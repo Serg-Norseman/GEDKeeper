@@ -90,21 +90,15 @@
     <Compile Include="src\HTML\HTMLException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ListView\CListableMFR.cs" />
-    <Compile Include="src\ListView\CListableNumber.cs" />
+    <Compile Include="src\ListView\LVNameItem.cs" />
+    <Compile Include="src\ListView\LVNumberItem.cs" />
     <Compile Include="src\CConfig.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ListView\CListableBool.cs">
+    <Compile Include="src\ListView\LVItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ListView\CListableName.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\ListView\CListableString.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\ListView\CListableYear.cs">
+    <Compile Include="src\ListView\LVStringItem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Logging\ILogger.cs" />
@@ -216,9 +210,6 @@
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\ProgressWindow.resx">
-      <DependentUpon>ProgressWindow.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

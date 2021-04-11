@@ -79,9 +79,9 @@ namespace GEDmill.HTML
             }
 
             var sb = new StringBuilder(original.Length);
-            uint uTabPos = 0;
-            bool bDoneCRLF = false;
-            bool bDoneSpace = false;
+            int tabPos = 0;
+            bool doneCRLF = false;
+            bool doneSpace = false;
             int nLength = original.Length;
             int n = 0;
             foreach (char c in original) {
@@ -89,81 +89,81 @@ namespace GEDmill.HTML
                     case (char)0x91:
                     case (char)0x92:
                         sb.Append("'");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case (char)0x93:
                     case (char)0x94:
                         sb.Append("\"");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case '<':
                         sb.Append("&lt;");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case '>':
                         sb.Append("&gt;");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case '\"':
                         sb.Append("&quot;");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case '&':
                         sb.Append("&amp;");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case ' ':
-                        if (bDoneSpace || hardSpace) {
+                        if (doneSpace || hardSpace) {
                             sb.Append("&nbsp;");
                         } else {
                             sb.Append(' ');
-                            bDoneSpace = true;
+                            doneSpace = true;
                         }
-                        bDoneCRLF = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        tabPos++;
                         break;
                     case '\n':
-                        if (!bDoneCRLF) {
+                        if (!doneCRLF) {
                             sb.Append("<br />");
                         }
-                        bDoneCRLF = false; // To allow multiple CRLFs to produce multiple <BR />s
-                        bDoneSpace = false;
-                        uTabPos = 0;
+                        doneCRLF = false; // To allow multiple CRLFs to produce multiple <BR />s
+                        doneSpace = false;
+                        tabPos = 0;
                         break;
                     case '\r':
-                        if (!bDoneCRLF) {
+                        if (!doneCRLF) {
                             sb.Append("<br />");
-                            bDoneCRLF = true;
+                            doneCRLF = true;
                         }
-                        bDoneSpace = false;
-                        uTabPos = 0;
+                        doneSpace = false;
+                        tabPos = 0;
                         break;
                     case '\t':
                         do {
                             sb.Append("&nbsp;");
-                            uTabPos++;
+                            tabPos++;
                         }
-                        while ((uTabPos % tabSpaces) != 0);
-                        bDoneSpace = true;
+                        while ((tabPos % tabSpaces) != 0);
+                        doneSpace = true;
                         break;
 
                     default:
                         sb.Append(c);
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                 }
                 ++n;
@@ -178,8 +178,7 @@ namespace GEDmill.HTML
                 return "";
             }
 
-            StringBuilder sb = new StringBuilder(original.Length);
-
+            var sb = new StringBuilder(original.Length);
             foreach (char c in original) {
                 switch (c) {
                     case '\'':
@@ -202,14 +201,14 @@ namespace GEDmill.HTML
                 return "_";
             }
 
-            const string sValidChars = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$%'`-@{}~!#()&_^";
+            const string validChars = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$%'`-@{}~!#()&_^";
 
-            StringBuilder sb = new StringBuilder(original.Length);
+            var sb = new StringBuilder(original.Length);
             int nLength = original.Length;
             int n = 0;
             foreach (char c in original) {
                 char cc = c;
-                if (sValidChars.IndexOf(c) < 0) {
+                if (validChars.IndexOf(c) < 0) {
                     cc = '_';
                 }
                 sb.Append(cc);
@@ -225,12 +224,12 @@ namespace GEDmill.HTML
                 return null;
             }
             int nLength = text.Length;
-            StringBuilder sb = new StringBuilder(nLength);
+            var sb = new StringBuilder(nLength);
             int i = 0;
             int nNameStart = -1;
             int nState = 0;
-            const string sInvalidNameChars = ",\"£$^&*()+=]}[{':;,<>?/\\|`¬#~";
-            const string sReplacement = "<email address>";
+            const string invalidNameChars = ",\"£$^&*()+=]}[{':;,<>?/\\|`¬#~";
+            const string replacement = "<email address>";
 
             while (i < nLength) {
                 char c = text[i];
@@ -238,7 +237,7 @@ namespace GEDmill.HTML
                 switch (nState) {
                     case 0:
                         // Not seen anything special.
-                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && sInvalidNameChars.IndexOf(c) < 0) {
+                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && invalidNameChars.IndexOf(c) < 0) {
                             // Possible name char, remember where name starts.
                             nState = 1;
                             nNameStart = i;
@@ -253,7 +252,7 @@ namespace GEDmill.HTML
                         if (c == '@') {
                             // Now looking for domain.
                             nState = 2;
-                        } else if (!char.IsWhiteSpace(c) && sInvalidNameChars.IndexOf(c) < 0) {
+                        } else if (!char.IsWhiteSpace(c) && invalidNameChars.IndexOf(c) < 0) {
                             // Continue looking through a possible name string.
                         } else {
                             // Can't be an email address. Add what we've got so far and return
@@ -265,7 +264,7 @@ namespace GEDmill.HTML
                         break;
                     case 2:
                         // Seen at sign, now looking for domain
-                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && sInvalidNameChars.IndexOf(c) < 0) {
+                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && invalidNameChars.IndexOf(c) < 0) {
                             // Possible domain char.
                             // Now looking for dot among domain chars.
                             nState = 3;
@@ -282,7 +281,7 @@ namespace GEDmill.HTML
                         if (c == '.') {
                             // Now looking for another domain.
                             nState = 4;
-                        } else if (!char.IsWhiteSpace(c) && c != '@' && sInvalidNameChars.IndexOf(c) < 0) {
+                        } else if (!char.IsWhiteSpace(c) && c != '@' && invalidNameChars.IndexOf(c) < 0) {
                             // A possible domain char, keep looking for dot.
                         } else {
                             // Can't be an email address. Add what we've got so far and return
@@ -294,7 +293,7 @@ namespace GEDmill.HTML
                         break;
                     case 4:
                         // Looking for valid domain char to start next domain portion.
-                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && sInvalidNameChars.IndexOf(c) < 0) {
+                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && invalidNameChars.IndexOf(c) < 0) {
                             // A valid domain char. Look for another dot , or end.
                             nState = 5;
                         } else {
@@ -310,11 +309,11 @@ namespace GEDmill.HTML
                         if (c == '.') {
                             // Read rest of domain part.
                             nState = 6;
-                        } else if (!char.IsWhiteSpace(c) && c != '@' && sInvalidNameChars.IndexOf(c) < 0) {
+                        } else if (!char.IsWhiteSpace(c) && c != '@' && invalidNameChars.IndexOf(c) < 0) {
                             // Valid domain name. Keep looking for dot or end.
                         } else if (c != '@') {
                             // Found complete email address
-                            sb.Append(sReplacement);
+                            sb.Append(replacement);
                             sb.Append(c);
                             nState = 0;
                         } else {
@@ -327,12 +326,12 @@ namespace GEDmill.HTML
                         break;
                     case 6:
                         // Looking for valid domain char to start next domain portion, or can end here if address is (name@add.add.)
-                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && sInvalidNameChars.IndexOf(c) < 0) {
+                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && invalidNameChars.IndexOf(c) < 0) {
                             // A valid domain char. Look for another dot , or end.
                             nState = 5;
                         } else {
                             // Found complete email address (ending in a full-stop).
-                            sb.Append(sReplacement);
+                            sb.Append(replacement);
                             sb.Append('.');
                             sb.Append(c);
                             nState = 0;
@@ -345,7 +344,7 @@ namespace GEDmill.HTML
             // Add anything remaining in email addr buffer.
             if (nState == 5 || nState == 6) {
                 // Found complete email address.
-                sb.Append(sReplacement);
+                sb.Append(replacement);
                 if (nState == 6) {
                     // We ended on a dot.
                     sb.Append('.');
@@ -451,7 +450,7 @@ namespace GEDmill.HTML
                 if (fullFilename != null && CConfig.Instance.OutputFolder != null && CConfig.Instance.OutputFolder != "") {
                     // Have we already copied the sFilename?
                     if (fCopiedFiles.ContainsKey(asidFilename)) {
-                        FilenameAndSize filenameAndSize = (FilenameAndSize)fCopiedFiles[asidFilename];
+                        var filenameAndSize = fCopiedFiles[asidFilename];
                         result = filenameAndSize.FileName;
                         rectArea.Width = filenameAndSize.Width;
                         rectArea.Height = filenameAndSize.Height;
@@ -655,14 +654,14 @@ namespace GEDmill.HTML
             image.Dispose();
 
             // Find which format to save in. TODO: There must be a more elegant way!!
-            string sExtn = Path.GetExtension(fileName);
-            string sFilepart = Path.GetDirectoryName(fileName);
-            sFilepart += "\\" + Path.GetFileNameWithoutExtension(fileName);
+            string extn = Path.GetExtension(fileName);
+            string filepart = Path.GetDirectoryName(fileName);
+            filepart += "\\" + Path.GetFileNameWithoutExtension(fileName);
             ImageFormat imageFormat;
-            switch (sExtn.ToLower()) {
+            switch (extn.ToLower()) {
                 case ".jpg":
                 case ".jpeg":
-                    sExtn = ".jpg";
+                    extn = ".jpg";
                     imageFormat = ImageFormat.Jpeg;
                     break;
                 case ".gif":
@@ -675,7 +674,7 @@ namespace GEDmill.HTML
                 case ".tiff":
                     // Tif's don't display in browsers, so convert to png.
                     imageFormat = ImageFormat.Png;
-                    sExtn = ".png";
+                    extn = ".png";
                     break;
                 case ".exif":
                     imageFormat = ImageFormat.Exif;
@@ -688,7 +687,7 @@ namespace GEDmill.HTML
                     break;
             }
 
-            string filenameNew = sFilepart + sExtn;
+            string filenameNew = filepart + extn;
             string absFilenameNew = string.Concat(folder, filenameNew);
             try {
                 if (File.Exists(absFilename)) {

@@ -23,7 +23,7 @@ using GDModel;
 namespace GEDmill.ListView
 {
     // Special class of ListViewItem can represent individual/source records.
-    public class CListableBool : ListViewItem
+    public class LVItem : ListViewItem
     {
         // The record associated with this list item
         protected GDMRecord fRecord;
@@ -33,10 +33,10 @@ namespace GEDmill.ListView
 
 
         // Constructor from record
-        public CListableBool(GDMRecord ir, bool checkBox)
+        public LVItem(GDMRecord ir)
         {
             fRecord = ir;
-            fCheckBox = checkBox;
+            fCheckBox = true;
             base.Text = ToString();
         }
 
@@ -47,7 +47,7 @@ namespace GEDmill.ListView
         }
 
         // For sorting the list
-        public int CompareTo(CListableBool other)
+        public int CompareTo(LVItem other)
         {
             if (fRecord == null && other.fRecord == null) {
                 return 0;
@@ -60,19 +60,13 @@ namespace GEDmill.ListView
             }
             bool tr = GMHelper.GetVisibility(fRecord);
             bool or = GMHelper.GetVisibility(other.fRecord);
-            if (tr == or) {
-                return 0;
-            }
-            if (tr) {
-                return 1;
-            }
-            return -1;
+            return (tr == or) ? 0 : (tr) ? 1 : -1;
         }
 
         // Used to exclude the record from the generated web site
-        public void SetRestricted(bool value)
+        public void SetVisibility(bool value)
         {
-            GMHelper.SetVisibility(fRecord, !value);
+            GMHelper.SetVisibility(fRecord, value);
         }
 
         public GDMRecord Record

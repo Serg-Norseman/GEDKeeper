@@ -24,13 +24,13 @@ namespace GEDmill.ListView
     /// <summary>
     /// Special class of ListViewSubItem that sorts strings numerically even if they start with alphabetic character.
     /// </summary>
-    public class CListableString : ListViewItem.ListViewSubItem, IComparable, IComparable<CListableString>
+    public class LVStringItem : ListViewItem.ListViewSubItem, IComparable, IComparable<LVStringItem>
     {
         // The string we are encapsulating
         private string fString;
 
         // Constructor
-        public CListableString(string s)
+        public LVStringItem(string s)
         {
             fString = s;
             base.Text = fString;
@@ -44,12 +44,12 @@ namespace GEDmill.ListView
 
         public int CompareTo(object obj)
         {
-            return CompareTo((CListableString)obj);
+            return CompareTo((LVStringItem)obj);
         }
 
         // Special compare will sort numerically if string is formated like "AAA111" or "I124".
         // Return -1 if this instance is less than other...
-        public int CompareTo(CListableString other)
+        public int CompareTo(LVStringItem other)
         {
             int nLeftL = fString.Length;
             int nRightL = other.fString.Length;

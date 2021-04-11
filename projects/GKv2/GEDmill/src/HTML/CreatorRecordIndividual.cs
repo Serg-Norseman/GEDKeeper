@@ -292,19 +292,6 @@ namespace GEDmill.HTML
             }
         }
 
-        private string GetNoteText(GDMNotes ns)
-        {
-            GDMLines noteLines = fTree.GetNoteLines(ns);
-            string result;
-            if (CConfig.Instance.ObfuscateEmails) {
-                result = ObfuscateEmail(noteLines.Text);
-            } else {
-                result = noteLines.Text;
-            }
-
-            return result;
-        }
-
         // Goes through all families this person was a irSibling in and finds their frParents and siblings.
         private void AddParentsAndSiblings()
         {

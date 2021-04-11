@@ -40,6 +40,9 @@ namespace GKUI.Components
         public IColor SelectColor(IColor color)
         {
             using (var clrDlg = new ColorDialog()) {
+                clrDlg.FullOpen = true;
+                clrDlg.SolidColorOnly = true;
+
                 if (color != null) {
                     Color sdColor = ((ColorHandler)color).Handle;
                     clrDlg.Color = sdColor;

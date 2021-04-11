@@ -61,30 +61,19 @@ namespace GEDmill
         private Point fConfigButtonSize;
 
         // Check event gets called when program builds the list. Don't want to enable buttons in that case.
-        private bool fDisablePrunepanelCheckEvent;
-
-        private ColorDialog fColorDialogConfigMiniTree;
+        private bool fDisableRestrictsCheckEvent;
 
         // When user redefines the mini tree colours, these hold the new colours until they click OK.
-        private Color m_colorConfigMiniTreeBranch;
-        private Color m_colorConfigMiniTreeIndiBorder;
-        private Color m_colorConfigMiniTreeIndiBackground;
-        private Color m_colorConfigMiniTreeIndiHighlight;
-        private Color m_colorConfigMiniTreeIndiBgConcealed;
-        private Color m_colorConfigMiniTreeIndiFgConcealed;
-        private Color m_colorConfigMiniTreeIndiShade;
-        private Color m_colorConfigMiniTreeIndiText;
-        private Color m_colorConfigMiniTreeIndiLink;
-        private Color m_colorConfigMiniTreeBackground;
-
-        // Public so GDMTree can change it. Should really refactor so that it's a member of GEDCOMTree.
-        public int PruneExcluded;
-
-        // Public so GDMTree can change it. Should really refactor so that it's a member of GEDCOMTree.
-        public int PruneIncluded;
-
-        // Indicates user has made changes to data from GEDCOM file
-        public bool PrunepanelDataChanged;
+        private Color fColorConfigMiniTreeBranch;
+        private Color fColorConfigMiniTreeIndiBorder;
+        private Color fColorConfigMiniTreeIndiBackground;
+        private Color fColorConfigMiniTreeIndiHighlight;
+        private Color fColorConfigMiniTreeIndiBgConcealed;
+        private Color fColorConfigMiniTreeIndiFgConcealed;
+        private Color fColorConfigMiniTreeIndiShade;
+        private Color fColorConfigMiniTreeIndiText;
+        private Color fColorConfigMiniTreeIndiLink;
+        private Color fColorConfigMiniTreeBackground;
 
 
         // Constructor. Initialise and create GUI.
@@ -104,28 +93,17 @@ namespace GEDmill
             helpProvider.SetHelpKeyword(btnHelp, "HelpButtonHelpKeyword");
             helpProvider.SetHelpNavigator(btnHelp, HelpNavigator.TableOfContents);
             helpProvider.SetShowHelp(btnHelp, true);
-
-            fColorDialogConfigMiniTree = new ColorDialog();
-            fColorDialogConfigMiniTree.FullOpen = true;
-            fColorDialogConfigMiniTree.SolidColorOnly = true;
-
             helpProvider.HelpNamespace = CConfig.Instance.ApplicationPath + "\\" + CConfig.HelpFilename;
 
             fCurrentPanel = 1;
             fConfigPanelOn = false;
-            PruneExcluded = 0;
-            PruneExcluded = 0;
-
-            PrunepanelDataChanged = false;
-            fDisablePrunepanelCheckEvent = false;
+            fDisableRestrictsCheckEvent = false;
         }
 
         public MainForm(Plugin plugin) : this()
         {
             fPlugin = plugin;
-
             SetLang();
-
             ShowCurrentPanel();
         }
 
@@ -246,8 +224,6 @@ namespace GEDmill
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("Quit button clicked.");
-
             DialogResult dialogResult = DialogResult.Yes;
 
             if (fCurrentPanel != 6) {
@@ -277,48 +253,48 @@ namespace GEDmill
 
         private void btnHelp_click(object sender, EventArgs e)
         {
-            string sHelpFile = CConfig.Instance.ApplicationPath + "\\" + CConfig.HelpFilename;
+            string helpFile = CConfig.Instance.ApplicationPath + "\\" + CConfig.HelpFilename;
 
             if (fConfigPanelOn) {
                 switch (tabcontrolConfigPanel.SelectedIndex) {
                     case 0:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "SettingsWebpages.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsWebpages.htm");
                         break;
                     case 1:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "SettingsImages.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsImages.htm");
                         break;
                     case 2:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "SettingsGEDCOM.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsGEDCOM.htm");
                         break;
                     case 3:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "SettingsTrees.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsTrees.htm");
                         break;
                     case 4:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "SettingsAdvanced.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsAdvanced.htm");
                         break;
                     default:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "FrontPage.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "FrontPage.htm");
                         break;
                 }
             } else {
                 switch (fCurrentPanel) {
                     case 2:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "SelectingInputFile_1.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SelectingInputFile_1.htm");
                         break;
                     case 3:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "ExcludingPeople_2.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "ExcludingPeople_2.htm");
                         break;
                     case 4:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "SetTheTitle_3.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SetTheTitle_3.htm");
                         break;
                     case 5:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "SelectingOutputFile_4.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SelectingOutputFile_4.htm");
                         break;
                     case 6:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "FinishScreen_5.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "FinishScreen_5.htm");
                         break;
                     default:
-                        Help.ShowHelp(btnHelp, sHelpFile, HelpNavigator.Topic, "FrontPage.htm");
+                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "FrontPage.htm");
                         break;
                 }
             }
@@ -326,8 +302,6 @@ namespace GEDmill
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("Config button clicked. current panel = " + fCurrentPanel.ToString());
-
             if (!fConfigPanelOn) {
                 // Switch config panel on
                 // Initialise config panel settings
@@ -343,31 +317,19 @@ namespace GEDmill
 
         private void btnSettingsCancel_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("Config reset button clicked. current panel = " + fCurrentPanel.ToString());
-
             // Ensure config panel on
-            if (!fConfigPanelOn) {
-                return;
-            }
+            if (!fConfigPanelOn) return;
 
             // Remove panel without saving changes
             SwitchConfigPanelOff();
         }
 
-        private void buttonPruneRecordsSave_click(object sender, EventArgs e)
-        {
-        }
-
-        private void buttonPruneRecordsLoad_click(object sender, EventArgs e)
-        {
-        }
-
-        private void textboxChooseOutput_textChanged(object sender, EventArgs e)
+        private void txtChooseOutput_TextChanged(object sender, EventArgs e)
         {
             EnableNextButton();
         }
 
-        private void lstSelectKey_SelectedValueChanged(object sender, EventArgs e)
+        private void lstKeyIndividuals_SelectedValueChanged(object sender, EventArgs e)
         {
             EnableKeyIndividualsDeleteButton();
         }
@@ -388,7 +350,7 @@ namespace GEDmill
 
         private void btnSelectKeyDelete_Click(object sender, EventArgs e)
         {
-            NameXRefPair xrefPairName = lstSelectKey.SelectedItem as NameXRefPair;
+            NameXRefPair xrefPairName = lstKeyIndividuals.SelectedItem as NameXRefPair;
             if (xrefPairName != null) {
                 string xref = xrefPairName.XRef;
                 if (!string.IsNullOrEmpty(xref)) {
@@ -398,7 +360,7 @@ namespace GEDmill
             }
         }
 
-        private void buttonChooseOutputBrowse_click(object sender, EventArgs e)
+        private void btnChooseOutputBrowse_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
             if (Directory.Exists(txtChooseOutput.Text)) {
@@ -422,275 +384,161 @@ namespace GEDmill
             }
         }
 
-        private void linklabelAllDone_click(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lblAllDone_Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            bool bOldVisitedValue = lblAllDone.Links[lblAllDone.Links.IndexOf(e.Link)].Visited;
+            bool oldVisitedValue = lblAllDone.Links[lblAllDone.Links.IndexOf(e.Link)].Visited;
             try {
                 lblAllDone.Links[lblAllDone.Links.IndexOf(e.Link)].Visited = true;
-                string sURL = lblAllDone.Text;
-                System.Diagnostics.Process.Start(sURL);
+                string url = lblAllDone.Text;
+                System.Diagnostics.Process.Start(url);
             } catch (Exception e2) {
                 fLogger.WriteError("Caught exception while viewing folder : {0}", e2);
-                lblAllDone.Links[lblAllDone.Links.IndexOf(e.Link)].Visited = bOldVisitedValue;
+                lblAllDone.Links[lblAllDone.Links.IndexOf(e.Link)].Visited = oldVisitedValue;
             }
         }
 
-        private void configPanel_BackImage_BrowseButton_click(object sender, EventArgs e)
+        private void btnConfigBackImageBrowse_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("config panel back image browse button clicked.");
-
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            if (Directory.Exists(txtConfigBackImageEdit.Text)) {
-                openFileDialog.InitialDirectory = txtConfigBackImageEdit.Text;
-            } else {
-                string sPath = txtConfigBackImageEdit.Text;
-                int iLastFolder = sPath.LastIndexOf('\\'); // Try parent folder
-                if (iLastFolder >= 0) {
-                    sPath = sPath.Substring(0, iLastFolder);
-                }
-                if (Directory.Exists(sPath)) {
-                    openFileDialog.InitialDirectory = sPath;
-                } else {
-                    openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                }
+            string sPath = GMHelper.GetInitialDirectory(txtConfigBackImageEdit.Text);
+            //openFileDialog.FileName = txtConfigBackImageEdit.Text;
+            string backFile = AppHost.StdDialogs.GetOpenFile("Select back image", sPath, GMHelper.GfxFilter, 1, "");
+            if (!string.IsNullOrEmpty(backFile) && GMHelper.IsSupportedFile(backFile)) {
+                txtConfigBackImageEdit.Text = backFile;
+                txtConfigBackImageEdit.SelectAll();
             }
-
-            openFileDialog.FileName = txtConfigBackImageEdit.Text;
-            openFileDialog.Filter = "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|"
-                + "Portable Network Graphics (*.png)|*.png|"
-                + "Graphics Interchange Format (*.gif)|*.gif|"
-                + "Windows Bitmap (*.bmp)|*.bmp|"
-                + "All supported picture files|*.jpg;*.jpeg;*.gif;*.bmp;*.png";
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                string sExtn = Path.GetExtension(openFileDialog.FileName);
-                sExtn = sExtn.ToLower();
-                if (sExtn != ".jpg" && sExtn != ".jpeg" && sExtn != ".png" && sExtn != ".gif" && sExtn != ".bmp") {
-                    MessageBox.Show(this, "The file you have selected is not a supported picture type.", "Unsupported Format",
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                } else {
-                    txtConfigBackImageEdit.Text = openFileDialog.FileName;
-                    txtConfigBackImageEdit.SelectionStart = txtConfigBackImageEdit.Text.Length;
-                    txtConfigBackImageEdit.SelectionLength = txtConfigBackImageEdit.Text.Length;
-                }
-            }
-            fLogger.WriteInfo("Selected file : " + txtConfigBackImageEdit.Text);
         }
 
-        private void configPanel_FrontImage_BrowseButton_click(object sender, EventArgs e)
+        private void btnConfigFrontImageBrowse_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("config panel front image browse button clicked.");
-
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            if (Directory.Exists(txtConfigFrontImageEdit.Text)) {
-                openFileDialog1.InitialDirectory = txtConfigFrontImageEdit.Text;
-            } else {
-                string sPath = txtConfigFrontImageEdit.Text;
-                int nLastFolder = sPath.LastIndexOf('\\'); // Try parent folder
-                if (nLastFolder >= 0) {
-                    sPath = sPath.Substring(0, nLastFolder);
-                }
-                if (Directory.Exists(sPath)) {
-                    openFileDialog1.InitialDirectory = sPath;
-                } else {
-                    openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                }
+            string sPath = GMHelper.GetInitialDirectory(txtConfigFrontImageEdit.Text);
+            string frontFile = AppHost.StdDialogs.GetOpenFile("Select front image", sPath, GMHelper.GfxFilter, 1, "");
+            if (!string.IsNullOrEmpty(frontFile) && GMHelper.IsSupportedFile(frontFile)) {
+                txtConfigFrontImageEdit.Text = frontFile;
+                txtConfigFrontImageEdit.SelectAll();
             }
-
-            openFileDialog1.FileName = txtConfigFrontImageEdit.Text;
-            openFileDialog1.Filter = "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|"
-                + "Portable Network Graphics (*.png)|*.png|"
-                + "Graphics Interchange Format (*.gif)|*.gif|"
-                + "Windows Bitmap (*.bmp)|*.bmp|"
-                + "All supported picture files|*.jpg;*.jpeg;*.gif;*.bmp;*.png";
-            openFileDialog1.FilterIndex = 1;
-            openFileDialog1.RestoreDirectory = true;
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK) {
-                string sExtn = Path.GetExtension(openFileDialog1.FileName);
-                sExtn = sExtn.ToLower();
-                if (sExtn != ".jpg" && sExtn != ".jpeg" && sExtn != ".png" && sExtn != ".gif" && sExtn != ".bmp") {
-                    MessageBox.Show(this, "The file you have selected is not a supported picture type.", "Unsupported Format",
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                } else {
-                    txtConfigFrontImageEdit.Text = openFileDialog1.FileName;
-                    txtConfigFrontImageEdit.SelectionStart = txtConfigFrontImageEdit.Text.Length;
-                    txtConfigFrontImageEdit.SelectionLength = txtConfigFrontImageEdit.Text.Length;
-                }
-            }
-            fLogger.WriteInfo("Selected file : " + txtConfigFrontImageEdit.Text);
         }
 
-        private void configPanel_TreeDiagrams_CheckBox_click(object sender, EventArgs e)
+        private void chkConfigTreeDiagrams_Click(object sender, EventArgs e)
         {
             EnableMiniTreeButtons();
         }
 
-        private void configPanel_MiniTreeColourIndiBackground_Button_click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColourIndiBackground_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("configPanel_MiniTreeColourIndiBackground_Button_click.");
-
-            fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiBackground;
-            if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
-                m_colorConfigMiniTreeIndiBackground = fColorDialogConfigMiniTree.Color;
-                SetMiniTreeColourConfigButtons();
-            }
+            fColorConfigMiniTreeIndiBackground = GMHelper.SelectColor(fColorConfigMiniTreeIndiBackground);
+            SetMiniTreeColourConfigButtons();
         }
 
-        private void configPanel_MiniTreeColourIndiHighlight_Button_click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColourIndiHighlight_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("configPanel_MiniTreeColourIndiHighlight_Button_click.");
-
-            fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiHighlight;
-            if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
-                m_colorConfigMiniTreeIndiHighlight = fColorDialogConfigMiniTree.Color;
-                SetMiniTreeColourConfigButtons();
-            }
+            fColorConfigMiniTreeIndiHighlight = GMHelper.SelectColor(fColorConfigMiniTreeIndiHighlight);
+            SetMiniTreeColourConfigButtons();
         }
 
-        private void configPanel_MiniTreeColourIndiBgConcealed_Button_click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColourIndiBgConcealed_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("configPanel_MiniTreeColourIndiBgConcealed_Button_click.");
-
-            fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiBgConcealed;
-            if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
-                m_colorConfigMiniTreeIndiBgConcealed = fColorDialogConfigMiniTree.Color;
-                SetMiniTreeColourConfigButtons();
-            }
+            fColorConfigMiniTreeIndiBgConcealed = GMHelper.SelectColor(fColorConfigMiniTreeIndiBgConcealed);
+            SetMiniTreeColourConfigButtons();
         }
 
-        private void configPanel_MiniTreeColourIndiShade_Button_click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColourIndiShade_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("configPanel_MiniTreeColourIndiShade_Button_click.");
-
-            fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiShade;
-            if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
-                m_colorConfigMiniTreeIndiShade = fColorDialogConfigMiniTree.Color;
-                SetMiniTreeColourConfigButtons();
-            }
+            fColorConfigMiniTreeIndiShade = GMHelper.SelectColor(fColorConfigMiniTreeIndiShade);
+            SetMiniTreeColourConfigButtons();
         }
 
-        private void configPanel_MiniTreeColourIndiText_Button_click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColourIndiText_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("configPanel_MiniTreeColourIndiText_Button_click.");
-
-            fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiText;
-            if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
-                m_colorConfigMiniTreeIndiText = fColorDialogConfigMiniTree.Color;
-                SetMiniTreeColourConfigButtons();
-            }
+            fColorConfigMiniTreeIndiText = GMHelper.SelectColor(fColorConfigMiniTreeIndiText);
+            SetMiniTreeColourConfigButtons();
         }
 
-        private void configPanel_MiniTreeColourIndiLink_Button_click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColourIndiLink_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("configPanel_MiniTreeColourIndiLink_Button_click.");
-
-            fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiLink;
-            if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
-                m_colorConfigMiniTreeIndiLink = fColorDialogConfigMiniTree.Color;
-                SetMiniTreeColourConfigButtons();
-            }
+            fColorConfigMiniTreeIndiLink = GMHelper.SelectColor(fColorConfigMiniTreeIndiLink);
+            SetMiniTreeColourConfigButtons();
         }
 
-        private void configPanel_MiniTreeColourBranch_Button_click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColourBranch_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("configPanel_MiniTreeColourBranch_Button_click.");
-
-            fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeBranch;
-            if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
-                m_colorConfigMiniTreeBranch = fColorDialogConfigMiniTree.Color;
-                SetMiniTreeColourConfigButtons();
-            }
+            fColorConfigMiniTreeBranch = GMHelper.SelectColor(fColorConfigMiniTreeBranch);
+            SetMiniTreeColourConfigButtons();
         }
 
-        private void configPanel_MiniTreeColourIndiBorder_Button_click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColourIndiBorder_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("configPanel_MiniTreeColourIndiBorder_Button_click.");
-
-            fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiBorder;
-            if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
-                m_colorConfigMiniTreeIndiBorder = fColorDialogConfigMiniTree.Color;
-                SetMiniTreeColourConfigButtons();
-            }
+            fColorConfigMiniTreeIndiBorder = GMHelper.SelectColor(fColorConfigMiniTreeIndiBorder);
+            SetMiniTreeColourConfigButtons();
         }
 
-        private void configPanel_MiniTreeColourIndiFgConcealed_Button_click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColourIndiFgConcealed_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("configPanel_MiniTreeColourIndiFgConcealed_Button_click.");
-
-            fColorDialogConfigMiniTree.Color = m_colorConfigMiniTreeIndiFgConcealed;
-            if (fColorDialogConfigMiniTree.ShowDialog() == DialogResult.OK) {
-                m_colorConfigMiniTreeIndiFgConcealed = fColorDialogConfigMiniTree.Color;
-                SetMiniTreeColourConfigButtons();
-            }
+            fColorConfigMiniTreeIndiFgConcealed = GMHelper.SelectColor(fColorConfigMiniTreeIndiFgConcealed);
+            SetMiniTreeColourConfigButtons();
         }
 
-        private void configPanel_MultiPageIndex_CheckBox_click(object sender, EventArgs e)
+        private void chkConfigMultiPageIndex_Click(object sender, EventArgs e)
         {
             fLogger.WriteInfo("config panel multi page index button clicked.");
             EnableMultiPageIndexConfig();
         }
 
-        private void configPanel_AllowMultimedia_CheckBox_click(object sender, EventArgs e)
+        private void chkConfigAllowMultimedia_Click(object sender, EventArgs e)
         {
             fLogger.WriteInfo("allow multimedia button clicked.");
             EnableMultimediaConfig();
         }
 
-        private void configPanel_IndiImages_CheckBox_click(object sender, EventArgs e)
+        private void chkConfigIndiImages_Click(object sender, EventArgs e)
         {
             fLogger.WriteInfo("config panel multi images button clicked.");
             EnableThumbnailsConfig();
         }
 
-        private void configPanel_ShowWithheldRecords_CheckBox_click(object sender, EventArgs e)
+        private void chkConfigShowWithheldRecords_Click(object sender, EventArgs e)
         {
             fLogger.WriteInfo("config panel show withheld records button clicked.");
             EnableWithheldConfig();
         }
 
-        private void configPanel_WithheldName_Label_click(object sender, EventArgs e)
+        private void radConfigWithheldNameLabel_Click(object sender, EventArgs e)
         {
             fLogger.WriteInfo("config panel withheld label clicked.");
             EnableWithheldConfig();
         }
 
-        private void miPruneRecordsIndisDetails_Click(Object sender, EventArgs e)
+        private void miIndividualDetails_Click(Object sender, EventArgs e)
         {
-            if (lvPruneIndividuals.SelectedItems.Count == 1) {
-                var lb = (CListableBool)lvPruneIndividuals.SelectedItems[0];
-                var ir = lb.Record as GDMIndividualRecord;
+            if (lvIndividuals.SelectedItems.Count == 1) {
+                var lvi = lvIndividuals.SelectedItems[0] as LVItem;
+                var ir = lvi.Record as GDMIndividualRecord;
                 BaseController.ViewRecordInfo(fBase, ir);
             }
         }
 
-        private void pruneSourcesContextMenuDetails_Click(Object sender, EventArgs e)
+        private void miSourceDetails_Click(Object sender, EventArgs e)
         {
-            if (lvPruneSources.SelectedItems.Count == 1) {
-                var lvi = (CListableBool)lvPruneSources.SelectedItems[0];
+            if (lvSources.SelectedItems.Count == 1) {
+                var lvi = lvSources.SelectedItems[0] as LVItem;
                 var sr = lvi.Record as GDMSourceRecord;
                 BaseController.ViewRecordInfo(fBase, sr);
             }
         }
 
-        private void miPruneRecordsIndisUnconnected_Click(Object sender, EventArgs e)
+        private void miUnconnectedExclude_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            PruneExcluded = 0;
-            PruneIncluded = 0;
+            int recordsExcluded = 0;
+            int recordsIncluded = 0;
 
             try {
                 var marks = new List<GDMRecord>();
                 // exclude all individuals unless connected in any way to this person through non-excluded people
-                foreach (ListViewItem lvi in lvPruneIndividuals.SelectedItems) {
-                    if (lvi is CListableBool) {
-                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
+                foreach (ListViewItem lvi in lvIndividuals.SelectedItems) {
+                    if (lvi is LVItem) {
+                        var ir = ((LVItem)lvi).Record as GDMIndividualRecord;
                         if (ir != null) {
                             // First mark as visited all possible relations of irSubject, not following restricted people
                             // Adds to visited list
@@ -699,9 +547,9 @@ namespace GEDmill
                     }
                 }
                 // Then exclude all unmarked individuals (i.e. not in visited list)
-                GMHelper.RestrictUnmarked(fBase.Context.Tree, marks);
+                GMHelper.RestrictUnmarked(fBase.Context.Tree, marks, out recordsExcluded);
             } catch (Exception ex) {
-                ReportPruneError(ex);
+                ReportRestrictError(ex);
             }
 
             // Rebuild list
@@ -710,30 +558,30 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, "individual");
         }
 
-        private void miPruneRecordsIndisDescendantsExc_Click(Object sender, EventArgs e)
+        private void miIndiDescendantsExclude_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            PruneExcluded = 0;
-            PruneIncluded = 0;
+            int recordsExcluded = 0;
+            int recordsIncluded = 0;
 
             try {
                 // exclude all individuals descended from this person, including spouses and spouses ancestors. 
-                if (lvPruneIndividuals.SelectedItems.Count == 1) {
-                    ListViewItem lvi = lvPruneIndividuals.SelectedItems[0];
-                    if (lvi is CListableBool) {
-                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
+                if (lvIndividuals.SelectedItems.Count == 1) {
+                    var lvi = lvIndividuals.SelectedItems[0] as LVItem;
+                    if (lvi != null) {
+                        GDMIndividualRecord ir = lvi.Record as GDMIndividualRecord;
                         if (ir != null) {
                             GMHelper.RestrictDescendants(fBase.Context.Tree, ir, false);
                         }
                     }
                 }
             } catch (Exception ex) {
-                ReportPruneError(ex);
+                ReportRestrictError(ex);
             }
 
             // Rebuild list
@@ -742,30 +590,30 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, "individual");
         }
 
-        private void miPruneRecordsIndisDescendantsInc_Click(Object sender, EventArgs e)
+        private void miIndiDescendantsInclude_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            PruneExcluded = 0;
-            PruneIncluded = 0;
+            int recordsExcluded = 0;
+            int recordsIncluded = 0;
 
             try {
                 // exclude all individuals descended from this person, including spouses and spouses ancestors. 
-                if (lvPruneIndividuals.SelectedItems.Count == 1) {
-                    ListViewItem lvi = lvPruneIndividuals.SelectedItems[0];
-                    if (lvi is CListableBool) {
-                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
+                if (lvIndividuals.SelectedItems.Count == 1) {
+                    var lvi = lvIndividuals.SelectedItems[0] as LVItem;
+                    if (lvi != null) {
+                        GDMIndividualRecord ir = lvi.Record as GDMIndividualRecord;
                         if (ir != null) {
                             GMHelper.RestrictDescendants(fBase.Context.Tree, ir, true);
                         }
                     }
                 }
             } catch (Exception ex) {
-                ReportPruneError(ex);
+                ReportRestrictError(ex);
             }
 
             // Rebuild lists
@@ -774,30 +622,30 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, "individual");
         }
 
-        private void miPruneRecordsIndisAncestorsExc_Click(Object sender, EventArgs e)
+        private void miIndiAncestorsExclude_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            PruneExcluded = 0;
-            PruneIncluded = 0;
+            int recordsExcluded = 0;
+            int recordsIncluded = 0;
 
             try {
                 // Exclude all individuals descended from this person, including spouses and spouses ancestors. 
-                if (lvPruneIndividuals.SelectedItems.Count == 1) {
-                    ListViewItem lvi = lvPruneIndividuals.SelectedItems[0];
-                    if (lvi is CListableBool) {
-                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
+                if (lvIndividuals.SelectedItems.Count == 1) {
+                    var lvi = lvIndividuals.SelectedItems[0] as LVItem;
+                    if (lvi != null) {
+                        var ir = lvi.Record as GDMIndividualRecord;
                         if (ir != null) {
                             GMHelper.RestrictAncestors(fBase.Context.Tree, ir, false);
                         }
                     }
                 }
             } catch (Exception ex) {
-                ReportPruneError(ex);
+                ReportRestrictError(ex);
             }
 
             // Rebuild lists
@@ -806,30 +654,30 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, "individual");
         }
 
-        private void miPruneRecordsIndisAncestorsInc_Click(Object sender, EventArgs e)
+        private void miIndiAncestorsInclude_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            PruneExcluded = 0;
-            PruneIncluded = 0;
+            int recordsExcluded = 0;
+            int recordsIncluded = 0;
 
             try {
                 // Exclude all individuals descended from this person, including spouses and spouses ancestors. 
-                if (lvPruneIndividuals.SelectedItems.Count == 1) {
-                    ListViewItem lvi = lvPruneIndividuals.SelectedItems[0];
-                    if (lvi is CListableBool) {
-                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
+                if (lvIndividuals.SelectedItems.Count == 1) {
+                    var lvi = lvIndividuals.SelectedItems[0] as LVItem;
+                    if (lvi != null) {
+                        var ir = lvi.Record as GDMIndividualRecord;
                         if (ir != null) {
                             GMHelper.RestrictAncestors(fBase.Context.Tree, ir, true);
                         }
                     }
                 }
             } catch (Exception ex) {
-                ReportPruneError(ex);
+                ReportRestrictError(ex);
             }
 
             // Rebuild lists
@@ -838,21 +686,21 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, "individual");
         }
 
-        private void pruneIndividualsContextMenuInclude_Click(Object sender, EventArgs e)
+        private void miIndividualsEveryoneInclude_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            PruneExcluded = 0;
-            PruneIncluded = 0;
-            foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
-                if (lvi is CListableBool) {
-                    GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
+            int recordsExcluded = 0;
+            int recordsIncluded = 0;
+            foreach (ListViewItem lvi in lvIndividuals.Items) {
+                if (lvi is LVItem) {
+                    GDMIndividualRecord ir = (GDMIndividualRecord)((LVItem)lvi).Record;
                     if (!GMHelper.GetVisibility(ir)) {
-                        ++PruneIncluded;
+                        ++recordsIncluded;
                         GMHelper.SetVisibility(ir, true);
                     }
                 }
@@ -864,24 +712,24 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowPruneResult(0, PruneIncluded, "individual");
+            ShowRestrictsResult(0, recordsIncluded, "individual");
         }
 
         // Removes pictures from the selected source
-        private void pruneSourcesContextMenuRemovePics_Click(Object sender, EventArgs e)
+        private void miSourceRemovePics_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
             int nHidden = 0;
-            foreach (ListViewItem lvi in lvPruneSources.SelectedItems) {
-                if (lvi is CListableBool) {
-                    GDMSourceRecord sr = (GDMSourceRecord)((CListableBool)lvi).Record;
+            foreach (ListViewItem lvi in lvSources.SelectedItems) {
+                if (lvi is LVItem) {
+                    GDMSourceRecord sr = (GDMSourceRecord)((LVItem)lvi).Record;
                     if (sr != null) {
                         int nHiddenThisTime = GMHelper.SetAllMFRsVisible(fBase.Context.Tree, sr, false);
                         nHidden += nHiddenThisTime;
                         if (nHiddenThisTime > 0) {
-                            SetSourceSubItems((CListableBool)lvi, sr, true); // Updates list
+                            SetSourceSubItems((LVItem)lvi, sr, true); // Updates list
                         }
                     }
                 }
@@ -894,26 +742,22 @@ namespace GEDmill
             Cursor.Hide();
 
             ShowHidePicsResult(nHidden);
-
-            if (nHidden > 0) {
-                PrunepanelDataChanged = true;
-            }
             EnablePrunePanelButtons();
         }
 
-        private void pruneIndividualsContextMenuExclude_Click(Object sender, EventArgs e)
+        private void miIndividualsEveryoneExclude_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            PruneExcluded = 0;
-            PruneIncluded = 0;
+            int recordsExcluded = 0;
+            int recordsIncluded = 0;
 
-            foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
-                if (lvi is CListableBool) {
-                    GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
+            foreach (ListViewItem lvi in lvIndividuals.Items) {
+                if (lvi is LVItem) {
+                    GDMIndividualRecord ir = (GDMIndividualRecord)((LVItem)lvi).Record;
                     if (GMHelper.GetVisibility(ir)) {
-                        PruneExcluded++;
+                        recordsExcluded++;
                         GMHelper.SetVisibility(ir, false);
                     }
                 }
@@ -925,22 +769,22 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowPruneResult(PruneExcluded, 0, "individual");
+            ShowRestrictsResult(recordsExcluded, 0, "individual");
         }
 
-        private void pruneSourcesContextMenuInclude_Click(Object sender, EventArgs e)
+        private void miSourcesAllInclude_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            PruneExcluded = 0;
-            PruneIncluded = 0;
+            int recordsExcluded = 0;
+            int recordsIncluded = 0;
 
-            foreach (ListViewItem lvi in lvPruneSources.Items) {
-                if (lvi is CListableBool) {
-                    GDMSourceRecord sr = (GDMSourceRecord)((CListableBool)lvi).Record;
+            foreach (ListViewItem lvi in lvSources.Items) {
+                if (lvi is LVItem) {
+                    var sr = ((LVItem)lvi).Record as GDMSourceRecord;
                     if (!GMHelper.GetVisibility(sr)) {
-                        PruneIncluded++;
+                        recordsIncluded++;
                         GMHelper.SetVisibility(sr, true);
                     }
                 }
@@ -952,22 +796,22 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowPruneResult(0, PruneIncluded, "source");
+            ShowRestrictsResult(0, recordsIncluded, "source");
         }
 
-        private void pruneSourcesContextMenuExclude_Click(Object sender, EventArgs e)
+        private void miSourcesAllExclude_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            PruneExcluded = 0;
-            PruneIncluded = 0;
+            int recordsExcluded = 0;
+            int recordsIncluded = 0;
 
-            foreach (ListViewItem lvi in lvPruneSources.Items) {
-                if (lvi is CListableBool) {
-                    GDMSourceRecord sr = (GDMSourceRecord)((CListableBool)lvi).Record;
+            foreach (ListViewItem lvi in lvSources.Items) {
+                if (lvi is LVItem) {
+                    var sr = ((LVItem)lvi).Record as GDMSourceRecord;
                     if (GMHelper.GetVisibility(sr)) {
-                        PruneExcluded++;
+                        recordsExcluded++;
                         GMHelper.SetVisibility(sr, false);
                     }
                 }
@@ -979,30 +823,30 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowPruneResult(PruneExcluded, 0, "source");
+            ShowRestrictsResult(recordsExcluded, 0, "source");
         }
 
         // Excludes people who aren't dead, but leave people we're not sure about
-        private void pruneIndividualsContextMenuAlive_Click(Object sender, EventArgs e)
+        private void miIndividualsAliveExclude_Click(Object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            PruneExcluded = 0;
-            PruneIncluded = 0;
+            int recordsExcluded = 0;
+            int recordsIncluded = 0;
 
             try {
-                foreach (ListViewItem lvi in lvPruneIndividuals.Items) {
-                    if (lvi is CListableBool) {
-                        GDMIndividualRecord ir = (GDMIndividualRecord)((CListableBool)lvi).Record;
+                foreach (ListViewItem lvi in lvIndividuals.Items) {
+                    if (lvi is LVItem) {
+                        var ir = ((LVItem)lvi).Record as GDMIndividualRecord;
                         if (ir != null && ir.IsLive() && GMHelper.GetVisibility(ir)) {
-                            PruneExcluded++;
+                            recordsExcluded++;
                             GMHelper.SetVisibility(ir, false);
                         }
                     }
                 }
             } catch (Exception ex) {
-                ReportPruneError(ex);
+                ReportRestrictError(ex);
             }
 
             // Rebuild list
@@ -1011,74 +855,73 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowPruneResult(PruneExcluded, PruneIncluded, "individual");
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, "individual");
         }
 
-        private void menuPruneRecordsIndis_Popup(Object sender, EventArgs e)
+        private void menuIndividuals_Popup(Object sender, EventArgs e)
         {
-            int nSelected = lvPruneIndividuals.SelectedItems.Count;
-            miPruneRecordsIndisUnconnected.Enabled = (nSelected > 0);
+            int nSelected = lvIndividuals.SelectedItems.Count;
+            miUnconnectedExclude.Enabled = (nSelected > 0);
             if (nSelected <= 1) {
-                miPruneRecordsIndisUnconnected.Text = "E&xclude individuals unless navigable from this person";
+                miUnconnectedExclude.Text = "E&xclude individuals unless navigable from this person";
             } else {
-                miPruneRecordsIndisUnconnected.Text = string.Format("E&xclude individuals unless navigable from these {0} people", nSelected);
+                miUnconnectedExclude.Text = string.Format("E&xclude individuals unless navigable from these {0} people", nSelected);
             }
 
-            miPruneRecordsIndisDescendantsExc.Enabled = (nSelected == 1);
-            miPruneRecordsIndisDescendantsInc.Enabled = (nSelected == 1);
-            miPruneRecordsIndisAncestorsExc.Enabled = (nSelected == 1);
-            miPruneRecordsIndisAncestorsInc.Enabled = (nSelected == 1);
-            miPruneRecordsIndisDetails.Enabled = (nSelected == 1);
+            miIndiDescendantsExclude.Enabled = (nSelected == 1);
+            miIndiDescendantsInclude.Enabled = (nSelected == 1);
+            miIndiAncestorsExclude.Enabled = (nSelected == 1);
+            miIndiAncestorsInclude.Enabled = (nSelected == 1);
+            miIndividualDetails.Enabled = (nSelected == 1);
         }
 
-        private void pruneSourcesContextMenu_popup(Object sender, EventArgs e)
+        private void menuSources_Popup(Object sender, EventArgs e)
         {
-            int nSelected = lvPruneSources.SelectedItems.Count;
-            miPruneRecordsSourcesDetails.Enabled = (nSelected == 1);
-            miPruneRecordsSourcesRemovePics.Enabled = (nSelected > 0);
+            int nSelected = lvSources.SelectedItems.Count;
+            miSourceDetails.Enabled = (nSelected == 1);
+            miSourceRemovePics.Enabled = (nSelected > 0);
             if (nSelected <= 1) {
-                miPruneRecordsSourcesRemovePics.Text = "&Remove pictures from this source";
+                miSourceRemovePics.Text = "&Remove pictures from this source";
             } else {
-                miPruneRecordsSourcesRemovePics.Text = string.Format("&Remove pictures from these {0} sources", nSelected);
+                miSourceRemovePics.Text = string.Format("&Remove pictures from these {0} sources", nSelected);
             }
         }
 
-        private void lvPruneIndividuals_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void lvIndividuals_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            if (!fDisablePrunepanelCheckEvent) {
-                CListableBool lb = (CListableBool)lvPruneIndividuals.Items[e.Index];
+            if (!fDisableRestrictsCheckEvent) {
+                var lb = lvIndividuals.Items[e.Index] as LVItem;
+                bool visible = GMHelper.GetVisibility(lb.Record);
+
                 // For some reason if user presses control while clicking any row of the list, it causes a check event. We don't want any checking to happen in that case.
                 if ((Control.ModifierKeys & Keys.Control) == 0) {
-                    if ((e.NewValue == CheckState.Checked && !GMHelper.GetVisibility(lb.Record))
-                        || (e.NewValue == CheckState.Unchecked && GMHelper.GetVisibility(lb.Record))) {
-                        lb.SetRestricted(e.NewValue == CheckState.Unchecked);
-                        PrunepanelDataChanged = true;
+                    if ((e.NewValue == CheckState.Checked && !visible) || (e.NewValue == CheckState.Unchecked && visible)) {
+                        lb.SetVisibility(e.NewValue == CheckState.Checked);
                         EnablePrunePanelButtons();
                     }
                 } else {
                     if (lb.Record != null) {
-                        e.NewValue = !GMHelper.GetVisibility(lb.Record) ? CheckState.Unchecked : CheckState.Checked;
+                        e.NewValue = !visible ? CheckState.Unchecked : CheckState.Checked;
                     }
                 }
             }
         }
 
-        private void lvPruneSources_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void lvSources_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            if (!fDisablePrunepanelCheckEvent) {
-                CListableBool lb = (CListableBool)lvPruneSources.Items[e.Index];
+            if (!fDisableRestrictsCheckEvent) {
+                var lb = lvSources.Items[e.Index] as LVItem;
+                bool visible = GMHelper.GetVisibility(lb.Record);
 
                 // For some reason if user presses control while clicking any row of the list, it causes a check event. We don't want any checking to happen in that case.
                 if ((Control.ModifierKeys & Keys.Control) == 0) {
-                    if ((e.NewValue == CheckState.Checked && !GMHelper.GetVisibility(lb.Record))
-                        || (e.NewValue == CheckState.Unchecked && GMHelper.GetVisibility(lb.Record))) {
-                        lb.SetRestricted(e.NewValue == CheckState.Unchecked);
-                        PrunepanelDataChanged = true;
+                    if ((e.NewValue == CheckState.Checked && !visible) || (e.NewValue == CheckState.Unchecked && visible)) {
+                        lb.SetVisibility(e.NewValue == CheckState.Checked);
                         EnablePrunePanelButtons();
                     }
                 } else {
                     if (lb.Record != null) {
-                        e.NewValue = !GMHelper.GetVisibility(lb.Record) ? CheckState.Unchecked : CheckState.Checked;
+                        e.NewValue = !visible ? CheckState.Unchecked : CheckState.Checked;
                     }
                 }
             }
@@ -1155,21 +998,21 @@ namespace GEDmill
         private void ShowCurrentPanel()
         {
             // Making panel3 bVisible calls check event on list view!
-            fDisablePrunepanelCheckEvent = true;
+            fDisableRestrictsCheckEvent = true;
 
             if (fConfigPanelOn) {
                 panelWelcome.Visible = false;
                 panelChooseGedcom.Visible = false;
-                panelPruneRecords.Visible = false;
-                panelSelectKey.Visible = false;
+                panelRecords.Visible = false;
+                panelKeyIndividuals.Visible = false;
                 panelChooseOutput.Visible = false;
                 panelAllDone.Visible = false;
                 tabcontrolConfigPanel.Visible = true;
             } else {
                 panelWelcome.Visible = (fCurrentPanel == 1);
                 panelChooseGedcom.Visible = (fCurrentPanel == 2);
-                panelPruneRecords.Visible = (fCurrentPanel == 3);
-                panelSelectKey.Visible = (fCurrentPanel == 4);
+                panelRecords.Visible = (fCurrentPanel == 3);
+                panelKeyIndividuals.Visible = (fCurrentPanel == 4);
                 panelChooseOutput.Visible = (fCurrentPanel == 5);
                 panelAllDone.Visible = (fCurrentPanel == 6);
                 tabcontrolConfigPanel.Visible = false;
@@ -1223,7 +1066,7 @@ namespace GEDmill
                 EnableNextButton();
             }
 
-            fDisablePrunepanelCheckEvent = false;
+            fDisableRestrictsCheckEvent = false;
         }
 
         // Logic for the next page button to ensure that user has completed the current page
@@ -1241,7 +1084,7 @@ namespace GEDmill
         // Logic for the key individuals delete button checks that an individual is selected for deletion
         private void EnableKeyIndividualsDeleteButton()
         {
-            btnSelectKeyDelete.Enabled = (lstSelectKey.SelectedItems.Count > 0);
+            btnSelectKeyDelete.Enabled = (lstKeyIndividuals.SelectedItems.Count > 0);
         }
 
         // Logic for the mini tree config buttons
@@ -1330,7 +1173,6 @@ namespace GEDmill
                         CConfig.Instance.FirstRecordXRef = "";
                         CConfig.Instance.KeyIndividuals = new List<string>();
                         CConfig.Instance.FirstRecordXRef = "";
-                        PrunepanelDataChanged = false; // A fresh file, no user changes yet.
                         FillIndividualsList();
                         FillSourcesList();
                         return true;
@@ -1338,14 +1180,14 @@ namespace GEDmill
                     case 3:
                         // Go through individuals list and set restricted flag as appropriate
                         bool somethingChecked = false;
-                        foreach (ListViewItem li in lvPruneIndividuals.Items) {
+                        foreach (ListViewItem li in lvIndividuals.Items) {
                             bool isChecked = li.Checked;
                             if (isChecked) {
                                 somethingChecked = true;
                             }
                             // Already done on click event: ((CListableBool)li).SetRestricted( !bChecked );
                             if (!isChecked) {
-                                GMHelper.RestrictAssociatedSources(fBase.Context.Tree, (GDMIndividualRecord)((CListableBool)li).Record);
+                                GMHelper.RestrictAssociatedSources(fBase.Context.Tree, (GDMIndividualRecord)((LVItem)li).Record);
                             }
                         }
 
@@ -1355,13 +1197,13 @@ namespace GEDmill
                             return false;
                         }
 
-                        if (PrunepanelDataChanged) {
+                        /*if (PrunepanelDataChanged) {
                             DialogResult dialogResult = MessageBox.Show(this, "You have made changes which will affect the website but have not saved them.\r\nWould you like to save them now?", "Save changes",
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                             if (dialogResult == DialogResult.Yes) {
                                 buttonPruneRecordsSave_click(null, null);
                             }
-                        }
+                        }*/
                         return true;
 
                     case 4:
@@ -1424,23 +1266,23 @@ namespace GEDmill
             var indiRecs = fBase.Context.Tree.GetRecords<GDMIndividualRecord>();
             fLogger.WriteInfo("FillIndividualsList() : " + indiRecs.Count.ToString());
 
-            fDisablePrunepanelCheckEvent = true;
+            fDisableRestrictsCheckEvent = true;
 
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            lvPruneIndividuals.Clear();
+            lvIndividuals.Clear();
 
-            lvPruneIndividuals.View = View.Details;
-            int nameWidth = lvPruneIndividuals.Width - 70 - 70 - 20;
-            lvPruneIndividuals.Columns.Add("Include", 30, HorizontalAlignment.Left);
+            lvIndividuals.View = View.Details;
+            int nameWidth = lvIndividuals.Width - 70 - 70 - 20;
+            lvIndividuals.Columns.Add("Include", 30, HorizontalAlignment.Left);
             nameWidth -= 30;
-            lvPruneIndividuals.Columns.Add("Name", nameWidth, HorizontalAlignment.Left);
-            lvPruneIndividuals.Columns.Add("Born", 70, HorizontalAlignment.Left);
-            lvPruneIndividuals.Columns.Add("Died", 70, HorizontalAlignment.Left);
-            lvPruneIndividuals.Columns.Add("Id", 60, HorizontalAlignment.Left);
-            lvPruneIndividuals.Columns.Add("User ref", 78, HorizontalAlignment.Left);
-            lvPruneIndividuals.Columns.Add("Pics", 48, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add("Name", nameWidth, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add("Born", 70, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add("Died", 70, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add("Id", 60, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add("User ref", 78, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add("Pics", 48, HorizontalAlignment.Left);
 
             // Build an array first then blit the whole array to the list control. This is faster than adding each item to the list control individually.
             ListViewItem[] temporaryItemsList = new ListViewItem[indiRecs.Count];
@@ -1452,62 +1294,62 @@ namespace GEDmill
                     continue;
                 }*/
 
-                CListableBool lbItem = new CListableBool(ir, true);
+                var lbItem = new LVItem(ir);
                 SetIndividualSubItems(lbItem, ir, true);
 
                 lbItem.Checked = GMHelper.GetVisibility(ir);
                 temporaryItemsList[nItem++] = lbItem;
             }
 
-            lvPruneIndividuals.Items.AddRange(temporaryItemsList);
-            lvPruneIndividuals.Sort();
+            lvIndividuals.Items.AddRange(temporaryItemsList);
+            lvIndividuals.Sort();
 
-            pagePruneRecordsIndis.Text = "Individuals (" + lvPruneIndividuals.Items.Count + ")";
+            pageIndividuals.Text = "Individuals (" + lvIndividuals.Items.Count + ")";
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            fDisablePrunepanelCheckEvent = false;
+            fDisableRestrictsCheckEvent = false;
         }
 
         // Attaches sub-items to a list item (before the list item is added to the list)
-        private void SetIndividualSubItems(CListableBool lbItem, GDMIndividualRecord ir, bool checkBoxes)
+        private void SetIndividualSubItems(ListViewItem lvItem, GDMIndividualRecord ir, bool checkBoxes)
         {
             // Save checkbox state because SubItems.Clear() clears item.Text and item.Checked as well, so replace old value after calling Clear().
-            bool bWasChecked = lbItem.Checked;
-            lbItem.SubItems.Clear();
-            lbItem.Checked = bWasChecked;
+            bool wasChecked = lvItem.Checked;
+            lvItem.SubItems.Clear();
+            lvItem.Checked = wasChecked;
 
             // If the list view has check boxes, the item is for the checkbox.
             // Otherwise the item is for the name, and so the sub items won't include the name.
             if (checkBoxes) {
-                string sSurname = "";
-                string sFirstName = "";
+                string surname = "";
+                string firstName = "";
                 var persName = (ir.PersonalNames.Count > 0) ? ir.PersonalNames[0].StringValue : "";
-                GMHelper.CapitaliseName(persName, ref sFirstName, ref sSurname);
+                GMHelper.CapitaliseName(persName, ref firstName, ref surname);
                 /*if (ir.NameSuffix != null && ir.NameSuffix != "") {
                     sFirstName += ", " + ir.NameSuffix;
                 }*/
-                lbItem.SubItems.Add(new CListableName(ir, sSurname, sFirstName));
+                lvItem.SubItems.Add(new LVNameItem(surname, firstName));
             }
 
             var lifeDatesX = ir.GetLifeDates();
-            var birthDate = (lifeDatesX.BirthEvent == null) ? null : lifeDatesX.BirthEvent.Date;
-            var deathDate = (lifeDatesX.DeathEvent == null) ? null : lifeDatesX.DeathEvent.Date;
+            var birthDate = (lifeDatesX.BirthEvent == null) ? 0 : lifeDatesX.BirthEvent.Date.GetChronologicalYear();
+            var deathDate = (lifeDatesX.DeathEvent == null) ? 0 : lifeDatesX.DeathEvent.Date.GetChronologicalYear();
 
-            lbItem.SubItems.Add(new CListableYear(birthDate));
-            lbItem.SubItems.Add(new CListableYear(deathDate));
-            lbItem.SubItems.Add(new CListableString(ir.XRef));
+            lvItem.SubItems.Add(new LVNumberItem(birthDate, false));
+            lvItem.SubItems.Add(new LVNumberItem(deathDate, false));
+            lvItem.SubItems.Add(new LVStringItem(ir.XRef));
 
             string uref = (ir.UserReferences.Count > 0) ? ir.UserReferences[0].StringValue : "";
-            lbItem.SubItems.Add(new CListableString(uref));
+            lvItem.SubItems.Add(new LVStringItem(uref));
 
             int nVisiblePics, nTotalPics;
             GMHelper.CountMFRs(ir, out nTotalPics, out nVisiblePics);
             if (nVisiblePics != nTotalPics) {
-                lbItem.SubItems.Add(new CListableNumber(nVisiblePics, string.Format("{0}/{1}", nVisiblePics, nTotalPics)));
+                lvItem.SubItems.Add(new LVNumberItem(nVisiblePics, string.Format("{0}/{1}", nVisiblePics, nTotalPics)));
             } else {
-                lbItem.SubItems.Add(new CListableNumber(nTotalPics, string.Format("{0}", nTotalPics)));
+                lvItem.SubItems.Add(new LVNumberItem(nTotalPics, string.Format("{0}", nTotalPics)));
             }
         }
 
@@ -1517,57 +1359,57 @@ namespace GEDmill
             var sources = fBase.Context.Tree.GetRecords<GDMSourceRecord>();
             fLogger.WriteInfo("FillSourcesList() : " + sources.Count.ToString());
 
-            fDisablePrunepanelCheckEvent = true; // call to item.Checked below invokes event handler.
+            fDisableRestrictsCheckEvent = true; // call to item.Checked below invokes event handler.
 
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            lvPruneSources.Clear();
+            lvSources.Clear();
 
-            lvPruneSources.View = View.Details;
-            int nWidthTitle = lvPruneSources.Width - 140 - 20;
-            lvPruneSources.Columns.Add("Include", 30, HorizontalAlignment.Left);
+            lvSources.View = View.Details;
+            int nWidthTitle = lvSources.Width - 140 - 20;
+            lvSources.Columns.Add("Include", 30, HorizontalAlignment.Left);
             nWidthTitle -= 30;
-            lvPruneSources.Columns.Add("Title", nWidthTitle, HorizontalAlignment.Left);
-            lvPruneSources.Columns.Add("Repository", 100, HorizontalAlignment.Left);
-            lvPruneSources.Columns.Add("Citations", 60, HorizontalAlignment.Left);
-            lvPruneSources.Columns.Add("B", 30, HorizontalAlignment.Left);
-            lvPruneSources.Columns.Add("M", 30, HorizontalAlignment.Left);
-            lvPruneSources.Columns.Add("D", 30, HorizontalAlignment.Left);
-            lvPruneSources.Columns.Add("Id", 60, HorizontalAlignment.Left);
-            lvPruneSources.Columns.Add("Pics", 48, HorizontalAlignment.Left);
+            lvSources.Columns.Add("Title", nWidthTitle, HorizontalAlignment.Left);
+            lvSources.Columns.Add("Repository", 100, HorizontalAlignment.Left);
+            lvSources.Columns.Add("Citations", 60, HorizontalAlignment.Left);
+            lvSources.Columns.Add("B", 30, HorizontalAlignment.Left);
+            lvSources.Columns.Add("M", 30, HorizontalAlignment.Left);
+            lvSources.Columns.Add("D", 30, HorizontalAlignment.Left);
+            lvSources.Columns.Add("Id", 60, HorizontalAlignment.Left);
+            lvSources.Columns.Add("Pics", 48, HorizontalAlignment.Left);
 
             ListViewItem[] temporaryItemsList = new ListViewItem[sources.Count];
             int nItem = 0;
             foreach (GDMSourceRecord sr in sources) {
-                CListableBool item = new CListableBool(sr, true);
+                var item = new LVItem(sr);
                 SetSourceSubItems(item, sr, true);
                 item.Checked = GMHelper.GetVisibility(sr);
                 temporaryItemsList[nItem++] = item;
             }
 
-            lvPruneSources.Items.AddRange(temporaryItemsList);
-            lvPruneSources.Sort();
+            lvSources.Items.AddRange(temporaryItemsList);
+            lvSources.Sort();
 
-            pagePruneRecordsSources.Text = "Sources (" + lvPruneSources.Items.Count + ")";
+            pageSources.Text = "Sources (" + lvSources.Items.Count + ")";
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            fDisablePrunepanelCheckEvent = false;
+            fDisableRestrictsCheckEvent = false;
         }
 
         // Attaches sub-items to a list item (before the list item is added to the list)
-        private void SetSourceSubItems(CListableBool lbItem, GDMSourceRecord sr, bool firstColumnIsCheckbox)
+        private void SetSourceSubItems(ListViewItem lvItem, GDMSourceRecord sr, bool firstColumnIsCheckbox)
         {
             // Store checkbox value because SubItems.Clear() clears item.Text and item.Checked as well!
-            bool wasChecked = lbItem.Checked;
-            lbItem.SubItems.Clear();
-            lbItem.Checked = wasChecked;
+            bool wasChecked = lvItem.Checked;
+            lvItem.SubItems.Clear();
+            lvItem.Checked = wasChecked;
 
             if (firstColumnIsCheckbox) {
                 // First nColumn (ie. item) is checkbox, so first sub-item is title.
-                lbItem.SubItems.Add(new CListableString(sr.ShortTitle));
+                lvItem.SubItems.Add(new LVStringItem(sr.ShortTitle));
             }
 
             string repositories = "";
@@ -1582,7 +1424,7 @@ namespace GEDmill
                     }
                 }
             }
-            lbItem.SubItems.Add(new CListableString(repositories));
+            lvItem.SubItems.Add(new LVStringItem(repositories));
 
             int nBirths = 0;
             int nMarriages = 0;
@@ -1632,21 +1474,21 @@ namespace GEDmill
                 }
             }
 
-            lbItem.SubItems.Add(new CListableNumber(nCitations));
-            lbItem.SubItems.Add(new CListableNumber(nBirths));
-            lbItem.SubItems.Add(new CListableNumber(nMarriages));
-            lbItem.SubItems.Add(new CListableNumber(nDeaths));
-            lbItem.SubItems.Add(new CListableString(sr.XRef));
+            lvItem.SubItems.Add(new LVNumberItem(nCitations));
+            lvItem.SubItems.Add(new LVNumberItem(nBirths));
+            lvItem.SubItems.Add(new LVNumberItem(nMarriages));
+            lvItem.SubItems.Add(new LVNumberItem(nDeaths));
+            lvItem.SubItems.Add(new LVStringItem(sr.XRef));
 
             int nVisiblePics, nTotalPics;
             GMHelper.CountMFRs(sr, out nTotalPics, out nVisiblePics);
 
             if (nVisiblePics != nTotalPics) {
-                lbItem.SubItems.Add(new CListableNumber(nVisiblePics, string.Format("{0}/{1}", nVisiblePics, nTotalPics)));
+                lvItem.SubItems.Add(new LVNumberItem(nVisiblePics, string.Format("{0}/{1}", nVisiblePics, nTotalPics)));
             } else {
-                lbItem.SubItems.Add(new CListableNumber(nTotalPics, string.Format("{0}", nTotalPics)));
+                lvItem.SubItems.Add(new LVNumberItem(nTotalPics, string.Format("{0}", nTotalPics)));
             }
-            lbItem.Checked = wasChecked;
+            lvItem.Checked = wasChecked;
         }
 
         // Spawns the website creation thread, which calls CWebsite.Create to do the work.
@@ -1669,7 +1511,7 @@ namespace GEDmill
 
             fLogger.WriteInfo("Starting progress window");
 
-            ProgressWindow progressWindow = new ProgressWindow();
+            var progressWindow = new ProgressWindow();
             progressWindow.Text = "Creating web pages";
 
             Website website = new Website(fBase.Context.Tree, progressWindow);
@@ -1723,8 +1565,8 @@ namespace GEDmill
             } else {
                 panelWelcome.Enabled = (fCurrentPanel == 1 && enable);
                 panelChooseGedcom.Enabled = (fCurrentPanel == 2 && enable);
-                panelPruneRecords.Enabled = (fCurrentPanel == 3 && enable);
-                panelSelectKey.Enabled = (fCurrentPanel == 4 && enable);
+                panelRecords.Enabled = (fCurrentPanel == 3 && enable);
+                panelKeyIndividuals.Enabled = (fCurrentPanel == 4 && enable);
                 panelChooseOutput.Enabled = (fCurrentPanel == 5 && enable);
                 panelAllDone.Enabled = (fCurrentPanel == 6 && enable);
 
@@ -1735,7 +1577,7 @@ namespace GEDmill
         }
 
         // Reports any exception thrown during the prune operation
-        private void ReportPruneError(Exception e)
+        private void ReportRestrictError(Exception e)
         {
             MessageBox.Show(this, string.Format("A problem was encountered while navigating the tree structure:\r\n\r\n{0}", e.StackTrace), CConfig.SoftwareName,
                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1744,38 +1586,37 @@ namespace GEDmill
         }
 
         // Displays the statistics of the prune operation
-        private void ShowPruneResult(int nExcluded, int nIncluded, string sType)
+        private void ShowRestrictsResult(int excluded, int included, string type)
         {
-            string sMsg = "";
-            if (nExcluded == 0 && nIncluded == 0) {
-                sMsg = "No changes made.";
+            string msg = "";
+            if (excluded == 0 && included == 0) {
+                msg = "No changes made.";
             } else {
-                if (nIncluded != 0) {
-                    sMsg = string.Format("{0} {1}{2} checked.", nIncluded, sType, nIncluded > 1 ? "s" : "");
+                if (included != 0) {
+                    msg = string.Format("{0} {1}{2} checked.", included, type, included > 1 ? "s" : "");
                 }
-                if (nExcluded != 0) {
-                    if (sMsg != "") {
-                        sMsg += "\r\n";
+                if (excluded != 0) {
+                    if (msg != "") {
+                        msg += "\r\n";
                     }
-                    sMsg += string.Format("{0} {1}{2} unchecked.", nExcluded, sType, nExcluded > 1 ? "s" : "");
+                    msg += string.Format("{0} {1}{2} unchecked.", excluded, type, excluded > 1 ? "s" : "");
                 }
             }
-
-            MessageBox.Show(this, sMsg, "Select Records", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, msg, "Select Records", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         // Displays the statistics of the remove pictures operation
-        private void ShowHidePicsResult(int nHidden)
+        private void ShowHidePicsResult(int hidden)
         {
-            string sMsg = "";
-            if (nHidden == 0) {
-                sMsg = "No multimedia files hidden.";
+            string msg = "";
+            if (hidden == 0) {
+                msg = "No multimedia files hidden.";
             } else {
-                if (nHidden != 0) {
-                    sMsg = string.Format("{0} multimedia file{1} hidden.", nHidden, nHidden > 1 ? "s" : "");
+                if (hidden != 0) {
+                    msg = string.Format("{0} multimedia file{1} hidden.", hidden, hidden > 1 ? "s" : "");
                 }
             }
-            MessageBox.Show(this, sMsg, "Hide Pictures", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, msg, "Hide Pictures", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         // Initialises config panel controls
@@ -1842,16 +1683,16 @@ namespace GEDmill
             chkConfigKeepSiblingOrder.Checked = CConfig.Instance.KeepSiblingOrder;
             chkConfigAllowMultimedia.Checked = CConfig.Instance.AllowMultimedia;
 
-            m_colorConfigMiniTreeBranch = CConfig.Instance.MiniTreeColourBranch;
-            m_colorConfigMiniTreeIndiBorder = CConfig.Instance.MiniTreeColourIndiBorder;
-            m_colorConfigMiniTreeIndiBackground = CConfig.Instance.MiniTreeColourIndiBackground;
-            m_colorConfigMiniTreeIndiHighlight = CConfig.Instance.MiniTreeColourIndiHighlight;
-            m_colorConfigMiniTreeIndiBgConcealed = CConfig.Instance.MiniTreeColourIndiBgConcealed;
-            m_colorConfigMiniTreeIndiFgConcealed = CConfig.Instance.MiniTreeColourIndiFgConcealed;
-            m_colorConfigMiniTreeIndiShade = CConfig.Instance.MiniTreeColourIndiShade;
-            m_colorConfigMiniTreeIndiText = CConfig.Instance.MiniTreeColourIndiText;
-            m_colorConfigMiniTreeIndiLink = CConfig.Instance.MiniTreeColourIndiLink;
-            m_colorConfigMiniTreeBackground = CConfig.Instance.MiniTreeColourBackground;
+            fColorConfigMiniTreeBranch = CConfig.Instance.MiniTreeColourBranch;
+            fColorConfigMiniTreeIndiBorder = CConfig.Instance.MiniTreeColourIndiBorder;
+            fColorConfigMiniTreeIndiBackground = CConfig.Instance.MiniTreeColourIndiBackground;
+            fColorConfigMiniTreeIndiHighlight = CConfig.Instance.MiniTreeColourIndiHighlight;
+            fColorConfigMiniTreeIndiBgConcealed = CConfig.Instance.MiniTreeColourIndiBgConcealed;
+            fColorConfigMiniTreeIndiFgConcealed = CConfig.Instance.MiniTreeColourIndiFgConcealed;
+            fColorConfigMiniTreeIndiShade = CConfig.Instance.MiniTreeColourIndiShade;
+            fColorConfigMiniTreeIndiText = CConfig.Instance.MiniTreeColourIndiText;
+            fColorConfigMiniTreeIndiLink = CConfig.Instance.MiniTreeColourIndiLink;
+            fColorConfigMiniTreeBackground = CConfig.Instance.MiniTreeColourBackground;
 
             chkConfigSupressBackreferences.Checked = !CConfig.Instance.SupressBackreferences;
 
@@ -1865,24 +1706,24 @@ namespace GEDmill
         // Colours the buttons that set the mini tree colours according to the values they control
         private void SetMiniTreeColourConfigButtons()
         {
-            btnConfigMiniTreeColourBranch.BackColor = m_colorConfigMiniTreeIndiBackground;
-            btnConfigMiniTreeColourBranch.ForeColor = m_colorConfigMiniTreeBranch;
-            btnConfigMiniTreeColourIndiBorder.BackColor = m_colorConfigMiniTreeIndiBackground;
-            btnConfigMiniTreeColourIndiBorder.ForeColor = m_colorConfigMiniTreeIndiBorder;
-            btnConfigMiniTreeColourIndiBackground.BackColor = m_colorConfigMiniTreeIndiBackground;
-            btnConfigMiniTreeColourIndiBackground.ForeColor = m_colorConfigMiniTreeIndiLink;
-            btnConfigMiniTreeColourIndiHighlight.BackColor = m_colorConfigMiniTreeIndiHighlight;
-            btnConfigMiniTreeColourIndiHighlight.ForeColor = m_colorConfigMiniTreeIndiText;
-            btnConfigMiniTreeColourIndiBgConcealed.BackColor = m_colorConfigMiniTreeIndiBgConcealed;
-            btnConfigMiniTreeColourIndiBgConcealed.ForeColor = m_colorConfigMiniTreeIndiFgConcealed;
-            btnConfigMiniTreeColourIndiFgConcealed.BackColor = m_colorConfigMiniTreeIndiBgConcealed;
-            btnConfigMiniTreeColourIndiFgConcealed.ForeColor = m_colorConfigMiniTreeIndiFgConcealed;
-            btnConfigMiniTreeColourIndiShade.BackColor = m_colorConfigMiniTreeIndiShade;
-            btnConfigMiniTreeColourIndiShade.ForeColor = m_colorConfigMiniTreeIndiLink;
-            btnConfigMiniTreeColourIndiText.BackColor = m_colorConfigMiniTreeIndiHighlight;
-            btnConfigMiniTreeColourIndiText.ForeColor = m_colorConfigMiniTreeIndiText;
-            btnConfigMiniTreeColourIndiLink.BackColor = m_colorConfigMiniTreeIndiBackground;
-            btnConfigMiniTreeColourIndiLink.ForeColor = m_colorConfigMiniTreeIndiLink;
+            btnConfigMiniTreeColourBranch.BackColor = fColorConfigMiniTreeIndiBackground;
+            btnConfigMiniTreeColourBranch.ForeColor = fColorConfigMiniTreeBranch;
+            btnConfigMiniTreeColourIndiBorder.BackColor = fColorConfigMiniTreeIndiBackground;
+            btnConfigMiniTreeColourIndiBorder.ForeColor = fColorConfigMiniTreeIndiBorder;
+            btnConfigMiniTreeColourIndiBackground.BackColor = fColorConfigMiniTreeIndiBackground;
+            btnConfigMiniTreeColourIndiBackground.ForeColor = fColorConfigMiniTreeIndiLink;
+            btnConfigMiniTreeColourIndiHighlight.BackColor = fColorConfigMiniTreeIndiHighlight;
+            btnConfigMiniTreeColourIndiHighlight.ForeColor = fColorConfigMiniTreeIndiText;
+            btnConfigMiniTreeColourIndiBgConcealed.BackColor = fColorConfigMiniTreeIndiBgConcealed;
+            btnConfigMiniTreeColourIndiBgConcealed.ForeColor = fColorConfigMiniTreeIndiFgConcealed;
+            btnConfigMiniTreeColourIndiFgConcealed.BackColor = fColorConfigMiniTreeIndiBgConcealed;
+            btnConfigMiniTreeColourIndiFgConcealed.ForeColor = fColorConfigMiniTreeIndiFgConcealed;
+            btnConfigMiniTreeColourIndiShade.BackColor = fColorConfigMiniTreeIndiShade;
+            btnConfigMiniTreeColourIndiShade.ForeColor = fColorConfigMiniTreeIndiLink;
+            btnConfigMiniTreeColourIndiText.BackColor = fColorConfigMiniTreeIndiHighlight;
+            btnConfigMiniTreeColourIndiText.ForeColor = fColorConfigMiniTreeIndiText;
+            btnConfigMiniTreeColourIndiLink.BackColor = fColorConfigMiniTreeIndiBackground;
+            btnConfigMiniTreeColourIndiLink.ForeColor = fColorConfigMiniTreeIndiLink;
         }
 
         // Used to set all buttons grey when form is disabled
@@ -2059,67 +1900,64 @@ namespace GEDmill
             CConfig.Instance.RenameOriginalPicture = chkConfigRenameOriginals.Checked;
 
             // Validate and strip trailing .html or .htm in case user has put them on
-            string sFrontPageFilename = txtConfigIndexName.Text;
-            string sFrontPageFilenameUpper = sFrontPageFilename.ToUpper();
-            if (sFrontPageFilenameUpper.LastIndexOf(".HTML") >= 0) {
-                sFrontPageFilename = sFrontPageFilename.Substring(0, sFrontPageFilename.Length - 5);
-            } else if (sFrontPageFilenameUpper.LastIndexOf(".HTM") >= 0) {
-                sFrontPageFilename = sFrontPageFilename.Substring(0, sFrontPageFilename.Length - 4);
+            string frontPageFilename = txtConfigIndexName.Text;
+            string frontPageFilenameUpper = frontPageFilename.ToUpper();
+            if (frontPageFilenameUpper.LastIndexOf(".HTML") >= 0) {
+                frontPageFilename = frontPageFilename.Substring(0, frontPageFilename.Length - 5);
+            } else if (frontPageFilenameUpper.LastIndexOf(".HTM") >= 0) {
+                frontPageFilename = frontPageFilename.Substring(0, frontPageFilename.Length - 4);
             }
-            CConfig.Instance.FrontPageFilename = sFrontPageFilename;
+            CConfig.Instance.FrontPageFilename = frontPageFilename;
 
             // Validate and strip trailing .css in case user has put them on
-            string sStylesheetFilename = txtConfigStylesheetName.Text;
-            if (sStylesheetFilename.Length > 0) {
-                string sStylesheetFilenameUpper = sStylesheetFilename.ToUpper();
-                if (sStylesheetFilename.LastIndexOf(".CSS") >= 0) {
-                    sStylesheetFilename = sStylesheetFilename.Substring(0, sStylesheetFilename.Length - 4);
+            string stylesheetFilename = txtConfigStylesheetName.Text;
+            if (stylesheetFilename.Length > 0) {
+                string sStylesheetFilenameUpper = stylesheetFilename.ToUpper();
+                if (stylesheetFilename.LastIndexOf(".CSS") >= 0) {
+                    stylesheetFilename = stylesheetFilename.Substring(0, stylesheetFilename.Length - 4);
                 }
-                CConfig.Instance.StylesheetFilename = sStylesheetFilename;
+                CConfig.Instance.StylesheetFilename = stylesheetFilename;
             }
 
             // Validate and strip leading http:// in case user has it them on
-            string sMainWebsiteLink = txtConfigUserLink.Text;
-            string sMainWebsiteLinkUpper = sMainWebsiteLink.ToUpper();
-
-            if (sMainWebsiteLink.ToLower() == "http://") {
+            string mainWebsiteLink = txtConfigUserLink.Text;
+            if (mainWebsiteLink.ToLower() == "http://") {
                 // User hasn't altered default value
-                sMainWebsiteLink = "";
+                mainWebsiteLink = "";
             }
 
-            CConfig.Instance.MainWebsiteLink = sMainWebsiteLink;
+            CConfig.Instance.MainWebsiteLink = mainWebsiteLink;
             CConfig.Instance.MiniTreeImageFormat = (cmbConfigTreeDiagramsFormat.SelectedIndex == 1 ? "png" : "gif");
             CConfig.Instance.MultiPageIndexes = chkConfigMultiPageIndex.Checked;
             CConfig.Instance.IncludeUserRefInIndex = chkConfigUserRefInIndex.Checked;
 
             try {
                 // Sanity check value
-                int uIndex = int.Parse(txtConfigMultiPageIndexNumber.Text);
-                if (uIndex > 0) {
-                    CConfig.Instance.IndividualsPerIndexPage = uIndex;
+                int index = int.Parse(txtConfigMultiPageIndexNumber.Text);
+                if (index > 0) {
+                    CConfig.Instance.IndividualsPerIndexPage = index;
                 }
             } catch (Exception) {
                 // Leave value unchanged
             }
 
-            string sCustomFooter = txtConfigCustomFooter.Text;
-            CConfig.Instance.CustomFooter = sCustomFooter;
+            CConfig.Instance.CustomFooter = txtConfigCustomFooter.Text;
 
             CConfig.Instance.FooterIsHtml = chkConfigFooterIsHtml.Checked;
             CConfig.Instance.ConserveTreeWidth = chkConfigConserveTreeWidth.Checked;
             CConfig.Instance.KeepSiblingOrder = chkConfigKeepSiblingOrder.Checked;
             CConfig.Instance.AllowMultimedia = chkConfigAllowMultimedia.Checked;
 
-            CConfig.Instance.MiniTreeColourBranch = m_colorConfigMiniTreeBranch;
-            CConfig.Instance.MiniTreeColourIndiBorder = m_colorConfigMiniTreeIndiBorder;
-            CConfig.Instance.MiniTreeColourIndiBackground = m_colorConfigMiniTreeIndiBackground;
-            CConfig.Instance.MiniTreeColourIndiHighlight = m_colorConfigMiniTreeIndiHighlight;
-            CConfig.Instance.MiniTreeColourIndiBgConcealed = m_colorConfigMiniTreeIndiBgConcealed;
-            CConfig.Instance.MiniTreeColourIndiFgConcealed = m_colorConfigMiniTreeIndiFgConcealed;
-            CConfig.Instance.MiniTreeColourIndiShade = m_colorConfigMiniTreeIndiShade;
-            CConfig.Instance.MiniTreeColourIndiText = m_colorConfigMiniTreeIndiText;
-            CConfig.Instance.MiniTreeColourIndiLink = m_colorConfigMiniTreeIndiLink;
-            CConfig.Instance.MiniTreeColourBackground = m_colorConfigMiniTreeBackground;
+            CConfig.Instance.MiniTreeColourBranch = fColorConfigMiniTreeBranch;
+            CConfig.Instance.MiniTreeColourIndiBorder = fColorConfigMiniTreeIndiBorder;
+            CConfig.Instance.MiniTreeColourIndiBackground = fColorConfigMiniTreeIndiBackground;
+            CConfig.Instance.MiniTreeColourIndiHighlight = fColorConfigMiniTreeIndiHighlight;
+            CConfig.Instance.MiniTreeColourIndiBgConcealed = fColorConfigMiniTreeIndiBgConcealed;
+            CConfig.Instance.MiniTreeColourIndiFgConcealed = fColorConfigMiniTreeIndiFgConcealed;
+            CConfig.Instance.MiniTreeColourIndiShade = fColorConfigMiniTreeIndiShade;
+            CConfig.Instance.MiniTreeColourIndiText = fColorConfigMiniTreeIndiText;
+            CConfig.Instance.MiniTreeColourIndiLink = fColorConfigMiniTreeIndiLink;
+            CConfig.Instance.MiniTreeColourBackground = fColorConfigMiniTreeBackground;
 
             CConfig.Instance.SupressBackreferences = !chkConfigSupressBackreferences.Checked;
         }
@@ -2133,7 +1971,7 @@ namespace GEDmill
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
             try {
-                lstSelectKey.Items.Clear();
+                lstKeyIndividuals.Items.Clear();
                 foreach (string xref in CConfig.Instance.KeyIndividuals) {
                     GDMIndividualRecord indiRec = fBase.Context.Tree.FindXRef<GDMIndividualRecord>(xref);
                     if (indiRec != null && GMHelper.GetVisibility(indiRec)) {
@@ -2143,7 +1981,7 @@ namespace GEDmill
                         if (string.IsNullOrEmpty(fullName)) {
                             fullName = CConfig.Instance.UnknownName;
                         }
-                        lstSelectKey.Items.Add(new NameXRefPair(fullName, xref));
+                        lstKeyIndividuals.Items.Add(new NameXRefPair(fullName, xref));
                     }
                 }
             } finally {
@@ -2160,7 +1998,7 @@ namespace GEDmill
         {
             fLogger.WriteInfo(string.Format("PrepareOutputDirectory({0})", outputFolder));
 
-            string sMessage = "Could not access or create folder.";
+            string message = "Could not access or create folder.";
             MessageBoxButtons messageBoxButtons = MessageBoxButtons.RetryCancel;
             DialogResult dialogResult = DialogResult.OK;
             bool failed = false;
@@ -2203,9 +2041,9 @@ namespace GEDmill
 
                     if (failed) {
                         // Catch failure, e.g. if user has dir/file open elsewhere
-                        sMessage = string.Format("The file {0} could not be deleted.\r\n{1}", outputFolder, exceptionMessage);
+                        message = string.Format("The file {0} could not be deleted.\r\n{1}", outputFolder, exceptionMessage);
                         messageBoxButtons = MessageBoxButtons.RetryCancel;
-                        dialogResult = MessageBox.Show(this, sMessage, "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
+                        dialogResult = MessageBox.Show(this, message, "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
                     }
                 }
                 while (failed && dialogResult == DialogResult.Retry);
@@ -2280,9 +2118,9 @@ namespace GEDmill
                             }
                             if (failed) {
                                 // Catch failure, e.g. if user has dir/file open elsewhere
-                                sMessage = string.Format("The folder {0} could not be deleted.\r\n{1}", outputFolder, exceptionMessage);
+                                message = string.Format("The folder {0} could not be deleted.\r\n{1}", outputFolder, exceptionMessage);
                                 messageBoxButtons = MessageBoxButtons.RetryCancel;
-                                dialogResult = MessageBox.Show(this, sMessage, "Creating website",
+                                dialogResult = MessageBox.Show(this, message, "Creating website",
                                     messageBoxButtons, MessageBoxIcon.Exclamation);
                             }
                         }
@@ -2304,43 +2142,43 @@ namespace GEDmill
             }
             // Order of catches is important here, due to hierarchy of exception classes.
             catch (DirectoryNotFoundException e) {
-                sMessage = "The folder you have selected could not be found.";
+                message = "The folder you have selected could not be found.";
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught DirectoryNotFoundException(5) : ", e);
                 failed = true;
             } catch (ArgumentNullException e) {
-                sMessage = "The folder name is missing or illegal.";
+                message = "The folder name is missing or illegal.";
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught ArgumentNullException(5) : ", e);
                 failed = true;
             } catch (PathTooLongException e) {
-                sMessage = "The folder name you have selected is too long.";
+                message = "The folder name you have selected is too long.";
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught PathTooLongException(5) : ", e);
                 failed = true;
             } catch (IOException e) {
-                sMessage = "The path you have selected is read-only, or the folder is not empty.";
+                message = "The path you have selected is read-only, or the folder is not empty.";
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.RetryCancel; // Let them correct this outside of app
                 fLogger.WriteError("Caught IOException(5) : ", e);
                 failed = true;
             } catch (UnauthorizedAccessException e) {
-                sMessage = "You do not have the correct permissions to access the folder.";
+                message = "You do not have the correct permissions to access the folder.";
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.RetryCancel; // Let them correct this outside of app
                 fLogger.WriteError("Caught UnauthorizedAccessException(5) : ", e);
                 failed = true;
             } catch (ArgumentException e) {
-                sMessage = "The folder name you have selected is of an illegal format.";
+                message = "The folder name you have selected is of an illegal format.";
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught ArgumentException(5) : ", e);
                 failed = true;
             } catch (NotSupportedException e) {
-                sMessage = "The folder name you have selected is of an unsupported format.";
+                message = "The folder name you have selected is of an unsupported format.";
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught NotSupportedException(5) : ", e);
@@ -2349,7 +2187,7 @@ namespace GEDmill
 
             // Handle any failure with a sMessage box
             if (failed) {
-                dialogResult = MessageBox.Show(this, string.Concat(sMessage, "\r\n", exceptionMessage), "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
+                dialogResult = MessageBox.Show(this, string.Concat(message, "\r\n", exceptionMessage), "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
 
                 if (dialogResult == DialogResult.Retry) {
                     return DialogResult.Retry;

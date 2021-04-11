@@ -12,8 +12,8 @@
         private System.Windows.Forms.Panel panelWelcome;
         private System.Windows.Forms.Panel panelChooseGedcom;
         private System.Windows.Forms.Panel panelChooseOutput;
-        private System.Windows.Forms.Panel panelPruneRecords;
-        private System.Windows.Forms.Panel panelSelectKey;
+        private System.Windows.Forms.Panel panelRecords;
+        private System.Windows.Forms.Panel panelKeyIndividuals;
         private System.Windows.Forms.Panel panelAllDone;
         private System.Windows.Forms.TabControl tabcontrolConfigPanel;
         private System.Windows.Forms.Label lblConfigFrontImageEdit;
@@ -111,15 +111,15 @@
         private System.Windows.Forms.Label lblChooseOutput;
         private System.Windows.Forms.Label lblChooseOutputContinue;
         private System.Windows.Forms.Button btnChooseOutputBrowse;
-        private System.Windows.Forms.Label lblPruneRecordsContinue;
-        private GKUI.Components.GKListView lvPruneIndividuals;
-        private GKUI.Components.GKListView lvPruneSources;
+        private System.Windows.Forms.Label lblRecordsContinue;
+        private GKUI.Components.GKListView lvIndividuals;
+        private GKUI.Components.GKListView lvSources;
         private System.Windows.Forms.Label lblPruneRecordsInstructions;
         private System.Windows.Forms.Label lblPruneRecordsButtons;
         private System.Windows.Forms.Label lblSelectKey;
         private System.Windows.Forms.TextBox txtSelectKey;
         private System.Windows.Forms.Label lblSelectKeyIndividuals;
-        private System.Windows.Forms.ListBox lstSelectKey;
+        private System.Windows.Forms.ListBox lstKeyIndividuals;
         private System.Windows.Forms.Button btnSelectKeyAdd;
         private System.Windows.Forms.Button btnSelectKeyDelete;
         private System.Windows.Forms.Label lblSelectKeyInstructions;
@@ -129,20 +129,20 @@
         private System.Windows.Forms.CheckBox chkAllDoneShowSite;
         private System.Windows.Forms.LinkLabel lblAllDone;
         private System.Windows.Forms.PictureBox pictureBoxWelcome;
-        private System.Windows.Forms.ContextMenu menuPruneRecordsIndis;
-        private System.Windows.Forms.ContextMenu menuPruneRecordsSources;
-        private System.Windows.Forms.MenuItem miPruneRecordsIndisUnconnected;
-        private System.Windows.Forms.MenuItem miPruneRecordsIndisDescendantsExc;
-        private System.Windows.Forms.MenuItem miPruneRecordsIndisDescendantsInc;
-        private System.Windows.Forms.MenuItem miPruneRecordsIndisAncestorsInc;
-        private System.Windows.Forms.MenuItem miPruneRecordsIndisAncestorsExc;
-        private System.Windows.Forms.MenuItem miPruneRecordsIndisDetails;
-        private System.Windows.Forms.MenuItem miPruneRecordsSourcesRemovePics;
-        private System.Windows.Forms.MenuItem miPruneRecordsSourcesDetails;
+        private System.Windows.Forms.ContextMenu menuIndividuals;
+        private System.Windows.Forms.ContextMenu menuSources;
+        private System.Windows.Forms.MenuItem miUnconnectedExclude;
+        private System.Windows.Forms.MenuItem miIndiDescendantsExclude;
+        private System.Windows.Forms.MenuItem miIndiDescendantsInclude;
+        private System.Windows.Forms.MenuItem miIndiAncestorsInclude;
+        private System.Windows.Forms.MenuItem miIndiAncestorsExclude;
+        private System.Windows.Forms.MenuItem miIndividualDetails;
+        private System.Windows.Forms.MenuItem miSourceRemovePics;
+        private System.Windows.Forms.MenuItem miSourceDetails;
         private System.Windows.Forms.HelpProvider helpProvider;
-        private System.Windows.Forms.TabControl tabcontrolPruneRecords;
-        private System.Windows.Forms.TabPage pagePruneRecordsIndis;
-        private System.Windows.Forms.TabPage pagePruneRecordsSources;
+        private System.Windows.Forms.TabControl tabcontrolRestrictRecords;
+        private System.Windows.Forms.TabPage pageIndividuals;
+        private System.Windows.Forms.TabPage pageSources;
         private System.Windows.Forms.TabPage pageSettingsWebpages;
         private System.Windows.Forms.TabPage pageSettingsImages;
         private System.Windows.Forms.TabPage pageSettingsGedcom;
@@ -153,11 +153,11 @@
         private System.Windows.Forms.MenuItem N3;
         private System.Windows.Forms.MenuItem N4;
         private System.Windows.Forms.MenuItem N5;
-        private System.Windows.Forms.MenuItem pruneIndividualsContextMenuInclude;
-        private System.Windows.Forms.MenuItem pruneIndividualsContextMenuExclude;
-        private System.Windows.Forms.MenuItem pruneIndividualsContextMenuAlive;
-        private System.Windows.Forms.MenuItem pruneSourcesContextMenuInclude;
-        private System.Windows.Forms.MenuItem pruneSourcesContextMenuExclude;
+        private System.Windows.Forms.MenuItem miIndividualsEveryoneInclude;
+        private System.Windows.Forms.MenuItem miIndividualsEveryoneExclude;
+        private System.Windows.Forms.MenuItem miIndividualsAliveExclude;
+        private System.Windows.Forms.MenuItem miSourcesAllInclude;
+        private System.Windows.Forms.MenuItem miSourcesAllExclude;
 
         private void InitializeComponent()
         {
@@ -267,20 +267,20 @@
             lblChooseOutput = new System.Windows.Forms.Label();
             btnChooseOutputBrowse = new System.Windows.Forms.Button();
             lblChooseOutputContinue = new System.Windows.Forms.Label();
-            panelPruneRecords = new System.Windows.Forms.Panel();
-            lblPruneRecordsContinue = new System.Windows.Forms.Label();
-            lvPruneIndividuals = new GKUI.Components.GKListView();
-            lvPruneSources = new GKUI.Components.GKListView();
+            panelRecords = new System.Windows.Forms.Panel();
+            lblRecordsContinue = new System.Windows.Forms.Label();
+            lvIndividuals = new GKUI.Components.GKListView();
+            lvSources = new GKUI.Components.GKListView();
             lblPruneRecordsInstructions = new System.Windows.Forms.Label();
             lblPruneRecordsButtons = new System.Windows.Forms.Label();
-            panelSelectKey = new System.Windows.Forms.Panel();
+            panelKeyIndividuals = new System.Windows.Forms.Panel();
             tabcontrolConfigPanel = new System.Windows.Forms.TabControl();
-            tabcontrolPruneRecords = new System.Windows.Forms.TabControl();
+            tabcontrolRestrictRecords = new System.Windows.Forms.TabControl();
             lblSelectKey = new System.Windows.Forms.Label();
             txtSelectKey = new System.Windows.Forms.TextBox();
             lblSelectKeyInstructions = new System.Windows.Forms.Label();
             lblSelectKeyIndividuals = new System.Windows.Forms.Label();
-            lstSelectKey = new System.Windows.Forms.ListBox();
+            lstKeyIndividuals = new System.Windows.Forms.ListBox();
             btnSelectKeyAdd = new System.Windows.Forms.Button();
             btnSelectKeyDelete = new System.Windows.Forms.Button();
             panelAllDone = new System.Windows.Forms.Panel();
@@ -289,39 +289,39 @@
             lblAllDoneThankYou = new System.Windows.Forms.Label();
             lblAllDoneDirectory = new System.Windows.Forms.Label();
             lblAllDoneStartFile = new System.Windows.Forms.Label();
-            menuPruneRecordsIndis = new System.Windows.Forms.ContextMenu();
-            menuPruneRecordsSources = new System.Windows.Forms.ContextMenu();
+            menuIndividuals = new System.Windows.Forms.ContextMenu();
+            menuSources = new System.Windows.Forms.ContextMenu();
             helpProvider = new System.Windows.Forms.HelpProvider();
             pageSettingsWebpages = new System.Windows.Forms.TabPage();
             pageSettingsImages = new System.Windows.Forms.TabPage();
             pageSettingsGedcom = new System.Windows.Forms.TabPage();
             pageSettingsTreeDiagrams = new System.Windows.Forms.TabPage();
             pageSettingsAdvanced = new System.Windows.Forms.TabPage();
-            miPruneRecordsIndisDescendantsExc = new System.Windows.Forms.MenuItem();
-            miPruneRecordsIndisAncestorsExc = new System.Windows.Forms.MenuItem();
-            miPruneRecordsIndisDescendantsInc = new System.Windows.Forms.MenuItem();
-            miPruneRecordsIndisAncestorsInc = new System.Windows.Forms.MenuItem();
-            miPruneRecordsIndisUnconnected = new System.Windows.Forms.MenuItem();
-            miPruneRecordsIndisDetails = new System.Windows.Forms.MenuItem();
-            pagePruneRecordsIndis = new System.Windows.Forms.TabPage();
-            pagePruneRecordsSources = new System.Windows.Forms.TabPage();
-            miPruneRecordsSourcesDetails = new System.Windows.Forms.MenuItem();
-            miPruneRecordsSourcesRemovePics = new System.Windows.Forms.MenuItem();
+            miIndiDescendantsExclude = new System.Windows.Forms.MenuItem();
+            miIndiAncestorsExclude = new System.Windows.Forms.MenuItem();
+            miIndiDescendantsInclude = new System.Windows.Forms.MenuItem();
+            miIndiAncestorsInclude = new System.Windows.Forms.MenuItem();
+            miUnconnectedExclude = new System.Windows.Forms.MenuItem();
+            miIndividualDetails = new System.Windows.Forms.MenuItem();
+            pageIndividuals = new System.Windows.Forms.TabPage();
+            pageSources = new System.Windows.Forms.TabPage();
+            miSourceDetails = new System.Windows.Forms.MenuItem();
+            miSourceRemovePics = new System.Windows.Forms.MenuItem();
             N1 = new System.Windows.Forms.MenuItem();
             N2 = new System.Windows.Forms.MenuItem();
             N3 = new System.Windows.Forms.MenuItem();
             N4 = new System.Windows.Forms.MenuItem();
             N5 = new System.Windows.Forms.MenuItem();
-            pruneIndividualsContextMenuInclude = new System.Windows.Forms.MenuItem();
-            pruneIndividualsContextMenuExclude = new System.Windows.Forms.MenuItem();
-            pruneIndividualsContextMenuAlive = new System.Windows.Forms.MenuItem();
-            pruneSourcesContextMenuInclude = new System.Windows.Forms.MenuItem();
-            pruneSourcesContextMenuExclude = new System.Windows.Forms.MenuItem();
+            miIndividualsEveryoneInclude = new System.Windows.Forms.MenuItem();
+            miIndividualsEveryoneExclude = new System.Windows.Forms.MenuItem();
+            miIndividualsAliveExclude = new System.Windows.Forms.MenuItem();
+            miSourcesAllInclude = new System.Windows.Forms.MenuItem();
+            miSourcesAllExclude = new System.Windows.Forms.MenuItem();
             panelWelcome.SuspendLayout();
             panelChooseGedcom.SuspendLayout();
             panelChooseOutput.SuspendLayout();
-            panelPruneRecords.SuspendLayout();
-            panelSelectKey.SuspendLayout();
+            panelRecords.SuspendLayout();
+            panelKeyIndividuals.SuspendLayout();
             tabcontrolConfigPanel.SuspendLayout();
             panelAllDone.SuspendLayout();
             SuspendLayout();
@@ -430,191 +430,201 @@
             panelChooseGedcom.Size = new System.Drawing.Size(280, 272);
             panelChooseGedcom.TabIndex = 6;
             // 
-            // panelPruneRecords
+            // panelRecords
             // 
-            panelPruneRecords.Controls.Add(lblPruneRecordsContinue);
-            panelPruneRecords.Controls.Add(lblPruneRecordsInstructions);
-            panelPruneRecords.Controls.Add(lblPruneRecordsButtons);
-            panelPruneRecords.Location = new System.Drawing.Point(0, 0);
-            panelPruneRecords.Name = "panelPruneRecords";
-            panelPruneRecords.Size = new System.Drawing.Size(496, 272);
-            panelPruneRecords.TabIndex = 11;
-            panelPruneRecords.Controls.Add(tabcontrolPruneRecords);
+            panelRecords.Controls.Add(lblRecordsContinue);
+            panelRecords.Controls.Add(lblPruneRecordsInstructions);
+            panelRecords.Controls.Add(lblPruneRecordsButtons);
+            panelRecords.Controls.Add(tabcontrolRestrictRecords);
+            panelRecords.Location = new System.Drawing.Point(0, 0);
+            panelRecords.Name = "panelRecords";
+            panelRecords.Size = new System.Drawing.Size(496, 272);
+            panelRecords.TabIndex = 11;
             // 
-            // lblPruneRecordsContinue
+            // lblRecordsContinue
             // 
-            lblPruneRecordsContinue.Location = new System.Drawing.Point(256, 288);
-            lblPruneRecordsContinue.Name = "lblPruneRecordsContinue";
-            lblPruneRecordsContinue.Size = new System.Drawing.Size(256, 16);
-            lblPruneRecordsContinue.TabIndex = 5;
-            lblPruneRecordsContinue.Text = "When you have finished selecting, click Next.";
+            lblRecordsContinue.Location = new System.Drawing.Point(256, 288);
+            lblRecordsContinue.Name = "lblRecordsContinue";
+            lblRecordsContinue.Size = new System.Drawing.Size(256, 16);
+            lblRecordsContinue.TabIndex = 5;
+            lblRecordsContinue.Text = "When you have finished selecting, click Next.";
             //
-            // miPruneRecordsIndisDescendantsExc
+            // miIndiDescendantsExclude
             //
-            miPruneRecordsIndisDescendantsExc.Text = "E&xclude all descendants of this person";
-            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisDescendantsExc_Click);
+            miIndiDescendantsExclude.Text = "E&xclude all descendants of this person";
+            miIndiDescendantsExclude.Click += new System.EventHandler(miIndiDescendantsExclude_Click);
             //
-            // miPruneRecordsIndisDescendantsExc
+            // miIndiAncestorsExclude
             //
-            miPruneRecordsIndisDescendantsExc.Text = "Exclude all &ancestors of this person";
-            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisAncestorsExc_Click);
+            miIndiAncestorsExclude.Text = "Exclude all &ancestors of this person";
+            miIndiAncestorsExclude.Click += new System.EventHandler(miIndiAncestorsExclude_Click);
             //
-            // miPruneRecordsIndisDescendantsExc
+            // miIndiDescendantsInclude
             //
-            miPruneRecordsIndisDescendantsExc.Text = "In&clude all descendants of this person";
-            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisDescendantsInc_Click);
+            miIndiDescendantsInclude.Text = "In&clude all descendants of this person";
+            miIndiDescendantsInclude.Click += new System.EventHandler(miIndiDescendantsInclude_Click);
             //
-            // miPruneRecordsIndisDescendantsExc
+            // miIndiAncestorsInclude
             //
-            miPruneRecordsIndisDescendantsExc.Text = "Include all a&ncestors of this person";
-            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisAncestorsInc_Click);
+            miIndiAncestorsInclude.Text = "Include all a&ncestors of this person";
+            miIndiAncestorsInclude.Click += new System.EventHandler(miIndiAncestorsInclude_Click);
             //
-            // miPruneRecordsIndisDescendantsExc
+            // miUnconnectedExclude
             //
-            miPruneRecordsIndisDescendantsExc.Text = "E&xclude individuals unless navigable from this person";
-            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisUnconnected_Click);
+            miUnconnectedExclude.Text = "E&xclude individuals unless navigable from this person";
+            miUnconnectedExclude.Click += new System.EventHandler(miUnconnectedExclude_Click);
             //
-            // miPruneRecordsIndisDescendantsExc
+            // miIndividualDetails
             //
-            miPruneRecordsIndisDescendantsExc.Text = "&Details and pictures...";
-            miPruneRecordsIndisDescendantsExc.Click += new System.EventHandler(miPruneRecordsIndisDetails_Click);
+            miIndividualDetails.Text = "&Details and pictures...";
+            miIndividualDetails.Click += new System.EventHandler(miIndividualDetails_Click);
             //
-            // menuPruneRecordsIndis
+            // miIndividualsEveryoneInclude
             //
-            pruneIndividualsContextMenuInclude.Text = "&Include everyone";
-            pruneIndividualsContextMenuInclude.Click += new System.EventHandler(pruneIndividualsContextMenuInclude_Click);
-
-            pruneIndividualsContextMenuExclude.Text = "&Exclude everyone";
-            pruneIndividualsContextMenuExclude.Click += new System.EventHandler(pruneIndividualsContextMenuExclude_Click);
-
-            pruneIndividualsContextMenuAlive.Text = "Exclude everyone still a&live (and those born in last 100 years)";
-            pruneIndividualsContextMenuAlive.Click += new System.EventHandler(pruneIndividualsContextMenuAlive_Click);
-
-            menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisDetails);
-            menuPruneRecordsIndis.MenuItems.Add(N3);
-            menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisDescendantsExc);
-            menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisDescendantsInc);
-            menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisAncestorsExc);
-            menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisAncestorsInc);
-            menuPruneRecordsIndis.MenuItems.Add(N4);
-            menuPruneRecordsIndis.MenuItems.Add(pruneIndividualsContextMenuInclude);
-            menuPruneRecordsIndis.MenuItems.Add(pruneIndividualsContextMenuExclude);
-            menuPruneRecordsIndis.MenuItems.Add(pruneIndividualsContextMenuAlive);
-            menuPruneRecordsIndis.MenuItems.Add(N5);
-            menuPruneRecordsIndis.MenuItems.Add(miPruneRecordsIndisUnconnected);
-            menuPruneRecordsIndis.Popup += new System.EventHandler(menuPruneRecordsIndis_Popup);
-
-            miPruneRecordsSourcesDetails.Text = "&Details and pictures...";
-            miPruneRecordsSourcesDetails.Click += new System.EventHandler(pruneSourcesContextMenuDetails_Click);
-
-            miPruneRecordsSourcesRemovePics.Text = "&Remove pictures from selected sources";
-            miPruneRecordsSourcesRemovePics.Click += new System.EventHandler(pruneSourcesContextMenuRemovePics_Click);
-
+            miIndividualsEveryoneInclude.Text = "&Include everyone";
+            miIndividualsEveryoneInclude.Click += new System.EventHandler(miIndividualsEveryoneInclude_Click);
+            //
+            // miIndividualsEveryoneExclude
+            //
+            miIndividualsEveryoneExclude.Text = "&Exclude everyone";
+            miIndividualsEveryoneExclude.Click += new System.EventHandler(miIndividualsEveryoneExclude_Click);
+            //
+            // miIndividualsAliveExclude
+            //
+            miIndividualsAliveExclude.Text = "Exclude everyone still a&live (and those born in last 100 years)";
+            miIndividualsAliveExclude.Click += new System.EventHandler(miIndividualsAliveExclude_Click);
+            //
+            // menuIndividuals
+            //
+            menuIndividuals.MenuItems.Add(miIndividualDetails);
+            menuIndividuals.MenuItems.Add(N3);
+            menuIndividuals.MenuItems.Add(miIndiDescendantsExclude);
+            menuIndividuals.MenuItems.Add(miIndiDescendantsInclude);
+            menuIndividuals.MenuItems.Add(miIndiAncestorsExclude);
+            menuIndividuals.MenuItems.Add(miIndiAncestorsInclude);
+            menuIndividuals.MenuItems.Add(N4);
+            menuIndividuals.MenuItems.Add(miIndividualsEveryoneInclude);
+            menuIndividuals.MenuItems.Add(miIndividualsEveryoneExclude);
+            menuIndividuals.MenuItems.Add(miIndividualsAliveExclude);
+            menuIndividuals.MenuItems.Add(N5);
+            menuIndividuals.MenuItems.Add(miUnconnectedExclude);
+            menuIndividuals.Popup += new System.EventHandler(menuIndividuals_Popup);
+            //
+            // miSourceDetails
+            //
+            miSourceDetails.Text = "&Details and pictures...";
+            miSourceDetails.Click += new System.EventHandler(miSourceDetails_Click);
+            //
+            // miSourceRemovePics
+            //
+            miSourceRemovePics.Text = "&Remove pictures from selected sources";
+            miSourceRemovePics.Click += new System.EventHandler(miSourceRemovePics_Click);
+            //
+            // N1
+            //
             N1.Text = "-";
+            //
+            // N2
+            //
             N2.Text = "-";
-
-            pruneSourcesContextMenuInclude.Text = "&Include all sources";
-            pruneSourcesContextMenuInclude.Click += new System.EventHandler(pruneSourcesContextMenuInclude_Click);
-
-            pruneSourcesContextMenuExclude.Text = "&Exclude all sources";
-            pruneSourcesContextMenuExclude.Click += new System.EventHandler(pruneSourcesContextMenuExclude_Click);
-
             //
-            // m_pruneSourcesContextMenu
+            // miSourcesAllInclude
             //
-            menuPruneRecordsSources.MenuItems.Add(miPruneRecordsSourcesDetails);
-            menuPruneRecordsSources.MenuItems.Add(N1);
-            menuPruneRecordsSources.MenuItems.Add(pruneSourcesContextMenuInclude);
-            menuPruneRecordsSources.MenuItems.Add(pruneSourcesContextMenuExclude);
-            menuPruneRecordsSources.MenuItems.Add(N2);
-            menuPruneRecordsSources.MenuItems.Add(miPruneRecordsSourcesRemovePics);
-            menuPruneRecordsSources.Popup += new System.EventHandler(pruneSourcesContextMenu_popup);
-
+            miSourcesAllInclude.Text = "&Include all sources";
+            miSourcesAllInclude.Click += new System.EventHandler(miSourcesAllInclude_Click);
+            //
+            // miSourcesAllExclude
+            //
+            miSourcesAllExclude.Text = "&Exclude all sources";
+            miSourcesAllExclude.Click += new System.EventHandler(miSourcesAllExclude_Click);
+            //
+            // menuSources
+            //
+            menuSources.MenuItems.Add(miSourceDetails);
+            menuSources.MenuItems.Add(N1);
+            menuSources.MenuItems.Add(miSourcesAllInclude);
+            menuSources.MenuItems.Add(miSourcesAllExclude);
+            menuSources.MenuItems.Add(N2);
+            menuSources.MenuItems.Add(miSourceRemovePics);
+            menuSources.Popup += new System.EventHandler(menuSources_Popup);
             // 
-            // panel3ListView
+            // tabcontrolRestrictRecords
             //          
-            tabcontrolPruneRecords.Location = new System.Drawing.Point(108, 65);
-            tabcontrolPruneRecords.Name = "tabcontrolPruneRecords";
-            tabcontrolPruneRecords.Size = new System.Drawing.Size(388, 207);
-            tabcontrolPruneRecords.TabIndex = 4;
-            tabcontrolPruneRecords.TabPages.Add(pagePruneRecordsIndis);
-            tabcontrolPruneRecords.TabPages.Add(pagePruneRecordsSources);
-
+            tabcontrolRestrictRecords.Location = new System.Drawing.Point(108, 65);
+            tabcontrolRestrictRecords.Name = "tabcontrolRestrictRecords";
+            tabcontrolRestrictRecords.Size = new System.Drawing.Size(388, 207);
+            tabcontrolRestrictRecords.TabIndex = 4;
+            tabcontrolRestrictRecords.TabPages.Add(pageIndividuals);
+            tabcontrolRestrictRecords.TabPages.Add(pageSources);
             // 
-            // lvPruneIndividuals
+            // lvIndividuals
             // 
-            lvPruneIndividuals.CheckBoxes = true;
-            lvPruneIndividuals.Location = new System.Drawing.Point(0, 0);
-            lvPruneIndividuals.Name = "m_listviewPruneRecordsIndis";
-            lvPruneIndividuals.Size = new System.Drawing.Size(381, 181);
-            lvPruneIndividuals.TabIndex = 4;
-            lvPruneIndividuals.View = System.Windows.Forms.View.Details;
-            lvPruneIndividuals.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(lvPruneIndividuals_ItemCheck);
-            lvPruneIndividuals.ContextMenu = menuPruneRecordsIndis;
-            lvPruneIndividuals.FullRowSelect = true;
-            lvPruneIndividuals.GridLines = true;
-            lvPruneIndividuals.AllowColumnReorder = true;
-
+            lvIndividuals.CheckBoxes = true;
+            lvIndividuals.Location = new System.Drawing.Point(0, 0);
+            lvIndividuals.Name = "lvIndividuals";
+            lvIndividuals.Size = new System.Drawing.Size(381, 181);
+            lvIndividuals.TabIndex = 4;
+            lvIndividuals.View = System.Windows.Forms.View.Details;
+            lvIndividuals.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(lvIndividuals_ItemCheck);
+            lvIndividuals.ContextMenu = menuIndividuals;
+            lvIndividuals.FullRowSelect = true;
+            lvIndividuals.GridLines = true;
+            lvIndividuals.AllowColumnReorder = true;
             // 
-            // pagePruneRecordsIndis
+            // pageIndividuals
             // 
-            pagePruneRecordsIndis.Text = "Individuals";
-            pagePruneRecordsIndis.Controls.Add(lvPruneIndividuals);
-
+            pageIndividuals.Text = "Individuals";
+            pageIndividuals.Controls.Add(lvIndividuals);
             // 
-            // lvPruneSources
+            // lvSources
             // 
-            lvPruneSources.CheckBoxes = true;
-            lvPruneSources.Location = new System.Drawing.Point(0, 0);
-            lvPruneSources.Name = "m_listviewPruneRecordsSources";
-            lvPruneSources.Size = new System.Drawing.Size(381, 181);
-            lvPruneSources.TabIndex = 4;
-            lvPruneSources.View = System.Windows.Forms.View.Details;
-            lvPruneSources.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(lvPruneSources_ItemCheck);
-            lvPruneSources.ContextMenu = menuPruneRecordsSources;
-            lvPruneSources.FullRowSelect = true;
-            lvPruneSources.GridLines = true;
-            lvPruneSources.AllowColumnReorder = true;
-
+            lvSources.CheckBoxes = true;
+            lvSources.Location = new System.Drawing.Point(0, 0);
+            lvSources.Name = "lvSources";
+            lvSources.Size = new System.Drawing.Size(381, 181);
+            lvSources.TabIndex = 4;
+            lvSources.View = System.Windows.Forms.View.Details;
+            lvSources.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(lvSources_ItemCheck);
+            lvSources.ContextMenu = menuSources;
+            lvSources.FullRowSelect = true;
+            lvSources.GridLines = true;
+            lvSources.AllowColumnReorder = true;
             // 
-            // pagePruneRecordsSources
+            // pageSources
             // 
-            pagePruneRecordsSources.Text = "Sources";
-            pagePruneRecordsSources.Controls.Add(lvPruneSources);
-
+            pageSources.Text = "Sources";
+            pageSources.Controls.Add(lvSources);
             // 
-            // panel3InstructionLabel
+            // lblPruneRecordsInstructions
             // 
             lblPruneRecordsInstructions.Location = new System.Drawing.Point(8, 16);
-            lblPruneRecordsInstructions.Name = "m_labelPruneRecordsInstructions";
+            lblPruneRecordsInstructions.Name = "lblPruneRecordsInstructions";
             lblPruneRecordsInstructions.Size = new System.Drawing.Size(488, 45);
             lblPruneRecordsInstructions.TabIndex = 3;
             lblPruneRecordsInstructions.Text = "Now, you can specify any individuals and sources you don\'t want to appear in the website. " +
                 "Clear the box next to their name to prevent them from appearing - those left ticked will appear.";
-
             // 
-            // panel3ButtonsLabel
+            // lblPruneRecordsButtons
             // 
             lblPruneRecordsButtons.Location = new System.Drawing.Point(8, 70);
-            lblPruneRecordsButtons.Name = "m_labelPruneRecordsButtons";
+            lblPruneRecordsButtons.Name = "lblPruneRecordsButtons";
             lblPruneRecordsButtons.Size = new System.Drawing.Size(92, 95);
             lblPruneRecordsButtons.TabIndex = 9;
             lblPruneRecordsButtons.Text = "Right-click on the list for more options, including adding pictures...";
-
             // 
-            // panelSelectKey
+            // panelKeyIndividuals
             // 
-            panelSelectKey.Controls.Add(lblSelectKey);
-            panelSelectKey.Controls.Add(txtSelectKey);
-            panelSelectKey.Controls.Add(lblSelectKeyIndividuals);
-            panelSelectKey.Controls.Add(lstSelectKey);
-            panelSelectKey.Controls.Add(btnSelectKeyAdd);
-            panelSelectKey.Controls.Add(btnSelectKeyDelete);
-            panelSelectKey.Controls.Add(lblSelectKeyInstructions);
-            panelSelectKey.Location = new System.Drawing.Point(216, 0);
-            panelSelectKey.Name = "panelSelectKey";
-            panelSelectKey.Size = new System.Drawing.Size(280, 272);
-            panelSelectKey.TabIndex = 12;
+            panelKeyIndividuals.Controls.Add(lblSelectKey);
+            panelKeyIndividuals.Controls.Add(txtSelectKey);
+            panelKeyIndividuals.Controls.Add(lblSelectKeyIndividuals);
+            panelKeyIndividuals.Controls.Add(lstKeyIndividuals);
+            panelKeyIndividuals.Controls.Add(btnSelectKeyAdd);
+            panelKeyIndividuals.Controls.Add(btnSelectKeyDelete);
+            panelKeyIndividuals.Controls.Add(lblSelectKeyInstructions);
+            panelKeyIndividuals.Location = new System.Drawing.Point(216, 0);
+            panelKeyIndividuals.Name = "panelKeyIndividuals";
+            panelKeyIndividuals.Size = new System.Drawing.Size(280, 272);
+            panelKeyIndividuals.TabIndex = 12;
             // 
             // lblSelectKey
             // 
@@ -642,14 +652,14 @@
             lblSelectKeyIndividuals.Text = "&Key Individuals:";
             lblSelectKeyIndividuals.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
-            // lstSelectKey
+            // lstKeyIndividuals
             // 
-            lstSelectKey.Location = new System.Drawing.Point(0, 206);
-            lstSelectKey.Name = "lstSelectKey";
-            lstSelectKey.Size = new System.Drawing.Size(192, 68);
-            lstSelectKey.TabIndex = 4;
-            lstSelectKey.Text = "";
-            lstSelectKey.SelectedValueChanged += new System.EventHandler(lstSelectKey_SelectedValueChanged);
+            lstKeyIndividuals.Location = new System.Drawing.Point(0, 206);
+            lstKeyIndividuals.Name = "lstKeyIndividuals";
+            lstKeyIndividuals.Size = new System.Drawing.Size(192, 68);
+            lstKeyIndividuals.TabIndex = 4;
+            lstKeyIndividuals.Text = "";
+            lstKeyIndividuals.SelectedValueChanged += new System.EventHandler(lstKeyIndividuals_SelectedValueChanged);
             // 
             // btnSelectKeyAdd
             // 
@@ -666,859 +676,794 @@
             btnSelectKeyDelete.TabIndex = 7;
             btnSelectKeyDelete.Text = "&Remove";
             btnSelectKeyDelete.Click += new System.EventHandler(btnSelectKeyDelete_Click);
-
             // 
-            // Key Indidivuals Instruction Label
+            // lblSelectKeyInstructions
             // 
             lblSelectKeyInstructions.Location = new System.Drawing.Point(0, 16);
-            lblSelectKeyInstructions.Name = "panel4InstructionLabel";
+            lblSelectKeyInstructions.Name = "lblSelectKeyInstructions";
             lblSelectKeyInstructions.Size = new System.Drawing.Size(288, 96);
             lblSelectKeyInstructions.TabIndex = 0;
             lblSelectKeyInstructions.Text = "Next, you can choose a title for the front page of your website. " +
                 "Leave it blank if you don\'t want a title.";
             lblSelectKeyInstructions.Text += "\r\n\r\nYou can also select which people feature as key individuals on the front page.";
-
             // 
-            // configPanel_Commentary_Label (Webpages)
+            // lblConfigCommentary
             // 
             lblConfigCommentary.Location = new System.Drawing.Point(9, 0);
-            lblConfigCommentary.Name = "m_labelConfigCommentary";
+            lblConfigCommentary.Name = "lblConfigCommentary";
             lblConfigCommentary.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigCommentary.Size = new System.Drawing.Size(200, 24);
             lblConfigCommentary.TabIndex = 1;
             lblConfigCommentary.Text = "Commentary for &title page:";
             lblConfigCommentary.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_Commentary_EditBox (Webpages)
+            // txtConfigCommentary
             // 
             txtConfigCommentary.Location = new System.Drawing.Point(9, 26);
-            txtConfigCommentary.Name = "m_textboxConfigCommentary";
+            txtConfigCommentary.Name = "txtConfigCommentary";
             txtConfigCommentary.Size = new System.Drawing.Size(240, 70);
             txtConfigCommentary.TabIndex = 2;
             txtConfigCommentary.Text = "";
             txtConfigCommentary.Multiline = true;
-
             // 
-            // configPanel_CommentaryIsHtml_Label (Webpages)
+            // lblConfigCommentaryIsHtml
             // 
             lblConfigCommentaryIsHtml.Location = new System.Drawing.Point(9, 91);
-            lblConfigCommentaryIsHtml.Name = "m_labelConfigCommentaryIsHtml";
+            lblConfigCommentaryIsHtml.Name = "lblConfigCommentaryIsHtml";
             lblConfigCommentaryIsHtml.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigCommentaryIsHtml.Size = new System.Drawing.Size(8, 24);
             lblConfigCommentaryIsHtml.TabIndex = 3;
             lblConfigCommentaryIsHtml.Text = "(";
             lblConfigCommentaryIsHtml.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_CommentaryIsHtml_CheckBox (Webpages)
+            // chkConfigCommentaryIsHtml
             // 
             chkConfigCommentaryIsHtml.Location = new System.Drawing.Point(19, 96);
-            chkConfigCommentaryIsHtml.Name = "m_checkboxConfigCommentaryIsHtml";
+            chkConfigCommentaryIsHtml.Name = "chkConfigCommentaryIsHtml";
             chkConfigCommentaryIsHtml.Size = new System.Drawing.Size(190, 24);
             chkConfigCommentaryIsHtml.TabIndex = 4;
             chkConfigCommentaryIsHtml.Text = "the a&bove text is HTML)";
-
             // 
-            // configPanel_UserLink_Label (Webpages)
+            // lblConfigUserLink
             // 
             lblConfigUserLink.Location = new System.Drawing.Point(9, 121);
-            lblConfigUserLink.Name = "m_labelConfigUserLink";
+            lblConfigUserLink.Name = "lblConfigUserLink";
             lblConfigUserLink.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigUserLink.Size = new System.Drawing.Size(260, 24);
             lblConfigUserLink.TabIndex = 5;
             lblConfigUserLink.Text = "&Link to your website: (with http:// prefix)";
             lblConfigUserLink.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_UserLink_EditBox (Webpages)
+            // txtConfigUserLink
             // 
             txtConfigUserLink.Location = new System.Drawing.Point(9, 147);
-            txtConfigUserLink.Name = "m_textboxConfigUserLink";
+            txtConfigUserLink.Name = "txtConfigUserLink";
             txtConfigUserLink.Size = new System.Drawing.Size(240, 20);
             txtConfigUserLink.TabIndex = 7;
             txtConfigUserLink.Text = "";
             txtConfigUserLink.Multiline = false;
-
             // 
-            // configPanel_CustomFooter_Label (Webpages)
+            // lblConfigCustomFooter
             // 
             lblConfigCustomFooter.Location = new System.Drawing.Point(9, 172);
-            lblConfigCustomFooter.Name = "m_labelConfigCustomFooter";
+            lblConfigCustomFooter.Name = "lblConfigCustomFooter";
             lblConfigCustomFooter.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigCustomFooter.Size = new System.Drawing.Size(224, 24);
             lblConfigCustomFooter.TabIndex = 8;
             lblConfigCustomFooter.Text = "Te&xt for page footer:";
             lblConfigCustomFooter.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_CustomFooter_EditBox (Webpages)
+            // txtConfigCustomFooter
             //
             txtConfigCustomFooter.Location = new System.Drawing.Point(9, 198);
-            txtConfigCustomFooter.Name = "m_textboxConfigCustomFooter";
+            txtConfigCustomFooter.Name = "txtConfigCustomFooter";
             txtConfigCustomFooter.Size = new System.Drawing.Size(200, 20);
             txtConfigCustomFooter.Text = "";
             txtConfigCustomFooter.TabIndex = 9;
-
             // 
-            // configPanel_FooterIsHtml_Label (Webpages)
+            // lblConfigFooterIsHtml
             // 
             lblConfigFooterIsHtml.Location = new System.Drawing.Point(9, 213);
-            lblConfigFooterIsHtml.Name = "m_labelConfigFooterIsHtml";
+            lblConfigFooterIsHtml.Name = "lblConfigFooterIsHtml";
             lblConfigFooterIsHtml.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigFooterIsHtml.Size = new System.Drawing.Size(8, 24);
             lblConfigFooterIsHtml.TabIndex = 10;
             lblConfigFooterIsHtml.Text = "(";
             lblConfigFooterIsHtml.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_FooterIsHtml_CheckBox (Webpages)
+            // chkConfigFooterIsHtml
             // 
             chkConfigFooterIsHtml.Location = new System.Drawing.Point(19, 218);
-            chkConfigFooterIsHtml.Name = "m_checkboxConfigFooterIsHtml";
+            chkConfigFooterIsHtml.Name = "chkConfigFooterIsHtml";
             chkConfigFooterIsHtml.Size = new System.Drawing.Size(190, 24);
             chkConfigFooterIsHtml.TabIndex = 11;
             chkConfigFooterIsHtml.Text = "the abo&ve text is HTML)";
-
             //
-            // configPanel_Stats_CheckBox (Webpages)
+            // chkConfigStats
             // 
             chkConfigStats.Location = new System.Drawing.Point(266, 7);
-            chkConfigStats.Name = "m_checkboxConfigStats";
+            chkConfigStats.Name = "chkConfigStats";
             chkConfigStats.Size = new System.Drawing.Size(200, 20);
             chkConfigStats.Text = "Include website &statistics";
             chkConfigStats.TabIndex = 12;
-
             //
-            // configPanel_CDROM_CheckBox (Webpages)
+            // chkConfigCdrom
             // 
             chkConfigCdrom.Location = new System.Drawing.Point(266, 30);
-            chkConfigCdrom.Name = "m_checkboxConfigCdrom";
+            chkConfigCdrom.Name = "chkConfigCdrom";
             chkConfigCdrom.Size = new System.Drawing.Size(200, 20);
             chkConfigCdrom.Text = "Create CD-ROM &auto-run files";
             chkConfigCdrom.TabIndex = 13;
-
             //
-            // configPanel_MultiPageIndex_CheckBox (Webpages)
+            // chkConfigMultiPageIndex
             // 
             chkConfigMultiPageIndex.Location = new System.Drawing.Point(266, 53);
-            chkConfigMultiPageIndex.Name = "m_checkboxConfigMultiPageIndex";
+            chkConfigMultiPageIndex.Name = "chkConfigMultiPageIndex";
             chkConfigMultiPageIndex.Size = new System.Drawing.Size(220, 20);
             chkConfigMultiPageIndex.Text = "&Multi-page individuals index";
             chkConfigMultiPageIndex.TabIndex = 14;
-            chkConfigMultiPageIndex.Click += new System.EventHandler(configPanel_MultiPageIndex_CheckBox_click);
-
+            chkConfigMultiPageIndex.Click += new System.EventHandler(chkConfigMultiPageIndex_Click);
             //
-            // configPanel_UserRefInIndex_CheckBox (Webpages)
+            // chkConfigUserRefInIndex
             //
             chkConfigUserRefInIndex.Location = new System.Drawing.Point(266, 76);
-            chkConfigUserRefInIndex.Name = "m_checkboxConfigUserRefInIndex";
+            chkConfigUserRefInIndex.Name = "chkConfigUserRefInIndex";
             chkConfigUserRefInIndex.Size = new System.Drawing.Size(220, 20);
             chkConfigUserRefInIndex.Text = "&User Reference numbers in index";
             chkConfigUserRefInIndex.TabIndex = 15;
-
             // 
-            // configPanel_MultiPageIndexNumber_Label (Webpages)
+            // lblConfigMultiPageIndexNumber
             // 
             lblConfigMultiPageIndexNumber.Location = new System.Drawing.Point(266, 96);
-            lblConfigMultiPageIndexNumber.Name = "m_labelConfigMultiPageIndexNumber";
+            lblConfigMultiPageIndexNumber.Name = "lblConfigMultiPageIndexNumber";
             lblConfigMultiPageIndexNumber.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigMultiPageIndexNumber.Size = new System.Drawing.Size(170, 24);
             lblConfigMultiPageIndexNumber.TabIndex = 16;
             lblConfigMultiPageIndexNumber.Text = "&Individuals per index page:";
             lblConfigMultiPageIndexNumber.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_MultiPageIndexNumber_TextBox (Webpages)
+            // txtConfigMultiPageIndexNumber
             // 
             txtConfigMultiPageIndexNumber.Location = new System.Drawing.Point(446, 100);
-            txtConfigMultiPageIndexNumber.Name = "m_textboxConfigMultiPageIndexNumber";
+            txtConfigMultiPageIndexNumber.Name = "txtConfigMultiPageIndexNumber";
             txtConfigMultiPageIndexNumber.Size = new System.Drawing.Size(45, 20);
             txtConfigMultiPageIndexNumber.TabIndex = 17;
             txtConfigMultiPageIndexNumber.Text = "";
-
             // 
-            // configPanel_IndexName_Label (Webpages)
+            // lblConfigIndexName
             // 
             lblConfigIndexName.Location = new System.Drawing.Point(266, 126);
-            lblConfigIndexName.Name = "m_labelConfigIndexName";
+            lblConfigIndexName.Name = "lblConfigIndexName";
             lblConfigIndexName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigIndexName.Size = new System.Drawing.Size(224, 20);
             lblConfigIndexName.TabIndex = 18;
             lblConfigIndexName.Text = "Name of &front page file:";
             lblConfigIndexName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_IndexName_EditBox (Webpages)
+            // txtConfigIndexName
             // 
             txtConfigIndexName.Location = new System.Drawing.Point(266, 148);
-            txtConfigIndexName.Name = "m_textboxConfigIndexName";
+            txtConfigIndexName.Name = "txtConfigIndexName";
             txtConfigIndexName.Size = new System.Drawing.Size(175, 20);
             txtConfigIndexName.TabIndex = 19;
             txtConfigIndexName.Text = "";
             txtConfigIndexName.Multiline = false;
-
             // 
-            // configPanel_IndexName_ExtnLabel (Webpages)
+            // lblConfigIndexNameExtn
             // 
             lblConfigIndexNameExtn.Location = new System.Drawing.Point(440, 141);
-            lblConfigIndexNameExtn.Name = "m_labelConfigIndexNameExtn";
+            lblConfigIndexNameExtn.Name = "lblConfigIndexNameExtn";
             lblConfigIndexNameExtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigIndexNameExtn.Size = new System.Drawing.Size(60, 24);
             lblConfigIndexNameExtn.TabIndex = 20;
-            lblConfigIndexNameExtn.Text = ""; //Filled programatically
+            lblConfigIndexNameExtn.Text = "";
             lblConfigIndexNameExtn.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_PreserveFrontPage_CheckBox (Webpages)
+            // chkConfigPreserveFrontPage
             // 
             chkConfigPreserveFrontPage.Location = new System.Drawing.Point(266, 170);
-            chkConfigPreserveFrontPage.Name = "m_checkboxConfigPreserveFrontPage";
+            chkConfigPreserveFrontPage.Name = "chkConfigPreserveFrontPage";
             chkConfigPreserveFrontPage.Size = new System.Drawing.Size(250, 20);
             chkConfigPreserveFrontPage.Text = "&Do not generate new front page";
             chkConfigPreserveFrontPage.TabIndex = 21;
-
             // 
-            // configPanel_Email_Label (Webpages)
+            // lblConfigEmail
             // 
             lblConfigEmail.Location = new System.Drawing.Point(266, 190);
-            lblConfigEmail.Name = "m_labelConfigEmail";
+            lblConfigEmail.Name = "lblConfigEmail";
             lblConfigEmail.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigEmail.Size = new System.Drawing.Size(220, 24);
             lblConfigEmail.TabIndex = 22;
             lblConfigEmail.Text = "&Email address to put on front page:";
             lblConfigEmail.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_Email_EditBox (Webpages)
+            // txtConfigEmail
             // 
             txtConfigEmail.Location = new System.Drawing.Point(266, 216);
-            txtConfigEmail.Name = "m_textboxConfigEmail";
+            txtConfigEmail.Name = "txtConfigEmail";
             txtConfigEmail.Size = new System.Drawing.Size(220, 20);
             txtConfigEmail.TabIndex = 23;
             txtConfigEmail.Text = "";
             txtConfigEmail.Multiline = false;
-
             // 
-            // configPanel_BackImage_EditLabel (Images)
+            // lblConfigBackImageEdit
             // 
             this.lblConfigBackImageEdit.Location = new System.Drawing.Point(9, 0);
-            this.lblConfigBackImageEdit.Name = "m_labelConfigBackImageEdit";
+            this.lblConfigBackImageEdit.Name = "lblConfigBackImageEdit";
             this.lblConfigBackImageEdit.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigBackImageEdit.Size = new System.Drawing.Size(156, 24);
             this.lblConfigBackImageEdit.TabIndex = 1;
             this.lblConfigBackImageEdit.Text = "&Background image:";
             this.lblConfigBackImageEdit.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_BackImage_EditBox (Images)
+            // txtConfigBackImageEdit
             // 
             this.txtConfigBackImageEdit.Location = new System.Drawing.Point(9, 26);
-            this.txtConfigBackImageEdit.Name = "m_textboxConfigBackImageEdit";
+            this.txtConfigBackImageEdit.Name = "txtConfigBackImageEdit";
             this.txtConfigBackImageEdit.Size = new System.Drawing.Size(191, 20);
             this.txtConfigBackImageEdit.TabIndex = 2;
             this.txtConfigBackImageEdit.Text = "";
-
             // 
-            // configPanel_BackImage_BrowseButton (Images)
+            // btnConfigBackImageBrowse
             // 
             this.btnConfigBackImageBrowse.Location = new System.Drawing.Point(208, 25);
-            this.btnConfigBackImageBrowse.Name = "m_buttonConfigBackImageBrowse";
+            this.btnConfigBackImageBrowse.Name = "btnConfigBackImageBrowse";
             this.btnConfigBackImageBrowse.TabIndex = 3;
             this.btnConfigBackImageBrowse.Text = "B&rowse...";
-            this.btnConfigBackImageBrowse.Click += new System.EventHandler(this.configPanel_BackImage_BrowseButton_click);
-
+            this.btnConfigBackImageBrowse.Click += new System.EventHandler(this.btnConfigBackImageBrowse_Click);
             // 
-            // configPanel_FrontImage_EditLabel (Images)
+            // lblConfigFrontImageEdit
             // 
             this.lblConfigFrontImageEdit.Location = new System.Drawing.Point(9, 46);
-            this.lblConfigFrontImageEdit.Name = "m_labelConfigFrontImageEdit";
+            this.lblConfigFrontImageEdit.Name = "lblConfigFrontImageEdit";
             this.lblConfigFrontImageEdit.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigFrontImageEdit.Size = new System.Drawing.Size(156, 20);
             this.lblConfigFrontImageEdit.TabIndex = 4;
             this.lblConfigFrontImageEdit.Text = "&Picture on front page:";
             this.lblConfigFrontImageEdit.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_FrontImage_EditBox (Images)
+            // txtConfigFrontImageEdit
             // 
             this.txtConfigFrontImageEdit.Location = new System.Drawing.Point(9, 68);
-            this.txtConfigFrontImageEdit.Name = "m_textboxConfigFrontImageEdit";
+            this.txtConfigFrontImageEdit.Name = "txtConfigFrontImageEdit";
             this.txtConfigFrontImageEdit.Size = new System.Drawing.Size(191, 20);
             this.txtConfigFrontImageEdit.TabIndex = 5;
             this.txtConfigFrontImageEdit.Text = "";
-
             // 
-            // configPanel_FrontImage_BrowseButton (Images)
+            // btnConfigFrontImageBrowse
             // 
             this.btnConfigFrontImageBrowse.Location = new System.Drawing.Point(208, 68);
-            this.btnConfigFrontImageBrowse.Name = "m_buttonConfigFrontImageBrowse";
+            this.btnConfigFrontImageBrowse.Name = "btnConfigFrontImageBrowse";
             this.btnConfigFrontImageBrowse.TabIndex = 6;
             this.btnConfigFrontImageBrowse.Text = "Br&owse...";
-            this.btnConfigFrontImageBrowse.Click += new System.EventHandler(this.configPanel_FrontImage_BrowseButton_click);
-
+            this.btnConfigFrontImageBrowse.Click += new System.EventHandler(this.btnConfigFrontImageBrowse_Click);
             // 
-            // configPanel_IndiImageSize_Label (Images)
+            // lblConfigIndiImageSize
             // 
             this.lblConfigIndiImageSize.Location = new System.Drawing.Point(9, 108);
-            this.lblConfigIndiImageSize.Name = "m_labelConfigIndiImageSize";
+            this.lblConfigIndiImageSize.Name = "lblConfigIndiImageSize";
             this.lblConfigIndiImageSize.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigIndiImageSize.Size = new System.Drawing.Size(256, 24);
             this.lblConfigIndiImageSize.TabIndex = 7;
             this.lblConfigIndiImageSize.Text = "Maximum size of individual images";
             this.lblConfigIndiImageSize.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             // 
-            // configPanel_IndiImageWidth_Label (Images)
+            // lblConfigIndiImageWidth
             // 
             this.lblConfigIndiImageWidth.Location = new System.Drawing.Point(9, 138);
-            this.lblConfigIndiImageWidth.Name = "m_labelConfigIndiImageWidth";
+            this.lblConfigIndiImageWidth.Name = "lblConfigIndiImageWidth";
             this.lblConfigIndiImageWidth.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigIndiImageWidth.Size = new System.Drawing.Size(50, 24);
             this.lblConfigIndiImageWidth.TabIndex = 8;
             this.lblConfigIndiImageWidth.Text = "&Width:";
             this.lblConfigIndiImageWidth.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_IndiImageWidth_EditBox (Images)
+            // txtConfigIndiImageWidth
             // 
             this.txtConfigIndiImageWidth.Location = new System.Drawing.Point(61, 138);
-            this.txtConfigIndiImageWidth.Name = "m_textboxConfigIndiImageWidth";
+            this.txtConfigIndiImageWidth.Name = "txtConfigIndiImageWidth";
             this.txtConfigIndiImageWidth.Size = new System.Drawing.Size(34, 20);
             this.txtConfigIndiImageWidth.TabIndex = 9;
             this.txtConfigIndiImageWidth.Text = "";
-
             // 
-            // configPanel_IndiImageHeight_Label (Images)
+            // lblConfigIndiImageHeight
             // 
             this.lblConfigIndiImageHeight.Location = new System.Drawing.Point(109, 138);
-            this.lblConfigIndiImageHeight.Name = "m_labelConfigIndiImageHeight";
+            this.lblConfigIndiImageHeight.Name = "lblConfigIndiImageHeight";
             this.lblConfigIndiImageHeight.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigIndiImageHeight.Size = new System.Drawing.Size(50, 24);
             this.lblConfigIndiImageHeight.TabIndex = 10;
             this.lblConfigIndiImageHeight.Text = "&Height:";
             this.lblConfigIndiImageHeight.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_IndiImageHeight_EditBox (Images)
+            // txtConfigIndiImageHeight
             // 
             this.txtConfigIndiImageHeight.Location = new System.Drawing.Point(162, 138);
-            this.txtConfigIndiImageHeight.Name = "m_textboxConfigIndiImageHeight";
+            this.txtConfigIndiImageHeight.Name = "txtConfigIndiImageHeight";
             this.txtConfigIndiImageHeight.Size = new System.Drawing.Size(34, 20);
             this.txtConfigIndiImageHeight.TabIndex = 11;
             this.txtConfigIndiImageHeight.Text = "";
-
             // 
-            // configPanel_SourceImageSize_Label (Images)
+            // lblConfigSourceImageSize
             // 
             this.lblConfigSourceImageSize.Location = new System.Drawing.Point(9, 167);
-            this.lblConfigSourceImageSize.Name = "m_labelConfigSourceImageSize";
+            this.lblConfigSourceImageSize.Name = "lblConfigSourceImageSize";
             this.lblConfigSourceImageSize.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigSourceImageSize.Size = new System.Drawing.Size(256, 24);
             this.lblConfigSourceImageSize.TabIndex = 12;
             this.lblConfigSourceImageSize.Text = "Maximum size of source images";
             this.lblConfigSourceImageSize.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             // 
-            // configPanel_SourceImageWidth_Label (Images)
+            // lblConfigSourceImageWidth
             // 
             this.lblConfigSourceImageWidth.Location = new System.Drawing.Point(9, 193);
-            this.lblConfigSourceImageWidth.Name = "m_labelConfigSourceImageWidth";
+            this.lblConfigSourceImageWidth.Name = "lblConfigSourceImageWidth";
             this.lblConfigSourceImageWidth.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigSourceImageWidth.Size = new System.Drawing.Size(50, 24);
             this.lblConfigSourceImageWidth.TabIndex = 13;
             this.lblConfigSourceImageWidth.Text = "W&idth:";
             this.lblConfigSourceImageWidth.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_SourceImageWidth_EditBox (Images)
+            // txtConfigSourceImageWidth
             // 
             this.txtConfigSourceImageWidth.Location = new System.Drawing.Point(60, 197);
-            this.txtConfigSourceImageWidth.Name = "m_textboxConfigSourceImageWidth";
+            this.txtConfigSourceImageWidth.Name = "txtConfigSourceImageWidth";
             this.txtConfigSourceImageWidth.Size = new System.Drawing.Size(34, 20);
             this.txtConfigSourceImageWidth.TabIndex = 14;
             this.txtConfigSourceImageWidth.Text = "";
-
             // 
-            // configPanel_SourceImageHeight_Label (Images)
+            // lblConfigSourceImageHeight
             // 
             this.lblConfigSourceImageHeight.Location = new System.Drawing.Point(109, 193);
-            this.lblConfigSourceImageHeight.Name = "m_labelConfigSourceImageHeight";
+            this.lblConfigSourceImageHeight.Name = "lblConfigSourceImageHeight";
             this.lblConfigSourceImageHeight.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigSourceImageHeight.Size = new System.Drawing.Size(50, 24);
             this.lblConfigSourceImageHeight.TabIndex = 15;
             this.lblConfigSourceImageHeight.Text = "H&eight:";
             this.lblConfigSourceImageHeight.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_SourceImageHeight_EditBox (Images)
+            // txtConfigSourceImageHeight
             // 
             this.txtConfigSourceImageHeight.Location = new System.Drawing.Point(162, 197);
-            this.txtConfigSourceImageHeight.Name = "m_textboxConfigSourceImageHeight";
+            this.txtConfigSourceImageHeight.Name = "txtConfigSourceImageHeight";
             this.txtConfigSourceImageHeight.Size = new System.Drawing.Size(34, 20);
             this.txtConfigSourceImageHeight.TabIndex = 16;
             this.txtConfigSourceImageHeight.Text = "";
-
             //
-            // configPanel_AllowMultimedia_CheckBox (Images)
+            // chkConfigAllowMultimedia
             // 
             this.chkConfigAllowMultimedia.Location = new System.Drawing.Point(300, 8);
-            this.chkConfigAllowMultimedia.Name = "m_checkboxConfigAllowMultimedia";
+            this.chkConfigAllowMultimedia.Name = "chkConfigAllowMultimedia";
             this.chkConfigAllowMultimedia.Size = new System.Drawing.Size(190, 24);
             this.chkConfigAllowMultimedia.TabIndex = 5;
             this.chkConfigAllowMultimedia.Text = "&Allow images etc.";
-            this.chkConfigAllowMultimedia.Click += new System.EventHandler(this.configPanel_AllowMultimedia_CheckBox_click);
-
+            this.chkConfigAllowMultimedia.Click += new System.EventHandler(this.chkConfigAllowMultimedia_Click);
             //
-            // configPanel_RenameOriginals_CheckBox (Images)
+            // chkConfigRenameOriginals
             // 
             this.chkConfigRenameOriginals.Location = new System.Drawing.Point(300, 38);
-            this.chkConfigRenameOriginals.Name = "m_checkboxConfigRenameOriginals";
+            this.chkConfigRenameOriginals.Name = "chkConfigRenameOriginals";
             this.chkConfigRenameOriginals.Size = new System.Drawing.Size(200, 30);
             this.chkConfigRenameOriginals.Text = "Re&name files";
             this.chkConfigRenameOriginals.TabIndex = 17;
-
             //
-            // configPanel_KeepOriginals_CheckBox (Images)
+            // chkConfigKeepOriginals
             // 
             this.chkConfigKeepOriginals.Location = new System.Drawing.Point(300, 64);
-            this.chkConfigKeepOriginals.Name = "m_checkboxConfigKeepOriginals";
+            this.chkConfigKeepOriginals.Name = "chkConfigKeepOriginals";
             this.chkConfigKeepOriginals.Size = new System.Drawing.Size(200, 40);
             this.chkConfigKeepOriginals.Text = "In&clude original (full-size) files";
             this.chkConfigKeepOriginals.TabIndex = 18;
-
             //
-            // configPanel_NonPictures_CheckBox (Images)
+            // chkConfigNonPictures
             // 
             this.chkConfigNonPictures.Location = new System.Drawing.Point(266, 120);
-            this.chkConfigNonPictures.Name = "m_checkboxConfigNonPictures";
+            this.chkConfigNonPictures.Name = "chkConfigNonPictures";
             this.chkConfigNonPictures.Size = new System.Drawing.Size(200, 20);
             this.chkConfigNonPictures.Text = "&Allow files other than pictures";
             this.chkConfigNonPictures.TabIndex = 19;
-
             //
-            // configPanel_IndiImages_CheckBox (Images)
+            // chkConfigIndiImages
             // 
             this.chkConfigIndiImages.Location = new System.Drawing.Point(266, 147);
-            this.chkConfigIndiImages.Name = "m_checkboxConfigIndiImages";
+            this.chkConfigIndiImages.Name = "chkConfigIndiImages";
             this.chkConfigIndiImages.Size = new System.Drawing.Size(200, 20);
             this.chkConfigIndiImages.Text = "&Multiple individual images";
             this.chkConfigIndiImages.TabIndex = 20;
-            this.chkConfigIndiImages.Click += new System.EventHandler(this.configPanel_IndiImages_CheckBox_click);
-
+            this.chkConfigIndiImages.Click += new System.EventHandler(this.chkConfigIndiImages_Click);
             // 
-            // configPanel_ThumbnailImageSize_Label (Images)
+            // lblConfigThumbnailImageSize
             // 
             this.lblConfigThumbnailImageSize.Location = new System.Drawing.Point(266, 167);
-            this.lblConfigThumbnailImageSize.Name = "m_labelConfigThumbnailImageSize";
+            this.lblConfigThumbnailImageSize.Name = "lblConfigThumbnailImageSize";
             this.lblConfigThumbnailImageSize.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigThumbnailImageSize.Size = new System.Drawing.Size(256, 24);
             this.lblConfigThumbnailImageSize.TabIndex = 21;
             this.lblConfigThumbnailImageSize.Text = "Maximum size of thumbnail images";
             this.lblConfigThumbnailImageSize.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             // 
-            // configPanel_ThumbnailImageWidth_Label (Images)
+            // lblConfigThumbnailImageWidth
             // 
             this.lblConfigThumbnailImageWidth.Location = new System.Drawing.Point(266, 193);
-            this.lblConfigThumbnailImageWidth.Name = "m_labelConfigThumbnailImageWidth";
+            this.lblConfigThumbnailImageWidth.Name = "lblConfigThumbnailImageWidth";
             this.lblConfigThumbnailImageWidth.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigThumbnailImageWidth.Size = new System.Drawing.Size(50, 24);
             this.lblConfigThumbnailImageWidth.TabIndex = 22;
             this.lblConfigThumbnailImageWidth.Text = "Wid&th:";
             this.lblConfigThumbnailImageWidth.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_ThumbnailImageWidth_EditBox (Images)
+            // txtConfigThumbnailImageWidth
             // 
             this.txtConfigThumbnailImageWidth.Location = new System.Drawing.Point(317, 197);
-            this.txtConfigThumbnailImageWidth.Name = "m_textboxConfigThumbnailImageWidth";
+            this.txtConfigThumbnailImageWidth.Name = "txtConfigThumbnailImageWidth";
             this.txtConfigThumbnailImageWidth.Size = new System.Drawing.Size(34, 20);
             this.txtConfigThumbnailImageWidth.TabIndex = 23;
             this.txtConfigThumbnailImageWidth.Text = "";
-
             // 
-            // configPanel_ThumbnailImageHeight_Label (Images)
+            // lblConfigThumbnailImageHeight
             // 
             this.lblConfigThumbnailImageHeight.Location = new System.Drawing.Point(366, 193);
-            this.lblConfigThumbnailImageHeight.Name = "m_labelConfigThumbnailImageHeight";
+            this.lblConfigThumbnailImageHeight.Name = "lblConfigThumbnailImageHeight";
             this.lblConfigThumbnailImageHeight.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblConfigThumbnailImageHeight.Size = new System.Drawing.Size(50, 24);
             this.lblConfigThumbnailImageHeight.TabIndex = 24;
             this.lblConfigThumbnailImageHeight.Text = "Hei&ght:";
             this.lblConfigThumbnailImageHeight.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_ThumbnailImageHeight_EditBox (Images)
+            // txtConfigThumbnailImageHeight
             // 
             this.txtConfigThumbnailImageHeight.Location = new System.Drawing.Point(419, 197);
-            this.txtConfigThumbnailImageHeight.Name = "m_textboxConfigThumbnailImageHeight";
+            this.txtConfigThumbnailImageHeight.Name = "txtConfigThumbnailImageHeight";
             this.txtConfigThumbnailImageHeight.Size = new System.Drawing.Size(34, 20);
             this.txtConfigThumbnailImageHeight.TabIndex = 25;
             this.txtConfigThumbnailImageHeight.Text = "";
-
             // 
-            // configPanel_TabSpaces_Label (GEDCOM)
+            // lblConfigTabSpaces
             // 
             lblConfigTabSpaces.Location = new System.Drawing.Point(6, 0);
-            lblConfigTabSpaces.Name = "m_labelConfigTabSpaces";
+            lblConfigTabSpaces.Name = "lblConfigTabSpaces";
             lblConfigTabSpaces.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigTabSpaces.Size = new System.Drawing.Size(188, 24);
             lblConfigTabSpaces.TabIndex = 1;
             lblConfigTabSpaces.Text = "&Num spaces to replace tabs:";
             lblConfigTabSpaces.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_TabSpaces_EditBox (GEDCOM)
+            // txtConfigTabSpaces
             // 
             txtConfigTabSpaces.Location = new System.Drawing.Point(203, 4);
-            txtConfigTabSpaces.Name = "m_textboxConfigTabSpaces";
+            txtConfigTabSpaces.Name = "txtConfigTabSpaces";
             txtConfigTabSpaces.Size = new System.Drawing.Size(31, 20);
             txtConfigTabSpaces.TabIndex = 2;
             txtConfigTabSpaces.Text = "";
-
             // 
-            // configPanel_NoName_Label (GEDCOM)
+            // lblConfigNoName
             // 
             lblConfigNoName.Location = new System.Drawing.Point(6, 24);
-            lblConfigNoName.Name = "m_labelConfigNoName";
+            lblConfigNoName.Name = "lblConfigNoName";
             lblConfigNoName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigNoName.Size = new System.Drawing.Size(200, 24);
             lblConfigNoName.TabIndex = 3;
             lblConfigNoName.Text = "Show &missing names as:";
             lblConfigNoName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_NoName_EditBox (GEDCOM)
+            // txtConfigNoName
             // 
             txtConfigNoName.Location = new System.Drawing.Point(6, 48);
-            txtConfigNoName.Name = "m_textboxConfigNoName";
+            txtConfigNoName.Name = "txtConfigNoName";
             txtConfigNoName.Size = new System.Drawing.Size(228, 20);
             txtConfigNoName.TabIndex = 4;
             txtConfigNoName.Text = "";
-
             //
-            // configPanel_ShowWithheldRecords_CheckBox (GEDCOM)
+            // chkConfigShowWithheldRecords
             // 
             chkConfigShowWithheldRecords.Location = new System.Drawing.Point(6, 86);
-            chkConfigShowWithheldRecords.Name = "m_checkboxConfigShowWithheldRecords";
+            chkConfigShowWithheldRecords.Name = "chkConfigShowWithheldRecords";
             chkConfigShowWithheldRecords.Size = new System.Drawing.Size(200, 16);
             chkConfigShowWithheldRecords.TabIndex = 5;
             chkConfigShowWithheldRecords.Text = "Include &withheld records";
-            chkConfigShowWithheldRecords.Click += new System.EventHandler(configPanel_ShowWithheldRecords_CheckBox_click);
-
+            chkConfigShowWithheldRecords.Click += new System.EventHandler(chkConfigShowWithheldRecords_Click);
             // 
-            // configPanel_WithheldName_GroupBox (GEDCOM)
+            // gbConfigWithheldName
             // 
             gbConfigWithheldName.Location = new System.Drawing.Point(6, 113);
-            gbConfigWithheldName.Name = "m_groupboxConfigWithheldName";
+            gbConfigWithheldName.Name = "gbConfigWithheldName";
             gbConfigWithheldName.Size = new System.Drawing.Size(228, 104);
             gbConfigWithheldName.TabIndex = 6;
             gbConfigWithheldName.Text = "Label w&ithheld records with:";
             gbConfigWithheldName.FlatStyle = System.Windows.Forms.FlatStyle.System;
-
             // 
-            // configPanel_WithheldName_Label (GEDCOM)
+            // radConfigWithheldNameLabel
             // 
             radConfigWithheldNameLabel.Location = new System.Drawing.Point(10, 18);
-            radConfigWithheldNameLabel.Name = "m_radiobuttonConfigWithheldNameLabel";
+            radConfigWithheldNameLabel.Name = "radConfigWithheldNameLabel";
             radConfigWithheldNameLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
             radConfigWithheldNameLabel.Size = new System.Drawing.Size(180, 20);
             radConfigWithheldNameLabel.TabIndex = 7;
             radConfigWithheldNameLabel.Text = "this &text:";
-            radConfigWithheldNameLabel.Click += new System.EventHandler(configPanel_WithheldName_Label_click);
-
+            radConfigWithheldNameLabel.Click += new System.EventHandler(radConfigWithheldNameLabel_Click);
             //
-            // configPanel_WithheldName_EditBox (GEDCOM)
+            // txtConfigWithheldName
             // 
             txtConfigWithheldName.Location = new System.Drawing.Point(28, 38);
-            txtConfigWithheldName.Name = "m_textboxConfigWithheldName";
+            txtConfigWithheldName.Name = "txtConfigWithheldName";
             txtConfigWithheldName.Size = new System.Drawing.Size(188, 20);
             txtConfigWithheldName.TabIndex = 8;
             txtConfigWithheldName.Text = "";
-
             // 
-            // configPanel_WithheldName_Name (GEDCOM)
+            // radConfigWithheldNameName
             // 
             radConfigWithheldNameName.Location = new System.Drawing.Point(10, 72);
-            radConfigWithheldNameName.Name = "m_radiobuttonConfigWithheldNameName";
+            radConfigWithheldNameName.Name = "radConfigWithheldNameName";
             radConfigWithheldNameName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             radConfigWithheldNameName.Size = new System.Drawing.Size(180, 20);
             radConfigWithheldNameName.TabIndex = 9;
             radConfigWithheldNameName.Text = "the individual's n&ame";
-            radConfigWithheldNameName.Click += new System.EventHandler(configPanel_WithheldName_Label_click);
-
+            radConfigWithheldNameName.Click += new System.EventHandler(radConfigWithheldNameLabel_Click);
             //
-            // configPanel_CapNames_CheckBox (GEDCOM)
+            // chkConfigCapNames
             // 
             chkConfigCapNames.Location = new System.Drawing.Point(266, 7);
-            chkConfigCapNames.Name = "m_checkboxConfigCapNames";
+            chkConfigCapNames.Name = "chkConfigCapNames";
             chkConfigCapNames.Size = new System.Drawing.Size(200, 20);
             chkConfigCapNames.TabIndex = 10;
             chkConfigCapNames.Text = "&Put surnames in CAPITALS";
-
             //
-            // configPanel_CapEvents_CheckBox (GEDCOM)
+            // chkConfigCapEvents
             // 
             chkConfigCapEvents.Location = new System.Drawing.Point(266, 34);
-            chkConfigCapEvents.Name = "m_checkboxConfigCapEvents";
+            chkConfigCapEvents.Name = "chkConfigCapEvents";
             chkConfigCapEvents.Size = new System.Drawing.Size(260, 20);
             chkConfigCapEvents.TabIndex = 11;
             chkConfigCapEvents.Text = "&Start events with a capital letter";
-
             //
-            // configPanel_HideEmails_CheckBox (GEDCOM)
+            // chkConfigHideEmails
             // 
             chkConfigHideEmails.Location = new System.Drawing.Point(266, 60);
-            chkConfigHideEmails.Name = "m_checkboxConfigHideEmails";
+            chkConfigHideEmails.Name = "chkConfigHideEmails";
             chkConfigHideEmails.Size = new System.Drawing.Size(260, 20);
             chkConfigHideEmails.TabIndex = 12;
             chkConfigHideEmails.Text = "Don't show &email addresses";
-
             //
-            // configPanel_OccupationHeadline_CheckBox (GEDCOM)
+            // chkConfigOccupationHeadline
             // 
             chkConfigOccupationHeadline.Location = new System.Drawing.Point(266, 86);
-            chkConfigOccupationHeadline.Name = "m_checkboxConfigOccupationHeadline";
+            chkConfigOccupationHeadline.Name = "chkConfigOccupationHeadline";
             chkConfigOccupationHeadline.Size = new System.Drawing.Size(260, 20);
             chkConfigOccupationHeadline.TabIndex = 13;
             chkConfigOccupationHeadline.Text = "Show occupation in pa&ge heading";
-
             //
-            // configPanel_TreeDiagrams_CheckBox (Tree Diagrams)
+            // chkConfigTreeDiagrams
             // 
             chkConfigTreeDiagrams.Location = new System.Drawing.Point(8, 8);
-            chkConfigTreeDiagrams.Name = "m_checkboxConfigTreeDiagrams";
+            chkConfigTreeDiagrams.Name = "chkConfigTreeDiagrams";
             chkConfigTreeDiagrams.Size = new System.Drawing.Size(200, 20);
             chkConfigTreeDiagrams.TabIndex = 2;
             chkConfigTreeDiagrams.Text = "Include &tree diagrams";
-            chkConfigTreeDiagrams.Click += new System.EventHandler(configPanel_TreeDiagrams_CheckBox_click);
-
+            chkConfigTreeDiagrams.Click += new System.EventHandler(chkConfigTreeDiagrams_Click);
             // 
-            // configPanel_TreeDiagramsFormat_Label (Tree Diagrams)
+            // lblConfigTreeDiagramsFormat
             // 
             lblConfigTreeDiagramsFormat.Location = new System.Drawing.Point(22, 25);
-            lblConfigTreeDiagramsFormat.Name = "m_labelConfigTreeDiagramsFormat";
+            lblConfigTreeDiagramsFormat.Name = "lblConfigTreeDiagramsFormat";
             lblConfigTreeDiagramsFormat.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigTreeDiagramsFormat.Size = new System.Drawing.Size(134, 24);
             lblConfigTreeDiagramsFormat.TabIndex = 3;
             lblConfigTreeDiagramsFormat.Text = "&File format:";
             lblConfigTreeDiagramsFormat.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-
             //
-            // configPanel_TreeDiagramsFormat_ComboBox (Tree Diagrams)
+            // cmbConfigTreeDiagramsFormat
             // 
             cmbConfigTreeDiagramsFormat.Location = new System.Drawing.Point(158, 30);
-            cmbConfigTreeDiagramsFormat.Name = "m_comboboxConfigTreeDiagramsFormat";
+            cmbConfigTreeDiagramsFormat.Name = "cmbConfigTreeDiagramsFormat";
             cmbConfigTreeDiagramsFormat.Size = new System.Drawing.Size(85, 20);
             cmbConfigTreeDiagramsFormat.TabIndex = 4;
             cmbConfigTreeDiagramsFormat.DropDownWidth = 40;
             cmbConfigTreeDiagramsFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             //
-            // configPanel_TreeDiagramsFakeBG_CheckBox (Tree Diagrams)
+            // chkConfigTreeDiagramsFakeBg
             // 
             chkConfigTreeDiagramsFakeBg.Location = new System.Drawing.Point(8, 66);
-            chkConfigTreeDiagramsFakeBg.Name = "m_checkboxConfigTreeDiagramsFakeBg";
+            chkConfigTreeDiagramsFakeBg.Name = "chkConfigTreeDiagramsFakeBg";
             chkConfigTreeDiagramsFakeBg.Size = new System.Drawing.Size(200, 20);
             chkConfigTreeDiagramsFakeBg.TabIndex = 5;
             chkConfigTreeDiagramsFakeBg.Text = "&Simulate transparency";
             //
-            // configPanel_ConserveTreeWidth_CheckBox (Tree Diagrams)
+            // chkConfigConserveTreeWidth
             // 
             chkConfigConserveTreeWidth.Location = new System.Drawing.Point(8, 90);
-            chkConfigConserveTreeWidth.Name = "m_checkboxConfigConserveTreeWidth";
+            chkConfigConserveTreeWidth.Name = "chkConfigConserveTreeWidth";
             chkConfigConserveTreeWidth.Size = new System.Drawing.Size(190, 24);
             chkConfigConserveTreeWidth.TabIndex = 6;
             chkConfigConserveTreeWidth.Text = "Conserve tree &width";
             //
-            // configPanel_KeepSiblingOrder_CheckBox (Tree Diagrams)
+            // chkConfigKeepSiblingOrder
             // 
             chkConfigKeepSiblingOrder.Location = new System.Drawing.Point(8, 114);
-            chkConfigKeepSiblingOrder.Name = "m_checkboxConfigKeepSiblingOrder";
+            chkConfigKeepSiblingOrder.Name = "chkConfigKeepSiblingOrder";
             chkConfigKeepSiblingOrder.Size = new System.Drawing.Size(230, 24);
             chkConfigKeepSiblingOrder.TabIndex = 7;
             chkConfigKeepSiblingOrder.Text = "Keep s&ibling order from GEDCOM";
             //
-            // configPanel_MiniTreeColours_GroupBox (Tree Diagrams)
+            // gbMiniTreeColours
             // 
             gbMiniTreeColours.Location = new System.Drawing.Point(260, 11);
-            gbMiniTreeColours.Name = "m_groupboxMiniTreeColours";
+            gbMiniTreeColours.Name = "gbMiniTreeColours";
             gbMiniTreeColours.Size = new System.Drawing.Size(230, 224);
             gbMiniTreeColours.TabIndex = 8;
             gbMiniTreeColours.Text = "Colours";
             gbMiniTreeColours.FlatStyle = System.Windows.Forms.FlatStyle.System;
             //
-            // configPanel_MiniTreeColourIndiHighlight_Button (Tree Diagrams)
+            // btnConfigMiniTreeColourIndiHighlight
             // 
             btnConfigMiniTreeColourIndiHighlight.Location = new System.Drawing.Point(12, 24);
-            btnConfigMiniTreeColourIndiHighlight.Name = "m_buttonConfigMiniTreeColourIndiHighlight";
+            btnConfigMiniTreeColourIndiHighlight.Name = "btnConfigMiniTreeColourIndiHighlight";
             btnConfigMiniTreeColourIndiHighlight.Size = new System.Drawing.Size(98, 24);
             btnConfigMiniTreeColourIndiHighlight.TabIndex = 9;
             btnConfigMiniTreeColourIndiHighlight.Text = "Selected &box";
-            btnConfigMiniTreeColourIndiHighlight.Click += new System.EventHandler(configPanel_MiniTreeColourIndiHighlight_Button_click);
+            btnConfigMiniTreeColourIndiHighlight.Click += new System.EventHandler(btnConfigMiniTreeColourIndiHighlight_Click);
             //
-            // configPanel_MiniTreeColourIndiText_Button (Tree Diagrams)
+            // btnConfigMiniTreeColourIndiText
             // 
             btnConfigMiniTreeColourIndiText.Location = new System.Drawing.Point(122, 24);
-            btnConfigMiniTreeColourIndiText.Name = "m_buttonConfigMiniTreeColourIndiText";
+            btnConfigMiniTreeColourIndiText.Name = "btnConfigMiniTreeColourIndiText";
             btnConfigMiniTreeColourIndiText.Size = new System.Drawing.Size(98, 24);
             btnConfigMiniTreeColourIndiText.TabIndex = 10;
             btnConfigMiniTreeColourIndiText.Text = "Selected te&xt";
-            btnConfigMiniTreeColourIndiText.Click += new System.EventHandler(configPanel_MiniTreeColourIndiText_Button_click);
+            btnConfigMiniTreeColourIndiText.Click += new System.EventHandler(btnConfigMiniTreeColourIndiText_Click);
             //
-            // configPanel_MiniTreeColourIndiBackground_Button (Tree Diagrams)
+            // btnConfigMiniTreeColourIndiBackground
             // 
             btnConfigMiniTreeColourIndiBackground.Location = new System.Drawing.Point(12, 60);
-            btnConfigMiniTreeColourIndiBackground.Name = "m_buttonConfigMiniTreeColourIndiBackground";
+            btnConfigMiniTreeColourIndiBackground.Name = "btnConfigMiniTreeColourIndiBackground";
             btnConfigMiniTreeColourIndiBackground.Size = new System.Drawing.Size(98, 24);
             btnConfigMiniTreeColourIndiBackground.TabIndex = 11;
             btnConfigMiniTreeColourIndiBackground.Text = "&General box";
             btnConfigMiniTreeColourIndiBackground.BackColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            btnConfigMiniTreeColourIndiBackground.Click += new System.EventHandler(configPanel_MiniTreeColourIndiBackground_Button_click);
+            btnConfigMiniTreeColourIndiBackground.Click += new System.EventHandler(btnConfigMiniTreeColourIndiBackground_Click);
             //
-            // configPanel_MiniTreeColourIndiLink_Button (Tree Diagrams)
+            // btnConfigMiniTreeColourIndiLink
             // 
             btnConfigMiniTreeColourIndiLink.Location = new System.Drawing.Point(122, 60);
-            btnConfigMiniTreeColourIndiLink.Name = "m_buttonConfigMiniTreeColourIndiLink";
+            btnConfigMiniTreeColourIndiLink.Name = "btnConfigMiniTreeColourIndiLink";
             btnConfigMiniTreeColourIndiLink.Size = new System.Drawing.Size(98, 24);
             btnConfigMiniTreeColourIndiLink.TabIndex = 12;
             btnConfigMiniTreeColourIndiLink.Text = "&Link text";
-            btnConfigMiniTreeColourIndiLink.Click += new System.EventHandler(configPanel_MiniTreeColourIndiLink_Button_click);
+            btnConfigMiniTreeColourIndiLink.Click += new System.EventHandler(btnConfigMiniTreeColourIndiLink_Click);
             //
-            // configPanel_MiniTreeColourIndiBgConcealed_Button (Tree Diagrams)
+            // btnConfigMiniTreeColourIndiBgConcealed
             // 
             btnConfigMiniTreeColourIndiBgConcealed.Location = new System.Drawing.Point(12, 96);
-            btnConfigMiniTreeColourIndiBgConcealed.Name = "m_buttonConfigMiniTreeColourIndiBgConcealed";
+            btnConfigMiniTreeColourIndiBgConcealed.Name = "btnConfigMiniTreeColourIndiBgConcealed";
             btnConfigMiniTreeColourIndiBgConcealed.Size = new System.Drawing.Size(98, 24);
             btnConfigMiniTreeColourIndiBgConcealed.TabIndex = 13;
             btnConfigMiniTreeColourIndiBgConcealed.Text = "&Private box";
-            btnConfigMiniTreeColourIndiBgConcealed.Click += new System.EventHandler(configPanel_MiniTreeColourIndiBgConcealed_Button_click);
+            btnConfigMiniTreeColourIndiBgConcealed.Click += new System.EventHandler(btnConfigMiniTreeColourIndiBgConcealed_Click);
             //
-            // configPanel_MiniTreeColourIndiFgConcealed_Button (Tree Diagrams)
+            // btnConfigMiniTreeColourIndiFgConcealed
             // 
             btnConfigMiniTreeColourIndiFgConcealed.Location = new System.Drawing.Point(122, 96);
-            btnConfigMiniTreeColourIndiFgConcealed.Name = "m_buttonConfigMiniTreeColourIndiFgConcealed";
+            btnConfigMiniTreeColourIndiFgConcealed.Name = "btnConfigMiniTreeColourIndiFgConcealed";
             btnConfigMiniTreeColourIndiFgConcealed.Size = new System.Drawing.Size(98, 24);
             btnConfigMiniTreeColourIndiFgConcealed.TabIndex = 14;
             btnConfigMiniTreeColourIndiFgConcealed.Text = "P&rivate text";
-            btnConfigMiniTreeColourIndiFgConcealed.Click += new System.EventHandler(configPanel_MiniTreeColourIndiFgConcealed_Button_click);
+            btnConfigMiniTreeColourIndiFgConcealed.Click += new System.EventHandler(btnConfigMiniTreeColourIndiFgConcealed_Click);
             //
-            // configPanel_MiniTreeColourIndiShade_Button (Tree Diagrams)
+            // btnConfigMiniTreeColourIndiShade
             // 
             btnConfigMiniTreeColourIndiShade.Location = new System.Drawing.Point(12, 132);
-            btnConfigMiniTreeColourIndiShade.Name = "m_buttonConfigMiniTreeColourIndiShade";
+            btnConfigMiniTreeColourIndiShade.Name = "btnConfigMiniTreeColourIndiShade";
             btnConfigMiniTreeColourIndiShade.Size = new System.Drawing.Size(98, 24);
             btnConfigMiniTreeColourIndiShade.TabIndex = 15;
             btnConfigMiniTreeColourIndiShade.Text = "Spous&e box";
-            btnConfigMiniTreeColourIndiShade.Click += new System.EventHandler(configPanel_MiniTreeColourIndiShade_Button_click);
+            btnConfigMiniTreeColourIndiShade.Click += new System.EventHandler(btnConfigMiniTreeColourIndiShade_Click);
             //
-            // configPanel_MiniTreeColourBranch_Button (Tree Diagrams)
+            // btnConfigMiniTreeColourBranch
             // 
             btnConfigMiniTreeColourBranch.Location = new System.Drawing.Point(12, 168);
-            btnConfigMiniTreeColourBranch.Name = "m_buttonConfigMiniTreeColourBranch";
+            btnConfigMiniTreeColourBranch.Name = "btnConfigMiniTreeColourBranch";
             btnConfigMiniTreeColourBranch.Size = new System.Drawing.Size(98, 24);
             btnConfigMiniTreeColourBranch.TabIndex = 16;
             btnConfigMiniTreeColourBranch.Text = "Br&anches";
-            btnConfigMiniTreeColourBranch.Click += new System.EventHandler(configPanel_MiniTreeColourBranch_Button_click);
+            btnConfigMiniTreeColourBranch.Click += new System.EventHandler(btnConfigMiniTreeColourBranch_Click);
             //
-            // configPanel_MiniTreeColourIndiBorder_Button (Tree Diagrams)
+            // btnConfigMiniTreeColourIndiBorder
             // 
             btnConfigMiniTreeColourIndiBorder.Location = new System.Drawing.Point(122, 168);
-            btnConfigMiniTreeColourIndiBorder.Name = "m_buttonConfigMiniTreeColourIndiBorder";
+            btnConfigMiniTreeColourIndiBorder.Name = "btnConfigMiniTreeColourIndiBorder";
             btnConfigMiniTreeColourIndiBorder.Size = new System.Drawing.Size(98, 24);
             btnConfigMiniTreeColourIndiBorder.TabIndex = 17;
             btnConfigMiniTreeColourIndiBorder.Text = "Box bor&ders";
-            btnConfigMiniTreeColourIndiBorder.Click += new System.EventHandler(configPanel_MiniTreeColourIndiBorder_Button_click);
+            btnConfigMiniTreeColourIndiBorder.Click += new System.EventHandler(btnConfigMiniTreeColourIndiBorder_Click);
             // 
-            // configPanel_HTMLExtn_Label (Advanced)
+            // lblConfigHtmlExtn
             // 
             lblConfigHtmlExtn.Location = new System.Drawing.Point(9, 54);
-            lblConfigHtmlExtn.Name = "m_labelConfigHtmlExtn";
+            lblConfigHtmlExtn.Name = "lblConfigHtmlExtn";
             lblConfigHtmlExtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigHtmlExtn.Size = new System.Drawing.Size(140, 24);
             lblConfigHtmlExtn.TabIndex = 4;
             lblConfigHtmlExtn.Text = "H&TML file extension:";
             lblConfigHtmlExtn.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             //
-            // configPanel_HTMLExtn_ComboBox  (Advanced)
+            // cmbConfigHtmlExtn
             // 
             cmbConfigHtmlExtn.Location = new System.Drawing.Point(149, 55);
-            cmbConfigHtmlExtn.Name = "m_comboboxConfigHtmlExtn";
+            cmbConfigHtmlExtn.Name = "cmbConfigHtmlExtn";
             cmbConfigHtmlExtn.Size = new System.Drawing.Size(85, 20);
             cmbConfigHtmlExtn.TabIndex = 5;
             cmbConfigHtmlExtn.DropDownWidth = 40;
             cmbConfigHtmlExtn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             //
-            // configPanel_W3C_CheckBox (Advanced)
+            // chkConfigW3C
             // 
             chkConfigW3C.Location = new System.Drawing.Point(11, 91);
-            chkConfigW3C.Name = "m_checkboxConfigW3C";
+            chkConfigW3C.Name = "chkConfigW3C";
             chkConfigW3C.Size = new System.Drawing.Size(200, 20);
             chkConfigW3C.Text = "Add &W3C validator sticker";
             chkConfigW3C.TabIndex = 6;
             //
-            // configPanel_user_rec_filename_CheckBox (Advanced)
+            // chkConfigUserRecFilename
             // 
             chkConfigUserRecFilename.Location = new System.Drawing.Point(11, 112);
-            chkConfigUserRecFilename.Name = "m_checkboxConfigUserRecFilename";
+            chkConfigUserRecFilename.Name = "chkConfigUserRecFilename";
             chkConfigUserRecFilename.Size = new System.Drawing.Size(240, 24);
             chkConfigUserRecFilename.Text = "&Use custom record number for filenames";
             chkConfigUserRecFilename.TabIndex = 7;
             //
-            // configPanel_SupressBackreferences_CheckBox (Advanced)
+            // chkConfigSupressBackreferences
             // 
             chkConfigSupressBackreferences.Location = new System.Drawing.Point(11, 136);
-            chkConfigSupressBackreferences.Name = "m_checkboxConfigSupressBackreferences";
+            chkConfigSupressBackreferences.Name = "chkConfigSupressBackreferences";
             chkConfigSupressBackreferences.Size = new System.Drawing.Size(250, 20);
             chkConfigSupressBackreferences.Text = "List c&iting records on source pages";
             chkConfigSupressBackreferences.TabIndex = 8;
             // 
-            // m_labelConfigStylesheetName (Advanced)
+            // lblConfigStylesheetName
             // 
             lblConfigStylesheetName.Location = new System.Drawing.Point(266, 0);
-            lblConfigStylesheetName.Name = "m_labelConfigStylesheetName";
+            lblConfigStylesheetName.Name = "lblConfigStylesheetName";
             lblConfigStylesheetName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigStylesheetName.Size = new System.Drawing.Size(224, 24);
             lblConfigStylesheetName.TabIndex = 9;
             lblConfigStylesheetName.Text = "Name of st&ylesheet:";
             lblConfigStylesheetName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             //
-            // configPanel_StylesheetName_EditBox (Advanced)
+            // txtConfigStylesheetName
             // 
             txtConfigStylesheetName.Location = new System.Drawing.Point(266, 32);
-            txtConfigStylesheetName.Name = "m_textboxConfigStylesheetName";
+            txtConfigStylesheetName.Name = "txtConfigStylesheetName";
             txtConfigStylesheetName.Size = new System.Drawing.Size(175, 20);
             txtConfigStylesheetName.TabIndex = 10;
             txtConfigStylesheetName.Text = "";
             txtConfigStylesheetName.Multiline = false;
             // 
-            // configPanel_StylesheetName_ExtnLabel (Advanced)
+            // lblConfigStylesheetNameExtn
             // 
             lblConfigStylesheetNameExtn.Location = new System.Drawing.Point(440, 27);
-            lblConfigStylesheetNameExtn.Name = "m_labelConfigStylesheetNameExtn";
+            lblConfigStylesheetNameExtn.Name = "lblConfigStylesheetNameExtn";
             lblConfigStylesheetNameExtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblConfigStylesheetNameExtn.Size = new System.Drawing.Size(60, 24);
             lblConfigStylesheetNameExtn.TabIndex = 11;
             lblConfigStylesheetNameExtn.Text = ".css";
             lblConfigStylesheetNameExtn.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             //
-            // configPanel_PreserveStylesheet_CheckBox (Advanced)
+            // chkConfigPreserveStylesheet
             // 
             chkConfigPreserveStylesheet.Location = new System.Drawing.Point(266, 56);
-            chkConfigPreserveStylesheet.Name = "m_checkboxConfigPreserveStylesheet";
+            chkConfigPreserveStylesheet.Name = "chkConfigPreserveStylesheet";
             chkConfigPreserveStylesheet.Size = new System.Drawing.Size(250, 20);
             chkConfigPreserveStylesheet.Text = "Do &not generate new stylesheet";
             chkConfigPreserveStylesheet.TabIndex = 12;
             //
-            // m_checkboxConfigExcludeHelppage (Advanced)
+            // chkConfigIncludeHelppage
             // 
             chkConfigIncludeHelppage.Location = new System.Drawing.Point(266, 91);
-            chkConfigIncludeHelppage.Name = "m_checkboxConfigExcludeHelppage";
+            chkConfigIncludeHelppage.Name = "chkConfigIncludeHelppage";
             chkConfigIncludeHelppage.Size = new System.Drawing.Size(250, 20);
             chkConfigIncludeHelppage.Text = "Include help page";
             chkConfigIncludeHelppage.TabIndex = 15;
             // 
-            // Choose Output panel
+            // panelChooseOutput
             // 
             panelChooseOutput.Controls.Add(txtChooseOutput);
             panelChooseOutput.Controls.Add(lblChooseOutputInstructions);
@@ -1526,55 +1471,55 @@
             panelChooseOutput.Controls.Add(btnChooseOutputBrowse);
             panelChooseOutput.Controls.Add(lblChooseOutputContinue);
             panelChooseOutput.Location = new System.Drawing.Point(216, 0);
-            panelChooseOutput.Name = "m_panelChooseOutput";
+            panelChooseOutput.Name = "panelChooseOutput";
             panelChooseOutput.Size = new System.Drawing.Size(280, 272);
             panelChooseOutput.TabIndex = 11;
             // 
-            // Choose Output EditBox
+            // txtChooseOutput
             // 
             txtChooseOutput.Location = new System.Drawing.Point(0, 120);
-            txtChooseOutput.Name = "m_textboxChooseOutput";
+            txtChooseOutput.Name = "txtChooseOutput";
             txtChooseOutput.Size = new System.Drawing.Size(192, 20);
             txtChooseOutput.TabIndex = 4;
             txtChooseOutput.Text = "";
-            txtChooseOutput.TextChanged += new System.EventHandler(textboxChooseOutput_textChanged);
+            txtChooseOutput.TextChanged += new System.EventHandler(txtChooseOutput_TextChanged);
             // 
-            // m_labelChooseOutput
+            // lblChooseOutput
             // 
             lblChooseOutput.Location = new System.Drawing.Point(0, 96);
-            lblChooseOutput.Name = "m_labelChooseOutput";
+            lblChooseOutput.Name = "lblChooseOutput";
             lblChooseOutput.RightToLeft = System.Windows.Forms.RightToLeft.No;
             lblChooseOutput.Size = new System.Drawing.Size(152, 24);
             lblChooseOutput.TabIndex = 5;
             lblChooseOutput.Text = "&Folder:";
             lblChooseOutput.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
-            // m_buttonChooseOutputBrowse
+            // btnChooseOutputBrowse
             // 
             btnChooseOutputBrowse.Location = new System.Drawing.Point(200, 120);
-            btnChooseOutputBrowse.Name = "m_buttonChooseOutputBrowse";
+            btnChooseOutputBrowse.Name = "btnChooseOutputBrowse";
             btnChooseOutputBrowse.TabIndex = 6;
             btnChooseOutputBrowse.Text = "B&rowse...";
-            btnChooseOutputBrowse.Click += new System.EventHandler(buttonChooseOutputBrowse_click);
+            btnChooseOutputBrowse.Click += new System.EventHandler(btnChooseOutputBrowse_Click);
             // 
-            // m_labelChooseOutputInstructions
+            // lblChooseOutputInstructions
             // 
             lblChooseOutputInstructions.Location = new System.Drawing.Point(0, 16);
-            lblChooseOutputInstructions.Name = "m_labelChooseOutputInstructions";
+            lblChooseOutputInstructions.Name = "lblChooseOutputInstructions";
             lblChooseOutputInstructions.Size = new System.Drawing.Size(280, 80);
             lblChooseOutputInstructions.TabIndex = 3;
             lblChooseOutputInstructions.Text = "Finally, select the folder where you wish to the website files to be created. If " +
                 "the folder doesn\'t exist already it will be created for you.";
             // 
-            // m_labelChooseOutputContinue
+            // lblChooseOutputContinue
             // 
             lblChooseOutputContinue.Location = new System.Drawing.Point(256, 288);
-            lblChooseOutputContinue.Name = "m_labelChooseOutputContinue";
+            lblChooseOutputContinue.Name = "lblChooseOutputContinue";
             lblChooseOutputContinue.Size = new System.Drawing.Size(256, 16);
             lblChooseOutputContinue.TabIndex = 15;
             lblChooseOutputContinue.Text = "Click Next to create the web pages...";
             // 
-            // m_panelAllDone
+            // panelAllDone
             // 
             panelAllDone.Controls.Add(chkAllDoneShowSite);
             panelAllDone.Controls.Add(lblAllDone);
@@ -1582,57 +1527,57 @@
             panelAllDone.Controls.Add(lblAllDoneDirectory);
             panelAllDone.Controls.Add(lblAllDoneStartFile);
             panelAllDone.Location = new System.Drawing.Point(216, 0);
-            panelAllDone.Name = "panel6";
+            panelAllDone.Name = "panelAllDone";
             panelAllDone.Size = new System.Drawing.Size(280, 272);
             panelAllDone.TabIndex = 12;
             //
-            // m_checkboxAllDoneShowSite
+            // chkAllDoneShowSite
             // 
             chkAllDoneShowSite.Location = new System.Drawing.Point(0, 250);
-            chkAllDoneShowSite.Name = "panel6WebsiteCheckBox";
+            chkAllDoneShowSite.Name = "chkAllDoneShowSite";
             chkAllDoneShowSite.Size = new System.Drawing.Size(288, 24);
             chkAllDoneShowSite.TabIndex = 7;
             chkAllDoneShowSite.Text = "&Display web pages after program finishes.";
             // 
-            // m_linklabelAllDone
+            // lblAllDone
             // 
             lblAllDone.Location = new System.Drawing.Point(0, 52);
-            lblAllDone.Name = "panel6FolderLink";
+            lblAllDone.Name = "lblAllDone";
             lblAllDone.Size = new System.Drawing.Size(288, 48);
             lblAllDone.TabIndex = 7;
             lblAllDone.TabStop = true;
             lblAllDone.Text = "<path>";
             lblAllDone.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            lblAllDone.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(linklabelAllDone_click);
+            lblAllDone.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(lblAllDone_Click);
             // 
-            // m_labelAllDoneThankYou
+            // lblAllDoneThankYou
             // 
             lblAllDoneThankYou.Location = new System.Drawing.Point(0, 230);
-            lblAllDoneThankYou.Name = "label1";
+            lblAllDoneThankYou.Name = "lblAllDoneThankYou";
             lblAllDoneThankYou.Size = new System.Drawing.Size(288, 24);
             lblAllDoneThankYou.TabIndex = 3;
             lblAllDoneThankYou.Text = "Thank you for using GEDmill.";
             lblAllDoneThankYou.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
-            // m_labelAllDoneDirectory
+            // lblAllDoneDirectory
             // 
             lblAllDoneDirectory.Location = new System.Drawing.Point(0, 16);
-            lblAllDoneDirectory.Name = "label3";
+            lblAllDoneDirectory.Name = "lblAllDoneDirectory";
             lblAllDoneDirectory.Size = new System.Drawing.Size(280, 48);
             lblAllDoneDirectory.TabIndex = 0;
             lblAllDoneDirectory.Text = "The website files have been generated and put in ";
             lblAllDoneDirectory.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
-            // m_labelAllDoneStartFile
+            // lblAllDoneStartFile
             // 
             lblAllDoneStartFile.Location = new System.Drawing.Point(0, 104);
-            lblAllDoneStartFile.Name = "label3a";
+            lblAllDoneStartFile.Name = "lblAllDoneStartFile";
             lblAllDoneStartFile.Size = new System.Drawing.Size(288, 48);
             lblAllDoneStartFile.TabIndex = 0;
             lblAllDoneStartFile.Text = "";
             lblAllDoneStartFile.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
-            // tabPageSettingsWebpages
+            // pageSettingsWebpages
             // 
             pageSettingsWebpages.Text = "Webpages";
             pageSettingsWebpages.Controls.Add(lblConfigCommentary);
@@ -1658,7 +1603,7 @@
             pageSettingsWebpages.Controls.Add(lblConfigFooterIsHtml);
             pageSettingsWebpages.Controls.Add(chkConfigFooterIsHtml);
             // 
-            // tabPageSettingsImages
+            // pageSettingsImages
             // 
             pageSettingsImages.Text = "Images";
             pageSettingsImages.Controls.Add(lblConfigFrontImageEdit);
@@ -1688,13 +1633,13 @@
             pageSettingsImages.Controls.Add(chkConfigKeepOriginals);
             pageSettingsImages.Controls.Add(chkConfigAllowMultimedia);
             // 
-            // tabPageSettingsGedcom
+            // gbConfigWithheldName
             // 
             gbConfigWithheldName.Controls.Add(radConfigWithheldNameLabel);
             gbConfigWithheldName.Controls.Add(txtConfigWithheldName);
             gbConfigWithheldName.Controls.Add(radConfigWithheldNameName);
             // 
-            // tabPageSettingsGedcom
+            // pageSettingsGedcom
             // 
             pageSettingsGedcom.Text = "GEDCOM";
             pageSettingsGedcom.Controls.Add(lblConfigNoName);
@@ -1708,7 +1653,7 @@
             pageSettingsGedcom.Controls.Add(lblConfigTabSpaces);
             pageSettingsGedcom.Controls.Add(txtConfigTabSpaces);
             // 
-            // tabPageSettingsTreeDiagrams
+            // gbMiniTreeColours
             // 
             gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiBackground);
             gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiHighlight);
@@ -1764,8 +1709,8 @@
             ClientSize = new System.Drawing.Size(506, 320);
             Controls.Add(panelWelcome);
             Controls.Add(panelChooseGedcom);
-            Controls.Add(panelPruneRecords);
-            Controls.Add(panelSelectKey);
+            Controls.Add(panelRecords);
+            Controls.Add(panelKeyIndividuals);
             Controls.Add(tabcontrolConfigPanel);
             Controls.Add(panelChooseOutput);
             Controls.Add(panelAllDone);
@@ -1791,8 +1736,8 @@
             panelWelcome.ResumeLayout(false);
             panelChooseGedcom.ResumeLayout(false);
             panelChooseOutput.ResumeLayout(false);
-            panelPruneRecords.ResumeLayout(false);
-            panelSelectKey.ResumeLayout(false);
+            panelRecords.ResumeLayout(false);
+            panelKeyIndividuals.ResumeLayout(false);
             tabcontrolConfigPanel.ResumeLayout(false);
             panelAllDone.ResumeLayout(false);
             ResumeLayout(false);

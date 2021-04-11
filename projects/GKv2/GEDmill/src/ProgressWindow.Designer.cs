@@ -1,5 +1,3 @@
-using System.Windows.Forms;
-
 namespace GEDmill
 {
     public partial class ProgressWindow
@@ -15,7 +13,6 @@ namespace GEDmill
             this.m_label = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
-
             // 
             // progressBar
             // 
@@ -25,7 +22,6 @@ namespace GEDmill
             this.m_progressbar.Name = "progressBar";
             this.m_progressbar.Size = new System.Drawing.Size(230, 27);
             this.m_progressbar.TabIndex = 1;
-
             // 
             // label
             // 
@@ -36,7 +32,6 @@ namespace GEDmill
             this.m_label.Name = "label";
             this.m_label.Size = new System.Drawing.Size(326, 37);
             this.m_label.TabIndex = 0;
-
             // 
             // btnCancel
             // 
@@ -48,11 +43,10 @@ namespace GEDmill
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.OnCancelClicked);
-
             // 
             // ProgressWindow
             // 
-            this.AutoScaleMode = AutoScaleMode.None;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
             this.ClientSize = new System.Drawing.Size(348, 91);
             this.Controls.Add(this.btnCancel);

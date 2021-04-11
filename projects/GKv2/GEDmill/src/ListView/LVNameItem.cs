@@ -18,14 +18,13 @@
 
 using System;
 using System.Windows.Forms;
-using GDModel;
 
 namespace GEDmill.ListView
 {
     /// <summary>
     /// Holds a name (both surname and first names) for use in a list box and provides sorting by surname then firstname.
     /// </summary>
-    public class CListableName : ListViewItem.ListViewSubItem
+    public class LVNameItem : ListViewItem.ListViewSubItem
     {
         // The surname (for sorting)
         private string fSurname;
@@ -33,13 +32,9 @@ namespace GEDmill.ListView
         // The first name(s)
         private string fFirstName;
 
-        // The record that this item represents
-        private GDMIndividualRecord fRecord;
 
-
-        public CListableName(GDMIndividualRecord ir, string surname, string firstname)
+        public LVNameItem(string surname, string firstname)
         {
-            fRecord = ir;
             fSurname = surname;
             fFirstName = firstname;
 
@@ -66,7 +61,7 @@ namespace GEDmill.ListView
         }
 
         // To sort the list
-        public int CompareTo(CListableName other)
+        public int CompareTo(LVNameItem other)
         {
             if (fSurname != "" && other.fSurname != "") {
                 int result = fSurname.CompareTo(other.fSurname);

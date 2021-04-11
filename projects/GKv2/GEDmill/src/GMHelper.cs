@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using BSLib.Design.Handlers;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GEDmill.Model;
@@ -36,6 +37,13 @@ namespace GEDmill
     /// </summary>
     public static class GMHelper
     {
+        public const string GfxFilter = "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|"
+                                        + "Portable Network Graphics (*.png)|*.png|"
+                                        + "Graphics Interchange Format (*.gif)|*.gif|"
+                                        + "Windows Bitmap (*.bmp)|*.bmp|"
+                                        + "All supported picture files|*.jpg;*.jpeg;*.gif;*.bmp;*.png";
+
+
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(GMHelper).Name);
 
 
@@ -451,13 +459,15 @@ namespace GEDmill
             TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, MarkProc, marks);
         }
 
-        public static void RestrictUnmarked(GDMTree tree, List<GDMRecord> marks)
+        public static void RestrictUnmarked(GDMTree tree, List<GDMRecord> marks, out int changed)
         {
+            changed = 0;
             var treeEnum = tree.GetEnumerator(GDMRecordType.rtIndividual);
             GDMRecord record;
             while (treeEnum.MoveNext(out record)) {
                 if (!marks.Contains(record)) {
                     GMHelper.SetVisibility(record, false);
+                    changed++;
                 }
             }
         }
@@ -530,6 +540,59 @@ namespace GEDmill
         {
             total = 0;
             visible = 0;
+        }
+
+        public static Color SelectColor(Color color)
+        {
+            var colorHandle = AppHost.StdDialogs.SelectColor(new ColorHandler(color));
+            return ((ColorHandler)colorHandle).Handle;
+        }
+
+        public static string GetInitialDirectory(string fileName)
+        {
+            string sPath = fileName;
+            if (!Directory.Exists(sPath)) {
+                int iLastFolder = sPath.LastIndexOf('\\'); // Try parent folder
+                if (iLastFolder >= 0) {
+                    sPath = sPath.Substring(0, iLastFolder);
+                }
+                if (!Directory.Exists(sPath)) {
+                    sPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                }
+            }
+            return sPath;
+        }
+
+        public static bool IsSupportedFile(string fileName)
+        {
+            if (!string.IsNullOrEmpty(fileName)) {
+                string exten = Path.GetExtension(fileName).ToLower();
+                if (exten != ".jpg" && exten != ".jpeg" && exten != ".png" && exten != ".gif" && exten != ".bmp") {
+                    MessageBox.Show("The file you have selected is not a supported picture type.", "Unsupported Format",
+                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static string GetIndiName(string surname, string firstName)
+        {
+            string name = "";
+
+            if (firstName != "" && surname != "") {
+                name = string.Concat(surname, ", ", firstName);
+            } else if (surname != "") {
+                name = surname;
+            } else {
+                name = firstName;
+            }
+
+            if (name == "") {
+                name = CConfig.Instance.UnknownName;
+            }
+
+            return name;
         }
     }
 }
