@@ -2650,6 +2650,10 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MARNM, GEDCOMTagName._MARNM);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MIDN, GEDCOMTagName._MIDN);
 
+            // non-standard convertible tags
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._FREL, GEDCOMTagName._FREL);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MREL, GEDCOMTagName._MREL);
+
             // non-standard extended tags (GEDKeeper)
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._BOOKMARK, GEDCOMTagName._BOOKMARK);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._COMM, GEDCOMTagName._COMM);

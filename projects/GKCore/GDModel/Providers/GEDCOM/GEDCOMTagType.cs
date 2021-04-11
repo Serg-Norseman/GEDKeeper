@@ -215,6 +215,10 @@ namespace GDModel.Providers.GEDCOM
         _TRAVEL, // [GK] INDI.ATTR
         _UID, // 
         _YDNA, // [MyFamilyTree] INDI.ATTR
+
+        // non-standard convertible tags
+        _FREL, // [Ages, FTM/FTW, Legacy, Family Tree Maker]
+        _MREL, // [Ages, FTM/FTW, Legacy, Family Tree Maker]
     }
 
     public static class GEDCOMTagName
@@ -409,5 +413,9 @@ namespace GDModel.Providers.GEDCOM
         public const string _STOPDATE = "_STOPDATE";
         public const string _STATUS = "_STATUS";
         public const string _TASK = "_TASK";
+
+        // non-standard convertible tags
+        public const string _FREL = "_FREL";
+        public const string _MREL = "_MREL";
     }
 }

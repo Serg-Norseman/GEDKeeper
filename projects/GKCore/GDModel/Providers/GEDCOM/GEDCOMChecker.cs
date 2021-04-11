@@ -248,18 +248,43 @@ namespace GDModel.Providers.GEDCOM
             fBaseContext.ImportNames(iRec);
         }
 
+        private void CheckChildLink(GDMFamilyRecord fam, int index)
+        {
+            GDMIndividualLink childLink = fam.Children[index];
+            var childRec = fTree.GetPtrValue<GDMIndividualRecord>(childLink);
+            if (childRec == null) {
+                fam.Children.DeleteAt(index);
+                return;
+            }
+
+            if (fFormat == GEDCOMFormat.gf_AGES) {
+                var frelTag = FindSubTagValue(childLink, "_FREL");
+                var mrelTag = FindSubTagValue(childLink, "_MREL");
+                if (frelTag == "ADOPTED" && mrelTag == "ADOPTED") {
+                    GDMChildToFamilyLink ctfLink = childRec.FindChildToFamilyLink(fam);
+                    ctfLink.PedigreeLinkageType = GDMPedigreeLinkageType.plAdopted;
+
+                    childLink.DeleteTag("_FREL");
+                    childLink.DeleteTag("_MREL");
+                }
+            }
+        }
+
+        private static string FindSubTagValue(GDMTag tag, string subTagName)
+        {
+            var subTag = tag.FindTag(subTagName, 0);
+            return (subTag == null) ? string.Empty : subTag.StringValue;
+        }
+
         private void CheckFamilyRecord(GDMFamilyRecord fam)
         {
             for (int i = 0, num = fam.Events.Count; i < num; i++) {
                 GDMCustomEvent evt = fam.Events[i];
-
                 CheckEvent(evt);
             }
 
             for (int i = fam.Children.Count - 1; i >= 0; i--) {
-                var childRec = fTree.GetPtrValue<GDMIndividualRecord>(fam.Children[i]);
-                if (childRec == null)
-                    fam.Children.DeleteAt(i);
+                CheckChildLink(fam, i);
             }
 
             GDMRecord val = fTree.GetPtrValue<GDMIndividualRecord>(fam.Husband);
