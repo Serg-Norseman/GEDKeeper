@@ -1692,18 +1692,24 @@ namespace GKCore.Charts
                 TreeChartPerson child0 = person.GetChild(0);
                 int chY = (!fOptions.InvertedTree) ? child0.PtY : child0.PtY + child0.Height;
 
-                if (childrenCount > 1) {
-                    int bpx = person.GetChild(0).PtX;
-                    int epx = person.GetChild(childrenCount - 1).PtX;
-                    DrawLine(bpx, crY, epx, crY); // h
-                }
-
                 for (int i = 0; i < childrenCount; i++) {
                     TreeChartPerson child = person.GetChild(i);
 
                     bool dotted = IsDottedLines(child);
                     var linePen = (!dotted) ? fLinePen : fDottedLinePen;
                     var decorativeLinePen = (!dotted) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+
+                    if (childrenCount > 1) {
+                        int jX;
+                        if (i < childrenCount / 2) {
+                            jX = Math.Min(cx, person.GetChild(i + 1).PtX);
+                        } else {
+                            jX = Math.Max(cx, person.GetChild(i - 1).PtX);
+                        }
+
+                        DrawLine(child.PtX, crY, jX, crY, linePen, decorativeLinePen); // h
+                    }
+
                     DrawLine(child.PtX, crY, child.PtX, chY, linePen, decorativeLinePen); // v
                 }
             }
