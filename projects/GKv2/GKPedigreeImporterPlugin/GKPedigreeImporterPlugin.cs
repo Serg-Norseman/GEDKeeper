@@ -65,7 +65,7 @@ namespace GKPedigreeImporterPlugin
         LSID_Close,
         LSID_PersonLineSpecials,
         LSID_Special_1,
-        LSID_Analysis,
+        LSID_Analyzing,
         LSID_Loading,
         LSID_NPS,
         LSID_SNP,
