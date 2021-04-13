@@ -664,7 +664,7 @@ namespace GKPedigreeImporterPlugin
                     int[] numberStats = new int[3];
 
                     int num = fRawContents.Count;
-                    progress.ProgressInit(fLangMan.LS(ILS.LSID_Analysis), num);
+                    progress.ProgressInit(fLangMan.LS(ILS.LSID_Analyzing), num);
 
                     for (int i = 0; i < num; i++) {
                         string txt = fRawContents[i].Trim();
