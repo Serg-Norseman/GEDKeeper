@@ -679,7 +679,7 @@ namespace GDModel.Providers.GEDCOM
             // extract day
             token = strTok.CurrentToken;
             int dNum;
-            if (token == GEDCOMToken.Number && ((dNum = strTok.GetNumber()) <= 31)) {
+            if (token == GEDCOMToken.Number && strTok.TokenLength() <= 2 && ((dNum = strTok.GetNumber()) <= 31)) {
                 day = (byte)dNum;
                 token = strTok.Next();
             }
@@ -702,7 +702,7 @@ namespace GDModel.Providers.GEDCOM
                 month = (byte)((idx < 0) ? 0 : idx);
 
                 token = strTok.Next();
-            } else if (dateFormat == GEDCOMDateFormat.System && token == GEDCOMToken.Number) {
+            } else if (dateFormat == GEDCOMDateFormat.System && token == GEDCOMToken.Number && strTok.TokenLength() <= 2) {
                 month = (byte)strTok.GetNumber();
 
                 token = strTok.Next();
