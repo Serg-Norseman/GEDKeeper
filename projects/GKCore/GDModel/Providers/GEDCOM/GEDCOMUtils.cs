@@ -173,16 +173,15 @@ namespace GDModel.Providers.GEDCOM
         {
             string result = str;
             if (!string.IsNullOrEmpty(str)) {
-                char[] strChars = str.ToCharArray();
-                int strLen = strChars.Length;
+                int strLen = str.Length;
                 int sx = -1;
                 for (int i = 0; i < strLen; i++) {
-                    char chr = strChars[i];
+                    char chr = str[i];
                     if (chr == GEDCOMConsts.PointerDelimiter) {
                         if (sx == -1) {
                             sx = i;
                         } else {
-                            result = new string(strChars, sx + 1, i - 1 - sx);
+                            result = str.Substring(sx + 1, i - 1 - sx);
                             break;
                         }
                     }
@@ -214,23 +213,22 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        // Performance improvement: x3.5
         public static long GetXRefNumber(string str)
         {
             if (string.IsNullOrEmpty(str)) {
                 return -1;
             }
 
-            char[] strChars = str.ToCharArray();
-            int strLen = strChars.Length;
-
             long result = 0;
+
+            int strLen = str.Length;
             for (int i = 0; i < strLen; i++) {
-                char ch = strChars[i];
+                char ch = str[i];
                 if (ch >= '0' && ch <= '9') {
                     result = (result * 10 + ((int)ch - 48));
                 }
             }
+
             return result;
         }
 
@@ -307,6 +305,7 @@ namespace GDModel.Providers.GEDCOM
 
             token = strTok.Next();
             if (token == GEDCOMToken.XRef) {
+                // here XRef is a pure value without delimiters
                 tagXRef = strTok.GetWord();
 
                 // FIXME: check for errors
@@ -342,12 +341,11 @@ namespace GDModel.Providers.GEDCOM
                 return string.Empty;
             }
 
-            char[] strChars = str.ToCharArray();
-            int strLen = strChars.Length;
+            int strLen = str.Length;
 
             // skip leading whitespaces
             int strBeg = 0;
-            while (strBeg < strLen && strChars[strBeg] == GEDCOMConsts.Delimiter) strBeg++;
+            while (strBeg < strLen && str[strBeg] == GEDCOMConsts.Delimiter) strBeg++;
 
             // check empty string
             if (strLen - strBeg == 0) {
@@ -356,13 +354,13 @@ namespace GDModel.Providers.GEDCOM
 
             int init = -1, fin = strBeg;
             for (int i = strBeg; i < strLen; i++) {
-                char chr = strChars[i];
+                char chr = str[i];
                 if (chr == GEDCOMConsts.PointerDelimiter) {
                     if (init == -1) {
                         init = i;
                     } else {
                         fin = i;
-                        xref = new string(strChars, init, fin + 1 - init);
+                        xref = str.Substring(init + 1, fin - 1 - init);
                         fin += 1;
                         break;
                     }
@@ -371,8 +369,7 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
-            xref = GEDCOMUtils.CleanXRef(xref);
-            return new string(strChars, fin, strLen - fin);
+            return str.Substring(fin, strLen - fin);
         }
 
         // Time format: hour:minutes:seconds.fraction

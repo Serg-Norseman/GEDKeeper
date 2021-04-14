@@ -38,6 +38,8 @@ namespace GDModel.Providers.GEDCOM
         public void Test_GetXRefNumber()
         {
             Assert.AreEqual(-1, GEDCOMUtils.GetXRefNumber(""));
+
+            Assert.AreEqual(12345, GEDCOMUtils.GetXRefNumber("12345"));
         }
 
         [Test]
@@ -420,6 +422,22 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual("", rest);
             Assert.AreEqual("I001", xref);
 
+            rest = GEDCOMUtils.ParseXRefPointer("@I1@", out xref);
+            Assert.AreEqual("", rest);
+            Assert.AreEqual("I1", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer("@I1@ rest", out xref);
+            Assert.AreEqual(" rest", rest);
+            Assert.AreEqual("I1", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer("I1@", out xref);
+            Assert.AreEqual("I1@", rest);
+            Assert.AreEqual("", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer("@X", out xref);
+            Assert.AreEqual("@X", rest);
+            Assert.AreEqual("", xref);
+
             rest = GEDCOMUtils.ParseXRefPointer(" ptr text", out xref);
             Assert.AreEqual("ptr text", rest);
             Assert.AreEqual("", xref);
@@ -429,6 +447,10 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual("", xref);
 
             rest = GEDCOMUtils.ParseXRefPointer("", out xref);
+            Assert.AreEqual("", rest);
+            Assert.AreEqual("", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer(null, out xref);
             Assert.AreEqual("", rest);
             Assert.AreEqual("", xref);
         }

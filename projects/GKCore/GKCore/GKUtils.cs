@@ -409,6 +409,8 @@ namespace GKCore
 
         #region Match functions
 
+        private static readonly char[] MaskDelimiters = { '*', '?', '|' };
+
         public static string PrepareMask(string mask)
         {
             string regexStr = "";
@@ -420,10 +422,8 @@ namespace GKCore
                 int curPos = 0;
                 int len = mask.Length;
 
-                char[] syms = "*?|".ToCharArray();
-
                 while (curPos < len) {
-                    int I = mask.IndexOfAny(syms, curPos);
+                    int I = mask.IndexOfAny(MaskDelimiters, curPos);
                     if (I < curPos) break;
                     if (I > curPos) {
                         string part = mask.Substring(curPos, I - curPos);

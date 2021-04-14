@@ -68,6 +68,7 @@ namespace GDModel
 
         public override string ParseString(string strValue)
         {
+            // here XRef is a pure value without delimiters
             return GEDCOMUtils.ParseXRefPointer(strValue, out fXRef);
         }
 
