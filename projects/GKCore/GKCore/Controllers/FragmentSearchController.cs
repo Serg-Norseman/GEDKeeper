@@ -67,6 +67,8 @@ namespace GKCore.Controllers
                         if (iRec.Patriarch) {
                             pn = "(*) " + pn;
                         }
+                        pn = string.Join(" ", pn, "[", iRec.XRef, "]");
+
                         fView.GroupsTree.AddNode(groupItem, pn, iRec);
                     }
 
@@ -79,13 +81,26 @@ namespace GKCore.Controllers
             }
         }
 
+        public GDMIndividualRecord GetSelectedPerson()
+        {
+            return fView.GroupsTree.GetSelectedData() as GDMIndividualRecord;
+        }
+
         public void SelectPerson()
         {
-            GDMIndividualRecord iRec = fView.GroupsTree.GetSelectedData() as GDMIndividualRecord;
+            GDMIndividualRecord iRec = GetSelectedPerson();
             if (iRec == null) return;
 
-            fBase.SelectRecordByXRef(iRec.XRef);
             fView.Close();
+            fBase.SelectRecordByXRef(iRec.XRef);
+        }
+
+        public void ShowDetails()
+        {
+            GDMIndividualRecord iRec = GetSelectedPerson();
+            if (iRec == null) return;
+
+            BaseController.ViewRecordInfo(fBase, iRec);
         }
     }
 }

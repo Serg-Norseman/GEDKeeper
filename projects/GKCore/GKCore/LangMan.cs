@@ -877,8 +877,9 @@ namespace GKCore
         /* 817 */ LSID_GoToPersonRecord,
         /* 818 */ LSID_STWeb,
         /* 819 */ LSID_SeparateDatesAndPlacesLines,
+        /* 820 */ LSID_Details,
 
-        /* 000 */ LSID_Last = LSID_SeparateDatesAndPlacesLines
+        /* 000 */ LSID_Last = LSID_Details
     }
 
 
@@ -1711,6 +1712,7 @@ namespace GKCore
             /* 817 */ "Go to person record",
             /* 818 */ "Web address",
             /* 819 */ "Separate dates and places lines",
+            /* 820 */ "Details",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -8,17 +8,26 @@
 		private System.Windows.Forms.TreeView tvGroups;
 		private GKUI.Components.LogChart gkLogChart1;
 		private System.Windows.Forms.Button btnAnalyseGroups;
+		private System.ComponentModel.IContainer components;
+		private System.Windows.Forms.ToolStripMenuItem miDetails;
+		private System.Windows.Forms.ToolStripMenuItem miGoToRecord;
+		private System.Windows.Forms.ContextMenuStrip contextMenu;
 
 		private void InitializeComponent()
 		{
+		    this.components = new System.ComponentModel.Container();
 		    this.tabsTools = new System.Windows.Forms.TabControl();
 		    this.pageFamilyGroups = new System.Windows.Forms.TabPage();
 		    this.btnAnalyseGroups = new System.Windows.Forms.Button();
 		    this.gkLogChart1 = new GKUI.Components.LogChart();
 		    this.tvGroups = new System.Windows.Forms.TreeView();
+		    this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+		    this.miDetails = new System.Windows.Forms.ToolStripMenuItem();
+		    this.miGoToRecord = new System.Windows.Forms.ToolStripMenuItem();
 		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
 		    this.pageFamilyGroups.SuspendLayout();
+		    this.contextMenu.SuspendLayout();
 		    this.SuspendLayout();
 		    // 
 		    // tabsTools
@@ -64,12 +73,36 @@
 		    // 
 		    // tvGroups
 		    // 
+		    this.tvGroups.ContextMenuStrip = this.contextMenu;
 		    this.tvGroups.Location = new System.Drawing.Point(9, 8);
 		    this.tvGroups.Margin = new System.Windows.Forms.Padding(2);
 		    this.tvGroups.Name = "tvGroups";
 		    this.tvGroups.Size = new System.Drawing.Size(782, 350);
 		    this.tvGroups.TabIndex = 0;
 		    this.tvGroups.DoubleClick += new System.EventHandler(this.tvGroups_DoubleClick);
+		    // 
+		    // contextMenu
+		    // 
+		    this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miDetails,
+            this.miGoToRecord});
+		    this.contextMenu.Name = "contextMenuStrip1";
+		    this.contextMenu.Size = new System.Drawing.Size(153, 70);
+		    this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
+		    // 
+		    // miDetails
+		    // 
+		    this.miDetails.Name = "miDetails";
+		    this.miDetails.Size = new System.Drawing.Size(152, 22);
+		    this.miDetails.Text = "miDetails";
+		    this.miDetails.Click += new System.EventHandler(this.miDetails_Click);
+		    // 
+		    // miGoToRecord
+		    // 
+		    this.miGoToRecord.Name = "miGoToRecord";
+		    this.miGoToRecord.Size = new System.Drawing.Size(152, 22);
+		    this.miGoToRecord.Text = "miGoToRecord";
+		    this.miGoToRecord.Click += new System.EventHandler(this.miGoToRecord_Click);
 		    // 
 		    // btnClose
 		    // 
@@ -103,8 +136,8 @@
 		    this.Text = "TreeToolsWin";
 		    this.tabsTools.ResumeLayout(false);
 		    this.pageFamilyGroups.ResumeLayout(false);
+		    this.contextMenu.ResumeLayout(false);
 		    this.ResumeLayout(false);
-
 		}
 	}
 }

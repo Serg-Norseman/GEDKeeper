@@ -67,6 +67,8 @@ namespace GKUI.Forms
             pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnAnalyseGroups.Text = LangMan.LS(LSID.LSID_Analyze);
+            miDetails.Text = LangMan.LS(LSID.LSID_Details);
+            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
         }
 
         private void btnAnalyseGroups_Click(object sender, EventArgs e)
@@ -84,6 +86,23 @@ namespace GKUI.Forms
             if (args == null) return;
 
             args.Hint = string.Format(LangMan.LS(LSID.LSID_LogHint), args.FragmentNumber, args.Size);
+        }
+
+        private void miDetails_Click(object sender, EventArgs e)
+        {
+            fController.ShowDetails();
+        }
+
+        private void miGoToRecord_Click(object sender, EventArgs e)
+        {
+            fController.SelectPerson();
+        }
+
+        private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var iRec = fController.GetSelectedPerson();
+            miDetails.Enabled = (iRec != null);
+            miGoToRecord.Enabled = (iRec != null);
         }
     }
 }
