@@ -413,25 +413,28 @@ namespace GDModel.Providers
                 dtx = evt.Date.Value as GDMDate;
                 Assert.AreEqual(32, dtx.Year);
                 Assert.AreEqual(true, dtx.YearBC);
+                Assert.AreEqual("032B.C.", dtx.StringValue);
 
                 evt = iRec.FindEvent("DEAT");
                 dtx = evt.Date.Value as GDMDate;
                 Assert.AreEqual(32, dtx.Year);
                 Assert.AreEqual(false, dtx.YearBC);
+                Assert.AreEqual("032", dtx.StringValue);
 
                 iRec = ctx.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec);
 
-                // TODO
-                /*evt = iRec.FindEvent("BIRT");
+                evt = iRec.FindEvent("BIRT");
                 dtx = evt.Date.Value as GDMDate;
                 Assert.AreEqual(31, dtx.Year);
                 Assert.AreEqual(true, dtx.YearBC);
+                Assert.AreEqual("031B.C.", dtx.StringValue);
 
                 evt = iRec.FindEvent("DEAT");
                 dtx = evt.Date.Value as GDMDate;
                 Assert.AreEqual(31, dtx.Year);
-                Assert.AreEqual(false, dtx.YearBC);*/
+                Assert.AreEqual(false, dtx.YearBC);
+                Assert.AreEqual("031", dtx.StringValue);
             }
         }
 

@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using BSLib;
 using BSLib.Calendar;
 using GDModel.Providers.GEDCOM;
@@ -279,44 +280,38 @@ namespace GDModel
 
         protected override string GetStringValue()
         {
-            string prefix = string.Empty;
+            var parts = new List<string>(5);
             if (fApproximated != GDMApproximated.daExact) {
-                prefix = GEDCOMConsts.GEDCOMDateApproximatedArray[(int)fApproximated] + " ";
+                parts.Add(GEDCOMConsts.GEDCOMDateApproximatedArray[(int)fApproximated]);
             }
 
-            string escapeStr = string.Empty;
             if (fCalendar != GDMCalendar.dcGregorian) {
-                escapeStr = GEDCOMConsts.GEDCOMDateEscapeArray[(int)fCalendar] + " ";
+                parts.Add(GEDCOMConsts.GEDCOMDateEscapeArray[(int)fCalendar]);
             }
 
-            string dayStr = string.Empty;
             if (fDay > 0) {
-                dayStr = fDay.ToString();
-                if (dayStr.Length == 1) {
-                    dayStr = "0" + dayStr;
-                }
-                dayStr += " ";
+                parts.Add(fDay.ToString("D2"));
             }
 
-            string monthStr = string.Empty;
             if (fMonth > 0) {
-                string[] monthes = GDMDate.GetMonthNames(fCalendar);
-                monthStr = monthes[fMonth - 1] + " ";
+                string[] months = GetMonthNames(fCalendar);
+                parts.Add(months[fMonth - 1]);
             }
 
-            string yearStr = string.Empty;
             if (fYear != UNKNOWN_YEAR) {
-                yearStr = fYear.ToString();
-                if (fYearModifier != "") {
+                string yearStr = fYear.ToString("D3");
+                if (!string.IsNullOrEmpty(fYearModifier)) {
                     yearStr = yearStr + "/" + fYearModifier;
                 }
+
                 if (fYearBC) {
                     yearStr += GEDCOMConsts.YearBC;
                 }
+
+                parts.Add(yearStr);
             }
 
-            string result = prefix + escapeStr + dayStr + monthStr + yearStr;
-            return result;
+            return string.Join(" ", parts);
         }
 
         private static byte GetMonthNumber(GDMCalendar calendar, string strMonth)
