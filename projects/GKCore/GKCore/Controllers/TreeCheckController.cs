@@ -86,11 +86,24 @@ namespace GKCore.Controllers
 
         public void SelectRecord()
         {
-            GDMRecord rec = ((TreeTools.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
+            GDMRecord rec = GetSelectedRecord();
             if (rec == null) return;
 
-            fBase.SelectRecordByXRef(rec.XRef);
             fView.Close();
+            fBase.SelectRecordByXRef(rec.XRef);
+        }
+
+        public GDMRecord GetSelectedRecord()
+        {
+            return ((TreeTools.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
+        }
+
+        public void ShowDetails()
+        {
+            GDMRecord rec = GetSelectedRecord();
+            if (rec == null) return;
+
+            BaseController.ViewRecordInfo(fBase, rec);
         }
     }
 }

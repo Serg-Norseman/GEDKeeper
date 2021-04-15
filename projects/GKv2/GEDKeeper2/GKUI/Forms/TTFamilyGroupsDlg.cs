@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -69,6 +69,7 @@ namespace GKUI.Forms
             btnAnalyseGroups.Text = LangMan.LS(LSID.LSID_Analyze);
             miDetails.Text = LangMan.LS(LSID.LSID_Details);
             miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
+            miCopyXRef.Text = LangMan.LS(LSID.LSID_CopyXRef);
         }
 
         private void btnAnalyseGroups_Click(object sender, EventArgs e)
@@ -103,6 +104,15 @@ namespace GKUI.Forms
             var iRec = fController.GetSelectedPerson();
             miDetails.Enabled = (iRec != null);
             miGoToRecord.Enabled = (iRec != null);
+            miCopyXRef.Enabled = (iRec != null);
+        }
+
+        public void miCopyXRef_Click(object sender, EventArgs e)
+        {
+            var rec = fController.GetSelectedPerson();
+            if (rec == null) return;
+
+            UIHelper.SetClipboardText(rec.XRef);
         }
     }
 }

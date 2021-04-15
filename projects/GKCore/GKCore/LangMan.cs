@@ -878,8 +878,9 @@ namespace GKCore
         /* 818 */ LSID_STWeb,
         /* 819 */ LSID_SeparateDatesAndPlacesLines,
         /* 820 */ LSID_Details,
+        /* 821 */ LSID_CopyXRef,
 
-        /* 000 */ LSID_Last = LSID_Details
+        /* 000 */ LSID_Last = LSID_CopyXRef
     }
 
 
@@ -1713,6 +1714,7 @@ namespace GKCore
             /* 818 */ "Web address",
             /* 819 */ "Separate dates and places lines",
             /* 820 */ "Details",
+            /* 821 */ "Copy XRef to clipboard",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
