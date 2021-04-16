@@ -26,9 +26,9 @@
 		    this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 		    this.miDetails = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miGoToRecord = new System.Windows.Forms.ToolStripMenuItem();
-		    this.btnClose = new System.Windows.Forms.Button();
 		    this.N1 = new System.Windows.Forms.ToolStripSeparator();
 		    this.miCopyXRef = new System.Windows.Forms.ToolStripMenuItem();
+		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
 		    this.pageFamilyGroups.SuspendLayout();
 		    this.contextMenu.SuspendLayout();
@@ -37,11 +37,11 @@
 		    // tabsTools
 		    // 
 		    this.tabsTools.Controls.Add(this.pageFamilyGroups);
-		    this.tabsTools.Location = new System.Drawing.Point(11, 10);
+		    this.tabsTools.Location = new System.Drawing.Point(9, 8);
 		    this.tabsTools.Margin = new System.Windows.Forms.Padding(2);
 		    this.tabsTools.Name = "tabsTools";
 		    this.tabsTools.SelectedIndex = 0;
-		    this.tabsTools.Size = new System.Drawing.Size(1010, 545);
+		    this.tabsTools.Size = new System.Drawing.Size(808, 436);
 		    this.tabsTools.TabIndex = 0;
 		    // 
 		    // pageFamilyGroups
@@ -49,39 +49,39 @@
 		    this.pageFamilyGroups.Controls.Add(this.btnAnalyseGroups);
 		    this.pageFamilyGroups.Controls.Add(this.gkLogChart1);
 		    this.pageFamilyGroups.Controls.Add(this.tvGroups);
-		    this.pageFamilyGroups.Location = new System.Drawing.Point(4, 26);
+		    this.pageFamilyGroups.Location = new System.Drawing.Point(4, 22);
 		    this.pageFamilyGroups.Margin = new System.Windows.Forms.Padding(2);
 		    this.pageFamilyGroups.Name = "pageFamilyGroups";
-		    this.pageFamilyGroups.Size = new System.Drawing.Size(1002, 515);
+		    this.pageFamilyGroups.Size = new System.Drawing.Size(800, 410);
 		    this.pageFamilyGroups.TabIndex = 5;
 		    this.pageFamilyGroups.Text = "pageFamilyGroups";
 		    // 
 		    // btnAnalyseGroups
 		    // 
-		    this.btnAnalyseGroups.Location = new System.Drawing.Point(864, 465);
+		    this.btnAnalyseGroups.Location = new System.Drawing.Point(9, 372);
 		    this.btnAnalyseGroups.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnAnalyseGroups.Name = "btnAnalyseGroups";
-		    this.btnAnalyseGroups.Size = new System.Drawing.Size(125, 30);
+		    this.btnAnalyseGroups.Size = new System.Drawing.Size(100, 24);
 		    this.btnAnalyseGroups.TabIndex = 7;
 		    this.btnAnalyseGroups.Text = "btnAnalyseGroups";
 		    this.btnAnalyseGroups.Click += new System.EventHandler(this.btnAnalyseGroups_Click);
 		    // 
 		    // gkLogChart1
 		    // 
-		    this.gkLogChart1.Location = new System.Drawing.Point(11, 465);
+		    this.gkLogChart1.Location = new System.Drawing.Point(125, 372);
 		    this.gkLogChart1.Margin = new System.Windows.Forms.Padding(2);
 		    this.gkLogChart1.Name = "gkLogChart1";
-		    this.gkLogChart1.Size = new System.Drawing.Size(832, 30);
+		    this.gkLogChart1.Size = new System.Drawing.Size(666, 24);
 		    this.gkLogChart1.TabIndex = 1;
 		    this.gkLogChart1.TabStop = true;
 		    // 
 		    // tvGroups
 		    // 
 		    this.tvGroups.ContextMenuStrip = this.contextMenu;
-		    this.tvGroups.Location = new System.Drawing.Point(11, 10);
+		    this.tvGroups.Location = new System.Drawing.Point(9, 8);
 		    this.tvGroups.Margin = new System.Windows.Forms.Padding(2);
 		    this.tvGroups.Name = "tvGroups";
-		    this.tvGroups.Size = new System.Drawing.Size(976, 436);
+		    this.tvGroups.Size = new System.Drawing.Size(782, 350);
 		    this.tvGroups.TabIndex = 0;
 		    this.tvGroups.DoubleClick += new System.EventHandler(this.tvGroups_DoubleClick);
 		    // 
@@ -94,53 +94,53 @@
             this.N1,
             this.miCopyXRef});
 		    this.contextMenu.Name = "contextMenuStrip1";
-		    this.contextMenu.Size = new System.Drawing.Size(178, 110);
+		    this.contextMenu.Size = new System.Drawing.Size(153, 76);
 		    this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
 		    // 
 		    // miDetails
 		    // 
 		    this.miDetails.Name = "miDetails";
-		    this.miDetails.Size = new System.Drawing.Size(177, 24);
+		    this.miDetails.Size = new System.Drawing.Size(152, 22);
 		    this.miDetails.Text = "miDetails";
 		    this.miDetails.Click += new System.EventHandler(this.miDetails_Click);
 		    // 
 		    // miGoToRecord
 		    // 
 		    this.miGoToRecord.Name = "miGoToRecord";
-		    this.miGoToRecord.Size = new System.Drawing.Size(177, 24);
+		    this.miGoToRecord.Size = new System.Drawing.Size(152, 22);
 		    this.miGoToRecord.Text = "miGoToRecord";
 		    this.miGoToRecord.Click += new System.EventHandler(this.miGoToRecord_Click);
+		    // 
+		    // N1
+		    // 
+		    this.N1.Name = "N1";
+		    this.N1.Size = new System.Drawing.Size(149, 6);
+		    // 
+		    // miCopyXRef
+		    // 
+		    this.miCopyXRef.Name = "miCopyXRef";
+		    this.miCopyXRef.Size = new System.Drawing.Size(152, 22);
+		    this.miCopyXRef.Text = "miCopyXRef";
+		    this.miCopyXRef.Click += new System.EventHandler(this.miCopyXRef_Click);
 		    // 
 		    // btnClose
 		    // 
 		    this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 		    this.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-		    this.btnClose.Location = new System.Drawing.Point(908, 582);
+		    this.btnClose.Location = new System.Drawing.Point(726, 466);
 		    this.btnClose.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnClose.Name = "btnClose";
-		    this.btnClose.Size = new System.Drawing.Size(114, 30);
+		    this.btnClose.Size = new System.Drawing.Size(91, 24);
 		    this.btnClose.TabIndex = 1;
 		    this.btnClose.Text = "btnClose";
 		    this.btnClose.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 		    // 
-		    // N1
-		    // 
-		    this.N1.Name = "N1";
-		    this.N1.Size = new System.Drawing.Size(174, 6);
-		    // 
-		    // miCopyXRef
-		    // 
-		    this.miCopyXRef.Name = "miCopyXRef";
-		    this.miCopyXRef.Size = new System.Drawing.Size(177, 24);
-		    this.miCopyXRef.Text = "miCopyXRef";
-		    this.miCopyXRef.Click += new System.EventHandler(this.miCopyXRef_Click);
-		    // 
 		    // TTFamilyGroupsDlg
 		    // 
-		    this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+		    this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 		    this.CancelButton = this.btnClose;
-		    this.ClientSize = new System.Drawing.Size(1034, 625);
+		    this.ClientSize = new System.Drawing.Size(827, 500);
 		    this.Controls.Add(this.tabsTools);
 		    this.Controls.Add(this.btnClose);
 		    this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));

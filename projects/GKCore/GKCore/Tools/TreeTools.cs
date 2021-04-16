@@ -568,17 +568,19 @@ namespace GKCore.Tools
 
             public string GetRecordName(GDMTree tree)
             {
-                string result = "[" + Rec.XRef + "] ";
+                string result = string.Empty;
 
                 switch (Rec.RecordType) {
                     case GDMRecordType.rtIndividual:
-                        result = result + GKUtils.GetNameString(((GDMIndividualRecord)Rec), true, false);
+                        result = GKUtils.GetNameString(((GDMIndividualRecord)Rec), true, false);
                         break;
 
                     case GDMRecordType.rtFamily:
-                        result = result + GKUtils.GetFamilyString(tree, (GDMFamilyRecord)Rec);
+                        result = GKUtils.GetFamilyString(tree, (GDMFamilyRecord)Rec);
                         break;
                 }
+
+                result = string.Concat(result, " [ ", Rec.XRef, " ]");
 
                 return result;
             }

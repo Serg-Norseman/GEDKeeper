@@ -19,11 +19,13 @@
  */
 
 using System;
-
+using System.Text;
+using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
+using GKCore.Tools;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -110,10 +112,15 @@ namespace GKUI.Forms
 
         public void miCopyXRef_Click(object sender, EventArgs e)
         {
-            var rec = fController.GetSelectedRecord();
-            if (rec == null) return;
+            var list = ListChecks.GetSelectedItems();
+            var text = new StringBuilder();
+            foreach (var item in list) {
+                var checkObj = (TreeTools.CheckObj)item;
+                text.Append(checkObj.Rec.XRef);
+                text.Append("\r\n");
+            }
 
-            UIHelper.SetClipboardText(rec.XRef);
+            UIHelper.SetClipboardText(text.ToString());
         }
     }
 }

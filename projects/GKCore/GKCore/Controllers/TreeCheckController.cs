@@ -98,6 +98,22 @@ namespace GKCore.Controllers
             return ((TreeTools.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
         }
 
+        public IList<GDMRecord> GetCheckedRecords()
+        {
+            var result = new List<GDMRecord>();
+
+            int num = fView.ChecksList.Items.Count;
+            for (int i = 0; i < num; i++) {
+                IListItem item = fView.ChecksList.Items[i];
+                if (item.Checked) {
+                    var checkObj = item.Data as TreeTools.CheckObj;
+                    result.Add(checkObj.Rec);
+                }
+            }
+
+            return result;
+        }
+
         public void ShowDetails()
         {
             GDMRecord rec = GetSelectedRecord();
