@@ -70,6 +70,7 @@ namespace GDModel
 
     public interface IGDMStructWithNotes : IGDMObject
     {
+        int NotesCount { get; }
         GDMList<GDMNotes> Notes { get; }
 
         //GDMNotes AddNote(GDMNoteRecord noteRec);

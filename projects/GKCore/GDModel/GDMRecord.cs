@@ -78,9 +78,20 @@ namespace GDModel
             get { return fMultimediaLinks; }
         }
 
+        public int NotesCount
+        {
+            get { return fNotes == null ? 0 : fNotes.Count; }
+        }
+
         public GDMList<GDMNotes> Notes
         {
-            get { return fNotes; }
+            get {
+                if (fNotes == null) {
+                    fNotes = new GDMList<GDMNotes>();
+                }
+
+                return fNotes;
+            }
         }
 
         public GDMRecordType RecordType
@@ -120,7 +131,6 @@ namespace GDModel
             fXRef = string.Empty;
             fAutomatedRecordID = string.Empty;
             fChangeDate = new GDMChangeDate();
-            fNotes = new GDMList<GDMNotes>();
             fSourceCitations = new GDMList<GDMSourceCitation>();
             fMultimediaLinks = new GDMList<GDMMultimediaLink>();
             fUserReferences = new GDMList<GDMUserReference>();
@@ -129,7 +139,7 @@ namespace GDModel
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fNotes.Dispose();
+                if (fNotes != null) fNotes.Dispose();
                 fSourceCitations.Dispose();
                 fMultimediaLinks.Dispose();
                 fUserReferences.Dispose();
@@ -147,7 +157,7 @@ namespace GDModel
             base.TrimExcess();
 
             fChangeDate.TrimExcess();
-            fNotes.TrimExcess();
+            if (fNotes != null) fNotes.TrimExcess();
             fSourceCitations.TrimExcess();
             fMultimediaLinks.TrimExcess();
             fUserReferences.TrimExcess();
@@ -175,7 +185,7 @@ namespace GDModel
 
             base.Assign(source);
 
-            AssignList(sourceRec.fNotes, fNotes);
+            if (sourceRec.fNotes != null) AssignList(sourceRec.fNotes, Notes);
             AssignList(sourceRec.fMultimediaLinks, fMultimediaLinks);
             AssignList(sourceRec.fSourceCitations, fSourceCitations);
             AssignList(sourceRec.fUserReferences, fUserReferences);
@@ -193,7 +203,7 @@ namespace GDModel
                 }
             }
 
-            while (fNotes.Count > 0) {
+            while (fNotes != null && fNotes.Count > 0) {
                 GDMTag tag = fNotes.Extract(0);
                 targetRecord.Notes.Add((GDMNotes)tag);
             }
@@ -218,7 +228,7 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fNotes.ReplaceXRefs(map);
+            if (fNotes != null) fNotes.ReplaceXRefs(map);
             fSourceCitations.ReplaceXRefs(map);
             fMultimediaLinks.ReplaceXRefs(map);
             fUserReferences.ReplaceXRefs(map);
@@ -230,7 +240,7 @@ namespace GDModel
 
             fAutomatedRecordID = string.Empty;
             fChangeDate.Clear();
-            fNotes.Clear();
+            if (fNotes != null) fNotes.Clear();
             fSourceCitations.Clear();
             fMultimediaLinks.Clear();
             fUserReferences.Clear();
@@ -240,7 +250,8 @@ namespace GDModel
         public override bool IsEmpty()
         {
             return base.IsEmpty() && string.IsNullOrEmpty(fAutomatedRecordID) && fChangeDate.IsEmpty() &&
-                (fNotes.Count == 0) && (fSourceCitations.Count == 0) && 
+                (fNotes == null || fNotes.Count == 0) &&
+                (fSourceCitations.Count == 0) && 
                 (fMultimediaLinks.Count == 0) && (fUserReferences.Count == 0);
         }
 

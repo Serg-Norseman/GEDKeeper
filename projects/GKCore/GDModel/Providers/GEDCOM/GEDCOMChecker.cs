@@ -103,7 +103,7 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithNotes(IGDMStructWithNotes tag)
         {
-            for (int i = tag.Notes.Count - 1; i >= 0; i--) {
+            for (int i = tag.NotesCount - 1; i >= 0; i--) {
                 GDMNotes note = tag.Notes[i];
                 if (!note.IsPointer) {
                     TransformNote(note);

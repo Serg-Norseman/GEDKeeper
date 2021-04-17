@@ -66,9 +66,20 @@ namespace GDModel
             get { return fMultimediaLinks; }
         }
 
+        public int NotesCount
+        {
+            get { return fNotes == null ? 0 : fNotes.Count; }
+        }
+
         public GDMList<GDMNotes> Notes
         {
-            get { return fNotes; }
+            get {
+                if (fNotes == null) {
+                    fNotes = new GDMList<GDMNotes>();
+                }
+
+                return fNotes;
+            }
         }
 
         public string Page
@@ -93,7 +104,6 @@ namespace GDModel
 
             fData = new GDMSourceCitationData();
             fText = new GDMTextTag((int)GEDCOMTagType.TEXT);
-            fNotes = new GDMList<GDMNotes>();
             fMultimediaLinks = new GDMList<GDMMultimediaLink>();
         }
 
@@ -102,7 +112,7 @@ namespace GDModel
             if (disposing) {
                 fData.Dispose();
                 fText.Dispose();
-                fNotes.Dispose();
+                if (fNotes != null) fNotes.Dispose();
                 fMultimediaLinks.Dispose();
             }
             base.Dispose(disposing);
@@ -115,7 +125,7 @@ namespace GDModel
             fData.TrimExcess();
             fDescription.TrimExcess();
             fText.TrimExcess();
-            fNotes.TrimExcess();
+            if (fNotes != null) fNotes.TrimExcess();
             fMultimediaLinks.TrimExcess();
         }
 
@@ -132,7 +142,7 @@ namespace GDModel
             fData.Assign(sourceObj.fData);
             fDescription.Assign(sourceObj.fDescription);
             fText.Assign(sourceObj.fText);
-            AssignList(sourceObj.Notes, fNotes);
+            if (sourceObj.fNotes != null) AssignList(sourceObj.fNotes, Notes);
             AssignList(sourceObj.MultimediaLinks, fMultimediaLinks);
         }
 
@@ -145,7 +155,7 @@ namespace GDModel
             fDescription.Clear();
             fPage = string.Empty;
             fText.Clear();
-            fNotes.Clear();
+            if (fNotes != null) fNotes.Clear();
             fMultimediaLinks.Clear();
         }
 
@@ -154,7 +164,7 @@ namespace GDModel
             bool result;
 
             bool isCommonEmpty = string.IsNullOrEmpty(fPage)
-                && (fNotes.Count == 0) && (fMultimediaLinks.Count == 0);
+                && (fNotes == null || fNotes.Count == 0) && (fMultimediaLinks.Count == 0);
 
             if (IsPointer) {
                 result = base.IsEmpty() && isCommonEmpty && fData.IsEmpty();
@@ -169,7 +179,7 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fNotes.ReplaceXRefs(map);
+            if (fNotes != null) fNotes.ReplaceXRefs(map);
             fMultimediaLinks.ReplaceXRefs(map);
         }
 
