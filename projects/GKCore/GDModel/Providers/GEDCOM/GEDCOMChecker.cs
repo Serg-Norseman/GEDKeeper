@@ -188,7 +188,9 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
-            CheckEventPlace(evt.Place);
+            if (evt.HasPlace) {
+                CheckEventPlace(evt.Place);
+            }
         }
 
         private void CheckUserRef(GDMIndividualRecord iRec, GDMUserReference userRef)
