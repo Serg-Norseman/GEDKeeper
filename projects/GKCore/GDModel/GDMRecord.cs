@@ -99,9 +99,20 @@ namespace GDModel
             get { return (GDMRecordType)base.Id; }
         }
 
+        public int SourceCitationsCount
+        {
+            get { return fSourceCitations == null ? 0 : fSourceCitations.Count; }
+        }
+
         public GDMList<GDMSourceCitation> SourceCitations
         {
-            get { return fSourceCitations; }
+            get {
+                if (fSourceCitations == null) {
+                    fSourceCitations = new GDMList<GDMSourceCitation>();
+                }
+
+                return fSourceCitations;
+            }
         }
 
         public string UID
@@ -131,7 +142,6 @@ namespace GDModel
             fXRef = string.Empty;
             fAutomatedRecordID = string.Empty;
             fChangeDate = new GDMChangeDate();
-            fSourceCitations = new GDMList<GDMSourceCitation>();
             fMultimediaLinks = new GDMList<GDMMultimediaLink>();
             fUserReferences = new GDMList<GDMUserReference>();
         }
@@ -140,7 +150,7 @@ namespace GDModel
         {
             if (disposing) {
                 if (fNotes != null) fNotes.Dispose();
-                fSourceCitations.Dispose();
+                if (fSourceCitations != null) fSourceCitations.Dispose();
                 fMultimediaLinks.Dispose();
                 fUserReferences.Dispose();
             }
@@ -158,14 +168,14 @@ namespace GDModel
 
             fChangeDate.TrimExcess();
             if (fNotes != null) fNotes.TrimExcess();
-            fSourceCitations.TrimExcess();
+            if (fSourceCitations != null) fSourceCitations.TrimExcess();
             fMultimediaLinks.TrimExcess();
             fUserReferences.TrimExcess();
         }
 
         public int IndexOfSource(GDMSourceRecord sourceRec)
         {
-            if (sourceRec != null) {
+            if (sourceRec != null && fSourceCitations != null) {
                 int num = fSourceCitations.Count;
                 for (int i = 0; i < num; i++) {
                     if (fSourceCitations[i].XRef == sourceRec.XRef) {
@@ -187,7 +197,7 @@ namespace GDModel
 
             if (sourceRec.fNotes != null) AssignList(sourceRec.fNotes, Notes);
             AssignList(sourceRec.fMultimediaLinks, fMultimediaLinks);
-            AssignList(sourceRec.fSourceCitations, fSourceCitations);
+            if (sourceRec.fSourceCitations != null) AssignList(sourceRec.fSourceCitations, SourceCitations);
             AssignList(sourceRec.fUserReferences, fUserReferences);
         }
 
@@ -213,7 +223,7 @@ namespace GDModel
                 targetRecord.MultimediaLinks.Add((GDMMultimediaLink)tag);
             }
 
-            while (fSourceCitations.Count > 0) {
+            while (fSourceCitations != null && fSourceCitations.Count > 0) {
                 GDMTag tag = fSourceCitations.Extract(0);
                 targetRecord.SourceCitations.Add((GDMSourceCitation)tag);
             }
@@ -229,7 +239,7 @@ namespace GDModel
             base.ReplaceXRefs(map);
 
             if (fNotes != null) fNotes.ReplaceXRefs(map);
-            fSourceCitations.ReplaceXRefs(map);
+            if (fSourceCitations != null) fSourceCitations.ReplaceXRefs(map);
             fMultimediaLinks.ReplaceXRefs(map);
             fUserReferences.ReplaceXRefs(map);
         }
@@ -241,7 +251,7 @@ namespace GDModel
             fAutomatedRecordID = string.Empty;
             fChangeDate.Clear();
             if (fNotes != null) fNotes.Clear();
-            fSourceCitations.Clear();
+            if (fSourceCitations != null) fSourceCitations.Clear();
             fMultimediaLinks.Clear();
             fUserReferences.Clear();
             fUID = string.Empty;
@@ -251,7 +261,7 @@ namespace GDModel
         {
             return base.IsEmpty() && string.IsNullOrEmpty(fAutomatedRecordID) && fChangeDate.IsEmpty() &&
                 (fNotes == null || fNotes.Count == 0) &&
-                (fSourceCitations.Count == 0) && 
+                (fSourceCitations == null || fSourceCitations.Count == 0) && 
                 (fMultimediaLinks.Count == 0) && (fUserReferences.Count == 0);
         }
 

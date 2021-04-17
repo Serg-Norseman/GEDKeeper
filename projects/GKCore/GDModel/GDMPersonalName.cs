@@ -108,9 +108,21 @@ namespace GDModel
             }
         }
 
+        public int SourceCitationsCount
+        {
+            get { return fSourceCitations == null ? 0 : fSourceCitations.Count; }
+        }
+
+
         public GDMList<GDMSourceCitation> SourceCitations
         {
-            get { return fSourceCitations; }
+            get {
+                if (fSourceCitations == null) {
+                    fSourceCitations = new GDMList<GDMSourceCitation>();
+                }
+
+                return fSourceCitations;
+            }
         }
 
 
@@ -123,7 +135,6 @@ namespace GDModel
             fLastPart = string.Empty;
 
             fPieces = new GDMPersonalNamePieces();
-            fSourceCitations = new GDMList<GDMSourceCitation>();
         }
 
         protected override void Dispose(bool disposing)
@@ -131,7 +142,7 @@ namespace GDModel
             if (disposing) {
                 fPieces.Dispose();
                 if (fNotes != null) fNotes.Dispose();
-                fSourceCitations.Dispose();
+                if (fSourceCitations != null) fSourceCitations.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -142,7 +153,7 @@ namespace GDModel
 
             fPieces.TrimExcess();
             if (fNotes != null) fNotes.TrimExcess();
-            fSourceCitations.TrimExcess();
+            if (fSourceCitations != null) fSourceCitations.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -162,7 +173,7 @@ namespace GDModel
 
             fPieces.Assign(otherName.Pieces);
             if (otherName.fNotes != null) AssignList(otherName.fNotes, Notes);
-            AssignList(otherName.SourceCitations, fSourceCitations);
+            if (otherName.fSourceCitations != null) AssignList(otherName.fSourceCitations, SourceCitations);
         }
 
         public override void Clear()
@@ -178,7 +189,7 @@ namespace GDModel
 
             fPieces.Clear();
             if (fNotes != null) fNotes.Clear();
-            fSourceCitations.Clear();
+            if (fSourceCitations != null) fSourceCitations.Clear();
         }
 
         public override bool IsEmpty()
@@ -186,7 +197,8 @@ namespace GDModel
             return base.IsEmpty()
                 && string.IsNullOrEmpty(fFirstPart) && string.IsNullOrEmpty(fSurname) && string.IsNullOrEmpty(fLastPart)
                 && fPieces.IsEmpty() && (fLanguage == GDMLanguageID.Unknown) && (fNameType == GDMNameType.ntNone)
-                && (fNotes == null || fNotes.Count == 0) && (fSourceCitations.Count == 0);
+                && (fNotes == null || fNotes.Count == 0)
+                && (fSourceCitations == null || fSourceCitations.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
@@ -195,7 +207,7 @@ namespace GDModel
 
             fPieces.ReplaceXRefs(map);
             if (fNotes != null) fNotes.ReplaceXRefs(map);
-            fSourceCitations.ReplaceXRefs(map);
+            if (fSourceCitations != null) fSourceCitations.ReplaceXRefs(map);
         }
 
         protected override string GetStringValue()

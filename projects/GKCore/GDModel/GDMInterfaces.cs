@@ -79,6 +79,7 @@ namespace GDModel
 
     public interface IGDMStructWithSourceCitations : IGDMObject
     {
+        int SourceCitationsCount { get; }
         GDMList<GDMSourceCitation> SourceCitations { get; }
 
         //GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality);
