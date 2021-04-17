@@ -42,7 +42,13 @@ namespace GDModel
 
         public GDMAddress Address
         {
-            get { return fAddress; }
+            get {
+                if (fAddress == null) {
+                    fAddress = new GDMAddress();
+                }
+
+                return fAddress;
+            }
         }
 
         public string Agency
@@ -114,7 +120,6 @@ namespace GDModel
 
         protected GDMCustomEvent()
         {
-            fAddress = new GDMAddress();
             fDate = new GDMDateValue();
             fPlace = new GDMPlace();
             fSourceCitations = new GDMList<GDMSourceCitation>();
@@ -135,7 +140,7 @@ namespace GDModel
         {
             base.TrimExcess();
 
-            fAddress.TrimExcess();
+            if (fAddress != null) fAddress.TrimExcess();
             fDate.TrimExcess();
             fPlace.TrimExcess();
             if (fNotes != null) fNotes.TrimExcess();
@@ -151,7 +156,7 @@ namespace GDModel
 
             base.Assign(sourceObj);
 
-            fAddress.Assign(sourceObj.fAddress);
+            if (sourceObj.fAddress != null) Address.Assign(sourceObj.fAddress);
             fAgency = sourceObj.fAgency;
             fCause = sourceObj.fCause;
             fClassification = sourceObj.fClassification;
@@ -168,7 +173,7 @@ namespace GDModel
         {
             base.Clear();
 
-            fAddress.Clear();
+            if (fAddress != null) fAddress.Clear();
             fAgency = string.Empty;
             fCause = string.Empty;
             fClassification = string.Empty;
@@ -183,7 +188,7 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fAddress.IsEmpty() && string.IsNullOrEmpty(fAgency) && string.IsNullOrEmpty(fCause)
+            return base.IsEmpty() && (fAddress == null || fAddress.IsEmpty()) && string.IsNullOrEmpty(fAgency) && string.IsNullOrEmpty(fCause)
                 && string.IsNullOrEmpty(fClassification) && fDate.IsEmpty() && fPlace.IsEmpty()
                 && string.IsNullOrEmpty(fReligiousAffilation) && (fRestriction == GDMRestriction.rnNone)
                 && (fNotes == null || fNotes.Count == 0) && (fSourceCitations.Count == 0) && (fMultimediaLinks.Count == 0);
@@ -193,7 +198,7 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fAddress.ReplaceXRefs(map);
+            if (fAddress != null) fAddress.ReplaceXRefs(map);
             fDate.ReplaceXRefs(map);
             fPlace.ReplaceXRefs(map);
             if (fNotes != null) fNotes.ReplaceXRefs(map);
