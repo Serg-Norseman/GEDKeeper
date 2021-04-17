@@ -129,9 +129,20 @@ namespace GDModel
             }
         }
 
+        public int MultimediaLinksCount
+        {
+            get { return fMultimediaLinks == null ? 0 : fMultimediaLinks.Count; }
+        }
+
         public GDMList<GDMMultimediaLink> MultimediaLinks
         {
-            get { return fMultimediaLinks; }
+            get {
+                if (fMultimediaLinks == null) {
+                    fMultimediaLinks = new GDMList<GDMMultimediaLink>();
+                }
+
+                return fMultimediaLinks;
+            }
         }
 
         public bool HasPlace
@@ -143,7 +154,6 @@ namespace GDModel
         protected GDMCustomEvent()
         {
             fDate = new GDMDateValue();
-            fMultimediaLinks = new GDMList<GDMMultimediaLink>();
         }
 
         protected override void Dispose(bool disposing)
@@ -151,7 +161,7 @@ namespace GDModel
             if (disposing) {
                 if (fNotes != null) fNotes.Dispose();
                 if (fSourceCitations != null) fSourceCitations.Dispose();
-                fMultimediaLinks.Dispose();
+                if (fMultimediaLinks != null) fMultimediaLinks.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -165,7 +175,7 @@ namespace GDModel
             if (fPlace != null) fPlace.TrimExcess();
             if (fNotes != null) fNotes.TrimExcess();
             if (fSourceCitations != null) fSourceCitations.TrimExcess();
-            fMultimediaLinks.TrimExcess();
+            if (fMultimediaLinks != null) fMultimediaLinks.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -186,7 +196,7 @@ namespace GDModel
             fRestriction = sourceObj.fRestriction;
             if (sourceObj.fNotes != null) AssignList(sourceObj.fNotes, Notes);
             if (sourceObj.fSourceCitations != null) AssignList(sourceObj.fSourceCitations, SourceCitations);
-            AssignList(sourceObj.MultimediaLinks, fMultimediaLinks);
+            if (sourceObj.fMultimediaLinks != null) AssignList(sourceObj.fMultimediaLinks, MultimediaLinks);
         }
 
         public override void Clear()
@@ -203,7 +213,7 @@ namespace GDModel
             fRestriction = GDMRestriction.rnNone;
             if (fNotes != null) fNotes.Clear();
             if (fSourceCitations != null) fSourceCitations.Clear();
-            fMultimediaLinks.Clear();
+            if (fMultimediaLinks != null) fMultimediaLinks.Clear();
         }
 
         public override bool IsEmpty()
@@ -212,7 +222,8 @@ namespace GDModel
                 && string.IsNullOrEmpty(fClassification) && fDate.IsEmpty() && (fPlace == null || fPlace.IsEmpty())
                 && string.IsNullOrEmpty(fReligiousAffilation) && (fRestriction == GDMRestriction.rnNone)
                 && (fNotes == null || fNotes.Count == 0)
-                && (fSourceCitations == null || fSourceCitations.Count == 0) && (fMultimediaLinks.Count == 0);
+                && (fSourceCitations == null || fSourceCitations.Count == 0)
+                && (fMultimediaLinks == null || fMultimediaLinks.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
@@ -224,7 +235,7 @@ namespace GDModel
             if (fPlace != null) fPlace.ReplaceXRefs(map);
             if (fNotes != null) fNotes.ReplaceXRefs(map);
             if (fSourceCitations != null) fSourceCitations.ReplaceXRefs(map);
-            fMultimediaLinks.ReplaceXRefs(map);
+            if (fMultimediaLinks != null) fMultimediaLinks.ReplaceXRefs(map);
         }
 
         public override float IsMatch(GDMTag tag, MatchParams matchParams)

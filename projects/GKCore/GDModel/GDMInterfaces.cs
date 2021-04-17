@@ -88,6 +88,7 @@ namespace GDModel
 
     public interface IGDMStructWithMultimediaLinks : IGDMObject
     {
+        int MultimediaLinksCount { get; }
         GDMList<GDMMultimediaLink> MultimediaLinks { get; }
 
         //GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec);

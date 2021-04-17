@@ -61,9 +61,20 @@ namespace GDModel
             get { return fDescription; }
         }
 
+        public int MultimediaLinksCount
+        {
+            get { return fMultimediaLinks == null ? 0 : fMultimediaLinks.Count; }
+        }
+
         public GDMList<GDMMultimediaLink> MultimediaLinks
         {
-            get { return fMultimediaLinks; }
+            get {
+                if (fMultimediaLinks == null) {
+                    fMultimediaLinks = new GDMList<GDMMultimediaLink>();
+                }
+
+                return fMultimediaLinks;
+            }
         }
 
         public int NotesCount
@@ -104,7 +115,6 @@ namespace GDModel
 
             fData = new GDMSourceCitationData();
             fText = new GDMTextTag((int)GEDCOMTagType.TEXT);
-            fMultimediaLinks = new GDMList<GDMMultimediaLink>();
         }
 
         protected override void Dispose(bool disposing)
@@ -113,7 +123,7 @@ namespace GDModel
                 fData.Dispose();
                 fText.Dispose();
                 if (fNotes != null) fNotes.Dispose();
-                fMultimediaLinks.Dispose();
+                if (fMultimediaLinks != null) fMultimediaLinks.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -126,7 +136,7 @@ namespace GDModel
             fDescription.TrimExcess();
             fText.TrimExcess();
             if (fNotes != null) fNotes.TrimExcess();
-            fMultimediaLinks.TrimExcess();
+            if (fMultimediaLinks != null) fMultimediaLinks.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -143,7 +153,7 @@ namespace GDModel
             fDescription.Assign(sourceObj.fDescription);
             fText.Assign(sourceObj.fText);
             if (sourceObj.fNotes != null) AssignList(sourceObj.fNotes, Notes);
-            AssignList(sourceObj.MultimediaLinks, fMultimediaLinks);
+            if (sourceObj.fMultimediaLinks != null) AssignList(sourceObj.fMultimediaLinks, MultimediaLinks);
         }
 
         public override void Clear()
@@ -156,7 +166,7 @@ namespace GDModel
             fPage = string.Empty;
             fText.Clear();
             if (fNotes != null) fNotes.Clear();
-            fMultimediaLinks.Clear();
+            if (fMultimediaLinks != null) fMultimediaLinks.Clear();
         }
 
         public override bool IsEmpty()
@@ -164,7 +174,8 @@ namespace GDModel
             bool result;
 
             bool isCommonEmpty = string.IsNullOrEmpty(fPage)
-                && (fNotes == null || fNotes.Count == 0) && (fMultimediaLinks.Count == 0);
+                && (fNotes == null || fNotes.Count == 0)
+                && (fMultimediaLinks == null || fMultimediaLinks.Count == 0);
 
             if (IsPointer) {
                 result = base.IsEmpty() && isCommonEmpty && fData.IsEmpty();
@@ -180,7 +191,7 @@ namespace GDModel
             base.ReplaceXRefs(map);
 
             if (fNotes != null) fNotes.ReplaceXRefs(map);
-            fMultimediaLinks.ReplaceXRefs(map);
+            if (fMultimediaLinks != null) fMultimediaLinks.ReplaceXRefs(map);
         }
 
         protected override string GetStringValue()

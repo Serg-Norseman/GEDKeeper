@@ -129,7 +129,7 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithMultimediaLinks(IGDMStructWithMultimediaLinks tag)
         {
-            for (int i = tag.MultimediaLinks.Count - 1; i >= 0; i--) {
+            for (int i = tag.MultimediaLinksCount - 1; i >= 0; i--) {
                 GDMMultimediaLink mmLink = tag.MultimediaLinks[i];
                 if (!mmLink.IsPointer) {
                     TransformMultimediaLink(mmLink);

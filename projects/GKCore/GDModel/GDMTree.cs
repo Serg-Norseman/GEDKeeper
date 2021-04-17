@@ -574,7 +574,7 @@ namespace GDModel
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = fRecords[i];
-                for (int j = rec.MultimediaLinks.Count - 1; j >= 0; j--) {
+                for (int j = rec.MultimediaLinksCount - 1; j >= 0; j--) {
                     if (rec.MultimediaLinks[j].XRef == mRec.XRef) {
                         rec.MultimediaLinks.DeleteAt(j);
                     }
