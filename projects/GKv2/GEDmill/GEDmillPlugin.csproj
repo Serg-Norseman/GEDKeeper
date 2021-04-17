@@ -159,9 +159,6 @@
     <Compile Include="src\MiniTree\TreeDrawer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\AlphabetComparer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\Model\CISRecordChanges.cs">
       <SubType>Code</SubType>
     </Compile>

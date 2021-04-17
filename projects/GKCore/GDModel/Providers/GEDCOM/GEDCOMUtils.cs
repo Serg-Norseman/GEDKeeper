@@ -109,66 +109,6 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
-        /// <summary>
-        /// This function is optimized for maximum performance and combines Trim and ToLower operations.
-        /// </summary>
-        public static string NormalizeLo(string str, bool trim = true)
-        {
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-
-            char[] strChars = str.ToCharArray();
-            int li = 0;
-            int ri = strChars.Length - 1;
-
-            if (trim) {
-                while (li < ri && strChars[li] <= ' ') li++;
-                while (ri >= li && strChars[ri] <= ' ') ri--;
-            }
-
-            for (int i = li; i <= ri; i++) {
-                char ch = strChars[i];
-                char ltr = (char)(ch | ' ');
-                if (ltr >= 'a' && ltr <= 'z') {
-                    strChars[i] = ltr;
-                } else {
-                    strChars[i] = ch;
-                }
-            }
-
-            string result = new string(strChars, li, ri - li + 1);
-            return result;
-        }
-
-        /// <summary>
-        /// This function is optimized for maximum performance and combines Trim and ToUpper operations.
-        /// </summary>
-        public static string NormalizeUp(string str, bool trim = true)
-        {
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-
-            char[] strChars = str.ToCharArray();
-            int li = 0;
-            int ri = strChars.Length - 1;
-
-            if (trim) {
-                while (li < ri && strChars[li] <= ' ') li++;
-                while (ri >= li && strChars[ri] <= ' ') ri--;
-            }
-
-            for (int i = li; i <= ri; i++) {
-                char ch = strChars[i];
-                char ltr = (char)(ch & -33);
-                if (ltr >= 'A' && ltr <= 'Z') {
-                    strChars[i] = ltr;
-                } else {
-                    strChars[i] = ch;
-                }
-            }
-
-            string result = new string(strChars, li, ri - li + 1);
-            return result;
-        }
-
         public static string CleanXRef(string str)
         {
             string result = str;
@@ -799,12 +739,11 @@ namespace GDModel.Providers.GEDCOM
                 return string.Empty;
             }
 
-            char[] strChars = strValue.ToCharArray();
-            int strLen = strChars.Length;
+            int strLen = strValue.Length;
 
             // skip leading whitespaces
             int strBeg = 0;
-            while (strBeg < strLen && strChars[strBeg] == ' ') strBeg++;
+            while (strBeg < strLen && strValue[strBeg] == ' ') strBeg++;
 
             // check empty string
             if (strLen - strBeg == 0) {
@@ -813,14 +752,14 @@ namespace GDModel.Providers.GEDCOM
 
             int fs = -1, ss = strBeg;
             for (int i = strBeg; i < strLen; i++) {
-                char chr = strChars[i];
+                char chr = strValue[i];
                 if (chr == GEDCOMConsts.NameSeparator) {
                     if (fs == -1) {
                         fs = i;
-                        firstPart = new string(strChars, 0, i);
+                        firstPart = strValue.Substring(0, i);
                     } else {
                         ss = i;
-                        surname = new string(strChars, fs + 1, (ss - fs) - 1);
+                        surname = strValue.Substring(fs + 1, (ss - fs) - 1);
                         ss += 1;
                         break;
                     }
@@ -828,9 +767,9 @@ namespace GDModel.Providers.GEDCOM
             }
 
             if (fs < 0) {
-                firstPart = new string(strChars, ss, strLen - ss);
+                firstPart = strValue.Substring(ss, strLen - ss);
             } else {
-                lastPart = new string(strChars, ss, strLen - ss);
+                lastPart = strValue.Substring(ss, strLen - ss);
             }
 
             return string.Empty;
@@ -1464,8 +1403,8 @@ namespace GDModel.Providers.GEDCOM
             if (string.IsNullOrEmpty(su)) return GDMOrdinanceProcessFlag.opNone;
 
             GDMOrdinanceProcessFlag result;
-            su = NormalizeUp(su);
-            
+
+            su = InvariantTextInfo.ToUpper(su);
             if (su == "YES") {
                 result = GDMOrdinanceProcessFlag.opYes;
             } else if (su == "NO") {
@@ -1473,6 +1412,7 @@ namespace GDModel.Providers.GEDCOM
             } else {
                 result = GDMOrdinanceProcessFlag.opNone;
             }
+
             return result;
         }
 
@@ -1585,12 +1525,11 @@ namespace GDModel.Providers.GEDCOM
 
         public static GDMSex GetSexVal(string str)
         {
-            str = NormalizeUp(str);
             if (str.Length != 1) return GDMSex.svUnknown;
 
-            char sl = str[0];
-
             GDMSex result;
+
+            char sl = InvariantTextInfo.ToUpper(str[0]);
             if (sl == 'M') {
                 result = GDMSex.svMale;
             } else if (sl == 'F') {
@@ -1600,6 +1539,7 @@ namespace GDModel.Providers.GEDCOM
             } else {
                 result = GDMSex.svUnknown;
             }
+
             return result;
         }
 
