@@ -261,7 +261,7 @@ namespace GKUI.Forms
         {
             IListView recView = contextMenu.SourceControl as GKListView;
 
-            miRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual));
+            miContRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual));
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
@@ -282,6 +282,18 @@ namespace GKUI.Forms
         private void miRecordDuplicate_Click(object sender, EventArgs e)
         {
             DuplicateRecord();
+        }
+
+        private void miRecordMerge_Click(object sender, EventArgs e)
+        {
+            var listView = contextMenu.SourceControl as GKListView;
+            if (listView != null) {
+                var items = listView.GetSelectedItems();
+                fController.ShowRecMerge(
+                    items.Count > 0 ? items[0] as GDMRecord : null,
+                    items.Count > 1 ? items[1] as GDMRecord : null
+                );
+            }
         }
 
         private void List_SelectedIndexChanged(object sender, EventArgs e)
@@ -574,7 +586,8 @@ namespace GKUI.Forms
             miContRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
             miContRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
             miContRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
-            miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
+            miContRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
+            miContRecordMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
 
             miTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
             miTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
@@ -942,7 +955,7 @@ namespace GKUI.Forms
 
         private void miTTRecMerge_Click(object sender, EventArgs e)
         {
-            fController.ShowRecMerge();
+            fController.ShowRecMerge(null, null);
         }
 
         private void miTTPlacesManager_Click(object sender, EventArgs e)
