@@ -78,6 +78,7 @@ namespace GKCore.Charts
         private readonly IList<string> fPreparedIndividuals;
 
         private IBaseWindow fBase;
+        private IFont fBoldFont;
         private int fBranchDistance;
         private bool fCertaintyIndex;
         private IPen fDecorativeLinePen;
@@ -119,6 +120,12 @@ namespace GKCore.Charts
                 fGraph = new KinshipsGraph(fBase.Context);
                 fTree = fBase.Context.Tree;
             }
+        }
+
+        public IFont BoldFont
+        {
+            get { return fBoldFont; }
+            set { fBoldFont = value; }
         }
 
         public int BranchDistance
@@ -259,6 +266,7 @@ namespace GKCore.Charts
 
                 DoneGraphics();
                 DoneSigns();
+                if (fBoldFont != null) fBoldFont.Dispose();
                 if (fDrawFont != null) fDrawFont.Dispose();
             }
             base.Dispose(disposing);
@@ -309,6 +317,7 @@ namespace GKCore.Charts
         {
             Base = sourceModel.fBase;
 
+            fBoldFont = sourceModel.fBoldFont;
             fBranchDistance = sourceModel.fBranchDistance;
             fCertaintyIndex = sourceModel.fCertaintyIndex;
             fDecorativeLinePen = sourceModel.fDecorativeLinePen;
@@ -847,6 +856,7 @@ namespace GKCore.Charts
         public void RecalcChart(bool noRedraw = false)
         {
             float fsz = (float)Math.Round(fOptions.DefFontSize * fScale);
+            fBoldFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, true);
             fDrawFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, false);
 
             Predef();
@@ -1482,15 +1492,30 @@ namespace GKCore.Charts
                     prt.Left += person.PortraitWidth;
                 }
 
-                int h = fRenderer.GetTextHeight(fDrawFont);
+                int bh = fRenderer.GetTextHeight(fBoldFont);
+                int th = fRenderer.GetTextHeight(fDrawFont);
+                int lh;
+                IFont font;
+                int ry = prt.Top + fNodePadding;
+
                 int lines = person.Lines.Length;
                 for (int k = 0; k < lines; k++) {
                     string line = person.Lines[k];
 
-                    int stw = fRenderer.GetTextWidth(line, fDrawFont);
+                    if (fOptions.BoldNames && k < person.NameLines) {
+                        lh = bh;
+                        font = fBoldFont;
+                    } else {
+                        lh = th;
+                        font = fDrawFont;
+                    }
+
+                    int stw = fRenderer.GetTextWidth(line, font);
                     int rx = prt.Left + ((prt.Right - prt.Left + 1) - stw) / 2;
-                    int ry = prt.Top + fNodePadding + (h * k);
-                    fRenderer.DrawString(line, fDrawFont, fSolidBlack, rx, ry);
+
+                    fRenderer.DrawString(line, font, fSolidBlack, rx, ry);
+
+                    ry += lh;
                 }
 
                 if (fOptions.SignsVisible && !person.Signs.IsEmpty()) {

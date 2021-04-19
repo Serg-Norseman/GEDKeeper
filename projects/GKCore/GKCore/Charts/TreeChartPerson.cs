@@ -103,6 +103,7 @@ namespace GKCore.Charts
         public bool IsVisible;
         public IColor UserColor;
         public bool Adopted;
+        public int NameLines;
 
 
         public IImage Portrait
@@ -419,22 +420,28 @@ namespace GKCore.Charts
                     nameLine += " \"" + fNick + "\"";
                 }
 
+                NameLines = 0;
+
                 // create lines
                 int idx = 0;
 
                 if (options.FamilyVisible) {
                     Lines[idx] = fSurname;
+                    NameLines++;
                     idx++;
                 }
 
                 if (!options.DiffLines) {
                     Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
+                    NameLines++;
                     idx++;
                 } else {
                     Lines[idx] = nameLine;
+                    NameLines++;
                     idx++;
 
                     Lines[idx] = fPatronymic;
+                    NameLines++;
                     idx++;
                 }
 
@@ -500,19 +507,34 @@ namespace GKCore.Charts
         public void CalcBounds(int lines, ChartRenderer renderer)
         {
             try {
+                TreeChartOptions options = fModel.Options;
+
                 InitInfo(lines);
                 DefineExpands();
 
+                int bh = renderer.GetTextHeight(fModel.BoldFont);
+                int th = renderer.GetTextHeight(fModel.DrawFont);
+
                 int maxwid = 0;
+                int height = 0;
                 for (int k = 0; k < lines; k++) {
-                    int wt = renderer.GetTextWidth(Lines[k], fModel.DrawFont);
+                    IFont font;
+                    if (options.BoldNames && k < NameLines) {
+                        height += bh;
+                        font = fModel.BoldFont;
+                    } else {
+                        height += th;
+                        font = fModel.DrawFont;
+                    }
+
+                    int wt = renderer.GetTextWidth(Lines[k], font);
                     if (maxwid < wt) maxwid = wt;
                 }
 
                 int pad2side = (fModel.NodePadding * 2);
 
                 fWidth = pad2side + maxwid;
-                fHeight = pad2side + renderer.GetTextHeight(fModel.DrawFont) * lines;
+                fHeight = pad2side + height;
 
                 if (fPortrait != null) {
                     ExtRect portRt = ExtRect.Create(0, 0, fHeight - 1, fHeight - 1);

@@ -879,8 +879,9 @@ namespace GKCore
         /* 819 */ LSID_SeparateDatesAndPlacesLines,
         /* 820 */ LSID_Details,
         /* 821 */ LSID_CopyXRef,
+        /* 822 */ LSID_BoldNames,
 
-        /* 000 */ LSID_Last = LSID_CopyXRef
+        /* 000 */ LSID_Last = LSID_BoldNames
     }
 
 
@@ -1715,6 +1716,7 @@ namespace GKCore
             /* 819 */ "Separate dates and places lines",
             /* 820 */ "Details",
             /* 821 */ "Copy XRef to clipboard",
+            /* 822 */ "Bold font of names",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

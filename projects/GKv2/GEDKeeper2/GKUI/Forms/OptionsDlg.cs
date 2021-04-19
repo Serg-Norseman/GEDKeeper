@@ -164,6 +164,7 @@ namespace GKUI.Forms
             chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
             chkDottedLinesOfAdoptedChildren.Checked = fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren;
             chkSeparateDAPLines.Checked = fOptions.TreeChartOptions.SeparateDatesAndPlacesLines;
+            chkBoldNames.Checked = fOptions.TreeChartOptions.BoldNames;
 
             lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
             lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.FemaleColor);
@@ -442,6 +443,7 @@ namespace GKUI.Forms
             fOptions.CheckTreeSize = chkCheckTreeSize.Checked;
             fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren = chkDottedLinesOfAdoptedChildren.Checked;
             fOptions.TreeChartOptions.SeparateDatesAndPlacesLines = chkSeparateDAPLines.Checked;
+            fOptions.TreeChartOptions.BoldNames = chkBoldNames.Checked;
 
             fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
             fOptions.TreeChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
@@ -693,6 +695,7 @@ namespace GKUI.Forms
             chkHideUnknownSpouses.Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
             chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
             chkSeparateDAPLines.Text = LangMan.LS(LSID.LSID_SeparateDatesAndPlacesLines);
+            chkBoldNames.Text = LangMan.LS(LSID.LSID_BoldNames);
 
             grpFileBackup.Text = LangMan.LS(LSID.LSID_FileBackup);
             radFBNone.Text = LangMan.LS(LSID.LSID_Not);
@@ -752,6 +755,12 @@ namespace GKUI.Forms
         {
             chkShowPlaces.Enabled = !chkOnlyYears.Checked;
             chkSeparateDAPLines.Enabled = chkShowPlaces.Checked && !chkOnlyYears.Checked;
+
+            chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked;
+
+            chkDiffLines.Enabled = chkName.Checked && chkPatronymic.Checked;
+
+            chkOnlyYears.Enabled = chkBirthDate.Checked && chkDeathDate.Checked;
         }
     }
 }

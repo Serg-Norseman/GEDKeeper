@@ -142,6 +142,7 @@
         private System.Windows.Forms.CheckBox chkDialogClosingWarn;
         private System.Windows.Forms.CheckBox chkDottedLinesOfAdoptedChildren;
         private System.Windows.Forms.CheckBox chkSeparateDAPLines;
+        private System.Windows.Forms.CheckBox chkBoldNames;
 
         private void InitializeComponent()
         {
@@ -215,6 +216,7 @@
             this.chkSignsVisible = new System.Windows.Forms.CheckBox();
             this.chkSeparateDAPLines = new System.Windows.Forms.CheckBox();
             this.chkShowPlaces = new System.Windows.Forms.CheckBox();
+            this.chkBoldNames = new System.Windows.Forms.CheckBox();
             this.chkDottedLinesOfAdoptedChildren = new System.Windows.Forms.CheckBox();
             this.chkCheckTreeSize = new System.Windows.Forms.CheckBox();
             this.chkHideUnknownSpouses = new System.Windows.Forms.CheckBox();
@@ -339,7 +341,7 @@
             this.PageControl1.Margin = new System.Windows.Forms.Padding(2);
             this.PageControl1.Name = "PageControl1";
             this.PageControl1.SelectedIndex = 0;
-            this.PageControl1.Size = new System.Drawing.Size(749, 654);
+            this.PageControl1.Size = new System.Drawing.Size(749, 693);
             this.PageControl1.TabIndex = 0;
             // 
             // pageCommon
@@ -355,7 +357,7 @@
             this.pageCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageCommon.Name = "pageCommon";
             this.pageCommon.Padding = new System.Windows.Forms.Padding(10);
-            this.pageCommon.Size = new System.Drawing.Size(741, 624);
+            this.pageCommon.Size = new System.Drawing.Size(741, 663);
             this.pageCommon.TabIndex = 0;
             this.pageCommon.Text = "pageCommon";
             // 
@@ -721,7 +723,7 @@
             this.pageMultimedia.Margin = new System.Windows.Forms.Padding(2);
             this.pageMultimedia.Name = "pageMultimedia";
             this.pageMultimedia.Padding = new System.Windows.Forms.Padding(10);
-            this.pageMultimedia.Size = new System.Drawing.Size(741, 624);
+            this.pageMultimedia.Size = new System.Drawing.Size(741, 663);
             this.pageMultimedia.TabIndex = 6;
             this.pageMultimedia.Text = "pageMultimedia";
             // 
@@ -823,7 +825,7 @@
             this.pageCharts.Margin = new System.Windows.Forms.Padding(2);
             this.pageCharts.Name = "pageCharts";
             this.pageCharts.Padding = new System.Windows.Forms.Padding(10);
-            this.pageCharts.Size = new System.Drawing.Size(741, 624);
+            this.pageCharts.Size = new System.Drawing.Size(741, 663);
             this.pageCharts.TabIndex = 4;
             this.pageCharts.Text = "pageCharts";
             // 
@@ -836,7 +838,7 @@
             this.tabsCharts.Margin = new System.Windows.Forms.Padding(2);
             this.tabsCharts.Name = "tabsCharts";
             this.tabsCharts.SelectedIndex = 0;
-            this.tabsCharts.Size = new System.Drawing.Size(721, 604);
+            this.tabsCharts.Size = new System.Drawing.Size(721, 643);
             this.tabsCharts.TabIndex = 0;
             // 
             // pageTreeChart
@@ -851,7 +853,7 @@
             this.pageTreeChart.Margin = new System.Windows.Forms.Padding(2);
             this.pageTreeChart.Name = "pageTreeChart";
             this.pageTreeChart.Padding = new System.Windows.Forms.Padding(10);
-            this.pageTreeChart.Size = new System.Drawing.Size(713, 574);
+            this.pageTreeChart.Size = new System.Drawing.Size(713, 613);
             this.pageTreeChart.TabIndex = 3;
             this.pageTreeChart.Text = "pageTreeChart";
             // 
@@ -1054,6 +1056,7 @@
             this.grpTreePersons.Controls.Add(this.chkSignsVisible);
             this.grpTreePersons.Controls.Add(this.chkSeparateDAPLines);
             this.grpTreePersons.Controls.Add(this.chkShowPlaces);
+            this.grpTreePersons.Controls.Add(this.chkBoldNames);
             this.grpTreePersons.Controls.Add(this.chkDottedLinesOfAdoptedChildren);
             this.grpTreePersons.Controls.Add(this.chkCheckTreeSize);
             this.grpTreePersons.Controls.Add(this.chkHideUnknownSpouses);
@@ -1065,7 +1068,7 @@
             this.grpTreePersons.Margin = new System.Windows.Forms.Padding(10);
             this.grpTreePersons.Name = "grpTreePersons";
             this.grpTreePersons.Padding = new System.Windows.Forms.Padding(10);
-            this.grpTreePersons.Size = new System.Drawing.Size(391, 554);
+            this.grpTreePersons.Size = new System.Drawing.Size(391, 593);
             this.grpTreePersons.TabIndex = 0;
             this.grpTreePersons.TabStop = false;
             this.grpTreePersons.Text = "grpTreePersons";
@@ -1102,10 +1105,10 @@
             // 
             // chkDiffLines
             // 
-            this.chkDiffLines.Location = new System.Drawing.Point(20, 105);
+            this.chkDiffLines.Location = new System.Drawing.Point(40, 105);
             this.chkDiffLines.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkDiffLines.Name = "chkDiffLines";
-            this.chkDiffLines.Size = new System.Drawing.Size(349, 20);
+            this.chkDiffLines.Size = new System.Drawing.Size(341, 20);
             this.chkDiffLines.TabIndex = 3;
             this.chkDiffLines.Text = "chkDiffLines";
             this.chkDiffLines.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
@@ -1199,6 +1202,16 @@
             this.chkShowPlaces.TabIndex = 11;
             this.chkShowPlaces.Text = "chkShowPlaces";
             this.chkShowPlaces.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
+            // 
+            // chkBoldNames
+            // 
+            this.chkBoldNames.Location = new System.Drawing.Point(20, 546);
+            this.chkBoldNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkBoldNames.Name = "chkBoldNames";
+            this.chkBoldNames.Size = new System.Drawing.Size(349, 21);
+            this.chkBoldNames.TabIndex = 11;
+            this.chkBoldNames.Text = "chkBoldNames";
+            this.chkBoldNames.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 
             // chkDottedLinesOfAdoptedChildren
             // 
@@ -1444,7 +1457,7 @@
             this.pageAncCircle.Location = new System.Drawing.Point(4, 26);
             this.pageAncCircle.Margin = new System.Windows.Forms.Padding(2);
             this.pageAncCircle.Name = "pageAncCircle";
-            this.pageAncCircle.Size = new System.Drawing.Size(713, 574);
+            this.pageAncCircle.Size = new System.Drawing.Size(713, 613);
             this.pageAncCircle.TabIndex = 4;
             this.pageAncCircle.Text = "pageAncCircle";
             // 
@@ -1456,7 +1469,7 @@
             this.ancOptionsControl1.Margin = new System.Windows.Forms.Padding(2);
             this.ancOptionsControl1.Name = "ancOptionsControl1";
             this.ancOptionsControl1.Options = null;
-            this.ancOptionsControl1.Size = new System.Drawing.Size(713, 574);
+            this.ancOptionsControl1.Size = new System.Drawing.Size(713, 613);
             this.ancOptionsControl1.TabIndex = 0;
             // 
             // pageUIView
@@ -1466,7 +1479,7 @@
             this.pageUIView.Margin = new System.Windows.Forms.Padding(2);
             this.pageUIView.Name = "pageUIView";
             this.pageUIView.Padding = new System.Windows.Forms.Padding(10);
-            this.pageUIView.Size = new System.Drawing.Size(741, 624);
+            this.pageUIView.Size = new System.Drawing.Size(741, 663);
             this.pageUIView.TabIndex = 1;
             this.pageUIView.Text = "pageUIView";
             // 
@@ -1479,7 +1492,7 @@
             this.PageControl2.Margin = new System.Windows.Forms.Padding(2);
             this.PageControl2.Name = "PageControl2";
             this.PageControl2.SelectedIndex = 0;
-            this.PageControl2.Size = new System.Drawing.Size(721, 604);
+            this.PageControl2.Size = new System.Drawing.Size(721, 643);
             this.PageControl2.TabIndex = 0;
             // 
             // pageViewCommon
@@ -1499,7 +1512,7 @@
             this.pageViewCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewCommon.Name = "pageViewCommon";
             this.pageViewCommon.Padding = new System.Windows.Forms.Padding(10);
-            this.pageViewCommon.Size = new System.Drawing.Size(713, 574);
+            this.pageViewCommon.Size = new System.Drawing.Size(713, 613);
             this.pageViewCommon.TabIndex = 0;
             this.pageViewCommon.Text = "pageViewCommon";
             // 
@@ -1732,7 +1745,7 @@
             this.pageViewPersons.Location = new System.Drawing.Point(4, 26);
             this.pageViewPersons.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewPersons.Name = "pageViewPersons";
-            this.pageViewPersons.Size = new System.Drawing.Size(713, 574);
+            this.pageViewPersons.Size = new System.Drawing.Size(713, 613);
             this.pageViewPersons.TabIndex = 1;
             this.pageViewPersons.Text = "pageViewPersons";
             // 
@@ -1744,7 +1757,7 @@
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(10);
-            this.panel1.Size = new System.Drawing.Size(488, 574);
+            this.panel1.Size = new System.Drawing.Size(488, 613);
             this.panel1.TabIndex = 2;
             // 
             // lstPersonColumns
@@ -1753,7 +1766,7 @@
             this.lstPersonColumns.Location = new System.Drawing.Point(10, 10);
             this.lstPersonColumns.Margin = new System.Windows.Forms.Padding(2);
             this.lstPersonColumns.Name = "lstPersonColumns";
-            this.lstPersonColumns.Size = new System.Drawing.Size(468, 554);
+            this.lstPersonColumns.Size = new System.Drawing.Size(468, 593);
             this.lstPersonColumns.TabIndex = 1;
             this.lstPersonColumns.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ListPersonColumns_ItemCheck);
             // 
@@ -1792,7 +1805,7 @@
             this.pagePedigree.Margin = new System.Windows.Forms.Padding(2);
             this.pagePedigree.Name = "pagePedigree";
             this.pagePedigree.Padding = new System.Windows.Forms.Padding(10);
-            this.pagePedigree.Size = new System.Drawing.Size(741, 624);
+            this.pagePedigree.Size = new System.Drawing.Size(741, 663);
             this.pagePedigree.TabIndex = 3;
             this.pagePedigree.Text = "pagePedigree";
             // 
@@ -1887,7 +1900,7 @@
             this.pagePlugins.Margin = new System.Windows.Forms.Padding(0);
             this.pagePlugins.Name = "pagePlugins";
             this.pagePlugins.Padding = new System.Windows.Forms.Padding(10);
-            this.pagePlugins.Size = new System.Drawing.Size(741, 624);
+            this.pagePlugins.Size = new System.Drawing.Size(741, 663);
             this.pagePlugins.TabIndex = 5;
             this.pagePlugins.Text = "pagePlugins";
             // 
@@ -1908,7 +1921,7 @@
             this.lvPlugins.Name = "lvPlugins";
             this.lvPlugins.Order = BSLib.Design.BSDTypes.SortOrder.None;
             this.lvPlugins.OwnerDraw = true;
-            this.lvPlugins.Size = new System.Drawing.Size(721, 604);
+            this.lvPlugins.Size = new System.Drawing.Size(721, 643);
             this.lvPlugins.SortColumn = 0;
             this.lvPlugins.TabIndex = 0;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
@@ -1936,7 +1949,7 @@
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(494, 658);
+            this.btnAccept.Location = new System.Drawing.Point(494, 697);
             this.btnAccept.Margin = new System.Windows.Forms.Padding(2);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(114, 30);
@@ -1949,7 +1962,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(624, 658);
+            this.btnCancel.Location = new System.Drawing.Point(624, 697);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(114, 30);
@@ -1963,7 +1976,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(749, 699);
+            this.ClientSize = new System.Drawing.Size(749, 738);
             this.Controls.Add(this.PageControl1);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);
