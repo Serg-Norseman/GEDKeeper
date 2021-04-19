@@ -111,6 +111,10 @@ namespace GKUI.Components
                 ForeColor = colorHandler.Handle;
             }
         }
+
+        public void SetFont(IFont font)
+        {
+        }
     }
 
 

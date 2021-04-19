@@ -881,7 +881,16 @@ namespace GKCore
         /* 821 */ LSID_CopyXRef,
         /* 822 */ LSID_BoldNames,
 
-        /* 000 */ LSID_Last = LSID_BoldNames
+        /* 823 */ LSID_Baptism,
+        /* 824 */ LSID_BarMitzvah,
+        /* 825 */ LSID_BatMitzvah,
+        /* 826 */ LSID_Blessing,
+        /* 827 */ LSID_AdultChristening,
+        /* 828 */ LSID_Confirmation,
+        /* 829 */ LSID_FirstCommunion,
+        /* 830 */ LSID_Ordination,
+
+        /* 000 */ LSID_Last = LSID_Ordination
     }
 
 
@@ -1216,7 +1225,7 @@ namespace GKCore
             /* 321 */ "Divorced",
             /* 322 */ "Birth",
             /* 323 */ "Adoption",
-            /* 324 */ "Christening",
+            /* 324 */ "Christening (child)",
             /* 325 */ "Graduation",
             /* 326 */ "Retirement",
             /* 327 */ "Naturalization",
@@ -1717,6 +1726,15 @@ namespace GKCore
             /* 820 */ "Details",
             /* 821 */ "Copy XRef to clipboard",
             /* 822 */ "Bold font of names",
+
+            /* 823 */ "Baptism",
+            /* 824 */ "Bar mitzvah",
+            /* 825 */ "Bat mitzvah",
+            /* 826 */ "Blessing",
+            /* 827 */ "Adult christening",
+            /* 828 */ "Confirmation",
+            /* 829 */ "First communion",
+            /* 830 */ "Ordination",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

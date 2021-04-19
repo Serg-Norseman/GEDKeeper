@@ -322,7 +322,7 @@
 321=Divorced
 322=Birth
 323=Adoption
-324=Christening
+324=Christening (child)
 325=Graduation
 326=Retirement
 327=Naturalization
@@ -823,3 +823,12 @@
 820=Details
 821=Copy XRef to clipboard
 822=Bold font of names
+
+823=Baptism
+824=Bar mitzvah
+825=Bat mitzvah
+826=Blessing
+827=Adult christening
+828=Confirmation
+829=First communion
+830=Ordination

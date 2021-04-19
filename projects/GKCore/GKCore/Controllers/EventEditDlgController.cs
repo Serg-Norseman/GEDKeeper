@@ -147,7 +147,7 @@ namespace GKCore.Controllers
 
                 fEvent.Date.ParseString(dt.StringValue);
 
-                int eventType = fView.EventType.SelectedIndex;
+                int eventType = fView.EventType.GetSelectedTag<int>();
                 if (fEvent is GDMFamilyEvent) {
                     fEvent.SetName(GKData.FamilyEvents[eventType].Sign);
                 } else {
@@ -175,11 +175,15 @@ namespace GKCore.Controllers
 
         private void SetEventTypes(GKData.EventStruct[] eventTypes)
         {
+            fView.EventType.Sorted = false;
+
             fView.EventType.Clear();
             int num = eventTypes.Length;
             for (int i = 0; i < num; i++) {
-                fView.EventType.Add(LangMan.LS(eventTypes[i].Name));
+                fView.EventType.AddItem(LangMan.LS(eventTypes[i].Name), i);
             }
+
+            fView.EventType.Sorted = true;
         }
 
         public override void UpdateView()
@@ -193,12 +197,12 @@ namespace GKCore.Controllers
                 SetEventTypes(GKData.FamilyEvents);
                 int idx = GKUtils.GetFamilyEventIndex(evtName);
                 if (idx < 0) idx = 0;
-                fView.EventType.SelectedIndex = idx;
+                fView.EventType.SetSelectedTag(idx);
             } else {
                 SetEventTypes(GKData.PersonEvents);
                 int idx = GKUtils.GetPersonEventIndex(evtName);
                 if (idx < 0) idx = 0;
-                fView.EventType.SelectedIndex = idx;
+                fView.EventType.SetSelectedTag(idx);
 
                 if (idx >= 0 && GKData.PersonEvents[idx].Kind == PersonEventKind.ekFact) {
                     fView.Attribute.Text = fEvent.StringValue;
@@ -344,10 +348,11 @@ namespace GKCore.Controllers
 
         public void ChangeEventType()
         {
+            int idx = fView.EventType.GetSelectedTag<int>();
+
             if (fEvent is GDMFamilyEvent) {
                 SetAttributeMode(false);
             } else {
-                int idx = fView.EventType.SelectedIndex;
                 if (idx >= 0) {
                     if (GKData.PersonEvents[idx].Kind == PersonEventKind.ekEvent) {
                         SetAttributeMode(false);
@@ -358,11 +363,10 @@ namespace GKCore.Controllers
             }
 
             string evName;
-            int id = fView.EventType.SelectedIndex;
             if (fEvent is GDMFamilyEvent) {
-                evName = GKData.FamilyEvents[id].Sign;
+                evName = GKData.FamilyEvents[idx].Sign;
             } else {
-                evName = GKData.PersonEvents[id].Sign;
+                evName = GKData.PersonEvents[idx].Sign;
             }
 
             // TODO: It is necessary to provide the registrable list of values for different tag types.
