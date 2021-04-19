@@ -61,8 +61,10 @@ namespace GKUI.Forms
             ProgressBar1.Minimum = 0;
             ProgressBar1.Value = 0;
             fStartTime = DateTime.Now;
-            fVal = 0;
+            fVal = -1;
             btnCancel.Enabled = cancelable;
+
+            DoStep(0);
         }
 
         private void DoDone()
