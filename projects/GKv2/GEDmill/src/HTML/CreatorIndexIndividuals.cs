@@ -323,15 +323,15 @@ namespace GEDmill.HTML
                         } else {
                             sName = sName.Substring(7);
                         }
-                    } else if (sName.Length >= 6 && sName.Substring(0, 6) == ",_&lt;")// Hack for unknown name.
-                      {
+                    } else if (sName.Length >= 6 && sName.Substring(0, 6) == ",_&lt;") {
+                        // Hack for unknown name
                         sName = sName.Substring(2);
                     }
                     string sLink = tuple.Second;
                     if (sLink != "") {
                         sLink1 = string.Concat("<a href=\"", sLink, "\">", sName, "</a>");
-                    } else if (sName == CConfig.Instance.NoSurname) // Hack for no surname.
-                      {
+                    } else if (sName == CConfig.Instance.NoSurname) {
+                        // Hack for no surname
                         sLink1 = string.Concat("<h2 id=\"-\">", sName, "</h2>");
                     } else {
                         sLink1 = string.Concat("<h2 id=\"", sName[0], "\">", sName, "</h2>");
@@ -350,16 +350,16 @@ namespace GEDmill.HTML
                         } else {
                             sName = sName.Substring(7);
                         }
-                    } else if (sName.Length >= 6 && sName.Substring(0, 6) == ",_&lt;")// Hack for unknown name.
-                      {
+                    } else if (sName.Length >= 6 && sName.Substring(0, 6) == ",_&lt;") {
+                        // Hack for unknown name
                         sName = sName.Substring(2);
                     }
 
                     string sLink = tuple.Second;
                     if (sLink != "") {
                         sLink2 = string.Concat("<a href=\"", sLink, "\">", sName, "</a>");
-                    } else if (sName == CConfig.Instance.NoSurname) // Hack for no surname.
-                      {
+                    } else if (sName == CConfig.Instance.NoSurname) {
+                        // Hack for no surname
                         sLink2 = string.Concat("<h2 id=\"-\">", sName, "</h2>");
                     } else {
                         sLink2 = string.Concat("<h2 id=\"", sName[0], "\">", sName, "</h2>");

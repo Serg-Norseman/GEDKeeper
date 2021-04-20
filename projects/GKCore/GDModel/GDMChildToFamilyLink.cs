@@ -65,11 +65,6 @@ namespace GDModel
             SetName(GEDCOMTagType.FAMC);
         }
 
-        public GDMChildToFamilyLink(int tagId, string tagValue) : this()
-        {
-            SetNameValue(tagId, tagValue);
-        }
-
         public override void Assign(GDMTag source)
         {
             GDMChildToFamilyLink srcCFL = source as GDMChildToFamilyLink;

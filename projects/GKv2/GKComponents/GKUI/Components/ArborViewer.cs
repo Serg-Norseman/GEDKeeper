@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -99,13 +98,13 @@ namespace GKUI.Components
 
         public ArborViewer()
         {
-            base.BorderStyle = BorderStyle.Fixed3D;
-            base.TabStop = true;
-            base.BackColor = Color.White;
+            BorderStyle = BorderStyle.Fixed3D;
+            TabStop = true;
+            BackColor = Color.White;
 
-            base.DoubleBuffered = true;
-            base.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            DoubleBuffered = true;
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
             // repulsion - отталкивание, stiffness - тугоподвижность, friction - сила трения
             fSys = new ArborSystemEx(10000, 500/*1000*/, 0.1, this);
@@ -242,7 +241,7 @@ namespace GKUI.Components
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            if (!Focused) base.Focus();
+            if (!Focused) Focus();
 
             if (fNodesDragging)
             {

@@ -27,7 +27,6 @@ using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Components
 {

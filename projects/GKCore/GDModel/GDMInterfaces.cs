@@ -100,7 +100,7 @@ namespace GDModel
     }
 
 
-    public interface IGDMStructWithLists : IGDMObject, IGDMStructWithNotes, IGDMStructWithSourceCitations, IGDMStructWithMultimediaLinks
+    public interface IGDMStructWithLists : IGDMStructWithNotes, IGDMStructWithSourceCitations, IGDMStructWithMultimediaLinks
     {
     }
 

@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GKCore.Export
 {

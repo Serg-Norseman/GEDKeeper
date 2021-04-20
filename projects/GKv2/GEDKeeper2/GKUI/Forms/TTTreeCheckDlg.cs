@@ -20,7 +20,6 @@
 
 using System;
 using System.Text;
-using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;

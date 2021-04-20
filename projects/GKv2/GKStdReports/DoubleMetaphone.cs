@@ -108,7 +108,7 @@ namespace GKStdReports
         /// <param name="primaryKey">Ref to var to receive primary metaphone key</param>
         /// <param name="alternateKey">Ref to var to receive alternate metaphone key, or be set to null if
         ///     word has no alternate key by double metaphone</param>
-        static public void doubleMetaphone(String word, ref String primaryKey, ref String alternateKey) {
+        public static void doubleMetaphone(String word, ref String primaryKey, ref String alternateKey) {
             DoubleMetaphone mp = new DoubleMetaphone(word);
             
             primaryKey = mp.PrimaryKey;

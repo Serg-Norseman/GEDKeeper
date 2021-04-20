@@ -66,7 +66,7 @@ namespace GKUI
         {
             WFAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
-            Logger.Init(WFAppHost.GetLogFilename());
+            Logger.Init(AppHost.GetLogFilename());
             LogSysInfo();
 
             Application.ThreadException += ExExceptionHandler;

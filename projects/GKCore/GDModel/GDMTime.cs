@@ -74,11 +74,6 @@ namespace GDModel
             SetName(GEDCOMTagType.TIME);
         }
 
-        public GDMTime(int tagId, string tagValue) : this()
-        {
-            SetNameValue(tagId, tagValue);
-        }
-
         protected override string GetStringValue()
         {
             string result;

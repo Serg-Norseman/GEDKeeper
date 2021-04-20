@@ -405,7 +405,7 @@ namespace GKUI.Forms
         {
             var item = cmbLanguages.SelectedItem as ComboItem<int>;
             if (item != null) {
-                AppHost.Instance.LoadLanguage((int)item.Tag);
+                AppHost.Instance.LoadLanguage(item.Tag);
             }
         }
 
@@ -587,11 +587,6 @@ namespace GKUI.Forms
         private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             fTempColumns.OrderedColumns[e.Index].CurActive = (e.NewValue == CheckState.Checked);
-        }
-
-        private void chkPortraitsVisible_CheckedChanged(object sender, EventArgs e)
-        {
-            chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked;
         }
 
         public void SetPage(OptionsPage page)

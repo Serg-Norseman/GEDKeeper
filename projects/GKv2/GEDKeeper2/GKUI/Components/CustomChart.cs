@@ -52,7 +52,7 @@ namespace GKUI.Components
             EventNavRefresh = new object();
         }
 
-        protected CustomChart() : base()
+        protected CustomChart()
         {
             fNavman = new NavigationStack<GDMRecord>();
         }

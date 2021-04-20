@@ -41,11 +41,6 @@ namespace GDModel
             fValue = null;
         }
 
-        public GDMDateValue(int tagId, string tagValue) : this()
-        {
-            SetNameValue(tagId, tagValue);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing) {

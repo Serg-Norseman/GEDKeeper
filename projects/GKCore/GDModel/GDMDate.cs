@@ -591,9 +591,7 @@ namespace GDModel
 
         public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar)
         {
-            string result = "";
-
-            result = GetDisplayString(format, true, showCalendar);
+            string result = GetDisplayString(format, true, showCalendar);
             if (sign && fApproximated != GDMApproximated.daExact) {
                 result = "~ " + result;
             }

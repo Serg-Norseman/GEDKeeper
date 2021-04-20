@@ -197,7 +197,7 @@ namespace GKUI.Components
         private readonly GMapOverlay fRoutes = new GMapOverlay("routes");
         private readonly GMapOverlay fTopOverlay = new GMapOverlay();
 
-        private bool fIsMouseDown = false;
+        private bool fIsMouseDown;
         private GMapControl fMapControl;
         private GMapMarker fTargetMarker;
 

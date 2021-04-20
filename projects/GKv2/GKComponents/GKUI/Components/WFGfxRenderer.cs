@@ -27,7 +27,6 @@ using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using GKCore.Charts;
-using GKUI.Components;
 
 namespace GKUI.Components
 {
@@ -40,7 +39,7 @@ namespace GKUI.Components
         private readonly Stack<Matrix> fTransforms;
         private float fTranslucent;
 
-        public WFGfxRenderer() : base()
+        public WFGfxRenderer()
         {
             fTransforms = new Stack<Matrix>();
         }

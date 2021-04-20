@@ -105,7 +105,7 @@ namespace GKStdReports
         ///     methods is quite valuable.</summary>
         /// 
         /// <param name="word">New current word for which to compute metaphone keys</param>
-        new public void computeKeys(String word) {
+        public new void computeKeys(String word) {
             base.computeKeys(word);
             
             m_primaryShortKey = ShortDoubleMetaphone.metaphoneKeyToShort(this.PrimaryKey);
@@ -138,7 +138,7 @@ namespace GKStdReports
         ///     tests are not performed, for performance reasons.</param>
         /// 
         /// <returns>ushort representation of the given metahphone key</returns>
-        static private ushort metaphoneKeyToShort(String metaphoneKey) {
+        private static ushort metaphoneKeyToShort(String metaphoneKey) {
             ushort result, charResult;
             Char currentChar;
             

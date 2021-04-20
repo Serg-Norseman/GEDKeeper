@@ -126,11 +126,6 @@ namespace GDModel
             fWWWList = new GDMList<GDMTag>();
         }
 
-        public GDMAddress(int tagId, string tagValue) : this()
-        {
-            SetNameValue(tagId, tagValue);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing) {

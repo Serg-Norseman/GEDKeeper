@@ -25,7 +25,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 

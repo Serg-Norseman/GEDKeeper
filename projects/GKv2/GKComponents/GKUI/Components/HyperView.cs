@@ -98,7 +98,7 @@ namespace GKUI.Components
         }
 
 
-        public HyperView() : base()
+        public HyperView()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |
                      ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);

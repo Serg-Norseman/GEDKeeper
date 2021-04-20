@@ -260,7 +260,7 @@ namespace GKCore.Lists
             return false;
         }
 
-        private readonly static char[] SpecialChars = new char[] { '*', '?', '|' };
+        private static readonly char[] SpecialChars = new char[] { '*', '?', '|' };
 
         private static string GetSimpleMask(string mask)
         {

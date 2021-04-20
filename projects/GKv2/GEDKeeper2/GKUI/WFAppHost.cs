@@ -60,7 +60,7 @@ namespace GKUI
             SetAppSign("GEDKeeper2");
         }
 
-        public WFAppHost() : base()
+        public WFAppHost()
         {
             fAppContext = new ApplicationContext();
             Application.ApplicationExit += this.OnApplicationExit;

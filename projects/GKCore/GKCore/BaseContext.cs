@@ -1469,7 +1469,8 @@ namespace GKCore
                 byte[] pwd = Encoding.Unicode.GetBytes(password);
 
                 switch (minorVer) {
-                    case 1: {
+                    case 1:
+                        {
                             byte[] salt = SCCrypt.CreateRandomSalt(7);
                             csp = new DESCryptoServiceProvider();
                             var pdb = new PasswordDeriveBytes(pwd, salt);
@@ -1483,7 +1484,8 @@ namespace GKCore
                         }
                         break;
 
-                    case 2: {
+                    case 2:
+                        {
                             var keyBytes = new byte[32];
                             Array.Copy(pwd, keyBytes, Math.Min(keyBytes.Length, pwd.Length));
                             csp = new RijndaelManaged();
