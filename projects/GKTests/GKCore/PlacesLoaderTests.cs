@@ -68,7 +68,7 @@ namespace GKCore
         [Test]
         public void Test_Geocoding()
         {
-            IGeocoder geocoder = IGeocoder.Create("");
+            IGeocoder geocoder = IGeocoder.Create("", "");
 
             geocoder.SetKey("");
             geocoder.SetProxy(null);
@@ -78,7 +78,7 @@ namespace GKCore
         [Test]
         public void Test_Geocoding_Google()
         {
-            var geocoder = IGeocoder.Create("Google");
+            var geocoder = IGeocoder.Create("Google", "us");
             geocoder.SetKey(GKData.GAPI_KEY);
             var geoPoints = geocoder.Geocode("New York", 1);
             //Assert.IsTrue(geoPoints.Count > 0);
@@ -87,7 +87,7 @@ namespace GKCore
         [Test]
         public void Test_Geocoding_Yandex()
         {
-            var geocoder = IGeocoder.Create("Yandex");
+            var geocoder = IGeocoder.Create("Yandex", "us");
             var geoPoints = geocoder.Geocode("New York", 1);
             //Assert.IsTrue(geoPoints.Count > 0);
         }
@@ -95,7 +95,7 @@ namespace GKCore
         [Test]
         public void Test_Geocoding_OSM()
         {
-            var geocoder = IGeocoder.Create("OSM");
+            var geocoder = IGeocoder.Create("OSM", "us");
             var geoPoints = geocoder.Geocode("New York", 1);
             //Assert.IsTrue(geoPoints.Count > 0);
         }

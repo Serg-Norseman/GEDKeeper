@@ -705,15 +705,13 @@ namespace GKCore
         {
             ProxyOptions proxyOptions = fOptions.Proxy;
             IWebProxy proxy = null;
-            if (proxyOptions.UseProxy)
-            {
-                proxy = new WebProxy(proxyOptions.Server + ":" + proxyOptions.Port, true)
-                {
+            if (proxyOptions.UseProxy) {
+                proxy = new WebProxy(proxyOptions.Server + ":" + proxyOptions.Port, true) {
                     Credentials = CredentialCache.DefaultCredentials
                 };
             }
 
-            IGeocoder geocoder = IGeocoder.Create(fOptions.Geocoder);
+            IGeocoder geocoder = IGeocoder.Create(fOptions.Geocoder, fOptions.GeoSearchCountry);
             geocoder.SetProxy(proxy);
 
             return geocoder;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,49 +38,51 @@ namespace GKCore.Maps
             fLang = cInfo.TwoLetterISOLanguageName;
         }
 
-        public override IList<GeoPoint> Geocode(string location, short results, string lang)
+        public override IList<GeoPoint> Geocode(string location, short results, string lang, string region)
         {
             string requestUrl =
                 string.Format(REQUEST_URL, MakeValidString(location), lang) +
                 (string.IsNullOrEmpty(fKey) ? string.Empty : "&key=" + fKey);
+
+            if (!string.IsNullOrEmpty(region)) {
+                requestUrl += string.Format("&region={0}", region);
+            }
 
             return ParseXml(requestUrl);
         }
 
         private IList<GeoPoint> ParseXml(string url)
         {
-            List<GeoPoint> geoObjects = new List<GeoPoint>();
+            var geoObjects = new List<GeoPoint>();
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.CreateDefault(new Uri(url));
+            var request = (HttpWebRequest)WebRequest.CreateDefault(new Uri(url));
             request.ContentType = "application/x-www-form-urlencoded";
             request.Credentials = CredentialCache.DefaultCredentials;
             request.Proxy = fProxy;
             request.UserAgent = "GK Geocoder";
 
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
-                using (Stream stream = response.GetResponseStream()) {
-
-                    XmlDocument xmlDocument = new XmlDocument();
+            using (var response = (HttpWebResponse)request.GetResponse()) {
+                using (var stream = response.GetResponseStream()) {
+                    var xmlDocument = new XmlDocument();
                     xmlDocument.Load(stream);
-                    XmlNode node = xmlDocument.DocumentElement;
+                    var node = xmlDocument.DocumentElement;
 
                     if (node != null && node.ChildNodes.Count > 0) {
                         int num = node.ChildNodes.Count;
                         for (int i = 0; i < num; i++) {
-                            XmlNode xNode = node.ChildNodes[i];
+                            var xNode = node.ChildNodes[i];
                             if (xNode.Name == "result") {
-                                XmlNode addressNode = xNode["formatted_address"];
-                                XmlNode geometry = xNode["geometry"];
-                                XmlNode pointNode = geometry["location"];
+                                var addressNode = xNode["formatted_address"];
+                                var geometry = xNode["geometry"];
+                                var pointNode = geometry["location"];
 
                                 if (addressNode != null && pointNode != null) {
-                                    string ptHint = addressNode.InnerText;
                                     double ptLongitude = ConvertHelper.ParseFloat(pointNode["lng"].InnerText, -1.0);
                                     double ptLatitude = ConvertHelper.ParseFloat(pointNode["lat"].InnerText, -1.0);
 
                                     if (ptLatitude != -1.0 && ptLongitude != -1.0) {
-                                        GeoPoint gpt = new GeoPoint(ptLatitude, ptLongitude, ptHint);
-                                        geoObjects.Add(gpt);
+                                        string ptHint = addressNode.InnerText;
+                                        geoObjects.Add(new GeoPoint(ptLatitude, ptLongitude, ptHint));
                                     }
                                 }
                             }

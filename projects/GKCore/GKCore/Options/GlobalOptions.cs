@@ -93,6 +93,7 @@ namespace GKCore.Options
         private bool fCheckTreeSize;
         private bool fDialogClosingWarn;
         private bool fFirstCapitalLetterInNames;
+        private string fGeoSearchCountry;
         private readonly ListOptionsCollection fListOptions;
         private bool fReadabilityHighlightRows;
 
@@ -247,6 +248,12 @@ namespace GKCore.Options
         {
             get { return fGeocoder; }
             set { fGeocoder = value; }
+        }
+
+        public string GeoSearchCountry
+        {
+            get { return fGeoSearchCountry; }
+            set { fGeoSearchCountry = value; }
         }
 
         public ListColumns IndividualListColumns
@@ -438,6 +445,7 @@ namespace GKCore.Options
 
             fCharsetDetection = false;
             fFirstCapitalLetterInNames = false;
+            fGeoSearchCountry = string.Empty;
         }
 
         protected override void Dispose(bool disposing)
@@ -670,6 +678,7 @@ namespace GKCore.Options
             fWomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
 
             fGeocoder = ini.ReadString("Common", "Geocoder", "Google");
+            fGeoSearchCountry = ini.ReadString("Common", "GeoSearchCountry", "");
 
             int kl = ini.ReadInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
             AppHost.Instance.SetKeyLayout(kl);
@@ -790,6 +799,7 @@ namespace GKCore.Options
             ini.WriteInteger("Common", "WomanSurnameFormat", (int)fWomanSurnameFormat);
 
             ini.WriteString("Common", "Geocoder", fGeocoder);
+            ini.WriteString("Common", "GeoSearchCountry", fGeoSearchCountry);
 
             fTreeChartOptions.SaveToFile(ini);
             fPedigreeOptions.SaveToFile(ini);

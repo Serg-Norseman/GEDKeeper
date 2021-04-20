@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -889,8 +889,9 @@ namespace GKCore
         /* 828 */ LSID_Confirmation,
         /* 829 */ LSID_FirstCommunion,
         /* 830 */ LSID_Ordination,
+        /* 831 */ LSID_GeoSearchCountryRestriction,
 
-        /* 000 */ LSID_Last = LSID_Ordination
+        /* 000 */ LSID_Last = LSID_GeoSearchCountryRestriction
     }
 
 
@@ -1735,6 +1736,7 @@ namespace GKCore
             /* 828 */ "Confirmation",
             /* 829 */ "First communion",
             /* 830 */ "Ordination",
+            /* 831 */ "Restriction geo search by country",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

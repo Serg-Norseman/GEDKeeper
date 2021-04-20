@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,6 +28,7 @@ namespace GKCore.Maps
         protected string fKey;
         protected IWebProxy fProxy;
         protected string fLang;
+        protected string fRegion;
 
         protected IGeocoder()
         {
@@ -52,6 +53,11 @@ namespace GKCore.Maps
             fLang = lang;
         }
 
+        public void SetRegion(string region)
+        {
+            fRegion = region;
+        }
+
         protected static string MakeValidString(string location)
         {
             location = location.Replace(" ", "+").Replace("&", "").Replace("?", "");
@@ -63,7 +69,7 @@ namespace GKCore.Maps
             //ServicePointManager.SecurityProtocol = (SecurityProtocolType)(SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls);
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)((ushort)3072 | (ushort)768 | (ushort)SecurityProtocolType.Tls);
 
-            return Geocode(location, results, fLang);
+            return Geocode(location, results, fLang, fRegion);
         }
 
         /// <summary>
@@ -74,10 +80,10 @@ namespace GKCore.Maps
         /// <param name="lang">Preference language for describing objects.</param>
         /// <example>Geocode("Moscow", 10, "en_US");</example>
         /// <returns>Collection of found locations</returns>
-        public abstract IList<GeoPoint> Geocode(string location, short results, string lang);
+        public abstract IList<GeoPoint> Geocode(string location, short results, string lang, string region);
 
 
-        public static IGeocoder Create(string type)
+        public static IGeocoder Create(string type, string region)
         {
             IGeocoder result;
             switch (type) {
@@ -96,6 +102,7 @@ namespace GKCore.Maps
                     result.SetKey(GKData.GAPI_KEY);
                     break;
             }
+            result.SetRegion(region);
             return result;
         }
     }

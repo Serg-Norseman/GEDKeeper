@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Globalization;
 using System.Windows.Forms;
 using BSLib.Design;
 using BSLib.Design.Graphics;
@@ -58,6 +59,18 @@ namespace GKUI.Forms
             fHost = host;
             fOptions = GlobalOptions.Instance;
             fTempColumns = IndividualListMan.CreateIndividualListColumns();
+
+            cmbGeoSearchCountry.Items.Clear();
+            foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.FrameworkCultures)) {
+                RegionInfo ri = null;
+                try {
+                    ri = new RegionInfo(ci.Name);
+                } catch {
+                    continue;
+                }
+                cmbGeoSearchCountry.Items.Add(ri.TwoLetterISORegionName);
+            }
+            cmbGeoSearchCountry.Sorted = true;
 
             SetLang();
             UpdateForm();
@@ -298,7 +311,9 @@ namespace GKUI.Forms
             UpdateBackupOptions();
             UpdateOtherOptions();
             UpdateLangs();
+
             cmbGeocoder.Text = fOptions.Geocoder;
+            cmbGeoSearchCountry.Text = fOptions.GeoSearchCountry;
 
             // media
             UpdateMediaOptions();
@@ -539,7 +554,9 @@ namespace GKUI.Forms
             AcceptBackupOptions();
             AcceptOtherOptions();
             AcceptLangs();
+
             fOptions.Geocoder = cmbGeocoder.Text;
+            fOptions.GeoSearchCountry = cmbGeoSearchCountry.Text;
 
             // media
             AcceptMediaOptions();
@@ -744,6 +761,7 @@ namespace GKUI.Forms
             chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
             lblDefaultDepth.Text = LangMan.LS(LSID.LSID_DefaultDepth);
             chkDialogClosingWarn.Text = LangMan.LS(LSID.LSID_WarnForClosingDialog);
+            lblGeoSearchCountry.Text = LangMan.LS(LSID.LSID_GeoSearchCountryRestriction);
         }
 
         private void chkTreeChartOption_CheckedChanged(object sender, EventArgs e)
