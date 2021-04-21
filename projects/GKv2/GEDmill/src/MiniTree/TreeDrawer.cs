@@ -237,7 +237,7 @@ namespace GEDmill.MiniTree
                     }
 
                     // Set the newly selected transparency
-                    colorpaletteNew.Entries[(int)backColor] = Color.FromArgb(0, Color.Magenta);
+                    colorpaletteNew.Entries[backColor] = Color.FromArgb(0, Color.Magenta);
 
                     // Re-insert the palette
                     bm.Palette = colorpaletteNew;

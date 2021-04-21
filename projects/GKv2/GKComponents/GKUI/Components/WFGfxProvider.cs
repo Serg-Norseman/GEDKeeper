@@ -122,7 +122,7 @@ namespace GKUI.Components
 
         public IImage LoadResourceImage(string resName, bool makeTransp)
         {
-            Bitmap img = (Bitmap)UIHelper.LoadResourceImage("Resources." + resName);
+            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
 
             if (makeTransp) {
                 img = (Bitmap)img.Clone();

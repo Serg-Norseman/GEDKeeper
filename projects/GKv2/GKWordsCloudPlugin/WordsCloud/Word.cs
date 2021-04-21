@@ -12,7 +12,7 @@
 using System;
 using System.Drawing;
 
-namespace WordCloud
+namespace GKWordsCloudPlugin.WordsCloud
 {
     public class Word : IComparable<Word>
     {
@@ -31,11 +31,6 @@ namespace WordCloud
         public int CompareTo(Word other)
         {
             return Occurrences - other.Occurrences;
-        }
-
-        public string GetCaption()
-        {
-            return string.Format("{0} - occurrences", Occurrences);
         }
     }
 }

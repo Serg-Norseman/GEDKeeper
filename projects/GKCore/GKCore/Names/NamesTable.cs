@@ -25,7 +25,6 @@ using System.Text;
 using BSLib;
 using GDModel;
 using GKCore.Interfaces;
-using GKCore.Types;
 
 namespace GKCore.Names
 {

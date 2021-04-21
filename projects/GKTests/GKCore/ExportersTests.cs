@@ -20,7 +20,6 @@
 
 using System;
 using GDModel;
-using GKCore;
 using GKCore.Export;
 using GKCore.Options;
 using GKCore.Types;

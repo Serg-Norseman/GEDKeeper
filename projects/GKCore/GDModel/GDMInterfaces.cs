@@ -50,7 +50,7 @@ namespace GDModel
     }
 
 
-    public interface IGDMListEnumerator<T> : IEnumerator<T>
+    public interface IGDMListEnumerator<out T> : IEnumerator<T>
     {
     }
 

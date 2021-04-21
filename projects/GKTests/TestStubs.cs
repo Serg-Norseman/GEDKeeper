@@ -18,14 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using BSLib;
 using BSLib.Design.Graphics;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.Names;
 using GKCore.Plugins;
 using GKCore.Types;
 using NSubstitute;
@@ -127,7 +125,7 @@ namespace GKTests.Stubs
         public GDMRecord GetSelectedRecordEx() { return null; }
     }
 
-    public class TestPlugin : OrdinaryPlugin, IPlugin
+    public class TestPlugin : OrdinaryPlugin
     {
         private ILangMan fLangMan;
 

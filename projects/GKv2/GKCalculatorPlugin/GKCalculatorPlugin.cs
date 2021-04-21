@@ -27,7 +27,6 @@ using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
-using GKUI.Components;
 
 [assembly: AssemblyTitle("GKCalculatorPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calculator plugin")]

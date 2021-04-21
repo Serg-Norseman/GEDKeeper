@@ -38,7 +38,7 @@ namespace GKCore.Charts
         private float fTranslucent;
         private TextWriter fWriter;
 
-        public SVGRenderer(string svgFileName, int width, int height) : base()
+        public SVGRenderer(string svgFileName, int width, int height)
         {
             fFileName = svgFileName;
             fWidth = width;

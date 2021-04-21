@@ -23,17 +23,14 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using GDModel;
-using GDModel.Providers.GEDCOM;
 using GEDmill.HTML;
 using GEDmill.ListView;
-using GEDmill.MiniTree;
 using GEDmill.Model;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Logging;
 using GKCore.Types;
-using GKUI.Components;
 
 namespace GEDmill
 {
@@ -694,7 +691,6 @@ namespace GEDmill
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            int recordsExcluded = 0;
             int recordsIncluded = 0;
             foreach (ListViewItem lvi in lvIndividuals.Items) {
                 if (lvi is LVItem) {
@@ -751,7 +747,6 @@ namespace GEDmill
             Cursor.Show();
 
             int recordsExcluded = 0;
-            int recordsIncluded = 0;
 
             foreach (ListViewItem lvi in lvIndividuals.Items) {
                 if (lvi is LVItem) {
@@ -777,7 +772,6 @@ namespace GEDmill
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
-            int recordsExcluded = 0;
             int recordsIncluded = 0;
 
             foreach (ListViewItem lvi in lvSources.Items) {
@@ -805,7 +799,6 @@ namespace GEDmill
             Cursor.Show();
 
             int recordsExcluded = 0;
-            int recordsIncluded = 0;
 
             foreach (ListViewItem lvi in lvSources.Items) {
                 if (lvi is LVItem) {

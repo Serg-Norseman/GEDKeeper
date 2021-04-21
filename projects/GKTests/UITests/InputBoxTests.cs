@@ -66,7 +66,7 @@ namespace GKUI.Components
         [Test]
         public void Test_IntInput()
         {
-            int intValue = 0;
+            int intValue;
 
             ModalFormHandler = InputBox_btnAccept_IntHandler;
             GKInputBox.QueryInt("caption", "prompt", out intValue);
@@ -77,7 +77,7 @@ namespace GKUI.Components
         [Test]
         public void Test_DblInput()
         {
-            double val = 0.0;
+            double val;
 
             ModalFormHandler = InputBox_btnAccept_DblHandler;
             GKInputBox.QueryDouble("caption", "prompt", out val);

@@ -79,14 +79,14 @@ namespace GEDmill
         {
             if (rectNew.Height > uMaxHeight) {
                 // Image won't fit horizontally, so scale in both directions til it will
-                rectNew.Width = (rectNew.Width * (int)uMaxHeight) / rectNew.Height;
-                rectNew.Height = (int)uMaxHeight;
+                rectNew.Width = (rectNew.Width * uMaxHeight) / rectNew.Height;
+                rectNew.Height = uMaxHeight;
             }
 
             if (rectNew.Width > uMaxWidth) {
                 // Image won't fit horizontally, so scale in both directions til it will
-                rectNew.Height = (rectNew.Height * (int)uMaxWidth) / rectNew.Width;
-                rectNew.Width = (int)uMaxWidth;
+                rectNew.Height = (rectNew.Height * uMaxWidth) / rectNew.Width;
+                rectNew.Width = uMaxWidth;
             }
         }
 

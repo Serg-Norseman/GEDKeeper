@@ -16,7 +16,6 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Windows.Forms;
 
 namespace GEDmill.ListView
@@ -44,7 +43,7 @@ namespace GEDmill.ListView
         // To display the name in the list
         public override string ToString()
         {
-            string name = "";
+            string name;
             if (fFirstName != "" && fSurname != "") {
                 name = string.Concat(fSurname, ", ", fFirstName);
             } else if (fSurname != "") {

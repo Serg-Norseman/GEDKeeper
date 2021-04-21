@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace WordCloud
+namespace GKWordsCloudPlugin.WordsCloud
 {
     public interface ICloudRenderer : IDisposable
     {

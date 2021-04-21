@@ -99,7 +99,7 @@ namespace GKCore.Options
             }
             catch (Exception)
             {
-                throw new EPedigreeOptionsException("Error loading AncestorsCircleOptions");
+                throw new PedigreeOptionsException("Error loading AncestorsCircleOptions");
             }
         }
 

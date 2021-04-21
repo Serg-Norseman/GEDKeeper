@@ -163,7 +163,7 @@ namespace GEDmill.MiniTree
                 return fSize;
             }
 
-            foreach (object obj in fMembers) {
+            foreach (var obj in fMembers) {
                 SizeF size;
                 if (obj is MiniTreeIndividual) {
                     size = ((MiniTreeIndividual)obj).CalculateSize(g, f);
@@ -200,7 +200,7 @@ namespace GEDmill.MiniTree
                 return;
             }
 
-            foreach (object obj in fMembers) {
+            foreach (var obj in fMembers) {
                 if (obj is MiniTreeGroup) {
                     var mtg = (MiniTreeGroup)obj;
                     if (mtg.fBoxLeft != null && mtg.fBoxRight != null) {
@@ -345,7 +345,7 @@ namespace GEDmill.MiniTree
                 return new SizeF(0f, 0f);
             }
 
-            foreach (object obj in fMembers) {
+            foreach (var obj in fMembers) {
                 if (obj is MiniTreeGroup) {
                     SizeF size = ((MiniTreeGroup)obj).CalculateLayout(x, y + fSize.Height);
                     x += size.Width;

@@ -21,14 +21,12 @@
 #if !__MonoCS__
 
 using System.Windows.Forms;
-
 using GKCore.Charts;
 using GKCore.Interfaces;
-using GKTests.Stubs;
-using GKUI.Components;
-using NUnit.Framework;
-using NUnit.Extensions.Forms;
 using GKTests;
+using GKTests.Stubs;
+using NUnit.Extensions.Forms;
+using NUnit.Framework;
 
 namespace GKUI.Components
 {

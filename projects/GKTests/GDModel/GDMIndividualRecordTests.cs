@@ -19,7 +19,6 @@
  */
 
 using System;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;

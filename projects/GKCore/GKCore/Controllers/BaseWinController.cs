@@ -439,7 +439,7 @@ namespace GKCore.Controllers
         public IListManager GetRecordsListManByType(GDMRecordType recType)
         {
             IListViewEx rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : (IListManager)rView.ListMan;
+            return (rView == null) ? null : rView.ListMan;
         }
 
         public GDMRecord GetSelectedRecordEx()
@@ -564,7 +564,7 @@ namespace GKCore.Controllers
         public void NavNext()
         {
             try {
-                GDMRecord rec = fNavman.Next() as GDMRecord;
+                GDMRecord rec = fNavman.Next();
                 if (rec != null) {
                     fView.SelectRecordByXRef(rec.XRef);
                     AppHost.Instance.UpdateControls(false);
@@ -576,7 +576,7 @@ namespace GKCore.Controllers
         public void NavPrev()
         {
             try {
-                GDMRecord rec = fNavman.Back() as GDMRecord;
+                GDMRecord rec = fNavman.Back();
                 if (rec != null) {
                     fView.SelectRecordByXRef(rec.XRef);
                     AppHost.Instance.UpdateControls(false);

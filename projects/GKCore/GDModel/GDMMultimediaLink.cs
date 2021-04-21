@@ -143,11 +143,6 @@ namespace GDModel
             return result;
         }
 
-        public override string ParseString(string strValue)
-        {
-            return base.ParseString(strValue);
-        }
-
         public string GetUID(GDMTree tree)
         {
             string result = null;

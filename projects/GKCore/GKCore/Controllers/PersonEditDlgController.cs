@@ -189,7 +189,7 @@ namespace GKCore.Controllers
                 GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fPerson.ChildToFamilyLinks[0]);
                 fView.SetParentsAvl(true, locked);
 
-                GDMIndividualRecord father = null, mother = null;
+                GDMIndividualRecord father, mother;
                 fBase.Context.Tree.GetSpouses(family, out father, out mother);
 
                 if (father != null) {

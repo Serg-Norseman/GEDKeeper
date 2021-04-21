@@ -20,7 +20,6 @@
 
 using System;
 using BSLib.Calendar;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;

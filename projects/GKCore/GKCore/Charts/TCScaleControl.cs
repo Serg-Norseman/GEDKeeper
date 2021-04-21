@@ -52,7 +52,7 @@ namespace GKCore.Charts
         /* Set member `fGrowOver` or property `GrowOver` to `true` if you want
          * to have the control with height exceeds height of `SCALE_RECT`
          * (i.e. height of the original image). */
-        private bool fGrowOver = false;
+        private bool fGrowOver;
 
         #endregion
 

@@ -20,7 +20,6 @@
 
 using System;
 using GDModel;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;

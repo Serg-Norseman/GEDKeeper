@@ -30,7 +30,7 @@ namespace GKUI.Components
     /// </summary>
     public class GKDateBox : MaskedTextBox
     {
-        private string fRegionalDatePattern;
+        private readonly string fRegionalDatePattern;
 
 
         public string RegionalDatePattern

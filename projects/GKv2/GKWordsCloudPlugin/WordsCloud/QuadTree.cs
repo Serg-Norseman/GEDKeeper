@@ -12,7 +12,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace WordCloud
+namespace GKWordsCloudPlugin.WordsCloud
 {
     /// <summary>
     ///   A Quadtree is a structure designed to partition space so

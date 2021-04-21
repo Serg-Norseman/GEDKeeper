@@ -314,7 +314,7 @@ namespace GEDmill.HTML
                 string sExtras1 = "&nbsp;";
                 string sExtras2 = "&nbsp;";
                 if (i < firstHalf.Count) {
-                    StringTuple tuple = (StringTuple)firstHalf[i];
+                    StringTuple tuple = firstHalf[i];
                     string sName = EscapeHTML(tuple.First, true);
                     if (sName.Length >= 7 && sName.Substring(0, 7) == ",&nbsp;") // Hack for no surname.
                     {
@@ -341,7 +341,7 @@ namespace GEDmill.HTML
                     ++i;
                 }
                 if (j < secondHalf.Count) {
-                    StringTuple tuple = (StringTuple)secondHalf[j];
+                    StringTuple tuple = secondHalf[j];
                     string sName = EscapeHTML(tuple.First, true);
                     if (sName.Length >= 7 && sName.Substring(0, 7) == ",&nbsp;") // Hack for no surname.
                     {

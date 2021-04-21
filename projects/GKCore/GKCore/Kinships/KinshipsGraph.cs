@@ -316,8 +316,7 @@ namespace GKCore.Kinships
                 GDMFamilyRecord fam = context.Tree.GetParentsFamily(iRec);
                 if (fam != null) {
                     GDMIndividualRecord father, mother;
-                    father = context.Tree.GetPtrValue(fam.Husband);
-                    mother = context.Tree.GetPtrValue(fam.Wife);
+                    context.Tree.GetSpouses(fam, out father, out mother);
 
                     SearchKGInt(context, currNode, father, graph, RelationKind.rkParent, RelationKind.rkChild);
                     SearchKGInt(context, currNode, mother, graph, RelationKind.rkParent, RelationKind.rkChild);

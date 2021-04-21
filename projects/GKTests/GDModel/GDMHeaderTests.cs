@@ -19,7 +19,6 @@
  */
 
 using System;
-using GDModel;
 using NUnit.Framework;
 
 namespace GDModel

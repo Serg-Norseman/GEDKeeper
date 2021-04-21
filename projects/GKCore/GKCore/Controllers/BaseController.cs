@@ -183,7 +183,6 @@ namespace GKCore.Controllers
 
             try {
                 baseWin.Context.BeginUpdate();
-                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<ISourceCitEditDlg>(baseWin)) {
                     bool exists = cit != null;

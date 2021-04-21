@@ -23,7 +23,6 @@ using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore.Interfaces;
-using GKCore.Tools;
 using GKCore.Types;
 
 namespace GKCore.Tools

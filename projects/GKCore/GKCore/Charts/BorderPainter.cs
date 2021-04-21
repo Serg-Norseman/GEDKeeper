@@ -292,7 +292,7 @@ namespace GKCore.Charts
                 renderer.DrawLine(pen, rR, rB, rR, rT); // R
             }
 
-            int halfStreak = (int)(DefaultStreak / 2);
+            int halfStreak = DefaultStreak / 2;
             rL -= halfStreak;
             rT -= halfStreak;
             rR += halfStreak;

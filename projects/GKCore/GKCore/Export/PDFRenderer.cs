@@ -41,7 +41,7 @@ namespace GKCore.Export
         private readonly float fPageHeight;
         private readonly float fPageWidth;
 
-        public PDFRenderer(float pageWidth, float pageHeight) : base()
+        public PDFRenderer(float pageWidth, float pageHeight)
         {
             fPageHeight = pageHeight;
             fPageWidth = pageWidth;

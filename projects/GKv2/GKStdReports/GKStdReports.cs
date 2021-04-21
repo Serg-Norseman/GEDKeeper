@@ -74,7 +74,7 @@ namespace GKStdReports
     }
 
 
-    public abstract class StdReportPlugin : OrdinaryPlugin, IPlugin
+    public abstract class StdReportPlugin : OrdinaryPlugin
     {
         public override ILangMan LangMan { get { return SRLangMan.Instance; } }
         public override IImage Icon { get { return null; } }

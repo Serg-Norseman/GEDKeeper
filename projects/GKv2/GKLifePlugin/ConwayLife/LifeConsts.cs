@@ -11,7 +11,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace ConwayLife
+namespace GKLifePlugin.ConwayLife
 {
     public delegate void DoesCellLiveEvent(object sender, int x, int y, LifeGrid grid, ref bool result);
     

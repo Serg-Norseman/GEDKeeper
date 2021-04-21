@@ -34,12 +34,12 @@ using GKCore.Types;
 
 namespace GKCore.MVP.Views
 {
-    public interface IAboutDlg : ICommonDialog, IView
+    public interface IAboutDlg : ICommonDialog
     {
     }
 
 
-    public interface IAddressEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IAddressEditDlg : ICommonDialog, IBaseEditor
     {
         GDMAddress Address { get; set; }
 
@@ -55,7 +55,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IAssociationEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IAssociationEditDlg : ICommonDialog, IBaseEditor
     {
         GDMAssociation Association { get; set; }
 
@@ -64,7 +64,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IBaseWindowView : IBaseWindow, IView
+    public interface IBaseWindowView : IBaseWindow
     {
         ITabControl RecordTabs { get; }
         IMenuItem ReportsItem { get; }
@@ -74,19 +74,19 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ICircleChartWin : IChartWindow, IView
+    public interface ICircleChartWin : IChartWindow
     {
         ICircleChart CircleChart { get; }
     }
 
 
-    public interface ICommonFilterDlg : ICommonDialog, IView
+    public interface ICommonFilterDlg : ICommonDialog
     {
         IFilterGridView FilterGrid { get; }
     }
 
 
-    public interface ICommunicationEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface ICommunicationEditDlg : ICommonDialog, IBaseEditor
     {
         GDMCommunicationRecord Communication { get; set; }
 
@@ -101,7 +101,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IDayTipsDlg : ICommonDialog, IView
+    public interface IDayTipsDlg : ICommonDialog
     {
         bool ShowTipsChecked { get; set; }
 
@@ -113,7 +113,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IEventEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IEventEditDlg : ICommonDialog, IBaseEditor
     {
         GDMCustomEvent Event { get; set; }
 
@@ -143,7 +143,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IFamilyEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IFamilyEditDlg : ICommonDialog, IBaseEditor
     {
         GDMFamilyRecord Family { get; set; }
 
@@ -165,7 +165,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IFilePropertiesDlg : ICommonDialog, IBaseEditor, IView
+    public interface IFilePropertiesDlg : ICommonDialog, IBaseEditor
     {
         IListView RecordStats { get; }
 
@@ -176,7 +176,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IGroupEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IGroupEditDlg : ICommonDialog, IBaseEditor
     {
         GDMGroupRecord Group { get; set; }
 
@@ -188,7 +188,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ILanguageEditDlg : ICommonDialog, IView
+    public interface ILanguageEditDlg : ICommonDialog
     {
         GDMLanguageID LanguageID { get; set; }
 
@@ -196,7 +196,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ILanguageSelectDlg : ICommonDialog, IView
+    public interface ILanguageSelectDlg : ICommonDialog
     {
         int SelectedLanguage { get; set; }
 
@@ -204,7 +204,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ILocationEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface ILocationEditDlg : ICommonDialog, IBaseEditor
     {
         GDMLocationRecord LocationRecord { get; set; }
 
@@ -218,7 +218,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IMapsViewerWin : IWindow, IView
+    public interface IMapsViewerWin : IWindow
     {
         IMapBrowser MapBrowser { get; }
         IComboBox PersonsCombo { get; }
@@ -235,7 +235,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IMediaEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IMediaEditDlg : ICommonDialog, IBaseEditor
     {
         GDMMultimediaRecord MediaRec { get; set; }
 
@@ -250,7 +250,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IMediaViewerWin : IWindow, IView
+    public interface IMediaViewerWin : IWindow
     {
         GDMFileReferenceWithTitle FileRef { get; set; }
         GDMMultimediaRecord Multimedia { get; set; }
@@ -264,7 +264,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface INameEditDlg : ICommonDialog, IView
+    public interface INameEditDlg : ICommonDialog
     {
         NameEntry IName { get; set; }
 
@@ -275,7 +275,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface INoteEdit : ICommonDialog, IBaseEditor, IView
+    public interface INoteEdit : ICommonDialog, IBaseEditor
     {
         GDMNoteRecord NoteRecord { get; set; }
 
@@ -292,7 +292,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IOrganizerWin : ICommonDialog, IView
+    public interface IOrganizerWin : ICommonDialog
     {
         ISheetList AdrList { get; }
         ISheetList PhonesList { get; }
@@ -301,13 +301,13 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IOptionsDlg : ICommonDialog, IView
+    public interface IOptionsDlg : ICommonDialog
     {
         void SetPage(OptionsPage page);
     }
 
 
-    public interface IParentsEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IParentsEditDlg : ICommonDialog, IBaseEditor
     {
         GDMChildToFamilyLink Link { get; set; }
         GDMIndividualRecord Person { get; set; }
@@ -323,7 +323,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IPersonalNameEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IPersonalNameEditDlg : ICommonDialog, IBaseEditor
     {
         GDMIndividualRecord Individual { get; set; }
         GDMPersonalName PersonalName { get; set; }
@@ -342,7 +342,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IPersonEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IPersonEditDlg : ICommonDialog, IBaseEditor
     {
         GDMIndividualRecord Person { get; set; }
         GDMIndividualRecord Target { get; set; }
@@ -389,7 +389,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IPersonsFilterDlg : ICommonDialog, IView
+    public interface IPersonsFilterDlg : ICommonDialog
     {
         IComboBox SourceCombo { get; }
         IComboBox GroupCombo { get; }
@@ -407,7 +407,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IPortraitSelectDlg : ICommonDialog, IBaseEditor, IView
+    public interface IPortraitSelectDlg : ICommonDialog, IBaseEditor
     {
         GDMMultimediaLink MultimediaLink { get; set; }
 
@@ -424,7 +424,7 @@ namespace GKCore.MVP.Views
     /// <summary>
     /// 
     /// </summary>
-    public interface IRecordSelectDialog : ICommonDialog, IBaseEditor, IView
+    public interface IRecordSelectDialog : ICommonDialog, IBaseEditor
     {
         string FastFilter { get; set; }
         GDMRecord ResultRecord { get; set; }
@@ -436,7 +436,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IRelationshipCalculatorDlg : ICommonDialog, IView
+    public interface IRelationshipCalculatorDlg : ICommonDialog
     {
         ILabel Label1 { get; }
         ILabel Label2 { get; }
@@ -446,7 +446,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IRepositoryEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IRepositoryEditDlg : ICommonDialog, IBaseEditor
     {
         GDMRepositoryRecord Repository { get; set; }
 
@@ -455,7 +455,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IResearchEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IResearchEditDlg : ICommonDialog, IBaseEditor
     {
         GDMResearchRecord Research { get; set; }
 
@@ -473,7 +473,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IScriptEditWin : ICommonDialog, ILocalization, IView
+    public interface IScriptEditWin : ICommonDialog, ILocalization
     {
         ITextBox ScriptText { get; }
         ITextBox DebugOutput { get; }
@@ -485,21 +485,21 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ISexCheckDlg : ICommonDialog, IView
+    public interface ISexCheckDlg : ICommonDialog
     {
         string IndividualName { get; set; }
         GDMSex Sex { get; set; }
     }
 
 
-    public interface ISlideshowWin : IWindow, IStatusForm, IView
+    public interface ISlideshowWin : IWindow, IStatusForm
     {
         void SetImage(IImage image);
         void UpdateControls();
     }
 
 
-    public interface ISourceCitEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface ISourceCitEditDlg : ICommonDialog, IBaseEditor
     {
         GDMSourceCitation SourceCitation { get; set; }
 
@@ -523,7 +523,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IStatisticsWin : IWindow, IView
+    public interface IStatisticsWin : IWindow
     {
         IGraphControl Graph { get; }
         IListView ListStats { get; }
@@ -532,7 +532,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ITaskEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface ITaskEditDlg : ICommonDialog, IBaseEditor
     {
         GDMTaskRecord Task { get; set; }
 
@@ -546,7 +546,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ITreeChartWin : IChartWindow, IView
+    public interface ITreeChartWin : IChartWindow
     {
         ITreeChart TreeBox { get; }
 
@@ -554,7 +554,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ITreeFilterDlg : ICommonDialog, IView
+    public interface ITreeFilterDlg : ICommonDialog
     {
         ChartFilter Filter { get; set; }
 
@@ -567,7 +567,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IUserRefEditDlg : ICommonDialog, IBaseEditor, IView
+    public interface IUserRefEditDlg : ICommonDialog, IBaseEditor
     {
         GDMUserReference UserRef { get; set; }
 
@@ -577,14 +577,14 @@ namespace GKCore.MVP.Views
 
 
 
-    public interface IFragmentSearchDlg : ICommonDialog, IBaseEditor, IView
+    public interface IFragmentSearchDlg : ICommonDialog, IBaseEditor
     {
         ITreeView GroupsTree { get; }
         ILogChart LogChart { get; }
     }
 
 
-    public interface IPatriarchsSearchDlg : ICommonDialog, IBaseEditor, IView
+    public interface IPatriarchsSearchDlg : ICommonDialog, IBaseEditor
     {
         INumericBox MinGensNum { get; }
         ICheckBox WithoutDatesCheck { get; }
@@ -592,18 +592,18 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IPatriarchsViewer : IWindow, IView
+    public interface IPatriarchsViewer : IWindow
     {
     }
 
 
-    public interface IPlacesManagerDlg : ICommonDialog, IBaseEditor, IView
+    public interface IPlacesManagerDlg : ICommonDialog, IBaseEditor
     {
         IListViewEx PlacesList { get; }
     }
 
 
-    public interface IRecMergeDlg : ICommonDialog, IBaseEditor, IView
+    public interface IRecMergeDlg : ICommonDialog, IBaseEditor
     {
         IMergeControl MergeCtl { get; }
         IButton SkipBtn { get; }
@@ -615,7 +615,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ITreeCheckDlg : ICommonDialog, IBaseEditor, IView
+    public interface ITreeCheckDlg : ICommonDialog, IBaseEditor
     {
         IListViewEx ChecksList { get; }
     }
@@ -623,7 +623,7 @@ namespace GKCore.MVP.Views
 
     public enum TreeMatchType { tmtInternal, tmtExternal, tmtAnalysis }
 
-    public interface ITreeCompareDlg : ICommonDialog, IBaseEditor, IView
+    public interface ITreeCompareDlg : ICommonDialog, IBaseEditor
     {
         ITextBox ExternalBase { get; }
         ITextBox CompareOutput { get; }
@@ -632,21 +632,21 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ITreeMergeDlg : ICommonDialog, IBaseEditor, IView
+    public interface ITreeMergeDlg : ICommonDialog, IBaseEditor
     {
         ITextBox UpdateBase { get; }
         ITextBox SyncLog { get; }
     }
 
 
-    public interface ITreeSplitDlg : ICommonDialog, IBaseEditor, IView
+    public interface ITreeSplitDlg : ICommonDialog, IBaseEditor
     {
         IListViewEx SelectedList { get; }
         IListViewEx SkippedList { get; }
     }
 
 
-    public interface IRecordInfoDlg : ICommonDialog, IBaseEditor, IView
+    public interface IRecordInfoDlg : ICommonDialog, IBaseEditor
     {
         GDMRecord Record { get; set; }
 

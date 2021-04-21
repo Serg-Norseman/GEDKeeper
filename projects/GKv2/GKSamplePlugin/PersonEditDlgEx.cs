@@ -37,7 +37,7 @@ using GKUI.Components;
 
 namespace GKSamplePlugin
 {
-    public partial class PersonEditDlgEx : GKUI.Forms.CommonDialog, IBaseEditor, IPersonEditDlg
+    public partial class PersonEditDlgEx : GKUI.Forms.CommonDialog, IPersonEditDlg
     {
         private readonly PersonEditDlgController fController;
 

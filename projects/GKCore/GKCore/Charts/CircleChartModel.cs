@@ -320,10 +320,6 @@ namespace GKCore.Charts
         /// Renders a specified <paramref name="segment"/>'s person name within
         /// the segment.
         /// </summary>
-        /// <param name="gfx">GDI+ context to render on. This member may change
-        /// this context's transformation. If it does, it also reverts the
-        /// transformation back. Thus, from the point of view of the client code
-        /// this member doesn't change the context's transformation.</param>
         /// <param name="segment">Source segment to be drawn on `gfx`.</param>
         private void DrawPersonName(CircleSegment segment)
         {

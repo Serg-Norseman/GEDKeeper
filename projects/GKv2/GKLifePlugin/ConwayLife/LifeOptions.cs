@@ -10,7 +10,7 @@
 
 using System.Drawing;
 
-namespace ConwayLife
+namespace GKLifePlugin.ConwayLife
 {
     public sealed class LifeOptions
     {

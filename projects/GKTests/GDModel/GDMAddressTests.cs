@@ -20,7 +20,6 @@
 
 using System;
 using BSLib;
-using GDModel;
 using GKTests;
 using NUnit.Framework;
 

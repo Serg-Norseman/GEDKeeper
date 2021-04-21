@@ -11,7 +11,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ConwayLife
+namespace GKLifePlugin.ConwayLife
 {
     public sealed class LifeHistory : IDisposable
     {

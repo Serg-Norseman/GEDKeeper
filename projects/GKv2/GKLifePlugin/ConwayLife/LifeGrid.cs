@@ -10,7 +10,7 @@
 
 using System;
 
-namespace ConwayLife
+namespace GKLifePlugin.ConwayLife
 {
     public sealed class LifeGrid : IDisposable, IEquatable<LifeGrid>
     {

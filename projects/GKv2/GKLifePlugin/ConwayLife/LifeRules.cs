@@ -8,7 +8,7 @@
  *  Converted to C#: 20/07/2011, Serg V. Zhdanovskih
  */
 
-namespace ConwayLife
+namespace GKLifePlugin.ConwayLife
 {
     public sealed class LifeRules
     {

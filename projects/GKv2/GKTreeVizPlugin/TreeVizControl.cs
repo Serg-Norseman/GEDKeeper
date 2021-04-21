@@ -750,9 +750,8 @@ namespace GKTreeVizPlugin
             try {
                 int endYear = (fCurYear < person.DeathYear) ? fCurYear : person.DeathYear;
 
-                float zBirth, zDeath;
-                zBirth = fYearSize * (person.BirthYear - fMinYear);
-                zDeath = fYearSize * (endYear - fMinYear);
+                float zBirth = fYearSize * (person.BirthYear - fMinYear);
+                float zDeath = fYearSize * (endYear - fMinYear);
 
                 PointF ppt = person.Pt;
 

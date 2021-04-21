@@ -18,7 +18,7 @@ using System.Drawing.Text;
 using System.Windows.Forms;
 using GKUI.Components;
 
-namespace WordCloud
+namespace GKWordsCloudPlugin.WordsCloud
 {
     public class GdiRenderer : ICloudRenderer
     {

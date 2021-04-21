@@ -19,7 +19,6 @@
  */
 
 using System;
-using GDModel;
 using GKCore;
 using GKCore.Types;
 using GKTests;

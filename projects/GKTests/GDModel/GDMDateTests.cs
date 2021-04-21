@@ -21,7 +21,6 @@
 using System;
 using System.Globalization;
 using BSLib.Calendar;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 using GKTests;

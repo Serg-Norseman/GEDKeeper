@@ -1213,8 +1213,7 @@ namespace GKCore
                 GDMMultimediaRecord mmRec = fTree.GetPtrValue<GDMMultimediaRecord>(mmLink);
 
                 if (mmLink != null && mmRec != null) {
-                    ExtRect cutoutArea;
-                    cutoutArea = mmLink.IsPrimaryCutout ? mmLink.CutoutPosition.Value : ExtRect.CreateEmpty();
+                    var cutoutArea = mmLink.IsPrimaryCutout ? mmLink.CutoutPosition.Value : ExtRect.CreateEmpty();
                     result = LoadMediaImage(mmRec.FileReferences[0], thumbWidth, thumbHeight, cutoutArea, throwException);
                 }
             } catch (MediaFileNotFoundException) {

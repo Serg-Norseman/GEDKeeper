@@ -397,7 +397,7 @@ namespace GEDmill.HTML
 
                 // Add entries for this individual's other names
                 if (!fConcealed && !fUnknownName) {
-                    string other_name = "";
+                    string other_name;
                     for (int i = 1; (other_name = GMHelper.GetName(fIndiRec, i)) != ""; i++) {
                         string other_firstName = "";
                         string other_surname = "";
@@ -718,7 +718,7 @@ namespace GEDmill.HTML
                 f.WriteLine("          <ul>");
 
                 for (int i = 0; i < fReferenceList.Count; i++) {
-                    GDMSourceCitation sourCit = fReferenceList[(int)i];
+                    GDMSourceCitation sourCit = fReferenceList[i];
 
                     string extraInfo = "";
                     var source = fTree.GetPtrValue<GDMSourceRecord>(sourCit);
@@ -880,7 +880,7 @@ namespace GEDmill.HTML
             if (fActualBirthday != null || fActualDeathday != null) {
                 f.WriteLine(string.Concat("            <p>", sBirthday, " - ", sDeathday, "</p>"));
             }
-            if (CConfig.Instance.OccupationHeadline && fOccupation != null && fOccupation != "") {
+            if (CConfig.Instance.OccupationHeadline && !string.IsNullOrEmpty(fOccupation)) {
                 f.WriteLine(string.Concat("            <p>", fOccupation, "</p>"));
             }
             if (fConcealed) {
@@ -962,7 +962,7 @@ namespace GEDmill.HTML
                     f.WriteLine("      <div id=\"miniphotos\">");
 
                     for (int i = 0; i < fMultimediaList.Count; i++) {
-                        iMultimedia = (Multimedia)fMultimediaList[i];
+                        iMultimedia = fMultimediaList[i];
 
                         non_pic_small_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, true, CConfig.Instance.LinkOriginalPicture);
                         non_pic_main_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, CConfig.Instance.LinkOriginalPicture);

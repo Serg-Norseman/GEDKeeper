@@ -15,7 +15,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace WordCloud
+namespace GKWordsCloudPlugin.WordsCloud
 {
     public class CloudViewer : Panel
     {

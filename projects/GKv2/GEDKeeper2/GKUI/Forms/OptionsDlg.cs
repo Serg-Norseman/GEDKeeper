@@ -61,8 +61,8 @@ namespace GKUI.Forms
             fTempColumns = IndividualListMan.CreateIndividualListColumns();
 
             cmbGeoSearchCountry.Items.Clear();
-            foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.FrameworkCultures)) {
-                RegionInfo ri = null;
+            foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures)) {
+                RegionInfo ri;
                 try {
                     ri = new RegionInfo(ci.Name);
                 } catch {

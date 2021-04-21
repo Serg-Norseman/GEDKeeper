@@ -11,15 +11,15 @@
 using System;
 using System.Windows.Forms;
 
-namespace ConwayLife
+namespace GKLifePlugin.ConwayLife
 {
     /// <summary>
     /// 
     /// </summary>
     public partial class OptionsForm : Form
     {
-        private LifeOptions fOptions;
-        private LifeRules fRules;
+        private readonly LifeOptions fOptions;
+        private readonly LifeRules fRules;
 
         public OptionsForm(LifeOptions options, LifeRules rules)
         {

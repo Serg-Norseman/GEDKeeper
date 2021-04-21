@@ -25,7 +25,7 @@ using BSLib.Design;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Stats;
-using WordCloud;
+using GKWordsCloudPlugin.WordsCloud;
 
 namespace GKWordsCloudPlugin
 {

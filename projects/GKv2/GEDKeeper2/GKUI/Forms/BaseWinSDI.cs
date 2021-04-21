@@ -820,7 +820,7 @@ namespace GKUI.Forms
         public void UpdateNavControls()
         {
             try {
-                IWorkWindow workWin = this as IWorkWindow;
+                IWorkWindow workWin = this;
 
                 tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
                 tbNext.Enabled = (workWin != null && workWin.NavCanForward());

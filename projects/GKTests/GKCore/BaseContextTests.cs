@@ -24,7 +24,6 @@ using System.Reflection;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCore;
 using GKCore.Cultures;
 using GKCore.Operations;
 using GKCore.Types;

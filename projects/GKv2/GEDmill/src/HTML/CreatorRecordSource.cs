@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using GDModel;
 using GEDmill.Model;
@@ -84,7 +83,7 @@ namespace GEDmill.HTML
                             break;
                         }
                     }
-                    if (!gotSourceName && fSourceRecord.AutomatedRecordID != null && fSourceRecord.AutomatedRecordID != "") {
+                    if (!gotSourceName && !string.IsNullOrEmpty(fSourceRecord.AutomatedRecordID)) {
                         sourName += fSourceRecord.AutomatedRecordID;
                     } else if (!gotSourceName) {
                         sourName += fSourceRecord.XRef;

@@ -368,8 +368,7 @@ namespace GDModel.Providers.GEDCOM
             }
 
             if (parentTag != null) {
-                StackTuple tuple = null;
-
+                StackTuple tuple;
                 if (addTagHandler != null) {
                     tuple = addTagHandler(parentTag, tagLevel, tagId, tagValue);
                 } else {

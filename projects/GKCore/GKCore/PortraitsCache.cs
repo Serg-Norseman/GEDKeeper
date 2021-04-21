@@ -70,7 +70,7 @@ namespace GKCore
         {
             if (context == null || iRec == null) return null;
 
-            IImage result = null;
+            IImage result;
 
             // get multimedia UID
             string imageUID = context.GetPrimaryBitmapUID(iRec);

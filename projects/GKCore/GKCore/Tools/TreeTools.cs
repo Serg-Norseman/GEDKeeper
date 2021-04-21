@@ -85,9 +85,8 @@ namespace GKCore.Tools
                 GDMFamilyRecord family = tree.GetPtrValue(ancestorRec.SpouseToFamilyLinks[i]);
                 GDMIndividualRecord spouse = tree.GetSpouseBy(family, ancestorRec);
 
-                bool res;
                 if (spouse != null) {
-                    res = PL_SearchAnc(tree, spouse, searchRec, (ancestorRec.Sex == GDMSex.svFemale));
+                    bool res = PL_SearchAnc(tree, spouse, searchRec, (ancestorRec.Sex == GDMSex.svFemale));
                     if (res) {
                         cross = ancestorRec;
                         return cross;

@@ -14,7 +14,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using GKUI.Components;
 
-namespace ConwayLife
+namespace GKLifePlugin.ConwayLife
 {
     public class LifeViewer : UserControl
     {

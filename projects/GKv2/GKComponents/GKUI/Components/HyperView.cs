@@ -42,12 +42,12 @@ namespace GKUI.Components
         private readonly List<BBTextChunk> fChunks;
         private readonly List<int> fHeights;
         private readonly StringList fLines;
+        private readonly StringFormat fStrFormat;
 
         private bool fAcceptFontChange;
         private int fBorderWidth;
         private BBTextChunk fCurrentLink;
         private Color fLinkColor;
-        private StringFormat fStrFormat;
         private ExtSize fTextSize;
         private bool fWordWrap;
 

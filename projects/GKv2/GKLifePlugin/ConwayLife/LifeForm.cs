@@ -11,7 +11,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace ConwayLife
+namespace GKLifePlugin.ConwayLife
 {
     public partial class LifeForm : Form
     {

@@ -25,12 +25,9 @@ using GKCore.Interfaces;
 
 namespace GKCore.Options
 {
-    public class EListOptionsException : Exception
+    public class ListOptionsException : Exception
     {
-        public EListOptionsException()
-        {
-        }
-        public EListOptionsException(string message) : base(message)
+        public ListOptionsException(string message) : base(message)
         {
         }
     }
@@ -84,7 +81,7 @@ namespace GKCore.Options
             try {
                 SortColumn = iniFile.ReadInteger(fName, "SortColumn", 0);
             } catch (Exception) {
-                throw new EListOptionsException("Error loading ListOptions");
+                throw new ListOptionsException("Error loading ListOptions");
             }
         }
 

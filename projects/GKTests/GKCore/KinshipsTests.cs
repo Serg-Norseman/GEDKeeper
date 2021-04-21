@@ -20,7 +20,6 @@
 
 using System;
 using GDModel;
-using GKCore;
 using GKCore.Kinships;
 using GKCore.Types;
 using GKTests;

@@ -883,8 +883,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static string GetDateStr(DateTime date)
         {
-            string result;
-            result = string.Format("{0:00} {1} {2:0000}", new object[] { date.Day, GEDCOMConsts.GEDCOMMonthArray[date.Month-1], date.Year });
+            var result = string.Format("{0:00} {1} {2:0000}", new object[] { date.Day, GEDCOMConsts.GEDCOMMonthArray[date.Month-1], date.Year });
             return result;
         }
 

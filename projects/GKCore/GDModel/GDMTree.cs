@@ -118,7 +118,18 @@ namespace GDModel
 
             public bool MoveNext(out GDMRecord current)
             {
-                return MoveNext(out current);
+                while (fIndex < fEndIndex) {
+                    fIndex++;
+                    var rec = fTree[fIndex];
+                    if (rec != null) {
+                        current = rec;
+                        return true;
+                    }
+                }
+
+                fIndex = fEndIndex + 1;
+                current = null;
+                return false;
             }
 
             public void Reset()
