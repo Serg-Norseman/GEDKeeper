@@ -47,6 +47,7 @@ namespace GKUI.Forms
 
             cmbStoreType = new ComboBox();
             cmbStoreType.ReadOnly = true;
+            cmbStoreType.SelectedIndexChanged += cmbStoreType_SelectedIndexChanged;
 
             txtFile = new TextBox();
             txtFile.ReadOnly = true;

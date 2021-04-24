@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -219,7 +219,7 @@ namespace GKCore.Export
 
                 fWriter.EndMulticolumns();
             } catch (Exception ex) {
-                Logger.LogWrite("FamilyBookExporter.InternalGenerate(): " + ex.Message);
+                Logger.WriteError("FamilyBookExporter.InternalGenerate()", ex);
                 throw;
             }
         }
@@ -256,13 +256,12 @@ namespace GKCore.Export
 
                     int srcNum2 = evt.SourceCitations.Count;
                     for (int m = 0; m < srcNum2; m++) {
-                        GDMSourceRecord src = evt.SourceCitations[m].Value as GDMSourceRecord;
-                        if (src == null)
-                            continue;
+                        var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(evt.SourceCitations[m]);
+                        if (sourceRec == null) continue;
 
-                        st = src.ShortTitle;
+                        st = sourceRec.ShortTitle;
                         if (string.IsNullOrEmpty(st))
-                            st = src.Title.Lines.Text;
+                            st = sourceRec.Title.Lines.Text;
                         PrepareSpecIndex(sourcesIndex, st, iRec);
                     }
 
@@ -302,13 +301,12 @@ namespace GKCore.Export
 
                 int srcNum = iRec.SourceCitations.Count;
                 for (int k = 0; k < srcNum; k++) {
-                    GDMSourceRecord src = iRec.SourceCitations[k].Value as GDMSourceRecord;
-                    if (src == null)
-                        continue;
+                    var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(iRec.SourceCitations[k]);
+                    if (sourceRec == null) continue;
 
-                    st = src.ShortTitle;
+                    st = sourceRec.ShortTitle;
                     if (string.IsNullOrEmpty(st))
-                        st = src.Title.Lines.Text;
+                        st = sourceRec.Title.Lines.Text;
                     PrepareSpecIndex(sourcesIndex, st, iRec);
                 }
             }
@@ -336,14 +334,7 @@ namespace GKCore.Export
             fWriter.AddImage(image);
 
             GDMIndividualRecord father, mother;
-            GDMFamilyRecord fam = iRec.GetParentsFamily();
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
-                father = fam.Husband.Individual;
-                mother = fam.Wife.Individual;
-            }
+            fBase.Context.Tree.GetParents(iRec, out father, out mother);
 
             if (father != null) {
                 fWriter.BeginParagraph(TextAlignment.taLeft, 0, 0, 0);
@@ -369,7 +360,7 @@ namespace GKCore.Export
                     
                     string evtName = GKUtils.GetEventName(evt);
                     string evtVal = evt.StringValue;
-                    string evtDesc = GKUtils.GetEventDesc(evt, false);
+                    string evtDesc = GKUtils.GetEventDesc(fBase.Context.Tree, evt, false);
 
                     string tmp = evtName + ": " + evtVal;
                     if (evtVal != "")
@@ -383,8 +374,8 @@ namespace GKCore.Export
             if (IncludeNotes && iRec.Notes.Count != 0) {
                 int num = iRec.Notes.Count;
                 for (int i = 0; i < num; i++) {
-                    GDMNotes note = iRec.Notes[i];
-                    fWriter.AddParagraph(GKUtils.MergeStrings(note.Lines), fTextFont);
+                    GDMLines noteLines = fTree.GetNoteLines(iRec.Notes[i]);
+                    fWriter.AddParagraph(GKUtils.MergeStrings(noteLines), fTextFont);
                 }
             }
         }

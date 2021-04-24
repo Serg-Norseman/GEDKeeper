@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,12 +73,12 @@ namespace GDModel
         }
 
 
-        public GDMMultimediaLink(GDMObject owner) : base(owner)
+        public GDMMultimediaLink()
         {
             SetName(GEDCOMTagType.OBJE);
 
-            fCutoutPosition = new GDMCutoutPosition(this);
-            fFileReferences = new GDMList<GDMFileReference>(this);
+            fCutoutPosition = new GDMCutoutPosition();
+            fFileReferences = new GDMList<GDMFileReference>();
             fIsPrimary = false;
             fIsPrimaryCutout = false;
             fTitle = string.Empty;
@@ -90,6 +90,14 @@ namespace GDModel
                 fFileReferences.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fCutoutPosition.TrimExcess();
+            fFileReferences.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -131,33 +139,21 @@ namespace GDModel
 
         protected override string GetStringValue()
         {
-            string result = IsPointer ? base.GetStringValue() : fStringValue;
+            string result = IsPointer ? base.GetStringValue() : string.Empty;
             return result;
         }
 
-        public override string ParseString(string strValue)
-        {
-            fStringValue = string.Empty;
-            return base.ParseString(strValue);
-        }
-
-        public string GetUID()
+        public string GetUID(GDMTree tree)
         {
             string result = null;
             try {
-                if (Value != null) {
-                    ExtRect cutoutArea;
-                    if (IsPrimaryCutout) {
-                        cutoutArea = CutoutPosition.Value;
-                    } else {
-                        cutoutArea = ExtRect.CreateEmpty();
-                    }
-
-                    GDMMultimediaRecord mmRec = (GDMMultimediaRecord)Value;
+                var mmRec = tree.GetPtrValue<GDMMultimediaRecord>(this);
+                if (mmRec != null) {
+                    ExtRect cutoutArea = IsPrimaryCutout ? CutoutPosition.Value : ExtRect.CreateEmpty();
                     result = mmRec.UID + "-" + GKUtils.GetRectUID(cutoutArea.Left, cutoutArea.Top, cutoutArea.Right, cutoutArea.Bottom);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GDMMultimediaLink.GetUID(): " + ex.Message);
+                Logger.WriteError("GDMMultimediaLink.GetUID()", ex);
                 result = null;
             }
             return result;

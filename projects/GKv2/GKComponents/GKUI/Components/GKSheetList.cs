@@ -25,7 +25,6 @@ using System.Windows.Forms;
 using BSLib;
 using BSLib.Design.MVP.Controls;
 using GKCore;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 

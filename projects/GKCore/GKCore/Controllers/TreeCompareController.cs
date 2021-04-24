@@ -69,7 +69,7 @@ namespace GKCore.Controllers
                     break;
 
                 case TreeMatchType.tmtExternal:
-                    TreeTools.CompareTree(fBase.Context, fExternalFile, ((ITreeCompareDlg)fView).CompareOutput);
+                    TreeTools.CompareTree(fBase.Context, fExternalFile, fView.CompareOutput);
                     break;
 
                 case TreeMatchType.tmtAnalysis:

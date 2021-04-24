@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,6 +36,10 @@ namespace GDModel.Providers.GEDCOM
     /// <summary>
     /// GEDCOMParser tokenized string into tokens.
     /// </summary>
+    /// <remarks>
+    /// This class has been heavily refactored under profiling. Any alterations must take into account the factor 
+    /// of performance degradation when changing the approach, even in small things.
+    /// </remarks>
     public sealed class GEDCOMParser
     {
         private const char EOL = (char)0;
@@ -264,7 +268,7 @@ namespace GDModel.Providers.GEDCOM
         public void RequestSymbol(char symbol)
         {
             if (fCurrentToken != GEDCOMToken.Symbol || GetSymbol() != symbol) {
-                throw new Exception("Required symbol not found");
+                throw new GEDCOMParserException("Required symbol not found");
             }
         }
 
@@ -272,14 +276,14 @@ namespace GDModel.Providers.GEDCOM
         {
             var token = Next();
             if (token != GEDCOMToken.Symbol || GetSymbol() != symbol) {
-                throw new Exception("Required symbol not found");
+                throw new GEDCOMParserException("Required symbol not found");
             }
         }
 
         public int RequestInt()
         {
             if (fCurrentToken != GEDCOMToken.Number) {
-                throw new Exception("Required integer not found");
+                throw new GEDCOMParserException("Required integer not found");
             }
             return GetNumber();
         }
@@ -288,9 +292,14 @@ namespace GDModel.Providers.GEDCOM
         {
             var token = Next();
             if (token != GEDCOMToken.Number) {
-                throw new Exception("Required integer not found");
+                throw new GEDCOMParserException("Required integer not found");
             }
             return GetNumber();
+        }
+
+        public int TokenLength()
+        {
+            return fTokenEnd - fSavePos;
         }
     }
 }

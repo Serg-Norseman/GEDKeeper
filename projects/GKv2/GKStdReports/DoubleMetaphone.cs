@@ -42,13 +42,13 @@ namespace GKStdReports
         private readonly StringBuilder m_primaryKey, m_alternateKey;
         
         ///Actual keys, populated after construction
-        private String m_primaryKeyString, m_alternateKeyString;
+        private string m_primaryKeyString, m_alternateKeyString;
         
         ///Variables to track the key length w/o having to grab the .Length attr
         private int m_primaryKeyLength, m_alternateKeyLength;
         
         ///Working copy of the word, and the orFamilySearchnal word
-        private String m_word, m_orFamilySearchnalWord;
+        private string m_word, m_orFamilySearchnalWord;
         
         ///Length and last valid zero-based index into word
         int m_length, m_last;
@@ -58,12 +58,13 @@ namespace GKStdReports
         
         /// <summary>Default ctor, initializes by computing the keys of an empty string,
         ///     which are both empty strings</summary>
-        public DoubleMetaphone() {
+        public DoubleMetaphone()
+        {
             //Leave room at the end for writing a bit beyond the length; keys are chopped at the end anyway
             m_primaryKey = new StringBuilder(METAPHONE_KEY_LENGTH+2);
             m_alternateKey = new StringBuilder(METAPHONE_KEY_LENGTH+2);
             
-            computeKeys("");
+            ComputeKeys("");
         }
         
         /// <summary>Constructs a new DoubleMetaphone object, and initializes it with
@@ -71,16 +72,18 @@ namespace GKStdReports
         /// 
         /// <param name="word">Word with which to initialize the object.  Computes the metaphone keys
         ///     of this word.</param>
-        public DoubleMetaphone(String word) {
+        public DoubleMetaphone(string word)
+        {
             //Leave room at the end for writing a bit beyond the length; keys are chopped at the end anyway
             m_primaryKey = new StringBuilder(METAPHONE_KEY_LENGTH+2);
             m_alternateKey = new StringBuilder(METAPHONE_KEY_LENGTH+2);
             
-            computeKeys(word);
+            ComputeKeys(word);
         }
         
         /// <summary>The primary metaphone key for the current word</summary>
-        public String PrimaryKey {
+        public string PrimaryKey
+        {
             get {
                 return m_primaryKeyString;
             }
@@ -88,14 +91,16 @@ namespace GKStdReports
         
         /// <summary>The alternate metaphone key for the current word, or null if the current
         ///     word does not have an alternate key by Double Metaphone</summary>
-        public String AlternateKey {
+        public string AlternateKey
+        {
             get {
                 return m_hasAlternate ? m_alternateKeyString : null;
             }
         }
         
         /// <summary>OrFamilySearchnal word for which the keys were computed</summary>
-        public String Word {
+        public string Word
+        {
             get {
                 return m_orFamilySearchnalWord;
             }
@@ -108,7 +113,8 @@ namespace GKStdReports
         /// <param name="primaryKey">Ref to var to receive primary metaphone key</param>
         /// <param name="alternateKey">Ref to var to receive alternate metaphone key, or be set to null if
         ///     word has no alternate key by double metaphone</param>
-        static public void doubleMetaphone(String word, ref String primaryKey, ref String alternateKey) {
+        public static void doubleMetaphone(string word, ref string primaryKey, ref string alternateKey)
+        {
             DoubleMetaphone mp = new DoubleMetaphone(word);
             
             primaryKey = mp.PrimaryKey;
@@ -120,7 +126,8 @@ namespace GKStdReports
         /// 
         /// <param name="word">New word to set to current word.  Discards previous metaphone keys,
         ///     and computes new keys for this word</param>
-        public void computeKeys(String word) {
+        public virtual void ComputeKeys(string word)
+        {
             m_primaryKey.Length = 0;
             m_alternateKey.Length = 0;
             
@@ -148,25 +155,26 @@ namespace GKStdReports
             m_word = m_word.ToUpper();
             
             //Now build the keys
-            buildMetaphoneKeys();
+            BuildMetaphoneKeys();
         }
         
         /**
          * Internal impl of double metaphone algorithm.  Populates m_primaryKey and m_alternateKey.  Modified copy-past of
          * Phillips' orFamilySearchnal code
          */
-        private void buildMetaphoneKeys() {
+        private void BuildMetaphoneKeys()
+        {
             int current = 0;
             if (m_length < 1)
                 return;
             
             //skip these when at start of word
-            if (areStringsAt(0, 2, "GN", "KN", "PN", "WR", "PS"))
+            if (AreStringsAt(0, 2, "GN", "KN", "PN", "WR", "PS"))
                 current += 1;
             
             //Initial 'X' is pronounced 'Z' e.g. 'Xavier'
             if (m_word[0] == 'X') {
-                addMetaphoneCharacter("S");	//'Z' maps to 'S'
+                AddMetaphoneCharacter("S");	//'Z' maps to 'S'
                 current += 1;
             }
             
@@ -184,14 +192,14 @@ namespace GKStdReports
                     case 'Y':
                         if (current == 0)
                             //all init vowels now map to 'A'
-                            addMetaphoneCharacter("A");
+                            AddMetaphoneCharacter("A");
                         current +=1;
                         break;
                         
                     case 'B':
                         
                         //"-mb", e.g", "dumb", already skipped over...
-                        addMetaphoneCharacter("P");
+                        AddMetaphoneCharacter("P");
                         
                         if (m_word[current + 1] == 'B')
                             current +=2;
@@ -200,161 +208,161 @@ namespace GKStdReports
                         break;
                         
                     case 'З':
-                        addMetaphoneCharacter("S");
+                        AddMetaphoneCharacter("S");
                         current += 1;
                         break;
                         
                     case 'C':
                         //various germanic
                         if ((current > 1)
-                            && !isVowel(current - 2)
-                            && areStringsAt((current - 1), 3, "ACH")
+                            && !IsVowel(current - 2)
+                            && AreStringsAt((current - 1), 3, "ACH")
                             && ((m_word[current + 2] != 'I') && ((m_word[current + 2] != 'E')
-                                                                 || areStringsAt((current - 2), 6, "BACHER", "MACHER")) )) {
-                            addMetaphoneCharacter("K");
+                                                                 || AreStringsAt((current - 2), 6, "BACHER", "MACHER")) )) {
+                            AddMetaphoneCharacter("K");
                             current +=2;
                             break;
                         }
                         
                         //special case 'caesar'
-                        if ((current == 0) && areStringsAt(current, 6, "CAESAR")) {
-                            addMetaphoneCharacter("S");
+                        if ((current == 0) && AreStringsAt(current, 6, "CAESAR")) {
+                            AddMetaphoneCharacter("S");
                             current +=2;
                             break;
                         }
                         
                         //italian 'chianti'
-                        if (areStringsAt(current, 4, "CHIA")) {
-                            addMetaphoneCharacter("K");
+                        if (AreStringsAt(current, 4, "CHIA")) {
+                            AddMetaphoneCharacter("K");
                             current +=2;
                             break;
                         }
                         
-                        if (areStringsAt(current, 2, "CH")) {
+                        if (AreStringsAt(current, 2, "CH")) {
                             //find 'michael'
-                            if ((current > 0) && areStringsAt(current, 4, "CHAE")) {
-                                addMetaphoneCharacter("K", "X");
+                            if ((current > 0) && AreStringsAt(current, 4, "CHAE")) {
+                                AddMetaphoneCharacter("K", "X");
                                 current +=2;
                                 break;
                             }
                             
                             //greek roots e.g. 'chemistry', 'chorus'
                             if ((current == 0)
-                                && (areStringsAt((current + 1), 5, "HARAC", "HARIS")
-                                    || areStringsAt((current + 1), 3, "HOR", "HYM", "HIA", "HEM"))
-                                && !areStringsAt(0, 5, "CHORE")) {
-                                addMetaphoneCharacter("K");
+                                && (AreStringsAt((current + 1), 5, "HARAC", "HARIS")
+                                    || AreStringsAt((current + 1), 3, "HOR", "HYM", "HIA", "HEM"))
+                                && !AreStringsAt(0, 5, "CHORE")) {
+                                AddMetaphoneCharacter("K");
                                 current +=2;
                                 break;
                             }
                             
                             //germanic, greek, or otherwise 'ch' for 'kh' sound
-                            if ((areStringsAt(0, 4, "VAN ", "VON ") || areStringsAt(0, 3, "SCH"))
+                            if ((AreStringsAt(0, 4, "VAN ", "VON ") || AreStringsAt(0, 3, "SCH"))
                                 // 'architect but not 'arch', 'orchestra', 'orchid'
-                                || areStringsAt((current - 2), 6, "ORCHES", "ARCHIT", "ORCHID")
-                                || areStringsAt((current + 2), 1, "T", "S")
-                                || ((areStringsAt((current - 1), 1, "A", "O", "U", "E") || (current == 0))
+                                || AreStringsAt((current - 2), 6, "ORCHES", "ARCHIT", "ORCHID")
+                                || AreStringsAt((current + 2), 1, "T", "S")
+                                || ((AreStringsAt((current - 1), 1, "A", "O", "U", "E") || (current == 0))
                                     //e.g., 'wachtler', 'wechsler', but not 'tichner'
-                                    && areStringsAt((current + 2), 1, "L", "R", "N", "M", "B", "H", "F", "V", "W", " "))) {
-                                addMetaphoneCharacter("K");
+                                    && AreStringsAt((current + 2), 1, "L", "R", "N", "M", "B", "H", "F", "V", "W", " "))) {
+                                AddMetaphoneCharacter("K");
                             } else {
                                 if (current > 0) {
-                                    if (areStringsAt(0, 2, "MC"))
+                                    if (AreStringsAt(0, 2, "MC"))
                                         //e.g., "McHugh"
-                                        addMetaphoneCharacter("K");
+                                        AddMetaphoneCharacter("K");
                                     else
-                                        addMetaphoneCharacter("X", "K");
+                                        AddMetaphoneCharacter("X", "K");
                                 } else
-                                    addMetaphoneCharacter("X");
+                                    AddMetaphoneCharacter("X");
                             }
                             current +=2;
                             break;
                         }
                         //e.g, 'czerny'
-                        if (areStringsAt(current, 2, "CZ") && !areStringsAt((current - 2), 4, "WICZ")) {
-                            addMetaphoneCharacter("S", "X");
+                        if (AreStringsAt(current, 2, "CZ") && !AreStringsAt((current - 2), 4, "WICZ")) {
+                            AddMetaphoneCharacter("S", "X");
                             current += 2;
                             break;
                         }
                         
                         //e.g., 'focaccia'
-                        if (areStringsAt((current + 1), 3, "CIA")) {
-                            addMetaphoneCharacter("X");
+                        if (AreStringsAt((current + 1), 3, "CIA")) {
+                            AddMetaphoneCharacter("X");
                             current += 3;
                             break;
                         }
                         
                         //double 'C', but not if e.g. 'McClellan'
-                        if (areStringsAt(current, 2, "CC") && !((current == 1) && (m_word[0] == 'M')))
+                        if (AreStringsAt(current, 2, "CC") && !((current == 1) && (m_word[0] == 'M')))
                             //'bellocchio' but not 'bacchus'
-                            if (areStringsAt((current + 2), 1, "I", "E", "H") && !areStringsAt((current + 2), 2, "HU")) {
+                            if (AreStringsAt((current + 2), 1, "I", "E", "H") && !AreStringsAt((current + 2), 2, "HU")) {
                             //'accident', 'accede' 'succeed'
                             if (((current == 1) && (m_word[current - 1] == 'A'))
-                                || areStringsAt((current - 1), 5, "UCCEE", "UCCES"))
-                                addMetaphoneCharacter("KS");
+                                || AreStringsAt((current - 1), 5, "UCCEE", "UCCES"))
+                                AddMetaphoneCharacter("KS");
                             //'bacci', 'bertucci', other italian
                             else
-                                addMetaphoneCharacter("X");
+                                AddMetaphoneCharacter("X");
                             current += 3;
                             break;
                         } else {//Pierce's rule
-                            addMetaphoneCharacter("K");
+                            AddMetaphoneCharacter("K");
                             current += 2;
                             break;
                         }
                         
-                        if (areStringsAt(current, 2, "CK", "CG", "CQ")) {
-                            addMetaphoneCharacter("K");
+                        if (AreStringsAt(current, 2, "CK", "CG", "CQ")) {
+                            AddMetaphoneCharacter("K");
                             current += 2;
                             break;
                         }
                         
-                        if (areStringsAt(current, 2, "CI", "CE", "CY")) {
+                        if (AreStringsAt(current, 2, "CI", "CE", "CY")) {
                             //italian vs. english
-                            if (areStringsAt(current, 3, "CIO", "CIE", "CIA"))
-                                addMetaphoneCharacter("S", "X");
+                            if (AreStringsAt(current, 3, "CIO", "CIE", "CIA"))
+                                AddMetaphoneCharacter("S", "X");
                             else
-                                addMetaphoneCharacter("S");
+                                AddMetaphoneCharacter("S");
                             current += 2;
                             break;
                         }
                         
                         //else
-                        addMetaphoneCharacter("K");
+                        AddMetaphoneCharacter("K");
                         
                         //name sent in 'mac caffrey', 'mac gregor
-                        if (areStringsAt((current + 1), 2, " C", " Q", " G"))
+                        if (AreStringsAt((current + 1), 2, " C", " Q", " G"))
                             current += 3;
                         else
-                            if (areStringsAt((current + 1), 1, "C", "K", "Q")
-                                && !areStringsAt((current + 1), 2, "CE", "CI"))
+                            if (AreStringsAt((current + 1), 1, "C", "K", "Q")
+                                && !AreStringsAt((current + 1), 2, "CE", "CI"))
                                 current += 2;
                             else
                                 current	+= 1;
                         break;
                         
                     case 'D':
-                        if (areStringsAt(current, 2, "DG"))
-                            if (areStringsAt((current + 2), 1, "I", "E", "Y")) {
+                        if (AreStringsAt(current, 2, "DG"))
+                            if (AreStringsAt((current + 2), 1, "I", "E", "Y")) {
                             //e.g. 'edge'
-                            addMetaphoneCharacter("J");
+                            AddMetaphoneCharacter("J");
                             current += 3;
                             break;
                         } else {
                             //e.g. 'edgar'
-                            addMetaphoneCharacter("TK");
+                            AddMetaphoneCharacter("TK");
                             current += 2;
                             break;
                         }
                         
-                        if (areStringsAt(current, 2, "DT", "DD")) {
-                            addMetaphoneCharacter("T");
+                        if (AreStringsAt(current, 2, "DT", "DD")) {
+                            AddMetaphoneCharacter("T");
                             current += 2;
                             break;
                         }
                         
                         //else
-                        addMetaphoneCharacter("T");
+                        AddMetaphoneCharacter("T");
                         current += 1;
                         break;
                         
@@ -363,13 +371,13 @@ namespace GKStdReports
                             current += 2;
                         else
                             current	+= 1;
-                        addMetaphoneCharacter("F");
+                        AddMetaphoneCharacter("F");
                         break;
                         
                     case 'G':
                         if (m_word[current + 1] == 'H') {
-                            if ((current > 0) && !isVowel(current - 1)) {
-                                addMetaphoneCharacter("K");
+                            if ((current > 0) && !IsVowel(current - 1)) {
+                                AddMetaphoneCharacter("K");
                                 current += 2;
                                 break;
                             }
@@ -378,30 +386,30 @@ namespace GKStdReports
                                 //'ghislane', ghiradelli
                                 if (current == 0) {
                                     if (m_word[current + 2] == 'I')
-                                        addMetaphoneCharacter("J");
+                                        AddMetaphoneCharacter("J");
                                     else
-                                        addMetaphoneCharacter("K");
+                                        AddMetaphoneCharacter("K");
                                     current += 2;
                                     break;
                                 }
                             }
                             //Parker's rule (with some further refinements) - e.g., 'hugh'
-                            if (((current > 1) && areStringsAt((current - 2), 1, "B", "H", "D") )
+                            if (((current > 1) && AreStringsAt((current - 2), 1, "B", "H", "D") )
                                 //e.g., 'bough'
-                                || ((current > 2) && areStringsAt((current - 3), 1, "B", "H", "D") )
+                                || ((current > 2) && AreStringsAt((current - 3), 1, "B", "H", "D") )
                                 //e.g., 'broughton'
-                                || ((current > 3) && areStringsAt((current - 4), 1, "B", "H") )) {
+                                || ((current > 3) && AreStringsAt((current - 4), 1, "B", "H") )) {
                                 current += 2;
                                 break;
                             } else {
                                 //e.g., 'laugh', 'McLaughlin', 'cough', 'gough', 'rough', 'tough'
                                 if ((current > 2)
                                     && (m_word[current - 1] == 'U')
-                                    && areStringsAt((current - 3), 1, "C", "G", "L", "R", "T")) {
-                                    addMetaphoneCharacter("F");
+                                    && AreStringsAt((current - 3), 1, "C", "G", "L", "R", "T")) {
+                                    AddMetaphoneCharacter("F");
                                 } else
                                     if ((current > 0) && m_word[current - 1] != 'I')
-                                        addMetaphoneCharacter("K");
+                                        AddMetaphoneCharacter("K");
                                 
                                 current += 2;
                                 break;
@@ -409,22 +417,22 @@ namespace GKStdReports
                         }
                         
                         if (m_word[current + 1] == 'N') {
-                            if ((current == 1) && isVowel(0) && !isWordSlavoGermanic()) {
-                                addMetaphoneCharacter("KN", "N");
+                            if ((current == 1) && IsVowel(0) && !IsWordSlavoGermanic()) {
+                                AddMetaphoneCharacter("KN", "N");
                             } else
                                 //not e.g. 'cagney'
-                                if (!areStringsAt((current + 2), 2, "EY")
-                                    && (m_word[current + 1] != 'Y') && !isWordSlavoGermanic()) {
-                                addMetaphoneCharacter("N", "KN");
+                                if (!AreStringsAt((current + 2), 2, "EY")
+                                    && (m_word[current + 1] != 'Y') && !IsWordSlavoGermanic()) {
+                                AddMetaphoneCharacter("N", "KN");
                             } else
-                                addMetaphoneCharacter("KN");
+                                AddMetaphoneCharacter("KN");
                             current += 2;
                             break;
                         }
                         
                         //'tagliaro'
-                        if (areStringsAt((current + 1), 2, "LI") && !isWordSlavoGermanic()) {
-                            addMetaphoneCharacter("KL", "L");
+                        if (AreStringsAt((current + 1), 2, "LI") && !IsWordSlavoGermanic()) {
+                            AddMetaphoneCharacter("KL", "L");
                             current += 2;
                             break;
                         }
@@ -432,34 +440,34 @@ namespace GKStdReports
                         //-ges-,-gep-,-gel-, -gie- at beginning
                         if ((current == 0)
                             && ((m_word[current + 1] == 'Y')
-                                || areStringsAt((current + 1), 2, "ES", "EP", "EB", "EL", "EY", "IB", "IL", "IN", "IE", "EI", "ER"))) {
-                            addMetaphoneCharacter("K", "J");
+                                || AreStringsAt((current + 1), 2, "ES", "EP", "EB", "EL", "EY", "IB", "IL", "IN", "IE", "EI", "ER"))) {
+                            AddMetaphoneCharacter("K", "J");
                             current += 2;
                             break;
                         }
                         
                         // -ger-,  -gy-
-                        if ((areStringsAt((current + 1), 2, "ER") || (m_word[current + 1] == 'Y'))
-                            && !areStringsAt(0, 6, "DANGER", "RANGER", "MANGER")
-                            && !areStringsAt((current - 1), 1, "E", "I")
-                            && !areStringsAt((current - 1), 3, "RGY", "OGY")) {
-                            addMetaphoneCharacter("K", "J");
+                        if ((AreStringsAt((current + 1), 2, "ER") || (m_word[current + 1] == 'Y'))
+                            && !AreStringsAt(0, 6, "DANGER", "RANGER", "MANGER")
+                            && !AreStringsAt((current - 1), 1, "E", "I")
+                            && !AreStringsAt((current - 1), 3, "RGY", "OGY")) {
+                            AddMetaphoneCharacter("K", "J");
                             current += 2;
                             break;
                         }
                         
                         // italian e.g, 'biaggi'
-                        if (areStringsAt((current + 1), 1, "E", "I", "Y") || areStringsAt((current - 1), 4, "AGGI", "OGGI")) {
+                        if (AreStringsAt((current + 1), 1, "E", "I", "Y") || AreStringsAt((current - 1), 4, "AGGI", "OGGI")) {
                             //obvious germanic
-                            if ((areStringsAt(0, 4, "VAN ", "VON ") || areStringsAt(0, 3, "SCH"))
-                                || areStringsAt((current + 1), 2, "ET"))
-                                addMetaphoneCharacter("K");
+                            if ((AreStringsAt(0, 4, "VAN ", "VON ") || AreStringsAt(0, 3, "SCH"))
+                                || AreStringsAt((current + 1), 2, "ET"))
+                                AddMetaphoneCharacter("K");
                             else
                                 //always soft if french ending
-                                if (areStringsAt((current + 1), 4, "IER "))
-                                    addMetaphoneCharacter("J");
+                                if (AreStringsAt((current + 1), 4, "IER "))
+                                    AddMetaphoneCharacter("J");
                                 else
-                                    addMetaphoneCharacter("J", "K");
+                                    AddMetaphoneCharacter("J", "K");
                             current += 2;
                             break;
                         }
@@ -468,14 +476,14 @@ namespace GKStdReports
                             current += 2;
                         else
                             current	+= 1;
-                        addMetaphoneCharacter("K");
+                        AddMetaphoneCharacter("K");
                         break;
                         
                     case 'H':
                         //only keep if first & before vowel or btw. 2 vowels
-                        if (((current == 0) || isVowel(current - 1))
-                            && isVowel(current + 1)) {
-                            addMetaphoneCharacter("H");
+                        if (((current == 0) || IsVowel(current - 1))
+                            && IsVowel(current + 1)) {
+                            AddMetaphoneCharacter("H");
                             current += 2;
                         } else//also takes care of 'HH'
                             current	+= 1;
@@ -483,31 +491,31 @@ namespace GKStdReports
                         
                     case 'J':
                         //obvious spanish, 'jose', 'san jacinto'
-                        if (areStringsAt(current, 4, "JOSE") || areStringsAt(0, 4, "SAN ")) {
-                            if (((current == 0) && (m_word[current + 4] == ' ')) || areStringsAt(0, 4, "SAN "))
-                                addMetaphoneCharacter("H");
+                        if (AreStringsAt(current, 4, "JOSE") || AreStringsAt(0, 4, "SAN ")) {
+                            if (((current == 0) && (m_word[current + 4] == ' ')) || AreStringsAt(0, 4, "SAN "))
+                                AddMetaphoneCharacter("H");
                             else {
-                                addMetaphoneCharacter("J", "H");
+                                AddMetaphoneCharacter("J", "H");
                             }
                             current +=1;
                             break;
                         }
                         
-                        if ((current == 0) && !areStringsAt(current, 4, "JOSE"))
-                            addMetaphoneCharacter("J", "A"); //Yankelovich/Jankelowicz
+                        if ((current == 0) && !AreStringsAt(current, 4, "JOSE"))
+                            AddMetaphoneCharacter("J", "A"); //Yankelovich/Jankelowicz
                         else
                             //spanish pron. of e.g. 'bajador'
-                            if (isVowel(current - 1)
-                                && !isWordSlavoGermanic()
+                            if (IsVowel(current - 1)
+                                && !IsWordSlavoGermanic()
                                 && ((m_word[current + 1] == 'A') || (m_word[current + 1] == 'O')))
-                                addMetaphoneCharacter("J", "H");
+                                AddMetaphoneCharacter("J", "H");
                             else
                                 if (current == m_last)
-                                    addMetaphoneCharacter("J", " ");
+                                    AddMetaphoneCharacter("J", " ");
                                 else
-                                    if (!areStringsAt((current + 1), 1, "L", "T", "K", "S", "N", "M", "B", "Z")
-                                        && !areStringsAt((current - 1), 1, "S", "K", "L"))
-                                        addMetaphoneCharacter("J");
+                                    if (!AreStringsAt((current + 1), 1, "L", "T", "K", "S", "N", "M", "B", "Z")
+                                        && !AreStringsAt((current - 1), 1, "S", "K", "L"))
+                                        AddMetaphoneCharacter("J");
                         
                         if (m_word[current + 1] == 'J') //it could happen!
                             current += 2;
@@ -520,35 +528,35 @@ namespace GKStdReports
                             current += 2;
                         else
                             current	+= 1;
-                        addMetaphoneCharacter("K");
+                        AddMetaphoneCharacter("K");
                         break;
                         
                     case 'L':
                         if (m_word[current + 1] == 'L') {
                             //spanish e.g. 'cabrillo', 'gallegos'
                             if (((current == (m_length - 3))
-                                 && areStringsAt((current - 1), 4, "ILLO", "ILLA", "ALLE"))
-                                || ((areStringsAt((m_last - 1), 2, "AS", "OS") || areStringsAt(m_last, 1, "A", "O"))
-                                    && areStringsAt((current - 1), 4, "ALLE"))) {
-                                addMetaphoneCharacter("L", " ");
+                                 && AreStringsAt((current - 1), 4, "ILLO", "ILLA", "ALLE"))
+                                || ((AreStringsAt((m_last - 1), 2, "AS", "OS") || AreStringsAt(m_last, 1, "A", "O"))
+                                    && AreStringsAt((current - 1), 4, "ALLE"))) {
+                                AddMetaphoneCharacter("L", " ");
                                 current += 2;
                                 break;
                             }
                             current += 2;
                         } else
                             current	+= 1;
-                        addMetaphoneCharacter("L");
+                        AddMetaphoneCharacter("L");
                         break;
                         
                     case 'M':
-                        if ((areStringsAt((current - 1), 3, "UMB")
-                             && (((current + 1) == m_last) || areStringsAt((current + 2), 2, "ER")))
+                        if ((AreStringsAt((current - 1), 3, "UMB")
+                             && (((current + 1) == m_last) || AreStringsAt((current + 2), 2, "ER")))
                             //'dumb','thumb'
                             ||  (m_word[current + 1] == 'M'))
                             current += 2;
                         else
                             current	+= 1;
-                        addMetaphoneCharacter("M");
+                        AddMetaphoneCharacter("M");
                         break;
                         
                     case 'N':
@@ -556,27 +564,27 @@ namespace GKStdReports
                             current += 2;
                         else
                             current	+= 1;
-                        addMetaphoneCharacter("N");
+                        AddMetaphoneCharacter("N");
                         break;
                         
                     case 'С':
                         current += 1;
-                        addMetaphoneCharacter("N");
+                        AddMetaphoneCharacter("N");
                         break;
                         
                     case 'P':
                         if (m_word[current + 1] == 'H') {
-                            addMetaphoneCharacter("F");
+                            AddMetaphoneCharacter("F");
                             current += 2;
                             break;
                         }
                         
                         //also account for "campbell", "raspberry"
-                        if (areStringsAt((current + 1), 1, "P", "B"))
+                        if (AreStringsAt((current + 1), 1, "P", "B"))
                             current += 2;
                         else
                             current	+= 1;
-                        addMetaphoneCharacter("P");
+                        AddMetaphoneCharacter("P");
                         break;
                         
                     case 'Q':
@@ -584,18 +592,18 @@ namespace GKStdReports
                             current += 2;
                         else
                             current	+= 1;
-                        addMetaphoneCharacter("K");
+                        AddMetaphoneCharacter("K");
                         break;
                         
                     case 'R':
                         //french e.g. 'rogier', but exclude 'hochmeier'
                         if ((current == m_last)
-                            && !isWordSlavoGermanic()
-                            && areStringsAt((current - 2), 2, "IE")
-                            && !areStringsAt((current - 4), 2, "ME", "MA"))
-                            addMetaphoneCharacter("", "R");
+                            && !IsWordSlavoGermanic()
+                            && AreStringsAt((current - 2), 2, "IE")
+                            && !AreStringsAt((current - 4), 2, "ME", "MA"))
+                            AddMetaphoneCharacter("", "R");
                         else
-                            addMetaphoneCharacter("R");
+                            AddMetaphoneCharacter("R");
                         
                         if (m_word[current + 1] == 'R')
                             current += 2;
@@ -605,34 +613,34 @@ namespace GKStdReports
                         
                     case 'S':
                         //special cases 'island', 'isle', 'carlisle', 'carlysle'
-                        if (areStringsAt((current - 1), 3, "ISL", "YSL")) {
+                        if (AreStringsAt((current - 1), 3, "ISL", "YSL")) {
                             current += 1;
                             break;
                         }
                         
                         //special case 'sugar-'
-                        if ((current == 0) && areStringsAt(current, 5, "SUGAR")) {
-                            addMetaphoneCharacter("X", "S");
+                        if ((current == 0) && AreStringsAt(current, 5, "SUGAR")) {
+                            AddMetaphoneCharacter("X", "S");
                             current += 1;
                             break;
                         }
                         
-                        if (areStringsAt(current, 2, "SH")) {
+                        if (AreStringsAt(current, 2, "SH")) {
                             //germanic
-                            if (areStringsAt((current + 1), 4, "HEIM", "HOEK", "HOLM", "HOLZ"))
-                                addMetaphoneCharacter("S");
+                            if (AreStringsAt((current + 1), 4, "HEIM", "HOEK", "HOLM", "HOLZ"))
+                                AddMetaphoneCharacter("S");
                             else
-                                addMetaphoneCharacter("X");
+                                AddMetaphoneCharacter("X");
                             current += 2;
                             break;
                         }
                         
                         //italian & armenian
-                        if (areStringsAt(current, 3, "SIO", "SIA") || areStringsAt(current, 4, "SIAN")) {
-                            if (!isWordSlavoGermanic())
-                                addMetaphoneCharacter("S", "X");
+                        if (AreStringsAt(current, 3, "SIO", "SIA") || AreStringsAt(current, 4, "SIAN")) {
+                            if (!IsWordSlavoGermanic())
+                                AddMetaphoneCharacter("S", "X");
                             else
-                                addMetaphoneCharacter("S");
+                                AddMetaphoneCharacter("S");
                             current += 3;
                             break;
                         }
@@ -640,92 +648,92 @@ namespace GKStdReports
                         //german & anglicisations, e.g. 'smith' match 'schmidt', 'snider' match 'schneider'
                         //also, -sz- in slavic language altho in hungarian it is pronounced 's'
                         if (((current == 0)
-                             && areStringsAt((current + 1), 1, "M", "N", "L", "W"))
-                            || areStringsAt((current + 1), 1, "Z")) {
-                            addMetaphoneCharacter("S", "X");
-                            if (areStringsAt((current + 1), 1, "Z"))
+                             && AreStringsAt((current + 1), 1, "M", "N", "L", "W"))
+                            || AreStringsAt((current + 1), 1, "Z")) {
+                            AddMetaphoneCharacter("S", "X");
+                            if (AreStringsAt((current + 1), 1, "Z"))
                                 current += 2;
                             else
                                 current	+= 1;
                             break;
                         }
                         
-                        if (areStringsAt(current, 2, "SC")) {
+                        if (AreStringsAt(current, 2, "SC")) {
                             //Schlesinger's rule
                             if (m_word[current + 2] == 'H')
                                 //dutch orFamilySearchn, e.g. 'school', 'schooner'
-                                if (areStringsAt((current + 3), 2, "OO", "ER", "EN", "UY", "ED", "EM")) {
+                                if (AreStringsAt((current + 3), 2, "OO", "ER", "EN", "UY", "ED", "EM")) {
                                 //'schermerhorn', 'schenker'
-                                if (areStringsAt((current + 3), 2, "ER", "EN")) {
-                                    addMetaphoneCharacter("X", "SK");
+                                if (AreStringsAt((current + 3), 2, "ER", "EN")) {
+                                    AddMetaphoneCharacter("X", "SK");
                                 } else
-                                    addMetaphoneCharacter("SK");
+                                    AddMetaphoneCharacter("SK");
                                 current += 3;
                                 break;
                             } else {
-                                if ((current == 0) && !isVowel(3) && (m_word[3] != 'W'))
-                                    addMetaphoneCharacter("X", "S");
+                                if ((current == 0) && !IsVowel(3) && (m_word[3] != 'W'))
+                                    AddMetaphoneCharacter("X", "S");
                                 else
-                                    addMetaphoneCharacter("X");
+                                    AddMetaphoneCharacter("X");
                                 current += 3;
                                 break;
                             }
                             
-                            if (areStringsAt((current + 2), 1, "I", "E", "Y")) {
-                                addMetaphoneCharacter("S");
+                            if (AreStringsAt((current + 2), 1, "I", "E", "Y")) {
+                                AddMetaphoneCharacter("S");
                                 current += 3;
                                 break;
                             }
                             //else
-                            addMetaphoneCharacter("SK");
+                            AddMetaphoneCharacter("SK");
                             current += 3;
                             break;
                         }
                         
                         //french e.g. 'resnais', 'artois'
-                        if ((current == m_last) && areStringsAt((current - 2), 2, "AI", "OI"))
-                            addMetaphoneCharacter("", "S");
+                        if ((current == m_last) && AreStringsAt((current - 2), 2, "AI", "OI"))
+                            AddMetaphoneCharacter("", "S");
                         else
-                            addMetaphoneCharacter("S");
+                            AddMetaphoneCharacter("S");
                         
-                        if (areStringsAt((current + 1), 1, "S", "Z"))
+                        if (AreStringsAt((current + 1), 1, "S", "Z"))
                             current += 2;
                         else
                             current	+= 1;
                         break;
                         
                     case 'T':
-                        if (areStringsAt(current, 4, "TION")) {
-                            addMetaphoneCharacter("X");
+                        if (AreStringsAt(current, 4, "TION")) {
+                            AddMetaphoneCharacter("X");
                             current += 3;
                             break;
                         }
                         
-                        if (areStringsAt(current, 3, "TIA", "TCH")) {
-                            addMetaphoneCharacter("X");
+                        if (AreStringsAt(current, 3, "TIA", "TCH")) {
+                            AddMetaphoneCharacter("X");
                             current += 3;
                             break;
                         }
                         
-                        if (areStringsAt(current, 2, "TH")
-                            || areStringsAt(current, 3, "TTH")) {
+                        if (AreStringsAt(current, 2, "TH")
+                            || AreStringsAt(current, 3, "TTH")) {
                             //special case 'thomas', 'thames' or germanic
-                            if (areStringsAt((current + 2), 2, "OM", "AM")
-                                || areStringsAt(0, 4, "VAN ", "VON ")
-                                || areStringsAt(0, 3, "SCH")) {
-                                addMetaphoneCharacter("T");
+                            if (AreStringsAt((current + 2), 2, "OM", "AM")
+                                || AreStringsAt(0, 4, "VAN ", "VON ")
+                                || AreStringsAt(0, 3, "SCH")) {
+                                AddMetaphoneCharacter("T");
                             } else {
-                                addMetaphoneCharacter("0", "T");
+                                AddMetaphoneCharacter("0", "T");
                             }
                             current += 2;
                             break;
                         }
                         
-                        if (areStringsAt((current + 1), 1, "T", "D"))
+                        if (AreStringsAt((current + 1), 1, "T", "D"))
                             current += 2;
                         else
                             current	+= 1;
-                        addMetaphoneCharacter("T");
+                        AddMetaphoneCharacter("T");
                         break;
                         
                     case 'V':
@@ -733,39 +741,39 @@ namespace GKStdReports
                             current += 2;
                         else
                             current	+= 1;
-                        addMetaphoneCharacter("F");
+                        AddMetaphoneCharacter("F");
                         break;
                         
                     case 'W':
                         //can also be in middle of word
-                        if (areStringsAt(current, 2, "WR")) {
-                            addMetaphoneCharacter("R");
+                        if (AreStringsAt(current, 2, "WR")) {
+                            AddMetaphoneCharacter("R");
                             current += 2;
                             break;
                         }
                         
                         if ((current == 0)
-                            && (isVowel(current + 1) || areStringsAt(current, 2, "WH"))) {
+                            && (IsVowel(current + 1) || AreStringsAt(current, 2, "WH"))) {
                             //Wasserman should match Vasserman
-                            if (isVowel(current + 1))
-                                addMetaphoneCharacter("A", "F");
+                            if (IsVowel(current + 1))
+                                AddMetaphoneCharacter("A", "F");
                             else
                                 //need Uomo to match Womo
-                                addMetaphoneCharacter("A");
+                                AddMetaphoneCharacter("A");
                         }
                         
                         //Arnow should match Arnoff
-                        if (((current == m_last) && isVowel(current - 1))
-                            || areStringsAt((current - 1), 5, "EWSKI", "EWSKY", "OWSKI", "OWSKY")
-                            || areStringsAt(0, 3, "SCH")) {
-                            addMetaphoneCharacter("", "F");
+                        if (((current == m_last) && IsVowel(current - 1))
+                            || AreStringsAt((current - 1), 5, "EWSKI", "EWSKY", "OWSKI", "OWSKY")
+                            || AreStringsAt(0, 3, "SCH")) {
+                            AddMetaphoneCharacter("", "F");
                             current +=1;
                             break;
                         }
                         
                         //polish e.g. 'filipowicz'
-                        if (areStringsAt(current, 4, "WICZ", "WITZ")) {
-                            addMetaphoneCharacter("TS", "FX");
+                        if (AreStringsAt(current, 4, "WICZ", "WITZ")) {
+                            AddMetaphoneCharacter("TS", "FX");
                             current +=4;
                             break;
                         }
@@ -777,11 +785,11 @@ namespace GKStdReports
                     case 'X':
                         //french e.g. breaux
                         if (!((current == m_last)
-                              && (areStringsAt((current - 3), 3, "IAU", "EAU")
-                                  || areStringsAt((current - 2), 2, "AU", "OU"))))
-                            addMetaphoneCharacter("KS");
+                              && (AreStringsAt((current - 3), 3, "IAU", "EAU")
+                                  || AreStringsAt((current - 2), 2, "AU", "OU"))))
+                            AddMetaphoneCharacter("KS");
                         
-                        if (areStringsAt((current + 1), 1, "C", "X"))
+                        if (AreStringsAt((current + 1), 1, "C", "X"))
                             current += 2;
                         else
                             current	+= 1;
@@ -790,15 +798,15 @@ namespace GKStdReports
                     case 'Z':
                         //chinese pinyin e.g. 'zhao'
                         if (m_word[current + 1] == 'H') {
-                            addMetaphoneCharacter("J");
+                            AddMetaphoneCharacter("J");
                             current += 2;
                             break;
                         } else
-                            if (areStringsAt((current + 1), 2, "ZO", "ZI", "ZA")
-                                || (isWordSlavoGermanic() && ((current > 0) && m_word[current - 1] != 'T'))) {
-                            addMetaphoneCharacter("S", "TS");
+                            if (AreStringsAt((current + 1), 2, "ZO", "ZI", "ZA")
+                                || (IsWordSlavoGermanic() && ((current > 0) && m_word[current - 1] != 'T'))) {
+                            AddMetaphoneCharacter("S", "TS");
                         } else
-                            addMetaphoneCharacter("S");
+                            AddMetaphoneCharacter("S");
                         
                         if (m_word[current + 1] == 'Z')
                             current += 2;
@@ -831,7 +839,8 @@ namespace GKStdReports
          * @return true if word contains strings that Lawrence's algorithm considers indicative of
          *         slavo-germanic orFamilySearchn; else false
          */
-        private bool isWordSlavoGermanic() {
+        private bool IsWordSlavoGermanic()
+        {
             if((m_word.IndexOf("W") != -1) ||
                (m_word.IndexOf("K") != -1) ||
                (m_word.IndexOf("CZ") != -1) ||
@@ -848,7 +857,8 @@ namespace GKStdReports
          * 
          * @return True if m_word[pos] is a Roman vowel, else false
          */
-        private bool isVowel(int pos) {
+        private bool IsVowel(int pos)
+        {
             if ((pos < 0) || (pos >= m_length))
                 return false;
             
@@ -866,8 +876,9 @@ namespace GKStdReports
          * @param primaryCharacter
          *               Character to append
          */
-        private void addMetaphoneCharacter(String primaryCharacter) {
-            addMetaphoneCharacter(primaryCharacter, null);
+        private void AddMetaphoneCharacter(string primaryCharacter)
+        {
+            AddMetaphoneCharacter(primaryCharacter, null);
         }
         
         /**
@@ -881,7 +892,8 @@ namespace GKStdReports
          *               Alternate character to append to alternate key.  May be null or a zero-length string,
          *               in which case the primary character will be appended to the alternate key instead
          */
-        private void addMetaphoneCharacter(String primaryCharacter, String alternateCharacter) {
+        private void AddMetaphoneCharacter(string primaryCharacter, string alternateCharacter)
+        {
             //Is the primary character valid?
             if (primaryCharacter.Length > 0) {
                 int idx = 0;
@@ -935,7 +947,7 @@ namespace GKStdReports
          * @return true if any one string in the strings array was found in m_word at the given position
          *         and length
          */
-        private bool areStringsAt(int start, int length, params String[] strings)
+        private bool AreStringsAt(int start, int length, params String[] strings)
         {
             if (start < 0)
             {
@@ -944,7 +956,7 @@ namespace GKStdReports
                 return false;
             }
             
-            String target = m_word.Substring(start, length);
+            string target = m_word.Substring(start, length);
             
             for (int idx = 0; idx < strings.Length; idx++) {
                 if (strings[idx] == target) {

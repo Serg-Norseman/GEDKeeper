@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using BSLib;
-using GDModel;
 
 namespace GDModel.Providers.GEDCOM
 {
@@ -46,17 +45,21 @@ namespace GDModel.Providers.GEDCOM
     }
 
 
-    public enum GeoCoord { Lati, Long }
-
-
-    public enum GDMDateFormat
+    public enum GEDCOMGeoCoord
     {
-        dfGEDCOMStd,
-        dfSystem
+        Lati,
+        Long
     }
 
 
-    public enum GDMDateType
+    public enum GEDCOMDateFormat
+    {
+        Standard,
+        System
+    }
+
+
+    public enum GEDCOMDateType
     {
         SIMP, ABT, AFT, BEF, BET, CAL, EST, FROM, INT, TO
     }
@@ -78,20 +81,16 @@ namespace GDModel.Providers.GEDCOM
 
 
     /// <summary>
-    /// 
+    /// This class contains helper methods for working with the GEDCOM data format.
     /// </summary>
+    /// <remarks>
+    /// This class has been heavily refactored under profiling. Any alterations must take into account the factor 
+    /// of performance degradation when changing the approach, even in small things.
+    /// </remarks>
     public static class GEDCOMUtils
     {
-        public static readonly string[] GEDCOMDateTypes;
-
         public static readonly TextInfo InvariantTextInfo = CultureInfo.InvariantCulture.TextInfo;
         public static readonly NumberFormatInfo InvariantNumberFormatInfo = NumberFormatInfo.InvariantInfo;
-
-
-        static GEDCOMUtils()
-        {
-            GEDCOMDateTypes = new string[] { "", "ABT", "AFT", "BEF", "BET", "CAL", "EST", "FROM", "INT", "TO" };
-        }
 
 
         #region Parse functions
@@ -110,80 +109,19 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
-        /// <summary>
-        /// This function is optimized for maximum performance and combines Trim and ToLower operations.
-        /// </summary>
-        public static string NormalizeLo(string str, bool trim = true)
-        {
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-
-            char[] strChars = str.ToCharArray();
-            int li = 0;
-            int ri = strChars.Length - 1;
-
-            if (trim) {
-                while (li < ri && strChars[li] <= ' ') li++;
-                while (ri >= li && strChars[ri] <= ' ') ri--;
-            }
-
-            for (int i = li; i <= ri; i++) {
-                char ch = strChars[i];
-                char ltr = (char)(ch | ' ');
-                if (ltr >= 'a' && ltr <= 'z') {
-                    strChars[i] = ltr;
-                } else {
-                    strChars[i] = ch;
-                }
-            }
-
-            string result = new string(strChars, li, ri - li + 1);
-            return result;
-        }
-
-        /// <summary>
-        /// This function is optimized for maximum performance and combines Trim and ToUpper operations.
-        /// </summary>
-        public static string NormalizeUp(string str, bool trim = true)
-        {
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-
-            char[] strChars = str.ToCharArray();
-            int li = 0;
-            int ri = strChars.Length - 1;
-
-            if (trim) {
-                while (li < ri && strChars[li] <= ' ') li++;
-                while (ri >= li && strChars[ri] <= ' ') ri--;
-            }
-
-            for (int i = li; i <= ri; i++) {
-                char ch = strChars[i];
-                char ltr = (char)(ch & -33);
-                if (ltr >= 'A' && ltr <= 'Z') {
-                    strChars[i] = ltr;
-                } else {
-                    strChars[i] = ch;
-                }
-            }
-
-            string result = new string(strChars, li, ri - li + 1);
-            return result;
-        }
-
         public static string CleanXRef(string str)
         {
             string result = str;
             if (!string.IsNullOrEmpty(str)) {
-                char[] strChars = str.ToCharArray();
-                int strLen = strChars.Length;
+                int strLen = str.Length;
                 int sx = -1;
                 for (int i = 0; i < strLen; i++) {
-                    char chr = strChars[i];
-                    if (chr == GEDCOMProvider.GEDCOM_POINTER_DELIMITER) {
+                    char chr = str[i];
+                    if (chr == GEDCOMConsts.PointerDelimiter) {
                         if (sx == -1) {
                             sx = i;
                         } else {
-                            result = new string(strChars, sx + 1, i - 1 - sx);
+                            result = str.Substring(sx + 1, i - 1 - sx);
                             break;
                         }
                     }
@@ -206,23 +144,31 @@ namespace GDModel.Providers.GEDCOM
             return xref;
         }
 
-        // Performance improvement: x3.5
-        public static int GetXRefNumber(string str)
+        public static bool IsXRef(string str)
+        {
+            if (string.IsNullOrEmpty(str)) {
+                return false;
+            } else {
+                return ((str[0] == '@') && (str[str.Length - 1] == '@'));
+            }
+        }
+
+        public static long GetXRefNumber(string str)
         {
             if (string.IsNullOrEmpty(str)) {
                 return -1;
             }
 
-            char[] strChars = str.ToCharArray();
-            int strLen = strChars.Length;
+            long result = 0;
 
-            int result = 0;
+            int strLen = str.Length;
             for (int i = 0; i < strLen; i++) {
-                char ch = strChars[i];
+                char ch = str[i];
                 if (ch >= '0' && ch <= '9') {
                     result = (result * 10 + ((int)ch - 48));
                 }
             }
+
             return result;
         }
 
@@ -231,7 +177,7 @@ namespace GDModel.Providers.GEDCOM
         /// PLACE_LATITUDE must be represented as [Ngg.nnnnnn (+) | Sgg.nnnnnn (-)]
         /// PLACE_LONGITUDE must be represented as [Wgg.nnnnnn (-) | Egg.nnnnnn (+)]
         /// </summary>
-        public static double GetGeoCoord(string value, GeoCoord coordType)
+        public static double GetGeoCoord(string value, GEDCOMGeoCoord coordType)
         {
             if (string.IsNullOrEmpty(value)) {
                 return 0.0;
@@ -269,13 +215,6 @@ namespace GDModel.Providers.GEDCOM
 
         #region Special parsing routines
 
-        // Line format: <level>_<@xref@>_<tag>_<value> (for test's purpose)
-        public static int ParseTag(string str, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
-        {
-            var strTok = new GEDCOMParser(str, false);
-            return ParseTag(strTok, out tagLevel, out tagXRef, out tagName, out tagValue);
-        }
-
         // Line format: <level>_<@xref@>_<tag>_<value>
         public static int ParseTag(GEDCOMParser strTok, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
         {
@@ -306,6 +245,7 @@ namespace GDModel.Providers.GEDCOM
 
             token = strTok.Next();
             if (token == GEDCOMToken.XRef) {
+                // here XRef is a pure value without delimiters
                 tagXRef = strTok.GetWord();
 
                 // FIXME: check for errors
@@ -337,16 +277,15 @@ namespace GDModel.Providers.GEDCOM
         public static string ParseXRefPointer(string str, out string xref)
         {
             xref = string.Empty;
-            if (str == null) {
+            if (string.IsNullOrEmpty(str)) {
                 return string.Empty;
             }
 
-            char[] strChars = str.ToCharArray();
-            int strLen = strChars.Length;
+            int strLen = str.Length;
 
             // skip leading whitespaces
             int strBeg = 0;
-            while (strBeg < strLen && strChars[strBeg] == ' ') strBeg++;
+            while (strBeg < strLen && str[strBeg] == GEDCOMConsts.Delimiter) strBeg++;
 
             // check empty string
             if (strLen - strBeg == 0) {
@@ -355,13 +294,13 @@ namespace GDModel.Providers.GEDCOM
 
             int init = -1, fin = strBeg;
             for (int i = strBeg; i < strLen; i++) {
-                char chr = strChars[i];
-                if (chr == GEDCOMProvider.GEDCOM_POINTER_DELIMITER) {
+                char chr = str[i];
+                if (chr == GEDCOMConsts.PointerDelimiter) {
                     if (init == -1) {
                         init = i;
                     } else {
                         fin = i;
-                        xref = new string(strChars, init, fin + 1 - init);
+                        xref = str.Substring(init + 1, fin - 1 - init);
                         fin += 1;
                         break;
                     }
@@ -370,8 +309,7 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
-            xref = GEDCOMUtils.CleanXRef(xref);
-            return new string(strChars, fin, strLen - fin);
+            return str.Substring(fin, strLen - fin);
         }
 
         // Time format: hour:minutes:seconds.fraction
@@ -445,17 +383,11 @@ namespace GDModel.Providers.GEDCOM
         public static string ParseDateValue(GDMTree owner, GDMDateValue dateValue, string str)
         {
             if (str == null) {
-                return null;
+                return string.Empty;
             }
 
             var strTok = new GEDCOMParser(str, false);
             return ParseDateValue(owner, dateValue, strTok);
-        }
-
-        // DateValue format: INT/FROM/TO/etc..._<date>
-        public static string ParseDateValue(GDMTree owner, GDMTag dateValue, GEDCOMParser strTok)
-        {
-            return ParseDateValue(owner, (GDMDateValue)dateValue, strTok);
         }
 
         // DateValue format: INT/FROM/TO/etc..._<date>
@@ -467,30 +399,30 @@ namespace GDModel.Providers.GEDCOM
             var token = strTok.CurrentToken;
             if (token == GEDCOMToken.Word) {
                 string su = strTok.GetWord();
-                idx = Algorithms.BinarySearch(GEDCOMDateTypes, su, string.CompareOrdinal);
+                idx = Algorithms.BinarySearch(GEDCOMConsts.GEDCOMDateTypes, su, string.CompareOrdinal);
             }
-            var dateType = (idx < 0) ? GDMDateType.SIMP : (GDMDateType)idx;
+            var dateType = (idx < 0) ? GEDCOMDateType.SIMP : (GEDCOMDateType)idx;
 
             string result;
             GDMCustomDate date;
             switch (dateType) {
-                case GDMDateType.AFT:
-                case GDMDateType.BEF:
-                case GDMDateType.BET:
-                    date = new GDMDateRange(dateValue);
+                case GEDCOMDateType.AFT:
+                case GEDCOMDateType.BEF:
+                case GEDCOMDateType.BET:
+                    date = new GDMDateRange();
                     result = GEDCOMUtils.ParseRangeDate(owner, (GDMDateRange)date, strTok);
                     break;
-                case GDMDateType.INT:
-                    date = new GDMDateInterpreted(dateValue);
+                case GEDCOMDateType.INT:
+                    date = new GDMDateInterpreted();
                     result = GEDCOMUtils.ParseIntDate(owner, (GDMDateInterpreted)date, strTok);
                     break;
-                case GDMDateType.FROM:
-                case GDMDateType.TO:
-                    date = new GDMDatePeriod(dateValue);
+                case GEDCOMDateType.FROM:
+                case GEDCOMDateType.TO:
+                    date = new GDMDatePeriod();
                     result = GEDCOMUtils.ParsePeriodDate(owner, (GDMDatePeriod)date, strTok);
                     break;
                 default:
-                    date = new GDMDate(dateValue);
+                    date = new GDMDate();
                     result = GEDCOMUtils.ParseDate(owner, (GDMDate)date, strTok);
                     break;
             }
@@ -500,10 +432,11 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // Format: FROM DATE1 TO DATE2
-        public static string ParsePeriodDate(GDMTree owner, GDMDatePeriod date, string strValue)
+        public static string ParsePeriodDate(GDMDatePeriod date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParsePeriodDate(owner, date, strTok);
+            // only standard GEDCOM dates (for owner == null)
+            return ParsePeriodDate(null, date, strTok);
         }
 
         // Format: FROM DATE1 TO DATE2
@@ -527,10 +460,11 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
-        public static string ParseRangeDate(GDMTree owner, GDMDateRange date, string strValue)
+        public static string ParseRangeDate(GDMDateRange date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParseRangeDate(owner, date, strTok);
+            // only standard GEDCOM dates (for owner == null)
+            return ParseRangeDate(null, date, strTok);
         }
 
         // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
@@ -543,7 +477,7 @@ namespace GDModel.Providers.GEDCOM
                 // error!
             }
             string su = strTok.GetWord();
-            int dateType = Algorithms.BinarySearch(GDMCustomDate.GEDCOMDateRangeArray, su, string.CompareOrdinal);
+            int dateType = Algorithms.BinarySearch(GEDCOMConsts.GEDCOMDateRangeArray, su, string.CompareOrdinal);
 
             if (dateType == 0) { // "AFT"
                 strTok.Next();
@@ -557,8 +491,8 @@ namespace GDModel.Providers.GEDCOM
                 ParseDate(owner, date.After, strTok);
                 strTok.SkipWhitespaces();
 
-                if (!strTok.RequireWord(GDMCustomDate.GEDCOMDateRangeArray[3])) { // "AND"
-                    throw new GDMDateException(string.Format("The range date '{0}' doesn't contain 'and' token", strTok.GetFullStr()));
+                if (!strTok.RequireWord(GEDCOMConsts.GEDCOMDateRangeArray[3])) { // "AND"
+                    throw new GEDCOMRangeDateException(strTok.GetFullStr());
                 }
 
                 strTok.Next();
@@ -571,10 +505,11 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // Format: INT DATE (phrase)
-        public static string ParseIntDate(GDMTree owner, GDMDateInterpreted date, string strValue)
+        public static string ParseIntDate(GDMDateInterpreted date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParseIntDate(owner, date, strTok);
+            // only standard GEDCOM dates (for owner == null)
+            return ParseIntDate(null, date, strTok);
         }
 
         // Format: INT DATE (phrase)
@@ -583,7 +518,7 @@ namespace GDModel.Providers.GEDCOM
             strTok.SkipWhitespaces();
 
             if (!strTok.RequireWord(GEDCOMTagName.INT)) {
-                throw new GDMDateException(string.Format("The interpreted date '{0}' doesn't start with a valid ident", strTok.GetFullStr()));
+                throw new GEDCOMIntDateException(strTok.GetFullStr());
             }
             strTok.Next();
             ParseDate(owner, date, strTok);
@@ -606,15 +541,11 @@ namespace GDModel.Providers.GEDCOM
             return strTok.GetRest();
         }
 
-        public static string ParseDate(GDMTree owner, GDMDate date, string strValue)
+        public static string ParseDate(GDMDate date, string strValue)
         {
             var strTok = new GEDCOMParser(strValue, false);
-            return ParseDate(owner, date, strTok);
-        }
-
-        public static string ParseDate(GDMTree owner, GDMTag date, GEDCOMParser strTok)
-        {
-            return ParseDate(owner, (GDMDate)date, strTok);
+            // only standard GEDCOM dates (for owner == null)
+            return ParseDate(null, date, strTok);
         }
 
         public static string ParseDate(GDMTree owner, GDMDate date, GEDCOMParser strTok)
@@ -646,7 +577,7 @@ namespace GDModel.Providers.GEDCOM
             yearModifier = string.Empty;
             month = 0;
             day = 0;
-            GDMDateFormat dateFormat = GDMDateFormat.dfGEDCOMStd;
+            GEDCOMDateFormat dateFormat = GEDCOMDateFormat.Standard;
 
             strTok.SkipWhitespaces();
 
@@ -663,7 +594,7 @@ namespace GDModel.Providers.GEDCOM
             token = strTok.CurrentToken;
             if (token == GEDCOMToken.Word) {
                 string su = InvariantTextInfo.ToUpper(strTok.GetWord());
-                int idx = Algorithms.BinarySearch(GDMCustomDate.GEDCOMDateApproximatedArray, su, string.CompareOrdinal);
+                int idx = Algorithms.BinarySearch(GEDCOMConsts.GEDCOMDateApproximatedArray, su, string.CompareOrdinal);
                 if (idx >= 0) {
                     approximated = (GDMApproximated)idx;
                     strTok.Next();
@@ -676,7 +607,7 @@ namespace GDModel.Providers.GEDCOM
             if (token == GEDCOMToken.XRef) {
                 // FIXME: check for errors
                 var escapeStr = "@" + strTok.GetWord() + "@";
-                int idx = Algorithms.IndexOf(GDMCustomDate.GEDCOMDateEscapeArray, escapeStr);
+                int idx = Algorithms.IndexOf(GEDCOMConsts.GEDCOMDateEscapeArray, escapeStr);
                 if (idx >= 0) {
                     calendar = (GDMCalendar)idx;
                 }
@@ -688,17 +619,17 @@ namespace GDModel.Providers.GEDCOM
             // extract day
             token = strTok.CurrentToken;
             int dNum;
-            if (token == GEDCOMToken.Number && ((dNum = strTok.GetNumber()) <= 31)) {
+            if (token == GEDCOMToken.Number && strTok.TokenLength() <= 2 && ((dNum = strTok.GetNumber()) <= 31)) {
                 day = (byte)dNum;
                 token = strTok.Next();
             }
 
             // extract delimiter
             if (token == GEDCOMToken.Whitespace && strTok.GetSymbol() == ' ') {
-                dateFormat = GDMDateFormat.dfGEDCOMStd;
+                dateFormat = GEDCOMDateFormat.Standard;
                 token = strTok.Next();
             } else if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '.') {
-                dateFormat = GDMDateFormat.dfSystem;
+                dateFormat = GEDCOMDateFormat.System;
                 token = strTok.Next();
             }
 
@@ -707,18 +638,18 @@ namespace GDModel.Providers.GEDCOM
                 // in this case, according to performance test results, BinarySearch is more efficient
                 // than a simple search or even a dictionary search (why?!)
                 string su = InvariantTextInfo.ToUpper(strTok.GetWord());
-                int idx = BinarySearch(GDMCustomDate.GEDCOMMonthValues, su, string.CompareOrdinal);
+                int idx = BinarySearch(GEDCOMConsts.GEDCOMMonthValues, su, string.CompareOrdinal);
                 month = (byte)((idx < 0) ? 0 : idx);
 
                 token = strTok.Next();
-            } else if (dateFormat == GDMDateFormat.dfSystem && token == GEDCOMToken.Number) {
+            } else if (dateFormat == GEDCOMDateFormat.System && token == GEDCOMToken.Number && strTok.TokenLength() <= 2) {
                 month = (byte)strTok.GetNumber();
 
                 token = strTok.Next();
             }
 
             // extract delimiter
-            if (dateFormat == GDMDateFormat.dfSystem) {
+            if (dateFormat == GEDCOMDateFormat.System) {
                 if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '.') {
                     token = strTok.Next();
                 }
@@ -734,7 +665,7 @@ namespace GDModel.Providers.GEDCOM
                 token = strTok.Next();
 
                 // extract year modifier
-                if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '/') {
+                if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == GEDCOMConsts.YearModifierSeparator) {
                     token = strTok.Next();
                     if (token != GEDCOMToken.Number) {
                         // error
@@ -792,20 +723,27 @@ namespace GDModel.Providers.GEDCOM
 
         public static string ParseName(string strValue, GDMPersonalName persName)
         {
-            string firstPart = string.Empty;
-            string surname = string.Empty;
-            string lastPart = string.Empty;
+            string firstPart, surname, lastPart;
+            string result = ParseName(strValue, out firstPart, out surname, out lastPart);
+            persName.SetNameParts(firstPart, surname, lastPart);
+            return result;
+        }
 
-            if (strValue == null) {
+        public static string ParseName(string strValue, out string firstPart, out string surname, out string lastPart)
+        {
+            firstPart = string.Empty;
+            surname = string.Empty;
+            lastPart = string.Empty;
+
+            if (string.IsNullOrEmpty(strValue)) {
                 return string.Empty;
             }
 
-            char[] strChars = strValue.ToCharArray();
-            int strLen = strChars.Length;
+            int strLen = strValue.Length;
 
             // skip leading whitespaces
             int strBeg = 0;
-            while (strBeg < strLen && strChars[strBeg] == ' ') strBeg++;
+            while (strBeg < strLen && strValue[strBeg] == ' ') strBeg++;
 
             // check empty string
             if (strLen - strBeg == 0) {
@@ -814,14 +752,14 @@ namespace GDModel.Providers.GEDCOM
 
             int fs = -1, ss = strBeg;
             for (int i = strBeg; i < strLen; i++) {
-                char chr = strChars[i];
-                if (chr == GEDCOMProvider.GEDCOM_NAME_SEPARATOR) {
+                char chr = strValue[i];
+                if (chr == GEDCOMConsts.NameSeparator) {
                     if (fs == -1) {
                         fs = i;
-                        firstPart = new string(strChars, 0, i);
+                        firstPart = strValue.Substring(0, i);
                     } else {
                         ss = i;
-                        surname = new string(strChars, fs + 1, (ss - fs) - 1);
+                        surname = strValue.Substring(fs + 1, (ss - fs) - 1);
                         ss += 1;
                         break;
                     }
@@ -829,14 +767,39 @@ namespace GDModel.Providers.GEDCOM
             }
 
             if (fs < 0) {
-                firstPart = new string(strChars, ss, strLen - ss);
+                firstPart = strValue.Substring(ss, strLen - ss);
             } else {
-                lastPart = new string(strChars, ss, strLen - ss);
+                lastPart = strValue.Substring(ss, strLen - ss);
             }
 
-            persName.SetNameParts(firstPart, surname, lastPart);
-
             return string.Empty;
+        }
+
+        public static string GetFullName(string firstPart, string surname, string lastPart)
+        {
+            string result = firstPart;
+            if (!string.IsNullOrEmpty(surname)) {
+                result += " " + surname;
+
+                if (!string.IsNullOrEmpty(lastPart)) {
+                    result += " " + lastPart;
+                }
+            }
+            return result;
+        }
+
+        // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
+        public static string GetNameTagValue(string firstPart, string surname, string lastPart)
+        {
+            string result = firstPart;
+            if (!string.IsNullOrEmpty(surname)) {
+                result += " /" + surname + "/";
+
+                if (!string.IsNullOrEmpty(lastPart)) {
+                    result += " " + lastPart;
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -857,28 +820,28 @@ namespace GDModel.Providers.GEDCOM
                 if (ix >= 0) {
                     c1 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GEDCOMBlobDecodeException();
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c2 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GEDCOMBlobDecodeException();
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c3 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GEDCOMBlobDecodeException();
                 }
 
                 ix = validChars.IndexOf(blob[i++]);
                 if (ix >= 0) {
                     c4 = (byte)ix;
                 } else {
-                    throw new GDMException("DecodeBlob");
+                    throw new GEDCOMBlobDecodeException();
                 }
 
                 // The following decodes Family Historian blobs.
@@ -920,8 +883,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static string GetDateStr(DateTime date)
         {
-            string result;
-            result = string.Format("{0:00} {1} {2:0000}", new object[] { date.Day, GDMCustomDate.GEDCOMMonthArray[date.Month-1], date.Year });
+            var result = string.Format("{0:00} {1} {2:0000}", new object[] { date.Day, GEDCOMConsts.GEDCOMMonthArray[date.Month-1], date.Year });
             return result;
         }
 
@@ -1425,7 +1387,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static bool GetBoolVal(string str, bool defValue = false)
         {
-            bool result = string.IsNullOrEmpty(str) ? defValue : ((str == "Y") ? true : false);
+            bool result = string.IsNullOrEmpty(str) ? defValue : (str == "Y");
             return result;
         }
 
@@ -1440,8 +1402,8 @@ namespace GDModel.Providers.GEDCOM
             if (string.IsNullOrEmpty(su)) return GDMOrdinanceProcessFlag.opNone;
 
             GDMOrdinanceProcessFlag result;
-            su = NormalizeUp(su);
-            
+
+            su = InvariantTextInfo.ToUpper(su);
             if (su == "YES") {
                 result = GDMOrdinanceProcessFlag.opYes;
             } else if (su == "NO") {
@@ -1449,6 +1411,7 @@ namespace GDModel.Providers.GEDCOM
             } else {
                 result = GDMOrdinanceProcessFlag.opNone;
             }
+
             return result;
         }
 
@@ -1561,12 +1524,11 @@ namespace GDModel.Providers.GEDCOM
 
         public static GDMSex GetSexVal(string str)
         {
-            str = NormalizeUp(str);
             if (str.Length != 1) return GDMSex.svUnknown;
 
-            char sl = str[0];
-
             GDMSex result;
+
+            char sl = InvariantTextInfo.ToUpper(str[0]);
             if (sl == 'M') {
                 result = GDMSex.svMale;
             } else if (sl == 'F') {
@@ -1576,6 +1538,7 @@ namespace GDModel.Providers.GEDCOM
             } else {
                 result = GDMSex.svUnknown;
             }
+
             return result;
         }
 
@@ -1751,9 +1714,9 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static StringList GetTagStrings(GDMTag strTag)
+        public static GDMLines GetTagStrings(GDMTag strTag)
         {
-            StringList strings = new StringList();
+            var strings = new GDMLines();
 
             if (strTag != null) {
                 if (strTag.StringValue != "") {
@@ -1783,7 +1746,7 @@ namespace GDModel.Providers.GEDCOM
             return strings;
         }
 
-        public static void SetTagStrings(GDMTag tag, StringList strings)
+        public static void SetTagStrings(GDMTag tag, GDMLines strings)
         {
             if (tag == null) return;
 
@@ -1805,7 +1768,7 @@ namespace GDModel.Providers.GEDCOM
                 for (int i = 0; i < num; i++) {
                     string str = strings[i];
 
-                    int len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
+                    int len = Math.Min(str.Length, GEDCOMConsts.MaxLineLength);
                     string sub = str.Substring(0, len);
                     str = str.Remove(0, len);
 
@@ -1816,7 +1779,7 @@ namespace GDModel.Providers.GEDCOM
                     }
 
                     while (str.Length > 0) {
-                        len = Math.Min(str.Length, GEDCOMProvider.MAX_LINE_LENGTH);
+                        len = Math.Min(str.Length, GEDCOMConsts.MaxLineLength);
                         GEDCOMProvider.AddBaseTag(tag, 0, (int)GEDCOMTagType.CONC, str.Substring(0, len));
                         str = str.Remove(0, len);
                     }

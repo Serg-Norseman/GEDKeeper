@@ -39,6 +39,7 @@ namespace GKUI.Forms
             txtSurname = new TextBox();
             txtSurname.Size = new Size(180, 22);
             txtSurname.KeyDown += edName_KeyDown;
+            txtSurname.LostFocus += txtXName_Leave;
 
             lblSurnamePrefix = new Label();
             lblSurnamePrefix.Text = "lblSurnamePrefix";
@@ -53,6 +54,7 @@ namespace GKUI.Forms
             txtMarriedSurname = new TextBox();
             txtMarriedSurname.Size = new Size(180, 22);
             txtMarriedSurname.KeyDown += edName_KeyDown;
+            txtMarriedSurname.LostFocus += txtXName_Leave;
 
             lblNamePrefix = new Label();
             lblNamePrefix.Text = "lblNamePrefix";
@@ -67,6 +69,7 @@ namespace GKUI.Forms
             txtName = new TextBox();
             txtName.Size = new Size(180, 22);
             txtName.KeyDown += edName_KeyDown;
+            txtName.LostFocus += txtXName_Leave;
 
             lblNameSuffix = new Label();
             lblNameSuffix.Text = "lblNameSuffix";
@@ -81,6 +84,7 @@ namespace GKUI.Forms
             txtPatronymic = new TextBox();
             txtPatronymic.Size = new Size(180, 22);
             txtPatronymic.KeyDown += edName_KeyDown;
+            txtPatronymic.LostFocus += txtXName_Leave;
 
             lblNickname = new Label();
             lblNickname.Text = "lblNickname";
@@ -113,33 +117,33 @@ namespace GKUI.Forms
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = UIHelper.LongButtonSize;
             btnCancel.Text = "btnCancel";
-            btnCancel.Click += CancelClickHandler;
+            btnCancel.Click += btnCancel_Click;
 
             var panel = new TableLayout {
                 Padding = new Padding(0),
                 Spacing = new Size(10, 10),
                 Rows = {
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblSurname, txtSurname),
-                                  new VSDefStackLayout(lblSurnamePrefix, txtSurnamePrefix) }
+                        Cells = { new DefStackLayout(lblSurname, txtSurname),
+                                  new DefStackLayout(lblSurnamePrefix, txtSurnamePrefix) }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblMarriedSurname, txtMarriedSurname),
-                                  new VSDefStackLayout(lblNamePrefix, txtNamePrefix) }
+                        Cells = { new DefStackLayout(lblMarriedSurname, txtMarriedSurname),
+                                  new DefStackLayout(lblNamePrefix, txtNamePrefix) }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblName, txtName),
-                                  new VSDefStackLayout(lblNameSuffix, txtNameSuffix) }
+                        Cells = { new DefStackLayout(lblName, txtName),
+                                  new DefStackLayout(lblNameSuffix, txtNameSuffix) }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblPatronymic, txtPatronymic),
-                                  new VSDefStackLayout(lblNickname, txtNickname) }
+                        Cells = { new DefStackLayout(lblPatronymic, txtPatronymic),
+                                  new DefStackLayout(lblNickname, txtNickname) }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblType, cmbNameType), null }
+                        Cells = { new DefStackLayout(lblType, cmbNameType), null }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblLanguage, cmbLanguage), null }
+                        Cells = { new DefStackLayout(lblLanguage, cmbLanguage), null }
                     },
                     null
                 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using System.Drawing;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
@@ -182,7 +183,7 @@ namespace GKUI.Forms
         {
             base.WndProc(ref m);
 
-            if (m.Msg == GKUI.Components.NativeMethods.WM_KEEPMODELESS) {
+            if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
                 AppHost.Instance.WidgetsEnable();
             }
         }
@@ -203,20 +204,15 @@ namespace GKUI.Forms
 
         private void Form_Load(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 ((IWorkWindow)this).UpdateSettings();
 
                 fController.UpdatePluginsItems();
                 UpdateMRU();
                 UpdateControls(false);
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_Load(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.Form_Load()", ex);
             }
-        }
-
-        private void Form_Show(object sender, EventArgs e)
-        {
         }
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
@@ -232,7 +228,6 @@ namespace GKUI.Forms
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
             AppHost.Instance.CloseWindow(this);
-            // Attention: Does not receive control when executing in Mono
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
@@ -266,7 +261,7 @@ namespace GKUI.Forms
         {
             IListView recView = contextMenu.SourceControl as GKListView;
 
-            miRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual));
+            miContRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual));
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
@@ -287,6 +282,18 @@ namespace GKUI.Forms
         private void miRecordDuplicate_Click(object sender, EventArgs e)
         {
             DuplicateRecord();
+        }
+
+        private void miRecordMerge_Click(object sender, EventArgs e)
+        {
+            var listView = contextMenu.SourceControl as GKListView;
+            if (listView != null) {
+                var items = listView.GetSelectedItems();
+                fController.ShowRecMerge(
+                    items.Count > 0 ? items[0] as GDMRecord : null,
+                    items.Count > 1 ? items[1] as GDMRecord : null
+                );
+            }
         }
 
         private void List_SelectedIndexChanged(object sender, EventArgs e)
@@ -352,7 +359,7 @@ namespace GKUI.Forms
             fController.ApplyFilter(recType);
         }
 
-        public void SetExternalFilter(ExternalFilterHandler filterHandler, 
+        public void SetExternalFilter(ExternalFilterHandler filterHandler,
                                       GDMRecordType recType = GDMRecordType.rtNone)
         {
             fController.SetExternalFilter(filterHandler, recType);
@@ -454,6 +461,7 @@ namespace GKUI.Forms
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
                 try {
                     try {
+                        mediaViewer.Multimedia = mediaRec;
                         mediaViewer.FileRef = fileRef;
                         if (modal) {
                             mediaViewer.ShowDialog();
@@ -466,7 +474,7 @@ namespace GKUI.Forms
                     }
                 } catch (Exception ex) {
                     if (mediaViewer != null) mediaViewer.Dispose();
-                    Logger.LogWrite("BaseWinSDI.ShowMedia(): " + ex.Message);
+                    Logger.WriteError("BaseWinSDI.ShowMedia()", ex);
                 }
             }
         }
@@ -578,7 +586,8 @@ namespace GKUI.Forms
             miContRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
             miContRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
             miContRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
-            miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
+            miContRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
+            miContRecordMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
 
             miTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
             miTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
@@ -753,7 +762,7 @@ namespace GKUI.Forms
                     AppHost.Instance.EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_DragDrop(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.Form_DragDrop()", ex);
             }
         }
 
@@ -804,27 +813,25 @@ namespace GKUI.Forms
                     MenuMRU.Items.Add(tsmi);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateMRU(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.UpdateMRU()", ex);
             }
         }
 
         public void UpdateNavControls()
         {
-            try
-            {
-                IWorkWindow workWin = this as IWorkWindow;
+            try {
+                IWorkWindow workWin = this;
 
                 tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
                 tbNext.Enabled = (workWin != null && workWin.NavCanForward());
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateNavControls(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.UpdateNavControls()", ex);
             }
         }
 
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
         {
-            try
-            {
+            try {
                 IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
                 IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
                 IChartWindow curChart = ((workWin is IChartWindow) ? ((IChartWindow) workWin) : null);
@@ -882,7 +889,7 @@ namespace GKUI.Forms
                     workWin.UpdateControls();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.UpdateControls(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.UpdateControls()", ex);
             }
         }
 
@@ -948,7 +955,7 @@ namespace GKUI.Forms
 
         private void miTTRecMerge_Click(object sender, EventArgs e)
         {
-            fController.ShowRecMerge();
+            fController.ShowRecMerge(null, null);
         }
 
         private void miTTPlacesManager_Click(object sender, EventArgs e)
@@ -1048,17 +1055,17 @@ namespace GKUI.Forms
 
         private void miPedigreeAscend_Click(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkAscend);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Ascend);
         }
 
         private void miPedigree_dAbovilleClick(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_dAboville);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_dAboville);
         }
 
         private void miPedigree_KonovalovClick(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_Konovalov);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_Konovalov);
         }
 
         private void miTreeAncestors_Click(object sender, EventArgs e)

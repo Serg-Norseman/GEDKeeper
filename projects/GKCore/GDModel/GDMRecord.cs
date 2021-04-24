@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -48,11 +48,11 @@ namespace GDModel
     /// <summary>
     /// 
     /// </summary>
-    public class GDMRecord : GDMTag, IGEDCOMStructWithLists
+    public class GDMRecord : GDMTag, IGDMStructWithLists, IGDMStructWithUserReferences
     {
+        protected GDMTree fTree;
         private string fAutomatedRecordID;
         private GDMChangeDate fChangeDate;
-        private object fExtData;
         private string fUID;
         private string fXRef;
 
@@ -73,15 +73,9 @@ namespace GDModel
             get { return fChangeDate; }
         }
 
-        public object ExtData
-        {
-            get { return fExtData; }
-            set { fExtData = value; }
-        }
-
         public GDMList<GDMMultimediaLink> MultimediaLinks
         {
-            get	{ return fMultimediaLinks; }
+            get { return fMultimediaLinks; }
         }
 
         public GDMList<GDMNotes> Notes
@@ -118,27 +112,18 @@ namespace GDModel
         public string XRef
         {
             get { return fXRef; }
-            set {
-                string oldXRef = fXRef;
-                fXRef = value;
-
-                var owner = GetTree();
-                if (owner != null) {
-                    owner.SetXRef(oldXRef, this);
-                }
-            }
         }
 
-
-        public GDMRecord(GDMObject owner) : base(owner)
+        public GDMRecord(GDMTree tree)
         {
+            fTree = tree;
             fXRef = string.Empty;
             fAutomatedRecordID = string.Empty;
-            fChangeDate = new GDMChangeDate(this);
-            fNotes = new GDMList<GDMNotes>(this);
-            fSourceCitations = new GDMList<GDMSourceCitation>(this);
-            fMultimediaLinks = new GDMList<GDMMultimediaLink>(this);
-            fUserReferences = new GDMList<GDMUserReference>(this);
+            fChangeDate = new GDMChangeDate();
+            fNotes = new GDMList<GDMNotes>();
+            fSourceCitations = new GDMList<GDMSourceCitation>();
+            fMultimediaLinks = new GDMList<GDMMultimediaLink>();
+            fUserReferences = new GDMList<GDMUserReference>();
         }
 
         protected override void Dispose(bool disposing)
@@ -152,9 +137,20 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
-        public override GDMTree GetTree()
+        public void ResetTree(GDMTree tree)
         {
-            return (Owner as GDMTree);
+            fTree = tree;
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fChangeDate.TrimExcess();
+            fNotes.TrimExcess();
+            fSourceCitations.TrimExcess();
+            fMultimediaLinks.TrimExcess();
+            fUserReferences.TrimExcess();
         }
 
         public int IndexOfSource(GDMSourceRecord sourceRec)
@@ -185,44 +181,35 @@ namespace GDModel
             AssignList(sourceRec.fUserReferences, fUserReferences);
         }
 
-        public virtual void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public virtual void MoveTo(GDMRecord targetRecord)
         {
-            if (clearDest) {
-                targetRecord.Clear();
-            }
-
             var subTags = SubTags;
             while (subTags.Count > 0) {
                 GDMTag tag = subTags.Extract(0);
-                if (tag.GetTagType() == GEDCOMTagType.CHAN && !clearDest) {
+                if (tag.GetTagType() == GEDCOMTagType.CHAN) {
                     tag.Dispose();
                 } else {
-                    tag.ResetOwner(targetRecord);
                     targetRecord.AddTag(tag);
                 }
             }
 
             while (fNotes.Count > 0) {
                 GDMTag tag = fNotes.Extract(0);
-                tag.ResetOwner(targetRecord);
                 targetRecord.Notes.Add((GDMNotes)tag);
             }
 
             while (fMultimediaLinks.Count > 0) {
                 GDMTag tag = fMultimediaLinks.Extract(0);
-                tag.ResetOwner(targetRecord);
                 targetRecord.MultimediaLinks.Add((GDMMultimediaLink)tag);
             }
 
             while (fSourceCitations.Count > 0) {
                 GDMTag tag = fSourceCitations.Extract(0);
-                tag.ResetOwner(targetRecord);
                 targetRecord.SourceCitations.Add((GDMSourceCitation)tag);
             }
 
             while (fUserReferences.Count > 0) {
                 GDMTag tag = fUserReferences.Extract(0);
-                tag.ResetOwner(targetRecord);
                 targetRecord.UserReferences.Add((GDMUserReference)tag);
             }
         }
@@ -257,19 +244,14 @@ namespace GDModel
                 (fMultimediaLinks.Count == 0) && (fUserReferences.Count == 0);
         }
 
-        public string NewXRef()
+        public void SetXRef(GDMTree tree, string newXRef, bool removeOldXRef)
         {
-            var owner = GetTree();
-            if (owner != null) {
-                string newXRef = owner.XRefIndex_NewXRef(this);
-                XRef = newXRef;
-            }
-            return XRef;
-        }
+            string oldXRef = fXRef;
+            fXRef = newXRef;
 
-        public void InitNew()
-        {
-            NewXRef();
+            if (tree != null) {
+                tree.SetXRef(oldXRef, this, removeOldXRef);
+            }
         }
 
         public string GetXRefNum()
@@ -283,57 +265,9 @@ namespace GDModel
             return xref;
         }
 
-        public int GetId()
+        public long GetId()
         {
             return GEDCOMUtils.GetXRefNumber(XRef);
-        }
-
-        public GDMNotes AddNote(GDMNoteRecord noteRec)
-        {
-            GDMNotes note = null;
-
-            if (noteRec != null) {
-                note = new GDMNotes(this);
-                note.Value = noteRec;
-                fNotes.Add(note);
-            }
-
-            return note;
-        }
-
-        public GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality)
-        {
-            GDMSourceCitation cit = null;
-
-            if (sourceRec != null) {
-                cit = new GDMSourceCitation(this);
-                cit.Value = sourceRec;
-                cit.Page = page;
-                cit.CertaintyAssessment = quality;
-                fSourceCitations.Add(cit);
-            }
-
-            return cit;
-        }
-
-        public GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec)
-        {
-            GDMMultimediaLink mmLink = null;
-
-            if (mediaRec != null) {
-                mmLink = new GDMMultimediaLink(this);
-                mmLink.Value = mediaRec;
-                fMultimediaLinks.Add(mmLink);
-            }
-
-            return mmLink;
-        }
-
-        public void AddUserRef(string reference)
-        {
-            GDMUserReference uRef = new GDMUserReference(this);
-            uRef.StringValue = reference;
-            fUserReferences.Add(uRef);
         }
     }
 }

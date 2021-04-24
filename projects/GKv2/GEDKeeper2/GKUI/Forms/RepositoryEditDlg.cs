@@ -57,25 +57,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void btnAddress_Click(object sender, EventArgs e)
-        {
-            fController.ModifyAddress();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("RepositoryEditDlg.btnCancel_Click(): " + ex.Message);
-            }
-        }
-
         public RepositoryEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -97,6 +78,27 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+        }
+
+        private void btnAddress_Click(object sender, EventArgs e)
+        {
+            fController.ModifyAddress();
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

@@ -5,7 +5,7 @@
  *  Distribution: This control is free for public use and components may be
  *  freely descended from it as long as credit is given to the author.
  * 
- *  Converted to C#: 20/07/2011, Serg V. Zhdanovskih
+ *  Converted to C#: 20/07/2011, Sergey V. Zhdanovskih.
  */
 
 using System;
@@ -14,7 +14,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using GKUI.Components;
 
-namespace ConwayLife
+namespace GKLifePlugin.ConwayLife
 {
     public class LifeViewer : UserControl
     {

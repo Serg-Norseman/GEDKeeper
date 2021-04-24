@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using GDModel;
 using NUnit.Framework;
 
 namespace GDModel
@@ -30,7 +29,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMFileReference fileRef = new GDMFileReference(null)) {
+            using (GDMFileReference fileRef = new GDMFileReference()) {
                 fileRef.MediaType = GDMMediaType.mtAudio;
                 Assert.AreEqual(GDMMediaType.mtAudio, fileRef.MediaType);
             }
@@ -58,9 +57,18 @@ namespace GDModel
         }
 
         [Test]
-        public void Test_Assign()
+        public void Test_Assign1()
         {
-            var instance = new GDMFileReferenceWithTitle(null);
+            var instance = new GDMFileReference();
+            Assert.Throws(typeof(ArgumentException), () => {
+                instance.Assign(null);
+            });
+        }
+
+        [Test]
+        public void Test_Assign2()
+        {
+            var instance = new GDMFileReferenceWithTitle();
             Assert.Throws(typeof(ArgumentException), () => {
                 instance.Assign(null);
             });
@@ -69,7 +77,7 @@ namespace GDModel
         [Test]
         public void Test_Clear()
         {
-            var instance = new GDMFileReferenceWithTitle(null);
+            var instance = new GDMFileReferenceWithTitle();
             instance.Clear();
         }
     }

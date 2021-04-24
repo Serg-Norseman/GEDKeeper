@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,15 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-
 namespace GKCore.Charts
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface ICircleChart
+    public interface ICircleChart : IChart
     {
-        void SaveSnapshot(string fileName);
     }
 }

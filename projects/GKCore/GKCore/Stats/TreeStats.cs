@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -86,16 +86,16 @@ namespace GKCore.Stats
                 string vLife = GKUtils.GetLifeExpectancyStr(ind);
                 stats.life.TakeVal(vLife, ind.Sex, true);
 
-                int chCnt = ind.GetTotalChildsCount();
+                int chCnt = fTree.GetTotalChildrenCount(ind);
                 stats.childs.TakeVal(chCnt, ind.Sex, true);
 
-                int vFba = GKUtils.GetFirstbornAge(ind, GKUtils.GetFirstborn(ind));
+                int vFba = GKUtils.GetFirstbornAge(ind, GKUtils.GetFirstborn(fTree, ind));
                 stats.fba.TakeVal(vFba, ind.Sex, true);
 
                 int mCnt = GKUtils.GetMarriagesCount(ind);
                 stats.marr.TakeVal(mCnt, ind.Sex, true);
 
-                int vMAge = GKUtils.GetMarriageAge(ind);
+                int vMAge = GKUtils.GetMarriageAge(fTree, ind);
                 stats.mage.TakeVal(vMAge, ind.Sex, true);
 
                 float vCI = ind.GetCertaintyAssessment();
@@ -171,7 +171,7 @@ namespace GKCore.Stats
         private void GetIndiName(StatsMode mode, List<StatsItem> values, GDMIndividualRecord iRec)
         {
             string v = "";
-            var parts = GKUtils.GetNameParts(iRec);
+            var parts = GKUtils.GetNameParts(fTree, iRec);
 
             switch (mode) {
                 case StatsMode.smSurnames:
@@ -197,23 +197,23 @@ namespace GKCore.Stats
             switch (mode)
             {
                 case StatsMode.smAncestors:
-                    values.Add(new StatsItem(iName, GKUtils.GetAncestorsCount(iRec) - 1));
+                    values.Add(new StatsItem(iName, GKUtils.GetAncestorsCount(fTree, iRec) - 1));
                     break;
 
                 case StatsMode.smDescendants:
-                    values.Add(new StatsItem(iName, GKUtils.GetDescendantsCount(iRec) - 1));
+                    values.Add(new StatsItem(iName, GKUtils.GetDescendantsCount(fTree, iRec) - 1));
                     break;
 
                 case StatsMode.smDescGenerations:
-                    values.Add(new StatsItem(iName, GKUtils.GetDescGenerations(iRec)));
+                    values.Add(new StatsItem(iName, GKUtils.GetDescGenerations(fTree, iRec)));
                     break;
 
                 case StatsMode.smChildsCount:
-                    values.Add(new StatsItem(iName, iRec.GetTotalChildsCount()));
+                    values.Add(new StatsItem(iName, fTree.GetTotalChildrenCount(iRec)));
                     break;
 
                 case StatsMode.smFirstbornAge:
-                    values.Add(new StatsItem(iName, GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(iRec))));
+                    values.Add(new StatsItem(iName, GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(fTree, iRec))));
                     break;
 
                 case StatsMode.smMarriages:
@@ -221,7 +221,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smMarriageAge:
-                    values.Add(new StatsItem(iName, GKUtils.GetMarriageAge(iRec)));
+                    values.Add(new StatsItem(iName, GKUtils.GetMarriageAge(fTree, iRec)));
                     break;
 
                 case StatsMode.smSurnames:
@@ -251,7 +251,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smChildsDistribution:
-                    CheckVal(values, iRec.GetTotalChildsCount().ToString());
+                    CheckVal(values, fTree.GetTotalChildrenCount(iRec).ToString());
                     break;
 
                 case StatsMode.smResidences:
@@ -334,12 +334,8 @@ namespace GKCore.Stats
             if (values == null)
                 throw new ArgumentNullException("values");
 
-            if (mode < StatsMode.smDescGenerations) {
-                GKUtils.InitExtCounts(fTree, -1);
-            }
-
             // special buffers for difficult calculations with averaged ages
-            Dictionary<string, List<int>> xvals = new Dictionary<string, List<int>>();
+            var xvals = new Dictionary<string, List<int>>();
 
             int num = fTree.RecordsCount;
             for (int i = 0; i < num; i++)
@@ -356,7 +352,7 @@ namespace GKCore.Stats
                     }
                     else
                     {
-                        GDMIndividualRecord iChild = GKUtils.GetFirstborn(iRec);
+                        GDMIndividualRecord iChild = GKUtils.GetFirstborn(fTree, iRec);
                         int fba = GKUtils.GetFirstbornAge(iRec, iChild);
                         if (fba > 0 && iChild != null) {
                             string key;
@@ -401,9 +397,9 @@ namespace GKCore.Stats
                 {
                     GDMFamilyRecord fRec = rec as GDMFamilyRecord;
 
-                    int diff = GKUtils.GetSpousesDiff(fRec);
+                    int diff = GKUtils.GetSpousesDiff(fTree, fRec);
                     if (diff != -1) {
-                        values.Add(new StatsItem(GKUtils.GetFamilyString(fRec), diff));
+                        values.Add(new StatsItem(GKUtils.GetFamilyString(fTree, fRec), diff));
                     }
                 }
             }
@@ -477,7 +473,7 @@ namespace GKCore.Stats
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeStats.WriteStatsReport(): " + ex.Message);
+                Logger.WriteError("TreeStats.WriteStatsReport()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
 #endif

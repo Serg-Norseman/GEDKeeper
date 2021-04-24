@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using BSLib.Design.MVP;
@@ -85,7 +84,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CommonWindow : CommonForm, IWindow
+    public class CommonWindow : CommonForm, IWindow
     {
         public virtual void Show(bool showInTaskbar)
         {

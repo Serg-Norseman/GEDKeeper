@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
@@ -70,63 +71,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        public void SetParentsAvl(bool avail)
-        {
-            btnParentsEdit.Enabled = avail;
-        }
-
-        public void SetFatherAvl(bool avail)
-        {
-            btnFatherAdd.Enabled = !avail;
-            btnFatherDelete.Enabled = avail;
-        }
-
-        public void SetMotherAvl(bool avail)
-        {
-            btnMotherAdd.Enabled = !avail;
-            btnMotherDelete.Enabled = avail;
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-                CancelClickHandler(sender, e);
-            } catch (Exception ex) {
-                Logger.LogWrite("ParentsEditDlg.btnCancel_Click(): " + ex.Message);
-            }
-        }
-
-        private void btnFatherAdd_Click(object sender, EventArgs e)
-        {
-            fController.AddFather();
-        }
-
-        private void btnFatherDelete_Click(object sender, EventArgs e)
-        {
-            fController.DeleteFather();
-        }
-
-        private void btnMotherAdd_Click(object sender, EventArgs e)
-        {
-            fController.AddMother();
-        }
-
-        private void btnMotherDelete_Click(object sender, EventArgs e)
-        {
-            fController.DeleteMother();
-        }
-
-        private void btnParentsEdit_Click(object sender, EventArgs e)
-        {
-            fController.EditParents();
-        }
-
         public ParentsEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -159,6 +103,64 @@ namespace GKUI.Forms
             SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
             SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
             SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
+        }
+
+        public void SetParentsAvl(bool avail)
+        {
+            btnParentsEdit.Enabled = avail;
+        }
+
+        public void SetFatherAvl(bool avail)
+        {
+            btnFatherAdd.Enabled = !avail;
+            btnFatherDelete.Enabled = avail;
+        }
+
+        public void SetMotherAvl(bool avail)
+        {
+            btnMotherAdd.Enabled = !avail;
+            btnMotherDelete.Enabled = avail;
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void btnFatherAdd_Click(object sender, EventArgs e)
+        {
+            fController.AddFather();
+        }
+
+        private void btnFatherDelete_Click(object sender, EventArgs e)
+        {
+            fController.DeleteFather();
+        }
+
+        private void btnMotherAdd_Click(object sender, EventArgs e)
+        {
+            fController.AddMother();
+        }
+
+        private void btnMotherDelete_Click(object sender, EventArgs e)
+        {
+            fController.DeleteMother();
+        }
+
+        private void btnParentsEdit_Click(object sender, EventArgs e)
+        {
+            fController.EditParents();
         }
     }
 }

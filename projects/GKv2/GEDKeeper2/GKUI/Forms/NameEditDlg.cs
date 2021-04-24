@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,9 +23,8 @@ using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Types;
+using GKCore.Names;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -64,18 +63,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void edName_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == '/') {
-                e.Handled = true;
-            }
-        }
-
         public NameEditDlg()
         {
             InitializeComponent();
@@ -94,6 +81,29 @@ namespace GKUI.Forms
             lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
 
             fController = new NameEditDlgController(this);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void edName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '/') {
+                e.Handled = true;
+            }
         }
     }
 }

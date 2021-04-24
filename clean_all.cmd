@@ -16,3 +16,8 @@ del .\GEDKeeper3.Gtk3.exe.*
 del .\GEDKeeper3.Mac.exe.*
 del .\GEDKeeper3.WinForms.exe.*
 del .\GEDKeeper3.Wpf.exe.*
+
+del .\appdata\imagecache\*.* /q
+del .\appdata\xdb\*.* /q
+del .\appdata\GEDKeeper2.log
+del .\appdata\GEDKeeper2.nms

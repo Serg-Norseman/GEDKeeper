@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using GDModel;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -34,6 +32,8 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
+
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
@@ -43,7 +43,7 @@ namespace GDModel
         {
             GDMSubmissionRecord submRec = fContext.Tree.AddRecord(new GDMSubmissionRecord(fContext.Tree)) as GDMSubmissionRecord;
             GDMRecord sbmrRec = fContext.Tree.AddRecord(new GDMSubmitterRecord(fContext.Tree));
-            sbmrRec.InitNew();
+            fContext.Tree.NewXRef(sbmrRec);
             string submitterXRef = sbmrRec.XRef;
 
             submRec.FamilyFileName = "FamilyFileName";
@@ -62,7 +62,7 @@ namespace GDModel
             Assert.AreEqual(GDMOrdinanceProcessFlag.opYes, submRec.OrdinanceProcessFlag);
 
             submRec.Submitter.XRef = submitterXRef;
-            GDMSubmitterRecord subr = submRec.Submitter.Value as GDMSubmitterRecord;
+            GDMSubmitterRecord subr = fContext.Tree.GetPtrValue<GDMSubmitterRecord>(submRec.Submitter);
             Assert.IsNotNull(subr);
 
 

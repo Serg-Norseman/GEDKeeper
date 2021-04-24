@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,17 +23,11 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMAssociation : GDMPointerWithNotes
+    public sealed class GDMAssociation : GDMPointerWithNotes, IGDMStructWithSourceCitations
     {
         private string fRelation;
         private GDMList<GDMSourceCitation> fSourceCitations;
 
-
-        public GDMIndividualRecord Individual
-        {
-            get { return (Value as GDMIndividualRecord); }
-            set { Value = value; }
-        }
 
         public string Relation
         {
@@ -47,10 +41,10 @@ namespace GDModel
         }
 
 
-        public GDMAssociation(GDMObject owner) : base(owner)
+        public GDMAssociation()
         {
             SetName(GEDCOMTagType.ASSO);
-            fSourceCitations = new GDMList<GDMSourceCitation>(this);
+            fSourceCitations = new GDMList<GDMSourceCitation>();
         }
 
         protected override void Dispose(bool disposing)
@@ -59,6 +53,13 @@ namespace GDModel
                 fSourceCitations.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fSourceCitations.TrimExcess();
         }
 
         public override void Clear()

@@ -113,7 +113,7 @@ namespace GKUI.Forms
             fController.CalcStats(fCurrentMode);
 
             fListStats.SortColumn = -1;
-            fListStats.Sorting = System.Windows.Forms.SortOrder.None;
+            fListStats.Sorting = SortOrder.None;
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)

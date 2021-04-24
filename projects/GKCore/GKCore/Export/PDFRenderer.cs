@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -41,7 +41,7 @@ namespace GKCore.Export
         private readonly float fPageHeight;
         private readonly float fPageWidth;
 
-        public PDFRenderer(float pageWidth, float pageHeight) : base()
+        public PDFRenderer(float pageWidth, float pageHeight)
         {
             fPageHeight = pageHeight;
             fPageWidth = pageWidth;
@@ -51,7 +51,7 @@ namespace GKCore.Export
         {
             PdfContentByte gfx = target as PdfContentByte;
             if (gfx == null)
-                throw new ArgumentException(@"Argument's type mismatch", "target");
+                throw new ArgumentNullException("target");
 
             fCanvas = gfx;
         }

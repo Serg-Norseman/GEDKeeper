@@ -143,11 +143,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("LocationEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

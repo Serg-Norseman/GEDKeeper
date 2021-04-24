@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -106,7 +107,6 @@ namespace GKUI.Forms
                 tbStart.Text = LangMan.LS(LSID.LSID_Start);
                 tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
             }
-
             timer1.Enabled = active;
         }
 

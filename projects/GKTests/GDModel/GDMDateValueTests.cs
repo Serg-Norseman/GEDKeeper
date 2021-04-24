@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using GDModel;
 using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
@@ -33,25 +32,27 @@ namespace GDModel
         public void Test_Common()
         {
             // check empty dateval match
-            using (GDMDateValue dtx1 = new GDMDateValue(null)) {
+            using (GDMDateValue dtx1 = new GDMDateValue()) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
-                using (GDMDateValue dtx2 = new GDMDateValue(null)) {
+                using (GDMDateValue dtx2 = new GDMDateValue()) {
                     Assert.IsNotNull(dtx2, "dtx1 != null");
 
                     Assert.AreEqual(0.0f, dtx1.IsMatch(dtx2, new MatchParams()));
                 }
             }
 
-            using (GDMDateValue dtx1 = new GDMDateValue(null)) {
+            using (GDMDateValue dtx1 = new GDMDateValue()) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 Assert.AreEqual("", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true)); // value is empty
 
                 dtx1.ParseString("20 JAN 2013");
                 Assert.AreEqual("2013.01.20 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
+
+                Assert.AreEqual(string.Empty, dtx1.ParseString(null));
             }
 
-            using (GDMDateValue dtx1 = new GDMDateValue(null)) {
+            using (GDMDateValue dtx1 = new GDMDateValue()) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 dtx1.ParseString("20 JAN 2013");
 
@@ -115,7 +116,7 @@ namespace GDModel
                 ((GDMDate)dtx1.Value).Approximated = GDMApproximated.daExact;
                 Assert.AreEqual("20 DEC 2013", dtx1.StringValue);
 
-                using (GDMDateValue dtx2 = new GDMDateValue(null)) {
+                using (GDMDateValue dtx2 = new GDMDateValue()) {
                     dtx2.ParseString("19 JAN 2013");
                     int res = dtx1.CompareTo(dtx2);
                     Assert.AreEqual(1, res);

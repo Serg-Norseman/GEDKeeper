@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,8 +19,6 @@
  */
 
 using System;
-using BSLib;
-using GDModel;
 using GKCore;
 using GKCore.Types;
 using GKTests;
@@ -64,14 +62,13 @@ namespace GDModel
                     Assert.AreEqual(100.0f, src1.IsMatch(src2, new MatchParams()));
                 }
 
-                src1.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, src1.GetTree());
+                src1.ResetTree(fContext.Tree);
             }
 
             // check move
             using (GDMSourceRecord src1 = new GDMSourceRecord(fContext.Tree)) {
                 Assert.Throws(typeof(ArgumentException), () => {
-                    src1.MoveTo(null, false);
+                    src1.MoveTo(null);
                 });
 
                 // fill the record
@@ -99,7 +96,7 @@ namespace GDModel
 
                     Assert.AreEqual(0, src2.RepositoryCitations.Count);
 
-                    src1.MoveTo(src2, false);
+                    src1.MoveTo(src2);
 
                     Assert.AreEqual("test source 2", src2.ShortTitle);
 
@@ -117,7 +114,9 @@ namespace GDModel
         public void Test_GDMSourceCitation()
         {
             GDMIndividualRecord indiv = new GDMIndividualRecord(fContext.Tree);
+
             GDMSourceRecord sourRec = new GDMSourceRecord(fContext.Tree);
+            fContext.Tree.NewXRef(sourRec);
 
             using (GDMSourceCitation srcCit = indiv.AddSource(sourRec, "p2", 3)) {
                 Assert.IsNotNull(srcCit);
@@ -138,13 +137,33 @@ namespace GDModel
                 });
 
                 srcCit.Clear();
-                srcCit.Value = null;
+                srcCit.XRef = string.Empty;
 
                 Assert.IsTrue(srcCit.IsEmpty(), "srcCit.IsEmpty()"); // its pointer
 
                 srcCit.Description.Text = "test";
                 Assert.AreEqual("test", srcCit.Description.Text);
             }
+        }
+
+        [Test]
+        public void Test_GDMSourceCitation2()
+        {
+            string text = "0 @I1@ INDI\n1 SOUR Textual source citation\n2 CONT continue tag...";
+            GDMIndividualRecord iRec = TestUtils.ParseIndiRec(text);
+            Assert.AreEqual(1, iRec.SourceCitations.Count);
+            var sourCit = iRec.SourceCitations[0];
+            Assert.AreEqual("Textual source citation\r\ncontinue tag...", sourCit.Description.Text);
+        }
+
+        [Test]
+        public void Test_GDMSourceCitation3()
+        {
+            string text = "0 @I1@ INDI\n1 SOUR @S1@";
+            GDMIndividualRecord iRec = TestUtils.ParseIndiRec(text);
+            Assert.AreEqual(1, iRec.SourceCitations.Count);
+            var sourCit = iRec.SourceCitations[0];
+            Assert.AreEqual("S1", sourCit.XRef);
         }
 
         [Test]

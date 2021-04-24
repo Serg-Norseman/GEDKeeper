@@ -68,5 +68,16 @@ namespace GKUI.Forms
         {
             DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
         }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
     }
 }

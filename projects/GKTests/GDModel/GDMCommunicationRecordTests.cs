@@ -19,7 +19,6 @@
  */
 
 using System;
-using GDModel;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -55,11 +54,11 @@ namespace GDModel
 
                 comRec.SetCorresponder(GDMCommunicationDir.cdFrom, iRec);
                 Assert.AreEqual(GDMCommunicationDir.cdFrom, comRec.CommDirection);
-                Assert.AreEqual(iRec, comRec.Corresponder.Value);
+                Assert.AreEqual(iRec, fContext.Tree.GetPtrValue<GDMRecord>(comRec.Corresponder));
 
                 comRec.SetCorresponder(GDMCommunicationDir.cdTo, iRec);
                 Assert.AreEqual(GDMCommunicationDir.cdTo, comRec.CommDirection);
-                Assert.AreEqual(iRec, comRec.Corresponder.Value);
+                Assert.AreEqual(iRec, fContext.Tree.GetPtrValue<GDMRecord>(comRec.Corresponder));
 
                 using (GDMCommunicationRecord comm2 = fContext.Tree.CreateCommunication()) {
                     Assert.Throws(typeof(ArgumentException), () => {

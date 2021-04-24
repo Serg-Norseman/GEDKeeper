@@ -11,7 +11,7 @@
 		private System.Windows.Forms.Label lblTheme;
 		private System.Windows.Forms.TextBox txtName;
 		private System.Windows.Forms.Label lblDate;
-		private System.Windows.Forms.MaskedTextBox txtDate;
+		private GKUI.Components.GKDateBox txtDate;
 		private System.Windows.Forms.Label lblType;
 		private System.Windows.Forms.ComboBox cmbCorrType;
 		private System.Windows.Forms.ComboBox txtDir;
@@ -28,7 +28,7 @@
 		    this.lblCorresponder = new System.Windows.Forms.Label();
 		    this.btnPersonAdd = new System.Windows.Forms.Button();
 		    this.txtName = new System.Windows.Forms.TextBox();
-		    this.txtDate = new System.Windows.Forms.MaskedTextBox();
+		    this.txtDate = new GKUI.Components.GKDateBox();
 		    this.cmbCorrType = new System.Windows.Forms.ComboBox();
 		    this.txtDir = new System.Windows.Forms.ComboBox();
 		    this.txtCorresponder = new System.Windows.Forms.TextBox();

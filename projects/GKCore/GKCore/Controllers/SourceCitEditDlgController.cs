@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -60,28 +60,28 @@ namespace GKCore.Controllers
         {
             try {
                 int idx = fSourcesList.IndexOf(fView.Source.Text);
-                GDMSourceRecord src = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GDMSourceRecord));
+                GDMSourceRecord sourceRec = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GDMSourceRecord));
 
-                if (src == null) {
+                if (sourceRec == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
 
                     return false;
                 } else {
-                    fSourceCitation.Value = src;
+                    fSourceCitation.XRef = sourceRec.XRef;
                     fSourceCitation.Page = fView.Page.Text;
                     fSourceCitation.CertaintyAssessment = fView.Certainty.SelectedIndex;
 
                     return true;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("SourceCitEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("SourceCitEditDlgController.Accept()", ex);
                 return false;
             }
         }
 
         public override void UpdateView()
         {
-            GDMSourceRecord src = (fSourceCitation.Value as GDMSourceRecord);
+            var src = fBase.Context.Tree.GetPtrValue<GDMSourceRecord>(fSourceCitation);
             if (src != null) fView.Source.Text = src.ShortTitle;
 
             fView.Page.Text = fSourceCitation.Page;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -68,7 +68,7 @@ namespace GDModel
         }
 
 
-        public GDMCutoutPosition(GDMObject owner) : base(owner)
+        public GDMCutoutPosition()
         {
             SetName(GEDCOMTagType._POSITION);
         }
@@ -80,7 +80,7 @@ namespace GDModel
             if (fX1 == 0 && fY1 == 0 && fX2 == 0 && fY2 == 0) {
                 result = string.Empty;
             } else {
-                result = string.Format("{0} {1} {2} {3}", new object[] { fX1, fY1, fX2, fY2 });
+                result = string.Format("{0} {1} {2} {3}", fX1, fY1, fX2, fY2);
             }
 
             return result;

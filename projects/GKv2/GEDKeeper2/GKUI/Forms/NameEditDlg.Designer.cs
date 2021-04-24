@@ -85,6 +85,7 @@
 			this.btnCancel.TabIndex = 6;
 			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
 			// grpPatronymics
 			// 

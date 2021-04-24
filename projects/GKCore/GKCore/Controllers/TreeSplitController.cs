@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -84,7 +84,7 @@ namespace GKCore.Controllers
             if (startPerson == null) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
             } else {
-                TreeTools.WalkTree(startPerson, walkMode, fSplitList);
+                TreeTools.WalkTree(fBase.Context.Tree, startPerson, walkMode, fSplitList);
             }
 
             UpdateView();
@@ -115,7 +115,7 @@ namespace GKCore.Controllers
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
-            TreeTools.CheckRelations(fSplitList);
+            TreeTools.CheckRelations(fBase.Context.Tree, fSplitList);
 
             var tree = fBase.Context.Tree;
             GKUtils.PrepareHeader(tree, fileName, GlobalOptions.Instance.DefCharacterSet, true);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,19 +36,9 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMDateValue(owner, tagId, tagValue);
-        }
-
-        public GDMDateValue(GDMObject owner) : base(owner)
+        public GDMDateValue()
         {
             fValue = null;
-        }
-
-        public GDMDateValue(GDMObject owner, int tagId, string tagValue) : this(owner)
-        {
-            SetNameValue(tagId, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -57,6 +47,15 @@ namespace GDModel
                 if (fValue != null) fValue.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            if (fValue != null) {
+                fValue.TrimExcess();
+            }
         }
 
         protected override string GetStringValue()
@@ -75,7 +74,7 @@ namespace GDModel
             if (fValue != null) {
                 fValue.SetDateTime(value);
             } else {
-                fValue = new GDMDate(this);
+                fValue = new GDMDate();
                 fValue.Date = value;
             }
         }
@@ -100,9 +99,9 @@ namespace GDModel
                     fValue = null;
                 }
 
-                return string.IsNullOrEmpty(strValue) ? string.Empty : GEDCOMUtils.ParseDateValue(GetTree(), this, strValue);
+                return string.IsNullOrEmpty(strValue) ? string.Empty : GEDCOMUtils.ParseDateValue(null, this, strValue);
             } catch (Exception ex) {
-                Logger.LogWrite("GEDCOMDateValue.ParseString(\"" + strValue + "\"): " + ex.Message);
+                Logger.WriteError("GDMDateValue.ParseString(\"" + strValue + "\")", ex);
                 return strValue;
             }
         }

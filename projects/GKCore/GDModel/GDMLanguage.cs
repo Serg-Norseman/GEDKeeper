@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -174,19 +174,14 @@ namespace GDModel
             return GEDCOMUtils.GetLanguageStr(fValue);
         }
 
-        public GDMLanguage(GDMObject owner) : base(owner)
+        public GDMLanguage()
         {
             SetName(GEDCOMTagType.LANG);
         }
 
-        public GDMLanguage(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMLanguage(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
-        }
-
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMLanguage(owner, tagId, tagValue);
         }
     }
 }

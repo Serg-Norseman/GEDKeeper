@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,7 @@ using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
+using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
@@ -85,14 +86,15 @@ namespace GKCore.Controllers
                         break;
                 }
                 #endif
-                fView.SexCombo.AddItem(name, null, image);
+                fView.SexCombo.AddItem(name, sx, image);
             }
         }
 
         private bool IsExtendedWomanSurname()
         {
+            var selectedSex = fView.SexCombo.GetSelectedTag<GDMSex>();
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (fView.SexCombo.SelectedIndex == (sbyte)GDMSex.svFemale);
+                (selectedSex == GDMSex.svFemale);
             return result;
         }
 
@@ -112,10 +114,17 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                GDMPersonalName np = fPerson.PersonalNames[0];
-                GKUtils.SetNameParts(np, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
+                GDMPersonalName persName;
+                if (fPerson.PersonalNames.Count > 0) {
+                    persName = fPerson.PersonalNames[0];
+                } else {
+                    persName = new GDMPersonalName();
+                    fPerson.PersonalNames.Add(persName);
+                }
 
-                GDMPersonalNamePieces pieces = np.Pieces;
+                GKUtils.SetNameParts(persName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
+
+                GDMPersonalNamePieces pieces = persName.Pieces;
                 pieces.Nickname = fView.Nickname.Text;
                 pieces.Prefix = fView.NamePrefix.Text;
                 pieces.SurnamePrefix = fView.SurnamePrefix.Text;
@@ -137,7 +146,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("PersonEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -145,8 +154,6 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
-                GDMPersonalName np = (fPerson.PersonalNames.Count > 0) ? fPerson.PersonalNames[0] : null;
-                UpdateNameControls(np);
 
                 fView.SexCombo.SelectedIndex = (sbyte)fPerson.Sex;
                 fView.Patriarch.Checked = fPerson.Patriarch;
@@ -170,7 +177,7 @@ namespace GKCore.Controllers
 
                 UpdateControls(true);
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlgController.UpdateView(): " + ex.Message);
+                Logger.WriteError("PersonEditDlgController.UpdateView()", ex);
             }
         }
 
@@ -179,22 +186,23 @@ namespace GKCore.Controllers
             bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
 
             if (fPerson.ChildToFamilyLinks.Count != 0) {
-                GDMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
+                GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fPerson.ChildToFamilyLinks[0]);
                 fView.SetParentsAvl(true, locked);
 
-                GDMIndividualRecord relPerson = family.Husband.Individual;
-                if (relPerson != null) {
+                GDMIndividualRecord father, mother;
+                fBase.Context.Tree.GetSpouses(family, out father, out mother);
+
+                if (father != null) {
                     fView.SetFatherAvl(true, locked);
-                    fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
+                    fView.Father.Text = GKUtils.GetNameString(father, true, false);
                 } else {
                     fView.SetFatherAvl(false, locked);
                     fView.Father.Text = "";
                 }
 
-                relPerson = family.Wife.Individual;
-                if (relPerson != null) {
+                if (mother != null) {
                     fView.SetMotherAvl(true, locked);
-                    fView.Mother.Text = GKUtils.GetNameString(relPerson, true, false);
+                    fView.Mother.Text = GKUtils.GetNameString(mother, true, false);
                 } else {
                     fView.SetMotherAvl(false, locked);
                     fView.Mother.Text = "";
@@ -211,6 +219,8 @@ namespace GKCore.Controllers
 
         public void UpdateControls(bool totalUpdate = false)
         {
+            var np = (fPerson.PersonalNames.Count > 0) ? fPerson.PersonalNames[0] : null;
+            UpdateNameControls(np);
             UpdateParents();
 
             if (totalUpdate) {
@@ -230,12 +240,9 @@ namespace GKCore.Controllers
             UpdatePortrait(totalUpdate);
 
             bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
-            ICulture culture = fBase.Context.Culture;
 
             // controls lock
             fView.Name.Enabled = !locked;
-            fView.Patronymic.Enabled = !locked && culture.HasPatronymic();
-            fView.Surname.Enabled = !locked && culture.HasSurname();
 
             fView.SexCombo.Enabled = !locked;
             fView.Patriarch.Enabled = !locked;
@@ -247,6 +254,7 @@ namespace GKCore.Controllers
             fView.NameSuffix.Enabled = !locked;
 
             fView.EventsList.ReadOnly = locked;
+            fView.NamesList.ReadOnly = locked;
             fView.NotesList.ReadOnly = locked;
             fView.MediaList.ReadOnly = locked;
             fView.SourcesList.ReadOnly = locked;
@@ -259,8 +267,10 @@ namespace GKCore.Controllers
 
         public void UpdateNameControls(GDMPersonalName np)
         {
+            ICulture culture;
             if (np != null) {
-                var parts = GKUtils.GetNameParts(fPerson, np, false);
+                var parts = GKUtils.GetNameParts(fBase.Context.Tree, fPerson, np, false);
+                culture = parts.Culture;
 
                 fView.Surname.Text = parts.Surname;
                 fView.Name.Text = parts.Name;
@@ -273,6 +283,8 @@ namespace GKCore.Controllers
 
                 fView.MarriedSurname.Text = np.Pieces.MarriedName;
             } else {
+                culture = fBase.Context.Culture;
+
                 fView.Surname.Text = "";
                 fView.Name.Text = "";
                 fView.Patronymic.Text = "";
@@ -284,6 +296,10 @@ namespace GKCore.Controllers
 
                 fView.MarriedSurname.Text = "";
             }
+
+            var locked = (fView.RestrictionCombo.SelectedIndex == (int) GDMRestriction.rnLocked);
+            fView.Patronymic.Enabled = !locked && culture.HasPatronymic();
+            fView.Surname.Enabled = !locked && culture.HasSurname();
         }
 
         public void UpdatePortrait(bool totalUpdate)
@@ -305,9 +321,6 @@ namespace GKCore.Controllers
                     case GDMSex.svFemale:
                         img = AppHost.GfxProvider.LoadResourceImage("pi_female_140.png", false);
                         break;
-
-                    default:
-                        break;
                 }
             }
             fView.SetPortrait(img);
@@ -322,18 +335,15 @@ namespace GKCore.Controllers
                 fTarget = value;
 
                 if (fTarget != null) {
-                    ICulture culture = fBase.Context.Culture;
                     INamesTable namesTable = AppHost.NamesTable;
 
-                    var parts = GKUtils.GetNameParts(fTarget);
-                    fView.Surname.Text = parts.Surname;
+                    var parts = GKUtils.GetNameParts(fBase.Context.Tree, fTarget, false);
+                    ICulture culture = parts.Culture;
                     GDMSex sx = (GDMSex)fView.SexCombo.SelectedIndex;
 
                     switch (fTargetMode) {
                         case TargetMode.tmParent:
-                            if (sx == GDMSex.svFemale) {
-                                SetMarriedSurname(parts.Surname);
-                            }
+                            fView.Surname.Text = parts.Surname;
                             if (culture.HasPatronymic()) {
                                 AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GDMSex.svMale));
                                 AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GDMSex.svFemale));
@@ -344,24 +354,27 @@ namespace GKCore.Controllers
                         case TargetMode.tmChild:
                             switch (sx) {
                                 case GDMSex.svMale:
+                                    fView.Surname.Text = parts.Surname;
                                     if (culture.HasPatronymic()) {
                                         fView.Name.Text = namesTable.GetNameByPatronymic(parts.Patronymic);
                                     }
                                     break;
 
                                 case GDMSex.svFemale:
-                                    SetMarriedSurname(parts.Surname);
+                                    SetMarriedSurname(culture, parts.Surname);
                                     break;
                             }
                             break;
 
-                        case TargetMode.tmWife:
-                            SetMarriedSurname(parts.Surname);
+                        case TargetMode.tmSpouse:
+                            if (sx == GDMSex.svFemale) {
+                                SetMarriedSurname(culture, parts.Surname);
+                            }
                             break;
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + "): " + ex.Message);
+                Logger.WriteError("PersonEditDlg.SetTarget(" + fTargetMode.ToString() + ")", ex);
             }
         }
 
@@ -372,9 +385,9 @@ namespace GKCore.Controllers
             }
         }
 
-        private void SetMarriedSurname(string husbSurname)
+        private void SetMarriedSurname(ICulture culture, string husbSurname)
         {
-            string surname = fBase.Context.Culture.GetMarriedSurname(husbSurname);
+            string surname = culture.GetMarriedSurname(husbSurname);
             if (IsExtendedWomanSurname()) {
                 fView.MarriedSurname.Text = surname;
             } else {
@@ -475,12 +488,20 @@ namespace GKCore.Controllers
             }
         }
 
+        public void JumpToRecord(GDMPointer pointer)
+        {
+            if (pointer != null && Accept()) {
+                fBase.SelectRecordByXRef(pointer.XRef, true);
+                fView.Close();
+            }
+        }
+
         public void JumpToFather()
         {
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
-            JumpToRecord(family.Husband.Individual);
+            JumpToRecord(family.Husband);
         }
 
         public void JumpToMother()
@@ -488,7 +509,22 @@ namespace GKCore.Controllers
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
-            JumpToRecord(family.Wife.Individual);
+            JumpToRecord(family.Wife);
+        }
+
+        public void JumpToPersonSpouse(GDMFamilyRecord family)
+        {
+            GDMIndividualRecord spouse = null;
+            switch (fPerson.Sex) {
+                case GDMSex.svMale:
+                    spouse = fBase.Context.Tree.GetPtrValue(family.Wife);
+                    break;
+
+                case GDMSex.svFemale:
+                    spouse = fBase.Context.Tree.GetPtrValue(family.Husband);
+                    break;
+            }
+            JumpToRecord(spouse);
         }
     }
 }

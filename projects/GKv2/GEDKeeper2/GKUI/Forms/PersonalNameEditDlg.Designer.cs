@@ -114,6 +114,7 @@
             this.btnCancel.TabIndex = 19;
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // lblSurnamePrefix
             // 
@@ -162,6 +163,8 @@
             this.txtSurname.Name = "txtSurname";
             this.txtSurname.Size = new System.Drawing.Size(226, 24);
             this.txtSurname.TabIndex = 1;
+            this.txtSurname.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtXName_KeyDown);
+            this.txtSurname.Leave += new System.EventHandler(this.txtXName_Leave);
             // 
             // txtName
             // 
@@ -170,6 +173,8 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(226, 24);
             this.txtName.TabIndex = 5;
+            this.txtName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtXName_KeyDown);
+            this.txtName.Leave += new System.EventHandler(this.txtXName_Leave);
             // 
             // txtPatronymic
             // 
@@ -178,6 +183,8 @@
             this.txtPatronymic.Name = "txtPatronymic";
             this.txtPatronymic.Size = new System.Drawing.Size(226, 24);
             this.txtPatronymic.TabIndex = 7;
+            this.txtPatronymic.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtXName_KeyDown);
+            this.txtPatronymic.Leave += new System.EventHandler(this.txtXName_Leave);
             // 
             // txtSurnamePrefix
             // 
@@ -247,6 +254,8 @@
             this.txtMarriedSurname.Name = "txtMarriedSurname";
             this.txtMarriedSurname.Size = new System.Drawing.Size(226, 24);
             this.txtMarriedSurname.TabIndex = 3;
+            this.txtMarriedSurname.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtXName_KeyDown);
+            this.txtMarriedSurname.Leave += new System.EventHandler(this.txtXName_Leave);
             // 
             // cmbLanguage
             // 
@@ -257,6 +266,7 @@
             this.cmbLanguage.Size = new System.Drawing.Size(226, 25);
             this.cmbLanguage.Sorted = true;
             this.cmbLanguage.TabIndex = 21;
+            this.cmbLanguage.SelectedIndexChanged += new System.EventHandler(this.cmbLanguage_SelectedIndexChanged);
             // 
             // lblLanguage
             // 

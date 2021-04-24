@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,10 +19,10 @@
  */
 
 using System;
-using System.Collections.Generic;
 using BSLib;
 using GKCore.Maps;
-using GKTests.Stubs;
+using GKCore.MVP.Controls;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore
@@ -31,14 +31,14 @@ namespace GKCore
     public class PlacesLoaderTests
     {
         [TestFixtureSetUp]
-        public void Init()
+        public void SetUp()
         {
         }
 
         [Test]
         public void Test_PlaceRef()
         {
-            var placeRef = new PlaceRef(null);
+            var placeRef = new PlaceRef(null, null);
             Assert.IsNotNull(placeRef);
             Assert.IsNull(placeRef.Event);
             Assert.AreEqual(0, placeRef.Date.ToBinary());
@@ -47,10 +47,11 @@ namespace GKCore
         [Test]
         public void Test_MapPlace()
         {
-            var mapPlace = new MapPlace();
-            Assert.IsNotNull(mapPlace);
-            Assert.IsNotNull(mapPlace.Points);
-            Assert.IsNotNull(mapPlace.PlaceRefs);
+            using (var mapPlace = new MapPlace()) {
+                Assert.IsNotNull(mapPlace);
+                Assert.IsNotNull(mapPlace.Points);
+                Assert.IsNotNull(mapPlace.PlaceRefs);
+            }
         }
 
         [Test]
@@ -66,29 +67,36 @@ namespace GKCore
         [Test]
         public void Test_Geocoding()
         {
-            IGeocoder geocoder = IGeocoder.Create("");
-            IList<GeoPoint> geoPoints;
+            IGeocoder geocoder = IGeocoder.Create("", "");
 
             geocoder.SetKey("");
             geocoder.SetProxy(null);
             geocoder.SetLang("");
+        }
 
-            try {
-                geocoder = IGeocoder.Create("Google");
-                geocoder.SetKey(GKData.GAPI_KEY);
-                geoPoints = geocoder.Geocode("New York", 1);
-                //Assert.IsTrue(geoPoints.Count > 0);
+        [Test]
+        public void Test_Geocoding_Google()
+        {
+            var geocoder = IGeocoder.Create("Google", "us");
+            geocoder.SetKey(GKData.GAPI_KEY);
+            var geoPoints = geocoder.Geocode("New York", 1);
+            //Assert.IsTrue(geoPoints.Count > 0);
+        }
 
-                geocoder = IGeocoder.Create("Yandex");
-                geoPoints = geocoder.Geocode("New York", 1);
-                //Assert.IsTrue(geoPoints.Count > 0);
+        [Test]
+        public void Test_Geocoding_Yandex()
+        {
+            var geocoder = IGeocoder.Create("Yandex", "us");
+            var geoPoints = geocoder.Geocode("New York", 1);
+            //Assert.IsTrue(geoPoints.Count > 0);
+        }
 
-                geocoder = IGeocoder.Create("OSM");
-                geoPoints = geocoder.Geocode("New York", 1);
-                //Assert.IsTrue(geoPoints.Count > 0);
-            } catch (Exception ex) {
-                Assert.Fail();
-            }
+        [Test]
+        public void Test_Geocoding_OSM()
+        {
+            var geocoder = IGeocoder.Create("OSM", "us");
+            var geoPoints = geocoder.Geocode("New York", 1);
+            //Assert.IsTrue(geoPoints.Count > 0);
         }
 
         [Test]
@@ -96,23 +104,23 @@ namespace GKCore
         {
             var gmapPoints = new ExtList<GeoPoint>();
 
-            PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null));
+            PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null, null));
             Assert.AreEqual(1, gmapPoints.Count);
 
-            PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null));
+            PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null, null));
             Assert.AreEqual(1, gmapPoints.Count); // duplicate will be excluded
         }
 
         [Test]
         public void Test_CopyPoints()
         {
-            var mockBrowser = new MapBrowserStub();
+            var mapBrowser = Substitute.For<IMapBrowser>();
 
-            Assert.Throws(typeof(ArgumentNullException), () => { PlacesLoader.CopyPoints(mockBrowser, null, true); });
+            Assert.Throws(typeof(ArgumentNullException), () => { PlacesLoader.CopyPoints(mapBrowser, null, true); });
 
             var gmapPoints = new ExtList<GeoPoint>();
             gmapPoints.Add(new GeoPoint(0, 0, "test"));
-            PlacesLoader.CopyPoints(mockBrowser, gmapPoints, true);
+            PlacesLoader.CopyPoints(mapBrowser, gmapPoints, true);
         }
 
         [Test]

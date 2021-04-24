@@ -29,12 +29,14 @@ namespace GKUI.Forms
             Shape1.BackgroundColor = Colors.White;
             Shape1.Border = BorderType.Line;
             Shape1.Height = 50;
-            Shape1.Content = new HDefStackLayout() { Items = { lblTitle } };
+            Shape1.Content = new DefStackLayout(Orientation.Horizontal) {
+                Items = { lblTitle }
+            };
 
             Image1 = new Eto.Forms.ImageView();
             Image1.Size = new Size(41, 43);
 
-            var imgLayout = new VDefStackLayout();
+            var imgLayout = new DefStackLayout(Orientation.Vertical);
             imgLayout.HorizontalContentAlignment = HorizontalAlignment.Center;
             imgLayout.VerticalContentAlignment = VerticalAlignment.Top;
             imgLayout.Items.Add(Image1);

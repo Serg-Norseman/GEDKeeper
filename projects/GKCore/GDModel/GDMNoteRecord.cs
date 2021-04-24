@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -27,19 +26,26 @@ namespace GDModel
 {
     public sealed class GDMNoteRecord : GDMRecord, IGDMTextObject
     {
-        private StringList fLines;
+        private GDMLines fLines;
 
-        public StringList Lines
+        public GDMLines Lines
         {
             get { return fLines; }
         }
 
 
-        public GDMNoteRecord(GDMObject owner) : base(owner)
+        public GDMNoteRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.NOTE);
 
-            fLines = new StringList();
+            fLines = new GDMLines();
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fLines.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -82,15 +88,14 @@ namespace GDModel
         /// The MoveTo() merges records and their references, but does not change the text in the target.
         /// </summary>
         /// <param name="targetRecord"></param>
-        /// <param name="clearDest"></param>
-        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord)
         {
             GDMNoteRecord targetNote = (targetRecord as GDMNoteRecord);
             if (targetNote == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
             string targetText = targetNote.Lines.Text;
-            base.MoveTo(targetRecord, clearDest);
+            base.MoveTo(targetRecord);
             targetNote.Lines.Text = targetText;
         }
 
@@ -111,7 +116,7 @@ namespace GDModel
         public void SetNotesArray(params string[] value)
         {
             fLines.Clear();
-            fLines.AddStrings(value);
+            fLines.AddRange(value);
         }
 
         public void AddNoteText(string text)

@@ -16,9 +16,9 @@
 		private System.Windows.Forms.Label lblStatus;
 		private System.Windows.Forms.ComboBox cmbStatus;
 		private System.Windows.Forms.Label lblStartDate;
-		private System.Windows.Forms.MaskedTextBox txtStartDate;
+		private GKUI.Components.GKDateBox txtStartDate;
 		private System.Windows.Forms.Label lblStopDate;
-		private System.Windows.Forms.MaskedTextBox txtStopDate;
+		private GKUI.Components.GKDateBox txtStopDate;
 		private System.Windows.Forms.Label lblPercent;
 		private System.Windows.Forms.NumericUpDown nudPercent;
 		private System.Windows.Forms.TabPage pageGroups;
@@ -35,8 +35,8 @@
 			this.txtName = new System.Windows.Forms.TextBox();
 			this.cmbPriority = new System.Windows.Forms.ComboBox();
 			this.cmbStatus = new System.Windows.Forms.ComboBox();
-			this.txtStartDate = new System.Windows.Forms.MaskedTextBox();
-			this.txtStopDate = new System.Windows.Forms.MaskedTextBox();
+			this.txtStartDate = new GKUI.Components.GKDateBox();
+			this.txtStopDate = new GKUI.Components.GKDateBox();
 			this.nudPercent = new System.Windows.Forms.NumericUpDown();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();

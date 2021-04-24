@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
@@ -36,7 +37,7 @@ using GKUI.Components;
 
 namespace GKSamplePlugin
 {
-    public partial class PersonEditDlgEx : GKUI.Forms.CommonDialog, IBaseEditor, IPersonEditDlg
+    public partial class PersonEditDlgEx : GKUI.Forms.CommonDialog, IPersonEditDlg
     {
         private readonly PersonEditDlgController fController;
 
@@ -187,9 +188,9 @@ namespace GKSamplePlugin
             get { return GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
-        IComboBoxEx IPersonEditDlg.SexCombo
+        IComboBox IPersonEditDlg.SexCombo
         {
-            get { return GetControlHandler<IComboBoxEx>(cmbSex); }
+            get { return GetControlHandler<IComboBox>(cmbSex); }
         }
 
         ICheckBox IPersonEditDlg.Patriarch
@@ -257,7 +258,7 @@ namespace GKSamplePlugin
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.LogWrite("PersonEditDlg.btnCancel_Click(): " + ex.Message);
+                Logger.WriteError("PersonEditDlg.btnCancel_Click()", ex);
             }
         }
 
@@ -272,7 +273,7 @@ namespace GKSamplePlugin
         {
             GDMAssociation ast = eArgs.ItemData as GDMAssociation;
             if (eArgs.Action == RecordAction.raJump && ast != null) {
-                fController.JumpToRecord(ast.Individual);
+                fController.JumpToRecord(ast);
             }
         }
 
@@ -280,14 +281,14 @@ namespace GKSamplePlugin
         {
             GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
             if (eArgs.Action == RecordAction.raJump && family != null) {
-                GDMIndividualRecord spouse = null;
+                GDMIndividualLink spouse = null;
                 switch (fController.Person.Sex) {
                     case GDMSex.svMale:
-                        spouse = family.Wife.Individual;
+                        spouse = family.Wife;
                         break;
 
                     case GDMSex.svFemale:
-                        spouse = family.Husband.Individual;
+                        spouse = family.Husband;
                         break;
                 }
 

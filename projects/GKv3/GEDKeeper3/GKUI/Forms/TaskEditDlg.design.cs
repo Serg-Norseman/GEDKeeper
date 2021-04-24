@@ -14,8 +14,8 @@ namespace GKUI.Forms
         private Label lblPriority;
         private ComboBox txtPriority;
         private Label lblStartDate;
-        private MaskedTextBox txtStartDate;
-        private MaskedTextBox txtStopDate;
+        private GKDateBox txtStartDate;
+        private GKDateBox txtStopDate;
         private Label lblStopDate;
         private Label lblGoal;
         private ComboBox cmbGoalType;
@@ -45,10 +45,10 @@ namespace GKUI.Forms
             txtPriority = new ComboBox();
             txtPriority.ReadOnly = true;
 
-            txtStartDate = new MaskedTextBox();
+            txtStartDate = new GKDateBox();
             txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
 
-            txtStopDate = new MaskedTextBox();
+            txtStopDate = new GKDateBox();
             txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
 
             cmbGoalType = new ComboBox();

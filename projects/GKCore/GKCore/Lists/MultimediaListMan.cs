@@ -62,7 +62,7 @@ namespace GKCore.Lists
         {
             GDMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
 
-            bool res = (QuickFilter == "*" || IsMatchesMask(fileRef.Title, QuickFilter));
+            bool res = IsMatchesMask(fileRef.Title, QuickFilter);
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 

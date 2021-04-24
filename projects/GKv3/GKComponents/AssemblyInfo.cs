@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
+using GKCore;
 
 [assembly: AssemblyTitle("GKComponents")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct("GEDKeeper3")]
-[assembly: AssemblyCopyright("Copyright © 2014-2019 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
 [assembly: AssemblyVersion("1.3.0.0")]
 [assembly: AssemblyCulture("")]

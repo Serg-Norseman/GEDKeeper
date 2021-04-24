@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,8 +19,6 @@
  */
 
 using System;
-using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -35,6 +33,7 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
@@ -47,12 +46,11 @@ namespace GDModel
             using (GDMMultimediaRecord mediaRec = fContext.Tree.CreateMultimedia()) {
                 Assert.IsNotNull(mediaRec);
 
-                mediaRec.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, mediaRec.GetTree());
+                mediaRec.ResetTree(fContext.Tree);
 
                 Assert.AreEqual("", mediaRec.GetFileTitle());
 
-                mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec));
+                mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
                 GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
                 Assert.IsNotNull(fileRef);
 

@@ -110,5 +110,13 @@ namespace GKCore.Export
         public abstract void AddNote(string text, IFont font);
 
         public abstract void AddImage(IImage image);
+
+        public abstract void BeginTable(int columnsCount, int rowsCount);
+        public abstract void EndTable();
+
+        public abstract void BeginTableRow(bool header = false);
+        public abstract void EndTableRow();
+
+        public abstract void AddTableCell(string content, IFont font, TextAlignment alignment);
     }
 }

@@ -10,8 +10,8 @@
 		private System.Windows.Forms.Label lblPriority;
 		private System.Windows.Forms.ComboBox txtPriority;
 		private System.Windows.Forms.Label lblStartDate;
-		private System.Windows.Forms.MaskedTextBox txtStartDate;
-		private System.Windows.Forms.MaskedTextBox txtStopDate;
+		private GKUI.Components.GKDateBox txtStartDate;
+		private GKUI.Components.GKDateBox txtStopDate;
 		private System.Windows.Forms.Label lblStopDate;
 		private System.Windows.Forms.Label lblGoal;
 		private System.Windows.Forms.ComboBox cmbGoalType;
@@ -27,8 +27,8 @@
 		    this.lblGoal = new System.Windows.Forms.Label();
 		    this.btnGoalSelect = new System.Windows.Forms.Button();
 		    this.txtPriority = new System.Windows.Forms.ComboBox();
-		    this.txtStartDate = new System.Windows.Forms.MaskedTextBox();
-		    this.txtStopDate = new System.Windows.Forms.MaskedTextBox();
+		    this.txtStartDate = new GKUI.Components.GKDateBox();
+		    this.txtStopDate = new GKUI.Components.GKDateBox();
 		    this.cmbGoalType = new System.Windows.Forms.ComboBox();
 		    this.txtGoal = new System.Windows.Forms.TextBox();
 		    this.btnAccept = new System.Windows.Forms.Button();

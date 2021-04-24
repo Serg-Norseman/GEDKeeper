@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using BSLib;
 using BSLib.DataViz.SmartGraph;
 using BSLib.Design.Graphics;
 using GDModel;
+using GKCore.Import;
 using GKCore.Options;
 using GKCore.Types;
 
@@ -60,7 +61,9 @@ namespace GKCore.Charts
         private readonly TreeChartModel fModel;
 
         private string fBirthDate;
+        private string fBirthPlace;
         private string fDeathDate;
+        private string fDeathPlace;
         private EnumSet<PersonFlag> fFlags;
         private string fName;
         private string fNick;
@@ -99,6 +102,8 @@ namespace GKCore.Charts
         public bool IsCollapsed;
         public bool IsVisible;
         public IColor UserColor;
+        public bool Adopted;
+        public int NameLines;
 
 
         public IImage Portrait
@@ -301,7 +306,7 @@ namespace GKCore.Charts
                         fModel.PreparedIndividuals.Add(iRec.XRef);
                     }
 
-                    var parts = GKUtils.GetNameParts(iRec);
+                    var parts = GKUtils.GetNameParts(fModel.Base.Context.Tree, iRec);
                     fSurname = parts.Surname;
                     fName = parts.Name;
                     fPatronymic = parts.Patronymic;
@@ -319,20 +324,20 @@ namespace GKCore.Charts
 
                     if (!options.OnlyYears) {
                         if (options.ShowPlaces) {
-                            string birthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
-                            if (!string.IsNullOrEmpty(birthPlace)) {
+                            fBirthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
+                            if (!string.IsNullOrEmpty(fBirthPlace) && !options.SeparateDatesAndPlacesLines) {
                                 if (!string.IsNullOrEmpty(fBirthDate)) {
                                     fBirthDate += ", ";
                                 }
-                                fBirthDate += birthPlace;
+                                fBirthDate += fBirthPlace;
                             }
 
-                            string deathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
-                            if (!string.IsNullOrEmpty(deathPlace)) {
+                            fDeathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
+                            if (!string.IsNullOrEmpty(fDeathPlace) && !options.SeparateDatesAndPlacesLines) {
                                 if (!string.IsNullOrEmpty(fDeathDate)) {
                                     fDeathDate += ", ";
                                 }
-                                fDeathDate += deathPlace;
+                                fDeathDate += fDeathPlace;
                             }
                         }
 
@@ -387,7 +392,9 @@ namespace GKCore.Charts
                     fPatronymic = "";
                     fNick = "";
                     fBirthDate = "";
+                    fBirthPlace = "";
                     fDeathDate = "";
+                    fDeathPlace = "";
                     IsDead = false;
                     fSex = GDMSex.svUnknown;
                     fSigns = EnumSet<SpecialUserRef>.Create();
@@ -395,7 +402,7 @@ namespace GKCore.Charts
                     CertaintyAssessment = 0.0f;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartPerson.BuildBy(): " + ex.Message);
+                Logger.WriteError("TreeChartPerson.BuildBy()", ex);
                 throw;
             }
         }
@@ -413,22 +420,28 @@ namespace GKCore.Charts
                     nameLine += " \"" + fNick + "\"";
                 }
 
+                NameLines = 0;
+
                 // create lines
                 int idx = 0;
 
                 if (options.FamilyVisible) {
                     Lines[idx] = fSurname;
+                    NameLines++;
                     idx++;
                 }
 
                 if (!options.DiffLines) {
                     Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
+                    NameLines++;
                     idx++;
                 } else {
                     Lines[idx] = nameLine;
+                    NameLines++;
                     idx++;
 
                     Lines[idx] = fPatronymic;
+                    NameLines++;
                     idx++;
                 }
 
@@ -436,11 +449,21 @@ namespace GKCore.Charts
                     if (options.BirthDateVisible) {
                         Lines[idx] = fBirthDate;
                         idx++;
+
+                        if (options.SeparateDatesAndPlacesLines) {
+                            Lines[idx] = fBirthPlace;
+                            idx++;
+                        }
                     }
 
                     if (options.DeathDateVisible) {
                         Lines[idx] = fDeathDate;
                         idx++;
+
+                        if (options.SeparateDatesAndPlacesLines) {
+                            Lines[idx] = fDeathPlace;
+                            idx++;
+                        }
                     }
                 } else {
                     string lifeYears = "[ ";
@@ -464,7 +487,7 @@ namespace GKCore.Charts
                     //idx++;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartPerson.InitInfo(): " + ex.Message);
+                Logger.WriteError("TreeChartPerson.InitInfo()", ex);
             }
         }
 
@@ -484,19 +507,34 @@ namespace GKCore.Charts
         public void CalcBounds(int lines, ChartRenderer renderer)
         {
             try {
+                TreeChartOptions options = fModel.Options;
+
                 InitInfo(lines);
                 DefineExpands();
 
+                int bh = renderer.GetTextHeight(fModel.BoldFont);
+                int th = renderer.GetTextHeight(fModel.DrawFont);
+
                 int maxwid = 0;
+                int height = 0;
                 for (int k = 0; k < lines; k++) {
-                    int wt = renderer.GetTextWidth(Lines[k], fModel.DrawFont);
+                    IFont font;
+                    if (options.BoldNames && k < NameLines) {
+                        height += bh;
+                        font = fModel.BoldFont;
+                    } else {
+                        height += th;
+                        font = fModel.DrawFont;
+                    }
+
+                    int wt = renderer.GetTextWidth(Lines[k], font);
                     if (maxwid < wt) maxwid = wt;
                 }
 
                 int pad2side = (fModel.NodePadding * 2);
 
                 fWidth = pad2side + maxwid;
-                fHeight = pad2side + renderer.GetTextHeight(fModel.DrawFont) * lines;
+                fHeight = pad2side + height;
 
                 if (fPortrait != null) {
                     ExtRect portRt = ExtRect.Create(0, 0, fHeight - 1, fHeight - 1);
@@ -516,7 +554,7 @@ namespace GKCore.Charts
                     fWidth += imgW;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
+                Logger.WriteError("TreeChartPerson.CalcBounds()", ex);
             }
         }
 

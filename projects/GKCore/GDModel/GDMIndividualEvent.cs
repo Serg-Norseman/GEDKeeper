@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,18 +22,13 @@ namespace GDModel
 {
     public sealed class GDMIndividualEvent : GDMCustomEvent
     {
-        public GDMIndividualEvent(GDMObject owner) : base(owner)
+        public GDMIndividualEvent()
         {
         }
 
-        public GDMIndividualEvent(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMIndividualEvent(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
-        }
-
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMIndividualEvent(owner, tagId, tagValue);
         }
     }
 }

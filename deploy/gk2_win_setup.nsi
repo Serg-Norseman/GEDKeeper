@@ -1,5 +1,5 @@
 ﻿; "GEDKeeper", the personal genealogical database editor.
-; Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+; Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
 ; This file is part of "GEDKeeper".
 
 !include "MUI2.nsh"
@@ -9,7 +9,7 @@
 
 Unicode true
 Name "GEDKeeper"
-OutFile "gedkeeper_2.16.2_winsetup.exe"
+OutFile "gedkeeper_2.17.0_winsetup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 
 CRCCheck on
@@ -262,10 +262,11 @@ Section "$(gkreq)"
     File "..\GKCore.dll"
     File "..\GKTray.exe"
 
-    File "..\ArborGVT.dll"
     File "..\BSLib.dll"
+    File "..\BSLib.DataViz.Model.dll"
+    File "..\BSLib.Design.dll"
+    File "..\BSLib.Design.WFHandlers.dll"
     File "..\BSLib.Linguistics.dll"
-    File "..\BSLib.SmartGraph.dll"
     File "..\DotNetRtfWriter.dll"
     File "..\ExcelLibrary.dll"
     File "..\GMap.NET.Core.dll"
@@ -481,7 +482,8 @@ SectionGroup /e "$(gkplg)"
         File "..\plugins\GKTreeVizPlugin.enu"
         File "..\plugins\GKTreeVizPlugin.ukr"
         File "..\plugins\GKTreeVizPlugin.pol"
-        File "..\plugins\ArborGVT.dll"
+        File "..\plugins\BSLib.DataViz.Model.dll"
+        File "..\plugins\BSLib.DataViz.WFControls.dll"
     SectionEnd
 
     Section "$(gkp_iv)"
@@ -563,23 +565,22 @@ Section "Uninstall"
     Delete $INSTDIR\GKCore.dll
     Delete $INSTDIR\GKTray.exe
 
-    Delete $INSTDIR\LinqBridge.dll
-    Delete $INSTDIR\NLog.dll
-    Delete $INSTDIR\nVLC.dll
-    Delete $INSTDIR\YamlSerializer.dll
-
     Delete $INSTDIR\BSLib.dll
+    Delete $INSTDIR\BSLib.DataViz.Model.dll
+    Delete $INSTDIR\BSLib.Design.dll
+    Delete $INSTDIR\BSLib.Design.WFHandlers.dll
     Delete $INSTDIR\BSLib.Linguistics.dll
-    Delete $INSTDIR\BSLib.SmartGraph.dll
-    Delete $INSTDIR\GMap.NET.Core.dll
-    Delete $INSTDIR\GMap.NET.WindowsForms.dll
-
-    Delete $INSTDIR\ArborGVT.dll
     Delete $INSTDIR\DotNetRtfWriter.dll
     Delete $INSTDIR\ExcelLibrary.dll
+    Delete $INSTDIR\GMap.NET.Core.dll
+    Delete $INSTDIR\GMap.NET.WindowsForms.dll
     Delete $INSTDIR\itextsharp.dll
     Delete $INSTDIR\lua51.dll
     Delete $INSTDIR\LuaInterface.dll
+    Delete $INSTDIR\NLog.dll
+    Delete $INSTDIR\nVLC.dll
+    Delete $INSTDIR\Ude.dll
+    Delete $INSTDIR\YamlSerializer.dll
     Delete $INSTDIR\ZedGraph.dll
 
     Delete $INSTDIR\uninstall.exe

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -41,23 +42,24 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            var dataOwner = fDataOwner as IGDMStructWithNotes;
             if (fSheetList == null || dataOwner == null) return;
 
             try {
                 fSheetList.ClearItems();
 
                 foreach (GDMNotes note in dataOwner.Notes) {
-                    fSheetList.AddItem(note, new object[] { note.Lines.Text.Trim() });
+                    GDMLines noteLines = fBaseContext.Tree.GetNoteLines(note);
+                    fSheetList.AddItem(note, new object[] { noteLines.Text.Trim() });
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("NoteLinksListModel.UpdateContents(): " + ex.Message);
+                Logger.WriteError("NoteLinksListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            var dataOwner = fDataOwner as IGDMStructWithNotes;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
             GDMNotes notes = eArgs.ItemData as GDMNotes;
@@ -75,7 +77,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raEdit:
                     if (notes != null) {
-                        noteRec = notes.Value as GDMNoteRecord;
+                        noteRec = fBaseContext.Tree.GetPtrValue<GDMNoteRecord>(notes);
                         result = BaseController.ModifyNote(fBaseWin, ref noteRec);
                     }
                     break;

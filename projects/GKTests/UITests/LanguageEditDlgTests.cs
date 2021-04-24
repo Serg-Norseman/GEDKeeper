@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,11 +22,10 @@
 
 using System;
 using System.Windows.Forms;
+using GKCore.Interfaces;
 using GKTests;
-using GKUI.Forms;
-using GKUI.Providers;
+using GKTests.Stubs;
 using NUnit.Framework;
-using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {
@@ -36,6 +35,36 @@ namespace GKUI.Forms
     [TestFixture]
     public class LanguageEditDlgTests : CustomWindowTest
     {
+        private IBaseWindow fBase;
+        private LanguageEditDlg fDialog;
+
+        public override void Setup()
+        {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
+            fBase = new BaseWindowStub();
+
+            fDialog = new LanguageEditDlg();
+            fDialog.Show();
+        }
+
+        public override void TearDown()
+        {
+            fDialog.Dispose();
+        }
+
+        [Test]
+        public void Test_Cancel()
+        {
+            ClickButton("btnCancel", fDialog);
+        }
+
+        [Test]
+        public void Test_EnterDataAndApply()
+        {
+            ClickButton("btnAccept", fDialog);
+        }
 
         #region Handlers for external tests
 

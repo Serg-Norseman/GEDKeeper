@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,6 +27,7 @@ using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
+using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Components;
 
@@ -99,7 +100,7 @@ namespace GKUI.Forms
                 if (!fTipShow) {
                     string xref = resNode.Sign;
                     GDMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GDMFamilyRecord;
-                    string txt = GKUtils.GetFamilyString(famRec) + " [" + xref + "] "/* + resNode.Mass.ToString()*/;
+                    string txt = GKUtils.GetFamilyString(fBase.Context.Tree, famRec) + " [" + xref + "] "/* + resNode.Mass.ToString()*/;
 
                     //fTip.Show(txt, arborViewer1, mpt.X + 24, mpt.Y);
                     fArborViewer.ToolTip = txt;

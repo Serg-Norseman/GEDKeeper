@@ -22,6 +22,7 @@ using BSLib;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
+using GKCore.Tools;
 using GKCore.Types;
 
 namespace GKCore.Controllers

@@ -28,7 +28,7 @@ namespace GKUI.Components
     {
         private const int TAB_PADDING = 5;
 
-        public GKTabControl() : base()
+        public GKTabControl()
         {
             DrawMode = TabDrawMode.OwnerDrawFixed;
             Padding = new Point(20, 4);

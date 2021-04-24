@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,12 +19,11 @@
  */
 
 using System;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
 using GKTests;
-using GKUI.Providers;
+using GKUI;
 using NUnit.Framework;
 
 namespace GDModel
@@ -37,6 +36,7 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             // TempDirtyHack: some functions are references to GlobalOptions (and GfxInit)
             // TODO: replace to mocks
             WFAppHost.ConfigureBootstrap(false);
@@ -62,15 +62,15 @@ namespace GDModel
             Assert.IsFalse(iRec.IsLive());
 
             GDMIndividualRecord ind3 = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
-            Assert.IsNotNull(ind3.GetParentsFamily());
+            Assert.IsNotNull(fContext.Tree.GetParentsFamily(ind3));
 
             GDMIndividualRecord ind2 = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
-            Assert.IsNotNull(ind2.GetMarriageFamily());
+            Assert.IsNotNull(fContext.Tree.GetMarriageFamily(ind2));
 
-            //
+            // TODO: transfer to BaseContext tests
             GDMIndividualRecord indiRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
-            Assert.IsNull(indiRec.GetMarriageFamily());
-            Assert.IsNotNull(indiRec.GetMarriageFamily(true));
+            Assert.IsNull(fContext.GetMarriageFamily(indiRec, false));
+            Assert.IsNotNull(fContext.GetMarriageFamily(indiRec, true));
 
             //
             Assert.Throws(typeof(ArgumentException), () => { indiRec.Assign(null); });
@@ -89,24 +89,15 @@ namespace GDModel
             Assert.AreEqual("test userref", indiRec.UserReferences[0].StringValue);
 
             //
-            Assert.IsNotNull(indiRec.Aliases);
             Assert.IsNotNull(indiRec.Associations);
             Assert.IsNotNull(indiRec.UserReferences); // for GEDCOMRecord
 
             Assert.Throws(typeof(ArgumentException), () => {
-                indiRec.AddEvent(new GDMFamilyEvent(null));
+                indiRec.AddEvent(new GDMFamilyEvent());
             });
 
             GDMIndividualRecord father, mother;
-            GDMFamilyRecord fam = indiRec.GetParentsFamily();
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
-                father = fam.Husband.Individual;
-                mother = fam.Wife.Individual;
-            }
-
+            fContext.Tree.GetParents(indiRec, out father, out mother);
             Assert.IsNull(father);
             Assert.IsNull(mother);
 
@@ -126,7 +117,7 @@ namespace GDModel
             indiRec.Bookmark = false;
             Assert.AreEqual(false, indiRec.Bookmark);
 
-            Assert.Throws(typeof(ArgumentException), () => { indiRec.MoveTo(null, false); });
+            Assert.Throws(typeof(ArgumentException), () => { indiRec.MoveTo(null); });
 
             using (GDMIndividualRecord copyIndi = new GDMIndividualRecord(null)) {
                 Assert.IsNotNull(copyIndi);
@@ -153,7 +144,7 @@ namespace GDModel
             mmLink = indiRec.SetPrimaryMultimediaLink(mmRec);
             Assert.IsNotNull(mmLink);
             mmLink = indiRec.GetPrimaryMultimediaLink();
-            Assert.AreEqual(mmRec, mmLink.Value);
+            Assert.AreEqual(mmRec, fContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink));
 
 
             Assert.AreEqual(-1, indiRec.IndexOfGroup(null));
@@ -167,13 +158,13 @@ namespace GDModel
             using (GDMIndividualRecord indi = new GDMIndividualRecord(fContext.Tree)) {
                 Assert.IsNotNull(indi);
 
-                var parts = GKUtils.GetNameParts(indi); // test with empty PersonalNames
+                var parts = GKUtils.GetNameParts(fContext.Tree, indi); // test with empty PersonalNames
                 Assert.AreEqual("", parts.Surname);
                 Assert.AreEqual("", parts.Name);
                 Assert.AreEqual("", parts.Patronymic);
 
-                indi.AddPersonalName(new GDMPersonalName(indi)); // test with empty Name
-                parts = GKUtils.GetNameParts(indi);
+                indi.AddPersonalName(new GDMPersonalName()); // test with empty Name
+                parts = GKUtils.GetNameParts(fContext.Tree, indi);
                 Assert.AreEqual("", parts.Surname);
                 Assert.AreEqual("", parts.Name);
                 Assert.AreEqual("", parts.Patronymic);
@@ -183,7 +174,7 @@ namespace GDModel
                 Assert.AreEqual("", GKUtils.GetNameString(indi, true, false));
                 Assert.AreEqual("", GKUtils.GetNickString(indi));
 
-                GDMPersonalName pName = new GDMPersonalName(indi);
+                GDMPersonalName pName = new GDMPersonalName();
                 indi.AddPersonalName(pName);
                 pName.Pieces.Nickname = "BigHead";
                 pName.SetNameParts("Ivan", "Petrov", "");
@@ -194,27 +185,31 @@ namespace GDModel
                 Assert.AreEqual("Ivan Petrov [BigHead]", st);
                 Assert.AreEqual("BigHead", GKUtils.GetNickString(indi));
 
-                Assert.IsNull(indi.GetParentsFamily());
-                Assert.IsNotNull(indi.GetParentsFamily(true));
+                Assert.IsNull(fContext.Tree.GetParentsFamily(indi));
+
+                // TODO: move to BaseContext tests
+                Assert.IsNotNull(fContext.GetParentsFamily(indi, true));
 
                 // MoveTo test
                 GDMIndividualRecord ind = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
 
                 indi.AddAssociation("test", ind);
-                indi.Aliases.Add(new GDMAlias(indi));
 
                 using (GDMIndividualRecord indi3 = new GDMIndividualRecord(fContext.Tree)) {
-                    indi.MoveTo(indi3, false);
+                    indi.MoveTo(indi3);
 
                     st = GKUtils.GetNameString(indi3, true, true);
                     Assert.AreEqual("Petrov Ivan [BigHead]", st);
                 }
 
-                indi.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, indi.GetTree());
+                indi.ResetTree(fContext.Tree);
             }
 
             indiRec.ReplaceXRefs(new GDMXRefReplacer());
+
+            fContext.Tree.SortSpouses(indiRec);
+
+            Assert.AreEqual(0, fContext.Tree.GetTotalChildrenCount(indiRec));
         }
 
         private static void GEDCOMRecordTest(GDMRecord rec)
@@ -247,19 +242,19 @@ namespace GDModel
 
             ind1 = tree.CreateIndividual();
             ind1.Sex = GDMSex.svMale;
-            GDMPersonalName pn = ind1.AddPersonalName(new GDMPersonalName(ind1));
+            GDMPersonalName pn = ind1.AddPersonalName(new GDMPersonalName());
             pn.SetNameParts("Ivan Ivanov", "Fedoroff", "");
 
             ind2 = tree.CreateIndividual();
             ind2.Sex = GDMSex.svMale;
-            pn = ind2.AddPersonalName(new GDMPersonalName(ind2));
+            pn = ind2.AddPersonalName(new GDMPersonalName());
             pn.SetNameParts("Ivan Ivanovich", "Fedoroff", "");
 
-            ev1 = new GDMIndividualEvent(ind1, (int)GEDCOMTagType.BIRT, "");
+            ev1 = new GDMIndividualEvent((int)GEDCOMTagType.BIRT, "");
             dtVal1 = ev1.Date;
             ind1.AddEvent(ev1);
 
-            ev2 = new GDMIndividualEvent(ind2, (int)GEDCOMTagType.BIRT, "");
+            ev2 = new GDMIndividualEvent((int)GEDCOMTagType.BIRT, "");
             dtVal2 = ev2.Date;
             ind2.AddEvent(ev2);
 
@@ -321,14 +316,6 @@ namespace GDModel
 
             res = ind1.IsMatch(ind2, mParams);
             Assert.AreEqual(100.0f, res);
-        }
-
-        [Test]
-        public void Test_GDMAlias()
-        {
-            using (GDMAlias alias = new GDMAlias(null)) {
-                Assert.IsNotNull(alias, "alias != null");
-            }
         }
     }
 }

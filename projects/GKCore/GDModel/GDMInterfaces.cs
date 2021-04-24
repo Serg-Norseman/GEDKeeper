@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System.Collections.Generic;
-using BSLib;
 
 namespace GDModel
 {
@@ -34,37 +33,79 @@ namespace GDModel
     }
 
 
+    public interface IGDMLines
+    {
+        string this[int index] { get; set; }
+        int Count { get; }
+        string Text { get; set; }
+
+        void Clear();
+        bool IsEmpty();
+    }
+
+
     public interface IGDMTextObject : IGDMTag
     {
-        StringList Lines { get; }
+        GDMLines Lines { get; }
     }
 
 
-    public interface IGEDCOMListEnumerator<T> : IEnumerator<T>
+    public interface IGDMListEnumerator<out T> : IEnumerator<T>
     {
     }
 
 
-    public interface IGEDCOMTreeEnumerator
+    public interface IGDMTreeEnumerator
     {
         bool MoveNext(out GDMRecord current);
         void Reset();
     }
 
 
-    public interface IGEDCOMStructWithLists : IGDMObject
+    public interface IGDMTreeEnumerator<T> : IGDMTreeEnumerator where T : GDMRecord
     {
-        GDMList<GDMNotes> Notes { get; }
-        GDMList<GDMSourceCitation> SourceCitations { get; }
-        GDMList<GDMMultimediaLink> MultimediaLinks { get; }
-
-        GDMNotes AddNote(GDMNoteRecord noteRec);
-        GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality);
-        GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec);
+        bool MoveNext(out T current);
     }
 
 
-    public interface IGEDCOMRecordWithEvents : IGDMObject
+    public interface IGDMStructWithNotes : IGDMObject
+    {
+        GDMList<GDMNotes> Notes { get; }
+
+        //GDMNotes AddNote(GDMNoteRecord noteRec);
+    }
+
+
+    public interface IGDMStructWithSourceCitations : IGDMObject
+    {
+        GDMList<GDMSourceCitation> SourceCitations { get; }
+
+        //GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality);
+    }
+
+
+    public interface IGDMStructWithMultimediaLinks : IGDMObject
+    {
+        GDMList<GDMMultimediaLink> MultimediaLinks { get; }
+
+        //GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec);
+    }
+
+
+    public interface IGDMStructWithUserReferences : IGDMObject
+    {
+        GDMList<GDMUserReference> UserReferences { get; }
+
+        //void AddUserRef(string reference);
+    }
+
+
+    public interface IGDMStructWithLists : IGDMStructWithNotes, IGDMStructWithSourceCitations, IGDMStructWithMultimediaLinks
+    {
+    }
+
+
+    public interface IGDMRecordWithEvents : IGDMObject
     {
         GDMList<GDMCustomEvent> Events { get; }
         

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,14 +26,12 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
-using GKUI.Components;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -50,12 +48,10 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
 
             GDMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
-            mmRec.FileReferences.Add(new GDMFileReferenceWithTitle(mmRec));
+            mmRec.FileReferences.Add(new GDMFileReferenceWithTitle());
             fileRef = mmRec.FileReferences[0];
 
             fileRef.Title = "File Title 2";
@@ -63,6 +59,7 @@ namespace GKUI.Forms
             fileRef.MediaType = GDMMediaType.mtPhoto;
 
             fDialog = new MediaViewerWin(fBase);
+            fDialog.Multimedia = mmRec;
             fDialog.Show();
         }
 
@@ -78,8 +75,7 @@ namespace GKUI.Forms
             fDialog.FileRef = fileRef;
             Assert.AreEqual(fileRef, fDialog.FileRef);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.jpg"));
+            Bitmap img = new Bitmap(TestUtils.LoadResourceStream("shaytan_plant.jpg"));
             IImage portableImage = new ImageHandler(img);
 
             fDialog.SetViewImage(portableImage, fileRef);
@@ -99,8 +95,7 @@ namespace GKUI.Forms
             fDialog.FileRef = fileRef;
             Assert.AreEqual(fileRef, fDialog.FileRef);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Stream stm = assembly.GetManifestResourceStream("GKTests.Resources.lorem_ipsum.txt");
+            Stream stm = TestUtils.LoadResourceStream("lorem_ipsum.txt");
             string text;
             using (StreamReader strd = new StreamReader(stm, Encoding.UTF8)) {
                 text = strd.ReadToEnd();
@@ -119,8 +114,7 @@ namespace GKUI.Forms
             fDialog.FileRef = fileRef;
             Assert.AreEqual(fileRef, fDialog.FileRef);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Stream stm = assembly.GetManifestResourceStream("GKTests.Resources.lorem_ipsum.txt");
+            Stream stm = TestUtils.LoadResourceStream("lorem_ipsum.txt");
             string text;
             using (StreamReader strd = new StreamReader(stm, Encoding.UTF8)) {
                 text = strd.ReadToEnd();
@@ -139,8 +133,7 @@ namespace GKUI.Forms
             fDialog.FileRef = fileRef;
             Assert.AreEqual(fileRef, fDialog.FileRef);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Stream stm = assembly.GetManifestResourceStream("GKTests.Resources.lorem_ipsum.txt");
+            Stream stm = TestUtils.LoadResourceStream("lorem_ipsum.txt");
 
             fDialog.SetViewHTML(stm);
             fDialog.Refresh();
@@ -152,35 +145,35 @@ namespace GKUI.Forms
         [Test]
         public void Test_Video()
         {
-            string targetName = TestUtils.GetTempFilePath("test_video.3gp");
+            string targetName = TestUtils.PrepareTestFile("test_video.3gp");
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Stream vidstm = assembly.GetManifestResourceStream("GKTests.Resources.test_video.3gp");
+            try {
+                Assert.IsTrue(File.Exists(targetName));
 
-            GKUtils.CopyFile(vidstm, new FileInfo(targetName), null);
-            Assert.IsTrue(File.Exists(targetName));
+                GDMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
+                mmRecV.FileReferences.Add(new GDMFileReferenceWithTitle());
+                var fileRefV = mmRecV.FileReferences[0];
 
-            GDMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
-            mmRecV.FileReferences.Add(new GDMFileReferenceWithTitle(mmRecV));
-            var fileRefV = mmRecV.FileReferences[0];
+                fileRefV.Title = "File Title 2";
+                fileRefV.LinkFile(targetName);
+                fileRefV.MediaType = GDMMediaType.mtVideo;
+                fileRefV.MultimediaFormat = GDMMultimediaFormat.mfMKV;
 
-            fileRefV.Title = "File Title 2";
-            fileRefV.LinkFile(targetName);
-            fileRefV.MediaType = GDMMediaType.mtVideo;
-            fileRefV.MultimediaFormat = GDMMultimediaFormat.mfMKV;
+                fDialog.FileRef = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.FileRef);
 
-            fDialog.FileRef = fileRefV;
-            Assert.AreEqual(fileRefV, fDialog.FileRef);
+                fDialog.SetViewMedia(targetName);
+                fDialog.Refresh();
 
-            fDialog.SetViewMedia(targetName);
-            fDialog.Refresh();
+                ClickButton("btnPlay", fDialog);
+                ClickButton("btnPause", fDialog);
+                ClickButton("btnMute", fDialog);
+                ClickButton("btnStop", fDialog);
 
-            ClickButton("btnPlay", fDialog);
-            ClickButton("btnPause", fDialog);
-            ClickButton("btnMute", fDialog);
-            ClickButton("btnStop", fDialog);
-
-            KeyDownForm(fDialog.Name, Keys.Escape);
+                KeyDownForm(fDialog.Name, Keys.Escape);
+            } finally {
+                TestUtils.RemoveTestFile(targetName);
+            }
         }
         #endif
     }

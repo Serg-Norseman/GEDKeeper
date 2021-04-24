@@ -24,7 +24,6 @@ using System;
 using System.Windows.Forms;
 using GDModel;
 using GKTests;
-using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -40,8 +39,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fDialog = new SexCheckDlg();
             fDialog.Show();
         }

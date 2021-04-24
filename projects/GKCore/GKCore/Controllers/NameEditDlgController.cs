@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,7 @@ using System;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
-using GKCore.Types;
+using GKCore.Names;
 
 namespace GKCore.Controllers
 {
@@ -62,7 +62,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("NameEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("NameEditDlgController.Accept()", ex);
                 return false;
             }
         }

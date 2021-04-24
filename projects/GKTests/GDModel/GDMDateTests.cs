@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using System.Globalization;
 using BSLib.Calendar;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 using GKTests;
@@ -40,7 +39,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMDate dtx1 = new GDMDate(null)) {
+            using (GDMDate dtx1 = new GDMDate()) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 dtx1.ParseString("20 JAN 2013");
 
@@ -97,7 +96,7 @@ namespace GDModel
                 dtx1.ParseString("@#DJULIAN@ 01 MAR 1980");
                 Assert.AreEqual("@#DJULIAN@ 01 MAR 1980", dtx1.StringValue);
 
-                using (GDMDate dtx2 = new GDMDate(null)) {
+                using (GDMDate dtx2 = new GDMDate()) {
                     Assert.IsNotNull(dtx2, "dtx2 != null");
 
                     Assert.Throws(typeof(ArgumentException), () => {
@@ -158,35 +157,35 @@ namespace GDModel
         [Test]
         public void Test_Misc()
         {
-            GDMDate dtx1 = new GDMDate(null);
+            GDMDate dtx1 = new GDMDate();
             dtx1.ParseString("20 JAN 2013");
 
-            GDMDate dtx2 = new GDMDate(null);
+            GDMDate dtx2 = new GDMDate();
             dtx2.ParseString("20 JAN 2014");
 
-            var dtA = GDMCustomDate.CreateApproximated(null, dtx1, GDMApproximated.daCalculated);
+            var dtA = GDMCustomDate.CreateApproximated(dtx1, GDMApproximated.daCalculated);
             Assert.IsNotNull(dtA);
             Assert.AreEqual(GDMApproximated.daCalculated, dtA.Approximated);
             dtA.GetHashCode();
 
-            var dtP = GDMCustomDate.CreatePeriod(null, dtx1, dtx2);
+            var dtP = GDMCustomDate.CreatePeriod(dtx1, dtx2);
             Assert.IsNotNull(dtP);
 
-            var dtR = GDMCustomDate.CreateRange(null, dtx1, dtx2);
+            var dtR = GDMCustomDate.CreateRange(dtx1, dtx2);
             Assert.IsNotNull(dtR);
         }
 
         [Test]
         public void Test_GetApproximated()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             Assert.AreEqual(GDMApproximated.daExact, instance.Approximated);
         }
 
         [Test]
         public void Test_SetApproximated()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.Approximated = GDMApproximated.daAbout;
             Assert.AreEqual(GDMApproximated.daAbout, instance.Approximated);
         }
@@ -214,7 +213,7 @@ namespace GDModel
             GDMDate instance = GDMDate.CreateByFormattedStr("31/11/1980", true);
             Assert.AreEqual(true, instance.IsValidDate());
 
-            instance = new GDMDate(null);
+            instance = new GDMDate();
             Assert.AreEqual(false, instance.IsValidDate());
 
             // month is unknown
@@ -225,7 +224,7 @@ namespace GDModel
         [Test]
         public void Test_SetDay()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.Day = 20;
             Assert.AreEqual(20, instance.Day);
         }
@@ -263,14 +262,14 @@ namespace GDModel
         [Test]
         public void Test_GetYearBC()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             Assert.AreEqual(false, instance.YearBC);
         }
 
         [Test]
         public void Test_SetYearBC()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.YearBC = true;
             Assert.AreEqual(true, instance.YearBC);
         }
@@ -278,7 +277,7 @@ namespace GDModel
         [Test]
         public void Test_GetYearModifier()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             Assert.AreEqual("", instance.YearModifier);
 
             instance.ParseString("20 DEC 1980/1");
@@ -296,7 +295,7 @@ namespace GDModel
         [Test]
         public void Test_Create()
         {
-            GDMTag result = GDMDate.Create(null, GEDCOMTagsTable.Lookup("BLAH"), "");
+            GDMTag result = new GDMDate(GEDCOMTagsTable.Lookup("BLAH"), "");
             Assert.IsNotNull(result);
             Assert.AreEqual("BLAH", result.GetTagName());
         }
@@ -310,16 +309,33 @@ namespace GDModel
         }
 
         [Test]
+        public void Test_Equals()
+        {
+            GDMDate instance = GDMDate.CreateByFormattedStr("20/01/1980", false);
+            GDMDate instance2 = GDMDate.CreateByFormattedStr("21/01/1980", false);
+
+            Assert.IsFalse(instance.Equals(instance2));
+            Assert.IsFalse(instance.Equals((object)instance2)); // other method
+
+            instance2.Assign(instance);
+
+            Assert.IsTrue(instance.Equals(instance2));
+            Assert.IsTrue(instance.Equals((object)instance2)); // other method
+
+            Assert.IsFalse(instance.Equals((object)null));
+        }
+
+        [Test]
         public void Test_IsEmpty()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             Assert.AreEqual(true, instance.IsEmpty());
         }
 
         [Test]
         public void Test_Assign()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
 
             GDMTag source = null;
             Assert.Throws(typeof(ArgumentException), () => { instance.Assign(source); });
@@ -347,7 +363,7 @@ namespace GDModel
         [Test]
         public void Test_SetDateTime()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             DateTime expResult;
             try {
                 expResult = ParseDT("1980-01-20");
@@ -361,7 +377,7 @@ namespace GDModel
         [Test]
         public void Test_ParseString()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             Assert.AreEqual("", instance.ParseString("20 DEC 1980"));
             Assert.AreEqual("20 DEC 1980", instance.StringValue);
         }
@@ -369,7 +385,7 @@ namespace GDModel
         [Test]
         public void Test_ParseString_system()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             Assert.AreEqual("", instance.ParseString("20.12.1980"));
             Assert.AreEqual("20 DEC 1980", instance.StringValue);
         }
@@ -390,7 +406,7 @@ namespace GDModel
         [Test]
         public void Test_ParseStringUnknown()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetDate(GDMCalendar.dcIslamic, 0, 0, 0);
             Assert.AreEqual(string.Empty, instance.ParseString("@#DUNKNOWN@ 20 DEC 1980"));
             Assert.AreEqual("@#DUNKNOWN@ 20 DEC 1980", instance.StringValue);
@@ -399,7 +415,7 @@ namespace GDModel
         [Test]
         public void Test_GetStringValue()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetJulian(1, 3, 1980);
             Assert.AreEqual("@#DJULIAN@ 01 MAR 1980", instance.StringValue);
         }
@@ -407,7 +423,7 @@ namespace GDModel
         [Test]
         public void Test_SetDate()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetDate(GDMCalendar.dcGregorian, 20, 12, 1980);
             Assert.AreEqual("1980.12.20", instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false));
             Assert.AreEqual("20 DEC 1980", instance.StringValue);
@@ -416,7 +432,7 @@ namespace GDModel
         [Test]
         public void Test_SetDateJulian()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetDate(GDMCalendar.dcJulian, 20, 12, 1980);
             Assert.AreEqual("1980.12.20", instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false));
             Assert.AreEqual("@#DJULIAN@ 20 DEC 1980", instance.StringValue);
@@ -425,7 +441,7 @@ namespace GDModel
         [Test]
         public void Test_SetDateFrench()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetDate(GDMCalendar.dcFrench, 20, 12, 1980);
             Assert.AreEqual("1980.12.20", instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false));
             Assert.AreEqual("@#DFRENCH R@ 20 FRUC 1980", instance.StringValue);
@@ -434,7 +450,7 @@ namespace GDModel
         [Test]
         public void Test_SetDateHebrew()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetDate(GDMCalendar.dcHebrew, 20, 12, 1980);
             Assert.AreEqual("1980.12.20", instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false));
             Assert.AreEqual("@#DHEBREW@ 20 AAV 1980", instance.StringValue);
@@ -457,7 +473,7 @@ namespace GDModel
         [Test]
         public void Test_SetGregorian_3args()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetGregorian(20, 12, 1980);
             Assert.AreEqual("1980.12.20", instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false));
         }
@@ -465,7 +481,7 @@ namespace GDModel
         [Test]
         public void Test_SetGregorian_5args()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetGregorian(20, "Dec", 1980, "", false);
             Assert.AreEqual("1980.12.20", instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false));
         }
@@ -473,7 +489,7 @@ namespace GDModel
         [Test]
         public void Test_SetGregorian_5argsBC()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetGregorian(20, "Dec", 1980, "", true);
             Assert.AreEqual("BC 1980.12.20", instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, false));
         }
@@ -481,7 +497,7 @@ namespace GDModel
         [Test]
         public void Test_SetJulian_3args()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetJulian(20, 12, 1980);
             Assert.AreEqual("1980.12.20", instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false));
         }
@@ -489,7 +505,7 @@ namespace GDModel
         [Test]
         public void Test_SetJulian_4args()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetJulian(20, "DEC", 1980, false);
             Assert.AreEqual("1980.12.20", instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, false, false));
         }
@@ -497,7 +513,7 @@ namespace GDModel
         [Test]
         public void Test_SetHebrew_3args()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetHebrew(1, 2, 1980);
             Assert.AreEqual(GDMCalendar.dcHebrew, instance.DateCalendar);
             Assert.AreEqual("@#DHEBREW@ 01 CSH 1980", instance.StringValue);
@@ -506,7 +522,7 @@ namespace GDModel
         [Test]
         public void Test_SetHebrew_4args()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetHebrew(1, "TSH", 1980, false);
             Assert.AreEqual(GDMCalendar.dcHebrew, instance.DateCalendar);
             Assert.AreEqual("@#DHEBREW@ 01 TSH 1980", instance.StringValue);
@@ -519,7 +535,7 @@ namespace GDModel
         [Test]
         public void Test_SetFrench_3args()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetFrench(1, 2, 1980);
             Assert.AreEqual(GDMCalendar.dcFrench, instance.DateCalendar);
             Assert.AreEqual("@#DFRENCH R@ 01 BRUM 1980", instance.StringValue);
@@ -528,7 +544,7 @@ namespace GDModel
         [Test]
         public void Test_SetFrench_4args()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetFrench(1, "VEND", 1980, false);
             Assert.AreEqual(GDMCalendar.dcFrench, instance.DateCalendar);
             Assert.AreEqual("@#DFRENCH R@ 01 VEND 1980", instance.StringValue);
@@ -541,7 +557,7 @@ namespace GDModel
         [Test]
         public void Test_SetRoman()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetRoman(1, "JAN", 1980, false);
             Assert.AreEqual(GDMCalendar.dcRoman, instance.DateCalendar);
         }
@@ -549,7 +565,7 @@ namespace GDModel
         [Test]
         public void Test_SetUnknown()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetUnknown(0, "", 0, false);
             Assert.AreEqual(GDMCalendar.dcUnknown, instance.DateCalendar);
         }
@@ -627,7 +643,7 @@ namespace GDModel
         [Test]
         public void Test_GetDisplayString_3args()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetJulian(20, 12, 1980);
             instance.YearBC = true;
             string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, true);
@@ -643,7 +659,7 @@ namespace GDModel
         [Test]
         public void Test_GetDisplayStringExt()
         {
-            GDMDate instance = new GDMDate(null);
+            GDMDate instance = new GDMDate();
             instance.SetJulian(20, 12, 1980);
             instance.YearBC = true;
             string result = instance.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true);
@@ -687,7 +703,7 @@ namespace GDModel
         {
             DateTime expectDate = TestUtils.ParseDT("20.01.2013");
 
-            using (var dtx1 = new GDMDateInterpreted(null)) {
+            using (var dtx1 = new GDMDateInterpreted()) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
                 dtx1.ParseString("INT 20 JAN 2013 (today)");
@@ -703,7 +719,9 @@ namespace GDModel
                 dtx1.ParseString("INT 20 JAN 2013 (yesterday)");
                 Assert.AreEqual("INT 20 JAN 2013 (yesterday)", dtx1.StringValue);
 
-                Assert.Throws(typeof(GDMDateException), () => { dtx1.ParseString("10 JAN 2013 (today)"); });
+                Assert.Throws(typeof(GEDCOMIntDateException), () => { dtx1.ParseString("10 JAN 2013 (today)"); });
+
+                Assert.AreEqual(string.Empty, dtx1.ParseString(null));
             }
         }
 

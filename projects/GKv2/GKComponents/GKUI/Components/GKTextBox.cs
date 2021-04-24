@@ -77,7 +77,7 @@ namespace GKUI.Components
         }
 
 
-        public GKTextBox(): base()
+        public GKTextBox()
         {
         }
 

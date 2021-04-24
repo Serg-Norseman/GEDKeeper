@@ -1,6 +1,6 @@
 ﻿/*
  *  "ChemLab", Desktop helper application for chemists.
- *  Copyright (C) 1996-1998, 2015 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 1996-1998, 2015 by Sergey V. Zhdanovskih.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ namespace GKDataQualityPlugin
         private const double Gamma = 0.8;
         private const int IntensityMax = 255;
 
-        private static int adjust(double color, double factor)
+        private static int Adjust(double color, double factor)
         {
             int result = (color == 0.0f) ? 0 : (int)(Math.Round(IntensityMax * Math.Pow((color * factor), Gamma)));
 
@@ -98,9 +98,9 @@ namespace GKDataQualityPlugin
                     factor = 0.0;
                 }
 
-                int R = adjust(red, factor);
-                int G = adjust(green, factor);
-                int B = adjust(blue, factor);
+                int R = Adjust(red, factor);
+                int G = Adjust(green, factor);
+                int B = Adjust(blue, factor);
 
                 return Color.FromArgb(R, G, B);
             } catch (Exception) {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -126,8 +126,7 @@ namespace GKUI.Components
 
         public void InitMap()
         {
-            try
-            {
+            try {
                 const string MapContent =
                     "<html>" +
                     "<head>" +
@@ -163,10 +162,8 @@ namespace GKUI.Components
                     "</body></html>";
 
                 LoadHtml(MapContent);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKMapBrowser.InitMap(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKMapBrowser.InitMap()", ex);
             }
         }
 
@@ -276,13 +273,10 @@ namespace GKUI.Components
             script = script.Trim();
             if (string.IsNullOrEmpty(script)) return;
 
-            try
-            {
+            try {
                 ExecuteScript(script);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKMapBrowser.gm_ExecScript(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKMapBrowser.gm_ExecScript()", ex);
             }
         }
 

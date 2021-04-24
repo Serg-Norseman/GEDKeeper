@@ -53,7 +53,7 @@ namespace GKUI.Forms
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(130, 26);
             btnCancel.Text = "btnCancel";
-            btnCancel.Click += CancelClickHandler;
+            btnCancel.Click += btnCancel_Click;
 
             var panelData = new TableLayout {
                 Spacing = new Size(10, 10),

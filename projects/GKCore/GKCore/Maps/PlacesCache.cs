@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace GKCore.Maps
 {
@@ -75,7 +74,7 @@ namespace GKCore.Maps
 
                 pointsList.AddRange(cachedPoints);
             } catch (Exception ex) {
-                Logger.LogWrite("PlacesCache.GetPlacePoints(): " + ex.Message);
+                Logger.WriteError("PlacesCache.GetPlacePoints()", ex);
             }
         }
 
@@ -91,7 +90,7 @@ namespace GKCore.Maps
                     fMemoryCache = rawData[0] as Dictionary<string, GeoPoint>;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PlacesCache.Load(): " + ex.Message);
+                Logger.WriteError("PlacesCache.Load()", ex);
             }*/
         }
 
@@ -105,7 +104,7 @@ namespace GKCore.Maps
                     writer.Write(content);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("PlacesCache.Load(): " + ex.Message);
+                Logger.WriteError("PlacesCache.Save()", ex);
             }*/
         }
     }

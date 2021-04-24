@@ -20,12 +20,12 @@
 
 using System;
 using System.Windows.Forms;
+using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
@@ -122,13 +122,7 @@ namespace GKUI.Forms
 
         private void TreePlaces_DoubleClick(object sender, EventArgs e)
         {
-            GKTreeNode node = tvPlaces.SelectedNode as GKTreeNode;
-            if (node == null) return;
-
-            GeoPoint pt = node.Tag as GeoPoint;
-            if (pt == null) return;
-
-            fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+            fController.SetCenter();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -172,14 +166,14 @@ namespace GKUI.Forms
 
         public ITVNode FindTreeNode(string place)
         {
-            GKTreeNode rootNode = fController.TreeRoot as GKTreeNode;
+            TreeNodeEx rootNode = fController.TreeRoot as TreeNodeEx;
 
             int num = rootNode.Nodes.Count;
             for (int i = 0; i < num; i++) {
-                TreeNode node = rootNode.Nodes[i];
+                TreeNodeEx node = rootNode.Nodes[i] as TreeNodeEx;
 
-                if (node.Text == place) {
-                    return node as ITVNode;
+                if (node != null && node.Text == place) {
+                    return node;
                 }
             }
 

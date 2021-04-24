@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,11 +19,12 @@
  */
 
 using System;
-
+using System.Text;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
+using GKCore.Tools;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -58,6 +59,7 @@ namespace GKUI.Forms
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
+            ListChecks.ContextMenuStrip = contextMenu;
 
             SetLang();
         }
@@ -67,8 +69,11 @@ namespace GKUI.Forms
             Text = LangMan.LS(LSID.LSID_ToolOp_7);
             pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnAnalyseBase.Text = LangMan.LS(LSID.LSID_Analysis);
+            btnAnalyseBase.Text = LangMan.LS(LSID.LSID_Analyze);
             btnBaseRepair.Text = LangMan.LS(LSID.LSID_Repair);
+            miDetails.Text = LangMan.LS(LSID.LSID_Details);
+            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
+            miCopyXRef.Text = LangMan.LS(LSID.LSID_CopyXRef);
         }
 
         private void btnAnalyseBase_Click(object sender, EventArgs e)
@@ -84,6 +89,37 @@ namespace GKUI.Forms
         private void ListChecks_DblClick(object sender, EventArgs e)
         {
             fController.SelectRecord();
+        }
+
+        private void miDetails_Click(object sender, EventArgs e)
+        {
+            fController.ShowDetails();
+        }
+
+        private void miGoToRecord_Click(object sender, EventArgs e)
+        {
+            fController.SelectRecord();
+        }
+
+        private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var rec = fController.GetSelectedRecord();
+            miDetails.Enabled = (rec != null);
+            miGoToRecord.Enabled = (rec != null);
+            miCopyXRef.Enabled = (rec != null);
+        }
+
+        public void miCopyXRef_Click(object sender, EventArgs e)
+        {
+            var list = ListChecks.GetSelectedItems();
+            var text = new StringBuilder();
+            foreach (var item in list) {
+                var checkObj = (TreeTools.CheckObj)item;
+                text.Append(checkObj.Rec.XRef);
+                text.Append("\r\n");
+            }
+
+            UIHelper.SetClipboardText(text.ToString());
         }
     }
 }

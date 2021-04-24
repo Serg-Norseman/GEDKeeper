@@ -50,6 +50,9 @@
     <Reference Include="BSLib.Design">
       <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design.WFHandlers">
+      <HintPath>..\..\libs\BSLib.Design.WFHandlers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -62,12 +65,14 @@
     <Compile Include="WordsCloudWidget.Designer.cs">
       <DependentUpon>WordsCloudWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="WordCloud\CloudModel.cs" />
-    <Compile Include="WordCloud\CloudViewer.cs" />
-    <Compile Include="WordCloud\GdiRenderer.cs" />
-    <Compile Include="WordCloud\QuadTree.cs" />
-    <Compile Include="WordCloud\QuadTreeNode.cs" />
-    <Compile Include="WordCloud\Word.cs" />
+    <Compile Include="WordsCloud\CloudModel.cs" />
+    <Compile Include="WordsCloud\CloudViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WordsCloud\GdiRenderer.cs" />
+    <Compile Include="WordsCloud\QuadTree.cs" />
+    <Compile Include="WordsCloud\QuadTreeNode.cs" />
+    <Compile Include="WordsCloud\Word.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKComponents\GKComponents.csproj">
@@ -98,9 +103,7 @@
       <DependentUpon>WordsCloudWidget.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WordCloud" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

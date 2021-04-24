@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -162,12 +162,10 @@ namespace GKUI.Components
         {
             Graphics gfx = e.Graphics;
 
-            try
-            {
+            try {
                 gfx.AntiAlias = true;
 
-                foreach (ArborNode node in fSys.Nodes)
-                {
+                foreach (ArborNode node in fSys.Nodes) {
                     var xnode = node as ArborNodeEx;
 
                     xnode.Box = getNodeRect(gfx, node);
@@ -175,13 +173,11 @@ namespace GKUI.Components
                     gfx.DrawText(fDrawFont, fWhiteBrush, xnode.Box.Left, xnode.Box.Top, node.Sign);
                 }
 
-                using (Pen grayPen = new Pen(Colors.Gray, 1))
-                {
+                using (Pen grayPen = new Pen(Colors.Gray, 1)) {
                     //grayPen.StartCap = PenLineCap.NoAnchor;
                     //grayPen.EndCap = PenLineCap.ArrowAnchor;
 
-                    foreach (ArborEdge edge in fSys.Edges)
-                    {
+                    foreach (ArborEdge edge in fSys.Edges) {
                         var srcNode = edge.Source as ArborNodeEx;
                         var tgtNode = edge.Target as ArborNodeEx;
 
@@ -191,22 +187,18 @@ namespace GKUI.Components
                         ArborPoint tail = intersect_line_box(pt1, pt2, srcNode.Box);
                         ArborPoint head = (tail.IsNull()) ? ArborPoint.Null : intersect_line_box(tail, pt2, tgtNode.Box);
 
-                        if (!head.IsNull() && !tail.IsNull())
-                        {
+                        if (!head.IsNull() && !tail.IsNull()) {
                             gfx.DrawLine(grayPen, (int)tail.X, (int)tail.Y, (int)head.X, (int)head.Y);
                         }
                     }
                 }
 
-                if (fEnergyDebug)
-                {
+                if (fEnergyDebug) {
                     string energy = "max=" + fSys.EnergyMax.ToString("0.00000") + ", mean=" + fSys.EnergyMean.ToString("0.00000");
                     gfx.DrawText(fDrawFont, fBlackBrush, 10, 10, energy);
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("ArborViewer.OnPaint(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("ArborViewer.OnPaint()", ex);
             }
         }
 

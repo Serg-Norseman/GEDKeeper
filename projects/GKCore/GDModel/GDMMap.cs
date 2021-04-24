@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,19 +42,14 @@ namespace GDModel
         }
 
 
-        public GDMMap(GDMObject owner) : base(owner)
+        public GDMMap()
         {
             SetName(GEDCOMTagType.MAP);
         }
 
-        public GDMMap(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMMap(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
-        }
-
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMMap(owner, tagId, tagValue);
         }
 
         public override void Assign(GDMTag source)

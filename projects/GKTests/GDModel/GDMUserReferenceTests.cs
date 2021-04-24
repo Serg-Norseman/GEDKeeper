@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,8 +19,6 @@
  */
 
 using System;
-using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKTests;
 using NUnit.Framework;
 
@@ -32,7 +30,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMUserReference userRef = new GDMUserReference(null)) {
+            using (GDMUserReference userRef = new GDMUserReference()) {
                 Assert.IsNotNull(userRef);
 
                 userRef.StringValue = "ref";
@@ -40,7 +38,7 @@ namespace GDModel
                 userRef.ReferenceType = "test";
                 Assert.AreEqual("test", userRef.ReferenceType);
 
-                using (GDMUserReference uref2 = new GDMUserReference(null)) {
+                using (GDMUserReference uref2 = new GDMUserReference()) {
                     Assert.IsNotNull(uref2);
 
                     Assert.Throws(typeof(ArgumentException), () => {
@@ -49,9 +47,14 @@ namespace GDModel
 
                     uref2.Assign(userRef);
 
-                    string buf = TestUtils.GetTagStreamText(uref2, 1);
-                    Assert.AreEqual("1 REFN ref\r\n"+
-                                    "2 TYPE test\r\n", buf);
+                    // test of output format
+                    var iRec = new GDMIndividualRecord(null);
+                    iRec.UserReferences.Add(uref2);
+                    string buf = TestUtils.GetTagStreamText(iRec, 0);
+                    Assert.AreEqual("0 INDI\r\n"+
+                                    "1 REFN ref\r\n"+
+                                    "2 TYPE test\r\n"+
+                                    "1 SEX U\r\n", buf);
                 }
 
                 Assert.IsFalse(userRef.IsEmpty());

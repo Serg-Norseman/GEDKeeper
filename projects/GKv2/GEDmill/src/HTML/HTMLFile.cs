@@ -19,7 +19,7 @@
 using System;
 using System.Globalization;
 using System.IO;
-using GEDmill.Exceptions;
+using System.Text;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -31,8 +31,6 @@ namespace GEDmill.HTML
     {
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(HTMLFile).Name);
 
-        private const string CharsetString = "utf-8";
-
         private FileStream fStream;
         private StreamWriter fWriter;
 
@@ -42,7 +40,7 @@ namespace GEDmill.HTML
         {
             // This is for CJ who ended up with 17000 files plastered all over her desktop...
             if (GMHelper.IsDesktop(filename)) {
-                throw new HTMLException(string.Format("A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop."));
+                throw new HTMLException("A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop.");
             }
 
             fLogger.WriteInfo("CHTMLFile : " + filename);
@@ -60,13 +58,11 @@ namespace GEDmill.HTML
             }
 
             if (fStream != null) {
-                System.Text.Encoding encoding = new UTF8EncodingWithoutPreamble();
-
+                var encoding = new UTF8EncodingWithoutPreamble();
                 fWriter = new StreamWriter(fStream, encoding);
 
-                string date;
                 DateTime dt = DateTime.Now;
-                date = dt.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
+                string date = dt.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
 
                 fWriter.WriteLine("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
                 fWriter.WriteLine("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">");
@@ -76,7 +72,7 @@ namespace GEDmill.HTML
                 {
                     fWriter.WriteLine("    <script type=\"text/javascript\" src=\"gedmill.js\"></script>");
                 }
-                fWriter.WriteLine("    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + CharsetString + "\" />");
+                fWriter.WriteLine("    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
                 fWriter.WriteLine("    <meta http-equiv=\"imagetoolbar\" content=\"no\" />");
                 fWriter.WriteLine(string.Concat("    <meta name=\"Title\" content=\"", title, "\" />"));
                 fWriter.WriteLine(string.Concat("    <meta name=\"Description\" content=\"", description, "\" />"));
@@ -116,7 +112,7 @@ namespace GEDmill.HTML
         /// <summary>
         /// A class just like .Net's UTF8Encoding, except it doesn't write the Byte Order Mark (BOM).
         /// </summary>
-        public class UTF8EncodingWithoutPreamble : System.Text.UTF8Encoding
+        private class UTF8EncodingWithoutPreamble : UTF8Encoding
         {
             private static readonly byte[] Preamble = new byte[0];
 

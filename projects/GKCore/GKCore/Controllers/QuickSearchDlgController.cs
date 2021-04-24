@@ -18,11 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using BSLib.Design.MVP;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
+using GKCore.Search;
 
 namespace GKCore.Controllers
 {

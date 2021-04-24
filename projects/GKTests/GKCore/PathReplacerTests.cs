@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -49,9 +49,12 @@ namespace GKCore
         public void Test_Common()
         {
             string prFile = TestUtils.PrepareTestFile("test_pathreplace.yaml");
-            fPathReplacer.Load(prFile);
-
-            Assert.AreEqual("/home/path11/x.yyy", fPathReplacer.TryReplacePath(@"D:\path1\x.yyy", false));
+            try {
+                fPathReplacer.Load(prFile);
+                Assert.AreEqual("/home/path11/x.yyy", fPathReplacer.TryReplacePath(@"D:\path1\x.yyy", false));
+            } finally {
+                TestUtils.RemoveTestFile(prFile);
+            }
         }
     }
 }

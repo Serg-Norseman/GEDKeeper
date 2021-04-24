@@ -34,3 +34,5 @@ build_sonarqube.cmd
 /projects/GKTests/OpenCover/
 /projects/GKTests/PartCover/
 /LuaInterface.dll.config
+
+/projects/GKv3/packages/**/

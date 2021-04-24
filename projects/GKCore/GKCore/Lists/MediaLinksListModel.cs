@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -42,16 +43,14 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            var dataOwner = fDataOwner as IGDMStructWithMultimediaLinks;
             if (fSheetList == null || dataOwner == null) return;
 
-            try
-            {
+            try {
                 fSheetList.ClearItems();
 
-                foreach (GDMMultimediaLink mmLink in dataOwner.MultimediaLinks)
-                {
-                    GDMMultimediaRecord mmRec = mmLink.Value as GDMMultimediaRecord;
+                foreach (GDMMultimediaLink mmLink in dataOwner.MultimediaLinks) {
+                    GDMMultimediaRecord mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
                     if (mmRec == null) continue;
 
                     if (mmRec.FileReferences.Count == 0) continue;
@@ -61,16 +60,14 @@ namespace GKCore.Lists
                     fSheetList.AddItem(mmLink, new object[] { fileRef.Title,
                                            LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]) });
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("MediaLinksListModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("MediaLinksListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            var dataOwner = fDataOwner as IGDMStructWithMultimediaLinks;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
             GDMMultimediaLink mmLink = eArgs.ItemData as GDMMultimediaLink;
@@ -78,8 +75,7 @@ namespace GKCore.Lists
             bool result = false;
 
             GDMMultimediaRecord mmRec;
-            switch (eArgs.Action)
-            {
+            switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     mmRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
                     if (mmRec != null) {
@@ -88,16 +84,14 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raEdit:
-                    if (mmLink != null)
-                    {
-                        mmRec = mmLink.Value as GDMMultimediaRecord;
+                    if (mmLink != null) {
+                        mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
                         result = BaseController.ModifyMedia(fBaseWin, ref mmRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMultimediaQuery)))
-                    {
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMultimediaQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GDMObject)dataOwner, mmLink);
                     }
                     break;

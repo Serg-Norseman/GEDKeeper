@@ -18,6 +18,10 @@
   * Improvement of UI features
   * Design solutions (MediaPlayer and portraits)
 
+* **[Alexey Dokuchaev](https://github.com/danfe)**
+
+  * FreeBSD port developed (https://www.freshports.org/misc/gedkeeper/)
+
 * **[Kevin D. Sandal](https://github.com/Dreamer451)**
 
   * Proofreading of the English manual
@@ -36,6 +40,11 @@
 * **[Alexander Curtis](https://github.com/alexandercurtis)**
 
   * Author of GEDmill (Family History Website Generator), now it is external plugin
+
+* **[Alexander Zaytsev](https://github.com/hazzik)**
+
+  * Improving the architecture and efficiency of the core
+  * Testing and bug fixes
 
 
 ## External components

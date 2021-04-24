@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,19 +23,39 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using BSLib.Design.IoC;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKTests.Stubs;
 using NUnit.Framework;
 
 namespace GKTests
 {
     public static class TestUtils
     {
-        public static BaseContext CreateContext(/*IBaseWindow baseWin = null*/)
+        public static void InitGEDCOMProviderTest()
         {
-            BaseContext context = new BaseContext(/*baseWin*/null);
+            // forced call of GEDCOMProvider static constructor
+            // this is important for a number of tests that require initialization of the GEDCOM tag table
+            // System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(GEDCOMProvider).TypeHandle);
+            var formats = GEDCOMProvider.GEDCOMFormats;
+            Assert.IsNotNull(formats);
+
+            var tagProps = GEDCOMTagsTable.GetTagProps("BIRT");
+            Assert.IsNotNull(tagProps);
+            Assert.AreEqual((int)GEDCOMTagType.BIRT, tagProps.TagId);
+        }
+
+        public static void InitProgressStub()
+        {
+            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
+        }
+
+        public static BaseContext CreateContext(IBaseWindow baseWin = null)
+        {
+            BaseContext context = new BaseContext(baseWin);
             Assert.IsNotNull(context);
             Assert.IsNotNull(context.Tree);
             return context;
@@ -152,7 +172,7 @@ namespace GKTests
 
             // media for tests
             GDMMultimediaRecord mediaRec = context.Tree.CreateMultimedia();
-            mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec));
+            mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
             GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
 
             fileRef.Title = "Test multimedia";
@@ -166,9 +186,9 @@ namespace GKTests
             Assert.IsNotNull(commRec, "commRec != null");
         }
 
-        public static string GetTagStreamText(GDMTag tag, int level)
+        public static string GetTagStreamText(GDMTag tag, int level, bool debugWrite = true)
         {
-            GEDCOMProvider.DebugWrite = true;
+            GEDCOMProvider.DebugWrite = debugWrite;
 
             string result;
             using (MemoryStream stm = new MemoryStream()) {
@@ -182,8 +202,10 @@ namespace GKTests
                             GEDCOMProvider.WriteMultimediaLink(fs, 1, tag);
                         } else if (tag is GDMSourceCitation) {
                             GEDCOMProvider.WriteSourceCitation(fs, 1, tag);
+                        } else if (tag is GDMSourceData) {
+                            GEDCOMProvider.WriteSourceData(fs, 1, tag);
                         } else {
-                            GEDCOMProvider.WriteTagEx(fs, level, tag);
+                            GEDCOMProvider.WriteBaseTag(fs, level, tag);
                         }
                     }
                     fs.Flush();
@@ -220,8 +242,7 @@ namespace GKTests
         {
             string fileName = GetTempFilePath(resName);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources." + resName)) {
+            using (Stream inStream = TestUtils.LoadResourceStream(resName)) {
                 long size = inStream.Length;
                 byte[] buffer = new byte[size];
                 int res = inStream.Read(buffer, 0, (int)size);
@@ -231,12 +252,33 @@ namespace GKTests
             return fileName;
         }
 
+        public static void RemoveTestFile(string fileName)
+        {
+            try {
+                File.Delete(fileName);
+            } catch (Exception) {
+            }
+        }
+
+        public static void RemoveTestDirectory(string dirName)
+        {
+            try {
+                Directory.Delete(dirName, true);
+            } catch (Exception) {
+            }
+        }
+
+        public static Stream LoadResourceStream(string resName)
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+            return assembly.GetManifestResourceStream("GKTests.Resources." + resName);
+        }
+
         public static IBaseContext LoadResourceGEDCOMFile(string resName)
         {
             BaseContext ctx = new BaseContext(null);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream stream = assembly.GetManifestResourceStream("GKTests.Resources." + resName)) {
+            using (Stream stream = TestUtils.LoadResourceStream(resName)) {
                 var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                 gedcomProvider.LoadFromStreamExt(stream, stream);
             }

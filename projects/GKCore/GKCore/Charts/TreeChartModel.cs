@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,6 +28,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Options;
+using GKCore.Search;
 using GKCore.Types;
 
 using BSDColors = BSLib.Design.BSDConsts.Colors;
@@ -77,15 +78,19 @@ namespace GKCore.Charts
         private readonly IList<string> fPreparedIndividuals;
 
         private IBaseWindow fBase;
+        private IFont fBoldFont;
         private int fBranchDistance;
         private bool fCertaintyIndex;
         private IPen fDecorativeLinePen;
+        private IPen fDottedLinePen;
+        private IPen fDottedDecorativeLinePen;
         private int fDepthLimit;
         private IFont fDrawFont;
         private int[] fEdges;
         private IImage fExpPic;
         private IImage fInfoPic;
         private IImage fPersExpPic;
+        private GKVarCache<GDMIndividualRecord, bool> fFilterData;
         private KinshipsGraph fGraph;
         private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
@@ -115,6 +120,12 @@ namespace GKCore.Charts
                 fGraph = new KinshipsGraph(fBase.Context);
                 fTree = fBase.Context.Tree;
             }
+        }
+
+        public IFont BoldFont
+        {
+            get { return fBoldFont; }
+            set { fBoldFont = value; }
         }
 
         public int BranchDistance
@@ -233,6 +244,7 @@ namespace GKCore.Charts
             fDepthLimit = -1;
             fEdges = new int[256];
             fFilter = new ChartFilter();
+            fFilterData = new GKVarCache<GDMIndividualRecord, bool>();
             fGraph = null;
             fPersons = new PersonList(true);
             fPreparedFamilies = new List<string>();
@@ -254,6 +266,7 @@ namespace GKCore.Charts
 
                 DoneGraphics();
                 DoneSigns();
+                if (fBoldFont != null) fBoldFont.Dispose();
                 if (fDrawFont != null) fDrawFont.Dispose();
             }
             base.Dispose(disposing);
@@ -267,7 +280,7 @@ namespace GKCore.Charts
                 var result = AppHost.GfxProvider.LoadResourceImage(name, makeTransp);
                 return result;
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.PrepareImage(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.PrepareImage()", ex);
                 return null;
             }
         }
@@ -291,7 +304,7 @@ namespace GKCore.Charts
                 fPersExpPic = PrepareImage("btn_expand2.gif", true);
                 fInfoPic = PrepareImage("btn_info.gif", true);
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.InitSigns(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.InitSigns()", ex);
             }
         }
 
@@ -304,9 +317,12 @@ namespace GKCore.Charts
         {
             Base = sourceModel.fBase;
 
+            fBoldFont = sourceModel.fBoldFont;
             fBranchDistance = sourceModel.fBranchDistance;
             fCertaintyIndex = sourceModel.fCertaintyIndex;
             fDecorativeLinePen = sourceModel.fDecorativeLinePen;
+            fDottedLinePen = sourceModel.fDottedLinePen;
+            fDottedDecorativeLinePen = sourceModel.fDottedDecorativeLinePen;
             fDepthLimit = sourceModel.fDepthLimit;
             fDrawFont = sourceModel.fDrawFont;
             fExpPic = sourceModel.fExpPic;
@@ -385,7 +401,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeChartModel.AddDescPerson(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.AddDescPerson()", ex);
                 throw;
             }
         }
@@ -426,15 +442,17 @@ namespace GKCore.Charts
 
                     if ((fDepthLimit <= -1 || generation != fDepthLimit) && aPerson.ChildToFamilyLinks.Count > 0 && !dupFlag)
                     {
-                        GDMFamilyRecord family = aPerson.ChildToFamilyLinks[0].Family;
+                        GDMChildToFamilyLink childLink = aPerson.ChildToFamilyLinks[0];
+                        result.Adopted = (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted);
+                        GDMFamilyRecord family = fTree.GetPtrValue(childLink);
 
                         bool isDup = (fPreparedFamilies.IndexOf(family.XRef) >= 0);
                         if (!isDup) fPreparedFamilies.Add(family.XRef);
 
                         if (fBase.Context.IsRecordAccess(family.Restriction))
                         {
-                            GDMIndividualRecord iFather = family.Husband.Individual;
-                            GDMIndividualRecord iMother = family.Wife.Individual;
+                            GDMIndividualRecord iFather = fTree.GetPtrValue(family.Husband);
+                            GDMIndividualRecord iMother = fTree.GetPtrValue(family.Wife);
 
                             bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
 
@@ -493,7 +511,7 @@ namespace GKCore.Charts
                         }
                     }
 
-                    if (aPerson.GetTotalChildsCount() > 1 || aPerson.SpouseToFamilyLinks.Count > 1) {
+                    if (fTree.GetTotalChildrenCount(aPerson) > 1 || aPerson.SpouseToFamilyLinks.Count > 1) {
                         result.SetFlag(PersonFlag.pfHasInvDesc);
                     }
                 }
@@ -502,7 +520,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeChartModel.DoAncestorsStep(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.DoAncestorsStep()", ex);
                 throw;
             }
         }
@@ -530,7 +548,7 @@ namespace GKCore.Charts
 
                 case FilterGroupMode.Selected:
                     GDMSourceRecord filterSource;
-                    if (fFilter.SourceRef == "") {
+                    if (string.IsNullOrEmpty(fFilter.SourceRef)) {
                         filterSource = null;
                     } else {
                         filterSource = fTree.XRefIndex_Find(fFilter.SourceRef) as GDMSourceRecord;
@@ -541,7 +559,7 @@ namespace GKCore.Charts
                     break;
             }
 
-            if ((fFilter.BranchCut != ChartFilter.BranchCutType.None) && (!(bool)person.ExtData)) {
+            if ((fFilter.BranchCut != ChartFilter.BranchCutType.None) && (!fFilterData[person])) {
                 result = false;
             }
 
@@ -571,11 +589,11 @@ namespace GKCore.Charts
 
                     for (int i = 0; i < spousesNum; i++)
                     {
-                        GDMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
+                        GDMFamilyRecord family = fTree.GetPtrValue(person.SpouseToFamilyLinks[i]);
 
                         // protection against invalid third-party files
                         if (family == null) {
-                            Logger.LogWrite("TreeChartModel.DoDescendantsStep(): null pointer to family");
+                            Logger.WriteError("TreeChartModel.DoDescendantsStep(): null pointer to family");
                             continue;
                         }
 
@@ -594,7 +612,7 @@ namespace GKCore.Charts
                         switch (person.Sex) {
                             case GDMSex.svFemale:
                                 {
-                                    GDMIndividualRecord sp = family.Husband.Individual;
+                                    GDMIndividualRecord sp = fTree.GetPtrValue(family.Husband);
                                     skipUnk = skipUnkSpouses && (sp == null);
 
                                     if (!skipUnk) {
@@ -620,7 +638,7 @@ namespace GKCore.Charts
 
                             case GDMSex.svMale:
                                 {
-                                    GDMIndividualRecord sp = family.Wife.Individual;
+                                    GDMIndividualRecord sp = fTree.GetPtrValue(family.Wife);
                                     skipUnk = skipUnkSpouses && (sp == null);
 
                                     if (!skipUnk) {
@@ -646,7 +664,7 @@ namespace GKCore.Charts
 
                             default:
                                 invalidSpouse = true;
-                                Logger.LogWrite("TreeChartModel.DoDescendantsStep(): sex of spouse is undetermined");
+                                Logger.WriteError("TreeChartModel.DoDescendantsStep(): sex of spouse is undetermined");
                                 break;
                         }
 
@@ -688,11 +706,11 @@ namespace GKCore.Charts
                             int num2 = family.Children.Count;
                             for (int j = 0; j < num2; j++)
                             {
-                                var childRec = family.Children[j].Individual;
+                                var childRec = fTree.GetPtrValue(family.Children[j]);
 
                                 // protection against invalid third-party files
                                 if (childRec == null) {
-                                    Logger.LogWrite("TreeChartModel.DoDescendantsStep(): null pointer to child");
+                                    Logger.WriteError("TreeChartModel.DoDescendantsStep(): null pointer to child");
                                     continue;
                                 }
 
@@ -704,6 +722,11 @@ namespace GKCore.Charts
                                 child.Father = ft;
                                 child.Mother = mt;
                                 child.SetFlag(descFlag);
+
+                                GDMChildToFamilyLink childLink = childRec.FindChildToFamilyLink(family);
+                                if (childLink != null) {
+                                    child.Adopted = (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted);
+                                }
 
                                 if (fOptions.Kinship) {
                                     if (ft != null) {
@@ -731,7 +754,7 @@ namespace GKCore.Charts
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TreeChartModel.DoDescendantsStep(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.DoDescendantsStep()", ex);
                 throw;
             }
         }
@@ -796,9 +819,15 @@ namespace GKCore.Charts
             if (!fOptions.OnlyYears) {
                 if (fOptions.BirthDateVisible) {
                     lines++;
+                    if (fOptions.SeparateDatesAndPlacesLines) {
+                        lines++;
+                    }
                 }
                 if (fOptions.DeathDateVisible) {
                     lines++;
+                    if (fOptions.SeparateDatesAndPlacesLines) {
+                        lines++;
+                    }
                 }
             } else {
                 lines++;
@@ -827,6 +856,7 @@ namespace GKCore.Charts
         public void RecalcChart(bool noRedraw = false)
         {
             float fsz = (float)Math.Round(fOptions.DefFontSize * fScale);
+            fBoldFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, true);
             fDrawFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, false);
 
             Predef();
@@ -1212,9 +1242,9 @@ namespace GKCore.Charts
 
             if (fFilter.BranchCut == ChartFilter.BranchCutType.None) return;
 
-            GKUtils.InitExtCounts(fTree, 0);
+            fFilterData.Clear();
             DoDescendantsFilter(root);
-            root.ExtData = true;
+            fFilterData[root] = true;
         }
 
         private bool DoDescendantsFilter(GDMIndividualRecord person)
@@ -1236,17 +1266,17 @@ namespace GKCore.Charts
 
             int num = person.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                GDMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
+                GDMFamilyRecord family = fTree.GetPtrValue(person.SpouseToFamilyLinks[i]);
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
-                    GDMIndividualRecord child = family.Children[j].Individual;
+                    GDMIndividualRecord child = fTree.GetPtrValue(family.Children[j]);
                     bool resChild = DoDescendantsFilter(child);
                     result |= resChild;
                 }
             }
 
-            person.ExtData = result;
+            fFilterData[person] = result;
             return result;
         }
 
@@ -1325,7 +1355,9 @@ namespace GKCore.Charts
             DoneGraphics();
 
             fLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 1f);
+            fDottedLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 1f, new float[] {4.0F, 2.0F});
             fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Silver), 1f);
+            fDottedDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Silver), 1f, new float[] {4.0F, 2.0F});
             fSolidBlack = fRenderer.CreateSolidBrush(ChartRenderer.GetColor(BSDColors.Black));
         }
 
@@ -1386,19 +1418,24 @@ namespace GKCore.Charts
 
         private void DrawLine(int x1, int y1, int x2, int y2)
         {
+            DrawLine(x1, y1, x2, y2, fLinePen, fDecorativeLinePen);
+        }
+
+        private void DrawLine(int x1, int y1, int x2, int y2, IPen linePen, IPen decorativeLinePen)
+        {
             if (!IsLineVisible(x1, y1, x2, y2)) return;
 
             int sX = fOffsetX + x1;
             int sX2 = fOffsetX + x2;
             int sY = fOffsetY + y1;
             int sY2 = fOffsetY + y2;
-            fRenderer.DrawLine(fLinePen, sX, sY, sX2, sY2);
+            fRenderer.DrawLine(linePen, sX, sY, sX2, sY2);
 
             if (fOptions.Decorative) {
                 if (sX == sX2) {
-                    fRenderer.DrawLine(fDecorativeLinePen, sX + 1, sY + 1, sX2 + 1, sY2 - 1);
+                    fRenderer.DrawLine(decorativeLinePen, sX + 1, sY + 1, sX2 + 1, sY2 - 1);
                 } else if (sY == sY2) {
-                    fRenderer.DrawLine(fDecorativeLinePen, sX + 1, sY + 1, sX2 + 0, sY2 + 1);
+                    fRenderer.DrawLine(decorativeLinePen, sX + 1, sY + 1, sX2 + 0, sY2 + 1);
                 }
             }
         }
@@ -1455,15 +1492,30 @@ namespace GKCore.Charts
                     prt.Left += person.PortraitWidth;
                 }
 
-                int h = fRenderer.GetTextHeight(fDrawFont);
+                int bh = fRenderer.GetTextHeight(fBoldFont);
+                int th = fRenderer.GetTextHeight(fDrawFont);
+                int ry = prt.Top + fNodePadding;
+
                 int lines = person.Lines.Length;
                 for (int k = 0; k < lines; k++) {
                     string line = person.Lines[k];
 
-                    int stw = fRenderer.GetTextWidth(line, fDrawFont);
+                    int lh;
+                    IFont font;
+                    if (fOptions.BoldNames && k < person.NameLines) {
+                        lh = bh;
+                        font = fBoldFont;
+                    } else {
+                        lh = th;
+                        font = fDrawFont;
+                    }
+
+                    int stw = fRenderer.GetTextWidth(line, font);
                     int rx = prt.Left + ((prt.Right - prt.Left + 1) - stw) / 2;
-                    int ry = prt.Top + fNodePadding + (h * k);
-                    fRenderer.DrawString(line, fDrawFont, fSolidBlack, rx, ry);
+
+                    fRenderer.DrawString(line, font, fSolidBlack, rx, ry);
+
+                    ry += lh;
                 }
 
                 if (fOptions.SignsVisible && !person.Signs.IsEmpty()) {
@@ -1501,8 +1553,13 @@ namespace GKCore.Charts
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartModel.DrawPerson(): " + ex.Message);
+                Logger.WriteError("TreeChartModel.DrawPerson()", ex);
             }
+        }
+
+        private bool IsDottedLines(TreeChartPerson person)
+        {
+            return (person != null && person.Adopted && fOptions.DottedLinesOfAdoptedChildren);
         }
 
         private void DrawAncestors(TreeChartPerson person, ChartDrawMode drawMode)
@@ -1523,13 +1580,17 @@ namespace GKCore.Charts
                 parY = (person.Father != null) ? person.Father.PtY : person.Mother.PtY;
             }
 
-            DrawLine(person.PtX, crY, person.PtX, person.PtY); // v
+            bool dotted = IsDottedLines(person);
+            var linePen = (!dotted) ? fLinePen : fDottedLinePen;
+            var decorativeLinePen = (!dotted) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+
+            DrawLine(person.PtX, crY, person.PtX, person.PtY, linePen, decorativeLinePen); // v
 
             string marrDate = null;
 
             if (person.Father != null) {
-                DrawLine(person.Father.PtX, crY, person.PtX, crY); // h
-                DrawLine(person.Father.PtX, parY, person.Father.PtX, crY); // v
+                DrawLine(person.Father.PtX, crY, person.PtX, crY, linePen, decorativeLinePen); // h
+                DrawLine(person.Father.PtX, parY, person.Father.PtX, crY, linePen, decorativeLinePen); // v
 
                 if (!string.IsNullOrEmpty(person.Father.MarriageDate) && marrDate == null) {
                     marrDate = person.Father.MarriageDate;
@@ -1537,8 +1598,8 @@ namespace GKCore.Charts
             }
 
             if (person.Mother != null) {
-                DrawLine(person.PtX, crY, person.Mother.PtX, crY); // h
-                DrawLine(person.Mother.PtX, parY, person.Mother.PtX, crY); // v
+                DrawLine(person.PtX, crY, person.Mother.PtX, crY, linePen, decorativeLinePen); // h
+                DrawLine(person.Mother.PtX, parY, person.Mother.PtX, crY, linePen, decorativeLinePen); // v
 
                 if (!string.IsNullOrEmpty(person.Mother.MarriageDate) && marrDate == null) {
                     marrDate = person.Mother.MarriageDate;
@@ -1656,15 +1717,25 @@ namespace GKCore.Charts
                 TreeChartPerson child0 = person.GetChild(0);
                 int chY = (!fOptions.InvertedTree) ? child0.PtY : child0.PtY + child0.Height;
 
-                if (childrenCount > 1) {
-                    int bpx = person.GetChild(0).PtX;
-                    int epx = person.GetChild(childrenCount - 1).PtX;
-                    DrawLine(bpx, crY, epx, crY); // h
-                }
-
                 for (int i = 0; i < childrenCount; i++) {
                     TreeChartPerson child = person.GetChild(i);
-                    DrawLine(child.PtX, crY, child.PtX, chY); // v
+
+                    bool dotted = IsDottedLines(child);
+                    var linePen = (!dotted) ? fLinePen : fDottedLinePen;
+                    var decorativeLinePen = (!dotted) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+
+                    if (childrenCount > 1) {
+                        int jX;
+                        if (i < childrenCount / 2) {
+                            jX = Math.Min(cx, person.GetChild(i + 1).PtX);
+                        } else {
+                            jX = Math.Max(cx, person.GetChild(i - 1).PtX);
+                        }
+
+                        DrawLine(child.PtX, crY, jX, crY, linePen, decorativeLinePen); // h
+                    }
+
+                    DrawLine(child.PtX, crY, child.PtX, chY, linePen, decorativeLinePen); // v
                 }
             }
         }
@@ -1711,8 +1782,7 @@ namespace GKCore.Charts
             if (!GlobalOptions.Instance.CheckTreeSize) return result;
 
             if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth) {
-                GKUtils.InitExtCounts(tree, -1);
-                int ancCount = GKUtils.GetAncestorsCount(iRec);
+                int ancCount = GKUtils.GetAncestorsCount(tree, iRec);
                 if (ancCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
                     return false;
@@ -1720,8 +1790,7 @@ namespace GKCore.Charts
             }
 
             if (chartKind >= TreeChartKind.ckDescendants && chartKind <= TreeChartKind.ckBoth) {
-                GKUtils.InitExtCounts(tree, -1);
-                int descCount = GKUtils.GetDescendantsCount(iRec);
+                int descCount = GKUtils.GetDescendantsCount(tree, iRec);
                 if (descCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
                     result = false;

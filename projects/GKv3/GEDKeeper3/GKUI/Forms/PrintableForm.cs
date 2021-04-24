@@ -93,7 +93,7 @@ namespace GKUI.Forms
 
                 float imgW = img.Width;
                 float imgH = img.Height;
-                float factor = SysUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
+                float factor = GfxHelper.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
                 if (factor > 1.0f) factor = 1.0f;
                 imgW = (imgW * factor);
                 imgH = (imgH * factor);

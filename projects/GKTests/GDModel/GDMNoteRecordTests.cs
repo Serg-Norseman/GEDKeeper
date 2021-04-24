@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using BSLib;
-using GDModel;
 using GKCore;
 using GKCore.Types;
 using GKTests;
@@ -36,6 +35,7 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
@@ -72,14 +72,18 @@ namespace GDModel
                 }
 
                 Assert.Throws(typeof(ArgumentException), () => {
-                    noteRec.MoveTo(null, false);
+                    noteRec.MoveTo(null);
+                });
+
+                Assert.Throws(typeof(ArgumentException), () => {
+                    noteRec.Assign(null);
                 });
 
                 using (GDMNoteRecord noteRec3 = new GDMNoteRecord(null)) {
                     noteRec3.SetNoteText("Test text 3");
                     Assert.AreEqual("Test text 3", noteRec3.Lines.Text.Trim());
 
-                    noteRec.MoveTo(noteRec3, false);
+                    noteRec.MoveTo(noteRec3);
 
                     Assert.AreEqual("Test text 3", noteRec3.Lines.Text.Trim());
                 }
@@ -113,13 +117,13 @@ namespace GDModel
                     Assert.AreEqual(0.0f, noteRec.IsMatch(null, new MatchParams()));
                 }
 
-                Assert.Throws(typeof(ArgumentException), () => { noteRec.MoveTo(null, false); });
+                Assert.Throws(typeof(ArgumentException), () => { noteRec.MoveTo(null); });
 
                 using (GDMNoteRecord noteRec3 = new GDMNoteRecord(null)) {
                     noteRec3.SetNoteText("Test text 3");
                     Assert.AreEqual("Test text 3", noteRec3.Lines.Text.Trim());
 
-                    noteRec.MoveTo(noteRec3, false);
+                    noteRec.MoveTo(noteRec3);
 
                     Assert.AreEqual("Test text 3", noteRec3.Lines.Text.Trim());
                 }
@@ -162,9 +166,13 @@ namespace GDModel
         {
             GDMNotes notes = indiv.AddNote(noteRec);
 
-            Assert.AreEqual(notes.Lines.Text, noteRec.Lines.Text);
-
             Assert.IsTrue(notes.IsPointer, "notes.IsPointer");
+
+            Assert.Throws<InvalidOperationException>(() => {
+                var lines = notes.Lines;
+            }, "Notes is a pointer");
+
+            Assert.AreEqual(notes.XRef, noteRec.XRef);
 
             Assert.IsFalse(notes.IsEmpty()); // its pointer
 
@@ -174,7 +182,7 @@ namespace GDModel
         [Test]
         public void Test_GEDCOMNotes()
         {
-            using (GDMNotes notes = new GDMNotes(null)) {
+            using (GDMNotes notes = new GDMNotes()) {
                 Assert.IsTrue(notes.IsEmpty());
                 notes.Lines.Text = "Test note";
                 Assert.IsFalse(notes.IsEmpty());
@@ -203,7 +211,7 @@ namespace GDModel
             
             StringList value = new StringList(lines);
             GDMNoteRecord instance = new GDMNoteRecord(null);
-            instance.Lines.AddStrings(lines);
+            instance.Lines.AddRange(lines);
             Assert.AreEqual(value.Text, instance.Lines.Text);
         }
 
@@ -214,7 +222,7 @@ namespace GDModel
             GDMNoteRecord instance = new GDMNoteRecord(null);
 
             Assert.Throws(typeof(ArgumentException), () => {
-                instance.MoveTo(other, false);
+                instance.MoveTo(other);
             });
         }
 
@@ -235,7 +243,7 @@ namespace GDModel
             GDMNoteRecord instance2 = new GDMNoteRecord(null);
             instance2.SetNotesArray(lines);
 
-            instance1.MoveTo(instance2, false);
+            instance1.MoveTo(instance2);
 
             // moveTo preserved existing note text
             StringList value = new StringList(lines);
@@ -246,7 +254,7 @@ namespace GDModel
         public void Test_IsMatch()
         {
             var matchParams = new MatchParams();
-            GDMTag other = new GDMAddress(null);
+            GDMTag other = new GDMAddress();
             GDMNoteRecord instance = new GDMNoteRecord(null);
             float result = instance.IsMatch(other, matchParams); // TODO matchParams is not used
             Assert.AreEqual(0.0F, result, 0.0);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -65,7 +65,7 @@ namespace GKPedigreeImporterPlugin
         LSID_Close,
         LSID_PersonLineSpecials,
         LSID_Special_1,
-        LSID_Analysis,
+        LSID_Analyzing,
         LSID_Loading,
         LSID_NPS,
         LSID_SNP,
@@ -100,7 +100,7 @@ namespace GKPedigreeImporterPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(ILS.LSID_PluginTitle);
             } catch (Exception ex) {
-                Logger.LogWrite("GKPedigreeImporterPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("GKPedigreeImporterPlugin.OnLanguageChange()", ex);
             }
         }
     }

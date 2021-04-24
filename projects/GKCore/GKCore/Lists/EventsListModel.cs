@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -56,18 +56,16 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as GDMRecordWithEvents;
             if (fSheetList == null || dataOwner == null) return;
 
-            try
-            {
+            try {
                 fSheetList.ClearItems();
 
-                for (int i = 0; i < dataOwner.Events.Count; i++)
-                {
+                for (int i = 0; i < dataOwner.Events.Count; i++) {
                     GDMCustomEvent evt = dataOwner.Events[i];
 
                     object[] itemsData = new object[5];
                     itemsData[0] = (i + 1);
                     itemsData[1] = GKUtils.GetEventName(evt);
-                    itemsData[2] = new GEDCOMDateItem(evt.Date.Value);
+                    itemsData[2] = new GDMDateItem(evt.Date.Value);
                     if (fPersonsMode) {
                         string st = evt.Place.StringValue;
                         if (evt.StringValue != "") {
@@ -85,20 +83,17 @@ namespace GKCore.Lists
                 fSheetList.ResizeColumn(1);
                 fSheetList.ResizeColumn(2);
                 fSheetList.ResizeColumn(3);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("EventsListModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("EventsListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
-            if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
+            GDMRecordWithEvents record = fDataOwner as GDMRecordWithEvents;
+            if (fBaseWin == null || fSheetList == null || record == null) return;
 
             GDMCustomEvent evt = eArgs.ItemData as GDMCustomEvent;
-            GDMRecordWithEvents record = dataOwner as GDMRecordWithEvents;
 
             bool result = false;
 
@@ -114,9 +109,9 @@ namespace GKCore.Lists
                                 newEvent = evt;
                             } else {
                                 if (record is GDMIndividualRecord) {
-                                    newEvent = new GDMIndividualEvent(record);
+                                    newEvent = new GDMIndividualEvent();
                                 } else {
-                                    newEvent = new GDMFamilyEvent(record);
+                                    newEvent = new GDMFamilyEvent();
                                 }
                             }
 
@@ -170,7 +165,7 @@ namespace GKCore.Lists
                         break;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("EventsListModel.Modify(): " + ex.Message);
+                Logger.WriteError("EventsListModel.Modify()", ex);
                 result = false;
             }
 

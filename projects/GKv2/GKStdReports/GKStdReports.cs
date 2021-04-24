@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,8 +28,8 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKStdReports")]
 [assembly: AssemblyDescription("GEDKeeper standard reports plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2018 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("0.4.0.0")]
+[assembly: AssemblyCopyright("Copyright © 2018-2021 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyVersion("0.6.0.0")]
 [assembly: AssemblyCulture("")]
 
 namespace GKStdReports
@@ -41,8 +41,16 @@ namespace GKStdReports
         LSID_Names,
         LSID_Surnames,
         LSID_Phonetics_Title,
-        LSID_Contemporaries_Title
+        LSID_Contemporaries_Title,
+        LSID_Sources_Title,
+        LSID_Name,
+        LSID_Title,
+        LSID_Repositories_Title,
+        LSID_Address,
+        LSID_Places_Title,
+        LSID_Repository,
     }
+
 
     public static class SRLangMan
     {
@@ -65,12 +73,27 @@ namespace GKStdReports
         }
     }
 
-    public class NFRPlugin : OrdinaryPlugin, IPlugin
+
+    public abstract class StdReportPlugin : OrdinaryPlugin
     {
-        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_NFR_Title); } }
         public override ILangMan LangMan { get { return SRLangMan.Instance; } }
         public override IImage Icon { get { return null; } }
         public override PluginCategory Category { get { return PluginCategory.Report; } }
+
+        public override void OnLanguageChange()
+        {
+            try {
+                SRLangMan.Instance = Host.CreateLangMan(this);
+            } catch (Exception ex) {
+                Logger.WriteError("StdReportPlugin.OnLanguageChange()", ex);
+            }
+        }
+    }
+
+
+    public class NFRPlugin : StdReportPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_NFR_Title); } }
 
         public override void Execute()
         {
@@ -81,24 +104,12 @@ namespace GKStdReports
                 report.Generate(true);
             }
         }
-
-        public override void OnLanguageChange()
-        {
-            try {
-                SRLangMan.Instance = Host.CreateLangMan(this);
-            } catch (Exception ex) {
-                Logger.LogWrite("NFRPlugin.OnLanguageChange(): " + ex.Message);
-            }
-        }
     }
 
 
-    public class PERPlugin : OrdinaryPlugin, IPlugin
+    public class PERPlugin : StdReportPlugin
     {
         public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_PER_Title); } }
-        public override ILangMan LangMan { get { return SRLangMan.Instance; } }
-        public override IImage Icon { get { return null; } }
-        public override PluginCategory Category { get { return PluginCategory.Report; } }
 
         public override void Execute()
         {
@@ -115,23 +126,12 @@ namespace GKStdReports
                 report.Generate(true);
             }
         }
-
-        public override void OnLanguageChange()
-        {
-            try {
-                SRLangMan.Instance = Host.CreateLangMan(this);
-            } catch (Exception ex) {
-                Logger.LogWrite("PERPlugin.OnLanguageChange(): " + ex.Message);
-            }
-        }
     }
 
-    public class PhonPlugin : OrdinaryPlugin, IPlugin
+
+    public class PhonPlugin : StdReportPlugin
     {
         public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Phonetics_Title); } }
-        public override ILangMan LangMan { get { return SRLangMan.Instance; } }
-        public override IImage Icon { get { return null; } }
-        public override PluginCategory Category { get { return PluginCategory.Report; } }
 
         public override void Execute()
         {
@@ -142,24 +142,12 @@ namespace GKStdReports
                 report.Generate(true);
             }
         }
-
-        public override void OnLanguageChange()
-        {
-            try {
-                SRLangMan.Instance = Host.CreateLangMan(this);
-            } catch (Exception ex) {
-                Logger.LogWrite("PhonPlugin.OnLanguageChange(): " + ex.Message);
-            }
-        }
     }
 
 
-    public class ContempPlugin : OrdinaryPlugin, IPlugin
+    public class ContempPlugin : StdReportPlugin
     {
         public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Contemporaries_Title); } }
-        public override ILangMan LangMan { get { return SRLangMan.Instance; } }
-        public override IImage Icon { get { return null; } }
-        public override PluginCategory Category { get { return PluginCategory.Report; } }
 
         public override void Execute()
         {
@@ -176,13 +164,52 @@ namespace GKStdReports
                 report.Generate(true);
             }
         }
+    }
 
-        public override void OnLanguageChange()
+
+    public class SourcesPlugin : StdReportPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Sources_Title); } }
+
+        public override void Execute()
         {
-            try {
-                SRLangMan.Instance = Host.CreateLangMan(this);
-            } catch (Exception ex) {
-                Logger.LogWrite("ContempPlugin.OnLanguageChange(): " + ex.Message);
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (var report = new SourcesReport(curBase)) {
+                report.Generate(true);
+            }
+        }
+    }
+
+
+    public class RepositoriesPlugin : StdReportPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Repositories_Title); } }
+
+        public override void Execute()
+        {
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (var report = new RepositoriesReport(curBase)) {
+                report.Generate(true);
+            }
+        }
+    }
+
+
+    public class PlacesPlugin : StdReportPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Places_Title); } }
+
+        public override void Execute()
+        {
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (var report = new PlacesReport(curBase)) {
+                report.Generate(true);
             }
         }
     }

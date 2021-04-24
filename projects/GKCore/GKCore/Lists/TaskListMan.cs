@@ -62,7 +62,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (QuickFilter == "*" || IsMatchesMask(GKUtils.GetTaskGoalStr(fRec), QuickFilter));
+            bool res = IsMatchesMask(GKUtils.GetTaskGoalStr(fBaseContext.Tree, fRec), QuickFilter);
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
@@ -80,7 +80,7 @@ namespace GKCore.Lists
             switch ((TaskColumnType)colType)
             {
                 case TaskColumnType.ctGoal:
-                    result = GKUtils.GetTaskGoalStr(fRec);
+                    result = GKUtils.GetTaskGoalStr(fBaseContext.Tree, fRec);
                     break;
 
                 case TaskColumnType.ctPriority:

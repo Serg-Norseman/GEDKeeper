@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,10 +33,6 @@ using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
-using GKTests.ControlTesters;
-using GKUI.Components;
-using GKUI.Forms;
-using GKUI.Providers;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -54,8 +50,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             WFAppHost.ConfigureBootstrap(false);
 
             var appHost = new WFAppHost();
@@ -76,6 +70,8 @@ namespace GKUI.Forms
         [STAThread, Test]
         public void Test_Common()
         {
+            TestUtils.InitGEDCOMProviderTest();
+
             // required for testing, otherwise the engine will require saving
             // the database (requires path of files for the archive and storage)
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
@@ -213,11 +209,19 @@ namespace GKUI.Forms
             // Stage 22-24: call to exports
             Exporter.TEST_MODE = true;
 
-            ModalFormHandler = SaveFilePDF_Handler;
-            ClickToolStripMenuItem("miExportToFamilyBook", fMainWin);
+            try {
+                ModalFormHandler = SaveFilePDF_Handler;
+                ClickToolStripMenuItem("miExportToFamilyBook", fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.pdf"));
+            }
 
-            ModalFormHandler = SaveFileXLS_Handler;
-            ClickToolStripMenuItem("miExportToExcelFile", fMainWin);
+            try {
+                ModalFormHandler = SaveFileXLS_Handler;
+                ClickToolStripMenuItem("miExportToExcelFile", fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.xls"));
+            }
 
             GeneratePedigree_Tests("Stage 24");
 
@@ -422,15 +426,27 @@ namespace GKUI.Forms
 
         private void GeneratePedigree(string stage, string menuItem)
         {
-            ModalFormHandler = SaveFileHTML_Handler;
-            ClickToolStripMenuItem(menuItem, fMainWin);
+            try {
+                ModalFormHandler = SaveFileHTML_Handler;
+                ClickToolStripMenuItem(menuItem, fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.html"));
+            }
 
-            ModalFormHandler = SaveFileRTF_Handler;
-            ClickToolStripMenuItem(menuItem, fMainWin);
+            try {
+                ModalFormHandler = SaveFileRTF_Handler;
+                ClickToolStripMenuItem(menuItem, fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.rtf"));
+            }
 
             #if !__MonoCS__
-            ModalFormHandler = SaveFilePDF_Handler;
-            ClickToolStripMenuItem(menuItem, fMainWin);
+            try {
+                ModalFormHandler = SaveFilePDF_Handler;
+                ClickToolStripMenuItem(menuItem, fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.pdf"));
+            }
             #endif
         }
 
@@ -461,7 +477,7 @@ namespace GKUI.Forms
             }
 
             if (form is ResearchEditDlg) {
-                ResearchEditDlgTests.ResearchEditDlg_Handler((ResearchEditDlg) form);
+                ResearchEditDlg_Handler((ResearchEditDlg) form);
                 return;
             }
 
@@ -498,12 +514,12 @@ namespace GKUI.Forms
 
         private void StructsDlg_Handler(GDMRecordWithEvents record, Form dlg, TabControlTester tabs, int[] tabIndexes)
         {
-            GKSheetListTester sheetTester;
+            WFAppHost.TEST_MODE = true; // FIXME: dirty hack
 
             // notes
             Assert.AreEqual(0, record.Notes.Count);
             tabs.SelectTab(tabIndexes[0]);
-            RecordSelectDlgTests.SetSelectItemHandler(this, 0);
+            RecordSelectDlgTests.SetSelectItemHandler(0);
             ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, record.Notes.Count);
 
@@ -519,7 +535,7 @@ namespace GKUI.Forms
             // media
             Assert.AreEqual(0, record.MultimediaLinks.Count);
             tabs.SelectTab(tabIndexes[1]);
-            RecordSelectDlgTests.SetSelectItemHandler(this, 0);
+            RecordSelectDlgTests.SetSelectItemHandler(0);
             ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, record.MultimediaLinks.Count);
 
@@ -553,7 +569,6 @@ namespace GKUI.Forms
         {
             GDMFamilyRecord familyRecord = dlg.Family;
             var tabs = new TabControlTester("tabsFamilyData", dlg);
-            GKSheetListTester sheetTester;
 
             // father
             PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
@@ -567,7 +582,7 @@ namespace GKUI.Forms
             ModalFormHandler = MessageBox_YesHandler;
             ClickButton("btnWifeDelete", dlg);
 
-            // childs
+            // children
             Assert.AreEqual(0, familyRecord.Children.Count);
             tabs.SelectTab(0);
             PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
@@ -613,7 +628,6 @@ namespace GKUI.Forms
             SelectCombo("cmbSex", dlg, 1); // male
 
             var tabs = new TabControlTester("tabsPersonData", dlg);
-            GKSheetListTester sheetTester;
 
             var cmbRestriction = new ComboBoxTester("cmbRestriction", dlg);
             cmbRestriction.Select(3);
@@ -716,7 +730,7 @@ namespace GKUI.Forms
             RecordSelectDlgTests.SetCreateItemHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, indiRecord.Groups.Count);
-            Assert.AreEqual("sample group", ((GDMGroupRecord)indiRecord.Groups[0].Value).GroupName);
+            Assert.AreEqual("sample group", fCurBase.Context.Tree.GetPtrValue<GDMGroupRecord>(indiRecord.Groups[0]).GroupName);
 
             ModalFormHandler = MessageBox_YesHandler;
             SelectSheetListItem("fGroupsList", dlg, 0);
@@ -744,6 +758,65 @@ namespace GKUI.Forms
         }
 
         #endregion
+
+        public void ResearchEditDlg_Handler(ResearchEditDlg dlg)
+        {
+            GDMResearchRecord resRecord = dlg.Research;
+
+            // tasks
+            SelectTab("tabsData", dlg, 0);
+            Assert.AreEqual(0, resRecord.Tasks.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
+            ClickToolStripButton("fTasksList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, resRecord.Tasks.Count);
+
+            SelectSheetListItem("fTasksList", dlg, 0);
+            SetModalFormHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
+            ClickToolStripButton("fTasksList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, resRecord.Tasks.Count);
+
+            SelectSheetListItem("fTasksList", dlg, 0);
+            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
+            ClickToolStripButton("fTasksList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, resRecord.Tasks.Count);
+
+            // communications
+            SelectTab("tabsData", dlg, 1);
+            Assert.AreEqual(0, resRecord.Communications.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, CommunicationEditDlgTests.CommunicationAdd_Mini_Handler);
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, resRecord.Communications.Count);
+
+            SelectSheetListItem("fCommunicationsList", dlg, 0);
+            SetModalFormHandler(fFormTest, CommunicationEditDlgTests.CommunicationAdd_Mini_Handler);
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, resRecord.Communications.Count);
+
+            SelectSheetListItem("fCommunicationsList", dlg, 0);
+            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, resRecord.Communications.Count);
+
+            // groups
+            SelectTab("tabsData", dlg, 2);
+            Assert.AreEqual(0, resRecord.Groups.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);
+            ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, resRecord.Groups.Count);
+            Assert.AreEqual("sample group", fCurBase.Context.Tree.GetPtrValue<GDMGroupRecord>(resRecord.Groups[0]).GroupName);
+
+            SelectSheetListItem("fGroupsList", dlg, 0);
+            SetModalFormHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);
+            ClickToolStripButton("fGroupsList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, resRecord.Groups.Count);
+
+            SelectSheetListItem("fGroupsList", dlg, 0);
+            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
+            ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, resRecord.Groups.Count);
+
+            ClickButton("btnAccept", dlg);
+        }
     }
 }
 

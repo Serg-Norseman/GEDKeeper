@@ -20,14 +20,12 @@
 
 #if !__MonoCS__
 
-using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -44,8 +42,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
 
             fDialog = new StatisticsWin(fBase, new List<GDMRecord>());

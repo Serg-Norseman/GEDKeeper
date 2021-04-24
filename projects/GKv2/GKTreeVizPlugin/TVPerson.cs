@@ -79,10 +79,10 @@ namespace GKTreeVizPlugin
         private static readonly Random random = new Random();
 
         public readonly List<TVPerson> Spouses;
-        public readonly List<TVPerson> Childs;
+        public readonly List<TVPerson> Children;
 
         public readonly int BeautySpouses;
-        public readonly int BeautyChilds;
+        public readonly int BeautyChildren;
 
         public PointF Pt;
         public float BaseRadius;
@@ -92,10 +92,10 @@ namespace GKTreeVizPlugin
         public TVStem()
         {
             Spouses = new List<TVPerson>();
-            Childs = new List<TVPerson>();
+            Children = new List<TVPerson>();
 
             BeautySpouses = random.Next(0, 360);
-            BeautyChilds = random.Next(0, 360);
+            BeautyChildren = random.Next(0, 360);
         }
 
         public void AddSpouse(TVPerson spouse)
@@ -115,7 +115,7 @@ namespace GKTreeVizPlugin
         public void AddChild(TVPerson child)
         {
             child.Stem = this;
-            Childs.Add(child);
+            Children.Add(child);
         }
 
         public void Update()
@@ -130,10 +130,10 @@ namespace GKTreeVizPlugin
             }
 
             // recalculate coordinates of visible children
-            pts = TreeVizControl.GetCirclePoints(BeautyChilds, Pt, Childs.Count, BaseRadius / 2);
-            for (int i = 0, count = Childs.Count; i < count; i++)
+            pts = TreeVizControl.GetCirclePoints(BeautyChildren, Pt, Children.Count, BaseRadius / 2);
+            for (int i = 0, count = Children.Count; i < count; i++)
             {
-                TVPerson chp = Childs[i];
+                TVPerson chp = Children[i];
                 chp.Pt = pts[i];
             }
         }

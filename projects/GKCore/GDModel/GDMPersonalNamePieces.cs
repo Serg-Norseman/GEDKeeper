@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,7 +25,7 @@ namespace GDModel
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GDMPersonalNamePieces : GDMTagWithLists
+    public sealed class GDMPersonalNamePieces : GDMTag
     {
         private string fPrefix;
         private string fGiven;
@@ -100,7 +100,7 @@ namespace GDModel
         }
 
 
-        public GDMPersonalNamePieces(GDMObject owner) : base(owner)
+        public GDMPersonalNamePieces()
         {
             fPrefix = string.Empty;
             fGiven = string.Empty;

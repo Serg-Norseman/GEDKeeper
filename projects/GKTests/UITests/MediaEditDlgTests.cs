@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,8 +26,6 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
-using GKUI.Providers;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -45,13 +43,11 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
             fMultimediaRecord = new GDMMultimediaRecord(fBase.Context.Tree);
-            fMultimediaRecord.FileReferences.Add(new GDMFileReferenceWithTitle(fMultimediaRecord));
+            fMultimediaRecord.FileReferences.Add(new GDMFileReferenceWithTitle());
 
             fDialog = new MediaEditDlg(fBase);
             fDialog.MediaRec = fMultimediaRecord;

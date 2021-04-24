@@ -93,19 +93,23 @@ namespace GKUI.Forms
 
             txtMarriedSurname = new TextBox();
             txtMarriedSurname.Size = new Size(180, 22);
-            txtMarriedSurname.KeyDown += edNameX_KeyDown;
+            txtMarriedSurname.KeyDown += txtXName_KeyDown;
+            txtMarriedSurname.LostFocus += txtXName_Leave;
 
             txtSurname = new TextBox();
             txtSurname.Size = new Size(180, 22);
-            txtSurname.KeyDown += edNameX_KeyDown;
+            txtSurname.KeyDown += txtXName_KeyDown;
+            txtSurname.LostFocus += txtXName_Leave;
 
             txtName = new TextBox();
             txtName.Size = new Size(180, 22);
-            txtName.KeyDown += edNameX_KeyDown;
+            txtName.KeyDown += txtXName_KeyDown;
+            txtName.LostFocus += txtXName_Leave;
 
             cmbPatronymic = new ComboBox();
             cmbPatronymic.Size = new Size(180, 22);
-            cmbPatronymic.KeyDown += edNameX_KeyDown;
+            cmbPatronymic.KeyDown += txtXName_KeyDown;
+            cmbPatronymic.LostFocus += txtXName_Leave;
 
             cmbSex = new ComboBox();
             cmbSex.ReadOnly = true;
@@ -120,46 +124,47 @@ namespace GKUI.Forms
 
             txtSurnamePrefix = new TextBox();
             txtSurnamePrefix.Size = new Size(180, 22);
-            txtSurnamePrefix.KeyDown += edNameX_KeyDown;
+            txtSurnamePrefix.KeyDown += txtXName_KeyDown;
 
             txtNamePrefix = new TextBox();
             txtNamePrefix.Size = new Size(180, 22);
-            txtNamePrefix.KeyDown += edNameX_KeyDown;
+            txtNamePrefix.KeyDown += txtXName_KeyDown;
 
             txtNameSuffix = new TextBox();
             txtNameSuffix.Size = new Size(180, 22);
-            txtNameSuffix.KeyDown += edNameX_KeyDown;
+            txtNameSuffix.KeyDown += txtXName_KeyDown;
 
             txtNickname = new TextBox();
             txtNickname.Size = new Size(180, 22);
-            txtNickname.KeyDown += edNameX_KeyDown;
+            txtNickname.KeyDown += txtXName_KeyDown;
 
             var personLayout = new DefTableLayout {
                 Rows = {
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblSurname, txtSurname),
-                                  new VSDefStackLayout(lblSurnamePrefix, txtSurnamePrefix), null }
+                        Cells = { new DefStackLayout(lblSurname, txtSurname),
+                                  new DefStackLayout(lblSurnamePrefix, txtSurnamePrefix), null }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblMarriedSurname, txtMarriedSurname),
-                                  new VSDefStackLayout(lblNamePrefix, txtNamePrefix), null }
+                        Cells = { new DefStackLayout(lblMarriedSurname, txtMarriedSurname),
+                                  new DefStackLayout(lblNamePrefix, txtNamePrefix),
+                                  new DefStackLayout(lblSex, cmbSex) }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblName, txtName),
-                                  new VSDefStackLayout(lblNameSuffix, txtNameSuffix),
-                                  new VSDefStackLayout(lblSex, cmbSex) }
+                        Cells = { new DefStackLayout(lblName, txtName),
+                                  new DefStackLayout(lblNameSuffix, txtNameSuffix),
+                                  chkBookmark }
                     },
                     new TableRow {
-                        Cells = { new VSDefStackLayout(lblPatronymic, cmbPatronymic),
-                                  new VSDefStackLayout(lblNickname, txtNickname),
-                                  TableLayout.Horizontal(10, chkBookmark, chkPatriarch) }
+                        Cells = { new DefStackLayout(lblPatronymic, cmbPatronymic),
+                                  new DefStackLayout(lblNickname, txtNickname),
+                                  chkPatriarch }
                     }
                 }
             };
 
             imgPortrait = new GKPortrait();
             imgPortrait.Image = null;
-            imgPortrait.Width = 150;
+            //imgPortrait.Width = 150;
             //imgPortrait.Size = new Size(149, 165);
             imgPortrait.SlidePanelHeight = 36;
             imgPortrait.PixelSpeed = 5;
@@ -183,7 +188,7 @@ namespace GKUI.Forms
             };
 
             GroupBox1 = new GroupBox();
-            GroupBox1.Content = TableLayout.Horizontal(10, new TableCell(personLayout, true), portraitLayout);
+            GroupBox1.Content = TableLayout.Horizontal(10, new TableCell(personLayout, true), new TableCell(portraitLayout));
 
             //
 
@@ -251,34 +256,6 @@ namespace GKUI.Forms
 
             //
 
-            btnAccept = new Button();
-            btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = UIHelper.LongButtonSize;
-            btnAccept.Text = "btnAccept";
-            btnAccept.Click += btnAccept_Click;
-
-            btnCancel = new Button();
-            btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = UIHelper.LongButtonSize;
-            btnCancel.Text = "btnCancel";
-            btnCancel.Click += btnCancel_Click;
-
-            //
-
-            lblRestriction = new Label();
-            lblRestriction.Text = "lblRestriction";
-
-            cmbRestriction = new ComboBox();
-            cmbRestriction.ReadOnly = true;
-            cmbRestriction.Size = new Size(180, 22);
-            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
-
-            btnNameCopy = new Button();
-            btnNameCopy.Size = UIHelper.ShortButtonSize;
-            btnNameCopy.Click += btnNameCopy_Click;
-
-            //
-
             pageEvents = new TabPage();
             pageEvents.Text = "pageEvents";
 
@@ -320,8 +297,34 @@ namespace GKUI.Forms
             tabsPersonData.Pages.Add(pageSources);
             tabsPersonData.Pages.Add(pageUserRefs);
             tabsPersonData.Pages.Add(pageParents);
-            //tabsPersonData.Size = new Size(600, 300);
-            //tabsPersonData.Height = 200;
+
+            //
+
+            lblRestriction = new Label();
+            lblRestriction.Text = "lblRestriction";
+
+            cmbRestriction = new ComboBox();
+            cmbRestriction.ReadOnly = true;
+            cmbRestriction.Size = new Size(180, 22);
+            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
+
+            btnNameCopy = new Button();
+            btnNameCopy.Size = UIHelper.ShortButtonSize;
+            btnNameCopy.Click += btnNameCopy_Click;
+
+            btnAccept = new Button();
+            btnAccept.ImagePosition = ButtonImagePosition.Left;
+            btnAccept.Size = UIHelper.LongButtonSize;
+            btnAccept.Text = "btnAccept";
+            btnAccept.Click += btnAccept_Click;
+
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = UIHelper.LongButtonSize;
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += btnCancel_Click;
+
+            //
 
             Content = new DefTableLayout {
                 Rows = {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using BSLib;
 using BSLib.Calendar;
 using GDModel.Providers.GEDCOM;
@@ -27,13 +28,6 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public class GDMDateException : GDMException
-    {
-        public GDMDateException(string message) : base(message)
-        {
-        }
-    }
-
     /// <summary>
     /// Class to hold simple standard GEDCOM dates.
     /// Note: Year cannot be used externally with negative values even for "BC",
@@ -108,12 +102,7 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMDate(owner, tagId, tagValue);
-        }
-
-        public GDMDate(GDMObject owner) : base(owner)
+        public GDMDate()
         {
             fApproximated = GDMApproximated.daExact;
             fCalendar = GDMCalendar.dcGregorian;
@@ -124,7 +113,7 @@ namespace GDModel
             fDay = 0;
         }
 
-        public GDMDate(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMDate(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }
@@ -201,7 +190,7 @@ namespace GDModel
                 Clear();
                 result = string.Empty;
             } else {
-                result = GEDCOMUtils.ParseDate(GetTree(), this, strValue);
+                result = GEDCOMUtils.ParseDate(this, strValue);
             }
             return result;
         }
@@ -233,24 +222,24 @@ namespace GDModel
                 case GDMCalendar.dcGregorian:
                 case GDMCalendar.dcJulian:
                 case GDMCalendar.dcRoman:
-                    monthes = GEDCOMMonthArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthArray;
                     break;
 
                 case GDMCalendar.dcHebrew:
-                    monthes = GEDCOMMonthHebrewArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthHebrewArray;
                     break;
 
                 case GDMCalendar.dcFrench:
-                    monthes = GEDCOMMonthFrenchArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthFrenchArray;
                     break;
 
                 case GDMCalendar.dcIslamic:
-                    monthes = GEDCOMMonthIslamicArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthIslamicArray;
                     break;
 
                 case GDMCalendar.dcUnknown:
                 default:
-                    monthes = GEDCOMMonthArray;
+                    monthes = GEDCOMConsts.GEDCOMMonthArray;
                     break;
             }
             return monthes;
@@ -269,66 +258,60 @@ namespace GDModel
                 }
             }
 
-            throw new GDMDateException(string.Format("The string {0} is not a valid {1} month identifier", str, calendar.ToString()));
+            throw new GDMDateException("The string {0} is not a valid {1} month identifier", str, calendar.ToString());
         }
 
         private static string IntToGEDCOMMonth(int m)
         {
-            return (m == 0) ? string.Empty : GEDCOMMonthArray[m - 1];
+            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthArray[m - 1];
         }
 
         private static string IntToGEDCOMMonthFrench(int m)
         {
-            return (m == 0) ? string.Empty : GEDCOMMonthFrenchArray[m - 1];
+            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthFrenchArray[m - 1];
         }
 
         private static string IntToGEDCOMMonthHebrew(int m)
         {
-            return (m == 0) ? string.Empty : GEDCOMMonthHebrewArray[m - 1];
+            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthHebrewArray[m - 1];
         }
 
         #endregion
 
         protected override string GetStringValue()
         {
-            string prefix = string.Empty;
+            var parts = new List<string>(5);
             if (fApproximated != GDMApproximated.daExact) {
-                prefix = GEDCOMDateApproximatedArray[(int)fApproximated] + " ";
+                parts.Add(GEDCOMConsts.GEDCOMDateApproximatedArray[(int)fApproximated]);
             }
 
-            string escapeStr = string.Empty;
             if (fCalendar != GDMCalendar.dcGregorian) {
-                escapeStr = GEDCOMDateEscapeArray[(int)fCalendar] + " ";
+                parts.Add(GEDCOMConsts.GEDCOMDateEscapeArray[(int)fCalendar]);
             }
 
-            string dayStr = string.Empty;
             if (fDay > 0) {
-                dayStr = fDay.ToString();
-                if (dayStr.Length == 1) {
-                    dayStr = "0" + dayStr;
-                }
-                dayStr += " ";
+                parts.Add(fDay.ToString("D2"));
             }
 
-            string monthStr = string.Empty;
             if (fMonth > 0) {
-                string[] monthes = GDMDate.GetMonthNames(fCalendar);
-                monthStr = monthes[fMonth - 1] + " ";
+                string[] months = GetMonthNames(fCalendar);
+                parts.Add(months[fMonth - 1]);
             }
 
-            string yearStr = string.Empty;
             if (fYear != UNKNOWN_YEAR) {
-                yearStr = fYear.ToString();
-                if (fYearModifier != "") {
+                string yearStr = fYear.ToString("D3");
+                if (!string.IsNullOrEmpty(fYearModifier)) {
                     yearStr = yearStr + "/" + fYearModifier;
                 }
+
                 if (fYearBC) {
-                    yearStr += GEDCOMProvider.GEDCOM_YEAR_BC;
+                    yearStr += GEDCOMConsts.YearBC;
                 }
+
+                parts.Add(yearStr);
             }
 
-            string result = prefix + escapeStr + dayStr + monthStr + yearStr;
-            return result;
+            return string.Join(" ", parts);
         }
 
         private static byte GetMonthNumber(GDMCalendar calendar, string strMonth)
@@ -338,15 +321,15 @@ namespace GDModel
             int month;
             switch (calendar) {
                 case GDMCalendar.dcHebrew:
-                    month = Algorithms.IndexOf(GEDCOMMonthHebrewArray, su);
+                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthHebrewArray, su);
                     break;
 
                 case GDMCalendar.dcFrench:
-                    month = Algorithms.IndexOf(GEDCOMMonthFrenchArray, su);
+                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthFrenchArray, su);
                     break;
 
                 default:
-                    month = Algorithms.IndexOf(GEDCOMMonthArray, su);
+                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthArray, su);
                     break;
             }
 
@@ -529,7 +512,7 @@ namespace GDModel
             string[] dtParts = dateStr.Split('.');
             if (dtParts.Length < 3) {
                 if (aException) {
-                    throw new GDMDateException(string.Format("GEDCOMDate.CreateByFormattedStr(): date format is invalid {0}", dateStr));
+                    throw new GDMDateException("Invalid date format '{0}'", dateStr);
                 }
 
                 return null;
@@ -543,7 +526,7 @@ namespace GDModel
             int month = (pm == "") ? 0 : ConvertHelper.ParseInt(pm, 0);
             int year = (py == "") ? UNKNOWN_YEAR : ConvertHelper.ParseInt(py, UNKNOWN_YEAR);
 
-            var date = new GDMDate(null);
+            var date = new GDMDate();
             date.SetDate(calendar, day, month, year);
             return date;
         }
@@ -608,9 +591,7 @@ namespace GDModel
 
         public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar)
         {
-            string result = "";
-
-            result = GetDisplayString(format, true, showCalendar);
+            string result = GetDisplayString(format, true, showCalendar);
             if (sign && fApproximated != GDMApproximated.daExact) {
                 result = "~ " + result;
             }

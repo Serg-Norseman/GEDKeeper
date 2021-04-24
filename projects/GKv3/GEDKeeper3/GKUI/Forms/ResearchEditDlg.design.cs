@@ -20,9 +20,9 @@ namespace GKUI.Forms
         private Label lblStatus;
         private ComboBox cmbStatus;
         private Label lblStartDate;
-        private MaskedTextBox txtStartDate;
+        private GKDateBox txtStartDate;
         private Label lblStopDate;
-        private MaskedTextBox txtStopDate;
+        private GKDateBox txtStopDate;
         private Label lblPercent;
         private NumericUpDown nudPercent;
         private TabPage pageGroups;
@@ -57,10 +57,10 @@ namespace GKUI.Forms
             cmbStatus = new ComboBox();
             cmbStatus.ReadOnly = true;
 
-            txtStartDate = new MaskedTextBox();
+            txtStartDate = new GKDateBox();
             txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
 
-            txtStopDate = new MaskedTextBox();
+            txtStopDate = new GKDateBox();
             txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
 
             nudPercent = new NumericUpDown();

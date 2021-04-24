@@ -20,6 +20,8 @@
 
 using System.Drawing;
 using System.Windows.Forms;
+using BSLib.Design;
+using BSLib.Design.Handlers;
 
 namespace GKUI.Components
 {
@@ -42,7 +44,7 @@ namespace GKUI.Components
             if (e.Index < 0 || e.Index >= Items.Count) return;
 
             object item = Items[e.Index];
-            GKComboItem ddItem = item as GKComboItem;
+            var ddItem = item as IComboItem;
             if (ddItem != null) {
                 int offset = e.Bounds.Left;
 
@@ -52,7 +54,7 @@ namespace GKUI.Components
                     offset += ddItem.Image.Width;
                 }
 
-                e.Graphics.DrawString(ddItem.Caption, e.Font, new SolidBrush(e.ForeColor),
+                e.Graphics.DrawString(ddItem.Text, e.Font, new SolidBrush(e.ForeColor),
                                       offset, e.Bounds.Top + 2);
             } else {
                 e.Graphics.DrawString(item.ToString(), e.Font, new SolidBrush(e.ForeColor),

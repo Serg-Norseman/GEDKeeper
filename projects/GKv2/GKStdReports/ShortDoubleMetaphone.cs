@@ -27,9 +27,6 @@
  * Copyright (c) 1998, 1999 by Lawrence Philips.
  */
 
-using System;
-using System.Text;
-
 namespace GKStdReports
 {
     /// <summary>Subclass of DoubleMetaphone, Adam Nelson's (anelson@nullpointer.net)
@@ -73,7 +70,7 @@ namespace GKStdReports
         private ushort m_primaryShortKey, m_alternateShortKey;
         
         /// <summary>Default ctor, initializes to an empty string and 0 keys</summary>
-        public ShortDoubleMetaphone() : base()
+        public ShortDoubleMetaphone()
         {
             m_primaryShortKey = m_alternateShortKey = 0;
         }
@@ -83,11 +80,11 @@ namespace GKStdReports
         ///     base class</summary>
         /// 
         /// <param name="word">Word for which to compute metaphone keys</param>
-        public ShortDoubleMetaphone(String word) : base(word)
+        public ShortDoubleMetaphone(string word) : base(word)
         {
-            m_primaryShortKey = ShortDoubleMetaphone.metaphoneKeyToShort(this.PrimaryKey);
+            m_primaryShortKey = ShortDoubleMetaphone.MetaphoneKeyToShort(this.PrimaryKey);
             if (this.AlternateKey != null) {
-                m_alternateShortKey = ShortDoubleMetaphone.metaphoneKeyToShort(this.AlternateKey);
+                m_alternateShortKey = ShortDoubleMetaphone.MetaphoneKeyToShort(this.AlternateKey);
             } else {
                 m_alternateShortKey = METAPHONE_INVALID_KEY;
             }
@@ -105,19 +102,21 @@ namespace GKStdReports
         ///     methods is quite valuable.</summary>
         /// 
         /// <param name="word">New current word for which to compute metaphone keys</param>
-        new public void computeKeys(String word) {
-            base.computeKeys(word);
+        public override void ComputeKeys(string word)
+        {
+            base.ComputeKeys(word);
             
-            m_primaryShortKey = ShortDoubleMetaphone.metaphoneKeyToShort(this.PrimaryKey);
+            m_primaryShortKey = ShortDoubleMetaphone.MetaphoneKeyToShort(this.PrimaryKey);
             if (this.AlternateKey != null) {
-                m_alternateShortKey = ShortDoubleMetaphone.metaphoneKeyToShort(this.AlternateKey);
+                m_alternateShortKey = ShortDoubleMetaphone.MetaphoneKeyToShort(this.AlternateKey);
             } else {
                 m_alternateShortKey = METAPHONE_INVALID_KEY;
             }
         }
         
         /// <summary>The primary metaphone key, represented as a ushort</summary>
-        public ushort PrimaryShortKey {
+        public ushort PrimaryShortKey
+        {
             get {
                 return m_primaryShortKey;
             }
@@ -125,7 +124,8 @@ namespace GKStdReports
         
         /// <summary>The alternative metaphone key, or METAPHONE_INVALID_KEY if the current
         ///     word has no alternate key by double metaphone</summary>
-        public ushort AlternateShortKey {
+        public ushort AlternateShortKey
+        {
             get {
                 return m_alternateShortKey;
             }
@@ -137,15 +137,14 @@ namespace GKStdReports
         ///     METAPHONE_KEY_LENGTH in DoubleMetaphone, this will break.  Length
         ///     tests are not performed, for performance reasons.</param>
         /// 
-        /// <returns>ushort representation of the given metahphone key</returns>
-        static private ushort metaphoneKeyToShort(String metaphoneKey) {
-            ushort result, charResult;
-            Char currentChar;
-            
-            result = 0;
+        /// <returns>ushort representation of the given metaphone key</returns>
+        private static ushort MetaphoneKeyToShort(string metaphoneKey)
+        {
+            ushort result = 0;
             
             for (int currentCharIdx = 0; currentCharIdx < metaphoneKey.Length; currentCharIdx++) {
-                currentChar = metaphoneKey[currentCharIdx];
+                char currentChar = metaphoneKey[currentCharIdx];
+                ushort charResult;
                 if (currentChar == 'A')
                     charResult = METAPHONE_A;
                 else if (currentChar == 'P')
@@ -182,6 +181,7 @@ namespace GKStdReports
                 result <<= 4;
                 result |= charResult;
             }
+
             return result;
         }
     }

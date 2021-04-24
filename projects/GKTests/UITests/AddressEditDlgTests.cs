@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,11 +25,7 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.ControlTesters;
 using GKTests.Stubs;
-using GKUI.Forms;
-using GKUI.Providers;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -46,12 +42,11 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fAddress = new GDMAddress(null);
+            fAddress = new GDMAddress();
 
             fAddress.AddWebPage("test");
             fAddress.AddPhoneNumber("test");

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -62,8 +62,8 @@ namespace GKCore.Controllers
                 fResearch.ResearchName = fView.Name.Text;
                 fResearch.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
                 fResearch.Status = (GDMResearchStatus)fView.Status.SelectedIndex;
-                fResearch.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.Text, true));
-                fResearch.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.Text, true));
+                fResearch.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
+                fResearch.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
                 fResearch.Percent = int.Parse(fView.Percent.Text);
 
                 fLocalUndoman.Commit();
@@ -72,7 +72,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("ResearchEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("ResearchEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -90,8 +90,8 @@ namespace GKCore.Controllers
                 fView.Name.Text = fResearch.ResearchName;
                 fView.Priority.SelectedIndex = (int)fResearch.Priority;
                 fView.Status.SelectedIndex = (int)fResearch.Status;
-                fView.StartDate.Text = fResearch.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.StopDate.Text = fResearch.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.StartDate.NormalizeDate = fResearch.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.StopDate.NormalizeDate = fResearch.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.Percent.Value = fResearch.Percent;
             }
 
@@ -105,6 +105,14 @@ namespace GKCore.Controllers
         {
             if (record != null && Accept()) {
                 fBase.SelectRecordByXRef(record.XRef);
+                fView.Close();
+            }
+        }
+
+        public void JumpToRecord(GDMPointer pointer)
+        {
+            if (pointer != null && Accept()) {
+                fBase.SelectRecordByXRef(pointer.XRef);
                 fView.Close();
             }
         }

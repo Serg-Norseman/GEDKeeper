@@ -126,7 +126,7 @@
 		    this.pageMergeOptions.Controls.Add(this.grpSearchPersons);
 		    this.pageMergeOptions.Location = new System.Drawing.Point(4, 26);
 		    this.pageMergeOptions.Name = "pageMergeOptions";
-		    this.pageMergeOptions.Size = new System.Drawing.Size(960, 471);
+		    this.pageMergeOptions.Size = new System.Drawing.Size(957, 469);
 		    this.pageMergeOptions.TabIndex = 1;
 		    this.pageMergeOptions.Text = "pageMergeOptions";
 		    // 
@@ -211,38 +211,43 @@
 		    this.grpSearchPersons.Controls.Add(this.chkBirthYear);
 		    this.grpSearchPersons.Location = new System.Drawing.Point(11, 136);
 		    this.grpSearchPersons.Name = "grpSearchPersons";
-		    this.grpSearchPersons.Size = new System.Drawing.Size(315, 193);
+		    this.grpSearchPersons.Padding = new System.Windows.Forms.Padding(10);
+		    this.grpSearchPersons.Size = new System.Drawing.Size(315, 236);
 		    this.grpSearchPersons.TabIndex = 1;
 		    this.grpSearchPersons.TabStop = false;
 		    this.grpSearchPersons.Text = "grpSearchPersons";
 		    // 
 		    // lblNameAccuracy
 		    // 
-		    this.lblNameAccuracy.Location = new System.Drawing.Point(22, 49);
+		    this.lblNameAccuracy.Location = new System.Drawing.Point(20, 56);
+		    this.lblNameAccuracy.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
 		    this.lblNameAccuracy.Name = "lblNameAccuracy";
-		    this.lblNameAccuracy.Size = new System.Drawing.Size(152, 15);
+		    this.lblNameAccuracy.Size = new System.Drawing.Size(285, 20);
 		    this.lblNameAccuracy.TabIndex = 0;
 		    this.lblNameAccuracy.Text = "lblNameAccuracy";
 		    // 
 		    // lblYearInaccuracy
 		    // 
-		    this.lblYearInaccuracy.Location = new System.Drawing.Point(22, 132);
+		    this.lblYearInaccuracy.Location = new System.Drawing.Point(20, 154);
+		    this.lblYearInaccuracy.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
 		    this.lblYearInaccuracy.Name = "lblYearInaccuracy";
-		    this.lblYearInaccuracy.Size = new System.Drawing.Size(152, 16);
+		    this.lblYearInaccuracy.Size = new System.Drawing.Size(285, 20);
 		    this.lblYearInaccuracy.TabIndex = 1;
 		    this.lblYearInaccuracy.Text = "lblYearInaccuracy";
 		    // 
 		    // chkIndistinctMatching
 		    // 
-		    this.chkIndistinctMatching.Location = new System.Drawing.Point(8, 24);
+		    this.chkIndistinctMatching.Location = new System.Drawing.Point(20, 27);
+		    this.chkIndistinctMatching.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
 		    this.chkIndistinctMatching.Name = "chkIndistinctMatching";
-		    this.chkIndistinctMatching.Size = new System.Drawing.Size(371, 21);
+		    this.chkIndistinctMatching.Size = new System.Drawing.Size(285, 24);
 		    this.chkIndistinctMatching.TabIndex = 1;
 		    this.chkIndistinctMatching.Text = "chkIndistinctMatching";
 		    // 
 		    // edNameAccuracy
 		    // 
-		    this.edNameAccuracy.Location = new System.Drawing.Point(22, 68);
+		    this.edNameAccuracy.Location = new System.Drawing.Point(20, 81);
+		    this.edNameAccuracy.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
 		    this.edNameAccuracy.Name = "edNameAccuracy";
 		    this.edNameAccuracy.Size = new System.Drawing.Size(152, 24);
 		    this.edNameAccuracy.TabIndex = 2;
@@ -254,7 +259,8 @@
 		    // 
 		    // edYearInaccuracy
 		    // 
-		    this.edYearInaccuracy.Location = new System.Drawing.Point(22, 152);
+		    this.edYearInaccuracy.Location = new System.Drawing.Point(20, 179);
+		    this.edYearInaccuracy.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
 		    this.edYearInaccuracy.Name = "edYearInaccuracy";
 		    this.edYearInaccuracy.Size = new System.Drawing.Size(152, 24);
 		    this.edYearInaccuracy.TabIndex = 4;
@@ -266,9 +272,10 @@
 		    // 
 		    // chkBirthYear
 		    // 
-		    this.chkBirthYear.Location = new System.Drawing.Point(8, 109);
+		    this.chkBirthYear.Location = new System.Drawing.Point(20, 129);
+		    this.chkBirthYear.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
 		    this.chkBirthYear.Name = "chkBirthYear";
-		    this.chkBirthYear.Size = new System.Drawing.Size(371, 21);
+		    this.chkBirthYear.Size = new System.Drawing.Size(285, 20);
 		    this.chkBirthYear.TabIndex = 6;
 		    this.chkBirthYear.Text = "chkBirthYear";
 		    // 
@@ -276,7 +283,6 @@
 		    // 
 		    this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-		    this.Title = "TreeToolsWin";
 		    this.ClientSize = new System.Drawing.Size(965, 499);
 		    this.Controls.Add(this.PageControl1);
 		    this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -288,6 +294,7 @@
 		    this.ShowInTaskbar = false;
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 		    this.Text = "TreeToolsWin";
+		    this.Title = "TreeToolsWin";
 		    this.PageControl1.ResumeLayout(false);
 		    this.pageMerge.ResumeLayout(false);
 		    this.pageMerge.PerformLayout();

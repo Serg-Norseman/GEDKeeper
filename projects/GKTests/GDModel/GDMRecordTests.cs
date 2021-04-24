@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using GDModel;
 using NUnit.Framework;
 
 namespace GDModel
@@ -28,11 +26,9 @@ namespace GDModel
     public class GDMRecordTests
     {
         [Test]
-        public void Test_ExtData()
+        public void Test_GDMRecord()
         {
             GDMRecord obj = new GDMRecord(null);
-            obj.ExtData = this;
-            Assert.AreEqual(this, obj.ExtData);
             obj.Dispose();
         }
     }

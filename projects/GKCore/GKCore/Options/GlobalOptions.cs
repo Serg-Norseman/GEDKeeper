@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -80,7 +80,7 @@ namespace GKCore.Options
         private bool fEmbeddedMediaPlayer;
         private bool fAllowMediaStoreReferences;
         private bool fAllowMediaStoreRelativeReferences;
-        private int  fMediaStoreDefault;
+        private MediaStoreType fMediaStoreDefault;
         private bool fAllowDeleteMediaFileFromStgArc;
         private bool fAllowDeleteMediaFileFromRefs;
         private bool fDeleteMediaFileWithoutConfirm;
@@ -89,10 +89,13 @@ namespace GKCore.Options
         private bool fAutoCheckUpdates;
         private bool fAutoSortChildren;
         private bool fAutoSortSpouses;
+        private bool fCharsetDetection;
         private bool fCheckTreeSize;
+        private bool fDialogClosingWarn;
+        private bool fFirstCapitalLetterInNames;
+        private string fGeoSearchCountry;
         private readonly ListOptionsCollection fListOptions;
         private bool fReadabilityHighlightRows;
-        private bool fCharsetDetection;
 
 
         public static GlobalOptions Instance
@@ -104,9 +107,70 @@ namespace GKCore.Options
         }
 
 
-        public TreeChartOptions TreeChartOptions
+        public bool AllowDeleteMediaFileFromStgArc
         {
-            get { return fTreeChartOptions; }
+            get { return fAllowDeleteMediaFileFromStgArc; }
+            set { fAllowDeleteMediaFileFromStgArc = value; }
+        }
+
+        public bool AllowDeleteMediaFileFromRefs
+        {
+            get { return fAllowDeleteMediaFileFromRefs; }
+            set { fAllowDeleteMediaFileFromRefs = value; }
+        }
+
+        public bool AllowMediaStoreReferences
+        {
+            get { return fAllowMediaStoreReferences; }
+            set { fAllowMediaStoreReferences = value; }
+        }
+
+        public bool AllowMediaStoreRelativeReferences
+        {
+            get { return fAllowMediaStoreRelativeReferences; }
+            set { fAllowMediaStoreRelativeReferences = value; }
+        }
+
+        public bool AutoCheckUpdates
+        {
+            get { return fAutoCheckUpdates; }
+            set { fAutoCheckUpdates = value; }
+        }
+
+        public bool Autosave
+        {
+            get { return fAutosave; }
+            set { fAutosave = value; }
+        }
+
+        public int AutosaveInterval
+        {
+            get { return fAutosaveInterval; }
+            set { fAutosaveInterval = value; }
+        }
+
+        public bool AutoSortChildren
+        {
+            get { return fAutoSortChildren; }
+            set { fAutoSortChildren = value; }
+        }
+
+        public bool AutoSortSpouses
+        {
+            get { return fAutoSortSpouses; }
+            set { fAutoSortSpouses = value; }
+        }
+
+        public bool CharsetDetection
+        {
+            get { return fCharsetDetection; }
+            set { fCharsetDetection = value; }
+        }
+
+        public bool CheckTreeSize
+        {
+            get { return fCheckTreeSize; }
+            set { fCheckTreeSize = value; }
         }
 
         public CircleChartOptions CircleChartOptions
@@ -125,21 +189,76 @@ namespace GKCore.Options
             set { fDefDateFormat = value; }
         }
 
-        public bool ShowDatesSign
-        {
-            get { return fShowDatesSign; }
-            set { fShowDatesSign = value; }
-        }
-
         public NameFormat DefNameFormat
         {
             get { return fDefNameFormat; }
             set { fDefNameFormat = value; }
         }
 
+        public bool DeleteMediaFileWithoutConfirm
+        {
+            get { return fDeleteMediaFileWithoutConfirm; }
+            set { fDeleteMediaFileWithoutConfirm = value; }
+        }
+
+        public bool DialogClosingWarn
+        {
+            get { return fDialogClosingWarn; }
+            set { fDialogClosingWarn = value; }
+        }
+
+        public bool EmbeddedMediaPlayer
+        {
+            get { return fEmbeddedMediaPlayer; }
+            set { fEmbeddedMediaPlayer = value; }
+        }
+
         public StringList EventFilters
         {
             get { return fEventFilters; }
+        }
+
+        // TODO: Need to make a decision on additional types of names:
+        // religious and according to the census (see GDMPersonalNamePieces)
+        public bool ExtendedNames
+        {
+            get { return fExtendedNames; }
+            set { fExtendedNames = value; }
+        }
+
+        public FileBackup FileBackup
+        {
+            get { return fFileBackup; }
+            set { fFileBackup = value; }
+        }
+
+        public int FileBackupEachRevisionMaxCount
+        {
+            get { return fFileBackupEachRevisionMaxCount; }
+            set { fFileBackupEachRevisionMaxCount = value; }
+        }
+
+        public bool FirstCapitalLetterInNames
+        {
+            get { return fFirstCapitalLetterInNames; }
+            set { fFirstCapitalLetterInNames = value; }
+        }
+
+        public string Geocoder
+        {
+            get { return fGeocoder; }
+            set { fGeocoder = value; }
+        }
+
+        public string GeoSearchCountry
+        {
+            get { return fGeoSearchCountry; }
+            set { fGeoSearchCountry = value; }
+        }
+
+        public ListColumns IndividualListColumns
+        {
+            get { return fIndividualListColumns; }
         }
 
         public int InterfaceLang
@@ -148,10 +267,44 @@ namespace GKCore.Options
             set { fInterfaceLang = value; }
         }
 
+        public IList<LangRecord> Languages
+        {
+            get { return fLanguages; }
+        }
+
         public string LastDir
         {
             get { return fLastDir; }
             set { fLastDir = value; }
+        }
+
+        public bool ListHighlightUnmarriedPersons
+        {
+            get { return fListHighlightUnmarriedPersons; }
+            set { fListHighlightUnmarriedPersons = value; }
+        }
+
+        public bool ListHighlightUnparentedPersons
+        {
+            get { return fListHighlightUnparentedPersons; }
+            set { fListHighlightUnparentedPersons = value; }
+        }
+
+        public ListOptionsCollection ListOptions
+        {
+            get { return fListOptions; }
+        }
+
+        public bool LoadRecentFiles
+        {
+            get { return fLoadRecentFiles; }
+            set { fLoadRecentFiles = value; }
+        }
+
+        public MediaStoreType MediaStoreDefault
+        {
+            get { return fMediaStoreDefault; }
+            set { fMediaStoreDefault = value; }
         }
 
         public List<MRUFile> MRUFiles
@@ -192,183 +345,15 @@ namespace GKCore.Options
             get { return fProxy; }
         }
 
-        public StringList Relations
-        {
-            get { return fRelations; }
-        }
-
-        public StringList ResidenceFilters
-        {
-            get { return fResidenceFilters; }
-        }
-
-        public FileBackup FileBackup
-        {
-            get { return fFileBackup; }
-            set { fFileBackup = value; }
-        }
-
-        public int FileBackupEachRevisionMaxCount
-        {
-            get { return fFileBackupEachRevisionMaxCount; }
-            set { fFileBackupEachRevisionMaxCount = value; }
-        }
-
-        public bool ShowTips
-        {
-            get { return fShowTips; }
-            set { fShowTips = value; }
-        }
-
-        public bool ListHighlightUnmarriedPersons
-        {
-            get { return fListHighlightUnmarriedPersons; }
-            set { fListHighlightUnmarriedPersons = value; }
-        }
-
-        public bool ListHighlightUnparentedPersons
-        {
-            get { return fListHighlightUnparentedPersons; }
-            set { fListHighlightUnparentedPersons = value; }
-        }
-
-        public ListColumns IndividualListColumns
-        {
-            get { return fIndividualListColumns; }
-        }
-
-        public bool ShowDatesCalendar
-        {
-            get { return fShowDatesCalendar; }
-            set { fShowDatesCalendar = value; }
-        }
-
-        public bool Autosave
-        {
-            get { return fAutosave; }
-            set { fAutosave = value; }
-        }
-
-        public int AutosaveInterval
-        {
-            get { return fAutosaveInterval; }
-            set { fAutosaveInterval = value; }
-        }
-
-        // TODO: Need to make a decision on additional types of names:
-        // religious and according to the census (see GDMPersonalNamePieces)
-        public bool ExtendedNames
-        {
-            get { return fExtendedNames; }
-            set { fExtendedNames = value; }
-        }
-
-        public WomanSurnameFormat WomanSurnameFormat
-        {
-            get { return fWomanSurnameFormat; }
-            set { fWomanSurnameFormat = value; }
-        }
-
-
-
-        public bool AllowMediaStoreReferences
-        {
-            get { return fAllowMediaStoreReferences; }
-            set { fAllowMediaStoreReferences = value; }
-        }
-
-        public bool AllowMediaStoreRelativeReferences
-        {
-            get { return fAllowMediaStoreRelativeReferences; }
-            set { fAllowMediaStoreRelativeReferences = value; }
-        }
-
-        public int MediaStoreDefault
-        {
-            get { return fMediaStoreDefault; }
-            set { fMediaStoreDefault = value; }
-        }
-
-        public bool AllowDeleteMediaFileFromStgArc
-        {
-            get { return fAllowDeleteMediaFileFromStgArc; }
-            set { fAllowDeleteMediaFileFromStgArc = value; }
-        }
-
-        public bool AllowDeleteMediaFileFromRefs
-        {
-            get { return fAllowDeleteMediaFileFromRefs; }
-            set { fAllowDeleteMediaFileFromRefs = value; }
-        }
-
-        public bool DeleteMediaFileWithoutConfirm
-        {
-            get { return fDeleteMediaFileWithoutConfirm; }
-            set { fDeleteMediaFileWithoutConfirm = value; }
-        }
-
-        public bool AutoCheckUpdates
-        {
-            get { return fAutoCheckUpdates; }
-            set { fAutoCheckUpdates = value; }
-        }
-
-        public bool AutoSortChildren
-        {
-            get { return fAutoSortChildren; }
-            set { fAutoSortChildren = value; }
-        }
-
-        public bool AutoSortSpouses
-        {
-            get { return fAutoSortSpouses; }
-            set { fAutoSortSpouses = value; }
-        }
-
-        public bool CharsetDetection
-        {
-            get { return fCharsetDetection; }
-            set { fCharsetDetection = value; }
-        }
-
-        public bool CheckTreeSize
-        {
-            get { return fCheckTreeSize; }
-            set { fCheckTreeSize = value; }
-        }
-
-        public bool EmbeddedMediaPlayer
-        {
-            get { return fEmbeddedMediaPlayer; }
-            set { fEmbeddedMediaPlayer = value; }
-        }
-
-        public string Geocoder
-        {
-            get { return fGeocoder; }
-            set { fGeocoder = value; }
-        }
-
-        public IList<LangRecord> Languages
-        {
-            get { return fLanguages; }
-        }
-
-        public ListOptionsCollection ListOptions
-        {
-            get { return fListOptions; }
-        }
-
-        public bool LoadRecentFiles
-        {
-            get { return fLoadRecentFiles; }
-            set { fLoadRecentFiles = value; }
-        }
-
         public bool ReadabilityHighlightRows
         {
             get { return fReadabilityHighlightRows; }
             set { fReadabilityHighlightRows = value; }
+        }
+
+        public StringList Relations
+        {
+            get { return fRelations; }
         }
 
         public bool RemovableMediaWarning
@@ -377,10 +362,44 @@ namespace GKCore.Options
             set { fRemovableMediaWarning = value; }
         }
 
+        public StringList ResidenceFilters
+        {
+            get { return fResidenceFilters; }
+        }
+
+        public bool ShowDatesCalendar
+        {
+            get { return fShowDatesCalendar; }
+            set { fShowDatesCalendar = value; }
+        }
+
+        public bool ShowDatesSign
+        {
+            get { return fShowDatesSign; }
+            set { fShowDatesSign = value; }
+        }
+
+        public bool ShowTips
+        {
+            get { return fShowTips; }
+            set { fShowTips = value; }
+        }
+
+        public TreeChartOptions TreeChartOptions
+        {
+            get { return fTreeChartOptions; }
+        }
+
         public bool UseExtendedNotes
         {
             get { return fUseExtendedNotes; }
             set { fUseExtendedNotes = value; }
+        }
+
+        public WomanSurnameFormat WomanSurnameFormat
+        {
+            get { return fWomanSurnameFormat; }
+            set { fWomanSurnameFormat = value; }
         }
 
 
@@ -425,6 +444,8 @@ namespace GKCore.Options
             fReadabilityHighlightRows = true;
 
             fCharsetDetection = false;
+            fFirstCapitalLetterInNames = false;
+            fGeoSearchCountry = string.Empty;
         }
 
         protected override void Dispose(bool disposing)
@@ -448,18 +469,15 @@ namespace GKCore.Options
 
         private void LngPrepareProc(string fileName)
         {
-            try
-            {
-                using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8))
-                {
+            try {
+                using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8)) {
                     string st = lngFile.ReadLine(); // header
 
-                    if (!string.IsNullOrEmpty(st) && st[0] == ';')
-                    {
+                    if (!string.IsNullOrEmpty(st) && st[0] == ';') {
                         st = st.Remove(0, 1);
                         string[] lngParams = st.Split(',');
                         if (lngParams.Length < 3)
-                            throw new Exception("Header is incorrect");
+                            throw new GKException("Header is incorrect");
 
                         string lngCode = lngParams[0];
                         string lngSign = lngParams[1];
@@ -471,10 +489,8 @@ namespace GKCore.Options
                         fLanguages.Add(lngRec);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GlobalOptions.LngPrepareProc("+fileName+"): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GlobalOptions.LngPrepareProc(" + fileName + ")", ex);
             }
         }
 
@@ -485,7 +501,7 @@ namespace GKCore.Options
                 string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
                 for (int i = 0; i < langFiles.Length; i++) LngPrepareProc(langFiles[i]);
             } catch (Exception ex) {
-                Logger.LogWrite("GlobalOptions.FindLanguages(): " + ex.Message);
+                Logger.WriteError("GlobalOptions.FindLanguages()", ex);
             }
         }
 
@@ -636,7 +652,7 @@ namespace GKCore.Options
             fShowTips = ini.ReadBool("Common", "ShowTips", true);
             fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 0);
             fFileBackup = (FileBackup)ini.ReadInteger("Common", "FileBackup", 0);
-            fFileBackupEachRevisionMaxCount = (ushort)ini.ReadInteger("Common", "FileBackupEachRevisionMaxCount", 0);
+            fFileBackupEachRevisionMaxCount = ini.ReadInteger("Common", "FileBackupEachRevisionMaxCount", 0);
             fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
             fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
             fRemovableMediaWarning = ini.ReadBool("Common", "RemovableMediaWarning", true);
@@ -644,7 +660,7 @@ namespace GKCore.Options
             fEmbeddedMediaPlayer = ini.ReadBool("Common", "EmbeddedMediaPlayer", true);
             fAllowMediaStoreReferences = ini.ReadBool("Common", "AllowMediaStoreReferences", false);
             fAllowMediaStoreRelativeReferences = ini.ReadBool("Common", "AllowMediaStoreRelativeReferences", true); // only when AllowMediaStoreReferences is true
-            fMediaStoreDefault = (ushort)ini.ReadInteger("Common", "MediaStoreDefault", 0); // (int)MediaStoreType.mstReference
+            fMediaStoreDefault = (MediaStoreType)ini.ReadInteger("Common", "MediaStoreDefault", 0); // (int)MediaStoreType.mstReference
             fAllowDeleteMediaFileFromStgArc = ini.ReadBool("Common", "AllowDeleteMediaFileFromStgArc", true);
             fAllowDeleteMediaFileFromRefs = ini.ReadBool("Common", "AllowDeleteMediaFileFromRefs", false);
             fDeleteMediaFileWithoutConfirm = ini.ReadBool("Common", "DeleteMediaFileWithoutConfirm", false);
@@ -652,6 +668,8 @@ namespace GKCore.Options
             fAutoSortChildren = ini.ReadBool("Common", "AutoSortChildren", true);
             fAutoSortSpouses = ini.ReadBool("Common", "AutoSortSpouses", false);
             fCharsetDetection = ini.ReadBool("Common", "CharsetDetection", false);
+            fFirstCapitalLetterInNames = ini.ReadBool("Common", "FirstCapitalLetterInNames", false);
+            fDialogClosingWarn = ini.ReadBool("Common", "DialogClosingWarn", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -660,6 +678,7 @@ namespace GKCore.Options
             fWomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
 
             fGeocoder = ini.ReadString("Common", "Geocoder", "Google");
+            fGeoSearchCountry = ini.ReadString("Common", "GeoSearchCountry", "");
 
             int kl = ini.ReadInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
             AppHost.Instance.SetKeyLayout(kl);
@@ -733,7 +752,7 @@ namespace GKCore.Options
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GlobalOptions.LoadFromFile(): " + ex.Message);
+                Logger.WriteError("GlobalOptions.LoadFromFile()", ex);
             }
         }
 
@@ -752,7 +771,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "ShowTips", fShowTips);
             ini.WriteInteger("Common", "InterfaceLang", fInterfaceLang);
             ini.WriteInteger("Common", "FileBackup", (int)fFileBackup);
-            ini.WriteInteger("Common", "FileBackupEachRevisionMaxCount", (int)fFileBackupEachRevisionMaxCount);
+            ini.WriteInteger("Common", "FileBackupEachRevisionMaxCount", fFileBackupEachRevisionMaxCount);
             ini.WriteBool("Common", "ShowDatesCalendar", fShowDatesCalendar);
             ini.WriteBool("Common", "ShowDatesSigns", fShowDatesSign);
             ini.WriteBool("Common", "RemovableMediaWarning", fRemovableMediaWarning);
@@ -760,7 +779,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "EmbeddedMediaPlayer", fEmbeddedMediaPlayer);
             ini.WriteBool("Common", "AllowMediaStoreReferences", fAllowMediaStoreReferences);
             ini.WriteBool("Common", "AllowMediaStoreRelativeReferences", fAllowMediaStoreRelativeReferences);
-            ini.WriteInteger("Common", "MediaStoreDefault", fMediaStoreDefault);
+            ini.WriteInteger("Common", "MediaStoreDefault", (int)fMediaStoreDefault);
             ini.WriteBool("Common", "AllowDeleteMediaFileFromStgArc", fAllowDeleteMediaFileFromStgArc);
             ini.WriteBool("Common", "AllowDeleteMediaFileFromRefs", fAllowDeleteMediaFileFromRefs);
             ini.WriteBool("Common", "DeleteMediaFileWithoutConfirm", fDeleteMediaFileWithoutConfirm);
@@ -768,6 +787,8 @@ namespace GKCore.Options
             ini.WriteBool("Common", "AutoSortChildren", fAutoSortChildren);
             ini.WriteBool("Common", "AutoSortSpouses", fAutoSortSpouses);
             ini.WriteBool("Common", "CharsetDetection", fCharsetDetection);
+            ini.WriteBool("Common", "FirstCapitalLetterInNames", fFirstCapitalLetterInNames);
+            ini.WriteBool("Common", "DialogClosingWarn", fDialogClosingWarn);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 
@@ -778,6 +799,7 @@ namespace GKCore.Options
             ini.WriteInteger("Common", "WomanSurnameFormat", (int)fWomanSurnameFormat);
 
             ini.WriteString("Common", "Geocoder", fGeocoder);
+            ini.WriteString("Common", "GeoSearchCountry", fGeoSearchCountry);
 
             fTreeChartOptions.SaveToFile(ini);
             fPedigreeOptions.SaveToFile(ini);
@@ -869,7 +891,7 @@ namespace GKCore.Options
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GlobalOptions.SaveToFile(): " + ex.Message);
+                Logger.WriteError("GlobalOptions.SaveToFile()", ex);
             }
         }
     }

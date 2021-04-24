@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 
@@ -44,7 +43,7 @@ namespace GKFoldersPlugin
             var folderTag = record.FindTag(GEDCOMTagName._FOLDER, 0);
             if (!string.IsNullOrEmpty(value)) {
                 if (folderTag == null) {
-                    record.AddTag(new GDMTag(record, (int)GEDCOMTagType._FOLDER, value));
+                    record.AddTag(new GDMValueTag((int)GEDCOMTagType._FOLDER, value));
                 } else {
                     folderTag.StringValue = value;
                 }
