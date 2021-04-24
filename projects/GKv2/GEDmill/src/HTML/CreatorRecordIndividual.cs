@@ -1075,16 +1075,13 @@ namespace GEDmill.HTML
             }
 
             // Useful holder vars
-            GDMDateValue date;
-            string place;
             string escapedDescription = "";
             string address = "";
             string url = "";
             string cause = "";
-
             bool important = false;
-            date = null;
-            place = "";
+            GDMDateValue date = null;
+            string place = "";
             string placeWord = CConfig.Instance.PlaceWord;
             string alternativePlaceWord = "and"; // For want of anything better...
             string alternativePlace = "";

@@ -238,7 +238,7 @@ namespace GKUI.Components
                     GMapProvider.WebProxy = WebRequest.DefaultWebProxy;
                 }
 
-                // set cache mode only if no internet avaible
+                // set cache mode only if no internet available
                 fMapControl.Manager.Mode = (!PingNetwork("pingtest.com")) ? AccessMode.CacheOnly : AccessMode.ServerAndCache;
 
                 // config map         

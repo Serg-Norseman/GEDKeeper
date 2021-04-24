@@ -115,12 +115,7 @@ namespace GDModel
         public override string ParseString(string strValue)
         {
             Clear();
-            string result;
-            if (string.IsNullOrEmpty(strValue)) {
-                result = string.Empty;
-            } else {
-                result = GEDCOMUtils.ParsePeriodDate(this, strValue);
-            }
+            string result = string.IsNullOrEmpty(strValue) ? string.Empty : GEDCOMUtils.ParsePeriodDate(this, strValue);
             return result;
         }
 

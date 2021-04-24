@@ -32,7 +32,7 @@ namespace GKCore
     /// </summary>
     public static class UpdateMan
     {
-        private const string UPDATE_URL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
+        private const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
 
         #if NET35 || NET40
         private const int Tls11 = 768;
@@ -57,7 +57,7 @@ namespace GKCore
                     Logger.WriteError("UpdateMan.GetLastVersion.SP()", ex);
                 }
 
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(UPDATE_URL);
+                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(UpdateURL);
                 webRequest.ContentType = "text/xml; encoding='utf-8'";
                 webRequest.KeepAlive = false;
                 webRequest.Method = "GET";

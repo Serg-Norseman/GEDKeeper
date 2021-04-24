@@ -188,13 +188,11 @@ namespace GEDmill.MiniTree
 
             // For gifs we need to reload and set transparency colour
             if (imageFormat == ImageFormat.Gif && !CConfig.Instance.FakeMiniTreeTransparency) {
-                Image imageGif;
-                ColorPalette colorpalette;
-                imageGif = Image.FromFile(fileName);
-                colorpalette = imageGif.Palette;
+                var imageGif = Image.FromFile(fileName);
+                var colorPalette = imageGif.Palette;
 
                 // Creates a new GIF image with a modified colour palette
-                if (colorpalette != null) {
+                if (colorPalette != null) {
                     // Create a new 8 bit per pixel image
                     Bitmap bm = new Bitmap(imageGif.Width, imageGif.Height, PixelFormat.Format8bppIndexed);
 
@@ -203,7 +201,7 @@ namespace GEDmill.MiniTree
 
                     // Copy all the entries from the old palette removing any transparency
                     int n = 0;
-                    foreach (Color c in colorpalette.Entries) {
+                    foreach (Color c in colorPalette.Entries) {
                         colorpaletteNew.Entries[n++] = Color.FromArgb(255, c);
                     }
 
@@ -250,7 +248,7 @@ namespace GEDmill.MiniTree
 
                     // Set the new image in place
                     imageGif = bm;
-                    colorpalette = imageGif.Palette;
+                    colorPalette = imageGif.Palette;
 
                     fLogger.WriteInfo("Re-saving mini gif as " + fileName);
 
@@ -272,7 +270,7 @@ namespace GEDmill.MiniTree
                 mtiFather = AddToGroup(fTree.GetPtrValue(frParents.Husband), mtgParents);
             }
 
-            // Create a group for the subejct and their siblings.
+            // Create a group for the subject and their siblings.
             MiniTreeGroup mtgSiblings = new MiniTreeGroup();
 
             // Keeps count of subject's siblings (including subject)

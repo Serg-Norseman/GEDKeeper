@@ -20,7 +20,6 @@
 
 #if !NETSTANDARD
 
-using System;
 using System.IO;
 using BSLib;
 using BSLib.Design.Graphics;
@@ -32,12 +31,13 @@ using itFont = iTextSharp.text.Font;
 using itImage = iTextSharp.text.Image;
 using itTable = iTextSharp.text.pdf.PdfPTable;
 using itCell = iTextSharp.text.pdf.PdfPCell;
+using itRectangle = iTextSharp.text.Rectangle;
 
 namespace GKCore.Export
 {
     public class PDFWriter : CustomWriter
     {
-        internal sealed class FontHandler: TypeHandler<it.Font>, IFont
+        internal sealed class FontHandler: TypeHandler<itFont>, IFont
         {
             public BaseFont BaseFont
             {
@@ -59,7 +59,7 @@ namespace GKCore.Export
                 get { return Handle.Size; }
             }
 
-            public FontHandler(it.Font handle) : base(handle)
+            public FontHandler(itFont handle) : base(handle)
             {
             }
 
@@ -140,7 +140,7 @@ namespace GKCore.Export
 
         public override void BeginWrite()
         {
-            iTextSharp.text.Rectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
+            itRectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
 
             fDocument = new Document(pageSize, fMargins.Left, fMargins.Right, fMargins.Top, fMargins.Bottom);
             fPdfWriter = PdfWriter.GetInstance(fDocument, new FileStream(fFileName, FileMode.Create));
@@ -180,13 +180,13 @@ namespace GKCore.Export
 
         public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
         {
-            int style = it.Font.NORMAL;
-            if (bold) style |= it.Font.BOLD;
-            if (underline) style |= it.Font.UNDERLINE;
+            int style = itFont.NORMAL;
+            if (bold) style |= itFont.BOLD;
+            if (underline) style |= itFont.UNDERLINE;
 
             BaseColor clr = new BaseColor(color.ToArgb());
 
-            return new FontHandler(new it.Font(fBaseFont, size, style, clr));
+            return new FontHandler(new itFont(fBaseFont, size, style, clr));
         }
 
         public override void AddParagraph(string text, IFont font)

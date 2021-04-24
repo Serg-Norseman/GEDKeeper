@@ -446,11 +446,10 @@ namespace GEDmill
                     ini.WriteString("Common", "UserEmailAddress", UserEmailAddress);
                     ini.WriteBool("Common", "FakeMiniTreeTransparency", FakeMiniTreeTransparency);
 
-                    int nKeyIndividuals = 0;
                     if (KeyIndividuals != null) {
-                        nKeyIndividuals = KeyIndividuals.Count;
-                        ini.WriteInteger("Individuals", "Count", nKeyIndividuals);
-                        for (int i = 0; i < nKeyIndividuals; i++) {
+                        int keyIndividualsCount = KeyIndividuals.Count;
+                        ini.WriteInteger("Individuals", "Count", keyIndividualsCount);
+                        for (int i = 0; i < keyIndividualsCount; i++) {
                             string keyXref = KeyIndividuals[i];
                             ini.WriteString("Individuals", "I_" + i, keyXref);
                         }
@@ -508,7 +507,7 @@ namespace GEDmill
         // Deserialise all the settings
         public void Load()
         {
-            int uVersionMajor = 0, uVersionMinor = 0, uVersionBuild = 0;
+            int versionMajor = 0, versionMinor = 0, versionPatch = 0;
 
             try {
                 using (var ini = new IniFile(AppDataPath + ConfigFilename)) {
@@ -607,9 +606,9 @@ namespace GEDmill
                     KeepSiblingOrder = ini.ReadBool("Common", "KeepSiblingOrder", false);
                     IncludeHelpPage = ini.ReadBool("Common", "IncludeHelpPage", true);
 
-                    uVersionMajor = ini.ReadInteger("Common", "VersionMajor", 0);
-                    uVersionMinor = ini.ReadInteger("Common", "VersionMinor", 0);
-                    uVersionBuild = ini.ReadInteger("Common", "VersionBuild", 0);
+                    versionMajor = ini.ReadInteger("Common", "VersionMajor", 0);
+                    versionMinor = ini.ReadInteger("Common", "VersionMinor", 0);
+                    versionPatch = ini.ReadInteger("Common", "VersionBuild", 0);
                 }
             } catch (Exception ex) {
                 fLogger.WriteError("CConfig.Load()", ex);

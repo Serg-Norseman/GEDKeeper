@@ -540,7 +540,7 @@ namespace GKTreeVizPlugin
                         TVPerson sps = PreparePerson(null, spouse, TVPersonType.Spouse);
                         if (sps == null) {
                             // this can occur only when processing of the patriarchs later than those already processed,
-                            // i.e. if the at first was already processed the patriarch, born in 1710, was processed his childrens
+                            // i.e. if the at first was already processed the patriarch, born in 1710, was processed his children
                             // and one of theirs spouses being a patriarch of new branches!
                             Logger.WriteError("TreeVizControl.PrepareDescendants(): an unexpected collision");
                             alreadyPrepared = true;

@@ -39,8 +39,7 @@ namespace GDModel.Providers
         public void Test_NativeFormat()
         {
             GEDCOMProvider.DebugWrite = false;
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.test_native.ged")) {
+            using (Stream inStream = TestUtils.LoadResourceStream("test_native.ged")) {
                 using (GDMTree tree = new GDMTree()) {
                     byte[] inArray;
                     using (MemoryStream inMem = new MemoryStream()) {
@@ -57,8 +56,7 @@ namespace GDModel.Providers
                         gedcomProvider.SaveToStreamExt(outStream, GEDCOMCharacterSet.csUTF8);
 
                         outStream.Position = 0;
-                        byte[] outArray;
-                        outArray = outStream.ToArray();
+                        byte[] outArray = outStream.ToArray();
 
                         string inStr = Encoding.ASCII.GetString(inArray);
                         // convert to GK GEDCOM
@@ -74,8 +72,7 @@ namespace GDModel.Providers
         [Test]
         public void Test_Standart()
         {
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.TGC55CLF.GED")) {
+            using (Stream inStream = TestUtils.LoadResourceStream("TGC55CLF.GED")) {
                 using (GDMTree tree = new GDMTree()) {
                     var gedcomProvider = new GEDCOMProvider(tree);
                     gedcomProvider.LoadFromStreamExt(inStream, inStream);
@@ -110,8 +107,7 @@ namespace GDModel.Providers
         public void Test_GK_UTF8()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_gk_utf8.ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_gk_utf8.ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual("UTF-8", charsetRes.Charset);
                     Assert.AreEqual(1.0f, charsetRes.Confidence);
@@ -133,8 +129,7 @@ namespace GDModel.Providers
         public void Test_Ahnenblatt_ANSI_Win1250()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ahn_ansi(win1250).ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_ahn_ansi(win1250).ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual("windows-1252", charsetRes.Charset);
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.5f);
@@ -156,8 +151,7 @@ namespace GDModel.Providers
         public void Test_Agelong_PseudoAnsel_Win1251()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_agelong_ansel(win1251).ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_agelong_ansel(win1251).ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual("windows-1251", charsetRes.Charset);
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.7f);
@@ -179,8 +173,7 @@ namespace GDModel.Providers
         public void Test_FTB6_ANSI_Win1251()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ftb6_ansi(win1251).ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_ftb6_ansi(win1251).ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual("windows-1251", charsetRes.Charset);
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.9f);
@@ -218,8 +211,7 @@ namespace GDModel.Providers
         public void Test_TrueAnsel()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ansel.ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_ansel.ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual(null, charsetRes.Charset);
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.0f);
@@ -475,8 +467,7 @@ namespace GDModel.Providers
         public void Test_GedML()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_gedml.xml")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_gedml.xml")) {
                     var gedmlProvider = new GedMLProvider(ctx.Tree);
                     gedmlProvider.LoadFromStreamExt(stmGed1, stmGed1);
                 }
@@ -494,8 +485,7 @@ namespace GDModel.Providers
         [Test]
         public void Test_FamilyShow()
         {
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.test_windsor.familyx")) {
+            using (Stream inStream = TestUtils.LoadResourceStream("test_windsor.familyx")) {
                 using (GDMTree tree = new GDMTree()) {
                     var fxProvider = new FamilyXProvider(tree);
                     fxProvider.LoadFromStreamExt(inStream, inStream);

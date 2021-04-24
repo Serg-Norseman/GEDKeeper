@@ -1400,7 +1400,7 @@ namespace GKCore
         {
             const int bufferSize = 1024 * 1024; // 1MB
             byte[] buffer = new byte[bufferSize];
-            int progress = 0, reportedProgress = 0, read = 0;
+            int reportedProgress = 0, read = 0;
             long len = sourceStm.Length;
             float flen = len;
 
@@ -1408,7 +1408,7 @@ namespace GKCore
                 targetStm.SetLength(sourceStm.Length);
                 for (long size = 0; size < len; size += read) {
                     if (progressController != null) {
-                        progress = (int)((size / flen) * 100);
+                        int progress = (int)((size / flen) * 100);
                         if (progress != reportedProgress) {
                             reportedProgress = progress;
                             progressController.ProgressStep(reportedProgress);
@@ -2928,10 +2928,8 @@ namespace GKCore
 
         public static ICulture DefineCulture(GDMTree tree, GDMPersonalName personalName)
         {
-            GDMLanguageID langID;
-
             // first priority - local langID from name
-            langID = (personalName != null) ? personalName.Language : GDMLanguageID.Unknown;
+            GDMLanguageID langID = (personalName != null) ? personalName.Language : GDMLanguageID.Unknown;
 
             // second priority - global langID from tree
             if (langID == GDMLanguageID.Unknown && tree != null) {

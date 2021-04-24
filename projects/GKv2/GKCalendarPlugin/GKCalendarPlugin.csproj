@@ -21,6 +21,7 @@
     <TargetFrameworkProfile />
     <DebugType>Full</DebugType>
     <WarningLevel>4</WarningLevel>
+    <RootNamespace>GKCalendarPlugin</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>

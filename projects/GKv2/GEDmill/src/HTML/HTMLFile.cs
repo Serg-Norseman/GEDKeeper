@@ -40,7 +40,7 @@ namespace GEDmill.HTML
         {
             // This is for CJ who ended up with 17000 files plastered all over her desktop...
             if (GMHelper.IsDesktop(filename)) {
-                throw new HTMLException(string.Format("A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop."));
+                throw new HTMLException("A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop.");
             }
 
             fLogger.WriteInfo("CHTMLFile : " + filename);
@@ -61,9 +61,8 @@ namespace GEDmill.HTML
                 var encoding = new UTF8EncodingWithoutPreamble();
                 fWriter = new StreamWriter(fStream, encoding);
 
-                string date;
                 DateTime dt = DateTime.Now;
-                date = dt.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
+                string date = dt.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
 
                 fWriter.WriteLine("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
                 fWriter.WriteLine("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">");

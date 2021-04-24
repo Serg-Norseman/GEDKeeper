@@ -26,10 +26,8 @@ using GKCore;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
 using NUnit.Framework;
 using GKCore.Options;
-using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {

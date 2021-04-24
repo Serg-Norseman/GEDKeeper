@@ -242,8 +242,7 @@ namespace GKTests
         {
             string fileName = GetTempFilePath(resName);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources." + resName)) {
+            using (Stream inStream = TestUtils.LoadResourceStream(resName)) {
                 long size = inStream.Length;
                 byte[] buffer = new byte[size];
                 int res = inStream.Read(buffer, 0, (int)size);
@@ -269,12 +268,17 @@ namespace GKTests
             }
         }
 
+        public static Stream LoadResourceStream(string resName)
+        {
+            Assembly assembly = typeof(CoreTests).Assembly;
+            return assembly.GetManifestResourceStream("GKTests.Resources." + resName);
+        }
+
         public static IBaseContext LoadResourceGEDCOMFile(string resName)
         {
             BaseContext ctx = new BaseContext(null);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream stream = assembly.GetManifestResourceStream("GKTests.Resources." + resName)) {
+            using (Stream stream = TestUtils.LoadResourceStream(resName)) {
                 var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                 gedcomProvider.LoadFromStreamExt(stream, stream);
             }

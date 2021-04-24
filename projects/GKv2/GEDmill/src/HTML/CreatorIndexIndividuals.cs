@@ -113,38 +113,38 @@ namespace GEDmill.HTML
         private static List<IndexPage> CreateIndexPages(List<IndexLetter> letters)
         {
             var pages = new List<IndexPage>();
-            int uLetters = letters.Count;
-            int uIndisPerPage;
+            int lettersCount = letters.Count;
+            int indisPerPage;
             if (CConfig.Instance.MultiPageIndexes == false) {
                 // Set to 0 for all names in one page.
-                uIndisPerPage = 0;
+                indisPerPage = 0;
             } else {
-                uIndisPerPage = CConfig.Instance.IndividualsPerIndexPage;
+                indisPerPage = CConfig.Instance.IndividualsPerIndexPage;
             }
-            int uIndiAccumulator = 0;
-            int uCurrentPage = 0;
-            string currentPageName = string.Format("individuals{0}.{1}", ++uCurrentPage, CConfig.Instance.HtmlExtension);
+            int indiAccumulator = 0;
+            int currentPage = 0;
+            string currentPageName = string.Format("individuals{0}.{1}", ++currentPage, CConfig.Instance.HtmlExtension);
             IndexPage indexpageCurrent = new IndexPage(currentPageName);
-            uint uLetter = 0;
-            while (uLetter < uLetters) {
-                int uCurrentIndis = letters[(int)uLetter].Items.Count;
-                if (uIndisPerPage != 0 && uIndiAccumulator + uCurrentIndis > uIndisPerPage) {
-                    int uWith = (uIndiAccumulator + uCurrentIndis - uIndisPerPage);
-                    int uWithout = uIndisPerPage - uIndiAccumulator;
-                    if (uWith < uWithout || uIndiAccumulator == 0) {
+            uint letter = 0;
+            while (letter < lettersCount) {
+                int currentIndis = letters[(int)letter].Items.Count;
+                if (indisPerPage != 0 && indiAccumulator + currentIndis > indisPerPage) {
+                    int uWith = (indiAccumulator + currentIndis - indisPerPage);
+                    int uWithout = indisPerPage - indiAccumulator;
+                    if (uWith < uWithout || indiAccumulator == 0) {
                         // Better to include it.
-                        indexpageCurrent.TotalIndis += letters[(int)uLetter].Items.Count;
-                        indexpageCurrent.Letters.Add(letters[(int)uLetter++]);
+                        indexpageCurrent.TotalIndis += letters[(int)letter].Items.Count;
+                        indexpageCurrent.Letters.Add(letters[(int)letter++]);
                     }
                     // Start new page.
                     pages.Add(indexpageCurrent);
-                    currentPageName = string.Format("individuals{0}.{1}", ++uCurrentPage, CConfig.Instance.HtmlExtension);
+                    currentPageName = string.Format("individuals{0}.{1}", ++currentPage, CConfig.Instance.HtmlExtension);
                     indexpageCurrent = new IndexPage(currentPageName);
-                    uIndiAccumulator = 0;
+                    indiAccumulator = 0;
                 } else {
-                    indexpageCurrent.TotalIndis += letters[(int)uLetter].Items.Count;
-                    indexpageCurrent.Letters.Add(letters[(int)uLetter++]);
-                    uIndiAccumulator += uCurrentIndis;
+                    indexpageCurrent.TotalIndis += letters[(int)letter].Items.Count;
+                    indexpageCurrent.Letters.Add(letters[(int)letter++]);
+                    indiAccumulator += currentIndis;
                 }
             }
             if (indexpageCurrent != null) {
@@ -161,29 +161,29 @@ namespace GEDmill.HTML
             string lastTitle = "";
             List<StringTuple> currentLetterList = null;
             foreach (StringTuple tuple in fIndividualIndex) {
-                string sName = tuple.First;
-                string sLink = tuple.Second;
-                string sExtras = tuple.Third;
+                string name = tuple.First;
+                string link = tuple.Second;
+                string extras = tuple.Third;
 
-                string sInitial;
-                string sTitle;
-                if (!string.IsNullOrEmpty(sName)) {
-                    sInitial = sName.Substring(0, 1);
-                    if (sInitial == ",") {
+                string initial;
+                string title;
+                if (!string.IsNullOrEmpty(name)) {
+                    initial = name.Substring(0, 1);
+                    if (initial == ",") {
                         // TODO: handle no surname in such a way that names starting with commas don't count.
-                        sInitial = "-";
-                        sTitle = CConfig.Instance.NoSurname;
+                        initial = "-";
+                        title = CConfig.Instance.NoSurname;
                     } else {
-                        sTitle = sInitial;
+                        title = initial;
                     }
 
                     int nCmp = 0;
-                    if (lastInitial == "" && sInitial != "") { // Z,A
+                    if (lastInitial == "" && initial != "") { // Z,A
                         nCmp = 1;
-                    } else if (lastInitial == "-" && sInitial != "-") {
+                    } else if (lastInitial == "-" && initial != "-") {
                         nCmp = 1;
                     } else {
-                        nCmp = string.Compare(sInitial, lastInitial, true, CultureInfo.CurrentCulture);
+                        nCmp = string.Compare(initial, lastInitial, true, CultureInfo.CurrentCulture);
                     }
                     if (nCmp != 0) {
                         if (currentLetterList != null) {
@@ -194,8 +194,8 @@ namespace GEDmill.HTML
                         if (currentLetterList == null) {
                             currentLetterList = new List<StringTuple>();
                         }
-                        lastInitial = sInitial;
-                        lastTitle = sTitle;
+                        lastInitial = initial;
+                        lastTitle = title;
                     }
                     currentLetterList.Add(tuple);
                 }

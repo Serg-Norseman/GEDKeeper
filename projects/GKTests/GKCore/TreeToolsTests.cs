@@ -26,7 +26,6 @@ using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Tools;
 using GKTests;
@@ -68,12 +67,11 @@ namespace GKCore
         public void Test_SearchTreeFragments_MergeTree()
         {
             List<List<GDMRecord>> treeFragments;
-            Assembly assembly = typeof(CoreTests).Assembly;
 
             using (var ctx1 = new BaseContext(null)) {
                 IBaseWindow baseWin = new BaseWindowStub(ctx1);
 
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test1.ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test1.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
                 }
@@ -84,7 +82,7 @@ namespace GKCore
                 Assert.AreEqual(1, treeFragments[1].Count);
 
                 using (var ctx2 = new BaseContext(null)) {
-                    using (Stream stmGed2 = assembly.GetManifestResourceStream("GKTests.Resources.test2.ged")) {
+                    using (Stream stmGed2 = TestUtils.LoadResourceStream("test2.ged")) {
                         var gedcomProvider = new GEDCOMProvider(ctx2.Tree);
                         gedcomProvider.LoadFromStreamExt(stmGed2, stmGed2);
                     }
@@ -123,18 +121,16 @@ namespace GKCore
         [Test]
         public void Test_MergeTree_SelfTest()
         {
-            Assembly assembly = typeof(CoreTests).Assembly;
-
             using (var ctx1 = new BaseContext(null)) {
                 IBaseWindow baseWin = new BaseWindowStub(ctx1);
 
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test1.ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test1.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
                 }
 
                 using (var ctx2 = new BaseContext(null)) {
-                    using (Stream stmGed2 = assembly.GetManifestResourceStream("GKTests.Resources.test2.ged")) {
+                    using (Stream stmGed2 = TestUtils.LoadResourceStream("test2.ged")) {
                         var gedcomProvider = new GEDCOMProvider(ctx2.Tree);
                         gedcomProvider.LoadFromStreamExt(stmGed2, stmGed2);
                     }
@@ -154,12 +150,10 @@ namespace GKCore
         [Test]
         public void Test_MergeRecord_Indi()
         {
-            Assembly assembly = typeof(CoreTests).Assembly;
-
             using (var ctx1 = new BaseContext(null)) {
                 IBaseWindow baseWin = new BaseWindowStub(ctx1);
 
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_mergerec.ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_mergerec.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
                 }
@@ -177,12 +171,10 @@ namespace GKCore
         [Test]
         public void Test_MergeRecord_Fam()
         {
-            Assembly assembly = typeof(CoreTests).Assembly;
-
             using (var ctx1 = new BaseContext(null)) {
                 IBaseWindow baseWin = new BaseWindowStub(ctx1);
 
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_mergerec.ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_mergerec.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
                 }
@@ -324,17 +316,16 @@ namespace GKCore
 
             var logBox = Substitute.For<ITextBox>();
 
-            Assembly assembly = typeof(CoreTests).Assembly;
             using (var ctx1 = new BaseContext(null)) {
                 IBaseWindow baseWin = new BaseWindowStub(ctx1);
 
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test1.ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test1.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
                 }
 
                 using (var ctx2 = new BaseContext(null)) {
-                    using (Stream stmGed2 = assembly.GetManifestResourceStream("GKTests.Resources.test2.ged")) {
+                    using (Stream stmGed2 = TestUtils.LoadResourceStream("test2.ged")) {
                         var gedcomProvider = new GEDCOMProvider(ctx2.Tree);
                         gedcomProvider.LoadFromStreamExt(stmGed2, stmGed2);
 

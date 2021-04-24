@@ -1137,8 +1137,6 @@ namespace GEDmill
                         lblAllDoneStartFile.Visible = false;
                     }
                     break;
-                default:
-                    break;
             }
 
             EnableNextButton();
@@ -1905,7 +1903,7 @@ namespace GEDmill
             // Validate and strip trailing .css in case user has put them on
             string stylesheetFilename = txtConfigStylesheetName.Text;
             if (stylesheetFilename.Length > 0) {
-                string sStylesheetFilenameUpper = stylesheetFilename.ToUpper();
+                string stylesheetFilenameUpper = stylesheetFilename.ToUpper();
                 if (stylesheetFilename.LastIndexOf(".CSS") >= 0) {
                     stylesheetFilename = stylesheetFilename.Substring(0, stylesheetFilename.Length - 4);
                 }

@@ -1387,7 +1387,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static bool GetBoolVal(string str, bool defValue = false)
         {
-            bool result = string.IsNullOrEmpty(str) ? defValue : ((str == "Y") ? true : false);
+            bool result = string.IsNullOrEmpty(str) ? defValue : (str == "Y");
             return result;
         }
 

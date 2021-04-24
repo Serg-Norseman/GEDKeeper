@@ -98,7 +98,7 @@ namespace GKCore.Export
         {
         }
 
-        private static RtfCharFormat addParagraphChunk(RtfParagraph par, string text, IFont font)
+        private static RtfCharFormat AddParagraphChunk(RtfParagraph par, string text, IFont font)
         {
             FontStruct fntStr = ((FontHandler)font).Handle;
 
@@ -122,33 +122,33 @@ namespace GKCore.Export
         {
             RtfParagraph par = fDocument.addParagraph();
             par.Alignment = iAlignments[(int)alignment];
-            addParagraphChunk(par, text, font);
+            AddParagraphChunk(par, text, font);
         }
 
         public override void AddParagraph(string text, IFont font)
         {
             RtfParagraph par = fDocument.addParagraph();
-            addParagraphChunk(par, text, font);
+            AddParagraphChunk(par, text, font);
         }
 
         public override void AddParagraphAnchor(string text, IFont font, string anchor)
         {
             RtfParagraph par = fDocument.addParagraph();
-            RtfCharFormat fmt = addParagraphChunk(par, text, font);
+            RtfCharFormat fmt = AddParagraphChunk(par, text, font);
             fmt.Bookmark = anchor;
         }
 
         public override void AddParagraphLink(string text, IFont font, string link)
         {
             RtfParagraph par = fDocument.addParagraph();
-            RtfCharFormat fmt = addParagraphChunk(par, text, font);
+            RtfCharFormat fmt = AddParagraphChunk(par, text, font);
             fmt.LocalHyperlink = link;
         }
 
         public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont)
         {
             RtfParagraph par = fDocument.addParagraph();
-            RtfCharFormat fmt = addParagraphChunk(par, text, font);
+            RtfCharFormat fmt = AddParagraphChunk(par, text, font);
             fmt.LocalHyperlink = link;
         }
 
@@ -190,8 +190,8 @@ namespace GKCore.Export
             FontStruct fntStr = ((FontHandler)font).Handle;
             var symFont = CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
 
-            addParagraphChunk(par, "\t· ", symFont);
-            addParagraphChunk(par, text, font);
+            AddParagraphChunk(par, "\t· ", symFont);
+            AddParagraphChunk(par, text, font);
         }
 
         public override void AddListItemLink(string text, IFont font, string link, IFont linkFont)
@@ -201,11 +201,11 @@ namespace GKCore.Export
             FontStruct fntStr = ((FontHandler)font).Handle;
             var symFont = CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
 
-            addParagraphChunk(par, "\t· ", symFont);
-            addParagraphChunk(par, text, font);
+            AddParagraphChunk(par, "\t· ", symFont);
+            AddParagraphChunk(par, text, font);
 
             if (!string.IsNullOrEmpty(link)) {
-                RtfCharFormat fmt = addParagraphChunk(par, link, linkFont);
+                RtfCharFormat fmt = AddParagraphChunk(par, link, linkFont);
                 fmt.LocalHyperlink = link;
             }
         }
@@ -228,18 +228,18 @@ namespace GKCore.Export
 
         public override void AddParagraphChunk(string text, IFont font)
         {
-            addParagraphChunk(fParagraph, text, font);
+            AddParagraphChunk(fParagraph, text, font);
         }
 
         public override void AddParagraphChunkAnchor(string text, IFont font, string anchor)
         {
-            RtfCharFormat fmt = addParagraphChunk(fParagraph, text, font);
+            RtfCharFormat fmt = AddParagraphChunk(fParagraph, text, font);
             fmt.Bookmark = anchor;
         }
 
         public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false)
         {
-            RtfCharFormat fmt = addParagraphChunk(fParagraph, text, font);
+            RtfCharFormat fmt = AddParagraphChunk(fParagraph, text, font);
             if (sup) fmt.FontStyle.addStyle(FontStyleFlag.Super);
             fmt.LocalHyperlink = link;
         }
@@ -278,7 +278,7 @@ namespace GKCore.Export
             if (!string.IsNullOrEmpty(content)) {
                 var par = cell.addParagraph();
                 par.Alignment = iAlignments[(int)alignment];
-                addParagraphChunk(par, content, font);
+                AddParagraphChunk(par, content, font);
             }
 
             fTableCol += 1;

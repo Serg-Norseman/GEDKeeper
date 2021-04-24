@@ -25,10 +25,7 @@ using System.Windows.Forms;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
-using GKUI.Components;
 using NUnit.Framework;
-using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {

@@ -114,7 +114,7 @@ namespace GDModel
             get { return fXRef; }
         }
 
-        public GDMRecord(GDMTree tree) : base()
+        public GDMRecord(GDMTree tree)
         {
             fTree = tree;
             fXRef = string.Empty;

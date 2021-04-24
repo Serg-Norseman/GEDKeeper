@@ -32,8 +32,6 @@ using GKCore;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
-using GKUI.Components;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -77,8 +75,7 @@ namespace GKUI.Forms
             fDialog.FileRef = fileRef;
             Assert.AreEqual(fileRef, fDialog.FileRef);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.jpg"));
+            Bitmap img = new Bitmap(TestUtils.LoadResourceStream("shaytan_plant.jpg"));
             IImage portableImage = new ImageHandler(img);
 
             fDialog.SetViewImage(portableImage, fileRef);
@@ -98,8 +95,7 @@ namespace GKUI.Forms
             fDialog.FileRef = fileRef;
             Assert.AreEqual(fileRef, fDialog.FileRef);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Stream stm = assembly.GetManifestResourceStream("GKTests.Resources.lorem_ipsum.txt");
+            Stream stm = TestUtils.LoadResourceStream("lorem_ipsum.txt");
             string text;
             using (StreamReader strd = new StreamReader(stm, Encoding.UTF8)) {
                 text = strd.ReadToEnd();
@@ -118,8 +114,7 @@ namespace GKUI.Forms
             fDialog.FileRef = fileRef;
             Assert.AreEqual(fileRef, fDialog.FileRef);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Stream stm = assembly.GetManifestResourceStream("GKTests.Resources.lorem_ipsum.txt");
+            Stream stm = TestUtils.LoadResourceStream("lorem_ipsum.txt");
             string text;
             using (StreamReader strd = new StreamReader(stm, Encoding.UTF8)) {
                 text = strd.ReadToEnd();
@@ -138,8 +133,7 @@ namespace GKUI.Forms
             fDialog.FileRef = fileRef;
             Assert.AreEqual(fileRef, fDialog.FileRef);
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Stream stm = assembly.GetManifestResourceStream("GKTests.Resources.lorem_ipsum.txt");
+            Stream stm = TestUtils.LoadResourceStream("lorem_ipsum.txt");
 
             fDialog.SetViewHTML(stm);
             fDialog.Refresh();

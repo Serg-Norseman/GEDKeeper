@@ -25,8 +25,6 @@ using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
 using GKTests;
-using GKUI.Components;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Components

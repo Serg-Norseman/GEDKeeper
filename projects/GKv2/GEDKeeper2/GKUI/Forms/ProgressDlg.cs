@@ -131,14 +131,14 @@ namespace GKUI.Forms
         internal void ProgressInit(string title, int max, bool cancelable = false)
         {
             //initEvent.WaitOne();
-            InvokeEx((MethodInvoker)delegate {
+            InvokeEx(delegate {
                 DoInit(title, max, cancelable);
             });
         }
 
         internal void ProgressDone()
         {
-            InvokeEx((MethodInvoker)delegate {
+            InvokeEx(delegate {
                 if (fRequiresClose) {
                     DoDone();
                 }
@@ -147,14 +147,14 @@ namespace GKUI.Forms
 
         internal void ProgressStep()
         {
-            InvokeEx((MethodInvoker)delegate {
+            InvokeEx(delegate {
                 DoStep(fVal + 1);
             });
         }
 
         internal void ProgressStep(int value)
         {
-            InvokeEx((MethodInvoker)delegate {
+            InvokeEx(delegate {
                 DoStep(value);
             });
         }

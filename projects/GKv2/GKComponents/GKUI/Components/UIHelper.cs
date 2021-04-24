@@ -279,7 +279,7 @@ namespace GKUI.Components
         public static bool IsStartupItem()
         {
             RegistryKey rkApp = GetRunKey();
-            return (rkApp.GetValue(GKData.APP_TITLE_NEW) == null) ? false : true;
+            return (rkApp.GetValue(GKData.APP_TITLE_NEW) != null);
         }
 
         private static RegistryKey GetRunKey()

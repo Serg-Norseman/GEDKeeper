@@ -232,8 +232,7 @@ namespace GKCore.Tools
                 GDMFamilyRecord family = tree.GetParentsFamily(iRec);
                 if (family != null) {
                     GDMIndividualRecord father, mother;
-                    father = tree.GetPtrValue(family.Husband);
-                    mother = tree.GetPtrValue(family.Wife);
+                    tree.GetSpouses(family, out father, out mother);
 
                     WalkTreeInt(tree, father, mode, walkProc, extData);
                     WalkTreeInt(tree, mother, mode, walkProc, extData);
@@ -1394,7 +1393,7 @@ namespace GKCore.Tools
                     if (iRec != null) {
                         if (prepared.IndexOf(iRec) < 0) {
                             var groupRecords = new List<GDMRecord>();
-                            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
+                            WalkTree(tree, iRec, TreeWalkMode.twmAll, groupRecords);
                             result.Add(groupRecords);
                             prepared.AddRange(groupRecords);
                         }

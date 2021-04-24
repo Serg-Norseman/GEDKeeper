@@ -217,7 +217,7 @@ namespace GKCore
             lua_register(lvm, "gt_get_person_group");
             lua_register(lvm, "gt_get_group_name");
 
-            // experimentals
+            // experimental
 
             lua_register(lvm, "ado_open");
             lua_register(lvm, "ado_close");

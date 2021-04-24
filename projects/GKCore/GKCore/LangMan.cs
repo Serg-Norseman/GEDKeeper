@@ -1805,8 +1805,7 @@ namespace GKCore
                 {
                     bool xt = false;
 
-                    string st;
-                    st = lngFile.ReadLine(); // header
+                    string st = lngFile.ReadLine();
                     if (!string.IsNullOrEmpty(st) && st[0] == ';')
                     {
                         st = st.Remove(0, 1);

@@ -70,11 +70,10 @@ namespace GDModel.Providers.FamilyShow
         }
 
         /// <summary>
-        ///   Extracts a specified package part to a target folder.  Does not overwrite existing histories, photos and attachments</summary>
-        /// <param name="packagePart">
-        ///   The package part to extract.</param>
-        /// <param name="targetDirectory">
-        ///   The absolute path to the targer folder.</param>
+        ///   Extracts a specified package part to a target folder.  Does not overwrite existing histories, photos and attachments
+        /// </summary>
+        /// <param name="packagePart">The package part to extract.</param>
+        /// <param name="targetDirectory">The absolute path to the target folder.</param>
         private static void ExtractPart(PackagePart packagePart, string targetDirectory)
         {
             try {

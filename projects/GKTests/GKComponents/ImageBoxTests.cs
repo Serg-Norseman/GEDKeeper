@@ -25,7 +25,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using BSLib;
 using GKCore;
-using GKUI.Components;
+using GKTests;
 using NUnit.Framework;
 
 namespace GKUI.Components
@@ -68,8 +68,7 @@ namespace GKUI.Components
         [Test]
         public void TestMethod()
         {
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.jpg"));
+            Bitmap img = new Bitmap(TestUtils.LoadResourceStream("shaytan_plant.jpg"));
 
             fImageBox.BeginUpdate();
             fImageBox.Image = null;

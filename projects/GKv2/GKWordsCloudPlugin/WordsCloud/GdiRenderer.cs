@@ -15,15 +15,12 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.Windows.Forms;
 using GKUI.Components;
 
 namespace GKWordsCloudPlugin.WordsCloud
 {
     public class GdiRenderer : ICloudRenderer
     {
-        private const TextFormatFlags FLAGS = TextFormatFlags.NoPadding;
-
         private Font fCurrentFont;
         private readonly Graphics fGraphics;
         private readonly int fMaxWordWeight;

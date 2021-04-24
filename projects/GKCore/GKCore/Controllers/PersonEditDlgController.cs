@@ -321,9 +321,6 @@ namespace GKCore.Controllers
                     case GDMSex.svFemale:
                         img = AppHost.GfxProvider.LoadResourceImage("pi_female_140.png", false);
                         break;
-
-                    default:
-                        break;
                 }
             }
             fView.SetPortrait(img);

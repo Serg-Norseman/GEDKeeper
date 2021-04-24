@@ -431,13 +431,11 @@ namespace GKCore.Export
                 if (iRec.ChildToFamilyLinks.Count > 0) {
                     GDMFamilyRecord family = fTree.GetPtrValue(iRec.ChildToFamilyLinks[0]);
                     if (fBase.Context.IsRecordAccess(family.Restriction)) {
-                        GDMIndividualRecord prnt;
+                        GDMIndividualRecord father, mother;
+                        fBase.Context.Tree.GetSpouses(family, out father, out mother);
 
-                        prnt = fTree.GetPtrValue(family.Wife);
-                        GenStep(res, prnt, level + 1, 1);
-
-                        prnt = fTree.GetPtrValue(family.Husband);
-                        GenStep(res, prnt, level + 1, 1);
+                        GenStep(res, father, level + 1, 1);
+                        GenStep(res, mother, level + 1, 1);
                     }
                 }
             } else {

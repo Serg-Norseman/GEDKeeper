@@ -74,17 +74,15 @@ namespace GEDmill.HTML
                 }
 
                 if (CConfig.Instance.ShowFrontPageStats) {
-                    string sIndividuals;
-                    sIndividuals = fStats.Individuals == 0 ? "no" : fStats.Individuals.ToString();
-                    sIndividuals += " individual";
+                    string individuals = fStats.Individuals == 0 ? "no" : fStats.Individuals.ToString();
+                    individuals += " individual";
                     if (fStats.Individuals != 1) {
-                        sIndividuals += "s";
+                        individuals += "s";
                     }
 
-                    string sSources;
-                    sSources = fStats.Sources == 0 ? "" : string.Concat(", cross-referenced to ", fStats.Sources.ToString(), " source");
+                    string sources = fStats.Sources == 0 ? "" : string.Concat(", cross-referenced to ", fStats.Sources.ToString(), " source");
                     if (fStats.Sources > 1) {
-                        sSources += "s";
+                        sources += "s";
                     }
 
                     string fileType = fStats.NonPicturesIncluded ? "multimedia file" : "image";
@@ -94,7 +92,7 @@ namespace GEDmill.HTML
                         multimedia += "s";
                     }
 
-                    f.WriteLine(string.Concat("       <p>This website contains records on ", sIndividuals, sSources, multimedia, ".</p>"));
+                    f.WriteLine(string.Concat("       <p>This website contains records on ", individuals, sources, multimedia, ".</p>"));
                 }
 
                 f.WriteLine("       <div id=\"links\"> <!-- links -->");

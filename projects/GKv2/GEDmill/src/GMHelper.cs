@@ -106,7 +106,7 @@ namespace GEDmill
             if (fileDir.Length > 0) {
                 fileDialog.InitialDirectory = fileDir;
             } else {
-                fileDialog.InitialDirectory = Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             }
 
             if (fileName.Length > 0) {
@@ -135,7 +135,7 @@ namespace GEDmill
             sFilterString += "All files (*.*)|*.*";
             fileDialog.Filter = sFilterString;
             fileDialog.FilterIndex = 1;
-            string sExtn = Path.GetExtension(fileDialog.FileName);
+            string extn = Path.GetExtension(fileDialog.FileName);
 
             // Check whether selected file matches given filter
             bool bValidExtn = true;
@@ -377,10 +377,10 @@ namespace GEDmill
             return (mmKind == MultimediaKind.mkImage);
         }
 
-        public static string MakeLinkNumber(GDMSourceCitation sourCit, int sourceCount, bool bComma)
+        public static string MakeLinkNumber(GDMSourceCitation sourCit, int sourceCount, bool hasComma)
         {
-            string sComma = bComma ? "," : "";
-            return string.Concat("<span class=\"reference\">", sComma, sourceCount.ToString(), "</span>");
+            string comma = hasComma ? "," : "";
+            return string.Concat("<span class=\"reference\">", comma, sourceCount.ToString(), "</span>");
         }
 
         // Returns a string to use in the list of references at the bottom of the page
@@ -439,12 +439,12 @@ namespace GEDmill
 
         public static void RestrictAncestors(GDMTree tree, GDMIndividualRecord iRec, bool visible)
         {
-            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAncestors, RestrictProc, ((object)visible));
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAncestors, RestrictProc, visible);
         }
 
         public static void RestrictDescendants(GDMTree tree, GDMIndividualRecord iRec, bool visible)
         {
-            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmDescendants, RestrictProc, ((object)visible));
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmDescendants, RestrictProc, visible);
         }
 
         private static bool MarkProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)

@@ -223,10 +223,9 @@ namespace GKCore.Names
             if (context == null || iRec == null) return;
 
             try {
-                string childName, childPat;
                 var parts = GKUtils.GetNameParts(context.Tree, iRec, false);
-                childName = parts.Name;
-                childPat = parts.Patronymic;
+                string childName = parts.Name;
+                string childPat = parts.Patronymic;
 
                 GDMSex iSex = iRec.Sex;
                 SetNameSex(childName, iSex);
@@ -235,9 +234,8 @@ namespace GKCore.Names
                 GDMIndividualRecord father = (fam == null) ? null : context.Tree.GetPtrValue(fam.Husband);
 
                 if (father != null) {
-                    string fatherName;
                     parts = GKUtils.GetNameParts(context.Tree, father, false);
-                    fatherName = parts.Name;
+                    string fatherName = parts.Name;
 
                     if (IsComparable(fatherName, childPat)) {
                         SetName(fatherName, childPat, iSex);

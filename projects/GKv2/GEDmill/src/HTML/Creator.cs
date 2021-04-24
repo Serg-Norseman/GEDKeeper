@@ -82,7 +82,7 @@ namespace GEDmill.HTML
             int tabPos = 0;
             bool doneCRLF = false;
             bool doneSpace = false;
-            int nLength = original.Length;
+            int length = original.Length;
             int n = 0;
             foreach (char c in original) {
                 switch (c) {
@@ -204,7 +204,7 @@ namespace GEDmill.HTML
             const string validChars = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$%'`-@{}~!#()&_^";
 
             var sb = new StringBuilder(original.Length);
-            int nLength = original.Length;
+            int length = original.Length;
             int n = 0;
             foreach (char c in original) {
                 char cc = c;

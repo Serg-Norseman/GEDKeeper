@@ -563,25 +563,19 @@ namespace GKCore.Controllers
 
         public void NavNext()
         {
-            try {
-                GDMRecord rec = fNavman.Next();
-                if (rec != null) {
-                    fView.SelectRecordByXRef(rec.XRef);
-                    AppHost.Instance.UpdateControls(false);
-                }
-            } finally {
+            GDMRecord rec = fNavman.Next();
+            if (rec != null) {
+                fView.SelectRecordByXRef(rec.XRef);
+                AppHost.Instance.UpdateControls(false);
             }
         }
 
         public void NavPrev()
         {
-            try {
-                GDMRecord rec = fNavman.Back();
-                if (rec != null) {
-                    fView.SelectRecordByXRef(rec.XRef);
-                    AppHost.Instance.UpdateControls(false);
-                }
-            } finally {
+            GDMRecord rec = fNavman.Back();
+            if (rec != null) {
+                fView.SelectRecordByXRef(rec.XRef);
+                AppHost.Instance.UpdateControls(false);
             }
         }
 

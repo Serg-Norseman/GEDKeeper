@@ -222,9 +222,6 @@ namespace GEDmill.MiniTree
                             case ECrossbar.DottedRight:
                                 g.DrawLine(paintbox.PenConnectorDotted, crossbarLeftGap, crossbarY, crossbarRight, crossbarY);
                                 break;
-
-                            default:
-                                break;
                         }
 
                         if (mtg.fStalkedIndividuals > 0) {

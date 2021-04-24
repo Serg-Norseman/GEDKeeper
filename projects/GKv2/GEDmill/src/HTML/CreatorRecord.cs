@@ -251,13 +251,7 @@ namespace GEDmill.HTML
         protected string GetNoteText(GDMNotes ns)
         {
             GDMLines noteLines = fTree.GetNoteLines(ns);
-            string result;
-            if (CConfig.Instance.ObfuscateEmails) {
-                result = ObfuscateEmail(noteLines.Text);
-            } else {
-                result = noteLines.Text;
-            }
-
+            string result = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(noteLines.Text) : noteLines.Text;
             return result;
         }
 

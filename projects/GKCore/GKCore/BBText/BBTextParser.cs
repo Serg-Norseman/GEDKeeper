@@ -267,7 +267,7 @@ namespace GKCore.BBText
                             lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Underline, !closedTag);
                         }
                         else if (tag == "url") {
-                            // bad impementation
+                            // bad implementation
                             // [url][/url] and [url=...][/url], but now only [url=...][/url]
                             string url = "";
 

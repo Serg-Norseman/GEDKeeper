@@ -306,8 +306,7 @@ namespace GKCore
         public void Test_CryptoLoadAndSave()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test1.ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test1.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
 

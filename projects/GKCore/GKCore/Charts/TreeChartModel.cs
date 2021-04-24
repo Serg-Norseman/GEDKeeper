@@ -1494,14 +1494,14 @@ namespace GKCore.Charts
 
                 int bh = fRenderer.GetTextHeight(fBoldFont);
                 int th = fRenderer.GetTextHeight(fDrawFont);
-                int lh;
-                IFont font;
                 int ry = prt.Top + fNodePadding;
 
                 int lines = person.Lines.Length;
                 for (int k = 0; k < lines; k++) {
                     string line = person.Lines[k];
 
+                    int lh;
+                    IFont font;
                     if (fOptions.BoldNames && k < person.NameLines) {
                         lh = bh;
                         font = fBoldFont;

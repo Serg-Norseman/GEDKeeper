@@ -20,14 +20,10 @@
 
 #if !__MonoCS__
 
-using System;
-using System.Windows.Forms;
 using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms

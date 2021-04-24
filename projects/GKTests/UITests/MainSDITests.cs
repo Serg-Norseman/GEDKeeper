@@ -33,9 +33,6 @@ using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
-using GKTests.ControlTesters;
-using GKUI.Components;
-using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -585,7 +582,7 @@ namespace GKUI.Forms
             ModalFormHandler = MessageBox_YesHandler;
             ClickButton("btnWifeDelete", dlg);
 
-            // childs
+            // children
             Assert.AreEqual(0, familyRecord.Children.Count);
             tabs.SelectTab(0);
             PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);

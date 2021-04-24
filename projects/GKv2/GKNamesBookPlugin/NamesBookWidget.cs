@@ -160,17 +160,14 @@ namespace GKNamesBookPlugin
 
         private void PrepareList()
         {
-            Assembly assembly = typeof(NamesBookWidget).Assembly;
-
-            using (Stream book_names = assembly.GetManifestResourceStream("Resources.bk_names.txt")) {
-                using (StreamReader strd = new StreamReader(book_names, Encoding.UTF8)) {
+            using (Stream bookNames = fPlugin.LoadResourceStream("bk_names.txt")) {
+                using (StreamReader strd = new StreamReader(bookNames, Encoding.UTF8)) {
                     while (strd.Peek() != -1) {
                         string ns = strd.ReadLine().Trim();
                         if (ns != "") {
                             string[] toks = ns.Split('/');
                             if (toks.Length >= 3) {
-                                NameRecord rec = new NameRecord();
-
+                                var rec = new NameRecord();
                                 rec.Name = toks[0].Trim();
                                 rec.Desc = toks[2].Trim();
                                 string st = toks[1].Trim();
@@ -195,8 +192,8 @@ namespace GKNamesBookPlugin
                 }
             }
 
-            using (Stream book_names = assembly.GetManifestResourceStream("Resources.bk_names_cf.txt")) {
-                using (StreamReader strd = new StreamReader(book_names, Encoding.UTF8)) {
+            using (Stream bookNames = fPlugin.LoadResourceStream("bk_names_cf.txt")) {
+                using (StreamReader strd = new StreamReader(bookNames, Encoding.UTF8)) {
                     while (strd.Peek() != -1) {
                         string ns = strd.ReadLine().Trim();
                         fChurchFNames.Add(ns);
@@ -204,8 +201,8 @@ namespace GKNamesBookPlugin
                 }
             }
 
-            using (Stream book_names = assembly.GetManifestResourceStream("Resources.bk_names_cm.txt")) {
-                using (StreamReader strd = new StreamReader(book_names, Encoding.UTF8)) {
+            using (Stream bookNames = fPlugin.LoadResourceStream("bk_names_cm.txt")) {
+                using (StreamReader strd = new StreamReader(bookNames, Encoding.UTF8)) {
                     while (strd.Peek() != -1) {
                         string ns = strd.ReadLine().Trim();
                         fChurchMNames.Add(ns);

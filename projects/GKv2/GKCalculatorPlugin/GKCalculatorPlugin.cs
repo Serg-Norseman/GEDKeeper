@@ -90,8 +90,7 @@ namespace GKCalculatorPlugin
         {
             bool result = base.Startup(host);
             try {
-                Assembly assembly = typeof(Plugin).Assembly;
-                using (Stream stmIcon = assembly.GetManifestResourceStream("Resources.icon_calc.gif")) {
+                using (Stream stmIcon = LoadResourceStream("icon_calc.gif")) {
                     Image bmp = Image.FromStream(stmIcon);
                     fIcon = new ImageHandler(bmp);
                 }

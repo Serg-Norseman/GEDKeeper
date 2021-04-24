@@ -92,7 +92,7 @@ namespace GKUI.Forms
 
         public void SetViewMedia(string mediaFile)
         {
-            var mediaPlayer = new GKUI.Components.MediaPlayer();
+            var mediaPlayer = new MediaPlayer();
             mediaPlayer.MediaFile = mediaFile;
 
             SetViewControl(mediaPlayer);
@@ -100,7 +100,7 @@ namespace GKUI.Forms
 
         public void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef)
         {
-            var imageCtl = new GKUI.Components.ImageView();
+            var imageCtl = new ImageView();
             imageCtl.OpenImage(img);
 
             fController.ProcessPortraits(imageCtl, fileRef);
