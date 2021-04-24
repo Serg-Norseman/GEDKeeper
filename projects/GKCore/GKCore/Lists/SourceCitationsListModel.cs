@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -44,14 +45,14 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            var dataOwner = fDataOwner as IGDMStructWithSourceCitations;
             if (fSheetList == null || dataOwner == null) return;
 
             try {
                 fSheetList.ClearItems();
 
                 foreach (GDMSourceCitation cit in dataOwner.SourceCitations) {
-                    GDMSourceRecord sourceRec = cit.Value as GDMSourceRecord;
+                    var sourceRec = fBaseContext.Tree.GetPtrValue<GDMSourceRecord>(cit);
                     if (sourceRec == null) continue;
 
                     int ca = cit.GetValidCertaintyAssessment();
@@ -64,13 +65,13 @@ namespace GKCore.Lists
 
                 fSheetList.ResizeColumn(1);
             } catch (Exception ex) {
-                Logger.LogWrite("SourceCitationsListModel.UpdateContents(): " + ex.Message);
+                Logger.WriteError("SourceCitationsListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
+            var dataOwner = fDataOwner as IGDMStructWithSourceCitations;
             if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
 
             GDMSourceCitation aCit = eArgs.ItemData as GDMSourceCitation;

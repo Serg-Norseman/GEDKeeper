@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -67,7 +67,7 @@ namespace GKCore.Controllers
             try {
                 fCommunication.CommName = fView.Name.Text;
                 fCommunication.CommunicationType = (GDMCommunicationType)fView.CorrType.SelectedIndex;
-                fCommunication.Date.Assign(GDMDate.CreateByFormattedStr(fView.Date.Text, true));
+                fCommunication.Date.Assign(GDMDate.CreateByFormattedStr(fView.Date.NormalizeDate, true));
                 fCommunication.SetCorresponder((GDMCommunicationDir)fView.Dir.SelectedIndex, fTempInd);
 
                 fBase.NotifyRecord(fCommunication, RecordAction.raEdit);
@@ -76,7 +76,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("CommunicationEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("CommunicationEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -96,9 +96,9 @@ namespace GKCore.Controllers
                 } else {
                     fView.Name.Text = fCommunication.CommName;
                     fView.CorrType.SelectedIndex = (int)fCommunication.CommunicationType;
-                    fView.Date.Text = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                    fView.Date.NormalizeDate = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
-                    fTempInd = fCommunication.Corresponder.Individual;
+                    fTempInd = fBase.Context.Tree.GetPtrValue(fCommunication.Corresponder);
 
                     if (fTempInd != null) {
                         fView.Dir.SelectedIndex = (int)fCommunication.CommDirection;
@@ -109,7 +109,7 @@ namespace GKCore.Controllers
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("CommunicationEditDlgController.SetCommunication(): " + ex.Message);
+                Logger.WriteError("CommunicationEditDlgController.SetCommunication()", ex);
             }
         }
 

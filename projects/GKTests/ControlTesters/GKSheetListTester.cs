@@ -39,10 +39,6 @@ namespace GKTests.ControlTesters
         {
         }
 
-        public GKSheetListTester(string name) : base(name)
-        {
-        }
-
         public new GKSheetList Properties
         {
             get { return (GKSheetList) TheObject; }

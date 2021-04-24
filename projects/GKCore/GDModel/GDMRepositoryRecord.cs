@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,12 +42,19 @@ namespace GDModel
         }
 
 
-        public GDMRepositoryRecord(GDMObject owner) : base(owner)
+        public GDMRepositoryRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.REPO);
 
-            fAddress = new GDMAddress(this);
+            fAddress = new GDMAddress();
             fRepositoryName = string.Empty;
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fAddress.TrimExcess();
         }
 
         public override void Assign(GDMTag source)

@@ -21,11 +21,11 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using BSLib.Design;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Stats;
-using GKUI.Components;
-using WordCloud;
+using GKWordsCloudPlugin.WordsCloud;
 
 namespace GKWordsCloudPlugin
 {
@@ -70,7 +70,7 @@ namespace GKWordsCloudPlugin
             fWords = new List<Word>();
 
             foreach (CloudType cloudType in CloudTypes) {
-                cbType.Items.Add(new GKComboItem(cloudType.Name, cloudType.Mode));
+                cbType.Items.Add(new ComboItem<StatsMode>(cloudType.Name, cloudType.Mode));
             }
             fMode = StatsMode.smNames;
 
@@ -138,7 +138,7 @@ namespace GKWordsCloudPlugin
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            GKComboItem item = (GKComboItem)cbType.SelectedItem;
+            var item = (ComboItem<StatsMode>)cbType.SelectedItem;
             if (item != null) {
                 fMode = (StatsMode)item.Tag;
                 UpdateCloud();

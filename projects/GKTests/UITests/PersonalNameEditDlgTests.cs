@@ -26,7 +26,6 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -45,13 +44,12 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
             fPerson = new GDMIndividualRecord(fBase.Context.Tree);
-            fPersonalName = new GDMPersonalName(fPerson);
+            fPersonalName = new GDMPersonalName();
 
             fDialog = new PersonalNameEditDlg(fBase);
+            fDialog.Individual = fPerson;
             fDialog.PersonalName = fPersonalName;
             fDialog.Show();
         }

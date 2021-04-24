@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using GDModel;
 using GEDmill.Model;
@@ -37,7 +36,7 @@ namespace GEDmill.HTML
         private GDMSourceRecord fSourceRecord;
 
 
-        public CreatorRecordSource(GDMTree tree, IProgressCallback progress, string w3cfile, GDMSourceRecord sr) : base(tree, progress, w3cfile)
+        public CreatorRecordSource(GDMTree tree, IProgressCallback progress, string w3cFile, GDMSourceRecord sr) : base(tree, progress, w3cFile)
         {
             fSourceRecord = sr;
         }
@@ -77,14 +76,14 @@ namespace GEDmill.HTML
                     sourName = "Source ";
                     bool gotSourceName = false;
                     // Try user reference number
-                    foreach (GDMUserReference urn in fSourceRecord.UserReferences) {
-                        if (urn.StringValue != "") {
-                            sourName += urn.StringValue;
+                    foreach (var userRef in fSourceRecord.UserReferences) {
+                        if (userRef.StringValue != "") {
+                            sourName += userRef.StringValue;
                             gotSourceName = true;
                             break;
                         }
                     }
-                    if (!gotSourceName && fSourceRecord.AutomatedRecordID != null && fSourceRecord.AutomatedRecordID != "") {
+                    if (!gotSourceName && !string.IsNullOrEmpty(fSourceRecord.AutomatedRecordID)) {
                         sourName += fSourceRecord.AutomatedRecordID;
                     } else if (!gotSourceName) {
                         sourName += fSourceRecord.XRef;
@@ -93,34 +92,20 @@ namespace GEDmill.HTML
                 f.WriteLine("<h1>{0}</h1>", EscapeHTML(sourName, false));
 
                 // Add repository information
-                foreach (GDMRepositoryCitation src in fSourceRecord.RepositoryCitations) {
-                    GDMRepositoryRecord rr = src.Value as GDMRepositoryRecord;
-                    if (rr != null) {
-                        if (!string.IsNullOrEmpty(rr.RepositoryName)) {
-                            f.WriteLine("<h2>{0}</h2>", EscapeHTML(rr.RepositoryName, false));
+                foreach (var sourCit in fSourceRecord.RepositoryCitations) {
+                    GDMRepositoryRecord repoRec = fTree.GetPtrValue<GDMRepositoryRecord>(sourCit);
+                    if (repoRec != null) {
+                        if (!string.IsNullOrEmpty(repoRec.RepositoryName)) {
+                            f.WriteLine("<h2>{0}</h2>", EscapeHTML(repoRec.RepositoryName, false));
                         }
 
-                        foreach (GDMNotes ns in rr.Notes) {
-                            string noteText;
-                            if (CConfig.Instance.ObfuscateEmails) {
-                                noteText = ObfuscateEmail(ns.Lines.Text);
-                            } else {
-                                noteText = ns.Lines.Text;
-                            }
-                            f.WriteLine("<p>{0}</p>", EscapeHTML(noteText, false));
+                        foreach (GDMNotes ns in repoRec.Notes) {
+                            WriteNotes(f, ns);
                         }
                     }
 
-                    if (src.Notes != null && src.Notes.Count > 0) {
-                        foreach (GDMNotes ns in src.Notes) {
-                            string noteText;
-                            if (CConfig.Instance.ObfuscateEmails) {
-                                noteText = ObfuscateEmail(ns.Lines.Text);
-                            } else {
-                                noteText = ns.Lines.Text;
-                            }
-                            f.WriteLine("<p>{0}</p>", EscapeHTML(noteText, false));
-                        }
+                    foreach (GDMNotes ns in sourCit.Notes) {
+                        WriteNotes(f, ns);
                     }
                 }
 
@@ -168,16 +153,16 @@ namespace GEDmill.HTML
                 // Add notes
                 OutputNotes(f, fSourceRecord.Notes);
 
-                if (CConfig.Instance.SupressBackreferences == false) {
+                if (!CConfig.Instance.SupressBackreferences) {
                     f.WriteLine("        <div id=\"citations\">");
                     f.WriteLine("          <h1>Citations</h1>");
                     f.WriteLine("          <ul>");
 
-                    var htBackrefs = fSourceRecord.MakeBackReferences();
+                    var htBackrefs = GMHelper.MakeBackReferences(fSourceRecord);
                     IDictionaryEnumerator enumerator = htBackrefs.GetEnumerator();
                     while (enumerator.MoveNext()) {
                         GDMIndividualRecord ir = (GDMIndividualRecord)(enumerator.Value);
-                        if (ir != null && ir.GetVisibility()) {
+                        if (ir != null && GMHelper.GetVisibility(ir)) {
                             string link = MakeLink(ir);
                             if (link != "") {
                                 f.WriteLine("<li>{0}</li>", link);

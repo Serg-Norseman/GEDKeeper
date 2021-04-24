@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -62,10 +62,13 @@ namespace GKCore.Controllers
             if (targetType == TargetMode.tmNone || target == null) return;
 
             bool result = false;
-            if (targetType == TargetMode.tmFamilySpouse) {
-                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamily, target);
-            } else if (targetType == TargetMode.tmFamilyChild) {
-                result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, fFamily);
+            switch (targetType) {
+                case TargetMode.tmSpouse:
+                    result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamily, target);
+                    break;
+                case TargetMode.tmFamilyChild:
+                    result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, fFamily);
+                    break;
             }
 
             if (result) UpdateControls();
@@ -85,7 +88,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("FamilyEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("FamilyEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -111,7 +114,7 @@ namespace GKCore.Controllers
 
                 UpdateControls();
             } catch (Exception ex) {
-                Logger.LogWrite("FamilyEditDlgController.SetFamily(): " + ex.Message);
+                Logger.WriteError("FamilyEditDlgController.SetFamily()", ex);
             }
         }
 
@@ -125,8 +128,7 @@ namespace GKCore.Controllers
 
                 fView.LockEditor(true);
             } else {
-                husband = fFamily.Husband.Individual;
-                wife = fFamily.Wife.Individual;
+                fBase.Context.Tree.GetSpouses(fFamily, out husband, out wife);
 
                 fView.LockEditor(fFamily.Restriction == GDMRestriction.rnLocked);
             }
@@ -177,14 +179,22 @@ namespace GKCore.Controllers
             }
         }
 
+        public void JumpToRecord(GDMPointer pointer)
+        {
+            if (pointer != null && Accept()) {
+                fBase.SelectRecordByXRef(pointer.XRef, true);
+                fView.Close();
+            }
+        }
+
         public void JumpToHusband()
         {
-            JumpToRecord(fFamily.Husband.Individual);
+            JumpToRecord(fFamily.Husband);
         }
 
         public void JumpToWife()
         {
-            JumpToRecord(fFamily.Wife.Individual);
+            JumpToRecord(fFamily.Wife);
         }
     }
 }

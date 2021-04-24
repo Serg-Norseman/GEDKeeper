@@ -59,10 +59,13 @@ namespace GKUI.Forms
             txtAliveBeforeDate.Enabled = false;
 
             rgLife = new GroupBox();
-            rgLife.Content = new VDefStackLayout { Items = {
+            rgLife.Content = new DefStackLayout(Orientation.Vertical)
+            {
+                Items = {
                     rbAll, rbOnlyLive, rbOnlyDead, rbAliveBefore,
                     new DefStackLayout(Orientation.Horizontal, 10, lblAliveBefore, txtAliveBeforeDate)
-                } };
+                }
+            };
 
             //
 
@@ -76,7 +79,9 @@ namespace GKUI.Forms
             rbSexFemale.Text = "rbSexFemale";
 
             rgSex = new GroupBox();
-            rgSex.Content = new VDefStackLayout { Items = { rbSexAll, rbSexMale, rbSexFemale } };
+            rgSex.Content = new DefStackLayout(Orientation.Vertical) {
+                Items = { rbSexAll, rbSexMale, rbSexFemale }
+            };
 
             //
 

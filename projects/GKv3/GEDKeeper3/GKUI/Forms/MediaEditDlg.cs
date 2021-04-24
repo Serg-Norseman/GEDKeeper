@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
@@ -83,36 +84,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-                CancelClickHandler(sender, e);
-            } catch (Exception ex) {
-                Logger.LogWrite("MediaEditDlg.btnCancel_Click(): " + ex.Message);
-            }
-        }
-
-        private void btnFileSelect_Click(object sender, EventArgs e)
-        {
-            fController.SelectFile();
-        }
-
-        private void btnView_Click(object sender, EventArgs e)
-        {
-            fController.View();
-        }
-
-        private void edName_TextChanged(object sender, EventArgs e)
-        {
-            Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), txtName.Text);
-        }
-
         public MediaEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -141,6 +112,42 @@ namespace GKUI.Forms
 
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
             fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void btnFileSelect_Click(object sender, EventArgs e)
+        {
+            fController.SelectFile();
+        }
+
+        private void btnView_Click(object sender, EventArgs e)
+        {
+            fController.View();
+        }
+
+        private void edName_TextChanged(object sender, EventArgs e)
+        {
+            Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), txtName.Text);
+        }
+
+        private void cmbStoreType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fController.ChangeStoreType();
         }
     }
 }

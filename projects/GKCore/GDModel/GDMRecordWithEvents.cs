@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,7 +35,7 @@ namespace GDModel
     }
 
 
-    public abstract class GDMRecordWithEvents : GDMRecord, IGEDCOMRecordWithEvents
+    public abstract class GDMRecordWithEvents : GDMRecord, IGDMRecordWithEvents
     {
         private GDMList<GDMCustomEvent> fEvents;
         private GDMRestriction fRestriction;
@@ -53,9 +53,9 @@ namespace GDModel
         }
 
 
-        protected GDMRecordWithEvents(GDMObject owner) : base(owner)
+        protected GDMRecordWithEvents(GDMTree tree) : base(tree)
         {
-            fEvents = new GDMList<GDMCustomEvent>(this);
+            fEvents = new GDMList<GDMCustomEvent>();
         }
 
         protected override void Dispose(bool disposing)
@@ -64,6 +64,13 @@ namespace GDModel
                 fEvents.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fEvents.TrimExcess();
         }
 
         public override void Clear()
@@ -88,8 +95,9 @@ namespace GDModel
 
             base.Assign(source);
 
-            foreach (GDMCustomEvent sourceEvent in sourceRec.fEvents) {
-                GDMCustomEvent copy = (GDMCustomEvent)Activator.CreateInstance(sourceEvent.GetType(), new object[] { this });
+            for (int i = 0, count = sourceRec.fEvents.Count; i < count; i++) {
+                GDMCustomEvent sourceEvent = sourceRec.fEvents[i];
+                GDMCustomEvent copy = (GDMCustomEvent)Activator.CreateInstance(sourceEvent.GetType());
                 copy.Assign(sourceEvent);
                 AddEvent(copy);
             }
@@ -97,17 +105,16 @@ namespace GDModel
             fRestriction = sourceRec.Restriction;
         }
 
-        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord)
         {
             GDMRecordWithEvents target = targetRecord as GDMRecordWithEvents;
             if (target == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
-            base.MoveTo(targetRecord, clearDest);
+            base.MoveTo(targetRecord);
 
             while (fEvents.Count > 0) {
                 GDMCustomEvent obj = fEvents.Extract(0);
-                obj.ResetOwner(target);
                 target.AddEvent(obj);
             }
 

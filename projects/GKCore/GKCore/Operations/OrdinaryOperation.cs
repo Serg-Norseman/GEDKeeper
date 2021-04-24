@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -355,7 +355,7 @@ namespace GKCore.Operations
 
         private bool ProcessRecordNoteAdd(bool redo)
         {
-            IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
+            var swl = fObj as IGDMStructWithNotes;
             GDMNoteRecord noteRec = fNewVal as GDMNoteRecord;
 
             bool result = (swl != null && noteRec != null);
@@ -373,7 +373,7 @@ namespace GKCore.Operations
 
         private bool ProcessRecordNoteRemove(bool redo)
         {
-            IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
+            var swl = fObj as IGDMStructWithNotes;
             GDMNotes notes = fNewVal as GDMNotes;
 
             bool result = (swl != null && notes != null);
@@ -389,7 +389,7 @@ namespace GKCore.Operations
 
         private bool ProcessRecordMediaAdd(bool redo)
         {
-            IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
+            var swl = fObj as IGDMStructWithMultimediaLinks;
             GDMMultimediaRecord mediaRec = fNewVal as GDMMultimediaRecord;
 
             bool result = (swl != null && mediaRec != null);
@@ -407,7 +407,7 @@ namespace GKCore.Operations
 
         private bool ProcessRecordMediaRemove(bool redo)
         {
-            IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
+            var swl = fObj as IGDMStructWithMultimediaLinks;
             GDMMultimediaLink mediaLink = fNewVal as GDMMultimediaLink;
 
             bool result = (swl != null && mediaLink != null);
@@ -423,7 +423,7 @@ namespace GKCore.Operations
 
         private bool ProcessRecordSourceCit(bool redo)
         {
-            IGEDCOMStructWithLists swl = fObj as IGEDCOMStructWithLists;
+            var swl = fObj as IGDMStructWithSourceCitations;
             GDMSourceCitation sourceCit = fNewVal as GDMSourceCitation;
 
             if (swl == null || sourceCit == null) {

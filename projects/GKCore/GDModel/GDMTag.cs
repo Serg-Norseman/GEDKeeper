@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,8 +37,6 @@ namespace GDModel
         #region Protected fields
 
         private int fId;
-        private GDMObject fOwner;
-        protected string fStringValue;
         private GDMList<GDMTag> fTags;
 
         #endregion
@@ -48,11 +46,6 @@ namespace GDModel
         public int Id
         {
             get { return fId; }
-        }
-
-        public GDMObject Owner
-        {
-            get { return fOwner; }
         }
 
         public string StringValue
@@ -66,27 +59,24 @@ namespace GDModel
         /// </summary>
         public GDMList<GDMTag> SubTags
         {
-            get { return fTags; }
+            get {
+                if (fTags == null) {
+                    fTags = new GDMList<GDMTag>();
+                }
+                return fTags;
+            }
         }
 
         #endregion
 
         #region Object management
 
-        public static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMTag(owner, tagId, tagValue);
-        }
-
-        public GDMTag(GDMObject owner)
+        public GDMTag()
         {
             fId = 0; // Unknown
-            fOwner = owner;
-            fTags = new GDMList<GDMTag>(this);
-            fStringValue = string.Empty;
         }
 
-        public GDMTag(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMTag(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }
@@ -102,14 +92,11 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
-        public void ResetOwner(GDMObject owner)
-        {
-            fOwner = owner;
-        }
-
         public virtual void ReplaceXRefs(GDMXRefReplacer map)
         {
-            fTags.ReplaceXRefs(map);
+            if (fTags != null) {
+                fTags.ReplaceXRefs(map);
+            }
         }
 
         public void SetNameValue(int tagId, string tagValue)
@@ -123,32 +110,16 @@ namespace GDModel
             }
         }
 
+        internal virtual void TrimExcess()
+        {
+            if (fTags != null) {
+                fTags.TrimExcess();
+            }
+        }
+
         #endregion
 
         #region Content management
-
-        public virtual GDMTree GetTree()
-        {
-            GDMTree owner = null;
-
-            GDMTag current = this;
-            while (current != null) {
-                GDMObject parent = current.fOwner;
-
-                var parentTag = parent as GDMTag;
-                if (parentTag != null) {
-                    current = parentTag;
-                } else {
-                    var parentTree = parent as GDMTree;
-                    if (parentTree != null) {
-                        owner = parentTree;
-                    }
-                    break;
-                }
-            }
-
-            return owner;
-        }
 
         public void SetName(int tagId)
         {
@@ -162,6 +133,9 @@ namespace GDModel
 
         public GDMTag AddTag(GDMTag tag)
         {
+            if (fTags == null) {
+                fTags = new GDMList<GDMTag>();
+            }
             fTags.Add(tag);
             return tag;
         }
@@ -177,13 +151,19 @@ namespace GDModel
             SetName(source.fId);
             ParseString(source.StringValue);
 
-            AssignList(source.fTags, this.fTags);
+            if (source.fTags != null && source.fTags.Count > 0) {
+                if (fTags == null) {
+                    fTags = new GDMList<GDMTag>();
+                }
+                AssignList(source.fTags, this.fTags);
+            }
         }
 
-        protected void AssignList<T>(GDMList<T> srcList, GDMList<T> destList) where T : GDMTag
+        protected internal void AssignList<T>(GDMList<T> srcList, GDMList<T> destList) where T : GDMTag
         {
-            foreach (GDMTag sourceTag in srcList) {
-                T copyTag = (T)Activator.CreateInstance(sourceTag.GetType(), new object[] { this });
+            for (int i = 0, count = srcList.Count; i < count; i++) {
+                GDMTag sourceTag = srcList[i];
+                T copyTag = (T)Activator.CreateInstance(sourceTag.GetType());
                 copyTag.Assign(sourceTag);
                 destList.Add(copyTag);
             }
@@ -191,12 +171,15 @@ namespace GDModel
 
         public virtual void Clear()
         {
+            if (fTags == null) return;
+
             fTags.Clear();
-            fStringValue = string.Empty;
         }
 
         public void DeleteTag(string tagName)
         {
+            if (fTags == null) return;
+
             GDMTag tag = FindTag(tagName, 0);
             while (tag != null) {
                 int idx = fTags.IndexOf(tag);
@@ -208,15 +191,17 @@ namespace GDModel
 
         public GDMTag FindTag(string tagName, int startIndex)
         {
+            if (fTags == null) return null;
+
             string su = GEDCOMUtils.InvariantTextInfo.ToUpper(tagName);
 
             int pos = su.IndexOf('\\');
-            string S = ((pos >= 0) ? su.Substring(0, pos) : su);
+            string S = (pos >= 0) ? su.Substring(0, pos) : su;
 
             GDMTag tempTag = this;
 
             while (true) {
-                int index = ((S == su) ? startIndex : 0);
+                int index = (S == su) ? startIndex : 0;
 
                 GDMList<GDMTag> tempSubTags = tempTag.fTags;
                 int tempSubCount = tempSubTags.Count;
@@ -229,7 +214,7 @@ namespace GDModel
                     su = su.Substring(pos + 1);
 
                     pos = su.IndexOf('\\');
-                    S = ((pos >= 0) ? su.Substring(0, pos) : su);
+                    S = (pos >= 0) ? su.Substring(0, pos) : su;
                 } else {
                     su = "";
                 }
@@ -242,6 +227,8 @@ namespace GDModel
 
         public IList<GDMTag> FindTags(string tagName)
         {
+            if (fTags == null) return null;
+
             IList<GDMTag> result = new List<GDMTag>();
 
             GDMTag tag = FindTag(tagName, 0);
@@ -257,7 +244,7 @@ namespace GDModel
 
         public virtual bool IsEmpty()
         {
-            return (string.IsNullOrEmpty(fStringValue) && (fTags.Count == 0));
+            return (fTags == null || fTags.Count == 0);
         }
 
         public virtual float IsMatch(GDMTag tag, MatchParams matchParams)
@@ -285,15 +272,52 @@ namespace GDModel
 
         protected virtual string GetStringValue()
         {
-            return fStringValue;
+            return string.Empty;
         }
 
         public virtual string ParseString(string strValue)
         {
-            fStringValue = strValue;
             return string.Empty;
         }
 
         #endregion
+    }
+
+
+    public class GDMValueTag : GDMTag
+    {
+        protected string fStringValue;
+
+        public GDMValueTag()
+        {
+            fStringValue = string.Empty;
+        }
+
+        public GDMValueTag(int tagId, string tagValue) : this()
+        {
+            SetNameValue(tagId, tagValue);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fStringValue = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(fStringValue);
+        }
+
+        protected override string GetStringValue()
+        {
+            return fStringValue;
+        }
+
+        public override string ParseString(string strValue)
+        {
+            fStringValue = strValue;
+            return string.Empty;
+        }
     }
 }

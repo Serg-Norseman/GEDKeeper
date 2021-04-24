@@ -140,7 +140,7 @@ namespace GEDmill.HTML
             fFirstName = "";
             fSurname = "";
             fOccupation = "";
-            fConcealed = !fIndiRec.GetVisibility();
+            fConcealed = !GMHelper.GetVisibility(fIndiRec);
             fEventList = new List<Event>();
             fAttributeList = new List<Event>();
             fReferenceList = new List<GDMSourceCitation>();
@@ -164,7 +164,7 @@ namespace GEDmill.HTML
                 return false;
             }
 
-            if (!fIndiRec.GetVisibility()) {
+            if (!GMHelper.GetVisibility(fIndiRec)) {
                 return false;
             }
 
@@ -185,10 +185,10 @@ namespace GEDmill.HTML
 
             GDMDateValue age30;
             if (fInferredBirthday != null) {
-                age30 = new GDMDateValue(null);
+                age30 = new GDMDateValue();
                 age30.Assign(fInferredBirthday.Date);
             } else {
-                age30 = new GDMDateValue(null);
+                age30 = new GDMDateValue();
                 age30.SetDateTime(DateTime.Now);
             }
             try {
@@ -202,14 +202,14 @@ namespace GEDmill.HTML
 
             // Go through all families this person was a irSubject to
             if (!fConcealed) {
-                foreach (GDMSpouseToFamilyLink sfl in fIndiRec.SpouseToFamilyLinks) {
-                    GDMFamilyRecord fr = (sfl.Value as GDMFamilyRecord);
+                foreach (GDMSpouseToFamilyLink spLink in fIndiRec.SpouseToFamilyLinks) {
+                    GDMFamilyRecord fr = fTree.GetPtrValue<GDMFamilyRecord>(spLink);
                     if (fr != null) {
                         // Find the irSubject's name
                         GDMIndividualRecord spouse = null;
                         string spouseLink = "";
-                        spouse = fr.GetSpouseBy(fIndiRec);
-                        if (spouse != null && spouse.GetVisibility()) {
+                        spouse = fTree.GetSpouseBy(fr, fIndiRec);
+                        if (spouse != null && GMHelper.GetVisibility(spouse)) {
                             spouseLink = MakeLink(spouse);
                         }
 
@@ -272,11 +272,8 @@ namespace GEDmill.HTML
                     if (marriageNote != "") {
                         marriageNote += "\n";
                     }
-                    if (CConfig.Instance.ObfuscateEmails) {
-                        marriageNote += ObfuscateEmail(ns.Lines.Text);
-                    } else {
-                        marriageNote += ns.Lines.Text;
-                    }
+
+                    marriageNote += GetNoteText(ns);
                 }
 
                 string marriedString = "married ";
@@ -302,11 +299,11 @@ namespace GEDmill.HTML
             DateTime dtNow = DateTime.Now;
 
             // Go through all families this person was a irSibling in
-            foreach (GDMChildToFamilyLink cfl in fIndiRec.ChildToFamilyLinks) {
-                GDMFamilyRecord fr = (cfl.Value as GDMFamilyRecord);
-                if (fr != null) {
-                    GDMIndividualRecord husband = fr.Husband.Individual;
-                    GDMIndividualRecord wife = fr.Wife.Individual;
+            foreach (GDMChildToFamilyLink childLink in fIndiRec.ChildToFamilyLinks) {
+                var famRec = fTree.GetPtrValue(childLink);
+                if (famRec != null) {
+                    GDMIndividualRecord husband = fTree.GetPtrValue(famRec.Husband);
+                    GDMIndividualRecord wife = fTree.GetPtrValue(famRec.Wife);
 
                     if (husband != null || wife != null) {
                         fParents.Add(new HusbandAndWife(husband, wife));
@@ -316,20 +313,20 @@ namespace GEDmill.HTML
                     GDMDateValue testBirthday = (fInferredBirthday != null) ? fInferredBirthday.Date : null;
 
                     if (testBirthday == null) {
-                        testBirthday = new GDMDateValue(null);
+                        testBirthday = new GDMDateValue();
                         testBirthday.SetDateTime(dtNow);
                     }
 
                     int previousDifference = -100 * 365; // 100 years should be enough
                     int nextDifference = 100 * 365;
 
-                    foreach (var ch in fr.Children) {
-                        if (ch.XRef == fIndiRec.XRef)
+                    foreach (var childPtr in famRec.Children) {
+                        if (childPtr.XRef == fIndiRec.XRef)
                             continue;
 
-                        GDMIndividualRecord child = ch.Value as GDMIndividualRecord;
+                        var child = fTree.GetPtrValue<GDMIndividualRecord>(childPtr);
                         if (child != null) {
-                            if (!child.GetVisibility())
+                            if (!GMHelper.GetVisibility(child))
                                 continue;
 
                             GDMCustomEvent childBirthday = child.FindEvent("BIRT");
@@ -344,11 +341,11 @@ namespace GEDmill.HTML
                             if (childBirthday != null)
                                 childBirthdate = childBirthday.Date;
                             if (childBirthdate == null) {
-                                childBirthdate = new GDMDateValue(null);
+                                childBirthdate = new GDMDateValue();
                                 childBirthdate.SetDateTime(dtNow);
                             }
 
-                            int difference = Extensions.GetEventsYearsDiff(testBirthday, childBirthdate);
+                            int difference = GMHelper.GetEventsYearsDiff(testBirthday, childBirthdate);
                             if (difference < 0) {
                                 if (difference > previousDifference) {
                                     previousDifference = difference;
@@ -400,11 +397,11 @@ namespace GEDmill.HTML
 
                 // Add entries for this individual's other names
                 if (!fConcealed && !fUnknownName) {
-                    string other_name = "";
-                    for (int i = 1; (other_name = fIndiRec.GetName(i)) != ""; i++) {
+                    string other_name;
+                    for (int i = 1; (other_name = GMHelper.GetName(fIndiRec, i)) != ""; i++) {
                         string other_firstName = "";
                         string other_surname = "";
-                        other_name = CConfig.Instance.CapitaliseName(other_name, ref other_firstName, ref other_surname); // Also splits name into first name and surname
+                        other_name = GMHelper.CapitaliseName(other_name, ref other_firstName, ref other_surname); // Also splits name into first name and surname
                         fIndiIndexCreator.AddIndividualToIndex(other_firstName, other_surname, fUnknownName, alterEgo, lifeDates, fConcealed, relativeFilename, sUserRef);
                     }
                 }
@@ -437,11 +434,7 @@ namespace GEDmill.HTML
                                     marriageNote += "\n";
                                 }
 
-                                if (CConfig.Instance.ObfuscateEmails) {
-                                    marriageNote += ObfuscateEmail(ns.Lines.Text);
-                                } else {
-                                    marriageNote += ns.Lines.Text;
-                                }
+                                marriageNote += GetNoteText(ns);
                             }
                         }
                         break;
@@ -456,7 +449,7 @@ namespace GEDmill.HTML
         {
             string sourceRefs = "";
             string place = "";
-            if (spouse.GetVisibility()) {
+            if (GMHelper.GetVisibility(spouse)) {
                 // Record death of irSubject if within this person's lifetime
                 GDMDateValue spouseDeathDate = null;
                 foreach (GDMCustomEvent ies in spouse.Events) {
@@ -490,14 +483,14 @@ namespace GEDmill.HTML
         }
 
         // Adds birth, baptism, death etc of the children in the given fr.
-        private void AddChildrensEvents(GDMFamilyRecord fr)
+        private void AddChildrensEvents(GDMFamilyRecord famRec)
         {
             // Find out all the children.
-            foreach (var ch in fr.Children) {
-                GDMIndividualRecord child = ch.Value as GDMIndividualRecord;
+            foreach (var childPtr in famRec.Children) {
+                var child = fTree.GetPtrValue<GDMIndividualRecord>(childPtr);
 
                 if (child != null) {
-                    bool childConcealed = !child.GetVisibility();
+                    bool childConcealed = !GMHelper.GetVisibility(child);
 
                     string childSex = "child";
                     if (!childConcealed) {
@@ -602,7 +595,7 @@ namespace GEDmill.HTML
                 fFirstName = "";
                 fSurname = fName = CConfig.Instance.ConcealedName;
             } else {
-                fName = CConfig.Instance.CapitaliseName(fName, ref fFirstName, ref fSurname); // Also splits name into first name and surname
+                fName = GMHelper.CapitaliseName(fName, ref fFirstName, ref fSurname); // Also splits name into first name and surname
             }
             if (fName == "") {
                 fFirstName = "";
@@ -613,10 +606,10 @@ namespace GEDmill.HTML
             // Remember other name records
             if (!fConcealed && !fUnknownName) {
                 NameAndSource nasOther;
-                for (int i = 1; (nasOther = fIndiRec.GetNameAndSource(i)) != null; i++) {
+                for (int i = 1; (nasOther = GMHelper.GetNameAndSource(fIndiRec, i)) != null; i++) {
                     string sFirstNameOther = "";
                     string sSurnameOther = "";
-                    nasOther.Name = CConfig.Instance.CapitaliseName(nasOther.Name, ref sFirstNameOther, ref sSurnameOther); // Also splits name into first name and surname
+                    nasOther.Name = GMHelper.CapitaliseName(nasOther.Name, ref sFirstNameOther, ref sSurnameOther); // Also splits name into first name and surname
                     nasOther.SourceHtml = AddSources(ref fReferenceList, nasOther.Sources);
                     fOtherNames.Add(nasOther);
                 }
@@ -627,7 +620,7 @@ namespace GEDmill.HTML
             } else {
                 fFullName = fIndiRec.GetPrimaryFullName();
                 string sDummy = "";
-                fFullName = CConfig.Instance.CapitaliseName(fFullName, ref sDummy, ref sDummy); // Also splits name into first name and surname
+                fFullName = GMHelper.CapitaliseName(fFullName, ref sDummy, ref sDummy); // Also splits name into first name and surname
             }
             if (fFullName == "") {
                 fFullName = CConfig.Instance.UnknownName;
@@ -724,19 +717,19 @@ namespace GEDmill.HTML
                 f.WriteLine("          <h1>Sources</h1>");
                 f.WriteLine("          <ul>");
 
-                for (uint i = 0; i < fReferenceList.Count; i++) {
-                    GDMSourceCitation sc = fReferenceList[(int)i];
+                for (int i = 0; i < fReferenceList.Count; i++) {
+                    GDMSourceCitation sourCit = fReferenceList[i];
 
                     string extraInfo = "";
-                    GDMSourceRecord sr = sc.Value as GDMSourceRecord;
+                    var source = fTree.GetPtrValue<GDMSourceRecord>(sourCit);
 
                     // Publication facts
-                    if (sr != null && sr.Publication.Lines.Text != null && sr.Publication.Lines.Text != "") {
+                    if (source != null && source.Publication.Lines.Text != null && source.Publication.Lines.Text != "") {
                         string pubFacts;
                         if (CConfig.Instance.ObfuscateEmails) {
-                            pubFacts = ObfuscateEmail(sr.Publication.Lines.Text);
+                            pubFacts = ObfuscateEmail(source.Publication.Lines.Text);
                         } else {
-                            pubFacts = sr.Publication.Lines.Text;
+                            pubFacts = source.Publication.Lines.Text;
                         }
 
                         if (pubFacts.Length > 7 && pubFacts.ToUpper().Substring(0, 7) == "HTTP://") {
@@ -767,7 +760,7 @@ namespace GEDmill.HTML
                     }
 
                     // Finally write source link and extra info
-                    f.WriteLine("<li>{0}{1}</li>", sc.MakeLinkText(i + 1), extraInfo);
+                    f.WriteLine("<li>{0}{1}</li>", GMHelper.MakeLinkText(fTree, sourCit, i + 1), extraInfo);
                 }
                 f.WriteLine("          </ul>");
                 f.WriteLine("        </div> <!-- references -->");
@@ -785,18 +778,8 @@ namespace GEDmill.HTML
                 for (int i = 0; i < fAttributeList.Count; i++) {
                     Event iEvent = fAttributeList[i];
 
-                    string importance;
-                    if (iEvent.Important) {
-                        importance = " class=\"important\"";
-                    } else {
-                        importance = "";
-                    }
-
-                    string attrNote = "";
-                    string noteString = iEvent.Note;
-                    if (noteString != null) {
-                        attrNote = string.Concat("<p class=\"eventNote\">", EscapeHTML(noteString, false), "</p>");
-                    }
+                    string importance = iEvent.Important ? " class=\"important\"" : "";
+                    string attrNote = MakeNote(iEvent.Note);
 
                     f.WriteLine("            <tr>");
                     f.WriteLine("              <td class=\"date\"><p>&nbsp;</p></td>");
@@ -819,22 +802,10 @@ namespace GEDmill.HTML
                 for (int i = 0; i < fEventList.Count; i++) {
                     Event iEvent = fEventList[i];
 
-                    string importance;
-                    if (iEvent.Important) {
-                        importance = " class=\"important\"";
-                    } else {
-                        importance = "";
-                    }
+                    string importance = iEvent.Important ? " class=\"important\"" : "";
+                    string eventNote = MakeNote(iEvent.Overview);
+                    eventNote += MakeNote(iEvent.Note);
 
-                    string eventNote = "";
-                    string overviewString = iEvent.Overview;
-                    if (!string.IsNullOrEmpty(overviewString)) {
-                        eventNote = string.Concat("<p class=\"eventNote\">", EscapeHTML(overviewString, false), "</p>");
-                    }
-                    string noteString = iEvent.Note;
-                    if (!string.IsNullOrEmpty(noteString)) {
-                        eventNote += string.Concat("<p class=\"eventNote\">", EscapeHTML(noteString, false), "</p>");
-                    }
                     string preference = "";
                     if (iEvent.Preference == EventPreference.First) {
                         preference = " (most likely)";
@@ -868,10 +839,10 @@ namespace GEDmill.HTML
                 for (int i = 0; i < fParents.Count; i++) {
                     HusbandAndWife parents = fParents[i];
                     string sParents = "";
-                    if (parents.Husband != null && parents.Husband.GetVisibility()) {
+                    if (parents.Husband != null && GMHelper.GetVisibility(parents.Husband)) {
                         sParents = MakeLink(parents.Husband);
                     }
-                    if (parents.Wife != null && parents.Wife.GetVisibility()) {
+                    if (parents.Wife != null && GMHelper.GetVisibility(parents.Wife)) {
                         string wifeName = MakeLink(parents.Wife);
                         if (sParents == "") {
                             sParents = wifeName;
@@ -909,7 +880,7 @@ namespace GEDmill.HTML
             if (fActualBirthday != null || fActualDeathday != null) {
                 f.WriteLine(string.Concat("            <p>", sBirthday, " - ", sDeathday, "</p>"));
             }
-            if (CConfig.Instance.OccupationHeadline && fOccupation != null && fOccupation != "") {
+            if (CConfig.Instance.OccupationHeadline && !string.IsNullOrEmpty(fOccupation)) {
                 f.WriteLine(string.Concat("            <p>", fOccupation, "</p>"));
             }
             if (fConcealed) {
@@ -991,7 +962,7 @@ namespace GEDmill.HTML
                     f.WriteLine("      <div id=\"miniphotos\">");
 
                     for (int i = 0; i < fMultimediaList.Count; i++) {
-                        iMultimedia = (Multimedia)fMultimediaList[i];
+                        iMultimedia = fMultimediaList[i];
 
                         non_pic_small_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, true, CConfig.Instance.LinkOriginalPicture);
                         non_pic_main_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, CConfig.Instance.LinkOriginalPicture);
@@ -1104,16 +1075,13 @@ namespace GEDmill.HTML
             }
 
             // Useful holder vars
-            GDMDateValue date;
-            string place;
             string escapedDescription = "";
             string address = "";
             string url = "";
             string cause = "";
-
             bool important = false;
-            date = null;
-            place = "";
+            GDMDateValue date = null;
+            string place = "";
             string placeWord = CConfig.Instance.PlaceWord;
             string alternativePlaceWord = "and"; // For want of anything better...
             string alternativePlace = "";
@@ -1604,11 +1572,8 @@ namespace GEDmill.HTML
                 if (eventNote != "") {
                     eventNote += "\n";
                 }
-                if (CConfig.Instance.ObfuscateEmails) {
-                    eventNote += ObfuscateEmail(ns.Lines.Text);
-                } else {
-                    eventNote += ns.Lines.Text;
-                }
+
+                eventNote += GetNoteText(ns);
             }
 
             Event iEvent = null;
@@ -1646,12 +1611,12 @@ namespace GEDmill.HTML
         private static string AddSources(ref List<GDMSourceCitation> referenceList, GDMList<GDMSourceCitation> sourceCitations)
         {
             string sourceRefs = "";
-            foreach (GDMSourceCitation sc in sourceCitations) {
+            foreach (GDMSourceCitation sourCit in sourceCitations) {
                 int sourceNumber = -1;
 
                 // Is source already in list?
                 for (int i = 0; i < referenceList.Count; ++i) {
-                    if (referenceList[i].Value == sc.Value) {
+                    if (referenceList[i].XRef == sourCit.XRef) {
                         sourceNumber = i;
                         break;
                     }
@@ -1664,10 +1629,10 @@ namespace GEDmill.HTML
 
                 if (sourceNumber == -1) {
                     sourceNumber = referenceList.Count;
-                    referenceList.Add(sc);
+                    referenceList.Add(sourCit);
                 }
 
-                sourceRefs += sc.MakeLinkNumber((uint)(sourceNumber + 1), bComma);
+                sourceRefs += GMHelper.MakeLinkNumber(sourCit, (sourceNumber + 1), bComma);
             }
             return sourceRefs;
         }
@@ -1680,7 +1645,7 @@ namespace GEDmill.HTML
             if (lowerLimit == null || upperLimit == null) {
                 minDifference = Int32.MaxValue;
             } else {
-                minDifference = Math.Abs(Extensions.GetEventsYearsDiff(lowerLimit, upperLimit));
+                minDifference = Math.Abs(GMHelper.GetEventsYearsDiff(lowerLimit, upperLimit));
             }
 
             OccupationCounter bestOc = null;
@@ -1690,7 +1655,7 @@ namespace GEDmill.HTML
                     // Dateless occupation assumed to be the generic answer
                     return oc.Name;
                 } else {
-                    int sdifference = Extensions.GetEventsYearsDiff(givenDate, oc.Date);
+                    int sdifference = GMHelper.GetEventsYearsDiff(givenDate, oc.Date);
                     int difference = Math.Abs(sdifference);
                     if (Math.Sign(sdifference) == -1) {
                         // favours occupations before date rather than after it.

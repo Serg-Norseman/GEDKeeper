@@ -24,7 +24,6 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -42,11 +41,9 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
-            fMultimediaLink = new GDMMultimediaLink(null);
+            fMultimediaLink = new GDMMultimediaLink();
 
             fDialog = new PortraitSelectDlg(fBase);
             fDialog.MultimediaLink = fMultimediaLink;

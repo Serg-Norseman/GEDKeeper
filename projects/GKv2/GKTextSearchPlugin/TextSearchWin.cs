@@ -45,9 +45,7 @@ namespace GKTextSearchPlugin
 
             fPlugin = plugin;
             fBase = baseWin;
-            Text = string.Format(
-                fPlugin.LangMan.LS(TLS.LSID_PluginTitle) + " [{0}]",
-                Path.GetFileName(fBase.Context.FileName));
+            Text = fPlugin.LangMan.LS(TLS.LSID_PluginTitle) + string.Format(" [{0}]", Path.GetFileName(fBase.Context.FileName));
 
             SuspendLayout();
             fResultsText = new HyperView();

@@ -25,12 +25,12 @@ using GKCore.Types;
 
 namespace GKCore.Options
 {
-    public class EPedigreeOptionsException : Exception
+    public class PedigreeOptionsException : Exception
     {
-        public EPedigreeOptionsException()
+        public PedigreeOptionsException()
         {
         }
-        public EPedigreeOptionsException(string message) : base(message)
+        public PedigreeOptionsException(string message) : base(message)
         {
         }
     }
@@ -81,7 +81,7 @@ namespace GKCore.Options
             }
             catch (Exception)
             {
-                throw new EPedigreeOptionsException("Error loading PedigreeOptions");
+                throw new PedigreeOptionsException("Error loading PedigreeOptions");
             }
         }
 

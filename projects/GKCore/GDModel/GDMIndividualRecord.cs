@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib.Calendar;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -40,7 +39,6 @@ namespace GDModel
 
     public sealed class GDMIndividualRecord : GDMRecordWithEvents
     {
-        private GDMList<GDMAlias> fAliases;
         private GDMList<GDMAssociation> fAssociations;
         private GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
         private GDMList<GDMPointer> fGroups;
@@ -48,11 +46,6 @@ namespace GDModel
         private GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
         private GDMSex fSex;
 
-
-        public GDMList<GDMAlias> Aliases
-        {
-            get { return fAliases; }
-        }
 
         public GDMList<GDMAssociation> Associations
         {
@@ -67,7 +60,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagName._BOOKMARK, 0) == null) {
-                        AddTag(new GDMTag(this, (int)GEDCOMTagType._BOOKMARK, ""));
+                        AddTag(new GDMValueTag((int)GEDCOMTagType._BOOKMARK, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagName._BOOKMARK);
@@ -93,7 +86,7 @@ namespace GDModel
             set {
                 if (value) {
                     if (FindTag(GEDCOMTagName._PATRIARCH, 0) == null) {
-                        AddTag(new GDMTag(this, (int)GEDCOMTagType._PATRIARCH, ""));
+                        AddTag(new GDMValueTag((int)GEDCOMTagType._PATRIARCH, ""));
                     }
                 } else {
                     DeleteTag(GEDCOMTagName._PATRIARCH);
@@ -118,22 +111,20 @@ namespace GDModel
         }
 
 
-        public GDMIndividualRecord(GDMObject owner) : base(owner)
+        public GDMIndividualRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.INDI);
 
-            fAliases = new GDMList<GDMAlias>(this);
-            fAssociations = new GDMList<GDMAssociation>(this);
-            fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>(this);
-            fGroups = new GDMList<GDMPointer>(this);
-            fPersonalNames = new GDMList<GDMPersonalName>(this);
-            fSpouseToFamilyLinks = new GDMList<GDMSpouseToFamilyLink>(this);
+            fAssociations = new GDMList<GDMAssociation>();
+            fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>();
+            fGroups = new GDMList<GDMPointer>();
+            fPersonalNames = new GDMList<GDMPersonalName>();
+            fSpouseToFamilyLinks = new GDMList<GDMSpouseToFamilyLink>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fAliases.Dispose();
                 fAssociations.Dispose();
                 fChildToFamilyLinks.Dispose();
                 fGroups.Dispose();
@@ -141,6 +132,17 @@ namespace GDModel
                 fSpouseToFamilyLinks.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fAssociations.TrimExcess();
+            fChildToFamilyLinks.TrimExcess();
+            fGroups.TrimExcess();
+            fPersonalNames.TrimExcess();
+            fSpouseToFamilyLinks.TrimExcess();
         }
 
         public override GDMCustomEvent AddEvent(GDMCustomEvent evt)
@@ -171,33 +173,32 @@ namespace GDModel
             fSex = GDMSex.svUnknown;
 
             for (int i = fChildToFamilyLinks.Count - 1; i >= 0; i--) {
-                GDMFamilyRecord family = fChildToFamilyLinks[i].Family;
+                var family = fTree.GetPtrValue<GDMFamilyRecord>(fChildToFamilyLinks[i]);
                 family.DeleteChild(this);
             }
             fChildToFamilyLinks.Clear();
 
             for (int i = fSpouseToFamilyLinks.Count - 1; i >= 0; i--) {
-                GDMFamilyRecord family = fSpouseToFamilyLinks[i].Family;
+                var family = fTree.GetPtrValue<GDMFamilyRecord>(fSpouseToFamilyLinks[i]);
                 family.RemoveSpouse(this);
             }
             fSpouseToFamilyLinks.Clear();
 
             for (int i = fGroups.Count - 1; i >= 0; i--) {
-                GDMGroupRecord group = (GDMGroupRecord)fGroups[i].Value;
+                var group = fTree.GetPtrValue<GDMGroupRecord>(fGroups[i]);
                 group.RemoveMember(this);
             }
             fGroups.Clear();
 
-            fAliases.Clear();
             fAssociations.Clear();
             fPersonalNames.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fSex == GDMSex.svUnknown) && fPersonalNames.Count == 0
-                && fChildToFamilyLinks.Count == 0 && fSpouseToFamilyLinks.Count == 0
-                && fAssociations.Count == 0 && fAliases.Count == 0 && fGroups.Count == 0;
+            return base.IsEmpty() && (fSex == GDMSex.svUnknown) && (fPersonalNames.Count == 0)
+                && (fChildToFamilyLinks.Count == 0) && (fSpouseToFamilyLinks.Count == 0)
+                && (fAssociations.Count == 0) && (fGroups.Count == 0);
         }
 
         public int IndexOfGroup(GDMGroupRecord groupRec)
@@ -219,7 +220,7 @@ namespace GDModel
             if (familyRec != null) {
                 int num = fSpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++) {
-                    if (fSpouseToFamilyLinks[i].Family == familyRec) {
+                    if (fSpouseToFamilyLinks[i].XRef == familyRec.XRef) {
                         return i;
                     }
                 }
@@ -230,9 +231,11 @@ namespace GDModel
 
         public void DeleteSpouseToFamilyLink(GDMFamilyRecord familyRec)
         {
+            if (familyRec == null) return;
+
             int num = fSpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                if (fSpouseToFamilyLinks[i].Family == familyRec) {
+                if (fSpouseToFamilyLinks[i].XRef == familyRec.XRef) {
                     fSpouseToFamilyLinks.DeleteAt(i);
                     break;
                 }
@@ -241,13 +244,29 @@ namespace GDModel
 
         public void DeleteChildToFamilyLink(GDMFamilyRecord familyRec)
         {
+            if (familyRec == null) return;
+
             int num = fChildToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                if (fChildToFamilyLinks[i].Family == familyRec) {
+                if (fChildToFamilyLinks[i].XRef == familyRec.XRef) {
                     fChildToFamilyLinks.DeleteAt(i);
                     break;
                 }
             }
+        }
+
+        public GDMChildToFamilyLink FindChildToFamilyLink(GDMFamilyRecord familyRec)
+        {
+            if (familyRec == null) return null;
+
+            for (int i = 0, num = fChildToFamilyLinks.Count; i < num; i++) {
+                var childLink = fChildToFamilyLinks[i];
+                if (childLink.XRef == familyRec.XRef) {
+                    return childLink;
+                }
+            }
+
+            return null;
         }
 
         public void ExchangeSpouses(int index1, int index2)
@@ -271,31 +290,25 @@ namespace GDModel
             fSex = sourceRec.fSex;
 
             foreach (GDMPersonalName srcName in sourceRec.fPersonalNames) {
-                GDMPersonalName copyName = new GDMPersonalName(this);
+                GDMPersonalName copyName = new GDMPersonalName();
                 copyName.Assign(srcName);
                 AddPersonalName(copyName);
             }
         }
 
-        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord)
         {
             GDMIndividualRecord targetIndi = targetRecord as GDMIndividualRecord;
             if (targetIndi == null) {
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
             }
 
-            /*if (!clearDest) {
-                DeleteTag(GEDCOMTagType.SEX);
-                DeleteTag(GEDCOMTagType._UID);
-            }*/
-
-            base.MoveTo(targetRecord, clearDest);
+            base.MoveTo(targetRecord);
 
             targetIndi.Sex = fSex;
 
             while (fPersonalNames.Count > 0) {
                 GDMPersonalName obj = fPersonalNames.Extract(0);
-                obj.ResetOwner(targetIndi);
                 targetIndi.AddPersonalName(obj);
             }
 
@@ -304,7 +317,7 @@ namespace GDModel
 
             while (fChildToFamilyLinks.Count > 0) {
                 GDMChildToFamilyLink ctfLink = fChildToFamilyLinks.Extract(0);
-                GDMFamilyRecord family = ctfLink.Family;
+                var family = fTree.GetPtrValue<GDMFamilyRecord>(ctfLink);
 
                 int num = family.Children.Count;
                 for (int i = 0; i < num; i++) {
@@ -315,13 +328,12 @@ namespace GDModel
                     }
                 }
 
-                ctfLink.ResetOwner(targetIndi);
                 targetIndi.ChildToFamilyLinks.Add(ctfLink);
             }
 
             while (fSpouseToFamilyLinks.Count > 0) {
                 GDMSpouseToFamilyLink stfLink = fSpouseToFamilyLinks.Extract(0);
-                GDMFamilyRecord family = stfLink.Family;
+                var family = fTree.GetPtrValue<GDMFamilyRecord>(stfLink);
 
                 if (family.Husband.XRef == currentXRef) {
                     family.Husband.XRef = targetXRef;
@@ -329,25 +341,16 @@ namespace GDModel
                     family.Wife.XRef = targetXRef;
                 }
 
-                stfLink.ResetOwner(targetIndi);
                 targetIndi.SpouseToFamilyLinks.Add(stfLink);
             }
 
             while (fAssociations.Count > 0) {
                 GDMAssociation obj = fAssociations.Extract(0);
-                obj.ResetOwner(targetIndi);
                 targetIndi.Associations.Add(obj);
-            }
-
-            while (fAliases.Count > 0) {
-                GDMAlias obj = fAliases.Extract(0);
-                obj.ResetOwner(targetIndi);
-                targetIndi.Aliases.Add(obj);
             }
 
             while (fGroups.Count > 0) {
                 GDMPointer obj = fGroups.Extract(0);
-                obj.ResetOwner(targetIndi);
                 targetIndi.Groups.Add(obj);
             }
         }
@@ -356,7 +359,6 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fAliases.ReplaceXRefs(map);
             fAssociations.ReplaceXRefs(map);
             fChildToFamilyLinks.ReplaceXRefs(map);
             fGroups.ReplaceXRefs(map);
@@ -394,40 +396,6 @@ namespace GDModel
             }
 
             return new LifeDatesRet(birthEvent, deathEvent);
-        }
-
-        /// <summary>
-        /// Attention: returns or creates only the first marriage!
-        /// </summary>
-        /// <param name="canCreate">can create if does not exist</param>
-        /// <returns></returns>
-        public GDMFamilyRecord GetMarriageFamily(bool canCreate = false)
-        {
-            GDMFamilyRecord result = (fSpouseToFamilyLinks.Count < 1) ? null : fSpouseToFamilyLinks[0].Family;
-
-            if (result == null && canCreate) {
-                result = GetTree().CreateFamily();
-                result.AddSpouse(this);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Attention: returns or creates only the first parents family!
-        /// </summary>
-        /// <param name="canCreate">can create if does not exist</param>
-        /// <returns></returns>
-        public GDMFamilyRecord GetParentsFamily(bool canCreate = false)
-        {
-            GDMFamilyRecord result = (fChildToFamilyLinks.Count < 1) ? null : fChildToFamilyLinks[0].Family;
-
-            if (result == null && canCreate) {
-                result = GetTree().CreateFamily();
-                result.AddChild(this);
-            }
-
-            return result;
         }
 
         public string GetPrimaryFullName()
@@ -520,9 +488,9 @@ namespace GDModel
 
         public GDMAssociation AddAssociation(string relation, GDMIndividualRecord relPerson)
         {
-            GDMAssociation result = new GDMAssociation(this);
+            GDMAssociation result = new GDMAssociation();
             result.Relation = relation;
-            result.Individual = relPerson;
+            result.XRef = (relPerson == null) ? string.Empty : relPerson.XRef;
             Associations.Add(result);
             return result;
         }
@@ -536,14 +504,14 @@ namespace GDModel
             for (int i = 0; i < num; i++) {
                 GDMMultimediaLink lnk = MultimediaLinks[i];
 
-                if (lnk.Value == mediaRec) {
+                if (lnk.XRef == mediaRec.XRef) {
                     mmLink = lnk;
                     break;
                 }
             }
 
             if (mmLink == null) {
-                mmLink = AddMultimedia(mediaRec);
+                mmLink = this.AddMultimedia(mediaRec);
             }
 
             mmLink.IsPrimary = true;
@@ -564,31 +532,6 @@ namespace GDModel
             }
 
             return result;
-        }
-
-        public int GetTotalChildsCount()
-        {
-            int result = 0;
-
-            int num = SpouseToFamilyLinks.Count;
-            for (int i = 0; i < num; i++) {
-                GDMFamilyRecord family = SpouseToFamilyLinks[i].Family;
-                result += family.Children.Count;
-            }
-
-            return result;
-        }
-
-        private static int EventsCompare(GDMPointer cp1, GDMPointer cp2)
-        {
-            UDN udn1 = ((GDMFamilyRecord)cp1.Value).GetUDN(GEDCOMTagName.MARR);
-            UDN udn2 = ((GDMFamilyRecord)cp2.Value).GetUDN(GEDCOMTagName.MARR);
-            return udn1.CompareTo(udn2);
-        }
-
-        public void SortSpouses()
-        {
-            fSpouseToFamilyLinks.Sort(EventsCompare);
         }
     }
 }

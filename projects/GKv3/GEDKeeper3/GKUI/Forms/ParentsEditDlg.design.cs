@@ -6,18 +6,8 @@ namespace GKUI.Forms
 {
     partial class ParentsEditDlg
     {
-        private TabControl tabsPersonData;
-        private TabPage pageEvents;
-        private TabPage pageNotes;
-        private TabPage pageMultimedia;
-        private TabPage pageSources;
-        private TabPage pageSpouses;
-        private TabPage pageAssociations;
-        private TabPage pageGroups;
         private Button btnAccept;
         private Button btnCancel;
-        private Label lblRestriction;
-        private ComboBox cmbRestriction;
 
         private GroupBox GroupBox1;
         private Label lblChildName;
@@ -25,10 +15,7 @@ namespace GKUI.Forms
         private Label lblLinkageType;
         private ComboBox cmbLinkageType;
 
-        private TextBox txtName;
         public ComboBox cmbSex;
-        private CheckBox chkPatriarch;
-        private TabPage pageUserRefs;
         private Panel panCtlParents;
         private Label lblParents;
         private TextBox txtFather;
@@ -36,29 +23,12 @@ namespace GKUI.Forms
         private Button btnParentsAdd;
         private Button btnParentsEdit;
         private Button btnParentsDelete;
-        private CheckBox chkBookmark;
-        private Label lblSurnamePrefix;
-        private TextBox txtSurnamePrefix;
-        private Label lblNamePrefix;
-        private TextBox txtNamePrefix;
-        private Label lblNameSuffix;
-        private TextBox txtNameSuffix;
-        private Label lblNickname;
-        private TextBox txtNickname;
-        private GKPortrait imgPortrait;
-        private Button btnNameCopy;
-        private Button btnPortraitAdd;
-        private Button btnPortraitDelete;
         private Button btnFatherAdd;
         private Button btnFatherDelete;
         private Button btnFatherSel;
         private Button btnMotherAdd;
         private Button btnMotherDelete;
         private Button btnMotherSel;
-        private TabPage pageNames;
-        private TextBox txtMarriedSurname;
-        private Label lblMarriedSurname;
-        private TabPage pageParents;
 
         private void InitializeComponent()
         {
@@ -166,9 +136,9 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { tabsPersonData }
+                        Cells = { null }
                     },
-                    UIHelper.MakeDialogFooter(lblRestriction, cmbRestriction, null, btnNameCopy, btnAccept, btnCancel)
+                    UIHelper.MakeDialogFooter(btnAccept, btnCancel)
                 }
             };
 

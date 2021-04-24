@@ -40,9 +40,8 @@
   <developer_name>Sergey V. Zhdanovskih</developer_name>
 
   <releases>
-    <release version="2.16.2" date="2019-09-18">
+    <release version="2.17.0" date="2021-03-14">
       <description>
-        <p>Fixes issues X, Y and Z</p>
       </description>
     </release>
   </releases>

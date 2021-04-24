@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,7 +28,6 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKUI.Providers;
 
 namespace GKUI.Components
 {
@@ -340,21 +339,13 @@ namespace GKUI.Components
                     break;
 
                 case Keys.Left:
-                    if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GDMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
-                        var father = (fam == null) ? null : fam.Husband.Individual;
-                        if (father != null) {
-                            RootPerson = father;
-                        }
-                    }
-                    break;
-
                 case Keys.Right:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GDMFamilyRecord fam = fModel.RootPerson.GetParentsFamily();
-                        var mother = (fam == null) ? null : fam.Wife.Individual;
-                        if (mother != null) {
-                            RootPerson = mother;
+                        GDMIndividualRecord father, mother;
+                        fModel.Base.Context.Tree.GetParents(fModel.RootPerson, out father, out mother);
+                        var target = (e.KeyCode == Keys.Left) ? father : mother;
+                        if (target != null) {
+                            RootPerson = target;
                         }
                     }
                     break;

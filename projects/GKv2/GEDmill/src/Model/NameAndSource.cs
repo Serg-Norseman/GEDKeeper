@@ -36,7 +36,7 @@ namespace GEDmill.Model
         {
             Name = name;
             SourceHtml = "";
-            Sources = new GDMList<GDMSourceCitation>(null);
+            Sources = new GDMList<GDMSourceCitation>();
         }
     }
 }

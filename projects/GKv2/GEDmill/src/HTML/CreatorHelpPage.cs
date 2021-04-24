@@ -38,8 +38,8 @@ namespace GEDmill.HTML
         // The main method that causes the help page to be created. 
         public void Create()
         {
-            FileStream helpStream = null;
-            StreamReader helpReader = null;
+            FileStream helpStream;
+            StreamReader helpReader;
             try {
                 helpStream = new FileStream(CConfig.Instance.ApplicationPath + "\\helpsource.html", FileMode.Open);
                 helpReader = new StreamReader(helpStream, System.Text.Encoding.UTF8);

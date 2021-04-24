@@ -36,6 +36,11 @@ namespace GDModel
                 OldXRef = oldXRef;
                 NewXRef = newXRef;
             }
+
+            public override string ToString()
+            {
+                return string.Format("{0} -> {1}", OldXRef, NewXRef);
+            }
         }
 
         private readonly List<XRefEntry> fList;
@@ -59,15 +64,22 @@ namespace GDModel
 
         public void AddXRef(GDMRecord rec, string oldXRef, string newXRef)
         {
+            // protection
+            oldXRef = GEDCOMUtils.CleanXRef(oldXRef);
+            newXRef = GEDCOMUtils.CleanXRef(newXRef);
+
             fList.Add(new XRefEntry(rec, oldXRef, newXRef));
         }
 
         public string FindNewXRef(string oldXRef)
         {
+            // protection
+            oldXRef = GEDCOMUtils.CleanXRef(oldXRef);
+
             string result = oldXRef;
 
             foreach (XRefEntry entry in fList) {
-                if (GEDCOMUtils.CleanXRef(entry.OldXRef) == GEDCOMUtils.CleanXRef(oldXRef)) {
+                if (entry.OldXRef == oldXRef) {
                     result = entry.NewXRef;
                     break;
                 }

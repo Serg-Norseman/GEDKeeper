@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System.Collections.Generic;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -53,7 +52,8 @@ namespace GKCore.Controllers
                 fView.ChecksList.ClearItems();
 
                 foreach (TreeTools.CheckObj checkObj in fChecksList) {
-                    fView.ChecksList.AddItem(checkObj, new object[] { checkObj.GetRecordName(),
+                    fView.ChecksList.AddItem(checkObj, new object[] {
+                        checkObj.GetRecordName(fBase.Context.Tree),
                         checkObj.Comment,
                         LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve])
                     });
@@ -85,11 +85,40 @@ namespace GKCore.Controllers
 
         public void SelectRecord()
         {
-            GDMRecord rec = ((TreeTools.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
+            GDMRecord rec = GetSelectedRecord();
             if (rec == null) return;
 
-            fBase.SelectRecordByXRef(rec.XRef);
             fView.Close();
+            fBase.SelectRecordByXRef(rec.XRef);
+        }
+
+        public GDMRecord GetSelectedRecord()
+        {
+            return ((TreeTools.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
+        }
+
+        public IList<GDMRecord> GetCheckedRecords()
+        {
+            var result = new List<GDMRecord>();
+
+            int num = fView.ChecksList.Items.Count;
+            for (int i = 0; i < num; i++) {
+                IListItem item = fView.ChecksList.Items[i];
+                if (item.Checked) {
+                    var checkObj = item.Data as TreeTools.CheckObj;
+                    result.Add(checkObj.Rec);
+                }
+            }
+
+            return result;
+        }
+
+        public void ShowDetails()
+        {
+            GDMRecord rec = GetSelectedRecord();
+            if (rec == null) return;
+
+            BaseController.ViewRecordInfo(fBase, rec);
         }
     }
 }

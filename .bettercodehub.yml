@@ -1,7 +1,10 @@
 languages:
   - csharp
 
-#component_depth: 3
+component_depth: 5
 
 exclude:
   - /projects/GKTests/.*
+  - /projects/GKv3/.*
+  - /projects/GKCommunicator/.*
+  - /projects/GKv2/GEDmill/.*

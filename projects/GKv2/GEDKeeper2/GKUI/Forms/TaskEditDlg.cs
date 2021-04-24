@@ -56,14 +56,14 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(txtPriority); }
         }
 
-        ITextBox ITaskEditDlg.StartDate
+        IDateBox ITaskEditDlg.StartDate
         {
-            get { return GetControlHandler<ITextBox>(txtStartDate); }
+            get { return GetControlHandler<IDateBox>(txtStartDate); }
         }
 
-        ITextBox ITaskEditDlg.StopDate
+        IDateBox ITaskEditDlg.StopDate
         {
-            get { return GetControlHandler<ITextBox>(txtStopDate); }
+            get { return GetControlHandler<IDateBox>(txtStopDate); }
         }
 
         IComboBox ITaskEditDlg.GoalType
@@ -82,30 +82,6 @@ namespace GKUI.Forms
         }
 
         #endregion
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("TaskEditDlg.btnCancel_Click(): " + ex.Message);
-            }
-        }
-
-        private void btnGoalSelect_Click(object sender, EventArgs e)
-        {
-            fController.SelectGoal();
-        }
-
-        private void cmbGoalType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            fController.ChangeGoalType();
-        }
 
         public TaskEditDlg(IBaseWindow baseWin)
         {
@@ -133,6 +109,32 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void btnGoalSelect_Click(object sender, EventArgs e)
+        {
+            fController.SelectGoal();
+        }
+
+        private void cmbGoalType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fController.ChangeGoalType();
         }
     }
 }

@@ -1,4 +1,5 @@
 coverage:
+  disable_default_path_fixes: true
   precision: 2
   round: nearest
   range: 60..100

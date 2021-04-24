@@ -1,0 +1,20 @@
+﻿0 HEAD
+1 SOUR Geni.com
+2 VERS 1.0
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+0 @I500000006275123389@ INDI
+1 NAME Jane /Doe/
+2 GIVN Jane
+2 SURN Doe
+2 _MARNM Smith
+1 SEX F
+1 BIRT
+2 DATE 05 MAY 1955
+1 NOTE {geni:about_me} '''Jane Doe'''
+2 CONT Birth at 1955, Raccoon City; 
+2 CONT
+2 CONT badline 1badline 2badline 3
+0 TRLR

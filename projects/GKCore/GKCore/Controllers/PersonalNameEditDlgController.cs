@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -34,7 +35,14 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class PersonalNameEditDlgController : DialogController<IPersonalNameEditDlg>
     {
+        private GDMIndividualRecord fIndividual;
         private GDMPersonalName fPersonalName;
+
+        public GDMIndividualRecord Individual
+        {
+            get { return fIndividual; }
+            set { fIndividual = value; }
+        }
 
         public GDMPersonalName PersonalName
         {
@@ -77,25 +85,21 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("PersonalNameEditDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("PersonalNameEditDlgController.Accept()", ex);
                 return false;
             }
         }
 
         private bool IsExtendedWomanSurname()
         {
-            GDMIndividualRecord iRec = fPersonalName.Owner as GDMIndividualRecord;
-
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (iRec.Sex == GDMSex.svFemale);
+                (fIndividual.Sex == GDMSex.svFemale);
             return result;
         }
 
         public override void UpdateView()
         {
-            GDMIndividualRecord iRec = fPersonalName.Owner as GDMIndividualRecord;
-
-            var parts = GKUtils.GetNameParts(iRec, fPersonalName, false);
+            var parts = GKUtils.GetNameParts(fBase.Context.Tree, fIndividual, fPersonalName, false);
 
             fView.Surname.Text = parts.Surname;
             fView.Name.Text = parts.Name;
@@ -117,12 +121,33 @@ namespace GKCore.Controllers
                 fView.MarriedSurname.Enabled = true;
             }
 
-            ICulture culture = fBase.Context.Culture;
+            ICulture culture = parts.Culture;
             fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname();
             fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic();
 
             GDMLanguageID langID = fPersonalName.Language;
             fView.Language.Text = GEDCOMUtils.GetLanguageStr(langID);
+        }
+
+        public void UpdateLanguage()
+        {
+            var selectedLanguageId = GetSelectedLanguageID();
+            var culture = CulturesPool.DefineCulture(selectedLanguageId);
+            fView.Surname.Enabled = culture.HasSurname();
+            fView.Patronymic.Enabled = culture.HasPatronymic();
+        }
+
+        private GDMLanguageID GetSelectedLanguageID()
+        {
+            var result = fView.Language.GetSelectedTag<GDMLanguageID>();
+            if (result == GDMLanguageID.Unknown) {
+                var tree = fBase.Context.Tree;
+                if (tree != null) {
+                    result = tree.Header.Language;
+                }
+            }
+
+            return result;
         }
     }
 }

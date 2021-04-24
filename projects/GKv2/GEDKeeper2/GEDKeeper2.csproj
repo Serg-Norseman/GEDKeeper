@@ -105,6 +105,9 @@
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design.WFHandlers">
+      <HintPath>..\..\libs\BSLib.Design.WFHandlers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
@@ -126,9 +129,6 @@
     <Compile Include="GKUI\Components\FilterGridView.cs" />
     <Compile Include="GKUI\Components\GKMergeControl.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GKUI\Components\GKInputBox.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="GKUI\Components\NativeMethods.cs" />
     <Compile Include="GKUI\Components\TreeChartBox.cs" />
@@ -443,10 +443,7 @@
     <Compile Include="GKUI\Forms\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Providers\ControlHandlers.cs" />
-    <Compile Include="GKUI\Providers\WFAppHost.cs" />
-    <Compile Include="GKUI\Providers\WFGfxRenderer.cs" />
-    <Compile Include="GKUI\Providers\WFStdDialogs.cs" />
+    <Compile Include="GKUI\WFAppHost.cs" />
     <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>

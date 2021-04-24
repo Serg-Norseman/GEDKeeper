@@ -49,11 +49,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
         public NoteEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -68,6 +63,22 @@ namespace GKUI.Forms
 
             fController = new NoteEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

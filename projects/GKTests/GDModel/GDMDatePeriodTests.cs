@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using BSLib.Calendar;
-using GDModel;
 using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
@@ -33,7 +32,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMDatePeriod dtx1 = new GDMDatePeriod(null)) {
+            using (GDMDatePeriod dtx1 = new GDMDatePeriod()) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 Assert.AreEqual("", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.GetDateTime());
@@ -75,6 +74,8 @@ namespace GDModel
                 Assert.Throws(typeof(NotSupportedException), () => {
                     dtx1.SetDateTime(DateTime.Now);
                 });
+
+                Assert.AreEqual(string.Empty, dtx1.ParseString(null));
             }
         }
     }

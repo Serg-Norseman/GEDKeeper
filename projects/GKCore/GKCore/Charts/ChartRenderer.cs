@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -136,7 +136,7 @@ namespace GKCore.Charts
         public abstract void DrawPath(IPen pen, IGfxPath path);
         public abstract void DrawPath(IPen pen, IBrush brush, IGfxPath path);
 
-        public virtual IPen CreatePen(IColor color, float width)
+        public virtual IPen CreatePen(IColor color, float width, float[] dashPattern = null)
         {
             return AppHost.GfxProvider.CreatePen(color, width);
         }

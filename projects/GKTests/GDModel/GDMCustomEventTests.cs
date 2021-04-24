@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,9 +19,7 @@
  */
 
 using System;
-using BSLib;
 using BSLib.Calendar;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;
@@ -37,6 +35,7 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
@@ -44,7 +43,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMIndividualAttribute customEvent = new GDMIndividualAttribute(null)) {
+            using (GDMIndividualAttribute customEvent = new GDMIndividualAttribute()) {
                 Assert.IsNotNull(customEvent);
 
                 Assert.IsNotNull(customEvent.Address);
@@ -76,7 +75,7 @@ namespace GDModel
                 Assert.AreEqual(GDMRestriction.rnLocked, customEvent.Restriction);
 
 
-                StringList strs = new StringList("test");
+                GDMLines strs = new GDMLines("test");
                 customEvent.PhysicalDescription = strs;
                 Assert.AreEqual(strs.Text, customEvent.PhysicalDescription.Text);
 
@@ -84,7 +83,7 @@ namespace GDModel
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
             }
 
-            using (GDMIndividualEvent customEvent = new GDMIndividualEvent(null)) {
+            using (GDMIndividualEvent customEvent = new GDMIndividualEvent()) {
                 Assert.IsNotNull(customEvent);
 
                 // stream test
@@ -98,28 +97,48 @@ namespace GDModel
                 customEvent.Address.AddressLine1 = "adr1";
                 customEvent.Restriction = GDMRestriction.rnConfidential;
 
-                using (GDMIndividualEvent copyEvent = new GDMIndividualEvent(null)) {
+                var note = new GDMNotes();
+                note.Lines.Text = "event notes";
+                customEvent.Notes.Add(note);
+
+                var sourCit = new GDMSourceCitation();
+                sourCit.Description.Text = "event sour desc";
+                customEvent.SourceCitations.Add(sourCit);
+
+                var mmLink = new GDMMultimediaLink();
+                mmLink.Title = "event media title";
+                customEvent.MultimediaLinks.Add(mmLink);
+
+                using (GDMIndividualEvent copyEvent = new GDMIndividualEvent()) {
                     Assert.IsNotNull(copyEvent);
                     copyEvent.Assign(customEvent);
 
-                    string buf1 = TestUtils.GetTagStreamText(copyEvent, 0);
-                    Assert.AreEqual("0 BIRT\r\n" +
-                                    "1 TYPE custom\r\n" +
-                                    "1 DATE 20 SEP 1970\r\n" +
-                                    "1 PLAC test place\r\n" +
-                                    "1 ADDR\r\n" +
-                                    "2 ADR1 adr1\r\n" +
-                                    "1 CAUS Cause\r\n" +
-                                    "1 AGNC Agency\r\n" +
-                                    "1 RELI rel_aff\r\n" +
-                                    "1 RESN confidential\r\n", buf1);
+                    var iRec = new GDMIndividualRecord(null);
+                    iRec.Events.Add(copyEvent);
+                    string buf1 = TestUtils.GetTagStreamText(iRec, 0);
+                    Assert.AreEqual("0 INDI\r\n" +
+                                    "1 SEX U\r\n" +
+                                    "1 BIRT\r\n" +
+                                    "2 TYPE custom\r\n" +
+                                    "2 DATE 20 SEP 1970\r\n" +
+                                    "2 PLAC test place\r\n" +
+                                    "2 ADDR\r\n" +
+                                    "3 ADR1 adr1\r\n" +
+                                    "2 CAUS Cause\r\n" +
+                                    "2 AGNC Agency\r\n" +
+                                    "2 RELI rel_aff\r\n" +
+                                    "2 RESN confidential\r\n" +
+                                    "2 NOTE event notes\r\n"+
+                                    "2 SOUR event sour desc\r\n"+
+                                    "2 OBJE\r\n"+
+                                    "3 TITL event media title\r\n", buf1);
                 }
 
                 customEvent.Address.AddEmailAddress("email");
                 Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
             }
 
-            using (GDMFamilyEvent customEvent = new GDMFamilyEvent(null)) {
+            using (GDMFamilyEvent customEvent = new GDMFamilyEvent()) {
                 Assert.IsNotNull(customEvent);
 
                 customEvent.Address.AddEmailAddress("email");
@@ -130,7 +149,7 @@ namespace GDModel
         [Test]
         public void Test_Assign()
         {
-            var instance = new GDMIndividualEvent(null);
+            var instance = new GDMIndividualEvent();
             Assert.Throws(typeof(ArgumentException), () => {
                 instance.Assign(null);
             });
@@ -139,14 +158,28 @@ namespace GDModel
         [Test]
         public void Test_Clear()
         {
-            var instance = new GDMIndividualEvent(null);
+            var instance = new GDMIndividualEvent();
             instance.Clear();
+        }
+
+        [Test]
+        public void Test_IsEmpty()
+        {
+            var instance = new GDMIndividualEvent();
+            Assert.IsTrue(instance.IsEmpty());
+        }
+
+        [Test]
+        public void Test_ReplaceXRefs()
+        {
+            var instance = new GDMIndividualEvent();
+            instance.ReplaceXRefs(null);
         }
 
         [Test]
         public void Test_GDMIndividualEvent()
         {
-            using (GDMIndividualEvent iEvent = new GDMIndividualEvent(null)) {
+            using (GDMIndividualEvent iEvent = new GDMIndividualEvent()) {
                 Assert.IsNotNull(iEvent);
             }
         }
@@ -166,7 +199,7 @@ namespace GDModel
             testUDN = GDMDate.GetUDNByFormattedStr("28/12/1990", GDMCalendar.dcGregorian);
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
-            using (GDMDateValue dateVal = new GDMDateValue(null)) {
+            using (GDMDateValue dateVal = new GDMDateValue()) {
                 dateVal.ParseString("28 DEC 1990");
                 testUDN = dateVal.GetUDN();
                 Assert.AreEqual("1990/12/28", testUDN.ToString());

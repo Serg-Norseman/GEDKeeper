@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,8 +26,6 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -44,10 +42,11 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fAssociation = new GDMAssociation(null);
+            fAssociation = new GDMAssociation();
 
             fDialog = new AssociationEditDlg(fBase);
             fDialog.Association = fAssociation;
@@ -73,14 +72,13 @@ namespace GKUI.Forms
 
             EnterCombo("cmbRelation", fDialog, "sample text");
 
-            // TODO: click and select Individual reference
-            //ModalFormHandler = RecordSelectDlgTests.RecordSelectDlg_Cancel_Handler;
-            //ClickButton("btnPersonAdd", fDialog);
+            ModalFormHandler = RecordSelectDlgTests.RecordSelectDlg_Cancel_Handler;
+            ClickButton("btnPersonAdd", fDialog);
 
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fAssociation.Relation);
-            Assert.AreEqual(null, fAssociation.Individual);
+            Assert.AreEqual(null, fBase.Context.Tree.GetPtrValue<GDMIndividualRecord>(fAssociation));
         }
 
         #region Handlers for external tests

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using GDModel;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -34,6 +33,8 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
+
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
@@ -64,22 +65,22 @@ namespace GDModel
 
                 taskRec.Goal = "Test Goal";
                 Assert.AreEqual("Test Goal", taskRec.Goal);
-                var goal = taskRec.GetTaskGoal();
+                var goal = GKUtils.GetTaskGoal(fContext.Tree, taskRec);
                 Assert.AreEqual(GDMGoalType.gtOther, goal.GoalType);
                 Assert.AreEqual(null, goal.GoalRec);
 
                 taskRec.Goal = iRec.XRef;
-                goal = taskRec.GetTaskGoal();
+                goal = GKUtils.GetTaskGoal(fContext.Tree, taskRec);
                 Assert.AreEqual(GDMGoalType.gtIndividual, goal.GoalType);
                 Assert.AreEqual(iRec, goal.GoalRec);
 
                 taskRec.Goal = famRec.XRef;
-                goal = taskRec.GetTaskGoal();
+                goal = GKUtils.GetTaskGoal(fContext.Tree, taskRec);
                 Assert.AreEqual(GDMGoalType.gtFamily, goal.GoalType);
                 Assert.AreEqual(famRec, goal.GoalRec);
 
                 taskRec.Goal = srcRec.XRef;
-                goal = taskRec.GetTaskGoal();
+                goal = GKUtils.GetTaskGoal(fContext.Tree, taskRec);
                 Assert.AreEqual(GDMGoalType.gtSource, goal.GoalType);
                 Assert.AreEqual(srcRec, goal.GoalRec);
 

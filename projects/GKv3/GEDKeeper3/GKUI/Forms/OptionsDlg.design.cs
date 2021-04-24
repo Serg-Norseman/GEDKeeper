@@ -127,6 +127,18 @@ namespace GKUI.Forms
         private CheckBox chkAutoSortSpouses;
         private CheckBox chkCheckTreeSize;
         private CheckBox chkCharsetDetection;
+        private Label lblBackupRevisionsMaxCount;
+        private NumericUpDown numBackupRevisionsMaxCount;
+        private CheckBox chkAllowMediaStoreRelativeReferences;
+        private Label lblMediaStoreDefault;
+        private ComboBox cmbMediaStoreDefault;
+        private CheckBox chkAllowDeleteMediaFileFromStgArc;
+        private CheckBox chkAllowDeleteMediaFileFromRefs;
+        private CheckBox chkDeleteMediaFileWithoutConfirm;
+        private CheckBox chkFirstCapitalLetterInNames;
+        private Label lblDefaultDepth;
+        private NumericUpDown numDefaultDepth;
+        private CheckBox chkDialogClosingWarn;
 
         private void InitializeComponent()
         {
@@ -169,6 +181,15 @@ namespace GKUI.Forms
                 }
             };
 
+            lblBackupRevisionsMaxCount = new Label();
+            lblBackupRevisionsMaxCount.Text = "lblBackupRevisionsMaxCount";
+
+            numBackupRevisionsMaxCount = new NumericUpDown();
+            numBackupRevisionsMaxCount.MaxValue = 1000;
+            numBackupRevisionsMaxCount.MinValue = 0;
+            numBackupRevisionsMaxCount.Width = 80;
+            numBackupRevisionsMaxCount.Value = 0;
+
             groupBox1 = new GroupBox();
             groupBox1.Content = new DefTableLayout {
                 Rows = {
@@ -178,8 +199,15 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = {
-                            new HDefStackLayout {
+                            new DefStackLayout(Orientation.Horizontal) {
                                 Items = { chkAutosave, numASMin, lblMinutes }
+                            }
+                        }
+                    },
+                    new TableRow {
+                        Cells = {
+                            new DefStackLayout(Orientation.Horizontal) {
+                                Items = { lblBackupRevisionsMaxCount, numBackupRevisionsMaxCount }
                             }
                         }
                     }
@@ -268,6 +296,9 @@ namespace GKUI.Forms
             cmbLanguages = new ComboBox();
             cmbLanguages.ReadOnly = true;
 
+            chkDialogClosingWarn = new CheckBox();
+            chkDialogClosingWarn.Text = "chkDialogClosingWarn";
+
             grpOther = new GroupBox();
             grpOther.Text = "grpOther";
             grpOther.Content = new DefTableLayout {
@@ -283,6 +314,9 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { chkCharsetDetection }
+                    },
+                    new TableRow {
+                        Cells = { chkDialogClosingWarn }
                     },
                     new TableRow {
                         Cells = { lblLanguage, cmbLanguages }
@@ -318,10 +352,38 @@ namespace GKUI.Forms
             chkRemovableMediaWarning = new CheckBox();
             chkRemovableMediaWarning.Text = "chkRemovableMediaWarning";
 
+            chkAllowMediaStoreRelativeReferences = new CheckBox();
+            chkAllowMediaStoreRelativeReferences.Text = "chkAllowMediaStoreRelativeReferences";
+
+            lblMediaStoreDefault = new Label();
+            lblMediaStoreDefault.Text = "lblMediaStoreDefault";
+
+            cmbMediaStoreDefault = new ComboBox();
+
+            chkAllowDeleteMediaFileFromStgArc = new CheckBox();
+            chkAllowDeleteMediaFileFromStgArc.Text = "chkAllowDeleteMediaFileFromStgArc";
+
+            chkAllowDeleteMediaFileFromRefs = new CheckBox();
+            chkAllowDeleteMediaFileFromRefs.Text = "chkAllowDeleteMediaFileFromRefs";
+
+            chkDeleteMediaFileWithoutConfirm = new CheckBox();
+            chkDeleteMediaFileWithoutConfirm.Text = "chkDeleteMediaFileWithoutConfirm";
+
             pageMultimedia = new TabPage();
             pageMultimedia.Text = "pageMultimedia";
-            pageMultimedia.Content = new VDefStackLayout {
-                Items = { chkRemovableMediaWarning, chkEmbeddedMediaPlayer, chkAllowMediaDirectRefs }
+            pageMultimedia.Content = new DefStackLayout(Orientation.Vertical) {
+                Items = {
+                    chkRemovableMediaWarning,
+                    chkEmbeddedMediaPlayer,
+                    chkAllowMediaDirectRefs,
+                    chkAllowMediaStoreRelativeReferences,
+                    new DefStackLayout(Orientation.Horizontal) {
+                                Items = { lblMediaStoreDefault, cmbMediaStoreDefault }
+                            },
+                    chkAllowDeleteMediaFileFromStgArc,
+                    chkAllowDeleteMediaFileFromRefs,
+                    chkDeleteMediaFileWithoutConfirm
+                }
             };
 
             //
@@ -383,7 +445,7 @@ namespace GKUI.Forms
 
             grpTreePersons = new GroupBox();
             grpTreePersons.Text = "grpTreePersons";
-            grpTreePersons.Content = new VDefStackLayout {
+            grpTreePersons.Content = new DefStackLayout(Orientation.Vertical) {
                 Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears,
                     chkMarriagesDates, chkKinship, chkSignsVisible, chkTreeDecorative, chkPortraitsVisible, chkDefaultPortraits,
                     chkChildlessExclude, chkInvertedTree, chkShowPlaces, chkHideUnknownSpouses, chkCheckTreeSize }
@@ -547,12 +609,27 @@ namespace GKUI.Forms
 
             //
 
+            lblDefaultDepth = new Label();
+            lblDefaultDepth.Text = "lblDefaultDepth";
+
+            numDefaultDepth = new NumericUpDown();
+            numDefaultDepth.MaxValue = 9;
+            numDefaultDepth.MinValue = -1;
+            numDefaultDepth.Width = 60;
+            numDefaultDepth.Value = -1;
+
             pageTreeChart = new TabPage();
             pageTreeChart.Text = "pageTreeChart";
-            pageTreeChart.Content = new HDefStackLayout {
+            pageTreeChart.Content = new DefStackLayout(Orientation.Horizontal) {
                 Items = {
                     grpTreePersons,
-                    new VDefStackLayout { Items = { grpTreeDecor, grpSpacings } }
+                    new DefStackLayout(Orientation.Vertical) {
+                        Items = {
+                            grpTreeDecor,
+                            grpSpacings,
+                            new DefStackLayout(Orientation.Horizontal) { Items = { lblDefaultDepth, numDefaultDepth } }
+                        }
+                    }
                 }
             };
 
@@ -596,7 +673,7 @@ namespace GKUI.Forms
 
             panel1 = new Panel();
             panel1.Width = 210;
-            panel1.Content = new VDefStackLayout {
+            panel1.Content = new DefStackLayout(Orientation.Vertical) {
                 Items = { btnColumnUp, btnColumnDown, null, btnDefList }
             };
 
@@ -617,7 +694,8 @@ namespace GKUI.Forms
 
             rgFNPFormat = new GroupBox();
             rgFNPFormat.Text = "rgFNPFormat";
-            rgFNPFormat.Content = new VDefStackLayout {
+            rgFNPFormat.Content = new DefStackLayout(Orientation.Vertical)
+            {
                 Items = { radS_N_P, radS_NP, radSNP }
             };
 
@@ -637,7 +715,8 @@ namespace GKUI.Forms
 
             grpDateFormat = new GroupBox();
             grpDateFormat.Text = "grpDateFormat";
-            grpDateFormat.Content = new VDefStackLayout {
+            grpDateFormat.Content = new DefStackLayout(Orientation.Vertical)
+            {
                 Items = { radDMY, radYMD, null, chkShowDatesSigns, chkShowDatesCalendar }
             };
 
@@ -661,7 +740,8 @@ namespace GKUI.Forms
 
             grpAdvancedNames = new GroupBox();
             grpAdvancedNames.Text = "AdvancedNames";
-            grpAdvancedNames.Content = new VDefStackLayout {
+            grpAdvancedNames.Content = new DefStackLayout(Orientation.Vertical)
+            {
                 Items = { chkExtendWomanSurnames, radMaiden_Married, radMarried_Maiden, radMaiden, radMarried }
             };
 
@@ -682,6 +762,9 @@ namespace GKUI.Forms
             chkAutoSortSpouses = new CheckBox();
             chkAutoSortSpouses.Text = "chkAutoSortSpouses";
 
+            chkFirstCapitalLetterInNames = new CheckBox();
+            chkFirstCapitalLetterInNames.Text = "chkFirstCapitalLetterInNames";
+
             //
 
             pageViewCommon = new TabPage();
@@ -692,9 +775,9 @@ namespace GKUI.Forms
                         Cells = { rgFNPFormat, grpDateFormat }
                     },
                     new TableRow {
-                        Cells = { grpAdvancedNames, new VDefStackLayout{
+                        Cells = { grpAdvancedNames, new DefStackLayout(Orientation.Vertical) {
                                 Items = { chkPlacesWithAddress, chkHighlightUnparented, chkHighlightUnmarried,
-                                          chkAutoSortChildren, chkAutoSortSpouses}
+                                          chkAutoSortChildren, chkAutoSortSpouses, chkFirstCapitalLetterInNames }
                             }
                         }
                     },
@@ -722,7 +805,8 @@ namespace GKUI.Forms
 
             grpPedigreeFormat = new GroupBox();
             grpPedigreeFormat.Text = "grpPedigreeFormat";
-            grpPedigreeFormat.Content = new VDefStackLayout {
+            grpPedigreeFormat.Content = new DefStackLayout(Orientation.Vertical)
+            {
                 Items = { radExcess, radCompact }
             };
 
@@ -742,7 +826,8 @@ namespace GKUI.Forms
 
             grpPedigree = new GroupBox();
             grpPedigree.Text = "grpPedigree";
-            grpPedigree.Content = new VDefStackLayout {
+            grpPedigree.Content = new DefStackLayout(Orientation.Vertical)
+            {
                 Items = { chkAttributes, chkNotes, chkSources, chkGenerations, grpPedigreeFormat }
             };
 

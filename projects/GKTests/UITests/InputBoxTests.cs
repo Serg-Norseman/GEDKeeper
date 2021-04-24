@@ -25,8 +25,6 @@ using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
 using GKTests;
-using GKUI.Components;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Components
@@ -39,7 +37,6 @@ namespace GKUI.Components
     {
         public override void Setup()
         {
-            base.Setup();
         }
 
         [Test]
@@ -67,7 +64,7 @@ namespace GKUI.Components
         [Test]
         public void Test_IntInput()
         {
-            int intValue = 0;
+            int intValue;
 
             ModalFormHandler = InputBox_btnAccept_IntHandler;
             GKInputBox.QueryInt("caption", "prompt", out intValue);
@@ -78,7 +75,7 @@ namespace GKUI.Components
         [Test]
         public void Test_DblInput()
         {
-            double val = 0.0;
+            double val;
 
             ModalFormHandler = InputBox_btnAccept_DblHandler;
             GKInputBox.QueryDouble("caption", "prompt", out val);

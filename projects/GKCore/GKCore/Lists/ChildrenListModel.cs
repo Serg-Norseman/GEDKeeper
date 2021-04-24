@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -52,20 +53,21 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
+                var tree = fBaseWin.Context.Tree;
                 int idx = 0;
                 foreach (GDMIndividualLink ptr in family.Children) {
                     idx += 1;
-                    GDMIndividualRecord child = ptr.Individual;
+                    GDMIndividualRecord child = tree.GetPtrValue(ptr);
 
                     fSheetList.AddItem(child, new object[] {
                         idx, GKUtils.GetNameString(child, true, false),
-                        new GEDCOMDateItem(GKUtils.GetBirthDate(child))
+                        new GDMDateItem(GKUtils.GetBirthDate(child))
                     });
                 }
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.LogWrite("ChildrenListModel.UpdateContents(): " + ex.Message);
+                Logger.WriteError("ChildrenListModel.UpdateContents()", ex);
             }
         }
 
@@ -80,7 +82,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    child = fBaseWin.Context.SelectPerson(family.Husband.Individual, TargetMode.tmParent, GDMSex.svUnknown);
+                    child = fBaseWin.Context.SelectPerson(fBaseWin.Context.Tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,13 +21,7 @@
 #if !__MonoCS__
 
 using System.Windows.Forms;
-using GDModel;
-using GKCore.Interfaces;
 using GKTests;
-using GKTests.Stubs;
-using GKUI.Forms;
-using GKUI.Providers;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -38,11 +32,8 @@ namespace GKUI.Forms
     [TestFixture]
     public class MapsViewerWinTests : CustomWindowTest
     {
-
         public override void Setup()
         {
-            base.Setup();
-
             WFAppHost.ConfigureBootstrap(false);
         }
 

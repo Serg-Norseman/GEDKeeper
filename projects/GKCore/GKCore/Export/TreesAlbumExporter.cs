@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -83,7 +83,7 @@ namespace GKCore.Export
                 chartOptions.Kinship = false;
                 chartOptions.ShowPlaces = false;
 
-                var treeBox = AppHost.Container.Resolve<ITreeChartBox>();
+                var treeBox = AppHost.Container.Resolve<ITreeChart>();
                 treeBox.SetRenderer(fRenderer);
                 treeBox.Base = fBase;
                 treeBox.Options = chartOptions;
@@ -92,7 +92,6 @@ namespace GKCore.Export
 
                 fPatList = PatriarchsMan.GetPatriarchsList(fBase.Context, 2, false);
                 fPatList.QuickSort(PatriarchsCompare);
-                GKUtils.InitExtCounts(fBase.Context.Tree, 0);
 
                 int num = fPatList.Count;
                 for (int i = 0; i < num; i++) {
@@ -108,7 +107,7 @@ namespace GKCore.Export
                 }
                 #endif
             } catch (Exception ex) {
-                Logger.LogWrite("TreesAlbumExporter.InternalGenerate(): " + ex.Message);
+                Logger.WriteError("TreesAlbumExporter.InternalGenerate()", ex);
                 throw;
             }
         }
@@ -133,7 +132,7 @@ namespace GKCore.Export
             Break
         }
 
-        private void TryRenderTreeSlice(ITreeChartBox treeBox, int index, GDMIndividualRecord currentPatriarch)
+        private void TryRenderTreeSlice(ITreeChart treeBox, int index, GDMIndividualRecord currentPatriarch)
         {
             IndiObj indi = fIndiQueue[index];
             fProcessed.Add(indi.IRec.XRef);
@@ -197,12 +196,14 @@ namespace GKCore.Export
             treeBox.GenChart(indi.IRec, indi.TreeKind, false);
             treeBox.RenderImage(RenderTarget.Printer, true);
 
+            var indiNums = new GKVarCache<GDMIndividualRecord, int>();
+
             for (int i = 0; i < treeBox.Model.Persons.Count; i++) {
                 TreeChartPerson person = treeBox.Model.Persons[i];
                 GDMIndividualRecord indiRec = person.Rec;
                 if (indiRec == null) continue;
 
-                int iNum = (int)indiRec.ExtData;
+                int iNum = indiNums[indiRec];
 
                 var offset = treeBox.Model.GetOffsets();
                 int ix = offset.X + person.Rect.Left;
@@ -211,7 +212,7 @@ namespace GKCore.Export
                 fRenderer.DrawAnchor(iRef, iRef, fTextFont, null, ix, iy);
 
                 iNum += 1;
-                indiRec.ExtData = iNum;
+                indiNums[indiRec] = iNum;
 
                 if (!person.CanExpand) continue;
 
@@ -233,7 +234,7 @@ namespace GKCore.Export
                             CheckQueue(indiRec, TreeChartKind.ckAncestors);
                         }
                     } else {
-                        if (person.HasFlag(PersonFlag.pfHasInvDesc) && TreeTools.PL_SearchAnc(indiRec, currentPatriarch, true)) {
+                        if (person.HasFlag(PersonFlag.pfHasInvDesc) && TreeTools.PL_SearchAnc(fTree, indiRec, currentPatriarch, true)) {
                             CheckQueue(indiRec, TreeChartKind.ckDescendants);
                         }
                     }
@@ -257,7 +258,7 @@ namespace GKCore.Export
             for (int i = 0; i < num; i++) {
                 var patriarch = fPatList[i].IRec;
 
-                if ((patriarch != currentPatriarch) && TreeTools.PL_SearchAnc(iRec, patriarch, true)) {
+                if ((patriarch != currentPatriarch) && TreeTools.PL_SearchAnc(fTree, iRec, patriarch, true)) {
                     result = true;
                     break;
                 }

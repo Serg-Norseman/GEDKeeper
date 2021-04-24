@@ -1,4 +1,4 @@
-﻿namespace ConwayLife
+﻿namespace GKLifePlugin.ConwayLife
 {
     partial class LifeForm
     {

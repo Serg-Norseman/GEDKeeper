@@ -25,10 +25,7 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.ControlTesters;
 using GKTests.Stubs;
-using GKUI.Forms;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -45,8 +42,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
             fTaskRecord = new GDMTaskRecord(fBase.Context.Tree);
 
@@ -92,7 +87,7 @@ namespace GKUI.Forms
 
             SelectCombo("txtPriority", fDialog, 1);
             EnterMaskedText("txtStartDate", fDialog, "01.01.2000");
-            EnterMaskedText("txtStopDate", fDialog, "20.02.2000");
+            EnterMaskedText("txtStopDate", fDialog, "02.02.2000");
 
             for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
                 SelectCombo("cmbGoalType", fDialog, (int)gt);
@@ -102,7 +97,7 @@ namespace GKUI.Forms
 
             Assert.AreEqual(GDMResearchPriority.rpLow, fTaskRecord.Priority);
             Assert.AreEqual("01 JAN 2000", fTaskRecord.StartDate.StringValue);
-            Assert.AreEqual("20 FEB 2000", fTaskRecord.StopDate.StringValue);
+            Assert.AreEqual("02 FEB 2000", fTaskRecord.StopDate.StringValue);
         }
 
         #region Handlers for external tests

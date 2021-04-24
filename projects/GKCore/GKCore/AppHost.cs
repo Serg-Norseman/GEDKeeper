@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,23 +27,16 @@ using BSLib;
 using BSLib.Design.IoC;
 using GKCore.Interfaces;
 using GKCore.Maps;
-using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
+using GKCore.Names;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.SingleInstance;
 using GKCore.Types;
 
-// TODO: total search and fix references to Encoding.GetEncoding(1251)!
 namespace GKCore
 {
     internal delegate void OnMessageReceivedInvoker(MessageEventArgs e);
-
-    public class WidgetInfo
-    {
-        public IWidget Widget;
-        public IMenuItem MenuItem;
-    }
 
     /// <summary>
     /// Global controller of UI for the isolation
@@ -102,7 +95,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.AutosaveTimer_Tick(): " + ex.Message);
+                Logger.WriteError("AppHost.AutosaveTimer_Tick()", ex);
             }
         }
 
@@ -138,7 +131,7 @@ namespace GKCore
                     UpdateMan.CheckUpdate();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.StartupWork(): " + ex.Message);
+                Logger.WriteError("AppHost.StartupWork()", ex);
             }
         }
 
@@ -508,7 +501,7 @@ namespace GKCore
                     EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.CreateBase(): " + ex.Message);
+                Logger.WriteError("AppHost.CreateBase()", ex);
             }
 
             return null;
@@ -543,7 +536,7 @@ namespace GKCore
                     EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.LoadBase(): " + ex.Message);
+                Logger.WriteError("AppHost.LoadBase()", ex);
             }
         }
 
@@ -576,7 +569,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.CriticalSave(): " + ex.Message);
+                Logger.WriteError("AppHost.CriticalSave()", ex);
             }
         }
 
@@ -599,7 +592,7 @@ namespace GKCore
         }
 
         /// <summary>
-        /// Reload at startup recent opened files.
+        /// Reload recently opened files at startup.
         /// </summary>
         public int ReloadRecentBases()
         {
@@ -642,7 +635,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("AppHost.ProcessHolidays(): " + ex.Message);
+                Logger.WriteError("AppHost.ProcessHolidays()", ex);
             }
         }
 
@@ -685,7 +678,7 @@ namespace GKCore
 
                 UpdateLang();
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.LoadLanguage(): " + ex.Message);
+                Logger.WriteError("AppHost.LoadLanguage()", ex);
             }
         }
 
@@ -712,16 +705,13 @@ namespace GKCore
         {
             ProxyOptions proxyOptions = fOptions.Proxy;
             IWebProxy proxy = null;
-            if (proxyOptions.UseProxy)
-            {
-                proxy = new WebProxy(proxyOptions.Server + ":" + proxyOptions.Port, true)
-                {
+            if (proxyOptions.UseProxy) {
+                proxy = new WebProxy(proxyOptions.Server + ":" + proxyOptions.Port, true) {
                     Credentials = CredentialCache.DefaultCredentials
                 };
             }
 
-            IGeocoder geocoder = IGeocoder.Create(fOptions.Geocoder);
-            geocoder.SetKey(GKData.GAPI_KEY);
+            IGeocoder geocoder = IGeocoder.Create(fOptions.Geocoder, fOptions.GeoSearchCountry);
             geocoder.SetProxy(proxy);
 
             return geocoder;
@@ -735,17 +725,15 @@ namespace GKCore
             if (pointsList == null)
                 throw new ArgumentNullException(@"pointsList");
 
-            try
-            {
+            try {
                 IGeocoder geocoder = CreateGeocoder();
 
                 IEnumerable<GeoPoint> geoPoints = geocoder.Geocode(searchValue, 1);
-                foreach (GeoPoint pt in geoPoints)
-                {
+                foreach (GeoPoint pt in geoPoints) {
                     pointsList.Add(pt);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("AppHost.RequestGeoCoords(): " + ex.Message);
+                Logger.WriteError("AppHost.RequestGeoCoords()", ex);
             }
         }
 
@@ -759,7 +747,7 @@ namespace GKCore
 
                 if (dlgPlugin != null && dlgPlugin.Category == PluginCategory.DialogReplacement) {
                     var dlgType = dlgPlugin.GetDialogType();
-                    if (GKUtils.ImplementsInterface(dlgType, resolveType) && dlgPlugin.Enabled) {
+                    if (SysUtils.ImplementsInterface(dlgType, resolveType) && dlgPlugin.Enabled) {
                         return (TTypeToResolve)dlgPlugin.CreateDialog(parameters);
                     }
                 }
@@ -831,7 +819,7 @@ namespace GKCore
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.LogWrite("AppHost.OnMessageReceived(): " + ex.Message);
+                    Logger.WriteError("AppHost.OnMessageReceived()", ex);
                 }
             };
 
@@ -975,7 +963,7 @@ namespace GKCore
 
         public static void InitSettings()
         {
-            Logger.LogInit(GetLogFilename());
+            Logger.Init(GetLogFilename());
 
             Plugins.Load(AppHost.Instance, GKUtils.GetPluginsPath());
 

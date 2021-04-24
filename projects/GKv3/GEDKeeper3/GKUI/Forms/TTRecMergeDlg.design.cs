@@ -85,7 +85,7 @@ namespace GKUI.Forms
 
             rgMode = new GroupBox();
             rgMode.Text = "rgMode";
-            rgMode.Content = new VDefStackLayout {
+            rgMode.Content = new DefStackLayout(Orientation.Vertical) {
                 Items = { radPersons, radFamilies, radNotes, radSources }
             };
 

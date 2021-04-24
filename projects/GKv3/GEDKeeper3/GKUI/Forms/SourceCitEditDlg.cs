@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
@@ -59,27 +60,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnSourceAdd_Click(object sender, EventArgs e)
-        {
-            fController.AddSource();
-        }
-
-        private void cbSource_KeyDown(object sender, KeyEventArgs e)
-        {
-            // dummy
-        }
-
-        private void cbSource_KeyUp(object sender, KeyEventArgs e)
-        {
-            fController.RefreshSourcesList(cmbSource.Text);
-            //cmbSource.SelectionStart = cmbSource.Text.Length;
-        }
-
         public SourceCitEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -100,6 +80,38 @@ namespace GKUI.Forms
 
             fController = new SourceCitEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void btnSourceAdd_Click(object sender, EventArgs e)
+        {
+            fController.AddSource();
+        }
+
+        private void cbSource_KeyDown(object sender, KeyEventArgs e)
+        {
+            // dummy
+        }
+
+        private void cbSource_KeyUp(object sender, KeyEventArgs e)
+        {
+            fController.RefreshSourcesList(cmbSource.Text);
+            //cmbSource.SelectionStart = cmbSource.Text.Length;
         }
     }
 }

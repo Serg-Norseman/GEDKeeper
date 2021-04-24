@@ -25,7 +25,7 @@ using System.Drawing.Printing;
 using System.Windows.Forms;
 using BSLib;
 using BSLib.Design.Graphics;
-using GKUI.Components;
+using BSLib.Design.Handlers;
 
 namespace GKUI.Forms
 {
@@ -36,7 +36,7 @@ namespace GKUI.Forms
     {
         private PrintDocument fPrintDoc;
 
-        protected PrintableForm() : base()
+        protected PrintableForm()
         {
             InitPrintDoc();
         }
@@ -57,7 +57,7 @@ namespace GKUI.Forms
             var printable = GetPrintable();
             if (printable != null) {
                 fPrintDoc.DefaultPageSettings.Landscape = printable.IsLandscape();
-                fPrintDoc.DefaultPageSettings.Margins = new System.Drawing.Printing.Margins(25, 25, 25, 25);
+                fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
             }
         }
 
@@ -70,7 +70,7 @@ namespace GKUI.Forms
             var printable = GetPrintable();
             if (printable != null) {
                 e.PageSettings.Landscape = printable.IsLandscape();
-                e.PageSettings.Margins = new System.Drawing.Printing.Margins(25, 25, 25, 25);
+                e.PageSettings.Margins = new Margins(25, 25, 25, 25);
             }
         }
 

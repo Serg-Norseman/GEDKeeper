@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -94,14 +94,14 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbDate2Calendar); }
         }
 
-        IDateBoxHandler IEventEditDlg.Date1
+        IDateBox IEventEditDlg.Date1
         {
-            get { return GetControlHandler<IDateBoxHandler>(txtEventDate1); }
+            get { return GetControlHandler<IDateBox>(txtEventDate1); }
         }
 
-        IDateBoxHandler IEventEditDlg.Date2
+        IDateBox IEventEditDlg.Date2
         {
-            get { return GetControlHandler<IDateBoxHandler>(txtEventDate2); }
+            get { return GetControlHandler<IDateBox>(txtEventDate2); }
         }
 
         IComboBox IEventEditDlg.Attribute
@@ -196,11 +196,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("EventEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnAddress_Click(object sender, EventArgs e)
@@ -242,7 +244,7 @@ namespace GKUI.Forms
                     txtBox.Text = dt[0] + "/" + dt[1] + "/" + txt.PadLeft(4, '_');
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("EventEditDlg.DragDrop(): " + ex.Message);
+                Logger.WriteError("EventEditDlg.DragDrop()", ex);
             }
         }
 

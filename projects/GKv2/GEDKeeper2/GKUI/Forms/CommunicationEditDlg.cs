@@ -67,9 +67,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbCorrType); }
         }
 
-        ITextBox ICommunicationEditDlg.Date
+        IDateBox ICommunicationEditDlg.Date
         {
-            get { return GetControlHandler<ITextBox>(txtDate); }
+            get { return GetControlHandler<IDateBox>(txtDate); }
         }
 
         IComboBox ICommunicationEditDlg.Dir
@@ -83,25 +83,6 @@ namespace GKUI.Forms
         }
 
         #endregion
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("CommunicationEditDlg.btnCancel_Click(): " + ex.Message);
-            }
-        }
-
-        private void btnPersonAdd_Click(object sender, EventArgs e)
-        {
-            fController.SetPerson();
-        }
 
         public CommunicationEditDlg(IBaseWindow baseWin)
         {
@@ -132,6 +113,27 @@ namespace GKUI.Forms
 
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
             fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void btnPersonAdd_Click(object sender, EventArgs e)
+        {
+            fController.SetPerson();
         }
     }
 }

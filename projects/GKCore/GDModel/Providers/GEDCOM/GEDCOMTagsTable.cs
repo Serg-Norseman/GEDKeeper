@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,37 +18,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 
 namespace GDModel.Providers.GEDCOM
 {
-    public class GEDCOMTagProps
+    public sealed class GEDCOMTagProps
     {
         public int TagId;
         public string TagName;
-
-        public TagConstructor Constructor;
-        public AddTagHandler AddHandler;
-        public SaveTagHandler SaveHandler;
         public bool SkipEmpty;
 
-        public GEDCOMTagProps(int tagId, string tagName)
+        public GEDCOMTagProps(int tagId, string tagName, bool skipEmpty = false)
         {
             TagId = tagId;
             TagName = tagName;
-        }
-
-        public GEDCOMTagProps(int tagId, string tagName,
-                              TagConstructor constructor, AddTagHandler addHandler, SaveTagHandler saveHandler,
-                              bool skipEmpty)
-        {
-            TagId = tagId;
-            TagName = tagName;
-
-            Constructor = constructor;
-            AddHandler = addHandler;
-            SaveHandler = saveHandler;
             SkipEmpty = skipEmpty;
         }
     }
@@ -63,32 +46,19 @@ namespace GDModel.Providers.GEDCOM
         private static readonly Dictionary<int, GEDCOMTagProps> fList;
         private static int fLastId = 0;
 
-        public static GEDCOMTagProps RegisterTag(GEDCOMTagType tag, string tagName)
+        public static GEDCOMTagProps RegisterTag(GEDCOMTagType tag, string tagName, bool skipEmpty = false)
         {
             GEDCOMTagProps tagProps;
+
             if (!fDictionary.TryGetValue(tagName, out tagProps)) {
                 int tagId = (int)tag;
-                tagProps = new GEDCOMTagProps(tagId, tagName);
+                tagProps = new GEDCOMTagProps(tagId, tagName, skipEmpty);
 
                 fDictionary.Add(tagName, tagProps);
                 fList[tagId] = tagProps;
-            } else {
-                
             }
+
             return tagProps;
-        }
-
-        public static void RegisterTag(GEDCOMTagType tag, string tagName,
-                                       TagConstructor constructor, AddTagHandler addHandler = null,
-                                       SaveTagHandler saveHandler = null,
-                                       bool skipEmpty = false)
-        {
-            GEDCOMTagProps tagProps = RegisterTag(tag, tagName);
-
-            tagProps.Constructor = constructor;
-            tagProps.AddHandler = addHandler;
-            tagProps.SaveHandler = saveHandler;
-            tagProps.SkipEmpty = skipEmpty;
         }
 
         public static int Lookup(string tagName)

@@ -20,8 +20,8 @@
 
 using System;
 using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
 using Eto.Forms;
-using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
@@ -51,7 +51,7 @@ namespace GKUI.Components
         public MenuItemEx(string text, object tag, IImage image, ItemAction action) : base()
         {
             Text = text;
-            Click += Plugin_Click;
+            Click += Item_Click;
             Tag = tag;
             ImageHandler hIcon = image as ImageHandler;
             Image = (hIcon == null) ? null : hIcon.Handle;
@@ -72,7 +72,7 @@ namespace GKUI.Components
             Items.Clear();
         }
 
-        private void Plugin_Click(object sender, EventArgs e)
+        private void Item_Click(object sender, EventArgs e)
         {
             if (fAction != null) {
                 fAction(this);

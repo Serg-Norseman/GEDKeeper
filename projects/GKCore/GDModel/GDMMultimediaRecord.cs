@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,11 +33,11 @@ namespace GDModel
         }
 
 
-        public GDMMultimediaRecord(GDMObject owner) : base(owner)
+        public GDMMultimediaRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.OBJE);
 
-            fFileReferences = new GDMList<GDMFileReferenceWithTitle>(this);
+            fFileReferences = new GDMList<GDMFileReferenceWithTitle>();
         }
 
         protected override void Dispose(bool disposing)
@@ -46,6 +46,13 @@ namespace GDModel
                 fFileReferences.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fFileReferences.TrimExcess();
         }
 
         public override void Assign(GDMTag source)

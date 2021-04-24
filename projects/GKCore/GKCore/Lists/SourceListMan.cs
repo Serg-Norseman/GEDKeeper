@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -64,7 +64,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (QuickFilter == "*" || IsMatchesMask(fRec.ShortTitle, QuickFilter));
+            bool res = IsMatchesMask(fRec.ShortTitle, QuickFilter);
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
@@ -121,23 +121,20 @@ namespace GKCore.Lists
             var source = fDataOwner as GDMSourceRecord;
             if (fSheetList == null || source == null) return;
 
-            try
-            {
+            try {
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
                 foreach (GDMRepositoryCitation repCit in source.RepositoryCitations) {
-                    GDMRepositoryRecord rep = repCit.Value as GDMRepositoryRecord;
+                    GDMRepositoryRecord rep = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repCit);
                     if (rep == null) continue;
 
                     fSheetList.AddItem(repCit, new object[] { rep.RepositoryName });
                 }
 
                 fSheetList.EndUpdate();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("SourceRepositoriesSublistModel.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("SourceRepositoriesSublistModel.UpdateContents()", ex);
             }
         }
 
@@ -160,7 +157,8 @@ namespace GKCore.Lists
 
                 case RecordAction.raDelete:
                     if (cit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery))) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, cit.Value as GDMRepositoryRecord);
+                        var repRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(cit);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, repRec);
                     }
                     break;
             }

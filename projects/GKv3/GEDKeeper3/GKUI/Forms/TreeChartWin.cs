@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,7 +31,6 @@ using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKCore.Options;
 using GKUI.Components;
-using GKUI.Providers;
 
 namespace GKUI.Forms
 {
@@ -52,7 +51,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITreeChartBox ITreeChartWin.TreeBox
+        ITreeChart ITreeChartWin.TreeBox
         {
             get { return fTreeBox; }
         }
@@ -105,6 +104,8 @@ namespace GKUI.Forms
 
             fController = new TreeChartWinController(this);
             fController.Init(baseWin);
+
+            SetupDepth();
         }
 
         protected override void Dispose(bool disposing)
@@ -268,6 +269,22 @@ namespace GKUI.Forms
             GenChart();
         }
 
+        private void SetupDepth()
+        {
+            switch (GlobalOptions.Instance.TreeChartOptions.DepthLimit) {
+                case 1: miGens1.PerformClick(); break;
+                case 2: miGens2.PerformClick(); break;
+                case 3: miGens3.PerformClick(); break;
+                case 4: miGens4.PerformClick(); break;
+                case 5: miGens5.PerformClick(); break;
+                case 6: miGens6.PerformClick(); break;
+                case 7: miGens7.PerformClick(); break;
+                case 8: miGens8.PerformClick(); break;
+                case 9: miGens9.PerformClick(); break;
+                default: miGensInf.PerformClick(); break;
+            }
+        }
+
         private void miEdit_Click(object sender, EventArgs e)
         {
             fController.Edit();
@@ -369,7 +386,7 @@ namespace GKUI.Forms
                 fPerson = p.Rec;
                 GenChart();
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartWin.miRebuildTree_Click(): " + ex.Message);
+                Logger.WriteError("TreeChartWin.miRebuildTree_Click()", ex);
             }
         }
 
@@ -382,6 +399,7 @@ namespace GKUI.Forms
         {
             miFatherAdd.Enabled = fController.ParentIsRequired(GDMSex.svMale);
             miMotherAdd.Enabled = fController.ParentIsRequired(GDMSex.svFemale);
+            miGoToRecord.Enabled = fController.SelectedPersonIsReal();
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)
@@ -397,6 +415,11 @@ namespace GKUI.Forms
         private void tbOptions_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowOptions(OptionsPage.opTreeChart);
+        }
+
+        private void miGoToRecord_Click(object sender, EventArgs e)
+        {
+            fController.GoToRecord();
         }
 
         #endregion
@@ -418,7 +441,7 @@ namespace GKUI.Forms
                     UpdateControls();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartWin.GenChart(): " + ex.Message);
+                Logger.WriteError("TreeChartWin.GenChart()", ex);
             }
         }
 
@@ -451,6 +474,7 @@ namespace GKUI.Forms
             miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
             miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
             miSelectColor.Text = LangMan.LS(LSID.LSID_SelectColor);
+            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
 
             SetToolTip(tbModes, LangMan.LS(LSID.LSID_ModesTip));
             SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
@@ -473,13 +497,14 @@ namespace GKUI.Forms
                 StatusLines[0] = string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fTreeBox.IndividualsCount);
                 var imageSize = fTreeBox.GetImageSize();
                 StatusLines[1] = string.Format(LangMan.LS(LSID.LSID_ImageSize), imageSize.Width, imageSize.Height);
+                StatusLines[2] = string.Format("{0}: {1:f0} %", LangMan.LS(LSID.LSID_Scale), fTreeBox.Scale * 100);
 
                 tbPrev.Enabled = NavCanBackward();
                 tbNext.Enabled = NavCanForward();
 
                 AppHost.Instance.UpdateControls(false, true);
             } catch (Exception ex) {
-                Logger.LogWrite("TreeChartWin.UpdateControls(): " + ex.Message);
+                Logger.WriteError("TreeChartWin.UpdateControls()", ex);
             }
         }
 

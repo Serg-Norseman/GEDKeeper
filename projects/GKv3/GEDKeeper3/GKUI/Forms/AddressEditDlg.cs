@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using GDModel;
@@ -91,25 +92,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void ListModify(object sender, ModifyEventArgs eArgs)
-        {
-            GDMTag itemTag = eArgs.ItemData as GDMTag;
-            if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
-
-            if (sender == fPhonesList) {
-                fController.DoPhonesAction(eArgs.Action, itemTag);
-            } else if (sender == fMailsList) {
-                fController.DoMailsAction(eArgs.Action, itemTag);
-            } else if (sender == fWebsList) {
-                fController.DoWebsAction(eArgs.Action, itemTag);
-            }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
         public AddressEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -145,6 +127,36 @@ namespace GKUI.Forms
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void ListModify(object sender, ModifyEventArgs eArgs)
+        {
+            GDMTag itemTag = eArgs.ItemData as GDMTag;
+            if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
+
+            if (sender == fPhonesList) {
+                fController.DoPhonesAction(eArgs.Action, itemTag);
+            } else if (sender == fMailsList) {
+                fController.DoMailsAction(eArgs.Action, itemTag);
+            } else if (sender == fWebsList) {
+                fController.DoWebsAction(eArgs.Action, itemTag);
+            }
+        }
+
+        private void btnAccept_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

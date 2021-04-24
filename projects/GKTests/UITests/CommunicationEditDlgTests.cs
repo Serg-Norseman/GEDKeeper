@@ -25,10 +25,7 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.ControlTesters;
 using GKTests.Stubs;
-using GKUI.Forms;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -46,8 +43,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
             fCommunicationRecord = new GDMCommunicationRecord(fContext.Tree);
@@ -89,11 +84,11 @@ namespace GKUI.Forms
             Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
 
             EnterText("txtName", fDialog, "sample text");
-            EnterMaskedText("txtDate", fDialog, "20.02.2000");
+            EnterMaskedText("txtDate", fDialog, "02.02.2000");
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fCommunicationRecord.CommName);
-            Assert.AreEqual("20 FEB 2000", fCommunicationRecord.Date.StringValue);
+            Assert.AreEqual("02 FEB 2000", fCommunicationRecord.Date.StringValue);
         }
 
         #region Handlers for external tests

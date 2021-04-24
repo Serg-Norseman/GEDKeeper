@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,16 +19,19 @@
  */
 
 using System;
-using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMSourceCitation : GDMPointer, IGDMTextObject
+    public sealed class GDMSourceCitation : GDMPointer, IGDMTextObject, IGDMStructWithNotes, IGDMStructWithMultimediaLinks
     {
         private int fCertaintyAssessment;
-        private StringList fDescription;
+        private GDMSourceCitationData fData;
+        private GDMLines fDescription;
+        private GDMList<GDMMultimediaLink> fMultimediaLinks;
+        private GDMList<GDMNotes> fNotes;
         private string fPage;
+        private GDMTextTag fText;
 
 
         public int CertaintyAssessment
@@ -37,24 +40,35 @@ namespace GDModel
             set { fCertaintyAssessment = value; }
         }
 
-        public StringList Description
+        public GDMSourceCitationData Data
+        {
+            get { return fData; }
+        }
+
+        public GDMLines Description
         {
             get {
-                StringList description;
-
-                if (!IsPointer) {
-                    description = fDescription;
-                } else {
-                    GDMSourceRecord sourceRecord = Value as GDMSourceRecord;
-                    if (sourceRecord != null) {
-                        description = sourceRecord.Title.Lines;
-                    } else {
-                        description = new StringList();
-                    }
+                if (IsPointer) {
+                    throw new InvalidOperationException("GDMSourceCitation is a pointer, please dereference");
                 }
 
-                return description;
+                return fDescription;
             }
+        }
+
+        GDMLines IGDMTextObject.Lines
+        {
+            get { return fDescription; }
+        }
+
+        public GDMList<GDMMultimediaLink> MultimediaLinks
+        {
+            get { return fMultimediaLinks; }
+        }
+
+        public GDMList<GDMNotes> Notes
+        {
+            get { return fNotes; }
         }
 
         public string Page
@@ -63,19 +77,46 @@ namespace GDModel
             set { fPage = value; }
         }
 
-        StringList IGDMTextObject.Lines
+        public GDMTextTag Text
         {
-            get { return fDescription; }
+            get { return fText; }
         }
 
 
-        public GDMSourceCitation(GDMObject owner) : base(owner)
+        public GDMSourceCitation()
         {
             SetName(GEDCOMTagType.SOUR);
 
             fCertaintyAssessment = -1;
-            fDescription = new StringList();
+            fDescription = new GDMLines();
             fPage = string.Empty;
+
+            fData = new GDMSourceCitationData();
+            fText = new GDMTextTag((int)GEDCOMTagType.TEXT);
+            fNotes = new GDMList<GDMNotes>();
+            fMultimediaLinks = new GDMList<GDMMultimediaLink>();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fData.Dispose();
+                fText.Dispose();
+                fNotes.Dispose();
+                fMultimediaLinks.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fData.TrimExcess();
+            fDescription.TrimExcess();
+            fText.TrimExcess();
+            fNotes.TrimExcess();
+            fMultimediaLinks.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -88,7 +129,11 @@ namespace GDModel
 
             fCertaintyAssessment = sourceObj.fCertaintyAssessment;
             fPage = sourceObj.fPage;
+            fData.Assign(sourceObj.fData);
             fDescription.Assign(sourceObj.fDescription);
+            fText.Assign(sourceObj.fText);
+            AssignList(sourceObj.Notes, fNotes);
+            AssignList(sourceObj.MultimediaLinks, fMultimediaLinks);
         }
 
         public override void Clear()
@@ -96,19 +141,36 @@ namespace GDModel
             base.Clear();
 
             fCertaintyAssessment = -1;
+            fData.Clear();
             fDescription.Clear();
             fPage = string.Empty;
+            fText.Clear();
+            fNotes.Clear();
+            fMultimediaLinks.Clear();
         }
 
         public override bool IsEmpty()
         {
             bool result;
+
+            bool isCommonEmpty = string.IsNullOrEmpty(fPage)
+                && (fNotes.Count == 0) && (fMultimediaLinks.Count == 0);
+
             if (IsPointer) {
-                result = base.IsEmpty();
+                result = base.IsEmpty() && isCommonEmpty && fData.IsEmpty();
             } else {
-                result = fDescription.IsEmpty() && (SubTags.Count == 0) && string.IsNullOrEmpty(fPage);
+                result = fDescription.IsEmpty() && (SubTags.Count == 0) && fText.IsEmpty() && isCommonEmpty;
             }
+
             return result;
+        }
+
+        public override void ReplaceXRefs(GDMXRefReplacer map)
+        {
+            base.ReplaceXRefs(map);
+
+            fNotes.ReplaceXRefs(map);
+            fMultimediaLinks.ReplaceXRefs(map);
         }
 
         protected override string GetStringValue()
@@ -126,8 +188,6 @@ namespace GDModel
                     fDescription.Add(result);
                 }
                 result = string.Empty;
-            } else {
-                fStringValue = string.Empty;
             }
             return result;
         }

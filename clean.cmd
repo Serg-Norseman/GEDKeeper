@@ -15,30 +15,29 @@ rem <<< Main assemblies cleaning >>>
 
 rmdir .\projects\.vs /s /q
 
-rmdir .\projects\GKv2\GEDKeeper2\bin /s /q
-rmdir .\projects\GKv2\GEDKeeper2\obj /s /q
-rmdir .\projects\GKv2\GEDKeeper2\ProfilingSessions /s /q
-
 rmdir .\projects\GKCore\bin /s /q
 rmdir .\projects\GKCore\obj /s /q
-
-rmdir .\projects\GKv2\GKComponents\bin /s /q
-rmdir .\projects\GKv2\GKComponents\obj /s /q
-
-rmdir .\projects\GKIntl\bin /s /q
-rmdir .\projects\GKIntl\obj /s /q
-
-rmdir .\projects\GKv2\GKSandbox\bin /s /q
-rmdir .\projects\GKv2\GKSandbox\obj /s /q
-
-rmdir .\projects\GKv2\GKTray\bin /s /q
-rmdir .\projects\GKv2\GKTray\obj /s /q
 
 rmdir .\projects\GKTests\bin /s /q
 rmdir .\projects\GKTests\obj /s /q
 rmdir .\projects\GKTests\OpenCover /s /q
 rmdir .\projects\GKTests\PartCover /s /q
 rmdir .\projects\GKTests\ProfilingSessions /s /q
+
+
+rmdir .\projects\GKv2\GEDKeeper2\bin /s /q
+rmdir .\projects\GKv2\GEDKeeper2\obj /s /q
+rmdir .\projects\GKv2\GEDKeeper2\ProfilingSessions /s /q
+
+rmdir .\projects\GKv2\GKComponents\bin /s /q
+rmdir .\projects\GKv2\GKComponents\obj /s /q
+
+rmdir .\projects\GKv2\GKTray\bin /s /q
+rmdir .\projects\GKv2\GKTray\obj /s /q
+
+
+rmdir .\projects\GKIntl\bin /s /q
+rmdir .\projects\GKIntl\obj /s /q
 
 rmdir .\projects\GKUpdater\bin /s /q
 rmdir .\projects\GKUpdater\obj /s /q

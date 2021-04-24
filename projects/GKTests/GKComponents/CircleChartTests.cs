@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,15 +21,12 @@
 #if !__MonoCS__
 
 using System.Windows.Forms;
-
 using GKCore.Charts;
 using GKCore.Interfaces;
-using GKTests.Stubs;
-using GKUI.Components;
-using GKUI.Providers;
-using NUnit.Framework;
-using NUnit.Extensions.Forms;
 using GKTests;
+using GKTests.Stubs;
+using NUnit.Extensions.Forms;
+using NUnit.Framework;
 
 namespace GKUI.Components
 {
@@ -40,9 +37,9 @@ namespace GKUI.Components
         private Form fForm;
         private CircleChart fCircleChart;
 
-        [TestFixtureSetUp]
-        public void Init()
+        public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
@@ -61,8 +58,7 @@ namespace GKUI.Components
             fForm.PerformLayout();
         }
 
-        [TestFixtureTearDown]
-        public void Done()
+        public override void TearDown()
         {
             fForm.Dispose();
         }

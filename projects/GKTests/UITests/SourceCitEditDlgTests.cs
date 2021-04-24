@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,8 +26,6 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -44,10 +42,11 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fSourceCitation = new GDMSourceCitation(null);
+            fSourceCitation = new GDMSourceCitation();
 
             fDialog = new SourceCitEditDlg(fBase);
             fDialog.SourceCitation = fSourceCitation;
@@ -73,6 +72,11 @@ namespace GKUI.Forms
 
             // The links to other records can be added or edited only in MainWinTests
             // (where there is a complete infrastructure of the calls to BaseWin.ModifyX/SelectRecord)
+
+            ModalFormHandler = Dialog_Cancel_Handler;
+            ClickButton("btnSourceAdd", fDialog);
+
+            //ClickButton("btnAccept", fDialog); // bug?!
         }
 
         #region Handlers for external tests

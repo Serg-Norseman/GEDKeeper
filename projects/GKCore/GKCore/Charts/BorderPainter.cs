@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using BSLib;
 
 using BSDColors = BSLib.Design.BSDConsts.Colors;
@@ -293,7 +292,7 @@ namespace GKCore.Charts
                 renderer.DrawLine(pen, rR, rB, rR, rT); // R
             }
 
-            int halfStreak = (int)(DefaultStreak / 2);
+            int halfStreak = DefaultStreak / 2;
             rL -= halfStreak;
             rT -= halfStreak;
             rR += halfStreak;

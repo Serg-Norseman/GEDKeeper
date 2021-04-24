@@ -20,10 +20,6 @@
 
 using BSLib;
 using BSLib.Design.Graphics;
-using GKCore;
-using GKCore.Charts;
-using GKCore.Interfaces;
-
 using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
@@ -57,7 +53,7 @@ namespace GKCore.Charts
 
         #endregion
 
-        public TCPersonControl(ITreeChartBox chart) : base(chart)
+        public TCPersonControl(ITreeChart chart) : base(chart)
         {
             var gfxProv = AppHost.GfxProvider;
             fCtlPen = gfxProv.CreatePen(gfxProv.CreateColor(BSDColors.Black), 2.0f);

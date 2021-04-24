@@ -27,8 +27,6 @@ using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
 using GKTests.Stubs;
-using GKUI.Forms;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -45,8 +43,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
             fGroupRecord = new GDMGroupRecord(fBase.Context.Tree);
 
@@ -99,7 +95,7 @@ namespace GKUI.Forms
 
             // members
             Assert.AreEqual(0, groupRecord.Members.Count);
-            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 0);
+            RecordSelectDlgTests.SetSelectItemHandler(0);
             ClickToolStripButton("fMembersList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, groupRecord.Members.Count);
 

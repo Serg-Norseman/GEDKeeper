@@ -24,10 +24,10 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using BSLib;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -52,7 +52,7 @@ namespace GKUI.Components
             EventNavRefresh = new object();
         }
 
-        protected CustomChart() : base()
+        protected CustomChart()
         {
             fNavman = new NavigationStack<GDMRecord>();
         }
@@ -334,22 +334,16 @@ namespace GKUI.Components
         {
             if (!fNavman.CanForward()) return;
 
-            try {
-                SetNavObject(fNavman.Next());
-                DoNavRefresh();
-            } finally {
-            }
+            SetNavObject(fNavman.Next());
+            DoNavRefresh();
         }
 
         public void NavPrev()
         {
             if (!fNavman.CanBackward()) return;
 
-            try {
-                SetNavObject(fNavman.Back());
-                DoNavRefresh();
-            } finally {
-            }
+            SetNavObject(fNavman.Back());
+            DoNavRefresh();
         }
 
         #endregion

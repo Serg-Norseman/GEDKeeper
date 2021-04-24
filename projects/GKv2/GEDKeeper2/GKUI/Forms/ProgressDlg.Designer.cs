@@ -10,6 +10,7 @@
 		private System.Windows.Forms.Label lblTotalVal;
 		private System.Windows.Forms.ProgressBar ProgressBar1;
 		private System.Windows.Forms.Label lblTitle;
+		private System.Windows.Forms.Button btnCancel;
 
 		private void InitializeComponent()
 		{
@@ -21,6 +22,7 @@
 		    this.lblRemainVal = new System.Windows.Forms.Label();
 		    this.lblTimeTotal = new System.Windows.Forms.Label();
 		    this.lblTotalVal = new System.Windows.Forms.Label();
+		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.SuspendLayout();
 		    // 
 		    // ProgressBar1
@@ -39,7 +41,7 @@
 		    this.lblTitle.Location = new System.Drawing.Point(16, 16);
 		    this.lblTitle.Margin = new System.Windows.Forms.Padding(8, 8, 8, 0);
 		    this.lblTitle.Name = "lblTitle";
-		    this.lblTitle.Size = new System.Drawing.Size(47, 17);
+		    this.lblTitle.Size = new System.Drawing.Size(44, 17);
 		    this.lblTitle.TabIndex = 1;
 		    this.lblTitle.Text = "lblTitle";
 		    // 
@@ -49,7 +51,7 @@
 		    this.lblTimePassed.Location = new System.Drawing.Point(16, 69);
 		    this.lblTimePassed.Margin = new System.Windows.Forms.Padding(4);
 		    this.lblTimePassed.Name = "lblTimePassed";
-		    this.lblTimePassed.Size = new System.Drawing.Size(117, 17);
+		    this.lblTimePassed.Size = new System.Drawing.Size(91, 17);
 		    this.lblTimePassed.TabIndex = 2;
 		    this.lblTimePassed.Text = "lblTimePassed";
 		    // 
@@ -59,7 +61,7 @@
 		    this.lblTimeRemain.Location = new System.Drawing.Point(16, 94);
 		    this.lblTimeRemain.Margin = new System.Windows.Forms.Padding(4);
 		    this.lblTimeRemain.Name = "lblTimeRemain";
-		    this.lblTimeRemain.Size = new System.Drawing.Size(127, 17);
+		    this.lblTimeRemain.Size = new System.Drawing.Size(94, 17);
 		    this.lblTimeRemain.TabIndex = 3;
 		    this.lblTimeRemain.Text = "lblTimeRemain";
 		    // 
@@ -91,7 +93,7 @@
 		    this.lblTimeTotal.Location = new System.Drawing.Point(16, 119);
 		    this.lblTimeTotal.Margin = new System.Windows.Forms.Padding(4);
 		    this.lblTimeTotal.Name = "lblTimeTotal";
-		    this.lblTimeTotal.Size = new System.Drawing.Size(102, 17);
+		    this.lblTimeTotal.Size = new System.Drawing.Size(79, 17);
 		    this.lblTimeTotal.TabIndex = 6;
 		    this.lblTimeTotal.Text = "lblTimeTotal";
 		    // 
@@ -106,13 +108,24 @@
 		    this.lblTotalVal.Text = "lblTotalVal";
 		    this.lblTotalVal.TextAlign = System.Drawing.ContentAlignment.TopRight;
 		    // 
+		    // btnCancel
+		    // 
+		    this.btnCancel.Enabled = false;
+		    this.btnCancel.Location = new System.Drawing.Point(400, 160);
+		    this.btnCancel.Name = "btnCancel";
+		    this.btnCancel.Size = new System.Drawing.Size(113, 31);
+		    this.btnCancel.TabIndex = 8;
+		    this.btnCancel.Text = "btnCancel";
+		    this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+		    // 
 		    // ProgressDlg
 		    // 
 		    this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 		    this.AutoSize = true;
-		    this.ClientSize = new System.Drawing.Size(531, 152);
+		    this.ClientSize = new System.Drawing.Size(531, 202);
 		    this.ControlBox = false;
+		    this.Controls.Add(this.btnCancel);
 		    this.Controls.Add(this.ProgressBar1);
 		    this.Controls.Add(this.lblTitle);
 		    this.Controls.Add(this.lblTimePassed);

@@ -1,0 +1,13 @@
+﻿0 HEAD
+1 CHAR UTF-8
+1 LANG English
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+0 @I1@ INDI
+1 SEX M
+1 NAME MaleName1 MaleName2 /MaleSurname/
+2 SURN MaleSurname
+2 GIVN MaleName1 MaleName2
+1 BIRT
+0 TRLR

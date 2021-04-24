@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,12 +22,14 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using BSLib.Design;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Interfaces;
@@ -108,6 +110,10 @@ namespace GKUI.Components
             if (colorHandler != null) {
                 ForeColor = colorHandler.Handle;
             }
+        }
+
+        public void SetFont(IFont font)
+        {
         }
     }
 
@@ -559,8 +565,7 @@ namespace GKUI.Components
         {
             if (fListMan == null) return;
 
-            try
-            {
+            try {
                 if (fListMan.ColumnsHaveBeenChanged != columnsChanged && columnsChanged) {
                     fListMan.ColumnsHaveBeenChanged = columnsChanged;
                 }
@@ -568,8 +573,7 @@ namespace GKUI.Components
                 object tempRec = GetSelectedData();
 
                 BeginUpdate();
-                try
-                {
+                try {
                     if (columnsChanged || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
                         Columns.Clear();
                         fListMan.UpdateColumns(this);
@@ -586,17 +590,13 @@ namespace GKUI.Components
                     #endif
 
                     ResizeColumns();
-                }
-                finally
-                {
+                } finally {
                     EndUpdate();
                 }
 
                 if (tempRec != null) SelectItem(tempRec);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GKListView.UpdateContents(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("GKListView.UpdateContents()", ex);
             }
         }
 
@@ -638,7 +638,33 @@ namespace GKUI.Components
 
                 return result;
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.GetSelectedData(): " + ex.Message);
+                Logger.WriteError("GKListView.GetSelectedData()", ex);
+                return null;
+            }
+        }
+
+        public IList<object> GetSelectedItems()
+        {
+            try {
+                var result = new List<object>();
+
+                if (!VirtualMode) {
+                    int num = SelectedItems.Count;
+                    for (int i = 0; i < num; i++) {
+                        var lvItem = SelectedItems[i] as GKListItem;
+                        result.Add(lvItem.Data);
+                    }
+                } else {
+                    int num = SelectedIndices.Count;
+                    for (int i = 0; i < num; i++) {
+                        int index = SelectedIndices[i];
+                        result.Add(fListMan.GetContentItem(index));
+                    }
+                }
+
+                return result;
+            } catch (Exception ex) {
+                Logger.WriteError("GKListView.GetSelectedItems()", ex);
                 return null;
             }
         }
@@ -672,17 +698,15 @@ namespace GKUI.Components
         public void ResizeColumn(int columnIndex)
         {
             try {
-                if (columnIndex >= 0 && Items.Count > 0)
-                {
+                if (columnIndex >= 0 && Items.Count > 0) {
                     AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
 
-                    if (Columns[columnIndex].Width < 20)
-                    {
+                    if (Columns[columnIndex].Width < 20) {
                         AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.ResizeColumn(): " + ex.Message);
+                Logger.WriteError("GKListView.ResizeColumn()", ex);
             }
         }
 
@@ -764,7 +788,7 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKListView.SelectItem(): " + ex.Message);
+                Logger.WriteError("GKListView.SelectItem()", ex);
             }
         }
 

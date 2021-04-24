@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
@@ -94,14 +95,14 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbDate2Calendar); }
         }
 
-        IDateBoxHandler IEventEditDlg.Date1
+        IDateBox IEventEditDlg.Date1
         {
-            get { return GetControlHandler<IDateBoxHandler>(txtEventDate1); }
+            get { return GetControlHandler<IDateBox>(txtEventDate1); }
         }
 
-        IDateBoxHandler IEventEditDlg.Date2
+        IDateBox IEventEditDlg.Date2
         {
-            get { return GetControlHandler<IDateBoxHandler>(txtEventDate2); }
+            get { return GetControlHandler<IDateBox>(txtEventDate2); }
         }
 
         IComboBox IEventEditDlg.Attribute
@@ -163,6 +164,9 @@ namespace GKUI.Forms
             SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
             SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
 
+            SetToolTip(txtEventDate1, txtEventDate1.RegionalDatePattern);
+            SetToolTip(txtEventDate2, txtEventDate2.RegionalDatePattern);
+
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);
 
@@ -193,12 +197,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-                CancelClickHandler(sender, e);
-            } catch (Exception ex) {
-                Logger.LogWrite("EventEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnAddress_Click(object sender, EventArgs e)
@@ -238,7 +243,7 @@ namespace GKUI.Forms
                     ((MaskedTextBox)sender).Text = dt[0] + '.' + dt[1] + '.' + txt;
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("EventEditDlg.DragDrop(): " + ex.Message);
+                Logger.WriteError("EventEditDlg.DragDrop()", ex);
             }
         }*/
 

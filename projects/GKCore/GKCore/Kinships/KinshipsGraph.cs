@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -101,8 +101,7 @@ namespace GKCore.Kinships
             Vertex target = fGraph.FindVertex(targetRec.XRef);
             if (target == null) return "???";
 
-            try
-            {
+            try {
                 IEnumerable<Edge> edgesPath = fGraph.GetPath(target);
 
                 string tmp = "";
@@ -113,8 +112,7 @@ namespace GKCore.Kinships
                 GDMIndividualRecord src = null, tgt = null, prev_tgt = null;
                 string part, fullRel = "";
 
-                foreach (Edge edge in edgesPath)
-                {
+                foreach (Edge edge in edgesPath) {
                     GDMIndividualRecord xFrom = (GDMIndividualRecord)edge.Source.Value;
                     GDMIndividualRecord xTo = (GDMIndividualRecord)edge.Target.Value;
                     RelationKind curRel = FixLink(xFrom, xTo, (RelationKind)((int)edge.Value));
@@ -163,10 +161,8 @@ namespace GKCore.Kinships
 
                     return fullRel;
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("KinshipsGraph.GetRelationship(): " + ex.Message);
+            } catch (Exception ex) {
+                Logger.WriteError("KinshipsGraph.GetRelationship()", ex);
                 return "";
             }
         }
@@ -291,12 +287,12 @@ namespace GKCore.Kinships
 
             KinshipsGraph graph = new KinshipsGraph(context);
 
-            SearchKGInt(null, iRec, graph, RelationKind.rkUndefined, RelationKind.rkUndefined);
+            SearchKGInt(context, null, iRec, graph, RelationKind.rkUndefined, RelationKind.rkUndefined);
 
             return graph;
         }
 
-        private static void SearchKGInt(Vertex prevNode, GDMIndividualRecord iRec,
+        private static void SearchKGInt(IBaseContext context, Vertex prevNode, GDMIndividualRecord iRec,
                                         KinshipsGraph graph, RelationKind relation, RelationKind inverseRelation)
         {
             if (iRec == null) return;
@@ -317,28 +313,27 @@ namespace GKCore.Kinships
             }
 
             if (iRec.ChildToFamilyLinks.Count > 0) {
-                GDMFamilyRecord fam = iRec.GetParentsFamily();
+                GDMFamilyRecord fam = context.Tree.GetParentsFamily(iRec);
                 if (fam != null) {
                     GDMIndividualRecord father, mother;
-                    father = fam.Husband.Individual;
-                    mother = fam.Wife.Individual;
+                    context.Tree.GetSpouses(fam, out father, out mother);
 
-                    SearchKGInt(currNode, father, graph, RelationKind.rkParent, RelationKind.rkChild);
-                    SearchKGInt(currNode, mother, graph, RelationKind.rkParent, RelationKind.rkChild);
+                    SearchKGInt(context, currNode, father, graph, RelationKind.rkParent, RelationKind.rkChild);
+                    SearchKGInt(context, currNode, mother, graph, RelationKind.rkParent, RelationKind.rkChild);
                 }
             }
 
             int num = iRec.SpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
-                GDMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-                GDMIndividualRecord spouse = ((iRec.Sex == GDMSex.svMale) ? family.Wife.Individual : family.Husband.Individual);
+                GDMFamilyRecord family = context.Tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
+                GDMIndividualRecord spouse = (iRec.Sex == GDMSex.svMale) ? context.Tree.GetPtrValue(family.Wife) : context.Tree.GetPtrValue(family.Husband);
 
-                SearchKGInt(currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
+                SearchKGInt(context, currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
-                    GDMIndividualRecord child = family.Children[j].Individual;
-                    SearchKGInt(currNode, child, graph, RelationKind.rkChild, RelationKind.rkParent);
+                    GDMIndividualRecord child = context.Tree.GetPtrValue(family.Children[j]);
+                    SearchKGInt(context, currNode, child, graph, RelationKind.rkChild, RelationKind.rkParent);
                 }
             }
         }

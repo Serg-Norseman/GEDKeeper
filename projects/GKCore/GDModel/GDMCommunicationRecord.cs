@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -97,12 +97,20 @@ namespace GDModel
         }
 
 
-        public GDMCommunicationRecord(GDMObject owner) : base(owner)
+        public GDMCommunicationRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType._COMM);
 
-            fDate = new GDMDate(this);
-            fCorresponder = new GDMIndividualLink(this);
+            fDate = new GDMDate();
+            fCorresponder = new GDMIndividualLink();
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fDate.TrimExcess();
+            fCorresponder.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -138,7 +146,7 @@ namespace GDModel
         {
             if (corresponder != null) {
                 CommDirection = direction;
-                fCorresponder.Value = corresponder;
+                fCorresponder.XRef = corresponder.XRef;
             }
         }
 

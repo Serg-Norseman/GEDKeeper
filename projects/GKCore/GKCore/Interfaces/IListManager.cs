@@ -73,5 +73,7 @@ namespace GKCore.Interfaces
         string[] CreateFields();
         ConditionKind GetCondByName(string condName);
         int GetFieldColumnId(string[] fields, string fieldName);
+
+        IList<ISearchResult> FindAll(string searchPattern);
     }
 }

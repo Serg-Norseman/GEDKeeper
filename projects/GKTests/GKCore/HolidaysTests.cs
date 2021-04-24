@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -46,7 +46,11 @@ namespace GKCore
                 Assert.AreEqual(0, tipsList.Count);
 
                 string holidaysFile = TestUtils.PrepareTestFile("test_holidays.yaml");
-                fHolidays.Load(holidaysFile);
+                try {
+                    fHolidays.Load(holidaysFile);
+                } finally {
+                    TestUtils.RemoveTestFile(holidaysFile);
+                }
 
                 fHolidays.CollectTips(tipsList, new DateTime(DateTime.Now.Year, 01, 05));
                 Assert.AreEqual(2, tipsList.Count); // one for header, and one with day

@@ -1,3 +1,5 @@
+set GKVER=2.17.0
+
 call .\clean.cmd
 call .\clean_all.cmd
 
@@ -13,6 +15,6 @@ exit /b 1
  
 :installer 
 "C:\Program Files (x86)\NSIS\makensis.exe" .\deploy\gk2_win_setup.nsi
-"c:\Program Files\7-zip\7z.exe" a -tzip -mx5 -scsWIN .\deploy\gedkeeper_2.16.2_win.zip .\deploy\gedkeeper_2.16.2_winsetup.exe
+"c:\Program Files\7-zip\7z.exe" a -tzip -mx5 -scsWIN .\deploy\gedkeeper_%GKVER%_win.zip .\deploy\gedkeeper_%GKVER%_winsetup.exe
 pause 
 exit /b 0

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -63,20 +63,20 @@ namespace GKCore.Controllers
                     fMultimediaLink.CutoutPosition.Value = ExtRect.CreateEmpty();
                 }
 
-                PortraitsCache.Instance.RemoveObsolete(fMultimediaLink);
+                var uid = fMultimediaLink.GetUID(fBase.Context.Tree);
+                PortraitsCache.Instance.RemoveObsolete(uid);
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("PortraitSelectDlgController.Accept(): " + ex.Message);
+                Logger.WriteError("PortraitSelectDlgController.Accept()", ex);
                 return false;
             }
         }
 
         public override void UpdateView()
         {
-            if (fMultimediaLink == null || fMultimediaLink.Value == null) return;
-
-            GDMMultimediaRecord mmRec = (GDMMultimediaRecord)fMultimediaLink.Value;
+            GDMMultimediaRecord mmRec = fBase.Context.Tree.GetPtrValue<GDMMultimediaRecord>(fMultimediaLink);
+            if (fMultimediaLink == null || mmRec == null) return;
 
             IImage img = fBase.Context.LoadMediaImage(mmRec.FileReferences[0], false);
             if (img == null) return;

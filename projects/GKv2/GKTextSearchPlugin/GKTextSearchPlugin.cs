@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -92,7 +92,7 @@ namespace GKTextSearchPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKTextSearchPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("GKTextSearchPlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -104,7 +104,7 @@ namespace GKTextSearchPlugin
                     fSearchMan = new SearchManager(this);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKTextSearchPlugin.Startup(): " + ex.Message);
+                Logger.WriteError("GKTextSearchPlugin.Startup()", ex);
                 result = false;
             }
             return result;
@@ -116,7 +116,7 @@ namespace GKTextSearchPlugin
             try {
                 //if (this.fSearchMan != null) this.fSearchMan.Dispose();
             } catch (Exception ex) {
-                Logger.LogWrite("GKTextSearchPlugin.Shutdown(): " + ex.Message);
+                Logger.WriteError("GKTextSearchPlugin.Shutdown()", ex);
                 result = false;
             }
             return result;

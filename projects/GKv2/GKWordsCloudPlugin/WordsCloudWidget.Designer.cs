@@ -2,7 +2,7 @@
 {
     partial class WordsCloudWidget
     {
-        private WordCloud.CloudViewer cloudViewer;
+        private GKWordsCloudPlugin.WordsCloud.CloudViewer cloudViewer;
         private System.Windows.Forms.ToolStrip ToolBar1;
         private System.Windows.Forms.ToolStripSeparator TBS1;
         private System.Windows.Forms.ToolStripComboBox cbType;
@@ -12,7 +12,7 @@
             this.ToolBar1 = new System.Windows.Forms.ToolStrip();
             this.TBS1 = new System.Windows.Forms.ToolStripSeparator();
             this.cbType = new System.Windows.Forms.ToolStripComboBox();
-            this.cloudViewer = new WordCloud.CloudViewer();
+            this.cloudViewer = new GKWordsCloudPlugin.WordsCloud.CloudViewer();
             this.ToolBar1.SuspendLayout();
             this.SuspendLayout();
             // 

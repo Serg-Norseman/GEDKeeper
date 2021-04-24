@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -28,7 +27,7 @@ using GDModel.Providers.GedML;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.Stubs;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GDModel.Providers
@@ -40,8 +39,7 @@ namespace GDModel.Providers
         public void Test_NativeFormat()
         {
             GEDCOMProvider.DebugWrite = false;
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.test_native.ged")) {
+            using (Stream inStream = TestUtils.LoadResourceStream("test_native.ged")) {
                 using (GDMTree tree = new GDMTree()) {
                     byte[] inArray;
                     using (MemoryStream inMem = new MemoryStream()) {
@@ -58,11 +56,14 @@ namespace GDModel.Providers
                         gedcomProvider.SaveToStreamExt(outStream, GEDCOMCharacterSet.csUTF8);
 
                         outStream.Position = 0;
-                        byte[] outArray;
-                        outArray = outStream.ToArray();
+                        byte[] outArray = outStream.ToArray();
+
+                        string inStr = Encoding.ASCII.GetString(inArray);
+                        // convert to GK GEDCOM
+                        inStr = inStr.Replace("1 ALIA @I11@", "1 ASSO @I11@\r\n2 RELA possible_duplicate");
 
                         string outStr = Encoding.ASCII.GetString(outArray);
-                        Assert.AreEqual(Encoding.ASCII.GetString(inArray), outStr);
+                        Assert.AreEqual(inStr, outStr);
                     }
                 }
             }
@@ -71,8 +72,7 @@ namespace GDModel.Providers
         [Test]
         public void Test_Standart()
         {
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.TGC55CLF.GED")) {
+            using (Stream inStream = TestUtils.LoadResourceStream("TGC55CLF.GED")) {
                 using (GDMTree tree = new GDMTree()) {
                     var gedcomProvider = new GEDCOMProvider(tree);
                     gedcomProvider.LoadFromStreamExt(inStream, inStream);
@@ -107,8 +107,7 @@ namespace GDModel.Providers
         public void Test_GK_UTF8()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_gk_utf8.ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_gk_utf8.ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual("UTF-8", charsetRes.Charset);
                     Assert.AreEqual(1.0f, charsetRes.Confidence);
@@ -130,8 +129,7 @@ namespace GDModel.Providers
         public void Test_Ahnenblatt_ANSI_Win1250()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ahn_ansi(win1250).ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_ahn_ansi(win1250).ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual("windows-1252", charsetRes.Charset);
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.5f);
@@ -153,8 +151,7 @@ namespace GDModel.Providers
         public void Test_Agelong_PseudoAnsel_Win1251()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_agelong_ansel(win1251).ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_agelong_ansel(win1251).ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual("windows-1251", charsetRes.Charset);
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.7f);
@@ -176,8 +173,7 @@ namespace GDModel.Providers
         public void Test_FTB6_ANSI_Win1251()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ftb6_ansi(win1251).ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_ftb6_ansi(win1251).ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual("windows-1251", charsetRes.Charset);
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.9f);
@@ -215,8 +211,7 @@ namespace GDModel.Providers
         public void Test_TrueAnsel()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_ansel.ged")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_ansel.ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual(null, charsetRes.Charset);
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.0f);
@@ -237,7 +232,7 @@ namespace GDModel.Providers
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
-                Assert.AreEqual("Test1\r\ntest2\r\ntest3 badline badline badline badline", noteRec1.Lines.Text);
+                Assert.AreEqual("Test1\r\ntest2\r\ntest3\r\nbadline badline badline badline", noteRec1.Lines.Text);
             }
         }
 
@@ -247,7 +242,7 @@ namespace GDModel.Providers
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_min_indented.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
 
-                var subm = ctx.Tree.Header.Submitter.Value as GDMSubmitterRecord;
+                var subm = ctx.Tree.GetPtrValue<GDMSubmitterRecord>(ctx.Tree.Header.Submitter);
                 Assert.IsNotNull(subm);
                 Assert.AreEqual("John Doe", subm.Name.FullName);
             }
@@ -272,8 +267,10 @@ namespace GDModel.Providers
         [Test]
         public void Test_FamilyHistorian()
         {
+            var progress = Substitute.For<IProgressController>();
+
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_famhist.ged")) {
-                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
 
@@ -286,11 +283,13 @@ namespace GDModel.Providers
         [Test]
         public void Test_FamilyTreeMaker_2008()
         {
+            var progress = Substitute.For<IProgressController>();
+
             // actually need to find the real signature of version for FTM 2008 (wrong in the file)
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftm2008.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_FamilyTreeMaker, ctx.Tree.Format);
 
-                GEDCOMChecker.CheckGEDCOMFormat(ctx.Tree, ctx, new ProgressStub());
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
@@ -342,6 +341,95 @@ namespace GDModel.Providers
         }
 
         [Test]
+        public void Test_Geni_Badlines()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_badlines.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+
+                var iRec1 = ctx.Tree.XRefIndex_Find("I500000006275123389") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                Assert.AreEqual(1, iRec1.Notes.Count);
+                var note = iRec1.Notes[0];
+                Assert.AreEqual("{geni:about_me} '''Jane Doe'''\r\nBirth at 1955, Raccoon City; \r\n\r\n\r\nbadline 1\r\nbadline 2\r\nbadline 3", note.Lines.Text);
+            }
+        }
+
+        [Test]
+        public void Test_Geni_SourceCitations()
+        {
+            var progress = Substitute.For<IProgressController>();
+
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_srcit.ged")) {
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
+
+                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+
+                var iRec1 = ctx.Tree.XRefIndex_Find("I6000000012345678912") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                Assert.AreEqual(3, iRec1.SourceCitations.Count);
+
+                var srCit = iRec1.SourceCitations[0];
+                Assert.IsTrue(srCit.IsPointer);
+                Assert.AreEqual("21 APR 2020", srCit.Data.Date.StringValue);
+                var sourceRec = ctx.Tree.GetPtrValue<GDMSourceRecord>(srCit);
+                Assert.AreEqual(1, sourceRec.MultimediaLinks.Count);
+
+                srCit = iRec1.SourceCitations[1];
+                Assert.IsTrue(srCit.IsPointer);
+                Assert.AreEqual("23 APR 2020", srCit.Data.Date.StringValue);
+                sourceRec = ctx.Tree.GetPtrValue<GDMSourceRecord>(srCit);
+                Assert.AreEqual(1, sourceRec.MultimediaLinks.Count);
+
+                srCit = iRec1.SourceCitations[2];
+                Assert.IsTrue(srCit.IsPointer);
+                Assert.AreEqual("25 APR 2020", srCit.Data.Date.StringValue);
+                sourceRec = ctx.Tree.GetPtrValue<GDMSourceRecord>(srCit);
+                Assert.AreEqual(1, sourceRec.MultimediaLinks.Count);
+            }
+        }
+
+        [Test]
+        public void Test_Geni_DateYearBC()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_dates_year.ged")) {
+                var iRec = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec);
+
+                GDMDate dtx;
+                GDMCustomEvent evt;
+
+                evt = iRec.FindEvent("BIRT");
+                dtx = evt.Date.Value as GDMDate;
+                Assert.AreEqual(32, dtx.Year);
+                Assert.AreEqual(true, dtx.YearBC);
+                Assert.AreEqual("032B.C.", dtx.StringValue);
+
+                evt = iRec.FindEvent("DEAT");
+                dtx = evt.Date.Value as GDMDate;
+                Assert.AreEqual(32, dtx.Year);
+                Assert.AreEqual(false, dtx.YearBC);
+                Assert.AreEqual("032", dtx.StringValue);
+
+                iRec = ctx.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec);
+
+                evt = iRec.FindEvent("BIRT");
+                dtx = evt.Date.Value as GDMDate;
+                Assert.AreEqual(31, dtx.Year);
+                Assert.AreEqual(true, dtx.YearBC);
+                Assert.AreEqual("031B.C.", dtx.StringValue);
+
+                evt = iRec.FindEvent("DEAT");
+                dtx = evt.Date.Value as GDMDate;
+                Assert.AreEqual(31, dtx.Year);
+                Assert.AreEqual(false, dtx.YearBC);
+                Assert.AreEqual("031", dtx.StringValue);
+            }
+        }
+
+        [Test]
         public void Test_Legacy()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_legacy.ged")) {
@@ -379,8 +467,7 @@ namespace GDModel.Providers
         public void Test_GedML()
         {
             using (BaseContext ctx = new BaseContext(null)) {
-                Assembly assembly = typeof(CoreTests).Assembly;
-                using (Stream stmGed1 = assembly.GetManifestResourceStream("GKTests.Resources.test_gedml.xml")) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_gedml.xml")) {
                     var gedmlProvider = new GedMLProvider(ctx.Tree);
                     gedmlProvider.LoadFromStreamExt(stmGed1, stmGed1);
                 }
@@ -398,8 +485,7 @@ namespace GDModel.Providers
         [Test]
         public void Test_FamilyShow()
         {
-            Assembly assembly = typeof(CoreTests).Assembly;
-            using (Stream inStream = assembly.GetManifestResourceStream("GKTests.Resources.test_windsor.familyx")) {
+            using (Stream inStream = TestUtils.LoadResourceStream("test_windsor.familyx")) {
                 using (GDMTree tree = new GDMTree()) {
                     var fxProvider = new FamilyXProvider(tree);
                     fxProvider.LoadFromStreamExt(inStream, inStream);

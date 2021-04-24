@@ -16,7 +16,6 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using GDModel;
 
 namespace GEDmill.Model
@@ -42,13 +41,6 @@ namespace GEDmill.Model
             RecordType = recordType;
             XRef = xref;
             EventType = eventType;
-        }
-
-        public BackReference(BackReference other)
-        {
-            RecordType = other.RecordType;
-            XRef = other.XRef;
-            EventType = other.EventType;
         }
     }
 }

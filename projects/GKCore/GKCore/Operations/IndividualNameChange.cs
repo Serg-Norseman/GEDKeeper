@@ -19,6 +19,7 @@
  */
 
 using GDModel;
+using GKCore.Interfaces;
 
 namespace GKCore.Operations
 {
@@ -48,8 +49,9 @@ namespace GKCore.Operations
             if (fPerson == null) {
                 result = false;
             } else {
+                IBaseContext baseContext = ((ChangeTracker)fManager).Context;
                 GDMPersonalName np = fPerson.PersonalNames[0];
-                var parts = GKUtils.GetNameParts(fPerson, np);
+                var parts = GKUtils.GetNameParts(baseContext.Tree, fPerson, np);
 
                 fOldSurname = parts.Surname;
                 fOldName = parts.Name;

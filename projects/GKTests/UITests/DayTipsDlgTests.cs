@@ -23,7 +23,6 @@
 using System;
 using System.Windows.Forms;
 using GKTests;
-using GKUI.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -38,8 +37,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fDialog = new DayTipsDlg();
             fDialog.Show();
         }

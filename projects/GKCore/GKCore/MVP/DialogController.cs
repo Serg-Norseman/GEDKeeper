@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,9 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using BSLib.Design.MVP;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 
 namespace GKCore.MVP
 {
@@ -45,9 +47,19 @@ namespace GKCore.MVP
             return true;
         }
 
-        public virtual void Cancel()
+        public virtual bool Cancel()
         {
-            RollbackChanges();
+            if (CheckChangesPersistence()) {
+                return false;
+            }
+
+            try {
+                RollbackChanges();
+                return true;
+            } catch (Exception ex) {
+                Logger.WriteError("DialogController.Cancel()", ex);
+                return false;
+            }
         }
 
         protected void CommitChanges()
@@ -60,11 +72,24 @@ namespace GKCore.MVP
             fLocalUndoman.Rollback();
         }
 
+        /// <summary>
+        /// Check the persistence of changes, the need to save or cancel them.
+        /// </summary>
+        /// <returns>if `true`, discard dialog closing events</returns>
+        public bool CheckChangesPersistence()
+        {
+            if (GlobalOptions.Instance.DialogClosingWarn && fLocalUndoman.HasChanges()) {
+                return (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_WarningOfDialogUnsavedChanges)));
+            } else {
+                return false;
+            }
+        }
+
         public override void Init(IBaseWindow baseWin)
         {
             base.Init(baseWin);
             if (fBase != null) {
-                fLocalUndoman = new ChangeTracker(fBase.Context.Tree);
+                fLocalUndoman = new ChangeTracker(fBase.Context);
             }
         }
     }

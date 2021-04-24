@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using GDModel;
 using GKCore;
 using GKCore.Types;
 using GKTests;
@@ -35,6 +34,7 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
@@ -45,8 +45,7 @@ namespace GDModel
             using (GDMGroupRecord grpRec = new GDMGroupRecord(fContext.Tree)) {
                 Assert.IsNotNull(grpRec);
 
-                grpRec.ResetOwner(fContext.Tree);
-                Assert.AreEqual(fContext.Tree, grpRec.GetTree());
+                grpRec.ResetTree(fContext.Tree);
             }
 
             using (GDMGroupRecord groupRec = fContext.Tree.CreateGroup()) {

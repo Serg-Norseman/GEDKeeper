@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Windows.Forms;
 using GKCore.MVP.Views;
 
@@ -53,7 +52,7 @@ namespace GKUI.Forms
             get { return fStatusLines; }
         }
 
-        public StatusForm() : base()
+        public StatusForm()
         {
             fStatusBar = new StatusBar();
             fStatusBar.Margin = new Padding(2);
@@ -74,7 +73,7 @@ namespace GKUI.Forms
 
         protected void SetStatusLine(int index, string value)
         {
-            StatusBarPanel panel = null;
+            StatusBarPanel panel;
             if (index < 0) {
                 return;
             } else if (index >= fStatusBar.Panels.Count) {

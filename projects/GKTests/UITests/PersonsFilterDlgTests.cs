@@ -25,7 +25,6 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
 using NUnit.Framework;
 using NUnit.Extensions.Forms;
 
@@ -43,8 +42,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
             fListMan = new IndividualListMan(fBase.Context);
 

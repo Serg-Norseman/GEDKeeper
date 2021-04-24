@@ -106,7 +106,7 @@ namespace GKUI.Forms
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = UIHelper.LongButtonSize;
             btnCancel.Text = "btnCancel";
-            btnCancel.Click += CancelClickHandler;
+            btnCancel.Click += btnCancel_Click;
 
             Content = new DefTableLayout {
                 Rows = {

@@ -86,14 +86,14 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbStatus); }
         }
 
-        ITextBox IResearchEditDlg.StartDate
+        IDateBox IResearchEditDlg.StartDate
         {
-            get { return GetControlHandler<ITextBox>(txtStartDate); }
+            get { return GetControlHandler<IDateBox>(txtStartDate); }
         }
 
-        ITextBox IResearchEditDlg.StopDate
+        IDateBox IResearchEditDlg.StopDate
         {
-            get { return GetControlHandler<ITextBox>(txtStopDate); }
+            get { return GetControlHandler<IDateBox>(txtStopDate); }
         }
 
         INumericBox IResearchEditDlg.Percent
@@ -180,11 +180,13 @@ namespace GKUI.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.LogWrite("ResearchEditDlg.btnCancel_Click(): " + ex.Message);
-            }
+            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

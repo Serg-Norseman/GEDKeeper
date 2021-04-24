@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using BSLib;
 using BSLib.Calendar;
@@ -73,7 +72,7 @@ namespace GKStdReports
             fPerson = selectedPerson;
         }
 
-        private void ExtractEvents(EventType type, List<PersonalEvent> list, IGEDCOMRecordWithEvents record)
+        private void ExtractEvents(EventType type, List<PersonalEvent> list, IGDMRecordWithEvents record)
         {
             int num = record.Events.Count;
             for (int i = 0; i < num; i++) {
@@ -87,7 +86,6 @@ namespace GKStdReports
         protected override void InternalGenerate()
         {
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
-            IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
             fTitleFont = fWriter.CreateFont("", 14f, true, false, clrBlack);
             fChapFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
@@ -97,30 +95,29 @@ namespace GKStdReports
             fWriter.AddParagraph(GKUtils.GetNameString(fPerson, true, false), fTitleFont, TextAlignment.taLeft);
             fWriter.NewLine();
 
+            IBaseContext baseContext = fBase.Context;
+
             var evList = new List<PersonalEvent>();
 
             GDMIndividualRecord father = null, mother = null;
-            if (fPerson.ChildToFamilyLinks.Count > 0) {
-                GDMFamilyRecord family = fPerson.ChildToFamilyLinks[0].Family;
-                if (fBase.Context.IsRecordAccess(family.Restriction)) {
-                    father = family.Husband.Individual;
-                    mother = family.Wife.Individual;
-                }
+            GDMFamilyRecord parFamily = baseContext.Tree.GetParentsFamily(fPerson);
+            if (parFamily != null && baseContext.IsRecordAccess(parFamily.Restriction)) {
+                baseContext.Tree.GetSpouses(parFamily, out father, out mother);
             }
 
             ExtractEvents(EventType.Personal, evList, fPerson);
 
             int num2 = fPerson.SpouseToFamilyLinks.Count;
             for (int j = 0; j < num2; j++) {
-                GDMFamilyRecord family = fPerson.SpouseToFamilyLinks[j].Family;
-                if (!fBase.Context.IsRecordAccess(family.Restriction))
+                GDMFamilyRecord family = baseContext.Tree.GetPtrValue(fPerson.SpouseToFamilyLinks[j]);
+                if (!baseContext.IsRecordAccess(family.Restriction))
                     continue;
 
                 ExtractEvents(EventType.Spouse, evList, family);
 
                 int num3 = family.Children.Count;
                 for (int i = 0; i < num3; i++) {
-                    GDMIndividualRecord child = family.Children[i].Individual;
+                    GDMIndividualRecord child = baseContext.Tree.GetPtrValue(family.Children[i]);
                     GDMCustomEvent evt = child.FindEvent(GEDCOMTagType.BIRT);
                     if (evt != null && evt.GetChronologicalYear() != 0) {
                         evList.Add(new PersonalEvent(EventType.Child, child, evt));
@@ -181,11 +178,11 @@ namespace GKStdReports
                     GDMIndividualRecord sp;
                     string unk;
                     if (fPerson.Sex == GDMSex.svMale) {
-                        sp = famRec.Wife.Individual;
+                        sp = baseContext.Tree.GetPtrValue(famRec.Wife);
                         st = LangMan.LS(LSID.LSID_Wife) + ": ";
                         unk = LangMan.LS(LSID.LSID_UnkFemale);
                     } else {
-                        sp = famRec.Husband.Individual;
+                        sp = baseContext.Tree.GetPtrValue(famRec.Husband);
                         st = LangMan.LS(LSID.LSID_Husband) + ": ";
                         unk = LangMan.LS(LSID.LSID_UnkMale);
                     }

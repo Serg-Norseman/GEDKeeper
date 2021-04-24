@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -66,12 +66,12 @@ namespace GDModel
         }
 
 
-        public GDMTaskRecord(GDMObject owner) : base(owner)
+        public GDMTaskRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType._TASK);
 
-            fStartDate = new GDMDate(this, (int)GEDCOMTagType._STARTDATE, string.Empty);
-            fStopDate = new GDMDate(this, (int)GEDCOMTagType._STOPDATE, string.Empty);
+            fStartDate = new GDMDate((int)GEDCOMTagType._STARTDATE, string.Empty);
+            fStopDate = new GDMDate((int)GEDCOMTagType._STOPDATE, string.Empty);
         }
 
         public override void Assign(GDMTag source)
@@ -86,6 +86,14 @@ namespace GDModel
             fPriority = sourceObj.fPriority;
             fStartDate.Assign(sourceObj.fStartDate);
             fStopDate.Assign(sourceObj.fStopDate);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fStartDate.TrimExcess();
+            fStopDate.TrimExcess();
         }
 
         public override void Clear()
@@ -104,47 +112,12 @@ namespace GDModel
                 fStartDate.IsEmpty() && (fStopDate.IsEmpty());
         }
 
-        public sealed class TaskGoalRet
-        {
-            public readonly GDMGoalType GoalType;
-            public readonly string GoalXRef;
-            public readonly GDMRecord GoalRec;
-
-            public TaskGoalRet(GDMGoalType goalType, string goalXRef, GDMRecord goalRec)
-            {
-                GoalType = goalType;
-                GoalXRef = goalXRef;
-                GoalRec = goalRec;
-            }
-        }
-
-        public TaskGoalRet GetTaskGoal()
-        {
-            GDMTree tree = GetTree();
-            string goalXRef = string.Empty;
-            GDMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(Goal));
-
-            GDMGoalType goalType;
-            if (goalRec is GDMIndividualRecord) {
-                goalType = GDMGoalType.gtIndividual;
-            } else if (goalRec is GDMFamilyRecord) {
-                goalType = GDMGoalType.gtFamily;
-            } else if (goalRec is GDMSourceRecord) {
-                goalType = GDMGoalType.gtSource;
-            } else {
-                goalType = GDMGoalType.gtOther;
-            }
-
-            return new TaskGoalRet(goalType, goalXRef, goalRec);
-        }
-
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
 
-            TaskGoalRet goalRet = GetTaskGoal();
-            if (goalRet.GoalType != GDMGoalType.gtOther) {
-                Goal = GEDCOMUtils.EncloseXRef(map.FindNewXRef(GEDCOMUtils.CleanXRef(Goal)));
+            if (GEDCOMUtils.IsXRef(fGoal)) {
+                fGoal = GEDCOMUtils.EncloseXRef(map.FindNewXRef(GEDCOMUtils.CleanXRef(fGoal)));
             }
         }
     }

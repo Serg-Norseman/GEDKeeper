@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -94,39 +94,39 @@ namespace GKCore.Controllers
                     break;
 
                 case 1: // BEF gcd2
-                    result = GDMCustomDate.CreateRange(null, null, gcd2);
+                    result = GDMCustomDate.CreateRange(null, gcd2);
                     break;
 
                 case 2: // AFT gcd1
-                    result = GDMCustomDate.CreateRange(null, gcd1, null);
+                    result = GDMCustomDate.CreateRange(gcd1, null);
                     break;
 
                 case 3: // "BET " + gcd1 + " AND " + gcd2
-                    result = GDMCustomDate.CreateRange(null, gcd1, gcd2);
+                    result = GDMCustomDate.CreateRange(gcd1, gcd2);
                     break;
 
                 case 4: // FROM gcd1
-                    result = GDMCustomDate.CreatePeriod(null, gcd1, null);
+                    result = GDMCustomDate.CreatePeriod(gcd1, null);
                     break;
 
                 case 5: // TO gcd2
-                    result = GDMCustomDate.CreatePeriod(null, null, gcd2);
+                    result = GDMCustomDate.CreatePeriod(null, gcd2);
                     break;
 
                 case 6: // FROM gcd1 TO gcd2
-                    result = GDMCustomDate.CreatePeriod(null, gcd1, gcd2);
+                    result = GDMCustomDate.CreatePeriod(gcd1, gcd2);
                     break;
 
                 case 7: // ABT gcd1
-                    result = GDMCustomDate.CreateApproximated(null, gcd1, GDMApproximated.daAbout);
+                    result = GDMCustomDate.CreateApproximated(gcd1, GDMApproximated.daAbout);
                     break;
 
                 case 8: // CAL gcd1
-                    result = GDMCustomDate.CreateApproximated(null, gcd1, GDMApproximated.daCalculated);
+                    result = GDMCustomDate.CreateApproximated(gcd1, GDMApproximated.daCalculated);
                     break;
 
                 case 9: // EST gcd1
-                    result = GDMCustomDate.CreateApproximated(null, gcd1, GDMApproximated.daEstimated);
+                    result = GDMCustomDate.CreateApproximated(gcd1, GDMApproximated.daEstimated);
                     break;
             }
 
@@ -137,7 +137,7 @@ namespace GKCore.Controllers
         {
             try {
                 fEvent.Place.StringValue = fView.Place.Text;
-                fEvent.Place.Location.Value = fTempLocation;
+                fBase.Context.Tree.SetPtrValue(fEvent.Place.Location, fTempLocation);
                 fEvent.Classification = fView.EventName.Text;
                 fEvent.Cause = fView.Cause.Text;
                 fEvent.Agency = fView.Agency.Text;
@@ -147,22 +147,18 @@ namespace GKCore.Controllers
 
                 fEvent.Date.ParseString(dt.StringValue);
 
-                int eventType = fView.EventType.SelectedIndex;
+                int eventType = fView.EventType.GetSelectedTag<int>();
                 if (fEvent is GDMFamilyEvent) {
                     fEvent.SetName(GKData.FamilyEvents[eventType].Sign);
                 } else {
                     GKData.EventStruct eventProps = GKData.PersonEvents[eventType];
                     fEvent.SetName(eventProps.Sign);
-                    if (eventProps.Kind == PersonEventKind.ekFact) {
-                        fEvent.StringValue = fView.Attribute.Text;
-                    } else {
-                        fEvent.StringValue = "";
-                    }
+                    fEvent.StringValue = (eventProps.Kind == PersonEventKind.ekFact) ? fView.Attribute.Text : string.Empty;
                 }
 
                 if (fEvent is GDMIndividualEvent) {
                     if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
-                        GDMIndividualAttribute attr = new GDMIndividualAttribute(fEvent.Owner);
+                        var attr = new GDMIndividualAttribute();
                         attr.Assign(fEvent);
                         fEvent = attr;
                     }
@@ -172,18 +168,22 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.LogWrite("EventEditController.Accept(): " + ex.Message);
+                Logger.WriteError("EventEditController.Accept()", ex);
                 return false;
             }
         }
 
         private void SetEventTypes(GKData.EventStruct[] eventTypes)
         {
+            fView.EventType.Sorted = false;
+
             fView.EventType.Clear();
             int num = eventTypes.Length;
             for (int i = 0; i < num; i++) {
-                fView.EventType.Add(LangMan.LS(eventTypes[i].Name));
+                fView.EventType.AddItem(LangMan.LS(eventTypes[i].Name), i);
             }
+
+            fView.EventType.Sorted = true;
         }
 
         public override void UpdateView()
@@ -197,12 +197,12 @@ namespace GKCore.Controllers
                 SetEventTypes(GKData.FamilyEvents);
                 int idx = GKUtils.GetFamilyEventIndex(evtName);
                 if (idx < 0) idx = 0;
-                fView.EventType.SelectedIndex = idx;
+                fView.EventType.SetSelectedTag(idx);
             } else {
                 SetEventTypes(GKData.PersonEvents);
                 int idx = GKUtils.GetPersonEventIndex(evtName);
                 if (idx < 0) idx = 0;
-                fView.EventType.SelectedIndex = idx;
+                fView.EventType.SetSelectedTag(idx);
 
                 if (idx >= 0 && GKData.PersonEvents[idx].Kind == PersonEventKind.ekFact) {
                     fView.Attribute.Text = fEvent.StringValue;
@@ -280,7 +280,7 @@ namespace GKCore.Controllers
             fView.Cause.Text = fEvent.Cause;
             fView.Agency.Text = fEvent.Agency;
 
-            fTempLocation = (fEvent.Place.Location.Value as GDMLocationRecord);
+            fTempLocation = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(fEvent.Place.Location);
             UpdatePlace();
 
             fView.NotesList.UpdateSheet();
@@ -301,7 +301,7 @@ namespace GKCore.Controllers
 
         public void AddPlace()
         {
-            fTempLocation = (fBase.Context.SelectRecord(GDMRecordType.rtLocation, null) as GDMLocationRecord);
+            fTempLocation = fBase.Context.SelectRecord(GDMRecordType.rtLocation, null) as GDMLocationRecord;
             UpdatePlace();
         }
 
@@ -348,10 +348,11 @@ namespace GKCore.Controllers
 
         public void ChangeEventType()
         {
+            int idx = fView.EventType.GetSelectedTag<int>();
+
             if (fEvent is GDMFamilyEvent) {
                 SetAttributeMode(false);
             } else {
-                int idx = fView.EventType.SelectedIndex;
                 if (idx >= 0) {
                     if (GKData.PersonEvents[idx].Kind == PersonEventKind.ekEvent) {
                         SetAttributeMode(false);
@@ -362,11 +363,10 @@ namespace GKCore.Controllers
             }
 
             string evName;
-            int id = fView.EventType.SelectedIndex;
             if (fEvent is GDMFamilyEvent) {
-                evName = GKData.FamilyEvents[id].Sign;
+                evName = GKData.FamilyEvents[idx].Sign;
             } else {
-                evName = GKData.PersonEvents[id].Sign;
+                evName = GKData.PersonEvents[idx].Sign;
             }
 
             // TODO: It is necessary to provide the registrable list of values for different tag types.

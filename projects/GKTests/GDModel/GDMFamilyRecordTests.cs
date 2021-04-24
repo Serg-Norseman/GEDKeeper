@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
@@ -49,8 +48,8 @@ namespace GDModel
             famRec.AddChild(indiv);
             Assert.AreEqual(0, famRec.IndexOfChild(indiv));
 
-            famRec.Husband.Value = tree.CreateIndividual();
-            famRec.Wife.Value = tree.CreateIndividual();
+            famRec.Husband.XRef = tree.CreateIndividual().XRef;
+            famRec.Wife.XRef = tree.CreateIndividual().XRef;
 
             using (GDMFamilyRecord fam2 = tree.CreateFamily()) {
                 Assert.Throws(typeof(ArgumentException), () => {
@@ -69,7 +68,7 @@ namespace GDModel
 
             // Integrity test
             GDMChildToFamilyLink childLink = indiv.ChildToFamilyLinks[0];
-            Assert.IsNotNull(childLink.Family);
+            Assert.IsNotNull(tree.GetPtrValue(childLink));
 
             famRec.RemoveChild(indiv);
             Assert.AreEqual(-1, famRec.IndexOfChild(indiv));
@@ -77,42 +76,42 @@ namespace GDModel
             //
 
             Assert.Throws(typeof(ArgumentException), () => {
-                famRec.AddEvent(new GDMIndividualEvent(null));
+                famRec.AddEvent(new GDMIndividualEvent());
             });
 
             famRec.ReplaceXRefs(new GDMXRefReplacer());
 
             //
 
-            famRec.Husband.Value = indiv;
-            Assert.AreEqual(indiv, famRec.Husband.Individual);
-            famRec.Husband.Value = null;
+            famRec.Husband.XRef = indiv.XRef;
+            Assert.AreEqual(indiv, tree.GetPtrValue(famRec.Husband));
+            famRec.Husband.XRef = string.Empty;
 
             //
 
-            famRec.Wife.Value = indiv;
-            Assert.AreEqual(indiv, famRec.Wife.Individual);
-            famRec.Wife.Value = null;
+            famRec.Wife.XRef = indiv.XRef;
+            Assert.AreEqual(indiv, tree.GetPtrValue(famRec.Wife));
+            famRec.Wife.XRef = string.Empty;
 
             //
 
             indiv.Sex = GDMSex.svMale;
             famRec.AddSpouse(indiv);
             Assert.AreEqual(0, indiv.IndexOfSpouse(famRec));
-            Test_GDMSpouseToFamilyLink(indiv.SpouseToFamilyLinks[0]);
-            Assert.IsNull(famRec.GetSpouseBy(indiv));
+            Test_GDMSpouseToFamilyLink(tree, indiv.SpouseToFamilyLinks[0]);
+            Assert.IsNull(tree.GetSpouseBy(famRec, indiv));
             famRec.RemoveSpouse(indiv);
 
             indiv.Sex = GDMSex.svFemale;
             famRec.AddSpouse(indiv);
             Assert.AreEqual(0, indiv.IndexOfSpouse(famRec));
-            Test_GDMSpouseToFamilyLink(indiv.SpouseToFamilyLinks[0]);
-            Assert.IsNull(famRec.GetSpouseBy(indiv));
+            Test_GDMSpouseToFamilyLink(tree, indiv.SpouseToFamilyLinks[0]);
+            Assert.IsNull(tree.GetSpouseBy(famRec, indiv));
             famRec.RemoveSpouse(indiv);
 
             //
 
-            famRec.SortChilds();
+            tree.SortChilds(famRec);
 
             //
 
@@ -124,16 +123,21 @@ namespace GDModel
             //
             famRec.AddSpouse(indiv);
 
+            famRec.AddChild(tree.CreateIndividual());
+            famRec.AddChild(tree.CreateIndividual());
+            famRec.AddChild(tree.CreateIndividual());
+            Assert.AreEqual(3, famRec.Children.Count);
+
             Assert.IsFalse(famRec.IsEmpty());
             famRec.Clear();
             Assert.IsTrue(famRec.IsEmpty());
         }
 
-        public static void Test_GDMSpouseToFamilyLink(GDMSpouseToFamilyLink spouseLink)
+        public static void Test_GDMSpouseToFamilyLink(GDMTree tree, GDMSpouseToFamilyLink spouseLink)
         {
-            Assert.IsNotNull(spouseLink.Family);
+            Assert.IsNotNull(tree.GetPtrValue<GDMFamilyRecord>(spouseLink));
 
-            using (spouseLink = new GDMSpouseToFamilyLink(null)) {
+            using (spouseLink = new GDMSpouseToFamilyLink()) {
                 Assert.IsNotNull(spouseLink);
             }
         }
@@ -160,10 +164,10 @@ namespace GDModel
                 famRec.DeleteChild(child1);
                 Assert.AreEqual(-1, famRec.IndexOfChild(child1));
 
-                string str = GKUtils.GetFamilyString(famRec, null, null);
+                string str = GKUtils.GetFamilyString(tree, famRec, null, null);
                 Assert.AreEqual("? - ?", str);
 
-                str = GKUtils.GetFamilyString(famRec, "x", "x");
+                str = GKUtils.GetFamilyString(tree, famRec, "x", "x");
                 Assert.AreEqual("x - x", str);
 
                 Assert.AreEqual(0.0f, famRec.IsMatch(null, new MatchParams()));
@@ -171,10 +175,10 @@ namespace GDModel
 
                 // MoveTo test
                 Assert.Throws(typeof(ArgumentException), () => {
-                    famRec.MoveTo(null, false);
+                    famRec.MoveTo(null);
                 });
 
-                GDMCustomEvent evt = famRec.AddEvent(new GDMFamilyEvent(famRec, (int)GEDCOMTagType.MARR, "01 SEP 1981"));
+                GDMCustomEvent evt = famRec.AddEvent(new GDMFamilyEvent((int)GEDCOMTagType.MARR, "01 SEP 1981"));
                 Assert.AreEqual(1, famRec.Events.Count);
                 Assert.AreEqual(evt, famRec.FindEvent(GEDCOMTagType.MARR));
 
@@ -182,14 +186,13 @@ namespace GDModel
                     Assert.AreEqual(0, famRec2.Events.Count);
                     Assert.AreEqual(null, famRec2.FindEvent(GEDCOMTagType.MARR));
 
-                    famRec.MoveTo(famRec2, false);
+                    famRec.MoveTo(famRec2);
 
                     Assert.AreEqual(1, famRec2.Events.Count);
                     Assert.AreEqual(evt, famRec2.FindEvent(GEDCOMTagType.MARR));
                 }
 
-                famRec.ResetOwner(tree);
-                Assert.AreEqual(tree, famRec.GetTree());
+                famRec.ResetTree(tree);
             }
         }
     }

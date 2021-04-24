@@ -21,6 +21,7 @@
     <TargetFrameworkProfile />
     <DebugType>Full</DebugType>
     <WarningLevel>4</WarningLevel>
+    <RootNamespace>GKNamesBookPlugin</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,10 +23,10 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
-using GKUI.Components;
 
 [assembly: AssemblyTitle("GKCalendarPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calendar plugin")]
@@ -103,7 +103,7 @@ namespace GKCalendarPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.LogWrite("GKCalendarPlugin.OnLanguageChange(): " + ex.Message);
+                Logger.WriteError("GKCalendarPlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -111,13 +111,12 @@ namespace GKCalendarPlugin
         {
             bool result = base.Startup(host);
             try {
-                Assembly assembly = typeof(Plugin).Assembly;
-                using (Stream stmIcon = assembly.GetManifestResourceStream("Resources.icon_time.gif")) {
+                using (Stream stmIcon = LoadResourceStream("icon_time.gif")) {
                     Image bmp = Image.FromStream(stmIcon);
                     fIcon = new ImageHandler(bmp);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("GKCalendarPlugin.Startup(): " + ex.Message);
+                Logger.WriteError("GKCalendarPlugin.Startup()", ex);
                 result = false;
             }
             return result;

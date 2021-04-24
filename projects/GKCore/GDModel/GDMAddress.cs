@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,14 +19,13 @@
  */
 
 using System;
-using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
     public sealed class GDMAddress : GDMTag
     {
-        private StringList fLines;
+        private GDMLines fLines;
         private string fAddressLine1;
         private string fAddressLine2;
         private string fAddressLine3;
@@ -40,7 +39,7 @@ namespace GDModel
         private GDMList<GDMTag> fWWWList;
 
 
-        public StringList Lines
+        public GDMLines Lines
         {
             get { return fLines; }
         }
@@ -108,11 +107,11 @@ namespace GDModel
         }
 
 
-        public GDMAddress(GDMObject owner) : base(owner)
+        public GDMAddress()
         {
             SetName(GEDCOMTagType.ADDR);
 
-            fLines = new StringList();
+            fLines = new GDMLines();
             fAddressLine1 = string.Empty;
             fAddressLine2 = string.Empty;
             fAddressLine3 = string.Empty;
@@ -121,20 +120,10 @@ namespace GDModel
             fAddressPostalCode = string.Empty;
             fAddressCountry = string.Empty;
 
-            fPhoneList = new GDMList<GDMTag>(this);
-            fEmailList = new GDMList<GDMTag>(this);
-            fFaxList = new GDMList<GDMTag>(this);
-            fWWWList = new GDMList<GDMTag>(this);
-        }
-
-        public GDMAddress(GDMObject owner, int tagId, string tagValue) : this(owner)
-        {
-            SetNameValue(tagId, tagValue);
-        }
-
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMAddress(owner, tagId, tagValue);
+            fPhoneList = new GDMList<GDMTag>();
+            fEmailList = new GDMList<GDMTag>();
+            fFaxList = new GDMList<GDMTag>();
+            fWWWList = new GDMList<GDMTag>();
         }
 
         protected override void Dispose(bool disposing)
@@ -146,6 +135,17 @@ namespace GDModel
                 fWWWList.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fLines.TrimExcess();
+            fPhoneList.TrimExcess();
+            fEmailList.TrimExcess();
+            fFaxList.TrimExcess();
+            fWWWList.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -212,22 +212,22 @@ namespace GDModel
 
         public GDMTag AddEmailAddress(string value)
         {
-            return fEmailList.Add(new GDMTag(this, (int)GEDCOMTagType.EMAIL, value));
+            return fEmailList.Add(new GDMValueTag((int)GEDCOMTagType.EMAIL, value));
         }
 
         public GDMTag AddFaxNumber(string value)
         {
-            return fFaxList.Add(new GDMTag(this, (int)GEDCOMTagType.FAX, value));
+            return fFaxList.Add(new GDMValueTag((int)GEDCOMTagType.FAX, value));
         }
 
         public GDMTag AddPhoneNumber(string value)
         {
-            return fPhoneList.Add(new GDMTag(this, (int)GEDCOMTagType.PHON, value));
+            return fPhoneList.Add(new GDMValueTag((int)GEDCOMTagType.PHON, value));
         }
 
         public GDMTag AddWebPage(string value)
         {
-            return fWWWList.Add(new GDMTag(this, (int)GEDCOMTagType.WWW, value));
+            return fWWWList.Add(new GDMValueTag((int)GEDCOMTagType.WWW, value));
         }
 
         public void SetAddressText(string value)
@@ -238,7 +238,7 @@ namespace GDModel
         public void SetAddressArray(string[] value)
         {
             fLines.Clear();
-            fLines.AddStrings(value);
+            fLines.AddRange(value);
         }
     }
 }

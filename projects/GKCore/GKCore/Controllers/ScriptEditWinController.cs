@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -85,8 +85,7 @@ namespace GKCore.Controllers
                     scrEngine.lua_run(fView.ScriptText.Text, fBase, fView.DebugOutput);
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("ScriptEditWin.Run(): " + ex.Message);
-                Logger.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace);
+                Logger.WriteError("ScriptEditWin.Run()", ex);
             }
         }
     }

@@ -58,6 +58,9 @@
     <Reference Include="BSLib.Design">
       <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.Design.WFHandlers">
+      <HintPath>..\..\libs\BSLib.Design.WFHandlers.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\libs\log4net.dll</HintPath>
     </Reference>
@@ -83,29 +86,19 @@
     <Compile Include="src\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Extensions.cs" />
     <Compile Include="src\GMHelper.cs" />
-    <Compile Include="src\ListView\CListableMFR.cs" />
-    <Compile Include="src\ListView\CListableNumber.cs" />
-    <Compile Include="src\Exceptions\BlobException.cs">
+    <Compile Include="src\HTML\HTMLException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\ListView\LVNameItem.cs" />
+    <Compile Include="src\ListView\LVNumberItem.cs" />
     <Compile Include="src\CConfig.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Exceptions\HTMLException.cs">
+    <Compile Include="src\ListView\LVItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ListView\CListableBool.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\ListView\CListableName.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\ListView\CListableString.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\ListView\CListableYear.cs">
+    <Compile Include="src\ListView\LVStringItem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Logging\ILogger.cs" />
@@ -166,9 +159,6 @@
     <Compile Include="src\MiniTree\TreeDrawer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\AlphabetComparer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\Model\CISRecordChanges.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -187,9 +177,7 @@
     <Compile Include="src\Model\IndexPage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\IProgressCallback.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="src\Model\IProgressCallback.cs" />
     <Compile Include="src\Model\Multimedia.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -219,9 +207,6 @@
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\ProgressWindow.resx">
-      <DependentUpon>ProgressWindow.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

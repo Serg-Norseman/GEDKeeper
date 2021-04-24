@@ -20,6 +20,7 @@
 
 using System;
 using GDModel;
+using GKCore.Interfaces;
 
 namespace GKCore.Operations
 {
@@ -28,16 +29,16 @@ namespace GKCore.Operations
     /// </summary>
     public sealed class ChangeTracker : UndoManager
     {
-        private readonly GDMTree fTree;
+        private readonly IBaseContext fBaseContext;
 
-        public GDMTree Tree
+        public IBaseContext Context
         {
-            get { return fTree; }
+            get { return fBaseContext; }
         }
 
-        public ChangeTracker(GDMTree tree)
+        public ChangeTracker(IBaseContext baseContext)
         {
-            fTree = tree;
+            fBaseContext = baseContext;
         }
 
         public bool DoOrdinaryOperation(OperationType type, GDMObject obj, object newVal)

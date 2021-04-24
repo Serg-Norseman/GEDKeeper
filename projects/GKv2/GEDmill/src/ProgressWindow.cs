@@ -17,6 +17,8 @@
  */
 
 using System;
+using System.ComponentModel;
+using System.Threading;
 using System.Windows.Forms;
 using GEDmill.Model;
 
@@ -28,7 +30,7 @@ namespace GEDmill
     public partial class ProgressWindow : Form, IProgressCallback
     {
         // Callbacks
-        public delegate void SetTextInvoker(String sText);
+        public delegate void SetTextInvoker(string sText);
         public delegate void IncrementInvoker(int nVal);
         public delegate void StepToInvoker(int nVal);
         public delegate void RangeInvoker(int nMinimum, int nMaximum);
@@ -37,8 +39,8 @@ namespace GEDmill
         public ThreadError ThreadError;
 
         private String fTitleRoot = "";
-        private System.Threading.ManualResetEvent fInitEvent = new System.Threading.ManualResetEvent(false);
-        private System.Threading.ManualResetEvent fAbortEvent = new System.Threading.ManualResetEvent(false);
+        private ManualResetEvent fInitEvent = new ManualResetEvent(false);
+        private ManualResetEvent fAbortEvent = new ManualResetEvent(false);
         private bool fRequiresClose = true;
 
 
@@ -73,7 +75,7 @@ namespace GEDmill
         }
 
         // Call this method from the worker thread to update the progress text.
-        public void SetText(String sText)
+        public void SetText(string sText)
         {
             Invoke(new SetTextInvoker(DoSetText), new object[] { sText });
         }
@@ -107,7 +109,7 @@ namespace GEDmill
         }
 
         // Partner of SetText(). Sets label text.
-        private void DoSetText(String sText)
+        private void DoSetText(string sText)
         {
             m_label.Text = sText;
         }
@@ -168,7 +170,7 @@ namespace GEDmill
 
         // Handles the form load, and sets an event to ensure that
         // intialization is synchronized with the appearance of the form.
-        protected override void OnLoad(System.EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             ControlBox = false;
@@ -190,7 +192,7 @@ namespace GEDmill
         }
 
         // Handler for 'Close' clicking
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
             fRequiresClose = false;
             AbortWork();
@@ -210,7 +212,7 @@ namespace GEDmill
         }
 
         // Handler for the cancel button
-        private void OnCancelClicked(object sender, System.EventArgs e)
+        private void OnCancelClicked(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();

@@ -68,7 +68,7 @@ namespace GKUI.Forms
             grpMatchType.Text = LangMan.LS(LSID.LSID_MatchType);
             radMatchInternal.Text = LangMan.LS(LSID.LSID_MatchInternal);
             radMathExternal.Text = LangMan.LS(LSID.LSID_MathExternal);
-            radAnalysis.Text = LangMan.LS(LSID.LSID_Analysis);
+            radAnalysis.Text = LangMan.LS(LSID.LSID_Analyze);
             btnMatch.Text = LangMan.LS(LSID.LSID_Match);
         }
 
