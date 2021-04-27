@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -53,10 +53,11 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
+                var tree = fBaseWin.Context.Tree;
                 int idx = 0;
                 foreach (GDMIndividualLink ptr in family.Children) {
                     idx += 1;
-                    GDMIndividualRecord child = ptr.Individual;
+                    GDMIndividualRecord child = tree.GetPtrValue(ptr);
 
                     fSheetList.AddItem(child, new object[] {
                         idx, GKUtils.GetNameString(child, true, false),
@@ -66,7 +67,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("ChildrenListModel.UpdateContents(): ", ex);
+                Logger.WriteError("ChildrenListModel.UpdateContents()", ex);
             }
         }
 
@@ -81,7 +82,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    child = fBaseWin.Context.SelectPerson(family.Husband.Individual, TargetMode.tmParent, GDMSex.svUnknown);
+                    child = fBaseWin.Context.SelectPerson(fBaseWin.Context.Tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);

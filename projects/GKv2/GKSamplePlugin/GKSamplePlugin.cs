@@ -62,7 +62,7 @@ namespace GKSamplePlugin
             try {
                 fLangMan = fHost.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.WriteError("GKSamplePlugin1.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKSamplePlugin1.OnLanguageChange()", ex);
             }
         }
 
@@ -73,7 +73,7 @@ namespace GKSamplePlugin
                 fHost = host;
                 // Implement any startup code here
             } catch (Exception ex) {
-                Logger.WriteError("GKSamplePlugin1.Startup(): ", ex);
+                Logger.WriteError("GKSamplePlugin1.Startup()", ex);
                 result = false;
             }
             return result;
@@ -85,7 +85,7 @@ namespace GKSamplePlugin
             try {
                 // Implement any shutdown code here
             } catch (Exception ex) {
-                Logger.WriteError("GKSamplePlugin1.Shutdown(): ", ex);
+                Logger.WriteError("GKSamplePlugin1.Shutdown()", ex);
                 result = false;
             }
             return result;

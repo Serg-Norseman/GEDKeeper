@@ -1,7 +1,12 @@
+@echo off
+
 call .\clean.cmd
 call .\clean_all.cmd
 
-call .\build_all.mswin.x86.cmd
+set CONFIG_TYPE=Debug
+for %%a in (release Release RELEASE) do if (%%a)==(%1) SET CONFIG_TYPE=Release
+
+call .\build_all.mswin.x86.cmd %CONFIG_TYPE%
 
 set BUILD_STATUS=%ERRORLEVEL% 
 if %BUILD_STATUS%==0 goto installer
@@ -9,7 +14,7 @@ if not %BUILD_STATUS%==0 goto fail
  
 :fail 
 pause 
-exit /b 1 
+exit /b %BUILD_STATUS% 
  
 :installer 
 cd .\deploy

@@ -126,7 +126,7 @@ namespace GKFoldersPlugin
                     result = fFilterFolder.Equals(FoldersHelper.GetFolder(record));
                 }
             } catch (Exception ex) {
-                Logger.WriteError("FoldersWidget.FilterHandler(): ", ex);
+                Logger.WriteError("FoldersWidget.FilterHandler()", ex);
             }
             return result;
         }

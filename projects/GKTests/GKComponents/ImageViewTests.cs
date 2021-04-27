@@ -26,9 +26,7 @@ using System.Windows.Forms;
 using BSLib;
 using BSLib.Design.Graphics;
 using GKCore;
-using GKCore.Interfaces;
 using GKTests;
-using GKUI.Components;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -71,8 +69,7 @@ namespace GKUI.Components
             Image image2 = null;
             fImageView.OpenImage(image2); // return without exceptions
 
-            Assembly assembly = typeof(CoreTests).Assembly;
-            Bitmap img = new Bitmap(assembly.GetManifestResourceStream("GKTests.Resources.shaytan_plant.jpg"));
+            Bitmap img = new Bitmap(TestUtils.LoadResourceStream("shaytan_plant.jpg"));
 
             fImageView.OpenImage(img);
 

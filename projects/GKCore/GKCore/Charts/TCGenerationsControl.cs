@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,8 +21,6 @@
 using System;
 using BSLib;
 using BSLib.Design.Graphics;
-using GKCore;
-using GKCore.Charts;
 
 namespace GKCore.Charts
 {
@@ -39,7 +37,7 @@ namespace GKCore.Charts
         private const int SEGMENT_ANGLE = 45;
         private const int D_COUNT = 10;
 
-        private int fThumbPos = 9; /* Counts from zero to 9. */
+        private int fThumbPos = 9; /* Counts from zero to 9; where 9 is infinite. */
 
         private readonly IColor fBlankColor;
         private readonly IColor fSelectColor;
@@ -47,7 +45,8 @@ namespace GKCore.Charts
         public override string Tip
         {
             get {
-                string gen = (fThumbPos < 9) ? fThumbPos.ToString() : LangMan.LS(LSID.LSID_Unlimited);
+                int depthLimit = GetDepthLimit();
+                string gen = (depthLimit == -1) ? LangMan.LS(LSID.LSID_Unlimited) : depthLimit.ToString();
                 return LangMan.LS(LSID.LSID_Generations) + ": " + gen;
             }
         }
@@ -70,7 +69,12 @@ namespace GKCore.Charts
 
         public override void UpdateState()
         {
-            fThumbPos= (fChart.DepthLimitAncestors >= -1) ? fChart.DepthLimitAncestors - 1 : 9;
+            fThumbPos = (fChart.DepthLimitAncestors >= -1) ? fChart.DepthLimitAncestors - 1 : 9;
+        }
+
+        private int GetDepthLimit()
+        {
+            return (fThumbPos < 9) ? fThumbPos + 1 : -1;
         }
 
         private static float GetChordLength(float radius, float radianAngle)
@@ -138,9 +142,7 @@ namespace GKCore.Charts
                 if ((r.Top <= y) && (r.Bottom > y)) {
                     if (i != fThumbPos) {
                         fThumbPos = i;
-
-                        int depthLimit = (fThumbPos< 9) ? fThumbPos+ 1 : -1;
-                        fChart.DepthLimitAncestors = depthLimit;
+                        fChart.DepthLimitAncestors = GetDepthLimit();
                         fChart.GenChart(fChart.Model.Root.Rec, fChart.Kind, true);
                     }
                     break;

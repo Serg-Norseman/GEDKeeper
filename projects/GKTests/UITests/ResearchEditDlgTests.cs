@@ -20,15 +20,10 @@
 
 #if !__MonoCS__
 
-using System;
-using System.Windows.Forms;
 using GDModel;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.ControlTesters;
 using GKTests.Stubs;
-using GKUI.Forms;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -46,8 +41,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
             fResearchRecord = new GDMResearchRecord(fBase.Context.Tree);
 
@@ -100,7 +93,7 @@ namespace GKUI.Forms
 
             EnterText("txtName", fDialog, "sample text");
             EnterMaskedText("txtStartDate", fDialog, "01.01.2000");
-            EnterMaskedText("txtStopDate", fDialog, "20.02.2000");
+            EnterMaskedText("txtStopDate", fDialog, "02.02.2000");
 
             // The links to other records can be added or edited only in MainWinTests
             // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
@@ -109,71 +102,8 @@ namespace GKUI.Forms
 
             Assert.AreEqual("sample text", fResearchRecord.ResearchName);
             Assert.AreEqual("01 JAN 2000", fResearchRecord.StartDate.StringValue);
-            Assert.AreEqual("20 FEB 2000", fResearchRecord.StopDate.StringValue);
+            Assert.AreEqual("02 FEB 2000", fResearchRecord.StopDate.StringValue);
         }
-
-        #region Handlers for external tests
-
-        public static void ResearchEditDlg_Handler(ResearchEditDlg dlg)
-        {
-            GDMResearchRecord resRecord = dlg.Research;
-
-            // tasks
-            SelectTab("tabsData", dlg, 0);
-            Assert.AreEqual(0, resRecord.Tasks.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
-            ClickToolStripButton("fTasksList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, resRecord.Tasks.Count);
-
-            SelectSheetListItem("fTasksList", dlg, 0);
-            SetModalFormHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
-            ClickToolStripButton("fTasksList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, resRecord.Tasks.Count);
-
-            SelectSheetListItem("fTasksList", dlg, 0);
-            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
-            ClickToolStripButton("fTasksList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, resRecord.Tasks.Count);
-
-            // communications
-            SelectTab("tabsData", dlg, 1);
-            Assert.AreEqual(0, resRecord.Communications.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, CommunicationEditDlgTests.CommunicationAdd_Mini_Handler);
-            ClickToolStripButton("fCommunicationsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, resRecord.Communications.Count);
-
-            SelectSheetListItem("fCommunicationsList", dlg, 0);
-            SetModalFormHandler(fFormTest, CommunicationEditDlgTests.CommunicationAdd_Mini_Handler);
-            ClickToolStripButton("fCommunicationsList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, resRecord.Communications.Count);
-
-            SelectSheetListItem("fCommunicationsList", dlg, 0);
-            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
-            ClickToolStripButton("fCommunicationsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, resRecord.Communications.Count);
-
-            // groups
-            SelectTab("tabsData", dlg, 2);
-            Assert.AreEqual(0, resRecord.Groups.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);
-            ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, resRecord.Groups.Count);
-            Assert.AreEqual("sample group", ((GDMGroupRecord)resRecord.Groups[0].Value).GroupName);
-
-            SelectSheetListItem("fGroupsList", dlg, 0);
-            SetModalFormHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);
-            ClickToolStripButton("fGroupsList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, resRecord.Groups.Count);
-
-            SelectSheetListItem("fGroupsList", dlg, 0);
-            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
-            ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, resRecord.Groups.Count);
-
-            ClickButton("btnAccept", dlg);
-        }
-
-        #endregion
     }
 }
 

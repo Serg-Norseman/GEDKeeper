@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -217,7 +217,7 @@ namespace GKCore
             lua_register(lvm, "gt_get_person_group");
             lua_register(lvm, "gt_get_group_name");
 
-            // experimentals
+            // experimental
 
             lua_register(lvm, "ado_open");
             lua_register(lvm, "ado_close");
@@ -608,7 +608,7 @@ namespace GKCore
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return null;
 
-            GDMFamilyRecord fam = rec.GetParentsFamily();
+            GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(rec);
             return fam;
         }
 
@@ -623,21 +623,21 @@ namespace GKCore
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return null;
 
-            GDMFamilyRecord fam = rec.SpouseToFamilyLinks[spIdx].Family;
+            GDMFamilyRecord fam = fBase.Context.Tree.GetPtrValue(rec.SpouseToFamilyLinks[spIdx]);
             return fam;
         }
 
         public object gt_get_family_husband(object recPtr)
         {
             GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
-            recPtr = (fam == null) ? null : fam.Husband.Value;
+            recPtr = (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Husband);
             return recPtr;
         }
 
         public object gt_get_family_wife(object recPtr)
         {
             GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
-            recPtr = (fam == null) ? null : fam.Wife.Value;
+            recPtr = (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Wife);
             return recPtr;
         }
 
@@ -650,7 +650,7 @@ namespace GKCore
         public object gt_get_family_child(object recPtr, int childIndex)
         {
             GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
-            return (fam == null) ? null : fam.Children[childIndex].Value;
+            return (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Children[childIndex]);
         }
 
         public int gt_get_location_usages(object recPtr)
@@ -691,7 +691,7 @@ namespace GKCore
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return null;
 
-            GDMGroupRecord grp = rec.Groups[grIdx].Value as GDMGroupRecord;
+            var grp = fBase.Context.Tree.GetPtrValue<GDMGroupRecord>(rec.Groups[grIdx]);
             return grp;
         }
 

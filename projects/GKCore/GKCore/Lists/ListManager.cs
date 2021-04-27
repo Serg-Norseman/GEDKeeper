@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,6 +28,7 @@ using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Search;
 using GKCore.Types;
 
 using BSDColors = BSLib.Design.BSDConsts.Colors;
@@ -203,7 +204,7 @@ namespace GKCore.Lists
         protected bool IsMatchesMask(string str, string mask)
         {
             if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) {
-                return false;
+                return true;
             }
 
             if (mask == "*") {
@@ -225,7 +226,7 @@ namespace GKCore.Lists
             }
         }
 
-        protected bool IsMatchesMask(StringList strList, string mask)
+        protected bool IsMatchesMask(GDMLines strList, string mask)
         {
             if (strList == null || strList.IsEmpty() || string.IsNullOrEmpty(mask)) {
                 return false;
@@ -259,7 +260,7 @@ namespace GKCore.Lists
             return false;
         }
 
-        private readonly static char[] SpecialChars = new char[] { '*', '?', '|' };
+        private static readonly char[] SpecialChars = new char[] { '*', '?', '|' };
 
         private static string GetSimpleMask(string mask)
         {
@@ -515,7 +516,7 @@ namespace GKCore.Lists
                         break;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("ListManager.CheckCondition(): ", ex);
+                Logger.WriteError("ListManager.CheckCondition()", ex);
                 res = true;
             }
 
@@ -533,7 +534,7 @@ namespace GKCore.Lists
                     res = res && CheckCondition(fcond);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("ListManager.CheckCommonFilter(): ", ex);
+                Logger.WriteError("ListManager.CheckCommonFilter()", ex);
                 res = true;
             }
 
@@ -627,7 +628,7 @@ namespace GKCore.Lists
                 fXSortFactor = (sortAscending ? 1 : -1);
                 ListTimSort<ValItem>.Sort(fContentList, CompareItems);
             } catch (Exception ex) {
-                Logger.WriteError("ListManager.SortContents(): ", ex);
+                Logger.WriteError("ListManager.SortContents()", ex);
             }
         }
 
@@ -651,6 +652,8 @@ namespace GKCore.Lists
                     Fetch(rec);
                     if (CheckFilter()) {
                         fContentList.Add(new ValItem(rec));
+                    } else {
+                        // filter's debug
                     }
                 }
             }
@@ -812,6 +815,25 @@ namespace GKCore.Lists
             }
 
             return idx;
+        }
+
+        public IList<ISearchResult> FindAll(string searchPattern)
+        {
+            List<ISearchResult> result = new List<ISearchResult>();
+
+            Regex regex = GKUtils.InitMaskRegex(searchPattern);
+
+            int num = fContentList.Count;
+            for (int i = 0; i < num; i++) {
+                GDMRecord rec = fContentList[i].Record;
+
+                string recName = GKUtils.GetRecordName(fBaseContext.Tree, rec, false);
+                if (GKUtils.MatchesRegex(recName, regex)) {
+                    result.Add(new SearchResult(rec));
+                }
+            }
+
+            return result;
         }
     }
 }

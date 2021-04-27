@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,14 +29,7 @@ namespace GKCore.Types
         public PGNodeType Type;
         public int Size;
 
-        public PGNode(string label, PGNodeType type)
-        {
-            FamilyXRef = label;
-            Type = type;
-            Size = 1;
-        }
-
-        public PGNode(string label, PGNodeType type, int size)
+        public PGNode(string label, PGNodeType type, int size = 1)
         {
             FamilyXRef = label;
             Type = type;

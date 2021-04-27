@@ -20,7 +20,6 @@
 
 #if !NETSTANDARD
 
-using System;
 using System.IO;
 using BSLib;
 using BSLib.Design.Graphics;
@@ -30,12 +29,15 @@ using iTextSharp.text.pdf;
 using it = iTextSharp.text;
 using itFont = iTextSharp.text.Font;
 using itImage = iTextSharp.text.Image;
+using itTable = iTextSharp.text.pdf.PdfPTable;
+using itCell = iTextSharp.text.pdf.PdfPCell;
+using itRectangle = iTextSharp.text.Rectangle;
 
 namespace GKCore.Export
 {
     public class PDFWriter : CustomWriter
     {
-        internal sealed class FontHandler: TypeHandler<it.Font>, IFont
+        internal sealed class FontHandler: TypeHandler<itFont>, IFont
         {
             public BaseFont BaseFont
             {
@@ -57,7 +59,7 @@ namespace GKCore.Export
                 get { return Handle.Size; }
             }
 
-            public FontHandler(it.Font handle) : base(handle)
+            public FontHandler(itFont handle) : base(handle)
             {
             }
 
@@ -101,6 +103,7 @@ namespace GKCore.Export
         private bool fMulticolumns;
         private PdfWriter fPdfWriter;
         private Paragraph p;
+        private itTable fTable;
 
         public PDFWriter()
         {
@@ -109,13 +112,6 @@ namespace GKCore.Export
             Stream fontStream = GetType().Assembly.GetManifestResourceStream("Resources.fonts.FreeSans.ttf");
             var fontBytes = FileHelper.ReadByteArray(fontStream);
             fBaseFont = BaseFont.CreateFont("FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, BaseFont.CACHED, fontBytes, null);
-
-            /*if !__MonoCS__
-            fBaseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            else
-            //BaseFont.TIMES_ROMAN, "Cp1251"
-            this.fBaseFont = BaseFont.CreateFont("/usr/share/fonts/truetype/abyssinica/AbyssinicaSIL-R.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            endif*/
         }
 
         protected override void Dispose(bool disposing)
@@ -144,7 +140,7 @@ namespace GKCore.Export
 
         public override void BeginWrite()
         {
-            iTextSharp.text.Rectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
+            itRectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
 
             fDocument = new Document(pageSize, fMargins.Left, fMargins.Right, fMargins.Top, fMargins.Bottom);
             fPdfWriter = PdfWriter.GetInstance(fDocument, new FileStream(fFileName, FileMode.Create));
@@ -184,13 +180,13 @@ namespace GKCore.Export
 
         public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
         {
-            int style = it.Font.NORMAL;
-            if (bold) style |= it.Font.BOLD;
-            if (underline) style |= it.Font.UNDERLINE;
+            int style = itFont.NORMAL;
+            if (bold) style |= itFont.BOLD;
+            if (underline) style |= itFont.UNDERLINE;
 
             BaseColor clr = new BaseColor(color.ToArgb());
 
-            return new FontHandler(new it.Font(fBaseFont, size, style, clr));
+            return new FontHandler(new itFont(fBaseFont, size, style, clr));
         }
 
         public override void AddParagraph(string text, IFont font)
@@ -383,6 +379,46 @@ namespace GKCore.Export
                     fDocument.Add(img);
                 }
             }
+        }
+
+        public override void BeginTable(int columnsCount, int rowsCount)
+        {
+            fTable = new itTable(columnsCount);
+
+            //table.WidthPercentage = 100f;
+            //table.TableFitsPage = true;
+            //table.Padding = 2f;
+            //table.Spacing = 0f;
+            //table.Cellpadding = 2f;
+            //table.Cellspacing = 0f;
+            //table.SpaceInsideCell = 2f;
+            //table.BorderColor = Color.BLACK;
+            //table.BorderWidth = 1f;
+            //table.DefaultCellBackgroundColor = new Color(System.Drawing.Color.CornflowerBlue);
+            //table.DefaultVerticalAlignment = Element.ALIGN_TOP;
+            //int[] widths = new int[] { 5, 20, 10, 15, 10, 15, 20 };
+            //table.SetWidths(widths);
+        }
+
+        public override void EndTable()
+        {
+            fDocument.Add(fTable);
+        }
+
+        public override void BeginTableRow(bool header = false)
+        {
+        }
+
+        public override void EndTableRow()
+        {
+        }
+
+        public override void AddTableCell(string content, IFont font, TextAlignment alignment)
+        {
+            itCell cell = new itCell(new Phrase(content, ((FontHandler)font).Handle));
+            cell.HorizontalAlignment = iAlignments[(int)alignment];
+            //cell.GrayFill
+            fTable.AddCell(cell);
         }
     }
 

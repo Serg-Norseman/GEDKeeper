@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -84,17 +84,16 @@ namespace GKCore.Lists
                 fSheetList.ResizeColumn(2);
                 fSheetList.ResizeColumn(3);
             } catch (Exception ex) {
-                Logger.WriteError("EventsListModel.UpdateContents(): ", ex);
+                Logger.WriteError("EventsListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
-            var dataOwner = fDataOwner as IGEDCOMStructWithLists;
-            if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
+            GDMRecordWithEvents record = fDataOwner as GDMRecordWithEvents;
+            if (fBaseWin == null || fSheetList == null || record == null) return;
 
             GDMCustomEvent evt = eArgs.ItemData as GDMCustomEvent;
-            GDMRecordWithEvents record = dataOwner as GDMRecordWithEvents;
 
             bool result = false;
 
@@ -110,9 +109,9 @@ namespace GKCore.Lists
                                 newEvent = evt;
                             } else {
                                 if (record is GDMIndividualRecord) {
-                                    newEvent = new GDMIndividualEvent(record);
+                                    newEvent = new GDMIndividualEvent();
                                 } else {
-                                    newEvent = new GDMFamilyEvent(record);
+                                    newEvent = new GDMFamilyEvent();
                                 }
                             }
 
@@ -166,7 +165,7 @@ namespace GKCore.Lists
                         break;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("EventsListModel.Modify(): ", ex);
+                Logger.WriteError("EventsListModel.Modify()", ex);
                 result = false;
             }
 

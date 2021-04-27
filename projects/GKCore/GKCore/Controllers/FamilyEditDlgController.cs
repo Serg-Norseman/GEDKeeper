@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -88,7 +88,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("FamilyEditDlgController.Accept(): ", ex);
+                Logger.WriteError("FamilyEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -114,7 +114,7 @@ namespace GKCore.Controllers
 
                 UpdateControls();
             } catch (Exception ex) {
-                Logger.WriteError("FamilyEditDlgController.SetFamily(): ", ex);
+                Logger.WriteError("FamilyEditDlgController.SetFamily()", ex);
             }
         }
 
@@ -128,8 +128,7 @@ namespace GKCore.Controllers
 
                 fView.LockEditor(true);
             } else {
-                husband = fFamily.Husband.Individual;
-                wife = fFamily.Wife.Individual;
+                fBase.Context.Tree.GetSpouses(fFamily, out husband, out wife);
 
                 fView.LockEditor(fFamily.Restriction == GDMRestriction.rnLocked);
             }
@@ -180,14 +179,22 @@ namespace GKCore.Controllers
             }
         }
 
+        public void JumpToRecord(GDMPointer pointer)
+        {
+            if (pointer != null && Accept()) {
+                fBase.SelectRecordByXRef(pointer.XRef, true);
+                fView.Close();
+            }
+        }
+
         public void JumpToHusband()
         {
-            JumpToRecord(fFamily.Husband.Individual);
+            JumpToRecord(fFamily.Husband);
         }
 
         public void JumpToWife()
         {
-            JumpToRecord(fFamily.Wife.Individual);
+            JumpToRecord(fFamily.Wife);
         }
     }
 }

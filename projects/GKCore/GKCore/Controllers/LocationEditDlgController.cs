@@ -72,7 +72,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("LocationEditDlgController.Accept(): ", ex);
+                Logger.WriteError("LocationEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -85,6 +85,8 @@ namespace GKCore.Controllers
 
             fView.NotesList.ListModel.DataOwner = fLocationRecord;
             fView.MediaList.ListModel.DataOwner = fLocationRecord;
+
+            ShowOnMap();
         }
 
         public GeoPoint GetSelectedGeoPoint()

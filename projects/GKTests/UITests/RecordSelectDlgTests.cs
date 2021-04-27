@@ -24,10 +24,8 @@ using System;
 using System.Windows.Forms;
 using GDModel;
 using GKCore.Interfaces;
-using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
 using NUnit.Framework;
 using NUnit.Extensions.Forms;
 using GKTests.ControlTesters;
@@ -45,8 +43,6 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
 
             fDialog = new RecordSelectDlg(fBase, GDMRecordType.rtIndividual);
@@ -86,10 +82,10 @@ namespace GKUI.Forms
             ClickButton("btnSelect", form);
         }
 
-        public static void SetSelectItemHandler(NUnitFormTest formTest, int itemIndex)
+        public static void SetSelectItemHandler(int itemIndex)
         {
             RSD_ItemIndex = itemIndex;
-            SetModalFormHandler(formTest, RSD_SelectItem_Handler);
+            SetModalFormHandler(fFormTest, RSD_SelectItem_Handler);
         }
 
         private static ModalFormHandler RSD_SubHandler;

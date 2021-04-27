@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,8 +23,6 @@
 using System;
 using System.Windows.Forms;
 using GKTests;
-using GKUI.Forms;
-using GKUI.Components;
 using NUnit.Framework;
 using NUnit.Extensions.Forms;
 
@@ -83,8 +81,12 @@ namespace GKUI.Forms
             SetModalFormHandler(fFormTest, SaveFile_Cancel_Handler);
             ClickButton("btnSave", form);
 
-            SetModalFormHandler(fFormTest, SaveFileGED_Handler);
-            ClickButton("btnSave", form);
+            try {
+                SetModalFormHandler(fFormTest, SaveFileGED_Handler);
+                ClickButton("btnSave", form);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.ged"));
+            }
 
             form.Close();
         }
@@ -99,10 +101,10 @@ namespace GKUI.Forms
             var radPersons = new RadioButtonTester("radPersons", form);
             radPersons.Properties.Checked = true;
 
-            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 0);
+            RecordSelectDlgTests.SetSelectItemHandler(0);
             ClickButton("MergeControl.btnRec1Select", form);
 
-            RecordSelectDlgTests.SetSelectItemHandler(fFormTest, 1);
+            RecordSelectDlgTests.SetSelectItemHandler(1);
             ClickButton("MergeControl.btnRec2Select", form);
 
             ClickButton("btnAutoSearch", form);

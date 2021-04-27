@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,12 +42,12 @@ namespace GDModel
         }
 
 
-        public GDMGroupRecord(GDMObject owner) : base(owner)
+        public GDMGroupRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType._GROUP);
 
             fGroupName = string.Empty;
-            fMembers = new GDMList<GDMIndividualLink>(this);
+            fMembers = new GDMList<GDMIndividualLink>();
         }
 
         protected override void Dispose(bool disposing)
@@ -56,6 +56,13 @@ namespace GDModel
                 fMembers.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fMembers.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -119,12 +126,12 @@ namespace GDModel
         {
             if (member == null) return false;
 
-            GDMIndividualLink mbrLink = new GDMIndividualLink(this, (int)GEDCOMTagType._MEMBER, string.Empty);
-            mbrLink.Individual = member;
+            GDMIndividualLink mbrLink = new GDMIndividualLink((int)GEDCOMTagType._MEMBER, string.Empty);
+            mbrLink.XRef = member.XRef;
             fMembers.Add(mbrLink);
 
-            var ptr = new GDMPointer(member, (int)GEDCOMTagType._GROUP, string.Empty);
-            ptr.Value = this;
+            var ptr = new GDMPointer((int)GEDCOMTagType._GROUP, string.Empty);
+            ptr.XRef = this.XRef;
             member.Groups.Add(ptr);
 
             return true;

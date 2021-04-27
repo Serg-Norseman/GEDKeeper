@@ -19,10 +19,16 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using BSLib.Design.Handlers;
+using GDModel;
+using GDModel.Providers.GEDCOM;
+using GEDmill.Model;
+using GKCore;
 using GKCore.Logging;
+using GKCore.Tools;
+using GKCore.Types;
 
 namespace GEDmill
 {
@@ -31,22 +37,56 @@ namespace GEDmill
     /// </summary>
     public static class GMHelper
     {
+        public const string GfxFilter = "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|"
+                                        + "Portable Network Graphics (*.png)|*.png|"
+                                        + "Graphics Interchange Format (*.gif)|*.gif|"
+                                        + "Windows Bitmap (*.bmp)|*.bmp|"
+                                        + "All supported picture files|*.jpg;*.jpeg;*.gif;*.bmp;*.png";
+
+
         private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(GMHelper).Name);
 
 
+        private static readonly Dictionary<string, CISRecordChanges> recX = new Dictionary<string, CISRecordChanges>();
+
+        public static void SetVisibility(GDMRecord record, bool value)
+        {
+            if (record == null) return;
+
+            CISRecordChanges changes;
+            if (!recX.TryGetValue(record.XRef, out changes)) {
+                changes = new CISRecordChanges(true);
+                recX.Add(record.XRef, changes);
+            }
+
+            changes.Visibility = value;
+        }
+
+        public static bool GetVisibility(GDMRecord record)
+        {
+            if (record == null) return true;
+
+            CISRecordChanges changes;
+            if (!recX.TryGetValue(record.XRef, out changes)) {
+                return true;
+            }
+
+            return changes.Visibility;
+        }
+
         // Modifies rectNew to fit within the limits given, keeping its aspect ratio
-        public static void ScaleAreaToFit(ref Rectangle rectNew, uint uMaxWidth, uint uMaxHeight)
+        public static void ScaleAreaToFit(ref Rectangle rectNew, int uMaxWidth, int uMaxHeight)
         {
             if (rectNew.Height > uMaxHeight) {
                 // Image won't fit horizontally, so scale in both directions til it will
-                rectNew.Width = (rectNew.Width * (int)uMaxHeight) / rectNew.Height;
-                rectNew.Height = (int)uMaxHeight;
+                rectNew.Width = (rectNew.Width * uMaxHeight) / rectNew.Height;
+                rectNew.Height = uMaxHeight;
             }
 
             if (rectNew.Width > uMaxWidth) {
                 // Image won't fit horizontally, so scale in both directions til it will
-                rectNew.Height = (rectNew.Height * (int)uMaxWidth) / rectNew.Width;
-                rectNew.Width = (int)uMaxWidth;
+                rectNew.Height = (rectNew.Height * uMaxWidth) / rectNew.Width;
+                rectNew.Width = uMaxWidth;
             }
         }
 
@@ -66,7 +106,7 @@ namespace GEDmill
             if (fileDir.Length > 0) {
                 fileDialog.InitialDirectory = fileDir;
             } else {
-                fileDialog.InitialDirectory = Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             }
 
             if (fileName.Length > 0) {
@@ -95,7 +135,7 @@ namespace GEDmill
             sFilterString += "All files (*.*)|*.*";
             fileDialog.Filter = sFilterString;
             fileDialog.FilterIndex = 1;
-            string sExtn = Path.GetExtension(fileDialog.FileName);
+            string extn = Path.GetExtension(fileDialog.FileName);
 
             // Check whether selected file matches given filter
             bool bValidExtn = true;
@@ -171,6 +211,68 @@ namespace GEDmill
             }
         }
 
+        // Capitalises an individual's name according to config setting
+        public static string CapitaliseName(string name, ref string firstName, ref string surname)
+        {
+            if (name == null) {
+                if (surname != null) {
+                    surname = CConfig.Instance.UnknownName;
+                }
+                return CConfig.Instance.UnknownName;
+            }
+
+            string newName = "";
+            switch (CConfig.Instance.NameCapitalisation) {
+                case 1:
+                case 0:
+                    // capitalise surname (the bit in //s)
+                    bool bSeenSlash = false;
+                    bool bFirstName = true;
+                    char oldc = '\0';
+                    foreach (char c in name) {
+                        if (c == '/') {
+                            bSeenSlash = !bSeenSlash;
+                            if (bFirstName && oldc != ' ' && newName.Length > 0) {
+                                // Ensure there is a space between first and last names (e.g. from "Fred/Bloggs/")
+                                newName += ' ';
+                                oldc = ' '; // To make oldc set to space too.
+                            } else {
+                                oldc = c;
+                            }
+                            bFirstName = false;
+                        } else if (bSeenSlash) {
+                            char cc = c;
+                            if (CConfig.Instance.NameCapitalisation == 1) {
+                                cc = char.ToUpper(cc);
+                            }
+                            newName += cc;
+                            if (surname != null) {
+                                surname += cc;
+                            }
+                            oldc = c;
+                        } else {
+                            newName += c;
+
+                            // Collapse multiple spaces into one
+                            if (oldc != ' ' || c != ' ') {
+                                if (bFirstName && firstName != null) {
+                                    firstName += c;
+                                } else if (!bFirstName && surname != null) {
+                                    surname += c;
+                                }
+                            }
+                            oldc = c;
+                        }
+                    }
+                    break;
+                default:
+                    newName = name;
+                    break;
+            }
+
+            return newName;
+        }
+
         // Returns the name of the alternative picture file to display for non-diaplayable files of the given format
         public static string NonPicFilename(string format, bool small, bool clickToDownload)
         {
@@ -198,46 +300,299 @@ namespace GEDmill
             return filename;
         }
 
-        // Converts a string of the form #RRGGBB to a Color instance.
-        // Used when retrieving colours from the config.
-        public static Color ConvertColour(string s)
+        public static int GetChronologicalYear(GDMDateValue dateVal)
         {
-            if (string.IsNullOrEmpty(s)) {
-                return Color.Black;
-            }
-
-            int nRed = 0;
-            int nGreen = 0;
-            int nBlue = 0;
-
-            switch (s.Length) {
-                case 4:
-                    s = s.Substring(1);
-                    goto case 3;
-                case 3:
-                    nRed = int.Parse(s.Substring(0, 1), NumberStyles.HexNumber);
-                    nGreen = int.Parse(s.Substring(1, 1), NumberStyles.HexNumber);
-                    nBlue = int.Parse(s.Substring(2, 1), NumberStyles.HexNumber);
-                    break;
-                case 7:
-                    s = s.Substring(1);
-                    goto case 6;
-                case 6:
-                    nRed = int.Parse(s.Substring(0, 2), NumberStyles.HexNumber);
-                    nGreen = int.Parse(s.Substring(2, 2), NumberStyles.HexNumber);
-                    nBlue = int.Parse(s.Substring(4, 2), NumberStyles.HexNumber);
-                    break;
-            }
-
-            return Color.FromArgb(nRed, nGreen, nBlue);
+            return (dateVal == null) ? 0 : dateVal.GetChronologicalYear();
         }
 
-        // Converts a Color instance to a string of the form #RRGGBB.
-        // Used when storing colours in the config.
-        public static string ConvertColour(Color c)
+        public static int GetEventsYearsDiff(GDMDateValue ev1, GDMDateValue ev2, bool currentEnd = true)
         {
-            string s = string.Format("#{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
-            return s;
+            int result = -1;
+
+            try {
+                int dt1 = GetChronologicalYear(ev1);
+                int dt2 = GetChronologicalYear(ev2);
+
+                if (currentEnd && dt2 == 0) {
+                    dt2 = DateTime.Now.Year;
+                }
+
+                if (dt1 != 0 && dt2 != 0) {
+                    result = Math.Abs(dt2 - dt1);
+                }
+            } catch (Exception ex) {
+                fLogger.WriteError("GKUtils.GetEventsYearsDiff()", ex);
+            }
+
+            return result;
+        }
+
+        public static string GetName(GDMIndividualRecord iRec, int i)
+        {
+            return (i >= 0 && i < iRec.PersonalNames.Count) ? iRec.PersonalNames[i].StringValue : "";
+        }
+
+        // Returns the n'th name and associated sources
+        public static NameAndSource GetNameAndSource(GDMIndividualRecord record, int n)
+        {
+            if (record.PersonalNames.Count <= n || n < 0) {
+                return null;
+            }
+            GDMPersonalName pns = record.PersonalNames[n];
+            NameAndSource nas = new NameAndSource(pns.StringValue);
+            nas.Sources.AddRange(pns.SourceCitations);
+            return nas;
+        }
+
+        public static List<GDMFamilyRecord> GetFamilyList(GDMTree tree, GDMIndividualRecord record)
+        {
+            var result = new List<GDMFamilyRecord>();
+
+            foreach (var link in record.SpouseToFamilyLinks) {
+                var family = tree.GetPtrValue(link);
+                if (family != null) {
+                    result.Add(family);
+                }
+            }
+
+            return result;
+        }
+
+        public static string GetLifeDatesStr(GDMIndividualRecord record)
+        {
+            var lifeDates = record.GetLifeDates();
+            //TODO
+            //TreeChartOptions options = GlobalOptions.Instance.ChartOptions;
+            //DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+            DateFormat dateFormat = DateFormat.dfYYYY;
+
+            string birthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, false);
+            string deathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, false);
+            return birthDate + " - " + deathDate;
+        }
+
+        public static bool IsPictureFormat(GDMFileReferenceWithTitle fileRef)
+        {
+            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
+            return (mmKind == MultimediaKind.mkImage);
+        }
+
+        public static string MakeLinkNumber(GDMSourceCitation sourCit, int sourceCount, bool hasComma)
+        {
+            string comma = hasComma ? "," : "";
+            return string.Concat("<span class=\"reference\">", comma, sourceCount.ToString(), "</span>");
+        }
+
+        // Returns a string to use in the list of references at the bottom of the page
+        public static string MakeLinkText(GDMTree tree, GDMSourceCitation sourCit, int sourceCount)
+        {
+            var sourRec = tree.GetPtrValue<GDMSourceRecord>(sourCit);
+            return string.Concat(sourceCount.ToString(), ". ", /*m_sSourceDescription*/sourRec.ShortTitle);
+        }
+
+        public static void RestrictAssociatedSources(GDMTree tree, GDMIndividualRecord iRec)
+        {
+            // Restrict sources connected with individual directly
+            foreach (GDMSourceCitation sc in iRec.SourceCitations) {
+                RestrictSource(tree, sc, true);
+            }
+
+            // Restrict sources connected with name
+            foreach (GDMPersonalName pns in iRec.PersonalNames) {
+                foreach (GDMSourceCitation sc in pns.SourceCitations) {
+                    RestrictSource(tree, sc, true);
+                }
+            }
+
+            // Restrict sources connected with events
+            foreach (GDMCustomEvent ies in iRec.Events) {
+                foreach (GDMSourceCitation sc in ies.SourceCitations) {
+                    RestrictSource(tree, sc, true);
+                }
+            }
+
+            // Restrict sources connected with m_associationStructures
+            foreach (GDMAssociation ass in iRec.Associations) {
+                foreach (GDMSourceCitation sc in ass.SourceCitations) {
+                    RestrictSource(tree, sc, true);
+                }
+            }
+        }
+
+        // Marks the given source citation as (un)restricted
+        public static void RestrictSource(GDMTree tree, GDMSourceCitation sc, bool visible)
+        {
+            if (tree != null && sc != null) {
+                var sourceRec = tree.GetPtrValue<GDMSourceRecord>(sc);
+                if (sourceRec != null) {
+                    GMHelper.SetVisibility(sourceRec, visible);
+                }
+            }
+        }
+
+        private static bool RestrictProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
+        {
+            bool visible = (bool)extData;
+            GMHelper.SetVisibility(iRec, visible);
+            return true;
+        }
+
+        public static void RestrictAncestors(GDMTree tree, GDMIndividualRecord iRec, bool visible)
+        {
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAncestors, RestrictProc, visible);
+        }
+
+        public static void RestrictDescendants(GDMTree tree, GDMIndividualRecord iRec, bool visible)
+        {
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmDescendants, RestrictProc, visible);
+        }
+
+        private static bool MarkProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
+        {
+            var marks = (List<GDMRecord>)extData;
+            marks.Add(iRec);
+            return true;
+        }
+
+        public static void MarkConnected(GDMTree tree, GDMIndividualRecord iRec, List<GDMRecord> marks)
+        {
+            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, MarkProc, marks);
+        }
+
+        public static void RestrictUnmarked(GDMTree tree, List<GDMRecord> marks, out int changed)
+        {
+            changed = 0;
+            var treeEnum = tree.GetEnumerator(GDMRecordType.rtIndividual);
+            GDMRecord record;
+            while (treeEnum.MoveNext(out record)) {
+                if (!marks.Contains(record)) {
+                    GMHelper.SetVisibility(record, false);
+                    changed++;
+                }
+            }
+        }
+
+        public static int SetAllMFRsVisible(GDMTree tree, GDMRecord record, bool visible)
+        {
+            int nChanged = 0;
+            foreach (GDMMultimediaLink mfr in record.MultimediaLinks) {
+                var mmRec = tree.GetPtrValue<GDMMultimediaRecord>(mfr);
+                if (mmRec != null && GMHelper.GetVisibility(mmRec) != visible) {
+                    GMHelper.SetVisibility(mmRec, visible);
+                    nChanged++;
+                }
+            }
+            return nChanged;
+        }
+
+        private static void GetBackReferences(GDMRecord inRecord, GDMRecord subject, List<BackReference> list)
+        {
+            try {
+                if (subject is GDMSourceRecord) {
+                    int num = inRecord.SourceCitations.Count;
+                    for (int i = 0; i < num; i++) {
+                        if (inRecord.SourceCitations[i].XRef == subject.XRef) {
+                            list.Add(new BackReference(inRecord.RecordType, inRecord.XRef, ""));
+                        }
+                    }
+
+                    var recordWithEvents = inRecord as GDMRecordWithEvents;
+                    if (recordWithEvents != null) {
+                        GDMRecordWithEvents evsRec = recordWithEvents;
+
+                        num = evsRec.Events.Count;
+                        for (int i = 0; i < num; i++) {
+                            var evt = evsRec.Events[i];
+
+                            int num2 = evt.SourceCitations.Count;
+                            for (int k = 0; k < num2; k++) {
+                                if (evt.SourceCitations[k].XRef == subject.XRef) {
+                                    list.Add(new BackReference(inRecord.RecordType, inRecord.XRef, evt.GetTagName()));
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GMHelper.GetBackReferences()", ex);
+            }
+        }
+
+        public static List<BackReference> GetBackReferences(GDMTree tree, GDMSourceRecord sourceRec)
+        {
+            var result = new List<BackReference>();
+
+            int num2 = tree.RecordsCount;
+            for (int j = 0; j < num2; j++) {
+                GetBackReferences(tree[j], sourceRec, result);
+            }
+
+            return result;
+        }
+
+        public static Dictionary<object, GDMIndividualRecord> MakeBackReferences(GDMRecord record)
+        {
+            var result = new Dictionary<object, GDMIndividualRecord>();
+            return result;
+        }
+
+        public static void CountMFRs(GDMRecord record, out int total, out int visible)
+        {
+            total = 0;
+            visible = 0;
+        }
+
+        public static Color SelectColor(Color color)
+        {
+            var colorHandle = AppHost.StdDialogs.SelectColor(new ColorHandler(color));
+            return ((ColorHandler)colorHandle).Handle;
+        }
+
+        public static string GetInitialDirectory(string fileName)
+        {
+            string sPath = fileName;
+            if (!Directory.Exists(sPath)) {
+                int iLastFolder = sPath.LastIndexOf('\\'); // Try parent folder
+                if (iLastFolder >= 0) {
+                    sPath = sPath.Substring(0, iLastFolder);
+                }
+                if (!Directory.Exists(sPath)) {
+                    sPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                }
+            }
+            return sPath;
+        }
+
+        public static bool IsSupportedFile(string fileName)
+        {
+            if (!string.IsNullOrEmpty(fileName)) {
+                string exten = Path.GetExtension(fileName).ToLower();
+                if (exten != ".jpg" && exten != ".jpeg" && exten != ".png" && exten != ".gif" && exten != ".bmp") {
+                    MessageBox.Show("The file you have selected is not a supported picture type.", "Unsupported Format",
+                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static string GetIndiName(string surname, string firstName)
+        {
+            string name = "";
+
+            if (firstName != "" && surname != "") {
+                name = string.Concat(surname, ", ", firstName);
+            } else if (surname != "") {
+                name = surname;
+            } else {
+                name = firstName;
+            }
+
+            if (name == "") {
+                name = CConfig.Instance.UnknownName;
+            }
+
+            return name;
         }
     }
 }

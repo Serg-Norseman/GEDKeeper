@@ -32,7 +32,7 @@ namespace GKCore
     /// </summary>
     public static class UpdateMan
     {
-        private const string UPDATE_URL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
+        private const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
 
         #if NET35 || NET40
         private const int Tls11 = 768;
@@ -54,10 +54,10 @@ namespace GKCore
                     #endif
                 } catch (Exception ex) {
                     // crash on WinXP, TLS 1.2 not supported
-                    Logger.WriteError("UpdateMan.GetLastVersion.SP(): ", ex);
+                    Logger.WriteError("UpdateMan.GetLastVersion.SP()", ex);
                 }
 
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(UPDATE_URL);
+                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(UpdateURL);
                 webRequest.ContentType = "text/xml; encoding='utf-8'";
                 webRequest.KeepAlive = false;
                 webRequest.Method = "GET";
@@ -90,7 +90,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("UpdateMan.GetLastVersion(): ", ex);
+                Logger.WriteError("UpdateMan.GetLastVersion()", ex);
             } finally {
                 if (reader != null)
                     reader.Close();
@@ -117,7 +117,7 @@ namespace GKCore
                     #endif
                 }
             } catch (Exception ex) {
-                Logger.WriteError("UpdateMan.WorkerMethod(): ", ex);
+                Logger.WriteError("UpdateMan.WorkerMethod()", ex);
             }
         }
 
@@ -130,7 +130,7 @@ namespace GKCore
                     // In Ubuntu 1604 LTS (Unity desktop), this method leads to a
                     // complete crash of the program at the level of X11,
                     // but in the same version of Ubuntu and Xfce, everything is fine
-                    Logger.LogWrite("UpdateMan.CheckUpdate(): is not supported for Unity");
+                    Logger.WriteInfo("UpdateMan.CheckUpdate(): is not supported for Unity");
                     return;
                 }
                 #endif
@@ -140,7 +140,7 @@ namespace GKCore
                 worker.IsBackground = true;
                 worker.Start();
             } catch (Exception ex) {
-                Logger.WriteError("UpdateMan.CheckUpdate(): ", ex);
+                Logger.WriteError("UpdateMan.CheckUpdate()", ex);
             }
         }
     }

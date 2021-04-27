@@ -436,7 +436,7 @@ namespace GKUI.Forms
                 fPerson = p.Rec;
                 GenChart();
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartWin.miRebuildTree_Click(): ", ex);
+                Logger.WriteError("TreeChartWin.miRebuildTree_Click()", ex);
             }
         }
 
@@ -449,6 +449,7 @@ namespace GKUI.Forms
         {
             miFatherAdd.Enabled = fController.ParentIsRequired(GDMSex.svMale);
             miMotherAdd.Enabled = fController.ParentIsRequired(GDMSex.svFemale);
+            miGoToRecord.Enabled = fController.SelectedPersonIsReal();
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)
@@ -464,6 +465,11 @@ namespace GKUI.Forms
         private void tbOptions_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowOptions(OptionsPage.opTreeChart);
+        }
+
+        private void miGoToRecord_Click(object sender, EventArgs e)
+        {
+            fController.GoToRecord();
         }
 
         #endregion
@@ -485,7 +491,7 @@ namespace GKUI.Forms
                     UpdateControls();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartWin.GenChart(): ", ex);
+                Logger.WriteError("TreeChartWin.GenChart()", ex);
             }
         }
 
@@ -521,6 +527,7 @@ namespace GKUI.Forms
             miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
             miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
             miSelectColor.Text = LangMan.LS(LSID.LSID_SelectColor);
+            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
 
             SetToolTip(tbModes, LangMan.LS(LSID.LSID_ModesTip));
             SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
@@ -543,13 +550,14 @@ namespace GKUI.Forms
                 StatusLines[0] = string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fTreeBox.IndividualsCount);
                 var imageSize = fTreeBox.GetImageSize();
                 StatusLines[1] = string.Format(LangMan.LS(LSID.LSID_ImageSize), imageSize.Width, imageSize.Height);
+                StatusLines[2] = string.Format("{0}: {1:f0} %", LangMan.LS(LSID.LSID_Scale), fTreeBox.Scale * 100);
 
                 tbPrev.Enabled = NavCanBackward();
                 tbNext.Enabled = NavCanForward();
 
                 AppHost.Instance.UpdateControls(false, true);
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartWin.UpdateControls(): ", ex);
+                Logger.WriteError("TreeChartWin.UpdateControls()", ex);
             }
         }
 

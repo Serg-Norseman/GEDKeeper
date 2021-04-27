@@ -27,7 +27,6 @@ using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
-using GKUI.Components;
 
 [assembly: AssemblyTitle("GKCalculatorPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calculator plugin")]
@@ -83,7 +82,7 @@ namespace GKCalculatorPlugin
 
                 if (fForm != null) fForm.SetLang();
             } catch (Exception ex) {
-                Logger.WriteError("GKCalculatorPlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKCalculatorPlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -91,13 +90,12 @@ namespace GKCalculatorPlugin
         {
             bool result = base.Startup(host);
             try {
-                Assembly assembly = typeof(Plugin).Assembly;
-                using (Stream stmIcon = assembly.GetManifestResourceStream("Resources.icon_calc.gif")) {
+                using (Stream stmIcon = LoadResourceStream("icon_calc.gif")) {
                     Image bmp = Image.FromStream(stmIcon);
                     fIcon = new ImageHandler(bmp);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKCalculatorPlugin.Startup(): ", ex);
+                Logger.WriteError("GKCalculatorPlugin.Startup()", ex);
                 result = false;
             }
             return result;

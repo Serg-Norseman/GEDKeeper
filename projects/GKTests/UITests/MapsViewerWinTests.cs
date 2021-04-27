@@ -21,13 +21,7 @@
 #if !__MonoCS__
 
 using System.Windows.Forms;
-using GDModel;
-using GKCore.Interfaces;
 using GKTests;
-using GKTests.Stubs;
-using GKUI.Forms;
-using GKUI.Components;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -38,11 +32,8 @@ namespace GKUI.Forms
     [TestFixture]
     public class MapsViewerWinTests : CustomWindowTest
     {
-
         public override void Setup()
         {
-            base.Setup();
-
             WFAppHost.ConfigureBootstrap(false);
         }
 

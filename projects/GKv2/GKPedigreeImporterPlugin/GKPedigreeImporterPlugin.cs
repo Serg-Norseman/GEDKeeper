@@ -65,7 +65,7 @@ namespace GKPedigreeImporterPlugin
         LSID_Close,
         LSID_PersonLineSpecials,
         LSID_Special_1,
-        LSID_Analysis,
+        LSID_Analyzing,
         LSID_Loading,
         LSID_NPS,
         LSID_SNP,
@@ -100,7 +100,7 @@ namespace GKPedigreeImporterPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(ILS.LSID_PluginTitle);
             } catch (Exception ex) {
-                Logger.WriteError("GKPedigreeImporterPlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKPedigreeImporterPlugin.OnLanguageChange()", ex);
             }
         }
     }

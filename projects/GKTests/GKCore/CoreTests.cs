@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,9 +25,7 @@ using System.Text;
 using BSLib;
 using BSLib.Design;
 using BSLib.Design.Handlers;
-using BSLib.Design.IoC;
 using GDModel;
-using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Names;
@@ -35,9 +33,9 @@ using GKCore.Search;
 using GKCore.Stats;
 using GKCore.Types;
 using GKTests;
-using GKTests.Stubs;
 using GKUI;
 using GKUI.Components;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore
@@ -50,18 +48,13 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
-            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
-
+            TestUtils.InitProgressStub();
             LangMan.DefInit();
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
-        }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
         }
 
         [Test]
@@ -101,8 +94,8 @@ namespace GKCore
         public void Test_Tween()
         {
             #if !__MonoCS__
-            TweenLibrary tween = new TweenLibrary();
-            tween.StartTween(TweenHandler, 0, 0, 10, 10, TweenAnimation.EaseInOutQuad, 20);
+            var tween = new GKCore.Charts.TweenLibrary();
+            tween.StartTween(TweenHandler, 0, 0, 10, 10, GKCore.Charts.TweenAnimation.EaseInOutQuad, 20);
             #endif
         }
 
@@ -120,20 +113,32 @@ namespace GKCore
             Assert.IsTrue(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
             Assert.AreEqual(DesktopType.Windows, SysUtils.GetDesktopType());
             #endif
+        }
 
-            //
-
+        [Test]
+        public void Test_SysUtils_IsUnicodeEncoding()
+        {
             Assert.IsTrue(SysUtils.IsUnicodeEncoding(Encoding.UTF8));
             Assert.IsFalse(SysUtils.IsUnicodeEncoding(Encoding.ASCII));
+        }
 
-            //
-
+        [Test]
+        public void Test_SysUtils_GetAssemblyAttribute()
+        {
             Assembly asm = this.GetType().Assembly;
             var attr1 = SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
             Assert.IsNotNull(attr1);
             Assert.AreEqual("GKTests", attr1.Title);
 
             Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(null); });
+        }
+
+        [Test]
+        public void Test_SysUtils_ImplementsInterface()
+        {
+            Assert.IsTrue(SysUtils.ImplementsInterface(typeof(LangManager), typeof(ILangMan)));
+
+            Assert.IsFalse(SysUtils.ImplementsInterface(typeof(LangManager), typeof(INamesTable)));
         }
 
         [Test]
@@ -144,7 +149,8 @@ namespace GKCore
 
             Assert.Throws(typeof(ArgumentNullException), () => { new SearchStrategy(null, null); });
 
-            SearchStrategy strat = new SearchStrategy(new WorkWindowStub(), "");
+            var workWindow = Substitute.For<IWorkWindow>();
+            SearchStrategy strat = new SearchStrategy(workWindow, "");
             Assert.IsNotNull(strat);
 
             IList<ISearchResult> res = strat.FindAll();
@@ -156,7 +162,7 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_Stats()
+        public void Test_CompositeItem()
         {
             CompositeItem compositeItem = new CompositeItem();
             Assert.IsNotNull(compositeItem);
@@ -174,17 +180,32 @@ namespace GKCore
             Assert.AreEqual(1, compositeItem.CommonVal);
             Assert.AreEqual(1, compositeItem.MaleVal);
             Assert.AreEqual(1, compositeItem.FemaleVal);
+        }
 
+        [Test]
+        public void Test_StatsItem()
+        {
             StatsItem statsItem = new StatsItem("test", false);
             Assert.IsNotNull(statsItem);
             Assert.AreEqual("test", statsItem.ToString());
+            Assert.AreEqual("0", statsItem.GetDisplayString());
 
             statsItem = new StatsItem("test2", 0);
             Assert.IsNotNull(statsItem);
             Assert.AreEqual("test2", statsItem.ToString());
 
+            statsItem = new StatsItem("test2", true);
+            Assert.IsNotNull(statsItem);
+            statsItem.ValF = 10;
+            statsItem.ValM = 11;
+            Assert.AreEqual("10 | 11", statsItem.GetDisplayString());
+        }
+
+        [Test]
+        public void Test_Stats()
+        {
             List<GDMRecord> selectedRecords = new List<GDMRecord>();
-            IGEDCOMTreeEnumerator iEnum = fContext.Tree.GetEnumerator(GDMRecordType.rtIndividual);
+            IGDMTreeEnumerator iEnum = fContext.Tree.GetEnumerator(GDMRecordType.rtIndividual);
             GDMRecord current;
             while (iEnum.MoveNext(out current)) {
                 selectedRecords.Add(current);
@@ -315,16 +336,20 @@ namespace GKCore
 
                 GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec);
-                namesTable.ImportNames(iRec);
+                namesTable.ImportNames(fContext, iRec);
 
-                namesTable.ImportNames(null);
+                namesTable.ImportNames(null, null);
 
                 sex = namesTable.GetSexByName("Anna");
                 Assert.AreEqual(GDMSex.svFemale, sex);
 
                 string namesFile = TestUtils.GetTempFilePath("names.txt");
-                namesTable.SaveToFile(namesFile);
-                namesTable.LoadFromFile(namesFile);
+                try {
+                    namesTable.SaveToFile(namesFile);
+                    namesTable.LoadFromFile(namesFile);
+                } finally {
+                    TestUtils.RemoveTestFile(namesFile);
+                }
             }
         }
 

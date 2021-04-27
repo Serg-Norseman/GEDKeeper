@@ -85,7 +85,7 @@ namespace GKCore.Controllers
                     scrEngine.lua_run(fView.ScriptText.Text, fBase, fView.DebugOutput);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("ScriptEditWin.Run(): ", ex);
+                Logger.WriteError("ScriptEditWin.Run()", ex);
             }
         }
     }

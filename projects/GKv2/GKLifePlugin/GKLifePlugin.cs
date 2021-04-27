@@ -21,10 +21,10 @@
 using System;
 using System.Reflection;
 using BSLib.Design.Graphics;
-using ConwayLife;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
+using GKLifePlugin.ConwayLife;
 
 [assembly: AssemblyTitle("GKLifePlugin")]
 [assembly: AssemblyDescription("GEDKeeper Conway's Game of Life plugin")]
@@ -79,7 +79,7 @@ namespace GKLifePlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_LifeGame);
             } catch (Exception ex) {
-                Logger.WriteError("GKLifePlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKLifePlugin.OnLanguageChange()", ex);
             }
         }
     }

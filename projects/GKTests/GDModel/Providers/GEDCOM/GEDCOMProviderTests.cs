@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
 using NUnit.Framework;
 
 namespace GDModel.Providers.GEDCOM
@@ -35,27 +34,6 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(GEDCOMFormat.gf_Unknown, GEDCOMProvider.GetGEDCOMFormat(tree));
             tree.Header.Source.StringValue = "GENBOX";
             Assert.AreEqual(GEDCOMFormat.gf_GENBOX, GEDCOMProvider.GetGEDCOMFormat(tree));
-        }
-
-        private GDMTag TagConstructorTest(GDMObject owner, int tagId, string tagValue)
-        {
-            return null;
-        }
-
-        [Test]
-        public void Test_GEDCOMFactory()
-        {
-            TagConstructor tagConst = TagConstructorTest;
-            Assert.AreEqual(null, tagConst.Invoke(null, 0, "x"));
-
-            //
-
-            GDMTag tag = GEDCOMProvider.CreateTag(null, (int)GEDCOMTagType.DATE, "");
-            Assert.IsNotNull(tag);
-
-            tag = GEDCOMProvider.CreateTag(null, GEDCOMTagsTable.Lookup("TEST"), "");
-            Assert.IsNotNull(tag);
-            Assert.AreEqual("TEST", tag.GetTagName());
         }
 
         [Test]

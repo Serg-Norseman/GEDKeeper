@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -113,8 +113,9 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
+                var tree = fBaseWin.Context.Tree;
                 foreach (GDMIndividualLink ptrMember in grp.Members) {
-                    GDMIndividualRecord member = ptrMember.Individual;
+                    GDMIndividualRecord member = tree.GetPtrValue(ptrMember);
                     if (member == null) continue;
 
                     fSheetList.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });
@@ -122,7 +123,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("GroupMembersSublistModel.UpdateContents(): ", ex);
+                Logger.WriteError("GroupMembersSublistModel.UpdateContents()", ex);
             }
         }
 

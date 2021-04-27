@@ -21,8 +21,6 @@
 #if !__MonoCS__
 
 using System.Windows.Forms;
-using GKUI.Components;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 using GKTests;
 

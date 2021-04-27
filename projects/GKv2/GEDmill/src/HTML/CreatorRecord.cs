@@ -16,7 +16,6 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -34,21 +33,21 @@ namespace GEDmill.HTML
         protected List<Multimedia> fMultimediaList;
 
 
-        protected CreatorRecord(GDMTree tree, IProgressCallback progress, string w3cfile) : base(tree, progress, w3cfile)
+        protected CreatorRecord(GDMTree tree, IProgressCallback progress, string w3cFile) : base(tree, progress, w3cFile)
         {
             fMultimediaList = new List<Multimedia>();
         }
 
         // Adds the given multimedia links to the given multimedia list.
         protected void AddMultimedia(GDMList<GDMMultimediaLink> multimediaLinks, string mmPrefix,
-                                     string mmLargePrefix, uint maxWidth, uint maxHeight, Stats stats)
+                                     string mmLargePrefix, int maxWidth, int maxHeight, Stats stats)
         {
             // TODO: ml.GetFileReferences();
             var fileRefs = new List<GDMFileReference>();
             foreach (var mmLink in multimediaLinks) {
                 if (mmLink.IsPointer) {
-                    var mmRec = mmLink.Value as GDMMultimediaRecord;
-                    if (!mmRec.GetVisibility()) {
+                    var mmRec = fTree.GetPtrValue(mmLink);
+                    if (!GMHelper.GetVisibility(mmRec)) {
                         // user chose not to show this picture
                         continue;
                     }
@@ -119,7 +118,7 @@ namespace GEDmill.HTML
 
         // Adds the given list of file references to the multimedia list.
         private void AddMultimediaFileReferences(List<GDMFileReference> fileRefs, string mmPrefix,
-                                                 string mmLargePrefix, uint maxWidth, uint maxHeight, Stats stats)
+                                                 string mmLargePrefix, int maxWidth, int maxHeight, Stats stats)
         {
             if (fileRefs == null) {
                 return;
@@ -168,7 +167,7 @@ namespace GEDmill.HTML
                 }
                 string originalFilename = Path.GetFileName(mmFilename);
 
-                bool pictureFormat = mfr.IsPictureFormat();
+                bool pictureFormat = GMHelper.IsPictureFormat(mfr);
                 if (pictureFormat || CConfig.Instance.AllowNonPictures) {
                     if (!pictureFormat && CConfig.Instance.AllowNonPictures) {
                         stats.NonPicturesIncluded = true;
@@ -222,14 +221,15 @@ namespace GEDmill.HTML
         }
 
         // Outputs the HTML for the Notes section of the page
-        protected static void OutputNotes(HTMLFile f, GDMList<GDMNotes> notes)
+        protected void OutputNotes(HTMLFile f, GDMList<GDMNotes> notes)
         {
             if (notes.Count > 0) {
                 // Generate notes list into a local array before adding header title. This is to cope with the case where all notes are nothing but blanks.
                 var note_strings = new List<string>(notes.Count);
 
                 foreach (GDMNotes ns in notes) {
-                    string noteText = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(ns.Lines.Text) : ns.Lines.Text;
+                    GDMLines noteLines = fTree.GetNoteLines(ns);
+                    string noteText = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(noteLines.Text) : noteLines.Text;
                     note_strings.Add(string.Concat("<li>", EscapeHTML(noteText, false), "</li>"));
                 }
 
@@ -245,6 +245,21 @@ namespace GEDmill.HTML
                     f.WriteLine("</ul>");
                     f.WriteLine("</div> <!-- notes -->");
                 }
+            }
+        }
+
+        protected string GetNoteText(GDMNotes ns)
+        {
+            GDMLines noteLines = fTree.GetNoteLines(ns);
+            string result = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(noteLines.Text) : noteLines.Text;
+            return result;
+        }
+
+        public void WriteNotes(HTMLFile f, GDMNotes ns)
+        {
+            if (ns != null) {
+                string noteText = GetNoteText(ns);
+                f.WriteLine("<p>{0}</p>", EscapeHTML(noteText, false));
             }
         }
     }

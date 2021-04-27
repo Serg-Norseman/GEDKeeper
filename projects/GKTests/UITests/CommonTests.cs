@@ -24,7 +24,6 @@ using BSLib;
 using BSLib.Design.Handlers;
 using GDModel;
 using GKCore;
-using GKUI.Components;
 using NUnit.Framework;
 
 namespace GKUI.Components
@@ -67,6 +66,9 @@ namespace GKUI.Components
             var color = AppHost.GfxProvider.CreateColor(100, 100, 100);
             var chk_res = AppHost.GfxProvider.CreateColor(50, 50, 50);
             Assert.AreEqual(((ColorHandler)chk_res).Handle, ((ColorHandler)color.Darker(0.5f)).Handle);
+
+            color = AppHost.GfxProvider.CreateColor(255, 75, 75, 75);
+            Assert.AreEqual("ff4b4b4b", color.GetName());
 
             color = AppHost.GfxProvider.CreateColor(50, 50, 50);
             chk_res = AppHost.GfxProvider.CreateColor(75, 75, 75);

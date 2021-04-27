@@ -21,17 +21,13 @@
 #if !__MonoCS__
 
 using System;
-using System.Windows.Forms;
 using GDModel;
-using GKCore;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
 using GKTests.Stubs;
 using GKUI;
 using GKUI.Forms;
-using GKUI.Components;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKFlowInputPlugin
@@ -103,8 +99,6 @@ namespace GKFlowInputPlugin
 
         public override void Setup()
         {
-            base.Setup();
-
             WFAppHost.ConfigureBootstrap(false);
             fBase = new BaseWindowStub(false);
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,7 +29,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -181,7 +180,7 @@ namespace GKPedigreeImporterPlugin
                 fam.AddSpouse(parent);
             }
 
-            GDMFamilyRecord family = parent.SpouseToFamilyLinks[marrNum - 1].Family;
+            GDMFamilyRecord family = fTree.GetPtrValue(parent.SpouseToFamilyLinks[marrNum - 1]);
             return family;
         }
 
@@ -442,7 +441,7 @@ namespace GKPedigreeImporterPlugin
             return result;
         }
 
-        private GDMIndividualRecord ParsePerson(StringList buffer, string str, ref int selfId)
+        private GDMIndividualRecord ParsePerson(GDMLines buffer, string str, ref int selfId)
         {
             try
             {
@@ -491,12 +490,12 @@ namespace GKPedigreeImporterPlugin
             }
             catch (Exception ex)
             {
-                Logger.WriteError("Importer.ParsePerson(): ", ex);
+                Logger.WriteError("Importer.ParsePerson()", ex);
                 throw;
             }
         }
 
-        private GDMSex GetProposeSex(StringList buffer)
+        private GDMSex GetProposeSex(GDMLines buffer)
         {
             GDMSex result = GDMSex.svUnknown;
             if (buffer == null) return result;
@@ -526,13 +525,13 @@ namespace GKPedigreeImporterPlugin
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("Importer.GetProposeSex(): ", ex);
+                Logger.WriteError("Importer.GetProposeSex()", ex);
             }
 
             return result;
         }
 
-        private void CheckSpouses(StringList buffer, GDMIndividualRecord curPerson)
+        private void CheckSpouses(GDMLines buffer, GDMIndividualRecord curPerson)
         {
             int num2 = buffer.Count;
             for (int i = 0; i < num2; i++) {
@@ -569,12 +568,12 @@ namespace GKPedigreeImporterPlugin
                         }
                     }
                 } catch (Exception ex) {
-                    Logger.WriteError("Importer.CheckSpouses(): ", ex);
+                    Logger.WriteError("Importer.CheckSpouses()", ex);
                 }
             }
         }
 
-        private void CheckBuffer(StringList buffer, GDMIndividualRecord curPerson)
+        private void CheckBuffer(GDMLines buffer, GDMIndividualRecord curPerson)
         {
             if (buffer.IsEmpty()) return;
 
@@ -594,7 +593,7 @@ namespace GKPedigreeImporterPlugin
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns>prevId, identifier of person</returns>
-        private int ParseBuffer(StringList buffer)
+        private int ParseBuffer(GDMLines buffer)
         {
             int prevId = 0;
 
@@ -620,7 +619,7 @@ namespace GKPedigreeImporterPlugin
                     CheckBuffer(buffer, curPerson);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("Importer.ParseBuffer(): ", ex);
+                Logger.WriteError("Importer.ParseBuffer()", ex);
                 throw;
             }
 
@@ -665,7 +664,7 @@ namespace GKPedigreeImporterPlugin
                     int[] numberStats = new int[3];
 
                     int num = fRawContents.Count;
-                    progress.ProgressInit(fLangMan.LS(ILS.LSID_Analysis), num);
+                    progress.ProgressInit(fLangMan.LS(ILS.LSID_Analyzing), num);
 
                     for (int i = 0; i < num; i++) {
                         string txt = fRawContents[i].Trim();
@@ -707,7 +706,7 @@ namespace GKPedigreeImporterPlugin
                     progress.ProgressDone();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("Importer.AnalyseRaw(): ", ex);
+                Logger.WriteError("Importer.AnalyseRaw()", ex);
                 return false;
             }
         }
@@ -738,7 +737,7 @@ namespace GKPedigreeImporterPlugin
             try {
                 fLog.Clear();
 
-                StringList buffer = new StringList();
+                GDMLines buffer = new GDMLines();
                 try {
                     int prev_id = 0;
 
@@ -777,10 +776,9 @@ namespace GKPedigreeImporterPlugin
 
                     return true;
                 } finally {
-                    buffer.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("Importer.ImportTextContent(): ", ex);
+                Logger.WriteError("Importer.ImportTextContent()", ex);
                 throw;
             }
         }
@@ -816,7 +814,7 @@ namespace GKPedigreeImporterPlugin
                 //sheet.Activate();
 
                 IProgressController progress = AppHost.Progress;
-                StringList buffer = new StringList();
+                GDMLines buffer = new GDMLines();
                 try
                 {
                     int rowsCount = sheet.UsedRange.Rows.Count;
@@ -909,7 +907,8 @@ namespace GKPedigreeImporterPlugin
                 {
                     progress.ProgressDone();
 
-                    buffer.Dispose();
+                    buffer.Clear();
+                    buffer = null;
 
                     excel.Quit();
                     excel = null;
@@ -918,7 +917,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                Logger.WriteError("Importer.ImportTableContent(): ", ex);
+                Logger.WriteError("Importer.ImportTableContent()", ex);
                 return false;
             }
         }
@@ -928,13 +927,11 @@ namespace GKPedigreeImporterPlugin
         {
             SourceType = SourceType.stText;
 
-            try
-            {
-                using (StreamReader strd = new StreamReader(fFileName, Encoding.GetEncoding(1251)))
-                {
+            try {
+                using (Stream fs = new FileStream(fFileName, FileMode.Open))
+                using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
                     IProgressController progress = AppHost.Progress;
-                    try
-                    {
+                    try {
                         progress.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
 
                         int lineNum = 0;
@@ -949,19 +946,15 @@ namespace GKPedigreeImporterPlugin
                             lineNum++;
                         }
                         fRawContents.AddObject("", new RawLine(lineNum));
-                    }
-                    finally
-                    {
+                    } finally {
                         progress.ProgressDone();
                     }
                 }
 
                 return AnalyseRaw();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                Logger.WriteError("Importer.LoadRawText(): ", ex);
+                Logger.WriteError("Importer.LoadRawText()", ex);
                 return false;
             }
         }
@@ -1022,7 +1015,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                Logger.WriteError("Importer.LoadRawWord(): ", ex);
+                Logger.WriteError("Importer.LoadRawWord()", ex);
                 return false;
             }
         }

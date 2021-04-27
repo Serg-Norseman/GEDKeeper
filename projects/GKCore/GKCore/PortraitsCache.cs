@@ -70,7 +70,7 @@ namespace GKCore
         {
             if (context == null || iRec == null) return null;
 
-            IImage result = null;
+            IImage result;
 
             // get multimedia UID
             string imageUID = context.GetPrimaryBitmapUID(iRec);
@@ -110,12 +110,11 @@ namespace GKCore
             return result;
         }
 
-        public void RemoveObsolete(GDMMultimediaLink mmLink)
+        public void RemoveObsolete(string imageUID)
         {
-            if (mmLink == null) return;
+            if (string.IsNullOrEmpty(imageUID)) return;
 
             try {
-                string imageUID = mmLink.GetUID();
                 string cachedFile = GetCachedFilename(imageUID);
 
                 if (fMemoryCache.ContainsKey(cachedFile)) {
@@ -126,7 +125,7 @@ namespace GKCore
                     File.Delete(cachedFile);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("PortraitsCache.RemoveObsolete(): ", ex);
+                Logger.WriteError("PortraitsCache.RemoveObsolete()", ex);
             }
         }
     }

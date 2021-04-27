@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -52,13 +52,13 @@ namespace GDModel
         }
 
 
-        public GDMSubmitterRecord(GDMObject owner) : base(owner)
+        public GDMSubmitterRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.SUBM);
 
-            fAddress = new GDMAddress(this);
-            fLanguages = new GDMList<GDMLanguage>(this);
-            fName = new GDMPersonalName(this);
+            fAddress = new GDMAddress();
+            fLanguages = new GDMList<GDMLanguage>();
+            fName = new GDMPersonalName();
             fRegisteredReference = string.Empty;
         }
 
@@ -68,6 +68,15 @@ namespace GDModel
                 fLanguages.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fAddress.TrimExcess();
+            fLanguages.TrimExcess();
+            fName.TrimExcess();
         }
 
         public override void Clear()
@@ -106,7 +115,7 @@ namespace GDModel
             if (index < 0) return;
 
             while (index >= fLanguages.Count) {
-                fLanguages.Add(new GDMLanguage(this, (int)GEDCOMTagType.LANG, ""));
+                fLanguages.Add(new GDMLanguage((int)GEDCOMTagType.LANG, ""));
             }
             fLanguages[index].StringValue = value;
         }

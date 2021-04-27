@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,8 +20,6 @@
 
 using System;
 using BSLib;
-using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -31,26 +29,39 @@ namespace GDModel.Providers.GEDCOM
     /// <summary>
     /// Class to check the GEDCOM format.
     /// </summary>
-    public static class GEDCOMChecker
+    public class GEDCOMChecker
     {
-        private static void TransformNote(GDMTree tree, GDMNotes note)
+        private IBaseContext fBaseContext;
+        private GEDCOMFormat fFormat;
+        private IProgressController fProgress;
+        private GDMTree fTree;
+
+        private GEDCOMChecker(IBaseContext baseContext, IProgressController progress)
         {
-            GDMNoteRecord noteRec = tree.CreateNote();
+            fBaseContext = baseContext;
+            fTree = fBaseContext.Tree;
+            fFormat = GEDCOMProvider.GetGEDCOMFormat(fTree);
+            fProgress = progress;
+        }
+
+        private void TransformNote(GDMNotes note)
+        {
+            GDMNoteRecord noteRec = fTree.CreateNote();
             noteRec.Lines.Assign(note.Lines);
 
             note.Clear();
-            note.Value = noteRec;
+            note.XRef = noteRec.XRef;
         }
 
-        private static void TransformMultimediaLink(GDMTree tree, GDMMultimediaLink mmLink)
+        private void TransformMultimediaLink(GDMMultimediaLink mmLink)
         {
             string title = mmLink.Title;
-            GDMMultimediaRecord mmRec = tree.CreateMultimedia();
+            GDMMultimediaRecord mmRec = fTree.CreateMultimedia();
 
             int num = mmLink.FileReferences.Count;
             for (int i = 0; i < num; i++) {
                 GDMFileReference srcFileRef = mmLink.FileReferences[i];
-                GDMFileReferenceWithTitle tgtFileRef = new GDMFileReferenceWithTitle(mmRec);
+                GDMFileReferenceWithTitle tgtFileRef = new GDMFileReferenceWithTitle();
 
                 tgtFileRef.LinkFile(srcFileRef.StringValue);
 
@@ -66,212 +77,231 @@ namespace GDModel.Providers.GEDCOM
             }
 
             mmLink.Clear();
-            mmLink.Value = mmRec;
+            mmLink.XRef = mmRec.XRef;
         }
 
-        private static void TransformSourceCitation(GDMTree tree, GDMSourceCitation sourCit)
+        private void TransformSourceCitation(GDMSourceCitation sourCit)
         {
-            GDMSourceRecord sourRec = tree.CreateSource();
+            GDMSourceRecord sourRec = fTree.CreateSource();
 
-            StringList description = sourCit.Description;
-            string page = sourCit.Page;
-            int certaintyAssessment = sourCit.CertaintyAssessment;
+            sourRec.Title.Lines.Assign(sourCit.Description);
+            sourRec.Text.Lines.Assign(sourCit.Text.Lines);
 
-            sourRec.Text.Lines.Assign(description);
+            // transfers notes and multimedia from the citation to the source record
+            sourRec.AssignList(sourCit.Notes, sourRec.Notes);
+            sourRec.AssignList(sourCit.MultimediaLinks, sourRec.MultimediaLinks);
 
-            sourCit.Clear();
-            sourCit.Value = sourRec;
-            sourCit.Page = page;
-            sourCit.CertaintyAssessment = certaintyAssessment;
+            sourCit.Description.Clear();
+            sourCit.Text.Clear();
+            sourCit.Notes.Clear();
+            sourCit.MultimediaLinks.Clear();
+            sourCit.XRef = sourRec.XRef;
+
+            CheckTagWithNotes(sourRec);
+            CheckTagWithMultimediaLinks(sourRec);
         }
 
-        private static void CheckTagWithLists(GDMTree tree, GEDCOMFormat format, GDMTagWithLists tag)
+        private void CheckTagWithNotes(IGDMStructWithNotes tag)
         {
-            int num = tag.MultimediaLinks.Count;
-            for (int i = 0; i < num; i++) {
-                GDMMultimediaLink mmLink = tag.MultimediaLinks[i];
-                if (!mmLink.IsPointer) TransformMultimediaLink(tree, mmLink);
-            }
-
-            num = tag.Notes.Count;
-            for (int i = 0; i < num; i++) {
+            for (int i = tag.Notes.Count - 1; i >= 0; i--) {
                 GDMNotes note = tag.Notes[i];
-                if (!note.IsPointer) TransformNote(tree, note);
-            }
-
-            num = tag.SourceCitations.Count;
-            for (int i = 0; i < num; i++) {
-                GDMSourceCitation sourCit = tag.SourceCitations[i];
-                if (!sourCit.IsPointer) TransformSourceCitation(tree, sourCit);
+                if (!note.IsPointer) {
+                    TransformNote(note);
+                } else {
+                    var noteRec = fTree.GetPtrValue<GDMNoteRecord>(note);
+                    if (noteRec == null) tag.Notes.DeleteAt(i);
+                }
             }
         }
 
-        // TODO: refactor
-        private static void CheckRecord_RepairTag(GDMTree tree, GEDCOMFormat format, GDMTagWithLists tag)
+        private void CheckTagWithSourceCitations(IGDMStructWithSourceCitations tag)
+        {
+            for (int i = tag.SourceCitations.Count - 1; i >= 0; i--) {
+                GDMSourceCitation sourCit = tag.SourceCitations[i];
+                if (!sourCit.IsPointer) {
+                    TransformSourceCitation(sourCit);
+                } else {
+                    var sourRec = fTree.GetPtrValue<GDMSourceRecord>(sourCit);
+                    if (sourRec == null) tag.SourceCitations.DeleteAt(i);
+                }
+            }
+        }
+
+        private void CheckTagWithMultimediaLinks(IGDMStructWithMultimediaLinks tag)
         {
             for (int i = tag.MultimediaLinks.Count - 1; i >= 0; i--) {
                 GDMMultimediaLink mmLink = tag.MultimediaLinks[i];
-                if (mmLink.IsPointer && mmLink.Value == null) tag.MultimediaLinks.DeleteAt(i);
-            }
-
-            for (int i = tag.Notes.Count - 1; i >= 0; i--) {
-                GDMNotes note = tag.Notes[i];
-                if (note.IsPointer && note.Value == null) tag.Notes.DeleteAt(i);
-            }
-
-            for (int i = tag.SourceCitations.Count - 1; i >= 0; i--) {
-                GDMSourceCitation sourCit = tag.SourceCitations[i];
-                if (sourCit.IsPointer && sourCit.Value == null) tag.SourceCitations.DeleteAt(i);
+                if (!mmLink.IsPointer) {
+                    TransformMultimediaLink(mmLink);
+                } else {
+                    var mmRec = fTree.GetPtrValue<GDMMultimediaRecord>(mmLink);
+                    if (mmRec == null) tag.MultimediaLinks.DeleteAt(i);
+                }
             }
         }
 
-        private static void CheckPointerWithNotes(GDMTree tree, GEDCOMFormat format, GDMPointerWithNotes ptr)
+        private void CheckPointerWithNotes(GDMPointerWithNotes ptr)
         {
-            // TODO: checkit!
-            GDMRecord val = ptr.Value;
+            GDMRecord val = fTree.GetPtrValue<GDMRecord>(ptr);
             if (!string.IsNullOrEmpty(ptr.XRef) && val == null) {
-                ptr.Value = null;
+                ptr.XRef = string.Empty;
             }
 
-            int num = ptr.Notes.Count;
-            for (int i = 0; i < num; i++) {
-                GDMNotes note = ptr.Notes[i];
-                if (!note.IsPointer) TransformNote(tree, note);
-            }
+            CheckTagWithNotes(ptr);
         }
 
-        private static void CheckIndividualEvent(GDMCustomEvent evt, GEDCOMFormat format)
+        private void CheckStructWL(IGDMStructWithLists swl)
         {
+            CheckTagWithNotes(swl);
+            CheckTagWithMultimediaLinks(swl);
+            CheckTagWithSourceCitations(swl);
+        }
+
+        private void CheckEventPlace(GDMPlace place)
+        {
+            GDMPointer placeLocation = place.Location;
+            GDMLocationRecord locRec = fTree.GetPtrValue<GDMLocationRecord>(placeLocation);
+
+            if (placeLocation.XRef != "" && locRec == null) {
+                placeLocation.XRef = "";
+            }
+
+            if (place.StringValue != "") {
+                if (locRec != null && place.StringValue != locRec.LocationName) {
+                    place.StringValue = locRec.LocationName;
+                }
+            }
+
+            CheckTagWithNotes(place);
+        }
+
+        private void CheckEvent(GDMCustomEvent evt)
+        {
+            CheckStructWL(evt);
+
             // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
-            if (format == GEDCOMFormat.gf_FamilyTreeMaker) {
+            if (fFormat == GEDCOMFormat.gf_FamilyTreeMaker) {
                 string subtype = evt.Classification.ToLower();
                 if (evt.Id == (int)GEDCOMTagType.EVEN && subtype == "occupation") {
                     evt.SetName(GEDCOMTagType.OCCU);
                     evt.Classification = string.Empty;
                 }
             }
+
+            CheckEventPlace(evt.Place);
         }
 
-        private static void CheckEventPlace(GDMCustomEvent evt)
+        private void CheckUserRef(GDMIndividualRecord iRec, GDMUserReference userRef)
         {
-            GDMPlace place = evt.Place;
-            GDMPointer placeLocation = place.Location;
+        }
 
-            if (placeLocation.XRef != "" && placeLocation.Value == null) {
-                placeLocation.XRef = "";
+        private void CheckPersonalName(GDMPersonalName persName)
+        {
+            CheckTagWithNotes(persName);
+            CheckTagWithSourceCitations(persName);
+
+            fBaseContext.CollectNameLangs(persName);
+        }
+
+        private void CheckIndividualRecord(GDMIndividualRecord iRec)
+        {
+            for (int i = 0, num = iRec.Events.Count; i < num; i++) {
+                GDMCustomEvent evt = iRec.Events[i];
+
+                CheckEvent(evt);
+
+                fBaseContext.CollectEventValues(evt);
             }
 
-            if (place.StringValue != "") {
-                GDMLocationRecord locRec = placeLocation.Value as GDMLocationRecord;
-                if (locRec != null && place.StringValue != locRec.LocationName) {
-                    place.StringValue = locRec.LocationName;
-                }
+            for (int i = 0, num = iRec.UserReferences.Count; i < num; i++) {
+                CheckUserRef(iRec, iRec.UserReferences[i]);
             }
-        }
 
-        private static void CheckAttrCompatible(GDMTree tree, GEDCOMFormat format, GDMIndividualRecord iRec, GDMCustomEvent aEvent)
-        {
-        }
-
-        private static void CheckURefCompatible(GDMIndividualRecord iRec, GDMUserReference userRef)
-        {
-        }
-
-        private static void CheckPersonalName(GDMIndividualRecord iRec, GDMPersonalName persName, IBaseContext baseContext)
-        {
-            baseContext.CollectNameLangs(persName);
-        }
-
-        private static void CheckIndividualRecord(IBaseContext baseContext, GDMTree tree, GEDCOMFormat format,
-                                                  GDMIndividualRecord iRec)
-        {
-            if (format == GEDCOMFormat.gf_Native) {
-                for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                    GDMCustomEvent evt = iRec.Events[i];
-
-                    CheckEventPlace(evt);
-                    CheckAttrCompatible(tree, format, iRec, evt);
-                    CheckRecord_RepairTag(tree, format, evt);
-
-                    baseContext.CollectEventValues(evt);
-                }
-
-                for (int i = 0, num = iRec.UserReferences.Count; i < num; i++) {
-                    CheckURefCompatible(iRec, iRec.UserReferences[i]);
-                }
-
-                for (int i = 0, num = iRec.PersonalNames.Count; i < num; i++) {
-                    CheckPersonalName(iRec, iRec.PersonalNames[i], baseContext);
-                }
-            } else {
-                for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                    GDMCustomEvent evt = iRec.Events[i];
-
-                    CheckIndividualEvent(evt, format);
-                    CheckTagWithLists(tree, format, evt);
-                }
-
-                for (int i = 0, num = iRec.ChildToFamilyLinks.Count; i < num; i++) {
-                    CheckPointerWithNotes(tree, format, iRec.ChildToFamilyLinks[i]);
-                }
-
-                for (int i = 0, num = iRec.SpouseToFamilyLinks.Count; i < num; i++) {
-                    CheckPointerWithNotes(tree, format, iRec.SpouseToFamilyLinks[i]);
-                }
-
-                for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
-                    CheckPointerWithNotes(tree, format, iRec.Associations[i]);
-                }
+            for (int i = 0, num = iRec.PersonalNames.Count; i < num; i++) {
+                CheckPersonalName(iRec.PersonalNames[i]);
             }
 
             for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--) {
-                if (iRec.ChildToFamilyLinks[i].Family == null)
+                var cfl = iRec.ChildToFamilyLinks[i];
+                if (fTree.GetPtrValue(cfl) == null) {
                     iRec.ChildToFamilyLinks.DeleteAt(i);
+                } else {
+                    CheckPointerWithNotes(cfl);
+                }
             }
 
             for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--) {
-                if (iRec.SpouseToFamilyLinks[i].Family == null)
+                var sfl = iRec.SpouseToFamilyLinks[i];
+                if (fTree.GetPtrValue(sfl) == null) {
                     iRec.SpouseToFamilyLinks.DeleteAt(i);
+                } else {
+                    CheckPointerWithNotes(sfl);
+                }
             }
 
-            baseContext.ImportNames(iRec);
+            for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
+                var asso = iRec.Associations[i];
+                CheckPointerWithNotes(asso);
+                CheckTagWithSourceCitations(asso);
+            }
+
+            fBaseContext.ImportNames(iRec);
         }
 
-        private static void CheckFamilyRecord(IBaseContext baseContext, GDMTree tree, GEDCOMFormat format,
-                                              GDMFamilyRecord fam)
+        private void CheckChildLink(GDMFamilyRecord fam, int index)
         {
-            if (format == GEDCOMFormat.gf_Native) {
-                int num = fam.Events.Count;
-                for (int i = 0; i < num; i++) {
-                    CheckEventPlace(fam.Events[i]);
+            GDMIndividualLink childLink = fam.Children[index];
+            var childRec = fTree.GetPtrValue<GDMIndividualRecord>(childLink);
+            if (childRec == null) {
+                fam.Children.DeleteAt(index);
+                return;
+            }
+
+            if (fFormat == GEDCOMFormat.gf_AGES) {
+                var frelTag = FindSubTagValue(childLink, "_FREL");
+                var mrelTag = FindSubTagValue(childLink, "_MREL");
+                if (frelTag == "ADOPTED" && mrelTag == "ADOPTED") {
+                    GDMChildToFamilyLink ctfLink = childRec.FindChildToFamilyLink(fam);
+                    ctfLink.PedigreeLinkageType = GDMPedigreeLinkageType.plAdopted;
+
+                    childLink.DeleteTag("_FREL");
+                    childLink.DeleteTag("_MREL");
                 }
-            } else {
-                int num2 = fam.Events.Count;
-                for (int i = 0; i < num2; i++) {
-                    CheckTagWithLists(tree, format, fam.Events[i]);
-                }
+            }
+        }
+
+        private static string FindSubTagValue(GDMTag tag, string subTagName)
+        {
+            var subTag = tag.FindTag(subTagName, 0);
+            return (subTag == null) ? string.Empty : subTag.StringValue;
+        }
+
+        private void CheckFamilyRecord(GDMFamilyRecord fam)
+        {
+            for (int i = 0, num = fam.Events.Count; i < num; i++) {
+                GDMCustomEvent evt = fam.Events[i];
+                CheckEvent(evt);
             }
 
             for (int i = fam.Children.Count - 1; i >= 0; i--) {
-                if (fam.Children[i].Value == null)
-                    fam.Children.DeleteAt(i);
+                CheckChildLink(fam, i);
             }
 
-            GDMRecord val = fam.Husband.Value;
+            GDMRecord val = fTree.GetPtrValue<GDMIndividualRecord>(fam.Husband);
             if (!string.IsNullOrEmpty(fam.Husband.XRef) && val == null) {
-                fam.Husband.Value = null;
+                fam.Husband.XRef = string.Empty;
             }
 
-            val = fam.Wife.Value;
+            val = fTree.GetPtrValue<GDMIndividualRecord>(fam.Wife);
             if (!string.IsNullOrEmpty(fam.Wife.XRef) && val == null) {
-                fam.Wife.Value = null;
+                fam.Wife.XRef = string.Empty;
             }
         }
 
-        private static void CheckGroupRecord(GDMGroupRecord group)
+        private void CheckGroupRecord(GDMGroupRecord group)
         {
             for (int i = group.Members.Count - 1; i >= 0; i--) {
-                GDMIndividualRecord mbr = group.Members[i].Individual;
+                GDMIndividualRecord mbr = fTree.GetPtrValue(group.Members[i]);
                 if (mbr == null) {
                     group.Members.DeleteAt(i);
                 } else {
@@ -282,17 +312,17 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        private static void CheckSourceRecord(GDMSourceRecord src)
+        private void CheckSourceRecord(GDMSourceRecord src)
         {
             for (int i = src.RepositoryCitations.Count - 1; i >= 0; i--) {
-                GDMRecord val = src.RepositoryCitations[i].Value;
+                GDMRecord val = fTree.GetPtrValue<GDMRecord>(src.RepositoryCitations[i]);
                 if (val == null) {
                     src.RepositoryCitations.DeleteAt(i);
                 }
             }
         }
 
-        private static void CheckMultimediaRecord(GDMMultimediaRecord mmRec, GEDCOMFormat format, int fileVer)
+        private void CheckMultimediaRecord(GDMMultimediaRecord mmRec, int fileVer)
         {
             for (int i = 0; i < mmRec.FileReferences.Count; i++) {
                 GDMFileReferenceWithTitle fileRef = mmRec.FileReferences[i];
@@ -303,7 +333,7 @@ namespace GDModel.Providers.GEDCOM
                     fileRef.MultimediaFormat = GDMFileReference.RecognizeFormat(fileRef.StringValue);
                 }
 
-                if (format == GEDCOMFormat.gf_Native && fileVer == 39) {
+                if (fFormat == GEDCOMFormat.gf_Native && fileVer == 39) {
                     // the transition to normalized names after GKv39
                     // only for not direct references AND not relative references (platform specific paths)
 
@@ -316,36 +346,21 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        private static void CheckRecord(IBaseContext baseContext, GDMTree tree, GDMRecord rec,
-                                        GEDCOMFormat format, int fileVer)
+        private void CheckRecord(GDMRecord rec, int fileVer)
         {
-            if (format != GEDCOMFormat.gf_Native) {
-                int num = rec.MultimediaLinks.Count;
-                for (int i = 0; i < num; i++) {
-                    GDMMultimediaLink mmLink = rec.MultimediaLinks[i];
-                    if (!mmLink.IsPointer) TransformMultimediaLink(tree, mmLink);
-                }
+            CheckStructWL(rec);
 
-                num = rec.Notes.Count;
-                for (int i = 0; i < num; i++) {
-                    GDMNotes note = rec.Notes[i];
-                    if (!note.IsPointer) TransformNote(tree, note);
-                }
-
-                num = rec.SourceCitations.Count;
-                for (int i = 0; i < num; i++) {
-                    GDMSourceCitation sourCit = rec.SourceCitations[i];
-                    if (!sourCit.IsPointer) TransformSourceCitation(tree, sourCit);
-                }
-            }
+            // TODO
+            // INDI: remove AFN, RFN - discuss???
+            // INDI,FAM: remove SUBM - discuss???
 
             switch (rec.RecordType) {
                 case GDMRecordType.rtIndividual:
-                    CheckIndividualRecord(baseContext, tree, format, rec as GDMIndividualRecord);
+                    CheckIndividualRecord(rec as GDMIndividualRecord);
                     break;
 
                 case GDMRecordType.rtFamily:
-                    CheckFamilyRecord(baseContext, tree, format, rec as GDMFamilyRecord);
+                    CheckFamilyRecord(rec as GDMFamilyRecord);
                     break;
 
                 case GDMRecordType.rtGroup:
@@ -357,12 +372,12 @@ namespace GDModel.Providers.GEDCOM
                     break;
 
                 case GDMRecordType.rtMultimedia:
-                    CheckMultimediaRecord(rec as GDMMultimediaRecord, format, fileVer);
+                    CheckMultimediaRecord(rec as GDMMultimediaRecord, fileVer);
                     break;
             }
         }
 
-        private static bool CheckRecordXRef(GDMRecord record)
+        private bool CheckRecordXRef(GDMRecord record)
         {
             string stdSign = GEDCOMUtils.GetSignByRecord(record);
             string xrefNum = record.GetXRefNum();
@@ -371,53 +386,43 @@ namespace GDModel.Providers.GEDCOM
             return ((recXRef == stdSign + xrefNum) && record.GetId() >= 0);
         }
 
-        private static void ConvertIdentifiers(GDMTree tree, IProgressController pc)
+        private void ConvertIdentifiers()
         {
-            pc.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), tree.RecordsCount * 2);
+            fProgress.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), fTree.RecordsCount * 2);
             GDMXRefReplacer repMap = new GDMXRefReplacer();
             try {
-                int recsCount = tree.RecordsCount;
+                int recsCount = fTree.RecordsCount;
                 for (int i = 0; i < recsCount; i++) {
-                    GDMRecord rec = tree[i];
+                    GDMRecord rec = fTree[i];
                     if (!CheckRecordXRef(rec)) {
-                        string newXRef = tree.XRefIndex_NewXRef(rec);
-                        repMap.AddXRef(rec, rec.XRef, newXRef);
-                        rec.XRef = newXRef;
+                        string oldXRef = rec.XRef;
+                        string newXRef = fTree.NewXRef(rec, true);
+                        repMap.AddXRef(rec, oldXRef, newXRef);
                     }
-                    pc.ProgressStep();
+                    fProgress.ProgressStep();
                 }
 
-                tree.Header.ReplaceXRefs(repMap);
+                fTree.Header.ReplaceXRefs(repMap);
                 for (int i = 0; i < recsCount; i++) {
-                    GDMRecord rec = tree[i];
+                    GDMRecord rec = fTree[i];
                     rec.ReplaceXRefs(repMap);
-                    pc.ProgressStep();
+                    fProgress.ProgressStep();
                 }
             } finally {
                 repMap.Dispose();
-                pc.ProgressDone();
+                fProgress.ProgressDone();
             }
         }
 
-        public static bool CheckGEDCOMFormat(GDMTree tree, IBaseContext baseContext, IProgressController pc)
+        private bool CheckFormat()
         {
-            if (tree == null)
-                throw new ArgumentNullException("tree");
-
-            if (baseContext == null)
-                throw new ArgumentNullException("baseContext");
-
-            if (pc == null)
-                throw new ArgumentNullException("pc");
-
             bool result = false;
 
             try {
-                GEDCOMFormat format = GEDCOMProvider.GetGEDCOMFormat(tree);
                 int fileVer;
                 // remove a deprecated features
-                if (format == GEDCOMFormat.gf_Native) {
-                    GDMHeader header = tree.Header;
+                if (fFormat == GEDCOMFormat.gf_Native) {
+                    GDMHeader header = fTree.Header;
                     GDMTag tag;
 
                     tag = header.FindTag("_ADVANCED", 0);
@@ -431,16 +436,16 @@ namespace GDModel.Providers.GEDCOM
                     fileVer = -1;
                 }
 
-                pc.ProgressInit(LangMan.LS(LSID.LSID_FormatCheck), 100);
+                fProgress.ProgressInit(LangMan.LS(LSID.LSID_FormatCheck), 100);
                 try {
                     bool xrefValid = true;
-                    bool isExtraneous = (format != GEDCOMFormat.gf_Native);
+                    bool isExtraneous = (fFormat != GEDCOMFormat.gf_Native);
 
                     int progress = 0;
-                    int num = tree.RecordsCount;
+                    int num = fTree.RecordsCount;
                     for (int i = 0; i < num; i++) {
-                        GDMRecord rec = tree[i];
-                        CheckRecord(baseContext, tree, rec, format, fileVer);
+                        GDMRecord rec = fTree[i];
+                        CheckRecord(rec, fileVer);
 
                         if (isExtraneous && xrefValid && !CheckRecordXRef(rec)) {
                             xrefValid = false;
@@ -449,32 +454,39 @@ namespace GDModel.Providers.GEDCOM
                         int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / num);
                         if (progress != newProgress) {
                             progress = newProgress;
-                            pc.ProgressStep(progress);
+                            fProgress.ProgressStep(progress);
                         }
                     }
 
                     // obsolete: AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed))
                     if (!xrefValid) {
-                        ConvertIdentifiers(tree, pc);
+                        ConvertIdentifiers();
                     }
+
+                    fTree.TrimExcess();
 
                     result = true;
                 } finally {
-                    pc.ProgressDone();
+                    fProgress.ProgressDone();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GEDCOMChecker.CheckGEDCOMFormat(): ", ex);
+                Logger.WriteError("GEDCOMChecker.CheckFormat()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
             }
 
             return result;
         }
 
-        public static void ClearGEDCOMFormat(GDMTree tree, IBaseContext baseContext, IProgressController pc)
+        public static bool CheckGEDCOMFormat(IBaseContext baseContext, IProgressController pc)
         {
-            // TODO
-            // INDI: remove AFN, RFN
-            // INDI,FAM: remove SUBM
+            if (baseContext == null)
+                throw new ArgumentNullException("baseContext");
+
+            if (pc == null)
+                throw new ArgumentNullException("pc");
+
+            var instance = new GEDCOMChecker(baseContext, pc);
+            return instance.CheckFormat();
         }
     }
 }

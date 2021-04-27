@@ -175,7 +175,7 @@ namespace GKCore.Cultures
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            var parts = GKUtils.GetNameParts(iRec);
+            var parts = GetNamePartsEx(iRec);
             bool female = (iRec.Sex == GDMSex.svFemale);
 
             return GetSurnames(parts.Surname, female);
@@ -183,7 +183,7 @@ namespace GKCore.Cultures
 
         public override string GetPossessiveName(GDMIndividualRecord iRec)
         {
-            var nameParts = GKUtils.GetNameParts(iRec);
+            var nameParts = GetNamePartsEx(iRec);
             var gender = DeclGenders[(int)iRec.Sex];
 
             string result = "";

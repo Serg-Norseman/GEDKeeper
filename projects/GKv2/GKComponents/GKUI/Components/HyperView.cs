@@ -42,12 +42,12 @@ namespace GKUI.Components
         private readonly List<BBTextChunk> fChunks;
         private readonly List<int> fHeights;
         private readonly StringList fLines;
+        private readonly StringFormat fStrFormat;
 
         private bool fAcceptFontChange;
         private int fBorderWidth;
         private BBTextChunk fCurrentLink;
         private Color fLinkColor;
-        private StringFormat fStrFormat;
         private ExtSize fTextSize;
         private bool fWordWrap;
 
@@ -98,7 +98,7 @@ namespace GKUI.Components
         }
 
 
-        public HyperView() : base()
+        public HyperView()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |
                      ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
@@ -145,6 +145,8 @@ namespace GKUI.Components
         private void ArrangeText()
         {
             try {
+                SuspendLayout();
+
                 fAcceptFontChange = false;
                 fHeights.Clear();
 
@@ -158,8 +160,10 @@ namespace GKUI.Components
 
                     string text = fLines.Text;
                     Font defFont = this.Font;
-                    SizeF csz = this.ClientSize;
+                    float maxWidth = this.ClientSize.Width - (2 * fBorderWidth);
                     SizeF zerosz = new SizeF(0f, 0f);
+
+                    text = SysUtils.StripHTML(text);
 
                     var parser = new BBTextParser(AppHost.GfxProvider, defFont.SizeInPoints,
                                                   new ColorHandler(fLinkColor), new ColorHandler(ForeColor));
@@ -193,50 +197,41 @@ namespace GKUI.Components
                             using (var font = new Font(defFont.Name, chunk.Size, (SDFontStyle)chunk.Style, defFont.Unit)) {
                                 SizeF strSize = gfx.MeasureString(chunkStr, font, zerosz, fStrFormat);
 
-                                if (fWordWrap) {
-                                    int wBound = xPos + 2 * fBorderWidth;
-                                    if (wBound + strSize.Width > csz.Width) {
-                                        int lastIndex = chunkStr.Length - 1;
-                                        while (true) {
-                                            int spPos = chunkStr.LastIndexOf(' ', lastIndex);
-                                            if (spPos <= 0) {
-                                                // the beginning of the chunk is reached and there are no more words to carry
-                                                chunk.Text = chunkStr.Substring(0, lastIndex + 1);
-                                                strSize = gfx.MeasureString(chunkStr, font, zerosz, fStrFormat);
-                                                // the current chunk still does not fit into the area
-                                                if (wBound + strSize.Width > csz.Width) {
-                                                    // this is not the only chunk on this line
-                                                    if (k > 0 && fChunks[k - 1].Line == chunk.Line) {
-                                                        // transfer the current chunk to the next line 
-                                                        // and recount it again at the next iteration
-                                                        ShiftChunks(k, chunksCount);
-                                                        recalcChunk = true;
-                                                    }
+                                if (fWordWrap && xPos + strSize.Width > maxWidth) {
+                                    int lastPos = 0, prevPos = 0;
+                                    string tempStr, prevStr = string.Empty;
+                                    int sliceType = -1;
+                                    while (true) {
+                                        tempStr = GetSlice(chunkStr, ref lastPos, ref sliceType);
+                                        strSize = gfx.MeasureString(tempStr, font, zerosz, fStrFormat);
+                                        if (xPos + strSize.Width <= maxWidth) {
+                                            prevStr = tempStr;
+                                            prevPos = lastPos;
+                                        } else {
+                                            if (sliceType == 0) {
+                                                // first word
+                                                if (xPos == 0) {
+                                                    string tail = chunkStr.Substring(lastPos);
+                                                    SplitChunk(chunk, k, tempStr, tail, ref chunksCount);
+                                                } else {
+                                                    ShiftChunks(k, chunksCount);
+                                                    recalcChunk = true;
                                                 }
                                                 break;
-                                            }
-
-                                            string newChunk = chunkStr.Substring(0, spPos);
-                                            strSize = gfx.MeasureString(newChunk, font, zerosz, fStrFormat);
-                                            if (wBound + strSize.Width < csz.Width) {
-                                                var secondPart = chunk.Clone();
-                                                secondPart.Text = chunkStr.Substring(spPos + 1);
-                                                secondPart.Line += 1;
-                                                fChunks.Insert(k + 1, secondPart);
-                                                chunksCount += 1;
-
-                                                // shift next chunks
-                                                ShiftChunks(k + 2, chunksCount);
-
-                                                chunk.Text = newChunk;
+                                            } else if (sliceType == 1 || sliceType == 2) {
+                                                // middle or tail word
+                                                string tail = chunkStr.Substring(prevPos);
+                                                SplitChunk(chunk, k, prevStr, tail, ref chunksCount);
                                                 break;
-                                            } else {
-                                                lastIndex = spPos - 1;
+                                            } else if (sliceType == 3) {
+                                                // one first and last word, nothing to do
+                                                break;
                                             }
                                         }
                                     }
                                 }
 
+                                strSize = gfx.MeasureString(chunk.Text, font, zerosz, fStrFormat);
                                 chunk.Width = (int)strSize.Width;
 
                                 xPos += chunk.Width;
@@ -261,17 +256,54 @@ namespace GKUI.Components
                     gfx.Dispose();
                     fAcceptFontChange = true;
                     AdjustViewport(fTextSize);
+
+                    ResumeLayout(true);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("HyperView.ArrangeText(): ", ex);
+                Logger.WriteError("HyperView.ArrangeText()", ex);
+            }
+        }
+
+        private static string GetSlice(string str, ref int lastPos, ref int type)
+        {
+            // type: -1 initial none, 0 first word, 1 any middle, 2 last word, 3 only one word in str
+            int pos = str.IndexOf(' ', lastPos);
+            string result;
+            if (pos >= 0) {
+                result = str.Substring(0, pos);
+                lastPos = pos + 1;
+                type = (type == -1) ? 0 : 1;
+            } else {
+                result = str;
+                if (lastPos > 0) {
+                    lastPos = -1;
+                    type = 2;
+                } else {
+                    lastPos = -1;
+                    type = 3;
+                }
+            }
+            return result;
+        }
+
+        private void SplitChunk(BBTextChunk chunk, int index, string head, string tail, ref int chunksCount)
+        {
+            chunk.Text = head;
+
+            if (!string.IsNullOrEmpty(tail)) {
+                var newChunk = chunk.Clone();
+                newChunk.Text = tail;
+                fChunks.Insert(index + 1, newChunk);
+                chunksCount += 1;
+
+                ShiftChunks(index + 1, chunksCount);
             }
         }
 
         private void ShiftChunks(int startIndex, int chunksCount)
         {
             for (int m = startIndex; m < chunksCount; m++) {
-                BBTextChunk mChunk = fChunks[m];
-                mChunk.Line += 1;
+                fChunks[m].Line += 1;
             }
         }
 
@@ -323,7 +355,7 @@ namespace GKUI.Components
                     if (font != null) font.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("HyperView.DoPaint(): ", ex);
+                Logger.WriteError("HyperView.DoPaint()", ex);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,9 +45,6 @@ namespace GKCore.Options
         public static readonly int UN_HUSBAND_COLOR = -2631681; // FFD7D7FF
         public static readonly int UN_WIFE_COLOR = -10281; // FFFFD7D7
 
-        private int fDepthLimitAncestors;
-        private int fDepthLimitDescendants;
-
         public bool ChildlessExclude;
         public bool Decorative;
         public bool FamilyVisible;
@@ -68,6 +65,9 @@ namespace GKCore.Options
         public bool MarriagesDates;
         public bool ShowPlaces;
         public bool HideUnknownSpouses;
+        public bool DottedLinesOfAdoptedChildren;
+        public bool SeparateDatesAndPlacesLines;
+        public bool BoldNames;
 
         public bool AutoAlign; // debug option, for future purposes
         public GfxBorderStyle BorderStyle;
@@ -89,17 +89,9 @@ namespace GKCore.Options
         public int Margins;
         public int SpouseDistance;
 
-        public int DepthLimitAncestors
-        {
-            get { return fDepthLimitAncestors; }
-            set { fDepthLimitAncestors = value; }
-        }
-
-        public int DepthLimitDescendants
-        {
-            get { return fDepthLimitDescendants; }
-            set { fDepthLimitDescendants = value; }
-        }
+        public int DepthLimit { get; set; }
+        public int DepthLimitAncestors { get; set; }
+        public int DepthLimitDescendants { get; set; }
 
         public TreeChartOptions()
         {
@@ -125,6 +117,9 @@ namespace GKCore.Options
             MarriagesDates = false;
             ShowPlaces = false;
             HideUnknownSpouses = false;
+            DottedLinesOfAdoptedChildren = false;
+            SeparateDatesAndPlacesLines = false;
+            BoldNames = false;
 
             AutoAlign = true;
             BorderStyle = GfxBorderStyle.None;
@@ -181,6 +176,9 @@ namespace GKCore.Options
             MarriagesDates = srcOptions.MarriagesDates;
             ShowPlaces = srcOptions.ShowPlaces;
             HideUnknownSpouses = srcOptions.HideUnknownSpouses;
+            DottedLinesOfAdoptedChildren = srcOptions.DottedLinesOfAdoptedChildren;
+            SeparateDatesAndPlacesLines = srcOptions.SeparateDatesAndPlacesLines;
+            BoldNames = srcOptions.BoldNames;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -216,6 +214,9 @@ namespace GKCore.Options
             MarriagesDates = iniFile.ReadBool("Chart", "MarriagesDates", false);
             ShowPlaces = iniFile.ReadBool("Chart", "ShowPlaces", false);
             HideUnknownSpouses = iniFile.ReadBool("Chart", "HideUnknownSpouses", false);
+            DottedLinesOfAdoptedChildren = iniFile.ReadBool("Chart", "DottedLinesOfAdoptedChildren", false);
+            SeparateDatesAndPlacesLines = iniFile.ReadBool("Chart", "SeparateDatesAndPlacesLines", false);
+            BoldNames = iniFile.ReadBool("Chart", "BoldNames", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -233,8 +234,9 @@ namespace GKCore.Options
             Margins = iniFile.ReadInteger("Chart", "Margins", TreeChartModel.DEF_MARGINS);
             SpouseDistance = iniFile.ReadInteger("Chart", "SpouseDistance", TreeChartModel.DEF_SPOUSE_DISTANCE);
 
-            fDepthLimitAncestors = iniFile.ReadInteger("Chart", "DepthLimit", -1);
-            fDepthLimitDescendants = iniFile.ReadInteger("Chart", "DepthLimitDescendants", -1);
+            DepthLimit = iniFile.ReadInteger("Chart", "DepthLimit", -1);
+            DepthLimitAncestors = iniFile.ReadInteger("Chart", "DepthLimitAncestors", -1);
+            DepthLimitDescendants = iniFile.ReadInteger("Chart", "DepthLimitDescendants", -1);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -265,6 +267,9 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "MarriagesDates", MarriagesDates);
             iniFile.WriteBool("Chart", "ShowPlaces", ShowPlaces);
             iniFile.WriteBool("Chart", "HideUnknownSpouses", HideUnknownSpouses);
+            iniFile.WriteBool("Chart", "DottedLinesOfAdoptedChildren", DottedLinesOfAdoptedChildren);
+            iniFile.WriteBool("Chart", "SeparateDatesAndPlacesLines", SeparateDatesAndPlacesLines);
+            iniFile.WriteBool("Chart", "BoldNames", BoldNames);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());
@@ -282,8 +287,9 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "Margins", Margins);
             iniFile.WriteInteger("Chart", "SpouseDistance", SpouseDistance);
 
-            iniFile.WriteInteger("Chart", "DepthLimit", fDepthLimitAncestors);
-            iniFile.WriteInteger("Chart", "DepthLimitDescendants", fDepthLimitDescendants);
+            iniFile.WriteInteger("Chart", "DepthLimit", DepthLimit);
+            iniFile.WriteInteger("Chart", "DepthLimitAncestors", DepthLimitAncestors);
+            iniFile.WriteInteger("Chart", "DepthLimitDescendants", DepthLimitDescendants);
         }
     }
 }

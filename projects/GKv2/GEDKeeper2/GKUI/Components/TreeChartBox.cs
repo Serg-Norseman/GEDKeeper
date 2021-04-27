@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -157,7 +157,7 @@ namespace GKUI.Components
             }
         }
 
-        public new float Scale
+        public float Scale
         {
             get { return fModel.Scale; }
         }
@@ -298,7 +298,7 @@ namespace GKUI.Components
                 NavAdd(iRec);
                 DoRootChanged(fModel.Root);
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.GenChart(): ", ex);
+                Logger.WriteError("TreeChartBox.GenChart()", ex);
             }
         }
 
@@ -313,7 +313,7 @@ namespace GKUI.Components
                 GenChart(rootRec, fModel.Kind, false);
                 RestoreSelection();
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.RefreshTree(): ", ex);
+                Logger.WriteError("TreeChartBox.RefreshTree()", ex);
             }
         }
 
@@ -335,7 +335,7 @@ namespace GKUI.Components
                 fModel.KinRoot = fSelected;
                 RecalcChart(noRedraw);
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.RebuildKinships(): ",ex);
+                Logger.WriteError("TreeChartBox.RebuildKinships()",ex);
             }
         }
 
@@ -473,7 +473,7 @@ namespace GKUI.Components
                     deepModel.Draw(ChartDrawMode.dmStatic);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.DrawDeep(): ", ex);
+                Logger.WriteError("TreeChartBox.DrawDeep()", ex);
             }
         }
 
@@ -518,7 +518,7 @@ namespace GKUI.Components
                     RestoreSelection();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.ToggleCollapse(): ", ex);
+                Logger.WriteError("TreeChartBox.ToggleCollapse()", ex);
             }
         }
 
@@ -758,6 +758,7 @@ namespace GKUI.Components
 
                         if (ctl != null) {
                             fMode = ChartControlMode.ControlsVisible;
+                            ctl.UpdateState();
                             ctl.Visible = true;
                             ctl.MouseMove(e.X, e.Y);
                             fActiveControl = ctl;

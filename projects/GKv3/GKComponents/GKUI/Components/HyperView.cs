@@ -188,7 +188,7 @@ namespace GKUI.Components
                     SetImageSize(fTextSize);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("HyperView.ArrangeText(): ", ex);
+                Logger.WriteError("HyperView.ArrangeText()", ex);
             }
         }
 
@@ -241,7 +241,7 @@ namespace GKUI.Components
                     if (font != null) font.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("HyperView.DoPaint(): ", ex);
+                Logger.WriteError("HyperView.DoPaint()", ex);
             }
         }
 

@@ -32,6 +32,11 @@ namespace GKUI.Forms
     {
         private readonly RelationshipCalculatorDlgController fController;
 
+        public IBaseWindow Base
+        {
+            get { return fController.Base; }
+        }
+
         #region View Interface
 
         ILabel IRelationshipCalculatorDlg.Label1

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2019-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2019-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,10 +19,14 @@
  */
 
 using System;
+using System.Drawing;
+using System.Reflection;
 using BSLib.Design.Graphics;
+using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
+using SDIcon = System.Drawing.Icon;
 
 namespace GEDmill
 {
@@ -32,21 +36,26 @@ namespace GEDmill
     public enum PLS
     {
         LSID_Title,
-        LSID_1,
-        LSID_2,
-        LSID_3,
-        LSID_4,
-        LSID_5
+        LSID_Quit,
+        LSID_Finish,
+        LSID_Version,
+        LSID_Back,
+        LSID_Next,
+        LSID_Help,
+        LSID_Settings,
+        LSID_Ok,
+        LSID_Cancel,
     }
 
     public sealed class Plugin : WidgetPlugin
     {
         private string fDisplayName = "Website Generator (GEDmill)";
         private ILangMan fLangMan;
+        private IImage fIcon;
 
         public override string DisplayName { get { return fDisplayName; } }
         public override ILangMan LangMan { get { return fLangMan; } }
-        public override IImage Icon { get { return null; } }
+        public override IImage Icon { get { return fIcon; } }
         public override PluginCategory Category { get { return PluginCategory.Report; } }
 
         private MainForm fForm;
@@ -85,8 +94,24 @@ namespace GEDmill
                 if (fForm != null)
                     fForm.SetLang();
             } catch (Exception ex) {
-                Logger.WriteError("GEDmillPlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GEDmillPlugin.OnLanguageChange()", ex);
             }
+        }
+
+        public override bool Startup(IHost host)
+        {
+            bool result = base.Startup(host);
+            try {
+                Assembly assembly = typeof(Plugin).Assembly;
+                using (var appIcon = SDIcon.ExtractAssociatedIcon(assembly.Location)) {
+                    Image bmp = appIcon.ToBitmap();
+                    fIcon = new ImageHandler(bmp);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GEDmillPlugin.Startup()", ex);
+                result = false;
+            }
+            return result;
         }
 
         public override bool Shutdown()
@@ -95,7 +120,7 @@ namespace GEDmill
             try {
                 CloseForm();
             } catch (Exception ex) {
-                Logger.WriteError("GEDmillPlugin.Shutdown(): ", ex);
+                Logger.WriteError("GEDmillPlugin.Shutdown()", ex);
                 result = false;
             }
             return result;

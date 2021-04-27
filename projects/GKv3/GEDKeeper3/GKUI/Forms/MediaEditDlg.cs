@@ -144,5 +144,10 @@ namespace GKUI.Forms
         {
             Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), txtName.Text);
         }
+
+        private void cmbStoreType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fController.ChangeStoreType();
+        }
     }
 }

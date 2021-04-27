@@ -59,7 +59,7 @@ namespace GKCore.SingleInstance
         /// <param name="name">The unique name used to identify the application.</param>
         /// <param name="enforcerRetriever">The method which would be used to retrieve an ISingleInstanceEnforcer object when instantiating the new object.</param>
         /// <exception cref="System.ArgumentNullException">name is null or empty.</exception>
-        /// <exception cref="SingleInstancing.SingleInstancingException">A general error occured while trying to instantiate the SingleInstanceInteractor. See InnerException for more details.</exception>
+        /// <exception cref="SingleInstancing.SingleInstancingException">A general error occurred while trying to instantiate the SingleInstanceInteractor. See InnerException for more details.</exception>
         public SingleInstanceTracker(string name, SingleInstanceEnforcerRetriever enforcerRetriever)
         {
             if (string.IsNullOrEmpty(name))
@@ -172,8 +172,10 @@ namespace GKCore.SingleInstance
         /// Sends a message to the first instance of the application.
         /// </summary>
         /// <param name="message">The message to send to the first instance of the application. The message must be serializable.</param>
-        /// <exception cref="System.InvalidOperationException">The object was constructed with the SingleInstanceTracker(string name) constructor overload, or with the SingleInstanceTracker(string name, SingleInstanceEnforcerRetriever enforcerRetriever) cosntructor overload, with enforcerRetriever set to null.</exception>
-        /// <exception cref="SingleInstancing.SingleInstancingException">The SingleInstanceInteractor has failed to send the message to the first application instance. The first instance might have terminated.</exception>
+        /// <exception cref="System.InvalidOperationException">The object was constructed with the SingleInstanceTracker(string name) constructor overload,
+        /// or with the SingleInstanceTracker(string name, SingleInstanceEnforcerRetriever enforcerRetriever) constructor overload, with enforcerRetriever set to null.</exception>
+        /// <exception cref="SingleInstancing.SingleInstancingException">The SingleInstanceInteractor has failed to send the message to the first application instance.
+        /// The first instance might have terminated.</exception>
         public void SendMessageToFirstInstance(object message)
         {
             #if IPC_SUPPORTS
@@ -197,7 +199,7 @@ namespace GKCore.SingleInstance
                     IpcFake.SendMessage(IpcFake.CmdSendArgs, args);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("SingleInstanceTracker.SendMessageToFirstInstance.2(): ", ex);
+                Logger.WriteError("SingleInstanceTracker.SendMessageToFirstInstance.2()", ex);
             }
 
             #endif

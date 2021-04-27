@@ -19,6 +19,7 @@
  */
 
 using GDModel;
+using GKCore.Interfaces;
 
 namespace GKCore.Names
 {
@@ -31,7 +32,7 @@ namespace GKCore.Names
         GDMSex GetSexByName(string name);
         void SetName(string name, string patronymic, GDMSex sex);
         void SetNameSex(string name, GDMSex sex);
-        void ImportNames(GDMIndividualRecord iRec);
+        void ImportNames(IBaseContext context, GDMIndividualRecord iRec);
         void LoadFromFile(string fileName);
         void SaveToFile(string fileName);
     }

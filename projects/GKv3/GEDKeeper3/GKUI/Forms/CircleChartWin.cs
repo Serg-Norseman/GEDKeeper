@@ -189,7 +189,7 @@ namespace GKUI.Forms
 
                 AppHost.Instance.UpdateControls(false, true);
             } catch (Exception ex) {
-                Logger.WriteError("CircleChartWin.UpdateControls(): ", ex);
+                Logger.WriteError("CircleChartWin.UpdateControls()", ex);
             }
         }
 

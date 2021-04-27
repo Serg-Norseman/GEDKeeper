@@ -118,13 +118,7 @@ namespace GKUI.Forms
 
         private void TreePlaces_DoubleClick(object sender, EventArgs e)
         {
-            GKTreeNode node = tvPlaces.SelectedItem as GKTreeNode;
-            if (node == null) return;
-
-            GeoPoint pt = node.Tag as GeoPoint;
-            if (pt == null) return;
-
-            fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+            fController.SetCenter();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -172,8 +166,8 @@ namespace GKUI.Forms
             for (int i = 0; i < num; i++) {
                 GKTreeNode node = rootNode.Children[i] as GKTreeNode;
 
-                if (node.Text == place) {
-                    return node as ITVNode;
+                if (node != null && node.Text == place) {
+                    return node;
                 }
             }
 

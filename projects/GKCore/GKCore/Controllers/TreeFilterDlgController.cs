@@ -73,7 +73,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("TreeFilterDlgController.Accept(): ", ex);
+                Logger.WriteError("TreeFilterDlgController.Accept()", ex);
                 return false;
             }
         }

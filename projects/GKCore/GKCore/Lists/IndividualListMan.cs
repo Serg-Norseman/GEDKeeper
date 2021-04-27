@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -165,7 +165,7 @@ namespace GKCore.Lists
 
             int count = fRec.Groups.Count;
             for (int idx = 0; idx < count; idx++) {
-                GDMGroupRecord grp = fRec.Groups[idx].Value as GDMGroupRecord;
+                GDMGroupRecord grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(fRec.Groups[idx]);
                 if (grp != null) {
                     if (idx > 0) result.Append("; ");
 
@@ -176,16 +176,16 @@ namespace GKCore.Lists
             return result.ToString();
         }
 
-        private bool HasPlace()
+        private bool IsMatchesPlace(string fltResidence)
         {
+            if (fltResidence == "*") return true;
+
             bool result = false;
 
-            string fltResidence = ((IndividualListFilter)fFilter).Residence;
             bool hasAddr = GlobalOptions.Instance.PlacesWithAddress;
 
             int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 string place = GKUtils.GetPlaceStr(fRec.Events[i], hasAddr);
                 result = IsMatchesMask(place, fltResidence);
                 if (result) break;
@@ -194,15 +194,14 @@ namespace GKCore.Lists
             return result;
         }
 
-        private bool HasEventVal()
+        private bool IsMatchesEventVal(string fltEventVal)
         {
+            if (fltEventVal == "*") return true;
+
             bool result = false;
 
-            string fltEventVal = ((IndividualListFilter)fFilter).EventVal;
-
             int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 result = IsMatchesMask(fRec.Events[i].StringValue, fltEventVal);
                 if (result) break;
             }
@@ -218,8 +217,8 @@ namespace GKCore.Lists
 
             if ((iFilter.Sex == GDMSex.svUnknown || fRec.Sex == iFilter.Sex)
                 && (IsMatchesMask(buf_fullname, iFilter.Name))
-                && (iFilter.Residence == "*" || HasPlace())
-                && (iFilter.EventVal == "*" || HasEventVal())
+                && (IsMatchesPlace(iFilter.Residence))
+                && (IsMatchesEventVal(iFilter.EventVal))
                 && (!iFilter.PatriarchOnly || fRec.Patriarch))
             {
                 bool isLive = (buf_dd == null);
@@ -311,7 +310,7 @@ namespace GKCore.Lists
                         break;
 
                     case NameFormat.nfF_NP:
-                        parts = GKUtils.GetNameParts(fRec);
+                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fRec);
                         switch (colSubtype) {
                             case 0:
                                 result = parts.Surname;
@@ -323,7 +322,7 @@ namespace GKCore.Lists
                         break;
 
                     case NameFormat.nfF_N_P:
-                        parts = GKUtils.GetNameParts(fRec);
+                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fRec);
                         switch (colSubtype) {
                             case 0:
                                 result = parts.Surname;
@@ -629,7 +628,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMPointer ptr in iRec.Groups) {
-                    GDMGroupRecord grp = ptr.Value as GDMGroupRecord;
+                    var grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(ptr);
                     if (grp != null) {
                         fSheetList.AddItem(grp, new object[] { grp.GroupName });
                     }
@@ -637,7 +636,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("GroupsSublistModel.UpdateContent(): ", ex);
+                Logger.WriteError("GroupsSublistModel.UpdateContent()", ex);
             }
         }
 
@@ -709,7 +708,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("NamesSublistModel.UpdateContents(): ", ex);
+                Logger.WriteError("NamesSublistModel.UpdateContents()", ex);
             }
         }
 
@@ -728,9 +727,10 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.ResolveDialog<IPersonalNameEditDlg>(fBaseWin)) {
                         bool exists = (persName != null);
                         if (!exists) {
-                            persName = new GDMPersonalName(iRec);
+                            persName = new GDMPersonalName();
                         }
 
+                        dlg.Individual = iRec;
                         dlg.PersonalName = persName;
                         result = AppHost.Instance.ShowModalX(dlg, false);
 
@@ -805,15 +805,17 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMChildToFamilyLink cfLink in iRec.ChildToFamilyLinks) {
-                    GDMFamilyRecord famRec = cfLink.Family;
+                    GDMFamilyRecord famRec = fBaseContext.Tree.GetPtrValue(cfLink);
 
-                    fSheetList.AddItem(cfLink, new object[] { GKUtils.GetFamilyString(famRec),
-                                                          LangMan.LS(GKData.ParentTypes[(int)cfLink.PedigreeLinkageType]) });
+                    fSheetList.AddItem(cfLink, new object[] {
+                        GKUtils.GetFamilyString(fBaseContext.Tree, famRec),
+                        LangMan.LS(GKData.ParentTypes[(int)cfLink.PedigreeLinkageType])
+                    });
                 }
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("ParentsSublistModel.UpdateContents(): ", ex);
+                Logger.WriteError("ParentsSublistModel.UpdateContents()", ex);
             }
         }
 
@@ -846,7 +848,8 @@ namespace GKCore.Lists
 
                 case RecordAction.raDelete:
                     if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery))) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, iRec, cfLink.Family);
+                        var famRec = fBaseContext.Tree.GetPtrValue(cfLink);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, iRec, famRec);
                     }
                     break;
 
@@ -904,17 +907,17 @@ namespace GKCore.Lists
                 foreach (GDMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks) {
                     idx += 1;
 
-                    GDMFamilyRecord family = spLink.Family;
+                    GDMFamilyRecord family = fBaseContext.Tree.GetPtrValue(spLink);
                     if (family == null) continue;
 
                     GDMIndividualRecord relPerson;
                     string relName;
 
                     if (iRec.Sex == GDMSex.svMale) {
-                        relPerson = family.Wife.Individual;
+                        relPerson = fBaseContext.Tree.GetPtrValue(family.Wife);
                         relName = LangMan.LS(LSID.LSID_UnkFemale);
                     } else {
-                        relPerson = family.Husband.Individual;
+                        relPerson = fBaseContext.Tree.GetPtrValue(family.Husband);
                         relName = LangMan.LS(LSID.LSID_UnkMale);
                     }
 
@@ -928,7 +931,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("SpousesSublistModel.UpdateContents(): ", ex);
+                Logger.WriteError("SpousesSublistModel.UpdateContents()", ex);
             }
         }
 
@@ -1019,7 +1022,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("URefsSublistModel.UpdateContents(): ", ex);
+                Logger.WriteError("URefsSublistModel.UpdateContents()", ex);
             }
         }
 
@@ -1038,7 +1041,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.ResolveDialog<IUserRefEditDlg>(fBaseWin)) {
                         bool exists = (userRef != null);
                         if (!exists) {
-                            userRef = new GDMUserReference(iRec);
+                            userRef = new GDMUserReference();
                         }
 
                         dlg.UserRef = userRef;

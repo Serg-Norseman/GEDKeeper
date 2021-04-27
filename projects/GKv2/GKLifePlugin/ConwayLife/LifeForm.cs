@@ -5,13 +5,13 @@
  *  Distribution: This control is free for public use and components may be
  *  freely descended from it as long as credit is given to the author.
  * 
- *  Converted to C#: 20/07/2011, Serg V. Zhdanovskih
+ *  Converted to C#: 20/07/2011, Sergey V. Zhdanovskih.
  */
 
 using System;
 using System.Windows.Forms;
 
-namespace ConwayLife
+namespace GKLifePlugin.ConwayLife
 {
     public partial class LifeForm : Form
     {
@@ -82,23 +82,12 @@ namespace ConwayLife
             btnSetCells.Enabled = !tbStart.Checked;
             tbClear.Enabled = !tbStart.Checked;
             tbRandomise.Enabled = !tbStart.Checked;
-
-            if (cmpLife.AcceptMouseClicks) {
-                cmpLife.Cursor = Cursors.Hand;
-            } else {
-                cmpLife.Cursor = Cursors.Default;
-            }
+            cmpLife.Cursor = cmpLife.AcceptMouseClicks ? Cursors.Hand : Cursors.Default;
         }
         
-        private void PatternStabilised(int Periodicity)
+        private void PatternStabilised(int periodicity)
         {
-            string msg;
-            if (Periodicity == 1) {
-                msg = StaticPattern;
-            } else {
-                msg = string.Format(RepeatingPattern, Periodicity);
-            }
-            
+            string msg = (periodicity == 1) ? StaticPattern : string.Format(RepeatingPattern, periodicity);
             MessageBox.Show(msg, PatternStabilisedTitle, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
         

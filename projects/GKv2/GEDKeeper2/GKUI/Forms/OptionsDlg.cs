@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Globalization;
 using System.Windows.Forms;
 using BSLib.Design;
 using BSLib.Design.Graphics;
@@ -59,6 +60,18 @@ namespace GKUI.Forms
             fOptions = GlobalOptions.Instance;
             fTempColumns = IndividualListMan.CreateIndividualListColumns();
 
+            cmbGeoSearchCountry.Items.Clear();
+            foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures)) {
+                RegionInfo ri;
+                try {
+                    ri = new RegionInfo(ci.Name);
+                } catch {
+                    continue;
+                }
+                cmbGeoSearchCountry.Items.Add(ri.TwoLetterISORegionName);
+            }
+            cmbGeoSearchCountry.Sorted = true;
+
             SetLang();
             UpdateForm();
         }
@@ -67,8 +80,7 @@ namespace GKUI.Forms
         {
             lstPersonColumns.ItemCheck -= ListPersonColumns_ItemCheck;
             lstPersonColumns.BeginUpdate();
-            try
-            {
+            try {
                 lstPersonColumns.Items.Clear();
 
                 int num = fTempColumns.Count;
@@ -77,17 +89,46 @@ namespace GKUI.Forms
 
                     lstPersonColumns.Items.Add(LangMan.LS(column.ColName), column.CurActive);
                 }
-            }
-            finally
-            {
+            } finally {
                 lstPersonColumns.EndUpdate();
             }
             lstPersonColumns.ItemCheck += ListPersonColumns_ItemCheck;
         }
 
-        private void UpdateControls()
+        private void UpdateProxyOptions()
         {
-            lblChartFont.Text = fOptions.TreeChartOptions.DefFontName + @", " + fOptions.TreeChartOptions.DefFontSize.ToString();
+            chkUseProxy.Checked = fOptions.Proxy.UseProxy;
+            txtProxyServer.Text = fOptions.Proxy.Server;
+            txtProxyPort.Text = fOptions.Proxy.Port;
+            txtProxyLogin.Text = fOptions.Proxy.Login;
+            txtProxyPass.Text = fOptions.Proxy.Password;
+        }
+
+        private void UpdateBackupOptions()
+        {
+            switch (fOptions.FileBackup) {
+                case FileBackup.fbNone:
+                    radFBNone.Checked = true;
+                    break;
+                case FileBackup.fbOnlyPrev:
+                    radFBOnlyPrev.Checked = true;
+                    break;
+                case FileBackup.fbEachRevision:
+                    radFBEachRevision.Checked = true;
+                    break;
+            }
+            chkAutosave.Checked = fOptions.Autosave;
+            numASMin.Value = fOptions.AutosaveInterval;
+            numBackupRevisionsMaxCount.Value = fOptions.FileBackupEachRevisionMaxCount;
+        }
+
+        private void UpdateOtherOptions()
+        {
+            chkShowOnStart.Checked = fOptions.ShowTips;
+            chkLoadRecentFiles.Checked = fOptions.LoadRecentFiles;
+            chkAutoCheckUpdates.Checked = fOptions.AutoCheckUpdates;
+            chkCharsetDetection.Checked = fOptions.CharsetDetection;
+            chkDialogClosingWarn.Checked = fOptions.DialogClosingWarn;
         }
 
         private void UpdateLangs()
@@ -102,10 +143,77 @@ namespace GKUI.Forms
             UIHelper.SetSelectedTag(cmbLanguages, fOptions.InterfaceLang, true);
         }
 
-        private void UpdateForm()
+        private void UpdateMediaOptions()
         {
-            switch (fOptions.DefNameFormat)
-            {
+            chkRemovableMediaWarning.Checked = fOptions.RemovableMediaWarning;
+            chkEmbeddedMediaPlayer.Checked = fOptions.EmbeddedMediaPlayer;
+            chkAllowMediaDirectRefs.Checked = fOptions.AllowMediaStoreReferences;
+            chkAllowMediaStoreRelativeReferences.Checked = fOptions.AllowMediaStoreRelativeReferences;
+            UIHelper.SetSelectedTag<MediaStoreType>(cmbMediaStoreDefault, fOptions.MediaStoreDefault);
+            chkAllowDeleteMediaFileFromStgArc.Checked = fOptions.AllowDeleteMediaFileFromStgArc;
+            chkAllowDeleteMediaFileFromRefs.Checked = fOptions.AllowDeleteMediaFileFromRefs;
+            chkDeleteMediaFileWithoutConfirm.Checked = fOptions.DeleteMediaFileWithoutConfirm;
+        }
+
+        private void UpdateTreeChartsOptions()
+        {
+            chkSurname.Checked = fOptions.TreeChartOptions.FamilyVisible;
+            chkName.Checked = fOptions.TreeChartOptions.NameVisible;
+            chkPatronymic.Checked = fOptions.TreeChartOptions.PatronymicVisible;
+            chkDiffLines.Checked = fOptions.TreeChartOptions.DiffLines;
+            chkBirthDate.Checked = fOptions.TreeChartOptions.BirthDateVisible;
+            chkDeathDate.Checked = fOptions.TreeChartOptions.DeathDateVisible;
+            chkOnlyYears.Checked = fOptions.TreeChartOptions.OnlyYears;
+            chkMarriagesDates.Checked = fOptions.TreeChartOptions.MarriagesDates;
+            chkKinship.Checked = fOptions.TreeChartOptions.Kinship;
+            chkSignsVisible.Checked = fOptions.TreeChartOptions.SignsVisible;
+            chkTreeDecorative.Checked = fOptions.TreeChartOptions.Decorative;
+            chkPortraitsVisible.Checked = fOptions.TreeChartOptions.PortraitsVisible;
+            chkDefaultPortraits.Checked = fOptions.TreeChartOptions.DefaultPortraits;
+            chkInvertedTree.Checked = fOptions.TreeChartOptions.InvertedTree;
+            chkChildlessExclude.Checked = fOptions.TreeChartOptions.ChildlessExclude;
+            chkShowPlaces.Checked = fOptions.TreeChartOptions.ShowPlaces;
+            chkHideUnknownSpouses.Checked = fOptions.TreeChartOptions.HideUnknownSpouses;
+            chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
+            chkDottedLinesOfAdoptedChildren.Checked = fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren;
+            chkSeparateDAPLines.Checked = fOptions.TreeChartOptions.SeparateDatesAndPlacesLines;
+            chkBoldNames.Checked = fOptions.TreeChartOptions.BoldNames;
+
+            lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
+            lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.FemaleColor);
+            lblUnkSexColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.UnkSexColor);
+            lblUnHusbandColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.UnHusbandColor);
+            lblUnWifeColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.UnWifeColor);
+
+            numMargins.Value = fOptions.TreeChartOptions.Margins;
+            numBranchDist.Value = fOptions.TreeChartOptions.BranchDistance;
+            numGenDist.Value = fOptions.TreeChartOptions.LevelDistance;
+            numSpouseDist.Value = fOptions.TreeChartOptions.SpouseDistance;
+
+            numDefaultDepth.Minimum = -1;
+            numDefaultDepth.Value = fOptions.TreeChartOptions.DepthLimit;
+            numDefaultDepthAncestors.Minimum = -1;
+            numDefaultDepthAncestors.Value = fOptions.TreeChartOptions.DepthLimitAncestors;
+            numDefaultDepthDescendants.Minimum = -1;
+            numDefaultDepthDescendants.Value = fOptions.TreeChartOptions.DepthLimitDescendants;
+
+            UpdateTreeChartFont();
+        }
+
+        private void UpdateTreeChartFont()
+        {
+            lblChartFont.Text = fOptions.TreeChartOptions.DefFontName + @", " + fOptions.TreeChartOptions.DefFontSize.ToString();
+        }
+
+        private void UpdateCircleChartsOptions()
+        {
+            ancOptionsControl1.Options = fOptions.CircleChartOptions;
+            ancOptionsControl1.UpdateControls();
+        }
+
+        private void UpdateInterfaceOptions()
+        {
+            switch (fOptions.DefNameFormat) {
                 case NameFormat.nfFNP:
                     radSNP.Checked = true;
                     break;
@@ -117,8 +225,7 @@ namespace GKUI.Forms
                     break;
             }
 
-            switch (fOptions.DefDateFormat)
-            {
+            switch (fOptions.DefDateFormat) {
                 case DateFormat.dfDD_MM_YYYY:
                     radDMY.Checked = true;
                     break;
@@ -126,116 +233,17 @@ namespace GKUI.Forms
                     radYMD.Checked = true;
                     break;
             }
+            chkShowDatesCalendar.Checked = fOptions.ShowDatesCalendar;
+            chkShowDatesSigns.Checked = fOptions.ShowDatesSign;
 
             chkPlacesWithAddress.Checked = fOptions.PlacesWithAddress;
             chkHighlightUnparented.Checked = fOptions.ListHighlightUnparentedPersons;
             chkHighlightUnmarried.Checked = fOptions.ListHighlightUnmarriedPersons;
-            chkShowDatesCalendar.Checked = fOptions.ShowDatesCalendar;
-            chkShowDatesSigns.Checked = fOptions.ShowDatesSign;
-            chkAutosave.Checked = fOptions.Autosave;
-            numASMin.Value = fOptions.AutosaveInterval;
-            chkRemovableMediaWarning.Checked = fOptions.RemovableMediaWarning;
-            chkLoadRecentFiles.Checked = fOptions.LoadRecentFiles;
-            chkEmbeddedMediaPlayer.Checked = fOptions.EmbeddedMediaPlayer;
-            chkAllowMediaDirectRefs.Checked = fOptions.AllowMediaStoreReferences;
-            chkAutoCheckUpdates.Checked = fOptions.AutoCheckUpdates;
-
-            chkAllowMediaStoreRelativeReferences.Checked = fOptions.AllowMediaStoreRelativeReferences;
-            UIHelper.SetSelectedTag<MediaStoreType>(cmbMediaStoreDefault, (MediaStoreType)fOptions.MediaStoreDefault);
-            chkAllowDeleteMediaFileFromStgArc.Checked = fOptions.AllowDeleteMediaFileFromStgArc;
-            chkAllowDeleteMediaFileFromRefs.Checked = fOptions.AllowDeleteMediaFileFromRefs;
-            chkDeleteMediaFileWithoutConfirm.Checked = fOptions.DeleteMediaFileWithoutConfirm;
-
-            chkSurname.Checked = fOptions.TreeChartOptions.FamilyVisible;
-            chkName.Checked = fOptions.TreeChartOptions.NameVisible;
-            chkPatronymic.Checked = fOptions.TreeChartOptions.PatronymicVisible;
-            chkDiffLines.Checked = fOptions.TreeChartOptions.DiffLines;
-            chkBirthDate.Checked = fOptions.TreeChartOptions.BirthDateVisible;
-            chkDeathDate.Checked = fOptions.TreeChartOptions.DeathDateVisible;
-            chkOnlyYears.Checked = fOptions.TreeChartOptions.OnlyYears;
-            chkKinship.Checked = fOptions.TreeChartOptions.Kinship;
-            chkSignsVisible.Checked = fOptions.TreeChartOptions.SignsVisible;
-            chkChildlessExclude.Checked = fOptions.TreeChartOptions.ChildlessExclude;
-            chkTreeDecorative.Checked = fOptions.TreeChartOptions.Decorative;
-            chkPortraitsVisible.Checked = fOptions.TreeChartOptions.PortraitsVisible;
-            chkDefaultPortraits.Checked = fOptions.TreeChartOptions.DefaultPortraits;
-            chkInvertedTree.Checked = fOptions.TreeChartOptions.InvertedTree;
-            chkMarriagesDates.Checked = fOptions.TreeChartOptions.MarriagesDates;
-            chkShowPlaces.Checked = fOptions.TreeChartOptions.ShowPlaces;
-            chkHideUnknownSpouses.Checked = fOptions.TreeChartOptions.HideUnknownSpouses;
-
-            numMargins.Value = fOptions.TreeChartOptions.Margins;
-            numBranchDist.Value = fOptions.TreeChartOptions.BranchDistance;
-            numGenDist.Value = fOptions.TreeChartOptions.LevelDistance;
-            numSpouseDist.Value = fOptions.TreeChartOptions.SpouseDistance;
-
-            lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
-            lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.FemaleColor);
-            lblUnkSexColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.UnkSexColor);
-            lblUnHusbandColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.UnHusbandColor);
-            lblUnWifeColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.UnWifeColor);
-
-            chkUseProxy.Checked = fOptions.Proxy.UseProxy;
-            txtProxyServer.Text = fOptions.Proxy.Server;
-            txtProxyPort.Text = fOptions.Proxy.Port;
-            txtProxyLogin.Text = fOptions.Proxy.Login;
-            txtProxyPass.Text = fOptions.Proxy.Password;
-
-            chkAttributes.Checked = fOptions.PedigreeOptions.IncludeAttributes;
-            chkNotes.Checked = fOptions.PedigreeOptions.IncludeNotes;
-            chkSources.Checked = fOptions.PedigreeOptions.IncludeSources;
-            chkGenerations.Checked = fOptions.PedigreeOptions.IncludeGenerations;
-
-            switch (fOptions.PedigreeOptions.Format)
-            {
-                case PedigreeFormat.Excess:
-                    radExcess.Checked = true;
-                    break;
-                case PedigreeFormat.Compact:
-                    radCompact.Checked = true;
-                    break;
-            }
-
-            chkShowOnStart.Checked = fOptions.ShowTips;
-
-            switch (fOptions.FileBackup)
-            {
-                case FileBackup.fbNone:
-                    radFBNone.Checked = true;
-                    break;
-                case FileBackup.fbOnlyPrev:
-                    radFBOnlyPrev.Checked = true;
-                    break;
-                case FileBackup.fbEachRevision:
-                    radFBEachRevision.Checked = true;
-                    break;
-            }
-
-            fOptions.IndividualListColumns.CopyTo(fTempColumns);
-            UpdateColumnsList();
-
-            UpdateControls();
-            UpdateLangs();
-
-            UpdatePlugins();
-            UpdateWomanSurnameFormat();
-
-            ancOptionsControl1.Options = fOptions.CircleChartOptions;
-            ancOptionsControl1.UpdateControls();
-
-            cmbGeocoder.Text = fOptions.Geocoder;
 
             chkAutoSortChildren.Checked = fOptions.AutoSortChildren;
             chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
-            chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
-            chkCharsetDetection.Checked = fOptions.CharsetDetection;
-
-            numBackupRevisionsMaxCount.Value = fOptions.FileBackupEachRevisionMaxCount;
             chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
             chkDialogClosingWarn.Checked = fOptions.DialogClosingWarn;
-
-            numDefaultDepthAncestors.Value = fOptions.TreeChartOptions.DepthLimitAncestors;
-            numDefaultDepthDescendants.Value = fOptions.TreeChartOptions.DepthLimitDescendants;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -249,8 +257,7 @@ namespace GKUI.Forms
             radMaiden.Enabled = isExtend;
             radMarried.Enabled = isExtend;
 
-            switch (wsFmt)
-            {
+            switch (wsFmt) {
                 case WomanSurnameFormat.wsfMaiden_Married:
                     radMaiden_Married.Checked = true;
                     break;
@@ -269,6 +276,71 @@ namespace GKUI.Forms
             }
         }
 
+        private void UpdatePedigreesOptions()
+        {
+            chkAttributes.Checked = fOptions.PedigreeOptions.IncludeAttributes;
+            chkNotes.Checked = fOptions.PedigreeOptions.IncludeNotes;
+            chkSources.Checked = fOptions.PedigreeOptions.IncludeSources;
+            chkGenerations.Checked = fOptions.PedigreeOptions.IncludeGenerations;
+
+            switch (fOptions.PedigreeOptions.Format) {
+                case PedigreeFormat.Excess:
+                    radExcess.Checked = true;
+                    break;
+                case PedigreeFormat.Compact:
+                    radCompact.Checked = true;
+                    break;
+            }
+        }
+
+        private void UpdatePlugins()
+        {
+            lvPlugins.ClearItems();
+
+            int num = AppHost.Plugins.Count;
+            for (int i = 0; i < num; i++) {
+                IPlugin plugin = AppHost.Plugins[i];
+                PluginInfo pInfo = PluginInfo.GetPluginInfo(plugin);
+
+                lvPlugins.AddItem(null, pInfo.Title,
+                    pInfo.Version,
+                    pInfo.Copyright,
+                    pInfo.Description);
+            }
+        }
+
+        private void UpdateForm()
+        {
+            // common
+            UpdateProxyOptions();
+            UpdateBackupOptions();
+            UpdateOtherOptions();
+            UpdateLangs();
+
+            cmbGeocoder.Text = fOptions.Geocoder;
+            cmbGeoSearchCountry.Text = fOptions.GeoSearchCountry;
+
+            // media
+            UpdateMediaOptions();
+
+            // charts
+            UpdateTreeChartsOptions();
+            UpdateCircleChartsOptions();
+
+            // interface
+            UpdateInterfaceOptions();
+            UpdateWomanSurnameFormat();
+
+            fOptions.IndividualListColumns.CopyTo(fTempColumns);
+            UpdateColumnsList();
+
+            // pedigrees
+            UpdatePedigreesOptions();
+
+            // plugins
+            UpdatePlugins();
+        }
+
         private void chkExtendWomanSurnames_CheckedChanged(object sender, EventArgs e)
         {
             if (!chkExtendWomanSurnames.Checked) {
@@ -279,23 +351,6 @@ namespace GKUI.Forms
                 radMarried_Maiden.Enabled = true;
                 radMaiden.Enabled = true;
                 radMarried.Enabled = true;
-            }
-        }
-
-        private void UpdatePlugins()
-        {
-            lvPlugins.ClearItems();
-
-            int num = AppHost.Plugins.Count;
-            for (int i = 0; i < num; i++)
-            {
-                IPlugin plugin = AppHost.Plugins[i];
-                PluginInfo pInfo = PluginInfo.GetPluginInfo(plugin);
-
-                lvPlugins.AddItem(null, pInfo.Title,
-                                  pInfo.Version,
-                                  pInfo.Copyright,
-                                  pInfo.Description);
             }
         }
 
@@ -314,13 +369,12 @@ namespace GKUI.Forms
             var sdFont = new System.Drawing.Font(chartOptions.DefFontName, chartOptions.DefFontSize);
             IFont font = new FontHandler(sdFont);
             font = AppHost.StdDialogs.SelectFont(font);
-            if (font != null)
-            {
+            if (font != null) {
                 chartOptions.DefFontName = font.Name;
                 chartOptions.DefFontSize = (int)(Math.Round(font.Size));
             }
 
-            UpdateControls();
+            UpdateTreeChartFont();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -329,15 +383,111 @@ namespace GKUI.Forms
                 AcceptChanges();
                 DialogResult = DialogResult.OK;
             } catch (Exception ex) {
-                Logger.WriteError("OptionsDlg.btnAccept_Click(): ", ex);
+                Logger.WriteError("OptionsDlg.btnAccept_Click()", ex);
                 DialogResult = DialogResult.None;
             }
         }
 
-        private void AcceptChanges()
+        private void AcceptProxyOptions()
         {
-            fTempColumns.CopyTo(fOptions.IndividualListColumns);
+            fOptions.Proxy.UseProxy = chkUseProxy.Checked;
+            fOptions.Proxy.Server = txtProxyServer.Text;
+            fOptions.Proxy.Port = txtProxyPort.Text;
+            fOptions.Proxy.Login = txtProxyLogin.Text;
+            fOptions.Proxy.Password = txtProxyPass.Text;
+        }
 
+        private void AcceptBackupOptions()
+        {
+            if (radFBNone.Checked) {
+                fOptions.FileBackup = FileBackup.fbNone;
+            } else if (radFBOnlyPrev.Checked) {
+                fOptions.FileBackup = FileBackup.fbOnlyPrev;
+            } else if (radFBEachRevision.Checked) {
+                fOptions.FileBackup = FileBackup.fbEachRevision;
+            }
+
+            fOptions.Autosave = chkAutosave.Checked;
+            fOptions.AutosaveInterval = (int)numASMin.Value;
+            fOptions.FileBackupEachRevisionMaxCount = (int)numBackupRevisionsMaxCount.Value;
+        }
+
+        private void AcceptOtherOptions()
+        {
+            fOptions.ShowTips = chkShowOnStart.Checked;
+            fOptions.LoadRecentFiles = chkLoadRecentFiles.Checked;
+            fOptions.AutoCheckUpdates = chkAutoCheckUpdates.Checked;
+            fOptions.CharsetDetection = chkCharsetDetection.Checked;
+            fOptions.DialogClosingWarn = chkDialogClosingWarn.Checked;
+        }
+
+        private void AcceptLangs()
+        {
+            var item = cmbLanguages.SelectedItem as ComboItem<int>;
+            if (item != null) {
+                AppHost.Instance.LoadLanguage(item.Tag);
+            }
+        }
+
+        private void AcceptMediaOptions()
+        {
+            fOptions.RemovableMediaWarning = chkRemovableMediaWarning.Checked;
+            fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked;
+            fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked;
+            fOptions.AllowMediaStoreRelativeReferences = chkAllowMediaStoreRelativeReferences.Checked;
+            fOptions.MediaStoreDefault = UIHelper.GetSelectedTag<MediaStoreType>(cmbMediaStoreDefault);
+            fOptions.AllowDeleteMediaFileFromStgArc = chkAllowDeleteMediaFileFromStgArc.Checked;
+            fOptions.AllowDeleteMediaFileFromRefs = chkAllowDeleteMediaFileFromRefs.Checked;
+            fOptions.DeleteMediaFileWithoutConfirm = chkDeleteMediaFileWithoutConfirm.Checked;
+        }
+
+        private void AcceptTreeChartsOptions()
+        {
+            fOptions.TreeChartOptions.FamilyVisible = chkSurname.Checked;
+            fOptions.TreeChartOptions.NameVisible = chkName.Checked;
+            fOptions.TreeChartOptions.PatronymicVisible = chkPatronymic.Checked;
+            fOptions.TreeChartOptions.DiffLines = chkDiffLines.Checked;
+            fOptions.TreeChartOptions.BirthDateVisible = chkBirthDate.Checked;
+            fOptions.TreeChartOptions.DeathDateVisible = chkDeathDate.Checked;
+            fOptions.TreeChartOptions.OnlyYears = chkOnlyYears.Checked;
+            fOptions.TreeChartOptions.MarriagesDates = chkMarriagesDates.Checked;
+            fOptions.TreeChartOptions.Kinship = chkKinship.Checked;
+            fOptions.TreeChartOptions.SignsVisible = chkSignsVisible.Checked;
+            fOptions.TreeChartOptions.Decorative = chkTreeDecorative.Checked;
+            fOptions.TreeChartOptions.PortraitsVisible = chkPortraitsVisible.Checked;
+            fOptions.TreeChartOptions.DefaultPortraits = chkDefaultPortraits.Checked;
+            fOptions.TreeChartOptions.InvertedTree = chkInvertedTree.Checked;
+            fOptions.TreeChartOptions.ChildlessExclude = chkChildlessExclude.Checked;
+            fOptions.TreeChartOptions.ShowPlaces = chkShowPlaces.Checked;
+            fOptions.TreeChartOptions.HideUnknownSpouses = chkHideUnknownSpouses.Checked;
+            fOptions.CheckTreeSize = chkCheckTreeSize.Checked;
+            fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren = chkDottedLinesOfAdoptedChildren.Checked;
+            fOptions.TreeChartOptions.SeparateDatesAndPlacesLines = chkSeparateDAPLines.Checked;
+            fOptions.TreeChartOptions.BoldNames = chkBoldNames.Checked;
+
+            fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
+            fOptions.TreeChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
+            fOptions.TreeChartOptions.UnkSexColor = UIHelper.ConvertColor(lblUnkSexColor.BackColor);
+            fOptions.TreeChartOptions.UnHusbandColor = UIHelper.ConvertColor(lblUnHusbandColor.BackColor);
+            fOptions.TreeChartOptions.UnWifeColor = UIHelper.ConvertColor(lblUnWifeColor.BackColor);
+
+            fOptions.TreeChartOptions.Margins = (int)numMargins.Value;
+            fOptions.TreeChartOptions.BranchDistance = (int)numBranchDist.Value;
+            fOptions.TreeChartOptions.LevelDistance = (int)numGenDist.Value;
+            fOptions.TreeChartOptions.SpouseDistance = (int)numSpouseDist.Value;
+
+            fOptions.TreeChartOptions.DepthLimit = (int)numDefaultDepth.Value;
+            fOptions.TreeChartOptions.DepthLimitAncestors = (int)numDefaultDepthAncestors.Value;
+            fOptions.TreeChartOptions.DepthLimitDescendants = (int)numDefaultDepthDescendants.Value;
+        }
+
+        private void AcceptCircleChartsOptions()
+        {
+            ancOptionsControl1.AcceptChanges();
+        }
+
+        private void AcceptInterfaceOptions()
+        {
             if (radSNP.Checked) {
                 fOptions.DefNameFormat = NameFormat.nfFNP;
             } else if (radS_NP.Checked) {
@@ -351,89 +501,20 @@ namespace GKUI.Forms
             } else if (radYMD.Checked) {
                 fOptions.DefDateFormat = DateFormat.dfYYYY_MM_DD;
             }
+            fOptions.ShowDatesCalendar = chkShowDatesCalendar.Checked;
+            fOptions.ShowDatesSign = chkShowDatesSigns.Checked;
 
             fOptions.PlacesWithAddress = chkPlacesWithAddress.Checked;
             fOptions.ListHighlightUnparentedPersons = chkHighlightUnparented.Checked;
             fOptions.ListHighlightUnmarriedPersons = chkHighlightUnmarried.Checked;
-            fOptions.ShowDatesCalendar = chkShowDatesCalendar.Checked;
-            fOptions.ShowDatesSign = chkShowDatesSigns.Checked;
-            fOptions.Autosave = chkAutosave.Checked;
-            fOptions.AutosaveInterval = (int)numASMin.Value;
-            fOptions.RemovableMediaWarning = chkRemovableMediaWarning.Checked;
-            fOptions.LoadRecentFiles = chkLoadRecentFiles.Checked;
-            fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked;
-            fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked;
-            fOptions.AutoCheckUpdates = chkAutoCheckUpdates.Checked;
 
-            fOptions.AllowMediaStoreRelativeReferences = chkAllowMediaStoreRelativeReferences.Checked;
-            fOptions.MediaStoreDefault = (int)UIHelper.GetSelectedTag<MediaStoreType>(cmbMediaStoreDefault);
-            fOptions.AllowDeleteMediaFileFromStgArc = chkAllowDeleteMediaFileFromStgArc.Checked;
-            fOptions.AllowDeleteMediaFileFromRefs = chkAllowDeleteMediaFileFromRefs.Checked;
-            fOptions.DeleteMediaFileWithoutConfirm = chkDeleteMediaFileWithoutConfirm.Checked;
+            fOptions.AutoSortChildren = chkAutoSortChildren.Checked;
+            fOptions.AutoSortSpouses = chkAutoSortSpouses.Checked;
+            fOptions.FirstCapitalLetterInNames = chkFirstCapitalLetterInNames.Checked;
+        }
 
-            fOptions.TreeChartOptions.FamilyVisible = chkSurname.Checked;
-            fOptions.TreeChartOptions.NameVisible = chkName.Checked;
-            fOptions.TreeChartOptions.PatronymicVisible = chkPatronymic.Checked;
-            fOptions.TreeChartOptions.DiffLines = chkDiffLines.Checked;
-            fOptions.TreeChartOptions.BirthDateVisible = chkBirthDate.Checked;
-            fOptions.TreeChartOptions.DeathDateVisible = chkDeathDate.Checked;
-            fOptions.TreeChartOptions.OnlyYears = chkOnlyYears.Checked;
-            fOptions.TreeChartOptions.Kinship = chkKinship.Checked;
-            fOptions.TreeChartOptions.SignsVisible = chkSignsVisible.Checked;
-            fOptions.TreeChartOptions.ChildlessExclude = chkChildlessExclude.Checked;
-            fOptions.TreeChartOptions.Decorative = chkTreeDecorative.Checked;
-            fOptions.TreeChartOptions.PortraitsVisible = chkPortraitsVisible.Checked;
-            fOptions.TreeChartOptions.DefaultPortraits = chkDefaultPortraits.Checked;
-            fOptions.TreeChartOptions.InvertedTree = chkInvertedTree.Checked;
-            fOptions.TreeChartOptions.MarriagesDates = chkMarriagesDates.Checked;
-            fOptions.TreeChartOptions.ShowPlaces = chkShowPlaces.Checked;
-            fOptions.TreeChartOptions.HideUnknownSpouses = chkHideUnknownSpouses.Checked;
-
-            fOptions.TreeChartOptions.Margins = (int)numMargins.Value;
-            fOptions.TreeChartOptions.BranchDistance = (int)numBranchDist.Value;
-            fOptions.TreeChartOptions.LevelDistance = (int)numGenDist.Value;
-            fOptions.TreeChartOptions.SpouseDistance = (int)numSpouseDist.Value;
-
-            fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
-            fOptions.TreeChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
-            fOptions.TreeChartOptions.UnkSexColor = UIHelper.ConvertColor(lblUnkSexColor.BackColor);
-            fOptions.TreeChartOptions.UnHusbandColor = UIHelper.ConvertColor(lblUnHusbandColor.BackColor);
-            fOptions.TreeChartOptions.UnWifeColor = UIHelper.ConvertColor(lblUnWifeColor.BackColor);
-
-            fOptions.Proxy.UseProxy = chkUseProxy.Checked;
-            fOptions.Proxy.Server = txtProxyServer.Text;
-            fOptions.Proxy.Port = txtProxyPort.Text;
-            fOptions.Proxy.Login = txtProxyLogin.Text;
-            fOptions.Proxy.Password = txtProxyPass.Text;
-
-            fOptions.PedigreeOptions.IncludeAttributes = chkAttributes.Checked;
-            fOptions.PedigreeOptions.IncludeNotes = chkNotes.Checked;
-            fOptions.PedigreeOptions.IncludeSources = chkSources.Checked;
-            fOptions.PedigreeOptions.IncludeGenerations = chkGenerations.Checked;
-
-            if (radExcess.Checked) {
-                fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
-            } else if (radCompact.Checked) {
-                fOptions.PedigreeOptions.Format = PedigreeFormat.Compact;
-            }
-
-            fOptions.ShowTips = chkShowOnStart.Checked;
-
-            if (radFBNone.Checked) {
-                fOptions.FileBackup = FileBackup.fbNone;
-            } else if (radFBOnlyPrev.Checked) {
-                fOptions.FileBackup = FileBackup.fbOnlyPrev;
-            } else if (radFBEachRevision.Checked) {
-                fOptions.FileBackup = FileBackup.fbEachRevision;
-            }
-
-            var item = cmbLanguages.SelectedItem as ComboItem<int>;
-            if (item != null) {
-                AppHost.Instance.LoadLanguage((int)item.Tag);
-            }
-
-            ancOptionsControl1.AcceptChanges();
-
+        private void AcceptWomanSurnameFormat()
+        {
             if (!chkExtendWomanSurnames.Checked) {
                 fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
             } else {
@@ -447,22 +528,60 @@ namespace GKUI.Forms
                     fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMarried;
                 }
             }
+        }
+
+        private void AcceptColumnsList()
+        {
+            fTempColumns.CopyTo(fOptions.IndividualListColumns);
+        }
+
+        private void AcceptPedigreesOptions()
+        {
+            fOptions.PedigreeOptions.IncludeAttributes = chkAttributes.Checked;
+            fOptions.PedigreeOptions.IncludeNotes = chkNotes.Checked;
+            fOptions.PedigreeOptions.IncludeSources = chkSources.Checked;
+            fOptions.PedigreeOptions.IncludeGenerations = chkGenerations.Checked;
+
+            if (radExcess.Checked) {
+                fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
+            } else if (radCompact.Checked) {
+                fOptions.PedigreeOptions.Format = PedigreeFormat.Compact;
+            }
+        }
+
+        private void AcceptPlugins()
+        {
+            // dummy for future
+        }
+
+        private void AcceptChanges()
+        {
+            // common
+            AcceptProxyOptions();
+            AcceptBackupOptions();
+            AcceptOtherOptions();
+            AcceptLangs();
 
             fOptions.Geocoder = cmbGeocoder.Text;
+            fOptions.GeoSearchCountry = cmbGeoSearchCountry.Text;
 
-            fOptions.AutoSortChildren = chkAutoSortChildren.Checked;
-            fOptions.AutoSortSpouses = chkAutoSortSpouses.Checked;
-            fOptions.CheckTreeSize = chkCheckTreeSize.Checked;
-            fOptions.CharsetDetection = chkCharsetDetection.Checked;
+            // media
+            AcceptMediaOptions();
 
-            fOptions.FileBackupEachRevisionMaxCount = (int)numBackupRevisionsMaxCount.Value;
-            fOptions.FirstCapitalLetterInNames = chkFirstCapitalLetterInNames.Checked;
-            fOptions.DialogClosingWarn = chkDialogClosingWarn.Checked;
+            // charts
+            AcceptTreeChartsOptions();
+            AcceptCircleChartsOptions();
 
-            fOptions.TreeChartOptions.DepthLimitAncestors = (int)numDefaultDepthAncestors.Value;
-            fOptions.TreeChartOptions.DepthLimitDescendants= (int)numDefaultDepthDescendants.Value;
+            // interface
+            AcceptInterfaceOptions();
+            AcceptWomanSurnameFormat();
+            AcceptColumnsList();
 
-            DialogResult = DialogResult.OK;
+            // pedigrees
+            AcceptPedigreesOptions();
+
+            // plugins
+            AcceptPlugins();
         }
 
         private void btnColumnUp_Click(object sender, EventArgs e)
@@ -491,19 +610,12 @@ namespace GKUI.Forms
 
         private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            bool cs = (e.NewValue == CheckState.Checked);
-            fTempColumns.OrderedColumns[e.Index].CurActive = cs;
-        }
-
-        private void chkPortraitsVisible_CheckedChanged(object sender, EventArgs e)
-        {
-            chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked;
+            fTempColumns.OrderedColumns[e.Index].CurActive = (e.NewValue == CheckState.Checked);
         }
 
         public void SetPage(OptionsPage page)
         {
-            switch (page)
-            {
+            switch (page) {
                 case OptionsPage.opCommon:
                     PageControl1.SelectedTab = pageCommon;
                     break;
@@ -600,6 +712,9 @@ namespace GKUI.Forms
             chkShowDatesSigns.Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
             chkShowPlaces.Text = LangMan.LS(LSID.LSID_ShowPlaces);
             chkHideUnknownSpouses.Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
+            chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
+            chkSeparateDAPLines.Text = LangMan.LS(LSID.LSID_SeparateDatesAndPlacesLines);
+            chkBoldNames.Text = LangMan.LS(LSID.LSID_BoldNames);
 
             grpFileBackup.Text = LangMan.LS(LSID.LSID_FileBackup);
             radFBNone.Text = LangMan.LS(LSID.LSID_Not);
@@ -645,7 +760,7 @@ namespace GKUI.Forms
             chkDeleteMediaFileWithoutConfirm.Text = LangMan.LS(LSID.LSID_DeleteMediaFileWithoutConfirm);
 
             cmbMediaStoreDefault.Items.Clear();
-            for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstRelativeReference; mst++) {
+            for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstURL; mst++) {
                 cmbMediaStoreDefault.Items.Add(new ComboItem<MediaStoreType>(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
             }
 
@@ -654,6 +769,19 @@ namespace GKUI.Forms
             lblDefaultDepthAncestors.Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_MITreeAncestors);
             lblDefaultDepthDescendants.Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_MITreeDescendants);
             chkDialogClosingWarn.Text = LangMan.LS(LSID.LSID_WarnForClosingDialog);
+            lblGeoSearchCountry.Text = LangMan.LS(LSID.LSID_GeoSearchCountryRestriction);
+        }
+
+        private void chkTreeChartOption_CheckedChanged(object sender, EventArgs e)
+        {
+            chkShowPlaces.Enabled = !chkOnlyYears.Checked;
+            chkSeparateDAPLines.Enabled = chkShowPlaces.Checked && !chkOnlyYears.Checked;
+
+            chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked;
+
+            chkDiffLines.Enabled = chkName.Checked && chkPatronymic.Checked;
+
+            chkOnlyYears.Enabled = chkBirthDate.Checked && chkDeathDate.Checked;
         }
     }
 }

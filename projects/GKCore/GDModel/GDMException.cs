@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,22 +28,11 @@ namespace GDModel
     /// </summary>
     public class GDMException : Exception
     {
-        public GDMException()
+        public GDMException(string message) : base(message)
         {
         }
 
-        public GDMException(string message)
-            : base(message)
-        {
-        }
-
-        public GDMException(string message, params object[] args)
-            : base(string.Format(message, args))
-        {
-        }
-
-        public GDMException(string message, Exception innerException)
-            : base(message, innerException)
+        public GDMException(string message, params object[] args) : base(string.Format(message, args))
         {
         }
     }
@@ -55,8 +44,7 @@ namespace GDModel
         {
         }
 
-        public GDMDateException(string message, params object[] args)
-            : base(message, args)
+        public GDMDateException(string message, params object[] args) : base(message, args)
         {
         }
     }

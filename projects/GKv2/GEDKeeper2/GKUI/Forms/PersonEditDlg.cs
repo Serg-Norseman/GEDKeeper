@@ -21,7 +21,6 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
@@ -32,7 +31,6 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 
@@ -392,7 +390,7 @@ namespace GKUI.Forms
 
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
-            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown) {
+            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown || eArgs.Action == RecordAction.raEdit) {
                 fController.UpdateNameControls(fController.Person.PersonalNames[0]);
             }
         }
@@ -401,7 +399,7 @@ namespace GKUI.Forms
         {
             GDMAssociation ast = eArgs.ItemData as GDMAssociation;
             if (eArgs.Action == RecordAction.raJump && ast != null) {
-                fController.JumpToRecord(ast.Individual);
+                fController.JumpToRecord(ast);
             }
         }
 
@@ -416,18 +414,7 @@ namespace GKUI.Forms
         {
             GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
             if (eArgs.Action == RecordAction.raJump && family != null) {
-                GDMIndividualRecord spouse = null;
-                switch (fController.Person.Sex) {
-                    case GDMSex.svMale:
-                        spouse = family.Wife.Individual;
-                        break;
-
-                    case GDMSex.svFemale:
-                        spouse = family.Husband.Individual;
-                        break;
-                }
-
-                fController.JumpToRecord(spouse);
+                fController.JumpToPersonSpouse(family);
             }
         }
 

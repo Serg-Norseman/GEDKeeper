@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,5 +27,9 @@ namespace GKCore.Types
         public GDMIndividualRecord TargetIndividual;
         public TargetMode TargetMode;
         public GDMSex NeedSex;
+
+        public Target()
+        {
+        }
     }
 }

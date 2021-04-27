@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,29 +19,35 @@
  */
 
 using System;
-using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
     public sealed class GDMTextTag : GDMTag, IGDMTextObject
     {
-        private StringList fLines;
+        private GDMLines fLines;
 
-        public StringList Lines
+        public GDMLines Lines
         {
             get { return fLines; }
         }
 
 
-        public GDMTextTag(GDMObject owner) : base(owner)
+        public GDMTextTag()
         {
-            fLines = new StringList();
+            fLines = new GDMLines();
         }
 
-        public GDMTextTag(GDMObject owner, int tagId) : this(owner)
+        public GDMTextTag(int tagId) : this()
         {
             SetName(tagId);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fLines.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -82,28 +88,32 @@ namespace GDModel
 
     public sealed class GDMNotes : GDMPointer, IGDMTextObject
     {
-        private StringList fLines;
+        private GDMLines fLines;
 
-        public StringList Lines
+        public GDMLines Lines
         {
             get {
-                StringList lines;
-                if (!IsPointer) {
-                    lines = fLines;
-                } else {
-                    GDMNoteRecord notesRecord = Value as GDMNoteRecord;
-                    lines = (notesRecord != null) ? notesRecord.Lines : new StringList();
+                if (IsPointer) {
+                    throw new InvalidOperationException("GDMNotes is a pointer, please dereference");
                 }
-                return lines;
+
+                return fLines;
             }
         }
 
 
-        public GDMNotes(GDMObject owner) : base(owner)
+        public GDMNotes()
         {
             SetName(GEDCOMTagType.NOTE);
 
-            fLines = new StringList();
+            fLines = new GDMLines();
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fLines.TrimExcess();
         }
 
         public override bool IsEmpty()
@@ -132,8 +142,6 @@ namespace GDModel
                     fLines.Add(result);
                 }
                 result = string.Empty;
-            } else {
-                fStringValue = string.Empty;
             }
             return result;
         }

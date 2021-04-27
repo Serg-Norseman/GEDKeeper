@@ -21,7 +21,6 @@
 using System;
 using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using GDModel;
 using GKCore;
@@ -106,7 +105,7 @@ namespace GKImageViewerPlugin
                                     fImageCtl.OpenImage(new Bitmap(fs));
                                 }
                             } catch (Exception ex) {
-                                Logger.WriteError("ImageViewerWin.SetFileRef.0(): ", ex);
+                                Logger.WriteError("ImageViewerWin.SetFileRef.0()", ex);
                             }
 
                             ctl = fImageCtl;
@@ -127,12 +126,12 @@ namespace GKImageViewerPlugin
 
                             try {
                                 using (Stream fs = new FileStream(fileName, FileMode.Open)) {
-                                    using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
+                                    using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
                                         txtBox.Text = strd.ReadToEnd();
                                     }
                                 }
                             } catch (Exception ex) {
-                                Logger.WriteError("ImageViewerWin.SetFileRef.1(): ", ex);
+                                Logger.WriteError("ImageViewerWin.SetFileRef.1()", ex);
                             }
 
                             ctl = txtBox;
@@ -151,7 +150,7 @@ namespace GKImageViewerPlugin
                                     }
                                 }
                             } catch (Exception ex) {
-                                Logger.WriteError("ImageViewerWin.SetFileRef.2(): ", ex);
+                                Logger.WriteError("ImageViewerWin.SetFileRef.2()", ex);
                             }
 
                             ctl = rtfBox;
@@ -166,7 +165,7 @@ namespace GKImageViewerPlugin
                                     browser.DocumentStream = fs;
                                 }
                             } catch (Exception ex) {
-                                Logger.WriteError("ImageViewerWin.SetFileRef.2(): ", ex);
+                                Logger.WriteError("ImageViewerWin.SetFileRef.2()", ex);
                             }
                             ctl = browser;
                         }

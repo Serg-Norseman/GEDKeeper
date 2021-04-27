@@ -101,7 +101,7 @@ namespace GKStdReports
                         fWriter.AddListItem(" " + GetPersonalInfo(iRec), fTextFont);
                     }
                 } catch (Exception ex) {
-                    Logger.WriteError("ContemporariesReport.InternalGenerate(): ", ex);
+                    Logger.WriteError("ContemporariesReport.InternalGenerate()", ex);
                 }
             }
 

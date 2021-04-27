@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,10 +19,7 @@
  */
 
 using System;
-using BSLib;
-using GDModel;
 using GKCore;
-using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 
@@ -36,6 +33,8 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
+
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
@@ -100,14 +99,14 @@ namespace GDModel
 
             GDMRecord sbmrRec = tree.AddRecord(new GDMSubmitterRecord(tree));
             Assert.IsNotNull(sbmrRec, "sbmrRec != null");
-            sbmrRec.InitNew();
+            tree.NewXRef(sbmrRec);
             string submXRef = sbmrRec.XRef;
 
             //
 
             GDMSubmissionRecord submRec = tree.AddRecord(new GDMSubmissionRecord(tree)) as GDMSubmissionRecord;
             Assert.IsNotNull(submRec, "rec1 != null");
-            submRec.InitNew();
+            tree.NewXRef(submRec);
 
             //
             GDMGroupRecord groupRec = tree.CreateGroup();
@@ -218,7 +217,7 @@ namespace GDModel
             using (GDMTree tree2 = new GDMTree()) {
                 GDMIndividualRecord iRec2 = tree.AddRecord(new GDMIndividualRecord(tree2)) as GDMIndividualRecord;
                 Assert.IsNotNull(iRec2);
-                iRec2.InitNew();
+                tree2.NewXRef(iRec2);
 
                 tree2.AddRecord(iRec2);
                 int rIdx = tree2.IndexOf(iRec2);

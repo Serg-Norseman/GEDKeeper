@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,6 +45,12 @@ namespace GKUI.Forms
             set { fController.FileRef = value; }
         }
 
+        public GDMMultimediaRecord Multimedia
+        {
+            get { return fController.Multimedia; }
+            set { fController.Multimedia = value; }
+        }
+
         public void SetViewText(string text)
         {
             try {
@@ -55,7 +61,7 @@ namespace GKUI.Forms
 
                 SetViewControl(txtBox);
             } catch (Exception ex) {
-                Logger.WriteError("MediaViewerWin.SetViewText(): ", ex);
+                Logger.WriteError("MediaViewerWin.SetViewText()", ex);
             }
         }
 
@@ -68,7 +74,7 @@ namespace GKUI.Forms
 
                 SetViewControl(rtfBox);
             } catch (Exception ex) {
-                Logger.WriteError("MediaViewerWin.SetViewRTF(): ", ex);
+                Logger.WriteError("MediaViewerWin.SetViewRTF()", ex);
             }
         }
 
@@ -80,7 +86,7 @@ namespace GKUI.Forms
 
                 SetViewControl(browser);
             } catch (Exception ex) {
-                Logger.WriteError("MediaViewerWin.SetViewHTML(): ", ex);
+                Logger.WriteError("MediaViewerWin.SetViewHTML()", ex);
             }
         }
 

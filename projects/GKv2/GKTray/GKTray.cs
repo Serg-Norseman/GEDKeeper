@@ -120,7 +120,7 @@ namespace GKTray
                     ini.Dispose();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKTray.LoadSettings(): ", ex);
+                Logger.WriteError("GKTray.LoadSettings()", ex);
             }
 
             fRecentFiles.MenuItems.Clear();

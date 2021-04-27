@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,8 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
-using GDModel.Providers.GEDCOM;
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
@@ -30,17 +29,29 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            using (GDMSourceData data = new GDMSourceData(null)) {
+            using (GDMSourceData data = new GDMSourceData()) {
                 Assert.IsNotNull(data);
 
                 data.Agency = "test agency";
                 Assert.AreEqual("test agency", data.Agency);
 
-                GDMTag evenTag = data.Events.Add(new GDMSourceEvent(data));
+                GDMTag evenTag = data.Events.Add(new GDMSourceEvent());
                 Assert.IsNotNull(evenTag);
 
                 GDMSourceEvent evt = data.Events[0];
                 Assert.AreEqual(evenTag, evt);
+
+                evt.StringValue = "BIRT";
+
+                var note = new GDMNotes();
+                note.Lines.Text = "test sourcedata notes";
+                data.Notes.Add(note);
+
+                string buf = TestUtils.GetTagStreamText(data, 0);
+                Assert.AreEqual("1 DATA\r\n" +
+                                "2 NOTE test sourcedata notes\r\n" +
+                                "2 AGNC test agency\r\n" +
+                                "2 EVEN BIRT\r\n", buf);
 
                 data.ReplaceXRefs(new GDMXRefReplacer());
 
@@ -53,7 +64,7 @@ namespace GDModel
         [Test]
         public void Test_SourceEvent()
         {
-            using (GDMSourceEvent evt = new GDMSourceEvent(null)) {
+            using (GDMSourceEvent evt = new GDMSourceEvent()) {
                 Assert.IsNotNull(evt);
 
                 Assert.IsNotNull(evt.Date);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -86,7 +86,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("TaskEditDlgController.Accept(): ", ex);
+                Logger.WriteError("TaskEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -104,7 +104,7 @@ namespace GKCore.Controllers
                 fView.StartDate.NormalizeDate = fTask.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                 fView.StopDate.NormalizeDate = fTask.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
-                var goal = fTask.GetTaskGoal();
+                var goal = GKUtils.GetTaskGoal(fBase.Context.Tree, fTask);
                 fTempRec = goal.GoalRec;
                 fView.GoalType.SelectedIndex = (sbyte)goal.GoalType;
 
@@ -112,7 +112,7 @@ namespace GKCore.Controllers
                     case GDMGoalType.gtIndividual:
                     case GDMGoalType.gtFamily:
                     case GDMGoalType.gtSource:
-                        fView.Goal.Text = GKUtils.GetGoalStr(goal.GoalType, fTempRec);
+                        fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, goal.GoalType, fTempRec);
                         break;
 
                     case GDMGoalType.gtOther:
@@ -132,17 +132,17 @@ namespace GKCore.Controllers
             switch (gt) {
                 case GDMGoalType.gtIndividual:
                     fTempRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
-                    fView.Goal.Text = GKUtils.GetGoalStr(gt, fTempRec);
+                    fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtFamily:
                     fTempRec = fBase.Context.SelectRecord(GDMRecordType.rtFamily, new object[0]);
-                    fView.Goal.Text = GKUtils.GetGoalStr(gt, fTempRec);
+                    fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtSource:
                     fTempRec = fBase.Context.SelectRecord(GDMRecordType.rtSource, new object[0]);
-                    fView.Goal.Text = GKUtils.GetGoalStr(gt, fTempRec);
+                    fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtOther:

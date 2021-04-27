@@ -61,7 +61,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("GroupEditDlgController.Accept(): ", ex);
+                Logger.WriteError("GroupEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -79,6 +79,14 @@ namespace GKCore.Controllers
         {
             if (record != null && Accept()) {
                 fBase.SelectRecordByXRef(record.XRef);
+                fView.Close();
+            }
+        }
+
+        public void JumpToRecord(GDMPointer pointer)
+        {
+            if (pointer != null && Accept()) {
+                fBase.SelectRecordByXRef(pointer.XRef);
                 fView.Close();
             }
         }

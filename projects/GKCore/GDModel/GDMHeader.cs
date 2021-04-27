@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,13 +33,13 @@ namespace GDModel
     }
 
 
-    public sealed class GDMHeaderSource : GDMTag
+    public sealed class GDMHeaderSource : GDMValueTag
     {
         public string Version { get; set; }
         public string ProductName { get; set; }
 
 
-        public GDMHeaderSource(GDMObject owner) : base(owner)
+        public GDMHeaderSource()
         {
             SetName(GEDCOMTagType.SOUR);
         }
@@ -65,7 +65,7 @@ namespace GDModel
         public string Form { get; set; }
 
 
-        public GDMHeaderGEDCOM(GDMObject owner) : base(owner)
+        public GDMHeaderGEDCOM()
         {
             SetName(GEDCOMTagType.GEDC);
         }
@@ -87,16 +87,18 @@ namespace GDModel
 
     public sealed class GDMHeaderCharSet : GDMTag
     {
+        private GEDCOMCharacterSet fValue;
+
         public GEDCOMCharacterSet Value
         {
-            get { return GEDCOMUtils.GetCharacterSetVal(StringValue); }
-            set { StringValue = GEDCOMUtils.GetCharacterSetStr(value); }
+            get { return fValue; }
+            set { fValue = value; }
         }
 
         public string Version { get; set; }
 
 
-        public GDMHeaderCharSet(GDMObject owner) : base(owner)
+        public GDMHeaderCharSet()
         {
             SetName(GEDCOMTagType.CHAR);
         }
@@ -112,15 +114,26 @@ namespace GDModel
         {
             return base.IsEmpty() && string.IsNullOrEmpty(Version);
         }
+
+        protected override string GetStringValue()
+        {
+            return GEDCOMUtils.GetCharacterSetStr(fValue);
+        }
+
+        public override string ParseString(string strValue)
+        {
+            fValue = GEDCOMUtils.GetCharacterSetVal(strValue);
+            return string.Empty;
+        }
     }
 
 
-    public sealed class GDMHeaderFile : GDMTag
+    public sealed class GDMHeaderFile : GDMValueTag
     {
         public int Revision { get; set; }
 
 
-        public GDMHeaderFile(GDMObject owner) : base(owner)
+        public GDMHeaderFile()
         {
             SetName(GEDCOMTagType.FILE);
         }
@@ -223,18 +236,32 @@ namespace GDModel
         }
 
 
-        public GDMHeader(GDMObject owner) : base(owner)
+        public GDMHeader()
         {
             SetName(GEDCOMTagType.HEAD);
 
-            fCharacterSet = new GDMHeaderCharSet(this);
-            fFile = new GDMHeaderFile(this);
-            fGEDCOM = new GDMHeaderGEDCOM(this);
-            fNote = new GDMTextTag(this, (int)GEDCOMTagType.NOTE);
-            fPlace = new GDMPlace(this);
-            fSource = new GDMHeaderSource(this);
-            fSubmission = new GDMPointer(this, (int)GEDCOMTagType.SUBN, string.Empty);
-            fSubmitter = new GDMPointer(this, (int)GEDCOMTagType.SUBM, string.Empty);
+            fCharacterSet = new GDMHeaderCharSet();
+            fFile = new GDMHeaderFile();
+            fGEDCOM = new GDMHeaderGEDCOM();
+            fNote = new GDMTextTag((int)GEDCOMTagType.NOTE);
+            fPlace = new GDMPlace();
+            fSource = new GDMHeaderSource();
+            fSubmission = new GDMPointer((int)GEDCOMTagType.SUBN, string.Empty);
+            fSubmitter = new GDMPointer((int)GEDCOMTagType.SUBM, string.Empty);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fCharacterSet.TrimExcess();
+            fFile.TrimExcess();
+            fGEDCOM.TrimExcess();
+            fNote.TrimExcess();
+            fPlace.TrimExcess();
+            fSource.TrimExcess();
+            fSubmission.TrimExcess();
+            fSubmitter.TrimExcess();
         }
 
         public override void Clear()

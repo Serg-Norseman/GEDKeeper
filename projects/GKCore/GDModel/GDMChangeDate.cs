@@ -37,7 +37,7 @@ namespace GDModel
         }
 
 
-        public GDMChangeDate(GDMObject owner) : base(owner)
+        public GDMChangeDate()
         {
             SetName(GEDCOMTagType.CHAN);
         }

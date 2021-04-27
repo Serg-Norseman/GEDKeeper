@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,6 +36,16 @@ namespace GKCore.Controllers
     /// </summary>
     public static class BaseController
     {
+        public static void ViewRecordInfo(IBaseWindow baseWin, GDMRecord record)
+        {
+            if (record != null) {
+                using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
+                    dlg.Record = record;
+                    AppHost.Instance.ShowModalX(dlg, false);
+                }
+            }
+        }
+
         #region Modify routines
 
         public static bool ModifyMedia(IBaseWindow baseWin, ref GDMMultimediaRecord mediaRec)
@@ -50,8 +60,8 @@ namespace GKCore.Controllers
                     bool exists = mediaRec != null;
                     if (!exists) {
                         mediaRec = new GDMMultimediaRecord(tree);
-                        mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle(mediaRec));
-                        mediaRec.InitNew();
+                        mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
+                        tree.NewXRef(mediaRec);
                     }
 
                     try {
@@ -90,7 +100,7 @@ namespace GKCore.Controllers
                 bool exists = noteRec != null;
                 if (!exists) {
                     noteRec = new GDMNoteRecord(tree);
-                    noteRec.InitNew();
+                    tree.NewXRef(noteRec);
                 }
 
                 try {
@@ -138,7 +148,7 @@ namespace GKCore.Controllers
                     bool exists = sourceRec != null;
                     if (!exists) {
                         sourceRec = new GDMSourceRecord(tree);
-                        sourceRec.InitNew();
+                        tree.NewXRef(sourceRec);
                     }
 
                     try {
@@ -166,18 +176,18 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifySourceCitation(IBaseWindow baseWin, ChangeTracker undoman, IGEDCOMStructWithLists _struct, ref GDMSourceCitation cit)
+        public static bool ModifySourceCitation(IBaseWindow baseWin, ChangeTracker undoman,
+                                                IGDMStructWithSourceCitations _struct, ref GDMSourceCitation cit)
         {
             bool result;
 
             try {
                 baseWin.Context.BeginUpdate();
-                GDMTree tree = baseWin.Context.Tree;
 
                 using (var dlg = AppHost.ResolveDialog<ISourceCitEditDlg>(baseWin)) {
                     bool exists = cit != null;
                     if (!exists) {
-                        cit = new GDMSourceCitation(_struct as GDMObject);
+                        cit = new GDMSourceCitation();
                     }
 
                     dlg.SourceCitation = cit;
@@ -210,7 +220,7 @@ namespace GKCore.Controllers
                     bool exists = repRec != null;
                     if (!exists) {
                         repRec = new GDMRepositoryRecord(tree);
-                        repRec.InitNew();
+                        tree.NewXRef(repRec);
                     }
 
                     try {
@@ -250,7 +260,7 @@ namespace GKCore.Controllers
                     bool exists = groupRec != null;
                     if (!exists) {
                         groupRec = new GDMGroupRecord(tree);
-                        groupRec.InitNew();
+                        tree.NewXRef(groupRec);
                     }
 
                     try {
@@ -290,7 +300,7 @@ namespace GKCore.Controllers
                     bool exists = researchRec != null;
                     if (!exists) {
                         researchRec = new GDMResearchRecord(tree);
-                        researchRec.InitNew();
+                        tree.NewXRef(researchRec);
                     }
 
                     try {
@@ -330,7 +340,7 @@ namespace GKCore.Controllers
                     bool exists = taskRec != null;
                     if (!exists) {
                         taskRec = new GDMTaskRecord(tree);
-                        taskRec.InitNew();
+                        tree.NewXRef(taskRec);
                     }
 
                     try {
@@ -370,7 +380,7 @@ namespace GKCore.Controllers
                     bool exists = commRec != null;
                     if (!exists) {
                         commRec = new GDMCommunicationRecord(tree);
-                        commRec.InitNew();
+                        tree.NewXRef(commRec);
                     }
 
                     try {
@@ -410,7 +420,7 @@ namespace GKCore.Controllers
                     bool exists = locRec != null;
                     if (!exists) {
                         locRec = new GDMLocationRecord(tree);
-                        locRec.InitNew();
+                        tree.NewXRef(locRec);
                     }
 
                     try {
@@ -475,9 +485,9 @@ namespace GKCore.Controllers
                     bool exists = (indivRec != null);
                     if (!exists) {
                         indivRec = new GDMIndividualRecord(tree);
-                        indivRec.InitNew();
+                        tree.NewXRef(indivRec);
 
-                        indivRec.AddPersonalName(new GDMPersonalName(indivRec));
+                        indivRec.AddPersonalName(new GDMPersonalName());
                         baseWin.Context.CreateEventEx(indivRec, GEDCOMTagName.BIRT, "", "");
                     }
 
@@ -538,7 +548,7 @@ namespace GKCore.Controllers
                     bool exists = (familyRec != null);
                     if (!exists) {
                         familyRec = new GDMFamilyRecord(tree);
-                        familyRec.InitNew();
+                        tree.NewXRef(familyRec);
                     }
 
                     try {
@@ -796,7 +806,7 @@ namespace GKCore.Controllers
                         break;
 
                     case GDMRecordType.rtFamily:
-                        msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString((GDMFamilyRecord)record));
+                        msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString(baseWin.Context.Tree, (GDMFamilyRecord)record));
                         break;
 
                     case GDMRecordType.rtNote:
@@ -831,7 +841,8 @@ namespace GKCore.Controllers
                         break;
 
                     case GDMRecordType.rtTask:
-                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr((GDMTaskRecord)record));
+                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery),
+                                            GKUtils.GetTaskGoalStr(baseWin.Context.Tree, (GDMTaskRecord)record));
                         break;
 
                     case GDMRecordType.rtCommunication:
@@ -859,7 +870,8 @@ namespace GKCore.Controllers
             if (father != null) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
                 if (family != null) {
-                    if (family.Husband.Value == null) {
+                    var husb = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Husband);
+                    if (husb == null) {
                         // new family
                         result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
                     } else {
@@ -880,7 +892,7 @@ namespace GKCore.Controllers
             if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachFatherQuery))) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null) {
-                    GDMIndividualRecord father = family.Husband.Individual;
+                    GDMIndividualRecord father = baseWin.Context.Tree.GetPtrValue(family.Husband);
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
                 }
             }
@@ -896,7 +908,8 @@ namespace GKCore.Controllers
             if (mother != null) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, mother);
                 if (family != null) {
-                    if (family.Wife.Value == null) {
+                    var wife = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Wife);
+                    if (wife == null) {
                         // new family
                         result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
                     } else {
@@ -917,7 +930,7 @@ namespace GKCore.Controllers
             if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMotherQuery))) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null) {
-                    GDMIndividualRecord mother = family.Wife.Individual;
+                    GDMIndividualRecord mother = baseWin.Context.Tree.GetPtrValue(family.Wife);
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
                 }
             }
@@ -930,7 +943,8 @@ namespace GKCore.Controllers
         {
             bool result = false;
 
-            GDMIndividualRecord husband = baseWin.Context.SelectPerson(family.Wife.Individual, TargetMode.tmSpouse, GDMSex.svMale);
+            var wife = baseWin.Context.Tree.GetPtrValue(family.Wife);
+            GDMIndividualRecord husband = baseWin.Context.SelectPerson(wife, TargetMode.tmSpouse, GDMSex.svMale);
             if (husband != null && family.Husband.IsEmpty()) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, husband);
             }
@@ -942,7 +956,7 @@ namespace GKCore.Controllers
         {
             bool result = false;
 
-            GDMIndividualRecord husband = family.Husband.Individual;
+            GDMIndividualRecord husband = baseWin.Context.Tree.GetPtrValue(family.Husband);
             if (!baseWin.Context.IsAvailableRecord(husband)) return false;
 
             if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachHusbandQuery))) {
@@ -956,7 +970,8 @@ namespace GKCore.Controllers
         {
             bool result = false;
 
-            GDMIndividualRecord wife = baseWin.Context.SelectPerson(family.Husband.Individual, TargetMode.tmSpouse, GDMSex.svFemale);
+            var husband = baseWin.Context.Tree.GetPtrValue(family.Husband);
+            GDMIndividualRecord wife = baseWin.Context.SelectPerson(husband, TargetMode.tmSpouse, GDMSex.svFemale);
             if (wife != null && family.Wife.IsEmpty()) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, wife);
             }
@@ -968,7 +983,7 @@ namespace GKCore.Controllers
         {
             bool result = false;
 
-            GDMIndividualRecord wife = family.Wife.Individual;
+            GDMIndividualRecord wife = baseWin.Context.Tree.GetPtrValue(family.Wife);
             if (!baseWin.Context.IsAvailableRecord(wife)) return false;
 
             if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachWifeQuery))) {
@@ -1020,9 +1035,9 @@ namespace GKCore.Controllers
 
         #region Aux
 
-        public static bool DetectCycle(GDMIndividualRecord iRec)
+        public static bool DetectCycle(GDMTree tree, GDMIndividualRecord iRec)
         {
-            string res = TreeTools.DetectCycle(iRec);
+            string res = TreeTools.DetectCycle(tree, iRec);
             if (!string.IsNullOrEmpty(res)) {
                 AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_DetectedDataLoop), res));
                 return true;

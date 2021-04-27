@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,10 +22,11 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMSourceData : GDMTagWithLists
+    public sealed class GDMSourceData : GDMTag, IGDMStructWithNotes
     {
         private string fAgency;
         private GDMList<GDMSourceEvent> fEvents;
+        private GDMList<GDMNotes> fNotes;
 
 
         public string Agency
@@ -39,21 +40,36 @@ namespace GDModel
             get { return fEvents; }
         }
 
+        public GDMList<GDMNotes> Notes
+        {
+            get { return fNotes; }
+        }
 
-        public GDMSourceData(GDMObject owner) : base(owner)
+
+        public GDMSourceData()
         {
             SetName(GEDCOMTagType.DATA);
 
             fAgency = string.Empty;
-            fEvents = new GDMList<GDMSourceEvent>(this);
+            fEvents = new GDMList<GDMSourceEvent>();
+            fNotes = new GDMList<GDMNotes>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
                 fEvents.Dispose();
+                fNotes.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fEvents.TrimExcess();
+            fNotes.TrimExcess();
         }
 
         public override void Clear()
@@ -61,17 +77,19 @@ namespace GDModel
             base.Clear();
             fAgency = string.Empty;
             fEvents.Clear();
+            fNotes.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fEvents.Count == 0) && string.IsNullOrEmpty(fAgency);
+            return base.IsEmpty() && (fEvents.Count == 0) && string.IsNullOrEmpty(fAgency) && (fNotes.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fEvents.ReplaceXRefs(map);
+            fNotes.ReplaceXRefs(map);
         }
     }
 }

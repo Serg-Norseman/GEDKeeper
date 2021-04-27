@@ -37,7 +37,7 @@ using GKUI.Components;
 
 namespace GKSamplePlugin
 {
-    public partial class PersonEditDlgEx : GKUI.Forms.CommonDialog, IBaseEditor, IPersonEditDlg
+    public partial class PersonEditDlgEx : GKUI.Forms.CommonDialog, IPersonEditDlg
     {
         private readonly PersonEditDlgController fController;
 
@@ -258,7 +258,7 @@ namespace GKSamplePlugin
             try {
                 fController.Cancel();
             } catch (Exception ex) {
-                Logger.WriteError("PersonEditDlg.btnCancel_Click(): ", ex);
+                Logger.WriteError("PersonEditDlg.btnCancel_Click()", ex);
             }
         }
 
@@ -273,7 +273,7 @@ namespace GKSamplePlugin
         {
             GDMAssociation ast = eArgs.ItemData as GDMAssociation;
             if (eArgs.Action == RecordAction.raJump && ast != null) {
-                fController.JumpToRecord(ast.Individual);
+                fController.JumpToRecord(ast);
             }
         }
 
@@ -281,14 +281,14 @@ namespace GKSamplePlugin
         {
             GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
             if (eArgs.Action == RecordAction.raJump && family != null) {
-                GDMIndividualRecord spouse = null;
+                GDMIndividualLink spouse = null;
                 switch (fController.Person.Sex) {
                     case GDMSex.svMale:
-                        spouse = family.Wife.Individual;
+                        spouse = family.Wife;
                         break;
 
                     case GDMSex.svFemale:
-                        spouse = family.Husband.Individual;
+                        spouse = family.Husband;
                         break;
                 }
 

@@ -53,12 +53,13 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMAssociation ast in person.Associations) {
-                    string nm = ((ast.Individual == null) ? "" : GKUtils.GetNameString(ast.Individual, true, false));
+                    var relIndi = fBaseContext.Tree.GetPtrValue(ast);
+                    string nm = ((relIndi == null) ? string.Empty : GKUtils.GetNameString(relIndi, true, false));
 
                     fSheetList.AddItem(ast, new object[] { ast.Relation, nm });
                 }
             } catch (Exception ex) {
-                Logger.WriteError("AssociationsListModel.UpdateContents(): ", ex);
+                Logger.WriteError("AssociationsListModel.UpdateContents()", ex);
             }
         }
 
@@ -78,7 +79,7 @@ namespace GKCore.Lists
                     using (var dlg = AppHost.ResolveDialog<IAssociationEditDlg>(fBaseWin)) {
                         bool exists = (ast != null);
                         if (!exists) {
-                            ast = new GDMAssociation(person);
+                            ast = new GDMAssociation();
                         }
 
                         dlg.Association = ast;

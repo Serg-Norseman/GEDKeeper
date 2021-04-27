@@ -57,7 +57,7 @@ namespace GKCore.MVP
                 RollbackChanges();
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("DialogController.Cancel(): ", ex);
+                Logger.WriteError("DialogController.Cancel()", ex);
                 return false;
             }
         }
@@ -89,7 +89,7 @@ namespace GKCore.MVP
         {
             base.Init(baseWin);
             if (fBase != null) {
-                fLocalUndoman = new ChangeTracker(fBase.Context.Tree);
+                fLocalUndoman = new ChangeTracker(fBase.Context);
             }
         }
     }

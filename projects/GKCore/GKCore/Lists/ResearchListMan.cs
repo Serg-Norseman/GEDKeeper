@@ -148,10 +148,10 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMPointer taskPtr in research.Tasks) {
-                    GDMTaskRecord task = taskPtr.Value as GDMTaskRecord;
+                    var task = fBaseContext.Tree.GetPtrValue<GDMTaskRecord>(taskPtr);
                     if (task == null) continue;
 
-                    fSheetList.AddItem(task, new object[] { GKUtils.GetTaskGoalStr(task),
+                    fSheetList.AddItem(task, new object[] { GKUtils.GetTaskGoalStr(fBaseContext.Tree, task),
                         LangMan.LS(GKData.PriorityNames[(int)task.Priority]),
                         new GDMDateItem(task.StartDate),
                         new GDMDateItem(task.StopDate)
@@ -160,7 +160,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("ResTasksSublistModel.UpdateContents(): ", ex);
+                Logger.WriteError("ResTasksSublistModel.UpdateContents()", ex);
             }
         }
 
@@ -226,7 +226,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMPointer commPtr in research.Communications) {
-                    GDMCommunicationRecord corr = commPtr.Value as GDMCommunicationRecord;
+                    var corr = fBaseContext.Tree.GetPtrValue<GDMCommunicationRecord>(commPtr);
                     if (corr == null) continue;
 
                     fSheetList.AddItem(corr, new object[] { corr.CommName,
@@ -238,7 +238,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("ResCommunicationsSublistModel.UpdateContents(): ", ex);
+                Logger.WriteError("ResCommunicationsSublistModel.UpdateContents()", ex);
             }
         }
 
@@ -301,7 +301,7 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 foreach (GDMPointer groupPtr in research.Groups) {
-                    GDMGroupRecord grp = groupPtr.Value as GDMGroupRecord;
+                    var grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(groupPtr);
                     if (grp == null) continue;
 
                     fSheetList.AddItem(grp, new object[] { grp.GroupName });
@@ -309,7 +309,7 @@ namespace GKCore.Lists
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("ResGroupsSublistModel.UpdateContents(): ", ex);
+                Logger.WriteError("ResGroupsSublistModel.UpdateContents()", ex);
             }
         }
 

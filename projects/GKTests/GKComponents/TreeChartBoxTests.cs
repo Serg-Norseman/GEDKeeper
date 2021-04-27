@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,21 +25,21 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKTests.Stubs;
-using GKUI.Components;
 using NUnit.Framework;
+using GKTests;
 
 namespace GKUI.Components
 {
     [TestFixture]
-    public class TreeChartBoxTests
+    public class TreeChartBoxTests : CustomWindowTest
     {
         private IBaseWindow fBase;
         private Form fForm;
         private TreeChartBox fTreeChartBox;
 
-        [TestFixtureSetUp]
-        public void Init()
+        public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
@@ -57,8 +57,7 @@ namespace GKUI.Components
             fForm.PerformLayout();
         }
 
-        [TestFixtureTearDown]
-        public void Done()
+        public override void TearDown()
         {
             fForm.Dispose();
         }
@@ -108,6 +107,10 @@ namespace GKUI.Components
             fTreeChartBox.RecalcChart(); // nothing
 
             fTreeChartBox.ToggleCollapse(); // nothing
+
+            Assert.IsFalse(fTreeChartBox.IsLandscape());
+
+            //Assert.IsNotNull(fTreeChartBox.GetPrintableImage());
 
             fForm.Show();
 

@@ -12,7 +12,7 @@
 
 ### Packaging
 
-* [7-zip](https://sourceforge.net/projects/sevenzip/) comporession
+* [7-zip](https://sourceforge.net/projects/sevenzip/) compression
 * Nullsoft Scriptable Install System ([NSIS](https://sourceforge.net/projects/nsis/)) 3.04
 
 ## For Windows

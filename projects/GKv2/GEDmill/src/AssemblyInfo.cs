@@ -16,7 +16,6 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Reflection;
 
 [assembly: AssemblyTitle ("GEDmill")]
@@ -24,7 +23,7 @@ using System.Reflection;
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]
 [assembly: AssemblyProduct ("GEDmill")]
-[assembly: AssemblyCopyright ("Copyright 2009 Alexander Curtis <alex@logicmill.com>")]
+[assembly: AssemblyCopyright ("Copyright 2009 Alexander Curtis")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 [assembly: AssemblyVersion ("1.11.0.0")]

@@ -34,18 +34,24 @@ namespace GKCore
             fLogFilename = fileName;
         }
 
-        public static void WriteInfo(string msg)
+        private static void WriteMessage(string level, string msg)
         {
             try {
                 lock (fLock) {
                     using (StreamWriter log = new StreamWriter(fLogFilename, true, Encoding.UTF8)) {
-                        log.WriteLine("[" + DateTime.Now.ToString() + "] -> " + msg);
+                        log.WriteLine(string.Format("[{0}] [{1}] -> {2}", DateTime.Now, level, msg));
                         log.Flush();
                         log.Close();
                     }
                 }
-            } catch (Exception ex) {
+            } catch (Exception) {
+                // If embed logging into the system, then consider cross-platform
             }
+        }
+
+        public static void WriteInfo(string msg)
+        {
+            WriteMessage("INFO", msg);
         }
 
         /// <summary>
@@ -53,7 +59,7 @@ namespace GKCore
         /// </summary>
         public static void WriteError(string msg)
         {
-            WriteInfo(msg);
+            WriteMessage("ERROR", msg);
         }
 
         /// <summary>
@@ -63,8 +69,13 @@ namespace GKCore
         /// <param name="ex"></param>
         public static void WriteError(string msg, Exception ex)
         {
-            string exceptionMessage = "\n" + msg + ": " + BuildExceptionMessage(ex, "    ");
-            WriteInfo(exceptionMessage);
+            string exceptionMessage = BuildExceptionMessage(ex, "    ");
+            if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(exceptionMessage)) {
+                msg += ": ";
+            }
+            msg += exceptionMessage;
+
+            WriteMessage("ERROR", msg);
         }
 
         /// <summary>
@@ -79,15 +90,15 @@ namespace GKCore
             if (e == null)
                 return string.Empty;
 
-            string message = baseIndent + e.Message;
+            string message = e.Message;
             string indent = baseIndent + "    ";
             if (e.Data != null) {
-                message += "\n" + indent + "Exception data:";
+                message += "\n" + baseIndent + "Exception data:";
                 foreach (object key in e.Data.Keys)
                     message += "\n" + indent + e.Data[key];
             }
-            message += "\n" + indent + "StackTrace:";
-            message += "\n" + indent + (e.StackTrace == null ? string.Empty : e.StackTrace.Replace("\n", "\n" + indent));
+            message += "\n" + baseIndent + "StackTrace:";
+            message += "\n" + baseIndent + (e.StackTrace == null ? string.Empty : e.StackTrace.Replace("\n", "\n" + indent));
             message += BuildExceptionMessage(e.InnerException, indent);
             return message;
         }

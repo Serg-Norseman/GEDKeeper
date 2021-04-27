@@ -3,13 +3,13 @@ APP="GEDKeeper2"
 EXT="ged"
 COMMENT="Personal genealogical database editor"
 # APP_PATH=/usr/bin/
-APP_VER="2.16.2"
+APP_VER="2.17.0"
 DEV_PATH="/home/norseman/share/gkdev/GEDKeeper"
 PACK_PATH="gedkeeper-$APP_VER"
 LIB_PATH="$PACK_PATH/usr/lib/gedkeeper"
 BIN_PATH="$PACK_PATH/usr/bin"
 
-rm -f ~/gedkeeper_2.16.2-1_all.deb
+rm -f ~/gedkeeper_2.17.0-1_all.deb
 rm -rf ~/$PACK_PATH
 
 # Create directories if missing
@@ -36,12 +36,12 @@ cp $DEV_PATH/GEDKeeper2.exe ~/$LIB_PATH
 cp $DEV_PATH/GEDKeeper2.exe.config ~/$LIB_PATH
 cp $DEV_PATH/GKCore.dll ~/$LIB_PATH
 cp $DEV_PATH/GKComponents.dll ~/$LIB_PATH
-cp $DEV_PATH/GKTray.exe ~/$LIB_PATH
 
-cp $DEV_PATH/ArborGVT.dll ~/$LIB_PATH
 cp $DEV_PATH/BSLib.dll ~/$LIB_PATH
+cp $DEV_PATH/BSLib.DataViz.Model.dll ~/$LIB_PATH
+cp $DEV_PATH/BSLib.Design.dll ~/$LIB_PATH
+cp $DEV_PATH/BSLib.Design.WFHandlers.dll ~/$LIB_PATH
 cp $DEV_PATH/BSLib.Linguistics.dll ~/$LIB_PATH
-cp $DEV_PATH/BSLib.SmartGraph.dll ~/$LIB_PATH
 cp $DEV_PATH/DotNetRtfWriter.dll ~/$LIB_PATH
 cp $DEV_PATH/ExcelLibrary.dll ~/$LIB_PATH
 cp $DEV_PATH/GMap.NET.Core.dll ~/$LIB_PATH
@@ -65,10 +65,11 @@ cp -r $DEV_PATH/samples/ ~/$LIB_PATH/
 chmod -x ~/$LIB_PATH/GKCore.dll
 chmod -x ~/$LIB_PATH/GKComponents.dll
 
-chmod -x ~/$LIB_PATH/ArborGVT.dll
 chmod -x ~/$LIB_PATH/BSLib.dll
+chmod -x ~/$LIB_PATH/BSLib.DataViz.Model.dll
+chmod -x ~/$LIB_PATH/BSLib.Design.dll
+chmod -x ~/$LIB_PATH/BSLib.Design.WFHandlers.dll
 chmod -x ~/$LIB_PATH/BSLib.Linguistics.dll
-chmod -x ~/$LIB_PATH/BSLib.SmartGraph.dll
 chmod -x ~/$LIB_PATH/DotNetRtfWriter.dll
 chmod -x ~/$LIB_PATH/ExcelLibrary.dll
 chmod -x ~/$LIB_PATH/GMap.NET.Core.dll
@@ -78,6 +79,7 @@ chmod -x ~/$LIB_PATH/KopiLua.dll
 chmod -x ~/$LIB_PATH/NLua.dll
 chmod -x ~/$LIB_PATH/NLog.dll
 chmod -x ~/$LIB_PATH/nVLC.dll
+chmod -x ~/$LIB_PATH/Ude.dll
 chmod -x ~/$LIB_PATH/YamlSerializer.dll
 chmod -x ~/$LIB_PATH/ZedGraph.dll
 

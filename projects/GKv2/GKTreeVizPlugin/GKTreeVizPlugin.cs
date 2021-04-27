@@ -78,7 +78,7 @@ namespace GKTreeVizPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_DisplayName);
             } catch (Exception ex) {
-                Logger.WriteError("GKTreeVizPlugin.OnLanguageChange(): ", ex);
+                Logger.WriteError("GKTreeVizPlugin.OnLanguageChange()", ex);
             }
         }
     }

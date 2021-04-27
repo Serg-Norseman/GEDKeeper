@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,12 +22,12 @@ namespace GKCore.Interfaces
 {
     public interface IProgressController
     {
-        void ProgressInit(string title, int max);
+        void ProgressInit(string title, int max, bool cancelable = false);
         void ProgressDone();
 
         void ProgressStep();
         void ProgressStep(int value);
 
-        /*bool IsCanceled { get; }*/
+        bool IsCanceled { get; }
     }
 }

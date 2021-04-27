@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.IO;
+using System.Reflection;
 using BSLib;
 using BSLib.Design.Graphics;
 using GKCore.Interfaces;
@@ -70,6 +72,20 @@ namespace GKCore.Plugins
         public virtual bool Shutdown()
         {
             return true;
+        }
+
+        public Stream LoadResourceStream(string resName)
+        {
+            Type thisType = this.GetType();
+            Assembly assembly = thisType.Assembly;
+            string thisNamespace = thisType.Namespace;
+
+            resName = string.Concat("Resources.", resName);
+            if (!string.IsNullOrEmpty(thisNamespace)) {
+                resName = string.Concat(thisNamespace, ".", resName);
+            }
+
+            return assembly.GetManifestResourceStream(resName);
         }
     }
 }

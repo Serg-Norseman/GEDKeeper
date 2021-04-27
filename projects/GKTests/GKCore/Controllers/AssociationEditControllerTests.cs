@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,12 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using GDModel;
 using GKCore.Interfaces;
-using GKTests.Stubs;
+using GKCore.MVP.Views;
+using GKCore.Types;
+using GKTests;
 using GKUI;
-//using NSubstitute;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore.Controllers
@@ -31,38 +32,82 @@ namespace GKCore.Controllers
     [TestFixture]
     public class AssociationEditControllerTests
     {
-        private GDMAssociation fAssociation;
-        private IBaseWindow fBase;
-
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
-
-            fBase = new BaseWindowStub();
-            fAssociation = new GDMAssociation(null);
         }
 
         [Test]
-        public void Test_Common()
+        public void Test_AssociationEditDlgController()
         {
-            /*var view = Substitute.For<IAssociationEditDlg>();
-
+            var view = Substitute.For<IAssociationEditDlg>();
             Assert.IsNull(view.Association);
             Assert.IsNotNull(view.Person);
             Assert.IsNotNull(view.Relation);
 
+            var baseContext = Substitute.For<IBaseContext>();
+            baseContext.Tree.Returns(new GDMTree());
+            var baseWin = Substitute.For<IBaseWindow>();
+            baseWin.Context.Returns(baseContext);
+            var tree = baseContext.Tree;
+            var association = new GDMAssociation(); // for xref pointers to work
+
             var controller = new AssociationEditDlgController(view);
             Assert.IsNotNull(controller);
 
-            controller.Association = fAssociation;
-            Assert.AreEqual(fAssociation, controller.Association);
+            controller.Init(baseWin);
+            Assert.AreEqual(baseWin, controller.Base);
 
-            controller.Accept();*/
+            controller.Association = association;
+            Assert.AreEqual(association, controller.Association);
 
-            //controller.SetPerson();
+            // the association is empty
+            controller.UpdateView();
 
-            /*Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.LoadBase(null, null); });*/
+            // the relation is empty, an exception will be thrown, accept will be false
+            Assert.IsFalse(controller.Accept());
+
+            var relValue = "test relation";
+            var relPerson = tree.CreateIndividual();
+
+            // substitutes of values
+            view.Relation.Text.Returns(relValue);
+            baseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown).Returns(relPerson);
+
+            controller.SetPerson();
+
+            Assert.IsTrue(controller.Accept());
+            Assert.AreEqual(relValue, association.Relation);
+            Assert.AreEqual(relPerson, tree.GetPtrValue(association));
+        }
+
+        [Test]
+        public void Test_LanguageEditDlgController()
+        {
+            var view = Substitute.For<ILanguageEditDlg>();
+            Assert.AreEqual(GDMLanguageID.Unknown, view.LanguageID);
+
+            var baseWin = Substitute.For<IBaseWindow>();
+            var tree = new GDMTree();
+
+            var controller = new LanguageEditDlgController(view);
+            Assert.IsNotNull(controller);
+
+            controller.Init(baseWin);
+            Assert.AreEqual(baseWin, controller.Base);
+
+            controller.LanguageID = GDMLanguageID.Akkadian;
+            Assert.AreEqual(GDMLanguageID.Akkadian, controller.LanguageID);
+
+            var langValue = GDMLanguageID.AngloSaxon;
+
+            // substitutes of values
+            view.LanguageCombo.GetSelectedTag<GDMLanguageID>().Returns(langValue);
+
+            Assert.IsTrue(controller.Accept());
+            Assert.AreEqual(langValue, controller.LanguageID);
         }
     }
 }

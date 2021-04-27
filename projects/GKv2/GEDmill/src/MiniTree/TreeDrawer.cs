@@ -72,25 +72,21 @@ namespace GEDmill.MiniTree
             {
                 FirstName = "";
                 Surname = "";
-                Concealed = (!ir.GetVisibility());
+                Concealed = (!GMHelper.GetVisibility(ir));
                 if (Concealed && !CConfig.Instance.UseWithheldNames) {
                     FirstName = "";
                     Surname = Name = CConfig.Instance.ConcealedName;
                 } else {
                     var irName = ir.GetPrimaryFullName();
                     if (irName != "") {
-                        Name = CConfig.Instance.CapitaliseName(irName, ref FirstName, ref Surname);
+                        Name = GMHelper.CapitaliseName(irName, ref FirstName, ref Surname);
                     } else {
                         FirstName = "";
                         Surname = Name = CConfig.Instance.UnknownName;
                     }
                 }
 
-                if (Concealed) {
-                    Date = "";
-                } else {
-                    Date = ir.GetLifeDatesStr();
-                }
+                Date = Concealed ? string.Empty : GMHelper.GetLifeDatesStr(ir);
             }
         }
 
@@ -192,13 +188,11 @@ namespace GEDmill.MiniTree
 
             // For gifs we need to reload and set transparency colour
             if (imageFormat == ImageFormat.Gif && !CConfig.Instance.FakeMiniTreeTransparency) {
-                Image imageGif;
-                ColorPalette colorpalette;
-                imageGif = Image.FromFile(fileName);
-                colorpalette = imageGif.Palette;
+                var imageGif = Image.FromFile(fileName);
+                var colorPalette = imageGif.Palette;
 
                 // Creates a new GIF image with a modified colour palette
-                if (colorpalette != null) {
+                if (colorPalette != null) {
                     // Create a new 8 bit per pixel image
                     Bitmap bm = new Bitmap(imageGif.Width, imageGif.Height, PixelFormat.Format8bppIndexed);
 
@@ -207,7 +201,7 @@ namespace GEDmill.MiniTree
 
                     // Copy all the entries from the old palette removing any transparency
                     int n = 0;
-                    foreach (Color c in colorpalette.Entries) {
+                    foreach (Color c in colorPalette.Entries) {
                         colorpaletteNew.Entries[n++] = Color.FromArgb(255, c);
                     }
 
@@ -241,7 +235,7 @@ namespace GEDmill.MiniTree
                     }
 
                     // Set the newly selected transparency
-                    colorpaletteNew.Entries[(int)backColor] = Color.FromArgb(0, Color.Magenta);
+                    colorpaletteNew.Entries[backColor] = Color.FromArgb(0, Color.Magenta);
 
                     // Re-insert the palette
                     bm.Palette = colorpaletteNew;
@@ -254,7 +248,7 @@ namespace GEDmill.MiniTree
 
                     // Set the new image in place
                     imageGif = bm;
-                    colorpalette = imageGif.Palette;
+                    colorPalette = imageGif.Palette;
 
                     fLogger.WriteInfo("Re-saving mini gif as " + fileName);
 
@@ -269,14 +263,14 @@ namespace GEDmill.MiniTree
         protected MiniTreeGroup CreateDataStructure(GDMIndividualRecord irSubject)
         {
             // Add subject's frParents
-            GDMFamilyRecord frParents = irSubject.GetParentsFamily(false);
+            GDMFamilyRecord frParents = fTree.GetParentsFamily(irSubject);
             MiniTreeGroup mtgParents = new MiniTreeGroup();
             MiniTreeIndividual mtiFather = null;
             if (frParents != null) {
-                mtiFather = AddToGroup(frParents.Husband.Individual, mtgParents);
+                mtiFather = AddToGroup(fTree.GetPtrValue(frParents.Husband), mtgParents);
             }
 
-            // Create a group for the subejct and their siblings.
+            // Create a group for the subject and their siblings.
             MiniTreeGroup mtgSiblings = new MiniTreeGroup();
 
             // Keeps count of subject's siblings (including subject)
@@ -302,12 +296,12 @@ namespace GEDmill.MiniTree
                     bool bAddedSubject = false;
                     int nSpouses = 0;
                     MiniTreeGroup.ECrossbar ecbCrossbar = MiniTreeGroup.ECrossbar.Solid;
-                    var alFamily = irSubject.GetFamilyList();
+                    var indiFamilies = GMHelper.GetFamilyList(fTree, irSubject);
 
-                    foreach (GDMFamilyRecord fr in alFamily) {
-                        GDMIndividualRecord irSpouse = fr.GetSpouseBy(irSubject);
+                    foreach (GDMFamilyRecord famRec in indiFamilies) {
+                        GDMIndividualRecord irSpouse = fTree.GetSpouseBy(famRec, irSubject);
 
-                        if (fr.Husband.Individual != irSubject) {
+                        if (famRec.Husband.XRef != irSubject.XRef) {
                             mtiRightmostSibling = AddToGroup(irSpouse, mtgSiblings);
                             // Subject is female so all but last husband have dotted bars
                             ecbCrossbar = MiniTreeGroup.ECrossbar.DottedLeft;
@@ -337,7 +331,7 @@ namespace GEDmill.MiniTree
 
                         // Add children by this spouse                   
                         MiniTreeIndividual mtiChild = null;
-                        while ((irGrandchild = GetChild(fr, nGrandchildren, null)) != null) {
+                        while ((irGrandchild = GetChild(famRec, nGrandchildren, null)) != null) {
                             if (Exists(irGrandchild)) {
                                 CBoxText boxtext = new CBoxText(irGrandchild);
                                 mtiChild = mtgOffspring.AddIndividual(irGrandchild, boxtext.FirstName, boxtext.Surname, boxtext.Date, true, true, false, boxtext.Concealed, false);
@@ -365,7 +359,7 @@ namespace GEDmill.MiniTree
                         }
 
                         // If subject is husband then we need to add their wife now.
-                        if (fr.Husband.Individual == irSubject) {
+                        if (famRec.Husband.XRef == irSubject.XRef) {
                             ecbCrossbar = MiniTreeGroup.ECrossbar.DottedRight;
 
                             // Hook up to previous rightmost sibling and set this as new rightmost sibling.
@@ -406,7 +400,7 @@ namespace GEDmill.MiniTree
 
             // Add subject's mother
             if (frParents != null) {
-                MiniTreeIndividual mtiMother = AddToGroup(frParents.Wife.Individual, mtgParents);
+                MiniTreeIndividual mtiMother = AddToGroup(fTree.GetPtrValue(frParents.Wife), mtgParents);
                 mtgSiblings.RightBox = mtiMother;
             }
 
@@ -415,17 +409,17 @@ namespace GEDmill.MiniTree
         }
 
         // Gets the n'th child in the fr, or returns the default individual if first child requested and no fr.
-        private static GDMIndividualRecord GetChild(GDMFamilyRecord fr, int nChild, GDMIndividualRecord irDefault)
+        private GDMIndividualRecord GetChild(GDMFamilyRecord famRec, int nChild, GDMIndividualRecord irDefault)
         {
             GDMIndividualRecord irChild = null;
-            if (fr != null && nChild < fr.Children.Count) {
+            if (famRec != null && nChild < famRec.Children.Count) {
                 // The ordering of children in the tree can be selected to be the same as it is in the GEDCOM file. This 
                 // is because the file should be ordered as the user chose to order the fr when entering the data in 
                 // their fr history app, regardless of actual birth dates. 
                 if (CConfig.Instance.KeepSiblingOrder) {
-                    irChild = fr.Children[nChild].Value as GDMIndividualRecord;
+                    irChild = fTree.GetPtrValue(famRec.Children[nChild]);
                 } else {
-                    irChild = fr.Children[nChild].Value as GDMIndividualRecord;
+                    irChild = fTree.GetPtrValue(famRec.Children[nChild]);
                 }
             } else {
                 // Return the default individual as first and only child of fr.
@@ -452,7 +446,7 @@ namespace GEDmill.MiniTree
         // Returns true if the supplied record is valid for inclusion in the tree
         private static bool Exists(GDMIndividualRecord ir)
         {
-            return (ir != null && ir.GetVisibility());
+            return (ir != null && GMHelper.GetVisibility(ir));
         }
     }
 }

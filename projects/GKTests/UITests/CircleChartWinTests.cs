@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,11 +22,8 @@
 
 using System;
 using System.Windows.Forms;
-using GDModel;
 using GKCore.Interfaces;
 using GKTests;
-using GKTests.Stubs;
-using GKUI.Forms;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -84,15 +81,23 @@ namespace GKUI.Forms
             ccWin.SelectByRec(null);
             ccWin.SetFilter();
 
-            formTest.ModalFormHandler = SaveFileJPG_Handler;
-            ClickToolStripButton("tbImageSave", ccWin);
+            try {
+                formTest.ModalFormHandler = SaveFileJPG_Handler;
+                ClickToolStripButton("tbImageSave", ccWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.jpg"));
+            }
 
             // FIXME exception!
             //ModalFormHandler = SaveFileEMF_Handler;
             //ClickToolStripButton("tbImageSave", ccWin);
 
-            formTest.ModalFormHandler = SaveFileSVG_Handler;
-            ClickToolStripButton("tbImageSave", ccWin);
+            try {
+                formTest.ModalFormHandler = SaveFileSVG_Handler;
+                ClickToolStripButton("tbImageSave", ccWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.svg"));
+            }
 
             KeyDownForm(frm.Name, Keys.Escape);
             frm.Dispose();

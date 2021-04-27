@@ -23,7 +23,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using GDModel;
-using GEDmill.Exceptions;
 using GEDmill.Model;
 using GKCore.Logging;
 
@@ -52,11 +51,11 @@ namespace GEDmill.HTML
         private string fW3CFile;
 
 
-        protected Creator(GDMTree tree, IProgressCallback progress, string sW3cfile)
+        protected Creator(GDMTree tree, IProgressCallback progress, string w3cFile)
         {
             fTree = tree;
             fProgressWindow = progress;
-            fW3CFile = sW3cfile;
+            fW3CFile = w3cFile;
         }
 
         // This clears the static list of all multimedia files copied to the output directory (and possibly renamed).
@@ -73,98 +72,98 @@ namespace GEDmill.HTML
         {
             fLogger.WriteInfo(string.Format("EscapeHTML({0})", original));
 
-            uint tabSpaces = CConfig.Instance.TabSpaces;
+            int tabSpaces = CConfig.Instance.TabSpaces;
 
             if (original == null) {
                 return "&lt;null&gt;";
             }
 
-            StringBuilder sb = new StringBuilder(original.Length);
-            uint uTabPos = 0;
-            bool bDoneCRLF = false;
-            bool bDoneSpace = false;
-            int nLength = original.Length;
+            var sb = new StringBuilder(original.Length);
+            int tabPos = 0;
+            bool doneCRLF = false;
+            bool doneSpace = false;
+            int length = original.Length;
             int n = 0;
             foreach (char c in original) {
                 switch (c) {
                     case (char)0x91:
                     case (char)0x92:
                         sb.Append("'");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case (char)0x93:
                     case (char)0x94:
                         sb.Append("\"");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case '<':
                         sb.Append("&lt;");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case '>':
                         sb.Append("&gt;");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case '\"':
                         sb.Append("&quot;");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case '&':
                         sb.Append("&amp;");
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                     case ' ':
-                        if (bDoneSpace || hardSpace) {
+                        if (doneSpace || hardSpace) {
                             sb.Append("&nbsp;");
                         } else {
                             sb.Append(' ');
-                            bDoneSpace = true;
+                            doneSpace = true;
                         }
-                        bDoneCRLF = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        tabPos++;
                         break;
                     case '\n':
-                        if (!bDoneCRLF) {
+                        if (!doneCRLF) {
                             sb.Append("<br />");
                         }
-                        bDoneCRLF = false; // To allow multiple CRLFs to produce multiple <BR />s
-                        bDoneSpace = false;
-                        uTabPos = 0;
+                        doneCRLF = false; // To allow multiple CRLFs to produce multiple <BR />s
+                        doneSpace = false;
+                        tabPos = 0;
                         break;
                     case '\r':
-                        if (!bDoneCRLF) {
+                        if (!doneCRLF) {
                             sb.Append("<br />");
-                            bDoneCRLF = true;
+                            doneCRLF = true;
                         }
-                        bDoneSpace = false;
-                        uTabPos = 0;
+                        doneSpace = false;
+                        tabPos = 0;
                         break;
                     case '\t':
                         do {
                             sb.Append("&nbsp;");
-                            uTabPos++;
+                            tabPos++;
                         }
-                        while ((uTabPos % tabSpaces) != 0);
-                        bDoneSpace = true;
+                        while ((tabPos % tabSpaces) != 0);
+                        doneSpace = true;
                         break;
 
                     default:
                         sb.Append(c);
-                        bDoneCRLF = false;
-                        bDoneSpace = false;
-                        uTabPos++;
+                        doneCRLF = false;
+                        doneSpace = false;
+                        tabPos++;
                         break;
                 }
                 ++n;
@@ -179,8 +178,7 @@ namespace GEDmill.HTML
                 return "";
             }
 
-            StringBuilder sb = new StringBuilder(original.Length);
-
+            var sb = new StringBuilder(original.Length);
             foreach (char c in original) {
                 switch (c) {
                     case '\'':
@@ -203,14 +201,14 @@ namespace GEDmill.HTML
                 return "_";
             }
 
-            const string sValidChars = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$%'`-@{}~!#()&_^";
+            const string validChars = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$%'`-@{}~!#()&_^";
 
-            StringBuilder sb = new StringBuilder(original.Length);
-            int nLength = original.Length;
+            var sb = new StringBuilder(original.Length);
+            int length = original.Length;
             int n = 0;
             foreach (char c in original) {
                 char cc = c;
-                if (sValidChars.IndexOf(c) < 0) {
+                if (validChars.IndexOf(c) < 0) {
                     cc = '_';
                 }
                 sb.Append(cc);
@@ -226,12 +224,12 @@ namespace GEDmill.HTML
                 return null;
             }
             int nLength = text.Length;
-            StringBuilder sb = new StringBuilder(nLength);
+            var sb = new StringBuilder(nLength);
             int i = 0;
             int nNameStart = -1;
             int nState = 0;
-            const string sInvalidNameChars = ",\"£$^&*()+=]}[{':;,<>?/\\|`¬#~";
-            const string sReplacement = "<email address>";
+            const string invalidNameChars = ",\"£$^&*()+=]}[{':;,<>?/\\|`¬#~";
+            const string replacement = "<email address>";
 
             while (i < nLength) {
                 char c = text[i];
@@ -239,7 +237,7 @@ namespace GEDmill.HTML
                 switch (nState) {
                     case 0:
                         // Not seen anything special.
-                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && sInvalidNameChars.IndexOf(c) < 0) {
+                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && invalidNameChars.IndexOf(c) < 0) {
                             // Possible name char, remember where name starts.
                             nState = 1;
                             nNameStart = i;
@@ -254,7 +252,7 @@ namespace GEDmill.HTML
                         if (c == '@') {
                             // Now looking for domain.
                             nState = 2;
-                        } else if (!char.IsWhiteSpace(c) && sInvalidNameChars.IndexOf(c) < 0) {
+                        } else if (!char.IsWhiteSpace(c) && invalidNameChars.IndexOf(c) < 0) {
                             // Continue looking through a possible name string.
                         } else {
                             // Can't be an email address. Add what we've got so far and return
@@ -266,7 +264,7 @@ namespace GEDmill.HTML
                         break;
                     case 2:
                         // Seen at sign, now looking for domain
-                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && sInvalidNameChars.IndexOf(c) < 0) {
+                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && invalidNameChars.IndexOf(c) < 0) {
                             // Possible domain char.
                             // Now looking for dot among domain chars.
                             nState = 3;
@@ -283,7 +281,7 @@ namespace GEDmill.HTML
                         if (c == '.') {
                             // Now looking for another domain.
                             nState = 4;
-                        } else if (!char.IsWhiteSpace(c) && c != '@' && sInvalidNameChars.IndexOf(c) < 0) {
+                        } else if (!char.IsWhiteSpace(c) && c != '@' && invalidNameChars.IndexOf(c) < 0) {
                             // A possible domain char, keep looking for dot.
                         } else {
                             // Can't be an email address. Add what we've got so far and return
@@ -295,7 +293,7 @@ namespace GEDmill.HTML
                         break;
                     case 4:
                         // Looking for valid domain char to start next domain portion.
-                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && sInvalidNameChars.IndexOf(c) < 0) {
+                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && invalidNameChars.IndexOf(c) < 0) {
                             // A valid domain char. Look for another dot , or end.
                             nState = 5;
                         } else {
@@ -311,11 +309,11 @@ namespace GEDmill.HTML
                         if (c == '.') {
                             // Read rest of domain part.
                             nState = 6;
-                        } else if (!char.IsWhiteSpace(c) && c != '@' && sInvalidNameChars.IndexOf(c) < 0) {
+                        } else if (!char.IsWhiteSpace(c) && c != '@' && invalidNameChars.IndexOf(c) < 0) {
                             // Valid domain name. Keep looking for dot or end.
                         } else if (c != '@') {
                             // Found complete email address
-                            sb.Append(sReplacement);
+                            sb.Append(replacement);
                             sb.Append(c);
                             nState = 0;
                         } else {
@@ -328,12 +326,12 @@ namespace GEDmill.HTML
                         break;
                     case 6:
                         // Looking for valid domain char to start next domain portion, or can end here if address is (name@add.add.)
-                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && sInvalidNameChars.IndexOf(c) < 0) {
+                        if (!char.IsWhiteSpace(c) && c != '@' && c != '.' && invalidNameChars.IndexOf(c) < 0) {
                             // A valid domain char. Look for another dot , or end.
                             nState = 5;
                         } else {
                             // Found complete email address (ending in a full-stop).
-                            sb.Append(sReplacement);
+                            sb.Append(replacement);
                             sb.Append('.');
                             sb.Append(c);
                             nState = 0;
@@ -346,7 +344,7 @@ namespace GEDmill.HTML
             // Add anything remaining in email addr buffer.
             if (nState == 5 || nState == 6) {
                 // Found complete email address.
-                sb.Append(sReplacement);
+                sb.Append(replacement);
                 if (nState == 6) {
                     // We ended on a dot.
                     sb.Append('.');
@@ -422,7 +420,7 @@ namespace GEDmill.HTML
         // sArea is changed to reflect new image size
         // sArea can be {0,0,0,0} meaning use whole image
         // stats can be null if we don't care about keeping count of the multimedia files.
-        public static string CopyMultimedia(string fullFilename, string newFilename, uint maxWidth, uint maxHeight,
+        public static string CopyMultimedia(string fullFilename, string newFilename, int maxWidth, int maxHeight,
                                             ref Rectangle rectArea, Stats stats)
         {
             fLogger.WriteInfo(string.Format("CopyMultimedia( {0}, {1}, {2} )", fullFilename, maxWidth, maxHeight));
@@ -452,7 +450,7 @@ namespace GEDmill.HTML
                 if (fullFilename != null && CConfig.Instance.OutputFolder != null && CConfig.Instance.OutputFolder != "") {
                     // Have we already copied the sFilename?
                     if (fCopiedFiles.ContainsKey(asidFilename)) {
-                        FilenameAndSize filenameAndSize = (FilenameAndSize)fCopiedFiles[asidFilename];
+                        var filenameAndSize = fCopiedFiles[asidFilename];
                         result = filenameAndSize.FileName;
                         rectArea.Width = filenameAndSize.Width;
                         rectArea.Height = filenameAndSize.Height;
@@ -559,19 +557,27 @@ namespace GEDmill.HTML
             string dummy = "";
             if (name == "") {
                 name = CConfig.Instance.UnknownName;
-            } else if (!ir.GetVisibility() && !CConfig.Instance.UseWithheldNames) {
+            } else if (!GMHelper.GetVisibility(ir) && !CConfig.Instance.UseWithheldNames) {
                 name = CConfig.Instance.ConcealedName;
             } else {
-                name = CConfig.Instance.CapitaliseName(name, ref dummy, ref dummy);
+                name = GMHelper.CapitaliseName(name, ref dummy, ref dummy);
             }
             return MakeLink(ir, name);
+        }
+
+        protected static string MakeNote(string noteStr)
+        {
+            if (!string.IsNullOrEmpty(noteStr)) {
+                return string.Concat("<p class=\"eventNote\">", EscapeHTML(noteStr, false), "</p>");
+            }
+            return string.Empty;
         }
 
         // Creates link HTML for the individual e.g. <a href="indiI1.html">Next Child</a>. Uses name provided by caller.
         protected static string MakeLink(GDMIndividualRecord ir, string name)
         {
             string link;
-            if (!ir.GetVisibility()) {
+            if (!GMHelper.GetVisibility(ir)) {
                 // TODO: Why are we linking to invisible people?
                 link = EscapeHTML(name, true);
             } else {
@@ -600,7 +606,7 @@ namespace GEDmill.HTML
         // Crops the specified image file to the given size. Also converts non-standard formats to standard ones.
         // Returns sFilename in case extension has changed.
         // sArea is changed to reflect new image size
-        private static string ConvertAndCropImage(string folder, string fileName, ref Rectangle rectArea, uint maxWidth, uint maxHeight)
+        private static string ConvertAndCropImage(string folder, string fileName, ref Rectangle rectArea, int maxWidth, int maxHeight)
         {
             fLogger.WriteInfo(string.Format("ConvertAndCropImage( {0}, {1} )", folder != null ? folder : "null", fileName != null ? fileName : "null"));
 
@@ -622,8 +628,8 @@ namespace GEDmill.HTML
             if (rectArea.Width <= 0 || rectArea.Height <= 0) {
                 SizeF s = image.PhysicalDimension;
                 if (s.Width <= maxWidth && s.Height <= maxHeight) {
-                    maxWidth = (uint)s.Width;
-                    maxHeight = (uint)s.Height;
+                    maxWidth = (int)s.Width;
+                    maxHeight = (int)s.Height;
                     // Nothing needs to be done, bitmap already correct size.
                     // Carry on with conversion.
                 }
@@ -648,14 +654,14 @@ namespace GEDmill.HTML
             image.Dispose();
 
             // Find which format to save in. TODO: There must be a more elegant way!!
-            string sExtn = Path.GetExtension(fileName);
-            string sFilepart = Path.GetDirectoryName(fileName);
-            sFilepart += "\\" + Path.GetFileNameWithoutExtension(fileName);
-            System.Drawing.Imaging.ImageFormat imageFormat;
-            switch (sExtn.ToLower()) {
+            string extn = Path.GetExtension(fileName);
+            string filepart = Path.GetDirectoryName(fileName);
+            filepart += "\\" + Path.GetFileNameWithoutExtension(fileName);
+            ImageFormat imageFormat;
+            switch (extn.ToLower()) {
                 case ".jpg":
                 case ".jpeg":
-                    sExtn = ".jpg";
+                    extn = ".jpg";
                     imageFormat = ImageFormat.Jpeg;
                     break;
                 case ".gif":
@@ -668,7 +674,7 @@ namespace GEDmill.HTML
                 case ".tiff":
                     // Tif's don't display in browsers, so convert to png.
                     imageFormat = ImageFormat.Png;
-                    sExtn = ".png";
+                    extn = ".png";
                     break;
                 case ".exif":
                     imageFormat = ImageFormat.Exif;
@@ -681,7 +687,7 @@ namespace GEDmill.HTML
                     break;
             }
 
-            string filenameNew = sFilepart + sExtn;
+            string filenameNew = filepart + extn;
             string absFilenameNew = string.Concat(folder, filenameNew);
             try {
                 if (File.Exists(absFilename)) {

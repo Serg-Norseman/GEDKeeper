@@ -76,12 +76,12 @@ namespace GKCore.Charts
             }
         }
 
-        private bool fInGroup = false;
-        private bool fInPolyline = false;
-        private string fLastColor = null;
-        private string fLastColorOpacity = null;
-        private IFont fLastFont = null;
-        private bool fStartedPolyline = false;
+        private bool fInGroup;
+        private bool fInPolyline;
+        private string fLastColor;
+        private string fLastColorOpacity;
+        private IFont fLastFont;
+        private bool fStartedPolyline;
         private State fState;
 
         private readonly IFormatProvider fFmt;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -43,12 +43,12 @@ namespace GKCore.BBText
         public BBTextChunk(int tokenLine, float fontSize, BSDTypes.FontStyle fontStyle, IColor color)
         {
             Line = tokenLine - 1;
-            Text = string.Empty;
-            URL = string.Empty;
-
-            Color = color;
             Size = fontSize;
             Style = fontStyle;
+            Color = color;
+
+            Text = string.Empty;
+            URL = string.Empty;
         }
 
         public bool HasCoord(int x, int y)

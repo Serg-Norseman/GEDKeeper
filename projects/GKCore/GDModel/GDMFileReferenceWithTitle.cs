@@ -33,10 +33,6 @@ namespace GDModel
         }
 
 
-        public GDMFileReferenceWithTitle(GDMObject owner) : base(owner)
-        {
-        }
-
         public override void Assign(GDMTag source)
         {
             GDMFileReferenceWithTitle srcObj = (source as GDMFileReferenceWithTitle);

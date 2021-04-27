@@ -138,11 +138,7 @@ namespace GKNavigatorPlugin
 
             fBase = baseWin;
 
-            if (fBase != null) {
-                fDatabaseName = Path.GetFileName(fBase.Context.FileName);
-            } else {
-                fDatabaseName = "";
-            }
+            fDatabaseName = (fBase == null) ? string.Empty : Path.GetFileName(fBase.Context.FileName);
 
             UpdateControls();
         }
@@ -195,7 +191,7 @@ namespace GKNavigatorPlugin
                     treeView1.EndUpdate();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKNavigatorPlugin.UpdateControls(): ", ex);
+                Logger.WriteError("GKNavigatorPlugin.UpdateControls()", ex);
             }
         }
 

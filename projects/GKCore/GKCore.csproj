@@ -123,7 +123,6 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GDModel\GDMException.cs" />
     <Compile Include="GDModel\GDMAddress.cs" />
-    <Compile Include="GDModel\GDMAlias.cs" />
     <Compile Include="GDModel\GDMAssociation.cs" />
     <Compile Include="GDModel\GDMChangeDate.cs" />
     <Compile Include="GDModel\GDMChildToFamilyLink.cs" />
@@ -131,7 +130,10 @@
     <Compile Include="GDModel\GDMCustomDate.cs" />
     <Compile Include="GDModel\GDMCustomEvent.cs" />
     <Compile Include="GDModel\GDMCutoutPosition.cs" />
+    <Compile Include="GDModel\GDMExtensions.cs" />
     <Compile Include="GDModel\GDMIndividualLink.cs" />
+    <Compile Include="GDModel\GDMLines.cs" />
+    <Compile Include="GDModel\GDMSourceCitationData.cs" />
     <Compile Include="GDModel\GDMSourceData.cs" />
     <Compile Include="GDModel\GDMDate.cs" />
     <Compile Include="GDModel\GDMDateInterpreted.cs" />
@@ -187,7 +189,6 @@
     <Compile Include="GDModel\GDMSubmissionRecord.cs" />
     <Compile Include="GDModel\GDMSubmitterRecord.cs" />
     <Compile Include="GDModel\GDMTag.cs" />
-    <Compile Include="GDModel\GDMTagWithLists.cs" />
     <Compile Include="GDModel\GDMTaskRecord.cs" />
     <Compile Include="GDModel\GDMTime.cs" />
     <Compile Include="GDModel\GDMTree.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="GKCore\Cultures\CulturesPool.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
+    <Compile Include="GKCore\GKVarCache.cs" />
     <Compile Include="GKCore\GKException.cs" />
     <Compile Include="GKCore\Import\ImportUtils.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />
@@ -275,7 +277,6 @@
     <Compile Include="GKCore\Interfaces\IListManager.cs" />
     <Compile Include="GKCore\Interfaces\IListViewEx.cs" />
     <Compile Include="GKCore\Interfaces\ILocalization.cs" />
-    <Compile Include="GKCore\Interfaces\ILogger.cs" />
     <Compile Include="GKCore\Interfaces\IOptions.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsControl.cs" />
     <Compile Include="GKCore\Interfaces\IGraphicsProvider.cs" />
@@ -333,6 +334,7 @@
     <Compile Include="GKCore\Types\SpecialUserRef.cs" />
     <Compile Include="GKCore\Types\Target.cs" />
     <Compile Include="GKCore\Types\TargetMode.cs" />
+    <Compile Include="GKCore\Types\WidgetInfo.cs" />
     <Compile Include="GKCore\Types\WomanSurnameFormat.cs" />
     <Compile Include="GKCore\AppHost.cs" />
     <Compile Include="GKCore\BaseContext.cs" />

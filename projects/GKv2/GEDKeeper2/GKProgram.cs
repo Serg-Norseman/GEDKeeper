@@ -29,8 +29,8 @@ using GKCore.SingleInstance;
 [assembly: AssemblyTitle("GEDKeeper")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2009-2019 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("2.16.2.0")]
+[assembly: AssemblyCopyright("Copyright © 2009-2021 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyVersion("2.17.0.0")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
@@ -66,7 +66,7 @@ namespace GKUI
         {
             WFAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
-            Logger.Init(WFAppHost.GetLogFilename());
+            Logger.Init(AppHost.GetLogFilename());
             LogSysInfo();
 
             Application.ThreadException += ExExceptionHandler;

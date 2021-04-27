@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -320,10 +320,6 @@ namespace GKCore.Charts
         /// Renders a specified <paramref name="segment"/>'s person name within
         /// the segment.
         /// </summary>
-        /// <param name="gfx">GDI+ context to render on. This member may change
-        /// this context's transformation. If it does, it also reverts the
-        /// transformation back. Thus, from the point of view of the client code
-        /// this member doesn't change the context's transformation.</param>
         /// <param name="segment">Source segment to be drawn on `gfx`.</param>
         private void DrawPersonName(CircleSegment segment)
         {
@@ -339,7 +335,7 @@ namespace GKCore.Charts
                     return;
                 }
             } else {
-                var parts = GKUtils.GetNameParts(iRec);
+                var parts = GKUtils.GetNameParts(fBase.Context.Tree, iRec);
                 surn = parts.Surname;
                 givn = parts.Name;
             }
@@ -534,10 +530,9 @@ namespace GKCore.Charts
             rootSegment.WedgeAngle = 360.0f;
 
             GDMIndividualRecord father = null, mother = null;
-            GDMFamilyRecord fam = fRootPerson.GetParentsFamily();
+            GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(fRootPerson);
             if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
-                father = fam.Husband.Individual;
-                mother = fam.Wife.Individual;
+                fBase.Context.Tree.GetSpouses(fam, out father, out mother);
             }
 
             if (mother != null) {
@@ -592,10 +587,9 @@ namespace GKCore.Charts
                     segment.ExtRad = extRad - 50;
 
                     GDMIndividualRecord father = null, mother = null;
-                    GDMFamilyRecord fam = iRec.GetParentsFamily();
+                    GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(iRec);
                     if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
-                        father = fam.Husband.Individual;
-                        mother = fam.Wife.Individual;
+                        fBase.Context.Tree.GetSpouses(fam, out father, out mother);
                     }
 
                     int ps = prevSteps + genSize;
@@ -714,16 +708,17 @@ namespace GKCore.Charts
                 fSegments.Add(resultSegment);
 
                 if (gen < fVisibleGenerations) {
+                    var tree = fBase.Context.Tree;
                     int numberOfFamilyLinks = iRec.SpouseToFamilyLinks.Count;
                     for (int j = 0; j < numberOfFamilyLinks; j++) {
-                        GDMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
+                        GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[j]);
                         if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
                         fBase.Context.ProcessFamily(family);
 
                         int numberOfChildren = family.Children.Count;
                         for (int i = 0; i < numberOfChildren; i++) {
-                            GDMIndividualRecord child = family.Children[i].Individual;
+                            GDMIndividualRecord child = tree.GetPtrValue(family.Children[i]);
                             DescPersonSegment childSegment = TraverseDescendants(child, gen + 1);
 
                             int size = Math.Max(1, childSegment.TotalSubSegments);

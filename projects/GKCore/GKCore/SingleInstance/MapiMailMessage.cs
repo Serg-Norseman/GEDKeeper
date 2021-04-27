@@ -430,7 +430,7 @@ namespace GKCore.MapiMail
     }
 
     /// <summary>
-    /// Represents a colleciton of recipients for a mail message.
+    /// Represents a collection of recipients for a mail message.
     /// </summary>
     public class RecipientCollection : CollectionBase
     {
@@ -488,7 +488,7 @@ namespace GKCore.MapiMail
         }
 
         /// <summary>
-        /// Structure which contains an interop representation of a colleciton of recipients.
+        /// Structure which contains an interop representation of a collection of recipients.
         /// </summary>
         internal struct InteropRecipientCollection : IDisposable
         {

@@ -117,7 +117,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("PersonsFilterDlgController.Accept(): ", ex);
+                Logger.WriteError("PersonsFilterDlgController.Accept()", ex);
                 return false;
             }
         }

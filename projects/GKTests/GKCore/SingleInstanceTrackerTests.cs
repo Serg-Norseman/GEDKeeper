@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore.SingleInstance
@@ -26,15 +27,9 @@ namespace GKCore.SingleInstance
     [TestFixture]
     public class SingleInstanceTrackerTests
     {
-        private class SingleInstanceEnforcerMock: ISingleInstanceEnforcer
-        {
-            public void OnMessageReceived(MessageEventArgs e) { }
-            public void OnNewInstanceCreated(EventArgs e) { }
-        }
-
         private static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
         {
-            return new SingleInstanceEnforcerMock();
+            return Substitute.For<ISingleInstanceEnforcer>();
         }
 
         [Test]

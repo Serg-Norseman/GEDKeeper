@@ -114,7 +114,7 @@ namespace GKUI.Forms
                 ResultRecord = fListRecords.GetSelectedData() as GDMRecord;
                 DialogResult = DialogResult.OK;
             } catch (Exception ex) {
-                Logger.WriteError("RecordSelectDlg.btnSelect_Click(): ", ex);
+                Logger.WriteError("RecordSelectDlg.btnSelect_Click()", ex);
                 ResultRecord = null;
                 DialogResult = DialogResult.None;
             }
@@ -129,7 +129,7 @@ namespace GKUI.Forms
                     DialogResult = DialogResult.OK;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("RecordSelectDlg.btnCreate_Click(): ", ex);
+                Logger.WriteError("RecordSelectDlg.btnCreate_Click()", ex);
                 ResultRecord = null;
                 DialogResult = DialogResult.None;
             }
@@ -139,14 +139,20 @@ namespace GKUI.Forms
 
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            if (fChangeTimer == null) {
-                fChangeTimer = new System.Timers.Timer(500);
-                fChangeTimer.AutoReset = false;
-                fChangeTimer.Elapsed += (sdr, args) => { BeginInvoke(new UpdateDelegate(fController.UpdateView)); };
+            if (!WFAppHost.TEST_MODE) {
+                if (fChangeTimer == null) {
+                    fChangeTimer = new System.Timers.Timer(500);
+                    fChangeTimer.AutoReset = false;
+                    fChangeTimer.Elapsed += (sdr, args) => {
+                        BeginInvoke(new UpdateDelegate(fController.UpdateView));
+                    };
+                } else {
+                    fChangeTimer.Stop();
+                }
+                fChangeTimer.Start();
             } else {
-                fChangeTimer.Stop();
+                fController.UpdateView();
             }
-            fChangeTimer.Start();
         }
 
         public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)

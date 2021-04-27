@@ -130,7 +130,7 @@ namespace GKUI.Forms
         {
             GDMRepositoryCitation cit = eArgs.ItemData as GDMRepositoryCitation;
             if (eArgs.Action == RecordAction.raJump && cit != null) {
-                fController.JumpToRecord(cit.Value);
+                fController.JumpToRecord(cit);
             }
         }
 

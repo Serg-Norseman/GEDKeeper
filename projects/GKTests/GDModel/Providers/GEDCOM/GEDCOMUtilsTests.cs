@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,10 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Text;
-using BSLib;
-using GDModel;
 using NUnit.Framework;
 
 namespace GDModel.Providers.GEDCOM
@@ -39,6 +36,8 @@ namespace GDModel.Providers.GEDCOM
         public void Test_GetXRefNumber()
         {
             Assert.AreEqual(-1, GEDCOMUtils.GetXRefNumber(""));
+
+            Assert.AreEqual(12345, GEDCOMUtils.GetXRefNumber("12345"));
         }
 
         [Test]
@@ -285,7 +284,7 @@ namespace GDModel.Providers.GEDCOM
         [Test]
         public void Test_ParseGEDCOMPointer()
         {
-            using (var ptr = new GDMPointer(null)) {
+            using (var ptr = new GDMPointer()) {
                 string remainder = ptr.ParseString("  @I1111@ test");
                 Assert.AreEqual("I1111", ptr.XRef);
                 Assert.AreEqual(" test", remainder);
@@ -311,7 +310,7 @@ namespace GDModel.Providers.GEDCOM
         [Test]
         public void Test_ParseGEDCOMTime()
         {
-            using (GDMTime time = new GDMTime(null)) {
+            using (GDMTime time = new GDMTime()) {
                 Assert.IsNotNull(time, "time != null");
                 time.ParseString("20:20:20.100");
 
@@ -414,13 +413,54 @@ namespace GDModel.Providers.GEDCOM
         }
 
         [Test]
+        public void Test_ParseXRefPointer()
+        {
+            string xref;
+            string rest = GEDCOMUtils.ParseXRefPointer(" @I001@", out xref);
+            Assert.AreEqual("", rest);
+            Assert.AreEqual("I001", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer("@I1@", out xref);
+            Assert.AreEqual("", rest);
+            Assert.AreEqual("I1", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer("@I1@ rest", out xref);
+            Assert.AreEqual(" rest", rest);
+            Assert.AreEqual("I1", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer("I1@", out xref);
+            Assert.AreEqual("I1@", rest);
+            Assert.AreEqual("", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer("@X", out xref);
+            Assert.AreEqual("@X", rest);
+            Assert.AreEqual("", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer(" ptr text", out xref);
+            Assert.AreEqual("ptr text", rest);
+            Assert.AreEqual("", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer(" ", out xref);
+            Assert.AreEqual("", rest);
+            Assert.AreEqual("", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer("", out xref);
+            Assert.AreEqual("", rest);
+            Assert.AreEqual("", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer(null, out xref);
+            Assert.AreEqual("", rest);
+            Assert.AreEqual("", xref);
+        }
+
+        [Test]
         public void Test_SetTagStringsL()
         {
-            var tag = new GDMTag(null, GEDCOMTagsTable.Lookup("TEST"), "");
+            var tag = new GDMValueTag(GEDCOMTagsTable.Lookup("TEST"), "");
             Assert.IsNotNull(tag);
 
             // very long string, 248"A" and " BBB BBBB"
-            var strings = new StringList( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BBB BBBB" );
+            var strings = new GDMLines( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BBB BBBB" );
 
             GEDCOMUtils.SetTagStrings(null, strings);
 
@@ -438,6 +478,11 @@ namespace GDModel.Providers.GEDCOM
         public void Test_GetGeoCoord()
         {
             Assert.AreEqual(0.0, GEDCOMUtils.GetGeoCoord(null, GEDCOMGeoCoord.Lati));
+
+            Assert.AreEqual(+0.005, GEDCOMUtils.GetGeoCoord("N0.005", GEDCOMGeoCoord.Lati));
+            Assert.AreEqual(+0.005, GEDCOMUtils.GetGeoCoord("E0.005", GEDCOMGeoCoord.Lati));
+            Assert.AreEqual(-0.005, GEDCOMUtils.GetGeoCoord("S0.005", GEDCOMGeoCoord.Lati));
+            Assert.AreEqual(-0.005, GEDCOMUtils.GetGeoCoord("W0.005", GEDCOMGeoCoord.Lati));
         }
     }
 }

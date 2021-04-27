@@ -18,23 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-
 namespace GDModel
 {
     public sealed class GDMIndividualLink : GDMPointer
     {
-        public GDMIndividualRecord Individual
-        {
-            get { return base.Value as GDMIndividualRecord; }
-            set { base.Value = value; }
-        }
-
-        public GDMIndividualLink(GDMObject owner) : base(owner)
+        public GDMIndividualLink()
         {
         }
 
-        public GDMIndividualLink(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMIndividualLink(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }

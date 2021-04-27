@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -762,7 +762,7 @@ namespace GKCore
         /* 704 */ LSID_MatchType,
         /* 705 */ LSID_MatchInternal,
         /* 706 */ LSID_MathExternal,
-        /* 707 */ LSID_Analysis,
+        /* 707 */ LSID_Analyze,
         /* 708 */ LSID_Match,
         /* 709 */ LSID_WithoutDates,
         /* 710 */ LSID_PatriarchsDiagram,
@@ -873,8 +873,25 @@ namespace GKCore
         /* 813 */ LSID_DefaultDepth,
         /* 814 */ LSID_WarningOfDialogUnsavedChanges,
         /* 815 */ LSID_WarnForClosingDialog,
+        /* 816 */ LSID_DottedLinesOfAdoptedChildren,
+        /* 817 */ LSID_GoToPersonRecord,
+        /* 818 */ LSID_STWeb,
+        /* 819 */ LSID_SeparateDatesAndPlacesLines,
+        /* 820 */ LSID_Details,
+        /* 821 */ LSID_CopyXRef,
+        /* 822 */ LSID_BoldNames,
 
-        /* 000 */ LSID_Last = LSID_WarnForClosingDialog
+        /* 823 */ LSID_Baptism,
+        /* 824 */ LSID_BarMitzvah,
+        /* 825 */ LSID_BatMitzvah,
+        /* 826 */ LSID_Blessing,
+        /* 827 */ LSID_AdultChristening,
+        /* 828 */ LSID_Confirmation,
+        /* 829 */ LSID_FirstCommunion,
+        /* 830 */ LSID_Ordination,
+        /* 831 */ LSID_GeoSearchCountryRestriction,
+
+        /* 000 */ LSID_Last = LSID_GeoSearchCountryRestriction
     }
 
 
@@ -987,7 +1004,7 @@ namespace GKCore
             /* 099 */ "Cancel",
             /* 100 */ "Close",
             /* 101 */ "Select",
-            /* 102 */ "Append",
+            /* 102 */ "Add new",
             /* 103 */ "New individual",
             /* 104 */ "Edit individual",
             /* 105 */ "Checking of sex",
@@ -1209,7 +1226,7 @@ namespace GKCore
             /* 321 */ "Divorced",
             /* 322 */ "Birth",
             /* 323 */ "Adoption",
-            /* 324 */ "Christening",
+            /* 324 */ "Christening (child)",
             /* 325 */ "Graduation",
             /* 326 */ "Retirement",
             /* 327 */ "Naturalization",
@@ -1272,7 +1289,7 @@ namespace GKCore
             /* 384 */ "<?>",
             /* 385 */ "Next",
             /* 386 */ "You know that ...",
-            /* 387 */ "Load and search for places",
+            /* 387 */ "Loading and searching places",
             /* 388 */ "(not selected)",
             /* 389 */ "Sample",
             /* 390 */ "For all people",
@@ -1355,13 +1372,13 @@ namespace GKCore
             /* 467 */ "Research",
             /* 468 */ "Task",
             /* 469 */ "Correspondence",
-            /* 470 */ "Correction IDs",
-            /* 471 */ "Check format",
+            /* 470 */ "Correcting IDs",
+            /* 471 */ "Checking format",
             /* 472 */ "Correction of identity records is required, continue?", // obsolete
             /* 473 */ "Number of objects in the master database: {0}",
             /* 474 */ "Synchronization is complete.",
-            /* 475 */ "Search the patriarchs",
-            /* 476 */ "Search links",
+            /* 475 */ "Identifying the patriarchs",
+            /* 476 */ "Checking links",
             /* 477 */ "Archive not found, the data is not loaded",
             /* 478 */ "Scale",
             /* 479 */ "GEDKeeper GEDCOM files (*.ged)|*.ged|GEDKeeper GEDCOM encrypted files (*.geds)|*.geds",
@@ -1404,7 +1421,7 @@ namespace GKCore
             /* 516 */ "Search unlinked namesakes",
             /* 517 */ "Check connection of families",
             /* 518 */ "Check database",
-            /* 519 */ "Search the patriarchs",
+            /* 519 */ "Find the patriarchs",
             /* 520 */ "Manage places",
             /* 521 */ "Matching...",
             /* 522 */ "Check connection of families",
@@ -1592,7 +1609,7 @@ namespace GKCore
             /* 704 */ "Type of comparison",
             /* 705 */ "Internal comparing (search for duplicates)",
             /* 706 */ "Comparing with another database",
-            /* 707 */ "Analysis",
+            /* 707 */ "Analyze",
             /* 708 */ "Compare",
             /* 709 */ "Ignore dates",
             /* 710 */ "Chart",
@@ -1611,7 +1628,7 @@ namespace GKCore
             /* 723 */ "{0} is {1} of {2}",
             /* 724 */ "Today is birthday of {0}",
             /* 725 */ "Tomorrow is birthday of {0}",
-            /* 726 */ "Blood group",
+            /* 726 */ "Blood type",
             /* 727 */ "Hair color",
             /* 728 */ "Eyes color",
             /* 729 */ "mtDNA haplogroup",
@@ -1633,7 +1650,7 @@ namespace GKCore
             /* 745 */ "Show default portraits",
             /* 746 */ "A media file is added from the removable media. Continue?",
             /* 747 */ "Warn when adding media files from removable media",
-            /* 748 */ "Load at startup recent opened files",
+            /* 748 */ "Load recently opened files at startup",
             /* 749 */ "Today is holiday \"{0}\"",
             /* 750 */ "Tomorrow is holiday \"{0}\"",
             /* 751 */ "{1} days remain before the holiday \"{0}\"",
@@ -1669,7 +1686,7 @@ namespace GKCore
             /* 781 */ "Adopted",
             /* 782 */ "Birth",
             /* 783 */ "Foster",
-            /* 784 */ "Charset detection at load",
+            /* 784 */ "Detect Charset at load",
             /* 785 */ "Linkage type",
             /* 786 */ "Was born",
             /* 787 */ "Was born",
@@ -1703,6 +1720,23 @@ namespace GKCore
             /* 813 */ "Default depth",
             /* 814 */ "The dialog contains unsaved changes. Continue and save?",
             /* 815 */ "Warn for closing dialog with unsaved changes",
+            /* 816 */ "Dotted lines of adopted children",
+            /* 817 */ "Go to person record",
+            /* 818 */ "Web address",
+            /* 819 */ "Separate dates and places lines",
+            /* 820 */ "Details",
+            /* 821 */ "Copy XRef to clipboard",
+            /* 822 */ "Bold font of names",
+
+            /* 823 */ "Baptism",
+            /* 824 */ "Bar mitzvah",
+            /* 825 */ "Bat mitzvah",
+            /* 826 */ "Blessing",
+            /* 827 */ "Adult christening",
+            /* 828 */ "Confirmation",
+            /* 829 */ "First communion",
+            /* 830 */ "Ordination",
+            /* 831 */ "Restriction geo search by country",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
@@ -1771,8 +1805,7 @@ namespace GKCore
                 {
                     bool xt = false;
 
-                    string st;
-                    st = lngFile.ReadLine(); // header
+                    string st = lngFile.ReadLine();
                     if (!string.IsNullOrEmpty(st) && st[0] == ';')
                     {
                         st = st.Remove(0, 1);

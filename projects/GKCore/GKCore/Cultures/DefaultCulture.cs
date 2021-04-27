@@ -66,7 +66,7 @@ namespace GKCore.Cultures
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            var parts = GKUtils.GetNameParts(iRec);
+            var parts = GetNamePartsEx(iRec);
             bool female = (iRec.Sex == GDMSex.svFemale);
 
             return GetSurnames(parts.Surname, female);
@@ -130,7 +130,27 @@ namespace GKCore.Cultures
             name = !string.IsNullOrEmpty(name) ? name : stdName;
             patronymic = !string.IsNullOrEmpty(patronymic) ? patronymic : stdPatronymic;
 
-            return new NamePartsRet(surname, marriedSurname, name, patronymic);
+            return new NamePartsRet(surname, marriedSurname, name, patronymic, this);
+        }
+
+        public NamePartsRet GetNamePartsEx(GDMIndividualRecord iRec, bool formatted = true)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            if (iRec.PersonalNames.Count > 0) {
+                GDMPersonalName personalName = iRec.PersonalNames[0];
+
+                NamePartsRet nameParts = GetNameParts(personalName);
+
+                if (formatted) {
+                    nameParts.Surname = GKUtils.GetFmtSurname(iRec.Sex, personalName, nameParts.Surname);
+                }
+
+                return nameParts;
+            } else {
+                return new NamePartsRet();
+            }
         }
     }
 }

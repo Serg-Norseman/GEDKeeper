@@ -48,10 +48,9 @@ namespace GDModel.Providers.FamilyShow
                 PackagePart documentPart = null;
 
                 // Get the Package Relationships and look for the Document part based on the RelationshipType
-                Uri uriDocumentTarget = null;
                 foreach (PackageRelationship relationship in package.GetRelationshipsByType(PackageRelationshipType)) {
                     // Resolve the Relationship Target Uri so the Document Part can be retrieved.
-                    uriDocumentTarget = PackUriHelper.ResolvePartUri(new Uri("/", UriKind.Relative), relationship.TargetUri);
+                    var uriDocumentTarget = PackUriHelper.ResolvePartUri(new Uri("/", UriKind.Relative), relationship.TargetUri);
 
                     // Open the Document Part, write the contents to a file.
                     documentPart = package.GetPart(uriDocumentTarget);
@@ -59,10 +58,9 @@ namespace GDModel.Providers.FamilyShow
                 }
 
                 // Get the Document part's Relationships, and look for required resources.
-                Uri uriResourceTarget = null;
                 foreach (PackageRelationship relationship in documentPart.GetRelationshipsByType(ResourceRelationshipType)) {
                     // Resolve the Relationship Target Uri so the Resource Part can be retrieved.
-                    uriResourceTarget = PackUriHelper.ResolvePartUri(documentPart.Uri, relationship.TargetUri);
+                    var uriResourceTarget = PackUriHelper.ResolvePartUri(documentPart.Uri, relationship.TargetUri);
 
                     // Open the Resource Part and write the contents to a file.
                     PackagePart resourcePart = package.GetPart(uriResourceTarget);
@@ -72,11 +70,10 @@ namespace GDModel.Providers.FamilyShow
         }
 
         /// <summary>
-        ///   Extracts a specified package part to a target folder.  Does not overwrite existing histories, photos and attachments</summary>
-        /// <param name="packagePart">
-        ///   The package part to extract.</param>
-        /// <param name="targetDirectory">
-        ///   The absolute path to the targer folder.</param>
+        ///   Extracts a specified package part to a target folder.  Does not overwrite existing histories, photos and attachments
+        /// </summary>
+        /// <param name="packagePart">The package part to extract.</param>
+        /// <param name="targetDirectory">The absolute path to the target folder.</param>
         private static void ExtractPart(PackagePart packagePart, string targetDirectory)
         {
             try {

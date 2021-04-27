@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 
@@ -32,7 +31,7 @@ namespace GDModel.Providers.GedML
     /// <summary>
     /// Processing the GedML format is one part of the Genealogical Data Model (GDM).
     /// </summary>
-    public class GedMLProvider : FileProvider
+    public class GedMLProvider : GEDCOMProvider
     {
         public GedMLProvider(GDMTree tree) : base(tree)
         {
@@ -50,8 +49,7 @@ namespace GDModel.Providers.GedML
 
         protected override string DetectCharset(Stream inputStream, bool charsetDetection)
         {
-            string streamCharset = null;
-            return streamCharset;
+            return null;
         }
 
         protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
@@ -94,14 +92,14 @@ namespace GDModel.Providers.GedML
                             tagValue = string.Empty;
 
                             if (tagLevel == 0) {
-                                StackTuple stackTuple = GEDCOMProvider.AddTreeTag(fTree, tagLevel, tagId, string.Empty);
+                                StackTuple stackTuple = AddTreeTag(fTree, tagLevel, tagId, string.Empty);
                                 if (stackTuple != null) {
                                     stack.Clear();
                                     stack.Push(stackTuple);
 
                                     curRecord = stackTuple.Tag;
                                     if (!string.IsNullOrEmpty(xrefId)) {
-                                        ((GDMRecord)curRecord).XRef = xrefId;
+                                        ((GDMRecord)curRecord).SetXRef(fTree, xrefId, false);
                                     }
                                 }
                             } else if (tagLevel > 0) {

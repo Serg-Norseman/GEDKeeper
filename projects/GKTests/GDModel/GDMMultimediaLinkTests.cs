@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using BSLib;
-using GDModel;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -35,6 +34,7 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
@@ -43,7 +43,7 @@ namespace GDModel
         public void Test_GEDCOMMultimediaLink()
         {
             var iRec = new GDMIndividualRecord(fContext.Tree);
-            using (GDMMultimediaLink mmLink = new GDMMultimediaLink(iRec)) {
+            using (GDMMultimediaLink mmLink = new GDMMultimediaLink()) {
                 Assert.IsNotNull(mmLink);
                 Assert.IsTrue(mmLink.IsEmpty());
 
@@ -82,11 +82,12 @@ namespace GDModel
                 });
 
                 using (var mmRec = new GDMMultimediaRecord(fContext.Tree)) {
-                    Assert.IsNull(mmLink.GetUID());
+                    fContext.Tree.NewXRef(mmRec);
+                    Assert.IsNull(mmLink.GetUID(fContext.Tree));
 
-                    mmLink.Value = mmRec;
+                    mmLink.XRef = mmRec.XRef;
 
-                    Assert.IsNotNull(mmLink.GetUID());
+                    Assert.IsNotNull(mmLink.GetUID(fContext.Tree));
                 }
 
                 mmLink.CutoutPosition.Clear();

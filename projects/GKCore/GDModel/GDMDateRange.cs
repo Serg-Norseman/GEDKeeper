@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -41,10 +41,18 @@ namespace GDModel
         }
 
 
-        public GDMDateRange(GDMObject owner) : base(owner)
+        public GDMDateRange()
         {
-            fDateAfter = new GDMDate(this);
-            fDateBefore = new GDMDate(this);
+            fDateAfter = new GDMDate();
+            fDateBefore = new GDMDate();
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fDateAfter.TrimExcess();
+            fDateBefore.TrimExcess();
         }
 
         protected override string GetStringValue()
@@ -106,12 +114,7 @@ namespace GDModel
         public override string ParseString(string strValue)
         {
             Clear();
-            string result;
-            if (string.IsNullOrEmpty(strValue)) {
-                result = string.Empty;
-            } else {
-                result = GEDCOMUtils.ParseRangeDate(GetTree(), this, strValue);
-            }
+            string result = string.IsNullOrEmpty(strValue) ? string.Empty : GEDCOMUtils.ParseRangeDate(this, strValue);
             return result;
         }
 

@@ -296,5 +296,10 @@ namespace GDModel.Providers.GEDCOM
             }
             return GetNumber();
         }
+
+        public int TokenLength()
+        {
+            return fTokenEnd - fSavePos;
+        }
     }
 }

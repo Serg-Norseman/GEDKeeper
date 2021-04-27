@@ -83,6 +83,9 @@
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>libs\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>libs\nunit.framework.dll</HintPath>
     </Reference>
@@ -97,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Externals\ExternalsTests.cs" />
+    <Compile Include="ExternalsTests.cs" />
     <Compile Include="GDModel\GDMAddressTests.cs" />
     <Compile Include="GDModel\GDMAssociationTests.cs" />
     <Compile Include="GDModel\GDMChangeDateTests.cs" />
@@ -113,8 +116,10 @@
     <Compile Include="GDModel\GDMGroupRecordTests.cs" />
     <Compile Include="GDModel\GDMHeaderTests.cs" />
     <Compile Include="GDModel\GDMIndividualRecordTests.cs" />
+    <Compile Include="GDModel\GDMLinesTests.cs" />
     <Compile Include="GDModel\GDMListTests.cs" />
     <Compile Include="GDModel\GDMLocationRecordTests.cs" />
+    <Compile Include="GDModel\GDMMapTests.cs" />
     <Compile Include="GDModel\GDMMultimediaLinkTests.cs" />
     <Compile Include="GDModel\GDMMultimediaRecordTests.cs" />
     <Compile Include="GDModel\GDMNoteRecordTests.cs" />
@@ -127,7 +132,7 @@
     <Compile Include="GDModel\GDMSubmissionRecordTests.cs" />
     <Compile Include="GDModel\GDMSubmitterRecordTests.cs" />
     <Compile Include="GDModel\GDMTagTests.cs" />
-    <Compile Include="GDModel\GDMTagWithListsTests.cs" />
+    <Compile Include="GDModel\GDMPlaceTests.cs" />
     <Compile Include="GDModel\GDMTaskRecordTests.cs" />
     <Compile Include="GDModel\GDMTimeTests.cs" />
     <Compile Include="GDModel\GDMTreeTests.cs" />
@@ -138,7 +143,6 @@
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParserTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProviderTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtilsTests.cs" />
-    <Compile Include="Externals\SmartGraphTests.cs" />
     <Compile Include="GKComponents\CircleChartTests.cs" />
     <Compile Include="GKComponents\GKListItemTests.cs" />
     <Compile Include="GKComponents\HyperViewTests.cs" />
@@ -149,6 +153,7 @@
     <Compile Include="GKCore\AppHostTests.cs" />
     <Compile Include="GKCore\BaseContextTests.cs" />
     <Compile Include="GKCore\BBTextParserTests.cs" />
+    <Compile Include="GKCore\ChartsTests.cs" />
     <Compile Include="GKCore\Controllers\AssociationEditControllerTests.cs" />
     <Compile Include="GKCore\CoreTests.cs" />
     <Compile Include="GKCore\CulturesTests.cs" />
@@ -205,12 +210,14 @@
     <Compile Include="UITests\NoteEditDlgTests.cs" />
     <Compile Include="UITests\OptionsDlgTests.cs" />
     <Compile Include="UITests\OrganizerWinTests.cs" />
+    <Compile Include="UITests\ParentsEditDlgTests.cs" />
     <Compile Include="UITests\PersonalNameEditDlgTests.cs" />
     <Compile Include="UITests\PersonEditDlgTests.cs" />
     <Compile Include="UITests\PersonsFilterDlgTests.cs" />
     <Compile Include="UITests\PortraitSelectDlgTests.cs" />
     <Compile Include="UITests\ProgressDlgTests.cs" />
     <Compile Include="UITests\QuickSearchDlgTests.cs" />
+    <Compile Include="UITests\RecordInfoDlgTests.cs" />
     <Compile Include="UITests\RecordSelectDlgTests.cs" />
     <Compile Include="UITests\RelationshipCalculatorDlgTests.cs" />
     <Compile Include="UITests\RepositoryEditDlgTests.cs" />
@@ -283,6 +290,9 @@
     <EmbeddedResource Include="Resources\test_windsor.familyx" />
     <EmbeddedResource Include="Resources\test_mergerec.ged" />
     <EmbeddedResource Include="Resources\test_names_03.ged" />
+    <EmbeddedResource Include="Resources\test_geni_badlines.ged" />
+    <EmbeddedResource Include="Resources\test_dates_year.ged" />
+    <EmbeddedResource Include="Resources\test_geni_srcit.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

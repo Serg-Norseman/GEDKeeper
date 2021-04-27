@@ -27,7 +27,6 @@ using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Components
 {
@@ -123,7 +122,7 @@ namespace GKUI.Components
 
         public IImage LoadResourceImage(string resName, bool makeTransp)
         {
-            Bitmap img = (Bitmap)UIHelper.LoadResourceImage("Resources." + resName);
+            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
 
             if (makeTransp) {
                 img = (Bitmap)img.Clone();

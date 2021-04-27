@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -75,7 +75,7 @@ namespace GDModel
         }
 
 
-        public GDMSubmissionRecord(GDMObject owner) : base(owner)
+        public GDMSubmissionRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.SUBN);
 
@@ -84,7 +84,14 @@ namespace GDModel
             fGenerationsOfAncestors = -1;
             fGenerationsOfDescendants = -1;
             fOrdinanceProcessFlag = GDMOrdinanceProcessFlag.opNone;
-            fSubmitter = new GDMPointer(this, (int)GEDCOMTagType.SUBM, string.Empty);
+            fSubmitter = new GDMPointer((int)GEDCOMTagType.SUBM, string.Empty);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fSubmitter.TrimExcess();
         }
 
         public override void Clear()

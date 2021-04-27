@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -58,7 +58,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction) && IsMatchesMask(GKUtils.GetFamilyString(fRec), QuickFilter));
+            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction) && IsMatchesMask(GKUtils.GetFamilyString(fBaseContext.Tree, fRec), QuickFilter));
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
 
@@ -76,7 +76,7 @@ namespace GKCore.Lists
             switch ((FamilyColumnType)colType)
             {
                 case FamilyColumnType.ctFamilyStr:
-                    result = GKUtils.GetFamilyString(fRec);
+                    result = GKUtils.GetFamilyString(fBaseContext.Tree, fRec);
                     break;
 
                 case FamilyColumnType.ctMarriageDate:

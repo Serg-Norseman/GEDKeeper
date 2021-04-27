@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
@@ -109,6 +110,10 @@ namespace GKUI.Components
             if (colorHandler != null) {
                 ForeColor = colorHandler.Handle;
             }
+        }
+
+        public void SetFont(IFont font)
+        {
         }
     }
 
@@ -591,7 +596,7 @@ namespace GKUI.Components
 
                 if (tempRec != null) SelectItem(tempRec);
             } catch (Exception ex) {
-                Logger.WriteError("GKListView.UpdateContents(): ", ex);
+                Logger.WriteError("GKListView.UpdateContents()", ex);
             }
         }
 
@@ -633,7 +638,33 @@ namespace GKUI.Components
 
                 return result;
             } catch (Exception ex) {
-                Logger.WriteError("GKListView.GetSelectedData(): ", ex);
+                Logger.WriteError("GKListView.GetSelectedData()", ex);
+                return null;
+            }
+        }
+
+        public IList<object> GetSelectedItems()
+        {
+            try {
+                var result = new List<object>();
+
+                if (!VirtualMode) {
+                    int num = SelectedItems.Count;
+                    for (int i = 0; i < num; i++) {
+                        var lvItem = SelectedItems[i] as GKListItem;
+                        result.Add(lvItem.Data);
+                    }
+                } else {
+                    int num = SelectedIndices.Count;
+                    for (int i = 0; i < num; i++) {
+                        int index = SelectedIndices[i];
+                        result.Add(fListMan.GetContentItem(index));
+                    }
+                }
+
+                return result;
+            } catch (Exception ex) {
+                Logger.WriteError("GKListView.GetSelectedItems()", ex);
                 return null;
             }
         }
@@ -675,7 +706,7 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKListView.ResizeColumn(): ", ex);
+                Logger.WriteError("GKListView.ResizeColumn()", ex);
             }
         }
 
@@ -757,7 +788,7 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKListView.SelectItem(): ", ex);
+                Logger.WriteError("GKListView.SelectItem()", ex);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
@@ -73,25 +72,42 @@ namespace GDModel
         }
 
 
-        public GDMSourceRecord(GDMObject owner) : base(owner)
+        public GDMSourceRecord(GDMTree tree) : base(tree)
         {
             SetName(GEDCOMTagType.SOUR);
 
-            fData = new GDMSourceData(this);
-            fOriginator = new GDMTextTag(this, (int)GEDCOMTagType.AUTH);
-            fPublication = new GDMTextTag(this, (int)GEDCOMTagType.PUBL);
-            fRepositoryCitations = new GDMList<GDMRepositoryCitation>(this);
+            fData = new GDMSourceData();
+            fOriginator = new GDMTextTag((int)GEDCOMTagType.AUTH);
+            fPublication = new GDMTextTag((int)GEDCOMTagType.PUBL);
+            fRepositoryCitations = new GDMList<GDMRepositoryCitation>();
             fShortTitle = string.Empty;
-            fText = new GDMTextTag(this, (int)GEDCOMTagType.TEXT);
-            fTitle = new GDMTextTag(this, (int)GEDCOMTagType.TITL);
+            fText = new GDMTextTag((int)GEDCOMTagType.TEXT);
+            fTitle = new GDMTextTag((int)GEDCOMTagType.TITL);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                fData.Dispose();
+                fOriginator.Dispose();
+                fPublication.Dispose();
                 fRepositoryCitations.Dispose();
+                fText.Dispose();
+                fTitle.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fData.TrimExcess();
+            fOriginator.TrimExcess();
+            fPublication.TrimExcess();
+            fRepositoryCitations.TrimExcess();
+            fText.TrimExcess();
+            fTitle.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -114,47 +130,49 @@ namespace GDModel
         public override void Clear()
         {
             base.Clear();
+
+            fData.Clear();
+            fOriginator.Clear();
+            fPublication.Clear();
+            fShortTitle = string.Empty;
             fRepositoryCitations.Clear();
+            fText.Clear();
+            fTitle.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fRepositoryCitations.Count == 0;
+            return base.IsEmpty() && fData.IsEmpty() && fOriginator.IsEmpty() && fPublication.IsEmpty()
+                && string.IsNullOrEmpty(fShortTitle) && fText.IsEmpty() && fTitle.IsEmpty()
+                && (fRepositoryCitations.Count == 0);
         }
 
-        public override void MoveTo(GDMRecord targetRecord, bool clearDest)
+        public override void MoveTo(GDMRecord targetRecord)
         {
             GDMSourceRecord targetSource = targetRecord as GDMSourceRecord;
             if (targetSource == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
 
-            StringList titl = new StringList();
-            StringList orig = new StringList();
-            StringList publ = new StringList();
-            StringList text = new StringList();
-            try {
-                titl.Text = (targetSource.Title.Lines.Text + "\n" + Title.Lines.Text).Trim();
-                orig.Text = (targetSource.Originator.Lines.Text + "\n" + Originator.Lines.Text).Trim();
-                publ.Text = (targetSource.Publication.Lines.Text + "\n" + Publication.Lines.Text).Trim();
-                text.Text = (targetSource.Text.Lines.Text + "\n" + Text.Lines.Text).Trim();
+            GDMLines titl = new GDMLines();
+            GDMLines orig = new GDMLines();
+            GDMLines publ = new GDMLines();
+            GDMLines text = new GDMLines();
 
-                base.MoveTo(targetRecord, clearDest);
+            titl.Text = (targetSource.Title.Lines.Text + "\n" + Title.Lines.Text).Trim();
+            orig.Text = (targetSource.Originator.Lines.Text + "\n" + Originator.Lines.Text).Trim();
+            publ.Text = (targetSource.Publication.Lines.Text + "\n" + Publication.Lines.Text).Trim();
+            text.Text = (targetSource.Text.Lines.Text + "\n" + Text.Lines.Text).Trim();
 
-                targetSource.Title.Lines.Assign(titl);
-                targetSource.Originator.Lines.Assign(orig);
-                targetSource.Publication.Lines.Assign(publ);
-                targetSource.Text.Lines.Assign(text);
+            base.MoveTo(targetRecord);
 
-                while (fRepositoryCitations.Count > 0) {
-                    GDMRepositoryCitation obj = fRepositoryCitations.Extract(0);
-                    obj.ResetOwner(targetSource);
-                    targetSource.RepositoryCitations.Add(obj);
-                }
-            } finally {
-                titl.Dispose();
-                orig.Dispose();
-                publ.Dispose();
-                text.Dispose();
+            targetSource.Title.Lines.Assign(titl);
+            targetSource.Originator.Lines.Assign(orig);
+            targetSource.Publication.Lines.Assign(publ);
+            targetSource.Text.Lines.Assign(text);
+
+            while (fRepositoryCitations.Count > 0) {
+                GDMRepositoryCitation obj = fRepositoryCitations.Extract(0);
+                targetSource.RepositoryCitations.Add(obj);
             }
         }
 
@@ -168,25 +186,25 @@ namespace GDModel
         public void SetOriginatorArray(params string[] value)
         {
             fOriginator.Lines.Clear();
-            fOriginator.Lines.AddStrings(value);
+            fOriginator.Lines.AddRange(value);
         }
 
         public void SetTitleArray(params string[] value)
         {
             fTitle.Lines.Clear();
-            fTitle.Lines.AddStrings(value);
+            fTitle.Lines.AddRange(value);
         }
 
         public void SetPublicationArray(params string[] value)
         {
             fPublication.Lines.Clear();
-            fPublication.Lines.AddStrings(value);
+            fPublication.Lines.AddRange(value);
         }
 
         public void SetTextArray(params string[] value)
         {
             fText.Lines.Clear();
-            fText.Lines.AddStrings(value);
+            fText.Lines.AddRange(value);
         }
 
         public override float IsMatch(GDMTag tag, MatchParams matchParams)
@@ -203,8 +221,8 @@ namespace GDModel
             GDMRepositoryCitation cit = null;
             
             if (repRec != null) {
-                cit = new GDMRepositoryCitation(this);
-                cit.Value = repRec;
+                cit = new GDMRepositoryCitation();
+                cit.XRef = repRec.XRef;
                 fRepositoryCitations.Add(cit);
             }
             
@@ -217,9 +235,7 @@ namespace GDModel
                 throw new ArgumentNullException("repRec");
 
             foreach (GDMRepositoryCitation repCit in fRepositoryCitations) {
-                GDMRepositoryRecord rep = repCit.Value as GDMRepositoryRecord;
-
-                if (rep == repRec) {
+                if (repCit.XRef == repRec.XRef) {
                     fRepositoryCitations.Delete(repCit);
                     break;
                 }

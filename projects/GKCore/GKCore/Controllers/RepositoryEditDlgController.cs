@@ -61,7 +61,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("RepositoryEditDlgController.Accept(): ", ex);
+                Logger.WriteError("RepositoryEditDlgController.Accept()", ex);
                 return false;
             }
         }

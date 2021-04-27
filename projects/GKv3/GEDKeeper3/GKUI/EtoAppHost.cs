@@ -232,7 +232,7 @@ namespace GKUI
                 InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
                 InputLanguage.CurrentInputLanguage = currentLang;*/
             } catch (Exception ex) {
-                Logger.WriteError("EtoFormsAppHost.SetKeyLayout(): ", ex);
+                Logger.WriteError("EtoFormsAppHost.SetKeyLayout()", ex);
             }
         }
 

@@ -24,7 +24,6 @@ using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Components
 {
@@ -40,6 +39,9 @@ namespace GKUI.Components
         public IColor SelectColor(IColor color)
         {
             using (var clrDlg = new ColorDialog()) {
+                clrDlg.FullOpen = true;
+                clrDlg.SolidColorOnly = true;
+
                 if (color != null) {
                     Color sdColor = ((ColorHandler)color).Handle;
                     clrDlg.Color = sdColor;

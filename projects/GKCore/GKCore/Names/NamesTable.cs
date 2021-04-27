@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,7 @@ using System.IO;
 using System.Text;
 using BSLib;
 using GDModel;
-using GKCore.Types;
+using GKCore.Interfaces;
 
 namespace GKCore.Names
 {
@@ -109,7 +109,7 @@ namespace GKCore.Names
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("NamesTable.LoadFromFile(): ", ex);
+                Logger.WriteError("NamesTable.LoadFromFile()", ex);
             }
         }
 
@@ -128,8 +128,7 @@ namespace GKCore.Names
 
         public NameEntry AddName(string name)
         {
-            NameEntry result = new NameEntry();
-            result.Name = name;
+            var result = new NameEntry(name);
             fNames.Add(name, result);
             return result;
         }
@@ -219,33 +218,31 @@ namespace GKCore.Names
             }
         }
 
-        public void ImportNames(GDMIndividualRecord iRec)
+        public void ImportNames(IBaseContext context, GDMIndividualRecord iRec)
         {
-            if (iRec == null) return;
+            if (context == null || iRec == null) return;
 
             try {
-                string childName, childPat;
-                var parts = GKUtils.GetNameParts(iRec, false);
-                childName = parts.Name;
-                childPat = parts.Patronymic;
+                var parts = GKUtils.GetNameParts(context.Tree, iRec, false);
+                string childName = parts.Name;
+                string childPat = parts.Patronymic;
 
                 GDMSex iSex = iRec.Sex;
                 SetNameSex(childName, iSex);
 
-                GDMFamilyRecord fam = iRec.GetParentsFamily();
-                GDMIndividualRecord father = (fam == null) ? null : fam.Husband.Individual;
+                GDMFamilyRecord fam = context.Tree.GetParentsFamily(iRec);
+                GDMIndividualRecord father = (fam == null) ? null : context.Tree.GetPtrValue(fam.Husband);
 
                 if (father != null) {
-                    string fatherName;
-                    parts = GKUtils.GetNameParts(father, false);
-                    fatherName = parts.Name;
+                    parts = GKUtils.GetNameParts(context.Tree, father, false);
+                    string fatherName = parts.Name;
 
                     if (IsComparable(fatherName, childPat)) {
                         SetName(fatherName, childPat, iSex);
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("NamesTable.ImportName(): ", ex);
+                Logger.WriteError("NamesTable.ImportName()", ex);
             }
         }
     }

@@ -95,7 +95,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem miRelationshipCalculator;
         private System.Windows.Forms.TabControl tabsRecords;
-        private System.Windows.Forms.ToolStripMenuItem miRecordDuplicate;
+        private System.Windows.Forms.ToolStripMenuItem miContRecordDuplicate;
+        private System.Windows.Forms.ToolStripMenuItem miContRecordMerge;
         private System.Windows.Forms.ToolStripMenuItem miContRecordDelete;
         private System.Windows.Forms.ToolStripMenuItem miContRecordEdit;
         private System.Windows.Forms.ContextMenuStrip contextMenu;
@@ -207,7 +208,8 @@
             this.miContRecordAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.miContRecordEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.miContRecordDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.miRecordDuplicate = new System.Windows.Forms.ToolStripMenuItem();
+            this.miContRecordDuplicate = new System.Windows.Forms.ToolStripMenuItem();
+            this.miContRecordMerge = new System.Windows.Forms.ToolStripMenuItem();
             this.tabsRecords = new System.Windows.Forms.TabControl();
             this.miTreeCompare = new System.Windows.Forms.ToolStripMenuItem();
             this.miTreeMerge = new System.Windows.Forms.ToolStripMenuItem();
@@ -634,6 +636,7 @@
             // miSearch
             // 
             this.miSearch.Name = "miSearch";
+            this.miSearch.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.miSearch.Size = new System.Drawing.Size(235, 24);
             this.miSearch.Text = "miSearch";
             this.miSearch.Click += new System.EventHandler(this.miSearch_Click);
@@ -981,7 +984,8 @@
                                     this.miContRecordAdd,
                                     this.miContRecordEdit,
                                     this.miContRecordDelete,
-                                    this.miRecordDuplicate});
+                                    this.miContRecordDuplicate,
+                                    this.miContRecordMerge,});
             this.contextMenu.Name = "contextMenu";
             this.contextMenu.Size = new System.Drawing.Size(218, 100);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
@@ -1009,10 +1013,17 @@
             // 
             // miRecordDuplicate
             // 
-            this.miRecordDuplicate.Name = "miRecordDuplicate";
-            this.miRecordDuplicate.Size = new System.Drawing.Size(217, 24);
-            this.miRecordDuplicate.Text = "miRecordDuplicate";
-            this.miRecordDuplicate.Click += new System.EventHandler(this.miRecordDuplicate_Click);
+            this.miContRecordDuplicate.Name = "miContRecordDuplicate";
+            this.miContRecordDuplicate.Size = new System.Drawing.Size(217, 24);
+            this.miContRecordDuplicate.Text = "miContRecordDuplicate";
+            this.miContRecordDuplicate.Click += new System.EventHandler(this.miRecordDuplicate_Click);
+            // 
+            // miRecordDuplicate
+            // 
+            this.miContRecordMerge.Name = "miContRecordMerge";
+            this.miContRecordMerge.Size = new System.Drawing.Size(217, 24);
+            this.miContRecordMerge.Text = "miContRecordMerge";
+            this.miContRecordMerge.Click += new System.EventHandler(this.miRecordMerge_Click);
             // 
             // tabsRecords
             // 
@@ -1047,7 +1058,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Closing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Closed);
             this.Load += new System.EventHandler(this.Form_Load);
-            this.VisibleChanged += new System.EventHandler(this.Form_Show);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form_DragEnter);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form_KeyDown);

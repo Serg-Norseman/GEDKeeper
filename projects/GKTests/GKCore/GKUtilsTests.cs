@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -39,20 +39,12 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            // for static initialization
-            GEDCOMProvider.SkipEmptyTag((int)GEDCOMTagType._AWARD);
-
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
-
             LangMan.DefInit();
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
-        }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
         }
 
         [Test]
@@ -157,9 +149,9 @@ namespace GKCore
         public void Test_GetNameParts()
         {
             string surname = "", name = "", patronymic = "";
-            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetNameParts(null, surname, name, patronymic); });
-            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { var parts = GKUtils.GetNameParts(null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameParts(null, null, true); });
         }
 
@@ -167,37 +159,37 @@ namespace GKCore
         public void Test_GetRecordName()
         {
             GDMRecord rec = fContext.Tree.XRefIndex_Find("I1");
-            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("F1");
-            Assert.AreEqual("Ivanov Ivan Ivanovich - Ivanova Maria Petrovna", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Ivanov Ivan Ivanovich - Ivanova Maria Petrovna", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("G1");
-            Assert.AreEqual("GroupTest", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("GroupTest", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("L1");
-            Assert.AreEqual("Test Location", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test Location", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("R1");
-            Assert.AreEqual("Test repository", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test repository", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("RS1");
-            Assert.AreEqual("Test research", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test research", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("S1");
-            Assert.AreEqual("Test source", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test source", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("N1");
-            Assert.AreEqual("Test note", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test note", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("TK1");
-            Assert.AreEqual("Test task", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test task", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("O1");
-            Assert.AreEqual("Test multimedia", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test multimedia", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
             rec = fContext.Tree.XRefIndex_Find("CM1");
-            Assert.AreEqual("Test communication", GKUtils.GetRecordName(rec, false));
+            Assert.AreEqual("Test communication", GKUtils.GetRecordName(fContext.Tree, rec, false));
         }
 
         [Test]
@@ -260,24 +252,14 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_InitExtData()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtData(null); });
-            GKUtils.InitExtData(fContext.Tree);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtCounts(null, 0); });
-            GKUtils.InitExtCounts(fContext.Tree, 0);
-        }
-
-        [Test]
         public void Test_GetXGoalStr()
         {
-            Assert.AreEqual("", GKUtils.GetTaskGoalStr(null));
-            Assert.AreEqual("", GKUtils.GetGoalStr(GDMGoalType.gtIndividual, null));
+            Assert.AreEqual("", GKUtils.GetTaskGoalStr(null, null));
+            Assert.AreEqual("", GKUtils.GetGoalStr(fContext.Tree, GDMGoalType.gtIndividual, null));
 
             var rec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
             Assert.IsNotNull(rec);
-            Assert.AreEqual("Test task", GKUtils.GetTaskGoalStr(rec));
+            Assert.AreEqual("Test task", GKUtils.GetTaskGoalStr(fContext.Tree, rec));
         }
 
         [Test]
@@ -298,9 +280,8 @@ namespace GKCore
         {
             GDMIndividualRecord iRec5 = fContext.Tree.XRefIndex_Find("I6") as GDMIndividualRecord;
 
-            GKUtils.InitExtCounts(fContext.Tree, -1);
-            Assert.AreEqual(0, GKUtils.GetAncestorsCount(null));
-            Assert.AreEqual(3, GKUtils.GetAncestorsCount(iRec5) - 1);
+            Assert.AreEqual(0, GKUtils.GetAncestorsCount(fContext.Tree, null));
+            Assert.AreEqual(3, GKUtils.GetAncestorsCount(fContext.Tree, iRec5) - 1);
         }
 
         [Test]
@@ -308,9 +289,8 @@ namespace GKCore
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
-            GKUtils.InitExtCounts(fContext.Tree, -1);
-            Assert.AreEqual(0, GKUtils.GetDescendantsCount(null));
-            Assert.AreEqual(3, GKUtils.GetDescendantsCount(iRec) - 1);
+            Assert.AreEqual(0, GKUtils.GetDescendantsCount(fContext.Tree, null));
+            Assert.AreEqual(3, GKUtils.GetDescendantsCount(fContext.Tree, iRec) - 1);
         }
 
         [Test]
@@ -318,7 +298,7 @@ namespace GKCore
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
-            Assert.AreEqual(2, GKUtils.GetDescGenerations(iRec));
+            Assert.AreEqual(2, GKUtils.GetDescGenerations(fContext.Tree, iRec));
         }
 
         [Test]
@@ -334,7 +314,7 @@ namespace GKCore
         {
             GDMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
 
-            Assert.AreEqual(1, GKUtils.GetSpousesDiff(famRec));
+            Assert.AreEqual(1, GKUtils.GetSpousesDiff(fContext.Tree, famRec));
         }
 
         [Test]
@@ -343,7 +323,7 @@ namespace GKCore
             GDMIndividualRecord iRec1 = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             GDMIndividualRecord iRec3 = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
 
-            Assert.AreEqual(iRec3, GKUtils.GetFirstborn(iRec1));
+            Assert.AreEqual(iRec3, GKUtils.GetFirstborn(fContext.Tree, iRec1));
             Assert.AreEqual(20, GKUtils.GetFirstbornAge(iRec1, iRec3));
         }
 
@@ -353,7 +333,7 @@ namespace GKCore
             GDMIndividualRecord iRec1 = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
             // specially bad date also for CheckBase functions
-            Assert.AreEqual(10, GKUtils.GetMarriageAge(iRec1));
+            Assert.AreEqual(10, GKUtils.GetMarriageAge(fContext.Tree, iRec1));
         }
 
         [Test]
@@ -371,26 +351,65 @@ namespace GKCore
         public void Test_FileCanBeArchived()
         {
             string sourFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
-            Assert.IsTrue(GKUtils.FileCanBeArchived(sourFile));
+            try {
+                Assert.IsTrue(GKUtils.FileCanBeArchived(sourFile));
+            } finally {
+                TestUtils.RemoveTestFile(sourFile);
+            }
         }
 
         [Test]
-        public void Test_X()
-        {
-        }
-
-        [Test]
-        public void Test_CommonX()
+        public void Test_GetEventName()
         {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventName(null); });
+        }
+
+        [Test]
+        public void Test_GetEventCause()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventCause(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventDesc(null); });
+        }
+
+        [Test]
+        public void Test_GetEventDesc()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventDesc(null, null); });
+        }
+
+        [Test]
+        public void Test_GetAttributeStr()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetAttributeStr(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, "", ""); });
+        }
+
+        [Test]
+        public void Test_GetFamilyString()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null, null, "", ""); });
+        }
+
+        [Test]
+        public void Test_GetNickString()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNickString(null); });
+        }
+
+        [Test]
+        public void Test_GetNameString()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameString(null, false, false); });
+        }
+
+        [Test]
+        public void Test_SetMarriedSurname()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetMarriedSurname(null, ""); });
+        }
+
+        [Test]
+        public void Test_GetStoreType()
+        {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetStoreType(null); });
         }
 
@@ -480,7 +499,7 @@ namespace GKCore
         [Test]
         public void Test_TruncateStrings()
         {
-            string test = GKUtils.TruncateStrings(new StringList("sample text for truncate"), 10);
+            string test = GKUtils.TruncateStrings(new GDMLines("sample text for truncate"), 10);
             Assert.AreEqual("sample tex...", test);
         }
 
@@ -506,19 +525,19 @@ namespace GKCore
             GKUtils.ShowFamilyInfo(fContext, famRec, summary);
 
             summary.Clear();
-            GKUtils.ShowGroupInfo(null, null);
+            GKUtils.ShowGroupInfo(null, null, null);
             GDMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GDMGroupRecord;
-            GKUtils.ShowGroupInfo(grpRec, summary);
+            GKUtils.ShowGroupInfo(fContext, grpRec, summary);
 
             summary.Clear();
-            GKUtils.ShowMultimediaInfo(null, null);
+            GKUtils.ShowMultimediaInfo(null, null, null);
             GDMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find("O1") as GDMMultimediaRecord;
-            GKUtils.ShowMultimediaInfo(mmRec, summary);
+            GKUtils.ShowMultimediaInfo(fContext, mmRec, summary);
 
             summary.Clear();
-            GKUtils.ShowNoteInfo(null, null);
+            GKUtils.ShowNoteInfo(null, null, null);
             GDMNoteRecord noteRec = fContext.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
-            GKUtils.ShowNoteInfo(noteRec, summary);
+            GKUtils.ShowNoteInfo(fContext, noteRec, summary);
 
             summary.Clear();
             GKUtils.ShowPersonInfo(fContext, null, null);
@@ -526,34 +545,34 @@ namespace GKCore
             GKUtils.ShowPersonInfo(fContext, indRec, summary);
 
             summary.Clear();
-            GKUtils.ShowSourceInfo(null, null);
+            GKUtils.ShowSourceInfo(null, null, null);
             GDMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
-            GKUtils.ShowSourceInfo(srcRec, summary);
+            GKUtils.ShowSourceInfo(fContext, srcRec, summary);
 
             summary.Clear();
-            GKUtils.ShowRepositoryInfo(null, null);
+            GKUtils.ShowRepositoryInfo(null, null, null);
             GDMRepositoryRecord repRec = fContext.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
-            GKUtils.ShowRepositoryInfo(repRec, summary);
+            GKUtils.ShowRepositoryInfo(fContext, repRec, summary);
 
             summary.Clear();
-            GKUtils.ShowResearchInfo(null, null);
+            GKUtils.ShowResearchInfo(null, null, null);
             GDMResearchRecord resRec = fContext.Tree.XRefIndex_Find("RS1") as GDMResearchRecord;
-            GKUtils.ShowResearchInfo(resRec, summary);
+            GKUtils.ShowResearchInfo(fContext, resRec, summary);
 
             summary.Clear();
-            GKUtils.ShowTaskInfo(null, null);
+            GKUtils.ShowTaskInfo(null, null, null);
             GDMTaskRecord taskRec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
-            GKUtils.ShowTaskInfo(taskRec, summary);
+            GKUtils.ShowTaskInfo(fContext, taskRec, summary);
 
             summary.Clear();
-            GKUtils.ShowCommunicationInfo(null, null);
+            GKUtils.ShowCommunicationInfo(null, null, null);
             GDMCommunicationRecord commRec = fContext.Tree.XRefIndex_Find("CM1") as GDMCommunicationRecord;
-            GKUtils.ShowCommunicationInfo(commRec, summary);
+            GKUtils.ShowCommunicationInfo(fContext, commRec, summary);
 
             summary.Clear();
-            GKUtils.ShowLocationInfo(null, null);
+            GKUtils.ShowLocationInfo(null, null, null);
             GDMLocationRecord locRec = fContext.Tree.XRefIndex_Find("L1") as GDMLocationRecord;
-            GKUtils.ShowLocationInfo(locRec, summary);
+            GKUtils.ShowLocationInfo(fContext, locRec, summary);
         }
 
         [Test]
@@ -596,6 +615,12 @@ namespace GKCore
             Assert.AreEqual("", GKUtils.GetRegionalDate("", "mm/dd/yyyy"));
             Assert.AreEqual("01/30/1980", GKUtils.GetRegionalDate("30.01.1980", "mm/dd/yyyy"));
             Assert.AreEqual("1980/01/30", GKUtils.GetRegionalDate("30.01.1980", "yyyy/mm/dd"));
+        }
+
+        [Test]
+        public void Test_GetRecordContent()
+        {
+            GKUtils.GetRecordContent(null, null, null);
         }
     }
 }

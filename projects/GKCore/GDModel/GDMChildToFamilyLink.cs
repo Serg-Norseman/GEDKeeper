@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -59,26 +59,10 @@ namespace GDModel
             set { fPedigreeLinkageType = value; }
         }
 
-        public GDMFamilyRecord Family
-        {
-            get { return (GDMFamilyRecord)base.Value; }
-            set { base.Value = value; }
-        }
 
-
-        public GDMChildToFamilyLink(GDMObject owner) : base(owner)
+        public GDMChildToFamilyLink()
         {
             SetName(GEDCOMTagType.FAMC);
-        }
-
-        public GDMChildToFamilyLink(GDMObject owner, int tagId, string tagValue) : this(owner)
-        {
-            SetNameValue(tagId, tagValue);
-        }
-
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMChildToFamilyLink(owner, tagId, tagValue);
         }
 
         public override void Assign(GDMTag source)

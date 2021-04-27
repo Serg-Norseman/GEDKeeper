@@ -129,7 +129,7 @@ namespace GKCore.SingleInstance
                 fFileWatcher.EnableRaisingEvents = true;
             } catch (Exception ex) {
                 // Access denied
-                Logger.WriteError("IpcFake.StartServer(): ", ex);
+                Logger.WriteError("IpcFake.StartServer()", ex);
             }
         }
 
@@ -190,7 +190,7 @@ namespace GKCore.SingleInstance
 
                 CleanOldMessages(fProcessedMsgs);
             } catch (Exception ex) {
-                Logger.WriteError("IpcFake.Send(): ", ex);
+                Logger.WriteError("IpcFake.Send()", ex);
             }
         }
 
@@ -222,7 +222,7 @@ namespace GKCore.SingleInstance
 
                 RemoveIpcInfoFile(nId);
             } catch (Exception ex) {
-                Logger.WriteError("IpcFake.SendMessage(): ", ex);
+                Logger.WriteError("IpcFake.SendMessage()", ex);
             }
         }
 
@@ -256,7 +256,7 @@ namespace GKCore.SingleInstance
                     return (string[])xml.Deserialize(ms);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("IpcFake.SafeDeserialize(): ", ex);
+                Logger.WriteError("IpcFake.SafeDeserialize()", ex);
                 return null;
             }
         }
@@ -439,7 +439,7 @@ namespace GKCore.SingleInstance
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("IpcFake.ProcessMessage(): ", ex);
+                Logger.WriteError("IpcFake.ProcessMessage()", ex);
             }
         }
 
@@ -497,7 +497,7 @@ namespace GKCore.SingleInstance
                 string filePath = GetIpcPath() + IpcMsgFilePreID + nId.ToString() + ".tmp";
                 return filePath;
             } catch (Exception ex) {
-                Logger.WriteError("IpcFake.GetIpcFilePath(): ", ex);
+                Logger.WriteError("IpcFake.GetIpcFilePath()", ex);
                 return null;
             }
         }
@@ -516,7 +516,7 @@ namespace GKCore.SingleInstance
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("IpcFake.WriteIpcInfoFile(): ", ex);
+                Logger.WriteError("IpcFake.WriteIpcInfoFile()", ex);
             }
 
             return false;
@@ -547,7 +547,7 @@ namespace GKCore.SingleInstance
                     ipcParam = (IpcParamEx)xml.Deserialize(fs);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("IpcFake.LoadIpcInfoFile(): ", ex);
+                Logger.WriteError("IpcFake.LoadIpcInfoFile()", ex);
             }
 
             RemoveIpcInfoFile(nId);

@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,8 +38,16 @@ namespace GKUI
     /// The main implementation of the platform-specific application's host for
     /// WinForms.
     /// </summary>
+    [Serializable]
     public sealed class WFAppHost : AppHost
     {
+        #if CI_MODE
+        public static bool TEST_MODE = true;
+        #else
+        public static bool TEST_MODE = false;
+        #endif
+
+
         private readonly ApplicationContext fAppContext;
 
         public ApplicationContext AppContext
@@ -52,7 +60,7 @@ namespace GKUI
             SetAppSign("GEDKeeper2");
         }
 
-        public WFAppHost() : base()
+        public WFAppHost()
         {
             fAppContext = new ApplicationContext();
             Application.ApplicationExit += this.OnApplicationExit;
@@ -230,7 +238,7 @@ namespace GKUI
                 InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
                 InputLanguage.CurrentInputLanguage = currentLang;
             } catch (Exception ex) {
-                Logger.WriteError("WinFormsAppHost.SetKeyLayout(): ", ex);
+                Logger.WriteError("WinFormsAppHost.SetKeyLayout()", ex);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKCore.Types;
 using GKUI;
 using NUnit.Framework;
 
@@ -50,6 +51,20 @@ namespace GKCore
             Assert.IsNotNull(AppHost.PathReplacer);
             Assert.IsNotNull(AppHost.NamesTable);
             Assert.IsNotNull(AppHost.Plugins);
+        }
+
+        [Test]
+        public void Test_WidgetInfo()
+        {
+            var instance = new WidgetInfo(null, null);
+            Assert.IsNotNull(instance);
+        }
+
+        [Test]
+        public void Test_Target()
+        {
+            var instance = new Target();
+            Assert.IsNotNull(instance);
         }
     }
 }

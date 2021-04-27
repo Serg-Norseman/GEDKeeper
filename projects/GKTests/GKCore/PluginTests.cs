@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using GKCore.Plugins;
 using GKCore.Types;
 using GKTests.Stubs;
 using GKUI;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore
@@ -41,10 +42,15 @@ namespace GKCore
         [Test]
         public void Test_OrdinaryPlugin()
         {
-            var plugin = new TestPlugin();
+            var plugin = Substitute.For<OrdinaryPlugin>();
+
+            plugin.Category.Returns(PluginCategory.Common);
             Assert.AreEqual(PluginCategory.Common, plugin.Category);
-            Assert.AreEqual(null, plugin.Icon);
-            Assert.AreEqual(null, plugin.LangMan);
+
+            Assert.IsNotNull(plugin.Icon);
+            Assert.IsNotNull(plugin.LangMan);
+
+            plugin.DisplayName.Returns("TestPlugin");
             Assert.AreEqual("TestPlugin", plugin.DisplayName);
 
             plugin.Startup(null);
@@ -56,6 +62,39 @@ namespace GKCore
             plugin.OnLanguageChange();
 
             plugin.Shutdown();
+        }
+
+        [Test]
+        public void Test_WidgetPlugin()
+        {
+            var plugin = Substitute.For<WidgetPlugin>();
+
+            plugin.Category.Returns(PluginCategory.Tool);
+            Assert.AreEqual(PluginCategory.Tool, plugin.Category);
+
+            Assert.IsNotNull(plugin.Icon);
+            Assert.IsNotNull(plugin.LangMan);
+
+            plugin.DisplayName.Returns("WidgetPlugin");
+            Assert.AreEqual("WidgetPlugin", plugin.DisplayName);
+
+            plugin.Startup(null);
+            Assert.AreEqual(null, plugin.Host);
+
+            plugin.OnHostClosing(null);
+            plugin.OnHostActivate();
+            plugin.OnHostDeactivate();
+            plugin.OnLanguageChange();
+
+            plugin.Shutdown();
+
+            plugin.WidgetInit(null);
+            plugin.BaseChanged(null);
+            plugin.BaseClosed(null);
+            plugin.BaseRenamed(null, string.Empty, string.Empty);
+            plugin.SelectedIndexChanged(null);
+            plugin.TabChanged(null);
+            plugin.WidgetEnable();
         }
 
         [Test]

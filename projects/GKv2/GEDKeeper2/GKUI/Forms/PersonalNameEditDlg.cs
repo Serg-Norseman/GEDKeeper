@@ -20,14 +20,12 @@
 
 using System;
 using System.Windows.Forms;
-using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKCore.Options;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -35,6 +33,12 @@ namespace GKUI.Forms
     public partial class PersonalNameEditDlg: EditorDialog, IPersonalNameEditDlg
     {
         private readonly PersonalNameEditDlgController fController;
+
+        public GDMIndividualRecord Individual
+        {
+            get { return fController.Individual; }
+            set { fController.Individual = value; }
+        }
 
         public GDMPersonalName PersonalName
         {
@@ -157,6 +161,11 @@ namespace GKUI.Forms
         {
             base.OnFormClosing(e);
             e.Cancel = fController.CheckChangesPersistence();
+        }
+
+        private void cmbLanguage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fController.UpdateLanguage();
         }
     }
 }

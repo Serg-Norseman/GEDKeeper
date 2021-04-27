@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,10 +33,12 @@ namespace GKCore
         public const string APP_TITLE = "GEDKeeper2";
         public const string APP_TITLE_NEW = "GEDKeeper";
 
+        public const string APP_COPYRIGHT = "Copyright © 2009-2020 by Sergey V. Zhdanovskih";
+
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
         public const int APP_FORMAT_DEFVER = 39; // don't change it!
-        public const int APP_FORMAT_CURVER = 41;
+        public const int APP_FORMAT_CURVER = 42; // v2.17.0
 
         public const string GEDCOM_EXT = "ged";
         public const string GEDCOM_SEC_EXT = "geds";
@@ -44,7 +46,8 @@ namespace GKCore
 
         public const int NOTE_NAME_MAX_LENGTH = 64;
 
-        public const string GAPI_KEY = "AIzaSyCebJC5BpniJtRaJCSEl3tXdFy3KhbV5hk";
+        public const string GAPI_KEY = "AIzaSyCyPx_u1PhHaN2d3ld4J8hsgASF5lOdpGY";
+        public const string YAPI_KEY = "a5653896-1335-477f-aac7-10a2ba9e52c5";
 
         public static readonly int HighlightUnparentedColor = 0xFFCACA;
         public static readonly int HighlightUnmarriedColor = 0xFFFFA1;
@@ -382,7 +385,7 @@ namespace GKCore
                 LSID.LSID_MT_12,
                 LSID.LSID_MT_13,
                 LSID.LSID_MT_14
-                    //LSID.LSID_MT_15 <Unknown removed to first position>
+                //LSID.LSID_MT_15 <Unknown removed to first position>
             };
 
 
@@ -391,7 +394,8 @@ namespace GKCore
                 new StoreTypeRec(LSID.LSID_STRef, ""),
                 new StoreTypeRec(LSID.LSID_STStg, "stg:"),
                 new StoreTypeRec(LSID.LSID_STArc, "arc:"),
-                new StoreTypeRec(LSID.LSID_STRel, "rel:")
+                new StoreTypeRec(LSID.LSID_STRel, "rel:"),
+                new StoreTypeRec(LSID.LSID_STWeb, "http")
             };
 
 
@@ -436,7 +440,7 @@ namespace GKCore
             DateKinds = array5;
 
 
-            EventStruct[] array6 = new EventStruct[41];
+            EventStruct[] array6 = new EventStruct[49];
             array6[ 0] = new EventStruct(LSID.LSID_Event, GEDCOMTagName.EVEN, PersonEventKind.ekEvent);
             array6[ 1] = new EventStruct(LSID.LSID_Birth, GEDCOMTagName.BIRT, PersonEventKind.ekEvent);
             array6[ 2] = new EventStruct(LSID.LSID_Adoption, GEDCOMTagName.ADOP, PersonEventKind.ekEvent);
@@ -481,6 +485,15 @@ namespace GKCore
             array6[38] = new EventStruct(LSID.LSID_EyesColor, GEDCOMTagName._EYES, PersonEventKind.ekFact);
             array6[39] = new EventStruct(LSID.LSID_MDNAHaplogroup, GEDCOMTagName._MDNA, PersonEventKind.ekFact);
             array6[40] = new EventStruct(LSID.LSID_YDNAHaplogroup, GEDCOMTagName._YDNA, PersonEventKind.ekFact);
+
+            array6[41] = new EventStruct(LSID.LSID_Baptism, GEDCOMTagName.BAPM, PersonEventKind.ekEvent);
+            array6[42] = new EventStruct(LSID.LSID_BarMitzvah, GEDCOMTagName.BARM, PersonEventKind.ekEvent);
+            array6[43] = new EventStruct(LSID.LSID_BatMitzvah, GEDCOMTagName.BASM, PersonEventKind.ekEvent);
+            array6[44] = new EventStruct(LSID.LSID_Blessing, GEDCOMTagName.BLES, PersonEventKind.ekEvent);
+            array6[45] = new EventStruct(LSID.LSID_AdultChristening, GEDCOMTagName.CHRA, PersonEventKind.ekEvent);
+            array6[46] = new EventStruct(LSID.LSID_Confirmation, GEDCOMTagName.CONF, PersonEventKind.ekEvent);
+            array6[47] = new EventStruct(LSID.LSID_FirstCommunion, GEDCOMTagName.FCOM, PersonEventKind.ekEvent);
+            array6[48] = new EventStruct(LSID.LSID_Ordination, GEDCOMTagName.ORDN, PersonEventKind.ekEvent);
             PersonEvents = array6;
 
 
@@ -601,7 +614,6 @@ namespace GKCore
             };
 
             BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";
-            //BloodGroups = new string[] { "", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-" };
         }
     }
 }

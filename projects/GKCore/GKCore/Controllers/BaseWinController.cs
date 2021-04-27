@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 #define GEDML_SUPPORT
+#define FAMX_SUPPORT
 
 using System;
 using System.Collections.Generic;
@@ -130,8 +131,13 @@ namespace GKCore.Controllers
             string homePath = AppHost.Instance.GetUserFilesPath("");
 
             string filters = LangMan.LS(LSID.LSID_GEDCOMFilter);
+
             #if GEDML_SUPPORT
             filters += "|" + LangMan.LS(LSID.LSID_GedMLFilter);
+            #endif
+
+            #if FAMX_SUPPORT
+            filters += "|" + "Family.Show files (*.familyx)|*.familyx";
             #endif
 
             string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
@@ -308,7 +314,7 @@ namespace GKCore.Controllers
                     GKUtils.GetRecordContent(fContext, record, hyperView.Lines);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.ShowRecordInfo(): ", ex);
+                Logger.WriteError("BaseWinSDI.ShowRecordInfo()", ex);
             }
         }
 
@@ -330,7 +336,7 @@ namespace GKCore.Controllers
 
             if (linkName.StartsWith("view_")) {
                 string xref = linkName.Remove(0, 5);
-                GDMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find(xref) as GDMMultimediaRecord;
+                var mmRec = fContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
                 if (mmRec != null) {
                     fView.ShowMedia(mmRec, false);
                 }
@@ -433,7 +439,7 @@ namespace GKCore.Controllers
         public IListManager GetRecordsListManByType(GDMRecordType recType)
         {
             IListViewEx rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : (IListManager)rView.ListMan;
+            return (rView == null) ? null : rView.ListMan;
         }
 
         public GDMRecord GetSelectedRecordEx()
@@ -557,25 +563,19 @@ namespace GKCore.Controllers
 
         public void NavNext()
         {
-            try {
-                GDMRecord rec = fNavman.Next() as GDMRecord;
-                if (rec != null) {
-                    fView.SelectRecordByXRef(rec.XRef);
-                    AppHost.Instance.UpdateControls(false);
-                }
-            } finally {
+            GDMRecord rec = fNavman.Next();
+            if (rec != null) {
+                fView.SelectRecordByXRef(rec.XRef);
+                AppHost.Instance.UpdateControls(false);
             }
         }
 
         public void NavPrev()
         {
-            try {
-                GDMRecord rec = fNavman.Back() as GDMRecord;
-                if (rec != null) {
-                    fView.SelectRecordByXRef(rec.XRef);
-                    AppHost.Instance.UpdateControls(false);
-                }
-            } finally {
+            GDMRecord rec = fNavman.Back();
+            if (rec != null) {
+                fView.SelectRecordByXRef(rec.XRef);
+                AppHost.Instance.UpdateControls(false);
             }
         }
 
@@ -608,7 +608,9 @@ namespace GKCore.Controllers
         public IList<ISearchResult> FindAll(string searchPattern)
         {
             GDMRecordType rt = GetSelectedRecordType();
-            IList<ISearchResult> result = fContext.FindAll(rt, searchPattern);
+            IListManager listMan = GetRecordsListManByType(rt);
+            IList<ISearchResult> result = listMan.FindAll(searchPattern);
+            //IList<ISearchResult> result = fContext.FindAll(rt, searchPattern);
             return result;
         }
 
@@ -792,11 +794,13 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ShowRecMerge()
+        public void ShowRecMerge(GDMRecord rec1, GDMRecord rec2)
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IRecMergeDlg>(fView)) {
+                    dlg.MergeCtl.SetRec1(rec1);
+                    dlg.MergeCtl.SetRec2(rec2);
                     AppHost.Instance.ShowModalX(dlg, false);
                 }
             } finally {
@@ -894,7 +898,7 @@ namespace GKCore.Controllers
                 return;
             }
 
-            if (BaseController.DetectCycle(selPerson)) return;
+            if (BaseController.DetectCycle(fContext.Tree, selPerson)) return;
 
             using (var p = new PedigreeExporter(fView, selPerson)) {
                 p.Options = AppHost.Options;
@@ -908,7 +912,7 @@ namespace GKCore.Controllers
             var selPerson = GetSelectedPerson();
             if (selPerson == null) return;
 
-            if (BaseController.DetectCycle(selPerson)) return;
+            if (BaseController.DetectCycle(fContext.Tree, selPerson)) return;
 
             if (TreeChartModel.CheckTreeChartSize(fContext.Tree, selPerson, chartKind)) {
                 var fmChart = AppHost.Container.Resolve<ITreeChartWin>(fView, selPerson);
@@ -922,7 +926,7 @@ namespace GKCore.Controllers
             var selPerson = GetSelectedPerson();
             if (selPerson == null) return;
 
-            if (BaseController.DetectCycle(selPerson)) return;
+            if (BaseController.DetectCycle(fContext.Tree, selPerson)) return;
 
             var fmChart = AppHost.Container.Resolve<ICircleChartWin>(fView, selPerson, chartKind);
             AppHost.Instance.ShowWindow(fmChart);
@@ -971,18 +975,12 @@ namespace GKCore.Controllers
                         continue;
                     }
 
-                    IMenuItem mi;
-                    if (plugin.Category == PluginCategory.Report) {
-                        mi = fView.ReportsItem.AddItem(plugin.DisplayName, plugin, plugin.Icon, Plugin_Click);
-                    } else {
-                        mi = fView.PluginsItem.AddItem(plugin.DisplayName, plugin, plugin.Icon, Plugin_Click);
-                    }
+                    IMenuItem ownerItem = (plugin.Category == PluginCategory.Report) ? fView.ReportsItem : fView.PluginsItem;
+                    IMenuItem mi = ownerItem.AddItem(plugin.DisplayName, plugin, plugin.Icon, Plugin_Click);
 
                     var widget = plugin as IWidget;
                     if (widget != null) {
-                        WidgetInfo widInfo = new WidgetInfo();
-                        widInfo.Widget = widget;
-                        widInfo.MenuItem = mi;
+                        var widInfo = new WidgetInfo(widget, mi);
                         AppHost.Instance.ActiveWidgets.Add(widInfo);
                         widget.WidgetInit(AppHost.Instance);
                     }
@@ -991,7 +989,7 @@ namespace GKCore.Controllers
                 fView.ReportsItem.Enabled = (fView.ReportsItem.ItemsCount > 0);
                 fView.PluginsItem.Enabled = (fView.PluginsItem.ItemsCount > 0);
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinController.UpdatePluginsItems(): ", ex);
+                Logger.WriteError("BaseWinController.UpdatePluginsItems()", ex);
             }
         }
 

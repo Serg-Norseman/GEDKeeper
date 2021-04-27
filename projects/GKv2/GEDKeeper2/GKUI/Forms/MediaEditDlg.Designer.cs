@@ -144,6 +144,7 @@
             this.cmbStoreType.Name = "cmbStoreType";
             this.cmbStoreType.Size = new System.Drawing.Size(281, 25);
             this.cmbStoreType.TabIndex = 8;
+            this.cmbStoreType.SelectedIndexChanged += new System.EventHandler(cmbStoreType_SelectedIndexChanged);
             // 
             // txtFile
             // 

@@ -64,7 +64,7 @@ namespace GKCore.Controllers
                     return false;
                 }
             } catch (Exception ex) {
-                Logger.WriteError("NoteEditDlgController.Accept(): ", ex);
+                Logger.WriteError("NoteEditDlgController.Accept()", ex);
                 return false;
             }
         }

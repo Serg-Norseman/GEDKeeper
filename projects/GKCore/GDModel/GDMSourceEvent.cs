@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMSourceEvent : GDMTag
+    public sealed class GDMSourceEvent : GDMValueTag
     {
         private GDMDatePeriod fDate;
         private GDMPlace fPlace;
@@ -39,12 +39,20 @@ namespace GDModel
         }
 
 
-        public GDMSourceEvent(GDMObject owner) : base(owner)
+        public GDMSourceEvent()
         {
             SetName(GEDCOMTagType.EVEN);
 
-            fDate = new GDMDatePeriod(this);
-            fPlace = new GDMPlace(this);
+            fDate = new GDMDatePeriod();
+            fPlace = new GDMPlace();
+        }
+
+        internal override void TrimExcess()
+        {
+            base.TrimExcess();
+
+            fDate.TrimExcess();
+            fPlace.TrimExcess();
         }
 
         public override void Clear()

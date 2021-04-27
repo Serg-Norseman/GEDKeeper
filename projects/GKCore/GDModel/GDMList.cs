@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,7 +29,7 @@ namespace GDModel
     {
         #region ListEnumerator
 
-        private struct GEDCOMListEnumerator : IGEDCOMListEnumerator<T>
+        private struct GEDCOMListEnumerator : IGDMListEnumerator<T>
         {
             private readonly GDMList<T> fOwnList;
             private int fIndex;
@@ -78,25 +78,28 @@ namespace GDModel
         #endregion
 
 
-        private List<T> fDataList; // lazy implementation
+        /// <summary>
+        /// Lazy initialization. Without this, the memory consumption when loading the tree increases to 145%.
+        /// </summary>
+        private List<T> fDataList;
 
 
         public int Count
         {
             get {
-                return ((fDataList == null) ? 0 : fDataList.Count);
+                return (fDataList == null) ? 0 : fDataList.Count;
             }
         }
 
         public T this[int index]
         {
             get {
-                return ((fDataList == null) ? default(T) : fDataList[index]);
+                return (fDataList == null) ? default(T) : fDataList[index];
             }
         }
         
 
-        public GDMList(GDMObject owner)
+        public GDMList()
         {
             fDataList = null;
         }
@@ -114,7 +117,7 @@ namespace GDModel
             return fDataList;
         }
 
-        public IGEDCOMListEnumerator<T> GetEnumerator()
+        public IGDMListEnumerator<T> GetEnumerator()
         {
             return new GEDCOMListEnumerator(this);
         }
@@ -237,6 +240,20 @@ namespace GDModel
         {
             if (fDataList != null) {
                 ListTimSort<T>.Sort(fDataList, comparer);
+            }
+        }
+
+        internal void TrimExcess()
+        {
+            if (fDataList != null) {
+                fDataList.TrimExcess();
+
+                for (int i = 0, num = fDataList.Count; i < num; i++) {
+                    var item = fDataList[i];
+                    if (item != null) {
+                        item.TrimExcess();
+                    }
+                }
             }
         }
     }

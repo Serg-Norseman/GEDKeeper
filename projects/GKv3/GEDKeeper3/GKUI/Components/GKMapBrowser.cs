@@ -163,7 +163,7 @@ namespace GKUI.Components
 
                 LoadHtml(MapContent);
             } catch (Exception ex) {
-                Logger.WriteError("GKMapBrowser.InitMap(): ", ex);
+                Logger.WriteError("GKMapBrowser.InitMap()", ex);
             }
         }
 
@@ -276,7 +276,7 @@ namespace GKUI.Components
             try {
                 ExecuteScript(script);
             } catch (Exception ex) {
-                Logger.WriteError("GKMapBrowser.gm_ExecScript(): ", ex);
+                Logger.WriteError("GKMapBrowser.gm_ExecScript()", ex);
             }
         }
 

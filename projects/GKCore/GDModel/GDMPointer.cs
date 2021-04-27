@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,26 +32,7 @@ namespace GDModel
             get { return (!string.IsNullOrEmpty(fXRef)); }
         }
 
-        // TODO: need to do a protection test on the proper records (with XRef)
-        public GDMRecord Value
-        {
-            get {
-                GDMTree tree = GetTree();
-                return (tree == null) ? null : tree.XRefIndex_Find(XRef);
-            }
-            set {
-                fXRef = string.Empty;
-                if (value == null) return;
-
-                string xrf = value.XRef;
-                if (string.IsNullOrEmpty(xrf))
-                {
-                    xrf = value.NewXRef();
-                }
-                XRef = xrf;
-            }
-        }
-
+        // TODO: how to be sure that the record will have the correct XRef in the required places?
         public string XRef
         {
             get { return fXRef; }
@@ -59,17 +40,12 @@ namespace GDModel
         }
 
 
-        public new static GDMTag Create(GDMObject owner, int tagId, string tagValue)
-        {
-            return new GDMPointer(owner, tagId, tagValue);
-        }
-
-        public GDMPointer(GDMObject owner) : base(owner)
+        public GDMPointer()
         {
             fXRef = string.Empty;
         }
 
-        public GDMPointer(GDMObject owner, int tagId, string tagValue) : this(owner)
+        public GDMPointer(int tagId, string tagValue) : this()
         {
             SetNameValue(tagId, tagValue);
         }
@@ -92,13 +68,16 @@ namespace GDModel
 
         public override string ParseString(string strValue)
         {
+            // here XRef is a pure value without delimiters
             return GEDCOMUtils.ParseXRefPointer(strValue, out fXRef);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            XRef = map.FindNewXRef(XRef);
+            if (map != null) {
+                XRef = map.FindNewXRef(XRef);
+            }
         }
     }
 }

@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-
 namespace GDModel.Providers.GEDCOM
 {
     public enum GEDCOMFormat
@@ -30,6 +28,7 @@ namespace GDModel.Providers.GEDCOM
 
         gf_Ahnenblatt,
         gf_AncestQuest,
+        gf_Ancestry,
         gf_AGES,
         gf_ALTREE,
         gf_EasyTree,
@@ -49,7 +48,8 @@ namespace GDModel.Providers.GEDCOM
         gf_PAF,
         gf_Reunion,
         gf_RootsMagic,
+        gf_WikiTree,
 
-        gf_Last = gf_RootsMagic
+        gf_Last = gf_WikiTree
     }
 }

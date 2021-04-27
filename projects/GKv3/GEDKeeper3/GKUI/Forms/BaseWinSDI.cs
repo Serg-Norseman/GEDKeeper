@@ -103,6 +103,9 @@ namespace GKUI.Forms
             //tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
             tbSendMail.Image = UIHelper.LoadResourceImage("Resources.btn_mail.gif");
 
+            //tbDocPrint.Visible = false;
+            //tbDocPreview.Visible = false;
+
             AppHost.Instance.LoadWindow(this);
 
             fController = new BaseWinController(this);
@@ -192,7 +195,7 @@ namespace GKUI.Forms
                 UpdateMRU();
                 UpdateControls(false);
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.Form_Load(): ", ex);
+                Logger.WriteError("BaseWinSDI.Form_Load()", ex);
             }
         }
 
@@ -209,7 +212,6 @@ namespace GKUI.Forms
         private void Form_Closed(object sender, EventArgs e)
         {
             AppHost.Instance.CloseWindow(this);
-            // Attention: Does not receive control when executing in Mono
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
@@ -421,15 +423,9 @@ namespace GKUI.Forms
                 throw new ArgumentNullException("mediaRec");
 
             GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
-            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
-            if (mmKind == MultimediaKind.mkNone) {
-                return;
-            }
+            if (fileRef == null) return;
 
-            bool externalViewer = !GlobalOptions.Instance.EmbeddedMediaPlayer &&
-                ((mmKind == MultimediaKind.mkAudio || mmKind == MultimediaKind.mkVideo));
-
-            if (externalViewer) {
+            if (!GKUtils.UseEmbeddedViewer(fileRef.MultimediaFormat)) {
                 string targetFile = fContext.MediaLoad(fileRef);
                 GKUtils.LoadExtFile(targetFile);
             } else {
@@ -449,7 +445,7 @@ namespace GKUI.Forms
                     }
                 } catch (Exception ex) {
                     if (mediaViewer != null) mediaViewer.Dispose();
-                    Logger.WriteError("BaseWinSDI.ShowMedia(): ", ex);
+                    Logger.WriteError("BaseWinSDI.ShowMedia()", ex);
                 }
             }
         }
@@ -731,7 +727,7 @@ namespace GKUI.Forms
                     AppHost.Instance.EndLoading();
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("BaseWinSDI.Form_DragDrop(): " + ex.Message);
+                Logger.WriteError("BaseWinSDI.Form_DragDrop()", ex);
             }
         }*/
 
@@ -776,7 +772,7 @@ namespace GKUI.Forms
                     MenuMRU.Items.Add(tsmi);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.UpdateMRU(): ", ex);
+                Logger.WriteError("BaseWinSDI.UpdateMRU()", ex);
             }
         }
 
@@ -788,7 +784,7 @@ namespace GKUI.Forms
                 tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
                 tbNext.Enabled = (workWin != null && workWin.NavCanForward());
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.UpdateNavControls(): ", ex);
+                Logger.WriteError("BaseWinSDI.UpdateNavControls()", ex);
             }
         }
 
@@ -852,7 +848,7 @@ namespace GKUI.Forms
                     workWin.UpdateControls();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.UpdateControls(): ", ex);
+                Logger.WriteError("BaseWinSDI.UpdateControls()", ex);
             }
         }
 
@@ -1018,17 +1014,17 @@ namespace GKUI.Forms
 
         private void miPedigreeAscend_Click(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkAscend);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Ascend);
         }
 
         private void miPedigree_dAbovilleClick(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_dAboville);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_dAboville);
         }
 
         private void miPedigree_KonovalovClick(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_Konovalov);
+            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_Konovalov);
         }
 
         private void miTreeAncestors_Click(object sender, EventArgs e)

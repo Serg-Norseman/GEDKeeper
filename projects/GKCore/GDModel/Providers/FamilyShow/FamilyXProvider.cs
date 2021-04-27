@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,9 +21,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 
@@ -40,6 +41,14 @@ namespace GDModel.Providers.FamilyShow
     {
         private const string OPCContentFileName = "content.xml";
 
+
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
+        static FamilyXProvider()
+        {
+            // Static initialization of the GEDCOMProvider is needed, 
+            // otherwise the standard tag identifiers are out of sync
+            var formats = GEDCOMProvider.GEDCOMFormats;
+        }
 
         public FamilyXProvider(GDMTree tree) : base(tree)
         {
@@ -70,22 +79,331 @@ namespace GDModel.Providers.FamilyShow
                     OPCUtility.CopyStream(documentPart.GetStream(), memStream);
                     memStream.Position = 0;
 
-                    XmlReaderSettings settings = new XmlReaderSettings();
-                    settings.DtdProcessing = DtdProcessing.Ignore;
-                    using (XmlReader xr = XmlReader.Create(memStream, settings)) {
-                    }
+                    LoadFromReader(memStream, null, null);
                 }
             }
 #endif
         }
 
+        private enum FXTag
+        {
+            Unknown,
+            Gender,
+            Restriction,
+            FirstName,
+            LastName,
+            Suffix,
+            IsLiving,
+            BirthDate,
+            BirthPlace,
+            DeathDate,
+            DeathPlace,
+            Note,
+            Relationship,
+            SpouseLink,
+            ChildLink
+        }
+
+        private enum RelationshipType { None, Spouse, Child }
+
         protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
         {
-            /*fTree.State = GDMTreeState.osLoading;
+            fTree.State = GDMTreeState.osLoading;
             try {
+                ProgressEventHandler progressHandler = fTree.OnProgress;
+
+                long fileSize = fileStream.Length;
+                int progress = 0;
+
+                GDMIndividualRecord lastIndividual = null;
+                FXTag lastTagType = FXTag.Unknown;
+                RelationshipType relationshipType = RelationshipType.None;
+                var families = new List<FamilyRec>();
+                var children = new List<ChildRec>();
+                var indiIdents = new Dictionary<string, GDMIndividualRecord>();
+
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.DtdProcessing = DtdProcessing.Ignore;
+                using (XmlReader xr = XmlReader.Create(fileStream, settings)) {
+                    while (xr.Read()) {
+                        if (xr.NodeType == XmlNodeType.Element && !xr.IsEmptyElement) {
+                            string nodeType = xr.Name;
+                            if (nodeType == "Person") {
+                                lastIndividual = fTree.CreateIndividual();
+                                var persName = new GDMPersonalName();
+                                lastIndividual.AddPersonalName(persName);
+
+                                // add an empty birth event
+                                AddEvent(lastIndividual, GEDCOMTagName.BIRT);
+
+                                lastIndividual.UID = xr.GetAttribute("Id");
+                                indiIdents.Add(lastIndividual.UID, lastIndividual);
+                            } else if (nodeType == "Gender") {
+                                lastTagType = FXTag.Gender;
+                            } else if (nodeType == "Restriction") {
+                                lastTagType = FXTag.Restriction;
+                            } else if (nodeType == "FirstName") {
+                                lastTagType = FXTag.FirstName;
+                            } else if (nodeType == "LastName") {
+                                lastTagType = FXTag.LastName;
+                            } else if (nodeType == "Suffix") {
+                                lastTagType = FXTag.Suffix;
+                            } else if (nodeType == "IsLiving") {
+                                lastTagType = FXTag.IsLiving;
+                            } else if (nodeType == "Note") {
+                                lastTagType = FXTag.Note;
+                            } else if (nodeType == "BirthDate") {
+                                lastTagType = FXTag.BirthDate;
+                            } else if (nodeType == "BirthPlace") {
+                                lastTagType = FXTag.BirthPlace;
+                            } else if (nodeType == "DeathDate") {
+                                lastTagType = FXTag.DeathDate;
+                            } else if (nodeType == "DeathPlace") {
+                                lastTagType = FXTag.DeathPlace;
+                            } else if (nodeType == "RelationshipType") {
+                                lastTagType = FXTag.Relationship;
+                            } else if (nodeType == "PersonId") {
+                                switch (relationshipType) {
+                                    case RelationshipType.Spouse:
+                                        lastTagType = FXTag.SpouseLink;
+                                        break;
+                                    case RelationshipType.Child:
+                                        lastTagType = FXTag.ChildLink;
+                                        break;
+                                    default:
+                                        lastTagType = FXTag.Unknown;
+                                        break;
+                                }
+                                relationshipType = RelationshipType.None;
+                            }
+                        } else if (xr.NodeType == XmlNodeType.Text) {
+                            string nodeValue = xr.Value;
+                            if (!string.IsNullOrEmpty(nodeValue)) {
+                                switch (lastTagType) {
+                                    case FXTag.Gender:
+                                        if (nodeValue == "Male") {
+                                            lastIndividual.Sex = GDMSex.svMale;
+                                        } else if (nodeValue == "Female") {
+                                            lastIndividual.Sex = GDMSex.svFemale;
+                                        }
+                                        break;
+
+                                    case FXTag.Restriction:
+                                        // FIXME: parse from nodeValue
+                                        lastIndividual.Restriction = GDMRestriction.rnNone;
+                                        break;
+
+                                    case FXTag.FirstName:
+                                        lastIndividual.PersonalNames[0].FirstPart = nodeValue;
+                                        break;
+
+                                    case FXTag.LastName:
+                                        lastIndividual.PersonalNames[0].Surname = nodeValue;
+                                        break;
+
+                                    case FXTag.Suffix:
+                                        lastIndividual.PersonalNames[0].LastPart = nodeValue;
+                                        break;
+
+                                    case FXTag.IsLiving:
+                                        bool isLiving = string.Equals(nodeValue, "true", StringComparison.InvariantCultureIgnoreCase);
+                                        if (!isLiving) AddEvent(lastIndividual, GEDCOMTagName.DEAT);
+                                        break;
+
+                                    case FXTag.BirthDate:
+                                    case FXTag.BirthPlace:
+                                        var birthEvent = lastIndividual.FindEvent("BIRT");
+                                        if (lastTagType == FXTag.BirthDate) {
+                                            SetEventDate(birthEvent, nodeValue);
+                                        } else {
+                                            birthEvent.Place.StringValue = nodeValue;
+                                        }
+                                        break;
+
+                                    case FXTag.DeathDate:
+                                    case FXTag.DeathPlace:
+                                        var deathEvent = lastIndividual.FindEvent("DEAT");
+                                        // IsLiving may be wrong
+                                        if (deathEvent == null) {
+                                            deathEvent = AddEvent(lastIndividual, GEDCOMTagName.DEAT);
+                                        }
+                                        if (lastTagType == FXTag.DeathDate) {
+                                            SetEventDate(deathEvent, nodeValue);
+                                        } else {
+                                            deathEvent.Place.StringValue = nodeValue;
+                                        }
+                                        break;
+
+                                    case FXTag.Note:
+                                        AddNote(lastIndividual, nodeValue);
+                                        break;
+
+                                    case FXTag.Relationship:
+                                        if (nodeValue == "Spouse") {
+                                            relationshipType = RelationshipType.Spouse;
+                                        } else if (nodeValue == "Child") {
+                                            relationshipType = RelationshipType.Child;
+                                        }
+                                        break;
+
+                                    case FXTag.SpouseLink:
+                                        ProcessSpouse(families, lastIndividual, nodeValue);
+                                        break;
+
+                                    case FXTag.ChildLink:
+                                        ProcessChild(children, lastIndividual, nodeValue);
+                                        break;
+                                }
+                                lastTagType = FXTag.Unknown;
+                            }
+                        }
+
+                        if (progressHandler != null) {
+                            int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
+                            if (progress != newProgress) {
+                                progress = newProgress;
+                                progressHandler(fTree, progress);
+                            }
+                        }
+                    }
+                }
+
+                foreach (var fam in families) {
+                    GDMIndividualRecord husbRec;
+                    indiIdents.TryGetValue(fam.HusbandId, out husbRec);
+
+                    GDMIndividualRecord wifeRec;
+                    indiIdents.TryGetValue(fam.WifeId, out wifeRec);
+
+                    GDMFamilyRecord famRec = fTree.CreateFamily();
+                    famRec.AddSpouse(husbRec);
+                    famRec.AddSpouse(wifeRec);
+                }
+
+                foreach (var child in children) {
+                    GDMIndividualRecord fathRec;
+                    indiIdents.TryGetValue(child.FatherId, out fathRec);
+
+                    GDMIndividualRecord mothRec;
+                    indiIdents.TryGetValue(child.MotherId, out mothRec);
+
+                    GDMIndividualRecord childRec;
+                    indiIdents.TryGetValue(child.ChildId, out childRec);
+
+                    GDMFamilyRecord famRec = GetParentsFamily(fathRec, mothRec);
+                    famRec.AddChild(childRec);
+                }
             } finally {
                 fTree.State = GDMTreeState.osReady;
-            }*/
+            }
+        }
+
+        private GDMFamilyRecord GetParentsFamily(GDMIndividualRecord father, GDMIndividualRecord mother)
+        {
+            GDMFamilyRecord result = null;
+
+            string fatherXRef = (father == null) ? string.Empty : father.XRef;
+            string motherXRef = (mother == null) ? string.Empty : mother.XRef;
+
+            var famEnum = fTree.GetEnumerator(GDMRecordType.rtFamily);
+            GDMRecord record;
+            while (famEnum.MoveNext(out record)) {
+                var famRec = record as GDMFamilyRecord;
+                if (famRec.Husband.XRef == fatherXRef && famRec.Wife.XRef == motherXRef) {
+                    result = famRec;
+                    break;
+                }
+            }
+
+            if (result == null) {
+                result = fTree.CreateFamily();
+                result.AddSpouse(father);
+                result.AddSpouse(mother);
+            }
+
+            return result;
+        }
+
+        private void ProcessSpouse(ICollection<FamilyRec> families, GDMIndividualRecord individual, string spouseId)
+        {
+            string husbId, wifeId;
+            if (individual.Sex == GDMSex.svMale) {
+                husbId = individual.UID;
+                wifeId = spouseId;
+            } else {
+                husbId = spouseId;
+                wifeId = individual.UID;
+            }
+
+            var famRec = families.SingleOrDefault(f => (f.HusbandId == husbId && f.WifeId == wifeId));
+            if (famRec == null) {
+                families.Add(new FamilyRec(husbId, wifeId));
+            }
+        }
+
+        private void ProcessChild(ICollection<ChildRec> children, GDMIndividualRecord individual, string childId)
+        {
+            var childRec = children.SingleOrDefault(f => (f.ChildId == childId));
+            if (childRec == null) {
+                childRec = new ChildRec(childId);
+                children.Add(childRec);
+            }
+
+            if (individual.Sex == GDMSex.svMale) {
+                childRec.FatherId = individual.UID;
+            } else {
+                childRec.MotherId = individual.UID;
+            }
+        }
+
+        private void SetEventDate(GDMCustomEvent evt, string dateValue)
+        {
+            try {
+                evt.Date.SetDateTime(DateTime.ParseExact(dateValue, "yyyy-MM-ddTHH:mm:ss", null));
+            } catch (Exception ex) {
+                Logger.WriteError("FamilyXProvider.SetEventDate("+dateValue+")", ex);
+            }
+        }
+
+        private GDMCustomEvent AddEvent(GDMRecordWithEvents indiRec, string eventName)
+        {
+            GDMCustomEvent result = new GDMIndividualEvent();
+            result.SetName(eventName);
+            indiRec.AddEvent(result);
+            return result;
+        }
+
+        private void AddNote(GDMRecord indiRec, string noteText)
+        {
+            var noteRec = fTree.CreateNote();
+            noteRec.Lines.Text = noteText;
+            var notes = new GDMNotes();
+            notes.XRef = noteRec.XRef;
+            indiRec.Notes.Add(notes);
+        }
+
+        private class FamilyRec
+        {
+            public string HusbandId;
+            public string WifeId;
+
+            public FamilyRec(string husbId, string wifeId)
+            {
+                HusbandId = husbId;
+                WifeId = wifeId;
+            }
+        }
+
+        private class ChildRec
+        {
+            public string FatherId;
+            public string MotherId;
+            public string ChildId;
+
+            public ChildRec(string childId)
+            {
+                ChildId = childId;
+            }
         }
     }
 }

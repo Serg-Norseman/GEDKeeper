@@ -26,8 +26,6 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Forms;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -45,10 +43,8 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            base.Setup();
-
             fBase = new BaseWindowStub();
-            fUserRef = new GDMUserReference(null);
+            fUserRef = new GDMUserReference();
 
             fDialog = new UserRefEditDlg(fBase);
             fDialog.UserRef = fUserRef;

@@ -20,10 +20,6 @@
 
 using BSLib;
 using BSLib.Design.Graphics;
-using GKCore;
-using GKCore.Charts;
-using GKCore.Interfaces;
-
 using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts

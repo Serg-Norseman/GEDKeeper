@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -115,37 +115,36 @@ namespace GKCore.Controllers
             UpdateChart();
         }
 
+        // TODO: refactor
         private void ParentAdd(GDMSex needSex)
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            bool needParent = false;
-            bool familyExist = p.Rec.GetParentsFamily() != null;
+            bool needParent;
+
+            GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(p.Rec);
+            bool familyExist = fam != null;
 
             if (familyExist) {
-                GDMIndividualRecord mother, father;
-                GDMFamilyRecord fam = p.Rec.GetParentsFamily();
-                if (fam == null) {
-                    father = null;
-                    mother = null;
-                } else {
-                    father = fam.Husband.Individual;
-                    mother = fam.Wife.Individual;
-                }
+                GDMIndividualRecord father, mother;
+                fBase.Context.Tree.GetSpouses(fam, out father, out mother);
 
                 needParent = (father == null && needSex == GDMSex.svMale) ||
-                    (mother == null && needSex == GDMSex.svFemale);
+                             (mother == null && needSex == GDMSex.svFemale);
+            } else {
+                needParent = true;
             }
 
-            if (!familyExist || needParent) {
-                GDMIndividualRecord child = p.Rec;
-                GDMFamilyRecord fam = (familyExist) ? p.Rec.GetParentsFamily() : fBase.Context.Tree.CreateFamily();
-                GDMIndividualRecord parent = fBase.Context.SelectPerson(null, TargetMode.tmParent, needSex);
+            if (needParent) {
+                GDMIndividualRecord parent = fBase.Context.SelectPerson(p.Rec, TargetMode.tmChild, needSex);
                 if (parent != null) {
+                    if (!familyExist) {
+                        fam = fBase.Context.Tree.CreateFamily();
+                        fam.AddChild(p.Rec);
+                    }
+
                     fam.AddSpouse(parent);
-                    if (!familyExist)
-                        fam.AddChild(child);
                     
                     UpdateChart();
                 }
@@ -213,15 +212,8 @@ namespace GKCore.Controllers
 
         public void RequestInfo(TreeChartPerson person)
         {
-            if (person == null) return;
-
-            if (person.Rec != null) {
-                GDMIndividualRecord iRec = person.Rec;
-
-                using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(fBase)) {
-                    dlg.Record = iRec;
-                    AppHost.Instance.ShowModalX(dlg, false);
-                }
+            if (person != null) {
+                BaseController.ViewRecordInfo(fBase, person.Rec);
             }
         }
 
@@ -230,22 +222,30 @@ namespace GKCore.Controllers
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return false;
 
-            bool familyExist = p.Rec.GetParentsFamily() != null;
+            bool familyExist = fBase.Context.Tree.GetParentsFamily(p.Rec) != null;
             if (!familyExist) return true;
 
-            GDMIndividualRecord mother, father;
-            GDMFamilyRecord fam = p.Rec.GetParentsFamily();
-            if (fam == null) {
-                father = null;
-                mother = null;
-            } else {
-                father = fam.Husband.Individual;
-                mother = fam.Wife.Individual;
-            }
+            GDMIndividualRecord father, mother;
+            fBase.Context.Tree.GetParents(p.Rec, out father, out mother);
 
             bool needParent = (father == null && needSex == GDMSex.svMale) ||
                 (mother == null && needSex == GDMSex.svFemale);
             return needParent;
+        }
+
+        public void GoToRecord()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            fBase.SelectRecordByXRef(p.Rec.XRef, false);
+            fBase.Activate();
+        }
+
+        public bool SelectedPersonIsReal()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            return (p != null && p.Rec != null);
         }
 
         // TODO: update localization

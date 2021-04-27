@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,8 +19,6 @@
  */
 
 using System;
-using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -35,6 +33,7 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
+            TestUtils.InitGEDCOMProviderTest();
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
         }
@@ -42,7 +41,7 @@ namespace GDModel
         [Test]
         public void Test_GEDCOMAssociation()
         {
-            using (GDMAssociation association = new GDMAssociation(fContext.Tree)) {
+            using (GDMAssociation association = new GDMAssociation()) {
                 Assert.IsNotNull(association);
 
                 Assert.IsNotNull(association.SourceCitations);
@@ -52,32 +51,36 @@ namespace GDModel
                 association.Relation = "This is test relation";
                 Assert.AreEqual("This is test relation", association.Relation);
 
-                association.Individual = null;
-                Assert.IsNull(association.Individual);
+                association.XRef = string.Empty;
+                Assert.IsNull(fContext.Tree.GetPtrValue(association));
 
                 GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec);
 
-                association.Individual = iRec;
-                Assert.IsNotNull(association.Individual);
+                association.XRef = iRec.XRef;
+                Assert.AreEqual(iRec, fContext.Tree.GetPtrValue(association));
 
-                using (GDMAssociation asso2 = new GDMAssociation(null)) {
+                using (GDMAssociation asso2 = new GDMAssociation()) {
                     Assert.IsNotNull(asso2);
 
                     Assert.Throws(typeof(ArgumentException), () => {
                         asso2.Assign(null);
                     });
 
+                    var iRec2 = new GDMIndividualRecord(null);
                     asso2.Assign(association);
+                    iRec2.Associations.Add(asso2);
 
-                    string buf = TestUtils.GetTagStreamText(asso2, 1);
-                    Assert.AreEqual("1 ASSO @I1@\r\n" +
+                    string buf = TestUtils.GetTagStreamText(iRec2, 0);
+                    Assert.AreEqual("0 INDI\r\n" +
+                                    "1 SEX U\r\n" +
+                                    "1 ASSO @I1@\r\n" +
                                     "2 RELA This is test relation\r\n", buf);
                 }
 
                 association.ReplaceXRefs(new GDMXRefReplacer());
 
-                GDMTag tag = association.SourceCitations.Add(new GDMSourceCitation(association));
+                GDMTag tag = association.SourceCitations.Add(new GDMSourceCitation());
                 Assert.IsNotNull(tag);
                 Assert.IsTrue(tag is GDMSourceCitation);
 

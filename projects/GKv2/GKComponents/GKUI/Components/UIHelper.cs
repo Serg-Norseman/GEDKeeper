@@ -230,11 +230,6 @@ namespace GKUI.Components
             return new Bitmap(GKUtils.LoadResourceStream(resName));
         }
 
-        public static Bitmap LoadResourceImage(Type baseType, string resName)
-        {
-            return new Bitmap(GKUtils.LoadResourceStream(baseType, resName));
-        }
-
         public static void SetControlEnabled(Control ctl, bool enabled)
         {
             if (ctl != null) {
@@ -284,7 +279,7 @@ namespace GKUI.Components
         public static bool IsStartupItem()
         {
             RegistryKey rkApp = GetRunKey();
-            return (rkApp.GetValue(GKData.APP_TITLE_NEW) == null) ? false : true;
+            return (rkApp.GetValue(GKData.APP_TITLE_NEW) != null);
         }
 
         private static RegistryKey GetRunKey()

@@ -67,7 +67,7 @@ namespace GKNavigatorPlugin
             GDMRecord gRecord = record as GDMRecord;
             if (gRecord == null) return;
 
-            string recName = GKUtils.GetRecordName(gRecord, false);
+            string recName = GKUtils.GetRecordName(baseWin.Context.Tree, gRecord, false);
 
             int index = Find(gRecord);
             if (index >= 0) {

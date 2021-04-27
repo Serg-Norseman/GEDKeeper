@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -70,7 +70,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("ParentsEditDlgController.Accept(): ", ex);
+                Logger.WriteError("ParentsEditDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -83,29 +83,30 @@ namespace GKCore.Controllers
 
                 UpdateControls();
             } catch (Exception ex) {
-                Logger.WriteError("ParentsEditDlgController.UpdateView(): ", ex);
+                Logger.WriteError("ParentsEditDlgController.UpdateView()", ex);
             }
         }
 
         public void UpdateControls()
         {
             if (fLink != null) {
-                GDMFamilyRecord family = fLink.Family;
+                GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fLink);
                 fView.SetParentsAvl(true);
 
-                GDMIndividualRecord relPerson = family.Husband.Individual;
-                if (relPerson != null) {
+                GDMIndividualRecord father, mother;
+                fBase.Context.Tree.GetSpouses(family, out father, out mother);
+
+                if (father != null) {
                     fView.SetFatherAvl(true);
-                    fView.Father.Text = GKUtils.GetNameString(relPerson, true, false);
+                    fView.Father.Text = GKUtils.GetNameString(father, true, false);
                 } else {
                     fView.SetFatherAvl(false);
                     fView.Father.Text = "";
                 }
 
-                relPerson = family.Wife.Individual;
-                if (relPerson != null) {
+                if (mother != null) {
                     fView.SetMotherAvl(true);
-                    fView.Mother.Text = GKUtils.GetNameString(relPerson, true, false);
+                    fView.Mother.Text = GKUtils.GetNameString(mother, true, false);
                 } else {
                     fView.SetMotherAvl(false);
                     fView.Mother.Text = "";
