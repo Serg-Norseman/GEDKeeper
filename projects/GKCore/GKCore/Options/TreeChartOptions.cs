@@ -89,6 +89,7 @@ namespace GKCore.Options
         public int Margins;
         public int SpouseDistance;
 
+        public bool SeparateDepth { get; set; }
         public int DepthLimit { get; set; }
         public int DepthLimitAncestors { get; set; }
         public int DepthLimitDescendants { get; set; }
@@ -120,6 +121,7 @@ namespace GKCore.Options
             DottedLinesOfAdoptedChildren = false;
             SeparateDatesAndPlacesLines = false;
             BoldNames = false;
+            SeparateDepth = false;
 
             AutoAlign = true;
             BorderStyle = GfxBorderStyle.None;
@@ -179,6 +181,7 @@ namespace GKCore.Options
             DottedLinesOfAdoptedChildren = srcOptions.DottedLinesOfAdoptedChildren;
             SeparateDatesAndPlacesLines = srcOptions.SeparateDatesAndPlacesLines;
             BoldNames = srcOptions.BoldNames;
+            SeparateDepth = srcOptions.SeparateDepth;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -234,6 +237,7 @@ namespace GKCore.Options
             Margins = iniFile.ReadInteger("Chart", "Margins", TreeChartModel.DEF_MARGINS);
             SpouseDistance = iniFile.ReadInteger("Chart", "SpouseDistance", TreeChartModel.DEF_SPOUSE_DISTANCE);
 
+            SeparateDepth = iniFile.ReadBool("Chart", "SeparateDepth", false);
             DepthLimit = iniFile.ReadInteger("Chart", "DepthLimit", -1);
             DepthLimitAncestors = iniFile.ReadInteger("Chart", "DepthLimitAncestors", -1);
             DepthLimitDescendants = iniFile.ReadInteger("Chart", "DepthLimitDescendants", -1);
@@ -287,6 +291,7 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "Margins", Margins);
             iniFile.WriteInteger("Chart", "SpouseDistance", SpouseDistance);
 
+            iniFile.WriteBool("Chart", "SeparateDepth", SeparateDepth);
             iniFile.WriteInteger("Chart", "DepthLimit", DepthLimit);
             iniFile.WriteInteger("Chart", "DepthLimitAncestors", DepthLimitAncestors);
             iniFile.WriteInteger("Chart", "DepthLimitDescendants", DepthLimitDescendants);

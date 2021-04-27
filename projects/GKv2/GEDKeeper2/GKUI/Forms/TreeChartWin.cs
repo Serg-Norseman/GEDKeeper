@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,6 +42,10 @@ namespace GKUI.Forms
         private readonly TreeChartBox fTreeBox;
 
         private GDMIndividualRecord fPerson;
+
+        private ToolStripMenuItem miGensInfCommon;
+        private ToolStripMenuItem miGensInfAncestors;
+        private ToolStripMenuItem miGensInfDescendants;
 
 
         public IBaseWindow Base
@@ -95,6 +99,8 @@ namespace GKUI.Forms
             Controls.Add(fTreeBox);
             Controls.SetChildIndex(fTreeBox, 0);
             Controls.SetChildIndex(ToolBar1, 1);
+
+            PopulateContextMenus();
 
             SetLang();
 
@@ -243,90 +249,117 @@ namespace GKUI.Forms
             }
         }
 
-        private void miGens9Ancestors_Click(object sender, EventArgs e)
+        private void PopulateContextMenus()
         {
-            miGensInfAncestors.Checked = false;
-            miGens1Ancestors.Checked = false;
-            miGens2Ancestors.Checked = false;
-            miGens3Ancestors.Checked = false;
-            miGens4Ancestors.Checked = false;
-            miGens5Ancestors.Checked = false;
-            miGens6Ancestors.Checked = false;
-            miGens7Ancestors.Checked = false;
-            miGens8Ancestors.Checked = false;
-            miGens9Ancestors.Checked = false;
-            ((ToolStripMenuItem)sender).Checked = true;
+            miGensInfCommon = AddToolStripItem(MenuGensCommon, "Inf", -1, miGensX_Click);
+            AddToolStripItem(MenuGensCommon, "1", 1, miGensX_Click);
+            AddToolStripItem(MenuGensCommon, "2", 2, miGensX_Click);
+            AddToolStripItem(MenuGensCommon, "3", 3, miGensX_Click);
+            AddToolStripItem(MenuGensCommon, "4", 4, miGensX_Click);
+            AddToolStripItem(MenuGensCommon, "5", 5, miGensX_Click);
+            AddToolStripItem(MenuGensCommon, "6", 6, miGensX_Click);
+            AddToolStripItem(MenuGensCommon, "7", 7, miGensX_Click);
+            AddToolStripItem(MenuGensCommon, "8", 8, miGensX_Click);
+            AddToolStripItem(MenuGensCommon, "9", 9, miGensX_Click);
 
-            int depth = -1;
-            if (sender == miGensInfAncestors) depth = -1;
-            if (sender == miGens1Ancestors) depth = 1;
-            if (sender == miGens2Ancestors) depth = 2;
-            if (sender == miGens3Ancestors) depth = 3;
-            if (sender == miGens4Ancestors) depth = 4;
-            if (sender == miGens5Ancestors) depth = 5;
-            if (sender == miGens6Ancestors) depth = 6;
-            if (sender == miGens7Ancestors) depth = 7;
-            if (sender == miGens8Ancestors) depth = 8;
-            if (sender == miGens9Ancestors) depth = 9;
-            fTreeBox.DepthLimitAncestors = depth;
+            miGensInfAncestors = AddToolStripItem(MenuGensAncestors, "Inf", -1, miGensXAncestors_Click);
+            AddToolStripItem(MenuGensAncestors, "1", 1, miGensXAncestors_Click);
+            AddToolStripItem(MenuGensAncestors, "2", 2, miGensXAncestors_Click);
+            AddToolStripItem(MenuGensAncestors, "3", 3, miGensXAncestors_Click);
+            AddToolStripItem(MenuGensAncestors, "4", 4, miGensXAncestors_Click);
+            AddToolStripItem(MenuGensAncestors, "5", 5, miGensXAncestors_Click);
+            AddToolStripItem(MenuGensAncestors, "6", 6, miGensXAncestors_Click);
+            AddToolStripItem(MenuGensAncestors, "7", 7, miGensXAncestors_Click);
+            AddToolStripItem(MenuGensAncestors, "8", 8, miGensXAncestors_Click);
+            AddToolStripItem(MenuGensAncestors, "9", 9, miGensXAncestors_Click);
 
-            GenChart();
+            miGensInfDescendants = AddToolStripItem(MenuGensDescendants, "Inf", -1, miGensXDescendants_Click);
+            AddToolStripItem(MenuGensDescendants, "1", 1, miGensXDescendants_Click);
+            AddToolStripItem(MenuGensDescendants, "2", 2, miGensXDescendants_Click);
+            AddToolStripItem(MenuGensDescendants, "3", 3, miGensXDescendants_Click);
+            AddToolStripItem(MenuGensDescendants, "4", 4, miGensXDescendants_Click);
+            AddToolStripItem(MenuGensDescendants, "5", 5, miGensXDescendants_Click);
+            AddToolStripItem(MenuGensDescendants, "6", 6, miGensXDescendants_Click);
+            AddToolStripItem(MenuGensDescendants, "7", 7, miGensXDescendants_Click);
+            AddToolStripItem(MenuGensDescendants, "8", 8, miGensXDescendants_Click);
+            AddToolStripItem(MenuGensDescendants, "9", 9, miGensXDescendants_Click);
         }
-        private void miGens9Descendants_Click(object sender, EventArgs e)
-        {
-            miGensInfDescendants.Checked = false;
-            miGens1Descendants.Checked = false;
-            miGens2Descendants.Checked = false;
-            miGens3Descendants.Checked = false;
-            miGens4Descendants.Checked = false;
-            miGens5Descendants.Checked = false;
-            miGens6Descendants.Checked = false;
-            miGens7Descendants.Checked = false;
-            miGens8Descendants.Checked = false;
-            miGens9Descendants.Checked = false;
-            ((ToolStripMenuItem)sender).Checked = true;
 
-            int depth = -1;
-            if (sender == miGensInfDescendants) depth = -1;
-            if (sender == miGens1Descendants) depth = 1;
-            if (sender == miGens2Descendants) depth = 2;
-            if (sender == miGens3Descendants) depth = 3;
-            if (sender == miGens4Descendants) depth = 4;
-            if (sender == miGens5Descendants) depth = 5;
-            if (sender == miGens6Descendants) depth = 6;
-            if (sender == miGens7Descendants) depth = 7;
-            if (sender == miGens8Descendants) depth = 8;
-            if (sender == miGens9Descendants) depth = 9;
+        private ToolStripMenuItem AddToolStripItem(ContextMenuStrip contextMenu, string text, object tag, EventHandler clickHandler)
+        {
+            var tsItem = new ToolStripMenuItem(text, null, clickHandler);
+            tsItem.Tag = tag;
+            contextMenu.Items.Add(tsItem);
+            return tsItem;
+        }
+
+        private void miGensX_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripMenuItem tsItem in MenuGensCommon.Items) {
+                tsItem.Checked = false;
+            }
+
+            var senderItem = ((ToolStripMenuItem)sender);
+            ((ToolStripMenuItem)sender).Checked = true;
+            int depth = (int)senderItem.Tag;
+            fTreeBox.DepthLimitAncestors = depth;
             fTreeBox.DepthLimitDescendants = depth;
 
             GenChart();
         }
 
+        private void miGensXAncestors_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripMenuItem tsItem in MenuGensAncestors.Items) {
+                tsItem.Checked = false;
+            }
+
+            var senderItem = ((ToolStripMenuItem)sender);
+            ((ToolStripMenuItem)sender).Checked = true;
+            int depth = (int)senderItem.Tag;
+            fTreeBox.DepthLimitAncestors = depth;
+
+            GenChart();
+        }
+
+        private void miGensXDescendants_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripMenuItem tsItem in MenuGensDescendants.Items) {
+                tsItem.Checked = false;
+            }
+
+            var senderItem = ((ToolStripMenuItem)sender);
+            ((ToolStripMenuItem)sender).Checked = true;
+            int depth = (int)senderItem.Tag;
+            fTreeBox.DepthLimitDescendants = depth;
+
+            GenChart();
+        }
+
+        private void SetupDepth(ContextMenuStrip contextMenu, int depth)
+        {
+            foreach (ToolStripMenuItem tsItem in contextMenu.Items) {
+                int itemDepth = (int)tsItem.Tag;
+                if (itemDepth == depth) {
+                    tsItem.PerformClick();
+                    break;
+                }
+            }
+        }
+
         private void SetupDepth()
         {
-            switch (GlobalOptions.Instance.TreeChartOptions.DepthLimitAncestors) {
-                case 1: miGens1Ancestors.PerformClick(); break;
-                case 2: miGens2Ancestors.PerformClick(); break;
-                case 3: miGens3Ancestors.PerformClick(); break;
-                case 4: miGens4Ancestors.PerformClick(); break;
-                case 5: miGens5Ancestors.PerformClick(); break;
-                case 6: miGens6Ancestors.PerformClick(); break;
-                case 7: miGens7Ancestors.PerformClick(); break;
-                case 8: miGens8Ancestors.PerformClick(); break;
-                case 9: miGens9Ancestors.PerformClick(); break;
-                default: miGensInfAncestors.PerformClick(); break;
-            }
-            switch (GlobalOptions.Instance.TreeChartOptions.DepthLimitDescendants) {
-                case 1: miGens1Descendants.PerformClick(); break;
-                case 2: miGens2Descendants.PerformClick(); break;
-                case 3: miGens3Descendants.PerformClick(); break;
-                case 4: miGens4Descendants.PerformClick(); break;
-                case 5: miGens5Descendants.PerformClick(); break;
-                case 6: miGens6Descendants.PerformClick(); break;
-                case 7: miGens7Descendants.PerformClick(); break;
-                case 8: miGens8Descendants.PerformClick(); break;
-                case 9: miGens9Descendants.PerformClick(); break;
-                default: miGensInfDescendants.PerformClick(); break;
+            var treeOptions = GlobalOptions.Instance.TreeChartOptions;
+
+            tbGensCommon.Visible = !treeOptions.SeparateDepth;
+            tbGensAncestors.Visible = treeOptions.SeparateDepth;
+            tbGensDescendants.Visible = treeOptions.SeparateDepth;
+
+            if (!treeOptions.SeparateDepth) {
+                SetupDepth(MenuGensCommon, treeOptions.DepthLimit);
+            } else {
+                SetupDepth(MenuGensAncestors, treeOptions.DepthLimitAncestors);
+                SetupDepth(MenuGensDescendants, treeOptions.DepthLimitDescendants);
             }
         }
 
@@ -501,9 +534,12 @@ namespace GKUI.Forms
 
         public override void SetLang()
         {
-            tbGensAncestors.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_MITreeAncestors);
-            tbGensDescendants.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_MITreeDescendants);
+            tbGensCommon.Text = LangMan.LS(LSID.LSID_Generations);
+            tbGensAncestors.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Ancestors);
+            tbGensDescendants.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Descendants);
 
+            miGensInfCommon.Text = LangMan.LS(LSID.LSID_Unlimited);
+            miGensInfCommon.Checked = true;
             miGensInfAncestors.Text = LangMan.LS(LSID.LSID_Unlimited);
             miGensInfAncestors.Checked = true;
             miGensInfDescendants.Text = LangMan.LS(LSID.LSID_Unlimited);
