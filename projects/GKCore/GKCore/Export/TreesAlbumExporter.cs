@@ -143,7 +143,8 @@ namespace GKCore.Export
             RenderStage stage = RenderStage.Normal;
 
             while (true) {
-                treeBox.Model.DepthLimit = depthLimit;
+                treeBox.Model.DepthLimitAncestors = depthLimit;
+                treeBox.Model.DepthLimitDescendants = depthLimit;
                 treeBox.Model.Scale = scaleFactor;
                 treeBox.GenChart(indi.IRec, indi.TreeKind, false);
                 tries += 1;
@@ -191,7 +192,8 @@ namespace GKCore.Export
             }
 
             scaleFactor = Math.Min(1.0f, scaleFactor);
-            treeBox.Model.DepthLimit = depthLimit;
+            treeBox.Model.DepthLimitAncestors = depthLimit;
+            treeBox.Model.DepthLimitDescendants = depthLimit;
             treeBox.Model.Scale = scaleFactor;
             treeBox.GenChart(indi.IRec, indi.TreeKind, false);
             treeBox.RenderImage(RenderTarget.Printer, true);

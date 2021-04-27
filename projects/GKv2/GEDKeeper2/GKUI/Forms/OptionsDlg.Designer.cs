@@ -193,8 +193,10 @@
             this.pageCharts = new System.Windows.Forms.TabPage();
             this.tabsCharts = new System.Windows.Forms.TabControl();
             this.pageTreeChart = new System.Windows.Forms.TabPage();
-            this.numDefaultDepth = new System.Windows.Forms.NumericUpDown();
-            this.lblDefaultDepth = new System.Windows.Forms.Label();
+            this.numDefaultDepthAncestors = new System.Windows.Forms.NumericUpDown();
+            this.lblDefaultDepthAncestors = new System.Windows.Forms.Label();
+            this.numDefaultDepthDescendants = new System.Windows.Forms.NumericUpDown();
+            this.lblDefaultDepthDescendants = new System.Windows.Forms.Label();
             this.grpSpacings = new System.Windows.Forms.GroupBox();
             this.numSpouseDist = new System.Windows.Forms.NumericUpDown();
             this.numGenDist = new System.Windows.Forms.NumericUpDown();
@@ -303,7 +305,8 @@
             this.pageCharts.SuspendLayout();
             this.tabsCharts.SuspendLayout();
             this.pageTreeChart.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepthAncestors)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepthDescendants)).BeginInit();
             this.grpSpacings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSpouseDist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGenDist)).BeginInit();
@@ -850,8 +853,10 @@
             // pageTreeChart
             // 
             this.pageTreeChart.BackColor = System.Drawing.SystemColors.Control;
-            this.pageTreeChart.Controls.Add(this.numDefaultDepth);
-            this.pageTreeChart.Controls.Add(this.lblDefaultDepth);
+            this.pageTreeChart.Controls.Add(this.numDefaultDepthAncestors);
+            this.pageTreeChart.Controls.Add(this.lblDefaultDepthAncestors);
+            this.pageTreeChart.Controls.Add(this.numDefaultDepthDescendants);
+            this.pageTreeChart.Controls.Add(this.lblDefaultDepthDescendants);
             this.pageTreeChart.Controls.Add(this.grpSpacings);
             this.pageTreeChart.Controls.Add(this.grpTreePersons);
             this.pageTreeChart.Controls.Add(this.grpTreeDecor);
@@ -863,6 +868,15 @@
             this.pageTreeChart.TabIndex = 3;
             this.pageTreeChart.Text = "pageTreeChart";
             // 
+            // numDefaultDepthAncestors
+            // 
+            this.numDefaultDepthAncestors.Location = new System.Drawing.Point(511, 358);
+            this.numDefaultDepthAncestors.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            // 
             // numDefaultDepth
             // 
             this.numDefaultDepth.Location = new System.Drawing.Point(511, 371);
@@ -871,10 +885,15 @@
             0,
             0,
             0});
-            this.numDefaultDepth.Minimum = new decimal(new int[] {
+            this.numDefaultDepthAncestors.Minimum = new decimal(new int[] {
             1,
             0,
             0,
+            -2147483648});
+            this.numDefaultDepthAncestors.Name = "numDefaultDepthAncestors";
+            this.numDefaultDepthAncestors.Size = new System.Drawing.Size(39, 21);
+            this.numDefaultDepthAncestors.TabIndex = 11;
+            this.numDefaultDepthAncestors.Value = new decimal(new int[] {
             0});
             this.numDefaultDepth.Name = "numDefaultDepth";
             this.numDefaultDepth.Size = new System.Drawing.Size(39, 21);
@@ -884,6 +903,16 @@
             0,
             0,
             0});
+            // 
+            // lblDefaultDepthAncestors
+            // 
+            this.lblDefaultDepthAncestors.AutoSize = true;
+            this.lblDefaultDepthAncestors.Location = new System.Drawing.Point(347, 360);
+            this.lblDefaultDepthAncestors.Margin = new System.Windows.Forms.Padding(8, 0, 0, 4);
+            this.lblDefaultDepthAncestors.Name = "lblDefaultDepthAncestors";
+            this.lblDefaultDepthAncestors.Size = new System.Drawing.Size(81, 13);
+            this.lblDefaultDepthAncestors.TabIndex = 10;
+            this.lblDefaultDepthAncestors.Text = "lblDefaultDepthAncestors";
             // 
             // lblDefaultDepth
             // 
@@ -895,6 +924,37 @@
             this.lblDefaultDepth.TabIndex = 10;
             this.lblDefaultDepth.Text = "lblDefaultDepth";
             // 
+            // numDefaultDepthDescendants
+            // 
+            this.numDefaultDepthDescendants.Location = new System.Drawing.Point(511, 383);
+            this.numDefaultDepthDescendants.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.numDefaultDepthDescendants.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.numDefaultDepthDescendants.Name = "numDefaultDepthDescendants";
+            this.numDefaultDepthDescendants.Size = new System.Drawing.Size(39, 21);
+            this.numDefaultDepthDescendants.TabIndex = 11;
+            this.numDefaultDepthDescendants.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            // 
+            // lblDefaultDepthDescendants
+            // 
+            this.lblDefaultDepthDescendants.AutoSize = true;
+            this.lblDefaultDepthDescendants.Location = new System.Drawing.Point(347, 385);
+            this.lblDefaultDepthDescendants.Margin = new System.Windows.Forms.Padding(8, 0, 0, 4);
+            this.lblDefaultDepthDescendants.Name = "lblDefaultDepthDescendants";
+            this.lblDefaultDepthDescendants.Size = new System.Drawing.Size(81, 13);
+            this.lblDefaultDepthDescendants.TabIndex = 10;
+            this.lblDefaultDepthDescendants.Text = "lblDefaultDepthDescendants";            // 
             // grpSpacings
             // 
             this.grpSpacings.Controls.Add(this.numSpouseDist);
@@ -2031,7 +2091,8 @@
             this.tabsCharts.ResumeLayout(false);
             this.pageTreeChart.ResumeLayout(false);
             this.pageTreeChart.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepthAncestors)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepthDescendants)).EndInit();
             this.grpSpacings.ResumeLayout(false);
             this.grpSpacings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSpouseDist)).EndInit();
@@ -2063,5 +2124,45 @@
             this.ResumeLayout(false);
 
         }
+        private System.Windows.Forms.CheckBox chkAllowMediaDirectRefs;
+        private System.Windows.Forms.TabPage pageMultimedia;
+        private System.Windows.Forms.CheckBox chkEmbeddedMediaPlayer;
+        private System.Windows.Forms.CheckBox chkLoadRecentFiles;
+        private System.Windows.Forms.CheckBox chkRemovableMediaWarning;
+        private System.Windows.Forms.CheckBox chkDefaultPortraits;
+        private System.Windows.Forms.ComboBox cmbGeocoder;
+        private System.Windows.Forms.Label lblGeocoder;
+        private System.Windows.Forms.CheckBox chkInvertedTree;
+        private System.Windows.Forms.CheckBox chkMarriagesDates;
+        private System.Windows.Forms.CheckBox chkAutoCheckUpdates;
+        private System.Windows.Forms.CheckBox chkShowPlaces;
+        private System.Windows.Forms.CheckBox chkHideUnknownSpouses;
+        private System.Windows.Forms.GroupBox grpSpacings;
+        private System.Windows.Forms.Label lblSpouseDist;
+        private System.Windows.Forms.Label lblGenDist;
+        private System.Windows.Forms.Label lblBranchDist;
+        private System.Windows.Forms.Label lblMargins;
+        private System.Windows.Forms.NumericUpDown numSpouseDist;
+        private System.Windows.Forms.NumericUpDown numGenDist;
+        private System.Windows.Forms.NumericUpDown numBranchDist;
+        private System.Windows.Forms.NumericUpDown numMargins;
+        private System.Windows.Forms.CheckBox chkAutoSortSpouses;
+        private System.Windows.Forms.CheckBox chkAutoSortChildren;
+        private System.Windows.Forms.CheckBox chkCheckTreeSize;
+        private System.Windows.Forms.CheckBox chkCharsetDetection;
+        private System.Windows.Forms.CheckBox chkAllowDeleteMediaFileFromRefs;
+        private System.Windows.Forms.CheckBox chkAllowDeleteMediaFileFromStgArc;
+        private System.Windows.Forms.Label lblMediaStoreDefault;
+        private System.Windows.Forms.CheckBox chkAllowMediaStoreRelativeReferences;
+        private System.Windows.Forms.ComboBox cmbMediaStoreDefault;
+        private System.Windows.Forms.CheckBox chkDeleteMediaFileWithoutConfirm;
+        private System.Windows.Forms.Label lblBackupRevisionsMaxCount;
+        private System.Windows.Forms.NumericUpDown numBackupRevisionsMaxCount;
+        private System.Windows.Forms.CheckBox chkFirstCapitalLetterInNames;
+        private System.Windows.Forms.NumericUpDown numDefaultDepthAncestors;
+        private System.Windows.Forms.NumericUpDown numDefaultDepthDescendants;
+        private System.Windows.Forms.Label lblDefaultDepthAncestors;
+        private System.Windows.Forms.Label lblDefaultDepthDescendants;
+        private System.Windows.Forms.CheckBox chkDialogClosingWarn;
     }
 }

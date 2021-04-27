@@ -69,7 +69,7 @@ namespace GKCore.Charts
 
         public override void UpdateState()
         {
-            fThumbPos = (fChart.DepthLimit >= 1) ? fChart.DepthLimit - 1 : 9;
+            fThumbPos = (fChart.DepthLimitAncestors >= -1) ? fChart.DepthLimitAncestors - 1 : 9;
         }
 
         private int GetDepthLimit()
@@ -142,7 +142,7 @@ namespace GKCore.Charts
                 if ((r.Top <= y) && (r.Bottom > y)) {
                     if (i != fThumbPos) {
                         fThumbPos = i;
-                        fChart.DepthLimit = GetDepthLimit();
+                        fChart.DepthLimitAncestors = GetDepthLimit();
                         fChart.GenChart(fChart.Model.Root.Rec, fChart.Kind, true);
                     }
                     break;

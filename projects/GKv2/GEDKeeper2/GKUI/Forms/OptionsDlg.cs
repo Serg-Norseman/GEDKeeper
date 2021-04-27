@@ -192,6 +192,10 @@ namespace GKUI.Forms
 
             numDefaultDepth.Minimum = -1;
             numDefaultDepth.Value = fOptions.TreeChartOptions.DepthLimit;
+            numDefaultDepthAncestors.Minimum = -1;
+            numDefaultDepthAncestors.Value = fOptions.TreeChartOptions.DepthLimitAncestors;
+            numDefaultDepthDescendants.Minimum = -1;
+            numDefaultDepthDescendants.Value = fOptions.TreeChartOptions.DepthLimitDescendants;
 
             UpdateTreeChartFont();
         }
@@ -239,6 +243,7 @@ namespace GKUI.Forms
             chkAutoSortChildren.Checked = fOptions.AutoSortChildren;
             chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
             chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
+            chkDialogClosingWarn.Checked = fOptions.DialogClosingWarn;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -472,6 +477,8 @@ namespace GKUI.Forms
             fOptions.TreeChartOptions.SpouseDistance = (int)numSpouseDist.Value;
 
             fOptions.TreeChartOptions.DepthLimit = (int)numDefaultDepth.Value;
+            fOptions.TreeChartOptions.DepthLimitAncestors = (int)numDefaultDepthAncestors.Value;
+            fOptions.TreeChartOptions.DepthLimitDescendants = (int)numDefaultDepthDescendants.Value;
         }
 
         private void AcceptCircleChartsOptions()
@@ -759,7 +766,8 @@ namespace GKUI.Forms
 
             lblBackupRevisionsMaxCount.Text = LangMan.LS(LSID.LSID_BackupRevisionsMaxCount);
             chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
-            lblDefaultDepth.Text = LangMan.LS(LSID.LSID_DefaultDepth);
+            lblDefaultDepthAncestors.Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_MITreeAncestors);
+            lblDefaultDepthDescendants.Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_MITreeDescendants);
             chkDialogClosingWarn.Text = LangMan.LS(LSID.LSID_WarnForClosingDialog);
             lblGeoSearchCountry.Text = LangMan.LS(LSID.LSID_GeoSearchCountryRestriction);
         }

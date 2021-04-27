@@ -90,6 +90,8 @@ namespace GKCore.Options
         public int SpouseDistance;
 
         public int DepthLimit { get; set; }
+        public int DepthLimitAncestors { get; set; }
+        public int DepthLimitDescendants { get; set; }
 
         public TreeChartOptions()
         {
@@ -233,6 +235,8 @@ namespace GKCore.Options
             SpouseDistance = iniFile.ReadInteger("Chart", "SpouseDistance", TreeChartModel.DEF_SPOUSE_DISTANCE);
 
             DepthLimit = iniFile.ReadInteger("Chart", "DepthLimit", -1);
+            DepthLimitAncestors = iniFile.ReadInteger("Chart", "DepthLimitAncestors", -1);
+            DepthLimitDescendants = iniFile.ReadInteger("Chart", "DepthLimitDescendants", -1);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -284,6 +288,8 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "SpouseDistance", SpouseDistance);
 
             iniFile.WriteInteger("Chart", "DepthLimit", DepthLimit);
+            iniFile.WriteInteger("Chart", "DepthLimitAncestors", DepthLimitAncestors);
+            iniFile.WriteInteger("Chart", "DepthLimitDescendants", DepthLimitDescendants);
         }
     }
 }

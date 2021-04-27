@@ -243,49 +243,90 @@ namespace GKUI.Forms
             }
         }
 
-        private void miGens9_Click(object sender, EventArgs e)
+        private void miGens9Ancestors_Click(object sender, EventArgs e)
         {
-            miGensInf.Checked = false;
-            miGens1.Checked = false;
-            miGens2.Checked = false;
-            miGens3.Checked = false;
-            miGens4.Checked = false;
-            miGens5.Checked = false;
-            miGens6.Checked = false;
-            miGens7.Checked = false;
-            miGens8.Checked = false;
-            miGens9.Checked = false;
+            miGensInfAncestors.Checked = false;
+            miGens1Ancestors.Checked = false;
+            miGens2Ancestors.Checked = false;
+            miGens3Ancestors.Checked = false;
+            miGens4Ancestors.Checked = false;
+            miGens5Ancestors.Checked = false;
+            miGens6Ancestors.Checked = false;
+            miGens7Ancestors.Checked = false;
+            miGens8Ancestors.Checked = false;
+            miGens9Ancestors.Checked = false;
             ((ToolStripMenuItem)sender).Checked = true;
 
             int depth = -1;
-            if (sender == miGensInf) depth = -1;
-            if (sender == miGens1) depth = 1;
-            if (sender == miGens2) depth = 2;
-            if (sender == miGens3) depth = 3;
-            if (sender == miGens4) depth = 4;
-            if (sender == miGens5) depth = 5;
-            if (sender == miGens6) depth = 6;
-            if (sender == miGens7) depth = 7;
-            if (sender == miGens8) depth = 8;
-            if (sender == miGens9) depth = 9;
-            fTreeBox.DepthLimit = depth;
+            if (sender == miGensInfAncestors) depth = -1;
+            if (sender == miGens1Ancestors) depth = 1;
+            if (sender == miGens2Ancestors) depth = 2;
+            if (sender == miGens3Ancestors) depth = 3;
+            if (sender == miGens4Ancestors) depth = 4;
+            if (sender == miGens5Ancestors) depth = 5;
+            if (sender == miGens6Ancestors) depth = 6;
+            if (sender == miGens7Ancestors) depth = 7;
+            if (sender == miGens8Ancestors) depth = 8;
+            if (sender == miGens9Ancestors) depth = 9;
+            fTreeBox.DepthLimitAncestors = depth;
+
+            GenChart();
+        }
+        private void miGens9Descendants_Click(object sender, EventArgs e)
+        {
+            miGensInfDescendants.Checked = false;
+            miGens1Descendants.Checked = false;
+            miGens2Descendants.Checked = false;
+            miGens3Descendants.Checked = false;
+            miGens4Descendants.Checked = false;
+            miGens5Descendants.Checked = false;
+            miGens6Descendants.Checked = false;
+            miGens7Descendants.Checked = false;
+            miGens8Descendants.Checked = false;
+            miGens9Descendants.Checked = false;
+            ((ToolStripMenuItem)sender).Checked = true;
+
+            int depth = -1;
+            if (sender == miGensInfDescendants) depth = -1;
+            if (sender == miGens1Descendants) depth = 1;
+            if (sender == miGens2Descendants) depth = 2;
+            if (sender == miGens3Descendants) depth = 3;
+            if (sender == miGens4Descendants) depth = 4;
+            if (sender == miGens5Descendants) depth = 5;
+            if (sender == miGens6Descendants) depth = 6;
+            if (sender == miGens7Descendants) depth = 7;
+            if (sender == miGens8Descendants) depth = 8;
+            if (sender == miGens9Descendants) depth = 9;
+            fTreeBox.DepthLimitDescendants = depth;
 
             GenChart();
         }
 
         private void SetupDepth()
         {
-            switch (GlobalOptions.Instance.TreeChartOptions.DepthLimit) {
-                case 1: miGens1.PerformClick(); break;
-                case 2: miGens2.PerformClick(); break;
-                case 3: miGens3.PerformClick(); break;
-                case 4: miGens4.PerformClick(); break;
-                case 5: miGens5.PerformClick(); break;
-                case 6: miGens6.PerformClick(); break;
-                case 7: miGens7.PerformClick(); break;
-                case 8: miGens8.PerformClick(); break;
-                case 9: miGens9.PerformClick(); break;
-                default: miGensInf.PerformClick(); break;
+            switch (GlobalOptions.Instance.TreeChartOptions.DepthLimitAncestors) {
+                case 1: miGens1Ancestors.PerformClick(); break;
+                case 2: miGens2Ancestors.PerformClick(); break;
+                case 3: miGens3Ancestors.PerformClick(); break;
+                case 4: miGens4Ancestors.PerformClick(); break;
+                case 5: miGens5Ancestors.PerformClick(); break;
+                case 6: miGens6Ancestors.PerformClick(); break;
+                case 7: miGens7Ancestors.PerformClick(); break;
+                case 8: miGens8Ancestors.PerformClick(); break;
+                case 9: miGens9Ancestors.PerformClick(); break;
+                default: miGensInfAncestors.PerformClick(); break;
+            }
+            switch (GlobalOptions.Instance.TreeChartOptions.DepthLimitDescendants) {
+                case 1: miGens1Descendants.PerformClick(); break;
+                case 2: miGens2Descendants.PerformClick(); break;
+                case 3: miGens3Descendants.PerformClick(); break;
+                case 4: miGens4Descendants.PerformClick(); break;
+                case 5: miGens5Descendants.PerformClick(); break;
+                case 6: miGens6Descendants.PerformClick(); break;
+                case 7: miGens7Descendants.PerformClick(); break;
+                case 8: miGens8Descendants.PerformClick(); break;
+                case 9: miGens9Descendants.PerformClick(); break;
+                default: miGensInfDescendants.PerformClick(); break;
             }
         }
 
@@ -460,10 +501,13 @@ namespace GKUI.Forms
 
         public override void SetLang()
         {
-            tbGens.Text = LangMan.LS(LSID.LSID_Generations);
+            tbGensAncestors.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_MITreeAncestors);
+            tbGensDescendants.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_MITreeDescendants);
 
-            miGensInf.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInf.Checked = true;
+            miGensInfAncestors.Text = LangMan.LS(LSID.LSID_Unlimited);
+            miGensInfAncestors.Checked = true;
+            miGensInfDescendants.Text = LangMan.LS(LSID.LSID_Unlimited);
+            miGensInfDescendants.Checked = true;
             miModeBoth.Text = LangMan.LS(LSID.LSID_TM_Both);
             miModeAncestors.Text = LangMan.LS(LSID.LSID_TM_Ancestors);
             miModeDescendants.Text = LangMan.LS(LSID.LSID_TM_Descendants);
