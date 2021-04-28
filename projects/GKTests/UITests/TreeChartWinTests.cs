@@ -83,17 +83,6 @@ namespace GKUI.Forms
             IList<ISearchResult> search = tcWin.FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
-            ClickToolStripMenuItem("miGens9", tcWin);
-            ClickToolStripMenuItem("miGens8", tcWin);
-            ClickToolStripMenuItem("miGens7", tcWin);
-            ClickToolStripMenuItem("miGens6", tcWin);
-            ClickToolStripMenuItem("miGens5", tcWin);
-            ClickToolStripMenuItem("miGens4", tcWin);
-            ClickToolStripMenuItem("miGens3", tcWin);
-            ClickToolStripMenuItem("miGens2", tcWin);
-            ClickToolStripMenuItem("miGens1", tcWin);
-            ClickToolStripMenuItem("miGensInf", tcWin);
-
             ClickToolStripMenuItem("miModeBoth", tcWin);
             ClickToolStripMenuItem("miModeAncestors", tcWin);
             ClickToolStripMenuItem("miModeDescendants", tcWin);

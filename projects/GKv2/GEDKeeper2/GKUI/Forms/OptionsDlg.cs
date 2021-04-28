@@ -190,8 +190,15 @@ namespace GKUI.Forms
             numGenDist.Value = fOptions.TreeChartOptions.LevelDistance;
             numSpouseDist.Value = fOptions.TreeChartOptions.SpouseDistance;
 
+            chkSeparateDepth.Checked = fOptions.TreeChartOptions.SeparateDepth;
+            chkSeparateDepth_CheckedChanged(null, null);
+
             numDefaultDepth.Minimum = -1;
             numDefaultDepth.Value = fOptions.TreeChartOptions.DepthLimit;
+            numDefaultDepthAncestors.Minimum = -1;
+            numDefaultDepthAncestors.Value = fOptions.TreeChartOptions.DepthLimitAncestors;
+            numDefaultDepthDescendants.Minimum = -1;
+            numDefaultDepthDescendants.Value = fOptions.TreeChartOptions.DepthLimitDescendants;
 
             UpdateTreeChartFont();
         }
@@ -239,6 +246,7 @@ namespace GKUI.Forms
             chkAutoSortChildren.Checked = fOptions.AutoSortChildren;
             chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
             chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
+            chkDialogClosingWarn.Checked = fOptions.DialogClosingWarn;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -471,7 +479,10 @@ namespace GKUI.Forms
             fOptions.TreeChartOptions.LevelDistance = (int)numGenDist.Value;
             fOptions.TreeChartOptions.SpouseDistance = (int)numSpouseDist.Value;
 
+            fOptions.TreeChartOptions.SeparateDepth = chkSeparateDepth.Checked;
             fOptions.TreeChartOptions.DepthLimit = (int)numDefaultDepth.Value;
+            fOptions.TreeChartOptions.DepthLimitAncestors = (int)numDefaultDepthAncestors.Value;
+            fOptions.TreeChartOptions.DepthLimitDescendants = (int)numDefaultDepthDescendants.Value;
         }
 
         private void AcceptCircleChartsOptions()
@@ -642,10 +653,9 @@ namespace GKUI.Forms
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Text = LangMan.LS(LSID.LSID_MIOptions);
+
+            // Common
             pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            pageUIView.Text = LangMan.LS(LSID.LSID_Interface);
-            pageTreeChart.Text = LangMan.LS(LSID.LSID_Trees);
-            pagePedigree.Text = LangMan.LS(LSID.LSID_Pedigrees);
 
             grpInternet.Text = LangMan.LS(LSID.LSID_Internet);
             chkUseProxy.Text = LangMan.LS(LSID.LSID_ProxyUse);
@@ -654,61 +664,6 @@ namespace GKUI.Forms
             lblProxyLogin.Text = LangMan.LS(LSID.LSID_ProxyLogin);
             lblProxyPassword.Text = LangMan.LS(LSID.LSID_Password);
 
-            grpOther.Text = LangMan.LS(LSID.LSID_Other);
-
-            chkShowOnStart.Text = LangMan.LS(LSID.LSID_StartupTips);
-            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
-            pageViewCommon.Text = LangMan.LS(LSID.LSID_ListsAll);
-            pageViewPersons.Text = LangMan.LS(LSID.LSID_ListPersons);
-            rgFNPFormat.Text = LangMan.LS(LSID.LSID_NamesFormat);
-            radSNP.Text = LangMan.LS(LSID.LSID_NF1);
-            radS_NP.Text = LangMan.LS(LSID.LSID_NF2);
-            radS_N_P.Text = LangMan.LS(LSID.LSID_NF3);
-            grpDateFormat.Text = LangMan.LS(LSID.LSID_DateFormat);
-            chkPlacesWithAddress.Text = LangMan.LS(LSID.LSID_PlacesWithAddress);
-            chkHighlightUnparented.Text = LangMan.LS(LSID.LSID_HighlightUnparented);
-            chkHighlightUnmarried.Text = LangMan.LS(LSID.LSID_HighlightUnmarried);
-            btnDefList.Text = LangMan.LS(LSID.LSID_DefList);
-            grpTreePersons.Text = LangMan.LS(LSID.LSID_ViewTree);
-            chkSurname.Text = LangMan.LS(LSID.LSID_Surname);
-            chkName.Text = LangMan.LS(LSID.LSID_Name);
-            chkPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
-            chkDiffLines.Text = LangMan.LS(LSID.LSID_DiffLines);
-            chkBirthDate.Text = LangMan.LS(LSID.LSID_BirthDate);
-            chkDeathDate.Text = LangMan.LS(LSID.LSID_DeathDate);
-            chkOnlyYears.Text = LangMan.LS(LSID.LSID_OnlyYears);
-            chkKinship.Text = LangMan.LS(LSID.LSID_Kinship);
-            chkSignsVisible.Text = LangMan.LS(LSID.LSID_SignsVisible);
-            chkTreeDecorative.Text = LangMan.LS(LSID.LSID_TreeDecorative);
-            chkPortraitsVisible.Text = LangMan.LS(LSID.LSID_PortraitsVisible);
-            chkDefaultPortraits.Text = LangMan.LS(LSID.LSID_DefaultPortraits);
-            chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
-            chkInvertedTree.Text = LangMan.LS(LSID.LSID_InvertedTree);
-            chkMarriagesDates.Text = LangMan.LS(LSID.LSID_MarriagesDates);
-            grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
-            lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
-            lblFemaleColor.Text = LangMan.LS(LSID.LSID_Woman);
-            lblUnkSexColor.Text = LangMan.LS(LSID.LSID_UnkSex);
-            lblUnHusbandColor.Text = LangMan.LS(LSID.LSID_UnHusband);
-            lblUnWifeColor.Text = LangMan.LS(LSID.LSID_UnWife);
-            lblFont.Text = LangMan.LS(LSID.LSID_Font);
-            grpPedigree.Text = LangMan.LS(LSID.LSID_PedigreeGen);
-            chkAttributes.Text = LangMan.LS(LSID.LSID_IncludeAttributes);
-            chkNotes.Text = LangMan.LS(LSID.LSID_IncludeNotes);
-            chkSources.Text = LangMan.LS(LSID.LSID_IncludeSources);
-            grpPedigreeFormat.Text = LangMan.LS(LSID.LSID_PedigreeFormat);
-            radExcess.Text = LangMan.LS(LSID.LSID_PF1);
-            radCompact.Text = LangMan.LS(LSID.LSID_PF2);
-            pageCharts.Text = LangMan.LS(LSID.LSID_Charts);
-            pagePlugins.Text = LangMan.LS(LSID.LSID_Plugins);
-            chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
-            chkShowDatesSigns.Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
-            chkShowPlaces.Text = LangMan.LS(LSID.LSID_ShowPlaces);
-            chkHideUnknownSpouses.Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
-            chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
-            chkSeparateDAPLines.Text = LangMan.LS(LSID.LSID_SeparateDatesAndPlacesLines);
-            chkBoldNames.Text = LangMan.LS(LSID.LSID_BoldNames);
-
             grpFileBackup.Text = LangMan.LS(LSID.LSID_FileBackup);
             radFBNone.Text = LangMan.LS(LSID.LSID_Not);
             radFBOnlyPrev.Text = LangMan.LS(LSID.LSID_BackupOnlyPrev);
@@ -716,9 +671,108 @@ namespace GKUI.Forms
 
             chkAutosave.Text = LangMan.LS(LSID.LSID_Autosave);
             lblMinutes.Text = LangMan.LS(LSID.LSID_Minutes);
+            lblBackupRevisionsMaxCount.Text = LangMan.LS(LSID.LSID_BackupRevisionsMaxCount);
 
-            chkGenerations.Text = LangMan.LS(LSID.LSID_IncludeGenerations);
+            grpOther.Text = LangMan.LS(LSID.LSID_Other);
+            chkShowOnStart.Text = LangMan.LS(LSID.LSID_StartupTips);
+            chkLoadRecentFiles.Text = LangMan.LS(LSID.LSID_LoadRecentFiles);
+            chkAutoCheckUpdates.Text = LangMan.LS(LSID.LSID_AutoCheckUpdates);
+            chkCharsetDetection.Text = LangMan.LS(LSID.LSID_CharsetDetection);
+            chkDialogClosingWarn.Text = LangMan.LS(LSID.LSID_WarnForClosingDialog);
+
+            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+            lblGeocoder.Text = LangMan.LS(LSID.LSID_Geocoder);
+            lblGeoSearchCountry.Text = LangMan.LS(LSID.LSID_GeoSearchCountryRestriction);
+
+            // Multimedia
+            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+
+            chkRemovableMediaWarning.Text = LangMan.LS(LSID.LSID_RemovableMediaWarningOption);
+            chkEmbeddedMediaPlayer.Text = LangMan.LS(LSID.LSID_EmbeddedMediaPlayer);
+
+            chkAllowMediaDirectRefs.Text = LangMan.LS(LSID.LSID_AllowMediaDirectReferences);
+            chkAllowMediaStoreRelativeReferences.Text = LangMan.LS(LSID.LSID_AllowMediaRelativeReferences);
+
+            lblMediaStoreDefault.Text = LangMan.LS(LSID.LSID_MediaStoreDefault);
+            cmbMediaStoreDefault.Items.Clear();
+            for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstURL; mst++) {
+                cmbMediaStoreDefault.Items.Add(new ComboItem<MediaStoreType>(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
+            }
+
+            chkAllowDeleteMediaFileFromStgArc.Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromStgArc);
+            chkAllowDeleteMediaFileFromRefs.Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromRefs);
+            chkDeleteMediaFileWithoutConfirm.Text = LangMan.LS(LSID.LSID_DeleteMediaFileWithoutConfirm);
+
+            // Charts
+            pageCharts.Text = LangMan.LS(LSID.LSID_Charts);
+
+            pageTreeChart.Text = LangMan.LS(LSID.LSID_Trees);
+            grpTreePersons.Text = LangMan.LS(LSID.LSID_ViewTree);
+
+            chkSurname.Text = LangMan.LS(LSID.LSID_Surname);
+            chkName.Text = LangMan.LS(LSID.LSID_Name);
+            chkPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
+            chkDiffLines.Text = LangMan.LS(LSID.LSID_DiffLines);
+            chkBirthDate.Text = LangMan.LS(LSID.LSID_BirthDate);
+            chkDeathDate.Text = LangMan.LS(LSID.LSID_DeathDate);
+            chkOnlyYears.Text = LangMan.LS(LSID.LSID_OnlyYears);
+            chkMarriagesDates.Text = LangMan.LS(LSID.LSID_MarriagesDates);
+            chkKinship.Text = LangMan.LS(LSID.LSID_Kinship);
+            chkSignsVisible.Text = LangMan.LS(LSID.LSID_SignsVisible);
+            chkTreeDecorative.Text = LangMan.LS(LSID.LSID_TreeDecorative);
+            chkPortraitsVisible.Text = LangMan.LS(LSID.LSID_PortraitsVisible);
+            chkDefaultPortraits.Text = LangMan.LS(LSID.LSID_DefaultPortraits);
+            chkInvertedTree.Text = LangMan.LS(LSID.LSID_InvertedTree);
+            chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
+            chkShowPlaces.Text = LangMan.LS(LSID.LSID_ShowPlaces);
+            chkSeparateDAPLines.Text = LangMan.LS(LSID.LSID_SeparateDatesAndPlacesLines);
+            chkHideUnknownSpouses.Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
+            chkCheckTreeSize.Text = LangMan.LS(LSID.LSID_CheckTreeSize);
+            chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
+            chkBoldNames.Text = LangMan.LS(LSID.LSID_BoldNames);
+
+            grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
+            lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
+            lblFemaleColor.Text = LangMan.LS(LSID.LSID_Woman);
+            lblUnkSexColor.Text = LangMan.LS(LSID.LSID_UnkSex);
+            lblUnHusbandColor.Text = LangMan.LS(LSID.LSID_UnHusband);
+            lblUnWifeColor.Text = LangMan.LS(LSID.LSID_UnWife);
+            lblFont.Text = LangMan.LS(LSID.LSID_Font);
+
+            grpSpacings.Text = LangMan.LS(LSID.LSID_Spacings);
+            lblMargins.Text = LangMan.LS(LSID.LSID_Margins);
+            lblBranchDist.Text = LangMan.LS(LSID.LSID_BranchDist);
+            lblGenDist.Text = LangMan.LS(LSID.LSID_GenDist);
+            lblSpouseDist.Text = LangMan.LS(LSID.LSID_SpouseDist);
+
+            chkSeparateDepth.Text = LangMan.LS(LSID.LSID_SeparateDepth);
+            lblDefaultDepth.Text = LangMan.LS(LSID.LSID_DefaultDepth);
+            lblDefaultDepthAncestors.Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_Ancestors);
+            lblDefaultDepthDescendants.Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_Descendants);
+
             pageAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+
+            // UIView
+            pageUIView.Text = LangMan.LS(LSID.LSID_Interface);
+
+            pageViewCommon.Text = LangMan.LS(LSID.LSID_ListsAll);
+
+            rgFNPFormat.Text = LangMan.LS(LSID.LSID_NamesFormat);
+            radSNP.Text = LangMan.LS(LSID.LSID_NF1);
+            radS_NP.Text = LangMan.LS(LSID.LSID_NF2);
+            radS_N_P.Text = LangMan.LS(LSID.LSID_NF3);
+
+            chkPlacesWithAddress.Text = LangMan.LS(LSID.LSID_PlacesWithAddress);
+            chkHighlightUnparented.Text = LangMan.LS(LSID.LSID_HighlightUnparented);
+            chkHighlightUnmarried.Text = LangMan.LS(LSID.LSID_HighlightUnmarried);
+
+            chkAutoSortChildren.Text = LangMan.LS(LSID.LSID_AutoSortChildren);
+            chkAutoSortSpouses.Text = LangMan.LS(LSID.LSID_AutoSortSpouses);
+            chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
+
+            grpDateFormat.Text = LangMan.LS(LSID.LSID_DateFormat);
+            chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
+            chkShowDatesSigns.Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
 
             grpAdvancedNames.Text = LangMan.LS(LSID.LSID_AdditionalNames);
             chkExtendWomanSurnames.Text = LangMan.LS(LSID.LSID_ExtendedWomanSurnames);
@@ -727,41 +781,24 @@ namespace GKUI.Forms
             radMaiden.Text = LangMan.LS(LSID.LSID_WSF_Maiden);
             radMarried.Text = LangMan.LS(LSID.LSID_WSF_Married);
 
-            lblGeocoder.Text = LangMan.LS(LSID.LSID_Geocoder);
-            chkRemovableMediaWarning.Text = LangMan.LS(LSID.LSID_RemovableMediaWarningOption);
-            chkLoadRecentFiles.Text = LangMan.LS(LSID.LSID_LoadRecentFiles);
-            chkEmbeddedMediaPlayer.Text = LangMan.LS(LSID.LSID_EmbeddedMediaPlayer);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            chkAllowMediaDirectRefs.Text = LangMan.LS(LSID.LSID_AllowMediaDirectReferences);
-            chkAutoCheckUpdates.Text = LangMan.LS(LSID.LSID_AutoCheckUpdates);
+            pageViewPersons.Text = LangMan.LS(LSID.LSID_ListPersons);
+            btnDefList.Text = LangMan.LS(LSID.LSID_DefList);
 
-            grpSpacings.Text = LangMan.LS(LSID.LSID_Spacings);
-            lblMargins.Text = LangMan.LS(LSID.LSID_Margins);
-            lblBranchDist.Text = LangMan.LS(LSID.LSID_BranchDist);
-            lblGenDist.Text = LangMan.LS(LSID.LSID_GenDist);
-            lblSpouseDist.Text = LangMan.LS(LSID.LSID_SpouseDist);
+            // Pedigree
+            pagePedigree.Text = LangMan.LS(LSID.LSID_Pedigrees);
 
-            chkAutoSortChildren.Text = LangMan.LS(LSID.LSID_AutoSortChildren);
-            chkAutoSortSpouses.Text = LangMan.LS(LSID.LSID_AutoSortSpouses);
-            chkCheckTreeSize.Text = LangMan.LS(LSID.LSID_CheckTreeSize);
-            chkCharsetDetection.Text = LangMan.LS(LSID.LSID_CharsetDetection);
+            grpPedigree.Text = LangMan.LS(LSID.LSID_PedigreeGen);
+            chkAttributes.Text = LangMan.LS(LSID.LSID_IncludeAttributes);
+            chkNotes.Text = LangMan.LS(LSID.LSID_IncludeNotes);
+            chkSources.Text = LangMan.LS(LSID.LSID_IncludeSources);
+            chkGenerations.Text = LangMan.LS(LSID.LSID_IncludeGenerations);
 
-            chkAllowMediaStoreRelativeReferences.Text = LangMan.LS(LSID.LSID_AllowMediaRelativeReferences);
-            lblMediaStoreDefault.Text = LangMan.LS(LSID.LSID_MediaStoreDefault);
-            chkAllowDeleteMediaFileFromStgArc.Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromStgArc);
-            chkAllowDeleteMediaFileFromRefs.Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromRefs);
-            chkDeleteMediaFileWithoutConfirm.Text = LangMan.LS(LSID.LSID_DeleteMediaFileWithoutConfirm);
+            grpPedigreeFormat.Text = LangMan.LS(LSID.LSID_PedigreeFormat);
+            radExcess.Text = LangMan.LS(LSID.LSID_PF1);
+            radCompact.Text = LangMan.LS(LSID.LSID_PF2);
 
-            cmbMediaStoreDefault.Items.Clear();
-            for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstURL; mst++) {
-                cmbMediaStoreDefault.Items.Add(new ComboItem<MediaStoreType>(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
-            }
-
-            lblBackupRevisionsMaxCount.Text = LangMan.LS(LSID.LSID_BackupRevisionsMaxCount);
-            chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
-            lblDefaultDepth.Text = LangMan.LS(LSID.LSID_DefaultDepth);
-            chkDialogClosingWarn.Text = LangMan.LS(LSID.LSID_WarnForClosingDialog);
-            lblGeoSearchCountry.Text = LangMan.LS(LSID.LSID_GeoSearchCountryRestriction);
+            // Plugins
+            pagePlugins.Text = LangMan.LS(LSID.LSID_Plugins);
         }
 
         private void chkTreeChartOption_CheckedChanged(object sender, EventArgs e)
@@ -774,6 +811,13 @@ namespace GKUI.Forms
             chkDiffLines.Enabled = chkName.Checked && chkPatronymic.Checked;
 
             chkOnlyYears.Enabled = chkBirthDate.Checked && chkDeathDate.Checked;
+        }
+
+        private void chkSeparateDepth_CheckedChanged(object sender, EventArgs e)
+        {
+            numDefaultDepth.Enabled = !chkSeparateDepth.Checked;
+            numDefaultDepthAncestors.Enabled = chkSeparateDepth.Checked;
+            numDefaultDepthDescendants.Enabled = chkSeparateDepth.Checked;
         }
     }
 }

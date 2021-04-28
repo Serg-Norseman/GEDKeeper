@@ -118,10 +118,16 @@ namespace GKUI.Components
             }
         }
 
-        public int DepthLimit
+        public int DepthLimitAncestors
         {
-            get { return fModel.DepthLimit; }
-            set { fModel.DepthLimit = value; }
+            get { return fModel.DepthLimitAncestors; }
+            set { fModel.DepthLimitAncestors = value; }
+        }
+
+        public int DepthLimitDescendants
+        {
+            get { return fModel.DepthLimitDescendants; }
+            set { fModel.DepthLimitDescendants = value; }
         }
 
         public int IndividualsCount
@@ -205,7 +211,7 @@ namespace GKUI.Components
 
             fTreeControls = new TreeControlsList<ITreeControl>();
             fTreeControls.Add(new TCScaleControl(this));
-            fTreeControls.Add(new TCGenerationsControl(this));
+            fTreeControls.Add(new TCGenerationsControl(this, TreeChartKind.ckDescendants));
             //fPersonControl = new PersonControl(this);
 
             InitTimer();
@@ -274,6 +280,11 @@ namespace GKUI.Components
             fTreeControls.UpdateState();
 
             DoZoomChanged();
+        }
+
+        public void GenChart(bool rootCenter)
+        {
+            GenChart(fModel.Root.Rec, fModel.Kind, rootCenter);
         }
 
         public void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
@@ -434,7 +445,8 @@ namespace GKUI.Components
                 using (var deepModel = new TreeChartModel()) {
                     deepModel.Assign(fModel);
                     deepModel.SetRenderer(fRenderer);
-                    deepModel.DepthLimit = 2;
+                    deepModel.DepthLimitAncestors = 2;
+                    deepModel.DepthLimitDescendants = 2;
                     deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth, true);
                     deepModel.RecalcChart(true);
 

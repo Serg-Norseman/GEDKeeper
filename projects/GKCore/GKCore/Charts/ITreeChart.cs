@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -52,7 +52,8 @@ namespace GKCore.Charts
 
     public interface ITreeChart : IChart
     {
-        int DepthLimit { get; set; }
+        int DepthLimitAncestors { get; set; }
+        int DepthLimitDescendants { get; set; }
         int Height { get; set; }
         TreeChartKind Kind { get; set; }
         TreeChartModel Model { get; }
@@ -61,6 +62,7 @@ namespace GKCore.Charts
         TreeChartPerson Selected { get; set; }
         int Width { get; set; }
 
+        void GenChart(bool rootCenter);
         void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
         ExtRect GetClientRect();
         ExtSize GetImageSize();

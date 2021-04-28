@@ -82,9 +82,10 @@ namespace GKCore.Charts
         private int fBranchDistance;
         private bool fCertaintyIndex;
         private IPen fDecorativeLinePen;
+        private int fDepthLimitAncestors;
+        private int fDepthLimitDescendants;
         private IPen fDottedLinePen;
         private IPen fDottedDecorativeLinePen;
-        private int fDepthLimit;
         private IFont fDrawFont;
         private int[] fEdges;
         private IImage fExpPic;
@@ -140,10 +141,16 @@ namespace GKCore.Charts
             set { fCertaintyIndex = value; }
         }
 
-        public int DepthLimit
+        public int DepthLimitAncestors
         {
-            get { return fDepthLimit; }
-            set { fDepthLimit = value; }
+            get { return fDepthLimitAncestors; }
+            set { fDepthLimitAncestors = value; }
+        }
+
+        public int DepthLimitDescendants
+        {
+            get { return fDepthLimitDescendants; }
+            set { fDepthLimitDescendants = value; }
         }
 
         public IFont DrawFont
@@ -241,7 +248,8 @@ namespace GKCore.Charts
 
         public TreeChartModel()
         {
-            fDepthLimit = -1;
+            fDepthLimitAncestors = -1;
+            fDepthLimitDescendants = -1;
             fEdges = new int[256];
             fFilter = new ChartFilter();
             fFilterData = new GKVarCache<GDMIndividualRecord, bool>();
@@ -321,9 +329,10 @@ namespace GKCore.Charts
             fBranchDistance = sourceModel.fBranchDistance;
             fCertaintyIndex = sourceModel.fCertaintyIndex;
             fDecorativeLinePen = sourceModel.fDecorativeLinePen;
+            fDepthLimitAncestors = sourceModel.fDepthLimitAncestors;
+            fDepthLimitDescendants= sourceModel.fDepthLimitDescendants;
             fDottedLinePen = sourceModel.fDottedLinePen;
             fDottedDecorativeLinePen = sourceModel.fDottedDecorativeLinePen;
-            fDepthLimit = sourceModel.fDepthLimit;
             fDrawFont = sourceModel.fDrawFont;
             fExpPic = sourceModel.fExpPic;
             fPersExpPic = sourceModel.fPersExpPic;
@@ -440,7 +449,7 @@ namespace GKCore.Charts
                         result.AddChild(aChild);
                     }
 
-                    if ((fDepthLimit <= -1 || generation != fDepthLimit) && aPerson.ChildToFamilyLinks.Count > 0 && !dupFlag)
+                    if ((fDepthLimitAncestors <= -1 || generation != fDepthLimitAncestors) && aPerson.ChildToFamilyLinks.Count > 0 && !dupFlag)
                     {
                         GDMChildToFamilyLink childLink = aPerson.ChildToFamilyLinks[0];
                         result.Adopted = (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted);
@@ -701,7 +710,7 @@ namespace GKCore.Charts
                             resParent = result;
                         }
 
-                        if ((fDepthLimit <= -1 || level != fDepthLimit) && (!isDup))
+                        if ((fDepthLimitDescendants <= -1 || level != fDepthLimitDescendants) && (!isDup))
                         {
                             int num2 = family.Children.Count;
                             for (int j = 0; j < num2; j++)
