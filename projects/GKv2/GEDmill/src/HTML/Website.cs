@@ -58,12 +58,12 @@ namespace GEDmill.HTML
 
             try {
                 // The value to indicate in the progress bar to show how much of the website creation is complete.
-                int nProgress = 0;
+                int progress = 0;
 
                 int[] gfstats = fTree.GetRecordStats();
 
                 // The maximum value of the progress bar, i.e. when website creation is fully complete.
-                int nProgressMax =
+                int progressMax =
                     1  // Site-wide multimedia files
                   + 1  // W3C Sticker
                   + 1  // Background image
@@ -86,7 +86,7 @@ namespace GEDmill.HTML
                 // Here goes....
 
                 // Start the progress indicator.
-                fProgressWindow.Begin(0, nProgressMax);
+                fProgressWindow.Begin(0, progressMax);
                 if (fProgressWindow.IsAborting) {
                     return;
                 }
@@ -96,7 +96,7 @@ namespace GEDmill.HTML
                 if (fProgressWindow.IsAborting) {
                     return;
                 }
-                fProgressWindow.StepTo(++nProgress);
+                fProgressWindow.StepTo(++progress);
 
                 // Copy the W3C sticker file.
                 fProgressWindow.SetText("Copying W3C sticker");
@@ -107,7 +107,7 @@ namespace GEDmill.HTML
                 if (fProgressWindow.IsAborting) {
                     return;
                 }
-                fProgressWindow.StepTo(++nProgress);
+                fProgressWindow.StepTo(++progress);
 
                 // Create the index creator for use by the individuals records creator.
                 var indiIndexCreator = new CreatorIndexIndividuals(fTree, fProgressWindow, sW3CFilename);
@@ -118,7 +118,7 @@ namespace GEDmill.HTML
                 if (fProgressWindow.IsAborting) {
                     return;
                 }
-                fProgressWindow.StepTo(++nProgress);
+                fProgressWindow.StepTo(++progress);
 
                 // Create the style sheet
                 fProgressWindow.SetText("Creating style sheet");
@@ -132,7 +132,7 @@ namespace GEDmill.HTML
                     return;
                 }
 
-                fProgressWindow.StepTo(++nProgress);
+                fProgressWindow.StepTo(++progress);
 
                 // Create the pages for the individual records.
                 fProgressWindow.SetText("Creating individual pages");
@@ -146,7 +146,7 @@ namespace GEDmill.HTML
                         return;
                     }
 
-                    fProgressWindow.StepTo(++nProgress);
+                    fProgressWindow.StepTo(++progress);
                 }
 
                 // Create the index for the individual records pages.
@@ -156,7 +156,7 @@ namespace GEDmill.HTML
                     return;
                 }
 
-                fProgressWindow.StepTo(++nProgress);
+                fProgressWindow.StepTo(++progress);
 
                 // Clear list of copied files, so that source images get copied afresh
                 // and so get resized differently to any indi images based on the same file.
@@ -175,7 +175,7 @@ namespace GEDmill.HTML
                         return;
                     }
 
-                    fProgressWindow.StepTo(++nProgress);
+                    fProgressWindow.StepTo(++progress);
                 }
 
                 if (fProgressWindow.IsAborting) {
@@ -189,7 +189,7 @@ namespace GEDmill.HTML
                     CreatorFrontPage fpc = new CreatorFrontPage(fTree, fProgressWindow, sW3CFilename, stats);
                     fpc.Create();
                 }
-                fProgressWindow.StepTo(++nProgress);
+                fProgressWindow.StepTo(++progress);
                 if (fProgressWindow.IsAborting) {
                     return;
                 }
@@ -201,7 +201,7 @@ namespace GEDmill.HTML
                     var hpc = new CreatorHelpPage(fTree, fProgressWindow, sW3CFilename);
                     hpc.Create();
                 }
-                fProgressWindow.StepTo(++nProgress);
+                fProgressWindow.StepTo(++progress);
                 if (fProgressWindow.IsAborting) {
                     return;
                 }
@@ -215,7 +215,7 @@ namespace GEDmill.HTML
                     return;
                 }
 
-                fProgressWindow.StepTo(++nProgress);
+                fProgressWindow.StepTo(++progress);
 
                 // Copy the Javascript
                 fProgressWindow.SetText("Creating Javascript file");
@@ -227,7 +227,7 @@ namespace GEDmill.HTML
                     return;
                 }
 
-                fProgressWindow.StepTo(++nProgress);
+                fProgressWindow.StepTo(++progress);
 
                 // Done
                 fLogger.WriteInfo("Website::CreateFinished");
@@ -295,17 +295,17 @@ namespace GEDmill.HTML
         // Copy valid XHTML sticker file.
         private string CopyW3CSticker()
         {
-            string sW3CFile = "";
+            string stickerFile = "";
             fLogger.WriteInfo("Copying W3C sticker ...");
             try {
                 Rectangle rectNewArea = new Rectangle(0, 0, 0, 0);
-                sW3CFile = Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\valid-xhtml10.png", "", 0, 0, ref rectNewArea, null);
+                stickerFile = Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\valid-xhtml10.png", "", 0, 0, ref rectNewArea, null);
             } catch (IOException e) {
                 fLogger.WriteError("Caught io exception while copying W3C sticker: {0}", e);
             } catch (ArgumentException e) {
                 fLogger.WriteError("Caught argument exception while copying W3C sticker: {0}", e);
             }
-            return sW3CFile;
+            return stickerFile;
         }
 
         // Copies the image for the background of the webpages.

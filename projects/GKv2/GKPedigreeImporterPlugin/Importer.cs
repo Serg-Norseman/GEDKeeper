@@ -738,45 +738,42 @@ namespace GKPedigreeImporterPlugin
                 fLog.Clear();
 
                 GDMLines buffer = new GDMLines();
-                try {
-                    int prev_id = 0;
+                int prev_id = 0;
 
-                    int num = fRawContents.Count;
-                    for (int i = 0; i < num; i++) {
-                        string line = PrepareLine(fRawContents[i]);
-                        RawLine rawLine = (RawLine)fRawContents.GetObject(i);
+                int num = fRawContents.Count;
+                for (int i = 0; i < num; i++) {
+                    string line = PrepareLine(fRawContents[i]);
+                    RawLine rawLine = (RawLine)fRawContents.GetObject(i);
 
-                        switch (rawLine.Type) {
-                            case RawLineType.rltComment:
-                                buffer.Add(line);
-                                break;
+                    switch (rawLine.Type) {
+                        case RawLineType.rltComment:
+                            buffer.Add(line);
+                            break;
 
-                            case RawLineType.rltPerson:
-                            case RawLineType.rltRomeGeneration:
-                            case RawLineType.rltEOF:
-                                {
-                                    prev_id = ParseBuffer(buffer);
-                                    buffer.Clear();
+                        case RawLineType.rltPerson:
+                        case RawLineType.rltRomeGeneration:
+                        case RawLineType.rltEOF:
+                        {
+                            prev_id = ParseBuffer(buffer);
+                            buffer.Clear();
 
-                                    switch (rawLine.Type) {
-                                        case RawLineType.rltPerson:
-                                            buffer.Add(line);
-                                            break;
-                                        case RawLineType.rltRomeGeneration:
-                                            fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
-                                            break;
-                                        case RawLineType.rltEOF:
-                                            fLog.Add("> EOF.");
-                                            break;
-                                    }
-                                }
-                                break;
+                            switch (rawLine.Type) {
+                                case RawLineType.rltPerson:
+                                    buffer.Add(line);
+                                    break;
+                                case RawLineType.rltRomeGeneration:
+                                    fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
+                                    break;
+                                case RawLineType.rltEOF:
+                                    fLog.Add("> EOF.");
+                                    break;
+                            }
                         }
+                            break;
                     }
-
-                    return true;
-                } finally {
                 }
+
+                return true;
             } catch (Exception ex) {
                 Logger.WriteError("Importer.ImportTextContent()", ex);
                 throw;

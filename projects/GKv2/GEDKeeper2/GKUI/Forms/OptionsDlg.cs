@@ -37,7 +37,6 @@ namespace GKUI.Forms
 {
     public sealed partial class OptionsDlg : CommonDialog, ILocalization, IOptionsDlg
     {
-        private readonly IHost fHost;
         private GlobalOptions fOptions;
         private readonly ListColumns fTempColumns;
 
@@ -56,7 +55,6 @@ namespace GKUI.Forms
             btnColumnUp.Image = UIHelper.LoadResourceImage("Resources.btn_up.gif");
             btnColumnDown.Image = UIHelper.LoadResourceImage("Resources.btn_down.gif");
 
-            fHost = host;
             fOptions = GlobalOptions.Instance;
             fTempColumns = IndividualListMan.CreateIndividualListColumns();
 
@@ -246,7 +244,6 @@ namespace GKUI.Forms
             chkAutoSortChildren.Checked = fOptions.AutoSortChildren;
             chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
             chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
-            chkDialogClosingWarn.Checked = fOptions.DialogClosingWarn;
         }
 
         private void UpdateWomanSurnameFormat()

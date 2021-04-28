@@ -194,7 +194,7 @@ namespace GKTests
             using (MemoryStream stm = new MemoryStream()) {
                 using (StreamWriter fs = new StreamWriter(stm)) {
                     if (tag is GDMRecord) {
-                        GEDCOMProvider.WriteRecordEx(fs, tag as GDMRecord);
+                        GEDCOMProvider.WriteRecordEx(fs, (GDMRecord)tag);
                     } else {
                         if (tag is GDMPersonalName) {
                             GEDCOMProvider.WritePersonalName(fs, 1, tag);

@@ -164,7 +164,7 @@ namespace GEDmill.HTML
                         GDMIndividualRecord ir = (GDMIndividualRecord)(enumerator.Value);
                         if (ir != null && GMHelper.GetVisibility(ir)) {
                             string link = MakeLink(ir);
-                            if (link != "") {
+                            if (!string.IsNullOrEmpty(link)) {
                                 f.WriteLine("<li>{0}</li>", link);
                             }
                         }
@@ -195,11 +195,10 @@ namespace GEDmill.HTML
         // Writes the HTML for the multimedia files associated with this record. 
         private void OutputMultimedia(HTMLFile f)
         {
-            string nonPicMainFilename = "";
             if (fMultimediaList.Count > 0) {
                 f.WriteLine("        <div id=\"sourcePics\">");
                 foreach (Multimedia iMultimedia in fMultimediaList) {
-                    nonPicMainFilename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, CConfig.Instance.LinkOriginalPicture);
+                    string nonPicMainFilename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, CConfig.Instance.LinkOriginalPicture);
 
                     string imageTitle = "";
                     string altName = "";
@@ -209,7 +208,7 @@ namespace GEDmill.HTML
                         altName = iMultimedia.Title;
                     }
 
-                    f.WriteLine(string.Concat("          <p>"));
+                    f.WriteLine("          <p>");
 
                     if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
                         // Must be a picture.
@@ -233,7 +232,7 @@ namespace GEDmill.HTML
                             f.WriteLine(string.Concat("            <img src=\"", nonPicMainFilename, "\" alt=\"", altName, "\" />")); // TODO: clip and scale properly. Use MainForm.s_config to set a max scale
                         }
                     }
-                    f.WriteLine(string.Concat("          </p>"));
+                    f.WriteLine("          </p>");
                     if (imageTitle != "") {
                         f.WriteLine("<p id=\"sourcepic_title\">{0}</p>", imageTitle);
                     }

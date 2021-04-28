@@ -494,10 +494,10 @@ namespace GEDmill
                     ini.WriteBool("Common", "KeepSiblingOrder", KeepSiblingOrder);
                     ini.WriteBool("Common", "IncludeHelpPage", IncludeHelpPage);
 
-                    int uVersionMajor = 1, uVersionMinor = 11, uVersionBuild = 0;
-                    ini.WriteInteger("Common", "VersionMajor", uVersionMajor);
-                    ini.WriteInteger("Common", "VersionMinor", uVersionMinor);
-                    ini.WriteInteger("Common", "VersionBuild", uVersionBuild);
+                    int versionMajor = 1, versionMinor = 11, versionPatch = 0;
+                    ini.WriteInteger("Common", "VersionMajor", versionMajor);
+                    ini.WriteInteger("Common", "VersionMinor", versionMinor);
+                    ini.WriteInteger("Common", "VersionPatch", versionPatch);
                 }
             } catch (Exception ex) {
                 fLogger.WriteError("CConfig.StoreSettings()", ex);
@@ -608,7 +608,7 @@ namespace GEDmill
 
                     versionMajor = ini.ReadInteger("Common", "VersionMajor", 0);
                     versionMinor = ini.ReadInteger("Common", "VersionMinor", 0);
-                    versionPatch = ini.ReadInteger("Common", "VersionBuild", 0);
+                    versionPatch = ini.ReadInteger("Common", "VersionPatch", 0);
                 }
             } catch (Exception ex) {
                 fLogger.WriteError("CConfig.Load()", ex);

@@ -20,7 +20,6 @@
 
 using System;
 using System.IO;
-using System.Reflection;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;

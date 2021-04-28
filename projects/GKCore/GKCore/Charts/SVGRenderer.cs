@@ -142,10 +142,10 @@ namespace GKCore.Charts
         {
             if (fGfx != null) {
                 if (path is IGfxCirclePath) {
-                    var circlePath = path as IGfxCirclePath;
+                    var circlePath = (IGfxCirclePath)path;
                     fGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, null /*pen*/, brush);
                 } else if (path is IGfxCircleSegmentPath) {
-                    var segmPath = path as IGfxCircleSegmentPath;
+                    var segmPath = (IGfxCircleSegmentPath)path;
                     fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, null /*pen*/, brush);
                 }
             }
@@ -155,10 +155,10 @@ namespace GKCore.Charts
         {
             if (fGfx != null) {
                 if (path is IGfxCirclePath) {
-                    var circlePath = path as IGfxCirclePath;
+                    var circlePath = (IGfxCirclePath)path;
                     fGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, null /*brush*/);
                 } else if (path is IGfxCircleSegmentPath) {
-                    var segmPath = path as IGfxCircleSegmentPath;
+                    var segmPath = (IGfxCircleSegmentPath)path;
                     fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, null /*brush*/);
                 }
             }
@@ -168,10 +168,10 @@ namespace GKCore.Charts
         {
             if (fGfx != null) {
                 if (path is IGfxCirclePath) {
-                    var circlePath = path as IGfxCirclePath;
+                    var circlePath = (IGfxCirclePath)path;
                     fGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, brush);
                 } else if (path is IGfxCircleSegmentPath) {
-                    var segmPath = path as IGfxCircleSegmentPath;
+                    var segmPath = (IGfxCircleSegmentPath)path;
                     fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, brush);
                 }
             }

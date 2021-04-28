@@ -152,7 +152,7 @@ namespace GKStdReports
                 fWriter.AddListItem("   " + li, fTextFont);
 
                 if (evObj.Rec is GDMIndividualRecord) {
-                    GDMIndividualRecord iRec = evObj.Rec as GDMIndividualRecord;
+                    GDMIndividualRecord iRec = (GDMIndividualRecord)evObj.Rec;
 
                     if (evt.GetTagType() == GEDCOMTagType.BIRT) {
                         if (evObj.Type == EventType.Personal) {
@@ -173,7 +173,7 @@ namespace GKStdReports
                         }
                     }
                 } else if (evObj.Rec is GDMFamilyRecord) {
-                    GDMFamilyRecord famRec = evObj.Rec as GDMFamilyRecord;
+                    GDMFamilyRecord famRec = (GDMFamilyRecord)evObj.Rec;
 
                     GDMIndividualRecord sp;
                     string unk;

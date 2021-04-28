@@ -72,7 +72,7 @@ namespace GEDmill.MiniTree
             {
                 FirstName = "";
                 Surname = "";
-                Concealed = (!GMHelper.GetVisibility(ir));
+                Concealed = !GMHelper.GetVisibility(ir);
                 if (Concealed && !CConfig.Instance.UseWithheldNames) {
                     FirstName = "";
                     Surname = Name = CConfig.Instance.ConcealedName;
@@ -100,7 +100,7 @@ namespace GEDmill.MiniTree
         // Returns the height of the whole tree diagram.
         public int Height
         {
-            get { return (int)(fSizeTotal.Height); }
+            get { return (int)fSizeTotal.Height; }
         }
 
 
@@ -263,11 +263,14 @@ namespace GEDmill.MiniTree
         protected MiniTreeGroup CreateDataStructure(GDMIndividualRecord irSubject)
         {
             // Add subject's frParents
-            GDMFamilyRecord frParents = fTree.GetParentsFamily(irSubject);
+            GDMFamilyRecord familyParents = fTree.GetParentsFamily(irSubject);
+            GDMIndividualRecord husband, wife;
+            fTree.GetSpouses(familyParents, out husband, out wife);
+
             MiniTreeGroup mtgParents = new MiniTreeGroup();
             MiniTreeIndividual mtiFather = null;
-            if (frParents != null) {
-                mtiFather = AddToGroup(fTree.GetPtrValue(frParents.Husband), mtgParents);
+            if (familyParents != null) {
+                mtiFather = AddToGroup(husband, mtgParents);
             }
 
             // Create a group for the subject and their siblings.
@@ -285,7 +288,7 @@ namespace GEDmill.MiniTree
             // For each sibling (including the subject)
             while (true)
             {
-                GDMIndividualRecord irSibling = GetChild(frParents, nSiblings, irSubject);
+                GDMIndividualRecord irSibling = GetChild(familyParents, nSiblings, irSubject);
                 if (irSibling == null) {
                     break;
                 }
@@ -309,7 +312,7 @@ namespace GEDmill.MiniTree
                             // Subject is male, so need to put them in now, before their children.
                             // (Otherwise they get added as a regular sibling later)
                             CBoxText boxtext = new CBoxText(irSubject);
-                            mtiRightmostSibling = mtgSiblings.AddIndividual(irSubject, boxtext.FirstName, boxtext.Surname, boxtext.Date, false, frParents != null, true, boxtext.Concealed, false);
+                            mtiRightmostSibling = mtgSiblings.AddIndividual(irSubject, boxtext.FirstName, boxtext.Surname, boxtext.Date, false, familyParents != null, true, boxtext.Concealed, false);
 
                             // To stop subject being added as regular sibling.
                             bAddedSubject = true;
@@ -376,7 +379,7 @@ namespace GEDmill.MiniTree
 
                     if (!bAddedSubject) {
                         CBoxText boxtext = new CBoxText(irSubject);
-                        MiniTreeIndividual mtiWife = mtgSiblings.AddIndividual(irSubject, boxtext.FirstName, boxtext.Surname, boxtext.Date, false, frParents != null, true, boxtext.Concealed, false);
+                        MiniTreeIndividual mtiWife = mtgSiblings.AddIndividual(irSubject, boxtext.FirstName, boxtext.Surname, boxtext.Date, false, familyParents != null, true, boxtext.Concealed, false);
 
                         if (mtgOffspring != null) {
                             mtgOffspring.fCrossbar = MiniTreeGroup.ECrossbar.Solid;
@@ -386,7 +389,7 @@ namespace GEDmill.MiniTree
                 } else if (Exists(irSibling)) {
                     // A sibling (not the subject).
                     CBoxText boxtext = new CBoxText(irSibling);
-                    mtgSiblings.AddIndividual(irSibling, boxtext.FirstName, boxtext.Surname, boxtext.Date, true, frParents != null, true, boxtext.Concealed, false);
+                    mtgSiblings.AddIndividual(irSibling, boxtext.FirstName, boxtext.Surname, boxtext.Date, true, familyParents != null, true, boxtext.Concealed, false);
                 }
 
                 nSiblings++;
@@ -399,8 +402,8 @@ namespace GEDmill.MiniTree
             mtgSiblings.LeftBox = mtiFather;
 
             // Add subject's mother
-            if (frParents != null) {
-                MiniTreeIndividual mtiMother = AddToGroup(fTree.GetPtrValue(frParents.Wife), mtgParents);
+            if (familyParents != null) {
+                MiniTreeIndividual mtiMother = AddToGroup(wife, mtgParents);
                 mtgSiblings.RightBox = mtiMother;
             }
 
@@ -409,21 +412,21 @@ namespace GEDmill.MiniTree
         }
 
         // Gets the n'th child in the fr, or returns the default individual if first child requested and no fr.
-        private GDMIndividualRecord GetChild(GDMFamilyRecord famRec, int nChild, GDMIndividualRecord irDefault)
+        private GDMIndividualRecord GetChild(GDMFamilyRecord famRec, int childIndex, GDMIndividualRecord irDefault)
         {
             GDMIndividualRecord irChild = null;
-            if (famRec != null && nChild < famRec.Children.Count) {
+            if (famRec != null && childIndex < famRec.Children.Count) {
                 // The ordering of children in the tree can be selected to be the same as it is in the GEDCOM file. This 
                 // is because the file should be ordered as the user chose to order the fr when entering the data in 
                 // their fr history app, regardless of actual birth dates. 
                 if (CConfig.Instance.KeepSiblingOrder) {
-                    irChild = fTree.GetPtrValue(famRec.Children[nChild]);
+                    irChild = fTree.GetPtrValue(famRec.Children[childIndex]);
                 } else {
-                    irChild = fTree.GetPtrValue(famRec.Children[nChild]);
+                    irChild = fTree.GetPtrValue(famRec.Children[childIndex]);
                 }
             } else {
                 // Return the default individual as first and only child of fr.
-                if (nChild == 0) {
+                if (childIndex == 0) {
                     irChild = irDefault;
                 }
             }
@@ -433,7 +436,7 @@ namespace GEDmill.MiniTree
         // Add a box for the individual to the specified group.
         private static MiniTreeIndividual AddToGroup(GDMIndividualRecord ir, MiniTreeGroup mtg)
         {
-            MiniTreeIndividual mti = null;
+            MiniTreeIndividual mti;
             if (Exists(ir)) {
                 CBoxText boxtext = new CBoxText(ir);
                 mti = mtg.AddIndividual(ir, boxtext.FirstName, boxtext.Surname, boxtext.Date, true, false, false, boxtext.Concealed, true);

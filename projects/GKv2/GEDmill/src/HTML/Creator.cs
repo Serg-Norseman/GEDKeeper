@@ -65,7 +65,7 @@ namespace GEDmill.HTML
         }
 
         // Converts all HTML characters into their escaped versions
-        // Set bHardSpace to false if you want to keep first space as breakable, true if you want all nbsp.
+        // Set hardSpace to false if you want to keep first space as breakable, true if you want all nbsp.
         // TODO: Surely there is a .Net function to do this (WebUtility.HtmlEncode)?
         // TODO: Might want to preserve <a> links in the HTML in case user has specified them in their data.
         public static string EscapeHTML(string original, bool hardSpace)
@@ -204,15 +204,12 @@ namespace GEDmill.HTML
             const string validChars = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$%'`-@{}~!#()&_^";
 
             var sb = new StringBuilder(original.Length);
-            int length = original.Length;
-            int n = 0;
             foreach (char c in original) {
                 char cc = c;
                 if (validChars.IndexOf(c) < 0) {
                     cc = '_';
                 }
                 sb.Append(cc);
-                ++n;
             }
             return sb.ToString();
         }

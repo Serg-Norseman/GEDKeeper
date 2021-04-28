@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using GDModel;
 using GEDmill.Model;
@@ -135,9 +134,7 @@ namespace GEDmill.HTML
                 f.WriteLine("<p>Website created{0} using GEDmill.</p>", byEmail);
                 // Add last update string
                 if (CConfig.Instance.AddHomePageCreateTime) {
-                    DateTime dt = DateTime.Now;
-                    string update_date_string = dt.ToString("dd MMMM yyyy", DateTimeFormatInfo.InvariantInfo);
-                    f.WriteLine("<p>Created on {0}.</p>", update_date_string);
+                    f.WriteLine("<p>Created on {0}.</p>", GMHelper.GetNowDateStr());
                 }
 
                 // Add link to users main website

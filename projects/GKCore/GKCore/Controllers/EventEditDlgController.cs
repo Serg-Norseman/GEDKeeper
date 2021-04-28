@@ -386,7 +386,7 @@ namespace GKCore.Controllers
             if (vals != null) {
                 string tmp = fView.Attribute.Text;
                 fView.Attribute.Clear();
-                fView.Attribute.AddRange((object[])vals, canbeSorted);
+                fView.Attribute.AddRange(vals, canbeSorted);
                 fView.Attribute.Text = tmp;
                 fView.Attribute.ReadOnly = (!userInput);
             }

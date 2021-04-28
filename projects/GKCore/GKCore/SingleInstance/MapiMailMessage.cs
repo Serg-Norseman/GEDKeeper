@@ -136,7 +136,7 @@ namespace GKCore.MapiMail
         public void ShowDialog()
         {
             // Create the mail message in an STA thread
-            Thread t = new Thread(new ThreadStart(ShowMail));
+            Thread t = new Thread(ShowMail);
             t.IsBackground = true;
             t.SetApartmentState(ApartmentState.STA);
             t.Start();

@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using BSLib.Design.Handlers;
@@ -327,23 +328,6 @@ namespace GEDmill
             return result;
         }
 
-        public static string GetName(GDMIndividualRecord iRec, int i)
-        {
-            return (i >= 0 && i < iRec.PersonalNames.Count) ? iRec.PersonalNames[i].StringValue : "";
-        }
-
-        // Returns the n'th name and associated sources
-        public static NameAndSource GetNameAndSource(GDMIndividualRecord record, int n)
-        {
-            if (record.PersonalNames.Count <= n || n < 0) {
-                return null;
-            }
-            GDMPersonalName pns = record.PersonalNames[n];
-            NameAndSource nas = new NameAndSource(pns.StringValue);
-            nas.Sources.AddRange(pns.SourceCitations);
-            return nas;
-        }
-
         public static List<GDMFamilyRecord> GetFamilyList(GDMTree tree, GDMIndividualRecord record)
         {
             var result = new List<GDMFamilyRecord>();
@@ -578,7 +562,7 @@ namespace GEDmill
 
         public static string GetIndiName(string surname, string firstName)
         {
-            string name = "";
+            string name;
 
             if (firstName != "" && surname != "") {
                 name = string.Concat(surname, ", ", firstName);
@@ -593,6 +577,12 @@ namespace GEDmill
             }
 
             return name;
+        }
+
+        public static string GetNowDateStr()
+        {
+            string result = DateTime.Now.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
+            return result;
         }
     }
 }

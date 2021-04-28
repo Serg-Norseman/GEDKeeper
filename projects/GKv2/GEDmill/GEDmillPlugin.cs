@@ -45,6 +45,7 @@ namespace GEDmill
         LSID_Settings,
         LSID_Ok,
         LSID_Cancel,
+        LSID_CreatingWebsite,
     }
 
     public sealed class Plugin : WidgetPlugin

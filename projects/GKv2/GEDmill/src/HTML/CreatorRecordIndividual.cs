@@ -205,10 +205,9 @@ namespace GEDmill.HTML
                 foreach (GDMSpouseToFamilyLink spLink in fIndiRec.SpouseToFamilyLinks) {
                     GDMFamilyRecord fr = fTree.GetPtrValue<GDMFamilyRecord>(spLink);
                     if (fr != null) {
-                        // Find the irSubject's name
-                        GDMIndividualRecord spouse = null;
                         string spouseLink = "";
-                        spouse = fTree.GetSpouseBy(fr, fIndiRec);
+                        // Find the irSubject's name
+                        GDMIndividualRecord spouse = fTree.GetSpouseBy(fr, fIndiRec);
                         if (spouse != null && GMHelper.GetVisibility(spouse)) {
                             spouseLink = MakeLink(spouse);
                         }
@@ -302,8 +301,8 @@ namespace GEDmill.HTML
             foreach (GDMChildToFamilyLink childLink in fIndiRec.ChildToFamilyLinks) {
                 var famRec = fTree.GetPtrValue(childLink);
                 if (famRec != null) {
-                    GDMIndividualRecord husband = fTree.GetPtrValue(famRec.Husband);
-                    GDMIndividualRecord wife = fTree.GetPtrValue(famRec.Wife);
+                    GDMIndividualRecord husband, wife;
+                    fTree.GetSpouses(famRec, out husband, out wife);
 
                     if (husband != null || wife != null) {
                         fParents.Add(new HusbandAndWife(husband, wife));
@@ -370,12 +369,12 @@ namespace GEDmill.HTML
         {
             string relativeFilename = GetIndividualHTMLFilename(fIndiRec);
             // Create some strings to use in index entry
-            string sUserRef = "";
+            string userRef = "";
             if (fIndiRec.UserReferences.Count > 0) {
                 GDMUserReference urn = fIndiRec.UserReferences[0];
-                sUserRef = EscapeHTML(urn.StringValue, false);
-                if (sUserRef.Length > 0) {
-                    sUserRef = string.Concat(" [", sUserRef, "]");
+                userRef = EscapeHTML(urn.StringValue, false);
+                if (userRef.Length > 0) {
+                    userRef = string.Concat(" [", userRef, "]");
                 }
             }
             string alterEgo = "";
@@ -389,20 +388,20 @@ namespace GEDmill.HTML
 
             if (fIndiIndexCreator != null) {
                 // Add index entry for this individuals main name (or hidden/unknown string)
-                string sFirstName = fFirstName;
+                string firstName = fFirstName;
                 if (!string.IsNullOrEmpty(fNameSuffix)) {
-                    sFirstName += ", " + fNameSuffix;
+                    firstName += ", " + fNameSuffix;
                 }
-                fIndiIndexCreator.AddIndividualToIndex(sFirstName, fSurname, fUnknownName, alterEgo, lifeDates, fConcealed, relativeFilename, sUserRef);
+                fIndiIndexCreator.AddIndividualToIndex(firstName, fSurname, fUnknownName, alterEgo, lifeDates, fConcealed, relativeFilename, userRef);
 
                 // Add entries for this individual's other names
                 if (!fConcealed && !fUnknownName) {
-                    string other_name;
-                    for (int i = 1; (other_name = GMHelper.GetName(fIndiRec, i)) != ""; i++) {
-                        string other_firstName = "";
-                        string other_surname = "";
-                        other_name = GMHelper.CapitaliseName(other_name, ref other_firstName, ref other_surname); // Also splits name into first name and surname
-                        fIndiIndexCreator.AddIndividualToIndex(other_firstName, other_surname, fUnknownName, alterEgo, lifeDates, fConcealed, relativeFilename, sUserRef);
+                    for (int i = 1; i < fIndiRec.PersonalNames.Count; i++) {
+                        string otherName = fIndiRec.PersonalNames[i].StringValue;
+                        string otherFirstName = "";
+                        string otherSurname = "";
+                        otherName = GMHelper.CapitaliseName(otherName, ref otherFirstName, ref otherSurname); // Also splits name into first name and surname
+                        fIndiIndexCreator.AddIndividualToIndex(otherFirstName, otherSurname, fUnknownName, alterEgo, lifeDates, fConcealed, relativeFilename, userRef);
                     }
                 }
             }
@@ -418,27 +417,25 @@ namespace GEDmill.HTML
             marriageNote = "";
             foreach (GDMFamilyEvent fes in fr.Events) {
                 if (fes.GetTagName() == "MARR") {
-                    {
-                        marriageDate = fes.Date;
+                    marriageDate = fes.Date;
 
-                        if (fes.Place != null) {
-                            if (fes.Place.StringValue != "")
-                                marriagePlace = string.Concat(" ", CConfig.Instance.PlaceWord, " ", EscapeHTML(fes.Place.StringValue, false));
-                        }
-
-                        sourceRefs = AddSources(ref fReferenceList, fes.SourceCitations);
-
-                        if (fes.Notes != null) {
-                            foreach (GDMNotes ns in fes.Notes) {
-                                if (marriageNote != "") {
-                                    marriageNote += "\n";
-                                }
-
-                                marriageNote += GetNoteText(ns);
-                            }
-                        }
-                        break;
+                    if (fes.Place != null) {
+                        if (fes.Place.StringValue != "")
+                            marriagePlace = string.Concat(" ", CConfig.Instance.PlaceWord, " ", EscapeHTML(fes.Place.StringValue, false));
                     }
+
+                    sourceRefs = AddSources(ref fReferenceList, fes.SourceCitations);
+
+                    if (fes.Notes != null) {
+                        foreach (GDMNotes ns in fes.Notes) {
+                            if (marriageNote != "") {
+                                marriageNote += "\n";
+                            }
+
+                            marriageNote += GetNoteText(ns);
+                        }
+                    }
+                    break;
                 }
             }
             return sourceRefs;
@@ -450,31 +447,28 @@ namespace GEDmill.HTML
             string sourceRefs = "";
             string place = "";
             if (GMHelper.GetVisibility(spouse)) {
-                // Record death of irSubject if within this person's lifetime
-                GDMDateValue spouseDeathDate = null;
                 foreach (GDMCustomEvent ies in spouse.Events) {
                     if (ies.GetTagName() == "DEAT") {
-                        {
-                            spouseDeathDate = ies.Date;
-                            if (spouseDeathDate != null) {
-                                if (fInferredDeathday == null || fInferredDeathday.Date == null || spouseDeathDate.CompareTo(fInferredDeathday.Date) <= 0) {
-                                    if (ies.Place != null) {
-                                        if (ies.Place.StringValue != "")
-                                            place = string.Concat(" ", CConfig.Instance.PlaceWord, " ", EscapeHTML(ies.Place.StringValue, false));
-                                    }
-
-                                    sourceRefs = AddSources(ref fReferenceList, ies.SourceCitations);
-
-                                    if (spouseDeathDate != null) {
-                                        Event iEvent = new Event(spouseDeathDate, "_SPOUSEDIED", string.Concat("death of ", spouseLink, place, ".", sourceRefs), "", null, false, CConfig.Instance.CapitaliseEventDescriptions);
-                                        fEventList.Add(iEvent);
-                                    } else {
-                                        Event iEvent = new Event(null, "_SPOUSEDIED", string.Concat("death of ", spouseLink, place, ".", sourceRefs), "", null, false, CConfig.Instance.CapitaliseEventDescriptions);
-                                        fAttributeList.Add(iEvent);
-                                    }
+                        // Record death of irSubject if within this person's lifetime
+                        GDMDateValue spouseDeathDate = ies.Date;
+                        if (spouseDeathDate != null) {
+                            if (fInferredDeathday == null || fInferredDeathday.Date == null || spouseDeathDate.CompareTo(fInferredDeathday.Date) <= 0) {
+                                if (ies.Place != null) {
+                                    if (ies.Place.StringValue != "")
+                                        place = string.Concat(" ", CConfig.Instance.PlaceWord, " ", EscapeHTML(ies.Place.StringValue, false));
                                 }
-                                break;
+
+                                sourceRefs = AddSources(ref fReferenceList, ies.SourceCitations);
+
+                                if (spouseDeathDate != null) {
+                                    Event iEvent = new Event(spouseDeathDate, "_SPOUSEDIED", string.Concat("death of ", spouseLink, place, ".", sourceRefs), "", null, false, CConfig.Instance.CapitaliseEventDescriptions);
+                                    fEventList.Add(iEvent);
+                                } else {
+                                    Event iEvent = new Event(null, "_SPOUSEDIED", string.Concat("death of ", spouseLink, place, ".", sourceRefs), "", null, false, CConfig.Instance.CapitaliseEventDescriptions);
+                                    fAttributeList.Add(iEvent);
+                                }
                             }
+                            break;
                         }
                     }
                 }
@@ -605,11 +599,14 @@ namespace GEDmill.HTML
 
             // Remember other name records
             if (!fConcealed && !fUnknownName) {
-                NameAndSource nasOther;
-                for (int i = 1; (nasOther = GMHelper.GetNameAndSource(fIndiRec, i)) != null; i++) {
-                    string sFirstNameOther = "";
-                    string sSurnameOther = "";
-                    nasOther.Name = GMHelper.CapitaliseName(nasOther.Name, ref sFirstNameOther, ref sSurnameOther); // Also splits name into first name and surname
+                for (int i = 1; i < fIndiRec.PersonalNames.Count; i++) {
+                    GDMPersonalName pns = fIndiRec.PersonalNames[i];
+                    NameAndSource nasOther = new NameAndSource(pns.StringValue);
+                    nasOther.Sources.AddRange(pns.SourceCitations);
+
+                    string firstNameOther = "";
+                    string surnameOther = "";
+                    nasOther.Name = GMHelper.CapitaliseName(nasOther.Name, ref firstNameOther, ref surnameOther); // Also splits name into first name and surname
                     nasOther.SourceHtml = AddSources(ref fReferenceList, nasOther.Sources);
                     fOtherNames.Add(nasOther);
                 }
@@ -904,8 +901,8 @@ namespace GEDmill.HTML
                 nicknames = string.Concat(" <span class=\"nicknames\">(", EscapeHTML(fUsedName, false), EscapeHTML(fNickName, false), ")</span>");
             }
             f.WriteLine(string.Concat("            <h1>", EscapeHTML(fName, false), fNameSources, nicknames, "</h1>"));
-            foreach (NameAndSource other_name in fOtherNames) {
-                f.WriteLine(string.Concat("            <h2>also known as ", EscapeHTML(other_name.Name, false), other_name.SourceHtml, "</h2>"));
+            foreach (NameAndSource otherName in fOtherNames) {
+                f.WriteLine(string.Concat("            <h2>also known as ", EscapeHTML(otherName.Name, false), otherName.SourceHtml, "</h2>"));
             }
             f.WriteLine("          </div> <!-- names -->");
         }
@@ -1622,10 +1619,7 @@ namespace GEDmill.HTML
                     }
                 }
 
-                bool bComma = false;
-                if (sourceRefs != "") {
-                    bComma = true;
-                }
+                bool bComma = (sourceRefs != "");
 
                 if (sourceNumber == -1) {
                     sourceNumber = referenceList.Count;

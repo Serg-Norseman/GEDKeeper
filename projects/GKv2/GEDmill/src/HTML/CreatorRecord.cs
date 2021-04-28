@@ -90,8 +90,8 @@ namespace GEDmill.HTML
 
                 if (r.ChangeDate != null) {
                     GDMChangeDate changeDate = r.ChangeDate;
-                    string dtx = r.ChangeDate.ToString();
-                    if (changeDate != null && dtx != null) {
+                    if (changeDate != null) {
+                        string dtx = changeDate.ToString();
                         if (dtx != "") {
                             dtx = " " + dtx;
                         }
@@ -225,20 +225,20 @@ namespace GEDmill.HTML
         {
             if (notes.Count > 0) {
                 // Generate notes list into a local array before adding header title. This is to cope with the case where all notes are nothing but blanks.
-                var note_strings = new List<string>(notes.Count);
+                var noteStrings = new List<string>(notes.Count);
 
                 foreach (GDMNotes ns in notes) {
                     GDMLines noteLines = fTree.GetNoteLines(ns);
                     string noteText = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(noteLines.Text) : noteLines.Text;
-                    note_strings.Add(string.Concat("<li>", EscapeHTML(noteText, false), "</li>"));
+                    noteStrings.Add(string.Concat("<li>", EscapeHTML(noteText, false), "</li>"));
                 }
 
-                if (note_strings.Count > 0) {
+                if (noteStrings.Count > 0) {
                     f.WriteLine("<div id=\"notes\">");
                     f.WriteLine("<h1>Notes</h1>");
                     f.WriteLine("<ul>");
 
-                    foreach (string note_string in note_strings) {
+                    foreach (string note_string in noteStrings) {
                         f.WriteLine(note_string);
                     }
 

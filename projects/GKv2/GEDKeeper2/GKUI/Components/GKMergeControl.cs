@@ -270,7 +270,7 @@ namespace GKUI.Components
             Controls.Add(btnRec2Select);
             Controls.Add(btnMergeToLeft);
             Controls.Add(btnMergeToRight);
-            Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(204)));
+            Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
             Name = "GKMergeControl";
             Size = new Size(957, 402);
             ResumeLayout(false);

@@ -78,7 +78,7 @@ namespace GEDmill
         {
             InitializeComponent();
 
-            fLogger.WriteInfo(CConfig.SoftwareName + " started at " + DateTime.Now.ToString());
+            fLogger.WriteInfo(CConfig.SoftwareName + " started");
 
             // Set some values that scale the size of the GUI
             fDefaultButtonSize = new Point(75, 23);
@@ -1146,7 +1146,7 @@ namespace GEDmill
         private bool ValidateCurrentPanel()
         {
             fLogger.WriteInfo("ValidateCurrentPanel()");
-            DialogResult result = DialogResult.OK;
+            DialogResult result;
 
             // Loop gives user the option to retry folder creation. Use return to exit.
             while (true) {
@@ -1210,11 +1210,8 @@ namespace GEDmill
                         }
                         string absImageFolder = string.Concat(outputFolder, imageFolder);
 
-                        bool preserveFiles = false;
-                        if (CConfig.Instance.PreserveFrontPage || CConfig.Instance.PreserveStylesheet) {
-                            // To generate warning if deleting folder & files.
-                            preserveFiles = true;
-                        }
+                        // To generate warning if deleting folder & files.
+                        bool preserveFiles = (CConfig.Instance.PreserveFrontPage || CConfig.Instance.PreserveStylesheet);
 
                         while (true) {
                             result = PrepareOutputDirectory(outputFolder, preserveFiles);
@@ -1276,8 +1273,7 @@ namespace GEDmill
             lvIndividuals.Columns.Add("Pics", 48, HorizontalAlignment.Left);
 
             // Build an array first then blit the whole array to the list control. This is faster than adding each item to the list control individually.
-            ListViewItem[] temporaryItemsList = new ListViewItem[indiRecs.Count];
-
+            var temporaryItemsList = new ListViewItem[indiRecs.Count];
             int nItem = 0;
             foreach (GDMIndividualRecord ir in indiRecs) {
                 // Only allow fully unrestricted individuals.
@@ -1370,7 +1366,7 @@ namespace GEDmill
             lvSources.Columns.Add("Id", 60, HorizontalAlignment.Left);
             lvSources.Columns.Add("Pics", 48, HorizontalAlignment.Left);
 
-            ListViewItem[] temporaryItemsList = new ListViewItem[sources.Count];
+            var temporaryItemsList = new ListViewItem[sources.Count];
             int nItem = 0;
             foreach (GDMSourceRecord sr in sources) {
                 var item = new LVItem(sr);
@@ -1493,7 +1489,7 @@ namespace GEDmill
                 fLogger.WriteError("Can't find background image " + CConfig.Instance.BackgroundImage);
 
                 dialogResult = MessageBox.Show(this, string.Format("The file {0} is missing. \r\nPages will be created without any background image.", CConfig.Instance.BackgroundImage),
-                    "Creating website", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+                    fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite), MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
                 if (dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (1)");
                     return false;
@@ -1507,8 +1503,7 @@ namespace GEDmill
 
             Website website = new Website(fBase.Context.Tree, progressWindow);
 
-            ThreadStart threadStart = new ThreadStart(website.Create);
-            Thread threadWorker = new Thread(threadStart);
+            Thread threadWorker = new Thread(website.Create);
 
             fLogger.WriteInfo("Starting progress thread");
 
@@ -1517,7 +1512,7 @@ namespace GEDmill
                 threadWorker.Start();
                 dialogResult = progressWindow.ShowDialog(this);
             } catch (HTMLException e) {
-                MessageBox.Show(this, string.Concat(e.Message), "Creating website",
+                MessageBox.Show(this, e.Message, fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite),
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } finally {
                 threadWorker.Join();
@@ -1527,7 +1522,7 @@ namespace GEDmill
                 fLogger.WriteInfo("Thread aborted");
                 if (progressWindow.ThreadError.Message == "") {
                     // Abort means there were file IO errors
-                    MessageBox.Show(this, string.Format("A problem was encountered while creating the website files"), CConfig.SoftwareName,
+                    MessageBox.Show(this, "A problem was encountered while creating the website files", CConfig.SoftwareName,
                         MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 } else {
                     // Abort means there were file IO errors
@@ -1991,8 +1986,8 @@ namespace GEDmill
 
             string message = "Could not access or create folder.";
             MessageBoxButtons messageBoxButtons = MessageBoxButtons.RetryCancel;
-            DialogResult dialogResult = DialogResult.OK;
-            bool failed = false;
+            DialogResult dialogResult;
+            bool failed;
             string exceptionMessage = "";
 
             // First see if folder clashes with a file
@@ -2002,7 +1997,7 @@ namespace GEDmill
                 // Earn user that file is being deleted
                 dialogResult = MessageBox.Show(this, string.Format("The folder {0} needs to be created. " +
                     "\r\nThis will destroy an existing file with that name.", outputFolder),
-                    "Creating website", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+                    fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite), MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
                 if (dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (2)");
                     return DialogResult.Cancel;
@@ -2034,7 +2029,7 @@ namespace GEDmill
                         // Catch failure, e.g. if user has dir/file open elsewhere
                         message = string.Format("The file {0} could not be deleted.\r\n{1}", outputFolder, exceptionMessage);
                         messageBoxButtons = MessageBoxButtons.RetryCancel;
-                        dialogResult = MessageBox.Show(this, message, "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
+                        dialogResult = MessageBox.Show(this, message, fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite), messageBoxButtons, MessageBoxIcon.Exclamation);
                     }
                 }
                 while (failed && dialogResult == DialogResult.Retry);
@@ -2052,14 +2047,14 @@ namespace GEDmill
 
                 if (GMHelper.IsDesktop(outputFolder)) {
                     dialogResult = MessageBox.Show(this, "GEDmill will not allow you to create files directly on the Desktop",
-                                                   "Creating website", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite), MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     fLogger.WriteInfo("Desktop detected as output folder.");
                     return DialogResult.Cancel;
                 }
 
                 // Warn user that file is being deleted
                 dialogResult = MessageBox.Show(this, string.Format("The folder {0} already exists.\r\nWould you like to delete any files it contains before creating the website files?", outputFolder),
-                    "Creating website",
+                    fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite),
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (3a)");
@@ -2069,7 +2064,7 @@ namespace GEDmill
                 if (dialogResult == DialogResult.Yes) {
                     if (preserveFiles) {
                         dialogResult = MessageBox.Show(this, string.Format("WARNING: Deleting the folder {0} will not preserve any existing front page and stylesheet files.\r\nDelete folder anyway?", outputFolder),
-                            "Creating website",
+                            fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite),
                             MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                         if (dialogResult == DialogResult.Cancel) {
                             fLogger.WriteInfo("Message box cancelled (3b)");
@@ -2077,7 +2072,7 @@ namespace GEDmill
                         }
                     } else {
                         dialogResult = MessageBox.Show(this, "WARNING: If the folder contains non-GEDmill files they will be deleted also.\r\nDelete folder anyway?",
-                            "Creating website", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                            fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                         if (dialogResult == DialogResult.Cancel) {
                             fLogger.WriteInfo("Message box cancelled (3c)");
                             return DialogResult.Cancel;
@@ -2111,7 +2106,7 @@ namespace GEDmill
                                 // Catch failure, e.g. if user has dir/file open elsewhere
                                 message = string.Format("The folder {0} could not be deleted.\r\n{1}", outputFolder, exceptionMessage);
                                 messageBoxButtons = MessageBoxButtons.RetryCancel;
-                                dialogResult = MessageBox.Show(this, message, "Creating website",
+                                dialogResult = MessageBox.Show(this, message, fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite),
                                     messageBoxButtons, MessageBoxIcon.Exclamation);
                             }
                         }
@@ -2178,7 +2173,7 @@ namespace GEDmill
 
             // Handle any failure with a sMessage box
             if (failed) {
-                dialogResult = MessageBox.Show(this, string.Concat(message, "\r\n", exceptionMessage), "Creating website", messageBoxButtons, MessageBoxIcon.Exclamation);
+                dialogResult = MessageBox.Show(this, string.Concat(message, "\r\n", exceptionMessage), fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite), messageBoxButtons, MessageBoxIcon.Exclamation);
 
                 if (dialogResult == DialogResult.Retry) {
                     return DialogResult.Retry;
