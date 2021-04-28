@@ -211,7 +211,7 @@ namespace GKUI.Components
 
             fTreeControls = new TreeControlsList<ITreeControl>();
             fTreeControls.Add(new TCScaleControl(this));
-            fTreeControls.Add(new TCGenerationsControl(this));
+            fTreeControls.Add(new TCGenerationsControl(this, TreeChartKind.ckDescendants));
             //fPersonControl = new PersonControl(this);
 
             InitTimer();
@@ -280,6 +280,11 @@ namespace GKUI.Components
             fTreeControls.UpdateState();
 
             DoZoomChanged();
+        }
+
+        public void GenChart(bool rootCenter)
+        {
+            GenChart(fModel.Root.Rec, fModel.Kind, rootCenter);
         }
 
         public void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)

@@ -39,6 +39,7 @@ namespace GKCore.Charts
 
         private int fThumbPos = 9; /* Counts from zero to 9; where 9 is infinite. */
 
+        private readonly TreeChartKind fControlMode;
         private readonly IColor fBlankColor;
         private readonly IColor fSelectColor;
 
@@ -61,20 +62,40 @@ namespace GKCore.Charts
             get { return fDestRect.Width; }
         }
 
-        public TCGenerationsControl(ITreeChart chart) : base(chart)
+        public TCGenerationsControl(ITreeChart chart, TreeChartKind controlMode) : base(chart)
         {
+            fControlMode = controlMode;
             fBlankColor = AppHost.GfxProvider.CreateColor(191, 191, 191);
             fSelectColor = AppHost.GfxProvider.CreateColor(128, 128, 128);
         }
 
         public override void UpdateState()
         {
-            fThumbPos = (fChart.DepthLimitAncestors >= -1) ? fChart.DepthLimitAncestors - 1 : 9;
+            int depth;
+            if (!fChart.Options.SeparateDepth || fControlMode == TreeChartKind.ckAncestors) {
+                depth = fChart.DepthLimitAncestors;
+            } else {
+                depth = fChart.DepthLimitDescendants;
+            }
+
+            fThumbPos = (depth >= -1) ? depth - 1 : 9;
         }
 
         private int GetDepthLimit()
         {
             return (fThumbPos < 9) ? fThumbPos + 1 : -1;
+        }
+
+        private void SetDepthLimit()
+        {
+            int depth = GetDepthLimit();
+            if (!fChart.Options.SeparateDepth || fControlMode == TreeChartKind.ckAncestors) {
+                fChart.DepthLimitAncestors = depth;
+            } else {
+                fChart.DepthLimitDescendants = depth;
+            }
+
+            fChart.GenChart(true);
         }
 
         private static float GetChordLength(float radius, float radianAngle)
@@ -142,8 +163,7 @@ namespace GKCore.Charts
                 if ((r.Top <= y) && (r.Bottom > y)) {
                     if (i != fThumbPos) {
                         fThumbPos = i;
-                        fChart.DepthLimitAncestors = GetDepthLimit();
-                        fChart.GenChart(fChart.Model.Root.Rec, fChart.Kind, true);
+                        SetDepthLimit();
                     }
                     break;
                 }

@@ -60,7 +60,7 @@ namespace GKCore.Charts
             var treeChart = Substitute.For<ITreeChart>();
             var chartRenderer = Substitute.For<ChartRenderer>();
 
-            var instance = new TCGenerationsControl(treeChart);
+            var instance = new TCGenerationsControl(treeChart, TreeChartKind.ckAncestors);
             Assert.IsNotNull(instance);
 
             //instance.Draw(chartRenderer);

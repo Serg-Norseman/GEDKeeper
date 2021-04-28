@@ -293,46 +293,35 @@ namespace GKUI.Forms
             return tsItem;
         }
 
-        private void miGensX_Click(object sender, EventArgs e)
+        private int GetGensMenuDepth(ContextMenuStrip contextMenu, object sender)
         {
-            foreach (ToolStripMenuItem tsItem in MenuGensCommon.Items) {
+            foreach (ToolStripMenuItem tsItem in contextMenu.Items) {
                 tsItem.Checked = false;
             }
-
             var senderItem = ((ToolStripMenuItem)sender);
             ((ToolStripMenuItem)sender).Checked = true;
-            int depth = (int)senderItem.Tag;
+            return (int)senderItem.Tag;
+        }
+
+        private void miGensX_Click(object sender, EventArgs e)
+        {
+            int depth = GetGensMenuDepth(MenuGensCommon, sender);
             fTreeBox.DepthLimitAncestors = depth;
             fTreeBox.DepthLimitDescendants = depth;
-
             GenChart();
         }
 
         private void miGensXAncestors_Click(object sender, EventArgs e)
         {
-            foreach (ToolStripMenuItem tsItem in MenuGensAncestors.Items) {
-                tsItem.Checked = false;
-            }
-
-            var senderItem = ((ToolStripMenuItem)sender);
-            ((ToolStripMenuItem)sender).Checked = true;
-            int depth = (int)senderItem.Tag;
+            int depth = GetGensMenuDepth(MenuGensAncestors, sender);
             fTreeBox.DepthLimitAncestors = depth;
-
             GenChart();
         }
 
         private void miGensXDescendants_Click(object sender, EventArgs e)
         {
-            foreach (ToolStripMenuItem tsItem in MenuGensDescendants.Items) {
-                tsItem.Checked = false;
-            }
-
-            var senderItem = ((ToolStripMenuItem)sender);
-            ((ToolStripMenuItem)sender).Checked = true;
-            int depth = (int)senderItem.Tag;
+            int depth = GetGensMenuDepth(MenuGensDescendants, sender);
             fTreeBox.DepthLimitDescendants = depth;
-
             GenChart();
         }
 
