@@ -34,22 +34,31 @@ using GKCore.Types;
 
 namespace GEDmill
 {
+    public enum PanelKind
+    {
+        Welcome,
+        RestrictRecords,
+        WebsiteTitleAndKeys,
+        OutputFolder,
+        Finish
+    }
+
     /// <summary>
     /// The main from from which the application is operated. Contains the GUI controls and the control handlers.
     /// </summary>
     public partial class MainForm : Form, ILocalization
     {
-        private static readonly GKCore.Logging.ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(MainForm).Name);
+        private static readonly GKCore.Logging.ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(MainForm).Name);
 
         private readonly Plugin fPlugin;
         private IBaseWindow fBase;
 
         // Specifies which panel of the wizard the user is viewing (i.e. which stage in the app they are at)
-        private int fCurrentPanel;
+        private PanelKind fCurrentPanel;
 
         // Application has an important state whereby it displays the settings panes. 
         // The main GUI navigation buttons behave differently in this mode.
-        private bool fConfigPanelOn;
+        private bool fConfigPanelVisible;
 
         // Scales the size of the main GUI
         private Point fDefaultButtonSize;
@@ -78,22 +87,22 @@ namespace GEDmill
         {
             InitializeComponent();
 
-            fLogger.WriteInfo(CConfig.SoftwareName + " started");
+            fLogger.WriteInfo(GMConfig.SoftwareName + " started");
 
             // Set some values that scale the size of the GUI
             fDefaultButtonSize = new Point(75, 23);
             fConfigButtonSize = new Point(92, 23);
 
             // Read back any previously stored settings.
-            CConfig.Instance.Load();
+            GMConfig.Instance.Load();
 
             helpProvider.SetHelpKeyword(btnHelp, "HelpButtonHelpKeyword");
             helpProvider.SetHelpNavigator(btnHelp, HelpNavigator.TableOfContents);
             helpProvider.SetShowHelp(btnHelp, true);
-            helpProvider.HelpNamespace = CConfig.Instance.ApplicationPath + "\\" + CConfig.HelpFilename;
+            helpProvider.HelpNamespace = GMConfig.Instance.ApplicationPath + "\\" + GMConfig.HelpFilename;
 
-            fCurrentPanel = 1;
-            fConfigPanelOn = false;
+            fCurrentPanel = PanelKind.Welcome;
+            fConfigPanelVisible = false;
             fDisableRestrictsCheckEvent = false;
         }
 
@@ -142,7 +151,7 @@ namespace GEDmill
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_Title);
             btnCancel.Text = fPlugin.LangMan.LS(PLS.LSID_Quit);
-            lblWelcomeVersion.Text = fPlugin.LangMan.LS(PLS.LSID_Version) + " " + CConfig.SoftwareVersion;
+            lblWelcomeVersion.Text = fPlugin.LangMan.LS(PLS.LSID_Version) + " " + GMConfig.SoftwareVersion;
             btnBack.Text = fPlugin.LangMan.LS(PLS.LSID_Back);
             btnHelp.Text = fPlugin.LangMan.LS(PLS.LSID_Help);
             btnSettings.Text = fPlugin.LangMan.LS(PLS.LSID_Settings);
@@ -158,11 +167,11 @@ namespace GEDmill
             fLogger.WriteInfo("Back button");
 
             // Mustn't affect configPanel 
-            if (fConfigPanelOn) {
+            if (fConfigPanelVisible) {
                 return;
             }
 
-            if (fCurrentPanel > 1) {
+            if (fCurrentPanel > PanelKind.Welcome) {
                 --fCurrentPanel;
             }
 
@@ -170,12 +179,12 @@ namespace GEDmill
             ShowCurrentPanel();
         }
 
-        private void btnNext_click(object sender, EventArgs e)
+        private void btnNext_Click(object sender, EventArgs e)
         {
             fLogger.WriteInfo("Next button clicked. current panel = " + fCurrentPanel.ToString());
 
             // Mustn't affect configPanel
-            if (fConfigPanelOn) {
+            if (fConfigPanelVisible) {
                 return;
             }
 
@@ -191,13 +200,13 @@ namespace GEDmill
             btnHelp.Enabled = false;
 
             if (ValidateCurrentPanel()) {
-                if (fCurrentPanel < 9) // Allow for extra ftp panels
+                if ((int)fCurrentPanel < 9) // Allow for extra ftp panels
                     ++fCurrentPanel;
                 else {
-                    CConfig.Instance.Save();
+                    GMConfig.Instance.Save();
 
-                    if (CConfig.Instance.OpenWebsiteOnExit) {
-                        GMHelper.OpenURL(CConfig.Instance.FrontPageURL);
+                    if (GMConfig.Instance.OpenWebsiteOnExit) {
+                        GMHelper.OpenURL(GMConfig.Instance.FrontPageURL);
                     }
                     Close();
                     return;
@@ -219,40 +228,49 @@ namespace GEDmill
             EnableCurrentPanel(true);
         }
 
+        private bool ShowQuestionYN(string msg)
+        {
+            return AppHost.StdDialogs.ShowQuestionYN(msg, GMConfig.SoftwareName);
+        }
+
+        private void ShowAlert(string msg)
+        {
+            AppHost.StdDialogs.ShowAlert(msg, GMConfig.SoftwareName);
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = DialogResult.Yes;
+            bool dialogResult = true;
 
-            if (fCurrentPanel != 6) {
+            if (fCurrentPanel != PanelKind.Finish) {
                 // Cancel button is "Finish" in panel 6
-                dialogResult = MessageBox.Show(this, "Are you sure you wish to exit GEDmill?", "Quit GEDmill",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                dialogResult = ShowQuestionYN("Are you sure you wish to exit GEDmill?");
             }
 
-            if (dialogResult == DialogResult.Yes) {
-                if (fCurrentPanel >= 6) {
+            if (dialogResult) {
+                if (fCurrentPanel >= PanelKind.Finish) {
                     // HTML generated, so save settings for that at least
                     // Store checkbox state in config.(Can't do in ValidateCurrentPanel because Next never gets clicked)
-                    CConfig.Instance.OpenWebsiteOnExit = chkAllDoneShowSite.Checked;
+                    GMConfig.Instance.OpenWebsiteOnExit = chkAllDoneShowSite.Checked;
                 }
 
-                if (fCurrentPanel == 6) {
+                if (fCurrentPanel == PanelKind.Finish) {
                     // Finish button is the only time we want to launch webpages
-                    if (CConfig.Instance.OpenWebsiteOnExit && CConfig.Instance.FrontPageFilename.Length > 0) {
-                        GMHelper.OpenURL(CConfig.Instance.FrontPageURL);
+                    if (GMConfig.Instance.OpenWebsiteOnExit && GMConfig.Instance.FrontPageFilename.Length > 0) {
+                        GMHelper.OpenURL(GMConfig.Instance.FrontPageURL);
                     }
                 }
 
-                CConfig.Instance.Save();
+                GMConfig.Instance.Save();
                 Close();
             }
         }
 
-        private void btnHelp_click(object sender, EventArgs e)
+        private void btnHelp_Click(object sender, EventArgs e)
         {
-            string helpFile = CConfig.Instance.ApplicationPath + "\\" + CConfig.HelpFilename;
+            string helpFile = GMConfig.Instance.ApplicationPath + "\\" + GMConfig.HelpFilename;
 
-            if (fConfigPanelOn) {
+            if (fConfigPanelVisible) {
                 switch (tabcontrolConfigPanel.SelectedIndex) {
                     case 0:
                         Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsWebpages.htm");
@@ -275,19 +293,16 @@ namespace GEDmill
                 }
             } else {
                 switch (fCurrentPanel) {
-                    case 2:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SelectingInputFile_1.htm");
-                        break;
-                    case 3:
+                    case PanelKind.RestrictRecords:
                         Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "ExcludingPeople_2.htm");
                         break;
-                    case 4:
+                    case PanelKind.WebsiteTitleAndKeys:
                         Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SetTheTitle_3.htm");
                         break;
-                    case 5:
+                    case PanelKind.OutputFolder:
                         Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SelectingOutputFile_4.htm");
                         break;
-                    case 6:
+                    case PanelKind.Finish:
                         Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "FinishScreen_5.htm");
                         break;
                     default:
@@ -299,7 +314,7 @@ namespace GEDmill
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            if (!fConfigPanelOn) {
+            if (!fConfigPanelVisible) {
                 // Switch config panel on
                 // Initialise config panel settings
                 LoadConfigPanelSettings();
@@ -315,7 +330,7 @@ namespace GEDmill
         private void btnSettingsCancel_Click(object sender, EventArgs e)
         {
             // Ensure config panel on
-            if (!fConfigPanelOn) return;
+            if (!fConfigPanelVisible) return;
 
             // Remove panel without saving changes
             SwitchConfigPanelOff();
@@ -338,9 +353,9 @@ namespace GEDmill
             if (indiRec == null) return;
 
             // Ensure they are only added once
-            bool alreadyAdded = CConfig.Instance.KeyIndividuals.Contains(indiRec.XRef);
+            bool alreadyAdded = GMConfig.Instance.KeyIndividuals.Contains(indiRec.XRef);
             if (!alreadyAdded) {
-                CConfig.Instance.KeyIndividuals.Add(indiRec.XRef);
+                GMConfig.Instance.KeyIndividuals.Add(indiRec.XRef);
                 FillKeyIndividualsList();
             }
         }
@@ -351,7 +366,7 @@ namespace GEDmill
             if (xrefPairName != null) {
                 string xref = xrefPairName.XRef;
                 if (!string.IsNullOrEmpty(xref)) {
-                    CConfig.Instance.KeyIndividuals.Remove(xref);
+                    GMConfig.Instance.KeyIndividuals.Remove(xref);
                 }
                 FillKeyIndividualsList();
             }
@@ -415,7 +430,7 @@ namespace GEDmill
             }
         }
 
-        private void chkConfigTreeDiagrams_Click(object sender, EventArgs e)
+        private void chkConfigIncludeTreeDiagrams_Click(object sender, EventArgs e)
         {
             EnableMiniTreeButtons();
         }
@@ -476,31 +491,26 @@ namespace GEDmill
 
         private void chkConfigMultiPageIndex_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("config panel multi page index button clicked.");
             EnableMultiPageIndexConfig();
         }
 
         private void chkConfigAllowMultimedia_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("allow multimedia button clicked.");
             EnableMultimediaConfig();
         }
 
         private void chkConfigIndiImages_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("config panel multi images button clicked.");
             EnableThumbnailsConfig();
         }
 
         private void chkConfigShowWithheldRecords_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("config panel show withheld records button clicked.");
             EnableWithheldConfig();
         }
 
         private void radConfigWithheldNameLabel_Click(object sender, EventArgs e)
         {
-            fLogger.WriteInfo("config panel withheld label clicked.");
             EnableWithheldConfig();
         }
 
@@ -853,30 +863,30 @@ namespace GEDmill
 
         private void menuIndividuals_Popup(Object sender, EventArgs e)
         {
-            int nSelected = lvIndividuals.SelectedItems.Count;
-            miUnconnectedExclude.Enabled = (nSelected > 0);
-            if (nSelected <= 1) {
+            int selectedCount = lvIndividuals.SelectedItems.Count;
+            miUnconnectedExclude.Enabled = (selectedCount > 0);
+            if (selectedCount <= 1) {
                 miUnconnectedExclude.Text = "E&xclude individuals unless navigable from this person";
             } else {
-                miUnconnectedExclude.Text = string.Format("E&xclude individuals unless navigable from these {0} people", nSelected);
+                miUnconnectedExclude.Text = string.Format("E&xclude individuals unless navigable from these {0} people", selectedCount);
             }
 
-            miIndiDescendantsExclude.Enabled = (nSelected == 1);
-            miIndiDescendantsInclude.Enabled = (nSelected == 1);
-            miIndiAncestorsExclude.Enabled = (nSelected == 1);
-            miIndiAncestorsInclude.Enabled = (nSelected == 1);
-            miIndividualDetails.Enabled = (nSelected == 1);
+            miIndiDescendantsExclude.Enabled = (selectedCount == 1);
+            miIndiDescendantsInclude.Enabled = (selectedCount == 1);
+            miIndiAncestorsExclude.Enabled = (selectedCount == 1);
+            miIndiAncestorsInclude.Enabled = (selectedCount == 1);
+            miIndividualDetails.Enabled = (selectedCount == 1);
         }
 
         private void menuSources_Popup(Object sender, EventArgs e)
         {
-            int nSelected = lvSources.SelectedItems.Count;
-            miSourceDetails.Enabled = (nSelected == 1);
-            miSourceRemovePics.Enabled = (nSelected > 0);
-            if (nSelected <= 1) {
+            int selectedCount = lvSources.SelectedItems.Count;
+            miSourceDetails.Enabled = (selectedCount == 1);
+            miSourceRemovePics.Enabled = (selectedCount > 0);
+            if (selectedCount <= 1) {
                 miSourceRemovePics.Text = "&Remove pictures from this source";
             } else {
-                miSourceRemovePics.Text = string.Format("&Remove pictures from these {0} sources", nSelected);
+                miSourceRemovePics.Text = string.Format("&Remove pictures from these {0} sources", selectedCount);
             }
         }
 
@@ -928,24 +938,22 @@ namespace GEDmill
             // Disable edit boxes etc. on previous panel to avoid confusing users
             EnableCurrentPanel(false);
 
-            // Move help button to its new location
-            btnHelp.Location = new Point(8, 288);
-
             // Flag panel as being on
-            fConfigPanelOn = true;
-
-            // Enable reset button
-            btnSettingsCancel.Visible = true;
+            fConfigPanelVisible = true;
 
             // Disable buttons while config panel shown
-            btnNext.Visible = false;
+            btnHelp.Visible = false;
             btnBack.Visible = false;
+            btnNext.Visible = false;
             btnCancel.Visible = false; // To give the panel a "modal" feeling
 
             // Make config button an "OK" button
             btnSettings.Text = fPlugin.LangMan.LS(PLS.LSID_Ok);
             btnSettings.Location = new Point(344, 288);
             btnSettings.Size = new Size(fDefaultButtonSize);
+
+            // Enable reset button
+            btnSettingsCancel.Visible = true;
 
             // Enable config panel
             EnableCurrentPanel(true);
@@ -958,33 +966,27 @@ namespace GEDmill
             // Disable edit boxes etc. on config panel
             EnableCurrentPanel(false);
 
-            // Move help button to its usual location
-            btnHelp.Location = new Point(186, 288);
-
             // Flag panel as being off
-            fConfigPanelOn = false;
+            fConfigPanelVisible = false;
 
             // Restore buttons states
-            // Done by ShowCurrentPanel()
+            btnHelp.Visible = true;
+            btnBack.Enabled = true;
+            btnNext.Visible = true;
+            btnCancel.Visible = true;
 
             // Make config button back to a config button
             btnSettings.Text = fPlugin.LangMan.LS(PLS.LSID_Settings);
             btnSettings.Location = new Point(88, 288);
             btnSettings.Size = new Size(fConfigButtonSize);
 
-            // Enable generic panel
-            EnableCurrentPanel(true);
-
             // Disable reset button
             btnSettingsCancel.Visible = false;
 
+            // Enable generic panel
+            EnableCurrentPanel(true);
             // ShowCurrentPanel() also restores visibility of back button.
             ShowCurrentPanel();
-            btnNext.Visible = true;
-            btnCancel.Visible = true;
-
-            // Back button should always be enabled (tho' sometimes not bVisible!)
-            btnBack.Enabled = true;
         }
 
         // Shows the current panel and associated wizard buttons, selected by m_currentPanel, and hides all the others.
@@ -993,55 +995,43 @@ namespace GEDmill
             // Making panel3 bVisible calls check event on list view!
             fDisableRestrictsCheckEvent = true;
 
-            if (fConfigPanelOn) {
+            if (fConfigPanelVisible) {
                 panelWelcome.Visible = false;
-                panelChooseGedcom.Visible = false;
                 panelRecords.Visible = false;
                 panelKeyIndividuals.Visible = false;
                 panelChooseOutput.Visible = false;
                 panelAllDone.Visible = false;
                 tabcontrolConfigPanel.Visible = true;
             } else {
-                panelWelcome.Visible = (fCurrentPanel == 1);
-                panelChooseGedcom.Visible = (fCurrentPanel == 2);
-                panelRecords.Visible = (fCurrentPanel == 3);
-                panelKeyIndividuals.Visible = (fCurrentPanel == 4);
-                panelChooseOutput.Visible = (fCurrentPanel == 5);
-                panelAllDone.Visible = (fCurrentPanel == 6);
+                panelWelcome.Visible = (fCurrentPanel == PanelKind.Welcome);
+                panelRecords.Visible = (fCurrentPanel == PanelKind.RestrictRecords);
+                panelKeyIndividuals.Visible = (fCurrentPanel == PanelKind.WebsiteTitleAndKeys);
+                panelChooseOutput.Visible = (fCurrentPanel == PanelKind.OutputFolder);
+                panelAllDone.Visible = (fCurrentPanel == PanelKind.Finish);
                 tabcontrolConfigPanel.Visible = false;
 
-                if (fCurrentPanel <= 1) {
-                    btnBack.Visible = false;
-                } else {
-                    btnBack.Visible = true;
-                }
-
+                btnBack.Visible = (fCurrentPanel > PanelKind.Welcome);
                 // Config button disappears once html created
-                if (fCurrentPanel >= 6) {
-                    btnSettings.Visible = false;
-                } else {
-                    btnSettings.Visible = true;
-                }
+                btnSettings.Visible = (fCurrentPanel < PanelKind.Finish);
 
-                if (fCurrentPanel == 6) {
+                if (fCurrentPanel == PanelKind.Finish) {
                     btnCancel.Text = fPlugin.LangMan.LS(PLS.LSID_Finish);
                     // Can't go back , because we can't undo the file creations.
                     btnBack.Visible = false;
                     btnHelp.Location = new Point(8, 288);
                     btnCancel.Location = new Point(424, 288);
                     btnNext.Visible = false;
-                } else if (fCurrentPanel == 9) {
+                } else if (fCurrentPanel > PanelKind.Finish) {
                     btnHelp.Location = new Point(8, 288);
                     btnNext.Text = fPlugin.LangMan.LS(PLS.LSID_Finish);
                     btnCancel.Visible = false;
                     btnHelp.Visible = false;
                     // Can't go back , because we can't undo the file creations.
                     btnBack.Visible = false;
-                } else if (fCurrentPanel == 2) {
-                } else if (fCurrentPanel == 4) {
+                } else if (fCurrentPanel == PanelKind.WebsiteTitleAndKeys) {
                     txtSelectKey.Focus();
                     txtSelectKey.SelectAll();
-                } else if (fCurrentPanel == 5) {
+                } else if (fCurrentPanel == PanelKind.OutputFolder) {
                     txtChooseOutput.Focus();
                     txtChooseOutput.SelectAll();
                 } else {
@@ -1052,7 +1042,7 @@ namespace GEDmill
                     btnHelp.Visible = true;
                 }
 
-                if (fCurrentPanel == 3) {
+                if (fCurrentPanel == PanelKind.RestrictRecords) {
                     EnablePrunePanelButtons();
                 }
 
@@ -1065,9 +1055,7 @@ namespace GEDmill
         // Logic for the next page button to ensure that user has completed the current page
         private void EnableNextButton()
         {
-            if (fCurrentPanel == 2) {
-                btnNext.Enabled = true;
-            } else if (fCurrentPanel == 5 && txtChooseOutput.Text.Length == 0) {
+            if (fCurrentPanel == PanelKind.OutputFolder && txtChooseOutput.Text.Length == 0) {
                 btnNext.Enabled = false;
             } else {
                 btnNext.Enabled = true;
@@ -1083,25 +1071,25 @@ namespace GEDmill
         // Logic for the mini tree config buttons
         private void EnableMiniTreeButtons()
         {
-            bool bEnabled = chkConfigTreeDiagrams.Checked;
+            bool includeTreeDiagrams = chkConfigIncludeTreeDiagrams.Checked;
 
-            chkConfigTreeDiagramsFakeBg.Enabled = bEnabled;
-            lblConfigTreeDiagramsFormat.Enabled = bEnabled;
-            cmbConfigTreeDiagramsFormat.Enabled = bEnabled;
-            gbMiniTreeColours.Enabled = bEnabled;
-            btnConfigMiniTreeColourIndiBackground.Enabled = bEnabled;
-            btnConfigMiniTreeColourIndiHighlight.Enabled = bEnabled;
-            btnConfigMiniTreeColourIndiBgConcealed.Enabled = bEnabled;
-            btnConfigMiniTreeColourIndiShade.Enabled = bEnabled;
-            btnConfigMiniTreeColourIndiText.Enabled = bEnabled;
-            btnConfigMiniTreeColourIndiLink.Enabled = bEnabled;
-            btnConfigMiniTreeColourBranch.Enabled = bEnabled;
-            btnConfigMiniTreeColourIndiBorder.Enabled = bEnabled;
-            btnConfigMiniTreeColourIndiFgConcealed.Enabled = bEnabled;
-            chkConfigConserveTreeWidth.Enabled = bEnabled;
-            chkConfigKeepSiblingOrder.Enabled = bEnabled;
+            chkConfigTreeDiagramsFakeBg.Enabled = includeTreeDiagrams;
+            lblConfigTreeDiagramsFormat.Enabled = includeTreeDiagrams;
+            cmbConfigTreeDiagramsFormat.Enabled = includeTreeDiagrams;
+            gbMiniTreeColours.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColourIndiBackground.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColourIndiHighlight.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColourIndiBgConcealed.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColourIndiShade.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColourIndiText.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColourIndiLink.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColourBranch.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColourIndiBorder.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColourIndiFgConcealed.Enabled = includeTreeDiagrams;
+            chkConfigConserveTreeWidth.Enabled = includeTreeDiagrams;
+            chkConfigKeepSiblingOrder.Enabled = includeTreeDiagrams;
 
-            if (bEnabled) {
+            if (includeTreeDiagrams) {
                 SetMiniTreeColourConfigButtons();
             } else {
                 ClearMiniTreeColourConfigButtons();
@@ -1112,25 +1100,22 @@ namespace GEDmill
         private void InitialiseCurrentPanel()
         {
             switch (fCurrentPanel) {
-                case 2:
-                    break;
-
-                case 4:
-                    txtSelectKey.Text = CConfig.Instance.SiteTitle;
-                    CConfig.Instance.FirstRecordXRef = "";
+                case PanelKind.WebsiteTitleAndKeys:
+                    txtSelectKey.Text = GMConfig.Instance.SiteTitle;
+                    GMConfig.Instance.FirstRecordXRef = "";
                     FillKeyIndividualsList();
                     break;
 
-                case 5:
-                    txtChooseOutput.Text = CConfig.Instance.OutputFolder;
+                case PanelKind.OutputFolder:
+                    txtChooseOutput.Text = GMConfig.Instance.OutputFolder;
                     break;
 
-                case 6:
-                    chkAllDoneShowSite.Visible = File.Exists(CConfig.Instance.FrontPageURL);
-                    chkAllDoneShowSite.Checked = CConfig.Instance.OpenWebsiteOnExit;
-                    lblAllDone.Text = CConfig.Instance.OutputFolder;
-                    if (CConfig.Instance.FrontPageFilename != "") {
-                        lblAllDoneStartFile.Text = string.Concat("(The front page for the website is the file ", CConfig.Instance.FrontPageFilename, ".", CConfig.Instance.HtmlExtension, ")");
+                case PanelKind.Finish:
+                    chkAllDoneShowSite.Visible = File.Exists(GMConfig.Instance.FrontPageURL);
+                    chkAllDoneShowSite.Checked = GMConfig.Instance.OpenWebsiteOnExit;
+                    lblAllDone.Text = GMConfig.Instance.OutputFolder;
+                    if (GMConfig.Instance.FrontPageFilename != "") {
+                        lblAllDoneStartFile.Text = string.Concat("(The front page for the website is the file ", GMConfig.Instance.FrontPageFilename, ".", GMConfig.Instance.HtmlExtension, ")");
                         lblAllDoneStartFile.Visible = true;
                     } else {
                         lblAllDoneStartFile.Text = "(No front page was generated.)";
@@ -1151,67 +1136,59 @@ namespace GEDmill
             // Loop gives user the option to retry folder creation. Use return to exit.
             while (true) {
                 switch (fCurrentPanel) {
-                    case 1:
-                        CConfig.Instance.InputFilename = fBase.Context.FileName;
-                        fLogger.WriteInfo("Selected file : " + CConfig.Instance.InputFilename);
-                        return true;
-
-                    case 2:
-                        if (CConfig.Instance.OutputFolder == "") {
-                            CConfig.Instance.OutputFolder = Path.GetDirectoryName(CConfig.Instance.InputFilename);
-                            CConfig.Instance.OutputFolder += "\\GEDmill_Output";
+                    case PanelKind.Welcome:
+                        GMConfig.Instance.InputFilename = fBase.Context.FileName;
+                        fLogger.WriteInfo("Selected file : " + GMConfig.Instance.InputFilename);
+                        if (GMConfig.Instance.OutputFolder == "") {
+                            GMConfig.Instance.OutputFolder = Path.GetDirectoryName(GMConfig.Instance.InputFilename);
+                            GMConfig.Instance.OutputFolder += "\\GEDmill_Output";
                         }
-                        CConfig.Instance.FirstRecordXRef = "";
-                        CConfig.Instance.KeyIndividuals = new List<string>();
-                        CConfig.Instance.FirstRecordXRef = "";
+                        GMConfig.Instance.FirstRecordXRef = "";
+                        GMConfig.Instance.KeyIndividuals = new List<string>();
+                        GMConfig.Instance.FirstRecordXRef = "";
                         FillIndividualsList();
                         FillSourcesList();
                         return true;
 
-                    case 3:
+                    case PanelKind.RestrictRecords:
                         // Go through individuals list and set restricted flag as appropriate
                         bool somethingChecked = false;
                         foreach (ListViewItem li in lvIndividuals.Items) {
-                            bool isChecked = li.Checked;
-                            if (isChecked) {
+                            if (li.Checked) {
                                 somethingChecked = true;
-                            }
-                            // Already done on click event: ((CListableBool)li).SetRestricted( !bChecked );
-                            if (!isChecked) {
+                            } else {
+                                // Already done on click event: ((CListableBool)li).SetRestricted( !bChecked );
                                 GMHelper.RestrictAssociatedSources(fBase.Context.Tree, (GDMIndividualRecord)((LVItem)li).Record);
                             }
                         }
 
-                        if (somethingChecked == false) {
-                            MessageBox.Show(this, "Please select at least one individual.", "No Individuals Selected",
-                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        if (!somethingChecked) {
+                            ShowAlert("Please select at least one individual.");
                             return false;
                         }
 
                         /*if (PrunepanelDataChanged) {
-                            DialogResult dialogResult = MessageBox.Show(this, "You have made changes which will affect the website but have not saved them.\r\nWould you like to save them now?", "Save changes",
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                            if (dialogResult == DialogResult.Yes) {
+                            bool dialogResult = ShowQuestionYN("You have made changes which will affect the website but have not saved them.\r\nWould you like to save them now?");
+                            if (dialogResult) {
                                 buttonPruneRecordsSave_click(null, null);
                             }
                         }*/
                         return true;
 
-                    case 4:
-                        CConfig.Instance.SiteTitle = txtSelectKey.Text;
+                    case PanelKind.WebsiteTitleAndKeys:
+                        GMConfig.Instance.SiteTitle = txtSelectKey.Text;
                         return true;
 
-                    case 5:
-                        CConfig.Instance.OutputFolder = txtChooseOutput.Text;
-                        string imageFolder = CConfig.Instance.ImageFolder;
-                        string outputFolder = CConfig.Instance.OutputFolder;
+                    case PanelKind.OutputFolder:
+                        GMConfig.Instance.OutputFolder = txtChooseOutput.Text;
+                        string outputFolder = GMConfig.Instance.OutputFolder;
                         if (outputFolder != "") {
                             outputFolder = outputFolder + '\\';
                         }
-                        string absImageFolder = string.Concat(outputFolder, imageFolder);
+                        string imageFolder = string.Concat(outputFolder, GMConfig.Instance.ImageFolder);
 
                         // To generate warning if deleting folder & files.
-                        bool preserveFiles = (CConfig.Instance.PreserveFrontPage || CConfig.Instance.PreserveStylesheet);
+                        bool preserveFiles = (GMConfig.Instance.PreserveFrontPage || GMConfig.Instance.PreserveStylesheet);
 
                         while (true) {
                             result = PrepareOutputDirectory(outputFolder, preserveFiles);
@@ -1224,7 +1201,7 @@ namespace GEDmill
                         }
 
                         while (true) {
-                            result = PrepareOutputDirectory(absImageFolder, false);
+                            result = PrepareOutputDirectory(imageFolder, false);
                             if (result == DialogResult.Cancel) {
                                 return false;
                             }
@@ -1233,13 +1210,13 @@ namespace GEDmill
                             }
                         }
 
-                        if (CreateWebsite(outputFolder, absImageFolder)) {
+                        if (CreateWebsite(outputFolder, imageFolder)) {
                             return true;
                         }
 
                         return false;
 
-                    case 6:
+                    case PanelKind.Finish:
                         return true;
 
                     default:
@@ -1482,15 +1459,13 @@ namespace GEDmill
         private bool CreateWebsite(string outputFolder, string imagesFolder)
         {
             fLogger.WriteInfo("Creating website");
-            DialogResult dialogResult;
 
             // If user has specified a background image, check it exists
-            if (!string.IsNullOrEmpty(CConfig.Instance.BackgroundImage) && File.Exists(CConfig.Instance.BackgroundImage) == false) {
-                fLogger.WriteError("Can't find background image " + CConfig.Instance.BackgroundImage);
+            if (!string.IsNullOrEmpty(GMConfig.Instance.BackgroundImage) && File.Exists(GMConfig.Instance.BackgroundImage) == false) {
+                fLogger.WriteError("Can't find background image " + GMConfig.Instance.BackgroundImage);
 
-                dialogResult = MessageBox.Show(this, string.Format("The file {0} is missing. \r\nPages will be created without any background image.", CConfig.Instance.BackgroundImage),
-                    fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite), MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
-                if (dialogResult == DialogResult.Cancel) {
+                bool result = ShowQuestionYN(string.Format("The file {0} is missing. \r\nPages will be created without any background image.", GMConfig.Instance.BackgroundImage));
+                if (!result) {
                     fLogger.WriteInfo("Message box cancelled (1)");
                     return false;
                 }
@@ -1501,19 +1476,17 @@ namespace GEDmill
             var progressWindow = new ProgressWindow();
             progressWindow.Text = "Creating web pages";
 
-            Website website = new Website(fBase.Context.Tree, progressWindow);
-
-            Thread threadWorker = new Thread(website.Create);
+            var website = new Website(fBase.Context.Tree, progressWindow, outputFolder);
+            var threadWorker = new Thread(website.Create);
 
             fLogger.WriteInfo("Starting progress thread");
 
-            dialogResult = DialogResult.Abort;
+            DialogResult dialogResult = DialogResult.Abort;
             try {
                 threadWorker.Start();
                 dialogResult = progressWindow.ShowDialog(this);
             } catch (HTMLException e) {
-                MessageBox.Show(this, e.Message, fPlugin.LangMan.LS(PLS.LSID_CreatingWebsite),
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ShowAlert(e.Message);
             } finally {
                 threadWorker.Join();
             }
@@ -1522,12 +1495,10 @@ namespace GEDmill
                 fLogger.WriteInfo("Thread aborted");
                 if (progressWindow.ThreadError.Message == "") {
                     // Abort means there were file IO errors
-                    MessageBox.Show(this, "A problem was encountered while creating the website files", CConfig.SoftwareName,
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ShowAlert("A problem was encountered while creating the website files");
                 } else {
                     // Abort means there were file IO errors
-                    MessageBox.Show(this, progressWindow.ThreadError.Message, CConfig.SoftwareName,
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ShowAlert(progressWindow.ThreadError.Message);
                 }
             }
 
@@ -1544,17 +1515,16 @@ namespace GEDmill
         // Enable the current page of the wizard
         private void EnableCurrentPanel(bool enable)
         {
-            if (fConfigPanelOn) {
+            if (fConfigPanelVisible) {
                 tabcontrolConfigPanel.Enabled = enable;
                 // Disable all other panels
                 enable = false;
             } else {
-                panelWelcome.Enabled = (fCurrentPanel == 1 && enable);
-                panelChooseGedcom.Enabled = (fCurrentPanel == 2 && enable);
-                panelRecords.Enabled = (fCurrentPanel == 3 && enable);
-                panelKeyIndividuals.Enabled = (fCurrentPanel == 4 && enable);
-                panelChooseOutput.Enabled = (fCurrentPanel == 5 && enable);
-                panelAllDone.Enabled = (fCurrentPanel == 6 && enable);
+                panelWelcome.Enabled = (fCurrentPanel == PanelKind.Welcome && enable);
+                panelRecords.Enabled = (fCurrentPanel == PanelKind.RestrictRecords && enable);
+                panelKeyIndividuals.Enabled = (fCurrentPanel == PanelKind.WebsiteTitleAndKeys && enable);
+                panelChooseOutput.Enabled = (fCurrentPanel == PanelKind.OutputFolder && enable);
+                panelAllDone.Enabled = (fCurrentPanel == PanelKind.Finish && enable);
 
                 tabcontrolConfigPanel.Enabled = false;
             }
@@ -1565,9 +1535,7 @@ namespace GEDmill
         // Reports any exception thrown during the prune operation
         private void ReportRestrictError(Exception e)
         {
-            MessageBox.Show(this, string.Format("A problem was encountered while navigating the tree structure:\r\n\r\n{0}", e.StackTrace), CConfig.SoftwareName,
-                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
+            ShowAlert(string.Format("A problem was encountered while navigating the tree structure:\r\n\r\n{0}", e.StackTrace));
             fLogger.WriteInfo(string.Format("Caught navigation exception : {0}", e.ToString()));
         }
 
@@ -1598,9 +1566,7 @@ namespace GEDmill
             if (hidden == 0) {
                 msg = "No multimedia files hidden.";
             } else {
-                if (hidden != 0) {
-                    msg = string.Format("{0} multimedia file{1} hidden.", hidden, hidden > 1 ? "s" : "");
-                }
+                msg = string.Format("{0} multimedia file{1} hidden.", hidden, hidden > 1 ? "s" : "");
             }
             MessageBox.Show(this, msg, "Hide Pictures", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -1608,79 +1574,78 @@ namespace GEDmill
         // Initialises config panel controls
         private void LoadConfigPanelSettings()
         {
-            txtConfigFrontImageEdit.Text = CConfig.Instance.FrontPageImageFilename;
+            txtConfigFrontImageEdit.Text = GMConfig.Instance.FrontPageImageFilename;
             txtConfigFrontImageEdit.SelectionStart = txtConfigFrontImageEdit.Text.Length;
             txtConfigFrontImageEdit.SelectionLength = txtConfigFrontImageEdit.Text.Length;
-            txtConfigBackImageEdit.Text = CConfig.Instance.BackgroundImage;
+            txtConfigBackImageEdit.Text = GMConfig.Instance.BackgroundImage;
             txtConfigBackImageEdit.SelectionStart = txtConfigBackImageEdit.Text.Length;
             txtConfigBackImageEdit.SelectionLength = txtConfigBackImageEdit.Text.Length;
-            txtConfigIndiImageWidth.Text = CConfig.Instance.MaxImageWidth.ToString();
-            txtConfigIndiImageHeight.Text = CConfig.Instance.MaxImageHeight.ToString();
-            txtConfigSourceImageWidth.Text = CConfig.Instance.MaxSourceImageWidth.ToString();
-            txtConfigSourceImageHeight.Text = CConfig.Instance.MaxSourceImageHeight.ToString();
-            txtConfigThumbnailImageWidth.Text = CConfig.Instance.MaxThumbnailImageWidth.ToString();
-            txtConfigThumbnailImageHeight.Text = CConfig.Instance.MaxThumbnailImageHeight.ToString();
+            txtConfigIndiImageWidth.Text = GMConfig.Instance.MaxImageWidth.ToString();
+            txtConfigIndiImageHeight.Text = GMConfig.Instance.MaxImageHeight.ToString();
+            txtConfigSourceImageWidth.Text = GMConfig.Instance.MaxSourceImageWidth.ToString();
+            txtConfigSourceImageHeight.Text = GMConfig.Instance.MaxSourceImageHeight.ToString();
+            txtConfigThumbnailImageWidth.Text = GMConfig.Instance.MaxThumbnailImageWidth.ToString();
+            txtConfigThumbnailImageHeight.Text = GMConfig.Instance.MaxThumbnailImageHeight.ToString();
             cmbConfigHtmlExtn.Items.Clear();
             cmbConfigHtmlExtn.Items.AddRange(new object[] { ".htm", ".html" });
-            cmbConfigHtmlExtn.SelectedIndex = (CConfig.Instance.HtmlExtension == "html" ? 1 : 0);
-            txtConfigNoName.Text = CConfig.Instance.UnknownName;
-            txtConfigWithheldName.Text = CConfig.Instance.ConcealedName;
-            radConfigWithheldNameLabel.Checked = !CConfig.Instance.UseWithheldNames;
-            radConfigWithheldNameName.Checked = CConfig.Instance.UseWithheldNames;
-            chkConfigCapNames.Checked = (CConfig.Instance.NameCapitalisation == 1);
-            chkConfigCapEvents.Checked = CConfig.Instance.CapitaliseEventDescriptions;
-            chkConfigHideEmails.Checked = CConfig.Instance.ObfuscateEmails;
-            chkConfigOccupationHeadline.Checked = CConfig.Instance.OccupationHeadline;
-            chkConfigShowWithheldRecords.Checked = CConfig.Instance.OnlyConceal;
-            txtConfigTabSpaces.Text = CConfig.Instance.TabSpaces.ToString();
-            txtConfigCommentary.Text = CConfig.Instance.CommentaryText;
-            chkConfigCommentaryIsHtml.Checked = CConfig.Instance.CommentaryIsHtml;
-            chkConfigStats.Checked = CConfig.Instance.ShowFrontPageStats;
-            chkConfigPreserveFrontPage.Checked = CConfig.Instance.PreserveFrontPage;
-            chkConfigPreserveStylesheet.Checked = CConfig.Instance.PreserveStylesheet;
-            chkConfigIncludeHelppage.Checked = CConfig.Instance.IncludeHelpPage;
-            chkConfigCdrom.Checked = CConfig.Instance.CreateCDROMFiles;
-            chkConfigNonPictures.Checked = CConfig.Instance.AllowNonPictures;
-            chkConfigIndiImages.Checked = CConfig.Instance.AllowMultipleImages;
-            chkConfigTreeDiagrams.Checked = CConfig.Instance.ShowMiniTrees;
-            chkConfigTreeDiagramsFakeBg.Checked = CConfig.Instance.FakeMiniTreeTransparency;
-            txtConfigEmail.Text = CConfig.Instance.UserEmailAddress;
-            txtConfigIndexName.Text = CConfig.Instance.FrontPageFilename;
-            lblConfigIndexNameExtn.Text = "." + CConfig.Instance.HtmlExtension;
-            txtConfigStylesheetName.Text = CConfig.Instance.StylesheetFilename;
-            if (CConfig.Instance.MainWebsiteLink.Length == 0) {
+            cmbConfigHtmlExtn.SelectedIndex = (GMConfig.Instance.HtmlExtension == "html" ? 1 : 0);
+            txtConfigNoName.Text = GMConfig.Instance.UnknownName;
+            txtConfigWithheldName.Text = GMConfig.Instance.ConcealedName;
+            radConfigWithheldNameLabel.Checked = !GMConfig.Instance.UseWithheldNames;
+            radConfigWithheldNameName.Checked = GMConfig.Instance.UseWithheldNames;
+            chkConfigCapNames.Checked = (GMConfig.Instance.NameCapitalisation == 1);
+            chkConfigCapEvents.Checked = GMConfig.Instance.CapitaliseEventDescriptions;
+            chkConfigHideEmails.Checked = GMConfig.Instance.ObfuscateEmails;
+            chkConfigOccupationHeadline.Checked = GMConfig.Instance.OccupationHeadline;
+            chkConfigShowWithheldRecords.Checked = GMConfig.Instance.OnlyConceal;
+            txtConfigTabSpaces.Text = GMConfig.Instance.TabSpaces.ToString();
+            txtConfigCommentary.Text = GMConfig.Instance.CommentaryText;
+            chkConfigCommentaryIsHtml.Checked = GMConfig.Instance.CommentaryIsHtml;
+            chkConfigStats.Checked = GMConfig.Instance.ShowFrontPageStats;
+            chkConfigPreserveFrontPage.Checked = GMConfig.Instance.PreserveFrontPage;
+            chkConfigPreserveStylesheet.Checked = GMConfig.Instance.PreserveStylesheet;
+            chkConfigCdrom.Checked = GMConfig.Instance.CreateCDROMFiles;
+            chkConfigNonPictures.Checked = GMConfig.Instance.AllowNonPictures;
+            chkConfigIndiImages.Checked = GMConfig.Instance.AllowMultipleImages;
+            chkConfigIncludeTreeDiagrams.Checked = GMConfig.Instance.ShowMiniTrees;
+            chkConfigTreeDiagramsFakeBg.Checked = GMConfig.Instance.FakeMiniTreeTransparency;
+            txtConfigEmail.Text = GMConfig.Instance.UserEmailAddress;
+            txtConfigIndexName.Text = GMConfig.Instance.FrontPageFilename;
+            lblConfigIndexNameExtn.Text = "." + GMConfig.Instance.HtmlExtension;
+            txtConfigStylesheetName.Text = GMConfig.Instance.StylesheetFilename;
+            if (GMConfig.Instance.MainWebsiteLink.Length == 0) {
                 txtConfigUserLink.Text = "http://";
             } else {
-                txtConfigUserLink.Text = CConfig.Instance.MainWebsiteLink;
+                txtConfigUserLink.Text = GMConfig.Instance.MainWebsiteLink;
             }
             cmbConfigTreeDiagramsFormat.Items.Clear();
             cmbConfigTreeDiagramsFormat.Items.AddRange(new object[] { "gif", "png" });
-            cmbConfigTreeDiagramsFormat.SelectedIndex = (CConfig.Instance.MiniTreeImageFormat == "png" ? 1 : 0);
-            chkConfigMultiPageIndex.Checked = CConfig.Instance.MultiPageIndexes;
-            chkConfigUserRefInIndex.Checked = CConfig.Instance.IncludeUserRefInIndex;
-            txtConfigMultiPageIndexNumber.Text = CConfig.Instance.IndividualsPerIndexPage.ToString();
-            chkConfigKeepOriginals.Checked = CConfig.Instance.LinkOriginalPicture;
-            chkConfigRenameOriginals.Checked = CConfig.Instance.RenameOriginalPicture;
-            chkConfigW3C.Checked = CConfig.Instance.IncludeValiditySticker;
-            chkConfigUserRecFilename.Checked = CConfig.Instance.UserRecFilename;
-            txtConfigCustomFooter.Text = CConfig.Instance.CustomFooter;
-            chkConfigFooterIsHtml.Checked = CConfig.Instance.FooterIsHtml;
-            chkConfigConserveTreeWidth.Checked = CConfig.Instance.ConserveTreeWidth;
-            chkConfigKeepSiblingOrder.Checked = CConfig.Instance.KeepSiblingOrder;
-            chkConfigAllowMultimedia.Checked = CConfig.Instance.AllowMultimedia;
+            cmbConfigTreeDiagramsFormat.SelectedIndex = (GMConfig.Instance.MiniTreeImageFormat == "png" ? 1 : 0);
+            chkConfigMultiPageIndex.Checked = GMConfig.Instance.MultiPageIndexes;
+            chkConfigUserRefInIndex.Checked = GMConfig.Instance.IncludeUserRefInIndex;
+            txtConfigMultiPageIndexNumber.Text = GMConfig.Instance.IndividualsPerIndexPage.ToString();
+            chkConfigKeepOriginals.Checked = GMConfig.Instance.LinkOriginalPicture;
+            chkConfigRenameOriginals.Checked = GMConfig.Instance.RenameOriginalPicture;
+            chkConfigW3C.Checked = GMConfig.Instance.IncludeValiditySticker;
+            chkConfigUserRecFilename.Checked = GMConfig.Instance.UserRecFilename;
+            txtConfigCustomFooter.Text = GMConfig.Instance.CustomFooter;
+            chkConfigFooterIsHtml.Checked = GMConfig.Instance.FooterIsHtml;
+            chkConfigConserveTreeWidth.Checked = GMConfig.Instance.ConserveTreeWidth;
+            chkConfigKeepSiblingOrder.Checked = GMConfig.Instance.KeepSiblingOrder;
+            chkConfigAllowMultimedia.Checked = GMConfig.Instance.AllowMultimedia;
 
-            fColorConfigMiniTreeBranch = CConfig.Instance.MiniTreeColourBranch;
-            fColorConfigMiniTreeIndiBorder = CConfig.Instance.MiniTreeColourIndiBorder;
-            fColorConfigMiniTreeIndiBackground = CConfig.Instance.MiniTreeColourIndiBackground;
-            fColorConfigMiniTreeIndiHighlight = CConfig.Instance.MiniTreeColourIndiHighlight;
-            fColorConfigMiniTreeIndiBgConcealed = CConfig.Instance.MiniTreeColourIndiBgConcealed;
-            fColorConfigMiniTreeIndiFgConcealed = CConfig.Instance.MiniTreeColourIndiFgConcealed;
-            fColorConfigMiniTreeIndiShade = CConfig.Instance.MiniTreeColourIndiShade;
-            fColorConfigMiniTreeIndiText = CConfig.Instance.MiniTreeColourIndiText;
-            fColorConfigMiniTreeIndiLink = CConfig.Instance.MiniTreeColourIndiLink;
-            fColorConfigMiniTreeBackground = CConfig.Instance.MiniTreeColourBackground;
+            fColorConfigMiniTreeBranch = GMConfig.Instance.MiniTreeColourBranch;
+            fColorConfigMiniTreeIndiBorder = GMConfig.Instance.MiniTreeColourIndiBorder;
+            fColorConfigMiniTreeIndiBackground = GMConfig.Instance.MiniTreeColourIndiBackground;
+            fColorConfigMiniTreeIndiHighlight = GMConfig.Instance.MiniTreeColourIndiHighlight;
+            fColorConfigMiniTreeIndiBgConcealed = GMConfig.Instance.MiniTreeColourIndiBgConcealed;
+            fColorConfigMiniTreeIndiFgConcealed = GMConfig.Instance.MiniTreeColourIndiFgConcealed;
+            fColorConfigMiniTreeIndiShade = GMConfig.Instance.MiniTreeColourIndiShade;
+            fColorConfigMiniTreeIndiText = GMConfig.Instance.MiniTreeColourIndiText;
+            fColorConfigMiniTreeIndiLink = GMConfig.Instance.MiniTreeColourIndiLink;
+            fColorConfigMiniTreeBackground = GMConfig.Instance.MiniTreeColourBackground;
 
-            chkConfigSupressBackreferences.Checked = !CConfig.Instance.SupressBackreferences;
+            chkConfigSupressBackreferences.Checked = !GMConfig.Instance.SupressBackreferences;
 
             SetMiniTreeColourConfigButtons();
 
@@ -1694,20 +1659,28 @@ namespace GEDmill
         {
             btnConfigMiniTreeColourBranch.BackColor = fColorConfigMiniTreeIndiBackground;
             btnConfigMiniTreeColourBranch.ForeColor = fColorConfigMiniTreeBranch;
+
             btnConfigMiniTreeColourIndiBorder.BackColor = fColorConfigMiniTreeIndiBackground;
             btnConfigMiniTreeColourIndiBorder.ForeColor = fColorConfigMiniTreeIndiBorder;
+
             btnConfigMiniTreeColourIndiBackground.BackColor = fColorConfigMiniTreeIndiBackground;
             btnConfigMiniTreeColourIndiBackground.ForeColor = fColorConfigMiniTreeIndiLink;
+
             btnConfigMiniTreeColourIndiHighlight.BackColor = fColorConfigMiniTreeIndiHighlight;
             btnConfigMiniTreeColourIndiHighlight.ForeColor = fColorConfigMiniTreeIndiText;
+
             btnConfigMiniTreeColourIndiBgConcealed.BackColor = fColorConfigMiniTreeIndiBgConcealed;
             btnConfigMiniTreeColourIndiBgConcealed.ForeColor = fColorConfigMiniTreeIndiFgConcealed;
+
             btnConfigMiniTreeColourIndiFgConcealed.BackColor = fColorConfigMiniTreeIndiBgConcealed;
             btnConfigMiniTreeColourIndiFgConcealed.ForeColor = fColorConfigMiniTreeIndiFgConcealed;
+
             btnConfigMiniTreeColourIndiShade.BackColor = fColorConfigMiniTreeIndiShade;
             btnConfigMiniTreeColourIndiShade.ForeColor = fColorConfigMiniTreeIndiLink;
+
             btnConfigMiniTreeColourIndiText.BackColor = fColorConfigMiniTreeIndiHighlight;
             btnConfigMiniTreeColourIndiText.ForeColor = fColorConfigMiniTreeIndiText;
+
             btnConfigMiniTreeColourIndiLink.BackColor = fColorConfigMiniTreeIndiBackground;
             btnConfigMiniTreeColourIndiLink.ForeColor = fColorConfigMiniTreeIndiLink;
         }
@@ -1717,20 +1690,28 @@ namespace GEDmill
         {
             btnConfigMiniTreeColourBranch.BackColor = Form.DefaultBackColor;
             btnConfigMiniTreeColourBranch.ForeColor = Form.DefaultForeColor;
+
             btnConfigMiniTreeColourIndiBorder.BackColor = Form.DefaultBackColor;
             btnConfigMiniTreeColourIndiBorder.ForeColor = Form.DefaultForeColor;
+
             btnConfigMiniTreeColourIndiBackground.BackColor = Form.DefaultBackColor;
             btnConfigMiniTreeColourIndiBackground.ForeColor = Form.DefaultForeColor;
+
             btnConfigMiniTreeColourIndiHighlight.BackColor = Form.DefaultBackColor;
             btnConfigMiniTreeColourIndiHighlight.ForeColor = Form.DefaultForeColor;
+
             btnConfigMiniTreeColourIndiBgConcealed.BackColor = Form.DefaultBackColor;
             btnConfigMiniTreeColourIndiBgConcealed.ForeColor = Form.DefaultForeColor;
+
             btnConfigMiniTreeColourIndiFgConcealed.BackColor = Form.DefaultBackColor;
             btnConfigMiniTreeColourIndiFgConcealed.ForeColor = Form.DefaultForeColor;
+
             btnConfigMiniTreeColourIndiShade.BackColor = Form.DefaultBackColor;
             btnConfigMiniTreeColourIndiShade.ForeColor = Form.DefaultForeColor;
+
             btnConfigMiniTreeColourIndiText.BackColor = Form.DefaultBackColor;
             btnConfigMiniTreeColourIndiText.ForeColor = Form.DefaultForeColor;
+
             btnConfigMiniTreeColourIndiLink.BackColor = Form.DefaultBackColor;
             btnConfigMiniTreeColourIndiLink.ForeColor = Form.DefaultForeColor;
         }
@@ -1739,20 +1720,18 @@ namespace GEDmill
         // Reads (and sanity checks) values from all controls in the config panel and puts them into the CConfig instance.
         private void SaveConfigPanelSettings()
         {
-            CConfig.Instance.FrontPageImageFilename = txtConfigFrontImageEdit.Text;
-            CConfig.Instance.BackgroundImage = txtConfigBackImageEdit.Text;
+            GMConfig.Instance.FrontPageImageFilename = txtConfigFrontImageEdit.Text;
+            GMConfig.Instance.BackgroundImage = txtConfigBackImageEdit.Text;
 
             try {
                 // Sanity check value
                 int maxImageWidth = int.Parse(txtConfigIndiImageWidth.Text);
                 if (maxImageWidth > 0 && maxImageWidth <= 300) {
-                    CConfig.Instance.MaxImageWidth = maxImageWidth;
-                } else if (CConfig.Instance.MaxImageWidth != maxImageWidth && maxImageWidth > 300) {
-                    DialogResult dialogResult = MessageBox.Show(this,
-                        string.Format("Setting the image width to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxImageWidth),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (dialogResult == DialogResult.Yes) {
-                        CConfig.Instance.MaxImageWidth = maxImageWidth;
+                    GMConfig.Instance.MaxImageWidth = maxImageWidth;
+                } else if (GMConfig.Instance.MaxImageWidth != maxImageWidth && maxImageWidth > 300) {
+                    bool dialogResult = ShowQuestionYN(string.Format("Setting the image width to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxImageWidth));
+                    if (dialogResult) {
+                        GMConfig.Instance.MaxImageWidth = maxImageWidth;
                     }
                 }
             } catch (Exception) {
@@ -1763,13 +1742,11 @@ namespace GEDmill
                 // Sanity check value
                 int maxImageHeight = int.Parse(txtConfigIndiImageHeight.Text);
                 if (maxImageHeight > 0 && maxImageHeight <= 800) {
-                    CConfig.Instance.MaxImageHeight = maxImageHeight;
-                } else if (CConfig.Instance.MaxImageHeight != maxImageHeight && maxImageHeight > 800) {
-                    DialogResult dialogResult = MessageBox.Show(this,
-                        string.Format("Setting the image height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxImageHeight),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (dialogResult == DialogResult.Yes) {
-                        CConfig.Instance.MaxImageHeight = maxImageHeight;
+                    GMConfig.Instance.MaxImageHeight = maxImageHeight;
+                } else if (GMConfig.Instance.MaxImageHeight != maxImageHeight && maxImageHeight > 800) {
+                    bool dialogResult = ShowQuestionYN(string.Format("Setting the image height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxImageHeight));
+                    if (dialogResult) {
+                        GMConfig.Instance.MaxImageHeight = maxImageHeight;
                     }
                 }
             } catch (Exception) {
@@ -1780,13 +1757,11 @@ namespace GEDmill
                 // Sanity check value
                 int maxSourceImageWidth = int.Parse(txtConfigSourceImageWidth.Text);
                 if (maxSourceImageWidth > 0 && maxSourceImageWidth <= 800) {
-                    CConfig.Instance.MaxSourceImageWidth = maxSourceImageWidth;
-                } else if (CConfig.Instance.MaxSourceImageWidth != maxSourceImageWidth && maxSourceImageWidth > 800) {
-                    DialogResult dialogResult = MessageBox.Show(this,
-                        string.Format("Setting the source width to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxSourceImageWidth),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (dialogResult == DialogResult.Yes) {
-                        CConfig.Instance.MaxSourceImageWidth = maxSourceImageWidth;
+                    GMConfig.Instance.MaxSourceImageWidth = maxSourceImageWidth;
+                } else if (GMConfig.Instance.MaxSourceImageWidth != maxSourceImageWidth && maxSourceImageWidth > 800) {
+                    bool dialogResult = ShowQuestionYN(string.Format("Setting the source width to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxSourceImageWidth));
+                    if (dialogResult) {
+                        GMConfig.Instance.MaxSourceImageWidth = maxSourceImageWidth;
                     }
                 }
             } catch (Exception) {
@@ -1797,13 +1772,11 @@ namespace GEDmill
                 // Sanity check value
                 int maxSourceImageHeight = int.Parse(txtConfigSourceImageHeight.Text);
                 if (maxSourceImageHeight > 0 && maxSourceImageHeight <= 800) {
-                    CConfig.Instance.MaxSourceImageHeight = maxSourceImageHeight;
-                } else if (CConfig.Instance.MaxSourceImageHeight != maxSourceImageHeight && maxSourceImageHeight > 800) {
-                    DialogResult dialogResult = MessageBox.Show(this,
-                        string.Format("Setting the source height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxSourceImageHeight),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (dialogResult == DialogResult.Yes) {
-                        CConfig.Instance.MaxSourceImageHeight = maxSourceImageHeight;
+                    GMConfig.Instance.MaxSourceImageHeight = maxSourceImageHeight;
+                } else if (GMConfig.Instance.MaxSourceImageHeight != maxSourceImageHeight && maxSourceImageHeight > 800) {
+                    bool dialogResult = ShowQuestionYN(string.Format("Setting the source height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxSourceImageHeight));
+                    if (dialogResult) {
+                        GMConfig.Instance.MaxSourceImageHeight = maxSourceImageHeight;
                     }
                 }
             } catch (Exception) {
@@ -1814,13 +1787,11 @@ namespace GEDmill
                 // Sanity check value
                 int maxThumbnailImageWidth = int.Parse(txtConfigThumbnailImageWidth.Text);
                 if (maxThumbnailImageWidth > 0 && maxThumbnailImageWidth < 80) {
-                    CConfig.Instance.MaxThumbnailImageWidth = maxThumbnailImageWidth;
-                } else if (CConfig.Instance.MaxThumbnailImageWidth != maxThumbnailImageWidth && maxThumbnailImageWidth > 80) {
-                    DialogResult dialogResult = MessageBox.Show(this,
-                        string.Format("Setting the thumbnail width to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxThumbnailImageWidth),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (dialogResult == DialogResult.Yes) {
-                        CConfig.Instance.MaxThumbnailImageWidth = maxThumbnailImageWidth;
+                    GMConfig.Instance.MaxThumbnailImageWidth = maxThumbnailImageWidth;
+                } else if (GMConfig.Instance.MaxThumbnailImageWidth != maxThumbnailImageWidth && maxThumbnailImageWidth > 80) {
+                    bool dialogResult = ShowQuestionYN(string.Format("Setting the thumbnail width to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxThumbnailImageWidth));
+                    if (dialogResult) {
+                        GMConfig.Instance.MaxThumbnailImageWidth = maxThumbnailImageWidth;
                     }
                 }
             } catch (Exception) {
@@ -1831,59 +1802,56 @@ namespace GEDmill
                 // Sanity check value
                 int maxThumbnailImageHeight = int.Parse(txtConfigThumbnailImageHeight.Text);
                 if (maxThumbnailImageHeight > 0 && maxThumbnailImageHeight < 80) {
-                    CConfig.Instance.MaxThumbnailImageHeight = maxThumbnailImageHeight;
-                } else if (CConfig.Instance.MaxThumbnailImageHeight != maxThumbnailImageHeight && maxThumbnailImageHeight > 80) {
-                    DialogResult dialogResult = MessageBox.Show(this,
-                        string.Format("Setting the thumbnail height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxThumbnailImageHeight),
-                        "Change settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (dialogResult == DialogResult.Yes) {
-                        CConfig.Instance.MaxThumbnailImageHeight = maxThumbnailImageHeight;
+                    GMConfig.Instance.MaxThumbnailImageHeight = maxThumbnailImageHeight;
+                } else if (GMConfig.Instance.MaxThumbnailImageHeight != maxThumbnailImageHeight && maxThumbnailImageHeight > 80) {
+                    bool dialogResult = ShowQuestionYN(string.Format("Setting the thumbnail height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?", maxThumbnailImageHeight));
+                    if (dialogResult) {
+                        GMConfig.Instance.MaxThumbnailImageHeight = maxThumbnailImageHeight;
                     }
                 }
             } catch (Exception) {
                 // Leave value unchanged
             }
 
-            CConfig.Instance.HtmlExtension = (cmbConfigHtmlExtn.SelectedIndex == 1 ? "html" : "htm");
-            CConfig.Instance.IncludeValiditySticker = chkConfigW3C.Checked;
-            CConfig.Instance.UserRecFilename = chkConfigUserRecFilename.Checked;
+            GMConfig.Instance.HtmlExtension = (cmbConfigHtmlExtn.SelectedIndex == 1 ? "html" : "htm");
+            GMConfig.Instance.IncludeValiditySticker = chkConfigW3C.Checked;
+            GMConfig.Instance.UserRecFilename = chkConfigUserRecFilename.Checked;
             if (txtConfigNoName.Text.Length > 0) {
-                CConfig.Instance.UnknownName = txtConfigNoName.Text;
+                GMConfig.Instance.UnknownName = txtConfigNoName.Text;
             }
             if (txtConfigWithheldName.Text.Length > 0) {
-                CConfig.Instance.ConcealedName = txtConfigWithheldName.Text;
+                GMConfig.Instance.ConcealedName = txtConfigWithheldName.Text;
             }
-            CConfig.Instance.UseWithheldNames = radConfigWithheldNameName.Checked;
-            CConfig.Instance.NameCapitalisation = (chkConfigCapNames.Checked ? 1 : 0);
-            CConfig.Instance.CapitaliseEventDescriptions = chkConfigCapEvents.Checked;
-            CConfig.Instance.ObfuscateEmails = chkConfigHideEmails.Checked;
-            CConfig.Instance.OccupationHeadline = chkConfigOccupationHeadline.Checked;
-            CConfig.Instance.OnlyConceal = chkConfigShowWithheldRecords.Checked;
+            GMConfig.Instance.UseWithheldNames = radConfigWithheldNameName.Checked;
+            GMConfig.Instance.NameCapitalisation = (chkConfigCapNames.Checked ? 1 : 0);
+            GMConfig.Instance.CapitaliseEventDescriptions = chkConfigCapEvents.Checked;
+            GMConfig.Instance.ObfuscateEmails = chkConfigHideEmails.Checked;
+            GMConfig.Instance.OccupationHeadline = chkConfigOccupationHeadline.Checked;
+            GMConfig.Instance.OnlyConceal = chkConfigShowWithheldRecords.Checked;
 
             try {
                 // Sanity check value
                 int tabSpaces = int.Parse(txtConfigTabSpaces.Text);
                 if (tabSpaces > 0 && tabSpaces < 64) {
-                    CConfig.Instance.TabSpaces = tabSpaces;
+                    GMConfig.Instance.TabSpaces = tabSpaces;
                 }
             } catch (Exception) {
                 // Leave value unchanged
             }
 
-            CConfig.Instance.CommentaryText = txtConfigCommentary.Text;
-            CConfig.Instance.CommentaryIsHtml = chkConfigCommentaryIsHtml.Checked;
-            CConfig.Instance.ShowFrontPageStats = chkConfigStats.Checked;
-            CConfig.Instance.ShowMiniTrees = chkConfigTreeDiagrams.Checked;
-            CConfig.Instance.FakeMiniTreeTransparency = chkConfigTreeDiagramsFakeBg.Checked;
-            CConfig.Instance.UserEmailAddress = txtConfigEmail.Text;
-            CConfig.Instance.PreserveFrontPage = chkConfigPreserveFrontPage.Checked;
-            CConfig.Instance.PreserveStylesheet = chkConfigPreserveStylesheet.Checked;
-            CConfig.Instance.IncludeHelpPage = chkConfigIncludeHelppage.Checked;
-            CConfig.Instance.CreateCDROMFiles = chkConfigCdrom.Checked;
-            CConfig.Instance.AllowMultipleImages = chkConfigIndiImages.Checked;
-            CConfig.Instance.AllowNonPictures = chkConfigNonPictures.Checked;
-            CConfig.Instance.LinkOriginalPicture = chkConfigKeepOriginals.Checked;
-            CConfig.Instance.RenameOriginalPicture = chkConfigRenameOriginals.Checked;
+            GMConfig.Instance.CommentaryText = txtConfigCommentary.Text;
+            GMConfig.Instance.CommentaryIsHtml = chkConfigCommentaryIsHtml.Checked;
+            GMConfig.Instance.ShowFrontPageStats = chkConfigStats.Checked;
+            GMConfig.Instance.ShowMiniTrees = chkConfigIncludeTreeDiagrams.Checked;
+            GMConfig.Instance.FakeMiniTreeTransparency = chkConfigTreeDiagramsFakeBg.Checked;
+            GMConfig.Instance.UserEmailAddress = txtConfigEmail.Text;
+            GMConfig.Instance.PreserveFrontPage = chkConfigPreserveFrontPage.Checked;
+            GMConfig.Instance.PreserveStylesheet = chkConfigPreserveStylesheet.Checked;
+            GMConfig.Instance.CreateCDROMFiles = chkConfigCdrom.Checked;
+            GMConfig.Instance.AllowMultipleImages = chkConfigIndiImages.Checked;
+            GMConfig.Instance.AllowNonPictures = chkConfigNonPictures.Checked;
+            GMConfig.Instance.LinkOriginalPicture = chkConfigKeepOriginals.Checked;
+            GMConfig.Instance.RenameOriginalPicture = chkConfigRenameOriginals.Checked;
 
             // Validate and strip trailing .html or .htm in case user has put them on
             string frontPageFilename = txtConfigIndexName.Text;
@@ -1893,7 +1861,7 @@ namespace GEDmill
             } else if (frontPageFilenameUpper.LastIndexOf(".HTM") >= 0) {
                 frontPageFilename = frontPageFilename.Substring(0, frontPageFilename.Length - 4);
             }
-            CConfig.Instance.FrontPageFilename = frontPageFilename;
+            GMConfig.Instance.FrontPageFilename = frontPageFilename;
 
             // Validate and strip trailing .css in case user has put them on
             string stylesheetFilename = txtConfigStylesheetName.Text;
@@ -1902,7 +1870,7 @@ namespace GEDmill
                 if (stylesheetFilename.LastIndexOf(".CSS") >= 0) {
                     stylesheetFilename = stylesheetFilename.Substring(0, stylesheetFilename.Length - 4);
                 }
-                CConfig.Instance.StylesheetFilename = stylesheetFilename;
+                GMConfig.Instance.StylesheetFilename = stylesheetFilename;
             }
 
             // Validate and strip leading http:// in case user has it them on
@@ -1912,60 +1880,60 @@ namespace GEDmill
                 mainWebsiteLink = "";
             }
 
-            CConfig.Instance.MainWebsiteLink = mainWebsiteLink;
-            CConfig.Instance.MiniTreeImageFormat = (cmbConfigTreeDiagramsFormat.SelectedIndex == 1 ? "png" : "gif");
-            CConfig.Instance.MultiPageIndexes = chkConfigMultiPageIndex.Checked;
-            CConfig.Instance.IncludeUserRefInIndex = chkConfigUserRefInIndex.Checked;
+            GMConfig.Instance.MainWebsiteLink = mainWebsiteLink;
+            GMConfig.Instance.MiniTreeImageFormat = (cmbConfigTreeDiagramsFormat.SelectedIndex == 1 ? "png" : "gif");
+            GMConfig.Instance.MultiPageIndexes = chkConfigMultiPageIndex.Checked;
+            GMConfig.Instance.IncludeUserRefInIndex = chkConfigUserRefInIndex.Checked;
 
             try {
                 // Sanity check value
                 int index = int.Parse(txtConfigMultiPageIndexNumber.Text);
                 if (index > 0) {
-                    CConfig.Instance.IndividualsPerIndexPage = index;
+                    GMConfig.Instance.IndividualsPerIndexPage = index;
                 }
             } catch (Exception) {
                 // Leave value unchanged
             }
 
-            CConfig.Instance.CustomFooter = txtConfigCustomFooter.Text;
+            GMConfig.Instance.CustomFooter = txtConfigCustomFooter.Text;
 
-            CConfig.Instance.FooterIsHtml = chkConfigFooterIsHtml.Checked;
-            CConfig.Instance.ConserveTreeWidth = chkConfigConserveTreeWidth.Checked;
-            CConfig.Instance.KeepSiblingOrder = chkConfigKeepSiblingOrder.Checked;
-            CConfig.Instance.AllowMultimedia = chkConfigAllowMultimedia.Checked;
+            GMConfig.Instance.FooterIsHtml = chkConfigFooterIsHtml.Checked;
+            GMConfig.Instance.ConserveTreeWidth = chkConfigConserveTreeWidth.Checked;
+            GMConfig.Instance.KeepSiblingOrder = chkConfigKeepSiblingOrder.Checked;
+            GMConfig.Instance.AllowMultimedia = chkConfigAllowMultimedia.Checked;
 
-            CConfig.Instance.MiniTreeColourBranch = fColorConfigMiniTreeBranch;
-            CConfig.Instance.MiniTreeColourIndiBorder = fColorConfigMiniTreeIndiBorder;
-            CConfig.Instance.MiniTreeColourIndiBackground = fColorConfigMiniTreeIndiBackground;
-            CConfig.Instance.MiniTreeColourIndiHighlight = fColorConfigMiniTreeIndiHighlight;
-            CConfig.Instance.MiniTreeColourIndiBgConcealed = fColorConfigMiniTreeIndiBgConcealed;
-            CConfig.Instance.MiniTreeColourIndiFgConcealed = fColorConfigMiniTreeIndiFgConcealed;
-            CConfig.Instance.MiniTreeColourIndiShade = fColorConfigMiniTreeIndiShade;
-            CConfig.Instance.MiniTreeColourIndiText = fColorConfigMiniTreeIndiText;
-            CConfig.Instance.MiniTreeColourIndiLink = fColorConfigMiniTreeIndiLink;
-            CConfig.Instance.MiniTreeColourBackground = fColorConfigMiniTreeBackground;
+            GMConfig.Instance.MiniTreeColourBranch = fColorConfigMiniTreeBranch;
+            GMConfig.Instance.MiniTreeColourIndiBorder = fColorConfigMiniTreeIndiBorder;
+            GMConfig.Instance.MiniTreeColourIndiBackground = fColorConfigMiniTreeIndiBackground;
+            GMConfig.Instance.MiniTreeColourIndiHighlight = fColorConfigMiniTreeIndiHighlight;
+            GMConfig.Instance.MiniTreeColourIndiBgConcealed = fColorConfigMiniTreeIndiBgConcealed;
+            GMConfig.Instance.MiniTreeColourIndiFgConcealed = fColorConfigMiniTreeIndiFgConcealed;
+            GMConfig.Instance.MiniTreeColourIndiShade = fColorConfigMiniTreeIndiShade;
+            GMConfig.Instance.MiniTreeColourIndiText = fColorConfigMiniTreeIndiText;
+            GMConfig.Instance.MiniTreeColourIndiLink = fColorConfigMiniTreeIndiLink;
+            GMConfig.Instance.MiniTreeColourBackground = fColorConfigMiniTreeBackground;
 
-            CConfig.Instance.SupressBackreferences = !chkConfigSupressBackreferences.Checked;
+            GMConfig.Instance.SupressBackreferences = !chkConfigSupressBackreferences.Checked;
         }
 
         // Populates the list box of individuals to link from the front page
         private void FillKeyIndividualsList()
         {
-            if (CConfig.Instance.KeyIndividuals == null) return;
-            fLogger.WriteInfo("FillKeyIndividualsList() : " + CConfig.Instance.KeyIndividuals.Count.ToString());
+            if (GMConfig.Instance.KeyIndividuals == null) return;
+            fLogger.WriteInfo("FillKeyIndividualsList() : " + GMConfig.Instance.KeyIndividuals.Count.ToString());
 
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
             try {
                 lstKeyIndividuals.Items.Clear();
-                foreach (string xref in CConfig.Instance.KeyIndividuals) {
+                foreach (string xref in GMConfig.Instance.KeyIndividuals) {
                     GDMIndividualRecord indiRec = fBase.Context.Tree.FindXRef<GDMIndividualRecord>(xref);
                     if (indiRec != null && GMHelper.GetVisibility(indiRec)) {
                         string firstName = "";
                         string surname = "";
                         string fullName = GMHelper.CapitaliseName(indiRec.GetPrimaryFullName(), ref firstName, ref surname);
                         if (string.IsNullOrEmpty(fullName)) {
-                            fullName = CConfig.Instance.UnknownName;
+                            fullName = GMConfig.Instance.UnknownName;
                         }
                         lstKeyIndividuals.Items.Add(new NameXRefPair(fullName, xref));
                     }
@@ -2188,6 +2156,8 @@ namespace GEDmill
         // Logic to enable controls related to the multi-page index option
         private void EnableMultiPageIndexConfig()
         {
+            fLogger.WriteInfo("Config panel multi page index enabled");
+
             if (chkConfigMultiPageIndex.Checked) {
                 lblConfigMultiPageIndexNumber.Enabled = true;
                 txtConfigMultiPageIndexNumber.Enabled = true;
@@ -2200,6 +2170,8 @@ namespace GEDmill
         // Logic to enable the controls related to multimedia content
         private void EnableMultimediaConfig()
         {
+            fLogger.WriteInfo("Multimedia config enabled");
+
             if (chkConfigAllowMultimedia.Checked) {
                 lblConfigIndiImageSize.Enabled = true;
                 lblConfigIndiImageWidth.Enabled = true;
@@ -2243,6 +2215,8 @@ namespace GEDmill
         // Logic to enable the controls related to thumbnails
         private void EnableThumbnailsConfig()
         {
+            fLogger.WriteInfo("Config panel thumbnails enabled");
+
             if (chkConfigIndiImages.Checked) {
                 lblConfigThumbnailImageSize.Enabled = true;
                 lblConfigThumbnailImageWidth.Enabled = true;
@@ -2261,6 +2235,8 @@ namespace GEDmill
         // Logic to enable the controls related to withheld records
         private void EnableWithheldConfig()
         {
+            fLogger.WriteInfo("Config panel withheld enabled");
+
             if (chkConfigShowWithheldRecords.Checked) {
                 gbConfigWithheldName.Enabled = true;
                 radConfigWithheldNameLabel.Enabled = true;

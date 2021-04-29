@@ -31,7 +31,7 @@ namespace GEDmill.HTML
     /// </summary>
     public class CreatorIndexIndividuals : Creator
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorIndexIndividuals).Name);
+        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(CreatorIndexIndividuals).Name);
 
 
         // This is the list of all the individual records that need to be in the index.
@@ -83,7 +83,7 @@ namespace GEDmill.HTML
                 indexEntry = ",_" + indexEntry;
             }
 
-            if (!concealed || CConfig.Instance.UseWithheldNames) {
+            if (!concealed || GMConfig.Instance.UseWithheldNames) {
                 fIndividualIndex.Add(new StringTuple(indexEntry, relativeFilename, userRef));
             }
         }
@@ -115,15 +115,15 @@ namespace GEDmill.HTML
             var pages = new List<IndexPage>();
             int lettersCount = letters.Count;
             int indisPerPage;
-            if (CConfig.Instance.MultiPageIndexes == false) {
+            if (GMConfig.Instance.MultiPageIndexes == false) {
                 // Set to 0 for all names in one page.
                 indisPerPage = 0;
             } else {
-                indisPerPage = CConfig.Instance.IndividualsPerIndexPage;
+                indisPerPage = GMConfig.Instance.IndividualsPerIndexPage;
             }
             int indiAccumulator = 0;
             int currentPage = 0;
-            string currentPageName = string.Format("individuals{0}.{1}", ++currentPage, CConfig.Instance.HtmlExtension);
+            string currentPageName = string.Format("individuals{0}.{1}", ++currentPage, GMConfig.Instance.HtmlExtension);
             IndexPage indexpageCurrent = new IndexPage(currentPageName);
             uint letter = 0;
             while (letter < lettersCount) {
@@ -138,7 +138,7 @@ namespace GEDmill.HTML
                     }
                     // Start new page.
                     pages.Add(indexpageCurrent);
-                    currentPageName = string.Format("individuals{0}.{1}", ++currentPage, CConfig.Instance.HtmlExtension);
+                    currentPageName = string.Format("individuals{0}.{1}", ++currentPage, GMConfig.Instance.HtmlExtension);
                     indexpageCurrent = new IndexPage(currentPageName);
                     indiAccumulator = 0;
                 } else {
@@ -172,7 +172,7 @@ namespace GEDmill.HTML
                     if (initial == ",") {
                         // TODO: handle no surname in such a way that names starting with commas don't count.
                         initial = "-";
-                        title = CConfig.Instance.NoSurname;
+                        title = GMConfig.Instance.NoSurname;
                     } else {
                         title = initial;
                     }
@@ -213,12 +213,12 @@ namespace GEDmill.HTML
         {
             fLogger.WriteInfo("OutputIndividualsIndexPage()");
 
-            string ownerName = CConfig.Instance.OwnersName;
+            string ownerName = GMConfig.Instance.OwnersName;
             if (ownerName != "") {
                 ownerName = " of " + ownerName;
             }
 
-            string fullFilename = CConfig.Instance.OutputFolder;
+            string fullFilename = GMConfig.Instance.OutputFolder;
             if (fullFilename != "") {
                 fullFilename += "\\";
             }
@@ -226,15 +226,15 @@ namespace GEDmill.HTML
 
             HTMLFile f = null;
             try {
-                f = new HTMLFile(fullFilename, CConfig.Instance.IndexTitle, "Index of all individuals in the family tree" + ownerName, "individuals index family tree people history dates"); // Creates a new file, and puts standard header html into it.
+                f = new HTMLFile(fullFilename, GMConfig.Instance.IndexTitle, "Index of all individuals in the family tree" + ownerName, "individuals index family tree people history dates"); // Creates a new file, and puts standard header html into it.
 
-                OutputPageHeader(f, "", "", false, true);
+                OutputPageHeader(f, "", "", false);
 
                 f.WriteLine("    <div class=\"hr\" />");
                 f.WriteLine("");
 
                 f.WriteLine("  <div id=\"page\">");
-                f.WriteLine("    <h1 class=\"centred\">{0}</h1>", CConfig.Instance.IndexTitle);
+                f.WriteLine("    <h1 class=\"centred\">{0}</h1>", GMConfig.Instance.IndexTitle);
 
                 if (headingsLinks != "") {
                     f.WriteLine("    <div id=\"headingsLinks\">");
@@ -319,7 +319,7 @@ namespace GEDmill.HTML
                     if (sName.Length >= 7 && sName.Substring(0, 7) == ",&nbsp;") // Hack for no surname.
                     {
                         if (sName.Length == 7) {
-                            sName = CConfig.Instance.UnknownName;
+                            sName = GMConfig.Instance.UnknownName;
                         } else {
                             sName = sName.Substring(7);
                         }
@@ -330,7 +330,7 @@ namespace GEDmill.HTML
                     string sLink = tuple.Second;
                     if (sLink != "") {
                         sLink1 = string.Concat("<a href=\"", sLink, "\">", sName, "</a>");
-                    } else if (sName == CConfig.Instance.NoSurname) {
+                    } else if (sName == GMConfig.Instance.NoSurname) {
                         // Hack for no surname
                         sLink1 = string.Concat("<h2 id=\"-\">", sName, "</h2>");
                     } else {
@@ -346,7 +346,7 @@ namespace GEDmill.HTML
                     if (sName.Length >= 7 && sName.Substring(0, 7) == ",&nbsp;") // Hack for no surname.
                     {
                         if (sName.Length == 7) {
-                            sName = CConfig.Instance.UnknownName;
+                            sName = GMConfig.Instance.UnknownName;
                         } else {
                             sName = sName.Substring(7);
                         }
@@ -358,7 +358,7 @@ namespace GEDmill.HTML
                     string sLink = tuple.Second;
                     if (sLink != "") {
                         sLink2 = string.Concat("<a href=\"", sLink, "\">", sName, "</a>");
-                    } else if (sName == CConfig.Instance.NoSurname) {
+                    } else if (sName == GMConfig.Instance.NoSurname) {
                         // Hack for no surname
                         sLink2 = string.Concat("<h2 id=\"-\">", sName, "</h2>");
                     } else {
@@ -368,7 +368,7 @@ namespace GEDmill.HTML
                     sExtras2 = tuple.Third;
                     ++j;
                 }
-                if (CConfig.Instance.IncludeUserRefInIndex) {
+                if (GMConfig.Instance.IncludeUserRefInIndex) {
                     f.WriteLine(string.Concat("        <tr><td>", sExtras1, "</td><td>", sLink1, "</td><td>", sExtras2, "</td><td>", sLink2, "</td></tr>"));
                 } else {
                     f.WriteLine(string.Concat("        <tr><td>", sLink1, "</td><td>", sLink2, "</td></tr>"));

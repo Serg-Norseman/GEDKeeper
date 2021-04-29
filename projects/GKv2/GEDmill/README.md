@@ -14,11 +14,9 @@ alongside a photograph (if available) and a family tree diagram.
 information has come from, with images of certificates, official documents etc. where available.
 * Option to hide certain individuals, for example to keep information about 
 living relatives or others out of the website.
-* Accepts family history data in GEDCOM format. Most family history applications 
-have the option to export data in this format. GEDmill was designed with 
-GEDCOM 5.5 in mind, but it can handle data in earlier formats.
 * Creates standards compliant HTML web pages. All webpages are W3C XHTML 1.0 compliant.
 * Generate files for a self-playing CD-ROM, to share your family history with 
 others without the need for a website.
 
 Copyright 2009 Alexander Curtis <alex@logicmill.com>
+Published version 1.11.0 by Alexander Curtis (11.11.2014).

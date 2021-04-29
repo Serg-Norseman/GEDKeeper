@@ -43,12 +43,14 @@ namespace GKCore.MVP.Views
 
         IFont SelectFont(IFont font);
 
-        void ShowError(string msg);
+        void ShowAlert(string msg, string title = "");
 
-        void ShowMessage(string msg);
+        void ShowError(string msg, string title = "");
 
-        bool ShowQuestionYN(string msg);
+        void ShowMessage(string msg, string title = "");
 
-        void ShowWarning(string msg);
+        bool ShowQuestionYN(string msg, string title = "");
+
+        void ShowWarning(string msg, string title = "");
     }
 }

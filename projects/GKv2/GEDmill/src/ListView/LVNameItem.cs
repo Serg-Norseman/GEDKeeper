@@ -53,7 +53,7 @@ namespace GEDmill.ListView
             }
 
             if (name == "") {
-                name = CConfig.Instance.UnknownName;
+                name = GMConfig.Instance.UnknownName;
             }
 
             return name;

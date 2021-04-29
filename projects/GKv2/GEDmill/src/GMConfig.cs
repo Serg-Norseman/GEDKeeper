@@ -30,7 +30,7 @@ namespace GEDmill
     /// Class that contains all the user configurable settings, and serialises them into IsolatedStorage at program start and exit.
     /// Note not all settings here are presented through the UI, but most are. Originally there was a distinction her but it has become blurred.
     /// </summary>
-    public class CConfig
+    public class GMConfig
     {
         public const string LOG_FILE = "GEDmill.log";
         public const string LOG_LEVEL = "WARN";
@@ -44,7 +44,7 @@ namespace GEDmill
         // Filename for the online help (as in "on the same system", as opposed to offline e.g. printed manual)
         public static string HelpFilename = "GEDmill Help.chm";
 
-        private static readonly GKCL.ILogger fLogger = GKCL.LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CConfig).Name);
+        private static readonly GKCL.ILogger fLogger = GKCL.LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(GMConfig).Name);
 
         // Filename used to store users config
         public const string ConfigFilename = "GEDmillPlugin.ini";
@@ -310,17 +310,14 @@ namespace GEDmill
         // If true, the list of "Citations" on source records will not be generated.
         public bool SupressBackreferences;
 
-        // If true a help page will be included in the output, with a link at the top of each record page.
-        public bool IncludeHelpPage;
 
+        private static GMConfig fInstance;
 
-        private static CConfig fInstance;
-
-        public static CConfig Instance
+        public static GMConfig Instance
         {
             get {
                 if (fInstance == null) {
-                    fInstance = new CConfig();
+                    fInstance = new GMConfig();
                 }
                 return fInstance;
             }
@@ -328,7 +325,7 @@ namespace GEDmill
 
 
         // Constructor, sets default values for the config
-        private CConfig()
+        private GMConfig()
         {
             ApplicationPath = GMHelper.GetAppPath();
             AppDataPath = AppHost.GetAppDataPathStatic();
@@ -492,7 +489,6 @@ namespace GEDmill
                     ini.WriteBool("Common", "AllowMultimedia", AllowMultimedia);
                     ini.WriteBool("Common", "SupressBackreferences", SupressBackreferences);
                     ini.WriteBool("Common", "KeepSiblingOrder", KeepSiblingOrder);
-                    ini.WriteBool("Common", "IncludeHelpPage", IncludeHelpPage);
 
                     int versionMajor = 1, versionMinor = 11, versionPatch = 0;
                     ini.WriteInteger("Common", "VersionMajor", versionMajor);
@@ -550,7 +546,7 @@ namespace GEDmill
                     ShowFrontPageStats = ini.ReadBool("Common", "ShowFrontPageStats", true);
                     CommentaryText = ini.ReadString("Common", "CommentaryText", "");
                     TreeFontName = ini.ReadString("Common", "TreeFontName", "Arial");
-                    TreeFontSize = (float)ini.ReadFloat("Common", "TreeFontSize", 7.2f);
+                    TreeFontSize = (float)ini.ReadFloat("Common", "TreeFontSize", 8.0f);
                     TargetTreeWidth = ini.ReadInteger("Common", "TargetTreeWidth", 800);
                     MiniTreeImageFormat = ini.ReadString("Common", "MiniTreeImageFormat", "gif");
                     MiniTreeColourIndiText = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiText", "#000000"));
@@ -604,7 +600,6 @@ namespace GEDmill
                     AllowMultimedia = ini.ReadBool("Common", "AllowMultimedia", true);
                     SupressBackreferences = ini.ReadBool("Common", "SupressBackreferences", false);
                     KeepSiblingOrder = ini.ReadBool("Common", "KeepSiblingOrder", false);
-                    IncludeHelpPage = ini.ReadBool("Common", "IncludeHelpPage", true);
 
                     versionMajor = ini.ReadInteger("Common", "VersionMajor", 0);
                     versionMinor = ini.ReadInteger("Common", "VersionMinor", 0);
@@ -619,7 +614,7 @@ namespace GEDmill
         public void Reset()
         {
             TreeFontName = "Arial";
-            TreeFontSize = 7.2f;
+            TreeFontSize = 8.0f;
             TargetTreeWidth = 800;
             MiniTreeImageFormat = "gif";
             MiniTreeColourBranch = ConvertColour("#000000");
@@ -669,7 +664,6 @@ namespace GEDmill
             KeepSiblingOrder = false;
             AllowMultimedia = true;
             SupressBackreferences = false;
-            IncludeHelpPage = true;
         }
 
         // Converts a string of the form #RRGGBB to a Color instance.

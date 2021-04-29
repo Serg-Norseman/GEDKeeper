@@ -33,7 +33,7 @@ namespace GEDmill.HTML
     /// </summary>
     public abstract class Creator
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(Creator).Name);
+        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Creator).Name);
 
         protected const string PageDescription = "GEDmill GEDCOM to HTML family history website";
 
@@ -70,14 +70,13 @@ namespace GEDmill.HTML
         // TODO: Might want to preserve <a> links in the HTML in case user has specified them in their data.
         public static string EscapeHTML(string original, bool hardSpace)
         {
-            fLogger.WriteInfo(string.Format("EscapeHTML({0})", original));
-
-            int tabSpaces = CConfig.Instance.TabSpaces;
-
-            if (original == null) {
-                return "&lt;null&gt;";
+            if (string.IsNullOrEmpty(original)) {
+                return string.Empty;
             }
 
+            fLogger.WriteInfo(string.Format("EscapeHTML({0})", original));
+
+            int tabSpaces = GMConfig.Instance.TabSpaces;
             var sb = new StringBuilder(original.Length);
             int tabPos = 0;
             bool doneCRLF = false;
@@ -353,28 +352,23 @@ namespace GEDmill.HTML
         }
 
         // Generates navbar at top of page, in header div
-        protected static void OutputPageHeader(HTMLFile f, string previousChildLink, string nextChildLink,
-                                               bool includeIndexLink, bool includeHelpLink)
+        protected static void OutputPageHeader(HTMLFile f, string previousChildLink, string nextChildLink, bool includeIndexLink)
         {
-            if (CConfig.Instance.IncludeNavbar) {
+            if (GMConfig.Instance.IncludeNavbar) {
                 string frontPageLink = "";
-                if (CConfig.Instance.FrontPageFilename != "") {
-                    frontPageLink += string.Concat("<a href=\"", CConfig.Instance.FrontPageFilename, ".", CConfig.Instance.HtmlExtension, "\">front page</a>");
+                if (GMConfig.Instance.FrontPageFilename != "") {
+                    frontPageLink += string.Concat("<a href=\"", GMConfig.Instance.FrontPageFilename, ".", GMConfig.Instance.HtmlExtension, "\">front page</a>");
                 }
                 string mainSiteLink = "";
-                if (CConfig.Instance.MainWebsiteLink != "") {
-                    mainSiteLink += string.Concat("<a href=\"", CConfig.Instance.MainWebsiteLink, "\">main site</a>");
+                if (GMConfig.Instance.MainWebsiteLink != "") {
+                    mainSiteLink += string.Concat("<a href=\"", GMConfig.Instance.MainWebsiteLink, "\">main site</a>");
                 }
-                string helpPageLink = "";
-                if (CConfig.Instance.IncludeHelpPage) {
-                    helpPageLink += string.Concat("<a href=\"help.", CConfig.Instance.HtmlExtension, "\">help</a>");
-                }
+
                 bool includeNavbar = previousChildLink != ""
                   || nextChildLink != ""
                   || includeIndexLink
                   || frontPageLink != ""
-                  || mainSiteLink != ""
-                  || helpPageLink != "";
+                  || mainSiteLink != "";
 
                 if (includeNavbar) {
                     f.WriteLine("    <div id=\"header\">");
@@ -389,7 +383,7 @@ namespace GEDmill.HTML
                     }
 
                     if (includeIndexLink) {
-                        f.WriteLine(string.Concat("<li><a href=\"individuals1.", CConfig.Instance.HtmlExtension, "\">index</a></li>"));
+                        f.WriteLine(string.Concat("<li><a href=\"individuals1.", GMConfig.Instance.HtmlExtension, "\">index</a></li>"));
                     }
 
                     if (frontPageLink != "") {
@@ -398,10 +392,6 @@ namespace GEDmill.HTML
 
                     if (mainSiteLink != "") {
                         f.WriteLine("<li>{0}</li>", mainSiteLink);
-                    }
-
-                    if (includeHelpLink && helpPageLink != "") {
-                        f.WriteLine("<li>{0}</li>", helpPageLink);
                     }
 
                     f.WriteLine("      </ul>");
@@ -444,7 +434,7 @@ namespace GEDmill.HTML
                     asidFilename = string.Concat(asidFilename, "(", maxWidth.ToString(), "x", maxHeight.ToString(), ")");
                 }
 
-                if (fullFilename != null && CConfig.Instance.OutputFolder != null && CConfig.Instance.OutputFolder != "") {
+                if (fullFilename != null && GMConfig.Instance.OutputFolder != null && GMConfig.Instance.OutputFolder != "") {
                     // Have we already copied the sFilename?
                     if (fCopiedFiles.ContainsKey(asidFilename)) {
                         var filenameAndSize = fCopiedFiles[asidFilename];
@@ -453,9 +443,9 @@ namespace GEDmill.HTML
                         rectArea.Height = filenameAndSize.Height;
                     } else {
                         // Copy file into output directory
-                        if (CConfig.Instance.CopyMultimedia) {
-                            string imageFolder = CConfig.Instance.ImageFolder;
-                            string outputFolder = CConfig.Instance.OutputFolder;
+                        if (GMConfig.Instance.CopyMultimedia) {
+                            string imageFolder = GMConfig.Instance.ImageFolder;
+                            string outputFolder = GMConfig.Instance.OutputFolder;
 
                             if (imageFolder != "") {
                                 imageFolder = imageFolder + '\\';
@@ -480,7 +470,7 @@ namespace GEDmill.HTML
                             string extnPart = Path.GetExtension(copyFilename);
                             while (File.Exists(absCopyFilename)) {
                                 const string sAdditionalLetters = "abcdefghijklmnopqrstuvwxyz";
-                                if (CConfig.Instance.RenameMultimedia == false) {
+                                if (GMConfig.Instance.RenameMultimedia == false) {
                                     uint nCopyPlus = uCopy + 2;
                                     copyFilename = string.Concat(imageFolder, filePart, "-", nCopyPlus.ToString(), extnPart);
                                 } else if (uCopy >= sAdditionalLetters.Length) {
@@ -507,7 +497,7 @@ namespace GEDmill.HTML
                             fCopiedFiles[asidFilename] = new FilenameAndSize(copyFilename, rectArea.Width, rectArea.Height);
                             result = copyFilename;
                         } else {
-                            if (CConfig.Instance.RelativiseMultimedia) {
+                            if (GMConfig.Instance.RelativiseMultimedia) {
                                 // TODO: make path of sFilename relative to MainForm.s_config.m_outputFolder
                                 string sRelativeFilename = fullFilename;
                                 result = sRelativeFilename;
@@ -553,9 +543,9 @@ namespace GEDmill.HTML
             string name = ir.GetPrimaryFullName();
             string dummy = "";
             if (name == "") {
-                name = CConfig.Instance.UnknownName;
-            } else if (!GMHelper.GetVisibility(ir) && !CConfig.Instance.UseWithheldNames) {
-                name = CConfig.Instance.ConcealedName;
+                name = GMConfig.Instance.UnknownName;
+            } else if (!GMHelper.GetVisibility(ir) && !GMConfig.Instance.UseWithheldNames) {
+                name = GMConfig.Instance.ConcealedName;
             } else {
                 name = GMHelper.CapitaliseName(name, ref dummy, ref dummy);
             }
@@ -587,13 +577,13 @@ namespace GEDmill.HTML
         // The string is just the sFilename, not a fully qualified path.
         protected static string GetIndividualHTMLFilename(GDMIndividualRecord ir)
         {
-            string relativeFilename = string.Concat("indi", ir.XRef, ".", CConfig.Instance.HtmlExtension);
-            if (CConfig.Instance.UserRecFilename) {
+            string relativeFilename = string.Concat("indi", ir.XRef, ".", GMConfig.Instance.HtmlExtension);
+            if (GMConfig.Instance.UserRecFilename) {
                 if (ir.UserReferences.Count > 0) {
                     GDMUserReference urn = ir.UserReferences[0];
                     string filenameUserRef = EscapeFilename(urn.StringValue);
                     if (filenameUserRef.Length > 0) {
-                        relativeFilename = string.Concat("indi", filenameUserRef, ".", CConfig.Instance.HtmlExtension);
+                        relativeFilename = string.Concat("indi", filenameUserRef, ".", GMConfig.Instance.HtmlExtension);
                     }
                 }
             }

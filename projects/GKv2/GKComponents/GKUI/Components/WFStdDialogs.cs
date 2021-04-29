@@ -152,24 +152,49 @@ namespace GKUI.Components
         }
 
 
-        public void ShowMessage(string msg)
+        public void ShowAlert(string msg, string title = "")
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
-        public void ShowError(string msg)
+        public void ShowMessage(string msg, string title = "")
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
-        public bool ShowQuestionYN(string msg)
+        public void ShowError(string msg, string title = "")
         {
-            return MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Hand);
         }
 
-        public void ShowWarning(string msg)
+        public bool ShowQuestionYN(string msg, string title = "")
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            return MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+        }
+
+        public void ShowWarning(string msg, string title = "")
+        {
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
 

@@ -30,7 +30,7 @@ namespace GEDmill.HTML
     /// </summary>
     public class CreatorRecordSource : CreatorRecord
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorRecordSource).Name);
+        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(CreatorRecordSource).Name);
 
         // The source record that we are creating the page for.
         private GDMSourceRecord fSourceRecord;
@@ -52,8 +52,8 @@ namespace GEDmill.HTML
             // Create the strings to use for the HTML file.
             string pageDescription = "GEDmill GEDCOM to HTML page for " + fSourceRecord.ShortTitle;
             string keywords = "family tree history " + fSourceRecord.ShortTitle;
-            string filename = string.Concat(CConfig.Instance.OutputFolder, "\\sour", fSourceRecord.XRef);
-            string fullFilename = string.Concat(filename, ".", CConfig.Instance.HtmlExtension);
+            string filename = string.Concat(GMConfig.Instance.OutputFolder, "\\sour", fSourceRecord.XRef);
+            string fullFilename = string.Concat(filename, ".", GMConfig.Instance.HtmlExtension);
 
             HTMLFile f = null;
             try {
@@ -61,7 +61,7 @@ namespace GEDmill.HTML
                 f = new HTMLFile(fullFilename, fSourceRecord.ShortTitle, pageDescription, keywords);
 
                 // Create a navbar to main site, front page etc.
-                OutputPageHeader(f, "", "", true, true);
+                OutputPageHeader(f, "", "", true);
 
                 f.WriteLine("    <div class=\"hr\" />");
                 f.WriteLine("");
@@ -111,7 +111,7 @@ namespace GEDmill.HTML
 
                 // Add Publication Information
                 string pubFacts;
-                if (CConfig.Instance.ObfuscateEmails) {
+                if (GMConfig.Instance.ObfuscateEmails) {
                     pubFacts = ObfuscateEmail(fSourceRecord.Publication.Lines.Text);
                 } else {
                     pubFacts = fSourceRecord.Publication.Lines.Text;
@@ -128,9 +128,9 @@ namespace GEDmill.HTML
                 f.WriteLine("        </div> <!-- summary -->");
 
                 // Collect together multimedia links.
-                if (CConfig.Instance.AllowMultimedia) {
+                if (GMConfig.Instance.AllowMultimedia) {
                     // Fill m_alMultimediaList:
-                    AddMultimedia(fSourceRecord.MultimediaLinks, string.Concat(fSourceRecord.XRef, "mms"), string.Concat(fSourceRecord.XRef, "mos"), CConfig.Instance.MaxSourceImageWidth, CConfig.Instance.MaxSourceImageHeight, stats);
+                    AddMultimedia(fSourceRecord.MultimediaLinks, string.Concat(fSourceRecord.XRef, "mms"), string.Concat(fSourceRecord.XRef, "mos"), GMConfig.Instance.MaxSourceImageWidth, GMConfig.Instance.MaxSourceImageHeight, stats);
                 }
 
                 // Add pics
@@ -138,7 +138,7 @@ namespace GEDmill.HTML
 
                 // Add textFromSource
                 string cleanText = fSourceRecord.Text.Lines.Text;
-                if (CConfig.Instance.ObfuscateEmails) {
+                if (GMConfig.Instance.ObfuscateEmails) {
                     cleanText = ObfuscateEmail(cleanText);
                 }
                 if (!string.IsNullOrEmpty(cleanText)) {
@@ -153,7 +153,7 @@ namespace GEDmill.HTML
                 // Add notes
                 OutputNotes(f, fSourceRecord.Notes);
 
-                if (!CConfig.Instance.SupressBackreferences) {
+                if (!GMConfig.Instance.SupressBackreferences) {
                     f.WriteLine("        <div id=\"citations\">");
                     f.WriteLine("          <h1>Citations</h1>");
                     f.WriteLine("          <ul>");
@@ -198,7 +198,7 @@ namespace GEDmill.HTML
             if (fMultimediaList.Count > 0) {
                 f.WriteLine("        <div id=\"sourcePics\">");
                 foreach (Multimedia iMultimedia in fMultimediaList) {
-                    string nonPicMainFilename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, CConfig.Instance.LinkOriginalPicture);
+                    string nonPicMainFilename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, GMConfig.Instance.LinkOriginalPicture);
 
                     string imageTitle = "";
                     string altName = "";
@@ -226,7 +226,7 @@ namespace GEDmill.HTML
                             altName = "Media for this source";
                         }
 
-                        if (CConfig.Instance.LinkOriginalPicture) {
+                        if (GMConfig.Instance.LinkOriginalPicture) {
                             f.WriteLine(string.Concat("            <a href=\"", iMultimedia.FileName, "\"><img src=\"", nonPicMainFilename, "\" alt=\"", altName, "\" /></a>")); // TODO: clip and scale properly. Use MainForm.s_config to set a max scale
                         } else {
                             f.WriteLine(string.Concat("            <img src=\"", nonPicMainFilename, "\" alt=\"", altName, "\" />")); // TODO: clip and scale properly. Use MainForm.s_config to set a max scale

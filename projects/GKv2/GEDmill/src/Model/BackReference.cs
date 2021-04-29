@@ -23,7 +23,7 @@ namespace GEDmill.Model
     /// <summary>
     /// Data structure used to refer from a record back to whatever references it
     /// </summary>
-    public class BackReference
+    public sealed class BackReference
     {
         // The record sType (individual, family, note)
         public GDMRecordType RecordType;
@@ -34,7 +34,7 @@ namespace GEDmill.Model
         // Stores the event sType that cites this source so that the event 
         // sType can be shown in the sources list box.
         public string EventType;
-        
+
 
         public BackReference(GDMRecordType recordType, string xref, string eventType)
         {

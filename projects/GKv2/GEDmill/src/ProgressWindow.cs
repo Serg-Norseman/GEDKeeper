@@ -30,18 +30,18 @@ namespace GEDmill
     public partial class ProgressWindow : Form, IProgressCallback
     {
         // Callbacks
-        public delegate void SetTextInvoker(string text);
-        public delegate void IncrementInvoker(int val);
-        public delegate void StepToInvoker(int val);
-        public delegate void RangeInvoker(int minimum, int maximum);
-        public delegate void EndInvoker(ThreadError threadError);
-
-        public ThreadError ThreadError;
+        private delegate void SetTextInvoker(string text);
+        private delegate void IncrementInvoker(int val);
+        private delegate void StepToInvoker(int val);
+        private delegate void RangeInvoker(int minimum, int maximum);
+        private delegate void EndInvoker(ThreadError threadError);
 
         private String fTitleRoot = "";
         private ManualResetEvent fInitEvent = new ManualResetEvent(false);
         private ManualResetEvent fAbortEvent = new ManualResetEvent(false);
         private bool fRequiresClose = true;
+
+        public ThreadError ThreadError { get; set; }
 
 
         public ProgressWindow()

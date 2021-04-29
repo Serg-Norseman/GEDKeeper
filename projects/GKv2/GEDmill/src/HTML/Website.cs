@@ -33,19 +33,22 @@ namespace GEDmill.HTML
     /// </summary>
     public class Website
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(Website).Name);
+        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Website).Name);
+
+        private string fOutputFolder;
 
         // The raw data that we are turning into a website.
-        protected GDMTree fTree;
+        private GDMTree fTree;
 
         // Pointer to the window showing the progress bar, so that web page creation progress can be shown to user.
-        protected IProgressCallback fProgressWindow;
+        private IProgressCallback fProgressWindow;
 
 
-        public Website(GDMTree tree, IProgressCallback progress)
+        public Website(GDMTree tree, IProgressCallback progress, string outputFolder)
         {
             fTree = tree;
             fProgressWindow = progress;
+            fOutputFolder = outputFolder;
         }
 
         // The heart of GEDmill is here.
@@ -72,16 +75,15 @@ namespace GEDmill.HTML
                   + 1  // Individuals Index
                   + gfstats[(int)GDMRecordType.rtSource]
                   + 1  // Front page
-                  + 1  // Help page
                   + 1  // CD ROM (Doesn't matter here that CD ROM autorun might not be included.)
                   + 1; // Scripts (Doesn't matter here that scripts might not be included.)
 
                 // The paintbox with which to draw the mini tree
-                Paintbox paintbox = new Paintbox(CConfig.Instance);
-                paintbox.SetBackgroundImage(CConfig.Instance.BackgroundImage);
+                var paintbox = new Paintbox(GMConfig.Instance);
+                paintbox.SetBackgroundImage(GMConfig.Instance.BackgroundImage);
 
                 // Object to keep count of number of files created etc.
-                Stats stats = new Stats();
+                var stats = new Stats();
 
                 // Here goes....
 
@@ -101,7 +103,7 @@ namespace GEDmill.HTML
                 // Copy the W3C sticker file.
                 fProgressWindow.SetText("Copying W3C sticker");
                 string sW3CFilename = "";
-                if (CConfig.Instance.IncludeValiditySticker) {
+                if (GMConfig.Instance.IncludeValiditySticker) {
                     sW3CFilename = CopyW3CSticker();
                 }
                 if (fProgressWindow.IsAborting) {
@@ -122,8 +124,8 @@ namespace GEDmill.HTML
 
                 // Create the style sheet
                 fProgressWindow.SetText("Creating style sheet");
-                string cssFilename = string.Concat(CConfig.Instance.OutputFolder, "\\", CConfig.Instance.StylesheetFilename, ".css");
-                if (CConfig.Instance.StylesheetFilename.Length > 0 && (!CConfig.Instance.PreserveStylesheet || !File.Exists(cssFilename))) {
+                string cssFilename = string.Concat(GMConfig.Instance.OutputFolder, "\\", GMConfig.Instance.StylesheetFilename, ".css");
+                if (GMConfig.Instance.StylesheetFilename.Length > 0 && (!GMConfig.Instance.PreserveStylesheet || !File.Exists(cssFilename))) {
                     var csc = new CreatorStylesheet(fTree, fProgressWindow, sW3CFilename, cssFilename, backgroundImageFilename);
                     csc.Create();
                 }
@@ -184,22 +186,10 @@ namespace GEDmill.HTML
 
                 // Create the front page
                 fProgressWindow.SetText("Creating front page");
-                string front_page_filename = string.Concat(CConfig.Instance.OutputFolder, "\\", CConfig.Instance.FrontPageFilename, ".", CConfig.Instance.HtmlExtension);
-                if (CConfig.Instance.FrontPageFilename.Length > 0 && (!CConfig.Instance.PreserveFrontPage || !File.Exists(front_page_filename))) {
+                string front_page_filename = string.Concat(GMConfig.Instance.OutputFolder, "\\", GMConfig.Instance.FrontPageFilename, ".", GMConfig.Instance.HtmlExtension);
+                if (GMConfig.Instance.FrontPageFilename.Length > 0 && (!GMConfig.Instance.PreserveFrontPage || !File.Exists(front_page_filename))) {
                     CreatorFrontPage fpc = new CreatorFrontPage(fTree, fProgressWindow, sW3CFilename, stats);
                     fpc.Create();
-                }
-                fProgressWindow.StepTo(++progress);
-                if (fProgressWindow.IsAborting) {
-                    return;
-                }
-
-                // Create the help page
-                fProgressWindow.SetText("Creating help page");
-                string help_page_filename = string.Concat(CConfig.Instance.OutputFolder, "\\", "help.", CConfig.Instance.HtmlExtension);
-                if (CConfig.Instance.IncludeHelpPage) {
-                    var hpc = new CreatorHelpPage(fTree, fProgressWindow, sW3CFilename);
-                    hpc.Create();
                 }
                 fProgressWindow.StepTo(++progress);
                 if (fProgressWindow.IsAborting) {
@@ -208,7 +198,7 @@ namespace GEDmill.HTML
                 
                 // Copy the CD ROM autorun file
                 fProgressWindow.SetText("Creating CD-ROM files");
-                if (CConfig.Instance.CreateCDROMFiles) {
+                if (GMConfig.Instance.CreateCDROMFiles) {
                     CreateCDROMFiles();
                 }
                 if (fProgressWindow.IsAborting) {
@@ -220,7 +210,7 @@ namespace GEDmill.HTML
                 // Copy the Javascript
                 fProgressWindow.SetText("Creating Javascript file");
                 // Currently (10Dec08) the only thing that uses javascript is the multiple images feature.
-                if (CConfig.Instance.AllowMultipleImages) {
+                if (GMConfig.Instance.AllowMultipleImages) {
                     CreateJavascriptFiles();
                 }
                 if (fProgressWindow.IsAborting) {
@@ -268,23 +258,23 @@ namespace GEDmill.HTML
             try {
                 // uint num_copied = 0;
                 Rectangle rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\gmaudio.png", "", CConfig.Instance.MaxImageWidth, CConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmaudio.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\gmaudio_sm.png", "", CConfig.Instance.MaxImageWidth, CConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmaudio_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\gmaudion.png", "", CConfig.Instance.MaxImageWidth, CConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmaudion.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\gmvideo.png", "", CConfig.Instance.MaxImageWidth, CConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmvideo.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\gmvideo_sm.png", "", CConfig.Instance.MaxImageWidth, CConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmvideo_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\gmvideon.png", "", CConfig.Instance.MaxImageWidth, CConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmvideon.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\gmdoc.png", "", CConfig.Instance.MaxImageWidth, CConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmdoc.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\gmdoc_sm.png", "", CConfig.Instance.MaxImageWidth, CConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmdoc_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\gmdocn.png", "", CConfig.Instance.MaxImageWidth, CConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmdocn.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
             } catch (IOException e) {
                 fLogger.WriteError("Caught io exception while copying nonpic images: {0}", e);
             } catch (ArgumentException e) {
@@ -299,7 +289,7 @@ namespace GEDmill.HTML
             fLogger.WriteInfo("Copying W3C sticker ...");
             try {
                 Rectangle rectNewArea = new Rectangle(0, 0, 0, 0);
-                stickerFile = Creator.CopyMultimedia(CConfig.Instance.ApplicationPath + "\\valid-xhtml10.png", "", 0, 0, ref rectNewArea, null);
+                stickerFile = Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\valid-xhtml10.png", "", 0, 0, ref rectNewArea, null);
             } catch (IOException e) {
                 fLogger.WriteError("Caught io exception while copying W3C sticker: {0}", e);
             } catch (ArgumentException e) {
@@ -313,10 +303,10 @@ namespace GEDmill.HTML
         private string CopyBackgroundImage()
         {
             string backgroundImage = "";
-            if (!string.IsNullOrEmpty(CConfig.Instance.BackgroundImage)) {
+            if (!string.IsNullOrEmpty(GMConfig.Instance.BackgroundImage)) {
                 try {
                     Rectangle newArea = new Rectangle(0, 0, 0, 0);
-                    backgroundImage = Creator.CopyMultimedia(CConfig.Instance.BackgroundImage, "", 0, 0, ref newArea, null);
+                    backgroundImage = Creator.CopyMultimedia(GMConfig.Instance.BackgroundImage, "", 0, 0, ref newArea, null);
                 } catch (IOException e) {
                     fLogger.WriteError("Caught io exception while copying background image: {0}", e);
                     backgroundImage = "";
@@ -331,12 +321,12 @@ namespace GEDmill.HTML
         // Copy the CD ROM autorun loader program.
         private void CreateCDROMFiles()
         {
-            string homepageUrl = string.Concat(CConfig.Instance.FrontPageFilename, ".", CConfig.Instance.HtmlExtension);
+            string homepageUrl = string.Concat(GMConfig.Instance.FrontPageFilename, ".", GMConfig.Instance.HtmlExtension);
 
-            if (homepageUrl != null && !string.IsNullOrEmpty(CConfig.Instance.OutputFolder)) {
-                string fileopenSrc = CConfig.Instance.ApplicationPath + "\\fileopen.exe";
-                string fileopenDest = CConfig.Instance.OutputFolder + "\\fileopen.exe";
-                string autorunDest = CConfig.Instance.OutputFolder + "\\autorun.inf";
+            if (homepageUrl != null && !string.IsNullOrEmpty(GMConfig.Instance.OutputFolder)) {
+                string fileopenSrc = GMConfig.Instance.ApplicationPath + "\\fileopen.exe";
+                string fileopenDest = GMConfig.Instance.OutputFolder + "\\fileopen.exe";
+                string autorunDest = GMConfig.Instance.OutputFolder + "\\autorun.inf";
 
                 // Copy fileopen.exe into output folder
                 if (File.Exists(fileopenDest)) {
@@ -367,9 +357,9 @@ namespace GEDmill.HTML
         // Copy the javascript picture-selection script.
         private void CreateJavascriptFiles()
         {
-            if (!string.IsNullOrEmpty(CConfig.Instance.OutputFolder)) {
-                string jsSrc = CConfig.Instance.ApplicationPath + "\\gedmill.js";
-                string jsDest = CConfig.Instance.OutputFolder + "\\gedmill.js";
+            if (!string.IsNullOrEmpty(GMConfig.Instance.OutputFolder)) {
+                string jsSrc = GMConfig.Instance.ApplicationPath + "\\gedmill.js";
+                string jsDest = GMConfig.Instance.OutputFolder + "\\gedmill.js";
                 if (File.Exists(jsSrc)) {
                     // Copy gedmill.js into output folder
                     if (File.Exists(jsDest)) {

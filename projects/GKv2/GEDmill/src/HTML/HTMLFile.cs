@@ -28,7 +28,7 @@ namespace GEDmill.HTML
     /// </summary>
     public class HTMLFile
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(HTMLFile).Name);
+        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(HTMLFile).Name);
 
         private FileStream fStream;
         private StreamWriter fWriter;
@@ -63,8 +63,8 @@ namespace GEDmill.HTML
                 fWriter.WriteLine("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
                 fWriter.WriteLine("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">");
                 fWriter.WriteLine("  <head>");
-                fWriter.WriteLine("    <link rel=\"stylesheet\" type=\"text/css\" href=\"" + CConfig.Instance.StylesheetFilename + ".css\" />");
-                if (CConfig.Instance.AllowMultipleImages) // Multiple images feature is currently (10Dec08) the only thing that uses javascript
+                fWriter.WriteLine("    <link rel=\"stylesheet\" type=\"text/css\" href=\"" + GMConfig.Instance.StylesheetFilename + ".css\" />");
+                if (GMConfig.Instance.AllowMultipleImages) // Multiple images feature is currently (10Dec08) the only thing that uses javascript
                 {
                     fWriter.WriteLine("    <script type=\"text/javascript\" src=\"gedmill.js\"></script>");
                 }

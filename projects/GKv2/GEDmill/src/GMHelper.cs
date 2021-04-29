@@ -45,7 +45,7 @@ namespace GEDmill
                                         + "All supported picture files|*.jpg;*.jpeg;*.gif;*.bmp;*.png";
 
 
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(GMHelper).Name);
+        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(GMHelper).Name);
 
 
         private static readonly Dictionary<string, CISRecordChanges> recX = new Dictionary<string, CISRecordChanges>();
@@ -217,13 +217,13 @@ namespace GEDmill
         {
             if (name == null) {
                 if (surname != null) {
-                    surname = CConfig.Instance.UnknownName;
+                    surname = GMConfig.Instance.UnknownName;
                 }
-                return CConfig.Instance.UnknownName;
+                return GMConfig.Instance.UnknownName;
             }
 
             string newName = "";
-            switch (CConfig.Instance.NameCapitalisation) {
+            switch (GMConfig.Instance.NameCapitalisation) {
                 case 1:
                 case 0:
                     // capitalise surname (the bit in //s)
@@ -243,7 +243,7 @@ namespace GEDmill
                             bFirstName = false;
                         } else if (bSeenSlash) {
                             char cc = c;
-                            if (CConfig.Instance.NameCapitalisation == 1) {
+                            if (GMConfig.Instance.NameCapitalisation == 1) {
                                 cc = char.ToUpper(cc);
                             }
                             newName += cc;
@@ -573,7 +573,7 @@ namespace GEDmill
             }
 
             if (name == "") {
-                name = CConfig.Instance.UnknownName;
+                name = GMConfig.Instance.UnknownName;
             }
 
             return name;

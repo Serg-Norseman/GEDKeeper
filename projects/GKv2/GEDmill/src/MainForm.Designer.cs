@@ -10,7 +10,6 @@
         private System.Windows.Forms.Button btnSettingsCancel;
         private System.Windows.Forms.Button btnHelp;
         private System.Windows.Forms.Panel panelWelcome;
-        private System.Windows.Forms.Panel panelChooseGedcom;
         private System.Windows.Forms.Panel panelChooseOutput;
         private System.Windows.Forms.Panel panelRecords;
         private System.Windows.Forms.Panel panelKeyIndividuals;
@@ -87,7 +86,6 @@
         private System.Windows.Forms.Label lblConfigStylesheetName;
         private System.Windows.Forms.Label lblConfigStylesheetNameExtn;
         private System.Windows.Forms.CheckBox chkConfigPreserveStylesheet;
-        private System.Windows.Forms.CheckBox chkConfigIncludeHelppage;
         private System.Windows.Forms.CheckBox chkConfigStats;
         private System.Windows.Forms.CheckBox chkConfigCdrom;
         private System.Windows.Forms.CheckBox chkConfigIndiImages;
@@ -98,7 +96,7 @@
         private System.Windows.Forms.CheckBox chkConfigUserRefInIndex;
         private System.Windows.Forms.Label lblConfigMultiPageIndexNumber;
         private System.Windows.Forms.TextBox txtConfigMultiPageIndexNumber;
-        private System.Windows.Forms.CheckBox chkConfigTreeDiagrams;
+        private System.Windows.Forms.CheckBox chkConfigIncludeTreeDiagrams;
         private System.Windows.Forms.CheckBox chkConfigTreeDiagramsFakeBg;
         private System.Windows.Forms.Label lblConfigTreeDiagramsFormat;
         private System.Windows.Forms.ComboBox cmbConfigTreeDiagramsFormat;
@@ -240,9 +238,8 @@
             lblConfigStylesheetName = new System.Windows.Forms.Label();
             lblConfigStylesheetNameExtn = new System.Windows.Forms.Label();
             chkConfigPreserveStylesheet = new System.Windows.Forms.CheckBox();
-            chkConfigIncludeHelppage = new System.Windows.Forms.CheckBox();
             chkConfigStats = new System.Windows.Forms.CheckBox();
-            chkConfigTreeDiagrams = new System.Windows.Forms.CheckBox();
+            chkConfigIncludeTreeDiagrams = new System.Windows.Forms.CheckBox();
             chkConfigTreeDiagramsFakeBg = new System.Windows.Forms.CheckBox();
             lblConfigTreeDiagramsFormat = new System.Windows.Forms.Label();
             cmbConfigTreeDiagramsFormat = new System.Windows.Forms.ComboBox();
@@ -260,7 +257,6 @@
             lblWelcomeVersion = new System.Windows.Forms.Label();
             lblWelcomeSubtitle = new System.Windows.Forms.Label();
             pictureBox = new System.Windows.Forms.PictureBox();
-            panelChooseGedcom = new System.Windows.Forms.Panel();
             panelChooseOutput = new System.Windows.Forms.Panel();
             txtChooseOutput = new System.Windows.Forms.TextBox();
             lblChooseOutputInstructions = new System.Windows.Forms.Label();
@@ -318,7 +314,6 @@
             miSourcesAllInclude = new System.Windows.Forms.MenuItem();
             miSourcesAllExclude = new System.Windows.Forms.MenuItem();
             panelWelcome.SuspendLayout();
-            panelChooseGedcom.SuspendLayout();
             panelChooseOutput.SuspendLayout();
             panelRecords.SuspendLayout();
             panelKeyIndividuals.SuspendLayout();
@@ -332,7 +327,7 @@
             btnNext.Name = "btnNext";
             btnNext.TabIndex = 7;
             btnNext.Text = "&Next >";
-            btnNext.Click += new System.EventHandler(btnNext_click);
+            btnNext.Click += new System.EventHandler(btnNext_Click);
             // 
             // btnBack
             // 
@@ -356,7 +351,7 @@
             btnHelp.Name = "btnHelp";
             btnHelp.TabIndex = 11;
             btnHelp.Text = "&Help";
-            btnHelp.Click += new System.EventHandler(btnHelp_click);
+            btnHelp.Click += new System.EventHandler(btnHelp_Click);
             // 
             // btnSettings
             // 
@@ -422,13 +417,6 @@
             lblWelcomeSubtitle.TabIndex = 3;
             lblWelcomeSubtitle.Text = "Family History Website Creator";
             lblWelcomeSubtitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panelChooseGedcom
-            // 
-            panelChooseGedcom.Location = new System.Drawing.Point(216, 0);
-            panelChooseGedcom.Name = "panelChooseGedcom";
-            panelChooseGedcom.Size = new System.Drawing.Size(280, 272);
-            panelChooseGedcom.TabIndex = 6;
             // 
             // panelRecords
             // 
@@ -1232,14 +1220,14 @@
             chkConfigOccupationHeadline.TabIndex = 13;
             chkConfigOccupationHeadline.Text = "Show occupation in pa&ge heading";
             //
-            // chkConfigTreeDiagrams
+            // chkConfigIncludeTreeDiagrams
             // 
-            chkConfigTreeDiagrams.Location = new System.Drawing.Point(8, 8);
-            chkConfigTreeDiagrams.Name = "chkConfigTreeDiagrams";
-            chkConfigTreeDiagrams.Size = new System.Drawing.Size(200, 20);
-            chkConfigTreeDiagrams.TabIndex = 2;
-            chkConfigTreeDiagrams.Text = "Include &tree diagrams";
-            chkConfigTreeDiagrams.Click += new System.EventHandler(chkConfigTreeDiagrams_Click);
+            chkConfigIncludeTreeDiagrams.Location = new System.Drawing.Point(8, 8);
+            chkConfigIncludeTreeDiagrams.Name = "chkConfigTreeDiagrams";
+            chkConfigIncludeTreeDiagrams.Size = new System.Drawing.Size(200, 20);
+            chkConfigIncludeTreeDiagrams.TabIndex = 2;
+            chkConfigIncludeTreeDiagrams.Text = "Include &tree diagrams";
+            chkConfigIncludeTreeDiagrams.Click += new System.EventHandler(chkConfigIncludeTreeDiagrams_Click);
             // 
             // lblConfigTreeDiagramsFormat
             // 
@@ -1454,14 +1442,6 @@
             chkConfigPreserveStylesheet.Size = new System.Drawing.Size(250, 20);
             chkConfigPreserveStylesheet.Text = "Do &not generate new stylesheet";
             chkConfigPreserveStylesheet.TabIndex = 12;
-            //
-            // chkConfigIncludeHelppage
-            // 
-            chkConfigIncludeHelppage.Location = new System.Drawing.Point(266, 91);
-            chkConfigIncludeHelppage.Name = "chkConfigIncludeHelppage";
-            chkConfigIncludeHelppage.Size = new System.Drawing.Size(250, 20);
-            chkConfigIncludeHelppage.Text = "Include help page";
-            chkConfigIncludeHelppage.TabIndex = 15;
             // 
             // panelChooseOutput
             // 
@@ -1668,7 +1648,7 @@
             // pageSettingsTreeDiagrams
             // 
             pageSettingsTreeDiagrams.Text = "Tree Diagrams";
-            pageSettingsTreeDiagrams.Controls.Add(chkConfigTreeDiagrams);
+            pageSettingsTreeDiagrams.Controls.Add(chkConfigIncludeTreeDiagrams);
             pageSettingsTreeDiagrams.Controls.Add(chkConfigTreeDiagramsFakeBg);
             pageSettingsTreeDiagrams.Controls.Add(lblConfigTreeDiagramsFormat);
             pageSettingsTreeDiagrams.Controls.Add(cmbConfigTreeDiagramsFormat);
@@ -1688,7 +1668,6 @@
             pageSettingsAdvanced.Controls.Add(lblConfigStylesheetNameExtn);
             pageSettingsAdvanced.Controls.Add(chkConfigPreserveStylesheet);
             pageSettingsAdvanced.Controls.Add(chkConfigSupressBackreferences);
-            pageSettingsAdvanced.Controls.Add(chkConfigIncludeHelppage);
             // 
             // tabcontrolConfigPanel
             // 
@@ -1708,7 +1687,6 @@
             AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             ClientSize = new System.Drawing.Size(506, 320);
             Controls.Add(panelWelcome);
-            Controls.Add(panelChooseGedcom);
             Controls.Add(panelRecords);
             Controls.Add(panelKeyIndividuals);
             Controls.Add(tabcontrolConfigPanel);
@@ -1734,7 +1712,6 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
 
             panelWelcome.ResumeLayout(false);
-            panelChooseGedcom.ResumeLayout(false);
             panelChooseOutput.ResumeLayout(false);
             panelRecords.ResumeLayout(false);
             panelKeyIndividuals.ResumeLayout(false);

@@ -31,7 +31,7 @@ namespace GEDmill.HTML
     /// </summary>
     public class CreatorFrontPage : Creator
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(CreatorFrontPage).Name);
+        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(CreatorFrontPage).Name);
 
         // Statistics about the website (number of files etc.)
         private Stats fStats;
@@ -45,34 +45,34 @@ namespace GEDmill.HTML
         // The main method that causes the front page to be created. 
         public void Create()
         {
-            string keywords = "family tree history " + CConfig.Instance.OwnersName;
-            string title = CConfig.Instance.SiteTitle;
+            string keywords = "family tree history " + GMConfig.Instance.OwnersName;
+            string title = GMConfig.Instance.SiteTitle;
 
             HTMLFile f = null;
             try {
-                f = new HTMLFile(CConfig.Instance.FrontPageURL, title, PageDescription, keywords); // Creates a new file, and puts standard header html into it.
+                f = new HTMLFile(GMConfig.Instance.FrontPageURL, title, PageDescription, keywords); // Creates a new file, and puts standard header html into it.
                 f.WriteLine("  <div id=\"page\"> <!-- page -->");
                 f.WriteLine("    <div id=\"cover\"> <!-- cover -->");
 
                 f.WriteLine("<h1>{0}</h1>", EscapeHTML(title, false));
 
-                if (!string.IsNullOrEmpty(CConfig.Instance.FrontPageImageFilename)) {
+                if (!string.IsNullOrEmpty(GMConfig.Instance.FrontPageImageFilename)) {
                     Rectangle newArea = new Rectangle(0, 0, 0, 0);
-                    string pictureFile = CopyMultimedia(CConfig.Instance.FrontPageImageFilename, "", 0, 0, ref newArea, null);
+                    string pictureFile = CopyMultimedia(GMConfig.Instance.FrontPageImageFilename, "", 0, 0, ref newArea, null);
                     if (!string.IsNullOrEmpty(pictureFile)) {
                         f.WriteLine("<p><img src=\"{0}\" alt=\"Front page image\" /></p>", pictureFile);
                     }
                 }
 
-                if (!string.IsNullOrEmpty(CConfig.Instance.CommentaryText)) {
-                    if (CConfig.Instance.CommentaryIsHtml) {
-                        f.WriteLine("<p>{0}</p>", CConfig.Instance.CommentaryText);
+                if (!string.IsNullOrEmpty(GMConfig.Instance.CommentaryText)) {
+                    if (GMConfig.Instance.CommentaryIsHtml) {
+                        f.WriteLine("<p>{0}</p>", GMConfig.Instance.CommentaryText);
                     } else {
-                        f.WriteLine("<p>{0}</p>", EscapeHTML(CConfig.Instance.CommentaryText, false));
+                        f.WriteLine("<p>{0}</p>", EscapeHTML(GMConfig.Instance.CommentaryText, false));
                     }
                 }
 
-                if (CConfig.Instance.ShowFrontPageStats) {
+                if (GMConfig.Instance.ShowFrontPageStats) {
                     string individuals = fStats.Individuals == 0 ? "no" : fStats.Individuals.ToString();
                     individuals += " individual";
                     if (fStats.Individuals != 1) {
@@ -95,13 +95,13 @@ namespace GEDmill.HTML
                 }
 
                 f.WriteLine("       <div id=\"links\"> <!-- links -->");
-                f.WriteLine(string.Concat("         <p><a href=\"individuals1.", CConfig.Instance.HtmlExtension, "\">", CConfig.Instance.IndexTitle, "</a></p>"));
+                f.WriteLine(string.Concat("         <p><a href=\"individuals1.", GMConfig.Instance.HtmlExtension, "\">", GMConfig.Instance.IndexTitle, "</a></p>"));
                 f.WriteLine("       </div> <!-- links -->");
-                if (CConfig.Instance.KeyIndividuals != null && CConfig.Instance.KeyIndividuals.Count > 0) {
+                if (GMConfig.Instance.KeyIndividuals != null && GMConfig.Instance.KeyIndividuals.Count > 0) {
                     // Although in theory you might want a restricted individual as a key individual, (they still form part of the tree), in practice this isn't allowed:
-                    var censoredKeyIndividuals = new List<string>(CConfig.Instance.KeyIndividuals.Count);
+                    var censoredKeyIndividuals = new List<string>(GMConfig.Instance.KeyIndividuals.Count);
 
-                    foreach (string keyXref in CConfig.Instance.KeyIndividuals) {
+                    foreach (string keyXref in GMConfig.Instance.KeyIndividuals) {
                         GDMIndividualRecord air = fTree.XRefIndex_Find(keyXref) as GDMIndividualRecord;
                         if (air != null) {
                             censoredKeyIndividuals.Add(MakeLink(air));
@@ -126,20 +126,20 @@ namespace GEDmill.HTML
 
                 string byEmail = "";
                 // Email contact address
-                if (!string.IsNullOrEmpty(CConfig.Instance.UserEmailAddress)) {
-                    byEmail = string.Concat(" by <a href=\"mailto:", CConfig.Instance.UserEmailAddress, "\">", EscapeHTML(CConfig.Instance.UserEmailAddress, false), "</a>");
+                if (!string.IsNullOrEmpty(GMConfig.Instance.UserEmailAddress)) {
+                    byEmail = string.Concat(" by <a href=\"mailto:", GMConfig.Instance.UserEmailAddress, "\">", EscapeHTML(GMConfig.Instance.UserEmailAddress, false), "</a>");
                 }
 
                 // Add brand and contact label
                 f.WriteLine("<p>Website created{0} using GEDmill.</p>", byEmail);
                 // Add last update string
-                if (CConfig.Instance.AddHomePageCreateTime) {
+                if (GMConfig.Instance.AddHomePageCreateTime) {
                     f.WriteLine("<p>Created on {0}.</p>", GMHelper.GetNowDateStr());
                 }
 
                 // Add link to users main website
-                if (!string.IsNullOrEmpty(CConfig.Instance.MainWebsiteLink)) {
-                    f.WriteLine("<p><a href=\"{0}\">Return to main site</a></p>", CConfig.Instance.MainWebsiteLink);
+                if (!string.IsNullOrEmpty(GMConfig.Instance.MainWebsiteLink)) {
+                    f.WriteLine("<p><a href=\"{0}\">Return to main site</a></p>", GMConfig.Instance.MainWebsiteLink);
                 }
 
                 f.WriteLine("    </div> <!-- cover -->");

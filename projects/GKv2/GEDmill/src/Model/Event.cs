@@ -109,9 +109,6 @@ namespace GEDmill.Model
             fOverview = overview;
             fImportant = important;
             fNote = note;
-            if (note == "") {
-                fNote = null;
-            }
             fType = evType;
         }
 
