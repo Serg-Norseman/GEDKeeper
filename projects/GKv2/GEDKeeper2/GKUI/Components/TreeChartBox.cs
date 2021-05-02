@@ -340,7 +340,7 @@ namespace GKUI.Components
                 fModel.KinRoot = fSelected;
                 RecalcChart(noRedraw);
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.RebuildKinships()",ex);
+                Logger.WriteError("TreeChartBox.RebuildKinships()", ex);
             }
         }
 
@@ -573,8 +573,7 @@ namespace GKUI.Components
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
+            switch (e.KeyCode) {
                 case Keys.F4:
                     ToggleCollapse();
                     break;

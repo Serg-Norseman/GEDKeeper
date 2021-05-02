@@ -154,6 +154,16 @@ namespace GKUI.Components
             set { Control.SelectedValue = value; }
         }
 
+        public bool Sorted
+        {
+            get { return false; }
+            set {
+                if (value) {
+                    Sort();
+                }
+            }
+        }
+
         public string Text
         {
             get { return Control.Text; }

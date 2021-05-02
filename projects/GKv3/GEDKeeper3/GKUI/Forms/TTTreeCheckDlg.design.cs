@@ -12,6 +12,10 @@ namespace GKUI.Forms
         private Button btnAnalyseBase;
         private Button btnBaseRepair;
         private Panel panProblemsContainer;
+        private ContextMenu contextMenu;
+        private ButtonMenuItem miDetails;
+        private ButtonMenuItem miGoToRecord;
+        private ButtonMenuItem miCopyXRef;
 
         private void InitializeComponent()
         {
@@ -41,6 +45,26 @@ namespace GKUI.Forms
                     UIHelper.MakeDialogFooter(btnAnalyseBase, null, btnBaseRepair)
                 }
             };
+
+            miDetails = new ButtonMenuItem();
+            miDetails.Text = "miDetails";
+            miDetails.Click += miDetails_Click;
+
+            miGoToRecord = new ButtonMenuItem();
+            miGoToRecord.Text = "miGoToRecord";
+            miGoToRecord.Click += miGoToRecord_Click;
+
+            miCopyXRef = new ButtonMenuItem();
+            miCopyXRef.Text = "miCopyXRef";
+            miCopyXRef.Click += miCopyXRef_Click;
+
+            contextMenu = new ContextMenu();
+            contextMenu.Items.AddRange(new MenuItem[] {
+                miDetails,
+                miGoToRecord,
+                miCopyXRef
+            });
+            contextMenu.Opening += contextMenu_Opening;
 
             //
 

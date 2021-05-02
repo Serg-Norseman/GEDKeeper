@@ -286,9 +286,9 @@ namespace GKUI.Forms
 
         private void miRecordMerge_Click(object sender, EventArgs e)
         {
-            var listView = contextMenu.SourceControl as GKListView;
-            if (listView != null) {
-                var items = listView.GetSelectedItems();
+            var recView = contextMenu.SourceControl as GKListView;
+            if (recView != null) {
+                var items = recView.GetSelectedItems();
                 fController.ShowRecMerge(
                     items.Count > 0 ? items[0] as GDMRecord : null,
                     items.Count > 1 ? items[1] as GDMRecord : null

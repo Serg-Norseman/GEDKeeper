@@ -127,7 +127,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public PersonsFilterDlg() : base()
+        public PersonsFilterDlg()
         {
             InitializeComponent();
         }

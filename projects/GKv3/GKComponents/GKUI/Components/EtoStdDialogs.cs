@@ -80,7 +80,7 @@ namespace GKUI.Components
                                                            int filterIndex, string defaultExt, bool multiSelect)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            
+
             if (!string.IsNullOrEmpty(title))
                 ofd.Title = title;
 
@@ -142,25 +142,49 @@ namespace GKUI.Components
             return sfd;
         }
 
-
-        public void ShowMessage(string msg)
+        public void ShowAlert(string msg, string title = "")
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxType.Information);
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Warning);
         }
 
-        public void ShowError(string msg)
+        public void ShowMessage(string msg, string title = "")
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxType.Error);
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Information);
         }
 
-        public bool ShowQuestionYN(string msg)
+        public void ShowError(string msg, string title = "")
         {
-            return MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.YesNo, MessageBoxType.Question) == DialogResult.Yes;
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Error);
         }
 
-        public void ShowWarning(string msg)
+        public bool ShowQuestionYN(string msg, string title = "")
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxType.Warning);
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            return MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxType.Question) == DialogResult.Yes;
+        }
+
+        public void ShowWarning(string msg, string title = "")
+        {
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Warning);
         }
 
 

@@ -380,7 +380,7 @@ namespace GKUI.Forms
 
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
-            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown) {
+            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown || eArgs.Action == RecordAction.raEdit) {
                 fController.UpdateNameControls(fController.Person.PersonalNames[0]);
             }
         }

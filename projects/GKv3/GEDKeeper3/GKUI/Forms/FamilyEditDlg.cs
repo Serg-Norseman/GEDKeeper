@@ -261,11 +261,8 @@ namespace GKUI.Forms
 
         private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
         {
-            if (e.Item is GDMRecord && !fController.Base.Context.IsAvailableRecord((GDMRecord)e.Item)) {
-                e.IsAvailable = false;
-            } else {
-                e.IsAvailable = true;
-            }
+            var record = e.Item as GDMRecord;
+            e.IsAvailable = record == null || fController.Base.Context.IsAvailableRecord(record);
         }
     }
 }

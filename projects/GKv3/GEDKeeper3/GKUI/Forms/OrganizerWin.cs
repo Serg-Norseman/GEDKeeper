@@ -20,7 +20,6 @@
 
 using System;
 using Eto.Forms;
-
 using BSLib;
 using GKCore;
 using GKCore.Controllers;
@@ -35,7 +34,6 @@ namespace GKUI.Forms
     {
         private readonly OrganizerController fController;
 
-        private readonly IBaseWindow fBase;
         private readonly GKSheetList fAdrList;
         private readonly GKSheetList fPhonesList;
         private readonly GKSheetList fMailsList;
@@ -68,8 +66,6 @@ namespace GKUI.Forms
         public OrganizerWin(IBaseWindow baseWin)
         {
             InitializeComponent();
-
-            fBase = baseWin;
 
             fAdrList = new GKSheetList(pageAddresses);
             fAdrList.Buttons = EnumSet<SheetButton>.Create();

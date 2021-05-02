@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,6 +40,7 @@ namespace GKUI.Forms
         public ProgressDlg()
         {
             InitializeComponent();
+
             Text = LangMan.LS(LSID.LSID_Progress);
             lblTimePassed.Text = LangMan.LS(LSID.LSID_TimePassed);
             lblTimeRemain.Text = LangMan.LS(LSID.LSID_TimeRemain);

@@ -83,9 +83,10 @@ namespace GKUI.Forms
         private ButtonMenuItem miDescendantsCircle;
         private ButtonMenuItem miRelationshipCalculator;
         private TabControl tabsRecords;
-        private ButtonMenuItem miRecordDuplicate;
+        private ButtonMenuItem miContRecordDuplicate;
         private ButtonMenuItem miContRecordDelete;
         private ButtonMenuItem miContRecordEdit;
+        private ButtonMenuItem miContRecordMerge;
         private ContextMenu contextMenu;
         private ButtonMenuItem miContRecordAdd;
         private ButtonMenuItem miTreeCompare;
@@ -553,16 +554,22 @@ namespace GKUI.Forms
             miContRecordDelete.Text = "miContRecordDelete";
             miContRecordDelete.Click += miRecordDelete_Click;
 
-            miRecordDuplicate = new ButtonMenuItem();
-            miRecordDuplicate.Text = "miRecordDuplicate";
-            miRecordDuplicate.Click += miRecordDuplicate_Click;
+            miContRecordDuplicate = new ButtonMenuItem();
+            miContRecordDuplicate.Text = "miRecordDuplicate";
+            miContRecordDuplicate.Click += miRecordDuplicate_Click;
+
+            miContRecordMerge = new ButtonMenuItem();
+            miContRecordMerge.Text = "miContRecordMerge";
+            miContRecordMerge.Click += miRecordMerge_Click;
 
             contextMenu = new ContextMenu();
             contextMenu.Items.AddRange(new MenuItem[] {
                                            miContRecordAdd,
                                            miContRecordEdit,
                                            miContRecordDelete,
-                                           miRecordDuplicate});
+                                           miContRecordDuplicate,
+                                           miContRecordMerge
+            });
             contextMenu.Opening += contextMenu_Opening;
 
             //

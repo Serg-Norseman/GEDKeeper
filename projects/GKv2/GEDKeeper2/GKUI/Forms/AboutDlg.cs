@@ -44,7 +44,7 @@ namespace GKUI.Forms
 
         private void LabelMail_Click(object sender, EventArgs e)
         {
-            Label lbl = sender as Label;
+            var lbl = sender as Label;
             if (lbl != null) {
                 GKUtils.LoadExtFile(lbl.Text);
             }

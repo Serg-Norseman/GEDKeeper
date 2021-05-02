@@ -32,7 +32,7 @@ namespace GKUI.Forms
     {
         private PrintDocument fPrintDoc;
 
-        protected PrintableForm() : base()
+        protected PrintableForm()
         {
             InitPrintDoc();
         }

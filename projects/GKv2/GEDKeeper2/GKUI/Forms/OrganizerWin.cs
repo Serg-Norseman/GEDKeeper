@@ -20,7 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-
 using BSLib;
 using GKCore;
 using GKCore.Controllers;

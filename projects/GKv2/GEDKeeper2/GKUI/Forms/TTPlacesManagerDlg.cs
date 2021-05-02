@@ -19,7 +19,6 @@
  */
 
 using System;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;

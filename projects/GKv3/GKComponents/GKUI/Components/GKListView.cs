@@ -90,6 +90,10 @@ namespace GKUI.Components
                 ForeColor = colorHandler.Handle;
             }
         }
+
+        public void SetFont(IFont font)
+        {
+        }
     }
 
     public enum SortOrder
@@ -132,7 +136,7 @@ namespace GKUI.Components
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class GKListView : GridView, IListViewEx
     {
@@ -556,6 +560,32 @@ namespace GKUI.Components
             // may take a few requests to update the list's items which does not already exist
             if (fListMan != null && fListMan.DeleteRecord(data)) {
                 /*VirtualListSize = fListMan.FilteredCount;*/
+            }
+        }
+
+        public IList<object> GetSelectedItems()
+        {
+            try {
+                var result = new List<object>();
+
+                /*if (!VirtualMode) {
+                    int num = SelectedItems.Count;
+                    for (int i = 0; i < num; i++) {
+                        var lvItem = SelectedItems[i] as GKListItem;
+                        result.Add(lvItem.Data);
+                    }
+                } else {
+                    int num = SelectedIndices.Count;
+                    for (int i = 0; i < num; i++) {
+                        int index = SelectedIndices[i];
+                        result.Add(fListMan.GetContentItem(index));
+                    }
+                }*/
+
+                return result;
+            } catch (Exception ex) {
+                Logger.WriteError("GKListView.GetSelectedItems()", ex);
+                return null;
             }
         }
 
