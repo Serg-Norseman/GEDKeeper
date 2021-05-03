@@ -1,11 +1,10 @@
 ![Logo](../master/dev_info/gk_logo_full_v01.png)
 
 
-[![Website](https://img.shields.io/badge/www-en.gedkeeper.net-0099BC.svg?maxAge=3600)](http://en.gedkeeper.net/)
-[![Website](https://img.shields.io/badge/www-gedkeeper.github.io-0099BC.svg?maxAge=3600)](https://gedkeeper.github.io/)
-[![wiki](https://img.shields.io/badge/browse-the%20wiki-orange.svg)](https://github.com/Serg-Norseman/GEDKeeper/wiki)
+[![Website](https://img.shields.io/badge/www-gedkeeper.net-0099BC.svg?maxAge=3600)](https://gedkeeper.net/)
 [![forums](https://img.shields.io/badge/join-the%20forums-yellowgreen.svg)](http://groups.google.com/group/gedkeeper-en)
-[![chat](https://badges.gitter.im/Serg-Norseman/GEDKeeper.svg)](https://gitter.im/Serg-Norseman/GEDKeeper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-brightgreen.svg)](https://t.me/gedkeeper_chat_en)
+[![wiki](https://img.shields.io/badge/browse-the%20wiki-orange.svg)](https://github.com/Serg-Norseman/GEDKeeper/wiki)
 [![donate](https://img.shields.io/badge/make%20a-donation-greenblue.svg)](https://sourceforge.net/p/gedkeeper/donate/)
 
 [![Change Log](https://img.shields.io/badge/Change%20Log-green)](CHANGELOG.md)
