@@ -371,8 +371,7 @@ namespace GKUI.Components
             if (fMouseCaptured == MouseCaptured.mcDrag) {
                 fMouseCaptured = MouseCaptured.mcNone;
                 Cursor = Cursors.Default;
-            }
-            else if (e.Button == MouseButtons.Left) {
+            } else if (e.Button == MouseButtons.Left) {
                 CircleSegment selected = FindSegment(e.X, e.Y);
                 if (selected != null && selected.IRec != null) {
                     RootPerson = selected.IRec;

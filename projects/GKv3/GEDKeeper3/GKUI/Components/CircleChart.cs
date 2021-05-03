@@ -346,7 +346,8 @@ namespace GKUI.Components
         protected override void OnMouseMove(MouseEventArgs e)
         {
             switch (fMouseCaptured) {
-                case MouseCaptured.mcNone: {
+                case MouseCaptured.mcNone:
+                    {
                         CircleSegment selected = FindSegment(e.Location);
 
                         string hint = "";
@@ -372,7 +373,8 @@ namespace GKUI.Components
                     }
                     break;
 
-                case MouseCaptured.mcDrag: {
+                case MouseCaptured.mcDrag:
+                    {
                         Point pt = new Point(e.Location);
                         AdjustScroll(-(pt.X - fMouseCaptureX), -(pt.Y - fMouseCaptureY));
                         fMouseCaptureX = pt.X;

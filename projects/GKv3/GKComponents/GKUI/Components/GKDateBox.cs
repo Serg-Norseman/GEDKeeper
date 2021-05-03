@@ -30,7 +30,7 @@ namespace GKUI.Components
     /// </summary>
     public class GKDateBox : MaskedTextBox
     {
-        private string fRegionalDatePattern;
+        private readonly string fRegionalDatePattern;
 
 
         public string RegionalDatePattern
@@ -62,15 +62,16 @@ namespace GKUI.Components
         {
             var culture = CultureInfo.CurrentCulture; // work
             //var culture = new CultureInfo("en-US"); // debug
+            //var culture = new CultureInfo("hu-HU"); // debug
 
             var dtf = culture.DateTimeFormat;
-            var dateSeparator = dtf.DateSeparator;
+            var dateSeparators = dtf.DateSeparator.ToCharArray();
 
             // may contain a period, a dash, and a slash
             var result = dtf.ShortDatePattern.ToLowerInvariant();
 
             // normalize
-            string[] parts = result.Split(dateSeparator.ToCharArray(), StringSplitOptions.None);
+            string[] parts = result.Split(dateSeparators, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < parts.Length; i++) {
                 string part = parts[i];
                 char firstChar = part[0];

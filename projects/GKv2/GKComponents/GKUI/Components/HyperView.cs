@@ -342,7 +342,7 @@ namespace GKUI.Components
 
                         string ct = chunk.Text;
                         if (!string.IsNullOrEmpty(ct)) {
-                            brush.Color = ((ColorHandler)chunk.Color).Handle;
+                            brush.Color = (chunk.Color == null) ? ForeColor : ((ColorHandler)chunk.Color).Handle;
                             font = ProcessFont(font, chunk.Size, (SDFontStyle)chunk.Style);
                             gfx.DrawString(ct, font, brush, xOffset, yOffset, fStrFormat);
 

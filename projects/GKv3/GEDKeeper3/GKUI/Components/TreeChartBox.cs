@@ -401,6 +401,11 @@ namespace GKUI.Components
                     deepModel.RecalcChart(true);
 
                     var pers = deepModel.FindPersonByRec(fSelected.Rec);
+                    if (pers == null) {
+                        Logger.WriteError("TreeChartBox.DrawDeep(): unexpected failure");
+                        return;
+                    }
+
                     int dmX = (spx + (fSelected.PtX - pers.PtX));
                     int dmY = (spy + (fSelected.PtY - pers.PtY));
                     deepModel.SetOffsets(dmX, dmY);
@@ -688,7 +693,7 @@ namespace GKUI.Components
                             break;
 
                         case MouseAction.Drag:
-                            Cursor = Cursors.Move; // SizeAll;
+                            Cursor = Cursors.Move;
                             fMode = ChartControlMode.DragImage;
                             break;
                     }
@@ -876,7 +881,7 @@ namespace GKUI.Components
             SetSelected(null);
         }
 
-        private void CenterPerson(TreeChartPerson person, bool animation = true)
+        public void CenterPerson(TreeChartPerson person, bool animation = true)
         {
             if (person == null) return;
 

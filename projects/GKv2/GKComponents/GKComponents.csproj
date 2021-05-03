@@ -101,6 +101,7 @@
     <Compile Include="GKUI\Components\GKComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKDateBox.cs" />
     <Compile Include="GKUI\Components\GKInputBox.cs">
       <SubType>Form</SubType>

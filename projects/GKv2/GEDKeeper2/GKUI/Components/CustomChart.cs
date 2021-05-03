@@ -173,8 +173,7 @@ namespace GKUI.Components
             } else if (Keys.Shift == ModifierKeys) {
                 HorizontalScroll.Value = Math.Max(HorizontalScroll.Value - e.Delta, 0);
                 PerformLayout();
-            }
-            else {
+            } else {
                 base.OnMouseWheel(e);
             }
         }
@@ -260,15 +259,17 @@ namespace GKUI.Components
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
             } else {
                 ImageFormat imFmt = ImageFormat.Png;
-                if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
-                else
-                    if (ext == ".emf") { imFmt = ImageFormat.Emf; }
-                else
-                    if (ext == ".png") { imFmt = ImageFormat.Png; }
-                else
-                    if (ext == ".gif") { imFmt = ImageFormat.Gif; }
-                else
-                    if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
+                if (ext == ".bmp") {
+                    imFmt = ImageFormat.Bmp;
+                } else if (ext == ".png") {
+                    imFmt = ImageFormat.Png;
+                } else if (ext == ".gif") {
+                    imFmt = ImageFormat.Gif;
+                } else if (ext == ".jpg") {
+                    imFmt = ImageFormat.Jpeg;
+                } else if (ext == ".emf") {
+                    imFmt = ImageFormat.Emf;
+                }
 
                 Image pic;
                 if (Equals(imFmt, ImageFormat.Emf)) {
@@ -304,9 +305,7 @@ namespace GKUI.Components
         private void DoNavRefresh()
         {
             var eventHandler = (EventHandler)Events[EventNavRefresh];
-            if (eventHandler == null) return;
-
-            eventHandler(this, null);
+            if (eventHandler != null) eventHandler(this, null);
         }
 
         protected abstract void SetNavObject(object obj);

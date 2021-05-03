@@ -86,7 +86,7 @@ namespace GKUI.Components
         }
 
 
-        public HyperView() : base()
+        public HyperView()
         {
             CenteredImage = false;
 
@@ -134,51 +134,95 @@ namespace GKUI.Components
                     int xMax = 0;
                     int lineHeight = 0;
 
-                    string text = fLines.Text.Trim();
-                    if (!string.IsNullOrEmpty(text)) {
-                        Font defFont = this.Font;
-                        var parser = new BBTextParser(AppHost.GfxProvider, defFont.Size,
-                                                      new ColorHandler(fLinkColor), new ColorHandler(TextColor));
+                    string text = fLines.Text;
+                    Font defFont = this.Font;
+                    float maxWidth = this.ClientSize.Width - (2 * fBorderWidth);
 
-                        parser.ParseText(fChunks, text);
+                    text = SysUtils.StripHTML(text);
 
-                        int line = -1;
-                        int chunksCount = fChunks.Count;
-                        for (int k = 0; k < chunksCount; k++)
-                        {
-                            BBTextChunk chunk = fChunks[k];
+                    var parser = new BBTextParser(AppHost.GfxProvider, defFont.Size,
+                                                  new ColorHandler(fLinkColor), new ColorHandler(TextColor));
 
-                            if (line != chunk.Line) {
-                                line = chunk.Line;
+                    parser.ParseText(fChunks, text);
 
-                                if (line > 0) {
-                                    yPos += lineHeight;
-                                    fHeights.Add(lineHeight);
-                                }
+                    int line = -1;
+                    int chunksCount = fChunks.Count;
+                    int k = 0;
+                    while (k < chunksCount) {
+                        BBTextChunk chunk = fChunks[k];
+                        bool recalcChunk = false;
 
-                                xPos = 0;
-                                lineHeight = 0;
+                        if (line != chunk.Line) {
+                            line = chunk.Line;
+
+                            if (line > 0) {
+                                yPos += lineHeight;
+                                fHeights.Add(lineHeight);
                             }
 
-                            int prevX = xPos;
-                            int prevY = yPos;
+                            xPos = 0;
+                            lineHeight = 0;
+                        }
 
-                            if (!string.IsNullOrEmpty(chunk.Text)) {
-                                using (var font = new Font(defFont.FamilyName, chunk.Size, (EDFontStyle)chunk.Style)) {
-                                    SizeF strSize = font.MeasureString(chunk.Text);
-                                    chunk.Width = (int)strSize.Width;
+                        int prevX = xPos;
+                        int prevY = yPos;
 
-                                    xPos += chunk.Width;
-                                    if (xMax < xPos) xMax = xPos;
+                        string chunkStr = chunk.Text;
+                        if (!string.IsNullOrEmpty(chunkStr)) {
+                            using (var font = new Font(defFont.FamilyName, chunk.Size, (EDFontStyle)chunk.Style)) {
+                                SizeF strSize = font.MeasureString(chunkStr);
 
-                                    int h = (int)strSize.Height;
-                                    if (lineHeight < h) lineHeight = h;
+                                if (fWordWrap && xPos + strSize.Width > maxWidth) {
+                                    int lastPos = 0, prevPos = 0;
+                                    string tempStr, prevStr = string.Empty;
+                                    int sliceType = -1;
+                                    while (true) {
+                                        tempStr = GetSlice(chunkStr, ref lastPos, ref sliceType);
+                                        strSize = font.MeasureString(tempStr);
+                                        if (xPos + strSize.Width <= maxWidth) {
+                                            prevStr = tempStr;
+                                            prevPos = lastPos;
+                                        } else {
+                                            if (sliceType == 0) {
+                                                // first word
+                                                if (xPos == 0) {
+                                                    string tail = chunkStr.Substring(lastPos);
+                                                    SplitChunk(chunk, k, tempStr, tail, ref chunksCount);
+                                                } else {
+                                                    ShiftChunks(k, chunksCount);
+                                                    recalcChunk = true;
+                                                }
+                                                break;
+                                            } else if (sliceType == 1 || sliceType == 2) {
+                                                // middle or tail word
+                                                string tail = chunkStr.Substring(prevPos);
+                                                SplitChunk(chunk, k, prevStr, tail, ref chunksCount);
+                                                break;
+                                            } else if (sliceType == 3) {
+                                                // one first and last word, nothing to do
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
 
-                                if (!string.IsNullOrEmpty(chunk.URL)) {
-                                    chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xPos - prevX, lineHeight);
-                                }
+                                strSize = font.MeasureString(chunk.Text);
+                                chunk.Width = (int)strSize.Width;
+
+                                xPos += chunk.Width;
+                                if (xMax < xPos) xMax = xPos;
+
+                                int h = (int)strSize.Height;
+                                if (lineHeight < h) lineHeight = h;
                             }
+
+                            if (!string.IsNullOrEmpty(chunk.URL)) {
+                                chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xPos - prevX, lineHeight);
+                            }
+                        }
+
+                        if (!recalcChunk) {
+                            k++;
                         }
                     }
 
@@ -192,6 +236,49 @@ namespace GKUI.Components
             }
         }
 
+        private static string GetSlice(string str, ref int lastPos, ref int type)
+        {
+            // type: -1 initial none, 0 first word, 1 any middle, 2 last word, 3 only one word in str
+            int pos = str.IndexOf(' ', lastPos);
+            string result;
+            if (pos >= 0) {
+                result = str.Substring(0, pos);
+                lastPos = pos + 1;
+                type = (type == -1) ? 0 : 1;
+            } else {
+                result = str;
+                if (lastPos > 0) {
+                    lastPos = -1;
+                    type = 2;
+                } else {
+                    lastPos = -1;
+                    type = 3;
+                }
+            }
+            return result;
+        }
+
+        private void SplitChunk(BBTextChunk chunk, int index, string head, string tail, ref int chunksCount)
+        {
+            chunk.Text = head;
+
+            if (!string.IsNullOrEmpty(tail)) {
+                var newChunk = chunk.Clone();
+                newChunk.Text = tail;
+                fChunks.Insert(index + 1, newChunk);
+                chunksCount += 1;
+
+                ShiftChunks(index + 1, chunksCount);
+            }
+        }
+
+        private void ShiftChunks(int startIndex, int chunksCount)
+        {
+            for (int m = startIndex; m < chunksCount; m++) {
+                fChunks[m].Line += 1;
+            }
+        }
+
         private void DoPaint(Graphics gfx)
         {
             try {
@@ -202,8 +289,9 @@ namespace GKUI.Components
                     gfx.FillRectangle(new SolidBrush(BackgroundColor), Viewport);
                     Font defFont = this.Font;
 
-                    int xOffset = fBorderWidth + ImageViewport.Left;
-                    int yOffset = fBorderWidth + ImageViewport.Top;
+                    var scrollPos = ImageViewport;
+                    int xOffset = fBorderWidth + scrollPos.Left;
+                    int yOffset = fBorderWidth + scrollPos.Top;
                     int lineHeight = 0;
 
                     int line = -1;
@@ -214,7 +302,7 @@ namespace GKUI.Components
                         if (line != chunk.Line) {
                             line = chunk.Line;
 
-                            xOffset = fBorderWidth + ImageViewport.Left;
+                            xOffset = fBorderWidth + scrollPos.Left;
                             yOffset += lineHeight;
 
                             // this condition is dirty hack
@@ -225,10 +313,7 @@ namespace GKUI.Components
 
                         string ct = chunk.Text;
                         if (!string.IsNullOrEmpty(ct)) {
-                            // FIXME: null?!
-                            IColor clr = chunk.Color;
-                            var chunkColor = (clr == null) ? TextColor : ((ColorHandler)chunk.Color).Handle;
-                            brush.Color = chunkColor;
+                            brush.Color = (chunk.Color == null) ? TextColor : ((ColorHandler)chunk.Color).Handle;
                             font = ProcessFont(font, chunk.Size, (EDFontStyle)chunk.Style);
                             gfx.DrawText(font, brush, xOffset, yOffset, ct);
 

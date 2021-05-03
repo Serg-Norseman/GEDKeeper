@@ -26,15 +26,8 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class GKComboItem<T> : ComboItem<T>, Eto.Forms.IListItem
+    public class GKComboItem<T> : ComboItem<T>
     {
-        public string Key
-        {
-            get { return Text; }
-        }
-
-        public string Text { get; set; }
-
         public GKComboItem(string text) : base(text)
         {
         }

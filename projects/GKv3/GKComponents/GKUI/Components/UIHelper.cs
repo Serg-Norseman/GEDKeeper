@@ -197,18 +197,17 @@ namespace GKUI.Components
 
         public static T GetSelectedTag<T>(ComboBox comboBox)
         {
-            GKComboItem<T> comboItem = (GKComboItem<T>)comboBox.SelectedValue;
-            T itemTag = (T)comboItem.Tag;
+            GKComboItem<T> comboItem = comboBox.SelectedValue as GKComboItem<T>;
+            T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
             return itemTag;
         }
 
         public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue, bool allowDefault = true)
         {
             foreach (object item in comboBox.Items) {
-                GKComboItem<T> comboItem = (GKComboItem<T>)item;
-                T itemTag = (T)comboItem.Tag;
+                GKComboItem<T> comboItem = item as GKComboItem<T>;
 
-                if (object.Equals(itemTag, tagValue)) {
+                if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
                     comboBox.SelectedValue = item;
                     return;
                 }
@@ -275,6 +274,34 @@ namespace GKUI.Components
         public static Bitmap LoadResourceImage(Type baseType, string resName)
         {
             return new Bitmap(GKUtils.LoadResourceStream(baseType, resName));
+        }
+
+        public static void SetControlEnabled(Control ctl, bool enabled)
+        {
+            if (ctl != null) {
+                ctl.Enabled = enabled;
+                ctl.BackgroundColor = enabled ? SystemColors.WindowBackground : SystemColors.Control;
+            }
+        }
+
+        public static void SetClipboardText(string text)
+        {
+            using (var clipboard = new Clipboard()) {
+                clipboard.Text = text;
+            }
+        }
+
+        public static void ProcessName(object sender)
+        {
+            TextBox tb = (sender as TextBox);
+            if (tb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
+                tb.Text = ConvertHelper.UniformName(tb.Text);
+            }
+
+            ComboBox cmb = (sender as ComboBox);
+            if (cmb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
+                cmb.Text = ConvertHelper.UniformName(cmb.Text);
+            }
         }
 
         public static void SetControlFont(Control ctl, Font font)
@@ -370,34 +397,6 @@ namespace GKUI.Components
                 string[] extensions = exts.Split(',');
 
                 fileDlg.Filters.Add(new FileDialogFilter(name, extensions));
-            }
-        }
-
-        public static void SetControlEnabled(Control ctl, bool enabled)
-        {
-            if (ctl != null) {
-                ctl.Enabled = enabled;
-                ctl.BackgroundColor = enabled ? SystemColors.WindowBackground : SystemColors.Control;
-            }
-        }
-
-        public static void SetClipboardText(string text)
-        {
-            using (var clipboard = new Clipboard()) {
-                clipboard.Text = text;
-            }
-        }
-
-        public static void ProcessName(object sender)
-        {
-            TextBox tb = (sender as TextBox);
-            if (tb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
-                tb.Text = ConvertHelper.UniformName(tb.Text);
-            }
-
-            ComboBox cmb = (sender as ComboBox);
-            if (cmb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
-                cmb.Text = ConvertHelper.UniformName(cmb.Text);
             }
         }
     }

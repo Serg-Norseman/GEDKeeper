@@ -637,22 +637,10 @@ namespace GKUI.Components
             }
         }
 
-        private sealed class MouseActionRet
+        private MouseAction GetMouseAction(MouseEventArgs e, MouseEvent mouseEvent, out TreeChartPerson person)
         {
-            public readonly MouseAction Action;
-            public readonly TreeChartPerson Person;
-
-            public MouseActionRet(MouseAction action, TreeChartPerson person)
-            {
-                Action = action;
-                Person = person;
-            }
-        }
-
-        private MouseActionRet GetMouseAction(MouseEventArgs e, MouseEvent mouseEvent)
-        {
-            MouseAction action = MouseAction.None;
-            TreeChartPerson person = null;
+            var result = MouseAction.None;
+            person = null;
 
             ExtPoint offsets = fModel.GetOffsets();
             int aX = e.X - offsets.X;
@@ -666,19 +654,14 @@ namespace GKUI.Components
                 if (persRt.Contains(aX, aY)) {
                     person = p;
 
-                    if (e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meDown)
-                    {
-                        action = MouseAction.Select;
+                    if (e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meDown) {
+                        result = MouseAction.Select;
                         break;
-                    }
-                    else if (e.Button == MouseButtons.Right && mouseEvent == MouseEvent.meUp)
-                    {
-                        action = MouseAction.Properties;
+                    } else if (e.Button == MouseButtons.Right && mouseEvent == MouseEvent.meUp) {
+                        result = MouseAction.Properties;
                         break;
-                    }
-                    else if (mouseEvent == MouseEvent.meMove)
-                    {
-                        action = MouseAction.Highlight;
+                    } else if (mouseEvent == MouseEvent.meMove) {
+                        result = MouseAction.Highlight;
                         break;
                     }
                 }
@@ -686,32 +669,32 @@ namespace GKUI.Components
                 ExtRect expRt = TreeChartModel.GetExpanderRect(persRt);
                 if ((e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
                     person = p;
-                    action = MouseAction.Expand;
+                    result = MouseAction.Expand;
                     break;
                 }
 
                 expRt = TreeChartModel.GetPersonExpandRect(persRt);
                 if ((e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
                     person = p;
-                    action = MouseAction.PersonExpand;
+                    result = MouseAction.PersonExpand;
                     break;
                 }
 
                 ExtRect infoRt = TreeChartModel.GetInfoRect(persRt);
                 if ((e.Button == MouseButtons.Left && mouseEvent == MouseEvent.meUp) && infoRt.Contains(aX, aY)) {
                     person = p;
-                    action = MouseAction.Info;
+                    result = MouseAction.Info;
                     break;
                 }
             }
 
-            if (action == MouseAction.None && person == null) {
+            if (result == MouseAction.None && person == null) {
                 if (e.Button == MouseButtons.Right && mouseEvent == MouseEvent.meDown) {
-                    action = MouseAction.Drag;
+                    result = MouseAction.Drag;
                 }
             }
 
-            return new MouseActionRet(action, person);
+            return result;
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -721,11 +704,12 @@ namespace GKUI.Components
 
             switch (fMode) {
                 case ChartControlMode.Default:
-                    var mAct = GetMouseAction(e, MouseEvent.meDown);
+                    TreeChartPerson mPers;
+                    MouseAction mAct = GetMouseAction(e, MouseEvent.meDown, out mPers);
 
-                    switch (mAct.Action) {
+                    switch (mAct) {
                         case MouseAction.Select:
-                            SelectBy(mAct.Person, true);
+                            SelectBy(mPers, true);
                             break;
 
                         case MouseAction.Drag:
@@ -748,13 +732,13 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            switch (fMode)
-            {
+            switch (fMode) {
                 case ChartControlMode.Default:
-                    var mAct = GetMouseAction(e, MouseEvent.meMove);
+                    TreeChartPerson mPers;
+                    MouseAction mAct = GetMouseAction(e, MouseEvent.meMove, out mPers);
 
-                    if (mAct.Action == MouseAction.Highlight) {
-                        SetHighlight(mAct.Person);
+                    if (mAct == MouseAction.Highlight) {
+                        SetHighlight(mPers);
                     } else {
                         SetHighlight(null);
 
@@ -800,31 +784,31 @@ namespace GKUI.Components
         {
             switch (fMode) {
                 case ChartControlMode.Default:
-                    var mAct = GetMouseAction(e, MouseEvent.meUp);
+                    TreeChartPerson mPers;
+                    MouseAction mAct = GetMouseAction(e, MouseEvent.meUp, out mPers);
 
-                    switch (mAct.Action) {
+                    switch (mAct) {
                         case MouseAction.None:
                             break;
 
                         case MouseAction.Properties:
-                            SelectBy(mAct.Person, false);
-                            if (fSelected == mAct.Person && fSelected.Rec != null)
-                            {
+                            SelectBy(mPers, false);
+                            if (fSelected == mPers && fSelected.Rec != null) {
                                 DoPersonProperties(new MouseEventArgs(e.Button, 1, e.X, e.Y, 0));
                             }
                             break;
 
                         case MouseAction.Expand:
-                            DoRootChanged(mAct.Person);
-                            GenChart(mAct.Person.Rec, TreeChartKind.ckBoth, true);
+                            DoRootChanged(mPers);
+                            GenChart(mPers.Rec, TreeChartKind.ckBoth, true);
                             break;
 
                         case MouseAction.PersonExpand:
-                            ToggleCollapse(mAct.Person);
+                            ToggleCollapse(mPers);
                             break;
 
                         case MouseAction.Info:
-                            DoInfoRequest(mAct.Person);
+                            DoInfoRequest(mPers);
                             break;
                     }
                     break;
