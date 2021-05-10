@@ -165,5 +165,10 @@ namespace GKUI.Forms
             base.OnClosing(e);
             e.Cancel = fController.CheckChangesPersistence();
         }
+
+        private void cmbLanguage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fController.UpdateLanguage();
+        }
     }
 }

@@ -80,7 +80,7 @@ namespace GKUI.Components
         }
     }
 
-    public sealed class ArborViewer : CustomPanel, IArborRenderer
+    public sealed class ArborViewer : ScrollablePanel, IArborRenderer
     {
         private bool fEnergyDebug;
         private ArborNode fDragged;
@@ -253,12 +253,10 @@ namespace GKUI.Components
             if (!HasFocus) base.Focus();
 
             Point mpt = new Point(e.Location);
-            if (fNodesDragging)
-            {
+            if (fNodesDragging) {
                 fDragged = fSys.GetNearestNode(mpt.X, mpt.Y);
 
-                if (fDragged != null)
-                {
+                if (fDragged != null) {
                     fDragged.Fixed = true;
                 }
             }
@@ -269,8 +267,7 @@ namespace GKUI.Components
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (fNodesDragging && fDragged != null)
-            {
+            if (fNodesDragging && fDragged != null) {
                 fDragged.Fixed = false;
                 //fDragged.Mass = 1000;
                 fDragged = null;
@@ -283,8 +280,7 @@ namespace GKUI.Components
         protected override void OnMouseMove(MouseEventArgs e)
         {
             Point mpt = new Point(e.Location);
-            if (fNodesDragging && fDragged != null)
-            {
+            if (fNodesDragging && fDragged != null) {
                 fDragged.Pt = fSys.GetModelCoords(mpt.X, mpt.Y);
             }
 

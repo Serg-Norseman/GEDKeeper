@@ -31,7 +31,7 @@ using GKCore.Interfaces;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    /// The main implementation of the platform-specific graphics provider for WinForms.
     /// </summary>
     public class WFGfxProvider : IGraphicsProviderEx
     {
@@ -234,7 +234,7 @@ namespace GKUI.Components
 
         public IColor CreateColor(int argb)
         {
-            // Dirty hack!
+            // FIXME: Dirty hack!
             //argb = (int)unchecked((long)argb & (long)((ulong)-1));
             //argb = (int)unchecked((ulong)argb & (uint)0xFF000000);
             int red = (argb >> 16) & 0xFF;

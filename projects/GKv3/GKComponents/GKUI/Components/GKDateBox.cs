@@ -48,7 +48,7 @@ namespace GKUI.Components
         public GKDateBox()
         {
             fRegionalDatePattern = GetShortDatePattern();
-            Provider = new FixedMaskedTextProvider(GetMask(fRegionalDatePattern));
+            Provider = new FixedMaskedTextProvider(GetMask(fRegionalDatePattern), CultureInfo.InvariantCulture);
         }
 
         private static string GetMask(string regionalDatePattern)

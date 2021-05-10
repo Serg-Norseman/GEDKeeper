@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -83,7 +83,7 @@ namespace GKUI.Components
                                                            int filterIndex, string defaultExt, bool multiSelect)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            
+
             if (!string.IsNullOrEmpty(title))
                 ofd.Title = title;
 
@@ -198,9 +198,9 @@ namespace GKUI.Components
         }
 
 
-        public bool GetInput(string prompt, ref string value)
+        public bool GetInput(object owner, string prompt, ref string value)
         {
-            bool res = GKInputBox.QueryText(GKData.APP_TITLE, prompt, ref value);
+            bool res = GKInputBox.QueryText(owner, GKData.APP_TITLE, prompt, ref value);
             return res && !string.IsNullOrEmpty(value);
         }
 

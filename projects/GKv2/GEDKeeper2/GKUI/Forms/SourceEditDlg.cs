@@ -105,7 +105,7 @@ namespace GKUI.Forms
             fRepositoriesList.OnModify += ModifyReposSheet;
 
             // SetLang()
-            Text = LangMan.LS(LSID.LSID_Source);
+            Title = LangMan.LS(LSID.LSID_Source);
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             lblShortTitle.Text = LangMan.LS(LSID.LSID_ShortTitle);
@@ -152,7 +152,7 @@ namespace GKUI.Forms
 
         private void EditShortTitle_TextChanged(object sender, EventArgs e)
         {
-            Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Source), txtShortTitle.Text);
+            Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Source), txtShortTitle.Text);
         }
     }
 }

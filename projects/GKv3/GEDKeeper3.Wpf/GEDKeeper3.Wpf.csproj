@@ -49,6 +49,9 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>GKUI.GKProgram</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Eto, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Eto.Forms.2.3.0\lib\net45\Eto.dll</HintPath>
@@ -61,7 +64,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="GKProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

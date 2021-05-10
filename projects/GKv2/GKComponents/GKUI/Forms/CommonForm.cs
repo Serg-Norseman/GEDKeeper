@@ -66,9 +66,7 @@ namespace GKUI.Forms
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
                 if (component is Control) {
                     fToolTip.SetToolTip((Control)component, toolTip);
-                }
-                else
-                if (component is ToolStripItem) {
+                } else if (component is ToolStripItem) {
                     ((ToolStripItem)component).ToolTipText = toolTip;
                 }
             }

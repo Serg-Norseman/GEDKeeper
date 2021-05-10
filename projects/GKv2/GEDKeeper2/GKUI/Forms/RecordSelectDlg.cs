@@ -71,7 +71,7 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             // SetLang()
-            Text = LangMan.LS(LSID.LSID_WinRecordSelect);
+            Title = LangMan.LS(LSID.LSID_WinRecordSelect);
             btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);
             btnSelect.Text = LangMan.LS(LSID.LSID_DlgSelect);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
@@ -87,7 +87,6 @@ namespace GKUI.Forms
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                // dummy
                 if (fChangeTimer != null) {
                     fChangeTimer.Stop();
                     fChangeTimer.Dispose();

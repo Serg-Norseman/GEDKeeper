@@ -19,7 +19,6 @@
  */
 
 using System;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -61,7 +60,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_ToolOp_3);
+            Title = LangMan.LS(LSID.LSID_ToolOp_3);
             pageTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnSelectAll.Text = LangMan.LS(LSID.LSID_SelAll);

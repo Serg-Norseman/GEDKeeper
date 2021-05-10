@@ -70,7 +70,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_WinSourceCitEdit);
+            Title = LangMan.LS(LSID.LSID_WinSourceCitEdit);
             lblSource.Text = LangMan.LS(LSID.LSID_Source);
             lblPage.Text = LangMan.LS(LSID.LSID_Page);
             lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);

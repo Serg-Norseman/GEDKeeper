@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using System.Globalization;
-using BSLib.Design.Graphics;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
 using Eto.Forms;
@@ -45,7 +44,7 @@ namespace GKUI
             SetAppSign("GEDKeeper3e");
         }
 
-        public EtoAppHost() : base()
+        public EtoAppHost()
         {
         }
 
@@ -165,12 +164,14 @@ namespace GKUI
 
         public override void SaveWinMRU(IBaseWindow baseWin)
         {
-            int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-            if (idx >= 0) {
-                var frm = baseWin as Form;
-                MRUFile mf = AppHost.Options.MRUFiles[idx];
-                mf.WinRect = UIHelper.GetFormRect(frm);
-                mf.WinState = gkWindowStates[(int)frm.WindowState];
+            if (baseWin != null) {
+                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+                if (idx >= 0) {
+                    var frm = baseWin as Form;
+                    MRUFile mf = AppHost.Options.MRUFiles[idx];
+                    mf.WinRect = UIHelper.GetFormRect(frm);
+                    mf.WinState = gkWindowStates[(int)frm.WindowState];
+                }
             }
         }
 
@@ -188,11 +189,13 @@ namespace GKUI
 
         public override void RestoreWinMRU(IBaseWindow baseWin)
         {
-            int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-            if (idx >= 0) {
-                var frm = baseWin as Form;
-                MRUFile mf = AppHost.Options.MRUFiles[idx];
-                UIHelper.RestoreFormRect(frm, mf.WinRect, efWindowStates[(int)mf.WinState]);
+            if (baseWin != null) {
+                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+                if (idx >= 0) {
+                    var frm = baseWin as Form;
+                    MRUFile mf = AppHost.Options.MRUFiles[idx];
+                    UIHelper.RestoreFormRect(frm, mf.WinRect, efWindowStates[(int)mf.WinState]);
+                }
             }
         }
 
@@ -318,11 +321,8 @@ namespace GKUI
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
-            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
@@ -330,8 +330,11 @@ namespace GKUI
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
-
             ControlsManager.RegisterHandlerType(typeof(TextArea), typeof(TextAreaHandler));
+
+            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
         }
 
         #endregion

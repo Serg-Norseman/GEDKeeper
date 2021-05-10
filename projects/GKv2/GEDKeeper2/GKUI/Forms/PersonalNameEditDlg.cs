@@ -120,7 +120,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_Name);
+            Title = LangMan.LS(LSID.LSID_Name);
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             lblSurname.Text = LangMan.LS(LSID.LSID_Surname);

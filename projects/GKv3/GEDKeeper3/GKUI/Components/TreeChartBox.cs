@@ -157,7 +157,7 @@ namespace GKUI.Components
 
         #region Instance control
 
-        public TreeChartBox() : base()
+        public TreeChartBox()
         {
             BackgroundColor = Colors.White;
 

@@ -27,7 +27,7 @@ namespace GKCore.MVP.Views
     /// </summary>
     public interface IStdDialogs
     {
-        bool GetInput(string prompt, ref string value);
+        bool GetInput(object owner, string prompt, ref string value);
 
         string GetOpenFile(string title, string context, string filter,
                            int filterIndex, string defaultExt);

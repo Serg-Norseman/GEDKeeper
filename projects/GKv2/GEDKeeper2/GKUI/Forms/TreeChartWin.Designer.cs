@@ -38,6 +38,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton tbDocPrint;
         private System.Windows.Forms.ToolStripButton tbDocPreview;
+        private System.Windows.Forms.ToolStripButton tbOptions;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tbFilter;
         private System.Windows.Forms.ToolStripButton tbPrev;
@@ -86,6 +87,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tbDocPreview = new System.Windows.Forms.ToolStripButton();
             this.tbDocPrint = new System.Windows.Forms.ToolStripButton();
+            this.tbOptions = new System.Windows.Forms.ToolStripButton();
             this.MenuPerson = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.N1 = new System.Windows.Forms.ToolStripSeparator();
@@ -131,7 +133,8 @@
             this.tbNext,
             this.toolStripSeparator2,
             this.tbDocPreview,
-            this.tbDocPrint});
+            this.tbDocPrint,
+            this.tbOptions});
             this.ToolBar1.Location = new System.Drawing.Point(0, 0);
             this.ToolBar1.Name = "ToolBar1";
             this.ToolBar1.Size = new System.Drawing.Size(658, 25);
@@ -336,6 +339,15 @@
             this.tbDocPrint.Size = new System.Drawing.Size(23, 22);
             this.tbDocPrint.Text = "toolStripButton2";
             this.tbDocPrint.Click += new System.EventHandler(this.tbDocPrint_Click);
+            // 
+            // tbOptions
+            // 
+            this.tbOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbOptions.Name = "tbOptions";
+            this.tbOptions.Size = new System.Drawing.Size(23, 22);
+            this.tbOptions.Text = "tbOptions";
+            this.tbOptions.Click += new System.EventHandler(this.tbOptions_Click);
             // 
             // MenuPerson
             // 

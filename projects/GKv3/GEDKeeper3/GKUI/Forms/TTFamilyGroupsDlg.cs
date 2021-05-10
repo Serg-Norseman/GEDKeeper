@@ -57,6 +57,8 @@ namespace GKUI.Forms
             fController = new FragmentSearchController(this);
             fController.Init(baseWin);
 
+            gkLogChart1.OnHintRequest += HintRequestEventHandler;
+
             SetLang();
         }
 

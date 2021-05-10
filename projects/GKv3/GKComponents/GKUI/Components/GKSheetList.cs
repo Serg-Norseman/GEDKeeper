@@ -25,6 +25,7 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Lists;
 using GKCore.Types;
+using BSDListItem = BSLib.Design.MVP.Controls.IListItem;
 
 namespace GKUI.Components
 {
@@ -374,7 +375,7 @@ namespace GKUI.Components
             fList.EndUpdate();
         }
 
-        public BSLib.Design.MVP.Controls.IListItem AddItem(object rowData, params object[] columnValues)
+        public BSDListItem AddItem(object rowData, params object[] columnValues)
         {
             return fList.AddItem(rowData, columnValues);
         }

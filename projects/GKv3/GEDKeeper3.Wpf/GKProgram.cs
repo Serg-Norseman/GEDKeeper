@@ -1,27 +1,46 @@
-﻿using System;
+﻿/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System;
 using System.Reflection;
 using Eto;
 using Eto.Forms;
 using GKCore;
-using GKUI;
-using Eto.Wpf.Forms.ToolBar;
-using Eto.Wpf.Forms.Controls;
 
 [assembly: AssemblyTitle("GEDKeeper3.Wpf")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct("GEDKeeper")]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
-[assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyCulture("")]
 
-namespace GEDKeeper3.Wpf
+namespace GKUI
 {
-    public class Program
+    /// <summary>
+    /// The main startup class of application.
+    /// </summary>
+    public static class GKProgram
     {
         private static void LogSysInfo()
         {
-            try
-            {
+            try {
                 //#if __MonoCS__
                 //Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
                 //Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
@@ -31,8 +50,9 @@ namespace GEDKeeper3.Wpf
                 Assembly execAssembly = Assembly.GetExecutingAssembly();
                 Logger.WriteInfo("CLR Version: " + execAssembly.ImageRuntimeVersion);
                 Logger.WriteInfo("GK Version: " + execAssembly.GetName().Version.ToString());
+            } catch {
+                // dummy
             }
-            catch { }
         }
 
         [STAThread]
@@ -43,14 +63,13 @@ namespace GEDKeeper3.Wpf
 
             EtoAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
-            Logger.Init(EtoAppHost.GetLogFilename());
+            Logger.Init(AppHost.GetLogFilename());
             LogSysInfo();
 
             var application = new Application(Platforms.Wpf);
 
             AppHost.InitSettings();
-            try
-            {
+            try {
                 var appHost = (EtoAppHost)AppHost.Instance;
                 appHost.Init(args, false);
 

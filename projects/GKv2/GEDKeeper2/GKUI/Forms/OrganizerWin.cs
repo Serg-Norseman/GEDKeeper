@@ -87,7 +87,7 @@ namespace GKUI.Forms
             fWebsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
             fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
 
-            Text = LangMan.LS(LSID.LSID_MIOrganizer);
+            Title = LangMan.LS(LSID.LSID_MIOrganizer);
             pageAddresses.Text = LangMan.LS(LSID.LSID_Addresses);
             pageTelephones.Text = LangMan.LS(LSID.LSID_Telephones);
             pageMails.Text = LangMan.LS(LSID.LSID_Mails);

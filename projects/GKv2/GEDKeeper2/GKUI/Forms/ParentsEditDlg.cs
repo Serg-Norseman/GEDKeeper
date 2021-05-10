@@ -92,7 +92,7 @@ namespace GKUI.Forms
         {
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_WinPersonEdit);
+            Title = LangMan.LS(LSID.LSID_WinPersonEdit);
             lblChildName.Text = LangMan.LS(LSID.LSID_Name);
             lblParents.Text = LangMan.LS(LSID.LSID_Parents);
             lblLinkageType.Text = LangMan.LS(LSID.LSID_LinkageType);

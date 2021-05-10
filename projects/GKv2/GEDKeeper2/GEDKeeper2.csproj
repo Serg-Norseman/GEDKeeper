@@ -130,7 +130,6 @@
     <Compile Include="GKUI\Components\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\NativeMethods.cs" />
     <Compile Include="GKUI\Components\TreeChartBox.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.cs">
       <SubType>Form</SubType>

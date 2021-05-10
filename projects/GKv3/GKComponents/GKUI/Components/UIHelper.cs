@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,47 +31,6 @@ using GKCore.Options;
 
 namespace GKUI.Components
 {
-    public class DefStackLayout : StackLayout
-    {
-        public DefStackLayout(Orientation orientation) : this(10, 10, orientation)
-        {
-        }
-
-        public DefStackLayout(int padding, int spacing, Orientation orientation)
-        {
-            Orientation = orientation;
-            Padding = new Padding(padding);
-            Spacing = spacing;
-        }
-
-        public DefStackLayout(Orientation orientation, int spacing, params Control[] items)
-        {
-            Orientation = orientation;
-            Padding = new Padding(0);
-            Spacing = spacing;
-            foreach (var item in items) Items.Add(item);
-        }
-
-        public DefStackLayout(params Control[] items) : this(Orientation.Vertical, 0, items)
-        {
-        }
-    }
-
-    public class DefTableLayout : TableLayout
-    {
-        public DefTableLayout()
-        {
-            Padding = new Padding(10);
-            Spacing = new Size(10, 10);
-        }
-
-        public DefTableLayout(int columns, int rows) : base(columns, rows)
-        {
-            Padding = new Padding(10);
-            Spacing = new Size(10, 10);
-        }
-    }
-
     /// <summary>
     /// Static functions only for UI implementation.
     /// </summary>
@@ -269,11 +228,6 @@ namespace GKUI.Components
         public static Bitmap LoadResourceImage(string resName)
         {
             return new Bitmap(GKUtils.LoadResourceStream(resName));
-        }
-
-        public static Bitmap LoadResourceImage(Type baseType, string resName)
-        {
-            return new Bitmap(GKUtils.LoadResourceStream(baseType, resName));
         }
 
         public static void SetControlEnabled(Control ctl, bool enabled)

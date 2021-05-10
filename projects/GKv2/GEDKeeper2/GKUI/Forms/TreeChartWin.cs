@@ -66,14 +66,14 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            tbModes.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
             tbFilter.Image = UIHelper.LoadResourceImage("Resources.btn_filter.gif");
             tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
             tbImageSave.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
-
             tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
             tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
+            tbOptions.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
+
             tbDocPrint.Visible = true;
             tbDocPreview.Visible = true;
 
@@ -526,6 +526,7 @@ namespace GKUI.Forms
             tbGensCommon.Text = LangMan.LS(LSID.LSID_Generations);
             tbGensAncestors.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Ancestors);
             tbGensDescendants.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Descendants);
+            tbModes.Text = LangMan.LS(LSID.LSID_ModesTip);
 
             miGensInfCommon.Text = LangMan.LS(LSID.LSID_Unlimited);
             miGensInfCommon.Checked = true;

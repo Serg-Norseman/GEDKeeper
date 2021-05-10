@@ -45,18 +45,20 @@ namespace GKUI.Forms
             tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
-            //SuspendLayout();
-            fImageCtl = new GKUI.Components.ImageBox();
-            fImageCtl.BackgroundColor = SystemColors.ControlBackground; //ControlDark;
+            SuspendLayout();
+            fImageCtl = new ImageBox();
+            fImageCtl.BackgroundColor = SystemColors.ControlBackground;
             fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             fImageCtl.ImageBorderColor = Colors.AliceBlue;
             fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
             Content = fImageCtl;
-            //ResumeLayout();
+            ResumeLayout();
 
-            fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
+            WindowState = WindowState.Maximized;
 
             SetLang();
+
+            fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
 
             fController = new SlideshowController(this);
             fController.Init(baseWin);
@@ -71,16 +73,9 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            fImageCtl.Focus();
-
-            fController.Next();
-        }
-
         private void SlideshowWin_Load(object sender, EventArgs e)
         {
+            fController.Next();
         }
 
         private void SlideshowWin_KeyDown(object sender, KeyEventArgs e)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2011-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2011-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,7 +37,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class HyperView : CustomPanel, IHyperView
+    public class HyperView : ScrollablePanel, IHyperView
     {
         private readonly List<BBTextChunk> fChunks;
         private readonly List<int> fHeights;
@@ -125,6 +125,8 @@ namespace GKUI.Components
         private void ArrangeText()
         {
             try {
+                SuspendLayout();
+
                 fAcceptFontChange = false;
                 fHeights.Clear();
 
@@ -230,6 +232,8 @@ namespace GKUI.Components
                 } finally {
                     fAcceptFontChange = true;
                     SetImageSize(fTextSize);
+
+                    ResumeLayout();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("HyperView.ArrangeText()", ex);
@@ -287,7 +291,6 @@ namespace GKUI.Components
                 Font font = null;
                 try {
                     gfx.FillRectangle(new SolidBrush(BackgroundColor), Viewport);
-                    Font defFont = this.Font;
 
                     var scrollPos = ImageViewport;
                     int xOffset = fBorderWidth + scrollPos.Left;
@@ -313,7 +316,9 @@ namespace GKUI.Components
 
                         string ct = chunk.Text;
                         if (!string.IsNullOrEmpty(ct)) {
-                            brush.Color = (chunk.Color == null) ? TextColor : ((ColorHandler)chunk.Color).Handle;
+                            Color chunkColor = (chunk.Color == null) ? TextColor : ((ColorHandler)chunk.Color).Handle;
+                            if (brush != null) brush.Dispose();
+                            brush = new SolidBrush(chunkColor);
                             font = ProcessFont(font, chunk.Size, (EDFontStyle)chunk.Style);
                             gfx.DrawText(font, brush, xOffset, yOffset, ct);
 

@@ -171,7 +171,7 @@ namespace GKUI.Components
             fModel.AdjustBounds();
 
             ExtSize boundary = GetImageSize();
-            SetImageSize(boundary);
+            SetImageSize(boundary, false);
         }
 
         private void DoRootChanged(GDMIndividualRecord person)

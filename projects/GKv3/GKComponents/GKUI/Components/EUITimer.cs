@@ -28,7 +28,7 @@ namespace GKUI.Components
     /// <summary>
     /// Eto-specific UI timer.
     /// </summary>
-    public class EUITimer : BaseObject, ITimer
+    public sealed class EUITimer : BaseObject, ITimer
     {
         private readonly UITimer fInnerTimer;
         private readonly EventHandler fElapsedHandler;

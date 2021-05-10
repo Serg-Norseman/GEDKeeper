@@ -26,7 +26,7 @@ using GKCore.Interfaces;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    /// WinForms-specific UI timer.
     /// </summary>
     public sealed class WinUITimer : BaseObject, ITimer
     {

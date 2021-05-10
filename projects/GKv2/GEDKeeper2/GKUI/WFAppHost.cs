@@ -20,6 +20,8 @@
 
 using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Windows.Forms;
 using BSLib.Design.Handlers;
 using BSLib.Design.IoC;
@@ -125,7 +127,7 @@ namespace GKUI
                         IntPtr handle = ((Form)win).Handle;
 
                         #if !__MonoCS__
-                        NativeMethods.PostMessage(handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                        PostMessageExt(handle, WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
                         #endif
                     }
                 }
@@ -142,7 +144,7 @@ namespace GKUI
 
             if (frm != null) {
                 #if !__MonoCS__
-                NativeMethods.EnableWindow(frm.Handle, value);
+                EnableWindowExt(frm.Handle, value);
                 #endif
             }
         }
@@ -339,6 +341,27 @@ namespace GKUI
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
         }
+
+        #endregion
+
+        #region NativeMethods
+
+        public const uint WM_USER = 0x0400;
+        public const uint WM_KEEPMODELESS = WM_USER + 111;
+
+        #if !__MonoCS__
+
+        [SecurityCritical, SuppressUnmanagedCodeSecurity]
+        [DllImport("user32.dll", EntryPoint="PostMessage", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool PostMessageExt(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+        [SecurityCritical, SuppressUnmanagedCodeSecurity]
+        [DllImport("user32.dll", EntryPoint="EnableWindow", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool EnableWindowExt(IntPtr hWnd, [MarshalAs(UnmanagedType.Bool)]bool bEnable);
+
+        #endif
 
         #endregion
     }

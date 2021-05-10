@@ -68,7 +68,7 @@ namespace GKUI.Forms
             }
         }
 
-        public StatusForm() : base()
+        public StatusForm()
         {
             fStatusRow = new TableRow() {
                 Cells = { null }

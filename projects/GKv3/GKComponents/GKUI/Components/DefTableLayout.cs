@@ -18,38 +18,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib.Design;
-using BSLib.Design.Graphics;
-using EFListItem = Eto.Forms.IListItem;
+using Eto.Drawing;
+using Eto.Forms;
 
 namespace GKUI.Components
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class GKComboItem<T> : ComboItem<T>, EFListItem
+    public class DefTableLayout : TableLayout
     {
-        public string Key
+        public DefTableLayout()
         {
-            get { return Text; }
+            Padding = new Padding(10);
+            Spacing = new Size(10, 10);
         }
 
-        string EFListItem.Text
+        public DefTableLayout(int columns, int rows) : base(columns, rows)
         {
-            get { return base.Text; }
-            set {  }
-        }
-
-        public GKComboItem(string text) : base(text)
-        {
-        }
-
-        public GKComboItem(string text, T tag) : base(text, tag)
-        {
-        }
-
-        public GKComboItem(string text, T tag, IImage image) : base(text, tag, image)
-        {
+            Padding = new Padding(10);
+            Spacing = new Size(10, 10);
         }
     }
 }

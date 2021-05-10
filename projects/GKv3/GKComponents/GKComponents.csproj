@@ -79,7 +79,10 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKUI\Components\ArborViewer.cs" />
     <Compile Include="GKUI\Components\ControlHandlers.cs" />
-    <Compile Include="GKUI\Components\CustomPanel.cs" />
+    <Compile Include="GKUI\Components\GKTabControl.cs" />
+    <Compile Include="GKUI\Components\ScrollablePanel.cs" />
+    <Compile Include="GKUI\Components\DefStackLayout.cs" />
+    <Compile Include="GKUI\Components\DefTableLayout.cs" />
     <Compile Include="GKUI\Components\EtoGfxRenderer.cs" />
     <Compile Include="GKUI\Components\EtoStdDialogs.cs" />
     <Compile Include="GKUI\Components\EUITimer.cs" />
@@ -103,6 +106,7 @@
     <Compile Include="GKUI\Components\ObservableExtList.cs" />
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\EtoGraphics.cs" />
+    <Compile Include="GKUI\Components\WizardPages.cs" />
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
     <Compile Include="GKUI\Forms\CommonForm.cs" />
     <Compile Include="GKUI\Components\EtoGfxProvider.cs" />

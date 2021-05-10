@@ -61,7 +61,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_Note);
+            Title = LangMan.LS(LSID.LSID_Note);
 
             ddbtnActions.Text = LangMan.LS(LSID.LSID_Actions);
             miSelectAndCopy.Text = LangMan.LS(LSID.LSID_SelectAndCopy);

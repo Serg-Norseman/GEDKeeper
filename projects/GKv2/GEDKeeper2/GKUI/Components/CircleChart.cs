@@ -104,7 +104,7 @@ namespace GKUI.Components
                 fZoom = value;
 
                 ExtSize boundary = GetImageSize();
-                AdjustViewport(boundary, true);
+                SetImageSize(boundary, true);
                 Invalidate();
 
                 DoZoomChanged();
@@ -156,7 +156,7 @@ namespace GKUI.Components
             fModel = new CircleChartModel();
             fModel.SetRenderer(fRenderer);
             fModel.Options = new CircleChartOptions();
-            fModel.Font = AppHost.GfxProvider.CreateFont(this.Font.Name, this.Font.Size, false);
+            fModel.Font = AppHost.GfxProvider.CreateFont(Font.Name, Font.Size, false);
 
             fComponents = new Container();
             fToolTip = new ToolTip(fComponents);
@@ -200,7 +200,7 @@ namespace GKUI.Components
             fModel.AdjustBounds();
 
             ExtSize boundary = GetImageSize();
-            AdjustViewport(boundary, false);
+            SetImageSize(boundary, false);
         }
 
         private void DoRootChanged(GDMIndividualRecord person)
@@ -272,8 +272,7 @@ namespace GKUI.Components
             PointF center = GetCenter(RenderTarget.Screen);
             mX = (mX - center.X) / fZoom;
             mY = (mY - center.Y) / fZoom;
-            CircleSegment result = fModel.FindSegment(mX, mY);
-            return result;
+            return fModel.FindSegment(mX, mY);
         }
 
         #region Protected inherited methods

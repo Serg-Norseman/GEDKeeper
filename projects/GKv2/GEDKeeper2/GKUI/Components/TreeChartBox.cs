@@ -509,7 +509,7 @@ namespace GKUI.Components
             }
 
             var imageSize = GetImageSize();
-            AdjustViewport(imageSize, noRedraw);
+            SetImageSize(imageSize, noRedraw);
         }
 
         public void ToggleCollapse(TreeChartPerson person)
@@ -599,7 +599,7 @@ namespace GKUI.Components
             SaveSelection();
 
             var imageSize = GetImageSize();
-            AdjustViewport(imageSize);
+            SetImageSize(imageSize);
             fTreeControls.UpdateView();
 
             RestoreSelection();
@@ -699,8 +699,9 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            fMouseX = e.X;
-            fMouseY = e.Y;
+            Point pt = e.Location;
+            fMouseX = pt.X;
+            fMouseY = pt.Y;
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -723,7 +724,7 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.ControlsVisible:
-                    fTreeControls.MouseDown(e.X, e.Y);
+                    fTreeControls.MouseDown(pt.X, pt.Y);
                     break;
             }
 
@@ -751,16 +752,16 @@ namespace GKUI.Components
                             ctl.MouseMove(e.X, e.Y);
                             fActiveControl = ctl;
 
-                            var pt = new Point(e.X + Left, e.Y + Top);
-                            fToolTip.Show(ctl.Tip, this, pt, 1500);
+                            fToolTip.Show(ctl.Tip, this, e.X + Left, e.Y + Top, 1500);
                         }
                     }
                     break;
 
                 case ChartControlMode.DragImage:
-                    AdjustScroll(-(e.X - fMouseX), -(e.Y - fMouseY));
-                    fMouseX = e.X;
-                    fMouseY = e.Y;
+                    Point pt = e.Location;
+                    AdjustScroll(-(pt.X - fMouseX), -(pt.Y - fMouseY));
+                    fMouseX = pt.X;
+                    fMouseY = pt.Y;
                     break;
 
                 case ChartControlMode.ControlsVisible:

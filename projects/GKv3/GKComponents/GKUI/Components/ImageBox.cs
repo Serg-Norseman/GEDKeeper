@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -88,7 +88,7 @@ namespace GKUI.Components
     /// <summary>
     ///   Component for displaying images with support for scrolling and zooming.
     /// </summary>
-    public sealed class ImageBox : CustomPanel
+    public sealed class ImageBox : ScrollablePanel
     {
         #region Constants
 
@@ -111,12 +111,12 @@ namespace GKUI.Components
         private ImageBoxBorderStyle fImageBorderStyle;
         private bool fIsPanning;
         private bool fIsSelecting;
-        private bool fShowNamedRegionTips;
         private int fScaledImageHeight;
         private int fScaledImageWidth;
         private Color fSelectionColor;
         private ImageBoxSelectionMode fSelectionMode;
         private RectangleF fSelectionRegion;
+        private bool fShowNamedRegionTips;
         private bool fSizeToFit;
         private Point fStartMousePosition;
         private string fTip;
@@ -393,7 +393,7 @@ namespace GKUI.Components
         /// <summary>
         ///   Initializes a new instance of the <see cref="ImageBox" /> class.
         /// </summary>
-        public ImageBox() : base()
+        public ImageBox()
         {
             CenteredImage = true;
 
@@ -404,12 +404,11 @@ namespace GKUI.Components
             AutoPan = true;
             BackgroundColor = Colors.White;
             DropShadowSize = 3;
+            ImageBorderColor = SystemColors.ControlBackground;
             ImageBorderStyle = ImageBoxBorderStyle.None;
-            ImageBorderColor = SystemColors.ControlBackground; //ControlDark;
             Padding = new Padding(0);
             SelectionColor = SystemColors.Highlight;
 
-            UpdateParams();
             ActualSize();
         }
 
@@ -483,7 +482,7 @@ namespace GKUI.Components
         ///   Gets the image view port.
         /// </summary>
         /// <returns></returns>
-        private Rectangle GetImageViewport() // region to drawing
+        private Rectangle GetImageViewport()
         {
             // FIXME: нужно учесть поправки по границе
             Rectangle viewport;
@@ -543,7 +542,7 @@ namespace GKUI.Components
         ///   Gets the source image region.
         /// </summary>
         /// <returns></returns>
-        private RectangleF GetSourceImageRegion() // source region from image
+        private RectangleF GetSourceImageRegion()
         {
             RectangleF region;
 

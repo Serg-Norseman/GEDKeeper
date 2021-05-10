@@ -63,6 +63,7 @@ namespace GKUI.Forms
             tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
             tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
+            tbOptions.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
 
             ToolBar1.Visible = true;
 
@@ -91,7 +92,7 @@ namespace GKUI.Forms
         {
             base.OnLoad(e);
             fCircleChart.Select();
-            GenChart();
+            UpdateControls();
         }
 
         protected override IPrintable GetPrintable()
@@ -148,9 +149,9 @@ namespace GKUI.Forms
         public override void SetLang()
         {
             if (fCircleChart.ChartType == CircleChartType.Ancestors) {
-                Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+                Title = LangMan.LS(LSID.LSID_AncestorsCircle);
             } else {
-                Text = LangMan.LS(LSID.LSID_DescendantsCircle);
+                Title = LangMan.LS(LSID.LSID_DescendantsCircle);
             }
 
             SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));

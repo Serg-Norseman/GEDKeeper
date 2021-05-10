@@ -254,12 +254,11 @@ namespace GKUI.Components
             base.OnMouseDown(e);
             if (!Focused) Focus();
 
-            if (fNodesDragging)
-            {
-                fDragged = fSys.GetNearestNode(e.Location.X, e.Location.Y);
+            Point mpt = e.Location;
+            if (fNodesDragging) {
+                fDragged = fSys.GetNearestNode(mpt.X, mpt.Y);
 
-                if (fDragged != null)
-                {
+                if (fDragged != null) {
                     fDragged.Fixed = true;
                 }
             }
@@ -269,8 +268,7 @@ namespace GKUI.Components
         {
             base.OnMouseUp(e);
 
-            if (fNodesDragging && fDragged != null)
-            {
+            if (fNodesDragging && fDragged != null) {
                 fDragged.Fixed = false;
                 //fDragged.Mass = 1000;
                 fDragged = null;
@@ -281,9 +279,9 @@ namespace GKUI.Components
         {
             base.OnMouseMove(e);
 
-            if (fNodesDragging && fDragged != null)
-            {
-                fDragged.Pt = fSys.GetModelCoords(e.Location.X, e.Location.Y);
+            Point mpt = e.Location;
+            if (fNodesDragging && fDragged != null) {
+                fDragged.Pt = fSys.GetModelCoords(mpt.X, mpt.Y);
             }
         }
 

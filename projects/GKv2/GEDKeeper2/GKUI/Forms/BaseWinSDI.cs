@@ -183,7 +183,7 @@ namespace GKUI.Forms
         {
             base.WndProc(ref m);
 
-            if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
+            if (m.Msg == WFAppHost.WM_KEEPMODELESS) {
                 AppHost.Instance.WidgetsEnable();
             }
         }

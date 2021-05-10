@@ -20,7 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-
 using GKCore;
 using GKCore.MVP.Views;
 using GKUI.Components;
@@ -35,7 +34,7 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
-            Text = LangMan.LS(LSID.LSID_MIAbout);
+            Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();

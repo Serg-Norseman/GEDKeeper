@@ -111,9 +111,6 @@ namespace GKUI.Components
             fImageBox.AutoPan = true;
             Assert.AreEqual(true, fImageBox.AutoPan);
 
-            fImageBox.AutoCenter = true;
-            Assert.AreEqual(true, fImageBox.AutoCenter);
-
             fImageBox.IsPanning = true;
             Assert.AreEqual(true, fImageBox.IsPanning);
             fImageBox.IsPanning = false;

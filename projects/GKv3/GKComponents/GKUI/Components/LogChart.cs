@@ -59,9 +59,8 @@ namespace GKUI.Components
             public Rectangle Rect;
         }
 
-        private static readonly Brush FRAG_BRUSH = new SolidBrush(Colors.Green);
-        private static readonly Brush EMPTY_BRUSH = new SolidBrush(Colors.Gray);
-        
+        private readonly Brush fEmptyBrush;
+        private readonly Brush fFragBrush;
         private readonly List<Fragment> fList;
         private string fHint;
 
@@ -70,13 +69,16 @@ namespace GKUI.Components
         public LogChart()
         {
             fList = new List<Fragment>();
+
+            fEmptyBrush = new SolidBrush(Colors.Gray);
+            fFragBrush = new SolidBrush(Colors.Green);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                FRAG_BRUSH.Dispose();
-                EMPTY_BRUSH.Dispose();
+                fFragBrush.Dispose();
+                fEmptyBrush.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -197,16 +199,18 @@ namespace GKUI.Components
             if (count > 0) {
                 for (int i = 0; i < count; i++) {
                     Fragment frag = fList[i];
-                    DrawRect(gfx, frag.X, frag.Width, FRAG_BRUSH);
+                    DrawRect(gfx, frag.X, frag.Width, fFragBrush);
                 }
             } else {
-                DrawRect(gfx, 0, Width, EMPTY_BRUSH);
+                DrawRect(gfx, 0, Width, fEmptyBrush);
             }
         }
 
         private void DrawRect(Graphics gfx, int x, int width, Brush lb)
         {
-            gfx.FillRectangle(lb, x, 0, width, Height);
+            if (width > 0) {
+                gfx.FillRectangle(lb, x, 0, width, Height);
+            }
         }
 
         private string HintRequest(int fragmentNumber, int size)

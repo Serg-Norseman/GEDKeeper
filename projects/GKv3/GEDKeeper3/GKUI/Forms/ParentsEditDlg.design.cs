@@ -134,11 +134,8 @@ namespace GKUI.Forms
                     new TableRow {
                         Cells = { panCtlParents }
                     },
-                    new TableRow {
-                        ScaleHeight = true,
-                        Cells = { null }
-                    },
-                    UIHelper.MakeDialogFooter(btnAccept, btnCancel)
+                    null,
+                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }
             };
 

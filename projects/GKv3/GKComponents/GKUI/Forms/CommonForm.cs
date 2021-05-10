@@ -35,7 +35,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        public string Caption
+        public new string Title
         {
             get { return base.Title; }
             set { base.Title = value; }
@@ -53,8 +53,7 @@ namespace GKUI.Forms
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
                 if (component is Control) {
                     ((Control)component).ToolTip = toolTip;
-                } else
-                if (component is ToolItem) {
+                } else if (component is ToolItem) {
                     ((ToolItem)component).ToolTip = toolTip;
                 }
             }
@@ -75,7 +74,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CommonWindow : CommonForm, IWindow
+    public class CommonWindow : CommonForm, IWindow
     {
         public virtual void Show(bool showInTaskbar)
         {
@@ -98,7 +97,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        public string Caption
+        public new string Title
         {
             get { return base.Title; }
             set { base.Title = value; }
@@ -119,7 +118,7 @@ namespace GKUI.Forms
             }
         }
 
-        public CommonDialog() : base()
+        public CommonDialog()
         {
             Maximizable = false;
             Minimizable = false;
@@ -134,8 +133,7 @@ namespace GKUI.Forms
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
                 if (component is Control) {
                     ((Control)component).ToolTip = toolTip;
-                } else
-                if (component is ToolItem) {
+                } else if (component is ToolItem) {
                     ((ToolItem)component).ToolTip = toolTip;
                 }
             }

@@ -18,10 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
+using Eto.Drawing;
+using Eto.Forms;
 
 namespace GKUI.Components
 {
@@ -29,22 +27,20 @@ namespace GKUI.Components
     {
         private const int TAB_PADDING = 5;
 
-        public GKTabControl() : base()
+        public GKTabControl()
         {
-            DrawMode = TabDrawMode.OwnerDrawFixed;
-            Padding = new System.Drawing.Point(20, 4);
-            SizeMode = TabSizeMode.Normal;
+            /*DrawMode = TabDrawMode.OwnerDrawFixed;
+            Padding = new Point(20, 4);
+            SizeMode = TabSizeMode.Normal;*/
         }
 
-        protected override void OnDrawItem(DrawItemEventArgs e)
+        /*protected override void OnDrawItem(DrawItemEventArgs e)
         {
             var gfx = e.Graphics;
-            string tabText = TabPages[e.Index].Text;
+            TabPage tabPage = TabPages[e.Index];
             bool isSelected = (e.State == DrawItemState.Selected);
 
             int iconX = e.Bounds.X, iconY = 0;
-
-            TabPage tabPage = TabPages[e.Index];
 
             // I used this as a rectangle because otherwise there is nasty looking line below each tab.
             Rectangle innerRec = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height + 2);
@@ -69,61 +65,63 @@ namespace GKUI.Components
                     gfx.FillRectangle(brush, innerRec);
             }
 
-            // Draw the tab icon if exists.
-            if (ImageList != null && (tabPage.ImageIndex > -1 || !string.IsNullOrEmpty(tabPage.ImageKey)))
-            {
-                Image img;
-
-                if (tabPage.ImageIndex > -1)
-                    img = ImageList.Images[tabPage.ImageIndex];
-                else
-                    img = ImageList.Images[tabPage.ImageKey];
-
-                if (img != null)
-                {
-                    iconX = innerRec.X + TAB_PADDING;
-                    iconY = (innerRec.Height - img.Height) / 2;
-
-                    gfx.DrawImageUnscaled(img, iconX, iconY + innerRec.Y);
-
-                    iconX += img.Width;
-                }
-            }
-
-            var closeRect = GetCloseButtonRect(innerRec);
-
-            // Draw the close button.
             if (tabPage != null)
             {
+                string tabText = tabPage.Text;
+
+                // Draw the tab icon if exists.
+                if (ImageList != null && (tabPage.ImageIndex > -1 || !string.IsNullOrEmpty(tabPage.ImageKey)))
+                {
+                    Image img;
+
+                    if (tabPage.ImageIndex > -1)
+                        img = ImageList.Images[tabPage.ImageIndex];
+                    else
+                        img = ImageList.Images[tabPage.ImageKey];
+
+                    if (img != null)
+                    {
+                        iconX = innerRec.X + TAB_PADDING;
+                        iconY = (innerRec.Height - img.Height) / 2;
+
+                        gfx.DrawImageUnscaled(img, iconX, iconY + innerRec.Y);
+
+                        iconX += img.Width;
+                    }
+                }
+
+                var closeRect = GetCloseButtonRect(innerRec);
+
+                // Draw the close button.
                 //if (tab.HasCloseButton)
                 {
-                    Image closeImg = ExtResources.iBtnClose;
+                    Image closeImg = UIHelper.LoadResourceImage("Resources.btn_close.png");
 
                     if (closeImg != null) {
                         gfx.DrawImageUnscaled(closeImg, closeRect.Left, closeRect.Top + innerRec.Y);
                     } else {
                         using (var xFont = new Font(e.Font, FontStyle.Bold)) {
                             Font font = (isSelected) ? xFont : e.Font;
-                            gfx.DrawString("x", xFont, Brushes.Black, closeRect.Left, closeRect.Top);
+                            gfx.DrawString("x", font, Brushes.Black, closeRect.Left, closeRect.Top);
                         }
                     }
                 }
+
+                // Draw the text. If the text is too long then cut off the end and add '...'
+                // To avoid this behaviour, set the TabControl.ItemSize to larger value.
+
+                var tabFont = isSelected ? new Font(e.Font, FontStyle.Bold) : e.Font;
+                var tabTextSize = gfx.MeasureString(tabText, tabFont);
+
+                var textX = iconX + TAB_PADDING;
+                var textY = (innerRec.Height - tabTextSize.Height + innerRec.Y) / 2;
+
+                // Calculate if the text fits as is. If not then trim it.
+                if (textX + tabTextSize.Width > closeRect.Left - TAB_PADDING)
+                    tabText = TrimTextToFit(gfx, tabText.Substring(0, tabText.Length - 1), tabFont, closeRect.Left - TAB_PADDING - textX);
+
+                gfx.DrawString(tabText, tabFont, Brushes.Black, textX, textY + innerRec.Y);
             }
-
-            // Draw the text. If the text is too long then cut off the end and add '...'
-            // To avoid this behaviour, set the TabControl.ItemSize to larger value.
-
-            var tabFont = isSelected ? new Font(e.Font, FontStyle.Bold) : e.Font;
-            var tabTextSize = gfx.MeasureString(tabText, tabFont);
-
-            var textX = iconX + TAB_PADDING;
-            var textY = (innerRec.Height - tabTextSize.Height + innerRec.Y) / 2;
-
-            // Calculate if the text fits as is. If not then trim it.
-            if (textX + tabTextSize.Width > closeRect.Left - TAB_PADDING)
-                tabText = TrimTextToFit(gfx, tabText.Substring(0, tabText.Length - 1), tabFont, closeRect.Left - TAB_PADDING - textX);
-
-            gfx.DrawString(tabText, tabFont, Brushes.Black, textX, textY + innerRec.Y);
         }
 
         private static string TrimTextToFit(Graphics g, string text, Font font, int width)
@@ -141,7 +139,7 @@ namespace GKUI.Components
 
         private Rectangle GetCloseButtonRect(Rectangle tabRect)
         {
-            Image closeImg = ExtResources.iBtnClose;
+            Image closeImg = UIHelper.LoadResourceImage("Resources.btn_close.png");
             int closeX = tabRect.Right - TAB_PADDING - closeImg.Width;
             int closeY = (tabRect.Height - closeImg.Height + tabRect.Y) / 2;
             var closeButton = new Rectangle(closeX, closeY, closeImg.Width, closeImg.Height);
@@ -150,12 +148,14 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            base.OnMouseDown(e);
+
             if (e.Button == MouseButtons.Left) {
                 Rectangle closeButton = GetCloseButtonRect(GetTabRect(SelectedIndex));
                 if (closeButton.Contains(e.Location)) {
                     TabPages.Remove(SelectedTab);
                 }
             }
-        }
+        }*/
     }
 }

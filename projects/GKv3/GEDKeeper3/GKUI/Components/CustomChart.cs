@@ -29,7 +29,7 @@ using GKCore.Charts;
 
 namespace GKUI.Components
 {
-    public abstract class CustomChart : CustomPanel, IPrintable
+    public abstract class CustomChart : ScrollablePanel, IPrintable
     {
         private readonly NavigationStack<GDMRecord> fNavman;
         protected ChartRenderer fRenderer;
@@ -38,7 +38,7 @@ namespace GKUI.Components
         public event EventHandler NavRefresh;
 
 
-        protected CustomChart() : base()
+        protected CustomChart()
         {
             CenteredImage = true;
 
@@ -134,10 +134,10 @@ namespace GKUI.Components
             using (var gfx = CreateGraphics()) {
                 image = new Metafile(gfx.GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
             }
+
             using (Graphics gfx = Graphics.FromImage(image)) {
                 RenderStaticImage(gfx, true);
-            }
-             */
+            }*/
 
             var image = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
             using (Graphics gfx = new Graphics(image)) {
@@ -201,13 +201,12 @@ namespace GKUI.Components
 
                 Bitmap pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
                 try {
-                    //using (Graphics gfx = Graphics.FromImage(pic)) {
                     using (Graphics gfx = new Graphics(pic)) {
                         fRenderer.SetTarget(gfx);
                         RenderImage(RenderTarget.RasterFile);
                     }
 
-                    ((Bitmap)pic).Save(fileName, imFmt);
+                    pic.Save(fileName, imFmt);
                 } finally {
                     pic.Dispose();
                 }
