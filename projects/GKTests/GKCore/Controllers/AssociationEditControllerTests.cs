@@ -23,7 +23,7 @@ using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKTests;
-using GKUI;
+using GKUI.Platform;
 using NSubstitute;
 using NUnit.Framework;
 

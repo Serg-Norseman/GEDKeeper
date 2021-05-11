@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2019 by Sergey V. Zhdanovskih, Igor Tyulyakov.
+ *  Copyright (C) 2017-2021 by Sergey V. Zhdanovskih, Igor Tyulyakov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,64 +31,33 @@ namespace GKUI.Components
     /// </summary>
     public class GKPortrait : UserControl, IPortraitControl
     {
-        private int fPixelSpeed = 5;
-        private readonly List<Button> fBtnsList = new List<Button>();
+        private readonly List<Button> fBtnsList;
+        private int fPixelSpeed;
 
 
         public Image Image
         {
-            get { return pictureBox1.Image; }
-            set { pictureBox1.Image = value; }
-        }
-
-        public override Image BackgroundImage
-        {
-            get { return pictureBox1.BackgroundImage; }
-            set { pictureBox1.BackgroundImage = value; }
-        }
-
-        public int SlidePanelHeight
-        {
-            get { return btnPanel.Height; }
-            set { btnPanel.Height = value; }
-        }
-
-        public Panel SlidePanel
-        {
-            get { return btnPanel; }
-            set { btnPanel = value; }
-        }
-
-        public int PixelSpeed
-        {
-            get { return fPixelSpeed; }
-            set { fPixelSpeed = value; }
-        }
-
-        public PictureBoxSizeMode SizeMode
-        {
-            get { return pictureBox1.SizeMode; }
-            set { pictureBox1.SizeMode = value; }
-        }
-
-        public override Cursor Cursor
-        {
-            get {
-                return base.Cursor;
-            }
-            set {
-                base.Cursor = value;
-                pictureBox1.Cursor = value;
-                btnPanel.Cursor = value;
-            }
+            get { return fImageBox.Image; }
+            set { fImageBox.Image = value; }
         }
 
 
         public GKPortrait()
         {
             InitializeComponent();
-            btnPanel.Top = Height;
-            timer.Stop();
+
+            fBtnsList = new List<Button>();
+
+            fImageBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            fImageBox.Cursor = Cursors.Arrow;
+
+            fPixelSpeed = 5;
+
+            fSlidePanel.Height = 36;
+            fSlidePanel.Cursor = Cursors.Arrow;
+            fSlidePanel.Top = Height;
+
+            fTimer.Stop();
         }
 
         public void Activate()
@@ -106,82 +75,61 @@ namespace GKUI.Components
         {
             int lenwagon = 0;
 
-            btnPanel.Controls.Clear();
+            fSlidePanel.Controls.Clear();
 
-            for (int i = 0, c = fBtnsList.Count; i < c; i++)
-            {
+            for (int i = 0, c = fBtnsList.Count; i < c; i++) {
                 lenwagon += (i > 0) ? (8 + fBtnsList[i].Width) : fBtnsList[i].Width;
             }
 
             int center = lenwagon / 2;
-            int startPosition = btnPanel.Width / 2 - center;
+            int startPosition = fSlidePanel.Width / 2 - center;
 
-            for (int i = 0, c = fBtnsList.Count; i < c; i++)
-            {
-                int heightCenter = btnPanel.Height / 2;
+            for (int i = 0, c = fBtnsList.Count; i < c; i++) {
+                int heightCenter = fSlidePanel.Height / 2;
                 int btnCenter = fBtnsList[i].Height / 2;
 
                 fBtnsList[i].Location = new Point(startPosition, heightCenter - btnCenter);
-                btnPanel.Controls.Add(fBtnsList[i]);
+                fSlidePanel.Controls.Add(fBtnsList[i]);
                 startPosition += fBtnsList[i].Width + 8;
             }
         }
 
         private void MoveSlidePanel(object sender, EventArgs e)
         {
-            if (btnPanel.Top <= Height - btnPanel.Height)
-                timer.Stop();
-            else
-                btnPanel.Top -= (btnPanel.Top - 5 > Height - btnPanel.Height) ? fPixelSpeed : btnPanel.Top - (Height - btnPanel.Height);
-        }
-
-        private void PictureBox1MouseHover(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
-        }
-
-        private void Panel1MouseHover(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
-        }
-
-        private void PictureBox1MouseLeave(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
-        }
-
-        private void Panel1MouseLeave(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
+            if (fSlidePanel.Top <= Height - fSlidePanel.Height) {
+                fTimer.Stop();
+            } else {
+                fSlidePanel.Top -= (fSlidePanel.Top - 5 > Height - fSlidePanel.Height) ? fPixelSpeed : fSlidePanel.Top - (Height - fSlidePanel.Height);
+            }
         }
 
         private void CheckCursorPosition(object sender, EventArgs e)
         {
             Point p = PointToClient(Cursor.Position);
-            bool buf = (p.X <= 1 || p.Y <= 1 || p.X >= pictureBox1.Width || p.Y >= pictureBox1.Height - 1);
+            bool buf = (p.X <= 1 || p.Y <= 1 || p.X >= fImageBox.Width || p.Y >= fImageBox.Height - 1);
             if (!buf) {
-                timer.Start();
-                timer.Interval = 1;
-            }
-            else {
-                btnPanel.Top = Height;
-                timer.Stop();
+                fTimer.Start();
+                fTimer.Interval = 1;
+            } else {
+                fSlidePanel.Top = Height;
+                fTimer.Stop();
             }
         }
 
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            btnPanel.Width = Width;
+
+            fSlidePanel.Width = Width;
             CheckCursorPosition(this, e);
         }
 
         #region Design
 
         private System.ComponentModel.IContainer components = null;
-        private PictureBox pictureBox1;
-        private Panel btnPanel;
-        private Timer timer;
+        private PictureBox fImageBox;
+        private Panel fSlidePanel;
+        private Timer fTimer;
 
         protected override void Dispose(bool disposing)
         {
@@ -196,39 +144,30 @@ namespace GKUI.Components
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            pictureBox1 = new PictureBox();
-            btnPanel = new Panel();
-            timer = new Timer(components);
-            ((System.ComponentModel.ISupportInitialize)(pictureBox1)).BeginInit();
+            fTimer = new Timer(components);
+            fTimer.Tick += MoveSlidePanel;
+
             SuspendLayout();
 
-            pictureBox1.BackgroundImageLayout = ImageLayout.Center;
-            pictureBox1.Dock = DockStyle.Fill;
-            pictureBox1.Location = new Point(0, 0);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(178, 188);
-            pictureBox1.TabIndex = 0;
-            pictureBox1.TabStop = false;
-            pictureBox1.MouseLeave += PictureBox1MouseLeave;
-            pictureBox1.MouseHover += PictureBox1MouseHover;
+            fImageBox = new PictureBox();
+            fImageBox.BackgroundImageLayout = ImageLayout.Center;
+            fImageBox.Dock = DockStyle.Fill;
+            fImageBox.Location = new Point(0, 0);
+            fImageBox.Size = new Size(178, 188);
+            fImageBox.MouseLeave += CheckCursorPosition;
+            fImageBox.MouseHover += CheckCursorPosition;
 
-            btnPanel.BackColor = SystemColors.ButtonShadow;
-            btnPanel.Location = new Point(0, 152);
-            btnPanel.Name = "panel1";
-            btnPanel.Size = new Size(178, 36);
-            btnPanel.TabIndex = 1;
-            btnPanel.MouseLeave += Panel1MouseLeave;
-            btnPanel.MouseHover += Panel1MouseHover;
+            fSlidePanel = new Panel();
+            fSlidePanel.BackColor = SystemColors.ButtonShadow;
+            fSlidePanel.Location = new Point(0, 152);
+            fSlidePanel.Size = new Size(178, 36);
+            fSlidePanel.MouseLeave += CheckCursorPosition;
+            fSlidePanel.MouseHover += CheckCursorPosition;
 
-            timer.Tick += MoveSlidePanel;
-
-            AutoScaleDimensions = new SizeF(6F, 13F);
-            AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(btnPanel);
-            Controls.Add(pictureBox1);
+            Controls.Add(fSlidePanel);
+            Controls.Add(fImageBox);
             Name = "GKPortrait";
             Size = new Size(178, 188);
-            ((System.ComponentModel.ISupportInitialize)(pictureBox1)).EndInit();
             ResumeLayout(false);
         }
 

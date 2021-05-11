@@ -29,6 +29,7 @@ namespace GKUI.Forms
 {
     public sealed partial class ProgressDlg : Form
     {
+        private readonly ManualResetEvent fCancelEvent;
         private bool fRequiresClose;
         private DateTime fStartTime;
         private int fVal;
@@ -37,10 +38,18 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            fCancelEvent = new ManualResetEvent(false);
+
             Title = LangMan.LS(LSID.LSID_Progress);
             lblTimePassed.Text = LangMan.LS(LSID.LSID_TimePassed);
             lblTimeRemain.Text = LangMan.LS(LSID.LSID_TimeRemain);
             lblTimeTotal.Text = LangMan.LS(LSID.LSID_TimeTotal);
+            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            fCancelEvent.Set();
         }
 
         #region Private methods
@@ -53,6 +62,7 @@ namespace GKUI.Forms
             ProgressBar1.Value = 0;
             fStartTime = DateTime.Now;
             fVal = -1;
+            btnCancel.Enabled = cancelable;
 
             DoStep(0);
         }
@@ -89,6 +99,15 @@ namespace GKUI.Forms
             return string.Format(null, "{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
         }
 
+        private void InvokeEx(Action method)
+        {
+            try {
+                Application.Instance.Invoke(method);
+            } catch {
+                // dummy
+            }
+        }
+
         #endregion
 
         #region Protected methods
@@ -102,55 +121,44 @@ namespace GKUI.Forms
         protected override void OnClosing(CancelEventArgs e)
         {
             fRequiresClose = false;
+            fCancelEvent.Set();
             base.OnClosing(e);
         }
 
         internal void ProgressInit(string title, int max, bool cancelable = false)
         {
-            try {
-                //DoInit(title, max);
-                Application.Instance.Invoke(delegate { DoInit(title, max); });
-            } catch (Exception ex) {
-                Logger.WriteError("ProgressDlg.ProgressInit()", ex);
-            }
+            InvokeEx(delegate {
+                DoInit(title, max, cancelable);
+            });
         }
 
         internal void ProgressDone()
         {
-            try {
+            InvokeEx(delegate {
                 if (fRequiresClose) {
-                    //DoDone();
-                    Application.Instance.Invoke(delegate { DoDone(); });
+                    DoDone();
                 }
-            } catch (Exception ex) {
-                Logger.WriteError("ProgressDlg.ProgressDone()", ex);
-            }
+            });
         }
 
         internal void ProgressStep()
         {
-            try {
-                //DoStep(fVal + 1);
-                Application.Instance.Invoke(delegate { DoStep(fVal + 1); });
-            } catch {
-                // dummy
-            }
+            InvokeEx(delegate {
+                DoStep(fVal + 1);
+            });
         }
 
         internal void ProgressStep(int value)
         {
-            try {
-                //DoStep(value);
-                Application.Instance.Invoke(delegate { DoStep(value); });
-            } catch {
-                // dummy
-            }
+            InvokeEx(delegate {
+                DoStep(value);
+            });
         }
 
         public bool IsCanceled
         {
             get {
-                return false;
+                return fCancelEvent.WaitOne(0, false);
             }
         }
 

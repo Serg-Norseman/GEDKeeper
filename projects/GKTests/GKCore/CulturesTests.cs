@@ -23,7 +23,7 @@ using GDModel;
 using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKTests;
-using GKUI;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKCore

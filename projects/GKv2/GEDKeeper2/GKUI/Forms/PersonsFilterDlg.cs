@@ -151,7 +151,7 @@ namespace GKUI.Forms
 
         public void SetSpecificLang()
         {
-            Text = LangMan.LS(LSID.LSID_MIFilter);
+            Title = LangMan.LS(LSID.LSID_MIFilter);
             pageSpecificFilter.Text = LangMan.LS(LSID.LSID_PersonsFilter);
             rbAll.Text = LangMan.LS(LSID.LSID_All);
             rbOnlyLive.Text = LangMan.LS(LSID.LSID_OnlyAlive);
@@ -169,7 +169,7 @@ namespace GKUI.Forms
             chkOnlyPatriarchs.Text = LangMan.LS(LSID.LSID_OnlyPatriarchs);
         }
 
-        private void rgLifeClick(object sender, EventArgs e)
+        private void rgLife_CheckedChanged(object sender, EventArgs e)
         {
             txtAliveBeforeDate.Enabled = rbAliveBefore.Checked;
         }

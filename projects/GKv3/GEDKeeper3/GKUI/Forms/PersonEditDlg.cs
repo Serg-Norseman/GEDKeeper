@@ -20,7 +20,6 @@
 
 using System;
 using System.ComponentModel;
-using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
@@ -34,6 +33,7 @@ using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {

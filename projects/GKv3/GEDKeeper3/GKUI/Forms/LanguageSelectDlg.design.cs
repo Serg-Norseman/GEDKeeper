@@ -27,6 +27,7 @@ namespace GKUI.Forms
             btnCancel.Click += CancelClickHandler;
 
             lstLanguages = new GKListView();
+            lstLanguages.Size = new Size(280, 380);
 
             Content = new DefTableLayout {
                 Rows = {

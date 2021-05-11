@@ -27,6 +27,7 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {

@@ -24,7 +24,7 @@ using GKCore.Interfaces;
 using GKCore.Plugins;
 using GKCore.Types;
 using GKTests.Stubs;
-using GKUI;
+using GKUI.Platform;
 using NSubstitute;
 using NUnit.Framework;
 

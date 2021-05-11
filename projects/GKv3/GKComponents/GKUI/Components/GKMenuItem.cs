@@ -22,6 +22,7 @@ using System;
 using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {

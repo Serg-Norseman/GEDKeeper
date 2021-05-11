@@ -28,6 +28,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {

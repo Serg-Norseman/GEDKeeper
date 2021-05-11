@@ -19,23 +19,22 @@
  */
 
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using BSLib;
 using BSLib.Design.Graphics;
-using BSLib.Design.Handlers;
+using Eto.Drawing;
+using Eto.Forms;
 using GKCore.Interfaces;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
-    /// The main implementation of the platform-specific graphics provider for WinForms.
+    /// The main implementation of the platform-specific graphics provider for EtoForms.
     /// </summary>
-    public class WFGfxProvider : IGraphicsProviderEx
+    public class EtoGfxProvider : IGraphicsProviderEx
     {
-        public WFGfxProvider()
+        public EtoGfxProvider()
         {
         }
 
@@ -62,7 +61,7 @@ namespace GKUI.Components
             if (fileName == null)
                 throw new ArgumentNullException("fileName");
 
-            ((ImageHandler)image).Handle.Save(fileName, ImageFormat.Bmp);
+            ((Bitmap)((ImageHandler)image).Handle).Save(fileName, ImageFormat.Bitmap);
         }
 
         public IImage CreateImage(Stream stream)
@@ -98,21 +97,19 @@ namespace GKUI.Components
                 }
 
                 Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                using (Graphics graphic = Graphics.FromImage(newImage)) {
-                    graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graphic.SmoothingMode = SmoothingMode.HighQuality;
-                    graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    graphic.CompositingQuality = CompositingQuality.HighQuality;
+                using (Graphics graphic = new Graphics(newImage)) {
+                    graphic.AntiAlias = true;
+                    graphic.ImageInterpolation = ImageInterpolation.High;
+                    graphic.PixelOffsetMode = PixelOffsetMode.Half;
 
                     if (cutoutIsEmpty) {
                         graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
                     } else {
-                        Rectangle destRect = new Rectangle(0, 0, imgWidth, imgHeight);
-                        //Rectangle srcRect = cutoutArea.ToRectangle();
-                        graphic.DrawImage(bmp, destRect,
-                                          cutoutArea.Left, cutoutArea.Top,
-                                          cutoutArea.GetWidth(), cutoutArea.GetHeight(),
-                                          GraphicsUnit.Pixel);
+                        RectangleF sourRect = new RectangleF(cutoutArea.Left, cutoutArea.Top,
+                                                             cutoutArea.GetWidth(), cutoutArea.GetHeight());
+                        RectangleF destRect = new RectangleF(0, 0, imgWidth, imgHeight);
+
+                        graphic.DrawImage(bmp, sourRect, destRect);
                     }
                 }
 
@@ -120,18 +117,31 @@ namespace GKUI.Components
             }
         }
 
+        public IImage GetResourceImage(string resName, bool makeTransp)
+        {
+            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
+
+            if (makeTransp) {
+                // only for 24, 32 bit images
+                /*Color pixColor = img.GetPixel(0, 0);
+                if (pixColor != Colors.Transparent) {
+                    img = (Bitmap)img.Clone();
+
+                    using (Graphics gfx = new Graphics(img)) {
+                        gfx.Clear(pixColor);
+                    }
+                }*/
+            }
+
+            return new ImageHandler(img);
+        }
+
+        // TODO: Temp version, on future
         public IImage LoadResourceImage(string resName, bool makeTransp)
         {
             Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
 
             if (makeTransp) {
-                img = (Bitmap)img.Clone();
-
-                #if __MonoCS__
-                img.MakeTransparent();
-                #else
-                img.MakeTransparent(img.GetPixel(0, 0));
-                #endif
             }
 
             return new ImageHandler(img);
@@ -227,8 +237,8 @@ namespace GKUI.Components
 
         public IFont CreateFont(string fontName, float size, bool bold)
         {
-            FontStyle style = (!bold) ? FontStyle.Regular : FontStyle.Bold;
-            var sdFont = new Font(fontName, size, style, GraphicsUnit.Point);
+            FontStyle style = (!bold) ? FontStyle.None : FontStyle.Bold;
+            var sdFont = new Font(fontName, size, style);
             return new FontHandler(sdFont);
         }
 
@@ -253,7 +263,7 @@ namespace GKUI.Components
 
         public IColor CreateColor(int a, int r, int g, int b)
         {
-            Color color = Color.FromArgb(a, r, g, b);
+            Color color = Color.FromArgb(r, g, b, a);
             return new ColorHandler(color);
         }
 
@@ -278,10 +288,10 @@ namespace GKUI.Components
 
         public ExtSizeF GetTextSize(string text, IFont font, object target)
         {
-            Graphics gfx = target as Graphics;
-            if (gfx != null && font != null) {
+            //Graphics gfx = target as Graphics;
+            if (/*gfx != null && */font != null) {
                 Font sdFnt = ((FontHandler)font).Handle;
-                var size = gfx.MeasureString(text, sdFnt);
+                var size = sdFnt.MeasureString(text);
                 return new ExtSizeF(size.Width, size.Height);
             } else {
                 return new ExtSizeF();
@@ -291,11 +301,11 @@ namespace GKUI.Components
         public string GetDefaultFontName()
         {
             string fontName;
-            #if __MonoCS__
-            fontName = "Noto Sans";
-            #else
-            fontName = "Verdana"; // "Tahoma";
-            #endif
+            if (Application.Instance.Platform.IsGtk) {
+                fontName = "Noto Sans";
+            } else {
+                fontName = "Verdana"; // "Tahoma";
+            }
             return fontName;
         }
     }

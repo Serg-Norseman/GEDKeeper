@@ -22,6 +22,7 @@
 
 using System.Windows.Forms;
 using GKTests;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms

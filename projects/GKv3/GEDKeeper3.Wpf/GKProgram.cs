@@ -23,6 +23,7 @@ using System.Reflection;
 using Eto;
 using Eto.Forms;
 using GKCore;
+using GKUI.Platform;
 
 [assembly: AssemblyTitle("GEDKeeper3.Wpf")]
 [assembly: AssemblyDescription("")]

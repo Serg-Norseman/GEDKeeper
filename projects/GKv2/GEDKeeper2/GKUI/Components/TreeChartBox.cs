@@ -32,6 +32,7 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 
+using GKUI.Platform;
 using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKUI.Components

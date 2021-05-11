@@ -31,8 +31,7 @@ namespace GKUI.Forms
 {
     public sealed partial class ProgressDlg : Form
     {
-        //private readonly ManualResetEvent initEvent = new ManualResetEvent(false);
-        private readonly ManualResetEvent fCancelEvent = new ManualResetEvent(false);
+        private readonly ManualResetEvent fCancelEvent;
         private bool fRequiresClose;
         private DateTime fStartTime;
         private int fVal;
@@ -40,6 +39,8 @@ namespace GKUI.Forms
         public ProgressDlg()
         {
             InitializeComponent();
+
+            fCancelEvent = new ManualResetEvent(false);
 
             Text = LangMan.LS(LSID.LSID_Progress);
             lblTimePassed.Text = LangMan.LS(LSID.LSID_TimePassed);
@@ -118,20 +119,18 @@ namespace GKUI.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            //initEvent.Set();
             fRequiresClose = true;
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
             fRequiresClose = false;
-            //abortEvent.Set();
+            fCancelEvent.Set();
             base.OnClosing(e);
         }
 
         internal void ProgressInit(string title, int max, bool cancelable = false)
         {
-            //initEvent.WaitOne();
             InvokeEx(delegate {
                 DoInit(title, max, cancelable);
             });
@@ -219,7 +218,6 @@ namespace GKUI.Forms
         {
             if (fProgressForm != null) {
                 fProgressForm.ProgressStep(fVal++);
-                //System.Threading.Thread.Sleep(0); // debug
             }
         }
 
@@ -227,7 +225,6 @@ namespace GKUI.Forms
         {
             if (fProgressForm != null) {
                 fProgressForm.ProgressStep(value);
-                //System.Threading.Thread.Sleep(0); // debug
             }
         }
 

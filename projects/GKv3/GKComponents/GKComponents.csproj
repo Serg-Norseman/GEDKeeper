@@ -78,14 +78,14 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKUI\Components\ArborViewer.cs" />
-    <Compile Include="GKUI\Components\ControlHandlers.cs" />
+    <Compile Include="GKUI\Platform\ControlHandlers.cs" />
     <Compile Include="GKUI\Components\GKTabControl.cs" />
     <Compile Include="GKUI\Components\ScrollablePanel.cs" />
     <Compile Include="GKUI\Components\DefStackLayout.cs" />
     <Compile Include="GKUI\Components\DefTableLayout.cs" />
-    <Compile Include="GKUI\Components\EtoGfxRenderer.cs" />
-    <Compile Include="GKUI\Components\EtoStdDialogs.cs" />
-    <Compile Include="GKUI\Components\EUITimer.cs" />
+    <Compile Include="GKUI\Platform\EtoGfxRenderer.cs" />
+    <Compile Include="GKUI\Platform\EtoStdDialogs.cs" />
+    <Compile Include="GKUI\Platform\EUITimer.cs" />
     <Compile Include="GKUI\Components\GKComboBox.cs" />
     <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKDateBox.cs" />
@@ -105,13 +105,14 @@
     </Compile>
     <Compile Include="GKUI\Components\ObservableExtList.cs" />
     <Compile Include="GKUI\Components\UIHelper.cs" />
-    <Compile Include="GKUI\Components\EtoGraphics.cs" />
+    <Compile Include="GKUI\Platform\EtoGraphics.cs" />
     <Compile Include="GKUI\Components\WizardPages.cs" />
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
     <Compile Include="GKUI\Forms\CommonForm.cs" />
-    <Compile Include="GKUI\Components\EtoGfxProvider.cs" />
+    <Compile Include="GKUI\Platform\EtoGfxProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

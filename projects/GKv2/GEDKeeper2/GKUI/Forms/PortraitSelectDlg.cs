@@ -66,7 +66,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_PortraitSelect);
+            Title = LangMan.LS(LSID.LSID_PortraitSelect);
 
             fController = new PortraitSelectDlgController(this);
             fController.Init(baseWin);

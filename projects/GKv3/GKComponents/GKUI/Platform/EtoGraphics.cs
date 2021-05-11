@@ -22,8 +22,9 @@ using System.IO;
 using BSLib;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
     /// 

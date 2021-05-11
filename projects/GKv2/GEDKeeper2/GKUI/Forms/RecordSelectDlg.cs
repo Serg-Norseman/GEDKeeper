@@ -28,6 +28,7 @@ using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {

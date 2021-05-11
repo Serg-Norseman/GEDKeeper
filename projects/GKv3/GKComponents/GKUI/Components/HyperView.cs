@@ -27,6 +27,7 @@ using Eto.Forms;
 using GKCore;
 using GKCore.BBText;
 using GKCore.MVP.Controls;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {

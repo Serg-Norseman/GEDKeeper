@@ -29,7 +29,7 @@ using GKCore.Interfaces;
 using GKCore.Tools;
 using GKTests;
 using GKTests.Stubs;
-using GKUI;
+using GKUI.Platform;
 using NSubstitute;
 using NUnit.Framework;
 

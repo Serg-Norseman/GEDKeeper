@@ -26,6 +26,7 @@ using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {

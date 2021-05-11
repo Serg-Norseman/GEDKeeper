@@ -42,7 +42,7 @@
     <Compile Include="GKUI\Components\ACOptionsControl.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs" />
     <Compile Include="GKUI\Components\GKMergeControl.cs" />
-    <Compile Include="GKUI\EtoAppHost.cs" />
+    <Compile Include="GKUI\Platform\EtoAppHost.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.design.cs">
       <DependentUpon>AboutDlg.cs</DependentUpon>
@@ -288,5 +288,6 @@
       <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

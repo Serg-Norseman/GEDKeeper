@@ -25,6 +25,7 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 using GKTests;
 

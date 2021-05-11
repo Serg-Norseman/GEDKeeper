@@ -123,13 +123,14 @@ namespace GKUI.Forms
 
         public override void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MIStats);
+            Title = LangMan.LS(LSID.LSID_MIStats);
             grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
 
-            ColumnHeader1.Text = LangMan.LS(LSID.LSID_Parameter);
-            ColumnHeader2.Text = LangMan.LS(LSID.LSID_Total);
-            ColumnHeader3.Text = LangMan.LS(LSID.LSID_ManSum);
-            ColumnHeader4.Text = LangMan.LS(LSID.LSID_WomanSum);
+            lvSummary.ClearColumns();
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100);
 
             SetToolTip(tbExcelExport, LangMan.LS(LSID.LSID_MIExportToExcelFile));
             fController.UpdateCommonStats();

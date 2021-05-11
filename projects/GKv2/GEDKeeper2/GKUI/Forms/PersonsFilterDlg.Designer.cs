@@ -194,7 +194,7 @@
             this.rbAliveBefore.Size = new System.Drawing.Size(108, 21);
             this.rbAliveBefore.TabIndex = 3;
             this.rbAliveBefore.Text = "rbAliveBefore";
-            this.rbAliveBefore.Click += new System.EventHandler(this.rgLifeClick);
+            this.rbAliveBefore.CheckedChanged += new System.EventHandler(this.rgLife_CheckedChanged);
             // 
             // rbOnlyDead
             // 
@@ -205,7 +205,7 @@
             this.rbOnlyDead.Size = new System.Drawing.Size(102, 21);
             this.rbOnlyDead.TabIndex = 2;
             this.rbOnlyDead.Text = "rbOnlyDead";
-            this.rbOnlyDead.Click += new System.EventHandler(this.rgLifeClick);
+            this.rbOnlyDead.CheckedChanged += new System.EventHandler(this.rgLife_CheckedChanged);
             // 
             // rbOnlyLive
             // 
@@ -216,7 +216,7 @@
             this.rbOnlyLive.Size = new System.Drawing.Size(94, 21);
             this.rbOnlyLive.TabIndex = 1;
             this.rbOnlyLive.Text = "rbOnlyLive";
-            this.rbOnlyLive.Click += new System.EventHandler(this.rgLifeClick);
+            this.rbOnlyLive.CheckedChanged += new System.EventHandler(this.rgLife_CheckedChanged);
             // 
             // rbAll
             // 
@@ -227,7 +227,7 @@
             this.rbAll.Size = new System.Drawing.Size(54, 21);
             this.rbAll.TabIndex = 0;
             this.rbAll.Text = "rbAll";
-            this.rbAll.Click += new System.EventHandler(this.rgLifeClick);
+            this.rbAll.CheckedChanged += new System.EventHandler(this.rgLife_CheckedChanged);
             // 
             // txtName
             // 

@@ -24,6 +24,7 @@ using BSLib;
 using BSLib.Design.Handlers;
 using GDModel;
 using GKCore;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Components

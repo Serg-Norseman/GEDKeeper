@@ -678,7 +678,7 @@ namespace GKUI.Components
             Columns.Clear();
         }
 
-        public void AddColumn(string caption, int width, bool autoSize)
+        public void AddColumn(string caption, int width, bool autoSize = false)
         {
             if (autoSize) width = -1;
             Columns.Add(caption, width, HorizontalAlignment.Left);

@@ -30,7 +30,7 @@ using GKCore.Options;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
-using GKUI;
+using GKUI.Platform;
 using GKUI.Components;
 using NUnit.Framework;
 

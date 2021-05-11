@@ -30,6 +30,7 @@ using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.Types;
 using GKUI.Components;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {

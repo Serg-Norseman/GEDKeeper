@@ -20,7 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;

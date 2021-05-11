@@ -27,8 +27,9 @@ using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using GKCore.Charts;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
     /// 

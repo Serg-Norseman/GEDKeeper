@@ -23,8 +23,9 @@ using BSLib;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using GKCore.Charts;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
     /// 

@@ -34,7 +34,7 @@ using GKCore.Options;
 using GKUI.Components;
 using GKUI.Forms;
 
-namespace GKUI
+namespace GKUI.Platform
 {
     /// <summary>
     /// The main implementation of the platform-specific application's host for

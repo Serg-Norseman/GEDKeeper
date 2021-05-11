@@ -19,23 +19,23 @@
  */
 
 using System;
+using System.Windows.Forms;
 using BSLib;
-using Eto.Forms;
 using GKCore.Interfaces;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
-    /// Eto-specific UI timer.
+    /// WinForms-specific UI timer.
     /// </summary>
-    public sealed class EUITimer : BaseObject, ITimer
+    public sealed class WinUITimer : BaseObject, ITimer
     {
-        private readonly UITimer fInnerTimer;
+        private readonly Timer fInnerTimer;
         private readonly EventHandler fElapsedHandler;
 
         public bool Enabled
         {
-            get { return fInnerTimer.Started; }
+            get { return fInnerTimer.Enabled; }
             set {
                 if (value) {
                     fInnerTimer.Start();
@@ -50,17 +50,17 @@ namespace GKUI.Components
         /// </summary>
         public double Interval
         {
-            get { return fInnerTimer.Interval * 1000; }
-            set { fInnerTimer.Interval = value / 1000; }
+            get { return fInnerTimer.Interval; }
+            set { fInnerTimer.Interval = (int)value; }
         }
 
-        public EUITimer(double msInterval, EventHandler elapsedHandler)
+        public WinUITimer(double msInterval, EventHandler elapsedHandler)
         {
             fElapsedHandler = elapsedHandler;
 
-            fInnerTimer = new UITimer();
-            fInnerTimer.Interval = msInterval / 1000;
-            fInnerTimer.Elapsed += ElapsedEventHandler;
+            fInnerTimer = new Timer();
+            fInnerTimer.Interval = (int)msInterval;
+            fInnerTimer.Tick += ElapsedEventHandler;
         }
 
         protected override void Dispose(bool disposing)

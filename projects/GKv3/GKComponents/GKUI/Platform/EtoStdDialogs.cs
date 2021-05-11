@@ -24,8 +24,9 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.MVP.Views;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
     /// The implementation of the contract for working with EtoForms dialogs.

@@ -19,7 +19,7 @@
  */
 
 using BSLib;
-using GKUI;
+using GKUI.Platform;
 using NSubstitute;
 using NUnit.Framework;
 

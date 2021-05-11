@@ -24,8 +24,9 @@ using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.MVP.Views;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
     /// The implementation of the contract for working with WinForms dialogs.
