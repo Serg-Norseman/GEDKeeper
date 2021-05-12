@@ -2003,7 +2003,7 @@
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(2);
             this.lvPlugins.MultiSelect = false;
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.Order = BSLib.Design.BSDTypes.SortOrder.None;
+            this.lvPlugins.SortOrder = BSLib.Design.BSDTypes.SortOrder.None;
             this.lvPlugins.OwnerDraw = true;
             this.lvPlugins.Size = new System.Drawing.Size(575, 512);
             this.lvPlugins.SortColumn = 0;

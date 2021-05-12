@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -31,9 +30,9 @@ namespace GKUI.Components
     public class FilterGridView : DataGridView, IFilterGridView
     {
         private readonly IListManager fListMan;
-
         private string[] fFields;
         private MaskedTextBox fMaskedTextBox;
+
 
         public FilterGridView(IListManager listMan)
         {

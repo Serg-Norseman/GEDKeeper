@@ -102,7 +102,7 @@ namespace GKUI.Forms
             fMediaList = new GKSheetList(pageMultimedia);
 
             // SetLang()
-            Text = LangMan.LS(LSID.LSID_Location);
+            Title = LangMan.LS(LSID.LSID_Location);
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             pageCommon.Text = LangMan.LS(LSID.LSID_Common);
@@ -111,9 +111,9 @@ namespace GKUI.Forms
             lblName.Text = LangMan.LS(LSID.LSID_Title);
             lblLatitude.Text = LangMan.LS(LSID.LSID_Latitude);
             lblLongitude.Text = LangMan.LS(LSID.LSID_Longitude);
-            ListGeoCoords.Columns[0].Text = LangMan.LS(LSID.LSID_Title);
-            ListGeoCoords.Columns[1].Text = LangMan.LS(LSID.LSID_Latitude);
-            ListGeoCoords.Columns[2].Text = LangMan.LS(LSID.LSID_Longitude);
+            ListGeoCoords.SetColumnCaption(0, LangMan.LS(LSID.LSID_Title));
+            ListGeoCoords.SetColumnCaption(1, LangMan.LS(LSID.LSID_Latitude));
+            ListGeoCoords.SetColumnCaption(2, LangMan.LS(LSID.LSID_Longitude));
             btnShowOnMap.Text = LangMan.LS(LSID.LSID_Show);
             grpSearch.Text = LangMan.LS(LSID.LSID_SearchCoords);
             btnSearch.Text = LangMan.LS(LSID.LSID_Search);
@@ -174,7 +174,7 @@ namespace GKUI.Forms
 
         private void EditName_TextChanged(object sender, EventArgs e)
         {
-            Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Location), txtName.Text);
+            Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Location), txtName.Text);
         }
 
         private void btnShowOnMap_Click(object sender, EventArgs e)

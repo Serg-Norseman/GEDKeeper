@@ -91,7 +91,7 @@
     <Compile Include="GKUI\Components\GKDateBox.cs" />
     <Compile Include="GKUI\Components\GKInputBox.cs" />
     <Compile Include="GKUI\Components\GKListView.cs" />
-    <Compile Include="GKUI\Components\GKMenuItem.cs" />
+    <Compile Include="GKUI\Platform\MenuItemEx.cs" />
     <Compile Include="GKUI\Components\GKPortrait.cs" />
     <Compile Include="GKUI\Components\GKSheetList.cs" />
     <Compile Include="GKUI\Components\GKTreeNode.cs" />

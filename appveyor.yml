@@ -37,5 +37,5 @@ build:
   verbosity: minimal
 
 test_script:
-  - .\packages\OpenCover.4.7.922\tools\OpenCover.Console.exe -register -target:"packages\NUnit.ConsoleRunner.3.12.0\tools\nunit3-console.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"GKTests.dll /framework:net-4.5" -output:".\coverage.xml" -filter:"+[*]* "
+  - .\packages\OpenCover.4.7.1189\tools\OpenCover.Console.exe -register -target:"packages\NUnit.ConsoleRunner.3.12.0\tools\nunit3-console.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"GKTests.dll /framework:net-4.5" -output:".\coverage.xml" -filter:"+[*]* "
   - codecov -f "coverage.xml" -X gcov

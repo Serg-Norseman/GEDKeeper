@@ -147,11 +147,12 @@ namespace GKUI.Forms
             summary.OnLink += mPersonSummaryLink;
             summary.Font = UIHelper.GetDefaultFont();
 
-            var recView = new GKListView(ListManager.Create(fContext, recType));
+            var recView = new GKListView();
             recView.MouseDoubleClick += miRecordEdit_Click;
             recView.SelectedItemsChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
             recView.ContextMenu = contextMenu;
+            recView.ListMan = ListManager.Create(fContext, recType);
 
             Splitter spl = new Splitter();
             spl.Panel1 = recView;

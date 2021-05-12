@@ -59,16 +59,9 @@ namespace GKUI.Forms
             fTempColumns = IndividualListMan.CreateIndividualListColumns();
 
             cmbGeoSearchCountry.Items.Clear();
-            foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures)) {
-                RegionInfo ri;
-                try {
-                    ri = new RegionInfo(ci.Name);
-                } catch {
-                    continue;
-                }
-                cmbGeoSearchCountry.Items.Add(ri.TwoLetterISORegionName);
+            foreach (var ci in GKUtils.GetCountries()) {
+                cmbGeoSearchCountry.Items.Add(ci);
             }
-            cmbGeoSearchCountry.Sorted = true;
 
             SetLang();
             UpdateForm();
@@ -649,7 +642,7 @@ namespace GKUI.Forms
         {
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_MIOptions);
+            Title = LangMan.LS(LSID.LSID_MIOptions);
 
             // Common
             pageCommon.Text = LangMan.LS(LSID.LSID_Common);

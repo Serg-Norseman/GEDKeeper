@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Globalization;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
@@ -56,6 +57,11 @@ namespace GKUI.Forms
 
             fOptions = GlobalOptions.Instance;
             fTempColumns = IndividualListMan.CreateIndividualListColumns();
+
+            cmbGeoSearchCountry.Items.Clear();
+            foreach (var ci in GKUtils.GetCountries()) {
+                cmbGeoSearchCountry.Items.Add(ci);
+            }
 
             lstPersonColumns.AddCheckedColumn("x", 75);
             lstPersonColumns.AddColumn("Title", 100);
@@ -168,6 +174,9 @@ namespace GKUI.Forms
             chkShowPlaces.Checked = fOptions.TreeChartOptions.ShowPlaces;
             chkHideUnknownSpouses.Checked = fOptions.TreeChartOptions.HideUnknownSpouses;
             chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
+            chkDottedLinesOfAdoptedChildren.Checked = fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren;
+            chkSeparateDAPLines.Checked = fOptions.TreeChartOptions.SeparateDatesAndPlacesLines;
+            chkBoldNames.Checked = fOptions.TreeChartOptions.BoldNames;
 
             lblMaleColor.BackgroundColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
             lblFemaleColor.BackgroundColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.FemaleColor);
@@ -180,7 +189,12 @@ namespace GKUI.Forms
             numGenDist.Value = fOptions.TreeChartOptions.LevelDistance;
             numSpouseDist.Value = fOptions.TreeChartOptions.SpouseDistance;
 
+            chkSeparateDepth.Checked = fOptions.TreeChartOptions.SeparateDepth;
+            chkSeparateDepth_CheckedChanged(null, null);
+
             numDefaultDepth.Value = fOptions.TreeChartOptions.DepthLimit;
+            numDefaultDepthAncestors.Value = fOptions.TreeChartOptions.DepthLimitAncestors;
+            numDefaultDepthDescendants.Value = fOptions.TreeChartOptions.DepthLimitDescendants;
 
             UpdateTreeChartFont();
         }
@@ -302,6 +316,7 @@ namespace GKUI.Forms
             UpdateLangs();
 
             cmbGeocoder.Text = fOptions.Geocoder;
+            cmbGeoSearchCountry.Text = fOptions.GeoSearchCountry;
 
             // media
             UpdateMediaOptions();
@@ -444,6 +459,9 @@ namespace GKUI.Forms
             fOptions.TreeChartOptions.ShowPlaces = chkShowPlaces.Checked.GetValueOrDefault();
             fOptions.TreeChartOptions.HideUnknownSpouses = chkHideUnknownSpouses.Checked.GetValueOrDefault();
             fOptions.CheckTreeSize = chkCheckTreeSize.Checked.GetValueOrDefault();
+            fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren = chkDottedLinesOfAdoptedChildren.Checked.GetValueOrDefault();
+            fOptions.TreeChartOptions.SeparateDatesAndPlacesLines = chkSeparateDAPLines.Checked.GetValueOrDefault();
+            fOptions.TreeChartOptions.BoldNames = chkBoldNames.Checked.GetValueOrDefault();
 
             fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackgroundColor);
             fOptions.TreeChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackgroundColor);
@@ -456,7 +474,10 @@ namespace GKUI.Forms
             fOptions.TreeChartOptions.LevelDistance = (int)numGenDist.Value;
             fOptions.TreeChartOptions.SpouseDistance = (int)numSpouseDist.Value;
 
+            fOptions.TreeChartOptions.SeparateDepth = chkSeparateDepth.Checked.GetValueOrDefault();
             fOptions.TreeChartOptions.DepthLimit = (int)numDefaultDepth.Value;
+            fOptions.TreeChartOptions.DepthLimitAncestors = (int)numDefaultDepthAncestors.Value;
+            fOptions.TreeChartOptions.DepthLimitDescendants = (int)numDefaultDepthDescendants.Value;
         }
 
         private void AcceptCircleChartsOptions()
@@ -541,6 +562,7 @@ namespace GKUI.Forms
             AcceptLangs();
 
             fOptions.Geocoder = cmbGeocoder.Text;
+            fOptions.GeoSearchCountry = cmbGeoSearchCountry.Text;
 
             // media
             AcceptMediaOptions();
@@ -588,11 +610,6 @@ namespace GKUI.Forms
         private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             fTempColumns.OrderedColumns[e.Index].CurActive = e.NewValue;
-        }
-
-        private void chkPortraitsVisible_CheckedChanged(object sender, EventArgs e)
-        {
-            chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked.GetValueOrDefault();
         }
 
         public void SetPage(OptionsPage page)
@@ -660,6 +677,7 @@ namespace GKUI.Forms
 
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
             lblGeocoder.Text = LangMan.LS(LSID.LSID_Geocoder);
+            lblGeoSearchCountry.Text = LangMan.LS(LSID.LSID_GeoSearchCountryRestriction);
 
             // Multimedia
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
@@ -702,8 +720,11 @@ namespace GKUI.Forms
             chkInvertedTree.Text = LangMan.LS(LSID.LSID_InvertedTree);
             chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
             chkShowPlaces.Text = LangMan.LS(LSID.LSID_ShowPlaces);
+            chkSeparateDAPLines.Text = LangMan.LS(LSID.LSID_SeparateDatesAndPlacesLines);
             chkHideUnknownSpouses.Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
             chkCheckTreeSize.Text = LangMan.LS(LSID.LSID_CheckTreeSize);
+            chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
+            chkBoldNames.Text = LangMan.LS(LSID.LSID_BoldNames);
 
             grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
             lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
@@ -719,7 +740,10 @@ namespace GKUI.Forms
             lblGenDist.Text = LangMan.LS(LSID.LSID_GenDist);
             lblSpouseDist.Text = LangMan.LS(LSID.LSID_SpouseDist);
 
+            chkSeparateDepth.Text = LangMan.LS(LSID.LSID_SeparateDepth);
             lblDefaultDepth.Text = LangMan.LS(LSID.LSID_DefaultDepth);
+            lblDefaultDepthAncestors.Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_Ancestors);
+            lblDefaultDepthDescendants.Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_Descendants);
 
             pageAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
 
@@ -770,6 +794,25 @@ namespace GKUI.Forms
 
             // Plugins
             pagePlugins.Text = LangMan.LS(LSID.LSID_Plugins);
+        }
+
+        private void chkTreeChartOption_CheckedChanged(object sender, EventArgs e)
+        {
+            chkShowPlaces.Enabled = !chkOnlyYears.Checked.GetValueOrDefault();
+            chkSeparateDAPLines.Enabled = chkShowPlaces.Checked.GetValueOrDefault() && !chkOnlyYears.Checked.GetValueOrDefault();
+
+            chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked.GetValueOrDefault();
+
+            chkDiffLines.Enabled = chkName.Checked.GetValueOrDefault() && chkPatronymic.Checked.GetValueOrDefault();
+
+            chkOnlyYears.Enabled = chkBirthDate.Checked.GetValueOrDefault() && chkDeathDate.Checked.GetValueOrDefault();
+        }
+
+        private void chkSeparateDepth_CheckedChanged(object sender, EventArgs e)
+        {
+            numDefaultDepth.Enabled = !chkSeparateDepth.Checked.GetValueOrDefault();
+            numDefaultDepthAncestors.Enabled = chkSeparateDepth.Checked.GetValueOrDefault();
+            numDefaultDepthDescendants.Enabled = chkSeparateDepth.Checked.GetValueOrDefault();
         }
     }
 }

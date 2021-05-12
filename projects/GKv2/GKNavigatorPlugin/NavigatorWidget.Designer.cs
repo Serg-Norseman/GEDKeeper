@@ -57,7 +57,7 @@
             this.lvData.HideSelection = false;
             this.lvData.Location = new System.Drawing.Point(0, 0);
             this.lvData.Name = "lvData";
-            this.lvData.Order = BSLib.Design.BSDTypes.SortOrder.None;
+            this.lvData.SortOrder = BSLib.Design.BSDTypes.SortOrder.None;
             this.lvData.OwnerDraw = true;
             this.lvData.Size = new System.Drawing.Size(391, 498);
             this.lvData.SortColumn = 0;

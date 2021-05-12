@@ -98,6 +98,10 @@ namespace GKUI.Forms
             chkDeath.Enabled = radTotal.Checked;
             chkResidence.Enabled = radTotal.Checked;
             cmbPersons.Enabled = radSelected.Checked;
+
+            if (radTotal.Checked) {
+                chkLinesVisible.Checked = false;
+            }
             chkLinesVisible.Enabled = radSelected.Checked;
         }
 
