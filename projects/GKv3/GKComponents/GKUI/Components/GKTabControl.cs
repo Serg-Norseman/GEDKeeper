@@ -23,7 +23,7 @@ using Eto.Forms;
 
 namespace GKUI.Components
 {
-    public class GKTabControl : TabControl
+    public class GKTabControl : DocumentControl
     {
         private const int TAB_PADDING = 5;
 

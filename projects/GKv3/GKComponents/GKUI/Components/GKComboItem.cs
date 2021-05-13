@@ -20,14 +20,17 @@
 
 using BSLib.Design;
 using BSLib.Design.Graphics;
+using Eto.Drawing;
+using GKUI.Platform;
 using EFListItem = Eto.Forms.IListItem;
+using EFImageListItem = Eto.Forms.IImageListItem;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKComboItem<T> : ComboItem<T>, EFListItem
+    public class GKComboItem<T> : ComboItem<T>, EFListItem, EFImageListItem
     {
         public string Key
         {
@@ -38,6 +41,15 @@ namespace GKUI.Components
         {
             get { return base.Text; }
             set {  }
+        }
+
+        Image EFImageListItem.Image
+        {
+            get {
+                var image = base.Image;
+                var efImage = (image == null) ? null : ((ImageHandler) image).Handle;
+                return efImage;
+            }
         }
 
         public GKComboItem(string text) : base(text)

@@ -596,9 +596,11 @@ namespace GKUI.Forms
             Closing += Form_Closing;
             Closed += Form_Closed;
             Load += Form_Load;
-            //DragDrop += Form_DragDrop;
-            //DragEnter += Form_DragEnter;
             KeyDown += Form_KeyDown;
+
+            AllowDrop = true;
+            DragDrop += Form_DragDrop;
+            DragEnter += Form_DragEnter;
 
             UIHelper.SetPredefProperties(this, 980, 460, true, true);
             ResumeLayout();

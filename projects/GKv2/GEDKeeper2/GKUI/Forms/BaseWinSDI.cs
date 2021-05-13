@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -752,11 +752,11 @@ namespace GKUI.Forms
                 try {
                     AppHost.Instance.BeginLoading();
 
-                    Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
-                    if (a == null) return;
+                    var files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                    if (files == null) return;
 
-                    for (int i = 0; i < a.Length; i++) {
-                        string fn = a.GetValue(i).ToString();
+                    for (int i = 0; i < files.Length; i++) {
+                        string fn = files[i];
                         AppHost.Instance.LoadBase(this, fn);
                     }
                 } finally {

@@ -70,7 +70,7 @@
 		    this.ListSelected.Location = new System.Drawing.Point(11, 10);
 		    this.ListSelected.Name = "ListSelected";
 		    this.ListSelected.Size = new System.Drawing.Size(483, 395);
-		    this.ListSelected.View = System.Windows.Forms.View.List;
+		    this.ListSelected.View = System.Windows.Forms.View.Details;
 		    this.ListSelected.TabIndex = 1;
 		    // 
 		    // ListSkipped
@@ -78,7 +78,7 @@
 		    this.ListSkipped.Location = new System.Drawing.Point(504, 10);
 		    this.ListSkipped.Name = "ListSkipped";
 		    this.ListSkipped.Size = new System.Drawing.Size(483, 395);
-            this.ListSkipped.View = System.Windows.Forms.View.List;
+            this.ListSkipped.View = System.Windows.Forms.View.Details;
 		    this.ListSkipped.TabIndex = 2;
 		    // 
 		    // btnSelectFamily

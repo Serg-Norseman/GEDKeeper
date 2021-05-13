@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,7 +34,6 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform;
@@ -720,10 +719,10 @@ namespace GKUI.Forms
             }
         }
 
-        // FIXME: Eto restriction
-        /*private void Form_DragEnter(object sender, DragEventArgs e)
+        private void Form_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+            var files = e.Data.Uris;
+            e.Effects = (files != null) ? DragEffects.Copy : DragEffects.None;
         }
 
         private void Form_DragDrop(object sender, DragEventArgs e)
@@ -732,11 +731,13 @@ namespace GKUI.Forms
                 try {
                     AppHost.Instance.BeginLoading();
 
-                    Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
-                    if (a == null) return;
+                    var files = e.Data.Uris;
+                    if (files == null) return;
 
-                    for (int i = 0; i < a.Length; i++) {
-                        string fn = a.GetValue(i).ToString();
+                    for (int i = 0; i < files.Length; i++) {
+                        var uri = files[i];
+                        if (!uri.IsFile) continue;
+                        string fn = uri.AbsolutePath;
                         AppHost.Instance.LoadBase(this, fn);
                     }
                 } finally {
@@ -745,7 +746,7 @@ namespace GKUI.Forms
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.Form_DragDrop()", ex);
             }
-        }*/
+        }
 
         private void UpdateShieldState()
         {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -228,24 +228,26 @@ namespace GKUI.Forms
             fController.RemovePlace();
         }
 
-        // FIXME: GKv3 DevRestriction
-        /*private void EditEventDate1_DragOver(object sender, DragEventArgs e)
+        private void txtEventDateX_DragOver(object sender, DragEventArgs e)
         {
-            e.Effect = e.Data.GetDataPresent(typeof(string)) ? DragDropEffects.Move : DragDropEffects.None;
+            // FIXME: don't work in Eto 2.4.1?
+            var data = e.Data.Text;
+            e.Effects = !string.IsNullOrEmpty(data) ? DragEffects.Move : DragEffects.None;
         }
 
-        private void EditEventDate1_DragDrop(object sender, DragEventArgs e)
+        private void txtEventDateX_DragDrop(object sender, DragEventArgs e)
         {
+            // FIXME: don't work in Eto 2.4.1?
             try {
-                if (e.Data.GetDataPresent(typeof(string))) {
+                /*if (e.Data.GetDataPresent(typeof(string))) {
                     string txt = e.Data.GetData(typeof(string)) as string;
                     string[] dt = ((MaskedTextBox)sender).Text.Split('.');
                     ((MaskedTextBox)sender).Text = dt[0] + '.' + dt[1] + '.' + txt;
-                }
+                }*/
             } catch (Exception ex) {
                 Logger.WriteError("EventEditDlg.DragDrop()", ex);
             }
-        }*/
+        }
 
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
         {
