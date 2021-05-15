@@ -1694,8 +1694,7 @@ namespace GDModel.Providers.GEDCOM
 
         internal static StackTuple AddBaseTag(GDMTag owner, int tagLevel, int tagId, string tagValue)
         {
-            var ownerTag = (GDMTag)owner;
-            GDMTag curTag = ownerTag.AddTag(new GDMValueTag(tagId, tagValue));
+            GDMTag curTag = owner.AddTag(new GDMValueTag(tagId, tagValue));
 
             return CreateReaderStackTuple(tagLevel, curTag, null);
         }

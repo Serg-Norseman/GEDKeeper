@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using BSLib.Design.Handlers;
 using GKCore.BBText;
-using GKUI;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKCore

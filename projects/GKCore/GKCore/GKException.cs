@@ -27,17 +27,8 @@ namespace GKCore
     /// </summary>
     public class GKException : Exception
     {
-        public GKException()
-        {
-        }
-
         public GKException(string message)
             : base(message)
-        {
-        }
-
-        public GKException(string message, Exception innerException)
-            : base(message, innerException)
         {
         }
     }

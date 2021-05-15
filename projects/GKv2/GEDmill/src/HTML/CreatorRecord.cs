@@ -75,7 +75,7 @@ namespace GEDmill.HTML
             if ((r.UserReferences.Count > 0)
               || (!string.IsNullOrEmpty(r.AutomatedRecordID))
               || (r.ChangeDate != null)
-              || (CConfig.Instance.CustomFooter != "")) {
+              || (GMConfig.Instance.CustomFooter != "")) {
                 foreach (GDMUserReference urn in r.UserReferences) {
                     string idType = EscapeHTML(urn.ReferenceType, false);
                     if (idType == "") {
@@ -90,8 +90,8 @@ namespace GEDmill.HTML
 
                 if (r.ChangeDate != null) {
                     GDMChangeDate changeDate = r.ChangeDate;
-                    string dtx = r.ChangeDate.ToString();
-                    if (changeDate != null && dtx != null) {
+                    if (changeDate != null) {
+                        string dtx = changeDate.ToString();
                         if (dtx != "") {
                             dtx = " " + dtx;
                         }
@@ -99,19 +99,19 @@ namespace GEDmill.HTML
                     }
                 }
 
-                if (CConfig.Instance.CustomFooter != "") {
-                    if (CConfig.Instance.FooterIsHtml) {
-                        f.WriteLine("<p>{0}</p>", CConfig.Instance.CustomFooter);
+                if (GMConfig.Instance.CustomFooter != "") {
+                    if (GMConfig.Instance.FooterIsHtml) {
+                        f.WriteLine("<p>{0}</p>", GMConfig.Instance.CustomFooter);
                     } else {
-                        f.WriteLine("<p>{0}</p>", EscapeHTML(CConfig.Instance.CustomFooter, false));
+                        f.WriteLine("<p>{0}</p>", EscapeHTML(GMConfig.Instance.CustomFooter, false));
                     }
                 }
             }
             f.WriteLine("      </div> <!-- footer -->");
 
-            f.WriteLine("<p class=\"plain\">Page created using GEDmill {0}</p>", CConfig.SoftwareVersion);
+            f.WriteLine("<p class=\"plain\">Page created using GEDmill {0}</p>", GMConfig.SoftwareVersion);
 
-            if (CConfig.Instance.IncludeValiditySticker) {
+            if (GMConfig.Instance.IncludeValiditySticker) {
                 OutputValiditySticker(f);
             }
         }
@@ -168,15 +168,15 @@ namespace GEDmill.HTML
                 string originalFilename = Path.GetFileName(mmFilename);
 
                 bool pictureFormat = GMHelper.IsPictureFormat(mfr);
-                if (pictureFormat || CConfig.Instance.AllowNonPictures) {
-                    if (!pictureFormat && CConfig.Instance.AllowNonPictures) {
+                if (pictureFormat || GMConfig.Instance.AllowNonPictures) {
+                    if (!pictureFormat && GMConfig.Instance.AllowNonPictures) {
                         stats.NonPicturesIncluded = true;
                     }
 
                     string newFilename = originalFilename;
                     if (!string.IsNullOrEmpty(mmFilename)) {
                         // Give multimedia files a standard name
-                        if (CConfig.Instance.RenameOriginalPicture) {
+                        if (GMConfig.Instance.RenameOriginalPicture) {
                             //string sFilePart = sMmPrefix;//string.Concat( mm_prefix, nMultimediaFiles.ToString() );
                             newFilename = string.Concat(mmPrefix, extPart.ToLower());
                         }
@@ -198,8 +198,8 @@ namespace GEDmill.HTML
                     if (!string.IsNullOrEmpty(copyFilename)) {
                         string largeFilename = "";
                         // Copy original original version
-                        if (CConfig.Instance.LinkOriginalPicture) {
-                            if (CConfig.Instance.RenameOriginalPicture) {
+                        if (GMConfig.Instance.LinkOriginalPicture) {
+                            if (GMConfig.Instance.RenameOriginalPicture) {
                                 //string sFilePart = sMmLargePrefix;
                                 largeFilename = string.Concat(mmLargePrefix, extPart.ToLower());
                             } else {
@@ -225,20 +225,20 @@ namespace GEDmill.HTML
         {
             if (notes.Count > 0) {
                 // Generate notes list into a local array before adding header title. This is to cope with the case where all notes are nothing but blanks.
-                var note_strings = new List<string>(notes.Count);
+                var noteStrings = new List<string>(notes.Count);
 
                 foreach (GDMNotes ns in notes) {
                     GDMLines noteLines = fTree.GetNoteLines(ns);
-                    string noteText = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(noteLines.Text) : noteLines.Text;
-                    note_strings.Add(string.Concat("<li>", EscapeHTML(noteText, false), "</li>"));
+                    string noteText = GMConfig.Instance.ObfuscateEmails ? ObfuscateEmail(noteLines.Text) : noteLines.Text;
+                    noteStrings.Add(string.Concat("<li>", EscapeHTML(noteText, false), "</li>"));
                 }
 
-                if (note_strings.Count > 0) {
+                if (noteStrings.Count > 0) {
                     f.WriteLine("<div id=\"notes\">");
                     f.WriteLine("<h1>Notes</h1>");
                     f.WriteLine("<ul>");
 
-                    foreach (string note_string in note_strings) {
+                    foreach (string note_string in noteStrings) {
                         f.WriteLine(note_string);
                     }
 
@@ -251,7 +251,7 @@ namespace GEDmill.HTML
         protected string GetNoteText(GDMNotes ns)
         {
             GDMLines noteLines = fTree.GetNoteLines(ns);
-            string result = CConfig.Instance.ObfuscateEmails ? ObfuscateEmail(noteLines.Text) : noteLines.Text;
+            string result = GMConfig.Instance.ObfuscateEmails ? ObfuscateEmail(noteLines.Text) : noteLines.Text;
             return result;
         }
 

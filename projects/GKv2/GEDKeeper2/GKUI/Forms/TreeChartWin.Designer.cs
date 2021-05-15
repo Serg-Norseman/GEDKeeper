@@ -25,18 +25,6 @@
         private System.Windows.Forms.ToolStripMenuItem miTraceKinships;
         private System.Windows.Forms.ToolStripMenuItem miCertaintyIndex;
         private System.Windows.Forms.ToolStripMenuItem miRebuildTree;
-        private System.Windows.Forms.ToolStripDropDownButton tbGens;
-        private System.Windows.Forms.ContextMenuStrip MenuGens;
-        private System.Windows.Forms.ToolStripMenuItem miGensInf;
-        private System.Windows.Forms.ToolStripMenuItem miGens1;
-        private System.Windows.Forms.ToolStripMenuItem miGens2;
-        private System.Windows.Forms.ToolStripMenuItem miGens3;
-        private System.Windows.Forms.ToolStripMenuItem miGens4;
-        private System.Windows.Forms.ToolStripMenuItem miGens5;
-        private System.Windows.Forms.ToolStripMenuItem miGens6;
-        private System.Windows.Forms.ToolStripMenuItem miGens7;
-        private System.Windows.Forms.ToolStripMenuItem miGens8;
-        private System.Windows.Forms.ToolStripMenuItem miGens9;
         private System.Windows.Forms.ToolStripSeparator N8;
         private System.Windows.Forms.ToolStripMenuItem miFillColor;
         private System.Windows.Forms.ToolStripMenuItem miFillImage;
@@ -50,6 +38,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton tbDocPrint;
         private System.Windows.Forms.ToolStripButton tbDocPreview;
+        private System.Windows.Forms.ToolStripButton tbOptions;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tbFilter;
         private System.Windows.Forms.ToolStripButton tbPrev;
@@ -58,6 +47,12 @@
         private System.Windows.Forms.ToolStripMenuItem miSelectColor;
         private System.Windows.Forms.ToolStripSeparator N11;
         private System.Windows.Forms.ToolStripMenuItem miGoToRecord;
+        private System.Windows.Forms.ToolStripDropDownButton tbGensCommon;
+        private System.Windows.Forms.ContextMenuStrip MenuGensCommon;
+        private System.Windows.Forms.ToolStripDropDownButton tbGensAncestors;
+        private System.Windows.Forms.ContextMenuStrip MenuGensAncestors;
+        private System.Windows.Forms.ToolStripDropDownButton tbGensDescendants;
+        private System.Windows.Forms.ContextMenuStrip MenuGensDescendants;
 
         private void InitializeComponent()
         {
@@ -65,18 +60,12 @@
             this.ToolBar1 = new System.Windows.Forms.ToolStrip();
             this.tbImageSave = new System.Windows.Forms.ToolStripButton();
             this.tbs1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tbGens = new System.Windows.Forms.ToolStripDropDownButton();
-            this.MenuGens = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.miGensInf = new System.Windows.Forms.ToolStripMenuItem();
-            this.miGens1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.miGens2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.miGens3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.miGens4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.miGens5 = new System.Windows.Forms.ToolStripMenuItem();
-            this.miGens6 = new System.Windows.Forms.ToolStripMenuItem();
-            this.miGens7 = new System.Windows.Forms.ToolStripMenuItem();
-            this.miGens8 = new System.Windows.Forms.ToolStripMenuItem();
-            this.miGens9 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tbGensCommon = new System.Windows.Forms.ToolStripDropDownButton();
+            this.MenuGensCommon = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tbGensAncestors = new System.Windows.Forms.ToolStripDropDownButton();
+            this.MenuGensAncestors = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tbGensDescendants = new System.Windows.Forms.ToolStripDropDownButton();
+            this.MenuGensDescendants = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tbs2 = new System.Windows.Forms.ToolStripSeparator();
             this.tbModes = new System.Windows.Forms.ToolStripDropDownButton();
             this.MenuModes = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -98,6 +87,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tbDocPreview = new System.Windows.Forms.ToolStripButton();
             this.tbDocPrint = new System.Windows.Forms.ToolStripButton();
+            this.tbOptions = new System.Windows.Forms.ToolStripButton();
             this.MenuPerson = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.N1 = new System.Windows.Forms.ToolStripSeparator();
@@ -118,7 +108,9 @@
             this.miSelectColor = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.ToolBar1.SuspendLayout();
-            this.MenuGens.SuspendLayout();
+            this.MenuGensCommon.SuspendLayout();
+            this.MenuGensAncestors.SuspendLayout();
+            this.MenuGensDescendants.SuspendLayout();
             this.MenuModes.SuspendLayout();
             this.MenuPerson.SuspendLayout();
             this.SuspendLayout();
@@ -130,7 +122,9 @@
             this.ToolBar1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tbImageSave,
             this.tbs1,
-            this.tbGens,
+            this.tbGensCommon,
+            this.tbGensAncestors,
+            this.tbGensDescendants,
             this.tbs2,
             this.tbModes,
             this.toolStripSeparator1,
@@ -139,7 +133,8 @@
             this.tbNext,
             this.toolStripSeparator2,
             this.tbDocPreview,
-            this.tbDocPrint});
+            this.tbDocPrint,
+            this.tbOptions});
             this.ToolBar1.Location = new System.Drawing.Point(0, 0);
             this.ToolBar1.Name = "ToolBar1";
             this.ToolBar1.Size = new System.Drawing.Size(658, 25);
@@ -156,101 +151,44 @@
             this.tbs1.Name = "tbs1";
             this.tbs1.Size = new System.Drawing.Size(6, 25);
             // 
-            // tbGens
+            // tbGensCommon
             // 
-            this.tbGens.DropDown = this.MenuGens;
-            this.tbGens.Name = "tbGens";
-            this.tbGens.Size = new System.Drawing.Size(57, 22);
-            this.tbGens.Text = "tbGens";
+            this.tbGensCommon.DropDown = this.MenuGensCommon;
+            this.tbGensCommon.Name = "tbGensCommon";
+            this.tbGensCommon.Size = new System.Drawing.Size(57, 22);
+            this.tbGensCommon.Text = "tbGensCommon";
             // 
-            // MenuGens
+            // MenuGensCommon
             // 
-            this.MenuGens.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miGensInf,
-            this.miGens1,
-            this.miGens2,
-            this.miGens3,
-            this.miGens4,
-            this.miGens5,
-            this.miGens6,
-            this.miGens7,
-            this.miGens8,
-            this.miGens9});
-            this.MenuGens.Name = "MenuGens";
-            this.MenuGens.OwnerItem = this.tbGens;
-            this.MenuGens.Size = new System.Drawing.Size(89, 224);
+            this.MenuGensCommon.Name = "MenuGensCommon";
+            this.MenuGensCommon.OwnerItem = this.tbGensCommon;
+            this.MenuGensCommon.Size = new System.Drawing.Size(89, 224);
             // 
-            // miGensInf
+            // tbGensAncestors
             // 
-            this.miGensInf.Checked = true;
-            this.miGensInf.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.miGensInf.Name = "miGensInf";
-            this.miGensInf.Size = new System.Drawing.Size(88, 22);
-            this.miGensInf.Text = "Inf";
-            this.miGensInf.Click += new System.EventHandler(this.miGens9_Click);
+            this.tbGensAncestors.DropDown = this.MenuGensAncestors;
+            this.tbGensAncestors.Name = "tbGensAncestors";
+            this.tbGensAncestors.Size = new System.Drawing.Size(57, 22);
+            this.tbGensAncestors.Text = "tbGensAncestors";
             // 
-            // miGens1
+            // MenuGensAncestors
             // 
-            this.miGens1.Name = "miGens1";
-            this.miGens1.Size = new System.Drawing.Size(88, 22);
-            this.miGens1.Text = "1";
-            this.miGens1.Click += new System.EventHandler(this.miGens9_Click);
+            this.MenuGensAncestors.Name = "MenuGensAncestors";
+            this.MenuGensAncestors.OwnerItem = this.tbGensAncestors;
+            this.MenuGensAncestors.Size = new System.Drawing.Size(89, 224);
             // 
-            // miGens2
+            // tbGensDescendants
             // 
-            this.miGens2.Name = "miGens2";
-            this.miGens2.Size = new System.Drawing.Size(88, 22);
-            this.miGens2.Text = "2";
-            this.miGens2.Click += new System.EventHandler(this.miGens9_Click);
+            this.tbGensDescendants.DropDown = this.MenuGensDescendants;
+            this.tbGensDescendants.Name = "tbGensDescendants";
+            this.tbGensDescendants.Size = new System.Drawing.Size(57, 22);
+            this.tbGensDescendants.Text = "tbGensDescendants";
             // 
-            // miGens3
+            // MenuGensDescendants
             // 
-            this.miGens3.Name = "miGens3";
-            this.miGens3.Size = new System.Drawing.Size(88, 22);
-            this.miGens3.Text = "3";
-            this.miGens3.Click += new System.EventHandler(this.miGens9_Click);
-            // 
-            // miGens4
-            // 
-            this.miGens4.Name = "miGens4";
-            this.miGens4.Size = new System.Drawing.Size(88, 22);
-            this.miGens4.Text = "4";
-            this.miGens4.Click += new System.EventHandler(this.miGens9_Click);
-            // 
-            // miGens5
-            // 
-            this.miGens5.Name = "miGens5";
-            this.miGens5.Size = new System.Drawing.Size(88, 22);
-            this.miGens5.Text = "5";
-            this.miGens5.Click += new System.EventHandler(this.miGens9_Click);
-            // 
-            // miGens6
-            // 
-            this.miGens6.Name = "miGens6";
-            this.miGens6.Size = new System.Drawing.Size(88, 22);
-            this.miGens6.Text = "6";
-            this.miGens6.Click += new System.EventHandler(this.miGens9_Click);
-            // 
-            // miGens7
-            // 
-            this.miGens7.Name = "miGens7";
-            this.miGens7.Size = new System.Drawing.Size(88, 22);
-            this.miGens7.Text = "7";
-            this.miGens7.Click += new System.EventHandler(this.miGens9_Click);
-            // 
-            // miGens8
-            // 
-            this.miGens8.Name = "miGens8";
-            this.miGens8.Size = new System.Drawing.Size(88, 22);
-            this.miGens8.Text = "8";
-            this.miGens8.Click += new System.EventHandler(this.miGens9_Click);
-            // 
-            // miGens9
-            // 
-            this.miGens9.Name = "miGens9";
-            this.miGens9.Size = new System.Drawing.Size(88, 22);
-            this.miGens9.Text = "9";
-            this.miGens9.Click += new System.EventHandler(this.miGens9_Click);
+            this.MenuGensDescendants.Name = "MenuGensDescendants";
+            this.MenuGensDescendants.OwnerItem = this.tbGensDescendants;
+            this.MenuGensDescendants.Size = new System.Drawing.Size(89, 224);
             // 
             // tbs2
             // 
@@ -402,6 +340,15 @@
             this.tbDocPrint.Text = "toolStripButton2";
             this.tbDocPrint.Click += new System.EventHandler(this.tbDocPrint_Click);
             // 
+            // tbOptions
+            // 
+            this.tbOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbOptions.Name = "tbOptions";
+            this.tbOptions.Size = new System.Drawing.Size(23, 22);
+            this.tbOptions.Text = "tbOptions";
+            this.tbOptions.Click += new System.EventHandler(this.tbOptions_Click);
+            // 
             // MenuPerson
             // 
             this.MenuPerson.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -552,12 +499,13 @@
             this.Controls.SetChildIndex(this.ToolBar1, 0);
             this.ToolBar1.ResumeLayout(false);
             this.ToolBar1.PerformLayout();
-            this.MenuGens.ResumeLayout(false);
+            this.MenuGensCommon.ResumeLayout(false);
+            this.MenuGensAncestors.ResumeLayout(false);
+            this.MenuGensDescendants.ResumeLayout(false);
             this.MenuModes.ResumeLayout(false);
             this.MenuPerson.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
     }
 }

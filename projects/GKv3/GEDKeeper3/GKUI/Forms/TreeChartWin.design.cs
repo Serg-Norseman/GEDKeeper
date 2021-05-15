@@ -24,18 +24,6 @@ namespace GKUI.Forms
         private CheckMenuItem miTraceKinships;
         private CheckMenuItem miCertaintyIndex;
         private ButtonMenuItem miRebuildTree;
-        private ButtonToolItem tbGens;
-        private ContextMenu MenuGens;
-        private RadioMenuItem miGensInf;
-        private RadioMenuItem miGens1;
-        private RadioMenuItem miGens2;
-        private RadioMenuItem miGens3;
-        private RadioMenuItem miGens4;
-        private RadioMenuItem miGens5;
-        private RadioMenuItem miGens6;
-        private RadioMenuItem miGens7;
-        private RadioMenuItem miGens8;
-        private RadioMenuItem miGens9;
         private ButtonMenuItem miFillColor;
         private ButtonMenuItem miFillImage;
         private ButtonMenuItem miFatherAdd;
@@ -50,6 +38,13 @@ namespace GKUI.Forms
         private ButtonToolItem tbNext;
         private ButtonToolItem tbOptions;
 
+        private ButtonToolItem tbGensCommon;
+        private ContextMenu MenuGensCommon;
+        private ButtonToolItem tbGensAncestors;
+        private ContextMenu MenuGensAncestors;
+        private ButtonToolItem tbGensDescendants;
+        private ContextMenu MenuGensDescendants;
+
         private void InitializeComponent()
         {
             SuspendLayout();
@@ -57,10 +52,20 @@ namespace GKUI.Forms
             tbImageSave = new ButtonToolItem();
             tbImageSave.Click += tbImageSave_Click;
 
-            tbGens = new ButtonToolItem();
-            //tbGens.DropDown = MenuGens;
-            tbGens.Text = "tbGens";
-            tbGens.Click  += (sender, e) => MenuGens.Show(this);
+            tbGensCommon = new ButtonToolItem();
+            //tbGensCommon.DropDown = MenuGensCommon;
+            tbGensCommon.Text = "tbGensCommon";
+            tbGensCommon.Click  += (sender, e) => MenuGensCommon.Show(this);
+
+            tbGensAncestors = new ButtonToolItem();
+            //tbGensAncestors.DropDown = MenuGensAncestors;
+            tbGensAncestors.Text = "tbGensAncestors";
+            tbGensAncestors.Click  += (sender, e) => MenuGensAncestors.Show(this);
+
+            tbGensDescendants = new ButtonToolItem();
+            //tbGensDescendants.DropDown = MenuGensDescendants;
+            tbGensDescendants.Text = "tbGensDescendants";
+            tbGensDescendants.Click  += (sender, e) => MenuGensDescendants.Show(this);
 
             tbModes = new ButtonToolItem();
             //tbModes.DropDown = MenuModes;
@@ -91,7 +96,9 @@ namespace GKUI.Forms
             ToolBar1.Items.AddRange(new ToolItem[] {
                                         tbImageSave,
                                         new SeparatorToolItem(),
-                                        tbGens,
+                                        tbGensCommon,
+                                        tbGensAncestors,
+                                        tbGensDescendants,
                                         new SeparatorToolItem(),
                                         tbModes,
                                         new SeparatorToolItem(),
@@ -104,59 +111,9 @@ namespace GKUI.Forms
                                         new SeparatorToolItem(),
                                         tbOptions});
 
-            miGensInf = new RadioMenuItem();
-            miGensInf.Checked = true;
-            miGensInf.Text = "Inf";
-            miGensInf.Click += miGens9_Click;
-
-            miGens1 = new RadioMenuItem();
-            miGens1.Text = "1";
-            miGens1.Click += miGens9_Click;
-
-            miGens2 = new RadioMenuItem();
-            miGens2.Text = "2";
-            miGens2.Click += miGens9_Click;
-
-            miGens3 = new RadioMenuItem();
-            miGens3.Text = "3";
-            miGens3.Click += miGens9_Click;
-
-            miGens4 = new RadioMenuItem();
-            miGens4.Text = "4";
-            miGens4.Click += miGens9_Click;
-
-            miGens5 = new RadioMenuItem();
-            miGens5.Text = "5";
-            miGens5.Click += miGens9_Click;
-
-            miGens6 = new RadioMenuItem();
-            miGens6.Text = "6";
-            miGens6.Click += miGens9_Click;
-
-            miGens7 = new RadioMenuItem();
-            miGens7.Text = "7";
-            miGens7.Click += miGens9_Click;
-
-            miGens8 = new RadioMenuItem();
-            miGens8.Text = "8";
-            miGens8.Click += miGens9_Click;
-
-            miGens9 = new RadioMenuItem();
-            miGens9.Text = "9";
-            miGens9.Click += miGens9_Click;
-
-            MenuGens = new ContextMenu();
-            MenuGens.Items.AddRange(new MenuItem[] {
-                                        miGensInf,
-                                        miGens1,
-                                        miGens2,
-                                        miGens3,
-                                        miGens4,
-                                        miGens5,
-                                        miGens6,
-                                        miGens7,
-                                        miGens8,
-                                        miGens9});
+            MenuGensCommon = new ContextMenu();
+            MenuGensAncestors = new ContextMenu();
+            MenuGensDescendants = new ContextMenu();
 
             miModeBoth = new RadioMenuItem();
             miModeBoth.Text = "miModeBoth";

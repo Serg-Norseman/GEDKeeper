@@ -23,7 +23,7 @@ using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
     /// 
@@ -37,18 +37,18 @@ namespace GKUI.Components
             get; set;
         }
 
-        public MenuItemEx(string text) : base()
+        public MenuItemEx(string text)
         {
             Text = text;
         }
 
-        public MenuItemEx(string text, object tag) : base()
+        public MenuItemEx(string text, object tag)
         {
             Text = text;
             Tag = tag;
         }
 
-        public MenuItemEx(string text, object tag, IImage image, ItemAction action) : base()
+        public MenuItemEx(string text, object tag, IImage image, ItemAction action)
         {
             Text = text;
             Click += Item_Click;
@@ -58,7 +58,12 @@ namespace GKUI.Components
             fAction = action;
         }
 
-        public int ItemsCount { get { return Items.Count; } }
+        public int ItemsCount
+        {
+            get {
+                return Items.Count;
+            }
+        }
 
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
         {

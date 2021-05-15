@@ -1288,6 +1288,10 @@ namespace GKCore.Tools
                         }
                     }
                 }
+
+                if (famsCount == 0 && namesCount == 0) {
+                    logBox.AppendText(LangMan.LS(LSID.LSID_MatchesNotFound) + CRLF);
+                }
             } finally {
                 int namesCount = names.Count;
                 for (int i = 0; i < namesCount; i++) {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,6 +37,7 @@ using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -183,7 +184,7 @@ namespace GKUI.Forms
         {
             base.WndProc(ref m);
 
-            if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
+            if (m.Msg == WFAppHost.WM_KEEPMODELESS) {
                 AppHost.Instance.WidgetsEnable();
             }
         }
@@ -286,9 +287,9 @@ namespace GKUI.Forms
 
         private void miRecordMerge_Click(object sender, EventArgs e)
         {
-            var listView = contextMenu.SourceControl as GKListView;
-            if (listView != null) {
-                var items = listView.GetSelectedItems();
+            var recView = contextMenu.SourceControl as GKListView;
+            if (recView != null) {
+                var items = recView.GetSelectedItems();
                 fController.ShowRecMerge(
                     items.Count > 0 ? items[0] as GDMRecord : null,
                     items.Count > 1 ? items[1] as GDMRecord : null
@@ -751,11 +752,11 @@ namespace GKUI.Forms
                 try {
                     AppHost.Instance.BeginLoading();
 
-                    Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
-                    if (a == null) return;
+                    var files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                    if (files == null) return;
 
-                    for (int i = 0; i < a.Length; i++) {
-                        string fn = a.GetValue(i).ToString();
+                    for (int i = 0; i < files.Length; i++) {
+                        string fn = files[i];
                         AppHost.Instance.LoadBase(this, fn);
                     }
                 } finally {

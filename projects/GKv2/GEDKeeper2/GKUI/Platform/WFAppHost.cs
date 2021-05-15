@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,10 +20,12 @@
 
 using System;
 using System.Globalization;
-using BSLib.Design.Graphics;
+using System.Runtime.InteropServices;
+using System.Security;
+using System.Windows.Forms;
+using BSLib.Design.Handlers;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
-using Eto.Forms;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
@@ -32,48 +34,60 @@ using GKCore.Options;
 using GKUI.Components;
 using GKUI.Forms;
 
-namespace GKUI
+namespace GKUI.Platform
 {
     /// <summary>
     /// The main implementation of the platform-specific application's host for
-    /// EtoForms.
+    /// WinForms.
     /// </summary>
-    public sealed class EtoAppHost : AppHost
+    [Serializable]
+    public sealed class WFAppHost : AppHost
     {
-        static EtoAppHost()
+        #if CI_MODE
+        public static bool TEST_MODE = true;
+        #else
+        public static bool TEST_MODE = false;
+        #endif
+
+
+        private readonly ApplicationContext fAppContext;
+
+        public ApplicationContext AppContext
         {
-            SetAppSign("GEDKeeper3e");
+            get { return fAppContext; }
         }
 
-        public EtoAppHost() : base()
+        static WFAppHost()
         {
+            SetAppSign("GEDKeeper2");
         }
 
-        private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)
+        public WFAppHost()
         {
-            //AppHost.Instance.SaveLastBases();
+            fAppContext = new ApplicationContext();
+            Application.ApplicationExit += this.OnApplicationExit;
+        }
+
+        private void OnApplicationExit(object sender, EventArgs e)
+        {
         }
 
         public override void Init(string[] args, bool isMDI)
         {
             base.Init(args, isMDI);
-            Application.Instance.Terminating += OnApplicationExit;
         }
 
+        // FIXME
         public override IWindow GetActiveWindow()
         {
-            Window activeWnd = fActiveBase as Window;
+            Form activeForm = Form.ActiveForm;
 
-            if (activeWnd == null) {
-                foreach (var wnd in Application.Instance.Windows) {
-                    if (wnd.HasFocus) {
-                        activeWnd = wnd;
-                        break;
-                    }
-                }
+            // only for tests!
+            if (activeForm == null && fRunningForms.Count > 0) {
+                activeForm = (Form)fRunningForms[0];
             }
 
-            return (activeWnd is IWindow) ? (IWindow)activeWnd : null;
+            return (activeForm is IWindow) ? (IWindow)activeForm : null;
         }
 
         // FIXME!
@@ -89,7 +103,7 @@ namespace GKUI
             base.CloseWindow(window);
 
             if (fRunningForms.Count == 0) {
-                Application.Instance.Quit();
+                fAppContext.ExitThread();
             }
         }
 
@@ -108,12 +122,18 @@ namespace GKUI
             IntPtr mainHandle = GetTopWindowHandle();
 
             if (keepModeless) {
-                #if !__MonoCS__
-                //NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-                #endif
+                foreach (IWindow win in fRunningForms) {
+                    if (win is IBaseWindow) {
+                        IntPtr handle = ((Form)win).Handle;
+
+                        #if !__MonoCS__
+                        PostMessageExt(handle, WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                        #endif
+                    }
+                }
             }
 
-            //UIHelper.CenterFormByParent((Form)form, mainHandle);
+            UIHelper.CenterFormByParent((Form)form, mainHandle);
 
             return base.ShowModalX(form, keepModeless);
         }
@@ -124,7 +144,7 @@ namespace GKUI
 
             if (frm != null) {
                 #if !__MonoCS__
-                //NativeMethods.EnableWindow(frm.Handle, value);
+                EnableWindowExt(frm.Handle, value);
                 #endif
             }
         }
@@ -165,74 +185,62 @@ namespace GKUI
 
         public override void SaveWinMRU(IBaseWindow baseWin)
         {
-            int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-            if (idx >= 0) {
-                var frm = baseWin as Form;
-                MRUFile mf = AppHost.Options.MRUFiles[idx];
-                mf.WinRect = UIHelper.GetFormRect(frm);
-                mf.WinState = gkWindowStates[(int)frm.WindowState];
+            if (baseWin != null) {
+                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+                if (idx >= 0) {
+                    var frm = baseWin as Form;
+                    MRUFile mf = AppHost.Options.MRUFiles[idx];
+                    mf.WinRect = UIHelper.GetFormRect(frm);
+                    mf.WinState = (WindowState)frm.WindowState;
+                }
             }
         }
 
-        private static Eto.Forms.WindowState[] efWindowStates = new Eto.Forms.WindowState[] {
-            Eto.Forms.WindowState.Normal,
-            Eto.Forms.WindowState.Minimized,
-            Eto.Forms.WindowState.Maximized
-        };
-
-        private static GKCore.Options.WindowState[] gkWindowStates = new GKCore.Options.WindowState[] {
-            GKCore.Options.WindowState.Normal,
-            GKCore.Options.WindowState.Maximized,
-            GKCore.Options.WindowState.Minimized
-        };
-
         public override void RestoreWinMRU(IBaseWindow baseWin)
         {
-            int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-            if (idx >= 0) {
-                var frm = baseWin as Form;
-                MRUFile mf = AppHost.Options.MRUFiles[idx];
-                UIHelper.RestoreFormRect(frm, mf.WinRect, efWindowStates[(int)mf.WinState]);
+            if (baseWin != null) {
+                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+                if (idx >= 0) {
+                    var frm = baseWin as Form;
+                    MRUFile mf = AppHost.Options.MRUFiles[idx];
+                    UIHelper.RestoreFormRect(frm, mf.WinRect, (FormWindowState)mf.WinState);
+                }
             }
         }
 
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
-            var result = new EUITimer(msInterval, elapsedHandler);
+            var result = new WinUITimer(msInterval, elapsedHandler);
             return result;
         }
 
         public override void Quit()
         {
             base.Quit();
-            Application.Instance.Quit();
+            Application.Exit();
         }
 
         #region KeyLayout functions
 
         public override int GetKeyLayout()
         {
-            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
-
-            /*#if __MonoCS__
+            #if __MonoCS__
             // There is a bug in Mono: does not work this CurrentInputLanguage
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
             #else
             InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
             return currentLang.Culture.KeyboardLayoutId;
-            #endif*/
+            #endif
         }
 
         public override void SetKeyLayout(int layout)
         {
             try {
-                CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(layout);
-
-                /*CultureInfo cultureInfo = new CultureInfo(layout);
+                CultureInfo cultureInfo = new CultureInfo(layout);
                 InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
-                InputLanguage.CurrentInputLanguage = currentLang;*/
+                InputLanguage.CurrentInputLanguage = currentLang;
             } catch (Exception ex) {
-                Logger.WriteError("EtoFormsAppHost.SetKeyLayout()", ex);
+                Logger.WriteError("WinFormsAppHost.SetKeyLayout()", ex);
             }
         }
 
@@ -248,7 +256,7 @@ namespace GKUI
             if (mdi)
                 throw new ArgumentException("MDI obsolete");
 
-            var appHost = new EtoAppHost();
+            var appHost = new WFAppHost();
             IContainer container = AppHost.Container;
 
             if (container == null)
@@ -257,8 +265,8 @@ namespace GKUI
             container.Reset();
 
             // controls and other
-            container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
-            container.Register<IGraphicsProviderEx, EtoGfxProvider>(LifeCycle.Singleton);
+            container.Register<IStdDialogs, WFStdDialogs>(LifeCycle.Singleton);
+            container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
             container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
 
@@ -318,21 +326,42 @@ namespace GKUI
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
-            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
-            ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolStripMenuItem), typeof(MenuItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolStripComboBox), typeof(ToolStripComboBoxHandler));
 
-            ControlsManager.RegisterHandlerType(typeof(TextArea), typeof(TextAreaHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
         }
+
+        #endregion
+
+        #region NativeMethods
+
+        public const uint WM_USER = 0x0400;
+        public const uint WM_KEEPMODELESS = WM_USER + 111;
+
+        #if !__MonoCS__
+
+        [SecurityCritical, SuppressUnmanagedCodeSecurity]
+        [DllImport("user32.dll", EntryPoint="PostMessage", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool PostMessageExt(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+        [SecurityCritical, SuppressUnmanagedCodeSecurity]
+        [DllImport("user32.dll", EntryPoint="EnableWindow", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool EnableWindowExt(IntPtr hWnd, [MarshalAs(UnmanagedType.Bool)]bool bEnable);
+
+        #endif
 
         #endregion
     }

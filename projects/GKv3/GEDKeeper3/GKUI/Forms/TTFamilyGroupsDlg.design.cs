@@ -12,10 +12,34 @@ namespace GKUI.Forms
         private TreeView tvGroups;
         private GKUI.Components.LogChart gkLogChart1;
         private Button btnAnalyseGroups;
+        private ContextMenu contextMenu;
+        private ButtonMenuItem miDetails;
+        private ButtonMenuItem miGoToRecord;
+        private ButtonMenuItem miCopyXRef;
 
         private void InitializeComponent()
         {
             SuspendLayout();
+
+            miDetails = new ButtonMenuItem();
+            miDetails.Text = "miDetails";
+            miDetails.Click += miDetails_Click;
+
+            miGoToRecord = new ButtonMenuItem();
+            miGoToRecord.Text = "miGoToRecord";
+            miGoToRecord.Click += miGoToRecord_Click;
+
+            miCopyXRef = new ButtonMenuItem();
+            miCopyXRef.Text = "miCopyXRef";
+            miCopyXRef.Click += miCopyXRef_Click;
+
+            contextMenu = new ContextMenu();
+            contextMenu.Items.AddRange(new MenuItem[] {
+                miDetails,
+                miGoToRecord,
+                miCopyXRef
+            });
+            contextMenu.Opening += contextMenu_Opening;
 
             gkLogChart1 = new GKUI.Components.LogChart();
             gkLogChart1.Height = 34;
@@ -25,6 +49,7 @@ namespace GKUI.Forms
             tvGroups.LabelEdit = false;
             tvGroups.MouseDoubleClick += tvGroups_DoubleClick;
             tvGroups.Size = new Size(780, 350);
+            tvGroups.ContextMenu = contextMenu;
 
             btnAnalyseGroups = new Button();
             btnAnalyseGroups.Size = new Size(130, 26);

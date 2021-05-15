@@ -55,7 +55,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            Text = LangMan.LS(LSID.LSID_MIFileProperties);
+            Title = LangMan.LS(LSID.LSID_MIFileProperties);
             hyperView1.OnLink += HyperViewLink;
 
             fController = new RecordInfoDlgController(this);

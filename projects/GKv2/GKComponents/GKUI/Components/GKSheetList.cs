@@ -21,12 +21,12 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
 using BSLib;
 using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Lists;
 using GKCore.Types;
+using BSDListItem = BSLib.Design.MVP.Controls.IListItem;
 
 namespace GKUI.Components
 {
@@ -426,7 +426,7 @@ namespace GKUI.Components
             fList.EndUpdate();
         }
 
-        public IListItem AddItem(object rowData, params object[] columnValues)
+        public BSDListItem AddItem(object rowData, params object[] columnValues)
         {
             return fList.AddItem(rowData, columnValues);
         }

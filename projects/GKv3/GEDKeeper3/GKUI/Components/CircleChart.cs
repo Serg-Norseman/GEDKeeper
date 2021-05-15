@@ -27,6 +27,7 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {
@@ -171,7 +172,7 @@ namespace GKUI.Components
             fModel.AdjustBounds();
 
             ExtSize boundary = GetImageSize();
-            SetImageSize(boundary);
+            SetImageSize(boundary, false);
         }
 
         private void DoRootChanged(GDMIndividualRecord person)
@@ -346,7 +347,8 @@ namespace GKUI.Components
         protected override void OnMouseMove(MouseEventArgs e)
         {
             switch (fMouseCaptured) {
-                case MouseCaptured.mcNone: {
+                case MouseCaptured.mcNone:
+                    {
                         CircleSegment selected = FindSegment(e.Location);
 
                         string hint = "";
@@ -372,7 +374,8 @@ namespace GKUI.Components
                     }
                     break;
 
-                case MouseCaptured.mcDrag: {
+                case MouseCaptured.mcDrag:
+                    {
                         Point pt = new Point(e.Location);
                         AdjustScroll(-(pt.X - fMouseCaptureX), -(pt.Y - fMouseCaptureY));
                         fMouseCaptureX = pt.X;

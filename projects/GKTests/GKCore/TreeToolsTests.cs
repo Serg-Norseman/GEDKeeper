@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
@@ -30,7 +29,7 @@ using GKCore.Interfaces;
 using GKCore.Tools;
 using GKTests;
 using GKTests.Stubs;
-using GKUI;
+using GKUI.Platform;
 using NSubstitute;
 using NUnit.Framework;
 

@@ -30,18 +30,18 @@ namespace GEDmill
     public partial class ProgressWindow : Form, IProgressCallback
     {
         // Callbacks
-        public delegate void SetTextInvoker(string sText);
-        public delegate void IncrementInvoker(int nVal);
-        public delegate void StepToInvoker(int nVal);
-        public delegate void RangeInvoker(int nMinimum, int nMaximum);
-        public delegate void EndInvoker(ThreadError threadError);
-
-        public ThreadError ThreadError;
+        private delegate void SetTextInvoker(string text);
+        private delegate void IncrementInvoker(int val);
+        private delegate void StepToInvoker(int val);
+        private delegate void RangeInvoker(int minimum, int maximum);
+        private delegate void EndInvoker(ThreadError threadError);
 
         private String fTitleRoot = "";
         private ManualResetEvent fInitEvent = new ManualResetEvent(false);
         private ManualResetEvent fAbortEvent = new ManualResetEvent(false);
         private bool fRequiresClose = true;
+
+        public ThreadError ThreadError { get; set; }
 
 
         public ProgressWindow()
@@ -52,10 +52,10 @@ namespace GEDmill
         }
 
         // Call this method from the worker thread to initialize the progress meter.
-        public void Begin(int nMinimum, int nMaximum)
+        public void Begin(int minimum, int maximum)
         {
             fInitEvent.WaitOne();
-            Invoke(new RangeInvoker(DoBegin), new object[] { nMinimum, nMaximum });
+            Invoke(new RangeInvoker(DoBegin), new object[] { minimum, maximum });
         }
 
         // Call this method from the worker thread to initialize
@@ -68,28 +68,28 @@ namespace GEDmill
 
         // Call this method from the worker thread to reset the range in the progress callback
         // You must have called one of the Begin() methods prior to this call.
-        public void SetRange(int nMinimum, int nMaximum)
+        public void SetRange(int minimum, int maximum)
         {
             fInitEvent.WaitOne();
-            Invoke(new RangeInvoker(DoSetRange), new object[] { nMinimum, nMaximum });
+            Invoke(new RangeInvoker(DoSetRange), new object[] { minimum, maximum });
         }
 
         // Call this method from the worker thread to update the progress text.
-        public void SetText(string sText)
+        public void SetText(string text)
         {
-            Invoke(new SetTextInvoker(DoSetText), new object[] { sText });
+            Invoke(new SetTextInvoker(DoSetText), new object[] { text });
         }
 
         // Call this method from the worker thread to increase the progress counter by a specified value.
-        public void Increment(int nVal)
+        public void Increment(int val)
         {
-            Invoke(new IncrementInvoker(DoIncrement), new object[] { nVal });
+            Invoke(new IncrementInvoker(DoIncrement), new object[] { val });
         }
 
         // Call this method from the worker thread to step the progress meter to a particular value.
-        public void StepTo(int nVal)
+        public void StepTo(int val)
         {
-            Invoke(new StepToInvoker(DoStepTo), new object[] { nVal });
+            Invoke(new StepToInvoker(DoStepTo), new object[] { val });
         }
 
         // If this property is true, then you should abort work
@@ -109,30 +109,30 @@ namespace GEDmill
         }
 
         // Partner of SetText(). Sets label text.
-        private void DoSetText(string sText)
+        private void DoSetText(string text)
         {
-            m_label.Text = sText;
+            lblText.Text = text;
         }
 
         // Partner of Increment(). Moves the progress bar and updates the status text.
-        private void DoIncrement(int nVal)
+        private void DoIncrement(int val)
         {
-            m_progressbar.Increment(nVal);
+            progressBar.Increment(val);
             UpdateStatusText();
         }
 
         // Partner of StepTo(). Moves the progress bar.
-        private void DoStepTo(int nVal)
+        private void DoStepTo(int val)
         {
-            m_progressbar.Value = nVal;
+            progressBar.Value = val;
             UpdateStatusText();
         }
 
         // Partner of Begin(). Sets the up the progress bar.
-        private void DoBegin(int nMinimum, int nMaximum)
+        private void DoBegin(int minimum, int maximum)
         {
             DoBegin();
-            DoSetRange(nMinimum, nMaximum);
+            DoSetRange(minimum, maximum);
         }
 
         // Starts the progress bar.
@@ -143,11 +143,11 @@ namespace GEDmill
         }
 
         // Partner of SetRange(). Sets the limits of the progress bar.
-        private void DoSetRange(int nMinimum, int nMaximum)
+        private void DoSetRange(int minimum, int maximum)
         {
-            m_progressbar.Minimum = nMinimum;
-            m_progressbar.Maximum = nMaximum;
-            m_progressbar.Value = nMinimum;
+            progressBar.Minimum = minimum;
+            progressBar.Maximum = maximum;
+            progressBar.Value = minimum;
             fTitleRoot = Text;
         }
 

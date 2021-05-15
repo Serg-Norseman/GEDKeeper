@@ -16,7 +16,7 @@
 		    this.lvEvents.HideSelection = false;
 		    this.lvEvents.Location = new System.Drawing.Point(10, 10);
 		    this.lvEvents.Name = "lvEvents";
-		    this.lvEvents.Order = BSLib.Design.BSDTypes.SortOrder.None;
+		    this.lvEvents.SortOrder = BSLib.Design.BSDTypes.SortOrder.None;
 		    this.lvEvents.OwnerDraw = true;
 		    this.lvEvents.Size = new System.Drawing.Size(729, 397);
 		    this.lvEvents.SortColumn = 0;

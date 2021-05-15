@@ -33,8 +33,8 @@ using GKCore.Search;
 using GKCore.Stats;
 using GKCore.Types;
 using GKTests;
-using GKUI;
 using GKUI.Components;
+using GKUI.Platform;
 using NSubstitute;
 using NUnit.Framework;
 

@@ -126,14 +126,7 @@ namespace GKUI.Components
         {
             Label lbl = sender as Label;
             if (lbl == null) return;
-
-            using (var clrDlg = new ColorDialog()) {
-                clrDlg.Color = lbl.BackgroundColor;
-
-                if (clrDlg.ShowDialog(this) == DialogResult.Ok) {
-                    lbl.BackgroundColor = clrDlg.Color;
-                }
-            }
+            lbl.BackgroundColor = UIHelper.ConvertColor(AppHost.StdDialogs.SelectColor(UIHelper.ConvertColor(lbl.BackgroundColor)));
         }
 
         #region Design

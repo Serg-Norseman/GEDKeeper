@@ -105,7 +105,7 @@ namespace GEDmill.MiniTree
                                                 bool concealed, bool shade)
         {
             MiniTreeIndividual mti = new MiniTreeIndividual(ir, firstnames, surname, date, createLink, createStalk,
-                                                            highlight, concealed, shade, CConfig.Instance.ConserveTreeWidth);
+                                                            highlight, concealed, shade, GMConfig.Instance.ConserveTreeWidth);
 
             if (fMembers == null) {
                 fMembers = new List<MiniTreeObject>();

@@ -890,8 +890,11 @@ namespace GKCore
         /* 829 */ LSID_FirstCommunion,
         /* 830 */ LSID_Ordination,
         /* 831 */ LSID_GeoSearchCountryRestriction,
+        /* 832 */ LSID_SeparateDepth,
+        /* 833 */ LSID_Ancestors,
+        /* 834 */ LSID_MatchesNotFound,
 
-        /* 000 */ LSID_Last = LSID_GeoSearchCountryRestriction
+        /* 000 */ LSID_Last = LSID_MatchesNotFound
     }
 
 
@@ -1737,6 +1740,9 @@ namespace GKCore
             /* 829 */ "First communion",
             /* 830 */ "Ordination",
             /* 831 */ "Restriction geo search by country",
+            /* 832 */ "Separate depth",
+            /* 833 */ "Ancestors",
+            /* 834 */ "Matches not found",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

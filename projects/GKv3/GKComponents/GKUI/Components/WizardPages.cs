@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,9 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Security.Permissions;
-using System.Windows.Forms;
+using Eto.Forms;
 
 namespace GKUI.Components
 {
@@ -29,15 +27,5 @@ namespace GKUI.Components
     /// </summary>
     public class WizardPages : TabControl
     {
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-        protected override void WndProc(ref Message m)
-        {
-            // Hide tabs by trapping the TCM_ADJUSTRECT message
-            if (m.Msg == 0x1328 && !DesignMode) {
-                m.Result = (IntPtr)1;
-            } else {
-                base.WndProc(ref m);
-            }
-        }
     }
 }

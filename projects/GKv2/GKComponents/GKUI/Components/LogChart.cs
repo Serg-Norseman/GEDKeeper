@@ -41,7 +41,7 @@ namespace GKUI.Components
     public delegate void HintRequestEventHandler(object sender, HintRequestEventArgs args);
 
     /// <summary>
-    /// 
+    /// Logarithmic graph of fragmented data.
     /// </summary>
     public sealed class LogChart : Panel
     {
@@ -55,7 +55,7 @@ namespace GKUI.Components
 
             public int X;
             public int Width;
-            
+
             public Rectangle Rect;
         }
 
@@ -117,8 +117,9 @@ namespace GKUI.Components
         {
             int count = fList.Count;
             if (count == 0) return;
-            
+
             int wid = Width - (count - 1);
+            if (wid <= 0) return;
 
             Fragment frag;
 
@@ -163,7 +164,7 @@ namespace GKUI.Components
                     if (idx == count - 1) {
                         idx = 0;
                     } else idx++;
-                    
+
                     d--;
                 }
             }
@@ -192,7 +193,7 @@ namespace GKUI.Components
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            
+
             if (Width <= 0 || Height <= 0) return;
 
             Graphics gfx = e.Graphics;
@@ -228,13 +229,14 @@ namespace GKUI.Components
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
+            Point mpt = e.Location;
 
             string hint = "";
             int count = fList.Count;
             for (int i = 0; i < count; i++) {
                 Fragment frag = fList[i];
 
-                if (frag.Rect.Contains(e.X, e.Y)) {
+                if (frag.Rect.Contains(mpt.X, mpt.Y)) {
                     hint = HintRequest(i + 1, frag.SrcVal);
                     break;
                 }

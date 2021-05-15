@@ -89,7 +89,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_Search);
+            Title = LangMan.LS(LSID.LSID_Search);
             //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
             SetToolTip(btnPrev, LangMan.LS(LSID.LSID_FindPrevious));
             SetToolTip(btnNext, LangMan.LS(LSID.LSID_FindNext));

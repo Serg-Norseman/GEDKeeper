@@ -25,11 +25,12 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.IoC;
 using GKCore;
 using GKCore.Interfaces;
-using BSLib.Design.IoC;
 using GKCore.Options;
 using GKUI.Components;
+using GKUI.Platform;
 
 [assembly: AssemblyTitle("GKTray")]
 [assembly: AssemblyDescription("")]

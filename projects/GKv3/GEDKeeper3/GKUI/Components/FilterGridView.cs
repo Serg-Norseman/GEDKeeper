@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,63 +27,56 @@ using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
-    internal class FilterConditionRow : FilterCondition
-    {
-        private FilterGridView fGrid;
-
-        public string ColumnText
-        {
-            get {
-                return fGrid.fFields[ColumnIndex + 1];
-            }
-            set {
-                ColumnIndex = fGrid.fListMan.GetFieldColumnId(fGrid.fFields, value);
-            }
-        }
-
-        public string ConditionText
-        {
-            get {
-                int condIndex = ((IConvertible)Condition).ToByte(null);
-                return GKData.CondSigns[condIndex];
-            }
-            set {
-                ConditionKind cond = fGrid.fListMan.GetCondByName(value);
-                Condition = cond;
-            }
-        }
-
-        public string ValueText
-        {
-            get {
-                return Value.ToString();
-            }
-            set {
-                Value = value;
-            }
-        }
-
-
-        public FilterConditionRow(IFilterGridView grid)
-            : base(0, ConditionKind.ck_Contains, "Test")
-        {
-            fGrid = (FilterGridView)grid;
-        }
-
-        public FilterConditionRow(IFilterGridView grid, FilterCondition filterCondition)
-            : base(filterCondition.ColumnIndex, filterCondition.Condition, filterCondition.Value)
-        {
-            fGrid = (FilterGridView)grid;
-        }
-    }
-
-
     public class FilterGridView : GridView, IFilterGridView
     {
-        internal readonly IListManager fListMan;
+        private class FilterConditionRow : FilterCondition
+        {
+            private readonly FilterGridView fGrid;
 
+            public string ColumnText
+            {
+                get {
+                    return fGrid.fFields[ColumnIndex + 1];
+                }
+                set {
+                    ColumnIndex = fGrid.fListMan.GetFieldColumnId(fGrid.fFields, value);
+                }
+            }
+
+            public string ConditionText
+            {
+                get {
+                    int condIndex = ((IConvertible)Condition).ToByte(null);
+                    return GKData.CondSigns[condIndex];
+                }
+                set {
+                    Condition = fGrid.fListMan.GetCondByName(value);
+                }
+            }
+
+            public string ValueText
+            {
+                get {
+                    return Value.ToString();
+                }
+                set {
+                    Value = value;
+                }
+            }
+
+
+            public FilterConditionRow(FilterGridView grid, FilterCondition filterCondition)
+                : base(filterCondition.ColumnIndex, filterCondition.Condition, filterCondition.Value)
+            {
+                fGrid = grid;
+            }
+        }
+
+
+        private readonly IListManager fListMan;
         private ObservableCollection<FilterConditionRow> fCollection;
-        internal string[] fFields;
+        private string[] fFields;
+
 
         public FilterGridView(IListManager listMan)
         {

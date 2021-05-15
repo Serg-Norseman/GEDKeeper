@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,7 +30,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class CustomPanel : Scrollable
+    public class ScrollablePanel : Scrollable
     {
         public const int SmallChange = 1;
         public const int LargeChange = 10;
@@ -102,7 +102,7 @@ namespace GKUI.Components
         }
 
 
-        public CustomPanel()
+        public ScrollablePanel()
         {
             base.ExpandContentHeight = true;
             base.ExpandContentWidth = true;
@@ -249,19 +249,12 @@ namespace GKUI.Components
             base.OnSizeChanged(e);
         }
 
-        /// <summary>
-        /// Raises the <see cref="Eto.Forms.Scrollable.Scroll" /> event.
-        /// </summary>
-        /// <param name="e">
-        /// A <see cref="T:Eto.Forms.ScrollEventArgs" /> that contains the event data.
-        /// </param>
         protected override void OnScroll(ScrollEventArgs e)
         {
             if (Loaded) {
                 SetViewportLocation(VisibleRect.Location);
                 fCanvas.Invalidate();
             }
-
             base.OnScroll(e);
         }
 
@@ -287,7 +280,7 @@ namespace GKUI.Components
         }
 
         /// <summary>
-        /// Sets the sizes of nested canvas.
+        /// Sets the sizes of canvas.
         /// </summary>
         /// <param name="imageSize">The size of canvas.</param>
         /// <param name="noRedraw">Flag of the need to redraw.</param>

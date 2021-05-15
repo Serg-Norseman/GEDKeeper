@@ -26,7 +26,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
-using GKUI;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKCore

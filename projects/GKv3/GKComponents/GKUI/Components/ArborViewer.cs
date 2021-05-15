@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -62,8 +62,7 @@ namespace GKUI.Components
 
         protected override void StopTimer()
         {
-            if (fTimer != null)
-            {
+            if (fTimer != null) {
                 fTimer.Stop();
                 fTimer.Dispose();
                 fTimer = null;
@@ -81,7 +80,7 @@ namespace GKUI.Components
         }
     }
 
-    public sealed class ArborViewer : CustomPanel, IArborRenderer
+    public sealed class ArborViewer : ScrollablePanel, IArborRenderer
     {
         private bool fEnergyDebug;
         private ArborNode fDragged;
@@ -254,12 +253,10 @@ namespace GKUI.Components
             if (!HasFocus) base.Focus();
 
             Point mpt = new Point(e.Location);
-            if (fNodesDragging)
-            {
+            if (fNodesDragging) {
                 fDragged = fSys.GetNearestNode(mpt.X, mpt.Y);
 
-                if (fDragged != null)
-                {
+                if (fDragged != null) {
                     fDragged.Fixed = true;
                 }
             }
@@ -270,8 +267,7 @@ namespace GKUI.Components
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (fNodesDragging && fDragged != null)
-            {
+            if (fNodesDragging && fDragged != null) {
                 fDragged.Fixed = false;
                 //fDragged.Mass = 1000;
                 fDragged = null;
@@ -284,8 +280,7 @@ namespace GKUI.Components
         protected override void OnMouseMove(MouseEventArgs e)
         {
             Point mpt = new Point(e.Location);
-            if (fNodesDragging && fDragged != null)
-            {
+            if (fNodesDragging && fDragged != null) {
                 fDragged.Pt = fSys.GetModelCoords(mpt.X, mpt.Y);
             }
 

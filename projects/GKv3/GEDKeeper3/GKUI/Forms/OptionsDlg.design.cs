@@ -136,9 +136,20 @@ namespace GKUI.Forms
         private CheckBox chkAllowDeleteMediaFileFromRefs;
         private CheckBox chkDeleteMediaFileWithoutConfirm;
         private CheckBox chkFirstCapitalLetterInNames;
+        private CheckBox chkDialogClosingWarn;
+        private Label lblGeoSearchCountry;
+        private ComboBox cmbGeoSearchCountry;
+        private CheckBox chkSeparateDAPLines;
+        private CheckBox chkDottedLinesOfAdoptedChildren;
+        private CheckBox chkBoldNames;
+
+        private CheckBox chkSeparateDepth;
         private Label lblDefaultDepth;
         private NumericUpDown numDefaultDepth;
-        private CheckBox chkDialogClosingWarn;
+        private Label lblDefaultDepthAncestors;
+        private NumericUpDown numDefaultDepthAncestors;
+        private Label lblDefaultDepthDescendants;
+        private NumericUpDown numDefaultDepthDescendants;
 
         private void InitializeComponent()
         {
@@ -290,6 +301,12 @@ namespace GKUI.Forms
             cmbGeocoder.Items.Add("Yandex");
             cmbGeocoder.Items.Add("OSM");
 
+            lblGeoSearchCountry = new Label();
+            lblGeoSearchCountry.Text = "lblGeoSearchCountry";
+
+            cmbGeoSearchCountry = new ComboBox();
+            cmbGeoSearchCountry.ReadOnly = true;
+
             lblLanguage = new Label();
             lblLanguage.Text = "lblLanguage";
 
@@ -323,6 +340,9 @@ namespace GKUI.Forms
                     },
                     new TableRow {
                         Cells = { lblGeocoder, cmbGeocoder }
+                    },
+                    new TableRow {
+                        Cells = { lblGeoSearchCountry, cmbGeoSearchCountry }
                     }
                 }
             };
@@ -390,65 +410,96 @@ namespace GKUI.Forms
 
             chkSurname = new CheckBox();
             chkSurname.Text = "chkSurname";
+            chkSurname.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkName = new CheckBox();
             chkName.Text = "chkName";
+            chkName.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkPatronymic = new CheckBox();
             chkPatronymic.Text = "chkPatronymic";
+            chkPatronymic.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkDiffLines = new CheckBox();
             chkDiffLines.Text = "chkDiffLines";
+            chkDiffLines.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkBirthDate = new CheckBox();
             chkBirthDate.Text = "chkBirthDate";
+            chkBirthDate.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkDeathDate = new CheckBox();
             chkDeathDate.Text = "chkDeathDate";
+            chkDeathDate.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkKinship = new CheckBox();
             chkKinship.Text = "chkKinship";
+            chkKinship.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkDefaultPortraits = new CheckBox();
             chkDefaultPortraits.Text = "chkDefaultPortraits";
+            chkDefaultPortraits.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkOnlyYears = new CheckBox();
             chkOnlyYears.Text = "chkOnlyYears";
+            chkOnlyYears.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkSignsVisible = new CheckBox();
             chkSignsVisible.Text = "chkSignsVisible";
+            chkSignsVisible.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkChildlessExclude = new CheckBox();
             chkChildlessExclude.Text = "chkChildlessExclude";
+            chkChildlessExclude.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkTreeDecorative = new CheckBox();
             chkTreeDecorative.Text = "chkTreeDecorative";
+            chkTreeDecorative.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkPortraitsVisible = new CheckBox();
             chkPortraitsVisible.Text = "chkPortraitsVisible";
-            chkPortraitsVisible.CheckedChanged += chkPortraitsVisible_CheckedChanged;
+            chkPortraitsVisible.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkInvertedTree = new CheckBox();
             chkInvertedTree.Text = "chkInvertedTree";
+            chkInvertedTree.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkMarriagesDates = new CheckBox();
             chkMarriagesDates.Text = "chkMarriagesDates";
+            chkMarriagesDates.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkShowPlaces = new CheckBox();
             chkShowPlaces.Text = "chkShowPlaces";
+            chkShowPlaces.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkHideUnknownSpouses = new CheckBox();
             chkHideUnknownSpouses.Text = "chkHideUnknownSpouses";
+            chkHideUnknownSpouses.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             chkCheckTreeSize = new CheckBox();
             chkCheckTreeSize.Text = "chkCheckTreeSize";
+            chkCheckTreeSize.CheckedChanged += chkTreeChartOption_CheckedChanged;
+
+            chkSeparateDAPLines = new CheckBox();
+            chkSeparateDAPLines.Text = "chkSeparateDAPLines";
+            chkSeparateDAPLines.CheckedChanged += chkTreeChartOption_CheckedChanged;
+
+            chkDottedLinesOfAdoptedChildren = new CheckBox();
+            chkDottedLinesOfAdoptedChildren.Text = "chkDottedLinesOfAdoptedChildren";
+            chkDottedLinesOfAdoptedChildren.CheckedChanged += chkTreeChartOption_CheckedChanged;
+
+            chkBoldNames = new CheckBox();
+            chkBoldNames.Text = "chkBoldNames";
+            chkBoldNames.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
             grpTreePersons = new GroupBox();
             grpTreePersons.Text = "grpTreePersons";
             grpTreePersons.Content = new DefStackLayout(Orientation.Vertical) {
                 Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears,
                     chkMarriagesDates, chkKinship, chkSignsVisible, chkTreeDecorative, chkPortraitsVisible, chkDefaultPortraits,
-                    chkChildlessExclude, chkInvertedTree, chkShowPlaces, chkHideUnknownSpouses, chkCheckTreeSize }
+                    chkInvertedTree, chkChildlessExclude, chkShowPlaces, chkSeparateDAPLines, chkHideUnknownSpouses, chkCheckTreeSize,
+                    chkDottedLinesOfAdoptedChildren, chkBoldNames
+                }
             };
 
             //
@@ -609,6 +660,10 @@ namespace GKUI.Forms
 
             //
 
+            chkSeparateDepth = new CheckBox();
+            chkSeparateDepth.Text = "chkSeparateDepth";
+            chkSeparateDepth.CheckedChanged += chkSeparateDepth_CheckedChanged;
+
             lblDefaultDepth = new Label();
             lblDefaultDepth.Text = "lblDefaultDepth";
 
@@ -617,6 +672,42 @@ namespace GKUI.Forms
             numDefaultDepth.MinValue = -1;
             numDefaultDepth.Width = 60;
             numDefaultDepth.Value = -1;
+
+            lblDefaultDepthAncestors = new Label();
+            lblDefaultDepthAncestors.Text = "lblDefaultDepthAncestors";
+
+            numDefaultDepthAncestors = new NumericUpDown();
+            numDefaultDepthAncestors.MaxValue = 9;
+            numDefaultDepthAncestors.MinValue = -1;
+            numDefaultDepthAncestors.Width = 60;
+            numDefaultDepthAncestors.Value = -1;
+
+            lblDefaultDepthDescendants = new Label();
+            lblDefaultDepthDescendants.Text = "lblDefaultDepthDescendants";
+
+            numDefaultDepthDescendants = new NumericUpDown();
+            numDefaultDepthDescendants.MaxValue = 9;
+            numDefaultDepthDescendants.MinValue = -1;
+            numDefaultDepthDescendants.Width = 60;
+            numDefaultDepthDescendants.Value = -1;
+
+            var depthLayout= new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        Cells = { chkSeparateDepth, null }
+                    },
+                    new TableRow {
+                        Cells = { lblDefaultDepth, numDefaultDepth }
+                    },
+                    new TableRow {
+                        Cells = { lblDefaultDepthAncestors, numDefaultDepthAncestors }
+                    },
+                    new TableRow {
+                        Cells = { lblDefaultDepthDescendants, numDefaultDepthDescendants }
+                    },
+                    null
+                }
+            };
 
             pageTreeChart = new TabPage();
             pageTreeChart.Text = "pageTreeChart";
@@ -627,7 +718,7 @@ namespace GKUI.Forms
                         Items = {
                             grpTreeDecor,
                             grpSpacings,
-                            new DefStackLayout(Orientation.Horizontal) { Items = { lblDefaultDepth, numDefaultDepth } }
+                            depthLayout
                         }
                     }
                 }

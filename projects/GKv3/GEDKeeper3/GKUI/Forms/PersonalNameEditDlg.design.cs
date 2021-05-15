@@ -106,6 +106,7 @@ namespace GKUI.Forms
             cmbLanguage = new ComboBox();
             cmbLanguage.Size = new Size(180, 22);
             cmbLanguage.ReadOnly = true;
+            cmbLanguage.SelectedIndexChanged += cmbLanguage_SelectedIndexChanged;
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;

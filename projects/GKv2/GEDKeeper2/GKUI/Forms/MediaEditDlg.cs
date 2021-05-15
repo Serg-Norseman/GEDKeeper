@@ -94,7 +94,7 @@ namespace GKUI.Forms
             fSourcesList = new GKSheetList(pageSources);
 
             // SetLang()
-            Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            Title = LangMan.LS(LSID.LSID_RPMultimedia);
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             pageCommon.Text = LangMan.LS(LSID.LSID_Common);
@@ -141,7 +141,7 @@ namespace GKUI.Forms
 
         private void edName_TextChanged(object sender, EventArgs e)
         {
-            Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), txtName.Text);
+            Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), txtName.Text);
         }
 
         private void cmbStoreType_SelectedIndexChanged(object sender, EventArgs e)

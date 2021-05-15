@@ -94,7 +94,7 @@ namespace GKUI.Forms
             fNotesList = new GKSheetList(pageNotes);
 
             // SetLang()
-            Text = LangMan.LS(LSID.LSID_WinTaskEdit);
+            Title = LangMan.LS(LSID.LSID_WinTaskEdit);
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);

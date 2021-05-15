@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,8 +24,9 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.MVP.Views;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
     /// The implementation of the contract for working with EtoForms dialogs.
@@ -80,7 +81,7 @@ namespace GKUI.Components
                                                            int filterIndex, string defaultExt, bool multiSelect)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            
+
             if (!string.IsNullOrEmpty(title))
                 ofd.Title = title;
 
@@ -143,30 +144,55 @@ namespace GKUI.Components
         }
 
 
-        public void ShowMessage(string msg)
+        public void ShowAlert(string msg, string title = "")
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxType.Information);
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Warning);
         }
 
-        public void ShowError(string msg)
+        public void ShowMessage(string msg, string title = "")
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxType.Error);
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Information);
         }
 
-        public bool ShowQuestionYN(string msg)
+        public void ShowError(string msg, string title = "")
         {
-            return MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.YesNo, MessageBoxType.Question) == DialogResult.Yes;
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Error);
         }
 
-        public void ShowWarning(string msg)
+        public bool ShowQuestionYN(string msg, string title = "")
         {
-            MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxType.Warning);
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            return MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxType.Question) == DialogResult.Yes;
+        }
+
+        public void ShowWarning(string msg, string title = "")
+        {
+            if (string.IsNullOrEmpty(title)) {
+                title = GKData.APP_TITLE;
+            }
+
+            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Warning);
         }
 
 
-        public bool GetInput(string prompt, ref string value)
+        public bool GetInput(object owner, string prompt, ref string value)
         {
-            bool res = GKInputBox.QueryText(GKData.APP_TITLE, prompt, ref value);
+            bool res = GKInputBox.QueryText(owner, GKData.APP_TITLE, prompt, ref value);
             return res && !string.IsNullOrEmpty(value);
         }
 

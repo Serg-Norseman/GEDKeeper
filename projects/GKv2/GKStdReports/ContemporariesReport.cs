@@ -75,7 +75,6 @@ namespace GKStdReports
         protected override void InternalGenerate()
         {
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
-            IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
             fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
             fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);

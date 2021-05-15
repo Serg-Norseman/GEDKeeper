@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -133,14 +133,12 @@ namespace GKUI.Components
             return result;
         }
 
-        public static bool QueryText(string caption, string prompt, ref string value)
+        public static bool QueryText(object owner, string caption, string prompt, ref string value)
         {
             bool result = false;
 
-            using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone))
-            {
-                if (inputBox.ShowModal() == DialogResult.Ok)
-                {
+            using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone)) {
+                if (inputBox.ShowModal((Control)owner) == DialogResult.Ok) {
                     value = inputBox.Value.Trim();
                     result = true;
                 }
@@ -182,7 +180,7 @@ namespace GKUI.Components
             } else {
                 txtValue = new TextBox();
             }
-            //txtValue.Size = new Size(354, 20);
+            txtValue.Size = new Size(354, 20);
 
             label1 = new Label();
             //label1.Size = new Size(35, 13);

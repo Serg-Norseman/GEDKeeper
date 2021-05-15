@@ -92,7 +92,7 @@ namespace GKUI.Forms
 
         public void SetViewMedia(string mediaFile)
         {
-            var mediaPlayer = new GKUI.Components.MediaPlayer();
+            var mediaPlayer = new MediaPlayer();
             mediaPlayer.MediaFile = mediaFile;
 
             SetViewControl(mediaPlayer);
@@ -126,7 +126,6 @@ namespace GKUI.Forms
             SuspendLayout();
             Content = fViewer;
             ResumeLayout();
-
         }
 
         public MediaViewerWin(IBaseWindow baseWin)

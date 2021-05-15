@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -270,7 +270,7 @@ namespace GKUI.Components
             Controls.Add(btnRec2Select);
             Controls.Add(btnMergeToLeft);
             Controls.Add(btnMergeToRight);
-            Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(204)));
+            Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
             Name = "GKMergeControl";
             Size = new Size(957, 402);
             ResumeLayout(false);

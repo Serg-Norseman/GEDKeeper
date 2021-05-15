@@ -25,6 +25,7 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 using GKTests;
 
@@ -92,8 +93,11 @@ namespace GKUI.Components
             fTreeChartBox.Selected = null;
             Assert.AreEqual(null, fTreeChartBox.Selected);
 
-            fTreeChartBox.DepthLimit = 8;
-            Assert.AreEqual(8, fTreeChartBox.DepthLimit);
+            fTreeChartBox.DepthLimitAncestors = 8;
+            Assert.AreEqual(8, fTreeChartBox.DepthLimitAncestors);
+
+            fTreeChartBox.DepthLimitDescendants = 8;
+            Assert.AreEqual(8, fTreeChartBox.DepthLimitDescendants);
 
             fTreeChartBox.SetScale(1.2f);
             Assert.AreEqual(1.2f, fTreeChartBox.Scale);

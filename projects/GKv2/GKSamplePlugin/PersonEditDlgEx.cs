@@ -455,7 +455,6 @@ namespace GKSamplePlugin
 
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
-            imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 
             SetLang();
 

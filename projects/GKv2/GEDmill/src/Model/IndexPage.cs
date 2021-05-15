@@ -25,8 +25,8 @@ namespace GEDmill.Model
     /// </summary>
     public class IndexPage
     {
-        public List<IndexLetter> Letters;
-        public string FileName;
+        public readonly List<IndexLetter> Letters;
+        public readonly string FileName;
         public int TotalIndis;
 
 

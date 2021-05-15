@@ -28,8 +28,9 @@ using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore.MVP.Controls;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     public abstract class BaseControlHandler<T, TThis> : ControlHandler<T, TThis>, IBaseControl
         where T : Control
@@ -152,6 +153,16 @@ namespace GKUI.Components
         {
             get { return Control.SelectedValue; }
             set { Control.SelectedValue = value; }
+        }
+
+        public bool Sorted
+        {
+            get { return false; }
+            set {
+                if (value) {
+                    Sort();
+                }
+            }
         }
 
         public string Text

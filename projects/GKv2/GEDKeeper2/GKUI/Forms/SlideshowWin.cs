@@ -50,15 +50,14 @@ namespace GKUI.Forms
             fImageCtl.Dock = DockStyle.Fill;
             fImageCtl.Location = new Point(0, 0);
             fImageCtl.Size = new Size(100, 100);
-            Controls.Add(fImageCtl);
-            Controls.SetChildIndex(fImageCtl, 0);
-            ResumeLayout(false);
-
             fImageCtl.BackColor = SystemColors.ControlDark;
             fImageCtl.Margin = new Padding(4);
             fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             fImageCtl.ImageBorderColor = Color.AliceBlue;
             fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
+            Controls.Add(fImageCtl);
+            Controls.SetChildIndex(fImageCtl, 0);
+            ResumeLayout(false);
 
             WindowState = FormWindowState.Maximized;
 
@@ -86,7 +85,7 @@ namespace GKUI.Forms
 
         public override void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_Slideshow);
+            Title = LangMan.LS(LSID.LSID_Slideshow);
             SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
             SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
         }

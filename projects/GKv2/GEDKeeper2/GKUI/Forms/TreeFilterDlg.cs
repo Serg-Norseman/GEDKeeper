@@ -130,7 +130,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_MIFilter);
+            Title = LangMan.LS(LSID.LSID_MIFilter);
             rgBranchCut.Text = LangMan.LS(LSID.LSID_BranchCut);
             rbCutNone.Text = LangMan.LS(LSID.LSID_Not);
             rbCutYears.Text = LangMan.LS(LSID.LSID_BCut_Years);

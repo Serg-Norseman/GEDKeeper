@@ -85,7 +85,7 @@ namespace GKUI.Forms
             fMediaList = new GKSheetList(pageMultimedia);
 
             // SetLang()
-            Text = LangMan.LS(LSID.LSID_WinGroupEdit);
+            Title = LangMan.LS(LSID.LSID_WinGroupEdit);
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             lblName.Text = LangMan.LS(LSID.LSID_Title);

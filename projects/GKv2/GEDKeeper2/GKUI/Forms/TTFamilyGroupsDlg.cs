@@ -63,7 +63,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_ToolOp_6);
+            Title = LangMan.LS(LSID.LSID_ToolOp_6);
             pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnAnalyseGroups.Text = LangMan.LS(LSID.LSID_Analyze);

@@ -21,11 +21,9 @@
 #if !__MonoCS__
 
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 using BSLib;
 using BSLib.Design.Graphics;
-using GKCore;
 using GKTests;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;

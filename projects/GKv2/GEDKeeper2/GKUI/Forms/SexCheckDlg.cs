@@ -37,7 +37,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_WinCheckSex);
+            Title = LangMan.LS(LSID.LSID_WinCheckSex);
             grpSex.Text = LangMan.LS(LSID.LSID_Sex);
             rbMale.Text = LangMan.LS(LSID.LSID_SexM);
             rbFemale.Text = LangMan.LS(LSID.LSID_SexF);

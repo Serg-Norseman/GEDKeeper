@@ -98,7 +98,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_WinCommunicationEdit);
+            Title = LangMan.LS(LSID.LSID_WinCommunicationEdit);
             pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
             lblTheme.Text = LangMan.LS(LSID.LSID_Theme);

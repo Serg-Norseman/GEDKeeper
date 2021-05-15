@@ -14,7 +14,7 @@ namespace GKUI.Forms
         private Scrollable Shape3;
         private Label lblTitle;
         private Eto.Forms.ImageView Image1;
-        private Label txtTip;
+        private TextBox txtTip;
 
         private void InitializeComponent()
         {
@@ -47,10 +47,10 @@ namespace GKUI.Forms
             Shape2.Width = 100;
             Shape2.Content = imgLayout;
 
-            txtTip = new Label();
-            txtTip.Wrap = WrapMode.Word;
-            txtTip.TextAlignment = TextAlignment.Left;
-            txtTip.VerticalAlignment = VerticalAlignment.Top;
+            txtTip = new TextBox();
+            txtTip.Size = new Size(370, 154);
+            txtTip.ReadOnly = true;
+            txtTip.ShowBorder = false;
 
             Shape3 = new Scrollable();
             Shape3.BackgroundColor = Colors.White;

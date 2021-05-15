@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,50 +28,10 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {
-    public class DefStackLayout : StackLayout
-    {
-        public DefStackLayout(Orientation orientation) : this(10, 10, orientation)
-        {
-        }
-
-        public DefStackLayout(int padding, int spacing, Orientation orientation)
-        {
-            Orientation = orientation;
-            Padding = new Padding(padding);
-            Spacing = spacing;
-        }
-
-        public DefStackLayout(Orientation orientation, int spacing, params Control[] items)
-        {
-            Orientation = orientation;
-            Padding = new Padding(0);
-            Spacing = spacing;
-            foreach (var item in items) Items.Add(item);
-        }
-
-        public DefStackLayout(params Control[] items) : this(Orientation.Vertical, 0, items)
-        {
-        }
-    }
-
-    public class DefTableLayout : TableLayout
-    {
-        public DefTableLayout()
-        {
-            Padding = new Padding(10);
-            Spacing = new Size(10, 10);
-        }
-
-        public DefTableLayout(int columns, int rows) : base(columns, rows)
-        {
-            Padding = new Padding(10);
-            Spacing = new Size(10, 10);
-        }
-    }
-
     /// <summary>
     /// Static functions only for UI implementation.
     /// </summary>
@@ -197,18 +157,17 @@ namespace GKUI.Components
 
         public static T GetSelectedTag<T>(ComboBox comboBox)
         {
-            GKComboItem<T> comboItem = (GKComboItem<T>)comboBox.SelectedValue;
-            T itemTag = (T)comboItem.Tag;
+            GKComboItem<T> comboItem = comboBox.SelectedValue as GKComboItem<T>;
+            T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
             return itemTag;
         }
 
         public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue, bool allowDefault = true)
         {
             foreach (object item in comboBox.Items) {
-                GKComboItem<T> comboItem = (GKComboItem<T>)item;
-                T itemTag = (T)comboItem.Tag;
+                GKComboItem<T> comboItem = item as GKComboItem<T>;
 
-                if (object.Equals(itemTag, tagValue)) {
+                if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
                     comboBox.SelectedValue = item;
                     return;
                 }
@@ -272,9 +231,32 @@ namespace GKUI.Components
             return new Bitmap(GKUtils.LoadResourceStream(resName));
         }
 
-        public static Bitmap LoadResourceImage(Type baseType, string resName)
+        public static void SetControlEnabled(Control ctl, bool enabled)
         {
-            return new Bitmap(GKUtils.LoadResourceStream(baseType, resName));
+            if (ctl != null) {
+                ctl.Enabled = enabled;
+                ctl.BackgroundColor = enabled ? SystemColors.WindowBackground : SystemColors.Control;
+            }
+        }
+
+        public static void SetClipboardText(string text)
+        {
+            using (var clipboard = new Clipboard()) {
+                clipboard.Text = text;
+            }
+        }
+
+        public static void ProcessName(object sender)
+        {
+            TextBox tb = (sender as TextBox);
+            if (tb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
+                tb.Text = ConvertHelper.UniformName(tb.Text);
+            }
+
+            ComboBox cmb = (sender as ComboBox);
+            if (cmb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
+                cmb.Text = ConvertHelper.UniformName(cmb.Text);
+            }
         }
 
         public static void SetControlFont(Control ctl, Font font)
@@ -370,34 +352,6 @@ namespace GKUI.Components
                 string[] extensions = exts.Split(',');
 
                 fileDlg.Filters.Add(new FileDialogFilter(name, extensions));
-            }
-        }
-
-        public static void SetControlEnabled(Control ctl, bool enabled)
-        {
-            if (ctl != null) {
-                ctl.Enabled = enabled;
-                ctl.BackgroundColor = enabled ? SystemColors.WindowBackground : SystemColors.Control;
-            }
-        }
-
-        public static void SetClipboardText(string text)
-        {
-            using (var clipboard = new Clipboard()) {
-                clipboard.Text = text;
-            }
-        }
-
-        public static void ProcessName(object sender)
-        {
-            TextBox tb = (sender as TextBox);
-            if (tb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
-                tb.Text = ConvertHelper.UniformName(tb.Text);
-            }
-
-            ComboBox cmb = (sender as ComboBox);
-            if (cmb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
-                cmb.Text = ConvertHelper.UniformName(cmb.Text);
             }
         }
     }

@@ -20,7 +20,6 @@
 
 using System;
 using System.IO;
-using System.Reflection;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -28,7 +27,7 @@ using GKCore.Cultures;
 using GKCore.Operations;
 using GKCore.Types;
 using GKTests;
-using GKUI;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKCore

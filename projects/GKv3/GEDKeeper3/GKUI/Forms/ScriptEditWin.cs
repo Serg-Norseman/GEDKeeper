@@ -146,6 +146,8 @@ namespace GKUI.Forms
             fController = new ScriptEditWinController(this);
             fController.Init(baseWin);
 
+            txtScriptText.TextChanged += mmScriptText_TextChanged;
+
             tbNewScript_Click(this, null);
 
             SetLang();

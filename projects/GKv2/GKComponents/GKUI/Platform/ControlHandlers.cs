@@ -20,8 +20,9 @@
 
 using BSLib.Design.Handlers;
 using GKCore.MVP.Controls;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     public sealed class DateBoxHandler : BaseControlHandler<GKDateBox, DateBoxHandler>, IDateBox
     {

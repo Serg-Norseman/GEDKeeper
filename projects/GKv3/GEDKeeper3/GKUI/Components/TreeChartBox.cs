@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,6 +31,8 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKUI.Platform;
+using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKUI.Components
 {
@@ -89,10 +91,16 @@ namespace GKUI.Components
             }
         }
 
-        public int DepthLimit
+        public int DepthLimitAncestors
         {
-            get { return fModel.DepthLimit; }
-            set { fModel.DepthLimit = value; }
+            get { return fModel.DepthLimitAncestors; }
+            set { fModel.DepthLimitAncestors = value; }
+        }
+
+        public int DepthLimitDescendants
+        {
+            get { return fModel.DepthLimitDescendants; }
+            set { fModel.DepthLimitDescendants = value; }
         }
 
         public int IndividualsCount
@@ -149,7 +157,7 @@ namespace GKUI.Components
 
         #region Instance control
 
-        public TreeChartBox() : base()
+        public TreeChartBox()
         {
             BackgroundColor = Colors.White;
 
@@ -160,7 +168,7 @@ namespace GKUI.Components
 
             fTreeControls = new TreeControlsList<ITreeControl>();
             fTreeControls.Add(new TCScaleControl(this));
-            fTreeControls.Add(new TCGenerationsControl(this));
+            fTreeControls.Add(new TCGenerationsControl(this, TreeChartKind.ckDescendants));
             //fPersonControl = new PersonControl(this);
 
             InitTimer();
@@ -224,6 +232,11 @@ namespace GKUI.Components
             fTreeControls.UpdateState();
 
             DoZoomChanged();
+        }
+
+        public void GenChart(bool rootCenter)
+        {
+            GenChart(fModel.Root.Rec, fModel.Kind, rootCenter);
         }
 
         public void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
@@ -345,13 +358,15 @@ namespace GKUI.Components
 
             fModel.SetOffsets(spx, spy);
 
+            fRenderer.SetSmoothing(true);
+
             DrawBackground(background);
 
-#if DEBUG_IMAGE
+            #if DEBUG_IMAGE
             using (Pen pen = new Pen(Color.Red)) {
                 fRenderer.DrawRectangle(pen, Color.Transparent, fSPX, fSPY, fImageWidth, fImageHeight);
             }
-#endif
+            #endif
 
             bool hasDeep = (fSelected != null && fSelected != fModel.Root && fSelected.Rec != null);
 
@@ -365,6 +380,13 @@ namespace GKUI.Components
             if (hasDeep && fOptions.DeepMode == DeepMode.Foreground) {
                 DrawDeep(fOptions.DeepMode, spx, spy);
             }
+
+            if (fOptions.BorderStyle != GfxBorderStyle.None) {
+                fRenderer.SetSmoothing(false);
+                var rt = ExtRect.CreateBounds(spx, spy, fModel.ImageWidth, fModel.ImageHeight);
+                BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
+                fRenderer.SetSmoothing(true);
+            }
         }
 
         private void DrawDeep(DeepMode mode, int spx, int spy)
@@ -373,11 +395,17 @@ namespace GKUI.Components
                 using (var deepModel = new TreeChartModel()) {
                     deepModel.Assign(fModel);
                     deepModel.SetRenderer(fRenderer);
-                    deepModel.DepthLimit = 2;
+                    deepModel.DepthLimitAncestors = 2;
+                    deepModel.DepthLimitDescendants = 2;
                     deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth, true);
                     deepModel.RecalcChart(true);
 
                     var pers = deepModel.FindPersonByRec(fSelected.Rec);
+                    if (pers == null) {
+                        Logger.WriteError("TreeChartBox.DrawDeep(): unexpected failure");
+                        return;
+                    }
+
                     int dmX = (spx + (fSelected.PtX - pers.PtX));
                     int dmY = (spy + (fSelected.PtY - pers.PtY));
                     deepModel.SetOffsets(dmX, dmY);
@@ -390,8 +418,8 @@ namespace GKUI.Components
 
                         case DeepMode.Foreground:
                             fRenderer.SetTranslucent(0.25f);
-                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDConsts.Colors.Black), 2.0f);
-                            IColor bColor = ChartRenderer.GetColor(BSDConsts.Colors.White);
+                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 2.0f);
+                            IColor bColor = ChartRenderer.GetColor(BSDColors.White);
                             fRenderer.DrawRoundedRectangle(xpen, bColor, dmX, dmY, deepModel.ImageWidth, deepModel.ImageHeight, 6);
                             fRenderer.SetTranslucent(0.00f);
                             break;
@@ -665,7 +693,7 @@ namespace GKUI.Components
                             break;
 
                         case MouseAction.Drag:
-                            Cursor = Cursors.Move; // SizeAll;
+                            Cursor = Cursors.Move;
                             fMode = ChartControlMode.DragImage;
                             break;
                     }
@@ -853,7 +881,7 @@ namespace GKUI.Components
             SetSelected(null);
         }
 
-        private void CenterPerson(TreeChartPerson person, bool animation = true)
+        public void CenterPerson(TreeChartPerson person, bool animation = true)
         {
             if (person == null) return;
 

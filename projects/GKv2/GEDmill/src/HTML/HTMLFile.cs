@@ -17,7 +17,6 @@
  */
 
 using System;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using GKCore.Logging;
@@ -29,7 +28,7 @@ namespace GEDmill.HTML
     /// </summary>
     public class HTMLFile
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(HTMLFile).Name);
+        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(HTMLFile).Name);
 
         private FileStream fStream;
         private StreamWriter fWriter;
@@ -43,7 +42,7 @@ namespace GEDmill.HTML
                 throw new HTMLException("A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop.");
             }
 
-            fLogger.WriteInfo("CHTMLFile : " + filename);
+            fLogger.WriteInfo("HTMLFile : " + filename);
 
             if (File.Exists(filename)) {
                 // Delete any current file
@@ -61,14 +60,11 @@ namespace GEDmill.HTML
                 var encoding = new UTF8EncodingWithoutPreamble();
                 fWriter = new StreamWriter(fStream, encoding);
 
-                DateTime dt = DateTime.Now;
-                string date = dt.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
-
                 fWriter.WriteLine("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
                 fWriter.WriteLine("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">");
                 fWriter.WriteLine("  <head>");
-                fWriter.WriteLine("    <link rel=\"stylesheet\" type=\"text/css\" href=\"" + CConfig.Instance.StylesheetFilename + ".css\" />");
-                if (CConfig.Instance.AllowMultipleImages) // Multiple images feature is currently (10Dec08) the only thing that uses javascript
+                fWriter.WriteLine("    <link rel=\"stylesheet\" type=\"text/css\" href=\"" + GMConfig.Instance.StylesheetFilename + ".css\" />");
+                if (GMConfig.Instance.AllowMultipleImages) // Multiple images feature is currently (10Dec08) the only thing that uses javascript
                 {
                     fWriter.WriteLine("    <script type=\"text/javascript\" src=\"gedmill.js\"></script>");
                 }
@@ -78,7 +74,7 @@ namespace GEDmill.HTML
                 fWriter.WriteLine(string.Concat("    <meta name=\"Description\" content=\"", description, "\" />"));
                 fWriter.WriteLine(string.Concat("    <meta name=\"Keywords\" content=\"", keywords, "\" />"));
                 fWriter.WriteLine("    <meta name=\"Version\" content=\"1.00\" />");
-                fWriter.WriteLine(string.Concat("    <meta name=\"VersionDate\" content=\"", date, "\" />"));
+                fWriter.WriteLine(string.Concat("    <meta name=\"VersionDate\" content=\"", GMHelper.GetNowDateStr(), "\" />"));
                 fWriter.WriteLine(string.Concat("    <title>", title, "</title>"));
                 fWriter.WriteLine("  </head>");
                 fWriter.WriteLine("  ");
@@ -102,11 +98,6 @@ namespace GEDmill.HTML
         public void WriteLine(string format, params object[] arg)
         {
             fWriter.WriteLine(string.Format(format, arg));
-        }
-
-        public void WriteH1(string text)
-        {
-            fWriter.WriteLine(string.Concat("<h1>", text, "</h1>"));
         }
 
         /// <summary>

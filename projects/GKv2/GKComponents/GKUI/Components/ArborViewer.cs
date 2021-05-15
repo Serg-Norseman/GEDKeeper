@@ -1,10 +1,21 @@
 ﻿/*
- *  ArborGVT - a graph visualization toolkit
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
- *  Physics code derived from springy.js, copyright (c) 2010 Dennis Hotson
- *  JavaScript library, copyright (c) 2011 Samizdat Drafting Co.
+ *  This file is part of "GEDKeeper".
  *
- *  Fork and C# implementation, copyright (c) 2012,2016 by Sergey V. Zhdanovskih.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 using System;
@@ -13,6 +24,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BSLib.DataViz.ArborGVT;
 using GKCore;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {
@@ -23,7 +35,7 @@ namespace GKUI.Components
 
         public ArborNodeEx(string sign) : base(sign)
         {
-            this.Color = Color.Gray;
+            Color = Color.Gray;
         }
     }
 
@@ -243,12 +255,11 @@ namespace GKUI.Components
             base.OnMouseDown(e);
             if (!Focused) Focus();
 
-            if (fNodesDragging)
-            {
-                fDragged = fSys.GetNearestNode(e.Location.X, e.Location.Y);
+            Point mpt = e.Location;
+            if (fNodesDragging) {
+                fDragged = fSys.GetNearestNode(mpt.X, mpt.Y);
 
-                if (fDragged != null)
-                {
+                if (fDragged != null) {
                     fDragged.Fixed = true;
                 }
             }
@@ -258,8 +269,7 @@ namespace GKUI.Components
         {
             base.OnMouseUp(e);
 
-            if (fNodesDragging && fDragged != null)
-            {
+            if (fNodesDragging && fDragged != null) {
                 fDragged.Fixed = false;
                 //fDragged.Mass = 1000;
                 fDragged = null;
@@ -270,9 +280,9 @@ namespace GKUI.Components
         {
             base.OnMouseMove(e);
 
-            if (fNodesDragging && fDragged != null)
-            {
-                fDragged.Pt = fSys.GetModelCoords(e.Location.X, e.Location.Y);
+            Point mpt = e.Location;
+            if (fNodesDragging && fDragged != null) {
+                fDragged.Pt = fSys.GetModelCoords(mpt.X, mpt.Y);
             }
         }
 

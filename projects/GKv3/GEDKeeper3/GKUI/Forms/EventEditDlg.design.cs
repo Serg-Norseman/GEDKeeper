@@ -88,14 +88,14 @@ namespace GKUI.Forms
             cmbEventDateType.SelectedIndexChanged += EditEventDateType_SelectedIndexChanged;
 
             txtEventDate1 = new GKDateBox();
-            //txtEventDate1.AllowDrop = true;
-            //txtEventDate1.DragDrop += new DragEventHandler(EditEventDate1_DragDrop);
-            //txtEventDate1.DragOver += new DragEventHandler(EditEventDate1_DragOver);
+            txtEventDate1.AllowDrop = true;
+            txtEventDate1.DragDrop += txtEventDateX_DragDrop;
+            txtEventDate1.DragOver += txtEventDateX_DragOver;
 
             txtEventDate2 = new GKDateBox();
-            //txtEventDate2.AllowDrop = true;
-            //txtEventDate2.DragDrop += new DragEventHandler(EditEventDate1_DragDrop);
-            //txtEventDate2.DragOver += new DragEventHandler(EditEventDate1_DragOver);
+            txtEventDate2.AllowDrop = true;
+            txtEventDate2.DragDrop += txtEventDateX_DragDrop;
+            txtEventDate2.DragOver += txtEventDateX_DragOver;
 
             txtEventCause = new TextBox();
 

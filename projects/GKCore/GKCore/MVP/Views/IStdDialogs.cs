@@ -27,7 +27,7 @@ namespace GKCore.MVP.Views
     /// </summary>
     public interface IStdDialogs
     {
-        bool GetInput(string prompt, ref string value);
+        bool GetInput(object owner, string prompt, ref string value);
 
         string GetOpenFile(string title, string context, string filter,
                            int filterIndex, string defaultExt);
@@ -43,12 +43,14 @@ namespace GKCore.MVP.Views
 
         IFont SelectFont(IFont font);
 
-        void ShowError(string msg);
+        void ShowAlert(string msg, string title = "");
 
-        void ShowMessage(string msg);
+        void ShowError(string msg, string title = "");
 
-        bool ShowQuestionYN(string msg);
+        void ShowMessage(string msg, string title = "");
 
-        void ShowWarning(string msg);
+        bool ShowQuestionYN(string msg, string title = "");
+
+        void ShowWarning(string msg, string title = "");
     }
 }

@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -44,6 +45,19 @@ namespace GKCore
     public static class GKUtils
     {
         #region Aux functions
+
+        public static List<string> GetCountries()
+        {
+            var countries = new List<string>();
+            foreach (CultureInfo culture in CultureInfo.GetCultures(CultureTypes.SpecificCultures)) {
+                RegionInfo regionInfo = new RegionInfo(culture.LCID);
+                string ctry = regionInfo.TwoLetterISORegionName; // DisplayName
+                if (!countries.Contains(ctry))
+                    countries.Add(ctry);
+            }
+            countries.Sort();
+            return countries;
+        }
 
         public static void LoadExtFile(string fileName, string args = "")
         {

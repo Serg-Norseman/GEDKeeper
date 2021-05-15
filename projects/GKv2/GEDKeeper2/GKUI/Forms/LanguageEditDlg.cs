@@ -58,7 +58,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_Language);
+            Title = LangMan.LS(LSID.LSID_Language);
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
 
             fController = new LanguageEditDlgController(this);

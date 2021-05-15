@@ -73,7 +73,7 @@ namespace GKUI.Forms
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             // SetLang()
-            Text = LangMan.LS(LSID.LSID_RelationshipCalculator);
+            Title = LangMan.LS(LSID.LSID_RelationshipCalculator);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnRec1Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
             btnRec2Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";

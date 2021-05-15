@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,10 +28,17 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Platform;
+
+using BSDListItem = BSLib.Design.MVP.Controls.IListItem;
+using BSDSortOrder = BSLib.Design.BSDTypes.SortOrder;
 
 namespace GKUI.Components
 {
-    public class GKListItem : GridItem, BSLib.Design.MVP.Controls.IListItem
+    /// <summary>
+    /// 
+    /// </summary>
+    public class GKListItem : GridItem, BSDListItem
     {
         private Color fBackColor;
         private Color fForeColor;
@@ -90,12 +97,12 @@ namespace GKUI.Components
                 ForeColor = colorHandler.Handle;
             }
         }
+
+        public void SetFont(IFont font)
+        {
+        }
     }
 
-    public enum SortOrder
-    {
-        None, Ascending, Descending
-    }
 
     public class ItemCheckEventArgs : EventArgs
     {
@@ -109,52 +116,29 @@ namespace GKUI.Components
         }
     }
 
+
     public delegate void ItemCheckEventHandler(object sender, ItemCheckEventArgs e);
 
-    public sealed class GKListViewItems : IListViewItems
-    {
-        private readonly GKListView fListView;
-
-        public BSLib.Design.MVP.Controls.IListItem this[int index]
-        {
-            get { return fListView.Items[index]; }
-        }
-
-        public int Count
-        {
-            get { return fListView.Items.Count; }
-        }
-
-        public GKListViewItems(GKListView listView)
-        {
-            fListView = listView;
-        }
-    }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class GKListView : GridView, IListViewEx
     {
         private readonly ObservableExtList<GKListItem> fItems;
-        private readonly GKListViewItems fItemsAccessor;
+        //private readonly GKListViewItems fItemsAccessor;
 
         private bool fCheckedList;
         private IListManager fListMan;
         private bool fSorting;
         private int fSortColumn;
-        private BSDTypes.SortOrder fSortOrder;
+        private BSDSortOrder fSortOrder;
         private int fUpdateCount;
 
 
-        public IList<GKListItem> Items
-        {
-            get { return fItems; }
-        }
-
         IListViewItems IListView.Items
         {
-            get { return fItemsAccessor; }
+            get { return fItems; }
         }
 
         public IListManager ListMan
@@ -171,7 +155,7 @@ namespace GKUI.Components
                     if (fListMan != null) {
                         fSorting = true;
                         fSortColumn = 0;
-                        fSortOrder = BSDTypes.SortOrder.Ascending;
+                        fSortOrder = BSDSortOrder.Ascending;
                     } else {
                     }
                 }
@@ -201,7 +185,7 @@ namespace GKUI.Components
             set { fSortColumn = value; }
         }
 
-        public BSDTypes.SortOrder SortOrder
+        public BSDSortOrder SortOrder
         {
             get { return fSortOrder; }
             set { fSortOrder = value; }
@@ -223,19 +207,15 @@ namespace GKUI.Components
 
             fCheckedList = false;
             fItems = new ObservableExtList<GKListItem>();
-            fItemsAccessor = new GKListViewItems(this);
-            fListMan = null;
+            //fItemsAccessor = new GKListViewItems(this);
             fSortColumn = 0;
-            fSortOrder = BSDTypes.SortOrder.None;
+            fSortOrder = BSDSortOrder.None;
 
             AllowColumnReordering = false;
             AllowMultipleSelection = false;
             DataStore = fItems;
-        }
 
-        public GKListView(IListManager listMan) : this()
-        {
-            ListMan = listMan;
+            fListMan = null;
         }
 
         protected override void Dispose(bool disposing)
@@ -272,34 +252,34 @@ namespace GKUI.Components
             }
         }
 
-        protected BSDTypes.SortOrder GetColumnSortOrder(int columnIndex)
+        protected BSDSortOrder GetColumnSortOrder(int columnIndex)
         {
-            return (fSortColumn == columnIndex) ? fSortOrder : BSDTypes.SortOrder.None;
+            return (fSortColumn == columnIndex) ? fSortOrder : BSDSortOrder.None;
         }
 
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
         {
             int prevColumn = fSortColumn;
             if (prevColumn == sortColumn && checkOrder) {
-                BSDTypes.SortOrder prevOrder = GetColumnSortOrder(sortColumn);
-                fSortOrder = (prevOrder == BSDTypes.SortOrder.Ascending) ? BSDTypes.SortOrder.Descending : BSDTypes.SortOrder.Ascending;
+                BSDSortOrder prevOrder = GetColumnSortOrder(sortColumn);
+                fSortOrder = (prevOrder == BSDSortOrder.Ascending) ? BSDSortOrder.Descending : BSDSortOrder.Ascending;
             }
 
             fSortColumn = sortColumn;
 
             object rowData = GetSelectedData();
-            SortContents();
+            SortContents(true);
             UpdateItems();
             if (rowData != null) SelectItem(rowData);
         }
 
-        public void Sort(int sortColumn, BSDTypes.SortOrder sortOrder)
+        public void Sort(int sortColumn, BSDSortOrder sortOrder)
         {
             fSortColumn = sortColumn;
             fSortOrder = sortOrder;
 
             object rowData = GetSelectedData();
-            SortContents();
+            SortContents(true);
             UpdateItems();
             if (rowData != null) SelectItem(rowData);
         }
@@ -369,10 +349,10 @@ namespace GKUI.Components
 
                 string arrow = "";
                 switch (GetColumnSortOrder(e.ColumnIndex)) {
-                    case SortOrder.Ascending:
+                    case BSDSortOrder.Ascending:
                         arrow = "▲";
                         break;
-                    case SortOrder.Descending:
+                    case BSDSortOrder.Descending:
                         arrow = "▼";
                         break;
                 }
@@ -413,22 +393,11 @@ namespace GKUI.Components
             base.OnCellFormatting(e);
         }*/
 
-        private void SortContents()
-        {
-            if (fSorting) {
-                if (fListMan != null) {
-                    fListMan.SortContents(fSortColumn, fSortOrder == BSDTypes.SortOrder.Ascending);
-                } else {
-                    SortHelper.MergeSort(fItems, CompareItems);
-                }
-            }
-        }
-
         private int CompareItems(GKListItem item1, GKListItem item2)
         {
             int result = 0;
 
-            if (fSortOrder != BSDTypes.SortOrder.None && fSortColumn >= 0) {
+            if (fSortOrder != BSDSortOrder.None && fSortColumn >= 0) {
                 if (fSortColumn < item1.Values.Length && fSortColumn < item2.Values.Length) {
                     IComparable val1 = item1.Values[fSortColumn] as IComparable;
                     IComparable val2 = item2.Values[fSortColumn] as IComparable;
@@ -438,14 +407,14 @@ namespace GKUI.Components
                         bool isStr2 = val2 is string;
 
                         if (isStr1 && isStr2) {
-                            result = agCompare((string)val1, (string)val2);
+                            result = StrCompareEx((string)val1, (string)val2);
                         } else {
                             result = val1.CompareTo(val2);
                         }
                     }
                 }
 
-                if (fSortOrder == BSDTypes.SortOrder.Descending) {
+                if (fSortOrder == BSDSortOrder.Descending) {
                     result = -result;
                 }
             }
@@ -453,38 +422,28 @@ namespace GKUI.Components
             return result;
         }
 
-        #region Private methods
+        #region Virtual mode with ListSource
 
-        internal static int agCompare(string str1, string str2)
+        // In Eto not exists
+        /*protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
         {
-            double val1, val2;
-            bool v1 = double.TryParse(str1, out val1);
-            bool v2 = double.TryParse(str2, out val2);
+            if (fListMan != null && fUpdateCount == 0) {
+                fListMan.ChangeColumnWidth(e.ColumnIndex, Columns[e.ColumnIndex].Width);
+            }
 
-            int result;
-            if (v1 && v2)
-            {
-                if (val1 < val2) {
-                    result = -1;
-                } else if (val1 > val2) {
-                    result = +1;
+            base.OnColumnWidthChanged(e);
+        }*/
+
+        private void SortContents(bool restoreSelected)
+        {
+            if (fSorting) {
+                if (fListMan != null) {
+                    fListMan.SortContents(fSortColumn, fSortOrder == BSDSortOrder.Ascending);
                 } else {
-                    result = 0;
+                    SortHelper.MergeSort(fItems, CompareItems);
                 }
             }
-            else
-            {
-                result = string.Compare(str1, str2, false);
-                if (str1 != "" && str2 == "") {
-                    result = -1;
-                } else if (str1 == "" && str2 != "") {
-                    result = +1;
-                }
-            }
-            return result;
         }
-
-        #endregion
 
         private void UpdateItems()
         {
@@ -503,18 +462,6 @@ namespace GKUI.Components
                 }
             }
         }
-
-        #region Virtual mode with ListSource
-
-        // In Eto not exists
-        /*protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
-        {
-            if (fListMan != null && fUpdateCount == 0) {
-                fListMan.ChangeColumnWidth(e.ColumnIndex, Columns[e.ColumnIndex].Width);
-            }
-
-            base.OnColumnWidthChanged(e);
-        }*/
 
         public void UpdateContents(bool columnsChanged = false)
         {
@@ -535,7 +482,7 @@ namespace GKUI.Components
                     }
 
                     fListMan.UpdateContents();
-                    SortContents();
+                    SortContents(false);
                     UpdateItems();
 
                     ResizeColumns();
@@ -563,27 +510,19 @@ namespace GKUI.Components
 
         #region Public methods
 
+        public void Clear()
+        {
+            Columns.Clear();
+            fItems.Clear();
+        }
+
         public void ClearColumns()
         {
             Columns.Clear();
         }
 
-        public void Clear()
-        {
-            Columns.Clear();
-            Items.Clear();
-        }
-
-        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
-        {
-            AddColumn(caption, width, autoSize);
-        }
-
         public void AddColumn(string caption, int width, bool autoSize = false)
         {
-            //if (autoSize) width = -1;
-            //Columns.Add(caption, width, HorizontalAlignment.Left);
-
             var cell = new TextBoxCell(Columns.Count);
 
             GridColumn column = new GridColumn();
@@ -596,9 +535,6 @@ namespace GKUI.Components
 
         public void AddCheckedColumn(string caption, int width, bool autoSize = false)
         {
-            //if (autoSize) width = -1;
-            //Columns.Add(caption, width, HorizontalAlignment.Left);
-
             var cell = new CheckBoxCell(Columns.Count);
 
             GridColumn column = new GridColumn();
@@ -639,6 +575,11 @@ namespace GKUI.Components
             Columns.Add(column);
         }
 
+        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
+        {
+            AddColumn(caption, width, autoSize);
+        }
+
         public void SetColumnCaption(int index, string caption)
         {
             Columns[index].HeaderText = caption;
@@ -677,7 +618,7 @@ namespace GKUI.Components
             fItems.Clear();
         }
 
-        public BSLib.Design.MVP.Controls.IListItem AddItem(object rowData, params object[] columnValues)
+        public BSDListItem AddItem(object rowData, params object[] columnValues)
         {
             object[] itemValues;
             if (fCheckedList) {
@@ -695,6 +636,32 @@ namespace GKUI.Components
             return item;
         }
 
+        public IList<object> GetSelectedItems()
+        {
+            try {
+                var result = new List<object>();
+
+                /*if (!VirtualMode) {
+                    int num = SelectedItems.Count;
+                    for (int i = 0; i < num; i++) {
+                        var lvItem = SelectedItems[i] as GKListItem;
+                        result.Add(lvItem.Data);
+                    }
+                } else {
+                    int num = SelectedIndices.Count;
+                    for (int i = 0; i < num; i++) {
+                        int index = SelectedIndices[i];
+                        result.Add(fListMan.GetContentItem(index));
+                    }
+                }*/
+
+                return result;
+            } catch (Exception ex) {
+                Logger.WriteError("GKListView.GetSelectedItems()", ex);
+                return null;
+            }
+        }
+
         public GKListItem GetSelectedItem()
         {
             var item = SelectedItem as GKListItem;
@@ -707,10 +674,10 @@ namespace GKUI.Components
             return (item != null) ? item.Data : null;
         }
 
-        private void SelectItem(BSLib.Design.MVP.Controls.IListItem item)
+        private void SelectItem(GKListItem item)
         {
             if (item != null) {
-                int idx = fItems.IndexOf((GKListItem)item);
+                int idx = fItems.IndexOf(item);
                 SelectItem(idx);
             }
         }
@@ -765,6 +732,36 @@ namespace GKUI.Components
             ItemCheckEventHandler handler = this.ItemCheck;
             if (handler != null)
                 handler.Invoke(this, new ItemCheckEventArgs(index, newValue));
+        }
+
+        #endregion
+
+        #region Internal functions
+
+        internal static int StrCompareEx(string str1, string str2)
+        {
+            double val1, val2;
+            bool v1 = double.TryParse(str1, out val1);
+            bool v2 = double.TryParse(str2, out val2);
+
+            int result;
+            if (v1 && v2) {
+                if (val1 < val2) {
+                    result = -1;
+                } else if (val1 > val2) {
+                    result = +1;
+                } else {
+                    result = 0;
+                }
+            } else {
+                result = string.Compare(str1, str2, false);
+                if (str1 != "" && str2 == "") {
+                    result = -1;
+                } else if (str1 == "" && str2 != "") {
+                    result = +1;
+                }
+            }
+            return result;
         }
 
         #endregion

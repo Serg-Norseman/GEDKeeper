@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib.DataViz.ArborGVT;
@@ -62,14 +63,18 @@ namespace GKUI.Forms
                 }
             }
 
-            arborViewer1.Name = "arborViewer1";
             arborViewer1.NodesDragging = true;
+        }
+
+        private void Form_Load(object sender, EventArgs e)
+        {
             arborViewer1.start();
         }
 
         private void ArborViewer1_MouseMove(object sender, MouseEventArgs e)
         {
-            ArborNode resNode = arborViewer1.getNodeByCoord(e.X, e.Y);
+            Point mpt = e.Location;
+            ArborNode resNode = arborViewer1.getNodeByCoord(mpt.X, mpt.Y);
 
             if (resNode == null) {
                 if (fTipShow) {

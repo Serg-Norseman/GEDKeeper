@@ -7,10 +7,6 @@
 		private System.Windows.Forms.ToolStrip ToolBar1;
 		private System.Windows.Forms.ToolStripComboBox cbType;
 		private GKUI.Components.GKListView lvSummary;
-		private System.Windows.Forms.ColumnHeader ColumnHeader1;
-		private System.Windows.Forms.ColumnHeader ColumnHeader2;
-		private System.Windows.Forms.ColumnHeader ColumnHeader3;
-		private System.Windows.Forms.ColumnHeader ColumnHeader4;
 		private System.Windows.Forms.ToolStripSeparator TBS1;
 		private System.Windows.Forms.ToolStripSeparator TBS2;
 		private System.Windows.Forms.ToolStripButton tbExcelExport;
@@ -19,10 +15,6 @@
 		{
 			this.grpSummary = new System.Windows.Forms.GroupBox();
 			this.lvSummary = new GKUI.Components.GKListView();
-			this.ColumnHeader1 = new System.Windows.Forms.ColumnHeader();
-			this.ColumnHeader2 = new System.Windows.Forms.ColumnHeader();
-			this.ColumnHeader3 = new System.Windows.Forms.ColumnHeader();
-			this.ColumnHeader4 = new System.Windows.Forms.ColumnHeader();
 			this.Panel1 = new System.Windows.Forms.Panel();
 			this.ToolBar1 = new System.Windows.Forms.ToolStrip();
 			this.TBS1 = new System.Windows.Forms.ToolStripSeparator();
@@ -47,11 +39,6 @@
 			// 
 			// lvSummary
 			// 
-			this.lvSummary.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-									this.ColumnHeader1,
-									this.ColumnHeader2,
-									this.ColumnHeader3,
-									this.ColumnHeader4});
 			this.lvSummary.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lvSummary.FullRowSelect = true;
 			this.lvSummary.Location = new System.Drawing.Point(3, 20);
@@ -60,26 +47,6 @@
 			this.lvSummary.TabIndex = 0;
 			this.lvSummary.UseCompatibleStateImageBehavior = false;
 			this.lvSummary.View = System.Windows.Forms.View.Details;
-			// 
-			// ColumnHeader1
-			// 
-			this.ColumnHeader1.Text = "ColumnHeader1";
-			this.ColumnHeader1.Width = 300;
-			// 
-			// ColumnHeader2
-			// 
-			this.ColumnHeader2.Text = "ColumnHeader2";
-			this.ColumnHeader2.Width = 100;
-			// 
-			// ColumnHeader3
-			// 
-			this.ColumnHeader3.Text = "ColumnHeader3";
-			this.ColumnHeader3.Width = 100;
-			// 
-			// ColumnHeader4
-			// 
-			this.ColumnHeader4.Text = "ColumnHeader4";
-			this.ColumnHeader4.Width = 100;
 			// 
 			// Panel1
 			// 

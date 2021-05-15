@@ -36,7 +36,7 @@ namespace GKUI.Forms
     public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
     {
         private readonly IBaseWindow fBase;
-        private ArborViewer fArborViewer;
+        private ArborViewer arborViewer1;
         private bool fTipShow;
 
         private void InitializeComponent()
@@ -45,18 +45,13 @@ namespace GKUI.Forms
             Load += Form_Load;
             Title = "PatriarchsViewer";
 
-            fArborViewer = new ArborViewer();
-            fArborViewer.BackgroundColor = Colors.White;
-            fArborViewer.EnergyDebug = false;
-            fArborViewer.NodesDragging = false;
-            fArborViewer.MouseMove += ArborViewer1_MouseMove;
+            arborViewer1 = new ArborViewer();
+            arborViewer1.BackgroundColor = Colors.White;
+            arborViewer1.EnergyDebug = false;
+            arborViewer1.NodesDragging = false;
+            arborViewer1.MouseMove += ArborViewer1_MouseMove;
 
-            Content = fArborViewer;
-        }
-
-        private void Form_Load(object sender, EventArgs e)
-        {
-            fArborViewer.start();
+            Content = arborViewer1;
         }
 
         public PatriarchsViewerWin(IBaseWindow baseWin, int minGens)
@@ -67,7 +62,7 @@ namespace GKUI.Forms
             fTipShow = false;
 
             using (Graph graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true)) {
-                ArborSystem sys = fArborViewer.Sys;
+                ArborSystem sys = arborViewer1.Sys;
 
                 foreach (Vertex vtx in graph.Vertices) {
                     var arbNode = sys.AddNode(vtx.Sign) as ArborNodeEx;
@@ -82,18 +77,22 @@ namespace GKUI.Forms
                 }
             }
 
-            fArborViewer.NodesDragging = true;
+            arborViewer1.NodesDragging = true;
+        }
+
+        private void Form_Load(object sender, EventArgs e)
+        {
+            arborViewer1.start();
         }
 
         private void ArborViewer1_MouseMove(object sender, MouseEventArgs e)
         {
             Point mpt = new Point(e.Location);
-            ArborNode resNode = fArborViewer.getNodeByCoord(mpt.X, mpt.Y);
+            ArborNode resNode = arborViewer1.getNodeByCoord(mpt.X, mpt.Y);
 
             if (resNode == null) {
                 if (fTipShow) {
-                    //fTip.Hide(arborViewer1);
-                    fArborViewer.ToolTip = string.Empty;
+                    arborViewer1.ToolTip = string.Empty;
                     fTipShow = false;
                 }
             } else {
@@ -102,8 +101,7 @@ namespace GKUI.Forms
                     GDMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GDMFamilyRecord;
                     string txt = GKUtils.GetFamilyString(fBase.Context.Tree, famRec) + " [" + xref + "] "/* + resNode.Mass.ToString()*/;
 
-                    //fTip.Show(txt, arborViewer1, mpt.X + 24, mpt.Y);
-                    fArborViewer.ToolTip = txt;
+                    arborViewer1.ToolTip = txt;
                     fTipShow = true;
                 }
             }

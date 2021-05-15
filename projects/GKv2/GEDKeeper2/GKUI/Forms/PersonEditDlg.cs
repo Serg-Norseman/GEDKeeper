@@ -266,7 +266,6 @@ namespace GKUI.Forms
 
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
-            imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 
             SetLang();
 
@@ -290,7 +289,7 @@ namespace GKUI.Forms
         {
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_WinPersonEdit);
+            Title = LangMan.LS(LSID.LSID_WinPersonEdit);
             lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
             lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
             lblName.Text = LangMan.LS(LSID.LSID_Name);
@@ -432,8 +431,8 @@ namespace GKUI.Forms
 
         private void Names_TextChanged(object sender, EventArgs e)
         {
-            Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
-                                 cmbPatronymic.Text, fController.Person.GetXRefNum());
+            Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
+                                  cmbPatronymic.Text, fController.Person.GetXRefNum());
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)

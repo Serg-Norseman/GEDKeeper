@@ -2,6 +2,7 @@
 rem <<< Main assemblies cleaning >>>
 
 rmdir .\.vs /s /q
+rmdir .\.idea /s /q
 
 rmdir .\GEDKeeper3\bin /s /q
 rmdir .\GEDKeeper3\obj /s /q

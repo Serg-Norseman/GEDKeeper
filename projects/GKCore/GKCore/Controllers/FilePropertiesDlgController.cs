@@ -86,7 +86,7 @@ namespace GKCore.Controllers
             using (var dlg = AppHost.ResolveDialog<ILanguageEditDlg>()) {
                 dlg.LanguageID = fBase.Context.Tree.Header.Language;
 
-                if (dlg.ShowModalX(this)) {
+                if (dlg.ShowModalX(fView)) {
                     // Assignment in control, instead of the header's property to work Cancel.
                     fView.Language.Text = GEDCOMUtils.GetLanguageStr(dlg.LanguageID);
                 }

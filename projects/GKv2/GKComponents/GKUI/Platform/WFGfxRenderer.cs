@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,8 +27,9 @@ using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using GKCore.Charts;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
     /// 
@@ -48,7 +49,7 @@ namespace GKUI.Components
         {
             Graphics gfx = target as Graphics;
             if (gfx == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentException("target");
 
             fCanvas = gfx;
         }

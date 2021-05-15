@@ -151,7 +151,7 @@ namespace GKUI.Forms
 
         public override void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_MIMap);
+            Title = LangMan.LS(LSID.LSID_MIMap);
             pagePlaces.Text = LangMan.LS(LSID.LSID_RPLocations);
             grpSelection.Text = LangMan.LS(LSID.LSID_MapSelection);
             radTotal.Text = LangMan.LS(LSID.LSID_MapSelOnAll);

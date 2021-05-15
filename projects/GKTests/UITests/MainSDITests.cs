@@ -33,6 +33,7 @@ using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
+using GKUI.Platform;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 

@@ -23,8 +23,9 @@ using BSLib;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using GKCore.Charts;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
     /// 
@@ -34,22 +35,22 @@ namespace GKUI.Components
         private Graphics fCanvas;
         private float fTranslucent;
 
-        public EtoGfxRenderer() : base()
+        public EtoGfxRenderer()
         {
-        }
-
-        public override void SetSmoothing(bool value)
-        {
-            fCanvas.AntiAlias = value;
         }
 
         public override void SetTarget(object target)
         {
             Graphics gfx = target as Graphics;
             if (gfx == null)
-                throw new ArgumentException(@"Argument's type mismatch", "target");
+                throw new ArgumentException("target");
 
             fCanvas = gfx;
+        }
+
+        public override void SetSmoothing(bool value)
+        {
+            fCanvas.AntiAlias = value;
         }
 
         public override void DrawImage(IImage image, float x, float y,
@@ -60,8 +61,7 @@ namespace GKUI.Components
             fCanvas.DrawImage(sdImage, x, y, width, height);
         }
 
-        public override void DrawImage(IImage image, ExtRect destinationRect,
-            ExtRect sourceRect)
+        public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)
         {
             var sdImage = ((ImageHandler)image).Handle;
 
@@ -112,7 +112,7 @@ namespace GKUI.Components
         public override void DrawRectangle(IPen pen, IColor fillColor,
                                            float x, float y, float width, float height)
         {
-            Color sdFillColor = ((ColorHandler)fillColor).Handle;
+            Color sdFillColor = (fillColor == null) ? Colors.Transparent : ((ColorHandler)fillColor).Handle;
 
             using (GraphicsPath path = CreateRectangle(x, y, width, height)) {
                 if (sdFillColor != Colors.Transparent) {

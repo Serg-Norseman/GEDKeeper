@@ -23,12 +23,12 @@ using BSLib;
 using Eto.Forms;
 using GKCore.Interfaces;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
     /// Eto-specific UI timer.
     /// </summary>
-    public class EUITimer : BaseObject, ITimer
+    public sealed class EUITimer : BaseObject, ITimer
     {
         private readonly UITimer fInnerTimer;
         private readonly EventHandler fElapsedHandler;

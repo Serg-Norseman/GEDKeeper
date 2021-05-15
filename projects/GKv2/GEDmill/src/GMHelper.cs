@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using BSLib.Design.Handlers;
@@ -44,7 +45,7 @@ namespace GEDmill
                                         + "All supported picture files|*.jpg;*.jpeg;*.gif;*.bmp;*.png";
 
 
-        private static readonly ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(GMHelper).Name);
+        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(GMHelper).Name);
 
 
         private static readonly Dictionary<string, CISRecordChanges> recX = new Dictionary<string, CISRecordChanges>();
@@ -216,13 +217,13 @@ namespace GEDmill
         {
             if (name == null) {
                 if (surname != null) {
-                    surname = CConfig.Instance.UnknownName;
+                    surname = GMConfig.Instance.UnknownName;
                 }
-                return CConfig.Instance.UnknownName;
+                return GMConfig.Instance.UnknownName;
             }
 
             string newName = "";
-            switch (CConfig.Instance.NameCapitalisation) {
+            switch (GMConfig.Instance.NameCapitalisation) {
                 case 1:
                 case 0:
                     // capitalise surname (the bit in //s)
@@ -242,7 +243,7 @@ namespace GEDmill
                             bFirstName = false;
                         } else if (bSeenSlash) {
                             char cc = c;
-                            if (CConfig.Instance.NameCapitalisation == 1) {
+                            if (GMConfig.Instance.NameCapitalisation == 1) {
                                 cc = char.ToUpper(cc);
                             }
                             newName += cc;
@@ -325,23 +326,6 @@ namespace GEDmill
             }
 
             return result;
-        }
-
-        public static string GetName(GDMIndividualRecord iRec, int i)
-        {
-            return (i >= 0 && i < iRec.PersonalNames.Count) ? iRec.PersonalNames[i].StringValue : "";
-        }
-
-        // Returns the n'th name and associated sources
-        public static NameAndSource GetNameAndSource(GDMIndividualRecord record, int n)
-        {
-            if (record.PersonalNames.Count <= n || n < 0) {
-                return null;
-            }
-            GDMPersonalName pns = record.PersonalNames[n];
-            NameAndSource nas = new NameAndSource(pns.StringValue);
-            nas.Sources.AddRange(pns.SourceCitations);
-            return nas;
         }
 
         public static List<GDMFamilyRecord> GetFamilyList(GDMTree tree, GDMIndividualRecord record)
@@ -578,7 +562,7 @@ namespace GEDmill
 
         public static string GetIndiName(string surname, string firstName)
         {
-            string name = "";
+            string name;
 
             if (firstName != "" && surname != "") {
                 name = string.Concat(surname, ", ", firstName);
@@ -589,10 +573,16 @@ namespace GEDmill
             }
 
             if (name == "") {
-                name = CConfig.Instance.UnknownName;
+                name = GMConfig.Instance.UnknownName;
             }
 
             return name;
+        }
+
+        public static string GetNowDateStr()
+        {
+            string result = DateTime.Now.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
+            return result;
         }
     }
 }

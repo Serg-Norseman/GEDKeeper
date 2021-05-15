@@ -21,10 +21,8 @@
 #if !__MonoCS__
 
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 using BSLib;
-using GKCore;
 using GKTests;
 using NUnit.Framework;
 
@@ -112,9 +110,6 @@ namespace GKUI.Components
 
             fImageBox.AutoPan = true;
             Assert.AreEqual(true, fImageBox.AutoPan);
-
-            fImageBox.AutoCenter = true;
-            Assert.AreEqual(true, fImageBox.AutoCenter);
 
             fImageBox.IsPanning = true;
             Assert.AreEqual(true, fImageBox.IsPanning);

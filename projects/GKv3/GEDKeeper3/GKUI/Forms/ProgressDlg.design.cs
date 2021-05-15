@@ -14,6 +14,7 @@ namespace GKUI.Forms
         private Label lblTotalVal;
         private ProgressBar ProgressBar1;
         private Label lblTitle;
+        private Button btnCancel;
 
         private void InitializeComponent()
         {
@@ -61,6 +62,12 @@ namespace GKUI.Forms
                 }
             };
 
+            btnCancel = new Button();
+            btnCancel.ImagePosition = ButtonImagePosition.Left;
+            btnCancel.Size = new Size(130, 26);
+            btnCancel.Text = "btnCancel";
+            btnCancel.Click += btnCancel_Click;
+
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
@@ -72,7 +79,8 @@ namespace GKUI.Forms
                     new TableRow {
                         ScaleHeight = true,
                         Cells = { timesPanel }
-                    }
+                    },
+                    UIHelper.MakeDialogFooter(null, btnCancel)
                 }
             };
 

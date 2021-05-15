@@ -130,7 +130,6 @@
     <Compile Include="GKUI\Components\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\NativeMethods.cs" />
     <Compile Include="GKUI\Components\TreeChartBox.cs" />
     <Compile Include="GKUI\Forms\AboutDlg.cs">
       <SubType>Form</SubType>
@@ -443,7 +442,7 @@
     <Compile Include="GKUI\Forms\UserRefEditDlg.Designer.cs">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\WFAppHost.cs" />
+    <Compile Include="GKUI\Platform\WFAppHost.cs" />
     <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -459,6 +458,9 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GKUI\Platform" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

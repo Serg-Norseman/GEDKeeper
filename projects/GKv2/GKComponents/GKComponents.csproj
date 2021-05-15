@@ -97,10 +97,10 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKUI\Components\ArborViewer.cs" />
-    <Compile Include="GKUI\Components\ControlHandlers.cs" />
     <Compile Include="GKUI\Components\GKComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKDateBox.cs" />
     <Compile Include="GKUI\Components\GKInputBox.cs">
       <SubType>Form</SubType>
@@ -133,13 +133,14 @@
       <DependentUpon>MediaPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\UIHelper.cs" />
-    <Compile Include="GKUI\Components\WFGfxProvider.cs" />
-    <Compile Include="GKUI\Components\WFGfxRenderer.cs" />
-    <Compile Include="GKUI\Components\WFStdDialogs.cs" />
-    <Compile Include="GKUI\Components\WinUITimer.cs" />
     <Compile Include="GKUI\Components\WizardPages.cs" />
     <Compile Include="GKUI\Components\ZGraphControl.cs" />
     <Compile Include="GKUI\Forms\CommonForm.cs" />
+    <Compile Include="GKUI\Platform\ControlHandlers.cs" />
+    <Compile Include="GKUI\Platform\WFGfxProvider.cs" />
+    <Compile Include="GKUI\Platform\WFGfxRenderer.cs" />
+    <Compile Include="GKUI\Platform\WFStdDialogs.cs" />
+    <Compile Include="GKUI\Platform\WinUITimer.cs" />
     <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKUI\Forms" />
+    <Folder Include="GKUI\Platform" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

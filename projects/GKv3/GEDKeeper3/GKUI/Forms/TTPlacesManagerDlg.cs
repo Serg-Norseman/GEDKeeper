@@ -74,7 +74,7 @@ namespace GKUI.Forms
             pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
-            btnAnalysePlaces.Text = LangMan.LS(LSID.LSID_Analysis);
+            btnAnalysePlaces.Text = LangMan.LS(LSID.LSID_Analyze);
         }
 
         private void btnAnalysePlaces_Click(object sender, EventArgs e)

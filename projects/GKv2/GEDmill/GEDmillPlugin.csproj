@@ -82,17 +82,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GEDmillPlugin.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="src\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\GMHelper.cs" />
     <Compile Include="src\HTML\HTMLException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\ListView\LVNameItem.cs" />
     <Compile Include="src\ListView\LVNumberItem.cs" />
-    <Compile Include="src\CConfig.cs">
+    <Compile Include="src\GMConfig.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\ListView\LVItem.cs">
@@ -115,9 +111,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\HTML\CreatorFrontPage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\HTML\CreatorHelpPage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\HTML\CreatorIndexIndividuals.cs">

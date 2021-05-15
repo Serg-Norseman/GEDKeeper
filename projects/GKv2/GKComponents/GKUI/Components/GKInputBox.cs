@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using GKCore;
 
@@ -135,14 +136,12 @@ namespace GKUI.Components
             return result;
         }
 
-        public static bool QueryText(string caption, string prompt, ref string value)
+        public static bool QueryText(object owner, string caption, string prompt, ref string value)
         {
             bool result = false;
 
-            using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone))
-            {
-                if (inputBox.ShowDialog() == DialogResult.OK)
-                {
+            using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone)) {
+                if (inputBox.ShowDialog() == DialogResult.OK) {
                     value = inputBox.Value.Trim();
                     result = true;
                 }
@@ -176,46 +175,46 @@ namespace GKUI.Components
 
         private void InitializeComponent()
         {
-            txtValue = new TextBox();
-            label1 = new Label();
-            btnAccept = new Button();
-            btnCancel = new Button();
             SuspendLayout();
 
-            txtValue.Location = new System.Drawing.Point(12, 25);
+            txtValue = new TextBox();
+            txtValue.Location = new Point(12, 25);
             txtValue.Name = "txtValue";
-            txtValue.Size = new System.Drawing.Size(354, 20);
+            txtValue.Size = new Size(354, 20);
             txtValue.TabIndex = 0;
 
+            label1 = new Label();
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(12, 9);
+            label1.Location = new Point(12, 9);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(35, 13);
+            label1.Size = new Size(35, 13);
             label1.TabIndex = 3;
             label1.Text = "label1";
 
-            btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            btnAccept.Location = new System.Drawing.Point(197, 61);
+            btnAccept = new Button();
+            btnAccept.ImageAlign = ContentAlignment.MiddleLeft;
+            btnAccept.Location = new Point(197, 61);
             btnAccept.Name = "btnAccept";
-            btnAccept.Size = new System.Drawing.Size(81, 25);
+            btnAccept.Size = new Size(81, 25);
             btnAccept.TabIndex = 4;
             btnAccept.Text = "btnAccept";
-            btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            btnAccept.TextAlign = ContentAlignment.MiddleRight;
             btnAccept.Click += btnAccept_Click;
 
+            btnCancel = new Button();
             btnCancel.DialogResult = DialogResult.Cancel;
-            btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            btnCancel.Location = new System.Drawing.Point(285, 61);
+            btnCancel.ImageAlign = ContentAlignment.MiddleLeft;
+            btnCancel.Location = new Point(285, 61);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new System.Drawing.Size(81, 25);
+            btnCancel.Size = new Size(81, 25);
             btnCancel.TabIndex = 5;
             btnCancel.Text = "btnCancel";
-            btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            btnCancel.TextAlign = ContentAlignment.MiddleRight;
             btnCancel.Click += btnCancel_Click;
 
-            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(378, 98);
+            ClientSize = new Size(378, 98);
             Controls.Add(btnAccept);
             Controls.Add(btnCancel);
             Controls.Add(label1);

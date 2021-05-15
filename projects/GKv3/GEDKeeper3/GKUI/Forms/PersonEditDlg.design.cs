@@ -45,7 +45,7 @@ namespace GKUI.Forms
         private TextBox txtNameSuffix;
         private Label lblNickname;
         private TextBox txtNickname;
-        private GKUI.Components.GKPortrait imgPortrait;
+        private GKPortrait imgPortrait;
         private Button btnNameCopy;
         private Button btnPortraitAdd;
         private Button btnPortraitDelete;
@@ -163,11 +163,7 @@ namespace GKUI.Forms
             };
 
             imgPortrait = new GKPortrait();
-            imgPortrait.Image = null;
-            //imgPortrait.Width = 150;
-            //imgPortrait.Size = new Size(149, 165);
-            imgPortrait.SlidePanelHeight = 36;
-            imgPortrait.PixelSpeed = 5;
+            imgPortrait.Size = new Size(140, 160);
 
             btnPortraitAdd = new Button();
             btnPortraitAdd.Size = UIHelper.ShortButtonSize;
@@ -197,11 +193,11 @@ namespace GKUI.Forms
 
             txtFather = new TextBox();
             txtFather.Enabled = false;
-            txtFather.Size = new Size(220, 22);
+            txtFather.Size = new Size(100, 22);
 
             txtMother = new TextBox();
             txtMother.Enabled = false;
-            txtMother.Size = new Size(220, 22);
+            txtMother.Size = new Size(100, 22);
 
             btnParentsAdd = new Button();
             btnParentsAdd.Size = UIHelper.ShortButtonSize;

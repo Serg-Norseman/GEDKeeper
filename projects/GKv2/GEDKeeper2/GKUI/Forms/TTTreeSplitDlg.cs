@@ -19,7 +19,6 @@
  */
 
 using System;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -53,6 +52,9 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
+            ListSelected.AddColumn("-", 300);
+            ListSkipped.AddColumn("-", 300);
+
             fController = new TreeSplitController(this);
             fController.Init(baseWin);
 
@@ -61,7 +63,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_ToolOp_3);
+            Title = LangMan.LS(LSID.LSID_ToolOp_3);
             pageTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             btnSelectAll.Text = LangMan.LS(LSID.LSID_SelAll);
@@ -70,6 +72,9 @@ namespace GKUI.Forms
             btnSelectDescendants.Text = LangMan.LS(LSID.LSID_SelDescendants);
             btnDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
             btnSave.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
+
+            ListSelected.SetColumnCaption(0, LangMan.LS(LSID.LSID_Person));
+            ListSkipped.SetColumnCaption(0, LangMan.LS(LSID.LSID_Person));
         }
 
         private void btnSelectFamily_Click(object sender, EventArgs e)

@@ -25,6 +25,7 @@ using GKCore.Interfaces;
 using GKCore.Names;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms

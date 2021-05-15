@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,9 +34,9 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -146,11 +146,12 @@ namespace GKUI.Forms
             summary.OnLink += mPersonSummaryLink;
             summary.Font = UIHelper.GetDefaultFont();
 
-            var recView = new GKListView(ListManager.Create(fContext, recType));
+            var recView = new GKListView();
             recView.MouseDoubleClick += miRecordEdit_Click;
             recView.SelectedItemsChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
             recView.ContextMenu = contextMenu;
+            recView.ListMan = ListManager.Create(fContext, recType);
 
             Splitter spl = new Splitter();
             spl.Panel1 = recView;
@@ -245,7 +246,7 @@ namespace GKUI.Forms
         {
             IListView recView = GetRecordsViewByType(GetSelectedRecordType());
 
-            miRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual));
+            miContRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual));
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
@@ -266,6 +267,18 @@ namespace GKUI.Forms
         private void miRecordDuplicate_Click(object sender, EventArgs e)
         {
             DuplicateRecord();
+        }
+
+        private void miRecordMerge_Click(object sender, EventArgs e)
+        {
+            var recView = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
+            if (recView != null) {
+                var items = recView.GetSelectedItems();
+                fController.ShowRecMerge(
+                    items.Count > 0 ? items[0] as GDMRecord : null,
+                    items.Count > 1 ? items[1] as GDMRecord : null
+                );
+            }
         }
 
         private void List_SelectedIndexChanged(object sender, EventArgs e)
@@ -433,6 +446,7 @@ namespace GKUI.Forms
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
                 try {
                     try {
+                        mediaViewer.Multimedia = mediaRec;
                         mediaViewer.FileRef = fileRef;
                         if (modal) {
                             mediaViewer.Show();
@@ -557,7 +571,8 @@ namespace GKUI.Forms
             miContRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
             miContRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
             miContRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
-            miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
+            miContRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
+            miContRecordMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
 
             miTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
             miTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
@@ -704,10 +719,10 @@ namespace GKUI.Forms
             }
         }
 
-        // FIXME: Eto restriction
-        /*private void Form_DragEnter(object sender, DragEventArgs e)
+        private void Form_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+            var files = e.Data.Uris;
+            e.Effects = (files != null) ? DragEffects.Copy : DragEffects.None;
         }
 
         private void Form_DragDrop(object sender, DragEventArgs e)
@@ -716,11 +731,13 @@ namespace GKUI.Forms
                 try {
                     AppHost.Instance.BeginLoading();
 
-                    Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
-                    if (a == null) return;
+                    var files = e.Data.Uris;
+                    if (files == null) return;
 
-                    for (int i = 0; i < a.Length; i++) {
-                        string fn = a.GetValue(i).ToString();
+                    for (int i = 0; i < files.Length; i++) {
+                        var uri = files[i];
+                        if (!uri.IsFile) continue;
+                        string fn = uri.AbsolutePath;
                         AppHost.Instance.LoadBase(this, fn);
                     }
                 } finally {
@@ -729,7 +746,7 @@ namespace GKUI.Forms
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.Form_DragDrop()", ex);
             }
-        }*/
+        }
 
         private void UpdateShieldState()
         {
@@ -779,7 +796,7 @@ namespace GKUI.Forms
         public void UpdateNavControls()
         {
             try {
-                IWorkWindow workWin = this as IWorkWindow;
+                IWorkWindow workWin = this;
 
                 tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
                 tbNext.Enabled = (workWin != null && workWin.NavCanForward());
@@ -914,7 +931,7 @@ namespace GKUI.Forms
 
         private void miTTRecMerge_Click(object sender, EventArgs e)
         {
-            fController.ShowRecMerge();
+            fController.ShowRecMerge(null, null);
         }
 
         private void miTTPlacesManager_Click(object sender, EventArgs e)

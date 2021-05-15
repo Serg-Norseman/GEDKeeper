@@ -87,7 +87,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_ToolOp_4);
+            Title = LangMan.LS(LSID.LSID_ToolOp_4);
             pageMerge.Text = LangMan.LS(LSID.LSID_RecMerge);
             pageMergeOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
             btnAutoSearch.Text = LangMan.LS(LSID.LSID_RM_Search);

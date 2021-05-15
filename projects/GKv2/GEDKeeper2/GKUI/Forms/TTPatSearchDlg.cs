@@ -74,7 +74,7 @@ namespace GKUI.Forms
 
         public void SetLang()
         {
-            Text = LangMan.LS(LSID.LSID_ToolOp_8);
+            Title = LangMan.LS(LSID.LSID_ToolOp_8);
             pagePatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             lblMinGenerations.Text = LangMan.LS(LSID.LSID_MinGenerations);

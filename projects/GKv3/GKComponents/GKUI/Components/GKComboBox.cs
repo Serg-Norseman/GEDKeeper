@@ -30,37 +30,12 @@ namespace GKUI.Components
     {
         public GKComboBox()
         {
-            //DrawMode = DrawMode.OwnerDrawFixed;
-            //DropDownStyle = ComboBoxStyle.DropDownList;
+            // Eto.Forms supports rendering an item image via IImageListItem 
         }
 
-        /*
-        protected override void OnDrawItem(DrawItemEventArgs e)
+        /*protected override void OnDrawItem(DrawItemEventArgs e)
         {
-            e.DrawBackground();
-            e.DrawFocusRectangle();
-
-            if (e.Index < 0 || e.Index >= Items.Count) return;
-
-            object item = Items[e.Index];
-            GKComboItem ddItem = item as GKComboItem;
-            if (ddItem != null) {
-                int offset = e.Bounds.Left;
-
-                if (ddItem.Image != null) {
-                    Image img = ((ImageHandler)ddItem.Image).Handle;
-                    e.Graphics.DrawImage(img, e.Bounds.Left, e.Bounds.Top);
-                    offset += ddItem.Image.Width;
-                }
-
-                e.Graphics.DrawString(ddItem.Caption, e.Font, new SolidBrush(e.ForeColor),
-                                      offset, e.Bounds.Top + 2);
-            } else {
-                e.Graphics.DrawString(item.ToString(), e.Font, new SolidBrush(e.ForeColor),
-                                      e.Bounds.Left, e.Bounds.Top + 2);
-            }
-            base.OnDrawItem(e);
-        }
-        */
+            // Eto.Forms supports rendering an item image via IImageListItem 
+        }*/
     }
 }

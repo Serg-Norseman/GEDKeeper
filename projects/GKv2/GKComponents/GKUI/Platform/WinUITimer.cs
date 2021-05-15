@@ -23,10 +23,10 @@ using System.Windows.Forms;
 using BSLib;
 using GKCore.Interfaces;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
     /// <summary>
-    /// 
+    /// WinForms-specific UI timer.
     /// </summary>
     public sealed class WinUITimer : BaseObject, ITimer
     {

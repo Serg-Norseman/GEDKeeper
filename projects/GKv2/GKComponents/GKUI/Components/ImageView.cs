@@ -81,10 +81,6 @@ namespace GKUI.Components
             InitializeComponent();
 
             FillZoomLevels();
-            imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
-            imageBox.ImageBorderColor = Color.AliceBlue;
-            imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
-            imageBox.AllowZoom = true;
         }
 
         public void Activate()
@@ -103,15 +99,36 @@ namespace GKUI.Components
 
         private void InitializeComponent()
         {
-            toolStrip = new ToolStrip();
-            btnSizeToFit = new ToolStripButton();
-            btnZoomIn = new ToolStripButton();
-            btnZoomOut = new ToolStripButton();
-            cbZoomLevels = new ToolStripComboBox();
-            imageBox = new ImageBox();
-            toolStrip.SuspendLayout();
             SuspendLayout();
 
+            btnSizeToFit = new ToolStripButton();
+            btnSizeToFit.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnSizeToFit.Image = UIHelper.LoadResourceImage("Resources.btn_size_to_fit.png");
+            btnSizeToFit.ImageTransparentColor = Color.Magenta;
+            btnSizeToFit.Name = "btnSizeToFit";
+            btnSizeToFit.Click += btnSizeToFit_Click;
+
+            btnZoomIn = new ToolStripButton();
+            btnZoomIn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnZoomIn.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_in.png");
+            btnZoomIn.ImageTransparentColor = Color.Magenta;
+            btnZoomIn.Name = "btnZoomIn";
+            btnZoomIn.Click += btnZoomIn_Click;
+
+            btnZoomOut = new ToolStripButton();
+            btnZoomOut.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnZoomOut.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_out.png");
+            btnZoomOut.ImageTransparentColor = Color.Magenta;
+            btnZoomOut.Name = "btnZoomOut";
+            btnZoomOut.Click += btnZoomOut_Click;
+
+            cbZoomLevels = new ToolStripComboBox();
+            cbZoomLevels.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbZoomLevels.Name = "zoomLevelsToolStripComboBox";
+            cbZoomLevels.Size = new Size(140, 28);
+            cbZoomLevels.SelectedIndexChanged += cbZoomLevels_SelectedIndexChanged;
+
+            toolStrip = new ToolStrip();
             toolStrip.Items.AddRange(new ToolStripItem[] {
                                          btnSizeToFit,
                                          btnZoomIn,
@@ -120,40 +137,19 @@ namespace GKUI.Components
                                          cbZoomLevels,
                                          new ToolStripSeparator()});
 
-            btnSizeToFit.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            btnSizeToFit.Image = UIHelper.LoadResourceImage("Resources.btn_size_to_fit.png");
-            btnSizeToFit.ImageTransparentColor = Color.Magenta;
-            btnSizeToFit.Name = "btnSizeToFit";
-            btnSizeToFit.Click += btnSizeToFit_Click;
-
-            btnZoomIn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            btnZoomIn.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_in.png");
-            btnZoomIn.ImageTransparentColor = Color.Magenta;
-            btnZoomIn.Name = "btnZoomIn";
-            btnZoomIn.Click += btnZoomIn_Click;
-
-            btnZoomOut.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            btnZoomOut.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_out.png");
-            btnZoomOut.ImageTransparentColor = Color.Magenta;
-            btnZoomOut.Name = "btnZoomOut";
-            btnZoomOut.Click += btnZoomOut_Click;
-
-            cbZoomLevels.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbZoomLevels.Name = "zoomLevelsToolStripComboBox";
-            cbZoomLevels.Size = new Size(140, 28);
-            cbZoomLevels.SelectedIndexChanged += cbZoomLevels_SelectedIndexChanged;
-
+            imageBox = new ImageBox();
+            imageBox.AllowZoom = true;
             imageBox.BackColor = SystemColors.ControlDark;
-            imageBox.Dock = DockStyle.Fill;
+            imageBox.ImageBorderColor = Color.AliceBlue;
+            imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
+            imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
             imageBox.ZoomChanged += imageBox_ZoomChanged;
+            imageBox.Dock = DockStyle.Fill;
 
             Controls.Add(imageBox);
             Controls.Add(toolStrip);
             Size = new Size(944, 389);
-            toolStrip.ResumeLayout(false);
-            toolStrip.PerformLayout();
-            ResumeLayout(false);
-            PerformLayout();
+            ResumeLayout(true);
         }
 
         #endregion

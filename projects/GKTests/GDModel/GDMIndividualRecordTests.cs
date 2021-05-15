@@ -23,7 +23,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
 using GKTests;
-using GKUI;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GDModel

@@ -20,17 +20,25 @@
 
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using BSLib.Design.MVP.Controls;
+
+using BSDListItem = BSLib.Design.MVP.Controls.IListItem;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class ObservableExtList<T> : List<T>, INotifyCollectionChanged where T : class
+    public class ObservableExtList<T> : List<T>, INotifyCollectionChanged, IListViewItems where T : BSDListItem
     {
         private int fUpdateCount;
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public IListItem this[int index]
+        {
+            get { return (BSDListItem)base[index]; }
+        }
 
         public ObservableExtList()
         {
@@ -67,7 +75,7 @@ namespace GKUI.Components
 
         public new void RemoveAt(int index)
         {
-            T item = this[index];
+            T item = base[index];
             base.RemoveAt(index);
             ChangeRemoved(item, index);
         }

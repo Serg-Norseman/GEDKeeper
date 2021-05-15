@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,31 +18,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Runtime.InteropServices;
-using System.Security;
+using BSLib.Design;
+using BSLib.Design.Graphics;
 
 namespace GKUI.Components
 {
     /// <summary>
-    /// Native WinAPI
+    /// 
     /// </summary>
-    [SecurityCritical, SuppressUnmanagedCodeSecurity]
-    public static class NativeMethods
+    public class GKComboItem<T> : ComboItem<T>
     {
-        public const uint WM_USER = 0x0400;
-        public const uint WM_KEEPMODELESS = WM_USER + 111;
+        public GKComboItem(string text) : base(text)
+        {
+        }
 
-        #if !__MonoCS__
+        public GKComboItem(string text, T tag) : base(text, tag)
+        {
+        }
 
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool EnableWindow(IntPtr hWnd, [MarshalAs(UnmanagedType.Bool)]bool bEnable);
-
-        #endif
+        public GKComboItem(string text, T tag, IImage image) : base(text, tag, image)
+        {
+        }
     }
 }

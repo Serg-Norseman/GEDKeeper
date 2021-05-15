@@ -19,7 +19,6 @@
  */
 
 using System.IO;
-using System.Reflection;
 using System.Text;
 using GDModel.Providers.FamilyShow;
 using GDModel.Providers.GEDCOM;

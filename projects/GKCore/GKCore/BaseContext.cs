@@ -530,43 +530,39 @@ namespace GKCore
                 throw new ArgumentNullException("tipsList");
 
             try {
-                try {
-                    bool firstTip = true;
-                    int num = fTree.RecordsCount;
-                    for (int i = 0; i < num; i++) {
-                        GDMRecord rec = fTree[i];
-                        if (rec.RecordType != GDMRecordType.rtIndividual) continue;
+                bool firstTip = true;
+                int num = fTree.RecordsCount;
+                for (int i = 0; i < num; i++) {
+                    GDMRecord rec = fTree[i];
+                    if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
-                        GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
+                    GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
-                        int days = GKUtils.GetDaysForBirth(iRec);
-                        if (days >= 0 && days < 3) {
-                            string tip;
+                    int days = GKUtils.GetDaysForBirth(iRec);
+                    if (days >= 0 && days < 3) {
+                        string tip;
 
-                            if (firstTip) {
-                                tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
-                                firstTip = false;
-                            }
-
-                            string nm = Culture.GetPossessiveName(iRec);
-
-                            switch (days) {
-                                case 0:
-                                    tip = string.Format(LangMan.LS(LSID.LSID_BirthdayToday), nm);
-                                    break;
-                                case 1:
-                                    tip = string.Format(LangMan.LS(LSID.LSID_BirthdayTomorrow), nm);
-                                    break;
-                                default:
-                                    tip = string.Format(LangMan.LS(LSID.LSID_DaysRemained), nm, days);
-                                    break;
-                            }
-
-                            tipsList.Add(tip);
+                        if (firstTip) {
+                            tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
+                            firstTip = false;
                         }
+
+                        string nm = Culture.GetPossessiveName(iRec);
+
+                        switch (days) {
+                            case 0:
+                                tip = string.Format(LangMan.LS(LSID.LSID_BirthdayToday), nm);
+                                break;
+                            case 1:
+                                tip = string.Format(LangMan.LS(LSID.LSID_BirthdayTomorrow), nm);
+                                break;
+                            default:
+                                tip = string.Format(LangMan.LS(LSID.LSID_DaysRemained), nm, days);
+                                break;
+                        }
+
+                        tipsList.Add(tip);
                     }
-                } finally {
-                    // temp stub, remove try/finally here?
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.CollectTips()", ex);
@@ -1229,7 +1225,7 @@ namespace GKCore
         {
             if (iRec == null) return null;
 
-            string result = null;
+            string result;
             try {
                 GDMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
                 result = (mmLink == null) ? null : mmLink.GetUID(fTree);

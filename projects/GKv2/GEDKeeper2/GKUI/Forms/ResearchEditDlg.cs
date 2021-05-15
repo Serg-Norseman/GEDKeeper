@@ -139,7 +139,7 @@ namespace GKUI.Forms
         {
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_WinResearchEdit);
+            Title = LangMan.LS(LSID.LSID_WinResearchEdit);
             pageTasks.Text = LangMan.LS(LSID.LSID_RPTasks);
             pageCommunications.Text = LangMan.LS(LSID.LSID_RPCommunications);
             pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);

@@ -45,7 +45,7 @@ namespace GKUI.Components
             string strValue = "test";
 
             ModalFormHandler = InputBox_btnAccept_StrHandler;
-            GKInputBox.QueryText("caption", "prompt", ref strValue);
+            GKInputBox.QueryText(null, "caption", "prompt", ref strValue);
 
             Assert.AreEqual("input", strValue);
         }

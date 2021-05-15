@@ -20,7 +20,7 @@
 
 using GDModel;
 using GKTests;
-using GKUI;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKCore

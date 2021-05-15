@@ -116,7 +116,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_Address);
+            Title = LangMan.LS(LSID.LSID_Address);
             pageCommon.Text = LangMan.LS(LSID.LSID_Address);
             lblCountry.Text = LangMan.LS(LSID.LSID_AdCountry);
             lblState.Text = LangMan.LS(LSID.LSID_AdState);

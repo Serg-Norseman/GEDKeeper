@@ -52,6 +52,9 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
+            ListSelected.AddColumn("-", 300);
+            ListSkipped.AddColumn("-", 300);
+
             fController = new TreeSplitController(this);
             fController.Init(baseWin);
 
@@ -69,6 +72,9 @@ namespace GKUI.Forms
             btnSelectDescendants.Text = LangMan.LS(LSID.LSID_SelDescendants);
             btnDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
             btnSave.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
+
+            ListSelected.SetColumnCaption(0, LangMan.LS(LSID.LSID_Person));
+            ListSkipped.SetColumnCaption(0, LangMan.LS(LSID.LSID_Person));
         }
 
         private void btnSelectFamily_Click(object sender, EventArgs e)

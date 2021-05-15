@@ -20,7 +20,6 @@
 
 using System;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.MVP.Views;
 using GKUI.Components;
@@ -37,7 +36,7 @@ namespace GKUI.Forms
 
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            lblProduct.Text = GKData.APP_TITLE_NEW;
+            lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();
         }

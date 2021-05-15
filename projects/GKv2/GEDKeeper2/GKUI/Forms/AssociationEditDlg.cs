@@ -65,7 +65,7 @@ namespace GKUI.Forms
             // SetLang()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_Association);
+            Title = LangMan.LS(LSID.LSID_Association);
             lblRelation.Text = LangMan.LS(LSID.LSID_Relation);
             lblPerson.Text = LangMan.LS(LSID.LSID_Person);
 

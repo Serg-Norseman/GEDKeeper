@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2011-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2011-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -255,7 +255,7 @@ namespace GKUI.Components
                 } finally {
                     gfx.Dispose();
                     fAcceptFontChange = true;
-                    AdjustViewport(fTextSize);
+                    SetImageSize(fTextSize);
 
                     ResumeLayout(true);
                 }
@@ -342,7 +342,8 @@ namespace GKUI.Components
 
                         string ct = chunk.Text;
                         if (!string.IsNullOrEmpty(ct)) {
-                            brush.Color = ((ColorHandler)chunk.Color).Handle;
+                            Color chunkColor = (chunk.Color == null) ? ForeColor : ((ColorHandler)chunk.Color).Handle;
+                            brush.Color = chunkColor;
                             font = ProcessFont(font, chunk.Size, (SDFontStyle)chunk.Style);
                             gfx.DrawString(ct, font, brush, xOffset, yOffset, fStrFormat);
 

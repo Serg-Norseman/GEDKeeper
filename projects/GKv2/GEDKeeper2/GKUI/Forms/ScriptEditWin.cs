@@ -98,9 +98,9 @@ namespace GKUI.Forms
 
         private void SetTitle()
         {
-            Text = Path.GetFileName(fFileName);
+            Title = Path.GetFileName(fFileName);
             if (fModified) {
-                Text = @"* " + Text;
+                Title = @"* " + Title;
             }
         }
 

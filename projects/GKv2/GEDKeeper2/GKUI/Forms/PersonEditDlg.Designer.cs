@@ -198,14 +198,10 @@
             // 
             // imgPortrait
             // 
-            this.imgPortrait.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.imgPortrait.Image = null;
             this.imgPortrait.Location = new System.Drawing.Point(537, 12);
             this.imgPortrait.Name = "imgPortrait";
-            this.imgPortrait.PixelSpeed = 5;
             this.imgPortrait.Size = new System.Drawing.Size(149, 165);
-            this.imgPortrait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Normal;
-            this.imgPortrait.SlidePanelHeight = 36;
             this.imgPortrait.TabIndex = 22;
             // 
             // lblMarriedSurname

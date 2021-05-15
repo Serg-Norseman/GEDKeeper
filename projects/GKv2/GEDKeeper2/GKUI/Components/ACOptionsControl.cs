@@ -125,12 +125,7 @@ namespace GKUI.Components
         {
             Label lbl = sender as Label;
             if (lbl == null) return;
-
-            ColorDialog1.Color = lbl.BackColor;
-
-            if (ColorDialog1.ShowDialog() == DialogResult.OK) {
-                lbl.BackColor = ColorDialog1.Color;
-            }
+            lbl.BackColor = UIHelper.ConvertColor(AppHost.StdDialogs.SelectColor(UIHelper.ConvertColor(lbl.BackColor)));
         }
     }
 }

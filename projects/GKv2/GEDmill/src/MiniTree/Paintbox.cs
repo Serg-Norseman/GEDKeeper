@@ -29,7 +29,7 @@ namespace GEDmill.MiniTree
     /// </summary>
     public class Paintbox : BaseObject
     {
-        private static readonly GKCore.Logging.ILogger fLogger = LogManager.GetLogger(CConfig.LOG_FILE, CConfig.LOG_LEVEL, typeof(Paintbox).Name);
+        private static readonly GKCore.Logging.ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Paintbox).Name);
 
         public SolidBrush BrushBg;
         public SolidBrush BrushBox;
@@ -50,7 +50,7 @@ namespace GEDmill.MiniTree
 
 
         // Construct the paintbox, reading values for the colours etc from the config.
-        public Paintbox(CConfig config)
+        public Paintbox(GMConfig config)
         {
             ColourGifTransparent = Color.Magenta;
             BrushBgGif = new SolidBrush(ColourGifTransparent);
@@ -68,10 +68,8 @@ namespace GEDmill.MiniTree
             PenConnectorDotted = new Pen(config.MiniTreeColourBranch, 1.0f);
             PenConnectorDotted.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
             PenBox = new Pen(config.MiniTreeColourIndiBorder, 1.0f);
-            Font = new Font("Microsoft Sans Serif", 10f);
             BrushFakeTransparency = null;
             Font = new Font(config.TreeFontName, config.TreeFontSize);
-            BrushFakeTransparency = null;
         }
 
         // Clean up any resources being used.

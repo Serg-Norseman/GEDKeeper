@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-
 using BSLib;
 
 namespace GKUI.Components
@@ -107,7 +106,6 @@ namespace GKUI.Components
         private readonly List<int> fZoomLevels;
 
         private bool fAllowZoom;
-        private bool fAutoCenter;
         private bool fAutoPan;
         private int fDropShadowSize;
         private Image fImage;
@@ -127,7 +125,7 @@ namespace GKUI.Components
         private string fTip;
         private int fUpdateCount;
         private int fZoom;
-        private Size fViewSize;
+        private Size fImageSize;
         private float fZoomFactor;
 
         #endregion
@@ -166,23 +164,6 @@ namespace GKUI.Components
         }
 
         /// <summary>
-        ///   Gets or sets a value indicating whether the image is centered where possible.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the image should be centered where possible; otherwise, <c>false</c>.
-        /// </value>
-        public bool AutoCenter
-        {
-            get { return fAutoCenter; }
-            set {
-                if (fAutoCenter != value) {
-                    fAutoCenter = value;
-                    Invalidate();
-                }
-            }
-        }
-
-        /// <summary>
         ///   Gets or sets if the mouse can be used to pan the control.
         /// </summary>
         /// <value>
@@ -208,11 +189,11 @@ namespace GKUI.Components
         public int DropShadowSize
         {
             get { return fDropShadowSize; }
-            set
-            {
-                if (fDropShadowSize == value) return;
-                fDropShadowSize = value;
-                Invalidate();
+            set {
+                if (fDropShadowSize != value) {
+                    fDropShadowSize = value;
+                    Invalidate();
+                }
             }
         }
 
@@ -430,16 +411,15 @@ namespace GKUI.Components
             fZoomLevels = new List<int>(new[] { 7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600 });
 
             AllowZoom = true;
-            DropShadowSize = 3;
-            ImageBorderStyle = ImageBoxBorderStyle.None;
-            BackColor = Color.White;
             AutoSize = false;
             AutoScroll = true;
             AutoPan = true;
-            AutoCenter = true;
-            SelectionColor = SystemColors.Highlight;
+            BackColor = Color.White;
+            DropShadowSize = 3;
             ImageBorderColor = SystemColors.ControlDark;
+            ImageBorderStyle = ImageBoxBorderStyle.None;
             Padding = new Padding(0);
+            SelectionColor = SystemColors.Highlight;
 
             fToolTip = new ToolTip();
             fToolTip.AutoPopDelay = 5000;
@@ -448,7 +428,6 @@ namespace GKUI.Components
             fToolTip.ShowAlways = true;
 
             ActualSize();
-            UpdateParams();
         }
 
         #endregion
@@ -468,11 +447,11 @@ namespace GKUI.Components
 
         private void UpdateParams()
         {
-            fViewSize = (fImage != null) ? fImage.Size : Size.Empty;
+            fImageSize = (fImage != null) ? fImage.Size : Size.Empty;
             fZoomFactor = fZoom / 100.0f;
 
-            fScaledImageHeight = (int)(fViewSize.Height * fZoomFactor);
-            fScaledImageWidth = (int)(fViewSize.Width * fZoomFactor);
+            fScaledImageHeight = (int)(fImageSize.Height * fZoomFactor);
+            fScaledImageWidth = (int)(fImageSize.Width * fZoomFactor);
         }
 
         /// <summary>
@@ -523,7 +502,7 @@ namespace GKUI.Components
         {
             Rectangle viewPort;
 
-            if (!fViewSize.IsEmpty)
+            if (!fImageSize.IsEmpty)
             {
                 Rectangle innerRectangle = GetInsideViewport();
 
@@ -533,15 +512,8 @@ namespace GKUI.Components
                     innerRectangle.Inflate(borderOffset, borderOffset);
                 }
 
-                int x, y;
-                if (fAutoCenter) {
-                    x = !HScroll ? (innerRectangle.Width - fScaledImageWidth) / 2 : 0;
-                    y = !VScroll ? (innerRectangle.Height - fScaledImageHeight) / 2 : 0;
-                } else {
-                    x = 0;
-                    y = 0;
-                }
-
+                int x = !HScroll ? (innerRectangle.Width - fScaledImageWidth) / 2 : 0;
+                int y = !VScroll ? (innerRectangle.Height - fScaledImageHeight) / 2 : 0;
                 int width = Math.Min(fScaledImageWidth - Math.Abs(AutoScrollPosition.X), innerRectangle.Width);
                 int height = Math.Min(fScaledImageHeight - Math.Abs(AutoScrollPosition.Y), innerRectangle.Height);
 
@@ -597,7 +569,7 @@ namespace GKUI.Components
         {
             RectangleF region;
 
-            if (!fViewSize.IsEmpty)
+            if (!fImageSize.IsEmpty)
             {
                 Rectangle viewPort = GetImageViewport();
                 float sourceLeft = (-AutoScrollPosition.X / fZoomFactor);
@@ -637,17 +609,18 @@ namespace GKUI.Components
 
                 if (x < 0)
                     x = 0;
-                else if (x > fViewSize.Width)
-                    x = fViewSize.Width;
+                else if (x > fImageSize.Width)
+                    x = fImageSize.Width;
 
                 if (y < 0)
                     y = 0;
-                else if (y > fViewSize.Height)
-                    y = fViewSize.Height;
+                else if (y > fImageSize.Height)
+                    y = fImageSize.Height;
             }
             else
             {
-                x = 0; // Return Point.Empty if we couldn't match
+                // Return Point.Empty if we couldn't match
+                x = 0;
                 y = 0;
             }
 
@@ -722,7 +695,7 @@ namespace GKUI.Components
         /// </summary>
         public void ZoomToFit()
         {
-            if (fViewSize.IsEmpty) return;
+            if (fImageSize.IsEmpty) return;
 
             AutoScrollMinSize = Size.Empty;
 
@@ -734,7 +707,7 @@ namespace GKUI.Components
         }
 
         /// <summary>
-        ///   Adjusts the view port to fit the  given region
+        ///   Adjusts the view port to fit the given region.
         /// </summary>
         /// <param name="rectangle">The rectangle to fit the view port to.</param>
         public void ZoomToRegion(RectangleF rectangle)
@@ -756,7 +729,7 @@ namespace GKUI.Components
         {
             if (fSizeToFit) {
                 ZoomToFit();
-            } else if (!fViewSize.IsEmpty) {
+            } else if (!fImageSize.IsEmpty) {
                 AutoScrollMinSize = new Size(fScaledImageWidth + Padding.Horizontal, fScaledImageHeight + Padding.Vertical);
             }
 
@@ -824,6 +797,7 @@ namespace GKUI.Components
                 case ImageBoxBorderStyle.FixedSingleDropShadow:
                     DrawDropShadow(graphics, viewPort);
                     break;
+
                 case ImageBoxBorderStyle.FixedSingleGlowShadow:
                     DrawGlowShadow(graphics, viewPort);
                     break;
@@ -879,6 +853,7 @@ namespace GKUI.Components
                 case ImageBoxBorderStyle.FixedSingleDropShadow:
                     offset = (fDropShadowSize + 1);
                     break;
+
                 default:
                     offset = 0;
                     break;
@@ -1048,7 +1023,7 @@ namespace GKUI.Components
                 gfx.FillRectangle(brush, innerRectangle);
 
             // draw the image
-            if (!fViewSize.IsEmpty)
+            if (!fImageSize.IsEmpty)
                 DrawImageBorder(gfx);
 
             if (fImage != null) {
@@ -1159,7 +1134,7 @@ namespace GKUI.Components
                     break;
             }
 
-            if (fZoom != previousZoom && fAutoCenter && !AutoScrollMinSize.IsEmpty)
+            if (fZoom != previousZoom && !AutoScrollMinSize.IsEmpty)
                 AutoScrollPosition = new Point((AutoScrollMinSize.Width - ClientSize.Width) / 2, (AutoScrollMinSize.Height - ClientSize.Height) / 2);
         }
 
@@ -1191,7 +1166,7 @@ namespace GKUI.Components
         /// </param>
         private void ProcessPanning(MouseEventArgs e, ImageBoxSelectionMode selectionMode)
         {
-            if (fAutoPan && !fViewSize.IsEmpty && selectionMode == ImageBoxSelectionMode.None)
+            if (fAutoPan && !fImageSize.IsEmpty && selectionMode == ImageBoxSelectionMode.None)
             {
                 if (!fIsPanning && (HScroll || VScroll))
                 {
@@ -1288,8 +1263,8 @@ namespace GKUI.Components
             // Fits a given rectangle's coordinates to match image boundaries
             if (x < 0) x = 0;
             if (y < 0) y = 0;
-            if (x + w > fViewSize.Width) w = fViewSize.Width - x;
-            if (y + h > fViewSize.Height) h = fViewSize.Height - y;
+            if (x + w > fImageSize.Width) w = fImageSize.Width - x;
+            if (y + h > fImageSize.Height) h = fImageSize.Height - y;
 
             SelectionRegion = new RectangleF(x, y, w, h);
         }

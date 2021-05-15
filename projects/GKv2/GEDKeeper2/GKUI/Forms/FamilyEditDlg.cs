@@ -260,7 +260,7 @@ namespace GKUI.Forms
 
         private void EditSpouse_TextChanged(object sender, EventArgs e)
         {
-            Text = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), txtHusband.Text, txtWife.Text);
+            Title = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), txtHusband.Text, txtWife.Text);
         }
 
         private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)

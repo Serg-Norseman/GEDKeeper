@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,9 @@ using BSLib;
 
 namespace GKUI.Components
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ScrollablePanel : Panel
     {
         public ScrollablePanel()
@@ -53,32 +56,27 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (!Focused)
+            if (!Focused) {
                 Focus();
+            }
 
             base.OnMouseDown(e);
         }
 
-        /// <summary>
-        /// Raises the <see cref="System.Windows.Forms.ScrollableControl.Scroll" /> event.
-        /// </summary>
-        /// <param name="se">
-        /// A <see cref="T:System.Windows.Forms.ScrollEventArgs" /> that contains the event data.
-        /// </param>
-        protected override void OnScroll(ScrollEventArgs se)
+        protected override void OnScroll(ScrollEventArgs e)
         {
-            if (se.Type == ScrollEventType.ThumbTrack) {
-                switch (se.ScrollOrientation) {
+            if (e.Type == ScrollEventType.ThumbTrack) {
+                switch (e.ScrollOrientation) {
                     case ScrollOrientation.HorizontalScroll:
-                        AutoScrollPosition = new Point(se.NewValue, -AutoScrollPosition.Y);
+                        AutoScrollPosition = new Point(e.NewValue, -AutoScrollPosition.Y);
                         break;
 
                     case ScrollOrientation.VerticalScroll:
-                        AutoScrollPosition = new Point(-AutoScrollPosition.X, se.NewValue);
+                        AutoScrollPosition = new Point(-AutoScrollPosition.X, e.NewValue);
                         break;
                 }
             }
-            base.OnScroll(se);
+            base.OnScroll(e);
         }
 
         /// <summary>
@@ -94,21 +92,25 @@ namespace GKUI.Components
         /// <summary>
         /// Adjusts the scroll.
         /// </summary>
-        /// <param name="x">The x.</param>
-        /// <param name="y">The y.</param>
+        /// <param name="dx">The X shift.</param>
+        /// <param name="dy">The Y shift.</param>
         protected void AdjustScroll(int dx, int dy)
         {
             UpdateScrollPosition(HorizontalScroll.Value + dx, VerticalScroll.Value + dy);
         }
 
-        protected void AdjustViewport(ExtSize imageSize, bool noRedraw = false)
+        /// <summary>
+        /// Sets the sizes of canvas.
+        /// </summary>
+        /// <param name="imageSize">The size of canvas.</param>
+        /// <param name="noRedraw">Flag of the need to redraw.</param>
+        protected void SetImageSize(ExtSize imageSize, bool noRedraw = false)
         {
             if (AutoScroll && !imageSize.IsEmpty) {
                 AutoScrollMinSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
             }
 
-            if (!noRedraw)
-                Invalidate();
+            if (!noRedraw) Invalidate();
         }
 
         protected Point GetImageRelativeLocation(PointF mpt)

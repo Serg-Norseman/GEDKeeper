@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,44 +20,48 @@
 
 using BSLib.Design;
 using BSLib.Design.Graphics;
+using Eto.Drawing;
+using GKUI.Platform;
+using EFListItem = Eto.Forms.IListItem;
+using EFImageListItem = Eto.Forms.IImageListItem;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKComboItem<T> : Eto.Forms.IListItem, IComboItem
+    public class GKComboItem<T> : ComboItem<T>, EFListItem, EFImageListItem
     {
-        public string Text { get; set; }
-        public T Tag { get; private set; }
-        public IImage Image { get; private set; }
-
         public string Key
         {
             get { return Text; }
         }
 
-        public GKComboItem(string text)
+        string EFListItem.Text
         {
-            Text = text;
+            get { return base.Text; }
+            set {  }
         }
 
-        public GKComboItem(string text, T tag)
+        Image EFImageListItem.Image
         {
-            Text = text;
-            Tag = tag;
+            get {
+                var image = base.Image;
+                var efImage = (image == null) ? null : ((ImageHandler) image).Handle;
+                return efImage;
+            }
         }
 
-        public GKComboItem(string text, T tag, IImage image)
+        public GKComboItem(string text) : base(text)
         {
-            Text = text;
-            Tag = tag;
-            Image = image;
         }
 
-        public override string ToString()
+        public GKComboItem(string text, T tag) : base(text, tag)
         {
-            return Text;
+        }
+
+        public GKComboItem(string text, T tag, IImage image) : base(text, tag, image)
+        {
         }
     }
 }

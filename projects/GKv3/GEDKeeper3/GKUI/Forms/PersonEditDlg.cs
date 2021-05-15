@@ -20,7 +20,6 @@
 
 using System;
 using System.ComponentModel;
-using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
@@ -34,6 +33,7 @@ using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -380,7 +380,7 @@ namespace GKUI.Forms
 
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
-            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown) {
+            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown || eArgs.Action == RecordAction.raEdit) {
                 fController.UpdateNameControls(fController.Person.PersonalNames[0]);
             }
         }

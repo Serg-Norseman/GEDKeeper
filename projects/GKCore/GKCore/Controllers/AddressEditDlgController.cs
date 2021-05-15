@@ -100,14 +100,14 @@ namespace GKCore.Controllers
             switch (action) {
                 case RecordAction.raAdd:
                     val = "";
-                    if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Telephone), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_Telephone), ref val)) {
                         fAddress.AddPhoneNumber(val);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     val = itemTag.StringValue;
-                    if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Telephone), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_Telephone), ref val)) {
                         itemTag.StringValue = val;
                     }
                     break;
@@ -125,14 +125,14 @@ namespace GKCore.Controllers
             switch (action) {
                 case RecordAction.raAdd:
                     val = "";
-                    if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Mail), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_Mail), ref val)) {
                         fAddress.AddEmailAddress(val);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     val = itemTag.StringValue;
-                    if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_Mail), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_Mail), ref val)) {
                         itemTag.StringValue = val;
                     }
                     break;
@@ -150,14 +150,14 @@ namespace GKCore.Controllers
             switch (action) {
                 case RecordAction.raAdd:
                     val = "";
-                    if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_WebSite), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_WebSite), ref val)) {
                         fAddress.AddWebPage(val);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     val = itemTag.StringValue;
-                    if (AppHost.StdDialogs.GetInput(LangMan.LS(LSID.LSID_WebSite), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_WebSite), ref val)) {
                         itemTag.StringValue = val;
                     }
                     break;

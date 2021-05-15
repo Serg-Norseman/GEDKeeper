@@ -30,7 +30,7 @@ using GKCore.Options;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
-using GKUI;
+using GKUI.Platform;
 using GKUI.Components;
 using NUnit.Framework;
 
@@ -207,11 +207,11 @@ namespace GKCore
                 model.CertaintyIndex = true;
                 Assert.AreEqual(true, model.CertaintyIndex);
 
-                model.DepthLimit = 8;
-                Assert.AreEqual(8, model.DepthLimit);
+                model.DepthLimitAncestors = 8;
+                Assert.AreEqual(8, model.DepthLimitAncestors);
 
-                model.DepthLimit = 8;
-                Assert.AreEqual(8, model.DepthLimit);
+                model.DepthLimitDescendants = 8;
+                Assert.AreEqual(8, model.DepthLimitDescendants);
 
                 Assert.IsNotNull(model.Filter);
 

@@ -28,6 +28,13 @@ using GKCore.Interfaces;
 using GKCore.Plugins;
 using SDIcon = System.Drawing.Icon;
 
+[assembly: AssemblyTitle("GEDmillPlugin")]
+[assembly: AssemblyDescription("GEDKeeper's GEDmill plugin")]
+[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyCopyright("Copyright © 2009 by Alexander Curtis, 2019-2021 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyVersion("1.12.0.0")]
+[assembly: AssemblyCulture("")]
+
 namespace GEDmill
 {
     /// <summary>
@@ -45,6 +52,7 @@ namespace GEDmill
         LSID_Settings,
         LSID_Ok,
         LSID_Cancel,
+        LSID_CreatingWebsite,
     }
 
     public sealed class Plugin : WidgetPlugin

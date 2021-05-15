@@ -23,10 +23,10 @@ namespace GKUI.Forms
             SuspendLayout();
 
             ListSelected = new GKListView();
-            ListSelected.Height = 200;
+            ListSelected.Height = 280;
 
             ListSkipped = new GKListView();
-            ListSkipped.Height = 200;
+            ListSkipped.Height = 280;
 
             btnSelectAll = new Button();
             btnSelectAll.Size = new Size(130, 26);

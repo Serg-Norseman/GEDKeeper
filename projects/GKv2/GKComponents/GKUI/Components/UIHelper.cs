@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -147,8 +147,7 @@ namespace GKUI.Components
 
         public static T GetSelectedTag<T>(ComboBox comboBox)
         {
-            object selectedItem = comboBox.SelectedItem;
-            ComboItem<T> comboItem = selectedItem as ComboItem<T>;
+            GKComboItem<T> comboItem = comboBox.SelectedItem as GKComboItem<T>;
             T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
             return itemTag;
         }
@@ -156,7 +155,7 @@ namespace GKUI.Components
         public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue, bool allowDefault = true)
         {
             foreach (object item in comboBox.Items) {
-                ComboItem<T> comboItem = item as ComboItem<T>;
+                GKComboItem<T> comboItem = item as GKComboItem<T>;
 
                 if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
                     comboBox.SelectedItem = item;
@@ -264,7 +263,7 @@ namespace GKUI.Components
             if (!IsStartupItem()) {
                 RegistryKey rkApp = GetRunKey();
                 string trayPath = GKUtils.GetAppPath() + "GKTray.exe";
-                rkApp.SetValue(GKData.APP_TITLE_NEW, trayPath);
+                rkApp.SetValue(GKData.APP_TITLE, trayPath);
             }
         }
 
@@ -272,14 +271,14 @@ namespace GKUI.Components
         {
             if (IsStartupItem()) {
                 RegistryKey rkApp = GetRunKey();
-                rkApp.DeleteValue(GKData.APP_TITLE_NEW, false);
+                rkApp.DeleteValue(GKData.APP_TITLE, false);
             }
         }
 
         public static bool IsStartupItem()
         {
             RegistryKey rkApp = GetRunKey();
-            return (rkApp.GetValue(GKData.APP_TITLE_NEW) != null);
+            return (rkApp.GetValue(GKData.APP_TITLE) != null);
         }
 
         private static RegistryKey GetRunKey()

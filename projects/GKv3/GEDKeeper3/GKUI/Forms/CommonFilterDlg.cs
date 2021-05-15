@@ -20,7 +20,6 @@
 
 using System;
 using Eto.Forms;
-
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
