@@ -29,8 +29,6 @@ NUnitResults.xml
 opencover.xml
 build_sonarqube.cmd
 
-/projects/GKvX/
-
 /projects/GKTests/OpenCover/
 /projects/GKTests/PartCover/
 /LuaInterface.dll.config
