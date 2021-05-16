@@ -1,8 +1,5 @@
 
 /temp/
 
-/GEDKeeperU/bin/
-/GEDKeeperU/obj/
-
-/GKComponents/bin/
-/GKComponents/obj/
+**/[Bb]in/
+**/[Oo]bj/

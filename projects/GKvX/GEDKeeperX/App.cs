@@ -1,7 +1,7 @@
 ﻿using BSLib.Design.MVP;
-using GEDKeeperX.Views;
 using GKCore;
-using GKUI.Providers;
+using GKUI.Forms;
+using GKUI.Platform;
 using Xamarin.Forms;
 
 namespace GEDKeeperX

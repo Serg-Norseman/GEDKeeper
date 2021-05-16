@@ -26,6 +26,7 @@ using GKCore.MVP.Views;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
+using GKCore.Tools;
 
 namespace GKUI.Forms
 {

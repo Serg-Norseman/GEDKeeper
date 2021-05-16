@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using BSLib.Design;
 using BSLib.Design.Graphics;
 
 namespace GKUI.Components
@@ -26,47 +27,21 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class GKComboItem
+    public class GKComboItem<T> : ComboItem<T>
     {
-        public readonly string Caption;
-        public readonly object Tag;
-        public readonly IImage Image;
-
-        public string Text
+        public GKComboItem(string text) : base(text)
         {
-            get { return Caption; }
-            set { }
         }
 
-        public string Key
+        public GKComboItem(string text, T tag) : base(text, tag)
         {
-            get { return Caption; }
         }
 
-        public GKComboItem(string caption)
+        public GKComboItem(string text, T tag, IImage image) : base(text, tag, image)
         {
-            Caption = caption;
         }
 
-        public GKComboItem(string caption, object tag)
-        {
-            Caption = caption;
-            Tag = tag;
-        }
-
-        public GKComboItem(string caption, object tag, IImage image)
-        {
-            Caption = caption;
-            Tag = tag;
-            Image = image;
-        }
-
-        public override string ToString()
-        {
-            return Caption;
-        }
-
-        public static IEnumerable<GKComboItem> Convert(IEnumerable<string> items)
+        /*public static IEnumerable<GKComboItem> Convert(IEnumerable<string> items)
         {
             var result = new List<GKComboItem>();
 
@@ -75,6 +50,6 @@ namespace GKUI.Components
             }
 
             return result;
-        }
+        }*/
     }
 }

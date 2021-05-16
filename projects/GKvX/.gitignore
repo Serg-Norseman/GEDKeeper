@@ -10,14 +10,5 @@
 
 /temp/
 
-/GEDKeeperX/bin/
-/GEDKeeperX/obj/
-
-/GEDKeeperX.Android/bin/
-/GEDKeeperX.Android/obj/
-
-/GEDKeeperX.iOS/bin/
-/GEDKeeperX.iOS/obj/
-
-/GEDKeeperX.UWP/bin/
-/GEDKeeperX.UWP/obj/
+**/[Bb]in/
+**/[Oo]bj/

@@ -109,7 +109,7 @@ namespace GKUI.Forms
                 //DoInit(title, max);
                 //Application.Instance.Invoke(delegate { DoInit(title, max); });
             } catch (Exception ex) {
-                Logger.LogWrite("ProgressDlg.ProgressInit(): " + ex.Message);
+                Logger.WriteError("ProgressDlg.ProgressInit()", ex);
             }
         }
 
@@ -121,7 +121,7 @@ namespace GKUI.Forms
                     //Application.Instance.Invoke(delegate { DoDone(); });
                 }
             } catch (Exception ex) {
-                Logger.LogWrite("ProgressDlg.ProgressDone(): " + ex.Message);
+                Logger.WriteError("ProgressDlg.ProgressDone()", ex);
             }
         }
 
@@ -145,6 +145,13 @@ namespace GKUI.Forms
             }
         }
 
+        public bool IsCanceled
+        {
+            get {
+                return false; //fCancelEvent.WaitOne(0, false);
+            }
+        }
+
         #endregion
     }
 
@@ -160,12 +167,7 @@ namespace GKUI.Forms
         private string fTitle;
         private int fVal;
 
-        /*public bool IsCanceled
-        {
-            get { return fProxy.IsCanceled; }
-        }*/
-
-        public void ProgressInit(string title, int max)
+        public void ProgressInit(string title, int max, bool cancelable = false)
         {
             if (fProgressForm != null) {
                 fProgressForm.ProgressInit(title, max);
@@ -230,6 +232,13 @@ namespace GKUI.Forms
         {
             //fMRE.Set();
             fFormLoaded = true;
+        }
+
+        public bool IsCanceled
+        {
+            get {
+                return (fProgressForm != null) && fProgressForm.IsCanceled;
+            }
         }
     }
 }

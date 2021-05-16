@@ -175,7 +175,17 @@ namespace GKUI.Providers
             set { Control.SelectedItem = value; }
         }
 
-        public object SelectedTag
+        public bool Sorted
+        {
+            get { return false; }
+            set {
+                if (value) {
+                    Sort();
+                }
+            }
+        }
+
+        /*public object SelectedTag
         {
             get {
                 return ((GKComboItem)Control.SelectedItem).Tag;
@@ -191,7 +201,7 @@ namespace GKUI.Providers
                 }
                 ctl.SelectedIndex = 0;
             }
-        }
+        }*/
 
         public string Text
         {
@@ -202,6 +212,11 @@ namespace GKUI.Providers
         public void Add(object item)
         {
             Control.Items.Add((string)item);
+        }
+
+        public void AddItem<T>(string caption, T tag, IImage image = null)
+        {
+            Control.Items.Add(new GKComboItem<T>(caption, tag, image));
         }
 
         public void AddItem(string caption, object tag, IImage image = null)
@@ -254,7 +269,7 @@ namespace GKUI.Providers
             return default(T);
         }
 
-        public void SetSelectedTag<T>(T tagValue)
+        public void SetSelectedTag<T>(T tagValue, bool allowDefault = true)
         {
         }
 

@@ -35,7 +35,7 @@ namespace GKUI.Forms
 
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Content = LangMan.LS(LSID.LSID_DlgClose);
-            lblProduct.Text = GKData.APP_TITLE_NEW;
+            lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();
         }
