@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31229.75
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GEDKeeper3A", "GEDKeeperA\GEDKeeper3A.csproj", "{8E7AEA62-3020-4F48-916A-601493A37430}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.std", "..\GKCore\GKCore.std.csproj", "{90EDBEEE-E312-42E3-996A-48736637FDCB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BC8F408-B5E6-4BF6-94CA-F23A78F5C076}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.editorconfig = ..\..\.editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E7AEA62-3020-4F48-916A-601493A37430}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7AEA62-3020-4F48-916A-601493A37430}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7AEA62-3020-4F48-916A-601493A37430}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7AEA62-3020-4F48-916A-601493A37430}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90EDBEEE-E312-42E3-996A-48736637FDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90EDBEEE-E312-42E3-996A-48736637FDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90EDBEEE-E312-42E3-996A-48736637FDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90EDBEEE-E312-42E3-996A-48736637FDCB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2AAFCD29-0895-47B9-B234-A7C9216A5F88}
+	EndGlobalSection
+EndGlobal

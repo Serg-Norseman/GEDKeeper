@@ -1,0 +1,22 @@
+<local:EditorDialog
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:GKUI.Forms"
+    x:Class="GKUI.Forms.AssociationEditDlg"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical" Spacing="10">
+        <TextBlock x:Name="lblRelation" />
+        <ComboBox x:Name="cmbRelation" Width="380" />
+        <TextBlock x:Name="lblPerson" />
+        <TextBox x:Name="txtPerson" IsReadOnly="True" Width="340" />
+        <Button x:Name="btnPersonAdd" />
+
+        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+            <Button x:Name="btnAccept" Click="btnAccept_Click" />
+            <Button x:Name="btnCancel" Click="CancelClickHandler" />
+        </StackPanel>
+    </StackPanel>
+</local:EditorDialog>

@@ -1,0 +1,15 @@
+<local:CommonForm
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:GKUI.Forms"
+    x:Class="GKUI.Forms.QuickSearchDlg"
+    mc:Ignorable="d">
+
+  <StackPanel Orientation="Horizontal">
+    <TextBox x:Name="txtSearchPattern" Width="150" />
+    <Button x:Name="btnPrev" Margin="8, 0, 8, 0" Height="24" Width="24" Click="FindPrev_Click" />
+    <Button x:Name="btnNext" Margin="0, 0, 8, 0" Height="24" Width="24" Click="FindNext_Click" />
+  </StackPanel>
+</local:CommonForm>
