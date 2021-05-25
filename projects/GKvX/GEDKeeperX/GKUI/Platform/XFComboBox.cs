@@ -9,7 +9,7 @@ namespace Xamarin.Forms
     /// <summary>
     /// Combo box with search option
     /// </summary>
-    public class ComboBox : StackLayout
+    public class XFComboBox : StackLayout
     {
         private Entry _entry;
         private ListView _listView;
@@ -17,8 +17,8 @@ namespace Xamarin.Forms
         private bool _supressSelectedItemFiltering;
 
         //Bindable properties
-        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(ComboBox), defaultValue: null, propertyChanged: (bindable, oldVal, newVal) => {
-            var comboBox = (ComboBox)bindable;
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(XFComboBox), defaultValue: null, propertyChanged: (bindable, oldVal, newVal) => {
+            var comboBox = (XFComboBox)bindable;
             comboBox._listView.ItemsSource = (IEnumerable)newVal;
         });
 
@@ -28,8 +28,8 @@ namespace Xamarin.Forms
             set { SetValue(ItemsSourceProperty, value); }
         }
 
-        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(ComboBox), defaultValue: null, propertyChanged: (bindable, oldVal, newVal) => {
-            var comboBox = (ComboBox)bindable;
+        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(XFComboBox), defaultValue: null, propertyChanged: (bindable, oldVal, newVal) => {
+            var comboBox = (XFComboBox)bindable;
             comboBox._listView.SelectedItem = newVal;
         });
 
@@ -39,20 +39,20 @@ namespace Xamarin.Forms
             set { SetValue(SelectedItemProperty, value); }
         }
 
-        /*public static new readonly BindableProperty VisualProperty = BindableProperty.Create(nameof(Visual), typeof(IVisual), typeof(ComboBox), defaultValue: new DefaultVisual(), propertyChanged: (bindable, oldVal, newVal) => {
-            var comboBox = (ComboBox)bindable;
+        public static new readonly BindableProperty VisualProperty = BindableProperty.Create(nameof(Visual), typeof(IVisual), typeof(XFComboBox), defaultValue: new VisualMarker.DefaultVisual(), propertyChanged: (bindable, oldVal, newVal) => {
+            var comboBox = (XFComboBox)bindable;
             comboBox._listView.Visual = (IVisual)newVal;
             comboBox._entry.Visual = (IVisual)newVal;
-        });*/
+        });
 
-        /*public new IVisual Visual
+        public new IVisual Visual
         {
             get { return (IVisual)GetValue(VisualProperty); }
             set { SetValue(VisualProperty, value); }
-        }*/
+        }
 
-        public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(ComboBox), defaultValue: "", propertyChanged: (bindable, oldVal, newVal) => {
-            var comboBox = (ComboBox)bindable;
+        public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(XFComboBox), defaultValue: "", propertyChanged: (bindable, oldVal, newVal) => {
+            var comboBox = (XFComboBox)bindable;
             comboBox._entry.Placeholder = (string)newVal;
         });
 
@@ -62,8 +62,8 @@ namespace Xamarin.Forms
             set { SetValue(PlaceholderProperty, value); }
         }
 
-        public static readonly BindableProperty TextProperty = BindableProperty.Create(nameof(Text), typeof(string), typeof(ComboBox), defaultValue: "", propertyChanged: (bindable, oldVal, newVal) => {
-            var comboBox = (ComboBox)bindable;
+        public static readonly BindableProperty TextProperty = BindableProperty.Create(nameof(Text), typeof(string), typeof(XFComboBox), defaultValue: "", propertyChanged: (bindable, oldVal, newVal) => {
+            var comboBox = (XFComboBox)bindable;
             comboBox._entry.Text = (string)newVal;
         });
 
@@ -73,8 +73,8 @@ namespace Xamarin.Forms
             set { SetValue(TextProperty, value); }
         }
 
-        public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(ComboBox), defaultValue: null, propertyChanged: (bindable, oldVal, newVal) => {
-            var comboBox = (ComboBox)bindable;
+        public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(XFComboBox), defaultValue: null, propertyChanged: (bindable, oldVal, newVal) => {
+            var comboBox = (XFComboBox)bindable;
             comboBox._listView.ItemTemplate = (DataTemplate)newVal;
         });
 
@@ -84,7 +84,7 @@ namespace Xamarin.Forms
             set { SetValue(ItemTemplateProperty, value); }
         }
 
-        public static readonly BindableProperty EntryDisplayPathProperty = BindableProperty.Create(nameof(EntryDisplayPath), typeof(string), typeof(ComboBox), defaultValue: "");
+        public static readonly BindableProperty EntryDisplayPathProperty = BindableProperty.Create(nameof(EntryDisplayPath), typeof(string), typeof(XFComboBox), defaultValue: "");
 
         public string EntryDisplayPath
         {
@@ -109,7 +109,7 @@ namespace Xamarin.Forms
         }
 
 
-        public ComboBox()
+        public XFComboBox()
         {
             //Entry used for filtering list view
             _entry = new Entry();
@@ -143,7 +143,7 @@ namespace Xamarin.Forms
             _listView.HeightRequest = 100;
             _listView.HorizontalOptions = LayoutOptions.StartAndExpand;
             _listView.IsVisible = false;
-            _listView.SetBinding(ListView.SelectedItemProperty, new Binding(nameof(ComboBox.SelectedItem), source: this));
+            _listView.SetBinding(ListView.SelectedItemProperty, new Binding(nameof(XFComboBox.SelectedItem), source: this));
 
             //Item selected event, surface it back to the top
             _listView.ItemSelected += (sender, args) =>

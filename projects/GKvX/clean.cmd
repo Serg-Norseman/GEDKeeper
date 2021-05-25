@@ -1,5 +1,5 @@
-
 rmdir .\.vs /s /q
+rmdir .\.idea /s /q
 
 rmdir .\GEDKeeperX\bin /s /q
 rmdir .\GEDKeeperX\obj /s /q

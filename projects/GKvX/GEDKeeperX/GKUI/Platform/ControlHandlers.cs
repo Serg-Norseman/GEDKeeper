@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,12 +20,16 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.MVP;
 using BSLib.Design.MVP.Controls;
 using GKUI.Components;
+using Plugin.InputKit.Shared.Controls;
 using Xamarin.Forms;
+using XFRadioButton = Xamarin.Forms.RadioButton;
+using XFIKCheckBox = Plugin.InputKit.Shared.Controls.CheckBox;
 
 namespace GKUI.Platform
 {
@@ -76,36 +80,16 @@ namespace GKUI.Platform
         }
     }
 
-    public sealed class CheckBoxHandler : BaseControlHandler<Switch, CheckBoxHandler>, ICheckBox
+    public sealed class CheckBoxHandler : BaseControlHandler<XFIKCheckBox, CheckBoxHandler>, ICheckBox
     {
-        public CheckBoxHandler(Switch control) : base(control)
+        public CheckBoxHandler(XFIKCheckBox control) : base(control)
         {
         }
 
         public bool Checked
         {
-            get { return Control.IsToggled; }
-            set { Control.IsToggled = value; }
-        }
-
-        // ALERT!
-        public string Text
-        {
-            get { return /*Control.Text*/""; }
-            set { /*Control.Text = value;*/ }
-        }
-    }
-
-    /*public sealed class RadioButtonHandler : BaseControlHandler<RadioButton, RadioButtonHandler>, IRadioButtonHandler
-    {
-        public RadioButtonHandler(RadioButton control) : base(control)
-        {
-        }
-
-        public bool Checked
-        {
-            get { return Control.Checked; }
-            set { Control.Checked = value; }
+            get { return Control.IsChecked; }
+            set { Control.IsChecked = value; }
         }
 
         public string Text
@@ -113,12 +97,35 @@ namespace GKUI.Platform
             get { return Control.Text; }
             set { Control.Text = value; }
         }
-    }*/
+    }
 
-    public sealed class ComboBoxHandler : BaseControlHandler<Picker, ComboBoxHandler>, IComboBox
+    public sealed class RadioButtonHandler : BaseControlHandler<XFRadioButton, RadioButtonHandler>, IRadioButton
     {
-        public ComboBoxHandler(Picker control) : base(control)
+        public RadioButtonHandler(XFRadioButton control) : base(control)
         {
+        }
+
+        public bool Checked
+        {
+            get { return Control.IsChecked; }
+            set { Control.IsChecked = value; }
+        }
+
+        public string Text
+        {
+            get { return (string)Control.Content; }
+            set { Control.Content = value; }
+        }
+    }
+
+    public sealed class ComboBoxHandler : BaseControlHandler<XFComboBox, ComboBoxHandler>, IComboBox
+    {
+        private IList fItems;
+
+        public ComboBoxHandler(XFComboBox control) : base(control)
+        {
+            fItems = new ObservableCollection<string>();
+            control.ItemsSource = fItems;
         }
 
         public new bool Enabled
@@ -145,8 +152,8 @@ namespace GKUI.Platform
 
         public int SelectedIndex
         {
-            get { return Control.SelectedIndex; }
-            set { Control.SelectedIndex = value; }
+            get { return 0/*Control.SelectedIndex*/; }
+            set { /*Control.SelectedIndex = value;*/ }
         }
 
         public object SelectedItem
@@ -185,30 +192,33 @@ namespace GKUI.Platform
 
         public string Text
         {
-            get { return Control.Title; }
-            set { Control.Title = value; }
+            get { return /*Control.Text*/string.Empty; }
+            set { /*Control.Text = value;*/ }
         }
 
         public void Add(object item)
         {
-            Control.Items.Add((string)item);
+            //Control.ItemsSource = null;
+            //Control.Items.Add((string)item);
+            fItems.Add(item.ToString());
+            //Control.ItemsSource = fItems;
         }
 
         public void AddItem<T>(string caption, T tag, IImage image = null)
         {
             //Control.Items.Add(new GKComboItem<T>(caption, tag, image));
-            Control.Items.Add(caption);
+            //Control.Items.Add(caption);
         }
 
         public void AddItem(string caption, object tag, IImage image = null)
         {
             //Control.Items.Add(new GKComboItem(caption, tag, image));
-            Control.Items.Add(caption);
+            //Control.Items.Add(caption);
         }
 
         public void AddItem<T>(string caption, T tag)
         {
-            Control.Items.Add(caption);
+            //Control.Items.Add(caption);
         }
 
         public void AddRange(object[] items, bool sorted = false)
@@ -217,7 +227,7 @@ namespace GKUI.Platform
             //Control.Items.AddRange(GKComboItem.Convert((string[])items));
             foreach (var itm in items)
             {
-                Control.Items.Add((string)itm);
+                //Control.Items.Add((string)itm);
             }
             //Control.Sorted = sorted;
         }
@@ -228,7 +238,7 @@ namespace GKUI.Platform
             //Control.Items.AddRange(GKComboItem.Convert((string[])items));
             foreach (var itm in items)
             {
-                Control.Items.Add((string)itm);
+                //Control.Items.Add((string)itm);
             }
             //Control.Sorted = sorted;
         }
@@ -244,15 +254,18 @@ namespace GKUI.Platform
         public void BeginUpdate()
         {
             //Control.BeginUpdate();
+            //Control.ItemsSource = null;
         }
 
         public void Clear()
         {
-            Control.Items.Clear();
+            //Control.Items.Clear();
+            //fItems.Clear();
         }
 
         public void EndUpdate()
         {
+            //Control.ItemsSource = fItems;
             //Control.EndUpdate();
         }
 

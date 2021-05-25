@@ -114,13 +114,13 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(AutoCompleteBox), typeof(ComboBoxHandler)); // AvUI: (-) ComboBox isn't editable
             ControlsManager.RegisterHandlerType(typeof(TextBlock), typeof(LabelHandler)); // AvUI: +
             //ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler)); // AvUI: (-)
-            //ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler)); // AvUI: +
+            ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler)); // AvUI: +
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler)); // AvUI: +
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler)); // AvUI: +
-            //ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler)); // AvUI: +
+            ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler)); // AvUI: +
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler)); // AvUI: +
-            //ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler)); // AvUI: +
-            //ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler)); // AvUI: + MenuItem
+            ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler)); // AvUI: +
+            ControlsManager.RegisterHandlerType(typeof(MenuItem), typeof(MenuItemHandler)); // AvUI: + MenuItem
 
             //ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler)); // custom
         }

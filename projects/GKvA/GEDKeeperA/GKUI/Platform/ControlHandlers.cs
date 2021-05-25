@@ -26,6 +26,7 @@ using BSLib.Design.Graphics;
 using BSLib.Design.MVP;
 using BSLib.Design.MVP.Controls;
 using GKUI.Components;
+using BSDMenuItem = BSLib.Design.MVP.Controls.IMenuItem;
 
 namespace GKUI.Platform
 {
@@ -441,7 +442,7 @@ namespace GKUI.Platform
 
     public sealed class TreeViewHandler : BaseControlHandler<TreeView, TreeViewHandler>, ITreeView
     {
-        private TreeItem fRootNode;
+        //private TreeItem fRootNode;
 
         public TreeViewHandler(TreeView control) : base(control)
         {
@@ -449,19 +450,20 @@ namespace GKUI.Platform
 
         public ITVNode AddNode(ITVNode parent, string name, object tag)
         {
-            var node = new GKTreeNode(name, tag);
+            /*var node = new GKTreeNode(name, tag);
             if (parent == null) {
                 fRootNode.Children.Add(node);
             } else {
                 ((GKTreeNode)parent).Children.Add(node);
             }
-            return node;
+            return node;*/
+            return null;
         }
 
         public void BeginUpdate()
         {
-            Control.DataStore = null;
-            fRootNode = new TreeItem();
+            /*Control.DataStore = null;
+            fRootNode = new TreeItem();*/
         }
 
         public void Clear()
@@ -470,18 +472,23 @@ namespace GKUI.Platform
 
         public void EndUpdate()
         {
-            Control.DataStore = fRootNode;
-            Control.RefreshData();
+            /*Control.DataStore = fRootNode;
+            Control.RefreshData();*/
         }
 
         public void Expand(ITVNode node)
         {
-            GKTreeNode treeNode = node as GKTreeNode;
+            /*GKTreeNode treeNode = node as GKTreeNode;
             if (treeNode != null) {
                 treeNode.Expanded = true;
-            }
+            }*/
         }
-    }*/
+
+        public object GetSelectedData()
+        {
+            return null;
+        }
+    }
 
     public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBar
     {
@@ -530,7 +537,7 @@ namespace GKUI.Platform
         }
     }*/
 
-    /*public sealed class TabControlHandler : BaseControlHandler<TabControl, TabControlHandler>, ITabControl
+    public sealed class TabControlHandler : BaseControlHandler<TabControl, TabControlHandler>, ITabControl
     {
         public TabControlHandler(TabControl control) : base(control)
         {
@@ -541,11 +548,11 @@ namespace GKUI.Platform
             get { return Control.SelectedIndex; }
             set { Control.SelectedIndex = value; }
         }
-    }*/
+    }
 
-    /*public sealed class MenuItemHandler : ControlHandler<ButtonMenuItem, MenuItemHandler>, IMenuItem
+    public sealed class MenuItemHandler : ControlHandler<MenuItem, MenuItemHandler>, BSDMenuItem
     {
-        public MenuItemHandler(ButtonMenuItem control) : base(control)
+        public MenuItemHandler(MenuItem control) : base(control)
         {
         }
 
@@ -557,8 +564,8 @@ namespace GKUI.Platform
 
         public bool Enabled
         {
-            get { return Control.Enabled; }
-            set { Control.Enabled = value; }
+            get { return Control.IsEnabled; }
+            set { Control.IsEnabled = value; }
         }
 
         public object Tag
@@ -569,19 +576,20 @@ namespace GKUI.Platform
 
         public int ItemsCount
         {
-            get { return Control.Items.Count; }
+            get { return /*Control.Items.Count*/ 0; }
         }
 
-        public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
+        public BSDMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
         {
-            var item = new MenuItemEx(text, tag, image, action);
+            /*var item = new MenuItemEx(text, tag, image, action);
             Control.Items.Add(item);
-            return item;
+            return item;*/
+            return null;
         }
 
         public void ClearItems()
         {
-            Control.Items.Clear();
+            //Control.Items.Clear();
         }
-    }*/
+    }
 }

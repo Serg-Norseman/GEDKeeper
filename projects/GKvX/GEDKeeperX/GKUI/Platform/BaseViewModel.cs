@@ -2,24 +2,29 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Xamarin.Forms;
 
 namespace GKUI.Platform
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        bool isBusy = false;
+        private bool fIsBusy;
+        private string fTitle;
+
         public bool IsBusy
         {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
+            get { return fIsBusy; }
+            set { SetProperty(ref fIsBusy, value); }
         }
 
-        string title = string.Empty;
         public string Title
         {
-            get { return title; }
-            set { SetProperty(ref title, value); }
+            get { return fTitle; }
+            set { SetProperty(ref fTitle, value); }
+        }
+
+        public BaseViewModel()
+        {
+            fTitle = string.Empty;
         }
 
         protected bool SetProperty<T>(ref T backingStore, T value,

@@ -1,4 +1,5 @@
 ﻿using GKUI.Components;
+using Plugin.InputKit.Shared.Controls;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
@@ -8,9 +9,9 @@ namespace GKUI.Forms
         private Button btnAccept;
         private Button btnCancel;
         private Label lblReference;
-        private Picker cmbRef;
+        private XFComboBox cmbRef;
         private Label lblRefType;
-        private Picker cmbRefType;
+        private XFComboBox cmbRefType;
 
         private void InitializeComponent()
         {
@@ -20,19 +21,23 @@ namespace GKUI.Forms
             lblReference = new Label();
             lblReference.Text = "lblReference";
 
-            cmbRef = new Picker();
+            cmbRef = new XFComboBox();
+            //cmbRef.IsEditable = true;
+            cmbRef.WidthRequest = 400;
 
             lblRefType = new Label();
             lblRefType.Text = "lblRefType";
 
-            cmbRefType = new Picker();
+            cmbRefType = new XFComboBox();
+            //cmbRefType.IsEditable = true;
+            cmbRefType.WidthRequest = 400;
 
             var panelData = new Grid()
             {
                 ColumnSpacing = 10,
                 RowSpacing = 10,
                 //HeightRequest = 175,
-                WidthRequest = 300,
+                WidthRequest = 600,
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Start
             };
@@ -46,6 +51,7 @@ namespace GKUI.Forms
                 UIHelper.CreateHStackLayout(btnAccept, btnCancel)
             });
 
+            ForceLayout();
             Title = "UserRefEditDlg";
             SetPredefProperties(500, 180);
         }

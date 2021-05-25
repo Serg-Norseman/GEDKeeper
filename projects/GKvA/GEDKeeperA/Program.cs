@@ -23,12 +23,8 @@ using Avalonia;
 namespace GEDKeeper3A
 {
     /// <summary>
-    /// Avalonia problems:
-    /// 1. No editable ComboBox - hard required (AutoCompleteBox?)
-    /// 2. No spacing for grid cells - minor
-    /// 3. No options for disable minimize/resize buttons in dialogs! - wow :(
+    ///
     /// </summary>
-
     class Program
     {
         // Initialization code. Don't use any Avalonia, third-party APIs or any
