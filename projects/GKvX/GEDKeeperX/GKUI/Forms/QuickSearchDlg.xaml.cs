@@ -18,40 +18,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
+using System;
 using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
     {
         private readonly QuickSearchDlgController fController;
-
-        #region Design
-
-        private TextBox txtSearchPattern;
-        private Button btnPrev;
-        private Button btnNext;
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-
-            base.CanResize = false;
-
-            txtSearchPattern = this.FindControl<TextBox>("txtSearchPattern");
-            btnPrev = this.FindControl<Button>("btnPrev");
-            btnNext = this.FindControl<Button>("btnNext");
-        }
-
-        #endregion
 
         #region View Interface
 
@@ -80,30 +61,30 @@ namespace GKUI.Forms
             SetLang();
         }
 
-        private void SearchPattern_TextChanged(object sender, RoutedEventArgs e)
+        private void SearchPattern_TextChanged(object sender, EventArgs e)
         {
             fController.ChangeText();
         }
 
-        private void FindNext_Click(object sender, RoutedEventArgs e)
+        private void FindNext_Click(object sender, EventArgs e)
         {
             fController.FindNext();
         }
 
-        private void FindPrev_Click(object sender, RoutedEventArgs e)
+        private void FindPrev_Click(object sender, EventArgs e)
         {
             fController.FindPrev();
         }
 
-        private void SearchPanel_KeyDown(object sender, KeyEventArgs e)
+        /*private void SearchPanel_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key) {
                 case Key.Enter:
                     e.Handled = true;
-                    /*if (e.Shift)
+                    if (e.Shift)
                         fController.FindPrev();
                     else
-                        fController.FindNext();*/
+                        fController.FindNext();
                     break;
 
                 case Key.Escape:
@@ -111,14 +92,14 @@ namespace GKUI.Forms
                     Close();
                     break;
             }
-        }
+        }*/
 
         public void SetLang()
         {
             Title = LangMan.LS(LSID.LSID_Search);
             //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
-            SetToolTip(btnPrev, LangMan.LS(LSID.LSID_FindPrevious));
-            SetToolTip(btnNext, LangMan.LS(LSID.LSID_FindNext));
+            //SetToolTip(btnPrev, LangMan.LS(LSID.LSID_FindPrevious));
+            //SetToolTip(btnNext, LangMan.LS(LSID.LSID_FindNext));
         }
     }
 }

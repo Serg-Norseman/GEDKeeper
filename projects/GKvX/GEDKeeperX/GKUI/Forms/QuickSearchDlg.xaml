@@ -1,0 +1,12 @@
+<forms:CommonForm
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    x:Class="GKUI.Forms.QuickSearchDlg">
+
+    <StackLayout Orientation="Horizontal">
+        <Entry x:Name="txtSearchPattern" WidthRequest="150" />
+        <Button x:Name="btnPrev" Margin="8, 0, 8, 0" HeightRequest="24" WidthRequest="24" Clicked="FindPrev_Click" />
+        <Button x:Name="btnNext" Margin="0, 0, 8, 0" HeightRequest="24" WidthRequest="24" Clicked="FindNext_Click" />
+    </StackLayout>
+</forms:CommonForm>

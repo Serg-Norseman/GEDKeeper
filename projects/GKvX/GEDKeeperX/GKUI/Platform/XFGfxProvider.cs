@@ -20,11 +20,11 @@
 
 using System;
 using System.IO;
-using Avalonia.Media;
 using BSLib;
 using BSLib.Design.Graphics;
 using GKCore.Interfaces;
 using GKUI.Components;
+using Xamarin.Forms;
 using IBrush = BSLib.Design.Graphics.IBrush;
 using IImage = BSLib.Design.Graphics.IImage;
 using IPen = BSLib.Design.Graphics.IPen;
@@ -34,9 +34,9 @@ namespace GKUI.Platform
     /// <summary>
     /// 
     /// </summary>
-    public class AFWGfxProvider : IGraphicsProviderEx
+    public class XFGfxProvider : IGraphicsProviderEx
     {
-        public AFWGfxProvider()
+        public XFGfxProvider()
         {
         }
 
@@ -219,19 +219,19 @@ namespace GKUI.Platform
             byte green = (byte)((argb >> 8) & 0xFF);
             byte blue = (byte)((argb >> 0) & 0xFF);
 
-            Color color = Color.FromArgb(0, red, green, blue);
+            Color color = Color.FromRgba(red, green, blue, 0);
             return new ColorHandler(color);
         }
 
         public IColor CreateColor(int r, int g, int b)
         {
-            Color color = Color.FromArgb(0, (byte)r, (byte)g, (byte)b);
+            Color color = Color.FromRgba((byte)r, (byte)g, (byte)b, 0);
             return new ColorHandler(color);
         }
 
         public IColor CreateColor(int a, int r, int g, int b)
         {
-            Color color = Color.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
+            Color color = Color.FromRgba((byte)r, (byte)g, (byte)b, (byte)a);
             return new ColorHandler(color);
         }
 

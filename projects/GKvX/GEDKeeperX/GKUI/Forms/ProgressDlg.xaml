@@ -1,0 +1,35 @@
+<forms:CommonForm
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    x:Class="GKUI.Forms.ProgressDlg">
+
+    <StackLayout Orientation="Vertical" Spacing="10">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.Children>
+                <Label Text="Loading" x:Name="lblTitle" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" />
+                <ProgressBar x:Name="ProgressBar1" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" />
+
+                <Label Text="Elapsed time" x:Name="lblTimePassed" Grid.Column="0" Grid.Row="2" />
+                <Label Text="lblPassedVal" x:Name="lblPassedVal" HorizontalTextAlignment="End" Grid.Column="1" Grid.Row="2" />
+
+                <Label Text="Remaining time" x:Name="lblTimeRemain" Grid.Column="0" Grid.Row="3" />
+                <Label Text="lblRemainVal" x:Name="lblRemainVal" HorizontalTextAlignment="End" Grid.Column="1" Grid.Row="3" />
+
+                <Label Text="Total time" x:Name="lblTimeTotal" Grid.Column="0" Grid.Row="4" />
+                <Label Text="lblTotalVal" x:Name="lblTotalVal" HorizontalTextAlignment="End" Grid.Column="1" Grid.Row="4" />
+            </Grid.Children>
+        </Grid>
+    </StackLayout>
+</forms:CommonForm>

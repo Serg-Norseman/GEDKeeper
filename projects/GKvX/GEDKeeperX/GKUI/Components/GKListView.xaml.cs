@@ -1,11 +1,11 @@
 ﻿using BSLib.Design;
 using BSLib.Design.MVP.Controls;
 using GKCore.Interfaces;
-using Avalonia.Controls;
+using Xamarin.Forms;
 
 namespace GKUI.Components
 {
-    public sealed partial class GKListView : UserControl, IListViewEx
+    public sealed partial class GKListView : View, IListViewEx
     {
         public GKListView()
         {

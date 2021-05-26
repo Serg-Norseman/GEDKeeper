@@ -19,10 +19,9 @@
  */
 
 using System.IO;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using BSLib;
 using BSLib.Design.Graphics;
+using Xamarin.Forms;
 using IBrush = BSLib.Design.Graphics.IBrush;
 using IImage = BSLib.Design.Graphics.IImage;
 
@@ -70,22 +69,22 @@ namespace GKUI.Components
 
         public byte GetR()
         {
-            return Handle.R;
+            return (byte)(Handle.R * 255);
         }
 
         public byte GetG()
         {
-            return Handle.G;
+            return (byte)(Handle.G * 255);
         }
 
         public byte GetB()
         {
-            return Handle.B;
+            return (byte)(Handle.B * 255);
         }
 
         public byte GetA()
         {
-            return Handle.A;
+            return (byte)(Handle.A * 255);
         }
 
         public bool IsTransparent()
@@ -258,7 +257,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ImageHandler: TypeHandler<Bitmap>, IImage
+    public sealed class ImageHandler: TypeHandler<Image>, IImage
     {
         public int Height
         {
@@ -270,7 +269,7 @@ namespace GKUI.Components
             get { return 0; /* Handle.Width; */ }
         }
 
-        public ImageHandler(Bitmap handle) : base(handle)
+        public ImageHandler(Image handle) : base(handle)
         {
         }
 

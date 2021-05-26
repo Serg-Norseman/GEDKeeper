@@ -34,7 +34,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        public string Caption
+        public string Title
         {
             get { return base.Title; }
             set { base.Title = value; }
@@ -67,10 +67,16 @@ namespace GKUI.Forms
 
         public void Close()
         {
+            //base.Close();
         }
 
         public void Dispose()
         {
+        }
+
+        protected T GetControlHandler<T>(object control) where T : class, IControl
+        {
+            return fControlsManager.GetControlHandler<T>(control);
         }
     }
 
@@ -78,8 +84,12 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CommonWindow : CommonForm, IWindow
+    public class CommonWindow : CommonForm, IWindow
     {
+        public CommonWindow()
+        {
+        }
+
         public virtual void Show(bool showInTaskbar)
         {
             //ShowInTaskbar = showInTaskbar;
@@ -110,7 +120,7 @@ namespace GKUI.Forms
             }
         }*/
 
-        public CommonDialog() : base()
+        public CommonDialog()
         {
         }
 
@@ -118,6 +128,14 @@ namespace GKUI.Forms
         {
             return false;//(ShowModal((Control)owner) == DialogResult.Ok);
         }
+
+        /*public void Close(DialogResult dialogResult)
+        {
+            fResult = dialogResult;
+            if (fResult != DialogResult.None) {
+                Close();
+            }
+        }*/
 
         protected async virtual void CancelClickHandler(object sender, EventArgs e)
         {

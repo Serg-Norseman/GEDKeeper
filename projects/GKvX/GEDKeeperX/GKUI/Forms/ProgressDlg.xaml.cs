@@ -20,45 +20,19 @@
 
 using System;
 using System.Threading;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using GKCore;
 using GKCore.Interfaces;
+using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    public sealed partial class ProgressDlg : Window
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public sealed partial class ProgressDlg : CommonForm
     {
+        private int fMaximum;
         private DateTime fStartTime;
         private bool fRequiresClose;
         private int fVal;
-
-        #region Design
-
-        private ProgressBar ProgressBar1;
-        private TextBlock lblTitle;
-        private TextBlock lblTimePassed;
-        private TextBlock lblPassedVal;
-        private TextBlock lblTimeRemain;
-        private TextBlock lblRemainVal;
-        private TextBlock lblTimeTotal;
-        private TextBlock lblTotalVal;
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-
-            ProgressBar1 = this.FindControl<ProgressBar>("ProgressBar1");
-            lblTitle = this.FindControl<TextBlock>("lblTitle");
-            lblTimePassed = this.FindControl<TextBlock>("lblTimePassed");
-            lblPassedVal = this.FindControl<TextBlock>("lblPassedVal");
-            lblTimeRemain = this.FindControl<TextBlock>("lblTimeRemain");
-            lblRemainVal = this.FindControl<TextBlock>("lblRemainVal");
-            lblTimeTotal = this.FindControl<TextBlock>("lblTimeTotal");
-            lblTotalVal = this.FindControl<TextBlock>("lblTotalVal");
-        }
-
-        #endregion
 
         public ProgressDlg()
         {
@@ -75,9 +49,8 @@ namespace GKUI.Forms
         private void DoInit(string title, int max)
         {
             lblTitle.Text = title;
-            ProgressBar1.Maximum = max;
-            ProgressBar1.Minimum = 0;
-            ProgressBar1.Value = 0;
+            fMaximum = max;
+            ProgressBar1.Progress = 0;
             fStartTime = DateTime.Now;
             fVal = 0;
         }
@@ -92,9 +65,10 @@ namespace GKUI.Forms
             if (fVal == value) return;
 
             fVal = value;
-            ProgressBar1.Value = fVal;
 
-            double max = ProgressBar1.Maximum;
+            ProgressBar1.Progress = fVal / (double)fMaximum;
+
+            double max = fMaximum;
             double pos = fVal;
             if (pos == 0.0d) pos = 1;
 
@@ -245,7 +219,7 @@ namespace GKUI.Forms
         {
             fProgressForm = new ProgressDlg();
             fProgressForm.ProgressInit(fTitle, fMax);
-            fProgressForm.Opened += ProgressForm_Load;
+            //fProgressForm.Opened += ProgressForm_Load;
 
             /*if (fParentHandle != IntPtr.Zero) {
                 UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
@@ -255,7 +229,7 @@ namespace GKUI.Forms
             //fProgressForm.Close();
         }
 
-        private void ProgressForm_Load(object? sender, EventArgs e)
+        private void ProgressForm_Load(object sender, EventArgs e)
         {
             //fMRE.Set();
             fFormLoaded = true;

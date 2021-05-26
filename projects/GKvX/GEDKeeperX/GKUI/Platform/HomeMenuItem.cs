@@ -4,7 +4,9 @@
     {
         Browse,
         About,
-        UserRef
+        UserRef,
+        QuickSearch,
+        Progress,
     }
 
     public class HomeMenuItem

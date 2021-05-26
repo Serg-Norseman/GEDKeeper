@@ -27,5 +27,8 @@ namespace GKUI.Forms
     /// </summary>
     public class EditorDialog : CommonDialog, IBaseEditor
     {
+        public EditorDialog()
+        {
+        }
     }
 }

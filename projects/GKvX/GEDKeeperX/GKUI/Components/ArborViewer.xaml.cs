@@ -1,17 +1,16 @@
 ﻿using BSLib.DataViz.ArborGVT;
-using Avalonia.Controls;
-using Avalonia.Media;
+using Xamarin.Forms;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// Stub component
     /// </summary>
-    public sealed partial class ArborViewer : UserControl
+    public sealed partial class ArborViewer : View
     {
         public Color BackColor
         {
-            get { return Colors.White; }
+            get { return Color.White; }
             set { }
         }
 

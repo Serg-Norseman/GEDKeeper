@@ -120,7 +120,7 @@ namespace GKUI.Platform
 
     public sealed class ComboBoxHandler : BaseControlHandler<XFComboBox, ComboBoxHandler>, IComboBox
     {
-        private IList fItems;
+        private readonly IList fItems;
 
         public ComboBoxHandler(XFComboBox control) : base(control)
         {
@@ -284,7 +284,7 @@ namespace GKUI.Platform
         }
     }
 
-    /*public sealed class TextBoxHandler : BaseControlHandler<Entry, TextBoxHandler>, ITextBox
+    public sealed class TextBoxHandler : BaseControlHandler<Entry, TextBoxHandler>, ITextBox
     {
         public TextBoxHandler(Entry control) : base(control)
         {
@@ -301,23 +301,23 @@ namespace GKUI.Platform
 
         public string[] Lines
         {
-            get { return UIHelper.Convert(Control.Text); }
+            get { return /*UIHelper.Convert(Control.Text)*/ null; }
             set { } // TODO
         }
 
         public bool ReadOnly
         {
-            get { return Control.ReadOnly; }
+            get { return Control.IsReadOnly; }
             set {
-                Control.ReadOnly = value;
+                Control.IsReadOnly = value;
                 SetBackColor();
             }
         }
 
         public string SelectedText
         {
-            get { return Control.SelectedText; }
-            set { Control.SelectedText = value; }
+            get { return /*Control.SelectedText*/ string.Empty; }
+            set { /*Control.SelectedText = value;*/ }
         }
 
         public string Text
@@ -338,19 +338,19 @@ namespace GKUI.Platform
 
         private void SetBackColor()
         {
-            Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
+            //Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
         }
 
         public void Copy()
         {
-            UIHelper.SetClipboardText(Control.SelectedText);
+            //UIHelper.SetClipboardText(Control.SelectedText);
         }
 
         public void SelectAll()
         {
-            Control.SelectAll();
+            //Control.SelectAll();
         }
-    }*/
+    }
 
     /*public sealed class TextAreaHandler : BaseControlHandler<Editor, TextAreaHandler>, ITextBox
     {

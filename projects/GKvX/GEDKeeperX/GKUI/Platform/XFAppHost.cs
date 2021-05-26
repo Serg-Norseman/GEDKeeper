@@ -19,7 +19,6 @@
  */
 
 using System;
-using Avalonia.Controls;
 using BSLib.Design.Graphics;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
@@ -28,20 +27,25 @@ using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKUI.Components;
 using GKUI.Forms;
+using Plugin.InputKit.Shared.Controls;
+using Xamarin.Forms;
+using XFRadioButton = Xamarin.Forms.RadioButton;
 
 namespace GKUI.Platform
 {
-    public class AFWAppHost
+    public class XFAppHost
     {
         #region Bootstrapper
 
         /// <summary>
-        /// This function implements initialization of IoC-container for UWP presentation.
+        /// This function implements initialization of IoC-container for XamarinForms presentation.
         /// </summary>
         public static void ConfigureBootstrap(bool mdi)
         {
-            //var appHost = new EtoAppHost();
+            /*if (mdi)
+                throw new ArgumentException("MDI obsolete");
 
+            var appHost = new EtoAppHost();
             IContainer container = AppHost.Container;
 
             if (container == null)
@@ -50,13 +54,13 @@ namespace GKUI.Platform
             container.Reset();
 
             // controls and other
-            //container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
-            container.Register<IGraphicsProviderEx, AFWGfxProvider>(LifeCycle.Singleton);
-            //container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
-            //container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
+            container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
+            container.Register<IGraphicsProvider, EtoGfxProvider>(LifeCycle.Singleton);
+            container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
+            container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
+
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
-            /*
             container.Register<IAddressEditDlg, AddressEditDlg>(LifeCycle.Transient);
             container.Register<IAssociationEditDlg, AssociationEditDlg>(LifeCycle.Transient);
             container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
@@ -80,9 +84,6 @@ namespace GKUI.Platform
             container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
             container.Register<IPatriarchsSearchDlg, TTPatSearchDlg>(LifeCycle.Transient);
-            */
-            container.Register<IPatriarchsViewer, PatriarchsViewerWin>(LifeCycle.Transient);
-            /*
             container.Register<IPersonsFilterDlg, PersonsFilterDlg>(LifeCycle.Transient);
             container.Register<IPlacesManagerDlg, TTPlacesManagerDlg>(LifeCycle.Transient);
             container.Register<IPersonalNameEditDlg, PersonalNameEditDlg>(LifeCycle.Transient);
@@ -106,23 +107,24 @@ namespace GKUI.Platform
             container.Register<ITreeFilterDlg, TreeFilterDlg>(LifeCycle.Transient);
             container.Register<ITreeMergeDlg, TTTreeMergeDlg>(LifeCycle.Transient);
             container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
-            */
-            container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
+            container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);*/
 
-            ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler)); // AvUI: +
-            ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler)); // AvUI: +
-            ControlsManager.RegisterHandlerType(typeof(AutoCompleteBox), typeof(ComboBoxHandler)); // AvUI: (-) ComboBox isn't editable
-            ControlsManager.RegisterHandlerType(typeof(TextBlock), typeof(LabelHandler)); // AvUI: +
-            //ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler)); // AvUI: (-)
-            ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler)); // AvUI: +
-            ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler)); // AvUI: +
-            ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler)); // AvUI: +
-            ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler)); // AvUI: +
-            ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler)); // AvUI: +
-            ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler)); // AvUI: +
-            ControlsManager.RegisterHandlerType(typeof(MenuItem), typeof(MenuItemHandler)); // AvUI: + MenuItem
+            ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
+            ControlsManager.RegisterHandlerType(typeof(Switch), typeof(CheckBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(XFComboBox), typeof(ComboBoxHandler));
+            //ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
+            //ControlsManager.RegisterHandlerType(typeof(MaskedEntry), typeof(MaskedTextBoxHandler));
+            //ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
+            //ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
+            ControlsManager.RegisterHandlerType(typeof(XFRadioButton), typeof(RadioButtonHandler));
+            //ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler));
+            ControlsManager.RegisterHandlerType(typeof(Entry), typeof(TextBoxHandler));
+            //ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
+            //ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
 
-            //ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler)); // custom
+            //ControlsManager.RegisterHandlerType(typeof(TextArea), typeof(TextAreaHandler));
+            //ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
         }
 
         #endregion

@@ -45,6 +45,12 @@ namespace GKUI.Forms
                     case (int)MenuItemType.UserRef:
                         MenuPages.Add(id, new NavigationPage(new UserRefEditDlg()));
                         break;
+                    case (int)MenuItemType.QuickSearch:
+                        MenuPages.Add(id, new NavigationPage(new QuickSearchDlg()));
+                        break;
+                    case (int)MenuItemType.Progress:
+                        MenuPages.Add(id, new NavigationPage(new ProgressDlg()));
+                        break;
                 }
             }
 

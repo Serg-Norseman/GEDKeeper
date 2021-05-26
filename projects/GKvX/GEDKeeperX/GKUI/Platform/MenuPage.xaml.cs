@@ -8,24 +8,30 @@ namespace GKUI.Forms
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MenuPage : ContentPage
     {
-        MainPage RootPage { get => Application.Current.MainPage as MainPage; }
+        private readonly List<HomeMenuItem> fMenuItems;
 
-        List<HomeMenuItem> menuItems;
+        private MainPage RootPage
+        {
+            get {
+                return Application.Current.MainPage as MainPage;
+            }
+        }
 
         public MenuPage()
         {
             InitializeComponent();
 
-            menuItems = new List<HomeMenuItem>
+            fMenuItems = new List<HomeMenuItem>
             {
                 new HomeMenuItem {Id = MenuItemType.Browse, Title="Browse" },
                 new HomeMenuItem {Id = MenuItemType.About, Title="About" },
-                new HomeMenuItem {Id = MenuItemType.UserRef, Title="UserRef" }
+                new HomeMenuItem {Id = MenuItemType.UserRef, Title="UserRef" },
+                new HomeMenuItem {Id = MenuItemType.QuickSearch, Title="QuickSearch" },
+                new HomeMenuItem {Id = MenuItemType.Progress, Title="Progress" },
             };
 
-            ListViewMenu.ItemsSource = menuItems;
-
-            ListViewMenu.SelectedItem = menuItems[0];
+            ListViewMenu.ItemsSource = fMenuItems;
+            ListViewMenu.SelectedItem = fMenuItems[0];
             ListViewMenu.ItemSelected += async (sender, e) =>
             {
                 if (e.SelectedItem == null)
