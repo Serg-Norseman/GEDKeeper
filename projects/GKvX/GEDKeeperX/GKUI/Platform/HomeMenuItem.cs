@@ -7,6 +7,7 @@
         UserRef,
         QuickSearch,
         Progress,
+        PatriarchsViewer,
     }
 
     public class HomeMenuItem

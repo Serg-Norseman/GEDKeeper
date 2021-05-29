@@ -28,6 +28,7 @@ namespace GKUI.Forms
                 new HomeMenuItem {Id = MenuItemType.UserRef, Title="UserRef" },
                 new HomeMenuItem {Id = MenuItemType.QuickSearch, Title="QuickSearch" },
                 new HomeMenuItem {Id = MenuItemType.Progress, Title="Progress" },
+                new HomeMenuItem {Id = MenuItemType.PatriarchsViewer, Title="PatriarchsViewer" },
             };
 
             ListViewMenu.ItemsSource = fMenuItems;

@@ -51,6 +51,9 @@ namespace GKUI.Forms
                     case (int)MenuItemType.Progress:
                         MenuPages.Add(id, new NavigationPage(new ProgressDlg()));
                         break;
+                    case (int)MenuItemType.PatriarchsViewer:
+                        MenuPages.Add(id, new NavigationPage(new PatriarchsViewerWin()));
+                        break;
                 }
             }
 

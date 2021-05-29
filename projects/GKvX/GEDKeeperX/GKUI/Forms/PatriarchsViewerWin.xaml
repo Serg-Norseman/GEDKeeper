@@ -1,0 +1,9 @@
+<forms:CommonWindow
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:components="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms;assembly=GEDKeeperX"
+    x:Class="GKUI.Forms.PatriarchsViewerWin">
+
+    <components:ArborViewer x:Name="arborViewer" />
+</forms:CommonWindow>
