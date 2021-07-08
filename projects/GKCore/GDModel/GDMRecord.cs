@@ -73,14 +73,36 @@ namespace GDModel
             get { return fChangeDate; }
         }
 
+        public int MultimediaLinksCount
+        {
+            get { return fMultimediaLinks == null ? 0 : fMultimediaLinks.Count; }
+        }
+
         public GDMList<GDMMultimediaLink> MultimediaLinks
         {
-            get { return fMultimediaLinks; }
+            get {
+                if (fMultimediaLinks == null) {
+                    fMultimediaLinks = new GDMList<GDMMultimediaLink>();
+                }
+
+                return fMultimediaLinks;
+            }
+        }
+
+        public int NotesCount
+        {
+            get { return fNotes == null ? 0 : fNotes.Count; }
         }
 
         public GDMList<GDMNotes> Notes
         {
-            get { return fNotes; }
+            get {
+                if (fNotes == null) {
+                    fNotes = new GDMList<GDMNotes>();
+                }
+
+                return fNotes;
+            }
         }
 
         public GDMRecordType RecordType
@@ -88,9 +110,20 @@ namespace GDModel
             get { return (GDMRecordType)base.Id; }
         }
 
+        public int SourceCitationsCount
+        {
+            get { return fSourceCitations == null ? 0 : fSourceCitations.Count; }
+        }
+
         public GDMList<GDMSourceCitation> SourceCitations
         {
-            get { return fSourceCitations; }
+            get {
+                if (fSourceCitations == null) {
+                    fSourceCitations = new GDMList<GDMSourceCitation>();
+                }
+
+                return fSourceCitations;
+            }
         }
 
         public string UID
@@ -120,18 +153,15 @@ namespace GDModel
             fXRef = string.Empty;
             fAutomatedRecordID = string.Empty;
             fChangeDate = new GDMChangeDate();
-            fNotes = new GDMList<GDMNotes>();
-            fSourceCitations = new GDMList<GDMSourceCitation>();
-            fMultimediaLinks = new GDMList<GDMMultimediaLink>();
             fUserReferences = new GDMList<GDMUserReference>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fNotes.Dispose();
-                fSourceCitations.Dispose();
-                fMultimediaLinks.Dispose();
+                if (fNotes != null) fNotes.Dispose();
+                if (fSourceCitations != null) fSourceCitations.Dispose();
+                if (fMultimediaLinks != null) fMultimediaLinks.Dispose();
                 fUserReferences.Dispose();
             }
             base.Dispose(disposing);
@@ -147,15 +177,15 @@ namespace GDModel
             base.TrimExcess();
 
             fChangeDate.TrimExcess();
-            fNotes.TrimExcess();
-            fSourceCitations.TrimExcess();
-            fMultimediaLinks.TrimExcess();
+            if (fNotes != null) fNotes.TrimExcess();
+            if (fSourceCitations != null) fSourceCitations.TrimExcess();
+            if (fMultimediaLinks != null) fMultimediaLinks.TrimExcess();
             fUserReferences.TrimExcess();
         }
 
         public int IndexOfSource(GDMSourceRecord sourceRec)
         {
-            if (sourceRec != null) {
+            if (sourceRec != null && fSourceCitations != null) {
                 int num = fSourceCitations.Count;
                 for (int i = 0; i < num; i++) {
                     if (fSourceCitations[i].XRef == sourceRec.XRef) {
@@ -175,9 +205,9 @@ namespace GDModel
 
             base.Assign(source);
 
-            AssignList(sourceRec.fNotes, fNotes);
-            AssignList(sourceRec.fMultimediaLinks, fMultimediaLinks);
-            AssignList(sourceRec.fSourceCitations, fSourceCitations);
+            if (sourceRec.fNotes != null) AssignList(sourceRec.fNotes, Notes);
+            if (sourceRec.fMultimediaLinks != null) AssignList(sourceRec.fMultimediaLinks, MultimediaLinks);
+            if (sourceRec.fSourceCitations != null) AssignList(sourceRec.fSourceCitations, SourceCitations);
             AssignList(sourceRec.fUserReferences, fUserReferences);
         }
 
@@ -193,17 +223,17 @@ namespace GDModel
                 }
             }
 
-            while (fNotes.Count > 0) {
+            while (fNotes != null && fNotes.Count > 0) {
                 GDMTag tag = fNotes.Extract(0);
                 targetRecord.Notes.Add((GDMNotes)tag);
             }
 
-            while (fMultimediaLinks.Count > 0) {
+            while (fMultimediaLinks != null && fMultimediaLinks.Count > 0) {
                 GDMTag tag = fMultimediaLinks.Extract(0);
                 targetRecord.MultimediaLinks.Add((GDMMultimediaLink)tag);
             }
 
-            while (fSourceCitations.Count > 0) {
+            while (fSourceCitations != null && fSourceCitations.Count > 0) {
                 GDMTag tag = fSourceCitations.Extract(0);
                 targetRecord.SourceCitations.Add((GDMSourceCitation)tag);
             }
@@ -218,9 +248,9 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fNotes.ReplaceXRefs(map);
-            fSourceCitations.ReplaceXRefs(map);
-            fMultimediaLinks.ReplaceXRefs(map);
+            if (fNotes != null) fNotes.ReplaceXRefs(map);
+            if (fSourceCitations != null) fSourceCitations.ReplaceXRefs(map);
+            if (fMultimediaLinks != null) fMultimediaLinks.ReplaceXRefs(map);
             fUserReferences.ReplaceXRefs(map);
         }
 
@@ -230,9 +260,9 @@ namespace GDModel
 
             fAutomatedRecordID = string.Empty;
             fChangeDate.Clear();
-            fNotes.Clear();
-            fSourceCitations.Clear();
-            fMultimediaLinks.Clear();
+            if (fNotes != null) fNotes.Clear();
+            if (fSourceCitations != null) fSourceCitations.Clear();
+            if (fMultimediaLinks != null) fMultimediaLinks.Clear();
             fUserReferences.Clear();
             fUID = string.Empty;
         }
@@ -240,8 +270,10 @@ namespace GDModel
         public override bool IsEmpty()
         {
             return base.IsEmpty() && string.IsNullOrEmpty(fAutomatedRecordID) && fChangeDate.IsEmpty() &&
-                (fNotes.Count == 0) && (fSourceCitations.Count == 0) && 
-                (fMultimediaLinks.Count == 0) && (fUserReferences.Count == 0);
+                (fNotes == null || fNotes.Count == 0) &&
+                (fSourceCitations == null || fSourceCitations.Count == 0) && 
+                (fMultimediaLinks == null || fMultimediaLinks.Count == 0) &&
+                (fUserReferences.Count == 0);
         }
 
         public void SetXRef(GDMTree tree, string newXRef, bool removeOldXRef)

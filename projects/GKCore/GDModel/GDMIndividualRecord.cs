@@ -500,7 +500,7 @@ namespace GDModel
             if (mediaRec == null) return null;
             GDMMultimediaLink mmLink = null;
 
-            int num = MultimediaLinks.Count;
+            int num = MultimediaLinksCount;
             for (int i = 0; i < num; i++) {
                 GDMMultimediaLink lnk = MultimediaLinks[i];
 
@@ -522,7 +522,7 @@ namespace GDModel
         {
             GDMMultimediaLink result = null;
 
-            int num = MultimediaLinks.Count;
+            int num = MultimediaLinksCount;
             for (int i = 0; i < num; i++) {
                 GDMMultimediaLink mmLink = MultimediaLinks[i];
                 if (mmLink.IsPrimary) {

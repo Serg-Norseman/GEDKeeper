@@ -70,6 +70,7 @@ namespace GDModel
 
     public interface IGDMStructWithNotes : IGDMObject
     {
+        int NotesCount { get; }
         GDMList<GDMNotes> Notes { get; }
 
         //GDMNotes AddNote(GDMNoteRecord noteRec);
@@ -78,6 +79,7 @@ namespace GDModel
 
     public interface IGDMStructWithSourceCitations : IGDMObject
     {
+        int SourceCitationsCount { get; }
         GDMList<GDMSourceCitation> SourceCitations { get; }
 
         //GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality);
@@ -86,6 +88,7 @@ namespace GDModel
 
     public interface IGDMStructWithMultimediaLinks : IGDMObject
     {
+        int MultimediaLinksCount { get; }
         GDMList<GDMMultimediaLink> MultimediaLinks { get; }
 
         //GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec);

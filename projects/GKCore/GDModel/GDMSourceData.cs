@@ -40,9 +40,20 @@ namespace GDModel
             get { return fEvents; }
         }
 
+        public int NotesCount
+        {
+            get { return fNotes == null ? 0 : fNotes.Count; }
+        }
+
         public GDMList<GDMNotes> Notes
         {
-            get { return fNotes; }
+            get {
+                if (fNotes == null) {
+                    fNotes = new GDMList<GDMNotes>();
+                }
+
+                return fNotes;
+            }
         }
 
 
@@ -52,14 +63,13 @@ namespace GDModel
 
             fAgency = string.Empty;
             fEvents = new GDMList<GDMSourceEvent>();
-            fNotes = new GDMList<GDMNotes>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
                 fEvents.Dispose();
-                fNotes.Dispose();
+                if (fNotes != null) fNotes.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -69,7 +79,7 @@ namespace GDModel
             base.TrimExcess();
 
             fEvents.TrimExcess();
-            fNotes.TrimExcess();
+            if (fNotes != null) fNotes.TrimExcess();
         }
 
         public override void Clear()
@@ -77,19 +87,19 @@ namespace GDModel
             base.Clear();
             fAgency = string.Empty;
             fEvents.Clear();
-            fNotes.Clear();
+            if (fNotes != null) fNotes.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fEvents.Count == 0) && string.IsNullOrEmpty(fAgency) && (fNotes.Count == 0);
+            return base.IsEmpty() && (fEvents.Count == 0) && string.IsNullOrEmpty(fAgency) && (fNotes == null || fNotes.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
             fEvents.ReplaceXRefs(map);
-            fNotes.ReplaceXRefs(map);
+            if (fNotes != null) fNotes.ReplaceXRefs(map);
         }
     }
 }

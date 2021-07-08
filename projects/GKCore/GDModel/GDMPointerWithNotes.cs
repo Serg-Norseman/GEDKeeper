@@ -26,21 +26,26 @@ namespace GDModel
     {
         private GDMList<GDMNotes> fNotes;
 
-        public GDMList<GDMNotes> Notes
+        public int NotesCount
         {
-            get { return fNotes; }
+            get { return fNotes == null ? 0 : fNotes.Count; }
         }
 
-
-        public GDMPointerWithNotes()
+        public GDMList<GDMNotes> Notes
         {
-            fNotes = new GDMList<GDMNotes>();
+            get {
+                if (fNotes == null) {
+                    fNotes = new GDMList<GDMNotes>();
+                }
+
+                return fNotes;
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fNotes.Dispose();
+                if (fNotes != null) fNotes.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -49,7 +54,7 @@ namespace GDModel
         {
             base.TrimExcess();
 
-            fNotes.TrimExcess();
+            if (fNotes != null) fNotes.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -60,24 +65,24 @@ namespace GDModel
 
             base.Assign(source);
 
-            AssignList(sourceObj.fNotes, fNotes);
+            if (sourceObj.fNotes != null) AssignList(sourceObj.fNotes, Notes);
         }
 
         public override void Clear()
         {
             base.Clear();
-            fNotes.Clear();
+            if (fNotes != null) fNotes.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fNotes.Count == 0);
+            return base.IsEmpty() && (fNotes == null || fNotes.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            fNotes.ReplaceXRefs(map);
+            if (fNotes != null) fNotes.ReplaceXRefs(map);
         }
     }
 }
