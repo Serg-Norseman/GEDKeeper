@@ -47,9 +47,20 @@ namespace GDModel
             get { return fMap; }
         }
 
+        public bool HasNotes
+        {
+            get { return fNotes != null && fNotes.Count != 0; }
+        }
+
         public GDMList<GDMNotes> Notes
         {
-            get { return fNotes; }
+            get {
+                if (fNotes == null) {
+                    fNotes = new GDMList<GDMNotes>();
+                }
+
+                return fNotes;
+            }
         }
 
 
@@ -60,7 +71,6 @@ namespace GDModel
             fForm = string.Empty;
             fLocation = new GDMPointer((int)GEDCOMTagType._LOC, string.Empty);
             fMap = new GDMMap();
-            fNotes = new GDMList<GDMNotes>();
         }
 
         public GDMPlace(int tagId, string tagValue) : this()
@@ -71,7 +81,7 @@ namespace GDModel
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fNotes.Dispose();
+                if (fNotes != null) fNotes.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -82,7 +92,7 @@ namespace GDModel
 
             fLocation.TrimExcess();
             fMap.TrimExcess();
-            fNotes.TrimExcess();
+            if (fNotes != null) fNotes.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -96,7 +106,7 @@ namespace GDModel
             fForm = otherPlace.fForm;
             fLocation.Assign(otherPlace.fLocation);
             fMap.Assign(otherPlace.fMap);
-            AssignList(otherPlace.Notes, fNotes);
+            if (otherPlace.fNotes != null) AssignList(otherPlace.fNotes, Notes);
         }
 
         public override void Clear()
@@ -106,12 +116,12 @@ namespace GDModel
             fForm = string.Empty;
             fLocation.Clear();
             fMap.Clear();
-            fNotes.Clear();
+            if (fNotes != null) fNotes.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fLocation.IsEmpty() && fMap.IsEmpty() && string.IsNullOrEmpty(fForm) && (fNotes.Count == 0);
+            return base.IsEmpty() && fLocation.IsEmpty() && fMap.IsEmpty() && string.IsNullOrEmpty(fForm) && (fNotes == null || fNotes.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
@@ -119,7 +129,7 @@ namespace GDModel
             base.ReplaceXRefs(map);
             fLocation.ReplaceXRefs(map);
             fMap.ReplaceXRefs(map);
-            fNotes.ReplaceXRefs(map);
+            if (fNotes != null) fNotes.ReplaceXRefs(map);
         }
     }
 }

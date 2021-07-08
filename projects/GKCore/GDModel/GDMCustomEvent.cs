@@ -25,7 +25,7 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public abstract class GDMCustomEvent : GDMValueTag, IGDMStructWithLists
+    public abstract class GDMCustomEvent : GDMValueTag, IGDMStructWithLists, IGDMStructWithPlace
     {
         private GDMAddress fAddress;
         private string fAgency;
@@ -42,7 +42,13 @@ namespace GDModel
 
         public GDMAddress Address
         {
-            get { return fAddress; }
+            get {
+                if (fAddress == null) {
+                    fAddress = new GDMAddress();
+                }
+
+                return fAddress;
+            }
         }
 
         public string Agency
@@ -68,9 +74,20 @@ namespace GDModel
             get { return fDate; }
         }
 
+        public bool HasPlace
+        {
+            get { return fPlace != null && !fPlace.IsEmpty(); }
+        }
+
         public GDMPlace Place
         {
-            get { return fPlace; }
+            get {
+                if (fPlace == null) {
+                    fPlace = new GDMPlace();
+                }
+
+                return fPlace;
+            }
         }
 
         public string ReligiousAffilation
@@ -85,38 +102,69 @@ namespace GDModel
             set { fRestriction = value; }
         }
 
+        public bool HasNotes
+        {
+            get { return fNotes != null && fNotes.Count != 0; }
+        }
+
         public GDMList<GDMNotes> Notes
         {
-            get { return fNotes; }
+            get {
+                if (fNotes == null) {
+                    fNotes = new GDMList<GDMNotes>();
+                }
+
+                return fNotes;
+            }
+        }
+
+        public bool HasSourceCitations
+        {
+            get { return fSourceCitations != null && fSourceCitations.Count != 0; }
         }
 
         public GDMList<GDMSourceCitation> SourceCitations
         {
-            get { return fSourceCitations; }
+            get {
+                if (fSourceCitations == null) {
+                    fSourceCitations = new GDMList<GDMSourceCitation>();
+                }
+
+                return fSourceCitations;
+            }
+        }
+
+        public bool HasMultimediaLinks
+        {
+            get { return fMultimediaLinks != null && fMultimediaLinks.Count != 0; }
         }
 
         public GDMList<GDMMultimediaLink> MultimediaLinks
         {
-            get { return fMultimediaLinks; }
+            get {
+                if (fMultimediaLinks == null) {
+                    fMultimediaLinks = new GDMList<GDMMultimediaLink>();
+                }
+
+                return fMultimediaLinks;
+            }
         }
 
 
         protected GDMCustomEvent()
         {
-            fAddress = new GDMAddress();
             fDate = new GDMDateValue();
-            fPlace = new GDMPlace();
-            fNotes = new GDMList<GDMNotes>();
-            fSourceCitations = new GDMList<GDMSourceCitation>();
-            fMultimediaLinks = new GDMList<GDMMultimediaLink>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fNotes.Dispose();
-                fSourceCitations.Dispose();
-                fMultimediaLinks.Dispose();
+                if (fAddress != null) fAddress.Dispose();
+                fDate.Dispose();
+                if (fPlace != null) fPlace.Dispose();
+                if (fNotes != null) fNotes.Dispose();
+                if (fSourceCitations != null) fSourceCitations.Dispose();
+                if (fMultimediaLinks != null) fMultimediaLinks.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -125,12 +173,12 @@ namespace GDModel
         {
             base.TrimExcess();
 
-            fAddress.TrimExcess();
+            if (fAddress != null) fAddress.TrimExcess();
             fDate.TrimExcess();
-            fPlace.TrimExcess();
-            fNotes.TrimExcess();
-            fSourceCitations.TrimExcess();
-            fMultimediaLinks.TrimExcess();
+            if (fPlace != null) fPlace.TrimExcess();
+            if (fNotes != null) fNotes.TrimExcess();
+            if (fSourceCitations != null) fSourceCitations.TrimExcess();
+            if (fMultimediaLinks != null) fMultimediaLinks.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -141,54 +189,56 @@ namespace GDModel
 
             base.Assign(sourceObj);
 
-            fAddress.Assign(sourceObj.fAddress);
+            if (sourceObj.fAddress != null) Address.Assign(sourceObj.fAddress);
             fAgency = sourceObj.fAgency;
             fCause = sourceObj.fCause;
             fClassification = sourceObj.fClassification;
             fDate.Assign(sourceObj.fDate);
-            fPlace.Assign(sourceObj.fPlace);
+            if (sourceObj.fPlace != null) Place.Assign(sourceObj.fPlace);
             fReligiousAffilation = sourceObj.fReligiousAffilation;
             fRestriction = sourceObj.fRestriction;
-            AssignList(sourceObj.Notes, fNotes);
-            AssignList(sourceObj.SourceCitations, fSourceCitations);
-            AssignList(sourceObj.MultimediaLinks, fMultimediaLinks);
+            if (sourceObj.fNotes != null) AssignList(sourceObj.fNotes, Notes);
+            if (sourceObj.fSourceCitations != null) AssignList(sourceObj.fSourceCitations, SourceCitations);
+            if (sourceObj.fMultimediaLinks != null) AssignList(sourceObj.fMultimediaLinks, MultimediaLinks);
         }
 
         public override void Clear()
         {
             base.Clear();
 
-            fAddress.Clear();
+            if (fAddress != null) fAddress.Clear();
             fAgency = string.Empty;
             fCause = string.Empty;
             fClassification = string.Empty;
             fDate.Clear();
-            fPlace.Clear();
+            if (fPlace != null) fPlace.Clear();
             fReligiousAffilation = string.Empty;
             fRestriction = GDMRestriction.rnNone;
-            fNotes.Clear();
-            fSourceCitations.Clear();
-            fMultimediaLinks.Clear();
+            if (fNotes != null) fNotes.Clear();
+            if (fSourceCitations != null) fSourceCitations.Clear();
+            if (fMultimediaLinks != null) fMultimediaLinks.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fAddress.IsEmpty() && string.IsNullOrEmpty(fAgency) && string.IsNullOrEmpty(fCause)
-                && string.IsNullOrEmpty(fClassification) && fDate.IsEmpty() && fPlace.IsEmpty()
+            return base.IsEmpty() && (fAddress == null || fAddress.IsEmpty()) && string.IsNullOrEmpty(fAgency) && string.IsNullOrEmpty(fCause)
+                && string.IsNullOrEmpty(fClassification) && fDate.IsEmpty() && (fPlace == null || fPlace.IsEmpty())
                 && string.IsNullOrEmpty(fReligiousAffilation) && (fRestriction == GDMRestriction.rnNone)
-                && (fNotes.Count == 0) && (fSourceCitations.Count == 0) && (fMultimediaLinks.Count == 0);
+                && (fNotes == null || fNotes.Count == 0)
+                && (fSourceCitations == null || fSourceCitations.Count == 0)
+                && (fMultimediaLinks == null || fMultimediaLinks.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
 
-            fAddress.ReplaceXRefs(map);
+            if (fAddress != null) fAddress.ReplaceXRefs(map);
             fDate.ReplaceXRefs(map);
-            fPlace.ReplaceXRefs(map);
-            fNotes.ReplaceXRefs(map);
-            fSourceCitations.ReplaceXRefs(map);
-            fMultimediaLinks.ReplaceXRefs(map);
+            if (fPlace != null) fPlace.ReplaceXRefs(map);
+            if (fNotes != null) fNotes.ReplaceXRefs(map);
+            if (fSourceCitations != null) fSourceCitations.ReplaceXRefs(map);
+            if (fMultimediaLinks != null) fMultimediaLinks.ReplaceXRefs(map);
         }
 
         public override float IsMatch(GDMTag tag, MatchParams matchParams)

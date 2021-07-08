@@ -281,8 +281,9 @@ namespace GDModel.Providers.GEDCOM
                             if (fTree.Format == GEDCOMFormat.gf_FTB || 
                                 fTree.Format == GEDCOMFormat.gf_WikiTree ||
                                 fTree.Format == GEDCOMFormat.gf_Geni ||
-                                fTree.Format == GEDCOMFormat.gf_Ancestry) {
-                                FixFTBLine(curRecord, curTag, lineNum, tagValue);
+                                fTree.Format == GEDCOMFormat.gf_Ancestry ||
+                                fTree.Format == GEDCOMFormat.gf_PAF) {
+                                FixBreakedLine(curRecord, curTag, lineNum, tagValue);
                                 continue;
                             } else {
                                 throw new GEDCOMInvalidFormatException(string.Format("The string {0} doesn't start with a valid number", lineNum));
@@ -2384,7 +2385,7 @@ namespace GDModel.Providers.GEDCOM
         /// <summary>
         /// Fix of line errors that are in the files of FamilyTreeBuilder.
         /// </summary>
-        private void FixFTBLine(GDMTag curRecord, GDMTag curTag, int lineNum, string str)
+        private void FixBreakedLine(GDMTag curRecord, GDMTag curTag, int lineNum, string str)
         {
             try {
                 if (curTag != null) {
@@ -2393,7 +2394,7 @@ namespace GDModel.Providers.GEDCOM
                     } else {
                         var tagType = curTag.GetTagType();
 
-                        if (tagType == GEDCOMTagType.CONT || tagType == GEDCOMTagType.CONC) {
+                        if (tagType == GEDCOMTagType.CONT || tagType == GEDCOMTagType.CONC || tagType == GEDCOMTagType.NAME) {
                             curTag.StringValue += str;
                         } else {
                             AddBaseTag(curTag, 0, (int)GEDCOMTagType.NOTE, str);

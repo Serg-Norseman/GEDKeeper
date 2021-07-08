@@ -103,6 +103,8 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithNotes(IGDMStructWithNotes tag)
         {
+            if (!tag.HasNotes) return;
+
             for (int i = tag.Notes.Count - 1; i >= 0; i--) {
                 GDMNotes note = tag.Notes[i];
                 if (!note.IsPointer) {
@@ -116,6 +118,8 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithSourceCitations(IGDMStructWithSourceCitations tag)
         {
+            if (!tag.HasSourceCitations) return;
+
             for (int i = tag.SourceCitations.Count - 1; i >= 0; i--) {
                 GDMSourceCitation sourCit = tag.SourceCitations[i];
                 if (!sourCit.IsPointer) {
@@ -129,6 +133,8 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithMultimediaLinks(IGDMStructWithMultimediaLinks tag)
         {
+            if (!tag.HasMultimediaLinks) return;
+
             for (int i = tag.MultimediaLinks.Count - 1; i >= 0; i--) {
                 GDMMultimediaLink mmLink = tag.MultimediaLinks[i];
                 if (!mmLink.IsPointer) {
@@ -188,7 +194,9 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
-            CheckEventPlace(evt.Place);
+            if (evt.HasPlace) {
+                CheckEventPlace(evt.Place);
+            }
         }
 
         private void CheckUserRef(GDMIndividualRecord iRec, GDMUserReference userRef)
