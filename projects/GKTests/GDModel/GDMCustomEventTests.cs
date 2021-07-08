@@ -54,9 +54,12 @@ namespace GDModel
                 Assert.AreEqual(1990, customEvent.GetChronologicalYear());
 
                 Assert.AreEqual(TestUtils.ParseDT(dateTest), customEvent.Date.Date);
+
+                Assert.IsFalse(customEvent.HasPlace);
                 customEvent.Place.ParseString("Ivanovo");
                 Assert.AreEqual("Ivanovo", customEvent.Place.StringValue);
 
+                Assert.IsTrue(customEvent.HasPlace);
                 Assert.IsNotNull(customEvent.Place);
 
                 customEvent.Agency = "test agency";

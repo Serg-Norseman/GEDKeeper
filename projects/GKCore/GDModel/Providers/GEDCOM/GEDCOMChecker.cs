@@ -103,7 +103,9 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithNotes(IGDMStructWithNotes tag)
         {
-            for (int i = tag.NotesCount - 1; i >= 0; i--) {
+            if (!tag.HasNotes) return;
+
+            for (int i = tag.Notes.Count - 1; i >= 0; i--) {
                 GDMNotes note = tag.Notes[i];
                 if (!note.IsPointer) {
                     TransformNote(note);
@@ -116,7 +118,9 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithSourceCitations(IGDMStructWithSourceCitations tag)
         {
-            for (int i = tag.SourceCitationsCount - 1; i >= 0; i--) {
+            if (!tag.HasSourceCitations) return;
+
+            for (int i = tag.SourceCitations.Count - 1; i >= 0; i--) {
                 GDMSourceCitation sourCit = tag.SourceCitations[i];
                 if (!sourCit.IsPointer) {
                     TransformSourceCitation(sourCit);
@@ -129,7 +133,9 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithMultimediaLinks(IGDMStructWithMultimediaLinks tag)
         {
-            for (int i = tag.MultimediaLinksCount - 1; i >= 0; i--) {
+            if (!tag.HasMultimediaLinks) return;
+
+            for (int i = tag.MultimediaLinks.Count - 1; i >= 0; i--) {
                 GDMMultimediaLink mmLink = tag.MultimediaLinks[i];
                 if (!mmLink.IsPointer) {
                     TransformMultimediaLink(mmLink);

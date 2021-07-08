@@ -40,9 +40,9 @@ namespace GDModel
             get { return fEvents; }
         }
 
-        public int NotesCount
+        public bool HasNotes
         {
-            get { return fNotes == null ? 0 : fNotes.Count; }
+            get { return fNotes != null && fNotes.Count != 0; }
         }
 
         public GDMList<GDMNotes> Notes

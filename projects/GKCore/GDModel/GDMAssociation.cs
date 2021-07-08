@@ -35,9 +35,9 @@ namespace GDModel
             set { fRelation = value; }
         }
 
-        public int SourceCitationsCount
+        public bool HasSourceCitations
         {
-            get { return fSourceCitations == null ? 0 : fSourceCitations.Count; }
+            get { return fSourceCitations != null && fSourceCitations.Count != 0; }
         }
 
         public GDMList<GDMSourceCitation> SourceCitations

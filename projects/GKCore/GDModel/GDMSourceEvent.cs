@@ -22,7 +22,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMSourceEvent : GDMValueTag
+    public sealed class GDMSourceEvent : GDMValueTag, IGDMStructWithPlace
     {
         private GDMDatePeriod fDate;
         private GDMPlace fPlace;
@@ -33,9 +33,20 @@ namespace GDModel
             get { return fDate; }
         }
 
+        public bool HasPlace
+        {
+            get { return fPlace != null && !fPlace.IsEmpty(); }
+        }
+
         public GDMPlace Place
         {
-            get { return fPlace; }
+            get {
+                if (fPlace == null) {
+                    fPlace = new GDMPlace();
+                }
+
+                return fPlace;
+            }
         }
 
 
@@ -44,7 +55,6 @@ namespace GDModel
             SetName(GEDCOMTagType.EVEN);
 
             fDate = new GDMDatePeriod();
-            fPlace = new GDMPlace();
         }
 
         internal override void TrimExcess()
@@ -52,7 +62,7 @@ namespace GDModel
             base.TrimExcess();
 
             fDate.TrimExcess();
-            fPlace.TrimExcess();
+            if (fPlace != null) fPlace.TrimExcess();
         }
 
         public override void Clear()
@@ -60,18 +70,19 @@ namespace GDModel
             base.Clear();
 
             fDate.Clear();
-            fPlace.Clear();
+            if (fPlace != null) fPlace.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fDate.IsEmpty() && fPlace.IsEmpty();
+            return base.IsEmpty() && fDate.IsEmpty() &&
+                (fPlace == null || fPlace.IsEmpty());
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            fPlace.ReplaceXRefs(map);
+            if (fPlace != null) fPlace.ReplaceXRefs(map);
         }
     }
 }

@@ -68,9 +68,16 @@ namespace GDModel
     }
 
 
+    public interface IGDMStructWithPlace : IGDMObject
+    {
+        bool HasPlace { get; }
+        GDMPlace Place { get; }
+    }
+
+
     public interface IGDMStructWithNotes : IGDMObject
     {
-        int NotesCount { get; }
+        bool HasNotes { get; }
         GDMList<GDMNotes> Notes { get; }
 
         //GDMNotes AddNote(GDMNoteRecord noteRec);
@@ -79,7 +86,7 @@ namespace GDModel
 
     public interface IGDMStructWithSourceCitations : IGDMObject
     {
-        int SourceCitationsCount { get; }
+        bool HasSourceCitations { get; }
         GDMList<GDMSourceCitation> SourceCitations { get; }
 
         //GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality);
@@ -88,7 +95,7 @@ namespace GDModel
 
     public interface IGDMStructWithMultimediaLinks : IGDMObject
     {
-        int MultimediaLinksCount { get; }
+        bool HasMultimediaLinks { get; }
         GDMList<GDMMultimediaLink> MultimediaLinks { get; }
 
         //GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec);
@@ -97,6 +104,7 @@ namespace GDModel
 
     public interface IGDMStructWithUserReferences : IGDMObject
     {
+        bool HasUserReferences { get; }
         GDMList<GDMUserReference> UserReferences { get; }
 
         //void AddUserRef(string reference);

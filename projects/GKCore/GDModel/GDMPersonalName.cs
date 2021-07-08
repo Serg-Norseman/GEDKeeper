@@ -92,9 +92,9 @@ namespace GDModel
             get { return fPieces; }
         }
 
-        public int NotesCount
+        public bool HasNotes
         {
-            get { return fNotes == null ? 0 : fNotes.Count; }
+            get { return fNotes != null && fNotes.Count != 0; }
         }
 
         public GDMList<GDMNotes> Notes
@@ -108,9 +108,9 @@ namespace GDModel
             }
         }
 
-        public int SourceCitationsCount
+        public bool HasSourceCitations
         {
-            get { return fSourceCitations == null ? 0 : fSourceCitations.Count; }
+            get { return fSourceCitations != null && fSourceCitations.Count != 0; }
         }
 
 

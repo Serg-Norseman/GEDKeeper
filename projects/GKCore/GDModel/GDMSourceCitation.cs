@@ -61,9 +61,9 @@ namespace GDModel
             get { return fDescription; }
         }
 
-        public int MultimediaLinksCount
+        public bool HasMultimediaLinks
         {
-            get { return fMultimediaLinks == null ? 0 : fMultimediaLinks.Count; }
+            get { return fMultimediaLinks != null && fMultimediaLinks.Count != 0; }
         }
 
         public GDMList<GDMMultimediaLink> MultimediaLinks
@@ -77,9 +77,9 @@ namespace GDModel
             }
         }
 
-        public int NotesCount
+        public bool HasNotes
         {
-            get { return fNotes == null ? 0 : fNotes.Count; }
+            get { return fNotes != null && fNotes.Count != 0; }
         }
 
         public GDMList<GDMNotes> Notes

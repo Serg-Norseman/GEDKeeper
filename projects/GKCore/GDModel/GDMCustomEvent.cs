@@ -25,7 +25,7 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public abstract class GDMCustomEvent : GDMValueTag, IGDMStructWithLists
+    public abstract class GDMCustomEvent : GDMValueTag, IGDMStructWithLists, IGDMStructWithPlace
     {
         private GDMAddress fAddress;
         private string fAgency;
@@ -74,6 +74,11 @@ namespace GDModel
             get { return fDate; }
         }
 
+        public bool HasPlace
+        {
+            get { return fPlace != null && !fPlace.IsEmpty(); }
+        }
+
         public GDMPlace Place
         {
             get {
@@ -97,9 +102,9 @@ namespace GDModel
             set { fRestriction = value; }
         }
 
-        public int NotesCount
+        public bool HasNotes
         {
-            get { return fNotes == null ? 0 : fNotes.Count; }
+            get { return fNotes != null && fNotes.Count != 0; }
         }
 
         public GDMList<GDMNotes> Notes
@@ -113,9 +118,9 @@ namespace GDModel
             }
         }
 
-        public int SourceCitationsCount
+        public bool HasSourceCitations
         {
-            get { return fSourceCitations == null ? 0 : fSourceCitations.Count; }
+            get { return fSourceCitations != null && fSourceCitations.Count != 0; }
         }
 
         public GDMList<GDMSourceCitation> SourceCitations
@@ -129,9 +134,9 @@ namespace GDModel
             }
         }
 
-        public int MultimediaLinksCount
+        public bool HasMultimediaLinks
         {
-            get { return fMultimediaLinks == null ? 0 : fMultimediaLinks.Count; }
+            get { return fMultimediaLinks != null && fMultimediaLinks.Count != 0; }
         }
 
         public GDMList<GDMMultimediaLink> MultimediaLinks
@@ -145,11 +150,6 @@ namespace GDModel
             }
         }
 
-        public bool HasPlace
-        {
-            get { return fPlace != null && !fPlace.IsEmpty(); }
-        }
-
 
         protected GDMCustomEvent()
         {
@@ -159,6 +159,9 @@ namespace GDModel
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                if (fAddress != null) fAddress.Dispose();
+                fDate.Dispose();
+                if (fPlace != null) fPlace.Dispose();
                 if (fNotes != null) fNotes.Dispose();
                 if (fSourceCitations != null) fSourceCitations.Dispose();
                 if (fMultimediaLinks != null) fMultimediaLinks.Dispose();
