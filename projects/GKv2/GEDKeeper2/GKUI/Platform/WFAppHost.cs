@@ -340,6 +340,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDateControl), typeof(DateControlHandler));
         }
 
         #endregion

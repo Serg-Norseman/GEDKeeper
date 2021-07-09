@@ -2104,7 +2104,7 @@ namespace GDModel.Providers.GEDCOM
                 curTag = srcitData.Text;
                 ((GDMTextTag)curTag).Lines.Add(tagValue);
                 // without curTag.ParseString(tagValue) because next TEXT
-                // will be rewrite all previous lines
+                // will rewrite all previous lines
                 // GK will be without support for a list of text chunks
                 addHandler = AddTextTag;
             } else {

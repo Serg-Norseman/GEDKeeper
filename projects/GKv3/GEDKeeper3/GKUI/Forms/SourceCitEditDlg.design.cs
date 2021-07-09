@@ -15,6 +15,11 @@ namespace GKUI.Forms
         private Label lblCertainty;
         private ComboBox txtCertainty;
         private ComboBox cmbSource;
+        private TabControl tabsData;
+        private TabPage pageCommon;
+        private TabPage pageOther;
+        private TextBox txtText;
+        private GKDateControl dateCtl;
 
         private void InitializeComponent()
         {
@@ -55,7 +60,9 @@ namespace GKUI.Forms
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
 
-            var panelData = new TableLayout {
+            pageCommon = new TabPage();
+            pageCommon.Text = "pageCommon";
+            pageCommon.Content = new TableLayout {
                 Spacing = new Size(10, 10),
                 Rows = {
                     new TableRow {
@@ -69,11 +76,34 @@ namespace GKUI.Forms
                 }
             };
 
+            txtText = new TextBox();
+
+            dateCtl = new GKDateControl();
+
+            pageOther = new TabPage();
+            pageOther.Text = "pageOther";
+            pageOther.Content = new DefTableLayout {
+                Rows = {
+                    new TableRow {
+                        Cells = { dateCtl }
+                    },
+                    new TableRow {
+                        ScaleHeight = true,
+                        Cells = { txtText }
+                    }
+                }
+            };
+
+            tabsData = new TabControl();
+            tabsData.Pages.Add(pageCommon);
+            tabsData.Pages.Add(pageOther);
+            tabsData.Size = new Size(440, 200);
+
             Content = new DefTableLayout {
                 Rows = {
                     new TableRow {
                         ScaleHeight = true,
-                        Cells = { panelData }
+                        Cells = { tabsData }
                     },
                     UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
                 }

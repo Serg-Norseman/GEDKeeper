@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="GKUI\Components\GKComboItem.cs" />
     <Compile Include="GKUI\Components\GKDateBox.cs" />
+    <Compile Include="GKUI\Components\GKDateControl.cs" />
     <Compile Include="GKUI\Components\GKInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,9 +150,6 @@
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKUI\Forms" />
-    <Folder Include="GKUI\Platform" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

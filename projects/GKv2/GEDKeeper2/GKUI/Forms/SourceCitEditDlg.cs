@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
@@ -57,6 +58,16 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
+        IDateControl ISourceCitEditDlg.DataDate
+        {
+            get { return GetControlHandler<IDateControl>(dateCtl); }
+        }
+
+        ITextBox ISourceCitEditDlg.DataText
+        {
+            get { return GetControlHandler<ITextBox>(txtText); }
+        }
+
         #endregion
 
         public SourceCitEditDlg(IBaseWindow baseWin)
@@ -71,6 +82,10 @@ namespace GKUI.Forms
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Title = LangMan.LS(LSID.LSID_WinSourceCitEdit);
+
+            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
+            pageOther.Text = LangMan.LS(LSID.LSID_Other);
+
             lblSource.Text = LangMan.LS(LSID.LSID_Source);
             lblPage.Text = LangMan.LS(LSID.LSID_Page);
             lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);

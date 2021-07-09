@@ -131,7 +131,7 @@ namespace GKUI.Forms
                     cmbLanguages.Items.Add(new ComboItem<int>(lngRec.Name, lngRec.Code));
                 }
             }
-            UIHelper.SetSelectedTag(cmbLanguages, fOptions.InterfaceLang, true);
+            cmbLanguages.SetSelectedTag(fOptions.InterfaceLang, true);
         }
 
         private void UpdateMediaOptions()
@@ -140,7 +140,7 @@ namespace GKUI.Forms
             chkEmbeddedMediaPlayer.Checked = fOptions.EmbeddedMediaPlayer;
             chkAllowMediaDirectRefs.Checked = fOptions.AllowMediaStoreReferences;
             chkAllowMediaStoreRelativeReferences.Checked = fOptions.AllowMediaStoreRelativeReferences;
-            UIHelper.SetSelectedTag<MediaStoreType>(cmbMediaStoreDefault, fOptions.MediaStoreDefault);
+            cmbMediaStoreDefault.SetSelectedTag<MediaStoreType>(fOptions.MediaStoreDefault);
             chkAllowDeleteMediaFileFromStgArc.Checked = fOptions.AllowDeleteMediaFileFromStgArc;
             chkAllowDeleteMediaFileFromRefs.Checked = fOptions.AllowDeleteMediaFileFromRefs;
             chkDeleteMediaFileWithoutConfirm.Checked = fOptions.DeleteMediaFileWithoutConfirm;
@@ -428,7 +428,7 @@ namespace GKUI.Forms
             fOptions.EmbeddedMediaPlayer = chkEmbeddedMediaPlayer.Checked;
             fOptions.AllowMediaStoreReferences = chkAllowMediaDirectRefs.Checked;
             fOptions.AllowMediaStoreRelativeReferences = chkAllowMediaStoreRelativeReferences.Checked;
-            fOptions.MediaStoreDefault = UIHelper.GetSelectedTag<MediaStoreType>(cmbMediaStoreDefault);
+            fOptions.MediaStoreDefault = cmbMediaStoreDefault.GetSelectedTag<MediaStoreType>();
             fOptions.AllowDeleteMediaFileFromStgArc = chkAllowDeleteMediaFileFromStgArc.Checked;
             fOptions.AllowDeleteMediaFileFromRefs = chkAllowDeleteMediaFileFromRefs.Checked;
             fOptions.DeleteMediaFileWithoutConfirm = chkDeleteMediaFileWithoutConfirm.Checked;

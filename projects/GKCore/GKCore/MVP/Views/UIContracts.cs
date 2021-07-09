@@ -506,6 +506,9 @@ namespace GKCore.MVP.Views
         ITextBox Page { get; }
         IComboBox Certainty { get; }
         IComboBox Source { get; }
+
+        IDateControl DataDate { get; }
+        ITextBox DataText { get; }
     }
 
 

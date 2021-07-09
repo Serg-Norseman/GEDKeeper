@@ -27,10 +27,12 @@ namespace GDModel
     {
         private int fCertaintyAssessment;
         private GDMSourceCitationData fData;
+        private string fPage;
+
+        // converted to SourceRecord
         private GDMLines fDescription;
         private GDMList<GDMMultimediaLink> fMultimediaLinks;
         private GDMList<GDMNotes> fNotes;
-        private string fPage;
         private GDMTextTag fText;
 
 

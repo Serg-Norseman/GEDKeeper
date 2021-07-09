@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -71,6 +71,10 @@ namespace GKCore.Controllers
                     fSourceCitation.Page = fView.Page.Text;
                     fSourceCitation.CertaintyAssessment = fView.Certainty.SelectedIndex;
 
+                    fSourceCitation.Data.Date.ParseString(fView.DataDate.Date.StringValue);
+                    fSourceCitation.Data.Text.Clear();
+                    fSourceCitation.Data.Text.Lines.Text = fView.DataText.Text;
+
                     return true;
                 }
             } catch (Exception ex) {
@@ -86,6 +90,9 @@ namespace GKCore.Controllers
 
             fView.Page.Text = fSourceCitation.Page;
             fView.Certainty.SelectedIndex = fSourceCitation.CertaintyAssessment;
+
+            fView.DataDate.Date = fSourceCitation.Data.Date.Value;
+            fView.DataText.Text = fSourceCitation.Data.Text.Lines.Text.Trim();
         }
 
         public void AddSource()

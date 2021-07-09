@@ -101,6 +101,15 @@ namespace GKCore.MVP.Controls
     /// <summary>
     /// 
     /// </summary>
+    public interface IDateControl : IBaseControl
+    {
+        GDMCustomDate Date { get; set; }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IMergeControl : IBaseControl
     {
         IBaseWindow Base { get; set; }

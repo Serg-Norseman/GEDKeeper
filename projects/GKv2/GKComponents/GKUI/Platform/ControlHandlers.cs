@@ -19,6 +19,7 @@
  */
 
 using BSLib.Design.Handlers;
+using GDModel;
 using GKCore.MVP.Controls;
 using GKUI.Components;
 
@@ -84,6 +85,19 @@ namespace GKUI.Platform
         public void Clear()
         {
             Control.Clear();
+        }
+    }
+
+    public sealed class DateControlHandler : BaseControlHandler<GKDateControl, DateControlHandler>, IDateControl
+    {
+        public GDMCustomDate Date
+        {
+            get { return Control.Date; }
+            set { Control.Date = value; }
+        }
+
+        public DateControlHandler(GKDateControl control) : base(control)
+        {
         }
     }
 }
