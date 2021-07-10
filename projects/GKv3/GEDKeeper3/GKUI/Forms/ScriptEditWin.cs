@@ -150,10 +150,10 @@ namespace GKUI.Forms
 
             tbNewScript_Click(this, null);
 
-            SetLang();
+            SetLocale();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             SetToolTip(tbNewScript, LangMan.LS(LSID.LSID_NewScriptTip));
             SetToolTip(tbLoadScript, LangMan.LS(LSID.LSID_LoadScriptTip));

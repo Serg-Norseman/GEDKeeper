@@ -88,7 +88,7 @@ namespace GKWordsCloudPlugin
                 fDisplayName = fLangMan.LS(PLS.LSID_Title);
 
                 if (fForm != null)
-                    fForm.SetLang();
+                    fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKWordsCloudPlugin.OnLanguageChange()", ex);
             }

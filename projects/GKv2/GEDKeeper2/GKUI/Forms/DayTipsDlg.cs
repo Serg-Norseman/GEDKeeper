@@ -66,7 +66,7 @@ namespace GKUI.Forms
 
             fController = new DayTipsDlgController(this);
 
-            // SetLang()
+            // SetLocale()
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             chkShow.Text = LangMan.LS(LSID.LSID_StartupTips);
             btnNextTip.Text = LangMan.LS(LSID.LSID_Next);

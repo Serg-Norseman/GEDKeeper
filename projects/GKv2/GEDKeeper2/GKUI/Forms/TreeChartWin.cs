@@ -103,7 +103,7 @@ namespace GKUI.Forms
 
             PopulateContextMenus();
 
-            SetLang();
+            SetLocale();
 
             miCertaintyIndex.Checked = fTreeBox.Options.CertaintyIndexVisible;
             fTreeBox.CertaintyIndex = fTreeBox.Options.CertaintyIndexVisible;
@@ -520,9 +520,9 @@ namespace GKUI.Forms
 
         #endregion
 
-        #region ILocalization implementation
+        #region ILocalizable implementation
 
-        public override void SetLang()
+        public override void SetLocale()
         {
             tbGensCommon.Text = LangMan.LS(LSID.LSID_Generations);
             tbGensAncestors.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Ancestors);

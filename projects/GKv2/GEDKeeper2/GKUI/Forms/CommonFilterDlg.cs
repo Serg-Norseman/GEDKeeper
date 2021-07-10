@@ -83,7 +83,7 @@ namespace GKUI.Forms
             filterView.Name = "dataGridView1";
             tsFieldsFilter.Controls.Add(filterView);
 
-            SetLang();
+            SetLocale();
 
             fController.UpdateView();
         }
@@ -110,7 +110,7 @@ namespace GKUI.Forms
             DialogResult = DialogResult.OK;
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
             GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);

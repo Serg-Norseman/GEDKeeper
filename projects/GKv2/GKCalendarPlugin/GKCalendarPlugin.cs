@@ -101,7 +101,7 @@ namespace GKCalendarPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_MICalendar);
 
-                if (fForm != null) fForm.SetLang();
+                if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKCalendarPlugin.OnLanguageChange()", ex);
             }

@@ -69,10 +69,10 @@ namespace GKUI.Forms
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
             ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
 
-            SetLang();
+            SetLocale();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_ToolOp_8);
             pagePatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);

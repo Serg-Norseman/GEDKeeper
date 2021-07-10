@@ -31,7 +31,7 @@ using GKUI.Platform;
 
 namespace GKUI.Components
 {
-    public class ImageView : Panel, ILocalization, IImageView
+    public class ImageView : Panel, ILocalizable, IImageView
     {
         private ImageBox imageBox;
         private Panel toolStrip;
@@ -93,7 +93,7 @@ namespace GKUI.Components
             Focus();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             btnSizeToFit.ToolTip = LangMan.LS(LSID.LSID_SizeToFit);
             btnZoomIn.ToolTip = LangMan.LS(LSID.LSID_ZoomIn);

@@ -31,7 +31,7 @@ using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {
-    public class ImageView : UserControl, ILocalization, IImageView
+    public class ImageView : UserControl, ILocalizable, IImageView
     {
         private ImageBox imageBox;
         private ToolStrip toolStrip;
@@ -88,7 +88,7 @@ namespace GKUI.Components
             Select();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
             btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);

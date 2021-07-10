@@ -126,7 +126,7 @@ namespace GKUI.Forms
 
             fSourcesList = new GKSheetList(pageSources);
 
-            // SetLang()
+            // SetLocale()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             GroupBox1.Text = LangMan.LS(LSID.LSID_Family);

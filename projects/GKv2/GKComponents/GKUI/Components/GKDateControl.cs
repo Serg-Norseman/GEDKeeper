@@ -32,7 +32,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class GKDateControl : UserControl, IDateControl, ILocalization
+    public class GKDateControl : UserControl, IDateControl, ILocalizable
     {
         public GDMCustomDate Date
         {
@@ -44,7 +44,7 @@ namespace GKUI.Components
         public GKDateControl()
         {
             InitializeComponent();
-            SetLang();
+            SetLocale();
         }
 
         public void Activate()
@@ -52,7 +52,7 @@ namespace GKUI.Components
             Select();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             lblDate.Text = LangMan.LS(LSID.LSID_Date);
 

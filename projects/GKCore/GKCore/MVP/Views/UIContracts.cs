@@ -415,7 +415,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IQuickSearchDlg : IView, ILocalization
+    public interface IQuickSearchDlg : IView, ILocalizable
     {
         ITextBox SearchPattern { get; }
     }
@@ -473,7 +473,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IScriptEditWin : ICommonDialog, ILocalization
+    public interface IScriptEditWin : ICommonDialog, ILocalizable
     {
         ITextBox ScriptText { get; }
         ITextBox DebugOutput { get; }

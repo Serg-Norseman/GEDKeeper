@@ -39,7 +39,7 @@ namespace GKNavigatorPlugin
         Records
     }
 
-    public partial class NavigatorWidget : Form, ILocalization
+    public partial class NavigatorWidget : Form, ILocalizable
     {
         private readonly Plugin fPlugin;
 
@@ -72,7 +72,7 @@ namespace GKNavigatorPlugin
             fPlugin = plugin;
 
             InitControls();
-            SetLang();
+            SetLocale();
         }
 
         private void InitControls()
@@ -102,9 +102,9 @@ namespace GKNavigatorPlugin
             tnRecsLocation = CreateNode(tnRecords, "Locations", GDMRecordType.rtLocation);
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_Navigator);
 

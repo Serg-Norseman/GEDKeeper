@@ -104,7 +104,7 @@ namespace GKUI.Forms
             fRepositoriesList.SetControlName("fRepositoriesList"); // for purpose of tests
             fRepositoriesList.OnModify += ModifyReposSheet;
 
-            // SetLang()
+            // SetLocale()
             Title = LangMan.LS(LSID.LSID_Source);
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);

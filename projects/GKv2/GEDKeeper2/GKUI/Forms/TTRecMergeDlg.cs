@@ -82,10 +82,10 @@ namespace GKUI.Forms
             MergeControl.Base = baseWin;
             MergeControl.MergeMode = fController.RMMode;
 
-            SetLang();
+            SetLocale();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_ToolOp_4);
             pageMerge.Text = LangMan.LS(LSID.LSID_RecMerge);

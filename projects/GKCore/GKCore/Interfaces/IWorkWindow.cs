@@ -24,7 +24,7 @@ using GDModel;
 
 namespace GKCore.Interfaces
 {
-    public interface IWindow : IView, ILocalization
+    public interface IWindow : IView, ILocalizable
     {
         void Show(bool showInTaskbar);
     }

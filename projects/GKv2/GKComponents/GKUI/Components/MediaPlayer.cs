@@ -30,7 +30,7 @@ using nVLC.Players;
 
 namespace GKUI.Components
 {
-    public partial class MediaPlayer : UserControl, ILocalization
+    public partial class MediaPlayer : UserControl, ILocalizable
     {
         #if !__MonoCS__
         private const bool FIND_LIBVLC = true;
@@ -87,7 +87,7 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
         }
 

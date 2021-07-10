@@ -66,7 +66,7 @@ namespace GKPedigreeImporterPlugin
             cbDatesFormat.SelectedIndex = 0;
             cbDateSeparator.SelectedIndex = 0;
 
-            // SetLang()
+            // SetLocale()
             Text = fLangMan.LS(ILS.LSID_PluginTitle);
             lblFile.Text = fLangMan.LS(ILS.LSID_File);
             btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + @"...";

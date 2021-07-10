@@ -55,7 +55,7 @@ namespace GKImageViewerPlugin
 
             fPlugin = plugin;
 
-            SetLang();
+            SetLocale();
         }
 
         private void ImageViewerWin_FormClosed(object sender, FormClosedEventArgs e)
@@ -197,15 +197,15 @@ namespace GKImageViewerPlugin
             Show();
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_ImgViewer);
             tbFileLoad.ToolTipText = fPlugin.LangMan.LS(PLS.LSID_FileLoad);
 
             if (fImageCtl != null) {
-                fImageCtl.SetLang();
+                fImageCtl.SetLocale();
             }
         }
 

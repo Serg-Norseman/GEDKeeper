@@ -61,7 +61,7 @@ namespace GKUI.Forms
 
             WindowState = FormWindowState.Maximized;
 
-            SetLang();
+            SetLocale();
 
             fController = new SlideshowController(this);
             fController.Init(baseWin);
@@ -83,7 +83,7 @@ namespace GKUI.Forms
             if (e.KeyCode == Keys.Escape) Close();
         }
 
-        public override void SetLang()
+        public override void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_Slideshow);
             SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));

@@ -127,7 +127,7 @@ namespace GKUI.Forms
             fPersonsList.OnModify += ListModify;
             fPersonsList.AddColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
 
-            // SetLang()
+            // SetLocale()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Title = LangMan.LS(LSID.LSID_MIFilter);

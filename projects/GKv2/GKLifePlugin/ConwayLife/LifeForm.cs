@@ -121,11 +121,11 @@ namespace GKLifePlugin.ConwayLife
 
         private void PluginForm_Load(object sender, EventArgs e)
         {
-            SetLang();
+            SetLocale();
             UpdateMenusAndButtons();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = Viewer.Options.LS_LifeGame;
             tbStep.Text = Viewer.Options.LS_Step;

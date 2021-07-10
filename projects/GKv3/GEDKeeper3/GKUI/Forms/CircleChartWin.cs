@@ -77,7 +77,7 @@ namespace GKUI.Forms
             fCircleChart.Options.Assign(GlobalOptions.Instance.CircleChartOptions);
             Content = fCircleChart;
 
-            SetLang();
+            SetLocale();
 
             fController = new CircleChartWinController(this);
             fController.Init(fBaseWin);
@@ -147,9 +147,9 @@ namespace GKUI.Forms
             AppHost.Instance.ShowOptions(OptionsPage.opCircleChart);
         }
 
-        #region ILocalization implementation
+        #region ILocalizable implementation
 
-        public override void SetLang()
+        public override void SetLocale()
         {
             if (fCircleChart.ChartType == CircleChartType.Ancestors) {
                 Title = LangMan.LS(LSID.LSID_AncestorsCircle);

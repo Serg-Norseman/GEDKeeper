@@ -33,7 +33,7 @@ namespace GKTextSearchPlugin
     /// <summary>
     /// 
     /// </summary>
-    public sealed partial class TextSearchWin : Form, ILocalization
+    public sealed partial class TextSearchWin : Form, ILocalizable
     {
         private readonly Plugin fPlugin;
         private readonly IBaseWindow fBase;
@@ -57,7 +57,7 @@ namespace GKTextSearchPlugin
             ResumeLayout(false);
             Controls.SetChildIndex(fResultsText, 0);
 
-            SetLang();
+            SetLocale();
         }
 
         private void Write(string text)
@@ -116,9 +116,9 @@ namespace GKTextSearchPlugin
             fPlugin.fForm = null;
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             btnSearch.Text = fPlugin.LangMan.LS(TLS.LSID_Search);
         }

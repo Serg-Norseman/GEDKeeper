@@ -90,7 +90,7 @@ namespace GKTextSearchPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(TLS.LSID_PluginTitle);
 
-                if (fForm != null) fForm.SetLang();
+                if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKTextSearchPlugin.OnLanguageChange()", ex);
             }

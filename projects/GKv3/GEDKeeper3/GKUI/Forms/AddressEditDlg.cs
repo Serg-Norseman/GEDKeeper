@@ -111,7 +111,7 @@ namespace GKUI.Forms
             fWebsList.OnModify += ListModify;
             fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
 
-            // SetLang()
+            // SetLocale()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Title = LangMan.LS(LSID.LSID_Address);

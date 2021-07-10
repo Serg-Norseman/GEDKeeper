@@ -30,7 +30,7 @@ namespace GKCalculatorPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class CalcWidget : Form, ILocalization, IWidgetForm
+    public partial class CalcWidget : Form, IWidgetForm
     {
         private readonly Plugin fPlugin;
         private readonly ExpCalculator fCalc;
@@ -47,7 +47,7 @@ namespace GKCalculatorPlugin
             fCalc = new ExpCalculator();
             lbOutput.Items.Clear();
 
-            SetLang();
+            SetLocale();
         }
 
         private void CalcWidget_Load(object sender, EventArgs e)
@@ -108,9 +108,9 @@ namespace GKCalculatorPlugin
             }
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_MICalc);
             chkPutToClipboard.Text = fPlugin.LangMan.LS(PLS.LSID_CopyResultToClipboard);

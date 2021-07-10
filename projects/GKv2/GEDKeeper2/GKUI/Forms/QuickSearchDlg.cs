@@ -51,7 +51,7 @@ namespace GKUI.Forms
 
             fController = new QuickSearchDlgController(this, workWindow);
 
-            SetLang();
+            SetLocale();
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)
@@ -87,7 +87,7 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_Search);
             //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);

@@ -57,7 +57,7 @@ namespace GKUI.Forms
 
             WindowState = WindowState.Maximized;
 
-            SetLang();
+            SetLocale();
 
             fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
 
@@ -84,7 +84,7 @@ namespace GKUI.Forms
             if (e.Key == Keys.Escape) Close();
         }
 
-        public override void SetLang()
+        public override void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_Slideshow);
             tbStart.Text = LangMan.LS(LSID.LSID_Start);

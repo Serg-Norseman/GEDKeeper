@@ -46,7 +46,7 @@ namespace GEDmill
     /// <summary>
     /// The main from from which the application is operated. Contains the GUI controls and the control handlers.
     /// </summary>
-    public partial class MainForm : Form, ILocalization
+    public partial class MainForm : Form, ILocalizable
     {
         private static readonly GKCore.Logging.ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(MainForm).Name);
 
@@ -109,7 +109,7 @@ namespace GEDmill
         public MainForm(Plugin plugin) : this()
         {
             fPlugin = plugin;
-            SetLang();
+            SetLocale();
             ShowCurrentPanel();
         }
 
@@ -145,9 +145,9 @@ namespace GEDmill
             }
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_Title);
             btnCancel.Text = fPlugin.LangMan.LS(PLS.LSID_Quit);

@@ -29,7 +29,7 @@ using nVLC.Events;
 using nVLC.Media;
 using nVLC.Players;*/
 
-    public partial class MediaPlayer : Panel, ILocalization
+    public partial class MediaPlayer : Panel, ILocalizable
     {
         /*
         #if !__MonoCS__
@@ -81,7 +81,7 @@ using nVLC.Players;*/
             base.Dispose(disposing);
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
         }
 

@@ -52,13 +52,13 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            SetLang();
+            SetLocale();
 
             fController = new TreeCompareController(this);
             fController.Init(baseWin);
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_ToolOp_1);
             pageTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);

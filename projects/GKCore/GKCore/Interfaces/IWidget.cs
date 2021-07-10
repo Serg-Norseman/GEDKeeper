@@ -20,7 +20,7 @@
 
 namespace GKCore.Interfaces
 {
-    public interface IWidgetForm
+    public interface IWidgetForm : ILocalizable
     {
     }
 

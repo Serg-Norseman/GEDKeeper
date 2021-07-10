@@ -92,7 +92,7 @@ namespace GKUI.Forms
 
             fCurrentMode = StatsMode.smAncestors;
 
-            SetLang();
+            SetLocale();
         }
 
         private void StatisticsWin_KeyDown(object sender, KeyEventArgs e)
@@ -115,7 +115,7 @@ namespace GKUI.Forms
             fController.UpdateCommonStats();
         }
 
-        public override void SetLang()
+        public override void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_MIStats);
             grpSummary.Text = LangMan.LS(LSID.LSID_Summary);

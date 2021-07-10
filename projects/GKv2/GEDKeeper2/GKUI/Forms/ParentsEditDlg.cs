@@ -82,13 +82,13 @@ namespace GKUI.Forms
             btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
             btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
 
-            SetLang();
+            SetLocale();
 
             fController = new ParentsEditDlgController(this);
             fController.Init(baseWin);
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);

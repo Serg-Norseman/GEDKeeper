@@ -44,7 +44,7 @@ namespace GKChroniclePlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class ChronicleWidget : Form, ILocalization
+    public partial class ChronicleWidget : Form, ILocalizable
     {
         private readonly Plugin fPlugin;
         private IBaseWindow fBase;
@@ -58,7 +58,7 @@ namespace GKChroniclePlugin
             fEvents = new List<EventRecord>();
             lvEvents.Clear();
 
-            SetLang();
+            SetLocale();
         }
 
         private void CalcWidget_Load(object sender, EventArgs e)
@@ -143,9 +143,9 @@ namespace GKChroniclePlugin
             }
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(CLS.LSID_Title);
         }

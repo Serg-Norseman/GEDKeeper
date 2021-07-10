@@ -87,7 +87,7 @@ namespace GKDataQualityPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(CLS.LSID_Title);
 
-                if (fForm != null) fForm.SetLang();
+                if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKDataQualityPlugin.OnLanguageChange()", ex);
             }

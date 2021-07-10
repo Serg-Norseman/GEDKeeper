@@ -145,7 +145,7 @@ namespace GKUI.Forms
             fMediaList = new GKSheetList(pageMultimedia);
             fSourcesList = new GKSheetList(pageSources);
 
-            // SetLang()
+            // SetLocale()
             Title = LangMan.LS(LSID.LSID_Event);
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);

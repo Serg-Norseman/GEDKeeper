@@ -50,7 +50,7 @@ namespace GKTests.Stubs
         public void SelectByRec(GDMRecord record) {}
         public bool AllowFilter() { return false; }
         public void SetFilter() {}
-        public void SetLang() {}
+        public void SetLocale() {}
         public void Show(bool showInTaskbar) {}
     }
 

@@ -112,13 +112,13 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            SetLang();
+            SetLocale();
 
             fController = new PersonalNameEditDlgController(this);
             fController.Init(baseWin);
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_Name);
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);

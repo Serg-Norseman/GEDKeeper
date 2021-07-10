@@ -61,10 +61,10 @@ namespace GKUI.Forms
             ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
             ListChecks.ContextMenuStrip = contextMenu;
 
-            SetLang();
+            SetLocale();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_ToolOp_7);
             pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);

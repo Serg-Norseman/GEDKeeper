@@ -58,10 +58,10 @@ namespace GKUI.Forms
             fController = new TreeSplitController(this);
             fController.Init(baseWin);
 
-            SetLang();
+            SetLocale();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_ToolOp_3);
             pageTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);

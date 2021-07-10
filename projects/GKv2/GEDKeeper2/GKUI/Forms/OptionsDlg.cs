@@ -35,7 +35,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class OptionsDlg : CommonDialog, ILocalization, IOptionsDlg
+    public sealed partial class OptionsDlg : CommonDialog, ILocalizable, IOptionsDlg
     {
         private GlobalOptions fOptions;
         private readonly ListColumns fTempColumns;
@@ -63,7 +63,7 @@ namespace GKUI.Forms
                 cmbGeoSearchCountry.Items.Add(ci);
             }
 
-            SetLang();
+            SetLocale();
             UpdateForm();
         }
 
@@ -638,7 +638,7 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);

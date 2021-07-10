@@ -121,7 +121,7 @@ namespace GKUI.Forms
             if (ctl == null) return;
             fViewer = ctl;
             fViewer.Size = new Size(1000, 600);
-            SetLang();
+            SetLocale();
 
             SuspendLayout();
             Content = fViewer;
@@ -132,16 +132,16 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            SetLang();
+            SetLocale();
 
             fController = new MediaViewerController(this);
             fController.Init(baseWin);
         }
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            var localizable = fViewer as ILocalization;
-            if (localizable != null) localizable.SetLang();
+            var localizable = fViewer as ILocalizable;
+            if (localizable != null) localizable.SetLocale();
         }
 
         protected override void OnLoad(EventArgs e)

@@ -37,7 +37,7 @@ namespace GKHistoryDataPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class HistoryDataWin : Form, ILocalization, IWidgetForm
+    public partial class HistoryDataWin : Form, IWidgetForm
     {
         public enum LinkState
         {
@@ -73,7 +73,7 @@ namespace GKHistoryDataPlugin
             fItems = new List<LinkItem>();
             LoadFiles();
 
-            SetLang();
+            SetLocale();
         }
 
         private void HistoryDataWin_Load(object sender, EventArgs e)
@@ -151,9 +151,9 @@ namespace GKHistoryDataPlugin
             }
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(HDLS.LSID_Title);
         }

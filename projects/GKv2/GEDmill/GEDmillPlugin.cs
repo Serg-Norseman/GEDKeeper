@@ -100,7 +100,7 @@ namespace GEDmill
                 fDisplayName = fLangMan.LS(PLS.LSID_Title);
 
                 if (fForm != null)
-                    fForm.SetLang();
+                    fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GEDmillPlugin.OnLanguageChange()", ex);
             }

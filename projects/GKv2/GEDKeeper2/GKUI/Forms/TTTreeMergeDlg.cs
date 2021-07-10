@@ -55,10 +55,10 @@ namespace GKUI.Forms
             fController = new TreeMergeController(this);
             fController.Init(baseWin);
 
-            SetLang();
+            SetLocale();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_ToolOp_2);
             pageTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);

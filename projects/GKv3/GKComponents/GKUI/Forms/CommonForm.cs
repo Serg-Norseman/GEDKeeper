@@ -82,7 +82,7 @@ namespace GKUI.Forms
             Show();
         }
 
-        public virtual void SetLang()
+        public virtual void SetLocale()
         {
         }
     }

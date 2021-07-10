@@ -152,7 +152,7 @@ namespace GKUI.Platform
         protected override void UpdateLang()
         {
             foreach (IWindow win in fRunningForms) {
-                win.SetLang();
+                win.SetLocale();
             }
         }
 

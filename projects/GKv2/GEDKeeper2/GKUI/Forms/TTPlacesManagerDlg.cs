@@ -56,7 +56,7 @@ namespace GKUI.Forms
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
 
-            SetLang();
+            SetLocale();
         }
 
         protected override void Dispose(bool disposing)
@@ -67,7 +67,7 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_ToolOp_9);
             pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);

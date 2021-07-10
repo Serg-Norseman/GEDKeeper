@@ -128,7 +128,7 @@ namespace GKUI.Forms
 
             tabsRecords.ResumeLayout();
 
-            SetLang();
+            SetLocale();
         }
 
         protected override void Dispose(bool disposing)
@@ -466,9 +466,9 @@ namespace GKUI.Forms
 
         #endregion
 
-        #region ILocalization implementation
+        #region ILocalizable implementation
 
-        public override void SetLang()
+        public override void SetLocale()
         {
             miFile.Text = LangMan.LS(LSID.LSID_MIFile);
             miEdit.Text = LangMan.LS(LSID.LSID_MIEdit);

@@ -82,7 +82,7 @@ namespace GKUI.Forms
             filterView.Height = 260;
             tsFieldsFilter.Content = filterView;
 
-            SetLang();
+            SetLocale();
 
             fController.UpdateView();
             this.KeyDown += Form_KeyDown;
@@ -110,7 +110,7 @@ namespace GKUI.Forms
             DialogResult = DialogResult.Ok;
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
             GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);

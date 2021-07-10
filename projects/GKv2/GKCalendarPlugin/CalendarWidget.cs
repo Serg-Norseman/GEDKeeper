@@ -30,7 +30,7 @@ namespace GKCalendarPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class CalendarWidget : Form, ILocalization
+    public partial class CalendarWidget : Form, ILocalizable
     {
         private readonly Plugin fPlugin;
 
@@ -57,7 +57,7 @@ namespace GKCalendarPlugin
 
             qtc.SelectionStart = DateTime.Now;
 
-            SetLang();
+            SetLocale();
         }
 
         private void CalendarWidget_Load(object sender, EventArgs e)
@@ -122,9 +122,9 @@ namespace GKCalendarPlugin
             }
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_MICalendar);
             ColumnHeader1.Text = fPlugin.LangMan.LS(PLS.LSID_MICalendar);

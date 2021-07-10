@@ -28,7 +28,7 @@ using GKCore.Tools;
 
 namespace GKDataQualityPlugin
 {
-    public partial class DataQualityWidget : Form, ILocalization
+    public partial class DataQualityWidget : Form, ILocalizable
     {
         private TreeMapViewer fDataMap;
         private readonly Plugin fPlugin;
@@ -43,7 +43,7 @@ namespace GKDataQualityPlugin
             fDataMap.Dock = DockStyle.Fill;
             Controls.Add(fDataMap);
 
-            SetLang();
+            SetLocale();
         }
 
         private MapItem CreateItem(MapItem parent, string name, double size, float quality)
@@ -126,9 +126,9 @@ namespace GKDataQualityPlugin
             fDataMap.UpdateView();
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(CLS.LSID_Title);
         }

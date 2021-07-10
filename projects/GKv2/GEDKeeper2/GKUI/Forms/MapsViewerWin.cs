@@ -146,10 +146,10 @@ namespace GKUI.Forms
             radTotal.Checked = true;
             radTotal_Click(null, null);
 
-            SetLang();
+            SetLocale();
         }
 
-        public override void SetLang()
+        public override void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_MIMap);
             pagePlaces.Text = LangMan.LS(LSID.LSID_RPLocations);

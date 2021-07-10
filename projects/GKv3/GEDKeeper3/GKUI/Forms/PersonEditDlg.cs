@@ -258,7 +258,7 @@ namespace GKUI.Forms
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
 
-            SetLang();
+            SetLocale();
 
             fController = new PersonEditDlgController(this);
             fController.Init(baseWin);
@@ -276,7 +276,7 @@ namespace GKUI.Forms
             fParentsList.ListModel = new ParentsSublistModel(baseWin, fController.LocalUndoman);
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);

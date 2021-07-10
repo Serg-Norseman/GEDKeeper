@@ -76,7 +76,7 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnLangEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
 
-            // SetLang()
+            // SetLocale()
             Title = LangMan.LS(LSID.LSID_MIFileProperties);
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);

@@ -32,7 +32,7 @@ namespace GKTimeLinePlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class TimeLineWidget : Form, ILocalization
+    public partial class TimeLineWidget : Form, ILocalizable
     {
         private readonly Plugin fPlugin;
 
@@ -49,7 +49,7 @@ namespace GKTimeLinePlugin
 
             fPlugin = plugin;
 
-            SetLang();
+            SetLocale();
         }
 
         private void TimeLineWidget_Load(object sender, EventArgs e)
@@ -198,9 +198,9 @@ namespace GKTimeLinePlugin
             return result;
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_MITimeLine);
 

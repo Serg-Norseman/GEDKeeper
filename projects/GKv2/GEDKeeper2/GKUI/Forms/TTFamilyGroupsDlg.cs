@@ -58,10 +58,10 @@ namespace GKUI.Forms
 
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
 
-            SetLang();
+            SetLocale();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Title = LangMan.LS(LSID.LSID_ToolOp_6);
             pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
