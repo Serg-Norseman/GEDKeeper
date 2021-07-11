@@ -487,7 +487,6 @@ namespace GDModel.Providers.GEDCOM
                 ParseDate(owner, date.Before, strTok);
             } else if (dateType == 2) { // "BET"
                 strTok.Next();
-                //result = GEDCOMProvider.FixFTB(result);
                 ParseDate(owner, date.After, strTok);
                 strTok.SkipWhitespaces();
 
@@ -497,7 +496,6 @@ namespace GDModel.Providers.GEDCOM
 
                 strTok.Next();
                 strTok.SkipWhitespaces();
-                //result = GEDCOMProvider.FixFTB(result);
                 ParseDate(owner, date.Before, strTok);
             }
 
@@ -566,6 +564,7 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
+        // Format: [ <YEAR>[B.C.] | <MONTH> <YEAR> | <DAY> <MONTH> <YEAR> ] (see p.45-46)
         public static string ParseDate(GDMTree owner, GEDCOMParser strTok, out GDMApproximated approximated,
                                        out GDMCalendar calendar, out short year, out bool yearBC,
                                        out string yearModifier, out byte month, out byte day)
@@ -659,6 +658,12 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
+            // extract negative years
+            if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '-') {
+                yearBC = true;
+                token = strTok.Next();
+            }
+
             // extract year
             if (token == GEDCOMToken.Number) {
                 year = (short)strTok.GetNumber();
@@ -697,6 +702,11 @@ namespace GDModel.Providers.GEDCOM
             token = strTok.CurrentToken;
             if (isAhnDeviance && token == GEDCOMToken.Symbol && strTok.GetSymbol() == ')') {
                 token = strTok.Next();
+            }
+
+            if (day > 0 && month == 0 && year == GDMDate.UNKNOWN_YEAR) {
+                year = day;
+                day = 0;
             }
 
             //date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);

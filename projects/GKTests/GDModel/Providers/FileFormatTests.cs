@@ -429,6 +429,28 @@ namespace GDModel.Providers
         }
 
         [Test]
+        public void Test_Geni_NegativeYears()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_neg_years.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+
+                var iRec = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec);
+
+                GDMDateRange dtx;
+                GDMCustomEvent evt;
+
+                evt = iRec.FindEvent("BIRT");
+                dtx = evt.Date.Value as GDMDateRange;
+                Assert.IsNotNull(dtx);
+                Assert.AreEqual(25, dtx.After.Year);
+                Assert.AreEqual(true, dtx.After.YearBC);
+                Assert.AreEqual(29, dtx.Before.Year);
+                Assert.AreEqual(false, dtx.Before.YearBC);
+            }
+        }
+
+        [Test]
         public void Test_Legacy()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_legacy.ged")) {

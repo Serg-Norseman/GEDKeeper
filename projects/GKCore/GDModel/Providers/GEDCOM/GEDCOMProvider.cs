@@ -2408,7 +2408,7 @@ namespace GDModel.Providers.GEDCOM
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GEDCOMProvider.FixFTBLine(): Line " + lineNum.ToString() + " failed correct", ex);
+                Logger.WriteError("GEDCOMProvider.FixBreakedLine(): Line " + lineNum.ToString() + " failed correct", ex);
             }
         }
 
