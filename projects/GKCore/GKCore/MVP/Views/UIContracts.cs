@@ -118,16 +118,8 @@ namespace GKCore.MVP.Views
         GDMCustomEvent Event { get; set; }
 
         IComboBox EventType { get; }
-        IComboBox EventDateType { get; }
 
-        ICheckBox Date1BC { get; }
-        ICheckBox Date2BC { get; }
-
-        IComboBox Date1Calendar { get; }
-        IComboBox Date2Calendar { get; }
-
-        IDateBox Date1 { get; }
-        IDateBox Date2 { get; }
+        IDateControl DataDate { get; }
 
         IComboBox Attribute { get; }
         ITextBox Place { get; }

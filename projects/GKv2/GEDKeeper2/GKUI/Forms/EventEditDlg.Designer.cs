@@ -12,37 +12,28 @@
 		private System.Windows.Forms.TabPage pageCommon;
 		private System.Windows.Forms.Label lblEvent;
 		private System.Windows.Forms.Label lblPlace;
-		private System.Windows.Forms.Label lblDate;
 		private System.Windows.Forms.Label lblCause;
 		private System.Windows.Forms.Label lblOrg;
 		private System.Windows.Forms.Label lblAttrValue;
 		private System.Windows.Forms.ComboBox cmbEventType;
 		private System.Windows.Forms.TextBox txtEventName;
 		private System.Windows.Forms.TextBox txtEventPlace;
-		private System.Windows.Forms.ComboBox cmbEventDateType;
-		private GKUI.Components.GKDateBox txtEventDate1;
-		private GKUI.Components.GKDateBox txtEventDate2;
 		private System.Windows.Forms.TextBox txtEventCause;
 		private System.Windows.Forms.TextBox txtEventOrg;
 		private System.Windows.Forms.ComboBox txtAttribute;
 		private System.Windows.Forms.Button btnPlaceAdd;
 		private System.Windows.Forms.Button btnPlaceDelete;
-		private System.Windows.Forms.ComboBox cmbDate1Calendar;
-		private System.Windows.Forms.ComboBox cmbDate2Calendar;
-		private System.Windows.Forms.CheckBox btnBC1;
-		private System.Windows.Forms.CheckBox btnBC2;
+        private Components.GKDateControl dateCtl;
 
-		private void InitializeComponent()
+        private void InitializeComponent()
 		{
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.tabsData = new System.Windows.Forms.TabControl();
 		    this.pageCommon = new System.Windows.Forms.TabPage();
-		    this.btnBC2 = new System.Windows.Forms.CheckBox();
-		    this.btnBC1 = new System.Windows.Forms.CheckBox();
+		    this.dateCtl = new GKUI.Components.GKDateControl();
 		    this.lblEvent = new System.Windows.Forms.Label();
 		    this.lblPlace = new System.Windows.Forms.Label();
-		    this.lblDate = new System.Windows.Forms.Label();
 		    this.lblCause = new System.Windows.Forms.Label();
 		    this.lblOrg = new System.Windows.Forms.Label();
 		    this.lblAttrValue = new System.Windows.Forms.Label();
@@ -51,14 +42,9 @@
 		    this.cmbEventType = new System.Windows.Forms.ComboBox();
 		    this.txtEventName = new System.Windows.Forms.TextBox();
 		    this.txtEventPlace = new System.Windows.Forms.TextBox();
-		    this.cmbEventDateType = new System.Windows.Forms.ComboBox();
-		    this.txtEventDate1 = new GKUI.Components.GKDateBox();
-		    this.txtEventDate2 = new GKUI.Components.GKDateBox();
 		    this.txtEventCause = new System.Windows.Forms.TextBox();
 		    this.txtEventOrg = new System.Windows.Forms.TextBox();
 		    this.txtAttribute = new System.Windows.Forms.ComboBox();
-		    this.cmbDate1Calendar = new System.Windows.Forms.ComboBox();
-		    this.cmbDate2Calendar = new System.Windows.Forms.ComboBox();
 		    this.pageNotes = new System.Windows.Forms.TabPage();
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
 		    this.pageSources = new System.Windows.Forms.TabPage();
@@ -105,11 +91,9 @@
 		    // 
 		    // pageCommon
 		    // 
-		    this.pageCommon.Controls.Add(this.btnBC2);
-		    this.pageCommon.Controls.Add(this.btnBC1);
+		    this.pageCommon.Controls.Add(this.dateCtl);
 		    this.pageCommon.Controls.Add(this.lblEvent);
 		    this.pageCommon.Controls.Add(this.lblPlace);
-		    this.pageCommon.Controls.Add(this.lblDate);
 		    this.pageCommon.Controls.Add(this.lblCause);
 		    this.pageCommon.Controls.Add(this.lblOrg);
 		    this.pageCommon.Controls.Add(this.lblAttrValue);
@@ -118,41 +102,22 @@
 		    this.pageCommon.Controls.Add(this.cmbEventType);
 		    this.pageCommon.Controls.Add(this.txtEventName);
 		    this.pageCommon.Controls.Add(this.txtEventPlace);
-		    this.pageCommon.Controls.Add(this.cmbEventDateType);
-		    this.pageCommon.Controls.Add(this.txtEventDate1);
-		    this.pageCommon.Controls.Add(this.txtEventDate2);
 		    this.pageCommon.Controls.Add(this.txtEventCause);
 		    this.pageCommon.Controls.Add(this.txtEventOrg);
 		    this.pageCommon.Controls.Add(this.txtAttribute);
-		    this.pageCommon.Controls.Add(this.cmbDate1Calendar);
-		    this.pageCommon.Controls.Add(this.cmbDate2Calendar);
 		    this.pageCommon.Location = new System.Drawing.Point(4, 22);
 		    this.pageCommon.Name = "pageCommon";
 		    this.pageCommon.Size = new System.Drawing.Size(488, 317);
 		    this.pageCommon.TabIndex = 0;
 		    this.pageCommon.Text = "pageCommon";
 		    // 
-		    // btnBC2
+		    // dateCtl
 		    // 
-		    this.btnBC2.AutoSize = true;
-		    this.btnBC2.Location = new System.Drawing.Point(434, 192);
-		    this.btnBC2.Name = "btnBC2";
-		    this.btnBC2.Size = new System.Drawing.Size(43, 17);
-		    this.btnBC2.TabIndex = 17;
-		    this.btnBC2.Text = "BC";
-		    this.btnBC2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-		    this.btnBC2.UseVisualStyleBackColor = true;
-		    // 
-		    // btnBC1
-		    // 
-		    this.btnBC1.AutoSize = true;
-		    this.btnBC1.Location = new System.Drawing.Point(266, 194);
-		    this.btnBC1.Name = "btnBC1";
-		    this.btnBC1.Size = new System.Drawing.Size(43, 17);
-		    this.btnBC1.TabIndex = 14;
-		    this.btnBC1.Text = "BC";
-		    this.btnBC1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-		    this.btnBC1.UseVisualStyleBackColor = true;
+		    this.dateCtl.Location = new System.Drawing.Point(5, 149);
+		    this.dateCtl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+		    this.dateCtl.Name = "dateCtl";
+		    this.dateCtl.Size = new System.Drawing.Size(473, 75);
+		    this.dateCtl.TabIndex = 10;
 		    // 
 		    // lblEvent
 		    // 
@@ -171,15 +136,6 @@
 		    this.lblPlace.Size = new System.Drawing.Size(50, 13);
 		    this.lblPlace.TabIndex = 5;
 		    this.lblPlace.Text = "lblPlace";
-		    // 
-		    // lblDate
-		    // 
-		    this.lblDate.AutoSize = true;
-		    this.lblDate.Location = new System.Drawing.Point(9, 148);
-		    this.lblDate.Name = "lblDate";
-		    this.lblDate.Size = new System.Drawing.Size(47, 13);
-		    this.lblDate.TabIndex = 10;
-		    this.lblDate.Text = "lblDate";
 		    // 
 		    // lblCause
 		    // 
@@ -250,36 +206,6 @@
 		    this.txtEventPlace.TabIndex = 6;
 		    this.txtEventPlace.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditEventPlace_KeyDown);
 		    // 
-		    // cmbEventDateType
-		    // 
-		    this.cmbEventDateType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-		    this.cmbEventDateType.Location = new System.Drawing.Point(9, 163);
-		    this.cmbEventDateType.Name = "cmbEventDateType";
-		    this.cmbEventDateType.Size = new System.Drawing.Size(135, 21);
-		    this.cmbEventDateType.TabIndex = 11;
-		    this.cmbEventDateType.SelectedIndexChanged += new System.EventHandler(this.EditEventDateType_SelectedIndexChanged);
-		    // 
-		    // txtEventDate1
-		    // 
-		    this.txtEventDate1.AllowDrop = true;
-		    this.txtEventDate1.BackColor = System.Drawing.SystemColors.Window;
-		    this.txtEventDate1.Location = new System.Drawing.Point(152, 163);
-		    this.txtEventDate1.Name = "txtEventDate1";
-		    this.txtEventDate1.Size = new System.Drawing.Size(158, 21);
-		    this.txtEventDate1.TabIndex = 12;
-		    this.txtEventDate1.DragDrop += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragDrop);
-		    this.txtEventDate1.DragOver += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragOver);
-		    // 
-		    // txtEventDate2
-		    // 
-		    this.txtEventDate2.AllowDrop = true;
-		    this.txtEventDate2.Location = new System.Drawing.Point(320, 163);
-		    this.txtEventDate2.Name = "txtEventDate2";
-		    this.txtEventDate2.Size = new System.Drawing.Size(158, 21);
-		    this.txtEventDate2.TabIndex = 15;
-		    this.txtEventDate2.DragDrop += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragDrop);
-		    this.txtEventDate2.DragOver += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragOver);
-		    // 
 		    // txtEventCause
 		    // 
 		    this.txtEventCause.Location = new System.Drawing.Point(9, 241);
@@ -300,22 +226,6 @@
 		    this.txtAttribute.Name = "txtAttribute";
 		    this.txtAttribute.Size = new System.Drawing.Size(469, 21);
 		    this.txtAttribute.TabIndex = 4;
-		    // 
-		    // cmbDate1Calendar
-		    // 
-		    this.cmbDate1Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-		    this.cmbDate1Calendar.Location = new System.Drawing.Point(152, 194);
-		    this.cmbDate1Calendar.Name = "cmbDate1Calendar";
-		    this.cmbDate1Calendar.Size = new System.Drawing.Size(107, 21);
-		    this.cmbDate1Calendar.TabIndex = 13;
-		    // 
-		    // cmbDate2Calendar
-		    // 
-		    this.cmbDate2Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-		    this.cmbDate2Calendar.Location = new System.Drawing.Point(320, 194);
-		    this.cmbDate2Calendar.Name = "cmbDate2Calendar";
-		    this.cmbDate2Calendar.Size = new System.Drawing.Size(107, 21);
-		    this.cmbDate2Calendar.TabIndex = 16;
 		    // 
 		    // pageNotes
 		    // 

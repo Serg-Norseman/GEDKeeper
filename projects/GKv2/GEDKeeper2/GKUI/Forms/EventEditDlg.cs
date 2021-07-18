@@ -69,39 +69,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbEventType); }
         }
 
-        IComboBox IEventEditDlg.EventDateType
+        IDateControl IEventEditDlg.DataDate
         {
-            get { return GetControlHandler<IComboBox>(cmbEventDateType); }
-        }
-
-        ICheckBox IEventEditDlg.Date1BC
-        {
-            get { return GetControlHandler<ICheckBox>(btnBC1); }
-        }
-
-        ICheckBox IEventEditDlg.Date2BC
-        {
-            get { return GetControlHandler<ICheckBox>(btnBC2); }
-        }
-
-        IComboBox IEventEditDlg.Date1Calendar
-        {
-            get { return GetControlHandler<IComboBox>(cmbDate1Calendar); }
-        }
-
-        IComboBox IEventEditDlg.Date2Calendar
-        {
-            get { return GetControlHandler<IComboBox>(cmbDate2Calendar); }
-        }
-
-        IDateBox IEventEditDlg.Date1
-        {
-            get { return GetControlHandler<IDateBox>(txtEventDate1); }
-        }
-
-        IDateBox IEventEditDlg.Date2
-        {
-            get { return GetControlHandler<IDateBox>(txtEventDate2); }
+            get { return GetControlHandler<IDateControl>(dateCtl); }
         }
 
         IComboBox IEventEditDlg.Attribute
@@ -156,15 +126,14 @@ namespace GKUI.Forms
             lblEvent.Text = LangMan.LS(LSID.LSID_Event);
             lblAttrValue.Text = LangMan.LS(LSID.LSID_Value);
             lblPlace.Text = LangMan.LS(LSID.LSID_Place);
-            lblDate.Text = LangMan.LS(LSID.LSID_Date);
             lblCause.Text = LangMan.LS(LSID.LSID_Cause);
             lblOrg.Text = LangMan.LS(LSID.LSID_Agency);
 
             SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
             SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
 
-            SetToolTip(txtEventDate1, txtEventDate1.RegionalDatePattern);
-            SetToolTip(txtEventDate2, txtEventDate2.RegionalDatePattern);
+            //SetToolTip(txtEventDate1, txtEventDate1.RegionalDatePattern);
+            //SetToolTip(txtEventDate2, txtEventDate2.RegionalDatePattern);
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);
@@ -251,11 +220,6 @@ namespace GKUI.Forms
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
         {
             fController.ChangeEventType();
-        }
-
-        private void EditEventDateType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            fController.ChangeDateType();
         }
     }
 }
