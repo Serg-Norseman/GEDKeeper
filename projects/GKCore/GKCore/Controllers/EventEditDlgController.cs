@@ -64,7 +64,7 @@ namespace GKCore.Controllers
                 fEvent.Cause = fView.Cause.Text;
                 fEvent.Agency = fView.Agency.Text;
 
-                GDMCustomDate dt = fView.DataDate.Date;
+                GDMCustomDate dt = fView.Date.Date;
                 if (dt == null) throw new ArgumentNullException("dt");
 
                 fEvent.Date.ParseString(dt.StringValue);
@@ -133,7 +133,7 @@ namespace GKCore.Controllers
 
             ChangeEventType();
 
-            fView.DataDate.Date = fEvent.Date.Value;
+            fView.Date.Date = fEvent.Date.Value;
             fView.EventName.Text = fEvent.Classification;
             fView.Cause.Text = fEvent.Cause;
             fView.Agency.Text = fEvent.Agency;

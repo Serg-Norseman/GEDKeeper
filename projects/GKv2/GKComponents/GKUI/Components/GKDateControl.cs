@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
@@ -34,6 +35,10 @@ namespace GKUI.Components
     /// </summary>
     public class GKDateControl : UserControl, IDateControl, ILocalizable
     {
+        private readonly IContainer fComponents;
+        private readonly ToolTip fToolTip;
+
+
         public GDMCustomDate Date
         {
             get { return GetDate(); }
@@ -43,8 +48,19 @@ namespace GKUI.Components
 
         public GKDateControl()
         {
+            fComponents = new Container();
+            fToolTip = new ToolTip(this.fComponents);
+
             InitializeComponent();
             SetLocale();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fComponents != null) fComponents.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         public void Activate()
@@ -54,8 +70,6 @@ namespace GKUI.Components
 
         public void SetLocale()
         {
-            lblDate.Text = LangMan.LS(LSID.LSID_Date);
-
             int num = GKData.DateKinds.Length;
             for (int i = 0; i < num; i++) {
                 cmbDateType.Items.Add(LangMan.LS(GKData.DateKinds[i].Name));
@@ -71,6 +85,9 @@ namespace GKUI.Components
 
             cmbDate1Calendar.SelectedIndex = 0;
             cmbDate2Calendar.SelectedIndex = 0;
+
+            fToolTip.SetToolTip(txtDate1, txtDate1.RegionalDatePattern);
+            fToolTip.SetToolTip(txtDate2, txtDate2.RegionalDatePattern);
         }
 
         public void ChangeDateType()
@@ -245,7 +262,6 @@ namespace GKUI.Components
 
         #region Design
 
-        private Label lblDate;
         private ComboBox cmbDateType;
         private GKDateBox txtDate1;
         private GKDateBox txtDate2;
@@ -256,7 +272,6 @@ namespace GKUI.Components
 
         private void InitializeComponent()
         {
-            this.lblDate = new System.Windows.Forms.Label();
             this.cmbDateType = new System.Windows.Forms.ComboBox();
             this.txtDate1 = new GKUI.Components.GKDateBox();
             this.txtDate2 = new GKUI.Components.GKDateBox();
@@ -266,22 +281,13 @@ namespace GKUI.Components
             this.chkBC1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
-            // lblDate
-            // 
-            this.lblDate.AutoSize = true;
-            this.lblDate.Location = new System.Drawing.Point(9, 8);
-            this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(49, 17);
-            this.lblDate.TabIndex = 10;
-            this.lblDate.Text = "lblDate";
-            // 
             // cmbDateType
             // 
             this.cmbDateType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDateType.Location = new System.Drawing.Point(9, 23);
+            this.cmbDateType.Location = new System.Drawing.Point(2, 2);
             this.cmbDateType.Name = "cmbDateType";
             this.cmbDateType.Size = new System.Drawing.Size(135, 25);
-            this.cmbDateType.TabIndex = 11;
+            this.cmbDateType.TabIndex = 1;
             this.cmbDateType.SelectedIndexChanged += cmbDateType_SelectedIndexChanged;
             // 
             // txtDate1
@@ -289,12 +295,12 @@ namespace GKUI.Components
             this.txtDate1.AllowDrop = true;
             this.txtDate1.BackColor = System.Drawing.SystemColors.Window;
             this.txtDate1.Culture = new System.Globalization.CultureInfo("");
-            this.txtDate1.Location = new System.Drawing.Point(152, 23);
+            this.txtDate1.Location = new System.Drawing.Point(145, 2);
             this.txtDate1.Mask = "00/00/0000";
             this.txtDate1.Name = "txtDate1";
             this.txtDate1.NormalizeDate = "__.__.____";
             this.txtDate1.Size = new System.Drawing.Size(158, 24);
-            this.txtDate1.TabIndex = 12;
+            this.txtDate1.TabIndex = 2;
             this.txtDate1.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.txtDate1.DragOver += txtDateX_DragOver;
             this.txtDate1.DragDrop += txtDateX_DragDrop;
@@ -303,12 +309,12 @@ namespace GKUI.Components
             // 
             this.txtDate2.AllowDrop = true;
             this.txtDate2.Culture = new System.Globalization.CultureInfo("");
-            this.txtDate2.Location = new System.Drawing.Point(320, 23);
+            this.txtDate2.Location = new System.Drawing.Point(313, 2);
             this.txtDate2.Mask = "00/00/0000";
             this.txtDate2.Name = "txtDate2";
             this.txtDate2.NormalizeDate = "__.__.____";
             this.txtDate2.Size = new System.Drawing.Size(158, 24);
-            this.txtDate2.TabIndex = 15;
+            this.txtDate2.TabIndex = 3;
             this.txtDate2.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.txtDate2.DragOver += txtDateX_DragOver;
             this.txtDate2.DragDrop += txtDateX_DragDrop;
@@ -316,37 +322,37 @@ namespace GKUI.Components
             // cmbDate1Calendar
             // 
             this.cmbDate1Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDate1Calendar.Location = new System.Drawing.Point(152, 54);
+            this.cmbDate1Calendar.Location = new System.Drawing.Point(145, 33);
             this.cmbDate1Calendar.Name = "cmbDate1Calendar";
             this.cmbDate1Calendar.Size = new System.Drawing.Size(107, 25);
-            this.cmbDate1Calendar.TabIndex = 13;
+            this.cmbDate1Calendar.TabIndex = 4;
             // 
             // cmbDate2Calendar
             // 
             this.cmbDate2Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDate2Calendar.Location = new System.Drawing.Point(320, 54);
+            this.cmbDate2Calendar.Location = new System.Drawing.Point(313, 33);
             this.cmbDate2Calendar.Name = "cmbDate2Calendar";
             this.cmbDate2Calendar.Size = new System.Drawing.Size(107, 25);
-            this.cmbDate2Calendar.TabIndex = 16;
+            this.cmbDate2Calendar.TabIndex = 6;
             // 
-            // btnBC2
+            // chkBC2
             // 
             this.chkBC2.AutoSize = true;
-            this.chkBC2.Location = new System.Drawing.Point(434, 54);
-            this.chkBC2.Name = "btnBC2";
+            this.chkBC2.Location = new System.Drawing.Point(427, 33);
+            this.chkBC2.Name = "chkBC2";
             this.chkBC2.Size = new System.Drawing.Size(47, 21);
-            this.chkBC2.TabIndex = 17;
+            this.chkBC2.TabIndex = 7;
             this.chkBC2.Text = "BC";
             this.chkBC2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkBC2.UseVisualStyleBackColor = true;
             // 
-            // btnBC1
+            // chkBC1
             // 
             this.chkBC1.AutoSize = true;
-            this.chkBC1.Location = new System.Drawing.Point(266, 54);
-            this.chkBC1.Name = "btnBC1";
+            this.chkBC1.Location = new System.Drawing.Point(259, 33);
+            this.chkBC1.Name = "chkBC1";
             this.chkBC1.Size = new System.Drawing.Size(47, 21);
-            this.chkBC1.TabIndex = 14;
+            this.chkBC1.TabIndex = 5;
             this.chkBC1.Text = "BC";
             this.chkBC1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkBC1.UseVisualStyleBackColor = true;
@@ -362,10 +368,9 @@ namespace GKUI.Components
             this.Controls.Add(this.txtDate1);
             this.Controls.Add(this.txtDate2);
             this.Controls.Add(this.cmbDateType);
-            this.Controls.Add(this.lblDate);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "GKDateControl";
-            this.Size = new System.Drawing.Size(491, 94);
+            this.Size = new System.Drawing.Size(473, 62);
             this.ResumeLayout(false);
             this.PerformLayout();
         }

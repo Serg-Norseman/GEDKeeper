@@ -23,28 +23,16 @@ namespace GKUI.Forms
         private ComboBox cmbEventType;
         private TextBox txtEventName;
         private TextBox txtEventPlace;
-        private ComboBox cmbEventDateType;
-        private GKDateBox txtEventDate1;
-        private GKDateBox txtEventDate2;
         private TextBox txtEventCause;
         private TextBox txtEventOrg;
         private ComboBox txtAttribute;
         private Button btnPlaceAdd;
         private Button btnPlaceDelete;
-        private ComboBox cmbDate1Calendar;
-        private ComboBox cmbDate2Calendar;
-        private CheckBox btnBC1;
-        private CheckBox btnBC2;
+        private GKDateControl dateCtl;
 
         private void InitializeComponent()
         {
             SuspendLayout();
-
-            btnBC1 = new CheckBox();
-            btnBC1.Text = "BC";
-
-            btnBC2 = new CheckBox();
-            btnBC2.Text = "BC";
 
             lblEvent = new Label();
             lblEvent.Text = "lblEvent";
@@ -83,48 +71,15 @@ namespace GKUI.Forms
             txtEventPlace = new TextBox();
             txtEventPlace.KeyDown += EditEventPlace_KeyDown;
 
-            cmbEventDateType = new ComboBox();
-            cmbEventDateType.ReadOnly = true;
-            cmbEventDateType.SelectedIndexChanged += EditEventDateType_SelectedIndexChanged;
-
-            txtEventDate1 = new GKDateBox();
-            txtEventDate1.AllowDrop = true;
-            txtEventDate1.DragDrop += txtEventDateX_DragDrop;
-            txtEventDate1.DragOver += txtEventDateX_DragOver;
-
-            txtEventDate2 = new GKDateBox();
-            txtEventDate2.AllowDrop = true;
-            txtEventDate2.DragDrop += txtEventDateX_DragDrop;
-            txtEventDate2.DragOver += txtEventDateX_DragOver;
-
             txtEventCause = new TextBox();
 
             txtEventOrg = new TextBox();
 
             txtAttribute = new ComboBox();
 
-            cmbDate1Calendar = new ComboBox();
-            cmbDate1Calendar.ReadOnly = true;
-
-            cmbDate2Calendar = new ComboBox();
-            cmbDate2Calendar.ReadOnly = true;
+            dateCtl = new GKDateControl();
 
             //
-
-            var datesPanel = new TableLayout {
-                Padding = new Padding(0),
-                Spacing = new Size(10, 10),
-                Rows = {
-                    new TableRow {
-                        Cells = { cmbEventDateType, txtEventDate1, txtEventDate2 }
-                    },
-                    new TableRow {
-                        Cells = { null,
-                            TableLayout.Horizontal(10, cmbDate1Calendar, btnBC1),
-                            TableLayout.Horizontal(10, cmbDate2Calendar, btnBC2) }
-                    },
-                }
-            };
 
             pageCommon = new TabPage();
             pageCommon.Text = "pageCommon";
@@ -140,7 +95,7 @@ namespace GKUI.Forms
                         Cells = { lblPlace, TableLayout.Horizontal(10, new TableCell(txtEventPlace, true), btnPlaceAdd, btnPlaceDelete) }
                     },
                     new TableRow {
-                        Cells = { lblDate, datesPanel }
+                        Cells = { lblDate, dateCtl }
                     },
                     new TableRow {
                         Cells = { lblCause, txtEventCause }

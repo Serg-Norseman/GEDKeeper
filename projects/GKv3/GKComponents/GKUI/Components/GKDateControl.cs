@@ -55,8 +55,6 @@ namespace GKUI.Components
 
         public void SetLocale()
         {
-            lblDate.Text = LangMan.LS(LSID.LSID_Date);
-
             int num = GKData.DateKinds.Length;
             for (int i = 0; i < num; i++) {
                 cmbDateType.Items.Add(LangMan.LS(GKData.DateKinds[i].Name));
@@ -72,6 +70,9 @@ namespace GKUI.Components
 
             cmbDate1Calendar.SelectedIndex = 0;
             cmbDate2Calendar.SelectedIndex = 0;
+
+            txtDate1.ToolTip = txtDate1.RegionalDatePattern;
+            txtDate2.ToolTip = txtDate2.RegionalDatePattern;
         }
 
         public void ChangeDateType()
@@ -246,7 +247,6 @@ namespace GKUI.Components
 
         #region Design
 
-        private Label lblDate;
         private ComboBox cmbDateType;
         private GKDateBox txtDate1;
         private GKDateBox txtDate2;
@@ -257,7 +257,6 @@ namespace GKUI.Components
 
         private void InitializeComponent()
         {
-            this.lblDate = new Label();
             this.cmbDateType = new ComboBox();
             this.txtDate1 = new GKUI.Components.GKDateBox();
             this.txtDate2 = new GKUI.Components.GKDateBox();
@@ -267,8 +266,6 @@ namespace GKUI.Components
             this.chkBC1 = new CheckBox();
 
             this.SuspendLayout();
-
-            this.lblDate.Text = "lblDate";
 
             this.cmbDateType.ReadOnly = true;
             this.cmbDateType.SelectedIndexChanged += cmbDateType_SelectedIndexChanged;

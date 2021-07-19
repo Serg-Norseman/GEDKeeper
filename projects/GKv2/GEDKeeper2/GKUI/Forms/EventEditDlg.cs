@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -69,7 +69,7 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbEventType); }
         }
 
-        IDateControl IEventEditDlg.DataDate
+        IDateControl IEventEditDlg.Date
         {
             get { return GetControlHandler<IDateControl>(dateCtl); }
         }
@@ -126,14 +126,12 @@ namespace GKUI.Forms
             lblEvent.Text = LangMan.LS(LSID.LSID_Event);
             lblAttrValue.Text = LangMan.LS(LSID.LSID_Value);
             lblPlace.Text = LangMan.LS(LSID.LSID_Place);
+            lblDate.Text = LangMan.LS(LSID.LSID_Date);
             lblCause.Text = LangMan.LS(LSID.LSID_Cause);
             lblOrg.Text = LangMan.LS(LSID.LSID_Agency);
 
             SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
             SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
-
-            //SetToolTip(txtEventDate1, txtEventDate1.RegionalDatePattern);
-            //SetToolTip(txtEventDate2, txtEventDate2.RegionalDatePattern);
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);
@@ -194,27 +192,6 @@ namespace GKUI.Forms
         private void btnPlaceDelete_Click(object sender, EventArgs e)
         {
             fController.RemovePlace();
-        }
-
-        private void EditEventDate1_DragOver(object sender, DragEventArgs e)
-        {
-            e.Effect = e.Data.GetDataPresent(typeof(string)) ? DragDropEffects.Move : DragDropEffects.None;
-        }
-
-        private void EditEventDate1_DragDrop(object sender, DragEventArgs e)
-        {
-            try {
-                IDataObject data = e.Data;
-                if (data.GetDataPresent(typeof(string))) {
-                    string txt = data.GetData(typeof(string)) as string;
-
-                    MaskedTextBox txtBox = ((MaskedTextBox)sender);
-                    string[] dt = txtBox.Text.Split('/');
-                    txtBox.Text = dt[0] + "/" + dt[1] + "/" + txt.PadLeft(4, '_');
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("EventEditDlg.DragDrop()", ex);
-            }
         }
 
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)

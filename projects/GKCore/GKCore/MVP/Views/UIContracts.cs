@@ -119,7 +119,7 @@ namespace GKCore.MVP.Views
 
         IComboBox EventType { get; }
 
-        IDateControl DataDate { get; }
+        IDateControl Date { get; }
 
         IComboBox Attribute { get; }
         ITextBox Place { get; }

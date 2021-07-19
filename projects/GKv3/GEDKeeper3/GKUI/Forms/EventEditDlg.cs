@@ -70,39 +70,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbEventType); }
         }
 
-        IComboBox IEventEditDlg.EventDateType
+        IDateControl IEventEditDlg.Date
         {
-            get { return GetControlHandler<IComboBox>(cmbEventDateType); }
-        }
-
-        ICheckBox IEventEditDlg.Date1BC
-        {
-            get { return GetControlHandler<ICheckBox>(btnBC1); }
-        }
-
-        ICheckBox IEventEditDlg.Date2BC
-        {
-            get { return GetControlHandler<ICheckBox>(btnBC2); }
-        }
-
-        IComboBox IEventEditDlg.Date1Calendar
-        {
-            get { return GetControlHandler<IComboBox>(cmbDate1Calendar); }
-        }
-
-        IComboBox IEventEditDlg.Date2Calendar
-        {
-            get { return GetControlHandler<IComboBox>(cmbDate2Calendar); }
-        }
-
-        IDateBox IEventEditDlg.Date1
-        {
-            get { return GetControlHandler<IDateBox>(txtEventDate1); }
-        }
-
-        IDateBox IEventEditDlg.Date2
-        {
-            get { return GetControlHandler<IDateBox>(txtEventDate2); }
+            get { return GetControlHandler<IDateControl>(dateCtl); }
         }
 
         IComboBox IEventEditDlg.Attribute
@@ -163,9 +133,6 @@ namespace GKUI.Forms
 
             SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
             SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
-
-            SetToolTip(txtEventDate1, txtEventDate1.RegionalDatePattern);
-            SetToolTip(txtEventDate2, txtEventDate2.RegionalDatePattern);
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);
@@ -228,35 +195,9 @@ namespace GKUI.Forms
             fController.RemovePlace();
         }
 
-        private void txtEventDateX_DragOver(object sender, DragEventArgs e)
-        {
-            // FIXME: don't work in Eto 2.4.1?
-            var data = e.Data.Text;
-            e.Effects = !string.IsNullOrEmpty(data) ? DragEffects.Move : DragEffects.None;
-        }
-
-        private void txtEventDateX_DragDrop(object sender, DragEventArgs e)
-        {
-            // FIXME: don't work in Eto 2.4.1?
-            try {
-                /*if (e.Data.GetDataPresent(typeof(string))) {
-                    string txt = e.Data.GetData(typeof(string)) as string;
-                    string[] dt = ((MaskedTextBox)sender).Text.Split('.');
-                    ((MaskedTextBox)sender).Text = dt[0] + '.' + dt[1] + '.' + txt;
-                }*/
-            } catch (Exception ex) {
-                Logger.WriteError("EventEditDlg.DragDrop()", ex);
-            }
-        }
-
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
         {
             fController.ChangeEventType();
-        }
-
-        private void EditEventDateType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            fController.ChangeDateType();
         }
     }
 }
