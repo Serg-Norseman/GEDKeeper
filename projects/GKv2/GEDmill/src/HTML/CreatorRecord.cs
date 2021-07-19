@@ -72,10 +72,8 @@ namespace GEDmill.HTML
         protected void OutputFooter(HTMLFile f, GDMRecord r)
         {
             f.WriteLine("      <div id=\"footer\">");
-            if ((r.UserReferences.Count > 0)
-              || (!string.IsNullOrEmpty(r.AutomatedRecordID))
-              || (r.ChangeDate != null)
-              || (GMConfig.Instance.CustomFooter != "")) {
+            if ((r.HasUserReferences) || (!string.IsNullOrEmpty(r.AutomatedRecordID)) || 
+                (r.ChangeDate != null) || (GMConfig.Instance.CustomFooter != "")) {
                 foreach (GDMUserReference urn in r.UserReferences) {
                     string idType = EscapeHTML(urn.ReferenceType, false);
                     if (idType == "") {

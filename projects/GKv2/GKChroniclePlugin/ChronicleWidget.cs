@@ -75,13 +75,11 @@ namespace GKChroniclePlugin
 
         public void BaseChanged(IBaseWindow baseWin)
         {
-            if (fBase != baseWin)
-            {
+            if (fBase != baseWin) {
                 fBase = baseWin;
                 fEvents.Clear();
 
-                if (fBase != null)
-                {
+                if (fBase != null) {
                     CollectData();
                 }
 
@@ -92,14 +90,12 @@ namespace GKChroniclePlugin
         private void CollectData()
         {
             int num = fBase.Context.Tree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMRecordWithEvents rec = fBase.Context.Tree[i] as GDMRecordWithEvents;
-                if (rec == null) continue;
+                if (rec == null || !rec.HasEvents) continue;
 
                 int eventsCount = rec.Events.Count;
-                for (int k = 0; k < eventsCount; k++)
-                {
+                for (int k = 0; k < eventsCount; k++) {
                     GDMCustomEvent evt = rec.Events[k];
                     UDN udn = evt.Date.GetUDN();
                     if (!udn.IsEmpty()) {
@@ -111,8 +107,7 @@ namespace GKChroniclePlugin
 
         private void UpdateControls()
         {
-            try
-            {
+            try {
                 lvEvents.BeginUpdate();
 
                 lvEvents.Clear();
@@ -125,20 +120,19 @@ namespace GKChroniclePlugin
                 for (int i = 0; i < fEvents.Count; i++) {
                     EventRecord eventRec = fEvents[i];
                     GDMCustomEvent evt = eventRec.Event;
+                    string strPlace = (!evt.HasPlace) ? string.Empty : evt.Place.StringValue;
 
                     lvEvents.AddItem(eventRec, new object[] {
                         new GDMDateItem(evt.Date.Value),
                         GKUtils.GetEventName(evt),
                         GKUtils.GetRecordName(fBase.Context.Tree, eventRec.Record, false),
-                        evt.Place.StringValue,
+                        strPlace,
                         GKUtils.GetEventCause(evt)
                     });
                 }
 
                 lvEvents.ResizeColumn(0);
-            }
-            finally
-            {
+            } finally {
                 lvEvents.EndUpdate();
             }
         }

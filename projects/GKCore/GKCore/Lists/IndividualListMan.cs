@@ -161,15 +161,17 @@ namespace GKCore.Lists
 
         private string GetGroups()
         {
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
 
-            int count = fRec.Groups.Count;
-            for (int idx = 0; idx < count; idx++) {
-                GDMGroupRecord grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(fRec.Groups[idx]);
-                if (grp != null) {
-                    if (idx > 0) result.Append("; ");
+            if (fRec.HasGroups) {
+                int count = fRec.Groups.Count;
+                for (int idx = 0; idx < count; idx++) {
+                    GDMGroupRecord grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(fRec.Groups[idx]);
+                    if (grp != null) {
+                        if (idx > 0) result.Append("; ");
 
-                    result.Append(grp.GroupName);
+                        result.Append(grp.GroupName);
+                    }
                 }
             }
 
@@ -182,13 +184,14 @@ namespace GKCore.Lists
 
             bool result = false;
 
-            bool hasAddr = GlobalOptions.Instance.PlacesWithAddress;
-
-            int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++) {
-                string place = GKUtils.GetPlaceStr(fRec.Events[i], hasAddr);
-                result = IsMatchesMask(place, fltResidence);
-                if (result) break;
+            if (fRec.HasEvents) {
+                bool includeAddr = GlobalOptions.Instance.PlacesWithAddress;
+                int num = fRec.Events.Count;
+                for (int i = 0; i < num; i++) {
+                    string place = GKUtils.GetPlaceStr(fRec.Events[i], includeAddr);
+                    result = IsMatchesMask(place, fltResidence);
+                    if (result) break;
+                }
             }
 
             return result;
@@ -200,10 +203,12 @@ namespace GKCore.Lists
 
             bool result = false;
 
-            int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++) {
-                result = IsMatchesMask(fRec.Events[i].StringValue, fltEventVal);
-                if (result) break;
+            if (fRec.HasEvents) {
+                int num = fRec.Events.Count;
+                for (int i = 0; i < num; i++) {
+                    result = IsMatchesMask(fRec.Events[i].StringValue, fltEventVal);
+                    if (result) break;
+                }
             }
 
             return result;
@@ -249,11 +254,11 @@ namespace GKCore.Lists
                         break;
 
                     case FilterGroupMode.None:
-                        if (fRec.Groups.Count != 0) return false;
+                        if (fRec.HasGroups) return false;
                         break;
 
                     case FilterGroupMode.Any:
-                        if (fRec.Groups.Count == 0) return false;
+                        if (!fRec.HasGroups) return false;
                         break;
 
                     case FilterGroupMode.Selected:
@@ -267,11 +272,11 @@ namespace GKCore.Lists
                         break;
 
                     case FilterGroupMode.None:
-                        if (fRec.SourceCitations.Count != 0) return false;
+                        if (fRec.HasSourceCitations) return false;
                         break;
 
                     case FilterGroupMode.Any:
-                        if (fRec.SourceCitations.Count == 0) return false;
+                        if (!fRec.HasSourceCitations) return false;
                         break;
 
                     case FilterGroupMode.Selected:
@@ -627,10 +632,12 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GDMPointer ptr in iRec.Groups) {
-                    var grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(ptr);
-                    if (grp != null) {
-                        fSheetList.AddItem(grp, new object[] { grp.GroupName });
+                if (iRec.HasGroups) {
+                    foreach (GDMPointer ptr in iRec.Groups) {
+                        var grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(ptr);
+                        if (grp != null) {
+                            fSheetList.AddItem(grp, new object[] { grp.GroupName });
+                        }
                     }
                 }
 
@@ -1016,8 +1023,10 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GDMUserReference uref in iRec.UserReferences) {
-                    fSheetList.AddItem(uref, new object[] { uref.StringValue, uref.ReferenceType });
+                if (iRec.HasUserReferences) {
+                    foreach (GDMUserReference uref in iRec.UserReferences) {
+                        fSheetList.AddItem(uref, new object[] { uref.StringValue, uref.ReferenceType });
+                    }
                 }
 
                 fSheetList.EndUpdate();

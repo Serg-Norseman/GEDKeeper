@@ -199,7 +199,7 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        private void CheckUserRef(GDMIndividualRecord iRec, GDMUserReference userRef)
+        private void CheckUserRef(GDMRecord rec, GDMUserReference userRef)
         {
         }
 
@@ -213,16 +213,14 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckIndividualRecord(GDMIndividualRecord iRec)
         {
-            for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                GDMCustomEvent evt = iRec.Events[i];
+            if (iRec.HasEvents) {
+                for (int i = 0, num = iRec.Events.Count; i < num; i++) {
+                    GDMCustomEvent evt = iRec.Events[i];
 
-                CheckEvent(evt);
+                    CheckEvent(evt);
 
-                fBaseContext.CollectEventValues(evt);
-            }
-
-            for (int i = 0, num = iRec.UserReferences.Count; i < num; i++) {
-                CheckUserRef(iRec, iRec.UserReferences[i]);
+                    fBaseContext.CollectEventValues(evt);
+                }
             }
 
             for (int i = 0, num = iRec.PersonalNames.Count; i < num; i++) {
@@ -247,10 +245,12 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
-            for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
-                var asso = iRec.Associations[i];
-                CheckPointerWithNotes(asso);
-                CheckTagWithSourceCitations(asso);
+            if (iRec.HasAssociations) {
+                for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
+                    var asso = iRec.Associations[i];
+                    CheckPointerWithNotes(asso);
+                    CheckTagWithSourceCitations(asso);
+                }
             }
 
             fBaseContext.ImportNames(iRec);
@@ -286,9 +286,11 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckFamilyRecord(GDMFamilyRecord fam)
         {
-            for (int i = 0, num = fam.Events.Count; i < num; i++) {
-                GDMCustomEvent evt = fam.Events[i];
-                CheckEvent(evt);
+            if (fam.HasEvents) {
+                for (int i = 0, num = fam.Events.Count; i < num; i++) {
+                    GDMCustomEvent evt = fam.Events[i];
+                    CheckEvent(evt);
+                }
             }
 
             for (int i = fam.Children.Count - 1; i >= 0; i--) {
@@ -357,6 +359,12 @@ namespace GDModel.Providers.GEDCOM
         private void CheckRecord(GDMRecord rec, int fileVer)
         {
             CheckStructWL(rec);
+
+            if (rec.HasUserReferences) {
+                for (int i = 0, num = rec.UserReferences.Count; i < num; i++) {
+                    CheckUserRef(rec, rec.UserReferences[i]);
+                }
+            }
 
             // TODO
             // INDI: remove AFN, RFN - discuss???

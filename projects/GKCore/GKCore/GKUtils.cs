@@ -139,16 +139,15 @@ namespace GKCore
 
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                GDMRecordWithEvents evsRec = tree[i] as GDMRecordWithEvents;
+                var evsRec = tree[i] as GDMRecordWithEvents;
+                if (evsRec == null || !evsRec.HasEvents) continue;
 
-                if (evsRec != null) {
-                    int num2 = evsRec.Events.Count;
-                    for (int j = 0; j < num2; j++) {
-                        GDMCustomEvent evt = evsRec.Events[j];
+                int num2 = evsRec.Events.Count;
+                for (int j = 0; j < num2; j++) {
+                    GDMCustomEvent evt = evsRec.Events[j];
 
-                        if (evt.Place.Location.XRef == locRec.XRef) {
-                            linksList.AddObject(GetRecordName(tree, evsRec, true) + ", " + GetEventName(evt).ToLower(), evsRec);
-                        }
+                    if (evt.HasPlace && evt.Place.Location.XRef == locRec.XRef) {
+                        linksList.AddObject(GetRecordName(tree, evsRec, true) + ", " + GetEventName(evt).ToLower(), evsRec);
                     }
                 }
             }
@@ -593,9 +592,12 @@ namespace GKCore
                 st = (idx > 0) ? LangMan.LS(GKData.PersonEvents[idx].Name) : attrName;
             }
 
-            string place = iAttr.Place.StringValue;
-            if (place != "") {
-                place = " [" + place + "]";
+            string place = string.Empty;
+            if (iAttr.HasPlace) {
+                place = iAttr.Place.StringValue;
+                if (place != "") {
+                    place = " [" + place + "]";
+                }
             }
             return st + ": " + iAttr.StringValue + place;
         }
@@ -606,11 +608,15 @@ namespace GKCore
                 throw new ArgumentNullException("evt");
 
             string dt = GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false);
-            string place = evt.Place.StringValue;
-            GDMLocationRecord location = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
 
-            if (place != "" && location != null && hyperLink) {
-                place = HyperLink(location.XRef, place, 0);
+            string place = string.Empty;
+            if (evt.HasPlace) {
+                place = evt.Place.StringValue;
+                GDMLocationRecord location = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
+
+                if (place != "" && location != null && hyperLink) {
+                    place = HyperLink(location.XRef, place, 0);
+                }
             }
 
             string result;
@@ -1057,21 +1063,22 @@ namespace GKCore
 
         public static string GetPlaceStr(GDMCustomEvent evt, bool includeAddress)
         {
-            if (evt == null) return string.Empty;
+            if (evt == null || !evt.HasPlace) return string.Empty;
 
             string result = evt.Place.StringValue;
 
-            if (includeAddress)
-            {
+            if (includeAddress) {
                 string resi = evt.StringValue;
-                string addr = evt.Address.Lines.Text.Trim();
-                if (resi != "" && addr != "")
-                {
-                    resi += ", ";
+
+                if (evt.HasAddress) {
+                    string addrText = evt.Address.Lines.Text.Trim();
+                    if (resi != "" && addrText != "") {
+                        resi += ", ";
+                    }
+                    resi += addrText;
                 }
-                resi += addr;
-                if (resi != "")
-                {
+
+                if (resi != "") {
                     result = result + " [" + resi + "]";
                 }
             }
@@ -1671,33 +1678,32 @@ namespace GKCore
             try {
                 int num;
 
-                if (subject is GDMNoteRecord) {
+                if (subject is GDMNoteRecord && aInRecord.HasNotes) {
                     num = aInRecord.Notes.Count;
                     for (int i = 0; i < num; i++) {
                         if (aInRecord.Notes[i].XRef == subject.XRef) {
                             ShowLink(tree, subject, aToList, aInRecord, null, null);
                         }
                     }
-                } else if (subject is GDMMultimediaRecord) {
+                } else if (subject is GDMMultimediaRecord && aInRecord.HasMultimediaLinks) {
                     num = aInRecord.MultimediaLinks.Count;
                     for (int i = 0; i < num; i++) {
                         if (aInRecord.MultimediaLinks[i].XRef == subject.XRef) {
                             ShowLink(tree, subject, aToList, aInRecord, null, null);
                         }
                     }
-                } else if (subject is GDMSourceRecord) {
+                } else if (subject is GDMSourceRecord && aInRecord.HasSourceCitations) {
                     num = aInRecord.SourceCitations.Count;
                     for (int i = 0; i < num; i++) {
-                        if (aInRecord.SourceCitations[i].XRef == subject.XRef) {
-                            ShowLink(tree, subject, aToList, aInRecord, null, aInRecord.SourceCitations[i]);
+                        var sourCit = aInRecord.SourceCitations[i];
+                        if (sourCit.XRef == subject.XRef) {
+                            ShowLink(tree, subject, aToList, aInRecord, null, sourCit);
                         }
                     }
                 }
 
-                var recordWithEvents = aInRecord as GDMRecordWithEvents;
-                if (recordWithEvents != null) {
-                    GDMRecordWithEvents evsRec = recordWithEvents;
-
+                var evsRec = aInRecord as GDMRecordWithEvents;
+                if (evsRec != null && evsRec.HasEvents) {
                     num = evsRec.Events.Count;
                     for (int i = 0; i < num; i++) {
                         ShowEvent(tree, subject, aToList, evsRec, evsRec.Events[i]);
@@ -1796,7 +1802,7 @@ namespace GKCore
             if (record == null || summary == null) return;
 
             try {
-                if (record.MultimediaLinks.Count != 0) {
+                if (record.HasMultimediaLinks) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_RPMultimedia) + " (" + record.MultimediaLinks.Count.ToString() + "):");
 
@@ -1821,7 +1827,7 @@ namespace GKCore
             if (record == null || summary == null) return;
 
             try {
-                if (record.Notes.Count != 0) {
+                if (record.HasNotes) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_RPNotes) + " (" + record.Notes.Count.ToString() + "):");
 
@@ -1848,7 +1854,7 @@ namespace GKCore
             if (record == null || summary == null) return;
 
             try {
-                if (record.SourceCitations.Count != 0) {
+                if (record.HasSourceCitations) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_RPSources) + " (" + record.SourceCitations.Count.ToString() + "):");
 
@@ -1877,7 +1883,7 @@ namespace GKCore
             if (record == null || summary == null) return;
 
             try {
-                if (record.Associations.Count != 0) {
+                if (record.HasAssociations) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_Associations) + ":");
 
@@ -1902,7 +1908,7 @@ namespace GKCore
             if (record == null || summary == null) return;
 
             try {
-                if (record.Events.Count != 0) {
+                if (record.HasEvents) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_Events) + ":");
 
@@ -1920,7 +1926,9 @@ namespace GKCore
                         summary.Add("  " + st + ": " + sv + GetEventDesc(baseContext.Tree, evt));
 
                         ShowDetailCause(evt, summary);
-                        ShowAddressSummary(evt.Address, summary);
+                        if (evt.HasAddress) {
+                            ShowAddressSummary(evt.Address, summary);
+                        }
                         ShowEventDetailInfo(baseContext, evt, summary);
                     }
                 }
@@ -1934,7 +1942,7 @@ namespace GKCore
             if (record == null || summary == null) return;
 
             try {
-                if (record.Events.Count != 0) {
+                if (record.HasEvents) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_Events) + ":");
 
@@ -1961,7 +1969,7 @@ namespace GKCore
             if (record == null || summary == null) return;
 
             try {
-                if (record.Groups.Count != 0) {
+                if (record.HasGroups) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.LSID_RPGroups) + ":");
 
@@ -2779,16 +2787,7 @@ namespace GKCore
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            string result;
-            if (iRec.PersonalNames.Count > 0)
-            {
-                GDMPersonalName np = iRec.PersonalNames[0];
-                result = np.Pieces.Nickname;
-            }
-            else
-            {
-                result = "";
-            }
+            string result = (iRec.PersonalNames.Count > 0) ? iRec.PersonalNames[0].Pieces.Nickname : string.Empty;
             return result;
         }
 
@@ -2802,17 +2801,18 @@ namespace GKCore
 
             WomanSurnameFormat wsFmt = GlobalOptions.Instance.WomanSurnameFormat;
             if (iSex == GDMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
+                string marriedSurname = personalName.Pieces.MarriedName;
                 switch (wsFmt) {
                     case WomanSurnameFormat.wsfMaiden_Married:
                         result = defSurname;
-                        if (personalName.Pieces.MarriedName.Length > 0) {
+                        if (marriedSurname.Length > 0) {
                             if (result.Length > 0) result += " ";
-                            result += "(" + personalName.Pieces.MarriedName + ")";
+                            result += "(" + marriedSurname + ")";
                         }
                         break;
 
                     case WomanSurnameFormat.wsfMarried_Maiden:
-                        result = personalName.Pieces.MarriedName;
+                        result = marriedSurname;
                         if (defSurname.Length > 0) {
                             if (result.Length > 0) result += " ";
                             result += "(" + defSurname + ")";
@@ -2824,7 +2824,7 @@ namespace GKCore
                         break;
 
                     case WomanSurnameFormat.wsfMarried:
-                        result = personalName.Pieces.MarriedName;
+                        result = marriedSurname;
                         break;
 
                     default:
@@ -2907,9 +2907,11 @@ namespace GKCore
             patronymic = patronymic.Trim();
 
             personalName.SetNameParts(name + " " + patronymic, surname, personalName.LastPart);
-            personalName.Pieces.Surname = surname;
-            personalName.Pieces.Given = name;
-            personalName.Pieces.PatronymicName = patronymic;
+
+            var pnPieces = personalName.Pieces;
+            pnPieces.Surname = surname;
+            pnPieces.Given = name;
+            pnPieces.PatronymicName = patronymic;
         }
 
         public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, GDMPersonalName personalName, bool formatted = true)

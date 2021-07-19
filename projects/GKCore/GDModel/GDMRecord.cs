@@ -48,7 +48,7 @@ namespace GDModel
     /// <summary>
     /// 
     /// </summary>
-    public class GDMRecord : GDMTag, IGDMStructWithLists, IGDMStructWithUserReferences
+    public class GDMRecord : GDMTag, IGDMRecord
     {
         protected GDMTree fTree;
         private string fAutomatedRecordID;
@@ -157,6 +157,7 @@ namespace GDModel
         {
             get { return fXRef; }
         }
+
 
         public GDMRecord(GDMTree tree)
         {

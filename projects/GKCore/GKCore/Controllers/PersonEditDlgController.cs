@@ -276,12 +276,13 @@ namespace GKCore.Controllers
                 fView.Name.Text = parts.Name;
                 fView.Patronymic.Text = parts.Patronymic;
 
-                fView.NamePrefix.Text = np.Pieces.Prefix;
-                fView.Nickname.Text = np.Pieces.Nickname;
-                fView.SurnamePrefix.Text = np.Pieces.SurnamePrefix;
-                fView.NameSuffix.Text = np.Pieces.Suffix;
+                var pnPieces = np.Pieces;
+                fView.NamePrefix.Text = pnPieces.Prefix;
+                fView.Nickname.Text = pnPieces.Nickname;
+                fView.SurnamePrefix.Text = pnPieces.SurnamePrefix;
+                fView.NameSuffix.Text = pnPieces.Suffix;
 
-                fView.MarriedSurname.Text = np.Pieces.MarriedName;
+                fView.MarriedSurname.Text = pnPieces.MarriedName;
             } else {
                 culture = fBase.Context.Culture;
 

@@ -106,12 +106,13 @@ namespace GKCore.Controllers
             fView.Patronymic.Text = parts.Patronymic;
             fView.NameType.SelectedIndex = (sbyte)fPersonalName.NameType;
 
-            fView.NamePrefix.Text = fPersonalName.Pieces.Prefix;
-            fView.Nickname.Text = fPersonalName.Pieces.Nickname;
-            fView.SurnamePrefix.Text = fPersonalName.Pieces.SurnamePrefix;
-            fView.NameSuffix.Text = fPersonalName.Pieces.Suffix;
+            var pnPieces = fPersonalName.Pieces;
+            fView.NamePrefix.Text = pnPieces.Prefix;
+            fView.Nickname.Text = pnPieces.Nickname;
+            fView.SurnamePrefix.Text = pnPieces.SurnamePrefix;
+            fView.NameSuffix.Text = pnPieces.Suffix;
 
-            fView.MarriedSurname.Text = fPersonalName.Pieces.MarriedName;
+            fView.MarriedSurname.Text = pnPieces.MarriedName;
 
             if (!IsExtendedWomanSurname()) {
                 fView.SurnameLabel.Text = LangMan.LS(LSID.LSID_Surname);

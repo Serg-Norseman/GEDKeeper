@@ -169,8 +169,9 @@ namespace GEDmill.HTML
             }
 
             // Collect together multimedia links
-            if (GMConfig.Instance.AllowMultimedia && !fConcealed) {
-                AddMultimedia(fIndiRec.MultimediaLinks, string.Concat(fIndiRec.XRef, "mm"), string.Concat(fIndiRec.XRef, "mo"), GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, stats);
+            if (GMConfig.Instance.AllowMultimedia && !fConcealed && fIndiRec.HasMultimediaLinks) {
+                AddMultimedia(fIndiRec.MultimediaLinks, string.Concat(fIndiRec.XRef, "mm"), string.Concat(fIndiRec.XRef, "mo"), 
+                              GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, stats);
             }
 
             AddEvents();
@@ -370,7 +371,7 @@ namespace GEDmill.HTML
             string relativeFilename = GetIndividualHTMLFilename(fIndiRec);
             // Create some strings to use in index entry
             string userRef = "";
-            if (fIndiRec.UserReferences.Count > 0) {
+            if (fIndiRec.HasUserReferences) {
                 GDMUserReference urn = fIndiRec.UserReferences[0];
                 userRef = EscapeHTML(urn.StringValue, false);
                 if (userRef.Length > 0) {
@@ -415,18 +416,19 @@ namespace GEDmill.HTML
             marriagePlace = "";
             sourceRefs = "";
             marriageNote = "";
-            foreach (GDMFamilyEvent fes in fr.Events) {
+            foreach (var fes in fr.Events) {
                 if (fes.GetTagName() == "MARR") {
                     marriageDate = fes.Date;
 
-                    if (fes.Place != null) {
-                        if (fes.Place.StringValue != "")
-                            marriagePlace = string.Concat(" ", GMConfig.Instance.PlaceWord, " ", EscapeHTML(fes.Place.StringValue, false));
+                    if (fes.HasPlace) {
+                        string strPlace = fes.Place.StringValue;
+                        if (strPlace != "")
+                            marriagePlace = string.Concat(" ", GMConfig.Instance.PlaceWord, " ", EscapeHTML(strPlace, false));
                     }
 
                     sourceRefs = AddSources(ref fReferenceList, fes.SourceCitations);
 
-                    if (fes.Notes != null) {
+                    if (fes.HasNotes) {
                         foreach (GDMNotes ns in fes.Notes) {
                             if (marriageNote != "") {
                                 marriageNote += "\n";
@@ -447,15 +449,16 @@ namespace GEDmill.HTML
             string sourceRefs = "";
             string place = "";
             if (GMHelper.GetVisibility(spouse)) {
-                foreach (GDMCustomEvent ies in spouse.Events) {
+                foreach (var ies in spouse.Events) {
                     if (ies.GetTagName() == "DEAT") {
                         // Record death of irSubject if within this person's lifetime
                         GDMDateValue spouseDeathDate = ies.Date;
                         if (spouseDeathDate != null) {
                             if (fInferredDeathday == null || fInferredDeathday.Date == null || spouseDeathDate.CompareTo(fInferredDeathday.Date) <= 0) {
-                                if (ies.Place != null) {
-                                    if (ies.Place.StringValue != "")
-                                        place = string.Concat(" ", GMConfig.Instance.PlaceWord, " ", EscapeHTML(ies.Place.StringValue, false));
+                                if (ies.HasPlace) {
+                                    string strPlace = ies.Place.StringValue;
+                                    if (strPlace != "")
+                                        place = string.Concat(" ", GMConfig.Instance.PlaceWord, " ", EscapeHTML(strPlace, false));
                                 }
 
                                 sourceRefs = AddSources(ref fReferenceList, ies.SourceCitations);
@@ -515,9 +518,10 @@ namespace GEDmill.HTML
                         if (childDeathday != null) {
                             childDeathdate = childDeathday.Date;
 
-                            if (childDeathday.Place != null) {
-                                if (childDeathday.Place.StringValue != "") {
-                                    deathPlace = string.Concat(" ", GMConfig.Instance.PlaceWord, " ", EscapeHTML(childDeathday.Place.StringValue, false));
+                            if (childDeathday.HasPlace) {
+                                string strPlace = childDeathday.Place.StringValue;
+                                if (strPlace != "") {
+                                    deathPlace = string.Concat(" ", GMConfig.Instance.PlaceWord, " ", EscapeHTML(strPlace, false));
                                 }
                             }
                         }
@@ -546,9 +550,10 @@ namespace GEDmill.HTML
                     if (childBirthday != null && !childConcealed) {
                         childBirthdate = childBirthday.Date;
 
-                        if (childBirthday.Place != null) {
-                            if (childBirthday.Place.StringValue != "") {
-                                birthPlace = string.Concat(" ", GMConfig.Instance.PlaceWord, " ", EscapeHTML(childBirthday.Place.StringValue, false));
+                        if (childBirthday.HasPlace) {
+                            string strPlace = childBirthday.Place.StringValue;
+                            if (strPlace != "") {
+                                birthPlace = string.Concat(" ", GMConfig.Instance.PlaceWord, " ", EscapeHTML(strPlace, false));
                             }
                         }
                         sourceRefs = AddSources(ref fReferenceList, childBirthday.SourceCitations);
@@ -568,7 +573,7 @@ namespace GEDmill.HTML
         // Works through all the events records for this individual and extracts information from them.
         private void AddEvents()
         {
-            if (fIndiRec.Events != null && !fConcealed) {
+            if (fIndiRec.HasEvents && !fConcealed) {
                 foreach (GDMCustomEvent ies in fIndiRec.Events) {
                     ProcessEvent(ies, null);
                     if (ies.GetTagName() == "TITL") {
@@ -1085,14 +1090,15 @@ namespace GEDmill.HTML
             string alternativePlace = "";
             if (es.Date != null) {
                 date = es.Date;
-                if (es.Place != null) {
+                if (es.HasPlace) {
                     place = es.Place.StringValue;
                 }
 
-                if (es.Address != null) {
-                    address = es.Address.Lines.Text;
-                    if (es.Address.WebPages.Count > 0)
-                        url = es.Address.WebPages[0].StringValue;
+                if (es.HasAddress) {
+                    var addr = es.Address;
+                    address = addr.Lines.Text;
+                    if (addr.WebPages.Count > 0)
+                        url = addr.WebPages[0].StringValue;
                 }
                 cause = es.Cause;
             }

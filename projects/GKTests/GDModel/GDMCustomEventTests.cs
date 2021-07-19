@@ -46,8 +46,6 @@ namespace GDModel
             using (GDMIndividualAttribute customEvent = new GDMIndividualAttribute()) {
                 Assert.IsNotNull(customEvent);
 
-                Assert.IsNotNull(customEvent.Address);
-
                 customEvent.Date.ParseString("28 DEC 1990");
                 string dateTest = "28.12.1990";
                 Assert.AreEqual(TestUtils.ParseDT(dateTest), customEvent.Date.GetDateTime());
@@ -77,13 +75,16 @@ namespace GDModel
                 customEvent.Restriction = GDMRestriction.rnLocked;
                 Assert.AreEqual(GDMRestriction.rnLocked, customEvent.Restriction);
 
-
                 GDMLines strs = new GDMLines("test");
                 customEvent.PhysicalDescription = strs;
                 Assert.AreEqual(strs.Text, customEvent.PhysicalDescription.Text);
 
-                customEvent.Address.AddEmailAddress("email");
-                Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
+                Assert.IsFalse(customEvent.HasAddress);
+                var addr = customEvent.Address;
+                Assert.IsNotNull(addr);
+                addr.AddEmailAddress("email");
+                Assert.AreEqual("email", addr.EmailAddresses[0].StringValue);
+                Assert.IsTrue(customEvent.HasAddress);
             }
 
             using (GDMIndividualEvent customEvent = new GDMIndividualEvent()) {
@@ -137,15 +138,17 @@ namespace GDModel
                                     "3 TITL event media title\r\n", buf1);
                 }
 
-                customEvent.Address.AddEmailAddress("email");
-                Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
+                var addr = customEvent.Address;
+                addr.AddEmailAddress("email");
+                Assert.AreEqual("email", addr.EmailAddresses[0].StringValue);
             }
 
             using (GDMFamilyEvent customEvent = new GDMFamilyEvent()) {
                 Assert.IsNotNull(customEvent);
 
-                customEvent.Address.AddEmailAddress("email");
-                Assert.AreEqual("email", customEvent.Address.EmailAddresses[0].StringValue);
+                var addr = customEvent.Address;
+                addr.AddEmailAddress("email");
+                Assert.AreEqual("email", addr.EmailAddresses[0].StringValue);
             }
         }
 

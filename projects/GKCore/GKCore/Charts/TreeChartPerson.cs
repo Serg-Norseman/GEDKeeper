@@ -349,9 +349,8 @@ namespace GKCore.Charts
                         }
                     }
 
-                    if (options.SignsVisible) {
-                        EnumSet<SpecialUserRef> signs = EnumSet<SpecialUserRef>.Create();
-
+                    fSigns = EnumSet<SpecialUserRef>.Create();
+                    if (options.SignsVisible && fRec.HasUserReferences) {
                         int num = fRec.UserReferences.Count;
                         for (int i = 0; i < num; i++) {
                             string rs = fRec.UserReferences[i].StringValue;
@@ -359,14 +358,10 @@ namespace GKCore.Charts
                             for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
                                 string sur = LangMan.LS(GKData.SpecialUserRefs[(int)cps].Title);
                                 if (rs == sur) {
-                                    signs.Include(cps);
+                                    fSigns.Include(cps);
                                 }
                             }
                         }
-
-                        fSigns = signs;
-                    } else {
-                        fSigns = EnumSet<SpecialUserRef>.Create();
                     }
 
                     if (options.PortraitsVisible) {

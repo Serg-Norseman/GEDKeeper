@@ -672,8 +672,8 @@ namespace GKCore.Tools
             var husb = tree.GetPtrValue<GDMIndividualRecord>(fRec.Husband);
             var wife = tree.GetPtrValue<GDMIndividualRecord>(fRec.Wife);
 
-            bool empty = (fRec.Notes.Count == 0 && fRec.SourceCitations.Count == 0 && fRec.MultimediaLinks.Count == 0 && fRec.UserReferences.Count == 0);
-            empty = empty && (fRec.Events.Count == 0 && fRec.Children.Count == 0);
+            bool empty = (!fRec.HasNotes && !fRec.HasSourceCitations && !fRec.HasMultimediaLinks && !fRec.HasUserReferences);
+            empty = empty && (!fRec.HasEvents && fRec.Children.Count == 0);
             empty = empty && (husb == null && wife == null);
 
             if (empty) {
@@ -888,7 +888,7 @@ namespace GKCore.Tools
 
         private static void CheckRelations_CheckNotes(GDMTree tree, List<GDMRecord> splitList, IGDMStructWithNotes tag)
         {
-            if (tag == null) return;
+            if (tag == null || !tag.HasNotes) return;
 
             for (int i = 0, num = tag.Notes.Count; i < num; i++) {
                 CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(tag.Notes[i]));
@@ -897,7 +897,7 @@ namespace GKCore.Tools
 
         private static void CheckRelations_CheckSourceCit(GDMTree tree, List<GDMRecord> splitList, IGDMStructWithSourceCitations tag)
         {
-            if (tag == null) return;
+            if (tag == null || !tag.HasSourceCitations) return;
 
             for (int i = 0, num = tag.SourceCitations.Count; i < num; i++) {
                 CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(tag.SourceCitations[i]));
@@ -906,7 +906,7 @@ namespace GKCore.Tools
 
         private static void CheckRelations_CheckMediaLink(GDMTree tree, List<GDMRecord> splitList, IGDMStructWithMultimediaLinks tag)
         {
-            if (tag == null) return;
+            if (tag == null || !tag.HasMultimediaLinks) return;
 
             for (int i = 0, num = tag.MultimediaLinks.Count; i < num; i++) {
                 CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(tag.MultimediaLinks[i]));
@@ -947,19 +947,25 @@ namespace GKCore.Tools
                 CheckRelations_CheckFamily(tree, splitList, tree.GetPtrValue(sfl));
             }
 
-            for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                CheckRelations_CheckSWL(tree, splitList, iRec.Events[i]);
+            if (iRec.HasEvents) {
+                for (int i = 0, num = iRec.Events.Count; i < num; i++) {
+                    CheckRelations_CheckSWL(tree, splitList, iRec.Events[i]);
+                }
             }
 
-            for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
-                var asso = iRec.Associations[i];
-                CheckRelations_CheckNotes(tree, splitList, asso);
-                CheckRelations_CheckSourceCit(tree, splitList, asso);
-                CheckRelations_CheckIndividual(tree, splitList, tree.GetPtrValue(asso));
+            if (iRec.HasAssociations) {
+                for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
+                    var asso = iRec.Associations[i];
+                    CheckRelations_CheckNotes(tree, splitList, asso);
+                    CheckRelations_CheckSourceCit(tree, splitList, asso);
+                    CheckRelations_CheckIndividual(tree, splitList, tree.GetPtrValue(asso));
+                }
             }
 
-            for (int i = 0, num = iRec.Groups.Count; i < num; i++) {
-                CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(iRec.Groups[i]));
+            if (iRec.HasGroups) {
+                for (int i = 0, num = iRec.Groups.Count; i < num; i++) {
+                    CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(iRec.Groups[i]));
+                }
             }
         }
 
@@ -976,8 +982,10 @@ namespace GKCore.Tools
                 CheckRelations_CheckRecord(tree, splitList, tree.GetPtrValue<GDMRecord>(fRec.Children[i]));
             }
 
-            for (int i = 0, num = fRec.Events.Count; i < num; i++) {
-                CheckRelations_CheckSWL(tree, splitList, fRec.Events[i]);
+            if (fRec.HasEvents) {
+                for (int i = 0, num = fRec.Events.Count; i < num; i++) {
+                    CheckRelations_CheckSWL(tree, splitList, fRec.Events[i]);
+                }
             }
         }
 
@@ -1319,6 +1327,7 @@ namespace GKCore.Tools
 
         private static void SearchPlaces_CheckEventPlace(GDMTree tree, StringList placesList, GDMCustomEvent evt, bool checkLocation)
         {
+            if (!evt.HasPlace) return;
             string placeStr = evt.Place.StringValue;
             if (string.IsNullOrEmpty(placeStr)) return;
 
@@ -1354,8 +1363,7 @@ namespace GKCore.Tools
 
             SearchPlaces_Clear(placesList);
 
-            try
-            {
+            try {
                 int recsCount = tree.RecordsCount;
                 pc.ProgressInit(LangMan.LS(LSID.LSID_PlacesPrepare), recsCount);
 
@@ -1363,7 +1371,7 @@ namespace GKCore.Tools
                     pc.ProgressStep();
 
                     var evsRec = tree[i] as GDMRecordWithEvents;
-                    if (evsRec != null) {
+                    if (evsRec != null && evsRec.HasEvents) {
                         int num2 = evsRec.Events.Count;
                         for (int j = 0; j < num2; j++) {
                             GDMCustomEvent evt = evsRec.Events[j];

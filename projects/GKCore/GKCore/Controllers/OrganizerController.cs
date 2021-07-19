@@ -63,10 +63,10 @@ namespace GKCore.Controllers
             fView.WebsList.ResizeColumn(1);
         }
 
-        private void PrepareEvent(string iName, GDMCustomEvent ev)
+        private void PrepareEvent(string iName, IGDMStructWithAddress ev)
         {
+            if (!ev.HasAddress) return;
             GDMAddress addr = ev.Address;
-            if (addr == null) return;
 
             string addrStr = addr.Lines.Text.Trim();
             if (addrStr != "") {

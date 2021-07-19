@@ -544,13 +544,13 @@ namespace GKCore.Charts
                     break;
 
                 case FilterGroupMode.None:
-                    if (person.SourceCitations.Count != 0) {
+                    if (person.HasSourceCitations) {
                         result = false;
                     }
                     break;
 
                 case FilterGroupMode.Any:
-                    if (person.SourceCitations.Count == 0) {
+                    if (!person.HasSourceCitations) {
                         result = false;
                     }
                     break;

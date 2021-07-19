@@ -29,6 +29,10 @@ namespace GDModel
 
     public interface IGDMTag : IGDMObject
     {
+        int Id { get; }
+        string StringValue { get; set; }
+        GDMList<GDMTag> SubTags { get; }
+
         bool IsEmpty();
     }
 
@@ -41,6 +45,7 @@ namespace GDModel
 
         void Clear();
         bool IsEmpty();
+        void TrimExcess();
     }
 
 
@@ -65,6 +70,13 @@ namespace GDModel
     public interface IGDMTreeEnumerator<T> : IGDMTreeEnumerator where T : GDMRecord
     {
         bool MoveNext(out T current);
+    }
+
+
+    public interface IGDMStructWithAddress : IGDMObject
+    {
+        bool HasAddress { get; }
+        GDMAddress Address { get; }
     }
 
 
@@ -116,11 +128,62 @@ namespace GDModel
     }
 
 
-    public interface IGDMRecordWithEvents : IGDMObject
+    public interface IGDMEvent : IGDMStructWithLists, IGDMStructWithAddress, IGDMStructWithPlace
     {
+        string Agency { get; set; }
+        string Cause { get; set; }
+        string Classification { get; set; }
+        GDMDateValue Date { get; }
+        string ReligiousAffilation { get; set; }
+        GDMRestriction Restriction { get; set; }
+    }
+
+
+    public interface IGDMRecord : IGDMStructWithLists, IGDMStructWithUserReferences
+    {
+        string AutomatedRecordID { get; }
+        GDMChangeDate ChangeDate { get; }
+        GDMRecordType RecordType { get; }
+        string UID { get; set; }
+        string XRef { get; }
+    }
+
+
+    public interface IGDMRecordWithEvents : IGDMRecord
+    {
+        bool HasEvents { get; }
         GDMList<GDMCustomEvent> Events { get; }
+
+        GDMRestriction Restriction { get; set; }
         
         GDMCustomEvent AddEvent(GDMCustomEvent evt);
         GDMCustomEvent FindEvent(string eventName);
+    }
+
+
+    public interface IGDMIndividualRecord : IGDMRecordWithEvents
+    {
+        bool HasAssociations { get; }
+        GDMList<GDMAssociation> Associations { get; }
+
+        bool Bookmark { get; set; }
+        GDMList<GDMChildToFamilyLink> ChildToFamilyLinks { get; }
+
+        bool HasGroups { get; }
+        GDMList<GDMPointer> Groups { get; }
+
+        bool Patriarch { get; set; }
+        GDMList<GDMPersonalName> PersonalNames { get; }
+        GDMSex Sex { get; set; }
+        GDMList<GDMSpouseToFamilyLink> SpouseToFamilyLinks { get; }
+    }
+
+
+    public interface IGDMFamilyRecord : IGDMRecordWithEvents
+    {
+        GDMList<GDMIndividualLink> Children { get; }
+        GDMIndividualLink Husband { get; }
+        GDMIndividualLink Wife { get; }
+        GDMMarriageStatus Status { get; set; }
     }
 }

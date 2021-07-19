@@ -25,7 +25,7 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public abstract class GDMCustomEvent : GDMValueTag, IGDMStructWithLists, IGDMStructWithPlace
+    public abstract class GDMCustomEvent : GDMValueTag, IGDMEvent
     {
         private GDMAddress fAddress;
         private string fAgency;
@@ -39,6 +39,11 @@ namespace GDModel
         private GDMList<GDMSourceCitation> fSourceCitations;
         private GDMList<GDMMultimediaLink> fMultimediaLinks;
 
+
+        public bool HasAddress
+        {
+            get { return fAddress != null && !fAddress.IsEmpty(); }
+        }
 
         public GDMAddress Address
         {
@@ -263,9 +268,9 @@ namespace GDModel
             if (matchParams.CheckEventPlaces) {
                 matches += 1;
 
-                if (this.Place == null && ev.Place == null) {
+                if (!this.HasPlace && !ev.HasPlace) {
                     locMatch = 100.0f;
-                } else if (this.Place != null && ev.Place != null && this.Place.StringValue == ev.Place.StringValue) {
+                } else if (this.HasPlace && ev.HasPlace && this.Place.StringValue == ev.Place.StringValue) {
                     locMatch = 100.0f;
                 }
             }

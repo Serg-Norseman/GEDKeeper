@@ -112,6 +112,7 @@ namespace GKTimeLinePlugin
                 if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
                 GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
+                if (!iRec.HasEvents) continue;
 
                 for (int k = 0, evNum = iRec.Events.Count; k < evNum; k++) {
                     GDMCustomEvent ev = iRec.Events[k];

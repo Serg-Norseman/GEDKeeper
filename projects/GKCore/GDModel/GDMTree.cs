@@ -651,6 +651,8 @@ namespace GDModel
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = fRecords[i];
+                if (!rec.HasSourceCitations) continue;
+
                 for (int j = rec.SourceCitations.Count - 1; j >= 0; j--) {
                     if (rec.SourceCitations[j].XRef == srcRec.XRef) {
                         rec.SourceCitations.DeleteAt(j);
@@ -711,13 +713,15 @@ namespace GDModel
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
                 var evsRec = fRecords[i] as GDMRecordWithEvents;
-                if (evsRec != null) {
-                    for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
-                        GDMPointer evLocation = evsRec.Events[j].Place.Location;
+                if (evsRec == null || !evsRec.HasEvents) continue;
 
-                        if (evLocation.XRef == locRec.XRef) {
-                            evLocation.XRef = string.Empty;
-                        }
+                for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
+                    var evt = evsRec.Events[j];
+                    if (!evt.HasPlace) continue;
+
+                    GDMPointer evLocation = evt.Place.Location;
+                    if (evLocation.XRef == locRec.XRef) {
+                        evLocation.XRef = string.Empty;
                     }
                 }
             }
@@ -733,13 +737,15 @@ namespace GDModel
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
                 var evsRec = fRecords[i] as GDMRecordWithEvents;
-                if (evsRec != null) {
-                    for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
-                        GDMPlace evPlace = evsRec.Events[j].Place;
+                if (evsRec == null || !evsRec.HasEvents) continue;
 
-                        if (evPlace.Location.XRef == locRec.XRef) {
-                            evPlace.StringValue = locRec.LocationName;
-                        }
+                for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
+                    var evt = evsRec.Events[j];
+                    if (!evt.HasPlace) continue;
+
+                    GDMPlace evPlace = evt.Place;
+                    if (evPlace.Location.XRef == locRec.XRef) {
+                        evPlace.StringValue = locRec.LocationName;
                     }
                 }
             }

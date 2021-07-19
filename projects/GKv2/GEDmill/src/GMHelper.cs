@@ -389,16 +389,20 @@ namespace GEDmill
             }
 
             // Restrict sources connected with events
-            foreach (GDMCustomEvent ies in iRec.Events) {
-                foreach (GDMSourceCitation sc in ies.SourceCitations) {
-                    RestrictSource(tree, sc, true);
+            if (iRec.HasEvents) {
+                foreach (GDMCustomEvent ies in iRec.Events) {
+                    foreach (GDMSourceCitation sc in ies.SourceCitations) {
+                        RestrictSource(tree, sc, true);
+                    }
                 }
             }
 
-            // Restrict sources connected with m_associationStructures
-            foreach (GDMAssociation ass in iRec.Associations) {
-                foreach (GDMSourceCitation sc in ass.SourceCitations) {
-                    RestrictSource(tree, sc, true);
+            // Restrict sources connected with associations
+            if (iRec.HasAssociations) {
+                foreach (GDMAssociation ass in iRec.Associations) {
+                    foreach (GDMSourceCitation sc in ass.SourceCitations) {
+                        RestrictSource(tree, sc, true);
+                    }
                 }
             }
         }
@@ -480,10 +484,8 @@ namespace GEDmill
                         }
                     }
 
-                    var recordWithEvents = inRecord as GDMRecordWithEvents;
-                    if (recordWithEvents != null) {
-                        GDMRecordWithEvents evsRec = recordWithEvents;
-
+                    var evsRec = inRecord as GDMRecordWithEvents;
+                    if (evsRec != null && evsRec.HasEvents) {
                         num = evsRec.Events.Count;
                         for (int i = 0; i < num; i++) {
                             var evt = evsRec.Events[i];

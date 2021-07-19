@@ -127,10 +127,10 @@ namespace GEDmill.HTML
                 f.WriteLine("          </div> <!-- names -->");
                 f.WriteLine("        </div> <!-- summary -->");
 
-                // Collect together multimedia links.
-                if (GMConfig.Instance.AllowMultimedia) {
-                    // Fill m_alMultimediaList:
-                    AddMultimedia(fSourceRecord.MultimediaLinks, string.Concat(fSourceRecord.XRef, "mms"), string.Concat(fSourceRecord.XRef, "mos"), GMConfig.Instance.MaxSourceImageWidth, GMConfig.Instance.MaxSourceImageHeight, stats);
+                // Collect together multimedia links
+                if (GMConfig.Instance.AllowMultimedia && fSourceRecord.HasMultimediaLinks) {
+                    AddMultimedia(fSourceRecord.MultimediaLinks, string.Concat(fSourceRecord.XRef, "mms"), string.Concat(fSourceRecord.XRef, "mos"), 
+                                  GMConfig.Instance.MaxSourceImageWidth, GMConfig.Instance.MaxSourceImageHeight, stats);
                 }
 
                 // Add pics

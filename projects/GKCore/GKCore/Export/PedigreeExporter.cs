@@ -218,7 +218,7 @@ namespace GKCore.Export
             var evList = new ExtList<PedigreeEvent>(true);
             try {
                 int i;
-                if (person.IRec.Events.Count > 0) {
+                if (person.IRec.HasEvents) {
                     fWriter.AddParagraph(LangMan.LS(LSID.LSID_Events) + ":", fTextFont);
 
                     int num = person.IRec.Events.Count;
@@ -269,7 +269,7 @@ namespace GKCore.Export
                 evList.Dispose();
             }
 
-            if (fOptions.PedigreeOptions.IncludeNotes && person.IRec.Notes.Count != 0) {
+            if (fOptions.PedigreeOptions.IncludeNotes && person.IRec.HasNotes) {
                 fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPNotes) + ":", fTextFont);
 
                 fWriter.BeginList();
@@ -286,7 +286,7 @@ namespace GKCore.Export
 
         private void WriteCompactFmt(PedigreePerson person)
         {
-            if (fOptions.PedigreeOptions.IncludeNotes && person.IRec.Notes.Count != 0) {
+            if (fOptions.PedigreeOptions.IncludeNotes && person.IRec.HasNotes) {
                 int num = person.IRec.Notes.Count;
                 for (int i = 0; i < num; i++) {
                     GDMLines noteLines = fTree.GetNoteLines(person.IRec.Notes[i]);
@@ -372,7 +372,7 @@ namespace GKCore.Export
 
                     string dt = GKUtils.GEDCOMEventToDateStr(evt, dateFormat, false);
                     li = dt + ": " + st + ".";
-                    if (evt.Place.StringValue != "") {
+                    if (evt.HasPlace && evt.Place.StringValue != "") {
                         li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
                     }
 
@@ -405,7 +405,7 @@ namespace GKCore.Export
             res.FamilyOrder = familyOrder;
             fPersonList.Add(res);
 
-            if (fOptions.PedigreeOptions.IncludeSources) {
+            if (fOptions.PedigreeOptions.IncludeSources && iRec.HasSourceCitations) {
                 int num = iRec.SourceCitations.Count;
                 for (int i = 0; i < num; i++) {
                     var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(iRec.SourceCitations[i]);

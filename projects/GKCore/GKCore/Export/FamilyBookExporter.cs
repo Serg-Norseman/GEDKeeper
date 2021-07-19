@@ -350,7 +350,7 @@ namespace GKCore.Export
                 fWriter.EndParagraph();
             }
 
-            if (IncludeEvents && iRec.Events.Count != 0) {
+            if (IncludeEvents && iRec.HasEvents) {
                 int num = iRec.Events.Count;
                 for (int i = 0; i < num; i++) {
                     GDMCustomEvent evt = iRec.Events[i];
@@ -371,7 +371,7 @@ namespace GKCore.Export
                 }
             }
 
-            if (IncludeNotes && iRec.Notes.Count != 0) {
+            if (IncludeNotes && iRec.HasNotes) {
                 int num = iRec.Notes.Count;
                 for (int i = 0; i < num; i++) {
                     GDMLines noteLines = fTree.GetNoteLines(iRec.Notes[i]);

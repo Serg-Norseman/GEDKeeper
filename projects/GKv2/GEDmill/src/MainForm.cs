@@ -1305,7 +1305,7 @@ namespace GEDmill
             lvItem.SubItems.Add(new LVNumberItem(deathDate, false));
             lvItem.SubItems.Add(new LVStringItem(ir.XRef));
 
-            string uref = (ir.UserReferences.Count > 0) ? ir.UserReferences[0].StringValue : "";
+            string uref = (ir.HasUserReferences) ? ir.UserReferences[0].StringValue : "";
             lvItem.SubItems.Add(new LVStringItem(uref));
 
             int nVisiblePics, nTotalPics;

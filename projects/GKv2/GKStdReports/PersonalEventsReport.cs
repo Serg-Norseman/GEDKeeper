@@ -72,8 +72,10 @@ namespace GKStdReports
             fPerson = selectedPerson;
         }
 
-        private void ExtractEvents(EventType type, List<PersonalEvent> list, IGDMRecordWithEvents record)
+        private void ExtractEvents(EventType type, IList<PersonalEvent> list, IGDMRecordWithEvents record)
         {
+            if (!record.HasEvents) return;
+
             int num = record.Events.Count;
             for (int i = 0; i < num; i++) {
                 GDMCustomEvent evt = record.Events[i];
@@ -146,7 +148,7 @@ namespace GKStdReports
                 }
 
                 string li = dt + ": " + st + ".";
-                if (evt.Place.StringValue != "") {
+                if (evt.HasPlace && evt.Place.StringValue != "") {
                     li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
                 }
                 fWriter.AddListItem("   " + li, fTextFont);

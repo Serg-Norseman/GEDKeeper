@@ -578,13 +578,11 @@ namespace GEDmill.HTML
         protected static string GetIndividualHTMLFilename(GDMIndividualRecord ir)
         {
             string relativeFilename = string.Concat("indi", ir.XRef, ".", GMConfig.Instance.HtmlExtension);
-            if (GMConfig.Instance.UserRecFilename) {
-                if (ir.UserReferences.Count > 0) {
-                    GDMUserReference urn = ir.UserReferences[0];
-                    string filenameUserRef = EscapeFilename(urn.StringValue);
-                    if (filenameUserRef.Length > 0) {
-                        relativeFilename = string.Concat("indi", filenameUserRef, ".", GMConfig.Instance.HtmlExtension);
-                    }
+            if (GMConfig.Instance.UserRecFilename && ir.HasUserReferences) {
+                GDMUserReference urn = ir.UserReferences[0];
+                string filenameUserRef = EscapeFilename(urn.StringValue);
+                if (filenameUserRef.Length > 0) {
+                    relativeFilename = string.Concat("indi", filenameUserRef, ".", GMConfig.Instance.HtmlExtension);
                 }
             }
             return relativeFilename;

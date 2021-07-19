@@ -51,6 +51,7 @@ namespace GKCore.Lists
 
             try {
                 fSheetList.ClearItems();
+                if (!person.HasAssociations) return;
 
                 foreach (GDMAssociation ast in person.Associations) {
                     var relIndi = fBaseContext.Tree.GetPtrValue(ast);
