@@ -39,9 +39,9 @@ namespace GDModel
     /// </summary>
     public sealed class GDMPersonalName : GDMTag, IGDMStructWithNotes, IGDMStructWithSourceCitations
     {
-        private string fFirstPart;
-        private string fSurname;
-        private string fLastPart;
+        private string fFirstPart; // GIVN | GIVN + _PATN | NPFX + GIVN
+        private string fSurname; // SURN | SPFX + SURN
+        private string fLastPart; // NSFX
 
         private GDMLanguageID fLanguage;
         private GDMNameType fNameType;

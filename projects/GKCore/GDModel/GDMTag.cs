@@ -140,6 +140,13 @@ namespace GDModel
             return tag;
         }
 
+        public GDMTag AddTag(string tagName, string tagValue)
+        {
+            int tagId = GEDCOMTagsTable.Lookup(tagName);
+            var tag = new GDMValueTag(tagId, tagValue);
+            return AddTag(tag);
+        }
+
         /// <summary>
         /// Copying the sub-tags from the source to the current tag.
         /// </summary>
@@ -278,6 +285,52 @@ namespace GDModel
         public virtual string ParseString(string strValue)
         {
             return string.Empty;
+        }
+
+        public string GetTagStringValue(string tagName)
+        {
+            GDMTag tag = FindTag(tagName, 0);
+            string result = (tag == null) ? string.Empty : tag.StringValue;
+            return result;
+        }
+
+        public void SetTagStringValue(string tagName, string value)
+        {
+            string su = tagName;
+
+            GDMTag P = FindTag(su, 0);
+
+            if (P != null) {
+                P.StringValue = value;
+            } else {
+                GDMTag O = this;
+                while (su != string.Empty) {
+                    string S;
+
+                    int index = su.IndexOf('\\');
+                    if (index >= 0) {
+                        S = su.Substring(0, index);
+                        su = su.Substring(index + 1);
+                    } else {
+                        S = su;
+                        su = "";
+                    }
+
+                    P = O.FindTag(S, 0);
+                    if (P == null) {
+                        if (su == string.Empty) {
+                            P = O.AddTag(S, value);
+                        } else {
+                            P = O.AddTag(S, "");
+                        }
+                    } else {
+                        if (su == string.Empty) {
+                            P.StringValue = value;
+                        }
+                    }
+                    O = P;
+                }
+            }
         }
 
         #endregion

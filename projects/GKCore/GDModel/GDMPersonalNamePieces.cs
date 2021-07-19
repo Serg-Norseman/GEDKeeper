@@ -44,60 +44,110 @@ namespace GDModel
             get { return fPrefix; }
             set { fPrefix = value; }
         }
+        /*public string Prefix
+        {
+            get { return GetTagStringValue("NPFX"); }
+            set { SetTagStringValue("NPFX", value); }
+        }*/
 
         public string Given
         {
             get { return fGiven; }
             set { fGiven = value; }
         }
+        /*public string Given
+        {
+            get { return GetTagStringValue("GIVN"); }
+            set { SetTagStringValue("GIVN", value); }
+        }*/
 
         public string Nickname
         {
             get { return fNickname; }
             set { fNickname = value; }
         }
+        /*public string Nickname
+        {
+            get { return GetTagStringValue("NICK"); }
+            set { SetTagStringValue("NICK", value); }
+        }*/
 
         public string SurnamePrefix
         {
             get { return fSurnamePrefix; }
             set { fSurnamePrefix = value; }
         }
+        /*public string SurnamePrefix
+        {
+            get { return GetTagStringValue("SPFX"); }
+            set { SetTagStringValue("SPFX", value); }
+        }*/
 
         public string Surname
         {
             get { return fSurname; }
             set { fSurname = value; }
         }
+        /*public string Surname
+        {
+            get { return GetTagStringValue("SURN"); }
+            set { SetTagStringValue("SURN", value); }
+        }*/
 
         public string Suffix
         {
             get { return fSuffix; }
             set { fSuffix = value; }
         }
+        /*public string Suffix
+        {
+            get { return GetTagStringValue("NSFX"); }
+            set { SetTagStringValue("NSFX", value); }
+        }*/
 
         public string PatronymicName
         {
             get { return fPatronymicName; }
             set { fPatronymicName = value; }
         }
+        /*public string PatronymicName
+        {
+            get { return GetTagStringValue("_PATN"); }
+            set { SetTagStringValue("_PATN", value); }
+        }*/
 
         public string MarriedName
         {
             get { return fMarriedName; }
             set { fMarriedName = value; }
         }
+        /*public string MarriedName
+        {
+            get { return GetTagStringValue("_MARN"); }
+            set { SetTagStringValue("_MARN", value); }
+        }*/
 
         public string ReligiousName
         {
             get { return fReligiousName; }
             set { fReligiousName = value; }
         }
+        /*public string ReligiousName
+        {
+            get { return GetTagStringValue("_RELN"); }
+            set { SetTagStringValue("_RELN", value); }
+        }*/
 
         public string CensusName
         {
             get { return fCensusName; }
             set { fCensusName = value; }
         }
+        /*public string CensusName
+        {
+            get { return GetTagStringValue("_CENN"); }
+            set { SetTagStringValue("_CENN", value); }
+        }*/
 
 
         public GDMPersonalNamePieces()
