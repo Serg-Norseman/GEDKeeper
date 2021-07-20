@@ -113,11 +113,10 @@ namespace GKCore.Cultures
             }
 
             // extracting sub-tags parts (high priority if any)
-            var pnPieces = personalName.Pieces;
-            string surname = pnPieces.Surname;
-            string name = pnPieces.Given;
-            string patronymic = pnPieces.PatronymicName;
-            string marriedSurname = pnPieces.MarriedName;
+            string surname = personalName.Pieces_Surname;
+            string name = personalName.Pieces_Given;
+            string patronymic = personalName.Pieces_PatronymicName;
+            string marriedSurname = personalName.Pieces_MarriedName;
 
             if (hasPatronymic && !string.IsNullOrEmpty(name)) {
                 string[] parts = name.Split(' ');

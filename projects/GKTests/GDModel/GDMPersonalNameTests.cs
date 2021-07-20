@@ -102,41 +102,35 @@ namespace GDModel
 
             //
 
-            GDMPersonalNamePieces pnPieces = persName.Pieces;
-            
-            pnPieces.Prefix = "Prefix";
-            Assert.AreEqual("Prefix", pnPieces.Prefix);
+            persName.Pieces_Prefix = "Prefix";
+            Assert.AreEqual("Prefix", persName.Pieces_Prefix);
 
-            pnPieces.Given = "Given";
-            Assert.AreEqual("Given", pnPieces.Given);
+            persName.Pieces_Given = "Given";
+            Assert.AreEqual("Given", persName.Pieces_Given);
 
-            pnPieces.Nickname = "Nickname";
-            Assert.AreEqual("Nickname", pnPieces.Nickname);
+            persName.Pieces_Nickname = "Nickname";
+            Assert.AreEqual("Nickname", persName.Pieces_Nickname);
 
-            pnPieces.SurnamePrefix = "SurnamePrefix";
-            Assert.AreEqual("SurnamePrefix", pnPieces.SurnamePrefix);
+            persName.Pieces_SurnamePrefix = "SurnamePrefix";
+            Assert.AreEqual("SurnamePrefix", persName.Pieces_SurnamePrefix);
 
-            pnPieces.Surname = "Surname";
-            Assert.AreEqual("Surname", pnPieces.Surname);
+            persName.Pieces_Surname = "Surname";
+            Assert.AreEqual("Surname", persName.Pieces_Surname);
 
-            pnPieces.Suffix = "Suffix";
-            Assert.AreEqual("Suffix", pnPieces.Suffix);
+            persName.Pieces_Suffix = "Suffix";
+            Assert.AreEqual("Suffix", persName.Pieces_Suffix);
 
-            pnPieces.PatronymicName = "PatronymicName";
-            Assert.AreEqual("PatronymicName", pnPieces.PatronymicName);
+            persName.Pieces_PatronymicName = "PatronymicName";
+            Assert.AreEqual("PatronymicName", persName.Pieces_PatronymicName);
 
-            pnPieces.MarriedName = "MarriedName";
-            Assert.AreEqual("MarriedName", pnPieces.MarriedName);
+            persName.Pieces_MarriedName = "MarriedName";
+            Assert.AreEqual("MarriedName", persName.Pieces_MarriedName);
 
-            pnPieces.ReligiousName = "ReligiousName";
-            Assert.AreEqual("ReligiousName", pnPieces.ReligiousName);
+            persName.Pieces_ReligiousName = "ReligiousName";
+            Assert.AreEqual("ReligiousName", persName.Pieces_ReligiousName);
 
-            pnPieces.CensusName = "CensusName";
-            Assert.AreEqual("CensusName", pnPieces.CensusName);
-
-            Assert.Throws(typeof(ArgumentException), () => {
-                pnPieces.Assign(null);
-            });
+            persName.Pieces_CensusName = "CensusName";
+            Assert.AreEqual("CensusName", persName.Pieces_CensusName);
 
             //
 
@@ -290,13 +284,6 @@ namespace GDModel
             string value = "the III";
             instance.LastPart = value;
             Assert.AreEqual(value, instance.LastPart);
-        }
-
-        [Test]
-        public void Test_GetPieces()
-        {
-            GDMPersonalName instance = new GDMPersonalName();
-            Assert.IsNotNull(instance.Pieces);
         }
 
         [Test]

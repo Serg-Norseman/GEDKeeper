@@ -124,13 +124,12 @@ namespace GKCore.Controllers
 
                 GKUtils.SetNameParts(persName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
 
-                GDMPersonalNamePieces pieces = persName.Pieces;
-                pieces.Nickname = fView.Nickname.Text;
-                pieces.Prefix = fView.NamePrefix.Text;
-                pieces.SurnamePrefix = fView.SurnamePrefix.Text;
-                pieces.Suffix = fView.NameSuffix.Text;
+                persName.Pieces_Nickname = fView.Nickname.Text;
+                persName.Pieces_Prefix = fView.NamePrefix.Text;
+                persName.Pieces_SurnamePrefix = fView.SurnamePrefix.Text;
+                persName.Pieces_Suffix = fView.NameSuffix.Text;
                 if (IsExtendedWomanSurname()) {
-                    pieces.MarriedName = fView.MarriedSurname.Text;
+                    persName.Pieces_MarriedName = fView.MarriedSurname.Text;
                 }
 
                 fPerson.Sex = (GDMSex)fView.SexCombo.SelectedIndex;
@@ -276,13 +275,12 @@ namespace GKCore.Controllers
                 fView.Name.Text = parts.Name;
                 fView.Patronymic.Text = parts.Patronymic;
 
-                var pnPieces = np.Pieces;
-                fView.NamePrefix.Text = pnPieces.Prefix;
-                fView.Nickname.Text = pnPieces.Nickname;
-                fView.SurnamePrefix.Text = pnPieces.SurnamePrefix;
-                fView.NameSuffix.Text = pnPieces.Suffix;
+                fView.NamePrefix.Text = np.Pieces_Prefix;
+                fView.Nickname.Text = np.Pieces_Nickname;
+                fView.SurnamePrefix.Text = np.Pieces_SurnamePrefix;
+                fView.NameSuffix.Text = np.Pieces_Suffix;
 
-                fView.MarriedSurname.Text = pnPieces.MarriedName;
+                fView.MarriedSurname.Text = np.Pieces_MarriedName;
             } else {
                 culture = fBase.Context.Culture;
 

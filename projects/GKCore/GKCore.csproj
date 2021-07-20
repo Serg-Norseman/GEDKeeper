@@ -175,7 +175,6 @@
     <Compile Include="GDModel\GDMNoteRecord.cs" />
     <Compile Include="GDModel\GDMNotes.cs" />
     <Compile Include="GDModel\GDMPersonalName.cs" />
-    <Compile Include="GDModel\GDMPersonalNamePieces.cs" />
     <Compile Include="GDModel\GDMPlace.cs" />
     <Compile Include="GDModel\GDMPointer.cs" />
     <Compile Include="GDModel\GDMPointerWithNotes.cs" />

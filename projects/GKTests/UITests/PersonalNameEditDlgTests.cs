@@ -77,7 +77,7 @@ namespace GKUI.Forms
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual("sample text", fPersonalName.Pieces.Surname);
+            Assert.AreEqual("sample text", fPersonalName.Pieces_Surname);
         }
 
         #region Handlers for external tests
