@@ -51,22 +51,21 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            fContext.Tree.Header.Language = GDMLanguageID.Russian;
+
+            var iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
             GDMPersonalName pName = iRec.PersonalNames[0];
             Assert.AreEqual("Ivanov", pName.Surname);
-            Assert.AreEqual("Ivan Ivanovich", pName.FirstPart);
+            Assert.AreEqual("Ivan", pName.Given);
+            Assert.AreEqual("Ivanovich", pName.PatronymicName);
 
-            pName.SetNameParts("Ivan Ivanovich", "Ivanov", "testLastPart");
+            pName.ParseString("Ivan Ivanovich /Ivanov/ jr.");
             Assert.AreEqual("Ivanov", pName.Surname);
-            Assert.AreEqual("Ivan Ivanovich", pName.FirstPart);
-            Assert.AreEqual("testLastPart", pName.NameSuffix);
+            Assert.AreEqual("Ivan Ivanovich", pName.Given);
+            Assert.AreEqual("jr.", pName.NameSuffix);
 
-//            GEDCOMPersonalNamePieces pieces = pName.Pieces;
-//            Assert.AreEqual(pieces.Surname, "surname");
-//            Assert.AreEqual(pieces.Name, "name");
-//            Assert.AreEqual(pieces.PatronymicName, "patr");
-
+            pName.PatronymicName = string.Empty;
             var parts = GKUtils.GetNameParts(fContext.Tree, iRec);
             Assert.AreEqual("Ivanov", parts.Surname);
             Assert.AreEqual("Ivan", parts.Name);
@@ -82,55 +81,43 @@ namespace GDModel
 
             //
 
-            persName.SetNameParts("Petr", "Ivanov", "Fedoroff");
+            persName.ParseString("Petr /Ivanov/ esq");
 
-            //persName.Surname = "Ivanov";
-            Assert.AreEqual("Petr", persName.FirstPart);
+            Assert.AreEqual("Petr", persName.Given);
             Assert.AreEqual("Ivanov", persName.Surname);
-            Assert.AreEqual("Fedoroff", persName.NameSuffix);
+            Assert.AreEqual("esq", persName.NameSuffix);
 
-            Assert.AreEqual("Petr Ivanov Fedoroff", persName.FullName);
+            Assert.AreEqual("Petr Ivanov esq", persName.FullName);
 
-            persName.FirstPart = "Petr";
-            Assert.AreEqual("Petr", persName.FirstPart);
-
-            persName.Surname = "Fedoroff";
-            Assert.AreEqual("Fedoroff", persName.Surname);
-
-            persName.NameSuffix = "Fedoroff";
-            Assert.AreEqual("Fedoroff", persName.NameSuffix);
-
-            //
+            persName.Given = "Petr";
+            Assert.AreEqual("Petr", persName.Given);
 
             persName.NamePrefix = "Lt.";
             Assert.AreEqual("Lt.", persName.NamePrefix);
 
-            persName.Pieces_Given = "Given";
-            Assert.AreEqual("Given", persName.Pieces_Given);
-
             persName.Nickname = "Nickname";
             Assert.AreEqual("Nickname", persName.Nickname);
 
-            persName.Pieces_SurnamePrefix = "SurnamePrefix";
-            Assert.AreEqual("SurnamePrefix", persName.Pieces_SurnamePrefix);
+            persName.SurnamePrefix = "de";
+            Assert.AreEqual("de", persName.SurnamePrefix);
 
-            persName.Pieces_Surname = "Fedoroff";
-            Assert.AreEqual("Fedoroff", persName.Pieces_Surname);
+            persName.Surname = "Fedoroff";
+            Assert.AreEqual("Fedoroff", persName.Surname);
 
             persName.NameSuffix = "Suffix";
             Assert.AreEqual("Suffix", persName.NameSuffix);
 
-            persName.Pieces_PatronymicName = "PatronymicName";
-            Assert.AreEqual("PatronymicName", persName.Pieces_PatronymicName);
+            persName.PatronymicName = "Ivanovich";
+            Assert.AreEqual("Ivanovich", persName.PatronymicName);
 
-            persName.Pieces_MarriedName = "MarriedName";
-            Assert.AreEqual("MarriedName", persName.Pieces_MarriedName);
+            persName.MarriedName = "MarriedName";
+            Assert.AreEqual("MarriedName", persName.MarriedName);
 
-            persName.Pieces_ReligiousName = "ReligiousName";
-            Assert.AreEqual("ReligiousName", persName.Pieces_ReligiousName);
+            persName.ReligiousName = "ReligiousName";
+            Assert.AreEqual("ReligiousName", persName.ReligiousName);
 
-            persName.Pieces_CensusName = "CensusName";
-            Assert.AreEqual("CensusName", persName.Pieces_CensusName);
+            persName.CensusName = "CensusName";
+            Assert.AreEqual("CensusName", persName.CensusName);
 
             //
 
@@ -155,17 +142,17 @@ namespace GDModel
             //
 
             string buf = TestUtils.GetTagStreamText(persName, 1);
-            Assert.AreEqual("1 NAME Petr /Fedoroff/ Suffix\r\n"+
+            Assert.AreEqual("1 NAME Lt. Petr Ivanovich /de Fedoroff/ Suffix\r\n"+
                             "2 LANG Polish\r\n"+ // extension
                             "2 TYPE birth\r\n"+
                             "2 NOTE persname notes\r\n"+
                             "2 SOUR persname sour desc\r\n"+
                             "2 SURN Fedoroff\r\n"+
-                            "2 GIVN Given\r\n"+
-                            "2 _PATN PatronymicName\r\n"+
+                            "2 GIVN Petr\r\n"+
+                            "2 _PATN Ivanovich\r\n"+
                             "2 NPFX Lt.\r\n"+
                             "2 NICK Nickname\r\n"+
-                            "2 SPFX SurnamePrefix\r\n"+
+                            "2 SPFX de\r\n"+
                             "2 NSFX Suffix\r\n"+
                             "2 _MARN MarriedName\r\n"+
                             "2 _RELN ReligiousName\r\n"+
@@ -180,16 +167,16 @@ namespace GDModel
                 nameCopy.Assign(persName);
 
                 string buf2 = TestUtils.GetTagStreamText(nameCopy, 1);
-                Assert.AreEqual("1 NAME Petr /Fedoroff/ Suffix\r\n"+
+                Assert.AreEqual("1 NAME Lt. Petr Ivanovich /de Fedoroff/ Suffix\r\n"+
                                 "2 TYPE birth\r\n"+
                                 "2 NOTE persname notes\r\n"+
                                 "2 SOUR persname sour desc\r\n"+
                                 "2 SURN Fedoroff\r\n"+
-                                "2 GIVN Given\r\n"+
-                                "2 _PATN PatronymicName\r\n"+
+                                "2 GIVN Petr\r\n"+
+                                "2 _PATN Ivanovich\r\n"+
                                 "2 NPFX Lt.\r\n"+
                                 "2 NICK Nickname\r\n"+
-                                "2 SPFX SurnamePrefix\r\n"+
+                                "2 SPFX de\r\n"+
                                 "2 NSFX Suffix\r\n"+
                                 "2 _MARN MarriedName\r\n"+
                                 "2 _RELN ReligiousName\r\n"+
@@ -199,7 +186,7 @@ namespace GDModel
             }
 
             using (GDMPersonalName name1 = new GDMPersonalName()) {
-                Assert.AreEqual("", name1.FirstPart);
+                Assert.AreEqual("", name1.Given);
                 Assert.AreEqual("", name1.Surname);
 
                 Assert.AreEqual(0.0f, name1.IsMatch(null, false));
@@ -207,16 +194,16 @@ namespace GDModel
                 using (GDMPersonalName name2 = new GDMPersonalName()) {
                     Assert.AreEqual(0.0f, name1.IsMatch(name2, false));
 
-                    name1.SetNameParts("Ivan", "Dub", "");
-                    name2.SetNameParts("Ivan", "Dub", "");
+                    name1.ParseString("Ivan /Dub/");
+                    name2.ParseString("Ivan /Dub/");
                     Assert.AreEqual(100.0f, name1.IsMatch(name2, false));
 
-                    name1.SetNameParts("Ivan", "Dub", "");
-                    name2.SetNameParts("Ivan", "Dub2", "");
+                    name1.ParseString("Ivan /Dub/");
+                    name2.ParseString("Ivan /Dub2/");
                     Assert.AreEqual(12.5f, name1.IsMatch(name2, false));
 
-                    name1.SetNameParts("Ivan", "Dub", "");
-                    name2.SetNameParts("Ivan2", "Dub", "");
+                    name1.ParseString("Ivan /Dub/");
+                    name2.ParseString("Ivan2 /Dub/");
                     Assert.AreEqual(50.0f, name1.IsMatch(name2, false));
                 }
             }
@@ -230,7 +217,7 @@ namespace GDModel
         public void Test_GetFullName()
         {
             GDMPersonalName instance = new GDMPersonalName();
-            instance.SetNameParts("Ivan Ivanov", "Fedoroff", "");
+            instance.ParseString("Ivan Ivanov /Fedoroff/");
             Assert.AreEqual("Ivan Ivanov Fedoroff", instance.FullName);
         }
 
@@ -239,16 +226,7 @@ namespace GDModel
         {
             GDMPersonalName instance = new GDMPersonalName();
             instance.ParseString("Ivan/Fedoroff/");
-            Assert.AreEqual("Ivan", instance.FirstPart);
-        }
-
-        [Test]
-        public void Test_SetFirstPart()
-        {
-            GDMPersonalName instance = new GDMPersonalName();
-            instance.ParseString("Ivan/Fedoroff/");
-            instance.FirstPart = "Baba Yaga";
-            Assert.AreEqual("Baba Yaga Fedoroff", instance.FullName);
+            Assert.AreEqual("Ivan", instance.Given);
         }
 
         [Test]
@@ -335,7 +313,7 @@ namespace GDModel
         public void Test_SetNameParts()
         {
             GDMPersonalName instance = new GDMPersonalName();
-            instance.SetNameParts("Ivan Ivanoff", "Fedoroff", "Esquire");
+            instance.ParseString("Ivan Ivanoff /Fedoroff/ Esquire");
             Assert.AreEqual("Ivan Ivanoff Fedoroff Esquire", instance.FullName);
         }
 
@@ -343,7 +321,7 @@ namespace GDModel
         public void Test_SetNamePartsNull()
         {
             GDMPersonalName instance = new GDMPersonalName();
-            instance.SetNameParts("Ivan Ivanoff", "Fedoroff", null);
+            instance.ParseString("Ivan Ivanoff /Fedoroff/");
             Assert.AreEqual("Ivan Ivanoff Fedoroff", instance.FullName);
         }
 
@@ -446,7 +424,7 @@ namespace GDModel
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
 
             GDMPersonalName instance2 = new GDMPersonalName();
-            instance2.SetNameParts("Ivan Ivanoff", "Fedoroff", "");
+            instance2.ParseString("Ivan Ivanoff /Fedoroff/");
 
             Assert.AreEqual(100.0F, instance1.IsMatch(instance2, false), 0.0);
         }
@@ -461,7 +439,7 @@ namespace GDModel
             instance1.ParseString("Ivan Ivanoff /Fedoroff/");
 
             GDMPersonalName instance2 = new GDMPersonalName();
-            instance2.SetNameParts("Pyotr", "Fedoroff", "Esquire");
+            instance2.ParseString("Pyotr /Fedoroff/ Esquire");
 
             Assert.AreNotEqual(100.0F, instance1.IsMatch(instance2, false));
         }
@@ -488,7 +466,7 @@ namespace GDModel
             instance1.ParseString("Ivan Ivanoff /?/");
 
             GDMPersonalName instance2 = new GDMPersonalName();
-            instance2.SetNameParts("Ivan Ivanoff", "?", "");
+            instance2.ParseString("Ivan Ivanoff /?/");
 
             Assert.AreEqual(100.0F, instance1.IsMatch(instance2, false), 0.0);
         }
@@ -503,7 +481,7 @@ namespace GDModel
             instance1.ParseString("/Federoff/");
 
             GDMPersonalName instance2 = new GDMPersonalName();
-            instance2.SetNameParts("", "Federoff", "");
+            instance2.ParseString("/Federoff/");
 
             Assert.AreEqual(100.0F, instance1.IsMatch(instance2, false), 0.0);
         }
@@ -518,7 +496,7 @@ namespace GDModel
             instance1.ParseString("Ivan Ivanoff /?/");
 
             GDMPersonalName instance2 = new GDMPersonalName();
-            instance2.SetNameParts("Ivan Ivanoff", "Unknown", "");
+            instance2.ParseString("Ivan Ivanoff /Unknown/");
 
             Assert.AreEqual(100.0f, instance1.IsMatch(instance2, false), 0.0);
         }
@@ -533,7 +511,7 @@ namespace GDModel
             instance1.ParseString("Vasiliy Pupkin");
 
             GDMPersonalName instance2 = new GDMPersonalName();
-            instance2.SetNameParts("Vasiliy Pupkin", "", "");
+            instance2.ParseString("Vasiliy Pupkin");
 
             Assert.AreEqual(100.0F, instance1.IsMatch(instance2, false), 0.0);
         }

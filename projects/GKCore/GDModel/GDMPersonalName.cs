@@ -58,35 +58,48 @@ namespace GDModel
     /// </summary>
     public sealed class GDMPersonalName : GDMTag, IGDMStructWithNotes, IGDMStructWithSourceCitations
     {
-        private string fFirstPart; // GIVN | GIVN + _PATN | NPFX + GIVN
-        private string fSurname; // SURN | SPFX + SURN
-
+        private string fGiven; // GIVN
         private GDMLanguageID fLanguage;
         private string fNamePrefix; // NPFX
-        private GDMNameType fNameType;
         private string fNameSuffix; // NSFX
+        private GDMNameType fNameType;
         private string fNickname; // NICK
         private GDMList<GDMNotes> fNotes;
         private GDMList<GDMSourceCitation> fSourceCitations;
+        private string fSurnamePrefix; // SPFX
+        private string fSurname; // SURN
+
+        private string fPatronymicName;
+        private string fMarriedName;
+        private string fReligiousName;
+        private string fCensusName;
 
 
         public string FullName
         {
             get {
-                return GEDCOMUtils.GetFullName(fFirstPart, fSurname, fNameSuffix);
+                return GEDCOMUtils.GetFullName(FirstPart, fSurname, fNameSuffix);
             }
         }
 
-        public string FirstPart
+        internal string FirstPart
         {
-            get { return fFirstPart; }
-            set { fFirstPart = GEDCOMUtils.Trim(value); }
+            get {
+                string result = fGiven;
+                if (!string.IsNullOrEmpty(fPatronymicName)) {
+                    if (!string.IsNullOrEmpty(result)) {
+                        result += " ";
+                    }
+                    result += fPatronymicName;
+                }
+                return result;
+            }
         }
 
-        public string Surname
+        public string Given
         {
-            get { return fSurname; }
-            set { fSurname = GEDCOMUtils.Trim(value); }
+            get { return fGiven; }
+            set { fGiven = GEDCOMUtils.Trim(value); }
         }
 
         public GDMLanguageID Language
@@ -152,62 +165,42 @@ namespace GDModel
             }
         }
 
-
-        #region Pieces
-
-        private string fPieces_Given; // GIVN
-        private string fPieces_SurnamePrefix; // SPFX
-        private string fPieces_Surname; // SURN
-
-        private string fPieces_PatronymicName;
-        private string fPieces_MarriedName;
-        private string fPieces_ReligiousName;
-        private string fPieces_CensusName;
-
-
-        public string Pieces_Given
+        public string SurnamePrefix
         {
-            get { return fPieces_Given; }
-            set { fPieces_Given = value; }
+            get { return fSurnamePrefix; }
+            set { fSurnamePrefix = GEDCOMUtils.Trim(value); }
         }
 
-        public string Pieces_SurnamePrefix
+        public string Surname
         {
-            get { return fPieces_SurnamePrefix; }
-            set { fPieces_SurnamePrefix = value; }
+            get { return fSurname; }
+            set { fSurname = GEDCOMUtils.Trim(value); }
         }
 
-        public string Pieces_Surname
+
+        public string PatronymicName
         {
-            get { return fPieces_Surname; }
-            set { fPieces_Surname = value; }
+            get { return fPatronymicName; }
+            set { fPatronymicName = GEDCOMUtils.Trim(value); }
         }
 
-        public string Pieces_PatronymicName
+        public string MarriedName
         {
-            get { return fPieces_PatronymicName; }
-            set { fPieces_PatronymicName = value; }
+            get { return fMarriedName; }
+            set { fMarriedName = GEDCOMUtils.Trim(value); }
         }
 
-        public string Pieces_MarriedName
+        public string ReligiousName
         {
-            get { return fPieces_MarriedName; }
-            set { fPieces_MarriedName = value; }
+            get { return fReligiousName; }
+            set { fReligiousName = GEDCOMUtils.Trim(value); }
         }
 
-        public string Pieces_ReligiousName
+        public string CensusName
         {
-            get { return fPieces_ReligiousName; }
-            set { fPieces_ReligiousName = value; }
+            get { return fCensusName; }
+            set { fCensusName = GEDCOMUtils.Trim(value); }
         }
-
-        public string Pieces_CensusName
-        {
-            get { return fPieces_CensusName; }
-            set { fPieces_CensusName = value; }
-        }
-
-        #endregion
 
 
         public GDMPersonalName()
@@ -215,20 +208,16 @@ namespace GDModel
             SetName(GEDCOMTagType.NAME);
 
             fNamePrefix = string.Empty;
-            fFirstPart = string.Empty;
+            fGiven = string.Empty;
+            fSurnamePrefix = string.Empty;
             fSurname = string.Empty;
             fNameSuffix = string.Empty;
-
-            fPieces_Given = string.Empty;
-            fPieces_SurnamePrefix = string.Empty;
-            fPieces_Surname = string.Empty;
-
             fNickname = string.Empty;
 
-            fPieces_PatronymicName = string.Empty;
-            fPieces_MarriedName = string.Empty;
-            fPieces_ReligiousName = string.Empty;
-            fPieces_CensusName = string.Empty;
+            fPatronymicName = string.Empty;
+            fMarriedName = string.Empty;
+            fReligiousName = string.Empty;
+            fCensusName = string.Empty;
         }
 
         protected override void Dispose(bool disposing)
@@ -257,23 +246,19 @@ namespace GDModel
             base.Assign(otherName);
 
             fNamePrefix = otherName.fNamePrefix;
-            fFirstPart = otherName.fFirstPart;
+            fGiven = otherName.fGiven;
+            fSurnamePrefix = otherName.fSurnamePrefix;
             fSurname = otherName.fSurname;
             fNameSuffix = otherName.fNameSuffix;
+            fNickname = otherName.fNickname;
+
+            fPatronymicName = otherName.fPatronymicName;
+            fMarriedName = otherName.fMarriedName;
+            fReligiousName = otherName.fReligiousName;
+            fCensusName = otherName.fCensusName;
 
             fLanguage = otherName.fLanguage;
             fNameType = otherName.fNameType;
-
-            fPieces_Given = otherName.fPieces_Given;
-            fPieces_SurnamePrefix = otherName.fPieces_SurnamePrefix;
-            fPieces_Surname = otherName.fPieces_Surname;
-
-            fNickname = otherName.fNickname;
-
-            fPieces_PatronymicName = otherName.fPieces_PatronymicName;
-            fPieces_MarriedName = otherName.fPieces_MarriedName;
-            fPieces_ReligiousName = otherName.fPieces_ReligiousName;
-            fPieces_CensusName = otherName.fPieces_CensusName;
 
             if (otherName.fNotes != null) AssignList(otherName.fNotes, Notes);
             if (otherName.fSourceCitations != null) AssignList(otherName.fSourceCitations, SourceCitations);
@@ -284,23 +269,19 @@ namespace GDModel
             base.Clear();
 
             fNamePrefix = string.Empty;
-            fFirstPart = string.Empty;
+            fGiven = string.Empty;
+            fSurnamePrefix = string.Empty;
             fSurname = string.Empty;
             fNameSuffix = string.Empty;
+            fNickname = string.Empty;
+
+            fPatronymicName = string.Empty;
+            fMarriedName = string.Empty;
+            fReligiousName = string.Empty;
+            fCensusName = string.Empty;
 
             fLanguage = GDMLanguageID.Unknown;
             fNameType = GDMNameType.ntNone;
-
-            fPieces_Given = string.Empty;
-            fPieces_SurnamePrefix = string.Empty;
-            fPieces_Surname = string.Empty;
-
-            fNickname = string.Empty;
-
-            fPieces_PatronymicName = string.Empty;
-            fPieces_MarriedName = string.Empty;
-            fPieces_ReligiousName = string.Empty;
-            fPieces_CensusName = string.Empty;
 
             if (fNotes != null) fNotes.Clear();
             if (fSourceCitations != null) fSourceCitations.Clear();
@@ -309,18 +290,17 @@ namespace GDModel
         private bool IsPiecesEmpty()
         {
             return 
-                string.IsNullOrEmpty(fNamePrefix) && string.IsNullOrEmpty(fPieces_Given) &&
-                string.IsNullOrEmpty(fPieces_SurnamePrefix) && string.IsNullOrEmpty(fPieces_Surname) &&
+                string.IsNullOrEmpty(fNamePrefix) && string.IsNullOrEmpty(fGiven) &&
+                string.IsNullOrEmpty(fSurnamePrefix) && string.IsNullOrEmpty(fSurname) &&
                 string.IsNullOrEmpty(fNameSuffix) && string.IsNullOrEmpty(fNickname) &&
-                string.IsNullOrEmpty(fPieces_PatronymicName) && string.IsNullOrEmpty(fPieces_MarriedName) &&
-                string.IsNullOrEmpty(fPieces_ReligiousName) && string.IsNullOrEmpty(fPieces_CensusName);
+                string.IsNullOrEmpty(fPatronymicName) && string.IsNullOrEmpty(fMarriedName) &&
+                string.IsNullOrEmpty(fReligiousName) && string.IsNullOrEmpty(fCensusName);
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty()
-                && string.IsNullOrEmpty(fFirstPart) && string.IsNullOrEmpty(fSurname)
-                && IsPiecesEmpty() && (fLanguage == GDMLanguageID.Unknown) && (fNameType == GDMNameType.ntNone)
+            return base.IsEmpty() && IsPiecesEmpty() &&
+                (fLanguage == GDMLanguageID.Unknown) && (fNameType == GDMNameType.ntNone)
                 && (fNotes == null || fNotes.Count == 0)
                 && (fSourceCitations == null || fSourceCitations.Count == 0);
         }
@@ -343,13 +323,6 @@ namespace GDModel
             return GEDCOMUtils.ParseName(strValue, this);
         }
 
-        public void SetNameParts(string firstPart, string surname, string lastPart)
-        {
-            fFirstPart = GEDCOMUtils.Trim(firstPart);
-            fSurname = GEDCOMUtils.Trim(surname);
-            fNameSuffix = GEDCOMUtils.Trim(lastPart);
-        }
-
         private static bool IsUnknown(string str)
         {
             return string.Equals(str, "?") || (string.Compare(str, "unknown", true) == 0);
@@ -364,9 +337,9 @@ namespace GDModel
             float matches = 0;
             bool surnameMatched = false;
 
-            if (!(string.IsNullOrEmpty(otherName.FirstPart) && string.IsNullOrEmpty(fFirstPart))) {
+            if (!(string.IsNullOrEmpty(otherName.FirstPart) && string.IsNullOrEmpty(FirstPart))) {
                 parts++;
-                if (otherName.FirstPart == fFirstPart)
+                if (otherName.FirstPart == FirstPart)
                     matches++;
             }
 

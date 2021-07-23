@@ -2801,7 +2801,7 @@ namespace GKCore
 
             WomanSurnameFormat wsFmt = GlobalOptions.Instance.WomanSurnameFormat;
             if (iSex == GDMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
-                string marriedSurname = personalName.Pieces_MarriedName;
+                string marriedSurname = personalName.MarriedName;
                 switch (wsFmt) {
                     case WomanSurnameFormat.wsfMaiden_Married:
                         result = defSurname;
@@ -2894,7 +2894,7 @@ namespace GKCore
                 personalName = iRec.PersonalNames[0];
             }
 
-            personalName.Pieces_MarriedName = marriedSurname.Trim();
+            personalName.MarriedName = marriedSurname.Trim();
         }
 
         public static void SetNameParts(GDMPersonalName personalName, string surname, string name, string patronymic)
@@ -2902,15 +2902,9 @@ namespace GKCore
             if (personalName == null)
                 throw new ArgumentNullException("personalName");
 
-            surname = surname.Trim();
-            name = name.Trim();
-            patronymic = patronymic.Trim();
-
-            personalName.SetNameParts(name + " " + patronymic, surname, personalName.NameSuffix);
-
-            personalName.Pieces_Surname = surname;
-            personalName.Pieces_Given = name;
-            personalName.Pieces_PatronymicName = patronymic;
+            personalName.Surname = surname.Trim();
+            personalName.Given = name.Trim();
+            personalName.PatronymicName = patronymic.Trim();
         }
 
         public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, GDMPersonalName personalName, bool formatted = true)

@@ -126,10 +126,10 @@ namespace GKCore.Controllers
 
                 persName.Nickname = fView.Nickname.Text;
                 persName.NamePrefix = fView.NamePrefix.Text;
-                persName.Pieces_SurnamePrefix = fView.SurnamePrefix.Text;
+                persName.SurnamePrefix = fView.SurnamePrefix.Text;
                 persName.NameSuffix = fView.NameSuffix.Text;
                 if (IsExtendedWomanSurname()) {
-                    persName.Pieces_MarriedName = fView.MarriedSurname.Text;
+                    persName.MarriedName = fView.MarriedSurname.Text;
                 }
 
                 fPerson.Sex = (GDMSex)fView.SexCombo.SelectedIndex;
@@ -277,10 +277,10 @@ namespace GKCore.Controllers
 
                 fView.NamePrefix.Text = np.NamePrefix;
                 fView.Nickname.Text = np.Nickname;
-                fView.SurnamePrefix.Text = np.Pieces_SurnamePrefix;
+                fView.SurnamePrefix.Text = np.SurnamePrefix;
                 fView.NameSuffix.Text = np.NameSuffix;
 
-                fView.MarriedSurname.Text = np.Pieces_MarriedName;
+                fView.MarriedSurname.Text = np.MarriedName;
             } else {
                 culture = fBase.Context.Culture;
 

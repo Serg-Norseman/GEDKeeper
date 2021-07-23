@@ -74,7 +74,7 @@ namespace GKCore.Controllers
 
                 fPersonalName.Nickname = fView.Nickname.Text;
                 fPersonalName.NamePrefix = fView.NamePrefix.Text;
-                fPersonalName.Pieces_SurnamePrefix = fView.SurnamePrefix.Text;
+                fPersonalName.SurnamePrefix = fView.SurnamePrefix.Text;
                 fPersonalName.NameSuffix = fView.NameSuffix.Text;
 
                 fPersonalName.NameType = (GDMNameType)fView.NameType.SelectedIndex;
@@ -107,10 +107,10 @@ namespace GKCore.Controllers
 
             fView.NamePrefix.Text = fPersonalName.NamePrefix;
             fView.Nickname.Text = fPersonalName.Nickname;
-            fView.SurnamePrefix.Text = fPersonalName.Pieces_SurnamePrefix;
+            fView.SurnamePrefix.Text = fPersonalName.SurnamePrefix;
             fView.NameSuffix.Text = fPersonalName.NameSuffix;
 
-            fView.MarriedSurname.Text = fPersonalName.Pieces_MarriedName;
+            fView.MarriedSurname.Text = fPersonalName.MarriedName;
 
             if (!IsExtendedWomanSurname()) {
                 fView.SurnameLabel.Text = LangMan.LS(LSID.LSID_Surname);

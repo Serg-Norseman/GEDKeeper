@@ -40,7 +40,14 @@ namespace GKCore
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_names_01.ged")) {
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
-                Assert.AreEqual("Александра Анатольевна Лазорева (Иванова)", iRec1.GetPrimaryFullName());
+
+                // first stage, NAME reads: surname "Лазорева (Иванова)"
+                // second stage, SURN reads: surname "Иванова"
+                // subordinate SURN tag overrides surname from NAME tag
+                // inappropriate information is lost
+
+                Assert.AreEqual("Александра Анатольевна Иванова", iRec1.GetPrimaryFullName());
+
                 // std-surn exists and double, but sub-surn has only second part
                 // sub-givn exists, but sub-patn is not
                 var parts = GKUtils.GetNameParts(ctx.Tree, iRec1);

@@ -733,17 +733,9 @@ namespace GDModel.Providers.GEDCOM
 
         public static string ParseName(string strValue, GDMPersonalName persName)
         {
-            string firstPart, surname, lastPart;
-            string result = ParseName(strValue, out firstPart, out surname, out lastPart);
-            persName.SetNameParts(firstPart, surname, lastPart);
-            return result;
-        }
-
-        public static string ParseName(string strValue, out string firstPart, out string surname, out string lastPart)
-        {
-            firstPart = string.Empty;
-            surname = string.Empty;
-            lastPart = string.Empty;
+            string firstPart = string.Empty;
+            string surname = string.Empty;
+            string lastPart = string.Empty;
 
             if (string.IsNullOrEmpty(strValue)) {
                 return string.Empty;
@@ -782,6 +774,10 @@ namespace GDModel.Providers.GEDCOM
                 lastPart = strValue.Substring(ss, strLen - ss);
             }
 
+            persName.Given = firstPart;
+            persName.Surname = surname;
+            persName.NameSuffix = lastPart;
+
             return string.Empty;
         }
 
@@ -799,25 +795,25 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
-        /*public static string GetNameTagValue(string firstPart, string surname, string lastPart)
-        {
-            string result = firstPart;
-            if (!string.IsNullOrEmpty(surname)) {
-                result += " /" + surname + "/";
-
-                if (!string.IsNullOrEmpty(lastPart)) {
-                    result += " " + lastPart;
-                }
-            }
-            return result;
-        }*/
-
-        // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
         public static string GetNameTagValue(GDMPersonalName personalName)
         {
             string firstPart = personalName.FirstPart;
             string surname = personalName.Surname;
             string lastPart = personalName.NameSuffix;
+
+            if (!string.IsNullOrEmpty(personalName.NamePrefix)) {
+                if (!string.IsNullOrEmpty(firstPart)) {
+                    firstPart = " " + firstPart;
+                }
+                firstPart = personalName.NamePrefix + firstPart;
+            }
+
+            if (!string.IsNullOrEmpty(personalName.SurnamePrefix)) {
+                if (!string.IsNullOrEmpty(surname)) {
+                    surname = " " + surname;
+                }
+                surname = personalName.SurnamePrefix + surname;
+            }
 
             string result = firstPart;
             if (!string.IsNullOrEmpty(surname)) {

@@ -177,7 +177,7 @@ namespace GDModel
                 GDMPersonalName pName = new GDMPersonalName();
                 indi.AddPersonalName(pName);
                 pName.Nickname = "BigHead";
-                pName.SetNameParts("Ivan", "Petrov", "");
+                pName.ParseString("Ivan /Petrov/");
 
                 st = GKUtils.GetNameString(indi, true, true);
                 Assert.AreEqual("Petrov Ivan [BigHead]", st);
@@ -243,12 +243,12 @@ namespace GDModel
             ind1 = tree.CreateIndividual();
             ind1.Sex = GDMSex.svMale;
             GDMPersonalName pn = ind1.AddPersonalName(new GDMPersonalName());
-            pn.SetNameParts("Ivan Ivanov", "Fedoroff", "");
+            pn.ParseString("Ivan Ivanov /Fedoroff/");
 
             ind2 = tree.CreateIndividual();
             ind2.Sex = GDMSex.svMale;
             pn = ind2.AddPersonalName(new GDMPersonalName());
-            pn.SetNameParts("Ivan Ivanovich", "Fedoroff", "");
+            pn.ParseString("Ivan Ivanovich /Fedoroff/");
 
             ev1 = new GDMIndividualEvent((int)GEDCOMTagType.BIRT, "");
             dtVal1 = ev1.Date;
