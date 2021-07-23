@@ -2353,8 +2353,13 @@ namespace GDModel.Providers.GEDCOM
 
         private static void WritePersonalNamePieces(StreamWriter stream, int level, GDMPersonalName persName)
         {
-            WriteTagLine(stream, level, GEDCOMTagName.SURN, persName.Surname, true);
-            WriteTagLine(stream, level, GEDCOMTagName.GIVN, persName.Given, true);
+            // given and surname are always included in the NAME tag, and without NAME modification tags - not required
+            if (!string.IsNullOrEmpty(persName.NamePrefix) || !string.IsNullOrEmpty(persName.SurnamePrefix) ||
+                !string.IsNullOrEmpty(persName.NameSuffix) || !string.IsNullOrEmpty(persName.PatronymicName)) {
+                WriteTagLine(stream, level, GEDCOMTagName.SURN, persName.Surname, true);
+                WriteTagLine(stream, level, GEDCOMTagName.GIVN, persName.Given, true);
+            }
+
             WriteTagLine(stream, level, GEDCOMTagName._PATN, persName.PatronymicName, true);
             WriteTagLine(stream, level, GEDCOMTagName.NPFX, persName.NamePrefix, true);
             WriteTagLine(stream, level, GEDCOMTagName.NICK, persName.Nickname, true);
