@@ -176,7 +176,7 @@ namespace GDModel
 
                 GDMPersonalName pName = new GDMPersonalName();
                 indi.AddPersonalName(pName);
-                pName.Pieces_Nickname = "BigHead";
+                pName.Nickname = "BigHead";
                 pName.SetNameParts("Ivan", "Petrov", "");
 
                 st = GKUtils.GetNameString(indi, true, true);

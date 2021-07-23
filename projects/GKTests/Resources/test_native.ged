@@ -52,7 +52,7 @@
 2 CONT Source Citation Sample Line 3
 1 RESN confidential
 1 SEX M
-1 NAME John /Doe/
+1 NAME John /Doe/ jr.
 2 FONE Phonetic
 2 ROMN Romanized name
 2 LANG English
@@ -63,7 +63,7 @@
 2 NPFX Name Prefix
 2 NICK Nick
 2 SPFX Surname Prefix
-2 NSFX Name Suffix
+2 NSFX jr.
 2 _MARN Married Name
 2 _RELN Religious Name
 2 _CENN Census Name

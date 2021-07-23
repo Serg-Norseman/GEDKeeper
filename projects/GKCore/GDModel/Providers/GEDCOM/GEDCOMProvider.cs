@@ -2333,13 +2333,13 @@ namespace GDModel.Providers.GEDCOM
             } else if (tagType == GEDCOMTagType.GIVN) {
                 persNamePieces.Pieces_Given = tagValue;
             } else if (tagType == GEDCOMTagType.NICK) {
-                persNamePieces.Pieces_Nickname = tagValue;
+                persNamePieces.Nickname = tagValue;
             } else if (tagType == GEDCOMTagType.SPFX) {
                 persNamePieces.Pieces_SurnamePrefix = tagValue;
             } else if (tagType == GEDCOMTagType.SURN) {
                 persNamePieces.Pieces_Surname = tagValue;
             } else if (tagType == GEDCOMTagType.NSFX) {
-                persNamePieces.Pieces_Suffix = tagValue;
+                persNamePieces.NameSuffix = tagValue;
             } else if (tagType == GEDCOMTagType._PATN || tagType == GEDCOMTagType._MIDN) {
                 persNamePieces.Pieces_PatronymicName = tagValue;
             } else if (tagType == GEDCOMTagType._MARN || tagType == GEDCOMTagType._MARNM) {
@@ -2365,9 +2365,9 @@ namespace GDModel.Providers.GEDCOM
             WriteTagLine(stream, lev, GEDCOMTagName.GIVN, persNamePieces.Pieces_Given, true);
             WriteTagLine(stream, lev, GEDCOMTagName._PATN, persNamePieces.Pieces_PatronymicName, true);
             WriteTagLine(stream, lev, GEDCOMTagName.NPFX, persNamePieces.Pieces_Prefix, true);
-            WriteTagLine(stream, lev, GEDCOMTagName.NICK, persNamePieces.Pieces_Nickname, true);
+            WriteTagLine(stream, lev, GEDCOMTagName.NICK, persNamePieces.Nickname, true);
             WriteTagLine(stream, lev, GEDCOMTagName.SPFX, persNamePieces.Pieces_SurnamePrefix, true);
-            WriteTagLine(stream, lev, GEDCOMTagName.NSFX, persNamePieces.Pieces_Suffix, true);
+            WriteTagLine(stream, lev, GEDCOMTagName.NSFX, persNamePieces.NameSuffix, true);
             WriteTagLine(stream, lev, GEDCOMTagName._MARN, persNamePieces.Pieces_MarriedName, true);
             WriteTagLine(stream, lev, GEDCOMTagName._RELN, persNamePieces.Pieces_ReligiousName, true);
             WriteTagLine(stream, lev, GEDCOMTagName._CENN, persNamePieces.Pieces_CensusName, true);

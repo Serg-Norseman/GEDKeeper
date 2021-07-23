@@ -72,10 +72,10 @@ namespace GKCore.Controllers
             try {
                 GKUtils.SetNameParts(fPersonalName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
 
-                fPersonalName.Pieces_Nickname = fView.Nickname.Text;
+                fPersonalName.Nickname = fView.Nickname.Text;
                 fPersonalName.Pieces_Prefix = fView.NamePrefix.Text;
                 fPersonalName.Pieces_SurnamePrefix = fView.SurnamePrefix.Text;
-                fPersonalName.Pieces_Suffix = fView.NameSuffix.Text;
+                fPersonalName.NameSuffix = fView.NameSuffix.Text;
 
                 fPersonalName.NameType = (GDMNameType)fView.NameType.SelectedIndex;
                 fPersonalName.Language = fView.Language.GetSelectedTag<GDMLanguageID>();
@@ -106,9 +106,9 @@ namespace GKCore.Controllers
             fView.NameType.SelectedIndex = (sbyte)fPersonalName.NameType;
 
             fView.NamePrefix.Text = fPersonalName.Pieces_Prefix;
-            fView.Nickname.Text = fPersonalName.Pieces_Nickname;
+            fView.Nickname.Text = fPersonalName.Nickname;
             fView.SurnamePrefix.Text = fPersonalName.Pieces_SurnamePrefix;
-            fView.NameSuffix.Text = fPersonalName.Pieces_Suffix;
+            fView.NameSuffix.Text = fPersonalName.NameSuffix;
 
             fView.MarriedSurname.Text = fPersonalName.Pieces_MarriedName;
 

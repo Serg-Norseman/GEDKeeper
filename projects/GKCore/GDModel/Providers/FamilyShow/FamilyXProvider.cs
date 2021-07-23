@@ -202,7 +202,7 @@ namespace GDModel.Providers.FamilyShow
                                         break;
 
                                     case FXTag.Suffix:
-                                        lastIndividual.PersonalNames[0].LastPart = nodeValue;
+                                        lastIndividual.PersonalNames[0].NameSuffix = nodeValue;
                                         break;
 
                                     case FXTag.IsLiving:

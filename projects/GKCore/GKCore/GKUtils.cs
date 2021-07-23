@@ -2787,7 +2787,7 @@ namespace GKCore
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            string result = (iRec.PersonalNames.Count > 0) ? iRec.PersonalNames[0].Pieces_Nickname : string.Empty;
+            string result = (iRec.PersonalNames.Count > 0) ? iRec.PersonalNames[0].Nickname : string.Empty;
             return result;
         }
 
@@ -2860,7 +2860,7 @@ namespace GKCore
             }
 
             if (includePieces) {
-                string nick = np.Pieces_Nickname;
+                string nick = np.Nickname;
                 if (!string.IsNullOrEmpty(nick)) result = result + " [" + nick + "]";
             }
 
@@ -2906,7 +2906,7 @@ namespace GKCore
             name = name.Trim();
             patronymic = patronymic.Trim();
 
-            personalName.SetNameParts(name + " " + patronymic, surname, personalName.LastPart);
+            personalName.SetNameParts(name + " " + patronymic, surname, personalName.NameSuffix);
 
             personalName.Pieces_Surname = surname;
             personalName.Pieces_Given = name;

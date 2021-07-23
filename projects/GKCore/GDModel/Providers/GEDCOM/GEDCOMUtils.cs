@@ -799,8 +799,26 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
-        public static string GetNameTagValue(string firstPart, string surname, string lastPart)
+        /*public static string GetNameTagValue(string firstPart, string surname, string lastPart)
         {
+            string result = firstPart;
+            if (!string.IsNullOrEmpty(surname)) {
+                result += " /" + surname + "/";
+
+                if (!string.IsNullOrEmpty(lastPart)) {
+                    result += " " + lastPart;
+                }
+            }
+            return result;
+        }*/
+
+        // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
+        public static string GetNameTagValue(GDMPersonalName personalName)
+        {
+            string firstPart = personalName.FirstPart;
+            string surname = personalName.Surname;
+            string lastPart = personalName.NameSuffix;
+
             string result = firstPart;
             if (!string.IsNullOrEmpty(surname)) {
                 result += " /" + surname + "/";
