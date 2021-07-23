@@ -102,8 +102,8 @@ namespace GDModel
 
             //
 
-            persName.Pieces_Prefix = "Prefix";
-            Assert.AreEqual("Prefix", persName.Pieces_Prefix);
+            persName.NamePrefix = "Lt.";
+            Assert.AreEqual("Lt.", persName.NamePrefix);
 
             persName.Pieces_Given = "Given";
             Assert.AreEqual("Given", persName.Pieces_Given);
@@ -163,7 +163,7 @@ namespace GDModel
                             "2 SURN Fedoroff\r\n"+
                             "2 GIVN Given\r\n"+
                             "2 _PATN PatronymicName\r\n"+
-                            "2 NPFX Prefix\r\n"+
+                            "2 NPFX Lt.\r\n"+
                             "2 NICK Nickname\r\n"+
                             "2 SPFX SurnamePrefix\r\n"+
                             "2 NSFX Suffix\r\n"+
@@ -187,7 +187,7 @@ namespace GDModel
                                 "2 SURN Fedoroff\r\n"+
                                 "2 GIVN Given\r\n"+
                                 "2 _PATN PatronymicName\r\n"+
-                                "2 NPFX Prefix\r\n"+
+                                "2 NPFX Lt.\r\n"+
                                 "2 NICK Nickname\r\n"+
                                 "2 SPFX SurnamePrefix\r\n"+
                                 "2 NSFX Suffix\r\n"+

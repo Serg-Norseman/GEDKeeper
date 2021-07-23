@@ -73,7 +73,7 @@ namespace GKCore.Controllers
                 GKUtils.SetNameParts(fPersonalName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
 
                 fPersonalName.Nickname = fView.Nickname.Text;
-                fPersonalName.Pieces_Prefix = fView.NamePrefix.Text;
+                fPersonalName.NamePrefix = fView.NamePrefix.Text;
                 fPersonalName.Pieces_SurnamePrefix = fView.SurnamePrefix.Text;
                 fPersonalName.NameSuffix = fView.NameSuffix.Text;
 
@@ -105,7 +105,7 @@ namespace GKCore.Controllers
             fView.Patronymic.Text = parts.Patronymic;
             fView.NameType.SelectedIndex = (sbyte)fPersonalName.NameType;
 
-            fView.NamePrefix.Text = fPersonalName.Pieces_Prefix;
+            fView.NamePrefix.Text = fPersonalName.NamePrefix;
             fView.Nickname.Text = fPersonalName.Nickname;
             fView.SurnamePrefix.Text = fPersonalName.Pieces_SurnamePrefix;
             fView.NameSuffix.Text = fPersonalName.NameSuffix;

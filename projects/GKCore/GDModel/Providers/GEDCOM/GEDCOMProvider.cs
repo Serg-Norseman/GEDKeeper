@@ -2329,7 +2329,7 @@ namespace GDModel.Providers.GEDCOM
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
             if (tagType == GEDCOMTagType.NPFX) {
-                persNamePieces.Pieces_Prefix = tagValue;
+                persNamePieces.NamePrefix = tagValue;
             } else if (tagType == GEDCOMTagType.GIVN) {
                 persNamePieces.Pieces_Given = tagValue;
             } else if (tagType == GEDCOMTagType.NICK) {
@@ -2364,7 +2364,7 @@ namespace GDModel.Providers.GEDCOM
             WriteTagLine(stream, lev, GEDCOMTagName.SURN, persNamePieces.Pieces_Surname, true);
             WriteTagLine(stream, lev, GEDCOMTagName.GIVN, persNamePieces.Pieces_Given, true);
             WriteTagLine(stream, lev, GEDCOMTagName._PATN, persNamePieces.Pieces_PatronymicName, true);
-            WriteTagLine(stream, lev, GEDCOMTagName.NPFX, persNamePieces.Pieces_Prefix, true);
+            WriteTagLine(stream, lev, GEDCOMTagName.NPFX, persNamePieces.NamePrefix, true);
             WriteTagLine(stream, lev, GEDCOMTagName.NICK, persNamePieces.Nickname, true);
             WriteTagLine(stream, lev, GEDCOMTagName.SPFX, persNamePieces.Pieces_SurnamePrefix, true);
             WriteTagLine(stream, lev, GEDCOMTagName.NSFX, persNamePieces.NameSuffix, true);

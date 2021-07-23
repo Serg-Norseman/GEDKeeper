@@ -62,6 +62,7 @@ namespace GDModel
         private string fSurname; // SURN | SPFX + SURN
 
         private GDMLanguageID fLanguage;
+        private string fNamePrefix; // NPFX
         private GDMNameType fNameType;
         private string fNameSuffix; // NSFX
         private string fNickname; // NICK
@@ -92,6 +93,12 @@ namespace GDModel
         {
             get { return fLanguage; }
             set { fLanguage = value; }
+        }
+
+        public string NamePrefix
+        {
+            get { return fNamePrefix; }
+            set { fNamePrefix = GEDCOMUtils.Trim(value); }
         }
 
         public GDMNameType NameType
@@ -148,7 +155,6 @@ namespace GDModel
 
         #region Pieces
 
-        private string fPieces_Prefix; // NPFX
         private string fPieces_Given; // GIVN
         private string fPieces_SurnamePrefix; // SPFX
         private string fPieces_Surname; // SURN
@@ -158,12 +164,6 @@ namespace GDModel
         private string fPieces_ReligiousName;
         private string fPieces_CensusName;
 
-
-        public string Pieces_Prefix
-        {
-            get { return fPieces_Prefix; }
-            set { fPieces_Prefix = value; }
-        }
 
         public string Pieces_Given
         {
@@ -214,11 +214,11 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.NAME);
 
+            fNamePrefix = string.Empty;
             fFirstPart = string.Empty;
             fSurname = string.Empty;
             fNameSuffix = string.Empty;
 
-            fPieces_Prefix = string.Empty;
             fPieces_Given = string.Empty;
             fPieces_SurnamePrefix = string.Empty;
             fPieces_Surname = string.Empty;
@@ -256,6 +256,7 @@ namespace GDModel
 
             base.Assign(otherName);
 
+            fNamePrefix = otherName.fNamePrefix;
             fFirstPart = otherName.fFirstPart;
             fSurname = otherName.fSurname;
             fNameSuffix = otherName.fNameSuffix;
@@ -263,7 +264,6 @@ namespace GDModel
             fLanguage = otherName.fLanguage;
             fNameType = otherName.fNameType;
 
-            fPieces_Prefix = otherName.fPieces_Prefix;
             fPieces_Given = otherName.fPieces_Given;
             fPieces_SurnamePrefix = otherName.fPieces_SurnamePrefix;
             fPieces_Surname = otherName.fPieces_Surname;
@@ -283,6 +283,7 @@ namespace GDModel
         {
             base.Clear();
 
+            fNamePrefix = string.Empty;
             fFirstPart = string.Empty;
             fSurname = string.Empty;
             fNameSuffix = string.Empty;
@@ -290,7 +291,6 @@ namespace GDModel
             fLanguage = GDMLanguageID.Unknown;
             fNameType = GDMNameType.ntNone;
 
-            fPieces_Prefix = string.Empty;
             fPieces_Given = string.Empty;
             fPieces_SurnamePrefix = string.Empty;
             fPieces_Surname = string.Empty;
@@ -309,7 +309,7 @@ namespace GDModel
         private bool IsPiecesEmpty()
         {
             return 
-                string.IsNullOrEmpty(fPieces_Prefix) && string.IsNullOrEmpty(fPieces_Given) &&
+                string.IsNullOrEmpty(fNamePrefix) && string.IsNullOrEmpty(fPieces_Given) &&
                 string.IsNullOrEmpty(fPieces_SurnamePrefix) && string.IsNullOrEmpty(fPieces_Surname) &&
                 string.IsNullOrEmpty(fNameSuffix) && string.IsNullOrEmpty(fNickname) &&
                 string.IsNullOrEmpty(fPieces_PatronymicName) && string.IsNullOrEmpty(fPieces_MarriedName) &&

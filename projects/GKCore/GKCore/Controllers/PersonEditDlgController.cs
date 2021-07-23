@@ -125,7 +125,7 @@ namespace GKCore.Controllers
                 GKUtils.SetNameParts(persName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
 
                 persName.Nickname = fView.Nickname.Text;
-                persName.Pieces_Prefix = fView.NamePrefix.Text;
+                persName.NamePrefix = fView.NamePrefix.Text;
                 persName.Pieces_SurnamePrefix = fView.SurnamePrefix.Text;
                 persName.NameSuffix = fView.NameSuffix.Text;
                 if (IsExtendedWomanSurname()) {
@@ -275,7 +275,7 @@ namespace GKCore.Controllers
                 fView.Name.Text = parts.Name;
                 fView.Patronymic.Text = parts.Patronymic;
 
-                fView.NamePrefix.Text = np.Pieces_Prefix;
+                fView.NamePrefix.Text = np.NamePrefix;
                 fView.Nickname.Text = np.Nickname;
                 fView.SurnamePrefix.Text = np.Pieces_SurnamePrefix;
                 fView.NameSuffix.Text = np.NameSuffix;
