@@ -49,6 +49,36 @@ namespace GDModel
         }
 
         [Test]
+        public void Test_GEDCOMStandard()
+        {
+            // checking for correction of incorrect parts of the NAME tag when reading subordinate tags
+            string text = 
+                "0 @I1@ INDI\r\n" +
+                "1 NAME Lt0 Petr1 Ivanovich2 /de3 Fedoroff4/ jr.5\r\n" + // wrong parts of NAME
+                "2 SURN Fedoroff\r\n" +
+                "2 GIVN Petr\r\n" +
+                "2 _PATN Ivanovich\r\n" +
+                "2 NPFX Lt.\r\n" +
+                "2 NICK Nickname\r\n" +
+                "2 SPFX de\r\n" +
+                "2 NSFX jr.\r\n";
+
+            GDMIndividualRecord iRec = TestUtils.ParseIndiRec(text);
+
+            Assert.AreEqual(1, iRec.PersonalNames.Count);
+            var persName = iRec.PersonalNames[0];
+
+            Assert.AreEqual("Lt.", persName.NamePrefix);
+            Assert.AreEqual("Petr", persName.Given);
+            Assert.AreEqual("Ivanovich", persName.PatronymicName);
+            Assert.AreEqual("de", persName.SurnamePrefix);
+            Assert.AreEqual("Fedoroff", persName.Surname);
+            Assert.AreEqual("jr.", persName.NameSuffix);
+
+            Assert.AreEqual("Lt. Petr Ivanovich /de Fedoroff/ jr.", persName.StringValue);
+        }
+
+        [Test]
         public void Test_Common()
         {
             fContext.Tree.Header.Language = GDMLanguageID.Russian;
