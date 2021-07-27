@@ -31,7 +31,7 @@ using GKUI.Platform;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct("GEDKeeper")]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
-[assembly: AssemblyVersion("2.17.0.0")]
+[assembly: AssemblyVersion("2.18.0.0")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]

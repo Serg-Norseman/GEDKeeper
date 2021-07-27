@@ -1,4 +1,33 @@
 
+## 28.07.2021 [v2.18.0]
+- Optimized data model to save memory [Alex Zaytsev]
+  (new achievement: 635 mb file (2.674.481 records) loaded in 3:46 minutes).
+- Added option for separate depth of ancestors and descendants in tree diagrams [Milan Kosina].
+- Added option to restrict geo-search by country.
+- Added option to bold names in tree diagrams.
+- To the record list added a context menu to merge selected items.</li>
+- In the tool for verification of database added: dialog of details, quick transition to a record
+  and copying XRef to clipboard.
+- In the tool for analyzing connectivity/fragmentation of data, added: display of an identifier,
+  a dialog of details and a quick transition to a person record.
+- Implemented support for years between 32 BC and 32 AD [Alex Zaytsev].
+- Fixed slow display of large notes with html markup inside.
+- Added some links to open data [Alex Zaytsev].
+- Fixed a bug in the language editing dialog [Alex Zaytsev].
+- Fixed drawing horizontal lines to adopted child in descendants diagram [Alex Zaytsev].
+- Fixed bug with Hungarian date format for event editing dialog.
+- Fixed pre-populating names for new records [Alex Zaytsev].
+- Fixed patronymic editing according to the language of the name [Alex Zaytsev].
+- Improved import of GEDCOM format from Ages files in terms of determining adopted children.
+- Added optional feature to display dates and places in separate lines in tree diagrams.
+- Fixed line break error in the information panel.
+- Added feature of downloading and viewing multimedia via http links.
+- Added transition to record of selected person from tree diagram.
+- Added display of scale in the status bar of tree diagrams.
+- Added three new reports: places, sources and repositories.
+- Added experimental support for the Family.Show file format.
+- Improved support of Geni file loading.
+
 ## 14.03.2021 [v2.17.0]
 - Fixed a logical error in the default records filtering method.
 - Optimized data model to save memory when loading large files (over 100 MB).

@@ -4,7 +4,7 @@ rem "GEDKeeper", the personal genealogical database editor.
 rem Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
 rem This file is part of "GEDKeeper".
 
-set GKVER=2.17.0
+set GKVER=2.18.0
 
 set lstfile=".\listfile.txt"
 set out_fn="gedkeeper_%GKVER%_win_portable"
