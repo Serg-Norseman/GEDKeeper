@@ -109,6 +109,10 @@ namespace GKCore.Lists
             }
 
             if (result) {
+                if (eArgs.Action == RecordAction.raAdd) {
+                    eArgs.ItemData = aCit;
+                }
+
                 fBaseWin.Context.Modified = true;
                 eArgs.IsChanged = true;
             }
