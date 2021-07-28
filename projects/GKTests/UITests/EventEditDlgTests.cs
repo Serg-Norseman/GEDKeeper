@@ -190,11 +190,14 @@ namespace GKUI.Forms
 
             SelectCombo("cmbEventType", form, 1); // Birth(indi) / ?(fam)
             EnterText("txtEventPlace", form, "test place");
-            SelectCombo("cmbEventDateType", form, 3); // Between
+
+            // FIXME: create GKDateControl tests
+            /*SelectCombo("cmbEventDateType", form, 3); // Between
             EnterMaskedText("txtEventDate1", form, "01.01.1900");
             EnterMaskedText("txtEventDate2", form, "10.01.1900");
             SelectCombo("cmbDate1Calendar", form, 1); // Julian
-            SelectCombo("cmbDate2Calendar", form, 1); // Julian
+            SelectCombo("cmbDate2Calendar", form, 1); // Julian*/
+
             EnterText("txtEventCause", form, "test cause");
             EnterText("txtEventOrg", form, "test agency");
 

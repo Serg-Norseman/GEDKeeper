@@ -5,7 +5,7 @@
 - Added option for separate depth of ancestors and descendants in tree diagrams [Milan Kosina].
 - Added option to restrict geo-search by country.
 - Added option to bold names in tree diagrams.
-- To the record list added a context menu to merge selected items.</li>
+- To the record list added a context menu to merge selected items.
 - In the tool for verification of database added: dialog of details, quick transition to a record
   and copying XRef to clipboard.
 - In the tool for analyzing connectivity/fragmentation of data, added: display of an identifier,
