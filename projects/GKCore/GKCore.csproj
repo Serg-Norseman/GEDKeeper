@@ -257,6 +257,7 @@
     <Compile Include="GKCore\Controllers\TreeSplitController.cs" />
     <Compile Include="GKCore\Controllers\UserRefEditDlgController.cs" />
     <Compile Include="GKCore\Cultures\CulturesPool.cs" />
+    <Compile Include="GKCore\Cultures\CzechCulture.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
     <Compile Include="GKCore\GKVarCache.cs" />

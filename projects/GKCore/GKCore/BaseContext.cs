@@ -204,9 +204,7 @@ namespace GKCore
 
         public void ImportNames(GDMIndividualRecord iRec)
         {
-            if (Culture is RussianCulture) {
-                AppHost.NamesTable.ImportNames(this, iRec);
-            }
+            AppHost.NamesTable.ImportNames(this, iRec);
         }
 
         public GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, GDMCustomDate evDate, string evPlace)
