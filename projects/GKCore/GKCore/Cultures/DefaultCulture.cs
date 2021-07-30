@@ -99,10 +99,10 @@ namespace GKCore.Cultures
 
             if (hasPatronymic) {
                 string firstPart = personalName.FirstPart;
-                string[] parts = firstPart.Split(' ');
-                if (parts.Length > 1) {
-                    stdName = parts[0];
-                    stdPatronymic = parts[1];
+                int si = firstPart.LastIndexOf(' ');
+                if (si != -1) {
+                    stdName = firstPart.Substring(0, si);
+                    stdPatronymic = firstPart.Substring(si + 1, firstPart.Length - si - 1);
                 } else {
                     stdName = firstPart;
                     stdPatronymic = string.Empty;
@@ -119,11 +119,11 @@ namespace GKCore.Cultures
             string patronymic = pnPieces.PatronymicName;
             string marriedSurname = pnPieces.MarriedName;
 
-            if (hasPatronymic && !string.IsNullOrEmpty(name)) {
-                string[] parts = name.Split(' ');
-                if (string.IsNullOrEmpty(patronymic) && parts.Length > 1) {
-                    name = parts[0];
-                    patronymic = parts[1];
+            if (hasPatronymic && !string.IsNullOrEmpty(name) && string.IsNullOrEmpty(patronymic)) {
+                int si = name.LastIndexOf(' ');
+                if (si != -1) {
+                    patronymic = name.Substring(si + 1, name.Length - si - 1);
+                    name = name.Substring(0, si);
                 }
             }
 
