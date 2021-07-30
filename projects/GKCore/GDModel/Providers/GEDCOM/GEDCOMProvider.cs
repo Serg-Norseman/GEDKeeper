@@ -73,9 +73,17 @@ namespace GDModel.Providers.GEDCOM
     {
         public static readonly GEDCOMAppFormat[] GEDCOMFormats;
 
+        public static bool KeepRichNames = true;
+
 
         public GEDCOMProvider(GDMTree tree) : base(tree)
         {
+        }
+
+        // TODO: transient implementation
+        public GEDCOMProvider(GDMTree tree, bool keepRichNames) : base(tree)
+        {
+            KeepRichNames = keepRichNames;
         }
 
         public override string GetFilesFilter()
@@ -2354,7 +2362,8 @@ namespace GDModel.Providers.GEDCOM
         private static void WritePersonalNamePieces(StreamWriter stream, int level, GDMPersonalName persName)
         {
             // given and surname are always included in the NAME tag, and without NAME modification tags - not required
-            if (!string.IsNullOrEmpty(persName.NamePrefix) || !string.IsNullOrEmpty(persName.SurnamePrefix) ||
+            if (KeepRichNames ||
+                !string.IsNullOrEmpty(persName.NamePrefix) || !string.IsNullOrEmpty(persName.SurnamePrefix) ||
                 !string.IsNullOrEmpty(persName.NameSuffix) || !string.IsNullOrEmpty(persName.PatronymicName)) {
                 WriteTagLine(stream, level, GEDCOMTagName.SURN, persName.Surname, true);
                 WriteTagLine(stream, level, GEDCOMTagName.GIVN, persName.Given, true);

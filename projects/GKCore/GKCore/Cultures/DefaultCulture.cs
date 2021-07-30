@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -97,10 +97,11 @@ namespace GKCore.Cultures
             string patronymic = personalName.PatronymicName;
 
             if (hasPatronymic && string.IsNullOrEmpty(patronymic) && !string.IsNullOrEmpty(name)) {
-                string[] parts = name.Split(' ');
-                if (parts.Length > 1) {
-                    name = parts[0];
-                    patronymic = parts[1];
+                string firstPart = name;
+                int si = firstPart.LastIndexOf(' ');
+                if (si != -1) {
+                    name = firstPart.Substring(0, si);
+                    patronymic = firstPart.Substring(si + 1, firstPart.Length - si - 1);
                 }
             }
 
