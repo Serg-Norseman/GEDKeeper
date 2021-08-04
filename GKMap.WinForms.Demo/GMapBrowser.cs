@@ -46,7 +46,6 @@ namespace GKMap.WinForms.Demo
         private void InitializeComponent()
         {
             fMapControl = new GMapControl {
-                Bearing = 0F,
                 CanDragMap = true,
                 Dock = DockStyle.Fill,
                 EmptyTileColor = Color.Navy,
@@ -277,7 +276,7 @@ namespace GKMap.WinForms.Demo
                 trkZoom.TickFrequency = 100;
 
                 // set current marker
-                fTargetMarker = new GMarkerGoogle(fMapControl.Position, GMarkerGoogleType.arrow);
+                fTargetMarker = new GMarkerIcon(fMapControl.Position, GMarkerIconType.arrow);
                 fTargetMarker.IsHitTestVisible = false;
                 fTargetMarker.IsVisible = true;
                 fTopOverlay.Markers.Add(fTargetMarker);
@@ -288,7 +287,7 @@ namespace GKMap.WinForms.Demo
                 if (pos != null && status == GeoCoderStatusCode.G_GEO_SUCCESS) {
                     fTargetMarker.Position = pos.Value;
 
-                    GMapMarker myCity = new GMarkerGoogle(pos.Value, GMarkerGoogleType.green_small);
+                    GMapMarker myCity = new GMarkerIcon(pos.Value, GMarkerIconType.green_small);
                     myCity.ToolTipMode = MarkerTooltipMode.Always;
                     myCity.ToolTipText = "Welcome to Egypt! ;}";
                     fObjects.Markers.Add(myCity);
@@ -586,7 +585,7 @@ namespace GKMap.WinForms.Demo
             GeoCoderStatusCode status;
             PointLatLng? pos = GMapProviders.GoogleMap.GetPoint(place, out status);
             if (pos != null && status == GeoCoderStatusCode.G_GEO_SUCCESS) {
-                var m = new GMarkerGoogle(pos.Value, GMarkerGoogleType.green);
+                var m = new GMarkerIcon(pos.Value, GMarkerIconType.green);
                 m.ToolTip = new GMapRoundedToolTip(m);
                 m.ToolTipText = place;
                 m.ToolTipMode = MarkerTooltipMode.Always;
@@ -598,7 +597,7 @@ namespace GKMap.WinForms.Demo
         public void AddMarker(PointLatLng targetPosition)
         {
             //var m = new GMarkerCross(targetPosition);
-            var m = new GMarkerGoogle(targetPosition, GMarkerGoogleType.green);
+            var m = new GMarkerIcon(targetPosition, GMarkerIconType.green);
 
             //m.ToolTip = new GMapBaloonToolTip(m);
             m.ToolTipMode = MarkerTooltipMode.OnMouseOver;
