@@ -22,7 +22,7 @@ namespace GKMap.MapProviders.Bing
         private readonly string fName = "BingHybridMap";
         private string fUrlDynamicFormat = string.Empty;
 
-        public static readonly BingHybridMapProvider Instance;
+        public static readonly BingHybridMapProvider Instance = new BingHybridMapProvider();
 
         public override Guid Id
         {
@@ -40,11 +40,6 @@ namespace GKMap.MapProviders.Bing
 
         private BingHybridMapProvider()
         {
-        }
-
-        static BingHybridMapProvider()
-        {
-            Instance = new BingHybridMapProvider();
         }
 
         public override PureImage GetTileImage(GPoint pos, int zoom)

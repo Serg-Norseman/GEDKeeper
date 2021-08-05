@@ -331,25 +331,25 @@ namespace GKMap.MapProviders.Bing
             return ret;
         }
 
-        public GeoCoderStatusCode GetPoints(string keywords, out List<PointLatLng> pointList)
+        public GeocoderStatusCode GetPoints(string keywords, out List<PointLatLng> pointList)
         {
             //Escape keywords to better handle special characters.
             return GetLatLngFromGeocoderUrl(MakeGeocoderUrl("q=" + Uri.EscapeDataString(keywords)), out pointList);
         }
 
-        public PointLatLng? GetPoint(string keywords, out GeoCoderStatusCode status)
+        public PointLatLng? GetPoint(string keywords, out GeocoderStatusCode status)
         {
             List<PointLatLng> pointList;
             status = GetPoints(keywords, out pointList);
             return pointList != null && pointList.Count > 0 ? pointList[0] : (PointLatLng?)null;
         }
 
-        public GeoCoderStatusCode GetPoints(Placemark placemark, out List<PointLatLng> pointList)
+        public GeocoderStatusCode GetPoints(Placemark placemark, out List<PointLatLng> pointList)
         {
             return GetLatLngFromGeocoderUrl(MakeGeocoderDetailedUrl(placemark), out pointList);
         }
 
-        public PointLatLng? GetPoint(Placemark placemark, out GeoCoderStatusCode status)
+        public PointLatLng? GetPoint(Placemark placemark, out GeocoderStatusCode status)
         {
             List<PointLatLng> pointList;
             status = GetLatLngFromGeocoderUrl(MakeGeocoderDetailedUrl(placemark), out pointList);
@@ -390,13 +390,13 @@ namespace GKMap.MapProviders.Bing
             return false;
         }
 
-        public GeoCoderStatusCode GetPlacemarks(PointLatLng location, out List<Placemark> placemarkList)
+        public GeocoderStatusCode GetPlacemarks(PointLatLng location, out List<Placemark> placemarkList)
         {
             // http://msdn.microsoft.com/en-us/library/ff701713.aspx
             throw new NotImplementedException();
         }
 
-        public Placemark? GetPlacemark(PointLatLng location, out GeoCoderStatusCode status)
+        public Placemark? GetPlacemark(PointLatLng location, out GeocoderStatusCode status)
         {
             // http://msdn.microsoft.com/en-us/library/ff701713.aspx
             throw new NotImplementedException();
@@ -407,9 +407,9 @@ namespace GKMap.MapProviders.Bing
             return string.Format(CultureInfo.InvariantCulture, GeocoderUrlFormat, keywords, SessionId);
         }
 
-        private GeoCoderStatusCode GetLatLngFromGeocoderUrl(string url, out List<PointLatLng> pointList)
+        private GeocoderStatusCode GetLatLngFromGeocoderUrl(string url, out List<PointLatLng> pointList)
         {
-            GeoCoderStatusCode status;
+            GeocoderStatusCode status;
             pointList = null;
 
             try {
@@ -425,7 +425,7 @@ namespace GKMap.MapProviders.Bing
                     }
                 }
 
-                status = GeoCoderStatusCode.Unknow;
+                status = GeocoderStatusCode.Unknown;
                 if (!string.IsNullOrEmpty(geo)) {
                     if (geo.StartsWith("<?xml") && geo.Contains("<Response")) {
                         XmlDocument doc = new XmlDocument();
@@ -445,43 +445,43 @@ namespace GKMap.MapProviders.Bing
                                     }
 
                                     if (pointList.Count > 0) {
-                                        status = GeoCoderStatusCode.G_GEO_SUCCESS;
+                                        status = GeocoderStatusCode.Success;
                                         if (cache && GMaps.Instance.UseGeocoderCache) {
                                             Cache.Instance.SaveContent(url, CacheType.GeocoderCache, geo);
                                         }
                                         break;
                                     }
 
-                                    status = GeoCoderStatusCode.G_GEO_UNKNOWN_ADDRESS;
+                                    status = GeocoderStatusCode.UnknownAddress;
                                     break;
                                 }
 
                             case "400":
-                                status = GeoCoderStatusCode.G_GEO_BAD_REQUEST;
+                                status = GeocoderStatusCode.BadRequest;
                                 break; // bad request, The request contained an error.
                             case "401":
-                                status = GeoCoderStatusCode.G_GEO_BAD_KEY;
+                                status = GeocoderStatusCode.BadKey;
                                 break; // Unauthorized, Access was denied. You may have entered your credentials incorrectly, or you might not have access to the requested resource or operation.
                             case "403":
-                                status = GeoCoderStatusCode.G_GEO_BAD_REQUEST;
+                                status = GeocoderStatusCode.BadRequest;
                                 break; // Forbidden, The request is for something forbidden. Authorization will not help.
                             case "404":
-                                status = GeoCoderStatusCode.G_GEO_UNKNOWN_ADDRESS;
+                                status = GeocoderStatusCode.UnknownAddress;
                                 break; // Not Found, The requested resource was not found. 
                             case "500":
-                                status = GeoCoderStatusCode.G_GEO_SERVER_ERROR;
+                                status = GeocoderStatusCode.ServerError;
                                 break; // Internal Server Error, Your request could not be completed because there was a problem with the service.
                             case "501":
-                                status = GeoCoderStatusCode.Unknow;
+                                status = GeocoderStatusCode.Unknown;
                                 break; // Service Unavailable, There's a problem with the service right now. Please try again later.
                             default:
-                                status = GeoCoderStatusCode.Unknow;
+                                status = GeocoderStatusCode.Unknown;
                                 break; // unknown, for possible future error codes
                         }
                     }
                 }
             } catch (Exception ex) {
-                status = GeoCoderStatusCode.ExceptionInCode;
+                status = GeocoderStatusCode.ExceptionInCode;
                 Debug.WriteLine("GetLatLngFromGeocoderUrl: " + ex);
             }
 
@@ -501,7 +501,7 @@ namespace GKMap.MapProviders.Bing
         private readonly string fName = "BingMap";
         private string fUrlDynamicFormat = string.Empty;
 
-        public static readonly BingMapProvider Instance;
+        public static readonly BingMapProvider Instance = new BingMapProvider();
 
 
         public override Guid Id
@@ -520,11 +520,6 @@ namespace GKMap.MapProviders.Bing
 
         private BingMapProvider()
         {
-        }
-
-        static BingMapProvider()
-        {
-            Instance = new BingMapProvider();
         }
 
         public override PureImage GetTileImage(GPoint pos, int zoom)

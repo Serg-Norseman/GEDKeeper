@@ -22,7 +22,7 @@ namespace GKMap.MapProviders.Bing
         private readonly string fName = "BingOSMap";
         private string fUrlDynamicFormat = string.Empty;
 
-        public static readonly BingOSMapProvider Instance;
+        public static readonly BingOSMapProvider Instance = new BingOSMapProvider();
 
         public override Guid Id
         {
@@ -40,11 +40,6 @@ namespace GKMap.MapProviders.Bing
 
         private BingOSMapProvider()
         {
-        }
-
-        static BingOSMapProvider()
-        {
-            Instance = new BingOSMapProvider();
         }
 
         public override PureImage GetTileImage(GPoint pos, int zoom)

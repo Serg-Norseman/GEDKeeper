@@ -70,7 +70,7 @@ namespace GKMap.MapProviders.Etc
         private readonly string fName = "WikiMapiaMap";
         private GMapProvider[] fOverlays;
 
-        public static readonly WikiMapiaMapProvider Instance;
+        public static readonly WikiMapiaMapProvider Instance = new WikiMapiaMapProvider();
 
         public override Guid Id
         {
@@ -98,11 +98,6 @@ namespace GKMap.MapProviders.Etc
 
         private WikiMapiaMapProvider()
         {
-        }
-
-        static WikiMapiaMapProvider()
-        {
-            Instance = new WikiMapiaMapProvider();
         }
 
         public override PureImage GetTileImage(GPoint pos, int zoom)

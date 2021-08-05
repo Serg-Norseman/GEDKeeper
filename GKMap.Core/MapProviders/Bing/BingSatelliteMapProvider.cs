@@ -22,7 +22,7 @@ namespace GKMap.MapProviders.Bing
         private readonly string fName = "BingSatelliteMap";
         private string fUrlDynamicFormat = string.Empty;
 
-        public static readonly BingSatelliteMapProvider Instance;
+        public static readonly BingSatelliteMapProvider Instance = new BingSatelliteMapProvider();
 
         public override Guid Id
         {
@@ -40,11 +40,6 @@ namespace GKMap.MapProviders.Bing
 
         private BingSatelliteMapProvider()
         {
-        }
-
-        static BingSatelliteMapProvider()
-        {
-            Instance = new BingSatelliteMapProvider();
         }
 
         public override PureImage GetTileImage(GPoint pos, int zoom)
