@@ -46,23 +46,19 @@ namespace GKMap.WinForms.Demo
         private void InitializeComponent()
         {
             fMapControl = new GMapControl {
-                CanDragMap = true,
                 Dock = DockStyle.Fill,
                 EmptyTileColor = Color.Navy,
-                HelperLineOption = HelperLineOptions.DontShow,
                 LevelsKeepInMemmory = 5,
                 Location = new Point(0, 0),
                 Margin = new Padding(4),
                 MarkersEnabled = true,
                 MaxZoom = 17,
                 MinZoom = 2,
-                MouseWheelZoomType = MouseWheelZoomType.MousePositionAndCenter,
                 PolygonsEnabled = true,
                 RetryLoadTile = 0,
                 RoutesEnabled = true,
                 ScaleMode = ScaleModes.Integer,
                 SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225),
-                ShowTileGridLines = false,
                 Size = new Size(881, 818),
                 TabIndex = 0,
                 Zoom = 0D
@@ -225,10 +221,10 @@ namespace GKMap.WinForms.Demo
 
                 // set cache mode only if no internet available
                 if (!GMapControl.PingNetwork("pingtest.com")) {
-                    fMapControl.Manager.Mode = AccessMode.CacheOnly;
+                    //fMapControl.Manager.Mode = AccessMode.CacheOnly;
                     MessageBox.Show("No internet connection available, going to CacheOnly mode.", "GKMap", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 } else {
-                    fMapControl.Manager.Mode = AccessMode.ServerAndCache;
+                    //fMapControl.Manager.Mode = AccessMode.ServerAndCache;
                 }
 
                 // config map         
@@ -262,10 +258,7 @@ namespace GKMap.WinForms.Demo
                 fMapControl.KeyPress += MainForm_KeyPress;
                 fMapControl.KeyUp += MainForm_KeyUp;
 
-                fMapControl.CanDragMap = true;
-                fMapControl.ShowTileGridLines = false;
                 //fMapControl.ScaleMode = ScaleModes.Fractional;
-                //fMapControl.VirtualSizeEnabled = true;
 
                 fMapControl.Manager.UseGeocoderCache = true;
                 fMapControl.Manager.UsePlacemarkCache = true;
@@ -282,9 +275,9 @@ namespace GKMap.WinForms.Demo
                 fTopOverlay.Markers.Add(fTargetMarker);
 
                 // add my city location for demo
-                GeoCoderStatusCode status;
+                GeocoderStatusCode status;
                 PointLatLng? pos = GMapProviders.GoogleMap.GetPoint("Egypt, Cairo", out status);
-                if (pos != null && status == GeoCoderStatusCode.G_GEO_SUCCESS) {
+                if (pos != null && status == GeocoderStatusCode.Success) {
                     fTargetMarker.Position = pos.Value;
 
                     GMapMarker myCity = new GMarkerIcon(pos.Value, GMarkerIconType.green_small);
@@ -451,9 +444,9 @@ namespace GKMap.WinForms.Demo
         private void MainMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left) {
-                GeoCoderStatusCode status;
+                GeocoderStatusCode status;
                 var pos = GMapProviders.GoogleMap.GetPlacemark(item.Position, out status);
-                if (status == GeoCoderStatusCode.G_GEO_SUCCESS && pos != null) {
+                if (status == GeocoderStatusCode.Success && pos != null) {
                     item.ToolTipText = pos.Value.Address;
                     fMapControl.Invalidate(false);
                 }
@@ -582,9 +575,9 @@ namespace GKMap.WinForms.Demo
         /// <param name="place"></param>
         public void AddLocationMarker(string place)
         {
-            GeoCoderStatusCode status;
+            GeocoderStatusCode status;
             PointLatLng? pos = GMapProviders.GoogleMap.GetPoint(place, out status);
-            if (pos != null && status == GeoCoderStatusCode.G_GEO_SUCCESS) {
+            if (pos != null && status == GeocoderStatusCode.Success) {
                 var m = new GMarkerIcon(pos.Value, GMarkerIconType.green);
                 m.ToolTip = new GMapRoundedToolTip(m);
                 m.ToolTipText = place;
@@ -603,9 +596,9 @@ namespace GKMap.WinForms.Demo
             m.ToolTipMode = MarkerTooltipMode.OnMouseOver;
 
             Placemark? p = null;
-            GeoCoderStatusCode status;
+            GeocoderStatusCode status;
             var ret = GMapProviders.GoogleMap.GetPlacemark(targetPosition, out status);
-            if (status == GeoCoderStatusCode.G_GEO_SUCCESS && ret != null) {
+            if (status == GeocoderStatusCode.Success && ret != null) {
                 p = ret;
             }
 

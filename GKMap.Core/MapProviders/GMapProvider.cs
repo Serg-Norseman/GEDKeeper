@@ -139,9 +139,9 @@ namespace GKMap.MapProviders
         /// It's pseudo-randomized to avoid blockages...
         /// </summary>                                
         public static string UserAgent = string.Format("Mozilla/5.0 (Windows NT {1}.0; {2}rv:{0}.0) Gecko/20100101 Firefox/{0}.0",
-            Stuff.random.Next(DateTime.Today.Year - 1969 - 5, DateTime.Today.Year - 1969),
-            Stuff.random.Next(0, 10) % 2 == 0 ? 10 : 6,
-            Stuff.random.Next(0, 10) % 2 == 1 ? string.Empty : "WOW64; ");
+            Stuff.Random.Next(DateTime.Today.Year - 1969 - 5, DateTime.Today.Year - 1969),
+            Stuff.Random.Next(0, 10) % 2 == 0 ? 10 : 6,
+            Stuff.Random.Next(0, 10) % 2 == 1 ? string.Empty : "WOW64; ");
 
         /// <summary>
         /// timeout for provider connections
@@ -180,11 +180,6 @@ namespace GKMap.MapProviders
                 fLanguageStr = Stuff.EnumToString(fLanguage);
             }
         }
-
-        /// <summary>
-        /// to bypass the cache, set to true
-        /// </summary>
-        public bool BypassCache = false;
 
         /// <summary>
         /// internal proxy for image management

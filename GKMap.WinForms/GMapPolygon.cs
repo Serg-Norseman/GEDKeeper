@@ -112,7 +112,6 @@ namespace GKMap.WinForms
 
         /// <summary>
         /// checks if point is inside the polygon,
-        /// info.: http://greatmaps.codeplex.com/discussions/279437#post700449
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>

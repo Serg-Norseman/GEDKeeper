@@ -45,8 +45,8 @@ namespace GKMap.WinForms.Demo
         private void textBoxGeo_KeyPress(object sender, KeyPressEventArgs e)
         {
             if ((Keys)e.KeyChar == Keys.Enter) {
-                GeoCoderStatusCode status = MapBrowser.MapControl.SetPositionByKeywords(textBoxGeo.Text);
-                if (status != GeoCoderStatusCode.G_GEO_SUCCESS) {
+                GeocoderStatusCode status = MapBrowser.MapControl.SetPositionByKeywords(textBoxGeo.Text);
+                if (status != GeocoderStatusCode.Success) {
                     MessageBox.Show("Geocoder can't find: '" + textBoxGeo.Text + "', reason: " + status, @"GKMap", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
