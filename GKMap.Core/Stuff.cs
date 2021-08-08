@@ -29,6 +29,24 @@ namespace GKMap
 
         public static readonly Random Random = new Random();
 
+        public static string LoadResourceString(string resName)
+        {
+            Assembly assembly = typeof(Stuff).Assembly;
+            Stream resStream = assembly.GetManifestResourceStream(resName);
+            string result;
+            using (StreamReader sr = new StreamReader(resStream)) {
+                result = sr.ReadToEnd();
+            }
+            return result;
+        }
+
+        public static Stream LoadResourceStream(string resName)
+        {
+            Assembly assembly = typeof(Stuff).Assembly;
+            Stream resStream = assembly.GetManifestResourceStream(resName);
+            return resStream;
+        }
+
         public static MemoryStream CopyStream(Stream inputStream, bool seekOriginBegin)
         {
             const int readSize = 32 * 1024;

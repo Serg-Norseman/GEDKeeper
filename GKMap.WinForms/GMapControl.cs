@@ -494,17 +494,17 @@ namespace GKMap.WinForms
         }
 
         /// <summary>
-        /// how many levels of tiles are staying decompresed in memory
+        /// how many levels of tiles are staying decompressed in memory
         /// </summary>
         [Browsable(false)]
-        public int LevelsKeepInMemmory
+        public int LevelsKeepInMemory
         {
             get {
-                return Core.LevelsKeepInMemmory;
+                return Core.LevelsKeepInMemory;
             }
 
             set {
-                Core.LevelsKeepInMemmory = value;
+                Core.LevelsKeepInMemory = value;
             }
         }
 
@@ -721,6 +721,23 @@ namespace GKMap.WinForms
         public GMapControl()
         {
             Overlays = new ObservableCollectionThreadSafe<GMapOverlay>();
+
+            EmptyTileColor = Color.Navy;
+            LevelsKeepInMemory = 5;
+            MarkersEnabled = true;
+            MaxZoom = 17;
+            MinZoom = 2;
+            PolygonsEnabled = true;
+            RetryLoadTile = 0;
+            RoutesEnabled = true;
+            ScaleMode = ScaleModes.Integer;
+            //ScaleMode = ScaleModes.Fractional;
+            SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
+            Zoom = 0D;
+
+            Manager.UseGeocoderCache = true;
+            Manager.UsePlacemarkCache = true;
+
             if (!IsDesignerHosted) {
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
                 SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -1338,7 +1355,7 @@ namespace GKMap.WinForms
                         long Ix = 0;
 
                         while (!parentTile.NotEmpty && zoomOffset < Core.Zoom &&
-                               zoomOffset <= LevelsKeepInMemmory) {
+                               zoomOffset <= LevelsKeepInMemory) {
                             Ix = (long)Math.Pow(2, zoomOffset);
                             parentTile = Core.Matrix.GetTileWithNoLock(Core.Zoom - zoomOffset++,
                                 new GPoint((int)(tilePoint.PosXY.X / Ix), (int)(tilePoint.PosXY.Y / Ix)));

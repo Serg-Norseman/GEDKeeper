@@ -211,8 +211,8 @@ namespace GKMap
                     if (IsStarted) {
                         CancelAsyncTasks();
 
-                        Matrix.ClearLevelsBelow(fZoom - LevelsKeepInMemmory);
-                        Matrix.ClearLevelsAbove(fZoom + LevelsKeepInMemmory);
+                        Matrix.ClearLevelsBelow(fZoom - LevelsKeepInMemory);
+                        Matrix.ClearLevelsAbove(fZoom + LevelsKeepInMemory);
 
                         lock (FailedLoads) {
                             FailedLoads.Clear();
@@ -253,7 +253,7 @@ namespace GKMap
         /// <summary>
         /// how many levels of tiles are staying decompresed in memory
         /// </summary>
-        public int LevelsKeepInMemmory = 5;
+        public int LevelsKeepInMemory = 5;
 
         /// <summary>
         /// occurs when current position is changed

@@ -6,11 +6,16 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
+#if MONO
+#undef EMBED_LIBS
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using System.Threading;
 using GKMap.MapProviders;
@@ -49,7 +54,7 @@ namespace GKMap.CacheProviders
         private string fDb;
         private int fPreAllocationPing;
 
-#if !MONO
+#if EMBED_LIBS
         static SQLitePureImageCache()
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
@@ -75,8 +80,13 @@ namespace GKMap.CacheProviders
 
                     if (Environment.Version.Major == 2) {
                     } else if (Environment.Version.Major == 4) {
-                        using (MemoryStream gzipDll = new MemoryStream((IntPtr.Size == 8 ? Properties.Resources.System_Data_SQLite_x64_NET4_dll : Properties.Resources.System_Data_SQLite_x86_NET4_dll))) {
-                            using (var gs = new System.IO.Compression.GZipStream(gzipDll, System.IO.Compression.CompressionMode.Decompress)) {
+                        string gzName = IntPtr.Size == 8
+                            ? "GKMap.Resources.System.Data.SQLite.x64.NET4.dll.gz"
+                            : "GKMap.Resources.System.Data.SQLite.x86.NET4.dll.gz";
+
+                        var resStream = Stuff.LoadResourceStream(gzName);
+                        using (MemoryStream gzipDll = new MemoryStream()) {
+                            using (var gs = new GZipStream(resStream, CompressionMode.Decompress)) {
                                 using (MemoryStream exctDll = new MemoryStream()) {
                                     byte[] tmp = new byte[1024 * 256];
                                     int r;
@@ -98,19 +108,19 @@ namespace GKMap.CacheProviders
         }
 
         private static int fPing;
+#endif
 
         /// <summary>
         /// triggers dynamic sqlite loading
         /// </summary>
         public static void Ping()
         {
-#if !MONO
+#if EMBED_LIBS
             if (++fPing == 1) {
                 Trace.WriteLine("SQLiteVersion: " + SQLiteConnection.SQLiteVersion + " | " + SQLiteConnection.SQLiteSourceId + " | " + SQLiteConnection.DefineConstants);
             }
 #endif
         }
-#endif
 
         /// <summary>
         /// local cache location
@@ -170,52 +180,49 @@ namespace GKMap.CacheProviders
         /// </summary>
         private void CheckPreAllocation()
         {
-            {
-                byte[] pageSizeBytes = new byte[2];
-                byte[] freePagesBytes = new byte[4];
+            byte[] pageSizeBytes = new byte[2];
+            byte[] freePagesBytes = new byte[4];
 
-                lock (this) {
-                    using (var dbf = File.Open(fDb, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-                        dbf.Seek(16, SeekOrigin.Begin);
+            lock (this) {
+                using (var dbf = File.Open(fDb, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                    dbf.Seek(16, SeekOrigin.Begin);
 
 #if !MONO
-                        dbf.Lock(16, 2);
-                        dbf.Read(pageSizeBytes, 0, 2);
-                        dbf.Unlock(16, 2);
+                    dbf.Lock(16, 2);
+                    dbf.Read(pageSizeBytes, 0, 2);
+                    dbf.Unlock(16, 2);
 
-                        dbf.Seek(36, SeekOrigin.Begin);
+                    dbf.Seek(36, SeekOrigin.Begin);
 
-                        dbf.Lock(36, 4);
-                        dbf.Read(freePagesBytes, 0, 4);
-                        dbf.Unlock(36, 4);
+                    dbf.Lock(36, 4);
+                    dbf.Read(freePagesBytes, 0, 4);
+                    dbf.Unlock(36, 4);
 #else
                   dbf.Read(pageSizeBytes, 0, 2);
                   dbf.Seek(36, SeekOrigin.Begin);
                   dbf.Read(freePagesBytes, 0, 4);
 #endif
 
-                        dbf.Close();
-                    }
+                    dbf.Close();
                 }
+            }
 
-                if (BitConverter.IsLittleEndian) {
-                    Array.Reverse(pageSizeBytes);
-                    Array.Reverse(freePagesBytes);
-                }
+            if (BitConverter.IsLittleEndian) {
+                Array.Reverse(pageSizeBytes);
+                Array.Reverse(freePagesBytes);
+            }
 
-                UInt16 pageSize = BitConverter.ToUInt16(pageSizeBytes, 0);
-                UInt32 freePages = BitConverter.ToUInt32(freePagesBytes, 0);
+            ushort pageSize = BitConverter.ToUInt16(pageSizeBytes, 0);
+            uint freePages = BitConverter.ToUInt32(freePagesBytes, 0);
+            var freeMB = (pageSize * freePages) / (1024.0 * 1024.0);
 
-                var freeMB = (pageSize * freePages) / (1024.0 * 1024.0);
+            int addSizeMB = 32;
+            int waitUntilMB = 4;
 
-                int addSizeMB = 32;
-                int waitUntilMB = 4;
+            Debug.WriteLine("FreePageSpace in cache: " + freeMB + "MB | " + freePages + " pages");
 
-                Debug.WriteLine("FreePageSpace in cache: " + freeMB + "MB | " + freePages + " pages");
-
-                if (freeMB <= waitUntilMB) {
-                    PreAllocateDB(fDb, addSizeMB);
-                }
+            if (freeMB <= waitUntilMB) {
+                PreAllocateDB(fDb, addSizeMB);
             }
         }
 
@@ -234,34 +241,36 @@ namespace GKMap.CacheProviders
 #if !MONO
                     cn.ConnectionString = string.Format("Data Source=\"{0}\";FailIfMissing=False;Page Size=32768", file);
 #else
-               cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=False,Page Size=32768", file);
+                    cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=False,Page Size=32768", file);
 #endif
                     cn.Open();
-                    {
-                        using (DbTransaction tr = cn.BeginTransaction()) {
-                            try {
-                                using (DbCommand cmd = cn.CreateCommand()) {
-                                    cmd.Transaction = tr;
-                                    cmd.CommandText = Properties.Resources.CreateTileDb;
-                                    cmd.ExecuteNonQuery();
-                                }
-                                tr.Commit();
-                            } catch (Exception exx) {
-#if MONO
-                        Console.WriteLine("CreateEmptyDB: " + exx.ToString());
-#endif
-                                Debug.WriteLine("CreateEmptyDB: " + exx);
+                    string strCreateTileDb = Stuff.LoadResourceString("GKMap.Resources.CreateTileDb.sql");
 
-                                tr.Rollback();
-                                ret = false;
+                    using (DbTransaction tr = cn.BeginTransaction()) {
+                        try {
+                            using (DbCommand cmd = cn.CreateCommand()) {
+                                cmd.Transaction = tr;
+                                cmd.CommandText = strCreateTileDb;
+                                cmd.ExecuteNonQuery();
                             }
+
+                            tr.Commit();
+                        } catch (Exception exx) {
+#if MONO
+                            Console.WriteLine("CreateEmptyDB: " + exx.ToString());
+#endif
+                            Debug.WriteLine("CreateEmptyDB: " + exx);
+
+                            tr.Rollback();
+                            ret = false;
                         }
-                        cn.Close();
                     }
+
+                    cn.Close();
                 }
             } catch (Exception ex) {
 #if MONO
-            Console.WriteLine("CreateEmptyDB: " + ex.ToString());
+                Console.WriteLine("CreateEmptyDB: " + ex.ToString());
 #endif
                 Debug.WriteLine("CreateEmptyDB: " + ex);
                 ret = false;
@@ -537,10 +546,8 @@ namespace GKMap.CacheProviders
                                     long length = rd.GetBytes(0, 0, null, 0, 0);
                                     byte[] tile = new byte[length];
                                     rd.GetBytes(0, 0, tile, 0, tile.Length);
-                                    {
-                                        if (GMapProvider.TileImageProxy != null) {
-                                            ret = GMapProvider.TileImageProxy.FromArray(tile);
-                                        }
+                                    if (GMapProvider.TileImageProxy != null) {
+                                        ret = GMapProvider.TileImageProxy.FromArray(tile);
                                     }
                                 }
                                 rd.Close();
@@ -559,7 +566,7 @@ namespace GKMap.CacheProviders
                 }
             } catch (Exception ex) {
 #if MONO
-            Console.WriteLine("GetImageFromCache: " + ex.ToString());
+                Console.WriteLine("GetImageFromCache: " + ex.ToString());
 #endif
                 Debug.WriteLine("GetImageFromCache: " + ex);
                 ret = null;
@@ -576,19 +583,18 @@ namespace GKMap.CacheProviders
                 using (SQLiteConnection cn = new SQLiteConnection()) {
                     cn.ConnectionString = fConnectionString;
                     cn.Open();
-                    {
-                        using (DbCommand com = cn.CreateCommand()) {
-                            com.CommandText = string.Format("DELETE FROM Tiles WHERE CacheTime is not NULL and CacheTime < datetime('{0}')", date.ToString("s"));
-                            if (type.HasValue) {
-                                com.CommandText += " and Type = " + type;
-                            }
-                            affectedRows = com.ExecuteNonQuery();
+                    using (DbCommand com = cn.CreateCommand()) {
+                        com.CommandText = string.Format("DELETE FROM Tiles WHERE CacheTime is not NULL and CacheTime < datetime('{0}')", date.ToString("s"));
+                        if (type.HasValue) {
+                            com.CommandText += " and Type = " + type;
                         }
+
+                        affectedRows = com.ExecuteNonQuery();
                     }
                 }
             } catch (Exception ex) {
 #if MONO
-            Console.WriteLine("DeleteOlderThan: " + ex);
+                Console.WriteLine("DeleteOlderThan: " + ex);
 #endif
                 Debug.WriteLine("DeleteOlderThan: " + ex);
             }

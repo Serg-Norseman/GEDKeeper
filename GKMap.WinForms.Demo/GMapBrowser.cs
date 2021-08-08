@@ -21,21 +21,24 @@ namespace GKMap.WinForms.Demo
         private GMapControl fMapControl;
         private GMapMarker fTargetMarker;
 
-        private TableLayoutPanel fToolsPanel;
-        private TableLayoutPanel fPanel;
-        private ComboBox cmbMapType;
-        private Label lblMapType;
-        private Button btnSaveView;
-        private Button btnZoomCenter;
-        private Button btnClearAll;
-        private TrackBar trkZoom;
-        private Button btnZoomUp;
-        private Button btnZoomDown;
-        private TableLayoutPanel panZoom;
-
-        public IMapControl MapControl
+        public GMapControl MapControl
         {
             get { return fMapControl; }
+        }
+
+        public GMapOverlay Objects
+        {
+            get { return fObjects; }
+        }
+
+        public GMapOverlay Polygons
+        {
+            get { return fPolygons; }
+        }
+
+        public GMapOverlay Routes
+        {
+            get { return fRoutes; }
         }
 
         public PointLatLng TargetPosition
@@ -45,166 +48,14 @@ namespace GKMap.WinForms.Demo
 
         private void InitializeComponent()
         {
-            fMapControl = new GMapControl {
-                Dock = DockStyle.Fill,
-                EmptyTileColor = Color.Navy,
-                LevelsKeepInMemmory = 5,
-                Location = new Point(0, 0),
-                Margin = new Padding(4),
-                MarkersEnabled = true,
-                MaxZoom = 17,
-                MinZoom = 2,
-                PolygonsEnabled = true,
-                RetryLoadTile = 0,
-                RoutesEnabled = true,
-                ScaleMode = ScaleModes.Integer,
-                SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225),
-                Size = new Size(881, 818),
-                TabIndex = 0,
-                Zoom = 0D
-            };
+            fMapControl = new GMapControl();
+            fMapControl.Dock = DockStyle.Fill;
+            fMapControl.Location = new Point(0, 0);
+            fMapControl.Margin = new Padding(4);
+            fMapControl.Size = new Size(881, 818);
+            fMapControl.TabIndex = 0;
 
-            lblMapType = new Label {
-                AutoSize = true,
-                Location = new Point(176, 27),
-                Margin = new Padding(4, 0, 4, 0),
-                Size = new Size(35, 17),
-                Text = "type"
-            };
-
-            cmbMapType = new ComboBox {
-                DropDownStyle = ComboBoxStyle.DropDownList,
-                FormattingEnabled = true,
-                Location = new Point(11, 23),
-                Margin = new Padding(4),
-                Size = new Size(163, 24),
-                TabIndex = 9
-            };
-            cmbMapType.DropDownClosed += cmbMapType_DropDownClosed;
-
-            btnSaveView = new Button {
-                Location = new Point(123, 144),
-                Margin = new Padding(3, 2, 3, 2),
-                Size = new Size(92, 30),
-                TabIndex = 39,
-                Text = "Save View",
-                UseVisualStyleBackColor = true
-            };
-            btnSaveView.Click += btnSaveView_Click;
-
-            btnZoomCenter = new Button {
-                Location = new Point(8, 55),
-                Margin = new Padding(4),
-                Size = new Size(109, 30),
-                TabIndex = 15,
-                Text = "Zoom Center",
-                UseVisualStyleBackColor = true
-            };
-            btnZoomCenter.Click += btnZoomCenter_Click;
-
-            btnClearAll = new Button {
-                Location = new Point(125, 55),
-                Margin = new Padding(4),
-                Size = new Size(84, 30),
-                TabIndex = 13,
-                Text = "Clear All",
-                UseVisualStyleBackColor = true
-            };
-            btnClearAll.Click += btnClearAll_Click;
-
-            fToolsPanel = new TableLayoutPanel();
-            fToolsPanel.AutoSize = true;
-            fToolsPanel.ColumnCount = 5;
-            //fToolsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            fToolsPanel.Controls.Add(btnClearAll, 4, 0);
-            fToolsPanel.Controls.Add(btnZoomCenter, 3, 0);
-            fToolsPanel.Controls.Add(btnSaveView, 2, 0);
-            fToolsPanel.Controls.Add(cmbMapType, 1, 0);
-            fToolsPanel.Controls.Add(lblMapType, 0, 0);
-            fToolsPanel.Dock = DockStyle.Fill;
-            fToolsPanel.Location = new Point(64, 0);
-            fToolsPanel.Margin = new Padding(0, 0, 3, 2);
-            fToolsPanel.RowCount = 5;
-            fToolsPanel.RowStyles.Add(new RowStyle());
-            fToolsPanel.RowStyles.Add(new RowStyle());
-            fToolsPanel.RowStyles.Add(new RowStyle());
-            fToolsPanel.RowStyles.Add(new RowStyle());
-            fToolsPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 7F));
-            fToolsPanel.Size = new Size(235, 687);
-            fToolsPanel.TabIndex = 30;
-
-            btnZoomUp = new Button {
-                Dock = DockStyle.Fill,
-                Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0),
-                Location = new Point(0, 0),
-                Margin = new Padding(0),
-                Size = new Size(58, 33),
-                TabIndex = 0,
-                Text = "+",
-                UseVisualStyleBackColor = true
-            };
-            btnZoomUp.Click += btnZoomUp_Click;
-
-            trkZoom = new TrackBar {
-                BackColor = Color.AliceBlue,
-                Dock = DockStyle.Fill,
-                LargeChange = 1,
-                Location = new Point(0, 33),
-                Margin = new Padding(0),
-                Maximum = 1700,
-                Minimum = 1,
-                Orientation = Orientation.Vertical,
-                Size = new Size(58, 617),
-                TabIndex = 29,
-                TickFrequency = 100,
-                TickStyle = TickStyle.TopLeft,
-                Value = 12
-            };
-            trkZoom.ValueChanged += trkZoom_ValueChanged;
-
-            btnZoomDown = new Button {
-                Dock = DockStyle.Fill,
-                Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0),
-                Location = new Point(0, 650),
-                Margin = new Padding(0),
-                Size = new Size(58, 33),
-                TabIndex = 1,
-                Text = "-",
-                UseVisualStyleBackColor = true
-            };
-            btnZoomDown.Click += btnZoomDown_Click;
-
-            panZoom = new TableLayoutPanel();
-            panZoom.ColumnCount = 1;
-            panZoom.ColumnStyles.Add(new ColumnStyle());
-            panZoom.Controls.Add(btnZoomUp, 0, 0);
-            panZoom.Controls.Add(trkZoom, 0, 1);
-            panZoom.Controls.Add(btnZoomDown, 0, 2);
-            panZoom.Dock = DockStyle.Fill;
-            panZoom.Location = new Point(3, 3);
-            panZoom.RowCount = 3;
-            panZoom.RowStyles.Add(new RowStyle());
-            panZoom.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            panZoom.RowStyles.Add(new RowStyle());
-            panZoom.Size = new Size(58, 683);
-            panZoom.TabIndex = 31;
-
-            fPanel = new TableLayoutPanel();
-            fPanel.ColumnCount = 2;
-            fPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            fPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            fPanel.Controls.Add(panZoom, 1, 1);
-            fPanel.Controls.Add(fMapControl, 0, 1);
-            fPanel.Controls.Add(fToolsPanel, 0, 0);
-            fPanel.Dock = DockStyle.Fill;
-            fPanel.Location = new Point(0, 0);
-            fPanel.Margin = new Padding(0, 0, 3, 2);
-            fPanel.RowCount = 2;
-            fPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            fPanel.RowStyles.Add(new RowStyle());
-            fPanel.Size = new Size(235, 687);
-
-            Controls.Add(fPanel);
+            Controls.Add(fMapControl);
         }
 
         public GMapBrowser()
@@ -227,7 +78,7 @@ namespace GKMap.WinForms.Demo
                     //fMapControl.Manager.Mode = AccessMode.ServerAndCache;
                 }
 
-                // config map         
+                // config map
                 fMapControl.MapProvider = GMapProviders.OpenStreetMap;
                 fMapControl.Position = new PointLatLng(30.0447272077905, 31.2361907958984);
                 fMapControl.MinZoom = 0;
@@ -242,8 +93,6 @@ namespace GKMap.WinForms.Demo
 
                 // map events
                 fMapControl.OnPositionChanged += MainMap_OnPositionChanged;
-                fMapControl.OnMapZoomChanged += MainMap_OnMapZoomChanged;
-                fMapControl.OnMapTypeChanged += MainMap_OnMapTypeChanged;
                 fMapControl.OnMarkerClick += MainMap_OnMarkerClick;
                 fMapControl.OnMarkerEnter += MainMap_OnMarkerEnter;
                 fMapControl.OnMarkerLeave += MainMap_OnMarkerLeave;
@@ -254,19 +103,7 @@ namespace GKMap.WinForms.Demo
                 fMapControl.MouseMove += MainMap_MouseMove;
                 fMapControl.MouseDown += MainMap_MouseDown;
                 fMapControl.MouseUp += MainMap_MouseUp;
-                fMapControl.MouseDoubleClick += MainMap_MouseDoubleClick;
-                fMapControl.KeyPress += MainForm_KeyPress;
                 fMapControl.KeyUp += MainForm_KeyUp;
-
-                //fMapControl.ScaleMode = ScaleModes.Fractional;
-
-                fMapControl.Manager.UseGeocoderCache = true;
-                fMapControl.Manager.UsePlacemarkCache = true;
-
-                // get zoom  
-                trkZoom.Minimum = fMapControl.MinZoom * 100;
-                trkZoom.Maximum = fMapControl.MaxZoom * 100;
-                trkZoom.TickFrequency = 100;
 
                 // set current marker
                 fTargetMarker = new GMarkerIcon(fMapControl.Position, GMarkerIconType.arrow);
@@ -292,63 +129,6 @@ namespace GKMap.WinForms.Demo
 
                 RegeneratePolygon();
             }
-
-            // get map types
-#if !MONO   // mono doesn't handle it, so we 'lost' provider list ;]
-            cmbMapType.ValueMember = "Name";
-            cmbMapType.DataSource = GMapProviders.List;
-            cmbMapType.SelectedItem = fMapControl.MapProvider;
-#endif
-
-            if (fMapControl.Zoom >= fMapControl.MinZoom && fMapControl.Zoom <= fMapControl.MaxZoom) {
-                trkZoom.Value = (int)fMapControl.Zoom * 100;
-            }
-        }
-
-        #region Event handlers
-
-        // change map type
-        private void cmbMapType_DropDownClosed(object sender, EventArgs e)
-        {
-            fMapControl.MapProvider = cmbMapType.SelectedItem as GMapProvider;
-        }
-
-        // saves current map view
-        private void btnSaveView_Click(object sender, EventArgs e)
-        {
-            try {
-                using (SaveFileDialog sfd = new SaveFileDialog()) {
-                    sfd.Filter = "PNG (*.png)|*.png";
-                    sfd.FileName = "GKMap image";
-
-                    Image tmpImage = fMapControl.ToImage();
-                    if (tmpImage != null) {
-                        using (tmpImage) {
-                            if (sfd.ShowDialog() == DialogResult.OK) {
-                                tmpImage.Save(sfd.FileName);
-
-                                MessageBox.Show("Image saved: " + sfd.FileName, "GKMap", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                        }
-                    }
-                }
-            } catch (Exception ex) {
-                MessageBox.Show("Image failed to save: " + ex.Message, "GKMap", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // clear markers and all
-        private void btnClearAll_Click(object sender, EventArgs e)
-        {
-            fRoutes.Routes.Clear();
-            fPolygons.Polygons.Clear();
-            fObjects.Markers.Clear();
-        }
-
-        // zoom to max for markers
-        private void btnZoomCenter_Click(object sender, EventArgs e)
-        {
-            fMapControl.ZoomAndCenterMarkers("objects");
         }
 
         private void RegeneratePolygon()
@@ -395,24 +175,11 @@ namespace GKMap.WinForms.Demo
             item.Stroke.Color = Color.Red;
         }
 
-        private void MainMap_OnMapTypeChanged(GMapProvider type)
-        {
-            cmbMapType.SelectedItem = type;
-            trkZoom.Minimum = fMapControl.MinZoom * 100;
-            trkZoom.Maximum = fMapControl.MaxZoom * 100;
-            fMapControl.ZoomAndCenterMarkers("objects");
-        }
-
         private void MainMap_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left) {
                 fIsMouseDown = false;
             }
-        }
-
-        private void MainMap_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            // dummy
         }
 
         private void MainMap_MouseDown(object sender, MouseEventArgs e)
@@ -436,11 +203,6 @@ namespace GKMap.WinForms.Demo
             }
         }
 
-        private void MainMap_OnMapZoomChanged()
-        {
-            trkZoom.Value = (int)(fMapControl.Zoom * 100.0);
-        }
-
         private void MainMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left) {
@@ -459,21 +221,6 @@ namespace GKMap.WinForms.Demo
                 fLastPosition = point;
                 fLastZoom = (int)fMapControl.Zoom;
             }
-        }
-
-        private void trkZoom_ValueChanged(object sender, EventArgs e)
-        {
-            fMapControl.Zoom = trkZoom.Value / 100.0;
-        }
-
-        private void btnZoomUp_Click(object sender, EventArgs e)
-        {
-            fMapControl.Zoom = ((int)fMapControl.Zoom) + 1;
-        }
-
-        private void btnZoomDown_Click(object sender, EventArgs e)
-        {
-            fMapControl.Zoom = ((int)(fMapControl.Zoom + 0.99)) - 1;
         }
 
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
@@ -513,25 +260,16 @@ namespace GKMap.WinForms.Demo
                         RegeneratePolygon();
                     }
                     break;
+
+                case Keys.Add:
+                    fMapControl.Zoom = ((int)fMapControl.Zoom) + 1;
+                    break;
+
+                case Keys.Subtract:
+                    fMapControl.Zoom = ((int)(fMapControl.Zoom + 0.99)) - 1;
+                    break;
             }
         }
-
-        private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (fMapControl.Focused) {
-                switch (e.KeyChar) {
-                    case '+':
-                        fMapControl.Zoom = ((int)fMapControl.Zoom) + 1;
-                        break;
-
-                    case '-':
-                        fMapControl.Zoom = ((int)(fMapControl.Zoom + 0.99)) - 1;
-                        break;
-                }
-            }
-        }
-
-        #endregion
 
         public void AddRoute(List<PointLatLng> points)
         {

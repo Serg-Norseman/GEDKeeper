@@ -36,6 +36,12 @@ namespace GKMap
 
         GMapProvider MapProvider { get; set; }
 
+        double Zoom { get; set; }
+
+        int MaxZoom { get; set; }
+
+        int MinZoom { get; set; }
+
         event PositionChanged OnPositionChanged;
         event TileLoadComplete OnTileLoadComplete;
         event TileLoadStart OnTileLoadStart;

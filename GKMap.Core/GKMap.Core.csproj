@@ -46,23 +46,17 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;MONO_disabled;SQLite</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MONO_disabled;SQLite;EMBED_LIBS;</DefineConstants>
     <DebugType>Full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\x86\Debug\GKMap.Core.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;MONO_disabled; SQLite</DefineConstants>
+    <DefineConstants>TRACE;MONO_disabled;SQLite;EMBED_LIBS;</DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\x86\Release\GKMap.Core.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
@@ -78,20 +72,6 @@
     <BaseAddress>4194304</BaseAddress>
     <RegisterForComInterop>False</RegisterForComInterop>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">
-    <TargetFrameworkVersionNumber>4.0</TargetFrameworkVersionNumber>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">
-    <TargetFrameworkVersionNumber>4.5</TargetFrameworkVersionNumber>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.6' ">
-    <TargetFrameworkVersionNumber>4.6</TargetFrameworkVersionNumber>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v5.0' ">
-    <TargetFrameworkVersionNumber>5.0</TargetFrameworkVersionNumber>
-  </PropertyGroup>
-  <ItemGroup Condition="!$(DefineConstants.Contains(';MONO'))">
-  </ItemGroup>
   <ItemGroup Condition="$(DefineConstants.Contains(';MONO'))">
     <Reference Include="Mono.Data.Sqlite">
       <HintPath>..\libs\Mono.Data.Sqlite.dll</HintPath>
@@ -102,12 +82,19 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="!$(DefineConstants.Contains('EMBED_LIBS;'))">
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\libs\x86\System.Data.SQLite.DLL</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains('EMBED_LIBS;'))">
     <Reference Include="System.Data.SQLite">
       <HintPath>..\libs\x86\System.Data.SQLite.DLL</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -164,11 +151,6 @@
     <Compile Include="GRect.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <DependentUpon>Resources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Cache.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Tile.cs" />
@@ -180,18 +162,15 @@
     <Compile Include="GSize.cs" />
     <Compile Include="SizeLatLng.cs" />
     <Compile Include="Stuff.cs" />
-    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CreateTileDb.sql" />
+  </ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains('EMBED_LIBS;'))">
+    <EmbeddedResource Include="Resources\System.Data.SQLite.x64.NET4.dll.gz" />
+    <EmbeddedResource Include="Resources\System.Data.SQLite.x86.NET4.dll.gz" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\System.Data.SQLite.x64.NET4.dll.gz" />
-    <None Include="Resources\System.Data.SQLite.x86.NET4.dll.gz" />
     <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup />
