@@ -30,11 +30,9 @@ using BSLib;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.Options;
-using GMap.NET;
-using GMap.NET.MapProviders;
-using GMap.NET.WindowsForms;
-using GMap.NET.WindowsForms.Markers;
-using GMap.NET.WindowsForms.ToolTips;
+using GKMap;
+using GKMap.MapProviders;
+using GKMap.WinForms;
 
 namespace GKUI.Components
 {
@@ -204,26 +202,19 @@ namespace GKUI.Components
         private void InitControl()
         {
             fMapControl = new GMapControl {
-                Bearing = 0F,
-                CanDragMap = true,
                 Dock = DockStyle.Fill,
                 EmptyTileColor = Color.Navy,
-                GrayScaleMode = false,
-                HelperLineOption = HelperLineOptions.DontShow,
-                LevelsKeepInMemmory = 5,
+                LevelsKeepInMemory = 5,
                 Location = new Point(0, 0),
                 Margin = new Padding(4),
                 MarkersEnabled = true,
                 MaxZoom = 17,
                 MinZoom = 2,
-                MouseWheelZoomType = MouseWheelZoomType.MousePositionAndCenter,
-                NegativeMode = false,
                 PolygonsEnabled = true,
                 RetryLoadTile = 0,
                 RoutesEnabled = true,
                 ScaleMode = ScaleModes.Integer,
                 SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225),
-                ShowTileGridLines = false,
                 Zoom = 0D
             };
             Controls.Add(fMapControl);
@@ -239,20 +230,16 @@ namespace GKUI.Components
                 }
 
                 // set cache mode only if no internet available
-                fMapControl.Manager.Mode = (!PingNetwork("pingtest.com")) ? AccessMode.CacheOnly : AccessMode.ServerAndCache;
+                //fMapControl.Manager.Mode = (!PingNetwork("pingtest.com")) ? AccessMode.CacheOnly : AccessMode.ServerAndCache;
 
                 // config map         
-                fMapControl.CanDragMap = true;
                 fMapControl.MapProvider = GMapProviders.GoogleMap;
                 fMapControl.MinZoom = 0;
                 fMapControl.MaxZoom = 24;
-                fMapControl.ShowTileGridLines = false;
                 fMapControl.Zoom = 9;
 
-                fMapControl.Manager.UseRouteCache = true;
                 fMapControl.Manager.UseGeocoderCache = true;
                 fMapControl.Manager.UsePlacemarkCache = true;
-                fMapControl.Manager.UseDirectionsCache = true;
 
                 // add custom layers  
                 fMapControl.Overlays.Add(fRoutes);
@@ -279,15 +266,15 @@ namespace GKUI.Components
                 fMapControl.KeyUp += MainForm_KeyUp;
 
                 // set current marker
-                fTargetMarker = new GMarkerGoogle(fMapControl.Position, GMarkerGoogleType.arrow);
+                fTargetMarker = new GMarkerIcon(fMapControl.Position, GMarkerIconType.arrow);
                 fTargetMarker.IsHitTestVisible = false;
                 fTargetMarker.IsVisible = true;
                 fTopOverlay.Markers.Add(fTargetMarker);
 
                 // add start location
-                GeoCoderStatusCode status;
+                GeocoderStatusCode status;
                 PointLatLng? pos = GMapProviders.GoogleMap.GetPoint("Russia, Moscow", out status);
-                if (pos != null && status == GeoCoderStatusCode.G_GEO_SUCCESS) {
+                if (pos != null && status == GeocoderStatusCode.Success) {
                     fTargetMarker.Position = pos.Value;
                     fMapControl.ZoomAndCenterMarkers(null);
                 }
@@ -319,10 +306,10 @@ namespace GKUI.Components
         /// <param name="place"></param>
         private void AddLocationMarker(string place)
         {
-            GeoCoderStatusCode status = GeoCoderStatusCode.Unknow;
+            GeocoderStatusCode status = GeocoderStatusCode.Unknown;
             PointLatLng? pos = GMapProviders.GoogleMap.GetPoint(place, out status);
-            if (pos != null && status == GeoCoderStatusCode.G_GEO_SUCCESS) {
-                GMarkerGoogle m = new GMarkerGoogle(pos.Value, GMarkerGoogleType.green);
+            if (pos != null && status == GeocoderStatusCode.Success) {
+                GMarkerIcon m = new GMarkerIcon(pos.Value, GMarkerIconType.green);
                 m.ToolTip = new GMapRoundedToolTip(m);
                 m.ToolTipText = place;
                 m.ToolTipMode = MarkerTooltipMode.Always;
@@ -333,7 +320,7 @@ namespace GKUI.Components
 
         private void AddMarker(PointLatLng position, string toolTip = "")
         {
-            GMarkerGoogle m = new GMarkerGoogle(position, GMarkerGoogleType.green_small);
+            GMarkerIcon m = new GMarkerIcon(position, GMarkerIconType.green_small);
             if (!string.IsNullOrEmpty(toolTip)) {
                 m.ToolTipMode = MarkerTooltipMode.Always;
                 m.ToolTipText = toolTip;
@@ -344,9 +331,9 @@ namespace GKUI.Components
         private void AddMarkerAndSearchTooltip(PointLatLng position)
         {
             Placemark? p = null;
-            GeoCoderStatusCode status;
+            GeocoderStatusCode status;
             var ret = GMapProviders.GoogleMap.GetPlacemark(position, out status);
-            if (status == GeoCoderStatusCode.G_GEO_SUCCESS && ret != null) {
+            if (status == GeocoderStatusCode.Success && ret != null) {
                 p = ret;
             }
 
@@ -457,9 +444,9 @@ namespace GKUI.Components
         private void MainMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left) {
-                GeoCoderStatusCode status;
+                GeocoderStatusCode status;
                 var pos = GMapProviders.GoogleMap.GetPlacemark(item.Position, out status);
-                if (status == GeoCoderStatusCode.G_GEO_SUCCESS && pos != null) {
+                if (status == GeocoderStatusCode.Success && pos != null) {
                     item.ToolTipText = pos.Value.Address;
                     fMapControl.Invalidate(false);
                 }
