@@ -1,3 +1,6 @@
+## 08.08.2021
+
+- Completed primary refactoring, code cleaning and reformatting.
 
 ## 03.08.2021
 
