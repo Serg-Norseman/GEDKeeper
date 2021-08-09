@@ -262,7 +262,6 @@ namespace GKUI.Components
                 fMapControl.MouseDown += MainMap_MouseDown;
                 fMapControl.MouseUp += MainMap_MouseUp;
                 fMapControl.MouseDoubleClick += MainMap_MouseDoubleClick;
-                fMapControl.KeyPress += MainForm_KeyPress;
                 fMapControl.KeyUp += MainForm_KeyUp;
 
                 // set current marker
@@ -481,21 +480,14 @@ namespace GKUI.Components
 
                 case Keys.Delete:
                     break;
-            }
-        }
 
-        private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (fMapControl.Focused) {
-                switch (e.KeyChar) {
-                    case '+':
-                        fMapControl.Zoom = ((int)fMapControl.Zoom) + 1;
-                        break;
+                case Keys.Add:
+                    fMapControl.Zoom = ((int)fMapControl.Zoom) + 1;
+                    break;
 
-                    case '-':
-                        fMapControl.Zoom = ((int)(fMapControl.Zoom + 0.99)) - 1;
-                        break;
-                }
+                case Keys.Subtract:
+                    fMapControl.Zoom = ((int)(fMapControl.Zoom + 0.99)) - 1;
+                    break;
             }
         }
 
