@@ -34,11 +34,6 @@ namespace GKCore
     {
         private const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
 
-        #if NET35 || NET40
-        private const int Tls11 = 768;
-        private const int Tls12 = 3072;
-        #endif
-
         public static Version GetLastVersion(out string url)
         {
             Version newVersion = null;
@@ -46,16 +41,7 @@ namespace GKCore
 
             XmlTextReader reader = null;
             try {
-                try {
-                    #if NET35 || NET40
-                    ServicePointManager.SecurityProtocol = (SecurityProtocolType)(ServicePointManager.SecurityProtocol | (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12);
-                    #else
-                    ServicePointManager.SecurityProtocol = (SecurityProtocolType)(ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
-                    #endif
-                } catch (Exception ex) {
-                    // crash on WinXP, TLS 1.2 not supported
-                    Logger.WriteError("UpdateMan.GetLastVersion.SP()", ex);
-                }
+                GKUtils.InitSecurityProtocol();
 
                 HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(UpdateURL);
                 webRequest.ContentType = "text/xml; encoding='utf-8'";

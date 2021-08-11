@@ -2703,8 +2703,35 @@ namespace GKCore
             }
         }
 
+        public static void InitSecurityProtocol()
+        {
+            #if NET35 || NET40
+            const int Tls11 = 768;
+            const int Tls12 = 3072;
+            #endif
+
+            try {
+                #if NET35 || NET40
+                ServicePointManager.SecurityProtocol =
+                    (SecurityProtocolType)(ServicePointManager.SecurityProtocol |
+                                           SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |
+                                           (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12);
+                #else
+                ServicePointManager.SecurityProtocol =
+                    (SecurityProtocolType)(ServicePointManager.SecurityProtocol |
+                                           SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+                #endif
+            } catch (Exception ex) {
+                // crash on WinXP, TLS 1.2 not supported
+                Logger.WriteError("GKUtils.InitSecurityProtocol()", ex);
+            }
+        }
+
         public static Stream GetWebStream(string uri)
         {
+            InitSecurityProtocol();
+
             using (var webClient = new WebClient()) {
                 byte[] dataBytes = webClient.DownloadData(uri);
                 var ms = new MemoryStream();
