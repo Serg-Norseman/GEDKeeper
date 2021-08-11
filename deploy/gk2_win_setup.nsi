@@ -374,6 +374,8 @@ SectionGroup /e "$(gklang)"
     Section "Українська"
         SetOutPath "$INSTDIR\locales"
         File "..\locales\ukrainian.lng"
+
+        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Шевченко Тарас Григорович (приклад).lnk" "$INSTDIR\samples\Taras_Shevchenko.ged" "" "$INSTDIR\samples\Taras_Shevchenko.ged" 0
     SectionEnd
 
     Section "Polski"
