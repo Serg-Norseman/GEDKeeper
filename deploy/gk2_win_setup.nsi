@@ -548,6 +548,7 @@ SectionGroup /e "$(gkplg)"
         File "..\plugins\GKStdReports.enu"
         File "..\plugins\GKStdReports.fra"
         File "..\plugins\GKStdReports.deu"
+        File "..\plugins\GKStdReports.ukr"
     SectionEnd
 SectionGroupEnd
 
