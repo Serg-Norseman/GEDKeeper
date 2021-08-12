@@ -6,6 +6,10 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
+//#define DEBUG_TILE_COORDS
+//#define DEBUG_CENTER
+//#define DEBUG_RENDER
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -1411,7 +1415,7 @@ namespace GKMap.WinForms
                         }
                     }
 
-#if DEBUG
+#if DEBUG_TILE_COORDS
                     // show tile grid lines
                     g.DrawRectangle(EmptyTileBorders, (int) Core.TileRect.X, (int) Core.TileRect.Y,
                         (int) Core.TileRect.Width, (int) Core.TileRect.Height);
@@ -1442,7 +1446,7 @@ namespace GKMap.WinForms
             }
 
             // center in virtual space...
-#if DEBUG
+#if DEBUG_CENTER
             g.DrawLine(ScalePen, -20, 0, 20, 0);
             g.DrawLine(ScalePen, 0, -20, 0, 20);
             g.DrawString("debug: virtual space center", CopyrightFont, Brushes.Blue, 2, CopyrightFont.Height);
@@ -1509,7 +1513,7 @@ namespace GKMap.WinForms
 
             #endregion
 
-#if DEBUG
+#if DEBUG_RENDER
             // show center
             g.DrawLine(CenterPen, Width / 2 - 5, Height / 2, Width / 2 + 5, Height / 2);
             g.DrawLine(CenterPen, Width / 2, Height / 2 - 5, Width / 2, Height / 2 + 5);
