@@ -79,8 +79,8 @@ namespace GKUI.Components
                 GKData.CalendarStruct cdr = GKData.DateCalendars[(int)gc];
                 if (!cdr.HasSupport) continue;
 
-                cmbDate1Calendar.Items.Add(new GKListItem(LangMan.LS(cdr.Name), gc));
-                cmbDate2Calendar.Items.Add(new GKListItem(LangMan.LS(cdr.Name), gc));
+                cmbDate1Calendar.Items.Add(new GKComboItem<GDMCalendar>(LangMan.LS(cdr.Name), gc));
+                cmbDate2Calendar.Items.Add(new GKComboItem<GDMCalendar>(LangMan.LS(cdr.Name), gc));
             }
 
             cmbDate1Calendar.SelectedIndex = 0;

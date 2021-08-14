@@ -125,10 +125,10 @@ namespace GKUI.Forms
         private void UpdateLangs()
         {
             cmbLanguages.Items.Clear();
-            cmbLanguages.Items.Add(new ComboItem<int>(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
+            cmbLanguages.Items.Add(new GKComboItem<int>(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
                 if (lngRec.Code != LangMan.LS_DEF_CODE) {
-                    cmbLanguages.Items.Add(new ComboItem<int>(lngRec.Name, lngRec.Code));
+                    cmbLanguages.Items.Add(new GKComboItem<int>(lngRec.Name, lngRec.Code));
                 }
             }
             cmbLanguages.SetSelectedTag(fOptions.InterfaceLang, true);
@@ -686,7 +686,7 @@ namespace GKUI.Forms
             lblMediaStoreDefault.Text = LangMan.LS(LSID.LSID_MediaStoreDefault);
             cmbMediaStoreDefault.Items.Clear();
             for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstURL; mst++) {
-                cmbMediaStoreDefault.Items.Add(new ComboItem<MediaStoreType>(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
+                cmbMediaStoreDefault.Items.Add(new GKComboItem<MediaStoreType>(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst));
             }
 
             chkAllowDeleteMediaFileFromStgArc.Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromStgArc);
