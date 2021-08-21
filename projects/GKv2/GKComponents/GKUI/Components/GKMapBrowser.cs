@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -201,22 +201,13 @@ namespace GKUI.Components
 
         private void InitControl()
         {
-            fMapControl = new GMapControl {
-                Dock = DockStyle.Fill,
-                EmptyTileColor = Color.Navy,
-                LevelsKeepInMemory = 5,
-                Location = new Point(0, 0),
-                Margin = new Padding(4),
-                MarkersEnabled = true,
-                MaxZoom = 17,
-                MinZoom = 2,
-                PolygonsEnabled = true,
-                RetryLoadTile = 0,
-                RoutesEnabled = true,
-                ScaleMode = ScaleModes.Integer,
-                SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225),
-                Zoom = 0D
-            };
+            fMapControl = new GMapControl();
+            fMapControl.Dock = DockStyle.Fill;
+            fMapControl.Location = new Point(0, 0);
+            fMapControl.Margin = new Padding(4);
+            fMapControl.MaxZoom = 17;
+            fMapControl.MinZoom = 2;
+            fMapControl.Zoom = 0D;
             Controls.Add(fMapControl);
 
             if (!GMapControl.IsDesignerHosted) {
@@ -459,7 +450,7 @@ namespace GKUI.Components
 
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
         {
-            int offset = -22;
+            const int offset = -22;
 
             switch (e.KeyCode) {
                 case Keys.Left:
