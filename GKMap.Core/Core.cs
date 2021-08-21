@@ -82,13 +82,6 @@ namespace GKMap
         internal int minZoom = 2;
         internal int Width;
         internal int Height;
-
-        internal int pxRes100m;  // 100 meters
-        internal int pxRes1000m;  // 1km  
-        internal int pxRes10km; // 10km
-        internal int pxRes100km; // 100km
-        internal int pxRes1000km; // 1000km
-        internal int pxRes5000km; // 5000km
         internal bool ZoomToArea = true;
 
 
@@ -525,7 +518,7 @@ namespace GKMap
         /// </summary>
         public void GoToCurrentPosition()
         {
-            CompensationOffset = fPositionPixel; // TODO: fix
+            CompensationOffset = fPositionPixel;
 
             // reset stuff
             RenderOffset = GPoint.Empty;
@@ -540,7 +533,7 @@ namespace GKMap
         /// </summary>
         internal void GoToCurrentPositionOnZoom()
         {
-            CompensationOffset = fPositionPixel; // TODO: fix
+            CompensationOffset = fPositionPixel;
 
             // reset stuff
             RenderOffset = GPoint.Empty;
@@ -872,13 +865,7 @@ namespace GKMap
         /// </summary>
         private void UpdateGroundResolution()
         {
-            double rez = fProvider.Projection.GetGroundResolution(Zoom, Position.Lat);
-            pxRes100m = (int)(100.0 / rez); // 100 meters
-            pxRes1000m = (int)(1000.0 / rez); // 1km  
-            pxRes10km = (int)(10000.0 / rez); // 10km
-            pxRes100km = (int)(100000.0 / rez); // 100km
-            pxRes1000km = (int)(1000000.0 / rez); // 1000km
-            pxRes5000km = (int)(5000000.0 / rez); // 5000km
+            //double rez = fProvider.Projection.GetGroundResolution(Zoom, Position.Lat);
         }
 
         #region IDisposable Members

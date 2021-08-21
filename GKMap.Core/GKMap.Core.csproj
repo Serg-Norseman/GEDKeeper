@@ -108,7 +108,6 @@
     <Compile Include="EmptyWebProxy.cs" />
     <Compile Include="MapProviders\GMapProviders.cs" />
     <Compile Include="ObservableCollection.cs" />
-    <Compile Include="ScaleModes.cs" />
     <Compile Include="SocksHttpWeb.cs" />
     <Compile Include="DrawTile.cs" />
     <Compile Include="ProxySocket\AuthMethod.cs" />

@@ -226,7 +226,6 @@ namespace GKMap
                             startEvent = false;
                         }
 
-                        #region -- save --
                         // check if stream wasn't disposed somehow
                         if (task.Value.Img != null) {
                             Debug.WriteLine("CacheEngine[" + left + "]: storing tile " + task.Value + ", " + task.Value.Img.Length / 1024 + "kB...");
@@ -248,13 +247,12 @@ namespace GKMap
                         } else {
                             Debug.WriteLine("CacheEngineLoop: skip, tile disposed to early -> " + task.Value);
                         }
-                        #endregion
                     } else {
                         if (!startEvent) {
                             startEvent = true;
                         }
 
-                        if (fAbortCacheLoop || NoMapInstances || !WaitForCache.WaitOne(33333, false) || NoMapInstances) {
+                        if (fAbortCacheLoop || NoMapInstances || !WaitForCache.WaitOne(33333, false)) {
                             break;
                         }
                     }

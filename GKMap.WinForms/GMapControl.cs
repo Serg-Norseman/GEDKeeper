@@ -37,7 +37,6 @@ namespace GKMap.WinForms
         private Brush fEmptyTileBrush = new SolidBrush(Color.Navy);
         private Color fEmptyTileColor = Color.Navy;
         private Graphics fGxOff;
-        private readonly Pen fHelperLinePen = new Pen(Color.Blue, 1);
         private bool fIsDragging;
         private bool fIsMouseOverMarker;
         private bool fIsMouseOverPolygon;
@@ -48,8 +47,6 @@ namespace GKMap.WinForms
         private float? fMapRenderTransform;
         private bool fMouseIn;
         private int fOverObjectCount;
-        private bool fRenderHelperLine;
-        private ScaleModes fScaleMode = ScaleModes.Integer;
         private RectLatLng fSelectedArea;
         private Brush fSelectedAreaFill = new SolidBrush(Color.FromArgb(33, Color.RoyalBlue));
         private Color fSelectedAreaFillColor = Color.FromArgb(33, Color.RoyalBlue);
@@ -57,11 +54,13 @@ namespace GKMap.WinForms
         private PointLatLng fSelectionStart;
         private double fZoomReal;
 
+        private readonly StringFormat BottomFormat = new StringFormat();
+        private readonly StringFormat CenterFormat = new StringFormat();
         private readonly Font CopyrightFont = new Font(FontFamily.GenericSansSerif, 7, FontStyle.Regular);
+        private readonly Color EmptyMapBackground = Color.WhiteSmoke;
+        private readonly string EmptyTileText = "We are sorry, but we don't\nhave imagery at this zoom\nlevel for this region.";
         private readonly Font MissingDataFont = new Font(FontFamily.GenericSansSerif, 11, FontStyle.Bold);
         private readonly Font ScaleFont = new Font(FontFamily.GenericSansSerif, 5, FontStyle.Italic);
-        private readonly StringFormat CenterFormat = new StringFormat();
-        private readonly StringFormat BottomFormat = new StringFormat();
         private readonly ImageAttributes TileFlipXYAttributes = new ImageAttributes();
 
         #region Properties
@@ -92,13 +91,6 @@ namespace GKMap.WinForms
         /// button was pressed, within which a drag operation will not begin.
         /// </summary>
         public Size DragSize = SystemInformation.DragSize;
-
-        /// <summary>
-        /// prevents focusing map if mouse enters it's area
-        /// </summary>
-        public bool DisableFocusOnMouseEnter = false;
-
-        public Color EmptyMapBackground = Color.WhiteSmoke;
 
         /// <summary>
         /// pen for empty tile borders
@@ -145,18 +137,6 @@ namespace GKMap.WinForms
             }
         }
 
-        [Category("GKMap")]
-        [Description("map scale type")]
-        public ScaleModes ScaleMode
-        {
-            get {
-                return fScaleMode;
-            }
-            set {
-                fScaleMode = value;
-            }
-        }
-
         [Category("GKMap"), DefaultValue(0)]
         public double Zoom
         {
@@ -175,15 +155,8 @@ namespace GKMap.WinForms
                         fZoomReal = value;
                     }
 
-                    double remainder = value % 1;
-                    if (ScaleMode == ScaleModes.Fractional && remainder != 0) {
-                        float scaleValue = (float)Math.Pow(2d, remainder);
-                        fMapRenderTransform = scaleValue;
-                        ZoomStep = Convert.ToInt32(value - remainder);
-                    } else {
-                        fMapRenderTransform = null;
-                        ZoomStep = (int)Math.Floor(value);
-                    }
+                    fMapRenderTransform = null;
+                    ZoomStep = (int)Math.Floor(value);
 
                     if (Core.IsStarted && !fIsDragging) {
                         ForceUpdateOverlays();
@@ -212,11 +185,6 @@ namespace GKMap.WinForms
                 }
             }
         }
-
-        /// <summary>
-        /// text on empty tiles
-        /// </summary>
-        public string EmptyTileText = "We are sorry, but we don't\nhave imagery at this zoom\nlevel for this region.";
 
         /// <summary>
         /// is mouse over marker
@@ -326,7 +294,7 @@ namespace GKMap.WinForms
         /// is routes enabled
         /// </summary>
         [Category("GKMap")]
-        public bool RoutesEnabled
+        internal bool RoutesEnabled
         {
             get {
                 return Core.RoutesEnabled;
@@ -340,7 +308,7 @@ namespace GKMap.WinForms
         /// is polygons enabled
         /// </summary>
         [Category("GKMap")]
-        public bool PolygonsEnabled
+        internal bool PolygonsEnabled
         {
             get {
                 return Core.PolygonsEnabled;
@@ -354,7 +322,7 @@ namespace GKMap.WinForms
         /// is markers enabled
         /// </summary>
         [Category("GKMap")]
-        public bool MarkersEnabled
+        internal bool MarkersEnabled
         {
             get {
                 return Core.MarkersEnabled;
@@ -427,7 +395,7 @@ namespace GKMap.WinForms
         /// </summary>
         [Category("GKMap")]
         [Description("background color od the selected area")]
-        public Color SelectedAreaFillColor
+        internal Color SelectedAreaFillColor
         {
             get {
                 return fSelectedAreaFillColor;
@@ -469,48 +437,9 @@ namespace GKMap.WinForms
         }
 
         /// <summary>
-        /// show map scale info
-        /// </summary>
-        public bool MapScaleInfoEnabled = false;
-
-        /// <summary>
         /// enables filling empty tiles using lower level images
         /// </summary>
         public bool FillEmptyTiles = true;
-
-        /// <summary>
-        /// if true, selects area just by holding mouse and moving
-        /// </summary>
-        public bool DisableAltForSelection = false;
-
-        /// <summary>
-        /// retry count to get tile 
-        /// </summary>
-        [Browsable(false)]
-        public int RetryLoadTile
-        {
-            get {
-                return Core.RetryLoadTile;
-            }
-            set {
-                Core.RetryLoadTile = value;
-            }
-        }
-
-        /// <summary>
-        /// how many levels of tiles are staying decompressed in memory
-        /// </summary>
-        [Browsable(false)]
-        public int LevelsKeepInMemory
-        {
-            get {
-                return Core.LevelsKeepInMemory;
-            }
-
-            set {
-                Core.LevelsKeepInMemory = value;
-            }
-        }
 
         /// <summary>
         /// map dragg button
@@ -726,16 +655,11 @@ namespace GKMap.WinForms
         {
             Overlays = new ObservableCollectionThreadSafe<GMapOverlay>();
 
-            EmptyTileColor = Color.Navy;
-            LevelsKeepInMemory = 5;
             MarkersEnabled = true;
             MaxZoom = 17;
             MinZoom = 2;
             PolygonsEnabled = true;
-            RetryLoadTile = 0;
             RoutesEnabled = true;
-            ScaleMode = ScaleModes.Integer;
-            //ScaleMode = ScaleModes.Fractional;
             SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
             Zoom = 0D;
 
@@ -815,21 +739,11 @@ namespace GKMap.WinForms
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-
-            fRenderHelperLine = (e.Modifiers == Keys.Shift || e.Modifiers == Keys.Alt);
-            if (fRenderHelperLine) {
-                Invalidate();
-            }
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
             base.OnKeyUp(e);
-
-            fRenderHelperLine = (e.Modifiers == Keys.Shift || e.Modifiers == Keys.Alt);
-            if (!fRenderHelperLine) {
-                Invalidate();
-            }
         }
 
         private void invalidatorEngage(object sender, ProgressChangedEventArgs e)
@@ -1276,7 +1190,6 @@ namespace GKMap.WinForms
             g.Clear(EmptyMapBackground);
 
             if (fMapRenderTransform.HasValue) {
-                #region -- scale --
                 var center = new GPoint(Width / 2, Height / 2);
                 var delta = center;
                 delta.OffsetNegative(Core.RenderOffset);
@@ -1292,7 +1205,6 @@ namespace GKMap.WinForms
                 g.TranslateTransform(pos.X, pos.Y, MatrixOrder.Append);
 
                 OnPaintOverlays(g);
-                #endregion
             } else {
                 g.TranslateTransform(Core.RenderOffset.X, Core.RenderOffset.Y);
                 DrawMap(g);
@@ -1352,14 +1264,11 @@ namespace GKMap.WinForms
                             }
                         }
                     } else if (FillEmptyTiles && MapProvider.Projection is MercatorProjection) {
-                        #region -- fill empty lines --
-
                         int zoomOffset = 1;
                         Tile parentTile = Tile.Empty;
                         long Ix = 0;
 
-                        while (!parentTile.NotEmpty && zoomOffset < Core.Zoom &&
-                               zoomOffset <= LevelsKeepInMemory) {
+                        while (!parentTile.NotEmpty && zoomOffset < Core.Zoom && zoomOffset <= Core.LevelsKeepInMemory) {
                             Ix = (long)Math.Pow(2, zoomOffset);
                             parentTile = Core.Matrix.GetTileWithNoLock(Core.Zoom - zoomOffset++,
                                 new GPoint((int)(tilePoint.PosXY.X / Ix), (int)(tilePoint.PosXY.Y / Ix)));
@@ -1387,8 +1296,6 @@ namespace GKMap.WinForms
                                 }
                             }
                         }
-
-                        #endregion
                     }
 
                     // add text if tile is missing
@@ -1467,48 +1374,10 @@ namespace GKMap.WinForms
                 g.FillRectangle(fSelectedAreaFill, x1, y1, x2 - x1, y2 - y1);
             }
 
-            if (fRenderHelperLine) {
-                var p = PointToClient(MousePosition);
-
-                g.DrawLine(fHelperLinePen, p.X, 0, p.X, Height);
-                g.DrawLine(fHelperLinePen, 0, p.Y, Width, p.Y);
-            }
-
             #region -- copyright --
 
             if (!string.IsNullOrEmpty(Core.Provider.Copyright)) {
                 g.DrawString(Core.Provider.Copyright, CopyrightFont, Brushes.Navy, 3, Height - CopyrightFont.Height - 5);
-            }
-
-            #endregion
-
-            #region -- draw scale --
-
-            if (MapScaleInfoEnabled) {
-                if (Width > Core.pxRes5000km) {
-                    g.DrawRectangle(ScalePen, 10, 10, Core.pxRes5000km, 10);
-                    g.DrawString("5000Km", ScaleFont, Brushes.Blue, Core.pxRes5000km + 10, 11);
-                }
-                if (Width > Core.pxRes1000km) {
-                    g.DrawRectangle(ScalePen, 10, 10, Core.pxRes1000km, 10);
-                    g.DrawString("1000Km", ScaleFont, Brushes.Blue, Core.pxRes1000km + 10, 11);
-                }
-                if (Width > Core.pxRes100km && Zoom > 2) {
-                    g.DrawRectangle(ScalePen, 10, 10, Core.pxRes100km, 10);
-                    g.DrawString("100Km", ScaleFont, Brushes.Blue, Core.pxRes100km + 10, 11);
-                }
-                if (Width > Core.pxRes10km && Zoom > 5) {
-                    g.DrawRectangle(ScalePen, 10, 10, Core.pxRes10km, 10);
-                    g.DrawString("10Km", ScaleFont, Brushes.Blue, Core.pxRes10km + 10, 11);
-                }
-                if (Width > Core.pxRes1000m && Zoom >= 10) {
-                    g.DrawRectangle(ScalePen, 10, 10, Core.pxRes1000m, 10);
-                    g.DrawString("1000m", ScaleFont, Brushes.Blue, Core.pxRes1000m + 10, 11);
-                }
-                if (Width > Core.pxRes100m && Zoom > 11) {
-                    g.DrawRectangle(ScalePen, 10, 10, Core.pxRes100m, 10);
-                    g.DrawString("100m", ScaleFont, Brushes.Blue, Core.pxRes100m + 9, 11);
-                }
             }
 
             #endregion
@@ -1617,7 +1486,7 @@ namespace GKMap.WinForms
                 if (!fSelectionEnd.IsEmpty && !fSelectionStart.IsEmpty) {
                     bool zoomtofit = false;
 
-                    if (!SelectedArea.IsEmpty && ModifierKeys == Keys.Shift) {
+                    if (!SelectedArea.IsEmpty && ModifierKeys == Keys.Alt) {
                         zoomtofit = SetZoomToFitRect(SelectedArea);
                     }
 
@@ -1640,8 +1509,6 @@ namespace GKMap.WinForms
                     if (o != null && o.IsVisible && o.IsHitTestVisible) {
                         foreach (GMapMarker m in o.Markers) {
                             if (m.IsVisible && m.IsHitTestVisible) {
-                                #region -- check --
-
                                 GPoint rp = new GPoint(e.X, e.Y);
                                 rp.OffsetNegative(Core.RenderOffset);
 
@@ -1651,15 +1518,11 @@ namespace GKMap.WinForms
                                     }
                                     break;
                                 }
-
-                                #endregion
                             }
                         }
 
                         foreach (GMapRoute m in o.Routes) {
                             if (m.IsVisible && m.IsHitTestVisible) {
-                                #region -- check --
-
                                 GPoint rp = new GPoint(e.X, e.Y);
                                 rp.OffsetNegative(Core.RenderOffset);
 
@@ -1669,20 +1532,17 @@ namespace GKMap.WinForms
                                     }
                                     break;
                                 }
-                                #endregion
                             }
                         }
 
                         foreach (GMapPolygon m in o.Polygons) {
                             if (m.IsVisible && m.IsHitTestVisible) {
-                                #region -- check --
                                 if (m.IsInside(FromLocalToLatLng(e.X, e.Y))) {
                                     if (OnPolygonClick != null) {
                                         OnPolygonClick(m, e);
                                     }
                                     break;
                                 }
-                                #endregion
                             }
                         }
                     }
@@ -1714,8 +1574,6 @@ namespace GKMap.WinForms
 
                         foreach (GMapRoute m in o.Routes) {
                             if (m.IsVisible && m.IsHitTestVisible) {
-                                #region -- check --
-
                                 GPoint rp = new GPoint(e.X, e.Y);
                                 rp.OffsetNegative(Core.RenderOffset);
 
@@ -1725,20 +1583,17 @@ namespace GKMap.WinForms
                                     }
                                     break;
                                 }
-                                #endregion
                             }
                         }
 
                         foreach (GMapPolygon m in o.Polygons) {
                             if (m.IsVisible && m.IsHitTestVisible) {
-                                #region -- check --
                                 if (m.IsInside(FromLocalToLatLng(e.X, e.Y))) {
                                     if (OnPolygonDoubleClick != null) {
                                         OnPolygonDoubleClick(m, e);
                                     }
                                     break;
                                 }
-                                #endregion
                             }
                         }
                     }
@@ -1774,7 +1629,7 @@ namespace GKMap.WinForms
                     base.Invalidate();
                 }
             } else {
-                if (fIsSelected && !fSelectionStart.IsEmpty && (ModifierKeys == Keys.Alt || ModifierKeys == Keys.Shift || DisableAltForSelection)) {
+                if (fIsSelected && !fSelectionStart.IsEmpty && (ModifierKeys == Keys.Alt)) {
                     fSelectionEnd = FromLocalToLatLng(e.X, e.Y);
                     PointLatLng p1 = fSelectionStart;
                     PointLatLng p2 = fSelectionEnd;
@@ -1792,8 +1647,6 @@ namespace GKMap.WinForms
                         if (o != null && o.IsVisible && o.IsHitTestVisible) {
                             foreach (GMapMarker m in o.Markers) {
                                 if (m.IsVisible && m.IsHitTestVisible) {
-                                    #region -- check --
-
                                     GPoint rp = new GPoint(e.X, e.Y);
                                     rp.OffsetNegative(Core.RenderOffset);
 
@@ -1819,14 +1672,11 @@ namespace GKMap.WinForms
 
                                         Invalidate();
                                     }
-                                    #endregion
                                 }
                             }
 
                             foreach (GMapRoute m in o.Routes) {
                                 if (m.IsVisible && m.IsHitTestVisible) {
-                                    #region -- check --
-
                                     GPoint rp = new GPoint(e.X, e.Y);
                                     rp.OffsetNegative(Core.RenderOffset);
 
@@ -1854,13 +1704,11 @@ namespace GKMap.WinForms
                                             Invalidate();
                                         }
                                     }
-                                    #endregion
                                 }
                             }
 
                             foreach (GMapPolygon m in o.Polygons) {
                                 if (m.IsVisible && m.IsHitTestVisible) {
-                                    #region -- check --
                                     GPoint rp = new GPoint(e.X, e.Y);
                                     rp.OffsetNegative(Core.RenderOffset);
 
@@ -1888,15 +1736,10 @@ namespace GKMap.WinForms
                                             Invalidate();
                                         }
                                     }
-                                    #endregion
                                 }
                             }
                         }
                     }
-                }
-
-                if (fRenderHelperLine) {
-                    base.Invalidate();
                 }
             }
         }
@@ -1923,9 +1766,7 @@ namespace GKMap.WinForms
         {
             base.OnMouseEnter(e);
 
-            if (!DisableFocusOnMouseEnter) {
-                Focus();
-            }
+            Focus();
             fMouseIn = true;
         }
 
