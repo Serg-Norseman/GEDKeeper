@@ -89,7 +89,6 @@ namespace Org.Mentalis.Network.ProxySocket.Authentication
         {
             CallBack = callback;
             Server.BeginSend(GetAuthenticationBytes(), 0, 3 + Username.Length + Password.Length, SocketFlags.None, this.OnSent, Server);
-            return;
         }
         /// <summary>
         /// Called when the authentication bytes have been sent.

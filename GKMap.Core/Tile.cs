@@ -48,18 +48,12 @@ namespace GKMap
             get {
                 return fZoom;
             }
-            private set {
-                fZoom = value;
-            }
         }
 
         public GPoint Pos
         {
             get {
                 return fPos;
-            }
-            private set {
-                fPos = value;
             }
         }
 

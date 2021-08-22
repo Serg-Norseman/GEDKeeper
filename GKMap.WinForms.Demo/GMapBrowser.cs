@@ -327,10 +327,7 @@ namespace GKMap.WinForms.Demo
 
         public void AddMarker(PointLatLng targetPosition)
         {
-            //var m = new GMarkerCross(targetPosition);
             var m = new GMarkerIcon(targetPosition, GMarkerIconType.green);
-
-            //m.ToolTip = new GMapBaloonToolTip(m);
             m.ToolTipMode = MarkerTooltipMode.OnMouseOver;
 
             Placemark? p = null;

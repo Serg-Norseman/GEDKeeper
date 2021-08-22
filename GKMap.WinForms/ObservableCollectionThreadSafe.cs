@@ -12,7 +12,7 @@ namespace GKMap.WinForms
 {
     public class ObservableCollectionThreadSafe<T> : ObservableCollection<T>
     {
-        NotifyCollectionChangedEventHandler fCollectionChanged;
+        private NotifyCollectionChangedEventHandler fCollectionChanged;
 
         public override event NotifyCollectionChangedEventHandler CollectionChanged
         {

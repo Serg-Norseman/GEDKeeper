@@ -691,6 +691,7 @@ namespace GKMap.WinForms
         {
             if (!IsDesignerHosted) {
                 GMapImageProxy.Enable();
+
                 GMaps.Instance.SQLitePing();
             }
         }
@@ -735,16 +736,6 @@ namespace GKMap.WinForms
             }
         }
 #endif
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-        }
-
-        protected override void OnKeyUp(KeyEventArgs e)
-        {
-            base.OnKeyUp(e);
-        }
 
         private void invalidatorEngage(object sender, ProgressChangedEventArgs e)
         {

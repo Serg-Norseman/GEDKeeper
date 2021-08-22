@@ -24,7 +24,6 @@ namespace GKMap
     public class GMaps : Singleton<GMaps>
     {
         private volatile bool fAbortCacheLoop;
-        private volatile bool fBoostCacheEngine;
         private Thread fCacheEngine;
         private volatile bool fCacheOnIdleRead = true;
         private bool? fIsRunningOnMono;
@@ -241,9 +240,8 @@ namespace GKMap
 
                             task.Value.Clear();
 
-                            if (!fBoostCacheEngine) {
-                                Thread.Sleep(333);
-                            }
+                            // boost cache engine
+                            Thread.Sleep(333);
                         } else {
                             Debug.WriteLine("CacheEngineLoop: skip, tile disposed to early -> " + task.Value);
                         }

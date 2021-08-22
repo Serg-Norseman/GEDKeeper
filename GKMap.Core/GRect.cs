@@ -15,8 +15,6 @@ namespace GKMap
     /// </summary>
     public struct GRect
     {
-        public static readonly GRect Empty = new GRect();
-
         private long fX;
         private long fY;
         private long fWidth;

@@ -57,9 +57,8 @@ namespace GKMap.WinForms
         {
             GMapImage ret;
             try {
-                var m = Image.FromStream(stream, true, !Win7OrLater);
                 ret = new GMapImage();
-                ret.Img = m;
+                ret.Img = Image.FromStream(stream, true, !Win7OrLater);
             } catch (Exception ex) {
                 ret = null;
                 Debug.WriteLine("FromStream: " + ex);

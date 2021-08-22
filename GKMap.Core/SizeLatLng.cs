@@ -15,9 +15,6 @@ namespace GKMap
     /// </summary>
     public struct SizeLatLng
     {
-        public static readonly SizeLatLng Empty = new SizeLatLng();
-
-
         private double fHeightLat;
         private double fWidthLng;
 

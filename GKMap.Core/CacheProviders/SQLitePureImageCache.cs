@@ -85,16 +85,15 @@ namespace GKMap.CacheProviders
                             : "GKMap.Resources.System.Data.SQLite.x86.NET4.dll.gz";
 
                         var resStream = Stuff.LoadResourceStream(gzName);
-                        using (MemoryStream gzipDll = new MemoryStream()) {
-                            using (var gs = new GZipStream(resStream, CompressionMode.Decompress)) {
-                                using (MemoryStream exctDll = new MemoryStream()) {
-                                    byte[] tmp = new byte[1024 * 256];
-                                    int r;
-                                    while ((r = gs.Read(tmp, 0, tmp.Length)) > 0) {
-                                        exctDll.Write(tmp, 0, r);
-                                    }
-                                    File.WriteAllBytes(dll, exctDll.ToArray());
+                        using (var gs = new GZipStream(resStream, CompressionMode.Decompress)) {
+                            using (MemoryStream exctDll = new MemoryStream()) {
+                                byte[] tmp = new byte[1024 * 256];
+                                int r;
+                                while ((r = gs.Read(tmp, 0, tmp.Length)) > 0) {
+                                    exctDll.Write(tmp, 0, r);
                                 }
+
+                                File.WriteAllBytes(dll, exctDll.ToArray());
                             }
                         }
                     }

@@ -21,8 +21,6 @@ namespace GKMap
     /// </summary>
     internal class SocksHttpWebRequest : WebRequest
     {
-        #region Member Variables
-
         private readonly Uri _requestUri;
         private WebHeaderCollection _requestHeaders;
         private string _method;
@@ -34,18 +32,10 @@ namespace GKMap
         static readonly StringCollection validHttpVerbs =
             new StringCollection { "GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "OPTIONS" };
 
-        #endregion
-
-        #region Constructor
-
         private SocksHttpWebRequest(Uri requestUri)
         {
             _requestUri = requestUri;
         }
-
-        #endregion
-
-        #region WebRequest Members
 
         public override WebResponse GetResponse()
         {
@@ -141,18 +131,9 @@ namespace GKMap
             return new MemoryStream(_requestContentBuffer);
         }
 
-        #endregion
-
-        #region Methods
-
         public new static WebRequest Create(string requestUri)
         {
             return new SocksHttpWebRequest(new Uri(requestUri));
-        }
-
-        public new static WebRequest Create(Uri requestUri)
-        {
-            return new SocksHttpWebRequest(requestUri);
         }
 
         private string BuildHttpRequestMessage()
@@ -264,10 +245,6 @@ namespace GKMap
             return ipAddress;
         }
 
-        #endregion
-
-        #region Properties
-
         public string RequestMessage
         {
             get {
@@ -277,15 +254,10 @@ namespace GKMap
                 return _requestMessage;
             }
         }
-
-        #endregion
-
     }
 
     internal class SocksHttpWebResponse : WebResponse
     {
-        #region Member Variables
-
         private WebHeaderCollection _httpResponseHeaders;
         private MemoryStream data;
 
@@ -300,10 +272,6 @@ namespace GKMap
             get;
             set;
         }
-
-        #endregion
-
-        #region Constructors
 
         public SocksHttpWebResponse(MemoryStream data, string headers)
         {
@@ -333,10 +301,6 @@ namespace GKMap
             }
         }
 
-        #endregion
-
-        #region WebResponse Members
-
         public override Stream GetResponseStream()
         {
             return data != null ? data : Stream.Null;
@@ -359,7 +323,5 @@ namespace GKMap
                 return _httpResponseHeaders;
             }
         }
-
-        #endregion
     }
 }

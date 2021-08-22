@@ -15,8 +15,6 @@ namespace GKMap
     /// </summary>
     public struct GSize
     {
-        public static readonly GSize Empty = new GSize();
-
         private long fWidth;
         private long fHeight;
 
