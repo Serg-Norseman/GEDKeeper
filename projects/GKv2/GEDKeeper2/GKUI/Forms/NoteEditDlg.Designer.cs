@@ -15,6 +15,7 @@
 			// 
 			// btnAccept
 			// 
+			this.btnAccept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnAccept.Location = new System.Drawing.Point(224, 216);
 			this.btnAccept.Name = "btnAccept";
@@ -26,6 +27,7 @@
 			// 
 			// btnCancel
 			// 
+			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnCancel.Location = new System.Drawing.Point(312, 216);
@@ -34,11 +36,14 @@
 			this.btnCancel.TabIndex = 2;
 			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
-			// mmNote
+			// txtNote
 			// 
 			this.txtNote.AcceptsReturn = true;
+			this.txtNote.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			| System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.txtNote.Location = new System.Drawing.Point(8, 8);
 			this.txtNote.Multiline = true;
 			this.txtNote.Name = "txtNote";
@@ -57,15 +62,16 @@
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.txtNote);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "NoteEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "NoteEditDlg";
+			this.Title = "NoteEditDlg";
 			this.ResumeLayout(false);
 			this.PerformLayout();
+		
 		}
 	}
 }
