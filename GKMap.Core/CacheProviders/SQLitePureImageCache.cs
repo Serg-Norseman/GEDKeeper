@@ -63,7 +63,7 @@ namespace GKMap.CacheProviders
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             if (args.Name.StartsWith("System.Data.SQLite", StringComparison.OrdinalIgnoreCase)) {
-                string appDataDir = CacheLocator.GetApplicationDataFolderPath();
+                string appDataDir = Stuff.GetApplicationDataFolderPath();
                 if (string.IsNullOrEmpty(appDataDir)) {
                     return null;
                 }

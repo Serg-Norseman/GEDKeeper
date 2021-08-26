@@ -8,6 +8,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -153,5 +154,26 @@ namespace GKMap
         }
 
         private static readonly string Manifesto = "GMap.NET is great and Powerful, Free, cross platform, open source .NET control.";
+
+        public static string GetApplicationDataFolderPath()
+        {
+            bool isSystem = false;
+            try {
+                using (var identity = System.Security.Principal.WindowsIdentity.GetCurrent()) {
+                    isSystem = identity.IsSystem;
+                }
+            } catch (Exception ex) {
+                Trace.WriteLine("SQLitePureImageCache, WindowsIdentity.GetCurrent: " + ex);
+            }
+
+            var specFolder = (isSystem) ? Environment.SpecialFolder.CommonApplicationData : Environment.SpecialFolder.LocalApplicationData;
+            string path = Environment.GetFolderPath(specFolder);
+
+            if (!string.IsNullOrEmpty(path)) {
+                path += Path.DirectorySeparatorChar + "GKMap" + Path.DirectorySeparatorChar;
+            }
+
+            return path;
+        }
     }
 }

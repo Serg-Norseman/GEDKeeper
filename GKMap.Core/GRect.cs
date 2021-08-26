@@ -112,18 +112,12 @@ namespace GKMap
 
             GRect comp = (GRect)obj;
 
-            return (comp.X == X) &&
-               (comp.Y == Y) &&
-               (comp.Width == Width) &&
-               (comp.Height == Height);
+            return (comp.X == X) && (comp.Y == Y) && (comp.Width == Width) && (comp.Height == Height);
         }
 
         public static bool operator ==(GRect left, GRect right)
         {
-            return (left.X == right.X
-                       && left.Y == right.Y
-                       && left.Width == right.Width
-                       && left.Height == right.Height);
+            return (left.X == right.X && left.Y == right.Y && left.Width == right.Width && left.Height == right.Height);
         }
 
         public static bool operator !=(GRect left, GRect right)

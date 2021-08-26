@@ -15,74 +15,6 @@ using GKMap.CacheProviders;
 
 namespace GKMap
 {
-    internal class CacheLocator
-    {
-        private static string fLocation;
-
-        public static string Location
-        {
-            get {
-                if (string.IsNullOrEmpty(fLocation)) {
-                    Reset();
-                }
-
-                return fLocation;
-            }
-            set {
-                if (string.IsNullOrEmpty(value)) { // setting to null resets to default
-                    Reset();
-                } else {
-                    fLocation = value;
-                }
-
-                if (Delay) {
-                    Cache.Instance.CacheLocation = fLocation;
-                }
-            }
-        }
-
-        private static void Reset()
-        {
-            string appDataLocation = GetApplicationDataFolderPath();
-
-            if (string.IsNullOrEmpty(appDataLocation)) {
-                GMaps.Instance.UseTileCache = false;
-                GMaps.Instance.UseGeocoderCache = false;
-                GMaps.Instance.UsePlacemarkCache = false;
-                GMaps.Instance.UseUrlCache = false;
-            } else {
-                Location = appDataLocation;
-            }
-        }
-
-        public static string GetApplicationDataFolderPath()
-        {
-            bool isSystem = false;
-            try {
-                using (var identity = System.Security.Principal.WindowsIdentity.GetCurrent()) {
-                    isSystem = identity.IsSystem;
-                }
-            } catch (Exception ex) {
-                Trace.WriteLine("SQLitePureImageCache, WindowsIdentity.GetCurrent: " + ex);
-            }
-
-            string path;
-            if (isSystem) {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            } else {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            }
-
-            if (!string.IsNullOrEmpty(path)) {
-                path += Path.DirectorySeparatorChar + "GKMap" + Path.DirectorySeparatorChar;
-            }
-
-            return path;
-        }
-
-        public static bool Delay;
-    }
-
     /// <summary>
     /// cache system for tiles, geocoding, etc...
     /// </summary>
@@ -93,27 +25,53 @@ namespace GKMap
         /// </summary>
         public IPureImageCache ImageCache;
 
-        private string fCache;
+        private string fImageCacheLocation;
 
         /// <summary>
         /// local cache location
         /// </summary>
-        public string CacheLocation
+        public string ImageCacheLocation
         {
             get {
-                return fCache;
+                return fImageCacheLocation;
             }
             set {
-                fCache = value;
+                fImageCacheLocation = value;
 
                 var cache = ImageCache as SQLitePureImageCache;
                 if (cache != null) {
                     cache.CacheLocation = value;
                 }
 
-                CacheLocator.Delay = true;
+                fCacheDelay = true;
             }
         }
+
+        private static bool fCacheDelay;
+        private static string fCacheLocation;
+
+        public static string CacheLocation
+        {
+            get {
+                if (string.IsNullOrEmpty(fCacheLocation)) {
+                    ResetCacheLocation();
+                }
+
+                return fCacheLocation;
+            }
+            set {
+                if (string.IsNullOrEmpty(value)) { // setting to null resets to default
+                    ResetCacheLocation();
+                } else {
+                    fCacheLocation = value;
+                }
+
+                if (fCacheDelay) {
+                    Cache.Instance.ImageCacheLocation = fCacheLocation;
+                }
+            }
+        }
+
 
         public Cache()
         {
@@ -123,7 +81,7 @@ namespace GKMap
 
             ImageCache = new SQLitePureImageCache();
 
-            string newCache = CacheLocator.Location;
+            string newCache = CacheLocation;
             string oldCache = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + "GKMap" + Path.DirectorySeparatorChar;
 
             // move database to non-roaming user directory
@@ -134,13 +92,13 @@ namespace GKMap
                     } else {
                         Directory.Move(oldCache, newCache);
                     }
-                    CacheLocation = newCache;
+                    ImageCacheLocation = newCache;
                 } catch (Exception ex) {
-                    CacheLocation = oldCache;
+                    ImageCacheLocation = oldCache;
                     Trace.WriteLine("SQLitePureImageCache, moving data: " + ex);
                 }
             } else {
-                CacheLocation = newCache;
+                ImageCacheLocation = newCache;
             }
         }
 
@@ -156,7 +114,7 @@ namespace GKMap
             try {
                 ConvertToHash(ref url);
 
-                string dir = Path.Combine(fCache, type.ToString()) + Path.DirectorySeparatorChar;
+                string dir = Path.Combine(fImageCacheLocation, type.ToString()) + Path.DirectorySeparatorChar;
 
                 // recreate dir
                 if (!Directory.Exists(dir)) {
@@ -180,7 +138,7 @@ namespace GKMap
             try {
                 ConvertToHash(ref url);
 
-                string dir = Path.Combine(fCache, type.ToString()) + Path.DirectorySeparatorChar;
+                string dir = Path.Combine(fImageCacheLocation, type.ToString()) + Path.DirectorySeparatorChar;
                 string file = dir + url + ".txt";
 
                 if (File.Exists(file)) {
@@ -204,6 +162,20 @@ namespace GKMap
         public string GetContent(string url, CacheType type)
         {
             return GetContent(url, type, TimeSpan.FromDays(88));
+        }
+
+        private static void ResetCacheLocation()
+        {
+            string appDataLocation = Stuff.GetApplicationDataFolderPath();
+
+            if (string.IsNullOrEmpty(appDataLocation)) {
+                GMaps.Instance.UseTileCache = false;
+                GMaps.Instance.UseGeocoderCache = false;
+                GMaps.Instance.UsePlacemarkCache = false;
+                GMaps.Instance.UseUrlCache = false;
+            } else {
+                CacheLocation = appDataLocation;
+            }
         }
     }
 

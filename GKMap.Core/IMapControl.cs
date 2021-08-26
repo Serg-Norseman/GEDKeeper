@@ -21,8 +21,6 @@ namespace GKMap
 
     public delegate void EmptyTileError(int zoom, GPoint pos);
 
-    public delegate void SelectionChange(RectLatLng selection, bool zoomToFit);
-
 
     public interface IMapControl
     {

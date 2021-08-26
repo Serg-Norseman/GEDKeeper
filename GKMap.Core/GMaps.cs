@@ -24,7 +24,7 @@ namespace GKMap
     public class GMaps : Singleton<GMaps>
     {
         private volatile bool fAbortCacheLoop;
-        private Thread fCacheEngine;
+        private Thread fCacheThread;
         private volatile bool fCacheOnIdleRead = true;
         private bool? fIsRunningOnMono;
         private int fReadingCache;
@@ -169,17 +169,17 @@ namespace GKMap
 
                     fTileCacheQueue.Enqueue(task);
 
-                    if (fCacheEngine != null && fCacheEngine.IsAlive) {
+                    if (fCacheThread != null && fCacheThread.IsAlive) {
                         WaitForCache.Set();
-                    } else if (fCacheEngine == null || fCacheEngine.ThreadState == System.Threading.ThreadState.Stopped || fCacheEngine.ThreadState == System.Threading.ThreadState.Unstarted) {
-                        fCacheEngine = null;
-                        fCacheEngine = new Thread(CacheEngineLoop);
-                        fCacheEngine.Name = "CacheEngine";
-                        fCacheEngine.IsBackground = false;
-                        fCacheEngine.Priority = ThreadPriority.Lowest;
+                    } else if (fCacheThread == null || fCacheThread.ThreadState == System.Threading.ThreadState.Stopped || fCacheThread.ThreadState == System.Threading.ThreadState.Unstarted) {
+                        fCacheThread = null;
+                        fCacheThread = new Thread(CacheThreadLoop);
+                        fCacheThread.Name = "CacheEngine";
+                        fCacheThread.IsBackground = false;
+                        fCacheThread.Priority = ThreadPriority.Lowest;
 
                         fAbortCacheLoop = false;
-                        fCacheEngine.Start();
+                        fCacheThread.Start();
                     }
                 }
             }
@@ -202,7 +202,7 @@ namespace GKMap
         /// <summary>
         /// live for cache ;}
         /// </summary>
-        private void CacheEngineLoop()
+        private void CacheThreadLoop()
         {
             Debug.WriteLine("CacheEngine: start");
 
@@ -226,8 +226,9 @@ namespace GKMap
                         }
 
                         // check if stream wasn't disposed somehow
-                        if (task.Value.Img != null) {
-                            Debug.WriteLine("CacheEngine[" + left + "]: storing tile " + task.Value + ", " + task.Value.Img.Length / 1024 + "kB...");
+                        var taskVal = task.Value;
+                        if (taskVal.Img != null) {
+                            Debug.WriteLine("CacheEngine[" + left + "]: storing tile " + taskVal + ", " + taskVal.Img.Length / 1024 + "kB...");
 
                             if (PrimaryCache != null) {
                                 if (fCacheOnIdleRead) {
@@ -235,15 +236,15 @@ namespace GKMap
                                         Thread.Sleep(1000);
                                     }
                                 }
-                                PrimaryCache.PutImageToCache(task.Value.Img, task.Value.Tile.Type, task.Value.Tile.Pos, task.Value.Tile.Zoom);
+                                PrimaryCache.PutImageToCache(taskVal.Img, taskVal.Tile.Type, taskVal.Tile.Pos, taskVal.Tile.Zoom);
                             }
 
-                            task.Value.Clear();
+                            taskVal.Clear();
 
                             // boost cache engine
                             Thread.Sleep(333);
                         } else {
-                            Debug.WriteLine("CacheEngineLoop: skip, tile disposed to early -> " + task.Value);
+                            Debug.WriteLine("CacheEngineLoop: skip, tile disposed to early -> " + taskVal);
                         }
                     } else {
                         if (!startEvent) {

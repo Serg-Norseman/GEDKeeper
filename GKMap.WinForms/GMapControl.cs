@@ -41,17 +41,11 @@ namespace GKMap.WinForms
         private bool fIsMouseOverMarker;
         private bool fIsMouseOverPolygon;
         private bool fIsMouseOverRoute;
-        private bool fIsSelected;
         private bool fLazyEvents = true;
         private RectLatLng? fLazySetZoomToFitRect;
         private float? fMapRenderTransform;
         private bool fMouseIn;
         private int fOverObjectCount;
-        private RectLatLng fSelectedArea;
-        private Brush fSelectedAreaFill = new SolidBrush(Color.FromArgb(33, Color.RoyalBlue));
-        private Color fSelectedAreaFillColor = Color.FromArgb(33, Color.RoyalBlue);
-        private PointLatLng fSelectionEnd;
-        private PointLatLng fSelectionStart;
         private double fZoomReal;
 
         private readonly StringFormat BottomFormat = new StringFormat();
@@ -74,14 +68,14 @@ namespace GKMap.WinForms
         {
             get {
 #if !DESIGN
-                return CacheLocator.Location;
+                return Cache.CacheLocation;
 #else
-            return string.Empty;
+                return string.Empty;
 #endif
             }
             set {
 #if !DESIGN
-                CacheLocator.Location = value;
+                Cache.CacheLocation = value;
 #endif
             }
         }
@@ -264,12 +258,7 @@ namespace GKMap.WinForms
                 if (Core.Provider == null || !Core.Provider.Equals(value)) {
                     Debug.WriteLine("MapType: " + Core.Provider.Name + " -> " + value.Name);
 
-                    RectLatLng viewarea = SelectedArea;
-                    if (viewarea != RectLatLng.Empty) {
-                        Position = new PointLatLng(viewarea.Lat - viewarea.HeightLat / 2, viewarea.Lng + viewarea.WidthLng / 2);
-                    } else {
-                        viewarea = ViewArea;
-                    }
+                    RectLatLng viewarea = ViewArea;
 
                     Core.Provider = value;
 
@@ -386,34 +375,6 @@ namespace GKMap.WinForms
         public Pen CenterPen = new Pen(Brushes.Red, 1);
 
         /// <summary>
-        /// area selection pen
-        /// </summary>
-        public Pen SelectionPen = new Pen(Brushes.Blue, 2);
-
-        /// <summary>
-        /// background of selected area
-        /// </summary>
-        [Category("GKMap")]
-        [Description("background color od the selected area")]
-        internal Color SelectedAreaFillColor
-        {
-            get {
-                return fSelectedAreaFillColor;
-            }
-            set {
-                if (fSelectedAreaFillColor != value) {
-                    fSelectedAreaFillColor = value;
-
-                    if (fSelectedAreaFill != null) {
-                        fSelectedAreaFill.Dispose();
-                        fSelectedAreaFill = null;
-                    }
-                    fSelectedAreaFill = new SolidBrush(fSelectedAreaFillColor);
-                }
-            }
-        }
-
-        /// <summary>
         /// color of empty tile background
         /// </summary>
         [Category("GKMap")]
@@ -440,30 +401,6 @@ namespace GKMap.WinForms
         /// enables filling empty tiles using lower level images
         /// </summary>
         public bool FillEmptyTiles = true;
-
-        /// <summary>
-        /// map dragg button
-        /// </summary>
-        [Category("GKMap")]
-        public MouseButtons DragButton = MouseButtons.Right;
-
-        /// <summary>
-        /// current selected area in map
-        /// </summary>
-        [Browsable(false)]
-        public RectLatLng SelectedArea
-        {
-            get {
-                return fSelectedArea;
-            }
-            set {
-                fSelectedArea = value;
-
-                if (Core.IsStarted) {
-                    Invalidate();
-                }
-            }
-        }
 
         /// <summary>
         /// map boundaries
@@ -620,11 +557,6 @@ namespace GKMap.WinForms
         public event RouteLeave OnRouteLeave;
 
         /// <summary>
-        /// occurs when mouse selection is changed
-        /// </summary>        
-        public event SelectionChange OnSelectionChange;
-
-        /// <summary>
         /// occurs on mouse enters marker area
         /// </summary>
         public event MarkerEnter OnMarkerEnter;
@@ -660,7 +592,6 @@ namespace GKMap.WinForms
             MinZoom = 2;
             PolygonsEnabled = true;
             RoutesEnabled = true;
-            SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
             Zoom = 0D;
 
             Manager.UseGeocoderCache = true;
@@ -1135,9 +1066,6 @@ namespace GKMap.WinForms
                 CopyrightFont.Dispose();
                 EmptyTileBorders.Dispose();
                 fEmptyTileBrush.Dispose();
-
-                fSelectedAreaFill.Dispose();
-                SelectionPen.Dispose();
                 ClearBackBuffer();
             }
             base.Dispose(disposing);
@@ -1283,7 +1211,6 @@ namespace GKMap.WinForms
 
                                     g.DrawImage(img.Img, dst, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                                         GraphicsUnit.Pixel, TileFlipXYAttributes);
-                                    g.FillRectangle(fSelectedAreaFill, dst);
                                 }
                             }
                         }
@@ -1351,19 +1278,6 @@ namespace GKMap.WinForms
 #endif
 
             g.ResetTransform();
-
-            if (!fSelectedArea.IsEmpty) {
-                GPoint p1 = FromLatLngToLocal(fSelectedArea.LocationTopLeft);
-                GPoint p2 = FromLatLngToLocal(fSelectedArea.LocationRightBottom);
-
-                long x1 = p1.X;
-                long y1 = p1.Y;
-                long x2 = p2.X;
-                long y2 = p2.Y;
-
-                g.DrawRectangle(SelectionPen, x1, y1, x2 - x1, y2 - y1);
-                g.FillRectangle(fSelectedAreaFill, x1, y1, x2 - x1, y2 - y1);
-            }
 
             #region -- copyright --
 
@@ -1435,14 +1349,9 @@ namespace GKMap.WinForms
             base.OnMouseDown(e);
 
             if (!IsMouseOverMarker) {
-                if (e.Button == DragButton) {
+                if (e.Button == MouseButtons.Left) {
                     Core.MouseDown = new GPoint(e.X, e.Y);
                     Invalidate();
-                } else if (!fIsSelected) {
-                    fIsSelected = true;
-                    SelectedArea = RectLatLng.Empty;
-                    fSelectionEnd = PointLatLng.Empty;
-                    fSelectionStart = FromLocalToLatLng(e.X, e.Y);
                 }
             }
         }
@@ -1450,10 +1359,6 @@ namespace GKMap.WinForms
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-
-            if (fIsSelected) {
-                fIsSelected = false;
-            }
 
             if (Core.IsDragging) {
                 if (fIsDragging) {
@@ -1470,23 +1375,11 @@ namespace GKMap.WinForms
                     }
                 }
             } else {
-                if (e.Button == DragButton) {
+                if (e.Button == MouseButtons.Left) {
                     Core.MouseDown = GPoint.Empty;
                 }
 
-                if (!fSelectionEnd.IsEmpty && !fSelectionStart.IsEmpty) {
-                    bool zoomtofit = false;
-
-                    if (!SelectedArea.IsEmpty && ModifierKeys == Keys.Alt) {
-                        zoomtofit = SetZoomToFitRect(SelectedArea);
-                    }
-
-                    if (OnSelectionChange != null) {
-                        OnSelectionChange(SelectedArea, zoomtofit);
-                    }
-                } else {
-                    Invalidate();
-                }
+                Invalidate();
             }
         }
 
@@ -1620,18 +1513,6 @@ namespace GKMap.WinForms
                     base.Invalidate();
                 }
             } else {
-                if (fIsSelected && !fSelectionStart.IsEmpty && (ModifierKeys == Keys.Alt)) {
-                    fSelectionEnd = FromLocalToLatLng(e.X, e.Y);
-                    PointLatLng p1 = fSelectionStart;
-                    PointLatLng p2 = fSelectionEnd;
-
-                    double x1 = Math.Min(p1.Lng, p2.Lng);
-                    double y1 = Math.Max(p1.Lat, p2.Lat);
-                    double x2 = Math.Max(p1.Lng, p2.Lng);
-                    double y2 = Math.Min(p1.Lat, p2.Lat);
-
-                    SelectedArea = new RectLatLng(y1, x1, x2 - x1, y1 - y2);
-                } else
                     if (Core.MouseDown.IsEmpty) {
                     for (int i = Overlays.Count - 1; i >= 0; i--) {
                         GMapOverlay o = Overlays[i];
