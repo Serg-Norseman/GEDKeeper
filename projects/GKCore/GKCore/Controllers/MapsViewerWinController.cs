@@ -77,8 +77,6 @@ namespace GKCore.Controllers
                 IProgressController progress = AppHost.Progress;
                 GDMTree tree = fBase.Context.Tree;
 
-                fView.MapBrowser.InitMap();
-
                 fView.PersonsCombo.BeginUpdate();
                 fView.PlacesTree.BeginUpdate();
                 progress.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), tree.RecordsCount);

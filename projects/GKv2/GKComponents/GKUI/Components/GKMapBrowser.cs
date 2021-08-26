@@ -131,10 +131,6 @@ namespace GKUI.Components
             }
         }
 
-        public void InitMap()
-        {
-        }
-
         public void RefreshPoints()
         {
             ClearAll();

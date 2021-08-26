@@ -159,7 +159,6 @@ namespace GKUI.Components
                 Assert.IsNotNull(comp.MapPoints);
 
                 comp.BeginUpdate();
-                comp.InitMap();
                 comp.SetCenter(0, 0, 1);
                 comp.EndUpdate(); // -> RefreshPoints()
 
