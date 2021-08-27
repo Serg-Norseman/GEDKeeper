@@ -141,9 +141,7 @@ namespace GKMap.WinForms.Demo
         // clear markers and all
         private void btnClearAll_Click(object sender, EventArgs e)
         {
-            MapBrowser.Routes.Routes.Clear();
-            MapBrowser.Polygons.Polygons.Clear();
-            MapBrowser.Objects.Markers.Clear();
+            MapBrowser.Objects.Clear();
         }
 
         // zoom to max for markers

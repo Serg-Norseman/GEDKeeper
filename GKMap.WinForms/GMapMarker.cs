@@ -6,7 +6,6 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -15,16 +14,12 @@ namespace GKMap.WinForms
     /// <summary>
     /// GKMap marker
     /// </summary>
-    public abstract class GMapMarker : IDisposable
+    public abstract class GMapMarker : GMapObject
     {
         private Rectangle fArea;
-        private bool fDisposed;
-        private bool fIsMouseOver;
         private Point fOffset;
-        private GMapOverlay fOverlay;
         private PointLatLng fPosition;
         private string fToolTipText;
-        private bool fVisible = true;
 
         /// <summary>
         /// marker position in local coordinates, internal only, do not set it manually
@@ -37,6 +32,7 @@ namespace GKMap.WinForms
             set {
                 if (fArea.Location != value) {
                     fArea.Location = value;
+
                     if (Overlay != null && Overlay.Control != null) {
                         if (!Overlay.Control.HoldInvalidation) {
                             Overlay.Control.Invalidate();
@@ -64,16 +60,6 @@ namespace GKMap.WinForms
             }
         }
 
-        public GMapOverlay Overlay
-        {
-            get {
-                return fOverlay;
-            }
-            internal set {
-                fOverlay = value;
-            }
-        }
-
         public PointLatLng Position
         {
             get {
@@ -92,7 +78,19 @@ namespace GKMap.WinForms
             }
         }
 
-        public object Tag;
+        public Size Size
+        {
+            get {
+                return fArea.Size;
+            }
+            set {
+                fArea.Size = value;
+            }
+        }
+
+        public GMapToolTip ToolTip;
+
+        public MarkerTooltipMode ToolTipMode = MarkerTooltipMode.OnMouseOver;
 
         /// <summary>
         /// ToolTip position in local coordinates
@@ -105,27 +103,6 @@ namespace GKMap.WinForms
                 return ret;
             }
         }
-
-        public Size Size
-        {
-            get {
-                return fArea.Size;
-            }
-            set {
-                fArea.Size = value;
-            }
-        }
-
-        public Rectangle LocalArea
-        {
-            get {
-                return fArea;
-            }
-        }
-
-        public GMapToolTip ToolTip;
-
-        public MarkerTooltipMode ToolTipMode = MarkerTooltipMode.OnMouseOver;
 
         public string ToolTipText
         {
@@ -140,74 +117,34 @@ namespace GKMap.WinForms
             }
         }
 
-        /// <summary>
-        /// is marker visible
-        /// </summary>
-        public bool IsVisible
-        {
-            get {
-                return fVisible;
-            }
-            set {
-                if (value != fVisible) {
-                    fVisible = value;
-
-                    if (Overlay != null && Overlay.Control != null) {
-                        if (fVisible) {
-                            Overlay.Control.UpdateMarkerLocalPosition(this);
-                        } else {
-                            if (Overlay.Control.IsMouseOverMarker) {
-                                Overlay.Control.IsMouseOverMarker = false;
-                                Overlay.Control.RestoreCursorOnLeave();
-                            }
-                        }
-
-                        if (!Overlay.Control.HoldInvalidation) {
-                            Overlay.Control.Invalidate();
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// if true, marker will be rendered even if it's outside current view
-        /// </summary>
-        public bool DisableRegionCheck;
-
-        /// <summary>
-        /// can maker receive input
-        /// </summary>
-        public bool IsHitTestVisible = true;
-
-        /// <summary>
-        /// is mouse over marker
-        /// </summary>
-        public bool IsMouseOver
-        {
-            get {
-                return fIsMouseOver;
-            }
-            internal set {
-                fIsMouseOver = value;
-            }
-        }
 
         protected GMapMarker(PointLatLng pos)
         {
             Position = pos;
+            fVisible = true;
+            IsHitTestVisible = true;
         }
 
-        public virtual void OnRender(Graphics g)
+        internal bool IsInside(int x, int y)
         {
-            //
+            return fArea.Contains(x, y);
         }
 
-        public virtual void Dispose()
+        protected override void UpdateLocalPosition()
         {
-            if (!fDisposed) {
-                fDisposed = true;
+            if (fVisible) {
+                Overlay.Control.UpdateMarkerLocalPosition(this);
+            } else {
+                if (Overlay.Control.IsMouseOverMarker) {
+                    Overlay.Control.IsMouseOverMarker = false;
+                    Overlay.Control.RestoreCursorOnLeave();
+                }
+            }
+        }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
                 Tag = null;
 
                 if (ToolTip != null) {

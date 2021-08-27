@@ -46,10 +46,11 @@ namespace GKMap
         private static List<Task> fTileLoadQueue4Tasks;
         private static int fLoadWaitCount;
         private static readonly int GThreadPoolSize = 4;
+        private static int Instances;
 
         internal volatile bool IsStarted;
-        public GRect TileRect;
 
+        public GRect TileRect;
         public GPoint RenderOffset;
         public GPoint CenterTileXYLocation;
         public GPoint CenterTileXYLocationLast;
@@ -78,8 +79,8 @@ namespace GKMap
         public bool UpdatingBounds { get; private set; }
 
 
-        internal int maxZoom = 2;
-        internal int minZoom = 2;
+        internal int MaxZoom = 2;
+        internal int MinZoom = 2;
         internal int Width;
         internal int Height;
         internal bool ZoomToArea = true;
@@ -105,16 +106,6 @@ namespace GKMap
                     if (OnCurrentPositionChanged != null)
                         OnCurrentPositionChanged(fPosition);
                 }
-            }
-        }
-
-        /// <summary>
-        /// current marker position in pixel coordinates
-        /// </summary>
-        public GPoint PositionPixel
-        {
-            get {
-                return fPositionPixel;
             }
         }
 
@@ -148,8 +139,8 @@ namespace GKMap
                         }
                         ReloadMap();
 
-                        if (minZoom < fProvider.MinZoom) {
-                            minZoom = fProvider.MinZoom;
+                        if (MinZoom < fProvider.MinZoom) {
+                            MinZoom = fProvider.MinZoom;
                         }
 
                         ZoomToArea = true;
@@ -224,21 +215,6 @@ namespace GKMap
         }
 
         /// <summary>
-        /// is polygons enabled
-        /// </summary>
-        public bool PolygonsEnabled = true;
-
-        /// <summary>
-        /// is routes enabled
-        /// </summary>
-        public bool RoutesEnabled = true;
-
-        /// <summary>
-        /// is markers enabled
-        /// </summary>
-        public bool MarkersEnabled = true;
-
-        /// <summary>
         /// retry count to get tile 
         /// </summary>
         public int RetryLoadTile = 0;
@@ -283,12 +259,10 @@ namespace GKMap
         /// </summary>
         public event MapTypeChanged OnMapTypeChanged;
 
-        internal static int Instances;
-
         public bool MouseWheelZooming = false;
 
-        internal readonly object invalidationLock = new object();
-        internal DateTime lastInvalidation = DateTime.Now;
+        internal readonly object InvalidationLock = new object();
+        internal DateTime LastInvalidation = DateTime.Now;
 
 
         public Core()
@@ -309,11 +283,10 @@ namespace GKMap
         {
             int mmaxZoom = GetMaxZoomToFitRect(rect);
             if (mmaxZoom > 0) {
-                PointLatLng center = new PointLatLng(rect.Lat - (rect.HeightLat / 2), rect.Lng + (rect.WidthLng / 2));
-                Position = center;
+                Position = new PointLatLng(rect.Lat - (rect.HeightLat / 2), rect.Lng + (rect.WidthLng / 2));
 
-                if (mmaxZoom > maxZoom) {
-                    mmaxZoom = maxZoom;
+                if (mmaxZoom > MaxZoom) {
+                    mmaxZoom = MaxZoom;
                 }
 
                 if (Zoom != mmaxZoom) {
@@ -367,13 +340,13 @@ namespace GKMap
 
                 var now = DateTime.Now;
                 TimeSpan delta;
-                lock (invalidationLock) {
-                    delta = now - lastInvalidation;
+                lock (InvalidationLock) {
+                    delta = now - LastInvalidation;
                 }
 
                 if (delta > span) {
-                    lock (invalidationLock) {
-                        lastInvalidation = now;
+                    lock (InvalidationLock) {
+                        LastInvalidation = now;
                     }
                     skiped = false;
 
@@ -443,12 +416,12 @@ namespace GKMap
         /// <returns></returns>
         public int GetMaxZoomToFitRect(RectLatLng rect)
         {
-            int zoom = minZoom;
+            int zoom = MinZoom;
 
             if (rect.HeightLat == 0 || rect.WidthLng == 0) {
-                zoom = maxZoom / 2;
+                zoom = MaxZoom / 2;
             } else {
-                for (int i = zoom; i <= maxZoom; i++) {
+                for (int i = zoom; i <= MaxZoom; i++) {
                     GPoint p1 = fProvider.Projection.FromLatLngToPixel(rect.LocationTopLeft, i);
                     GPoint p2 = fProvider.Projection.FromLatLngToPixel(rect.LocationRightBottom, i);
 

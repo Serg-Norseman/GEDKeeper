@@ -9,12 +9,12 @@
 using System.Collections.Generic;
 using GKMap.MapProviders;
 
-namespace GKMap
+namespace GKMap.WinForms
 {
     /// <summary>
     /// represents route of map
     /// </summary>
-    public class MapRoute
+    public class MapRoute : GMapObject
     {
         /// <summary>
         /// points of route
@@ -25,11 +25,6 @@ namespace GKMap
         /// route info
         /// </summary>
         public string Name;
-
-        /// <summary>
-        /// custom object
-        /// </summary>
-        public object Tag;
 
         /// <summary>
         /// route start point

@@ -256,36 +256,29 @@ namespace GKMap.WinForms
         public virtual void OnRender(Graphics g)
         {
             if (Control != null) {
-                if (Control.RoutesEnabled) {
-                    foreach (GMapRoute r in Routes) {
-                        if (r.IsVisible) {
-                            r.OnRender(g);
-                        }
+                foreach (GMapRoute r in Routes) {
+                    if (r.IsVisible) {
+                        r.OnRender(g);
                     }
                 }
 
-                if (Control.PolygonsEnabled) {
-                    foreach (GMapPolygon r in Polygons) {
-                        if (r.IsVisible) {
-                            r.OnRender(g);
-                        }
+                foreach (GMapPolygon r in Polygons) {
+                    if (r.IsVisible) {
+                        r.OnRender(g);
                     }
                 }
 
-                if (Control.MarkersEnabled) {
-                    // markers
-                    foreach (GMapMarker m in Markers) {
-                        if (m.IsVisible || m.DisableRegionCheck) {
-                            m.OnRender(g);
-                        }
+                foreach (GMapMarker m in Markers) {
+                    if (m.IsVisible) {
+                        m.OnRender(g);
                     }
+                }
 
-                    // tooltips above
-                    foreach (GMapMarker m in Markers) {
-                        if (m.ToolTip != null && m.IsVisible) {
-                            if (!string.IsNullOrEmpty(m.ToolTipText) && (m.ToolTipMode == MarkerTooltipMode.Always || (m.ToolTipMode == MarkerTooltipMode.OnMouseOver && m.IsMouseOver))) {
-                                m.ToolTip.OnRender(g);
-                            }
+                // tooltips above
+                foreach (GMapMarker m in Markers) {
+                    if (m.ToolTip != null && m.IsVisible) {
+                        if (!string.IsNullOrEmpty(m.ToolTipText) && (m.ToolTipMode == MarkerTooltipMode.Always || m.IsMouseOver)) {
+                            m.ToolTip.OnRender(g);
                         }
                     }
                 }

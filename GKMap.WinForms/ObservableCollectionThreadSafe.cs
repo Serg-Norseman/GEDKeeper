@@ -32,7 +32,7 @@ namespace GKMap.WinForms
                     Delegate[] delegates = fCollectionChanged.GetInvocationList();
 
                     // Walk thru invocation list
-                    foreach (NotifyCollectionChangedEventHandler handler in delegates) {
+                    foreach (var handler in delegates) {
                         var dispatcherObject = handler.Target as System.Windows.Forms.Control;
 
                         // If the subscriber is a DispatcherObject and different thread

@@ -37,16 +37,16 @@ namespace GKMap
 
     public class NotifyCollectionChangedEventArgs : EventArgs
     {
-        private NotifyCollectionChangedAction _action;
-        private IList _newItems;
-        private int _newStartingIndex;
-        private IList _oldItems;
-        private int _oldStartingIndex;
+        private NotifyCollectionChangedAction fAction;
+        private IList fNewItems;
+        private int fNewStartingIndex;
+        private IList fOldItems;
+        private int fOldStartingIndex;
 
         public NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction action)
         {
-            _newStartingIndex = -1;
-            _oldStartingIndex = -1;
+            fNewStartingIndex = -1;
+            fOldStartingIndex = -1;
             if (action != NotifyCollectionChangedAction.Reset) {
                 throw new ArgumentException("WrongActionForCtor", "action");
             }
@@ -55,8 +55,8 @@ namespace GKMap
 
         public NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction action, object changedItem, int index)
         {
-            _newStartingIndex = -1;
-            _oldStartingIndex = -1;
+            fNewStartingIndex = -1;
+            fOldStartingIndex = -1;
             if (((action != NotifyCollectionChangedAction.Add) && (action != NotifyCollectionChangedAction.Remove)) && (action != NotifyCollectionChangedAction.Reset)) {
                 throw new ArgumentException("MustBeResetAddOrRemoveActionForCtor", "action");
             }
@@ -75,8 +75,8 @@ namespace GKMap
 
         public NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction action, object changedItem, int index, int oldIndex)
         {
-            _newStartingIndex = -1;
-            _oldStartingIndex = -1;
+            fNewStartingIndex = -1;
+            fOldStartingIndex = -1;
             if (action != NotifyCollectionChangedAction.Move) {
                 throw new ArgumentException("WrongActionForCtor", "action");
             }
@@ -89,8 +89,8 @@ namespace GKMap
 
         public NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction action, object newItem, object oldItem, int index)
         {
-            _newStartingIndex = -1;
-            _oldStartingIndex = -1;
+            fNewStartingIndex = -1;
+            fOldStartingIndex = -1;
             if (action != NotifyCollectionChangedAction.Replace) {
                 throw new ArgumentException("WrongActionForCtor", "action");
             }
@@ -99,9 +99,9 @@ namespace GKMap
 
         private void InitializeAdd(NotifyCollectionChangedAction action, IList newItems, int newStartingIndex)
         {
-            _action = action;
-            _newItems = (newItems == null) ? null : ArrayList.ReadOnly(newItems);
-            _newStartingIndex = newStartingIndex;
+            fAction = action;
+            fNewItems = (newItems == null) ? null : ArrayList.ReadOnly(newItems);
+            fNewStartingIndex = newStartingIndex;
         }
 
         private void InitializeAddOrRemove(NotifyCollectionChangedAction action, IList changedItems, int startingIndex)
@@ -123,43 +123,43 @@ namespace GKMap
 
         private void InitializeRemove(NotifyCollectionChangedAction action, IList oldItems, int oldStartingIndex)
         {
-            _action = action;
-            _oldItems = (oldItems == null) ? null : ArrayList.ReadOnly(oldItems);
-            _oldStartingIndex = oldStartingIndex;
+            fAction = action;
+            fOldItems = (oldItems == null) ? null : ArrayList.ReadOnly(oldItems);
+            fOldStartingIndex = oldStartingIndex;
         }
 
         public NotifyCollectionChangedAction Action
         {
             get {
-                return _action;
+                return fAction;
             }
         }
 
         public IList NewItems
         {
             get {
-                return _newItems;
+                return fNewItems;
             }
         }
 
         public int NewStartingIndex
         {
             get {
-                return _newStartingIndex;
+                return fNewStartingIndex;
             }
         }
 
         public IList OldItems
         {
             get {
-                return _oldItems;
+                return fOldItems;
             }
         }
 
         public int OldStartingIndex
         {
             get {
-                return _oldStartingIndex;
+                return fOldStartingIndex;
             }
         }
     }
@@ -231,7 +231,7 @@ namespace GKMap
         private void CopyFrom(IEnumerable<T> collection)
         {
             IList<T> items = Items;
-            if ((collection != null) && (items != null)) {
+            if (collection != null) {
                 using (IEnumerator<T> enumerator = collection.GetEnumerator()) {
                     while (enumerator.MoveNext()) {
                         items.Add(enumerator.Current);

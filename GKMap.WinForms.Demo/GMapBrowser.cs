@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using GKMap.MapProviders;
@@ -9,8 +8,6 @@ namespace GKMap.WinForms.Demo
     public sealed class GMapBrowser : UserControl
     {
         private readonly GMapOverlay fObjects = new GMapOverlay("objects");
-        private readonly GMapOverlay fPolygons = new GMapOverlay("polygons");
-        private readonly GMapOverlay fRoutes = new GMapOverlay("routes");
         private readonly GMapOverlay fTopOverlay = new GMapOverlay();
 
         private GMapPolygon fCurrentPolygon;
@@ -29,16 +26,6 @@ namespace GKMap.WinForms.Demo
         public GMapOverlay Objects
         {
             get { return fObjects; }
-        }
-
-        public GMapOverlay Polygons
-        {
-            get { return fPolygons; }
-        }
-
-        public GMapOverlay Routes
-        {
-            get { return fRoutes; }
         }
 
         public PointLatLng TargetPosition
@@ -86,8 +73,6 @@ namespace GKMap.WinForms.Demo
                 fMapControl.Zoom = 9;
 
                 // add custom layers  
-                fMapControl.Overlays.Add(fRoutes);
-                fMapControl.Overlays.Add(fPolygons);
                 fMapControl.Overlays.Add(fObjects);
                 fMapControl.Overlays.Add(fTopOverlay);
 
@@ -246,11 +231,11 @@ namespace GKMap.WinForms.Demo
 
                 case Keys.Delete:
                     if (fCurrentPolygon != null) {
-                        fPolygons.Polygons.Remove(fCurrentPolygon);
+                        fObjects.Polygons.Remove(fCurrentPolygon);
                         fCurrentPolygon = null;
                     }
                     if (fCurrentRoute != null) {
-                        fRoutes.Routes.Remove(fCurrentRoute);
+                        fObjects.Routes.Remove(fCurrentRoute);
                         fCurrentRoute = null;
                     }
                     if (fTargetMarker != null) {
@@ -273,38 +258,16 @@ namespace GKMap.WinForms.Demo
 
         public void AddRoute(List<PointLatLng> points)
         {
-            if (fCurrentRoute == null) {
-                fCurrentRoute = new GMapRoute(points, "route test");
-                fCurrentRoute.IsHitTestVisible = true;
-                fRoutes.Routes.Add(fCurrentRoute);
-            } else {
-                fCurrentRoute.Points.Clear();
-                fCurrentRoute.Points.AddRange(points);
-
-                if (fRoutes.Routes.Count == 0) {
-                    fRoutes.Routes.Add(fCurrentRoute);
-                } else {
-                    fMapControl.UpdateRouteLocalPosition(fCurrentRoute);
-                }
-            }
+            fCurrentRoute = new GMapRoute(points, "route test");
+            fCurrentRoute.IsHitTestVisible = true;
+            fObjects.Routes.Add(fCurrentRoute);
         }
 
         public void AddPolygon(List<PointLatLng> points)
         {
-            if (fCurrentPolygon == null) {
-                fCurrentPolygon = new GMapPolygon(points, "polygon test");
-                fCurrentPolygon.IsHitTestVisible = true;
-                fPolygons.Polygons.Add(fCurrentPolygon);
-            } else {
-                fCurrentPolygon.Points.Clear();
-                fCurrentPolygon.Points.AddRange(points);
-
-                if (fPolygons.Polygons.Count == 0) {
-                    fPolygons.Polygons.Add(fCurrentPolygon);
-                } else {
-                    fMapControl.UpdatePolygonLocalPosition(fCurrentPolygon);
-                }
-            }
+            fCurrentPolygon = new GMapPolygon(points, "polygon test");
+            fCurrentPolygon.IsHitTestVisible = true;
+            fObjects.Polygons.Add(fCurrentPolygon);
         }
 
         /// <summary>

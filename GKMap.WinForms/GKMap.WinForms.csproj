@@ -61,10 +61,12 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GMapObject.cs" />
     <Compile Include="GMapPolygon.cs" />
     <Compile Include="GMapRoundedToolTip.cs" />
     <Compile Include="GMarkerIcon.cs" />
     <Compile Include="GMapToolTip.cs" />
+    <Compile Include="MapRoute.cs" />
     <Compile Include="ObservableCollectionThreadSafe.cs" />
     <Compile Include="GMapMarker.cs" />
     <Compile Include="GMapOverlay.cs" />

@@ -16,12 +16,16 @@ namespace GKMap
     /// </summary>
     internal class TileMatrix : IDisposable
     {
-        private List<Dictionary<GPoint, Tile>> fLevels = new List<Dictionary<GPoint, Tile>>(33);
-        private RWLock fLock = new RWLock();
-        private List<KeyValuePair<GPoint, Tile>> fTemp = new List<KeyValuePair<GPoint, Tile>>(44);
+        private List<Dictionary<GPoint, Tile>> fLevels;
+        private RWLock fLock;
+        private List<KeyValuePair<GPoint, Tile>> fTemp;
 
         public TileMatrix()
         {
+            fLevels = new List<Dictionary<GPoint, Tile>>(33);
+            fLock = new RWLock();
+            fTemp = new List<KeyValuePair<GPoint, Tile>>(44);
+
             for (int i = 0; i < fLevels.Capacity; i++) {
                 fLevels.Add(new Dictionary<GPoint, Tile>(55, new GPointComparer()));
             }

@@ -168,15 +168,15 @@ namespace GKMap.WinForms
             g.DrawImage(fBitmap, LocalPosition.X, LocalPosition.Y, Size.Width, Size.Height);
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            if (fBitmap != null) {
+            if (disposing && fBitmap != null) {
                 if (!IconCache.ContainsValue(fBitmap)) {
                     fBitmap.Dispose();
                     fBitmap = null;
                 }
             }
-            base.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

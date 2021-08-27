@@ -40,10 +40,6 @@ namespace Org.Mentalis.Network.ProxySocket
         /// <summary>
         /// Initializes a new instance of the ProxyException class.
         /// </summary>
-        public ProxyException() : this("An error occured while talking to the proxy server.") { }
-        /// <summary>
-        /// Initializes a new instance of the ProxyException class.
-        /// </summary>
         /// <param name="message">The message that describes the error.</param>
         public ProxyException(string message) : base(message) { }
         /// <summary>

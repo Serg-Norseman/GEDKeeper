@@ -6,7 +6,6 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -17,71 +16,9 @@ namespace GKMap.WinForms
     /// <summary>
     /// GKMap route
     /// </summary>
-    public class GMapRoute : MapRoute, IDisposable
+    public class GMapRoute : MapRoute
     {
-        private bool fDisposed;
         private GraphicsPath fGraphicsPath;
-        private bool fIsMouseOver;
-        private GMapOverlay fOverlay;
-        private bool fVisible = true;
-
-        public GMapOverlay Overlay
-        {
-            get {
-                return fOverlay;
-            }
-            internal set {
-                fOverlay = value;
-            }
-        }
-
-        /// <summary>
-        /// is marker visible
-        /// </summary>
-        public bool IsVisible
-        {
-            get {
-                return fVisible;
-            }
-            set {
-                if (value != fVisible) {
-                    fVisible = value;
-
-                    if (Overlay != null && Overlay.Control != null) {
-                        if (fVisible) {
-                            Overlay.Control.UpdateRouteLocalPosition(this);
-                        } else {
-                            if (Overlay.Control.IsMouseOverRoute) {
-                                Overlay.Control.IsMouseOverRoute = false;
-                                Overlay.Control.RestoreCursorOnLeave();
-                            }
-                        }
-
-                        if (!Overlay.Control.HoldInvalidation) {
-                            Overlay.Control.Invalidate();
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// can receive input
-        /// </summary>
-        public bool IsHitTestVisible = false;
-
-        /// <summary>
-        /// is mouse over
-        /// </summary>
-        public bool IsMouseOver
-        {
-            get {
-                return fIsMouseOver;
-            }
-            internal set {
-                fIsMouseOver = value;
-            }
-        }
 
         public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(144, Color.MidnightBlue));
 
@@ -101,11 +38,27 @@ namespace GKMap.WinForms
         public GMapRoute(string name)
             : base(name)
         {
+            fVisible = true;
+            IsHitTestVisible = false;
         }
 
         public GMapRoute(IEnumerable<PointLatLng> points, string name)
             : base(points, name)
         {
+            fVisible = true;
+            IsHitTestVisible = false;
+        }
+
+        protected override void UpdateLocalPosition()
+        {
+            if (fVisible) {
+                Overlay.Control.UpdateRouteLocalPosition(this);
+            } else {
+                if (Overlay.Control.IsMouseOverRoute) {
+                    Overlay.Control.IsMouseOverRoute = false;
+                    Overlay.Control.RestoreCursorOnLeave();
+                }
+            }
         }
 
         /// <summary>
@@ -116,10 +69,7 @@ namespace GKMap.WinForms
         /// <returns></returns>
         internal bool IsInside(int x, int y)
         {
-            if (fGraphicsPath != null) {
-                return fGraphicsPath.IsOutlineVisible(x, y, Stroke);
-            }
-            return false;
+            return fGraphicsPath != null && fGraphicsPath.IsOutlineVisible(x, y, Stroke);
         }
 
         internal void UpdateGraphicsPath()
@@ -142,18 +92,16 @@ namespace GKMap.WinForms
             }
         }
 
-        public virtual void OnRender(Graphics g)
+        public override void OnRender(Graphics g)
         {
             if (IsVisible && fGraphicsPath != null) {
                 g.DrawPath(Stroke, fGraphicsPath);
             }
         }
 
-        public virtual void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            if (!fDisposed) {
-                fDisposed = true;
-
+            if (disposing) {
                 LocalPoints.Clear();
 
                 if (fGraphicsPath != null) {
@@ -162,6 +110,7 @@ namespace GKMap.WinForms
                 }
                 Clear();
             }
+            base.Dispose(disposing);
         }
     }
 

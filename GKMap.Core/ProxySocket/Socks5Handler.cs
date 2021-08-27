@@ -45,19 +45,6 @@ namespace Org.Mentalis.Network.ProxySocket
         /// Initiliazes a new Socks5Handler instance.
         /// </summary>
         /// <param name="server">The socket connection with the proxy server.</param>
-        /// <exception cref="ArgumentNullException"><c>server</c>  is null.</exception>
-        public Socks5Handler(Socket server) : this(server, "") { }
-        /// <summary>
-        /// Initiliazes a new Socks5Handler instance.
-        /// </summary>
-        /// <param name="server">The socket connection with the proxy server.</param>
-        /// <param name="user">The username to use.</param>
-        /// <exception cref="ArgumentNullException"><c>server</c> -or- <c>user</c> is null.</exception>
-        public Socks5Handler(Socket server, string user) : this(server, user, "") { }
-        /// <summary>
-        /// Initiliazes a new Socks5Handler instance.
-        /// </summary>
-        /// <param name="server">The socket connection with the proxy server.</param>
         /// <param name="user">The username to use.</param>
         /// <param name="pass">The password to use.</param>
         /// <exception cref="ArgumentNullException"><c>server</c> -or- <c>user</c> -or- <c>pass</c> is null.</exception>

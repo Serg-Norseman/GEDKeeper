@@ -26,8 +26,6 @@ namespace GKMap
     {
         PointLatLng Position { get; set; }
 
-        GPoint PositionPixel { get; }
-
         string CacheLocation { get; set; }
 
         RectLatLng ViewArea { get; }

@@ -213,10 +213,8 @@ namespace GKMap.MapProviders.Bing
 
                         if (string.IsNullOrEmpty(html)) {
                             html = GetContentUsingHttp(url);
-                            if (!string.IsNullOrEmpty(html)) {
-                                if (GMaps.Instance.UseUrlCache) {
-                                    Cache.Instance.SaveContent(url, CacheType.UrlCache, html);
-                                }
+                            if (!string.IsNullOrEmpty(html) && GMaps.Instance.UseUrlCache) {
+                                Cache.Instance.SaveContent(url, CacheType.UrlCache, html);
                             }
                         }
 

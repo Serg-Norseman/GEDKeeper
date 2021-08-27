@@ -18,69 +18,7 @@ namespace GKMap.WinForms
     /// </summary>
     public class GMapPolygon : MapRoute
     {
-        private bool fDisposed;
         private GraphicsPath fGraphicsPath;
-        private bool fIsMouseOver;
-        private GMapOverlay fOverlay;
-        private bool fVisible = true;
-
-        /// <summary>
-        /// is polygon visible
-        /// </summary>
-        public bool IsVisible
-        {
-            get {
-                return fVisible;
-            }
-            set {
-                if (value != fVisible) {
-                    fVisible = value;
-
-                    if (Overlay != null && Overlay.Control != null) {
-                        if (fVisible) {
-                            Overlay.Control.UpdatePolygonLocalPosition(this);
-                        } else {
-                            if (Overlay.Control.IsMouseOverPolygon) {
-                                Overlay.Control.IsMouseOverPolygon = false;
-                                Overlay.Control.RestoreCursorOnLeave();
-                            }
-                        }
-
-                        if (!Overlay.Control.HoldInvalidation) {
-                            Overlay.Control.Invalidate();
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// can receive input
-        /// </summary>
-        public bool IsHitTestVisible = false;
-
-        /// <summary>
-        /// is mouse over
-        /// </summary>
-        public bool IsMouseOver
-        {
-            get {
-                return fIsMouseOver;
-            }
-            internal set {
-                fIsMouseOver = value;
-            }
-        }
-
-        public GMapOverlay Overlay
-        {
-            get {
-                return fOverlay;
-            }
-            internal set {
-                fOverlay = value;
-            }
-        }
 
         public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(155, Color.MidnightBlue));
 
@@ -107,7 +45,21 @@ namespace GKMap.WinForms
         public GMapPolygon(List<PointLatLng> points, string name)
            : base(points, name)
         {
+            fVisible = true;
+            IsHitTestVisible = false;
             LocalPoints.Capacity = Points.Count;
+        }
+
+        protected override void UpdateLocalPosition()
+        {
+            if (fVisible) {
+                Overlay.Control.UpdatePolygonLocalPosition(this);
+            } else {
+                if (Overlay.Control.IsMouseOverPolygon) {
+                    Overlay.Control.IsMouseOverPolygon = false;
+                    Overlay.Control.RestoreCursorOnLeave();
+                }
+            }
         }
 
         /// <summary>
@@ -147,10 +99,7 @@ namespace GKMap.WinForms
         /// <returns></returns>
         internal bool IsInsideLocal(int x, int y)
         {
-            if (fGraphicsPath != null) {
-                return fGraphicsPath.IsVisible(x, y);
-            }
-            return false;
+            return fGraphicsPath != null && fGraphicsPath.IsVisible(x, y);
         }
 
         internal void UpdateGraphicsPath()
@@ -174,7 +123,7 @@ namespace GKMap.WinForms
             }
         }
 
-        public virtual void OnRender(Graphics g)
+        public override void OnRender(Graphics g)
         {
             if (IsVisible && fGraphicsPath != null) {
                 g.FillPath(Fill, fGraphicsPath);
@@ -182,11 +131,9 @@ namespace GKMap.WinForms
             }
         }
 
-        public virtual void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            if (!fDisposed) {
-                fDisposed = true;
-
+            if (disposing) {
                 LocalPoints.Clear();
 
                 if (fGraphicsPath != null) {
@@ -195,6 +142,7 @@ namespace GKMap.WinForms
                 }
                 Clear();
             }
+            base.Dispose(disposing);
         }
     }
 

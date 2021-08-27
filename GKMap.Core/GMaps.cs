@@ -102,7 +102,7 @@ namespace GKMap
                     Assembly l = null;
 
                     foreach (var a in assembliesLoaded) {
-                        if (a.FullName.Contains("GKMap.WinForms") || a.FullName.Contains("GKMap.WPF")) {
+                        if (a.FullName.Contains("GKMap.WinForms") || a.FullName.Contains("GKMap.WPF") || a.FullName.Contains("GKMap.EtoForms")) {
                             l = a;
                             break;
                         }
@@ -113,10 +113,13 @@ namespace GKMap
                         var hh = Path.GetDirectoryName(jj);
                         var f1 = hh + Path.DirectorySeparatorChar + "GKMap.WinForms.dll";
                         var f2 = hh + Path.DirectorySeparatorChar + "GKMap.WPF.dll";
+                        var f3 = hh + Path.DirectorySeparatorChar + "GKMap.EtoForms.dll";
                         if (File.Exists(f1)) {
                             l = Assembly.LoadFile(f1);
                         } else if (File.Exists(f2)) {
                             l = Assembly.LoadFile(f2);
+                        } else if (File.Exists(f3)) {
+                            l = Assembly.LoadFile(f3);
                         }
                     }
 
@@ -127,6 +130,8 @@ namespace GKMap
                             t = l.GetType("GKMap.WinForms.GMapImageProxy");
                         } else if (l.FullName.Contains("GKMap.WPF")) {
                             t = l.GetType("GKMap.WPF.GMapImageProxy");
+                        } else if (l.FullName.Contains("GKMap.EtoForms")) {
+                            t = l.GetType("GKMap.EtoForms.GMapImageProxy");
                         }
 
                         if (t != null) {
@@ -200,7 +205,7 @@ namespace GKMap
         }
 
         /// <summary>
-        /// live for cache ;}
+        /// live for cache
         /// </summary>
         private void CacheThreadLoop()
         {

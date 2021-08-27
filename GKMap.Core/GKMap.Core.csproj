@@ -147,7 +147,6 @@
     <Compile Include="LanguageType.cs" />
     <Compile Include="PureProjection.cs" />
     <Compile Include="IMapControl.cs" />
-    <Compile Include="MapRoute.cs" />
     <Compile Include="GPoint.cs" />
     <Compile Include="IPureImageCache.cs" />
     <Compile Include="GRect.cs" />
