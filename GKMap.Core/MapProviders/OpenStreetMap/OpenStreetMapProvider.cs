@@ -191,7 +191,7 @@ namespace GKMap.MapProviders.OpenStreetMap
             pointList = null;
 
             try {
-                string geo = GMaps.Instance.UseGeocoderCache ? Cache.Instance.GetContent(url, CacheType.GeocoderCache) : string.Empty;
+                string geo = GMaps.Instance.CacheExists ? Cache.Instance.GetContent(url, CacheType.GeocoderCache) : string.Empty;
 
                 bool cache = false;
 
@@ -205,7 +205,7 @@ namespace GKMap.MapProviders.OpenStreetMap
 
                 if (!string.IsNullOrEmpty(geo)) {
                     if (geo.StartsWith("<?xml") && geo.Contains("<place")) {
-                        if (cache && GMaps.Instance.UseGeocoderCache) {
+                        if (cache && GMaps.Instance.CacheExists) {
                             Cache.Instance.SaveContent(url, CacheType.GeocoderCache, geo);
                         }
 
@@ -255,7 +255,7 @@ namespace GKMap.MapProviders.OpenStreetMap
             Placemark? ret = null;
 
             try {
-                string geo = GMaps.Instance.UsePlacemarkCache ? Cache.Instance.GetContent(url, CacheType.PlacemarkCache) : string.Empty;
+                string geo = GMaps.Instance.CacheExists ? Cache.Instance.GetContent(url, CacheType.PlacemarkCache) : string.Empty;
 
                 bool cache = false;
 
@@ -269,7 +269,7 @@ namespace GKMap.MapProviders.OpenStreetMap
 
                 if (!string.IsNullOrEmpty(geo)) {
                     if (geo.StartsWith("<?xml") && geo.Contains("<result")) {
-                        if (cache && GMaps.Instance.UsePlacemarkCache) {
+                        if (cache && GMaps.Instance.CacheExists) {
                             Cache.Instance.SaveContent(url, CacheType.PlacemarkCache, geo);
                         }
 

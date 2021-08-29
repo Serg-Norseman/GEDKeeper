@@ -109,7 +109,7 @@ namespace GKMap.CacheProviders
             Dispose(false);
         }
 
-        void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (fCacheLock != null) {
                 if (disposing) {

@@ -99,11 +99,11 @@ namespace GKMap.MapProviders.Google
             if (!fInit && TryCorrectVersion) {
                 string url = string.Format("https://maps.{0}/maps/api/js?client=google-maps-lite&amp;libraries=search&amp;language=en&amp;region=", ServerAPIs);
                 try {
-                    string html = GMaps.Instance.UseUrlCache ? Cache.Instance.GetContent(url, CacheType.UrlCache, TimeSpan.FromHours(GMapProvider.TTLCache)) : string.Empty;
+                    string html = GMaps.Instance.CacheExists ? Cache.Instance.GetContent(url, CacheType.UrlCache, TimeSpan.FromHours(GMapProvider.TTLCache)) : string.Empty;
 
                     if (string.IsNullOrEmpty(html)) {
                         html = GetContentUsingHttp(url);
-                        if (!string.IsNullOrEmpty(html) && GMaps.Instance.UseUrlCache) {
+                        if (!string.IsNullOrEmpty(html) && GMaps.Instance.CacheExists) {
                             Cache.Instance.SaveContent(url, CacheType.UrlCache, html);
                         }
                     }
@@ -261,7 +261,7 @@ namespace GKMap.MapProviders.Google
             pointList = null;
 
             try {
-                string geo = GMaps.Instance.UseGeocoderCache ? Cache.Instance.GetContent(url, CacheType.GeocoderCache) : string.Empty;
+                string geo = GMaps.Instance.CacheExists ? Cache.Instance.GetContent(url, CacheType.GeocoderCache) : string.Empty;
 
                 bool cache = false;
 
@@ -425,7 +425,7 @@ namespace GKMap.MapProviders.Google
                             } else {
                                 status = GeocoderStatusCode.Success;
 
-                                if (cache && GMaps.Instance.UseGeocoderCache) {
+                                if (cache && GMaps.Instance.CacheExists) {
                                     Cache.Instance.SaveContent(url, CacheType.GeocoderCache, geo);
                                 }
 
@@ -464,7 +464,7 @@ namespace GKMap.MapProviders.Google
             placemarkList = null;
 
             try {
-                string reverse = GMaps.Instance.UsePlacemarkCache ? Cache.Instance.GetContent(url, CacheType.PlacemarkCache) : string.Empty;
+                string reverse = GMaps.Instance.CacheExists ? Cache.Instance.GetContent(url, CacheType.PlacemarkCache) : string.Empty;
 
                 bool cache = false;
 
@@ -931,7 +931,7 @@ namespace GKMap.MapProviders.Google
                             } else {
                                 status = GeocoderStatusCode.Success;
 
-                                if (cache && GMaps.Instance.UsePlacemarkCache) {
+                                if (cache && GMaps.Instance.CacheExists) {
                                     Cache.Instance.SaveContent(url, CacheType.PlacemarkCache, reverse);
                                 }
 

@@ -26,31 +26,10 @@ namespace GKMap.WinForms
         /// </summary>
         public string Name;
 
-        /// <summary>
-        /// route start point
-        /// </summary>
-        public PointLatLng? From
+        public bool HasLines
         {
             get {
-                if (Points.Count > 0) {
-                    return Points[0];
-                }
-
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// route end point
-        /// </summary>
-        public PointLatLng? To
-        {
-            get {
-                if (Points.Count > 1) {
-                    return Points[Points.Count - 1];
-                }
-
-                return null;
+                return (Points.Count > 1);
             }
         }
 
@@ -62,7 +41,7 @@ namespace GKMap.WinForms
             get {
                 double distance = 0.0;
 
-                if (From.HasValue && To.HasValue) {
+                if (HasLines) {
                     for (int i = 1; i < Points.Count; i++) {
                         distance += GMapProviders.EmptyProvider.Projection.GetDistance(Points[i - 1], Points[i]);
                     }

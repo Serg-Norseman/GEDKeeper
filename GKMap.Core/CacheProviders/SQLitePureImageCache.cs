@@ -110,7 +110,7 @@ namespace GKMap.CacheProviders
 #endif
 
         /// <summary>
-        /// triggers dynamic sqlite loading
+        /// triggers dynamic SQLite loading
         /// </summary>
         public static void Ping()
         {
@@ -145,19 +145,16 @@ namespace GKMap.CacheProviders
                 SQLiteConnection.ClearAllPools();
 #endif
                 // make empty db
-                {
-                    fDb = fDir + "Data.gmdb";
+                fDb = fDir + "Data.gmdb";
+                fCreated = !File.Exists(fDb) ? CreateEmptyDB(fDb) : AlterDBAddTimeColumn(fDb);
 
-                    fCreated = !File.Exists(fDb) ? CreateEmptyDB(fDb) : AlterDBAddTimeColumn(fDb);
-
-                    CheckPreAllocation();
+                CheckPreAllocation();
 
 #if !MONO
-                    fConnectionString = string.Format("Data Source=\"{0}\";Page Size=32768;Pooling=True", fDb); //;Journal Mode=Wal
+                fConnectionString = string.Format("Data Source=\"{0}\";Page Size=32768;Pooling=True", fDb); //;Journal Mode=Wal
 #else
-               ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=True,Page Size=32768,Pooling=True", db);
+                fConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=True,Page Size=32768,Pooling=True", db);
 #endif
-                }
 
                 // clear old attachments
                 fAttachedCaches.Clear();
@@ -197,9 +194,9 @@ namespace GKMap.CacheProviders
                     dbf.Read(freePagesBytes, 0, 4);
                     dbf.Unlock(36, 4);
 #else
-                  dbf.Read(pageSizeBytes, 0, 2);
-                  dbf.Seek(36, SeekOrigin.Begin);
-                  dbf.Read(freePagesBytes, 0, 4);
+                    dbf.Read(pageSizeBytes, 0, 2);
+                    dbf.Seek(36, SeekOrigin.Begin);
+                    dbf.Read(freePagesBytes, 0, 4);
 #endif
 
                     dbf.Close();
@@ -288,7 +285,7 @@ namespace GKMap.CacheProviders
 #if !MONO
                     cn.ConnectionString = string.Format("Data Source=\"{0}\";FailIfMissing=False;Page Size=32768", file);
 #else
-               cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=False,Page Size=32768", file);
+                    cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=False,Page Size=32768", file);
 #endif
                     cn.Open();
                     {
@@ -302,7 +299,7 @@ namespace GKMap.CacheProviders
                                 tr.Commit();
                             } catch (Exception exx) {
 #if MONO
-                        Console.WriteLine("PreAllocateDB: " + exx.ToString());
+                                Console.WriteLine("PreAllocateDB: " + exx.ToString());
 #endif
                                 Debug.WriteLine("PreAllocateDB: " + exx);
 
@@ -315,7 +312,7 @@ namespace GKMap.CacheProviders
                 }
             } catch (Exception ex) {
 #if MONO
-            Console.WriteLine("PreAllocateDB: " + ex.ToString());
+                Console.WriteLine("PreAllocateDB: " + ex.ToString());
 #endif
                 Debug.WriteLine("PreAllocateDB: " + ex);
                 ret = false;
@@ -333,7 +330,7 @@ namespace GKMap.CacheProviders
 #if !MONO
                         cn.ConnectionString = string.Format("Data Source=\"{0}\";FailIfMissing=False;Page Size=32768;Pooling=True", file);
 #else
-                  cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=False,Page Size=32768,Pooling=True", file);
+                        cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=False,Page Size=32768,Pooling=True", file);
 #endif
                         cn.Open();
                         {
@@ -371,7 +368,7 @@ namespace GKMap.CacheProviders
                                     }
                                 } catch (Exception exx) {
 #if MONO
-                           Console.WriteLine("AlterDBAddTimeColumn: " + exx.ToString());
+                                    Console.WriteLine("AlterDBAddTimeColumn: " + exx.ToString());
 #endif
                                     Debug.WriteLine("AlterDBAddTimeColumn: " + exx);
 
@@ -387,7 +384,7 @@ namespace GKMap.CacheProviders
                 }
             } catch (Exception ex) {
 #if MONO
-            Console.WriteLine("AlterDBAddTimeColumn: " + ex.ToString());
+                Console.WriteLine("AlterDBAddTimeColumn: " + ex.ToString());
 #endif
                 Debug.WriteLine("AlterDBAddTimeColumn: " + ex);
                 ret = false;
@@ -404,16 +401,14 @@ namespace GKMap.CacheProviders
 #if !MONO
                     cn.ConnectionString = string.Format("Data Source=\"{0}\";FailIfMissing=True;Page Size=32768", file);
 #else
-               cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=True,Page Size=32768", file);
+                    cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=True,Page Size=32768", file);
 #endif
                     cn.Open();
-                    {
-                        using (DbCommand cmd = cn.CreateCommand()) {
-                            cmd.CommandText = "vacuum;";
-                            cmd.ExecuteNonQuery();
-                        }
-                        cn.Close();
+                    using (DbCommand cmd = cn.CreateCommand()) {
+                        cmd.CommandText = "vacuum;";
+                        cmd.ExecuteNonQuery();
                     }
+                    cn.Close();
                 }
             } catch (Exception ex) {
                 Debug.WriteLine("VacuumDb: " + ex);
@@ -495,7 +490,7 @@ namespace GKMap.CacheProviders
                                     tr.Commit();
                                 } catch (Exception ex) {
 #if MONO
-                           Console.WriteLine("PutImageToCache: " + ex.ToString());
+                                    Console.WriteLine("PutImageToCache: " + ex.ToString());
 #endif
                                     Debug.WriteLine("PutImageToCache: " + ex);
 
@@ -512,7 +507,7 @@ namespace GKMap.CacheProviders
                     }
                 } catch (Exception ex) {
 #if MONO
-               Console.WriteLine("PutImageToCache: " + ex.ToString());
+                    Console.WriteLine("PutImageToCache: " + ex.ToString());
 #endif
                     Debug.WriteLine("PutImageToCache: " + ex);
                     ret = false;
@@ -528,39 +523,40 @@ namespace GKMap.CacheProviders
                 using (SQLiteConnection cn = new SQLiteConnection()) {
                     cn.ConnectionString = fConnectionString;
                     cn.Open();
-                    {
-                        if (!string.IsNullOrEmpty(fAttachSqlQuery)) {
-                            using (DbCommand com = cn.CreateCommand()) {
-                                com.CommandText = fAttachSqlQuery;
-                                int x = com.ExecuteNonQuery();
-                                //Debug.WriteLine("Attach: " + x);                         
-                            }
-                        }
 
+                    if (!string.IsNullOrEmpty(fAttachSqlQuery)) {
                         using (DbCommand com = cn.CreateCommand()) {
-                            com.CommandText = string.Format(finnalSqlSelect, pos.X, pos.Y, zoom, type);
-
-                            using (DbDataReader rd = com.ExecuteReader(System.Data.CommandBehavior.SequentialAccess)) {
-                                if (rd.Read()) {
-                                    long length = rd.GetBytes(0, 0, null, 0, 0);
-                                    byte[] tile = new byte[length];
-                                    rd.GetBytes(0, 0, tile, 0, tile.Length);
-                                    if (GMapProvider.TileImageProxy != null) {
-                                        ret = GMapProvider.TileImageProxy.FromArray(tile);
-                                    }
-                                }
-                                rd.Close();
-                            }
-                        }
-
-                        if (!string.IsNullOrEmpty(fDetachSqlQuery)) {
-                            using (DbCommand com = cn.CreateCommand()) {
-                                com.CommandText = fDetachSqlQuery;
-                                int x = com.ExecuteNonQuery();
-                                //Debug.WriteLine("Detach: " + x);
-                            }
+                            com.CommandText = fAttachSqlQuery;
+                            int x = com.ExecuteNonQuery();
+                            //Debug.WriteLine("Attach: " + x);
                         }
                     }
+
+                    using (DbCommand com = cn.CreateCommand()) {
+                        com.CommandText = string.Format(finnalSqlSelect, pos.X, pos.Y, zoom, type);
+
+                        using (DbDataReader rd = com.ExecuteReader(System.Data.CommandBehavior.SequentialAccess)) {
+                            if (rd.Read()) {
+                                long length = rd.GetBytes(0, 0, null, 0, 0);
+                                byte[] tile = new byte[length];
+                                rd.GetBytes(0, 0, tile, 0, tile.Length);
+                                if (GMaps.TileImageProxy != null) {
+                                    ret = GMaps.TileImageProxy.FromArray(tile);
+                                }
+                            }
+
+                            rd.Close();
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(fDetachSqlQuery)) {
+                        using (DbCommand com = cn.CreateCommand()) {
+                            com.CommandText = fDetachSqlQuery;
+                            int x = com.ExecuteNonQuery();
+                            //Debug.WriteLine("Detach: " + x);
+                        }
+                    }
+
                     cn.Close();
                 }
             } catch (Exception ex) {

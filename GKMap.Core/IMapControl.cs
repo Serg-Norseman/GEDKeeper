@@ -28,8 +28,6 @@ namespace GKMap
 
         string CacheLocation { get; set; }
 
-        RectLatLng ViewArea { get; }
-
         GMapProvider MapProvider { get; set; }
 
         double Zoom { get; set; }

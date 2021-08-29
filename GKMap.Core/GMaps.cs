@@ -9,9 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Threading;
 using GKMap.CacheProviders;
 using GKMap.MapProviders;
@@ -26,7 +24,6 @@ namespace GKMap
         private volatile bool fAbortCacheLoop;
         private Thread fCacheThread;
         private volatile bool fCacheOnIdleRead = true;
-        private bool? fIsRunningOnMono;
         private int fReadingCache;
         private readonly Queue<CacheQueueItem> fTileCacheQueue = new Queue<CacheQueueItem>();
 
@@ -34,24 +31,9 @@ namespace GKMap
         internal volatile bool NoMapInstances = false;
 
         /// <summary>
-        /// tile access mode
+        /// is map using cache
         /// </summary>
-        public bool UseTileCache = true;
-
-        /// <summary>
-        /// is map using cache for geocoder
-        /// </summary>
-        public bool UseGeocoderCache = true;
-
-        /// <summary>
-        /// is map using cache for placemarks
-        /// </summary>
-        public bool UsePlacemarkCache = true;
-
-        /// <summary>
-        /// is map using cache for other url
-        /// </summary>
-        public bool UseUrlCache = true;
+        public bool CacheExists = true;
 
         /// <summary>
         /// primary cache provider, by default: ultra fast SQLite
@@ -72,77 +54,10 @@ namespace GKMap
         public readonly MemoryCache MemoryCache = new MemoryCache();
 
         /// <summary>
-        /// return true if running on mono
+        /// internal proxy for image management
         /// </summary>
-        /// <returns></returns>
-        public bool IsRunningOnMono
-        {
-            get {
-                if (!fIsRunningOnMono.HasValue) {
-                    try {
-                        fIsRunningOnMono = (Type.GetType("Mono.Runtime") != null);
-                        return fIsRunningOnMono.Value;
-                    } catch {
-                    }
-                } else {
-                    return fIsRunningOnMono.Value;
-                }
-                return false;
-            }
-        }
+        internal static PureImageProxy TileImageProxy;
 
-
-        static GMaps()
-        {
-            if (GMapProvider.TileImageProxy == null) {
-                try {
-                    AppDomain d = AppDomain.CurrentDomain;
-                    var assembliesLoaded = d.GetAssemblies();
-
-                    Assembly l = null;
-
-                    foreach (var a in assembliesLoaded) {
-                        if (a.FullName.Contains("GKMap.WinForms") || a.FullName.Contains("GKMap.WPF") || a.FullName.Contains("GKMap.EtoForms")) {
-                            l = a;
-                            break;
-                        }
-                    }
-
-                    if (l == null) {
-                        var jj = Assembly.GetExecutingAssembly().Location;
-                        var hh = Path.GetDirectoryName(jj);
-                        var f1 = hh + Path.DirectorySeparatorChar + "GKMap.WinForms.dll";
-                        var f2 = hh + Path.DirectorySeparatorChar + "GKMap.WPF.dll";
-                        var f3 = hh + Path.DirectorySeparatorChar + "GKMap.EtoForms.dll";
-                        if (File.Exists(f1)) {
-                            l = Assembly.LoadFile(f1);
-                        } else if (File.Exists(f2)) {
-                            l = Assembly.LoadFile(f2);
-                        } else if (File.Exists(f3)) {
-                            l = Assembly.LoadFile(f3);
-                        }
-                    }
-
-                    if (l != null) {
-                        Type t = null;
-
-                        if (l.FullName.Contains("GKMap.WinForms")) {
-                            t = l.GetType("GKMap.WinForms.GMapImageProxy");
-                        } else if (l.FullName.Contains("GKMap.WPF")) {
-                            t = l.GetType("GKMap.WPF.GMapImageProxy");
-                        } else if (l.FullName.Contains("GKMap.EtoForms")) {
-                            t = l.GetType("GKMap.EtoForms.GMapImageProxy");
-                        }
-
-                        if (t != null) {
-                            t.InvokeMember("Enable", BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod, null, null, null);
-                        }
-                    }
-                } catch (Exception ex) {
-                    Debug.WriteLine("GMaps, try set TileImageProxy failed: " + ex.Message);
-                }
-            }
-        }
 
         public GMaps()
         {
@@ -154,11 +69,12 @@ namespace GKMap
         }
 
         /// <summary>
-        /// triggers dynamic sqlite loading, 
-        /// call this before you use sqlite for other reasons than caching maps
         /// </summary>
-        public void SQLitePing()
+        public static void Initialize(PureImageProxy imageProxy)
         {
+            TileImageProxy = imageProxy;
+
+            // triggers dynamic SQLite loading, call this before you use SQLite for other reasons than caching maps
             SQLitePureImageCache.Ping();
         }
 
@@ -286,8 +202,8 @@ namespace GKMap
 
                 // let't check memory first
                 var m = MemoryCache.GetTileFromMemoryCache(rawTile);
-                if (m != null && GMapProvider.TileImageProxy != null) {
-                    ret = GMapProvider.TileImageProxy.FromArray(m);
+                if (m != null && TileImageProxy != null) {
+                    ret = TileImageProxy.FromArray(m);
                 }
 
                 if (ret == null) {

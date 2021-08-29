@@ -169,10 +169,7 @@ namespace GKMap
             string appDataLocation = Stuff.GetApplicationDataFolderPath();
 
             if (string.IsNullOrEmpty(appDataLocation)) {
-                GMaps.Instance.UseTileCache = false;
-                GMaps.Instance.UseGeocoderCache = false;
-                GMaps.Instance.UsePlacemarkCache = false;
-                GMaps.Instance.UseUrlCache = false;
+                GMaps.Instance.CacheExists = false;
             } else {
                 CacheLocation = appDataLocation;
             }

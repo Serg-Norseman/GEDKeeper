@@ -181,11 +181,6 @@ namespace GKMap.MapProviders
             }
         }
 
-        /// <summary>
-        /// internal proxy for image management
-        /// </summary>
-        internal static PureImageProxy TileImageProxy;
-
         private static readonly string RequestAccept = "*/*";
         private static readonly string ResponseContentType = "image";
 
@@ -269,7 +264,7 @@ namespace GKMap.MapProviders
                         Debug.WriteLine("Response[" + data.Length + " bytes]: " + url);
 
                         if (data.Length > 0) {
-                            ret = TileImageProxy.FromStream(data);
+                            ret = GMaps.TileImageProxy.FromStream(data);
 
                             if (ret != null) {
                                 ret.Data = data;

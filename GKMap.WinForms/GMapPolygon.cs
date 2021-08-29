@@ -42,7 +42,7 @@ namespace GKMap.WinForms
             DefaultStroke.Width = 5;
         }
 
-        public GMapPolygon(List<PointLatLng> points, string name)
+        public GMapPolygon(IEnumerable<PointLatLng> points, string name)
            : base(points, name)
         {
             fVisible = true;

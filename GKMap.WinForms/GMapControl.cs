@@ -209,17 +209,6 @@ namespace GKMap.WinForms
             }
         }
 
-        /// <summary>
-        /// gets current map view top/left coordinate, width in Lng, height in Lat
-        /// </summary>
-        [Browsable(false)]
-        public RectLatLng ViewArea
-        {
-            get {
-                return Core.ViewArea;
-            }
-        }
-
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
         public GMapProvider MapProvider
@@ -231,14 +220,14 @@ namespace GKMap.WinForms
                 if (Core.Provider == null || !Core.Provider.Equals(value)) {
                     Debug.WriteLine("MapType: " + Core.Provider.Name + " -> " + value.Name);
 
-                    RectLatLng viewarea = ViewArea;
+                    RectLatLng viewarea = Core.ViewArea;
 
                     Core.Provider = value;
 
                     if (Core.IsStarted) {
                         if (Core.ZoomToArea) {
                             // restore zoom rect as close as possible
-                            if (viewarea != RectLatLng.Empty && viewarea != ViewArea) {
+                            if (viewarea != RectLatLng.Empty && viewarea != Core.ViewArea) {
                                 int bestZoom = Core.GetMaxZoomToFitRect(viewarea);
                                 if (bestZoom > 0 && Zoom != bestZoom) {
                                     Zoom = bestZoom;
@@ -249,18 +238,6 @@ namespace GKMap.WinForms
                         }
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// gets map manager
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
-        public GMaps Manager
-        {
-            get {
-                return GMaps.Instance;
             }
         }
 
@@ -297,7 +274,7 @@ namespace GKMap.WinForms
         /// <summary>
         /// list of overlays, should be thread safe
         /// </summary>
-        public ObservableCollectionThreadSafe<GMapOverlay> Overlays { get; }
+        public ObservableCollectionThreadSafe<GMapOverlay> Overlays { get; private set; }
 
         /// <summary>
         /// enables integrated DoubleBuffer for running on windows mobile
@@ -419,6 +396,16 @@ namespace GKMap.WinForms
         public event MarkerDoubleClick OnMarkerDoubleClick;
 
         /// <summary>
+        /// occurs on mouse enters marker area
+        /// </summary>
+        public event MarkerEnter OnMarkerEnter;
+
+        /// <summary>
+        /// occurs on mouse leaves marker area
+        /// </summary>
+        public event MarkerLeave OnMarkerLeave;
+
+        /// <summary>
         /// occurs when clicked on polygon
         /// </summary>
         public event PolygonClick OnPolygonClick;
@@ -427,6 +414,16 @@ namespace GKMap.WinForms
         /// occurs when double clicked on polygon
         /// </summary>
         public event PolygonDoubleClick OnPolygonDoubleClick;
+
+        /// <summary>
+        /// occurs on mouse enters Polygon area
+        /// </summary>
+        public event PolygonEnter OnPolygonEnter;
+
+        /// <summary>
+        /// occurs on mouse leaves Polygon area
+        /// </summary>
+        public event PolygonLeave OnPolygonLeave;
 
         /// <summary>
         /// occurs when clicked on route
@@ -448,26 +445,6 @@ namespace GKMap.WinForms
         /// </summary>
         public event RouteLeave OnRouteLeave;
 
-        /// <summary>
-        /// occurs on mouse enters marker area
-        /// </summary>
-        public event MarkerEnter OnMarkerEnter;
-
-        /// <summary>
-        /// occurs on mouse leaves marker area
-        /// </summary>
-        public event MarkerLeave OnMarkerLeave;
-
-        /// <summary>
-        /// occurs on mouse enters Polygon area
-        /// </summary>
-        public event PolygonEnter OnPolygonEnter;
-
-        /// <summary>
-        /// occurs on mouse leaves Polygon area
-        /// </summary>
-        public event PolygonLeave OnPolygonLeave;
-
 #endregion
 
 
@@ -482,10 +459,6 @@ namespace GKMap.WinForms
             MaxZoom = 17;
             MinZoom = 2;
             Zoom = 0D;
-
-            Manager.UseGeocoderCache = true;
-            Manager.UsePlacemarkCache = true;
-            Manager.UseUrlCache = true;
 
             if (!IsDesignerHosted) {
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -511,9 +484,7 @@ namespace GKMap.WinForms
         static GMapControl()
         {
             if (!IsDesignerHosted) {
-                GMapImageProxy.Enable();
-
-                GMaps.Instance.SQLitePing();
+                GMaps.Initialize(GMapImageProxy.Instance);
             }
         }
 
@@ -761,7 +732,7 @@ namespace GKMap.WinForms
             foreach (GMapOverlay o in Overlays) {
                 if (((overlayId == null && o.IsZoomSignificant) || o.Id == overlayId) && o.IsVisible && o.Routes.Count > 0) {
                     foreach (GMapRoute route in o.Routes) {
-                        if (route.IsVisible && route.From.HasValue && route.To.HasValue) {
+                        if (route.IsVisible && route.HasLines) {
                             foreach (PointLatLng p in route.Points) {
                                 // left
                                 if (p.Lng < left) {
@@ -809,7 +780,7 @@ namespace GKMap.WinForms
             double right = double.MinValue;
             double bottom = double.MaxValue;
 
-            if (route.From.HasValue && route.To.HasValue) {
+            if (route.HasLines) {
                 foreach (PointLatLng p in route.Points) {
                     // left
                     if (p.Lng < left) {
@@ -928,7 +899,7 @@ namespace GKMap.WinForms
         private void ParentForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.TaskManagerClosing) {
-                Manager.CancelTileCaching();
+                GMaps.Instance.CancelTileCaching();
             }
         }
 
@@ -1488,7 +1459,7 @@ namespace GKMap.WinForms
                 }
 
                 // set mouse position to map center
-                if (!GMaps.Instance.IsRunningOnMono) {
+                if (!Core.IsRunningOnMono) {
                     Point p = PointToScreen(new Point(Width / 2, Height / 2));
                     SetCursorPos(p.X, p.Y);
                 }

@@ -10,7 +10,6 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using GKMap.MapProviders;
 
 namespace GKMap.WinForms
 {
@@ -46,11 +45,6 @@ namespace GKMap.WinForms
 
         private GMapImageProxy()
         {
-        }
-
-        public static void Enable()
-        {
-            GMapProvider.TileImageProxy = Instance;
         }
 
         public override PureImage FromStream(Stream stream)

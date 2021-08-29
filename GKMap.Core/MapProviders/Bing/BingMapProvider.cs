@@ -179,7 +179,7 @@ namespace GKMap.MapProviders.Bing
 
                     #region -- try get sesion key --
                     if (!string.IsNullOrEmpty(key)) {
-                        string keyResponse = GMaps.Instance.UseUrlCache ? Cache.Instance.GetContent("BingLoggingServiceV1" + key, CacheType.UrlCache, TimeSpan.FromHours(GMapProvider.TTLCache)) : string.Empty;
+                        string keyResponse = GMaps.Instance.CacheExists ? Cache.Instance.GetContent("BingLoggingServiceV1" + key, CacheType.UrlCache, TimeSpan.FromHours(GMapProvider.TTLCache)) : string.Empty;
 
                         if (string.IsNullOrEmpty(keyResponse)) {
                             // Bing Maps WPF Control
@@ -188,7 +188,7 @@ namespace GKMap.MapProviders.Bing
                             keyResponse = GetContentUsingHttp(string.Format("http://dev.virtualearth.net/webservices/v1/LoggingService/LoggingService.svc/Log?entry=0&fmt=1&type=3&group=MapControl&name=AJAX&mkt=en-us&auth={0}&jsonp=microsoftMapsNetworkCallback", key));
 
                             if (!string.IsNullOrEmpty(keyResponse) && keyResponse.Contains("ValidCredentials")) {
-                                if (GMaps.Instance.UseUrlCache) {
+                                if (GMaps.Instance.CacheExists) {
                                     Cache.Instance.SaveContent("BingLoggingServiceV1" + key, CacheType.UrlCache, keyResponse);
                                 }
                             }
@@ -209,11 +209,11 @@ namespace GKMap.MapProviders.Bing
                     if (TryCorrectVersion && DisableDynamicTileUrlFormat) {
                         #region -- get the version --
                         string url = @"http://www.bing.com/maps";
-                        string html = GMaps.Instance.UseUrlCache ? Cache.Instance.GetContent(url, CacheType.UrlCache, TimeSpan.FromDays(7)) : string.Empty;
+                        string html = GMaps.Instance.CacheExists ? Cache.Instance.GetContent(url, CacheType.UrlCache, TimeSpan.FromDays(7)) : string.Empty;
 
                         if (string.IsNullOrEmpty(html)) {
                             html = GetContentUsingHttp(url);
-                            if (!string.IsNullOrEmpty(html) && GMaps.Instance.UseUrlCache) {
+                            if (!string.IsNullOrEmpty(html) && GMaps.Instance.CacheExists) {
                                 Cache.Instance.SaveContent(url, CacheType.UrlCache, html);
                             }
                         }
@@ -280,7 +280,7 @@ namespace GKMap.MapProviders.Bing
                 try {
                     string url = "http://dev.virtualearth.net/REST/V1/Imagery/Metadata/" + imageryType + "?output=xml&key=" + SessionId;
 
-                    string r = GMaps.Instance.UseUrlCache ? Cache.Instance.GetContent("GetTileUrl" + imageryType, CacheType.UrlCache, TimeSpan.FromDays(7)) : string.Empty;
+                    string r = GMaps.Instance.CacheExists ? Cache.Instance.GetContent("GetTileUrl" + imageryType, CacheType.UrlCache, TimeSpan.FromDays(7)) : string.Empty;
                     bool cache = false;
 
                     if (string.IsNullOrEmpty(r)) {
@@ -301,7 +301,7 @@ namespace GKMap.MapProviders.Bing
                                 XmlNode imageUrl = xno["ImageUrl"];
 
                                 if (imageUrl != null && !string.IsNullOrEmpty(imageUrl.InnerText)) {
-                                    if (cache && GMaps.Instance.UseUrlCache) {
+                                    if (cache && GMaps.Instance.CacheExists) {
                                         Cache.Instance.SaveContent("GetTileUrl" + imageryType, CacheType.UrlCache, r);
                                     }
 
@@ -411,7 +411,7 @@ namespace GKMap.MapProviders.Bing
             pointList = null;
 
             try {
-                string geo = GMaps.Instance.UseGeocoderCache ? Cache.Instance.GetContent(url, CacheType.GeocoderCache) : string.Empty;
+                string geo = GMaps.Instance.CacheExists ? Cache.Instance.GetContent(url, CacheType.GeocoderCache) : string.Empty;
 
                 bool cache = false;
 
@@ -438,13 +438,13 @@ namespace GKMap.MapProviders.Bing
                                     foreach (XmlNode xno in xnl) {
                                         XmlNode latitude = xno["Point"]["Latitude"];
                                         XmlNode longitude = xno["Point"]["Longitude"];
-                                        pointList.Add(new PointLatLng(Double.Parse(latitude.InnerText, CultureInfo.InvariantCulture),
-                                                                      Double.Parse(longitude.InnerText, CultureInfo.InvariantCulture)));
+                                        pointList.Add(new PointLatLng(double.Parse(latitude.InnerText, CultureInfo.InvariantCulture),
+                                                                      double.Parse(longitude.InnerText, CultureInfo.InvariantCulture)));
                                     }
 
                                     if (pointList.Count > 0) {
                                         status = GeocoderStatusCode.Success;
-                                        if (cache && GMaps.Instance.UseGeocoderCache) {
+                                        if (cache && GMaps.Instance.CacheExists) {
                                             Cache.Instance.SaveContent(url, CacheType.GeocoderCache, geo);
                                         }
                                         break;
