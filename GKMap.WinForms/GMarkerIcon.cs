@@ -57,7 +57,7 @@ namespace GKMap.WinForms
         private static Bitmap fMarkerShadow;
         private static Bitmap fShadowSmall;
 
-        public GMarkerIconType Type { get; }
+        public GMarkerIconType Type { get; private set; }
 
 
         public GMarkerIcon(PointLatLng p, GMarkerIconType type)
