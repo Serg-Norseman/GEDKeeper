@@ -42,7 +42,7 @@ namespace GKMap.CacheProviders
         private static readonly string SingleSqlInsertLast = "INSERT INTO main.TilesData(id, Tile) VALUES((SELECT last_insert_rowid()), @p1)";
 
         private readonly List<string> fAttachedCaches = new List<string>();
-        private string finnalSqlSelect = SingleSqlSelect;
+        private string fFinalSqlSelect = SingleSqlSelect;
         private string fAttachSqlQuery = string.Empty;
         private string fDetachSqlQuery = string.Empty;
 
@@ -158,7 +158,7 @@ namespace GKMap.CacheProviders
 
                 // clear old attachments
                 fAttachedCaches.Clear();
-                RebuildFinnalSelect();
+                RebuildFinalSelect();
 
                 // attach all databases from main cache location
                 var dbs = Directory.GetFiles(fDir, "*.gmdb", SearchOption.AllDirectories);
@@ -418,10 +418,10 @@ namespace GKMap.CacheProviders
         }
         #endregion
 
-        private void RebuildFinnalSelect()
+        private void RebuildFinalSelect()
         {
-            finnalSqlSelect = null;
-            finnalSqlSelect = SingleSqlSelect;
+            fFinalSqlSelect = null;
+            fFinalSqlSelect = SingleSqlSelect;
 
             fAttachSqlQuery = null;
             fAttachSqlQuery = string.Empty;
@@ -431,7 +431,7 @@ namespace GKMap.CacheProviders
 
             int i = 1;
             foreach (var c in fAttachedCaches) {
-                finnalSqlSelect += string.Format("\nUNION SELECT Tile FROM db{0}.TilesData WHERE id = (SELECT id FROM db{0}.Tiles WHERE X={{0}} AND Y={{1}} AND Zoom={{2}} AND Type={{3}})", i);
+                fFinalSqlSelect += string.Format("\nUNION SELECT Tile FROM db{0}.TilesData WHERE id = (SELECT id FROM db{0}.Tiles WHERE X={{0}} AND Y={{1}} AND Zoom={{2}} AND Type={{3}})", i);
                 fAttachSqlQuery += string.Format("\nATTACH '{0}' as db{1};", c, i);
                 fDetachSqlQuery += string.Format("\nDETACH DATABASE db{0};", i);
 
@@ -443,7 +443,7 @@ namespace GKMap.CacheProviders
         {
             if (!fAttachedCaches.Contains(db)) {
                 fAttachedCaches.Add(db);
-                RebuildFinnalSelect();
+                RebuildFinalSelect();
             }
         }
 
@@ -451,7 +451,7 @@ namespace GKMap.CacheProviders
         {
             if (fAttachedCaches.Contains(db)) {
                 fAttachedCaches.Remove(db);
-                RebuildFinnalSelect();
+                RebuildFinalSelect();
             }
         }
 
@@ -533,7 +533,7 @@ namespace GKMap.CacheProviders
                     }
 
                     using (DbCommand com = cn.CreateCommand()) {
-                        com.CommandText = string.Format(finnalSqlSelect, pos.X, pos.Y, zoom, type);
+                        com.CommandText = string.Format(fFinalSqlSelect, pos.X, pos.Y, zoom, type);
 
                         using (DbDataReader rd = com.ExecuteReader(System.Data.CommandBehavior.SequentialAccess)) {
                             if (rd.Read()) {

@@ -88,9 +88,9 @@ namespace GKMap.WinForms
             }
         }
 
-        public GMapToolTip ToolTip;
+        public GMapToolTip ToolTip { get; set; }
 
-        public MarkerTooltipMode ToolTipMode = MarkerTooltipMode.OnMouseOver;
+        public MarkerTooltipMode ToolTipMode { get; set; }
 
         /// <summary>
         /// ToolTip position in local coordinates
@@ -122,6 +122,7 @@ namespace GKMap.WinForms
         {
             Position = pos;
             fVisible = true;
+            ToolTipMode = MarkerTooltipMode.OnMouseOver;
             IsHitTestVisible = true;
         }
 

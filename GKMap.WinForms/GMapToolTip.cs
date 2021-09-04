@@ -17,12 +17,16 @@ namespace GKMap.WinForms
     /// </summary>
     public class GMapToolTip : IDisposable
     {
+        public static readonly Brush DefaultFill = new SolidBrush(Color.FromArgb(222, Color.AliceBlue));
+        public static readonly Font DefaultFont = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Bold, GraphicsUnit.Pixel);
+        public static readonly Brush DefaultForeground = new SolidBrush(Color.Navy);
+        public static readonly StringFormat DefaultFormat = new StringFormat();
+        public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(140, Color.MidnightBlue));
+
+
         private bool fDisposed;
         private GMapMarker fMarker;
 
-        public Point Offset;
-
-        public static readonly StringFormat DefaultFormat = new StringFormat();
 
         public GMapMarker Marker
         {
@@ -34,33 +38,27 @@ namespace GKMap.WinForms
             }
         }
 
+        public Point Offset { get; set; }
+
         /// <summary>
         /// string format
         /// </summary>
-        public readonly StringFormat Format = DefaultFormat;
-
-        public static readonly Font DefaultFont = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Bold, GraphicsUnit.Pixel);
+        public StringFormat Format = DefaultFormat;
 
         /// <summary>
         /// font
         /// </summary>
         public Font Font = DefaultFont;
 
-        public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(140, Color.MidnightBlue));
-
         /// <summary>
         /// specifies how the outline is painted
         /// </summary>
         public Pen Stroke = DefaultStroke;
 
-        public static readonly Brush DefaultFill = new SolidBrush(Color.FromArgb(222, Color.AliceBlue));
-
         /// <summary>
         /// background color
         /// </summary>
         public Brush Fill = DefaultFill;
-
-        public static readonly Brush DefaultForeground = new SolidBrush(Color.Navy);
 
         /// <summary>
         /// text foreground

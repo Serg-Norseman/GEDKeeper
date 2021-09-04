@@ -42,7 +42,7 @@ namespace Org.Mentalis.Network.ProxySocket
     internal sealed class Socks5Handler : SocksHandler
     {
         /// <summary>
-        /// Initiliazes a new Socks5Handler instance.
+        /// Initializes a new Socks5Handler instance.
         /// </summary>
         /// <param name="server">The socket connection with the proxy server.</param>
         /// <param name="user">The username to use.</param>

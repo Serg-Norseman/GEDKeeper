@@ -9,13 +9,23 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using GKMap.CacheProviders;
 using GKMap.MapProviders;
 
 namespace GKMap
 {
+    public enum CacheType
+    {
+        GeocoderCache,
+        PlacemarkCache,
+        UrlCache,
+    }
+
     /// <summary>
     /// maps manager
     /// </summary>
@@ -23,28 +33,60 @@ namespace GKMap
     {
         private volatile bool fAbortCacheLoop;
         private Thread fCacheThread;
+        private bool fCacheExists = true;
         private volatile bool fCacheOnIdleRead = true;
+        private string fImageCacheLocation;
         private int fReadingCache;
         private readonly Queue<CacheQueueItem> fTileCacheQueue = new Queue<CacheQueueItem>();
 
         internal readonly AutoResetEvent WaitForCache = new AutoResetEvent(false);
         internal volatile bool NoMapInstances = false;
 
-        /// <summary>
-        /// is map using cache
-        /// </summary>
-        public bool CacheExists = true;
+        private static bool fCacheDelay;
+        private static string fCacheLocation;
+
 
         /// <summary>
         /// primary cache provider, by default: ultra fast SQLite
         /// </summary>
-        public IPureImageCache PrimaryCache
+        public IPureImageCache ImageCache { get; private set; }
+
+        public string ImageCacheLocation
         {
             get {
-                return Cache.Instance.ImageCache;
+                return fImageCacheLocation;
             }
             set {
-                Cache.Instance.ImageCache = value;
+                fImageCacheLocation = value;
+
+                var cache = ImageCache as SQLitePureImageCache;
+                if (cache != null) {
+                    cache.CacheLocation = value;
+                }
+
+                fCacheDelay = true;
+            }
+        }
+
+        public static string CacheLocation
+        {
+            get {
+                if (string.IsNullOrEmpty(fCacheLocation)) {
+                    ResetCacheLocation();
+                }
+
+                return fCacheLocation;
+            }
+            set {
+                if (string.IsNullOrEmpty(value)) { // setting to null resets to default
+                    ResetCacheLocation();
+                } else {
+                    fCacheLocation = value;
+                }
+
+                if (fCacheDelay) {
+                    Instance.ImageCacheLocation = fCacheLocation;
+                }
             }
         }
 
@@ -66,6 +108,111 @@ namespace GKMap
             }
 
             ServicePointManager.DefaultConnectionLimit = 5;
+            InitCache();
+        }
+
+        private void InitCache()
+        {
+            ImageCache = new SQLitePureImageCache();
+
+            string newCache = CacheLocation;
+            string oldCache = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + "GKMap" + Path.DirectorySeparatorChar;
+
+            // move database to non-roaming user directory
+            if (Directory.Exists(oldCache)) {
+                try {
+                    if (Directory.Exists(newCache)) {
+                        Directory.Delete(oldCache, true);
+                    } else {
+                        Directory.Move(oldCache, newCache);
+                    }
+                    ImageCacheLocation = newCache;
+                } catch (Exception ex) {
+                    ImageCacheLocation = oldCache;
+                    Trace.WriteLine("SQLitePureImageCache, moving data: " + ex);
+                }
+            } else {
+                ImageCacheLocation = newCache;
+            }
+        }
+
+        private static readonly SHA1CryptoServiceProvider HashProvider = new SHA1CryptoServiceProvider();
+
+        private static void ConvertToHash(ref string s)
+        {
+            s = BitConverter.ToString(HashProvider.ComputeHash(Encoding.Unicode.GetBytes(s)));
+        }
+
+        public void SaveContent(string url, CacheType type, string content)
+        {
+            if (!fCacheExists)
+                return;
+
+            try {
+                ConvertToHash(ref url);
+
+                string dir = Path.Combine(fImageCacheLocation, type.ToString()) + Path.DirectorySeparatorChar;
+
+                // recreate dir
+                if (!Directory.Exists(dir)) {
+                    Directory.CreateDirectory(dir);
+                }
+
+                string file = dir + url + ".txt";
+
+                using (StreamWriter writer = new StreamWriter(file, false, Encoding.UTF8)) {
+                    writer.Write(content);
+                }
+            } catch (Exception ex) {
+                Debug.WriteLine("SaveContent: " + ex);
+            }
+        }
+
+        public string GetContent(string url, CacheType type, TimeSpan stayInCache)
+        {
+            if (!fCacheExists)
+                return string.Empty;
+
+            string ret = null;
+
+            try {
+                ConvertToHash(ref url);
+
+                string dir = Path.Combine(fImageCacheLocation, type.ToString()) + Path.DirectorySeparatorChar;
+                string file = dir + url + ".txt";
+
+                if (File.Exists(file)) {
+                    var writeTime = File.GetLastWriteTime(file);
+                    if (DateTime.Now - writeTime < stayInCache) {
+                        using (StreamReader r = new StreamReader(file, Encoding.UTF8)) {
+                            ret = r.ReadToEnd();
+                        }
+                    } else {
+                        File.Delete(file);
+                    }
+                }
+            } catch (Exception ex) {
+                ret = null;
+                Debug.WriteLine("GetContent: " + ex);
+            }
+
+            return ret;
+        }
+
+        public string GetContent(string url, CacheType type)
+        {
+            return GetContent(url, type, TimeSpan.FromDays(88));
+        }
+
+        private static void ResetCacheLocation()
+        {
+            string appDataLocation = Stuff.GetApplicationDataFolderPath();
+
+            if (string.IsNullOrEmpty(appDataLocation)) {
+                Instance.fCacheExists = false;
+            } else {
+                CacheLocation = appDataLocation;
+            }
         }
 
         /// <summary>
@@ -151,13 +298,13 @@ namespace GKMap
                         if (taskVal.Img != null) {
                             Debug.WriteLine("CacheEngine[" + left + "]: storing tile " + taskVal + ", " + taskVal.Img.Length / 1024 + "kB...");
 
-                            if (PrimaryCache != null) {
+                            if (ImageCache != null) {
                                 if (fCacheOnIdleRead) {
                                     while (Interlocked.Decrement(ref fReadingCache) > 0) {
                                         Thread.Sleep(1000);
                                     }
                                 }
-                                PrimaryCache.PutImageToCache(taskVal.Img, taskVal.Tile.Type, taskVal.Tile.Pos, taskVal.Tile.Zoom);
+                                ImageCache.PutImageToCache(taskVal.Img, taskVal.Tile.Type, taskVal.Tile.Pos, taskVal.Tile.Zoom);
                             }
 
                             taskVal.Clear();
@@ -207,13 +354,13 @@ namespace GKMap
                 }
 
                 if (ret == null) {
-                    if (PrimaryCache != null) {
+                    if (ImageCache != null) {
                         // hold writer for 5s
                         if (fCacheOnIdleRead) {
                             Interlocked.Exchange(ref fReadingCache, 5);
                         }
 
-                        ret = PrimaryCache.GetImageFromCache(provider.DbId, pos, zoom);
+                        ret = ImageCache.GetImageFromCache(provider.DbId, pos, zoom);
                         if (ret != null) {
                             MemoryCache.AddTileToMemoryCache(rawTile, ret.Data.GetBuffer());
                             return ret;

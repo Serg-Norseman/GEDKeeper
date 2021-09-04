@@ -14,7 +14,7 @@ namespace GKMap.WinForms
         /// <summary>
         /// can receive input
         /// </summary>
-        public bool IsHitTestVisible;
+        public bool IsHitTestVisible { get; set; }
 
         /// <summary>
         /// is mouse over marker
@@ -42,7 +42,7 @@ namespace GKMap.WinForms
         /// <summary>
         /// custom object
         /// </summary>
-        public object Tag;
+        public object Tag { get; set; }
 
         /// <summary>
         /// is visible

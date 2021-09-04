@@ -83,7 +83,7 @@ namespace GKMap.WinForms
         /// <summary>
         /// overlay Id
         /// </summary>
-        public string Id;
+        public string Id { get; set; }
 
         /// <summary>
         /// list of markers, should be thread safe

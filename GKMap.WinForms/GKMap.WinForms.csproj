@@ -66,7 +66,7 @@
     <Compile Include="GMapRoundedToolTip.cs" />
     <Compile Include="GMarkerIcon.cs" />
     <Compile Include="GMapToolTip.cs" />
-    <Compile Include="MapRoute.cs" />
+    <Compile Include="GMapFigure.cs" />
     <Compile Include="ObservableCollectionThreadSafe.cs" />
     <Compile Include="GMapMarker.cs" />
     <Compile Include="GMapOverlay.cs" />

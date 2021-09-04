@@ -10,24 +10,26 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using GKMap.MapProviders;
 
 namespace GKMap.WinForms
 {
     /// <summary>
     /// GKMap route
     /// </summary>
-    public class GMapRoute : MapRoute
+    public class GMapRoute : GMapFigure
     {
+        public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(144, Color.MidnightBlue));
+
+
         private GraphicsPath fGraphicsPath;
 
-        public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(144, Color.MidnightBlue));
 
         /// <summary>
         /// specifies how the outline is painted
         /// </summary>
-        public Pen Stroke = DefaultStroke;
+        public Pen Stroke { get; set; }
 
-        public readonly List<GPoint> LocalPoints = new List<GPoint>();
 
         static GMapRoute()
         {
@@ -35,17 +37,11 @@ namespace GKMap.WinForms
             DefaultStroke.Width = 5;
         }
 
-        public GMapRoute(string name)
-            : base(name)
+        public GMapRoute(string name, IEnumerable<PointLatLng> points = null)
+            : base(name, points)
         {
             fVisible = true;
-            IsHitTestVisible = false;
-        }
-
-        public GMapRoute(IEnumerable<PointLatLng> points, string name)
-            : base(points, name)
-        {
-            fVisible = true;
+            Stroke = DefaultStroke;
             IsHitTestVisible = false;
         }
 
@@ -111,6 +107,22 @@ namespace GKMap.WinForms
                 Clear();
             }
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// route distance (in km)
+        /// </summary>
+        public double GetDistance()
+        {
+            double distance = 0.0;
+
+            if (HasLines) {
+                for (int i = 1; i < Points.Count; i++) {
+                    distance += GMapProviders.EmptyProvider.Projection.GetDistance(Points[i - 1], Points[i]);
+                }
+            }
+
+            return distance;
         }
     }
 

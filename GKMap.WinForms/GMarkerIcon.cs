@@ -47,6 +47,9 @@ namespace GKMap.WinForms
 
     public class GMarkerIcon : GMapMarker
     {
+        private static readonly Dictionary<string, Bitmap> IconCache = new Dictionary<string, Bitmap>();
+
+
         private Bitmap fBitmap;
         private Bitmap fBitmapShadow;
 
@@ -54,9 +57,8 @@ namespace GKMap.WinForms
         private static Bitmap fMarkerShadow;
         private static Bitmap fShadowSmall;
 
-        public readonly GMarkerIconType Type;
+        public GMarkerIconType Type { get; }
 
-        private static readonly Dictionary<string, Bitmap> IconCache = new Dictionary<string, Bitmap>();
 
         public GMarkerIcon(PointLatLng p, GMarkerIconType type)
             : base(p)

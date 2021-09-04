@@ -44,7 +44,7 @@ namespace Org.Mentalis.Network.ProxySocket
     internal abstract class SocksHandler
     {
         /// <summary>
-        /// Initilizes a new instance of the SocksHandler class.
+        /// Initializes a new instance of the SocksHandler class.
         /// </summary>
         /// <param name="server">The socket connection with the proxy server.</param>
         /// <param name="user">The username to use when authenticating with the server.</param>

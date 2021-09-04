@@ -99,12 +99,12 @@ namespace GKMap.MapProviders.Google
             if (!fInit && TryCorrectVersion) {
                 string url = string.Format("https://maps.{0}/maps/api/js?client=google-maps-lite&amp;libraries=search&amp;language=en&amp;region=", ServerAPIs);
                 try {
-                    string html = GMaps.Instance.CacheExists ? Cache.Instance.GetContent(url, CacheType.UrlCache, TimeSpan.FromHours(GMapProvider.TTLCache)) : string.Empty;
+                    string html = GMaps.Instance.GetContent(url, CacheType.UrlCache, TimeSpan.FromHours(GMapProvider.TTLCache));
 
                     if (string.IsNullOrEmpty(html)) {
                         html = GetContentUsingHttp(url);
-                        if (!string.IsNullOrEmpty(html) && GMaps.Instance.CacheExists) {
-                            Cache.Instance.SaveContent(url, CacheType.UrlCache, html);
+                        if (!string.IsNullOrEmpty(html)) {
+                            GMaps.Instance.SaveContent(url, CacheType.UrlCache, html);
                         }
                     }
 
@@ -261,7 +261,7 @@ namespace GKMap.MapProviders.Google
             pointList = null;
 
             try {
-                string geo = GMaps.Instance.CacheExists ? Cache.Instance.GetContent(url, CacheType.GeocoderCache) : string.Empty;
+                string geo = GMaps.Instance.GetContent(url, CacheType.GeocoderCache);
 
                 bool cache = false;
 
@@ -425,8 +425,8 @@ namespace GKMap.MapProviders.Google
                             } else {
                                 status = GeocoderStatusCode.Success;
 
-                                if (cache && GMaps.Instance.CacheExists) {
-                                    Cache.Instance.SaveContent(url, CacheType.GeocoderCache, geo);
+                                if (cache) {
+                                    GMaps.Instance.SaveContent(url, CacheType.GeocoderCache, geo);
                                 }
 
                                 pointList = new List<PointLatLng>();
@@ -464,7 +464,7 @@ namespace GKMap.MapProviders.Google
             placemarkList = null;
 
             try {
-                string reverse = GMaps.Instance.CacheExists ? Cache.Instance.GetContent(url, CacheType.PlacemarkCache) : string.Empty;
+                string reverse = GMaps.Instance.GetContent(url, CacheType.PlacemarkCache);
 
                 bool cache = false;
 
@@ -931,8 +931,8 @@ namespace GKMap.MapProviders.Google
                             } else {
                                 status = GeocoderStatusCode.Success;
 
-                                if (cache && GMaps.Instance.CacheExists) {
-                                    Cache.Instance.SaveContent(url, CacheType.PlacemarkCache, reverse);
+                                if (cache) {
+                                    GMaps.Instance.SaveContent(url, CacheType.PlacemarkCache, reverse);
                                 }
 
                                 placemarkList = new List<Placemark>();

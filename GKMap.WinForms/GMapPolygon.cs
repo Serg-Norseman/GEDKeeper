@@ -16,25 +16,24 @@ namespace GKMap.WinForms
     /// <summary>
     /// GKMap polygon
     /// </summary>
-    public class GMapPolygon : MapRoute
+    public class GMapPolygon : GMapFigure
     {
-        private GraphicsPath fGraphicsPath;
-
+        public static readonly Brush DefaultFill = new SolidBrush(Color.FromArgb(155, Color.AliceBlue));
         public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(155, Color.MidnightBlue));
+
+
+        private GraphicsPath fGraphicsPath;
 
         /// <summary>
         /// specifies how the outline is painted
         /// </summary>
         public Pen Stroke = DefaultStroke;
 
-        public static readonly Brush DefaultFill = new SolidBrush(Color.FromArgb(155, Color.AliceBlue));
-
         /// <summary>
         /// background color
         /// </summary>
         public Brush Fill = DefaultFill;
 
-        public readonly List<GPoint> LocalPoints = new List<GPoint>();
 
         static GMapPolygon()
         {
@@ -42,12 +41,11 @@ namespace GKMap.WinForms
             DefaultStroke.Width = 5;
         }
 
-        public GMapPolygon(IEnumerable<PointLatLng> points, string name)
-           : base(points, name)
+        public GMapPolygon(string name, IEnumerable<PointLatLng> points)
+           : base(name, points)
         {
             fVisible = true;
             IsHitTestVisible = false;
-            LocalPoints.Capacity = Points.Count;
         }
 
         protected override void UpdateLocalPosition()

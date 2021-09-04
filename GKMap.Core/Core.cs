@@ -261,11 +261,6 @@ namespace GKMap
         public event TileLoadStart OnTileLoadStart;
 
         /// <summary>
-        /// occurs on empty tile displayed
-        /// </summary>
-        public event EmptyTileError OnEmptyTileError;
-
-        /// <summary>
         /// occurs on map drag
         /// </summary>
         public event MapDrag OnMapDrag;
@@ -718,13 +713,6 @@ namespace GKMap
                                     lock (task.Core.FailedLoads) {
                                         if (!task.Core.FailedLoads.ContainsKey(task)) {
                                             task.Core.FailedLoads.Add(task, ex);
-
-                                            if (task.Core.OnEmptyTileError != null) {
-                                                if (!task.Core.fRaiseEmptyTileError) {
-                                                    task.Core.fRaiseEmptyTileError = true;
-                                                    task.Core.OnEmptyTileError(task.Zoom, task.Pos);
-                                                }
-                                            }
                                         }
                                     }
                                 }

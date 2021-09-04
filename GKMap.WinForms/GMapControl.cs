@@ -72,14 +72,14 @@ namespace GKMap.WinForms
         {
             get {
 #if !DESIGN
-                return Cache.CacheLocation;
+                return GMaps.CacheLocation;
 #else
                 return string.Empty;
 #endif
             }
             set {
 #if !DESIGN
-                Cache.CacheLocation = value;
+                GMaps.CacheLocation = value;
 #endif
             }
         }
@@ -373,19 +373,6 @@ namespace GKMap.WinForms
         }
 
         /// <summary>
-        /// occurs on empty tile displayed
-        /// </summary>
-        public event EmptyTileError OnEmptyTileError
-        {
-            add {
-                Core.OnEmptyTileError += value;
-            }
-            remove {
-                Core.OnEmptyTileError -= value;
-            }
-        }
-
-        /// <summary>
         /// occurs when clicked on marker
         /// </summary>
         public event MarkerClick OnMarkerClick;
@@ -556,7 +543,7 @@ namespace GKMap.WinForms
         /// updates markers local position
         /// </summary>
         /// <param name="marker"></param>
-        public void UpdateMarkerLocalPosition(GMapMarker marker)
+        internal void UpdateMarkerLocalPosition(GMapMarker marker)
         {
             GPoint p = FromLatLngToLocal(marker.Position);
             p.OffsetNegative(Core.RenderOffset);
@@ -567,7 +554,7 @@ namespace GKMap.WinForms
         /// updates routes local position
         /// </summary>
         /// <param name="route"></param>
-        public void UpdateRouteLocalPosition(GMapRoute route)
+        internal void UpdateRouteLocalPosition(GMapRoute route)
         {
             route.LocalPoints.Clear();
 
@@ -583,7 +570,7 @@ namespace GKMap.WinForms
         /// updates polygons local position
         /// </summary>
         /// <param name="polygon"></param>
-        public void UpdatePolygonLocalPosition(GMapPolygon polygon)
+        internal void UpdatePolygonLocalPosition(GMapPolygon polygon)
         {
             polygon.LocalPoints.Clear();
 
@@ -657,9 +644,9 @@ namespace GKMap.WinForms
         /// </summary>
         /// <param name="route"></param>
         /// <returns></returns>
-        public bool ZoomAndCenterRoute(MapRoute route)
+        public bool ZoomAndCenterRoute(GMapFigure figure)
         {
-            RectLatLng? rect = GetRectOfRoute(route);
+            RectLatLng? rect = GetRectOfRoute(figure);
             if (rect.HasValue) {
                 return SetZoomToFitRect(rect.Value);
             }
@@ -771,7 +758,7 @@ namespace GKMap.WinForms
         /// </summary>
         /// <param name="route"></param>
         /// <returns></returns>
-        public RectLatLng? GetRectOfRoute(MapRoute route)
+        public RectLatLng? GetRectOfRoute(GMapFigure figure)
         {
             RectLatLng? ret = null;
 
@@ -780,8 +767,8 @@ namespace GKMap.WinForms
             double right = double.MinValue;
             double bottom = double.MaxValue;
 
-            if (route.HasLines) {
-                foreach (PointLatLng p in route.Points) {
+            if (figure.HasLines) {
+                foreach (PointLatLng p in figure.Points) {
                     // left
                     if (p.Lng < left) {
                         left = p.Lng;

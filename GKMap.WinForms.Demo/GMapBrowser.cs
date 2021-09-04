@@ -258,14 +258,14 @@ namespace GKMap.WinForms.Demo
 
         public void AddRoute(List<PointLatLng> points)
         {
-            fCurrentRoute = new GMapRoute(points, "route test");
+            fCurrentRoute = new GMapRoute("route test", points);
             fCurrentRoute.IsHitTestVisible = true;
             fObjects.Routes.Add(fCurrentRoute);
         }
 
         public void AddPolygon(List<PointLatLng> points)
         {
-            fCurrentPolygon = new GMapPolygon(points, "polygon test");
+            fCurrentPolygon = new GMapPolygon("polygon test", points);
             fCurrentPolygon.IsHitTestVisible = true;
             fObjects.Polygons.Add(fCurrentPolygon);
         }

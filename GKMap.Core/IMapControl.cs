@@ -19,8 +19,6 @@ namespace GKMap
     public delegate void MapZoomChanged();
     public delegate void MapTypeChanged(GMapProvider type);
 
-    public delegate void EmptyTileError(int zoom, GPoint pos);
-
 
     public interface IMapControl
     {

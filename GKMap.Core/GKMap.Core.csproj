@@ -152,7 +152,6 @@
     <Compile Include="GRect.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Cache.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileMatrix.cs" />
