@@ -22,10 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
-using System.Net.NetworkInformation;
-using System.Text;
 using System.Windows.Forms;
-
 using BSLib;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
@@ -187,8 +184,6 @@ namespace GKUI.Components
         #region Inner control
 
         private readonly GMapOverlay fObjects = new GMapOverlay("objects");
-        private readonly GMapOverlay fPolygons = new GMapOverlay("polygons");
-        private readonly GMapOverlay fRoutes = new GMapOverlay("routes");
         private readonly GMapOverlay fTopOverlay = new GMapOverlay();
 
         private bool fIsMouseDown;
@@ -225,12 +220,7 @@ namespace GKUI.Components
                 fMapControl.MaxZoom = 24;
                 fMapControl.Zoom = 9;
 
-                fMapControl.Manager.UseGeocoderCache = true;
-                fMapControl.Manager.UsePlacemarkCache = true;
-
                 // add custom layers  
-                fMapControl.Overlays.Add(fRoutes);
-                fMapControl.Overlays.Add(fPolygons);
                 fMapControl.Overlays.Add(fObjects);
                 fMapControl.Overlays.Add(fTopOverlay);
 
@@ -274,16 +264,16 @@ namespace GKUI.Components
 
         private void AddRoute(List<PointLatLng> points)
         {
-            var route = new GMapRoute(points, "route test");
+            var route = new GMapRoute("route test", points);
             route.IsHitTestVisible = true;
-            fRoutes.Routes.Add(route);
+            fObjects.Routes.Add(route);
         }
 
         private void AddPolygon(List<PointLatLng> points)
         {
-            var polygon = new GMapPolygon(points, "polygon test");
+            var polygon = new GMapPolygon("polygon test", points);
             polygon.IsHitTestVisible = true;
-            fPolygons.Polygons.Add(polygon);
+            fObjects.Polygons.Add(polygon);
         }
 
         /// <summary>
@@ -329,28 +319,7 @@ namespace GKUI.Components
 
         private void ClearAll()
         {
-            fRoutes.Routes.Clear();
-            fPolygons.Polygons.Clear();
-            fObjects.Markers.Clear();
-        }
-
-        private static bool PingNetwork(string hostNameOrAddress)
-        {
-            bool pingStatus = false;
-
-            using (Ping p = new Ping()) {
-                byte[] buffer = Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                int timeout = 4444; // 4s
-
-                try {
-                    PingReply reply = p.Send(hostNameOrAddress, timeout, buffer);
-                    pingStatus = (reply.Status == IPStatus.Success);
-                } catch (Exception) {
-                    pingStatus = false;
-                }
-            }
-
-            return pingStatus;
+            fObjects.Clear();
         }
 
         #region Event handlers
