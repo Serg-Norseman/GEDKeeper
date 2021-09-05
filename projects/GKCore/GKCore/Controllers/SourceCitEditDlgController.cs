@@ -112,6 +112,8 @@ namespace GKCore.Controllers
 
             fBase.Context.GetSourcesList(fSourcesList);
             RefreshSourcesList("");
+
+            fView.Source.Activate();
         }
 
         public void RefreshSourcesList(string filter)
