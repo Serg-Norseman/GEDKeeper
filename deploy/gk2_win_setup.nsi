@@ -269,8 +269,8 @@ Section "$(gkreq)"
     File "..\BSLib.Linguistics.dll"
     File "..\DotNetRtfWriter.dll"
     File "..\ExcelLibrary.dll"
-    File "..\GMap.NET.Core.dll"
-    File "..\GMap.NET.WindowsForms.dll"
+    File "..\GKMap.Core.dll"
+    File "..\GKMap.WinForms.dll"
     File "..\itextsharp.dll"
     File "..\lua51.dll"
     File "..\LuaInterface.dll"
@@ -576,8 +576,8 @@ Section "Uninstall"
     Delete $INSTDIR\BSLib.Linguistics.dll
     Delete $INSTDIR\DotNetRtfWriter.dll
     Delete $INSTDIR\ExcelLibrary.dll
-    Delete $INSTDIR\GMap.NET.Core.dll
-    Delete $INSTDIR\GMap.NET.WindowsForms.dll
+    Delete $INSTDIR\GKMap.Core.dll
+    Delete $INSTDIR\GKMap.WinForms.dll
     Delete $INSTDIR\itextsharp.dll
     Delete $INSTDIR\lua51.dll
     Delete $INSTDIR\LuaInterface.dll

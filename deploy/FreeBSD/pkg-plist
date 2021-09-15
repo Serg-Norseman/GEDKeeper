@@ -8,8 +8,8 @@ bin/gedkeeper
 %%DATADIR%%/GEDKeeper2.exe
 %%DATADIR%%/GKComponents.dll
 %%DATADIR%%/GKCore.dll
-%%DATADIR%%/GMap.NET.Core.dll
-%%DATADIR%%/GMap.NET.WindowsForms.dll
+%%DATADIR%%/GKMap.Core.dll
+%%DATADIR%%/GKMap.WinForms.dll
 %%DATADIR%%/KopiLua.dll
 %%DATADIR%%/NLog.dll
 %%DATADIR%%/NLua.dll
@@ -400,8 +400,8 @@ bin/gedkeeper
 %%DATADIR%%/plugins/GKWordsCloudPlugin.pol
 %%DATADIR%%/plugins/GKWordsCloudPlugin.rus
 %%DATADIR%%/plugins/GKWordsCloudPlugin.ukr
-%%DATADIR%%/plugins/GMap.NET.Core.dll
-%%DATADIR%%/plugins/GMap.NET.WindowsForms.dll
+%%DATADIR%%/plugins/GKMap.Core.dll
+%%DATADIR%%/plugins/GKMap.WinForms.dll
 %%DATADIR%%/plugins/KopiLua.dll
 %%DATADIR%%/plugins/NLog.dll
 %%DATADIR%%/plugins/NLua.dll

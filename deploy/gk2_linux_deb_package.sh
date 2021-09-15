@@ -44,8 +44,8 @@ cp $DEV_PATH/BSLib.Design.WFHandlers.dll ~/$LIB_PATH
 cp $DEV_PATH/BSLib.Linguistics.dll ~/$LIB_PATH
 cp $DEV_PATH/DotNetRtfWriter.dll ~/$LIB_PATH
 cp $DEV_PATH/ExcelLibrary.dll ~/$LIB_PATH
-cp $DEV_PATH/GMap.NET.Core.dll ~/$LIB_PATH
-cp $DEV_PATH/GMap.NET.WindowsForms.dll ~/$LIB_PATH
+cp $DEV_PATH/GKMap.Core.dll ~/$LIB_PATH
+cp $DEV_PATH/GKMap.WinForms.dll ~/$LIB_PATH
 cp $DEV_PATH/itextsharp.dll ~/$LIB_PATH
 cp $DEV_PATH/KopiLua.dll ~/$LIB_PATH
 cp $DEV_PATH/NLua.dll ~/$LIB_PATH
@@ -72,8 +72,8 @@ chmod -x ~/$LIB_PATH/BSLib.Design.WFHandlers.dll
 chmod -x ~/$LIB_PATH/BSLib.Linguistics.dll
 chmod -x ~/$LIB_PATH/DotNetRtfWriter.dll
 chmod -x ~/$LIB_PATH/ExcelLibrary.dll
-chmod -x ~/$LIB_PATH/GMap.NET.Core.dll
-chmod -x ~/$LIB_PATH/GMap.NET.WindowsForms.dll
+chmod -x ~/$LIB_PATH/GKMap.Core.dll
+chmod -x ~/$LIB_PATH/GKMap.WinForms.dll
 chmod -x ~/$LIB_PATH/itextsharp.dll
 chmod -x ~/$LIB_PATH/KopiLua.dll
 chmod -x ~/$LIB_PATH/NLua.dll
