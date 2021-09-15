@@ -37,11 +37,7 @@ namespace GKTests
     {
         public static void InitGEDCOMProviderTest()
         {
-            // forced call of GEDCOMProvider static constructor
-            // this is important for a number of tests that require initialization of the GEDCOM tag table
-            // System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(GEDCOMProvider).TypeHandle);
-            var formats = GEDCOMProvider.GEDCOMFormats;
-            Assert.IsNotNull(formats);
+            GKUtils.InitGEDCOM();
 
             var tagProps = GEDCOMTagsTable.GetTagProps("BIRT");
             Assert.IsNotNull(tagProps);

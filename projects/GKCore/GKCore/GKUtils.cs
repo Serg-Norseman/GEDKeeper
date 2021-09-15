@@ -25,6 +25,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using BSLib;
@@ -45,6 +46,16 @@ namespace GKCore
     public static class GKUtils
     {
         #region Aux functions
+
+        /// <summary>
+        /// Forced call of GEDCOMProvider static constructor.
+        /// This is important for a number of tests that require initialization of the GEDCOM tag table.
+        /// And at the start of the application, before loading any GEDCOM files.
+        /// </summary>
+        public static void InitGEDCOM()
+        {
+            RuntimeHelpers.RunClassConstructor(typeof(GEDCOMProvider).TypeHandle);
+        }
 
         public static List<string> GetCountries()
         {
