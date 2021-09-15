@@ -77,17 +77,20 @@ namespace GKUI.Platform
             base.Init(args, isMDI);
         }
 
-        // FIXME
         public override IWindow GetActiveWindow()
         {
-            Form activeForm = Form.ActiveForm;
+            IWindow activeWin = Form.ActiveForm as IWindow;
 
-            // only for tests!
-            if (activeForm == null && fRunningForms.Count > 0) {
-                activeForm = (Form)fRunningForms[0];
+            if (activeWin == null) {
+                activeWin = fActiveBase;
             }
 
-            return (activeForm is IWindow) ? (IWindow)activeForm : null;
+            // only for tests!
+            if (activeWin == null && fRunningForms.Count > 0) {
+                activeWin = fRunningForms[0] as IWindow;
+            }
+
+            return activeWin;
         }
 
         // FIXME!
