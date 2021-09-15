@@ -893,8 +893,9 @@ namespace GKCore
         /* 832 */ LSID_SeparateDepth,
         /* 833 */ LSID_Ancestors,
         /* 834 */ LSID_MatchesNotFound,
+        /* 835 */ LSID_ShortKinshipForm,
 
-        /* 000 */ LSID_Last = LSID_MatchesNotFound
+        /* 000 */ LSID_Last = LSID_ShortKinshipForm
     }
 
 
@@ -1743,6 +1744,7 @@ namespace GKCore
             /* 832 */ "Separate depth",
             /* 833 */ "Ancestors",
             /* 834 */ "Matches not found",
+            /* 835 */ "Short kinship form",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

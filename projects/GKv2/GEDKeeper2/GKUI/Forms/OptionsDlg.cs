@@ -237,6 +237,8 @@ namespace GKUI.Forms
             chkAutoSortChildren.Checked = fOptions.AutoSortChildren;
             chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
             chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
+
+            chkShortKinshipForm.Checked = fOptions.ShortKinshipForm;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -505,6 +507,8 @@ namespace GKUI.Forms
             fOptions.AutoSortChildren = chkAutoSortChildren.Checked;
             fOptions.AutoSortSpouses = chkAutoSortSpouses.Checked;
             fOptions.FirstCapitalLetterInNames = chkFirstCapitalLetterInNames.Checked;
+
+            fOptions.ShortKinshipForm = chkShortKinshipForm.Checked;
         }
 
         private void AcceptWomanSurnameFormat()
@@ -759,6 +763,7 @@ namespace GKUI.Forms
             chkAutoSortChildren.Text = LangMan.LS(LSID.LSID_AutoSortChildren);
             chkAutoSortSpouses.Text = LangMan.LS(LSID.LSID_AutoSortSpouses);
             chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
+            chkShortKinshipForm.Text = LangMan.LS(LSID.LSID_ShortKinshipForm);
 
             grpDateFormat.Text = LangMan.LS(LSID.LSID_DateFormat);
             chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);

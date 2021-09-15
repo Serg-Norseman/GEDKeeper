@@ -779,7 +779,7 @@ namespace GKCore.Charts
             if (target.Node == null || target.Rec == null) {
                 target.Kinship = "";
             } else {
-                string kinship = fGraph.GetRelationship(target.Rec);
+                string kinship = fGraph.GetRelationship(target.Rec, false, GlobalOptions.Instance.ShortKinshipForm);
                 if (kinship == "?") {
                     kinship = "-";
                 }

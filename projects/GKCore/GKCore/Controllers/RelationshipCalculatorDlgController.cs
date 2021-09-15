@@ -24,6 +24,7 @@ using GDModel;
 using GKCore.Kinships;
 using GKCore.MVP;
 using GKCore.MVP.Views;
+using GKCore.Options;
 
 namespace GKCore.Controllers
 {
@@ -81,7 +82,7 @@ namespace GKCore.Controllers
                     }
 
                     kinsGraph.SetTreeRoot(fRec1);
-                    fResult = kinsGraph.GetRelationship(fRec2, true);
+                    fResult = kinsGraph.GetRelationship(fRec2, true, GlobalOptions.Instance.ShortKinshipForm);
 
                     #if DEBUG_SOLVE
                     fResult += "\r\n" + kinsGraph.IndividualsPath;

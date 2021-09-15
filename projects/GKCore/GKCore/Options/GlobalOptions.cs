@@ -96,6 +96,7 @@ namespace GKCore.Options
         private string fGeoSearchCountry;
         private readonly ListOptionsCollection fListOptions;
         private bool fReadabilityHighlightRows;
+        private bool fShortKinshipForm;
 
 
         public static GlobalOptions Instance
@@ -367,6 +368,12 @@ namespace GKCore.Options
             get { return fResidenceFilters; }
         }
 
+        public bool ShortKinshipForm
+        {
+            get { return fShortKinshipForm; }
+            set { fShortKinshipForm = value; }
+        }
+
         public bool ShowDatesCalendar
         {
             get { return fShowDatesCalendar; }
@@ -442,6 +449,7 @@ namespace GKCore.Options
 
             fListOptions = new ListOptionsCollection();
             fReadabilityHighlightRows = true;
+            fShortKinshipForm = false;
 
             fCharsetDetection = false;
             fFirstCapitalLetterInNames = false;
@@ -670,6 +678,7 @@ namespace GKCore.Options
             fCharsetDetection = ini.ReadBool("Common", "CharsetDetection", false);
             fFirstCapitalLetterInNames = ini.ReadBool("Common", "FirstCapitalLetterInNames", false);
             fDialogClosingWarn = ini.ReadBool("Common", "DialogClosingWarn", false);
+            fShortKinshipForm = ini.ReadBool("Common", "ShortKinshipForm", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -789,6 +798,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "CharsetDetection", fCharsetDetection);
             ini.WriteBool("Common", "FirstCapitalLetterInNames", fFirstCapitalLetterInNames);
             ini.WriteBool("Common", "DialogClosingWarn", fDialogClosingWarn);
+            ini.WriteBool("Common", "ShortKinshipForm", fShortKinshipForm);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

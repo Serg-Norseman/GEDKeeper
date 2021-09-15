@@ -150,6 +150,7 @@
         private System.Windows.Forms.Label lblDefaultDepthAncestors;
         private System.Windows.Forms.Label lblDefaultDepthDescendants;
         private System.Windows.Forms.CheckBox chkSeparateDepth;
+        private System.Windows.Forms.CheckBox chkShortKinshipForm;
 
         private void InitializeComponent()
         {
@@ -276,6 +277,7 @@
             this.chkShowDatesCalendar = new System.Windows.Forms.CheckBox();
             this.chkFirstCapitalLetterInNames = new System.Windows.Forms.CheckBox();
             this.chkAutoSortSpouses = new System.Windows.Forms.CheckBox();
+            this.chkShortKinshipForm = new System.Windows.Forms.CheckBox();
             this.chkAutoSortChildren = new System.Windows.Forms.CheckBox();
             this.chkHighlightUnmarried = new System.Windows.Forms.CheckBox();
             this.pageViewPersons = new System.Windows.Forms.TabPage();
@@ -1590,6 +1592,7 @@
             this.pageViewCommon.Controls.Add(this.chkShowDatesCalendar);
             this.pageViewCommon.Controls.Add(this.chkFirstCapitalLetterInNames);
             this.pageViewCommon.Controls.Add(this.chkAutoSortSpouses);
+            this.pageViewCommon.Controls.Add(this.chkShortKinshipForm);
             this.pageViewCommon.Controls.Add(this.chkAutoSortChildren);
             this.pageViewCommon.Controls.Add(this.chkHighlightUnmarried);
             this.pageViewCommon.Location = new System.Drawing.Point(4, 22);
@@ -1802,6 +1805,15 @@
             this.chkAutoSortSpouses.TabIndex = 4;
             this.chkAutoSortSpouses.Text = "chkAutoSortSpouses";
             // 
+            // chkShortKinshipForm
+            // 
+            this.chkShortKinshipForm.Location = new System.Drawing.Point(9, 318);
+            this.chkShortKinshipForm.Margin = new System.Windows.Forms.Padding(2);
+            this.chkShortKinshipForm.Name = "chkShortKinshipForm";
+            this.chkShortKinshipForm.Size = new System.Drawing.Size(242, 17);
+            this.chkShortKinshipForm.TabIndex = 4;
+            this.chkShortKinshipForm.Text = "chkShortKinshipForm";
+            // 
             // chkAutoSortChildren
             // 
             this.chkAutoSortChildren.Location = new System.Drawing.Point(9, 240);
@@ -2003,10 +2015,10 @@
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(2);
             this.lvPlugins.MultiSelect = false;
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.SortOrder = BSLib.Design.BSDTypes.SortOrder.None;
             this.lvPlugins.OwnerDraw = true;
             this.lvPlugins.Size = new System.Drawing.Size(575, 512);
             this.lvPlugins.SortColumn = 0;
+            this.lvPlugins.SortOrder = BSLib.Design.BSDTypes.SortOrder.None;
             this.lvPlugins.TabIndex = 0;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
             this.lvPlugins.View = System.Windows.Forms.View.Details;
