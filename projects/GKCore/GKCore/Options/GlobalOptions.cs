@@ -97,6 +97,7 @@ namespace GKCore.Options
         private readonly ListOptionsCollection fListOptions;
         private bool fReadabilityHighlightRows;
         private bool fShortKinshipForm;
+        private bool fSurnameFirstInOrder;
 
 
         public static GlobalOptions Instance
@@ -392,6 +393,12 @@ namespace GKCore.Options
             set { fShowTips = value; }
         }
 
+        public bool SurnameFirstInOrder
+        {
+            get { return fSurnameFirstInOrder; }
+            set { fSurnameFirstInOrder = value; }
+        }
+
         public TreeChartOptions TreeChartOptions
         {
             get { return fTreeChartOptions; }
@@ -450,6 +457,7 @@ namespace GKCore.Options
             fListOptions = new ListOptionsCollection();
             fReadabilityHighlightRows = true;
             fShortKinshipForm = false;
+            fSurnameFirstInOrder = true;
 
             fCharsetDetection = false;
             fFirstCapitalLetterInNames = false;
@@ -679,6 +687,7 @@ namespace GKCore.Options
             fFirstCapitalLetterInNames = ini.ReadBool("Common", "FirstCapitalLetterInNames", false);
             fDialogClosingWarn = ini.ReadBool("Common", "DialogClosingWarn", false);
             fShortKinshipForm = ini.ReadBool("Common", "ShortKinshipForm", false);
+            fSurnameFirstInOrder = ini.ReadBool("Common", "SurnameFirstInOrder", true);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -799,6 +808,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "FirstCapitalLetterInNames", fFirstCapitalLetterInNames);
             ini.WriteBool("Common", "DialogClosingWarn", fDialogClosingWarn);
             ini.WriteBool("Common", "ShortKinshipForm", fShortKinshipForm);
+            ini.WriteBool("Common", "SurnameFirstInOrder", fSurnameFirstInOrder);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

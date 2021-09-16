@@ -239,6 +239,7 @@ namespace GKUI.Forms
             chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
 
             chkShortKinshipForm.Checked = fOptions.ShortKinshipForm;
+            chkSurnameFirstInOrder.Checked = fOptions.SurnameFirstInOrder;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -482,15 +483,24 @@ namespace GKUI.Forms
             ancOptionsControl1.AcceptChanges();
         }
 
+        private NameFormat GetSelectedNameFormat()
+        {
+            NameFormat result;
+            if (radSNP.Checked) {
+                result = NameFormat.nfFNP;
+            } else if (radS_NP.Checked) {
+                result = NameFormat.nfF_NP;
+            } else if (radS_N_P.Checked) {
+                result = NameFormat.nfF_N_P;
+            } else {
+                result = NameFormat.nfFNP;
+            }
+            return result;
+        }
+
         private void AcceptInterfaceOptions()
         {
-            if (radSNP.Checked) {
-                fOptions.DefNameFormat = NameFormat.nfFNP;
-            } else if (radS_NP.Checked) {
-                fOptions.DefNameFormat = NameFormat.nfF_NP;
-            } else if (radS_N_P.Checked) {
-                fOptions.DefNameFormat = NameFormat.nfF_N_P;
-            }
+            fOptions.DefNameFormat = GetSelectedNameFormat();
 
             if (radDMY.Checked) {
                 fOptions.DefDateFormat = DateFormat.dfDD_MM_YYYY;
@@ -509,6 +519,7 @@ namespace GKUI.Forms
             fOptions.FirstCapitalLetterInNames = chkFirstCapitalLetterInNames.Checked;
 
             fOptions.ShortKinshipForm = chkShortKinshipForm.Checked;
+            fOptions.SurnameFirstInOrder = chkSurnameFirstInOrder.Checked;
         }
 
         private void AcceptWomanSurnameFormat()
@@ -764,6 +775,7 @@ namespace GKUI.Forms
             chkAutoSortSpouses.Text = LangMan.LS(LSID.LSID_AutoSortSpouses);
             chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
             chkShortKinshipForm.Text = LangMan.LS(LSID.LSID_ShortKinshipForm);
+            chkSurnameFirstInOrder.Text = LangMan.LS(LSID.LSID_SurnameFirstInOrder);
 
             grpDateFormat.Text = LangMan.LS(LSID.LSID_DateFormat);
             chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
@@ -813,6 +825,12 @@ namespace GKUI.Forms
             numDefaultDepth.Enabled = !chkSeparateDepth.Checked;
             numDefaultDepthAncestors.Enabled = chkSeparateDepth.Checked;
             numDefaultDepthDescendants.Enabled = chkSeparateDepth.Checked;
+        }
+
+        private void rgFNPFormat_CheckedChanged(object sender, EventArgs e)
+        {
+            var defNameFormat = GetSelectedNameFormat();
+            chkSurnameFirstInOrder.Enabled = (defNameFormat == NameFormat.nfFNP);
         }
     }
 }

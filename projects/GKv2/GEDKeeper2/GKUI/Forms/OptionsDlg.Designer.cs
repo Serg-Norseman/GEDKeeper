@@ -151,6 +151,7 @@
         private System.Windows.Forms.Label lblDefaultDepthDescendants;
         private System.Windows.Forms.CheckBox chkSeparateDepth;
         private System.Windows.Forms.CheckBox chkShortKinshipForm;
+        private System.Windows.Forms.CheckBox chkSurnameFirstInOrder;
 
         private void InitializeComponent()
         {
@@ -258,6 +259,7 @@
             this.pageUIView = new System.Windows.Forms.TabPage();
             this.PageControl2 = new System.Windows.Forms.TabControl();
             this.pageViewCommon = new System.Windows.Forms.TabPage();
+            this.chkSurnameFirstInOrder = new System.Windows.Forms.CheckBox();
             this.grpAdvancedNames = new System.Windows.Forms.GroupBox();
             this.radMarried = new System.Windows.Forms.RadioButton();
             this.radMaiden = new System.Windows.Forms.RadioButton();
@@ -376,7 +378,7 @@
             this.pageCommon.Location = new System.Drawing.Point(4, 22);
             this.pageCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageCommon.Name = "pageCommon";
-            this.pageCommon.Padding = new System.Windows.Forms.Padding(8);
+            this.pageCommon.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.pageCommon.Size = new System.Drawing.Size(591, 528);
             this.pageCommon.TabIndex = 0;
             this.pageCommon.Text = "pageCommon";
@@ -390,7 +392,7 @@
             this.groupBox1.Controls.Add(this.chkAutosave);
             this.groupBox1.Controls.Add(this.grpFileBackup);
             this.groupBox1.Location = new System.Drawing.Point(278, 8);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(8);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(303, 208);
@@ -474,7 +476,7 @@
             this.grpFileBackup.Controls.Add(this.radFBOnlyPrev);
             this.grpFileBackup.Controls.Add(this.radFBNone);
             this.grpFileBackup.Location = new System.Drawing.Point(10, 24);
-            this.grpFileBackup.Margin = new System.Windows.Forms.Padding(8);
+            this.grpFileBackup.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.grpFileBackup.Name = "grpFileBackup";
             this.grpFileBackup.Padding = new System.Windows.Forms.Padding(2);
             this.grpFileBackup.Size = new System.Drawing.Size(274, 109);
@@ -485,7 +487,7 @@
             // radFBEachRevision
             // 
             this.radFBEachRevision.Location = new System.Drawing.Point(10, 78);
-            this.radFBEachRevision.Margin = new System.Windows.Forms.Padding(8);
+            this.radFBEachRevision.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.radFBEachRevision.Name = "radFBEachRevision";
             this.radFBEachRevision.Size = new System.Drawing.Size(235, 19);
             this.radFBEachRevision.TabIndex = 2;
@@ -659,7 +661,7 @@
             this.grpOther.Location = new System.Drawing.Point(9, 226);
             this.grpOther.Margin = new System.Windows.Forms.Padding(2);
             this.grpOther.Name = "grpOther";
-            this.grpOther.Padding = new System.Windows.Forms.Padding(8);
+            this.grpOther.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.grpOther.Size = new System.Drawing.Size(572, 162);
             this.grpOther.TabIndex = 2;
             this.grpOther.TabStop = false;
@@ -764,7 +766,7 @@
             this.pageMultimedia.Location = new System.Drawing.Point(4, 22);
             this.pageMultimedia.Margin = new System.Windows.Forms.Padding(2);
             this.pageMultimedia.Name = "pageMultimedia";
-            this.pageMultimedia.Padding = new System.Windows.Forms.Padding(8);
+            this.pageMultimedia.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.pageMultimedia.Size = new System.Drawing.Size(591, 528);
             this.pageMultimedia.TabIndex = 6;
             this.pageMultimedia.Text = "pageMultimedia";
@@ -783,7 +785,7 @@
             // 
             this.chkDeleteMediaFileWithoutConfirm.AutoSize = true;
             this.chkDeleteMediaFileWithoutConfirm.Location = new System.Drawing.Point(16, 246);
-            this.chkDeleteMediaFileWithoutConfirm.Margin = new System.Windows.Forms.Padding(8);
+            this.chkDeleteMediaFileWithoutConfirm.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.chkDeleteMediaFileWithoutConfirm.Name = "chkDeleteMediaFileWithoutConfirm";
             this.chkDeleteMediaFileWithoutConfirm.Size = new System.Drawing.Size(192, 17);
             this.chkDeleteMediaFileWithoutConfirm.TabIndex = 11;
@@ -793,7 +795,7 @@
             // 
             this.chkAllowDeleteMediaFileFromRefs.AutoSize = true;
             this.chkAllowDeleteMediaFileFromRefs.Location = new System.Drawing.Point(16, 213);
-            this.chkAllowDeleteMediaFileFromRefs.Margin = new System.Windows.Forms.Padding(8);
+            this.chkAllowDeleteMediaFileFromRefs.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.chkAllowDeleteMediaFileFromRefs.Name = "chkAllowDeleteMediaFileFromRefs";
             this.chkAllowDeleteMediaFileFromRefs.Size = new System.Drawing.Size(188, 17);
             this.chkAllowDeleteMediaFileFromRefs.TabIndex = 11;
@@ -803,7 +805,7 @@
             // 
             this.chkAllowDeleteMediaFileFromStgArc.AutoSize = true;
             this.chkAllowDeleteMediaFileFromStgArc.Location = new System.Drawing.Point(16, 180);
-            this.chkAllowDeleteMediaFileFromStgArc.Margin = new System.Windows.Forms.Padding(8);
+            this.chkAllowDeleteMediaFileFromStgArc.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.chkAllowDeleteMediaFileFromStgArc.Name = "chkAllowDeleteMediaFileFromStgArc";
             this.chkAllowDeleteMediaFileFromStgArc.Size = new System.Drawing.Size(198, 17);
             this.chkAllowDeleteMediaFileFromStgArc.TabIndex = 11;
@@ -813,7 +815,7 @@
             // 
             this.lblMediaStoreDefault.AutoSize = true;
             this.lblMediaStoreDefault.Location = new System.Drawing.Point(16, 147);
-            this.lblMediaStoreDefault.Margin = new System.Windows.Forms.Padding(8);
+            this.lblMediaStoreDefault.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.lblMediaStoreDefault.Name = "lblMediaStoreDefault";
             this.lblMediaStoreDefault.Size = new System.Drawing.Size(106, 13);
             this.lblMediaStoreDefault.TabIndex = 11;
@@ -823,7 +825,7 @@
             // 
             this.chkAllowMediaStoreRelativeReferences.AutoSize = true;
             this.chkAllowMediaStoreRelativeReferences.Location = new System.Drawing.Point(16, 114);
-            this.chkAllowMediaStoreRelativeReferences.Margin = new System.Windows.Forms.Padding(8);
+            this.chkAllowMediaStoreRelativeReferences.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.chkAllowMediaStoreRelativeReferences.Name = "chkAllowMediaStoreRelativeReferences";
             this.chkAllowMediaStoreRelativeReferences.Size = new System.Drawing.Size(215, 17);
             this.chkAllowMediaStoreRelativeReferences.TabIndex = 11;
@@ -833,7 +835,7 @@
             // 
             this.chkAllowMediaDirectRefs.AutoSize = true;
             this.chkAllowMediaDirectRefs.Location = new System.Drawing.Point(16, 82);
-            this.chkAllowMediaDirectRefs.Margin = new System.Windows.Forms.Padding(8);
+            this.chkAllowMediaDirectRefs.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.chkAllowMediaDirectRefs.Name = "chkAllowMediaDirectRefs";
             this.chkAllowMediaDirectRefs.Size = new System.Drawing.Size(145, 17);
             this.chkAllowMediaDirectRefs.TabIndex = 11;
@@ -843,7 +845,7 @@
             // 
             this.chkEmbeddedMediaPlayer.AutoSize = true;
             this.chkEmbeddedMediaPlayer.Location = new System.Drawing.Point(16, 49);
-            this.chkEmbeddedMediaPlayer.Margin = new System.Windows.Forms.Padding(8);
+            this.chkEmbeddedMediaPlayer.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.chkEmbeddedMediaPlayer.Name = "chkEmbeddedMediaPlayer";
             this.chkEmbeddedMediaPlayer.Size = new System.Drawing.Size(150, 17);
             this.chkEmbeddedMediaPlayer.TabIndex = 11;
@@ -853,7 +855,7 @@
             // 
             this.chkRemovableMediaWarning.AutoSize = true;
             this.chkRemovableMediaWarning.Location = new System.Drawing.Point(16, 16);
-            this.chkRemovableMediaWarning.Margin = new System.Windows.Forms.Padding(8);
+            this.chkRemovableMediaWarning.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.chkRemovableMediaWarning.Name = "chkRemovableMediaWarning";
             this.chkRemovableMediaWarning.Size = new System.Drawing.Size(163, 17);
             this.chkRemovableMediaWarning.TabIndex = 10;
@@ -866,7 +868,7 @@
             this.pageCharts.Location = new System.Drawing.Point(4, 22);
             this.pageCharts.Margin = new System.Windows.Forms.Padding(2);
             this.pageCharts.Name = "pageCharts";
-            this.pageCharts.Padding = new System.Windows.Forms.Padding(8);
+            this.pageCharts.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.pageCharts.Size = new System.Drawing.Size(591, 528);
             this.pageCharts.TabIndex = 4;
             this.pageCharts.Text = "pageCharts";
@@ -899,7 +901,7 @@
             this.pageTreeChart.Location = new System.Drawing.Point(4, 22);
             this.pageTreeChart.Margin = new System.Windows.Forms.Padding(2);
             this.pageTreeChart.Name = "pageTreeChart";
-            this.pageTreeChart.Padding = new System.Windows.Forms.Padding(8);
+            this.pageTreeChart.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.pageTreeChart.Size = new System.Drawing.Size(567, 486);
             this.pageTreeChart.TabIndex = 3;
             this.pageTreeChart.Text = "pageTreeChart";
@@ -993,7 +995,7 @@
             this.grpSpacings.Location = new System.Drawing.Point(331, 230);
             this.grpSpacings.Margin = new System.Windows.Forms.Padding(2);
             this.grpSpacings.Name = "grpSpacings";
-            this.grpSpacings.Padding = new System.Windows.Forms.Padding(8);
+            this.grpSpacings.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.grpSpacings.Size = new System.Drawing.Size(229, 128);
             this.grpSpacings.TabIndex = 2;
             this.grpSpacings.TabStop = false;
@@ -1151,9 +1153,9 @@
             this.grpTreePersons.Controls.Add(this.chkTreeDecorative);
             this.grpTreePersons.Controls.Add(this.chkPortraitsVisible);
             this.grpTreePersons.Location = new System.Drawing.Point(9, 8);
-            this.grpTreePersons.Margin = new System.Windows.Forms.Padding(8);
+            this.grpTreePersons.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.grpTreePersons.Name = "grpTreePersons";
-            this.grpTreePersons.Padding = new System.Windows.Forms.Padding(8);
+            this.grpTreePersons.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.grpTreePersons.Size = new System.Drawing.Size(313, 474);
             this.grpTreePersons.TabIndex = 0;
             this.grpTreePersons.TabStop = false;
@@ -1381,7 +1383,7 @@
             this.grpTreeDecor.Location = new System.Drawing.Point(331, 10);
             this.grpTreeDecor.Margin = new System.Windows.Forms.Padding(2);
             this.grpTreeDecor.Name = "grpTreeDecor";
-            this.grpTreeDecor.Padding = new System.Windows.Forms.Padding(8);
+            this.grpTreeDecor.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.grpTreeDecor.Size = new System.Drawing.Size(196, 208);
             this.grpTreeDecor.TabIndex = 1;
             this.grpTreeDecor.TabStop = false;
@@ -1564,7 +1566,7 @@
             this.pageUIView.Location = new System.Drawing.Point(4, 22);
             this.pageUIView.Margin = new System.Windows.Forms.Padding(2);
             this.pageUIView.Name = "pageUIView";
-            this.pageUIView.Padding = new System.Windows.Forms.Padding(8);
+            this.pageUIView.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.pageUIView.Size = new System.Drawing.Size(591, 528);
             this.pageUIView.TabIndex = 1;
             this.pageUIView.Text = "pageUIView";
@@ -1583,6 +1585,7 @@
             // 
             // pageViewCommon
             // 
+            this.pageViewCommon.Controls.Add(this.chkSurnameFirstInOrder);
             this.pageViewCommon.Controls.Add(this.grpAdvancedNames);
             this.pageViewCommon.Controls.Add(this.rgFNPFormat);
             this.pageViewCommon.Controls.Add(this.grpDateFormat);
@@ -1598,10 +1601,19 @@
             this.pageViewCommon.Location = new System.Drawing.Point(4, 22);
             this.pageViewCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewCommon.Name = "pageViewCommon";
-            this.pageViewCommon.Padding = new System.Windows.Forms.Padding(8);
+            this.pageViewCommon.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.pageViewCommon.Size = new System.Drawing.Size(567, 486);
             this.pageViewCommon.TabIndex = 0;
             this.pageViewCommon.Text = "pageViewCommon";
+            // 
+            // chkSurnameFirstInOrder
+            // 
+            this.chkSurnameFirstInOrder.Location = new System.Drawing.Point(9, 106);
+            this.chkSurnameFirstInOrder.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSurnameFirstInOrder.Name = "chkSurnameFirstInOrder";
+            this.chkSurnameFirstInOrder.Size = new System.Drawing.Size(242, 17);
+            this.chkSurnameFirstInOrder.TabIndex = 9;
+            this.chkSurnameFirstInOrder.Text = "chkSurnameFirstInOrder";
             // 
             // grpAdvancedNames
             // 
@@ -1611,7 +1623,7 @@
             this.grpAdvancedNames.Controls.Add(this.radMaiden_Married);
             this.grpAdvancedNames.Controls.Add(this.chkExtendWomanSurnames);
             this.grpAdvancedNames.Location = new System.Drawing.Point(261, 153);
-            this.grpAdvancedNames.Margin = new System.Windows.Forms.Padding(8);
+            this.grpAdvancedNames.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.grpAdvancedNames.Name = "grpAdvancedNames";
             this.grpAdvancedNames.Padding = new System.Windows.Forms.Padding(2);
             this.grpAdvancedNames.Size = new System.Drawing.Size(294, 158);
@@ -1623,7 +1635,7 @@
             // 
             this.radMarried.AutoSize = true;
             this.radMarried.Location = new System.Drawing.Point(21, 127);
-            this.radMarried.Margin = new System.Windows.Forms.Padding(8);
+            this.radMarried.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.radMarried.Name = "radMarried";
             this.radMarried.Size = new System.Drawing.Size(77, 17);
             this.radMarried.TabIndex = 12;
@@ -1701,6 +1713,7 @@
             this.radS_N_P.Size = new System.Drawing.Size(179, 23);
             this.radS_N_P.TabIndex = 2;
             this.radS_N_P.Text = "radS_N_P";
+            this.radS_N_P.CheckedChanged += new System.EventHandler(this.rgFNPFormat_CheckedChanged);
             // 
             // radS_NP
             // 
@@ -1710,6 +1723,7 @@
             this.radS_NP.Size = new System.Drawing.Size(179, 23);
             this.radS_NP.TabIndex = 1;
             this.radS_NP.Text = "radS_NP";
+            this.radS_NP.CheckedChanged += new System.EventHandler(this.rgFNPFormat_CheckedChanged);
             // 
             // radSNP
             // 
@@ -1719,6 +1733,7 @@
             this.radSNP.Size = new System.Drawing.Size(179, 23);
             this.radSNP.TabIndex = 0;
             this.radSNP.Text = "radSNP";
+            this.radSNP.CheckedChanged += new System.EventHandler(this.rgFNPFormat_CheckedChanged);
             // 
             // grpDateFormat
             // 
@@ -1841,7 +1856,7 @@
             this.pageViewPersons.Location = new System.Drawing.Point(4, 22);
             this.pageViewPersons.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewPersons.Name = "pageViewPersons";
-            this.pageViewPersons.Size = new System.Drawing.Size(567, 486);
+            this.pageViewPersons.Size = new System.Drawing.Size(569, 491);
             this.pageViewPersons.TabIndex = 1;
             this.pageViewPersons.Text = "pageViewPersons";
             // 
@@ -1852,8 +1867,8 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(8);
-            this.panel1.Size = new System.Drawing.Size(390, 486);
+            this.panel1.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.panel1.Size = new System.Drawing.Size(390, 491);
             this.panel1.TabIndex = 2;
             // 
             // lstPersonColumns
@@ -1862,7 +1877,7 @@
             this.lstPersonColumns.Location = new System.Drawing.Point(8, 8);
             this.lstPersonColumns.Margin = new System.Windows.Forms.Padding(2);
             this.lstPersonColumns.Name = "lstPersonColumns";
-            this.lstPersonColumns.Size = new System.Drawing.Size(374, 470);
+            this.lstPersonColumns.Size = new System.Drawing.Size(374, 475);
             this.lstPersonColumns.TabIndex = 1;
             this.lstPersonColumns.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ListPersonColumns_ItemCheck);
             // 
@@ -1878,7 +1893,7 @@
             // btnColumnDown
             // 
             this.btnColumnDown.Location = new System.Drawing.Point(398, 43);
-            this.btnColumnDown.Margin = new System.Windows.Forms.Padding(8);
+            this.btnColumnDown.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.btnColumnDown.Name = "btnColumnDown";
             this.btnColumnDown.Size = new System.Drawing.Size(31, 27);
             this.btnColumnDown.TabIndex = 1;
@@ -1887,7 +1902,7 @@
             // btnDefList
             // 
             this.btnDefList.Location = new System.Drawing.Point(398, 272);
-            this.btnDefList.Margin = new System.Windows.Forms.Padding(8);
+            this.btnDefList.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.btnDefList.Name = "btnDefList";
             this.btnDefList.Size = new System.Drawing.Size(154, 35);
             this.btnDefList.TabIndex = 1;
@@ -1900,7 +1915,7 @@
             this.pagePedigree.Location = new System.Drawing.Point(4, 22);
             this.pagePedigree.Margin = new System.Windows.Forms.Padding(2);
             this.pagePedigree.Name = "pagePedigree";
-            this.pagePedigree.Padding = new System.Windows.Forms.Padding(8);
+            this.pagePedigree.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.pagePedigree.Size = new System.Drawing.Size(591, 528);
             this.pagePedigree.TabIndex = 3;
             this.pagePedigree.Text = "pagePedigree";
@@ -1915,7 +1930,7 @@
             this.grpPedigree.Location = new System.Drawing.Point(10, 10);
             this.grpPedigree.Margin = new System.Windows.Forms.Padding(2);
             this.grpPedigree.Name = "grpPedigree";
-            this.grpPedigree.Padding = new System.Windows.Forms.Padding(8);
+            this.grpPedigree.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.grpPedigree.Size = new System.Drawing.Size(324, 206);
             this.grpPedigree.TabIndex = 0;
             this.grpPedigree.TabStop = false;
@@ -1964,7 +1979,7 @@
             this.grpPedigreeFormat.Location = new System.Drawing.Point(16, 107);
             this.grpPedigreeFormat.Margin = new System.Windows.Forms.Padding(2);
             this.grpPedigreeFormat.Name = "grpPedigreeFormat";
-            this.grpPedigreeFormat.Padding = new System.Windows.Forms.Padding(8);
+            this.grpPedigreeFormat.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.grpPedigreeFormat.Size = new System.Drawing.Size(279, 81);
             this.grpPedigreeFormat.TabIndex = 3;
             this.grpPedigreeFormat.TabStop = false;
@@ -1995,7 +2010,7 @@
             this.pagePlugins.Location = new System.Drawing.Point(4, 22);
             this.pagePlugins.Margin = new System.Windows.Forms.Padding(0);
             this.pagePlugins.Name = "pagePlugins";
-            this.pagePlugins.Padding = new System.Windows.Forms.Padding(8);
+            this.pagePlugins.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.pagePlugins.Size = new System.Drawing.Size(591, 528);
             this.pagePlugins.TabIndex = 5;
             this.pagePlugins.Text = "pagePlugins";

@@ -311,7 +311,7 @@ namespace GKCore.Lists
 
                 switch (defNameFormat) {
                     case NameFormat.nfFNP:
-                        result = GKUtils.GetNameString(fRec, true, false);
+                        result = GKUtils.GetNameString(fRec, GlobalOptions.Instance.SurnameFirstInOrder, false);
                         break;
 
                     case NameFormat.nfF_NP:
