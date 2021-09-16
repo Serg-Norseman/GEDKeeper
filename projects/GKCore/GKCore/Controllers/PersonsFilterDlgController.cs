@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using BSLib;
 using GDModel;
 using GKCore.Interfaces;
@@ -159,20 +160,15 @@ namespace GKCore.Controllers
 
             GDMTree tree = Base.Context.Tree;
 
-            var values = new StringList();
             fView.GroupCombo.Clear();
-            int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                GDMRecord rec = tree[i];
-                if (rec is GDMGroupRecord) {
-                    values.AddObject((rec as GDMGroupRecord).GroupName, rec);
-                }
-            }
-            values.Sort();
             fView.GroupCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
             fView.GroupCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
             fView.GroupCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
-            fView.GroupCombo.AddStrings(values);
+            var groups = GKUtils.GetGroups(tree);
+            foreach (var item in groups) {
+                fView.GroupCombo.AddItem<GDMRecord>(item.GroupName, item);
+            }
+
             if (iFilter.FilterGroupMode != FilterGroupMode.Selected) {
                 fView.GroupCombo.SelectedIndex = (int)iFilter.FilterGroupMode;
             } else {
@@ -180,19 +176,15 @@ namespace GKCore.Controllers
                 if (groupRec != null) fView.GroupCombo.Text = groupRec.GroupName;
             }
 
-            values = new StringList();
             fView.SourceCombo.Clear();
-            for (int i = 0; i < tree.RecordsCount; i++) {
-                GDMRecord rec = tree[i];
-                if (rec is GDMSourceRecord) {
-                    values.AddObject((rec as GDMSourceRecord).ShortTitle, rec);
-                }
-            }
-            values.Sort();
             fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
             fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
             fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
-            fView.SourceCombo.AddStrings(values);
+            var sources = GKUtils.GetSources(tree);
+            foreach (var item in sources) {
+                fView.SourceCombo.AddItem<GDMRecord>(item.ShortTitle, item);
+            }
+
             if (iFilter.SourceMode != FilterGroupMode.Selected) {
                 fView.SourceCombo.SelectedIndex = (int)iFilter.SourceMode;
             } else {

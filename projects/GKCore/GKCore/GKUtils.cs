@@ -379,6 +379,37 @@ namespace GKCore
             return string.Empty;
         }
 
+        public static List<GDMGroupRecord> GetGroups(GDMTree tree)
+        {
+            var result = new List<GDMGroupRecord>();
+
+            int num = tree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                var rec = tree[i] as GDMGroupRecord;
+                if (rec != null) {
+                    result.Add(rec);
+                }
+            }
+            result.Sort((a, b) => -b.GroupName.CompareTo(a.GroupName));
+
+            return result;
+        }
+
+        public static List<GDMSourceRecord> GetSources(GDMTree tree)
+        {
+            var result = new List<GDMSourceRecord>();
+
+            for (int i = 0; i < tree.RecordsCount; i++) {
+                var rec = tree[i] as GDMSourceRecord;
+                if (rec != null) {
+                    result.Add(rec);
+                }
+            }
+            result.Sort((a, b) => -b.ShortTitle.CompareTo(a.ShortTitle));
+
+            return result;
+        }
+
         #endregion
 
         #region Encoding

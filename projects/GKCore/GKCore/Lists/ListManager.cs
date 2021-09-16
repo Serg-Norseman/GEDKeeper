@@ -203,12 +203,12 @@ namespace GKCore.Lists
 
         protected bool IsMatchesMask(string str, string mask)
         {
-            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) {
+            if (string.IsNullOrEmpty(mask) || mask == "*") {
                 return true;
             }
 
-            if (mask == "*") {
-                return true;
+            if (string.IsNullOrEmpty(str)) {
+                return false;
             }
 
             if (fMask != mask) {
