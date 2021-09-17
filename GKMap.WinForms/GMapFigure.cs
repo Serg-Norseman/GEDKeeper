@@ -7,6 +7,7 @@
  */
 
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 
 namespace GKMap.WinForms
 {
@@ -15,6 +16,9 @@ namespace GKMap.WinForms
     /// </summary>
     public class GMapFigure : GMapObject
     {
+        protected GraphicsPath fGraphicsPath;
+
+
         public bool HasLines
         {
             get {
@@ -56,6 +60,20 @@ namespace GKMap.WinForms
             Points.Clear();
             Tag = null;
             Name = null;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                LocalPoints.Clear();
+
+                if (fGraphicsPath != null) {
+                    fGraphicsPath.Dispose();
+                    fGraphicsPath = null;
+                }
+                Clear();
+            }
+            base.Dispose(disposing);
         }
     }
 }

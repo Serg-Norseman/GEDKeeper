@@ -22,9 +22,6 @@ namespace GKMap.WinForms
         public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(144, Color.MidnightBlue));
 
 
-        private GraphicsPath fGraphicsPath;
-
-
         /// <summary>
         /// specifies how the outline is painted
         /// </summary>
@@ -93,20 +90,6 @@ namespace GKMap.WinForms
             if (IsVisible && fGraphicsPath != null) {
                 g.DrawPath(Stroke, fGraphicsPath);
             }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                LocalPoints.Clear();
-
-                if (fGraphicsPath != null) {
-                    fGraphicsPath.Dispose();
-                    fGraphicsPath = null;
-                }
-                Clear();
-            }
-            base.Dispose(disposing);
         }
 
         /// <summary>

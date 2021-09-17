@@ -48,33 +48,41 @@ namespace GKMap.MapProviders
         /// <summary>
         /// unique provider id
         /// </summary>
-        public abstract Guid Id
+        public virtual Guid Id
         {
-            get;
+            get {
+                throw new NotImplementedException();
+            }
         }
 
         /// <summary>
         /// provider name
         /// </summary>
-        public abstract string Name
+        public virtual string Name
         {
-            get;
+            get {
+                throw new NotImplementedException();
+            }
         }
 
         /// <summary>
         /// provider projection
         /// </summary>
-        public abstract PureProjection Projection
+        public virtual PureProjection Projection
         {
-            get;
+            get {
+                throw new NotImplementedException();
+            }
         }
 
         /// <summary>
         /// provider overlays
         /// </summary>
-        public abstract GMapProvider[] Overlays
+        public virtual GMapProvider[] Overlays
         {
-            get;
+            get {
+                throw new NotImplementedException();
+            }
         }
 
         /// <summary>
@@ -83,7 +91,10 @@ namespace GKMap.MapProviders
         /// <param name="pos"></param>
         /// <param name="zoom"></param>
         /// <returns></returns>
-        public abstract PureImage GetTileImage(GPoint pos, int zoom);
+        public virtual PureImage GetTileImage(GPoint pos, int zoom)
+        {
+            throw new NotImplementedException();
+        }
 
         private static readonly List<GMapProvider> MapProviders = new List<GMapProvider>();
 
@@ -214,10 +225,8 @@ namespace GKMap.MapProviders
             fAuthorization = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(userName + ":" + userPassword));
         }
 
-        protected PureImage GetTileImageUsingHttp(string url)
+        private WebRequest GetRequest(string url)
         {
-            PureImage ret = null;
-
             WebRequest request = IsSocksProxy ? SocksHttpWebRequest.Create(url) : WebRequest.Create(url);
 
             if (WebProxy != null) {
@@ -256,6 +265,14 @@ namespace GKMap.MapProviders
                 }
             }
 
+            return request;
+        }
+
+        protected PureImage GetTileImageUsingHttp(string url)
+        {
+            PureImage ret = null;
+
+            WebRequest request = GetRequest(url);
             using (var response = request.GetResponse()) {
                 if (CheckTileImageHttpResponse(response)) {
                     using (Stream responseStream = response.GetResponseStream()) {
@@ -286,43 +303,7 @@ namespace GKMap.MapProviders
         {
             string ret;
 
-            WebRequest request = IsSocksProxy ? SocksHttpWebRequest.Create(url) : WebRequest.Create(url);
-
-            if (WebProxy != null) {
-                request.Proxy = WebProxy;
-            }
-
-            if (Credential != null) {
-                request.PreAuthenticate = true;
-                request.Credentials = Credential;
-            }
-
-            if (!string.IsNullOrEmpty(fAuthorization)) {
-                request.Headers.Set("Authorization", fAuthorization);
-            }
-
-            if (request is HttpWebRequest) {
-                var r = request as HttpWebRequest;
-                r.UserAgent = UserAgent;
-                r.ReadWriteTimeout = TimeoutMs * 6;
-                r.Accept = RequestAccept;
-                r.Referer = RefererUrl;
-                r.Timeout = TimeoutMs;
-            } else if (request is SocksHttpWebRequest) {
-                var r = request as SocksHttpWebRequest;
-
-                if (!string.IsNullOrEmpty(UserAgent)) {
-                    r.Headers.Add("User-Agent", UserAgent);
-                }
-
-                if (!string.IsNullOrEmpty(RequestAccept)) {
-                    r.Headers.Add("Accept", RequestAccept);
-                }
-
-                if (!string.IsNullOrEmpty(RefererUrl)) {
-                    r.Headers.Add("Referer", RefererUrl);
-                }
-            }
+            WebRequest request = GetRequest(url);
             using (var response = request.GetResponse()) {
                 using (Stream responseStream = response.GetResponseStream()) {
                     using (StreamReader read = new StreamReader(responseStream, Encoding.UTF8)) {

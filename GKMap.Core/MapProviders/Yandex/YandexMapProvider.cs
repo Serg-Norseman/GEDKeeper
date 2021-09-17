@@ -20,20 +20,6 @@ namespace GKMap.MapProviders.Yandex
         public readonly string ServerRu /*d{'_'}b*/ = /*{^_^}*/ Stuff.GString /*{"_"}*/ (/* ;}~ */"MECxW6okUK0FRlRPbF0BQg=="/* ;}~ */);
         public readonly string ServerCom /*d{'_'}b*/ = /*{^_^}*/ Stuff.GString/*{"_"}*/ (/* ;}~ */"MECxW6okUK2JNHOW5AuimA=="/* ;}~ */);
 
-        public override Guid Id
-        {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override string Name
-        {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
         public override PureProjection Projection
         {
             get {
@@ -49,11 +35,6 @@ namespace GKMap.MapProviders.Yandex
                 }
                 return fOverlays;
             }
-        }
-
-        public override PureImage GetTileImage(GPoint pos, int zoom)
-        {
-            throw new NotImplementedException();
         }
     }
 

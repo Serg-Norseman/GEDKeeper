@@ -12,31 +12,10 @@ namespace GKMap.MapProviders.Etc
 {
     public abstract class WikiMapiaMapProviderBase : GMapProvider
     {
-        public override Guid Id
-        {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override string Name
-        {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
         public override PureProjection Projection
         {
             get {
                 return MercatorProjection.Instance;
-            }
-        }
-
-        public override GMapProvider[] Overlays
-        {
-            get {
-                throw new NotImplementedException();
             }
         }
 
@@ -46,11 +25,6 @@ namespace GKMap.MapProviders.Etc
             MaxZoom = 22;
             RefererUrl = "http://wikimapia.org/";
             Copyright = string.Format("© WikiMapia.org - Map data ©{0} WikiMapia", DateTime.Today.Year);
-        }
-
-        public override PureImage GetTileImage(GPoint pos, int zoom)
-        {
-            throw new NotImplementedException();
         }
 
         public static int GetServerNum(GPoint pos)

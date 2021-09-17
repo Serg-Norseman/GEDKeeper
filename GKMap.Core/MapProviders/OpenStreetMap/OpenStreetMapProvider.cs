@@ -23,31 +23,10 @@ namespace GKMap.MapProviders.OpenStreetMap
         public readonly string ServerLetters = "abc";
         public int MinExpectedRank = 0;
 
-        public override Guid Id
-        {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override string Name
-        {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
         public override PureProjection Projection
         {
             get {
                 return MercatorProjection.Instance;
-            }
-        }
-
-        public override GMapProvider[] Overlays
-        {
-            get {
-                throw new NotImplementedException();
             }
         }
 
@@ -58,11 +37,6 @@ namespace GKMap.MapProviders.OpenStreetMap
             //only if one valid available. by providing http://www.openstreetmap.org/ a 418 error is given by the server.
             //RefererUrl = "http://www.openstreetmap.org/";
             Copyright = string.Format("© OpenStreetMap - Map data ©{0} OpenStreetMap", DateTime.Today.Year);
-        }
-
-        public override PureImage GetTileImage(GPoint pos, int zoom)
-        {
-            throw new NotImplementedException();
         }
 
         public GeocoderStatusCode GetPoints(string keywords, out List<PointLatLng> pointList)

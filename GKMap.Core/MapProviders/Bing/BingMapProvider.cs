@@ -59,20 +59,6 @@ namespace GKMap.MapProviders.Bing
         private GMapProvider[] fOverlays;
 
 
-        public override Guid Id
-        {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override string Name
-        {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
         public override PureProjection Projection
         {
             get {
@@ -158,11 +144,6 @@ namespace GKMap.MapProviders.Bing
                         throw new ArgumentException("Invalid QuadKey digit sequence.");
                 }
             }
-        }
-
-        public override PureImage GetTileImage(GPoint pos, int zoom)
-        {
-            throw new NotImplementedException();
         }
 
         public override void OnInitialized()

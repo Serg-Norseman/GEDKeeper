@@ -1308,94 +1308,98 @@ namespace GKMap.WinForms
                 if (Core.MouseDown.IsEmpty) {
                     GPoint rp = new GPoint(e.X, e.Y);
                     rp.OffsetNegative(Core.RenderOffset);
+                    ProcessOverlaysMouseMove(rp);
+                }
+            }
+        }
 
-                    for (int i = Overlays.Count - 1; i >= 0; i--) {
-                        GMapOverlay o = Overlays[i];
-                        if (o != null && o.IsVisible && o.IsHitTestVisible) {
-                            foreach (GMapMarker m in o.Markers) {
-                                if (m.IsVisible && m.IsHitTestVisible) {
-                                    if (m.IsInside((int)rp.X, (int)rp.Y)) {
-                                        if (!m.IsMouseOver) {
-                                            SetCursorHandOnEnter();
-                                            m.IsMouseOver = true;
-                                            IsMouseOverMarker = true;
+        private void ProcessOverlaysMouseMove(GPoint rp)
+        {
+            for (int i = Overlays.Count - 1; i >= 0; i--) {
+                GMapOverlay o = Overlays[i];
+                if (o == null || !o.IsVisible || !o.IsHitTestVisible) continue;
 
-                                            if (OnMarkerEnter != null) {
-                                                OnMarkerEnter(m);
-                                            }
+                foreach (GMapMarker m in o.Markers) {
+                    if (!m.IsVisible || !m.IsHitTestVisible) continue;
 
-                                            Invalidate();
-                                        }
-                                    } else if (m.IsMouseOver) {
-                                        m.IsMouseOver = false;
-                                        IsMouseOverMarker = false;
-                                        RestoreCursorOnLeave();
-                                        if (OnMarkerLeave != null) {
-                                            OnMarkerLeave(m);
-                                        }
+                    if (m.IsInside((int)rp.X, (int)rp.Y)) {
+                        if (!m.IsMouseOver) {
+                            SetCursorHandOnEnter();
+                            m.IsMouseOver = true;
+                            IsMouseOverMarker = true;
 
-                                        Invalidate();
-                                    }
-                                }
+                            if (OnMarkerEnter != null) {
+                                OnMarkerEnter(m);
                             }
 
-                            foreach (GMapRoute m in o.Routes) {
-                                if (m.IsVisible && m.IsHitTestVisible) {
-                                    if (m.IsInside((int)rp.X, (int)rp.Y)) {
-                                        if (!m.IsMouseOver) {
-                                            SetCursorHandOnEnter();
-                                            m.IsMouseOver = true;
-                                            IsMouseOverRoute = true;
+                            Invalidate();
+                        }
+                    } else if (m.IsMouseOver) {
+                        m.IsMouseOver = false;
+                        IsMouseOverMarker = false;
+                        RestoreCursorOnLeave();
+                        if (OnMarkerLeave != null) {
+                            OnMarkerLeave(m);
+                        }
 
-                                            if (OnRouteEnter != null) {
-                                                OnRouteEnter(m);
-                                            }
+                        Invalidate();
+                    }
+                }
 
-                                            Invalidate();
-                                        }
-                                    } else {
-                                        if (m.IsMouseOver) {
-                                            m.IsMouseOver = false;
-                                            IsMouseOverRoute = false;
-                                            RestoreCursorOnLeave();
-                                            if (OnRouteLeave != null) {
-                                                OnRouteLeave(m);
-                                            }
+                foreach (GMapRoute m in o.Routes) {
+                    if (!m.IsVisible || !m.IsHitTestVisible) continue;
 
-                                            Invalidate();
-                                        }
-                                    }
-                                }
+                    if (m.IsInside((int)rp.X, (int)rp.Y)) {
+                        if (!m.IsMouseOver) {
+                            SetCursorHandOnEnter();
+                            m.IsMouseOver = true;
+                            IsMouseOverRoute = true;
+
+                            if (OnRouteEnter != null) {
+                                OnRouteEnter(m);
                             }
 
-                            foreach (GMapPolygon m in o.Polygons) {
-                                if (m.IsVisible && m.IsHitTestVisible) {
-                                    if (m.IsInsideLocal((int)rp.X, (int)rp.Y)) {
-                                        if (!m.IsMouseOver) {
-                                            SetCursorHandOnEnter();
-                                            m.IsMouseOver = true;
-                                            IsMouseOverPolygon = true;
-
-                                            if (OnPolygonEnter != null) {
-                                                OnPolygonEnter(m);
-                                            }
-
-                                            Invalidate();
-                                        }
-                                    } else {
-                                        if (m.IsMouseOver) {
-                                            m.IsMouseOver = false;
-                                            IsMouseOverPolygon = false;
-                                            RestoreCursorOnLeave();
-                                            if (OnPolygonLeave != null) {
-                                                OnPolygonLeave(m);
-                                            }
-
-                                            Invalidate();
-                                        }
-                                    }
-                                }
+                            Invalidate();
+                        }
+                    } else {
+                        if (m.IsMouseOver) {
+                            m.IsMouseOver = false;
+                            IsMouseOverRoute = false;
+                            RestoreCursorOnLeave();
+                            if (OnRouteLeave != null) {
+                                OnRouteLeave(m);
                             }
+
+                            Invalidate();
+                        }
+                    }
+                }
+
+                foreach (GMapPolygon m in o.Polygons) {
+                    if (!m.IsVisible || !m.IsHitTestVisible) continue;
+
+                    if (m.IsInsideLocal((int)rp.X, (int)rp.Y)) {
+                        if (!m.IsMouseOver) {
+                            SetCursorHandOnEnter();
+                            m.IsMouseOver = true;
+                            IsMouseOverPolygon = true;
+
+                            if (OnPolygonEnter != null) {
+                                OnPolygonEnter(m);
+                            }
+
+                            Invalidate();
+                        }
+                    } else {
+                        if (m.IsMouseOver) {
+                            m.IsMouseOver = false;
+                            IsMouseOverPolygon = false;
+                            RestoreCursorOnLeave();
+                            if (OnPolygonLeave != null) {
+                                OnPolygonLeave(m);
+                            }
+
+                            Invalidate();
                         }
                     }
                 }
