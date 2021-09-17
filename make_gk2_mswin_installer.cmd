@@ -1,6 +1,6 @@
 @echo off
 
-set GKVER=2.18.0
+set GKVER=2.19.0
 
 call .\clean.cmd
 call .\clean_all.cmd

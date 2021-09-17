@@ -1,4 +1,6 @@
 
+## 28.09.2021 [v2.19.0]
+
 ## 28.07.2021 [v2.18.0]
 - Optimized data model to save memory [Alex Zaytsev]
   (new achievement: 635 mb file (2.674.481 records) loaded in 3:46 minutes).
