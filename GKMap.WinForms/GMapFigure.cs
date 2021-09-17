@@ -26,7 +26,7 @@ namespace GKMap.WinForms
             }
         }
 
-        public List<GPoint> LocalPoints { get; }
+        public List<GPoint> LocalPoints { get; private set; }
 
         /// <summary>
         /// route info
@@ -36,7 +36,7 @@ namespace GKMap.WinForms
         /// <summary>
         /// points of route
         /// </summary>
-        public List<PointLatLng> Points { get; }
+        public List<PointLatLng> Points { get; private set; }
 
 
         public GMapFigure(string name, IEnumerable<PointLatLng> points = null)
