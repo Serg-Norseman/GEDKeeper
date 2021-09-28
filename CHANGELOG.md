@@ -1,5 +1,16 @@
 
 ## 28.09.2021 [v2.19.0]
+- Fixed a bug with filtering by locations, groups and sources.
+- Added option to display names in reverse order - first name at the beginning, surname at the end.
+- Fixed a bug in the work of events when creating an empty file, before loading any GEDCOM files.
+- Added an option for short form of kinship in the relationship calculator and tree diagrams.
+- Fixed full activation and data filling when calling plugins.
+- Fixed getter and setter of items in comboboxes of calendars and interface language.
+- Proofreading of Ukrainian localization [Oleksiy Diedush].
+- Added a sample of Taras Shevchenko's genealogy [Oleksiy Diedush].
+- Fixed focus issue in lists.
+- Fixed extracting patronymic from complex name [Alex Zaytsev].
+- Added ability to assign multiple places at once in the places manager [Alex Zaytsev].
 
 ## 28.07.2021 [v2.18.0]
 - Optimized data model to save memory [Alex Zaytsev]
