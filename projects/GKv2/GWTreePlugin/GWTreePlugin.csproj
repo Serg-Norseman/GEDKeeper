@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{70BD5213-9A14-4E76-906D-8FE1633ADB3E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GWTreePlugin</RootNamespace>
+    <AssemblyName>GWTreePlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>4096</FileAlignment>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <TargetFrameworkProfile />
+    <DebugType>Full</DebugType>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\..\plugins\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\..\..\plugins\</OutputPath>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.Design">
+      <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.Design.WFHandlers">
+      <HintPath>..\..\libs\BSLib.Design.WFHandlers.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GWTreeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GWTreeForm.Designer.cs">
+      <DependentUpon>GWTreeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GWTreePlugin.cs" />
+    <Compile Include="GWTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GWTree\TreeModel.cs" />
+    <Compile Include="GWTree\Family.cs" />
+    <Compile Include="GWTree\Group.cs" />
+    <Compile Include="GWTree\Partner.cs" />
+    <Compile Include="GWTree\Node.cs" />
+    <Compile Include="GWTree\Pair.cs" />
+    <Compile Include="GWTree\Children.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
+      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Name>GKCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+      <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
+      <Name>GKComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

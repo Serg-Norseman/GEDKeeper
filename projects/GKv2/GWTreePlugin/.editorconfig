@@ -1,0 +1,27 @@
+; Top-most http://editorconfig.org/ file
+root = true
+
+[*]
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+; 4-column indentation
+[*.{cs,csproj,xaml,xml,sln,props,targets,resx,config}]
+indent_style = space
+indent_size = 4
+dotnet_sort_system_directives_first = true
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:always
+dotnet_style_coalesce_expression = false
+dotnet_style_null_propagation = false
+dotnet_style_prefer_auto_properties = false:silent
+csharp_preserve_single_line_statements = false
+csharp_preserve_single_line_blocks = true
+csharp_new_line_before_open_brace = methods, properties, events, indexers, types
+csharp_new_line_before_else = false
+csharp_new_line_before_catch = false
+csharp_new_line_before_finally = false
+
+[*.{md,yml}]
+indent_style = space
+indent_size = 2

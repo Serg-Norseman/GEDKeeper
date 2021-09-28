@@ -1,0 +1,8 @@
+**/.vs/
+**/[Bb]in/
+**/[Oo]bj/
+
+/temp/*.*
+*.suo
+*.userprefs
+*.DotSettings*
