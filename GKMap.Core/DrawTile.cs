@@ -19,6 +19,13 @@ namespace GKMap
         public GPoint PosPixel;
         public double DistanceSqr;
 
+        public DrawTile(GPoint posXY, GPoint posPixel, double distanceSqr)
+        {
+            PosXY = posXY;
+            PosPixel = posPixel;
+            DistanceSqr = distanceSqr;
+        }
+
         public override string ToString()
         {
             return PosXY + ", px: " + PosPixel;

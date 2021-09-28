@@ -26,24 +26,21 @@ namespace GKMap
         private bool? fIsRunningOnMono;
         private DateTime fLastTileLoadStart = DateTime.Now;
         private DateTime fLastTileLoadEnd = DateTime.Now;
+        private int fLoadWaitCount;
         private GSize fMinOfTiles;
         private GSize fMaxOfTiles;
         private PointLatLng fPosition;
         private GPoint fPositionPixel;
         private GMapProvider fProvider;
-        private bool fRaiseEmptyTileError;
-        private double fScaleX = 1;
-        private double fScaleY = 1;
         private GSize fSizeOfMapArea;
+        private readonly int fThreadPoolSize = 4;
+        private readonly BlockingCollection<LoadTask> fTileLoadQueue4 = new BlockingCollection<LoadTask>(new ConcurrentStack<LoadTask>());
+        private List<Task> fTileLoadQueue4Tasks;
         private int fZoom;
 
         private volatile int okZoom;
         private volatile int skipOverZoom;
 
-        private static readonly BlockingCollection<LoadTask> fTileLoadQueue4 = new BlockingCollection<LoadTask>(new ConcurrentStack<LoadTask>());
-        private static List<Task> fTileLoadQueue4Tasks;
-        private static int fLoadWaitCount;
-        private static readonly int fThreadPoolSize = 4;
         private static int fInstances;
 
         public GRect TileRect;
@@ -81,8 +78,6 @@ namespace GKMap
                 return false;
             }
         }
-
-        public PointLatLng? LastLocationInBounds { get; private set; }
 
         public TileMatrix Matrix { get; private set; }
 
@@ -221,7 +216,6 @@ namespace GKMap
 
                         lock (FailedLoads) {
                             FailedLoads.Clear();
-                            fRaiseEmptyTileError = true;
                         }
 
                         GoToCurrentPositionOnZoom();
@@ -244,6 +238,7 @@ namespace GKMap
         /// how many levels of tiles are staying decompressed in memory
         /// </summary>
         public int LevelsKeepInMemory = 5;
+
 
         /// <summary>
         /// occurs when current position is changed
@@ -486,7 +481,6 @@ namespace GKMap
 
                 lock (FailedLoads) {
                     FailedLoads.Clear();
-                    fRaiseEmptyTileError = true;
                 }
 
                 RefreshEvent.Set();
@@ -552,7 +546,6 @@ namespace GKMap
                 UpdateBounds();
             }
 
-            LastLocationInBounds = Position;
             IsDragging = true;
             Position = FromLocalToLatLng(Width / 2, Height / 2);
             IsDragging = false;
@@ -579,7 +572,6 @@ namespace GKMap
             }
 
             if (IsDragging) {
-                LastLocationInBounds = Position;
                 Position = FromLocalToLatLng(Width / 2, Height / 2);
 
                 if (OnMapDrag != null) {
@@ -635,30 +627,29 @@ namespace GKMap
             fTileLoadQueue4.Add(t);
         }
 
-        private static void ProcessLoadTask(LoadTask task, string ctid)
+        private void ProcessLoadTask(LoadTask task, string ctid)
         {
             try {
-                if (task.Core == null || task.Core.Matrix == null)
+                if (Matrix == null)
                     return;
 
-                var m = task.Core.Matrix.GetTileWithReadLock(task.Zoom, task.Pos);
+                var m = Matrix.GetTileWithReadLock(task.Zoom, task.Pos);
                 if (!m.NotEmpty) {
                     Debug.WriteLine(ctid + " - try load: " + task);
 
                     Tile t = new Tile(task.Zoom, task.Pos);
 
-                    var provider = task.Core.fProvider;
-                    foreach (var tl in provider.Overlays) {
+                    foreach (var tl in fProvider.Overlays) {
                         int retry = 0;
                         do {
                             PureImage img = null;
                             Exception ex = null;
 
-                            if (task.Zoom >= provider.MinZoom && (!provider.MaxZoom.HasValue || task.Zoom <= provider.MaxZoom)) {
-                                if (task.Core.skipOverZoom == 0 || task.Zoom <= task.Core.skipOverZoom) {
+                            if (task.Zoom >= fProvider.MinZoom && (!fProvider.MaxZoom.HasValue || task.Zoom <= fProvider.MaxZoom)) {
+                                if (skipOverZoom == 0 || task.Zoom <= skipOverZoom) {
                                     // tile number inversion(BottomLeft -> TopLeft)
                                     if (tl.InvertedAxisY) {
-                                        img = GMaps.Instance.GetImageFrom(tl, new GPoint(task.Pos.X, task.Core.fMaxOfTiles.Height - task.Pos.Y), task.Zoom, out ex);
+                                        img = GMaps.Instance.GetImageFrom(tl, new GPoint(task.Pos.X, fMaxOfTiles.Height - task.Pos.Y), task.Zoom, out ex);
                                     } else {
                                         img = GMaps.Instance.GetImageFrom(tl, task.Pos, task.Zoom, out ex);
                                     }
@@ -666,23 +657,23 @@ namespace GKMap
                             }
 
                             if (img != null && ex == null) {
-                                if (task.Core.okZoom < task.Zoom) {
-                                    task.Core.okZoom = task.Zoom;
-                                    task.Core.skipOverZoom = 0;
-                                    Debug.WriteLine("skipOverZoom disabled, okZoom: " + task.Core.okZoom);
+                                if (okZoom < task.Zoom) {
+                                    okZoom = task.Zoom;
+                                    skipOverZoom = 0;
+                                    Debug.WriteLine("skipOverZoom disabled, okZoom: " + okZoom);
                                 }
                             } else if (ex != null) {
-                                if ((task.Core.skipOverZoom != task.Core.okZoom) && (task.Zoom > task.Core.okZoom)) {
+                                if ((skipOverZoom != okZoom) && (task.Zoom > okZoom)) {
                                     if (ex.Message.Contains("(404) Not Found")) {
-                                        task.Core.skipOverZoom = task.Core.okZoom;
-                                        Debug.WriteLine("skipOverZoom enabled: " + task.Core.skipOverZoom);
+                                        skipOverZoom = okZoom;
+                                        Debug.WriteLine("skipOverZoom enabled: " + skipOverZoom);
                                     }
                                 }
                             }
 
                             // check for parent tiles if not found
-                            if (img == null && task.Core.okZoom > 0 && provider.Projection is MercatorProjection) {
-                                int zoomOffset = task.Zoom > task.Core.okZoom ? task.Zoom - task.Core.okZoom : 1;
+                            if (img == null && okZoom > 0 && fProvider.Projection is MercatorProjection) {
+                                int zoomOffset = task.Zoom > okZoom ? task.Zoom - okZoom : 1;
                                 long Ix = 0;
                                 GPoint parentTile = GPoint.Empty;
 
@@ -710,24 +701,24 @@ namespace GKMap
                                 break;
                             } else {
                                 if (ex != null) {
-                                    lock (task.Core.FailedLoads) {
-                                        if (!task.Core.FailedLoads.ContainsKey(task)) {
-                                            task.Core.FailedLoads.Add(task, ex);
+                                    lock (FailedLoads) {
+                                        if (!FailedLoads.ContainsKey(task)) {
+                                            FailedLoads.Add(task, ex);
                                         }
                                     }
                                 }
 
-                                if (task.Core.RetryLoadTile > 0) {
+                                if (RetryLoadTile > 0) {
                                     Debug.WriteLine(ctid + " - ProcessLoadTask: " + task + " -> empty tile, retry " + retry);
                                     Thread.Sleep(1111);
                                 }
                             }
                         }
-                        while (++retry < task.Core.RetryLoadTile);
+                        while (++retry < RetryLoadTile);
                     }
 
-                    if (t.HasAnyOverlays && task.Core.IsStarted) {
-                        task.Core.Matrix.SetTile(t);
+                    if (t.HasAnyOverlays && IsStarted) {
+                        Matrix.SetTile(t);
                     } else {
                         t.Dispose();
                     }
@@ -735,8 +726,8 @@ namespace GKMap
             } catch (Exception ex) {
                 Debug.WriteLine(ctid + " - ProcessLoadTask: " + ex);
             } finally {
-                if (task.Core.RefreshEvent != null) {
-                    task.Core.RefreshEvent.Set();
+                if (RefreshEvent != null) {
+                    RefreshEvent.Set();
                 }
             }
         }
@@ -785,18 +776,17 @@ namespace GKMap
                 #region -- find tiles around --
                 TileDrawingList.Clear();
 
-                for (long i = (int)Math.Floor(-fSizeOfMapArea.Width * fScaleX), countI = (int)Math.Ceiling(fSizeOfMapArea.Width * fScaleX); i <= countI; i++) {
-                    for (long j = (int)Math.Floor(-fSizeOfMapArea.Height * fScaleY), countJ = (int)Math.Ceiling(fSizeOfMapArea.Height * fScaleY); j <= countJ; j++) {
+                for (long i = -fSizeOfMapArea.Width, countI = fSizeOfMapArea.Width; i <= countI; i++) {
+                    for (long j = -fSizeOfMapArea.Height, countJ = fSizeOfMapArea.Height; j <= countJ; j++) {
                         GPoint p = CenterTileXYLocation;
                         p.X += i;
                         p.Y += j;
 
                         if (p.X >= fMinOfTiles.Width && p.Y >= fMinOfTiles.Height && p.X <= fMaxOfTiles.Width && p.Y <= fMaxOfTiles.Height) {
-                            DrawTile dt = new DrawTile() {
-                                PosXY = p,
-                                PosPixel = new GPoint(p.X * TileRect.Width, p.Y * TileRect.Height),
-                                DistanceSqr = (CenterTileXYLocation.X - p.X) * (CenterTileXYLocation.X - p.X) + (CenterTileXYLocation.Y - p.Y) * (CenterTileXYLocation.Y - p.Y)
-                            };
+                            DrawTile dt = new DrawTile(
+                                p, new GPoint(p.X * TileRect.Width, p.Y * TileRect.Height),
+                                (CenterTileXYLocation.X - p.X) * (CenterTileXYLocation.X - p.X) + (CenterTileXYLocation.Y - p.Y) * (CenterTileXYLocation.Y - p.Y)
+                            );
 
                             if (!TileDrawingList.Contains(dt)) {
                                 TileDrawingList.Add(dt);
@@ -816,7 +806,7 @@ namespace GKMap
             TileDrawingListLock.AcquireReaderLock();
             try {
                 foreach (DrawTile p in TileDrawingList) {
-                    LoadTask task = new LoadTask(p.PosXY, Zoom, this);
+                    LoadTask task = new LoadTask(p.PosXY, Zoom);
                     AddLoadTask(task);
                 }
             } finally {
@@ -867,7 +857,6 @@ namespace GKMap
                 if (FailedLoads != null) {
                     lock (FailedLoads) {
                         FailedLoads.Clear();
-                        fRaiseEmptyTileError = false;
                     }
                     FailedLoads = null;
                 }

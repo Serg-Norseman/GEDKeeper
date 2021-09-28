@@ -60,7 +60,7 @@ namespace GKMap.WinForms
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        internal bool IsInside(int x, int y)
+        internal override bool IsInside(int x, int y)
         {
             return fGraphicsPath != null && fGraphicsPath.IsOutlineVisible(x, y, Stroke);
         }

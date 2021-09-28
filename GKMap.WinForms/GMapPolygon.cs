@@ -63,7 +63,7 @@ namespace GKMap.WinForms
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public bool IsInside(PointLatLng p)
+        public bool IsInsideLatLng(PointLatLng p)
         {
             int count = Points.Count;
 
@@ -93,7 +93,7 @@ namespace GKMap.WinForms
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        internal bool IsInsideLocal(int x, int y)
+        internal override bool IsInside(int x, int y)
         {
             return fGraphicsPath != null && fGraphicsPath.IsVisible(x, y);
         }

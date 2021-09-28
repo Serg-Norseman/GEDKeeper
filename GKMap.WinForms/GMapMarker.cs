@@ -126,7 +126,7 @@ namespace GKMap.WinForms
             IsHitTestVisible = true;
         }
 
-        internal bool IsInside(int x, int y)
+        internal override bool IsInside(int x, int y)
         {
             return fArea.Contains(x, y);
         }

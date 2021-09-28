@@ -19,13 +19,10 @@ namespace GKMap
         public GPoint Pos;
         public int Zoom;
 
-        internal Core Core;
-
-        public LoadTask(GPoint pos, int zoom, Core core = null)
+        public LoadTask(GPoint pos, int zoom)
         {
             Pos = pos;
             Zoom = zoom;
-            Core = core;
         }
 
         public override string ToString()

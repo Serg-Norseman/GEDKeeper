@@ -16,7 +16,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
 using System.Net.NetworkInformation;
@@ -1223,7 +1222,7 @@ namespace GKMap.WinForms
                         }
 
                         foreach (GMapPolygon m in o.Polygons) {
-                            if (m.IsVisible && m.IsHitTestVisible && m.IsInside(FromLocalToLatLng(e.X, e.Y))) {
+                            if (m.IsVisible && m.IsHitTestVisible && m.IsInsideLatLng(FromLocalToLatLng(e.X, e.Y))) {
                                 if (OnPolygonClick != null) {
                                     OnPolygonClick(m, e);
                                 }
@@ -1265,7 +1264,7 @@ namespace GKMap.WinForms
                         }
 
                         foreach (GMapPolygon m in o.Polygons) {
-                            if (m.IsVisible && m.IsHitTestVisible && m.IsInside(FromLocalToLatLng(e.X, e.Y))) {
+                            if (m.IsVisible && m.IsHitTestVisible && m.IsInsideLatLng(FromLocalToLatLng(e.X, e.Y))) {
                                 if (OnPolygonDoubleClick != null) {
                                     OnPolygonDoubleClick(m, e);
                                 }
@@ -1378,7 +1377,7 @@ namespace GKMap.WinForms
                 foreach (GMapPolygon m in o.Polygons) {
                     if (!m.IsVisible || !m.IsHitTestVisible) continue;
 
-                    if (m.IsInsideLocal((int)rp.X, (int)rp.Y)) {
+                    if (m.IsInside((int)rp.X, (int)rp.Y)) {
                         if (!m.IsMouseOver) {
                             SetCursorHandOnEnter();
                             m.IsMouseOver = true;

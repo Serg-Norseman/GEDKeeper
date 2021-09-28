@@ -77,6 +77,11 @@ namespace GKMap.WinForms
         {
         }
 
+        internal virtual bool IsInside(int x, int y)
+        {
+            return false;
+        }
+
         ~GMapObject()
         {
             Dispose(false);
