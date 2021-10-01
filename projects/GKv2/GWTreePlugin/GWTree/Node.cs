@@ -11,18 +11,18 @@ namespace GWTree
         private int fOrder = -1;
         private bool fSelected;
 
-        public List<Family> FamiliesList;
-        public GDMIndividualRecord IndiRec;
         public bool InOtherTree;
         public Family ParentFamily;
         public bool Partner;
         public Family SelfFamily;
-        public string StrID;
+        public GDMSex Sex;
 
         public float x;
         public float y;
         public float width;
         public float height;
+
+        public List<Family> FamiliesList { get; private set; }
 
         public int Floor
         {
@@ -43,6 +43,8 @@ namespace GWTree
                 fId = value;
             }
         }
+
+        public GDMIndividualRecord IndiRec { get; set; }
 
         public int Order
         {
@@ -73,10 +75,11 @@ namespace GWTree
         public Node(TreeModel model, long nodeId = -1)
         {
             fModel = model;
+            FamiliesList = new List<Family>();
+
             width = 64;
             height = 32;
             Clear();
-            StrID = nodeId.ToString();
             fId = nodeId;
         }
 
@@ -88,7 +91,14 @@ namespace GWTree
 
         public void LoadPerson()
         {
-            Name = IndiRec.GetPrimaryFullName();
+            if (IndiRec != null) {
+                Name = IndiRec.GetPrimaryFullName();
+                Sex = IndiRec.Sex;
+            } else {
+                Name = "Unknown";
+                Surname = "";
+                Sex = GDMSex.svUnknown;
+            }
         }
     }
 }

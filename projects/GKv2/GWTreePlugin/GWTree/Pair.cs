@@ -23,6 +23,20 @@ namespace GWTree
         {
         }
 
+        public void Assign(Node node1, Node node2)
+        {
+            AddNode(node1);
+            AddNode(node2);
+        }
+
+        public override void RemoveNode(Node node)
+        {
+            base.RemoveNode(node);
+            if (fNodes.Count < 2) {
+                Clear();
+            }
+        }
+
         public override Node GetLeftEdge()
         {
             var nodeA = NodeA;
@@ -51,30 +65,6 @@ namespace GWTree
             }
         }
 
-        public override void DrawLinks(Graphics gfx)
-        {
-            if (IsEmpty) {
-                return;
-            }
-            var nodeA = NodeA;
-            var nodeB = NodeB;
-            if (nodeA == null || nodeB == null) return;
-            fModel.DrawLine(gfx, 0, nodeA.x + nodeA.width / 2, nodeA.y + nodeA.height / 2, nodeB.x + nodeB.width / 2, nodeB.y + nodeB.height / 2);
-        }
-
-        public override void RemoveNode(Node node)
-        {
-            base.RemoveNode(node);
-            if (fNodes.Count < 2) {
-                IsEmpty = true;
-            }
-        }
-
-        public override void ShiftPivot(int offset)
-        {
-            GetLeftEdge().x = GetLeftEdge().x + offset;
-        }
-
         public override PointF GetPivot(ref Node left, ref Node right)
         {
             left = GetLeftEdge();
@@ -86,10 +76,24 @@ namespace GWTree
             return pivot;
         }
 
-        public void Assign(Node node1, Node node2)
+        public override void ShiftPivot(int offset)
         {
-            AddNode(node1);
-            AddNode(node2);
+            var left = GetLeftEdge();
+            left.x = left.x + offset;
+        }
+
+        public override void DrawLinks(Graphics gfx)
+        {
+            if (IsEmpty) {
+                return;
+            }
+            var nodeA = NodeA;
+            var nodeB = NodeB;
+            if (nodeA == null || nodeB == null) return;
+
+            fModel.DrawLine(gfx, 0,
+                            nodeA.x + nodeA.width, nodeA.y + nodeA.height / 2,
+                            nodeB.x, nodeB.y + nodeB.height / 2);
         }
     }
 }

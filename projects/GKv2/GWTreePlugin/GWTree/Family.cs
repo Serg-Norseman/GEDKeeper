@@ -5,24 +5,30 @@ namespace GWTree
 {
     public sealed class Family : Group
     {
-        public Pair Pair;
-        public Children Children;
+        public Pair Pair { get; private set; }
+        public Children Children { get; private set; }
 
         public override bool IsEmpty
         {
             get {
                 return Pair.IsEmpty && Children.IsEmpty;
             }
-            set {
-                Pair.IsEmpty = value;
-                Children.IsEmpty = value;
-            }
         }
 
 
-        public Family(TreeModel model)
+        public Family(TreeModel model, Pair pair)
             : base(model)
         {
+            Pair = pair;
+            Children = new Children(model);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            Pair.Clear();
+            Children.Clear();
         }
 
         public override int AddNode(Node node)
@@ -48,13 +54,13 @@ namespace GWTree
 
         public override void DrawLinks(Graphics gfx)
         {
-            if (Pair != null) {
+            if (!Pair.IsEmpty) {
                 Pair.DrawLinks(gfx);
             }
-            if (Children != null) {
+            if (!Children.IsEmpty) {
                 Children.DrawLinks(gfx);
             }
-            if (Pair != null && Children != null) {
+            if (!Pair.IsEmpty && !Children.IsEmpty) {
                 Node dum1 = null, dum2 = null;
                 PointF pairPvt = Pair.GetPivot(ref dum1, ref dum2);
                 PointF childrenPvt = Children.GetPivot(ref dum1, ref dum2);
@@ -67,10 +73,10 @@ namespace GWTree
             if (list == null) {
                 list = new List<Node>();
             }
-            if (Pair != null) {
+            if (!Pair.IsEmpty) {
                 Pair.GetNodes(list, exclude);
             }
-            if (Children != null) {
+            if (!Children.IsEmpty) {
                 Children.GetNodes(list, exclude);
             }
             return list;

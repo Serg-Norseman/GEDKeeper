@@ -15,11 +15,6 @@ namespace GWTree
             get {
                 return fNodes.Count == 0;
             }
-            set {
-                if (value) {
-                    fNodes.Clear();
-                }
-            }
         }
 
 
@@ -27,6 +22,11 @@ namespace GWTree
         {
             fModel = model;
             fNodes = new List<Node>();
+        }
+
+        public virtual void Clear()
+        {
+            fNodes.Clear();
         }
 
         public virtual int AddNode(Node node)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using BSLib;
 using GDModel;
 using GKCore.Interfaces;
 
@@ -20,11 +21,12 @@ namespace GWTree
         public const float HSpace = 40;
         public const float VSpace = 70;
         public const float PivotOffset = 20.0f;
-        public const float VLinkOffset = 7;
+        public const float VLinkOffset = 4;
 
 
         private readonly Dictionary<int, Dictionary<int, Node>> fDesk;
         private List<Family> fFamilies;
+        private int fLastUnknownId;
         private readonly List<Node> fNodes;
         private Node fRootPerson;
         private Node fSelectedNode;
@@ -70,6 +72,7 @@ namespace GWTree
             fDesk = new Dictionary<int, Dictionary<int, Node>>();
             fFamilies = new List<Family>();
             fNodes = new List<Node>();
+            fLastUnknownId = 0;
         }
 
         public void Clear()
@@ -80,16 +83,13 @@ namespace GWTree
 
             fSelectedNode = null;
             fRootPerson = null;
+            fLastUnknownId = 0;
         }
 
-        public void UpdateGraph(bool centerSelected = true)
+        public void UpdateGraph()
         {
             UpdateNodesCoord();
             ResolveCollisions();
-
-            if (centerSelected) {
-                fTreeView.CenterNode(fSelectedNode);
-            }
         }
 
         private Node GetDeskVal(int floor, int order)
@@ -114,7 +114,12 @@ namespace GWTree
                 row = new Dictionary<int, Node>();
                 fDesk[floor] = row;
             }
-            row[order] = node;
+
+            if (node == null && row.ContainsKey(order)) {
+                row.Remove(order);
+            } else {
+                row[order] = node;
+            }
         }
 
         private void EnumDeskValues(DeskEnum enumFunc)
@@ -142,11 +147,17 @@ namespace GWTree
 
         private Node PrepareNode(Node node, int order = 0, int floor = 0)
         {
+            if (node == null) return null;
+
+            //SetDeskVal(node.Floor, node.Order, null);
+
             node.Order = order;
             node.Floor = floor;
             node.y = floor * (node.height + VSpace);
+
             SetDeskVal(floor, order, node);
             UpdateNodesCoord();
+
             return node;
         }
 
@@ -166,7 +177,14 @@ namespace GWTree
 
         private Node ProcessRecord(GDMIndividualRecord iRec)
         {
-            var node = PrepareNode(NewNode(iRec.GetId()));
+            long id;
+            if (iRec != null) {
+                id = iRec.GetId();
+            } else {
+                id = --fLastUnknownId;
+            }
+
+            var node = PrepareNode(NewNode(id));
             node.IndiRec = iRec;
             node.LoadPerson();
             return node;
@@ -185,36 +203,48 @@ namespace GWTree
             UpdateGraph();
         }
 
-        private Node LoadIndividual(GDMIndividualRecord indiRec)
-        {
-            if (indiRec == null) return null;
+        private List<GDMIndividualRecord> fProcessedRecords = new List<GDMIndividualRecord>();
 
-            Node result = ProcessRecord(indiRec);
+        private bool IsProcessed(GDMIndividualRecord indiRec)
+        {
+            return fProcessedRecords.Contains(indiRec);
+        }
+
+        private Node LoadIndividual(GDMIndividualRecord indiRec, bool preLoaded = false)
+        {
+            if (indiRec == null || IsProcessed(indiRec)) return null;
+
+            Node result = (!preLoaded) ? ProcessRecord(indiRec) : NewNode(indiRec.GetId());
+            fProcessedRecords.Add(indiRec);
+
+            var list = new List<GDMIndividualRecord>();
 
             GDMIndividualRecord father, mother;
             Context.Tree.GetParents(indiRec, out father, out mother);
-
-            Node fathNode = (father == null) ? null : ProcessRecord(father);
-            Node mothNode = (mother == null) ? null : ProcessRecord(mother);
-
-            if (fathNode != null || mothNode != null) {
-                AddParents(result, fathNode, mothNode);
+            if (father != null || mother != null) {
+                if (!IsProcessed(father) && !IsProcessed(mother)) {
+                    Node fathNode = ProcessRecord(father); // can be null
+                    Node mothNode = ProcessRecord(mother); // can be null
+                    AddParents(result, fathNode, mothNode);
+                }
             }
 
             for (int i = 0; i < indiRec.SpouseToFamilyLinks.Count; i++) {
-                var family = Context.Tree.GetPtrValue<GDMFamilyRecord>(indiRec.SpouseToFamilyLinks[i]);
+                var familyRec = Context.Tree.GetPtrValue<GDMFamilyRecord>(indiRec.SpouseToFamilyLinks[i]);
 
-                GDMIndividualRecord spouse = Context.Tree.GetSpouseBy(family, indiRec);
-                if (spouse != null) {
-                    var spNode = ProcessRecord(spouse);
-                    AddSpouse(result, spNode);
+                GDMIndividualRecord spouse = Context.Tree.GetSpouseBy(familyRec, indiRec);
+
+                Family family = null;
+                if (!IsProcessed(spouse)) {
+                    var spNode = ProcessRecord(spouse); // can be null
+                    family = AddSpouse(result, spNode);
                 }
 
-                for (int k = 0; k < family.Children.Count; k++) {
-                    GDMIndividualRecord child = Context.Tree.GetPtrValue(family.Children[k]);
-                    if (child != null) {
+                for (int k = 0; k < familyRec.Children.Count; k++) {
+                    GDMIndividualRecord child = Context.Tree.GetPtrValue(familyRec.Children[k]);
+                    if (child != null && !IsProcessed(child)) {
                         var chNode = ProcessRecord(child);
-                        AddChild(result, chNode);
+                        AddChild(result, family, chNode);
                     }
                 }
             }
@@ -225,9 +255,11 @@ namespace GWTree
         public void UpdateNodesCoord()
         {
             EnumDeskValues((i, k, node) => {
-                //node.Floor = i;
-                //node.Order = k;
-                node.y = node.Floor * (node.height + VSpace);
+                if (node != null) {
+                    //node.Floor = i;
+                    //node.Order = k;
+                    node.y = node.Floor * (node.height + VSpace);
+                }
                 return true;
             });
         }
@@ -250,31 +282,32 @@ namespace GWTree
                         var k = kvCol.Key;
                         var node = kvCol.Value;
 
-                        if (xx > node.x) {
-                            node.x = xx;
-                            bContinue = true;
+                        if (node != null) {
+                            if (xx > node.x) {
+                                node.x = xx;
+                                //bContinue = true;
+                            }
+                            xx = (int)(node.x + node.width + HSpace);
                         }
-                        xx = (int)(node.x + node.width + HSpace);
                     }
                 }
 
                 foreach (Family family in fFamilies) {
                     float pivotX = 0;
-                    if (family.Pair != null) {
+                    if (!family.Pair.IsEmpty && !family.Children.IsEmpty) {
                         Node dum1 = null, dum2 = null;
                         pivotX += family.Pair.GetPivot(ref dum1, ref dum2).X;
-                    }
-                    if (family.Children != null) {
-                        Node dum1 = null, dum2 = null;
                         pivotX -= family.Children.GetPivot(ref dum1, ref dum2).X;
-                    }
 
-                    if (pivotX > 0 && family.Children != null) {
-                        family.Children.ShiftPivot((int)pivotX);
-                        bContinue = true;
-                    } else if (pivotX < 0 && family.Pair != null) {
-                        family.Pair.ShiftPivot((int)-pivotX);
-                        bContinue = true;
+                        if (Math.Abs(pivotX) >= 1) {
+                            if (Math.Abs(pivotX) > 0) {
+                                family.Children.ShiftPivot((int)pivotX);
+                                bContinue = true;
+                            } else {
+                                family.Pair.ShiftPivot((int)-pivotX);
+                                bContinue = true;
+                            }
+                        }
                     }
                 }
             }
@@ -290,10 +323,8 @@ namespace GWTree
                 return person.ParentFamily.Pair;
             }
 
-            Family family = new Family(this);
-            family.Pair = new Pair(this);
+            Family family = new Family(this, new Pair(this));
             family.Pair.Assign(parent1, parent2);
-            family.Children = new Children(this);
             family.Children.AddNode(person);
             fFamilies.Add(family);
 
@@ -322,109 +353,69 @@ namespace GWTree
             }
 
             PrepareNode(parent1, rightOrder + 1, person.Floor - 1);
+            //LoadIndividual(parent1.IndiRec, true);
+
             PrepareNode(parent2, rightOrder + 2, person.Floor - 1);
-            UpdateNodesCoord();
+            //LoadIndividual(parent2.IndiRec, true);
 
             return family.Pair;
         }
 
-        public Node AddSpouse(Node person, Node spouse)
+        public Family AddSpouse(Node person, Node spouse)
         {
             if (person == null || person.InOtherTree || spouse == null) {
                 return null;
             }
 
+            Family family;
+            int spOrder;
+
             if (person.SelfFamily != null) {
                 var pair = person.SelfFamily.Pair;
-                if (pair.NodeA == spouse) {
-                    return pair.NodeA;
+                if (pair.NodeA == spouse || pair.NodeB == spouse) {
+                    return person.SelfFamily;
                 }
-                if (pair.NodeB == spouse) {
-                    return pair.NodeB;
-                }
-                return AddPartner(person, spouse);
-            }
 
-            spouse.Partner = true;
+                family = new Family(this, new Partner(this));
 
-            Family family = new Family(this);
-            family.Pair = new Pair(this);
-            family.Pair.Assign(person, spouse);
-            fFamilies.Add(family);
+                (family.Pair as Partner).Number = person.FamiliesList.Count + 1;
+                person.FamiliesList.Add(family);
 
-            person.SelfFamily = family;
-            spouse.SelfFamily = family;
-
-            PrepareNode(spouse, person.Order + 1, person.Floor);
-            UpdateNodesCoord();
-
-            return spouse;
-        }
-
-        private Node AddPartner(Node person, Node partner)
-        {
-            if (person == null || person.InOtherTree) {
-                return null;
-            }
-
-            if (person.FamiliesList == null) {
-                person.FamiliesList = new List<Family>();
-            }
-
-            partner.Partner = true;
-
-            Family family = new Family(this);
-            family.Pair = new Partner(this);
-            (family.Pair as Partner).Assign(person, partner);
-            (family.Pair as Partner).Number = person.FamiliesList.Count + 1;
-            person.FamiliesList.Add(family);
-            partner.SelfFamily = family;
-            fFamilies.Add(family);
-
-            int order = person.SelfFamily.Pair.GetRightEdge().Order + 1;
-            PrepareNode(partner, order, person.Floor);
-            UpdateNodesCoord();
-
-            return partner;
-        }
-
-        public Node AddChild(Node person, Node child)
-        {
-            if (person == null || person.InOtherTree || person.SelfFamily == null || child == null) {
-                return null;
-            }
-
-            Family selfFam = person.SelfFamily;
-            int order = 0;
-            if (selfFam.Children == null || selfFam.Children.IsEmpty) {
-                if (selfFam.Children == null) {
-                    selfFam.Children = new Children(this);
-                }
-                int tmpOrd = person.Order;
-                while (--tmpOrd >= 0) {
-                    Node nd = GetDeskVal(person.Floor, tmpOrd);
-                    if (nd != null && nd.SelfFamily != null && nd.SelfFamily.Children != null && !nd.SelfFamily.Children.IsEmpty) {
-                        Node rind = nd.SelfFamily.Children.GetRightEdge();
-                        order = rind.Order + 1;
-                        if (nd.SelfFamily.Children.GetRightPartner() != null && !nd.SelfFamily.Children.GetRightPartner().Partner) {
-                            selfFam.Children = null;
-                            return null;
-                        }
-                        break;
-                    }
-                }
+                spOrder = pair.GetRightEdge().Order + 1;
             } else {
-                order = (selfFam.Children.GetLeftEdge().Order);
-                if (selfFam.Children.GetLeftPartner() != null) {
-                    order = selfFam.Children.GetRightEdge().Order + 1;
-                }
+                family = new Family(this, new Pair(this));
+
+                person.SelfFamily = family;
+
+                spOrder = person.Order + 1;
             }
 
-            selfFam.Children.AddNode(child);
-            child.ParentFamily = person.SelfFamily;
+            family.Pair.Assign(person, spouse);
+            spouse.Partner = true;
+            spouse.SelfFamily = family;
+            fFamilies.Add(family);
+            PrepareNode(spouse, spOrder, person.Floor);
+
+            //LoadIndividual(spouse.IndiRec, true);
+
+            return family;
+        }
+
+        public Node AddChild(Node person, Family family, Node child)
+        {
+            if (person == null || person.InOtherTree || family == null || child == null) {
+                return null;
+            }
+
+            var right = family.Children.GetRightEdge();
+            int order = (right == null) ? person.Order : right.Order + 1;
+
+            family.Children.AddNode(child);
+            child.ParentFamily = family;
 
             PrepareNode(child, order, person.Floor + 1);
-            UpdateNodesCoord();
+
+            LoadIndividual(child.IndiRec, true);
 
             return child;
         }
@@ -446,6 +437,23 @@ namespace GWTree
             foreach (Node node in fNodes) {
                 ((ITreeView)fTreeView).DrawNode(gfx, node);
             }
+        }
+
+        public ExtRectF GetImageRect()
+        {
+            ExtRectF result = ExtRectF.Create(float.MaxValue, float.MaxValue, float.MinValue, float.MinValue);
+            foreach (Node node in fNodes) {
+                var lx = node.x;
+                var ly = node.y;
+                var rx = node.x + node.width;
+                var ry = node.y + node.height;
+
+                if (result.Left > lx) result.Left = lx;
+                if (result.Top > ly) result.Top = ly;
+                if (result.Right < rx) result.Right = rx;
+                if (result.Bottom < ry) result.Bottom = ry;
+            }
+            return result;
         }
     }
 }

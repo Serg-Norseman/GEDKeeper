@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using GDModel;
 using GKCore.Interfaces;
 using GWTree;
 
@@ -8,7 +9,7 @@ namespace GWTreePlugin
 {
     public class GWTreeView : UserControl, ITreeView
     {
-        public static readonly Font DefFont = new Font("Verdana", 9.0f, FontStyle.Regular, GraphicsUnit.Pixel);
+        public static readonly Font DefFont = new Font("Verdana", 9.0f, FontStyle.Bold, GraphicsUnit.Pixel);
         public static readonly Pen DefPen = new Pen(Color.Black);
         public static readonly Brush DefBrush = new SolidBrush(Color.Black);
 
@@ -49,6 +50,19 @@ namespace GWTreePlugin
             fModel.Clear();
         }
 
+        public void CenterView()
+        {
+            var imageRect = fModel.GetImageRect();
+            var imWidth = imageRect.GetWidth();
+            var imHeight = imageRect.GetHeight();
+            if (float.IsInfinity(imWidth) || float.IsInfinity(imHeight)) return;
+
+            fOffsetX = (int)((-imWidth * fZoom + Width) / 2);
+            fOffsetY = (int)((-imHeight * fZoom + Height) / 2);
+
+            Invalidate();
+        }
+
         public void CenterNode(Node node)
         {
             if (node == null) return;
@@ -61,8 +75,22 @@ namespace GWTreePlugin
 
         void ITreeView.DrawNode(Graphics gfx, Node node)
         {
+            Brush nodeBrush;
+            switch (node.Sex) {
+                case GDMSex.svMale:
+                    nodeBrush = new SolidBrush(Color.LightSkyBlue);
+                    break;
+                case GDMSex.svFemale:
+                    nodeBrush = new SolidBrush(Color.LightPink);
+                    break;
+                default:
+                    nodeBrush = new SolidBrush(Color.LightGray);
+                    break;
+            }
+
+            gfx.FillRectangle(nodeBrush, fOffsetX + node.x, fOffsetY + node.y, node.width, node.height);
             gfx.DrawRectangle(DefPen, fOffsetX + node.x, fOffsetY + node.y, node.width, node.height);
-            gfx.DrawString(node.StrID, DefFont, DefBrush, fOffsetX + node.x, fOffsetY + node.y);
+            gfx.DrawString(node.Id.ToString(), DefFont, DefBrush, fOffsetX + node.x, fOffsetY + node.y);
         }
 
         void ITreeView.DrawLine(Graphics gfx, float x1, float y1, float x2, float y2)
@@ -92,7 +120,8 @@ namespace GWTreePlugin
 
         protected override void OnResize(EventArgs e)
         {
-            CenterNode(fModel.SelectedNode);
+            //CenterNode(fModel.SelectedNode);
+            CenterView();
 
             base.OnResize(e);
         }

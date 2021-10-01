@@ -8,6 +8,23 @@ namespace GWTree
         {
         }
 
+        public Node GetLeftSibling()
+        {
+            if (IsEmpty) {
+                return null;
+            }
+
+            Node node = fNodes[0];
+            int xOrder = node.Order;
+            foreach (Node item in fNodes) {
+                if (item.Order != -1 && item.Order < xOrder) {
+                    xOrder = item.Order;
+                    node = item;
+                }
+            }
+            return node;
+        }
+
         public Node GetRightSibling()
         {
             if (IsEmpty) {
@@ -17,14 +34,29 @@ namespace GWTree
             Node node = fNodes[0];
             int xOrder = node.Order;
             foreach (Node item in fNodes) {
-                if (item.Order != -1) {
-                    if (item.Order > xOrder) {
-                        xOrder = item.Order;
-                        node = item;
-                    }
+                if (item.Order != -1 && item.Order > xOrder) {
+                    xOrder = item.Order;
+                    node = item;
                 }
             }
             return node;
+        }
+
+        public Node GetLeftPartner()
+        {
+            if (IsEmpty) {
+                return null;
+            }
+
+            Node left = GetLeftSibling();
+            Node leftRes = null;
+            if (left != null && left.SelfFamily != null && !left.SelfFamily.Pair.IsEmpty) {
+                leftRes = left.SelfFamily.Pair.GetLeftEdge();
+                if (left == leftRes) {
+                    return null;
+                }
+            }
+            return leftRes;
         }
 
         public Node GetRightPartner()
@@ -35,26 +67,13 @@ namespace GWTree
 
             Node right = GetRightSibling();
             Node rightRes = null;
-            if (right != null && right.SelfFamily != null && right.SelfFamily.Pair != null) {
+            if (right != null && right.SelfFamily != null && !right.SelfFamily.Pair.IsEmpty) {
                 rightRes = right.SelfFamily.Pair.GetRightEdge();
                 if (right == rightRes) {
                     return null;
                 }
             }
             return rightRes;
-        }
-
-        public override Node GetRightEdge()
-        {
-            if (IsEmpty) {
-                return null;
-            }
-
-            Node right = GetRightPartner();
-            if (right == null) {
-                right = GetRightSibling();
-            }
-            return right;
         }
 
         public override Node GetLeftEdge()
@@ -70,40 +89,17 @@ namespace GWTree
             return left;
         }
 
-        public Node GetLeftSibling()
+        public override Node GetRightEdge()
         {
             if (IsEmpty) {
                 return null;
             }
 
-            Node node = fNodes[0];
-            int xOrder = node.Order;
-            foreach (Node item in fNodes) {
-                if (item.Order != -1) {
-                    if (item.Order < xOrder) {
-                        xOrder = item.Order;
-                        node = item;
-                    }
-                }
+            Node right = GetRightPartner();
+            if (right == null) {
+                right = GetRightSibling();
             }
-            return node;
-        }
-
-        public Node GetLeftPartner()
-        {
-            if (IsEmpty) {
-                return null;
-            }
-
-            Node left = GetLeftSibling();
-            Node leftRes = null;
-            if (left != null && left.SelfFamily != null && left.SelfFamily.Pair != null) {
-                leftRes = left.SelfFamily.Pair.GetLeftEdge();
-                if (left == leftRes) {
-                    return null;
-                }
-            }
-            return leftRes;
+            return right;
         }
 
         public override void ShiftPivot(int offset)
@@ -112,7 +108,8 @@ namespace GWTree
                 return;
             }
 
-            GetLeftSibling().x = GetLeftSibling().x + offset;
+            var left = GetLeftSibling();
+            left.x = left.x + offset;
         }
 
         public override PointF GetPivot(ref Node left, ref Node right)
@@ -134,13 +131,14 @@ namespace GWTree
 
             Node left = null;
             Node right = null;
-            PointF pivot = GetPivot(ref right, ref left);
+            PointF pivot = GetPivot(ref left, ref right);
             foreach (Node item in fNodes) {
                 float ix = item.x + item.width / 2;
                 fModel.DrawLine(gfx, 0, ix, item.y, ix, pivot.Y);
             }
-            float bx = (right).x + (right).width / 2;
-            float ex = (left).x + (left).width / 2;
+
+            float bx = left.x + left.width / 2;
+            float ex = right.x + right.width / 2;
             fModel.DrawLine(gfx, 0, bx, pivot.Y, ex, pivot.Y);
         }
     }

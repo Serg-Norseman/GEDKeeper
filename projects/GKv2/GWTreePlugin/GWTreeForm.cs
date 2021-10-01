@@ -62,5 +62,10 @@ namespace GWTreePlugin
         {
             //Text = fPlugin.LangMan.LS(PLS.LSID_Title);
         }
+
+        private void GWTreeForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape) Close();
+        }
     }
 }

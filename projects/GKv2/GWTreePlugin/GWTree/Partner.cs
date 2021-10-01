@@ -45,7 +45,8 @@ namespace GWTree
 
         public override void ShiftPivot(int offset)
         {
-            GetRightEdge().x = GetRightEdge().x + offset;
+            var right = GetRightEdge();
+            right.x = right.x + offset;
         }
 
         public override void DrawLinks(Graphics gfx)
@@ -53,10 +54,14 @@ namespace GWTree
             if (IsEmpty) {
                 return;
             }
+            var nodeA = NodeA;
+            var nodeB = NodeB;
+            if (nodeA == null || nodeB == null) return;
+
             float offset = TreeModel.VLinkOffset * Number;
             fModel.DrawLine(gfx, 0,
-                NodeA.x + NodeA.width / 2, NodeA.y + NodeA.height / 2 - offset,
-                NodeB.x + NodeB.width / 2, NodeB.y + NodeB.height / 2 - offset);
+                            nodeA.x + nodeA.width, nodeA.y + nodeA.height / 2 - offset,
+                            nodeB.x, nodeB.y + nodeB.height / 2 - offset);
         }
     }
 }
