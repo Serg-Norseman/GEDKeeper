@@ -44,7 +44,7 @@ namespace GWTree
             }
         }
 
-        public GDMIndividualRecord IndiRec { get; set; }
+        public GDMIndividualRecord IndiRec { get; private set; }
 
         public int Order
         {
@@ -89,8 +89,10 @@ namespace GWTree
             Surname = "";
         }
 
-        public void LoadPerson()
+        public void LoadPerson(GDMIndividualRecord iRec)
         {
+            IndiRec = iRec;
+
             if (IndiRec != null) {
                 Name = IndiRec.GetPrimaryFullName();
                 Sex = IndiRec.Sex;

@@ -63,6 +63,12 @@ namespace GWTree
         {
         }
 
+        public PointF GetPivot()
+        {
+            Node dummy1 = null, dummy2 = null;
+            return GetPivot(ref dummy1, ref dummy2);
+        }
+
         public virtual PointF GetPivot(ref Node left, ref Node right)
         {
             return PointF.Empty;

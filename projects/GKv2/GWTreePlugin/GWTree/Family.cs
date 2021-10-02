@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
+using GDModel;
 
 namespace GWTree
 {
@@ -7,6 +8,8 @@ namespace GWTree
     {
         public Pair Pair { get; private set; }
         public Children Children { get; private set; }
+
+        public GDMFamilyRecord FamRec { get; set; }
 
         public override bool IsEmpty
         {
@@ -61,9 +64,8 @@ namespace GWTree
                 Children.DrawLinks(gfx);
             }
             if (!Pair.IsEmpty && !Children.IsEmpty) {
-                Node dum1 = null, dum2 = null;
-                PointF pairPvt = Pair.GetPivot(ref dum1, ref dum2);
-                PointF childrenPvt = Children.GetPivot(ref dum1, ref dum2);
+                PointF pairPvt = Pair.GetPivot();
+                PointF childrenPvt = Children.GetPivot();
                 fModel.DrawLine(gfx, 0, pairPvt.X, pairPvt.Y, childrenPvt.X, childrenPvt.Y);
             }
         }

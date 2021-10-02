@@ -17,7 +17,7 @@ namespace GWTree
             Node node = fNodes[0];
             int xOrder = node.Order;
             foreach (Node item in fNodes) {
-                if (item.Order != -1 && item.Order < xOrder) {
+                if (item.Order < xOrder) {
                     xOrder = item.Order;
                     node = item;
                 }
@@ -34,7 +34,7 @@ namespace GWTree
             Node node = fNodes[0];
             int xOrder = node.Order;
             foreach (Node item in fNodes) {
-                if (item.Order != -1 && item.Order > xOrder) {
+                if (item.Order > xOrder) {
                     xOrder = item.Order;
                     node = item;
                 }
