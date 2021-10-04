@@ -1,8 +1,18 @@
+using System;
 using System.Collections.Generic;
 using GDModel;
 
 namespace GWTree
 {
+    [Flags]
+    public enum ProcessStage
+    {
+        None,
+        Parent,
+        Spouse,
+        Child
+    }
+
     public class Node
     {
         private long fId = -1;
@@ -16,6 +26,7 @@ namespace GWTree
         public bool Partner;
         public Family SelfFamily;
         public GDMSex Sex;
+        public ProcessStage Stage;
 
         public float x;
         public float y;
@@ -72,15 +83,18 @@ namespace GWTree
         public string Surname { get; set; }
 
 
-        public Node(TreeModel model, long nodeId = -1)
+        public Node(TreeModel model, long nodeId, GDMIndividualRecord iRec)
         {
-            fModel = model;
             FamiliesList = new List<Family>();
+
+            fModel = model;
+            fId = nodeId;
+            IndiRec = iRec;
 
             width = 64;
             height = 32;
+
             Clear();
-            fId = nodeId;
         }
 
         public void Clear()
@@ -89,10 +103,8 @@ namespace GWTree
             Surname = "";
         }
 
-        public void LoadPerson(GDMIndividualRecord iRec)
+        public void LoadPerson()
         {
-            IndiRec = iRec;
-
             if (IndiRec != null) {
                 Name = IndiRec.GetPrimaryFullName();
                 Sex = IndiRec.Sex;

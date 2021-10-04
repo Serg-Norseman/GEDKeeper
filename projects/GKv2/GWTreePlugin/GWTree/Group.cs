@@ -33,7 +33,7 @@ namespace GWTree
         {
             int i = 0;
             while (i < fNodes.Count) {
-                if (node == fNodes[i] || node.Id != -1 && node.Id == fNodes[i].Id) {
+                if (node == fNodes[i] || node.Id == fNodes[i].Id) {
                     return i;
                 }
                 i++;
