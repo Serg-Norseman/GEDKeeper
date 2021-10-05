@@ -433,10 +433,10 @@ namespace GKUI.Components
             }
 
             if (fOptions.BorderStyle != GfxBorderStyle.None) {
-                fRenderer.SetSmoothing(false);
+                //fRenderer.SetSmoothing(false);
                 var rt = ExtRect.CreateBounds(spx, spy, fModel.ImageWidth, fModel.ImageHeight);
                 BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
-                fRenderer.SetSmoothing(true);
+                //fRenderer.SetSmoothing(true);
             }
         }
 

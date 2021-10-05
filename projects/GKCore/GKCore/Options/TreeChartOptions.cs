@@ -182,6 +182,7 @@ namespace GKCore.Options
             SeparateDatesAndPlacesLines = srcOptions.SeparateDatesAndPlacesLines;
             BoldNames = srcOptions.BoldNames;
             SeparateDepth = srcOptions.SeparateDepth;
+            BorderStyle = srcOptions.BorderStyle;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -220,6 +221,7 @@ namespace GKCore.Options
             DottedLinesOfAdoptedChildren = iniFile.ReadBool("Chart", "DottedLinesOfAdoptedChildren", false);
             SeparateDatesAndPlacesLines = iniFile.ReadBool("Chart", "SeparateDatesAndPlacesLines", false);
             BoldNames = iniFile.ReadBool("Chart", "BoldNames", false);
+            BorderStyle = (GfxBorderStyle)iniFile.ReadInteger("Chart", "BorderStyle", 0);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -274,6 +276,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "DottedLinesOfAdoptedChildren", DottedLinesOfAdoptedChildren);
             iniFile.WriteBool("Chart", "SeparateDatesAndPlacesLines", SeparateDatesAndPlacesLines);
             iniFile.WriteBool("Chart", "BoldNames", BoldNames);
+            iniFile.WriteInteger("Chart", "BorderStyle", (int)BorderStyle);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());

@@ -895,8 +895,9 @@ namespace GKCore
         /* 834 */ LSID_MatchesNotFound,
         /* 835 */ LSID_ShortKinshipForm,
         /* 836 */ LSID_SurnameFirstInOrder,
+        /* 837 */ LSID_Borders,
 
-        /* 000 */ LSID_Last = LSID_SurnameFirstInOrder
+        /* 000 */ LSID_Last = LSID_Borders
     }
 
 
@@ -1747,6 +1748,7 @@ namespace GKCore
             /* 834 */ "Matches not found",
             /* 835 */ "Short kinship form",
             /* 836 */ "Surname first in order",
+            /* 837 */ "Borders",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
