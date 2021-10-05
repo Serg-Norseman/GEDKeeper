@@ -97,6 +97,7 @@ namespace GKCore.Charts
         private TreeChartPerson fHighlightedPerson;
         private TreeChartKind fKind;
         private TreeChartPerson fKinRoot;
+        private ITreeLayout fLayout;
         private int fLevelDistance;
         private IPen fLinePen;
         private int fMargins;
@@ -186,6 +187,12 @@ namespace GKCore.Charts
         {
             get { return fKinRoot; }
             set { fKinRoot = value; }
+        }
+
+        public ITreeLayout Layout
+        {
+            get { return fLayout; }
+            set { fLayout = value; }
         }
 
         public int Margins

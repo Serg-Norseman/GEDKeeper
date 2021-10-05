@@ -200,6 +200,8 @@
     <Compile Include="GKCore\Charts\IChart.cs" />
     <Compile Include="GKCore\Charts\ICircleChart.cs" />
     <Compile Include="GKCore\Charts\ITreeControl.cs" />
+    <Compile Include="GKCore\Charts\ITreeLayout.cs" />
+    <Compile Include="GKCore\Charts\NativeTreeLayout.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Charts\SVGRenderer.cs" />
     <Compile Include="GKCore\Charts\TCGenerationsControl.cs" />
