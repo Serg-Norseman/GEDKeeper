@@ -86,10 +86,10 @@ namespace GKCore
                 Assert.AreEqual(null, tcPerson.Portrait);
                 Assert.AreEqual(0, tcPerson.PortraitWidth);
 
-                tcPerson.Divorced = false;
-                Assert.AreEqual(false, tcPerson.Divorced);
-                tcPerson.Divorced = true;
-                Assert.AreEqual(true, tcPerson.Divorced);
+                tcPerson.SetFlag(PersonFlag.pfDivorced, false);
+                Assert.AreEqual(false, tcPerson.HasFlag(PersonFlag.pfDivorced));
+                tcPerson.SetFlag(PersonFlag.pfDivorced, true);
+                Assert.AreEqual(true, tcPerson.HasFlag(PersonFlag.pfDivorced));
 
                 tcPerson.IsDup = false;
                 Assert.AreEqual(false, tcPerson.IsDup);
@@ -98,11 +98,6 @@ namespace GKCore
 
                 Assert.AreEqual(0, tcPerson.Height);
                 Assert.AreEqual(0, tcPerson.Width);
-
-                tcPerson.IsDead = false;
-                Assert.AreEqual(false, tcPerson.IsDead);
-                tcPerson.IsDead = true;
-                Assert.AreEqual(true, tcPerson.IsDead);
 
                 Assert.AreEqual(0, tcPerson.PtX);
                 tcPerson.PtX = 11;
