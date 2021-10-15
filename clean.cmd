@@ -101,3 +101,6 @@ rmdir .\projects\GKv2\GKFoldersPlugin\obj /s /q
 
 rmdir .\projects\GKv2\GEDmill\bin /s /q
 rmdir .\projects\GKv2\GEDmill\obj /s /q
+
+rmdir .\projects\GKv2\GWTreePlugin\bin /s /q
+rmdir .\projects\GKv2\GWTreePlugin\obj /s /q

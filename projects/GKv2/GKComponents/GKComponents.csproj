@@ -6,55 +6,15 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <AssemblyName>GKComponents</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <NoWin32Manifest>False</NoWin32Manifest>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
-    <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <StartAction>Project</StartAction>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\</OutputPath>
-    <DebugSymbols>False</DebugSymbols>
-    <DebugType>None</DebugType>
-    <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(CIMode)'=='true'">
-    <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(MonoCS)'=='true'">
-    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup Condition="!$(DefineConstants.Contains(';__MonoCS__'))">
+  <Import Project="..\..\GKConfigurations.targets" />
+  <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
     <Reference Include="nVLC">
       <HintPath>..\..\libs\mswin\nVLC.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition="$(DefineConstants.Contains(';__MonoCS__'))">
+  <ItemGroup Condition=" '$(MonoCS)' == 'true' ">
     <Reference Include="nVLC">
       <HintPath>..\..\libs\linux\nVLC.dll</HintPath>
     </Reference>

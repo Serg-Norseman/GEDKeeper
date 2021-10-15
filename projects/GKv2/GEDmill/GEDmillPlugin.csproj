@@ -1,55 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
-    <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{658AE6DC-A4FA-4042-A26F-E5B6CC7EF56B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>res\gedmill.ico</ApplicationIcon>
-    <AssemblyKeyContainerName>
-    </AssemblyKeyContainerName>
     <AssemblyName>GEDmillPlugin</AssemblyName>
-    <DefaultClientScript>JScript</DefaultClientScript>
-    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-    <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>False</DelaySign>
     <OutputType>Library</OutputType>
     <RootNamespace>GEDmill</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
     <NoWin32Manifest>False</NoWin32Manifest>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <SignAssembly>False</SignAssembly>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <SourceAnalysisOverrideSettingsFile>C:\Users\Norseman\AppData\Roaming\ICSharpCode\SharpDevelop5\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+  </PropertyGroup>
+  <Import Project="..\..\GKConfigurations.targets" />
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <OutputPath>..\..\..\plugins\</OutputPath>
-    <DebugType>Full</DebugType>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DebugSymbols>true</DebugSymbols>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DebugSymbols>false</DebugSymbols>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <ErrorReport>prompt</ErrorReport>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <OutputPath>..\..\..\plugins\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BSLib">
@@ -211,10 +180,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\Logging" />
-    <Folder Include="src\Model" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
@@ -225,30 +190,4 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>285212672</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <StartAction>Project</StartAction>
-    <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
 </Project>
