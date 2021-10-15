@@ -25,11 +25,11 @@ namespace GKMap.CacheProviders
 #if !MONO
     using System.Data.SQLite;
 #else
-   using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
-   using SQLiteTransaction = Mono.Data.Sqlite.SqliteTransaction;
-   using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
-   using SQLiteDataReader = Mono.Data.Sqlite.SqliteDataReader;
-   using SQLiteParameter = Mono.Data.Sqlite.SqliteParameter;
+    using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
+    using SQLiteTransaction = Mono.Data.Sqlite.SqliteTransaction;
+    using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
+    using SQLiteDataReader = Mono.Data.Sqlite.SqliteDataReader;
+    using SQLiteParameter = Mono.Data.Sqlite.SqliteParameter;
 #endif
 
     /// <summary>
@@ -153,7 +153,7 @@ namespace GKMap.CacheProviders
 #if !MONO
                 fConnectionString = string.Format("Data Source=\"{0}\";Page Size=32768;Pooling=True", fDb); //;Journal Mode=Wal
 #else
-                fConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=True,Page Size=32768,Pooling=True", db);
+                fConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=True,Page Size=32768,Pooling=True", fDb);
 #endif
 
                 // clear old attachments
