@@ -10,4 +10,4 @@ cp -r $DEV_PATH/deploy/Manjaro/* ~/$PACK_PATH/
 
 cd ~/$PACK_PATH
 
-makepkg
+makepkg -f
