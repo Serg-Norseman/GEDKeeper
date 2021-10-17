@@ -61,18 +61,18 @@ namespace GKUI.Platform
 
         public override IWindow GetActiveWindow()
         {
-            Window activeWnd = fActiveBase as Window;
+            IWindow activeWin = fActiveBase;
 
-            if (activeWnd == null) {
+            if (activeWin == null) {
                 foreach (var wnd in Application.Instance.Windows) {
                     if (wnd.HasFocus) {
-                        activeWnd = wnd;
+                        activeWin = wnd as IWindow;
                         break;
                     }
                 }
             }
 
-            return (activeWnd is IWindow) ? (IWindow)activeWnd : null;
+            return activeWin;
         }
 
         // FIXME!

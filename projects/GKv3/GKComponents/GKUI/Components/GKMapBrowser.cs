@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,7 +30,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class GKMapBrowser : WebView, IMapBrowser
+    public sealed class GKMapBrowser : WebView, IMapBrowser
     {
         private readonly ExtList<GeoPoint> fMapPoints;
         private bool fShowPoints;
@@ -73,12 +73,13 @@ namespace GKUI.Components
             fUpdateCount = 0;
             fShowPoints = true;
             fShowLines = true;
+
+            InitMap();
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 ClearPoints();
                 fMapPoints.Dispose();
             }
@@ -116,9 +117,7 @@ namespace GKUI.Components
         public void EndUpdate()
         {
             fUpdateCount--;
-
-            if (fUpdateCount <= 0)
-            {
+            if (fUpdateCount <= 0) {
                 RefreshPoints();
                 fUpdateCount = 0;
             }
@@ -176,8 +175,7 @@ namespace GKUI.Components
             string polylineScript = "";
 
             int num = fMapPoints.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GeoPoint pt = fMapPoints[i];
                 pointsScript += string.Format("addMarker({0}, {1}, \"{2}\");", new object[]
                                               { PlacesLoader.CoordToStr(pt.Latitude), PlacesLoader.CoordToStr(pt.Longitude), pt.Hint });
@@ -195,13 +193,11 @@ namespace GKUI.Components
                                                });
             }
 
-            if (ShowPoints)
-            {
+            if (fShowPoints) {
                 gm_ExecScript(pointsScript);
             }
 
-            if (ShowLines)
-            {
+            if (fShowLines) {
                 if (!string.IsNullOrEmpty(polylineScript)) {
                     polylineScript = polylineScript.Remove(polylineScript.Length - 1, 1);
                 }

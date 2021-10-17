@@ -278,6 +278,10 @@ namespace GKUI.Forms
             AddToolStripItem(MenuGensDescendants, "7", 7, miGensXDescendants_Click);
             AddToolStripItem(MenuGensDescendants, "8", 8, miGensXDescendants_Click);
             AddToolStripItem(MenuGensDescendants, "9", 9, miGensXDescendants_Click);
+
+            for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.CrossCorners; bs++) {
+                AddToolStripItem(MenuBorders, bs.ToString(), (int)bs, miBorderX_Click);
+            }
         }
 
         private RadioMenuItem AddToolStripItem(ContextMenu contextMenu, string text, object tag, EventHandler<EventArgs> clickHandler)
@@ -290,7 +294,7 @@ namespace GKUI.Forms
             return tsItem;
         }
 
-        private int GetGensMenuDepth(ContextMenu contextMenu, object sender)
+        private int GetMenuItemTag(ContextMenu contextMenu, object sender)
         {
             foreach (RadioMenuItem tsItem in contextMenu.Items) {
                 tsItem.Checked = false;
@@ -302,7 +306,7 @@ namespace GKUI.Forms
 
         private void miGensX_Click(object sender, EventArgs e)
         {
-            int depth = GetGensMenuDepth(MenuGensCommon, sender);
+            int depth = GetMenuItemTag(MenuGensCommon, sender);
             fTreeBox.DepthLimitAncestors = depth;
             fTreeBox.DepthLimitDescendants = depth;
             GenChart();
@@ -310,23 +314,23 @@ namespace GKUI.Forms
 
         private void miGensXAncestors_Click(object sender, EventArgs e)
         {
-            int depth = GetGensMenuDepth(MenuGensAncestors, sender);
+            int depth = GetMenuItemTag(MenuGensAncestors, sender);
             fTreeBox.DepthLimitAncestors = depth;
             GenChart();
         }
 
         private void miGensXDescendants_Click(object sender, EventArgs e)
         {
-            int depth = GetGensMenuDepth(MenuGensDescendants, sender);
+            int depth = GetMenuItemTag(MenuGensDescendants, sender);
             fTreeBox.DepthLimitDescendants = depth;
             GenChart();
         }
 
-        private void SetupDepth(ContextMenu contextMenu, int depth)
+        private void SetMenuItemTag(ContextMenu contextMenu, int value)
         {
             foreach (RadioMenuItem tsItem in contextMenu.Items) {
-                int itemDepth = (int)tsItem.Tag;
-                if (itemDepth == depth) {
+                int itemTag = (int)tsItem.Tag;
+                if (itemTag == value) {
                     tsItem.PerformClick();
                     break;
                 }
@@ -342,11 +346,20 @@ namespace GKUI.Forms
             tbGensDescendants.Enabled = treeOptions.SeparateDepth;
 
             if (!treeOptions.SeparateDepth) {
-                SetupDepth(MenuGensCommon, treeOptions.DepthLimit);
+                SetMenuItemTag(MenuGensCommon, treeOptions.DepthLimit);
             } else {
-                SetupDepth(MenuGensAncestors, treeOptions.DepthLimitAncestors);
-                SetupDepth(MenuGensDescendants, treeOptions.DepthLimitDescendants);
+                SetMenuItemTag(MenuGensAncestors, treeOptions.DepthLimitAncestors);
+                SetMenuItemTag(MenuGensDescendants, treeOptions.DepthLimitDescendants);
             }
+
+            SetMenuItemTag(MenuBorders, (int)GlobalOptions.Instance.TreeChartOptions.BorderStyle);
+        }
+
+        private void miBorderX_Click(object sender, EventArgs e)
+        {
+            int borderStyle = GetMenuItemTag(MenuBorders, sender);
+            GlobalOptions.Instance.TreeChartOptions.BorderStyle = (GfxBorderStyle)borderStyle;
+            fTreeBox.Invalidate();
         }
 
         private void miEdit_Click(object sender, EventArgs e)
@@ -546,6 +559,7 @@ namespace GKUI.Forms
             miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
             miSelectColor.Text = LangMan.LS(LSID.LSID_SelectColor);
             miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
+            tbBorders.Text = LangMan.LS(LSID.LSID_Borders);
 
             SetToolTip(tbModes, LangMan.LS(LSID.LSID_ModesTip));
             SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));

@@ -33,6 +33,9 @@ using GKMap.WinForms;
 
 namespace GKUI.Components
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class GKMapBrowser : UserControl, IMapBrowser
     {
         private readonly ExtList<GeoPoint> fMapPoints;
