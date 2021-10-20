@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Collections.Generic;
@@ -441,7 +441,7 @@ namespace GKUI.Forms
                 TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.rtf"));
             }
 
-            #if !__MonoCS__
+            #if !MONO
             try {
                 ModalFormHandler = SaveFilePDF_Handler;
                 ClickToolStripMenuItem(menuItem, fMainWin);

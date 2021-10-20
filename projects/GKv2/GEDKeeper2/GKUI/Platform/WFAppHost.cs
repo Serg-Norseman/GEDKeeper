@@ -129,7 +129,7 @@ namespace GKUI.Platform
                     if (win is IBaseWindow) {
                         IntPtr handle = ((Form)win).Handle;
 
-                        #if !__MonoCS__
+                        #if !MONO
                         PostMessageExt(handle, WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
                         #endif
                     }
@@ -146,7 +146,7 @@ namespace GKUI.Platform
             Form frm = form as Form;
 
             if (frm != null) {
-                #if !__MonoCS__
+                #if !MONO
                 EnableWindowExt(frm.Handle, value);
                 #endif
             }
@@ -227,7 +227,7 @@ namespace GKUI.Platform
 
         public override int GetKeyLayout()
         {
-            #if __MonoCS__
+            #if MONO
             // There is a bug in Mono: does not work this CurrentInputLanguage
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
             #else
@@ -353,7 +353,7 @@ namespace GKUI.Platform
         public const uint WM_USER = 0x0400;
         public const uint WM_KEEPMODELESS = WM_USER + 111;
 
-        #if !__MonoCS__
+        #if !MONO
 
         [SecurityCritical, SuppressUnmanagedCodeSecurity]
         [DllImport("user32.dll", EntryPoint="PostMessage", SetLastError = true)]

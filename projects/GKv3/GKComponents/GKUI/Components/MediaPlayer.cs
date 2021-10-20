@@ -32,7 +32,7 @@ using nVLC.Players;*/
     public partial class MediaPlayer : Panel, ILocalizable
     {
         /*
-        #if !__MonoCS__
+        #if !MONO
         private const bool FIND_LIBVLC = true;
         #else
         private const bool FIND_LIBVLC = false;

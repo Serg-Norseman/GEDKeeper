@@ -133,7 +133,7 @@ namespace GKUI.Forms
         {
             if (disposing) {
                 fController.Dispose();
-                #if !__MonoCS__
+                #if !MONO
                 if (components != null) components.Dispose();
                 #endif
             }

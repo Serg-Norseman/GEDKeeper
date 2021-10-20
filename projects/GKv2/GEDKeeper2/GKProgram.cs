@@ -47,7 +47,7 @@ namespace GKUI
         private static void LogSysInfo()
         {
             try {
-                #if __MonoCS__
+                #if MONO
                 Logger.WriteInfo("Mono Version: " + SysUtils.GetMonoVersion());
                 Logger.WriteInfo("Desktop Type: " + SysUtils.GetDesktopType().ToString());
                 #endif

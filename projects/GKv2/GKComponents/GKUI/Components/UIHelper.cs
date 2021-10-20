@@ -33,7 +33,7 @@ using GKCore.Options;
 
 namespace GKUI.Components
 {
-    #if !__MonoCS__
+    #if !MONO
     using Microsoft.Win32;
     #endif
 
@@ -256,7 +256,7 @@ namespace GKUI.Components
         }
 
         #region Application's autorun
-        #if !__MonoCS__
+        #if !MONO
 
         public static void RegisterStartup()
         {

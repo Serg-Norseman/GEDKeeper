@@ -223,11 +223,7 @@ namespace GKTests
 
         public static string GetTempFilePath(string fileName)
         {
-            #if !__MonoCS__
             fileName = GKUtils.GetTempDir() + fileName;
-            #else
-            fileName = GKUtils.GetHomePath() + fileName;
-            #endif
 
             if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
 

@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if __MonoCS__
+#if MONO
 #define NO_DEPEND
 #endif
 

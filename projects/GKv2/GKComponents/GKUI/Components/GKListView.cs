@@ -337,7 +337,7 @@ namespace GKUI.Components
         public new void BeginUpdate()
         {
             if (fUpdateCount == 0) {
-                #if !__MonoCS__
+                #if !MONO
                 ListViewItemSorter = null;
                 #endif
                 base.BeginUpdate();
@@ -350,7 +350,7 @@ namespace GKUI.Components
             fUpdateCount--;
             if (fUpdateCount == 0) {
                 base.EndUpdate();
-                #if !__MonoCS__
+                #if !MONO
                 ListViewItemSorter = fColumnSorter;
                 #endif
             }
@@ -402,7 +402,7 @@ namespace GKUI.Components
                 Graphics gfx = e.Graphics;
                 Rectangle rt = e.Bounds;
 
-                #if !__MonoCS__
+                #if !MONO
                 if (VisualStyleRenderer.IsSupported) {
                     VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
                     if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
@@ -576,7 +576,7 @@ namespace GKUI.Components
                     SortContents(false);
                     VirtualListSize = fListMan.FilteredCount;
 
-                    #if __MonoCS__
+                    #if MONO
                     if (fListMan.FilteredCount != 0) {
                         TopItem = Items[0];
                     }

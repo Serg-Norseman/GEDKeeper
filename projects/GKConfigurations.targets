@@ -50,13 +50,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" $(Configuration.Contains('Mono')) ">
-    <DefineConstants>$(DefineConstants);MONO;__MonoCS__;</DefineConstants>
+    <DefineConstants>$(DefineConstants);MONO;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(CIMode)' == 'true' ">
     <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(MonoCS)' == 'true' ">
-    <DefineConstants>$(DefineConstants);MONO;__MonoCS__</DefineConstants>
+    <DefineConstants>$(DefineConstants);MONO;</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">

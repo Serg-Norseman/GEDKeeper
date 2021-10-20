@@ -137,7 +137,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             // platform: in Mono tsSpecificFilter has 0 index, somehow
-            #if __MonoCS__
+            #if MONO
             tabsFilters.Controls.SetChildIndex(pageSpecificFilter, 1);
             #endif
             tabsFilters.SelectedIndex = 1;

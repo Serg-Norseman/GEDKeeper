@@ -310,7 +310,7 @@ namespace GKUI.Components
                 Graphics gfx = e.Graphics;
                 Rectangle rt = e.Bounds;
 
-                #if !__MonoCS__
+                #if !MONO
                 VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
                 if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
                     element = VisualStyleElement.Header.Item.Hot;

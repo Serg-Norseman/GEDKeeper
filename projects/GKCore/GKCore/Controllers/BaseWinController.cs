@@ -688,7 +688,7 @@ namespace GKCore.Controllers
 
         public void ExportToFamilyBook()
         {
-            //#if __MonoCS__
+            //#if MONO
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             //#endif
@@ -700,7 +700,7 @@ namespace GKCore.Controllers
 
         public void ExportToTreesAlbum()
         {
-            //#if __MonoCS__
+            //#if MONO
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             //#endif
@@ -854,7 +854,7 @@ namespace GKCore.Controllers
 
         public void ShowMap()
         {
-            //#if __MonoCS__
+            //#if MONO
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             var mapsWin = AppHost.Container.Resolve<IMapsViewerWin>(fView);

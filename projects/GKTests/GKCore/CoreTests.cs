@@ -93,7 +93,7 @@ namespace GKCore
         [Test]
         public void Test_Tween()
         {
-            #if !__MonoCS__
+            #if !MONO
             var tween = new GKCore.Charts.TweenLibrary();
             tween.StartTween(TweenHandler, 0, 0, 10, 10, GKCore.Charts.TweenAnimation.EaseInOutQuad, 20);
             #endif
@@ -102,7 +102,7 @@ namespace GKCore
         [Test]
         public void Test_SysUtils()
         {
-            #if __MonoCS__
+            #if MONO
             Assert.IsTrue(SysUtils.IsUnix());
             Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
             Assert.IsFalse(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));

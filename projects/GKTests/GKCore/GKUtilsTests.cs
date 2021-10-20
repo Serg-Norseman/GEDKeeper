@@ -483,7 +483,7 @@ namespace GKCore
         [Test]
         public void Test_GetContainerName()
         {
-            #if !__MonoCS__
+            #if !MONO
             Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true)); // archive
             Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false)); // storage
             #endif

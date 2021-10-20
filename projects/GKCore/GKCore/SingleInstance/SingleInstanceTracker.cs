@@ -3,7 +3,7 @@
  * (http://www.codeproject.com/Articles/19682/A-Pure-NET-Single-Instance-Application-Solution)
  */
 
-#if !__MonoCS__
+#if !MONO
 #define IPC_SUPPORTS
 #endif
 

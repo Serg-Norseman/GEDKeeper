@@ -107,7 +107,7 @@ namespace GKUI.Platform
             IntPtr mainHandle = GetTopWindowHandle();
 
             if (keepModeless) {
-                #if !__MonoCS__
+                #if !MONO
                 //NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
                 #endif
             }
@@ -122,7 +122,7 @@ namespace GKUI.Platform
             Form frm = form as Form;
 
             if (frm != null) {
-                #if !__MonoCS__
+                #if !MONO
                 //NativeMethods.EnableWindow(frm.Handle, value);
                 #endif
             }
@@ -217,7 +217,7 @@ namespace GKUI.Platform
         {
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
 
-            /*#if __MonoCS__
+            /*#if MONO
             // There is a bug in Mono: does not work this CurrentInputLanguage
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
             #else
