@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="..\..\GKConfigurations.targets" />
   <PropertyGroup>
     <ProjectGuid>{658AE6DC-A4FA-4042-A26F-E5B6CC7EF56B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,7 +12,6 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <NoWin32Manifest>False</NoWin32Manifest>
   </PropertyGroup>
-  <Import Project="..\..\GKConfigurations.targets" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <OutputPath>..\..\..\plugins\</OutputPath>

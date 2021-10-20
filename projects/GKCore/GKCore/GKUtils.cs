@@ -1410,7 +1410,7 @@ namespace GKCore
             return tempPath + Path.DirectorySeparatorChar;
         }
 
-        public static string GetAppPath()
+        public static string GetBinPath()
         {
             Assembly asm = Assembly.GetEntryAssembly();
             if (asm == null) {
@@ -1420,6 +1420,12 @@ namespace GKCore
             Module[] mods = asm.GetModules();
             string fn = mods[0].FullyQualifiedName;
             return Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
+        }
+
+        public static string GetAppPath()
+        {
+            string result = Path.Combine(GetBinPath(), @"..\");
+            return result;
         }
 
         public static string GetPluginsPath()

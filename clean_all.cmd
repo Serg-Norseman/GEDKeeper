@@ -8,6 +8,8 @@ del .\*.pdb
 del .\*.mdb
 del .\*.xml
 del .\*.log
+
+del .\bin\*.* /q
 del .\plugins\*.* /q
 del .\deploy\*.zip /q
 

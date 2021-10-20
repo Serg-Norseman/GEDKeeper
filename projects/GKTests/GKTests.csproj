@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <Import Project="..\GKConfigurations.targets" />
   <PropertyGroup>
     <ProjectGuid>{A8B53A6B-40A6-40BA-A671-03FC911BC37B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +10,6 @@
     <AssemblyName>GKTests</AssemblyName>
     <NoWin32Manifest>False</NoWin32Manifest>
   </PropertyGroup>
-  <Import Project="..\GKConfigurations.targets" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
