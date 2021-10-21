@@ -42,7 +42,7 @@ install -d 0755 %{buildroot}%{_libdir}/%{name}
 install -Dm 0644 application-x-%{name}.xml %{buildroot}%{_datadir}/mime/application-x-%{name}.xml
 install -Dm 0644 %{name}.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
 install -Dm 0644 %{name}.png %{buildroot}%{_datadir}/pixmaps/%{name}.png
-cp -r *.dll %{rname}2.exe \
+cp -r bin \
 	locales \
 	plugins \
 	samples \

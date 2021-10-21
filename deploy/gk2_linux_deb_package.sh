@@ -1,6 +1,6 @@
 #!/bin/sh
 
-APP_VER="$1"
+APP_VER="2.19.0"
 DEV_PATH="/home/norseman/share/gkdev/GEDKeeper"
 PACK_PATH="gedkeeper-$APP_VER"
 

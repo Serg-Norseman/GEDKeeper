@@ -254,31 +254,34 @@ Section "$(gkreq)"
 
     SetOutPath $INSTDIR
 
-    !insertmacro CheckNetFramework 35
+    !insertmacro CheckNetFramework 40Full
 
-    File "..\GEDKeeper2.exe"
-    File "..\GEDKeeper2.exe.config"
-    File "..\GKComponents.dll"
-    File "..\GKCore.dll"
-    File "..\GKTray.exe"
+    CreateDirectory "$INSTDIR\bin"
+    SetOutPath "$INSTDIR\bin"
 
-    File "..\BSLib.dll"
-    File "..\BSLib.DataViz.Model.dll"
-    File "..\BSLib.Design.dll"
-    File "..\BSLib.Design.WFHandlers.dll"
-    File "..\BSLib.Linguistics.dll"
-    File "..\DotNetRtfWriter.dll"
-    File "..\ExcelLibrary.dll"
-    File "..\GKMap.Core.dll"
-    File "..\GKMap.WinForms.dll"
-    File "..\itextsharp.dll"
-    File "..\lua51.dll"
-    File "..\LuaInterface.dll"
-    File "..\NLog.dll"
-    File "..\nVLC.dll"
-    File "..\Ude.dll"
-    File "..\YamlSerializer.dll"
-    File "..\ZedGraph.dll"
+    File "..\bin\GEDKeeper2.exe"
+    File "..\bin\GEDKeeper2.exe.config"
+    File "..\bin\GKComponents.dll"
+    File "..\bin\GKCore.dll"
+    File "..\bin\GKTray.exe"
+
+    File "..\bin\BSLib.dll"
+    File "..\bin\BSLib.DataViz.Model.dll"
+    File "..\bin\BSLib.Design.dll"
+    File "..\bin\BSLib.Design.WFHandlers.dll"
+    File "..\bin\BSLib.Linguistics.dll"
+    File "..\bin\DotNetRtfWriter.dll"
+    File "..\bin\ExcelLibrary.dll"
+    File "..\bin\GKMap.Core.dll"
+    File "..\bin\GKMap.WinForms.dll"
+    File "..\bin\itextsharp.dll"
+    File "..\bin\lua51.dll"
+    File "..\bin\LuaInterface.dll"
+    File "..\bin\NLog.dll"
+    File "..\bin\nVLC.dll"
+    File "..\bin\Ude.dll"
+    File "..\bin\YamlSerializer.dll"
+    File "..\bin\ZedGraph.dll"
 
     File "..\LICENSE"
 
@@ -293,7 +296,11 @@ Section "$(gkreq)"
     File "..\samples\*.*"
 
     CreateDirectory "$SMPROGRAMS\GEDKeeper2"
-    CreateShortCut "$SMPROGRAMS\GEDKeeper2\GEDKeeper2.lnk" "$INSTDIR\GEDKeeper2.exe" "" "$INSTDIR\GEDKeeper2.exe" 0
+    SetOutPath "$INSTDIR\bin"
+    CreateShortCut "$SMPROGRAMS\GEDKeeper2\GKTray.lnk" "$INSTDIR\bin\GKTray.exe" "" "$INSTDIR\bin\GKTray.exe" 0
+    CreateShortCut "$SMPROGRAMS\GEDKeeper2\GEDKeeper2.lnk" "$INSTDIR\bin\GEDKeeper2.exe" "" "$INSTDIR\bin\GEDKeeper2.exe" 0
+    CreateShortCut "$DESKTOP\GEDKeeper2.lnk" "$INSTDIR\bin\GEDKeeper2.exe" "" "$INSTDIR\bin\GEDKeeper2.exe" 0
+
     CreateShortCut "$SMPROGRAMS\GEDKeeper2\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 
     ; Write the installation path into the registry
@@ -316,17 +323,15 @@ Section "$(gkscr)"
 SectionEnd
 
 Section "$(gkreg)"
-    CreateShortCut "$DESKTOP\GEDKeeper2.lnk" "$INSTDIR\GEDKeeper2.exe" "" "$INSTDIR\GEDKeeper2.exe" 0
-
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper2.exe" "" "$INSTDIR\GEDKeeper2.exe"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper2.exe" "Path" "$INSTDIR"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper2.exe" "" "$INSTDIR\bin\GEDKeeper2.exe"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper2.exe" "Path" "$INSTDIR\bin"
 
     WriteRegStr HKCR ".ged" "" "GEDCOM.File"
     WriteRegStr HKCR "GEDCOM.File" "" "GEDCOM File"
-    WriteRegStr HKCR "GEDCOM.File\DefaultIcon" "" "$INSTDIR\GEDKeeper2.exe,0"
+    WriteRegStr HKCR "GEDCOM.File\DefaultIcon" "" "$INSTDIR\bin\GEDKeeper2.exe,0"
     WriteRegStr HKCR "GEDCOM.File\shell" "" "open"
     WriteRegStr HKCR "GEDCOM.File\shell\open" "" "$(gk_shellopen)"
-    WriteRegStr HKCR "GEDCOM.File\shell\open\command" "" '$INSTDIR\GEDKeeper2.exe "%1"'
+    WriteRegStr HKCR "GEDCOM.File\shell\open\command" "" '$INSTDIR\bin\GEDKeeper2.exe "%1"'
 SectionEnd
 
 SectionGroup /e "$(gklang)"
@@ -563,31 +568,11 @@ Section "Uninstall"
 
     ; Remove files and uninstaller
     Delete $INSTDIR\LICENSE
-    Delete $INSTDIR\GEDKeeper2.exe
-    Delete $INSTDIR\GEDKeeper2.exe.config
-    Delete $INSTDIR\GKComponents.dll
-    Delete $INSTDIR\GKCore.dll
-    Delete $INSTDIR\GKTray.exe
-
-    Delete $INSTDIR\BSLib.dll
-    Delete $INSTDIR\BSLib.DataViz.Model.dll
-    Delete $INSTDIR\BSLib.Design.dll
-    Delete $INSTDIR\BSLib.Design.WFHandlers.dll
-    Delete $INSTDIR\BSLib.Linguistics.dll
-    Delete $INSTDIR\DotNetRtfWriter.dll
-    Delete $INSTDIR\ExcelLibrary.dll
-    Delete $INSTDIR\GKMap.Core.dll
-    Delete $INSTDIR\GKMap.WinForms.dll
-    Delete $INSTDIR\itextsharp.dll
-    Delete $INSTDIR\lua51.dll
-    Delete $INSTDIR\LuaInterface.dll
-    Delete $INSTDIR\NLog.dll
-    Delete $INSTDIR\nVLC.dll
-    Delete $INSTDIR\Ude.dll
-    Delete $INSTDIR\YamlSerializer.dll
-    Delete $INSTDIR\ZedGraph.dll
 
     Delete $INSTDIR\uninstall.exe
+
+    Delete "$INSTDIR\bin\*.*"
+    RMDir "$INSTDIR\bin"
 
     Delete "$INSTDIR\locales\help_rus\images\*.*"
     RMDir "$INSTDIR\locales\help_rus\images"

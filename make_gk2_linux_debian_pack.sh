@@ -1,5 +1,5 @@
 #!/bin/sh
 
-sh ./build_all.linux.x86.sh
+msbuild ./projects/GEDKeeper2.linux.sln /p:Configuration=Release /p:Platform="x86" /p:MonoCS=true /p:TargetFrameworkVersion=v4.5 /v:quiet
 cd ./deploy/
-sh ./gk2_linux_deb_package.sh "2.19.0"
+sh ./gk2_linux_deb_package.sh
