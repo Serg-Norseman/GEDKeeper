@@ -1,5 +1,13 @@
 
-del /q .\deploy\*.exe
+del .\bin\*.* /q
+del .\plugins\*.* /q
+del .\deploy\*.zip /q
+del .\deploy\*.exe /q
+
+del .\appdata\imagecache\*.* /q
+del .\appdata\xdb\*.* /q
+del .\appdata\GEDKeeper2.log
+del .\appdata\GEDKeeper2.nms
 
 del .\coverageResults.txt
 
