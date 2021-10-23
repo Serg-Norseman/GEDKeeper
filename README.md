@@ -110,6 +110,7 @@ Google Maps (© Google).
 
 
 ## Implementations
+
 - Legacy (NET4.0 & WinForms based), "GEDKeeper2"
 - Cross-platform (NET Standard & Eto based), codenamed "GEDKeeper3", interface grinding stage
 - Future mobile (NET Standard & Xamarin based), codenamed "GEDKeeperX", initial experience
@@ -117,8 +118,16 @@ Google Maps (© Google).
 
 ## Supported languages
 
-
-cze, deu, enu, fra, ita, pol, rus, ukr, zho
+- Russian [rus]
+- English [enu]
+- Ukrainian [ukr]
+- Polish [pol]
+- Italian [ita]
+- Chinese (simplified) [zho]
+- French [fra]
+- German [deu]
+- Czech [cze]
+- Kazakh (cyrillic), partial [kaz]
 
 
 ## Docs & Help
