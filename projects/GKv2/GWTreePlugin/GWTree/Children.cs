@@ -109,7 +109,9 @@ namespace GWTree
             }
 
             var left = GetLeftSibling();
-            left.x = left.x + offset;
+            if (left != null) {
+                left.x = left.x + offset;
+            }
         }
 
         public override PointF GetPivot(ref Node left, ref Node right)
@@ -118,8 +120,10 @@ namespace GWTree
             right = GetRightSibling();
 
             PointF pivot = new PointF();
-            pivot.X = (left.x + right.x + right.width) / 2;
-            pivot.Y = (left.y + right.y) / 2 - TreeModel.VSpace / 2;
+            if (left != null && right != null) {
+                pivot.X = (left.x + right.x + right.width) / 2;
+                pivot.Y = (left.y + right.y) / 2 - TreeModel.VSpace / 2;
+            }
             return pivot;
         }
 

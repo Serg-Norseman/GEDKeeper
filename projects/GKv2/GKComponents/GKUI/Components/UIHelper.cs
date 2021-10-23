@@ -262,8 +262,10 @@ namespace GKUI.Components
         {
             if (!IsStartupItem()) {
                 RegistryKey rkApp = GetRunKey();
-                string trayPath = GKUtils.GetAppPath() + "GKTray.exe";
-                rkApp.SetValue(GKData.APP_TITLE, trayPath);
+                if (rkApp != null) {
+                    string trayPath = GKUtils.GetAppPath() + "GKTray.exe";
+                    rkApp.SetValue(GKData.APP_TITLE, trayPath);
+                }
             }
         }
 
@@ -271,14 +273,16 @@ namespace GKUI.Components
         {
             if (IsStartupItem()) {
                 RegistryKey rkApp = GetRunKey();
-                rkApp.DeleteValue(GKData.APP_TITLE, false);
+                if (rkApp != null) {
+                    rkApp.DeleteValue(GKData.APP_TITLE, false);
+                }
             }
         }
 
         public static bool IsStartupItem()
         {
             RegistryKey rkApp = GetRunKey();
-            return (rkApp.GetValue(GKData.APP_TITLE) != null);
+            return (rkApp != null && rkApp.GetValue(GKData.APP_TITLE) != null);
         }
 
         private static RegistryKey GetRunKey()

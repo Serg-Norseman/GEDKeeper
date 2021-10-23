@@ -241,13 +241,19 @@ namespace GKCore
 
         public static Version GetAppVersion()
         {
-            return GetAssembly().GetName().Version;
+            var asm = GetAssembly();
+            return (asm == null) ? null : asm.GetName().Version;
         }
 
         public static string GetAppCopyright()
         {
-            var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(GetAssembly());
-            return (attr == null) ? string.Empty : attr.Copyright;
+            var asm = GetAssembly();
+            if (asm == null) {
+                return string.Empty;
+            } else {
+                var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(asm);
+                return (attr == null) ? string.Empty : attr.Copyright;
+            }
         }
 
         protected static string GetAppSign()

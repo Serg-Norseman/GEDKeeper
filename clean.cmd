@@ -9,6 +9,7 @@ del .\appdata\xdb\*.* /q
 del .\appdata\GEDKeeper2.log
 del .\appdata\GEDKeeper2.nms
 
+del .\TestResult.xml
 del .\coverageResults.txt
 
 rmdir .\cov-int /s /q

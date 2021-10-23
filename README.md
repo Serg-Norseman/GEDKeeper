@@ -20,8 +20,6 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/serg-norseman/gedkeeper/badge)](https://www.codefactor.io/repository/github/serg-norseman/gedkeeper)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/gedkeeper/localized.svg)](https://crowdin.com/project/gedkeeper)
 
-[GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=600&user=serg-norseman)
-
 
 ## English
 The **GEDKeeper** program is for working with personal genealogical databases.

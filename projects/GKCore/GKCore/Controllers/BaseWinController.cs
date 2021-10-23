@@ -609,8 +609,7 @@ namespace GKCore.Controllers
         {
             GDMRecordType rt = GetSelectedRecordType();
             IListManager listMan = GetRecordsListManByType(rt);
-            IList<ISearchResult> result = listMan.FindAll(searchPattern);
-            //IList<ISearchResult> result = fContext.FindAll(rt, searchPattern);
+            IList<ISearchResult> result = (listMan == null) ? new List<ISearchResult>() : listMan.FindAll(searchPattern);
             return result;
         }
 

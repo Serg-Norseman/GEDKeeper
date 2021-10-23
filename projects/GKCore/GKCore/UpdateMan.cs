@@ -89,14 +89,15 @@ namespace GKCore
         {
             try {
                 Version curVersion = AppHost.GetAppVersion();
+                if (curVersion == null) return;
 
                 string url;
                 Version newVersion = GetLastVersion(out url);
+                if (newVersion == null) return;
 
                 if (curVersion.CompareTo(newVersion) < 0) {
-                    string question = "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?";
-
                     #if !CI_MODE
+                    string question = "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?";
                     if (AppHost.StdDialogs.ShowQuestionYN(string.Format(question, curVersion, newVersion))) {
                         Process.Start(url);
                     }

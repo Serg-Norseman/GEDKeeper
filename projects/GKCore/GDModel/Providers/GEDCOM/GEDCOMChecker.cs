@@ -270,10 +270,12 @@ namespace GDModel.Providers.GEDCOM
                 var mrelTag = FindSubTagValue(childLink, "_MREL");
                 if (frelTag == "ADOPTED" && mrelTag == "ADOPTED") {
                     GDMChildToFamilyLink ctfLink = childRec.FindChildToFamilyLink(fam);
-                    ctfLink.PedigreeLinkageType = GDMPedigreeLinkageType.plAdopted;
+                    if (ctfLink != null) {
+                        ctfLink.PedigreeLinkageType = GDMPedigreeLinkageType.plAdopted;
 
-                    childLink.DeleteTag("_FREL");
-                    childLink.DeleteTag("_MREL");
+                        childLink.DeleteTag("_FREL");
+                        childLink.DeleteTag("_MREL");
+                    }
                 }
             }
         }
