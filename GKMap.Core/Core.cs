@@ -35,6 +35,7 @@ namespace GKMap
         private GSize fSizeOfMapArea;
         private readonly int fThreadPoolSize = 4;
         private readonly BlockingCollection<LoadTask> fTileLoadQueue4 = new BlockingCollection<LoadTask>(new ConcurrentStack<LoadTask>());
+        private readonly object fTileLoadQueue4Lock = new object();
         private List<Task> fTileLoadQueue4Tasks;
         private int fZoom;
 
@@ -91,6 +92,7 @@ namespace GKMap
 
 
         internal Dictionary<LoadTask, Exception> FailedLoads = new Dictionary<LoadTask, Exception>(new LoadTaskComparer());
+        internal readonly object FailedLoadsLock = new object();
         internal volatile bool IsStarted;
         internal readonly object InvalidationLock = new object();
         internal DateTime LastInvalidation = DateTime.Now;
@@ -591,36 +593,33 @@ namespace GKMap
 
         private void AddLoadTask(LoadTask t)
         {
-            if (fTileLoadQueue4Tasks == null) {
-                lock (fTileLoadQueue4) {
-                    if (fTileLoadQueue4Tasks == null) {
-                        fTileLoadQueue4Tasks = new List<Task>();
+            lock (fTileLoadQueue4Lock) {
+                if (fTileLoadQueue4Tasks == null) {
+                    fTileLoadQueue4Tasks = new List<Task>();
 
-                        while (fTileLoadQueue4Tasks.Count < fThreadPoolSize) {
-                            Debug.WriteLine("creating ProcessLoadTask: " + fTileLoadQueue4Tasks.Count);
+                    while (fTileLoadQueue4Tasks.Count < fThreadPoolSize) {
+                        Debug.WriteLine("creating ProcessLoadTask: " + fTileLoadQueue4Tasks.Count);
 
-                            fTileLoadQueue4Tasks.Add(Task.Factory.StartNew(delegate {
-                                string ctid = "ProcessLoadTask[" + Thread.CurrentThread.ManagedThreadId + "]";
-                                Thread.CurrentThread.Name = ctid;
+                        fTileLoadQueue4Tasks.Add(Task.Factory.StartNew(delegate {
+                            string ctid = "ProcessLoadTask[" + Thread.CurrentThread.ManagedThreadId + "]";
+                            Thread.CurrentThread.Name = ctid;
 
-                                Debug.WriteLine(ctid + ": started");
-                                do {
-                                    if (fTileLoadQueue4.Count == 0) {
-                                        Debug.WriteLine(ctid + ": ready");
+                            Debug.WriteLine(ctid + ": started");
+                            do {
+                                if (fTileLoadQueue4.Count == 0) {
+                                    Debug.WriteLine(ctid + ": ready");
 
-                                        if (Interlocked.Increment(ref fLoadWaitCount) >= fThreadPoolSize) {
-                                            Interlocked.Exchange(ref fLoadWaitCount, 0);
-                                            OnLoadComplete(ctid);
-                                        }
+                                    if (Interlocked.Increment(ref fLoadWaitCount) >= fThreadPoolSize) {
+                                        Interlocked.Exchange(ref fLoadWaitCount, 0);
+                                        OnLoadComplete(ctid);
                                     }
-                                    ProcessLoadTask(fTileLoadQueue4.Take(), ctid);
                                 }
-                                while (!fTileLoadQueue4.IsAddingCompleted);
+                                ProcessLoadTask(fTileLoadQueue4.Take(), ctid);
+                            } while (!fTileLoadQueue4.IsAddingCompleted);
 
-                                Debug.WriteLine(ctid + ": exit");
+                            Debug.WriteLine(ctid + ": exit");
 
-                            }, TaskCreationOptions.LongRunning));
-                        }
+                        }, TaskCreationOptions.LongRunning));
                     }
                 }
             }
@@ -639,7 +638,9 @@ namespace GKMap
 
                     Tile t = new Tile(task.Zoom, task.Pos);
 
-                    foreach (var tl in fProvider.Overlays) {
+                    var providerOverlays = fProvider.Overlays;
+
+                    if (providerOverlays != null) foreach (var tl in providerOverlays) {
                         int retry = 0;
                         do {
                             PureImage img = null;
@@ -855,7 +856,7 @@ namespace GKMap
                 }
 
                 if (FailedLoads != null) {
-                    lock (FailedLoads) {
+                    lock (FailedLoadsLock) {
                         FailedLoads.Clear();
                     }
                     FailedLoads = null;

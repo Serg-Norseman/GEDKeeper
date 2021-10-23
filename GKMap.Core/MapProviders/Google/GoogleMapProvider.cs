@@ -1056,9 +1056,10 @@ namespace GKMap.MapProviders.Google
         private string GetSignature(Uri uri)
         {
             byte[] encodedPathQuery = Encoding.ASCII.GetBytes(uri.LocalPath + uri.Query);
-            var hashAlgorithm = new HMACSHA1(fPrivateKeyBytes);
-            byte[] hashed = hashAlgorithm.ComputeHash(encodedPathQuery);
-            return Convert.ToBase64String(hashed).Replace("+", "-").Replace("/", "_");
+            using (var hashAlgorithm = new HMACSHA1(fPrivateKeyBytes)) {
+                byte[] hashed = hashAlgorithm.ComputeHash(encodedPathQuery);
+                return Convert.ToBase64String(hashed).Replace("+", "-").Replace("/", "_");
+            }
         }
     }
 

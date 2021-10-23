@@ -875,9 +875,7 @@ namespace GKMap.WinForms
                         f = f.ParentForm;
                     }
 
-                    if (f != null) {
-                        f.FormClosing += ParentForm_FormClosing;
-                    }
+                    f.FormClosing += ParentForm_FormClosing;
                 }
             }
         }
@@ -988,8 +986,8 @@ namespace GKMap.WinForms
                                 if (!img.IsParent) {
                                     g.DrawImage(img.Img, Core.TileRect.X, Core.TileRect.Y, Core.TileRect.Width, Core.TileRect.Height);
                                 } else {
-                                    float wix = (img.Img.Width / img.Ix);
-                                    float hix = (img.Img.Height / img.Ix);
+                                    float wix = ((float)img.Img.Width / img.Ix);
+                                    float hix = ((float)img.Img.Height / img.Ix);
                                     RectangleF srcRect = new RectangleF(img.Xoff * wix, img.Yoff * hix, wix, hix);
                                     Rectangle dst = new Rectangle((int)Core.TileRect.X, (int)Core.TileRect.Y, (int)Core.TileRect.Width, (int)Core.TileRect.Height);
                                     g.DrawImage(img.Img, dst, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, GraphicsUnit.Pixel, TileFlipXYAttributes);
