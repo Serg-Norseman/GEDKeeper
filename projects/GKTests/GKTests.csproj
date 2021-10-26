@@ -111,6 +111,7 @@
     <Compile Include="GKCore\Controllers\AssociationEditControllerTests.cs" />
     <Compile Include="GKCore\CoreTests.cs" />
     <Compile Include="GKCore\CulturesTests.cs" />
+    <Compile Include="GKCore\DatabaseTests.cs" />
     <Compile Include="GKCore\ExportersTests.cs" />
     <Compile Include="GKCore\GKUtilsTests.cs" />
     <Compile Include="GKCore\HolidaysTests.cs" />

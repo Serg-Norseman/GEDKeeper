@@ -39,6 +39,9 @@
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.SQLite">
+      <HintPath>..\libs\BSLib.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetRtfWriter">
       <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
     </Reference>
@@ -202,6 +205,8 @@
     <Compile Include="GKCore\Controllers\UserRefEditDlgController.cs" />
     <Compile Include="GKCore\Cultures\CulturesPool.cs" />
     <Compile Include="GKCore\Cultures\CzechCulture.cs" />
+    <Compile Include="GKCore\Database\GKDatabase.cs" />
+    <Compile Include="GKCore\Database\GKDBNameEntry.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
     <Compile Include="GKCore\GKVarCache.cs" />
