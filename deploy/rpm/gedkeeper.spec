@@ -15,7 +15,10 @@ Requires:	mono-core
 Requires:	mono-data
 Requires:	mono-winforms
 Requires:	lua
-AutoReq:        no
+Requires:	sqlite3
+
+AutoReq:	no
+AutoReqProv:	no
 
 %description
 %{summary}.
