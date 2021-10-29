@@ -101,7 +101,7 @@ namespace GKImageViewerPlugin
                             fImageCtl = new ImageView();
 
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                                     fImageCtl.OpenImage(new Bitmap(fs));
                                 }
                             } catch (Exception ex) {
@@ -125,7 +125,7 @@ namespace GKImageViewerPlugin
                             txtBox.ScrollBars = ScrollBars.Both;
 
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                                     using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
                                         txtBox.Text = strd.ReadToEnd();
                                     }
@@ -144,7 +144,7 @@ namespace GKImageViewerPlugin
                             rtfBox.ReadOnly = true;
 
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                                     using (StreamReader strd = new StreamReader(fs)) {
                                         rtfBox.Text = strd.ReadToEnd();
                                     }
@@ -161,7 +161,7 @@ namespace GKImageViewerPlugin
                         {
                             var browser = new WebBrowser();
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                                     browser.DocumentStream = fs;
                                 }
                             } catch (Exception ex) {

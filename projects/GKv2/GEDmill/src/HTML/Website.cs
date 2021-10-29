@@ -343,7 +343,7 @@ namespace GEDmill.HTML
                 }
                 fLogger.WriteInfo("Creating autorun.inf");
 
-                FileStream fs = new FileStream(autorunDest, FileMode.Create);
+                FileStream fs = new FileStream(autorunDest, FileMode.Create, FileAccess.Write);
                 StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.ASCII);
 
                 sw.WriteLine("[AUTORUN]");

@@ -791,7 +791,7 @@
 790=Familienakte ohne Eltern oder Kinder erkannt
 791=Wollen Sie die Multimedia Dateien entfernen?
 792=Speichermedium nicht gefunden
-793=Datei nicht gefunden
+793=Datei "{0}" nicht gefunden
 794=Erlaube relativer Pfad zu Media Datei
 795=Standart Medienspeichertyp
 796=Erlaube das Löschen von Mediendateien im Speicher und Archiv

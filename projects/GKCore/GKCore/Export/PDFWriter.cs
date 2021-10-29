@@ -143,7 +143,7 @@ namespace GKCore.Export
             itRectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
 
             fDocument = new Document(pageSize, fMargins.Left, fMargins.Right, fMargins.Top, fMargins.Bottom);
-            fPdfWriter = PdfWriter.GetInstance(fDocument, new FileStream(fFileName, FileMode.Create));
+            fPdfWriter = PdfWriter.GetInstance(fDocument, new FileStream(fFileName, FileMode.Create, FileAccess.Write));
 
             fDocument.AddTitle(fDocumentTitle);
             fDocument.AddSubject("");

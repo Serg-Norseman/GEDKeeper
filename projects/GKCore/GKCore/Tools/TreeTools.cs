@@ -750,7 +750,7 @@ namespace GKCore.Tools
                 case MediaStoreStatus.mssFileNotFound:
                     {
                         CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdFileNotFound, CheckSolve.csSkip);
-                        checkObj.Comment = LangMan.LS(LSID.LSID_FileNotFound) + " " + fileName;
+                        checkObj.Comment = LangMan.LS(LSID.LSID_FileNotFound, fileName);
                         checksList.Add(checkObj);
                     }
                     break;

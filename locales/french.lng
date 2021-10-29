@@ -791,7 +791,7 @@
 790=Fiche familiale détectée sans parents ni enfants
 791=Are you sure you want to remove multimedia file?
 792=Storage not found
-793=File not found
+793=File "{0}" not found
 794=Allow relative references to media files
 795=Default media storage type
 796=Allow delete media files from storage and archive

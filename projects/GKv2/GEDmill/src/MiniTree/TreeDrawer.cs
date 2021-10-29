@@ -179,7 +179,7 @@ namespace GEDmill.MiniTree
             }
 
             // Save using FileStream to try to avoid crash (only seen by customers)
-            FileStream fs = new FileStream(fileName, FileMode.Create);
+            FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
             bmp.Save(fs, imageFormat);
             fs.Close();
 

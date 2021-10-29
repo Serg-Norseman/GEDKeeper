@@ -93,7 +93,7 @@ namespace GDModel.Providers.FamilyShow
                 Directory.CreateDirectory(Path.GetDirectoryName(uriFullPartPath.LocalPath));
 
                 // Create the file with the Part content
-                using (FileStream fileStream = new FileStream(uriFullPartPath.LocalPath, FileMode.Create)) {
+                using (FileStream fileStream = new FileStream(uriFullPartPath.LocalPath, FileMode.Create, FileAccess.Write)) {
                     CopyStream(packagePart.GetStream(), fileStream);
                 }
             } catch {

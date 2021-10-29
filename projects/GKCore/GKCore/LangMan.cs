@@ -1701,7 +1701,7 @@ namespace GKCore
             /* 790 */ "Family record detected without family",
             /* 791 */ "Are you sure you want to remove multimedia file?",
             /* 792 */ "Storage not found",
-            /* 793 */ "File not found",
+            /* 793 */ "File \"{0}\" not found",
             /* 794 */ "Allow relative references to media files",
             /* 795 */ "Default media storage type",
             /* 796 */ "Allow delete media files from storage and archive",
@@ -1756,6 +1756,11 @@ namespace GKCore
         public static string LS(LSID lsid)
         {
             return fLangMan.LS(lsid);
+        }
+
+        public static string LS(LSID lsid, params object[] args)
+        {
+            return string.Format(fLangMan.LS(lsid), args);
         }
 
         public static void DefInit()

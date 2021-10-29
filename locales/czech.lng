@@ -791,7 +791,7 @@
 790=Záznam rodiny byl zjištěn bez rodičů nebo dětí
 791=Opravdu chcete multimediální soubor odebrat?
 792=Úložiště nebylo nalezeno
-793=Soubor nenalezen
+793=Soubor "{0}" nenalezen
 794=Povolit relativní odkazy na mediální soubory
 795=Výchozí typ úložiště médií
 796=Povolit mazání mediálních souborů z úložiště a archivace
