@@ -96,7 +96,7 @@ namespace GKMap.WinForms.Demo
 
         private void trkZoom_ValueChanged(object sender, EventArgs e)
         {
-            MapBrowser.MapControl.Zoom = trkZoom.Value / 100.0;
+            MapBrowser.MapControl.Zoom = (int)Math.Floor(trkZoom.Value / 100.0);
         }
 
         private void btnZoomUp_Click(object sender, EventArgs e)
@@ -123,13 +123,13 @@ namespace GKMap.WinForms.Demo
                     sfd.FileName = "GKMap image";
 
                     Image tmpImage = MapBrowser.MapControl.ToImage();
-                    if (tmpImage != null) {
-                        using (tmpImage) {
-                            if (sfd.ShowDialog() == DialogResult.OK) {
-                                tmpImage.Save(sfd.FileName);
+                    if (tmpImage == null) return;
 
-                                MessageBox.Show("Image saved: " + sfd.FileName, "GKMap", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
+                    using (tmpImage) {
+                        if (sfd.ShowDialog() == DialogResult.OK) {
+                            tmpImage.Save(sfd.FileName);
+
+                            MessageBox.Show("Image saved: " + sfd.FileName, "GKMap", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }

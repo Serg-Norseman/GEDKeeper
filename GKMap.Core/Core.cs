@@ -29,6 +29,7 @@ namespace GKMap
         private int fLoadWaitCount;
         private GSize fMinOfTiles;
         private GSize fMaxOfTiles;
+        private bool fMouseIn;
         private PointLatLng fPosition;
         private GPoint fPositionPixel;
         private GMapProvider fProvider;
@@ -37,6 +38,7 @@ namespace GKMap
         private readonly BlockingCollection<LoadTask> fTileLoadQueue4 = new BlockingCollection<LoadTask>(new ConcurrentStack<LoadTask>());
         private readonly object fTileLoadQueue4Lock = new object();
         private List<Task> fTileLoadQueue4Tasks;
+        private IMapControl fView;
         private int fZoom;
 
         private volatile int okZoom;
@@ -54,6 +56,8 @@ namespace GKMap
         public GPoint MouseDown;
         public GPoint MouseCurrent;
         public GPoint MouseLastZoom;
+
+        public bool InvertedMouseWheelZooming { get; set; }
 
         /// <summary>
         /// is user dragging map
@@ -81,6 +85,12 @@ namespace GKMap
         }
 
         public TileMatrix Matrix { get; private set; }
+
+        public bool MouseIn
+        {
+            get { return fMouseIn; }
+            set { fMouseIn = value; }
+        }
 
         public AutoResetEvent RefreshEvent { get; private set; }
 
@@ -272,9 +282,41 @@ namespace GKMap
         /// </summary>
         public event MapTypeChanged OnMapTypeChanged;
 
+        /// <summary>
+        /// occurs on mouse enters marker area
+        /// </summary>
+        public event MarkerEnter OnMarkerEnter;
 
-        public Core()
+        /// <summary>
+        /// occurs on mouse leaves marker area
+        /// </summary>
+        public event MarkerLeave OnMarkerLeave;
+
+        /// <summary>
+        /// occurs on mouse enters Polygon area
+        /// </summary>
+        public event PolygonEnter OnPolygonEnter;
+
+        /// <summary>
+        /// occurs on mouse leaves Polygon area
+        /// </summary>
+        public event PolygonLeave OnPolygonLeave;
+
+        /// <summary>
+        /// occurs on mouse enters route area
+        /// </summary>
+        public event RouteEnter OnRouteEnter;
+
+        /// <summary>
+        /// occurs on mouse leaves route area
+        /// </summary>
+        public event RouteLeave OnRouteLeave;
+
+
+        public Core(IMapControl view)
         {
+            fView = view;
+
             Provider = EmptyProvider.Instance;
             RefreshEvent = new AutoResetEvent(false);
             TileDrawingListLock = new RWLock();
@@ -889,6 +931,419 @@ namespace GKMap
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        internal void ProcessOverlaysMouseMove(GPoint rp)
+        {
+            for (int i = fView.Overlays.Count - 1; i >= 0; i--) {
+                IMapOverlay o = fView.Overlays[i];
+                if (o == null || !o.IsVisible || !o.IsHitTestVisible)
+                    continue;
+
+                foreach (IMapMarker m in o.Markers) {
+                    if (!m.IsVisible || !m.IsHitTestVisible)
+                        continue;
+
+                    if (m.IsInside((int)rp.X, (int)rp.Y)) {
+                        if (!m.IsMouseOver) {
+                            fView.SetCursorHandOnEnter();
+                            m.IsMouseOver = true;
+                            fView.IsMouseOverMarker = true;
+
+                            var markerEnter = (MarkerEnter)OnMarkerEnter;
+                            if (markerEnter != null) {
+                                markerEnter(m);
+                            }
+
+                            fView.Invalidate();
+                        }
+                    } else if (m.IsMouseOver) {
+                        m.IsMouseOver = false;
+                        fView.IsMouseOverMarker = false;
+                        fView.RestoreCursorOnLeave();
+
+                        var markerLeave = (MarkerLeave)OnMarkerLeave;
+                        if (markerLeave != null) {
+                            markerLeave(m);
+                        }
+
+                        fView.Invalidate();
+                    }
+                }
+
+                foreach (IMapRoute m in o.Routes) {
+                    if (!m.IsVisible || !m.IsHitTestVisible)
+                        continue;
+
+                    if (m.IsInside((int)rp.X, (int)rp.Y)) {
+                        if (!m.IsMouseOver) {
+                            fView.SetCursorHandOnEnter();
+                            m.IsMouseOver = true;
+                            fView.IsMouseOverRoute = true;
+
+                            var routeEnter = (RouteEnter)OnRouteEnter;
+                            if (routeEnter != null) {
+                                routeEnter(m);
+                            }
+
+                            fView.Invalidate();
+                        }
+                    } else {
+                        if (m.IsMouseOver) {
+                            m.IsMouseOver = false;
+                            fView.IsMouseOverRoute = false;
+                            fView.RestoreCursorOnLeave();
+
+                            var routeLeave = (RouteLeave)OnRouteLeave;
+                            if (routeLeave != null) {
+                                routeLeave(m);
+                            }
+
+                            fView.Invalidate();
+                        }
+                    }
+                }
+
+                foreach (IMapPolygon m in o.Polygons) {
+                    if (!m.IsVisible || !m.IsHitTestVisible)
+                        continue;
+
+                    if (m.IsInside((int)rp.X, (int)rp.Y)) {
+                        if (!m.IsMouseOver) {
+                            fView.SetCursorHandOnEnter();
+                            m.IsMouseOver = true;
+                            fView.IsMouseOverPolygon = true;
+
+                            var polygonEnter = (PolygonEnter)OnPolygonEnter;
+                            if (polygonEnter != null) {
+                                polygonEnter(m);
+                            }
+
+                            fView.Invalidate();
+                        }
+                    } else {
+                        if (m.IsMouseOver) {
+                            m.IsMouseOver = false;
+                            fView.IsMouseOverPolygon = false;
+                            fView.RestoreCursorOnLeave();
+
+                            var polygonLeave = (PolygonLeave)OnPolygonLeave;
+                            if (polygonLeave != null) {
+                                polygonLeave(m);
+                            }
+
+                            fView.Invalidate();
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// updates markers local position
+        /// </summary>
+        /// <param name="marker"></param>
+        public void UpdateMarkerLocalPosition(IMapMarker marker)
+        {
+            GPoint p = FromLatLngToLocal(marker.Position);
+            p.OffsetNegative(RenderOffset);
+            marker.LocalPosition = new GPoint((int)(p.X + marker.Offset.X), (int)(p.Y + marker.Offset.Y));
+        }
+
+        /// <summary>
+        /// updates routes local position
+        /// </summary>
+        /// <param name="route"></param>
+        public void UpdateRouteLocalPosition(IMapRoute route)
+        {
+            route.LocalPoints.Clear();
+
+            for (int i = 0; i < route.Points.Count; i++) {
+                GPoint p = FromLatLngToLocal(route.Points[i]);
+                p.OffsetNegative(RenderOffset);
+                route.LocalPoints.Add(p);
+            }
+            route.UpdateGraphicsPath();
+        }
+
+        /// <summary>
+        /// updates polygons local position
+        /// </summary>
+        /// <param name="polygon"></param>
+        public void UpdatePolygonLocalPosition(IMapPolygon polygon)
+        {
+            polygon.LocalPoints.Clear();
+
+            for (int i = 0; i < polygon.Points.Count; i++) {
+                GPoint p = FromLatLngToLocal(polygon.Points[i]);
+                p.OffsetNegative(RenderOffset);
+                polygon.LocalPoints.Add(p);
+            }
+            polygon.UpdateGraphicsPath();
+        }
+
+        /// <summary>
+        /// set current position using keywords
+        /// </summary>
+        /// <param name="keys"></param>
+        /// <returns>true if successful</returns>
+        public GeocoderStatusCode SetPositionByKeywords(string keys)
+        {
+            var status = GeocoderStatusCode.Unknown;
+
+            var gp = Provider as IGeocodingProvider;
+            if (gp == null) {
+                gp = GMapProviders.OpenStreetMap;
+            }
+
+            if (gp != null) {
+                var pt = gp.GetPoint(keys, out status);
+                if (status == GeocoderStatusCode.Success && pt.HasValue) {
+                    Position = pt.Value;
+                }
+            }
+
+            return status;
+        }
+
+        /// <summary>
+        /// gets rect of route
+        /// </summary>
+        /// <param name="route"></param>
+        /// <returns></returns>
+        public RectLatLng? GetRectOfRoute(IMapFigure figure)
+        {
+            RectLatLng? ret = null;
+
+            double left = double.MaxValue;
+            double top = double.MinValue;
+            double right = double.MinValue;
+            double bottom = double.MaxValue;
+
+            if (figure.HasLines) {
+                foreach (PointLatLng p in figure.Points) {
+                    // left
+                    if (p.Lng < left) {
+                        left = p.Lng;
+                    }
+
+                    // top
+                    if (p.Lat > top) {
+                        top = p.Lat;
+                    }
+
+                    // right
+                    if (p.Lng > right) {
+                        right = p.Lng;
+                    }
+
+                    // bottom
+                    if (p.Lat < bottom) {
+                        bottom = p.Lat;
+                    }
+                }
+                ret = RectLatLng.FromLTRB(left, top, right, bottom);
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// gets rectangle with all objects inside
+        /// </summary>
+        /// <param name="overlayId">overlay id or null to check all except zoomInsignificant</param>
+        /// <returns></returns>
+        public RectLatLng? GetRectOfAllMarkers(string overlayId)
+        {
+            RectLatLng? ret = null;
+
+            double left = double.MaxValue;
+            double top = double.MinValue;
+            double right = double.MinValue;
+            double bottom = double.MaxValue;
+
+            foreach (IMapOverlay o in fView.Overlays) {
+                if (((overlayId == null && o.IsZoomSignificant) || o.Id == overlayId) && o.IsVisible && o.Markers.Count > 0) {
+                    foreach (IMapMarker m in o.Markers) {
+                        if (!m.IsVisible) continue;
+
+                        // left
+                        if (m.Position.Lng < left) {
+                            left = m.Position.Lng;
+                        }
+
+                        // top
+                        if (m.Position.Lat > top) {
+                            top = m.Position.Lat;
+                        }
+
+                        // right
+                        if (m.Position.Lng > right) {
+                            right = m.Position.Lng;
+                        }
+
+                        // bottom
+                        if (m.Position.Lat < bottom) {
+                            bottom = m.Position.Lat;
+                        }
+                    }
+                }
+            }
+
+            if (left != double.MaxValue && right != double.MinValue && top != double.MinValue && bottom != double.MaxValue) {
+                ret = RectLatLng.FromLTRB(left, top, right, bottom);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// gets rectangle with all objects inside
+        /// </summary>
+        /// <param name="overlayId">overlay id or null to check all except zoomInsignificant</param>
+        /// <returns></returns>
+        public RectLatLng? GetRectOfAllRoutes(string overlayId)
+        {
+            RectLatLng? ret = null;
+
+            double left = double.MaxValue;
+            double top = double.MinValue;
+            double right = double.MinValue;
+            double bottom = double.MaxValue;
+
+            foreach (IMapOverlay o in fView.Overlays) {
+                if (((overlayId == null && o.IsZoomSignificant) || o.Id == overlayId) && o.IsVisible && o.Routes.Count > 0) {
+                    foreach (IMapRoute route in o.Routes) {
+                        if (!route.IsVisible || !route.HasLines) continue;
+
+                        foreach (PointLatLng p in route.Points) {
+                            // left
+                            if (p.Lng < left) {
+                                left = p.Lng;
+                            }
+
+                            // top
+                            if (p.Lat > top) {
+                                top = p.Lat;
+                            }
+
+                            // right
+                            if (p.Lng > right) {
+                                right = p.Lng;
+                            }
+
+                            // bottom
+                            if (p.Lat < bottom) {
+                                bottom = p.Lat;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (left != double.MaxValue && right != double.MinValue && top != double.MinValue && bottom != double.MaxValue) {
+                ret = RectLatLng.FromLTRB(left, top, right, bottom);
+            }
+
+            return ret;
+        }
+
+        public void ProcessMouseWheel(int eX, int eY, int eDelta)
+        {
+            if (fMouseIn && !IsDragging) {
+                if (MouseLastZoom.X != eX && MouseLastZoom.Y != eY) {
+                    fView.Position = FromLocalToLatLng(eX, eY);
+                    MouseLastZoom.X = eX;
+                    MouseLastZoom.Y = eY;
+                }
+
+                fView.SetMousePositionToMapCenter();
+
+                MouseWheelZooming = true;
+
+                if (eDelta > 0) {
+                    if (!InvertedMouseWheelZooming) {
+                        fView.Zoom = ((int)Zoom) + 1;
+                    } else {
+                        fView.Zoom = ((int)(Zoom + 0.99)) - 1;
+                    }
+                } else if (eDelta < 0) {
+                    if (!InvertedMouseWheelZooming) {
+                        fView.Zoom = ((int)(Zoom + 0.99)) - 1;
+                    } else {
+                        fView.Zoom = ((int)Zoom) + 1;
+                    }
+                }
+
+                MouseWheelZooming = false;
+            }
+        }
+
+        public void ProcessMouseClick(int eX, int eY, EventArgs e)
+        {
+            if (IsDragging) return;
+
+            GPoint rp = new GPoint(eX, eY);
+            rp.OffsetNegative(RenderOffset);
+
+            for (int i = fView.Overlays.Count - 1; i >= 0; i--) {
+                IMapOverlay o = fView.Overlays[i];
+                if (o == null || !o.IsVisible || !o.IsHitTestVisible) continue;
+
+                foreach (IMapMarker m in o.Markers) {
+                    if (m.IsVisible && m.IsHitTestVisible && m.IsInside((int)rp.X, (int)rp.Y)) {
+                        fView.DoMouseClick(m, e);
+                        break;
+                    }
+                }
+
+                foreach (IMapRoute m in o.Routes) {
+                    if (m.IsVisible && m.IsHitTestVisible && m.IsInside((int)rp.X, (int)rp.Y)) {
+                        fView.DoMouseClick(m, e);
+                        break;
+                    }
+                }
+
+                foreach (IMapPolygon m in o.Polygons) {
+                    if (m.IsVisible && m.IsHitTestVisible && m.IsInsideLatLng(FromLocalToLatLng(eX, eY))) {
+                        fView.DoMouseClick(m, e);
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void ProcessMouseDoubleClick(int eX, int eY, EventArgs e)
+        {
+            if (IsDragging) return;
+
+            GPoint rp = new GPoint(eX, eY);
+            rp.OffsetNegative(RenderOffset);
+
+            for (int i = fView.Overlays.Count - 1; i >= 0; i--) {
+                IMapOverlay o = fView.Overlays[i];
+                if (o == null || !o.IsVisible || !o.IsHitTestVisible) continue;
+
+                foreach (IMapMarker m in o.Markers) {
+                    if (m.IsVisible && m.IsHitTestVisible && m.IsInside((int)rp.X, (int)rp.Y)) {
+                        fView.DoMouseDoubleClick(m, e);
+                        break;
+                    }
+                }
+
+                foreach (IMapRoute m in o.Routes) {
+                    if (m.IsVisible && m.IsHitTestVisible && m.IsInside((int)rp.X, (int)rp.Y)) {
+                        fView.DoMouseDoubleClick(m, e);
+                        break;
+                    }
+                }
+
+                foreach (IMapPolygon m in o.Polygons) {
+                    if (m.IsVisible && m.IsHitTestVisible && m.IsInsideLatLng(FromLocalToLatLng(eX, eY))) {
+                        fView.DoMouseDoubleClick(m, e);
+                        break;
+                    }
+                }
+            }
         }
     }
 }

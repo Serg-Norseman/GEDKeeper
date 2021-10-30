@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace GKMap.WinForms
 {
-    public abstract class GMapObject : IDisposable
+    public abstract class GMapObject : IMapObject
     {
         private bool fDisposed;
         private bool fIsMouseOver;
@@ -24,7 +24,7 @@ namespace GKMap.WinForms
             get {
                 return fIsMouseOver;
             }
-            internal set {
+            set {
                 fIsMouseOver = value;
             }
         }
@@ -59,9 +59,7 @@ namespace GKMap.WinForms
                     if (Overlay != null && Overlay.Control != null) {
                         UpdateLocalPosition();
 
-                        if (!Overlay.Control.HoldInvalidation) {
-                            Overlay.Control.Invalidate();
-                        }
+                        Overlay.Control.Invalidate();
                     }
                 }
             }
@@ -77,7 +75,7 @@ namespace GKMap.WinForms
         {
         }
 
-        internal virtual bool IsInside(int x, int y)
+        public virtual bool IsInside(int x, int y)
         {
             return false;
         }

@@ -6,6 +6,7 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
+using System;
 using GKMap.MapProviders;
 
 namespace GKMap
@@ -19,6 +20,14 @@ namespace GKMap
     public delegate void MapZoomChanged();
     public delegate void MapTypeChanged(GMapProvider type);
 
+    public delegate void MarkerEnter(IMapMarker item);
+    public delegate void MarkerLeave(IMapMarker item);
+
+    public delegate void PolygonEnter(IMapPolygon item);
+    public delegate void PolygonLeave(IMapPolygon item);
+
+    public delegate void RouteEnter(IMapRoute item);
+    public delegate void RouteLeave(IMapRoute item);
 
     public interface IMapControl
     {
@@ -28,11 +37,13 @@ namespace GKMap
 
         GMapProvider MapProvider { get; set; }
 
-        double Zoom { get; set; }
+        int Zoom { get; set; }
 
         int MaxZoom { get; set; }
 
         int MinZoom { get; set; }
+
+        ObservableCollection<IMapOverlay> Overlays { get; }
 
         event PositionChanged OnPositionChanged;
         event TileLoadComplete OnTileLoadComplete;
@@ -41,13 +52,32 @@ namespace GKMap
         event MapZoomChanged OnMapZoomChanged;
         event MapTypeChanged OnMapTypeChanged;
 
-        void ReloadMap();
-
         PointLatLng FromLocalToLatLng(int x, int y);
         GPoint FromLatLngToLocal(PointLatLng point);
 
-        bool ZoomAndCenterMarkers(string overlayId);
+        void Invalidate();
+
+        void Refresh();
+
+        void ReloadMap();
 
         GeocoderStatusCode SetPositionByKeywords(string keys);
+
+        bool ZoomAndCenterMarkers(string overlayId);
+
+        bool HoldInvalidation { get; set; }
+        bool IsMouseOverMarker { get; set; }
+        bool IsMouseOverRoute { get; set; }
+        bool IsMouseOverPolygon { get; set; }
+
+        void DoMouseClick(IMapObject obj, EventArgs e);
+        void DoMouseDoubleClick(IMapObject obj, EventArgs e);
+        //void ForceUpdateOverlays();
+        void RestoreCursorOnLeave();
+        void SetCursorHandOnEnter();
+        void SetMousePositionToMapCenter();
+        void UpdateMarkerLocalPosition(IMapMarker marker);
+        void UpdateRouteLocalPosition(IMapRoute route);
+        void UpdatePolygonLocalPosition(IMapPolygon polygon);
     }
 }

@@ -14,7 +14,7 @@ namespace GKMap.WinForms
     /// <summary>
     /// represents route of map
     /// </summary>
-    public class GMapFigure : GMapObject
+    public class GMapFigure : GMapObject, IMapFigure
     {
         protected GraphicsPath fGraphicsPath;
 
@@ -60,6 +60,10 @@ namespace GKMap.WinForms
             Points.Clear();
             Tag = null;
             Name = null;
+        }
+
+        public virtual void UpdateGraphicsPath()
+        {
         }
 
         protected override void Dispose(bool disposing)

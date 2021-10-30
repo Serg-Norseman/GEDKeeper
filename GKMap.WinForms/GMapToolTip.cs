@@ -89,7 +89,7 @@ namespace GKMap.WinForms
         public virtual void OnRender(Graphics g)
         {
             Size st = g.MeasureString(Marker.ToolTipText, Font).ToSize();
-            Rectangle rect = new Rectangle(Marker.ToolTipPosition.X, Marker.ToolTipPosition.Y - st.Height, st.Width + TextPadding.Width, st.Height + TextPadding.Height);
+            Rectangle rect = new Rectangle((int)Marker.ToolTipPosition.X, (int)Marker.ToolTipPosition.Y - st.Height, st.Width + TextPadding.Width, st.Height + TextPadding.Height);
             rect.Offset(Offset.X, Offset.Y);
 
             g.DrawLine(Stroke, Marker.ToolTipPosition.X, Marker.ToolTipPosition.Y, rect.X, rect.Y + rect.Height / 2);

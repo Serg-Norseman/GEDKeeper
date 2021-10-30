@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -382,6 +383,25 @@ namespace GKMap
             }
 
             return ret;
+        }
+
+        public static bool PingNetwork(string hostNameOrAddress)
+        {
+            bool pingStatus;
+
+            using (Ping p = new Ping()) {
+                byte[] buffer = Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                int timeout = 4444; // 4s
+
+                try {
+                    PingReply reply = p.Send(hostNameOrAddress, timeout, buffer);
+                    pingStatus = (reply != null && reply.Status == IPStatus.Success);
+                } catch (Exception) {
+                    pingStatus = false;
+                }
+            }
+
+            return pingStatus;
         }
     }
 }

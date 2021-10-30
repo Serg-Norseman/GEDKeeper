@@ -61,7 +61,6 @@
     <Compile Include="GMarkerIcon.cs" />
     <Compile Include="GMapToolTip.cs" />
     <Compile Include="GMapFigure.cs" />
-    <Compile Include="ObservableCollectionThreadSafe.cs" />
     <Compile Include="GMapMarker.cs" />
     <Compile Include="GMapOverlay.cs" />
     <Compile Include="GMapImage.cs" />
@@ -69,7 +68,6 @@
     <Compile Include="GMapControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -77,40 +75,6 @@
       <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
       <Name>GKMap.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\arrow.png" />
-    <EmbeddedResource Include="Resources\arrow_shadow.png" />
-    <EmbeddedResource Include="Resources\black_small.png" />
-    <EmbeddedResource Include="Resources\blue-dot.png" />
-    <EmbeddedResource Include="Resources\blue.png" />
-    <EmbeddedResource Include="Resources\blue_small.png" />
-    <EmbeddedResource Include="Resources\brown_small.png" />
-    <EmbeddedResource Include="Resources\drag_cross_67_16.png" />
-    <EmbeddedResource Include="Resources\gray_small.png" />
-    <EmbeddedResource Include="Resources\green-dot.png" />
-    <EmbeddedResource Include="Resources\green.png" />
-    <EmbeddedResource Include="Resources\green_small.png" />
-    <EmbeddedResource Include="Resources\lightblue.png" />
-    <EmbeddedResource Include="Resources\ltblue-dot.png" />
-    <EmbeddedResource Include="Resources\msmarker_shadow.png" />
-    <EmbeddedResource Include="Resources\orange-dot.png" />
-    <EmbeddedResource Include="Resources\orange.png" />
-    <EmbeddedResource Include="Resources\orange_small.png" />
-    <EmbeddedResource Include="Resources\pink-dot.png" />
-    <EmbeddedResource Include="Resources\pink.png" />
-    <EmbeddedResource Include="Resources\purple-dot.png" />
-    <EmbeddedResource Include="Resources\purple.png" />
-    <EmbeddedResource Include="Resources\purple_small.png" />
-    <EmbeddedResource Include="Resources\red-dot.png" />
-    <EmbeddedResource Include="Resources\red.png" />
-    <EmbeddedResource Include="Resources\red_small.png" />
-    <EmbeddedResource Include="Resources\shadow_small.png" />
-    <EmbeddedResource Include="Resources\white_small.png" />
-    <EmbeddedResource Include="Resources\yellow-dot.png" />
-    <EmbeddedResource Include="Resources\yellow.png" />
-    <EmbeddedResource Include="Resources\yellow_small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

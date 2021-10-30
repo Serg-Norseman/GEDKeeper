@@ -58,7 +58,7 @@ namespace GKMap.WinForms.Demo
                 //GMapProvider.WebProxy = WebRequest.DefaultWebProxy;
 
                 // set cache mode only if no internet available
-                if (!GMapControl.PingNetwork("pingtest.com")) {
+                if (!GMaps.PingNetwork("google.com")) {
                     //fMapControl.Manager.Mode = AccessMode.CacheOnly;
                     MessageBox.Show("No internet connection available, going to CacheOnly mode.", "GKMap", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 } else {
@@ -126,38 +126,38 @@ namespace GKMap.WinForms.Demo
             AddRoute(polygonPoints);
         }
 
-        private void MainMap_OnMarkerLeave(GMapMarker item)
+        private void MainMap_OnMarkerLeave(IMapMarker item)
         {
             // dummy
         }
 
-        private void MainMap_OnMarkerEnter(GMapMarker item)
+        private void MainMap_OnMarkerEnter(IMapMarker item)
         {
             // dummy
         }
 
-        private void MainMap_OnPolygonLeave(GMapPolygon item)
+        private void MainMap_OnPolygonLeave(IMapPolygon item)
         {
             fCurrentPolygon = null;
-            item.Stroke.Color = Color.MidnightBlue;
+            ((GMapPolygon)item).Stroke.Color = Color.MidnightBlue;
         }
 
-        private void MainMap_OnPolygonEnter(GMapPolygon item)
+        private void MainMap_OnPolygonEnter(IMapPolygon item)
         {
-            fCurrentPolygon = item;
-            item.Stroke.Color = Color.Red;
+            fCurrentPolygon = item as GMapPolygon;
+            fCurrentPolygon.Stroke.Color = Color.Red;
         }
 
-        private void MainMap_OnRouteLeave(GMapRoute item)
+        private void MainMap_OnRouteLeave(IMapRoute item)
         {
             fCurrentRoute = null;
-            item.Stroke.Color = Color.MidnightBlue;
+            ((GMapRoute)item).Stroke.Color = Color.MidnightBlue;
         }
 
-        private void MainMap_OnRouteEnter(GMapRoute item)
+        private void MainMap_OnRouteEnter(IMapRoute item)
         {
-            fCurrentRoute = item;
-            item.Stroke.Color = Color.Red;
+            fCurrentRoute = item as GMapRoute;
+            fCurrentRoute.Stroke.Color = Color.Red;
         }
 
         private void MainMap_MouseUp(object sender, MouseEventArgs e)
@@ -188,7 +188,7 @@ namespace GKMap.WinForms.Demo
             }
         }
 
-        private void MainMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
+        private void MainMap_OnMarkerClick(IMapMarker item, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left) {
                 GeocoderStatusCode status;
@@ -204,7 +204,7 @@ namespace GKMap.WinForms.Demo
         {
             lock (this) {
                 fLastPosition = point;
-                fLastZoom = (int)fMapControl.Zoom;
+                fLastZoom = fMapControl.Zoom;
             }
         }
 

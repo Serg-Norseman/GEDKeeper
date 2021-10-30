@@ -6,7 +6,6 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace GKMap.WinForms
@@ -14,17 +13,17 @@ namespace GKMap.WinForms
     /// <summary>
     /// GKMap marker
     /// </summary>
-    public abstract class GMapMarker : GMapObject
+    public abstract class GMapMarker : GMapObject, IMapMarker
     {
-        private Rectangle fArea;
-        private Point fOffset;
+        private GRect fArea;
+        private GPoint fOffset;
         private PointLatLng fPosition;
         private string fToolTipText;
 
         /// <summary>
         /// marker position in local coordinates, internal only, do not set it manually
         /// </summary>
-        public Point LocalPosition
+        public GPoint LocalPosition
         {
             get {
                 return fArea.Location;
@@ -34,15 +33,13 @@ namespace GKMap.WinForms
                     fArea.Location = value;
 
                     if (Overlay != null && Overlay.Control != null) {
-                        if (!Overlay.Control.HoldInvalidation) {
-                            Overlay.Control.Invalidate();
-                        }
+                        Overlay.Control.Invalidate();
                     }
                 }
             }
         }
 
-        public Point Offset
+        public GPoint Offset
         {
             get {
                 return fOffset;
@@ -78,7 +75,7 @@ namespace GKMap.WinForms
             }
         }
 
-        public Size Size
+        public GSize Size
         {
             get {
                 return fArea.Size;
@@ -95,10 +92,10 @@ namespace GKMap.WinForms
         /// <summary>
         /// ToolTip position in local coordinates
         /// </summary>
-        public Point ToolTipPosition
+        public GPoint ToolTipPosition
         {
             get {
-                Point ret = fArea.Location;
+                GPoint ret = fArea.Location;
                 ret.Offset(-Offset.X, -Offset.Y);
                 return ret;
             }
@@ -126,7 +123,7 @@ namespace GKMap.WinForms
             IsHitTestVisible = true;
         }
 
-        internal override bool IsInside(int x, int y)
+        public override bool IsInside(int x, int y)
         {
             return fArea.Contains(x, y);
         }
@@ -157,10 +154,8 @@ namespace GKMap.WinForms
         }
     }
 
-    public delegate void MarkerClick(GMapMarker item, MouseEventArgs e);
-    public delegate void MarkerEnter(GMapMarker item);
-    public delegate void MarkerLeave(GMapMarker item);
-    public delegate void MarkerDoubleClick(GMapMarker item, MouseEventArgs e);
+    public delegate void MarkerClick(IMapMarker item, MouseEventArgs e);
+    public delegate void MarkerDoubleClick(IMapMarker item, MouseEventArgs e);
 
     /// <summary>
     /// mode of tooltip

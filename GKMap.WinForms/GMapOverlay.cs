@@ -6,7 +6,6 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
-using System;
 using System.Drawing;
 
 namespace GKMap.WinForms
@@ -14,9 +13,9 @@ namespace GKMap.WinForms
     /// <summary>
     /// GKMap overlay
     /// </summary>
-    public class GMapOverlay : IDisposable
+    public class GMapOverlay : IMapOverlay
     {
-        private GMapControl fControl;
+        private IMapControl fControl;
         private bool fDisposed;
         private bool fIsHitTestVisible = true;
         private bool fIsVisible = true;
@@ -53,9 +52,7 @@ namespace GKMap.WinForms
                             }
                             Control.RestoreCursorOnLeave();
 
-                            if (!Control.HoldInvalidation) {
-                                Control.Invalidate();
-                            }
+                            Control.Invalidate();
                         }
                     }
                 }
@@ -88,19 +85,19 @@ namespace GKMap.WinForms
         /// <summary>
         /// list of markers, should be thread safe
         /// </summary>
-        public readonly ObservableCollectionThreadSafe<GMapMarker> Markers = new ObservableCollectionThreadSafe<GMapMarker>();
+        public ObservableCollection<IMapMarker> Markers { get; private set; }
 
         /// <summary>
         /// list of routes, should be thread safe
         /// </summary>
-        public readonly ObservableCollectionThreadSafe<GMapRoute> Routes = new ObservableCollectionThreadSafe<GMapRoute>();
+        public ObservableCollection<IMapRoute> Routes { get; private set; }
 
         /// <summary>
         /// list of polygons, should be thread safe
         /// </summary>
-        public readonly ObservableCollectionThreadSafe<GMapPolygon> Polygons = new ObservableCollectionThreadSafe<GMapPolygon>();
+        public ObservableCollection<IMapPolygon> Polygons { get; private set; }
 
-        public GMapControl Control
+        public IMapControl Control
         {
             get {
                 return fControl;
@@ -112,13 +109,15 @@ namespace GKMap.WinForms
 
         public GMapOverlay()
         {
+            Markers = new ObservableCollectionThreadSafe<IMapMarker>();
+            Routes = new ObservableCollectionThreadSafe<IMapRoute>();
+            Polygons = new ObservableCollectionThreadSafe<IMapPolygon>();
             CreateEvents();
         }
 
-        public GMapOverlay(string id)
+        public GMapOverlay(string id) : this()
         {
             Id = id;
-            CreateEvents();
         }
 
         private void CreateEvents()
@@ -163,9 +162,7 @@ namespace GKMap.WinForms
                     }
                 }
 
-                if (!Control.HoldInvalidation) {
-                    Control.Invalidate();
-                }
+                Control.Invalidate();
             }
         }
 
@@ -190,9 +187,7 @@ namespace GKMap.WinForms
                     }
                 }
 
-                if (!Control.HoldInvalidation) {
-                    Control.Invalidate();
-                }
+                Control.Invalidate();
             }
         }
 
@@ -217,9 +212,7 @@ namespace GKMap.WinForms
                     }
                 }
 
-                if (!Control.HoldInvalidation) {
-                    Control.Invalidate();
-                }
+                Control.Invalidate();
             }
         }
 

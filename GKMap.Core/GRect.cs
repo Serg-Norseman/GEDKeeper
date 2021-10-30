@@ -125,6 +125,11 @@ namespace GKMap
             return !(left == right);
         }
 
+        public bool Contains(long x, long y)
+        {
+            return this.X <= x && x < this.X + this.Width && this.Y <= y && y < this.Y + this.Height;
+        }
+
         public override int GetHashCode()
         {
             if (IsEmpty) {

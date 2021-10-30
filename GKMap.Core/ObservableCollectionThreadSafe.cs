@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.ComponentModel;
 
 namespace GKMap.WinForms
 {
@@ -33,12 +34,12 @@ namespace GKMap.WinForms
 
                     // Walk thru invocation list
                     foreach (var handler in delegates) {
-                        var dispatcherObject = handler.Target as System.Windows.Forms.Control;
+                        var dispatcherObject = handler.Target as ISynchronizeInvoke /*System.Windows.Forms.Control*/;
 
                         // If the subscriber is a DispatcherObject and different thread
                         if (dispatcherObject != null && dispatcherObject.InvokeRequired) {
                             // Invoke handler in the target dispatcher's thread
-                            dispatcherObject.Invoke(handler, this, e);
+                            dispatcherObject.Invoke(handler, new object[] { this, e });
                         } else {
                             // Execute handler as is
                             fCollectionChanged(this, e);

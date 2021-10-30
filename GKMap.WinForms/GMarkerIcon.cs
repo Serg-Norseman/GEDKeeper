@@ -9,7 +9,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 
 namespace GKMap.WinForms
 {
@@ -79,19 +78,19 @@ namespace GKMap.WinForms
             : base(p)
         {
             fBitmap = bitmap;
-            Size = new Size(bitmap.Width, bitmap.Height);
-            Offset = new Point(-Size.Width / 2, -Size.Height);
+            Size = new GSize(bitmap.Width, bitmap.Height);
+            Offset = new GPoint(-Size.Width / 2, -Size.Height);
         }
 
         private void LoadBitmap()
         {
             fBitmap = GetIcon(Type.ToString());
-            Size = new Size(fBitmap.Width, fBitmap.Height);
+            Size = new GSize(fBitmap.Width, fBitmap.Height);
 
             switch (Type) {
                 case GMarkerIconType.arrow:
                     {
-                        Offset = new Point(-11, -Size.Height);
+                        Offset = new GPoint(-11, -Size.Height);
                         if (fArrowShadow == null) {
                             fArrowShadow = GetIcon("arrow_shadow");
                         }
@@ -116,7 +115,7 @@ namespace GKMap.WinForms
                 case GMarkerIconType.red:
                 case GMarkerIconType.red_dot:
                     {
-                        Offset = new Point(-Size.Width / 2 + 1, -Size.Height + 1);
+                        Offset = new GPoint(-Size.Width / 2 + 1, -Size.Height + 1);
                         if (fMarkerShadow == null) {
                             fMarkerShadow = GetIcon("msmarker_shadow");
                         }
@@ -135,7 +134,7 @@ namespace GKMap.WinForms
                 case GMarkerIconType.red_small:
                 case GMarkerIconType.white_small:
                     {
-                        Offset = new Point(-Size.Width / 2, -Size.Height + 1);
+                        Offset = new GPoint(-Size.Width / 2, -Size.Height + 1);
                         if (fShadowSmall == null) {
                             fShadowSmall = GetIcon("shadow_small");
                         }
@@ -149,17 +148,12 @@ namespace GKMap.WinForms
         {
             Bitmap ret;
             if (!IconCache.TryGetValue(name, out ret)) {
-                ret = LoadResourceBitmap("GKMap.WinForms.Resources." + name + ".png");
+                string resName = "GKMap.Resources.Images." + name + ".png";
+                Stream resStream = Stuff.LoadResourceStream(resName);
+                ret = new Bitmap(resStream);
                 IconCache.Add(name, ret);
             }
             return ret;
-        }
-
-        private static Bitmap LoadResourceBitmap(string resName)
-        {
-            Assembly assembly = typeof(GMarkerIcon).Assembly;
-            Stream resStream = assembly.GetManifestResourceStream(resName);
-            return new Bitmap(resStream);
         }
 
         public override void OnRender(Graphics g)

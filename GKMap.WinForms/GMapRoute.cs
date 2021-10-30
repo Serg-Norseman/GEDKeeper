@@ -17,7 +17,7 @@ namespace GKMap.WinForms
     /// <summary>
     /// GKMap route
     /// </summary>
-    public class GMapRoute : GMapFigure
+    public class GMapRoute : GMapFigure, IMapRoute
     {
         public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(144, Color.MidnightBlue));
 
@@ -60,12 +60,12 @@ namespace GKMap.WinForms
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        internal override bool IsInside(int x, int y)
+        public override bool IsInside(int x, int y)
         {
             return fGraphicsPath != null && fGraphicsPath.IsOutlineVisible(x, y, Stroke);
         }
 
-        internal void UpdateGraphicsPath()
+        public override void UpdateGraphicsPath()
         {
             if (fGraphicsPath == null) {
                 fGraphicsPath = new GraphicsPath();
@@ -109,8 +109,6 @@ namespace GKMap.WinForms
         }
     }
 
-    public delegate void RouteClick(GMapRoute item, MouseEventArgs e);
-    public delegate void RouteEnter(GMapRoute item);
-    public delegate void RouteLeave(GMapRoute item);
-    public delegate void RouteDoubleClick(GMapRoute item, MouseEventArgs e);
+    public delegate void RouteClick(IMapRoute item, MouseEventArgs e);
+    public delegate void RouteDoubleClick(IMapRoute item, MouseEventArgs e);
 }

@@ -64,12 +64,12 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition=" '$(EMBED_LIBS)' != 'true' ">
+  <ItemGroup Condition=" !$(DefineConstants.Contains('EMBED_LIBS;')) ">
     <Reference Include="System.Data.SQLite">
       <HintPath>..\libs\x86\System.Data.SQLite.DLL</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition=" '$(EMBED_LIBS)' == 'true' ">
+  <ItemGroup Condition=" $(DefineConstants.Contains('EMBED_LIBS;')) ">
     <Reference Include="System.Data.SQLite">
       <HintPath>..\libs\x86\System.Data.SQLite.DLL</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -83,10 +83,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheProviders\MemoryCache.cs" />
+    <Compile Include="IMapFigure.cs" />
+    <Compile Include="IMapMarker.cs" />
+    <Compile Include="IMapObject.cs" />
+    <Compile Include="IMapOverlay.cs" />
+    <Compile Include="IMapPolygon.cs" />
+    <Compile Include="IMapRoute.cs" />
     <Compile Include="MapProviders\EmptyProvider.cs" />
     <Compile Include="EmptyWebProxy.cs" />
     <Compile Include="MapProviders\GMapProviders.cs" />
     <Compile Include="ObservableCollection.cs" />
+    <Compile Include="ObservableCollectionThreadSafe.cs" />
     <Compile Include="SocksHttpWeb.cs" />
     <Compile Include="DrawTile.cs" />
     <Compile Include="ProxySocket\AuthMethod.cs" />
@@ -142,12 +149,45 @@
     <Compile Include="Stuff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(EMBED_LIBS)' == 'true'">
+  <ItemGroup Condition=" $(DefineConstants.Contains('EMBED_LIBS;')) ">
     <EmbeddedResource Include="Resources\System.Data.SQLite.x64.NET4.dll.gz" />
     <EmbeddedResource Include="Resources\System.Data.SQLite.x86.NET4.dll.gz" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\CreateTileDb.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\arrow.png" />
+    <EmbeddedResource Include="Resources\Images\arrow_shadow.png" />
+    <EmbeddedResource Include="Resources\Images\black_small.png" />
+    <EmbeddedResource Include="Resources\Images\blue-dot.png" />
+    <EmbeddedResource Include="Resources\Images\blue.png" />
+    <EmbeddedResource Include="Resources\Images\blue_small.png" />
+    <EmbeddedResource Include="Resources\Images\brown_small.png" />
+    <EmbeddedResource Include="Resources\Images\drag_cross_67_16.png" />
+    <EmbeddedResource Include="Resources\Images\gray_small.png" />
+    <EmbeddedResource Include="Resources\Images\green-dot.png" />
+    <EmbeddedResource Include="Resources\Images\green.png" />
+    <EmbeddedResource Include="Resources\Images\green_small.png" />
+    <EmbeddedResource Include="Resources\Images\lightblue.png" />
+    <EmbeddedResource Include="Resources\Images\ltblue-dot.png" />
+    <EmbeddedResource Include="Resources\Images\msmarker_shadow.png" />
+    <EmbeddedResource Include="Resources\Images\orange-dot.png" />
+    <EmbeddedResource Include="Resources\Images\orange.png" />
+    <EmbeddedResource Include="Resources\Images\orange_small.png" />
+    <EmbeddedResource Include="Resources\Images\pink-dot.png" />
+    <EmbeddedResource Include="Resources\Images\pink.png" />
+    <EmbeddedResource Include="Resources\Images\purple-dot.png" />
+    <EmbeddedResource Include="Resources\Images\purple.png" />
+    <EmbeddedResource Include="Resources\Images\purple_small.png" />
+    <EmbeddedResource Include="Resources\Images\red-dot.png" />
+    <EmbeddedResource Include="Resources\Images\red.png" />
+    <EmbeddedResource Include="Resources\Images\red_small.png" />
+    <EmbeddedResource Include="Resources\Images\shadow_small.png" />
+    <EmbeddedResource Include="Resources\Images\white_small.png" />
+    <EmbeddedResource Include="Resources\Images\yellow-dot.png" />
+    <EmbeddedResource Include="Resources\Images\yellow.png" />
+    <EmbeddedResource Include="Resources\Images\yellow_small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

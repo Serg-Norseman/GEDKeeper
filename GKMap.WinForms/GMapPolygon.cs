@@ -16,7 +16,7 @@ namespace GKMap.WinForms
     /// <summary>
     /// GKMap polygon
     /// </summary>
-    public class GMapPolygon : GMapFigure
+    public class GMapPolygon : GMapFigure, IMapPolygon
     {
         public static readonly Brush DefaultFill = new SolidBrush(Color.FromArgb(155, Color.AliceBlue));
         public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(155, Color.MidnightBlue));
@@ -93,12 +93,12 @@ namespace GKMap.WinForms
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        internal override bool IsInside(int x, int y)
+        public override bool IsInside(int x, int y)
         {
             return fGraphicsPath != null && fGraphicsPath.IsVisible(x, y);
         }
 
-        internal void UpdateGraphicsPath()
+        public override void UpdateGraphicsPath()
         {
             if (fGraphicsPath == null) {
                 fGraphicsPath = new GraphicsPath();
@@ -128,8 +128,6 @@ namespace GKMap.WinForms
         }
     }
 
-    public delegate void PolygonClick(GMapPolygon item, MouseEventArgs e);
-    public delegate void PolygonEnter(GMapPolygon item);
-    public delegate void PolygonLeave(GMapPolygon item);
-    public delegate void PolygonDoubleClick(GMapPolygon item, MouseEventArgs e);
+    public delegate void PolygonClick(IMapPolygon item, MouseEventArgs e);
+    public delegate void PolygonDoubleClick(IMapPolygon item, MouseEventArgs e);
 }
