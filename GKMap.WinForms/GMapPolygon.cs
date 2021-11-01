@@ -9,17 +9,20 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
+using GKMap.MapObjects;
 
 namespace GKMap.WinForms
 {
     /// <summary>
-    /// GKMap polygon
+    /// GKMap polygon.
     /// </summary>
-    public class GMapPolygon : GMapFigure, IMapPolygon
+    public class GMapPolygon : MapPolygon, IRenderable
     {
         public static readonly Brush DefaultFill = new SolidBrush(Color.FromArgb(155, Color.AliceBlue));
         public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(155, Color.MidnightBlue));
+
+
+        protected GraphicsPath fGraphicsPath;
 
 
         /// <summary>
@@ -40,51 +43,8 @@ namespace GKMap.WinForms
         }
 
         public GMapPolygon(string name, IEnumerable<PointLatLng> points)
-           : base(name, points)
+            : base(name, points)
         {
-            fVisible = true;
-            IsHitTestVisible = false;
-        }
-
-        protected override void UpdateLocalPosition()
-        {
-            if (fVisible) {
-                Overlay.Control.UpdatePolygonLocalPosition(this);
-            } else {
-                if (Overlay.Control.IsMouseOverPolygon) {
-                    Overlay.Control.IsMouseOverPolygon = false;
-                    Overlay.Control.RestoreCursorOnLeave();
-                }
-            }
-        }
-
-        /// <summary>
-        /// checks if point is inside the polygon,
-        /// </summary>
-        /// <param name="p"></param>
-        /// <returns></returns>
-        public bool IsInsideLatLng(PointLatLng p)
-        {
-            int count = Points.Count;
-
-            if (count < 3) {
-                return false;
-            }
-
-            bool result = false;
-
-            for (int i = 0, j = count - 1; i < count; i++) {
-                var p1 = Points[i];
-                var p2 = Points[j];
-
-                if (p1.Lat < p.Lat && p2.Lat >= p.Lat || p2.Lat < p.Lat && p1.Lat >= p.Lat) {
-                    if (p1.Lng + (p.Lat - p1.Lat) / (p2.Lat - p1.Lat) * (p2.Lng - p1.Lng) < p.Lng) {
-                        result = !result;
-                    }
-                }
-                j = i;
-            }
-            return result;
         }
 
         /// <summary>
@@ -119,15 +79,21 @@ namespace GKMap.WinForms
             }
         }
 
-        public override void OnRender(Graphics g)
+        public void OnRender(Graphics g)
         {
             if (IsVisible && fGraphicsPath != null) {
                 g.FillPath(Fill, fGraphicsPath);
                 g.DrawPath(Stroke, fGraphicsPath);
             }
         }
-    }
 
-    public delegate void PolygonClick(IMapPolygon item, MouseEventArgs e);
-    public delegate void PolygonDoubleClick(IMapPolygon item, MouseEventArgs e);
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && fGraphicsPath != null) {
+                fGraphicsPath.Dispose();
+                fGraphicsPath = null;
+            }
+            base.Dispose(disposing);
+        }
+    }
 }

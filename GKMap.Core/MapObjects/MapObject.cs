@@ -1,13 +1,20 @@
-﻿using System;
-using System.Drawing;
+﻿/*
+ *  This file is part of the "GKMap".
+ *  GKMap project borrowed from GMap.NET (by radioman).
+ *
+ *  Copyright (C) 2009-2018 by radioman (email@radioman.lt).
+ *  This program is licensed under the FLAT EARTH License.
+ */
 
-namespace GKMap.WinForms
+using System;
+
+namespace GKMap.MapObjects
 {
-    public abstract class GMapObject : IMapObject
+    public abstract class MapObject : IDisposable
     {
         private bool fDisposed;
         private bool fIsMouseOver;
-        private GMapOverlay fOverlay;
+        private MapOverlay fOverlay;
         protected bool fVisible;
 
 
@@ -29,7 +36,7 @@ namespace GKMap.WinForms
             }
         }
 
-        public GMapOverlay Overlay
+        public MapOverlay Overlay
         {
             get {
                 return fOverlay;
@@ -65,12 +72,6 @@ namespace GKMap.WinForms
             }
         }
 
-
-        public virtual void OnRender(Graphics g)
-        {
-            //
-        }
-
         protected virtual void UpdateLocalPosition()
         {
         }
@@ -80,7 +81,7 @@ namespace GKMap.WinForms
             return false;
         }
 
-        ~GMapObject()
+        ~MapObject()
         {
             Dispose(false);
         }

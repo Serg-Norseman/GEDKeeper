@@ -6,16 +6,16 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
-using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using GKMap.MapObjects;
 
 namespace GKMap.WinForms
 {
     /// <summary>
-    /// GKMap marker
+    /// GKMap marker tooltip.
     /// </summary>
-    public class GMapToolTip : IDisposable
+    public class GMapToolTip : MapToolTip, IRenderable
     {
         public static readonly Brush DefaultFill = new SolidBrush(Color.FromArgb(222, Color.AliceBlue));
         public static readonly Font DefaultFont = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Bold, GraphicsUnit.Pixel);
@@ -23,22 +23,6 @@ namespace GKMap.WinForms
         public static readonly StringFormat DefaultFormat = new StringFormat();
         public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(140, Color.MidnightBlue));
 
-
-        private bool fDisposed;
-        private GMapMarker fMarker;
-
-
-        public GMapMarker Marker
-        {
-            get {
-                return fMarker;
-            }
-            internal set {
-                fMarker = value;
-            }
-        }
-
-        public Point Offset { get; set; }
 
         /// <summary>
         /// string format
@@ -80,17 +64,15 @@ namespace GKMap.WinForms
             DefaultFormat.Alignment = StringAlignment.Center;
         }
 
-        public GMapToolTip(GMapMarker marker)
+        public GMapToolTip(MapMarker marker) : base(marker)
         {
-            Marker = marker;
-            Offset = new Point(14, -44);
         }
 
         public virtual void OnRender(Graphics g)
         {
             Size st = g.MeasureString(Marker.ToolTipText, Font).ToSize();
             Rectangle rect = new Rectangle((int)Marker.ToolTipPosition.X, (int)Marker.ToolTipPosition.Y - st.Height, st.Width + TextPadding.Width, st.Height + TextPadding.Height);
-            rect.Offset(Offset.X, Offset.Y);
+            rect.Offset((int)Offset.X, (int)Offset.Y);
 
             g.DrawLine(Stroke, Marker.ToolTipPosition.X, Marker.ToolTipPosition.Y, rect.X, rect.Y + rect.Height / 2);
 
@@ -98,13 +80,6 @@ namespace GKMap.WinForms
             g.DrawRectangle(Stroke, rect);
 
             g.DrawString(Marker.ToolTipText, Font, Foreground, rect, Format);
-        }
-
-        public void Dispose()
-        {
-            if (!fDisposed) {
-                fDisposed = true;
-            }
         }
     }
 }

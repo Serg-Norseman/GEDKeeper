@@ -7,6 +7,7 @@
  */
 
 using System;
+using GKMap.MapObjects;
 using GKMap.MapProviders;
 
 namespace GKMap
@@ -20,30 +21,32 @@ namespace GKMap
     public delegate void MapZoomChanged();
     public delegate void MapTypeChanged(GMapProvider type);
 
-    public delegate void MarkerEnter(IMapMarker item);
-    public delegate void MarkerLeave(IMapMarker item);
+    public delegate void MarkerEnter(MapMarker item);
+    public delegate void MarkerLeave(MapMarker item);
 
-    public delegate void PolygonEnter(IMapPolygon item);
-    public delegate void PolygonLeave(IMapPolygon item);
+    public delegate void PolygonEnter(MapPolygon item);
+    public delegate void PolygonLeave(MapPolygon item);
 
-    public delegate void RouteEnter(IMapRoute item);
-    public delegate void RouteLeave(IMapRoute item);
+    public delegate void RouteEnter(MapRoute item);
+    public delegate void RouteLeave(MapRoute item);
 
-    public interface IMapControl
+    internal interface IMapControl
     {
-        PointLatLng Position { get; set; }
-
         string CacheLocation { get; set; }
 
-        GMapProvider MapProvider { get; set; }
+        MapCore Core { get; }
 
-        int Zoom { get; set; }
+        GMapProvider MapProvider { get; set; }
 
         int MaxZoom { get; set; }
 
         int MinZoom { get; set; }
 
-        ObservableCollection<IMapOverlay> Overlays { get; }
+        PointLatLng Position { get; set; }
+
+        int Zoom { get; set; }
+
+        ObservableCollectionThreadSafe<MapOverlay> Overlays { get; }
 
         event PositionChanged OnPositionChanged;
         event TileLoadComplete OnTileLoadComplete;
@@ -70,14 +73,18 @@ namespace GKMap
         bool IsMouseOverRoute { get; set; }
         bool IsMouseOverPolygon { get; set; }
 
-        void DoMouseClick(IMapObject obj, EventArgs e);
-        void DoMouseDoubleClick(IMapObject obj, EventArgs e);
-        //void ForceUpdateOverlays();
+        #region Callbacks
+
+        void DoMouseClick(MapObject obj, EventArgs e);
+        void DoMouseDoubleClick(MapObject obj, EventArgs e);
         void RestoreCursorOnLeave();
         void SetCursorHandOnEnter();
+        void DrawTile(object go, PureImage pureImage, ref bool found);
+        void DrawLowerTile(object go, PureImage pureImage, long Ix, long xoff, long yoff, ref bool found);
+        void DrawMissingTile(object go, Exception ex);
+        void ShowTileGridLines(object go, DrawTile tilePoint);
         void SetMousePositionToMapCenter();
-        void UpdateMarkerLocalPosition(IMapMarker marker);
-        void UpdateRouteLocalPosition(IMapRoute route);
-        void UpdatePolygonLocalPosition(IMapPolygon polygon);
+
+        #endregion
     }
 }

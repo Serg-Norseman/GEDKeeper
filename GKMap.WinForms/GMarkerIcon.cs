@@ -9,42 +9,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using GKMap.MapObjects;
 
 namespace GKMap.WinForms
 {
-    public enum GMarkerIconType
-    {
-        none = 0,
-        arrow,
-        blue,
-        blue_small,
-        blue_dot,
-        brown_small,
-        gray_small,
-        green,
-        green_small,
-        green_dot,
-        yellow,
-        yellow_small,
-        yellow_dot,
-        lightblue,
-        lightblue_dot,
-        orange,
-        orange_small,
-        orange_dot,
-        pink,
-        pink_dot,
-        purple,
-        purple_small,
-        purple_dot,
-        red,
-        red_small,
-        red_dot,
-        black_small,
-        white_small,
-    }
-
-    public class GMarkerIcon : GMapMarker
+    /// <summary>
+    /// GKMap marker with icon.
+    /// </summary>
+    public sealed class GMarkerIcon : MapMarker, IRenderable
     {
         private static readonly Dictionary<string, Bitmap> IconCache = new Dictionary<string, Bitmap>();
 
@@ -57,6 +29,19 @@ namespace GKMap.WinForms
         private static Bitmap fShadowSmall;
 
         public GMarkerIconType Type { get; private set; }
+
+        public override string ToolTipText
+        {
+            get {
+                return base.ToolTipText;
+            }
+            set {
+                if (ToolTip == null && !string.IsNullOrEmpty(value)) {
+                    ToolTip = new GMapRoundedToolTip(this);
+                }
+                base.ToolTipText = value;
+            }
+        }
 
 
         public GMarkerIcon(PointLatLng p, GMarkerIconType type)
@@ -156,7 +141,7 @@ namespace GKMap.WinForms
             return ret;
         }
 
-        public override void OnRender(Graphics g)
+        public void OnRender(Graphics g)
         {
             if (fBitmapShadow != null) {
                 g.DrawImage(fBitmapShadow, LocalPosition.X, LocalPosition.Y, fBitmapShadow.Width, fBitmapShadow.Height);
@@ -166,11 +151,9 @@ namespace GKMap.WinForms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && fBitmap != null) {
-                if (!IconCache.ContainsValue(fBitmap)) {
-                    fBitmap.Dispose();
-                    fBitmap = null;
-                }
+            if (disposing && fBitmap != null && !IconCache.ContainsValue(fBitmap)) {
+                fBitmap.Dispose();
+                fBitmap = null;
             }
             base.Dispose(disposing);
         }

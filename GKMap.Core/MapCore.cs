@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using GKMap.MapObjects;
 using GKMap.MapProviders;
 
 namespace GKMap
@@ -20,12 +21,14 @@ namespace GKMap
     /// <summary>
     /// internal map control core
     /// </summary>
-    internal class Core : IDisposable
+    internal class MapCore : IDisposable
     {
         private BackgroundWorker fInvalidator;
         private bool? fIsRunningOnMono;
         private DateTime fLastTileLoadStart = DateTime.Now;
         private DateTime fLastTileLoadEnd = DateTime.Now;
+        private bool fLazyEvents = true;
+        private RectLatLng? fLazySetZoomToFitRect;
         private int fLoadWaitCount;
         private GSize fMinOfTiles;
         private GSize fMaxOfTiles;
@@ -313,7 +316,7 @@ namespace GKMap
         public event RouteLeave OnRouteLeave;
 
 
-        public Core(IMapControl view)
+        public MapCore(IMapControl view)
         {
             fView = view;
 
@@ -331,21 +334,38 @@ namespace GKMap
         /// <returns></returns>
         public bool SetZoomToFitRect(RectLatLng rect)
         {
-            int mmaxZoom = GetMaxZoomToFitRect(rect);
-            if (mmaxZoom > 0) {
-                Position = new PointLatLng(rect.Lat - (rect.HeightLat / 2), rect.Lng + (rect.WidthLng / 2));
+            if (fLazyEvents) {
+                fLazySetZoomToFitRect = rect;
+            } else {
+                int maxZoom = GetMaxZoomToFitRect(rect);
+                if (maxZoom > 0) {
+                    PointLatLng center = new PointLatLng(rect.Lat - (rect.HeightLat / 2), rect.Lng + (rect.WidthLng / 2));
+                    fView.Position = center;
 
-                if (mmaxZoom > MaxZoom) {
-                    mmaxZoom = MaxZoom;
+                    if (maxZoom > MaxZoom) {
+                        maxZoom = MaxZoom;
+                    }
+
+                    if (Zoom != maxZoom) {
+                        fView.Zoom = maxZoom;
+                    }
+
+                    return true;
                 }
-
-                if (Zoom != mmaxZoom) {
-                    Zoom = mmaxZoom;
-                }
-
-                return true;
             }
             return false;
+        }
+
+        public void ResetZoomToFitRect()
+        {
+            if (fLazyEvents) {
+                fLazyEvents = false;
+
+                if (fLazySetZoomToFitRect.HasValue) {
+                    SetZoomToFitRect(fLazySetZoomToFitRect.Value);
+                    fLazySetZoomToFitRect = null;
+                }
+            }
         }
 
         public BackgroundWorker OnMapOpen()
@@ -495,6 +515,8 @@ namespace GKMap
             DragPoint.X = pt.X - RenderOffset.X;
             DragPoint.Y = pt.Y - RenderOffset.Y;
             IsDragging = true;
+
+            Debug.WriteLine("IsDragging = " + IsDragging);
         }
 
         /// <summary>
@@ -504,8 +526,9 @@ namespace GKMap
         {
             IsDragging = false;
             MouseDown = GPoint.Empty;
-
             RefreshEvent.Set();
+
+            Debug.WriteLine("IsDragging = " + IsDragging);
         }
 
         /// <summary>
@@ -597,6 +620,8 @@ namespace GKMap
             if (OnMapDrag != null) {
                 OnMapDrag();
             }
+
+            ForceUpdateOverlays();
         }
 
         /// <summary>
@@ -865,7 +890,7 @@ namespace GKMap
             }
         }
 
-        ~Core()
+        ~MapCore()
         {
             Dispose(false);
         }
@@ -933,14 +958,17 @@ namespace GKMap
             GC.SuppressFinalize(this);
         }
 
-        internal void ProcessOverlaysMouseMove(GPoint rp)
+        internal void ProcessOverlaysMouseMove(int eX, int eY)
         {
+            GPoint rp = new GPoint(eX, eY);
+            rp.OffsetNegative(RenderOffset);
+
             for (int i = fView.Overlays.Count - 1; i >= 0; i--) {
-                IMapOverlay o = fView.Overlays[i];
+                MapOverlay o = fView.Overlays[i];
                 if (o == null || !o.IsVisible || !o.IsHitTestVisible)
                     continue;
 
-                foreach (IMapMarker m in o.Markers) {
+                foreach (MapMarker m in o.Markers) {
                     if (!m.IsVisible || !m.IsHitTestVisible)
                         continue;
 
@@ -971,7 +999,7 @@ namespace GKMap
                     }
                 }
 
-                foreach (IMapRoute m in o.Routes) {
+                foreach (MapRoute m in o.Routes) {
                     if (!m.IsVisible || !m.IsHitTestVisible)
                         continue;
 
@@ -1004,7 +1032,7 @@ namespace GKMap
                     }
                 }
 
-                foreach (IMapPolygon m in o.Polygons) {
+                foreach (MapPolygon m in o.Polygons) {
                     if (!m.IsVisible || !m.IsHitTestVisible)
                         continue;
 
@@ -1043,7 +1071,7 @@ namespace GKMap
         /// updates markers local position
         /// </summary>
         /// <param name="marker"></param>
-        public void UpdateMarkerLocalPosition(IMapMarker marker)
+        public void UpdateMarkerLocalPosition(MapMarker marker)
         {
             GPoint p = FromLatLngToLocal(marker.Position);
             p.OffsetNegative(RenderOffset);
@@ -1054,7 +1082,7 @@ namespace GKMap
         /// updates routes local position
         /// </summary>
         /// <param name="route"></param>
-        public void UpdateRouteLocalPosition(IMapRoute route)
+        public void UpdateRouteLocalPosition(MapRoute route)
         {
             route.LocalPoints.Clear();
 
@@ -1070,7 +1098,7 @@ namespace GKMap
         /// updates polygons local position
         /// </summary>
         /// <param name="polygon"></param>
-        public void UpdatePolygonLocalPosition(IMapPolygon polygon)
+        public void UpdatePolygonLocalPosition(MapPolygon polygon)
         {
             polygon.LocalPoints.Clear();
 
@@ -1107,11 +1135,11 @@ namespace GKMap
         }
 
         /// <summary>
-        /// gets rect of route
+        /// gets rect of route or polygon
         /// </summary>
-        /// <param name="route"></param>
+        /// <param name="figure"></param>
         /// <returns></returns>
-        public RectLatLng? GetRectOfRoute(IMapFigure figure)
+        public RectLatLng? GetRectOfFigure(MapFigure figure)
         {
             RectLatLng? ret = null;
 
@@ -1161,9 +1189,9 @@ namespace GKMap
             double right = double.MinValue;
             double bottom = double.MaxValue;
 
-            foreach (IMapOverlay o in fView.Overlays) {
+            foreach (MapOverlay o in fView.Overlays) {
                 if (((overlayId == null && o.IsZoomSignificant) || o.Id == overlayId) && o.IsVisible && o.Markers.Count > 0) {
-                    foreach (IMapMarker m in o.Markers) {
+                    foreach (MapMarker m in o.Markers) {
                         if (!m.IsVisible) continue;
 
                         // left
@@ -1210,9 +1238,9 @@ namespace GKMap
             double right = double.MinValue;
             double bottom = double.MaxValue;
 
-            foreach (IMapOverlay o in fView.Overlays) {
+            foreach (MapOverlay o in fView.Overlays) {
                 if (((overlayId == null && o.IsZoomSignificant) || o.Id == overlayId) && o.IsVisible && o.Routes.Count > 0) {
-                    foreach (IMapRoute route in o.Routes) {
+                    foreach (MapRoute route in o.Routes) {
                         if (!route.IsVisible || !route.HasLines) continue;
 
                         foreach (PointLatLng p in route.Points) {
@@ -1286,24 +1314,24 @@ namespace GKMap
             rp.OffsetNegative(RenderOffset);
 
             for (int i = fView.Overlays.Count - 1; i >= 0; i--) {
-                IMapOverlay o = fView.Overlays[i];
+                MapOverlay o = fView.Overlays[i];
                 if (o == null || !o.IsVisible || !o.IsHitTestVisible) continue;
 
-                foreach (IMapMarker m in o.Markers) {
+                foreach (MapMarker m in o.Markers) {
                     if (m.IsVisible && m.IsHitTestVisible && m.IsInside((int)rp.X, (int)rp.Y)) {
                         fView.DoMouseClick(m, e);
                         break;
                     }
                 }
 
-                foreach (IMapRoute m in o.Routes) {
+                foreach (MapRoute m in o.Routes) {
                     if (m.IsVisible && m.IsHitTestVisible && m.IsInside((int)rp.X, (int)rp.Y)) {
                         fView.DoMouseClick(m, e);
                         break;
                     }
                 }
 
-                foreach (IMapPolygon m in o.Polygons) {
+                foreach (MapPolygon m in o.Polygons) {
                     if (m.IsVisible && m.IsHitTestVisible && m.IsInsideLatLng(FromLocalToLatLng(eX, eY))) {
                         fView.DoMouseClick(m, e);
                         break;
@@ -1320,29 +1348,154 @@ namespace GKMap
             rp.OffsetNegative(RenderOffset);
 
             for (int i = fView.Overlays.Count - 1; i >= 0; i--) {
-                IMapOverlay o = fView.Overlays[i];
+                MapOverlay o = fView.Overlays[i];
                 if (o == null || !o.IsVisible || !o.IsHitTestVisible) continue;
 
-                foreach (IMapMarker m in o.Markers) {
+                foreach (MapMarker m in o.Markers) {
                     if (m.IsVisible && m.IsHitTestVisible && m.IsInside((int)rp.X, (int)rp.Y)) {
                         fView.DoMouseDoubleClick(m, e);
                         break;
                     }
                 }
 
-                foreach (IMapRoute m in o.Routes) {
+                foreach (MapRoute m in o.Routes) {
                     if (m.IsVisible && m.IsHitTestVisible && m.IsInside((int)rp.X, (int)rp.Y)) {
                         fView.DoMouseDoubleClick(m, e);
                         break;
                     }
                 }
 
-                foreach (IMapPolygon m in o.Polygons) {
+                foreach (MapPolygon m in o.Polygons) {
                     if (m.IsVisible && m.IsHitTestVisible && m.IsInsideLatLng(FromLocalToLatLng(eX, eY))) {
                         fView.DoMouseDoubleClick(m, e);
                         break;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// update objects when map is dragged/zoomed
+        /// </summary>
+        public void ForceUpdateOverlays()
+        {
+            try {
+                fView.HoldInvalidation = true;
+
+                foreach (var o in fView.Overlays) {
+                    if (o.IsVisible) {
+                        o.ForceUpdate();
+                    }
+                }
+            } finally {
+                fView.Refresh();
+            }
+        }
+
+        /// <summary>
+        /// sets to max zoom to fit all markers and centers them in map
+        /// </summary>
+        /// <param name="overlayId">overlay id or null to check all</param>
+        /// <returns></returns>
+        public bool ZoomAndCenterMarkers(string overlayId)
+        {
+            RectLatLng? rect = GetRectOfAllMarkers(overlayId);
+            if (rect.HasValue) {
+                return SetZoomToFitRect(rect.Value);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// zooms and centers all route
+        /// </summary>
+        /// <param name="overlayId">overlay id or null to check all</param>
+        /// <returns></returns>
+        public bool ZoomAndCenterRoutes(string overlayId)
+        {
+            RectLatLng? rect = GetRectOfAllRoutes(overlayId);
+            if (rect.HasValue) {
+                return SetZoomToFitRect(rect.Value);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// zooms and centers route 
+        /// </summary>
+        /// <param name="figure"></param>
+        /// <returns></returns>
+        public bool ZoomAndCenterFigure(MapFigure figure)
+        {
+            RectLatLng? rect = GetRectOfFigure(figure);
+            if (rect.HasValue) {
+                return SetZoomToFitRect(rect.Value);
+            }
+            return false;
+        }
+
+        public void DrawMap(object g)
+        {
+            if (UpdatingBounds || Equals(fProvider, EmptyProvider.Instance) || fProvider == null) {
+                Debug.WriteLine("Core.updatingBounds");
+                return;
+            }
+
+            TileDrawingListLock.AcquireReaderLock();
+            Matrix.EnterReadLock();
+
+            try {
+                foreach (var tilePoint in TileDrawingList) {
+                    TileRect.Location = tilePoint.PosPixel;
+                    TileRect.OffsetNegative(CompensationOffset);
+
+                    bool found = false;
+
+                    Tile t = Matrix.GetTileWithNoLock(Zoom, tilePoint.PosXY);
+                    if (t.NotEmpty) {
+                        // render tile
+                        foreach (var pureImage in t.Overlays) {
+                            fView.DrawTile(g, pureImage, ref found);
+                        }
+                    } else if (fProvider.Projection is MercatorProjection) {
+                        // filling empty tiles using lower level images
+                        int zoomOffset = 1;
+                        Tile parentTile = Tile.Empty;
+                        long Ix = 0;
+
+                        while (!parentTile.NotEmpty && zoomOffset < Zoom && zoomOffset <= LevelsKeepInMemory) {
+                            Ix = (long)Math.Pow(2, zoomOffset);
+                            parentTile = Matrix.GetTileWithNoLock(Zoom - zoomOffset++,
+                                new GPoint((int)(tilePoint.PosXY.X / Ix), (int)(tilePoint.PosXY.Y / Ix)));
+                        }
+
+                        if (parentTile.NotEmpty) {
+                            long xoff = Math.Abs(tilePoint.PosXY.X - (parentTile.Pos.X * Ix));
+                            long yoff = Math.Abs(tilePoint.PosXY.Y - (parentTile.Pos.Y * Ix));
+
+                            // render tile 
+                            foreach (var pureImage in parentTile.Overlays) {
+                                fView.DrawLowerTile(g, pureImage, Ix, xoff, yoff, ref found);
+                            }
+                        }
+                    }
+
+                    // add text if tile is missing
+                    if (!found) {
+                        lock (FailedLoads) {
+                            var lt = new LoadTask(tilePoint.PosXY, Zoom);
+                            if (FailedLoads.ContainsKey(lt)) {
+                                var ex = FailedLoads[lt];
+                                fView.DrawMissingTile(g, ex);
+                            }
+                        }
+                    }
+
+                    fView.ShowTileGridLines(g, tilePoint);
+                }
+            } finally {
+                Matrix.LeaveReadLock();
+                TileDrawingListLock.ReleaseReaderLock();
             }
         }
     }

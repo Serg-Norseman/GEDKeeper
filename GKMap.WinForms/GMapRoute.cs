@@ -9,17 +9,19 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using GKMap.MapProviders;
+using GKMap.MapObjects;
 
 namespace GKMap.WinForms
 {
     /// <summary>
-    /// GKMap route
+    /// GKMap route.
     /// </summary>
-    public class GMapRoute : GMapFigure, IMapRoute
+    public class GMapRoute : MapRoute, IRenderable
     {
         public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(144, Color.MidnightBlue));
+
+
+        protected GraphicsPath fGraphicsPath;
 
 
         /// <summary>
@@ -37,21 +39,7 @@ namespace GKMap.WinForms
         public GMapRoute(string name, IEnumerable<PointLatLng> points = null)
             : base(name, points)
         {
-            fVisible = true;
             Stroke = DefaultStroke;
-            IsHitTestVisible = false;
-        }
-
-        protected override void UpdateLocalPosition()
-        {
-            if (fVisible) {
-                Overlay.Control.UpdateRouteLocalPosition(this);
-            } else {
-                if (Overlay.Control.IsMouseOverRoute) {
-                    Overlay.Control.IsMouseOverRoute = false;
-                    Overlay.Control.RestoreCursorOnLeave();
-                }
-            }
         }
 
         /// <summary>
@@ -85,30 +73,20 @@ namespace GKMap.WinForms
             }
         }
 
-        public override void OnRender(Graphics g)
+        public void OnRender(Graphics g)
         {
             if (IsVisible && fGraphicsPath != null) {
                 g.DrawPath(Stroke, fGraphicsPath);
             }
         }
 
-        /// <summary>
-        /// route distance (in km)
-        /// </summary>
-        public double GetDistance()
+        protected override void Dispose(bool disposing)
         {
-            double distance = 0.0;
-
-            if (HasLines) {
-                for (int i = 1; i < Points.Count; i++) {
-                    distance += GMapProviders.EmptyProvider.Projection.GetDistance(Points[i - 1], Points[i]);
-                }
+            if (disposing && fGraphicsPath != null) {
+                fGraphicsPath.Dispose();
+                fGraphicsPath = null;
             }
-
-            return distance;
+            base.Dispose(disposing);
         }
     }
-
-    public delegate void RouteClick(IMapRoute item, MouseEventArgs e);
-    public delegate void RouteDoubleClick(IMapRoute item, MouseEventArgs e);
 }

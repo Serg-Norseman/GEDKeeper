@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using GKMap.MapObjects;
 using GKMap.MapProviders;
 
 namespace GKMap.WinForms.Demo
@@ -16,7 +17,7 @@ namespace GKMap.WinForms.Demo
         private PointLatLng fLastPosition;
         private int fLastZoom;
         private GMapControl fMapControl;
-        private GMapMarker fTargetMarker;
+        private MapMarker fTargetMarker;
 
         public GMapControl MapControl
         {
@@ -102,7 +103,7 @@ namespace GKMap.WinForms.Demo
                 if (pos != null && status == GeocoderStatusCode.Success) {
                     fTargetMarker.Position = pos.Value;
 
-                    GMapMarker myCity = new GMarkerIcon(pos.Value, GMarkerIconType.green_small);
+                    MapMarker myCity = new GMarkerIcon(pos.Value, GMarkerIconType.green_small);
                     myCity.ToolTipMode = MarkerTooltipMode.Always;
                     myCity.ToolTipText = "Welcome to Egypt! ;}";
                     fObjects.Markers.Add(myCity);
@@ -119,42 +120,42 @@ namespace GKMap.WinForms.Demo
         private void RegeneratePolygon()
         {
             List<PointLatLng> polygonPoints = new List<PointLatLng>();
-            foreach (GMapMarker m in fObjects.Markers) {
+            foreach (MapMarker m in fObjects.Markers) {
                 polygonPoints.Add(m.Position);
             }
 
             AddRoute(polygonPoints);
         }
 
-        private void MainMap_OnMarkerLeave(IMapMarker item)
+        private void MainMap_OnMarkerLeave(MapMarker item)
         {
             // dummy
         }
 
-        private void MainMap_OnMarkerEnter(IMapMarker item)
+        private void MainMap_OnMarkerEnter(MapMarker item)
         {
             // dummy
         }
 
-        private void MainMap_OnPolygonLeave(IMapPolygon item)
+        private void MainMap_OnPolygonLeave(MapPolygon item)
         {
             fCurrentPolygon = null;
             ((GMapPolygon)item).Stroke.Color = Color.MidnightBlue;
         }
 
-        private void MainMap_OnPolygonEnter(IMapPolygon item)
+        private void MainMap_OnPolygonEnter(MapPolygon item)
         {
             fCurrentPolygon = item as GMapPolygon;
             fCurrentPolygon.Stroke.Color = Color.Red;
         }
 
-        private void MainMap_OnRouteLeave(IMapRoute item)
+        private void MainMap_OnRouteLeave(MapRoute item)
         {
             fCurrentRoute = null;
             ((GMapRoute)item).Stroke.Color = Color.MidnightBlue;
         }
 
-        private void MainMap_OnRouteEnter(IMapRoute item)
+        private void MainMap_OnRouteEnter(MapRoute item)
         {
             fCurrentRoute = item as GMapRoute;
             fCurrentRoute.Stroke.Color = Color.Red;
@@ -188,7 +189,7 @@ namespace GKMap.WinForms.Demo
             }
         }
 
-        private void MainMap_OnMarkerClick(IMapMarker item, MouseEventArgs e)
+        private void MainMap_OnMarkerClick(MapMarker item, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left) {
                 GeocoderStatusCode status;
@@ -280,7 +281,6 @@ namespace GKMap.WinForms.Demo
             PointLatLng? pos = GMapProviders.GoogleMap.GetPoint(place, out status);
             if (pos != null && status == GeocoderStatusCode.Success) {
                 var m = new GMarkerIcon(pos.Value, GMarkerIconType.green);
-                m.ToolTip = new GMapRoundedToolTip(m);
                 m.ToolTipText = place;
                 m.ToolTipMode = MarkerTooltipMode.Always;
 

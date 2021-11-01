@@ -7,18 +7,14 @@
  */
 
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 
-namespace GKMap.WinForms
+namespace GKMap.MapObjects
 {
     /// <summary>
     /// represents route of map
     /// </summary>
-    public class GMapFigure : GMapObject, IMapFigure
+    public abstract class MapFigure : MapObject
     {
-        protected GraphicsPath fGraphicsPath;
-
-
         public bool HasLines
         {
             get {
@@ -39,7 +35,7 @@ namespace GKMap.WinForms
         public List<PointLatLng> Points { get; private set; }
 
 
-        public GMapFigure(string name, IEnumerable<PointLatLng> points = null)
+        public MapFigure(string name, IEnumerable<PointLatLng> points = null)
         {
             LocalPoints = new List<GPoint>();
             Points = new List<PointLatLng>();
@@ -58,7 +54,6 @@ namespace GKMap.WinForms
         public void Clear()
         {
             Points.Clear();
-            Tag = null;
             Name = null;
         }
 
@@ -70,11 +65,6 @@ namespace GKMap.WinForms
         {
             if (disposing) {
                 LocalPoints.Clear();
-
-                if (fGraphicsPath != null) {
-                    fGraphicsPath.Dispose();
-                    fGraphicsPath = null;
-                }
                 Clear();
             }
             base.Dispose(disposing);

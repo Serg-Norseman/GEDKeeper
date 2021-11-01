@@ -19,25 +19,35 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using GKMap.MapObjects;
 using GKMap.MapProviders;
 
 namespace GKMap.WinForms
 {
+    public delegate void MarkerClick(MapMarker item, MouseEventArgs e);
+    public delegate void MarkerDoubleClick(MapMarker item, MouseEventArgs e);
+
+    public delegate void PolygonClick(MapPolygon item, MouseEventArgs e);
+    public delegate void PolygonDoubleClick(MapPolygon item, MouseEventArgs e);
+
+    public delegate void RouteClick(MapRoute item, MouseEventArgs e);
+    public delegate void RouteDoubleClick(MapRoute item, MouseEventArgs e);
+
     /// <summary>
     /// GKMap control for Windows Forms
     /// </summary>   
     public class GMapControl : UserControl, IMapControl
     {
+        public static readonly bool IsDesignerHosted = LicenseManager.UsageMode == LicenseUsageMode.Designtime;
+
         private Bitmap fBackBuffer;
+        private MapCore fCore;
         private Cursor fCursorBefore = Cursors.Default;
         private bool fForceDoubleBuffer;
         private Graphics fGxOff;
-        private bool fIsDragging;
         private bool fIsMouseOverMarker;
         private bool fIsMouseOverPolygon;
         private bool fIsMouseOverRoute;
-        private bool fLazyEvents = true;
-        private RectLatLng? fLazySetZoomToFitRect;
         private int fOverObjectCount;
 
         private readonly StringFormat BottomFormat = new StringFormat();
@@ -51,7 +61,7 @@ namespace GKMap.WinForms
         private readonly Font ScaleFont = new Font(FontFamily.GenericSansSerif, 5, FontStyle.Italic);
         private readonly ImageAttributes TileFlipXYAttributes = new ImageAttributes();
 
-#if DEBUG_CENTER
+#if DEBUG_CENTER || DEBUG_RENDER
         private readonly Pen CenterPen = new Pen(Brushes.Red, 1);
         private readonly Pen ScalePen = new Pen(Brushes.Blue, 1);
 #endif
@@ -79,62 +89,27 @@ namespace GKMap.WinForms
             }
         }
 
+        MapCore IMapControl.Core { get { return fCore; } }
+
+        /// <summary>
+        /// stops immediate marker/route/polygon invalidation;
+        /// call Refresh to perform single refresh and reset invalidation state
+        /// </summary>
+        public bool HoldInvalidation { get; set; }
+
         /// <summary>
         /// reverses MouseWheel zooming direction
         /// </summary>
         public bool InvertedMouseWheelZooming
         {
             get {
-                return Core.InvertedMouseWheelZooming;
+                return fCore.InvertedMouseWheelZooming;
             }
             set {
-                Core.InvertedMouseWheelZooming = value;
+                fCore.InvertedMouseWheelZooming = value;
             }
         }
 
-        /// <summary>
-        /// current map center position
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
-        public PointLatLng Position
-        {
-            get {
-                return Core.Position;
-            }
-            set {
-                Core.Position = value;
-
-                if (Core.IsStarted) {
-                    ForceUpdateOverlays();
-                }
-            }
-        }
-
-        [Category("GKMap"), DefaultValue(0)]
-        public int Zoom
-        {
-            get {
-                return Core.Zoom;
-            }
-            set {
-                if (Core.Zoom != value) {
-                    Debug.WriteLine("ZoomPropertyChanged: " + Core.Zoom + " -> " + value);
-
-                    if (value > MaxZoom) {
-                        Core.Zoom = MaxZoom;
-                    } else if (value < MinZoom) {
-                        Core.Zoom = MinZoom;
-                    } else {
-                        Core.Zoom = value;
-                    }
-
-                    if (Core.IsStarted && !fIsDragging) {
-                        ForceUpdateOverlays();
-                    }
-                }
-            }
-        }
 
         /// <summary>
         /// is mouse over marker
@@ -148,22 +123,6 @@ namespace GKMap.WinForms
             }
             set {
                 fIsMouseOverMarker = value;
-                fOverObjectCount += value ? 1 : -1;
-            }
-        }
-
-        /// <summary>
-        /// is mouse over route
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
-        public bool IsMouseOverRoute
-        {
-            get {
-                return fIsMouseOverRoute;
-            }
-            set {
-                fIsMouseOverRoute = value;
                 fOverObjectCount += value ? 1 : -1;
             }
         }
@@ -184,32 +143,48 @@ namespace GKMap.WinForms
             }
         }
 
+        /// <summary>
+        /// is mouse over route
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        public bool IsMouseOverRoute
+        {
+            get {
+                return fIsMouseOverRoute;
+            }
+            set {
+                fIsMouseOverRoute = value;
+                fOverObjectCount += value ? 1 : -1;
+            }
+        }
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
         public GMapProvider MapProvider
         {
             get {
-                return Core.Provider;
+                return fCore.Provider;
             }
             set {
-                if (Core.Provider == null || !Core.Provider.Equals(value)) {
-                    Debug.WriteLine("MapType: " + Core.Provider.Name + " -> " + value.Name);
+                if (fCore.Provider == null || !fCore.Provider.Equals(value)) {
+                    Debug.WriteLine("MapType: " + fCore.Provider.Name + " -> " + value.Name);
 
-                    RectLatLng viewarea = Core.ViewArea;
+                    RectLatLng viewarea = fCore.ViewArea;
 
-                    Core.Provider = value;
+                    fCore.Provider = value;
 
-                    if (Core.IsStarted) {
-                        if (Core.ZoomToArea) {
+                    if (fCore.IsStarted) {
+                        if (fCore.ZoomToArea) {
                             // restore zoom rect as close as possible
-                            if (viewarea != RectLatLng.Empty && viewarea != Core.ViewArea) {
-                                int bestZoom = Core.GetMaxZoomToFitRect(viewarea);
+                            if (viewarea != RectLatLng.Empty && viewarea != fCore.ViewArea) {
+                                int bestZoom = fCore.GetMaxZoomToFitRect(viewarea);
                                 if (bestZoom > 0 && Zoom != bestZoom) {
                                     Zoom = bestZoom;
                                 }
                             }
                         } else {
-                            ForceUpdateOverlays();
+                            fCore.ForceUpdateOverlays();
                         }
                     }
                 }
@@ -224,10 +199,10 @@ namespace GKMap.WinForms
         public int MaxZoom
         {
             get {
-                return Core.MaxZoom;
+                return fCore.MaxZoom;
             }
             set {
-                Core.MaxZoom = value;
+                fCore.MaxZoom = value;
             }
         }
 
@@ -239,25 +214,61 @@ namespace GKMap.WinForms
         public int MinZoom
         {
             get {
-                return Core.MinZoom;
+                return fCore.MinZoom;
             }
             set {
-                Core.MinZoom = value;
+                fCore.MinZoom = value;
             }
         }
 
         /// <summary>
         /// list of overlays, should be thread safe
         /// </summary>
-        public ObservableCollection<IMapOverlay> Overlays { get; private set; }
+        public ObservableCollectionThreadSafe<MapOverlay> Overlays { get; private set; }
 
         /// <summary>
-        /// stops immediate marker/route/polygon invalidation;
-        /// call Refresh to perform single refresh and reset invalidation state
+        /// current map center position
         /// </summary>
-        public bool HoldInvalidation { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        public PointLatLng Position
+        {
+            get {
+                return fCore.Position;
+            }
+            set {
+                fCore.Position = value;
 
-        internal Core Core { get; private set; }
+                if (fCore.IsStarted) {
+                    fCore.ForceUpdateOverlays();
+                }
+            }
+        }
+
+        [Category("GKMap"), DefaultValue(0)]
+        public int Zoom
+        {
+            get {
+                return fCore.Zoom;
+            }
+            set {
+                if (fCore.Zoom != value) {
+                    Debug.WriteLine("ZoomPropertyChanged: " + fCore.Zoom + " -> " + value);
+
+                    if (value > MaxZoom) {
+                        fCore.Zoom = MaxZoom;
+                    } else if (value < MinZoom) {
+                        fCore.Zoom = MinZoom;
+                    } else {
+                        fCore.Zoom = value;
+                    }
+
+                    if (fCore.IsStarted && !fCore.IsDragging) {
+                        fCore.ForceUpdateOverlays();
+                    }
+                }
+            }
+        }
 
         #endregion
 
@@ -269,10 +280,10 @@ namespace GKMap.WinForms
         public event PositionChanged OnPositionChanged
         {
             add {
-                Core.OnCurrentPositionChanged += value;
+                fCore.OnCurrentPositionChanged += value;
             }
             remove {
-                Core.OnCurrentPositionChanged -= value;
+                fCore.OnCurrentPositionChanged -= value;
             }
         }
 
@@ -282,10 +293,10 @@ namespace GKMap.WinForms
         public event TileLoadComplete OnTileLoadComplete
         {
             add {
-                Core.OnTileLoadComplete += value;
+                fCore.OnTileLoadComplete += value;
             }
             remove {
-                Core.OnTileLoadComplete -= value;
+                fCore.OnTileLoadComplete -= value;
             }
         }
 
@@ -295,10 +306,10 @@ namespace GKMap.WinForms
         public event TileLoadStart OnTileLoadStart
         {
             add {
-                Core.OnTileLoadStart += value;
+                fCore.OnTileLoadStart += value;
             }
             remove {
-                Core.OnTileLoadStart -= value;
+                fCore.OnTileLoadStart -= value;
             }
         }
 
@@ -308,10 +319,10 @@ namespace GKMap.WinForms
         public event MapDrag OnMapDrag
         {
             add {
-                Core.OnMapDrag += value;
+                fCore.OnMapDrag += value;
             }
             remove {
-                Core.OnMapDrag -= value;
+                fCore.OnMapDrag -= value;
             }
         }
 
@@ -321,10 +332,10 @@ namespace GKMap.WinForms
         public event MapZoomChanged OnMapZoomChanged
         {
             add {
-                Core.OnMapZoomChanged += value;
+                fCore.OnMapZoomChanged += value;
             }
             remove {
-                Core.OnMapZoomChanged -= value;
+                fCore.OnMapZoomChanged -= value;
             }
         }
 
@@ -334,10 +345,10 @@ namespace GKMap.WinForms
         public event MapTypeChanged OnMapTypeChanged
         {
             add {
-                Core.OnMapTypeChanged += value;
+                fCore.OnMapTypeChanged += value;
             }
             remove {
-                Core.OnMapTypeChanged -= value;
+                fCore.OnMapTypeChanged -= value;
             }
         }
 
@@ -357,10 +368,10 @@ namespace GKMap.WinForms
         public event MarkerEnter OnMarkerEnter
         {
             add {
-                Core.OnMarkerEnter += value;
+                fCore.OnMarkerEnter += value;
             }
             remove {
-                Core.OnMarkerEnter -= value;
+                fCore.OnMarkerEnter -= value;
             }
         }
 
@@ -370,10 +381,10 @@ namespace GKMap.WinForms
         public event MarkerLeave OnMarkerLeave
         {
             add {
-                Core.OnMarkerLeave += value;
+                fCore.OnMarkerLeave += value;
             }
             remove {
-                Core.OnMarkerLeave -= value;
+                fCore.OnMarkerLeave -= value;
             }
         }
 
@@ -393,10 +404,10 @@ namespace GKMap.WinForms
         public event PolygonEnter OnPolygonEnter
         {
             add {
-                Core.OnPolygonEnter += value;
+                fCore.OnPolygonEnter += value;
             }
             remove {
-                Core.OnPolygonEnter -= value;
+                fCore.OnPolygonEnter -= value;
             }
         }
 
@@ -406,10 +417,10 @@ namespace GKMap.WinForms
         public event PolygonLeave OnPolygonLeave
         {
             add {
-                Core.OnPolygonLeave += value;
+                fCore.OnPolygonLeave += value;
             }
             remove {
-                Core.OnPolygonLeave -= value;
+                fCore.OnPolygonLeave -= value;
             }
         }
 
@@ -429,10 +440,10 @@ namespace GKMap.WinForms
         public event RouteEnter OnRouteEnter
         {
             add {
-                Core.OnRouteEnter += value;
+                fCore.OnRouteEnter += value;
             }
             remove {
-                Core.OnRouteEnter -= value;
+                fCore.OnRouteEnter -= value;
             }
         }
 
@@ -442,15 +453,22 @@ namespace GKMap.WinForms
         public event RouteLeave OnRouteLeave
         {
             add {
-                Core.OnRouteLeave += value;
+                fCore.OnRouteLeave += value;
             }
             remove {
-                Core.OnRouteLeave -= value;
+                fCore.OnRouteLeave -= value;
             }
         }
 
         #endregion
 
+
+        static GMapControl()
+        {
+            if (!IsDesignerHosted) {
+                GMaps.Initialize(GMapImageProxy.Instance);
+            }
+        }
 
 #if !DESIGN
         /// <summary>
@@ -458,9 +476,9 @@ namespace GKMap.WinForms
         /// </summary>
         public GMapControl()
         {
-            Core = new Core(this);
+            fCore = new MapCore(this);
 
-            Overlays = new ObservableCollectionThreadSafe<IMapOverlay>();
+            Overlays = new ObservableCollectionThreadSafe<MapOverlay>();
 
             InvertedMouseWheelZooming = false;
             MaxZoom = 17;
@@ -488,26 +506,71 @@ namespace GKMap.WinForms
 
 #endif
 
-        static GMapControl()
+        protected override void Dispose(bool disposing)
         {
-            if (!IsDesignerHosted) {
-                GMaps.Initialize(GMapImageProxy.Instance);
+            if (disposing) {
+                fCore.OnMapClose();
+
+                Overlays.CollectionChanged -= Overlays_CollectionChanged;
+
+                foreach (var o in Overlays) {
+                    o.Dispose();
+                }
+                Overlays.Clear();
+
+#if DEBUG_CENTER
+                CenterPen.Dispose();
+                ScalePen.Dispose();
+#endif
+
+                ScaleFont.Dispose();
+                CenterFormat.Dispose();
+                BottomFormat.Dispose();
+                CopyrightFont.Dispose();
+                EmptyTileBorders.Dispose();
+                EmptyTileBrush.Dispose();
+                ClearBackBuffer();
             }
+            base.Dispose(disposing);
         }
 
-        private void Overlays_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        /// <summary>
+        /// Call it to empty tile cache & reload tiles
+        /// </summary>
+        public void ReloadMap()
         {
-            if (e.NewItems != null) {
-                foreach (GMapOverlay obj in e.NewItems) {
-                    if (obj != null) {
-                        obj.Control = this;
-                    }
-                }
+            fCore.ReloadMap();
+        }
 
-                if (Core.IsStarted) {
-                    Invalidate();
-                }
-            }
+        /// <summary>
+        /// set current position using keywords
+        /// </summary>
+        /// <param name="keys"></param>
+        /// <returns>true if successful</returns>
+        public GeocoderStatusCode SetPositionByKeywords(string keys)
+        {
+            return fCore.SetPositionByKeywords(keys);
+        }
+
+        /// <summary>
+        /// gets world coordinate from local control coordinate 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public PointLatLng FromLocalToLatLng(int x, int y)
+        {
+            return fCore.FromLocalToLatLng(x, y);
+        }
+
+        /// <summary>
+        /// gets local coordinate from world coordinate
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public GPoint FromLatLngToLocal(PointLatLng point)
+        {
+            return fCore.FromLatLngToLocal(point);
         }
 
         /// <summary>
@@ -517,8 +580,8 @@ namespace GKMap.WinForms
         {
             HoldInvalidation = false;
 
-            lock (Core.InvalidationLock) {
-                Core.LastInvalidation = DateTime.Now;
+            lock (fCore.InvalidationLock) {
+                fCore.LastInvalidation = DateTime.Now;
             }
 
             base.Refresh();
@@ -530,90 +593,11 @@ namespace GKMap.WinForms
         /// </summary>
         public new void Invalidate()
         {
-            if (Core.RefreshEvent != null && !HoldInvalidation) {
-                Core.RefreshEvent.Set();
+            if (fCore.RefreshEvent != null && !HoldInvalidation) {
+                fCore.RefreshEvent.Set();
             }
         }
 #endif
-
-        private void invalidatorEngage(object sender, ProgressChangedEventArgs e)
-        {
-            base.Invalidate();
-        }
-
-        /// <summary>
-        /// update objects when map is dragged/zoomed
-        /// </summary>
-        internal void ForceUpdateOverlays()
-        {
-            try {
-                HoldInvalidation = true;
-
-                foreach (GMapOverlay o in Overlays) {
-                    if (o.IsVisible) {
-                        o.ForceUpdate();
-                    }
-                }
-            } finally {
-                Refresh();
-            }
-        }
-
-        /// <summary>
-        /// updates markers local position
-        /// </summary>
-        /// <param name="marker"></param>
-        public void UpdateMarkerLocalPosition(IMapMarker marker)
-        {
-            Core.UpdateMarkerLocalPosition(marker);
-        }
-
-        /// <summary>
-        /// updates routes local position
-        /// </summary>
-        /// <param name="route"></param>
-        public void UpdateRouteLocalPosition(IMapRoute route)
-        {
-            Core.UpdateRouteLocalPosition(route);
-        }
-
-        /// <summary>
-        /// updates polygons local position
-        /// </summary>
-        /// <param name="polygon"></param>
-        public void UpdatePolygonLocalPosition(IMapPolygon polygon)
-        {
-            Core.UpdatePolygonLocalPosition(polygon);
-        }
-
-        /// <summary>
-        /// sets zoom to max to fit rect
-        /// </summary>
-        /// <param name="rect"></param>
-        /// <returns></returns>
-        public bool SetZoomToFitRect(RectLatLng rect)
-        {
-            if (fLazyEvents) {
-                fLazySetZoomToFitRect = rect;
-            } else {
-                int maxZoom = Core.GetMaxZoomToFitRect(rect);
-                if (maxZoom > 0) {
-                    PointLatLng center = new PointLatLng(rect.Lat - (rect.HeightLat / 2), rect.Lng + (rect.WidthLng / 2));
-                    Position = center;
-
-                    if (maxZoom > MaxZoom) {
-                        maxZoom = MaxZoom;
-                    }
-
-                    if (Zoom != maxZoom) {
-                        Zoom = maxZoom;
-                    }
-
-                    return true;
-                }
-            }
-            return false;
-        }
 
         /// <summary>
         /// sets to max zoom to fit all markers and centers them in map
@@ -622,11 +606,7 @@ namespace GKMap.WinForms
         /// <returns></returns>
         public bool ZoomAndCenterMarkers(string overlayId)
         {
-            RectLatLng? rect = Core.GetRectOfAllMarkers(overlayId);
-            if (rect.HasValue) {
-                return SetZoomToFitRect(rect.Value);
-            }
-            return false;
+            return fCore.ZoomAndCenterMarkers(overlayId);
         }
 
         /// <summary>
@@ -636,25 +616,17 @@ namespace GKMap.WinForms
         /// <returns></returns>
         public bool ZoomAndCenterRoutes(string overlayId)
         {
-            RectLatLng? rect = Core.GetRectOfAllRoutes(overlayId);
-            if (rect.HasValue) {
-                return SetZoomToFitRect(rect.Value);
-            }
-            return false;
+            return fCore.ZoomAndCenterRoutes(overlayId);
         }
 
         /// <summary>
         /// zooms and centers route 
         /// </summary>
-        /// <param name="route"></param>
+        /// <param name="figure"></param>
         /// <returns></returns>
-        public bool ZoomAndCenterRoute(GMapFigure figure)
+        public bool ZoomAndCenterFigure(MapFigure figure)
         {
-            RectLatLng? rect = Core.GetRectOfRoute(figure);
-            if (rect.HasValue) {
-                return SetZoomToFitRect(rect.Value);
-            }
-            return false;
+            return fCore.ZoomAndCenterFigure(figure);
         }
 
         /// <summary>
@@ -701,30 +673,20 @@ namespace GKMap.WinForms
         public void Offset(int x, int y)
         {
             if (IsHandleCreated) {
-                Core.DragOffset(new GPoint(x, y));
-                ForceUpdateOverlays();
+                fCore.DragOffset(new GPoint(x, y));
             }
         }
 
-#region UserControl Events
-
-        public static readonly bool IsDesignerHosted = LicenseManager.UsageMode == LicenseUsageMode.Designtime;
+        #region UserControl Events
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
             if (!IsDesignerHosted) {
-                if (fLazyEvents) {
-                    fLazyEvents = false;
-
-                    if (fLazySetZoomToFitRect.HasValue) {
-                        SetZoomToFitRect(fLazySetZoomToFitRect.Value);
-                        fLazySetZoomToFitRect = null;
-                    }
-                }
-                Core.OnMapOpen().ProgressChanged += invalidatorEngage;
-                ForceUpdateOverlays();
+                fCore.ResetZoomToFitRect();
+                fCore.OnMapOpen().ProgressChanged += invalidatorEngage;
+                fCore.ForceUpdateOverlays();
             }
         }
 
@@ -742,41 +704,6 @@ namespace GKMap.WinForms
                     f.FormClosing += ParentForm_FormClosing;
                 }
             }
-        }
-
-        private void ParentForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.TaskManagerClosing) {
-                GMaps.Instance.CancelTileCaching();
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                Core.OnMapClose();
-
-                Overlays.CollectionChanged -= Overlays_CollectionChanged;
-
-                foreach (var o in Overlays) {
-                    o.Dispose();
-                }
-                Overlays.Clear();
-
-#if DEBUG_CENTER
-                CenterPen.Dispose();
-                ScalePen.Dispose();
-#endif
-
-                ScaleFont.Dispose();
-                CenterFormat.Dispose();
-                BottomFormat.Dispose();
-                CopyrightFont.Dispose();
-                EmptyTileBorders.Dispose();
-                EmptyTileBrush.Dispose();
-                ClearBackBuffer();
-            }
-            base.Dispose(disposing);
         }
 
 #if !DESIGN
@@ -815,124 +742,11 @@ namespace GKMap.WinForms
         {
             // render white background
             g.Clear(EmptyMapBackground);
-            g.TranslateTransform(Core.RenderOffset.X, Core.RenderOffset.Y);
-            DrawMap(g);
+            g.TranslateTransform(fCore.RenderOffset.X, fCore.RenderOffset.Y);
+            fCore.DrawMap(g);
             OnPaintOverlays(g);
         }
 #endif
-
-        private void DrawMap(Graphics g)
-        {
-            if (Core.UpdatingBounds || Equals(MapProvider, EmptyProvider.Instance) || MapProvider == null) {
-                Debug.WriteLine("Core.updatingBounds");
-                return;
-            }
-
-            Core.TileDrawingListLock.AcquireReaderLock();
-            Core.Matrix.EnterReadLock();
-
-            try {
-                foreach (var tilePoint in Core.TileDrawingList) {
-                    Core.TileRect.Location = tilePoint.PosPixel;
-                    Core.TileRect.OffsetNegative(Core.CompensationOffset);
-
-                    bool found = false;
-
-                    Tile t = Core.Matrix.GetTileWithNoLock(Core.Zoom, tilePoint.PosXY);
-                    if (t.NotEmpty) {
-                        // render tile
-                        foreach (var pureImage in t.Overlays) {
-                            var img = (GMapImage)pureImage;
-                            if (img != null && img.Img != null) {
-                                if (!found)
-                                    found = true;
-
-                                if (!img.IsParent) {
-                                    g.DrawImage(img.Img, Core.TileRect.X, Core.TileRect.Y, Core.TileRect.Width, Core.TileRect.Height);
-                                } else {
-                                    float wix = ((float)img.Img.Width / img.Ix);
-                                    float hix = ((float)img.Img.Height / img.Ix);
-                                    RectangleF srcRect = new RectangleF(img.Xoff * wix, img.Yoff * hix, wix, hix);
-                                    Rectangle dst = new Rectangle((int)Core.TileRect.X, (int)Core.TileRect.Y, (int)Core.TileRect.Width, (int)Core.TileRect.Height);
-                                    g.DrawImage(img.Img, dst, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, GraphicsUnit.Pixel, TileFlipXYAttributes);
-                                }
-                            }
-                        }
-                    } else if (MapProvider.Projection is MercatorProjection) {
-                        // filling empty tiles using lower level images
-                        int zoomOffset = 1;
-                        Tile parentTile = Tile.Empty;
-                        long Ix = 0;
-
-                        while (!parentTile.NotEmpty && zoomOffset < Core.Zoom && zoomOffset <= Core.LevelsKeepInMemory) {
-                            Ix = (long)Math.Pow(2, zoomOffset);
-                            parentTile = Core.Matrix.GetTileWithNoLock(Core.Zoom - zoomOffset++,
-                                new GPoint((int)(tilePoint.PosXY.X / Ix), (int)(tilePoint.PosXY.Y / Ix)));
-                        }
-
-                        if (parentTile.NotEmpty) {
-                            long xoff = Math.Abs(tilePoint.PosXY.X - (parentTile.Pos.X * Ix));
-                            long yoff = Math.Abs(tilePoint.PosXY.Y - (parentTile.Pos.Y * Ix));
-
-                            // render tile 
-                            foreach (var pureImage in parentTile.Overlays) {
-                                var img = (GMapImage)pureImage;
-                                if (img != null && img.Img != null && !img.IsParent) {
-                                    if (!found)
-                                        found = true;
-
-                                    RectangleF srcRect = new RectangleF(xoff * (img.Img.Width / Ix),
-                                        yoff * (img.Img.Height / Ix), (img.Img.Width / Ix), (img.Img.Height / Ix));
-                                    Rectangle dst = new Rectangle((int)Core.TileRect.X, (int)Core.TileRect.Y,
-                                        (int)Core.TileRect.Width, (int)Core.TileRect.Height);
-
-                                    g.DrawImage(img.Img, dst, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-                                        GraphicsUnit.Pixel, TileFlipXYAttributes);
-                                }
-                            }
-                        }
-                    }
-
-                    // add text if tile is missing
-                    if (!found) {
-                        lock (Core.FailedLoads) {
-                            var lt = new LoadTask(tilePoint.PosXY, Core.Zoom);
-                            if (Core.FailedLoads.ContainsKey(lt)) {
-                                var ex = Core.FailedLoads[lt];
-                                g.FillRectangle(EmptyTileBrush,
-                                    new RectangleF(Core.TileRect.X, Core.TileRect.Y, Core.TileRect.Width,
-                                        Core.TileRect.Height));
-
-                                g.DrawString("Exception: " + ex.Message, MissingDataFont, Brushes.Red,
-                                    new RectangleF(Core.TileRect.X + 11, Core.TileRect.Y + 11,
-                                        Core.TileRect.Width - 11, Core.TileRect.Height - 11));
-
-                                g.DrawString(EmptyTileText, MissingDataFont, Brushes.Blue,
-                                    new RectangleF(Core.TileRect.X, Core.TileRect.Y, Core.TileRect.Width,
-                                        Core.TileRect.Height), CenterFormat);
-
-                                g.DrawRectangle(EmptyTileBorders, (int)Core.TileRect.X, (int)Core.TileRect.Y,
-                                    (int)Core.TileRect.Width, (int)Core.TileRect.Height);
-                            }
-                        }
-                    }
-
-#if DEBUG_TILE_COORDS
-                    // show tile grid lines
-                    g.DrawRectangle(EmptyTileBorders, (int) Core.TileRect.X, (int) Core.TileRect.Y,
-                        (int) Core.TileRect.Width, (int) Core.TileRect.Height);
-                    g.DrawString(
-                        (tilePoint.PosXY == Core.CenterTileXYLocation ? "CENTER: " : "TILE: ") + tilePoint,
-                        MissingDataFont, Brushes.DimGray,
-                        new RectangleF(Core.TileRect.X, Core.TileRect.Y, Core.TileRect.Width, Core.TileRect.Height),
-                        CenterFormat);
-#endif
-                }
-            } finally {
-                Core.Matrix.LeaveReadLock();
-                Core.TileDrawingListLock.ReleaseReaderLock();
-            }
-        }
 
         /// <summary>
         /// override, to render something more
@@ -956,13 +770,10 @@ namespace GKMap.WinForms
 
             g.ResetTransform();
 
-#region -- copyright --
-
-            if (!string.IsNullOrEmpty(Core.Provider.Copyright)) {
-                g.DrawString(Core.Provider.Copyright, CopyrightFont, Brushes.Navy, 3, Height - CopyrightFont.Height - 5);
+            // copyright
+            if (!string.IsNullOrEmpty(fCore.Provider.Copyright)) {
+                g.DrawString(fCore.Provider.Copyright, CopyrightFont, Brushes.Navy, 3, Height - CopyrightFont.Height - 5);
             }
-
-#endregion
 
 #if DEBUG_RENDER
             // show center
@@ -970,7 +781,7 @@ namespace GKMap.WinForms
             g.DrawLine(CenterPen, Width / 2, Height / 2 - 5, Width / 2, Height / 2 + 5);
 
             // debug info
-            g.DrawString(string.Format(CultureInfo.InvariantCulture, "{0:0.0}", Zoom) + "z, " + MapProvider + ", refresh: " + fCounter++ + ", render: " + fDelta + "ms", fDebugFont, Brushes.Blue, fDebugFont.Height, fDebugFont.Height + 20);
+            g.DrawString(string.Format("{0:0.0}", Zoom) + "z, " + MapProvider + ", refresh: " + fCounter++ + ", render: " + fDelta + "ms", fDebugFont, Brushes.Blue, fDebugFont.Height, fDebugFont.Height + 20);
 #endif
         }
 
@@ -983,7 +794,7 @@ namespace GKMap.WinForms
                 return;
             }
 
-            if (Width == Core.Width && Height == Core.Height) {
+            if (Width == fCore.Width && Height == fCore.Height) {
                 Debug.WriteLine("maximized");
                 return;
             }
@@ -993,11 +804,110 @@ namespace GKMap.WinForms
                     UpdateBackBuffer();
                 }
 
-                Core.OnMapSizeChanged(Width, Height);
+                fCore.OnMapSizeChanged(Width, Height);
 
-                if (Visible && IsHandleCreated && Core.IsStarted) {
-                    ForceUpdateOverlays();
+                if (Visible && IsHandleCreated && fCore.IsStarted) {
+                    fCore.ForceUpdateOverlays();
                 }
+            }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            if (!IsMouseOverMarker && e.Button == MouseButtons.Left) {
+                fCore.MouseDown = new GPoint(e.X, e.Y);
+                Invalidate();
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+
+            if (fCore.IsDragging) {
+                RestoreCursor();
+                fCore.EndDrag();
+            } else {
+                if (e.Button == MouseButtons.Left) {
+                    fCore.MouseDown = GPoint.Empty;
+                }
+
+                Invalidate();
+            }
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+
+            fCore.ProcessMouseClick(e.X, e.Y, e);
+        }
+
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+
+            fCore.ProcessMouseDoubleClick(e.X, e.Y, e);
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            if (!fCore.IsDragging && !fCore.MouseDown.IsEmpty) {
+                // Gets the width and height of a rectangle centered on the point the mouse
+                // button was pressed, within which a drag operation will not begin.
+                var dragSize = SystemInformation.DragSize;
+
+                if (Math.Abs(e.X - fCore.MouseDown.X) * 2 >= dragSize.Width || Math.Abs(e.Y - fCore.MouseDown.Y) * 2 >= dragSize.Height) {
+                    fCore.BeginDrag(fCore.MouseDown);
+                }
+            }
+
+            if (fCore.IsDragging) {
+                SetCursorDrag();
+                fCore.MouseCurrent = new GPoint(e.X, e.Y);
+                fCore.Drag(fCore.MouseCurrent);
+                base.Invalidate();
+            } else {
+                if (fCore.MouseDown.IsEmpty) {
+                    fCore.ProcessOverlaysMouseMove(e.X, e.Y);
+                }
+            }
+        }
+
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            base.OnMouseEnter(e);
+
+            Focus();
+            fCore.MouseIn = true;
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+
+            fCore.MouseIn = false;
+        }
+
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
+
+            fCore.ProcessMouseWheel(e.X, e.Y, e.Delta);
+        }
+
+        #endregion
+
+        #region Core callbacks and aux private methods
+
+        private void ParentForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.TaskManagerClosing) {
+                GMaps.Instance.CancelTileCaching();
             }
         }
 
@@ -1021,127 +931,157 @@ namespace GKMap.WinForms
             }
         }
 
-        protected override void OnMouseDown(MouseEventArgs e)
+        private void Overlays_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            base.OnMouseDown(e);
+            if (e.NewItems != null) {
+                foreach (GMapOverlay obj in e.NewItems) {
+                    if (obj != null) {
+                        obj.Control = this;
+                    }
+                }
 
-            if (!IsMouseOverMarker) {
-                if (e.Button == MouseButtons.Left) {
-                    Core.MouseDown = new GPoint(e.X, e.Y);
+                if (fCore.IsStarted) {
                     Invalidate();
                 }
             }
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
+        private void invalidatorEngage(object sender, ProgressChangedEventArgs e)
         {
-            base.OnMouseUp(e);
+            base.Invalidate();
+        }
 
-            if (Core.IsDragging) {
-                if (fIsDragging) {
-                    fIsDragging = false;
-                    Debug.WriteLine("IsDragging = " + fIsDragging);
-                    Cursor = fCursorBefore;
-                    fCursorBefore = null;
-                }
-                Core.EndDrag();
-            } else {
-                if (e.Button == MouseButtons.Left) {
-                    Core.MouseDown = GPoint.Empty;
-                }
+        void IMapControl.DrawTile(object go, PureImage pureImage, ref bool found)
+        {
+            Graphics g = (Graphics)go;
+            var img = (GMapImage)pureImage;
+            if (img != null && img.Img != null) {
+                if (!found)
+                    found = true;
 
-                Invalidate();
+                if (!img.IsParent) {
+                    g.DrawImage(img.Img, fCore.TileRect.X, fCore.TileRect.Y, fCore.TileRect.Width, fCore.TileRect.Height);
+                } else {
+                    float wix = ((float)img.Img.Width / img.Ix);
+                    float hix = ((float)img.Img.Height / img.Ix);
+                    RectangleF srcRect = new RectangleF(img.Xoff * wix, img.Yoff * hix, wix, hix);
+                    Rectangle dst = new Rectangle((int)fCore.TileRect.X, (int)fCore.TileRect.Y, (int)fCore.TileRect.Width, (int)fCore.TileRect.Height);
+                    g.DrawImage(img.Img, dst, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, GraphicsUnit.Pixel, TileFlipXYAttributes);
+                }
             }
         }
 
-        protected override void OnMouseClick(MouseEventArgs e)
+        void IMapControl.DrawLowerTile(object go, PureImage pureImage, long Ix, long xoff, long yoff, ref bool found)
         {
-            base.OnMouseClick(e);
-            Core.ProcessMouseClick(e.X, e.Y, e);
+            Graphics g = (Graphics)go;
+            var img = (GMapImage)pureImage;
+            if (img != null && img.Img != null && !img.IsParent) {
+                if (!found)
+                    found = true;
+
+                RectangleF srcRect = new RectangleF(xoff * (img.Img.Width / Ix),
+                    yoff * (img.Img.Height / Ix), (img.Img.Width / Ix), (img.Img.Height / Ix));
+                Rectangle dst = new Rectangle((int)fCore.TileRect.X, (int)fCore.TileRect.Y,
+                    (int)fCore.TileRect.Width, (int)fCore.TileRect.Height);
+
+                g.DrawImage(img.Img, dst, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
+                    GraphicsUnit.Pixel, TileFlipXYAttributes);
+            }
         }
 
-        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        void IMapControl.DrawMissingTile(object go, Exception ex)
         {
-            base.OnMouseDoubleClick(e);
-            Core.ProcessMouseDoubleClick(e.X, e.Y, e);
+            Graphics g = (Graphics)go;
+
+            g.FillRectangle(EmptyTileBrush,
+                new RectangleF(fCore.TileRect.X, fCore.TileRect.Y, fCore.TileRect.Width,
+                    fCore.TileRect.Height));
+
+            g.DrawString("Exception: " + ex.Message, MissingDataFont, Brushes.Red,
+                new RectangleF(fCore.TileRect.X + 11, fCore.TileRect.Y + 11,
+                    fCore.TileRect.Width - 11, fCore.TileRect.Height - 11));
+
+            g.DrawString(EmptyTileText, MissingDataFont, Brushes.Blue,
+                new RectangleF(fCore.TileRect.X, fCore.TileRect.Y, fCore.TileRect.Width,
+                    fCore.TileRect.Height), CenterFormat);
+
+            g.DrawRectangle(EmptyTileBorders, (int)fCore.TileRect.X, (int)fCore.TileRect.Y,
+                (int)fCore.TileRect.Width, (int)fCore.TileRect.Height);
         }
 
-        void IMapControl.DoMouseClick(IMapObject obj, EventArgs e)
+        void IMapControl.ShowTileGridLines(object go, DrawTile tilePoint)
         {
-            if (obj is IMapMarker) {
+#if DEBUG_TILE_COORDS
+            Graphics g = (Graphics)go;
+
+            // show tile grid lines
+            g.DrawRectangle(EmptyTileBorders, (int)fCore.TileRect.X, (int)fCore.TileRect.Y,
+                (int)fCore.TileRect.Width, (int)fCore.TileRect.Height);
+            g.DrawString(
+                (tilePoint.PosXY == fCore.CenterTileXYLocation ? "CENTER: " : "TILE: ") + tilePoint,
+                MissingDataFont, Brushes.DimGray,
+                new RectangleF(fCore.TileRect.X, fCore.TileRect.Y, fCore.TileRect.Width, fCore.TileRect.Height),
+                CenterFormat);
+#endif
+        }
+
+        void IMapControl.DoMouseClick(MapObject obj, EventArgs e)
+        {
+            if (obj is MapMarker) {
                 if (OnMarkerClick != null) {
-                    OnMarkerClick(obj as IMapMarker, (MouseEventArgs)e);
+                    OnMarkerClick(obj as MapMarker, (MouseEventArgs)e);
                 }
-            } else if (obj is IMapRoute) {
+            } else if (obj is MapRoute) {
                 if (OnRouteClick != null) {
-                    OnRouteClick(obj as IMapRoute, (MouseEventArgs)e);
+                    OnRouteClick(obj as MapRoute, (MouseEventArgs)e);
                 }
-            } else if (obj is IMapPolygon) {
+            } else if (obj is MapPolygon) {
                 if (OnPolygonClick != null) {
-                    OnPolygonClick(obj as IMapPolygon, (MouseEventArgs)e);
+                    OnPolygonClick(obj as MapPolygon, (MouseEventArgs)e);
                 }
             }
         }
 
-        void IMapControl.DoMouseDoubleClick(IMapObject obj, EventArgs e)
+        void IMapControl.DoMouseDoubleClick(MapObject obj, EventArgs e)
         {
-            if (obj is IMapMarker) {
+            if (obj is MapMarker) {
                 if (OnMarkerDoubleClick != null) {
-                    OnMarkerDoubleClick(obj as IMapMarker, (MouseEventArgs)e);
+                    OnMarkerDoubleClick(obj as MapMarker, (MouseEventArgs)e);
                 }
-            } else if (obj is IMapRoute) {
+            } else if (obj is MapRoute) {
                 if (OnRouteDoubleClick != null) {
-                    OnRouteDoubleClick(obj as IMapRoute, (MouseEventArgs)e);
+                    OnRouteDoubleClick(obj as MapRoute, (MouseEventArgs)e);
                 }
-            } else if (obj is IMapPolygon) {
+            } else if (obj is MapPolygon) {
                 if (OnPolygonDoubleClick != null) {
-                    OnPolygonDoubleClick(obj as IMapPolygon, (MouseEventArgs)e);
+                    OnPolygonDoubleClick(obj as MapPolygon, (MouseEventArgs)e);
                 }
             }
         }
 
-        protected override void OnMouseMove(MouseEventArgs e)
+        private void SetCursorHand()
         {
-            base.OnMouseMove(e);
+            fCursorBefore = Cursor;
+            Cursor = Cursors.Hand;
+        }
 
-            if (!Core.IsDragging && !Core.MouseDown.IsEmpty) {
-                // Gets the width and height of a rectangle centered on the point the mouse
-                // button was pressed, within which a drag operation will not begin.
-                var dragSize = SystemInformation.DragSize;
+        private void SetCursorDrag()
+        {
+            fCursorBefore = Cursor;
+            Cursor = Cursors.SizeAll;
+        }
 
-                GPoint p = new GPoint(e.X, e.Y);
-                if (Math.Abs(p.X - Core.MouseDown.X) * 2 >= dragSize.Width || Math.Abs(p.Y - Core.MouseDown.Y) * 2 >= dragSize.Height) {
-                    Core.BeginDrag(Core.MouseDown);
-                }
-            }
-
-            if (Core.IsDragging) {
-                if (!fIsDragging) {
-                    fIsDragging = true;
-                    Debug.WriteLine("IsDragging = " + fIsDragging);
-
-                    fCursorBefore = Cursor;
-                    Cursor = Cursors.SizeAll;
-                }
-
-                Core.MouseCurrent = new GPoint(e.X, e.Y);
-                Core.Drag(Core.MouseCurrent);
-                base.Invalidate();
-            } else {
-                if (Core.MouseDown.IsEmpty) {
-                    GPoint rp = new GPoint(e.X, e.Y);
-                    rp.OffsetNegative(Core.RenderOffset);
-                    Core.ProcessOverlaysMouseMove(rp);
-                }
-            }
+        private void RestoreCursor()
+        {
+            Cursor = Cursors.Arrow;
+            fCursorBefore = null;
         }
 
         void IMapControl.RestoreCursorOnLeave()
         {
             if (fOverObjectCount <= 0 && fCursorBefore != null) {
                 fOverObjectCount = 0;
-                Cursor = fCursorBefore;
-                fCursorBefore = null;
+                RestoreCursor();
             }
         }
 
@@ -1149,75 +1089,13 @@ namespace GKMap.WinForms
         {
             if (fOverObjectCount <= 0 && Cursor != Cursors.Hand) {
                 fOverObjectCount = 0;
-                fCursorBefore = Cursor;
-                Cursor = Cursors.Hand;
+                SetCursorHand();
             }
         }
 
-        protected override void OnMouseEnter(EventArgs e)
+        void IMapControl.SetMousePositionToMapCenter()
         {
-            base.OnMouseEnter(e);
-
-            Focus();
-            Core.MouseIn = true;
-        }
-
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            base.OnMouseLeave(e);
-            Core.MouseIn = false;
-        }
-
-        protected override void OnMouseWheel(MouseEventArgs e)
-        {
-            base.OnMouseWheel(e);
-            Core.ProcessMouseWheel(e.X, e.Y, e.Delta);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Call it to empty tile cache & reload tiles
-        /// </summary>
-        public void ReloadMap()
-        {
-            Core.ReloadMap();
-        }
-
-        /// <summary>
-        /// set current position using keywords
-        /// </summary>
-        /// <param name="keys"></param>
-        /// <returns>true if successful</returns>
-        public GeocoderStatusCode SetPositionByKeywords(string keys)
-        {
-            return Core.SetPositionByKeywords(keys);
-        }
-
-        /// <summary>
-        /// gets world coordinate from local control coordinate 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public PointLatLng FromLocalToLatLng(int x, int y)
-        {
-            return Core.FromLocalToLatLng(x, y);
-        }
-
-        /// <summary>
-        /// gets local coordinate from world coordinate
-        /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        public GPoint FromLatLngToLocal(PointLatLng point)
-        {
-            return Core.FromLatLngToLocal(point);
-        }
-
-        public void SetMousePositionToMapCenter()
-        {
-            if (!Core.IsRunningOnMono) {
+            if (!fCore.IsRunningOnMono) {
                 Point p = PointToScreen(new Point(Width / 2, Height / 2));
                 SetCursorPos(p.X, p.Y);
             }
@@ -1226,5 +1104,7 @@ namespace GKMap.WinForms
         [DllImport("user32.dll", EntryPoint = "SetCursorPos")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetCursorPos(int x, int y);
+
+        #endregion
     }
 }

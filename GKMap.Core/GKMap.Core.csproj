@@ -83,16 +83,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheProviders\MemoryCache.cs" />
-    <Compile Include="IMapFigure.cs" />
-    <Compile Include="IMapMarker.cs" />
-    <Compile Include="IMapObject.cs" />
-    <Compile Include="IMapOverlay.cs" />
-    <Compile Include="IMapPolygon.cs" />
-    <Compile Include="IMapRoute.cs" />
+    <Compile Include="MapObjects\MapMarker.cs" />
+    <Compile Include="MapObjects\MapFigure.cs" />
+    <Compile Include="MapObjects\MapObject.cs" />
+    <Compile Include="MapObjects\MapOverlay.cs" />
+    <Compile Include="MapObjects\MapPolygon.cs" />
     <Compile Include="MapProviders\EmptyProvider.cs" />
     <Compile Include="EmptyWebProxy.cs" />
     <Compile Include="MapProviders\GMapProviders.cs" />
-    <Compile Include="ObservableCollection.cs" />
+    <Compile Include="MapObjects\MapRoute.cs" />
+    <Compile Include="MapObjects\MapToolTip.cs" />
     <Compile Include="ObservableCollectionThreadSafe.cs" />
     <Compile Include="SocksHttpWeb.cs" />
     <Compile Include="DrawTile.cs" />
@@ -137,7 +137,7 @@
     <Compile Include="IPureImageCache.cs" />
     <Compile Include="GRect.cs" />
     <Compile Include="Singleton.cs" />
-    <Compile Include="Core.cs" />
+    <Compile Include="MapCore.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileMatrix.cs" />
     <Compile Include="GMaps.cs" />
@@ -189,6 +189,7 @@
     <EmbeddedResource Include="Resources\Images\yellow.png" />
     <EmbeddedResource Include="Resources\Images\yellow_small.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -55,19 +55,17 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GMapObject.cs" />
     <Compile Include="GMapPolygon.cs" />
     <Compile Include="GMapRoundedToolTip.cs" />
     <Compile Include="GMarkerIcon.cs" />
     <Compile Include="GMapToolTip.cs" />
-    <Compile Include="GMapFigure.cs" />
-    <Compile Include="GMapMarker.cs" />
     <Compile Include="GMapOverlay.cs" />
     <Compile Include="GMapImage.cs" />
     <Compile Include="GMapRoute.cs" />
     <Compile Include="GMapControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="IRenderable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

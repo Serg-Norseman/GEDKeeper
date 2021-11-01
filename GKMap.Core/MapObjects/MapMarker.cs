@@ -6,14 +6,53 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
-using System.Windows.Forms;
-
-namespace GKMap.WinForms
+namespace GKMap.MapObjects
 {
     /// <summary>
-    /// GKMap marker
+    /// mode of tooltip
     /// </summary>
-    public abstract class GMapMarker : GMapObject, IMapMarker
+    public enum MarkerTooltipMode
+    {
+        OnMouseOver,
+        Always,
+    }
+
+    public enum GMarkerIconType
+    {
+        none = 0,
+        arrow,
+        blue,
+        blue_small,
+        blue_dot,
+        brown_small,
+        gray_small,
+        green,
+        green_small,
+        green_dot,
+        yellow,
+        yellow_small,
+        yellow_dot,
+        lightblue,
+        lightblue_dot,
+        orange,
+        orange_small,
+        orange_dot,
+        pink,
+        pink_dot,
+        purple,
+        purple_small,
+        purple_dot,
+        red,
+        red_small,
+        red_dot,
+        black_small,
+        white_small,
+    }
+
+    /// <summary>
+    /// GKMap marker.
+    /// </summary>
+    public abstract class MapMarker : MapObject
     {
         private GRect fArea;
         private GPoint fOffset;
@@ -50,7 +89,7 @@ namespace GKMap.WinForms
 
                     if (IsVisible) {
                         if (Overlay != null && Overlay.Control != null) {
-                            Overlay.Control.UpdateMarkerLocalPosition(this);
+                            Overlay.Control.Core.UpdateMarkerLocalPosition(this);
                         }
                     }
                 }
@@ -68,7 +107,7 @@ namespace GKMap.WinForms
 
                     if (IsVisible) {
                         if (Overlay != null && Overlay.Control != null) {
-                            Overlay.Control.UpdateMarkerLocalPosition(this);
+                            Overlay.Control.Core.UpdateMarkerLocalPosition(this);
                         }
                     }
                 }
@@ -85,7 +124,7 @@ namespace GKMap.WinForms
             }
         }
 
-        public GMapToolTip ToolTip { get; set; }
+        public MapToolTip ToolTip { get; set; }
 
         public MarkerTooltipMode ToolTipMode { get; set; }
 
@@ -101,21 +140,18 @@ namespace GKMap.WinForms
             }
         }
 
-        public string ToolTipText
+        public virtual string ToolTipText
         {
             get {
                 return fToolTipText;
             }
             set {
-                if (ToolTip == null && !string.IsNullOrEmpty(value)) {
-                    ToolTip = new GMapRoundedToolTip(this);
-                }
                 fToolTipText = value;
             }
         }
 
 
-        protected GMapMarker(PointLatLng pos)
+        protected MapMarker(PointLatLng pos)
         {
             Position = pos;
             fVisible = true;
@@ -131,7 +167,7 @@ namespace GKMap.WinForms
         protected override void UpdateLocalPosition()
         {
             if (fVisible) {
-                Overlay.Control.UpdateMarkerLocalPosition(this);
+                Overlay.Control.Core.UpdateMarkerLocalPosition(this);
             } else {
                 if (Overlay.Control.IsMouseOverMarker) {
                     Overlay.Control.IsMouseOverMarker = false;
@@ -143,8 +179,6 @@ namespace GKMap.WinForms
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                Tag = null;
-
                 if (ToolTip != null) {
                     fToolTipText = null;
                     ToolTip.Dispose();
@@ -152,17 +186,5 @@ namespace GKMap.WinForms
                 }
             }
         }
-    }
-
-    public delegate void MarkerClick(IMapMarker item, MouseEventArgs e);
-    public delegate void MarkerDoubleClick(IMapMarker item, MouseEventArgs e);
-
-    /// <summary>
-    /// mode of tooltip
-    /// </summary>
-    public enum MarkerTooltipMode
-    {
-        OnMouseOver,
-        Always,
     }
 }
