@@ -1424,7 +1424,7 @@ namespace GKCore
 
         public static string GetAppPath()
         {
-            string result = Path.Combine(GetBinPath(), @".." + Path.DirectorySeparatorChar);
+            string result = Path.GetFullPath(Path.Combine(GetBinPath(), @".." + Path.DirectorySeparatorChar));
             return result;
         }
 
