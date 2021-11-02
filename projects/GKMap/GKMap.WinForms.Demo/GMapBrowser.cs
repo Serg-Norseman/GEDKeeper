@@ -14,8 +14,6 @@ namespace GKMap.WinForms.Demo
         private GMapPolygon fCurrentPolygon;
         private GMapRoute fCurrentRoute;
         private bool fIsMouseDown;
-        private PointLatLng fLastPosition;
-        private int fLastZoom;
         private GMapControl fMapControl;
         private MapMarker fTargetMarker;
 
@@ -78,7 +76,6 @@ namespace GKMap.WinForms.Demo
                 fMapControl.Overlays.Add(fTopOverlay);
 
                 // map events
-                fMapControl.OnPositionChanged += MainMap_OnPositionChanged;
                 fMapControl.OnMarkerClick += MainMap_OnMarkerClick;
                 fMapControl.OnMarkerEnter += MainMap_OnMarkerEnter;
                 fMapControl.OnMarkerLeave += MainMap_OnMarkerLeave;
@@ -97,7 +94,7 @@ namespace GKMap.WinForms.Demo
                 fTargetMarker.IsVisible = true;
                 fTopOverlay.Markers.Add(fTargetMarker);
 
-                // add my city location for demo
+                // add start location
                 GeocoderStatusCode status;
                 PointLatLng? pos = GMapProviders.GoogleMap.GetPoint("Egypt, Cairo", out status);
                 if (pos != null && status == GeocoderStatusCode.Success) {
@@ -124,8 +121,73 @@ namespace GKMap.WinForms.Demo
                 polygonPoints.Add(m.Position);
             }
 
-            AddRoute(polygonPoints);
+            AddRoute("route test", polygonPoints);
+            //AddPolygon("polygon test", polygonPoints);
         }
+
+        public GMapRoute AddRoute(string name, List<PointLatLng> points)
+        {
+            var route = new GMapRoute(name, points);
+            route.IsHitTestVisible = true;
+            fObjects.Routes.Add(route);
+            return route;
+        }
+
+        public GMapPolygon AddPolygon(string name, List<PointLatLng> points)
+        {
+            var polygon = new GMapPolygon(name, points);
+            polygon.IsHitTestVisible = true;
+            fObjects.Polygons.Add(polygon);
+            return polygon;
+        }
+
+        /// <summary>
+        /// adds marker using geocoder
+        /// </summary>
+        /// <param name="place"></param>
+        public void AddLocationMarker(string place)
+        {
+            GeocoderStatusCode status;
+            PointLatLng? pos = GMapProviders.GoogleMap.GetPoint(place, out status);
+            if (pos != null && status == GeocoderStatusCode.Success) {
+                var m = new GMarkerIcon(pos.Value, GMarkerIconType.green);
+                m.ToolTipText = place;
+                m.ToolTipMode = MarkerTooltipMode.Always;
+
+                fObjects.Markers.Add(m);
+            }
+        }
+
+        public void AddMarker(PointLatLng position)
+        {
+            var m = new GMarkerIcon(position, GMarkerIconType.green);
+            m.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+
+            Placemark? p = null;
+            GeocoderStatusCode status;
+            var ret = GMapProviders.GoogleMap.GetPlacemark(position, out status);
+            if (status == GeocoderStatusCode.Success && ret != null) {
+                p = ret;
+            }
+
+            m.ToolTipText = (p != null) ? p.Value.Address : position.ToString();
+
+            fObjects.Markers.Add(m);
+
+            RegeneratePolygon();
+        }
+
+        public void SaveSnapshot(string fileName)
+        {
+            Image tmpImage = fMapControl.ToImage();
+            if (tmpImage != null) {
+                using (tmpImage) {
+                    tmpImage.Save(fileName);
+                }
+            }
+        }
+
+        #region Event handlers
 
         private void MainMap_OnMarkerLeave(MapMarker item)
         {
@@ -146,7 +208,7 @@ namespace GKMap.WinForms.Demo
         private void MainMap_OnPolygonEnter(MapPolygon item)
         {
             fCurrentPolygon = item as GMapPolygon;
-            fCurrentPolygon.Stroke.Color = Color.Red;
+            ((GMapPolygon)item).Stroke.Color = Color.Red;
         }
 
         private void MainMap_OnRouteLeave(MapRoute item)
@@ -158,7 +220,12 @@ namespace GKMap.WinForms.Demo
         private void MainMap_OnRouteEnter(MapRoute item)
         {
             fCurrentRoute = item as GMapRoute;
-            fCurrentRoute.Stroke.Color = Color.Red;
+            ((GMapRoute)item).Stroke.Color = Color.Red;
+        }
+
+        private void MainMap_OnMapTypeChanged(GMapProvider type)
+        {
+            fMapControl.ZoomAndCenterMarkers("objects");
         }
 
         private void MainMap_MouseUp(object sender, MouseEventArgs e)
@@ -201,17 +268,9 @@ namespace GKMap.WinForms.Demo
             }
         }
 
-        private void MainMap_OnPositionChanged(PointLatLng point)
-        {
-            lock (this) {
-                fLastPosition = point;
-                fLastZoom = fMapControl.Zoom;
-            }
-        }
-
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
         {
-            int offset = -22;
+            const int offset = -22;
 
             switch (e.KeyCode) {
                 case Keys.Left:
@@ -257,54 +316,6 @@ namespace GKMap.WinForms.Demo
             }
         }
 
-        public void AddRoute(List<PointLatLng> points)
-        {
-            fCurrentRoute = new GMapRoute("route test", points);
-            fCurrentRoute.IsHitTestVisible = true;
-            fObjects.Routes.Add(fCurrentRoute);
-        }
-
-        public void AddPolygon(List<PointLatLng> points)
-        {
-            fCurrentPolygon = new GMapPolygon("polygon test", points);
-            fCurrentPolygon.IsHitTestVisible = true;
-            fObjects.Polygons.Add(fCurrentPolygon);
-        }
-
-        /// <summary>
-        /// adds marker using geocoder
-        /// </summary>
-        /// <param name="place"></param>
-        public void AddLocationMarker(string place)
-        {
-            GeocoderStatusCode status;
-            PointLatLng? pos = GMapProviders.GoogleMap.GetPoint(place, out status);
-            if (pos != null && status == GeocoderStatusCode.Success) {
-                var m = new GMarkerIcon(pos.Value, GMarkerIconType.green);
-                m.ToolTipText = place;
-                m.ToolTipMode = MarkerTooltipMode.Always;
-
-                fObjects.Markers.Add(m);
-            }
-        }
-
-        public void AddMarker(PointLatLng targetPosition)
-        {
-            var m = new GMarkerIcon(targetPosition, GMarkerIconType.green);
-            m.ToolTipMode = MarkerTooltipMode.OnMouseOver;
-
-            Placemark? p = null;
-            GeocoderStatusCode status;
-            var ret = GMapProviders.GoogleMap.GetPlacemark(targetPosition, out status);
-            if (status == GeocoderStatusCode.Success && ret != null) {
-                p = ret;
-            }
-
-            m.ToolTipText = (p != null) ? p.Value.Address : fTargetMarker.Position.ToString();
-
-            fObjects.Markers.Add(m);
-
-            RegeneratePolygon();
-        }
+        #endregion
     }
 }

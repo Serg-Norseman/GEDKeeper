@@ -28,6 +28,7 @@ using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.Options;
 using GKMap;
+using GKMap.MapObjects;
 using GKMap.MapProviders;
 using GKMap.WinForms;
 
@@ -107,7 +108,7 @@ namespace GKUI.Components
 
         public void ClearPoints()
         {
-            ClearAll();
+            fObjects.Clear();
             fMapPoints.Clear();
         }
 
@@ -133,7 +134,7 @@ namespace GKUI.Components
 
         public void RefreshPoints()
         {
-            ClearAll();
+            fObjects.Clear();
             if (fMapPoints.Count <= 0) return;
 
             var points = new List<PointLatLng>();
@@ -157,20 +158,10 @@ namespace GKUI.Components
             }
 
             if (fShowLines) {
-                AddRoute(points);
+                AddRoute("route", points);
             }
 
             ZoomToBounds();
-        }
-
-        public void SaveSnapshot(string fileName)
-        {
-            Image tmpImage = fMapControl.ToImage();
-            if (tmpImage != null) {
-                using (tmpImage) {
-                    tmpImage.Save(fileName);
-                }
-            }
         }
 
         public void SetCenter(double latitude, double longitude, int scale)
@@ -181,7 +172,7 @@ namespace GKUI.Components
 
         public void ZoomToBounds()
         {
-            ZoomAndCenterMarkers();
+            fMapControl.ZoomAndCenterMarkers(null);
         }
 
         #region Inner control
@@ -191,7 +182,7 @@ namespace GKUI.Components
 
         private bool fIsMouseDown;
         private GMapControl fMapControl;
-        private GMapMarker fTargetMarker;
+        private MapMarker fTargetMarker;
 
         private void InitControl()
         {
@@ -201,7 +192,7 @@ namespace GKUI.Components
             fMapControl.Margin = new Padding(4);
             fMapControl.MaxZoom = 17;
             fMapControl.MinZoom = 2;
-            fMapControl.Zoom = 0D;
+            fMapControl.Zoom = 0;
             Controls.Add(fMapControl);
 
             if (!GMapControl.IsDesignerHosted) {
@@ -228,8 +219,6 @@ namespace GKUI.Components
                 fMapControl.Overlays.Add(fTopOverlay);
 
                 // map events
-                fMapControl.OnPositionChanged += MainMap_OnPositionChanged;
-                fMapControl.OnMapZoomChanged += MainMap_OnMapZoomChanged;
                 fMapControl.OnMapTypeChanged += MainMap_OnMapTypeChanged;
                 fMapControl.OnMarkerClick += MainMap_OnMarkerClick;
                 fMapControl.OnMarkerEnter += MainMap_OnMarkerEnter;
@@ -241,7 +230,6 @@ namespace GKUI.Components
                 fMapControl.MouseMove += MainMap_MouseMove;
                 fMapControl.MouseDown += MainMap_MouseDown;
                 fMapControl.MouseUp += MainMap_MouseUp;
-                fMapControl.MouseDoubleClick += MainMap_MouseDoubleClick;
                 fMapControl.KeyUp += MainForm_KeyUp;
 
                 // set current marker
@@ -260,36 +248,32 @@ namespace GKUI.Components
             }
         }
 
-        private void ZoomAndCenterMarkers()
+        public GMapRoute AddRoute(string name, List<PointLatLng> points)
         {
-            fMapControl.ZoomAndCenterMarkers(null);
-        }
-
-        private void AddRoute(List<PointLatLng> points)
-        {
-            var route = new GMapRoute("route test", points);
+            var route = new GMapRoute(name, points);
             route.IsHitTestVisible = true;
             fObjects.Routes.Add(route);
+            return route;
         }
 
-        private void AddPolygon(List<PointLatLng> points)
+        public GMapPolygon AddPolygon(string name, List<PointLatLng> points)
         {
-            var polygon = new GMapPolygon("polygon test", points);
+            var polygon = new GMapPolygon(name, points);
             polygon.IsHitTestVisible = true;
             fObjects.Polygons.Add(polygon);
+            return polygon;
         }
 
         /// <summary>
         /// adds marker using geocoder
         /// </summary>
         /// <param name="place"></param>
-        private void AddLocationMarker(string place)
+        public void AddLocationMarker(string place)
         {
-            GeocoderStatusCode status = GeocoderStatusCode.Unknown;
+            GeocoderStatusCode status;
             PointLatLng? pos = GMapProviders.GoogleMap.GetPoint(place, out status);
             if (pos != null && status == GeocoderStatusCode.Success) {
-                GMarkerIcon m = new GMarkerIcon(pos.Value, GMarkerIconType.green);
-                m.ToolTip = new GMapRoundedToolTip(m);
+                var m = new GMarkerIcon(pos.Value, GMarkerIconType.green);
                 m.ToolTipText = place;
                 m.ToolTipMode = MarkerTooltipMode.Always;
 
@@ -297,7 +281,7 @@ namespace GKUI.Components
             }
         }
 
-        private void AddMarker(PointLatLng position, string toolTip = "")
+        public void AddMarker(PointLatLng position, string toolTip = "")
         {
             GMarkerIcon m = new GMarkerIcon(position, GMarkerIconType.green_small);
             if (!string.IsNullOrEmpty(toolTip)) {
@@ -307,7 +291,7 @@ namespace GKUI.Components
             fObjects.Markers.Add(m);
         }
 
-        private void AddMarkerAndSearchTooltip(PointLatLng position)
+        public void AddMarkerAndSearchTooltip(PointLatLng position)
         {
             Placemark? p = null;
             GeocoderStatusCode status;
@@ -316,45 +300,50 @@ namespace GKUI.Components
                 p = ret;
             }
 
-            string toolTip = (p != null) ? p.Value.Address : fTargetMarker.Position.ToString();
+            string toolTip = (p != null) ? p.Value.Address : position.ToString();
             AddMarker(position, toolTip);
         }
 
-        private void ClearAll()
+        public void SaveSnapshot(string fileName)
         {
-            fObjects.Clear();
+            Image tmpImage = fMapControl.ToImage();
+            if (tmpImage != null) {
+                using (tmpImage) {
+                    tmpImage.Save(fileName);
+                }
+            }
         }
 
         #region Event handlers
 
-        private void MainMap_OnMarkerLeave(GMapMarker item)
+        private void MainMap_OnMarkerLeave(MapMarker item)
         {
             // dummy
         }
 
-        private void MainMap_OnMarkerEnter(GMapMarker item)
+        private void MainMap_OnMarkerEnter(MapMarker item)
         {
             // dummy
         }
 
-        private void MainMap_OnPolygonLeave(GMapPolygon item)
+        private void MainMap_OnPolygonLeave(MapPolygon item)
         {
-            item.Stroke.Color = Color.MidnightBlue;
+            ((GMapPolygon)item).Stroke.Color = Color.MidnightBlue;
         }
 
-        private void MainMap_OnPolygonEnter(GMapPolygon item)
+        private void MainMap_OnPolygonEnter(MapPolygon item)
         {
-            item.Stroke.Color = Color.Red;
+            ((GMapPolygon)item).Stroke.Color = Color.Red;
         }
 
-        private void MainMap_OnRouteLeave(GMapRoute item)
+        private void MainMap_OnRouteLeave(MapRoute item)
         {
-            item.Stroke.Color = Color.MidnightBlue;
+            ((GMapRoute)item).Stroke.Color = Color.MidnightBlue;
         }
 
-        private void MainMap_OnRouteEnter(GMapRoute item)
+        private void MainMap_OnRouteEnter(MapRoute item)
         {
-            item.Stroke.Color = Color.Red;
+            ((GMapRoute)item).Stroke.Color = Color.Red;
         }
 
         private void MainMap_OnMapTypeChanged(GMapProvider type)
@@ -367,11 +356,6 @@ namespace GKUI.Components
             if (e.Button == MouseButtons.Left) {
                 fIsMouseDown = false;
             }
-        }
-
-        private void MainMap_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            // dummy
         }
 
         private void MainMap_MouseDown(object sender, MouseEventArgs e)
@@ -395,11 +379,7 @@ namespace GKUI.Components
             }
         }
 
-        private void MainMap_OnMapZoomChanged()
-        {
-        }
-
-        private void MainMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
+        private void MainMap_OnMarkerClick(MapMarker item, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left) {
                 GeocoderStatusCode status;
@@ -409,11 +389,6 @@ namespace GKUI.Components
                     fMapControl.Invalidate(false);
                 }
             }
-        }
-
-        private void MainMap_OnPositionChanged(PointLatLng point)
-        {
-            // dummy
         }
 
         private void MainForm_KeyUp(object sender, KeyEventArgs e)

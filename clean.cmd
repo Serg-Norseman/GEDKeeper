@@ -50,6 +50,15 @@ rmdir .\projects\GKIntl\obj /s /q
 rmdir .\projects\GKUpdater\bin /s /q
 rmdir .\projects\GKUpdater\obj /s /q
 
+rmdir .\projects\GKMap\GKMap.Core\bin /s /q
+rmdir .\projects\GKMap\GKMap.Core\obj /s /q
+
+rmdir .\projects\GKMap\GKMap.WinForms\bin /s /q
+rmdir .\projects\GKMap\GKMap.WinForms\obj /s /q
+
+rmdir .\projects\GKMap\GKMap.WinForms.Demo\bin /s /q
+rmdir .\projects\GKMap\GKMap.WinForms.Demo\obj /s /q
+
 rem <<< Plugins cleaning >>>
 
 rmdir .\projects\GKv2\GKSamplePlugin\bin /s /q

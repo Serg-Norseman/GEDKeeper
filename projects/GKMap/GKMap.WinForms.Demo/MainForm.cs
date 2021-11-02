@@ -122,15 +122,9 @@ namespace GKMap.WinForms.Demo
                     sfd.Filter = "PNG (*.png)|*.png";
                     sfd.FileName = "GKMap image";
 
-                    Image tmpImage = MapBrowser.MapControl.ToImage();
-                    if (tmpImage == null) return;
-
-                    using (tmpImage) {
-                        if (sfd.ShowDialog() == DialogResult.OK) {
-                            tmpImage.Save(sfd.FileName);
-
-                            MessageBox.Show("Image saved: " + sfd.FileName, "GKMap", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
+                    if (sfd.ShowDialog() == DialogResult.OK) {
+                        MapBrowser.SaveSnapshot(sfd.FileName);
+                        MessageBox.Show("Image saved: " + sfd.FileName, "GKMap", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             } catch (Exception ex) {
