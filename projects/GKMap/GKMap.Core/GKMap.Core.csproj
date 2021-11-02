@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GKMap</RootNamespace>
+    <AssemblyName>GKMap.Core</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DelaySign>False</DelaySign>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SQLite;EMBED_LIBS;</DefineConstants>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;SQLite;EMBED_LIBS;</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <Optimize>true</Optimize>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(MonoCS)' == 'true' ">
+    <DefineConstants>$(DefineConstants);MONO;</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(MonoCS)' == 'true' ">
+    <Reference Include="Mono.Data.Sqlite">
+      <HintPath>..\libs\Mono.Data.Sqlite.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\libs\Mono.Security.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" !$(DefineConstants.Contains('EMBED_LIBS;')) ">
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\libs\x86\System.Data.SQLite.DLL</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" $(DefineConstants.Contains('EMBED_LIBS;')) ">
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\libs\x86\System.Data.SQLite.DLL</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CacheProviders\MemoryCache.cs" />
+    <Compile Include="MapObjects\MapMarker.cs" />
+    <Compile Include="MapObjects\MapFigure.cs" />
+    <Compile Include="MapObjects\MapObject.cs" />
+    <Compile Include="MapObjects\MapOverlay.cs" />
+    <Compile Include="MapObjects\MapPolygon.cs" />
+    <Compile Include="MapProviders\EmptyProvider.cs" />
+    <Compile Include="EmptyWebProxy.cs" />
+    <Compile Include="MapProviders\GMapProviders.cs" />
+    <Compile Include="MapObjects\MapRoute.cs" />
+    <Compile Include="MapObjects\MapToolTip.cs" />
+    <Compile Include="ObservableCollectionThreadSafe.cs" />
+    <Compile Include="SocksHttpWeb.cs" />
+    <Compile Include="DrawTile.cs" />
+    <Compile Include="ProxySocket\AuthMethod.cs" />
+    <Compile Include="ProxySocket\AuthNone.cs" />
+    <Compile Include="ProxySocket\AuthUserPass.cs" />
+    <Compile Include="ProxySocket\IAsyncProxyResult.cs" />
+    <Compile Include="ProxySocket\ProxyException.cs" />
+    <Compile Include="ProxySocket\ProxySocket.cs" />
+    <Compile Include="ProxySocket\Socks4Handler.cs" />
+    <Compile Include="ProxySocket\Socks5Handler.cs" />
+    <Compile Include="ProxySocket\SocksHandler.cs" />
+    <Compile Include="MapProviders\Bing\BingMapProvider.cs" />
+    <Compile Include="MapProviders\Bing\BingOSMapProvider.cs" />
+    <Compile Include="MapProviders\Bing\BingSatelliteMapProvider.cs" />
+    <Compile Include="MapProviders\Bing\BingHybridMapProvider.cs" />
+    <Compile Include="MapProviders\Etc\WikiMapiaMapProvider.cs" />
+    <Compile Include="MapProviders\OpenStreetMap\OpenStreet4UMapProvider.cs" />
+    <Compile Include="MapProviders\Yandex\YandexHybridMapProvider.cs" />
+    <Compile Include="MapProviders\Yandex\YandexSatelliteMapProvider.cs" />
+    <Compile Include="MapProviders\Yandex\YandexMapProvider.cs" />
+    <Compile Include="MapProviders\Google\GoogleTerrainMapProvider.cs" />
+    <Compile Include="MapProviders\Google\GoogleHybridMapProvider.cs" />
+    <Compile Include="MapProviders\Google\GoogleSatelliteMapProvider.cs" />
+    <Compile Include="MapProviders\Google\GoogleMapProvider.cs" />
+    <Compile Include="MapProviders\OpenStreetMap\OpenStreetMapProvider.cs" />
+    <Compile Include="MapProviders\GMapProvider.cs" />
+    <Compile Include="IGeocodingProvider.cs" />
+    <Compile Include="CacheProviders\SQLitePureImageCache.cs" />
+    <Compile Include="CacheQueueItem.cs" />
+    <Compile Include="RWLock.cs" />
+    <Compile Include="PureImage.cs" />
+    <Compile Include="LoadTask.cs" />
+    <Compile Include="RawTile.cs" />
+    <Compile Include="MapProviders\Yandex\MercatorProjectionYandex.cs" />
+    <Compile Include="MapProviders\MercatorProjection.cs" />
+    <Compile Include="GeocoderStatusCode.cs" />
+    <Compile Include="LanguageType.cs" />
+    <Compile Include="PureProjection.cs" />
+    <Compile Include="IMapControl.cs" />
+    <Compile Include="GPoint.cs" />
+    <Compile Include="IPureImageCache.cs" />
+    <Compile Include="GRect.cs" />
+    <Compile Include="Singleton.cs" />
+    <Compile Include="MapCore.cs" />
+    <Compile Include="Tile.cs" />
+    <Compile Include="TileMatrix.cs" />
+    <Compile Include="GMaps.cs" />
+    <Compile Include="Placemark.cs" />
+    <Compile Include="PointLatLng.cs" />
+    <Compile Include="RectLatLng.cs" />
+    <Compile Include="GSize.cs" />
+    <Compile Include="SizeLatLng.cs" />
+    <Compile Include="Stuff.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(DefineConstants.Contains('EMBED_LIBS;')) ">
+    <EmbeddedResource Include="Resources\System.Data.SQLite.x64.NET4.dll.gz" />
+    <EmbeddedResource Include="Resources\System.Data.SQLite.x86.NET4.dll.gz" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\CreateTileDb.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\arrow.png" />
+    <EmbeddedResource Include="Resources\Images\arrow_shadow.png" />
+    <EmbeddedResource Include="Resources\Images\black_small.png" />
+    <EmbeddedResource Include="Resources\Images\blue-dot.png" />
+    <EmbeddedResource Include="Resources\Images\blue.png" />
+    <EmbeddedResource Include="Resources\Images\blue_small.png" />
+    <EmbeddedResource Include="Resources\Images\brown_small.png" />
+    <EmbeddedResource Include="Resources\Images\drag_cross_67_16.png" />
+    <EmbeddedResource Include="Resources\Images\gray_small.png" />
+    <EmbeddedResource Include="Resources\Images\green-dot.png" />
+    <EmbeddedResource Include="Resources\Images\green.png" />
+    <EmbeddedResource Include="Resources\Images\green_small.png" />
+    <EmbeddedResource Include="Resources\Images\lightblue.png" />
+    <EmbeddedResource Include="Resources\Images\ltblue-dot.png" />
+    <EmbeddedResource Include="Resources\Images\msmarker_shadow.png" />
+    <EmbeddedResource Include="Resources\Images\orange-dot.png" />
+    <EmbeddedResource Include="Resources\Images\orange.png" />
+    <EmbeddedResource Include="Resources\Images\orange_small.png" />
+    <EmbeddedResource Include="Resources\Images\pink-dot.png" />
+    <EmbeddedResource Include="Resources\Images\pink.png" />
+    <EmbeddedResource Include="Resources\Images\purple-dot.png" />
+    <EmbeddedResource Include="Resources\Images\purple.png" />
+    <EmbeddedResource Include="Resources\Images\purple_small.png" />
+    <EmbeddedResource Include="Resources\Images\red-dot.png" />
+    <EmbeddedResource Include="Resources\Images\red.png" />
+    <EmbeddedResource Include="Resources\Images\red_small.png" />
+    <EmbeddedResource Include="Resources\Images\shadow_small.png" />
+    <EmbeddedResource Include="Resources\Images\white_small.png" />
+    <EmbeddedResource Include="Resources\Images\yellow-dot.png" />
+    <EmbeddedResource Include="Resources\Images\yellow.png" />
+    <EmbeddedResource Include="Resources\Images\yellow_small.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
