@@ -168,6 +168,35 @@ namespace GKUI.Components
             }
         }
 
+        public static ToolStripMenuItem AddToolStripItem(ContextMenuStrip contextMenu, string text, object tag, EventHandler clickHandler)
+        {
+            var tsItem = new ToolStripMenuItem(text, null, clickHandler);
+            tsItem.Tag = tag;
+            contextMenu.Items.Add(tsItem);
+            return tsItem;
+        }
+
+        public static T GetMenuItemTag<T>(ContextMenuStrip contextMenu, object sender)
+        {
+            foreach (ToolStripMenuItem tsItem in contextMenu.Items) {
+                tsItem.Checked = false;
+            }
+            var senderItem = ((ToolStripMenuItem)sender);
+            ((ToolStripMenuItem)sender).Checked = true;
+            return (T)senderItem.Tag;
+        }
+
+        public static void SetMenuItemTag<T>(ContextMenuStrip contextMenu, T value)
+        {
+            foreach (ToolStripMenuItem tsItem in contextMenu.Items) {
+                T itemTag = (T)tsItem.Tag;
+                if (Equals(itemTag, value)) {
+                    tsItem.PerformClick();
+                    break;
+                }
+            }
+        }
+
         public static GKListView CreateRecordsView(Control parent, IBaseContext baseContext, GDMRecordType recType)
         {
             if (parent == null)

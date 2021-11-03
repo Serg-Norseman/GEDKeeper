@@ -897,8 +897,11 @@ namespace GKCore
         /* 836 */ LSID_SurnameFirstInOrder,
         /* 837 */ LSID_Borders,
         /* 838 */ LSID_UpdateToLatestVersion,
+        /* 839 */ LSID_Providers,
+        /* 840 */ LSID_Coordinates,
+        /* 841 */ LSID_LoadPlaces,
 
-        /* 000 */ LSID_Last = LSID_UpdateToLatestVersion
+        /* 000 */ LSID_Last = LSID_LoadPlaces
     }
 
 
@@ -1751,6 +1754,9 @@ namespace GKCore
             /* 836 */ "Surname first in order",
             /* 837 */ "Borders",
             /* 838 */ "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?",
+            /* 839 */ "Providers",
+            /* 840 */ "Coordinates",
+            /* 841 */ "Load places",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

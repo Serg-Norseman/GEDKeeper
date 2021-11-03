@@ -380,6 +380,14 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\GKMap\GKMap.Core\GKMap.Core.csproj">
+      <Project>{d0c39d9d-bed0-418b-9a5e-713176caf40c}</Project>
+      <Name>GKMap.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GKMap\GKMap.WinForms\GKMap.WinForms.csproj">
+      <Project>{e06def77-f933-42fb-afd7-db2d0d8d6a98}</Project>
+      <Name>GKMap.WinForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GKComponents\GKComponents.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents</Name>

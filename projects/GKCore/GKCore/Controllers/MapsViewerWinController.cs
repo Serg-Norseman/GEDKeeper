@@ -233,13 +233,18 @@ namespace GKCore.Controllers
         }
 
         // TODO: localize?
-        public void SaveImage()
+        public void SaveSnapshot()
         {
-            string filter1 = "Image files|*.jpg";
+            try {
+                string filter1 = "Image files|*.jpg";
 
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fileName)) {
-                fView.MapBrowser.SaveSnapshot(fileName);
+                string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
+                if (!string.IsNullOrEmpty(fileName)) {
+                    fView.MapBrowser.SaveSnapshot(fileName);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("SaveSnapshot()", ex);
+                AppHost.StdDialogs.ShowError("Image failed to save: " + ex.Message);
             }
         }
     }

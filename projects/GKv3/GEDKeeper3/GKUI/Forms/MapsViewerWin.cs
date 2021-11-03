@@ -112,7 +112,7 @@ namespace GKUI.Forms
 
         private void btnSaveImage_Click(object sender, EventArgs e)
         {
-            fController.SaveImage();
+            fController.SaveSnapshot();
         }
 
         private void btnSelectPlaces_Click(object sender, EventArgs e)

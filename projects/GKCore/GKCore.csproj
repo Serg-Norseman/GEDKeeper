@@ -9,6 +9,12 @@
     <AssemblyName>GKCore</AssemblyName>
     <NoWin32Manifest>False</NoWin32Manifest>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
   <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
     <Reference Include="LuaInterface">
       <HintPath>..\libs\mswin\LuaInterface.dll</HintPath>

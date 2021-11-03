@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Net;
 using System.Windows.Forms;
 using BSLib;
+using GKCore;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.Options;
@@ -146,7 +147,7 @@ namespace GKUI.Components
                 var point = new PointLatLng(pt.Latitude, pt.Longitude);
 
                 if (fShowPoints) {
-                    AddMarker(point);
+                    AddMarker(point, GMarkerIconType.green, MarkerTooltipMode.OnMouseOver, " ");
                     if (i == num - 1) {
                         SetCenter(pt.Latitude, pt.Longitude, -1);
                     }
@@ -180,9 +181,25 @@ namespace GKUI.Components
         private readonly GMapOverlay fObjects = new GMapOverlay("objects");
         private readonly GMapOverlay fTopOverlay = new GMapOverlay();
 
+        private MapObject fCurrentObj;
         private bool fIsMouseDown;
         private GMapControl fMapControl;
         private MapMarker fTargetMarker;
+
+        public GMapControl MapControl
+        {
+            get { return fMapControl; }
+        }
+
+        public GMapOverlay Objects
+        {
+            get { return fObjects; }
+        }
+
+        public PointLatLng TargetPosition
+        {
+            get { return fTargetMarker.Position; }
+        }
 
         private void InitControl()
         {
@@ -205,11 +222,9 @@ namespace GKUI.Components
                     GMapProvider.WebProxy = WebRequest.DefaultWebProxy;
                 }
 
-                // set cache mode only if no internet available
-                //fMapControl.Manager.Mode = (!PingNetwork("pingtest.com")) ? AccessMode.CacheOnly : AccessMode.ServerAndCache;
-
-                // config map         
+                // config map
                 fMapControl.MapProvider = GMapProviders.GoogleMap;
+                fMapControl.Position = new PointLatLng(30.0447272077905, 31.2361907958984);
                 fMapControl.MinZoom = 0;
                 fMapControl.MaxZoom = 24;
                 fMapControl.Zoom = 9;
@@ -248,6 +263,24 @@ namespace GKUI.Components
             }
         }
 
+        public void GeneratePolygon()
+        {
+            var points = new List<PointLatLng>();
+            foreach (MapMarker m in fObjects.Markers) {
+                points.Add(m.Position);
+            }
+            AddPolygon("polygon test", points);
+        }
+
+        public void GenerateRoute()
+        {
+            var points = new List<PointLatLng>();
+            foreach (MapMarker m in fObjects.Markers) {
+                points.Add(m.Position);
+            }
+            AddRoute("route test", points);
+        }
+
         public GMapRoute AddRoute(string name, List<PointLatLng> points)
         {
             var route = new GMapRoute(name, points);
@@ -281,27 +314,24 @@ namespace GKUI.Components
             }
         }
 
-        public void AddMarker(PointLatLng position, string toolTip = "")
+        public void AddMarker(PointLatLng position, GMarkerIconType iconType, MarkerTooltipMode tooltipMode, string toolTip = "")
         {
-            GMarkerIcon m = new GMarkerIcon(position, GMarkerIconType.green_small);
+            var m = new GMarkerIcon(position, iconType); // GMarkerIconType.green
+            m.ToolTipMode = tooltipMode; // MarkerTooltipMode.OnMouseOver
+
             if (!string.IsNullOrEmpty(toolTip)) {
-                m.ToolTipMode = MarkerTooltipMode.Always;
                 m.ToolTipText = toolTip;
+            } else {
+                Placemark? p = null;
+                GeocoderStatusCode status;
+                var ret = GMapProviders.GoogleMap.GetPlacemark(position, out status);
+                if (status == GeocoderStatusCode.Success && ret != null) {
+                    p = ret;
+                }
+                m.ToolTipText = (p != null) ? p.Value.Address : position.ToString();
             }
+
             fObjects.Markers.Add(m);
-        }
-
-        public void AddMarkerAndSearchTooltip(PointLatLng position)
-        {
-            Placemark? p = null;
-            GeocoderStatusCode status;
-            var ret = GMapProviders.GoogleMap.GetPlacemark(position, out status);
-            if (status == GeocoderStatusCode.Success && ret != null) {
-                p = ret;
-            }
-
-            string toolTip = (p != null) ? p.Value.Address : position.ToString();
-            AddMarker(position, toolTip);
         }
 
         public void SaveSnapshot(string fileName)
@@ -318,31 +348,35 @@ namespace GKUI.Components
 
         private void MainMap_OnMarkerLeave(MapMarker item)
         {
-            // dummy
+            fCurrentObj = null;
         }
 
         private void MainMap_OnMarkerEnter(MapMarker item)
         {
-            // dummy
+            fCurrentObj = item;
         }
 
         private void MainMap_OnPolygonLeave(MapPolygon item)
         {
+            fCurrentObj = null;
             ((GMapPolygon)item).Stroke.Color = Color.MidnightBlue;
         }
 
         private void MainMap_OnPolygonEnter(MapPolygon item)
         {
+            fCurrentObj = item;
             ((GMapPolygon)item).Stroke.Color = Color.Red;
         }
 
         private void MainMap_OnRouteLeave(MapRoute item)
         {
+            fCurrentObj = null;
             ((GMapRoute)item).Stroke.Color = Color.MidnightBlue;
         }
 
         private void MainMap_OnRouteEnter(MapRoute item)
         {
+            fCurrentObj = item;
             ((GMapRoute)item).Stroke.Color = Color.Red;
         }
 
@@ -413,6 +447,15 @@ namespace GKUI.Components
                     break;
 
                 case Keys.Delete:
+                    if (fCurrentObj != null) {
+                        if (fCurrentObj is MapPolygon)
+                            fObjects.Polygons.Remove(fCurrentObj as MapPolygon);
+                        if (fCurrentObj is MapRoute)
+                            fObjects.Routes.Remove(fCurrentObj as MapRoute);
+                        if (fCurrentObj is MapMarker)
+                            fObjects.Markers.Remove(fCurrentObj as MapMarker);
+                        fCurrentObj = null;
+                    }
                     break;
 
                 case Keys.Add:

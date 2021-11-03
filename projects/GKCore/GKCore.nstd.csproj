@@ -47,6 +47,9 @@
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\netstd\BSLib.Linguistics.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.SQLite">
+      <HintPath>..\libs\netstd\BSLib.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="NLua">
       <HintPath>..\libs\linux\NLua.dll</HintPath>
     </Reference>
