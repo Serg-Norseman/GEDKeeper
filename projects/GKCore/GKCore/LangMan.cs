@@ -896,8 +896,9 @@ namespace GKCore
         /* 835 */ LSID_ShortKinshipForm,
         /* 836 */ LSID_SurnameFirstInOrder,
         /* 837 */ LSID_Borders,
+        /* 838 */ LSID_UpdateToLatestVersion,
 
-        /* 000 */ LSID_Last = LSID_Borders
+        /* 000 */ LSID_Last = LSID_UpdateToLatestVersion
     }
 
 
@@ -1749,6 +1750,7 @@ namespace GKCore
             /* 835 */ "Short kinship form",
             /* 836 */ "Surname first in order",
             /* 837 */ "Borders",
+            /* 838 */ "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

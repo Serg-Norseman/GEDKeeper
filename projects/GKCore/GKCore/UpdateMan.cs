@@ -97,8 +97,8 @@ namespace GKCore
 
                 if (curVersion.CompareTo(newVersion) < 0) {
                     #if !CI_MODE
-                    string question = "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?";
-                    if (AppHost.StdDialogs.ShowQuestionYN(string.Format(question, curVersion, newVersion))) {
+                    string question = LangMan.LS(LSID.LSID_UpdateToLatestVersion, curVersion, newVersion);
+                    if (AppHost.StdDialogs.ShowQuestionYN(question)) {
                         Process.Start(url);
                     }
                     #endif
