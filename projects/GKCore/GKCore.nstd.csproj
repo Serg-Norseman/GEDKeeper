@@ -47,9 +47,6 @@
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\netstd\BSLib.Linguistics.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.SQLite">
-      <HintPath>..\libs\netstd\BSLib.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="NLua">
       <HintPath>..\libs\linux\NLua.dll</HintPath>
     </Reference>
@@ -170,5 +167,13 @@
     <EmbeddedResource Include="Resources\btn_volume_mute.png" />
     <EmbeddedResource Include="Resources\pnl_video.png" />
     <EmbeddedResource Include="Resources\btn_info.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
   </ItemGroup>
 </Project>

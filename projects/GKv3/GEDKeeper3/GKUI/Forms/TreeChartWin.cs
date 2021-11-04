@@ -216,7 +216,7 @@ namespace GKUI.Forms
 
         private void ImageTree_PersonProperties(object sender, EventArgs e)
         {
-            MenuPerson.Show(fTreeBox /*, new Point(e.X, e.Y)*/); // FIXME: GKv3 DevRestr
+            MenuPerson.Show(fTreeBox, ((MouseEventArgs)e).Location);
         }
 
         private void ImageTree_RootChanged(object sender, TreeChartPerson person)
