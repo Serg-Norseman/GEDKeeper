@@ -140,6 +140,10 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            tbSaveSnapshot.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
+
+            UIHelper.FixToolStrip(ToolBar1);
+
             fMapBrowser = new GKMapBrowser();
             fMapBrowser.Dock = DockStyle.Fill;
             panClient.Controls.Add(this.fMapBrowser, 0, 0);
@@ -201,7 +205,6 @@ namespace GKUI.Forms
             btnSelectPlaces.Text = LangMan.LS(LSID.LSID_Show);
             chkLinesVisible.Text = LangMan.LS(LSID.LSID_LinesVisible);
 
-            tbSaveSnapshot.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
             SetToolTip(tbSaveSnapshot, LangMan.LS(LSID.LSID_ImageSaveTip));
 
             tbLoadPlaces.Text = LangMan.LS(LSID.LSID_LoadPlaces);

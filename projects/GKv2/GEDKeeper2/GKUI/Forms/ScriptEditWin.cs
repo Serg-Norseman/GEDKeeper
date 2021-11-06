@@ -143,6 +143,8 @@ namespace GKUI.Forms
             tbSaveScript.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
             tbRun.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
+            UIHelper.FixToolStrip(ToolBar1);
+
             fController = new ScriptEditWinController(this);
             fController.Init(baseWin);
 

@@ -284,6 +284,15 @@ namespace GKUI.Components
             }
         }
 
+        public static void FixToolStrip(ToolStrip toolStrip)
+        {
+            #if MONO
+            // dirty hack: Mono ToolStrip does not support correct AutoSize
+            toolStrip.AutoSize = false;
+            toolStrip.Height = 27;
+            #endif
+        }
+
         #region Application's autorun
         #if !MONO
 

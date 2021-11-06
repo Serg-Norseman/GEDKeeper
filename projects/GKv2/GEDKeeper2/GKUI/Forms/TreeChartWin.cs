@@ -78,6 +78,8 @@ namespace GKUI.Forms
             tbDocPrint.Visible = true;
             tbDocPreview.Visible = true;
 
+            UIHelper.FixToolStrip(ToolBar1);
+
             miModeBoth.Tag = TreeChartKind.ckBoth;
             miModeAncestors.Tag = TreeChartKind.ckAncestors;
             miModeDescendants.Tag = TreeChartKind.ckDescendants;

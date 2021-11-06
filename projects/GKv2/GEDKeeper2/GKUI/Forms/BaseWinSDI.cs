@@ -107,6 +107,8 @@ namespace GKUI.Forms
             tbDocPrint.Visible = false;
             tbDocPreview.Visible = false;
 
+            UIHelper.FixToolStrip(ToolBar1);
+
             AppHost.Instance.LoadWindow(this);
 
             fController = new BaseWinController(this);

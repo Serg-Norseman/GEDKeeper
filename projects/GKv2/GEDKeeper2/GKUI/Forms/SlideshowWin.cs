@@ -45,6 +45,8 @@ namespace GKUI.Forms
             tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
+            UIHelper.FixToolStrip(toolStrip1);
+
             SuspendLayout();
             fImageCtl = new ImageBox();
             fImageCtl.Dock = DockStyle.Fill;
