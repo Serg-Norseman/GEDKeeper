@@ -29,15 +29,10 @@
     <RegisterForComInterop>False</RegisterForComInterop>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SQLite;EMBED_LIBS;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;</DefineConstants>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Optimize>False</Optimize>
@@ -46,7 +41,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;SQLite;EMBED_LIBS;</DefineConstants>
+    <DefineConstants>TRACE;</DefineConstants>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <Optimize>true</Optimize>
     <ErrorReport>prompt</ErrorReport>
@@ -64,12 +59,7 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition=" !$(DefineConstants.Contains('EMBED_LIBS;')) ">
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\libs\x86\System.Data.SQLite.DLL</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition=" $(DefineConstants.Contains('EMBED_LIBS;')) ">
+  <ItemGroup>
     <Reference Include="System.Data.SQLite">
       <HintPath>..\libs\x86\System.Data.SQLite.DLL</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -149,11 +139,9 @@
     <Compile Include="Stuff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup Condition=" $(DefineConstants.Contains('EMBED_LIBS;')) ">
+  <ItemGroup>
     <EmbeddedResource Include="Resources\System.Data.SQLite.x64.NET4.dll.gz" />
     <EmbeddedResource Include="Resources\System.Data.SQLite.x86.NET4.dll.gz" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\CreateTileDb.sql" />
   </ItemGroup>
   <ItemGroup>
