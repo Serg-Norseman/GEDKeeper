@@ -299,8 +299,9 @@ namespace GKCore.Charts
                     DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
 
                     SetFlag(PersonFlag.pfIsDead, (lifeDates.DeathEvent != null));
-                    fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, false);
-                    fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, false);
+                    GlobalOptions glob = GlobalOptions.Instance;
+                    fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, glob.ShowDatesSign);
+                    fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, glob.ShowDatesSign);
 
                     if (!options.OnlyYears) {
                         if (options.ShowPlaces) {
