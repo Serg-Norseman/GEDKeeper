@@ -1025,6 +1025,11 @@ namespace GKCore
             return ((evt == null) ? null : evt.Date.Value);
         }
 
+        public static string GetMarriageDateStr(GDMFamilyRecord fRec, DateFormat dateFormat, bool sign)
+        {
+            GDMCustomDate date = GetMarriageDate(fRec);
+            return (date == null) ? string.Empty : date.GetDisplayStringExt(dateFormat, sign, false);
+        }
         public static string GetMarriageDateStr(GDMFamilyRecord fRec, DateFormat dateFormat)
         {
             GDMCustomDate date = GetMarriageDate(fRec);
