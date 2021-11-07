@@ -2758,13 +2758,14 @@ namespace GKCore
 
         public static void InitSecurityProtocol()
         {
-            #if NET35 || NET40
+            // Mono v4.6 doesn't contain SecurityProtocolType.Tls11
+            #if NET35 || NET40 || MONO
             const int Tls11 = 768;
             const int Tls12 = 3072;
             #endif
 
             try {
-                #if NET35 || NET40
+                #if NET35 || NET40 || MONO
                 ServicePointManager.SecurityProtocol =
                     (SecurityProtocolType)(ServicePointManager.SecurityProtocol |
                                            SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |
