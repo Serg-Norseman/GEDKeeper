@@ -92,16 +92,6 @@ namespace GKUI.Platform
             }
         }
 
-        public override void ShowWindow(IWindow window)
-        {
-            Form frm = window as Form;
-
-            if (frm != null) {
-                frm.ShowInTaskbar = true;
-                frm.Show();
-            }
-        }
-
         public override bool ShowModalX(ICommonDialog form, bool keepModeless = false)
         {
             IntPtr mainHandle = GetTopWindowHandle();

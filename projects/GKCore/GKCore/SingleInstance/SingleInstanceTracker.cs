@@ -4,7 +4,7 @@
  */
 
 #if !MONO
-#define IPC_SUPPORTS
+//#define IPC_SUPPORTS
 #endif
 
 #if NETSTANDARD
@@ -107,9 +107,6 @@ namespace GKCore.SingleInstance
 
                         // Retreive a reference to the proxy object which will be later used to send messages
                         fProxy = (SingleInstanceProxy)Activator.GetObject(typeof(SingleInstanceProxy), proxyUri);
-
-                        // Notify the first instance of the application that a new instance was created
-                        fProxy.Enforcer.OnNewInstanceCreated(new EventArgs());
                     }
                     
                     #else

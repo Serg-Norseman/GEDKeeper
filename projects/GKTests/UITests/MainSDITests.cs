@@ -78,7 +78,7 @@ namespace GKUI.Forms
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
 
             var appHost = (WFAppHost)AppHost.Instance;
-            Assert.IsNotNull(appHost.AppContext);
+            Assert.IsNotNull(appHost);
 
             appHost.BaseClosed(null);
             appHost.CloseWindow(null);

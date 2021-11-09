@@ -1,6 +1,8 @@
 
-del .\bin\*.* /q
-del .\plugins\*.* /q
+del .\bin\* /s /q
+for /d %%p in (.\bin\*) do rd "%%p" /s /q
+
+del .\plugins\* /s /q
 del .\deploy\*.zip /q
 del .\deploy\*.exe /q
 

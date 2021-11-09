@@ -63,7 +63,7 @@ namespace GKUI
 
         [STAThread]
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             WFAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
@@ -84,7 +84,7 @@ namespace GKUI
                         var appHost = (WFAppHost)AppHost.Instance;
                         appHost.Init(args, false);
 
-                        Application.Run(appHost.AppContext);
+                        Application.Run();
                     } finally {
                         AppHost.DoneSettings();
                     }

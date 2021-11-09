@@ -50,13 +50,6 @@ namespace GKUI.Platform
         #endif
 
 
-        private readonly ApplicationContext fAppContext;
-
-        public ApplicationContext AppContext
-        {
-            get { return fAppContext; }
-        }
-
         static WFAppHost()
         {
             SetAppSign("GEDKeeper2");
@@ -64,7 +57,6 @@ namespace GKUI.Platform
 
         public WFAppHost()
         {
-            fAppContext = new ApplicationContext();
             Application.ApplicationExit += this.OnApplicationExit;
         }
 
@@ -106,17 +98,7 @@ namespace GKUI.Platform
             base.CloseWindow(window);
 
             if (fRunningForms.Count == 0) {
-                fAppContext.ExitThread();
-            }
-        }
-
-        public override void ShowWindow(IWindow window)
-        {
-            Form frm = window as Form;
-
-            if (frm != null) {
-                frm.ShowInTaskbar = true;
-                frm.Show();
+                Application.ExitThread();
             }
         }
 

@@ -71,6 +71,7 @@ namespace GKCore.MVP.Views
         IMenuItem PluginsItem { get; }
 
         bool CheckModified();
+        void LoadBase(string fileName);
     }
 
 

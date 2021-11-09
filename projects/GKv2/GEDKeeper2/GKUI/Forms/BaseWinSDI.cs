@@ -769,6 +769,19 @@ namespace GKUI.Forms
             }
         }
 
+        void IBaseWindowView.LoadBase(string fileName)
+        {
+            MethodInvoker invoker = delegate() {
+                AppHost.Instance.LoadBase(this, fileName);
+            };
+
+            if (InvokeRequired) {
+                Invoke(invoker);
+            } else {
+                invoker();
+            }
+        }
+
         private void StatusBar_DrawItem(object sender, StatusBarDrawItemEventArgs sbdevent)
         {
             UpdateShieldState(sbdevent);
