@@ -926,6 +926,10 @@ namespace GKCore.Tools
         {
             if (rec == null) return;
 
+            if (rec.RecordType != GDMRecordType.rtIndividual && rec.RecordType != GDMRecordType.rtFamily) {
+                CheckRelations_AddRel(splitList, rec);
+            }
+
             CheckRelations_CheckSWL(tree, splitList, rec);
         }
 
@@ -1000,14 +1004,55 @@ namespace GKCore.Tools
             }
         }
 
+        private static void CheckRelations_RequireFamily(GDMTree tree, List<GDMRecord> splitList, GDMFamilyRecord fRec)
+        {
+            if (fRec == null) return;
+
+            if (splitList.Contains(tree.GetPtrValue<GDMRecord>(fRec.Husband))) {
+                CheckRelations_AddRel(splitList, fRec);
+                return;
+            }
+
+            if (splitList.Contains(tree.GetPtrValue<GDMRecord>(fRec.Wife))) {
+                CheckRelations_AddRel(splitList, fRec);
+                return;
+            }
+
+            for (int i = 0, num = fRec.Children.Count; i < num; i++) {
+                if (splitList.Contains(tree.GetPtrValue<GDMRecord>(fRec.Children[i]))) {
+                    CheckRelations_AddRel(splitList, fRec);
+                    return;
+                }
+            }
+        }
+
         public static void CheckRelations(GDMTree tree, List<GDMRecord> splitList)
         {
             if (splitList == null)
                 throw new ArgumentNullException("splitList");
 
+            // check relations betweeen individuals from list
             int num = splitList.Count;
-            for (int i = 0; i < num; i++) {
-                GDMRecord rec = splitList[i];
+            for (int k = 0; k < num; k++) {
+                var iRec = splitList[k] as GDMIndividualRecord;
+                if (iRec == null) continue;
+
+                for (int i = 0; i < iRec.ChildToFamilyLinks.Count; i++) {
+                    var cfl = iRec.ChildToFamilyLinks[i];
+                    CheckRelations_RequireFamily(tree, splitList, tree.GetPtrValue(cfl));
+                }
+
+                for (int i = 0; i < iRec.SpouseToFamilyLinks.Count; i++) {
+                    var sfl = iRec.SpouseToFamilyLinks[i];
+                    CheckRelations_RequireFamily(tree, splitList, tree.GetPtrValue(sfl));
+                }
+            }
+
+            // check all other relations
+            int m = 0;
+            while (m < splitList.Count) {
+                GDMRecord rec = splitList[m];
+
                 switch (rec.RecordType) {
                     case GDMRecordType.rtIndividual:
                         CheckRelations_CheckIndividual(tree, splitList, rec as GDMIndividualRecord);
@@ -1037,6 +1082,8 @@ namespace GKCore.Tools
                         CheckRelations_CheckRecord(tree, splitList, rec);
                         break;
                 }
+
+                m += 1;
             }
         }
 
