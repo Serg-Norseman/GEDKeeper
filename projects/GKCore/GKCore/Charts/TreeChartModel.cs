@@ -500,9 +500,7 @@ namespace GKCore.Charts
 
                             if (fOptions.MarriagesDates) {
                                 DateFormat dateFormat = (fOptions.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
-                                //DateFormat dateFormat = DateFormat.dfYYYY;
-                                GlobalOptions glob = GlobalOptions.Instance;
-                                var marDate = GKUtils.GetMarriageDateStr(family, dateFormat, glob.ShowDatesSign);
+                                var marDate = GKUtils.GetMarriageDateStr(family, dateFormat, GlobalOptions.Instance.ShowDatesSign);
                                 if (!string.IsNullOrEmpty(marDate)) {
                                     if (result.Father != null) {
                                         result.Father.MarriageDate = marDate;
@@ -822,7 +820,9 @@ namespace GKCore.Charts
                 lines++;
             }
 
-            if (!fOptions.OnlyYears) {
+            if (fOptions.OnlyYears && !fOptions.ShowPlaces) {
+                lines++;
+            } else {
                 if (fOptions.BirthDateVisible) {
                     lines++;
                     if (fOptions.SeparateDatesAndPlacesLines) {
@@ -835,8 +835,6 @@ namespace GKCore.Charts
                         lines++;
                     }
                 }
-            } else {
-                lines++;
             }
 
             if (fOptions.Kinship) {

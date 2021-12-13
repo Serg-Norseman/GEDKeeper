@@ -303,31 +303,29 @@ namespace GKCore.Charts
                     fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, glob.ShowDatesSign);
                     fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, glob.ShowDatesSign);
 
-                    if (!options.OnlyYears) {
-                        if (options.ShowPlaces) {
-                            fBirthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
-                            if (!string.IsNullOrEmpty(fBirthPlace) && !options.SeparateDatesAndPlacesLines) {
-                                if (!string.IsNullOrEmpty(fBirthDate)) {
-                                    fBirthDate += ", ";
-                                }
-                                fBirthDate += fBirthPlace;
+                    if (options.ShowPlaces) {
+                        fBirthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
+                        if (!string.IsNullOrEmpty(fBirthPlace) && !options.SeparateDatesAndPlacesLines) {
+                            if (!string.IsNullOrEmpty(fBirthDate)) {
+                                fBirthDate += ", ";
                             }
-
-                            fDeathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
-                            if (!string.IsNullOrEmpty(fDeathPlace) && !options.SeparateDatesAndPlacesLines) {
-                                if (!string.IsNullOrEmpty(fDeathDate)) {
-                                    fDeathDate += ", ";
-                                }
-                                fDeathDate += fDeathPlace;
-                            }
+                            fBirthDate += fBirthPlace;
                         }
 
-                        if (!string.IsNullOrEmpty(fBirthDate)) {
-                            fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
+                        fDeathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
+                        if (!string.IsNullOrEmpty(fDeathPlace) && !options.SeparateDatesAndPlacesLines) {
+                            if (!string.IsNullOrEmpty(fDeathDate)) {
+                                fDeathDate += ", ";
+                            }
+                            fDeathDate += fDeathPlace;
                         }
-                        if (!string.IsNullOrEmpty(fDeathDate)) {
-                            fDeathDate = ImportUtils.STD_DEATH_SIGN + " " + fDeathDate;
-                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(fBirthDate)) {
+                        fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
+                    }
+                    if (!string.IsNullOrEmpty(fDeathDate)) {
+                        fDeathDate = ImportUtils.STD_DEATH_SIGN + " " + fDeathDate;
                     }
 
                     fSigns = EnumSet<SpecialUserRef>.Create();
@@ -421,7 +419,17 @@ namespace GKCore.Charts
                     idx++;
                 }
 
-                if (!options.OnlyYears) {
+                if (options.OnlyYears && !options.ShowPlaces) {
+                    string lifeYears = "[ ";
+                    lifeYears += (fBirthDate == "") ? "?" : fBirthDate;
+                    if (HasFlag(PersonFlag.pfIsDead)) {
+                        lifeYears += (fDeathDate == "") ? " - ?" : " - " + fDeathDate;
+                    }
+                    lifeYears += " ]";
+
+                    Lines[idx] = lifeYears;
+                    idx++;
+                } else {
                     if (options.BirthDateVisible) {
                         Lines[idx] = fBirthDate;
                         idx++;
@@ -441,16 +449,6 @@ namespace GKCore.Charts
                             idx++;
                         }
                     }
-                } else {
-                    string lifeYears = "[ ";
-                    lifeYears += (fBirthDate == "") ? "?" : fBirthDate;
-                    if (HasFlag(PersonFlag.pfIsDead)) {
-                        lifeYears += (fDeathDate == "") ? " - ?" : " - " + fDeathDate;
-                    }
-                    lifeYears += " ]";
-
-                    Lines[idx] = lifeYears;
-                    idx++;
                 }
 
                 if (options.Kinship) {

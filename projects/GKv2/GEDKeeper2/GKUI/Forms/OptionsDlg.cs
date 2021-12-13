@@ -810,8 +810,7 @@ namespace GKUI.Forms
 
         private void chkTreeChartOption_CheckedChanged(object sender, EventArgs e)
         {
-            chkShowPlaces.Enabled = !chkOnlyYears.Checked;
-            chkSeparateDAPLines.Enabled = chkShowPlaces.Checked && !chkOnlyYears.Checked;
+            chkSeparateDAPLines.Enabled = chkShowPlaces.Checked;
 
             chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked;
 
