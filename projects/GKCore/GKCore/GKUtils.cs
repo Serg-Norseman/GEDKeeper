@@ -61,10 +61,13 @@ namespace GKCore
         {
             var countries = new List<string>();
             foreach (CultureInfo culture in CultureInfo.GetCultures(CultureTypes.SpecificCultures)) {
-                RegionInfo regionInfo = new RegionInfo(culture.LCID);
-                string ctry = regionInfo.TwoLetterISORegionName; // DisplayName
-                if (!countries.Contains(ctry))
-                    countries.Add(ctry);
+                try {
+                    RegionInfo regionInfo = new RegionInfo(culture.Name);
+                    string ctry = regionInfo.TwoLetterISORegionName;
+                    if (!countries.Contains(ctry))
+                        countries.Add(ctry);
+                } catch {
+                }
             }
             countries.Sort();
             return countries;
