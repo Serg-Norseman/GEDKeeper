@@ -168,6 +168,7 @@ namespace GKUI.Forms
             chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
             chkDottedLinesOfAdoptedChildren.Checked = fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren;
             chkSeparateDAPLines.Checked = fOptions.TreeChartOptions.SeparateDatesAndPlacesLines;
+            chkOnlyLocality.Checked = fOptions.TreeChartOptions.OnlyLocality;
             chkBoldNames.Checked = fOptions.TreeChartOptions.BoldNames;
 
             lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
@@ -459,6 +460,7 @@ namespace GKUI.Forms
             fOptions.CheckTreeSize = chkCheckTreeSize.Checked;
             fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren = chkDottedLinesOfAdoptedChildren.Checked;
             fOptions.TreeChartOptions.SeparateDatesAndPlacesLines = chkSeparateDAPLines.Checked;
+            fOptions.TreeChartOptions.OnlyLocality = chkOnlyLocality.Checked;
             fOptions.TreeChartOptions.BoldNames = chkBoldNames.Checked;
 
             fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
@@ -731,6 +733,7 @@ namespace GKUI.Forms
             chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
             chkShowPlaces.Text = LangMan.LS(LSID.LSID_ShowPlaces);
             chkSeparateDAPLines.Text = LangMan.LS(LSID.LSID_SeparateDatesAndPlacesLines);
+            chkOnlyLocality.Text = LangMan.LS(LSID.LSID_OnlyLocality);
             chkHideUnknownSpouses.Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
             chkCheckTreeSize.Text = LangMan.LS(LSID.LSID_CheckTreeSize);
             chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
@@ -811,6 +814,7 @@ namespace GKUI.Forms
         private void chkTreeChartOption_CheckedChanged(object sender, EventArgs e)
         {
             chkSeparateDAPLines.Enabled = chkShowPlaces.Checked;
+            chkOnlyLocality.Enabled = chkShowPlaces.Checked;
 
             chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked;
 

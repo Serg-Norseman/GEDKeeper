@@ -304,7 +304,7 @@ namespace GKCore.Charts
                     fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, glob.ShowDatesSign);
 
                     if (options.ShowPlaces) {
-                        fBirthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
+                        fBirthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false, options.OnlyLocality);
                         if (!string.IsNullOrEmpty(fBirthPlace) && !options.SeparateDatesAndPlacesLines) {
                             if (!string.IsNullOrEmpty(fBirthDate)) {
                                 fBirthDate += ", ";
@@ -312,7 +312,7 @@ namespace GKCore.Charts
                             fBirthDate += fBirthPlace;
                         }
 
-                        fDeathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
+                        fDeathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false, options.OnlyLocality);
                         if (!string.IsNullOrEmpty(fDeathPlace) && !options.SeparateDatesAndPlacesLines) {
                             if (!string.IsNullOrEmpty(fDeathDate)) {
                                 fDeathDate += ", ";

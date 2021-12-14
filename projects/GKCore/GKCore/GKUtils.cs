@@ -1111,11 +1111,23 @@ namespace GKCore
             return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent(GEDCOMTagType.RESI), includeAddress);
         }
 
-        public static string GetPlaceStr(GDMCustomEvent evt, bool includeAddress)
+        private static char[] PLACE_DELIMITERS = new char[] { ',' };
+
+        public static string GetPlaceStr(GDMCustomEvent evt, bool includeAddress, bool onlyLocality = false)
         {
             if (evt == null || !evt.HasPlace) return string.Empty;
 
             string result = evt.Place.StringValue;
+
+            if (!string.IsNullOrEmpty(result) && onlyLocality) {
+                string[] placeParts = result.Split(PLACE_DELIMITERS, StringSplitOptions.None);
+                if (placeParts.Length > 1) {
+                    // for compatibility with strange cases
+                    bool reverseOrder = GlobalOptions.Instance.ReversePlaceEntitiesOrder;
+
+                    result = ((!reverseOrder) ? placeParts[0] : placeParts[placeParts.Length - 1]).Trim();
+                }
+            }
 
             if (includeAddress) {
                 string resi = evt.StringValue;

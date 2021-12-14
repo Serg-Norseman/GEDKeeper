@@ -96,6 +96,7 @@ namespace GKCore.Options
         private string fGeoSearchCountry;
         private readonly ListOptionsCollection fListOptions;
         private bool fReadabilityHighlightRows;
+        private bool fReversePlaceEntitiesOrder;
         private bool fShortKinshipForm;
         private bool fSurnameFirstInOrder;
 
@@ -369,6 +370,15 @@ namespace GKCore.Options
             get { return fResidenceFilters; }
         }
 
+        /// <summary>
+        /// Hidden option for non-standard order.
+        /// </summary>
+        public bool ReversePlaceEntitiesOrder
+        {
+            get { return fReversePlaceEntitiesOrder; }
+            set { fReversePlaceEntitiesOrder = value; }
+        }
+
         public bool ShortKinshipForm
         {
             get { return fShortKinshipForm; }
@@ -462,6 +472,8 @@ namespace GKCore.Options
             fCharsetDetection = false;
             fFirstCapitalLetterInNames = false;
             fGeoSearchCountry = string.Empty;
+
+            fReversePlaceEntitiesOrder = false;
         }
 
         protected override void Dispose(bool disposing)
@@ -755,6 +767,8 @@ namespace GKCore.Options
             fListOptions.LoadFromFile(ini);
 
             LoadPluginsFromFile(ini);
+
+            fReversePlaceEntitiesOrder = ini.ReadBool("Common", "ReversePlaceEntitiesOrder", false);
         }
 
         public void LoadFromFile(string fileName)
@@ -895,6 +909,8 @@ namespace GKCore.Options
             fListOptions.SaveToFile(ini);
 
             SavePluginsToFile(ini);
+
+            ini.WriteBool("Common", "ReversePlaceEntitiesOrder", fReversePlaceEntitiesOrder);
         }
 
         public void SaveToFile(string fileName)

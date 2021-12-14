@@ -900,8 +900,9 @@ namespace GKCore
         /* 839 */ LSID_Providers,
         /* 840 */ LSID_Coordinates,
         /* 841 */ LSID_LoadPlaces,
+        /* 842 */ LSID_OnlyLocality,
 
-        /* 000 */ LSID_Last = LSID_LoadPlaces
+        /* 000 */ LSID_Last = LSID_OnlyLocality
     }
 
 
@@ -1757,6 +1758,7 @@ namespace GKCore
             /* 839 */ "Providers",
             /* 840 */ "Coordinates",
             /* 841 */ "Load places",
+            /* 842 */ "Only locality",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
