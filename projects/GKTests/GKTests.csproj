@@ -223,6 +223,8 @@
     <EmbeddedResource Include="Resources\test_holidays.yaml" />
     <EmbeddedResource Include="Resources\test_pathreplace.yaml" />
     <EmbeddedResource Include="Resources\lorem_ipsum.txt" />
+    <EmbeddedResource Include="Resources\lorem_ipsum.rtf" />
+    <EmbeddedResource Include="Resources\lorem_ipsum.htm" />
     <EmbeddedResource Include="Resources\test_names_01.ged" />
     <EmbeddedResource Include="Resources\test_names_02.ged" />
     <EmbeddedResource Include="Resources\test_ahn_ansi%28win1250%29.ged" />

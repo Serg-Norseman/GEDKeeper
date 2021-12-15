@@ -44,6 +44,9 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
 
             fDialog = new RelationshipCalculatorDlg(fBase);

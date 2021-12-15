@@ -21,16 +21,20 @@
 #if !MONO
 
 using System.Windows.Forms;
-using NUnit.Framework;
 using GKTests;
+using GKUI.Platform;
+using NUnit.Framework;
 
 namespace GKUI.Components
 {
     [TestFixture]
     public class SmallComponents : CustomWindowTest
     {
-        public SmallComponents()
+        [TestFixtureSetUp]
+        public void SetUp()
         {
+            // GKMapBrowser -> GlobalOptions -> IGraphicsProviderEx
+            WFAppHost.ConfigureBootstrap(false);
         }
 
         [Test]

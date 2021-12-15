@@ -26,6 +26,7 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -42,6 +43,9 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
 
             fDialog = new StatisticsWin(fBase, new List<GDMRecord>());

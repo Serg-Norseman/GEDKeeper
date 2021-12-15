@@ -56,7 +56,7 @@ namespace GKUI.Forms
             ClickRadioButton("radTotal", form);
 
             formTest.ModalFormHandler = SaveFile_Cancel_Handler;
-            ClickButton("btnSaveImage", form);
+            ClickToolStripButton("tbSaveSnapshot", form);
 
             KeyDownForm(form.Name, Keys.Escape);
             form.Dispose();

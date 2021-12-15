@@ -32,7 +32,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;EMBED_LIBS;</DefineConstants>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Optimize>False</Optimize>
@@ -41,7 +41,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;</DefineConstants>
+    <DefineConstants>TRACE;EMBED_LIBS;</DefineConstants>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <Optimize>true</Optimize>
     <ErrorReport>prompt</ErrorReport>
@@ -139,9 +139,11 @@
     <Compile Include="Stuff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
     <EmbeddedResource Include="Resources\System.Data.SQLite.x64.NET4.dll.gz" />
     <EmbeddedResource Include="Resources\System.Data.SQLite.x86.NET4.dll.gz" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\CreateTileDb.sql" />
   </ItemGroup>
   <ItemGroup>

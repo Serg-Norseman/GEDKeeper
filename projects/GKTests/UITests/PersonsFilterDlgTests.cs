@@ -25,6 +25,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 using NUnit.Extensions.Forms;
 
@@ -42,6 +43,9 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
             fListMan = new IndividualListMan(fBase.Context);
 

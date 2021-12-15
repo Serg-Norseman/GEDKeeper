@@ -26,6 +26,7 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -44,6 +45,9 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
             fPerson = new GDMIndividualRecord(fBase.Context.Tree);
             fPersonalName = new GDMPersonalName();
