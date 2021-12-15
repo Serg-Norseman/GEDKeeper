@@ -9,6 +9,7 @@
     <RootNamespace>GKTests</RootNamespace>
     <AssemblyName>GKTests</AssemblyName>
     <NoWin32Manifest>False</NoWin32Manifest>
+    <Prefer32Bit>True</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
