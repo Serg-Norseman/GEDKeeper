@@ -214,7 +214,7 @@ namespace GEDmill.HTML
                         }
 
                         // Add fr events as events connected to this individual
-                        foreach (GDMFamilyEvent fes in fr.Events) {
+                        foreach (GDMCustomEvent fes in fr.Events) {
                             ProcessEvent(fes, spouseLink);
                         }
 

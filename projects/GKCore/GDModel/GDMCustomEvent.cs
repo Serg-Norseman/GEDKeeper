@@ -31,7 +31,7 @@ namespace GDModel
         private string fAgency;
         private string fCause;
         private string fClassification;
-        private GDMDateValue fDate;
+        private readonly GDMDateValue fDate;
         private GDMPlace fPlace;
         private string fReligiousAffilation;
         private GDMRestriction fRestriction;

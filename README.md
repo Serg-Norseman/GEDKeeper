@@ -20,7 +20,6 @@
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/gedkeeper/localized.svg)](https://crowdin.com/project/gedkeeper)
 
 
-## English
 The **GEDKeeper** program is for working with personal genealogical databases.
 
 The program is designed with an extremely simple and intuitive interface. 
@@ -64,48 +63,6 @@ improve the existing code, add a new feature, and so on.
 
 Have a bug or a feature request? Please first search for existing and closed [issues](https://github.com/Serg-Norseman/GEDKeeper/issues).
 If your problem or idea is not addressed yet, please open a new issue.
-
-
-## Russian
-Программа **GEDKeeper** предназначена для ведения личной генеалогической базы данных.
-
-Программа разработана так, чтобы интерфейс был максимально простым и интуитивно 
-понятным. Программа очень просто устанавливается на компьютер, полностью 
-поддерживает формат GEDCOM, не имеет ограничений по количеству персон и 
-поколений, позволяет генерировать родословные росписи, строить несколько видов 
-деревьев, а также выводить на печать и сохранять их изображения, обеспечивает 
-быструю навигацию, фильтрацию, поиск и возможности добавления 
-мультимедиа-материалов. Кроме того есть вывод географических данных на карты 
-Google Maps (© Google).
-
-Цель программы - максимально быстрое и эффективное средство ведения личной 
-генеалогической базы данных.
-
-Для расширения возможностей программы поддерживаются скрипты на Lua и плагины.
-
-Новые релизы могут быть загружены на странице [releases](https://github.com/serg-norseman/gedkeeper/releases) 
-или на домашней страничке проекта [GitHub.io](https://gedkeeper.github.io/index_rus.html). 
-Альтернативно можно пробовать загрузить на сайте 
-[Sourceforge](https://sourceforge.net/projects/gedkeeper/) (более популярен).
-
-Основной сайт проекта: [http://ru.gedkeeper.net/](http://ru.gedkeeper.net/)
-
-Группа сообщества: [Google Groups: GEDKeeper (ru)](https://groups.google.com/forum/#!forum/gedkeeper-ru)
-
-### Поддержка
-
-Проект полностью свободен, я не налагаю никаких ограничений на его использование. Я просто люблю делать полезные вещи.
-Если у вас есть желание помочь, расскажите друзьям о проекте или пожертвуйте на его развитие. Благодарю!
-
-### Содействие
-
-Любое участие приветствуются. Вклад в развитие может закрыть проблему, исправить ошибку, добавить новый блок,
-улучшить существующий код, добавить новую функцию и т.д.
-
-### Ошибки и запросы функций
-
-Есть ошибка или запрос новой функции? Сначала найдите существующие и закрытые проблемы.
-Если ваша проблема или идея еще не решены, создайте новую.
 
 
 ## Implementations
