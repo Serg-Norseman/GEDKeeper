@@ -31,10 +31,10 @@ namespace GDModel.Providers.GEDCOM
     /// </summary>
     public class GEDCOMChecker
     {
-        private IBaseContext fBaseContext;
-        private GEDCOMFormat fFormat;
-        private IProgressController fProgress;
-        private GDMTree fTree;
+        private readonly IBaseContext fBaseContext;
+        private readonly GEDCOMFormat fFormat;
+        private readonly IProgressController fProgress;
+        private readonly GDMTree fTree;
 
         private GEDCOMChecker(IBaseContext baseContext, IProgressController progress)
         {

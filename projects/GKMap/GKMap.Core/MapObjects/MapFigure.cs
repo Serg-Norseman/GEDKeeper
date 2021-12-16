@@ -35,7 +35,7 @@ namespace GKMap.MapObjects
         public List<PointLatLng> Points { get; private set; }
 
 
-        public MapFigure(string name, IEnumerable<PointLatLng> points = null)
+        protected MapFigure(string name, IEnumerable<PointLatLng> points = null)
         {
             LocalPoints = new List<GPoint>();
             Points = new List<PointLatLng>();

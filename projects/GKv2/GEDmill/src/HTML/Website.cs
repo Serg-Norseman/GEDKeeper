@@ -35,13 +35,13 @@ namespace GEDmill.HTML
     {
         private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Website).Name);
 
-        private string fOutputFolder;
+        private readonly string fOutputFolder;
 
         // The raw data that we are turning into a website.
-        private GDMTree fTree;
+        private readonly GDMTree fTree;
 
         // Pointer to the window showing the progress bar, so that web page creation progress can be shown to user.
-        private IProgressCallback fProgressWindow;
+        private readonly IProgressCallback fProgressWindow;
 
 
         public Website(GDMTree tree, IProgressCallback progress, string outputFolder)

@@ -178,7 +178,7 @@ namespace GDModel.Providers.FamilyShow
                             }
                         } else if (xr.NodeType == XmlNodeType.Text) {
                             string nodeValue = xr.Value;
-                            if (!string.IsNullOrEmpty(nodeValue)) {
+                            if (!string.IsNullOrEmpty(nodeValue) && (lastIndividual != null)) {
                                 switch (lastTagType) {
                                     case FXTag.Gender:
                                         if (nodeValue == "Male") {

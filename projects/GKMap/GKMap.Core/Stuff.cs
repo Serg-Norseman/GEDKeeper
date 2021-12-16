@@ -19,7 +19,7 @@ namespace GKMap
     /// <summary>
     /// etc functions...
     /// </summary>
-    internal class Stuff
+    internal static class Stuff
     {
         public static string EnumToString(Enum value)
         {

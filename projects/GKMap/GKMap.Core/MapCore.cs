@@ -41,7 +41,7 @@ namespace GKMap
         private readonly BlockingCollection<LoadTask> fTileLoadQueue4 = new BlockingCollection<LoadTask>(new ConcurrentStack<LoadTask>());
         private readonly object fTileLoadQueue4Lock = new object();
         private List<Task> fTileLoadQueue4Tasks;
-        private IMapControl fView;
+        private readonly IMapControl fView;
         private int fZoom;
 
         private volatile int okZoom;
@@ -404,7 +404,7 @@ namespace GKMap
             int spanMs = (int)span.TotalMilliseconds;
             bool skiped = false;
 
-            while (RefreshEvent != null && (!skiped && RefreshEvent.WaitOne() || (RefreshEvent.WaitOne(spanMs, false) || true))) {
+            while (RefreshEvent != null && (!skiped && RefreshEvent.WaitOne() || RefreshEvent.WaitOne(spanMs, false))) {
                 if (w.CancellationPending)
                     break;
 

@@ -94,7 +94,7 @@ namespace GEDmill.MiniTree
         private SizeF fSizeTotal;
 
         // Reference to the global gedcom data
-        private GDMTree fTree;
+        private readonly GDMTree fTree;
 
 
         // Returns the height of the whole tree diagram.

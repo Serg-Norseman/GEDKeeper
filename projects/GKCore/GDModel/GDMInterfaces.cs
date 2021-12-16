@@ -91,8 +91,6 @@ namespace GDModel
     {
         bool HasNotes { get; }
         GDMList<GDMNotes> Notes { get; }
-
-        //GDMNotes AddNote(GDMNoteRecord noteRec);
     }
 
 
@@ -100,8 +98,6 @@ namespace GDModel
     {
         bool HasSourceCitations { get; }
         GDMList<GDMSourceCitation> SourceCitations { get; }
-
-        //GDMSourceCitation AddSource(GDMSourceRecord sourceRec, string page, int quality);
     }
 
 
@@ -109,8 +105,6 @@ namespace GDModel
     {
         bool HasMultimediaLinks { get; }
         GDMList<GDMMultimediaLink> MultimediaLinks { get; }
-
-        //GDMMultimediaLink AddMultimedia(GDMMultimediaRecord mediaRec);
     }
 
 
@@ -118,8 +112,6 @@ namespace GDModel
     {
         bool HasUserReferences { get; }
         GDMList<GDMUserReference> UserReferences { get; }
-
-        //void AddUserRef(string reference);
     }
 
 

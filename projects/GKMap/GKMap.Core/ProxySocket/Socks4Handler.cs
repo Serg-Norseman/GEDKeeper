@@ -242,5 +242,3 @@ namespace Org.Mentalis.Network.ProxySocket
         }
     }
 }
-
-

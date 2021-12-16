@@ -27,12 +27,12 @@ namespace GKMap
             }
         }
 
-        public Uri GetProxy(Uri uri)
+        public Uri GetProxy(Uri destination)
         {
-            return uri;
+            return destination;
         }
 
-        public bool IsBypassed(Uri uri)
+        public bool IsBypassed(Uri host)
         {
             return true;
         }

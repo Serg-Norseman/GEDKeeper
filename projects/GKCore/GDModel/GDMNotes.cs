@@ -25,7 +25,7 @@ namespace GDModel
 {
     public sealed class GDMTextTag : GDMTag, IGDMTextObject
     {
-        private GDMLines fLines;
+        private readonly GDMLines fLines;
 
         public GDMLines Lines
         {
@@ -88,7 +88,7 @@ namespace GDModel
 
     public sealed class GDMNotes : GDMPointer, IGDMTextObject
     {
-        private GDMLines fLines;
+        private readonly GDMLines fLines;
 
         public GDMLines Lines
         {

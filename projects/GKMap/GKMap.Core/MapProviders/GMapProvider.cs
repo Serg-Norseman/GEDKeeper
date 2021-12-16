@@ -24,7 +24,7 @@ namespace GKMap.MapProviders
         /// <summary>
         /// Time to live of cache, in hours. Default: 240 (10 days).
         /// </summary>
-        public static int TTLCache = 240;
+        public const int TTLCache = 240;
 
         private string fAuthorization = string.Empty;
         private bool fIsInitialized;
