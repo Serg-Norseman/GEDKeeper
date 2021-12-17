@@ -11,7 +11,6 @@
 [![GitHub release](https://img.shields.io/github/release/Serg-Norseman/GEDKeeper.svg?label=Latest&maxAge=60)](https://github.com/Serg-Norseman/GEDKeeper/releases/latest)
 [![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)
 
-[![Build Status](https://travis-ci.org/Serg-Norseman/GEDKeeper.svg?branch=master)](https://travis-ci.org/Serg-Norseman/GEDKeeper)
 [![Build status](https://ci.appveyor.com/api/projects/status/h0u8iwr3kvy6o9x1?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/gedkeeper)
 [![codecov.io](https://codecov.io/github/Serg-Norseman/GEDKeeper/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/GEDKeeper?branch=master)
 [![Coverity Status](https://scan.coverity.com/projects/10037/badge.svg)](https://scan.coverity.com/projects/serg-norseman-gedkeeper)
