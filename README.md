@@ -35,17 +35,14 @@ but not limited to, the following:
 The aim of this program is to be a quick and effective means of conducting personal 
 genealogical database development.
 
-To enhance the capabilities of the program it supports scripts using [Lua](https://www.lua.org/)
-and plug-ins written in [.NET](https://dotnet.microsoft.com/).
+To enhance the capabilities of the program it supports scripts using Lua and plug-ins written in .NET.
 
 The latest releases can be downloaded from [releases](https://github.com/serg-norseman/gedkeeper/releases) 
-or from the homepage site on [GitHub.io](https://gedkeeper.github.io/). 
-Alternatively, why not try the [Sourceforge](https://sourceforge.net/projects/gedkeeper/) 
-site (this is very popular).
+or from the [homepage site](https://gedkeeper.net/). Alternatively [SourceForge](https://sourceforge.net/projects/gedkeeper/) site.
 
-Project's main site: [http://en.gedkeeper.net/](http://en.gedkeeper.net/)
+Project's homepage site: [http://gedkeeper.net/](http://gedkeeper.net/)
 
-Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/forum/#!forum/gedkeeper-en)
+Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/gedkeeper-en)
 
 ### Support
 
@@ -73,16 +70,16 @@ If your problem or idea is not addressed yet, please open a new issue.
 
 ## Supported languages
 
-- Russian [rus]
-- English [enu]
-- Ukrainian [ukr]
-- Polish [pol]
-- Italian [ita]
-- Chinese (simplified) [zho]
-- French [fra]
-- German [deu]
-- Czech [cze]
-- Kazakh (cyrillic), partial [kaz]
+- Chinese (simplified)
+- Czech
+- English
+- French
+- German
+- Italian
+- Kazakh (cyrillic), partial
+- Polish
+- Russian
+- Ukrainian
 
 
 ## Docs & Help
@@ -96,6 +93,6 @@ If your problem or idea is not addressed yet, please open a new issue.
 
 ## Links
 
-https://gedkeeper.github.io/
+https://gedkeeper.net/
 
 https://sourceforge.net/projects/gedkeeper/
