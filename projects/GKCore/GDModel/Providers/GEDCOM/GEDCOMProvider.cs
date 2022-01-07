@@ -73,9 +73,17 @@ namespace GDModel.Providers.GEDCOM
     {
         public static readonly GEDCOMAppFormat[] GEDCOMFormats;
 
+        public static bool KeepRichNames = true;
+
 
         public GEDCOMProvider(GDMTree tree) : base(tree)
         {
+        }
+
+        // TODO: transient implementation
+        public GEDCOMProvider(GDMTree tree, bool keepRichNames) : base(tree)
+        {
+            KeepRichNames = keepRichNames;
         }
 
         public override string GetFilesFilter()
@@ -2297,7 +2305,7 @@ namespace GDModel.Providers.GEDCOM
                 curTag.ParseString(tagValue);
                 addHandler = AddSourceCitationTag;
             } else {
-                return AddPersonalNamePiecesTag(persName.Pieces, tagLevel, tagId, tagValue);
+                return AddPersonalNamePiecesTag(persName, tagLevel, tagId, tagValue);
             }
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
@@ -2316,62 +2324,59 @@ namespace GDModel.Providers.GEDCOM
             if (persName.HasNotes) WriteList(stream, lev, persName.Notes, WriteNote);
             if (persName.HasSourceCitations) WriteList(stream, lev, persName.SourceCitations, WriteSourceCitation);
 
-            WritePersonalNamePieces(stream, level, persName.Pieces); // same level
+            WritePersonalNamePieces(stream, lev, persName);
             return true;
         }
 
 
-        private static StackTuple AddPersonalNamePiecesTag(GDMTag owner, int tagLevel, int tagId, string tagValue)
+        private static StackTuple AddPersonalNamePiecesTag(GDMPersonalName persName, int tagLevel, int tagId, string tagValue)
         {
-            GDMPersonalNamePieces persNamePieces = (GDMPersonalNamePieces)owner;
-            GDMTag curTag = null;
-            AddTagHandler addHandler = null;
-
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
             if (tagType == GEDCOMTagType.NPFX) {
-                persNamePieces.Prefix = tagValue;
+                persName.NamePrefix = tagValue;
             } else if (tagType == GEDCOMTagType.GIVN) {
-                persNamePieces.Given = tagValue;
+                persName.Given = tagValue;
             } else if (tagType == GEDCOMTagType.NICK) {
-                persNamePieces.Nickname = tagValue;
+                persName.Nickname = tagValue;
             } else if (tagType == GEDCOMTagType.SPFX) {
-                persNamePieces.SurnamePrefix = tagValue;
+                persName.SurnamePrefix = tagValue;
             } else if (tagType == GEDCOMTagType.SURN) {
-                persNamePieces.Surname = tagValue;
+                persName.Surname = tagValue;
             } else if (tagType == GEDCOMTagType.NSFX) {
-                persNamePieces.Suffix = tagValue;
+                persName.NameSuffix = tagValue;
             } else if (tagType == GEDCOMTagType._PATN || tagType == GEDCOMTagType._MIDN) {
-                persNamePieces.PatronymicName = tagValue;
+                persName.PatronymicName = tagValue;
             } else if (tagType == GEDCOMTagType._MARN || tagType == GEDCOMTagType._MARNM) {
-                persNamePieces.MarriedName = tagValue;
+                persName.MarriedName = tagValue;
             } else if (tagType == GEDCOMTagType._RELN) {
-                persNamePieces.ReligiousName = tagValue;
+                persName.ReligiousName = tagValue;
             } else if (tagType == GEDCOMTagType._CENN) {
-                persNamePieces.CensusName = tagValue;
+                persName.CensusName = tagValue;
             } else {
-                return AddBaseTag(owner, tagLevel, tagId, tagValue);
+                return AddBaseTag(persName, tagLevel, tagId, tagValue);
             }
 
-            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+            return CreateReaderStackTuple(tagLevel, null, null);
         }
 
-        private static void WritePersonalNamePieces(StreamWriter stream, int level, GDMTag tag)
+        private static void WritePersonalNamePieces(StreamWriter stream, int level, GDMPersonalName persName)
         {
-            GDMPersonalNamePieces persNamePieces = (GDMPersonalNamePieces)tag;
+            // given and surname are always included in the NAME tag, and without NAME modification tags - not required
+            if (KeepRichNames ||
+                !string.IsNullOrEmpty(persName.NamePrefix) || !string.IsNullOrEmpty(persName.SurnamePrefix) ||
+                !string.IsNullOrEmpty(persName.NameSuffix) || !string.IsNullOrEmpty(persName.PatronymicName)) {
+                WriteTagLine(stream, level, GEDCOMTagName.SURN, persName.Surname, true);
+                WriteTagLine(stream, level, GEDCOMTagName.GIVN, persName.Given, true);
+            }
 
-            int lev = level + 1;
-            WriteSubTags(stream, lev, persNamePieces);
-
-            WriteTagLine(stream, lev, GEDCOMTagName.SURN, persNamePieces.Surname, true);
-            WriteTagLine(stream, lev, GEDCOMTagName.GIVN, persNamePieces.Given, true);
-            WriteTagLine(stream, lev, GEDCOMTagName._PATN, persNamePieces.PatronymicName, true);
-            WriteTagLine(stream, lev, GEDCOMTagName.NPFX, persNamePieces.Prefix, true);
-            WriteTagLine(stream, lev, GEDCOMTagName.NICK, persNamePieces.Nickname, true);
-            WriteTagLine(stream, lev, GEDCOMTagName.SPFX, persNamePieces.SurnamePrefix, true);
-            WriteTagLine(stream, lev, GEDCOMTagName.NSFX, persNamePieces.Suffix, true);
-            WriteTagLine(stream, lev, GEDCOMTagName._MARN, persNamePieces.MarriedName, true);
-            WriteTagLine(stream, lev, GEDCOMTagName._RELN, persNamePieces.ReligiousName, true);
-            WriteTagLine(stream, lev, GEDCOMTagName._CENN, persNamePieces.CensusName, true);
+            WriteTagLine(stream, level, GEDCOMTagName._PATN, persName.PatronymicName, true);
+            WriteTagLine(stream, level, GEDCOMTagName.NPFX, persName.NamePrefix, true);
+            WriteTagLine(stream, level, GEDCOMTagName.NICK, persName.Nickname, true);
+            WriteTagLine(stream, level, GEDCOMTagName.SPFX, persName.SurnamePrefix, true);
+            WriteTagLine(stream, level, GEDCOMTagName.NSFX, persName.NameSuffix, true);
+            WriteTagLine(stream, level, GEDCOMTagName._MARN, persName.MarriedName, true);
+            WriteTagLine(stream, level, GEDCOMTagName._RELN, persName.ReligiousName, true);
+            WriteTagLine(stream, level, GEDCOMTagName._CENN, persName.CensusName, true);
         }
 
         #endregion

@@ -270,6 +270,8 @@ namespace GKCore.Options
             set { fInterfaceLang = value; }
         }
 
+        public bool KeepRichNames { get; set; }
+
         public IList<LangRecord> Languages
         {
             get { return fLanguages; }
@@ -473,6 +475,7 @@ namespace GKCore.Options
             fFirstCapitalLetterInNames = false;
             fGeoSearchCountry = string.Empty;
 
+            KeepRichNames = true;
             fReversePlaceEntitiesOrder = false;
         }
 
@@ -710,6 +713,8 @@ namespace GKCore.Options
             fGeocoder = ini.ReadString("Common", "Geocoder", "Google");
             fGeoSearchCountry = ini.ReadString("Common", "GeoSearchCountry", "");
 
+            KeepRichNames = ini.ReadBool("Common", "KeepRichNames", true);
+
             int kl = ini.ReadInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
             AppHost.Instance.SetKeyLayout(kl);
 
@@ -834,6 +839,8 @@ namespace GKCore.Options
 
             ini.WriteString("Common", "Geocoder", fGeocoder);
             ini.WriteString("Common", "GeoSearchCountry", fGeoSearchCountry);
+
+            ini.WriteBool("Common", "KeepRichNames", KeepRichNames);
 
             fTreeChartOptions.SaveToFile(ini);
             fPedigreeOptions.SaveToFile(ini);

@@ -1432,7 +1432,7 @@ namespace GKCore
             if (string.IsNullOrEmpty(password)) {
                 GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
 
-                var gedcomProvider = new GEDCOMProvider(fTree);
+                var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames);
                 gedcomProvider.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
             } else {
                 SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
@@ -1449,7 +1449,7 @@ namespace GKCore
                 GEDCOMCharacterSet charSet = GlobalOptions.Instance.DefCharacterSet;
                 GKUtils.PrepareHeader(fTree, rfn, charSet, false);
 
-                var gedcomProvider = new GEDCOMProvider(fTree);
+                var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames);
                 gedcomProvider.SaveToFile(rfn, charSet);
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.CriticalSave()", ex);
@@ -1540,7 +1540,7 @@ namespace GKCore
 
             using (var cryptic = CreateCSP(GS_MAJOR_VER, GS_MINOR_VER, password)) {
                 using (CryptoStream crStream = new CryptoStream(stream, cryptic.CreateEncryptor(), CryptoStreamMode.Write)) {
-                    var gedcomProvider = new GEDCOMProvider(fTree);
+                    var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames);
                     gedcomProvider.SaveToStreamExt(crStream, charSet);
                     crStream.Flush();
                 }

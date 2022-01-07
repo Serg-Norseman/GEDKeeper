@@ -194,7 +194,7 @@ namespace GDModel.Providers.FamilyShow
                                         break;
 
                                     case FXTag.FirstName:
-                                        lastIndividual.PersonalNames[0].FirstPart = nodeValue;
+                                        lastIndividual.PersonalNames[0].Given = nodeValue;
                                         break;
 
                                     case FXTag.LastName:
@@ -202,7 +202,7 @@ namespace GDModel.Providers.FamilyShow
                                         break;
 
                                     case FXTag.Suffix:
-                                        lastIndividual.PersonalNames[0].LastPart = nodeValue;
+                                        lastIndividual.PersonalNames[0].NameSuffix = nodeValue;
                                         break;
 
                                     case FXTag.IsLiving:

@@ -33,46 +33,73 @@ namespace GDModel
         ntMarried
     }
 
+    /**
+     * Page 55 
+     * NAME_PERSONAL := [ <NAME_TEXT> /<NAME_TEXT>/ <NAME_TEXT> ]
+     * can be interpreted as:
+     * NAME_PERSONAL := [ <name_prefix> <given_name> /<surname_prefix> <surname>/ <name_suffix> ]
+     * 
+     * name_prefix (+), given_name (+), surname_prefix (+), surname (+), name_suffix (+), nickname (separate)
+     * 
+     * William Lee (given name only or surname not known)
+     * /Parry/ (surname only)
+     * William Lee /Parry/
+     * William Lee /Mac Parry/ (both parts (Mac and Parry) are surname parts
+     * William /Lee/ Parry (surname imbedded in the name string)
+     * William Lee /Pa.../
+     * 
+     * [ Lt. Cmndr. Joseph /Allen/ jr. ] - in this example "Lt. Cmndr." is considered as the name prefix portion.
+     * [ Lt. Cmndr. Joseph /Allen/ jr. ] - in this example "jr." is considered as the name suffix portion.
+     * [ /de la Cruz/ ] - in this example "de la" - surname prefix or article used in a family name.
+     */
 
     /// <summary>
     /// 
     /// </summary>
     public sealed class GDMPersonalName : GDMTag, IGDMStructWithNotes, IGDMStructWithSourceCitations
     {
-        private string fFirstPart;
-        private string fSurname;
-        private string fLastPart;
-
+        private string fGiven; // GIVN
         private GDMLanguageID fLanguage;
+        private string fNamePrefix; // NPFX
+        private string fNameSuffix; // NSFX
         private GDMNameType fNameType;
-        private GDMPersonalNamePieces fPieces;
+        private string fNickname; // NICK
         private GDMList<GDMNotes> fNotes;
         private GDMList<GDMSourceCitation> fSourceCitations;
+        private string fSurnamePrefix; // SPFX
+        private string fSurname; // SURN
+
+        private string fPatronymicName;
+        private string fMarriedName;
+        private string fReligiousName;
+        private string fCensusName;
 
 
         public string FullName
         {
             get {
-                return GEDCOMUtils.GetFullName(fFirstPart, fSurname, fLastPart);
+                return GEDCOMUtils.GetFullName(FirstPart, fSurname, fNameSuffix);
             }
         }
 
-        public string FirstPart
+        internal string FirstPart
         {
-            get { return fFirstPart; }
-            set { fFirstPart = GEDCOMUtils.Trim(value); }
+            get {
+                string result = fGiven;
+                if (!string.IsNullOrEmpty(fPatronymicName)) {
+                    if (!string.IsNullOrEmpty(result)) {
+                        result += " ";
+                    }
+                    result += fPatronymicName;
+                }
+                return result;
+            }
         }
 
-        public string Surname
+        public string Given
         {
-            get { return fSurname; }
-            set { fSurname = GEDCOMUtils.Trim(value); }
-        }
-
-        public string LastPart
-        {
-            get { return fLastPart; }
-            set { fLastPart = GEDCOMUtils.Trim(value); }
+            get { return fGiven; }
+            set { fGiven = GEDCOMUtils.Trim(value); }
         }
 
         public GDMLanguageID Language
@@ -81,15 +108,28 @@ namespace GDModel
             set { fLanguage = value; }
         }
 
+        public string NamePrefix
+        {
+            get { return fNamePrefix; }
+            set { fNamePrefix = GEDCOMUtils.Trim(value); }
+        }
+
         public GDMNameType NameType
         {
             get { return fNameType; }
             set { fNameType = value; }
         }
 
-        public GDMPersonalNamePieces Pieces
+        public string NameSuffix
         {
-            get { return fPieces; }
+            get { return fNameSuffix; }
+            set { fNameSuffix = GEDCOMUtils.Trim(value); }
+        }
+
+        public string Nickname
+        {
+            get { return fNickname; }
+            set { fNickname = GEDCOMUtils.Trim(value); }
         }
 
         public bool HasNotes
@@ -125,22 +165,64 @@ namespace GDModel
             }
         }
 
+        public string SurnamePrefix
+        {
+            get { return fSurnamePrefix; }
+            set { fSurnamePrefix = GEDCOMUtils.Trim(value); }
+        }
+
+        public string Surname
+        {
+            get { return fSurname; }
+            set { fSurname = GEDCOMUtils.Trim(value); }
+        }
+
+
+        public string PatronymicName
+        {
+            get { return fPatronymicName; }
+            set { fPatronymicName = GEDCOMUtils.Trim(value); }
+        }
+
+        public string MarriedName
+        {
+            get { return fMarriedName; }
+            set { fMarriedName = GEDCOMUtils.Trim(value); }
+        }
+
+        public string ReligiousName
+        {
+            get { return fReligiousName; }
+            set { fReligiousName = GEDCOMUtils.Trim(value); }
+        }
+
+        public string CensusName
+        {
+            get { return fCensusName; }
+            set { fCensusName = GEDCOMUtils.Trim(value); }
+        }
+
 
         public GDMPersonalName()
         {
             SetName(GEDCOMTagType.NAME);
 
-            fFirstPart = string.Empty;
+            fNamePrefix = string.Empty;
+            fGiven = string.Empty;
+            fSurnamePrefix = string.Empty;
             fSurname = string.Empty;
-            fLastPart = string.Empty;
+            fNameSuffix = string.Empty;
+            fNickname = string.Empty;
 
-            fPieces = new GDMPersonalNamePieces();
+            fPatronymicName = string.Empty;
+            fMarriedName = string.Empty;
+            fReligiousName = string.Empty;
+            fCensusName = string.Empty;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fPieces.Dispose();
                 if (fNotes != null) fNotes.Dispose();
                 if (fSourceCitations != null) fSourceCitations.Dispose();
             }
@@ -151,7 +233,6 @@ namespace GDModel
         {
             base.TrimExcess();
 
-            fPieces.TrimExcess();
             if (fNotes != null) fNotes.TrimExcess();
             if (fSourceCitations != null) fSourceCitations.TrimExcess();
         }
@@ -164,14 +245,21 @@ namespace GDModel
 
             base.Assign(otherName);
 
-            fFirstPart = otherName.fFirstPart;
+            fNamePrefix = otherName.fNamePrefix;
+            fGiven = otherName.fGiven;
+            fSurnamePrefix = otherName.fSurnamePrefix;
             fSurname = otherName.fSurname;
-            fLastPart = otherName.fLastPart;
+            fNameSuffix = otherName.fNameSuffix;
+            fNickname = otherName.fNickname;
+
+            fPatronymicName = otherName.fPatronymicName;
+            fMarriedName = otherName.fMarriedName;
+            fReligiousName = otherName.fReligiousName;
+            fCensusName = otherName.fCensusName;
 
             fLanguage = otherName.fLanguage;
             fNameType = otherName.fNameType;
 
-            fPieces.Assign(otherName.Pieces);
             if (otherName.fNotes != null) AssignList(otherName.fNotes, Notes);
             if (otherName.fSourceCitations != null) AssignList(otherName.fSourceCitations, SourceCitations);
         }
@@ -180,23 +268,39 @@ namespace GDModel
         {
             base.Clear();
 
-            fFirstPart = string.Empty;
+            fNamePrefix = string.Empty;
+            fGiven = string.Empty;
+            fSurnamePrefix = string.Empty;
             fSurname = string.Empty;
-            fLastPart = string.Empty;
+            fNameSuffix = string.Empty;
+            fNickname = string.Empty;
+
+            fPatronymicName = string.Empty;
+            fMarriedName = string.Empty;
+            fReligiousName = string.Empty;
+            fCensusName = string.Empty;
 
             fLanguage = GDMLanguageID.Unknown;
             fNameType = GDMNameType.ntNone;
 
-            fPieces.Clear();
             if (fNotes != null) fNotes.Clear();
             if (fSourceCitations != null) fSourceCitations.Clear();
         }
 
+        private bool IsPiecesEmpty()
+        {
+            return 
+                string.IsNullOrEmpty(fNamePrefix) && string.IsNullOrEmpty(fGiven) &&
+                string.IsNullOrEmpty(fSurnamePrefix) && string.IsNullOrEmpty(fSurname) &&
+                string.IsNullOrEmpty(fNameSuffix) && string.IsNullOrEmpty(fNickname) &&
+                string.IsNullOrEmpty(fPatronymicName) && string.IsNullOrEmpty(fMarriedName) &&
+                string.IsNullOrEmpty(fReligiousName) && string.IsNullOrEmpty(fCensusName);
+        }
+
         public override bool IsEmpty()
         {
-            return base.IsEmpty()
-                && string.IsNullOrEmpty(fFirstPart) && string.IsNullOrEmpty(fSurname) && string.IsNullOrEmpty(fLastPart)
-                && fPieces.IsEmpty() && (fLanguage == GDMLanguageID.Unknown) && (fNameType == GDMNameType.ntNone)
+            return base.IsEmpty() && IsPiecesEmpty() &&
+                (fLanguage == GDMLanguageID.Unknown) && (fNameType == GDMNameType.ntNone)
                 && (fNotes == null || fNotes.Count == 0)
                 && (fSourceCitations == null || fSourceCitations.Count == 0);
         }
@@ -205,26 +309,18 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fPieces.ReplaceXRefs(map);
             if (fNotes != null) fNotes.ReplaceXRefs(map);
             if (fSourceCitations != null) fSourceCitations.ReplaceXRefs(map);
         }
 
         protected override string GetStringValue()
         {
-            return GEDCOMUtils.GetNameTagValue(fFirstPart, fSurname, fLastPart);
+            return GEDCOMUtils.GetNameTagValue(this);
         }
 
         public override string ParseString(string strValue)
         {
             return GEDCOMUtils.ParseName(strValue, this);
-        }
-
-        public void SetNameParts(string firstPart, string surname, string lastPart)
-        {
-            fFirstPart = GEDCOMUtils.Trim(firstPart);
-            fSurname = GEDCOMUtils.Trim(surname);
-            fLastPart = GEDCOMUtils.Trim(lastPart);
         }
 
         private static bool IsUnknown(string str)
@@ -241,9 +337,9 @@ namespace GDModel
             float matches = 0;
             bool surnameMatched = false;
 
-            if (!(string.IsNullOrEmpty(otherName.FirstPart) && string.IsNullOrEmpty(fFirstPart))) {
+            if (!(string.IsNullOrEmpty(otherName.FirstPart) && string.IsNullOrEmpty(FirstPart))) {
                 parts++;
-                if (otherName.FirstPart == fFirstPart)
+                if (otherName.FirstPart == FirstPart)
                     matches++;
             }
 
@@ -269,9 +365,9 @@ namespace GDModel
                 surnameMatched = true;
             }
 
-            if (!string.IsNullOrEmpty(otherName.Pieces.Nickname) && !string.IsNullOrEmpty(fPieces.Nickname)) {
+            if (!string.IsNullOrEmpty(otherName.Nickname) && !string.IsNullOrEmpty(Nickname)) {
                 parts++;
-                if (otherName.Pieces.Nickname == fPieces.Nickname)
+                if (otherName.Nickname == Nickname)
                     matches++;
             }
 

@@ -72,11 +72,10 @@ namespace GKCore.Controllers
             try {
                 GKUtils.SetNameParts(fPersonalName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
 
-                GDMPersonalNamePieces pieces = fPersonalName.Pieces;
-                pieces.Nickname = fView.Nickname.Text;
-                pieces.Prefix = fView.NamePrefix.Text;
-                pieces.SurnamePrefix = fView.SurnamePrefix.Text;
-                pieces.Suffix = fView.NameSuffix.Text;
+                fPersonalName.Nickname = fView.Nickname.Text;
+                fPersonalName.NamePrefix = fView.NamePrefix.Text;
+                fPersonalName.SurnamePrefix = fView.SurnamePrefix.Text;
+                fPersonalName.NameSuffix = fView.NameSuffix.Text;
 
                 fPersonalName.NameType = (GDMNameType)fView.NameType.SelectedIndex;
                 fPersonalName.Language = fView.Language.GetSelectedTag<GDMLanguageID>();
@@ -106,13 +105,12 @@ namespace GKCore.Controllers
             fView.Patronymic.Text = parts.Patronymic;
             fView.NameType.SelectedIndex = (sbyte)fPersonalName.NameType;
 
-            var pnPieces = fPersonalName.Pieces;
-            fView.NamePrefix.Text = pnPieces.Prefix;
-            fView.Nickname.Text = pnPieces.Nickname;
-            fView.SurnamePrefix.Text = pnPieces.SurnamePrefix;
-            fView.NameSuffix.Text = pnPieces.Suffix;
+            fView.NamePrefix.Text = fPersonalName.NamePrefix;
+            fView.Nickname.Text = fPersonalName.Nickname;
+            fView.SurnamePrefix.Text = fPersonalName.SurnamePrefix;
+            fView.NameSuffix.Text = fPersonalName.NameSuffix;
 
-            fView.MarriedSurname.Text = pnPieces.MarriedName;
+            fView.MarriedSurname.Text = fPersonalName.MarriedName;
 
             if (!IsExtendedWomanSurname()) {
                 fView.SurnameLabel.Text = LangMan.LS(LSID.LSID_Surname);
