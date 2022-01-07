@@ -128,7 +128,7 @@ namespace GKUI.Platform
             if (makeTransp) {
                 img = (Bitmap)img.Clone();
 
-                #if __MonoCS__
+                #if MONO
                 img.MakeTransparent();
                 #else
                 img.MakeTransparent(img.GetPixel(0, 0));
@@ -292,7 +292,7 @@ namespace GKUI.Platform
         public string GetDefaultFontName()
         {
             string fontName;
-            #if __MonoCS__
+            #if MONO
             fontName = "Noto Sans";
             #else
             fontName = "Verdana"; // "Tahoma";

@@ -68,6 +68,7 @@ namespace GKCore.Options
         public bool DottedLinesOfAdoptedChildren;
         public bool SeparateDatesAndPlacesLines;
         public bool BoldNames;
+        public bool OnlyLocality;
 
         public bool AutoAlign; // debug option, for future purposes
         public GfxBorderStyle BorderStyle;
@@ -122,6 +123,7 @@ namespace GKCore.Options
             SeparateDatesAndPlacesLines = false;
             BoldNames = false;
             SeparateDepth = false;
+            OnlyLocality = false;
 
             AutoAlign = true;
             BorderStyle = GfxBorderStyle.None;
@@ -182,6 +184,8 @@ namespace GKCore.Options
             SeparateDatesAndPlacesLines = srcOptions.SeparateDatesAndPlacesLines;
             BoldNames = srcOptions.BoldNames;
             SeparateDepth = srcOptions.SeparateDepth;
+            BorderStyle = srcOptions.BorderStyle;
+            OnlyLocality = srcOptions.OnlyLocality;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -220,6 +224,8 @@ namespace GKCore.Options
             DottedLinesOfAdoptedChildren = iniFile.ReadBool("Chart", "DottedLinesOfAdoptedChildren", false);
             SeparateDatesAndPlacesLines = iniFile.ReadBool("Chart", "SeparateDatesAndPlacesLines", false);
             BoldNames = iniFile.ReadBool("Chart", "BoldNames", false);
+            BorderStyle = (GfxBorderStyle)iniFile.ReadInteger("Chart", "BorderStyle", 0);
+            OnlyLocality = iniFile.ReadBool("Chart", "OnlyLocality", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -274,6 +280,8 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "DottedLinesOfAdoptedChildren", DottedLinesOfAdoptedChildren);
             iniFile.WriteBool("Chart", "SeparateDatesAndPlacesLines", SeparateDatesAndPlacesLines);
             iniFile.WriteBool("Chart", "BoldNames", BoldNames);
+            iniFile.WriteInteger("Chart", "BorderStyle", (int)BorderStyle);
+            iniFile.WriteBool("Chart", "OnlyLocality", OnlyLocality);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());

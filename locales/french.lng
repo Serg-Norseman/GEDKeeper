@@ -791,7 +791,7 @@
 790=Fiche familiale détectée sans parents ni enfants
 791=Are you sure you want to remove multimedia file?
 792=Storage not found
-793=File not found
+793=File "{0}" not found
 794=Allow relative references to media files
 795=Default media storage type
 796=Allow delete media files from storage and archive
@@ -836,3 +836,11 @@
 832=Separate depth
 833=Ancestors
 834=Matches not found
+835=Short kinship form
+836=Surname first in order
+837=Borders
+838=You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?
+839=Providers
+840=Coordinates
+841=Load places
+842=Only locality

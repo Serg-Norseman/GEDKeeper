@@ -93,7 +93,6 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fMapBrowser = new GKMapBrowser();
-            fMapBrowser.InitMap();
             fMapBrowser.ShowLines = false;
             fMapBrowser.Dock = DockStyle.Fill;
             panMap.Controls.Add(fMapBrowser);

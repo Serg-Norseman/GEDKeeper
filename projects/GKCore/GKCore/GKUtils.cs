@@ -25,6 +25,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using BSLib;
@@ -46,14 +47,27 @@ namespace GKCore
     {
         #region Aux functions
 
+        /// <summary>
+        /// Forced call of GEDCOMProvider static constructor.
+        /// This is important for a number of tests that require initialization of the GEDCOM tag table.
+        /// And at the start of the application, before loading any GEDCOM files.
+        /// </summary>
+        public static void InitGEDCOM()
+        {
+            RuntimeHelpers.RunClassConstructor(typeof(GEDCOMProvider).TypeHandle);
+        }
+
         public static List<string> GetCountries()
         {
             var countries = new List<string>();
             foreach (CultureInfo culture in CultureInfo.GetCultures(CultureTypes.SpecificCultures)) {
-                RegionInfo regionInfo = new RegionInfo(culture.LCID);
-                string ctry = regionInfo.TwoLetterISORegionName; // DisplayName
-                if (!countries.Contains(ctry))
-                    countries.Add(ctry);
+                try {
+                    RegionInfo regionInfo = new RegionInfo(culture.Name);
+                    string ctry = regionInfo.TwoLetterISORegionName;
+                    if (!countries.Contains(ctry))
+                        countries.Add(ctry);
+                } catch {
+                }
             }
             countries.Sort();
             return countries;
@@ -366,6 +380,37 @@ namespace GKCore
             }
 
             return string.Empty;
+        }
+
+        public static List<GDMGroupRecord> GetGroups(GDMTree tree)
+        {
+            var result = new List<GDMGroupRecord>();
+
+            int num = tree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                var rec = tree[i] as GDMGroupRecord;
+                if (rec != null) {
+                    result.Add(rec);
+                }
+            }
+            result.Sort((a, b) => -b.GroupName.CompareTo(a.GroupName));
+
+            return result;
+        }
+
+        public static List<GDMSourceRecord> GetSources(GDMTree tree)
+        {
+            var result = new List<GDMSourceRecord>();
+
+            for (int i = 0; i < tree.RecordsCount; i++) {
+                var rec = tree[i] as GDMSourceRecord;
+                if (rec != null) {
+                    result.Add(rec);
+                }
+            }
+            result.Sort((a, b) => -b.ShortTitle.CompareTo(a.ShortTitle));
+
+            return result;
         }
 
         #endregion
@@ -983,6 +1028,11 @@ namespace GKCore
             return ((evt == null) ? null : evt.Date.Value);
         }
 
+        public static string GetMarriageDateStr(GDMFamilyRecord fRec, DateFormat dateFormat, bool sign)
+        {
+            GDMCustomDate date = GetMarriageDate(fRec);
+            return (date == null) ? string.Empty : date.GetDisplayStringExt(dateFormat, sign, false);
+        }
         public static string GetMarriageDateStr(GDMFamilyRecord fRec, DateFormat dateFormat)
         {
             GDMCustomDate date = GetMarriageDate(fRec);
@@ -1061,11 +1111,23 @@ namespace GKCore
             return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent(GEDCOMTagType.RESI), includeAddress);
         }
 
-        public static string GetPlaceStr(GDMCustomEvent evt, bool includeAddress)
+        private static char[] PLACE_DELIMITERS = new char[] { ',' };
+
+        public static string GetPlaceStr(GDMCustomEvent evt, bool includeAddress, bool onlyLocality = false)
         {
             if (evt == null || !evt.HasPlace) return string.Empty;
 
             string result = evt.Place.StringValue;
+
+            if (!string.IsNullOrEmpty(result) && onlyLocality) {
+                string[] placeParts = result.Split(PLACE_DELIMITERS, StringSplitOptions.None);
+                if (placeParts.Length > 1) {
+                    // for compatibility with strange cases
+                    bool reverseOrder = GlobalOptions.Instance.ReversePlaceEntitiesOrder;
+
+                    result = ((!reverseOrder) ? placeParts[0] : placeParts[placeParts.Length - 1]).Trim();
+                }
+            }
 
             if (includeAddress) {
                 string resi = evt.StringValue;
@@ -1368,7 +1430,7 @@ namespace GKCore
             return tempPath + Path.DirectorySeparatorChar;
         }
 
-        public static string GetAppPath()
+        public static string GetBinPath()
         {
             Assembly asm = Assembly.GetEntryAssembly();
             if (asm == null) {
@@ -1378,6 +1440,12 @@ namespace GKCore
             Module[] mods = asm.GetModules();
             string fn = mods[0].FullyQualifiedName;
             return Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
+        }
+
+        public static string GetAppPath()
+        {
+            string result = Path.GetFullPath(Path.Combine(GetBinPath(), @".." + Path.DirectorySeparatorChar));
+            return result;
         }
 
         public static string GetPluginsPath()
@@ -2703,8 +2771,36 @@ namespace GKCore
             }
         }
 
+        public static void InitSecurityProtocol()
+        {
+            // Mono v4.6 doesn't contain SecurityProtocolType.Tls11
+            #if NET35 || NET40 || MONO
+            const int Tls11 = 768;
+            const int Tls12 = 3072;
+            #endif
+
+            try {
+                #if NET35 || NET40 || MONO
+                ServicePointManager.SecurityProtocol =
+                    (SecurityProtocolType)(ServicePointManager.SecurityProtocol |
+                                           SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |
+                                           (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12);
+                #else
+                ServicePointManager.SecurityProtocol =
+                    (SecurityProtocolType)(ServicePointManager.SecurityProtocol |
+                                           SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
+                #endif
+            } catch (Exception ex) {
+                // crash on WinXP, TLS 1.2 not supported
+                Logger.WriteError("GKUtils.InitSecurityProtocol()", ex);
+            }
+        }
+
         public static Stream GetWebStream(string uri)
         {
+            InitSecurityProtocol();
+
             using (var webClient = new WebClient()) {
                 byte[] dataBytes = webClient.DownloadData(uri);
                 var ms = new MemoryStream();

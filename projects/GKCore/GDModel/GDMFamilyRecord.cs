@@ -38,9 +38,9 @@ namespace GDModel
 
     public sealed class GDMFamilyRecord : GDMRecordWithEvents, IGDMFamilyRecord
     {
-        private GDMList<GDMIndividualLink> fChildren;
-        private GDMIndividualLink fHusband;
-        private GDMIndividualLink fWife;
+        private readonly GDMList<GDMIndividualLink> fChildren;
+        private readonly GDMIndividualLink fHusband;
+        private readonly GDMIndividualLink fWife;
         private GDMMarriageStatus fStatus;
 
 

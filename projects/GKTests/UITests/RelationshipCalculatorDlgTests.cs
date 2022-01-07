@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
@@ -44,6 +44,9 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
 
             fDialog = new RelationshipCalculatorDlg(fBase);

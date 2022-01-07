@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using BSLib.Design;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
@@ -157,7 +158,7 @@ namespace GKUI.Components
 
         public static T GetSelectedTag<T>(this ComboBox comboBox)
         {
-            GKComboItem<T> comboItem = comboBox.SelectedValue as GKComboItem<T>;
+            var comboItem = comboBox.SelectedValue as ComboItem<T>;
             T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
             return itemTag;
         }
@@ -165,7 +166,7 @@ namespace GKUI.Components
         public static void SetSelectedTag<T>(this ComboBox comboBox, T tagValue, bool allowDefault = true)
         {
             foreach (object item in comboBox.Items) {
-                GKComboItem<T> comboItem = item as GKComboItem<T>;
+                var comboItem = item as ComboItem<T>;
 
                 if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
                     comboBox.SelectedValue = item;
@@ -175,6 +176,37 @@ namespace GKUI.Components
 
             if (allowDefault) {
                 comboBox.SelectedIndex = 0;
+            }
+        }
+
+        public static RadioMenuItem AddToolStripItem(ContextMenu contextMenu, string text, object tag, EventHandler<EventArgs> clickHandler)
+        {
+            var tsItem = new RadioMenuItem();
+            tsItem.Text = text;
+            tsItem.Tag = tag;
+            tsItem.Click += clickHandler;
+            contextMenu.Items.Add(tsItem);
+            return tsItem;
+        }
+
+        public static T GetMenuItemTag<T>(ContextMenu contextMenu, object sender)
+        {
+            foreach (RadioMenuItem tsItem in contextMenu.Items) {
+                tsItem.Checked = false;
+            }
+            var senderItem = ((RadioMenuItem)sender);
+            ((RadioMenuItem)sender).Checked = true;
+            return (T)senderItem.Tag;
+        }
+
+        public static void SetMenuItemTag<T>(ContextMenu contextMenu, T value)
+        {
+            foreach (RadioMenuItem tsItem in contextMenu.Items) {
+                T itemTag = (T)tsItem.Tag;
+                if (Equals(itemTag, value)) {
+                    tsItem.PerformClick();
+                    break;
+                }
             }
         }
 

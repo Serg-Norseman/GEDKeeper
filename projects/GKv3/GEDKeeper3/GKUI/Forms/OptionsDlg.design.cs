@@ -143,6 +143,9 @@ namespace GKUI.Forms
         private CheckBox chkDottedLinesOfAdoptedChildren;
         private CheckBox chkBoldNames;
 
+        private CheckBox chkShortKinshipForm;
+        private CheckBox chkSurnameFirstInOrder;
+
         private CheckBox chkSeparateDepth;
         private Label lblDefaultDepth;
         private NumericUpDown numDefaultDepth;
@@ -776,18 +779,24 @@ namespace GKUI.Forms
 
             radS_N_P = new RadioButton();
             radS_N_P.Text = "radS_N_P";
+            radS_N_P.CheckedChanged += rgFNPFormat_CheckedChanged;
 
             radS_NP = new RadioButton(radS_N_P);
             radS_NP.Text = "radS_NP";
+            radS_NP.CheckedChanged += rgFNPFormat_CheckedChanged;
 
             radSNP = new RadioButton(radS_N_P);
             radSNP.Text = "radSNP";
+            radSNP.CheckedChanged += rgFNPFormat_CheckedChanged;
+
+            chkSurnameFirstInOrder = new CheckBox();
+            chkSurnameFirstInOrder.Text = "chkSurnameFirstInOrder";
 
             rgFNPFormat = new GroupBox();
             rgFNPFormat.Text = "rgFNPFormat";
             rgFNPFormat.Content = new DefStackLayout(Orientation.Vertical)
             {
-                Items = { radS_N_P, radS_NP, radSNP }
+                Items = { radS_N_P, radS_NP, radSNP, chkSurnameFirstInOrder }
             };
 
             //
@@ -856,6 +865,9 @@ namespace GKUI.Forms
             chkFirstCapitalLetterInNames = new CheckBox();
             chkFirstCapitalLetterInNames.Text = "chkFirstCapitalLetterInNames";
 
+            chkShortKinshipForm = new CheckBox();
+            chkShortKinshipForm.Text = "chkShortKinshipForm";
+
             //
 
             pageViewCommon = new TabPage();
@@ -868,7 +880,9 @@ namespace GKUI.Forms
                     new TableRow {
                         Cells = { grpAdvancedNames, new DefStackLayout(Orientation.Vertical) {
                                 Items = { chkPlacesWithAddress, chkHighlightUnparented, chkHighlightUnmarried,
-                                          chkAutoSortChildren, chkAutoSortSpouses, chkFirstCapitalLetterInNames }
+                                          chkAutoSortChildren, chkAutoSortSpouses, chkFirstCapitalLetterInNames,
+                                          chkShortKinshipForm
+                                }
                             }
                         }
                     },

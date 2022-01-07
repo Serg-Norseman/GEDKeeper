@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System.Windows.Forms;
 using GKTests;
@@ -56,7 +56,7 @@ namespace GKUI.Forms
             ClickRadioButton("radTotal", form);
 
             formTest.ModalFormHandler = SaveFile_Cancel_Handler;
-            ClickButton("btnSaveImage", form);
+            ClickToolStripButton("tbSaveSnapshot", form);
 
             KeyDownForm(form.Name, Keys.Escape);
             form.Dispose();

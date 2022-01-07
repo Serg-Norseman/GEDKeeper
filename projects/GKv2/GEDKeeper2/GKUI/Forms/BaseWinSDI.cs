@@ -107,6 +107,8 @@ namespace GKUI.Forms
             tbDocPrint.Visible = false;
             tbDocPreview.Visible = false;
 
+            UIHelper.FixToolStrip(ToolBar1);
+
             AppHost.Instance.LoadWindow(this);
 
             fController = new BaseWinController(this);
@@ -133,7 +135,7 @@ namespace GKUI.Forms
         {
             if (disposing) {
                 fController.Dispose();
-                #if !__MonoCS__
+                #if !MONO
                 if (components != null) components.Dispose();
                 #endif
             }
@@ -764,6 +766,19 @@ namespace GKUI.Forms
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.Form_DragDrop()", ex);
+            }
+        }
+
+        void IBaseWindowView.LoadBase(string fileName)
+        {
+            MethodInvoker invoker = delegate() {
+                AppHost.Instance.LoadBase(this, fileName);
+            };
+
+            if (InvokeRequired) {
+                Invoke(invoker);
+            } else {
+                invoker();
             }
         }
 

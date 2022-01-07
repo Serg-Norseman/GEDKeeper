@@ -31,10 +31,10 @@ namespace GDModel.Providers.GEDCOM
     /// </summary>
     public class GEDCOMChecker
     {
-        private IBaseContext fBaseContext;
-        private GEDCOMFormat fFormat;
-        private IProgressController fProgress;
-        private GDMTree fTree;
+        private readonly IBaseContext fBaseContext;
+        private readonly GEDCOMFormat fFormat;
+        private readonly IProgressController fProgress;
+        private readonly GDMTree fTree;
 
         private GEDCOMChecker(IBaseContext baseContext, IProgressController progress)
         {
@@ -270,10 +270,12 @@ namespace GDModel.Providers.GEDCOM
                 var mrelTag = FindSubTagValue(childLink, "_MREL");
                 if (frelTag == "ADOPTED" && mrelTag == "ADOPTED") {
                     GDMChildToFamilyLink ctfLink = childRec.FindChildToFamilyLink(fam);
-                    ctfLink.PedigreeLinkageType = GDMPedigreeLinkageType.plAdopted;
+                    if (ctfLink != null) {
+                        ctfLink.PedigreeLinkageType = GDMPedigreeLinkageType.plAdopted;
 
-                    childLink.DeleteTag("_FREL");
-                    childLink.DeleteTag("_MREL");
+                        childLink.DeleteTag("_FREL");
+                        childLink.DeleteTag("_MREL");
+                    }
                 }
             }
         }

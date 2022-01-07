@@ -228,8 +228,7 @@ namespace GKCore.Lists
             {
                 bool isLive = (buf_dd == null);
 
-                switch (iFilter.FilterLifeMode)
-                {
+                switch (iFilter.FilterLifeMode) {
                     case FilterLifeMode.lmOnlyAlive:
                         if (!isLive) return false;
                         break;
@@ -248,8 +247,7 @@ namespace GKCore.Lists
                         break;
                 }
 
-                switch (iFilter.FilterGroupMode)
-                {
+                switch (iFilter.FilterGroupMode) {
                     case FilterGroupMode.All:
                         break;
 
@@ -266,8 +264,7 @@ namespace GKCore.Lists
                         break;
                 }
 
-                switch (iFilter.SourceMode)
-                {
+                switch (iFilter.SourceMode) {
                     case FilterGroupMode.All:
                         break;
 
@@ -311,7 +308,7 @@ namespace GKCore.Lists
 
                 switch (defNameFormat) {
                     case NameFormat.nfFNP:
-                        result = GKUtils.GetNameString(fRec, true, false);
+                        result = GKUtils.GetNameString(fRec, GlobalOptions.Instance.SurnameFirstInOrder, false);
                         break;
 
                     case NameFormat.nfF_NP:

@@ -27,7 +27,7 @@ namespace GDModel
     public sealed class GDMGroupRecord : GDMRecord
     {
         private string fGroupName;
-        private GDMList<GDMIndividualLink> fMembers;
+        private readonly GDMList<GDMIndividualLink> fMembers;
 
 
         public string GroupName

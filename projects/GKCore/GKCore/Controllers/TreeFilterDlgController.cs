@@ -83,19 +83,14 @@ namespace GKCore.Controllers
             GDMTree tree = fBase.Context.Tree;
             fTemp = fFilter.BranchPersons;
 
-            var values = new StringList();
-            int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                GDMRecord rec = tree[i];
-                if (rec.RecordType == GDMRecordType.rtSource) {
-                    values.AddObject((rec as GDMSourceRecord).ShortTitle, rec);
-                }
-            }
-            values.Sort();
+            fView.SourceCombo.Clear();
             fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
             fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
             fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
-            fView.SourceCombo.AddStrings(values);
+            var sources = GKUtils.GetSources(tree);
+            foreach (var item in sources) {
+                fView.SourceCombo.AddItem<GDMRecord>(item.ShortTitle, item);
+            }
 
             UpdateControls();
         }

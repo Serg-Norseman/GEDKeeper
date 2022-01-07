@@ -103,7 +103,7 @@ namespace GKUI.Components
         public void Test_Font()
         {
             string fontName;
-            #if __MonoCS__
+            #if MONO
             fontName = "DejaVu Sans"; // "Noto Sans";
             #else
             fontName = "Verdana";

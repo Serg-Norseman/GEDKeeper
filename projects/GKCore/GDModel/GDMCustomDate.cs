@@ -48,7 +48,7 @@ namespace GDModel
     }
 
 
-    public abstract class GDMCustomDate : GDMTag, IComparable, IEquatable<GDMCustomDate>
+    public abstract class GDMCustomDate : GDMTag, IComparable, IComparable<GDMCustomDate>, IEquatable<GDMCustomDate>
     {
         public DateTime Date
         {
@@ -100,11 +100,14 @@ namespace GDModel
 
         public int CompareTo(object obj)
         {
-            GDMCustomDate otherDate = obj as GDMCustomDate;
+            return CompareTo(obj as GDMCustomDate);
+        }
 
-            if (otherDate != null) {
+        public int CompareTo(GDMCustomDate other)
+        {
+            if (other != null) {
                 UDN abs1 = GetUDN();
-                UDN abs2 = otherDate.GetUDN();
+                UDN abs2 = other.GetUDN();
                 return abs1.CompareTo(abs2);
             }
 

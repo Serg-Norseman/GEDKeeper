@@ -37,7 +37,7 @@ namespace GKCore
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
         public const int APP_FORMAT_DEFVER = 39; // don't change it!
-        public const int APP_FORMAT_CURVER = 42; // v2.17.0
+        public const int APP_FORMAT_CURVER = 44; // v2.19.0
 
         public const string GEDCOM_EXT = "ged";
         public const string GEDCOM_SEC_EXT = "geds";
@@ -51,7 +51,7 @@ namespace GKCore
         public static readonly int HighlightUnparentedColor = 0xFFCACA;
         public static readonly int HighlightUnmarriedColor = 0xFFFFA1;
 
-        #if __MonoCS__
+        #if MONO
         public const string DEF_FONT = "Noto Sans";
         #else
         public const string DEF_FONT = "Tahoma";

@@ -31,7 +31,7 @@ using GKUI.Platform;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct("GEDKeeper")]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
-[assembly: AssemblyVersion("2.17.0.0")]
+[assembly: AssemblyVersion("2.19.0.0")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
@@ -47,7 +47,7 @@ namespace GKUI
         private static void LogSysInfo()
         {
             try {
-                #if __MonoCS__
+                #if MONO
                 Logger.WriteInfo("Mono Version: " + SysUtils.GetMonoVersion());
                 Logger.WriteInfo("Desktop Type: " + SysUtils.GetDesktopType().ToString());
                 #endif
@@ -63,7 +63,7 @@ namespace GKUI
 
         [STAThread]
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             WFAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
@@ -84,7 +84,7 @@ namespace GKUI
                         var appHost = (WFAppHost)AppHost.Instance;
                         appHost.Init(args, false);
 
-                        Application.Run(appHost.AppContext);
+                        Application.Run();
                     } finally {
                         AppHost.DoneSettings();
                     }

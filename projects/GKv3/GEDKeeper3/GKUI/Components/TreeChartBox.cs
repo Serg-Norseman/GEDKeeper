@@ -114,6 +114,12 @@ namespace GKUI.Components
             set { fModel.Kind = value; }
         }
 
+        public ITreeLayout Layout
+        {
+            get { return fModel.Layout; }
+            set { fModel.Layout = value; }
+        }
+
         public TreeChartModel Model
         {
             get { return fModel; }
@@ -173,6 +179,8 @@ namespace GKUI.Components
 
             InitTimer();
             fTween = new TweenLibrary();
+
+            SetLayout(new NativeTreeLayout());
         }
 
         public TreeChartBox(ChartRenderer renderer) : this()
@@ -190,6 +198,11 @@ namespace GKUI.Components
                 if (fTreeControls != null) fTreeControls.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void SetLayout(ITreeLayout layout)
+        {
+            fModel.Layout = layout;
         }
 
         public override void SetRenderer(ChartRenderer renderer)
@@ -382,10 +395,10 @@ namespace GKUI.Components
             }
 
             if (fOptions.BorderStyle != GfxBorderStyle.None) {
-                fRenderer.SetSmoothing(false);
+                //fRenderer.SetSmoothing(false);
                 var rt = ExtRect.CreateBounds(spx, spy, fModel.ImageWidth, fModel.ImageHeight);
                 BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
-                fRenderer.SetSmoothing(true);
+                //fRenderer.SetSmoothing(true);
             }
         }
 
@@ -730,6 +743,7 @@ namespace GKUI.Components
 
                         if (ctl != null) {
                             fMode = ChartControlMode.ControlsVisible;
+                            ctl.UpdateState();
                             ctl.Visible = true;
                             ctl.MouseMove(scrPt.X, scrPt.Y);
                             fActiveControl = ctl;

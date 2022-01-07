@@ -50,13 +50,6 @@ namespace GKUI.Platform
         #endif
 
 
-        private readonly ApplicationContext fAppContext;
-
-        public ApplicationContext AppContext
-        {
-            get { return fAppContext; }
-        }
-
         static WFAppHost()
         {
             SetAppSign("GEDKeeper2");
@@ -64,7 +57,6 @@ namespace GKUI.Platform
 
         public WFAppHost()
         {
-            fAppContext = new ApplicationContext();
             Application.ApplicationExit += this.OnApplicationExit;
         }
 
@@ -77,17 +69,20 @@ namespace GKUI.Platform
             base.Init(args, isMDI);
         }
 
-        // FIXME
         public override IWindow GetActiveWindow()
         {
-            Form activeForm = Form.ActiveForm;
+            IWindow activeWin = Form.ActiveForm as IWindow;
 
-            // only for tests!
-            if (activeForm == null && fRunningForms.Count > 0) {
-                activeForm = (Form)fRunningForms[0];
+            if (activeWin == null) {
+                activeWin = fActiveBase;
             }
 
-            return (activeForm is IWindow) ? (IWindow)activeForm : null;
+            // only for tests!
+            if (activeWin == null && fRunningForms.Count > 0) {
+                activeWin = fRunningForms[0] as IWindow;
+            }
+
+            return activeWin;
         }
 
         // FIXME!
@@ -103,17 +98,7 @@ namespace GKUI.Platform
             base.CloseWindow(window);
 
             if (fRunningForms.Count == 0) {
-                fAppContext.ExitThread();
-            }
-        }
-
-        public override void ShowWindow(IWindow window)
-        {
-            Form frm = window as Form;
-
-            if (frm != null) {
-                frm.ShowInTaskbar = true;
-                frm.Show();
+                Application.ExitThread();
             }
         }
 
@@ -126,7 +111,7 @@ namespace GKUI.Platform
                     if (win is IBaseWindow) {
                         IntPtr handle = ((Form)win).Handle;
 
-                        #if !__MonoCS__
+                        #if !MONO
                         PostMessageExt(handle, WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
                         #endif
                     }
@@ -143,7 +128,7 @@ namespace GKUI.Platform
             Form frm = form as Form;
 
             if (frm != null) {
-                #if !__MonoCS__
+                #if !MONO
                 EnableWindowExt(frm.Handle, value);
                 #endif
             }
@@ -224,7 +209,7 @@ namespace GKUI.Platform
 
         public override int GetKeyLayout()
         {
-            #if __MonoCS__
+            #if MONO
             // There is a bug in Mono: does not work this CurrentInputLanguage
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
             #else
@@ -350,7 +335,7 @@ namespace GKUI.Platform
         public const uint WM_USER = 0x0400;
         public const uint WM_KEEPMODELESS = WM_USER + 111;
 
-        #if !__MonoCS__
+        #if !MONO
 
         [SecurityCritical, SuppressUnmanagedCodeSecurity]
         [DllImport("user32.dll", EntryPoint="PostMessage", SetLastError = true)]

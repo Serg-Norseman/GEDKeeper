@@ -242,6 +242,9 @@ namespace GKUI.Components
 
         private void RestoreSelected(object itemData)
         {
+            Activate();
+            fList.Activate();
+
             if (itemData != null) fList.SelectItem(itemData);
         }
 

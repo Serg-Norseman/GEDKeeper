@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
@@ -26,6 +26,7 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -42,6 +43,9 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
             fEvent = new GDMIndividualEvent();
 
@@ -190,11 +194,14 @@ namespace GKUI.Forms
 
             SelectCombo("cmbEventType", form, 1); // Birth(indi) / ?(fam)
             EnterText("txtEventPlace", form, "test place");
-            SelectCombo("cmbEventDateType", form, 3); // Between
+
+            // FIXME: create GKDateControl tests
+            /*SelectCombo("cmbEventDateType", form, 3); // Between
             EnterMaskedText("txtEventDate1", form, "01.01.1900");
             EnterMaskedText("txtEventDate2", form, "10.01.1900");
             SelectCombo("cmbDate1Calendar", form, 1); // Julian
-            SelectCombo("cmbDate2Calendar", form, 1); // Julian
+            SelectCombo("cmbDate2Calendar", form, 1); // Julian*/
+
             EnterText("txtEventCause", form, "test cause");
             EnterText("txtEventOrg", form, "test agency");
 

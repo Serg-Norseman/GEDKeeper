@@ -204,9 +204,7 @@ namespace GKCore
 
         public void ImportNames(GDMIndividualRecord iRec)
         {
-            if (Culture is RussianCulture) {
-                AppHost.NamesTable.ImportNames(this, iRec);
-            }
+            AppHost.NamesTable.ImportNames(this, iRec);
         }
 
         public GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, GDMCustomDate evDate, string evPlace)
@@ -816,7 +814,7 @@ namespace GKCore
 
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
                     } else {
-                        stream = new FileStream(targetFn, FileMode.Open);
+                        stream = new FileStream(targetFn, FileMode.Open, FileAccess.Read);
                     }
                     break;
 
@@ -836,13 +834,19 @@ namespace GKCore
                     break;
 
                 case MediaStoreType.mstRelativeReference:
-                    string treeName = fFileName;
-                    targetFn = GetTreePath(treeName) + targetFn;
-                    stream = new FileStream(targetFn, FileMode.Open);
-                    break;
-
                 case MediaStoreType.mstReference:
-                    stream = new FileStream(targetFn, FileMode.Open);
+                    if (gst == MediaStoreType.mstRelativeReference) {
+                        string treeName = fFileName;
+                        targetFn = GetTreePath(treeName) + targetFn;
+                    }
+                    if (!File.Exists(targetFn)) {
+                        if (throwException) {
+                            throw new MediaFileNotFoundException(targetFn);
+                        }
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound, targetFn));
+                    } else {
+                        stream = new FileStream(targetFn, FileMode.Open, FileAccess.Read);
+                    }
                     break;
 
                 case MediaStoreType.mstURL:
@@ -869,7 +873,7 @@ namespace GKCore
 
                     case MediaStoreType.mstArchive:
                         fileName = GKUtils.GetTempDir() + Path.GetFileName(targetFn);
-                        FileStream fs = new FileStream(fileName, FileMode.Create);
+                        FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
                         try {
                             if (!File.Exists(GetArcFileName())) {
                                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
@@ -1026,7 +1030,7 @@ namespace GKCore
                         break;
 
                     case MediaStoreStatus.mssFileNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound, fileName));
                         break;
 
                     case MediaStoreStatus.mssStgNotFound:

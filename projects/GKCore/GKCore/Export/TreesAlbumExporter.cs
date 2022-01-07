@@ -216,7 +216,7 @@ namespace GKCore.Export
                 iNum += 1;
                 indiNums[indiRec] = iNum;
 
-                if (!person.CanExpand) continue;
+                if (!person.HasFlag(PersonFlag.pfCanExpand)) continue;
 
                 ix = offset.X + person.Rect.Left;
                 iy = offset.Y + person.Rect.Bottom;

@@ -32,7 +32,7 @@ namespace GKUI.Components
 {
     public partial class MediaPlayer : UserControl, ILocalizable
     {
-        #if !__MonoCS__
+        #if !MONO
         private const bool FIND_LIBVLC = true;
         #else
         private const bool FIND_LIBVLC = false;

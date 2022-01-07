@@ -609,8 +609,7 @@ namespace GKCore.Controllers
         {
             GDMRecordType rt = GetSelectedRecordType();
             IListManager listMan = GetRecordsListManByType(rt);
-            IList<ISearchResult> result = listMan.FindAll(searchPattern);
-            //IList<ISearchResult> result = fContext.FindAll(rt, searchPattern);
+            IList<ISearchResult> result = (listMan == null) ? new List<ISearchResult>() : listMan.FindAll(searchPattern);
             return result;
         }
 
@@ -688,7 +687,7 @@ namespace GKCore.Controllers
 
         public void ExportToFamilyBook()
         {
-            //#if __MonoCS__
+            //#if MONO
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             //#endif
@@ -700,7 +699,7 @@ namespace GKCore.Controllers
 
         public void ExportToTreesAlbum()
         {
-            //#if __MonoCS__
+            //#if MONO
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             //#endif
@@ -854,7 +853,7 @@ namespace GKCore.Controllers
 
         public void ShowMap()
         {
-            //#if __MonoCS__
+            //#if MONO
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             var mapsWin = AppHost.Container.Resolve<IMapsViewerWin>(fView);

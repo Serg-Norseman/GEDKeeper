@@ -77,8 +77,6 @@ namespace GKCore.Controllers
                 IProgressController progress = AppHost.Progress;
                 GDMTree tree = fBase.Context.Tree;
 
-                fView.MapBrowser.InitMap();
-
                 fView.PersonsCombo.BeginUpdate();
                 fView.PlacesTree.BeginUpdate();
                 progress.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), tree.RecordsCount);
@@ -119,7 +117,9 @@ namespace GKCore.Controllers
                     personValues.Sort();
                     fView.PersonsCombo.Clear();
                     fView.PersonsCombo.AddItem<GDMIndividualRecord>(LangMan.LS(LSID.LSID_NotSelected), null);
-                    fView.PersonsCombo.AddStrings(personValues);
+                    for (int i = 0; i < personValues.Count; i++) {
+                        fView.PersonsCombo.AddItem<GDMIndividualRecord>(personValues[i], personValues.GetObject(i) as GDMIndividualRecord);
+                    }
 
                     fView.SelectPlacesBtn.Enabled = true;
                 } finally {
@@ -233,13 +233,18 @@ namespace GKCore.Controllers
         }
 
         // TODO: localize?
-        public void SaveImage()
+        public void SaveSnapshot()
         {
-            string filter1 = "Image files|*.jpg";
+            try {
+                string filter1 = "Image files|*.jpg";
 
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fileName)) {
-                fView.MapBrowser.SaveSnapshot(fileName);
+                string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
+                if (!string.IsNullOrEmpty(fileName)) {
+                    fView.MapBrowser.SaveSnapshot(fileName);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("SaveSnapshot()", ex);
+                AppHost.StdDialogs.ShowError("Image failed to save: " + ex.Message);
             }
         }
     }

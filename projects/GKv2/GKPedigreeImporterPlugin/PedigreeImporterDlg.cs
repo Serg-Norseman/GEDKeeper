@@ -97,7 +97,7 @@ namespace GKPedigreeImporterPlugin
         private void btnImportFileChoose_Click(object sender, EventArgs e)
         {
             string filter;
-            #if !__MonoCS__
+            #if !MONO
             filter = fLangMan.LS(ILS.LSID_AllFiltersW);
             #else
             filter = fLangMan.LS(ILS.LSID_AllFiltersL);

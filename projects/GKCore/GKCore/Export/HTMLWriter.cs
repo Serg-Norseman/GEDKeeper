@@ -65,7 +65,7 @@ namespace GKCore.Export
 
         public override void BeginWrite()
         {
-            fStream = new StreamWriter(new FileStream(fFileName, FileMode.Create), Encoding.UTF8);
+            fStream = new StreamWriter(new FileStream(fFileName, FileMode.Create, FileAccess.Write), Encoding.UTF8);
 
             fStream.WriteLine("<html>");
             fStream.WriteLine("<head>");

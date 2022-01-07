@@ -74,9 +74,9 @@ namespace GKUI.Components
             return new ArborNodeEx(sign);
         }
 
-        protected override ArborEdge CreateEdge(ArborNode src, ArborNode tgt, double len, double stiffness, bool directed = false)
+        protected override ArborEdge CreateEdge(ArborNode source, ArborNode target, double length, double stiffness, bool directed = false)
         {
-            return new ArborEdge(src, tgt, len, stiffness, directed);
+            return new ArborEdge(source, target, length, stiffness, directed);
         }
     }
 

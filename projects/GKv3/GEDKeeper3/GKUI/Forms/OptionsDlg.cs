@@ -20,6 +20,7 @@
 
 using System;
 using System.Globalization;
+using BSLib.Design;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
@@ -139,7 +140,7 @@ namespace GKUI.Forms
                     cmbLanguages.Items.Add(new GKComboItem<int>(lngRec.Name, lngRec.Code));
                 }
             }
-            UIHelper.SetSelectedTag(cmbLanguages, fOptions.InterfaceLang, true);
+            cmbLanguages.SetSelectedTag(fOptions.InterfaceLang, true);
         }
 
         private void UpdateMediaOptions()
@@ -148,7 +149,7 @@ namespace GKUI.Forms
             chkEmbeddedMediaPlayer.Checked = fOptions.EmbeddedMediaPlayer;
             chkAllowMediaDirectRefs.Checked = fOptions.AllowMediaStoreReferences;
             chkAllowMediaStoreRelativeReferences.Checked = fOptions.AllowMediaStoreRelativeReferences;
-            UIHelper.SetSelectedTag<MediaStoreType>(cmbMediaStoreDefault, fOptions.MediaStoreDefault);
+            cmbMediaStoreDefault.SetSelectedTag<MediaStoreType>(fOptions.MediaStoreDefault);
             chkAllowDeleteMediaFileFromStgArc.Checked = fOptions.AllowDeleteMediaFileFromStgArc;
             chkAllowDeleteMediaFileFromRefs.Checked = fOptions.AllowDeleteMediaFileFromRefs;
             chkDeleteMediaFileWithoutConfirm.Checked = fOptions.DeleteMediaFileWithoutConfirm;
@@ -242,6 +243,9 @@ namespace GKUI.Forms
             chkAutoSortChildren.Checked = fOptions.AutoSortChildren;
             chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
             chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
+
+            chkShortKinshipForm.Checked = fOptions.ShortKinshipForm;
+            chkSurnameFirstInOrder.Checked = fOptions.SurnameFirstInOrder;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -421,9 +425,9 @@ namespace GKUI.Forms
 
         private void AcceptLangs()
         {
-            var item = cmbLanguages.Items[cmbLanguages.SelectedIndex] as GKComboItem<int>;
+            var item = cmbLanguages.Items[cmbLanguages.SelectedIndex] as ComboItem<int>;
             if (item != null) {
-                AppHost.Instance.LoadLanguage((int)item.Tag);
+                AppHost.Instance.LoadLanguage(item.Tag);
             }
         }
 
@@ -485,15 +489,24 @@ namespace GKUI.Forms
             ancOptionsControl1.AcceptChanges();
         }
 
+        private NameFormat GetSelectedNameFormat()
+        {
+            NameFormat result;
+            if (radSNP.Checked) {
+                result = NameFormat.nfFNP;
+            } else if (radS_NP.Checked) {
+                result = NameFormat.nfF_NP;
+            } else if (radS_N_P.Checked) {
+                result = NameFormat.nfF_N_P;
+            } else {
+                result = NameFormat.nfFNP;
+            }
+            return result;
+        }
+
         private void AcceptInterfaceOptions()
         {
-            if (radSNP.Checked) {
-                fOptions.DefNameFormat = NameFormat.nfFNP;
-            } else if (radS_NP.Checked) {
-                fOptions.DefNameFormat = NameFormat.nfF_NP;
-            } else if (radS_N_P.Checked) {
-                fOptions.DefNameFormat = NameFormat.nfF_N_P;
-            }
+            fOptions.DefNameFormat = GetSelectedNameFormat();
 
             if (radDMY.Checked) {
                 fOptions.DefDateFormat = DateFormat.dfDD_MM_YYYY;
@@ -510,6 +523,9 @@ namespace GKUI.Forms
             fOptions.AutoSortChildren = chkAutoSortChildren.Checked.GetValueOrDefault();
             fOptions.AutoSortSpouses = chkAutoSortSpouses.Checked.GetValueOrDefault();
             fOptions.FirstCapitalLetterInNames = chkFirstCapitalLetterInNames.Checked.GetValueOrDefault();
+
+            fOptions.ShortKinshipForm = chkShortKinshipForm.Checked.GetValueOrDefault();
+            fOptions.SurnameFirstInOrder = chkSurnameFirstInOrder.Checked.GetValueOrDefault();
         }
 
         private void AcceptWomanSurnameFormat()
@@ -764,6 +780,8 @@ namespace GKUI.Forms
             chkAutoSortChildren.Text = LangMan.LS(LSID.LSID_AutoSortChildren);
             chkAutoSortSpouses.Text = LangMan.LS(LSID.LSID_AutoSortSpouses);
             chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
+            chkShortKinshipForm.Text = LangMan.LS(LSID.LSID_ShortKinshipForm);
+            chkSurnameFirstInOrder.Text = LangMan.LS(LSID.LSID_SurnameFirstInOrder);
 
             grpDateFormat.Text = LangMan.LS(LSID.LSID_DateFormat);
             chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
@@ -813,6 +831,12 @@ namespace GKUI.Forms
             numDefaultDepth.Enabled = !chkSeparateDepth.Checked.GetValueOrDefault();
             numDefaultDepthAncestors.Enabled = chkSeparateDepth.Checked.GetValueOrDefault();
             numDefaultDepthDescendants.Enabled = chkSeparateDepth.Checked.GetValueOrDefault();
+        }
+
+        private void rgFNPFormat_CheckedChanged(object sender, EventArgs e)
+        {
+            var defNameFormat = GetSelectedNameFormat();
+            chkSurnameFirstInOrder.Enabled = (defNameFormat == NameFormat.nfFNP);
         }
     }
 }

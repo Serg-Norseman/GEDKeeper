@@ -1,6 +1,17 @@
 
-del /q .\deploy\*.exe
+del .\bin\* /s /q
+for /d %%p in (.\bin\*) do rd "%%p" /s /q
 
+del .\plugins\* /s /q
+del .\deploy\*.zip /q
+del .\deploy\*.exe /q
+
+del .\appdata\imagecache\*.* /q
+del .\appdata\xdb\*.* /q
+del .\appdata\GEDKeeper2.log
+del .\appdata\GEDKeeper2.nms
+
+del .\TestResult.xml
 del .\coverageResults.txt
 
 rmdir .\cov-int /s /q
@@ -25,7 +36,6 @@ rmdir .\projects\GKTests\OpenCover /s /q
 rmdir .\projects\GKTests\PartCover /s /q
 rmdir .\projects\GKTests\ProfilingSessions /s /q
 
-
 rmdir .\projects\GKv2\GEDKeeper2\bin /s /q
 rmdir .\projects\GKv2\GEDKeeper2\obj /s /q
 rmdir .\projects\GKv2\GEDKeeper2\ProfilingSessions /s /q
@@ -36,12 +46,20 @@ rmdir .\projects\GKv2\GKComponents\obj /s /q
 rmdir .\projects\GKv2\GKTray\bin /s /q
 rmdir .\projects\GKv2\GKTray\obj /s /q
 
-
 rmdir .\projects\GKIntl\bin /s /q
 rmdir .\projects\GKIntl\obj /s /q
 
 rmdir .\projects\GKUpdater\bin /s /q
 rmdir .\projects\GKUpdater\obj /s /q
+
+rmdir .\projects\GKMap\GKMap.Core\bin /s /q
+rmdir .\projects\GKMap\GKMap.Core\obj /s /q
+
+rmdir .\projects\GKMap\GKMap.WinForms\bin /s /q
+rmdir .\projects\GKMap\GKMap.WinForms\obj /s /q
+
+rmdir .\projects\GKMap\GKMap.WinForms.Demo\bin /s /q
+rmdir .\projects\GKMap\GKMap.WinForms.Demo\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
@@ -101,3 +119,6 @@ rmdir .\projects\GKv2\GKFoldersPlugin\obj /s /q
 
 rmdir .\projects\GKv2\GEDmill\bin /s /q
 rmdir .\projects\GKv2\GEDmill\obj /s /q
+
+rmdir .\projects\GKv2\GWTreePlugin\bin /s /q
+rmdir .\projects\GKv2\GWTreePlugin\obj /s /q

@@ -63,7 +63,6 @@ namespace GKCore.MVP.Controls
         void DeletePoint(int index);
         void BeginUpdate();
         void EndUpdate();
-        void InitMap();
         void RefreshPoints();
         void SaveSnapshot(string fileName);
         void SetCenter(double latitude, double longitude, int scale);

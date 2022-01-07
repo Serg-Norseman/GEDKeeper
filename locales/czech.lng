@@ -791,7 +791,7 @@
 790=Záznam rodiny byl zjištěn bez rodičů nebo dětí
 791=Opravdu chcete multimediální soubor odebrat?
 792=Úložiště nebylo nalezeno
-793=Soubor nenalezen
+793=Soubor "{0}" nenalezen
 794=Povolit relativní odkazy na mediální soubory
 795=Výchozí typ úložiště médií
 796=Povolit mazání mediálních souborů z úložiště a archivace
@@ -836,3 +836,11 @@
 832=Separate depth
 833=Ancestors
 834=Matches not found
+835=Short kinship form
+836=Surname first in order
+837=Borders
+838=You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?
+839=Providers
+840=Coordinates
+841=Load places
+842=Only locality

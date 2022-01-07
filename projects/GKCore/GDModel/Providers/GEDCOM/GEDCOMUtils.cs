@@ -1088,7 +1088,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] PedigreeLinkageTypes = new string[] {
+        public static readonly string[] PedigreeLinkageTypes = new string[] {
             "", "adopted", "birth", "foster" };
 
         public static GDMPedigreeLinkageType GetPedigreeLinkageTypeVal(string str)
@@ -1102,7 +1102,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] ChildLinkageStatuses = new string[] {
+        public static readonly string[] ChildLinkageStatuses = new string[] {
             "", "challenged", "disproven", "proven" };
 
         public static GDMChildLinkageStatus GetChildLinkageStatusVal(string str)
@@ -1116,7 +1116,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] CommunicationTypes = new string[] {
+        public static readonly string[] CommunicationTypes = new string[] {
             "call", "email", "fax", "letter", "tape", "visit" };
 
         public static GDMCommunicationType GetCommunicationTypeVal(string str)
@@ -1280,7 +1280,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] MediaTypes = new string[] {
+        public static readonly string[] MediaTypes = new string[] {
             "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
             "manuscript", "map", "newspaper", "photo", "tombstone", "video", "z" };
 
@@ -1332,7 +1332,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] NameTypes = new string[] {
+        public static readonly string[] NameTypes = new string[] {
             "", "aka", "birth", "immigrant", "maiden", "married" };
 
         public static GDMNameType GetNameTypeVal(string str)
@@ -1587,7 +1587,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] MarriageStatuses = new string[] {
+        public static readonly string[] MarriageStatuses = new string[] {
             "", "married", "marrnotreg", "notmarr" };
 
         public static GDMMarriageStatus GetMarriageStatusVal(string str)
@@ -1693,7 +1693,7 @@ namespace GDModel.Providers.GEDCOM
             return tagA.CompareTo(tagB);
         }
 
-        public static GEDCOMTagType[] IndiEvents = new GEDCOMTagType[] {
+        public static readonly GEDCOMTagType[] IndiEvents = new GEDCOMTagType[] {
             GEDCOMTagType.ADOP, GEDCOMTagType.BAPM, GEDCOMTagType.BARM, GEDCOMTagType.BASM, GEDCOMTagType.BIRT,
             GEDCOMTagType.BLES, GEDCOMTagType.BURI, GEDCOMTagType.CENS, GEDCOMTagType.CHR, GEDCOMTagType.CHRA,
             GEDCOMTagType.CONF, GEDCOMTagType.CREM, GEDCOMTagType.DEAT, GEDCOMTagType.EMIG, GEDCOMTagType.EVEN,
@@ -1708,7 +1708,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static GEDCOMTagType[] IndiAttrs = new GEDCOMTagType[] {
+        public static readonly GEDCOMTagType[] IndiAttrs = new GEDCOMTagType[] {
             GEDCOMTagType.CAST, GEDCOMTagType.DSCR, GEDCOMTagType.EDUC, GEDCOMTagType.FACT, GEDCOMTagType.IDNO,
             GEDCOMTagType.NATI, GEDCOMTagType.NCHI, GEDCOMTagType.NMR, GEDCOMTagType.OCCU, GEDCOMTagType.PROP,
             GEDCOMTagType.RELI, GEDCOMTagType.RESI, GEDCOMTagType.SSN, GEDCOMTagType.TITL,
@@ -1725,7 +1725,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static GEDCOMTagType[] FamEvents = new GEDCOMTagType[] {
+        public static readonly GEDCOMTagType[] FamEvents = new GEDCOMTagType[] {
             GEDCOMTagType.ANUL, GEDCOMTagType.CENS, GEDCOMTagType.DIV, GEDCOMTagType.DIVF, GEDCOMTagType.ENGA,
             GEDCOMTagType.EVEN, GEDCOMTagType.MARB, GEDCOMTagType.MARC, GEDCOMTagType.MARL, GEDCOMTagType.MARR,
             GEDCOMTagType.MARS, GEDCOMTagType.RESI,

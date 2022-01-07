@@ -222,8 +222,14 @@ namespace GKCore.Names
         {
             if (context == null || iRec == null) return;
 
+            var persName = (iRec.PersonalNames.Count > 0) ? iRec.PersonalNames[0] : null;
+            if (persName == null) return;
+
+            ICulture culture = GKUtils.DefineCulture(context.Tree, persName);
+            if (culture == null || !culture.HasPatronymic()) return;
+
             try {
-                var parts = GKUtils.GetNameParts(context.Tree, iRec, false);
+                var parts = GKUtils.GetNameParts(context.Tree, iRec, persName, false);
                 string childName = parts.Name;
                 string childPat = parts.Patronymic;
 

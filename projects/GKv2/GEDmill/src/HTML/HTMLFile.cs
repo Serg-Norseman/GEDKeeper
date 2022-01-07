@@ -51,7 +51,7 @@ namespace GEDmill.HTML
             }
             fStream = null;
             try {
-                fStream = new FileStream(filename, FileMode.Create);
+                fStream = new FileStream(filename, FileMode.Create, FileAccess.Write);
             } catch (NotSupportedException) {
                 throw new HTMLException(string.Format("A problem occurred when creating an HTML file:\r\nThe path or filename {0} is not valid.", filename));
             }

@@ -38,6 +38,20 @@ namespace GDModel
             return note;
         }
 
+        public static GDMNotes FindNotes(this IGDMStructWithNotes _struct, GDMNoteRecord noteRec)
+        {
+            if (noteRec != null && _struct.HasNotes) {
+                int num = _struct.Notes.Count;
+                for (int i = 0; i < num; i++) {
+                    var notes = _struct.Notes[i];
+                    if (notes.XRef == noteRec.XRef) {
+                        return notes;
+                    }
+                }
+            }
+            return null;
+        }
+
         public static GDMSourceCitation AddSource(this IGDMStructWithSourceCitations _struct, GDMSourceRecord sourceRec, string page, int quality)
         {
             GDMSourceCitation cit = null;
@@ -53,6 +67,20 @@ namespace GDModel
             return cit;
         }
 
+        public static GDMSourceCitation FindSourceCitation(this IGDMStructWithSourceCitations _struct, GDMSourceRecord sourceRec)
+        {
+            if (sourceRec != null && _struct.HasSourceCitations) {
+                int num = _struct.SourceCitations.Count;
+                for (int i = 0; i < num; i++) {
+                    var sourCit = _struct.SourceCitations[i];
+                    if (sourCit.XRef == sourceRec.XRef) {
+                        return sourCit;
+                    }
+                }
+            }
+            return null;
+        }
+
         public static GDMMultimediaLink AddMultimedia(this IGDMStructWithMultimediaLinks _struct, GDMMultimediaRecord mediaRec)
         {
             GDMMultimediaLink result = null;
@@ -64,6 +92,20 @@ namespace GDModel
             }
 
             return result;
+        }
+
+        public static GDMMultimediaLink FindMultimediaLink(this IGDMStructWithMultimediaLinks _struct, GDMMultimediaRecord mmRec)
+        {
+            if (mmRec != null && _struct.HasMultimediaLinks) {
+                int num = _struct.MultimediaLinks.Count;
+                for (int i = 0; i < num; i++) {
+                    var link = _struct.MultimediaLinks[i];
+                    if (link.XRef == mmRec.XRef) {
+                        return link;
+                    }
+                }
+            }
+            return null;
         }
 
         public static void AddUserRef(this IGDMStructWithUserReferences _struct, string reference)

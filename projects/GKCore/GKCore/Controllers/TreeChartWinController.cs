@@ -115,7 +115,6 @@ namespace GKCore.Controllers
             UpdateChart();
         }
 
-        // TODO: refactor
         private void ParentAdd(GDMSex needSex)
         {
             TreeChartPerson p = fView.TreeBox.Selected;

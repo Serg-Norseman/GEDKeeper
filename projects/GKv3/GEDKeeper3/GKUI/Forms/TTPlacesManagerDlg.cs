@@ -84,12 +84,12 @@ namespace GKUI.Forms
 
         private void btnIntoList_Click(object sender, EventArgs e)
         {
-            fController.CreateLocationRecord();
+            fController.CreateLocationRecord(ListPlaces.GetSelectedItems());
         }
 
         private void ListPlaces_DblClick(object sender, EventArgs e)
         {
-            fController.CreateLocationRecord();
+            fController.CreateLocationRecord(ListPlaces.GetSelectedItems());
         }
     }
 }

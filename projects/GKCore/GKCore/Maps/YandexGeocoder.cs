@@ -73,7 +73,10 @@ namespace GKCore.Maps
                     var nodes = doc.SelectNodes("//ns:ymaps/ns:GeoObjectCollection/opengis:featureMember/ns:GeoObject", ns);
                     foreach (XmlNode node in nodes) {
                         var pointNode = node.SelectSingleNode("opengis:Point/opengis:pos", ns);
+                        if (pointNode == null) continue;
+
                         var metaNode = node.SelectSingleNode("opengis:metaDataProperty/geocoder:GeocoderMetaData", ns);
+                        if (metaNode == null) continue;
 
                         var kindNode = metaNode["kind"];
                         if (kindNode.InnerText != "locality") continue;
@@ -82,7 +85,7 @@ namespace GKCore.Maps
                         double lng = double.Parse(splitted[0], CultureInfo.InvariantCulture);
                         double lat = double.Parse(splitted[1], CultureInfo.InvariantCulture);
 
-                        string ptHint = (metaNode == null || metaNode["text"] == null) ? string.Empty : metaNode["text"].InnerText;
+                        string ptHint = (metaNode["text"] == null) ? string.Empty : metaNode["text"].InnerText;
                         geoObjects.Add(new GeoPoint(lat, lng, ptHint));
                     }
                 }

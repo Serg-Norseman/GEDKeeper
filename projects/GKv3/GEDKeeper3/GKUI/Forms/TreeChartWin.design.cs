@@ -44,6 +44,8 @@ namespace GKUI.Forms
         private ContextMenu MenuGensAncestors;
         private ButtonToolItem tbGensDescendants;
         private ContextMenu MenuGensDescendants;
+        private ButtonToolItem tbBorders;
+        private ContextMenu MenuBorders;
 
         private void InitializeComponent()
         {
@@ -91,6 +93,9 @@ namespace GKUI.Forms
             tbOptions = new ButtonToolItem();
             tbOptions.Click += tbOptions_Click;
 
+            tbBorders = new ButtonToolItem();
+            tbBorders.Click += (sender, e) => MenuBorders.Show(this);
+
             ToolBar1 = new ToolBar();
             ToolBar1.TextAlign = ToolBarTextAlign.Right;
             ToolBar1.Items.AddRange(new ToolItem[] {
@@ -109,11 +114,14 @@ namespace GKUI.Forms
                                         tbDocPreview,
                                         tbDocPrint,
                                         new SeparatorToolItem(),
-                                        tbOptions});
+                                        tbOptions,
+                                        new SeparatorToolItem(),
+                                        tbBorders});
 
             MenuGensCommon = new ContextMenu();
             MenuGensAncestors = new ContextMenu();
             MenuGensDescendants = new ContextMenu();
+            MenuBorders = new ContextMenu();
 
             miModeBoth = new RadioMenuItem();
             miModeBoth.Text = "miModeBoth";

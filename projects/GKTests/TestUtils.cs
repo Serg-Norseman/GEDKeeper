@@ -37,11 +37,7 @@ namespace GKTests
     {
         public static void InitGEDCOMProviderTest()
         {
-            // forced call of GEDCOMProvider static constructor
-            // this is important for a number of tests that require initialization of the GEDCOM tag table
-            // System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(GEDCOMProvider).TypeHandle);
-            var formats = GEDCOMProvider.GEDCOMFormats;
-            Assert.IsNotNull(formats);
+            GKUtils.InitGEDCOM();
 
             var tagProps = GEDCOMTagsTable.GetTagProps("BIRT");
             Assert.IsNotNull(tagProps);
@@ -227,11 +223,7 @@ namespace GKTests
 
         public static string GetTempFilePath(string fileName)
         {
-            #if !__MonoCS__
             fileName = GKUtils.GetTempDir() + fileName;
-            #else
-            fileName = GKUtils.GetHomePath() + fileName;
-            #endif
 
             if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
 

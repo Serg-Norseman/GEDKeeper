@@ -41,12 +41,6 @@ namespace GKCore.SingleInstance
         /// </summary>
         /// <param name="e">The EventArgs object holding information about the event.</param>
         void OnMessageReceived(MessageEventArgs e);
-
-        /// <summary>
-        /// Handles a creation of a new instance of the application.
-        /// </summary>
-        /// <param name="e">The EventArgs object holding information about the event.</param>
-        void OnNewInstanceCreated(EventArgs e);
     }
 
 

@@ -45,7 +45,7 @@
 		    this.btnAccept.Margin = new System.Windows.Forms.Padding(4);
 		    this.btnAccept.Name = "btnAccept";
 		    this.btnAccept.Size = new System.Drawing.Size(101, 31);
-		    this.btnAccept.TabIndex = 7;
+		    this.btnAccept.TabIndex = 1;
 		    this.btnAccept.Text = "btnAccept";
 		    this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 		    this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
@@ -58,7 +58,7 @@
 		    this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
 		    this.btnCancel.Name = "btnCancel";
 		    this.btnCancel.Size = new System.Drawing.Size(101, 31);
-		    this.btnCancel.TabIndex = 8;
+		    this.btnCancel.TabIndex = 2;
 		    this.btnCancel.Text = "btnCancel";
 		    this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 		    this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -72,7 +72,7 @@
 		    this.tabsData.Name = "tabsData";
 		    this.tabsData.SelectedIndex = 0;
 		    this.tabsData.Size = new System.Drawing.Size(559, 307);
-		    this.tabsData.TabIndex = 9;
+		    this.tabsData.TabIndex = 0;
 		    // 
 		    // pageCommon
 		    // 
@@ -96,7 +96,7 @@
 		    this.lblPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 		    this.lblPage.Name = "lblPage";
 		    this.lblPage.Size = new System.Drawing.Size(50, 17);
-		    this.lblPage.TabIndex = 10;
+		    this.lblPage.TabIndex = 3;
 		    this.lblPage.Text = "lblPage";
 		    // 
 		    // txtPage
@@ -105,7 +105,7 @@
 		    this.txtPage.Margin = new System.Windows.Forms.Padding(4);
 		    this.txtPage.Name = "txtPage";
 		    this.txtPage.Size = new System.Drawing.Size(410, 24);
-		    this.txtPage.TabIndex = 11;
+		    this.txtPage.TabIndex = 4;
 		    // 
 		    // lblSource
 		    // 
@@ -114,7 +114,7 @@
 		    this.lblSource.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 		    this.lblSource.Name = "lblSource";
 		    this.lblSource.Size = new System.Drawing.Size(63, 17);
-		    this.lblSource.TabIndex = 7;
+		    this.lblSource.TabIndex = 0;
 		    this.lblSource.Text = "lblSource";
 		    // 
 		    // btnSourceAdd
@@ -123,7 +123,7 @@
 		    this.btnSourceAdd.Margin = new System.Windows.Forms.Padding(4);
 		    this.btnSourceAdd.Name = "btnSourceAdd";
 		    this.btnSourceAdd.Size = new System.Drawing.Size(35, 35);
-		    this.btnSourceAdd.TabIndex = 9;
+		    this.btnSourceAdd.TabIndex = 2;
 		    this.btnSourceAdd.TabStop = false;
 		    this.btnSourceAdd.Click += new System.EventHandler(this.btnSourceAdd_Click);
 		    // 
@@ -134,7 +134,7 @@
 		    this.lblCertainty.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 		    this.lblCertainty.Name = "lblCertainty";
 		    this.lblCertainty.Size = new System.Drawing.Size(76, 17);
-		    this.lblCertainty.TabIndex = 12;
+		    this.lblCertainty.TabIndex = 5;
 		    this.lblCertainty.Text = "lblCertainty";
 		    // 
 		    // txtCertainty
@@ -144,7 +144,7 @@
 		    this.txtCertainty.Margin = new System.Windows.Forms.Padding(4);
 		    this.txtCertainty.Name = "txtCertainty";
 		    this.txtCertainty.Size = new System.Drawing.Size(410, 25);
-		    this.txtCertainty.TabIndex = 13;
+		    this.txtCertainty.TabIndex = 6;
 		    // 
 		    // cmbSource
 		    // 
@@ -153,7 +153,7 @@
 		    this.cmbSource.Name = "cmbSource";
 		    this.cmbSource.Size = new System.Drawing.Size(368, 25);
 		    this.cmbSource.Sorted = true;
-		    this.cmbSource.TabIndex = 8;
+		    this.cmbSource.TabIndex = 1;
 		    this.cmbSource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyDown);
 		    this.cmbSource.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyUp);
 		    // 
@@ -170,21 +170,22 @@
 		    // txtText
 		    // 
 		    this.txtText.Dock = System.Windows.Forms.DockStyle.Fill;
-		    this.txtText.Location = new System.Drawing.Point(0, 82);
+		    this.txtText.Location = new System.Drawing.Point(0, 61);
 		    this.txtText.Multiline = true;
 		    this.txtText.Name = "txtText";
 		    this.txtText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-		    this.txtText.Size = new System.Drawing.Size(551, 195);
+		    this.txtText.Size = new System.Drawing.Size(551, 216);
 		    this.txtText.TabIndex = 3;
 		    // 
 		    // dateCtl
 		    // 
 		    this.dateCtl.AutoSize = true;
+		    this.dateCtl.Date = null;
 		    this.dateCtl.Dock = System.Windows.Forms.DockStyle.Top;
 		    this.dateCtl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 		    this.dateCtl.Location = new System.Drawing.Point(0, 0);
 		    this.dateCtl.Name = "dateCtl";
-		    this.dateCtl.Size = new System.Drawing.Size(551, 82);
+		    this.dateCtl.Size = new System.Drawing.Size(551, 61);
 		    this.dateCtl.TabIndex = 2;
 		    // 
 		    // SourceCitEditDlg

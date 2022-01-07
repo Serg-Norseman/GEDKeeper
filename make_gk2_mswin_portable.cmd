@@ -1,24 +1,21 @@
 @echo off
 
 call .\clean.cmd
-call .\clean_all.cmd
 
-set CONFIG_TYPE=Debug
-for %%a in (release Release RELEASE) do if (%%a)==(%1) SET CONFIG_TYPE=Release
+set MSBDIR=@%WINDIR%\Microsoft.NET\Framework\v4.0.30319
+%MSBDIR%\msbuild.exe projects\GEDKeeper2.mswin.sln /p:Configuration=Release /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.0 /v:quiet
 
-call .\build_all.mswin.x86.cmd %CONFIG_TYPE%
-
-set BUILD_STATUS=%ERRORLEVEL% 
+set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS%==0 goto installer
-if not %BUILD_STATUS%==0 goto fail 
- 
-:fail 
+if not %BUILD_STATUS%==0 goto fail
+
+:fail
 pause 
 exit /b %BUILD_STATUS% 
- 
-:installer 
+
+:installer
 cd .\deploy
 call gk2_win_portable.cmd
 cd ..
-pause 
+pause
 exit /b 0

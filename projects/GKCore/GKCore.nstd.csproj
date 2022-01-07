@@ -168,4 +168,12 @@
     <EmbeddedResource Include="Resources\pnl_video.png" />
     <EmbeddedResource Include="Resources\btn_info.gif" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+  </ItemGroup>
 </Project>

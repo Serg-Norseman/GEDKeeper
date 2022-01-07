@@ -18,19 +18,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System.Windows.Forms;
-using NUnit.Framework;
 using GKTests;
+using GKUI.Platform;
+using NUnit.Framework;
 
 namespace GKUI.Components
 {
     [TestFixture]
     public class SmallComponents : CustomWindowTest
     {
-        public SmallComponents()
+        [TestFixtureSetUp]
+        public void SetUp()
         {
+            // GKMapBrowser -> GlobalOptions -> IGraphicsProviderEx
+            WFAppHost.ConfigureBootstrap(false);
         }
 
         [Test]
@@ -159,7 +163,6 @@ namespace GKUI.Components
                 Assert.IsNotNull(comp.MapPoints);
 
                 comp.BeginUpdate();
-                comp.InitMap();
                 comp.SetCenter(0, 0, 1);
                 comp.EndUpdate(); // -> RefreshPoints()
 

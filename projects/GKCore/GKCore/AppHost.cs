@@ -101,6 +101,7 @@ namespace GKCore
 
         public virtual void Init(string[] args, bool isMDI)
         {
+            GKUtils.InitGEDCOM();
             LoadLanguage(AppHost.Options.InterfaceLang);
             SetArgs(args);
             StartupWork();
@@ -108,15 +109,13 @@ namespace GKCore
 
         public void StartupWork()
         {
-            try
-            {
+            try {
                 ApplyOptions();
 
-                try
-                {
+                try {
                     BeginLoading();
 
-                    int result = LoadArgs();
+                    int result = LoadArgs(false);
                     result += ReloadRecentBases();
                     if (result == 0) {
                         CreateBase("");
@@ -190,7 +189,12 @@ namespace GKCore
 
         public abstract IntPtr GetTopWindowHandle();
 
-        public abstract void ShowWindow(IWindow window);
+        public void ShowWindow(IWindow window)
+        {
+            if (window != null) {
+                window.Show(true);
+            }
+        }
 
         public abstract void EnableWindow(IWidgetForm form, bool value);
 
@@ -240,13 +244,19 @@ namespace GKCore
 
         public static Version GetAppVersion()
         {
-            return GetAssembly().GetName().Version;
+            var asm = GetAssembly();
+            return (asm == null) ? null : asm.GetName().Version;
         }
 
         public static string GetAppCopyright()
         {
-            var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(GetAssembly());
-            return (attr == null) ? string.Empty : attr.Copyright;
+            var asm = GetAssembly();
+            if (asm == null) {
+                return string.Empty;
+            } else {
+                var attr = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(asm);
+                return (attr == null) ? string.Empty : attr.Copyright;
+            }
         }
 
         protected static string GetAppSign()
@@ -429,7 +439,7 @@ namespace GKCore
         public virtual bool ShowModalX(ICommonDialog form, bool keepModeless = false)
         {
             var owner = GetActiveWindow();
-            return (form == null) ? false : form.ShowModalX(owner);
+            return (form != null && form.ShowModalX(owner));
         }
 
         public void ShowHelpTopic(string topic)
@@ -577,13 +587,18 @@ namespace GKCore
         /// Verify and load the databases specified in the command line arguments.
         /// </summary>
         /// <returns>number of loaded files</returns>
-        public int LoadArgs()
+        public int LoadArgs(bool invoke)
         {
             int result = 0;
             if (fCommandArgs != null && fCommandArgs.Length > 0) {
                 foreach (var arg in fCommandArgs) {
                     if (File.Exists(arg)) {
-                        AppHost.Instance.CreateBase(arg);
+                        if (invoke) {
+                            var baseWin = GetActiveWindow() as IBaseWindowView;
+                            baseWin.LoadBase(arg);
+                        } else {
+                            AppHost.Instance.CreateBase(arg);
+                        }
                         result += 1;
                     }
                 }
@@ -815,7 +830,7 @@ namespace GKCore
                             // A obligatory recovery of window, otherwise it will fail to load
                             Restore();
                             SetArgs(args);
-                            LoadArgs();
+                            LoadArgs(true);
                         }
                     }
                 } catch (Exception ex) {
@@ -828,10 +843,6 @@ namespace GKCore
             //} else {
             invoker(e);
             //}
-        }
-
-        void ISingleInstanceEnforcer.OnNewInstanceCreated(EventArgs e)
-        {
         }
 
         #endregion

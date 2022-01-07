@@ -77,21 +77,20 @@ namespace GKChroniclePlugin
         {
             if (fBase != baseWin) {
                 fBase = baseWin;
-                fEvents.Clear();
 
-                if (fBase != null) {
-                    CollectData();
-                }
-
+                CollectData();
                 UpdateControls();
             }
         }
 
         private void CollectData()
         {
+            fEvents.Clear();
+            if (fBase == null) return;
+
             int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                GDMRecordWithEvents rec = fBase.Context.Tree[i] as GDMRecordWithEvents;
+                var rec = fBase.Context.Tree[i] as GDMRecordWithEvents;
                 if (rec == null || !rec.HasEvents) continue;
 
                 int eventsCount = rec.Events.Count;

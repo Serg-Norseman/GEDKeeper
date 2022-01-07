@@ -26,7 +26,7 @@ namespace GDModel
 {
     public sealed class GDMNoteRecord : GDMRecord, IGDMTextObject
     {
-        private GDMLines fLines;
+        private readonly GDMLines fLines;
 
         public GDMLines Lines
         {

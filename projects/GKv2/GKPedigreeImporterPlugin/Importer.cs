@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if __MonoCS__
+#if MONO
 #define NO_DEPEND
 #endif
 
@@ -925,7 +925,7 @@ namespace GKPedigreeImporterPlugin
             SourceType = SourceType.stText;
 
             try {
-                using (Stream fs = new FileStream(fFileName, FileMode.Open))
+                using (Stream fs = new FileStream(fFileName, FileMode.Open, FileAccess.Read))
                 using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
                     IProgressController progress = AppHost.Progress;
                     try {

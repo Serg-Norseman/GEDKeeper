@@ -56,6 +56,7 @@ namespace GKCore.Charts
         int DepthLimitDescendants { get; set; }
         int Height { get; set; }
         TreeChartKind Kind { get; set; }
+        ITreeLayout Layout { get; set; }
         TreeChartModel Model { get; }
         TreeChartOptions Options { get; set; }
         float Scale { get; }
@@ -70,6 +71,7 @@ namespace GKCore.Charts
         void Invalidate();
         void RefreshTree();
         void RenderImage(RenderTarget target, bool forciblyCentered = false);
+        void SetLayout(ITreeLayout layout);
         void SetRenderer(ChartRenderer renderer);
         void SetScale(float value);
     }

@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using GDModel;
@@ -32,7 +33,7 @@ using GKCore.Options;
 
 namespace GKUI.Components
 {
-    #if !__MonoCS__
+    #if !MONO
     using Microsoft.Win32;
     #endif
 
@@ -146,7 +147,7 @@ namespace GKUI.Components
 
         public static T GetSelectedTag<T>(this ComboBox comboBox)
         {
-            GKComboItem<T> comboItem = comboBox.SelectedItem as GKComboItem<T>;
+            var comboItem = comboBox.SelectedItem as ComboItem<T>;
             T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
             return itemTag;
         }
@@ -154,7 +155,7 @@ namespace GKUI.Components
         public static void SetSelectedTag<T>(this ComboBox comboBox, T tagValue, bool allowDefault = true)
         {
             foreach (object item in comboBox.Items) {
-                GKComboItem<T> comboItem = item as GKComboItem<T>;
+                var comboItem = item as ComboItem<T>;
 
                 if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
                     comboBox.SelectedItem = item;
@@ -164,6 +165,35 @@ namespace GKUI.Components
 
             if (allowDefault) {
                 comboBox.SelectedIndex = 0;
+            }
+        }
+
+        public static ToolStripMenuItem AddToolStripItem(ContextMenuStrip contextMenu, string text, object tag, EventHandler clickHandler)
+        {
+            var tsItem = new ToolStripMenuItem(text, null, clickHandler);
+            tsItem.Tag = tag;
+            contextMenu.Items.Add(tsItem);
+            return tsItem;
+        }
+
+        public static T GetMenuItemTag<T>(ContextMenuStrip contextMenu, object sender)
+        {
+            foreach (ToolStripMenuItem tsItem in contextMenu.Items) {
+                tsItem.Checked = false;
+            }
+            var senderItem = ((ToolStripMenuItem)sender);
+            ((ToolStripMenuItem)sender).Checked = true;
+            return (T)senderItem.Tag;
+        }
+
+        public static void SetMenuItemTag<T>(ContextMenuStrip contextMenu, T value)
+        {
+            foreach (ToolStripMenuItem tsItem in contextMenu.Items) {
+                T itemTag = (T)tsItem.Tag;
+                if (Equals(itemTag, value)) {
+                    tsItem.PerformClick();
+                    break;
+                }
             }
         }
 
@@ -254,15 +284,26 @@ namespace GKUI.Components
             }
         }
 
+        public static void FixToolStrip(ToolStrip toolStrip)
+        {
+            #if MONO
+            // dirty hack: Mono ToolStrip does not support correct AutoSize
+            toolStrip.AutoSize = false;
+            toolStrip.Height = 27;
+            #endif
+        }
+
         #region Application's autorun
-        #if !__MonoCS__
+        #if !MONO
 
         public static void RegisterStartup()
         {
             if (!IsStartupItem()) {
                 RegistryKey rkApp = GetRunKey();
-                string trayPath = GKUtils.GetAppPath() + "GKTray.exe";
-                rkApp.SetValue(GKData.APP_TITLE, trayPath);
+                if (rkApp != null) {
+                    string trayPath = GKUtils.GetAppPath() + "GKTray.exe";
+                    rkApp.SetValue(GKData.APP_TITLE, trayPath);
+                }
             }
         }
 
@@ -270,14 +311,16 @@ namespace GKUI.Components
         {
             if (IsStartupItem()) {
                 RegistryKey rkApp = GetRunKey();
-                rkApp.DeleteValue(GKData.APP_TITLE, false);
+                if (rkApp != null) {
+                    rkApp.DeleteValue(GKData.APP_TITLE, false);
+                }
             }
         }
 
         public static bool IsStartupItem()
         {
             RegistryKey rkApp = GetRunKey();
-            return (rkApp.GetValue(GKData.APP_TITLE) != null);
+            return (rkApp != null && rkApp.GetValue(GKData.APP_TITLE) != null);
         }
 
         private static RegistryKey GetRunKey()

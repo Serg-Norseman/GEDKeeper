@@ -57,14 +57,16 @@ namespace GDModel.Providers.FamilyShow
                     ExtractPart(documentPart, targetDirectory);
                 }
 
-                // Get the Document part's Relationships, and look for required resources.
-                foreach (PackageRelationship relationship in documentPart.GetRelationshipsByType(ResourceRelationshipType)) {
-                    // Resolve the Relationship Target Uri so the Resource Part can be retrieved.
-                    var uriResourceTarget = PackUriHelper.ResolvePartUri(documentPart.Uri, relationship.TargetUri);
+                if (documentPart != null) {
+                    // Get the Document part's Relationships, and look for required resources.
+                    foreach (PackageRelationship relationship in documentPart.GetRelationshipsByType(ResourceRelationshipType)) {
+                        // Resolve the Relationship Target Uri so the Resource Part can be retrieved.
+                        var uriResourceTarget = PackUriHelper.ResolvePartUri(documentPart.Uri, relationship.TargetUri);
 
-                    // Open the Resource Part and write the contents to a file.
-                    PackagePart resourcePart = package.GetPart(uriResourceTarget);
-                    ExtractPart(resourcePart, targetDirectory);
+                        // Open the Resource Part and write the contents to a file.
+                        PackagePart resourcePart = package.GetPart(uriResourceTarget);
+                        ExtractPart(resourcePart, targetDirectory);
+                    }
                 }
             }
         }
@@ -91,7 +93,7 @@ namespace GDModel.Providers.FamilyShow
                 Directory.CreateDirectory(Path.GetDirectoryName(uriFullPartPath.LocalPath));
 
                 // Create the file with the Part content
-                using (FileStream fileStream = new FileStream(uriFullPartPath.LocalPath, FileMode.Create)) {
+                using (FileStream fileStream = new FileStream(uriFullPartPath.LocalPath, FileMode.Create, FileAccess.Write)) {
                     CopyStream(packagePart.GetStream(), fileStream);
                 }
             } catch {
