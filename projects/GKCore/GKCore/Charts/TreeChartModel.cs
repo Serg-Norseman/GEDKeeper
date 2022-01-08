@@ -605,6 +605,10 @@ namespace GKCore.Charts
 
                         if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
+                        bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
+
+                        result.SetFlag(PersonFlag.pfDivorced, divorced);
+
                         TreeChartPerson resParent = null;
                         TreeChartPerson ft = null;
                         TreeChartPerson mt = null;
@@ -622,6 +626,7 @@ namespace GKCore.Charts
                                         resParent = AddDescPerson(null, sp, true, level);
                                         resParent.Sex = GDMSex.svMale;
                                         resParent.SetFlag(PersonFlag.pfSpouse);
+                                        resParent.SetFlag(PersonFlag.pfDivorced, divorced);
 
                                         ft = resParent;
                                         ft.IsDup = isDup;
@@ -648,6 +653,7 @@ namespace GKCore.Charts
                                         resParent = AddDescPerson(null, sp, true, level);
                                         resParent.Sex = GDMSex.svFemale;
                                         resParent.SetFlag(PersonFlag.pfSpouse);
+                                        resParent.SetFlag(PersonFlag.pfDivorced, divorced);
 
                                         ft = result;
                                         ft.IsDup = isDup;
