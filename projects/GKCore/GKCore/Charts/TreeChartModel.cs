@@ -957,6 +957,19 @@ namespace GKCore.Charts
             while (pp != null);
         }
 
+        private int GetEdge(int gen)
+        {
+            int result = fEdges[gen];
+
+            if (!fOptions.MinimizingWidth) {
+                for (int i = gen + 1; i < 256; i++) {
+                    result = Math.Max(result, fEdges[i]);
+                }
+            }
+
+            return result;
+        }
+
         private void RecalcAnc(ExtList<TreeChartPerson> prev, TreeChartPerson person, int ptX, int ptY)
         {
             if (person == null) return;
@@ -966,8 +979,9 @@ namespace GKCore.Charts
 
             int gen = person.Generation;
 
-            int offset = (fEdges[gen] > 0) ? fBranchDistance : fMargins;
-            int bound = fEdges[gen] + offset;
+            int edge = GetEdge(gen);
+            int offset = (edge > 0) ? fBranchDistance : fMargins;
+            int bound = edge + offset;
             if (person.Rect.Left <= bound) {
                 ShiftAnc(person, bound - person.Rect.Left);
             }

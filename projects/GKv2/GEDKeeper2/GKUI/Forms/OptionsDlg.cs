@@ -170,6 +170,7 @@ namespace GKUI.Forms
             chkSeparateDAPLines.Checked = fOptions.TreeChartOptions.SeparateDatesAndPlacesLines;
             chkOnlyLocality.Checked = fOptions.TreeChartOptions.OnlyLocality;
             chkBoldNames.Checked = fOptions.TreeChartOptions.BoldNames;
+            chkMinimizingWidth.Checked = fOptions.TreeChartOptions.MinimizingWidth;
 
             lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
             lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.FemaleColor);
@@ -462,6 +463,7 @@ namespace GKUI.Forms
             fOptions.TreeChartOptions.SeparateDatesAndPlacesLines = chkSeparateDAPLines.Checked;
             fOptions.TreeChartOptions.OnlyLocality = chkOnlyLocality.Checked;
             fOptions.TreeChartOptions.BoldNames = chkBoldNames.Checked;
+            fOptions.TreeChartOptions.MinimizingWidth = chkMinimizingWidth.Checked;
 
             fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
             fOptions.TreeChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
@@ -738,6 +740,7 @@ namespace GKUI.Forms
             chkCheckTreeSize.Text = LangMan.LS(LSID.LSID_CheckTreeSize);
             chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
             chkBoldNames.Text = LangMan.LS(LSID.LSID_BoldNames);
+            chkMinimizingWidth.Text = LangMan.LS(LSID.LSID_MinimizingWidth);
 
             grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
             lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);

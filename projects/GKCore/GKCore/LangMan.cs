@@ -902,8 +902,9 @@ namespace GKCore
         /* 841 */ LSID_LoadPlaces,
         /* 842 */ LSID_OnlyLocality,
         /* 843 */ LSID_GoToPrimaryBranch,
+        /* 844 */ LSID_MinimizingWidth,
 
-        /* 000 */ LSID_Last = LSID_GoToPrimaryBranch
+        /* 000 */ LSID_Last = LSID_MinimizingWidth
     }
 
 
@@ -1761,6 +1762,7 @@ namespace GKCore
             /* 841 */ "Load places",
             /* 842 */ "Only locality",
             /* 843 */ "Go to primary branch",
+            /* 844 */ "Minimizing width",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
