@@ -56,6 +56,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripDropDownButton tbBorders;
         private System.Windows.Forms.ContextMenuStrip MenuBorders;
+        private System.Windows.Forms.ToolStripMenuItem miGoToPrimaryBranch;
 
         private void InitializeComponent()
         {
@@ -113,6 +114,7 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbBorders = new System.Windows.Forms.ToolStripDropDownButton();
             this.MenuBorders = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miGoToPrimaryBranch = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolBar1.SuspendLayout();
             this.MenuModes.SuspendLayout();
             this.MenuPerson.SuspendLayout();
@@ -367,6 +369,7 @@
             this.miDelete,
             this.N11,
             this.miGoToRecord,
+            this.miGoToPrimaryBranch,
             this.N3,
             this.miRebuildTree,
             this.miRebuildKinships,
@@ -453,6 +456,13 @@
             this.miGoToRecord.Size = new System.Drawing.Size(172, 22);
             this.miGoToRecord.Text = "miGoToRecord";
             this.miGoToRecord.Click += new System.EventHandler(this.miGoToRecord_Click);
+            // 
+            // miGoToPrimaryBranch
+            // 
+            this.miGoToPrimaryBranch.Name = "miGoToPrimaryBranch";
+            this.miGoToPrimaryBranch.Size = new System.Drawing.Size(172, 22);
+            this.miGoToPrimaryBranch.Text = "miGoToPrimaryBranch";
+            this.miGoToPrimaryBranch.Click += new System.EventHandler(this.miGoToPrimaryBranch_Click);
             // 
             // N3
             // 

@@ -71,6 +71,7 @@ namespace GKCore.Charts
         void Invalidate();
         void RefreshTree();
         void RenderImage(RenderTarget target, bool forciblyCentered = false);
+        void SelectBy(TreeChartPerson person, bool needCenter);
         void SetLayout(ITreeLayout layout);
         void SetRenderer(ChartRenderer renderer);
         void SetScale(float value);

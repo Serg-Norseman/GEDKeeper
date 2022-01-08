@@ -876,7 +876,7 @@ namespace GKUI.Components
             Invalidate();
         }
 
-        private void SelectBy(TreeChartPerson person, bool needCenter)
+        public void SelectBy(TreeChartPerson person, bool needCenter)
         {
             if (person == null) return;
 

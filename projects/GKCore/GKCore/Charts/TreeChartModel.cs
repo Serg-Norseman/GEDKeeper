@@ -1315,13 +1315,13 @@ namespace GKCore.Charts
 
         #region Navigation
 
-        public TreeChartPerson FindPersonByRec(GDMIndividualRecord iRec)
+        public TreeChartPerson FindPersonByRec(GDMIndividualRecord iRec, bool onlyPrimary = false)
         {
             if (iRec != null) {
                 int num = fPersons.Count;
                 for (int i = 0; i < num; i++) {
                     TreeChartPerson p = fPersons[i];
-                    if (p.Rec == iRec) {
+                    if (p.Rec == iRec && (!onlyPrimary || !p.IsDup)) {
                         return p;
                     }
                 }

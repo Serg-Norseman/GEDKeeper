@@ -276,5 +276,16 @@ namespace GKCore.Controllers
             p.UserColor = AppHost.StdDialogs.SelectColor(p.UserColor);
             fView.TreeBox.Invalidate();
         }
+
+        public void GoToPrimaryBranch()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null || !p.IsDup) return;
+
+            var pers = fView.TreeBox.Model.FindPersonByRec(p.Rec, true);
+            if (pers != null) {
+                fView.TreeBox.SelectBy(pers, true);
+            }
+        }
     }
 }
