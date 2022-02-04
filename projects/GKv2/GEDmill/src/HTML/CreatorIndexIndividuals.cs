@@ -22,6 +22,7 @@ using System.Globalization;
 using System.IO;
 using GDModel;
 using GEDmill.Model;
+using GKCore.Interfaces;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -38,7 +39,7 @@ namespace GEDmill.HTML
         private List<StringTuple> fIndividualIndex;
 
 
-        public CreatorIndexIndividuals(GDMTree tree, IProgressCallback progress, string sW3cfile) : base(tree, progress, sW3cfile)
+        public CreatorIndexIndividuals(GDMTree tree, IProgressCallback progress, ILangMan langMan) : base(tree, progress, langMan)
         {
             fIndividualIndex = new List<StringTuple>();
         }
@@ -123,7 +124,7 @@ namespace GEDmill.HTML
             }
             int indiAccumulator = 0;
             int currentPage = 0;
-            string currentPageName = string.Format("individuals{0}.{1}", ++currentPage, GMConfig.Instance.HtmlExtension);
+            string currentPageName = string.Format("individuals{0}.html", ++currentPage);
             IndexPage indexpageCurrent = new IndexPage(currentPageName);
             uint letter = 0;
             while (letter < lettersCount) {
@@ -138,7 +139,7 @@ namespace GEDmill.HTML
                     }
                     // Start new page.
                     pages.Add(indexpageCurrent);
-                    currentPageName = string.Format("individuals{0}.{1}", ++currentPage, GMConfig.Instance.HtmlExtension);
+                    currentPageName = string.Format("individuals{0}.html", ++currentPage);
                     indexpageCurrent = new IndexPage(currentPageName);
                     indiAccumulator = 0;
                 } else {
@@ -215,7 +216,7 @@ namespace GEDmill.HTML
 
             string ownerName = GMConfig.Instance.OwnersName;
             if (ownerName != "") {
-                ownerName = " of " + ownerName;
+                ownerName = " of " + ownerName; // FIXME: i18l
             }
 
             string fullFilename = GMConfig.Instance.OutputFolder;
@@ -226,7 +227,8 @@ namespace GEDmill.HTML
 
             HTMLFile f = null;
             try {
-                f = new HTMLFile(fullFilename, GMConfig.Instance.IndexTitle, "Index of all individuals in the family tree" + ownerName, "individuals index family tree people history dates"); // Creates a new file, and puts standard header html into it.
+                // FIXME: i18l
+                f = new HTMLFile(fLangMan, fullFilename, GMConfig.Instance.IndexTitle, "Index of all individuals in the family tree" + ownerName, "individuals index family tree people history dates"); // Creates a new file, and puts standard header html into it.
 
                 OutputPageHeader(f, "", "", false);
 
@@ -257,7 +259,7 @@ namespace GEDmill.HTML
         }
 
         // Generates the core of the HTML file for the given page of the index.
-        private static void OutputIndexPage(IndexPage indexPage, HTMLFile f)
+        private void OutputIndexPage(IndexPage indexPage, HTMLFile f)
         {
             int nTotal = indexPage.TotalIndis + indexPage.Letters.Count;
 
@@ -299,7 +301,7 @@ namespace GEDmill.HTML
                 // Output HTML.
                 OutputIndexPageColumns(f, firstHalf, secondHalf);
             } else {
-                f.WriteLine("    <p>There are no individuals to list.</p>");
+                f.WriteLine("    <p>{0}</p>", fLangMan.LS(PLS.LSID_ThereAreNoIndividualsToList));
             }
         }
 

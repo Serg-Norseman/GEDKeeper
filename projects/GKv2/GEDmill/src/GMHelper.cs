@@ -65,7 +65,7 @@ namespace GEDmill
 
         public static bool GetVisibility(GDMRecord record)
         {
-            if (record == null) return true;
+            if (record == null) return false;
 
             CISRecordChanges changes;
             if (!recX.TryGetValue(record.XRef, out changes)) {
@@ -322,7 +322,7 @@ namespace GEDmill
                     result = Math.Abs(dt2 - dt1);
                 }
             } catch (Exception ex) {
-                fLogger.WriteError("GKUtils.GetEventsYearsDiff()", ex);
+                fLogger.WriteError("GMHelper.GetEventsYearsDiff()", ex);
             }
 
             return result;
@@ -547,19 +547,6 @@ namespace GEDmill
                 }
             }
             return sPath;
-        }
-
-        public static bool IsSupportedFile(string fileName)
-        {
-            if (!string.IsNullOrEmpty(fileName)) {
-                string exten = Path.GetExtension(fileName).ToLower();
-                if (exten != ".jpg" && exten != ".jpeg" && exten != ".png" && exten != ".gif" && exten != ".bmp") {
-                    MessageBox.Show("The file you have selected is not a supported picture type.", "Unsupported Format",
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return false;
-                }
-            }
-            return true;
         }
 
         public static string GetIndiName(string surname, string firstName)

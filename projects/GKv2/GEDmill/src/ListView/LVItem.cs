@@ -16,13 +16,14 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Windows.Forms;
 using GDModel;
 
 namespace GEDmill.ListView
 {
     // Special class of ListViewItem can represent individual/source records.
-    public class LVItem : ListViewItem
+    public class LVItem : ListViewItem, IComparable, IComparable<LVItem>
     {
         // The record associated with this list item
         protected GDMRecord fRecord;
@@ -43,6 +44,11 @@ namespace GEDmill.ListView
         public override string ToString()
         {
             return string.Empty;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return CompareTo((LVItem)obj);
         }
 
         // For sorting the list

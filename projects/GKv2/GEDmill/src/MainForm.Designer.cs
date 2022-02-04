@@ -36,9 +36,6 @@
         private System.Windows.Forms.TextBox txtConfigThumbnailImageWidth;
         private System.Windows.Forms.Label lblConfigThumbnailImageHeight;
         private System.Windows.Forms.TextBox txtConfigThumbnailImageHeight;
-        private System.Windows.Forms.Label lblConfigHtmlExtn;
-        private System.Windows.Forms.ComboBox cmbConfigHtmlExtn;
-        private System.Windows.Forms.CheckBox chkConfigW3C;
         private System.Windows.Forms.CheckBox chkConfigUserRecFilename;
         private System.Windows.Forms.Label lblConfigCustomFooter;
         private System.Windows.Forms.TextBox txtConfigCustomFooter;
@@ -81,11 +78,6 @@
         private System.Windows.Forms.TextBox txtConfigIndexName;
         private System.Windows.Forms.Label lblConfigIndexName;
         private System.Windows.Forms.Label lblConfigIndexNameExtn;
-        private System.Windows.Forms.CheckBox chkConfigPreserveFrontPage;
-        private System.Windows.Forms.TextBox txtConfigStylesheetName;
-        private System.Windows.Forms.Label lblConfigStylesheetName;
-        private System.Windows.Forms.Label lblConfigStylesheetNameExtn;
-        private System.Windows.Forms.CheckBox chkConfigPreserveStylesheet;
         private System.Windows.Forms.CheckBox chkConfigStats;
         private System.Windows.Forms.CheckBox chkConfigCdrom;
         private System.Windows.Forms.CheckBox chkConfigIndiImages;
@@ -187,9 +179,6 @@
             txtConfigThumbnailImageWidth = new System.Windows.Forms.TextBox();
             lblConfigThumbnailImageHeight = new System.Windows.Forms.Label();
             txtConfigThumbnailImageHeight = new System.Windows.Forms.TextBox();
-            lblConfigHtmlExtn = new System.Windows.Forms.Label();
-            cmbConfigHtmlExtn = new System.Windows.Forms.ComboBox();
-            chkConfigW3C = new System.Windows.Forms.CheckBox();
             chkConfigUserRecFilename = new System.Windows.Forms.CheckBox();
             lblConfigCustomFooter = new System.Windows.Forms.Label();
             txtConfigCustomFooter = new System.Windows.Forms.TextBox();
@@ -233,11 +222,6 @@
             txtConfigIndexName = new System.Windows.Forms.TextBox();
             lblConfigIndexName = new System.Windows.Forms.Label();
             lblConfigIndexNameExtn = new System.Windows.Forms.Label();
-            chkConfigPreserveFrontPage = new System.Windows.Forms.CheckBox();
-            txtConfigStylesheetName = new System.Windows.Forms.TextBox();
-            lblConfigStylesheetName = new System.Windows.Forms.Label();
-            lblConfigStylesheetNameExtn = new System.Windows.Forms.Label();
-            chkConfigPreserveStylesheet = new System.Windows.Forms.CheckBox();
             chkConfigStats = new System.Windows.Forms.CheckBox();
             chkConfigIncludeTreeDiagrams = new System.Windows.Forms.CheckBox();
             chkConfigTreeDiagramsFakeBg = new System.Windows.Forms.CheckBox();
@@ -846,14 +830,6 @@
             lblConfigIndexNameExtn.TabIndex = 20;
             lblConfigIndexNameExtn.Text = "";
             lblConfigIndexNameExtn.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            //
-            // chkConfigPreserveFrontPage
-            // 
-            chkConfigPreserveFrontPage.Location = new System.Drawing.Point(266, 170);
-            chkConfigPreserveFrontPage.Name = "chkConfigPreserveFrontPage";
-            chkConfigPreserveFrontPage.Size = new System.Drawing.Size(250, 20);
-            chkConfigPreserveFrontPage.Text = "&Do not generate new front page";
-            chkConfigPreserveFrontPage.TabIndex = 21;
             // 
             // lblConfigEmail
             // 
@@ -1362,33 +1338,6 @@
             btnConfigMiniTreeColourIndiBorder.TabIndex = 17;
             btnConfigMiniTreeColourIndiBorder.Text = "Box bor&ders";
             btnConfigMiniTreeColourIndiBorder.Click += new System.EventHandler(btnConfigMiniTreeColourIndiBorder_Click);
-            // 
-            // lblConfigHtmlExtn
-            // 
-            lblConfigHtmlExtn.Location = new System.Drawing.Point(9, 54);
-            lblConfigHtmlExtn.Name = "lblConfigHtmlExtn";
-            lblConfigHtmlExtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            lblConfigHtmlExtn.Size = new System.Drawing.Size(140, 24);
-            lblConfigHtmlExtn.TabIndex = 4;
-            lblConfigHtmlExtn.Text = "H&TML file extension:";
-            lblConfigHtmlExtn.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            //
-            // cmbConfigHtmlExtn
-            // 
-            cmbConfigHtmlExtn.Location = new System.Drawing.Point(149, 55);
-            cmbConfigHtmlExtn.Name = "cmbConfigHtmlExtn";
-            cmbConfigHtmlExtn.Size = new System.Drawing.Size(85, 20);
-            cmbConfigHtmlExtn.TabIndex = 5;
-            cmbConfigHtmlExtn.DropDownWidth = 40;
-            cmbConfigHtmlExtn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            //
-            // chkConfigW3C
-            // 
-            chkConfigW3C.Location = new System.Drawing.Point(11, 91);
-            chkConfigW3C.Name = "chkConfigW3C";
-            chkConfigW3C.Size = new System.Drawing.Size(200, 20);
-            chkConfigW3C.Text = "Add &W3C validator sticker";
-            chkConfigW3C.TabIndex = 6;
             //
             // chkConfigUserRecFilename
             // 
@@ -1405,43 +1354,6 @@
             chkConfigSupressBackreferences.Size = new System.Drawing.Size(250, 20);
             chkConfigSupressBackreferences.Text = "List c&iting records on source pages";
             chkConfigSupressBackreferences.TabIndex = 8;
-            // 
-            // lblConfigStylesheetName
-            // 
-            lblConfigStylesheetName.Location = new System.Drawing.Point(266, 0);
-            lblConfigStylesheetName.Name = "lblConfigStylesheetName";
-            lblConfigStylesheetName.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            lblConfigStylesheetName.Size = new System.Drawing.Size(224, 24);
-            lblConfigStylesheetName.TabIndex = 9;
-            lblConfigStylesheetName.Text = "Name of st&ylesheet:";
-            lblConfigStylesheetName.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            //
-            // txtConfigStylesheetName
-            // 
-            txtConfigStylesheetName.Location = new System.Drawing.Point(266, 32);
-            txtConfigStylesheetName.Name = "txtConfigStylesheetName";
-            txtConfigStylesheetName.Size = new System.Drawing.Size(175, 20);
-            txtConfigStylesheetName.TabIndex = 10;
-            txtConfigStylesheetName.Text = "";
-            txtConfigStylesheetName.Multiline = false;
-            // 
-            // lblConfigStylesheetNameExtn
-            // 
-            lblConfigStylesheetNameExtn.Location = new System.Drawing.Point(440, 27);
-            lblConfigStylesheetNameExtn.Name = "lblConfigStylesheetNameExtn";
-            lblConfigStylesheetNameExtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            lblConfigStylesheetNameExtn.Size = new System.Drawing.Size(60, 24);
-            lblConfigStylesheetNameExtn.TabIndex = 11;
-            lblConfigStylesheetNameExtn.Text = ".css";
-            lblConfigStylesheetNameExtn.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            //
-            // chkConfigPreserveStylesheet
-            // 
-            chkConfigPreserveStylesheet.Location = new System.Drawing.Point(266, 56);
-            chkConfigPreserveStylesheet.Name = "chkConfigPreserveStylesheet";
-            chkConfigPreserveStylesheet.Size = new System.Drawing.Size(250, 20);
-            chkConfigPreserveStylesheet.Text = "Do &not generate new stylesheet";
-            chkConfigPreserveStylesheet.TabIndex = 12;
             // 
             // panelChooseOutput
             // 
@@ -1571,7 +1483,6 @@
             pageSettingsWebpages.Controls.Add(txtConfigIndexName);
             pageSettingsWebpages.Controls.Add(lblConfigIndexName);
             pageSettingsWebpages.Controls.Add(lblConfigIndexNameExtn);
-            pageSettingsWebpages.Controls.Add(chkConfigPreserveFrontPage);
             pageSettingsWebpages.Controls.Add(chkConfigStats);
             pageSettingsWebpages.Controls.Add(chkConfigMultiPageIndex);
             pageSettingsWebpages.Controls.Add(chkConfigUserRefInIndex);
@@ -1659,14 +1570,7 @@
             // pageSettingsAdvanced
             // 
             pageSettingsAdvanced.Text = "Advanced";
-            pageSettingsAdvanced.Controls.Add(lblConfigHtmlExtn);
-            pageSettingsAdvanced.Controls.Add(cmbConfigHtmlExtn);
-            pageSettingsAdvanced.Controls.Add(chkConfigW3C);
             pageSettingsAdvanced.Controls.Add(chkConfigUserRecFilename);
-            pageSettingsAdvanced.Controls.Add(txtConfigStylesheetName);
-            pageSettingsAdvanced.Controls.Add(lblConfigStylesheetName);
-            pageSettingsAdvanced.Controls.Add(lblConfigStylesheetNameExtn);
-            pageSettingsAdvanced.Controls.Add(chkConfigPreserveStylesheet);
             pageSettingsAdvanced.Controls.Add(chkConfigSupressBackreferences);
             // 
             // tabcontrolConfigPanel

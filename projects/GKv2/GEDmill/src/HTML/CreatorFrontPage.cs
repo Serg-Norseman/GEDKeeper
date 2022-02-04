@@ -22,6 +22,7 @@ using System.Drawing;
 using System.IO;
 using GDModel;
 using GEDmill.Model;
+using GKCore.Interfaces;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -37,7 +38,7 @@ namespace GEDmill.HTML
         private Stats fStats;
 
 
-        public CreatorFrontPage(GDMTree tree, IProgressCallback progress, string w3cfile, Stats stats) : base(tree, progress, w3cfile)
+        public CreatorFrontPage(GDMTree tree, IProgressCallback progress, ILangMan langMan, Stats stats) : base(tree, progress, langMan)
         {
             fStats = stats;
         }
@@ -45,12 +46,12 @@ namespace GEDmill.HTML
         // The main method that causes the front page to be created. 
         public void Create()
         {
-            string keywords = "family tree history " + GMConfig.Instance.OwnersName;
+            string keywords = fLangMan.LS(PLS.LSID_Keywords) + " " + GMConfig.Instance.OwnersName;
             string title = GMConfig.Instance.SiteTitle;
 
             HTMLFile f = null;
             try {
-                f = new HTMLFile(GMConfig.Instance.FrontPageURL, title, PageDescription, keywords); // Creates a new file, and puts standard header html into it.
+                f = new HTMLFile(fLangMan, GMConfig.Instance.FrontPageURL, title, fLangMan.LS(PLS.LSID_FrontPageDescription), keywords); // Creates a new file, and puts standard header html into it.
                 f.WriteLine("  <div id=\"page\"> <!-- page -->");
                 f.WriteLine("    <div id=\"cover\"> <!-- cover -->");
 
@@ -60,7 +61,7 @@ namespace GEDmill.HTML
                     Rectangle newArea = new Rectangle(0, 0, 0, 0);
                     string pictureFile = CopyMultimedia(GMConfig.Instance.FrontPageImageFilename, "", 0, 0, ref newArea, null);
                     if (!string.IsNullOrEmpty(pictureFile)) {
-                        f.WriteLine("<p><img src=\"{0}\" alt=\"Front page image\" /></p>", pictureFile);
+                        f.WriteLine("<p><img src=\"{0}\" /></p>", pictureFile);
                     }
                 }
 
@@ -73,29 +74,18 @@ namespace GEDmill.HTML
                 }
 
                 if (GMConfig.Instance.ShowFrontPageStats) {
-                    string individuals = fStats.Individuals == 0 ? "no" : fStats.Individuals.ToString();
-                    individuals += " individual";
-                    if (fStats.Individuals != 1) {
-                        individuals += "s";
-                    }
+                    string individuals = fLangMan.LS(PLS.LSID_individuals) + " " + (fStats.Individuals == 0 ? fLangMan.LS(PLS.LSID_No) : fStats.Individuals.ToString());
 
-                    string sources = fStats.Sources == 0 ? "" : string.Concat(", cross-referenced to ", fStats.Sources.ToString(), " source");
-                    if (fStats.Sources > 1) {
-                        sources += "s";
-                    }
+                    string sources = (fStats.Sources == 0 ? "" : string.Concat(", ", fLangMan.LS(PLS.LSID_sources) + " " + fStats.Sources.ToString()));
 
-                    string fileType = fStats.NonPicturesIncluded ? "multimedia file" : "image";
-                    string multimedia = fStats.MultimediaFiles == 0 ? "" : string.Concat(". There are links to ", fStats.MultimediaFiles.ToString(), " ", fileType);
+                    string fileType = fStats.NonPicturesIncluded ? fLangMan.LS(PLS.LSID_multimedia) : fLangMan.LS(PLS.LSID_images);
+                    string multimedia = fStats.MultimediaFiles == 0 ? "" : string.Concat(", ", fileType, " ", fStats.MultimediaFiles.ToString());
 
-                    if (fStats.MultimediaFiles > 1) {
-                        multimedia += "s";
-                    }
-
-                    f.WriteLine(string.Concat("       <p>This website contains records on ", individuals, sources, multimedia, ".</p>"));
+                    f.WriteLine(string.Concat("       <p>", fLangMan.LS(PLS.LSID_ThisWebsiteContainsRecordsOn), " ", individuals, sources, multimedia, ".</p>"));
                 }
 
                 f.WriteLine("       <div id=\"links\"> <!-- links -->");
-                f.WriteLine(string.Concat("         <p><a href=\"individuals1.", GMConfig.Instance.HtmlExtension, "\">", GMConfig.Instance.IndexTitle, "</a></p>"));
+                f.WriteLine(string.Concat("         <p><a href=\"individuals1.html\">", GMConfig.Instance.IndexTitle, "</a></p>"));
                 f.WriteLine("       </div> <!-- links -->");
                 if (GMConfig.Instance.KeyIndividuals != null && GMConfig.Instance.KeyIndividuals.Count > 0) {
                     // Although in theory you might want a restricted individual as a key individual, (they still form part of the tree), in practice this isn't allowed:
@@ -109,12 +99,8 @@ namespace GEDmill.HTML
                     }
 
                     if (censoredKeyIndividuals.Count > 0) {
-                        string plural = "";
-                        if (censoredKeyIndividuals.Count > 1) {
-                            plural = "s";
-                        }
                         f.WriteLine("<div id=\"keyindividuals\">");
-                        f.WriteLine("<p>Key Individual{0}:</p>", plural);
+                        f.WriteLine("<p>{0}:</p>", fLangMan.LS(PLS.LSID_KeyIndividuals));
                         f.WriteLine("<ul>");
                         foreach (string air_link in censoredKeyIndividuals) {
                             f.WriteLine("<li>{0}</li>", air_link);
@@ -131,15 +117,16 @@ namespace GEDmill.HTML
                 }
 
                 // Add brand and contact label
-                f.WriteLine("<p>Website created{0} using GEDmill.</p>", byEmail);
+                f.WriteLine("<p>{0}</p>", string.Format(fLangMan.LS(PLS.LSID_WebsiteCreatedUsingGEDmill), byEmail));
+
                 // Add last update string
                 if (GMConfig.Instance.AddHomePageCreateTime) {
-                    f.WriteLine("<p>Created on {0}.</p>", GMHelper.GetNowDateStr());
+                    f.WriteLine("<p>{0} {1}.</p>", fLangMan.LS(PLS.LSID_CreatedOn), GMHelper.GetNowDateStr());
                 }
 
                 // Add link to users main website
                 if (!string.IsNullOrEmpty(GMConfig.Instance.MainWebsiteLink)) {
-                    f.WriteLine("<p><a href=\"{0}\">Return to main site</a></p>", GMConfig.Instance.MainWebsiteLink);
+                    f.WriteLine("<p><a href=\"{0}\">{1}</a></p>", GMConfig.Instance.MainWebsiteLink, fLangMan.LS(PLS.LSID_ReturnToMainSite));
                 }
 
                 f.WriteLine("    </div> <!-- cover -->");

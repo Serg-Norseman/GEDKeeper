@@ -16,14 +16,14 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections;
+using System;
 
 namespace GEDmill.Model
 {
     /// <summary>
     /// Data structure encapsulating a multimedia file record, for sorting the attached multimedia into a user-specified order.
     /// </summary>
-    public class Multimedia
+    public class Multimedia : IComparable, IComparable<Multimedia>
     {
         public string Format;
         public string Title;
@@ -47,36 +47,19 @@ namespace GEDmill.Model
             Ordering = ordering;
         }
 
-        // Compares two multimedia objects based on user-specified order
-        public class OrderComparer : IComparer
+        public int CompareTo(object obj)
         {
-            public int Compare(object x, object y)
-            {
-                Multimedia im1 = x as Multimedia;
-                Multimedia im2 = y as Multimedia;
-                int order1 = 0;
-                int order2 = 0;
+            return CompareTo((Multimedia)obj);
+        }
 
-                if (im1 != null) {
-                    order1 = im1.Ordering;
-                }
-                if (im2 != null) {
-                    order2 = im2.Ordering;
-                }
-
-                if (im1 == null) {
-                    if (im2 == null) {
-                        return 0;
-                    }
-                    return 1;
-                }
-
-                if (im2 == null) {
-                    return -1;
-                }
-
-                return order1 - order2;
+        // For sorting the list
+        public int CompareTo(Multimedia other)
+        {
+            if (other == null) {
+                return -1;
             }
+
+            return this.Ordering - other.Ordering;
         }
     }
 }

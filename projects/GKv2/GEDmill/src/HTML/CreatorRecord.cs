@@ -21,6 +21,7 @@ using System.Drawing;
 using System.IO;
 using GDModel;
 using GEDmill.Model;
+using GKCore.Interfaces;
 
 namespace GEDmill.HTML
 {
@@ -33,7 +34,7 @@ namespace GEDmill.HTML
         protected List<Multimedia> fMultimediaList;
 
 
-        protected CreatorRecord(GDMTree tree, IProgressCallback progress, string w3cFile) : base(tree, progress, w3cFile)
+        protected CreatorRecord(GDMTree tree, IProgressCallback progress, ILangMan langMan) : base(tree, progress, langMan)
         {
             fMultimediaList = new List<Multimedia>();
         }
@@ -77,13 +78,13 @@ namespace GEDmill.HTML
                 foreach (GDMUserReference urn in r.UserReferences) {
                     string idType = EscapeHTML(urn.ReferenceType, false);
                     if (idType == "") {
-                        idType = "User reference number";
+                        idType = fLangMan.LS(PLS.LSID_URefNumber);
                     }
                     f.WriteLine("<p>{0}: {1}</p>", idType, EscapeHTML(urn.StringValue, false));
                 }
 
                 if (!string.IsNullOrEmpty(r.AutomatedRecordID)) {
-                    f.WriteLine("<p>Record {0}</p>", r.AutomatedRecordID);
+                    f.WriteLine("<p>{0} {1}</p>", fLangMan.LS(PLS.LSID_Record), r.AutomatedRecordID);
                 }
 
                 if (r.ChangeDate != null) {
@@ -93,7 +94,7 @@ namespace GEDmill.HTML
                         if (dtx != "") {
                             dtx = " " + dtx;
                         }
-                        f.WriteLine("<p id=\"changedate\">Record last changed {0}</p>", dtx);
+                        f.WriteLine("<p id=\"changedate\">{0} {1}</p>", fLangMan.LS(PLS.LSID_RecordLastChanged), dtx);
                     }
                 }
 
@@ -107,11 +108,7 @@ namespace GEDmill.HTML
             }
             f.WriteLine("      </div> <!-- footer -->");
 
-            f.WriteLine("<p class=\"plain\">Page created using GEDmill {0}</p>", GMConfig.SoftwareVersion);
-
-            if (GMConfig.Instance.IncludeValiditySticker) {
-                OutputValiditySticker(f);
-            }
+            f.WriteLine("<p class=\"plain\">{0} {1}</p>", fLangMan.LS(PLS.LSID_PageCreatedUsingGEDmill), GMConfig.SoftwareVersion);
         }
 
         // Adds the given list of file references to the multimedia list.
@@ -124,6 +121,7 @@ namespace GEDmill.HTML
 
             for (int i = 0; i < fileRefs.Count; i++) {
                 GDMFileReferenceWithTitle mfr = fileRefs[i] as GDMFileReferenceWithTitle;
+
                 string copyFilename = "";
                 int nMmOrdering = i;
                 string mmTitle = mfr.Title;
@@ -233,7 +231,7 @@ namespace GEDmill.HTML
 
                 if (noteStrings.Count > 0) {
                     f.WriteLine("<div id=\"notes\">");
-                    f.WriteLine("<h1>Notes</h1>");
+                    f.WriteLine("<h1>{0}</h1>", fLangMan.LS(PLS.LSID_Notes));
                     f.WriteLine("<ul>");
 
                     foreach (string note_string in noteStrings) {

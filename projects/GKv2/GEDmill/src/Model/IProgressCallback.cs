@@ -16,8 +16,6 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-
 namespace GEDmill.Model
 {
     /// <summary>
@@ -54,7 +52,7 @@ namespace GEDmill.Model
         /// </summary>
         /// <param name="text">The progress text to display</param>
         /// <remarks>You must have called one of the Begin() methods prior to this call.</remarks>
-        void SetText(String text);
+        void SetText(string text);
 
         /// <summary>
         /// Call this method from the worker thread to increase the progress counter by a specified value.

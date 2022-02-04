@@ -449,7 +449,7 @@ namespace GEDmill.MiniTree
         // Returns true if the supplied record is valid for inclusion in the tree
         private static bool Exists(GDMIndividualRecord ir)
         {
-            return (ir != null && GMHelper.GetVisibility(ir));
+            return GMHelper.GetVisibility(ir);
         }
     }
 }

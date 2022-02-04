@@ -60,7 +60,7 @@ namespace GEDmill.ListView
                 }
                 char cLeft = fString[i];
                 char cRight = other.fString[i];
-                if (Char.IsDigit(cLeft) && Char.IsDigit(cRight)) {
+                if (char.IsDigit(cLeft) && char.IsDigit(cRight)) {
                     // Compare rest of strings numerically
                     int nLeft = 0;
                     int nRight = 0;
@@ -69,7 +69,7 @@ namespace GEDmill.ListView
                     bool bLeftIsNumeric = true;
                     bool bRightIsNumeric = true;
                     foreach (char c in sLeft) {
-                        if (!Char.IsDigit(c)) {
+                        if (!char.IsDigit(c)) {
                             bLeftIsNumeric = false;
                             break;
                         }
@@ -78,7 +78,7 @@ namespace GEDmill.ListView
                     }
                     if (bLeftIsNumeric) {
                         foreach (char c in sRight) {
-                            if (!Char.IsDigit(c)) {
+                            if (!char.IsDigit(c)) {
                                 bRightIsNumeric = false;
                                 break;
                             }

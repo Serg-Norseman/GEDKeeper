@@ -10,3 +10,241 @@ Settings...
 Ok
 Cancel
 Creating website
+Copying multimedia
+GEDmill family history website
+family tree history
+A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop.
+A problem occurred when creating an HTML file:\r\nThe path or filename {0} is not valid.
+The file you have selected is not a supported picture type.
+Copying background image
+Creating style sheet
+Creating individual pages
+Creating individuals index
+Creating source pages
+Creating front page
+Creating CD-ROM files
+Creating Javascript file
+Done
+User reference number
+Record
+Record last changed
+Page created using GEDmill
+Notes
+no
+Return to main site
+Created on
+front page
+main site
+index
+Unknown image format
+married
+partner of
+child
+son
+daughter
+Sources
+Other facts
+Life History
+Parents
+Citations
+Are you sure you wish to exit GEDmill?
+Select back image
+Select front image
+Please select at least one individual.
+The file {0} is missing. \r\nPages will be created without any background image.
+There are no individuals to list.
+GEDmill page for
+Source
+Text
+Image for this source
+Media for this source
+This website contains records on
+Website created{0} using GEDmill.
+individuals
+sources
+multimedia files
+images
+Key Individuals
+previous child
+next child
+death of
+birth of
+ (most likely)
+ (less likely)
+Information about this individual has been withheld.
+also known as
+Mini tree diagram
+and
+from
+to
+born
+christened
+baptised
+died
+buried
+cremated
+adopted
+bar mitzvah
+bat mitzvah
+blessing
+christened (as adult)
+confirmed
+first communion
+ordained
+naturalized
+emigrated
+immigrated
+probate
+wrote will
+graduated
+retired
+other event
+caste
+physical description
+educated
+ID number
+nationality
+number of children
+number of marriages
+occupation
+property
+religion
+resident
+Social Security number
+other fact
+never married
+annulment of marriage
+recorded in census
+divorced
+filing of divorce
+engagement
+publication of banns of marriage
+contract of marriage
+licence obtained for marriage
+settlement of marriage
+unknown event
+Marital status unknown
+Exclude individuals unless navigable from this person
+Exclude individuals unless navigable from these {0} people
+Remove pictures from this source
+Remove pictures from these {0} sources
+(The front page for the website is the file {0}.{1})
+(No front page was generated.)
+Include
+Name
+Born
+Died
+Id
+User ref
+Pics
+Individuals
+No Surname
+Index Of Names
+Family history
+Private Record
+<unknown>
+in
+Repository
+A problem was encountered while creating the website files
+A problem was encountered while navigating the tree structure:\r\n\r\n{0}
+Setting the image width/height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?
+Could not access or create folder.
+The folder {0} could not be deleted.\r\n{1}
+The file {0} could not be deleted.\r\n{1}
+No changes made.
+No multimedia files hidden.
+Webpages
+Images
+Tree Diagrams
+Advanced
+Family History Website Creator
+When you have finished selecting, click Next.
+Exclude all descendants of this person
+Exclude all ancestors of this person
+Include all descendants of this person
+Include all ancestors of this person
+Exclude individuals unless navigable from this person
+Details and pictures...
+Include everyone
+Exclude everyone
+Exclude everyone still alive (and those born in last 100 years)
+Remove pictures from selected sources
+Include all sources
+Exclude all sources
+Now, you can specify any individuals and sources you don\'t want to appear in the website. Clear the box next to their name to prevent them from appearing - those left ticked will appear.
+Right-click on the list for more options, including adding pictures...
+Website Title:
+Key Individuals:
+Add...
+Remove
+Next, you can choose a title for the front page of your website. Leave it blank if you don\'t want a title.\r\n\r\nYou can also select which people feature as key individuals on the front page.
+Commentary for title page:
+the above text is HTML)
+Link to your website: (with http:// prefix)
+Text for page footer:
+Include website statistics
+Create CD-ROM auto-run files
+Multi-page individuals index
+User Reference numbers in index
+Individuals per index page:
+Name of front page file:
+Email address to put on front page:
+Background image:
+Browse...
+Picture on front page:
+Maximum size of individual images
+Width:
+Height:
+Maximum size of source images
+Allow images etc.
+Rename files
+Include original (full-size) files
+Allow files other than pictures
+Multiple individual images
+Maximum size of thumbnail images
+Num spaces to replace tabs:
+Show missing names as:
+Include withheld records
+Label withheld records with:
+this text:
+the individual's name
+Put surnames in CAPITALS
+Start events with a capital letter
+Don't show email addresses
+Show occupation in page heading
+Include tree diagrams
+File format:
+Simulate transparency
+Conserve tree width
+Keep sibling order from GEDCOM
+Colours
+Selected box
+Selected text
+General box
+Link text
+Private box
+Private text
+Spouse box
+Branches
+Box borders
+Use custom record number for filenames
+List citing records on source pages
+Folder:
+Finally, select the folder where you wish to the website files to be created. If the folder doesn\'t exist already it will be created for you.
+Click Next to create the web pages...
+Display web pages after program finishes.
+<path>
+Thank you for using GEDmill.
+The website files have been generated and put in;
+The folder {0} needs to be created. \r\nThis will destroy an existing file with that name.
+GEDmill will not allow you to create files directly on the Desktop
+The folder {0} already exists.\r\nWould you like to delete any files it contains before creating the website files?
+Deleting the folder {0} will not preserve any existing front page and stylesheet files.\r\nDelete folder anyway?
+If the folder contains non-GEDmill files they will be deleted also.\r\nDelete folder anyway?
+The folder you have selected could not be found.
+The folder name is missing or illegal.
+The folder name you have selected is too long.
+The path you have selected is read-only, or the folder is not empty.
+You do not have the correct permissions to access the folder.
+The folder name you have selected is of an illegal format.
+The folder name you have selected is of an unsupported format.

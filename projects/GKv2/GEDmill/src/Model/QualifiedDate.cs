@@ -53,7 +53,7 @@ namespace GEDmill.Model
             if (Date != null) {
                 return Date.ToString();
             }
-            return "";
+            return string.Empty;
         }
     }
 }

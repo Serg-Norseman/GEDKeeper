@@ -36,7 +36,7 @@ namespace GEDmill
         private delegate void RangeInvoker(int minimum, int maximum);
         private delegate void EndInvoker(ThreadError threadError);
 
-        private String fTitleRoot = "";
+        private string fTitleRoot = "";
         private ManualResetEvent fInitEvent = new ManualResetEvent(false);
         private ManualResetEvent fAbortEvent = new ManualResetEvent(false);
         private bool fRequiresClose = true;

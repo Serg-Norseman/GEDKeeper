@@ -22,6 +22,7 @@ using System.IO;
 using GDModel;
 using GEDmill.MiniTree;
 using GEDmill.Model;
+using GKCore.Interfaces;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -35,6 +36,7 @@ namespace GEDmill.HTML
     {
         private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Website).Name);
 
+        private readonly ILangMan fLangMan;
         private readonly string fOutputFolder;
 
         // The raw data that we are turning into a website.
@@ -44,11 +46,12 @@ namespace GEDmill.HTML
         private readonly IProgressCallback fProgressWindow;
 
 
-        public Website(GDMTree tree, IProgressCallback progress, string outputFolder)
+        public Website(GDMTree tree, IProgressCallback progress, string outputFolder, ILangMan langMan)
         {
             fTree = tree;
             fProgressWindow = progress;
             fOutputFolder = outputFolder;
+            fLangMan = langMan;
         }
 
         // The heart of GEDmill is here.
@@ -68,7 +71,6 @@ namespace GEDmill.HTML
                 // The maximum value of the progress bar, i.e. when website creation is fully complete.
                 int progressMax =
                     1  // Site-wide multimedia files
-                  + 1  // W3C Sticker
                   + 1  // Background image
                   + 1  // Style sheet
                   + gfstats[(int)GDMRecordType.rtIndividual]
@@ -93,29 +95,18 @@ namespace GEDmill.HTML
                     return;
                 }
                 // Copy the images to use in place of non-pic multimedia files.
-                fProgressWindow.SetText("Copying multimedia");
+                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CopyingMultimedia));
                 CopyIcons();
                 if (fProgressWindow.IsAborting) {
                     return;
                 }
                 fProgressWindow.StepTo(++progress);
 
-                // Copy the W3C sticker file.
-                fProgressWindow.SetText("Copying W3C sticker");
-                string sW3CFilename = "";
-                if (GMConfig.Instance.IncludeValiditySticker) {
-                    sW3CFilename = CopyW3CSticker();
-                }
-                if (fProgressWindow.IsAborting) {
-                    return;
-                }
-                fProgressWindow.StepTo(++progress);
-
                 // Create the index creator for use by the individuals records creator.
-                var indiIndexCreator = new CreatorIndexIndividuals(fTree, fProgressWindow, sW3CFilename);
+                var indiIndexCreator = new CreatorIndexIndividuals(fTree, fProgressWindow, fLangMan);
 
                 // Copy the image for the background of the webpages.
-                fProgressWindow.SetText("Copying background image");
+                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CopyingBackground));
                 string backgroundImageFilename = CopyBackgroundImage();
                 if (fProgressWindow.IsAborting) {
                     return;
@@ -123,10 +114,10 @@ namespace GEDmill.HTML
                 fProgressWindow.StepTo(++progress);
 
                 // Create the style sheet
-                fProgressWindow.SetText("Creating style sheet");
-                string cssFilename = string.Concat(GMConfig.Instance.OutputFolder, "\\", GMConfig.Instance.StylesheetFilename, ".css");
-                if (GMConfig.Instance.StylesheetFilename.Length > 0 && (!GMConfig.Instance.PreserveStylesheet || !File.Exists(cssFilename))) {
-                    var csc = new CreatorStylesheet(fTree, fProgressWindow, sW3CFilename, cssFilename, backgroundImageFilename);
+                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingStyleSheet));
+                string cssFilename = string.Concat(fOutputFolder, "\\", GMConfig.StylesheetFilename);
+                if (GMConfig.StylesheetFilename.Length > 0) {
+                    var csc = new CreatorStylesheet(fTree, fProgressWindow, fLangMan, cssFilename, backgroundImageFilename);
                     csc.Create();
                 }
 
@@ -137,10 +128,10 @@ namespace GEDmill.HTML
                 fProgressWindow.StepTo(++progress);
 
                 // Create the pages for the individual records.
-                fProgressWindow.SetText("Creating individual pages");
+                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualPages));
                 var indiList = fTree.GetRecords<GDMIndividualRecord>();
                 foreach (GDMIndividualRecord ir in indiList) {
-                    var ipc = new CreatorRecordIndividual(fTree, fProgressWindow, sW3CFilename, ir, indiIndexCreator, paintbox);
+                    var ipc = new CreatorRecordIndividual(fTree, fProgressWindow, fLangMan, ir, indiIndexCreator, paintbox);
                     if (ipc.Create(stats)) {
                         stats.Individuals++;
                     }
@@ -152,7 +143,7 @@ namespace GEDmill.HTML
                 }
 
                 // Create the index for the individual records pages.
-                fProgressWindow.SetText("Creating individuals index");
+                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualsIndex));
                 indiIndexCreator.Create();
                 if (fProgressWindow.IsAborting) {
                     return;
@@ -165,10 +156,10 @@ namespace GEDmill.HTML
                 Creator.ClearCopiedFilesList();
 
                 // Create the pages for the source records.
-                fProgressWindow.SetText("Creating source pages");
+                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingSourcePages));
                 var sourList = fTree.GetRecords<GDMSourceRecord>();
                 foreach (GDMSourceRecord sr in sourList) {
-                    var spc = new CreatorRecordSource(fTree, fProgressWindow, sW3CFilename, sr);
+                    var spc = new CreatorRecordSource(fTree, fProgressWindow, fLangMan, sr);
                     if (spc.Create(stats)) {
                         stats.Sources++;
                     }
@@ -185,10 +176,10 @@ namespace GEDmill.HTML
                 }
 
                 // Create the front page
-                fProgressWindow.SetText("Creating front page");
-                string front_page_filename = string.Concat(GMConfig.Instance.OutputFolder, "\\", GMConfig.Instance.FrontPageFilename, ".", GMConfig.Instance.HtmlExtension);
-                if (GMConfig.Instance.FrontPageFilename.Length > 0 && (!GMConfig.Instance.PreserveFrontPage || !File.Exists(front_page_filename))) {
-                    CreatorFrontPage fpc = new CreatorFrontPage(fTree, fProgressWindow, sW3CFilename, stats);
+                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingFrontPage));
+                string front_page_filename = string.Concat(fOutputFolder, "\\", GMConfig.Instance.FrontPageFilename, ".html");
+                if (GMConfig.Instance.FrontPageFilename.Length > 0) {
+                    CreatorFrontPage fpc = new CreatorFrontPage(fTree, fProgressWindow, fLangMan, stats);
                     fpc.Create();
                 }
                 fProgressWindow.StepTo(++progress);
@@ -197,7 +188,7 @@ namespace GEDmill.HTML
                 }
                 
                 // Copy the CD ROM autorun file
-                fProgressWindow.SetText("Creating CD-ROM files");
+                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingCDROMFiles));
                 if (GMConfig.Instance.CreateCDROMFiles) {
                     CreateCDROMFiles();
                 }
@@ -208,7 +199,7 @@ namespace GEDmill.HTML
                 fProgressWindow.StepTo(++progress);
 
                 // Copy the Javascript
-                fProgressWindow.SetText("Creating Javascript file");
+                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingJSFile));
                 // Currently (10Dec08) the only thing that uses javascript is the multiple images feature.
                 if (GMConfig.Instance.AllowMultipleImages) {
                     CreateJavascriptFiles();
@@ -221,7 +212,7 @@ namespace GEDmill.HTML
 
                 // Done
                 fLogger.WriteInfo("Website::CreateFinished");
-                fProgressWindow.SetText("Done");
+                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_Done));
                 threaderror.Error = 0;
                 threaderror.Message = "";
             } catch (ArgumentException e) {
@@ -282,22 +273,6 @@ namespace GEDmill.HTML
             }
         }
 
-        // Copy valid XHTML sticker file.
-        private string CopyW3CSticker()
-        {
-            string stickerFile = "";
-            fLogger.WriteInfo("Copying W3C sticker ...");
-            try {
-                Rectangle rectNewArea = new Rectangle(0, 0, 0, 0);
-                stickerFile = Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\valid-xhtml10.png", "", 0, 0, ref rectNewArea, null);
-            } catch (IOException e) {
-                fLogger.WriteError("Caught io exception while copying W3C sticker: {0}", e);
-            } catch (ArgumentException e) {
-                fLogger.WriteError("Caught argument exception while copying W3C sticker: {0}", e);
-            }
-            return stickerFile;
-        }
-
         // Copies the image for the background of the webpages.
         // Returns the sFilename of the copy.
         private string CopyBackgroundImage()
@@ -321,12 +296,12 @@ namespace GEDmill.HTML
         // Copy the CD ROM autorun loader program.
         private void CreateCDROMFiles()
         {
-            string homepageUrl = string.Concat(GMConfig.Instance.FrontPageFilename, ".", GMConfig.Instance.HtmlExtension);
+            string homepageUrl = string.Concat(GMConfig.Instance.FrontPageFilename, ".html");
 
-            if (homepageUrl != null && !string.IsNullOrEmpty(GMConfig.Instance.OutputFolder)) {
+            if (homepageUrl != null && !string.IsNullOrEmpty(fOutputFolder)) {
                 string fileopenSrc = GMConfig.Instance.ApplicationPath + "\\fileopen.exe";
-                string fileopenDest = GMConfig.Instance.OutputFolder + "\\fileopen.exe";
-                string autorunDest = GMConfig.Instance.OutputFolder + "\\autorun.inf";
+                string fileopenDest = fOutputFolder + "\\fileopen.exe";
+                string autorunDest = fOutputFolder + "\\autorun.inf";
 
                 // Copy fileopen.exe into output folder
                 if (File.Exists(fileopenDest)) {
@@ -357,9 +332,9 @@ namespace GEDmill.HTML
         // Copy the javascript picture-selection script.
         private void CreateJavascriptFiles()
         {
-            if (!string.IsNullOrEmpty(GMConfig.Instance.OutputFolder)) {
+            if (!string.IsNullOrEmpty(fOutputFolder)) {
                 string jsSrc = GMConfig.Instance.ApplicationPath + "\\gedmill.js";
-                string jsDest = GMConfig.Instance.OutputFolder + "\\gedmill.js";
+                string jsDest = fOutputFolder + "\\gedmill.js";
                 if (File.Exists(jsSrc)) {
                     // Copy gedmill.js into output folder
                     if (File.Exists(jsDest)) {

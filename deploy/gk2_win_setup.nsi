@@ -556,6 +556,14 @@ SectionGroup /e "$(gkplg)"
         File "..\plugins\GKStdReports.deu"
         File "..\plugins\GKStdReports.ukr"
     SectionEnd
+
+    Section "GEDmill"
+        SetOutPath "$INSTDIR\plugins"
+        File "..\plugins\GEDmillPlugin.dll"
+        File "..\plugins\GEDmillPlugin.rus"
+        File "..\plugins\GEDmillPlugin.enu"
+        File "..\plugins\log4net.dll"
+    SectionEnd
 SectionGroupEnd
 
 Section "Uninstall"
