@@ -422,6 +422,11 @@ namespace GDModel
             return new LifeDatesRet(birthEvent, deathEvent);
         }
 
+        public GDMPersonalName GetPrimaryPersonalName()
+        {
+            return (fPersonalNames.Count <= 0) ? null : fPersonalNames[0];
+        }
+
         public string GetPrimaryFullName()
         {
             string result = (fPersonalNames.Count <= 0) ? string.Empty : fPersonalNames[0].FullName;

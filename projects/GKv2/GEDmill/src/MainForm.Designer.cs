@@ -60,7 +60,7 @@
         private System.Windows.Forms.RadioButton radConfigWithheldNameLabel;
         private System.Windows.Forms.RadioButton radConfigWithheldNameName;
         private System.Windows.Forms.TextBox txtConfigWithheldName;
-        private System.Windows.Forms.CheckBox chkConfigCapNames;
+        private System.Windows.Forms.CheckBox chkConfigCapSurnames;
         private System.Windows.Forms.CheckBox chkConfigCapEvents;
         private System.Windows.Forms.CheckBox chkConfigHideEmails;
         private System.Windows.Forms.CheckBox chkConfigOccupationHeadline;
@@ -204,7 +204,7 @@
             radConfigWithheldNameLabel = new System.Windows.Forms.RadioButton();
             radConfigWithheldNameName = new System.Windows.Forms.RadioButton();
             txtConfigWithheldName = new System.Windows.Forms.TextBox();
-            chkConfigCapNames = new System.Windows.Forms.CheckBox();
+            chkConfigCapSurnames = new System.Windows.Forms.CheckBox();
             chkConfigCapEvents = new System.Windows.Forms.CheckBox();
             chkConfigHideEmails = new System.Windows.Forms.CheckBox();
             chkConfigOccupationHeadline = new System.Windows.Forms.CheckBox();
@@ -1164,13 +1164,13 @@
             radConfigWithheldNameName.Text = "the individual's n&ame";
             radConfigWithheldNameName.Click += new System.EventHandler(radConfigWithheldNameLabel_Click);
             //
-            // chkConfigCapNames
+            // chkConfigCapSurnames
             // 
-            chkConfigCapNames.Location = new System.Drawing.Point(266, 7);
-            chkConfigCapNames.Name = "chkConfigCapNames";
-            chkConfigCapNames.Size = new System.Drawing.Size(200, 20);
-            chkConfigCapNames.TabIndex = 10;
-            chkConfigCapNames.Text = "&Put surnames in CAPITALS";
+            chkConfigCapSurnames.Location = new System.Drawing.Point(266, 7);
+            chkConfigCapSurnames.Name = "chkConfigCapSurnames";
+            chkConfigCapSurnames.Size = new System.Drawing.Size(200, 20);
+            chkConfigCapSurnames.TabIndex = 10;
+            chkConfigCapSurnames.Text = "&Put surnames in CAPITALS";
             //
             // chkConfigCapEvents
             // 
@@ -1536,7 +1536,7 @@
             pageSettingsGedcom.Controls.Add(lblConfigNoName);
             pageSettingsGedcom.Controls.Add(txtConfigNoName);
             pageSettingsGedcom.Controls.Add(gbConfigWithheldName);
-            pageSettingsGedcom.Controls.Add(chkConfigCapNames);
+            pageSettingsGedcom.Controls.Add(chkConfigCapSurnames);
             pageSettingsGedcom.Controls.Add(chkConfigCapEvents);
             pageSettingsGedcom.Controls.Add(chkConfigHideEmails);
             pageSettingsGedcom.Controls.Add(chkConfigOccupationHeadline);

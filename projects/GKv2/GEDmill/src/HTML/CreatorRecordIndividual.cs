@@ -28,6 +28,7 @@ using GKCore.Logging;
 using GKCore.Types;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
+using GKCore;
 
 namespace GEDmill.HTML
 {
@@ -37,6 +38,8 @@ namespace GEDmill.HTML
 
         // The individual record that we are creating the page for.
         private GDMIndividualRecord fIndiRec;
+
+        private GDMPersonalName fPrimaryName;
 
         // Indicates that this individual should have most of the record data excluded from the website for privacy.
         private bool fConcealed;
@@ -126,7 +129,7 @@ namespace GEDmill.HTML
         private Paintbox fPaintbox;
 
 
-        public CreatorRecordIndividual(GDMTree tree, IProgressCallback progress, ILangMan langMan, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator, Paintbox paintbox) : base(tree, progress, langMan)
+        public CreatorRecordIndividual(IBaseContext context, IProgressCallback progress, ILangMan langMan, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator, Paintbox paintbox) : base(context, progress, langMan)
         {
             fIndiRec = ir;
             fIndiIndexCreator = indiIndexCreator;
@@ -136,6 +139,7 @@ namespace GEDmill.HTML
             fDeathdaySourceRefs = "";
             fNameTitle = "";
             fUnknownName = false;
+            fPrimaryName = fIndiRec.GetPrimaryPersonalName();
             fName = fIndiRec.GetPrimaryFullName();
             fNameSuffix = ""/*fIndiRec.NameSuffix*/; // TODO
             fFirstName = "";
@@ -348,7 +352,7 @@ namespace GEDmill.HTML
                                 childBirthdate.SetDateTime(dtNow);
                             }
 
-                            int difference = GMHelper.GetEventsYearsDiff(testBirthday, childBirthdate);
+                            int difference = GetEventsYearsDiff(testBirthday, childBirthdate);
                             if (difference < 0) {
                                 if (difference > previousDifference) {
                                     previousDifference = difference;
@@ -401,10 +405,10 @@ namespace GEDmill.HTML
                 // Add entries for this individual's other names
                 if (!fConcealed && !fUnknownName) {
                     for (int i = 1; i < fIndiRec.PersonalNames.Count; i++) {
-                        string otherName = fIndiRec.PersonalNames[i].StringValue;
-                        string otherFirstName = "";
-                        string otherSurname = "";
-                        otherName = GMHelper.CapitaliseName(otherName, ref otherFirstName, ref otherSurname); // Also splits name into first name and surname
+                        string otherName;
+                        string otherFirstName;
+                        string otherSurname;
+                        otherName = GMHelper.CapitaliseName(fIndiRec.PersonalNames[i], out otherFirstName, out otherSurname); // Also splits name into first name and surname
                         fIndiIndexCreator.AddIndividualToIndex(otherFirstName, otherSurname, fUnknownName, alterEgo, lifeDates, fConcealed, relativeFilename, userRef);
                     }
                 }
@@ -597,7 +601,7 @@ namespace GEDmill.HTML
                 fFirstName = "";
                 fSurname = fName = GMConfig.Instance.ConcealedName;
             } else {
-                fName = GMHelper.CapitaliseName(fName, ref fFirstName, ref fSurname); // Also splits name into first name and surname
+                fName = GMHelper.CapitaliseName(fPrimaryName, out fFirstName, out fSurname); // Also splits name into first name and surname
             }
 
             if (fName == "") {
@@ -610,12 +614,10 @@ namespace GEDmill.HTML
             if (!fConcealed && !fUnknownName) {
                 for (int i = 1; i < fIndiRec.PersonalNames.Count; i++) {
                     GDMPersonalName pns = fIndiRec.PersonalNames[i];
-                    NameAndSource nasOther = new NameAndSource(pns.StringValue);
-                    nasOther.Sources.AddRange(pns.SourceCitations);
 
-                    string firstNameOther = "";
-                    string surnameOther = "";
-                    nasOther.Name = GMHelper.CapitaliseName(nasOther.Name, ref firstNameOther, ref surnameOther); // Also splits name into first name and surname
+                    string dummy;
+                    NameAndSource nasOther = new NameAndSource(GMHelper.CapitaliseName(pns, out dummy, out dummy));
+                    nasOther.Sources.AddRange(pns.SourceCitations);
                     nasOther.SourceHtml = AddSources(ref fReferenceList, nasOther.Sources);
                     fOtherNames.Add(nasOther);
                 }
@@ -624,9 +626,8 @@ namespace GEDmill.HTML
             if (fConcealed && !GMConfig.Instance.UseWithheldNames) {
                 fFullName = GMConfig.Instance.ConcealedName;
             } else {
-                fFullName = fIndiRec.GetPrimaryFullName();
-                string sDummy = "";
-                fFullName = GMHelper.CapitaliseName(fFullName, ref sDummy, ref sDummy); // Also splits name into first name and surname
+                string dummy;
+                fFullName = GMHelper.CapitaliseName(fPrimaryName, out dummy, out dummy); // Also splits name into first name and surname
             }
             if (fFullName == "") {
                 fFullName = GMConfig.Instance.UnknownName;
@@ -765,7 +766,7 @@ namespace GEDmill.HTML
                     }
 
                     // Finally write source link and extra info
-                    f.WriteLine("<li>{0}{1}</li>", GMHelper.MakeLinkText(fTree, sourCit, i + 1), extraInfo);
+                    f.WriteLine("<li>{0}{1}</li>", MakeLinkText(fTree, sourCit, i + 1), extraInfo);
                 }
                 f.WriteLine("          </ul>");
                 f.WriteLine("        </div> <!-- references -->");
@@ -923,8 +924,8 @@ namespace GEDmill.HTML
                 f.WriteLine("    <div id=\"photos\">");
                 f.WriteLine("      <div id=\"mainphoto\">");
 
-                string non_pic_small_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, true, GMConfig.Instance.LinkOriginalPicture);
-                string non_pic_main_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, GMConfig.Instance.LinkOriginalPicture);
+                string non_pic_small_filename = "multimedia/" + NonPicFilename(iMultimedia.Format, true, GMConfig.Instance.LinkOriginalPicture);
+                string non_pic_main_filename = "multimedia/" + NonPicFilename(iMultimedia.Format, false, GMConfig.Instance.LinkOriginalPicture);
 
                 string imageTitle = "";
                 string altName = fFullName;
@@ -969,8 +970,8 @@ namespace GEDmill.HTML
                     for (int i = 0; i < fMultimediaList.Count; i++) {
                         iMultimedia = fMultimediaList[i];
 
-                        non_pic_small_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, true, GMConfig.Instance.LinkOriginalPicture);
-                        non_pic_main_filename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, GMConfig.Instance.LinkOriginalPicture);
+                        non_pic_small_filename = "multimedia/" + NonPicFilename(iMultimedia.Format, true, GMConfig.Instance.LinkOriginalPicture);
+                        non_pic_main_filename = "multimedia/" + NonPicFilename(iMultimedia.Format, false, GMConfig.Instance.LinkOriginalPicture);
 
                         string largeFilenameArg;
                         if (!string.IsNullOrEmpty(iMultimedia.LargeFileName)) {
@@ -984,7 +985,7 @@ namespace GEDmill.HTML
                             // Must be a picture.
                             // Scale mini pic down to thumbnail.
                             Rectangle newArea = new Rectangle(0, 0, iMultimedia.Width, iMultimedia.Height);
-                            GMHelper.ScaleAreaToFit(ref newArea, GMConfig.Instance.MaxThumbnailImageWidth, GMConfig.Instance.MaxThumbnailImageHeight);
+                            ScaleAreaToFit(ref newArea, GMConfig.Instance.MaxThumbnailImageWidth, GMConfig.Instance.MaxThumbnailImageHeight);
 
                             f.WriteLine(string.Concat("          <img style=\"width:", newArea.Width, "px; height:", newArea.Height, "px; margin-bottom:", GMConfig.Instance.MaxThumbnailImageHeight - newArea.Height, "px;\" class=\"miniphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"Click to select\" onclick=\"updateMainPhoto('", iMultimedia.FileName, "','", EscapeJavascript(iMultimedia.Title), "',", largeFilenameArg, ")\" />"));
                         } else {
@@ -1636,7 +1637,7 @@ namespace GEDmill.HTML
                     referenceList.Add(sourCit);
                 }
 
-                sourceRefs += GMHelper.MakeLinkNumber(sourCit, (sourceNumber + 1), bComma);
+                sourceRefs += MakeLinkNumber(sourCit, (sourceNumber + 1), bComma);
             }
             return sourceRefs;
         }
@@ -1649,7 +1650,7 @@ namespace GEDmill.HTML
             if (lowerLimit == null || upperLimit == null) {
                 minDifference = int.MaxValue;
             } else {
-                minDifference = Math.Abs(GMHelper.GetEventsYearsDiff(lowerLimit, upperLimit));
+                minDifference = Math.Abs(GetEventsYearsDiff(lowerLimit, upperLimit));
             }
 
             OccupationCounter bestOc = null;
@@ -1659,7 +1660,7 @@ namespace GEDmill.HTML
                     // Dateless occupation assumed to be the generic answer
                     return oc.Name;
                 } else {
-                    int sdifference = GMHelper.GetEventsYearsDiff(givenDate, oc.Date);
+                    int sdifference = GetEventsYearsDiff(givenDate, oc.Date);
                     int difference = Math.Abs(sdifference);
                     if (Math.Sign(sdifference) == -1) {
                         // favours occupations before date rather than after it.
@@ -1694,6 +1695,28 @@ namespace GEDmill.HTML
             }
 
             return marriageNote;
+        }
+
+        private static int GetEventsYearsDiff(GDMDateValue ev1, GDMDateValue ev2, bool currentEnd = true)
+        {
+            int result = -1;
+
+            try {
+                int dt1 = GKUtils.GetChronologicalYear(ev1);
+                int dt2 = GKUtils.GetChronologicalYear(ev2);
+
+                if (currentEnd && dt2 == 0) {
+                    dt2 = DateTime.Now.Year;
+                }
+
+                if (dt1 != 0 && dt2 != 0) {
+                    result = Math.Abs(dt2 - dt1);
+                }
+            } catch (Exception ex) {
+                fLogger.WriteError("CreatorRecordIndividual.GetEventsYearsDiff()", ex);
+            }
+
+            return result;
         }
     }
 }

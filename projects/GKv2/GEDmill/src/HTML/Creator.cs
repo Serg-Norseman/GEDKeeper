@@ -38,6 +38,8 @@ namespace GEDmill.HTML
 
         protected readonly ILangMan fLangMan;
 
+        protected IBaseContext fContext;
+
         // The raw data that we are turning into a website.
         protected GDMTree fTree;
 
@@ -49,9 +51,10 @@ namespace GEDmill.HTML
         private static Dictionary<string, FilenameAndSize> fCopiedFiles = new Dictionary<string, FilenameAndSize>();
 
 
-        protected Creator(GDMTree tree, IProgressCallback progress, ILangMan langMan)
+        protected Creator(IBaseContext context, IProgressCallback progress, ILangMan langMan)
         {
-            fTree = tree;
+            fContext = context;
+            fTree = fContext.Tree;
             fProgressWindow = progress;
             fLangMan = langMan;
         }
@@ -527,14 +530,12 @@ namespace GEDmill.HTML
         // Creates link HTML for the individual e.g. <a href="indiI1.html">Fred Bloggs</a>
         protected static string MakeLink(GDMIndividualRecord ir)
         {
-            string name = ir.GetPrimaryFullName();
-            string dummy = "";
-            if (name == "") {
-                name = GMConfig.Instance.UnknownName;
-            } else if (!GMHelper.GetVisibility(ir) && !GMConfig.Instance.UseWithheldNames) {
+            string name;
+            if (!GMHelper.GetVisibility(ir) && !GMConfig.Instance.UseWithheldNames) {
                 name = GMConfig.Instance.ConcealedName;
             } else {
-                name = GMHelper.CapitaliseName(name, ref dummy, ref dummy);
+                string dummy;
+                name = GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out dummy, out dummy);
             }
             return MakeLink(ir, name);
         }
@@ -616,7 +617,7 @@ namespace GEDmill.HTML
 
             if (maxWidth != 0 && maxHeight != 0) {
                 // If image is too big then shrink it. (Can't always use GetThumbnailImage because that might use embedded thumbnail).
-                GMHelper.ScaleAreaToFit(ref rectNewArea, maxWidth, maxHeight);
+                ScaleAreaToFit(ref rectNewArea, maxWidth, maxHeight);
             }
 
             Bitmap bitmapNew = new Bitmap(rectNewArea.Width, rectNewArea.Height, PixelFormat.Format24bppRgb);
@@ -685,6 +686,62 @@ namespace GEDmill.HTML
 
             rectArea = rectNewArea;
             return filenameNew;
+        }
+
+        // Modifies rectNew to fit within the limits given, keeping its aspect ratio
+        protected static void ScaleAreaToFit(ref Rectangle rectangle, int maxWidth, int maxHeight)
+        {
+            if (rectangle.Height > maxHeight) {
+                // Image won't fit horizontally, so scale in both directions til it will
+                rectangle.Width = (rectangle.Width * maxHeight) / rectangle.Height;
+                rectangle.Height = maxHeight;
+            }
+
+            if (rectangle.Width > maxWidth) {
+                // Image won't fit horizontally, so scale in both directions til it will
+                rectangle.Height = (rectangle.Height * maxWidth) / rectangle.Width;
+                rectangle.Width = maxWidth;
+            }
+        }
+
+        protected static string MakeLinkNumber(GDMSourceCitation sourCit, int sourceCount, bool hasComma)
+        {
+            string comma = hasComma ? "," : "";
+            return string.Concat("<span class=\"reference\">", comma, sourceCount.ToString(), "</span>");
+        }
+
+        // Returns a string to use in the list of references at the bottom of the page
+        protected static string MakeLinkText(GDMTree tree, GDMSourceCitation sourCit, int sourceCount)
+        {
+            var sourRec = tree.GetPtrValue<GDMSourceRecord>(sourCit);
+            return string.Concat(sourceCount.ToString(), ". ", /*m_sSourceDescription*/sourRec.ShortTitle);
+        }
+
+        // Returns the name of the alternative picture file to display for non-diaplayable files of the given format
+        protected static string NonPicFilename(string format, bool small, bool clickToDownload)
+        {
+            string filename;
+            switch (format.ToLower()) {
+                case "wav":
+                case "mp3":
+                case "mid":
+                case "midi":
+                case "rmi":
+                case "au":
+                case "wma":
+                    filename = small ? "gmaudio_sm.png" : clickToDownload ? "gmaudio.png" : "gmaudion.png";
+                    break;
+                case "avi":
+                case "mpeg":
+                case "mpg":
+                case "wmv":
+                    filename = small ? "gmvideo_sm.png" : clickToDownload ? "gmvideo.png" : "gmvideon.png";
+                    break;
+                default:
+                    filename = small ? "gmdoc_sm.png" : clickToDownload ? "gmdoc.png" : "gmdocn.png";
+                    break;
+            }
+            return filename;
         }
     }
 }

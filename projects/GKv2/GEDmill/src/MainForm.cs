@@ -228,7 +228,7 @@ namespace GEDmill
             gbConfigWithheldName.Text = fLangMan.LS(PLS.LSID_ConfigWithheldName);
             radConfigWithheldNameLabel.Text = fLangMan.LS(PLS.LSID_ConfigWithheldNameLabel);
             radConfigWithheldNameName.Text = fLangMan.LS(PLS.LSID_ConfigWithheldNameName);
-            chkConfigCapNames.Text = fLangMan.LS(PLS.LSID_ConfigCapNames);
+            chkConfigCapSurnames.Text = fLangMan.LS(PLS.LSID_ConfigCapSurnames);
             chkConfigCapEvents.Text = fLangMan.LS(PLS.LSID_ConfigCapEvents);
             chkConfigHideEmails.Text = fLangMan.LS(PLS.LSID_ConfigHideEmails);
             chkConfigOccupationHeadline.Text = fLangMan.LS(PLS.LSID_ConfigOccupationHeadline);
@@ -1401,13 +1401,8 @@ namespace GEDmill
             // If the list view has check boxes, the item is for the checkbox.
             // Otherwise the item is for the name, and so the sub items won't include the name.
             if (checkBoxes) {
-                string surname = "";
-                string firstName = "";
-                var persName = (ir.PersonalNames.Count > 0) ? ir.PersonalNames[0].StringValue : "";
-                GMHelper.CapitaliseName(persName, ref firstName, ref surname);
-                /*if (ir.NameSuffix != null && ir.NameSuffix != "") {
-                    sFirstName += ", " + ir.NameSuffix;
-                }*/
+                string surname, firstName;
+                GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out firstName, out surname);
                 lvItem.SubItems.Add(new LVNameItem(surname, firstName));
             }
 
@@ -1589,7 +1584,7 @@ namespace GEDmill
             var progressWindow = new ProgressWindow();
             progressWindow.Text = fLangMan.LS(PLS.LSID_CreatingWebsite);
 
-            var website = new Website(fBase.Context.Tree, progressWindow, outputFolder, fLangMan);
+            var website = new Website(fBase.Context, progressWindow, outputFolder, fLangMan);
             var threadWorker = new Thread(website.Create);
 
             fLogger.WriteInfo("Starting progress thread");
@@ -1705,7 +1700,7 @@ namespace GEDmill
             txtConfigWithheldName.Text = GMConfig.Instance.ConcealedName;
             radConfigWithheldNameLabel.Checked = !GMConfig.Instance.UseWithheldNames;
             radConfigWithheldNameName.Checked = GMConfig.Instance.UseWithheldNames;
-            chkConfigCapNames.Checked = (GMConfig.Instance.NameCapitalisation == 1);
+            chkConfigCapSurnames.Checked = (GMConfig.Instance.NameCapitalisation == 1);
             chkConfigCapEvents.Checked = GMConfig.Instance.CapitaliseEventDescriptions;
             chkConfigHideEmails.Checked = GMConfig.Instance.ObfuscateEmails;
             chkConfigOccupationHeadline.Checked = GMConfig.Instance.OccupationHeadline;
@@ -1929,7 +1924,7 @@ namespace GEDmill
                 GMConfig.Instance.ConcealedName = txtConfigWithheldName.Text;
             }
             GMConfig.Instance.UseWithheldNames = radConfigWithheldNameName.Checked;
-            GMConfig.Instance.NameCapitalisation = (chkConfigCapNames.Checked ? 1 : 0);
+            GMConfig.Instance.NameCapitalisation = (chkConfigCapSurnames.Checked ? 1 : 0);
             GMConfig.Instance.CapitaliseEventDescriptions = chkConfigCapEvents.Checked;
             GMConfig.Instance.ObfuscateEmails = chkConfigHideEmails.Checked;
             GMConfig.Instance.OccupationHeadline = chkConfigOccupationHeadline.Checked;
@@ -2022,9 +2017,8 @@ namespace GEDmill
                 foreach (string xref in GMConfig.Instance.KeyIndividuals) {
                     GDMIndividualRecord indiRec = fBase.Context.Tree.FindXRef<GDMIndividualRecord>(xref);
                     if (indiRec != null && GMHelper.GetVisibility(indiRec)) {
-                        string firstName = "";
-                        string surname = "";
-                        string fullName = GMHelper.CapitaliseName(indiRec.GetPrimaryFullName(), ref firstName, ref surname);
+                        string firstName, surname;
+                        string fullName = GMHelper.CapitaliseName(indiRec.GetPrimaryPersonalName(), out firstName, out surname);
                         if (string.IsNullOrEmpty(fullName)) {
                             fullName = GMConfig.Instance.UnknownName;
                         }

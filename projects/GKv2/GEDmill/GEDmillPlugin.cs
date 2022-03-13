@@ -252,7 +252,7 @@ namespace GEDmill
         LSID_ConfigWithheldName,
         LSID_ConfigWithheldNameLabel,
         LSID_ConfigWithheldNameName,
-        LSID_ConfigCapNames,
+        LSID_ConfigCapSurnames,
         LSID_ConfigCapEvents,
         LSID_ConfigHideEmails,
         LSID_ConfigOccupationHeadline,

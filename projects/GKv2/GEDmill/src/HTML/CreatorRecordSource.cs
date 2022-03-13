@@ -37,7 +37,7 @@ namespace GEDmill.HTML
         private GDMSourceRecord fSourceRecord;
 
 
-        public CreatorRecordSource(GDMTree tree, IProgressCallback progress, ILangMan langMan, GDMSourceRecord sr) : base(tree, progress, langMan)
+        public CreatorRecordSource(IBaseContext context, IProgressCallback progress, ILangMan langMan, GDMSourceRecord sr) : base(context, progress, langMan)
         {
             fSourceRecord = sr;
         }
@@ -199,7 +199,7 @@ namespace GEDmill.HTML
             if (fMultimediaList.Count > 0) {
                 f.WriteLine("        <div id=\"sourcePics\">");
                 foreach (Multimedia iMultimedia in fMultimediaList) {
-                    string nonPicMainFilename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, GMConfig.Instance.LinkOriginalPicture);
+                    string nonPicMainFilename = "multimedia/" + NonPicFilename(iMultimedia.Format, false, GMConfig.Instance.LinkOriginalPicture);
 
                     string imageTitle = "";
                     string altName = "";

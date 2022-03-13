@@ -941,6 +941,11 @@ namespace GKCore
             return result;
         }
 
+        public static int GetChronologicalYear(GDMDateValue dateVal)
+        {
+            return (dateVal == null) ? 0 : dateVal.GetChronologicalYear();
+        }
+
         public static int GetChronologicalYear(GDMCustomEvent evt)
         {
             return (evt == null) ? 0 : evt.Date.GetChronologicalYear();
@@ -2750,7 +2755,7 @@ namespace GKCore
 
         public static bool UseEmbeddedViewer(GDMMultimediaFormat format)
         {
-            MultimediaKind mmKind = GKUtils.GetMultimediaKind(format);
+            MultimediaKind mmKind = GetMultimediaKind(format);
 
             switch (mmKind) {
                 case MultimediaKind.mkImage:
@@ -2769,6 +2774,15 @@ namespace GKCore
                 default:
                     return false;
             }
+        }
+
+        public static bool IsPictureFormat(GDMFileReferenceWithTitle fileRef)
+        {
+            if (fileRef == null)
+                return false;
+
+            MultimediaKind mmKind = GetMultimediaKind(fileRef.MultimediaFormat);
+            return (mmKind == MultimediaKind.mkImage);
         }
 
         public static void InitSecurityProtocol()

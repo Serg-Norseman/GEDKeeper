@@ -39,7 +39,7 @@ namespace GEDmill.HTML
         private string fBackgroundImageFilename;
 
 
-        public CreatorStylesheet(GDMTree tree, IProgressCallback progress, ILangMan langMan, string cssFilename, string backgroundImageFilename) : base(tree, progress, langMan)
+        public CreatorStylesheet(IBaseContext context, IProgressCallback progress, ILangMan langMan, string cssFilename, string backgroundImageFilename) : base(context, progress, langMan)
         {
             fCssFilename = cssFilename;
             fBackgroundImageFilename = backgroundImageFilename;

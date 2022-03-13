@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Windows.Forms;
 using BSLib.Design.Handlers;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -29,7 +28,6 @@ using GEDmill.Model;
 using GKCore;
 using GKCore.Logging;
 using GKCore.Tools;
-using GKCore.Types;
 
 namespace GEDmill
 {
@@ -73,99 +71,6 @@ namespace GEDmill
             }
 
             return changes.Visibility;
-        }
-
-        // Modifies rectNew to fit within the limits given, keeping its aspect ratio
-        public static void ScaleAreaToFit(ref Rectangle rectNew, int uMaxWidth, int uMaxHeight)
-        {
-            if (rectNew.Height > uMaxHeight) {
-                // Image won't fit horizontally, so scale in both directions til it will
-                rectNew.Width = (rectNew.Width * uMaxHeight) / rectNew.Height;
-                rectNew.Height = uMaxHeight;
-            }
-
-            if (rectNew.Width > uMaxWidth) {
-                // Image won't fit horizontally, so scale in both directions til it will
-                rectNew.Height = (rectNew.Height * uMaxWidth) / rectNew.Width;
-                rectNew.Width = uMaxWidth;
-            }
-        }
-
-        // Presents a file selection dialog and returns the selecetd file name and path
-        public static bool SelectFile(ref string fileDir, ref string fileName, string title, string defaultName,
-                                      bool loadNotSave, string filterName, List<string> filterExtensions)
-        {
-            bool fileSelected = false;
-
-            FileDialog fileDialog;
-            if (loadNotSave) {
-                fileDialog = new OpenFileDialog();
-            } else {
-                fileDialog = new SaveFileDialog();
-            }
-
-            if (fileDir.Length > 0) {
-                fileDialog.InitialDirectory = fileDir;
-            } else {
-                fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            }
-
-            if (fileName.Length > 0) {
-                fileDialog.FileName = fileName;
-            } else {
-                fileDialog.FileName = defaultName;
-            }
-
-            string sFilterString = "";
-            int nFilterAllIndex = 1;
-            if (filterExtensions.Count > 0) {
-                nFilterAllIndex++;
-                string sFilterCode = "";
-                bool bFirst = true;
-                //"Picture files (*.jpg; *.gif)|*.jpg;*.gif|All files (*.*)|*.*";
-                foreach (string sFilterExtn in filterExtensions) {
-                    if (!bFirst) {
-                        sFilterCode += ";";
-                    } else {
-                        bFirst = false;
-                    }
-                    sFilterCode += "*" + sFilterExtn;
-                }
-                sFilterString = filterName + " (" + sFilterCode + ")|" + sFilterCode + "|";
-            }
-            sFilterString += "All files (*.*)|*.*";
-            fileDialog.Filter = sFilterString;
-            fileDialog.FilterIndex = 1;
-            string extn = Path.GetExtension(fileDialog.FileName);
-
-            // Check whether selected file matches given filter
-            bool bValidExtn = true;
-            if (fileDialog.FileName.Length > 0) {
-                bValidExtn = false;
-                string sExtnFromDlg = Path.GetExtension(fileDialog.FileName).ToUpper();
-                foreach (string sFilterExtn in filterExtensions) {
-                    if (sExtnFromDlg == sFilterExtn.ToUpper()) {
-                        bValidExtn = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!bValidExtn) {
-                // Use *.* filter if default file isn't a .txt file.
-                fileDialog.FilterIndex = nFilterAllIndex;
-            }
-            fileDialog.RestoreDirectory = true;
-            fileDialog.Title = title;
-
-            if (fileDialog.ShowDialog() == DialogResult.OK) {
-                fileSelected = true;
-                fileDir = Path.GetDirectoryName(fileDialog.FileName);
-                fileName = Path.GetFileName(fileDialog.FileName);
-            }
-            fLogger.WriteInfo("Selected file : " + fileDir + "\\" + fileName);
-
-            return (fileSelected);
         }
 
         // Used to display the finished website. Uses whatever app the user has assigned to open HTML files.
@@ -213,165 +118,23 @@ namespace GEDmill
         }
 
         // Capitalises an individual's name according to config setting
-        public static string CapitaliseName(string name, ref string firstName, ref string surname)
+        public static string CapitaliseName(GDMPersonalName name, out string firstName, out string surname)
         {
             if (name == null) {
-                if (surname != null) {
-                    surname = GMConfig.Instance.UnknownName;
-                }
+                firstName = string.Empty;
+                surname = GMConfig.Instance.UnknownName;
                 return GMConfig.Instance.UnknownName;
             }
 
-            string newName = "";
-            switch (GMConfig.Instance.NameCapitalisation) {
-                case 1:
-                case 0:
-                    // capitalise surname (the bit in //s)
-                    bool bSeenSlash = false;
-                    bool bFirstName = true;
-                    char oldc = '\0';
-                    foreach (char c in name) {
-                        if (c == '/') {
-                            bSeenSlash = !bSeenSlash;
-                            if (bFirstName && oldc != ' ' && newName.Length > 0) {
-                                // Ensure there is a space between first and last names (e.g. from "Fred/Bloggs/")
-                                newName += ' ';
-                                oldc = ' '; // To make oldc set to space too.
-                            } else {
-                                oldc = c;
-                            }
-                            bFirstName = false;
-                        } else if (bSeenSlash) {
-                            char cc = c;
-                            if (GMConfig.Instance.NameCapitalisation == 1) {
-                                cc = char.ToUpper(cc);
-                            }
-                            newName += cc;
-                            if (surname != null) {
-                                surname += cc;
-                            }
-                            oldc = c;
-                        } else {
-                            newName += c;
+            firstName = name.Given;
+            surname = name.Surname;
 
-                            // Collapse multiple spaces into one
-                            if (oldc != ' ' || c != ' ') {
-                                if (bFirstName && firstName != null) {
-                                    firstName += c;
-                                } else if (!bFirstName && surname != null) {
-                                    surname += c;
-                                }
-                            }
-                            oldc = c;
-                        }
-                    }
-                    break;
-                default:
-                    newName = name;
-                    break;
+            if (GMConfig.Instance.NameCapitalisation == 1) {
+                surname = surname.ToUpper();
             }
 
-            return newName;
-        }
-
-        // Returns the name of the alternative picture file to display for non-diaplayable files of the given format
-        public static string NonPicFilename(string format, bool small, bool clickToDownload)
-        {
-            string filename;
-            switch (format.ToLower()) {
-                case "wav":
-                case "mp3":
-                case "mid":
-                case "midi":
-                case "rmi":
-                case "au":
-                case "wma":
-                    filename = small ? "gmaudio_sm.png" : clickToDownload ? "gmaudio.png" : "gmaudion.png";
-                    break;
-                case "avi":
-                case "mpeg":
-                case "mpg":
-                case "wmv":
-                    filename = small ? "gmvideo_sm.png" : clickToDownload ? "gmvideo.png" : "gmvideon.png";
-                    break;
-                default:
-                    filename = small ? "gmdoc_sm.png" : clickToDownload ? "gmdoc.png" : "gmdocn.png";
-                    break;
-            }
-            return filename;
-        }
-
-        public static int GetChronologicalYear(GDMDateValue dateVal)
-        {
-            return (dateVal == null) ? 0 : dateVal.GetChronologicalYear();
-        }
-
-        public static int GetEventsYearsDiff(GDMDateValue ev1, GDMDateValue ev2, bool currentEnd = true)
-        {
-            int result = -1;
-
-            try {
-                int dt1 = GetChronologicalYear(ev1);
-                int dt2 = GetChronologicalYear(ev2);
-
-                if (currentEnd && dt2 == 0) {
-                    dt2 = DateTime.Now.Year;
-                }
-
-                if (dt1 != 0 && dt2 != 0) {
-                    result = Math.Abs(dt2 - dt1);
-                }
-            } catch (Exception ex) {
-                fLogger.WriteError("GMHelper.GetEventsYearsDiff()", ex);
-            }
-
+            string result = string.Concat(firstName, " ", surname);
             return result;
-        }
-
-        public static List<GDMFamilyRecord> GetFamilyList(GDMTree tree, GDMIndividualRecord record)
-        {
-            var result = new List<GDMFamilyRecord>();
-
-            foreach (var link in record.SpouseToFamilyLinks) {
-                var family = tree.GetPtrValue(link);
-                if (family != null) {
-                    result.Add(family);
-                }
-            }
-
-            return result;
-        }
-
-        public static string GetLifeDatesStr(GDMIndividualRecord record)
-        {
-            var lifeDates = record.GetLifeDates();
-            //TODO
-            //TreeChartOptions options = GlobalOptions.Instance.ChartOptions;
-            //DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
-            DateFormat dateFormat = DateFormat.dfYYYY;
-
-            string birthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, false);
-            string deathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, false);
-            return birthDate + " - " + deathDate;
-        }
-
-        public static bool IsPictureFormat(GDMFileReferenceWithTitle fileRef)
-        {
-            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
-            return (mmKind == MultimediaKind.mkImage);
-        }
-
-        public static string MakeLinkNumber(GDMSourceCitation sourCit, int sourceCount, bool hasComma)
-        {
-            string comma = hasComma ? "," : "";
-            return string.Concat("<span class=\"reference\">", comma, sourceCount.ToString(), "</span>");
-        }
-
-        // Returns a string to use in the list of references at the bottom of the page
-        public static string MakeLinkText(GDMTree tree, GDMSourceCitation sourCit, int sourceCount)
-        {
-            var sourRec = tree.GetPtrValue<GDMSourceRecord>(sourCit);
-            return string.Concat(sourceCount.ToString(), ". ", /*m_sSourceDescription*/sourRec.ShortTitle);
         }
 
         public static void RestrictAssociatedSources(GDMTree tree, GDMIndividualRecord iRec)
@@ -547,25 +310,6 @@ namespace GEDmill
                 }
             }
             return sPath;
-        }
-
-        public static string GetIndiName(string surname, string firstName)
-        {
-            string name;
-
-            if (firstName != "" && surname != "") {
-                name = string.Concat(surname, ", ", firstName);
-            } else if (surname != "") {
-                name = surname;
-            } else {
-                name = firstName;
-            }
-
-            if (name == "") {
-                name = GMConfig.Instance.UnknownName;
-            }
-
-            return name;
         }
 
         public static string GetNowDateStr()

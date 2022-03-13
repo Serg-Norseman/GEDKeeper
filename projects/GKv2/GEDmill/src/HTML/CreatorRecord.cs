@@ -21,7 +21,9 @@ using System.Drawing;
 using System.IO;
 using GDModel;
 using GEDmill.Model;
+using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 namespace GEDmill.HTML
 {
@@ -34,7 +36,7 @@ namespace GEDmill.HTML
         protected List<Multimedia> fMultimediaList;
 
 
-        protected CreatorRecord(GDMTree tree, IProgressCallback progress, ILangMan langMan) : base(tree, progress, langMan)
+        protected CreatorRecord(IBaseContext context, IProgressCallback progress, ILangMan langMan) : base(context, progress, langMan)
         {
             fMultimediaList = new List<Multimedia>();
         }
@@ -43,7 +45,9 @@ namespace GEDmill.HTML
         protected void AddMultimedia(GDMList<GDMMultimediaLink> multimediaLinks, string mmPrefix,
                                      string mmLargePrefix, int maxWidth, int maxHeight, Stats stats)
         {
-            // TODO: ml.GetFileReferences();
+            if (multimediaLinks == null)
+                return;
+
             var fileRefs = new List<GDMFileReference>();
             foreach (var mmLink in multimediaLinks) {
                 if (mmLink.IsPointer) {
@@ -57,15 +61,105 @@ namespace GEDmill.HTML
                         fileRefs.Add(fileRef);
                     }
                 } else {
+                    // FIXME: GK is already translating everything to pointers
                     foreach (var fileRef in mmLink.FileReferences) {
                         fileRefs.Add(fileRef);
                     }
                 }
             }
 
-            if (multimediaLinks != null) {
-                // Add extra pics added by the user on indi exclude screen.
-                AddMultimediaFileReferences(fileRefs, mmPrefix, mmLargePrefix, maxWidth, maxHeight, stats);
+            // Adds the given list of file references to the multimedia list.
+            for (int i = 0; i < fileRefs.Count; i++) {
+                GDMFileReferenceWithTitle mfr = fileRefs[i] as GDMFileReferenceWithTitle;
+                if (mfr == null) continue;
+
+                MultimediaKind mmKind = GKUtils.GetMultimediaKind(mfr.MultimediaFormat);
+                bool blockThisMediaType = (mmKind == MultimediaKind.mkNone);
+
+                string copyFilename = "";
+                int nMmOrdering = i;
+                string mmTitle = mfr.Title;
+                string mmFilename = mfr.StringValue;
+                string mmFormat = mfr.MultimediaFormat.ToString();
+                Rectangle rectArea = new Rectangle(0, 0, 0, 0);
+                string extPart;
+
+                // Don't trust extension on sFilename. Use our own. (Happens for .tmp files from embedded data)
+                switch (mmFormat) {
+                    case "bmp":
+                        extPart = ".bmp";
+                        break;
+                    case "gif":
+                        extPart = ".gif";
+                        break;
+                    case "jpg":
+                    case "jpeg":
+                        extPart = ".jpg";
+                        break;
+                    case "tiff":
+                    case "tif":
+                        extPart = ".tif";
+                        break;
+                    case "png":
+                        extPart = ".png";
+                        break;
+                    case "ole":
+                        extPart = ".ole";
+                        break;
+                    default:
+                        extPart = Path.GetExtension(mmFilename);
+                        if (extPart.ToUpper() == ".TMP") {
+                            extPart = "." + mmFormat;
+                        }
+                        break;
+                }
+                string originalFilename = Path.GetFileName(mmFilename);
+
+                bool pictureFormat = GKUtils.IsPictureFormat(mfr);
+                if (pictureFormat || GMConfig.Instance.AllowNonPictures) {
+                    if (!pictureFormat && GMConfig.Instance.AllowNonPictures) {
+                        stats.NonPicturesIncluded = true;
+                    }
+
+                    string newFilename = originalFilename;
+                    if (!string.IsNullOrEmpty(mmFilename)) {
+                        // Give multimedia files a standard name
+                        if (GMConfig.Instance.RenameOriginalPicture) {
+                            //string sFilePart = sMmPrefix;//string.Concat( mm_prefix, nMultimediaFiles.ToString() );
+                            newFilename = string.Concat(mmPrefix, extPart.ToLower());
+                        }
+
+                        if (!blockThisMediaType) {
+                            if (pictureFormat) {
+                                // TODO: CutoutPosition
+                                copyFilename = CopyMultimedia(mmFilename, newFilename, maxWidth, maxHeight, ref rectArea, stats);
+                            } else {
+                                copyFilename = CopyMultimedia(mmFilename, newFilename, 0, 0, ref rectArea, stats);
+                            }
+                        }
+                    }
+
+                    // copyFilename can be empty, if file doesn't exist.
+                    if (!string.IsNullOrEmpty(copyFilename)) {
+                        string largeFilename = "";
+                        // Copy original original version
+                        if (GMConfig.Instance.LinkOriginalPicture) {
+                            if (GMConfig.Instance.RenameOriginalPicture) {
+                                //string sFilePart = sMmLargePrefix;
+                                largeFilename = string.Concat(mmLargePrefix, extPart.ToLower());
+                            } else {
+                                largeFilename = originalFilename;
+                            }
+
+                            Rectangle rectLargeArea = new Rectangle(0, 0, 0, 0);
+                            largeFilename = CopyMultimedia(mmFilename, largeFilename, 0, 0, ref rectLargeArea, null);
+                        }
+
+                        // Add format and new sFilename to multimedia list
+                        Multimedia imm = new Multimedia(nMmOrdering, mmFormat, mmTitle, copyFilename, largeFilename, rectArea.Width, rectArea.Height);
+                        fMultimediaList.Add(imm);
+                    }
+                }
             }
         }
 
@@ -109,111 +203,6 @@ namespace GEDmill.HTML
             f.WriteLine("      </div> <!-- footer -->");
 
             f.WriteLine("<p class=\"plain\">{0} {1}</p>", fLangMan.LS(PLS.LSID_PageCreatedUsingGEDmill), GMConfig.SoftwareVersion);
-        }
-
-        // Adds the given list of file references to the multimedia list.
-        private void AddMultimediaFileReferences(List<GDMFileReference> fileRefs, string mmPrefix,
-                                                 string mmLargePrefix, int maxWidth, int maxHeight, Stats stats)
-        {
-            if (fileRefs == null) {
-                return;
-            }
-
-            for (int i = 0; i < fileRefs.Count; i++) {
-                GDMFileReferenceWithTitle mfr = fileRefs[i] as GDMFileReferenceWithTitle;
-
-                string copyFilename = "";
-                int nMmOrdering = i;
-                string mmTitle = mfr.Title;
-                string mmFilename = mfr.StringValue;
-                string mmFormat = mfr.MultimediaFormat.ToString();
-                Rectangle rectArea = new Rectangle(0, 0, 0, 0);
-                string extPart;
-                bool blockThisMediaType = false;
-
-                // Don't trust extension on sFilename. Use our own. (Happens for .tmp files from embedded data)
-                switch (mmFormat) {
-                    case "bmp":
-                        extPart = ".bmp";
-                        break;
-                    case "gif":
-                        extPart = ".gif";
-                        break;
-                    case "jpg":
-                    case "jpeg":
-                        extPart = ".jpg";
-                        break;
-                    case "tiff":
-                    case "tif":
-                        extPart = ".tif";
-                        break;
-                    case "png":
-                        extPart = ".png";
-                        break;
-                    case "ole":
-                        blockThisMediaType = true;
-                        extPart = ".ole";
-                        break;
-                    default:
-                        extPart = Path.GetExtension(mmFilename);
-                        if (extPart.ToUpper() == ".TMP") {
-                            extPart = "." + mmFormat;
-                        }
-                        break;
-                }
-                string originalFilename = Path.GetFileName(mmFilename);
-
-                bool pictureFormat = GMHelper.IsPictureFormat(mfr);
-                if (pictureFormat || GMConfig.Instance.AllowNonPictures) {
-                    if (!pictureFormat && GMConfig.Instance.AllowNonPictures) {
-                        stats.NonPicturesIncluded = true;
-                    }
-
-                    string newFilename = originalFilename;
-                    if (!string.IsNullOrEmpty(mmFilename)) {
-                        // Give multimedia files a standard name
-                        if (GMConfig.Instance.RenameOriginalPicture) {
-                            //string sFilePart = sMmPrefix;//string.Concat( mm_prefix, nMultimediaFiles.ToString() );
-                            newFilename = string.Concat(mmPrefix, extPart.ToLower());
-                        }
-
-                        if (!blockThisMediaType) {
-                            if (pictureFormat) {
-                                // TODO
-                                /*if (mfr.m_asidPair != null) {
-                                    Rectangle rectAsidArea = mfr.m_asidPair.m_rectArea;
-                                    rectArea = new Rectangle(rectAsidArea.X, rectAsidArea.Y, rectAsidArea.Width, rectAsidArea.Height);
-                                }*/
-                                copyFilename = CopyMultimedia(mmFilename, newFilename, maxWidth, maxHeight, ref rectArea, stats);
-                            } else {
-                                copyFilename = CopyMultimedia(mmFilename, newFilename, 0, 0, ref rectArea, stats);
-                            }
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(copyFilename)) {
-                        string largeFilename = "";
-                        // Copy original original version
-                        if (GMConfig.Instance.LinkOriginalPicture) {
-                            if (GMConfig.Instance.RenameOriginalPicture) {
-                                //string sFilePart = sMmLargePrefix;
-                                largeFilename = string.Concat(mmLargePrefix, extPart.ToLower());
-                            } else {
-                                largeFilename = originalFilename;
-                            }
-
-                            Rectangle rectLargeArea = new Rectangle(0, 0, 0, 0);
-                            largeFilename = CopyMultimedia(mmFilename, largeFilename, 0, 0, ref rectLargeArea, null);
-                        }
-
-                        // Add format and new sFilename to multimedia list
-                        Multimedia imm = new Multimedia(nMmOrdering, mmFormat, mmTitle, copyFilename, largeFilename, rectArea.Width, rectArea.Height);
-                        fMultimediaList.Add(imm);
-                    } else {
-                        // Happens e.g. when original file doesn't exist.
-                    }
-                }
-            }
         }
 
         // Outputs the HTML for the Notes section of the page

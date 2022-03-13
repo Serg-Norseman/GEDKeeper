@@ -39,7 +39,7 @@ namespace GEDmill.HTML
         private List<StringTuple> fIndividualIndex;
 
 
-        public CreatorIndexIndividuals(GDMTree tree, IProgressCallback progress, ILangMan langMan) : base(tree, progress, langMan)
+        public CreatorIndexIndividuals(IBaseContext context, IProgressCallback progress, ILangMan langMan) : base(context, progress, langMan)
         {
             fIndividualIndex = new List<StringTuple>();
         }
