@@ -729,15 +729,13 @@ namespace GKCore.Tools
             }
         }
 
-        private static bool StgNotFound;
-        private static bool ArcNotFound;
-
         private static void CheckMultimediaRecord(IBaseContext baseContext, GDMMultimediaRecord mmRec, List<CheckObj> checksList)
         {
             if (mmRec.FileReferences.Count <= 0) {
                 CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdMediaRecordWithoutFiles, CheckSolve.csRemove);
                 checkObj.Comment = LangMan.LS(LSID.LSID_MediaRecordWithoutFiles);
                 checksList.Add(checkObj);
+                return;
             }
 
             string fileName;
@@ -749,27 +747,25 @@ namespace GKCore.Tools
 
                 case MediaStoreStatus.mssFileNotFound:
                     {
-                        CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdFileNotFound, CheckSolve.csSkip);
+                        CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdFileNotFound, CheckSolve.csRemove);
                         checkObj.Comment = LangMan.LS(LSID.LSID_FileNotFound, fileName);
                         checksList.Add(checkObj);
                     }
                     break;
 
                 case MediaStoreStatus.mssStgNotFound:
-                    if (!StgNotFound) {
-                        CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdStgNotFound, CheckSolve.csSkip);
+                    {
+                        CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdStgNotFound, CheckSolve.csRemove);
                         checkObj.Comment = LangMan.LS(LSID.LSID_StgNotFound);
                         checksList.Add(checkObj);
-                        StgNotFound = true;
                     }
                     break;
 
                 case MediaStoreStatus.mssArcNotFound:
-                    if (!ArcNotFound) {
-                        CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdArcNotFound, CheckSolve.csSkip);
+                    {
+                        CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdArcNotFound, CheckSolve.csRemove);
                         checkObj.Comment = LangMan.LS(LSID.LSID_ArcNotFound);
                         checksList.Add(checkObj);
-                        ArcNotFound = true;
                     }
                     break;
 
@@ -786,9 +782,6 @@ namespace GKCore.Tools
 
             if (checksList == null)
                 throw new ArgumentNullException("checksList");
-
-            StgNotFound = false;
-            ArcNotFound = false;
 
             IProgressController progress = AppHost.Progress;
             try {

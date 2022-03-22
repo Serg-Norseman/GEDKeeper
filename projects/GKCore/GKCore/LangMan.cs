@@ -903,8 +903,10 @@ namespace GKCore
         /* 842 */ LSID_OnlyLocality,
         /* 843 */ LSID_GoToPrimaryBranch,
         /* 844 */ LSID_MinimizingWidth,
+        /* 845 */ LSID_ContinueQuestion,
 
-        /* 000 */ LSID_Last = LSID_MinimizingWidth
+        /* 000 */
+        LSID_Last = LSID_ContinueQuestion
     }
 
 

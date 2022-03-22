@@ -1030,15 +1030,15 @@ namespace GKCore
                         break;
 
                     case MediaStoreStatus.mssFileNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound, fileName));
+                        result = AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_FileNotFound, fileName)));
                         break;
 
                     case MediaStoreStatus.mssStgNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_StgNotFound));
+                        result = AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_StgNotFound)));
                         break;
 
                     case MediaStoreStatus.mssArcNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        result = AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_ArcNotFound)));
                         break;
 
                     case MediaStoreStatus.mssBadData:
