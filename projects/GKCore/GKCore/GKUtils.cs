@@ -568,10 +568,8 @@ namespace GKCore
         {
             int res = -1;
 
-            for (int i = 0; i < GKData.PersonEvents.Length; i++)
-            {
-                if (GKData.PersonEvents[i].Sign == sign)
-                {
+            for (int i = 0; i < GKData.PersonEvents.Length; i++) {
+                if (GKData.PersonEvents[i].Sign == sign) {
                     res = i;
                     break;
                 }
@@ -584,10 +582,8 @@ namespace GKCore
         {
             int res = -1;
 
-            for (int i = 0; i < GKData.FamilyEvents.Length; i++)
-            {
-                if (GKData.FamilyEvents[i].Sign == sign)
-                {
+            for (int i = 0; i < GKData.FamilyEvents.Length; i++) {
+                if (GKData.FamilyEvents[i].Sign == sign) {
                     res = i;
                     break;
                 }
@@ -606,7 +602,7 @@ namespace GKCore
             var evtName = evt.GetTagName();
             if (evt is GDMIndividualEvent || evt is GDMIndividualAttribute) {
                 int ev = GetPersonEventIndex(evtName);
-                if (ev == 0) {
+                if (evtName == GEDCOMTagName.EVEN || evtName == GEDCOMTagName.FACT) {
                     result = !string.IsNullOrEmpty(evt.Classification) ? evt.Classification : LangMan.LS(GKData.PersonEvents[ev].Name);
                 } else {
                     result = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evtName;
@@ -614,7 +610,7 @@ namespace GKCore
             } else if (evt is GDMFamilyEvent) {
                 int ev = GetFamilyEventIndex(evtName);
                 if (ev == 0) {
-                    result = evt.Classification;
+                    result = !string.IsNullOrEmpty(evt.Classification) ? evt.Classification : LangMan.LS(GKData.FamilyEvents[ev].Name);
                 } else {
                     result = (ev > 0) ? LangMan.LS(GKData.FamilyEvents[ev].Name) : evtName;
                 }
@@ -628,14 +624,7 @@ namespace GKCore
             if (iAttr == null)
                 throw new ArgumentNullException("iAttr");
 
-            var attrName = iAttr.GetTagName();
-            int idx = GetPersonEventIndex(attrName);
-            string st;
-            if (idx == 0) {
-                st = iAttr.Classification;
-            } else {
-                st = (idx > 0) ? LangMan.LS(GKData.PersonEvents[idx].Name) : attrName;
-            }
+            string st = GetEventName(iAttr);
 
             string place = string.Empty;
             if (iAttr.HasPlace) {

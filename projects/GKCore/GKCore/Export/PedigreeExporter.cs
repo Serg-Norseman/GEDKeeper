@@ -361,14 +361,7 @@ namespace GKCore.Export
                 string li;
 
                 if (evObj.IRec == person.IRec) {
-                    var evtName = evt.GetTagName();
-                    int ev = GKUtils.GetPersonEventIndex(evtName);
-                    string st;
-                    if (ev == 0) {
-                        st = evt.Classification;
-                    } else {
-                        st = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evtName;
-                    }
+                    string st = GKUtils.GetEventName(evt);
 
                     string dt = GKUtils.GEDCOMEventToDateStr(evt, dateFormat, false);
                     li = dt + ": " + st + ".";
