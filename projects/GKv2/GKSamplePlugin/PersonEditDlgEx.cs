@@ -51,6 +51,7 @@ namespace GKSamplePlugin
         private readonly GKSheetList fUserRefList;
         private readonly GKSheetList fNamesList;
         private readonly GKSheetList fParentsList;
+        private readonly GKSheetList fChildrenList;
 
         public GDMIndividualRecord Person
         {
@@ -121,6 +122,11 @@ namespace GKSamplePlugin
         ISheetList IPersonEditDlg.ParentsList
         {
             get { return fParentsList; }
+        }
+
+        ISheetList IPersonEditDlg.ChildrenList
+        {
+            get { return fChildrenList; }
         }
 
         IPortraitControl IPersonEditDlg.Portrait
@@ -308,6 +314,19 @@ namespace GKSamplePlugin
             }
         }
 
+        private void PersonEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
+        {
+            var record = e.Item as GDMRecord;
+            e.IsAvailable = record == null || fController.Base.Context.IsAvailableRecord(record);
+        }
+
+        private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raJump) {
+                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
+            }
+        }
+
         private void Names_TextChanged(object sender, EventArgs e)
         {
             Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
@@ -453,6 +472,11 @@ namespace GKSamplePlugin
             fParentsList.SetControlName("fParentsList"); // for purpose of tests
             fParentsList.OnModify += ModifyParentsSheet;
 
+            fChildrenList = new GKSheetList(pageChilds);
+            fChildrenList.SetControlName("fChildsList"); // for purpose of tests
+            fChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
+            fChildrenList.OnModify += ModifyChildrenSheet;
+
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
 
@@ -472,6 +496,7 @@ namespace GKSamplePlugin
             fSpousesList.ListModel = new SpousesSublistModel(baseWin, fController.LocalUndoman);
             fUserRefList.ListModel = new URefsSublistModel(baseWin, fController.LocalUndoman);
             fParentsList.ListModel = new ParentsSublistModel(baseWin, fController.LocalUndoman);
+            fChildrenList.ListModel = new IndividualChildrenListModel(baseWin, fController.LocalUndoman);
         }
 
         public void SetLocale()
