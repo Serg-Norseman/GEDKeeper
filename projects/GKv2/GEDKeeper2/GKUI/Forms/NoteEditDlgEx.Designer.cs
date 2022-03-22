@@ -4,7 +4,7 @@
     {
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.TextBox txtNote;
+        private System.Windows.Forms.RichTextBox txtNote;
         private GKUI.Components.HyperView hyperView1;
         private System.Windows.Forms.ToolStripComboBox cmbSizes;
         private System.Windows.Forms.ToolStripMenuItem miClear;
@@ -28,7 +28,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.pageEditor = new System.Windows.Forms.TabPage();
-            this.txtNote = new System.Windows.Forms.TextBox();
+            this.txtNote = new System.Windows.Forms.RichTextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnBold = new System.Windows.Forms.ToolStripButton();
             this.btnItalic = new System.Windows.Forms.ToolStripButton();
@@ -100,13 +100,12 @@
             // 
             // txtNote
             // 
-            this.txtNote.AcceptsReturn = true;
             this.txtNote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtNote.Location = new System.Drawing.Point(3, 31);
             this.txtNote.Margin = new System.Windows.Forms.Padding(4);
             this.txtNote.Multiline = true;
             this.txtNote.Name = "txtNote";
-            this.txtNote.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Both;
             this.txtNote.Size = new System.Drawing.Size(763, 319);
             this.txtNote.TabIndex = 1;
             // 

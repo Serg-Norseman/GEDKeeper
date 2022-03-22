@@ -4,13 +4,13 @@
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.TextBox txtNote;
+		private System.Windows.Forms.RichTextBox txtNote;
 
 		private void InitializeComponent()
 		{
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.txtNote = new System.Windows.Forms.TextBox();
+			this.txtNote = new System.Windows.Forms.RichTextBox();
 			this.SuspendLayout();
 			// 
 			// btnAccept
@@ -40,14 +40,13 @@
 			// 
 			// txtNote
 			// 
-			this.txtNote.AcceptsReturn = true;
 			this.txtNote.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
 			this.txtNote.Location = new System.Drawing.Point(8, 8);
 			this.txtNote.Multiline = true;
 			this.txtNote.Name = "txtNote";
-			this.txtNote.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.txtNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Both;
 			this.txtNote.Size = new System.Drawing.Size(385, 193);
 			this.txtNote.TabIndex = 0;
 			// 

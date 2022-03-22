@@ -71,6 +71,7 @@ namespace GKUI.Platform
         }
     }
 
+
     public sealed class LogChartHandler : BaseControlHandler<LogChart, LogChartHandler>, ILogChart
     {
         public LogChartHandler(LogChart control) : base(control)
@@ -87,6 +88,7 @@ namespace GKUI.Platform
             Control.Clear();
         }
     }
+
 
     public sealed class DateControlHandler : BaseControlHandler<GKDateControl, DateControlHandler>, IDateControl
     {
