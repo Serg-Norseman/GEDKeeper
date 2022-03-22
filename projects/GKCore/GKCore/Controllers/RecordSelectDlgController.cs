@@ -67,6 +67,12 @@ namespace GKCore.Controllers
             return (iRec != null && iRec.ChildToFamilyLinks.Count == 0);
         }
 
+        private bool SpouseSelectorHandler(GDMRecord record)
+        {
+            GDMFamilyRecord famRec = record as GDMFamilyRecord;
+            return (famRec != null && famRec.HasSpouse(fTarget.TargetIndividual));
+        }
+
         public override void UpdateView()
         {
             string flt = fView.FilterBox.Text;
@@ -80,13 +86,21 @@ namespace GKCore.Controllers
             recordsList.ListMan.Filter.Clear();
             recordsList.ListMan.QuickFilter = flt;
 
-            if (fRecType == GDMRecordType.rtIndividual) {
-                IndividualListFilter iFilter = (IndividualListFilter)recordsList.ListMan.Filter;
-                iFilter.Sex = fTarget.NeedSex;
+            switch (fRecType) {
+                case GDMRecordType.rtIndividual: {
+                        IndividualListFilter iFilter = (IndividualListFilter)recordsList.ListMan.Filter;
+                        iFilter.Sex = fTarget.NeedSex;
+                        if (fTarget.TargetMode == TargetMode.tmParent) {
+                            recordsList.ListMan.ExternalFilter = ChildSelectorHandler;
+                        }
+                        break;
+                    }
 
-                if (fTarget.TargetMode == TargetMode.tmParent) {
-                    recordsList.ListMan.ExternalFilter = ChildSelectorHandler;
-                }
+                case GDMRecordType.rtFamily:
+                    if (fTarget.TargetMode == TargetMode.tmFamilySpouse) {
+                        recordsList.ListMan.ExternalFilter = SpouseSelectorHandler;
+                    }
+                    break;
             }
 
             recordsList.UpdateContents();

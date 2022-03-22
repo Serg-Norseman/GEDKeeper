@@ -856,6 +856,18 @@ namespace GDModel
             return result;
         }
 
+        public GDMFamilyRecord FindChildFamily(GDMIndividualRecord individualRec, GDMIndividualRecord childRec)
+        {
+            int num = individualRec.SpouseToFamilyLinks.Count;
+            for (int i = 0; i < num; i++) {
+                var family = GetPtrValue<GDMFamilyRecord>(individualRec.SpouseToFamilyLinks[i]);
+                if (family.IndexOfChild(childRec) >= 0) {
+                    return family;
+                }
+            }
+            return null;
+        }
+
         public GDMLines GetNoteLines(GDMNotes notes)
         {
             GDMLines lines;

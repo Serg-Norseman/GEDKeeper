@@ -1665,13 +1665,13 @@ namespace GKCore
 
         #region UI control functions
 
-        public GDMFamilyRecord SelectFamily(GDMIndividualRecord target)
+        public GDMFamilyRecord SelectFamily(GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild)
         {
             GDMFamilyRecord result;
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
-                    dlg.SetTarget(TargetMode.tmFamilyChild, target, GDMSex.svUnknown);
+                    dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
                     dlg.FastFilter = "*";
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {

@@ -173,6 +173,7 @@ namespace GKCore.Controllers
                 fView.SpousesList.ListModel.DataOwner = fPerson;
                 fView.UserRefList.ListModel.DataOwner = fPerson;
                 fView.ParentsList.ListModel.DataOwner = fPerson;
+                fView.ChildrenList.ListModel.DataOwner = fPerson;
 
                 UpdateControls(true);
             } catch (Exception ex) {
@@ -234,6 +235,7 @@ namespace GKCore.Controllers
                 fView.SpousesList.UpdateSheet();
                 fView.UserRefList.UpdateSheet();
                 fView.ParentsList.UpdateSheet();
+                fView.ChildrenList.UpdateSheet();
             }
 
             UpdatePortrait(totalUpdate);
@@ -262,6 +264,7 @@ namespace GKCore.Controllers
             fView.GroupsList.ReadOnly = locked;
             fView.UserRefList.ReadOnly = locked;
             fView.ParentsList.ReadOnly = locked;
+            fView.ChildrenList.ReadOnly = locked;
         }
 
         public void UpdateNameControls(GDMPersonalName np)

@@ -278,6 +278,11 @@ namespace GDModel
             }
         }
 
+        public bool HasSpouse(GDMIndividualRecord spouse)
+        {
+            return (spouse != null) && (fHusband.XRef == spouse.XRef || fWife.XRef == spouse.XRef);
+        }
+
         public bool AddChild(GDMIndividualRecord child)
         {
             if (child == null) return false;

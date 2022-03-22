@@ -352,6 +352,7 @@ namespace GKCore.MVP.Views
         ISheetList MediaList { get; }
         ISheetList SourcesList { get; }
         ISheetList ParentsList { get; }
+        ISheetList ChildrenList { get; }
 
         IPortraitControl Portrait { get; }
         ITextBox Father { get; }

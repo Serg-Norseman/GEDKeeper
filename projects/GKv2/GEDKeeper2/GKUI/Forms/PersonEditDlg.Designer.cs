@@ -55,7 +55,8 @@
         private System.Windows.Forms.TextBox txtMarriedSurname;
         private System.Windows.Forms.Label lblMarriedSurname;
         private System.Windows.Forms.TabPage pageParents;
-        
+        private System.Windows.Forms.TabPage pageChilds;
+
         private void InitializeComponent()
         {
             this.btnAccept = new System.Windows.Forms.Button();
@@ -111,6 +112,7 @@
             this.pageSources = new System.Windows.Forms.TabPage();
             this.pageUserRefs = new System.Windows.Forms.TabPage();
             this.pageParents = new System.Windows.Forms.TabPage();
+            this.pageChilds = new System.Windows.Forms.TabPage();
             this.GroupBox1.SuspendLayout();
             this.panCtlParents.SuspendLayout();
             this.tabsPersonData.SuspendLayout();
@@ -574,6 +576,7 @@
             this.tabsPersonData.Controls.Add(this.pageSources);
             this.tabsPersonData.Controls.Add(this.pageUserRefs);
             this.tabsPersonData.Controls.Add(this.pageParents);
+            this.tabsPersonData.Controls.Add(this.pageChilds);
             this.tabsPersonData.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabsPersonData.Location = new System.Drawing.Point(0, 258);
             this.tabsPersonData.Margin = new System.Windows.Forms.Padding(2);
@@ -673,6 +676,15 @@
             this.pageParents.Size = new System.Drawing.Size(691, 230);
             this.pageParents.TabIndex = 9;
             this.pageParents.Text = "pageParents";
+            // 
+            // pageChilds
+            // 
+            this.pageChilds.Location = new System.Drawing.Point(4, 26);
+            this.pageChilds.Margin = new System.Windows.Forms.Padding(2);
+            this.pageChilds.Name = "pageChilds";
+            this.pageChilds.Size = new System.Drawing.Size(700, 290);
+            this.pageChilds.TabIndex = 10;
+            this.pageChilds.Text = "pageChilds";
             // 
             // PersonEditDlg
             // 
