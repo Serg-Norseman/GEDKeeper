@@ -1,5 +1,5 @@
 ﻿; "GEDKeeper", the personal genealogical database editor.
-; Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+; Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
 ; This file is part of "GEDKeeper".
 
 !include "MUI2.nsh"
@@ -9,7 +9,7 @@
 
 Unicode true
 Name "GEDKeeper"
-OutFile "gedkeeper_2.19.0_winsetup.exe"
+OutFile "gedkeeper_2.20.0_winsetup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 
 CRCCheck on

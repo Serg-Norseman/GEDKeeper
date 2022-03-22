@@ -1,4 +1,24 @@
 
+## 28.03.2022 [v2.20.0]
+- Fixed display of parents' names in person and family dialogs.
+- Improved safely remove or fix media records with missing files.
+- Fixed maximum text length limit in note editor.
+- Fixed display of custom names of generalized events and facts.
+- Added a tab and an editable list of children directly in the person's dialog.
+- Added website generator plugin (GEDmill).
+- Added an option to turn off minimizing the width of tree diagrams.
+- Added the function to jump to the primary branch from the duplicate one in tree diagrams.
+- Fixed display of divorce color in descendant trees.
+- Fixed the work of the tool for splitting databases.
+- Added option to display only localities when displaying places in tree diagrams.
+- Removed locking the display of places with the "Years only" option in tree diagrams.
+- Fixed a fail in the initialization of the regional culture object, the settings did not open.
+- Added partial Kazakh localization [Erik].
+- Polish localization proofreading [Waldemar Stoczkowski].
+- Improved support for Linux Fedora packages.
+- Added initial support for Linux Manjaro packages.
+- Introduced the display of the borders of the tree diagram.
+
 ## 28.09.2021 [v2.19.0]
 - Fixed a bug with filtering by locations, groups and sources.
 - Added option to display names in reverse order - first name at the beginning, surname at the end.
