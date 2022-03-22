@@ -1765,6 +1765,7 @@ namespace GKCore
             /* 842 */ "Only locality",
             /* 843 */ "Go to primary branch",
             /* 844 */ "Minimizing width",
+            /* 845 */ "{0}. Continue?",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
