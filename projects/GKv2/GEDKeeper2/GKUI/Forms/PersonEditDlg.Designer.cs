@@ -404,7 +404,7 @@
             // 
             // txtMother
             // 
-            this.txtMother.ForeColor = System.Drawing.SystemColors.Control;
+            this.txtMother.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtMother.Location = new System.Drawing.Point(331, 8);
             this.txtMother.Margin = new System.Windows.Forms.Padding(2);
             this.txtMother.Name = "txtMother";
@@ -505,7 +505,7 @@
             // 
             // txtFather
             // 
-            this.txtFather.ForeColor = System.Drawing.SystemColors.Control;
+            this.txtFather.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtFather.Location = new System.Drawing.Point(72, 8);
             this.txtFather.Margin = new System.Windows.Forms.Padding(2);
             this.txtFather.Name = "txtFather";

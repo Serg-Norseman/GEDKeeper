@@ -194,7 +194,7 @@
 		    // 
 		    // txtHusband
 		    // 
-		    this.txtHusband.ForeColor = System.Drawing.SystemColors.Control;
+		    this.txtHusband.ForeColor = System.Drawing.SystemColors.ControlText;
 		    this.txtHusband.Location = new System.Drawing.Point(110, 31);
 		    this.txtHusband.Margin = new System.Windows.Forms.Padding(2);
 		    this.txtHusband.Name = "txtHusband";
@@ -204,7 +204,7 @@
 		    // 
 		    // txtWife
 		    // 
-		    this.txtWife.ForeColor = System.Drawing.SystemColors.Control;
+		    this.txtWife.ForeColor = System.Drawing.SystemColors.ControlText;
 		    this.txtWife.Location = new System.Drawing.Point(110, 68);
 		    this.txtWife.Margin = new System.Windows.Forms.Padding(2);
 		    this.txtWife.Name = "txtWife";
