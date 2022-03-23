@@ -63,6 +63,16 @@ namespace GKCore.Export
             fStyles = new Dictionary<string, string>();
         }
 
+        public override bool SupportedText()
+        {
+            return true;
+        }
+
+        public override bool SupportedTables()
+        {
+            return true;
+        }
+
         public override void BeginWrite()
         {
             fStream = new StreamWriter(new FileStream(fFileName, FileMode.Create, FileAccess.Write), Encoding.UTF8);

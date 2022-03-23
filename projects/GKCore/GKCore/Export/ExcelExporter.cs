@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,10 +25,6 @@ using GKCore.Options;
 
 namespace GKCore.Export
 {
-#if !NETSTANDARD
-    using ExcelLibrary.SpreadSheet;
-#endif
-
     /// <summary>
     /// 
     /// </summary>
@@ -47,69 +43,65 @@ namespace GKCore.Export
             fPath = AppHost.StdDialogs.GetSaveFile("Excel files (*.xls)|*.xls");
             if (string.IsNullOrEmpty(fPath)) return;
 
-            Workbook workbook = new Workbook();
-            Worksheet worksheet = new Worksheet("First Sheet");
+            fWriter = new XLSWriter();
+            fWriter.BeginWrite();
+
+            int recordsCount = fTree.RecordsCount;
 
             IProgressController progress = AppHost.Progress;
-            progress.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", fTree.RecordsCount);
+            progress.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", recordsCount);
 
             var dateFormat = GlobalOptions.Instance.DefDateFormat;
-            try
-            {
-                worksheet.Cells[1,  1] = new Cell("№");
-                worksheet.Cells[1,  2] = new Cell(LangMan.LS(LSID.LSID_Surname));
-                worksheet.Cells[1,  3] = new Cell(LangMan.LS(LSID.LSID_Name));
-                worksheet.Cells[1,  4] = new Cell(LangMan.LS(LSID.LSID_Patronymic));
-                worksheet.Cells[1,  5] = new Cell(LangMan.LS(LSID.LSID_Sex));
-                worksheet.Cells[1,  6] = new Cell(LangMan.LS(LSID.LSID_BirthDate));
-                worksheet.Cells[1,  7] = new Cell(LangMan.LS(LSID.LSID_DeathDate));
-                worksheet.Cells[1,  8] = new Cell(LangMan.LS(LSID.LSID_BirthPlace));
-                worksheet.Cells[1,  9] = new Cell(LangMan.LS(LSID.LSID_DeathPlace));
-                worksheet.Cells[1, 10] = new Cell(LangMan.LS(LSID.LSID_Residence));
-                worksheet.Cells[1, 11] = new Cell(LangMan.LS(LSID.LSID_Age));
-                worksheet.Cells[1, 12] = new Cell(LangMan.LS(LSID.LSID_LifeExpectancy));
+            try {
+                fWriter.BeginTable(12, recordsCount + 1);
 
-                ushort row = 1;
-                int num = fTree.RecordsCount;
-                for (int i = 0; i < num; i++)
-                {
+                fWriter.AddTableCell("№");
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_Surname));
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_Name));
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_Patronymic));
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_Sex));
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_BirthDate));
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_DeathDate));
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_BirthPlace));
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_DeathPlace));
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_Residence));
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_Age));
+                fWriter.AddTableCell(LangMan.LS(LSID.LSID_LifeExpectancy));
+
+                for (int i = 0; i < recordsCount; i++) {
                     GDMRecord rec = fTree[i];
                     if (rec.RecordType == GDMRecordType.rtIndividual) {
                         GDMIndividualRecord ind = (GDMIndividualRecord)rec;
 
                         if (fSelectedRecords == null || fSelectedRecords.IndexOf(rec) >= 0) {
                             var parts = GKUtils.GetNameParts(fTree, ind);
-
                             string sx = "" + GKUtils.SexStr(ind.Sex)[0];
-                            row++;
 
-                            worksheet.Cells[row, 1] = new Cell(ind.GetXRefNum());
-                            worksheet.Cells[row, 2] = new Cell(parts.Surname);
-                            worksheet.Cells[row, 3] = new Cell(parts.Name);
-                            worksheet.Cells[row, 4] = new Cell(parts.Patronymic);
-                            worksheet.Cells[row, 5] = new Cell(sx);
-                            worksheet.Cells[row, 6] = new Cell(GKUtils.GetBirthDate(ind, dateFormat, false));
-                            worksheet.Cells[row, 7] = new Cell(GKUtils.GetDeathDate(ind, dateFormat, false));
-                            worksheet.Cells[row, 8] = new Cell(GKUtils.GetBirthPlace(ind));
-                            worksheet.Cells[row, 9] = new Cell(GKUtils.GetDeathPlace(ind));
-                            worksheet.Cells[row,10] = new Cell(GKUtils.GetResidencePlace(ind, fOptions.PlacesWithAddress));
-                            worksheet.Cells[row,11] = new Cell(GKUtils.GetAge(ind, -1));
-                            worksheet.Cells[row,12] = new Cell(GKUtils.GetLifeExpectancy(ind));
+                            fWriter.AddTableCell(ind.GetXRefNum());
+                            fWriter.AddTableCell(parts.Surname);
+                            fWriter.AddTableCell(parts.Name);
+                            fWriter.AddTableCell(parts.Patronymic);
+                            fWriter.AddTableCell(sx);
+                            fWriter.AddTableCell(GKUtils.GetBirthDate(ind, dateFormat, false));
+                            fWriter.AddTableCell(GKUtils.GetDeathDate(ind, dateFormat, false));
+                            fWriter.AddTableCell(GKUtils.GetBirthPlace(ind));
+                            fWriter.AddTableCell(GKUtils.GetDeathPlace(ind));
+                            fWriter.AddTableCell(GKUtils.GetResidencePlace(ind, fOptions.PlacesWithAddress));
+                            fWriter.AddTableCell(GKUtils.GetAgeStr(ind, -1));
+                            fWriter.AddTableCell(GKUtils.GetLifeExpectancyStr(ind));
                         }
                     }
 
                     progress.ProgressStep();
                 }
 
-                workbook.Worksheets.Add(worksheet);
-                workbook.Save(fPath);
+                fWriter.SetFileName(fPath);
+                fWriter.EndWrite();
 
-                #if !CI_MODE
+#if !CI_MODE
                 if (show) ShowResult();
-                #endif
-            }
-            finally
-            {
+#endif
+            } finally {
                 progress.ProgressDone();
             }
 #endif

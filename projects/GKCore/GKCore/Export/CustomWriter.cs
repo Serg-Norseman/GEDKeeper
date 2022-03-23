@@ -52,6 +52,10 @@ namespace GKCore.Export
             fMargins = new ExtMargins(20);
         }
 
+        public abstract bool SupportedText();
+
+        public abstract bool SupportedTables();
+
         public virtual ChartRenderer GetPageRenderer()
         {
             return null;
@@ -117,6 +121,6 @@ namespace GKCore.Export
         public abstract void BeginTableRow(bool header = false);
         public abstract void EndTableRow();
 
-        public abstract void AddTableCell(string content, IFont font, TextAlignment alignment);
+        public abstract void AddTableCell(string content, IFont font = null, TextAlignment alignment = TextAlignment.taLeft);
     }
 }

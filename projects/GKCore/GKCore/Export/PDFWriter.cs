@@ -122,6 +122,16 @@ namespace GKCore.Export
             base.Dispose(disposing);
         }
 
+        public override bool SupportedText()
+        {
+            return true;
+        }
+
+        public override bool SupportedTables()
+        {
+            return true;
+        }
+
         public override ChartRenderer GetPageRenderer()
         {
             var itPS = fDocument.PageSize;
