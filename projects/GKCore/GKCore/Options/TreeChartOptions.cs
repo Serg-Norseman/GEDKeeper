@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -70,6 +70,7 @@ namespace GKCore.Options
         public bool BoldNames;
         public bool OnlyLocality;
         public bool MinimizingWidth;
+        //public bool RootSpousesAncestors;
 
         public bool AutoAlign; // debug option, for future purposes
         public GfxBorderStyle BorderStyle;
@@ -126,6 +127,7 @@ namespace GKCore.Options
             SeparateDepth = false;
             OnlyLocality = false;
             MinimizingWidth = true;
+            //RootSpousesAncestors = true;
 
             AutoAlign = true;
             BorderStyle = GfxBorderStyle.None;
