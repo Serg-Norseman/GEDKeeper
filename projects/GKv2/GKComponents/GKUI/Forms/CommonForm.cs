@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using BSLib.Design.MVP;
@@ -103,7 +104,14 @@ namespace GKUI.Forms
     {
         public virtual bool ShowModalX(object owner)
         {
-            return (ShowDialog() == DialogResult.OK);
+            var ownerForm = owner as Form;
+            return (ShowDialog(ownerForm) == DialogResult.OK);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            CenterToParent();
         }
     }
 }
