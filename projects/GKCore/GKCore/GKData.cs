@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,6 +35,12 @@ namespace GKCore
         public const string APP_COPYRIGHT = "Copyright © 2009-2022 by Sergey V. Zhdanovskih";
 
         public const string APP_MAIL = "gedkeeper@yandex.ru";
+
+        public const string APP_FORUM_EN = "https://groups.google.com/g/gedkeeper-en";
+        public const string APP_CHANNEL_EN = "https://t.me/gedkeeper_en";
+
+        public const string APP_FORUM_RU = "https://groups.google.com/g/gedkeeper-ru";
+        public const string APP_CHANNEL_RU = "https://t.me/gedkeeper_ru";
 
         public const int APP_FORMAT_DEFVER = 39; // don't change it!
         public const int APP_FORMAT_CURVER = 44; // v2.19.0

@@ -65,11 +65,15 @@
     <Compile Include="GKUI\Components\CustomChart.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\FilterGridView.cs" />
+    <Compile Include="GKUI\Components\FilterGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\TreeChartBox.cs" />
+    <Compile Include="GKUI\Components\TreeChartBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -205,7 +209,9 @@
     <Compile Include="GKUI\Forms\OrganizerWin.Designer.cs">
       <DependentUpon>OrganizerWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\ParentsEditDlg.cs" />
+    <Compile Include="GKUI\Forms\ParentsEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\ParentsEditDlg.Designer.cs">
       <DependentUpon>ParentsEditDlg.cs</DependentUpon>
     </Compile>
@@ -251,7 +257,9 @@
     <Compile Include="GKUI\Forms\QuickSearchDlg.Designer.cs">
       <DependentUpon>QuickSearchDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\RecordInfoDlg.cs" />
+    <Compile Include="GKUI\Forms\RecordInfoDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\RecordInfoDlg.Designer.cs">
       <DependentUpon>RecordInfoDlg.cs</DependentUpon>
     </Compile>
@@ -318,7 +326,9 @@
     <Compile Include="GKUI\Forms\StatisticsWin.Designer.cs">
       <DependentUpon>StatisticsWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\StatusForm.cs" />
+    <Compile Include="GKUI\Forms\StatusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\TaskEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -343,35 +353,51 @@
     <Compile Include="GKUI\Forms\TreeFilterDlg.Designer.cs">
       <DependentUpon>TreeFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\TTFamilyGroupsDlg.cs" />
+    <Compile Include="GKUI\Forms\TTFamilyGroupsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\TTFamilyGroupsDlg.Designer.cs">
       <DependentUpon>TTFamilyGroupsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\TTPatSearchDlg.cs" />
+    <Compile Include="GKUI\Forms\TTPatSearchDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\TTPatSearchDlg.Designer.cs">
       <DependentUpon>TTPatSearchDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\TTPlacesManagerDlg.cs" />
+    <Compile Include="GKUI\Forms\TTPlacesManagerDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\TTPlacesManagerDlg.Designer.cs">
       <DependentUpon>TTPlacesManagerDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\TTRecMergeDlg.cs" />
+    <Compile Include="GKUI\Forms\TTRecMergeDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\TTRecMergeDlg.Designer.cs">
       <DependentUpon>TTRecMergeDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\TTTreeCheckDlg.cs" />
+    <Compile Include="GKUI\Forms\TTTreeCheckDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\TTTreeCheckDlg.Designer.cs">
       <DependentUpon>TTTreeCheckDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\TTTreeCompareDlg.cs" />
+    <Compile Include="GKUI\Forms\TTTreeCompareDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\TTTreeCompareDlg.Designer.cs">
       <DependentUpon>TTTreeCompareDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\TTTreeMergeDlg.cs" />
+    <Compile Include="GKUI\Forms\TTTreeMergeDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\TTTreeMergeDlg.Designer.cs">
       <DependentUpon>TTTreeMergeDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\TTTreeSplitDlg.cs" />
+    <Compile Include="GKUI\Forms\TTTreeSplitDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Forms\TTTreeSplitDlg.Designer.cs">
       <DependentUpon>TTTreeSplitDlg.cs</DependentUpon>
     </Compile>
