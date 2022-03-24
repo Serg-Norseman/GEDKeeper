@@ -75,13 +75,21 @@ namespace GKCore
 
         public static void LoadExtFile(string fileName, string args = "")
         {
-            #if !CI_MODE
+#if !CI_MODE
+#if MONO
+            var proc = new Process();
+            proc.EnableRaisingEvents = false;
+            proc.StartInfo.FileName = "xdg-open";
+            proc.StartInfo.Arguments = fileName;
+            proc.Start();
+#else
             if (File.Exists(fileName)) {
-                Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true, Arguments = args });
+                Process.Start(new ProcessStartInfo("file://" + fileName) { UseShellExecute = true, Arguments = args });
             } else {
                 Process.Start(fileName);
             }
-            #endif
+#endif
+#endif
         }
 
         public static string SexChar(GDMSex sex)

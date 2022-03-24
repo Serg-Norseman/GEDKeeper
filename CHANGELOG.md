@@ -1,5 +1,6 @@
 
 ## 28.03.2022 [v2.20.0]
+- Fixed a bug with calling the log and help in Linux.
 - Fixed display of parents' names in person and family dialogs.
 - Improved safely remove or fix media records with missing files.
 - Fixed maximum text length limit in note editor.
