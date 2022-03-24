@@ -151,6 +151,7 @@ namespace GKCore.Controllers
             if (fContext.FileSave(fileName)) {
                 fContext.Modified = false;
                 ChangeFileName();
+                AppHost.Instance.BaseSaved(fView, fileName);
             }
         }
 

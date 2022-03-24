@@ -1,7 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-# SharpDevelop 5.1
+# Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{F5B0E1E6-6FA7-4EEA-905A-B32125985C14}"
@@ -80,6 +79,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNetCore", "GKCommunicator\GKNetCore\GKNetCore.csproj", "{FEE68CF6-1D60-4E90-AEF3-6AFA4A8C977D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNetUI", "GKCommunicator\GKNetUI\GKNetUI.csproj", "{1D2C209A-6E19-4FCF-BA08-11B8096FCA99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKBackupPlugin", "GKv2\GKBackupPlugin\GKBackupPlugin.csproj", "{D0E58F68-8706-4308-924B-BE56A03B3C99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -451,12 +452,21 @@ Global
 		{1D2C209A-6E19-4FCF-BA08-11B8096FCA99}.Release|x64.Build.0 = Release|x64
 		{1D2C209A-6E19-4FCF-BA08-11B8096FCA99}.Release|x86.ActiveCfg = Release|x86
 		{1D2C209A-6E19-4FCF-BA08-11B8096FCA99}.Release|x86.Build.0 = Release|x86
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Debug|x64.Build.0 = Debug|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Debug|x86.Build.0 = Debug|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Release|x64.ActiveCfg = Release|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Release|x64.Build.0 = Release|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Release|x86.ActiveCfg = Release|Any CPU
+		{D0E58F68-8706-4308-924B-BE56A03B3C99}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {1F308521-252A-4B60-8C81-1A2F327B3E47}
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{29156CC1-79B1-473D-93F4-62340686FFC3} = {F5B0E1E6-6FA7-4EEA-905A-B32125985C14}
@@ -484,5 +494,9 @@ Global
 		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98} = {BBA8D997-B7FB-45FE-86A2-08C01C0AAB4C}
 		{FEE68CF6-1D60-4E90-AEF3-6AFA4A8C977D} = {BBA8D997-B7FB-45FE-86A2-08C01C0AAB4C}
 		{1D2C209A-6E19-4FCF-BA08-11B8096FCA99} = {BBA8D997-B7FB-45FE-86A2-08C01C0AAB4C}
+		{D0E58F68-8706-4308-924B-BE56A03B3C99} = {F5B0E1E6-6FA7-4EEA-905A-B32125985C14}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1F308521-252A-4B60-8C81-1A2F327B3E47}
 	EndGlobalSection
 EndGlobal

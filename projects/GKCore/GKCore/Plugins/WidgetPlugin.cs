@@ -47,6 +47,11 @@ namespace GKCore.Plugins
             // dummy
         }
 
+        public virtual void BaseSaved(IBaseWindow baseWin, string fileName)
+        {
+            // dummy
+        }
+
         public virtual void SelectedIndexChanged(IBaseWindow baseWin)
         {
             // dummy

@@ -418,6 +418,13 @@ namespace GKCore
             }
         }
 
+        public virtual void BaseSaved(IBaseWindow baseWin, string fileName)
+        {
+            foreach (WidgetInfo widgetInfo in fActiveWidgets) {
+                widgetInfo.Widget.BaseSaved(baseWin, fileName);
+            }
+        }
+
         public virtual void SelectedIndexChanged(IBaseWindow baseWin)
         {
             if (baseWin == null) return;

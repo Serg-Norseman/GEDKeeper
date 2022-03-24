@@ -36,6 +36,7 @@ namespace GKCore.Interfaces
         void BaseChanged(IBaseWindow baseWin);
         void BaseClosed(IBaseWindow baseWin);
         void BaseRenamed(IBaseWindow baseWin, string oldName, string newName);
+        void BaseSaved(IBaseWindow baseWin, string fileName);
         void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
         void SelectedIndexChanged(IBaseWindow baseWin);
         void TabChanged(IBaseWindow baseWin);
