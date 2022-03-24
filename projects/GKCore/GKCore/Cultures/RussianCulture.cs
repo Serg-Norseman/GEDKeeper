@@ -211,7 +211,22 @@ namespace GKCore.Cultures
                 result = Morpher.GetDeclension(surname, DeclensionCase.Genitive, gender, "1", 1);
             }
 
-            result += " " + Morpher.GetDeclension(nameParts.Name + " " + nameParts.Patronymic, DeclensionCase.Genitive, gender, "23", 2);
+            string partsMask = "";
+            string nameIn = "";
+            if (!string.IsNullOrEmpty(nameParts.Name)) {
+                nameIn = nameParts.Name;
+                partsMask = "2";
+            }
+            if (!string.IsNullOrEmpty(nameParts.Patronymic)) {
+                if (!string.IsNullOrEmpty(nameIn)) {
+                    nameIn += " ";
+                }
+
+                nameIn += nameParts.Patronymic;
+                partsMask += "3";
+            }
+
+            result += " " + Morpher.GetDeclension(nameIn, DeclensionCase.Genitive, gender, partsMask, 2);
             return result;
         }
 
