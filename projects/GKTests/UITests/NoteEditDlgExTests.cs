@@ -78,7 +78,7 @@ namespace GKUI.Forms
             ClickToolStripMenuItem("miSelectAndCopy", fDialog);
             ClickToolStripMenuItem("miClear", fDialog);
 
-            var txtNote = new TextBoxTester("txtNote");
+            var txtNote = new RichTextBoxTester("txtNote");
             txtNote.Enter("sample text");
             Assert.AreEqual("sample text", txtNote.Text);
 

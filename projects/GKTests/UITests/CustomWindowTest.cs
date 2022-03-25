@@ -117,6 +117,12 @@ namespace GKTests
             textBox.Enter(value);
         }
 
+        public static void EnterRichText(string name, Form form, string value)
+        {
+            var textBox = new RichTextBoxTester(name, form);
+            textBox.Enter(value);
+        }
+
         public static void EnterMaskedText(string name, Form form, string value)
         {
             var textBox = new MaskedTextBoxTester(name, form);
