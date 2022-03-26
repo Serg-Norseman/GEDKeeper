@@ -11,6 +11,7 @@
 ../bin/BSLib.Design.dll
 ../bin/BSLib.Design.WFHandlers.dll
 ../bin/BSLib.Linguistics.dll
+../bin/BSLib.SQLite.dll
 ../bin/DotNetRtfWriter.dll
 ../bin/ExcelLibrary.dll
 ../bin/GKMap.Core.dll

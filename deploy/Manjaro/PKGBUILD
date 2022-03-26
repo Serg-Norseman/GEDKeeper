@@ -7,7 +7,7 @@ pkgdesc="Personal genealogical database editor"
 arch=('i386' 'x86_64')
 url="https://github.com/serg-norseman/gedkeeper"
 license=('GPLv3')
-depends=('mono', 'sqlite3')
+depends=('mono' 'sqlite3')
 
 package() {
 	cp -r * $pkgdir
