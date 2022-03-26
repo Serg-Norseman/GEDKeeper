@@ -50,7 +50,7 @@ namespace GKCore
 
         public static bool IsUnicodeEncoding(Encoding encoding)
         {
-            return (encoding == Encoding.Unicode || encoding == Encoding.UTF7 || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
+            return (encoding != null) && (encoding == Encoding.Unicode || encoding == Encoding.UTF7 || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
         }
 
         #endregion

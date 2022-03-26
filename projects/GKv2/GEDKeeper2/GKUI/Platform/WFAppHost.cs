@@ -64,11 +64,6 @@ namespace GKUI.Platform
         {
         }
 
-        public override void Init(string[] args, bool isMDI)
-        {
-            base.Init(args, isMDI);
-        }
-
         public override IWindow GetActiveWindow()
         {
             IWindow activeWin = Form.ActiveForm as IWindow;
@@ -79,7 +74,7 @@ namespace GKUI.Platform
 
             // only for tests!
             if (activeWin == null && fRunningForms.Count > 0) {
-                activeWin = fRunningForms[0] as IWindow;
+                activeWin = fRunningForms[0];
             }
 
             return activeWin;

@@ -168,7 +168,7 @@ namespace GKUI.Forms
                 trkZoom.TickFrequency = 100;
 
                 if (fMapBrowser.MapControl.Zoom >= fMapBrowser.MapControl.MinZoom && fMapBrowser.MapControl.Zoom <= fMapBrowser.MapControl.MaxZoom) {
-                    trkZoom.Value = (int)fMapBrowser.MapControl.Zoom * 100;
+                    trkZoom.Value = fMapBrowser.MapControl.Zoom * 100;
                 }
 
                 // get position
@@ -287,7 +287,7 @@ namespace GKUI.Forms
 
         private void btnZoomUp_Click(object sender, EventArgs e)
         {
-            fMapBrowser.MapControl.Zoom = ((int)fMapBrowser.MapControl.Zoom) + 1;
+            fMapBrowser.MapControl.Zoom = fMapBrowser.MapControl.Zoom + 1;
         }
 
         private void btnZoomDown_Click(object sender, EventArgs e)

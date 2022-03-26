@@ -140,7 +140,7 @@ namespace GKWordsCloudPlugin
         {
             var item = (ComboItem<StatsMode>)cbType.SelectedItem;
             if (item != null) {
-                fMode = (StatsMode)item.Tag;
+                fMode = item.Tag;
                 UpdateCloud();
             }
         }

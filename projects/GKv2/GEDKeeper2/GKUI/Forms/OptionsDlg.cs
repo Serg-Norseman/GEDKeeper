@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Globalization;
 using System.Windows.Forms;
 using BSLib.Design;
 using BSLib.Design.Graphics;

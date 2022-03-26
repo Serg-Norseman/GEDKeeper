@@ -16,7 +16,7 @@ namespace GKMap.WinForms
     /// </summary>
     public class GMapOverlay : MapOverlay, IRenderable
     {
-        public GMapOverlay() : base()
+        public GMapOverlay()
         {
         }
 
@@ -58,8 +58,7 @@ namespace GKMap.WinForms
             }
 
             // tooltips above
-            foreach (var marker in Markers) {
-                var m = (MapMarker) marker;
+            foreach (var m in Markers) {
                 if (m.ToolTip != null && m.IsVisible) {
                     if (!string.IsNullOrEmpty(m.ToolTipText) && (m.ToolTipMode == MarkerTooltipMode.Always || m.IsMouseOver)) {
                         var renderable = m.ToolTip as IRenderable;

@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.MVP;

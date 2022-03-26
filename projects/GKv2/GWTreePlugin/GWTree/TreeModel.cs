@@ -7,8 +7,6 @@ using GKCore.Interfaces;
 
 namespace GWTree
 {
-    public delegate bool DeskEnum(int i, int k, Node node);
-
     public interface ITreeView
     {
         void CenterNode(Node node);
@@ -359,7 +357,7 @@ namespace GWTree
 
         public void DrawLine(Graphics gfx, uint color, float x1, float y1, float x2, float y2)
         {
-            ((ITreeView)fTreeView).DrawLine(gfx, x1, y1, x2, y2);
+            fTreeView.DrawLine(gfx, x1, y1, x2, y2);
         }
 
         internal void DrawLinks(Graphics gfx)
@@ -372,7 +370,7 @@ namespace GWTree
         internal void DrawNodes(Graphics gfx)
         {
             foreach (Node node in fNodes) {
-                ((ITreeView)fTreeView).DrawNode(gfx, node);
+                fTreeView.DrawNode(gfx, node);
             }
         }
 

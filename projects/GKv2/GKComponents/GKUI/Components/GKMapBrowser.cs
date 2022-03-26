@@ -18,13 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
 using System.Windows.Forms;
 using BSLib;
-using GKCore;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.Options;
@@ -459,7 +457,7 @@ namespace GKUI.Components
                     break;
 
                 case Keys.Add:
-                    fMapControl.Zoom = ((int)fMapControl.Zoom) + 1;
+                    fMapControl.Zoom = fMapControl.Zoom + 1;
                     break;
 
                 case Keys.Subtract:

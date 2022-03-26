@@ -152,7 +152,7 @@ namespace GKUI.Components
 
             //fLayout.Add(fImageBox, 0, 0);
             //fLayout.Add(fSlidePanel, 0, Height);
-            Content = fImageBox;//fLayout;
+            Content = fImageBox; //fLayout;
             ResumeLayout();
         }
 

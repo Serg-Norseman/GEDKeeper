@@ -186,7 +186,7 @@ namespace GKCore.Lists
                     result = (child != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachChildQuery)));
                     if (result) {
                         GDMFamilyRecord family2 = tree.FindChildFamily(indiRec, child);
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, family2);
+                        result = (family2 != null) && fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, family2);
                     }
                     break;
             }

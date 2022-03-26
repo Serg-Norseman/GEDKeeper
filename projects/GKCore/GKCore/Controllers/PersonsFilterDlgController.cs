@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using BSLib;
 using GDModel;
 using GKCore.Interfaces;
