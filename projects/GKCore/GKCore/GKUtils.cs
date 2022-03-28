@@ -465,9 +465,16 @@ namespace GKCore
 
         public static StreamReader GetDetectedStreamReader(Stream stream)
         {
-            // TODO: total search and fix references to Encoding.GetEncoding(1251)
             // TODO: implement detection of encoding
-            StreamReader reader = new StreamReader(stream, Encoding.GetEncoding(1251));
+            Encoding defaultEncoding;
+            try {
+                // legacy encoding
+                defaultEncoding = Encoding.GetEncoding(1251);
+            } catch {
+                defaultEncoding = Encoding.UTF8;
+            }
+
+            StreamReader reader = new StreamReader(stream, defaultEncoding);
             return reader;
         }
 
@@ -1004,7 +1011,20 @@ namespace GKCore
 
             try {
                 var lifeDates = iRec.GetLifeDates();
+                result = GetAgeLD(lifeDates, toYear);
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.GetAge()", ex);
+            }
 
+            return result;
+        }
+
+        public static int GetAgeLD(GDMIndividualRecord.LifeDatesRet lifeDates, int toYear)
+        {
+            int result = -1;
+            if (lifeDates == null) return result;
+
+            try {
                 if (toYear == -1) {
                     result = GetEventsYearsDiff(lifeDates.BirthEvent, lifeDates.DeathEvent, lifeDates.DeathEvent == null);
                 } else {
@@ -1014,7 +1034,7 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKUtils.GetAge()", ex);
+                Logger.WriteError("GKUtils.GetAgeLD()", ex);
             }
 
             return result;

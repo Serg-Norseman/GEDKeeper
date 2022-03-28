@@ -84,8 +84,16 @@ namespace GKCore.Names
             try {
                 fNames.Clear();
 
+                Encoding defaultEncoding;
+                try {
+                    // legacy encoding
+                    defaultEncoding = Encoding.GetEncoding(1251);
+                } catch {
+                    defaultEncoding = Encoding.UTF8;
+                }
+
                 using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                    using (StreamReader reader = FileHelper.OpenStreamReader(fileStream, Encoding.GetEncoding(1251))) {
+                    using (StreamReader reader = FileHelper.OpenStreamReader(fileStream, defaultEncoding)) {
                         while (reader.Peek() != -1) {
                             string line = reader.ReadLine();
                             if (string.IsNullOrEmpty(line)) continue;
