@@ -445,8 +445,7 @@ namespace GKCore
 
         public virtual bool ShowModalX(ICommonDialog form, bool keepModeless = false)
         {
-            var owner = GetActiveWindow();
-            return (form != null && form.ShowModalX(owner));
+            return (form != null && form.ShowModalX(null));
         }
 
         public void ShowHelpTopic(string topic)
