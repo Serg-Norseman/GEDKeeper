@@ -904,9 +904,10 @@ namespace GKCore
         /* 843 */ LSID_GoToPrimaryBranch,
         /* 844 */ LSID_MinimizingWidth,
         /* 845 */ LSID_ContinueQuestion,
+        /* 846 */ LSID_ShowAge,
 
         /* 000 */
-        LSID_Last = LSID_ContinueQuestion
+        LSID_Last = LSID_ShowAge
     }
 
 
@@ -1766,6 +1767,7 @@ namespace GKCore
             /* 843 */ "Go to primary branch",
             /* 844 */ "Minimizing width",
             /* 845 */ "{0}. Continue?",
+            /* 846 */ "Show age",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

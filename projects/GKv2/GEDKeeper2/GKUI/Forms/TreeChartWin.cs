@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -558,6 +558,8 @@ namespace GKUI.Forms
             SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
             SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
             SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            SetToolTip(tbFilter, LangMan.LS(LSID.LSID_MIFilter));
+            SetToolTip(tbOptions, LangMan.LS(LSID.LSID_MIOptions));
         }
 
         #endregion

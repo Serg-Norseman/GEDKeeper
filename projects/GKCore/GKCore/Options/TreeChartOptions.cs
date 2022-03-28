@@ -71,6 +71,7 @@ namespace GKCore.Options
         public bool OnlyLocality;
         public bool MinimizingWidth;
         //public bool RootSpousesAncestors;
+        public bool AgeVisible;
 
         public bool AutoAlign; // debug option, for future purposes
         public GfxBorderStyle BorderStyle;
@@ -128,6 +129,7 @@ namespace GKCore.Options
             OnlyLocality = false;
             MinimizingWidth = true;
             //RootSpousesAncestors = true;
+            AgeVisible = false;
 
             AutoAlign = true;
             BorderStyle = GfxBorderStyle.None;
@@ -191,6 +193,7 @@ namespace GKCore.Options
             BorderStyle = srcOptions.BorderStyle;
             OnlyLocality = srcOptions.OnlyLocality;
             MinimizingWidth = srcOptions.MinimizingWidth;
+            AgeVisible = srcOptions.AgeVisible;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -232,6 +235,7 @@ namespace GKCore.Options
             BorderStyle = (GfxBorderStyle)iniFile.ReadInteger("Chart", "BorderStyle", 0);
             OnlyLocality = iniFile.ReadBool("Chart", "OnlyLocality", false);
             MinimizingWidth = iniFile.ReadBool("Chart", "MinimizingWidth", true);
+            AgeVisible = iniFile.ReadBool("Chart", "AgeVisible", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -289,6 +293,7 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "BorderStyle", (int)BorderStyle);
             iniFile.WriteBool("Chart", "OnlyLocality", OnlyLocality);
             iniFile.WriteBool("Chart", "MinimizingWidth", MinimizingWidth);
+            iniFile.WriteBool("Chart", "AgeVisible", AgeVisible);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -170,6 +170,7 @@ namespace GKUI.Forms
             chkOnlyLocality.Checked = fOptions.TreeChartOptions.OnlyLocality;
             chkBoldNames.Checked = fOptions.TreeChartOptions.BoldNames;
             chkMinimizingWidth.Checked = fOptions.TreeChartOptions.MinimizingWidth;
+            chkShowAge.Checked = fOptions.TreeChartOptions.AgeVisible;
 
             lblMaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
             lblFemaleColor.BackColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.FemaleColor);
@@ -463,6 +464,7 @@ namespace GKUI.Forms
             fOptions.TreeChartOptions.OnlyLocality = chkOnlyLocality.Checked;
             fOptions.TreeChartOptions.BoldNames = chkBoldNames.Checked;
             fOptions.TreeChartOptions.MinimizingWidth = chkMinimizingWidth.Checked;
+            fOptions.TreeChartOptions.AgeVisible = chkShowAge.Checked;
 
             fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackColor);
             fOptions.TreeChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackColor);
@@ -740,6 +742,7 @@ namespace GKUI.Forms
             chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
             chkBoldNames.Text = LangMan.LS(LSID.LSID_BoldNames);
             chkMinimizingWidth.Text = LangMan.LS(LSID.LSID_MinimizingWidth);
+            chkShowAge.Text = LangMan.LS(LSID.LSID_ShowAge);
 
             grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
             lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
@@ -823,6 +826,8 @@ namespace GKUI.Forms
             chkDiffLines.Enabled = chkName.Checked && chkPatronymic.Checked;
 
             chkOnlyYears.Enabled = chkBirthDate.Checked && chkDeathDate.Checked;
+
+            chkShowAge.Enabled = chkOnlyYears.Checked && !chkShowPlaces.Checked;
         }
 
         private void chkSeparateDepth_CheckedChanged(object sender, EventArgs e)

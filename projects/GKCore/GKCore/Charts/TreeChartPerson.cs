@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -61,6 +61,7 @@ namespace GKCore.Charts
     {
         private readonly TreeChartModel fModel;
 
+        private string fAge;
         private string fBirthDate;
         private string fBirthPlace;
         private string fDeathDate;
@@ -321,6 +322,13 @@ namespace GKCore.Charts
                         }
                     }
 
+                    if (options.AgeVisible) {
+                        int age = GKUtils.GetAgeLD(lifeDates, -1);
+                        fAge = (age == -1) ? "" : age.ToString();
+                    } else {
+                        fAge = "";
+                    }
+
                     if (!string.IsNullOrEmpty(fBirthDate)) {
                         fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
                     }
@@ -369,6 +377,7 @@ namespace GKCore.Charts
                     fBirthPlace = "";
                     fDeathDate = "";
                     fDeathPlace = "";
+                    fAge = "";
                     SetFlag(PersonFlag.pfIsDead, false);
                     fSex = GDMSex.svUnknown;
                     fSigns = EnumSet<SpecialUserRef>.Create();
@@ -424,6 +433,9 @@ namespace GKCore.Charts
                     lifeYears += (fBirthDate == "") ? "?" : fBirthDate;
                     if (HasFlag(PersonFlag.pfIsDead)) {
                         lifeYears += (fDeathDate == "") ? " - ?" : " - " + fDeathDate;
+                    }
+                    if (!string.IsNullOrEmpty(fAge)) {
+                        lifeYears += string.Concat(" (", fAge, ")");
                     }
                     lifeYears += " ]";
 
