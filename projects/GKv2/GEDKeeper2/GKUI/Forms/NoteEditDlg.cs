@@ -53,6 +53,9 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            txtNote.Enter += RichTextBox_Enter;
+            txtNote.Leave += RichTextBox_Leave;
+
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
@@ -63,6 +66,16 @@ namespace GKUI.Forms
 
             fController = new NoteEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void RichTextBox_Enter(object sender, EventArgs e)
+        {
+            AcceptButton = null;
+        }
+
+        private void RichTextBox_Leave(object sender, EventArgs e)
+        {
+            AcceptButton = btnAccept;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
