@@ -80,12 +80,10 @@ namespace GKUI.Platform
             return activeWin;
         }
 
-        // FIXME!
         public override IntPtr GetTopWindowHandle()
         {
-            IntPtr mainHandle = IntPtr.Zero;
-
-            return mainHandle;
+            var ownerForm = GetActiveWindow() as Form;
+            return (ownerForm == null) ? IntPtr.Zero : ownerForm.Handle;
         }
 
         public override void CloseWindow(IWindow window)

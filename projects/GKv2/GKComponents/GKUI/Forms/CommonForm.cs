@@ -104,14 +104,7 @@ namespace GKUI.Forms
     {
         public virtual bool ShowModalX(object owner)
         {
-            var ownerForm = owner as Form;
-            return (ShowDialog(ownerForm) == DialogResult.OK);
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            CenterToParent();
+            return (ShowDialog() == DialogResult.OK);
         }
     }
 }
