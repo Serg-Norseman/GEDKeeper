@@ -1,0 +1,69 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3", "GEDKeeper3\GEDKeeper3.csproj", "{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3.Wpf", "GEDKeeper3.Wpf\GEDKeeper3.Wpf.csproj", "{6EFC871A-0EC1-4D3C-8779-8A9CCE3F509C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.nstd", "..\GKCore\GKCore.nstd.csproj", "{10D619AF-E1CD-4F4A-9C19-5E434300B48F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKComponents", "GKComponents\GKComponents.csproj", "{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKSamplePlugin", "GKSamplePlugin\GKSamplePlugin.csproj", "{BD2B94CA-5913-415B-9428-ED3C6D270602}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DE73F1DF-B77D-454A-94ED-344EBDC2E2F1}"
+	ProjectSection(SolutionItems) = preProject
+		..\GKConfigurations.targets = ..\GKConfigurations.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3.Gtk2", "GEDKeeper3.Gtk2\GEDKeeper3.Gtk2.csproj", "{CDA19E8B-D105-4FE1-BED6-A602E11CA535}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3.Mac", "GEDKeeper3.Mac\GEDKeeper3.Mac.csproj", "{C0AE8789-BF77-456D-9411-E6A7C46619EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EFC871A-0EC1-4D3C-8779-8A9CCE3F509C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EFC871A-0EC1-4D3C-8779-8A9CCE3F509C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EFC871A-0EC1-4D3C-8779-8A9CCE3F509C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EFC871A-0EC1-4D3C-8779-8A9CCE3F509C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD2B94CA-5913-415B-9428-ED3C6D270602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD2B94CA-5913-415B-9428-ED3C6D270602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD2B94CA-5913-415B-9428-ED3C6D270602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD2B94CA-5913-415B-9428-ED3C6D270602}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDA19E8B-D105-4FE1-BED6-A602E11CA535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDA19E8B-D105-4FE1-BED6-A602E11CA535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA19E8B-D105-4FE1-BED6-A602E11CA535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDA19E8B-D105-4FE1-BED6-A602E11CA535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0AE8789-BF77-456D-9411-E6A7C46619EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0AE8789-BF77-456D-9411-E6A7C46619EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0AE8789-BF77-456D-9411-E6A7C46619EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0AE8789-BF77-456D-9411-E6A7C46619EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C05CBCB7-0B24-41CC-8BDC-E5BB79045E5D}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CDA19E8B-D105-4FE1-BED6-A602E11CA535} = {DE73F1DF-B77D-454A-94ED-344EBDC2E2F1}
+	EndGlobalSection
+EndGlobal
