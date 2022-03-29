@@ -381,6 +381,8 @@ namespace GKUI.Forms
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
+            fController.AcceptTempData();
+
             fController.UpdateControls();
         }
 

@@ -450,12 +450,16 @@ namespace GKCore.Controllers
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
             if (family == null) return;
 
+            AcceptTempData();
+
             fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, fPerson, family);
             UpdateControls();
         }
 
         public void AddFather()
         {
+            AcceptTempData();
+
             if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
@@ -463,6 +467,8 @@ namespace GKCore.Controllers
 
         public void DeleteFather()
         {
+            AcceptTempData();
+
             if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
@@ -470,6 +476,8 @@ namespace GKCore.Controllers
 
         public void AddMother()
         {
+            AcceptTempData();
+
             if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
@@ -477,6 +485,8 @@ namespace GKCore.Controllers
 
         public void DeleteMother()
         {
+            AcceptTempData();
+
             if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fPerson)) {
                 UpdateControls();
             }
