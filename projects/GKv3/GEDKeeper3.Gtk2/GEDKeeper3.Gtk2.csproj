@@ -32,9 +32,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.pcl.csproj">
-      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
-      <Name>GKCore.pcl</Name>
+    <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj">
+      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Name>GKCore.nstd</Name>
     </ProjectReference>
     <ProjectReference Include="..\GEDKeeper3\GEDKeeper3.csproj">
       <Project>{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}</Project>
