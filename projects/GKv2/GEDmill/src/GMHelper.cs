@@ -126,15 +126,16 @@ namespace GEDmill
                 return GMConfig.Instance.UnknownName;
             }
 
-            firstName = name.Given;
-            surname = name.Surname;
+            string tmpFirstName = name.Given;
+            string tmpSurname = name.Surname;
 
             if (GMConfig.Instance.NameCapitalisation == 1) {
-                surname = surname.ToUpper();
+                tmpSurname = tmpSurname.ToUpper();
             }
 
-            string result = string.Concat(firstName, " ", surname);
-            return result;
+            firstName = tmpFirstName;
+            surname = tmpSurname;
+            return string.Concat(tmpFirstName, " ", tmpSurname);
         }
 
         public static void RestrictAssociatedSources(GDMTree tree, GDMIndividualRecord iRec)

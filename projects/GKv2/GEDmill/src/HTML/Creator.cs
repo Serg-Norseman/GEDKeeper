@@ -82,7 +82,6 @@ namespace GEDmill.HTML
             int tabPos = 0;
             bool doneCRLF = false;
             bool doneSpace = false;
-            int length = original.Length;
             int n = 0;
             foreach (char c in original) {
                 switch (c) {

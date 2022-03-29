@@ -49,9 +49,7 @@ namespace GEDmill.HTML
             fLogger.WriteInfo("Creating individuals index...");
 
             // Sort the index
-            //AlphabetComparer comparer = new AlphabetComparer();
-            //fIndividualIndex.Sort(comparer);
-            // FIXME
+            fIndividualIndex.Sort((ind1, ind2) => ind1.First.CompareTo(ind2.First));
 
             // Split into letter groups
             List<IndexLetter> letters = CreateIndexLetters();

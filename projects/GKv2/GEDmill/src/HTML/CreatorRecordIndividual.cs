@@ -92,9 +92,6 @@ namespace GEDmill.HTML
         // Indicates that a name for this individual is not available
         private bool fUnknownName;
 
-        // The individual's main name
-        private string fName;
-
         // The suffix on the individual's name (e.g. "Snr")
         private string fNameSuffix;
 
@@ -104,7 +101,7 @@ namespace GEDmill.HTML
         // The individual's surname
         private string fSurname;
 
-        // The individual's fully expanded name
+        // The individual's fully name
         private string fFullName;
 
         // The individual's nickname
@@ -140,7 +137,7 @@ namespace GEDmill.HTML
             fNameTitle = "";
             fUnknownName = false;
             fPrimaryName = fIndiRec.GetPrimaryPersonalName();
-            fName = fIndiRec.GetPrimaryFullName();
+            fFullName = fIndiRec.GetPrimaryFullName();
             fNameSuffix = ""/*fIndiRec.NameSuffix*/; // TODO
             fFirstName = "";
             fSurname = "";
@@ -243,12 +240,12 @@ namespace GEDmill.HTML
                 }
             }
 
-            string title = fName; //"Fred Bloggs 1871-1921"
+            string title = fFullName; //"Fred Bloggs 1871-1921"
             string lifeDates = "";
             if (!fConcealed) {
                 if (birthyear != "" || deathyear != "") {
                     lifeDates = string.Concat(birthyear, "-", deathyear);
-                    title = string.Concat(fName, " ", lifeDates);
+                    title = string.Concat(fFullName, " ", lifeDates);
                 }
             }
 
@@ -599,14 +596,13 @@ namespace GEDmill.HTML
             // Construct the guy's name
             if (fConcealed && !GMConfig.Instance.UseWithheldNames) {
                 fFirstName = "";
-                fSurname = fName = GMConfig.Instance.ConcealedName;
+                fSurname = fFullName = GMConfig.Instance.ConcealedName;
             } else {
-                fName = GMHelper.CapitaliseName(fPrimaryName, out fFirstName, out fSurname); // Also splits name into first name and surname
+                fFullName = GMHelper.CapitaliseName(fPrimaryName, out fFirstName, out fSurname); // Also splits name into first name and surname
             }
-
-            if (fName == "") {
+            if (fFullName == "") {
                 fFirstName = "";
-                fSurname = fName = GMConfig.Instance.UnknownName;
+                fSurname = fFullName = GMConfig.Instance.UnknownName;
                 fUnknownName = true;
             }
 
@@ -621,16 +617,6 @@ namespace GEDmill.HTML
                     nasOther.SourceHtml = AddSources(ref fReferenceList, nasOther.Sources);
                     fOtherNames.Add(nasOther);
                 }
-            }
-
-            if (fConcealed && !GMConfig.Instance.UseWithheldNames) {
-                fFullName = GMConfig.Instance.ConcealedName;
-            } else {
-                string dummy;
-                fFullName = GMHelper.CapitaliseName(fPrimaryName, out dummy, out dummy); // Also splits name into first name and surname
-            }
-            if (fFullName == "") {
-                fFullName = GMConfig.Instance.UnknownName;
             }
 
             if (fNameTitle.Length > 0) {
@@ -655,8 +641,8 @@ namespace GEDmill.HTML
         private void OutputHTML(string title)
         {
             HTMLFile f = null;
-            string pageDescription = fLangMan.LS(PLS.LSID_PageDescription) + " " + fName;
-            string keywords = fLangMan.LS(PLS.LSID_Keywords) + " " + fName;
+            string pageDescription = fLangMan.LS(PLS.LSID_PageDescription) + " " + fFullName;
+            string keywords = fLangMan.LS(PLS.LSID_Keywords) + " " + fFullName;
             string relativeFilename = GetIndividualHTMLFilename(fIndiRec);
             string fullFilename = string.Concat(GMConfig.Instance.OutputFolder, "\\", relativeFilename);
 
@@ -899,9 +885,7 @@ namespace GEDmill.HTML
         private void OutputNames(HTMLFile f)
         {
             f.WriteLine("          <div id=\"names\">");
-            if (fFullName != fName) {
-                f.WriteLine(string.Concat("            <h2>", EscapeHTML(fFullName, false), "</h2>"));
-            }
+
             if (fUsedName != "" && fNickName != "") {
                 fUsedName += ", ";
             }
@@ -909,10 +893,13 @@ namespace GEDmill.HTML
             if (fUsedName != "" || fNickName != "") {
                 nicknames = string.Concat(" <span class=\"nicknames\">(", EscapeHTML(fUsedName, false), EscapeHTML(fNickName, false), ")</span>");
             }
-            f.WriteLine(string.Concat("            <h1>", EscapeHTML(fName, false), fNameSources, nicknames, "</h1>"));
+
+            f.WriteLine(string.Concat("            <h1>", EscapeHTML(fFullName, false), fNameSources, nicknames, "</h1>"));
+
             foreach (NameAndSource otherName in fOtherNames) {
                 f.WriteLine(string.Concat("            <h2>", fLangMan.LS(PLS.LSID_also_known_as), " ", EscapeHTML(otherName.Name, false), otherName.SourceHtml, "</h2>"));
             }
+
             f.WriteLine("          </div> <!-- names -->");
         }
 
