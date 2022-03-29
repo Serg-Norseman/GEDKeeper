@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -46,8 +46,7 @@ namespace GKCore.Kinships
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fGraph.Dispose();
             }
             base.Dispose(disposing);
@@ -124,8 +123,7 @@ namespace GKCore.Kinships
                     if (tmp != "") tmp += ", ";
                     tmp += xFrom.XRef + ">" + GKData.RelationSigns[(int)curRel] + ">" + xTo.XRef;
 
-                    if (prevRel != RelationKind.rkUndefined)
-                    {
+                    if (prevRel != RelationKind.rkUndefined) {
                         int g, lev;
                         finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out lev);
                         great += g;
@@ -184,11 +182,9 @@ namespace GKCore.Kinships
         {
             RelationKind resRel = rel;
 
-            switch (rel)
-            {
+            switch (rel) {
                 case RelationKind.rkParent:
-                    switch (xTo.Sex)
-                    {
+                    switch (xTo.Sex) {
                         case GDMSex.svMale:
                             resRel = RelationKind.rkFather;
                             break;
@@ -199,8 +195,7 @@ namespace GKCore.Kinships
                     break;
 
                 case RelationKind.rkSpouse:
-                    switch (xTo.Sex)
-                    {
+                    switch (xTo.Sex) {
                         case GDMSex.svMale:
                             resRel = RelationKind.rkHusband;
                             break;
@@ -211,8 +206,7 @@ namespace GKCore.Kinships
                     break;
 
                 case RelationKind.rkChild:
-                    switch (xTo.Sex)
-                    {
+                    switch (xTo.Sex) {
                         case GDMSex.svMale:
                             resRel = RelationKind.rkSon;
                             break;
