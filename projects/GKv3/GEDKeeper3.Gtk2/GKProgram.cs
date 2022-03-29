@@ -52,7 +52,7 @@ namespace GEDKeeper3.Gtk2
             Logger.Init(AppHost.GetLogFilename());
             LogSysInfo();
 
-            var application = new Application(Platforms.Gtk2);
+            var application = new Application(Platforms.Gtk);
 
             AppHost.InitSettings();
             try {
