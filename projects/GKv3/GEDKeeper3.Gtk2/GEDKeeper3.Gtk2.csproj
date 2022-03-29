@@ -42,7 +42,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="GKProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
