@@ -13,14 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKComponents", "GKComponent
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKSamplePlugin", "GKSamplePlugin\GKSamplePlugin.csproj", "{BD2B94CA-5913-415B-9428-ED3C6D270602}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DE73F1DF-B77D-454A-94ED-344EBDC2E2F1}"
-	ProjectSection(SolutionItems) = preProject
-		..\GKConfigurations.targets = ..\GKConfigurations.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3.Mac", "GEDKeeper3.Mac\GEDKeeper3.Mac.csproj", "{C0AE8789-BF77-456D-9411-E6A7C46619EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper3.Gtk2", "GEDKeeper3.Gtk2\GEDKeeper3.Gtk2.csproj", "{CDA19E8B-D105-4FE1-BED6-A602E11CA535}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89782CA9-48D0-451A-AEB1-4E1771CEAC47}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

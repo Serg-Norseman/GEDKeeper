@@ -1,70 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="..\..\GKConfigurations.targets" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BD2B94CA-5913-415B-9428-ED3C6D270602}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>GKSamplePlugin</RootNamespace>
-    <AssemblyName>GKSamplePlugin</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <NoWin32Manifest>False</NoWin32Manifest>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>..\..\..\plugins\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\..\..\plugins\</OutputPath>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Eto, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Forms.2.5.11\lib\netstandard2.0\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ComponentModel.Annotations.4.7.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="PluginForm.cs" />
-    <Compile Include="PluginForm.design.cs">
-      <DependentUpon>PluginForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKSamplePlugin.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="BSLib.Design">
-      <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj">
-      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
-      <Name>GKCore.nstd</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Eto.Forms.2.5.11\build\Eto.Forms.targets" Condition="Exists('..\packages\Eto.Forms.2.5.11\build\Eto.Forms.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Eto.Forms.2.5.11\build\Eto.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Eto.Forms.2.5.11\build\Eto.Forms.targets'))" />
-  </Target>
+    <ItemGroup>
+        <Reference Include="BSLib.Design">
+            <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Eto.Forms" Version="2.5.11" />
+    </ItemGroup>
 </Project>

@@ -52,7 +52,15 @@ namespace GEDKeeper3.Gtk2
             Logger.Init(AppHost.GetLogFilename());
             LogSysInfo();
 
-            var application = new Application(Platforms.Gtk);
+            var application = new Application(
+#if NETCOREAPP3_1
+                Platforms.Gtk
+#else
+#pragma warning disable CS0618
+                Platforms.Gtk2
+#pragma warning restore CS0618
+#endif
+            );
 
             AppHost.InitSettings();
             try {
