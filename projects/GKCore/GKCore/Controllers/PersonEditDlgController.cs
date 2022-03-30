@@ -153,14 +153,10 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
-
                 fView.SexCombo.SelectedIndex = (sbyte)fPerson.Sex;
                 fView.Patriarch.Checked = fPerson.Patriarch;
                 fView.Bookmark.Checked = fPerson.Bookmark;
-
-                //cmbRestriction.SelectedIndexChanged -= cbRestriction_SelectedIndexChanged;
                 fView.RestrictionCombo.SelectedIndex = (sbyte)fPerson.Restriction;
-                //cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
 
                 fView.EventsList.ListModel.DataOwner = fPerson;
                 fView.NotesList.ListModel.DataOwner = fPerson;
