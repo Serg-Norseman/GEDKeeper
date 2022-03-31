@@ -321,6 +321,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(TextArea), typeof(TextAreaHandler));
+            ControlsManager.RegisterHandlerType(typeof(RichTextArea), typeof(RichTextAreaHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));

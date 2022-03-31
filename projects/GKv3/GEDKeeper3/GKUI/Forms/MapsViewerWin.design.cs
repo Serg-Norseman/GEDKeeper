@@ -55,7 +55,7 @@ namespace GKUI.Forms
 
             btnSaveImage = new Button();
             btnSaveImage.Text = "btnSaveImage";
-            btnSaveImage.Click += btnSaveImage_Click;
+            btnSaveImage.Click += tbSaveSnapshot_Click;
 
             grpSelection = new GroupBox();
             grpSelection.Text = "grpSelection";

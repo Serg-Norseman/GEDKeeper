@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -446,6 +446,9 @@ namespace GKUI.Forms
             miFatherAdd.Enabled = fController.ParentIsRequired(GDMSex.svMale);
             miMotherAdd.Enabled = fController.ParentIsRequired(GDMSex.svFemale);
             miGoToRecord.Enabled = fController.SelectedPersonIsReal();
+
+            TreeChartPerson p = fTreeBox.Selected;
+            miGoToPrimaryBranch.Enabled = (p != null && p.Rec != null && p.IsDup);
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)
@@ -466,6 +469,11 @@ namespace GKUI.Forms
         private void miGoToRecord_Click(object sender, EventArgs e)
         {
             fController.GoToRecord();
+        }
+
+        private void miGoToPrimaryBranch_Click(object sender, EventArgs e)
+        {
+            fController.GoToPrimaryBranch();
         }
 
         #endregion
@@ -529,6 +537,7 @@ namespace GKUI.Forms
             miSelectColor.Text = LangMan.LS(LSID.LSID_SelectColor);
             miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
             tbBorders.Text = LangMan.LS(LSID.LSID_Borders);
+            miGoToPrimaryBranch.Text = LangMan.LS(LSID.LSID_GoToPrimaryBranch);
 
             SetToolTip(tbModes, LangMan.LS(LSID.LSID_ModesTip));
             SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
@@ -536,6 +545,8 @@ namespace GKUI.Forms
             SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
             SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
             SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            SetToolTip(tbFilter, LangMan.LS(LSID.LSID_MIFilter));
+            SetToolTip(tbOptions, LangMan.LS(LSID.LSID_MIOptions));
         }
 
         #endregion

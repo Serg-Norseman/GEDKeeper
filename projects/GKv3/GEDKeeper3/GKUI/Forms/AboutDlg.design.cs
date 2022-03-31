@@ -12,6 +12,8 @@ namespace GKUI.Forms
         private LinkButton lblMail;
         private Button btnClose;
         private LinkButton lblProjSite;
+        private LinkButton lblForum;
+        private LinkButton lblChannel;
 
         private void InitializeComponent()
         {
@@ -40,8 +42,18 @@ namespace GKUI.Forms
 
             lblProjSite = new LinkButton();
             lblProjSite.Font = UIHelper.GetDefaultFont(9.0f, FontStyle.Bold);
-            lblProjSite.Text = "https://gedkeeper.github.io/";
+            lblProjSite.Text = "https://gedkeeper.net/";
             lblProjSite.Click += LabelMail_Click;
+
+            lblForum = new LinkButton();
+            lblForum.Font = UIHelper.GetDefaultFont(9.0f, FontStyle.Bold);
+            lblForum.Text = "https://gedkeeper.net/";
+            lblForum.Click += LabelMail_Click;
+
+            lblChannel = new LinkButton();
+            lblChannel.Font = UIHelper.GetDefaultFont(9.0f, FontStyle.Bold);
+            lblChannel.Text = "https://gedkeeper.net/";
+            lblChannel.Click += LabelMail_Click;
 
             Content = new DefTableLayout {
                 Rows = {
@@ -51,6 +63,8 @@ namespace GKUI.Forms
                     null,
                     lblProjSite,
                     lblMail,
+                    lblForum,
+                    lblChannel,
                     UIHelper.MakeDialogFooter(null, btnClose)
                 }
             };

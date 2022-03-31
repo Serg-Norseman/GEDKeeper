@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using Eto.Forms;
 using GKCore;
 using GKCore.MVP.Views;
+using GKCore.Options;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -39,6 +40,14 @@ namespace GKUI.Forms
             lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();
+
+            if (GlobalOptions.Instance.GetLanguageSign() == "rus") {
+                lblForum.Text = GKData.APP_FORUM_RU;
+                lblChannel.Text = GKData.APP_CHANNEL_RU;
+            } else {
+                lblForum.Text = GKData.APP_FORUM_EN;
+                lblChannel.Text = GKData.APP_CHANNEL_EN;
+            }
         }
 
         private void LabelMail_Click(object sender, EventArgs e)

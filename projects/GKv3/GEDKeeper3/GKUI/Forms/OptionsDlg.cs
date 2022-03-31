@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -177,7 +177,10 @@ namespace GKUI.Forms
             chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
             chkDottedLinesOfAdoptedChildren.Checked = fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren;
             chkSeparateDAPLines.Checked = fOptions.TreeChartOptions.SeparateDatesAndPlacesLines;
+            chkOnlyLocality.Checked = fOptions.TreeChartOptions.OnlyLocality;
             chkBoldNames.Checked = fOptions.TreeChartOptions.BoldNames;
+            chkMinimizingWidth.Checked = fOptions.TreeChartOptions.MinimizingWidth;
+            chkShowAge.Checked = fOptions.TreeChartOptions.AgeVisible;
 
             lblMaleColor.BackgroundColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.MaleColor);
             lblFemaleColor.BackgroundColor = UIHelper.ConvertColor(fOptions.TreeChartOptions.FemaleColor);
@@ -465,7 +468,10 @@ namespace GKUI.Forms
             fOptions.CheckTreeSize = chkCheckTreeSize.Checked.GetValueOrDefault();
             fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren = chkDottedLinesOfAdoptedChildren.Checked.GetValueOrDefault();
             fOptions.TreeChartOptions.SeparateDatesAndPlacesLines = chkSeparateDAPLines.Checked.GetValueOrDefault();
+            fOptions.TreeChartOptions.OnlyLocality = chkOnlyLocality.Checked.GetValueOrDefault();
             fOptions.TreeChartOptions.BoldNames = chkBoldNames.Checked.GetValueOrDefault();
+            fOptions.TreeChartOptions.MinimizingWidth = chkMinimizingWidth.Checked.GetValueOrDefault();
+            fOptions.TreeChartOptions.AgeVisible = chkShowAge.Checked.GetValueOrDefault();
 
             fOptions.TreeChartOptions.MaleColor = UIHelper.ConvertColor(lblMaleColor.BackgroundColor);
             fOptions.TreeChartOptions.FemaleColor = UIHelper.ConvertColor(lblFemaleColor.BackgroundColor);
@@ -737,10 +743,13 @@ namespace GKUI.Forms
             chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
             chkShowPlaces.Text = LangMan.LS(LSID.LSID_ShowPlaces);
             chkSeparateDAPLines.Text = LangMan.LS(LSID.LSID_SeparateDatesAndPlacesLines);
+            chkOnlyLocality.Text = LangMan.LS(LSID.LSID_OnlyLocality);
             chkHideUnknownSpouses.Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
             chkCheckTreeSize.Text = LangMan.LS(LSID.LSID_CheckTreeSize);
             chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
             chkBoldNames.Text = LangMan.LS(LSID.LSID_BoldNames);
+            chkMinimizingWidth.Text = LangMan.LS(LSID.LSID_MinimizingWidth);
+            chkShowAge.Text = LangMan.LS(LSID.LSID_ShowAge);
 
             grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
             lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
@@ -816,14 +825,16 @@ namespace GKUI.Forms
 
         private void chkTreeChartOption_CheckedChanged(object sender, EventArgs e)
         {
-            chkShowPlaces.Enabled = !chkOnlyYears.Checked.GetValueOrDefault();
-            chkSeparateDAPLines.Enabled = chkShowPlaces.Checked.GetValueOrDefault() && !chkOnlyYears.Checked.GetValueOrDefault();
+            chkSeparateDAPLines.Enabled = chkShowPlaces.Checked.GetValueOrDefault();
+            chkOnlyLocality.Enabled = chkShowPlaces.Checked.GetValueOrDefault();
 
             chkDefaultPortraits.Enabled = chkPortraitsVisible.Checked.GetValueOrDefault();
 
             chkDiffLines.Enabled = chkName.Checked.GetValueOrDefault() && chkPatronymic.Checked.GetValueOrDefault();
 
             chkOnlyYears.Enabled = chkBirthDate.Checked.GetValueOrDefault() && chkDeathDate.Checked.GetValueOrDefault();
+
+            chkShowAge.Enabled = chkOnlyYears.Checked.GetValueOrDefault() && !chkShowPlaces.Checked.GetValueOrDefault();
         }
 
         private void chkSeparateDepth_CheckedChanged(object sender, EventArgs e)

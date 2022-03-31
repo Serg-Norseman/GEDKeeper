@@ -865,7 +865,7 @@ namespace GKUI.Components
             Invalidate();
         }
 
-        private void SelectBy(TreeChartPerson person, bool needCenter)
+        public void SelectBy(TreeChartPerson person, bool needCenter)
         {
             if (person == null) return;
 
@@ -913,11 +913,6 @@ namespace GKUI.Components
                 fTween.StartTween(UpdateScrollPosition, srcX, srcY, dstX, dstY, TweenAnimation.EaseInOutQuad, timeInterval);
             }
         }
-
-        /*private void SetScroll(int x, int y)
-        {
-            UpdateScrollPosition(x, y);
-        }*/
 
         #endregion
 

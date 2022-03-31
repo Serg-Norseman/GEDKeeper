@@ -59,6 +59,7 @@ namespace GKUI.Forms
         private TextBox txtMarriedSurname;
         private Label lblMarriedSurname;
         private TabPage pageParents;
+        private TabPage pageChilds;
 
         private void InitializeComponent()
         {
@@ -282,6 +283,9 @@ namespace GKUI.Forms
             pageParents = new TabPage();
             pageParents.Text = "pageParents";
 
+            pageChilds = new TabPage();
+            pageChilds.Text = "pageChilds";
+
             tabsPersonData = new TabControl();
             tabsPersonData.Pages.Add(pageEvents);
             tabsPersonData.Pages.Add(pageSpouses);
@@ -293,6 +297,7 @@ namespace GKUI.Forms
             tabsPersonData.Pages.Add(pageSources);
             tabsPersonData.Pages.Add(pageUserRefs);
             tabsPersonData.Pages.Add(pageParents);
+            tabsPersonData.Pages.Add(pageChilds);
 
             //
 

@@ -502,8 +502,7 @@ namespace GKUI.Components
 
         public ExtRect GetClientRect()
         {
-            Rectangle rt = this.ClientRectangle;
-            return ExtRect.CreateBounds(rt.Left, rt.Top, rt.Width, rt.Height);
+            return UIHelper.Rt2Rt(this.ClientRectangle);
         }
 
         public void RecalcChart(bool noRedraw = false)

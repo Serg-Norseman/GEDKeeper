@@ -385,6 +385,74 @@ namespace GKUI.Platform
         }
     }
 
+    public sealed class RichTextAreaHandler : BaseControlHandler<RichTextArea, RichTextAreaHandler>, ITextBox
+    {
+        public RichTextAreaHandler(RichTextArea control) : base(control)
+        {
+        }
+
+        public new bool Enabled
+        {
+            get { return Control.Enabled; }
+            set {
+                Control.Enabled = value;
+                SetBackColor();
+            }
+        }
+
+        public string[] Lines
+        {
+            get { return UIHelper.Convert(Control.Text); }
+            set { /* TODO! */ }
+        }
+
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set {
+                Control.ReadOnly = value;
+                SetBackColor();
+            }
+        }
+
+        public string SelectedText
+        {
+            get { return Control.SelectedText; }
+            set { Control.SelectedText = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public void AppendText(string text)
+        {
+            Control.Append(text, true);
+        }
+
+        public void Clear()
+        {
+            Control.Text = string.Empty;
+        }
+
+        private void SetBackColor()
+        {
+            Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
+        }
+
+        public void Copy()
+        {
+            UIHelper.SetClipboardText(Control.SelectedText);
+        }
+
+        public void SelectAll()
+        {
+            Control.SelectAll();
+        }
+    }
+
     public sealed class MaskedTextBoxHandler : BaseControlHandler<MaskedTextBox, MaskedTextBoxHandler>, ITextBox
     {
         public MaskedTextBoxHandler(MaskedTextBox control) : base(control)

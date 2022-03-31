@@ -42,7 +42,6 @@ namespace GKUI.Components
     {
         private Color fBackColor;
         private Color fForeColor;
-        private object fData;
 
         public Color BackColor
         {
@@ -62,24 +61,20 @@ namespace GKUI.Components
             set { base.Values[0] = value; }
         }
 
-        public object Data
-        {
-            get { return fData; }
-            set { fData = value; }
-        }
+        public object Data { get; set; }
 
         public GKListItem(params object[] values) : base(values)
         {
             BackColor = Colors.Transparent;
         }
 
-        public void AddSubItem(object itemValue)
-        {
-        }
-
         public int CompareTo(object obj)
         {
             return 0;
+        }
+
+        public void AddSubItem(object itemValue)
+        {
         }
 
         public void SetBackColor(IColor color)

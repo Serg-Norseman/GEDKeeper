@@ -110,7 +110,7 @@ namespace GKUI.Forms
             if (e.Key == Keys.Escape) Close();
         }
 
-        private void btnSaveImage_Click(object sender, EventArgs e)
+        private void tbSaveSnapshot_Click(object sender, EventArgs e)
         {
             fController.SaveSnapshot();
         }

@@ -30,6 +30,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miMotherAdd;
         private ButtonMenuItem miSelectColor;
         private ButtonMenuItem miGoToRecord;
+        private ButtonMenuItem miGoToPrimaryBranch;
 
         private ButtonToolItem tbDocPrint;
         private ButtonToolItem tbDocPreview;
@@ -217,6 +218,10 @@ namespace GKUI.Forms
             miGoToRecord.Text = "miGoToRecord";
             miGoToRecord.Click += miGoToRecord_Click;
 
+            miGoToPrimaryBranch = new ButtonMenuItem();
+            miGoToPrimaryBranch.Text = "miGoToPrimaryBranch";
+            miGoToPrimaryBranch.Click += miGoToPrimaryBranch_Click;
+
             MenuPerson = new ContextMenu();
             MenuPerson.Items.AddRange(new MenuItem[] {
                                           miEdit,
@@ -231,6 +236,7 @@ namespace GKUI.Forms
                                           miDelete,
                                           new SeparatorMenuItem(),
                                           miGoToRecord,
+                                          miGoToPrimaryBranch,
                                           new SeparatorMenuItem(),
                                           miRebuildTree,
                                           miRebuildKinships,

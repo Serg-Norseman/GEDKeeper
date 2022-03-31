@@ -748,6 +748,13 @@ namespace GKUI.Forms
             }
         }
 
+        void IBaseWindowView.LoadBase(string fileName)
+        {
+            Application.Instance.Invoke(delegate () {
+                AppHost.Instance.LoadBase(this, fileName);
+            });
+        }
+
         private void UpdateShieldState()
         {
             Bitmap img = (Bitmap)((ImageHandler)fController.GetShieldImage()).Handle;

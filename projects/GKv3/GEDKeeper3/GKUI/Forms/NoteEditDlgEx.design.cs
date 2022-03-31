@@ -8,7 +8,7 @@ namespace GKUI.Forms
     {
         private Button btnAccept;
         private Button btnCancel;
-        private TextArea txtNote;
+        private RichTextArea txtNote;
         private HyperView hyperView1;
         private ButtonToolItem cmbSizes;
         private ContextMenu menuSizes;
@@ -99,8 +99,9 @@ namespace GKUI.Forms
 
             //
 
-            txtNote = new TextArea();
+            txtNote = new RichTextArea();
             txtNote.AcceptsReturn = true;
+            txtNote.AcceptsTab = false;
 
             hyperView1 = new HyperView();
             hyperView1.BorderWidth = 0;

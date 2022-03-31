@@ -142,6 +142,9 @@ namespace GKUI.Forms
         private CheckBox chkSeparateDAPLines;
         private CheckBox chkDottedLinesOfAdoptedChildren;
         private CheckBox chkBoldNames;
+        private CheckBox chkOnlyLocality;
+        private CheckBox chkMinimizingWidth;
+        private CheckBox chkShowAge;
 
         private CheckBox chkShortKinshipForm;
         private CheckBox chkSurnameFirstInOrder;
@@ -495,13 +498,25 @@ namespace GKUI.Forms
             chkBoldNames.Text = "chkBoldNames";
             chkBoldNames.CheckedChanged += chkTreeChartOption_CheckedChanged;
 
+            chkOnlyLocality = new CheckBox();
+            chkOnlyLocality.Text = "chkOnlyLocality";
+            chkOnlyLocality.CheckedChanged += chkTreeChartOption_CheckedChanged;
+
+            chkMinimizingWidth = new CheckBox();
+            chkMinimizingWidth.Text = "chkMinimizingWidth";
+            chkMinimizingWidth.CheckedChanged += chkTreeChartOption_CheckedChanged;
+
+            chkShowAge = new CheckBox();
+            chkShowAge.Text = "chkShowAge";
+            chkShowAge.CheckedChanged += chkTreeChartOption_CheckedChanged;
+
             grpTreePersons = new GroupBox();
             grpTreePersons.Text = "grpTreePersons";
             grpTreePersons.Content = new DefStackLayout(Orientation.Vertical) {
-                Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears,
+                Items = { chkSurname, chkName, chkPatronymic, chkDiffLines, chkBirthDate, chkDeathDate, chkOnlyYears, chkShowAge,
                     chkMarriagesDates, chkKinship, chkSignsVisible, chkTreeDecorative, chkPortraitsVisible, chkDefaultPortraits,
-                    chkInvertedTree, chkChildlessExclude, chkShowPlaces, chkSeparateDAPLines, chkHideUnknownSpouses, chkCheckTreeSize,
-                    chkDottedLinesOfAdoptedChildren, chkBoldNames
+                    chkInvertedTree, chkChildlessExclude, chkShowPlaces, chkSeparateDAPLines, chkOnlyLocality, chkHideUnknownSpouses, chkCheckTreeSize,
+                    chkDottedLinesOfAdoptedChildren, chkBoldNames, chkMinimizingWidth
                 }
             };
 

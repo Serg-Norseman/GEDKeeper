@@ -150,7 +150,7 @@ namespace GKUI.Forms
             fController = new FamilyEditDlgController(this);
             fController.Init(baseWin);
 
-            fChildrenList.ListModel = new ChildrenListModel(baseWin, fController.LocalUndoman);
+            fChildrenList.ListModel = new FamilyChildrenListModel(baseWin, fController.LocalUndoman);
             fEventsList.ListModel = new EventsListModel(baseWin, fController.LocalUndoman, false);
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
             fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);

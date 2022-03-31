@@ -117,7 +117,7 @@ namespace GKUI.Platform
             }
         }
 
-        public IImage GetResourceImage(string resName, bool makeTransp)
+        public IImage LoadResourceImage(string resName, bool makeTransp)
         {
             Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
 
@@ -131,17 +131,6 @@ namespace GKUI.Platform
                         gfx.Clear(pixColor);
                     }
                 }*/
-            }
-
-            return new ImageHandler(img);
-        }
-
-        // TODO: Temp version, on future
-        public IImage LoadResourceImage(string resName, bool makeTransp)
-        {
-            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
-
-            if (makeTransp) {
             }
 
             return new ImageHandler(img);

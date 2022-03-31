@@ -8,7 +8,7 @@ namespace GKUI.Forms
     {
         private Button btnAccept;
         private Button btnCancel;
-        private TextArea txtNote;
+        private RichTextArea txtNote;
 
         private void InitializeComponent()
         {
@@ -26,8 +26,9 @@ namespace GKUI.Forms
             btnCancel.Text = "btnCancel";
             btnCancel.Click += btnCancel_Click;
 
-            txtNote = new TextArea();
+            txtNote = new RichTextArea();
             txtNote.AcceptsReturn = true;
+            txtNote.AcceptsTab = false;
             txtNote.Size = new Size(400, 260);
 
             Content = new DefTableLayout {
