@@ -14,4 +14,11 @@
     <ItemGroup>
       <PackageReference Include="Eto.Platform.Mac64" Version="2.5.11" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\GKCore\Resources\icon_gedkeeper.png">
+        <Link>icon_gedkeeper.png</Link>
+      </Content>
+      <None Remove="icon_gedkeeper.icns" />
+    </ItemGroup>
 </Project>
