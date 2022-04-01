@@ -128,6 +128,10 @@ namespace GKUI.Components
             if (fLines.Count == 0)
                 return;
 
+            float maxWidth = this.ClientSize.Width - (2 * fBorderWidth);
+            if (maxWidth < 0)
+                return;
+
             try {
                 //SuspendLayout();
 
@@ -139,16 +143,13 @@ namespace GKUI.Components
                     int yPos = 0;
                     int xMax = 0;
                     int lineHeight = 0;
-
-                    string text = fLines.Text;
                     Font defFont = this.Font;
-                    float maxWidth = this.ClientSize.Width - (2 * fBorderWidth);
-
-                    text = SysUtils.StripHTML(text);
 
                     var parser = new BBTextParser(AppHost.GfxProvider, defFont.Size,
                                                   new ColorHandler(fLinkColor), new ColorHandler(TextColor));
 
+                    string text = fLines.Text;
+                    text = SysUtils.StripHTML(text);
                     parser.ParseText(fChunks, text);
 
                     int line = -1;
