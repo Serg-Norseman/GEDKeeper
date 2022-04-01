@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,35 +27,18 @@ using GKUI.Platform;
 
 [assembly: AssemblyTitle("GEDKeeper3.Wpf")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyProduct(GKData.APP_TITLE)]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
 [assembly: AssemblyVersion("3.0.0.0")]
 [assembly: AssemblyCulture("")]
 
-namespace GKUI
+namespace GEDKeeper3.Wpf
 {
     /// <summary>
     /// The main startup class of application.
     /// </summary>
     public static class GKProgram
     {
-        private static void LogSysInfo()
-        {
-            try {
-                //#if MONO
-                //Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
-                //Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
-                //#endif
-
-                // There should be no links to the application infrastructure
-                Assembly execAssembly = Assembly.GetExecutingAssembly();
-                Logger.WriteInfo("CLR Version: " + execAssembly.ImageRuntimeVersion);
-                Logger.WriteInfo("GK Version: " + execAssembly.GetName().Version.ToString());
-            } catch {
-                // dummy
-            }
-        }
-
         [STAThread]
         public static void Main(string[] args)
         {
@@ -68,7 +51,7 @@ namespace GKUI
             EtoAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
             Logger.Init(AppHost.GetLogFilename());
-            LogSysInfo();
+            AppHost.LogSysInfo();
 
             var application = new Application(Platforms.Wpf);
 

@@ -1,6 +1,25 @@
-﻿using System;
+﻿/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System;
 using System.Reflection;
-using System.Resources;
 using System.Text;
 using Eto;
 using Eto.Forms;
@@ -9,14 +28,10 @@ using GKUI.Platform;
 
 [assembly: AssemblyTitle("GEDKeeper3.Gtk2")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2009-2017 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyProduct(GKData.APP_TITLE)]
+[assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
 [assembly: AssemblyVersion("3.0.0.0")]
-[assembly: NeutralResourcesLanguage("en")]
+[assembly: AssemblyCulture("")]
 
 namespace GEDKeeper3.Gtk2
 {
@@ -25,23 +40,6 @@ namespace GEDKeeper3.Gtk2
     /// </summary>
     public static class GKProgram
     {
-        private static void LogSysInfo()
-        {
-            try {
-                //#if MONO
-                //Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
-                //Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
-                //#endif
-
-                // There should be no links to the application infrastructure
-                Assembly execAssembly = Assembly.GetExecutingAssembly();
-                Logger.WriteInfo("CLR Version: " + execAssembly.ImageRuntimeVersion);
-                Logger.WriteInfo("GK Version: " + execAssembly.GetName().Version.ToString());
-            } catch {
-                // dummy
-            }
-        }
-
         [STAThread]
         public static void Main(string[] args)
         {
@@ -54,7 +52,7 @@ namespace GEDKeeper3.Gtk2
             EtoAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
             Logger.Init(AppHost.GetLogFilename());
-            LogSysInfo();
+            AppHost.LogSysInfo();
 
             var application = new Application(
 #if NETCOREAPP3_1

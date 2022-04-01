@@ -99,6 +99,23 @@ namespace GKCore
             }
         }
 
+        public static void LogSysInfo()
+        {
+            try {
+                //#if MONO
+                //Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
+                //Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
+                //#endif
+
+                // There should be no links to the application infrastructure
+                Assembly execAssembly = Assembly.GetExecutingAssembly();
+                Logger.WriteInfo("CLR Version: " + execAssembly.ImageRuntimeVersion);
+                Logger.WriteInfo("GK Version: " + execAssembly.GetName().Version.ToString());
+            } catch {
+                // dummy
+            }
+        }
+
         public virtual void Init(string[] args, bool isMDI)
         {
             GKUtils.InitGEDCOM();
