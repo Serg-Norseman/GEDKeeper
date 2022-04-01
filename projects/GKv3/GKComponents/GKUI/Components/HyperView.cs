@@ -97,7 +97,7 @@ namespace GKUI.Components
             fHeights = new List<int>();
             fLines = new StringList();
             fLines.OnChange += LinesChanged;
-            fLinkColor = Colors.Blue;
+            fLinkColor = SystemColors.LinkText;
             fTextSize = ExtSize.Empty;
             fWordWrap = true;
         }
