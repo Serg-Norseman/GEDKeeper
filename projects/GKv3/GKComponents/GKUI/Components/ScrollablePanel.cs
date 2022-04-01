@@ -28,7 +28,7 @@ using Eto.Forms;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class ScrollablePanel : Scrollable
     {
@@ -114,7 +114,7 @@ namespace GKUI.Components
             Content = fCanvas;
 
             fFont = SystemFonts.Label();
-            fTextColor = Colors.Black;
+            fTextColor = SystemColors.ControlText;
 
             SetImageSize(new ExtSize(100, 100), false);
         }
