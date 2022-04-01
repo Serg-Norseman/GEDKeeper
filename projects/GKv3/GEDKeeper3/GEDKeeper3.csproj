@@ -16,8 +16,12 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj"/>
-        <ProjectReference Include="..\GKComponents\GKComponents.csproj"/>
+        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+        <ProjectReference Include="..\GKComponents\GKComponents.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
+    </ItemGroup>
+    
 </Project>

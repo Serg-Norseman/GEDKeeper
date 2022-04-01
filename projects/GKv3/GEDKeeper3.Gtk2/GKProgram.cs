@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Resources;
+using System.Text;
 using Eto;
 using Eto.Forms;
 using GKCore;
@@ -44,6 +45,9 @@ namespace GEDKeeper3.Gtk2
         [STAThread]
         public static void Main(string[] args)
         {
+#if NETCOREAPP3_1
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
             //Style.Add<ButtonToolItemHandler>("icons", h => h.Widget.Image.);
             //Style.Add<ButtonHandler>("icons", h => h.Widget.Image.);
 
