@@ -659,6 +659,10 @@ namespace GKUI.Components
 
         public GKListItem GetSelectedItem()
         {
+            if (SelectedRow < 0) {
+                return null;
+            }
+
             var item = SelectedItem as GKListItem;
             return item;
         }
