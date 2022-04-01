@@ -125,8 +125,11 @@ namespace GKUI.Components
 
         private void ArrangeText()
         {
+            if (fLines.Count == 0)
+                return;
+
             try {
-                SuspendLayout();
+                //SuspendLayout();
 
                 fAcceptFontChange = false;
                 fHeights.Clear();
@@ -230,11 +233,11 @@ namespace GKUI.Components
                     }
 
                     fTextSize = new ExtSize(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
+                    SetImageSize(fTextSize);
                 } finally {
                     fAcceptFontChange = true;
-                    SetImageSize(fTextSize);
 
-                    ResumeLayout();
+                    //ResumeLayout();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("HyperView.ArrangeText()", ex);
