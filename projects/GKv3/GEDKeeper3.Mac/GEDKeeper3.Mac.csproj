@@ -4,6 +4,7 @@
         <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
         <OutputType>exe</OutputType>
         <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
+        <MacBundleName>GEDKeeper3</MacBundleName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,6 +20,12 @@
       <Content Include="..\..\GKCore\Resources\icon_gedkeeper.png">
         <Link>icon_gedkeeper.png</Link>
       </Content>
-      <None Remove="icon_gedkeeper.icns" />
     </ItemGroup>
+    
+    <Target Name="MacBundleLocaleFiles" BeforeTargets="MacFinishBundle">
+        <ItemGroup>
+            <LocaleFiles Include="..\..\..\locales\**\*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(LocaleFiles)" DestinationFolder="$(OutputContents)\locales\%(RecursiveDir)" />
+    </Target>
 </Project>
