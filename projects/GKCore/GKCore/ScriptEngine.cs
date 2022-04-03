@@ -55,21 +55,12 @@ namespace GKCore
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public class ScriptEngine : BaseObject
+    public class ScriptEngine
     {
         private ITextBox fDebugOutput;
         private IBaseWindow fBase;
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // dummy
-            }
-            base.Dispose(disposing);
-        }
 
         public void lua_run(string script, IBaseWindow baseWin, ITextBox debugOutput)
         {
@@ -560,7 +551,7 @@ namespace GKCore
         {
             GDMFamilyRecord fRec = familyPtr as GDMFamilyRecord;
             if (fRec == null) return;
-            
+
             GDMIndividualRecord spRec = spousePtr as GDMIndividualRecord;
             fRec.AddSpouse(spRec);
         }

@@ -32,17 +32,17 @@ using GKCore.MVP.Views;
 namespace GKCore.Controllers
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class MapsViewerWinController : FormController<IMapsViewerWin>
     {
-        private readonly ExtList<GeoPoint> fMapPoints;
+        private readonly List<GeoPoint> fMapPoints;
         private readonly List<GDMRecord> fSelectedPersons;
-        private readonly ExtList<MapPlace> fPlaces;
+        private readonly List<MapPlace> fPlaces;
 
         private ITVNode fBaseRoot;
 
-        public ExtList<MapPlace> Places
+        public IList<MapPlace> Places
         {
             get { return fPlaces; }
         }
@@ -54,8 +54,8 @@ namespace GKCore.Controllers
 
         public MapsViewerWinController(IMapsViewerWin view, List<GDMRecord> selectedPersons) : base(view)
         {
-            fMapPoints = new ExtList<GeoPoint>(true);
-            fPlaces = new ExtList<MapPlace>(true);
+            fMapPoints = new List<GeoPoint>();
+            fPlaces = new List<MapPlace>();
             fSelectedPersons = selectedPersons;
         }
 
@@ -210,7 +210,7 @@ namespace GKCore.Controllers
                     var placeRef = place.PlaceRefs[j];
                     GDMCustomEvent evt = placeRef.Event;
                     var evtType = evt.GetTagType();
-                    bool checkEventType = (condBirth && evtType == GEDCOMTagType.BIRT) || 
+                    bool checkEventType = (condBirth && evtType == GEDCOMTagType.BIRT) ||
                         (condDeath && evtType == GEDCOMTagType.DEAT) || (condResidence && evtType == GEDCOMTagType.RESI);
 
                     if ((ind != null && (placeRef.Owner == ind)) || checkEventType) {
@@ -221,7 +221,7 @@ namespace GKCore.Controllers
 
             if (ind != null) {
                 // sort points by date
-                fMapPoints.QuickSort(MapPointsCompare);
+                SortHelper.QuickSort(fMapPoints, MapPointsCompare);
             }
 
             PlacesLoader.CopyPoints(fView.MapBrowser, fMapPoints, ind != null);

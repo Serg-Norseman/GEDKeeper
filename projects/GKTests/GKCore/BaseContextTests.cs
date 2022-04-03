@@ -108,7 +108,7 @@ namespace GKCore
         public void Test_CreateEventEx()
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
-            
+
             var evt = fContext.CreateEventEx(iRec, GEDCOMTagName.FACT, "17 JAN 2013", "Ivanovo");
             Assert.IsNotNull(evt);
 
@@ -405,23 +405,22 @@ namespace GKCore
         [Test]
         public void Test_UndoManager()
         {
-            using (var undoman = new UndoManager()) {
-                Assert.IsNotNull(undoman);
+            var undoman = new UndoManager();
+            Assert.IsNotNull(undoman);
 
-                Assert.IsFalse(undoman.CanUndo());
-                Assert.IsFalse(undoman.CanRedo());
+            Assert.IsFalse(undoman.CanUndo());
+            Assert.IsFalse(undoman.CanRedo());
 
-                undoman.Clear();
+            undoman.Clear();
 
-                Assert.IsFalse(undoman.DoOperation(null));
+            Assert.IsFalse(undoman.DoOperation(null));
 
-                undoman.Undo();
-                undoman.Redo();
-                undoman.Commit();
-                undoman.Rollback();
+            undoman.Undo();
+            undoman.Redo();
+            undoman.Commit();
+            undoman.Rollback();
 
-                Assert.IsFalse(undoman.DoOperation(new InvalidOperation(undoman)));
-            }
+            Assert.IsFalse(undoman.DoOperation(new InvalidOperation(undoman)));
         }
 
         [Test]

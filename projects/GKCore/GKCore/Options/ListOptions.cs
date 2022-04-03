@@ -33,9 +33,9 @@ namespace GKCore.Options
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public class ListOptions : BaseObject, IOptions
+    public class ListOptions : IOptions
     {
         public static readonly string[] RecordTypeNames = new string[] {
             "None",

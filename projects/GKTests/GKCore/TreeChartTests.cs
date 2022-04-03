@@ -67,94 +67,86 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_PersonList()
-        {
-            PersonList personList = new PersonList(true);
-            Assert.IsNotNull(personList);
-        }
-
-        [Test]
         public void Test_TreeChartPerson()
         {
-            using (TreeChartPerson tcPerson = new TreeChartPerson(null)) {
-                Assert.IsNotNull(tcPerson);
+            var tcPerson = new TreeChartPerson(null);
+            Assert.IsNotNull(tcPerson);
 
-                tcPerson.BuildBy(null);
+            tcPerson.BuildBy(null);
 
-                Assert.AreEqual(null, tcPerson.Rec);
+            Assert.AreEqual(null, tcPerson.Rec);
 
-                Assert.AreEqual(null, tcPerson.Portrait);
-                Assert.AreEqual(0, tcPerson.PortraitWidth);
+            Assert.AreEqual(null, tcPerson.Portrait);
+            Assert.AreEqual(0, tcPerson.PortraitWidth);
 
-                tcPerson.SetFlag(PersonFlag.pfDivorced, false);
-                Assert.AreEqual(false, tcPerson.HasFlag(PersonFlag.pfDivorced));
-                tcPerson.SetFlag(PersonFlag.pfDivorced, true);
-                Assert.AreEqual(true, tcPerson.HasFlag(PersonFlag.pfDivorced));
+            tcPerson.SetFlag(PersonFlag.pfDivorced, false);
+            Assert.AreEqual(false, tcPerson.HasFlag(PersonFlag.pfDivorced));
+            tcPerson.SetFlag(PersonFlag.pfDivorced, true);
+            Assert.AreEqual(true, tcPerson.HasFlag(PersonFlag.pfDivorced));
 
-                tcPerson.IsDup = false;
-                Assert.AreEqual(false, tcPerson.IsDup);
-                tcPerson.IsDup = true;
-                Assert.AreEqual(true, tcPerson.IsDup);
+            tcPerson.IsDup = false;
+            Assert.AreEqual(false, tcPerson.IsDup);
+            tcPerson.IsDup = true;
+            Assert.AreEqual(true, tcPerson.IsDup);
 
-                Assert.AreEqual(0, tcPerson.Height);
-                Assert.AreEqual(0, tcPerson.Width);
+            Assert.AreEqual(0, tcPerson.Height);
+            Assert.AreEqual(0, tcPerson.Width);
 
-                Assert.AreEqual(0, tcPerson.PtX);
-                tcPerson.PtX = 11;
-                Assert.AreEqual(11, tcPerson.PtX);
+            Assert.AreEqual(0, tcPerson.PtX);
+            tcPerson.PtX = 11;
+            Assert.AreEqual(11, tcPerson.PtX);
 
-                Assert.AreEqual(0, tcPerson.PtY);
-                tcPerson.PtY = 22;
-                Assert.AreEqual(22, tcPerson.PtY);
+            Assert.AreEqual(0, tcPerson.PtY);
+            tcPerson.PtY = 22;
+            Assert.AreEqual(22, tcPerson.PtY);
 
-                tcPerson.Selected = false;
-                Assert.AreEqual(false, tcPerson.Selected);
-                tcPerson.Selected = true;
-                Assert.AreEqual(true, tcPerson.Selected);
+            tcPerson.Selected = false;
+            Assert.AreEqual(false, tcPerson.Selected);
+            tcPerson.Selected = true;
+            Assert.AreEqual(true, tcPerson.Selected);
 
-                Assert.AreEqual(GDMSex.svUnknown, tcPerson.Sex);
-                tcPerson.Sex = GDMSex.svMale;
-                Assert.AreEqual(GDMSex.svMale, tcPerson.Sex);
+            Assert.AreEqual(GDMSex.svUnknown, tcPerson.Sex);
+            tcPerson.Sex = GDMSex.svMale;
+            Assert.AreEqual(GDMSex.svMale, tcPerson.Sex);
 
-                EnumSet<SpecialUserRef> enums = tcPerson.Signs;
-                Assert.IsTrue(enums.IsEmpty());
+            EnumSet<SpecialUserRef> enums = tcPerson.Signs;
+            Assert.IsTrue(enums.IsEmpty());
 
-                Assert.AreEqual(0, tcPerson.GetChildsCount());
-                Assert.AreEqual(0, tcPerson.GetSpousesCount());
+            Assert.AreEqual(0, tcPerson.GetChildsCount());
+            Assert.AreEqual(0, tcPerson.GetSpousesCount());
 
-                TreeChartPerson child = new TreeChartPerson(null);
-                tcPerson.AddChild(null);
-                tcPerson.AddChild(child);
-                Assert.AreEqual(1, tcPerson.GetChildsCount());
-                Assert.AreEqual(child, tcPerson.GetChild(0));
+            TreeChartPerson child = new TreeChartPerson(null);
+            tcPerson.AddChild(null);
+            tcPerson.AddChild(child);
+            Assert.AreEqual(1, tcPerson.GetChildsCount());
+            Assert.AreEqual(child, tcPerson.GetChild(0));
 
-                TreeChartPerson spouse = new TreeChartPerson(null);
-                tcPerson.AddSpouse(null);
-                tcPerson.AddSpouse(spouse);
-                Assert.AreEqual(1, tcPerson.GetSpousesCount());
-                Assert.AreEqual(spouse, tcPerson.GetSpouse(0));
+            TreeChartPerson spouse = new TreeChartPerson(null);
+            tcPerson.AddSpouse(null);
+            tcPerson.AddSpouse(spouse);
+            Assert.AreEqual(1, tcPerson.GetSpousesCount());
+            Assert.AreEqual(spouse, tcPerson.GetSpouse(0));
 
-                Assert.IsFalse(tcPerson.HasFlag(PersonFlag.pfDescWalk));
-                tcPerson.SetFlag(PersonFlag.pfDescWalk);
-                Assert.IsTrue(tcPerson.HasFlag(PersonFlag.pfDescWalk));
+            Assert.IsFalse(tcPerson.HasFlag(PersonFlag.pfDescWalk));
+            tcPerson.SetFlag(PersonFlag.pfDescWalk);
+            Assert.IsTrue(tcPerson.HasFlag(PersonFlag.pfDescWalk));
 
-                tcPerson.BuildBy(null);
+            tcPerson.BuildBy(null);
 
-                ExtRect psnRt = tcPerson.Rect;
-                Assert.IsTrue(psnRt.IsEmpty());
+            ExtRect psnRt = tcPerson.Rect;
+            Assert.IsTrue(psnRt.IsEmpty());
 
-                tcPerson.Sex = GDMSex.svMale;
-                var color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
-                Assert.AreEqual(Color.FromArgb(255, Color.Blue), color);
+            tcPerson.Sex = GDMSex.svMale;
+            var color = ((ColorHandler) tcPerson.GetSelectedColor()).Handle;
+            Assert.AreEqual(Color.FromArgb(255, Color.Blue), color);
 
-                tcPerson.Sex = GDMSex.svFemale;
-                color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
-                Assert.AreEqual(Color.FromArgb(255, Color.Red), color);
+            tcPerson.Sex = GDMSex.svFemale;
+            color = ((ColorHandler) tcPerson.GetSelectedColor()).Handle;
+            Assert.AreEqual(Color.FromArgb(255, Color.Red), color);
 
-                tcPerson.Sex = GDMSex.svUnknown;
-                color = ((ColorHandler)tcPerson.GetSelectedColor()).Handle;
-                Assert.AreEqual(Color.FromArgb(255, Color.Black), color);
-            }
+            tcPerson.Sex = GDMSex.svUnknown;
+            color = ((ColorHandler) tcPerson.GetSelectedColor()).Handle;
+            Assert.AreEqual(Color.FromArgb(255, Color.Black), color);
         }
 
         [Test]

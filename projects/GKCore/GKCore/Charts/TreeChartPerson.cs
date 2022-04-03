@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using BSLib.Design.Graphics;
@@ -32,7 +33,7 @@ using BSDColors = BSLib.Design.BSDConsts.Colors;
 namespace GKCore.Charts
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class PersonModifyEventArgs : EventArgs
     {
@@ -55,9 +56,9 @@ namespace GKCore.Charts
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public class TreeChartPerson : BaseObject
+    public class TreeChartPerson
     {
         private readonly TreeChartModel fModel;
 
@@ -74,8 +75,8 @@ namespace GKCore.Charts
         private GDMIndividualRecord fRec;
         private EnumSet<SpecialUserRef> fSigns;
         private GDMSex fSex;
-        private PersonList fChilds;
-        private PersonList fSpouses;
+        private List<TreeChartPerson> fChilds;
+        private List<TreeChartPerson> fSpouses;
         private IImage fPortrait;
         private int fPortraitWidth;
 
@@ -204,18 +205,6 @@ namespace GKCore.Charts
             UserColor = null;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // don't dispose portrait - he's from cache!
-                //if (fPortrait != null) fPortrait.Dispose();
-
-                if (fChilds != null) fChilds.Dispose();
-                if (fSpouses != null) fSpouses.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         public bool HasFlag(PersonFlag flag)
         {
             return fFlags.Contains(flag);
@@ -263,7 +252,7 @@ namespace GKCore.Charts
         {
             if (child == null) return;
 
-            if (fChilds == null) fChilds = new PersonList(false);
+            if (fChilds == null) fChilds = new List<TreeChartPerson>();
 
             fChilds.Add(child);
         }
@@ -272,7 +261,7 @@ namespace GKCore.Charts
         {
             if (spouse == null) return;
 
-            if (fSpouses == null) fSpouses = new PersonList(false);
+            if (fSpouses == null) fSpouses = new List<TreeChartPerson>();
 
             fSpouses.Add(spouse);
         }

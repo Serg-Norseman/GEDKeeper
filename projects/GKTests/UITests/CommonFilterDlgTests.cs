@@ -33,7 +33,7 @@ using NUnit.Framework;
 namespace GKUI.Forms
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [TestFixture]
     public class CommonFilterDlgTests : CustomWindowTest
@@ -59,7 +59,6 @@ namespace GKUI.Forms
         public override void TearDown()
         {
             fDialog.Dispose();
-            fListMan.Dispose();
         }
 
         [Test]

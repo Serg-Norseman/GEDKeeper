@@ -36,7 +36,7 @@ namespace GKCore.Options
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class GlobalOptions : BaseObject
     {
@@ -483,17 +483,11 @@ namespace GKCore.Options
         {
             if (disposing) {
                 fLastBases.Dispose();
-                //fLanguages.Dispose();
                 fRelations.Dispose();
 
                 fResidenceFilters.Dispose();
                 fNameFilters.Dispose();
-                //FMRUFiles.Dispose();
                 fEventFilters.Dispose();
-
-                fProxy.Dispose();
-                fPedigreeOptions.Dispose();
-                fTreeChartOptions.Dispose();
             }
             base.Dispose(disposing);
         }

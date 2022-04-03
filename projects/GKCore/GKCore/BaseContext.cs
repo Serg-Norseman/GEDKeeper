@@ -54,7 +54,7 @@ namespace GKCore
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class BaseContext : BaseObject, IBaseContext
     {
@@ -171,7 +171,6 @@ namespace GKCore
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fUndoman.Dispose();
                 fTree.Dispose();
             }
             base.Dispose(disposing);
@@ -1631,7 +1630,7 @@ namespace GKCore
         /// <summary>
         /// This method performs a basic locking of the records for their
         /// editors.
-        /// 
+        ///
         /// The original idea was to call the methods Lock/Unlock records,
         /// in the edit dialogs of the records. However, it would be unsafe,
         /// because in the case of a failure of dialogue, the record would

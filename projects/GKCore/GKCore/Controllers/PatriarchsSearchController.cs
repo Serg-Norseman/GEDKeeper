@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using BSLib;
 using GDModel;
 using GKCore.MVP;
@@ -28,7 +29,7 @@ using GKCore.Types;
 namespace GKCore.Controllers
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class PatriarchsSearchController : DialogController<IPatriarchsSearchDlg>
     {
@@ -57,11 +58,11 @@ namespace GKCore.Controllers
         public void Search()
         {
             fView.PatriarchsList.BeginUpdate();
-            ExtList<PatriarchObj> lst = null;
+            IList<PatriarchObj> lst = null;
             try {
                 fView.PatriarchsList.ClearItems();
                 lst = PatriarchsMan.GetPatriarchsList(fBase.Context, (int)fView.MinGensNum.Value, !fView.WithoutDatesCheck.Checked);
-                lst.QuickSort(PatriarchsCompare);
+                SortHelper.QuickSort(lst, PatriarchsCompare);
 
                 int num = lst.Count;
                 for (int i = 0; i < num; i++) {
@@ -73,7 +74,6 @@ namespace GKCore.Controllers
                     });
                 }
             } finally {
-                if (lst != null) lst.Dispose();
                 fView.PatriarchsList.EndUpdate();
             }
         }
