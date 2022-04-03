@@ -34,11 +34,11 @@ using GKMap.WinForms;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class GKMapBrowser : UserControl, IMapBrowser
     {
-        private readonly ExtList<GeoPoint> fMapPoints;
+        private readonly List<GeoPoint> fMapPoints;
         private bool fShowPoints;
         private bool fShowLines;
         private int fUpdateCount;
@@ -66,7 +66,7 @@ namespace GKUI.Components
             }
         }
 
-        public ExtList<GeoPoint> MapPoints
+        public IList<GeoPoint> MapPoints
         {
             get { return fMapPoints; }
         }
@@ -75,7 +75,7 @@ namespace GKUI.Components
         {
             InitControl();
 
-            fMapPoints = new ExtList<GeoPoint>(true);
+            fMapPoints = new List<GeoPoint>();
             fUpdateCount = 0;
             fShowPoints = true;
             fShowLines = true;
@@ -85,7 +85,6 @@ namespace GKUI.Components
         {
             if (disposing) {
                 ClearPoints();
-                fMapPoints.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -99,7 +98,8 @@ namespace GKUI.Components
         {
             BeginUpdate();
             GeoPoint pt = new GeoPoint(latitude, longitude, hint);
-            int res = fMapPoints.Add(pt);
+            int res = fMapPoints.Count;
+            fMapPoints.Add(pt);
             EndUpdate();
 
             return res;
@@ -113,7 +113,7 @@ namespace GKUI.Components
 
         public void DeletePoint(int index)
         {
-            fMapPoints.Delete(index);
+            fMapPoints.RemoveAt(index);
             RefreshPoints();
         }
 
@@ -227,7 +227,7 @@ namespace GKUI.Components
                 fMapControl.MaxZoom = 24;
                 fMapControl.Zoom = 9;
 
-                // add custom layers  
+                // add custom layers
                 fMapControl.Overlays.Add(fObjects);
                 fMapControl.Overlays.Add(fTopOverlay);
 

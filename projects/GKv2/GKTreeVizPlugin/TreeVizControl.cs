@@ -423,24 +423,21 @@ namespace GKTreeVizPlugin
                 fSys.SetViewSize(50, 50);
                 fSys.OnStop += OnArborStop;
 
-                using (ExtList<PatriarchObj> patList = PatriarchsMan.GetPatriarchsLinks(
-                                                           baseWin.Context, minGens, false, loneSuppress)) {
-                    int num = patList.Count;
-                    for (int i = 0; i < num; i++) {
-                        PatriarchObj pObj = patList[i];
+                var patList = PatriarchsMan.GetPatriarchsLinks(baseWin.Context, minGens, false, loneSuppress);
+                int num = patList.Count;
+                for (int i = 0; i < num; i++) {
+                    PatriarchObj pObj = patList[i];
 
-                        if (!loneSuppress || pObj.HasLinks) {
-                            ArborNode node = fSys.AddNode(pObj.IRec.XRef);
-                            node.Data = pObj;
-                        }
+                    if (!loneSuppress || pObj.HasLinks) {
+                        ArborNode node = fSys.AddNode(pObj.IRec.XRef);
+                        node.Data = pObj;
                     }
+                }
+                for (int i = 0; i < num; i++) {
+                    PatriarchObj pat1 = patList[i];
 
-                    for (int i = 0; i < num; i++) {
-                        PatriarchObj pat1 = patList[i];
-
-                        foreach (PatriarchObj pat2 in pat1.Links) {
-                            fSys.AddEdge(pat1.IRec.XRef, pat2.IRec.XRef);
-                        }
+                    foreach (PatriarchObj pat2 in pat1.Links) {
+                        fSys.AddEdge(pat1.IRec.XRef, pat2.IRec.XRef);
                     }
                 }
 

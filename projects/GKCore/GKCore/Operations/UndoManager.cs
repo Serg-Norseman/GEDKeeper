@@ -34,7 +34,7 @@ namespace GKCore.Operations
 
     public delegate void TransactionEventHandler(object sender, TransactionType type);
 
-    public class UndoManager : BaseObject, IUndoManager
+    public class UndoManager : IUndoManager
     {
         private const CustomOperation TRANS_DELIMITER = null;
 
@@ -62,14 +62,6 @@ namespace GKCore.Operations
             fCurrentIndex = -1;
 
             PushInternal(TRANS_DELIMITER);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // dummy
-            }
-            base.Dispose(disposing);
         }
 
         #region Private methods

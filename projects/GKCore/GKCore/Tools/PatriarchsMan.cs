@@ -19,7 +19,7 @@
  */
 
 using System;
-using BSLib;
+using System.Collections.Generic;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore.Interfaces;
@@ -28,14 +28,14 @@ using GKCore.Types;
 namespace GKCore.Tools
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class PatriarchsMan
     {
-        public static ExtList<PatriarchObj> GetPatriarchsList(IBaseContext context,
+        public static IList<PatriarchObj> GetPatriarchsList(IBaseContext context,
                                                               int gensMin, bool datesCheck)
         {
-            ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(true);
+            var patList = new List<PatriarchObj>();
 
             IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), context.Tree.RecordsCount);
@@ -81,11 +81,11 @@ namespace GKCore.Tools
             return patList;
         }
 
-        public static ExtList<PatriarchObj> GetPatriarchsLinks(IBaseContext context,
+        public static IList<PatriarchObj> GetPatriarchsLinks(IBaseContext context,
                                                                int gensMin, bool datesCheck,
                                                                bool loneSuppress)
         {
-            ExtList<PatriarchObj> patList = GetPatriarchsList(context, gensMin, datesCheck);
+            var patList = GetPatriarchsList(context, gensMin, datesCheck);
 
             IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
@@ -118,10 +118,9 @@ namespace GKCore.Tools
 
             if (loneSuppress) {
                 for (int i = patList.Count - 1; i >= 0; i--) {
-                    PatriarchObj patr = patList[i];
-                    if (!patr.HasLinks) patList.Delete(i);
+                    var patr = patList[i];
+                    if (!patr.HasLinks) patList.RemoveAt(i);
                 }
-                patList.Pack();
             }
 
             return patList;
@@ -159,60 +158,60 @@ namespace GKCore.Tools
             Graph graph = new Graph();
 
             try {
-                using (ExtList<PatriarchObj> patList = GetPatriarchsList(context, gensMin, datesCheck)) {
-                    var pgNodes = new GKVarCache<GDMFamilyRecord, PGNode>();
+                var patList = GetPatriarchsList(context, gensMin, datesCheck);
+                var pgNodes = new GKVarCache<GDMFamilyRecord, PGNode>();
 
-                    // prepare
-                    int count = patList.Count;
-                    for (int i = 0; i < count; i++) {
-                        PatriarchObj patNode = patList[i];
-                        GDMIndividualRecord iRec = patNode.IRec;
+                // prepare
+                int count = patList.Count;
+                for (int i = 0; i < count; i++) {
+                    PatriarchObj patNode = patList[i];
+                    GDMIndividualRecord iRec = patNode.IRec;
 
-                        int count2 = iRec.SpouseToFamilyLinks.Count;
-                        for (int k = 0; k < count2; k++) {
-                            GDMFamilyRecord family = context.Tree.GetPtrValue(iRec.SpouseToFamilyLinks[k]);
-                            pgNodes[family] = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
-                        }
+                    int count2 = iRec.SpouseToFamilyLinks.Count;
+                    for (int k = 0; k < count2; k++) {
+                        GDMFamilyRecord family = context.Tree.GetPtrValue(iRec.SpouseToFamilyLinks[k]);
+                        pgNodes[family] = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
                     }
+                }
 
-                    IProgressController progress = AppHost.Progress;
-                    try {
-                        int patCount = patList.Count;
-                        progress.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patCount);
+                IProgressController progress = AppHost.Progress;
+                try {
+                    int patCount = patList.Count;
+                    progress.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patCount);
 
-                        for (int i = 0; i < patCount; i++) {
-                            PatriarchObj patr = patList[i];
+                    for (int i = 0; i < patCount; i++) {
+                        PatriarchObj patr = patList[i];
 
-                            for (int j = i + 1; j < patCount; j++) {
-                                PatriarchObj patr2 = patList[j];
+                        for (int j = i + 1; j < patCount; j++) {
+                            PatriarchObj patr2 = patList[j];
 
-                                GDMFamilyRecord cross = TreeTools.PL_SearchIntersection(context.Tree, patr.IRec, patr2.IRec);
+                            GDMFamilyRecord cross = TreeTools.PL_SearchIntersection(context.Tree, patr.IRec, patr2.IRec);
 
-                                if (cross != null) {
-                                    var node = pgNodes[cross];
+                            if (cross != null) {
+                                var node = pgNodes[cross];
 
-                                    if (node != null && node.Type == PGNodeType.Patriarch) {
-                                        // dummy
-                                    } else {
-                                        int size = GKUtils.GetDescGenerations(context.Tree, context.Tree.GetPtrValue(cross.Husband));
-                                        if (size == 0) size = 1;
-                                        pgNodes[cross] = new PGNode(cross.XRef, PGNodeType.Intersection, size);
-                                    }
+                                if (node != null && node.Type == PGNodeType.Patriarch) {
+                                    // dummy
+                                } else {
+                                    int size = GKUtils.GetDescGenerations(context.Tree, context.Tree.GetPtrValue(cross.Husband));
+                                    if (size == 0) size = 1;
+                                    pgNodes[cross] = new PGNode(cross.XRef, PGNodeType.Intersection, size);
                                 }
                             }
-
-                            progress.ProgressStep();
                         }
-                    } finally {
-                        progress.ProgressDone();
-                    }
 
-                    // create graph
-                    int count3 = patList.Count;
-                    for (int i = 0; i < count3; i++) {
-                        PatriarchObj patNode = patList[i];
-                        PL_WalkDescLinks(context.Tree, graph, pgNodes, null, patNode.IRec);
+                        progress.ProgressStep();
                     }
+                } finally {
+                    progress.ProgressDone();
+                }
+
+                // create graph
+                int count3 = patList.Count;
+                for (int i = 0; i < count3; i++) {
+                    PatriarchObj patNode = patList[i];
+                    PL_WalkDescLinks(context.Tree, graph, pgNodes, null, patNode.IRec);
+                }
 
                     /*if (gpl_params.aLoneSuppress) {
 				for (int i = aList.Count - 1; i >= 0; i--) {
@@ -220,7 +219,6 @@ namespace GKCore.Tools
 					if (patr.ILinks.Count == 0) aList.Delete(i);
 				}
 				aList.Pack();*/
-                }
             } catch (Exception ex) {
                 Logger.WriteError("PatriarchsMan.GetPatriarchsGraph()", ex);
             }

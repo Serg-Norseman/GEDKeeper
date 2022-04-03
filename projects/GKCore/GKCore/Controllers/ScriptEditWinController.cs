@@ -27,7 +27,7 @@ using GKCore.MVP.Views;
 namespace GKCore.Controllers
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class ScriptEditWinController : DialogController<IScriptEditWin>
     {
@@ -81,9 +81,8 @@ namespace GKCore.Controllers
         {
             try {
                 fView.DebugOutput.Clear();
-                using (ScriptEngine scrEngine = new ScriptEngine()) {
-                    scrEngine.lua_run(fView.ScriptText.Text, fBase, fView.DebugOutput);
-                }
+                var scrEngine = new ScriptEngine();
+                scrEngine.lua_run(fView.ScriptText.Text, fBase, fView.DebugOutput);
             } catch (Exception ex) {
                 Logger.WriteError("ScriptEditWin.Run()", ex);
             }

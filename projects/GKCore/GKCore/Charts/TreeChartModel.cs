@@ -41,16 +41,6 @@ namespace GKCore.Charts
 
     public delegate void InfoRequestEventHandler(object sender, TreeChartPerson person);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class PersonList : ExtList<TreeChartPerson>
-    {
-        public PersonList(bool ownsObjects) : base(ownsObjects)
-        {
-        }
-    }
-
     public enum TreeChartKind
     {
         ckAncestors,
@@ -59,7 +49,7 @@ namespace GKCore.Charts
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class TreeChartModel : ChartModel
     {
@@ -73,9 +63,9 @@ namespace GKCore.Charts
         public const int DEF_PERSON_NODE_PADDING = 10;
 
         private readonly ChartFilter fFilter;
-        private readonly PersonList fPersons;
-        private readonly IList<string> fPreparedFamilies;
-        private readonly IList<string> fPreparedIndividuals;
+        private readonly List<TreeChartPerson> fPersons;
+        private readonly List<string> fPreparedFamilies;
+        private readonly List<string> fPreparedIndividuals;
 
         private IBaseWindow fBase;
         private IFont fBoldFont;
@@ -218,7 +208,7 @@ namespace GKCore.Charts
             set { fPathDebug = value; }
         }
 
-        public PersonList Persons
+        public IList<TreeChartPerson> Persons
         {
             get { return fPersons; }
         }
@@ -261,7 +251,7 @@ namespace GKCore.Charts
             fFilter = new ChartFilter();
             fFilterData = new GKVarCache<GDMIndividualRecord, bool>();
             fGraph = null;
-            fPersons = new PersonList(true);
+            fPersons = new List<TreeChartPerson>();
             fPreparedFamilies = new List<string>();
             fPreparedIndividuals = new List<string>();
             fScale = 1.0f;
@@ -277,7 +267,6 @@ namespace GKCore.Charts
             if (disposing) {
                 if (fGraph != null) fGraph.Dispose();
                 fFilter.Dispose();
-                fPersons.Dispose();
 
                 DoneGraphics();
                 DoneSigns();
@@ -994,7 +983,7 @@ namespace GKCore.Charts
             return result;
         }
 
-        private void RecalcAnc(ExtList<TreeChartPerson> prev, TreeChartPerson person, int ptX, int ptY)
+        private void RecalcAnc(List<TreeChartPerson> prev, TreeChartPerson person, int ptX, int ptY)
         {
             if (person == null) return;
 
@@ -1059,12 +1048,8 @@ namespace GKCore.Charts
         {
             Array.Clear(fEdges, 0, fEdges.Length);
 
-            var prev = new ExtList<TreeChartPerson>();
-            try {
-                RecalcAnc(prev, fRoot, fMargins, fMargins);
-            } finally {
-                prev.Dispose();
-            }
+            var prev = new List<TreeChartPerson>();
+            RecalcAnc(prev, fRoot, fMargins, fMargins);
         }
 
         private bool ShiftDesc(TreeChartPerson person, int offset, bool isSingle, bool verify = false)
@@ -1155,10 +1140,10 @@ namespace GKCore.Charts
             }
 
             // This code is designed to align parents in the center of the location of children (across width),
-            // because in the process of drawing children, various kinds of displacement are formed, 
-            // and the initial arrangement of the parents can be very laterally, 
+            // because in the process of drawing children, various kinds of displacement are formed,
+            // and the initial arrangement of the parents can be very laterally,
             // after the formation of a complete tree of their descendants.
-            // However, this may be a problem (reason of #189) in the case if a shift initiated from descendants, 
+            // However, this may be a problem (reason of #189) in the case if a shift initiated from descendants,
             // must be performed to the left with an overlay on an already formed side branch.
 
             if (!fOptions.AutoAlign) {
@@ -1258,7 +1243,7 @@ namespace GKCore.Charts
                 fEdges[gen] = person.Rect.Right;
             }
 
-            // Fix of long-distance displacement of male nodes in the presence of more than 
+            // Fix of long-distance displacement of male nodes in the presence of more than
             // one marriage and a large tree of descendants from the first wife
             if (person.Sex == GDMSex.svMale && spousesCount >= 2) {
                 var firstWife = person.GetSpouse(0);

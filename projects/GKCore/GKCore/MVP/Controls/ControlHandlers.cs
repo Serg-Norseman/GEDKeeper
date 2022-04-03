@@ -56,7 +56,7 @@ namespace GKCore.MVP.Controls
     {
         bool ShowPoints { get; set; }
         bool ShowLines { get; set; }
-        ExtList<GeoPoint> MapPoints { get; }
+        IList<GeoPoint> MapPoints { get; }
 
         int AddPoint(double latitude, double longitude, string hint);
         void ClearPoints();
