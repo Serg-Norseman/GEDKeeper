@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,11 +35,11 @@ using GKMap.MapProviders;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class GKMapBrowser : Panel, IMapBrowser
     {
-        private readonly ExtList<GeoPoint> fMapPoints;
+        private readonly List<GeoPoint> fMapPoints;
         private bool fShowPoints;
         private bool fShowLines;
         private int fUpdateCount;
@@ -67,7 +67,7 @@ namespace GKUI.Components
             }
         }
 
-        public ExtList<GeoPoint> MapPoints
+        public IList<GeoPoint> MapPoints
         {
             get { return fMapPoints; }
         }
@@ -76,7 +76,7 @@ namespace GKUI.Components
         {
             InitControl();
 
-            fMapPoints = new ExtList<GeoPoint>(true);
+            fMapPoints = new List<GeoPoint>();
             fUpdateCount = 0;
             fShowPoints = true;
             fShowLines = true;
@@ -86,7 +86,6 @@ namespace GKUI.Components
         {
             if (disposing) {
                 ClearPoints();
-                fMapPoints.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -100,7 +99,8 @@ namespace GKUI.Components
         {
             BeginUpdate();
             GeoPoint pt = new GeoPoint(latitude, longitude, hint);
-            int res = fMapPoints.Add(pt);
+            int res = fMapPoints.Count;
+            fMapPoints.Add(pt);
             EndUpdate();
 
             return res;
@@ -114,7 +114,7 @@ namespace GKUI.Components
 
         public void DeletePoint(int index)
         {
-            fMapPoints.Delete(index);
+            fMapPoints.RemoveAt(index);
             RefreshPoints();
         }
 
@@ -209,7 +209,6 @@ namespace GKUI.Components
             fMapControl.MaxZoom = 17;
             fMapControl.MinZoom = 2;
             fMapControl.Zoom = 0;
-            //Controls.Add(fMapControl);
             Content = fMapControl;
 
             if (!GMapControl.IsDesignerHosted) {
@@ -229,7 +228,7 @@ namespace GKUI.Components
                 fMapControl.MaxZoom = 24;
                 fMapControl.Zoom = 9;
 
-                // add custom layers  
+                // add custom layers
                 fMapControl.Overlays.Add(fObjects);
                 fMapControl.Overlays.Add(fTopOverlay);
 
