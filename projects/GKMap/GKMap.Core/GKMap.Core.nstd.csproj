@@ -10,6 +10,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
         <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
+        <PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
     </ItemGroup>
 
     <ItemGroup>

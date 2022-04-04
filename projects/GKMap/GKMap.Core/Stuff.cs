@@ -85,11 +85,11 @@ namespace GKMap
         {
             byte[] results;
 
-            using (var hashProvider = new SHA1CryptoServiceProvider()) {
+            using (var hashProvider = SHA1.Create()) {
                 byte[] tdesKey = hashProvider.ComputeHash(Encoding.UTF8.GetBytes(passphrase));
                 Array.Resize(ref tdesKey, 16);
 
-                using (TripleDESCryptoServiceProvider tdesAlgorithm = new TripleDESCryptoServiceProvider()) {
+                using (var tdesAlgorithm = TripleDES.Create()) {
                     tdesAlgorithm.Key = tdesKey;
                     tdesAlgorithm.Mode = CipherMode.ECB;
                     tdesAlgorithm.Padding = PaddingMode.PKCS7;
@@ -117,12 +117,12 @@ namespace GKMap
         {
             byte[] results;
 
-            using (var hashProvider = new SHA1CryptoServiceProvider()) {
+            using (var hashProvider = SHA1.Create()) {
                 byte[] tdesKey = hashProvider.ComputeHash(Encoding.UTF8.GetBytes(passphrase));
                 Array.Resize(ref tdesKey, 16);
 
                 // Step 2. Create a new TripleDESCryptoServiceProvider object
-                using (TripleDESCryptoServiceProvider tdesAlgorithm = new TripleDESCryptoServiceProvider()) {
+                using (var tdesAlgorithm = TripleDES.Create()) {
                     // Step 3. Setup the decoder
                     tdesAlgorithm.Key = tdesKey;
                     tdesAlgorithm.Mode = CipherMode.ECB;
@@ -159,8 +159,6 @@ namespace GKMap
         {
             bool isSystem = false;
 
-            // FIXME
-#if !NETSTANDARD
             try {
                 using (var identity = System.Security.Principal.WindowsIdentity.GetCurrent()) {
                     isSystem = identity.IsSystem;
@@ -168,7 +166,6 @@ namespace GKMap
             } catch (Exception ex) {
                 Trace.WriteLine("SQLitePureImageCache, WindowsIdentity.GetCurrent: " + ex);
             }
-#endif
 
             var specFolder = (isSystem) ? Environment.SpecialFolder.CommonApplicationData : Environment.SpecialFolder.LocalApplicationData;
             string path = Environment.GetFolderPath(specFolder);
