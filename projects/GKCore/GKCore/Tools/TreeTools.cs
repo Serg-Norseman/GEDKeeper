@@ -33,7 +33,7 @@ using GKCore.Types;
 namespace GKCore.Tools
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class TreeTools
     {
@@ -140,26 +140,23 @@ namespace GKCore.Tools
             string[] options = { "ratio=auto" };
             GraphvizWriter gvw = new GraphvizWriter("Family Tree", options);
 
-            using (ExtList<PatriarchObj> patList = PatriarchsMan.GetPatriarchsLinks(baseWin.Context, minGens, false, loneSuppress))
-            {
-                int num = patList.Count;
-                for (int i = 0; i < num; i++) {
-                    PatriarchObj pObj = patList[i];
+            var patList = PatriarchsMan.GetPatriarchsLinks(baseWin.Context, minGens, false, loneSuppress);
+            int num = patList.Count;
+            for (int i = 0; i < num; i++) {
+                PatriarchObj pObj = patList[i];
 
-                    if (!loneSuppress || pObj.HasLinks) {
-                        string color = (pObj.IRec.Sex == GDMSex.svFemale) ? "pink" : "blue";
-                        gvw.WriteNode(pObj.IRec.XRef, GKUtils.GetNameString(pObj.IRec, true, false), "filled", color, "box");
-                    }
+                if (!loneSuppress || pObj.HasLinks) {
+                    string color = (pObj.IRec.Sex == GDMSex.svFemale) ? "pink" : "blue";
+                    gvw.WriteNode(pObj.IRec.XRef, GKUtils.GetNameString(pObj.IRec, true, false), "filled", color, "box");
                 }
+            }
+            for (int i = 0; i < num; i++) {
+                PatriarchObj pat1 = patList[i];
 
-                for (int i = 0; i < num; i++) {
-                    PatriarchObj pat1 = patList[i];
-
-                    int num2 = pat1.Links.Count;
-                    for (int k = 0; k < num2; k++) {
-                        PatriarchObj pat2 = pat1.Links[k];
-                        gvw.WriteEdge(pat1.IRec.XRef, pat2.IRec.XRef);
-                    }
+                int num2 = pat1.Links.Count;
+                for (int k = 0; k < num2; k++) {
+                    PatriarchObj pat2 = pat1.Links[k];
+                    gvw.WriteEdge(pat1.IRec.XRef, pat2.IRec.XRef);
                 }
             }
 
@@ -1177,7 +1174,7 @@ namespace GKCore.Tools
             }
 
             result.Sort(new IndividualRecordComparer());
-            
+
             progress.ProgressDone();
 
             return result;
@@ -1273,8 +1270,8 @@ namespace GKCore.Tools
                 for (int i = 0; i < mainCount; i++) {
                     GDMIndividualRecord iRec = mainTree[i] as GDMIndividualRecord;
                     if (iRec != null) {
-                        int idx = names.AddObject(GKUtils.GetNameString(iRec, true, false), new ExtList<GDMIndividualRecord>());
-                        ((ExtList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
+                        int idx = names.AddObject(GKUtils.GetNameString(iRec, true, false), new List<GDMIndividualRecord>());
+                        ((IList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
 
                         var parts = GKUtils.GetNameParts(mainTree, iRec);
                         fams.AddObject(context.Culture.NormalizeSurname(parts.Surname, iRec.Sex == GDMSex.svFemale), null);
@@ -1288,7 +1285,7 @@ namespace GKCore.Tools
                         string tm = GKUtils.GetNameString(iRec, true, false);
                         int idx = names.IndexOf(tm);
                         if (idx >= 0) {
-                            ((ExtList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
+                            ((IList<GDMIndividualRecord>)names.GetObject(idx)).Add(iRec);
                         }
 
                         var parts = GKUtils.GetNameParts(tempTree, iRec);
@@ -1306,10 +1303,9 @@ namespace GKCore.Tools
                 }
 
                 for (int i = names.Count - 1; i >= 0; i--) {
-                    ExtList<GDMIndividualRecord> lst = (ExtList<GDMIndividualRecord>)names.GetObject(i);
+                    var lst = (IList<GDMIndividualRecord>)names.GetObject(i);
 
                     if (lst.Count == 1) {
-                        lst.Dispose();
                         names.Delete(i);
                     }
                 }
@@ -1327,7 +1323,7 @@ namespace GKCore.Tools
                     logBox.AppendText(LangMan.LS(LSID.LSID_SimilarNames) + CRLF);
                     for (int i = 0; i < namesCount; i++) {
                         logBox.AppendText("    " + names[i] + CRLF);
-                        ExtList<GDMIndividualRecord> lst = (ExtList<GDMIndividualRecord>)names.GetObject(i);
+                        var lst = (IList<GDMIndividualRecord>) names.GetObject(i);
 
                         int num5 = lst.Count;
                         for (int j = 0; j < num5; j++) {
@@ -1361,7 +1357,6 @@ namespace GKCore.Tools
             if (placesList == null)
                 throw new ArgumentNullException("placesList");
 
-            for (int i = placesList.Count - 1; i >= 0; i--) ((PlaceObj)placesList.GetObject(i)).Dispose();
             placesList.Clear();
         }
 

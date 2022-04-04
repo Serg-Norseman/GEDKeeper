@@ -49,33 +49,25 @@ namespace GKCore.Maps
         public double MaxLat;
     }
 
-    public class MapPlace : BaseObject
+    public class MapPlace
     {
         public string Name;
         public readonly List<GeoPoint> Points;
-        public readonly ExtList<PlaceRef> PlaceRefs;
+        public readonly List<PlaceRef> PlaceRefs;
 
         public MapPlace()
         {
             Points = new List<GeoPoint>();
-            PlaceRefs = new ExtList<PlaceRef>(false);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                PlaceRefs.Dispose();
-            }
-            base.Dispose(disposing);
+            PlaceRefs = new List<PlaceRef>();
         }
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class PlacesLoader
     {
-        public static void AddPoint(ExtList<GeoPoint> mapPoints, GeoPoint gmPt, PlaceRef placeRef)
+        public static void AddPoint(IList<GeoPoint> mapPoints, GeoPoint gmPt, PlaceRef placeRef)
         {
             GeoPoint pt;
             int num = mapPoints.Count;
@@ -91,7 +83,7 @@ namespace GKCore.Maps
             mapPoints.Add(pt);
         }
 
-        public static void CopyPoints(IMapBrowser browser, ExtList<GeoPoint> gmapPoints, bool byPerson)
+        public static void CopyPoints(IMapBrowser browser, IList<GeoPoint> gmapPoints, bool byPerson)
         {
             if (gmapPoints == null)
                 throw new ArgumentNullException("gmapPoints");
@@ -117,7 +109,7 @@ namespace GKCore.Maps
             }
         }
 
-        public static CoordsRect GetPointsFrame(ExtList<GeoPoint> mapPoints)
+        public static CoordsRect GetPointsFrame(IList<GeoPoint> mapPoints)
         {
             CoordsRect result = new CoordsRect();
             if (mapPoints == null || mapPoints.Count <= 0) return result;

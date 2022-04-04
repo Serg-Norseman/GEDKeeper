@@ -36,7 +36,7 @@ namespace GKCore.Export
         private readonly List<IndiObj> fIndiQueue;
         private readonly StringList fProcessed;
 
-        private ExtList<PatriarchObj> fPatList;
+        private IList<PatriarchObj> fPatList;
         private ExtRectF fPageSize;
         private ChartRenderer fRenderer;
         private IFont fLinkFont;
@@ -91,7 +91,7 @@ namespace GKCore.Export
                 treeBox.Width = (int)pageWidth;
 
                 fPatList = PatriarchsMan.GetPatriarchsList(fBase.Context, 2, false);
-                fPatList.QuickSort(PatriarchsCompare);
+                SortHelper.QuickSort(fPatList, PatriarchsCompare);
 
                 int num = fPatList.Count;
                 for (int i = 0; i < num; i++) {

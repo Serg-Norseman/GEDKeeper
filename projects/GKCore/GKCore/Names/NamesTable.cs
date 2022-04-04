@@ -29,23 +29,15 @@ using GKCore.Interfaces;
 namespace GKCore.Names
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public sealed class NamesTable : BaseObject, INamesTable
+    public sealed class NamesTable : INamesTable
     {
         private readonly Dictionary<string, NameEntry> fNames;
 
         public NamesTable()
         {
             fNames = new Dictionary<string, NameEntry>();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // dummy
-            }
-            base.Dispose(disposing);
         }
 
         #region Internal functions

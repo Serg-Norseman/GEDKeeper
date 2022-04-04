@@ -35,9 +35,9 @@ namespace GKCore.Options
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public sealed class TreeChartOptions : BaseObject, IOptions
+    public sealed class TreeChartOptions : IOptions
     {
         public static readonly int MALE_COLOR = -3750145; // FFC6C6FF
         public static readonly int FEMALE_COLOR = -14650; // FFFFC6C6

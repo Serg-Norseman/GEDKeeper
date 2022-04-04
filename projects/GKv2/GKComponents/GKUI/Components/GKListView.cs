@@ -41,7 +41,7 @@ using WFSortOrder = System.Windows.Forms.SortOrder;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [Serializable]
     public class GKListItem : ListViewItem, IListItem
@@ -266,8 +266,6 @@ namespace GKUI.Components
             }
             set {
                 if (fListMan != value) {
-                    if (fListMan != null) fListMan.Dispose();
-
                     fListMan = value;
 
                     if (fListMan != null) {
@@ -316,17 +314,6 @@ namespace GKUI.Components
             ListViewItemSorter = fColumnSorter;
 
             fListMan = null;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (fListMan != null) {
-                    fListMan.Dispose();
-                    fListMan = null;
-                }
-            }
-            base.Dispose(disposing);
         }
 
         public void Activate()
