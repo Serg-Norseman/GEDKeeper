@@ -16,7 +16,7 @@ namespace GKMap.EtoForms
     /// <summary>
     /// GKMap marker with icon.
     /// </summary>
-    public sealed class GMarkerIcon : MapMarker, IRenderable
+    public sealed class GMarkerIcon : MapIconMarker, IRenderable
     {
         private static readonly Dictionary<string, Bitmap> IconCache = new Dictionary<string, Bitmap>();
 
@@ -28,7 +28,6 @@ namespace GKMap.EtoForms
         private static Bitmap fMarkerShadow;
         private static Bitmap fShadowSmall;
 
-        public GMarkerIconType Type { get; private set; }
 
         public override string ToolTipText
         {
@@ -45,13 +44,8 @@ namespace GKMap.EtoForms
 
 
         public GMarkerIcon(PointLatLng p, GMarkerIconType type)
-            : base(p)
+            : base(p, type)
         {
-            Type = type;
-
-            if (type != GMarkerIconType.none) {
-                LoadBitmap();
-            }
         }
 
         /// <summary>
@@ -67,7 +61,7 @@ namespace GKMap.EtoForms
             Offset = new GPoint(-Size.Width / 2, -Size.Height);
         }
 
-        private void LoadBitmap()
+        protected override void LoadBitmap()
         {
             fBitmap = GetIcon(Type.ToString());
             Size = new GSize(fBitmap.Width, fBitmap.Height);

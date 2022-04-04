@@ -187,4 +187,26 @@ namespace GKMap.MapObjects
             }
         }
     }
+
+
+    public abstract class MapIconMarker : MapMarker
+    {
+        public GMarkerIconType Type { get; private set; }
+
+        protected MapIconMarker(PointLatLng pos) : base(pos)
+        {
+        }
+
+        public MapIconMarker(PointLatLng p, GMarkerIconType type)
+        : base(p)
+        {
+            Type = type;
+
+            if (type != GMarkerIconType.none) {
+                LoadBitmap();
+            }
+        }
+
+        protected abstract void LoadBitmap();
+    }
 }
