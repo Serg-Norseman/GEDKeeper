@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -262,7 +262,7 @@ namespace GKUI.Forms
             if ((Keys)e.KeyChar == Keys.Enter) {
                 GeocoderStatusCode status = fMapBrowser.MapControl.SetPositionByKeywords(txtPlace.Text);
                 if (status != GeocoderStatusCode.Success) {
-                    MessageBox.Show("Geocoder can't find: '" + txtPlace.Text + "', reason: " + status, @"GKMap", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    AppHost.StdDialogs.ShowError("Geocoder can't find: '" + txtPlace.Text + "', reason: " + status);
                 }
             }
         }

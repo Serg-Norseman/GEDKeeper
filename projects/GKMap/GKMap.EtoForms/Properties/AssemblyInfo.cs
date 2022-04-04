@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  This file is part of the "GKMap".
  *  GKMap project borrowed from GMap.NET (by radioman).
  *
@@ -7,12 +7,12 @@
  */
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("GKMap.Core")]
-[assembly: AssemblyDescription("GKMap Core")]
+[assembly: AssemblyTitle("GKMap.EtoForms")]
+[assembly: AssemblyDescription("GKMap EtoForms UI")]
 [assembly: AssemblyCulture("")]
+
 [assembly: AssemblyProduct("GKMap")]
 [assembly: AssemblyCopyright("Copyright © 2009-2018 by radioman")]
 [assembly: AssemblyVersion("1.8.0")]
@@ -24,6 +24,4 @@ using System.Runtime.InteropServices;
 #endif
 
 [assembly: ComVisible(false)]
-[assembly: Guid("843e1f67-489b-4454-b451-021e5c526e30")]
-[assembly: InternalsVisibleTo("GKMap.WinForms")]
-[assembly: InternalsVisibleTo("GKMap.EtoForms")]
+[assembly: Guid("82e283ec-0096-4b55-baaf-89f671fa56d5")]

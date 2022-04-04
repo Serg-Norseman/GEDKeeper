@@ -58,8 +58,8 @@ rmdir .\projects\GKMap\GKMap.Core\obj /s /q
 rmdir .\projects\GKMap\GKMap.WinForms\bin /s /q
 rmdir .\projects\GKMap\GKMap.WinForms\obj /s /q
 
-rmdir .\projects\GKMap\GKMap.WinForms.Demo\bin /s /q
-rmdir .\projects\GKMap\GKMap.WinForms.Demo\obj /s /q
+rmdir .\projects\GKMap\GKMap.EtoForms\bin /s /q
+rmdir .\projects\GKMap\GKMap.EtoForms\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
