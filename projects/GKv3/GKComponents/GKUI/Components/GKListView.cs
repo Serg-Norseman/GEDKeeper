@@ -36,7 +36,7 @@ using BSDSortOrder = BSLib.Design.BSDTypes.SortOrder;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class GKListItem : GridItem, BSDListItem
     {
@@ -143,8 +143,6 @@ namespace GKUI.Components
             }
             set {
                 if (fListMan != value) {
-                    if (fListMan != null) fListMan.Dispose();
-
                     fListMan = value;
 
                     if (fListMan != null) {
@@ -211,17 +209,6 @@ namespace GKUI.Components
             DataStore = fItems;
 
             fListMan = null;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (fListMan != null) {
-                    fListMan.Dispose();
-                    fListMan = null;
-                }
-            }
-            base.Dispose(disposing);
         }
 
         public void Activate()
