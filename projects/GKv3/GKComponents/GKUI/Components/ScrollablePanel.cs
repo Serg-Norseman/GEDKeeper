@@ -241,6 +241,16 @@ namespace GKUI.Components
             base.OnMouseWheel(e);
         }
 
+        protected override void OnShown(EventArgs e)
+        {
+            if (Loaded) {
+                fViewport = VisibleRect;
+                UpdateProperties();
+            }
+
+            base.OnShown(e);
+        }
+
         protected override void OnSizeChanged(EventArgs e)
         {
             if (Loaded) {

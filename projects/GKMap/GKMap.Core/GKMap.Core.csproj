@@ -145,8 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\CreateTileDb.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Images\arrow.png" />
     <EmbeddedResource Include="Resources\Images\arrow_shadow.png" />
     <EmbeddedResource Include="Resources\Images\black_small.png" />
