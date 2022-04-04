@@ -19,7 +19,7 @@
  */
 
 using System;
-using BSLib;
+using System.Collections.Generic;
 using Eto.Forms;
 using GKCore;
 using GKCore.Maps;
@@ -28,11 +28,11 @@ using GKCore.MVP.Controls;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class GKMapBrowser : WebView, IMapBrowser
     {
-        private readonly ExtList<GeoPoint> fMapPoints;
+        private readonly List<GeoPoint> fMapPoints;
         private bool fShowPoints;
         private bool fShowLines;
         private int fUpdateCount;
@@ -60,7 +60,7 @@ namespace GKUI.Components
             }
         }
 
-        public ExtList<GeoPoint> MapPoints
+        public IList<GeoPoint> MapPoints
         {
             get { return fMapPoints; }
         }
@@ -69,7 +69,7 @@ namespace GKUI.Components
         {
             BrowserContextMenuEnabled = false;
 
-            fMapPoints = new ExtList<GeoPoint>(true);
+            fMapPoints = new List<GeoPoint>();
             fUpdateCount = 0;
             fShowPoints = true;
             fShowLines = true;
@@ -81,7 +81,6 @@ namespace GKUI.Components
         {
             if (disposing) {
                 ClearPoints();
-                fMapPoints.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -94,7 +93,9 @@ namespace GKUI.Components
         public int AddPoint(double latitude, double longitude, string hint)
         {
             GeoPoint pt = new GeoPoint(latitude, longitude, hint);
-            return fMapPoints.Add(pt);
+            var count = fMapPoints.Count;
+            fMapPoints.Add(pt);
+            return count;
         }
 
         public void ClearPoints()
@@ -105,7 +106,7 @@ namespace GKUI.Components
 
         public void DeletePoint(int index)
         {
-            fMapPoints.Delete(index);
+            fMapPoints.RemoveAt(index);
             RefreshPoints();
         }
 
