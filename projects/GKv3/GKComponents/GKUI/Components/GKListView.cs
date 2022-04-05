@@ -242,17 +242,15 @@ namespace GKUI.Components
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
         {
             int prevColumn = fSortColumn;
+            BSDSortOrder sortOrder;
             if (prevColumn == sortColumn && checkOrder) {
-                BSDSortOrder prevOrder = GetColumnSortOrder(sortColumn);
-                fSortOrder = (prevOrder == BSDSortOrder.Ascending) ? BSDSortOrder.Descending : BSDSortOrder.Ascending;
+                var prevOrder = GetColumnSortOrder(sortColumn);
+                sortOrder = (prevOrder == BSDSortOrder.Ascending) ? BSDSortOrder.Descending : BSDSortOrder.Ascending;
+            } else {
+                sortOrder = BSDSortOrder.Ascending;
             }
 
-            fSortColumn = sortColumn;
-
-            object rowData = GetSelectedData();
-            SortContents(true);
-            UpdateItems();
-            if (rowData != null) SelectItem(rowData);
+            Sort(sortColumn, sortOrder);
         }
 
         public void Sort(int sortColumn, BSDSortOrder sortOrder)
@@ -260,21 +258,22 @@ namespace GKUI.Components
             fSortColumn = sortColumn;
             fSortOrder = sortOrder;
 
-            object rowData = GetSelectedData();
-            SortContents(true);
-            UpdateItems();
+            var rowData = GetSelectedData();
+            BeginUpdate();
+            try {
+                SortContents(true);
+                UpdateItems();
+            } finally {
+                EndUpdate();
+            }
+
             if (rowData != null) SelectItem(rowData);
         }
 
         protected override void OnColumnHeaderClick(GridColumnEventArgs e)
         {
-            BeginUpdate();
-            try {
-                int columnIndex = this.Columns.IndexOf(e.Column);
-                SetSortColumn(columnIndex);
-            } finally {
-                EndUpdate();
-            }
+            var columnIndex = Columns.IndexOf(e.Column);
+            SetSortColumn(columnIndex);
 
             base.OnColumnHeaderClick(e);
         }
