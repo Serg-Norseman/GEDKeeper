@@ -271,7 +271,7 @@ namespace GKUI.Components
             BeginUpdate();
             try {
                 int columnIndex = this.Columns.IndexOf(e.Column);
-                SetSortColumn(columnIndex, false);
+                SetSortColumn(columnIndex);
             } finally {
                 EndUpdate();
             }
@@ -512,6 +512,7 @@ namespace GKUI.Components
             column.DataCell = cell;
             column.AutoSize = autoSize;
             column.Width = width;
+            column.Sortable = true;
             Columns.Add(column);
         }
 
