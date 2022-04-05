@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using GKMap.MapProviders;
 
@@ -182,22 +183,14 @@ namespace GKMap.CacheProviders
             lock (this) {
                 using (var dbf = File.Open(fDb, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
                     dbf.Seek(16, SeekOrigin.Begin);
-
-#if !MONO
-                    dbf.Lock(16, 2);
+                    Lock(dbf, 16, 2);
                     dbf.Read(pageSizeBytes, 0, 2);
-                    dbf.Unlock(16, 2);
+                    Unlock(dbf, 16, 2);
 
                     dbf.Seek(36, SeekOrigin.Begin);
-
-                    dbf.Lock(36, 4);
+                    Lock(dbf, 36, 4);
                     dbf.Read(freePagesBytes, 0, 4);
-                    dbf.Unlock(36, 4);
-#else
-                    dbf.Read(pageSizeBytes, 0, 2);
-                    dbf.Seek(36, SeekOrigin.Begin);
-                    dbf.Read(freePagesBytes, 0, 4);
-#endif
+                    Unlock(dbf, 36, 4);
 
                     dbf.Close();
                 }
@@ -220,6 +213,30 @@ namespace GKMap.CacheProviders
             if (freeMB <= waitUntilMB) {
                 PreAllocateDB(fDb, addSizeMB);
             }
+        }
+
+        private static void Unlock(FileStream dbf, int position, int length)
+        {
+#if !MONO
+#if NETSTANDARD || NETCOREAPP || NET5_0_OR_GREATER || NET471 || NET472 || NET48 || NET471_OR_GREATER
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+#endif
+            {
+                dbf.Unlock(position, length);
+            }
+#endif
+        }
+
+        private static void Lock(FileStream dbf, int position, int length)
+        {
+#if !MONO
+#if NETSTANDARD || NETCOREAPP || NET5_0_OR_GREATER || NET471 || NET472 || NET48 || NET471_OR_GREATER
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+#endif
+            {
+                dbf.Lock(position, length);
+            }
+#endif
         }
 
         #region -- import / export --
@@ -350,7 +367,7 @@ namespace GKMap.CacheProviders
                                     if (ex.Message.Contains("no such column: CacheTime")) {
                                         NoCacheTimeColumn = true;
                                     } else {
-                                        throw ex;
+                                        throw;
                                     }
                                 }
 

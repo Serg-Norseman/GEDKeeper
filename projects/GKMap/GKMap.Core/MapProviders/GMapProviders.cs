@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using GKMap.MapProviders.Bing;
 using GKMap.MapProviders.Etc;
@@ -57,7 +58,11 @@ namespace GKMap.MapProviders
 
         static GMapProviders()
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Ssl3 | (SecurityProtocolType)3072;
+            try {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Ssl3 | (SecurityProtocolType) 3072;
+            } catch (NotSupportedException ex) {
+                Debug.WriteLine("GMapProviders: " + ex);
+            }
 
             fList = new List<GMapProvider>();
 

@@ -76,6 +76,7 @@ namespace GKUI.Forms
             btnShowOnMap.Click += btnShowOnMap_Click;
 
             panMap = new Panel();
+            panMap.Size = new Size(768, 283);
             //panMap.BorderStyle = BorderStyle.Fixed3D;
 
             grpSearch = new GroupBox();
