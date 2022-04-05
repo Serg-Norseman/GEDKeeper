@@ -411,6 +411,8 @@ namespace GKCore.Options
             set { fSurnameFirstInOrder = value; }
         }
 
+        public bool SurnameInCapitals { get; set; }
+
         public TreeChartOptions TreeChartOptions
         {
             get { return fTreeChartOptions; }
@@ -477,6 +479,7 @@ namespace GKCore.Options
 
             KeepRichNames = true;
             fReversePlaceEntitiesOrder = false;
+            SurnameInCapitals = false;
         }
 
         protected override void Dispose(bool disposing)
@@ -697,6 +700,7 @@ namespace GKCore.Options
             fDialogClosingWarn = ini.ReadBool("Common", "DialogClosingWarn", false);
             fShortKinshipForm = ini.ReadBool("Common", "ShortKinshipForm", false);
             fSurnameFirstInOrder = ini.ReadBool("Common", "SurnameFirstInOrder", true);
+            SurnameInCapitals = ini.ReadBool("Common", "SurnameInCapitals", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -822,6 +826,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "DialogClosingWarn", fDialogClosingWarn);
             ini.WriteBool("Common", "ShortKinshipForm", fShortKinshipForm);
             ini.WriteBool("Common", "SurnameFirstInOrder", fSurnameFirstInOrder);
+            ini.WriteBool("Common", "SurnameInCapitals", SurnameInCapitals);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

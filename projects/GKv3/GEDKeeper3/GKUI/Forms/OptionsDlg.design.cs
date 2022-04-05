@@ -148,6 +148,7 @@ namespace GKUI.Forms
 
         private CheckBox chkShortKinshipForm;
         private CheckBox chkSurnameFirstInOrder;
+        private CheckBox chkSurnameInCapitals;
 
         private CheckBox chkSeparateDepth;
         private Label lblDefaultDepth;
@@ -880,6 +881,9 @@ namespace GKUI.Forms
             chkFirstCapitalLetterInNames = new CheckBox();
             chkFirstCapitalLetterInNames.Text = "chkFirstCapitalLetterInNames";
 
+            chkSurnameInCapitals = new CheckBox();
+            chkSurnameInCapitals.Text = "chkSurnameInCapitals";
+
             chkShortKinshipForm = new CheckBox();
             chkShortKinshipForm.Text = "chkShortKinshipForm";
 
@@ -896,7 +900,7 @@ namespace GKUI.Forms
                         Cells = { grpAdvancedNames, new DefStackLayout(Orientation.Vertical) {
                                 Items = { chkPlacesWithAddress, chkHighlightUnparented, chkHighlightUnmarried,
                                           chkAutoSortChildren, chkAutoSortSpouses, chkFirstCapitalLetterInNames,
-                                          chkShortKinshipForm
+                                          chkSurnameInCapitals, chkShortKinshipForm
                                 }
                             }
                         }

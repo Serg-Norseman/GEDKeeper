@@ -249,6 +249,7 @@ namespace GKUI.Forms
 
             chkShortKinshipForm.Checked = fOptions.ShortKinshipForm;
             chkSurnameFirstInOrder.Checked = fOptions.SurnameFirstInOrder;
+            chkSurnameInCapitals.Checked = fOptions.SurnameInCapitals;
         }
 
         private void UpdateWomanSurnameFormat()
@@ -532,6 +533,7 @@ namespace GKUI.Forms
 
             fOptions.ShortKinshipForm = chkShortKinshipForm.Checked.GetValueOrDefault();
             fOptions.SurnameFirstInOrder = chkSurnameFirstInOrder.Checked.GetValueOrDefault();
+            fOptions.SurnameInCapitals = chkSurnameInCapitals.Checked.GetValueOrDefault();
         }
 
         private void AcceptWomanSurnameFormat()
@@ -791,6 +793,7 @@ namespace GKUI.Forms
             chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
             chkShortKinshipForm.Text = LangMan.LS(LSID.LSID_ShortKinshipForm);
             chkSurnameFirstInOrder.Text = LangMan.LS(LSID.LSID_SurnameFirstInOrder);
+            chkSurnameInCapitals.Text = LangMan.LS(LSID.LSID_SurnameInCapitals);
 
             grpDateFormat.Text = LangMan.LS(LSID.LSID_DateFormat);
             chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);

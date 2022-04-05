@@ -2962,6 +2962,10 @@ namespace GKCore
                 result = defSurname;
             }
 
+            if (GlobalOptions.Instance.SurnameInCapitals) {
+                result = result.ToUpper();
+            }
+
             return result;
         }
 

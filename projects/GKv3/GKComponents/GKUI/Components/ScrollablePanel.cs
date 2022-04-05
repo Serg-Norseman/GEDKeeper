@@ -244,8 +244,12 @@ namespace GKUI.Components
         protected override void OnShown(EventArgs e)
         {
             if (Loaded) {
-                fViewport = VisibleRect;
-                UpdateProperties();
+                try {
+                    fViewport = VisibleRect;
+                    UpdateProperties();
+                } catch (Exception ex) {
+                    // FIXME: works in MacOS and doesn't work in Wpf
+                }
             }
 
             base.OnShown(e);

@@ -905,9 +905,9 @@ namespace GKCore
         /* 844 */ LSID_MinimizingWidth,
         /* 845 */ LSID_ContinueQuestion,
         /* 846 */ LSID_ShowAge,
+        /* 847 */ LSID_SurnameInCapitals,
 
-        /* 000 */
-        LSID_Last = LSID_ShowAge
+        /* 000 */ LSID_Last = LSID_SurnameInCapitals
     }
 
 
@@ -1768,6 +1768,7 @@ namespace GKCore
             /* 844 */ "Minimizing width",
             /* 845 */ "{0}. Continue?",
             /* 846 */ "Show age",
+            /* 847 */ "Surname in capitals",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
