@@ -100,8 +100,8 @@ namespace GKMap.MapProviders
 
         protected GMapProvider()
         {
-            using (var HashProvider = new SHA1CryptoServiceProvider()) {
-                DbId = Math.Abs(BitConverter.ToInt32(HashProvider.ComputeHash(Id.ToByteArray()), 0));
+            using (var sha1 = SHA1.Create()) {
+                DbId = Math.Abs(BitConverter.ToInt32(sha1.ComputeHash(Id.ToByteArray()), 0));
             }
 
             if (MapProviders.Exists(p => p.Id == Id || p.DbId == DbId)) {
@@ -148,7 +148,7 @@ namespace GKMap.MapProviders
         /// <summary>
         /// Gets or sets the value of the User-agent HTTP header.
         /// It's pseudo-randomized to avoid blockages...
-        /// </summary>                                
+        /// </summary>
         public static string UserAgent = string.Format("Mozilla/5.0 (Windows NT {1}.0; {2}rv:{0}.0) Gecko/20100101 Firefox/{0}.0",
             Stuff.Random.Next(DateTime.Today.Year - 1969 - 5, DateTime.Today.Year - 1969),
             Stuff.Random.Next(0, 10) % 2 == 0 ? 10 : 6,

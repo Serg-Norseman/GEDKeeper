@@ -137,7 +137,7 @@ namespace GKMap
             }
         }
 
-        private static readonly SHA1CryptoServiceProvider HashProvider = new SHA1CryptoServiceProvider();
+        private static readonly SHA1 HashProvider = SHA1.Create();
 
         private static void ConvertToHash(ref string s)
         {
