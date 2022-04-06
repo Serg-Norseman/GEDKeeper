@@ -463,7 +463,7 @@ namespace GKUI.Components
             if (target == RenderTarget.Screen) {
                 fRenderer.DrawRectangle(null, backColor, 0, 0, Width, Height);
             } else if (target == RenderTarget.Printer) {
-                fRenderer.DrawRectangle(null, UIHelper.ConvertColor(Colors.White), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
+                fRenderer.DrawRectangle(null, UIHelper.ConvertColor(Color.White), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
             } else {
                 fRenderer.DrawRectangle(null, backColor, 0, 0, fModel.ImageWidth, fModel.ImageHeight);
             }
