@@ -1,17 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
+
     <ItemGroup>
         <Reference Include="BSLib.Design">
             <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
         </Reference>
     </ItemGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
     </ItemGroup>
+
     <ItemGroup>
-        <PackageReference Include="Eto.Forms" Version="2.5.11" />
+        <PackageReference Include="Eto.Forms" Version="2.6.1" />
     </ItemGroup>
+
 </Project>

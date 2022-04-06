@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -43,7 +43,7 @@ namespace GKCore.Database
 
         static GKDatabase()
         {
-#if !NETSTANDARD && !NET461
+#if !NETSTANDARD && !NET461 && !NET462
             SQLiteLoader.Load();
 #endif
         }

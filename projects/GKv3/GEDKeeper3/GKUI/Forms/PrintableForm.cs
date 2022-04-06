@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,8 +20,11 @@
 
 //define DEBUG_PRINT
 
+using BSLib;
 using BSLib.Design.Graphics;
+using Eto.Drawing;
 using Eto.Forms;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -42,8 +45,6 @@ namespace GKUI.Forms
         private void InitPrintDoc()
         {
             fPrintDoc = new PrintDocument();
-            //fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
-            //fPrintDoc.BeginPrint += printDocument1_BeginPrint;
             fPrintDoc.PrintPage += printDocument1_PrintPage;
         }
 
@@ -57,54 +58,36 @@ namespace GKUI.Forms
             if (printable != null) {
                 fPrintDoc.PrintSettings.Orientation = printable.IsLandscape() ? PageOrientation.Landscape : PageOrientation.Portrait;
                 fPrintDoc.PrintSettings.MaximumPageRange = new Eto.Forms.Range<int>(1, 1);
-                //fPrintDoc.DefaultPageSettings.Margins = new Printing.Margins(25, 25, 25, 25);
                 fPrintDoc.PageCount = 1;
             }
         }
 
-        // FIXME: Eto restriction
-        /*private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
-        {
-        }
-
-        private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
-        {
-            var printable = GetPrintable();
-            if (printable != null) {
-                e.PageSettings.Landscape = printable.IsLandscape();
-                e.PageSettings.Margins = new System.Drawing.Printing.Margins(25, 25, 25, 25);
-            }
-        }*/
-
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
         {
-            /*Graphics gfx = e.Graphics;
-            Rectangle marginBounds = e.MarginBounds;
-            Rectangle pageBounds = e.PageBounds;
+            int pageMargin = 25;
 
-            #if DEBUG_PRINT
+            Graphics gfx = e.Graphics;
+            SizeF pageSize = e.PageSize;
+
+#if DEBUG_PRINT
             gfx.DrawRectangle(Pens.Gray, marginBounds);
-            #endif
+#endif
 
             var printable = GetPrintable();
             if (printable != null) {
-                ImageHandler imgHandler = (ImageHandler)printable.GetPrintableImage();
-                Image img = imgHandler.Handle;
+                Image img = ((ImageHandler)printable.GetPrintableImage()).Handle;
 
                 float imgW = img.Width;
                 float imgH = img.Height;
-                float factor = GfxHelper.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
+                float factor = GfxHelper.ZoomToFit(imgW, imgH, pageSize.Width - pageMargin * 2, pageSize.Height - pageMargin * 2);
                 if (factor > 1.0f) factor = 1.0f;
                 imgW = (imgW * factor);
                 imgH = (imgH * factor);
-                float x = (pageBounds.Width - imgW) / 2;
-                float y = (pageBounds.Height - imgH) / 2;
+                float x = (pageSize.Width - imgW) / 2;
+                float y = (pageSize.Height - imgH) / 2;
 
                 gfx.DrawImage(img, x, y, imgW, imgH);
             }
-
-            // Look at InitCurDoc()
-            //e.HasMorePages = false;*/
         }
 
         #endregion
@@ -113,7 +96,7 @@ namespace GKUI.Forms
 
         protected virtual IPrintable GetPrintable()
         {
-            return null; // dummy
+            return null;
         }
 
         public bool AllowPrint()
@@ -126,7 +109,6 @@ namespace GKUI.Forms
             InitCurDoc();
 
             using (PrintDialog printDlg = new PrintDialog()) {
-                // Already includes all previous
                 printDlg.ShowDialog(this, fPrintDoc);
             }
         }
@@ -135,12 +117,9 @@ namespace GKUI.Forms
         {
             InitCurDoc();
 
-            // FIXME: -> Eto >= 2.6.0
-            /*using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
-                previewDlg.WindowState = FormWindowState.Maximized;
-                previewDlg.Document = fPrintDoc;
-                previewDlg.ShowDialog();
-            }*/
+            using (PrintPreviewDialog previewDlg = new PrintPreviewDialog(fPrintDoc)) {
+                previewDlg.ShowDialog(this);
+            }
         }
 
         #endregion

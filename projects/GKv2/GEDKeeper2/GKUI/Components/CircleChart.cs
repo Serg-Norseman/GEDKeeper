@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -462,7 +462,9 @@ namespace GKUI.Components
             var backColor = fModel.Options.BrushColor[9];
             if (target == RenderTarget.Screen) {
                 fRenderer.DrawRectangle(null, backColor, 0, 0, Width, Height);
-            } else if (target != RenderTarget.Printer) {
+            } else if (target == RenderTarget.Printer) {
+                fRenderer.DrawRectangle(null, UIHelper.ConvertColor(Colors.White), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
+            } else {
                 fRenderer.DrawRectangle(null, backColor, 0, 0, fModel.ImageWidth, fModel.ImageHeight);
             }
 

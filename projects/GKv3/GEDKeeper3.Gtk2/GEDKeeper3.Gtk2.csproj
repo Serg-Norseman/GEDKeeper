@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
-        <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
+        <TargetFrameworks>netcoreapp3.1;net462</TargetFrameworks>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OutputType>exe</OutputType>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -13,12 +14,12 @@
         <OutputPath>..\..\..\bin\</OutputPath>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-        <PackageReference Include="Eto.Platform.Gtk2" Version="2.5.11" />
+    <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+        <PackageReference Include="Eto.Platform.Gtk2" Version="2.6.1" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-        <PackageReference Include="Eto.Platform.Gtk" Version="2.5.11" />
+        <PackageReference Include="Eto.Platform.Gtk" Version="2.6.1" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -47,7 +47,6 @@ namespace GKUI.Forms
         {
             fPrintDoc = new PrintDocument();
             fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
-            fPrintDoc.BeginPrint += printDocument1_BeginPrint;
             fPrintDoc.PrintPage += printDocument1_PrintPage;
         }
 
@@ -59,10 +58,6 @@ namespace GKUI.Forms
                 fPrintDoc.DefaultPageSettings.Landscape = printable.IsLandscape();
                 fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
             }
-        }
-
-        private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
-        {
         }
 
         private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
@@ -80,14 +75,13 @@ namespace GKUI.Forms
             Rectangle marginBounds = e.MarginBounds;
             Rectangle pageBounds = e.PageBounds;
 
-            #if DEBUG_PRINT
+#if DEBUG_PRINT
             gfx.DrawRectangle(Pens.Gray, marginBounds);
-            #endif
+#endif
 
             var printable = GetPrintable();
             if (printable != null) {
-                ImageHandler imgHandler = (ImageHandler)printable.GetPrintableImage();
-                Image img = imgHandler.Handle;
+                Image img = ((ImageHandler)printable.GetPrintableImage()).Handle;
 
                 float imgW = img.Width;
                 float imgH = img.Height;
@@ -110,7 +104,7 @@ namespace GKUI.Forms
 
         protected virtual IPrintable GetPrintable()
         {
-            return null; // dummy
+            return null;
         }
 
         public bool AllowPrint()

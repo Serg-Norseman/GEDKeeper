@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
+
     <ItemGroup>
         <Reference Include="BSLib">
             <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
@@ -15,13 +16,14 @@
             <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
         </Reference>
     </ItemGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
         <ProjectReference Include="..\GKComponents\GKComponents.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
     </ItemGroup>
-    
+
 </Project>

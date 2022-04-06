@@ -54,9 +54,7 @@ namespace GKMap.EtoForms
         /// <returns></returns>
         public override bool IsInside(int x, int y)
         {
-            // FIXME: -> FillContains, Eto >= 2.6.0
-            return false;
-            //return fGraphicsPath != null && fGraphicsPath.IsVisible(x, y);
+            return fGraphicsPath != null && fGraphicsPath.FillContains(new PointF(x, y));
         }
 
         public override void UpdateGraphicsPath()

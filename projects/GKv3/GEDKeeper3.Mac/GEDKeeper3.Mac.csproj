@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
         <OutputType>exe</OutputType>
-        <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
+        <TargetFrameworks>netcoreapp3.1;net462</TargetFrameworks>
         <MacBundleName>GEDKeeper3</MacBundleName>
     </PropertyGroup>
 
@@ -13,19 +14,20 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Eto.Platform.Mac64" Version="2.5.11" />
+        <PackageReference Include="Eto.Platform.Mac64" Version="2.6.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\GKCore\Resources\icon_gedkeeper.png">
-        <Link>icon_gedkeeper.png</Link>
-      </Content>
+        <Content Include="..\..\GKCore\Resources\icon_gedkeeper.png">
+            <Link>icon_gedkeeper.png</Link>
+        </Content>
     </ItemGroup>
-    
+
     <Target Name="MacBundleLocaleFiles" BeforeTargets="MacFinishBundle">
         <ItemGroup>
             <LocaleFiles Include="..\..\..\locales\**\*" />
         </ItemGroup>
         <Copy SourceFiles="@(LocaleFiles)" DestinationFolder="$(OutputContents)\locales\%(RecursiveDir)" />
     </Target>
+
 </Project>
