@@ -476,7 +476,6 @@ namespace GDModel.Providers.GEDCOM
                         }
                     }
 
-                    // obsolete: AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed))
                     if (!xrefValid) {
                         ConvertIdentifiers();
                     }

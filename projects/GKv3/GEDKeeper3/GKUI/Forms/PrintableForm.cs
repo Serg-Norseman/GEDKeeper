@@ -135,7 +135,7 @@ namespace GKUI.Forms
         {
             InitCurDoc();
 
-            // It's not supported! :(
+            // FIXME: -> Eto >= 2.6.0
             /*using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
                 previewDlg.WindowState = FormWindowState.Maximized;
                 previewDlg.Document = fPrintDoc;

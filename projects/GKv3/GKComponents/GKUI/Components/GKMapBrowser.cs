@@ -203,8 +203,6 @@ namespace GKUI.Components
         private void InitControl()
         {
             fMapControl = new GMapControl();
-            //fMapControl.Dock = DockStyle.Fill;
-            //fMapControl.Location = new Point(0, 0);
             //fMapControl.Margin = new Padding(4);
             fMapControl.MaxZoom = 17;
             fMapControl.MinZoom = 2;

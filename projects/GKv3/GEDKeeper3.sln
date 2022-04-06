@@ -26,6 +26,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKMap.Core.nstd", "..\GKMap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKMap.EtoForms", "..\GKMap\GKMap.EtoForms\GKMap.EtoForms.csproj", "{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8EEE8-8592-420C-B5C5-E6DDBA389BA1}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\locales\Chinese Simplified.lng = ..\..\locales\Chinese Simplified.lng
+		..\..\locales\czech.lng = ..\..\locales\czech.lng
+		..\..\locales\English.lng = ..\..\locales\English.lng
+		..\..\locales\french.lng = ..\..\locales\french.lng
+		..\..\locales\german.lng = ..\..\locales\german.lng
+		..\..\locales\italian.lng = ..\..\locales\italian.lng
+		..\..\locales\polish.lng = ..\..\locales\polish.lng
+		..\..\locales\russian.lng = ..\..\locales\russian.lng
+		..\..\locales\ukrainian.lng = ..\..\locales\ukrainian.lng
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

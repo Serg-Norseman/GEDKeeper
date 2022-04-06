@@ -470,7 +470,7 @@
 469=Korrespondenz
 470=ID Korrekturen
 471=Format Check
-472=Datensatz-ID korrigieren nötig, weiterfahren?
+472=|EMF-Dateien (*.emf)|*.emf
 473=Anzahl der Objekte in der Hauptdatenbank: {0}
 474=Synchronisierung abgeschlossen.
 475=Patriarchen suchen (Familienoberhäupter)
@@ -481,7 +481,7 @@
 480=Alle Dateien (*.*)|*.*
 481=Bilder (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
 482=Skripte (*.lua)|*.lua
-483=BMP-Dateien (*.bmp)|*.bmp|JPEG-Dateien (*.jpg)|*.jpg|EMF-Dateien (*.emf)|*.emf|PNG-Dateien (*.png)|*.png|GIF-Dateien (*.gif)|*.gif
+483=BMP-Dateien (*.bmp)|*.bmp|JPEG-Dateien (*.jpg)|*.jpg|PNG-Dateien (*.png)|*.png|GIF-Dateien (*.gif)|*.gif
 484=Todesursachen
 485=Stammbaum
 486=Parameter
@@ -849,3 +849,4 @@
 845={0}. Continue?
 846=Show age
 847=Surname in capitals
+848=|SVG files (*.svg)|*.svg

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -129,16 +129,6 @@ namespace GKUI.Components
         public IImage GetPrintableImage()
         {
             ExtSize imageSize = GetImageSize();
-            var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
-
-            /*Image image;
-            using (var gfx = CreateGraphics()) {
-                image = new Metafile(gfx.GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
-            }
-
-            using (Graphics gfx = Graphics.FromImage(image)) {
-                RenderStaticImage(gfx, true);
-            }*/
 
             var image = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
             using (Graphics gfx = new Graphics(image)) {
@@ -187,18 +177,10 @@ namespace GKUI.Components
                     imFmt = ImageFormat.Gif;
                 } else if (ext == ".jpg") {
                     imFmt = ImageFormat.Jpeg;
-                } /*else if (ext == ".emf") {
-                    imFmt = ImageFormat.Emf;
-                }*/
+                } else if (ext == ".emf") {
+                    /* Emf is not supported */
+                }
 
-                /*Image pic;
-                if (Equals(imFmt, ImageFormat.Emf)) {
-                    using (var gfx = CreateGraphics()) {
-                        pic = new Metafile(fileName, gfx.GetHdc());
-                    }
-                } else {
-                    pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
-                }*/
 
                 Bitmap pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
                 try {

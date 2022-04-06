@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -521,7 +521,7 @@ namespace GKCore
         /* 469 */ LSID_Communication,
         /* 470 */ LSID_IDsCorrect,
         /* 471 */ LSID_FormatCheck,
-        /* 472 */ LSID_IDsCorrectNeed, // obsolete
+        /* 472 */ LSID_EmfFilter,
         /* 473 */ LSID_MainBaseSize,
         /* 474 */ LSID_SyncFin,
         /* 475 */ LSID_PatSearch,
@@ -906,8 +906,9 @@ namespace GKCore
         /* 845 */ LSID_ContinueQuestion,
         /* 846 */ LSID_ShowAge,
         /* 847 */ LSID_SurnameInCapitals,
+        /* 848 */ LSID_SvgFilter,
 
-        /* 000 */ LSID_Last = LSID_SurnameInCapitals
+        /* 000 */ LSID_Last = LSID_SvgFilter
     }
 
 
@@ -1769,6 +1770,7 @@ namespace GKCore
             /* 845 */ "{0}. Continue?",
             /* 846 */ "Show age",
             /* 847 */ "Surname in capitals",
+            /* 848 */ "|SVG files (*.svg)|*.svg",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,10 +37,9 @@ namespace GKCore.Controllers
         {
         }
 
-        // TODO: update localization
         public void SaveSnapshot()
         {
-            string filters = LangMan.LS(LSID.LSID_TreeImagesFilter) + "|SVG files (*.svg)|*.svg";
+            string filters = GKUtils.GetImageFilter(true);
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", filters, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName)) {
                 fView.CircleChart.SaveSnapshot(fileName);

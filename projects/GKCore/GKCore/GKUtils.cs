@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1554,6 +1554,22 @@ namespace GKCore
             var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
             return relativePath.Replace('/', Path.DirectorySeparatorChar);
+        }
+
+        public static string GetImageFilter(bool svg)
+        {
+            string filter = LangMan.LS(LSID.LSID_TreeImagesFilter);
+
+#if !NETSTANDARD
+            // Emf is not supported by Eto.Drawing
+            filter += LangMan.LS(LSID.LSID_EmfFilter);
+#endif
+
+            if (svg) {
+                filter += LangMan.LS(LSID.LSID_SvgFilter);
+            }
+
+            return filter;
         }
 
         #endregion

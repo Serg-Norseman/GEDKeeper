@@ -470,7 +470,7 @@
 469=一致
 470=修正身份
 471=核对格式
-472=身份条目学被修正, 继续吗?
+472=|EMF files (*.emf)|*.emf
 473=主库中客体数量是: {0}
 474=完成同步.
 475=搜索家长
@@ -481,7 +481,7 @@
 480=All files (*.*)|*.*
 481=Images (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
 482=Scripts (*.lua)|*.lua
-483=BMP files (*.bmp)|*.bmp|JPEG files (*.jpg)|*.jpg|EMF files (*.emf)|*.emf|PNG files (*.png)|*.png|GIF files (*.gif)|*.gif
+483=BMP files (*.bmp)|*.bmp|JPEG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|GIF files (*.gif)|*.gif
 484=死因
 485=家谱
 486=参数
@@ -849,3 +849,4 @@
 845={0}. Continue?
 846=Show age
 847=Surname in capitals
+848=|SVG files (*.svg)|*.svg

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -60,7 +60,6 @@ namespace GKUI.Components
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                //if (fNavman != null) fNavman.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -214,10 +213,10 @@ namespace GKUI.Components
         public IImage GetPrintableImage()
         {
             ExtSize imageSize = GetImageSize();
-            var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
 
             Image image;
             using (var gfx = CreateGraphics()) {
+                var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
                 image = new Metafile(gfx.GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
             }
 

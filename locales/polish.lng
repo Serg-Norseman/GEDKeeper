@@ -470,7 +470,7 @@
 469=Korespondencja
 470=Korekcja identyfikatory
 471=Sprawdź format
-472=Korekta rekordów tożsamości jest wymagany, kontynuować?
+472=|Pliki EMF (*.emf)|*.emf
 473=Liczba obiektów w baza danych master: {0}
 474=Synchronizacja zakończona.
 475=Szukaj patriarchów
@@ -481,7 +481,7 @@
 480=Wszystkie pliki (*.*)|*.*
 481=Obrazy (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
 482=Skrypty (*.lua)|*.lua
-483=Pliki BMP (*.bmp)|*.bmp|Pliki JPEG (*.jpg)|*.jpg|Pliki EMF (*.emf)|*.emf|Pliki PNG (*.png)|*.png|Pliki GIF (*.gif)|*.gif
+483=Pliki BMP (*.bmp)|*.bmp|Pliki JPEG (*.jpg)|*.jpg|Pliki PNG (*.png)|*.png|Pliki GIF (*.gif)|*.gif
 484=Przyczyny śmierci
 485=Rodowód
 486=Parametr
@@ -849,3 +849,4 @@
 845={0}. Continue?
 846=Show age
 847=Surname in capitals
+848=|SVG files (*.svg)|*.svg
