@@ -27,6 +27,7 @@
 
     <ItemGroup>
         <PackageReference Include="Eto.Forms" Version="2.6.1" />
+        <PackageReference Include="ScottPlot.Eto" Version="4.1.40" />
     </ItemGroup>
 
     <ItemGroup>

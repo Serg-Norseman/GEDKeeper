@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,20 +19,31 @@
  */
 
 using System.Collections.Generic;
+using BSLib;
 using Eto.Forms;
-
 using GKCore.MVP.Controls;
 using GKCore.Stats;
+using ScottPlot.Eto;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class ZGraphControl : Panel, IGraphControl
+    public sealed class ZGraphControl : Panel, IGraphControl
     {
+        private class XYPair
+        {
+            public double X;
+            public double Y;
+        }
+
+        private readonly PlotView fGraph;
+
         public ZGraphControl()
         {
+            fGraph = new PlotView();
+            Content = fGraph;
         }
 
         public void Activate()
@@ -42,10 +53,75 @@ namespace GKUI.Components
 
         public void Clear()
         {
+            fGraph.Plot.Clear();
+            fGraph.Refresh();
         }
 
         public void PrepareArray(string title, string xAxis, string yAxis, ChartStyle style, bool excludeUnknowns, List<StatsItem> vals)
         {
+            try {
+                fGraph.Plot.Clear();
+
+                fGraph.Plot. Title(title, true);
+                fGraph.Plot.XAxis.Label(xAxis);
+                fGraph.Plot.YAxis.Label(yAxis);
+
+                if (style != ChartStyle.ClusterBar) {
+                    var ppList = new List<XYPair>();
+
+                    int num = vals.Count;
+                    for (int i = 0; i < num; i++) {
+                        StatsItem item = vals[i];
+
+                        string s = item.Caption;
+                        double lab = (s == "?") ? 0.0f : ConvertHelper.ParseFloat(s, 0.0f, true);
+
+                        if (lab != 0.0d || !excludeUnknowns) {
+                            ppList.Add(new XYPair() { X = lab, Y = item.Value });
+                        }
+                    }
+                    ppList.Sort((a, b) => b.X.CompareTo(a.X));
+
+                    switch (style) {
+                        case ChartStyle.Bar: {
+                                var values = new double[ppList.Count];
+                                var positions = new double[ppList.Count];
+                                for (int i = 0; i < ppList.Count; i++) {
+                                    XYPair xyPair = ppList[i];
+                                    values[i] = xyPair.Y;
+                                    positions[i] = xyPair.X;
+                                }
+                                fGraph.Plot.AddBar(values, positions);
+                            }
+                            break;
+
+                        case ChartStyle.Point: {
+                                var scatterList = fGraph.Plot.AddScatterList(markerSize: 7, markerShape: ScottPlot.MarkerShape.filledDiamond);
+                                foreach (var xyPair in ppList) {
+                                    scatterList.Add(xyPair.X, xyPair.Y);
+                                }
+                            }
+                            break;
+                    }
+                } else {
+                    int itemscount = vals.Count;
+                    double[] yValuesF = new double[itemscount];
+                    double[] yValuesM = new double[itemscount];
+                    double[] xValues = new double[itemscount];
+
+                    for (int i = 0; i < itemscount; i++) {
+                        StatsItem sti = vals[i];
+                        xValues[i] = ConvertHelper.ParseInt(sti.Caption, 0);
+                        yValuesF[i] = sti.ValF;
+                        yValuesM[i] = sti.ValM + sti.ValF;
+                    }
+
+                    fGraph.Plot.AddBar(yValuesM, xValues, System.Drawing.Color.Blue).Label = "M";
+                    fGraph.Plot.AddBar(yValuesF, xValues, System.Drawing.Color.Red).Label = "F";
+                }
+            } finally {
+                fGraph.Refresh();
+            }
         }
     }
 }
