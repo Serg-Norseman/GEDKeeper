@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -147,7 +147,7 @@ namespace GKUI.Components
         {
             if (fMedia == null) {
                 if (string.IsNullOrEmpty(fMediaFile)) {
-                    MessageBox.Show("Please select media path first", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    AppHost.StdDialogs.ShowError("Please select media path first");
                     return;
                 }
 

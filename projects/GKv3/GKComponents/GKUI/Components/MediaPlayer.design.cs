@@ -31,19 +31,19 @@ namespace GKUI.Components
             //
 
             btnPause = new Button();
-            btnPause.Image = UIHelper.LoadResourceImage("Resources.btnPause");
+            btnPause.Image = UIHelper.LoadResourceImage("Resources.btn_pause.png");
             btnPause.ImagePosition = ButtonImagePosition.Overlay;
             btnPause.Size = new Size(40, 40);
             btnPause.Click += btnPause_Click;
 
             btnPlay = new Button();
-            btnPlay.Image = UIHelper.LoadResourceImage("Resources.btnPlay");
+            btnPlay.Image = UIHelper.LoadResourceImage("Resources.btn_play.png");
             btnPlay.ImagePosition = ButtonImagePosition.Overlay;
             btnPlay.Size = new Size(40, 40);
             btnPlay.Click += btnPlay_Click;
 
             btnStop = new Button();
-            btnStop.Image = UIHelper.LoadResourceImage("Resources.btnStop");
+            btnStop.Image = UIHelper.LoadResourceImage("Resources.btn_stop.png");
             btnStop.ImagePosition = ButtonImagePosition.Overlay;
             btnStop.Size = new Size(40, 40);
             btnStop.Click += btnStop_Click;
@@ -51,7 +51,7 @@ namespace GKUI.Components
             //
 
             btnMute = new Button();
-            btnMute.Image = UIHelper.LoadResourceImage("Resources.btnVolumeMute.gif");
+            btnMute.Image = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
             btnMute.ImagePosition = ButtonImagePosition.Overlay;
             btnMute.Size = new Size(40, 40);
             btnMute.Click += btnMute_Click;
@@ -66,19 +66,16 @@ namespace GKUI.Components
             pnlControls.Content = new TableLayout() {
                 Rows = {
                     new TableRow {
-                        Cells = { trkPosition, lblDuration }
+                        Cells = { TableLayout.Horizontal(trkPosition, lblDuration) }
                     },
                     new TableRow {
-                        Cells = { TableLayout.Horizontal(btnPause, btnPlay, btnStop, null), TableLayout.Horizontal(btnMute, trkVolume) }
+                        Cells = { TableLayout.Horizontal(btnPause, btnPlay, btnStop, null, btnMute, trkVolume) }
                     }
                 }
             };
 
             pnlVideo = new Panel();
             pnlVideo.BackgroundColor = SystemColors.ControlText;
-            //pnlVideo.BackgroundImage = global::ExtResources.pnlVideo;
-            //pnlVideo.BackgroundImageLayout = ImageLayout.Center;
-            //pnlVideo.BorderStyle = BorderStyle.Fixed3D;
 
             Content = new TableLayout() {
                 Rows = {

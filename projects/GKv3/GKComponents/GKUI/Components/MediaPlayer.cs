@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,30 +19,22 @@
  */
 
 using System;
+using System.Runtime.InteropServices;
+using Eto.Drawing;
 using Eto.Forms;
+using GKCore;
 using GKCore.Interfaces;
+using LibVLCSharp.Shared;
+using VLCMediaPlayer = LibVLCSharp.Shared.MediaPlayer;
 
 namespace GKUI.Components
 {
-/*using nVLC;
-using nVLC.Events;
-using nVLC.Media;
-using nVLC.Players;*/
-
     public partial class MediaPlayer : Panel, ILocalizable
     {
-        /*
-        #if !MONO
-        private const bool FIND_LIBVLC = true;
-        #else
-        private const bool FIND_LIBVLC = false;
-        #endif
-
-        private readonly IMediaPlayerFactory fFactory;
-        private readonly IDiskPlayer fPlayer;
-        private IMedia fMedia;*/
-
+        private LibVLC fLibVLC;
+        private Media fMedia;
         private string fMediaFile;
+        private VLCMediaPlayer fPlayer;
 
         public string MediaFile
         {
@@ -54,31 +46,58 @@ using nVLC.Players;*/
         {
             InitializeComponent();
 
-            /*fFactory = new MediaPlayerFactory(FIND_LIBVLC);
-            fPlayer = fFactory.CreatePlayer<IDiskPlayer>();
+            BackgroundColor = Colors.Black;
 
-            fPlayer.Events.PlayerPositionChanged += Events_PlayerPositionChanged;
-            fPlayer.Events.TimeChanged += Events_TimeChanged;
-            fPlayer.Events.MediaEnded += Events_MediaEnded;
-            fPlayer.Events.PlayerStopped += Events_PlayerStopped;
+            Core.Initialize();
+            fLibVLC = new LibVLC();
+            fMedia = null;
+            fPlayer = null;
 
-            fPlayer.WindowHandle = pnlVideo.Handle;
-
-            fMedia = null;*/
-
-            //trkVolume.Value = Math.Max(0, fPlayer.Volume);
-            //trkVolume_Scroll(null, null);
-
-            //UISync.Init(this);
+            trkVolume.Value = Math.Max(0, 100);
+            trkVolume_Scroll(null, null);
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                //fPlayer.Stop();
+            if (disposing) {
+                if (fMedia != null) {
+                    fMedia.Dispose();
+                }
+                if (fPlayer != null) {
+                    fPlayer.Stop();
+                    MpAttach(IntPtr.Zero);
+                    fPlayer.Dispose();
+                }
+                fLibVLC.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void SetPlayer(VLCMediaPlayer value)
+        {
+            if (ReferenceEquals(fPlayer, value)) {
+                return;
+            }
+
+            MpAttach(IntPtr.Zero);
+            fPlayer = value;
+            MpAttach(pnlVideo.NativeHandle);
+        }
+
+        private void MpAttach(IntPtr handle)
+        {
+            if (fPlayer == null || fPlayer.NativeReference == IntPtr.Zero)
+                return;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                fPlayer.Hwnd = handle;
+            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                fPlayer.NsObject = handle;
+            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                fPlayer.XWindow = (uint)handle;
+            } else {
+                throw new InvalidOperationException("Unsupported OSPlatform");
+            }
         }
 
         public void SetLocale()
@@ -87,7 +106,7 @@ using nVLC.Players;*/
 
         private void InitControls()
         {
-            //trkPosition.Value = 0;
+            trkPosition.Value = 0;
             lblDuration.Text = @"00:00:00 / 00:00:00";
         }
 
@@ -95,42 +114,52 @@ using nVLC.Players;*/
 
         private void Events_PlayerStopped(object sender, EventArgs e)
         {
-            //UISync.Execute(InitControls);
+            Application.Instance.Invoke(delegate () {
+                InitControls();
+            });
         }
 
         private void Events_MediaEnded(object sender, EventArgs e)
         {
-            //UISync.Execute(InitControls);
+            Application.Instance.Invoke(delegate () {
+                InitControls();
+            });
         }
 
-        /*private void Events_TimeChanged(object sender, MediaPlayerTimeChanged e)
+        private void Events_TimeChanged(object sender, MediaPlayerTimeChangedEventArgs e)
         {
-            UISync.Execute(() => lblTime.Text = TimeSpan.FromMilliseconds(e.NewTime).ToString().Substring(0, 8));
+            Application.Instance.Invoke(delegate () {
+                //lblTime.Text = TimeSpan.FromMilliseconds(e.NewTime).ToString().Substring(0, 8);
+            });
         }
 
-        private void Events_PlayerPositionChanged(object sender, MediaPlayerPositionChanged e)
+        private void Events_PlayerPositionChanged(object sender, MediaPlayerPositionChangedEventArgs e)
         {
-            UISync.Execute(() => {
-                               int newPos = (int)(e.NewPosition * 100);
-                               if (newPos > trkPosition.Maximum) return;
-                               trkPosition.Value = newPos;
-                           });
+            Application.Instance.Invoke(delegate () {
+                int newPos = (int)(e.Position * 100);
+                if (newPos > trkPosition.MaxValue) return;
+                trkPosition.Value = newPos;
+            });
         }
 
-        private void Events_StateChanged(object sender, MediaStateChange e)
+        private void Events_StateChanged(object sender, MediaStateChangedEventArgs e)
         {
-            UISync.Execute(() => label1.Text = e.NewState.ToString());
+            Application.Instance.Invoke(delegate () {
+                //label1.Text = e.State.ToString();
+            });
         }
 
-        private void Events_DurationChanged(object sender, MediaDurationChange e)
+        private void Events_DurationChanged(object sender, MediaDurationChangedEventArgs e)
         {
-            UISync.Execute(() => lblDuration.Text = TimeSpan.FromMilliseconds(e.NewDuration).ToString().Substring(0, 8));
+            Application.Instance.Invoke(delegate () {
+                lblDuration.Text = TimeSpan.FromMilliseconds(e.Duration).ToString().Substring(0, 8);
+            });
         }
 
-        private void Events_ParsedChanged(object sender, MediaParseChange e)
+        private void Events_ParsedChanged(object sender, MediaParsedChangedEventArgs e)
         {
-            //Console.WriteLine(e.Parsed);
-        }*/
+            Console.WriteLine(e.ParsedStatus);
+        }
 
         #endregion
 
@@ -138,89 +167,89 @@ using nVLC.Players;*/
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            /*if (fMedia == null) {
+            if (fMedia == null) {
                 if (string.IsNullOrEmpty(fMediaFile)) {
-                    MessageBox.Show("Please select media path first", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    AppHost.StdDialogs.ShowError("Please select media path first");
                     return;
                 }
 
-                fMedia = fFactory.CreateMedia<IMedia>(fMediaFile);
-                fMedia.Events.DurationChanged += Events_DurationChanged;
-                fMedia.Events.StateChanged += Events_StateChanged;
-                fMedia.Events.ParsedChanged += Events_ParsedChanged;
+                fMedia = new Media(fLibVLC, fMediaFile);
+                fMedia.DurationChanged += Events_DurationChanged;
+                fMedia.StateChanged += Events_StateChanged;
+                fMedia.ParsedChanged += Events_ParsedChanged;
 
-                fPlayer.Open(fMedia);
-                fMedia.Parse(true);
+                SetPlayer(new VLCMediaPlayer(fMedia));
+                fPlayer.PositionChanged += Events_PlayerPositionChanged;
+                fPlayer.TimeChanged += Events_TimeChanged;
+                fPlayer.EndReached += Events_MediaEnded;
+                fPlayer.Stopped += Events_PlayerStopped;
+
+                //fMedia.Parse();
+                fPlayer.Play(fMedia);
             }
 
-            fPlayer.Play();*/
+            fPlayer.Play();
         }
 
         private void trkVolume_Scroll(object sender, EventArgs e)
         {
-            /*fPlayer.Mute = false;
+            if (fPlayer == null)
+                return;
+
+            fPlayer.Mute = false;
             fPlayer.Volume = trkVolume.Value;
 
             if (100 >= fPlayer.Volume && fPlayer.Volume > 50) {
-                btnMute.BackgroundImage = ExtResources.btnVolumeMax;
+                btnMute.Image = UIHelper.LoadResourceImage("Resources.btn_volume_max.png");
             }
             if (50 >= fPlayer.Volume && fPlayer.Volume > 5) {
-                btnMute.BackgroundImage = ExtResources.btnVolumeMiddle;
+                btnMute.Image = UIHelper.LoadResourceImage("Resources.btn_volume_middle.png");
             }
             if (5 >= fPlayer.Volume && fPlayer.Volume > 0) {
-                btnMute.BackgroundImage = ExtResources.btnVolumeMin;
+                btnMute.Image = UIHelper.LoadResourceImage("Resources.btn_volume_min.png");
             }
             if (fPlayer.Volume == 0) {
-                btnMute.BackgroundImage = ExtResources.btnVolumeMute;
-            }*/
+                btnMute.Image = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
+            }
         }
 
         private void trkPosition_Scroll(object sender, EventArgs e)
         {
-            //fPlayer.Position = trkPosition.Value / 100.0f;
+            if (fPlayer == null)
+                return;
+
+            fPlayer.Position = trkPosition.Value / 100.0f;
         }
 
         public void btnStop_Click(object sender, EventArgs e)
         {
-            //fPlayer.Stop();
+            if (fPlayer == null)
+                return;
+
+            fPlayer.Stop();
         }
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            //fPlayer.Pause();
+            if (fPlayer == null)
+                return;
+
+            fPlayer.Pause();
         }
 
         private void btnMute_Click(object sender, EventArgs e)
         {
-            /*fPlayer.ToggleMute();
+            if (fPlayer == null)
+                return;
+
+            fPlayer.ToggleMute();
 
             if (fPlayer.Mute) {
-                btnMute.BackgroundImage = ExtResources.btnVolumeMute;
+                btnMute.Image = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
             } else {
                 trkVolume_Scroll(sender, e);
-            }*/
+            }
         }
-
-        #endregion
-
-        #region UI synchronization
-
-        /*private static class UISync
-        {
-            private static ISynchronizeInvoke fSync;
-
-            public static void Init(ISynchronizeInvoke sync)
-            {
-                fSync = sync;
-            }
-
-            public static void Execute(Action action)
-            {
-                // TODO: to rework this part, because there is a critical error
-                // when closing window during playback
-                fSync.BeginInvoke(action, null);
-            }
-        }*/
 
         #endregion
     }
