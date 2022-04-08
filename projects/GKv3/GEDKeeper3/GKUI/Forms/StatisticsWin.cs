@@ -102,7 +102,7 @@ namespace GKUI.Forms
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fCurrentMode = (StatsMode)cbType.SelectedIndex;
+            fCurrentMode = cbType.GetSelectedTag<StatsMode>();
             fController.CalcStats(fCurrentMode);
 
             fListStats.SortOrder = BSDTypes.SortOrder.None;

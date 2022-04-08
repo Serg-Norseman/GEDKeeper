@@ -170,7 +170,7 @@ namespace GKCore.Controllers
                 if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
 
                 GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
-                fView.StatsType.Add(LangMan.LS(tr.Title));
+                fView.StatsType.AddItem(LangMan.LS(tr.Title), sm);
             }
             fView.StatsType.EndUpdate();
         }
