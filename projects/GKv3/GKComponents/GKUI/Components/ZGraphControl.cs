@@ -21,9 +21,13 @@
 using System.Collections.Generic;
 using BSLib;
 using Eto.Forms;
+using GKCore;
 using GKCore.MVP.Controls;
 using GKCore.Stats;
-using ScottPlot.Eto;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Eto;
+using OxyPlot.Series;
 
 namespace GKUI.Components
 {
@@ -32,17 +36,15 @@ namespace GKUI.Components
     /// </summary>
     public sealed class ZGraphControl : Panel, IGraphControl
     {
-        private class XYPair
-        {
-            public double X;
-            public double Y;
-        }
-
         private readonly PlotView fGraph;
+        private PlotModel fModel;
 
         public ZGraphControl()
         {
+            fModel = new PlotModel();
+
             fGraph = new PlotView();
+            fGraph.Model = fModel;
             Content = fGraph;
         }
 
@@ -53,74 +55,68 @@ namespace GKUI.Components
 
         public void Clear()
         {
-            fGraph.Plot.Clear();
-            fGraph.Refresh();
+            fModel = new PlotModel();
+            fGraph.Model = fModel;
         }
 
         public void PrepareArray(string title, string xAxis, string yAxis, ChartStyle style, bool excludeUnknowns, List<StatsItem> vals)
         {
             try {
-                fGraph.Plot.Clear();
+                Clear();
 
-                fGraph.Plot. Title(title, true);
-                fGraph.Plot.XAxis.Label(xAxis);
-                fGraph.Plot.YAxis.Label(yAxis);
+                fModel.Title = title;
 
-                if (style != ChartStyle.ClusterBar) {
-                    var ppList = new List<XYPair>();
+                vals.Sort((a, b) => GKUtils.StrCompareEx(b.Caption, a.Caption));
 
-                    int num = vals.Count;
-                    for (int i = 0; i < num; i++) {
-                        StatsItem item = vals[i];
+                switch (style) {
+                    case ChartStyle.Bar: {
+                            var categoryAxis = new CategoryAxis { Position = AxisPosition.Left };
+                            fModel.Axes.Add(categoryAxis);
 
-                        string s = item.Caption;
-                        double lab = (s == "?") ? 0.0f : ConvertHelper.ParseFloat(s, 0.0f, true);
-
-                        if (lab != 0.0d || !excludeUnknowns) {
-                            ppList.Add(new XYPair() { X = lab, Y = item.Value });
+                            var series = new BarSeries();
+                            for (int i = 0; i < vals.Count; i++) {
+                                StatsItem item = vals[i];
+                                if (item.Caption != "?" || !excludeUnknowns) {
+                                    categoryAxis.Labels.Add(item.Caption);
+                                    series.Items.Add(new BarItem(item.Value, i));
+                                }
+                            }
+                            fModel.Series.Add(series);
                         }
-                    }
-                    ppList.Sort((a, b) => b.X.CompareTo(a.X));
+                        break;
 
-                    switch (style) {
-                        case ChartStyle.Bar: {
-                                var values = new double[ppList.Count];
-                                var positions = new double[ppList.Count];
-                                for (int i = 0; i < ppList.Count; i++) {
-                                    XYPair xyPair = ppList[i];
-                                    values[i] = xyPair.Y;
-                                    positions[i] = xyPair.X;
-                                }
-                                fGraph.Plot.AddBar(values, positions);
-                            }
-                            break;
-
-                        case ChartStyle.Point: {
-                                var scatterList = fGraph.Plot.AddScatterList(markerSize: 7, markerShape: ScottPlot.MarkerShape.filledDiamond);
-                                foreach (var xyPair in ppList) {
-                                    scatterList.Add(xyPair.X, xyPair.Y);
+                    case ChartStyle.Point: {
+                            var series = new LineSeries() { MarkerType = MarkerType.Diamond, MarkerSize = 4 };
+                            for (int i = 0; i < vals.Count; i++) {
+                                StatsItem item = vals[i];
+                                string s = item.Caption;
+                                double lab = (s == "?") ? 0.0f : ConvertHelper.ParseFloat(s, 0.0f, true);
+                                if (lab != 0.0d || !excludeUnknowns) {
+                                    series.Points.Add(new DataPoint(lab, item.Value));
                                 }
                             }
-                            break;
-                    }
-                } else {
-                    int itemscount = vals.Count;
-                    double[] yValuesF = new double[itemscount];
-                    double[] yValuesM = new double[itemscount];
-                    double[] xValues = new double[itemscount];
+                            fModel.Series.Add(series);
+                        }
+                        break;
 
-                    for (int i = 0; i < itemscount; i++) {
-                        StatsItem sti = vals[i];
-                        xValues[i] = ConvertHelper.ParseInt(sti.Caption, 0);
-                        yValuesF[i] = sti.ValF;
-                        yValuesM[i] = sti.ValM + sti.ValF;
-                    }
+                    case ChartStyle.ClusterBar: {
+                            var categoryAxis = new CategoryAxis { Position = AxisPosition.Left };
+                            fModel.Axes.Add(categoryAxis);
 
-                    fGraph.Plot.AddBar(yValuesM, xValues, System.Drawing.Color.Blue).Label = "M";
-                    fGraph.Plot.AddBar(yValuesF, xValues, System.Drawing.Color.Red).Label = "F";
+                            var seriesF = new BarSeries() { FillColor = OxyColors.Red, Title = "F" };
+                            var seriesM = new BarSeries() { FillColor = OxyColors.Blue, Title = "M" };
+                            for (int i = 0; i < vals.Count; i++) {
+                                StatsItem sti = vals[i];
+                                categoryAxis.Labels.Add(sti.Caption);
+                                seriesF.Items.Add(new BarItem(sti.ValF, i));
+                                seriesM.Items.Add(new BarItem(sti.ValM, i));
+                            }
+                            fModel.Series.Add(seriesF);
+                            fModel.Series.Add(seriesM);
+                        }
+                        break;
                 }
             } finally {
-                fGraph.Refresh();
             }
         }
     }

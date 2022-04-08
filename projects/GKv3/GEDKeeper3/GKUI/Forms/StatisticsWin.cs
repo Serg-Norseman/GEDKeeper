@@ -82,9 +82,9 @@ namespace GKUI.Forms
             Splitter spl = new Splitter();
             spl.Panel1 = fListStats;
             spl.Panel2 = fGraph;
-            spl.RelativePosition = 300;
+            spl.RelativePosition = 500;
             spl.Orientation = Orientation.Horizontal;
-            spl.FixedPanel = SplitterFixedPanel.Panel2;
+            spl.FixedPanel = SplitterFixedPanel.Panel1;
             panDataPlaceholder.Content = spl;
 
             fController = new StatisticsWinController(this, selectedRecords);
