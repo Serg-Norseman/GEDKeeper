@@ -65,6 +65,7 @@ namespace GKUI.Components
                 Clear();
 
                 fModel.Title = title;
+                fModel.Background = OxyColors.White;
 
                 vals.Sort((a, b) => GKUtils.StrCompareEx(b.Caption, a.Caption));
 
