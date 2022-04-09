@@ -602,11 +602,16 @@ namespace GKUI.Components
 
         public BSDListItem AddItem(object rowData, params object[] columnValues)
         {
+            return AddItem(rowData, false, columnValues);
+        }
+
+        public BSDListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
+        {
             object[] itemValues;
             if (fCheckedList) {
                 int num = columnValues.Length;
                 itemValues = new object[num + 1];
-                itemValues[0] = false;
+                itemValues[0] = isChecked;
                 Array.Copy(columnValues, 0, itemValues, 1, num);
             } else {
                 itemValues = columnValues;

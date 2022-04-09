@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,8 +40,6 @@ namespace GKUI.Forms
 
         private readonly ZGraphControl fGraph;
         private readonly GKListView fListStats;
-
-        private StatsMode fCurrentMode;
 
         #region View Interface
 
@@ -97,8 +95,6 @@ namespace GKUI.Forms
             fController = new StatisticsWinController(this, selectedRecords);
             fController.Init(baseWin);
 
-            fCurrentMode = StatsMode.smAncestors;
-
             SetLocale();
         }
 
@@ -109,8 +105,7 @@ namespace GKUI.Forms
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fCurrentMode = cbType.GetSelectedTag<StatsMode>();
-            fController.CalcStats(fCurrentMode);
+            fController.CalcStats();
 
             fListStats.SortColumn = -1;
             fListStats.Sorting = SortOrder.None;

@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Globalization;
 using BSLib.Design;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
