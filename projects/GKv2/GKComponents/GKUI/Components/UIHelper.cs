@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -285,12 +285,12 @@ namespace GKUI.Components
         {
             TextBox tb = (sender as TextBox);
             if (tb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
-                tb.Text = ConvertHelper.UniformName(tb.Text);
+                tb.Text = GKUtils.UniformName(tb.Text);
             }
 
             ComboBox cmb = (sender as ComboBox);
             if (cmb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
-                cmb.Text = ConvertHelper.UniformName(cmb.Text);
+                cmb.Text = GKUtils.UniformName(cmb.Text);
             }
         }
 

@@ -2912,6 +2912,30 @@ namespace GKCore
 
         #region Names processing
 
+        public static string UniformName(string val)
+        {
+            if (string.IsNullOrEmpty(val)) {
+                return null;
+            }
+
+            StringBuilder str = new StringBuilder(val.ToLower());
+
+            bool prevDelimiter = true;
+            for (int i = 0; i < str.Length; i++) {
+                char chr = str[i];
+                if (chr == ' ' || chr == '-') {
+                    prevDelimiter = true;
+                } else {
+                    if (prevDelimiter) {
+                        str[i] = char.ToUpper(chr);
+                        prevDelimiter = false;
+                    }
+                }
+            }
+
+            return str.ToString();
+        }
+
         public static string GetFamilyString(GDMTree tree, GDMFamilyRecord family)
         {
             if (family == null)
