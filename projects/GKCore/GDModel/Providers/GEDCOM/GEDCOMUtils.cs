@@ -368,10 +368,10 @@ namespace GDModel.Providers.GEDCOM
 
             if (!string.IsNullOrEmpty(strValue)) {
                 var parser = new GEDCOMParser(strValue, true);
-                x1 = parser.RequestNextInt();
-                y1 = parser.RequestNextInt();
-                x2 = parser.RequestNextInt();
-                y2 = parser.RequestNextInt();
+                x1 = parser.RequestNextSignedInt();
+                y1 = parser.RequestNextSignedInt();
+                x2 = parser.RequestNextSignedInt();
+                y2 = parser.RequestNextSignedInt();
             }
 
             position.SetRawData(x1, y1, x2, y2);

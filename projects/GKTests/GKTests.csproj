@@ -260,6 +260,7 @@
     <EmbeddedResource Include="Resources\test_dates_year.ged" />
     <EmbeddedResource Include="Resources\test_geni_srcit.ged" />
     <EmbeddedResource Include="Resources\test_geni_neg_years.ged" />
+    <EmbeddedResource Include="Resources\test_ftb_badpos.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

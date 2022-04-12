@@ -236,6 +236,18 @@ namespace GDModel.Providers
         }
 
         [Test]
+        public void Test_FTB_BadPosition()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftb_badpos.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
+
+                //GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
+                //Assert.IsNotNull(noteRec1);
+                //Assert.AreEqual("Test1\r\ntest2\r\ntest3\r\nbadline badline badline badline", noteRec1.Lines.Text);
+            }
+        }
+
+        [Test]
         public void Test_MinIndented()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_min_indented.ged")) {
