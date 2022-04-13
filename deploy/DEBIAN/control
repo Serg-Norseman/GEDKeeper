@@ -1,5 +1,5 @@
 Package: gedkeeper
-Version: 2.20.0-1
+Version: 2.20.1-1
 Architecture: all
 Depends: mono-complete (>=5.12), sqlite3
 Maintainer: Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>

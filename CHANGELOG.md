@@ -1,4 +1,14 @@
 
+## 14.04.2022 [v2.20.1]
+- Fixed support for negative coordinates in FTB files.
+- Added option to display surnames in capital letters.
+- Fixed error resetting name in person edit dialog when adding father/mother.
+- Fixed double display of the surname in the person page in the generated site.
+- Fixed an error in determining the kinship of cousins.
+- Added the feature to display age in a person's card in the tree.
+- Fixed a bug with displaying dialogs relative to the main window.
+- Fixed issue with typing Return in note editor.
+
 ## 28.03.2022 [v2.20.0]
 - Fixed declension of partial names in birthday message.
 - Fixed a bug with calling the log and help in Linux.
