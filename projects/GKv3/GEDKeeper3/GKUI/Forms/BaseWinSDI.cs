@@ -147,6 +147,7 @@ namespace GKUI.Forms
             summary.Font = UIHelper.GetDefaultFont();
 
             var recView = new GKListView();
+            recView.AllowMultipleSelection = true;
             recView.MouseDoubleClick += miRecordEdit_Click;
             recView.SelectedItemsChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
