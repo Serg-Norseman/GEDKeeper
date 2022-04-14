@@ -52,6 +52,8 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             ListPlaces = new GKListView();
+            ListPlaces.Sorting = true;
+            ListPlaces.AllowMultipleSelection = true;
             ListPlaces.MouseDoubleClick += ListPlaces_DblClick;
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
