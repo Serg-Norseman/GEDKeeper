@@ -628,19 +628,15 @@ namespace GKUI.Components
             try {
                 var result = new List<object>();
 
-                /*if (!VirtualMode) {
-                    int num = SelectedItems.Count;
-                    for (int i = 0; i < num; i++) {
-                        var lvItem = SelectedItems[i] as GKListItem;
-                        result.Add(lvItem.Data);
+                if (fListMan == null) {
+                    foreach (GKListItem item in SelectedItems) {
+                        result.Add(item.Data);
                     }
                 } else {
-                    int num = SelectedIndices.Count;
-                    for (int i = 0; i < num; i++) {
-                        int index = SelectedIndices[i];
+                    foreach (var index in SelectedRows) {
                         result.Add(fListMan.GetContentItem(index));
                     }
-                }*/
+                }
 
                 return result;
             } catch (Exception ex) {
