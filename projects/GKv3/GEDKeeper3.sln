@@ -22,9 +22,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKMap.Core.nstd", "..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj", "{D0C39D9D-BED0-418B-9A5E-713176CAF40C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKMap.Core.nstd", "..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj", "{D0C39D9D-BED0-418B-9A5E-713176CAF40C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKMap.EtoForms", "..\GKMap\GKMap.EtoForms\GKMap.EtoForms.csproj", "{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKMap.EtoForms", "..\GKMap\GKMap.EtoForms\GKMap.EtoForms.csproj", "{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8EEE8-8592-420C-B5C5-E6DDBA389BA1}"
 	ProjectSection(SolutionItems) = preProject
@@ -38,6 +38,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8
 		..\..\locales\russian.lng = ..\..\locales\russian.lng
 		..\..\locales\ukrainian.lng = ..\..\locales\ukrainian.lng
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "subprojects", "subprojects", "{0801C061-F6A6-466B-A355-3F7B6225ADB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{B8B3F590-CF25-40FC-8454-D673B594DBF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +88,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BD2B94CA-5913-415B-9428-ED3C6D270602} = {B8B3F590-CF25-40FC-8454-D673B594DBF3}
+		{D0C39D9D-BED0-418B-9A5E-713176CAF40C} = {0801C061-F6A6-466B-A355-3F7B6225ADB2}
+		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98} = {0801C061-F6A6-466B-A355-3F7B6225ADB2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C05CBCB7-0B24-41CC-8BDC-E5BB79045E5D}

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -100,7 +100,7 @@ namespace GKUI.Forms
 
         public void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef)
         {
-            var imageCtl = new ImageView();
+            var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(img);
 
             fController.ProcessPortraits(imageCtl, fileRef);

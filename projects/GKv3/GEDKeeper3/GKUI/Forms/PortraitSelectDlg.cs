@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,8 +33,6 @@ namespace GKUI.Forms
     public sealed partial class PortraitSelectDlg : EditorDialog, IPortraitSelectDlg
     {
         private readonly PortraitSelectDlgController fController;
-
-        private ITimer fTimer;
 
         public GDMMultimediaLink MultimediaLink
         {
@@ -70,31 +68,8 @@ namespace GKUI.Forms
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Title = LangMan.LS(LSID.LSID_PortraitSelect);
 
-            fTimer = AppHost.Instance.CreateTimer(100.0f, InitViewer_Tick);
-            fTimer.Start();
-
             fController = new PortraitSelectDlgController(this);
             fController.Init(baseWin);
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            if (imageView1 != null) {
-                imageView1.Focus();
-                imageView1.Invalidate();
-                imageView1.ZoomToFit();
-            }
-        }
-
-        // dirty temporary hack
-        private void InitViewer_Tick(object sender, EventArgs e)
-        {
-            if (imageView1 != null && !imageView1.Viewport.Size.IsEmpty) {
-                imageView1.ZoomToFit();
-                fTimer.Stop();
-            }
         }
     }
 }

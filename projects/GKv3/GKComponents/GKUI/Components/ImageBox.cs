@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -204,7 +204,7 @@ namespace GKUI.Components
             set {
                 if (fImage != value) {
                     fImage = value;
-                    UpdateParams();
+                    AdjustLayout();
                     OnImageChanged(EventArgs.Empty);
                 }
             }
@@ -322,6 +322,7 @@ namespace GKUI.Components
             set {
                 if (fSelectionRegion != value) {
                     fSelectionRegion = value;
+                    Invalidate();
                     OnSelectionRegionChanged(EventArgs.Empty);
                 }
             }
@@ -371,7 +372,7 @@ namespace GKUI.Components
                 if (fZoom != value) {
                     fZoom = value;
 
-                    UpdateParams();
+                    AdjustLayout();
                     OnZoomChanged(EventArgs.Empty);
                 }
             }
@@ -425,17 +426,6 @@ namespace GKUI.Components
         private bool AllowPainting()
         {
             return fUpdateCount == 0;
-        }
-
-        private void UpdateParams()
-        {
-            fImageSize = (fImage != null) ? fImage.Size : Size.Empty;
-            fZoomFactor = fZoom / 100.0f;
-
-            fScaledImageHeight = (int)(fImageSize.Height * fZoomFactor);
-            fScaledImageWidth = (int)(fImageSize.Width * fZoomFactor);
-
-            //SetImageSize(new ExtSize(fScaledImageWidth, fScaledImageHeight), true);
         }
 
         /// <summary>
@@ -674,10 +664,7 @@ namespace GKUI.Components
 
             //base.UpdateScrollSizes();
             Size viewportSize = base.Viewport.Size;
-            viewportSize.Height -= 40;
-            viewportSize.Width -= 40;
-
-            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, viewportSize.Width, viewportSize.Height);
+            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, viewportSize.Width - 40, viewportSize.Height - 40);
             double zoom = aspectRatio * 100.0;
 
             Zoom = (int)Math.Round(Math.Floor(zoom));
@@ -706,6 +693,16 @@ namespace GKUI.Components
         /// </summary>
         private void AdjustLayout()
         {
+            var clientSize = ClientSize;
+            if (clientSize.Height <= 0 || clientSize.Width <= 0)
+                return;
+
+            fImageSize = (fImage != null) ? fImage.Size : Size.Empty;
+            fZoomFactor = fZoom / 100.0f;
+
+            fScaledImageHeight = (int)(fImageSize.Height * fZoomFactor);
+            fScaledImageWidth = (int)(fImageSize.Width * fZoomFactor);
+
             if (fSizeToFit) {
                 ZoomToFit();
             } else if (!fImageSize.IsEmpty) {
@@ -1001,14 +998,16 @@ namespace GKUI.Components
         /// </param>
         protected override void OnSizeChanged(EventArgs e)
         {
-            base.OnSizeChanged(e);
             AdjustLayout();
+
+            base.OnSizeChanged(e);
         }
 
         protected override void OnScroll(ScrollEventArgs e)
         {
-            base.OnScroll(e);
             AdjustLayout();
+
+            base.OnScroll(e);
         }
 
         #endregion
@@ -1021,8 +1020,6 @@ namespace GKUI.Components
         /// </param>
         private void OnImageChanged(EventArgs e)
         {
-            AdjustLayout();
-
             EventHandler handler = ImageChanged;
             if (handler != null)
                 handler(this, e);
@@ -1036,8 +1033,6 @@ namespace GKUI.Components
         /// </param>
         private void OnSelectionRegionChanged(EventArgs e)
         {
-            Invalidate();
-
             EventHandler handler = SelectionRegionChanged;
             if (handler != null)
                 handler(this, e);
@@ -1051,8 +1046,6 @@ namespace GKUI.Components
         /// </param>
         private void OnZoomChanged(EventArgs e)
         {
-            AdjustLayout();
-
             EventHandler handler = ZoomChanged;
             if (handler != null)
                 handler(this, e);

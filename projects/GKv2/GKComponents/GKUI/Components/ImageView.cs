@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -170,11 +170,11 @@ namespace GKUI.Components
         {
             if (image != null) {
                 imageBox.BeginUpdate();
-                imageBox.Image = image;
-                imageBox.ZoomToFit();
-                imageBox.EndUpdate();
 
-                UpdateZoomLevels();
+                imageBox.Image = image;
+                ZoomToFit();
+
+                imageBox.EndUpdate();
             }
         }
 
@@ -219,8 +219,11 @@ namespace GKUI.Components
 
         private void cbZoomLevels_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
-            imageBox.Zoom = zoom;
+            if (cbZoomLevels.Focused) {
+                // number w/out '%'
+                int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
+                imageBox.Zoom = zoom;
+            }
         }
 
         protected override void Select(bool directed, bool forward)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -207,7 +207,7 @@ namespace GKUI.Components
             set {
                 if (fImage != value) {
                     fImage = value;
-                    UpdateParams();
+                    AdjustLayout();
                     OnImageChanged(EventArgs.Empty);
                 }
             }
@@ -329,6 +329,7 @@ namespace GKUI.Components
             set {
                 if (fSelectionRegion != value) {
                     fSelectionRegion = value;
+                    Invalidate();
                     OnSelectionRegionChanged(EventArgs.Empty);
                 }
             }
@@ -378,7 +379,7 @@ namespace GKUI.Components
                 if (fZoom != value) {
                     fZoom = value;
 
-                    UpdateParams();
+                    AdjustLayout();
                     OnZoomChanged(EventArgs.Empty);
                 }
             }
@@ -443,15 +444,6 @@ namespace GKUI.Components
         private bool AllowPainting()
         {
             return fUpdateCount == 0;
-        }
-
-        private void UpdateParams()
-        {
-            fImageSize = (fImage != null) ? fImage.Size : Size.Empty;
-            fZoomFactor = fZoom / 100.0f;
-
-            fScaledImageHeight = (int)(fImageSize.Height * fZoomFactor);
-            fScaledImageWidth = (int)(fImageSize.Width * fZoomFactor);
         }
 
         /// <summary>
@@ -727,6 +719,12 @@ namespace GKUI.Components
         /// </summary>
         private void AdjustLayout()
         {
+            fImageSize = (fImage != null) ? fImage.Size : Size.Empty;
+            fZoomFactor = fZoom / 100.0f;
+
+            fScaledImageHeight = (int)(fImageSize.Height * fZoomFactor);
+            fScaledImageWidth = (int)(fImageSize.Width * fZoomFactor);
+
             if (fSizeToFit) {
                 ZoomToFit();
             } else if (!fImageSize.IsEmpty) {
@@ -770,7 +768,8 @@ namespace GKUI.Components
                 {
                     int alpha = feather - ((feather / glowSize) * i);
 
-                    using (var pen = new Pen(Color.FromArgb(alpha, fImageBorderColor), i) { LineJoin = LineJoin.Round })
+                    var color = Color.FromArgb(alpha, fImageBorderColor);
+                    using (var pen = new Pen(color, i) { LineJoin = LineJoin.Round })
                         g.DrawPath(pen, path);
                 }
             }
@@ -825,10 +824,11 @@ namespace GKUI.Components
 
         private void DrawNamedRegions(Graphics gfx)
         {
+            var color = Color.FromArgb(128, fSelectionColor);
             foreach (var region in fNamedRegions) {
                 RectangleF rect = GetOffsetRectangle(region.Region);
 
-                using (Brush brush = new SolidBrush(Color.FromArgb(128, fSelectionColor)))
+                using (Brush brush = new SolidBrush(color))
                     gfx.FillRectangle(brush, rect);
 
                 using (var pen = new Pen(fSelectionColor))
@@ -1054,6 +1054,7 @@ namespace GKUI.Components
         protected override void OnResize(EventArgs e)
         {
             AdjustLayout();
+
             base.OnResize(e);
         }
 
@@ -1067,8 +1068,6 @@ namespace GKUI.Components
         /// </param>
         private void OnImageChanged(EventArgs e)
         {
-            AdjustLayout();
-
             EventHandler handler = ImageChanged;
             if (handler != null)
                 handler(this, e);
@@ -1082,8 +1081,6 @@ namespace GKUI.Components
         /// </param>
         private void OnSelectionRegionChanged(EventArgs e)
         {
-            Invalidate();
-
             EventHandler handler = SelectionRegionChanged;
             if (handler != null)
                 handler(this, e);
@@ -1097,8 +1094,6 @@ namespace GKUI.Components
         /// </param>
         private void OnZoomChanged(EventArgs e)
         {
-            AdjustLayout();
-
             EventHandler handler = ZoomChanged;
             if (handler != null)
                 handler(this, e);
