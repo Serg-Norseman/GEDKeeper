@@ -29,7 +29,7 @@ using GKUI.Platform;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct(GKData.APP_TITLE)]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
-[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyVersion(GKData.APP_VERSION_3X)]
 [assembly: AssemblyCulture("")]
 
 namespace GEDKeeper3.Wpf

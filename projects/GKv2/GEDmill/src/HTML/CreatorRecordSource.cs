@@ -37,7 +37,7 @@ namespace GEDmill.HTML
         private GDMSourceRecord fSourceRecord;
 
 
-        public CreatorRecordSource(IBaseContext context, IProgressCallback progress, ILangMan langMan, GDMSourceRecord sr) : base(context, progress, langMan)
+        public CreatorRecordSource(IBaseContext context, ILangMan langMan, GDMSourceRecord sr) : base(context, langMan)
         {
             fSourceRecord = sr;
         }

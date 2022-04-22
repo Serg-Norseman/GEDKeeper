@@ -1,6 +1,5 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
-using GKCore;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -26,11 +25,6 @@ namespace GKUI.Forms
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
         private ButtonToolItem tbSendMail;
-
-        // Obsolete
-        /*private ButtonToolItem tbDocPrint;
-        private ButtonToolItem tbDocPreview;*/
-
         private MenuBar MainMenu1;
         private ButtonMenuItem miFile;
         private ButtonMenuItem miFileNew;
@@ -188,14 +182,6 @@ namespace GKUI.Forms
             tbNext = new ButtonToolItem();
             tbNext.Enabled = false;
             tbNext.Click += tbNext_Click;
-
-            // Obsolete
-            /*tbDocPreview = new ButtonToolItem();
-            tbDocPreview.Click += tbDocPreview_Click;
-
-            tbDocPrint = new ButtonToolItem();
-            tbDocPrint.Click += tbDocPrint_Click;
-            */
 
             tbSendMail = new ButtonToolItem();
             tbSendMail.Click += tbSendMail_Click;

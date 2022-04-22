@@ -31,7 +31,6 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
-
 using GKUI.Platform;
 using BSDColors = BSLib.Design.BSDConsts.Colors;
 
@@ -712,9 +711,9 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            Point pt = e.Location;
-            fMouseX = pt.X;
-            fMouseY = pt.Y;
+            Point scrPt = e.Location;
+            fMouseX = scrPt.X;
+            fMouseY = scrPt.Y;
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -737,7 +736,7 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.ControlsVisible:
-                    fTreeControls.MouseDown(pt.X, pt.Y);
+                    fTreeControls.MouseDown(scrPt.X, scrPt.Y);
                     break;
             }
 
@@ -746,6 +745,8 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            Point scrPt = e.Location;
+
             switch (fMode) {
                 case ChartControlMode.Default:
                     TreeChartPerson mPers;
@@ -756,13 +757,13 @@ namespace GKUI.Components
                     } else {
                         SetHighlight(null);
 
-                        ITreeControl ctl = fTreeControls.Contains(e.X, e.Y);
+                        ITreeControl ctl = fTreeControls.Contains(scrPt.X, scrPt.Y);
 
                         if (ctl != null) {
                             fMode = ChartControlMode.ControlsVisible;
                             ctl.UpdateState();
                             ctl.Visible = true;
-                            ctl.MouseMove(e.X, e.Y);
+                            ctl.MouseMove(scrPt.X, scrPt.Y);
                             fActiveControl = ctl;
 
                             fToolTip.Show(ctl.Tip, this, e.X + Left, e.Y + Top, 1500);
@@ -779,13 +780,13 @@ namespace GKUI.Components
 
                 case ChartControlMode.ControlsVisible:
                     if (fActiveControl != null) {
-                        if (!(fActiveControl.Contains(e.X, e.Y) || fActiveControl.MouseCaptured)) {
+                        if (!(fActiveControl.Contains(scrPt.X, scrPt.Y) || fActiveControl.MouseCaptured)) {
                             fMode = ChartControlMode.Default;
                             fActiveControl.Visible = false;
                             fToolTip.Hide(this);
                             fActiveControl = null;
                         } else {
-                            fActiveControl.MouseMove(e.X, e.Y);
+                            fActiveControl.MouseMove(scrPt.X, scrPt.Y);
                         }
                     }
                     break;

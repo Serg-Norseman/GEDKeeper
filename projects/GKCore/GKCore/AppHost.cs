@@ -102,10 +102,10 @@ namespace GKCore
         public static void LogSysInfo()
         {
             try {
-                //#if MONO
-                //Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
-                //Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
-                //#endif
+                #if MONO
+                Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
+                Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
+                #endif
 
                 // There should be no links to the application infrastructure
                 Assembly execAssembly = Assembly.GetExecutingAssembly();
@@ -243,10 +243,7 @@ namespace GKCore
 
         public abstract ITimer CreateTimer(double msInterval, EventHandler elapsedHandler);
 
-        public virtual void Quit()
-        {
-            AppHost.Instance.SaveLastBases();
-        }
+        public abstract void Quit();
 
         #region Executing environment
 

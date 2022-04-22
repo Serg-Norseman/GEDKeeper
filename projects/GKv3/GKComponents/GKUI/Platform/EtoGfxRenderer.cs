@@ -53,6 +53,13 @@ namespace GKUI.Platform
             fCanvas.AntiAlias = value;
         }
 
+        public override void DrawArc(IPen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
+        {
+            Pen sdPen = ((PenHandler)pen).Handle;
+
+            fCanvas.DrawArc(sdPen, x, y, width, height, startAngle, sweepAngle);
+        }
+
         public override void DrawImage(IImage image, float x, float y,
                                        float width, float height)
         {
@@ -215,7 +222,12 @@ namespace GKUI.Platform
             Color sdColor = ((ColorHandler)color).Handle;
             sdColor = PrepareColor(sdColor);
 
-            return new PenHandler(new Pen(sdColor, width));
+            var etoPen = new Pen(sdColor, width);
+            if (dashPattern != null) {
+                etoPen.DashStyle = new DashStyle(0, dashPattern);
+            }
+
+            return new PenHandler(etoPen);
         }
 
         public override IBrush CreateSolidBrush(IColor color)

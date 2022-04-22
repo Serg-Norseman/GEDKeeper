@@ -126,7 +126,7 @@ namespace GEDmill.HTML
         private Paintbox fPaintbox;
 
 
-        public CreatorRecordIndividual(IBaseContext context, IProgressCallback progress, ILangMan langMan, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator, Paintbox paintbox) : base(context, progress, langMan)
+        public CreatorRecordIndividual(IBaseContext context, ILangMan langMan, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator, Paintbox paintbox) : base(context, langMan)
         {
             fIndiRec = ir;
             fIndiIndexCreator = indiIndexCreator;

@@ -527,11 +527,6 @@ namespace GEDmill
                     ini.WriteBool("Common", "AllowMultimedia", AllowMultimedia);
                     ini.WriteBool("Common", "SupressBackreferences", SupressBackreferences);
                     ini.WriteBool("Common", "KeepSiblingOrder", KeepSiblingOrder);
-
-                    int versionMajor = 1, versionMinor = 11, versionPatch = 0;
-                    ini.WriteInteger("Common", "VersionMajor", versionMajor);
-                    ini.WriteInteger("Common", "VersionMinor", versionMinor);
-                    ini.WriteInteger("Common", "VersionPatch", versionPatch);
                 }
             } catch (Exception ex) {
                 fLogger.WriteError("GMConfig.Save()", ex);
@@ -541,8 +536,6 @@ namespace GEDmill
         // Deserialise all the settings
         public void Load()
         {
-            int versionMajor = 0, versionMinor = 0, versionPatch = 0;
-
             try {
                 using (var ini = new IniFile(AppDataPath + ConfigFilename)) {
                     Version = ini.ReadString("Common", "Version", "");
@@ -633,10 +626,6 @@ namespace GEDmill
                     AllowMultimedia = ini.ReadBool("Common", "AllowMultimedia", true);
                     SupressBackreferences = ini.ReadBool("Common", "SupressBackreferences", false);
                     KeepSiblingOrder = ini.ReadBool("Common", "KeepSiblingOrder", false);
-
-                    versionMajor = ini.ReadInteger("Common", "VersionMajor", 0);
-                    versionMinor = ini.ReadInteger("Common", "VersionMinor", 0);
-                    versionPatch = ini.ReadInteger("Common", "VersionPatch", 0);
                 }
             } catch (Exception ex) {
                 fLogger.WriteError("GMConfig.Load()", ex);

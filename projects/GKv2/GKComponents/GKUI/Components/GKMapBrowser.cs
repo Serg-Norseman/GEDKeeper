@@ -395,7 +395,8 @@ namespace GKUI.Components
             if (e.Button == MouseButtons.Left) {
                 fIsMouseDown = true;
                 if (fTargetMarker.IsVisible) {
-                    fTargetMarker.Position = fMapControl.FromLocalToLatLng(e.X, e.Y);
+                    Point mpt = e.Location;
+                    fTargetMarker.Position = fMapControl.FromLocalToLatLng(mpt.X, mpt.Y);
                 }
             }
         }
@@ -404,7 +405,8 @@ namespace GKUI.Components
         {
             if (e.Button == MouseButtons.Left && fIsMouseDown) {
                 if (fTargetMarker.IsVisible) {
-                    fTargetMarker.Position = fMapControl.FromLocalToLatLng(e.X, e.Y);
+                    Point mpt = e.Location;
+                    fTargetMarker.Position = fMapControl.FromLocalToLatLng(mpt.X, mpt.Y);
                 }
 
                 fMapControl.Refresh(); // force instant invalidation

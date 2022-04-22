@@ -80,7 +80,6 @@ namespace GKUI.Platform
                                        float width, float height)
         {
             var sdImage = ((ImageHandler)image).Handle;
-            //fCanvas.DrawImage(sdImage, x, y, width, height);
 
             using (var attributes = new ImageAttributes()) {
                 ColorMatrix matrix = new ColorMatrix();

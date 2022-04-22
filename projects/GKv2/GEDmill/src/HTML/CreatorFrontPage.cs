@@ -38,7 +38,7 @@ namespace GEDmill.HTML
         private Stats fStats;
 
 
-        public CreatorFrontPage(IBaseContext context, IProgressCallback progress, ILangMan langMan, Stats stats) : base(context, progress, langMan)
+        public CreatorFrontPage(IBaseContext context, ILangMan langMan, Stats stats) : base(context, langMan)
         {
             fStats = stats;
         }

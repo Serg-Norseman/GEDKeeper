@@ -29,9 +29,9 @@ using GKUI.Platform;
 
 [assembly: AssemblyTitle("GEDKeeper")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyProduct(GKData.APP_TITLE)]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
-[assembly: AssemblyVersion("2.20.1.0")]
+[assembly: AssemblyVersion(GKData.APP_VERSION_2X)]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
@@ -44,23 +44,6 @@ namespace GKUI
     /// </summary>
     public static class GKProgram
     {
-        private static void LogSysInfo()
-        {
-            try {
-                #if MONO
-                Logger.WriteInfo("Mono Version: " + SysUtils.GetMonoVersion());
-                Logger.WriteInfo("Desktop Type: " + SysUtils.GetDesktopType().ToString());
-                #endif
-
-                // There should be no links to the application infrastructure
-                Assembly execAssembly = Assembly.GetExecutingAssembly();
-                Logger.WriteInfo("CLR Version: " + execAssembly.ImageRuntimeVersion);
-                Logger.WriteInfo("GK Version: " + execAssembly.GetName().Version.ToString());
-            } catch {
-                // dummy
-            }
-        }
-
         [STAThread]
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
         public static void Main(string[] args)
@@ -68,7 +51,7 @@ namespace GKUI
             WFAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
             Logger.Init(AppHost.GetLogFilename());
-            LogSysInfo();
+            AppHost.LogSysInfo();
 
             Application.ThreadException += ExExceptionHandler;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);

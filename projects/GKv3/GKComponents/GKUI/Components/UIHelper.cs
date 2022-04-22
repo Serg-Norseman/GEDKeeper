@@ -138,7 +138,7 @@ namespace GKUI.Components
             }
         }
 
-        public static void CenterFormByParent(Form form, Rectangle parentRect)
+        public static void CenterFormByParent(Window form, Rectangle parentRect)
         {
             if (form == null) return;
 

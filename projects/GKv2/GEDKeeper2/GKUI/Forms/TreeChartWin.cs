@@ -75,9 +75,6 @@ namespace GKUI.Forms
             tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
             tbOptions.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
 
-            tbDocPrint.Visible = true;
-            tbDocPreview.Visible = true;
-
             UIHelper.FixToolStrip(ToolBar1);
 
             miModeBoth.Tag = TreeChartKind.ckBoth;

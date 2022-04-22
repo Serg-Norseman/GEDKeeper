@@ -74,9 +74,9 @@ namespace GKUI.Components
             return new ArborNodeEx(sign);
         }
 
-        protected override ArborEdge CreateEdge(ArborNode src, ArborNode tgt, double len, double stiffness, bool directed = false)
+        protected override ArborEdge CreateEdge(ArborNode source, ArborNode target, double length, double stiffness, bool directed = false)
         {
-            return new ArborEdge(src, tgt, len, stiffness, directed);
+            return new ArborEdge(source, target, length, stiffness, directed);
         }
     }
 
@@ -110,13 +110,7 @@ namespace GKUI.Components
 
         public ArborViewer()
         {
-            //base.BorderStyle = BorderStyle.Fixed3D;
-            //base.TabStop = true;
             base.BackgroundColor = Colors.White;
-
-            //base.DoubleBuffered = true;
-            //base.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            //base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
             // repulsion - отталкивание, stiffness - тугоподвижность, friction - сила трения
             fSys = new ArborSystemEx(10000, 500/*1000*/, 0.1, this);

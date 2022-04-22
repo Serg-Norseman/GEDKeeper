@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -75,12 +75,9 @@ namespace GKUI.Platform
             return activeWin;
         }
 
-        // FIXME!
         public override IntPtr GetTopWindowHandle()
         {
-            IntPtr mainHandle = IntPtr.Zero;
-
-            return mainHandle;
+            return IntPtr.Zero;
         }
 
         public override void CloseWindow(IWindow window)
@@ -94,7 +91,7 @@ namespace GKUI.Platform
 
         public override bool ShowModalX(ICommonDialog form, bool keepModeless = false)
         {
-            IntPtr mainHandle = GetTopWindowHandle();
+            Window activeWin = GetActiveWindow() as Window;
 
             if (keepModeless) {
                 #if !MONO
@@ -102,9 +99,9 @@ namespace GKUI.Platform
                 #endif
             }
 
-            //UIHelper.CenterFormByParent((Form)form, mainHandle);
+            //UIHelper.CenterFormByParent((Window)form, mainHandle);
 
-            return base.ShowModalX(form, keepModeless);
+            return (form != null && form.ShowModalX(activeWin));
         }
 
         public override void EnableWindow(IWidgetForm form, bool value)
@@ -197,7 +194,6 @@ namespace GKUI.Platform
 
         public override void Quit()
         {
-            base.Quit();
             Application.Instance.Quit();
         }
 
@@ -205,27 +201,16 @@ namespace GKUI.Platform
 
         public override int GetKeyLayout()
         {
+            // InputLanguage only exists in WinForms
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
-
-            /*#if MONO
-            // There is a bug in Mono: does not work this CurrentInputLanguage
-            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
-            #else
-            InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
-            return currentLang.Culture.KeyboardLayoutId;
-            #endif*/
         }
 
         public override void SetKeyLayout(int layout)
         {
             try {
                 CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(layout);
-
-                /*CultureInfo cultureInfo = new CultureInfo(layout);
-                InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
-                InputLanguage.CurrentInputLanguage = currentLang;*/
             } catch (Exception ex) {
-                Logger.WriteError("EtoFormsAppHost.SetKeyLayout()", ex);
+                Logger.WriteError("EtoAppHost.SetKeyLayout()", ex);
             }
         }
 

@@ -43,19 +43,15 @@ namespace GEDmill.HTML
         // The raw data that we are turning into a website.
         protected GDMTree fTree;
 
-        // Pointer to the window showing the progress bar, so that web page creation progress can be shown to user.
-        private IProgressCallback fProgressWindow;
-
         // The same multimedia file may be referenced multiple times. 
         // This hash prevents it being copied to the output directory more than once.
         private static Dictionary<string, FilenameAndSize> fCopiedFiles = new Dictionary<string, FilenameAndSize>();
 
 
-        protected Creator(IBaseContext context, IProgressCallback progress, ILangMan langMan)
+        protected Creator(IBaseContext context, ILangMan langMan)
         {
             fContext = context;
             fTree = fContext.Tree;
-            fProgressWindow = progress;
             fLangMan = langMan;
         }
 

@@ -30,7 +30,6 @@
         private System.Windows.Forms.ToolStripMenuItem miFillImage;
         private System.Windows.Forms.ToolStripSeparator N9;
         private System.ComponentModel.IContainer components;
-        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripSeparator tbs2;
         private System.Windows.Forms.ToolStripSeparator tbs1;
         private System.Windows.Forms.ToolStripMenuItem miFatherAdd;
@@ -110,7 +109,6 @@
             this.miRebuildKinships = new System.Windows.Forms.ToolStripMenuItem();
             this.N10 = new System.Windows.Forms.ToolStripSeparator();
             this.miSelectColor = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbBorders = new System.Windows.Forms.ToolStripDropDownButton();
             this.MenuBorders = new System.Windows.Forms.ContextMenuStrip(this.components);

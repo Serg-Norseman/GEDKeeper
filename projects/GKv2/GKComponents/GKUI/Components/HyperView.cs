@@ -144,6 +144,13 @@ namespace GKUI.Components
 
         private void ArrangeText()
         {
+            if (fLines.Count == 0)
+                return;
+
+            float maxWidth = this.ClientSize.Width - (2 * fBorderWidth);
+            if (maxWidth < 0)
+                return;
+
             try {
                 SuspendLayout();
 
@@ -157,17 +164,14 @@ namespace GKUI.Components
                     int yPos = 0;
                     int xMax = 0;
                     int lineHeight = 0;
-
-                    string text = fLines.Text;
                     Font defFont = this.Font;
-                    float maxWidth = this.ClientSize.Width - (2 * fBorderWidth);
                     SizeF zerosz = new SizeF(0f, 0f);
-
-                    text = SysUtils.StripHTML(text);
 
                     var parser = new BBTextParser(AppHost.GfxProvider, defFont.SizeInPoints,
                                                   new ColorHandler(fLinkColor), new ColorHandler(ForeColor));
 
+                    string text = fLines.Text;
+                    text = SysUtils.StripHTML(text);
                     parser.ParseText(fChunks, text);
 
                     int line = -1;
@@ -396,7 +400,9 @@ namespace GKUI.Components
 
         protected override void OnResize(EventArgs e)
         {
-            ArrangeText();
+            if (fAcceptFontChange) {
+                ArrangeText();
+            }
 
             base.OnResize(e);
         }

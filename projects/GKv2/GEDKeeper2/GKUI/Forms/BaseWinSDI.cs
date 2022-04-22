@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -100,12 +100,7 @@ namespace GKUI.Forms
             tbStats.Image = UIHelper.LoadResourceImage("Resources.btn_table.gif");
             tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
-            tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
-            tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
             tbSendMail.Image = UIHelper.LoadResourceImage("Resources.btn_mail.gif");
-
-            tbDocPrint.Visible = false;
-            tbDocPreview.Visible = false;
 
             UIHelper.FixToolStrip(ToolBar1);
 
@@ -561,9 +556,6 @@ namespace GKUI.Forms
             miPedigree_Konovalov2.Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
             SetToolTip(tbStats, LangMan.LS(LSID.LSID_StatsTip));
 
-            SetToolTip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
-            SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
-
             SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
             SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
 
@@ -721,16 +713,6 @@ namespace GKUI.Forms
 
         #region From MainWin
 
-        private void tbDocPrint_Click(object sender, EventArgs e)
-        {
-            // obsolete
-        }
-
-        private void tbDocPreview_Click(object sender, EventArgs e)
-        {
-            // obsolete
-        }
-
         private void Form_Resize(object sender, EventArgs e)
         {
             StatusBar.Panels[0].Width = Width - 50;
@@ -872,9 +854,6 @@ namespace GKUI.Forms
                 tbFilter.Enabled = miFilter.Enabled;
 
                 miSearch.Enabled = (workWin != null && workWin.AllowQuickSearch());
-
-                tbDocPrint.Enabled = (curChart != null && curChart.AllowPrint());
-                tbDocPreview.Enabled = (curChart != null && curChart.AllowPrint());
 
                 miTreeTools.Enabled = baseEn;
                 miExportToFamilyBook.Enabled = baseEn;

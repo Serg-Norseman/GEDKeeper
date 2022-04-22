@@ -38,7 +38,7 @@ namespace GEDmill.HTML
         private List<StringTuple> fIndividualIndex;
 
 
-        public CreatorIndexIndividuals(IBaseContext context, IProgressCallback progress, ILangMan langMan) : base(context, progress, langMan)
+        public CreatorIndexIndividuals(IBaseContext context, ILangMan langMan) : base(context, langMan)
         {
             fIndividualIndex = new List<StringTuple>();
         }
@@ -160,8 +160,6 @@ namespace GEDmill.HTML
             List<StringTuple> currentLetterList = null;
             foreach (StringTuple tuple in fIndividualIndex) {
                 string name = tuple.First;
-                string link = tuple.Second;
-                string extras = tuple.Third;
 
                 string initial;
                 string title;

@@ -105,7 +105,7 @@ namespace GEDmill.HTML
                 fProgressWindow.StepTo(++progress);
 
                 // Create the index creator for use by the individuals records creator.
-                var indiIndexCreator = new CreatorIndexIndividuals(fContext, fProgressWindow, fLangMan);
+                var indiIndexCreator = new CreatorIndexIndividuals(fContext, fLangMan);
 
                 // Copy the image for the background of the webpages.
                 fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CopyingBackground));
@@ -119,7 +119,7 @@ namespace GEDmill.HTML
                 fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingStyleSheet));
                 string cssFilename = string.Concat(fOutputFolder, "\\", GMConfig.StylesheetFilename);
                 if (GMConfig.StylesheetFilename.Length > 0) {
-                    var csc = new CreatorStylesheet(fContext, fProgressWindow, fLangMan, cssFilename, backgroundImageFilename);
+                    var csc = new CreatorStylesheet(fContext, fLangMan, cssFilename, backgroundImageFilename);
                     csc.Create();
                 }
 
@@ -133,7 +133,7 @@ namespace GEDmill.HTML
                 fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualPages));
                 var indiList = fTree.GetRecords<GDMIndividualRecord>();
                 foreach (GDMIndividualRecord ir in indiList) {
-                    var ipc = new CreatorRecordIndividual(fContext, fProgressWindow, fLangMan, ir, indiIndexCreator, paintbox);
+                    var ipc = new CreatorRecordIndividual(fContext, fLangMan, ir, indiIndexCreator, paintbox);
                     if (ipc.Create(stats)) {
                         stats.Individuals++;
                     }
@@ -161,7 +161,7 @@ namespace GEDmill.HTML
                 fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingSourcePages));
                 var sourList = fTree.GetRecords<GDMSourceRecord>();
                 foreach (GDMSourceRecord sr in sourList) {
-                    var spc = new CreatorRecordSource(fContext, fProgressWindow, fLangMan, sr);
+                    var spc = new CreatorRecordSource(fContext, fLangMan, sr);
                     if (spc.Create(stats)) {
                         stats.Sources++;
                     }
@@ -179,9 +179,8 @@ namespace GEDmill.HTML
 
                 // Create the front page
                 fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingFrontPage));
-                string front_page_filename = string.Concat(fOutputFolder, "\\", GMConfig.Instance.FrontPageFilename, ".html");
                 if (GMConfig.Instance.FrontPageFilename.Length > 0) {
-                    CreatorFrontPage fpc = new CreatorFrontPage(fContext, fProgressWindow, fLangMan, stats);
+                    CreatorFrontPage fpc = new CreatorFrontPage(fContext, fLangMan, stats);
                     fpc.Create();
                 }
                 fProgressWindow.StepTo(++progress);
