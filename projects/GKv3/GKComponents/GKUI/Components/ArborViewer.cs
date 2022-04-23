@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -132,8 +132,7 @@ namespace GKUI.Components
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fSys.Dispose();
                 fDrawFont.Dispose();
                 fWhiteBrush.Dispose();
@@ -167,9 +166,6 @@ namespace GKUI.Components
                 }
 
                 using (Pen grayPen = new Pen(Colors.Gray, 1)) {
-                    //grayPen.StartCap = PenLineCap.NoAnchor;
-                    //grayPen.EndCap = PenLineCap.ArrowAnchor;
-
                     foreach (ArborEdge edge in fSys.Edges) {
                         var srcNode = edge.Source as ArborNodeEx;
                         var tgtNode = edge.Target as ArborNodeEx;
@@ -181,7 +177,7 @@ namespace GKUI.Components
                         ArborPoint head = (tail.IsNull()) ? ArborPoint.Null : intersect_line_box(tail, pt2, tgtNode.Box);
 
                         if (!head.IsNull() && !tail.IsNull()) {
-                            gfx.DrawLine(grayPen, (int)tail.X, (int)tail.Y, (int)head.X, (int)head.Y);
+                            UIHelper.DrawArrowLine(gfx, Colors.Gray, grayPen, (float)tail.X, (float)tail.Y, (float)head.X, (float)head.Y);
                         }
                     }
                 }
