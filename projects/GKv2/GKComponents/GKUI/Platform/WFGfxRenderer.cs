@@ -158,6 +158,15 @@ namespace GKUI.Platform
             }
         }
 
+        public override void FillRectangle(IBrush brush,
+                                           float x, float y, float width, float height)
+        {
+            if (brush != null) {
+                Brush sdBrush = ((BrushHandler)brush).Handle;
+                fCanvas.FillRectangle(sdBrush, x, y, width, height);
+            }
+        }
+
         private static GraphicsPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
         {
             float xw = x + width;

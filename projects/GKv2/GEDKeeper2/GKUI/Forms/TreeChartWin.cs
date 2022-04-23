@@ -87,7 +87,6 @@ namespace GKUI.Forms
             fTreeBox = new TreeChartBox(new WFGfxRenderer());
             fTreeBox.Name = "fTreeBox";
             fTreeBox.Base = fBase;
-            fTreeBox.DragOver += ImageTree_DragOver;
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
             fTreeBox.InfoRequest += ImageTree_InfoRequest;
@@ -131,6 +130,7 @@ namespace GKUI.Forms
         {
             base.OnLoad(e);
             fTreeBox.Select();
+            UpdateControls();
         }
 
         protected override IPrintable GetPrintable()
@@ -208,15 +208,6 @@ namespace GKUI.Forms
         private void tbImageSave_Click(object sender, EventArgs e)
         {
             fController.SaveSnapshot();
-        }
-
-        private void ImageTree_DragOver(object sender, DragEventArgs e)
-        {
-            /*if (e.Data.GetDataPresent(typeof(string))) {
-				e.Effect = DragDropEffects.Move;
-			} else {
-				e.Effect = DragDropEffects.None;
-			}*/
         }
 
         private void ImageTree_PersonProperties(object sender, MouseEventArgs e)

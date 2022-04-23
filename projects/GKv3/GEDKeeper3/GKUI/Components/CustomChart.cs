@@ -36,6 +36,8 @@ namespace GKUI.Components
         protected ChartRenderer fRenderer;
 
 
+        public Image BackgroundImage { get; set; }
+
         public event EventHandler NavRefresh;
 
 

@@ -128,6 +128,7 @@ namespace GKCore.Charts
 
         public abstract void DrawRectangle(IPen pen, IColor fillColor, float x, float y,
                                            float width, float height);
+        public abstract void FillRectangle(IBrush brush, float x, float y, float width, float height);
         public abstract void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
                                                   float width, float height, float radius);
 

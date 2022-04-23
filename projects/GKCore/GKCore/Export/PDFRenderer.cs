@@ -241,6 +241,14 @@ namespace GKCore.Export
             }
         }
 
+        public override void FillRectangle(IBrush brush,
+                                           float x, float y, float width, float height)
+        {
+            if (brush != null) {
+                // TODO
+            }
+        }
+
         public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
                                                   float width, float height, float radius)
         {

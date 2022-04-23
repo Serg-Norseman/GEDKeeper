@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -368,23 +368,13 @@ namespace GKUI.Components
 
         private void DrawBackground(BackgroundMode background)
         {
-            if (background == BackgroundMode.bmNone) return;
-
-            bool bgImage = ((BackgroundImage != null) &&
-                            (background == BackgroundMode.bmAny ||
-                             background == BackgroundMode.bmImage));
-
-            if (bgImage) {
-                /*var imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
-
-                    using (Brush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile)) {
-                        gfx.FillRectangle(textureBrush, imgRect);
+            if (background == BackgroundMode.bmAny || background == BackgroundMode.bmImage) {
+                if (BackgroundImage != null) {
+                    /*using (Brush textureBrush = new TextureBrush(BackgroundImage)) {
+                        var rect = CanvasRectangle;
+                        fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, rect.Width, rect.Height);
                     }*/
-            } else {
-                bool bgFill = (background == BackgroundMode.bmAny ||
-                               background == BackgroundMode.bmImage);
-
-                if (bgFill) {
+                } else {
                     fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackColor), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
                 }
             }

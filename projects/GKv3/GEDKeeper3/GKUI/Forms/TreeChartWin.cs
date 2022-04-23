@@ -84,7 +84,6 @@ namespace GKUI.Forms
 
             fTreeBox = new TreeChartBox(new EtoGfxRenderer());
             fTreeBox.Base = fBase;
-            //fTreeBox.DragOver += ImageTree_DragOver;
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
             fTreeBox.InfoRequest += ImageTree_InfoRequest;
@@ -203,16 +202,6 @@ namespace GKUI.Forms
         {
             fController.SaveSnapshot();
         }
-
-        // FIXME: Eto restriction
-        /*private void ImageTree_DragOver(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(typeof(string))) {
-				e.Effect = DragDropEffects.Move;
-			} else {
-				e.Effect = DragDropEffects.None;
-			}
-        }*/
 
         private void ImageTree_PersonProperties(object sender, EventArgs e)
         {
@@ -398,7 +387,7 @@ namespace GKUI.Forms
             using (var colorDialog1 = new ColorDialog()) {
                 if (colorDialog1.ShowDialog(this) != DialogResult.Ok) return;
 
-                //fTreeBox.BackgroundImage = null;
+                fTreeBox.BackgroundImage = null;
                 fTreeBox.BackgroundColor = colorDialog1.Color;
                 fTreeBox.Invalidate();
             }
@@ -406,13 +395,13 @@ namespace GKUI.Forms
 
         private void miFillImage_Click(object sender, EventArgs e)
         {
-            /*string fileName = AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
+            string fileName = AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             Image img = new Bitmap(fileName);
             fTreeBox.BackgroundImage = img;
-            fTreeBox.BackgroundImageLayout = ImageLayout.Tile;
-            fTreeBox.Invalidate();*/
+            //fTreeBox.BackgroundImageLayout = ImageLayout.Tile;
+            fTreeBox.Invalidate();
         }
 
         private void miModeItem_Click(object sender, EventArgs e)
