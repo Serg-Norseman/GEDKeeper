@@ -33,35 +33,16 @@ namespace GKUI.Components
 {
     public abstract class CustomChart : ScrollablePanel, IPrintable
     {
-        private static readonly object EventNavRefresh;
-
-
         private readonly NavigationStack<GDMRecord> fNavman;
         protected ChartRenderer fRenderer;
 
 
-        public event EventHandler NavRefresh
-        {
-            add { Events.AddHandler(EventNavRefresh, value); }
-            remove { Events.RemoveHandler(EventNavRefresh, value); }
-        }
+        public event EventHandler NavRefresh;
 
-
-        static CustomChart()
-        {
-            EventNavRefresh = new object();
-        }
 
         protected CustomChart()
         {
             fNavman = new NavigationStack<GDMRecord>();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -303,7 +284,7 @@ namespace GKUI.Components
 
         private void DoNavRefresh()
         {
-            var eventHandler = (EventHandler)Events[EventNavRefresh];
+            var eventHandler = NavRefresh;
             if (eventHandler != null) eventHandler(this, null);
         }
 

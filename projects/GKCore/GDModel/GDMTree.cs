@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -147,8 +147,6 @@ namespace GDModel
 
         private GEDCOMFormat fFormat;
         private int[] fLastIDs;
-        private EventHandler fOnChange;
-        private EventHandler fOnChanging;
         private ProgressEventHandler fOnProgressEvent;
         private GDMTreeState fState;
         private int fUpdateCount;
@@ -186,17 +184,9 @@ namespace GDModel
             set { fState = value; }
         }
 
-        public event EventHandler OnChange
-        {
-            add { fOnChange = value; }
-            remove { if (fOnChange == value) fOnChange = null; }
-        }
+        public event EventHandler OnChange;
 
-        public event EventHandler OnChanging
-        {
-            add { fOnChanging = value; }
-            remove { if (fOnChanging == value) fOnChanging = null; }
-        }
+        public event EventHandler OnChanging;
 
         public ProgressEventHandler OnProgress
         {
@@ -829,15 +819,19 @@ namespace GDModel
 
         private void Changed()
         {
-            if (fUpdateCount == 0 && fOnChange != null) {
-                fOnChange(this, new EventArgs());
+            if (fUpdateCount == 0) {
+                var eventHandler = OnChange;
+                if (eventHandler != null)
+                    eventHandler(this, new EventArgs());
             }
         }
 
         private void Changing()
         {
-            if (fUpdateCount == 0 && fOnChanging != null) {
-                fOnChanging(this, new EventArgs());
+            if (fUpdateCount == 0) {
+                var eventHandler = OnChanging;
+                if (eventHandler != null)
+                    eventHandler(this, new EventArgs());
             }
         }
 

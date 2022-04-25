@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -250,7 +250,7 @@ namespace GKUI.Components
 
         private void DoBeforeChange(ModifyEventArgs eArgs)
         {
-            var eventHandler = (ModifyEventHandler)OnBeforeChange;
+            var eventHandler = OnBeforeChange;
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
             }
@@ -268,7 +268,7 @@ namespace GKUI.Components
                 }
             }
 
-            var eventHandler = (ModifyEventHandler)OnModify;
+            var eventHandler = OnModify;
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
             }
@@ -278,9 +278,8 @@ namespace GKUI.Components
         {
             var args = new ItemValidatingEventArgs(item);
 
-            var eventHandler = (ItemValidatingEventHandler)OnItemValidating;
-            if (eventHandler == null)
-            {
+            var eventHandler = OnItemValidating;
+            if (eventHandler == null) {
                 return true;
             }
 

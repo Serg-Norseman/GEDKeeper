@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2011-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2011-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -386,7 +386,7 @@ namespace GKUI.Components
 
         private void DoLink(string linkName)
         {
-            LinkEventHandler eventHandler = (LinkEventHandler)OnLink;
+            var eventHandler = OnLink;
             if (eventHandler != null) eventHandler(this, linkName);
         }
 

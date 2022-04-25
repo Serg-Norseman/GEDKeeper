@@ -46,9 +46,6 @@ namespace GKUI.Components
         private const float ZOOM_LOW_LIMIT = 0.0125f;
         private const float ZOOM_HIGH_LIMIT = 1000.0f;
 
-        private static readonly object EventRootChanged;
-        private static readonly object EventZoomChanged;
-
         private readonly IContainer fComponents;
         private readonly CircleChartModel fModel;
         private readonly ToolTip fToolTip;
@@ -112,17 +109,9 @@ namespace GKUI.Components
             }
         }
 
-        public event ARootChangedEventHandler RootChanged
-        {
-            add { Events.AddHandler(EventRootChanged, value); }
-            remove { Events.RemoveHandler(EventRootChanged, value); }
-        }
+        public event ARootChangedEventHandler RootChanged;
 
-        public event EventHandler ZoomChanged
-        {
-            add { Events.AddHandler(EventZoomChanged, value); }
-            remove { Events.RemoveHandler(EventZoomChanged, value); }
-        }
+        public event EventHandler ZoomChanged;
 
         public GDMIndividualRecord RootPerson
         {
@@ -141,12 +130,6 @@ namespace GKUI.Components
             }
         }
 
-
-        static CircleChart()
-        {
-            EventRootChanged = new object();
-            EventZoomChanged = new object();
-        }
 
         public CircleChart()
         {
@@ -206,14 +189,14 @@ namespace GKUI.Components
 
         private void DoRootChanged(GDMIndividualRecord person)
         {
-            var eventHandler = (ARootChangedEventHandler)Events[EventRootChanged];
+            var eventHandler = RootChanged;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
 
         private void DoZoomChanged()
         {
-            var eventHandler = (EventHandler)Events[EventZoomChanged];
+            var eventHandler = ZoomChanged;
             if (eventHandler != null)
                 eventHandler(this, new EventArgs());
         }

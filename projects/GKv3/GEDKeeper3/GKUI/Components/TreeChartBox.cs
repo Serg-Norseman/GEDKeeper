@@ -507,35 +507,35 @@ namespace GKUI.Components
 
         private void DoPersonModify(PersonModifyEventArgs eArgs)
         {
-            var eventHandler = (PersonModifyEventHandler)PersonModify;
+            var eventHandler = PersonModify;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
 
         private void DoRootChanged(TreeChartPerson person)
         {
-            var eventHandler = (RootChangedEventHandler)RootChanged;
+            var eventHandler = RootChanged;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
 
         private void DoInfoRequest(TreeChartPerson person)
         {
-            var eventHandler = (InfoRequestEventHandler)InfoRequest;
+            var eventHandler = InfoRequest;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
 
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
-            var eventHandler = (/*Mouse*/ EventHandler)PersonProperties;
+            var eventHandler = PersonProperties;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
 
         private void DoZoomChanged()
         {
-            var eventHandler = (EventHandler)ZoomChanged;
+            var eventHandler = ZoomChanged;
             if (eventHandler != null)
                 eventHandler(this, new EventArgs());
         }

@@ -61,45 +61,20 @@ namespace GKUI.Components
         private bool fTraceKinships;
         private bool fTraceSelected;
 
-        private static readonly object EventPersonModify;
-        private static readonly object EventRootChanged;
-        private static readonly object EventPersonProperties;
-        private static readonly object EventZoomChanged;
-        private static readonly object EventInfoRequest;
-
         #endregion
 
         #region Public properties
 
-        public event PersonModifyEventHandler PersonModify
-        {
-            add { Events.AddHandler(EventPersonModify, value); }
-            remove { Events.RemoveHandler(EventPersonModify, value); }
-        }
+        public event PersonModifyEventHandler PersonModify;
 
-        public event RootChangedEventHandler RootChanged
-        {
-            add { Events.AddHandler(EventRootChanged, value); }
-            remove { Events.RemoveHandler(EventRootChanged, value); }
-        }
+        public event RootChangedEventHandler RootChanged;
 
-        public event MouseEventHandler PersonProperties
-        {
-            add { Events.AddHandler(EventPersonProperties, value); }
-            remove { Events.RemoveHandler(EventPersonProperties, value); }
-        }
+        public event MouseEventHandler PersonProperties;
 
-        public event EventHandler ZoomChanged
-        {
-            add { Events.AddHandler(EventZoomChanged, value); }
-            remove { Events.RemoveHandler(EventZoomChanged, value); }
-        }
+        public event EventHandler ZoomChanged;
 
-        public event InfoRequestEventHandler InfoRequest
-        {
-            add { Events.AddHandler(EventInfoRequest, value); }
-            remove { Events.RemoveHandler(EventInfoRequest, value); }
-        }
+        public event InfoRequestEventHandler InfoRequest;
+
 
         public IBaseWindow Base
         {
@@ -189,15 +164,6 @@ namespace GKUI.Components
         #endregion
 
         #region Instance control
-
-        static TreeChartBox()
-        {
-            EventPersonModify = new object();
-            EventRootChanged = new object();
-            EventPersonProperties = new object();
-            EventZoomChanged = new object();
-            EventInfoRequest = new object();
-        }
 
         public TreeChartBox()
         {
@@ -540,35 +506,35 @@ namespace GKUI.Components
 
         private void DoPersonModify(PersonModifyEventArgs eArgs)
         {
-            var eventHandler = (PersonModifyEventHandler)Events[EventPersonModify];
+            var eventHandler = PersonModify;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
 
         private void DoRootChanged(TreeChartPerson person)
         {
-            var eventHandler = (RootChangedEventHandler)Events[EventRootChanged];
+            var eventHandler = RootChanged;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
 
         private void DoInfoRequest(TreeChartPerson person)
         {
-            var eventHandler = (InfoRequestEventHandler)Events[EventInfoRequest];
+            var eventHandler = InfoRequest;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
 
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
-            var eventHandler = (MouseEventHandler)Events[EventPersonProperties];
+            var eventHandler = PersonProperties;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
 
         private void DoZoomChanged()
         {
-            var eventHandler = (EventHandler)Events[EventZoomChanged];
+            var eventHandler = ZoomChanged;
             if (eventHandler != null)
                 eventHandler(this, new EventArgs());
         }

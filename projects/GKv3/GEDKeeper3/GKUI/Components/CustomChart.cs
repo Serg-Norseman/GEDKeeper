@@ -218,7 +218,7 @@ namespace GKUI.Components
 
         private void DoNavRefresh()
         {
-            var eventHandler = (EventHandler)NavRefresh;
+            var eventHandler = NavRefresh;
             if (eventHandler != null) eventHandler(this, null);
         }
 

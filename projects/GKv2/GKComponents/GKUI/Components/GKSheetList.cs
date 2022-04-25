@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,10 +34,6 @@ namespace GKUI.Components
     /// </summary>
     public class GKSheetList : ContainerControl, ISheetList
     {
-        private static readonly object EventModify;
-        private static readonly object EventItemValidating;
-        private static readonly object EventBeforeChange;
-
         private readonly ToolStripButton fBtnAdd;
         private readonly ToolStripButton fBtnDelete;
         private readonly ToolStripButton fBtnEdit;
@@ -52,23 +48,11 @@ namespace GKUI.Components
         private bool fReadOnly;
 
 
-        public event ModifyEventHandler OnModify
-        {
-            add { Events.AddHandler(EventModify, value); }
-            remove { Events.RemoveHandler(EventModify, value); }
-        }
+        public event ModifyEventHandler OnModify;
 
-        public event ItemValidatingEventHandler OnItemValidating
-        {
-            add { Events.AddHandler(EventItemValidating, value); }
-            remove { Events.RemoveHandler(EventItemValidating, value); }
-        }
+        public event ItemValidatingEventHandler OnItemValidating;
 
-        public event ModifyEventHandler OnBeforeChange
-        {
-            add { Events.AddHandler(EventBeforeChange, value); }
-            remove { Events.RemoveHandler(EventBeforeChange, value); }
-        }
+        public event ModifyEventHandler OnBeforeChange;
 
 
         public EnumSet<SheetButton> Buttons
@@ -108,12 +92,6 @@ namespace GKUI.Components
             set { SetReadOnly(value); }
         }
 
-        static GKSheetList()
-        {
-            EventModify = new object();
-            EventItemValidating = new object();
-            EventBeforeChange = new object();
-        }
 
         public GKSheetList(Control owner)
         {
@@ -300,7 +278,7 @@ namespace GKUI.Components
 
         private void DoBeforeChange(ModifyEventArgs eArgs)
         {
-            var eventHandler = (ModifyEventHandler)Events[EventBeforeChange];
+            var eventHandler = OnBeforeChange;
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
             }
@@ -318,7 +296,7 @@ namespace GKUI.Components
                 }
             }
 
-            var eventHandler = (ModifyEventHandler)Events[EventModify];
+            var eventHandler = OnModify;
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
             }
@@ -328,9 +306,8 @@ namespace GKUI.Components
         {
             var args = new ItemValidatingEventArgs(item);
 
-            var eventHandler = (ItemValidatingEventHandler)Events[EventItemValidating];
-            if (eventHandler == null)
-            {
+            var eventHandler = OnItemValidating;
+            if (eventHandler == null) {
                 return true;
             }
 
