@@ -139,6 +139,7 @@ namespace GKUI.Forms
 
                 case Keys.D:
                     if (e.Control) {
+                        filterView.RemoveCondition(filterView.SelectedRow);
                     }
                     break;
             }

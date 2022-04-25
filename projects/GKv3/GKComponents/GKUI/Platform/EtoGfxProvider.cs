@@ -122,6 +122,7 @@ namespace GKUI.Platform
             Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
 
             if (makeTransp) {
+                // TODO
                 // only for 24, 32 bit images
                 /*Color pixColor = img.GetPixel(0, 0);
                 if (pixColor != Colors.Transparent) {

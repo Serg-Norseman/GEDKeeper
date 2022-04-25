@@ -104,6 +104,13 @@ namespace GKUI.Components
             fCollection.Add(new FilterConditionRow(this, fcond));
         }
 
+        public void RemoveCondition(int index)
+        {
+            if (index >= 0 && index < fCollection.Count) {
+                fCollection.RemoveAt(index);
+            }
+        }
+
         public void Clear()
         {
             fCollection.Clear();

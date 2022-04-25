@@ -282,8 +282,7 @@ namespace GKUI.Platform
 
         public byte[] GetBytes()
         {
-            using (var stream = new MemoryStream())
-            {
+            using (var stream = new MemoryStream()) {
                 ((Bitmap)Handle).Save(stream, ImageFormat.Bitmap);
                 return stream.ToArray();
             }

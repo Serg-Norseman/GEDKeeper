@@ -65,6 +65,7 @@ namespace GKUI.Platform
         {
             var sdImage = ((ImageHandler)image).Handle;
 
+            // TODO: implement output with transparency
             fCanvas.DrawImage(sdImage, x, y, width, height);
         }
 
