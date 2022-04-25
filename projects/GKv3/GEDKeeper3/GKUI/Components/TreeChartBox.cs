@@ -545,20 +545,23 @@ namespace GKUI.Components
             switch (e.Key) {
                 case Keys.F4:
                     ToggleCollapse();
+                    e.Handled = true;
                     break;
 
-                case Keys.Plus:
+                case Keys.Add:
                     SetScale(fModel.Scale + 0.05f);
                     e.Handled = true;
                     break;
 
-                case Keys.Minus:
+                case Keys.Subtract:
                     SetScale(fModel.Scale - 0.05f);
                     e.Handled = true;
                     break;
-            }
 
-            base.OnKeyDown(e);
+                default:
+                    base.OnKeyDown(e);
+                    break;
+            }
         }
 
         protected override void OnSizeChanged(EventArgs e)

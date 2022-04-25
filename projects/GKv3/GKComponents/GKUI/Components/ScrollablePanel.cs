@@ -110,6 +110,8 @@ namespace GKUI.Components
 
             fCanvas = new Drawable();
             fCanvas.Paint += PaintHandler;
+            fCanvas.KeyDown += KeyDownHandler;
+            fCanvas.KeyUp += KeyUpHandler;
             fCanvas.CanFocus = true;
             Content = fCanvas;
 
@@ -117,6 +119,16 @@ namespace GKUI.Components
             fTextColor = SystemColors.ControlText;
 
             SetImageSize(new ExtSize(100, 100), false);
+        }
+
+        private void KeyDownHandler(object sender, KeyEventArgs e)
+        {
+            OnKeyDown(e);
+        }
+
+        private void KeyUpHandler(object sender, KeyEventArgs e)
+        {
+            OnKeyUp(e);
         }
 
         protected virtual void OnFontChanged(EventArgs e)

@@ -48,67 +48,76 @@ namespace GKUI.Components
             fNavman = new NavigationStack<GDMRecord>();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
-        }
-
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            e.Handled = true;
             switch (e.Key) {
+                case Keys.Keypad4:
                 case Keys.Left:
                     AdjustScroll(-SmallChange, 0);
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad6:
                 case Keys.Right:
                     AdjustScroll(+SmallChange, 0);
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad8:
                 case Keys.Up:
                     AdjustScroll(0, -SmallChange);
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad2:
                 case Keys.Down:
                     AdjustScroll(0, +SmallChange);
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad9:
                 case Keys.PageUp:
                     if (Keys.None == e.Modifiers) {
                         AdjustScroll(0, -LargeChange);
                     } else if (Keys.Shift == e.Modifiers) {
                         AdjustScroll(-LargeChange, 0);
                     }
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad3:
                 case Keys.PageDown:
                     if (Keys.None == e.Modifiers) {
                         AdjustScroll(0, +LargeChange);
                     } else if (Keys.Shift == e.Modifiers) {
                         AdjustScroll(+LargeChange, 0);
                     }
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad7:
                 case Keys.Home:
                     if (Keys.None == e.Modifiers) {
                         AdjustScroll(0, -Viewport.Height);
                     } else if (Keys.Shift == e.Modifiers) {
                         AdjustScroll(-Viewport.Width, 0);
                     }
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad1:
                 case Keys.End:
                     if (Keys.None == e.Modifiers) {
                         AdjustScroll(0, Viewport.Height);
                     } else if (Keys.Shift == e.Modifiers) {
                         AdjustScroll(+Viewport.Width, 0);
                     }
+                    e.Handled = true;
                     break;
 
                 case Keys.Backspace:
                     NavPrev();
+                    e.Handled = true;
                     break;
 
                 default:

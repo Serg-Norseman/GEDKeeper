@@ -266,52 +266,63 @@ namespace GKUI.Components
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            // FIXME: dont't work!
             switch (e.Key) {
-                case Keys.Plus:
+                case Keys.Add:
                     if (Keys.None == e.Modifiers) {
                         Zoom = Math.Min(fZoom * 1.05f, ZOOM_HIGH_LIMIT);
                     }
+                    e.Handled = true;
                     break;
 
-                case Keys.Minus:
+                case Keys.Subtract:
                     if (Keys.None == e.Modifiers) {
                         Zoom = Math.Max(fZoom * 0.95f, ZOOM_LOW_LIMIT);
                     }
+                    e.Handled = true;
                     break;
 
                 case Keys.D0:
                     if (e.Control) {
                         Zoom = 1.0f;
                     }
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad8:
                 case Keys.Up:
                     if (Keys.None == e.Modifiers) {
                         VisibleGenerations += 1;
                     }
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad2:
                 case Keys.Down:
                     if (Keys.None == e.Modifiers) {
                         VisibleGenerations -= 1;
                     }
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad4:
                 case Keys.Left:
+                case Keys.Keypad6:
                 case Keys.Right:
                     if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
                         GDMIndividualRecord father, mother;
                         fModel.Base.Context.Tree.GetParents(fModel.RootPerson, out father, out mother);
-                        var target = (e.Key == Keys.Left) ? father : mother;
+                        var target = (e.Key == Keys.Left || e.Key == Keys.Keypad4) ? father : mother;
                         if (target != null) {
                             RootPerson = target;
                         }
                     }
+                    e.Handled = true;
+                    break;
+
+                default:
+                    base.OnKeyDown(e);
                     break;
             }
-
-            base.OnKeyDown(e);
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -428,7 +439,8 @@ namespace GKUI.Components
 
             var backColor = fModel.Options.BrushColor[9];
             if (target == RenderTarget.Screen) {
-                fRenderer.DrawRectangle(null, backColor, 0, 0, Width, Height);
+                var rect = CanvasRectangle;
+                fRenderer.DrawRectangle(null, backColor, 0, 0, rect.Width, rect.Height);
             } else if (target == RenderTarget.Printer) {
                 fRenderer.DrawRectangle(null, UIHelper.ConvertColor(Colors.White), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
             } else {
