@@ -75,7 +75,7 @@ namespace GKUI.Components
 
             Screen screen = Screen.FromRectangle(Rt2Rt(winRect));
             if (screen != null) {
-                RectangleF workArea = screen.WorkingArea;
+                var workArea = screen.WorkingArea;
 
                 int width = winRect.GetWidth();
                 int height = winRect.GetHeight();
@@ -148,7 +148,7 @@ namespace GKUI.Components
             // is located.
             Screen screen = Screen.FromRectangle(parentRect);
             if (screen != null) {
-                RectangleF workArea = screen.WorkingArea;
+                var workArea = screen.WorkingArea;
 
                 int fx = (int)workArea.Left + (((int)workArea.Width - form.Width) >> 1);
                 int fy = (int)workArea.Top + (((int)workArea.Height - form.Height) >> 1);

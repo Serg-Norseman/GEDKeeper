@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -207,18 +207,6 @@ namespace GKUI.Components
             fImageViewport = new Rectangle(destX, destY, width, height);
         }
 
-        private void SetViewportLocation(Point location)
-        {
-            fViewport.Location = location;
-            UpdateProperties();
-        }
-
-        private void SetViewportSize(Size size)
-        {
-            fViewport.Size = size;
-            UpdateProperties();
-        }
-
         // unsupported in Wpf and maybe in other platforms (exclude WinForms), don't use
         public Graphics CreateGraphics()
         {
@@ -270,7 +258,8 @@ namespace GKUI.Components
         protected override void OnSizeChanged(EventArgs e)
         {
             if (Loaded) {
-                SetViewportSize(VisibleRect.Size);
+                fViewport.Size = VisibleRect.Size;
+                UpdateProperties();
             }
             base.OnSizeChanged(e);
         }
@@ -278,7 +267,8 @@ namespace GKUI.Components
         protected override void OnScroll(ScrollEventArgs e)
         {
             if (Loaded) {
-                SetViewportLocation(VisibleRect.Location);
+                fViewport.Location = VisibleRect.Location;
+                UpdateProperties();
                 fCanvas.Invalidate();
             }
             base.OnScroll(e);

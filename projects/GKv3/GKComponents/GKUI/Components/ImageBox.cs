@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
+using GKCore.Types;
 
 namespace GKUI.Components
 {
@@ -71,18 +72,6 @@ namespace GKUI.Components
         ///   A fixed, single-line border with a soft outer glow.
         /// </summary>
         FixedSingleGlowShadow
-    }
-
-    public class NamedRegion
-    {
-        public readonly string Name;
-        public readonly ExtRect Region;
-
-        public NamedRegion(string name, ExtRect region)
-        {
-            Name = name;
-            Region = region;
-        }
     }
 
     /// <summary>
@@ -474,7 +463,6 @@ namespace GKUI.Components
         /// <returns></returns>
         private Rectangle GetImageViewport()
         {
-            // FIXME: нужно учесть поправки по границе
             Rectangle viewport;
 
             if (!fImageSize.IsEmpty)
@@ -662,9 +650,8 @@ namespace GKUI.Components
         {
             if (fImageSize.IsEmpty) return;
 
-            //base.UpdateScrollSizes();
-            Size viewportSize = base.Viewport.Size;
-            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, viewportSize.Width - 40, viewportSize.Height - 40);
+            var innerRectangle = base.Viewport;
+            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width - 40, innerRectangle.Height - 40);
             double zoom = aspectRatio * 100.0;
 
             Zoom = (int)Math.Round(Math.Floor(zoom));
@@ -676,8 +663,7 @@ namespace GKUI.Components
         /// <param name="rectangle">The rectangle to fit the view port to.</param>
         public void ZoomToRegion(RectangleF rectangle)
         {
-            Size clientSize = Viewport.Size;
-
+            var clientSize = Viewport.Size;
             double ratioX = clientSize.Width / rectangle.Width;
             double ratioY = clientSize.Height / rectangle.Height;
             double zoomFactor = Math.Min(ratioX, ratioY);

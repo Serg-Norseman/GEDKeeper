@@ -27,6 +27,7 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
+using GKCore.Types;
 using GKUI.Platform;
 
 namespace GKUI.Components

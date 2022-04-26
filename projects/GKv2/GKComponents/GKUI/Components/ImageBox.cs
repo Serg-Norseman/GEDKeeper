@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BSLib;
+using GKCore.Types;
 
 namespace GKUI.Components
 {
@@ -72,18 +73,6 @@ namespace GKUI.Components
         ///   A fixed, single-line border with a soft outer glow.
         /// </summary>
         FixedSingleGlowShadow
-    }
-
-    public class NamedRegion
-    {
-        public readonly string Name;
-        public readonly ExtRect Region;
-
-        public NamedRegion(string name, ExtRect region)
-        {
-            Name = name;
-            Region = region;
-        }
     }
 
     /// <summary>
@@ -492,7 +481,7 @@ namespace GKUI.Components
         /// <returns></returns>
         private Rectangle GetImageViewport()
         {
-            Rectangle viewPort;
+            Rectangle viewport;
 
             if (!fImageSize.IsEmpty)
             {
@@ -504,17 +493,17 @@ namespace GKUI.Components
                     innerRectangle.Inflate(borderOffset, borderOffset);
                 }
 
-                int x = !HScroll ? (innerRectangle.Width - fScaledImageWidth) / 2 : 0;
-                int y = !VScroll ? (innerRectangle.Height - fScaledImageHeight) / 2 : 0;
+                int x = innerRectangle.Left + (!HScroll ? (innerRectangle.Width - fScaledImageWidth) / 2 : 0);
+                int y = innerRectangle.Top + (!VScroll ? (innerRectangle.Height - fScaledImageHeight) / 2 : 0);
                 int width = Math.Min(fScaledImageWidth - Math.Abs(AutoScrollPosition.X), innerRectangle.Width);
                 int height = Math.Min(fScaledImageHeight - Math.Abs(AutoScrollPosition.Y), innerRectangle.Height);
 
-                viewPort = new Rectangle(x + innerRectangle.Left, y + innerRectangle.Top, width, height);
+                viewport = new Rectangle(x, y, width, height);
             }
             else
-                viewPort = Rectangle.Empty;
+                viewport = Rectangle.Empty;
 
-            return viewPort;
+            return viewport;
         }
 
         /// <summary>
@@ -547,10 +536,12 @@ namespace GKUI.Components
             float offsetY = viewport.Top + Padding.Top + AutoScrollPosition.Y;
 
             RectangleF scaledRect = new RectangleF(
-                (source.Left * fZoomFactor), (source.Top * fZoomFactor),
-                (source.Width * fZoomFactor), (source.Height * fZoomFactor));
+                offsetX + (source.Left * fZoomFactor),
+                offsetY + (source.Top * fZoomFactor),
+                (source.Width * fZoomFactor),
+                (source.Height * fZoomFactor));
 
-            return new RectangleF(scaledRect.Left + offsetX, scaledRect.Top + offsetY, scaledRect.Width, scaledRect.Height);
+            return scaledRect;
         }
 
         /// <summary>
@@ -691,8 +682,8 @@ namespace GKUI.Components
 
             AutoScrollMinSize = Size.Empty;
 
-            Rectangle innerRectangle = GetInsideViewport();
-            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width, innerRectangle.Height);
+            var innerRectangle = GetInsideViewport();
+            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width - 40, innerRectangle.Height - 40);
             double zoom = aspectRatio * 100.0;
 
             Zoom = (int)Math.Round(Math.Floor(zoom));
@@ -704,8 +695,9 @@ namespace GKUI.Components
         /// <param name="rectangle">The rectangle to fit the view port to.</param>
         public void ZoomToRegion(RectangleF rectangle)
         {
-            double ratioX = ClientSize.Width / rectangle.Width;
-            double ratioY = ClientSize.Height / rectangle.Height;
+            var clientSize = ClientSize;
+            double ratioX = clientSize.Width / rectangle.Width;
+            double ratioY = clientSize.Height / rectangle.Height;
             double zoomFactor = Math.Min(ratioX, ratioY);
             int cx = (int)(rectangle.X + (rectangle.Width / 2));
             int cy = (int)(rectangle.Y + (rectangle.Height / 2));
@@ -728,7 +720,7 @@ namespace GKUI.Components
             if (fSizeToFit) {
                 ZoomToFit();
             } else if (!fImageSize.IsEmpty) {
-                AutoScrollMinSize = new Size(fScaledImageWidth + Padding.Horizontal, fScaledImageHeight + Padding.Vertical);
+                SetImageSize(new ExtSize(fScaledImageWidth, fScaledImageHeight), true);
             }
 
             Invalidate();

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -90,8 +90,6 @@ namespace GKUI.Forms
             lblPassedVal.Text = TimeSpanToString(passTime);
             lblRemainVal.Text = TimeSpanToString(restTime);
             lblTotalVal.Text = TimeSpanToString(sumTime);
-
-            Invalidate();
         }
 
         private static string TimeSpanToString(TimeSpan ts)
@@ -103,6 +101,7 @@ namespace GKUI.Forms
         {
             try {
                 Application.Instance.Invoke(method);
+                Application.Instance.RunIteration();
             } catch {
                 // dummy
             }
@@ -171,7 +170,7 @@ namespace GKUI.Forms
         private volatile bool fFormLoaded;
         private int fMax;
         //private ManualResetEvent fMRE = new ManualResetEvent(false);
-        private IntPtr fParentHandle;
+        private Window fParentHandle;
         private ProgressDlg fProgressForm;
         //private Thread fThread;
         private string fTitle;
@@ -186,12 +185,12 @@ namespace GKUI.Forms
                 fTitle = title;
                 fMax = max;
                 fCancelable = cancelable;
-                fParentHandle = AppHost.Instance.GetTopWindowHandle();
+                fParentHandle = AppHost.Instance.GetActiveWindow() as Window;
 
                 ShowProgressForm();
-                //fThread = new Thread(ShowProgressForm);
-                //fThread.SetApartmentState(ApartmentState.STA);
-                //fThread.Start();
+                /*fThread = new Thread(ShowProgressForm);
+                fThread.SetApartmentState(ApartmentState.STA);
+                fThread.Start();*/
 
                 while (!fFormLoaded) {
                     Thread.Sleep(50);
@@ -230,12 +229,12 @@ namespace GKUI.Forms
             fProgressForm.ProgressInit(fTitle, fMax, fCancelable);
             fProgressForm.Load += ProgressForm_Load;
 
-            /*if (fParentHandle != IntPtr.Zero) {
-                UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
+            fProgressForm.Owner = fParentHandle;
+            /*if (fParentHandle != null) {
+                UIHelper.CenterFormByParent(fProgressForm, fParentHandle.Bounds);
             }*/
 
             fProgressForm.Show();
-            //fProgressForm.Close();
         }
 
         private void ProgressForm_Load(object sender, EventArgs e)

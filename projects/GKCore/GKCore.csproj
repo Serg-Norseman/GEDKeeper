@@ -277,6 +277,7 @@
     <Compile Include="GKCore\Types\MediaStoreStatus.cs" />
     <Compile Include="GKCore\Types\MediaStoreType.cs" />
     <Compile Include="GKCore\Types\MultimediaKind.cs" />
+    <Compile Include="GKCore\Types\NamedRegion.cs" />
     <Compile Include="GKCore\Types\NameFormat.cs" />
     <Compile Include="GKCore\Types\NamePartsRet.cs" />
     <Compile Include="GKCore\Types\PatriarchObj.cs" />

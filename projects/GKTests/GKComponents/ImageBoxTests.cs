@@ -23,6 +23,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
+using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 

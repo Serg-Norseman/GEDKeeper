@@ -71,10 +71,10 @@ namespace GKUI.Components
 
                 switch (style) {
                     case ChartStyle.Bar: {
-                            var categoryAxis = new CategoryAxis { Position = AxisPosition.Left };
+                            var categoryAxis = new CategoryAxis { Position = AxisPosition.Left, Title = xAxis };
                             fModel.Axes.Add(categoryAxis);
 
-                            var series = new BarSeries();
+                            var series = new BarSeries() { Title = yAxis };
                             for (int i = 0; i < vals.Count; i++) {
                                 StatsItem item = vals[i];
                                 if (item.Caption != "?" || !excludeUnknowns) {
@@ -87,7 +87,7 @@ namespace GKUI.Components
                         break;
 
                     case ChartStyle.Point: {
-                            var series = new LineSeries() { MarkerType = MarkerType.Diamond, MarkerSize = 4 };
+                            var series = new LineSeries() { MarkerType = MarkerType.Diamond, MarkerSize = 4, Title = yAxis };
                             for (int i = 0; i < vals.Count; i++) {
                                 StatsItem item = vals[i];
                                 string s = item.Caption;
@@ -101,7 +101,7 @@ namespace GKUI.Components
                         break;
 
                     case ChartStyle.ClusterBar: {
-                            var categoryAxis = new CategoryAxis { Position = AxisPosition.Left };
+                            var categoryAxis = new CategoryAxis { Position = AxisPosition.Left, Title = xAxis };
                             fModel.Axes.Add(categoryAxis);
 
                             var seriesF = new BarSeries() { FillColor = OxyColors.Red, Title = "F" };

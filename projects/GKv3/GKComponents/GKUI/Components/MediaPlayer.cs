@@ -184,11 +184,10 @@ namespace GKUI.Components
                 fPlayer.EndReached += Events_MediaEnded;
                 fPlayer.Stopped += Events_PlayerStopped;
 
-                //fMedia.Parse();
-                fPlayer.Play(fMedia);
+                fMedia.Parse();
             }
 
-            fPlayer.Play();
+            fPlayer.Play(fMedia);
         }
 
         private void trkVolume_Scroll(object sender, EventArgs e)

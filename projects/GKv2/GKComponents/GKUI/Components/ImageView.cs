@@ -28,6 +28,7 @@ using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
+using GKCore.Types;
 
 namespace GKUI.Components
 {
