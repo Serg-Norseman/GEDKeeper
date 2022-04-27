@@ -13,7 +13,7 @@ namespace GKUI.Forms
         private Label lblRefType;
         private ComboBox cmbRefType;
 
-        private void InitializeComponent()
+        /*private void InitializeComponent()
         {
             SuspendLayout();
 
@@ -69,6 +69,6 @@ namespace GKUI.Forms
 
             SetPredefProperties(500, 180);
             ResumeLayout();
-        }
+        }*/
     }
 }

@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <RootNamespace />
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,6 +25,7 @@
 
     <ItemGroup>
         <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
+        <PackageReference Include="Eto.Serialization.Xaml" Version="2.6.1" />
     </ItemGroup>
 
 </Project>
