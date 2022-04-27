@@ -22,6 +22,7 @@ using System;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,6 +34,14 @@ namespace GKUI.Forms
 {
     public partial class SlideshowWin : StatusForm, ISlideshowWin
     {
+        #region Design components
+
+        private ButtonToolItem tbNext;
+        private ButtonToolItem tbPrev;
+        private ButtonToolItem tbStart;
+
+        #endregion
+
         private readonly SlideshowController fController;
 
         private readonly ImageBox fImageCtl;
@@ -40,22 +49,23 @@ namespace GKUI.Forms
 
         public SlideshowWin(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            //InitializeComponent();
+            XamlReader.Load(this);
 
             tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
             tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
-            SuspendLayout();
+            /*SuspendLayout();
             fImageCtl = new ImageBox();
-            fImageCtl.BackgroundColor = SystemColors.ControlBackground;
-            fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
-            fImageCtl.ImageBorderColor = Colors.AliceBlue;
-            fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
+            //fImageCtl.BackgroundColor = SystemColors.ControlBackground;
+            //fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
+            //fImageCtl.ImageBorderColor = Colors.AliceBlue;
+            //fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
             Content = fImageCtl;
             ResumeLayout();
 
-            WindowState = WindowState.Maximized;
+            WindowState = WindowState.Maximized;*/
 
             SetLocale();
 

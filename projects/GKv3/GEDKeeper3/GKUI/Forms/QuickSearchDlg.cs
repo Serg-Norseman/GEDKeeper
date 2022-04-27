@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -31,6 +32,14 @@ namespace GKUI.Forms
 {
     public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
     {
+        #region Design components
+
+        private TextBox txtSearchPattern;
+        private Button btnPrev;
+        private Button btnNext;
+
+        #endregion
+
         private readonly QuickSearchDlgController fController;
 
         #region View Interface
@@ -44,7 +53,8 @@ namespace GKUI.Forms
 
         public QuickSearchDlg(IWorkWindow workWindow)
         {
-            InitializeComponent();
+            //InitializeComponent();
+            XamlReader.Load(this);
 
             btnPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");

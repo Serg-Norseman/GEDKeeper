@@ -5,12 +5,7 @@ namespace GKUI.Forms
 {
     partial class SlideshowWin
     {
-        private ButtonToolItem tbNext;
-        private ButtonToolItem tbPrev;
-        private ButtonToolItem tbStart;
-        private ToolBar toolStrip1;
-
-        private void InitializeComponent()
+        /*private void InitializeComponent()
         {
             SuspendLayout();
 
@@ -38,6 +33,6 @@ namespace GKUI.Forms
 
             UIHelper.SetPredefProperties(this, 790, 570, true, true);
             ResumeLayout();
-        }
+        }*/
     }
 }

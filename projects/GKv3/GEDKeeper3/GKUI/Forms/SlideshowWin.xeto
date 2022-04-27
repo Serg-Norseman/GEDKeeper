@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  xmlns:components="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.SlideshowWin"
+  ShowInTaskbar="True" Load="SlideshowWin_Load" KeyDown="SlideshowWin_KeyDown" WindowState="Maximized">
+
+  <Form.ToolBar>
+    <ToolBar>
+      <ButtonToolItem x:Name="tbStart" Click="tsbStart_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbPrev" Click="tsbPrev_Click" />
+      <ButtonToolItem x:Name="tbNext" Click="tsbNext_Click" />
+    </ToolBar>
+  </Form.ToolBar>
+
+  <components:ImageBox x:Name="fImageCtl" ImageBorderStyle="FixedSingleGlowShadow" ImageBorderColor="AliceBlue" SelectionMode="Zoom" Size="780, 560" />
+
+</Form>

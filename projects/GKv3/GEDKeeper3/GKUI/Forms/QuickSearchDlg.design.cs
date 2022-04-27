@@ -6,11 +6,7 @@ namespace GKUI.Forms
 {
     partial class QuickSearchDlg
     {
-        private TextBox txtSearchPattern;
-        private Button btnPrev;
-        private Button btnNext;
-
-        private void InitializeComponent()
+        /*private void InitializeComponent()
         {
             SuspendLayout();
 
@@ -38,6 +34,6 @@ namespace GKUI.Forms
 
             UIHelper.SetPredefProperties(this, 210, 30);
             ResumeLayout();
-        }
+        }*/
     }
 }
