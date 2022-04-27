@@ -5,7 +5,7 @@ namespace GKUI.Forms
 {
 	partial class RecordInfoDlg
 	{
-        private HyperView hyperView1;
+        /*private HyperView hyperView1;
 
         private void InitializeComponent()
 		{
@@ -20,6 +20,6 @@ namespace GKUI.Forms
 
             SetPredefProperties(630, 405);
             ResumeLayout();
-		}
+		}*/
 	}
 }
