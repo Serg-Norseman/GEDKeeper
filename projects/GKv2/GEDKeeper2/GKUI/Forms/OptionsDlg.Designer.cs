@@ -35,7 +35,7 @@
         private System.Windows.Forms.TabControl PageControl2;
         private System.Windows.Forms.TabPage pageViewCommon;
         private System.Windows.Forms.TabPage pageViewPersons;
-        private System.Windows.Forms.CheckedListBox lstPersonColumns;
+        private GKUI.Components.GKListView lstPersonColumns;
         private System.Windows.Forms.Button btnColumnUp;
         private System.Windows.Forms.Button btnColumnDown;
         private System.Windows.Forms.Button btnDefList;
@@ -290,7 +290,7 @@
             this.chkHighlightUnmarried = new System.Windows.Forms.CheckBox();
             this.pageViewPersons = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lstPersonColumns = new System.Windows.Forms.CheckedListBox();
+            this.lstPersonColumns = new GKUI.Components.GKListView();
             this.btnColumnUp = new System.Windows.Forms.Button();
             this.btnColumnDown = new System.Windows.Forms.Button();
             this.btnDefList = new System.Windows.Forms.Button();

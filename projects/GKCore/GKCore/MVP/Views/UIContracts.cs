@@ -296,6 +296,8 @@ namespace GKCore.MVP.Views
 
     public interface IOptionsDlg : ICommonDialog
     {
+        void AcceptCircleChartsOptions();
+        void UpdateCircleChartsOptions();
         void SetPage(OptionsPage page);
     }
 
