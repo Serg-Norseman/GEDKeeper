@@ -22,8 +22,8 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using BSLib.Design.Graphics;
-using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -125,7 +125,7 @@ namespace GKUI.Forms
 
         public MediaViewerWin(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             SetLocale();
 

@@ -53,7 +53,6 @@ namespace GKUI.Forms
 
         public QuickSearchDlg(IWorkWindow workWindow)
         {
-            //InitializeComponent();
             XamlReader.Load(this);
 
             btnPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");

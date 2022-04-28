@@ -49,7 +49,6 @@ namespace GKUI.Forms
 
         public SlideshowWin(IBaseWindow baseWin)
         {
-            //InitializeComponent();
             XamlReader.Load(this);
 
             tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");

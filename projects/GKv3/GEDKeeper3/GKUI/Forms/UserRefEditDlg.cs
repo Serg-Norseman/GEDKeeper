@@ -34,7 +34,15 @@ namespace GKUI.Forms
 {
     public sealed partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
     {
-        #region Design controls
+        #region Design components
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblReference;
+        private ComboBox cmbRef;
+        private Label lblRefType;
+        private ComboBox cmbRefType;
+
         #endregion
 
         private readonly UserRefEditDlgController fController;
@@ -61,7 +69,6 @@ namespace GKUI.Forms
 
         public UserRefEditDlg(IBaseWindow baseWin)
         {
-            //InitializeComponent();
             XamlReader.Load(this);
 
             // in the root element of the xeto file cause an error that Label cannot be converted to Button!
