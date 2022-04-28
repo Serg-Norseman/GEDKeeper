@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Reflection;
 using BSLib.Design.MVP;
 using Eto.Forms;
 using GKCore.Interfaces;
@@ -45,7 +46,7 @@ namespace GKUI.Forms
 
         public CommonForm()
         {
-            fControlsManager = new ControlsManager();
+            fControlsManager = new ControlsManager(this);
         }
 
         public void SetToolTip(BindableWidget component, string toolTip)
@@ -66,7 +67,16 @@ namespace GKUI.Forms
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControlHandler<T>(control);
+            return fControlsManager.GetControl<T>(control);
+        }
+
+        public object GetControl(string controlName)
+        {
+            object result = this.GetType().GetField(controlName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
+            if (result == null) {
+                result = this.FindChild(controlName);
+            }
+            return result;
         }
     }
 
@@ -125,7 +135,7 @@ namespace GKUI.Forms
             Resizable = false;
             ShowInTaskbar = false;
 
-            fControlsManager = new ControlsManager();
+            fControlsManager = new ControlsManager(this);
         }
 
         public void SetToolTip(BindableWidget component, string toolTip)
@@ -161,7 +171,16 @@ namespace GKUI.Forms
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControlHandler<T>(control);
+            return fControlsManager.GetControl<T>(control);
+        }
+
+        public object GetControl(string controlName)
+        {
+            object result = this.GetType().GetField(controlName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
+            if (result == null) {
+                result = this.FindChild(controlName);
+            }
+            return result;
         }
     }
 }

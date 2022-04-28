@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Controllers\OptionsDlgController.cs" />
     <Compile Include="GKCore\Export\XLSWriter.cs" />
     <Compile Include="GDModel\GDMException.cs" />
     <Compile Include="GDModel\GDMAddress.cs" />

@@ -303,6 +303,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(PasswordBox), typeof(PasswordBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(TextArea), typeof(TextAreaHandler));
@@ -312,6 +313,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDateControl), typeof(DateControlHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKListView), typeof(ListViewHandler));
         }
 
         #endregion

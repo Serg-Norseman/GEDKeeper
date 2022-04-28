@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Forms;
 using BSLib.Design.MVP;
 using GKCore.Interfaces;
@@ -51,7 +51,7 @@ namespace GKUI.Forms
             fComponents = new Container();
             fToolTip = new ToolTip(this.fComponents);
 
-            fControlsManager = new ControlsManager();
+            fControlsManager = new ControlsManager(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -75,7 +75,16 @@ namespace GKUI.Forms
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControlHandler<T>(control);
+            return fControlsManager.GetControl<T>(control);
+        }
+
+        public object GetControl(string controlName)
+        {
+            object result = this.GetType().GetField(controlName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
+            if (result == null) {
+                result = this.Controls.Find(controlName, true);
+            }
+            return result;
         }
     }
 

@@ -279,6 +279,16 @@ namespace GKUI.Components
             }
         }
 
+        public int SelectedIndex
+        {
+            get {
+                return Items.IndexOf(GetSelectedItem());
+            }
+            set {
+                SelectItem(value);
+            }
+        }
+
         public int SortColumn
         {
             get { return fSortColumn; }
@@ -605,6 +615,12 @@ namespace GKUI.Components
             Columns.Clear();
         }
 
+        public void AddCheckedColumn(string caption, int width, bool autoSize = false)
+        {
+            CheckBoxes = true;
+            AddColumn(caption, width, autoSize);
+        }
+
         public void AddColumn(string caption, int width, bool autoSize = false)
         {
             if (autoSize) width = -1;
@@ -651,6 +667,15 @@ namespace GKUI.Components
         public void ClearItems()
         {
             Items.Clear();
+        }
+
+        public BSDListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
+        {
+            var item = AddItem(rowData, columnValues);
+            if (CheckBoxes) {
+                ((GKListItem)item).Checked = isChecked;
+            }
+            return item;
         }
 
         public BSDListItem AddItem(object rowData, params object[] columnValues)

@@ -83,7 +83,6 @@ namespace GKUI.Forms
         public static void OptionsDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
             var optDlg = ((OptionsDlg)form);
-            Assert.AreEqual(GlobalOptions.Instance, optDlg.Options);
 
             optDlg.SetPage(OptionsPage.opCommon);
 
