@@ -22,6 +22,7 @@ using System;
 using System.Globalization;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
+using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Charts;
@@ -46,6 +47,37 @@ namespace GKUI.Platform
 
         public EtoAppHost()
         {
+            Eto.Style.Add<TableLayout>("paddedTable", table => {
+                table.Padding = new Padding(8);
+                table.Spacing = new Size(4, 4);
+            });
+
+            Eto.Style.Add<TableLayout>("paddedTable8", table => {
+                table.Padding = new Padding(8);
+                table.Spacing = new Size(8, 8);
+            });
+
+            Eto.Style.Add<StackLayout>("vertListStack", stack => {
+                stack.Orientation = Orientation.Vertical;
+                stack.Padding = new Padding(8);
+                stack.Spacing = 4;
+            });
+
+            Eto.Style.Add<StackLayout>("horzListStack", stack => {
+                stack.Orientation = Orientation.Horizontal;
+                stack.Padding = new Padding(8);
+                stack.Spacing = 4;
+            });
+
+            Eto.Style.Add<Button>("dlgBtn", button => {
+                button.ImagePosition = ButtonImagePosition.Left;
+                button.Size = new Size(120, 26);
+            });
+
+            Eto.Style.Add<Button>("iconBtn", button => {
+                button.ImagePosition = ButtonImagePosition.Left;
+                button.Size = new Size(26, 26);
+            });
         }
 
         private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)

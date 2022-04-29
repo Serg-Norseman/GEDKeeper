@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms" x:Class="GKUI.Forms.QuickSearchDlg"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.QuickSearchDlg"
   KeyDown="SearchPanel_KeyDown" Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
 
-  <TableLayout Spacing="10, 0">
+  <TableLayout Padding="4" Spacing="4, 0">
 
     <TableRow>
-      <TextBox x:Name="txtSearchPattern" Width="150" TextChanged="SearchPattern_TextChanged"/>
-      <Button x:Name="btnPrev" Size="26, 26" Click="FindPrev_Click" />
-      <Button x:Name="btnNext" Size="26, 26" Click="FindNext_Click" />
+      <TextBox x:Name="txtSearchPattern" Width="160" TextChanged="SearchPattern_TextChanged"/>
+      <Button x:Name="btnPrev" Style="iconBtn" Click="FindPrev_Click" />
+      <Button x:Name="btnNext" Style="iconBtn" Click="FindNext_Click" />
     </TableRow>
 
   </TableLayout>

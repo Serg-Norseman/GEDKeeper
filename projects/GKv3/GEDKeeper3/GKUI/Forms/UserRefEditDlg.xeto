@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms" x:Class="GKUI.Forms.UserRefEditDlg" Title="UserRefEditDlg">
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.UserRefEditDlg">
 
-  <TableLayout Padding="10" Spacing="0, 10">
+  <TableLayout Style="paddedTable8">
 
     <TableRow>
-      <TableLayout Spacing="10, 10">
+      <TableLayout Spacing="4, 4">
         <TableRow>
           <Label x:Name="lblReference" />
           <ComboBox x:Name="cmbRef" Width="300"/>
@@ -19,13 +20,13 @@
     </TableRow>
 
     <TableRow>
-      <StackLayout Spacing="10" Orientation="Horizontal">
+      <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" ImagePosition="Left" Size="130, 26" Click="btnAccept_Click">btnAccept</Button>
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" ImagePosition="Left" Size="130, 26" Click="btnCancel_Click">btnCancel</Button>
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>
