@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,11 +27,21 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Views;
 using GKUI.Components;
+using Eto.Serialization.Xaml;
 
 namespace GKUI.Forms
 {
     public sealed partial class OrganizerWin : CommonDialog, IOrganizerWin
     {
+        #region Design components
+
+        private TabPage pageAddresses;
+        private TabPage pageTelephones;
+        private TabPage pageMails;
+        private TabPage pageWebs;
+
+        #endregion
+
         private readonly OrganizerController fController;
 
         private readonly GKSheetList fAdrList;
@@ -65,7 +75,7 @@ namespace GKUI.Forms
 
         public OrganizerWin(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             fAdrList = new GKSheetList(pageAddresses);
             fAdrList.Buttons = EnumSet<SheetButton>.Create();
