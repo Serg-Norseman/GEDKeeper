@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -32,6 +33,15 @@ namespace GKUI.Forms
 {
     public sealed partial class LanguageEditDlg : CommonDialog, ILanguageEditDlg
     {
+        #region Design components
+
+        private ComboBox cmbLanguage;
+        private Label lblLanguage;
+        private Button btnCancel;
+        private Button btnAccept;
+
+        #endregion
+
         private readonly LanguageEditDlgController fController;
 
         public GDMLanguageID LanguageID
@@ -51,7 +61,10 @@ namespace GKUI.Forms
 
         public LanguageEditDlg()
         {
-            InitializeComponent();
+            XamlReader.Load(this);
+
+            DefaultButton = btnAccept;
+            AbortButton = btnCancel;
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
