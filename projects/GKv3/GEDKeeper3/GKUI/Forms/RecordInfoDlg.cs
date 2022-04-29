@@ -62,7 +62,6 @@ namespace GKUI.Forms
         public RecordInfoDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-            // TODO: supported x:Name and ID, which is better?
 
             Title = LangMan.LS(LSID.LSID_MIFileProperties);
             //hyperView1.OnLink += HyperViewLink;

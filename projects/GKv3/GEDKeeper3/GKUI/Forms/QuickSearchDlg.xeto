@@ -6,9 +6,9 @@
   <TableLayout Spacing="10, 0">
 
     <TableRow>
-      <TextBox ID="txtSearchPattern" Width="150" TextChanged="SearchPattern_TextChanged"/>
-      <Button ID="btnPrev" Size="26, 26" Click="FindPrev_Click" />
-      <Button ID="btnNext" Size="26, 26" Click="FindNext_Click" />
+      <TextBox x:Name="txtSearchPattern" Width="150" TextChanged="SearchPattern_TextChanged"/>
+      <Button x:Name="btnPrev" Size="26, 26" Click="FindPrev_Click" />
+      <Button x:Name="btnNext" Size="26, 26" Click="FindNext_Click" />
     </TableRow>
 
   </TableLayout>

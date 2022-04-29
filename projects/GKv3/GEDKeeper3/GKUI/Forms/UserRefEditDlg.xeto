@@ -7,13 +7,13 @@
     <TableRow>
       <TableLayout Spacing="10, 10">
         <TableRow>
-          <Label ID="lblReference" />
-          <ComboBox ID="cmbRef" Width="300"/>
+          <Label x:Name="lblReference" />
+          <ComboBox x:Name="cmbRef" Width="300"/>
         </TableRow>
 
         <TableRow>
-          <Label ID="lblRefType" />
-          <ComboBox ID="cmbRefType" Width="300"/>
+          <Label x:Name="lblRefType" />
+          <ComboBox x:Name="cmbRefType" Width="300"/>
         </TableRow>
       </TableLayout>
     </TableRow>
@@ -22,10 +22,10 @@
       <StackLayout Spacing="10" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button ID="btnAccept" ImagePosition="Left" Size="130, 26" Click="btnAccept_Click">btnAccept</Button>
+          <Button x:Name="btnAccept" ImagePosition="Left" Size="130, 26" Click="btnAccept_Click">btnAccept</Button>
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button ID="btnCancel" ImagePosition="Left" Size="130, 26" Click="btnCancel_Click">btnCancel</Button>
+          <Button x:Name="btnCancel" ImagePosition="Left" Size="130, 26" Click="btnCancel_Click">btnCancel</Button>
         </StackLayoutItem>
       </StackLayout>
     </TableRow>
