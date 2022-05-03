@@ -25,6 +25,7 @@ using BSLib;
 using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -42,6 +43,95 @@ namespace GKUI.Forms
 {
     public sealed partial class BaseWinSDI : CommonWindow, IBaseWindowView
     {
+        #region Design components
+
+        private TableLayout StatusBar;
+        private Label panStatusText;
+        private Eto.Forms.ImageView panStatusShieldImage;
+        private ToolBar ToolBar1;
+        private ButtonToolItem tbFileNew;
+        private ButtonToolItem tbFileLoad;
+        private ButtonToolItem tbFileSave;
+        private ButtonToolItem tbRecordAdd;
+        private ButtonToolItem tbRecordEdit;
+        private ButtonToolItem tbRecordDelete;
+        private ButtonToolItem tbFilter;
+        private ButtonToolItem tbTreeAncestors;
+        private ButtonToolItem tbTreeDescendants;
+        private ButtonToolItem tbPedigree;
+        private ButtonToolItem tbStats;
+        private ButtonToolItem tbPrev;
+        private ButtonToolItem tbNext;
+        private ButtonToolItem tbSendMail;
+        private MenuBar MainMenu1;
+        private ButtonMenuItem miFile;
+        private ButtonMenuItem miFileNew;
+        private ButtonMenuItem miFileLoad;
+        private ButtonMenuItem miMRUFiles;
+        private ButtonMenuItem miFileSave;
+        private ButtonMenuItem miFileSaveAs;
+        private ButtonMenuItem miFileClose;
+        private ButtonMenuItem miFileProperties;
+        private ButtonMenuItem miExportToExcelFile;
+        private ButtonMenuItem miExportToFamilyBook;
+        private ButtonMenuItem miExportToTreesAlbum;
+        private ButtonMenuItem miTreeTools;
+        private ButtonMenuItem miExit;
+        private ButtonMenuItem miEdit;
+        private ButtonMenuItem miRecordAdd;
+        private ButtonMenuItem miRecordEdit;
+        private ButtonMenuItem miRecordDelete;
+        private ButtonMenuItem miSearch;
+        private ButtonMenuItem miFilter;
+        private ButtonMenuItem miOptions;
+        private ButtonMenuItem miPedigree;
+        private ButtonMenuItem miTreeAncestors;
+        private ButtonMenuItem miTreeDescendants;
+        private ButtonMenuItem miPedigree_dAboville;
+        private ButtonMenuItem miPedigree_Konovalov;
+        private ButtonMenuItem miMap;
+        private ButtonMenuItem miStats;
+        private ButtonMenuItem miHelp;
+        private ButtonMenuItem miContext;
+        private ButtonMenuItem miLogSend;
+        private ButtonMenuItem miLogView;
+        private ButtonMenuItem miAbout;
+        private ContextMenu MenuMRU;
+        private ContextMenu MenuPedigree;
+        private ButtonMenuItem miPedigree_dAboville2;
+        private ButtonMenuItem miPedigree_Konovalov2;
+        private ButtonMenuItem miOrganizer;
+        private ButtonMenuItem miService;
+        private ButtonMenuItem miScripts;
+        private ButtonMenuItem miExport;
+        private ButtonMenuItem miTreeBoth;
+        private ButtonMenuItem miAncestorsCircle;
+        private ButtonToolItem tbTreeBoth;
+        private ButtonMenuItem miReports;
+        private ButtonMenuItem miPlugins;
+        private ButtonMenuItem miSlideshow;
+        private ButtonToolItem tbLoadMRU;
+        private ButtonMenuItem miPedigreeAscend;
+        private ButtonMenuItem miDescendantsCircle;
+        private ButtonMenuItem miRelationshipCalculator;
+        private TabControl tabsRecords;
+        private ButtonMenuItem miContRecordDuplicate;
+        private ButtonMenuItem miContRecordDelete;
+        private ButtonMenuItem miContRecordEdit;
+        private ButtonMenuItem miContRecordMerge;
+        private ContextMenu contextMenu;
+        private ButtonMenuItem miContRecordAdd;
+        private ButtonMenuItem miTreeCompare;
+        private ButtonMenuItem miTreeMerge;
+        private ButtonMenuItem miTreeSplit;
+        private ButtonMenuItem miRecMerge;
+        private ButtonMenuItem miFamilyGroups;
+        private ButtonMenuItem miTreeCheck;
+        private ButtonMenuItem miPatSearch;
+        private ButtonMenuItem miPlacesManager;
+
+        #endregion
+
         #region Private fields
 
         private readonly BaseWinController fController;
@@ -82,6 +172,7 @@ namespace GKUI.Forms
 
         public BaseWinSDI()
         {
+            XamlReader.Load(this);
             InitializeComponent();
 
             Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
@@ -132,6 +223,25 @@ namespace GKUI.Forms
                 fController.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void InitializeComponent()
+        {
+            MenuMRU = new ContextMenu();
+
+            miPedigree_dAboville2 = new ButtonMenuItem(miPedigree_dAbovilleClick);
+            miPedigree_Konovalov2 = new ButtonMenuItem(miPedigree_KonovalovClick);
+            MenuPedigree = new ContextMenu();
+            MenuPedigree.Items.AddRange(new MenuItem[] { miPedigree_dAboville2, miPedigree_Konovalov2 });
+
+            miContRecordAdd = new ButtonMenuItem(miRecordAdd_Click);
+            miContRecordEdit = new ButtonMenuItem(miRecordEdit_Click);
+            miContRecordDelete = new ButtonMenuItem(miRecordDelete_Click);
+            miContRecordDuplicate = new ButtonMenuItem(miRecordDuplicate_Click);
+            miContRecordMerge = new ButtonMenuItem(miRecordMerge_Click);
+            contextMenu = new ContextMenu();
+            contextMenu.Items.AddRange(new MenuItem[] { miContRecordAdd, miContRecordEdit, miContRecordDelete, miContRecordDuplicate, miContRecordMerge });
+            contextMenu.Opening += contextMenu_Opening;
         }
 
         private void CreatePage(string pageText, GDMRecordType recType)
@@ -294,6 +404,18 @@ namespace GKUI.Forms
         private void mPersonSummaryLink(object sender, string linkName)
         {
             fController.SelectSummaryLink(linkName);
+        }
+
+        private void tbLoadMRU_Click(object sender, EventArgs e)
+        {
+            if (MenuMRU.Items.Count > 0) {
+                MenuMRU.Show(this);
+            }
+        }
+
+        private void tbPedigree_Click(object sender, EventArgs e)
+        {
+            MenuPedigree.Show(this);
         }
 
         #endregion

@@ -24,6 +24,7 @@ using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -39,6 +40,65 @@ namespace GKUI.Forms
 {
     public partial class PersonEditDlg : EditorDialog, IPersonEditDlg
     {
+        #region Design components
+
+        private TabControl tabsPersonData;
+        private TabPage pageEvents;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageSources;
+        private TabPage pageSpouses;
+        private TabPage pageAssociations;
+        private TabPage pageGroups;
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblRestriction;
+        private ComboBox cmbRestriction;
+        private GroupBox GroupBox1;
+        private Label lblSurname;
+        private Label lblName;
+        private Label lblPatronymic;
+        private Label lblSex;
+        private TextBox txtSurname;
+        private TextBox txtName;
+        private ComboBox cmbPatronymic;
+        public ComboBox cmbSex;
+        private CheckBox chkPatriarch;
+        private TabPage pageUserRefs;
+        private Panel panCtlParents;
+        private Label lblParents;
+        private TextBox txtFather;
+        private TextBox txtMother;
+        private Button btnParentsAdd;
+        private Button btnParentsEdit;
+        private Button btnParentsDelete;
+        private CheckBox chkBookmark;
+        private Label lblSurnamePrefix;
+        private TextBox txtSurnamePrefix;
+        private Label lblNamePrefix;
+        private TextBox txtNamePrefix;
+        private Label lblNameSuffix;
+        private TextBox txtNameSuffix;
+        private Label lblNickname;
+        private TextBox txtNickname;
+        private GKPortrait imgPortrait;
+        private Button btnNameCopy;
+        private Button btnPortraitAdd;
+        private Button btnPortraitDelete;
+        private Button btnFatherAdd;
+        private Button btnFatherDelete;
+        private Button btnFatherSel;
+        private Button btnMotherAdd;
+        private Button btnMotherDelete;
+        private Button btnMotherSel;
+        private TabPage pageNames;
+        private TextBox txtMarriedSurname;
+        private Label lblMarriedSurname;
+        private TabPage pageParents;
+        private TabPage pageChilds;
+
+        #endregion
+
         private readonly PersonEditDlgController fController;
 
         private readonly GKSheetList fEventsList;
@@ -213,7 +273,7 @@ namespace GKUI.Forms
 
         public PersonEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             txtMarriedSurname.TextChanged += Names_TextChanged;
             txtSurname.TextChanged += Names_TextChanged;

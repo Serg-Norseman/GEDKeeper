@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.PersonEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <GroupBox x:Name="GroupBox1">
+        <TableLayout Style="paddedTable">
+          <TableRow>
+            <TableCell ScaleWidth="True">
+              <TableLayout x:Name="personLayout" Spacing="4, 4">
+                <TableRow>
+                  <StackLayout Spacing="4">
+                    <Label x:Name="lblSurname" />
+                    <TextBox x:Name="txtSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
+                  </StackLayout>
+                  <StackLayout Spacing="4">
+                    <Label x:Name="lblSurnamePrefix" />
+                    <TextBox x:Name="txtSurnamePrefix" Width="180" KeyDown="txtXName_KeyDown" />
+                  </StackLayout>
+                  <TableCell />
+                </TableRow>
+
+                <TableRow>
+                  <StackLayout Spacing="4">
+                    <Label x:Name="lblMarriedSurname" />
+                    <TextBox x:Name="txtMarriedSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
+                  </StackLayout>
+                  <StackLayout Spacing="4">
+                    <Label x:Name="lblNamePrefix" />
+                    <TextBox x:Name="txtNamePrefix" Width="180" KeyDown="txtXName_KeyDown" />
+                  </StackLayout>
+                  <StackLayout Spacing="4">
+                    <Label x:Name="lblSex" />
+                    <ComboBox x:Name="cmbSex" ReadOnly="true" Width="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" />
+                  </StackLayout>
+                </TableRow>
+
+                <TableRow>
+                  <StackLayout Spacing="4">
+                    <Label x:Name="lblName" />
+                    <TextBox x:Name="txtName" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
+                  </StackLayout>
+                  <StackLayout Spacing="4">
+                    <Label x:Name="lblNameSuffix" />
+                    <TextBox x:Name="txtNameSuffix" Width="180" KeyDown="txtXName_KeyDown" />
+                  </StackLayout>
+                  <CheckBox x:Name="chkBookmark" />
+                </TableRow>
+
+                <TableRow>
+                  <StackLayout Spacing="4">
+                    <Label x:Name="lblPatronymic" />
+                    <ComboBox x:Name="cmbPatronymic" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
+                  </StackLayout>
+                  <StackLayout Spacing="4">
+                    <Label x:Name="lblNickname" />
+                    <TextBox x:Name="txtNickname" Width="180" KeyDown="txtXName_KeyDown" />
+                  </StackLayout>
+                  <CheckBox x:Name="chkPatriarch" />
+                </TableRow>
+              </TableLayout>
+            </TableCell>
+
+            <TableCell>
+              <TableLayout x:Name="portraitLayout">
+                <TableRow ScaleHeight="True">
+                  <comcom:GKPortrait x:Name="imgPortrait" Size="140, 160" />
+                </TableRow>
+                <TableRow>
+                  <StackLayout Orientation="Horizontal" Spacing="4">
+                    <StackLayoutItem Expand="True" />
+                    <Button x:Name="btnPortraitAdd" Style="iconBtn" Click="btnPortraitAdd_Click" />
+                    <Button x:Name="btnPortraitDelete" Style="iconBtn" Click="btnPortraitDelete_Click" />
+                    <StackLayoutItem Expand="True" />
+                  </StackLayout>
+                </TableRow>
+              </TableLayout>
+            </TableCell>
+          </TableRow>
+        </TableLayout>
+      </GroupBox>
+    </TableRow>
+
+    <TableRow>
+      <GroupBox x:Name="panCtlParents">
+        <TableLayout x:Name="parentsTab" Style="paddedTable">
+          <TableRow>
+            <TableCell>
+              <Label x:Name="lblParents" />
+            </TableCell>
+
+            <TableCell ScaleWidth="True">
+              <TextBox x:Name="txtFather" Enabled="False" Width="100" />
+            </TableCell>
+
+            <TableCell ScaleWidth="True">
+              <TextBox x:Name="txtMother" Enabled="False" Width="100" />
+            </TableCell>
+
+            <TableCell>
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <Button x:Name="btnParentsAdd" Style="iconBtn" Click="btnParentsAdd_Click" />
+                <Button x:Name="btnParentsEdit" Style="iconBtn" Click="btnParentsEdit_Click" />
+                <Button x:Name="btnParentsDelete" Style="iconBtn" Click="btnParentsDelete_Click" />
+              </StackLayout>
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell />
+
+            <TableCell ScaleWidth="True">
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <Button x:Name="btnFatherAdd" Style="iconBtn" Click="btnFatherAdd_Click" />
+                <Button x:Name="btnFatherDelete" Style="iconBtn" Click="btnFatherDelete_Click" />
+                <Button x:Name="btnFatherSel" Style="iconBtn" Click="btnFatherSel_Click" />
+              </StackLayout>
+            </TableCell>
+
+            <TableCell ScaleWidth="True">
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <Button x:Name="btnMotherAdd" Style="iconBtn" Click="btnMotherAdd_Click" />
+                <Button x:Name="btnMotherDelete" Style="iconBtn" Click="btnMotherDelete_Click" />
+                <Button x:Name="btnMotherSel" Style="iconBtn" Click="btnMotherSel_Click" />
+              </StackLayout>
+            </TableCell>
+
+            <TableCell />
+          </TableRow>
+        </TableLayout>
+      </GroupBox>
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsPersonData">
+        <TabPage x:Name="pageEvents" />
+        <TabPage x:Name="pageSpouses" />
+        <TabPage x:Name="pageNames" />
+        <TabPage x:Name="pageAssociations" />
+        <TabPage x:Name="pageGroups" />
+        <TabPage x:Name="pageNotes" />
+        <TabPage x:Name="pageMultimedia" />
+        <TabPage x:Name="pageSources" />
+        <TabPage x:Name="pageUserRefs" />
+        <TabPage x:Name="pageParents" />
+        <TabPage x:Name="pageChilds" />
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem HorizontalAlignment="Left">
+          <Label x:Name="lblRestriction" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Left">
+          <ComboBox x:Name="cmbRestriction" ReadOnly="True" Width="180" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
+        </StackLayoutItem>
+
+        <StackLayoutItem Expand="True" />
+
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnNameCopy" Style="iconBtn" Click="btnNameCopy_Click" />
+        </StackLayoutItem>
+
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>
