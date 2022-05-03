@@ -24,7 +24,6 @@ using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -71,19 +70,8 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            // in the root element of the xeto file cause an error that Label cannot be converted to Button!
-            DefaultButton = btnAccept;
-            AbortButton = btnCancel;
-
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinUserRefEdit);
-            lblReference.Text = LangMan.LS(LSID.LSID_Reference);
-            lblRefType.Text = LangMan.LS(LSID.LSID_Type);
 
             fController = new UserRefEditDlgController(this);
             fController.Init(baseWin);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using BSLib.Design.Graphics;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -35,6 +36,18 @@ namespace GKUI.Forms
 {
     public partial class CircleChartWin : PrintableForm, ICircleChartWin
     {
+        #region Design components
+
+        private ToolBar ToolBar1;
+        private ButtonToolItem tbImageSave;
+        private ButtonToolItem tbPrev;
+        private ButtonToolItem tbNext;
+        private ButtonToolItem tbDocPreview;
+        private ButtonToolItem tbDocPrint;
+        private ButtonToolItem tbOptions;
+
+        #endregion
+
         private readonly CircleChartWinController fController;
 
         private readonly IBaseWindow fBaseWin;
@@ -56,7 +69,7 @@ namespace GKUI.Forms
 
         public CircleChartWin(IBaseWindow baseWin, GDMIndividualRecord startPerson, CircleChartType type)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             tbImageSave.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
             tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");

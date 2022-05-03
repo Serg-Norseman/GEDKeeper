@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -71,6 +72,15 @@ namespace GKCore.Controllers
         {
             fView.Ref.Text = fUserRef.StringValue;
             fView.RefType.Text = fUserRef.ReferenceType;
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_WinUserRefEdit);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ILabel>("lblReference").Text = LangMan.LS(LSID.LSID_Reference);
+            GetControl<ILabel>("lblRefType").Text = LangMan.LS(LSID.LSID_Type);
         }
     }
 }

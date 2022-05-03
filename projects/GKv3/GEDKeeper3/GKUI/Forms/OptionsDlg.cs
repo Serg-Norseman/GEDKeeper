@@ -199,9 +199,6 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            DefaultButton = btnAccept;
-            AbortButton = btnCancel;
-
             lblMaleColor.Cursor = Cursors.Pointer;
             lblFemaleColor.Cursor = Cursors.Pointer;
             lblUnkSexColor.Cursor = Cursors.Pointer;

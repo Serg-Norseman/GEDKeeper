@@ -13,11 +13,11 @@
             <TableCell ScaleWidth="True">
               <TableLayout x:Name="personLayout" Spacing="4, 4">
                 <TableRow>
-                  <StackLayout Spacing="4">
+                  <StackLayout Spacing="2">
                     <Label x:Name="lblSurname" />
                     <TextBox x:Name="txtSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
                   </StackLayout>
-                  <StackLayout Spacing="4">
+                  <StackLayout Spacing="2">
                     <Label x:Name="lblSurnamePrefix" />
                     <TextBox x:Name="txtSurnamePrefix" Width="180" KeyDown="txtXName_KeyDown" />
                   </StackLayout>
@@ -25,26 +25,26 @@
                 </TableRow>
 
                 <TableRow>
-                  <StackLayout Spacing="4">
+                  <StackLayout Spacing="2">
                     <Label x:Name="lblMarriedSurname" />
                     <TextBox x:Name="txtMarriedSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
                   </StackLayout>
-                  <StackLayout Spacing="4">
+                  <StackLayout Spacing="2">
                     <Label x:Name="lblNamePrefix" />
                     <TextBox x:Name="txtNamePrefix" Width="180" KeyDown="txtXName_KeyDown" />
                   </StackLayout>
-                  <StackLayout Spacing="4">
+                  <StackLayout Spacing="2">
                     <Label x:Name="lblSex" />
                     <ComboBox x:Name="cmbSex" ReadOnly="true" Width="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" />
                   </StackLayout>
                 </TableRow>
 
                 <TableRow>
-                  <StackLayout Spacing="4">
+                  <StackLayout Spacing="2">
                     <Label x:Name="lblName" />
                     <TextBox x:Name="txtName" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
                   </StackLayout>
-                  <StackLayout Spacing="4">
+                  <StackLayout Spacing="2">
                     <Label x:Name="lblNameSuffix" />
                     <TextBox x:Name="txtNameSuffix" Width="180" KeyDown="txtXName_KeyDown" />
                   </StackLayout>
@@ -52,11 +52,11 @@
                 </TableRow>
 
                 <TableRow>
-                  <StackLayout Spacing="4">
+                  <StackLayout Spacing="2">
                     <Label x:Name="lblPatronymic" />
                     <ComboBox x:Name="cmbPatronymic" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
                   </StackLayout>
-                  <StackLayout Spacing="4">
+                  <StackLayout Spacing="2">
                     <Label x:Name="lblNickname" />
                     <TextBox x:Name="txtNickname" Width="180" KeyDown="txtXName_KeyDown" />
                   </StackLayout>

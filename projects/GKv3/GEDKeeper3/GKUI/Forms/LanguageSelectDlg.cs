@@ -59,9 +59,6 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            DefaultButton = btnAccept;
-            AbortButton = btnCancel;
-
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 

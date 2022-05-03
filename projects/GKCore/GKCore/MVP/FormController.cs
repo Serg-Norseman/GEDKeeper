@@ -43,6 +43,7 @@ namespace GKCore.MVP
         protected FormController(TView view) : base(view)
         {
             fControlsManager = new ControlsManager(view);
+            SetLocale();
         }
 
         public virtual void Init(IBaseWindow baseWin)
@@ -53,6 +54,11 @@ namespace GKCore.MVP
         protected T GetControl<T>(string controlName) where T : class, IControl
         {
             return fControlsManager.GetControl<T>(controlName);
+        }
+
+        public virtual void SetLocale()
+        {
+            // dummy
         }
     }
 }

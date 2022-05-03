@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
-  x:Class="GKUI.Forms.LanguageSelectDlg" Title="Select language">
+  x:Class="GKUI.Forms.LanguageSelectDlg" Title="Select language"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
 
   <TableLayout Style="paddedTable8">
 

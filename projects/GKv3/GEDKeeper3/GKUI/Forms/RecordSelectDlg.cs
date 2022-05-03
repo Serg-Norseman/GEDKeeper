@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -33,6 +34,16 @@ namespace GKUI.Forms
 {
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
+        #region Design components
+
+        private Button btnSelect;
+        private Button btnCreate;
+        private Button btnCancel;
+        private Panel panList;
+        public TextBox txtFastFilter;
+
+        #endregion
+
         private readonly RecordSelectDlgController fController;
 
         private GKListView fListRecords;
@@ -63,7 +74,7 @@ namespace GKUI.Forms
 
         public RecordSelectDlg(IBaseWindow baseWin, GDMRecordType recType)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnSelect.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");

@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms"
-  x:Class="GKUI.Forms.LanguageEditDlg"
-  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+  x:Class="GKUI.Forms.RecordSelectDlg"
+  AbortButton="{x:Reference btnCancel}">
 
   <TableLayout Style="paddedTable8">
 
     <TableRow>
-      <StackLayout Orientation="Horizontal" Spacing="4">
-        <Label x:Name="lblLanguage" />
-        <StackLayoutItem Expand="True" />
-        <ComboBox x:Name="cmbLanguage" ReadOnly="True" Width="260" />
-      </StackLayout>
+      <TextBox x:Name="txtFastFilter" TextChanged="txtFastFilter_TextChanged" />
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <Panel x:Name="panList" Size="540, 400" />
     </TableRow>
 
     <TableRow>
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+          <Button x:Name="btnCreate" Style="dlgBtn" Click="btnCreate_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+          <Button x:Name="btnSelect" Style="dlgBtn" Click="btnSelect_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="CancelClickHandler" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.CircleChartWin"
+  Size="1100, 580" ShowInTaskbar="true" KeyDown="CircleChartWin_KeyDown">
+
+  <Form.ToolBar>
+    <ToolBar TextAlign="Right">
+      <ButtonToolItem x:Name="tbImageSave" Click="tbImageSave_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbPrev" Enabled="False" Click="ToolBar1_ButtonClick" />
+      <ButtonToolItem x:Name="tbNext" Enabled="False" Click="ToolBar1_ButtonClick" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbDocPreview" Click="tbDocPreview_Click" />
+      <ButtonToolItem x:Name="tbDocPrint" Click="tbDocPrint_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbOptions" Click="tbOptions_Click" />
+    </ToolBar>
+  </Form.ToolBar>
+
+</Form>
