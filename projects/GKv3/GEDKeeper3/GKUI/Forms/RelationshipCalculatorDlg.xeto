@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.RelationshipCalculatorDlg"
+  AbortButton="{x:Reference btnClose}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <TableLayout Spacing="4, 4">
+        <TableRow>
+          <Label x:Name="Lab1" />
+          <StackLayout Orientation="Horizontal" Spacing="4">
+            <StackLayoutItem Expand="True">
+              <TextBox x:Name="Edit1" ReadOnly="True" />
+            </StackLayoutItem>
+            <Button x:Name="btnRec1Select" Width="80" Click="btnRec1Select_Click" />
+          </StackLayout>
+        </TableRow>
+        <TableRow>
+          <Label x:Name="Lab2" />
+          <StackLayout Orientation="Horizontal" Spacing="4">
+            <StackLayoutItem Expand="True">
+              <TextBox x:Name="Edit2" ReadOnly="True" />
+            </StackLayoutItem>
+            <Button x:Name="btnRec2Select" Width="80" Click="btnRec2Select_Click" />
+          </StackLayout>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <StackLayout Spacing="2">
+        <Label x:Name="lblKinship" />
+        <TextArea x:Name="txtResult" ReadOnly="True" Size="400, 140" />
+      </StackLayout>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnClose" Style="dlgBtn" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.AssociationEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <TableLayout Spacing="4, 4">
+        <TableRow>
+          <Label x:Name="lblRelation" />
+          <ComboBox x:Name="cmbRelation" Width="280" />
+        </TableRow>
+
+        <TableRow>
+          <Label x:Name="lblPerson" />
+          <StackLayout Orientation="Horizontal" Spacing="4">
+            <StackLayoutItem Expand="True">
+              <TextBox x:Name="txtPerson" ReadOnly="true" />
+            </StackLayoutItem>
+            <Button x:Name="btnPersonAdd" Style="iconBtn" Click="btnPersonAdd_Click" />
+          </StackLayout>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

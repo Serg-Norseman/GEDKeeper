@@ -97,12 +97,6 @@ namespace GKUI.Forms
             fWebsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
             fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
 
-            Title = LangMan.LS(LSID.LSID_MIOrganizer);
-            pageAddresses.Text = LangMan.LS(LSID.LSID_Addresses);
-            pageTelephones.Text = LangMan.LS(LSID.LSID_Telephones);
-            pageMails.Text = LangMan.LS(LSID.LSID_Mails);
-            pageWebs.Text = LangMan.LS(LSID.LSID_Webs);
-
             fController = new OrganizerController(this);
             fController.Init(baseWin);
         }

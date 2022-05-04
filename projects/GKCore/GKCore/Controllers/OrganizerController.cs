@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -88,6 +89,15 @@ namespace GKCore.Controllers
             foreach (GDMTag tag in addr.WebPages) {
                 fView.WebsList.AddItem(null, iName, tag.StringValue);
             }
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_MIOrganizer);
+            GetControl<ITabPage>("pageAddresses").Text = LangMan.LS(LSID.LSID_Addresses);
+            GetControl<ITabPage>("pageTelephones").Text = LangMan.LS(LSID.LSID_Telephones);
+            GetControl<ITabPage>("pageMails").Text = LangMan.LS(LSID.LSID_Mails);
+            GetControl<ITabPage>("pageWebs").Text = LangMan.LS(LSID.LSID_Webs);
         }
     }
 }

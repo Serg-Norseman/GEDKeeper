@@ -20,7 +20,6 @@
 
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -62,9 +61,6 @@ namespace GKUI.Forms
         public RecordInfoDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            Title = LangMan.LS(LSID.LSID_MIFileProperties);
-            //hyperView1.OnLink += HyperViewLink;
 
             fController = new RecordInfoDlgController(this);
             fController.Init(baseWin);

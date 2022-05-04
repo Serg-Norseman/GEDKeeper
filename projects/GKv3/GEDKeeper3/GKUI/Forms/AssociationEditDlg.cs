@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -34,6 +35,14 @@ namespace GKUI.Forms
     public sealed partial class AssociationEditDlg : EditorDialog, IAssociationEditDlg
     {
         #region Design components
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblRelation;
+        private ComboBox cmbRelation;
+        private Label lblPerson;
+        private TextBox txtPerson;
+        private Button btnPersonAdd;
 
         #endregion
 
@@ -61,7 +70,7 @@ namespace GKUI.Forms
 
         public AssociationEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnPersonAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");

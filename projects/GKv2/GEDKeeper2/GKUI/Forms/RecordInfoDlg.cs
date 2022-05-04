@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -54,9 +53,6 @@ namespace GKUI.Forms
         public RecordInfoDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
-
-            Title = LangMan.LS(LSID.LSID_MIFileProperties);
-            hyperView1.OnLink += HyperViewLink;
 
             fController = new RecordInfoDlgController(this);
             fController.Init(baseWin);

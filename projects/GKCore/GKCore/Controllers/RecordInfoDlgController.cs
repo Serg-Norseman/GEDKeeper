@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -69,6 +69,11 @@ namespace GKCore.Controllers
                 GDMRecord record = Base.Context.Tree.XRefIndex_Find(linkName);
                 fView.HyperView.Lines.Assign(fBase.GetRecordContent(record));
             }
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_MIFileProperties);
         }
     }
 }

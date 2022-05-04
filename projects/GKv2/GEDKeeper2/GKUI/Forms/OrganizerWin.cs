@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -86,12 +86,6 @@ namespace GKUI.Forms
             fWebsList.Buttons = EnumSet<SheetButton>.Create();
             fWebsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
             fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
-
-            Title = LangMan.LS(LSID.LSID_MIOrganizer);
-            pageAddresses.Text = LangMan.LS(LSID.LSID_Addresses);
-            pageTelephones.Text = LangMan.LS(LSID.LSID_Telephones);
-            pageMails.Text = LangMan.LS(LSID.LSID_Mails);
-            pageWebs.Text = LangMan.LS(LSID.LSID_Webs);
 
             fController = new OrganizerController(this);
             fController.Init(baseWin);
