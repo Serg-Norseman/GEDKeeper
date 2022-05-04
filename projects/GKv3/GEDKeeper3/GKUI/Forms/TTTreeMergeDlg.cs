@@ -30,6 +30,10 @@ namespace GKUI.Forms
 {
     public sealed partial class TTTreeMergeDlg : CommonDialog, ITreeMergeDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly TreeMergeController fController;
 
         #region View Interface

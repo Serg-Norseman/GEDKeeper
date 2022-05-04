@@ -33,6 +33,10 @@ namespace GKUI.Forms
 {
     public partial class PersonalNameEditDlg: EditorDialog, IPersonalNameEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly PersonalNameEditDlgController fController;
 
         public GDMIndividualRecord Individual

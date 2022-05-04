@@ -32,6 +32,10 @@ namespace GKUI.Forms
 {
     public sealed partial class NameEditDlg : CommonDialog, INameEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly NameEditDlgController fController;
 
         public NameEntry IName

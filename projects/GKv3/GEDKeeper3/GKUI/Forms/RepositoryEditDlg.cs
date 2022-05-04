@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,8 +22,8 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -34,6 +34,18 @@ namespace GKUI.Forms
 {
     public sealed partial class RepositoryEditDlg : EditorDialog, IRepositoryEditDlg
     {
+        #region Design components
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblName;
+        private TextBox txtName;
+        private TabControl tabsData;
+        private TabPage pageNotes;
+        private Button btnAddress;
+
+        #endregion
+
         private readonly RepositoryEditDlgController fController;
 
         private readonly GKSheetList fNotesList;
@@ -60,20 +72,12 @@ namespace GKUI.Forms
 
         public RepositoryEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fNotesList = new GKSheetList(pageNotes);
-
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_Repository);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            lblName.Text = LangMan.LS(LSID.LSID_Title);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
 
             fController = new RepositoryEditDlgController(this);
             fController.Init(baseWin);

@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -76,6 +77,16 @@ namespace GKCore.Controllers
         public void ModifyAddress()
         {
             BaseController.ModifyAddress(fBase, fRepository.Address);
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_Repository);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Title);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
+            GetControl<IButton>("btnAddress").Text = LangMan.LS(LSID.LSID_Address) + @"...";
         }
     }
 }

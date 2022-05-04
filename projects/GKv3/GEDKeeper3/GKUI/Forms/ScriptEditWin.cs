@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.IO;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,6 +34,19 @@ namespace GKUI.Forms
 {
     public sealed partial class ScriptEditWin : CommonDialog, IScriptEditWin
     {
+        #region Design components
+
+        private ToolBar ToolBar1;
+        private ButtonToolItem tbLoadScript;
+        private ButtonToolItem tbRun;
+        private TextArea txtDebugOutput;
+        private TextArea txtScriptText;
+        private ButtonToolItem tbSaveScript;
+        private ButtonToolItem tbNewScript;
+        private Splitter splitContainer1;
+
+        #endregion
+
         private readonly ScriptEditWinController fController;
 
         private string fFileName;
@@ -136,7 +150,7 @@ namespace GKUI.Forms
 
         public ScriptEditWin(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             tbNewScript.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
             tbLoadScript.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");

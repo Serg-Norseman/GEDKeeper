@@ -33,6 +33,10 @@ namespace GKUI.Forms
 {
     public partial class ParentsEditDlg : EditorDialog, IParentsEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly ParentsEditDlgController fController;
 
         public GDMChildToFamilyLink Link

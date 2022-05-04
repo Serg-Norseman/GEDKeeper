@@ -931,4 +931,18 @@ namespace GKUI.Platform
             Control.UpdateContents(columnsChanged);
         }
     }
+
+
+    public sealed class TabPageHandler : BaseControlHandler<TabPage, TabPageHandler>, ITabPage
+    {
+        public TabPageHandler(TabPage control) : base(control)
+        {
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+    }
 }

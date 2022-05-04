@@ -35,6 +35,10 @@ namespace GKUI.Forms
 {
     public sealed partial class TaskEditDlg : EditorDialog, ITaskEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly TaskEditDlgController fController;
 
         private readonly GKSheetList fNotesList;

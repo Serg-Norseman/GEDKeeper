@@ -35,6 +35,10 @@ namespace GKUI.Forms
 {
     public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly LocationEditDlgController fController;
 
         private readonly GKMapBrowser fMapBrowser;

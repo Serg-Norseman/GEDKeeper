@@ -36,6 +36,10 @@ namespace GKUI.Forms
 {
     public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly ResearchEditDlgController fController;
 
         private readonly GKSheetList fTasksList;

@@ -33,6 +33,10 @@ namespace GKUI.Forms
 {
     public sealed partial class AssociationEditDlg : EditorDialog, IAssociationEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly AssociationEditDlgController fController;
 
         public GDMAssociation Association

@@ -69,6 +69,11 @@ namespace GKUI.Platform
                 stack.Spacing = 4;
             });
 
+            Eto.Style.Add<Button>("funcBtn", button => {
+                button.ImagePosition = ButtonImagePosition.Left;
+                button.Size = new Size(160, 26);
+            });
+
             Eto.Style.Add<Button>("dlgBtn", button => {
                 button.ImagePosition = ButtonImagePosition.Left;
                 button.Size = new Size(120, 26);
@@ -340,6 +345,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(TextArea), typeof(TextAreaHandler));
             ControlsManager.RegisterHandlerType(typeof(RichTextArea), typeof(RichTextAreaHandler));
+            ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));

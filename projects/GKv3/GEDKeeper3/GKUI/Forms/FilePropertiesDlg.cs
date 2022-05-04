@@ -32,6 +32,10 @@ namespace GKUI.Forms
 {
     public sealed partial class FilePropertiesDlg : CommonDialog, IFilePropertiesDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly FilePropertiesDlgController fController;
 
         public IBaseWindow Base

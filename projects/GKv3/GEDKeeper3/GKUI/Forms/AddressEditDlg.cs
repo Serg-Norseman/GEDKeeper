@@ -35,6 +35,10 @@ namespace GKUI.Forms
 {
     public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly AddressEditDlgController fController;
 
         private readonly GKSheetList fPhonesList;

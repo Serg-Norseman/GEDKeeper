@@ -36,6 +36,10 @@ namespace GKUI.Forms
 {
     public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
     {
+        #region Design components
+
+        #endregion
+
         private readonly StatisticsWinController fController;
 
         private readonly ZGraphControl fGraph;

@@ -35,6 +35,10 @@ namespace GKUI.Forms
 {
     public sealed partial class SourceEditDlg : EditorDialog, ISourceEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly SourceEditDlgController fController;
 
         private readonly GKSheetList fNotesList;

@@ -320,6 +320,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(ToolStripMenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripComboBox), typeof(ToolStripComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(RichTextBox), typeof(RichTextBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));

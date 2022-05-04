@@ -30,6 +30,10 @@ namespace GKUI.Forms
 {
     public partial class DayTipsDlg : CommonDialog, IDayTipsDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly DayTipsDlgController fController;
 
         public bool ShowTipsChecked

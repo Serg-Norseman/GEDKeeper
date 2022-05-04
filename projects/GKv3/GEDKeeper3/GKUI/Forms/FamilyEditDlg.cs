@@ -35,6 +35,10 @@ namespace GKUI.Forms
 {
     public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly FamilyEditDlgController fController;
 
         private readonly GKSheetList fChildrenList;

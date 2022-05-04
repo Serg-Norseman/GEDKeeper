@@ -30,6 +30,10 @@ namespace GKUI.Forms
 {
     public sealed partial class RelationshipCalculatorDlg : CommonDialog, IRelationshipCalculatorDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly RelationshipCalculatorDlgController fController;
 
         public IBaseWindow Base

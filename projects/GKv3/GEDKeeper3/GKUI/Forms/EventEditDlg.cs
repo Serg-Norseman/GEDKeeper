@@ -36,6 +36,10 @@ namespace GKUI.Forms
 {
     public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly EventEditDlgController fController;
 
         private readonly GKSheetList fNotesList;

@@ -29,6 +29,10 @@ namespace GKUI.Forms
 {
     public sealed partial class AboutDlg : CommonDialog, IAboutDlg
     {
+        #region Design components
+
+        #endregion
+
         public AboutDlg()
         {
             InitializeComponent();

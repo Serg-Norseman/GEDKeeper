@@ -34,6 +34,10 @@ namespace GKUI.Forms
 {
     public sealed partial class NoteEditDlgEx : EditorDialog, INoteEditDlgEx
     {
+        #region Design components
+
+        #endregion
+
         private readonly NoteEditDlgController fController;
 
         public GDMNoteRecord NoteRecord

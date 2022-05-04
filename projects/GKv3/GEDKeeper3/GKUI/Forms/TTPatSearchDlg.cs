@@ -30,6 +30,10 @@ namespace GKUI.Forms
 {
     public sealed partial class TTPatSearchDlg : CommonDialog, IPatriarchsSearchDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly PatriarchsSearchController fController;
 
         private GKListView ListPatriarchs;

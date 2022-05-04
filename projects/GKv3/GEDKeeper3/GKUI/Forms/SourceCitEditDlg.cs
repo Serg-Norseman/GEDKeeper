@@ -34,6 +34,10 @@ namespace GKUI.Forms
 {
     public sealed partial class SourceCitEditDlg : EditorDialog, ISourceCitEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly SourceCitEditDlgController fController;
 
         public GDMSourceCitation SourceCitation

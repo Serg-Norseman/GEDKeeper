@@ -27,6 +27,10 @@ namespace GKUI.Forms
 {
     public sealed partial class SexCheckDlg : CommonDialog, ISexCheckDlg
     {
+        #region Design components
+
+        #endregion
+
         public SexCheckDlg()
         {
             InitializeComponent();

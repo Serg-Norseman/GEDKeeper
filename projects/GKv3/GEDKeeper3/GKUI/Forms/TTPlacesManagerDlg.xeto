@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.TTPlacesManagerDlg"
+  AbortButton="{x:Reference btnClose}" Maximizable="False" Minimizable="False" ShowInTaskbar="False">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsTools">
+        <TabPage x:Name="pagePlaceManage">
+
+          <TableLayout Style="paddedTable8">
+
+            <TableRow ScaleHeight="True">
+              <Panel x:Name="panPlacesContainer" Size="800, 360" />
+            </TableRow>
+
+            <TableRow>
+              <StackLayout Spacing="8" Orientation="Horizontal">
+                <StackLayoutItem HorizontalAlignment="Left">
+                  <Button x:Name="btnAnalysePlaces" Style="funcBtn" Click="btnAnalysePlaces_Click" />
+                </StackLayoutItem>
+                <StackLayoutItem Expand="True" />
+                <StackLayoutItem HorizontalAlignment="Right">
+                  <Button x:Name="btnIntoList" Style="funcBtn" Click="btnIntoList_Click" />
+                </StackLayoutItem>
+              </StackLayout>
+            </TableRow>
+
+          </TableLayout>
+
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnClose" Style="dlgBtn" Click="btnClose_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

@@ -26,7 +26,6 @@ using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
-using GKCore.Maps;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKMap;
@@ -39,6 +38,10 @@ namespace GKUI.Forms
 {
     public sealed partial class MapsViewerWin : CommonWindow, IMapsViewerWin
     {
+        #region Design components
+
+        #endregion
+
         private readonly MapsViewerWinController fController;
 
         private readonly GKMapBrowser fMapBrowser;

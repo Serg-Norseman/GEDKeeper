@@ -32,6 +32,10 @@ namespace GKUI.Forms
 {
     public sealed partial class TTFamilyGroupsDlg : CommonDialog, IFragmentSearchDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly FragmentSearchController fController;
 
         #region View Interface

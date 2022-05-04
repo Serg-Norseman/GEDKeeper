@@ -30,6 +30,10 @@ namespace GKUI.Forms
 {
     public sealed partial class TTTreeCompareDlg : CommonDialog, ITreeCompareDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly TreeCompareController fController;
 
         #region View Interface

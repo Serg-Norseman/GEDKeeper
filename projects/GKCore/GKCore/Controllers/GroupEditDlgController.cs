@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -89,6 +90,17 @@ namespace GKCore.Controllers
                 fBase.SelectRecordByXRef(pointer.XRef);
                 fView.Close();
             }
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_WinGroupEdit);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Title);
+            GetControl<ITabPage>("pageMembers").Text = LangMan.LS(LSID.LSID_Members);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
+            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.LSID_RPMultimedia);
         }
     }
 }

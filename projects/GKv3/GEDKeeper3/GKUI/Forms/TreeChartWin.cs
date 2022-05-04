@@ -37,6 +37,10 @@ namespace GKUI.Forms
 {
     public partial class TreeChartWin : PrintableForm, ITreeChartWin
     {
+        #region Design components
+
+        #endregion
+
         private readonly TreeChartWinController fController;
 
         private readonly IBaseWindow fBase;

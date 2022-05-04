@@ -31,6 +31,10 @@ namespace GKUI.Forms
 {
     public sealed partial class TTTreeCheckDlg : CommonDialog, ITreeCheckDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly TreeCheckController fController;
 
         private GKListView ListChecks;

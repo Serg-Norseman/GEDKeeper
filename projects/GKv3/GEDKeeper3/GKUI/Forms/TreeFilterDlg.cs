@@ -34,6 +34,10 @@ namespace GKUI.Forms
 {
     public sealed partial class TreeFilterDlg : EditorDialog, ITreeFilterDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly TreeFilterDlgController fController;
 
         private readonly GKSheetList fPersonsList;

@@ -35,6 +35,10 @@ namespace GKUI.Forms
 {
     public sealed partial class CommunicationEditDlg : EditorDialog, ICommunicationEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly CommunicationEditDlgController fController;
 
         private readonly GKSheetList fNotesList;

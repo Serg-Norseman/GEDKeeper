@@ -30,6 +30,10 @@ namespace GKUI.Forms
 {
     public sealed partial class TTTreeSplitDlg : CommonDialog, ITreeSplitDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly TreeSplitController fController;
 
         #region View Interface

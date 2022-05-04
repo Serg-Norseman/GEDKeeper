@@ -34,6 +34,10 @@ namespace GKUI.Forms
 {
     public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
     {
+        #region Design components
+
+        #endregion
+
         private readonly MediaEditDlgController fController;
 
         private readonly GKSheetList fNotesList;

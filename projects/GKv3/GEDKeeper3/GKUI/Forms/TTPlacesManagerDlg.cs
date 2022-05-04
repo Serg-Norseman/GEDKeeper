@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,8 @@
  */
 
 using System;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -29,6 +31,17 @@ namespace GKUI.Forms
 {
     public sealed partial class TTPlacesManagerDlg : CommonDialog, IPlacesManagerDlg
     {
+        #region Design components
+
+        private TabControl tabsTools;
+        private Button btnClose;
+        private TabPage pagePlaceManage;
+        private Panel panPlacesContainer;
+        private Button btnAnalysePlaces;
+        private Button btnIntoList;
+
+        #endregion
+
         private readonly PlacesManagerController fController;
 
         private GKListView ListPlaces;
@@ -44,7 +57,7 @@ namespace GKUI.Forms
 
         public TTPlacesManagerDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
@@ -92,6 +105,11 @@ namespace GKUI.Forms
         private void ListPlaces_DblClick(object sender, EventArgs e)
         {
             fController.CreateLocationRecord(ListPlaces.GetSelectedItems());
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
