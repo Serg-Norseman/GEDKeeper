@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.TTPatSearchDlg"
+  AbortButton="{x:Reference btnClose}" Maximizable="False" Minimizable="False" ShowInTaskbar="False">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsTools">
+        <TabPage x:Name="pagePatSearch">
+
+          <TableLayout Style="paddedTable8">
+
+            <TableRow ScaleHeight="True">
+              <Panel x:Name="panPatriarchsContainer" Size="880, 400" />
+            </TableRow>
+
+            <TableRow>
+              <StackLayout Spacing="4" Orientation="Horizontal">
+                <Label x:Name="lblMinGenerations" />
+                <NumericUpDown x:Name="edMinGens" Value="2" />
+                <CheckBox x:Name="chkWithoutDates" />
+                <StackLayoutItem Expand="True" />
+                <Button x:Name="btnSetPatriarch" Click="btnSetPatriarch_Click" />
+                <Button x:Name="btnPatSearch" Click="btnPatSearch_Click" />
+                <Button x:Name="btnPatriarchsDiagram" Click="btnPatriarchsDiagram_Click" />
+              </StackLayout>
+            </TableRow>
+
+          </TableLayout>
+
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnClose" Style="dlgBtn" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

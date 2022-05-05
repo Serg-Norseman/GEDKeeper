@@ -92,7 +92,7 @@ namespace GKUI.Platform
             {
                 UIHelper.ConvertFileDialogFilters(ofd, filter);
 
-                if (filterIndex > 0) ofd.CurrentFilterIndex = filterIndex;
+                if (filterIndex > 0) ofd.CurrentFilterIndex = filterIndex - 1;
             }
 
             ofd.MultiSelect = multiSelect;
@@ -134,7 +134,7 @@ namespace GKUI.Platform
             {
                 UIHelper.ConvertFileDialogFilters(sfd, filter);
 
-                if (filterIndex > 0) sfd.CurrentFilterIndex = filterIndex;
+                if (filterIndex > 0) sfd.CurrentFilterIndex = filterIndex - 1;
             }
 
             if (!string.IsNullOrEmpty(suggestedFileName))

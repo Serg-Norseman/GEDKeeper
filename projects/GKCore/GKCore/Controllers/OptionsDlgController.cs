@@ -595,5 +595,9 @@ namespace GKCore.Controllers
             // plugins
             AcceptPlugins();
         }
+
+        public override void SetLocale()
+        {
+        }
     }
 }

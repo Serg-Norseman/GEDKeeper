@@ -45,5 +45,9 @@ namespace GKCore.Controllers
                 fView.CircleChart.SaveSnapshot(fileName);
             }
         }
+
+        public override void SetLocale()
+        {
+        }
     }
 }

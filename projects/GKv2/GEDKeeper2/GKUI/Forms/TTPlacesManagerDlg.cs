@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -55,8 +55,6 @@ namespace GKUI.Forms
             ListPlaces.DoubleClick += ListPlaces_DblClick;
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
-
-            SetLocale();
         }
 
         protected override void Dispose(bool disposing)
@@ -65,15 +63,6 @@ namespace GKUI.Forms
                 fController.Clear();
             }
             base.Dispose(disposing);
-        }
-
-        public void SetLocale()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_9);
-            pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
-            btnAnalysePlaces.Text = LangMan.LS(LSID.LSID_Analyze);
         }
 
         private void btnAnalysePlaces_Click(object sender, EventArgs e)

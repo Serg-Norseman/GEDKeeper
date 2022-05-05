@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -230,6 +230,10 @@ namespace GKCore.Controllers
                 LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap),
                 LangMan.LS(LSID.LSID_Value),
                 fCurrentValues);
+        }
+
+        public override void SetLocale()
+        {
         }
     }
 }

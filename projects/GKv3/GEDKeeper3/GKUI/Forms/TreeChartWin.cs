@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -38,6 +39,49 @@ namespace GKUI.Forms
     public partial class TreeChartWin : PrintableForm, ITreeChartWin
     {
         #region Design components
+
+        private ToolBar ToolBar1;
+        private ButtonToolItem tbImageSave;
+        private ContextMenu MenuPerson;
+        private ButtonMenuItem miEdit;
+        private ButtonMenuItem miSpouseAdd;
+        private ButtonMenuItem miSonAdd;
+        private ButtonMenuItem miDaughterAdd;
+        private ButtonMenuItem miFamilyAdd;
+        private ButtonMenuItem miDelete;
+        private ButtonMenuItem miRebuildKinships;
+        private ButtonToolItem tbModes;
+        private ContextMenu MenuModes;
+        private RadioMenuItem miModeBoth;
+        private RadioMenuItem miModeAncestors;
+        private RadioMenuItem miModeDescendants;
+        private CheckMenuItem miTraceSelected;
+        private CheckMenuItem miTraceKinships;
+        private CheckMenuItem miCertaintyIndex;
+        private ButtonMenuItem miRebuildTree;
+        private ButtonMenuItem miFillColor;
+        private ButtonMenuItem miFillImage;
+        private ButtonMenuItem miFatherAdd;
+        private ButtonMenuItem miMotherAdd;
+        private ButtonMenuItem miSelectColor;
+        private ButtonMenuItem miGoToRecord;
+        private ButtonMenuItem miGoToPrimaryBranch;
+
+        private ButtonToolItem tbDocPrint;
+        private ButtonToolItem tbDocPreview;
+        private ButtonToolItem tbFilter;
+        private ButtonToolItem tbPrev;
+        private ButtonToolItem tbNext;
+        private ButtonToolItem tbOptions;
+
+        private ButtonToolItem tbGensCommon;
+        private ContextMenu MenuGensCommon;
+        private ButtonToolItem tbGensAncestors;
+        private ContextMenu MenuGensAncestors;
+        private ButtonToolItem tbGensDescendants;
+        private ContextMenu MenuGensDescendants;
+        private ButtonToolItem tbBorders;
+        private ContextMenu MenuBorders;
 
         #endregion
 
@@ -121,6 +165,115 @@ namespace GKUI.Forms
             if (disposing) {
             }
             base.Dispose(disposing);
+        }
+
+        private void InitializeComponent()
+        {
+            XamlReader.Load(this);
+
+            MenuGensCommon = new ContextMenu();
+            MenuGensAncestors = new ContextMenu();
+            MenuGensDescendants = new ContextMenu();
+            MenuBorders = new ContextMenu();
+
+            miModeBoth = new RadioMenuItem();
+            miModeBoth.Click += miModeItem_Click;
+
+            miModeAncestors = new RadioMenuItem();
+            miModeAncestors.Click += miModeItem_Click;
+
+            miModeDescendants = new RadioMenuItem();
+            miModeDescendants.Click += miModeItem_Click;
+
+            miTraceSelected = new CheckMenuItem();
+            miTraceSelected.Click += miTraceSelected_Click;
+
+            miTraceKinships = new CheckMenuItem();
+            miTraceKinships.Click += miTraceKinships_Click;
+
+            miCertaintyIndex = new CheckMenuItem();
+            miCertaintyIndex.Click += miCertaintyIndex_Click;
+
+            miFillColor = new ButtonMenuItem();
+            miFillColor.Click += miFillColor_Click;
+
+            miFillImage = new ButtonMenuItem();
+            miFillImage.Click += miFillImage_Click;
+
+            MenuModes = new ContextMenu();
+            MenuModes.Items.AddRange(new MenuItem[] {
+                                         miModeBoth,
+                                         miModeAncestors,
+                                         miModeDescendants,
+                                         new SeparatorMenuItem(),
+                                         miTraceSelected,
+                                         miTraceKinships,
+                                         miCertaintyIndex,
+                                         new SeparatorMenuItem(),
+                                         miFillColor,
+                                         miFillImage,
+                                         new SeparatorMenuItem()});
+
+            miEdit = new ButtonMenuItem();
+            miEdit.Click += miEdit_Click;
+
+            miFatherAdd = new ButtonMenuItem();
+            miFatherAdd.Click += miFatherAdd_Click;
+
+            miMotherAdd = new ButtonMenuItem();
+            miMotherAdd.Click += miMotherAdd_Click;
+
+            miFamilyAdd = new ButtonMenuItem();
+            miFamilyAdd.Click += miFamilyAdd_Click;
+
+            miSpouseAdd = new ButtonMenuItem();
+            miSpouseAdd.Click += miSpouseAdd_Click;
+
+            miSonAdd = new ButtonMenuItem();
+            miSonAdd.Click += miSonAdd_Click;
+
+            miDaughterAdd = new ButtonMenuItem();
+            miDaughterAdd.Click += miDaughterAdd_Click;
+
+            miDelete = new ButtonMenuItem();
+            miDelete.Click += miDelete_Click;
+
+            miRebuildTree = new ButtonMenuItem();
+            miRebuildTree.Click += miRebuildTree_Click;
+
+            miRebuildKinships = new ButtonMenuItem();
+            miRebuildKinships.Click += miRebuildKinships_Click;
+
+            miSelectColor = new ButtonMenuItem();
+            miSelectColor.Click += miSelectColor_Click;
+
+            miGoToRecord = new ButtonMenuItem();
+            miGoToRecord.Click += miGoToRecord_Click;
+
+            miGoToPrimaryBranch = new ButtonMenuItem();
+            miGoToPrimaryBranch.Click += miGoToPrimaryBranch_Click;
+
+            MenuPerson = new ContextMenu();
+            MenuPerson.Items.AddRange(new MenuItem[] {
+                                          miEdit,
+                                          new SeparatorMenuItem(),
+                                          miFatherAdd,
+                                          miMotherAdd,
+                                          miFamilyAdd,
+                                          miSpouseAdd,
+                                          miSonAdd,
+                                          miDaughterAdd,
+                                          new SeparatorMenuItem(),
+                                          miDelete,
+                                          new SeparatorMenuItem(),
+                                          miGoToRecord,
+                                          miGoToPrimaryBranch,
+                                          new SeparatorMenuItem(),
+                                          miRebuildTree,
+                                          miRebuildKinships,
+                                          new SeparatorMenuItem(),
+                                          miSelectColor});
+            MenuPerson.Opening += MenuPerson_Opening;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -467,6 +620,31 @@ namespace GKUI.Forms
         private void miGoToPrimaryBranch_Click(object sender, EventArgs e)
         {
             fController.GoToPrimaryBranch();
+        }
+
+        private void tbGensCommon_Click(object sender, EventArgs e)
+        {
+            MenuGensCommon.Show(this);
+        }
+
+        private void tbGensAncestors_Click(object sender, EventArgs e)
+        {
+            MenuGensAncestors.Show(this);
+        }
+
+        private void tbGensDescendants_Click(object sender, EventArgs e)
+        {
+            MenuGensDescendants.Show(this);
+        }
+
+        private void tbModes_Click(object sender, EventArgs e)
+        {
+            MenuModes.Show(this);
+        }
+
+        private void tbBorders_Click(object sender, EventArgs e)
+        {
+            MenuBorders.Show(this);
         }
 
         #endregion

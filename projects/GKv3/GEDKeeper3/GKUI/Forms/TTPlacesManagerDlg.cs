@@ -71,8 +71,6 @@ namespace GKUI.Forms
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
             panPlacesContainer.Content = ListPlaces;
-
-            SetLocale();
         }
 
         protected override void Dispose(bool disposing)
@@ -81,15 +79,6 @@ namespace GKUI.Forms
                 fController.Clear();
             }
             base.Dispose(disposing);
-        }
-
-        public void SetLocale()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_9);
-            pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
-            btnAnalysePlaces.Text = LangMan.LS(LSID.LSID_Analyze);
         }
 
         private void btnAnalysePlaces_Click(object sender, EventArgs e)
@@ -105,11 +94,6 @@ namespace GKUI.Forms
         private void ListPlaces_DblClick(object sender, EventArgs e)
         {
             fController.CreateLocationRecord(ListPlaces.GetSelectedItems());
-        }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            Close();
         }
     }
 }

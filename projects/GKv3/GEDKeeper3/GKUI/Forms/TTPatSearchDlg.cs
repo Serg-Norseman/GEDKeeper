@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,8 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -31,6 +33,17 @@ namespace GKUI.Forms
     public sealed partial class TTPatSearchDlg : CommonDialog, IPatriarchsSearchDlg
     {
         #region Design components
+
+        private TabControl tabsTools;
+        private Button btnClose;
+        private TabPage pagePatSearch;
+        private Button btnPatSearch;
+        private Panel panPatriarchsContainer;
+        private Label lblMinGenerations;
+        private NumericUpDown edMinGens;
+        private Button btnSetPatriarch;
+        private Button btnPatriarchsDiagram;
+        private CheckBox chkWithoutDates;
 
         #endregion
 
@@ -59,7 +72,7 @@ namespace GKUI.Forms
 
         public TTPatSearchDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 

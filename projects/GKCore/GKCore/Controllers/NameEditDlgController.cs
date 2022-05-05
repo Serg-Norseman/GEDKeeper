@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -80,6 +80,10 @@ namespace GKCore.Controllers
                 fView.FPatr.Text = fIName.F_Patronymic;
                 fView.MPatr.Text = fIName.M_Patronymic;
             }
+        }
+
+        public override void SetLocale()
+        {
         }
     }
 }

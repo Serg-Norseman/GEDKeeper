@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -81,6 +81,10 @@ namespace GKCore.Controllers
         {
             fTempPerson = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
             fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
+        }
+
+        public override void SetLocale()
+        {
         }
     }
 }

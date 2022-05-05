@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,8 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
-using GKCore;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -31,6 +32,16 @@ namespace GKUI.Forms
     public sealed partial class TTTreeMergeDlg : CommonDialog, ITreeMergeDlg
     {
         #region Design components
+
+        private TabControl tabsTools;
+        private Button btnClose;
+        private TabPage pageTreeMerge;
+        private Label lblMasterBase;
+        private TextBox edMasterBase;
+        private Label lblOtherBase;
+        private TextBox edUpdateBase;
+        private Button btnTreeMerge;
+        private TextArea mSyncRes;
 
         #endregion
 
@@ -52,25 +63,12 @@ namespace GKUI.Forms
 
         public TTTreeMergeDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new TreeMergeController(this);
             fController.Init(baseWin);
-
-            SetLocale();
-        }
-
-        public void SetLocale()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_2);
-            pageTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnTreeMerge.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            lblMasterBase.Text = LangMan.LS(LSID.LSID_MasterBase);
-            lblOtherBase.Text = LangMan.LS(LSID.LSID_OtherBase);
-            edMasterBase.Text = LangMan.LS(LSID.LSID_CurrentBase);
         }
 
         private void btnTreeMerge_Click(object sender, EventArgs e)

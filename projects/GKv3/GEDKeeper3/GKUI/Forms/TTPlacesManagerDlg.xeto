@@ -17,14 +17,10 @@
             </TableRow>
 
             <TableRow>
-              <StackLayout Spacing="8" Orientation="Horizontal">
-                <StackLayoutItem HorizontalAlignment="Left">
-                  <Button x:Name="btnAnalysePlaces" Style="funcBtn" Click="btnAnalysePlaces_Click" />
-                </StackLayoutItem>
+              <StackLayout Spacing="4" Orientation="Horizontal">
+                <Button x:Name="btnAnalysePlaces" Click="btnAnalysePlaces_Click" />
                 <StackLayoutItem Expand="True" />
-                <StackLayoutItem HorizontalAlignment="Right">
-                  <Button x:Name="btnIntoList" Style="funcBtn" Click="btnIntoList_Click" />
-                </StackLayoutItem>
+                <Button x:Name="btnIntoList" Click="btnIntoList_Click" />
               </StackLayout>
             </TableRow>
 
@@ -38,7 +34,7 @@
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnClose" Style="dlgBtn" Click="btnClose_Click" />
+          <Button x:Name="btnClose" Style="dlgBtn" Click="CancelClickHandler" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

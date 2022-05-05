@@ -286,5 +286,9 @@ namespace GKCore.Controllers
                 fView.TreeBox.SelectBy(pers, true);
             }
         }
+
+        public override void SetLocale()
+        {
+        }
     }
 }

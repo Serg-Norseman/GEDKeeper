@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Interfaces;
 
@@ -29,6 +30,20 @@ namespace GKUI.Forms
 {
     public sealed partial class ProgressDlg : Form
     {
+        #region Design components
+
+        private Label lblTimePassed;
+        private Label lblTimeRemain;
+        private Label lblPassedVal;
+        private Label lblRemainVal;
+        private Label lblTimeTotal;
+        private Label lblTotalVal;
+        private ProgressBar ProgressBar1;
+        private Label lblTitle;
+        private Button btnCancel;
+
+        #endregion
+
         private readonly ManualResetEvent fCancelEvent;
         private bool fRequiresClose;
         private DateTime fStartTime;
@@ -36,7 +51,7 @@ namespace GKUI.Forms
 
         public ProgressDlg()
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             fCancelEvent = new ManualResetEvent(false);
 
