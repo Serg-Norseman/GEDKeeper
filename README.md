@@ -86,6 +86,7 @@ If your problem or idea is not addressed yet, please open a new issue.
 
 - [Contributing guide](/CONTRIBUTING.md)
 - [Coding style guide](/CODINGSTYLE.md)
+- [Build](/BUILD.md)
 - [Testing](/TESTING.md)
 - [FAQ](/FAQ.md)
 - [Changelog](/CHANGELOG.md)
