@@ -76,15 +76,6 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Association);
-            lblRelation.Text = LangMan.LS(LSID.LSID_Relation);
-            lblPerson.Text = LangMan.LS(LSID.LSID_Person);
-
-            SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
-
             fController = new AssociationEditDlgController(this);
             fController.Init(baseWin);
         }

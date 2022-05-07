@@ -945,4 +945,18 @@ namespace GKUI.Platform
             set { Control.Text = value; }
         }
     }
+
+
+    public sealed class GroupBoxHandler : BaseControlHandler<GroupBox, GroupBoxHandler>, IGroupBox
+    {
+        public GroupBoxHandler(GroupBox control) : base(control)
+        {
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+    }
 }

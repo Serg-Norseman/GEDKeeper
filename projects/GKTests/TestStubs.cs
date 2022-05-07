@@ -53,6 +53,7 @@ namespace GKTests.Stubs
         public void SetLocale() {}
         public void Show(bool showInTaskbar) {}
         public object GetControl(string controlName) { return null; }
+        public void SetToolTip(object component, string toolTip) { }
     }
 
     internal class ProgressStub : IProgressController

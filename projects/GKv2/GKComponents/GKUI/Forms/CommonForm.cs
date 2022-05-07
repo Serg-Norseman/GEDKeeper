@@ -62,7 +62,7 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        public void SetToolTip(Component component, string toolTip)
+        public void SetToolTip(object component, string toolTip)
         {
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
                 if (component is Control) {

@@ -60,5 +60,11 @@ namespace GKCore.MVP
         {
             // dummy
         }
+
+        protected virtual void SetToolTip(string componentName, string toolTip)
+        {
+            var ctl = fView.GetControl(componentName);
+            fView.SetToolTip(ctl, toolTip);
+        }
     }
 }

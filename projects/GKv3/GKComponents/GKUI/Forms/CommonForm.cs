@@ -49,7 +49,7 @@ namespace GKUI.Forms
             fControlsManager = new ControlsManager(this);
         }
 
-        public void SetToolTip(BindableWidget component, string toolTip)
+        public void SetToolTip(object component, string toolTip)
         {
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
                 if (component is Control) {
@@ -138,7 +138,7 @@ namespace GKUI.Forms
             fControlsManager = new ControlsManager(this);
         }
 
-        public void SetToolTip(BindableWidget component, string toolTip)
+        public void SetToolTip(object component, string toolTip)
         {
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
                 if (component is Control) {

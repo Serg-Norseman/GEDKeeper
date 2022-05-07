@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.FamilyEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <GroupBox x:Name="GroupBox1">
+        <TableLayout Style="paddedTable">
+          <TableRow>
+            <Label x:Name="lblHusband" />
+            <StackLayout Orientation="Horizontal" Spacing="4">
+              <StackLayoutItem Expand="True">
+                <TextBox x:Name="txtHusband" Enabled="False" />
+              </StackLayoutItem>
+              <Button x:Name="btnHusbandAdd" Style="iconBtn" Enabled="False" Click="btnHusbandAddClick" />
+              <Button x:Name="btnHusbandDelete" Style="iconBtn" Enabled="False" Click="btnHusbandDeleteClick" />
+              <Button x:Name="btnHusbandSel" Style="iconBtn" Enabled="False" Click="btnHusbandSelClick" />
+            </StackLayout>
+          </TableRow>
+          <TableRow>
+            <Label x:Name="lblWife" />
+            <StackLayout Orientation="Horizontal" Spacing="4">
+              <StackLayoutItem Expand="True">
+                <TextBox x:Name="txtWife" Enabled="False" />
+              </StackLayoutItem>
+              <Button x:Name="btnWifeAdd" Style="iconBtn" Enabled="False" Click="btnWifeAddClick" />
+              <Button x:Name="btnWifeDelete" Style="iconBtn" Enabled="False" Click="btnWifeDeleteClick" />
+              <Button x:Name="btnWifeSel" Style="iconBtn" Enabled="False" Click="btnWifeSelClick" />
+            </StackLayout>
+          </TableRow>
+          <TableRow>
+            <Label x:Name="lblStatus" />
+            <ComboBox x:Name="cmbMarriageStatus" ReadOnly="True" />
+          </TableRow>
+        </TableLayout>
+      </GroupBox>
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsData" Size="600, 260">
+        <TabPage x:Name="pageChilds" />
+        <TabPage x:Name="pageEvents" />
+        <TabPage x:Name="pageNotes" />
+        <TabPage x:Name="pageMultimedia" />
+        <TabPage x:Name="pageSources" />
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem HorizontalAlignment="Left">
+          <Label x:Name="lblRestriction" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Left">
+          <ComboBox x:Name="cmbRestriction" ReadOnly="True" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
+        </StackLayoutItem>
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

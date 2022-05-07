@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -129,27 +129,6 @@ namespace GKUI.Forms
 
             fSourcesList = new GKSheetList(pageSources);
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GroupBox1.Text = LangMan.LS(LSID.LSID_Family);
-            lblHusband.Text = LangMan.LS(LSID.LSID_Husband);
-            lblWife.Text = LangMan.LS(LSID.LSID_Wife);
-            lblStatus.Text = LangMan.LS(LSID.LSID_Status);
-            pageChilds.Text = LangMan.LS(LSID.LSID_Childs);
-            pageEvents.Text = LangMan.LS(LSID.LSID_Events);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
-
-            SetToolTip(btnHusbandAdd, LangMan.LS(LSID.LSID_HusbandAddTip));
-            SetToolTip(btnHusbandDelete, LangMan.LS(LSID.LSID_HusbandDeleteTip));
-            SetToolTip(btnHusbandSel, LangMan.LS(LSID.LSID_HusbandSelTip));
-            SetToolTip(btnWifeAdd, LangMan.LS(LSID.LSID_WifeAddTip));
-            SetToolTip(btnWifeDelete, LangMan.LS(LSID.LSID_WifeDeleteTip));
-            SetToolTip(btnWifeSel, LangMan.LS(LSID.LSID_WifeSelTip));
 
             fController = new FamilyEditDlgController(this);
             fController.Init(baseWin);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -112,20 +112,6 @@ namespace GKUI.Forms
             fWebsList.SetControlName("fWebsList"); // for purpose of tests
             fWebsList.OnModify += ListModify;
             fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Address);
-            pageCommon.Text = LangMan.LS(LSID.LSID_Address);
-            lblCountry.Text = LangMan.LS(LSID.LSID_AdCountry);
-            lblState.Text = LangMan.LS(LSID.LSID_AdState);
-            lblCity.Text = LangMan.LS(LSID.LSID_AdCity);
-            lblPostalCode.Text = LangMan.LS(LSID.LSID_AdPostalCode);
-            lblAddress.Text = LangMan.LS(LSID.LSID_Address);
-            pagePhones.Text = LangMan.LS(LSID.LSID_Telephones);
-            pageEmails.Text = LangMan.LS(LSID.LSID_EMails);
-            pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);

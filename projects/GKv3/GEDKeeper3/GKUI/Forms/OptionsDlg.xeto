@@ -201,13 +201,13 @@
                           <StackLayout Orientation="Horizontal" Spacing="4">
                             <StackLayoutItem HorizontalAlignment="Left">
                               <Scrollable x:Name="panMaleColor" Border="Bezel">
-                                <Label x:Name="lblMaleColor" Size="100, 26" TextAlignment="Center" VerticalAlignment="Center" MouseDown="PanColor_Click" />
+                                <Label x:Name="lblMaleColor" Size="100, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
                               </Scrollable>
                             </StackLayoutItem>
                             <StackLayoutItem Expand="True" />
                             <StackLayoutItem HorizontalAlignment="Right">
                               <Scrollable x:Name="panFemaleColor" Border="Bezel">
-                                <Label x:Name="lblFemaleColor" Size="100, 26" TextAlignment="Center" VerticalAlignment="Center" MouseDown="PanColor_Click" />
+                                <Label x:Name="lblFemaleColor" Size="100, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
                               </Scrollable>
                             </StackLayoutItem>
                           </StackLayout>
@@ -215,25 +215,25 @@
 
                         <TableRow>
                           <Scrollable x:Name="panUnkSexColor" Border="Bezel">
-                            <Label x:Name="lblUnkSexColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" MouseDown="PanColor_Click" />
+                            <Label x:Name="lblUnkSexColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
                           </Scrollable>
                         </TableRow>
 
                         <TableRow>
                           <Scrollable x:Name="panUnHusbandColor" Border="Bezel">
-                            <Label x:Name="lblUnHusbandColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" MouseDown="PanColor_Click" />
+                            <Label x:Name="lblUnHusbandColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
                           </Scrollable>
                         </TableRow>
 
                         <TableRow>
                           <Scrollable x:Name="panUnWifeColor" Border="Bezel">
-                            <Label x:Name="lblUnWifeColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" MouseDown="PanColor_Click" />
+                            <Label x:Name="lblUnWifeColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
                           </Scrollable>
                         </TableRow>
 
                         <TableRow>
                           <Scrollable x:Name="panDefFont" Border="Bezel">
-                            <Label x:Name="lblChartFont" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" MouseDown="panDefFont_Click" />
+                            <Label x:Name="lblChartFont" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="panDefFont_Click" />
                           </Scrollable>
                         </TableRow>
 
