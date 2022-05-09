@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.AddressEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsData" Size="600, 260">
+        <TabPage x:Name="pageCommon">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <Label x:Name="lblCountry" />
+              <TextBox x:Name="txtCountry" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblState" />
+              <TextBox x:Name="txtState" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblCity" />
+              <TextBox x:Name="txtCity" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblPostalCode" />
+              <TextBox x:Name="txtPostalCode" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblAddress" />
+              <TextBox x:Name="txtAddress" />
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pagePhones" />
+        <TabPage x:Name="pageEmails" />
+        <TabPage x:Name="pageWebPages" />
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

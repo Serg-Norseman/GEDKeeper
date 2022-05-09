@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.TTTreeSplitDlg"
+  AbortButton="{x:Reference btnClose}" Maximizable="False" Minimizable="False" ShowInTaskbar="False">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsTools">
+        <TabPage x:Name="pageTreeSplit">
+
+          <TableLayout Style="paddedTable8">
+
+            <TableRow ScaleHeight="True">
+              <TableLayout Spacing="4, 4">
+                <TableRow>
+                  <TableCell ScaleWidth="True">
+                    <comcom:GKListView x:Name="ListSelected" Size="380, 280" />
+                  </TableCell>
+                  <TableCell ScaleWidth="True">
+                    <comcom:GKListView x:Name="ListSkipped" Size="380, 280" />
+                  </TableCell>
+                </TableRow>
+              </TableLayout>
+            </TableRow>
+
+            <TableRow>
+              <StackLayout Spacing="8" Orientation="Horizontal">
+                <StackLayoutItem HorizontalAlignment="Left">
+                  <Button x:Name="btnSelectAll" Style="dlgBtn" Click="btnSelectAll_Click" />
+                </StackLayoutItem>
+                <StackLayoutItem HorizontalAlignment="Left">
+                  <Button x:Name="btnSelectFamily" Style="dlgBtn" Click="btnSelectFamily_Click" />
+                </StackLayoutItem>
+                <StackLayoutItem HorizontalAlignment="Left">
+                  <Button x:Name="btnSelectAncestors" Style="dlgBtn" Click="btnSelectAncestors_Click" />
+                </StackLayoutItem>
+                <StackLayoutItem HorizontalAlignment="Left">
+                  <Button x:Name="btnSelectDescendants" Style="dlgBtn" Click="btnSelectDescendants_Click" />
+                </StackLayoutItem>
+                <StackLayoutItem Expand="True" />
+                <StackLayoutItem HorizontalAlignment="Right">
+                  <Button x:Name="btnSave" Style="dlgBtn" Click="btnSave_Click" />
+                </StackLayoutItem>
+                <StackLayoutItem HorizontalAlignment="Right">
+                  <Button x:Name="btnDelete" Style="dlgBtn" Click="btnDelete_Click" />
+                </StackLayoutItem>
+              </StackLayout>
+            </TableRow>
+
+          </TableLayout>
+
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnClose" Style="dlgBtn" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

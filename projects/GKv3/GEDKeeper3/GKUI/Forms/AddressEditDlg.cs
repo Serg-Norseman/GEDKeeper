@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -36,6 +37,24 @@ namespace GKUI.Forms
     public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
     {
         #region Design components
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabControl tabsData;
+        private TabPage pagePhones;
+        private TabPage pageEmails;
+        private TabPage pageCommon;
+        private TabPage pageWebPages;
+        private Label lblCountry;
+        private Label lblState;
+        private Label lblCity;
+        private Label lblPostalCode;
+        private Label lblAddress;
+        private TextBox txtCountry;
+        private TextBox txtState;
+        private TextBox txtCity;
+        private TextBox txtPostalCode;
+        private TextBox txtAddress;
 
         #endregion
 
@@ -98,7 +117,7 @@ namespace GKUI.Forms
 
         public AddressEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");

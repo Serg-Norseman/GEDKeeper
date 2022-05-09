@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,6 +34,22 @@ namespace GKUI.Forms
     public sealed partial class FilePropertiesDlg : CommonDialog, IFilePropertiesDlg
     {
         #region Design components
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabPage pageAuthor;
+        private Label lblName;
+        private Label lblAddress;
+        private Label lblTelephone;
+        private TextBox txtName;
+        private TextBox txtTel;
+        private TextArea txtAddress;
+        private TabPage pageOther;
+        private TabControl tabsData;
+        private GKListView lvRecordStats;
+        private Button btnLangEdit;
+        private TextBox txtLanguage;
+        private Label lblLanguage;
 
         #endregion
 
@@ -74,7 +91,7 @@ namespace GKUI.Forms
 
         public FilePropertiesDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
@@ -89,8 +106,10 @@ namespace GKUI.Forms
             lblAddress.Text = LangMan.LS(LSID.LSID_Address);
             lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
             pageOther.Text = LangMan.LS(LSID.LSID_Other);
-            lvRecordStats.SetColumnCaption(0, LangMan.LS(LSID.LSID_RM_Records));
             lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+
+            lvRecordStats.AddColumn(LangMan.LS(LSID.LSID_RM_Records), 300);
+            lvRecordStats.AddColumn("Count", 100 /*, HorizontalAlignment.Right*/);
 
             fController = new FilePropertiesDlgController(this);
             fController.Init(baseWin);

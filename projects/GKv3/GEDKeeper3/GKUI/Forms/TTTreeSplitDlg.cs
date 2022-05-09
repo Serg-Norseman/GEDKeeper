@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,8 @@
  */
 
 using System;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -31,6 +33,18 @@ namespace GKUI.Forms
     public sealed partial class TTTreeSplitDlg : CommonDialog, ITreeSplitDlg
     {
         #region Design components
+
+        private TabControl tabsTools;
+        private Button btnClose;
+        private TabPage pageTreeSplit;
+        private Button btnSelectAll;
+        private GKListView ListSelected;
+        private GKListView ListSkipped;
+        private Button btnSelectFamily;
+        private Button btnSelectAncestors;
+        private Button btnSelectDescendants;
+        private Button btnDelete;
+        private Button btnSave;
 
         #endregion
 
@@ -52,7 +66,7 @@ namespace GKUI.Forms
 
         public TTTreeSplitDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 

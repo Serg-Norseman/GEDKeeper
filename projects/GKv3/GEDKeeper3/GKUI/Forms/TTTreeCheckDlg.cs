@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,8 @@
 
 using System;
 using System.Text;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -32,6 +34,17 @@ namespace GKUI.Forms
     public sealed partial class TTTreeCheckDlg : CommonDialog, ITreeCheckDlg
     {
         #region Design components
+
+        private TabControl tabsTools;
+        private Button btnClose;
+        private TabPage pageTreeCheck;
+        private Button btnAnalyseBase;
+        private Button btnBaseRepair;
+        private Panel panProblemsContainer;
+        private ContextMenu contextMenu;
+        private ButtonMenuItem miDetails;
+        private ButtonMenuItem miGoToRecord;
+        private ButtonMenuItem miCopyXRef;
 
         #endregion
 
@@ -66,6 +79,31 @@ namespace GKUI.Forms
             ListChecks.ContextMenu = contextMenu;
 
             SetLocale();
+        }
+
+        private void InitializeComponent()
+        {
+            XamlReader.Load(this);
+
+            miDetails = new ButtonMenuItem();
+            miDetails.Text = "miDetails";
+            miDetails.Click += miDetails_Click;
+
+            miGoToRecord = new ButtonMenuItem();
+            miGoToRecord.Text = "miGoToRecord";
+            miGoToRecord.Click += miGoToRecord_Click;
+
+            miCopyXRef = new ButtonMenuItem();
+            miCopyXRef.Text = "miCopyXRef";
+            miCopyXRef.Click += miCopyXRef_Click;
+
+            contextMenu = new ContextMenu();
+            contextMenu.Items.AddRange(new MenuItem[] {
+                miDetails,
+                miGoToRecord,
+                miCopyXRef
+            });
+            contextMenu.Opening += contextMenu_Opening;
         }
 
         public void SetLocale()

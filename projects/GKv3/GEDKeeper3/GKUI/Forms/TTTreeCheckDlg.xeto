@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.TTTreeCheckDlg"
+  AbortButton="{x:Reference btnClose}" Maximizable="False" Minimizable="False" ShowInTaskbar="False">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsTools">
+        <TabPage x:Name="pageTreeCheck">
+          <TableLayout Style="paddedTable8">
+            <TableRow ScaleHeight="True">
+              <Panel x:Name="panProblemsContainer" Size="880, 400" />
+            </TableRow>
+
+            <TableRow>
+              <StackLayout Spacing="4" Orientation="Horizontal">
+                <Button x:Name="btnAnalyseBase" Style="dlgBtn" Click="btnAnalyseBase_Click" />
+                <StackLayoutItem Expand="True" />
+                <Button x:Name="btnBaseRepair" Style="dlgBtn" Click="btnBaseRepair_Click" />
+              </StackLayout>
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnClose" Style="dlgBtn" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

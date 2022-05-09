@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -33,6 +34,17 @@ namespace GKUI.Forms
     public sealed partial class TTFamilyGroupsDlg : CommonDialog, IFragmentSearchDlg
     {
         #region Design components
+
+        private TabControl tabsTools;
+        private Button btnClose;
+        private TabPage pageFamilyGroups;
+        private TreeView tvGroups;
+        private GKUI.Components.LogChart gkLogChart1;
+        private Button btnAnalyseGroups;
+        private ContextMenu contextMenu;
+        private ButtonMenuItem miDetails;
+        private ButtonMenuItem miGoToRecord;
+        private ButtonMenuItem miCopyXRef;
 
         #endregion
 
@@ -64,6 +76,29 @@ namespace GKUI.Forms
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
 
             SetLocale();
+        }
+
+        private void InitializeComponent()
+        {
+            XamlReader.Load(this);
+
+            miDetails = new ButtonMenuItem();
+            miDetails.Click += miDetails_Click;
+
+            miGoToRecord = new ButtonMenuItem();
+            miGoToRecord.Click += miGoToRecord_Click;
+
+            miCopyXRef = new ButtonMenuItem();
+            miCopyXRef.Click += miCopyXRef_Click;
+
+            contextMenu = new ContextMenu();
+            contextMenu.Items.AddRange(new MenuItem[] {
+                miDetails,
+                miGoToRecord,
+                miCopyXRef
+            });
+            contextMenu.Opening += contextMenu_Opening;
+            tvGroups.ContextMenu = contextMenu;
         }
 
         public void SetLocale()

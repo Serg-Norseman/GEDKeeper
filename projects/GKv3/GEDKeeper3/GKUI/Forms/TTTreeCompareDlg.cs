@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,8 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -31,6 +33,19 @@ namespace GKUI.Forms
     public sealed partial class TTTreeCompareDlg : CommonDialog, ITreeCompareDlg
     {
         #region Design components
+
+        private TabControl tabsTools;
+        private TabPage pageTreeCompare;
+        private TextArea ListCompare;
+        private Button btnClose;
+        private Label lblFile;
+        private TextBox txtCompareFile;
+        private Button btnFileChoose;
+        private RadioButton radAnalysis;
+        private Button btnMatch;
+        private RadioButton radMathExternal;
+        private RadioButton radMatchInternal;
+        private GroupBox grpMatchType;
 
         #endregion
 
@@ -52,7 +67,7 @@ namespace GKUI.Forms
 
         public TTTreeCompareDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
