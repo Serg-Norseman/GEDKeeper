@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -36,6 +37,22 @@ namespace GKUI.Forms
     public sealed partial class TaskEditDlg : EditorDialog, ITaskEditDlg
     {
         #region Design components
+
+        private GroupBox GroupBox1;
+        private TabControl tabsData;
+        private TabPage pageNotes;
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblPriority;
+        private ComboBox txtPriority;
+        private Label lblStartDate;
+        private GKDateBox txtStartDate;
+        private GKDateBox txtStopDate;
+        private Label lblStopDate;
+        private Label lblGoal;
+        private ComboBox cmbGoalType;
+        private TextBox txtGoal;
+        private Button btnGoalSelect;
 
         #endregion
 
@@ -90,7 +107,10 @@ namespace GKUI.Forms
 
         public TaskEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
+
+            txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
+            txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
 
             btnGoalSelect.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");

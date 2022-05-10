@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -36,6 +37,24 @@ namespace GKUI.Forms
     public sealed partial class SourceEditDlg : EditorDialog, ISourceEditDlg
     {
         #region Design components
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabControl tabsData;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageRepositories;
+        private TabPage pageText;
+        private TextArea txtText;
+        private TabPage pageCommon;
+        private Label lblShortTitle;
+        private TextBox txtShortTitle;
+        private Label lblAuthor;
+        private TextArea txtAuthor;
+        private Label lblTitle;
+        private TextArea txtTitle;
+        private Label lblPublication;
+        private TextArea txtPublication;
 
         #endregion
 
@@ -97,7 +116,7 @@ namespace GKUI.Forms
 
         public SourceEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.MediaEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsData" Size="600, 260">
+        <TabPage x:Name="pageCommon">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <Label x:Name="lblName" />
+              <TextBox x:Name="txtName" TextChanged="edName_TextChanged" />
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblFile" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <StackLayoutItem Expand="True">
+                  <TextBox x:Name="txtFile" ReadOnly="True" />
+                </StackLayoutItem>
+                <Button x:Name="btnFileSelect" Click="btnFileSelect_Click">...</Button>
+              </StackLayout>
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblType" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <ComboBox x:Name="cmbMediaType" ReadOnly="True" />
+                <Label x:Name="lblStoreType" />
+                <StackLayoutItem Expand="True">
+                  <ComboBox x:Name="cmbStoreType" ReadOnly="True" SelectedIndexChanged="cmbStoreType_SelectedIndexChanged" />
+                </StackLayoutItem>
+              </StackLayout>
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pageNotes" />
+        <TabPage x:Name="pageSources" />
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem HorizontalAlignment="Left">
+          <Button x:Name="btnView" Style="dlgBtn" Click="btnView_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

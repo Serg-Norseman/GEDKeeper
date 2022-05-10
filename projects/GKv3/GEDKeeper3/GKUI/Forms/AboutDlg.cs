@@ -20,6 +20,7 @@
 
 using System;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.MVP.Views;
 using GKCore.Options;
@@ -31,11 +32,20 @@ namespace GKUI.Forms
     {
         #region Design components
 
+        private Label lblProduct;
+        private Label lblVersion;
+        private Label lblCopyright;
+        private LinkButton lblMail;
+        private Button btnClose;
+        private LinkButton lblProjSite;
+        private LinkButton lblForum;
+        private LinkButton lblChannel;
+
         #endregion
 
         public AboutDlg()
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -37,6 +38,27 @@ namespace GKUI.Forms
     public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
     {
         #region Design components
+
+        private GroupBox GroupBox1;
+        private TextBox txtName;
+        private Label lblName;
+        private TabControl tabsData;
+        private TabPage pageNotes;
+        private TabPage pageTasks;
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblPriority;
+        private ComboBox cmbPriority;
+        private TabPage pageCommunications;
+        private Label lblStatus;
+        private ComboBox cmbStatus;
+        private Label lblStartDate;
+        private GKDateBox txtStartDate;
+        private Label lblStopDate;
+        private GKDateBox txtStopDate;
+        private Label lblPercent;
+        private NumericUpDown nudPercent;
+        private TabPage pageGroups;
 
         #endregion
 
@@ -110,7 +132,10 @@ namespace GKUI.Forms
 
         public ResearchEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
+
+            txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
+            txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");

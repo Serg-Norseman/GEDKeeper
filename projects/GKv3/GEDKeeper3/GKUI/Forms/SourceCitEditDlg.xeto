@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.SourceCitEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsData" Size="440, 200">
+        <TabPage x:Name="pageCommon">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <Label x:Name="lblSource" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <StackLayoutItem Expand="True">
+                  <ComboBox x:Name="cmbSource" KeyDown="cbSource_KeyDown" KeyUp="cbSource_KeyUp" Width="400" />
+                </StackLayoutItem>
+                <Button x:Name="btnSourceAdd" Style="iconBtn" Click="btnSourceAdd_Click" />
+              </StackLayout>
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblPage" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <TextBox x:Name="txtPage" />
+                <Label x:Name="lblCertainty" />
+                <StackLayoutItem Expand="True">
+                  <ComboBox x:Name="txtCertainty" ReadOnly="True" />
+                </StackLayoutItem>
+              </StackLayout>
+            </TableRow>
+
+            <TableRow ScaleHeight="True" />
+          </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pageOther">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <comcom:GKDateControl x:Name="dateCtl" />
+            </TableRow>
+
+            <TableRow ScaleHeight="True">
+              <TextBox x:Name="txtText" />
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>
