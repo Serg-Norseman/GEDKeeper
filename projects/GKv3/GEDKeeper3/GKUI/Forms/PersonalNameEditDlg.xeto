@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.PersonalNameEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TableLayout Spacing="4, 4">
+        <TableRow>
+          <StackLayout Style="labtexStack">
+            <Label x:Name="lblSurname" />
+            <TextBox x:Name="txtSurname" Width="180" KeyDown="edName_KeyDown" LostFocus="txtXName_Leave" />
+          </StackLayout>
+
+          <StackLayout Style="labtexStack">
+            <Label x:Name="lblSurnamePrefix" />
+            <TextBox x:Name="txtSurnamePrefix" Width="180" KeyDown="edName_KeyDown" />
+          </StackLayout>
+        </TableRow>
+
+        <TableRow>
+          <StackLayout Style="labtexStack">
+            <Label x:Name="lblMarriedSurname" />
+            <TextBox x:Name="txtMarriedSurname" Width="180" KeyDown="edName_KeyDown" LostFocus="txtXName_Leave" />
+          </StackLayout>
+
+          <StackLayout Style="labtexStack">
+            <Label x:Name="lblNamePrefix" />
+            <TextBox x:Name="txtNamePrefix" Width="180" KeyDown="edName_KeyDown" />
+          </StackLayout>
+        </TableRow>
+
+        <TableRow>
+          <StackLayout Style="labtexStack">
+            <Label x:Name="lblName" />
+            <TextBox x:Name="txtName" Width="180" KeyDown="edName_KeyDown" LostFocus="txtXName_Leave" />
+          </StackLayout>
+
+          <StackLayout Style="labtexStack">
+            <Label x:Name="lblNameSuffix" />
+            <TextBox x:Name="txtNameSuffix" Width="180" KeyDown="edName_KeyDown" />
+          </StackLayout>
+        </TableRow>
+
+        <TableRow>
+          <StackLayout Style="labtexStack">
+            <Label x:Name="lblPatronymic" />
+            <TextBox x:Name="txtPatronymic" Width="180" KeyDown="edName_KeyDown" LostFocus="txtXName_Leave" />
+          </StackLayout>
+
+          <StackLayout Style="labtexStack">
+            <Label x:Name="lblNickname" />
+            <TextBox x:Name="txtNickname" Width="180" KeyDown="edName_KeyDown" />
+          </StackLayout>
+        </TableRow>
+
+        <TableRow>
+          <StackLayout Style="labtexStack">
+            <Label x:Name="lblType" />
+            <ComboBox x:Name="cmbNameType" Width="180" ReadOnly="true" />
+          </StackLayout>
+        </TableRow>
+
+        <TableRow>
+          <StackLayout Style="labtexStack">
+            <Label x:Name="lblLanguage" />
+            <ComboBox x:Name="cmbLanguage" Width="180" ReadOnly="true" SelectedIndexChanged="cmbLanguage_SelectedIndexChanged" />
+          </StackLayout>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

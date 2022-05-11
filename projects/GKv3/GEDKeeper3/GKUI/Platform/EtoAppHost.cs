@@ -69,6 +69,12 @@ namespace GKUI.Platform
                 stack.Spacing = 4;
             });
 
+            Eto.Style.Add<StackLayout>("labtexStack", stack => {
+                stack.Orientation = Orientation.Vertical;
+                stack.Padding = new Padding(0);
+                stack.Spacing = 2;
+            });
+
             Eto.Style.Add<Button>("funcBtn", button => {
                 button.ImagePosition = ButtonImagePosition.Left;
                 button.Size = new Size(160, 26);

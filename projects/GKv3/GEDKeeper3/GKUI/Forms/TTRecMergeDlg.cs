@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,8 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -32,6 +34,28 @@ namespace GKUI.Forms
     public sealed partial class TTRecMergeDlg : CommonDialog, IRecMergeDlg
     {
         #region Design components
+
+        private TabControl PageControl1;
+        private TabPage pageMerge;
+        private Button btnAutoSearch;
+        private Button btnSkip;
+        private ProgressBar ProgressBar1;
+        private TabPage pageMergeOptions;
+        private GroupBox rgMode;
+        private GroupBox grpSearchPersons;
+        private Label lblNameAccuracy;
+        private Label lblYearInaccuracy;
+        private NumericUpDown edNameAccuracy;
+        private NumericUpDown edYearInaccuracy;
+        private CheckBox chkBirthYear;
+        private RadioButton radPersons;
+        private RadioButton radNotes;
+        private RadioButton radFamilies;
+        private RadioButton radSources;
+        private CheckBox chkBookmarkMerged;
+        private GroupBox grpMergeOther;
+        private GKUI.Components.GKMergeControl MergeControl;
+        private CheckBox chkIndistinctMatching;
 
         #endregion
 
@@ -78,7 +102,7 @@ namespace GKUI.Forms
 
         public TTRecMergeDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             fController = new RecMergeController(this);
             fController.Init(baseWin);

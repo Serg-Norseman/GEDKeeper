@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.StatisticsWin"
+  ShowInTaskbar="True" Load="StatisticsWin_Load" KeyDown="StatisticsWin_KeyDown">
+
+  <TableLayout>
+    <TableRow>
+      <GroupBox x:Name="grpSummary">
+        <comcom:GKListView x:Name="lvSummary" />
+      </GroupBox>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout x:Name="ToolBar1" Orientation="Horizontal" Spacing="4">
+        <ComboBox x:Name="cbType" Width="200" ReadOnly="true" SelectedIndexChanged="cbType_SelectedIndexChanged" />
+        <Button x:Name="tbExcelExport" Style="iconBtn" Click="tbExcelExport_Click" />
+      </StackLayout>
+    </TableRow>
+
+    <TableRow ScaleHeight="true">
+      <Panel x:Name="panDataPlaceholder" Size="800, 260" />
+    </TableRow>
+  </TableLayout>
+
+</Form>

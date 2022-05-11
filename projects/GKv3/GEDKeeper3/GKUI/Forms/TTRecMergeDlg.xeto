@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:gkcom="clr-namespace:GKUI.Components"
+  x:Class="GKUI.Forms.TTRecMergeDlg"
+  Maximizable="False" Minimizable="False" ShowInTaskbar="False">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="PageControl1">
+        <TabPage x:Name="pageMerge">
+
+          <TableLayout Style="paddedTable8">
+
+            <TableRow ScaleHeight="True">
+              <gkcom:GKMergeControl x:Name="MergeControl" Bookmark="false" MergeMode="rtNone" />
+            </TableRow>
+
+            <TableRow>
+              <StackLayout Spacing="8" Orientation="Horizontal">
+                <StackLayoutItem HorizontalAlignment="Left">
+                  <Button x:Name="btnAutoSearch" Style="funcBtn" Click="btnSearch_Click" />
+                </StackLayoutItem>
+                <StackLayoutItem HorizontalAlignment="Left">
+                  <Button x:Name="btnSkip" Style="funcBtn" Click="btnSkip_Click" />
+                </StackLayoutItem>
+                <StackLayoutItem Expand="True">
+                  <ProgressBar x:Name="ProgressBar1" Height="26" />
+                </StackLayoutItem>
+              </StackLayout>
+            </TableRow>
+
+          </TableLayout>
+
+        </TabPage>
+
+        <TabPage x:Name="pageMergeOptions">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <GroupBox x:Name="rgMode">
+                <StackLayout Style="vertListStack">
+                  <RadioButton x:Name="radPersons" Checked="true" Click="radMergeMode_Click" />
+                  <RadioButton x:Name="radFamilies" Click="radMergeMode_Click" />
+                  <RadioButton x:Name="radNotes" Click="radMergeMode_Click" />
+                  <RadioButton x:Name="radSources" Click="radMergeMode_Click" />
+                </StackLayout>
+              </GroupBox>
+
+              <GroupBox x:Name="grpSearchPersons">
+                <TableLayout Style="paddedTable">
+                  <TableRow>
+                    <CheckBox x:Name="chkIndistinctMatching" />
+                  </TableRow>
+
+                  <TableRow>
+                    <Label x:Name="lblNameAccuracy" />
+                    <NumericUpDown x:Name="edNameAccuracy" Value="90" />
+                  </TableRow>
+
+                  <TableRow>
+                    <CheckBox x:Name="chkBirthYear" />
+                  </TableRow>
+
+                  <TableRow>
+                    <Label x:Name="lblYearInaccuracy" />
+                    <NumericUpDown x:Name="edYearInaccuracy" Value="3" />
+                  </TableRow>
+                </TableLayout>
+              </GroupBox>
+            </TableRow>
+
+            <TableRow>
+              <GroupBox x:Name="grpMergeOther" Padding="8">
+                <CheckBox x:Name="chkBookmarkMerged" CheckedChanged="chkBookmarkMerged_CheckedChanged" />
+              </GroupBox>
+            </TableRow>
+
+            <TableRow ScaleHeight="True" />
+          </TableLayout>
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

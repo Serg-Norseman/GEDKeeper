@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using BSLib.Design;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -37,6 +38,14 @@ namespace GKUI.Forms
     public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
     {
         #region Design components
+
+        private GroupBox grpSummary;
+        private Panel panDataPlaceholder;
+        private /*ToolBar*/Panel ToolBar1;
+        private /*ButtonToolItem*/ComboBox cbType;
+        private GKListView lvSummary;
+        private /*ButtonToolItem*/Button tbExcelExport;
+        //private ContextMenu cmStatTypes;
 
         #endregion
 
@@ -71,7 +80,7 @@ namespace GKUI.Forms
 
         public StatisticsWin(IBaseWindow baseWin, List<GDMRecord> selectedRecords)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             tbExcelExport.Image = UIHelper.LoadResourceImage("Resources.btn_excel.gif");
 

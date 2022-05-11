@@ -22,6 +22,7 @@ using System;
 using System.Globalization;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -39,6 +40,41 @@ namespace GKUI.Forms
     public sealed partial class MapsViewerWin : CommonWindow, IMapsViewerWin
     {
         #region Design components
+
+        private TabControl PageControl1;
+        private TabPage pagePlaces;
+        private TreeView tvPlaces;
+        private GroupBox grpSelection;
+        private ComboBox cmbPersons;
+        private CheckBox chkResidence;
+        private CheckBox chkDeath;
+        private CheckBox chkBirth;
+        private Button btnSelectPlaces;
+        private RadioButton radTotal;
+        private RadioButton radSelected;
+        private CheckBox chkLinesVisible;
+        private ToolBar ToolBar1;
+        private ButtonToolItem tbLoadPlaces;
+        private ButtonToolItem tbSaveSnapshot;
+        private ButtonToolItem tbProviders;
+        private ContextMenu MenuProviders;
+        private ButtonToolItem tbClear;
+        private ButtonToolItem tbZoomCenter;
+        private TabPage pageCoordinates;
+        private Panel Panel1;
+        private GroupBox gbCoords;
+        private Label lblPlace;
+        private TextBox txtPlace;
+        private Label lblLng;
+        private Label lblLat;
+        private TextBox txtLng;
+        private TextBox txtLat;
+        private Button btnSearch;
+        private Button btnAddRouteMarker;
+        private Button btnAddPolygonMarker;
+        private Slider trkZoom;
+        private Button btnZoomUp;
+        private Button btnZoomDown;
 
         #endregion
 
@@ -176,6 +212,13 @@ namespace GKUI.Forms
             }
         }
 
+        private void InitializeComponent()
+        {
+            XamlReader.Load(this);
+
+            MenuProviders = new ContextMenu();
+        }
+
         private void PopulateContextMenus()
         {
             var providers = GMapProviders.List;
@@ -242,6 +285,11 @@ namespace GKUI.Forms
         private void tbZoomCenter_Click(object sender, EventArgs e)
         {
             fMapBrowser.MapControl.ZoomAndCenterMarkers("objects");
+        }
+
+        private void tbProviders_Click(object sender, EventArgs e)
+        {
+            MenuProviders.Show(this);
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
