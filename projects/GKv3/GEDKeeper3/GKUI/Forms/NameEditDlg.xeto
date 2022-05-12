@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.NameEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <StackLayout Orientation="Horizontal" Spacing="4">
+        <Label x:Name="lblName" />
+        <TextBox x:Name="txtName" Width="260" />
+      </StackLayout>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Orientation="Horizontal" Spacing="4">
+        <Label x:Name="lblSex" />
+        <ComboBox x:Name="cmbSex" ReadOnly="True" />
+      </StackLayout>
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <GroupBox x:Name="grpPatronymics">
+        <TableLayout Style="paddedTable">
+          <TableRow>
+            <Label x:Name="lblFemale" />
+            <TextBox x:Name="txtFPatr" KeyDown="edName_KeyDown" />
+          </TableRow>
+
+          <TableRow>
+            <Label x:Name="lblMale" />
+            <TextBox x:Name="txtMPatr" KeyDown="edName_KeyDown" />
+          </TableRow>
+        </TableLayout>
+      </GroupBox>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

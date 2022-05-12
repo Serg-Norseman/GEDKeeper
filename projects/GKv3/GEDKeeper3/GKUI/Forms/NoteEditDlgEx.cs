@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -35,6 +36,27 @@ namespace GKUI.Forms
     public sealed partial class NoteEditDlgEx : EditorDialog, INoteEditDlgEx
     {
         #region Design components
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private RichTextArea txtNote;
+        private HyperView hyperView1;
+        private ButtonToolItem cmbSizes;
+        private ContextMenu menuSizes;
+        private ButtonMenuItem miClear;
+        private ButtonMenuItem miExport;
+        private ButtonMenuItem miImport;
+        private ButtonMenuItem miSelectAndCopy;
+        private ButtonToolItem ddbtnActions;
+        private ContextMenu menuActions;
+        private ButtonToolItem btnURL;
+        private ButtonToolItem btnUnderline;
+        private ButtonToolItem btnItalic;
+        private ButtonToolItem btnBold;
+        private TabPage pagePreview;
+        private ToolBar toolStrip1;
+        private TabPage pageEditor;
+        private TabControl tabControl1;
 
         #endregion
 
@@ -78,6 +100,38 @@ namespace GKUI.Forms
 
             fController = new NoteEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void InitializeComponent()
+        {
+            XamlReader.Load(this);
+
+            //btnBold.Font=new Font("Tahoma", 9F, FontStyle.Bold);
+            //btnItalic.Font=new Font("Tahoma", 9F, FontStyle.Italic);
+            //btnUnderline.Font=new Font("Tahoma", 9F, FontStyle.None, FontDecoration.Underline);
+            //btnURL.Font=new Font("Tahoma", 9F, FontStyle.None, FontDecoration.Underline);
+            //btnURL.TextColor=Colors.Blue;
+
+            menuSizes = new ContextMenu();
+
+            miSelectAndCopy = new ButtonMenuItem();
+            miSelectAndCopy.Click += miSelectAndCopy_Click;
+
+            miImport = new ButtonMenuItem();
+            miImport.Click += miImport_Click;
+
+            miExport = new ButtonMenuItem();
+            miExport.Click += miExport_Click;
+
+            miClear = new ButtonMenuItem();
+            miClear.Click += miClear_Click;
+
+            menuActions = new ContextMenu();
+            menuActions.Items.AddRange(new MenuItem[] {
+                                           miSelectAndCopy,
+                                           miImport,
+                                           miExport,
+                                           miClear});
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -148,6 +202,17 @@ namespace GKUI.Forms
         private void miClear_Click(object sender, EventArgs e)
         {
             fController.Clear();
+        }
+
+        private void cmbSizes_Click(object sender, EventArgs e)
+        {
+            //cmbSizes.SelectedIndexChanged=cmbSizes_SelectedIndexChanged;
+            menuSizes.Show(this);
+        }
+
+        private void ddbtnActions_Click(object sender, EventArgs e)
+        {
+            menuActions.Show(this);
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)

@@ -78,9 +78,9 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
             btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
             btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
             SetLocale();
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -34,6 +35,34 @@ namespace GKUI.Forms
     public partial class ParentsEditDlg : EditorDialog, IParentsEditDlg
     {
         #region Design components
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private GroupBox GroupBox1;
+        private Label lblChildName;
+        private TextBox txtChildName;
+        private Label lblLinkageType;
+        private ComboBox cmbLinkageType;
+        private Panel panCtlParents;
+        private Label lblParents;
+        private TextBox txtFather;
+        private TextBox txtMother;
+        //private Button btnParentsAdd;
+        private Button btnParentsEdit;
+        //private Button btnParentsDelete;
+        private Button btnFatherAdd;
+        private Button btnFatherDelete;
+        //private Button btnFatherSel;
+        private Button btnMotherAdd;
+        private Button btnMotherDelete;
+        //private Button btnMotherSel;
+
+        /*
+                <Button x:Name="btnParentsAdd" Style="iconBtn" Click="btnParentsAdd_Click" />
+                <Button x:Name="btnParentsDelete" Style="iconBtn" Click="btnParentsDelete_Click" />
+                <Button x:Name="btnFatherSel" Style="iconBtn" Click="btnFatherSel_Click" />
+                <Button x:Name="btnMotherSel" Style="iconBtn" Click="btnMotherSel_Click" />
+         */
 
         #endregion
 
@@ -77,15 +106,15 @@ namespace GKUI.Forms
 
         public ParentsEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
             btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
             btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
             SetLocale();
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.SexCheckDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}" Topmost="True">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <TextBox x:Name="txtName" ReadOnly="True" />
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <GroupBox x:Name="grpSex">
+        <StackLayout Style="vertListStack">
+          <comcom:RadioButtonEx x:Name="rbNone" GroupIndex="1" Text="?" />
+          <comcom:RadioButtonEx x:Name="rbMale" GroupIndex="1" />
+          <comcom:RadioButtonEx x:Name="rbFemale" GroupIndex="1" />
+        </StackLayout>
+      </GroupBox>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

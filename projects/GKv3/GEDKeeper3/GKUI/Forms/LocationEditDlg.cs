@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -36,6 +37,26 @@ namespace GKUI.Forms
     public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
     {
         #region Design components
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabControl tabsData;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageCommon;
+        private Label lblName;
+        private TextBox txtName;
+        private Label lblLatitude;
+        private TextBox txtLatitude;
+        private Label lblLongitude;
+        private TextBox txtLongitude;
+        private GroupBox grpSearch;
+        private GKListView ListGeoCoords;
+        private Button btnSearch;
+        private Button btnSelect;
+        private Button btnSelectName;
+        private Button btnShowOnMap;
+        private Panel panMap;
 
         #endregion
 
@@ -92,7 +113,7 @@ namespace GKUI.Forms
 
         public LocationEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
@@ -114,9 +135,9 @@ namespace GKUI.Forms
             lblName.Text = LangMan.LS(LSID.LSID_Title);
             lblLatitude.Text = LangMan.LS(LSID.LSID_Latitude);
             lblLongitude.Text = LangMan.LS(LSID.LSID_Longitude);
-            ListGeoCoords.SetColumnCaption(0, LangMan.LS(LSID.LSID_Title));
-            ListGeoCoords.SetColumnCaption(1, LangMan.LS(LSID.LSID_Latitude));
-            ListGeoCoords.SetColumnCaption(2, LangMan.LS(LSID.LSID_Longitude));
+            ListGeoCoords.AddColumn(LangMan.LS(LSID.LSID_Title), 200);
+            ListGeoCoords.AddColumn(LangMan.LS(LSID.LSID_Latitude), 80);
+            ListGeoCoords.AddColumn(LangMan.LS(LSID.LSID_Longitude), 80);
             btnShowOnMap.Text = LangMan.LS(LSID.LSID_Show);
             grpSearch.Text = LangMan.LS(LSID.LSID_SearchCoords);
             btnSearch.Text = LangMan.LS(LSID.LSID_Search);

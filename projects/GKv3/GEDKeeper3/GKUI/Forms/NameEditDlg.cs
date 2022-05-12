@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
@@ -33,6 +34,18 @@ namespace GKUI.Forms
     public sealed partial class NameEditDlg : CommonDialog, INameEditDlg
     {
         #region Design components
+
+        private Label lblName;
+        private TextBox txtName;
+        private Label lblSex;
+        private ComboBox cmbSex;
+        private Button btnAccept;
+        private Button btnCancel;
+        private GroupBox grpPatronymics;
+        private Label lblFemale;
+        private TextBox txtFPatr;
+        private Label lblMale;
+        private TextBox txtMPatr;
 
         #endregion
 
@@ -70,7 +83,7 @@ namespace GKUI.Forms
 
         public NameEditDlg()
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");

@@ -701,6 +701,7 @@ namespace GKCore.Options
             fShortKinshipForm = ini.ReadBool("Common", "ShortKinshipForm", false);
             fSurnameFirstInOrder = ini.ReadBool("Common", "SurnameFirstInOrder", true);
             SurnameInCapitals = ini.ReadBool("Common", "SurnameInCapitals", false);
+            fUseExtendedNotes = ini.ReadBool("Common", "UseExtendedNotes", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -827,6 +828,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "ShortKinshipForm", fShortKinshipForm);
             ini.WriteBool("Common", "SurnameFirstInOrder", fSurnameFirstInOrder);
             ini.WriteBool("Common", "SurnameInCapitals", SurnameInCapitals);
+            ini.WriteBool("Common", "UseExtendedNotes", fUseExtendedNotes);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

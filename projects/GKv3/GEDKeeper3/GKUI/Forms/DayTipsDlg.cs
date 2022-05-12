@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,8 @@
 using System;
 using BSLib;
 using BSLib.Design.MVP.Controls;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
@@ -31,6 +33,13 @@ namespace GKUI.Forms
     public partial class DayTipsDlg : CommonDialog, IDayTipsDlg
     {
         #region Design components
+
+        private CheckBox chkShow;
+        private Button btnNextTip;
+        private Button btnClose;
+        private Label lblTitle;
+        private Eto.Forms.ImageView Image1;
+        private TextBox txtTip;
 
         #endregion
 
@@ -63,7 +72,7 @@ namespace GKUI.Forms
 
         public DayTipsDlg()
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             Image1.Image = UIHelper.LoadResourceImage("Resources.image_tips_light.png");
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");

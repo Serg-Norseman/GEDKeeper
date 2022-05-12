@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.LocationEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsData" Size="600, 260">
+        <TabPage x:Name="pageCommon">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <TableLayout Spacing="2, 2">
+                <TableRow>
+                  <Label x:Name="lblName" />
+                  <Label x:Name="lblLatitude" />
+                  <Label x:Name="lblLongitude" />
+                </TableRow>
+
+                <TableRow>
+                  <TableCell ScaleWidth="True">
+                    <TextBox x:Name="txtName" TextChanged="EditName_TextChanged" KeyDown="EditName_KeyDown" />
+                  </TableCell>
+                  <TextBox x:Name="txtLatitude" Width="100" />
+                  <TextBox x:Name="txtLongitude" Width="100" />
+                </TableRow>
+              </TableLayout>
+            </TableRow>
+
+            <TableRow ScaleHeight="True">
+              <GroupBox x:Name="grpSearch">
+                <TableLayout Style="paddedTable">
+                  <TableRow>
+                    <TableLayout>
+                      <TableRow>
+                        <TableCell ScaleWidth="True">
+                          <comcom:GKListView x:Name="ListGeoCoords" MouseDown="ListGeoCoords_Click" />
+                        </TableCell>
+
+                        <StackLayout Style="vertListStack">
+                          <Button x:Name="btnSearch" Style="funcBtn" Click="btnSearch_Click" />
+                          <Button x:Name="btnSelect" Style="funcBtn" Click="btnSelect_Click" />
+                          <Button x:Name="btnSelectName" Style="funcBtn" Click="btnSelectName_Click" />
+                          <Button x:Name="btnShowOnMap" Style="funcBtn" Click="btnShowOnMap_Click" />
+                        </StackLayout>
+                      </TableRow>
+                    </TableLayout>
+                  </TableRow>
+
+                  <TableRow ScaleHeight="True">
+                    <Panel x:Name="panMap" Size="760, 280" />
+                  </TableRow>
+                </TableLayout>
+              </GroupBox>
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pageNotes" />
+        <TabPage x:Name="pageMultimedia" />
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

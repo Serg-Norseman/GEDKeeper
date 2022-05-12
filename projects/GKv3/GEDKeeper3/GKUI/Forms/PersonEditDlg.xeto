@@ -66,9 +66,11 @@
             </TableCell>
 
             <TableCell>
-              <TableLayout x:Name="portraitLayout">
+              <TableLayout x:Name="portraitLayout" Spacing="0, 4">
                 <TableRow ScaleHeight="True">
-                  <comcom:GKPortrait x:Name="imgPortrait" Size="140, 160" />
+                  <Scrollable Border="Bezel">
+                    <comcom:GKPortrait x:Name="imgPortrait" Size="140, 160" />
+                  </Scrollable>
                 </TableRow>
                 <TableRow>
                   <StackLayout Orientation="Horizontal" Spacing="4">

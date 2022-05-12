@@ -64,12 +64,14 @@ namespace GKCore.MVP
 
         protected void CommitChanges()
         {
-            fLocalUndoman.Commit();
+            if (fLocalUndoman != null)
+                fLocalUndoman.Commit();
         }
 
         protected void RollbackChanges()
         {
-            fLocalUndoman.Rollback();
+            if (fLocalUndoman != null)
+                fLocalUndoman.Rollback();
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace GKCore.MVP
         /// <returns>if `true`, discard dialog closing events</returns>
         public bool CheckChangesPersistence()
         {
-            if (GlobalOptions.Instance.DialogClosingWarn && fLocalUndoman.HasChanges()) {
+            if (GlobalOptions.Instance.DialogClosingWarn && fLocalUndoman != null && fLocalUndoman.HasChanges()) {
                 return (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_WarningOfDialogUnsavedChanges)));
             } else {
                 return false;

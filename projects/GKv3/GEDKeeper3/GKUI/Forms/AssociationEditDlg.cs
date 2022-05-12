@@ -24,7 +24,6 @@ using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;

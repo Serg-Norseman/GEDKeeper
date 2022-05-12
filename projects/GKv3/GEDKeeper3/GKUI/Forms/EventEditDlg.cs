@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -37,6 +38,30 @@ namespace GKUI.Forms
     public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
     {
         #region Design components
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabControl tabsData;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageSources;
+        private Button btnAddress;
+        private TabPage pageCommon;
+        private Label lblEvent;
+        private Label lblPlace;
+        private Label lblDate;
+        private Label lblCause;
+        private Label lblOrg;
+        private Label lblAttrValue;
+        private ComboBox cmbEventType;
+        private TextBox txtEventName;
+        private TextBox txtEventPlace;
+        private TextBox txtEventCause;
+        private TextBox txtEventOrg;
+        private ComboBox txtAttribute;
+        private Button btnPlaceAdd;
+        private Button btnPlaceDelete;
+        private GKDateControl dateCtl;
 
         #endregion
 
@@ -108,7 +133,7 @@ namespace GKUI.Forms
 
         public EventEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
