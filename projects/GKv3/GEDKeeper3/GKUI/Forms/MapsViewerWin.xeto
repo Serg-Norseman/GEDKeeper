@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKUI.Forms.MapsViewerWin"
   ShowInTaskbar="true" KeyDown="MapsViewerWin_KeyDown">
 
@@ -25,11 +25,11 @@
             <TableRow>
               <GroupBox x:Name="grpSelection">
                 <StackLayout Style="vertListStack">
-                  <RadioButton x:Name="radTotal" Click="radTotal_Click" />
+                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radTotal" CheckedChanged="radTotal_Click" />
                   <CheckBox x:Name="chkBirth" />
                   <CheckBox x:Name="chkDeath" />
                   <CheckBox x:Name="chkResidence" />
-                  <RadioButton x:Name="radSelected" Click="radTotal_Click" />
+                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radSelected" CheckedChanged="radTotal_Click" />
                   <ComboBox x:Name="cmbPersons" ReadOnly="True" />
                   <CheckBox x:Name="chkLinesVisible" Checked="True" />
                   <Button x:Name="btnSelectPlaces" Enabled="False" Click="btnSelectPlaces_Click" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:gkcom="clr-namespace:GKUI.Components"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:gkcom="clr-namespace:GKUI.Components" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKUI.Forms.TTRecMergeDlg"
   Maximizable="False" Minimizable="False" ShowInTaskbar="False">
 
@@ -39,10 +39,10 @@
             <TableRow>
               <GroupBox x:Name="rgMode">
                 <StackLayout Style="vertListStack">
-                  <RadioButton x:Name="radPersons" Checked="true" Click="radMergeMode_Click" />
-                  <RadioButton x:Name="radFamilies" Click="radMergeMode_Click" />
-                  <RadioButton x:Name="radNotes" Click="radMergeMode_Click" />
-                  <RadioButton x:Name="radSources" Click="radMergeMode_Click" />
+                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radPersons" Checked="true" CheckedChanged="radMergeMode_Click" />
+                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radFamilies" CheckedChanged="radMergeMode_Click" />
+                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radNotes" CheckedChanged="radMergeMode_Click" />
+                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radSources" CheckedChanged="radMergeMode_Click" />
                 </StackLayout>
               </GroupBox>
 
