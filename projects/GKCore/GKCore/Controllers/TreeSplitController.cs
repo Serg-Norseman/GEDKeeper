@@ -20,6 +20,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.MVP;
@@ -128,6 +129,19 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_ToolOp_3);
+
+            GetControl<ITabPage>("pageTreeSplit").Text = LangMan.LS(LSID.LSID_ToolOp_3);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<IButton>("btnSelectAll").Text = LangMan.LS(LSID.LSID_SelAll);
+            GetControl<IButton>("btnSelectFamily").Text = LangMan.LS(LSID.LSID_SelFamily);
+            GetControl<IButton>("btnSelectAncestors").Text = LangMan.LS(LSID.LSID_SelAncestors);
+            GetControl<IButton>("btnSelectDescendants").Text = LangMan.LS(LSID.LSID_SelDescendants);
+            GetControl<IButton>("btnDelete").Text = LangMan.LS(LSID.LSID_DoDelete);
+            GetControl<IButton>("btnSave").Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
+
+            fView.SelectedList.AddColumn(LangMan.LS(LSID.LSID_Person), 300, false);
+            fView.SkippedList.AddColumn(LangMan.LS(LSID.LSID_Person), 300, false);
         }
     }
 }

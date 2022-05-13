@@ -67,18 +67,13 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fController = new TreeCheckController(this);
-            fController.Init(baseWin);
-
             ListChecks = UIHelper.CreateListView(panProblemsContainer);
             ListChecks.MouseDoubleClick += ListChecks_DblClick;
             ListChecks.AddCheckedColumn(@"x", 50, false);
-            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
-            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
-            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
             ListChecks.ContextMenu = contextMenu;
 
-            SetLocale();
+            fController = new TreeCheckController(this);
+            fController.Init(baseWin);
         }
 
         private void InitializeComponent()
@@ -86,15 +81,12 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             miDetails = new ButtonMenuItem();
-            miDetails.Text = "miDetails";
             miDetails.Click += miDetails_Click;
 
             miGoToRecord = new ButtonMenuItem();
-            miGoToRecord.Text = "miGoToRecord";
             miGoToRecord.Click += miGoToRecord_Click;
 
             miCopyXRef = new ButtonMenuItem();
-            miCopyXRef.Text = "miCopyXRef";
             miCopyXRef.Click += miCopyXRef_Click;
 
             contextMenu = new ContextMenu();
@@ -104,18 +96,6 @@ namespace GKUI.Forms
                 miCopyXRef
             });
             contextMenu.Opening += contextMenu_Opening;
-        }
-
-        public void SetLocale()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_7);
-            pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnAnalyseBase.Text = LangMan.LS(LSID.LSID_Analyze);
-            btnBaseRepair.Text = LangMan.LS(LSID.LSID_Repair);
-            miDetails.Text = LangMan.LS(LSID.LSID_Details);
-            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-            miCopyXRef.Text = LangMan.LS(LSID.LSID_CopyXRef);
         }
 
         private void btnAnalyseBase_Click(object sender, EventArgs e)

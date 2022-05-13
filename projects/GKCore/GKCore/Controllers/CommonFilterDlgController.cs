@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -69,6 +70,13 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
+            GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<IButton>("btnReset").Text = LangMan.LS(LSID.LSID_DlgReset);
+            GetControl<ITabPage>("tsFieldsFilter").Text = LangMan.LS(LSID.LSID_FieldsFilter);
         }
     }
 }

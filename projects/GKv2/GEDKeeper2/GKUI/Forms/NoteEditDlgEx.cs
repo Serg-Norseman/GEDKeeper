@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using System.Windows.Forms;
 using BSLib.Design;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -33,7 +32,7 @@ namespace GKUI.Forms
 {
     public sealed partial class NoteEditDlgEx : EditorDialog, INoteEditDlgEx
     {
-        private readonly NoteEditDlgController fController;
+        private readonly NoteEditDlgExController fController;
 
         public GDMNoteRecord NoteRecord
         {
@@ -61,20 +60,7 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Note);
-
-            ddbtnActions.Text = LangMan.LS(LSID.LSID_Actions);
-            miSelectAndCopy.Text = LangMan.LS(LSID.LSID_SelectAndCopy);
-            miImport.Text = LangMan.LS(LSID.LSID_Import);
-            miExport.Text = LangMan.LS(LSID.LSID_MIExport);
-            miClear.Text = LangMan.LS(LSID.LSID_Clear);
-            pageEditor.Text = LangMan.LS(LSID.LSID_Note);
-            pagePreview.Text = LangMan.LS(LSID.LSID_DocPreview);
-
-            fController = new NoteEditDlgController(this);
+            fController = new NoteEditDlgExController(this);
             fController.Init(baseWin);
         }
 

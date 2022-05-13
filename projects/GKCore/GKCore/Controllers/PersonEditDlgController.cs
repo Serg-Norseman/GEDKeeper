@@ -22,6 +22,7 @@
 
 using System;
 using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
@@ -537,6 +538,47 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_WinPersonEdit);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ILabel>("lblSurname").Text = LangMan.LS(LSID.LSID_Surname);
+            GetControl<ILabel>("lblMarriedSurname").Text = LangMan.LS(LSID.LSID_MarriedSurname);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Name);
+            GetControl<ILabel>("lblPatronymic").Text = LangMan.LS(LSID.LSID_Patronymic);
+            GetControl<ILabel>("lblSex").Text = LangMan.LS(LSID.LSID_Sex);
+            GetControl<ILabel>("lblNickname").Text = LangMan.LS(LSID.LSID_Nickname);
+            GetControl<ILabel>("lblSurnamePrefix").Text = LangMan.LS(LSID.LSID_SurnamePrefix);
+            GetControl<ILabel>("lblNamePrefix").Text = LangMan.LS(LSID.LSID_NamePrefix);
+            GetControl<ILabel>("lblNameSuffix").Text = LangMan.LS(LSID.LSID_NameSuffix);
+            GetControl<ICheckBox>("chkPatriarch").Text = LangMan.LS(LSID.LSID_Patriarch);
+            GetControl<ICheckBox>("chkBookmark").Text = LangMan.LS(LSID.LSID_Bookmark);
+            GetControl<ILabel>("lblParents").Text = LangMan.LS(LSID.LSID_Parents);
+            GetControl<ITabPage>("pageEvents").Text = LangMan.LS(LSID.LSID_Events);
+            GetControl<ITabPage>("pageSpouses").Text = LangMan.LS(LSID.LSID_Spouses);
+            GetControl<ITabPage>("pageAssociations").Text = LangMan.LS(LSID.LSID_Associations);
+            GetControl<ITabPage>("pageGroups").Text = LangMan.LS(LSID.LSID_RPGroups);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
+            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.LSID_RPSources);
+            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.LSID_UserRefs);
+            GetControl<ILabel>("lblRestriction").Text = LangMan.LS(LSID.LSID_Restriction);
+            GetControl<ITabPage>("pageNames").Text = LangMan.LS(LSID.LSID_Names);
+            GetControl<ITabPage>("pageParents").Text = LangMan.LS(LSID.LSID_Parents);
+            GetControl<ITabPage>("pageChilds").Text = LangMan.LS(LSID.LSID_Childs);
+
+            SetToolTip("btnPortraitAdd", LangMan.LS(LSID.LSID_PortraitAddTip));
+            SetToolTip("btnPortraitDelete", LangMan.LS(LSID.LSID_PortraitDeleteTip));
+            SetToolTip("btnParentsAdd", LangMan.LS(LSID.LSID_ParentsAddTip));
+            SetToolTip("btnParentsEdit", LangMan.LS(LSID.LSID_ParentsEditTip));
+            SetToolTip("btnParentsDelete", LangMan.LS(LSID.LSID_ParentsDeleteTip));
+            SetToolTip("btnFatherAdd", LangMan.LS(LSID.LSID_FatherAddTip));
+            SetToolTip("btnFatherDelete", LangMan.LS(LSID.LSID_FatherDeleteTip));
+            SetToolTip("btnFatherSel", LangMan.LS(LSID.LSID_FatherSelTip));
+            SetToolTip("btnMotherAdd", LangMan.LS(LSID.LSID_MotherAddTip));
+            SetToolTip("btnMotherDelete", LangMan.LS(LSID.LSID_MotherDeleteTip));
+            SetToolTip("btnMotherSel", LangMan.LS(LSID.LSID_MotherSelTip));
+            SetToolTip("btnNameCopy", LangMan.LS(LSID.LSID_NameCopyTip));
         }
     }
 }

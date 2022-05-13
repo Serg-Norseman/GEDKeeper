@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -141,28 +140,7 @@ namespace GKUI.Forms
             fController = new PersonsFilterDlgController(this, listMan);
             fController.Init(baseWin);
 
-            SetSpecificLang();
             fController.UpdateView();
-        }
-
-        public void SetSpecificLang()
-        {
-            Title = LangMan.LS(LSID.LSID_MIFilter);
-            pageSpecificFilter.Text = LangMan.LS(LSID.LSID_PersonsFilter);
-            rbAll.Text = LangMan.LS(LSID.LSID_All);
-            rbOnlyLive.Text = LangMan.LS(LSID.LSID_OnlyAlive);
-            rbOnlyDead.Text = LangMan.LS(LSID.LSID_OnlyDied);
-            rbAliveBefore.Text = LangMan.LS(LSID.LSID_AliveBefore).ToLower();
-            rbSexAll.Text = LangMan.LS(LSID.LSID_All);
-            rbSexMale.Text = LangMan.LS(LSID.LSID_OnlyMans);
-            rbSexFemale.Text = LangMan.LS(LSID.LSID_OnlyWomans);
-            lblAliveBefore.Text = LangMan.LS(LSID.LSID_AliveBefore) + ":";
-            lblNameMask.Text = LangMan.LS(LSID.LSID_NameMask);
-            lblPlaceMask.Text = LangMan.LS(LSID.LSID_PlaceMask);
-            lblEventsMask.Text = LangMan.LS(LSID.LSID_EventMask);
-            lblGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            lblSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            chkOnlyPatriarchs.Text = LangMan.LS(LSID.LSID_OnlyPatriarchs);
         }
 
         private void rgLife_CheckedChanged(object sender, EventArgs e)

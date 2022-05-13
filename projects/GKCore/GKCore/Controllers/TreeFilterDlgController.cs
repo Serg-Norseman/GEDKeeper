@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Charts;
 using GKCore.MVP;
@@ -145,6 +146,18 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_MIFilter);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<IGroupBox>("rgBranchCut").Text = LangMan.LS(LSID.LSID_BranchCut);
+            GetControl<IRadioButton>("rbCutNone").Text = LangMan.LS(LSID.LSID_Not);
+            GetControl<IRadioButton>("rbCutYears").Text = LangMan.LS(LSID.LSID_BCut_Years);
+            GetControl<ILabel>("lblYear").Text = LangMan.LS(LSID.LSID_Year);
+            GetControl<IRadioButton>("rbCutPersons").Text = LangMan.LS(LSID.LSID_BCut_Persons);
+            GetControl<ILabel>("lblRPSources").Text = LangMan.LS(LSID.LSID_RPSources);
+
+            fView.PersonsList.AddColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
         }
     }
 }

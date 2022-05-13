@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -328,8 +328,6 @@ namespace GKUI.Forms
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
 
-            SetLocale();
-
             fController = new PersonEditDlgController(this);
             fController.Init(baseWin);
 
@@ -345,50 +343,6 @@ namespace GKUI.Forms
             fUserRefList.ListModel = new URefsSublistModel(baseWin, fController.LocalUndoman);
             fParentsList.ListModel = new ParentsSublistModel(baseWin, fController.LocalUndoman);
             fChildrenList.ListModel = new IndividualChildrenListModel(baseWin, fController.LocalUndoman);
-        }
-
-        public void SetLocale()
-        {
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinPersonEdit);
-            lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-            lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
-            lblSex.Text = LangMan.LS(LSID.LSID_Sex);
-            lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
-            lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
-            lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
-            chkPatriarch.Text = LangMan.LS(LSID.LSID_Patriarch);
-            chkBookmark.Text = LangMan.LS(LSID.LSID_Bookmark);
-            lblParents.Text = LangMan.LS(LSID.LSID_Parents);
-            pageEvents.Text = LangMan.LS(LSID.LSID_Events);
-            pageSpouses.Text = LangMan.LS(LSID.LSID_Spouses);
-            pageAssociations.Text = LangMan.LS(LSID.LSID_Associations);
-            pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
-            lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
-            pageNames.Text = LangMan.LS(LSID.LSID_Names);
-            pageParents.Text = LangMan.LS(LSID.LSID_Parents);
-            pageChilds.Text = LangMan.LS(LSID.LSID_Childs);
-
-            SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
-            SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
-            SetToolTip(btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
-            SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
-            SetToolTip(btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
-            SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
-            SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
-            SetToolTip(btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
-            SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
-            SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
-            SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
-            SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
         }
 
         private void cbSex_SelectedIndexChanged(object sender, EventArgs e)

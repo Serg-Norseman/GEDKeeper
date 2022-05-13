@@ -163,16 +163,11 @@ namespace GKUI.Forms
             txtScriptText.TextChanged += mmScriptText_TextChanged;
 
             tbNewScript_Click(this, null);
-
-            SetLocale();
         }
 
         public void SetLocale()
         {
-            SetToolTip(tbNewScript, LangMan.LS(LSID.LSID_NewScriptTip));
-            SetToolTip(tbLoadScript, LangMan.LS(LSID.LSID_LoadScriptTip));
-            SetToolTip(tbSaveScript, LangMan.LS(LSID.LSID_SaveScriptTip));
-            SetToolTip(tbRun, LangMan.LS(LSID.LSID_RunScriptTip));
+            fController.SetLocale();
         }
 
         private void ScriptEditWin_KeyDown(object sender, KeyEventArgs e)

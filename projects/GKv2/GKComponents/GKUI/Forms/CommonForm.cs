@@ -80,7 +80,8 @@ namespace GKUI.Forms
 
         public object GetControl(string controlName)
         {
-            object result = this.GetType().GetField(controlName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
+            var field = this.GetType().GetField(controlName, BindingFlags.NonPublic | BindingFlags.Instance);
+            object result = field.GetValue(this);
             if (result == null) {
                 result = this.Controls.Find(controlName, true);
             }

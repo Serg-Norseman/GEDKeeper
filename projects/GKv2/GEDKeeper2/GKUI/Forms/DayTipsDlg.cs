@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using BSLib;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
 using GKUI.Components;
@@ -65,12 +64,6 @@ namespace GKUI.Forms
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new DayTipsDlgController(this);
-
-            // SetLocale()
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            chkShow.Text = LangMan.LS(LSID.LSID_StartupTips);
-            btnNextTip.Text = LangMan.LS(LSID.LSID_Next);
-            lblTitle.Text = LangMan.LS(LSID.LSID_YouKnowWhat);
         }
 
         private void btnNextTip_Click(object sender, EventArgs e)

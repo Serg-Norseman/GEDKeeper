@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -50,30 +50,14 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fController = new TreeCheckController(this);
-            fController.Init(baseWin);
-
             ListChecks = UIHelper.CreateListView(panProblemsContainer);
             ListChecks.DoubleClick += ListChecks_DblClick;
             ListChecks.CheckBoxes = true;
-            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
-            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
-            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
             ListChecks.ContextMenuStrip = contextMenu;
 
-            SetLocale();
-        }
+            fController = new TreeCheckController(this);
+            fController.Init(baseWin);
 
-        public void SetLocale()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_7);
-            pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnAnalyseBase.Text = LangMan.LS(LSID.LSID_Analyze);
-            btnBaseRepair.Text = LangMan.LS(LSID.LSID_Repair);
-            miDetails.Text = LangMan.LS(LSID.LSID_Details);
-            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-            miCopyXRef.Text = LangMan.LS(LSID.LSID_CopyXRef);
         }
 
         private void btnAnalyseBase_Click(object sender, EventArgs e)

@@ -24,7 +24,6 @@ using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
 using GKUI.Components;
@@ -65,12 +64,6 @@ namespace GKUI.Forms
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Language);
-            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
 
             fController = new LanguageEditDlgController(this);
         }

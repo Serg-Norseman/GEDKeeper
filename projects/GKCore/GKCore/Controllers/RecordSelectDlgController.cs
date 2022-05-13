@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -108,6 +109,11 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_WinRecordSelect);
+
+            GetControl<IButton>("btnCreate").Text = LangMan.LS(LSID.LSID_DlgAppend);
+            GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.LSID_DlgSelect);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
         }
     }
 }

@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
@@ -162,12 +163,12 @@ namespace GKCore.Controllers
 
         public void UpdateStatsTypes()
         {
-            ICulture culture = fBase.Context.Culture;
+            bool hasPatronymic = (fBase == null) ? false : fBase.Context.Culture.HasPatronymic();
 
             fView.StatsType.BeginUpdate();
             fView.StatsType.Clear();
             for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {
-                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
+                if (sm == StatsMode.smPatronymics && !hasPatronymic) continue;
 
                 GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
                 fView.StatsType.AddItem(LangMan.LS(tr.Title), sm);
@@ -234,6 +235,22 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_MIStats);
+
+            GetControl<IGroupBox>("grpSummary").Text = LangMan.LS(LSID.LSID_Summary);
+
+            var lvSummary = fView.Summary;
+            lvSummary.ClearColumns();
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300, false);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100, false);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100, false);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100, false);
+
+            SetToolTip("tbExcelExport", LangMan.LS(LSID.LSID_MIExportToExcelFile));
+
+            int oldIndex = fView.StatsType.SelectedIndex;
+            UpdateStatsTypes();
+            fView.StatsType.SelectedIndex = oldIndex;
         }
     }
 }

@@ -173,6 +173,7 @@ namespace GKCore.Controllers
         public override void SetLocale()
         {
             fView.Title = LangMan.LS(LSID.LSID_Address);
+
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
             GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.LSID_Address);
@@ -184,6 +185,10 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pagePhones").Text = LangMan.LS(LSID.LSID_Telephones);
             GetControl<ITabPage>("pageEmails").Text = LangMan.LS(LSID.LSID_EMails);
             GetControl<ITabPage>("pageWebPages").Text = LangMan.LS(LSID.LSID_WebSites);
+
+            fView.PhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
+            fView.MailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
+            fView.WebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
         }
     }
 }

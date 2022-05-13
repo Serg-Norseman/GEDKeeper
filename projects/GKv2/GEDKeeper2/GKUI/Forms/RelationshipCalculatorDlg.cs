@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -71,13 +71,6 @@ namespace GKUI.Forms
             InitializeComponent();
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_RelationshipCalculator);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnRec1Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            btnRec2Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            lblKinship.Text = LangMan.LS(LSID.LSID_Kinship);
 
             fController = new RelationshipCalculatorDlgController(this);
             fController.Init(baseWin);

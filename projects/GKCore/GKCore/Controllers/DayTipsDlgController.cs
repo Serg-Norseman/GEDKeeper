@@ -19,6 +19,7 @@
  */
 
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 
@@ -67,6 +68,10 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<ICheckBox>("chkShow").Text = LangMan.LS(LSID.LSID_StartupTips);
+            GetControl<IButton>("btnNextTip").Text = LangMan.LS(LSID.LSID_Next);
+            GetControl<ILabel>("lblTitle").Text = LangMan.LS(LSID.LSID_YouKnowWhat);
         }
     }
 }

@@ -24,7 +24,6 @@ using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -124,15 +123,12 @@ namespace GKUI.Forms
 
             fPhonesList = new GKSheetList(pagePhones);
             fPhonesList.OnModify += ListModify;
-            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
 
             fMailsList = new GKSheetList(pageEmails);
             fMailsList.OnModify += ListModify;
-            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
 
             fWebsList = new GKSheetList(pageWebPages);
             fWebsList.OnModify += ListModify;
-            fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);

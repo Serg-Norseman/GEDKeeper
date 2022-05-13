@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -121,6 +122,18 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_WinCommunicationEdit);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
+            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            GetControl<ILabel>("lblTheme").Text = LangMan.LS(LSID.LSID_Theme);
+            GetControl<ILabel>("lblCorresponder").Text = LangMan.LS(LSID.LSID_Corresponder);
+            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.LSID_Type);
+            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.LSID_Date);
+
+            SetToolTip("btnPersonAdd", LangMan.LS(LSID.LSID_PersonAttachTip));
         }
     }
 }

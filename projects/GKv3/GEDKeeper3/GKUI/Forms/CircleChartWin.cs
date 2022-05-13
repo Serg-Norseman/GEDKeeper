@@ -90,8 +90,6 @@ namespace GKUI.Forms
             fCircleChart.Options.Assign(GlobalOptions.Instance.CircleChartOptions);
             Content = fCircleChart;
 
-            SetLocale();
-
             fController = new CircleChartWinController(this);
             fController.Init(fBaseWin);
         }
@@ -164,17 +162,7 @@ namespace GKUI.Forms
 
         public override void SetLocale()
         {
-            if (fCircleChart.ChartType == CircleChartType.Ancestors) {
-                Title = LangMan.LS(LSID.LSID_AncestorsCircle);
-            } else {
-                Title = LangMan.LS(LSID.LSID_DescendantsCircle);
-            }
-
-            SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
-            SetToolTip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
-            SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
         }
 
         #endregion

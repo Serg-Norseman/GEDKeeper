@@ -23,7 +23,6 @@ using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -96,20 +95,6 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnLangEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_MIFileProperties);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            pageAuthor.Text = LangMan.LS(LSID.LSID_Author);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblAddress.Text = LangMan.LS(LSID.LSID_Address);
-            lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
-            pageOther.Text = LangMan.LS(LSID.LSID_Other);
-            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
-
-            lvRecordStats.AddColumn(LangMan.LS(LSID.LSID_RM_Records), 300);
-            lvRecordStats.AddColumn("Count", 100 /*, HorizontalAlignment.Right*/);
 
             fController = new FilePropertiesDlgController(this);
             fController.Init(baseWin);

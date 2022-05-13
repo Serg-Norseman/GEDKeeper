@@ -235,25 +235,7 @@ namespace GKUI.Forms
 
         public override void SetLocale()
         {
-            Title = LangMan.LS(LSID.LSID_MIMap);
-            pagePlaces.Text = LangMan.LS(LSID.LSID_RPLocations);
-            grpSelection.Text = LangMan.LS(LSID.LSID_MapSelection);
-            radTotal.Text = LangMan.LS(LSID.LSID_MapSelOnAll);
-            chkBirth.Text = LangMan.LS(LSID.LSID_MSBirthPlaces);
-            chkDeath.Text = LangMan.LS(LSID.LSID_MSDeathPlaces);
-            chkResidence.Text = LangMan.LS(LSID.LSID_MSResiPlace);
-            radSelected.Text = LangMan.LS(LSID.LSID_MapSelOnSelected);
-            //btnSaveImage.Text = LangMan.LS(LSID.LSID_SaveImage);
-            btnSelectPlaces.Text = LangMan.LS(LSID.LSID_Show);
-            chkLinesVisible.Text = LangMan.LS(LSID.LSID_LinesVisible);
-
-            SetToolTip(tbSaveSnapshot, LangMan.LS(LSID.LSID_ImageSaveTip));
-
-            tbLoadPlaces.Text = LangMan.LS(LSID.LSID_LoadPlaces);
-            tbProviders.Text = LangMan.LS(LSID.LSID_Providers);
-            pageCoordinates.Text = LangMan.LS(LSID.LSID_Coordinates);
-            tbClear.Text = LangMan.LS(LSID.LSID_Clear);
-            btnSearch.Text = LangMan.LS(LSID.LSID_Search);
+            fController.SetLocale();
         }
 
         public ITVNode FindTreeNode(string place)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -77,20 +77,6 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnSourceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinSourceCitEdit);
-
-            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            pageOther.Text = LangMan.LS(LSID.LSID_Other);
-
-            lblSource.Text = LangMan.LS(LSID.LSID_Source);
-            lblPage.Text = LangMan.LS(LSID.LSID_Page);
-            lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);
-
-            SetToolTip(btnSourceAdd, LangMan.LS(LSID.LSID_SourceAddTip));
 
             fController = new SourceCitEditDlgController(this);
             fController.Init(baseWin);

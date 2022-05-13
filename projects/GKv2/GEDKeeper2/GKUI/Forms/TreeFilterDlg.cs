@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -125,18 +125,6 @@ namespace GKUI.Forms
             fPersonsList = new GKSheetList(Panel1);
             fPersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
             fPersonsList.OnModify += ListModify;
-            fPersonsList.AddColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_MIFilter);
-            rgBranchCut.Text = LangMan.LS(LSID.LSID_BranchCut);
-            rbCutNone.Text = LangMan.LS(LSID.LSID_Not);
-            rbCutYears.Text = LangMan.LS(LSID.LSID_BCut_Years);
-            lblYear.Text = LangMan.LS(LSID.LSID_Year);
-            rbCutPersons.Text = LangMan.LS(LSID.LSID_BCut_Persons);
-            lblRPSources.Text = LangMan.LS(LSID.LSID_RPSources);
 
             fController = new TreeFilterDlgController(this);
             fController.Init(baseWin);

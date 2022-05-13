@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,6 @@ using System;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
 using GKUI.Components;
@@ -54,12 +53,6 @@ namespace GKUI.Forms
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Language);
-            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
 
             fController = new LanguageEditDlgController(this);
         }

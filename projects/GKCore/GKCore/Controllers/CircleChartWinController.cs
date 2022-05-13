@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Charts;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 
@@ -48,6 +49,17 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            if (fView.CircleChart.ChartType == CircleChartType.Ancestors) {
+                fView.Title = LangMan.LS(LSID.LSID_AncestorsCircle);
+            } else {
+                fView.Title = LangMan.LS(LSID.LSID_DescendantsCircle);
+            }
+
+            SetToolTip("tbImageSave", LangMan.LS(LSID.LSID_ImageSaveTip));
+            SetToolTip("tbDocPrint", LangMan.LS(LSID.LSID_DocPrint));
+            SetToolTip("tbDocPreview", LangMan.LS(LSID.LSID_DocPreview));
+            SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
+            SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
         }
     }
 }

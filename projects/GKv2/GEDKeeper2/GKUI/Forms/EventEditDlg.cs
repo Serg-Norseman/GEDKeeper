@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -113,25 +112,6 @@ namespace GKUI.Forms
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
             fSourcesList = new GKSheetList(pageSources);
-
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_Event);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
-            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            lblEvent.Text = LangMan.LS(LSID.LSID_Event);
-            lblAttrValue.Text = LangMan.LS(LSID.LSID_Value);
-            lblPlace.Text = LangMan.LS(LSID.LSID_Place);
-            lblDate.Text = LangMan.LS(LSID.LSID_Date);
-            lblCause.Text = LangMan.LS(LSID.LSID_Cause);
-            lblOrg.Text = LangMan.LS(LSID.LSID_Agency);
-
-            SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
-            SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);

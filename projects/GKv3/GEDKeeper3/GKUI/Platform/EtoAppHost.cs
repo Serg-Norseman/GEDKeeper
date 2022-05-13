@@ -350,10 +350,13 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(PasswordBox), typeof(PasswordBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(RadioMenuItem), typeof(MenuItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(CheckMenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(TextArea), typeof(TextAreaHandler));
             ControlsManager.RegisterHandlerType(typeof(RichTextArea), typeof(RichTextAreaHandler));
             ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(ButtonToolItem), typeof(ButtonToolItemHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));

@@ -19,6 +19,7 @@
  */
 
 using System.IO;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Charts;
 using GKCore.MVP;
@@ -289,6 +290,45 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            GetControl<IButtonToolItem>("tbGensCommon").Text = LangMan.LS(LSID.LSID_Generations);
+            GetControl<IButtonToolItem>("tbGensAncestors").Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Ancestors);
+            GetControl<IButtonToolItem>("tbGensDescendants").Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Descendants);
+            GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.LSID_ModesTip);
+            GetControl<IButtonToolItem>("tbBorders").Text = LangMan.LS(LSID.LSID_Borders);
+
+            GetControl<IMenuItem>("miGensInfCommon").Text = LangMan.LS(LSID.LSID_Unlimited);
+            GetControl<IMenuItem>("miGensInfAncestors").Text = LangMan.LS(LSID.LSID_Unlimited);
+            GetControl<IMenuItem>("miGensInfDescendants").Text = LangMan.LS(LSID.LSID_Unlimited);
+            GetControl<IMenuItem>("miModeBoth").Text = LangMan.LS(LSID.LSID_TM_Both);
+            GetControl<IMenuItem>("miModeAncestors").Text = LangMan.LS(LSID.LSID_TM_Ancestors);
+            GetControl<IMenuItem>("miModeDescendants").Text = LangMan.LS(LSID.LSID_TM_Descendants);
+            GetControl<IMenuItem>("miEdit").Text = LangMan.LS(LSID.LSID_DoEdit);
+            GetControl<IMenuItem>("miFatherAdd").Text = LangMan.LS(LSID.LSID_FatherAdd);
+            GetControl<IMenuItem>("miMotherAdd").Text = LangMan.LS(LSID.LSID_MotherAdd);
+            GetControl<IMenuItem>("miFamilyAdd").Text = LangMan.LS(LSID.LSID_FamilyAdd);
+            GetControl<IMenuItem>("miSpouseAdd").Text = LangMan.LS(LSID.LSID_SpouseAdd);
+            GetControl<IMenuItem>("miSonAdd").Text = LangMan.LS(LSID.LSID_SonAdd);
+            GetControl<IMenuItem>("miDaughterAdd").Text = LangMan.LS(LSID.LSID_DaughterAdd);
+            GetControl<IMenuItem>("miDelete").Text = LangMan.LS(LSID.LSID_DoDelete);
+            GetControl<IMenuItem>("miRebuildTree").Text = LangMan.LS(LSID.LSID_RebuildTree);
+            GetControl<IMenuItem>("miRebuildKinships").Text = LangMan.LS(LSID.LSID_RebuildKinships);
+            GetControl<IMenuItem>("miFillColor").Text = LangMan.LS(LSID.LSID_FillColor);
+            GetControl<IMenuItem>("miFillImage").Text = LangMan.LS(LSID.LSID_FillImage);
+            GetControl<IMenuItem>("miTraceSelected").Text = LangMan.LS(LSID.LSID_TM_TraceSelected);
+            GetControl<IMenuItem>("miTraceKinships").Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
+            GetControl<IMenuItem>("miCertaintyIndex").Text = LangMan.LS(LSID.LSID_CertaintyIndex);
+            GetControl<IMenuItem>("miSelectColor").Text = LangMan.LS(LSID.LSID_SelectColor);
+            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
+            GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.LSID_GoToPrimaryBranch);
+
+            SetToolTip("tbModes", LangMan.LS(LSID.LSID_ModesTip));
+            SetToolTip("tbImageSave", LangMan.LS(LSID.LSID_ImageSaveTip));
+            SetToolTip("tbDocPrint", LangMan.LS(LSID.LSID_DocPrint));
+            SetToolTip("tbDocPreview", LangMan.LS(LSID.LSID_DocPreview));
+            SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
+            SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
+            SetToolTip("tbFilter", LangMan.LS(LSID.LSID_MIFilter));
+            SetToolTip("tbOptions", LangMan.LS(LSID.LSID_MIOptions));
         }
     }
 }

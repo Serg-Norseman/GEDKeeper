@@ -74,8 +74,6 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
-
-            SetLocale();
         }
 
         private void InitializeComponent()
@@ -99,17 +97,6 @@ namespace GKUI.Forms
             });
             contextMenu.Opening += contextMenu_Opening;
             tvGroups.ContextMenu = contextMenu;
-        }
-
-        public void SetLocale()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_6);
-            pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnAnalyseGroups.Text = LangMan.LS(LSID.LSID_Analyze);
-            miDetails.Text = LangMan.LS(LSID.LSID_Details);
-            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-            miCopyXRef.Text = LangMan.LS(LSID.LSID_CopyXRef);
         }
 
         private void btnAnalyseGroups_Click(object sender, EventArgs e)

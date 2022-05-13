@@ -2,11 +2,11 @@
 {
 	partial class CommonFilterDlg
 	{
-		private System.Windows.Forms.Button btnAccept;
-		private System.Windows.Forms.Button btnCancel;
+        protected System.Windows.Forms.Button btnAccept;
+        protected System.Windows.Forms.Button btnCancel;
 		protected System.Windows.Forms.TabControl tabsFilters;
-		private System.Windows.Forms.TabPage tsFieldsFilter;
-		private System.Windows.Forms.Button btnReset;
+        protected System.Windows.Forms.TabPage tsFieldsFilter;
+        protected System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Panel pnlClient;
         private System.Windows.Forms.Panel pnlButtons;
 

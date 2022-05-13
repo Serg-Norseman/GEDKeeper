@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,6 @@ using System;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -112,27 +111,8 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            SetLocale();
-
             fController = new PersonalNameEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        public void SetLocale()
-        {
-            Title = LangMan.LS(LSID.LSID_Name);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-            lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
-            lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
-            lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
-            lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
-            lblType.Text = LangMan.LS(LSID.LSID_Type);
-            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
         }
 
         private void txtXName_KeyDown(object sender, KeyEventArgs e)

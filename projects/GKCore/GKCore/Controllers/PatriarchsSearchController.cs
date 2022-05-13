@@ -20,6 +20,7 @@
 
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -100,6 +101,20 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_ToolOp_8);
+
+            GetControl<ITabPage>("pagePatSearch").Text = LangMan.LS(LSID.LSID_ToolOp_8);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<ILabel>("lblMinGenerations").Text = LangMan.LS(LSID.LSID_MinGenerations);
+            GetControl<IButton>("btnSetPatriarch").Text = LangMan.LS(LSID.LSID_SetPatFlag);
+            GetControl<IButton>("btnPatSearch").Text = LangMan.LS(LSID.LSID_Search);
+            GetControl<ICheckBox>("chkWithoutDates").Text = LangMan.LS(LSID.LSID_WithoutDates);
+            GetControl<IButton>("btnPatriarchsDiagram").Text = LangMan.LS(LSID.LSID_PatriarchsDiagram);
+
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
         }
     }
 }

@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -91,6 +92,17 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_ToolOp_1);
+
+            GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.LSID_ToolOp_1);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.LSID_MIFile);
+            GetControl<IButton>("btnFileChoose").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.LSID_MatchType);
+            GetControl<IRadioButton>("radMatchInternal").Text = LangMan.LS(LSID.LSID_MatchInternal);
+            GetControl<IRadioButton>("radMathExternal").Text = LangMan.LS(LSID.LSID_MathExternal);
+            GetControl<IRadioButton>("radAnalysis").Text = LangMan.LS(LSID.LSID_Analyze);
+            GetControl<IButton>("btnMatch").Text = LangMan.LS(LSID.LSID_Match);
         }
     }
 }

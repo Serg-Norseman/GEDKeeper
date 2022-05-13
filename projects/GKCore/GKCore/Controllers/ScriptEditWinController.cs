@@ -90,6 +90,10 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            SetToolTip("tbNewScript", LangMan.LS(LSID.LSID_NewScriptTip));
+            SetToolTip("tbLoadScript", LangMan.LS(LSID.LSID_LoadScriptTip));
+            SetToolTip("tbSaveScript", LangMan.LS(LSID.LSID_SaveScriptTip));
+            SetToolTip("tbRun", LangMan.LS(LSID.LSID_RunScriptTip));
         }
     }
 }

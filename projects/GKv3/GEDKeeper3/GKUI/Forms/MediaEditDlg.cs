@@ -116,19 +116,6 @@ namespace GKUI.Forms
             fNotesList = new GKSheetList(pageNotes);
             fSourcesList = new GKSheetList(pageSources);
 
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_RPMultimedia);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            lblName.Text = LangMan.LS(LSID.LSID_Title);
-            lblType.Text = LangMan.LS(LSID.LSID_Type);
-            lblStoreType.Text = LangMan.LS(LSID.LSID_StoreType);
-            lblFile.Text = LangMan.LS(LSID.LSID_File);
-            btnView.Text = LangMan.LS(LSID.LSID_View) + @"...";
-
             fController = new MediaEditDlgController(this);
             fController.Init(baseWin);
 

@@ -72,11 +72,6 @@ namespace GKUI.Forms
 
             imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;
 
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_PortraitSelect);
-
             fController = new PortraitSelectDlgController(this);
             fController.Init(baseWin);
         }

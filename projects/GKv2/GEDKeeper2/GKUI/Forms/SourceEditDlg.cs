@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -103,20 +103,6 @@ namespace GKUI.Forms
             fRepositoriesList = new GKSheetList(pageRepositories);
             fRepositoriesList.SetControlName("fRepositoriesList"); // for purpose of tests
             fRepositoriesList.OnModify += ModifyReposSheet;
-
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_Source);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            lblShortTitle.Text = LangMan.LS(LSID.LSID_ShortTitle);
-            lblAuthor.Text = LangMan.LS(LSID.LSID_Author);
-            lblTitle.Text = LangMan.LS(LSID.LSID_Title);
-            lblPublication.Text = LangMan.LS(LSID.LSID_Publication);
-            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            pageText.Text = LangMan.LS(LSID.LSID_Text);
-            pageRepositories.Text = LangMan.LS(LSID.LSID_RPRepositories);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
 
             fController = new SourceEditDlgController(this);
             fController.Init(baseWin);

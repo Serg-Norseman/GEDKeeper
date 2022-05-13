@@ -22,7 +22,6 @@ using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -87,13 +86,6 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_RelationshipCalculator);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnRec1Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            btnRec2Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            lblKinship.Text = LangMan.LS(LSID.LSID_Kinship);
 
             fController = new RelationshipCalculatorDlgController(this);
             fController.Init(baseWin);

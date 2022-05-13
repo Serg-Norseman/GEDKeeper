@@ -23,7 +23,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -63,8 +62,6 @@ namespace GKUI.Forms
 
             WindowState = FormWindowState.Maximized;
 
-            SetLocale();
-
             fController = new SlideshowController(this);
             fController.Init(baseWin);
             fController.LoadList();
@@ -77,7 +74,7 @@ namespace GKUI.Forms
 
         private void SlideshowWin_Closed(object sender, FormClosedEventArgs e)
         {
-            SetTimer(false);
+            fController.Dispose();
         }
 
         private void SlideshowWin_KeyDown(object sender, KeyEventArgs e)
@@ -87,9 +84,7 @@ namespace GKUI.Forms
 
         public override void SetLocale()
         {
-            Title = LangMan.LS(LSID.LSID_Slideshow);
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
         }
 
         public void SetImage(IImage image)
@@ -99,24 +94,14 @@ namespace GKUI.Forms
             fImageCtl.ZoomToFit();
         }
 
-        private void SetTimer(bool active)
-        {
-            if (active) {
-                tbStart.Text = LangMan.LS(LSID.LSID_Stop);
-                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
-            } else {
-                tbStart.Text = LangMan.LS(LSID.LSID_Start);
-                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
-            }
-            timer1.Enabled = active;
-        }
-
         private void tsbStart_Click(object sender, EventArgs e)
         {
-            if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
-                SetTimer(true);
+            bool active = fController.SwitchActive();
+
+            if (active) {
+                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
             } else {
-                SetTimer(false);
+                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
             }
         }
 
@@ -126,11 +111,6 @@ namespace GKUI.Forms
         }
 
         private void tsbNext_Click(object sender, EventArgs e)
-        {
-            fController.Next();
-        }
-
-        private void Timer1Tick(object sender, EventArgs e)
         {
             fController.Next();
         }

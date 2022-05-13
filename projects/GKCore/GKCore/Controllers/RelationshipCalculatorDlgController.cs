@@ -20,6 +20,7 @@
 
 //#define DEBUG_SOLVE
 
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Kinships;
 using GKCore.MVP;
@@ -116,6 +117,12 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_RelationshipCalculator);
+
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<IButton>("btnRec1Select").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            GetControl<IButton>("btnRec2Select").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            GetControl<ILabel>("lblKinship").Text = LangMan.LS(LSID.LSID_Kinship);
         }
     }
 }

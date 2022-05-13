@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -75,6 +75,7 @@ namespace GKUI.Forms
 
             fBase = baseWin;
             fListMan = listMan;
+
             fController = new CommonFilterDlgController(this, listMan);
             fController.Init(baseWin);
 
@@ -82,8 +83,6 @@ namespace GKUI.Forms
             filterView.Dock = DockStyle.Fill;
             filterView.Name = "dataGridView1";
             tsFieldsFilter.Controls.Add(filterView);
-
-            SetLocale();
 
             fController.UpdateView();
         }
@@ -108,17 +107,6 @@ namespace GKUI.Forms
         {
             fController.Accept();
             DialogResult = DialogResult.OK;
-        }
-
-        public void SetLocale()
-        {
-            GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
-            GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);
-
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            btnReset.Text = LangMan.LS(LSID.LSID_DlgReset);
-            tsFieldsFilter.Text = LangMan.LS(LSID.LSID_FieldsFilter);
         }
 
         public virtual void DoReset()

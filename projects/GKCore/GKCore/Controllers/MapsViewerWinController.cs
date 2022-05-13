@@ -250,6 +250,25 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_MIMap);
+
+            GetControl<ITabPage>("pagePlaces").Text = LangMan.LS(LSID.LSID_RPLocations);
+            GetControl<IGroupBox>("grpSelection").Text = LangMan.LS(LSID.LSID_MapSelection);
+            GetControl<IRadioButton>("radTotal").Text = LangMan.LS(LSID.LSID_MapSelOnAll);
+            GetControl<ICheckBox>("chkBirth").Text = LangMan.LS(LSID.LSID_MSBirthPlaces);
+            GetControl<ICheckBox>("chkDeath").Text = LangMan.LS(LSID.LSID_MSDeathPlaces);
+            GetControl<ICheckBox>("chkResidence").Text = LangMan.LS(LSID.LSID_MSResiPlace);
+            GetControl<IRadioButton>("radSelected").Text = LangMan.LS(LSID.LSID_MapSelOnSelected);
+            //btnSaveImage.Text = LangMan.LS(LSID.LSID_SaveImage);
+            GetControl<IButton>("btnSelectPlaces").Text = LangMan.LS(LSID.LSID_Show);
+            GetControl<ICheckBox>("chkLinesVisible").Text = LangMan.LS(LSID.LSID_LinesVisible);
+            GetControl<IButtonToolItem>("tbLoadPlaces").Text = LangMan.LS(LSID.LSID_LoadPlaces);
+            GetControl<IButtonToolItem>("tbProviders").Text = LangMan.LS(LSID.LSID_Providers);
+            GetControl<ITabPage>("pageCoordinates").Text = LangMan.LS(LSID.LSID_Coordinates);
+            GetControl<IButtonToolItem>("tbClear").Text = LangMan.LS(LSID.LSID_Clear);
+            GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.LSID_Search);
+
+            SetToolTip("tbSaveSnapshot", LangMan.LS(LSID.LSID_ImageSaveTip));
         }
     }
 }

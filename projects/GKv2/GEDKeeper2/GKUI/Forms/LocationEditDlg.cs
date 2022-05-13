@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -99,27 +99,6 @@ namespace GKUI.Forms
 
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
-
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_Location);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            lblName.Text = LangMan.LS(LSID.LSID_Title);
-            lblLatitude.Text = LangMan.LS(LSID.LSID_Latitude);
-            lblLongitude.Text = LangMan.LS(LSID.LSID_Longitude);
-            ListGeoCoords.SetColumnCaption(0, LangMan.LS(LSID.LSID_Title));
-            ListGeoCoords.SetColumnCaption(1, LangMan.LS(LSID.LSID_Latitude));
-            ListGeoCoords.SetColumnCaption(2, LangMan.LS(LSID.LSID_Longitude));
-            btnShowOnMap.Text = LangMan.LS(LSID.LSID_Show);
-            grpSearch.Text = LangMan.LS(LSID.LSID_SearchCoords);
-            btnSearch.Text = LangMan.LS(LSID.LSID_Search);
-            btnSelect.Text = LangMan.LS(LSID.LSID_SelectCoords);
-            btnSelectName.Text = LangMan.LS(LSID.LSID_SelectName);
-
-            SetToolTip(btnShowOnMap, LangMan.LS(LSID.LSID_ShowOnMapTip));
 
             fController = new LocationEditDlgController(this);
             fController.Init(baseWin);

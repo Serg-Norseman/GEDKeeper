@@ -18,9 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -33,8 +36,10 @@ namespace GKCore.Controllers
     public class SlideshowController : FormController<ISlideshowWin>
     {
         private readonly List<GDMFileReferenceWithTitle> fFileRefs;
+        private bool fActive;
         private int fCurrentIndex;
         private string fCurrentText;
+        private ITimer fTimer;
 
         public List<GDMFileReferenceWithTitle> FileRefs
         {
@@ -50,6 +55,18 @@ namespace GKCore.Controllers
         {
             fFileRefs = new List<GDMFileReferenceWithTitle>();
             fCurrentIndex = -1;
+            fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
+        }
+
+        public void Dispose()
+        {
+            if (fTimer != null)
+                fTimer.Dispose();
+        }
+
+        private void Timer1Tick(object sender, EventArgs e)
+        {
+            Next();
         }
 
         public void LoadList()
@@ -112,8 +129,29 @@ namespace GKCore.Controllers
             SetFileRef();
         }
 
+        public bool SwitchActive()
+        {
+            if (!fActive) {
+                GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.LSID_Stop);
+                fTimer.Start();
+            } else {
+                GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.LSID_Start);
+                fTimer.Stop();
+            }
+
+            fActive = !fActive;
+
+            return fActive;
+        }
+
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_Slideshow);
+
+            GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.LSID_Start);
+
+            SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
+            SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
         }
     }
 }

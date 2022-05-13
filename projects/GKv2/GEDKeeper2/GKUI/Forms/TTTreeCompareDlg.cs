@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -52,24 +51,8 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            SetLocale();
-
             fController = new TreeCompareController(this);
             fController.Init(baseWin);
-        }
-
-        public void SetLocale()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_1);
-            pageTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            lblFile.Text = LangMan.LS(LSID.LSID_MIFile);
-            btnFileChoose.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            grpMatchType.Text = LangMan.LS(LSID.LSID_MatchType);
-            radMatchInternal.Text = LangMan.LS(LSID.LSID_MatchInternal);
-            radMathExternal.Text = LangMan.LS(LSID.LSID_MathExternal);
-            radAnalysis.Text = LangMan.LS(LSID.LSID_Analyze);
-            btnMatch.Text = LangMan.LS(LSID.LSID_Match);
         }
 
         private void btnFileChoose_Click(object sender, EventArgs e)

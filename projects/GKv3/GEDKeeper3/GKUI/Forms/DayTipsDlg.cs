@@ -23,7 +23,6 @@ using BSLib;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
 using GKUI.Components;
@@ -78,12 +77,6 @@ namespace GKUI.Forms
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new DayTipsDlgController(this);
-
-            // SetLocale()
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            chkShow.Text = LangMan.LS(LSID.LSID_StartupTips);
-            btnNextTip.Text = LangMan.LS(LSID.LSID_Next);
-            lblTitle.Text = LangMan.LS(LSID.LSID_YouKnowWhat);
         }
 
         private void btnNextTip_Click(object sender, EventArgs e)

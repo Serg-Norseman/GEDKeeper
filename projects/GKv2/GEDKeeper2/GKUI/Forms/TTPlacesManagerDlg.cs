@@ -19,7 +19,6 @@
  */
 
 using System;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -48,13 +47,12 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fController = new PlacesManagerController(this);
-            fController.Init(baseWin);
-
             ListPlaces = UIHelper.CreateListView(Panel4);
             ListPlaces.DoubleClick += ListPlaces_DblClick;
-            ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
-            ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
+
+
+            fController = new PlacesManagerController(this);
+            fController.Init(baseWin);
         }
 
         protected override void Dispose(bool disposing)

@@ -143,7 +143,9 @@ namespace GKUI.Forms
 
             PopulateContextMenus();
 
-            SetLocale();
+            miGensInfCommon.Checked = true;
+            miGensInfAncestors.Checked = true;
+            miGensInfDescendants.Checked = true;
 
             miCertaintyIndex.Checked = fTreeBox.Options.CertaintyIndexVisible;
             fTreeBox.CertaintyIndex = fTreeBox.Options.CertaintyIndexVisible;
@@ -676,48 +678,7 @@ namespace GKUI.Forms
 
         public override void SetLocale()
         {
-            tbGensCommon.Text = LangMan.LS(LSID.LSID_Generations);
-            tbGensAncestors.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Ancestors);
-            tbGensDescendants.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Descendants);
-            tbModes.Text = LangMan.LS(LSID.LSID_ModesTip);
-
-            miGensInfCommon.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInfCommon.Checked = true;
-            miGensInfAncestors.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInfAncestors.Checked = true;
-            miGensInfDescendants.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInfDescendants.Checked = true;
-            miModeBoth.Text = LangMan.LS(LSID.LSID_TM_Both);
-            miModeAncestors.Text = LangMan.LS(LSID.LSID_TM_Ancestors);
-            miModeDescendants.Text = LangMan.LS(LSID.LSID_TM_Descendants);
-            miEdit.Text = LangMan.LS(LSID.LSID_DoEdit);
-            miFatherAdd.Text = LangMan.LS(LSID.LSID_FatherAdd);
-            miMotherAdd.Text = LangMan.LS(LSID.LSID_MotherAdd);
-            miFamilyAdd.Text = LangMan.LS(LSID.LSID_FamilyAdd);
-            miSpouseAdd.Text = LangMan.LS(LSID.LSID_SpouseAdd);
-            miSonAdd.Text = LangMan.LS(LSID.LSID_SonAdd);
-            miDaughterAdd.Text = LangMan.LS(LSID.LSID_DaughterAdd);
-            miDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
-            miRebuildTree.Text = LangMan.LS(LSID.LSID_RebuildTree);
-            miRebuildKinships.Text = LangMan.LS(LSID.LSID_RebuildKinships);
-            miFillColor.Text = LangMan.LS(LSID.LSID_FillColor);
-            miFillImage.Text = LangMan.LS(LSID.LSID_FillImage);
-            miTraceSelected.Text = LangMan.LS(LSID.LSID_TM_TraceSelected);
-            miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
-            miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
-            miSelectColor.Text = LangMan.LS(LSID.LSID_SelectColor);
-            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-            tbBorders.Text = LangMan.LS(LSID.LSID_Borders);
-            miGoToPrimaryBranch.Text = LangMan.LS(LSID.LSID_GoToPrimaryBranch);
-
-            SetToolTip(tbModes, LangMan.LS(LSID.LSID_ModesTip));
-            SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
-            SetToolTip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
-            SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
-            SetToolTip(tbFilter, LangMan.LS(LSID.LSID_MIFilter));
-            SetToolTip(tbOptions, LangMan.LS(LSID.LSID_MIOptions));
+            fController.SetLocale();
         }
 
         #endregion

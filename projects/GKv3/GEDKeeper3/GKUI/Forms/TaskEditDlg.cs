@@ -24,7 +24,6 @@ using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -117,18 +116,6 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fNotesList = new GKSheetList(pageNotes);
-
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_WinTaskEdit);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            lblGoal.Text = LangMan.LS(LSID.LSID_Goal);
-            lblPriority.Text = LangMan.LS(LSID.LSID_Priority);
-            lblStartDate.Text = LangMan.LS(LSID.LSID_StartDate);
-            lblStopDate.Text = LangMan.LS(LSID.LSID_StopDate);
-
-            SetToolTip(btnGoalSelect, LangMan.LS(LSID.LSID_GoalSelectTip));
 
             fController = new TaskEditDlgController(this);
             fController.Init(baseWin);

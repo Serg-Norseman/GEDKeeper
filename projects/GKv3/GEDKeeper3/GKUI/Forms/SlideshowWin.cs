@@ -23,7 +23,6 @@ using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -45,7 +44,6 @@ namespace GKUI.Forms
         private readonly SlideshowController fController;
 
         private readonly ImageBox fImageCtl;
-        private ITimer fTimer;
 
         public SlideshowWin(IBaseWindow baseWin)
         {
@@ -66,26 +64,19 @@ namespace GKUI.Forms
 
             WindowState = WindowState.Maximized;*/
 
-            SetLocale();
-
-            fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
-
             fController = new SlideshowController(this);
             fController.Init(baseWin);
             fController.LoadList();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (fTimer != null) fTimer.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         private void SlideshowWin_Load(object sender, EventArgs e)
         {
             fController.Next();
+        }
+
+        private void SlideshowWin_Closed(object sender, EventArgs e)
+        {
+            fController.Dispose();
         }
 
         private void SlideshowWin_KeyDown(object sender, KeyEventArgs e)
@@ -95,10 +86,7 @@ namespace GKUI.Forms
 
         public override void SetLocale()
         {
-            Title = LangMan.LS(LSID.LSID_Slideshow);
-            tbStart.Text = LangMan.LS(LSID.LSID_Start);
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
         }
 
         public void SetImage(IImage image)
@@ -108,25 +96,14 @@ namespace GKUI.Forms
             fImageCtl.ZoomToFit();
         }
 
-        private void SetTimer(bool active)
-        {
-            if (active) {
-                tbStart.Text = LangMan.LS(LSID.LSID_Stop);
-                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
-                fTimer.Start();
-            } else {
-                tbStart.Text = LangMan.LS(LSID.LSID_Start);
-                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
-                fTimer.Stop();
-            }
-        }
-
         private void tsbStart_Click(object sender, EventArgs e)
         {
-            if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
-                SetTimer(true);
+            bool active = fController.SwitchActive();
+
+            if (active) {
+                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
             } else {
-                SetTimer(false);
+                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
             }
         }
 
@@ -136,11 +113,6 @@ namespace GKUI.Forms
         }
 
         private void tsbNext_Click(object sender, EventArgs e)
-        {
-            fController.Next();
-        }
-
-        private void Timer1Tick(object sender, EventArgs e)
         {
             fController.Next();
         }

@@ -24,7 +24,6 @@ using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -116,26 +115,8 @@ namespace GKUI.Forms
             btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
             btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
-            SetLocale();
-
             fController = new ParentsEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        public void SetLocale()
-        {
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinPersonEdit);
-            lblChildName.Text = LangMan.LS(LSID.LSID_Name);
-            lblParents.Text = LangMan.LS(LSID.LSID_Parents);
-            lblLinkageType.Text = LangMan.LS(LSID.LSID_LinkageType);
-
-            SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
-            SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
-            SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
-            SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
-            SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
         }
 
         public void SetParentsAvl(bool avail)

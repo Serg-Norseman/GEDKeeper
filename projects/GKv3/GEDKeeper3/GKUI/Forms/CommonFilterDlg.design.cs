@@ -8,10 +8,10 @@ namespace GKUI.Forms
     {
         protected TabControl tabsFilters;
 
-        private Button btnAccept;
-        private Button btnCancel;
-        private TabPage tsFieldsFilter;
-        private Button btnReset;
+        protected Button btnAccept;
+        protected Button btnCancel;
+        protected TabPage tsFieldsFilter;
+        protected Button btnReset;
 
         private void InitializeComponent()
         {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
 using GKCore.Names;
@@ -69,16 +68,6 @@ namespace GKUI.Forms
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Name);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblSex.Text = LangMan.LS(LSID.LSID_Sex);
-            grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
-            lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
-            lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
 
             fController = new NameEditDlgController(this);
         }

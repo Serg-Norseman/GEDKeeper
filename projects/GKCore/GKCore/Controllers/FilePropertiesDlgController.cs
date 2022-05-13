@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.MVP;
@@ -95,6 +96,19 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_MIFileProperties);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ITabPage>("pageAuthor").Text = LangMan.LS(LSID.LSID_Author);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Name);
+            GetControl<ILabel>("lblAddress").Text = LangMan.LS(LSID.LSID_Address);
+            GetControl<ILabel>("lblTelephone").Text = LangMan.LS(LSID.LSID_Telephone);
+            GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.LSID_Other);
+            GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.LSID_Language);
+
+            fView.RecordStats.AddColumn(LangMan.LS(LSID.LSID_RM_Records), 300, false);
+            fView.RecordStats.AddColumn("Count", 100, false /*, HorizontalAlignment.Right*/);
         }
     }
 }

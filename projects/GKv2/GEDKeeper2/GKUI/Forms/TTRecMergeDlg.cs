@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -81,29 +80,6 @@ namespace GKUI.Forms
 
             MergeControl.Base = baseWin;
             MergeControl.MergeMode = fController.RMMode;
-
-            SetLocale();
-        }
-
-        public void SetLocale()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_4);
-            pageMerge.Text = LangMan.LS(LSID.LSID_RecMerge);
-            pageMergeOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
-            btnAutoSearch.Text = LangMan.LS(LSID.LSID_RM_Search);
-            btnSkip.Text = LangMan.LS(LSID.LSID_RM_Skip);
-            rgMode.Text = LangMan.LS(LSID.LSID_RM_Records);
-            radPersons.Text = LangMan.LS(LSID.LSID_RPIndividuals);
-            radNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            radFamilies.Text = LangMan.LS(LSID.LSID_RPFamilies);
-            radSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            grpSearchPersons.Text = LangMan.LS(LSID.LSID_RM_SearchPersons);
-            chkIndistinctMatching.Text = LangMan.LS(LSID.LSID_RM_IndistinctMatching);
-            chkBirthYear.Text = LangMan.LS(LSID.LSID_RM_BirthYear);
-            lblNameAccuracy.Text = LangMan.LS(LSID.LSID_RM_NameAccuracy);
-            lblYearInaccuracy.Text = LangMan.LS(LSID.LSID_RM_YearInaccuracy);
-            grpMergeOther.Text = LangMan.LS(LSID.LSID_Other);
-            chkBookmarkMerged.Text = LangMan.LS(LSID.LSID_BookmarkMerged);
         }
 
         private void radMergeMode_Click(object sender, EventArgs e)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -92,19 +92,6 @@ namespace GKUI.Forms
 
             fNotesList = new GKSheetList(pageNotes);
             fSourcesList = new GKSheetList(pageSources);
-
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_RPMultimedia);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            lblName.Text = LangMan.LS(LSID.LSID_Title);
-            lblType.Text = LangMan.LS(LSID.LSID_Type);
-            lblStoreType.Text = LangMan.LS(LSID.LSID_StoreType);
-            lblFile.Text = LangMan.LS(LSID.LSID_File);
-            btnView.Text = LangMan.LS(LSID.LSID_View) + @"...";
 
             fController = new MediaEditDlgController(this);
             fController.Init(baseWin);

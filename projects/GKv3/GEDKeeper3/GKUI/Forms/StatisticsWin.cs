@@ -125,21 +125,9 @@ namespace GKUI.Forms
 
         public override void SetLocale()
         {
-            Title = LangMan.LS(LSID.LSID_MIStats);
-            grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
+            fController.SetLocale();
 
-            lvSummary.ClearColumns();
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100);
-
-            SetToolTip(tbExcelExport, LangMan.LS(LSID.LSID_MIExportToExcelFile));
             fController.UpdateCommonStats();
-
-            int oldIndex = cbType.SelectedIndex;
-            fController.UpdateStatsTypes();
-            cbType.SelectedIndex = oldIndex;
         }
 
         private void tbExcelExport_Click(object sender, EventArgs e)

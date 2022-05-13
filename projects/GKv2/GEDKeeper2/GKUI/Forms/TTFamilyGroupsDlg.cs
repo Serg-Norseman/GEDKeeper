@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -57,19 +57,6 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
-
-            SetLocale();
-        }
-
-        public void SetLocale()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_6);
-            pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnAnalyseGroups.Text = LangMan.LS(LSID.LSID_Analyze);
-            miDetails.Text = LangMan.LS(LSID.LSID_Details);
-            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-            miCopyXRef.Text = LangMan.LS(LSID.LSID_CopyXRef);
         }
 
         private void btnAnalyseGroups_Click(object sender, EventArgs e)

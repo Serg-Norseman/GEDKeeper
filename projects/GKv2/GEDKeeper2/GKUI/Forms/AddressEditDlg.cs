@@ -22,7 +22,6 @@ using System;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -101,17 +100,14 @@ namespace GKUI.Forms
             fPhonesList = new GKSheetList(pagePhones);
             fPhonesList.SetControlName("fPhonesList"); // for purpose of tests
             fPhonesList.OnModify += ListModify;
-            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
 
             fMailsList = new GKSheetList(pageEmails);
             fMailsList.SetControlName("fMailsList"); // for purpose of tests
             fMailsList.OnModify += ListModify;
-            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
 
             fWebsList = new GKSheetList(pageWebPages);
             fWebsList.SetControlName("fWebsList"); // for purpose of tests
             fWebsList.OnModify += ListModify;
-            fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);

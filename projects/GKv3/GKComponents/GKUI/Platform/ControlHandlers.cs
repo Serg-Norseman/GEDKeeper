@@ -771,16 +771,30 @@ namespace GKUI.Platform
         }
     }
 
-    public sealed class MenuItemHandler : ControlHandler<ButtonMenuItem, MenuItemHandler>, IMenuItem
+    public sealed class MenuItemHandler : ControlHandler<MenuItem, MenuItemHandler>, IMenuItem
     {
-        public MenuItemHandler(ButtonMenuItem control) : base(control)
+        public MenuItemHandler(MenuItem control) : base(control)
         {
         }
 
         public bool Checked
         {
-            get { return false; }
-            set { }
+            get {
+                if (Control is RadioMenuItem) {
+                    return ((RadioMenuItem)Control).Checked;
+                } else if (Control is CheckMenuItem) {
+                    return ((CheckMenuItem)Control).Checked;
+                } else {
+                    return false;
+                }
+            }
+            set {
+                if (Control is RadioMenuItem) {
+                    ((RadioMenuItem)Control).Checked = value;
+                } else if (Control is CheckMenuItem) {
+                    ((CheckMenuItem)Control).Checked = value;
+                }
+            }
         }
 
         public bool Enabled
@@ -795,21 +809,53 @@ namespace GKUI.Platform
             set { Control.Tag = value; }
         }
 
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
         public int ItemsCount
         {
-            get { return Control.Items.Count; }
+            get { return (Control is ButtonMenuItem) ? ((ButtonMenuItem)Control).Items.Count : 0; }
         }
 
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
         {
-            var item = new MenuItemEx(text, tag, image, action);
-            Control.Items.Add(item);
-            return item;
+            if (Control is ButtonMenuItem) {
+                var item = new MenuItemEx(text, tag, image, action);
+                ((ButtonMenuItem)Control).Items.Add(item);
+                return item;
+            } else {
+                return null;
+            }
         }
 
         public void ClearItems()
         {
-            Control.Items.Clear();
+            if (Control is ButtonMenuItem) {
+                ((ButtonMenuItem)Control).Items.Clear();
+            }
+        }
+    }
+
+
+    public class ButtonToolItemHandler : ControlHandler<ButtonToolItem, ButtonToolItemHandler>, IButtonToolItem
+    {
+        public ButtonToolItemHandler(ButtonToolItem control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
         }
     }
 

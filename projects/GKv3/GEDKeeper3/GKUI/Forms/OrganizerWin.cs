@@ -19,15 +19,14 @@
  */
 
 using System;
-using Eto.Forms;
 using BSLib;
-using GKCore;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Views;
 using GKUI.Components;
-using Eto.Serialization.Xaml;
 
 namespace GKUI.Forms
 {
@@ -79,23 +78,15 @@ namespace GKUI.Forms
 
             fAdrList = new GKSheetList(pageAddresses);
             fAdrList.Buttons = EnumSet<SheetButton>.Create();
-            fAdrList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fAdrList.AddColumn(LangMan.LS(LSID.LSID_Address), 100, false);
 
             fPhonesList = new GKSheetList(pageTelephones);
             fPhonesList.Buttons = EnumSet<SheetButton>.Create();
-            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 100, false);
 
             fMailsList = new GKSheetList(pageMails);
             fMailsList.Buttons = EnumSet<SheetButton>.Create();
-            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 100, false);
 
             fWebsList = new GKSheetList(pageWebs);
             fWebsList.Buttons = EnumSet<SheetButton>.Create();
-            fWebsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
 
             fController = new OrganizerController(this);
             fController.Init(baseWin);

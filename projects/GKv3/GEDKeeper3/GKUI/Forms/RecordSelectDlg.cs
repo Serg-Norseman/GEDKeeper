@@ -79,12 +79,6 @@ namespace GKUI.Forms
             btnSelect.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_WinRecordSelect);
-            btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);
-            btnSelect.Text = LangMan.LS(LSID.LSID_DlgSelect);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);
             fController.RecType = recType;

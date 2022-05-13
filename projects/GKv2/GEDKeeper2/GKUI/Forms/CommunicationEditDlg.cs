@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,6 @@ using System;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -94,19 +93,6 @@ namespace GKUI.Forms
 
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinCommunicationEdit);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            lblTheme.Text = LangMan.LS(LSID.LSID_Theme);
-            lblCorresponder.Text = LangMan.LS(LSID.LSID_Corresponder);
-            lblType.Text = LangMan.LS(LSID.LSID_Type);
-            lblDate.Text = LangMan.LS(LSID.LSID_Date);
-
-            SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
 
             fController = new CommunicationEditDlgController(this);
             fController.Init(baseWin);

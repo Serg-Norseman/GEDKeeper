@@ -99,10 +99,14 @@ namespace GKCore.Controllers
         public override void SetLocale()
         {
             fView.Title = LangMan.LS(LSID.LSID_ToolOp_9);
+
             GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.LSID_ToolOp_9);
             GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
             GetControl<IButton>("btnIntoList").Text = LangMan.LS(LSID.LSID_InsertIntoBook);
             GetControl<IButton>("btnAnalysePlaces").Text = LangMan.LS(LSID.LSID_Analyze);
+
+            fView.PlacesList.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
+            fView.PlacesList.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
         }
     }
 }

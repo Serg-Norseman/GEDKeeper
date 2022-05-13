@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -74,18 +73,6 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnLangEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-
-            // SetLocale()
-            Title = LangMan.LS(LSID.LSID_MIFileProperties);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            pageAuthor.Text = LangMan.LS(LSID.LSID_Author);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblAddress.Text = LangMan.LS(LSID.LSID_Address);
-            lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
-            pageOther.Text = LangMan.LS(LSID.LSID_Other);
-            lvRecordStats.SetColumnCaption(0, LangMan.LS(LSID.LSID_RM_Records));
-            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
 
             fController = new FilePropertiesDlgController(this);
             fController.Init(baseWin);

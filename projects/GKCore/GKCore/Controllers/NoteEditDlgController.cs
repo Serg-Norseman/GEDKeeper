@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -30,7 +31,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class NoteEditDlgController : DialogController<INoteEdit>
+    public class NoteEditDlgController : DialogController<INoteEdit>
     {
         private GDMNoteRecord fNoteRecord;
 
@@ -103,7 +104,8 @@ namespace GKCore.Controllers
         public void Import()
         {
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt");
-            if (string.IsNullOrEmpty(fileName)) return;
+            if (string.IsNullOrEmpty(fileName))
+                return;
 
             using (var sr = new StreamReader(fileName)) {
                 fView.Note.Text = sr.ReadToEnd();
@@ -113,7 +115,8 @@ namespace GKCore.Controllers
         public void Export()
         {
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt", "", true);
-            if (string.IsNullOrEmpty(fileName)) return;
+            if (string.IsNullOrEmpty(fileName))
+                return;
 
             using (var sw = new StreamWriter(fileName)) {
                 sw.Write(fView.Note.Text);
@@ -132,6 +135,30 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_Note);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+        }
+    }
+
+    public class NoteEditDlgExController : NoteEditDlgController
+    {
+        public NoteEditDlgExController(INoteEdit view) : base(view)
+        {
+        }
+
+        public override void SetLocale()
+        {
+            base.SetLocale();
+
+            GetControl<IButtonToolItem>("ddbtnActions").Text = LangMan.LS(LSID.LSID_Actions);
+            GetControl<IMenuItem>("miSelectAndCopy").Text = LangMan.LS(LSID.LSID_SelectAndCopy);
+            GetControl<IMenuItem>("miImport").Text = LangMan.LS(LSID.LSID_Import);
+            GetControl<IMenuItem>("miExport").Text = LangMan.LS(LSID.LSID_MIExport);
+            GetControl<IMenuItem>("miClear").Text = LangMan.LS(LSID.LSID_Clear);
+            GetControl<ITabPage>("pageEditor").Text = LangMan.LS(LSID.LSID_Note);
+            GetControl<ITabPage>("pagePreview").Text = LangMan.LS(LSID.LSID_DocPreview);
         }
     }
 }

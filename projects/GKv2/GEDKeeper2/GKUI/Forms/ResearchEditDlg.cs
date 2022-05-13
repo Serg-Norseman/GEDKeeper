@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -124,8 +124,6 @@ namespace GKUI.Forms
 
             fNotesList = new GKSheetList(pageNotes);
 
-            SetLocale();
-
             fController = new ResearchEditDlgController(this);
             fController.Init(baseWin);
 
@@ -133,23 +131,6 @@ namespace GKUI.Forms
             fCommunicationsList.ListModel = new ResCommunicationsSublistModel(baseWin, fController.LocalUndoman);
             fGroupsList.ListModel = new ResGroupsSublistModel(baseWin, fController.LocalUndoman);
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-        }
-
-        public void SetLocale()
-        {
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinResearchEdit);
-            pageTasks.Text = LangMan.LS(LSID.LSID_RPTasks);
-            pageCommunications.Text = LangMan.LS(LSID.LSID_RPCommunications);
-            pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            lblName.Text = LangMan.LS(LSID.LSID_Title);
-            lblPriority.Text = LangMan.LS(LSID.LSID_Priority);
-            lblStatus.Text = LangMan.LS(LSID.LSID_Status);
-            lblPercent.Text = LangMan.LS(LSID.LSID_Percent);
-            lblStartDate.Text = LangMan.LS(LSID.LSID_StartDate);
-            lblStopDate.Text = LangMan.LS(LSID.LSID_StopDate);
         }
 
         private void ListTasksModify(object sender, ModifyEventArgs eArgs)

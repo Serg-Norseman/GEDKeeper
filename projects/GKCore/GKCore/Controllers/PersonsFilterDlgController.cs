@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -194,6 +195,23 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.LSID_MIFilter);
+
+            GetControl<ITabPage>("pageSpecificFilter").Text = LangMan.LS(LSID.LSID_PersonsFilter);
+            GetControl<IRadioButton>("rbAll").Text = LangMan.LS(LSID.LSID_All);
+            GetControl<IRadioButton>("rbOnlyLive").Text = LangMan.LS(LSID.LSID_OnlyAlive);
+            GetControl<IRadioButton>("rbOnlyDead").Text = LangMan.LS(LSID.LSID_OnlyDied);
+            GetControl<IRadioButton>("rbAliveBefore").Text = LangMan.LS(LSID.LSID_AliveBefore).ToLower();
+            GetControl<IRadioButton>("rbSexAll").Text = LangMan.LS(LSID.LSID_All);
+            GetControl<IRadioButton>("rbSexMale").Text = LangMan.LS(LSID.LSID_OnlyMans);
+            GetControl<IRadioButton>("rbSexFemale").Text = LangMan.LS(LSID.LSID_OnlyWomans);
+            GetControl<ILabel>("lblAliveBefore").Text = LangMan.LS(LSID.LSID_AliveBefore) + ":";
+            GetControl<ILabel>("lblNameMask").Text = LangMan.LS(LSID.LSID_NameMask);
+            GetControl<ILabel>("lblPlaceMask").Text = LangMan.LS(LSID.LSID_PlaceMask);
+            GetControl<ILabel>("lblEventsMask").Text = LangMan.LS(LSID.LSID_EventMask);
+            GetControl<ILabel>("lblGroups").Text = LangMan.LS(LSID.LSID_RPGroups);
+            GetControl<ILabel>("lblSources").Text = LangMan.LS(LSID.LSID_RPSources);
+            GetControl<ICheckBox>("chkOnlyPatriarchs").Text = LangMan.LS(LSID.LSID_OnlyPatriarchs);
         }
     }
 }
