@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <RootNamespace />
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release</Configurations>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,5 +28,80 @@
         <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.6.1" />
     </ItemGroup>
+
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'MSWin_Debug' ">
+        <DefineConstants>OS_MSWIN</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'MSWin_Release' ">
+        <DefineConstants>OS_MSWIN</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Linux_Debug' ">
+        <DefineConstants>OS_LINUX</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Linux_Release' ">
+        <DefineConstants>OS_LINUX</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'MacOS_Debug' ">
+        <DefineConstants>OS_MACOS</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'MacOS_Release' ">
+        <DefineConstants>OS_MACOS</DefineConstants>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
+        <TargetFramework>net462</TargetFramework>
+        <OutputType>WinExe</OutputType>
+        <ApplicationIcon>icon_gedkeeper.ico</ApplicationIcon>
+        <StartupObject>GEDKeeper3.GKProgram</StartupObject>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutputPath>..\..\..\bin\</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
+        <PackageReference Include="Eto.Platform.Wpf" Version="2.6.1" />
+        <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.16" />
+    </ItemGroup>
+
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <OutputType>exe</OutputType>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutputPath>..\..\..\bin\</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
+        <PackageReference Include="Eto.Platform.Gtk" Version="2.6.1" />
+    </ItemGroup>
+
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
+        <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+        <OutputType>exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <MacBundleName>GEDKeeper3</MacBundleName>
+    </PropertyGroup>
+
+    <ItemGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
+        <PackageReference Include="Eto.Platform.Mac64" Version="2.6.1" />
+        <PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
+        <Content Include="..\..\GKCore\Resources\icon_gedkeeper.png">
+            <Link>icon_gedkeeper.png</Link>
+        </Content>
+    </ItemGroup>
+
+    <Target Name="MacBundleLocaleFiles" BeforeTargets="MacFinishBundle" Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
+        <ItemGroup>
+            <LocaleFiles Include="..\..\..\locales\**\*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(LocaleFiles)" DestinationFolder="$(OutputContents)\locales\%(RecursiveDir)" />
+    </Target>
 
 </Project>

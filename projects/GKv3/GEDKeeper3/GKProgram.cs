@@ -20,19 +20,20 @@
 
 using System;
 using System.Reflection;
+using System.Text;
 using Eto;
 using Eto.Forms;
 using GKCore;
 using GKUI.Platform;
 
-[assembly: AssemblyTitle("GEDKeeper3.Wpf")]
+[assembly: AssemblyTitle("GEDKeeper3")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct(GKData.APP_TITLE)]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
 [assembly: AssemblyVersion(GKData.APP_VERSION_3X)]
 [assembly: AssemblyCulture("")]
 
-namespace GEDKeeper3.Wpf
+namespace GEDKeeper3
 {
     /// <summary>
     /// The main startup class of application.
@@ -53,7 +54,25 @@ namespace GEDKeeper3.Wpf
             Logger.Init(AppHost.GetLogFilename());
             AppHost.LogSysInfo();
 
-            var application = new Application(Platforms.Wpf);
+            var application = new Application(
+#if OS_MSWIN
+                Platforms.Wpf
+#endif
+
+#if OS_LINUX
+#if NETCOREAPP3_1
+                Platforms.Gtk
+#else
+#pragma warning disable CS0618
+                Platforms.Gtk2
+#pragma warning restore CS0618
+#endif
+#endif
+
+#if OS_MACOS
+                Platforms.Mac64
+#endif
+            );
 
             AppHost.InitSettings();
             try {

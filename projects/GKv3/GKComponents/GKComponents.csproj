@@ -17,7 +17,6 @@
         <Reference Include="BSLib.Design">
             <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
         </Reference>
-
     </ItemGroup>
 
     <ItemGroup>
