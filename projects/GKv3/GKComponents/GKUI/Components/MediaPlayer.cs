@@ -20,8 +20,8 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Interfaces;
 using LibVLCSharp.Shared;
@@ -31,6 +31,19 @@ namespace GKUI.Components
 {
     public partial class MediaPlayer : Panel, ILocalizable
     {
+        #region Design components
+
+        private Panel pnlVideo;
+        private Button btnMute;
+        private Slider trkVolume;
+        private Button btnPause;
+        private Button btnPlay;
+        private Button btnStop;
+        private Slider trkPosition;
+        private Label lblDuration;
+
+        #endregion
+
         private LibVLC fLibVLC;
         private Media fMedia;
         private string fMediaFile;
@@ -44,9 +57,12 @@ namespace GKUI.Components
 
         public MediaPlayer()
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
-            BackgroundColor = Colors.Black;
+            btnPause.Image = UIHelper.LoadResourceImage("Resources.btn_pause.png");
+            btnPlay.Image = UIHelper.LoadResourceImage("Resources.btn_play.png");
+            btnStop.Image = UIHelper.LoadResourceImage("Resources.btn_stop.png");
+            btnMute.Image = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
 
             Core.Initialize();
             fLibVLC = new LibVLC();
@@ -73,15 +89,35 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
 
-        private void SetPlayer(VLCMediaPlayer value)
+        private void Play()
         {
-            if (ReferenceEquals(fPlayer, value)) {
-                return;
+            if (fMedia == null) {
+                if (string.IsNullOrEmpty(fMediaFile)) {
+                    AppHost.StdDialogs.ShowError("Please select media path first");
+                    return;
+                }
+
+                fMedia = new Media(fLibVLC, fMediaFile);
+                fMedia.DurationChanged += Events_DurationChanged;
+                fMedia.StateChanged += Events_StateChanged;
+                fMedia.ParsedChanged += Events_ParsedChanged;
+
+                //System.Diagnostics.Debug.Print(this.ParentWindow.NativeHandle.ToString());
+                //System.Diagnostics.Debug.Print(this.NativeHandle.ToString());
+
+                MpAttach(IntPtr.Zero);
+                fPlayer = new VLCMediaPlayer(fMedia);
+                MpAttach(pnlVideo.NativeHandle);
+
+                fPlayer.PositionChanged += Events_PlayerPositionChanged;
+                fPlayer.TimeChanged += Events_TimeChanged;
+                fPlayer.EndReached += Events_MediaEnded;
+                fPlayer.Stopped += Events_PlayerStopped;
+
+                fMedia.Parse();
             }
 
-            MpAttach(IntPtr.Zero);
-            fPlayer = value;
-            MpAttach(pnlVideo.NativeHandle);
+            fPlayer.Play();
         }
 
         private void MpAttach(IntPtr handle)
@@ -167,27 +203,7 @@ namespace GKUI.Components
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            if (fMedia == null) {
-                if (string.IsNullOrEmpty(fMediaFile)) {
-                    AppHost.StdDialogs.ShowError("Please select media path first");
-                    return;
-                }
-
-                fMedia = new Media(fLibVLC, fMediaFile);
-                fMedia.DurationChanged += Events_DurationChanged;
-                fMedia.StateChanged += Events_StateChanged;
-                fMedia.ParsedChanged += Events_ParsedChanged;
-
-                SetPlayer(new VLCMediaPlayer(fMedia));
-                fPlayer.PositionChanged += Events_PlayerPositionChanged;
-                fPlayer.TimeChanged += Events_TimeChanged;
-                fPlayer.EndReached += Events_MediaEnded;
-                fPlayer.Stopped += Events_PlayerStopped;
-
-                fMedia.Parse();
-            }
-
-            fPlayer.Play(fMedia);
+            Play();
         }
 
         private void trkVolume_Scroll(object sender, EventArgs e)

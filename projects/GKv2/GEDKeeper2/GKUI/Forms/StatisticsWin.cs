@@ -94,8 +94,6 @@ namespace GKUI.Forms
 
             fController = new StatisticsWinController(this, selectedRecords);
             fController.Init(baseWin);
-
-            SetLocale();
         }
 
         private void StatisticsWin_KeyDown(object sender, KeyEventArgs e)

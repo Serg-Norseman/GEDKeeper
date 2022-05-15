@@ -18,9 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib.Design.MVP;
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Search;
 
@@ -29,7 +29,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class QuickSearchDlgController : Controller<IQuickSearchDlg>
+    public sealed class QuickSearchDlgController : FormController<IQuickSearchDlg>
     {
         private readonly IWorkWindow fWorkWindow;
         private ISearchStrategy fStrategy;
@@ -83,6 +83,14 @@ namespace GKCore.Controllers
             if (result != null) {
                 SelectResult(result as SearchResult);
             }
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_Search);
+            //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
+            SetToolTip("btnPrev", LangMan.LS(LSID.LSID_FindPrevious));
+            SetToolTip("btnNext", LangMan.LS(LSID.LSID_FindNext));
         }
     }
 }

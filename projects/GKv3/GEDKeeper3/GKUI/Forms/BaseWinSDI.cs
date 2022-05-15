@@ -588,81 +588,7 @@ namespace GKUI.Forms
 
         public override void SetLocale()
         {
-            miFile.Text = LangMan.LS(LSID.LSID_MIFile);
-            miEdit.Text = LangMan.LS(LSID.LSID_MIEdit);
-            miPedigree.Text = LangMan.LS(LSID.LSID_MIPedigree);
-            miService.Text = LangMan.LS(LSID.LSID_MIService);
-            //miWindow.Text = LangMan.LS(LSID.LSID_MIWindow);
-            miHelp.Text = LangMan.LS(LSID.LSID_MIHelp);
-
-            miFileNew.Text = LangMan.LS(LSID.LSID_MIFileNew);
-            miFileLoad.Text = LangMan.LS(LSID.LSID_MIFileLoad);
-            miMRUFiles.Text = LangMan.LS(LSID.LSID_MIMRUFiles);
-            miFileSave.Text = LangMan.LS(LSID.LSID_MIFileSave);
-            miFileSaveAs.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
-            miFileClose.Text = LangMan.LS(LSID.LSID_MIFileClose);
-            miFileProperties.Text = LangMan.LS(LSID.LSID_MIFileProperties) + @"...";
-            miExport.Text = LangMan.LS(LSID.LSID_MIExport);
-            miExportToFamilyBook.Text = LangMan.LS(LSID.LSID_MIExportToFamilyBook);
-            miExportToTreesAlbum.Text = LangMan.LS(LSID.LSID_TreesAlbum);
-            miExportToExcelFile.Text = LangMan.LS(LSID.LSID_MIExportToExcelFile);
-            miExit.Text = LangMan.LS(LSID.LSID_MIExit);
-
-            miRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
-            miRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
-            miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
-
-            miTreeAncestors.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
-            miTreeDescendants.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
-            miTreeBoth.Text = LangMan.LS(LSID.LSID_MITreeBoth);
-            miPedigreeAscend.Text = LangMan.LS(LSID.LSID_MIPedigreeAscend);
-            miPedigree_dAboville.Text = LangMan.LS(LSID.LSID_MIPedigree_dAboville);
-            miPedigree_Konovalov.Text = LangMan.LS(LSID.LSID_MIPedigree_Konovalov);
-
-            miMap.Text = LangMan.LS(LSID.LSID_MIMap) + @"...";
-            miStats.Text = LangMan.LS(LSID.LSID_MIStats) + @"...";
-            miSearch.Text = LangMan.LS(LSID.LSID_Search);
-            miAncestorsCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
-            miDescendantsCircle.Text = LangMan.LS(LSID.LSID_DescendantsCircle);
-            miRelationshipCalculator.Text = LangMan.LS(LSID.LSID_RelationshipCalculator);
-
-            miOrganizer.Text = LangMan.LS(LSID.LSID_MIOrganizer) + @"...";
-            miSlideshow.Text = LangMan.LS(LSID.LSID_Slideshow) + @"...";
-            miScripts.Text = LangMan.LS(LSID.LSID_MIScripts);
-            miTreeTools.Text = LangMan.LS(LSID.LSID_MITreeTools);
-            miFilter.Text = LangMan.LS(LSID.LSID_MIFilter) + @"...";
-            miOptions.Text = LangMan.LS(LSID.LSID_MIOptions) + @"...";
-
-            //miWinCascade.Text = LangMan.LS(LSID.LSID_MIWinCascade);
-            //miWinHTile.Text = LangMan.LS(LSID.LSID_MIWinHTile);
-            //miWinVTile.Text = LangMan.LS(LSID.LSID_MIWinVTile);
-            //miWinMinimize.Text = LangMan.LS(LSID.LSID_MIWinMinimize);
-            //miWinArrange.Text = LangMan.LS(LSID.LSID_MIWinArrange);
-
-            miContext.Text = LangMan.LS(LSID.LSID_MIContext);
-            miAbout.Text = LangMan.LS(LSID.LSID_MIAbout) + @"...";
-            miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
-            miLogView.Text = LangMan.LS(LSID.LSID_LogView);
-            miPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
-            miReports.Text = LangMan.LS(LSID.LSID_Reports);
-
-            SetToolTip(tbFileNew, LangMan.LS(LSID.LSID_FileNewTip));
-            SetToolTip(tbFileLoad, LangMan.LS(LSID.LSID_FileLoadTip));
-            SetToolTip(tbFileSave, LangMan.LS(LSID.LSID_FileSaveTip));
-            SetToolTip(tbRecordAdd, LangMan.LS(LSID.LSID_RecordAddTip));
-            SetToolTip(tbRecordEdit, LangMan.LS(LSID.LSID_RecordEditTip));
-            SetToolTip(tbRecordDelete, LangMan.LS(LSID.LSID_RecordDeleteTip));
-            SetToolTip(tbFilter, LangMan.LS(LSID.LSID_FilterTip));
-            SetToolTip(tbTreeAncestors, LangMan.LS(LSID.LSID_TreeAncestorsTip));
-            SetToolTip(tbTreeDescendants, LangMan.LS(LSID.LSID_TreeDescendantsTip));
-            SetToolTip(tbTreeBoth, LangMan.LS(LSID.LSID_TreeBothTip));
-            SetToolTip(tbPedigree, LangMan.LS(LSID.LSID_PedigreeTip));
-            miPedigree_dAboville2.Text = LangMan.LS(LSID.LSID_Pedigree_dAbovilleTip);
-            miPedigree_Konovalov2.Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
-            SetToolTip(tbStats, LangMan.LS(LSID.LSID_StatsTip));
-
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
 
             int num = miPlugins.Items.Count;
             for (int i = 0; i < num; i++) {
@@ -682,21 +608,6 @@ namespace GKUI.Forms
             tabsRecords.Pages[ 8].Text = LangMan.LS(LSID.LSID_RPTasks);
             tabsRecords.Pages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
             tabsRecords.Pages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
-
-            miContRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
-            miContRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
-            miContRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
-            miContRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
-            miContRecordMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
-
-            miTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
-            miTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
-            miTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
-            miRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
-            miFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
-            miTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
-            miPatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
-            miPlacesManager.Text = LangMan.LS(LSID.LSID_ToolOp_9);
         }
 
         #endregion

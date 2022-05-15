@@ -22,7 +22,6 @@ using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -59,8 +58,6 @@ namespace GKUI.Forms
             btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             fController = new QuickSearchDlgController(this, workWindow);
-
-            SetLocale();
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)
@@ -98,10 +95,7 @@ namespace GKUI.Forms
 
         public void SetLocale()
         {
-            Title = LangMan.LS(LSID.LSID_Search);
-            //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
-            SetToolTip(btnPrev, LangMan.LS(LSID.LSID_FindPrevious));
-            SetToolTip(btnNext, LangMan.LS(LSID.LSID_FindNext));
+            fController.SetLocale();
         }
     }
 }
