@@ -52,6 +52,22 @@
     </PropertyGroup>
 
 
+    <PropertyGroup Condition=" $(Configuration.Contains('_Debug')) ">
+        <DebugSymbols>True</DebugSymbols>
+        <DebugType>Full</DebugType>
+        <Optimize>False</Optimize>
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+        <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(DefineConstants.Contains('_Release')) ">
+        <DebugSymbols>False</DebugSymbols>
+        <DebugType>None</DebugType>
+        <Optimize>True</Optimize>
+        <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+        <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+    </PropertyGroup>
+
+
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
         <TargetFramework>net462</TargetFramework>
         <OutputType>WinExe</OutputType>
