@@ -199,7 +199,6 @@ namespace GKUI.Forms
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
 
             tabsRecords.SuspendLayout();
-
             CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GDMRecordType.rtIndividual);
             CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GDMRecordType.rtFamily);
             CreatePage(LangMan.LS(LSID.LSID_RPNotes), GDMRecordType.rtNote);
@@ -211,10 +210,7 @@ namespace GKUI.Forms
             CreatePage(LangMan.LS(LSID.LSID_RPTasks), GDMRecordType.rtTask);
             CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GDMRecordType.rtCommunication);
             CreatePage(LangMan.LS(LSID.LSID_RPLocations), GDMRecordType.rtLocation);
-
             tabsRecords.ResumeLayout();
-
-            SetLocale();
         }
 
         protected override void Dispose(bool disposing)
@@ -296,6 +292,8 @@ namespace GKUI.Forms
         private void Form_Load(object sender, EventArgs e)
         {
             try {
+                AppHost.Instance.LoadLanguage(AppHost.Options.InterfaceLang);
+
                 ((IWorkWindow)this).UpdateSettings();
 
                 fController.UpdatePluginsItems();

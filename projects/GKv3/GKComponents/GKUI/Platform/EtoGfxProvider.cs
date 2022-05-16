@@ -291,7 +291,8 @@ namespace GKUI.Platform
         {
             string fontName;
             if (Application.Instance.Platform.IsGtk) {
-                fontName = "Noto Sans";
+                //fontName = "Noto Sans";
+                fontName = "Sans";
             } else {
                 fontName = "Verdana"; // "Tahoma";
             }

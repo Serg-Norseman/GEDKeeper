@@ -60,7 +60,7 @@ namespace GEDKeeper3
 #endif
 
 #if OS_LINUX
-#if NETCOREAPP3_1
+#if NETCOREAPP3_1 || NET6_0
                 Platforms.Gtk
 #else
 #pragma warning disable CS0618
@@ -79,7 +79,12 @@ namespace GEDKeeper3
                 var appHost = (EtoAppHost)AppHost.Instance;
                 appHost.Init(args, false);
 
+#if OS_LINUX
+                var win = (appHost.RunningForms.Count > 0 ? appHost.RunningForms[0] : null) as Form;
+                application.Run(win);
+#else
                 application.Run();
+#endif
             } finally {
                 AppHost.DoneSettings();
             }

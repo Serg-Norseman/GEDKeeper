@@ -68,8 +68,9 @@
 
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>netcoreapp6.0</TargetFramework>
         <OutputType>exe</OutputType>
+        <StartupObject>GEDKeeper3.GKProgram</StartupObject>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <OutputPath>..\..\..\bin\</OutputPath>
     </PropertyGroup>
