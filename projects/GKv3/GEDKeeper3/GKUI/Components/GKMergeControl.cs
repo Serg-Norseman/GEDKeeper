@@ -175,11 +175,11 @@ namespace GKUI.Components
 
             Edit1 = new TextBox();
             Edit1.ReadOnly = true;
-            Edit1.Width = 350;
+            Edit1.Width = 330;
 
             Edit2 = new TextBox();
             Edit2.ReadOnly = true;
-            Edit2.Width = 350;
+            Edit2.Width = 330;
 
             btnRec1Select = new Button();
             btnRec1Select.Size = new Size(80, 26);
@@ -204,28 +204,40 @@ namespace GKUI.Components
             btnMergeToRight.Click += btnMergeToRight_Click;
 
             fView1 = new HyperView();
+            fView1.Width = 420;
+
             fView2 = new HyperView();
+            fView2.Width = 420;
 
-            var contPan = new DefTableLayout(2, 4);
-            contPan.SetRowScale(0, false);
-            contPan.SetRowScale(1, false);
-            contPan.SetRowScale(2, true);
-            contPan.SetRowScale(3, false);
-            contPan.SetColumnScale(0, true);
-            contPan.SetColumnScale(1, true);
+            Content = new TableLayout {
+                Padding = new Padding(0),
+                Spacing = new Size(4, 4),
+                Rows = {
+                    new TableRow {
+                        Cells = { Lab1, Lab2 }
+                    },
+                    new TableRow {
+                        Cells = {
+                            new StackLayout() { Orientation = Orientation.Horizontal, Spacing = 4, Items = { Edit1, btnRec1Select } },
+                            new StackLayout() { Orientation = Orientation.Horizontal, Spacing = 4, Items = { Edit2, btnRec2Select } }
+                        }
+                    },
+                    new TableRow {
+                        ScaleHeight = true,
+                        Cells = {
+                            new TableCell(fView1, true),
+                            new TableCell(fView2, true)
+                        }
+                    },
+                    new TableRow {
+                        Cells = {
+                            new StackLayout() { Orientation = Orientation.Horizontal, Items = { null, btnMergeToLeft } },
+                            new StackLayout() { Orientation = Orientation.Horizontal, Items = { btnMergeToRight, null } }
+                        }
+                    }
+                }
+            };
 
-            contPan.Add(Lab1, 0, 0);
-            contPan.Add(Lab2, 1, 0);
-            contPan.Add(TableLayout.Horizontal(Edit1, null, btnRec1Select), 0, 1);
-            contPan.Add(TableLayout.Horizontal(Edit2, null, btnRec2Select), 1, 1);
-            contPan.Add(fView1, 0, 2);
-            contPan.Add(fView2, 1, 2);
-            contPan.Add(TableLayout.Horizontal(null, btnMergeToLeft), 0, 3);
-            contPan.Add(TableLayout.Horizontal(btnMergeToRight, null), 1, 3);
-
-            Content = contPan;
-
-            UIHelper.SetControlFont(this, UIHelper.GetDefaultFont());
             ResumeLayout();
         }
 
