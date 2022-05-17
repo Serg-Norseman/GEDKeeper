@@ -102,7 +102,7 @@ namespace GKUI.Platform
 #if OS_LINUX
             Eto.Style.Add<Eto.GtkSharp.Forms.ToolBar.ToolBarHandler>("tbsi", h => {
                 // executed but no result
-                h.Control.ToolbarStyle = Gtk.ToolbarStyle.Both; // Icons
+                h.Control.ToolbarStyle = Gtk.ToolbarStyle.BothHoriz;
                 h.Control.IconSize = Gtk.IconSize.SmallToolbar;
             });
 #endif

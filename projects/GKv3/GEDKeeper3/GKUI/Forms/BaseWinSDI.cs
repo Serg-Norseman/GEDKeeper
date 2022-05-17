@@ -175,23 +175,6 @@ namespace GKUI.Forms
             XamlReader.Load(this);
             InitializeComponent();
 
-            Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
-            tbFileNew.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
-            tbFileLoad.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
-            tbFileSave.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
-            tbRecordAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            tbRecordEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            tbRecordDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            tbFilter.Image = UIHelper.LoadResourceImage("Resources.btn_filter.gif");
-            tbTreeAncestors.Image = UIHelper.LoadResourceImage("Resources.btn_tree_ancestry.gif");
-            tbTreeDescendants.Image = UIHelper.LoadResourceImage("Resources.btn_tree_descendants.gif");
-            tbTreeBoth.Image = UIHelper.LoadResourceImage("Resources.btn_tree_both.gif");
-            tbPedigree.Image = UIHelper.LoadResourceImage("Resources.btn_scroll.gif");
-            tbStats.Image = UIHelper.LoadResourceImage("Resources.btn_table.gif");
-            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
-            tbSendMail.Image = UIHelper.LoadResourceImage("Resources.btn_mail.gif");
-
             AppHost.Instance.LoadWindow(this);
 
             fController = new BaseWinController(this);

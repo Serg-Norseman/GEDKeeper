@@ -152,11 +152,6 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            tbNewScript.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
-            tbLoadScript.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
-            tbSaveScript.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
-            tbRun.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
-
             fController = new ScriptEditWinController(this);
             fController.Init(baseWin);
 

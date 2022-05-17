@@ -179,8 +179,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            tbSaveSnapshot.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
-
             fMapBrowser = new GKMapBrowser();
             Panel1.Content = fMapBrowser;
 

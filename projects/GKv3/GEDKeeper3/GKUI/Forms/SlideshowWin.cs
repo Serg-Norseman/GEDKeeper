@@ -49,10 +49,6 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
-            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
-
             /*SuspendLayout();
             fImageCtl = new ImageBox();
             //fImageCtl.BackgroundColor = SystemColors.ControlBackground;

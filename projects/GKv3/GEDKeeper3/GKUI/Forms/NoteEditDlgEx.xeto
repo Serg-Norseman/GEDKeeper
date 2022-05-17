@@ -5,7 +5,7 @@
   DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
 
   <Dialog.ToolBar>
-    <ToolBar TextAlign="Right">
+    <ToolBar TextAlign="Right" Style="tbsi">
       <ButtonToolItem x:Name="btnBold" Text="B" Click="btnBold_Click" />
       <ButtonToolItem x:Name="btnItalic" Text="I" Click="btnItalic_Click" />
       <ButtonToolItem x:Name="btnUnderline" Text="U" Click="btnUnderline_Click" />

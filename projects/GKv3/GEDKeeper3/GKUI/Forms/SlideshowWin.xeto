@@ -5,11 +5,11 @@
   ShowInTaskbar="True" Load="SlideshowWin_Load" Closed="SlideshowWin_Closed" KeyDown="SlideshowWin_KeyDown" WindowState="Maximized">
 
   <Form.ToolBar>
-    <ToolBar>
-      <ButtonToolItem x:Name="tbStart" Click="tsbStart_Click" />
+    <ToolBar TextAlign="Right" Style="tbsi">
+      <ButtonToolItem x:Name="tbStart" Image="{Resource Resources.btn_start.gif, GKCore}" Click="tsbStart_Click" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbPrev" Click="tsbPrev_Click" />
-      <ButtonToolItem x:Name="tbNext" Click="tsbNext_Click" />
+      <ButtonToolItem x:Name="tbPrev" Image="{Resource Resources.btn_left.gif, GKCore}" Click="tsbPrev_Click" />
+      <ButtonToolItem x:Name="tbNext" Image="{Resource Resources.btn_right.gif, GKCore}" Click="tsbNext_Click" />
     </ToolBar>
   </Form.ToolBar>
 
