@@ -291,8 +291,6 @@ namespace GKUI.Forms
         private void Form_Load(object sender, EventArgs e)
         {
             try {
-                AppHost.Instance.LoadLanguage(AppHost.Options.InterfaceLang);
-
                 ((IWorkWindow)this).UpdateSettings();
 
                 fController.UpdatePluginsItems();

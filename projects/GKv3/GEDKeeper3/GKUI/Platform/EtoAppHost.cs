@@ -47,6 +47,12 @@ namespace GKUI.Platform
 
         public EtoAppHost()
         {
+            InitCommonStyles();
+            InitPlatformStyles();
+        }
+
+        private void InitCommonStyles()
+        {
             Eto.Style.Add<TableLayout>("paddedTable", table => {
                 table.Padding = new Padding(8);
                 table.Spacing = new Size(4, 4);
@@ -89,6 +95,17 @@ namespace GKUI.Platform
                 button.ImagePosition = ButtonImagePosition.Left;
                 button.Size = new Size(26, 26);
             });
+        }
+
+        private void InitPlatformStyles()
+        {
+#if OS_LINUX
+            Eto.Style.Add<Eto.GtkSharp.Forms.ToolBar.ToolBarHandler>("tbsi", h => {
+                // executed but no result
+                h.Control.ToolbarStyle = Gtk.ToolbarStyle.Both; // Icons
+                h.Control.IconSize = Gtk.IconSize.SmallToolbar;
+            });
+#endif
         }
 
         private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)
@@ -137,9 +154,9 @@ namespace GKUI.Platform
             Window activeWin = GetActiveWindow() as Window;
 
             if (keepModeless) {
-                #if !MONO
+#if !MONO
                 //NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-                #endif
+#endif
             }
 
             //UIHelper.CenterFormByParent((Window)form, mainHandle);
@@ -152,9 +169,9 @@ namespace GKUI.Platform
             Form frm = form as Form;
 
             if (frm != null) {
-                #if !MONO
+#if !MONO
                 //NativeMethods.EnableWindow(frm.Handle, value);
-                #endif
+#endif
             }
         }
 

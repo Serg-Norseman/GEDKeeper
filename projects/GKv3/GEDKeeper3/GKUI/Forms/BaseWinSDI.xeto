@@ -6,7 +6,7 @@
   Load="Form_Load" KeyDown="Form_KeyDown" AllowDrop="true" DragDrop="Form_DragDrop" DragEnter="Form_DragEnter">
 
   <Form.ToolBar>
-    <ToolBar TextAlign="Right">
+    <ToolBar Style="tbsi">
       <ButtonToolItem x:Name="tbFileNew" Click="miFileNew_Click" />
       <ButtonToolItem x:Name="tbFileLoad" Click="miFileLoad_Click" />
       <ButtonToolItem x:Name="tbLoadMRU" Text="▼" Click="tbLoadMRU_Click" />

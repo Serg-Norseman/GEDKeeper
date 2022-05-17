@@ -119,7 +119,7 @@ namespace GKCore
         public virtual void Init(string[] args, bool isMDI)
         {
             GKUtils.InitGEDCOM();
-            //LoadLanguage(AppHost.Options.InterfaceLang);
+            LoadLanguage(AppHost.Options.InterfaceLang);
             SetArgs(args);
             StartupWork();
         }

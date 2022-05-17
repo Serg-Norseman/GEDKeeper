@@ -43,11 +43,9 @@ namespace GEDKeeper3
         [STAThread]
         public static void Main(string[] args)
         {
-#if NETCOREAPP3_1
+#if NETCOREAPP3_1 || NET6_0
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
-            //Style.Add<ButtonToolItemHandler>("icons", h => h.Widget.Image.);
-            //Style.Add<ButtonHandler>("icons", h => h.Widget.Image.);
 
             EtoAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
