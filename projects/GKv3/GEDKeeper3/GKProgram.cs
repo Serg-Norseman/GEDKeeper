@@ -20,8 +20,6 @@
 
 using System;
 using System.Reflection;
-using System.Text;
-using Eto;
 using Eto.Forms;
 using GKCore;
 using GKUI.Platform;
@@ -43,46 +41,19 @@ namespace GEDKeeper3
         [STAThread]
         public static void Main(string[] args)
         {
-#if NETCOREAPP3_1 || NET6_0
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-#endif
-
             EtoAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
             Logger.Init(AppHost.GetLogFilename());
             AppHost.LogSysInfo();
 
-            var application = new Application(
-#if OS_MSWIN
-                Platforms.Wpf
-#endif
-
-#if OS_LINUX
-#if NETCOREAPP3_1 || NET6_0
-                Platforms.Gtk
-#else
-#pragma warning disable CS0618
-                Platforms.Gtk2
-#pragma warning restore CS0618
-#endif
-#endif
-
-#if OS_MACOS
-                Platforms.Mac64
-#endif
-            );
+            var application = new Application();
 
             AppHost.InitSettings();
             try {
                 var appHost = (EtoAppHost)AppHost.Instance;
                 appHost.Init(args, false);
 
-#if OS_LINUX
-                var win = (appHost.RunningForms.Count > 0 ? appHost.RunningForms[0] : null) as Form;
-                application.Run(win);
-#else
                 application.Run();
-#endif
             } finally {
                 AppHost.DoneSettings();
             }

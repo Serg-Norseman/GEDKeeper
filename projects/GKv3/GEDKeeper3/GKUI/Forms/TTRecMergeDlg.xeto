@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms" xmlns:gkcom="clr-namespace:GKUI.Components" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
-  x:Class="GKUI.Forms.TTRecMergeDlg"
-  Maximizable="False" Minimizable="False" ShowInTaskbar="False">
+  x:Class="GKUI.Forms.TTRecMergeDlg">
 
   <TableLayout Style="paddedTable8">
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="PageControl1">
+      <TabControl>
         <TabPage x:Name="pageMerge">
 
           <TableLayout Style="paddedTable8">

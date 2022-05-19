@@ -22,7 +22,6 @@ using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
-using GDModel;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -33,8 +32,8 @@ namespace GKUI.Forms
     public sealed partial class TTRecMergeDlg : CommonDialog, IRecMergeDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
-        private TabControl PageControl1;
         private TabPage pageMerge;
         private Button btnAutoSearch;
         private Button btnSkip;
@@ -56,6 +55,7 @@ namespace GKUI.Forms
         private GKUI.Components.GKMergeControl MergeControl;
         private CheckBox chkIndistinctMatching;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly RecMergeController fController;
@@ -112,12 +112,7 @@ namespace GKUI.Forms
 
         private void radMergeMode_Click(object sender, EventArgs e)
         {
-            if (radPersons.Checked) fController.RMMode = GDMRecordType.rtIndividual;
-            if (radNotes.Checked) fController.RMMode = GDMRecordType.rtNote;
-            if (radFamilies.Checked) fController.RMMode = GDMRecordType.rtFamily;
-            if (radSources.Checked) fController.RMMode = GDMRecordType.rtSource;
-
-            MergeControl.MergeMode = fController.RMMode;
+            fController.ChangeMergeMode();
         }
 
         private void chkBookmarkMerged_CheckedChanged(object sender, EventArgs e)

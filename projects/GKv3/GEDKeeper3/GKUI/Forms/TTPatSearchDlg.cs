@@ -32,8 +32,8 @@ namespace GKUI.Forms
     public sealed partial class TTPatSearchDlg : CommonDialog, IPatriarchsSearchDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
-        private TabControl tabsTools;
         private Button btnClose;
         private TabPage pagePatSearch;
         private Button btnPatSearch;
@@ -43,12 +43,12 @@ namespace GKUI.Forms
         private Button btnSetPatriarch;
         private Button btnPatriarchsDiagram;
         private CheckBox chkWithoutDates;
+        private GKListView ListPatriarchs;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly PatriarchsSearchController fController;
-
-        private GKListView ListPatriarchs;
 
         #region View Interface
 
@@ -72,12 +72,6 @@ namespace GKUI.Forms
         public TTPatSearchDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            ListPatriarchs = new GKListView();
-            ListPatriarchs.MouseDoubleClick += ListPatriarchs_DblClick;
-            panPatriarchsContainer.Content = ListPatriarchs;
 
             fController = new PatriarchsSearchController(this);
             fController.Init(baseWin);

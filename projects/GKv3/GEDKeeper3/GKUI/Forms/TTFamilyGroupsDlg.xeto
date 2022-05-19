@@ -2,16 +2,24 @@
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKUI.Forms.TTFamilyGroupsDlg"
-  AbortButton="{x:Reference btnClose}" Maximizable="False" Minimizable="False" ShowInTaskbar="False">
+  AbortButton="{x:Reference btnClose}">
 
   <TableLayout Style="paddedTable8">
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsTools">
+      <TabControl>
         <TabPage x:Name="pageFamilyGroups">
           <TableLayout Style="paddedTable8">
             <TableRow ScaleHeight="True">
-              <TreeView x:Name="tvGroups" Size="780, 340" LabelEdit="False" MouseDoubleClick="tvGroups_DoubleClick" />
+              <TreeView x:Name="tvGroups" Size="780, 340" LabelEdit="False" MouseDoubleClick="tvGroups_DoubleClick">
+                <TreeView.ContextMenu>
+                  <ContextMenu Opening="contextMenu_Opening">
+                    <ButtonMenuItem x:Name="miDetails" Click="miDetails_Click" />
+                    <ButtonMenuItem x:Name="miGoToRecord" Click="miGoToRecord_Click" />
+                    <ButtonMenuItem x:Name="miCopyXRef" Click="miCopyXRef_Click" />
+                  </ContextMenu>
+                </TreeView.ContextMenu>
+              </TreeView>
             </TableRow>
 
             <TableRow>
@@ -31,7 +39,7 @@
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnClose" Style="dlgBtn" Click="CancelClickHandler" />
+          <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

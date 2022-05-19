@@ -156,5 +156,15 @@ namespace GKCore.Controllers
             GetControl<IGroupBox>("grpMergeOther").Text = LangMan.LS(LSID.LSID_Other);
             GetControl<ICheckBox>("chkBookmarkMerged").Text = LangMan.LS(LSID.LSID_BookmarkMerged);
         }
+
+        public void ChangeMergeMode()
+        {
+            if (GetControl<ICheckBox>("radPersons").Checked) fRMMode = GDMRecordType.rtIndividual;
+            if (GetControl<ICheckBox>("radNotes").Checked) fRMMode = GDMRecordType.rtNote;
+            if (GetControl<ICheckBox>("radFamilies").Checked) fRMMode = GDMRecordType.rtFamily;
+            if (GetControl<ICheckBox>("radSources").Checked) fRMMode = GDMRecordType.rtSource;
+
+            fView.MergeCtl.MergeMode = fRMMode;
+        }
     }
 }

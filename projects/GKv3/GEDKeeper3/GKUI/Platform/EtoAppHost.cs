@@ -20,6 +20,7 @@
 
 using System;
 using System.Globalization;
+using System.Text;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
 using Eto.Drawing;
@@ -285,6 +286,11 @@ namespace GKUI.Platform
         {
             if (mdi)
                 throw new ArgumentException("MDI obsolete");
+
+#if NETCOREAPP3_1 || NET6_0
+            // support for legacy encodings
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
 
             var appHost = new EtoAppHost();
             IContainer container = AppHost.Container;

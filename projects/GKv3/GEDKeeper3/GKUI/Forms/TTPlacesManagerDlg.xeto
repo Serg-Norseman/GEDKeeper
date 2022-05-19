@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKUI.Forms.TTPlacesManagerDlg"
-  AbortButton="{x:Reference btnClose}" Maximizable="False" Minimizable="False" ShowInTaskbar="False">
+  AbortButton="{x:Reference btnClose}">
 
   <TableLayout Style="paddedTable8">
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsTools">
+      <TabControl>
         <TabPage x:Name="pagePlaceManage">
 
           <TableLayout Style="paddedTable8">
 
             <TableRow ScaleHeight="True">
-              <Panel x:Name="panPlacesContainer" Size="800, 360" />
+              <comcom:GKListView x:Name="ListPlaces" Size="800, 360" Sorting="True" AllowMultipleSelection="True" MouseDoubleClick="ListPlaces_DblClick" />
             </TableRow>
 
             <TableRow>
@@ -34,7 +34,7 @@
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnClose" Style="dlgBtn" Click="CancelClickHandler" />
+          <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

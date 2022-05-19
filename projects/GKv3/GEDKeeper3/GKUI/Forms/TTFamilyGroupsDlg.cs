@@ -34,18 +34,18 @@ namespace GKUI.Forms
     public sealed partial class TTFamilyGroupsDlg : CommonDialog, IFragmentSearchDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
-        private TabControl tabsTools;
         private Button btnClose;
         private TabPage pageFamilyGroups;
         private TreeView tvGroups;
         private GKUI.Components.LogChart gkLogChart1;
         private Button btnAnalyseGroups;
-        private ContextMenu contextMenu;
         private ButtonMenuItem miDetails;
         private ButtonMenuItem miGoToRecord;
         private ButtonMenuItem miCopyXRef;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly FragmentSearchController fController;
@@ -66,37 +66,12 @@ namespace GKUI.Forms
 
         public TTFamilyGroupsDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            XamlReader.Load(this);
 
             fController = new FragmentSearchController(this);
             fController.Init(baseWin);
 
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
-        }
-
-        private void InitializeComponent()
-        {
-            XamlReader.Load(this);
-
-            miDetails = new ButtonMenuItem();
-            miDetails.Click += miDetails_Click;
-
-            miGoToRecord = new ButtonMenuItem();
-            miGoToRecord.Click += miGoToRecord_Click;
-
-            miCopyXRef = new ButtonMenuItem();
-            miCopyXRef.Click += miCopyXRef_Click;
-
-            contextMenu = new ContextMenu();
-            contextMenu.Items.AddRange(new MenuItem[] {
-                miDetails,
-                miGoToRecord,
-                miCopyXRef
-            });
-            contextMenu.Opening += contextMenu_Opening;
-            tvGroups.ContextMenu = contextMenu;
         }
 
         private void btnAnalyseGroups_Click(object sender, EventArgs e)

@@ -84,12 +84,7 @@ namespace GKUI.Forms
 
         private void radMergeMode_Click(object sender, EventArgs e)
         {
-            if (radPersons.Checked) fController.RMMode = GDMRecordType.rtIndividual;
-            if (radNotes.Checked) fController.RMMode = GDMRecordType.rtNote;
-            if (radFamilies.Checked) fController.RMMode = GDMRecordType.rtFamily;
-            if (radSources.Checked) fController.RMMode = GDMRecordType.rtSource;
-
-            MergeControl.MergeMode = fController.RMMode;
+            fController.ChangeMergeMode();
         }
 
         private void chkBookmarkMerged_CheckedChanged(object sender, EventArgs e)

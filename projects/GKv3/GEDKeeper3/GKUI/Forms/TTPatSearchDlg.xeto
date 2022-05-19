@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKUI.Forms.TTPatSearchDlg"
-  AbortButton="{x:Reference btnClose}" Maximizable="False" Minimizable="False" ShowInTaskbar="False">
+  AbortButton="{x:Reference btnClose}">
 
   <TableLayout Style="paddedTable8">
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsTools">
+      <TabControl>
         <TabPage x:Name="pagePatSearch">
 
           <TableLayout Style="paddedTable8">
 
             <TableRow ScaleHeight="True">
-              <Panel x:Name="panPatriarchsContainer" Size="880, 400" />
+              <comcom:GKListView x:Name="ListPatriarchs" Size="880, 400" MouseDoubleClick="ListPatriarchs_DblClick" />
             </TableRow>
 
             <TableRow>
@@ -38,7 +38,7 @@
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnClose" Style="dlgBtn" Click="CancelClickHandler" />
+          <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>
