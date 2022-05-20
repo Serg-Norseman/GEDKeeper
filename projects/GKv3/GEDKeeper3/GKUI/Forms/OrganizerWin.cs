@@ -33,12 +33,14 @@ namespace GKUI.Forms
     public sealed partial class OrganizerWin : CommonDialog, IOrganizerWin
     {
         #region Design components
+#pragma warning disable CS0169
 
         private TabPage pageAddresses;
         private TabPage pageTelephones;
         private TabPage pageMails;
         private TabPage pageWebs;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly OrganizerController fController;
@@ -76,16 +78,9 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            fAdrList = new GKSheetList(pageAddresses);
             fAdrList.Buttons = EnumSet<SheetButton>.Create();
-
-            fPhonesList = new GKSheetList(pageTelephones);
             fPhonesList.Buttons = EnumSet<SheetButton>.Create();
-
-            fMailsList = new GKSheetList(pageMails);
             fMailsList.Buttons = EnumSet<SheetButton>.Create();
-
-            fWebsList = new GKSheetList(pageWebs);
             fWebsList.Buttons = EnumSet<SheetButton>.Create();
 
             fController = new OrganizerController(this);

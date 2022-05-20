@@ -34,7 +34,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKSampleDialogPlugin.cs" />
-    <Compile Include="PersonEditDlgEx.cs" />
+    <Compile Include="PersonEditDlgEx.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="PersonEditDlgEx.Designer.cs">
       <DependentUpon>PersonEditDlgEx.cs</DependentUpon>
     </Compile>

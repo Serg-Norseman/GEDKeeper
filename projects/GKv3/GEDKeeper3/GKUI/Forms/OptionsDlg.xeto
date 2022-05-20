@@ -389,8 +389,8 @@
 
                   <TableCell>
                     <StackLayout Spacing="4">
-                      <Button x:Name="btnColumnUp" Size="26, 26" Click="btnColumnUp_Click" />
-                      <Button x:Name="btnColumnDown" Size="26, 26" Click="btnColumnDown_Click" />
+                      <Button x:Name="btnColumnUp" Size="26, 26" Image="{Resource Resources.btn_up.gif, GKCore}" Click="btnColumnUp_Click" />
+                      <Button x:Name="btnColumnDown" Size="26, 26" Image="{Resource Resources.btn_down.gif, GKCore}" Click="btnColumnDown_Click" />
                       <StackLayoutItem />
                     </StackLayout>
                   </TableCell>
@@ -444,10 +444,10 @@
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Click="CancelClickHandler" />
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

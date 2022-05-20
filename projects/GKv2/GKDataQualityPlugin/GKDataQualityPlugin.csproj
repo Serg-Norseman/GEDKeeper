@@ -37,7 +37,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKDataQualityPlugin.cs" />
-    <Compile Include="DataQualityWidget.cs" />
+    <Compile Include="DataQualityWidget.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="DataQualityWidget.Designer.cs">
       <DependentUpon>DataQualityWidget.cs</DependentUpon>
     </Compile>

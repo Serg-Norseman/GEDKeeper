@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKUI.Forms.OrganizerWin"
   Maximizable="False" Minimizable="False" ShowInTaskbar="False" Load="OrganizerWin_Load" KeyDown="OrganizerWin_KeyDown" Size="600, 400">
 
   <TabControl>
-    <TabPage x:Name="pageAddresses" />
-    <TabPage x:Name="pageTelephones" />
-    <TabPage x:Name="pageMails" />
-    <TabPage x:Name="pageWebs" />
+    <TabPage x:Name="pageAddresses">
+      <comcom:GKSheetList x:Name="fAdrList" />
+    </TabPage>
+    <TabPage x:Name="pageTelephones">
+      <comcom:GKSheetList x:Name="fPhonesList" />
+    </TabPage>
+    <TabPage x:Name="pageMails">
+      <comcom:GKSheetList x:Name="fMailsList" />
+    </TabPage>
+    <TabPage x:Name="pageWebs">
+      <comcom:GKSheetList x:Name="fWebsList" />
+    </TabPage>
   </TabControl>
 
 </Dialog>

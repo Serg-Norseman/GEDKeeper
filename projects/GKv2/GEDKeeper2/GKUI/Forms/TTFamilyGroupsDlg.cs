@@ -96,10 +96,7 @@ namespace GKUI.Forms
 
         public void miCopyXRef_Click(object sender, EventArgs e)
         {
-            var rec = fController.GetSelectedPerson();
-            if (rec == null) return;
-
-            UIHelper.SetClipboardText(rec.XRef);
+            fController.CopySelectedXRef();
         }
     }
 }

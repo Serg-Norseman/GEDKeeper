@@ -24,22 +24,22 @@ using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class NoteEditDlg : EditorDialog, INoteEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
         private RichTextArea txtNote;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly NoteEditDlgController fController;
@@ -62,9 +62,6 @@ namespace GKUI.Forms
         public NoteEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new NoteEditDlgController(this);
             fController.Init(baseWin);

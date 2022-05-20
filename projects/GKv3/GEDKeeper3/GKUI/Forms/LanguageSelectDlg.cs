@@ -31,11 +31,13 @@ namespace GKUI.Forms
     public partial class LanguageSelectDlg : CommonDialog, ILanguageSelectDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private GKListView lstLanguages;
         private Button btnCancel;
         private Button btnAccept;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly LanguageSelectDlgController fController;
@@ -58,9 +60,6 @@ namespace GKUI.Forms
         public LanguageSelectDlg()
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             lstLanguages.AddColumn(@"Language", 300);
 

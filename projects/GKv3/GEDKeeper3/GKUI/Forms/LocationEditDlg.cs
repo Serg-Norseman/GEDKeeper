@@ -37,10 +37,10 @@ namespace GKUI.Forms
     public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
-        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
         private TabPage pageCommon;
@@ -56,8 +56,8 @@ namespace GKUI.Forms
         private Button btnSelect;
         private Button btnSelectName;
         private Button btnShowOnMap;
-        private Panel panMap;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly LocationEditDlgController fController;
@@ -114,16 +114,6 @@ namespace GKUI.Forms
         public LocationEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fMapBrowser = new GKMapBrowser();
-            fMapBrowser.ShowLines = false;
-            panMap.Content = fMapBrowser;
-
-            fNotesList = new GKSheetList(pageNotes);
-            fMediaList = new GKSheetList(pageMultimedia);
 
             fController = new LocationEditDlgController(this);
             fController.Init(baseWin);

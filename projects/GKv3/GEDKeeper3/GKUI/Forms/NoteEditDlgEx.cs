@@ -35,6 +35,7 @@ namespace GKUI.Forms
     public sealed partial class NoteEditDlgEx : EditorDialog, INoteEditDlgEx
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
@@ -57,6 +58,7 @@ namespace GKUI.Forms
         private TabPage pageEditor;
         private TabControl tabControl1;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly NoteEditDlgExController fController;
@@ -80,9 +82,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
             FillSizes();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new NoteEditDlgExController(this);
             fController.Init(baseWin);

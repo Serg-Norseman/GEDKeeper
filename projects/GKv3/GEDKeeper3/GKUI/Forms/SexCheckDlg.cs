@@ -24,13 +24,13 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class SexCheckDlg : CommonDialog, ISexCheckDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private TextBox txtName;
         private GroupBox grpSex;
@@ -40,14 +40,12 @@ namespace GKUI.Forms
         private Button btnAccept;
         private Button btnCancel;
 
+#pragma warning restore CS0169
         #endregion
 
         public SexCheckDlg()
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             // SetLocale()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);

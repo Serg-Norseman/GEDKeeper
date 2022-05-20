@@ -35,15 +35,16 @@ namespace GKUI.Forms
     public sealed partial class RepositoryEditDlg : EditorDialog, IRepositoryEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
         private Label lblName;
         private TextBox txtName;
-        private TabControl tabsData;
         private TabPage pageNotes;
         private Button btnAddress;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly RepositoryEditDlgController fController;
@@ -73,11 +74,6 @@ namespace GKUI.Forms
         public RepositoryEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fNotesList = new GKSheetList(pageNotes);
 
             fController = new RepositoryEditDlgController(this);
             fController.Init(baseWin);

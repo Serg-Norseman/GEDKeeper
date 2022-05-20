@@ -36,8 +36,8 @@ namespace GKUI.Forms
     public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
-        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageSources;
         private Button btnAccept;
@@ -54,6 +54,7 @@ namespace GKUI.Forms
         private TextBox txtFile;
         private Button btnFileSelect;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly MediaEditDlgController fController;
@@ -109,12 +110,6 @@ namespace GKUI.Forms
         public MediaEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fNotesList = new GKSheetList(pageNotes);
-            fSourcesList = new GKSheetList(pageSources);
 
             fController = new MediaEditDlgController(this);
             fController.Init(baseWin);

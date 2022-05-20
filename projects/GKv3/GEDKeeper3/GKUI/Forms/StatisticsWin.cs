@@ -25,12 +25,10 @@ using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Stats;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -38,15 +36,15 @@ namespace GKUI.Forms
     public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
     {
         #region Design components
+#pragma warning disable CS0169
 
         private GroupBox grpSummary;
-        private Panel panDataPlaceholder;
-        private /*ToolBar*/Panel ToolBar1;
-        private /*ButtonToolItem*/ComboBox cbType;
+        private ComboBox cbType;
         private GKListView lvSummary;
-        private /*ButtonToolItem*/Button tbExcelExport;
+        private Button tbExcelExport;
         //private ContextMenu cmStatTypes;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly StatisticsWinController fController;
@@ -82,21 +80,8 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            tbExcelExport.Image = UIHelper.LoadResourceImage("Resources.btn_excel.gif");
-
-            fGraph = new ZGraphControl();
-
-            fListStats = new GKListView();
             fListStats.AddColumn("-", 250, false);
             fListStats.AddColumn("-", 150, false);
-
-            Splitter spl = new Splitter();
-            spl.Panel1 = fListStats;
-            spl.Panel2 = fGraph;
-            spl.RelativePosition = 500;
-            spl.Orientation = Orientation.Horizontal;
-            spl.FixedPanel = SplitterFixedPanel.Panel1;
-            panDataPlaceholder.Content = spl;
 
             fController = new StatisticsWinController(this, selectedRecords);
             fController.Init(baseWin);

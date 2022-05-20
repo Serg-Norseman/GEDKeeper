@@ -27,13 +27,13 @@ using GDModel;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public partial class ParentsEditDlg : EditorDialog, IParentsEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
@@ -46,23 +46,13 @@ namespace GKUI.Forms
         private Label lblParents;
         private TextBox txtFather;
         private TextBox txtMother;
-        //private Button btnParentsAdd;
         private Button btnParentsEdit;
-        //private Button btnParentsDelete;
         private Button btnFatherAdd;
         private Button btnFatherDelete;
-        //private Button btnFatherSel;
         private Button btnMotherAdd;
         private Button btnMotherDelete;
-        //private Button btnMotherSel;
 
-        /*
-                <Button x:Name="btnParentsAdd" Style="iconBtn" Click="btnParentsAdd_Click" />
-                <Button x:Name="btnParentsDelete" Style="iconBtn" Click="btnParentsDelete_Click" />
-                <Button x:Name="btnFatherSel" Style="iconBtn" Click="btnFatherSel_Click" />
-                <Button x:Name="btnMotherSel" Style="iconBtn" Click="btnMotherSel_Click" />
-         */
-
+#pragma warning restore CS0169
         #endregion
 
         private readonly ParentsEditDlgController fController;
@@ -106,14 +96,6 @@ namespace GKUI.Forms
         public ParentsEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
 
             fController = new ParentsEditDlgController(this);
             fController.Init(baseWin);

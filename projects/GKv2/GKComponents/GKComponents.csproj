@@ -55,14 +55,18 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKComboItem.cs" />
-    <Compile Include="GKUI\Components\GKDateBox.cs" />
-    <Compile Include="GKUI\Components\GKDateControl.cs" />
+    <Compile Include="GKUI\Components\GKDateBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\GKDateControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKListView.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKPortrait.cs">
       <SubType>UserControl</SubType>
@@ -70,14 +74,24 @@
     <Compile Include="GKUI\Components\GKSheetList.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKTabControl.cs" />
+    <Compile Include="GKUI\Components\GKTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\ScrollablePanel.cs" />
-    <Compile Include="GKUI\Components\HyperView.cs" />
-    <Compile Include="GKUI\Components\ImageBox.cs" />
-    <Compile Include="GKUI\Components\ImageView.cs" />
+    <Compile Include="GKUI\Components\ScrollablePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\HyperView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ImageBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ImageView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\LogChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -88,9 +102,15 @@
       <DependentUpon>MediaPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\UIHelper.cs" />
-    <Compile Include="GKUI\Components\WizardPages.cs" />
-    <Compile Include="GKUI\Components\ZGraphControl.cs" />
-    <Compile Include="GKUI\Forms\CommonForm.cs" />
+    <Compile Include="GKUI\Components\WizardPages.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ZGraphControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\CommonForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Platform\ControlHandlers.cs" />
     <Compile Include="GKUI\Platform\WFGfxProvider.cs" />
     <Compile Include="GKUI\Platform\WFGfxRenderer.cs" />

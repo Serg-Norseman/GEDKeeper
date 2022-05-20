@@ -60,16 +60,6 @@ namespace GKUI.Forms
             fController.SelectExternalFile();
         }
 
-        public TreeMatchType GetTreeMatchType()
-        {
-            TreeMatchType type =
-                ((radMatchInternal.Checked) ?
-                 TreeMatchType.tmtInternal :
-                 ((radMathExternal.Checked) ? TreeMatchType.tmtExternal : TreeMatchType.tmtAnalysis));
-
-            return type;
-        }
-
         private void btnMatch_Click(object sender, EventArgs e)
         {
             fController.Match();
@@ -77,11 +67,7 @@ namespace GKUI.Forms
 
         private void rbtnMatch_CheckedChanged(object sender, EventArgs e)
         {
-            TreeMatchType type = GetTreeMatchType();
-
-            lblFile.Enabled = (type == TreeMatchType.tmtExternal);
-            txtCompareFile.Enabled = (type == TreeMatchType.tmtExternal);
-            btnFileChoose.Enabled = (type == TreeMatchType.tmtExternal);
+            fController.ChangeTreeMatchType();
         }
     }
 }

@@ -14,12 +14,19 @@
     <TableRow>
       <StackLayout x:Name="ToolBar1" Orientation="Horizontal" Spacing="4">
         <ComboBox x:Name="cbType" Width="200" ReadOnly="true" SelectedIndexChanged="cbType_SelectedIndexChanged" />
-        <Button x:Name="tbExcelExport" Style="iconBtn" Click="tbExcelExport_Click" />
+        <Button x:Name="tbExcelExport" Style="iconBtn" Image="{Resource Resources.btn_excel.gif, GKCore}" Click="tbExcelExport_Click" />
       </StackLayout>
     </TableRow>
 
     <TableRow ScaleHeight="true">
-      <Panel x:Name="panDataPlaceholder" Size="800, 260" />
+      <Splitter x:Name="spl" Size="800, 260" RelativePosition="500" Orientation="Horizontal" FixedPanel="Panel1">
+        <Splitter.Panel1>
+          <comcom:GKListView x:Name="fListStats" />
+        </Splitter.Panel1>
+        <Splitter.Panel2>
+          <comcom:ZGraphControl x:Name="fGraph" />
+        </Splitter.Panel2>
+      </Splitter>
     </TableRow>
   </TableLayout>
 

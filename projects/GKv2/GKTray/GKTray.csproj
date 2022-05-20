@@ -31,7 +31,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutDlg.cs" />
+    <Compile Include="AboutDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AboutDlg.Designer.cs">
       <DependentUpon>AboutDlg.cs</DependentUpon>
     </Compile>

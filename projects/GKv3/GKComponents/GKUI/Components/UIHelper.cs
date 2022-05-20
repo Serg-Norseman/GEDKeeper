@@ -225,17 +225,6 @@ namespace GKUI.Components
             return recView;
         }
 
-        public static GKListView CreateListView(Panel parent)
-        {
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-
-            GKListView listView = new GKListView();
-            parent.Content = listView;
-
-            return listView;
-        }
-
         public static IColor ConvertColor(Color color)
         {
             return new ColorHandler(color);

@@ -37,8 +37,8 @@ namespace GKUI.Forms
     public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
-        private TabControl tabsData;
         private TabPage pageEvents;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
@@ -62,6 +62,7 @@ namespace GKUI.Forms
         private Label lblRestriction;
         private ComboBox cmbRestriction;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly FamilyEditDlgController fController;
@@ -130,30 +131,6 @@ namespace GKUI.Forms
         public FamilyEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnHusbandAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnHusbandDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnHusbandSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnWifeAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnWifeDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnWifeSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-
-            txtHusband.TextChanged += EditSpouse_TextChanged;
-            txtWife.TextChanged += EditSpouse_TextChanged;
-
-            fChildrenList = new GKSheetList(pageChilds);
-            fChildrenList.OnItemValidating += FamilyEditDlg_ItemValidating;
-            fChildrenList.OnModify += ModifyChildrenSheet;
-
-            fEventsList = new GKSheetList(pageEvents);
-
-            fNotesList = new GKSheetList(pageNotes);
-
-            fMediaList = new GKSheetList(pageMultimedia);
-
-            fSourcesList = new GKSheetList(pageSources);
 
             fController = new FamilyEditDlgController(this);
             fController.Init(baseWin);

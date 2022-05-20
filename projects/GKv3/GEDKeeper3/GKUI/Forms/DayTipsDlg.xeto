@@ -12,7 +12,7 @@
           <TableCell>
             <Scrollable BackgroundColor="Gray" Border="Line" Width="100">
               <StackLayout Orientation="Vertical" Padding="8" HorizontalContentAlignment="Center" VerticalContentAlignment="Top">
-                <ImageView x:Name="Image1" Size="41, 43" />
+                <ImageView Size="41, 43" Image="{Resource Resources.image_tips_light.png, GKCore}" />
               </StackLayout>
             </Scrollable>
           </TableCell>
@@ -44,7 +44,7 @@
           <Button x:Name="btnNextTip" Style="dlgBtn" Click="btnNextTip_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnClose" Style="dlgBtn" Click="CancelClickHandler" />
+          <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

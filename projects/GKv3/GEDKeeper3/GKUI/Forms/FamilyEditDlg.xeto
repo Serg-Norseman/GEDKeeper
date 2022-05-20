@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKUI.Forms.FamilyEditDlg"
   DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
 
@@ -13,22 +13,22 @@
             <Label x:Name="lblHusband" />
             <StackLayout Orientation="Horizontal" Spacing="4">
               <StackLayoutItem Expand="True">
-                <TextBox x:Name="txtHusband" Enabled="False" />
+                <TextBox x:Name="txtHusband" TextChanged="EditSpouse_TextChanged" Enabled="False" />
               </StackLayoutItem>
-              <Button x:Name="btnHusbandAdd" Style="iconBtn" Enabled="False" Click="btnHusbandAddClick" />
-              <Button x:Name="btnHusbandDelete" Style="iconBtn" Enabled="False" Click="btnHusbandDeleteClick" />
-              <Button x:Name="btnHusbandSel" Style="iconBtn" Enabled="False" Click="btnHusbandSelClick" />
+              <Button x:Name="btnHusbandAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Enabled="False" Click="btnHusbandAddClick" />
+              <Button x:Name="btnHusbandDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Enabled="False" Click="btnHusbandDeleteClick" />
+              <Button x:Name="btnHusbandSel" Style="iconBtn" Image="{Resource Resources.btn_jump.gif, GKCore}" Enabled="False" Click="btnHusbandSelClick" />
             </StackLayout>
           </TableRow>
           <TableRow>
             <Label x:Name="lblWife" />
             <StackLayout Orientation="Horizontal" Spacing="4">
               <StackLayoutItem Expand="True">
-                <TextBox x:Name="txtWife" Enabled="False" />
+                <TextBox x:Name="txtWife" TextChanged="EditSpouse_TextChanged" Enabled="False" />
               </StackLayoutItem>
-              <Button x:Name="btnWifeAdd" Style="iconBtn" Enabled="False" Click="btnWifeAddClick" />
-              <Button x:Name="btnWifeDelete" Style="iconBtn" Enabled="False" Click="btnWifeDeleteClick" />
-              <Button x:Name="btnWifeSel" Style="iconBtn" Enabled="False" Click="btnWifeSelClick" />
+              <Button x:Name="btnWifeAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Enabled="False" Click="btnWifeAddClick" />
+              <Button x:Name="btnWifeDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Enabled="False" Click="btnWifeDeleteClick" />
+              <Button x:Name="btnWifeSel" Style="iconBtn" Image="{Resource Resources.btn_jump.gif, GKCore}" Enabled="False" Click="btnWifeSelClick" />
             </StackLayout>
           </TableRow>
           <TableRow>
@@ -40,12 +40,22 @@
     </TableRow>
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsData" Size="600, 260">
-        <TabPage x:Name="pageChilds" />
-        <TabPage x:Name="pageEvents" />
-        <TabPage x:Name="pageNotes" />
-        <TabPage x:Name="pageMultimedia" />
-        <TabPage x:Name="pageSources" />
+      <TabControl Size="600, 260">
+        <TabPage x:Name="pageChilds">
+          <comcom:GKSheetList x:Name="fChildrenList" OnItemValidating="FamilyEditDlg_ItemValidating" OnModify="ModifyChildrenSheet" />
+        </TabPage>
+        <TabPage x:Name="pageEvents">
+          <comcom:GKSheetList x:Name="fEventsList" />
+        </TabPage>
+        <TabPage x:Name="pageNotes">
+          <comcom:GKSheetList x:Name="fNotesList" />
+        </TabPage>
+        <TabPage x:Name="pageMultimedia">
+          <comcom:GKSheetList x:Name="fMediaList" />
+        </TabPage>
+        <TabPage x:Name="pageSources">
+          <comcom:GKSheetList x:Name="fSourcesList" />
+        </TabPage>
       </TabControl>
     </TableRow>
 
@@ -59,10 +69,10 @@
         </StackLayoutItem>
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="btnCancel_Click" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

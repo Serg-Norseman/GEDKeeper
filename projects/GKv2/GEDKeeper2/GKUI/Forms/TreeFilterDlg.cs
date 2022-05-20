@@ -87,6 +87,21 @@ namespace GKUI.Forms
 
         #endregion
 
+        public TreeFilterDlg(IBaseWindow baseWin)
+        {
+            InitializeComponent();
+
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+
+            fPersonsList = new GKSheetList(Panel1);
+            fPersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
+            fPersonsList.OnModify += ListModify;
+
+            fController = new TreeFilterDlgController(this);
+            fController.Init(baseWin);
+        }
+
         private void ListModify(object sender, ModifyEventArgs eArgs)
         {
             if (sender == fPersonsList) {
@@ -113,21 +128,6 @@ namespace GKUI.Forms
         private void TreeFilterDlg_Load(object sender, EventArgs e)
         {
             fController.UpdateView();
-        }
-
-        public TreeFilterDlg(IBaseWindow baseWin)
-        {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fPersonsList = new GKSheetList(Panel1);
-            fPersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
-            fPersonsList.OnModify += ListModify;
-
-            fController = new TreeFilterDlgController(this);
-            fController.Init(baseWin);
         }
     }
 }

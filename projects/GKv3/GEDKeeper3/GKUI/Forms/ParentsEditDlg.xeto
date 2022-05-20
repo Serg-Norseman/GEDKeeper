@@ -38,7 +38,7 @@
 
             <TableCell>
               <StackLayout Orientation="Horizontal" Spacing="4">
-                <Button x:Name="btnParentsEdit" Style="iconBtn" Click="btnParentsEdit_Click" />
+                <Button x:Name="btnParentsEdit" Style="iconBtn" Image="{Resource Resources.btn_rec_edit.gif, GKCore}" Click="btnParentsEdit_Click" />
               </StackLayout>
             </TableCell>
           </TableRow>
@@ -48,15 +48,15 @@
 
             <TableCell ScaleWidth="True">
               <StackLayout Orientation="Horizontal" Spacing="4">
-                <Button x:Name="btnFatherAdd" Style="iconBtn" Click="btnFatherAdd_Click" />
-                <Button x:Name="btnFatherDelete" Style="iconBtn" Click="btnFatherDelete_Click" />
+                <Button x:Name="btnFatherAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnFatherAdd_Click" />
+                <Button x:Name="btnFatherDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="btnFatherDelete_Click" />
               </StackLayout>
             </TableCell>
 
             <TableCell ScaleWidth="True">
               <StackLayout Orientation="Horizontal" Spacing="4">
-                <Button x:Name="btnMotherAdd" Style="iconBtn" Click="btnMotherAdd_Click" />
-                <Button x:Name="btnMotherDelete" Style="iconBtn" Click="btnMotherDelete_Click" />
+                <Button x:Name="btnMotherAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnMotherAdd_Click" />
+                <Button x:Name="btnMotherDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="btnMotherDelete_Click" />
               </StackLayout>
             </TableCell>
 
@@ -70,10 +70,10 @@
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="btnCancel_Click" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

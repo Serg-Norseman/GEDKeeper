@@ -31,7 +31,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConwayLife\LifeConsts.cs" />
-    <Compile Include="ConwayLife\LifeForm.cs" />
+    <Compile Include="ConwayLife\LifeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ConwayLife\LifeForm.Designer.cs">
       <DependentUpon>LifeForm.cs</DependentUpon>
     </Compile>
@@ -39,8 +41,12 @@
     <Compile Include="ConwayLife\LifeHistory.cs" />
     <Compile Include="ConwayLife\LifeOptions.cs" />
     <Compile Include="ConwayLife\LifeRules.cs" />
-    <Compile Include="ConwayLife\LifeViewer.cs" />
-    <Compile Include="ConwayLife\OptionsForm.cs" />
+    <Compile Include="ConwayLife\LifeViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConwayLife\OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ConwayLife\OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
@@ -70,8 +76,6 @@
       <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ConwayLife" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

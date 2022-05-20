@@ -34,6 +34,7 @@ namespace GKUI.Forms
     public partial class PersonalNameEditDlg: EditorDialog, IPersonalNameEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private TextBox txtMarriedSurname;
         private Label lblMarriedSurname;
@@ -58,6 +59,7 @@ namespace GKUI.Forms
         private ComboBox cmbLanguage;
         private Label lblLanguage;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly PersonalNameEditDlgController fController;
@@ -136,9 +138,6 @@ namespace GKUI.Forms
         public PersonalNameEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new PersonalNameEditDlgController(this);
             fController.Init(baseWin);

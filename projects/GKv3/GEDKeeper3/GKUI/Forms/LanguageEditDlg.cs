@@ -26,19 +26,20 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class LanguageEditDlg : CommonDialog, ILanguageEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private ComboBox cmbLanguage;
         private Label lblLanguage;
         private Button btnCancel;
         private Button btnAccept;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly LanguageEditDlgController fController;
@@ -61,9 +62,6 @@ namespace GKUI.Forms
         public LanguageEditDlg()
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new LanguageEditDlgController(this);
         }

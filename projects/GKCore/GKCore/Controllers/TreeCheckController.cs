@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using System.Text;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
@@ -119,6 +120,17 @@ namespace GKCore.Controllers
             if (rec == null) return;
 
             BaseController.ViewRecordInfo(fBase, rec);
+        }
+
+        public void CopySelectedXRefs(IList<object> list)
+        {
+            var text = new StringBuilder();
+            foreach (var item in list) {
+                var checkObj = (TreeTools.CheckObj)item;
+                text.Append(checkObj.Rec.XRef);
+                text.Append("\r\n");
+            }
+            AppHost.Instance.SetClipboardText(text.ToString());
         }
 
         public override void SetLocale()

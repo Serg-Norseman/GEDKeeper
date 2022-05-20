@@ -18,13 +18,13 @@
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCreate" Style="dlgBtn" Click="btnCreate_Click" />
+          <Button x:Name="btnCreate" Style="dlgBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnCreate_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnSelect" Style="dlgBtn" Click="btnSelect_Click" />
+          <Button x:Name="btnSelect" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnSelect_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Click="CancelClickHandler" />
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

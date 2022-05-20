@@ -92,11 +92,8 @@ namespace GKUI.Components
         }
 
 
-        public GKSheetList(Panel owner)
+        public GKSheetList()
         {
-            if (owner == null)
-                throw new ArgumentNullException("owner");
-
             fBtnMoveDown = new Button();
             fBtnMoveDown.Image = UIHelper.LoadResourceImage("Resources.btn_down.gif");
             fBtnMoveDown.Size = UIHelper.ShortButtonSize;
@@ -153,12 +150,18 @@ namespace GKUI.Components
             Content = tab;
             ResumeLayout();
 
+            fButtons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
+            fListModel = null;
+        }
+
+        public GKSheetList(Panel owner) : this()
+        {
+            if (owner == null)
+                throw new ArgumentNullException("owner");
+
             owner.SuspendLayout();
             owner.Content = this;
             owner.ResumeLayout();
-
-            fButtons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
-            fListModel = null;
         }
 
         protected override void Dispose(bool disposing)

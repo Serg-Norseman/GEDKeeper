@@ -33,6 +33,7 @@ namespace GKUI.Forms
     public sealed partial class FilePropertiesDlg : CommonDialog, IFilePropertiesDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
@@ -44,12 +45,12 @@ namespace GKUI.Forms
         private TextBox txtTel;
         private TextArea txtAddress;
         private TabPage pageOther;
-        private TabControl tabsData;
         private GKListView lvRecordStats;
         private Button btnLangEdit;
         private TextBox txtLanguage;
         private Label lblLanguage;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly FilePropertiesDlgController fController;
@@ -91,10 +92,6 @@ namespace GKUI.Forms
         public FilePropertiesDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnLangEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
 
             fController = new FilePropertiesDlgController(this);
             fController.Init(baseWin);

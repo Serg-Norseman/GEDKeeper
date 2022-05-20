@@ -36,9 +36,9 @@ namespace GKUI.Forms
     public sealed partial class CommunicationEditDlg : EditorDialog, ICommunicationEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private GroupBox GroupBox1;
-        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
         private Button btnAccept;
@@ -54,6 +54,7 @@ namespace GKUI.Forms
         private TextBox txtCorresponder;
         private Button btnPersonAdd;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly CommunicationEditDlgController fController;
@@ -111,13 +112,6 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             txtDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnPersonAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-
-            fNotesList = new GKSheetList(pageNotes);
-            fMediaList = new GKSheetList(pageMultimedia);
 
             fController = new CommunicationEditDlgController(this);
             fController.Init(baseWin);

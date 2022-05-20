@@ -22,23 +22,23 @@ using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class PortraitSelectDlg : EditorDialog, IPortraitSelectDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
         private GKUI.Components.ImageView imageView1;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly PortraitSelectDlgController fController;
@@ -66,11 +66,6 @@ namespace GKUI.Forms
         public PortraitSelectDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;
 
             fController = new PortraitSelectDlgController(this);
             fController.Init(baseWin);

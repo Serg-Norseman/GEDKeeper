@@ -7,7 +7,7 @@
   <TableLayout Style="paddedTable8">
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsData" Size="600, 360">
+      <TabControl Size="600, 360">
         <TabPage x:Name="pageCommon">
           <TableLayout Style="paddedTable">
             <TableRow>
@@ -29,8 +29,8 @@
                 <StackLayoutItem Expand="True">
                   <TextBox x:Name="txtEventPlace" KeyDown="EditEventPlace_KeyDown" />
                 </StackLayoutItem>
-                <Button x:Name="btnPlaceAdd" Style="iconBtn" Enabled="False" Click="btnPlaceAdd_Click" />
-                <Button x:Name="btnPlaceDelete" Style="iconBtn" Enabled="False" Click="btnPlaceDelete_Click" />
+                <Button x:Name="btnPlaceAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Enabled="False" Click="btnPlaceAdd_Click" />
+                <Button x:Name="btnPlaceDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Enabled="False" Click="btnPlaceDelete_Click" />
               </StackLayout>
             </TableRow>
 
@@ -53,9 +53,15 @@
           </TableLayout>
         </TabPage>
 
-        <TabPage x:Name="pageNotes" />
-        <TabPage x:Name="pageMultimedia" />
-        <TabPage x:Name="pageSources" />
+        <TabPage x:Name="pageNotes">
+          <comcom:GKSheetList x:Name="fNotesList" />
+        </TabPage>
+        <TabPage x:Name="pageMultimedia">
+          <comcom:GKSheetList x:Name="fMediaList" />
+        </TabPage>
+        <TabPage x:Name="pageSources">
+          <comcom:GKSheetList x:Name="fSourcesList" />
+        </TabPage>
       </TabControl>
     </TableRow>
 
@@ -66,10 +72,10 @@
         </StackLayoutItem>
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="btnCancel_Click" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

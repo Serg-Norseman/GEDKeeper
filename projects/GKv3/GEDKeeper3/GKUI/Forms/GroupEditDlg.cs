@@ -36,16 +36,17 @@ namespace GKUI.Forms
     public sealed partial class GroupEditDlg : EditorDialog, IGroupEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private TextBox edName;
         private Label lblName;
-        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
         private TabPage pageMembers;
         private Button btnAccept;
         private Button btnCancel;
 
+#pragma warning disable CS0169
         #endregion
 
         private readonly GroupEditDlgController fController;
@@ -87,15 +88,6 @@ namespace GKUI.Forms
         public GroupEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fMembersList = new GKSheetList(pageMembers);
-            fMembersList.OnModify += ModifyMembersSheet;
-
-            fNotesList = new GKSheetList(pageNotes);
-            fMediaList = new GKSheetList(pageMultimedia);
 
             fController = new GroupEditDlgController(this);
             fController.Init(baseWin);
