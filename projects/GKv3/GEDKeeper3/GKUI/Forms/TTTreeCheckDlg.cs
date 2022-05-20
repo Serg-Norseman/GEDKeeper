@@ -22,7 +22,6 @@ using System;
 using System.Text;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -34,8 +33,8 @@ namespace GKUI.Forms
     public sealed partial class TTTreeCheckDlg : CommonDialog, ITreeCheckDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
-        private TabControl tabsTools;
         private Button btnClose;
         private TabPage pageTreeCheck;
         private Button btnAnalyseBase;
@@ -46,6 +45,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miGoToRecord;
         private ButtonMenuItem miCopyXRef;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly TreeCheckController fController;
@@ -64,8 +64,6 @@ namespace GKUI.Forms
         public TTTreeCheckDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             ListChecks = UIHelper.CreateListView(panProblemsContainer);
             ListChecks.MouseDoubleClick += ListChecks_DblClick;

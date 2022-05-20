@@ -32,8 +32,8 @@ namespace GKUI.Forms
     public sealed partial class TTTreeSplitDlg : CommonDialog, ITreeSplitDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
-        private TabControl tabsTools;
         private Button btnClose;
         private TabPage pageTreeSplit;
         private Button btnSelectAll;
@@ -45,6 +45,7 @@ namespace GKUI.Forms
         private Button btnDelete;
         private Button btnSave;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly TreeSplitController fController;
@@ -66,8 +67,6 @@ namespace GKUI.Forms
         public TTTreeSplitDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new TreeSplitController(this);
             fController.Init(baseWin);

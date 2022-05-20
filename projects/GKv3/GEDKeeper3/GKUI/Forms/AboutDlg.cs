@@ -24,7 +24,6 @@ using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.MVP.Views;
 using GKCore.Options;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -46,8 +45,6 @@ namespace GKUI.Forms
         public AboutDlg()
         {
             XamlReader.Load(this);
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);

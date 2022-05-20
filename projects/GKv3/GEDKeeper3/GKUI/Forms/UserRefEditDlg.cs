@@ -27,13 +27,13 @@ using GDModel;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
@@ -42,6 +42,7 @@ namespace GKUI.Forms
         private Label lblRefType;
         private ComboBox cmbRefType;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly UserRefEditDlgController fController;
@@ -69,9 +70,6 @@ namespace GKUI.Forms
         public UserRefEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new UserRefEditDlgController(this);
             fController.Init(baseWin);

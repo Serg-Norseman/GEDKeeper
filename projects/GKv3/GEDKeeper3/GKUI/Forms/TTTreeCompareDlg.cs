@@ -25,15 +25,14 @@ using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class TTTreeCompareDlg : CommonDialog, ITreeCompareDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
-        private TabControl tabsTools;
         private TabPage pageTreeCompare;
         private TextArea ListCompare;
         private Button btnClose;
@@ -46,6 +45,7 @@ namespace GKUI.Forms
         private RadioButton radMatchInternal;
         private GroupBox grpMatchType;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly TreeCompareController fController;
@@ -67,8 +67,6 @@ namespace GKUI.Forms
         public TTTreeCompareDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new TreeCompareController(this);
             fController.Init(baseWin);
