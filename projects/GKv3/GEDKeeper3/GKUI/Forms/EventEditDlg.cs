@@ -37,10 +37,10 @@ namespace GKUI.Forms
     public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
-        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
         private TabPage pageSources;
@@ -62,6 +62,7 @@ namespace GKUI.Forms
         private Button btnPlaceDelete;
         private GKDateControl dateCtl;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly EventEditDlgController fController;
@@ -133,15 +134,6 @@ namespace GKUI.Forms
         public EventEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnPlaceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnPlaceDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-
-            fNotesList = new GKSheetList(pageNotes);
-            fMediaList = new GKSheetList(pageMultimedia);
-            fSourcesList = new GKSheetList(pageSources);
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);

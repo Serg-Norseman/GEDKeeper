@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Components"
+  x:Class="GKUI.Components.ACOptionsControl">
+
+  <StackLayout Padding="8" Spacing="4">
+
+    <TableLayout Spacing="4, 4">
+
+      <TableRow>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acb0" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" />
+        </Scrollable>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acb1" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" />
+        </Scrollable>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acb2" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" />
+        </Scrollable>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acb3" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" />
+        </Scrollable>
+        <TableCell ScaleWidth="True" />
+      </TableRow>
+
+      <TableRow>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acb4" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" />
+        </Scrollable>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acb5" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" />
+        </Scrollable>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acb6" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" />
+        </Scrollable>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acb7" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" />
+        </Scrollable>
+        <TableCell ScaleWidth="True" />
+      </TableRow>
+
+      <TableRow>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acbText" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" TextColor="White" />
+        </Scrollable>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acbBack" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" />
+        </Scrollable>
+        <Scrollable Border="Bezel">
+          <Label x:Name="acbLine" Cursor="{x:Static Cursors.Pointer}" Size="100, 20" MouseDown="lblColorClick" TextAlignment="Center" VerticalAlignment="Center" TextColor="White" />
+        </Scrollable>
+      </TableRow>
+
+    </TableLayout>
+
+    <CheckBox x:Name="chkHideEmptySegments" />
+    <CheckBox x:Name="chkArcText" />
+    <StackLayoutItem Expand="True" />
+
+  </StackLayout>
+
+</Panel>

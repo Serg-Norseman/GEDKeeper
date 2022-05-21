@@ -41,8 +41,8 @@ namespace GKUI.Forms
     public partial class PersonEditDlg : EditorDialog, IPersonEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
-        private TabControl tabsPersonData;
         private TabPage pageEvents;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
@@ -97,6 +97,7 @@ namespace GKUI.Forms
         private TabPage pageParents;
         private TabPage pageChilds;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly PersonEditDlgController fController;
@@ -274,56 +275,6 @@ namespace GKUI.Forms
         public PersonEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            txtMarriedSurname.TextChanged += Names_TextChanged;
-            txtSurname.TextChanged += Names_TextChanged;
-            txtName.TextChanged += Names_TextChanged;
-            cmbPatronymic.TextChanged += Names_TextChanged;
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnPortraitAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnPortraitDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnParentsAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnNameCopy.Image = UIHelper.LoadResourceImage("Resources.btn_copy.gif");
-
-            fEventsList = new GKSheetList(pageEvents);
-
-            fSpousesList = new GKSheetList(pageSpouses);
-            fSpousesList.OnModify += ModifySpousesSheet;
-            fSpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
-
-            fNamesList = new GKSheetList(pageNames);
-            fNamesList.OnModify += ModifyNamesSheet;
-
-            fAssociationsList = new GKSheetList(pageAssociations);
-            fAssociationsList.OnModify += ModifyAssociationsSheet;
-
-            fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.OnModify += ModifyGroupsSheet;
-
-            fNotesList = new GKSheetList(pageNotes);
-
-            fMediaList = new GKSheetList(pageMultimedia);
-
-            fSourcesList = new GKSheetList(pageSources);
-
-            fUserRefList = new GKSheetList(pageUserRefs);
-
-            fParentsList = new GKSheetList(pageParents);
-            fParentsList.OnModify += ModifyParentsSheet;
-
-            fChildrenList = new GKSheetList(pageChilds);
-            fChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
-            fChildrenList.OnModify += ModifyChildrenSheet;
 
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
@@ -516,7 +467,7 @@ namespace GKUI.Forms
 
         private void btnNameCopy_Click(object sender, EventArgs e)
         {
-            UIHelper.SetClipboardText(GKUtils.GetNameString(fController.Person, true, false));
+            fController.CopyPersonName();
         }
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)

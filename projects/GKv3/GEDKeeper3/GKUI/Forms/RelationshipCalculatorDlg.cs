@@ -25,13 +25,13 @@ using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class RelationshipCalculatorDlg : CommonDialog, IRelationshipCalculatorDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Label lblKinship;
         private TextArea txtResult;
@@ -43,6 +43,7 @@ namespace GKUI.Forms
         private Label Lab1;
         private Button btnClose;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly RelationshipCalculatorDlgController fController;
@@ -84,8 +85,6 @@ namespace GKUI.Forms
         public RelationshipCalculatorDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new RelationshipCalculatorDlgController(this);
             fController.Init(baseWin);

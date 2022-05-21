@@ -27,13 +27,13 @@ using GDModel;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class AssociationEditDlg : EditorDialog, IAssociationEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
@@ -43,6 +43,7 @@ namespace GKUI.Forms
         private TextBox txtPerson;
         private Button btnPersonAdd;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly AssociationEditDlgController fController;
@@ -70,10 +71,6 @@ namespace GKUI.Forms
         public AssociationEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnPersonAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new AssociationEditDlgController(this);
             fController.Init(baseWin);

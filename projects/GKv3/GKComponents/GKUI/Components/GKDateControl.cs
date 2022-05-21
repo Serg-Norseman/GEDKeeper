@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -288,15 +288,16 @@ namespace GKUI.Components
 
             Content = new TableLayout {
                 Padding = new Padding(0),
-                Spacing = new Size(10, 10),
+                Spacing = new Size(4, 4),
                 Rows = {
                     new TableRow {
                         Cells = { cmbDateType, txtDate1, txtDate2 }
                     },
                     new TableRow {
                         Cells = { null,
-                            TableLayout.Horizontal(10, cmbDate1Calendar, chkBC1),
-                            TableLayout.Horizontal(10, cmbDate2Calendar, chkBC2) }
+                            new StackLayout() { Orientation = Orientation.Horizontal, Spacing = 4, Items = { cmbDate1Calendar, chkBC1 } },
+                            new StackLayout() { Orientation = Orientation.Horizontal, Spacing = 4, Items = { cmbDate2Calendar, chkBC2 } }
+                        }
                     },
                 }
             };

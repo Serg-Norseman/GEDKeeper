@@ -26,13 +26,13 @@ using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
 using GKCore.Names;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class NameEditDlg : CommonDialog, INameEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Label lblName;
         private TextBox txtName;
@@ -46,6 +46,7 @@ namespace GKUI.Forms
         private Label lblMale;
         private TextBox txtMPatr;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly NameEditDlgController fController;
@@ -83,9 +84,6 @@ namespace GKUI.Forms
         public NameEditDlg()
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new NameEditDlgController(this);
         }

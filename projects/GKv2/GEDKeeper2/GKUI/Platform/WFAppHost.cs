@@ -227,6 +227,11 @@ namespace GKUI.Platform
             }
         }
 
+        public override void SetClipboardText(string text)
+        {
+            UIHelper.SetClipboardText(text);
+        }
+
         #endregion
 
         #region Bootstrapper

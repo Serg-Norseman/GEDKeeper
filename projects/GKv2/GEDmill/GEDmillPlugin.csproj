@@ -162,7 +162,9 @@
     <Compile Include="src\Model\ThreadError.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ProgressWindow.cs" />
+    <Compile Include="src\ProgressWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="src\ProgressWindow.Designer.cs">
       <DependentUpon>ProgressWindow.cs</DependentUpon>
     </Compile>

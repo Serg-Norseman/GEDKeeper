@@ -626,8 +626,6 @@ namespace GKCore.MVP.Views
     {
         ITextBox ExternalBase { get; }
         ITextBox CompareOutput { get; }
-
-        TreeMatchType GetTreeMatchType();
     }
 
 

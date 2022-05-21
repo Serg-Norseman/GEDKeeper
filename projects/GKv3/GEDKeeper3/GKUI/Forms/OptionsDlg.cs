@@ -37,6 +37,7 @@ namespace GKUI.Forms
     public sealed partial class OptionsDlg : CommonDialog, ILocalizable, IOptionsDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private TabControl PageControl1;
         private TabPage pageCommon;
@@ -190,6 +191,7 @@ namespace GKUI.Forms
         private Label lblDefaultDepthDescendants;
         private NumericUpDown numDefaultDepthDescendants;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly OptionsDlgController fController;
@@ -198,11 +200,6 @@ namespace GKUI.Forms
         public OptionsDlg(IHost host)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnColumnUp.Image = UIHelper.LoadResourceImage("Resources.btn_up.gif");
-            btnColumnDown.Image = UIHelper.LoadResourceImage("Resources.btn_down.gif");
 
             fController = new OptionsDlgController(this);
 

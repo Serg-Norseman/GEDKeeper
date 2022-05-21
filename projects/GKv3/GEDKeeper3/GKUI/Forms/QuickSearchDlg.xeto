@@ -8,8 +8,8 @@
 
     <TableRow>
       <TextBox x:Name="txtSearchPattern" Width="160" TextChanged="SearchPattern_TextChanged"/>
-      <Button x:Name="btnPrev" Style="iconBtn" Click="FindPrev_Click" />
-      <Button x:Name="btnNext" Style="iconBtn" Click="FindNext_Click" />
+      <Button x:Name="btnPrev" Style="iconBtn" Image="{Resource Resources.btn_left.gif, GKCore}" Click="FindPrev_Click" />
+      <Button x:Name="btnNext" Style="iconBtn" Image="{Resource Resources.btn_right.gif, GKCore}" Click="FindNext_Click" />
     </TableRow>
 
   </TableLayout>

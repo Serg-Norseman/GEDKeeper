@@ -25,18 +25,19 @@ using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private TextBox txtSearchPattern;
         private Button btnPrev;
         private Button btnNext;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly QuickSearchDlgController fController;
@@ -53,9 +54,6 @@ namespace GKUI.Forms
         public QuickSearchDlg(IWorkWindow workWindow)
         {
             XamlReader.Load(this);
-
-            btnPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             fController = new QuickSearchDlgController(this, workWindow);
         }

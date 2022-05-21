@@ -24,7 +24,6 @@ using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -38,11 +37,11 @@ namespace GKUI.Forms
     public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private GroupBox GroupBox1;
         private TextBox txtName;
         private Label lblName;
-        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageTasks;
         private Button btnAccept;
@@ -60,6 +59,7 @@ namespace GKUI.Forms
         private NumericUpDown nudPercent;
         private TabPage pageGroups;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly ResearchEditDlgController fController;
@@ -136,20 +136,6 @@ namespace GKUI.Forms
 
             txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
             txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fTasksList = new GKSheetList(pageTasks);
-            fTasksList.OnModify += ListTasksModify;
-
-            fCommunicationsList = new GKSheetList(pageCommunications);
-            fCommunicationsList.OnModify += ListCommunicationsModify;
-
-            fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.OnModify += ListGroupsModify;
-
-            fNotesList = new GKSheetList(pageNotes);
 
             fController = new ResearchEditDlgController(this);
             fController.Init(baseWin);

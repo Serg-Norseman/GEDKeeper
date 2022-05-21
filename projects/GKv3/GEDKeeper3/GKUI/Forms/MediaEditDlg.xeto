@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKUI.Forms.MediaEditDlg"
   DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
 
@@ -38,8 +38,12 @@
           </TableLayout>
         </TabPage>
 
-        <TabPage x:Name="pageNotes" />
-        <TabPage x:Name="pageSources" />
+        <TabPage x:Name="pageNotes">
+          <comcom:GKSheetList x:Name="fNotesList" />
+        </TabPage>
+        <TabPage x:Name="pageSources">
+          <comcom:GKSheetList x:Name="fSourcesList" />
+        </TabPage>
       </TabControl>
     </TableRow>
 
@@ -50,10 +54,10 @@
         </StackLayoutItem>
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="btnCancel_Click" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

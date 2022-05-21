@@ -37,10 +37,10 @@ namespace GKUI.Forms
     public sealed partial class SourceEditDlg : EditorDialog, ISourceEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
-        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
         private TabPage pageRepositories;
@@ -56,6 +56,7 @@ namespace GKUI.Forms
         private Label lblPublication;
         private TextArea txtPublication;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly SourceEditDlgController fController;
@@ -117,15 +118,6 @@ namespace GKUI.Forms
         public SourceEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fNotesList = new GKSheetList(pageNotes);
-            fMediaList = new GKSheetList(pageMultimedia);
-
-            fRepositoriesList = new GKSheetList(pageRepositories);
-            fRepositoriesList.OnModify += ModifyReposSheet;
 
             fController = new SourceEditDlgController(this);
             fController.Init(baseWin);

@@ -35,6 +35,7 @@ namespace GKUI.Forms
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnSelect;
         private Button btnCreate;
@@ -42,6 +43,7 @@ namespace GKUI.Forms
         private Panel panList;
         public TextBox txtFastFilter;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly RecordSelectDlgController fController;
@@ -75,9 +77,6 @@ namespace GKUI.Forms
         public RecordSelectDlg(IBaseWindow baseWin, GDMRecordType recType)
         {
             XamlReader.Load(this);
-
-            btnSelect.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);

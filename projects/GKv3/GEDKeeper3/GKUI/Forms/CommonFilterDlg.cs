@@ -20,7 +20,7 @@
 
 using System;
 using Eto.Forms;
-using GKCore;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -31,12 +31,24 @@ namespace GKUI.Forms
 {
     public partial class CommonFilterDlg : CommonDialog, ICommonFilterDlg
     {
+        #region Design components
+#pragma warning disable CS0169
+
+        private TabControl tabsFilters;
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabPage pageFieldsFilter;
+        private TabPage pageSpecificFilter;
+        private Button btnReset;
+        private FilterGridView filterView;
+
+#pragma warning restore CS0169
+        #endregion
+
         private readonly CommonFilterDlgController fController;
 
         private readonly IBaseWindow fBase;
         private readonly IListManager fListMan;
-
-        private FilterGridView filterView;
 
         public IBaseWindow Base
         {
@@ -59,10 +71,7 @@ namespace GKUI.Forms
 
         public CommonFilterDlg()
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            XamlReader.Load(this);
         }
 
         public CommonFilterDlg(IBaseWindow baseWin, IListManager listMan) : this()
@@ -79,58 +88,20 @@ namespace GKUI.Forms
             fController = new CommonFilterDlgController(this, listMan);
             fController.Init(baseWin);
 
-            filterView = new FilterGridView(fListMan);
-            filterView.Height = 260;
-            tsFieldsFilter.Content = filterView;
+            filterView.ListMan = fListMan;
 
             fController.UpdateView();
-            this.KeyDown += Form_KeyDown;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try {
-                AcceptChanges();
-                DialogResult = DialogResult.Ok;
-            } catch (Exception ex) {
-                Logger.WriteError("CommonFilterDlg.btnAccept_Click()", ex);
-                DialogResult = DialogResult.None;
-            }
+            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            DoReset();
-        }
-
-        public virtual void AcceptChanges()
-        {
-            fController.Accept();
-            DialogResult = DialogResult.Ok;
-        }
-
-        public virtual void DoReset()
-        {
             fListMan.Filter.Clear();
             fController.UpdateView();
-        }
-
-        private void Form_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key) {
-                case Keys.I:
-                    if (e.Control) {
-                        FilterCondition fcond = new FilterCondition(0, ConditionKind.ck_Contains, "");
-                        filterView.AddCondition(fcond);
-                    }
-                    break;
-
-                case Keys.D:
-                    if (e.Control) {
-                        filterView.RemoveCondition(filterView.SelectedRow);
-                    }
-                    break;
-            }
         }
     }
 }

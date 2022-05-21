@@ -103,6 +103,13 @@ namespace GKCore.Controllers
             BaseController.ViewRecordInfo(fBase, iRec);
         }
 
+        public void CopySelectedXRef()
+        {
+            var rec = GetSelectedPerson();
+            if (rec != null)
+                AppHost.Instance.SetClipboardText(rec.XRef);
+        }
+
         public override void SetLocale()
         {
             fView.Title = LangMan.LS(LSID.LSID_ToolOp_6);

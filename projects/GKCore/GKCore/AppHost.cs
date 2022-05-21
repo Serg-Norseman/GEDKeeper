@@ -241,6 +241,8 @@ namespace GKCore
 
         public abstract void SetKeyLayout(int layout);
 
+        public abstract void SetClipboardText(string text);
+
         public abstract ITimer CreateTimer(double msInterval, EventHandler elapsedHandler);
 
         public abstract void Quit();

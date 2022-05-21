@@ -19,12 +19,9 @@
  */
 
 using System;
-using System.Text;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKCore.Tools;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -57,7 +54,6 @@ namespace GKUI.Forms
 
             fController = new TreeCheckController(this);
             fController.Init(baseWin);
-
         }
 
         private void btnAnalyseBase_Click(object sender, EventArgs e)
@@ -96,14 +92,7 @@ namespace GKUI.Forms
         public void miCopyXRef_Click(object sender, EventArgs e)
         {
             var list = ListChecks.GetSelectedItems();
-            var text = new StringBuilder();
-            foreach (var item in list) {
-                var checkObj = (TreeTools.CheckObj)item;
-                text.Append(checkObj.Rec.XRef);
-                text.Append("\r\n");
-            }
-
-            UIHelper.SetClipboardText(text.ToString());
+            fController.CopySelectedXRefs(list);
         }
     }
 }

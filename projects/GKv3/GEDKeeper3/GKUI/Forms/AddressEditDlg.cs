@@ -36,10 +36,10 @@ namespace GKUI.Forms
     public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
-        private TabControl tabsData;
         private TabPage pagePhones;
         private TabPage pageEmails;
         private TabPage pageCommon;
@@ -55,6 +55,7 @@ namespace GKUI.Forms
         private TextBox txtPostalCode;
         private TextBox txtAddress;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly AddressEditDlgController fController;
@@ -117,18 +118,6 @@ namespace GKUI.Forms
         public AddressEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fPhonesList = new GKSheetList(pagePhones);
-            fPhonesList.OnModify += ListModify;
-
-            fMailsList = new GKSheetList(pageEmails);
-            fMailsList.OnModify += ListModify;
-
-            fWebsList = new GKSheetList(pageWebPages);
-            fWebsList.OnModify += ListModify;
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);

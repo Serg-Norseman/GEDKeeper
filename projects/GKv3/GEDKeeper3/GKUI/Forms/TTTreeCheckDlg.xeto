@@ -11,7 +11,15 @@
         <TabPage x:Name="pageTreeCheck">
           <TableLayout Style="paddedTable8">
             <TableRow ScaleHeight="True">
-              <Panel x:Name="panProblemsContainer" Size="880, 400" />
+              <comcom:GKListView x:Name="ListChecks" Size="880, 400" MouseDoubleClick="ListChecks_DblClick">
+                <comcom:GKListView.ContextMenu>
+                  <ContextMenu Opening="contextMenu_Opening">
+                    <ButtonMenuItem x:Name="miDetails" Click="miDetails_Click" />
+                    <ButtonMenuItem x:Name="miGoToRecord" Click="miGoToRecord_Click" />
+                    <ButtonMenuItem x:Name="miCopyXRef" Click="miCopyXRef_Click" />
+                  </ContextMenu>
+                </comcom:GKListView.ContextMenu>
+              </comcom:GKListView>
             </TableRow>
 
             <TableRow>

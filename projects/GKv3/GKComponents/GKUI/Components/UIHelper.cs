@@ -38,10 +38,6 @@ namespace GKUI.Components
     /// </summary>
     public static class UIHelper
     {
-        public static readonly Size ShortButtonSize = new Size(24, 24);
-        public static readonly Size LongButtonSize = new Size(120, 24);
-
-
         public static Rectangle Rt2Rt(ExtRect ert)
         {
             return new Rectangle(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
@@ -225,17 +221,6 @@ namespace GKUI.Components
             return recView;
         }
 
-        public static GKListView CreateListView(Panel parent)
-        {
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-
-            GKListView listView = new GKListView();
-            parent.Content = listView;
-
-            return listView;
-        }
-
         public static IColor ConvertColor(Color color)
         {
             return new ColorHandler(color);
@@ -326,48 +311,10 @@ namespace GKUI.Components
             return new Font(fontName, size);
         }
 
-        private const bool USE_CLIENT_SIZE_PRESET = false;
-
-        public static void SetPredefProperties(Window window, int width, int height, bool fontPreset = true)
-        {
-            SetPredefProperties(window, width, height, USE_CLIENT_SIZE_PRESET, fontPreset);
-        }
-
-        public static void SetPredefProperties(Window window, int width, int height, bool useClientSizePreset, bool fontPreset)
-        {
-            if (useClientSizePreset) {
-                window.ClientSize = new Size(width, height);
-            }
-
-            if (fontPreset) {
-                UIHelper.SetControlFont(window, GetDefaultFont());
-            }
-        }
-
         public static string[] Convert(string text)
         {
             var strList = new StringList(text);
             return strList.ToArray();
-        }
-
-        // FIXME: replace to TableLayout.Horizontal(), same
-        public static TableRow MakeDialogFooter(params TableCell[] cells)
-        {
-            var row = new TableRow();
-            foreach (var cell in cells) row.Cells.Add(cell);
-
-            return new TableRow {
-                ScaleHeight = false,
-                Cells = {
-                    new TableLayout {
-                        Padding = 0,
-                        Spacing = new Size(10, 10),
-                        Rows = {
-                            row
-                        }
-                    }
-                }
-            };
         }
 
         public static void ConvertFileDialogFilters(FileDialog fileDlg, string filter)

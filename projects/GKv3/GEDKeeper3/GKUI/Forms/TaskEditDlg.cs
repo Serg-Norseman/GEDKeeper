@@ -36,9 +36,9 @@ namespace GKUI.Forms
     public sealed partial class TaskEditDlg : EditorDialog, ITaskEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private GroupBox GroupBox1;
-        private TabControl tabsData;
         private TabPage pageNotes;
         private Button btnAccept;
         private Button btnCancel;
@@ -53,6 +53,7 @@ namespace GKUI.Forms
         private TextBox txtGoal;
         private Button btnGoalSelect;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly TaskEditDlgController fController;
@@ -110,12 +111,6 @@ namespace GKUI.Forms
 
             txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
             txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-
-            btnGoalSelect.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fNotesList = new GKSheetList(pageNotes);
 
             fController = new TaskEditDlgController(this);
             fController.Init(baseWin);

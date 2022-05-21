@@ -536,6 +536,11 @@ namespace GKCore.Controllers
             JumpToRecord(spouse);
         }
 
+        public void CopyPersonName()
+        {
+            AppHost.Instance.SetClipboardText(GKUtils.GetNameString(fPerson, true, false));
+        }
+
         public override void SetLocale()
         {
             fView.Title = LangMan.LS(LSID.LSID_WinPersonEdit);

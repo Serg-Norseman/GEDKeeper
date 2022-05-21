@@ -15,7 +15,7 @@
                 <TableRow>
                   <StackLayout Spacing="2">
                     <Label x:Name="lblSurname" />
-                    <TextBox x:Name="txtSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
+                    <TextBox x:Name="txtSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
                   </StackLayout>
                   <StackLayout Spacing="2">
                     <Label x:Name="lblSurnamePrefix" />
@@ -27,7 +27,7 @@
                 <TableRow>
                   <StackLayout Spacing="2">
                     <Label x:Name="lblMarriedSurname" />
-                    <TextBox x:Name="txtMarriedSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
+                    <TextBox x:Name="txtMarriedSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
                   </StackLayout>
                   <StackLayout Spacing="2">
                     <Label x:Name="lblNamePrefix" />
@@ -42,7 +42,7 @@
                 <TableRow>
                   <StackLayout Spacing="2">
                     <Label x:Name="lblName" />
-                    <TextBox x:Name="txtName" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
+                    <TextBox x:Name="txtName" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
                   </StackLayout>
                   <StackLayout Spacing="2">
                     <Label x:Name="lblNameSuffix" />
@@ -54,7 +54,7 @@
                 <TableRow>
                   <StackLayout Spacing="2">
                     <Label x:Name="lblPatronymic" />
-                    <ComboBox x:Name="cmbPatronymic" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" />
+                    <ComboBox x:Name="cmbPatronymic" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
                   </StackLayout>
                   <StackLayout Spacing="2">
                     <Label x:Name="lblNickname" />
@@ -75,8 +75,8 @@
                 <TableRow>
                   <StackLayout Orientation="Horizontal" Spacing="4">
                     <StackLayoutItem Expand="True" />
-                    <Button x:Name="btnPortraitAdd" Style="iconBtn" Click="btnPortraitAdd_Click" />
-                    <Button x:Name="btnPortraitDelete" Style="iconBtn" Click="btnPortraitDelete_Click" />
+                    <Button x:Name="btnPortraitAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnPortraitAdd_Click" />
+                    <Button x:Name="btnPortraitDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="btnPortraitDelete_Click" />
                     <StackLayoutItem Expand="True" />
                   </StackLayout>
                 </TableRow>
@@ -105,9 +105,9 @@
 
             <TableCell>
               <StackLayout Orientation="Horizontal" Spacing="4">
-                <Button x:Name="btnParentsAdd" Style="iconBtn" Click="btnParentsAdd_Click" />
-                <Button x:Name="btnParentsEdit" Style="iconBtn" Click="btnParentsEdit_Click" />
-                <Button x:Name="btnParentsDelete" Style="iconBtn" Click="btnParentsDelete_Click" />
+                <Button x:Name="btnParentsAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnParentsAdd_Click" />
+                <Button x:Name="btnParentsEdit" Style="iconBtn" Image="{Resource Resources.btn_rec_edit.gif, GKCore}" Click="btnParentsEdit_Click" />
+                <Button x:Name="btnParentsDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="btnParentsDelete_Click" />
               </StackLayout>
             </TableCell>
           </TableRow>
@@ -117,17 +117,17 @@
 
             <TableCell ScaleWidth="True">
               <StackLayout Orientation="Horizontal" Spacing="4">
-                <Button x:Name="btnFatherAdd" Style="iconBtn" Click="btnFatherAdd_Click" />
-                <Button x:Name="btnFatherDelete" Style="iconBtn" Click="btnFatherDelete_Click" />
-                <Button x:Name="btnFatherSel" Style="iconBtn" Click="btnFatherSel_Click" />
+                <Button x:Name="btnFatherAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnFatherAdd_Click" />
+                <Button x:Name="btnFatherDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="btnFatherDelete_Click" />
+                <Button x:Name="btnFatherSel" Style="iconBtn" Image="{Resource Resources.btn_jump.gif, GKCore}" Click="btnFatherSel_Click" />
               </StackLayout>
             </TableCell>
 
             <TableCell ScaleWidth="True">
               <StackLayout Orientation="Horizontal" Spacing="4">
-                <Button x:Name="btnMotherAdd" Style="iconBtn" Click="btnMotherAdd_Click" />
-                <Button x:Name="btnMotherDelete" Style="iconBtn" Click="btnMotherDelete_Click" />
-                <Button x:Name="btnMotherSel" Style="iconBtn" Click="btnMotherSel_Click" />
+                <Button x:Name="btnMotherAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnMotherAdd_Click" />
+                <Button x:Name="btnMotherDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="btnMotherDelete_Click" />
+                <Button x:Name="btnMotherSel" Style="iconBtn" Image="{Resource Resources.btn_jump.gif, GKCore}" Click="btnMotherSel_Click" />
               </StackLayout>
             </TableCell>
 
@@ -138,18 +138,50 @@
     </TableRow>
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsPersonData">
-        <TabPage x:Name="pageEvents" />
-        <TabPage x:Name="pageSpouses" />
-        <TabPage x:Name="pageNames" />
-        <TabPage x:Name="pageAssociations" />
-        <TabPage x:Name="pageGroups" />
-        <TabPage x:Name="pageNotes" />
-        <TabPage x:Name="pageMultimedia" />
-        <TabPage x:Name="pageSources" />
-        <TabPage x:Name="pageUserRefs" />
-        <TabPage x:Name="pageParents" />
-        <TabPage x:Name="pageChilds" />
+      <TabControl>
+        <TabPage x:Name="pageEvents">
+          <comcom:GKSheetList x:Name="fEventsList" />
+        </TabPage>
+
+        <TabPage x:Name="pageSpouses">
+          <comcom:GKSheetList x:Name="fSpousesList" OnModify="ModifySpousesSheet" OnBeforeChange="BeforeChangeSpousesSheet" />
+        </TabPage>
+
+        <TabPage x:Name="pageNames">
+          <comcom:GKSheetList x:Name="fNamesList" OnModify="ModifyNamesSheet" />
+        </TabPage>
+
+        <TabPage x:Name="pageAssociations">
+          <comcom:GKSheetList x:Name="fAssociationsList" OnModify="ModifyAssociationsSheet" />
+        </TabPage>
+
+        <TabPage x:Name="pageGroups">
+          <comcom:GKSheetList x:Name="fGroupsList" OnModify="ModifyGroupsSheet" />
+        </TabPage>
+
+        <TabPage x:Name="pageNotes">
+          <comcom:GKSheetList x:Name="fNotesList" />
+        </TabPage>
+
+        <TabPage x:Name="pageMultimedia">
+          <comcom:GKSheetList x:Name="fMediaList" />
+        </TabPage>
+
+        <TabPage x:Name="pageSources">
+          <comcom:GKSheetList x:Name="fSourcesList" />
+        </TabPage>
+
+        <TabPage x:Name="pageUserRefs">
+          <comcom:GKSheetList x:Name="fUserRefList" />
+        </TabPage>
+
+        <TabPage x:Name="pageParents">
+          <comcom:GKSheetList x:Name="fParentsList" OnModify="ModifyParentsSheet" />
+        </TabPage>
+
+        <TabPage x:Name="pageChilds">
+          <comcom:GKSheetList x:Name="fChildrenList" OnModify="ModifyChildrenSheet" OnItemValidating="PersonEditDlg_ItemValidating" />
+        </TabPage>
       </TabControl>
     </TableRow>
 
@@ -165,14 +197,14 @@
         <StackLayoutItem Expand="True" />
 
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnNameCopy" Style="iconBtn" Click="btnNameCopy_Click" />
+          <Button x:Name="btnNameCopy" Style="iconBtn" Image="{Resource Resources.btn_copy.gif, GKCore}" Click="btnNameCopy_Click" />
         </StackLayoutItem>
 
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="btnCancel_Click" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

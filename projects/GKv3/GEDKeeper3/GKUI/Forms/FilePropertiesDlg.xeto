@@ -7,7 +7,7 @@
   <TableLayout Style="paddedTable8">
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsData" Size="500, 340">
+      <TabControl Size="500, 340">
         <TabPage x:Name="pageAuthor">
           <TableLayout Style="paddedTable">
             <TableRow>
@@ -28,7 +28,7 @@
                 <StackLayoutItem Expand="True">
                   <TextBox x:Name="txtLanguage" ReadOnly="True" />
                 </StackLayoutItem>
-                <Button x:Name="btnLangEdit" Style="iconBtn" Click="btnLangEdit_Click" />
+                <Button x:Name="btnLangEdit" Style="iconBtn" Image="{Resource Resources.btn_rec_edit.gif, GKCore}" Click="btnLangEdit_Click" />
               </StackLayout>
             </TableRow>
           </TableLayout>
@@ -44,10 +44,10 @@
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="btnCancel_Click" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

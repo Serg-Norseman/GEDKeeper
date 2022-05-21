@@ -24,7 +24,6 @@ using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -36,6 +35,7 @@ namespace GKUI.Forms
     public sealed partial class SourceCitEditDlg : EditorDialog, ISourceCitEditDlg
     {
         #region Design components
+#pragma warning disable CS0169
 
         private Button btnAccept;
         private Button btnCancel;
@@ -46,12 +46,12 @@ namespace GKUI.Forms
         private Label lblCertainty;
         private ComboBox txtCertainty;
         private ComboBox cmbSource;
-        private TabControl tabsData;
         private TabPage pageCommon;
         private TabPage pageOther;
         private TextBox txtText;
         private GKDateControl dateCtl;
 
+#pragma warning restore CS0169
         #endregion
 
         private readonly SourceCitEditDlgController fController;
@@ -94,10 +94,6 @@ namespace GKUI.Forms
         public SourceCitEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnSourceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
             fController = new SourceCitEditDlgController(this);
             fController.Init(baseWin);

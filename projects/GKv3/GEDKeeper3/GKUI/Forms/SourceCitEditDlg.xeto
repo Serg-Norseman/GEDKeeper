@@ -7,7 +7,7 @@
   <TableLayout Style="paddedTable8">
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsData" Size="440, 200">
+      <TabControl Size="440, 200">
         <TabPage x:Name="pageCommon">
           <TableLayout Style="paddedTable">
             <TableRow>
@@ -16,7 +16,7 @@
                 <StackLayoutItem Expand="True">
                   <ComboBox x:Name="cmbSource" KeyDown="cbSource_KeyDown" KeyUp="cbSource_KeyUp" Width="400" />
                 </StackLayoutItem>
-                <Button x:Name="btnSourceAdd" Style="iconBtn" Click="btnSourceAdd_Click" />
+                <Button x:Name="btnSourceAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnSourceAdd_Click" />
               </StackLayout>
             </TableRow>
 
@@ -53,10 +53,10 @@
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Click="btnAccept_Click" />
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="btnCancel_Click" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

@@ -59,7 +59,7 @@ namespace GKCore.Controllers
 
         public void Match()
         {
-            TreeMatchType type = fView.GetTreeMatchType();
+            TreeMatchType type = GetTreeMatchType();
 
             fView.CompareOutput.Clear();
             var tree = fBase.Context.Tree;
@@ -88,6 +88,25 @@ namespace GKCore.Controllers
                         break;
                     }
             }
+        }
+
+        public TreeMatchType GetTreeMatchType()
+        {
+            TreeMatchType type =
+                ((GetControl<IRadioButton>("radMatchInternal").Checked) ?
+                 TreeMatchType.tmtInternal :
+                 ((GetControl<IRadioButton>("radMathExternal").Checked) ? TreeMatchType.tmtExternal : TreeMatchType.tmtAnalysis));
+
+            return type;
+        }
+
+        public void ChangeTreeMatchType()
+        {
+            TreeMatchType type = GetTreeMatchType();
+
+            GetControl<ILabel>("lblFile").Enabled = (type == TreeMatchType.tmtExternal);
+            GetControl<ITextBox>("txtCompareFile").Enabled = (type == TreeMatchType.tmtExternal);
+            GetControl<IButton>("btnFileChoose").Enabled = (type == TreeMatchType.tmtExternal);
         }
 
         public override void SetLocale()
