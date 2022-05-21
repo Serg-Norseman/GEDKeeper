@@ -76,7 +76,7 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
             GetControl<IButton>("btnReset").Text = LangMan.LS(LSID.LSID_DlgReset);
-            GetControl<ITabPage>("tsFieldsFilter").Text = LangMan.LS(LSID.LSID_FieldsFilter);
+            GetControl<ITabPage>("pageFieldsFilter").Text = LangMan.LS(LSID.LSID_FieldsFilter);
         }
     }
 }

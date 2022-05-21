@@ -249,7 +249,6 @@ namespace GKUI.Forms
             var summary = new HyperView();
             summary.BorderWidth = 4;
             summary.OnLink += mPersonSummaryLink;
-            summary.Font = UIHelper.GetDefaultFont();
 
             var recView = new GKListView();
             recView.AllowMultipleSelection = true;

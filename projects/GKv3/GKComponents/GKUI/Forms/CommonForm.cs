@@ -23,7 +23,6 @@ using System.Reflection;
 using BSLib.Design.MVP;
 using Eto.Forms;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -162,11 +161,6 @@ namespace GKUI.Forms
         protected virtual void CancelClickHandler(object sender, EventArgs e)
         {
             Close(DialogResult.Cancel);
-        }
-
-        public void SetPredefProperties(int width, int height, bool fontPreset = true)
-        {
-            UIHelper.SetPredefProperties(this, width, height, fontPreset);
         }
 
         protected T GetControlHandler<T>(object control) where T : class, IControl

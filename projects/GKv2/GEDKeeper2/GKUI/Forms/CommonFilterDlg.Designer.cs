@@ -5,7 +5,7 @@
         protected System.Windows.Forms.Button btnAccept;
         protected System.Windows.Forms.Button btnCancel;
 		protected System.Windows.Forms.TabControl tabsFilters;
-        protected System.Windows.Forms.TabPage tsFieldsFilter;
+        protected System.Windows.Forms.TabPage pageFieldsFilter;
         protected System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Panel pnlClient;
         private System.Windows.Forms.Panel pnlButtons;
@@ -18,11 +18,11 @@
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.pnlClient = new System.Windows.Forms.Panel();
 		    this.tabsFilters = new System.Windows.Forms.TabControl();
-		    this.tsFieldsFilter = new System.Windows.Forms.TabPage();
+		    this.pageFieldsFilter = new System.Windows.Forms.TabPage();
 		    this.pnlButtons.SuspendLayout();
 		    this.pnlClient.SuspendLayout();
 		    this.tabsFilters.SuspendLayout();
-		    this.tsFieldsFilter.SuspendLayout();
+		    this.pageFieldsFilter.SuspendLayout();
 		    this.SuspendLayout();
 		    // 
 		    // pnlButtons
@@ -84,7 +84,7 @@
 		    // 
 		    // tabsFilters
 		    // 
-		    this.tabsFilters.Controls.Add(this.tsFieldsFilter);
+		    this.tabsFilters.Controls.Add(this.pageFieldsFilter);
 		    this.tabsFilters.Dock = System.Windows.Forms.DockStyle.Fill;
 		    this.tabsFilters.Location = new System.Drawing.Point(16, 16);
 		    this.tabsFilters.Margin = new System.Windows.Forms.Padding(0, 0, 0, 16);
@@ -92,15 +92,15 @@
 		    this.tabsFilters.SelectedIndex = 0;
 		    this.tabsFilters.Size = new System.Drawing.Size(827, 494);
 		    this.tabsFilters.TabIndex = 1;
-		    // 
-		    // tsFieldsFilter
-		    // 
-		    this.tsFieldsFilter.Location = new System.Drawing.Point(4, 26);
-		    this.tsFieldsFilter.Margin = new System.Windows.Forms.Padding(2);
-		    this.tsFieldsFilter.Name = "tsFieldsFilter";
-		    this.tsFieldsFilter.Size = new System.Drawing.Size(819, 464);
-		    this.tsFieldsFilter.TabIndex = 1;
-		    this.tsFieldsFilter.Text = "tsFieldsFilter";
+            // 
+            // pageFieldsFilter
+            // 
+            this.pageFieldsFilter.Location = new System.Drawing.Point(4, 26);
+		    this.pageFieldsFilter.Margin = new System.Windows.Forms.Padding(2);
+		    this.pageFieldsFilter.Name = "tsFieldsFilter";
+		    this.pageFieldsFilter.Size = new System.Drawing.Size(819, 464);
+		    this.pageFieldsFilter.TabIndex = 1;
+		    this.pageFieldsFilter.Text = "tsFieldsFilter";
 		    // 
 		    // CommonFilterDlg
 		    // 
@@ -122,7 +122,7 @@
 		    this.pnlButtons.ResumeLayout(false);
 		    this.pnlClient.ResumeLayout(false);
 		    this.tabsFilters.ResumeLayout(false);
-		    this.tsFieldsFilter.ResumeLayout(false);
+		    this.pageFieldsFilter.ResumeLayout(false);
 		    this.ResumeLayout(false);
 		}
 	}

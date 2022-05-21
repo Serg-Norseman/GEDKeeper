@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents" xmlns:gkcom="clr-namespace:GKUI.Components"
+  x:Class="GKUI.Forms.PersonsFilterDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsFilters" Size="800, 560">
+        <TabPage x:Name="pageFieldsFilter">
+          <gkcom:FilterGridView x:Name="filterView" Height="260" />
+        </TabPage>
+
+        <TabPage x:Name="pageSpecificFilter">
+          <TableLayout Style="paddedTable8">
+            <TableRow>
+              <GroupBox x:Name="rgSex">
+                <StackLayout Style="vertListStack">
+                  <RadioButton x:Name="rbSexAll" />
+                  <RadioButton x:Name="rbSexMale" />
+                  <RadioButton x:Name="rbSexFemale" />
+                </StackLayout>
+              </GroupBox>
+
+              <GroupBox x:Name="rgLife">
+                <StackLayout Style="vertListStack">
+                  <RadioButton x:Name="rbAll" CheckedChanged="rgLife_CheckedChanged" />
+                  <RadioButton x:Name="rbOnlyLive" CheckedChanged="rgLife_CheckedChanged" />
+                  <RadioButton x:Name="rbOnlyDead" CheckedChanged="rgLife_CheckedChanged" />
+                  <RadioButton x:Name="rbAliveBefore" CheckedChanged="rgLife_CheckedChanged" />
+                  <StackLayout Orientation="Horizontal" Spacing="4">
+                    <Label x:Name="lblAliveBefore" />
+                    <MaskedTextBox x:Name="txtAliveBeforeDate" Enabled="False" />
+                  </StackLayout>
+                </StackLayout>
+              </GroupBox>
+            </TableRow>
+
+            <TableRow>
+              <TableLayout x:Name="masksPanel" Spacing="4,4">
+                <TableRow>
+                  <Label x:Name="lblNameMask" />
+                  <ComboBox x:Name="txtName" />
+                </TableRow>
+
+                <TableRow>
+                  <Label x:Name="lblPlaceMask" />
+                  <ComboBox x:Name="cmbResidence" />
+                </TableRow>
+
+                <TableRow>
+                  <Label x:Name="lblEventsMask" />
+                  <ComboBox x:Name="cmbEventVal" />
+                </TableRow>
+
+                <TableRow>
+                  <Label x:Name="lblGroups" />
+                  <ComboBox x:Name="cmbGroup" ReadOnly="True" />
+                </TableRow>
+
+                <TableRow>
+                  <Label x:Name="lblSources" />
+                  <ComboBox x:Name="cmbSource" ReadOnly="True" />
+                </TableRow>
+
+                <TableRow>
+                  <CheckBox x:Name="chkOnlyPatriarchs" />
+                </TableRow>
+              </TableLayout>
+            </TableRow>
+
+            <TableRow ScaleHeight="True" />
+
+          </TableLayout>
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem HorizontalAlignment="Left">
+          <Button x:Name="btnReset" Style="dlgBtn" Click="btnReset_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+  
+</Dialog>

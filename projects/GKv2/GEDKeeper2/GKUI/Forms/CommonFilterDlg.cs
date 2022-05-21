@@ -82,7 +82,7 @@ namespace GKUI.Forms
             filterView = new FilterGridView(fListMan);
             filterView.Dock = DockStyle.Fill;
             filterView.Name = "dataGridView1";
-            tsFieldsFilter.Controls.Add(filterView);
+            pageFieldsFilter.Controls.Add(filterView);
 
             fController.UpdateView();
         }
