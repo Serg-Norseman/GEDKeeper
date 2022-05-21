@@ -20,19 +20,18 @@
 
 using System;
 using System.Reflection;
-using Eto;
 using Eto.Forms;
 using GKCore;
 using GKUI.Platform;
 
-[assembly: AssemblyTitle("GEDKeeper3.Wpf")]
+[assembly: AssemblyTitle("GEDKeeper3")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct(GKData.APP_TITLE)]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
 [assembly: AssemblyVersion(GKData.APP_VERSION_3X)]
 [assembly: AssemblyCulture("")]
 
-namespace GEDKeeper3.Wpf
+namespace GEDKeeper3
 {
     /// <summary>
     /// The main startup class of application.
@@ -42,18 +41,12 @@ namespace GEDKeeper3.Wpf
         [STAThread]
         public static void Main(string[] args)
         {
-#if NETCOREAPP3_1
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-#endif
-            //Style.Add<ButtonToolItemHandler>("icons", h => h.Widget.Image.);
-            //Style.Add<ButtonHandler>("icons", h => h.Widget.Image.);
-
             EtoAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
             Logger.Init(AppHost.GetLogFilename());
             AppHost.LogSysInfo();
 
-            var application = new Application(Platforms.Wpf);
+            var application = new Application();
 
             AppHost.InitSettings();
             try {

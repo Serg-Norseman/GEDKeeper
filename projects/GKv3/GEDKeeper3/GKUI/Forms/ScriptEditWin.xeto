@@ -5,12 +5,12 @@
   Size="700, 420" Resizable="True" ShowInTaskbar="True" Closing="ScriptEditWin_Closing" KeyDown="ScriptEditWin_KeyDown">
 
   <Dialog.ToolBar>
-    <ToolBar>
-      <ButtonToolItem x:Name="tbNewScript" Click="tbNewScript_Click" />
-      <ButtonToolItem x:Name="tbLoadScript" Click="tbLoadScript_Click" />
-      <ButtonToolItem x:Name="tbSaveScript" Click="tbSaveScript_Click" />
+    <ToolBar TextAlign="Right" Style="tbsi">
+      <ButtonToolItem x:Name="tbNewScript" Image="{Resource Resources.btn_create_new.gif, GKCore}" Click="tbNewScript_Click" />
+      <ButtonToolItem x:Name="tbLoadScript" Image="{Resource Resources.btn_load.gif, GKCore}" Click="tbLoadScript_Click" />
+      <ButtonToolItem x:Name="tbSaveScript" Image="{Resource Resources.btn_save.gif, GKCore}" Click="tbSaveScript_Click" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbRun" Click="tbRun_Click" />
+      <ButtonToolItem x:Name="tbRun" Image="{Resource Resources.btn_start.gif, GKCore}" Click="tbRun_Click" />
     </ToolBar>
   </Dialog.ToolBar>
 

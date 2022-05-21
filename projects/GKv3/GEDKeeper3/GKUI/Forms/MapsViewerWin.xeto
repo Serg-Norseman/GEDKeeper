@@ -5,10 +5,10 @@
   ShowInTaskbar="true" KeyDown="MapsViewerWin_KeyDown">
 
   <Form.ToolBar>
-    <ToolBar TextAlign="Right">
+    <ToolBar TextAlign="Right" Style="tbsi">
       <ButtonToolItem x:Name="tbLoadPlaces" Click="tbLoadPlaces_Click" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbSaveSnapshot" Click="tbSaveSnapshot_Click" />
+      <ButtonToolItem x:Name="tbSaveSnapshot" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbSaveSnapshot_Click" />
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbProviders" Click="tbProviders_Click" />
       <SeparatorToolItem />

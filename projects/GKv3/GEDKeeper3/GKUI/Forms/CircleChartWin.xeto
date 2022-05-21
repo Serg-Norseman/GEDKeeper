@@ -5,16 +5,16 @@
   Size="1020, 760" ShowInTaskbar="true" KeyDown="CircleChartWin_KeyDown">
 
   <Form.ToolBar>
-    <ToolBar TextAlign="Right">
-      <ButtonToolItem x:Name="tbImageSave" Click="tbImageSave_Click" />
+    <ToolBar TextAlign="Right" Style="tbsi">
+      <ButtonToolItem x:Name="tbImageSave" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbImageSave_Click" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbPrev" Enabled="False" Click="ToolBar1_ButtonClick" />
-      <ButtonToolItem x:Name="tbNext" Enabled="False" Click="ToolBar1_ButtonClick" />
+      <ButtonToolItem x:Name="tbPrev" Image="{Resource Resources.btn_left.gif, GKCore}" Enabled="False" Click="ToolBar1_ButtonClick" />
+      <ButtonToolItem x:Name="tbNext" Image="{Resource Resources.btn_right.gif, GKCore}" Enabled="False" Click="ToolBar1_ButtonClick" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbDocPreview" Click="tbDocPreview_Click" />
-      <ButtonToolItem x:Name="tbDocPrint" Click="tbDocPrint_Click" />
+      <ButtonToolItem x:Name="tbDocPreview" Image="{Resource Resources.btn_preview.gif, GKCore}" Click="tbDocPreview_Click" />
+      <ButtonToolItem x:Name="tbDocPrint" Image="{Resource Resources.btn_print.gif, GKCore}" Click="tbDocPrint_Click" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbOptions" Click="tbOptions_Click" />
+      <ButtonToolItem x:Name="tbOptions" Image="{Resource Resources.btn_tools.gif, GKCore}" Click="tbOptions_Click" />
     </ToolBar>
   </Form.ToolBar>
 
