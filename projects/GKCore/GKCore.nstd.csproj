@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>GKCore</AssemblyName>
     <RootNamespace />
     <Company />
     <Product>GEDKeeper</Product>
-    <Copyright>Copyright © 2014-2019 Sergey V. Zhdanovskih</Copyright>
+    <Copyright>Copyright © 2014-2022 Sergey V. Zhdanovskih</Copyright>
     <AssemblyVersion>3.0.0.0</AssemblyVersion>
     <FileVersion>3.0.0.0</FileVersion>
     <Authors>Sergey V. Zhdanovskih</Authors>
