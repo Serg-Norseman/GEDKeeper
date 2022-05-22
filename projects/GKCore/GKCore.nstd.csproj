@@ -128,6 +128,7 @@
     <EmbeddedResource Include="Resources\icon_gedkeeper.ico" />
     <EmbeddedResource Include="Resources\icon_gedkeeper.png" />
     <EmbeddedResource Include="Resources\image_tips_light.png" />
+    <EmbeddedResource Include="Resources\image_logo.png" />
     <EmbeddedResource Include="Resources\pi_female_140.png" />
     <EmbeddedResource Include="Resources\pi_female_200.png" />
     <EmbeddedResource Include="Resources\pi_female_400.png" />

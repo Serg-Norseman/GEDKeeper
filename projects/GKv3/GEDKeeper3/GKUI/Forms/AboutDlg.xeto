@@ -13,16 +13,12 @@
 
             <StackLayoutItem>
               <StackLayout Spacing="8">
-                <Label x:Name="lblProduct" Font="Bold+20pt" />
+                <ImageView Image="{Resource Resources.image_logo.png, GKCore}" />
                 <Label x:Name="lblVersion" Font="Bold+12pt" />
               </StackLayout>
             </StackLayoutItem>
 
             <StackLayoutItem Expand="True" />
-
-            <StackLayoutItem HorizontalAlignment="Right">
-              <ImageView Image="{Resource Resources.icon_gedkeeper.png, GKCore}" />
-            </StackLayoutItem>
 
           </StackLayout>
 

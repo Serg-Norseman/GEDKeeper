@@ -46,9 +46,14 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            //<Label x:Name="lblProduct" Font="Bold+20pt" />
+            //<StackLayoutItem HorizontalAlignment="Right">
+            //<ImageView Image="{Resource Resources.icon_gedkeeper.png, GKCore}" />
+            //</StackLayoutItem>
+
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            lblProduct.Text = GKData.APP_TITLE;
+            //lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();
 

@@ -3,6 +3,7 @@
     <PropertyGroup>
         <RootNamespace />
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <UseXeto>True</UseXeto>
 
         <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release</Configurations>
     </PropertyGroup>
