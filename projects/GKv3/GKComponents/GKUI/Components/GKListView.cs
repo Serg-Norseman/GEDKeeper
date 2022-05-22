@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -121,7 +121,6 @@ namespace GKUI.Components
     public class GKListView : GridView, IListViewEx
     {
         private readonly ObservableExtList<GKListItem> fItems;
-        //private readonly GKListViewItems fItemsAccessor;
 
         private bool fCheckedList;
         private IListManager fListMan;
@@ -190,17 +189,8 @@ namespace GKUI.Components
 
         public GKListView()
         {
-            //SetStyle(ControlStyles.DoubleBuffer, true);
-            //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            //SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            // Enable the OnNotifyMessage event so we get a chance to filter out
-            // Windows messages before they get to the form's WndProc
-            //SetStyle(ControlStyles.EnableNotifyMessage, true);
-            //OwnerDraw = true;
-
             fCheckedList = false;
             fItems = new ObservableExtList<GKListItem>();
-            //fItemsAccessor = new GKListViewItems(this);
             fSortColumn = 0;
             fSortOrder = BSDSortOrder.None;
 
@@ -213,7 +203,11 @@ namespace GKUI.Components
 
         public void Activate()
         {
-            Focus();
+            try {
+                Focus();
+            } catch {
+                // why is an exception thrown here?
+            }
         }
 
         public void BeginUpdate()
@@ -278,96 +272,28 @@ namespace GKUI.Components
             base.OnColumnHeaderClick(e);
         }
 
+        // In Eto not exists
         /*protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
         {
-            #if DEFAULT_HEADER
-
-            e.DrawDefault = true;
-
-            #else
-
-            using (var sf = new StringFormat())
-            {
-                Graphics gfx = e.Graphics;
-                Rectangle rt = e.Bounds;
-
-                #if !MONO
-                VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
-                if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
-                    element = VisualStyleElement.Header.Item.Hot;
-                if ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected)
-                    element = VisualStyleElement.Header.Item.Pressed;
-
-                var visualStyleRenderer = new VisualStyleRenderer(element);
-                visualStyleRenderer.DrawBackground(gfx, rt);
-                #else
-                e.DrawBackground();
-                #endif
-
-                switch (e.Header.TextAlign)
-                {
-                    case HorizontalAlignment.Left:
-                        sf.Alignment = StringAlignment.Near;
-                        break;
-
-                    case HorizontalAlignment.Right:
-                        sf.Alignment = StringAlignment.Far;
-                        break;
-
-                    case HorizontalAlignment.Center:
-                        sf.Alignment = StringAlignment.Center;
-                        break;
-                }
-
-                sf.LineAlignment = StringAlignment.Center;
-                sf.Trimming = StringTrimming.EllipsisCharacter;
-                sf.FormatFlags = StringFormatFlags.NoWrap;
-
-                int w = TextRenderer.MeasureText(" ", Font).Width;
-                rt.Inflate(-(w / 5), 0);
-
-                gfx.DrawString(e.Header.Text, Font, Brushes.Black, rt, sf);
-
-                string arrow = "";
-                switch (GetColumnSortOrder(e.ColumnIndex)) {
-                    case BSDSortOrder.Ascending:
-                        arrow = "▲";
-                        break;
-                    case BSDSortOrder.Descending:
-                        arrow = "▼";
-                        break;
-                }
-
-                if (arrow != "") {
-                    using (var fnt = new Font(Font.FontFamily, Font.SizeInPoints * 0.6f, FontStyle.Regular)) {
-                        float aw = gfx.MeasureString(arrow, fnt).Width;
-                        float x = rt.Left + (rt.Width - aw) / 2.0f;
-                        gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
-                        gfx.DrawString(arrow, fnt, Brushes.Black, x, rt.Top);
-                    }
-                }
-            }
-
-            #endif
-
-            base.OnDrawColumnHeader(e);
         }*/
 
         /*protected override void OnCellFormatting(GridCellFormatEventArgs e)
         {
-            if (e.Row == fItems.IndexOf((GKListItem)SelectedItem)) {
-                e.BackgroundColor = SystemColors.Highlight;
+            var item = e.Item as GKListItem;
+            if (item == null)
+                return;
+
+            // doesn't work because selection changes don't call this method
+            if (item == SelectedItem) {
+                e.BackgroundColor = SystemColors.Selection; // exactly this value
                 e.ForegroundColor = Colors.White;
             } else {
-                var item = e.Item as GKListItem;
-                if (item != null) {
-                    if (item.BackColor != Colors.Transparent) {
-                        e.BackgroundColor = item.BackColor;
-                        e.ForegroundColor = Colors.Black;
-                    } else {
-                        e.BackgroundColor = Colors.White;
-                        e.ForegroundColor = Colors.Black;
-                    }
+                if (item.BackColor != Colors.Transparent) {
+                    e.BackgroundColor = item.BackColor;
+                    e.ForegroundColor = Colors.Black;
+                } else {
+                    e.BackgroundColor = Colors.White;
+                    e.ForegroundColor = Colors.Black;
                 }
             }
 
