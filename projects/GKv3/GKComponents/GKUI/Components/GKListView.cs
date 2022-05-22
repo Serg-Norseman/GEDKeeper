@@ -673,6 +673,7 @@ namespace GKUI.Components
         {
             if (index >= 0 && index < fItems.Count) {
                 ScrollToRow(index);
+                UnselectAll();
                 SelectRow(index);
             }
         }
