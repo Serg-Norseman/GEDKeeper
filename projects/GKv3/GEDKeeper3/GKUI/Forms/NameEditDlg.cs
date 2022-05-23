@@ -32,7 +32,7 @@ namespace GKUI.Forms
     public sealed partial class NameEditDlg : CommonDialog, INameEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Label lblName;
         private TextBox txtName;
@@ -46,7 +46,7 @@ namespace GKUI.Forms
         private Label lblMale;
         private TextBox txtMPatr;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly NameEditDlgController fController;

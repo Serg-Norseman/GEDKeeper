@@ -25,7 +25,7 @@
                   <StackLayoutItem />
                   <StackLayout Orientation="Horizontal" Spacing="4">
                     <Label x:Name="lblYear" />
-                    <NumericUpDown x:Name="edYear" Increment="10" MaxValue="3000" />
+                    <NumericStepper x:Name="edYear" Increment="10" MaxValue="3000" />
                   </StackLayout>
                 </StackLayout>
               </TableRow>

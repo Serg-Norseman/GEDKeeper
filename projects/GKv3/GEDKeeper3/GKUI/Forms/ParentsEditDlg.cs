@@ -33,7 +33,7 @@ namespace GKUI.Forms
     public partial class ParentsEditDlg : EditorDialog, IParentsEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnAccept;
         private Button btnCancel;
@@ -52,7 +52,7 @@ namespace GKUI.Forms
         private Button btnMotherAdd;
         private Button btnMotherDelete;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly ParentsEditDlgController fController;

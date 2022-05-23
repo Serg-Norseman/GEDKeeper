@@ -31,9 +31,11 @@ namespace GKUI.Forms
     public sealed partial class RecordInfoDlg : CommonDialog, IRecordInfoDlg
     {
         #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private HyperView hyperView1;
 
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly RecordInfoDlgController fController;

@@ -36,21 +36,20 @@ namespace GKUI.Forms
     public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private GroupBox grpSummary;
         private ComboBox cbType;
         private GKListView lvSummary;
         private Button tbExcelExport;
         //private ContextMenu cmStatTypes;
+        private ZGraphControl fGraph;
+        private GKListView fListStats;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly StatisticsWinController fController;
-
-        private readonly ZGraphControl fGraph;
-        private readonly GKListView fListStats;
 
         #region View Interface
 

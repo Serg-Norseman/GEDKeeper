@@ -36,7 +36,7 @@ namespace GKUI.Forms
     public sealed partial class CommunicationEditDlg : EditorDialog, ICommunicationEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private GroupBox GroupBox1;
         private TabPage pageNotes;
@@ -53,14 +53,13 @@ namespace GKUI.Forms
         private Label lblCorresponder;
         private TextBox txtCorresponder;
         private Button btnPersonAdd;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly CommunicationEditDlgController fController;
-
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
 
         public GDMCommunicationRecord Communication
         {

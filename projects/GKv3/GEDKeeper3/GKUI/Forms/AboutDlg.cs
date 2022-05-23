@@ -30,6 +30,7 @@ namespace GKUI.Forms
     public sealed partial class AboutDlg : CommonDialog, IAboutDlg
     {
         #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Label lblProduct;
         private Label lblVersion;
@@ -40,6 +41,7 @@ namespace GKUI.Forms
         private LinkButton lblForum;
         private LinkButton lblChannel;
 
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         public AboutDlg()

@@ -39,6 +39,7 @@ namespace GKUI.Forms
     public partial class TreeChartWin : PrintableForm, ITreeChartWin
     {
         #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private ToolBar ToolBar1;
         private ButtonToolItem tbImageSave;
@@ -66,14 +67,12 @@ namespace GKUI.Forms
         private ButtonMenuItem miSelectColor;
         private ButtonMenuItem miGoToRecord;
         private ButtonMenuItem miGoToPrimaryBranch;
-
         private ButtonToolItem tbDocPrint;
         private ButtonToolItem tbDocPreview;
         private ButtonToolItem tbFilter;
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
         private ButtonToolItem tbOptions;
-
         private ButtonToolItem tbGensCommon;
         private ContextMenu MenuGensCommon;
         private ButtonToolItem tbGensAncestors;
@@ -83,6 +82,7 @@ namespace GKUI.Forms
         private ButtonToolItem tbBorders;
         private ContextMenu MenuBorders;
 
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly TreeChartWinController fController;

@@ -31,7 +31,7 @@ namespace GKUI.Forms
     public partial class DayTipsDlg : CommonDialog, IDayTipsDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private CheckBox chkShow;
         private Button btnNextTip;
@@ -40,7 +40,7 @@ namespace GKUI.Forms
         private Eto.Forms.ImageView Image1;
         private TextBox txtTip;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly DayTipsDlgController fController;

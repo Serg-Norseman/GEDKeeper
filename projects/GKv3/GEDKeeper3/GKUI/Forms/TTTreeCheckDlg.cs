@@ -31,7 +31,7 @@ namespace GKUI.Forms
     public sealed partial class TTTreeCheckDlg : CommonDialog, ITreeCheckDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnClose;
         private TabPage pageTreeCheck;
@@ -42,7 +42,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miCopyXRef;
         private GKListView ListChecks;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly TreeCheckController fController;

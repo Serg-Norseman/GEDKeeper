@@ -34,7 +34,7 @@ namespace GKUI.Forms
     public sealed partial class TTFamilyGroupsDlg : CommonDialog, IFragmentSearchDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnClose;
         private TabPage pageFamilyGroups;
@@ -45,7 +45,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miGoToRecord;
         private ButtonMenuItem miCopyXRef;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly FragmentSearchController fController;

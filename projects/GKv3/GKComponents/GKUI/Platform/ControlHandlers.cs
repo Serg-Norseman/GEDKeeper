@@ -636,9 +636,9 @@ namespace GKUI.Platform
         }
     }
 
-    public sealed class NumericBoxHandler : BaseControlHandler<NumericUpDown, NumericBoxHandler>, INumericBox
+    public sealed class NumericBoxHandler : BaseControlHandler<NumericStepper, NumericBoxHandler>, INumericBox
     {
-        public NumericBoxHandler(NumericUpDown control) : base(control)
+        public NumericBoxHandler(NumericStepper control) : base(control)
         {
         }
 

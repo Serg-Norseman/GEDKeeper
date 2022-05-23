@@ -28,13 +28,13 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class ScriptEditWin : CommonDialog, IScriptEditWin
     {
         #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private ToolBar ToolBar1;
         private ButtonToolItem tbLoadScript;
@@ -45,6 +45,7 @@ namespace GKUI.Forms
         private ButtonToolItem tbNewScript;
         private Splitter splitContainer1;
 
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly ScriptEditWinController fController;

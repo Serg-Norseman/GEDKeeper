@@ -37,7 +37,7 @@ namespace GKUI.Forms
     public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnAccept;
         private Button btnCancel;
@@ -61,15 +61,14 @@ namespace GKUI.Forms
         private Button btnPlaceAdd;
         private Button btnPlaceDelete;
         private GKDateControl dateCtl;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
+        private GKSheetList fSourcesList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly EventEditDlgController fController;
-
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
-        private readonly GKSheetList fSourcesList;
 
         public GDMCustomEvent Event
         {

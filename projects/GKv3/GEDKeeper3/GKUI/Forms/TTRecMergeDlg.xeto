@@ -53,7 +53,7 @@
 
                   <TableRow>
                     <Label x:Name="lblNameAccuracy" />
-                    <NumericUpDown x:Name="edNameAccuracy" Value="90" />
+                    <NumericStepper x:Name="edNameAccuracy" Value="90" />
                   </TableRow>
 
                   <TableRow>
@@ -62,7 +62,7 @@
 
                   <TableRow>
                     <Label x:Name="lblYearInaccuracy" />
-                    <NumericUpDown x:Name="edYearInaccuracy" Value="3" />
+                    <NumericStepper x:Name="edYearInaccuracy" Value="3" />
                   </TableRow>
                 </TableLayout>
               </GroupBox>

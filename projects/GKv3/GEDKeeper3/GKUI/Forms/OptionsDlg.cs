@@ -37,7 +37,7 @@ namespace GKUI.Forms
     public sealed partial class OptionsDlg : CommonDialog, ILocalizable, IOptionsDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TabControl PageControl1;
         private TabPage pageCommon;
@@ -122,7 +122,7 @@ namespace GKUI.Forms
         private RadioButton radFBEachRevision;
         private GroupBox grpFileBackup;
         private CheckBox chkAutosave;
-        private NumericUpDown numASMin;
+        private NumericStepper numASMin;
         private Label lblMinutes;
         private GroupBox groupBox1;
         private CheckBox chkGenerations;
@@ -152,16 +152,16 @@ namespace GKUI.Forms
         private Label lblGenDist;
         private Label lblBranchDist;
         private Label lblMargins;
-        private NumericUpDown numSpouseDist;
-        private NumericUpDown numGenDist;
-        private NumericUpDown numBranchDist;
-        private NumericUpDown numMargins;
+        private NumericStepper numSpouseDist;
+        private NumericStepper numGenDist;
+        private NumericStepper numBranchDist;
+        private NumericStepper numMargins;
         private CheckBox chkAutoSortChildren;
         private CheckBox chkAutoSortSpouses;
         private CheckBox chkCheckTreeSize;
         private CheckBox chkCharsetDetection;
         private Label lblBackupRevisionsMaxCount;
-        private NumericUpDown numBackupRevisionsMaxCount;
+        private NumericStepper numBackupRevisionsMaxCount;
         private CheckBox chkAllowMediaStoreRelativeReferences;
         private Label lblMediaStoreDefault;
         private ComboBox cmbMediaStoreDefault;
@@ -178,20 +178,18 @@ namespace GKUI.Forms
         private CheckBox chkOnlyLocality;
         private CheckBox chkMinimizingWidth;
         private CheckBox chkShowAge;
-
         private CheckBox chkShortKinshipForm;
         private CheckBox chkSurnameFirstInOrder;
         private CheckBox chkSurnameInCapitals;
-
         private CheckBox chkSeparateDepth;
         private Label lblDefaultDepth;
-        private NumericUpDown numDefaultDepth;
+        private NumericStepper numDefaultDepth;
         private Label lblDefaultDepthAncestors;
-        private NumericUpDown numDefaultDepthAncestors;
+        private NumericStepper numDefaultDepthAncestors;
         private Label lblDefaultDepthDescendants;
-        private NumericUpDown numDefaultDepthDescendants;
+        private NumericStepper numDefaultDepthDescendants;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly OptionsDlgController fController;

@@ -35,7 +35,7 @@ namespace GKUI.Forms
     public sealed partial class TreeFilterDlg : EditorDialog, ITreeFilterDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnAccept;
         private Button btnCancel;
@@ -46,14 +46,13 @@ namespace GKUI.Forms
         private RadioButton rbCutYears;
         private RadioButton rbCutPersons;
         private Label lblYear;
-        private NumericUpDown edYear;
+        private NumericStepper edYear;
+        private GKSheetList fPersonsList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly TreeFilterDlgController fController;
-
-        private readonly GKSheetList fPersonsList;
 
         public ChartFilter Filter
         {

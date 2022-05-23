@@ -33,22 +33,21 @@ namespace GKUI.Forms
     public sealed partial class OrganizerWin : CommonDialog, IOrganizerWin
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TabPage pageAddresses;
         private TabPage pageTelephones;
         private TabPage pageMails;
         private TabPage pageWebs;
+        private GKSheetList fAdrList;
+        private GKSheetList fPhonesList;
+        private GKSheetList fMailsList;
+        private GKSheetList fWebsList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly OrganizerController fController;
-
-        private readonly GKSheetList fAdrList;
-        private readonly GKSheetList fPhonesList;
-        private readonly GKSheetList fMailsList;
-        private readonly GKSheetList fWebsList;
 
         #region View Interface
 

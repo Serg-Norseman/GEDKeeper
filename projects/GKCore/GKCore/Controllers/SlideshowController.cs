@@ -58,10 +58,13 @@ namespace GKCore.Controllers
             fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            if (fTimer != null)
-                fTimer.Dispose();
+            if (disposing) {
+                if (fTimer != null)
+                    fTimer.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         private void Timer1Tick(object sender, EventArgs e)

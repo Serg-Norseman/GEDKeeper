@@ -37,7 +37,7 @@ namespace GKUI.Forms
     public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TabPage pageEvents;
         private TabPage pageNotes;
@@ -61,17 +61,16 @@ namespace GKUI.Forms
         private ComboBox cmbMarriageStatus;
         private Label lblRestriction;
         private ComboBox cmbRestriction;
+        private GKSheetList fChildrenList;
+        private GKSheetList fEventsList;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
+        private GKSheetList fSourcesList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly FamilyEditDlgController fController;
-
-        private readonly GKSheetList fChildrenList;
-        private readonly GKSheetList fEventsList;
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
-        private readonly GKSheetList fSourcesList;
 
         public GDMFamilyRecord Family
         {

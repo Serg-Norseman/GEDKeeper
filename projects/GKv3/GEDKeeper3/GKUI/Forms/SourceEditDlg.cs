@@ -37,7 +37,7 @@ namespace GKUI.Forms
     public sealed partial class SourceEditDlg : EditorDialog, ISourceEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnAccept;
         private Button btnCancel;
@@ -55,15 +55,14 @@ namespace GKUI.Forms
         private TextArea txtTitle;
         private Label lblPublication;
         private TextArea txtPublication;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
+        private GKSheetList fRepositoriesList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly SourceEditDlgController fController;
-
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
-        private readonly GKSheetList fRepositoriesList;
 
         public GDMSourceRecord Model
         {

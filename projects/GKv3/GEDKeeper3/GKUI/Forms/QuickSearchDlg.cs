@@ -31,13 +31,13 @@ namespace GKUI.Forms
     public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TextBox txtSearchPattern;
         private Button btnPrev;
         private Button btnNext;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly QuickSearchDlgController fController;

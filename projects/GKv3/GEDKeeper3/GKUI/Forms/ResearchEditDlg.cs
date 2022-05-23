@@ -37,7 +37,7 @@ namespace GKUI.Forms
     public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private GroupBox GroupBox1;
         private TextBox txtName;
@@ -56,18 +56,17 @@ namespace GKUI.Forms
         private Label lblStopDate;
         private GKDateBox txtStopDate;
         private Label lblPercent;
-        private NumericUpDown nudPercent;
+        private NumericStepper nudPercent;
         private TabPage pageGroups;
+        private GKSheetList fTasksList;
+        private GKSheetList fCommunicationsList;
+        private GKSheetList fGroupsList;
+        private GKSheetList fNotesList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly ResearchEditDlgController fController;
-
-        private readonly GKSheetList fTasksList;
-        private readonly GKSheetList fCommunicationsList;
-        private readonly GKSheetList fGroupsList;
-        private readonly GKSheetList fNotesList;
 
         public GDMResearchRecord Research
         {

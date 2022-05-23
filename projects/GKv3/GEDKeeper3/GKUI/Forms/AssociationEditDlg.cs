@@ -33,7 +33,7 @@ namespace GKUI.Forms
     public sealed partial class AssociationEditDlg : EditorDialog, IAssociationEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnAccept;
         private Button btnCancel;
@@ -43,7 +43,7 @@ namespace GKUI.Forms
         private TextBox txtPerson;
         private Button btnPersonAdd;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly AssociationEditDlgController fController;

@@ -44,6 +44,7 @@ namespace GKUI.Forms
     public sealed partial class BaseWinSDI : CommonWindow, IBaseWindowView
     {
         #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TableLayout StatusBar;
         private Label panStatusText;
@@ -130,6 +131,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miPatSearch;
         private ButtonMenuItem miPlacesManager;
 
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         #region Private fields

@@ -36,7 +36,7 @@ namespace GKUI.Forms
     public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TabPage pageNotes;
         private TabPage pageSources;
@@ -53,14 +53,13 @@ namespace GKUI.Forms
         private Label lblFile;
         private TextBox txtFile;
         private Button btnFileSelect;
+        private GKSheetList fNotesList;
+        private GKSheetList fSourcesList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly MediaEditDlgController fController;
-
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fSourcesList;
 
         public GDMMultimediaRecord MediaRec
         {

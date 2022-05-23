@@ -20,7 +20,7 @@
               <Label x:Name="lblStatus" />
               <ComboBox x:Name="cmbStatus" ReadOnly="True" />
               <Label x:Name="lblPercent" />
-              <NumericUpDown x:Name="nudPercent" Increment="5" />
+              <NumericStepper x:Name="nudPercent" Increment="5" />
             </StackLayout>
           </TableRow>
           <TableRow>

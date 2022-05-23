@@ -33,13 +33,13 @@ namespace GKUI.Forms
     public sealed partial class NoteEditDlg : EditorDialog, INoteEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnAccept;
         private Button btnCancel;
         private RichTextArea txtNote;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly NoteEditDlgController fController;

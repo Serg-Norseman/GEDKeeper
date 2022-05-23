@@ -37,6 +37,7 @@ namespace GKUI.Forms
     public partial class CircleChartWin : PrintableForm, ICircleChartWin
     {
         #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private ToolBar ToolBar1;
         private ButtonToolItem tbImageSave;
@@ -46,6 +47,7 @@ namespace GKUI.Forms
         private ButtonToolItem tbDocPrint;
         private ButtonToolItem tbOptions;
 
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly CircleChartWinController fController;

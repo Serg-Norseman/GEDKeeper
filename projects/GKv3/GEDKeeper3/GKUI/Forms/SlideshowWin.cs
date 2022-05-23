@@ -34,31 +34,21 @@ namespace GKUI.Forms
     public partial class SlideshowWin : StatusForm, ISlideshowWin
     {
         #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private ButtonToolItem tbNext;
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbStart;
+        private ImageBox fImageCtl;
 
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly SlideshowController fController;
 
-        private readonly ImageBox fImageCtl;
-
         public SlideshowWin(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            /*SuspendLayout();
-            fImageCtl = new ImageBox();
-            //fImageCtl.BackgroundColor = SystemColors.ControlBackground;
-            //fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
-            //fImageCtl.ImageBorderColor = Colors.AliceBlue;
-            //fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
-            Content = fImageCtl;
-            ResumeLayout();
-
-            WindowState = WindowState.Maximized;*/
 
             fController = new SlideshowController(this);
             fController.Init(baseWin);

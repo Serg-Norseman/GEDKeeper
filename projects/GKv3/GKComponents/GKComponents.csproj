@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <RootNamespace />
     </PropertyGroup>
@@ -10,8 +10,7 @@
         <Reference Include="BSLib">
             <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
         </Reference>
-        <Reference Include="BSLib.DataViz.Model, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-            <SpecificVersion>False</SpecificVersion>
+        <Reference Include="BSLib.DataViz.Model">
             <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
         </Reference>
         <Reference Include="BSLib.Design">

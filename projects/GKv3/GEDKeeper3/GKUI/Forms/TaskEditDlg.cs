@@ -36,7 +36,7 @@ namespace GKUI.Forms
     public sealed partial class TaskEditDlg : EditorDialog, ITaskEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private GroupBox GroupBox1;
         private TabPage pageNotes;
@@ -52,13 +52,12 @@ namespace GKUI.Forms
         private ComboBox cmbGoalType;
         private TextBox txtGoal;
         private Button btnGoalSelect;
+        private GKSheetList fNotesList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly TaskEditDlgController fController;
-
-        private readonly GKSheetList fNotesList;
 
         public GDMTaskRecord Task
         {

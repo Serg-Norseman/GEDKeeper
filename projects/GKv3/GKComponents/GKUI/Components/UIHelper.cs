@@ -330,7 +330,7 @@ namespace GKUI.Components
                 string exts = filterParts[idx + 1];
                 string[] extensions = exts.Split(',');
 
-                fileDlg.Filters.Add(new FileDialogFilter(name, extensions));
+                fileDlg.Filters.Add(new FileFilter(name, extensions));
             }
         }
 

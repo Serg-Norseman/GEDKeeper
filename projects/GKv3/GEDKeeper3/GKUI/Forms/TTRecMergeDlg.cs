@@ -32,7 +32,7 @@ namespace GKUI.Forms
     public sealed partial class TTRecMergeDlg : CommonDialog, IRecMergeDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TabPage pageMerge;
         private Button btnAutoSearch;
@@ -43,8 +43,8 @@ namespace GKUI.Forms
         private GroupBox grpSearchPersons;
         private Label lblNameAccuracy;
         private Label lblYearInaccuracy;
-        private NumericUpDown edNameAccuracy;
-        private NumericUpDown edYearInaccuracy;
+        private NumericStepper edNameAccuracy;
+        private NumericStepper edYearInaccuracy;
         private CheckBox chkBirthYear;
         private RadioButton radPersons;
         private RadioButton radNotes;
@@ -55,7 +55,7 @@ namespace GKUI.Forms
         private GKUI.Components.GKMergeControl MergeControl;
         private CheckBox chkIndistinctMatching;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly RecMergeController fController;

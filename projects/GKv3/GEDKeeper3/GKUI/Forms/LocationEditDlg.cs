@@ -37,7 +37,7 @@ namespace GKUI.Forms
     public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnAccept;
         private Button btnCancel;
@@ -56,15 +56,14 @@ namespace GKUI.Forms
         private Button btnSelect;
         private Button btnSelectName;
         private Button btnShowOnMap;
+        private GKMapBrowser fMapBrowser;
+        private GKSheetList fMediaList;
+        private GKSheetList fNotesList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly LocationEditDlgController fController;
-
-        private readonly GKMapBrowser fMapBrowser;
-        private readonly GKSheetList fMediaList;
-        private readonly GKSheetList fNotesList;
 
         public GDMLocationRecord LocationRecord
         {

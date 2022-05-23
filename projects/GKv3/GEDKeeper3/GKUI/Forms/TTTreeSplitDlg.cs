@@ -32,7 +32,7 @@ namespace GKUI.Forms
     public sealed partial class TTTreeSplitDlg : CommonDialog, ITreeSplitDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnClose;
         private TabPage pageTreeSplit;
@@ -45,7 +45,7 @@ namespace GKUI.Forms
         private Button btnDelete;
         private Button btnSave;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly TreeSplitController fController;

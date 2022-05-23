@@ -36,7 +36,7 @@ namespace GKUI.Forms
     public sealed partial class GroupEditDlg : EditorDialog, IGroupEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TextBox edName;
         private Label lblName;
@@ -45,15 +45,14 @@ namespace GKUI.Forms
         private TabPage pageMembers;
         private Button btnAccept;
         private Button btnCancel;
+        private GKSheetList fMembersList;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
 
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly GroupEditDlgController fController;
-
-        private readonly GKSheetList fMembersList;
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
 
         public GDMGroupRecord Group
         {

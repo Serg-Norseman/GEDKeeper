@@ -36,7 +36,7 @@ namespace GKUI.Forms
     public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnAccept;
         private Button btnCancel;
@@ -54,15 +54,14 @@ namespace GKUI.Forms
         private TextBox txtCity;
         private TextBox txtPostalCode;
         private TextBox txtAddress;
+        private GKSheetList fPhonesList;
+        private GKSheetList fMailsList;
+        private GKSheetList fWebsList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly AddressEditDlgController fController;
-
-        private readonly GKSheetList fPhonesList;
-        private readonly GKSheetList fMailsList;
-        private readonly GKSheetList fWebsList;
 
         public GDMAddress Address
         {

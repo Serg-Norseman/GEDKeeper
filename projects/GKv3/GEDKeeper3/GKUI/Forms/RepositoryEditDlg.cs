@@ -35,7 +35,7 @@ namespace GKUI.Forms
     public sealed partial class RepositoryEditDlg : EditorDialog, IRepositoryEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnAccept;
         private Button btnCancel;
@@ -43,13 +43,12 @@ namespace GKUI.Forms
         private TextBox txtName;
         private TabPage pageNotes;
         private Button btnAddress;
+        private GKSheetList fNotesList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly RepositoryEditDlgController fController;
-
-        private readonly GKSheetList fNotesList;
 
         public GDMRepositoryRecord Repository
         {

@@ -52,7 +52,7 @@ namespace GKUI.Platform
             InitPlatformStyles();
         }
 
-        private void InitCommonStyles()
+        private static void InitCommonStyles()
         {
             Eto.Style.Add<TableLayout>("paddedTable", table => {
                 table.Padding = new Padding(8);
@@ -98,7 +98,7 @@ namespace GKUI.Platform
             });
         }
 
-        private void InitPlatformStyles()
+        private static void InitPlatformStyles()
         {
 #if OS_LINUX
             Eto.Style.Add<Eto.GtkSharp.Forms.ToolBar.ToolBarHandler>("tbsi", h => {
@@ -223,13 +223,13 @@ namespace GKUI.Platform
             }
         }
 
-        private static Eto.Forms.WindowState[] efWindowStates = new Eto.Forms.WindowState[] {
+        private static readonly Eto.Forms.WindowState[] efWindowStates = new Eto.Forms.WindowState[] {
             Eto.Forms.WindowState.Normal,
             Eto.Forms.WindowState.Minimized,
             Eto.Forms.WindowState.Maximized
         };
 
-        private static GKCore.Options.WindowState[] gkWindowStates = new GKCore.Options.WindowState[] {
+        private static readonly GKCore.Options.WindowState[] gkWindowStates = new GKCore.Options.WindowState[] {
             GKCore.Options.WindowState.Normal,
             GKCore.Options.WindowState.Maximized,
             GKCore.Options.WindowState.Minimized
@@ -369,7 +369,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(RadioButtonEx), typeof(RadioButtonHandler));

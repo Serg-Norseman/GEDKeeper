@@ -40,6 +40,7 @@ namespace GKUI.Forms
     public sealed partial class MapsViewerWin : CommonWindow, IMapsViewerWin
     {
         #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TabControl PageControl1;
         private TabPage pagePlaces;
@@ -76,6 +77,7 @@ namespace GKUI.Forms
         private Button btnZoomUp;
         private Button btnZoomDown;
 
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly MapsViewerWinController fController;

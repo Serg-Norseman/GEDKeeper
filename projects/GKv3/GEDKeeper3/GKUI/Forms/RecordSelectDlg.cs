@@ -35,7 +35,7 @@ namespace GKUI.Forms
     public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnSelect;
         private Button btnCreate;
@@ -43,7 +43,7 @@ namespace GKUI.Forms
         private Panel panList;
         public TextBox txtFastFilter;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly RecordSelectDlgController fController;

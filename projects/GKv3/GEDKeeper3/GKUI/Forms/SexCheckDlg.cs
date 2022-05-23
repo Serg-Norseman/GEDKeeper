@@ -30,7 +30,7 @@ namespace GKUI.Forms
     public sealed partial class SexCheckDlg : CommonDialog, ISexCheckDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TextBox txtName;
         private GroupBox grpSex;
@@ -40,7 +40,7 @@ namespace GKUI.Forms
         private Button btnAccept;
         private Button btnCancel;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         public SexCheckDlg()

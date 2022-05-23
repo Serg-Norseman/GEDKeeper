@@ -31,7 +31,7 @@ namespace GKUI.Forms
     public sealed partial class TTTreeCompareDlg : CommonDialog, ITreeCompareDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TabPage pageTreeCompare;
         private TextArea ListCompare;
@@ -45,7 +45,7 @@ namespace GKUI.Forms
         private RadioButton radMatchInternal;
         private GroupBox grpMatchType;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly TreeCompareController fController;

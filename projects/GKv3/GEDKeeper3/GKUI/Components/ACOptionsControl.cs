@@ -129,7 +129,8 @@ namespace GKUI.Components
             lbl.BackgroundColor = UIHelper.ConvertColor(AppHost.StdDialogs.SelectColor(UIHelper.ConvertColor(lbl.BackgroundColor)));
         }
 
-        #region Design
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Label acb0;
         private Label acb1;
@@ -145,6 +146,7 @@ namespace GKUI.Components
         private CheckBox chkHideEmptySegments;
         private CheckBox chkArcText;
 
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
     }
 }

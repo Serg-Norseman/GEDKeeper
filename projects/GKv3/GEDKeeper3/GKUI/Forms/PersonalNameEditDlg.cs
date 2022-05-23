@@ -34,7 +34,7 @@ namespace GKUI.Forms
     public partial class PersonalNameEditDlg: EditorDialog, IPersonalNameEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TextBox txtMarriedSurname;
         private Label lblMarriedSurname;
@@ -59,7 +59,7 @@ namespace GKUI.Forms
         private ComboBox cmbLanguage;
         private Label lblLanguage;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly PersonalNameEditDlgController fController;

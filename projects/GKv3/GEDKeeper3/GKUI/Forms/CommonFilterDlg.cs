@@ -32,7 +32,7 @@ namespace GKUI.Forms
     public partial class CommonFilterDlg : CommonDialog, ICommonFilterDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TabControl tabsFilters;
         private Button btnAccept;
@@ -42,7 +42,7 @@ namespace GKUI.Forms
         private Button btnReset;
         private FilterGridView filterView;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly CommonFilterDlgController fController;

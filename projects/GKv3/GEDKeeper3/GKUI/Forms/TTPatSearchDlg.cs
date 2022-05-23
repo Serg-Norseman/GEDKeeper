@@ -32,20 +32,20 @@ namespace GKUI.Forms
     public sealed partial class TTPatSearchDlg : CommonDialog, IPatriarchsSearchDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnClose;
         private TabPage pagePatSearch;
         private Button btnPatSearch;
         private Panel panPatriarchsContainer;
         private Label lblMinGenerations;
-        private NumericUpDown edMinGens;
+        private NumericStepper edMinGens;
         private Button btnSetPatriarch;
         private Button btnPatriarchsDiagram;
         private CheckBox chkWithoutDates;
         private GKListView ListPatriarchs;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly PatriarchsSearchController fController;

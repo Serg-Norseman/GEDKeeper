@@ -32,6 +32,7 @@ namespace GKUI.Components
     public partial class MediaPlayer : Panel, ILocalizable
     {
         #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Panel pnlVideo;
         private Button btnMute;
@@ -42,6 +43,7 @@ namespace GKUI.Components
         private Slider trkPosition;
         private Label lblDuration;
 
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private LibVLC fLibVLC;

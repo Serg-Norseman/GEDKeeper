@@ -41,7 +41,7 @@ namespace GKUI.Forms
     public partial class PersonEditDlg : EditorDialog, IPersonEditDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private TabPage pageEvents;
         private TabPage pageNotes;
@@ -96,23 +96,22 @@ namespace GKUI.Forms
         private Label lblMarriedSurname;
         private TabPage pageParents;
         private TabPage pageChilds;
+        private GKSheetList fEventsList;
+        private GKSheetList fSpousesList;
+        private GKSheetList fAssociationsList;
+        private GKSheetList fGroupsList;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
+        private GKSheetList fSourcesList;
+        private GKSheetList fUserRefList;
+        private GKSheetList fNamesList;
+        private GKSheetList fParentsList;
+        private GKSheetList fChildrenList;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly PersonEditDlgController fController;
-
-        private readonly GKSheetList fEventsList;
-        private readonly GKSheetList fSpousesList;
-        private readonly GKSheetList fAssociationsList;
-        private readonly GKSheetList fGroupsList;
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
-        private readonly GKSheetList fSourcesList;
-        private readonly GKSheetList fUserRefList;
-        private readonly GKSheetList fNamesList;
-        private readonly GKSheetList fParentsList;
-        private readonly GKSheetList fChildrenList;
 
         public GDMIndividualRecord Person
         {
@@ -287,7 +286,6 @@ namespace GKUI.Forms
             fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
             fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
             fAssociationsList.ListModel = new AssociationsListModel(baseWin, fController.LocalUndoman);
-
             fGroupsList.ListModel = new GroupsSublistModel(baseWin, fController.LocalUndoman);
             fNamesList.ListModel = new NamesSublistModel(baseWin, fController.LocalUndoman);
             fSpousesList.ListModel = new SpousesSublistModel(baseWin, fController.LocalUndoman);

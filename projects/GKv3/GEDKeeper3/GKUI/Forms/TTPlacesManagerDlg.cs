@@ -31,7 +31,7 @@ namespace GKUI.Forms
     public sealed partial class TTPlacesManagerDlg : CommonDialog, IPlacesManagerDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnClose;
         private TabPage pagePlaceManage;
@@ -40,7 +40,7 @@ namespace GKUI.Forms
         private Button btnIntoList;
         private GKListView ListPlaces;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly PlacesManagerController fController;

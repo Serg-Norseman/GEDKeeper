@@ -31,7 +31,7 @@ namespace GKUI.Forms
     public sealed partial class RelationshipCalculatorDlg : CommonDialog, IRelationshipCalculatorDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Label lblKinship;
         private TextArea txtResult;
@@ -43,7 +43,7 @@ namespace GKUI.Forms
         private Label Lab1;
         private Button btnClose;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly RelationshipCalculatorDlgController fController;

@@ -33,7 +33,7 @@ namespace GKUI.Forms
     public sealed partial class FilePropertiesDlg : CommonDialog, IFilePropertiesDlg
     {
         #region Design components
-#pragma warning disable CS0169
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Button btnAccept;
         private Button btnCancel;
@@ -50,7 +50,7 @@ namespace GKUI.Forms
         private TextBox txtLanguage;
         private Label lblLanguage;
 
-#pragma warning restore CS0169
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly FilePropertiesDlgController fController;

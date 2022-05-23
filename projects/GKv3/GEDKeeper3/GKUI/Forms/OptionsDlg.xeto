@@ -98,13 +98,13 @@
 
                   <StackLayout Orientation="Horizontal" Spacing="4">
                     <CheckBox x:Name="chkAutosave" />
-                    <NumericUpDown x:Name="numASMin" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                    <NumericStepper x:Name="numASMin" MaxValue="120" MinValue="1" Width="60" Value="1" />
                     <Label x:Name="lblMinutes" />
                   </StackLayout>
 
                   <StackLayout Orientation="Horizontal" Spacing="4">
                     <Label x:Name="lblBackupRevisionsMaxCount" />
-                    <NumericUpDown x:Name="numBackupRevisionsMaxCount" MaxValue="1000" MinValue="0" Width="80" Value="0" />
+                    <NumericStepper x:Name="numBackupRevisionsMaxCount" MaxValue="1000" MinValue="0" Width="80" Value="0" />
                   </StackLayout>
 
                 </StackLayout>
@@ -247,22 +247,22 @@
 
                         <TableRow>
                           <Label x:Name="lblMargins" />
-                          <NumericUpDown x:Name="numMargins" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                          <NumericStepper x:Name="numMargins" MaxValue="120" MinValue="1" Width="60" Value="1" />
                         </TableRow>
 
                         <TableRow>
                           <Label x:Name="lblBranchDist" />
-                          <NumericUpDown x:Name="numBranchDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                          <NumericStepper x:Name="numBranchDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
                         </TableRow>
 
                         <TableRow>
                           <Label x:Name="lblGenDist" />
-                          <NumericUpDown x:Name="numGenDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                          <NumericStepper x:Name="numGenDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
                         </TableRow>
 
                         <TableRow>
                           <Label x:Name="lblSpouseDist" />
-                          <NumericUpDown x:Name="numSpouseDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                          <NumericStepper x:Name="numSpouseDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
                         </TableRow>
 
                         <TableRow ScaleHeight="True" />
@@ -278,17 +278,17 @@
 
                       <TableRow>
                         <Label x:Name="lblDefaultDepth" />
-                        <NumericUpDown x:Name="numDefaultDepth" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
+                        <NumericStepper x:Name="numDefaultDepth" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
                       </TableRow>
 
                       <TableRow>
                         <Label x:Name="lblDefaultDepthAncestors" />
-                        <NumericUpDown x:Name="numDefaultDepthAncestors" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
+                        <NumericStepper x:Name="numDefaultDepthAncestors" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
                       </TableRow>
 
                       <TableRow>
                         <Label x:Name="lblDefaultDepthDescendants" />
-                        <NumericUpDown x:Name="numDefaultDepthDescendants" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
+                        <NumericStepper x:Name="numDefaultDepthDescendants" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
                       </TableRow>
 
                       <TableRow ScaleHeight="True" />

@@ -19,7 +19,7 @@
             <TableRow>
               <StackLayout Spacing="4" Orientation="Horizontal">
                 <Label x:Name="lblMinGenerations" />
-                <NumericUpDown x:Name="edMinGens" Value="2" />
+                <NumericStepper x:Name="edMinGens" Value="2" />
                 <CheckBox x:Name="chkWithoutDates" />
                 <StackLayoutItem Expand="True" />
                 <Button x:Name="btnSetPatriarch" Click="btnSetPatriarch_Click" />
