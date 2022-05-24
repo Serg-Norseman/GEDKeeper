@@ -772,7 +772,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void CheckBase(IBaseWindow baseWin, List<CheckObj> checksList)
+        public static void CheckBase(IBaseWindow baseWin, List<CheckObj> checksList, IProgressController progress)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
@@ -780,7 +780,6 @@ namespace GKCore.Tools
             if (checksList == null)
                 throw new ArgumentNullException("checksList");
 
-            IProgressController progress = AppHost.Progress;
             try {
                 GDMTree tree = baseWin.Context.Tree;
                 progress.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);

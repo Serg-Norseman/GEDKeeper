@@ -250,12 +250,14 @@ namespace GKCore
         [Test]
         public void Test_CheckBaseAndRepairProblem()
         {
+            var progress = Substitute.For<IProgressController>();
+
             List<TreeTools.CheckObj> checksList = new List<TreeTools.CheckObj>();
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(null, checksList); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(fBaseWin, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(null, checksList, progress); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(fBaseWin, null, progress); });
 
             // three records with errors + multimedia with a nonexistent file
-            TreeTools.CheckBase(fBaseWin, checksList);
+            TreeTools.CheckBase(fBaseWin, checksList, progress);
             Assert.AreEqual(3 + 1, checksList.Count);
 
             Assert.AreEqual(TreeTools.CheckDiag.cdStrangeSpouse, checksList[0].Diag);

@@ -22,6 +22,7 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Threading;
 using System.Windows.Forms;
 using BSLib.Design.Handlers;
 using BSLib.Design.IoC;
@@ -201,6 +202,21 @@ namespace GKUI.Platform
         public override void Quit()
         {
             Application.Exit();
+        }
+
+        public override void ExecuteWork(ParameterizedThreadStart proc)
+        {
+            using (var progressForm = new ProgressDlg()) {
+                var workerThread = new Thread(proc);
+                try {
+                    workerThread.SetApartmentState(ApartmentState.STA);
+                    workerThread.Start(progressForm);
+
+                    progressForm.ShowDialog();
+                } catch (Exception ex) {
+                    Logger.WriteInfo(ex.Message);
+                }
+            }
         }
 
         #region KeyLayout functions

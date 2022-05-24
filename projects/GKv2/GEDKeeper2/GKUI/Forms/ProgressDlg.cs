@@ -28,7 +28,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class ProgressDlg : Form
+    public sealed partial class ProgressDlg : Form, IProgressController
     {
         private readonly ManualResetEvent fCancelEvent;
         private bool fRequiresClose;
@@ -128,14 +128,14 @@ namespace GKUI.Forms
             base.OnClosing(e);
         }
 
-        internal void ProgressInit(string title, int max, bool cancelable = false)
+        void IProgressController.ProgressInit(string title, int max, bool cancelable = false)
         {
             InvokeEx(delegate {
                 DoInit(title, max, cancelable);
             });
         }
 
-        internal void ProgressDone()
+        void IProgressController.ProgressDone()
         {
             InvokeEx(delegate {
                 if (fRequiresClose) {
@@ -144,21 +144,21 @@ namespace GKUI.Forms
             });
         }
 
-        internal void ProgressStep()
+        void IProgressController.ProgressStep()
         {
             InvokeEx(delegate {
                 DoStep(fVal + 1);
             });
         }
 
-        internal void ProgressStep(int value)
+        void IProgressController.ProgressStep(int value)
         {
             InvokeEx(delegate {
                 DoStep(value);
             });
         }
 
-        public bool IsCanceled
+        bool IProgressController.IsCanceled
         {
             get {
                 return fCancelEvent.WaitOne(0, false);
@@ -183,7 +183,7 @@ namespace GKUI.Forms
         public void ProgressInit(string title, int max, bool cancelable = false)
         {
             if (fProgressForm != null) {
-                fProgressForm.ProgressInit(title, max, cancelable);
+                ((IProgressController)fProgressForm).ProgressInit(title, max, cancelable);
             } else {
                 fFormLoaded = false;
                 fTitle = title;
@@ -207,7 +207,7 @@ namespace GKUI.Forms
         public void ProgressDone()
         {
             if (fProgressForm != null) {
-                fProgressForm.ProgressDone();
+                ((IProgressController)fProgressForm).ProgressDone();
                 //fProgressForm.Dispose();
                 fProgressForm = null;
             }
@@ -216,21 +216,21 @@ namespace GKUI.Forms
         public void ProgressStep()
         {
             if (fProgressForm != null) {
-                fProgressForm.ProgressStep(fVal++);
+                ((IProgressController)fProgressForm).ProgressStep(fVal++);
             }
         }
 
         public void ProgressStep(int value)
         {
             if (fProgressForm != null) {
-                fProgressForm.ProgressStep(value);
+                ((IProgressController)fProgressForm).ProgressStep(value);
             }
         }
 
         private void ShowProgressForm()
         {
             fProgressForm = new ProgressDlg();
-            fProgressForm.ProgressInit(fTitle, fMax, fCancelable);
+            ((IProgressController)fProgressForm).ProgressInit(fTitle, fMax, fCancelable);
             fProgressForm.Load += ProgressForm_Load;
 
             if (fParentHandle != IntPtr.Zero) {
@@ -250,7 +250,7 @@ namespace GKUI.Forms
         public bool IsCanceled
         {
             get {
-                return (fProgressForm != null) && fProgressForm.IsCanceled;
+                return (fProgressForm != null) && ((IProgressController)fProgressForm).IsCanceled;
             }
         }
     }

@@ -44,7 +44,12 @@ namespace GKCore.Controllers
         public void CheckGroups()
         {
             IProgressController progress = AppHost.Progress;
-            List<List<GDMRecord>> treeFragments = TreeTools.SearchTreeFragments(fBase.Context.Tree, progress);
+            List<List<GDMRecord>> treeFragments = null;
+
+            AppHost.Instance.ExecuteWork((progressPtr) => {
+                var controller = (IProgressController)progressPtr;
+                treeFragments = TreeTools.SearchTreeFragments(fBase.Context.Tree, controller);
+            });
 
             fView.LogChart.Clear();
             fView.GroupsTree.BeginUpdate();

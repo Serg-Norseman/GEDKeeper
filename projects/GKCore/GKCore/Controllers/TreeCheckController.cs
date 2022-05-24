@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -46,7 +47,10 @@ namespace GKCore.Controllers
 
         public void CheckBase()
         {
-            TreeTools.CheckBase(fBase, fChecksList);
+            AppHost.Instance.ExecuteWork((progressPtr) => {
+                var controller = (IProgressController)progressPtr;
+                TreeTools.CheckBase(fBase, fChecksList, controller);
+            });
 
             fView.ChecksList.BeginUpdate();
             try {
