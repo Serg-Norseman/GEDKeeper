@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -55,7 +56,10 @@ namespace GKCore.Controllers
         {
             fView.PlacesList.BeginUpdate();
             try {
-                TreeTools.SearchPlaces(fBase.Context.Tree, fPlaces, AppHost.Progress);
+                AppHost.Instance.ExecuteWork((progressPtr) => {
+                    var controller = (IProgressController)progressPtr;
+                    TreeTools.SearchPlaces(fBase.Context.Tree, fPlaces, controller);
+                });
 
                 fView.PlacesList.ClearItems();
 

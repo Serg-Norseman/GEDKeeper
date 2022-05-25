@@ -43,7 +43,6 @@ namespace GKCore.Controllers
 
         public void CheckGroups()
         {
-            IProgressController progress = AppHost.Progress;
             List<List<GDMRecord>> treeFragments = null;
 
             AppHost.Instance.ExecuteWork((progressPtr) => {

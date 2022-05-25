@@ -118,7 +118,7 @@ namespace GKUI.Forms
         {
             try {
                 Application.Instance.Invoke(method);
-                //Application.Instance.RunIteration();
+                Application.Instance.RunIteration();
             } catch {
                 // dummy
             }

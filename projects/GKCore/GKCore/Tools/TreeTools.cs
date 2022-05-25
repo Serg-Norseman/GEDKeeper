@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using BSLib.Design.MVP.Controls;
@@ -1091,7 +1092,7 @@ namespace GKCore.Tools
             public GDMIndividualRecord IRec;
         }
 
-        public static List<ULIndividual> GetUnlinkedNamesakes(IBaseWindow baseWin)
+        public static List<ULIndividual> GetUnlinkedNamesakes(IBaseWindow baseWin, IProgressController progress)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
@@ -1102,7 +1103,6 @@ namespace GKCore.Tools
 
             Dictionary<string, List<GDMIndividualRecord>> families = new Dictionary<string, List<GDMIndividualRecord>>();
 
-            IProgressController progress = AppHost.Progress;
             progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount, true);
 
             // make a table of surnames and persons, related to these surnames

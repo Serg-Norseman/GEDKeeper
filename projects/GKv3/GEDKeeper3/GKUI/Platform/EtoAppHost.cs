@@ -22,7 +22,6 @@ using System;
 using System.Globalization;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
 using Eto.Drawing;
@@ -263,29 +262,10 @@ namespace GKUI.Platform
         public override void ExecuteWork(ParameterizedThreadStart proc)
         {
             using (var progressForm = new ProgressDlg()) {
-                //progressForm.Show();
-                /*Application.Instance.Invoke(new Action(() => {
-                    progressForm.Show();
-                }));*/
-
-                /*Task.Factory.StartNew(() => {
-                    progressForm.Show();
+                progressForm.Show();
+                Application.Instance.Invoke(async () => {
                     proc(progressForm);
-                });*/
-
-                /*Task.Run(new Action(() => {
-                    proc(progressForm);
-                })).Wait();*/
-
-                /*var workerThread = new Thread(proc);
-                try {
-                    //workerThread.SetApartmentState(ApartmentState.STA);
-                    workerThread.Start(progressForm);
-
-                    progressForm.Show();
-                } catch (Exception ex) {
-                    Logger.WriteInfo(ex.Message);
-                }*/
+                });
             }
         }
 

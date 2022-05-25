@@ -21,6 +21,7 @@
 using System.Collections.Generic;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -66,7 +67,10 @@ namespace GKCore.Controllers
 
             switch (type) {
                 case TreeMatchType.tmtInternal:
-                    TreeTools.FindDuplicates(tree, tree, 90 /*min: 80-85*/, DuplicateFoundFunc, AppHost.Progress);
+                    AppHost.Instance.ExecuteWork((progressPtr) => {
+                        var controller = (IProgressController)progressPtr;
+                        TreeTools.FindDuplicates(tree, tree, 90 /*min: 80-85*/, DuplicateFoundFunc, controller);
+                    });
                     break;
 
                 case TreeMatchType.tmtExternal:
@@ -75,7 +79,11 @@ namespace GKCore.Controllers
 
                 case TreeMatchType.tmtAnalysis:
                     {
-                        List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(fBase);
+                        List<TreeTools.ULIndividual> uln = null;
+                        AppHost.Instance.ExecuteWork((progressPtr) => {
+                            var controller = (IProgressController)progressPtr;
+                            uln = TreeTools.GetUnlinkedNamesakes(fBase, controller);
+                        });
 
                         fView.CompareOutput.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
                         if (uln != null && uln.Count > 0) {
