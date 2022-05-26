@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.0" />
     </ItemGroup>
 
@@ -64,6 +64,7 @@
         <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
         <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
+
     <PropertyGroup Condition=" $(DefineConstants.Contains('_Release')) ">
         <DebugSymbols>False</DebugSymbols>
         <DebugType>None</DebugType>
@@ -71,7 +72,6 @@
         <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
         <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
     </PropertyGroup>
-
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
         <TargetFramework>net6.0-windows</TargetFramework>
@@ -88,7 +88,6 @@
         <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.16" />
     </ItemGroup>
 
-
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
         <TargetFramework>net6.0</TargetFramework>
         <OutputType>exe</OutputType>
@@ -103,12 +102,10 @@
 
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <OutputType>exe</OutputType>
 
-        <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
-
-        <MacBundleName>GEDKeeper3</MacBundleName>
+        <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
     </PropertyGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
@@ -122,7 +119,7 @@
         </Content>
     </ItemGroup>
 
-    <Target Name="MacBundleLocaleFiles" BeforeTargets="MacFinishBundle" Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
+    <Target Name="MacBundleLocaleFiles" BeforeTargets="MacFinishBundle">
         <ItemGroup>
             <LocaleFiles Include="..\..\..\locales\**\*" />
         </ItemGroup>
