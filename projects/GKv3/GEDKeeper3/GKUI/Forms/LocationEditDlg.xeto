@@ -7,7 +7,7 @@
   <TableLayout Style="paddedTable8">
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsData" Size="600, 260">
+      <TabControl x:Name="tabsData">
         <TabPage x:Name="pageCommon">
           <TableLayout Style="paddedTable">
             <TableRow>
@@ -49,7 +49,7 @@
                   </TableRow>
 
                   <TableRow ScaleHeight="True">
-                    <comcom:GKMapBrowser x:Name="fMapBrowser" Size="760, 280" ShowLines="False" />
+                    <comcom:GKMapBrowser x:Name="fMapBrowser" Size="600, 260" ShowLines="False" />
                   </TableRow>
                 </TableLayout>
               </GroupBox>

@@ -42,7 +42,6 @@ namespace GKUI.Forms
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private TabControl PageControl1;
         private TabPage pagePlaces;
         private TreeView tvPlaces;
         private GroupBox grpSelection;
@@ -54,7 +53,6 @@ namespace GKUI.Forms
         private RadioButton radTotal;
         private RadioButton radSelected;
         private CheckBox chkLinesVisible;
-        private ToolBar ToolBar1;
         private ButtonToolItem tbLoadPlaces;
         private ButtonToolItem tbSaveSnapshot;
         private ButtonToolItem tbProviders;
@@ -62,7 +60,6 @@ namespace GKUI.Forms
         private ButtonToolItem tbClear;
         private ButtonToolItem tbZoomCenter;
         private TabPage pageCoordinates;
-        private Panel Panel1;
         private GroupBox gbCoords;
         private Label lblPlace;
         private TextBox txtPlace;
@@ -76,13 +73,12 @@ namespace GKUI.Forms
         private Slider trkZoom;
         private Button btnZoomUp;
         private Button btnZoomDown;
+        private GKMapBrowser fMapBrowser;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly MapsViewerWinController fController;
-
-        private readonly GKMapBrowser fMapBrowser;
 
         #region View Interface
 
@@ -179,19 +175,15 @@ namespace GKUI.Forms
 
         public MapsViewerWin(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
-            fMapBrowser = new GKMapBrowser();
-            Panel1.Content = fMapBrowser;
-
-            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
-            fController.Init(baseWin);
+            MenuProviders = new ContextMenu();
+            PopulateContextMenus();
 
             radTotal.Checked = true;
 
-            PopulateContextMenus();
-
-            SetLocale();
+            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
+            fController.Init(baseWin);
 
             if (!GMapControl.IsDesignerHosted) {
                 fMapBrowser.MapControl.OnMapTypeChanged += MainMap_OnMapTypeChanged;
@@ -210,13 +202,6 @@ namespace GKUI.Forms
                 txtLat.Text = fMapBrowser.MapControl.Position.Lat.ToString(CultureInfo.InvariantCulture);
                 txtLng.Text = fMapBrowser.MapControl.Position.Lng.ToString(CultureInfo.InvariantCulture);
             }
-        }
-
-        private void InitializeComponent()
-        {
-            XamlReader.Load(this);
-
-            MenuProviders = new ContextMenu();
         }
 
         private void PopulateContextMenus()
