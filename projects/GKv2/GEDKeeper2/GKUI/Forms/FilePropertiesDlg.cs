@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -28,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class FilePropertiesDlg : CommonDialog, IFilePropertiesDlg
+    public sealed partial class FilePropertiesDlg : CommonDialog<IFilePropertiesDlg, FilePropertiesDlgController>, IFilePropertiesDlg
     {
-        private readonly FilePropertiesDlgController fController;
-
         public IBaseWindow Base
         {
             get { return fController.Base; }
@@ -77,22 +74,6 @@ namespace GKUI.Forms
             fController = new FilePropertiesDlgController(this);
             fController.Init(baseWin);
             fController.UpdateView();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnLangEdit_Click(object sender, EventArgs e)

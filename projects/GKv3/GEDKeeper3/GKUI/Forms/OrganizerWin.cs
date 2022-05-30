@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
@@ -30,7 +29,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class OrganizerWin : CommonDialog, IOrganizerWin
+    public sealed partial class OrganizerWin : CommonDialog<IOrganizerWin, OrganizerController>, IOrganizerWin
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -46,8 +45,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly OrganizerController fController;
 
         #region View Interface
 
@@ -76,11 +73,6 @@ namespace GKUI.Forms
         public OrganizerWin(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            fAdrList.Buttons = EnumSet<SheetButton>.Create();
-            fPhonesList.Buttons = EnumSet<SheetButton>.Create();
-            fMailsList.Buttons = EnumSet<SheetButton>.Create();
-            fWebsList.Buttons = EnumSet<SheetButton>.Create();
 
             fController = new OrganizerController(this);
             fController.Init(baseWin);

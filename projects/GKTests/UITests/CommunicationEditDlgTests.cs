@@ -52,7 +52,7 @@ namespace GKUI.Forms
             fCommunicationRecord = new GDMCommunicationRecord(fContext.Tree);
 
             fDialog = new CommunicationEditDlg(fBase);
-            fDialog.Communication = fCommunicationRecord;
+            fDialog.CommunicationRecord = fCommunicationRecord;
             fDialog.Show();
         }
 
@@ -71,7 +71,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
+            Assert.AreEqual(fCommunicationRecord, fDialog.CommunicationRecord);
 
             EnterText("txtName", fDialog, "sample text");
             SelectCombo("cmbCorrType", fDialog, 1);
@@ -85,7 +85,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataDatesAndApply()
         {
-            Assert.AreEqual(fCommunicationRecord, fDialog.Communication);
+            Assert.AreEqual(fCommunicationRecord, fDialog.CommunicationRecord);
 
             EnterText("txtName", fDialog, "sample text");
             EnterMaskedText("txtDate", fDialog, "02.02.2000");

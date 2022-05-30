@@ -18,11 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
 using BSLib.Design.MVP;
+using GKCore;
 using GKCore.Interfaces;
+using GKCore.MVP;
 
 namespace GKUI.Forms
 {
@@ -110,11 +113,62 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
+    public class CommonWindow<TView, TController> : CommonWindow
+        where TView : IView
+        where TController : FormController<TView>
+    {
+        protected TController fController;
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class CommonDialog : CommonForm, ICommonDialog
     {
         public virtual bool ShowModalX(object owner)
         {
             return (ShowDialog() == DialogResult.OK);
+        }
+
+        protected virtual void CancelClickHandler(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CommonDialog<TView, TController> : CommonDialog
+        where TView : IView
+        where TController : DialogController<TView>
+    {
+        protected TController fController;
+
+        protected virtual void AcceptClickHandler(object sender, EventArgs e)
+        {
+            try {
+                DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+            } catch (Exception ex) {
+                Logger.WriteError("CommonDialog<>.AcceptClickHandler()", ex);
+            }
+        }
+
+        protected override void CancelClickHandler(object sender, EventArgs e)
+        {
+            try {
+                DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+            } catch (Exception ex) {
+                Logger.WriteError("CommonDialog<>.CancelClickHandler()", ex);
+            }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

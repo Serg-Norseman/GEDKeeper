@@ -734,7 +734,7 @@ namespace GKCore.Lists
                             persName = new GDMPersonalName();
                         }
 
-                        dlg.Individual = iRec;
+                        dlg.IndividualRecord = iRec;
                         dlg.PersonalName = persName;
                         result = AppHost.Instance.ShowModalX(dlg, false);
 
@@ -843,8 +843,8 @@ namespace GKCore.Lists
                 case RecordAction.raEdit:
                     if (cfLink != null) {
                         using (var dlg = AppHost.ResolveDialog<IParentsEditDlg>(fBaseWin)) {
-                            dlg.Person = iRec;
-                            dlg.Link = cfLink;
+                            dlg.IndividualRecord = iRec;
+                            dlg.ChildLink = cfLink;
                             result = AppHost.Instance.ShowModalX(dlg, false);
                         }
                     }
@@ -1050,7 +1050,7 @@ namespace GKCore.Lists
                             userRef = new GDMUserReference();
                         }
 
-                        dlg.UserRef = userRef;
+                        dlg.UserReference = userRef;
                         result = AppHost.Instance.ShowModalX(dlg, false);
 
                         if (!exists) {

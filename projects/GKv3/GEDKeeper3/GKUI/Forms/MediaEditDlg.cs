@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
@@ -33,7 +32,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
+    public sealed partial class MediaEditDlg : CommonDialog<IMediaEditDlg, MediaEditDlgController>, IMediaEditDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -59,12 +58,10 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly MediaEditDlgController fController;
-
-        public GDMMultimediaRecord MediaRec
+        public GDMMultimediaRecord MultimediaRecord
         {
-            get { return fController.MediaRec; }
-            set { fController.MediaRec = value; }
+            get { return fController.MultimediaRecord; }
+            set { fController.MultimediaRecord = value; }
         }
 
         #region View Interface
@@ -115,22 +112,6 @@ namespace GKUI.Forms
 
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
             fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnFileSelect_Click(object sender, EventArgs e)

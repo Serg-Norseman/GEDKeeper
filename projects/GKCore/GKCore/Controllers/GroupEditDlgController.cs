@@ -32,14 +32,14 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class GroupEditDlgController : DialogController<IGroupEditDlg>
     {
-        private GDMGroupRecord fGroup;
+        private GDMGroupRecord fGroupRecord;
 
-        public GDMGroupRecord Group
+        public GDMGroupRecord GroupRecord
         {
-            get { return fGroup; }
+            get { return fGroupRecord; }
             set {
-                if (fGroup != value) {
-                    fGroup = value;
+                if (fGroupRecord != value) {
+                    fGroupRecord = value;
                     UpdateView();
                 }
             }
@@ -54,9 +54,9 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fGroup.GroupName = fView.Name.Text;
+                fGroupRecord.GroupName = fView.Name.Text;
 
-                fBase.NotifyRecord(fGroup, RecordAction.raEdit);
+                fBase.NotifyRecord(fGroupRecord, RecordAction.raEdit);
 
                 CommitChanges();
 
@@ -69,11 +69,11 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Name.Text = (fGroup == null) ? "" : fGroup.GroupName;
+            fView.Name.Text = (fGroupRecord == null) ? "" : fGroupRecord.GroupName;
 
-            fView.MembersList.ListModel.DataOwner = fGroup;
-            fView.NotesList.ListModel.DataOwner = fGroup;
-            fView.MediaList.ListModel.DataOwner = fGroup;
+            fView.MembersList.ListModel.DataOwner = fGroupRecord;
+            fView.NotesList.ListModel.DataOwner = fGroupRecord;
+            fView.MediaList.ListModel.DataOwner = fGroupRecord;
         }
 
         public void JumpToRecord(GDMRecord record)

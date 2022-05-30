@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
@@ -30,7 +29,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class FilePropertiesDlg : CommonDialog, IFilePropertiesDlg
+    public sealed partial class FilePropertiesDlg : CommonDialog<IFilePropertiesDlg, FilePropertiesDlgController>, IFilePropertiesDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -52,8 +51,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly FilePropertiesDlgController fController;
 
         public IBaseWindow Base
         {
@@ -96,22 +93,6 @@ namespace GKUI.Forms
             fController = new FilePropertiesDlgController(this);
             fController.Init(baseWin);
             fController.UpdateView();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnLangEdit_Click(object sender, EventArgs e)

@@ -39,17 +39,17 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class PersonEditDlgController : DialogController<IPersonEditDlg>
     {
-        private GDMIndividualRecord fPerson;
+        private GDMIndividualRecord fIndividualRecord;
         private IImage fPortraitImg;
         private GDMIndividualRecord fTarget;
         private TargetMode fTargetMode;
 
-        public GDMIndividualRecord Person
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fPerson; }
+            get { return fIndividualRecord; }
             set {
-                if (fPerson != value) {
-                    fPerson = value;
+                if (fIndividualRecord != value) {
+                    fIndividualRecord = value;
                     UpdateView();
                 }
             }
@@ -116,11 +116,11 @@ namespace GKCore.Controllers
         {
             try {
                 GDMPersonalName persName;
-                if (fPerson.PersonalNames.Count > 0) {
-                    persName = fPerson.PersonalNames[0];
+                if (fIndividualRecord.PersonalNames.Count > 0) {
+                    persName = fIndividualRecord.PersonalNames[0];
                 } else {
                     persName = new GDMPersonalName();
-                    fPerson.PersonalNames.Add(persName);
+                    fIndividualRecord.PersonalNames.Add(persName);
                 }
 
                 GKUtils.SetNameParts(persName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
@@ -133,16 +133,16 @@ namespace GKCore.Controllers
                     persName.MarriedName = fView.MarriedSurname.Text;
                 }
 
-                fPerson.Sex = (GDMSex)fView.SexCombo.SelectedIndex;
-                fPerson.Patriarch = fView.Patriarch.Checked;
-                fPerson.Bookmark = fView.Bookmark.Checked;
-                fPerson.Restriction = (GDMRestriction)fView.RestrictionCombo.SelectedIndex;
+                fIndividualRecord.Sex = (GDMSex)fView.SexCombo.SelectedIndex;
+                fIndividualRecord.Patriarch = fView.Patriarch.Checked;
+                fIndividualRecord.Bookmark = fView.Bookmark.Checked;
+                fIndividualRecord.Restriction = (GDMRestriction)fView.RestrictionCombo.SelectedIndex;
 
-                fBase.Context.ProcessIndividual(fPerson);
+                fBase.Context.ProcessIndividual(fIndividualRecord);
 
                 fLocalUndoman.Commit();
 
-                fBase.NotifyRecord(fPerson, RecordAction.raEdit);
+                fBase.NotifyRecord(fIndividualRecord, RecordAction.raEdit);
 
                 return true;
             } catch (Exception ex) {
@@ -154,23 +154,23 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
-                fView.SexCombo.SelectedIndex = (sbyte)fPerson.Sex;
-                fView.Patriarch.Checked = fPerson.Patriarch;
-                fView.Bookmark.Checked = fPerson.Bookmark;
-                fView.RestrictionCombo.SelectedIndex = (sbyte)fPerson.Restriction;
+                fView.SexCombo.SelectedIndex = (sbyte)fIndividualRecord.Sex;
+                fView.Patriarch.Checked = fIndividualRecord.Patriarch;
+                fView.Bookmark.Checked = fIndividualRecord.Bookmark;
+                fView.RestrictionCombo.SelectedIndex = (sbyte)fIndividualRecord.Restriction;
 
-                fView.EventsList.ListModel.DataOwner = fPerson;
-                fView.NotesList.ListModel.DataOwner = fPerson;
-                fView.MediaList.ListModel.DataOwner = fPerson;
-                fView.SourcesList.ListModel.DataOwner = fPerson;
-                fView.AssociationsList.ListModel.DataOwner = fPerson;
+                fView.EventsList.ListModel.DataOwner = fIndividualRecord;
+                fView.NotesList.ListModel.DataOwner = fIndividualRecord;
+                fView.MediaList.ListModel.DataOwner = fIndividualRecord;
+                fView.SourcesList.ListModel.DataOwner = fIndividualRecord;
+                fView.AssociationsList.ListModel.DataOwner = fIndividualRecord;
 
-                fView.GroupsList.ListModel.DataOwner = fPerson;
-                fView.NamesList.ListModel.DataOwner = fPerson;
-                fView.SpousesList.ListModel.DataOwner = fPerson;
-                fView.UserRefList.ListModel.DataOwner = fPerson;
-                fView.ParentsList.ListModel.DataOwner = fPerson;
-                fView.ChildrenList.ListModel.DataOwner = fPerson;
+                fView.GroupsList.ListModel.DataOwner = fIndividualRecord;
+                fView.NamesList.ListModel.DataOwner = fIndividualRecord;
+                fView.SpousesList.ListModel.DataOwner = fIndividualRecord;
+                fView.UserRefList.ListModel.DataOwner = fIndividualRecord;
+                fView.ParentsList.ListModel.DataOwner = fIndividualRecord;
+                fView.ChildrenList.ListModel.DataOwner = fIndividualRecord;
 
                 UpdateControls(true);
             } catch (Exception ex) {
@@ -182,8 +182,8 @@ namespace GKCore.Controllers
         {
             bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
 
-            if (fPerson.ChildToFamilyLinks.Count != 0) {
-                GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fPerson.ChildToFamilyLinks[0]);
+            if (fIndividualRecord.ChildToFamilyLinks.Count != 0) {
+                GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fIndividualRecord.ChildToFamilyLinks[0]);
                 fView.SetParentsAvl(true, locked);
 
                 GDMIndividualRecord father, mother;
@@ -216,7 +216,7 @@ namespace GKCore.Controllers
 
         public void UpdateControls(bool totalUpdate = false)
         {
-            var np = (fPerson.PersonalNames.Count > 0) ? fPerson.PersonalNames[0] : null;
+            var np = (fIndividualRecord.PersonalNames.Count > 0) ? fIndividualRecord.PersonalNames[0] : null;
             UpdateNameControls(np);
             UpdateParents();
 
@@ -268,7 +268,7 @@ namespace GKCore.Controllers
         {
             ICulture culture;
             if (np != null) {
-                var parts = GKUtils.GetNameParts(fBase.Context.Tree, fPerson, np, false);
+                var parts = GKUtils.GetNameParts(fBase.Context.Tree, fIndividualRecord, np, false);
                 culture = parts.Culture;
 
                 fView.Surname.Text = parts.Surname;
@@ -304,7 +304,7 @@ namespace GKCore.Controllers
         public void UpdatePortrait(bool totalUpdate)
         {
             if (fPortraitImg == null || totalUpdate) {
-                fPortraitImg = fBase.Context.GetPrimaryBitmap(fPerson, fView.Portrait.Width, fView.Portrait.Height, false);
+                fPortraitImg = fBase.Context.GetPrimaryBitmap(fIndividualRecord, fView.Portrait.Width, fView.Portrait.Height, false);
             }
 
             IImage img = fPortraitImg;
@@ -400,13 +400,13 @@ namespace GKCore.Controllers
             // For the sample: we need to have gender's value on time of call AddSpouse (for define husband/wife)
             // And we need to have actual name's value for visible it in FamilyEditDlg
 
-            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, fPerson, (GDMSex)fView.SexCombo.SelectedIndex);
-            fLocalUndoman.DoIndividualNameChange(fPerson, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
+            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, fIndividualRecord, (GDMSex)fView.SexCombo.SelectedIndex);
+            fLocalUndoman.DoIndividualNameChange(fIndividualRecord, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
         }
 
         public void AddPortrait()
         {
-            if (BaseController.AddIndividualPortrait(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualPortrait(fBase, fLocalUndoman, fIndividualRecord)) {
                 fView.MediaList.UpdateSheet();
                 UpdatePortrait(true);
             }
@@ -414,7 +414,7 @@ namespace GKCore.Controllers
 
         public void DeletePortrait()
         {
-            if (BaseController.DeleteIndividualPortrait(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualPortrait(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdatePortrait(true);
             }
         }
@@ -423,9 +423,9 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            GDMFamilyRecord family = fBase.Context.SelectFamily(fPerson);
-            if (family != null && family.IndexOfChild(fPerson) < 0) {
-                fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fPerson, family);
+            GDMFamilyRecord family = fBase.Context.SelectFamily(fIndividualRecord);
+            if (family != null && family.IndexOfChild(fIndividualRecord) < 0) {
+                fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fIndividualRecord, family);
             }
             UpdateControls();
         }
@@ -434,7 +434,7 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family != null && BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null)) {
                 UpdateControls();
             }
@@ -444,12 +444,12 @@ namespace GKCore.Controllers
         {
             if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery))) return;
 
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family == null) return;
 
             AcceptTempData();
 
-            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, fPerson, family);
+            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, fIndividualRecord, family);
             UpdateControls();
         }
 
@@ -457,7 +457,7 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
@@ -466,7 +466,7 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
@@ -475,7 +475,7 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
@@ -484,7 +484,7 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
@@ -507,7 +507,7 @@ namespace GKCore.Controllers
 
         public void JumpToFather()
         {
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family == null) return;
 
             JumpToRecord(family.Husband);
@@ -515,7 +515,7 @@ namespace GKCore.Controllers
 
         public void JumpToMother()
         {
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family == null) return;
 
             JumpToRecord(family.Wife);
@@ -524,7 +524,7 @@ namespace GKCore.Controllers
         public void JumpToPersonSpouse(GDMFamilyRecord family)
         {
             GDMIndividualRecord spouse = null;
-            switch (fPerson.Sex) {
+            switch (fIndividualRecord.Sex) {
                 case GDMSex.svMale:
                     spouse = fBase.Context.Tree.GetPtrValue(family.Wife);
                     break;
@@ -538,7 +538,7 @@ namespace GKCore.Controllers
 
         public void CopyPersonName()
         {
-            AppHost.Instance.SetClipboardText(GKUtils.GetNameString(fPerson, true, false));
+            AppHost.Instance.SetClipboardText(GKUtils.GetNameString(fIndividualRecord, true, false));
         }
 
         public override void SetLocale()

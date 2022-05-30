@@ -33,14 +33,14 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class FamilyEditDlgController : DialogController<IFamilyEditDlg>
     {
-        private GDMFamilyRecord fFamily;
+        private GDMFamilyRecord fFamilyRecord;
 
-        public GDMFamilyRecord Family
+        public GDMFamilyRecord FamilyRecord
         {
-            get { return fFamily; }
+            get { return fFamilyRecord; }
             set {
-                if (fFamily != value) {
-                    fFamily = value;
+                if (fFamilyRecord != value) {
+                    fFamilyRecord = value;
                     UpdateView();
                 }
             }
@@ -65,10 +65,10 @@ namespace GKCore.Controllers
             bool result = false;
             switch (targetType) {
                 case TargetMode.tmSpouse:
-                    result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamily, target);
+                    result = fLocalUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, fFamilyRecord, target);
                     break;
                 case TargetMode.tmFamilyChild:
-                    result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, fFamily);
+                    result = fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, target, fFamilyRecord);
                     break;
             }
 
@@ -78,14 +78,14 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fFamily.Status = (GDMMarriageStatus)fView.MarriageStatus.SelectedIndex;
-                fFamily.Restriction = (GDMRestriction)fView.Restriction.SelectedIndex;
+                fFamilyRecord.Status = (GDMMarriageStatus)fView.MarriageStatus.SelectedIndex;
+                fFamilyRecord.Restriction = (GDMRestriction)fView.Restriction.SelectedIndex;
 
-                fBase.Context.ProcessFamily(fFamily);
+                fBase.Context.ProcessFamily(fFamilyRecord);
 
                 fLocalUndoman.Commit();
 
-                fBase.NotifyRecord(fFamily, RecordAction.raEdit);
+                fBase.NotifyRecord(fFamilyRecord, RecordAction.raEdit);
 
                 return true;
             } catch (Exception ex) {
@@ -97,20 +97,20 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
-                fView.ChildrenList.ListModel.DataOwner = fFamily;
-                fView.EventsList.ListModel.DataOwner = fFamily;
-                fView.NotesList.ListModel.DataOwner = fFamily;
-                fView.MediaList.ListModel.DataOwner = fFamily;
-                fView.SourcesList.ListModel.DataOwner = fFamily;
+                fView.ChildrenList.ListModel.DataOwner = fFamilyRecord;
+                fView.EventsList.ListModel.DataOwner = fFamilyRecord;
+                fView.NotesList.ListModel.DataOwner = fFamilyRecord;
+                fView.MediaList.ListModel.DataOwner = fFamilyRecord;
+                fView.SourcesList.ListModel.DataOwner = fFamilyRecord;
 
-                if (fFamily == null) {
+                if (fFamilyRecord == null) {
                     fView.MarriageStatus.Enabled = false;
                     fView.MarriageStatus.SelectedIndex = 0;
                     fView.Restriction.SelectedIndex = 0;
                 } else {
                     fView.MarriageStatus.Enabled = true;
-                    fView.MarriageStatus.SelectedIndex = (int)fFamily.Status;
-                    fView.Restriction.SelectedIndex = (sbyte)fFamily.Restriction;
+                    fView.MarriageStatus.SelectedIndex = (int)fFamilyRecord.Status;
+                    fView.Restriction.SelectedIndex = (sbyte)fFamilyRecord.Restriction;
                 }
 
                 UpdateControls();
@@ -123,15 +123,15 @@ namespace GKCore.Controllers
         {
             GDMIndividualRecord husband, wife;
 
-            if (fFamily == null) {
+            if (fFamilyRecord == null) {
                 husband = null;
                 wife = null;
 
                 fView.LockEditor(true);
             } else {
-                fBase.Context.Tree.GetSpouses(fFamily, out husband, out wife);
+                fBase.Context.Tree.GetSpouses(fFamilyRecord, out husband, out wife);
 
-                fView.LockEditor(fFamily.Restriction == GDMRestriction.rnLocked);
+                fView.LockEditor(fFamilyRecord.Restriction == GDMRestriction.rnLocked);
             }
 
             fView.SetHusband((husband != null) ? GKUtils.GetNameString(husband, true, false) : null);
@@ -146,28 +146,28 @@ namespace GKCore.Controllers
 
         public void AddHusband()
         {
-            if (BaseController.AddFamilyHusband(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.AddFamilyHusband(fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
             }
         }
 
         public void DeleteHusband()
         {
-            if (BaseController.DeleteFamilyHusband(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.DeleteFamilyHusband(fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
             }
         }
 
         public void AddWife()
         {
-            if (BaseController.AddFamilyWife(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.AddFamilyWife(fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
             }
         }
 
         public void DeleteWife()
         {
-            if (BaseController.DeleteFamilyWife(fBase, fLocalUndoman, fFamily)) {
+            if (BaseController.DeleteFamilyWife(fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
             }
         }
@@ -190,12 +190,12 @@ namespace GKCore.Controllers
 
         public void JumpToHusband()
         {
-            JumpToRecord(fFamily.Husband);
+            JumpToRecord(fFamilyRecord.Husband);
         }
 
         public void JumpToWife()
         {
-            JumpToRecord(fFamily.Wife);
+            JumpToRecord(fFamilyRecord.Wife);
         }
 
         public override void SetLocale()

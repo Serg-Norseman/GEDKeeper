@@ -34,15 +34,15 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class MediaEditDlgController : DialogController<IMediaEditDlg>
     {
-        private GDMMultimediaRecord fMediaRec;
+        private GDMMultimediaRecord fMultimediaRecord;
         private bool fIsNew;
 
-        public GDMMultimediaRecord MediaRec
+        public GDMMultimediaRecord MultimediaRecord
         {
-            get { return fMediaRec; }
+            get { return fMultimediaRecord; }
             set {
-                if (fMediaRec != value) {
-                    fMediaRec = value;
+                if (fMultimediaRecord != value) {
+                    fMultimediaRecord = value;
                     UpdateView();
                 }
             }
@@ -61,7 +61,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                GDMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+                GDMFileReferenceWithTitle fileRef = fMultimediaRecord.FileReferences[0];
 
                 if (fIsNew) {
                     MediaStoreType gst = fView.StoreType.GetSelectedTag<MediaStoreType>();
@@ -83,7 +83,7 @@ namespace GKCore.Controllers
                 UpdateControls();
 
                 fLocalUndoman.Commit();
-                fBase.NotifyRecord(fMediaRec, RecordAction.raEdit);
+                fBase.NotifyRecord(fMultimediaRecord, RecordAction.raEdit);
 
                 return true;
             } catch (Exception ex) {
@@ -94,15 +94,15 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.NotesList.ListModel.DataOwner = fMediaRec;
-            fView.SourcesList.ListModel.DataOwner = fMediaRec;
+            fView.NotesList.ListModel.DataOwner = fMultimediaRecord;
+            fView.SourcesList.ListModel.DataOwner = fMultimediaRecord;
 
             UpdateControls();
         }
 
         private void UpdateControls()
         {
-            GDMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+            GDMFileReferenceWithTitle fileRef = fMultimediaRecord.FileReferences[0];
 
             fIsNew = (fileRef.StringValue == "");
 
@@ -201,7 +201,7 @@ namespace GKCore.Controllers
                 Accept();
             }
 
-            fBase.ShowMedia(fMediaRec, true);
+            fBase.ShowMedia(fMultimediaRecord, true);
         }
 
         public override void SetLocale()

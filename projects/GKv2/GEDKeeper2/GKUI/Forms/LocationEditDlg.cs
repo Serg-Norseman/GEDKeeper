@@ -32,10 +32,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
+    public sealed partial class LocationEditDlg : CommonDialog<ILocationEditDlg, LocationEditDlgController>, ILocationEditDlg
     {
-        private readonly LocationEditDlgController fController;
-
         private readonly GKMapBrowser fMapBrowser;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fNotesList;
@@ -112,22 +110,6 @@ namespace GKUI.Forms
             if (e.KeyCode == Keys.Down && e.Control) {
                 txtName.Text = txtName.Text.ToLower();
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

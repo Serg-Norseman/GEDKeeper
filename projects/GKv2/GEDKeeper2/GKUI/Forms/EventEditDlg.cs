@@ -32,10 +32,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
+    public sealed partial class EventEditDlg : CommonDialog<IEventEditDlg, EventEditDlgController>, IEventEditDlg
     {
-        private readonly EventEditDlgController fController;
-
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fSourcesList;
@@ -134,22 +132,6 @@ namespace GKUI.Forms
                 btnPlaceAdd.Enabled = true;
                 btnPlaceDelete.Enabled = false;
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnAddress_Click(object sender, EventArgs e)

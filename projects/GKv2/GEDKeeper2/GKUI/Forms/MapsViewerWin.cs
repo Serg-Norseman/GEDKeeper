@@ -148,15 +148,13 @@ namespace GKUI.Forms
             fMapBrowser.Dock = DockStyle.Fill;
             panClient.Controls.Add(this.fMapBrowser, 0, 0);
 
-            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
-            fController.Init(baseWin);
+            PopulateContextMenus();
 
             radTotal.Checked = true;
             radTotal_Click(null, null);
 
-            PopulateContextMenus();
-
-            SetLocale();
+            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
+            fController.Init(baseWin);
 
             if (!GMapControl.IsDesignerHosted) {
                 fMapBrowser.MapControl.OnMapTypeChanged += MainMap_OnMapTypeChanged;

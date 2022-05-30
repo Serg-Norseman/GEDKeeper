@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Controllers;
@@ -31,10 +29,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
+    public sealed partial class AddressEditDlg : CommonDialog<IAddressEditDlg, AddressEditDlgController>, IAddressEditDlg
     {
-        private readonly AddressEditDlgController fController;
-
         private readonly GKSheetList fPhonesList;
         private readonly GKSheetList fMailsList;
         private readonly GKSheetList fWebsList;
@@ -125,22 +121,6 @@ namespace GKUI.Forms
             } else if (sender == fWebsList) {
                 fController.DoWebsAction(eArgs.Action, itemTag);
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

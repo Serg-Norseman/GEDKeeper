@@ -31,8 +31,22 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SourceEditDlgController : EditorController<GDMSourceRecord, ISourceEditDlg>
+    public sealed class SourceEditDlgController : DialogController<ISourceEditDlg>
     {
+        private GDMSourceRecord fSourceRecord;
+
+        public GDMSourceRecord SourceRecord
+        {
+            get { return fSourceRecord; }
+            set {
+                if (fSourceRecord != value) {
+                    fSourceRecord = value;
+                    UpdateView();
+                }
+            }
+        }
+
+
         public SourceEditDlgController(ISourceEditDlg view) : base(view)
         {
             fView.ShortTitle.Activate();
@@ -41,19 +55,19 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fModel.ShortTitle = fView.ShortTitle.Text;
-                fModel.Originator.Clear();
-                fModel.SetOriginatorArray(fView.Author.Lines);
-                fModel.Title.Clear();
-                fModel.SetTitleArray(fView.Title.Lines);
-                fModel.Publication.Clear();
-                fModel.SetPublicationArray(fView.Publication.Lines);
-                fModel.Text.Clear();
-                fModel.SetTextArray(fView.Text.Lines);
+                fSourceRecord.ShortTitle = fView.ShortTitle.Text;
+                fSourceRecord.Originator.Clear();
+                fSourceRecord.SetOriginatorArray(fView.Author.Lines);
+                fSourceRecord.Title.Clear();
+                fSourceRecord.SetTitleArray(fView.Title.Lines);
+                fSourceRecord.Publication.Clear();
+                fSourceRecord.SetPublicationArray(fView.Publication.Lines);
+                fSourceRecord.Text.Clear();
+                fSourceRecord.SetTextArray(fView.Text.Lines);
 
                 fLocalUndoman.Commit();
 
-                fBase.NotifyRecord(fModel, RecordAction.raEdit);
+                fBase.NotifyRecord(fSourceRecord, RecordAction.raEdit);
 
                 return true;
             } catch (Exception ex) {
@@ -64,15 +78,15 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.ShortTitle.Text = fModel.ShortTitle;
-            fView.Author.Text = fModel.Originator.Lines.Text.Trim();
-            fView.Title.Text = fModel.Title.Lines.Text.Trim();
-            fView.Publication.Text = fModel.Publication.Lines.Text.Trim();
-            fView.Text.Text = fModel.Text.Lines.Text.Trim();
+            fView.ShortTitle.Text = fSourceRecord.ShortTitle;
+            fView.Author.Text = fSourceRecord.Originator.Lines.Text.Trim();
+            fView.Title.Text = fSourceRecord.Title.Lines.Text.Trim();
+            fView.Publication.Text = fSourceRecord.Publication.Lines.Text.Trim();
+            fView.Text.Text = fSourceRecord.Text.Lines.Text.Trim();
 
-            fView.RepositoriesList.ListModel.DataOwner = fModel;
-            fView.NotesList.ListModel.DataOwner = fModel;
-            fView.MediaList.ListModel.DataOwner = fModel;
+            fView.RepositoriesList.ListModel.DataOwner = fSourceRecord;
+            fView.NotesList.ListModel.DataOwner = fSourceRecord;
+            fView.MediaList.ListModel.DataOwner = fSourceRecord;
         }
 
         public void JumpToRecord(GDMRecord record)

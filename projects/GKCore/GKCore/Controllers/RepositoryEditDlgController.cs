@@ -32,14 +32,14 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class RepositoryEditDlgController : DialogController<IRepositoryEditDlg>
     {
-        private GDMRepositoryRecord fRepository;
+        private GDMRepositoryRecord fRepositoryRecord;
 
-        public GDMRepositoryRecord Repository
+        public GDMRepositoryRecord RepositoryRecord
         {
-            get { return fRepository; }
+            get { return fRepositoryRecord; }
             set {
-                if (fRepository != value) {
-                    fRepository = value;
+                if (fRepositoryRecord != value) {
+                    fRepositoryRecord = value;
                     UpdateView();
                 }
             }
@@ -54,9 +54,9 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fRepository.RepositoryName = fView.Name.Text;
+                fRepositoryRecord.RepositoryName = fView.Name.Text;
 
-                fBase.NotifyRecord(fRepository, RecordAction.raEdit);
+                fBase.NotifyRecord(fRepositoryRecord, RecordAction.raEdit);
 
                 CommitChanges();
 
@@ -69,14 +69,14 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Name.Text = fRepository.RepositoryName;
+            fView.Name.Text = fRepositoryRecord.RepositoryName;
 
-            fView.NotesList.ListModel.DataOwner = fRepository;
+            fView.NotesList.ListModel.DataOwner = fRepositoryRecord;
         }
 
         public void ModifyAddress()
         {
-            BaseController.ModifyAddress(fBase, fRepository.Address);
+            BaseController.ModifyAddress(fBase, fRepositoryRecord.Address);
         }
 
         public override void SetLocale()

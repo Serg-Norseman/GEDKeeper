@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
@@ -34,7 +33,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
+    public sealed partial class LocationEditDlg : CommonDialog<ILocationEditDlg, LocationEditDlgController>, ILocationEditDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -62,8 +61,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly LocationEditDlgController fController;
 
         public GDMLocationRecord LocationRecord
         {
@@ -126,22 +123,6 @@ namespace GKUI.Forms
             if (e.Key == Keys.Down && e.Control) {
                 txtName.Text = txtName.Text.ToLower();
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

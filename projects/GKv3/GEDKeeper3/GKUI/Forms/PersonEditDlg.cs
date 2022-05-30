@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
@@ -38,7 +37,7 @@ using GKUI.Platform;
 
 namespace GKUI.Forms
 {
-    public partial class PersonEditDlg : EditorDialog, IPersonEditDlg
+    public partial class PersonEditDlg : CommonDialog<IPersonEditDlg, PersonEditDlgController>, IPersonEditDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -111,12 +110,10 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly PersonEditDlgController fController;
-
-        public GDMIndividualRecord Person
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fController.Person; }
-            set { fController.Person = value; }
+            get { return fController.IndividualRecord; }
+            set { fController.IndividualRecord = value; }
         }
 
         public GDMIndividualRecord Target
@@ -341,26 +338,10 @@ namespace GKUI.Forms
             }
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
-        }
-
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown || eArgs.Action == RecordAction.raEdit) {
-                fController.UpdateNameControls(fController.Person.PersonalNames[0]);
+                fController.UpdateNameControls(fController.IndividualRecord.PersonalNames[0]);
             }
         }
 
@@ -415,7 +396,7 @@ namespace GKUI.Forms
         private void Names_TextChanged(object sender, EventArgs e)
         {
             Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
-                                  cmbPatronymic.Text, fController.Person.GetXRefNum());
+                                  cmbPatronymic.Text, fController.IndividualRecord.GetXRefNum());
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)

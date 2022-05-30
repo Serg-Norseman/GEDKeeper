@@ -19,9 +19,11 @@
  */
 
 using System;
+using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Charts;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -44,12 +46,13 @@ namespace GKCore.Controllers
 
         public TreeFilterDlgController(ITreeFilterDlg view) : base(view)
         {
+            fView.PersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
         }
 
         public override bool Accept()
         {
             try {
-                fFilter.BranchCut = (ChartFilter.BranchCutType)fView.GetCutModeRadio();
+                fFilter.BranchCut = GetCutModeRadio();
                 if (fFilter.BranchCut == ChartFilter.BranchCutType.Years) {
                     fFilter.BranchYear = (int)fView.YearNum.Value;
                 } else if (fFilter.BranchCut == ChartFilter.BranchCutType.Persons) {
@@ -78,6 +81,12 @@ namespace GKCore.Controllers
             }
         }
 
+        public override bool Cancel()
+        {
+            fFilter.Reset();
+            return true;
+        }
+
         public override void UpdateView()
         {
             GDMTree tree = fBase.Context.Tree;
@@ -97,7 +106,7 @@ namespace GKCore.Controllers
 
         public void UpdateControls()
         {
-            fView.SetCutModeRadio((int)fFilter.BranchCut);
+            SetCutModeRadio(fFilter.BranchCut);
             fView.YearNum.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Years);
             fView.PersonsList.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Persons);
             fView.YearNum.Text = fFilter.BranchYear.ToString();
@@ -141,6 +150,40 @@ namespace GKCore.Controllers
                     break;
             }
 
+            UpdateControls();
+        }
+
+
+        private void SetCutModeRadio(ChartFilter.BranchCutType cutMode)
+        {
+            switch (cutMode) {
+                case ChartFilter.BranchCutType.None:
+                    GetControl<IRadioButton>("rbCutNone").Checked = true;
+                    break;
+                case ChartFilter.BranchCutType.Years:
+                    GetControl<IRadioButton>("rbCutYears").Checked = true;
+                    break;
+                case ChartFilter.BranchCutType.Persons:
+                    GetControl<IRadioButton>("rbCutPersons").Checked = true;
+                    break;
+            }
+        }
+
+        private ChartFilter.BranchCutType GetCutModeRadio()
+        {
+            var cutMode = ChartFilter.BranchCutType.None;
+            if (GetControl<IRadioButton>("rbCutNone").Checked)
+                cutMode = ChartFilter.BranchCutType.None;
+            if (GetControl<IRadioButton>("rbCutYears").Checked)
+                cutMode = ChartFilter.BranchCutType.Years;
+            if (GetControl<IRadioButton>("rbCutPersons").Checked)
+                cutMode = ChartFilter.BranchCutType.Persons;
+            return cutMode;
+        }
+
+        public void ChangeCutMode()
+        {
+            fFilter.BranchCut = GetCutModeRadio();
             UpdateControls();
         }
 

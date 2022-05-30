@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
@@ -32,20 +31,18 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
+    public partial class FamilyEditDlg : CommonDialog<IFamilyEditDlg, FamilyEditDlgController>, IFamilyEditDlg
     {
-        private readonly FamilyEditDlgController fController;
-
         private readonly GKSheetList fChildrenList;
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fSourcesList;
 
-        public GDMFamilyRecord Family
+        public GDMFamilyRecord FamilyRecord
         {
-            get { return fController.Family; }
-            set { fController.Family = value; }
+            get { return fController.FamilyRecord; }
+            set { fController.FamilyRecord = value; }
         }
 
         #region View Interface
@@ -184,22 +181,6 @@ namespace GKUI.Forms
             if (eArgs.Action == RecordAction.raJump) {
                 fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)

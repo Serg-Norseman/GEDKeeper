@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -51,7 +51,7 @@ namespace GKUI.Forms
             fUserRef = new GDMUserReference();
 
             fDialog = new UserRefEditDlg(fBase);
-            fDialog.UserRef = fUserRef;
+            fDialog.UserReference = fUserRef;
             fDialog.Show();
         }
 
@@ -70,7 +70,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fUserRef, fDialog.UserRef);
+            Assert.AreEqual(fUserRef, fDialog.UserReference);
 
             EnterCombo("cmbRef", fDialog, "sample text");
             ClickButton("btnAccept", fDialog);

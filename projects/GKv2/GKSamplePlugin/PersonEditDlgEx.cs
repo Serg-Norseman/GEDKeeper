@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,13 +34,12 @@ using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
+using GKUI.Forms;
 
 namespace GKSamplePlugin
 {
-    public partial class PersonEditDlgEx : GKUI.Forms.CommonDialog, IPersonEditDlg
+    public partial class PersonEditDlgEx : CommonDialog<IPersonEditDlg, PersonEditDlgController>, IPersonEditDlg
     {
-        private readonly PersonEditDlgController fController;
-
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fSpousesList;
         private readonly GKSheetList fAssociationsList;
@@ -53,10 +52,10 @@ namespace GKSamplePlugin
         private readonly GKSheetList fParentsList;
         private readonly GKSheetList fChildrenList;
 
-        public GDMIndividualRecord Person
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fController.Person; }
-            set { fController.Person = value; }
+            get { return fController.IndividualRecord; }
+            set { fController.IndividualRecord = value; }
         }
 
         public GDMIndividualRecord Target
@@ -254,24 +253,10 @@ namespace GKSamplePlugin
             fController.UpdateControls();
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.Cancel();
-            } catch (Exception ex) {
-                Logger.WriteError("PersonEditDlg.btnCancel_Click()", ex);
-            }
-        }
-
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown) {
-                fController.UpdateNameControls(fController.Person.PersonalNames[0]);
+                fController.UpdateNameControls(fController.IndividualRecord.PersonalNames[0]);
             }
         }
 
@@ -288,7 +273,7 @@ namespace GKSamplePlugin
             GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
             if (eArgs.Action == RecordAction.raJump && family != null) {
                 GDMIndividualLink spouse = null;
-                switch (fController.Person.Sex) {
+                switch (fController.IndividualRecord.Sex) {
                     case GDMSex.svMale:
                         spouse = family.Wife;
                         break;
@@ -330,7 +315,7 @@ namespace GKSamplePlugin
         private void Names_TextChanged(object sender, EventArgs e)
         {
             Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
-                                 cmbPatronymic.Text, fController.Person.GetXRefNum());
+                                 cmbPatronymic.Text, fController.IndividualRecord.GetXRefNum());
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)
@@ -380,7 +365,7 @@ namespace GKSamplePlugin
 
         private void btnNameCopy_Click(object sender, EventArgs e)
         {
-            UIHelper.SetClipboardText(GKUtils.GetNameString(fController.Person, true, false));
+            UIHelper.SetClipboardText(GKUtils.GetNameString(fController.IndividualRecord, true, false));
         }
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)

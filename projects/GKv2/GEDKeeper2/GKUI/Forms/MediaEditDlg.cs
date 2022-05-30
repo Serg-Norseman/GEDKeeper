@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
@@ -31,17 +30,15 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class MediaEditDlg : EditorDialog, IMediaEditDlg
+    public sealed partial class MediaEditDlg : CommonDialog<IMediaEditDlg, MediaEditDlgController>, IMediaEditDlg
     {
-        private readonly MediaEditDlgController fController;
-
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fSourcesList;
 
-        public GDMMultimediaRecord MediaRec
+        public GDMMultimediaRecord MultimediaRecord
         {
-            get { return fController.MediaRec; }
-            set { fController.MediaRec = value; }
+            get { return fController.MultimediaRecord; }
+            set { fController.MultimediaRecord = value; }
         }
 
         #region View Interface
@@ -98,22 +95,6 @@ namespace GKUI.Forms
 
             fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
             fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnFileSelect_Click(object sender, EventArgs e)

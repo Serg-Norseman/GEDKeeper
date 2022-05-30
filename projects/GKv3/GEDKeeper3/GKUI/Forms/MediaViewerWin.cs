@@ -38,16 +38,16 @@ namespace GKUI.Forms
         private readonly MediaViewerController fController;
         private Control fViewer;
 
-        public GDMFileReferenceWithTitle FileRef
+        public GDMFileReferenceWithTitle FileReference
         {
-            get { return fController.FileRef; }
-            set { fController.FileRef = value; }
+            get { return fController.FileReference; }
+            set { fController.FileReference = value; }
         }
 
-        public GDMMultimediaRecord Multimedia
+        public GDMMultimediaRecord MultimediaRecord
         {
-            get { return fController.Multimedia; }
-            set { fController.Multimedia = value; }
+            get { return fController.MultimediaRecord; }
+            set { fController.MultimediaRecord = value; }
         }
 
         public void SetViewText(string text)

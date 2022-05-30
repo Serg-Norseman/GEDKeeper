@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
@@ -34,7 +33,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
+    public partial class FamilyEditDlg : CommonDialog<IFamilyEditDlg, FamilyEditDlgController>, IFamilyEditDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -70,12 +69,10 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly FamilyEditDlgController fController;
-
-        public GDMFamilyRecord Family
+        public GDMFamilyRecord FamilyRecord
         {
-            get { return fController.Family; }
-            set { fController.Family = value; }
+            get { return fController.FamilyRecord; }
+            set { fController.FamilyRecord = value; }
         }
 
         #region View Interface
@@ -185,22 +182,6 @@ namespace GKUI.Forms
             if (eArgs.Action == RecordAction.raJump) {
                 fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)

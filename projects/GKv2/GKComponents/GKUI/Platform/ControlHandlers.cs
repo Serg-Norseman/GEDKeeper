@@ -18,8 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Windows.Forms;
 using BSLib.Design;
 using BSLib.Design.Handlers;
+using BSLib.Design.MVP;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP.Controls;
@@ -208,6 +210,29 @@ namespace GKUI.Platform
         public void UpdateContents(bool columnsChanged = false)
         {
             Control.UpdateContents(columnsChanged);
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class DropDownToolItemHandler : ControlHandler<ToolStripDropDownButton, DropDownToolItemHandler>, IButtonToolItem
+    {
+        public DropDownToolItemHandler(ToolStripDropDownButton control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
         }
     }
 }

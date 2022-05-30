@@ -32,24 +32,24 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class ParentsEditDlgController : DialogController<IParentsEditDlg>
     {
-        private GDMChildToFamilyLink fLink;
-        private GDMIndividualRecord fPerson;
+        private GDMChildToFamilyLink fChildLink;
+        private GDMIndividualRecord fIndividualRecord;
 
-        public GDMChildToFamilyLink Link
+        public GDMChildToFamilyLink ChildLink
         {
-            get { return fLink; }
+            get { return fChildLink; }
             set {
-                if (fLink != value) {
-                    fLink = value;
+                if (fChildLink != value) {
+                    fChildLink = value;
                     UpdateView();
                 }
             }
         }
 
-        public GDMIndividualRecord Person
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fPerson; }
-            set { fPerson = value; }
+            get { return fIndividualRecord; }
+            set { fIndividualRecord = value; }
         }
 
 
@@ -63,11 +63,11 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fLink.PedigreeLinkageType = (GDMPedigreeLinkageType)fView.LinkageTypeCombo.SelectedIndex;
+                fChildLink.PedigreeLinkageType = (GDMPedigreeLinkageType)fView.LinkageTypeCombo.SelectedIndex;
 
                 fLocalUndoman.Commit();
 
-                fBase.NotifyRecord(fPerson, RecordAction.raEdit);
+                fBase.NotifyRecord(fIndividualRecord, RecordAction.raEdit);
 
                 return true;
             } catch (Exception ex) {
@@ -79,8 +79,8 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
-                fView.ChildName.Text = GKUtils.GetNameString(fPerson, true, false);
-                fView.LinkageTypeCombo.SelectedIndex = (sbyte)fLink.PedigreeLinkageType;
+                fView.ChildName.Text = GKUtils.GetNameString(fIndividualRecord, true, false);
+                fView.LinkageTypeCombo.SelectedIndex = (sbyte)fChildLink.PedigreeLinkageType;
 
                 UpdateControls();
             } catch (Exception ex) {
@@ -90,8 +90,8 @@ namespace GKCore.Controllers
 
         public void UpdateControls()
         {
-            if (fLink != null) {
-                GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fLink);
+            if (fChildLink != null) {
+                GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fChildLink);
                 fView.SetParentsAvl(true);
 
                 GDMIndividualRecord father, mother;
@@ -124,7 +124,7 @@ namespace GKCore.Controllers
 
         public void EditParents()
         {
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family != null && BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null)) {
                 UpdateControls();
             }
@@ -132,28 +132,28 @@ namespace GKCore.Controllers
 
         public void AddFather()
         {
-            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
         public void DeleteFather()
         {
-            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
         public void AddMother()
         {
-            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
         public void DeleteMother()
         {
-            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }

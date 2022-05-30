@@ -51,7 +51,7 @@ namespace GKUI.Forms
             fGroupRecord = new GDMGroupRecord(fBase.Context.Tree);
 
             fDialog = new GroupEditDlg(fBase);
-            fDialog.Group = fGroupRecord;
+            fDialog.GroupRecord = fGroupRecord;
             fDialog.Show();
         }
 
@@ -70,7 +70,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fGroupRecord, fDialog.Group);
+            Assert.AreEqual(fGroupRecord, fDialog.GroupRecord);
 
             var sheetTester = new GKSheetListTester("fMembersList", fDialog);
             //EnumSet<SheetButton> buttons = sheetTester.Properties.Buttons;
@@ -95,7 +95,7 @@ namespace GKUI.Forms
 
         public static void GroupEditDlg_Handler(GroupEditDlg dlg)
         {
-            GDMGroupRecord groupRecord = dlg.Group;
+            GDMGroupRecord groupRecord = dlg.GroupRecord;
 
             // members
             Assert.AreEqual(0, groupRecord.Members.Count);

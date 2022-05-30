@@ -32,11 +32,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class OptionsDlg : CommonDialog, ILocalizable, IOptionsDlg
+    public sealed partial class OptionsDlg : CommonDialog<IOptionsDlg, OptionsDlgController>, ILocalizable, IOptionsDlg
     {
-        private readonly OptionsDlgController fController;
-
-
         public OptionsDlg(IHost host)
         {
             InitializeComponent();
@@ -53,8 +50,6 @@ namespace GKUI.Forms
             numDefaultDepth.Minimum = -1;
             numDefaultDepthAncestors.Minimum = -1;
             numDefaultDepthDescendants.Minimum = -1;
-
-            SetLocale();
 
             fController.UpdateView();
 
@@ -95,17 +90,6 @@ namespace GKUI.Forms
             }
 
             fController.UpdateTreeChartFont();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.AcceptChanges();
-                DialogResult = DialogResult.OK;
-            } catch (Exception ex) {
-                Logger.WriteError("OptionsDlg.btnAccept_Click()", ex);
-                DialogResult = DialogResult.None;
-            }
         }
 
         private void btnColumnUp_Click(object sender, EventArgs e)

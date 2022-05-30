@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Controllers;
@@ -29,20 +28,18 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class ParentsEditDlg : EditorDialog, IParentsEditDlg
+    public partial class ParentsEditDlg : CommonDialog<IParentsEditDlg, ParentsEditDlgController>, IParentsEditDlg
     {
-        private readonly ParentsEditDlgController fController;
-
-        public GDMChildToFamilyLink Link
+        public GDMChildToFamilyLink ChildLink
         {
-            get { return fController.Link; }
-            set { fController.Link = value; }
+            get { return fController.ChildLink; }
+            set { fController.ChildLink = value; }
         }
 
-        public GDMIndividualRecord Person
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fController.Person; }
-            set { fController.Person = value; }
+            get { return fController.IndividualRecord; }
+            set { fController.IndividualRecord = value; }
         }
 
         #region View Interface
@@ -100,22 +97,6 @@ namespace GKUI.Forms
         {
             btnMotherAdd.Enabled = !avail;
             btnMotherDelete.Enabled = avail;
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)

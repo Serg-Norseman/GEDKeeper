@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -53,7 +53,7 @@ namespace GKUI.Forms
             fPersonalName = new GDMPersonalName();
 
             fDialog = new PersonalNameEditDlg(fBase);
-            fDialog.Individual = fPerson;
+            fDialog.IndividualRecord = fPerson;
             fDialog.PersonalName = fPersonalName;
             fDialog.Show();
         }

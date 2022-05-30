@@ -33,15 +33,15 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class TaskEditDlgController : DialogController<ITaskEditDlg>
     {
-        private GDMTaskRecord fTask;
+        private GDMTaskRecord fTaskRecord;
         private GDMRecord fTempRec;
 
-        public GDMTaskRecord Task
+        public GDMTaskRecord TaskRecord
         {
-            get { return fTask; }
+            get { return fTaskRecord; }
             set {
-                if (fTask != value) {
-                    fTask = value;
+                if (fTaskRecord != value) {
+                    fTaskRecord = value;
                     UpdateView();
                 }
             }
@@ -64,26 +64,26 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fTask.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
-                fTask.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
-                fTask.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
+                fTaskRecord.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
+                fTaskRecord.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
+                fTaskRecord.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
 
                 GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
                 switch (gt) {
                     case GDMGoalType.gtIndividual:
                     case GDMGoalType.gtFamily:
                     case GDMGoalType.gtSource:
-                        fTask.Goal = GEDCOMUtils.EncloseXRef(fTempRec.XRef);
+                        fTaskRecord.Goal = GEDCOMUtils.EncloseXRef(fTempRec.XRef);
                         break;
 
                     case GDMGoalType.gtOther:
-                        fTask.Goal = fView.Goal.Text;
+                        fTaskRecord.Goal = fView.Goal.Text;
                         break;
                 }
 
                 fLocalUndoman.Commit();
 
-                fBase.NotifyRecord(fTask, RecordAction.raEdit);
+                fBase.NotifyRecord(fTaskRecord, RecordAction.raEdit);
 
                 return true;
             } catch (Exception ex) {
@@ -94,18 +94,18 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            if (fTask == null) {
+            if (fTaskRecord == null) {
                 fView.Priority.SelectedIndex = -1;
                 fView.StartDate.Text = "";
                 fView.StopDate.Text = "";
                 fView.GoalType.SelectedIndex = 0;
                 fView.Goal.Text = "";
             } else {
-                fView.Priority.SelectedIndex = (sbyte)fTask.Priority;
-                fView.StartDate.NormalizeDate = fTask.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.StopDate.NormalizeDate = fTask.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Priority.SelectedIndex = (sbyte)fTaskRecord.Priority;
+                fView.StartDate.NormalizeDate = fTaskRecord.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.StopDate.NormalizeDate = fTaskRecord.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
-                var goal = GKUtils.GetTaskGoal(fBase.Context.Tree, fTask);
+                var goal = GKUtils.GetTaskGoal(fBase.Context.Tree, fTaskRecord);
                 fTempRec = goal.GoalRec;
                 fView.GoalType.SelectedIndex = (sbyte)goal.GoalType;
 
@@ -117,12 +117,12 @@ namespace GKCore.Controllers
                         break;
 
                     case GDMGoalType.gtOther:
-                        fView.Goal.Text = fTask.Goal;
+                        fView.Goal.Text = fTaskRecord.Goal;
                         break;
                 }
             }
 
-            fView.NotesList.ListModel.DataOwner = fTask;
+            fView.NotesList.ListModel.DataOwner = fTaskRecord;
 
             ChangeGoalType();
         }

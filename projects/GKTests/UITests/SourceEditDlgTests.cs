@@ -51,7 +51,7 @@ namespace GKUI.Forms
             fSourceRecord = new GDMSourceRecord(fBase.Context.Tree);
 
             fDialog = new SourceEditDlg(fBase);
-            fDialog.Model = fSourceRecord;
+            fDialog.SourceRecord = fSourceRecord;
             fDialog.Show();
         }
 
@@ -70,7 +70,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fSourceRecord, fDialog.Model);
+            Assert.AreEqual(fSourceRecord, fDialog.SourceRecord);
 
             var txtShortTitle = new TextBoxTester("txtShortTitle");
             txtShortTitle.Enter("sample text");
@@ -97,7 +97,7 @@ namespace GKUI.Forms
 
         public static void SourceEditDlg_Handler(SourceEditDlg dlg)
         {
-            GDMSourceRecord srcRecord = dlg.Model;
+            GDMSourceRecord srcRecord = dlg.SourceRecord;
             SelectTab("tabsData", dlg, 2);
 
             // repositories

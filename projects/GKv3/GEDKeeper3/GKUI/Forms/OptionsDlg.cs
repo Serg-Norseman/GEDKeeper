@@ -34,7 +34,7 @@ using GKUI.Platform;
 
 namespace GKUI.Forms
 {
-    public sealed partial class OptionsDlg : CommonDialog, ILocalizable, IOptionsDlg
+    public sealed partial class OptionsDlg : CommonDialog<IOptionsDlg, OptionsDlgController>, ILocalizable, IOptionsDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -192,8 +192,6 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly OptionsDlgController fController;
-
 
         public OptionsDlg(IHost host)
         {
@@ -249,17 +247,6 @@ namespace GKUI.Forms
             }
 
             fController.UpdateTreeChartFont();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            try {
-                fController.AcceptChanges();
-                DialogResult = DialogResult.Ok;
-            } catch (Exception ex) {
-                Logger.WriteError("OptionsDlg.btnAccept_Click()", ex);
-                DialogResult = DialogResult.None;
-            }
         }
 
         private void btnColumnUp_Click(object sender, EventArgs e)

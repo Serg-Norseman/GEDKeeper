@@ -117,7 +117,7 @@
     <Compile Include="GKCore\BaseContextTests.cs" />
     <Compile Include="GKCore\BBTextParserTests.cs" />
     <Compile Include="GKCore\ChartsTests.cs" />
-    <Compile Include="GKCore\Controllers\AssociationEditControllerTests.cs" />
+    <Compile Include="GKCore\ControllerTests.cs" />
     <Compile Include="GKCore\CoreTests.cs" />
     <Compile Include="GKCore\CulturesTests.cs" />
     <Compile Include="GKCore\DatabaseTests.cs" />
