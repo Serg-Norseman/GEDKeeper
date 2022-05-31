@@ -113,9 +113,6 @@ namespace GKUI.Forms
 
             fController = new LocationEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void EditName_KeyDown(object sender, KeyEventArgs e)

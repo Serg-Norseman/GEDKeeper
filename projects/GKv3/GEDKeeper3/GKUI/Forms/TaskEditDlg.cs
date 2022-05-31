@@ -110,8 +110,6 @@ namespace GKUI.Forms
 
             fController = new TaskEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void btnGoalSelect_Click(object sender, EventArgs e)

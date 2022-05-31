@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using BSLib.Design.MVP;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
@@ -92,6 +93,14 @@ namespace GKCore.MVP
             base.Init(baseWin);
             if (fBase != null) {
                 fLocalUndoman = new ChangeTracker(fBase.Context);
+            }
+        }
+
+        public void JumpToRecord(IGDMPointerHost pointer)
+        {
+            if (pointer != null && Accept()) {
+                fBase.SelectRecordByXRef(pointer.XRef);
+                fView.Close();
             }
         }
     }

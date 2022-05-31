@@ -121,11 +121,6 @@ namespace GKUI.Forms
 
             fController = new ResearchEditDlgController(this);
             fController.Init(baseWin);
-
-            fTasksList.ListModel = new ResTasksSublistModel(baseWin, fController.LocalUndoman);
-            fCommunicationsList.ListModel = new ResCommunicationsSublistModel(baseWin, fController.LocalUndoman);
-            fGroupsList.ListModel = new ResGroupsSublistModel(baseWin, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void ListTasksModify(object sender, ModifyEventArgs eArgs)

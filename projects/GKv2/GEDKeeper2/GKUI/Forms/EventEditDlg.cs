@@ -113,10 +113,6 @@ namespace GKUI.Forms
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
         }
 
         public void SetLocationMode(bool active)

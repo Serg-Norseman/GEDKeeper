@@ -21,6 +21,8 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -55,6 +57,16 @@ namespace GKCore.Controllers
             for (GDMResearchStatus rs = GDMResearchStatus.rsDefined; rs <= GDMResearchStatus.rsWithdrawn; rs++) {
                 fView.Status.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
             }
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.TasksList.ListModel = new ResTasksSublistModel(baseWin, fLocalUndoman);
+            fView.CommunicationsList.ListModel = new ResCommunicationsSublistModel(baseWin, fLocalUndoman);
+            fView.GroupsList.ListModel = new ResGroupsSublistModel(baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
         }
 
         public override bool Accept()
@@ -100,22 +112,6 @@ namespace GKCore.Controllers
             fView.TasksList.ListModel.DataOwner = fResearchRecord;
             fView.CommunicationsList.ListModel.DataOwner = fResearchRecord;
             fView.GroupsList.ListModel.DataOwner = fResearchRecord;
-        }
-
-        public void JumpToRecord(GDMRecord record)
-        {
-            if (record != null && Accept()) {
-                fBase.SelectRecordByXRef(record.XRef);
-                fView.Close();
-            }
-        }
-
-        public void JumpToRecord(GDMPointer pointer)
-        {
-            if (pointer != null && Accept()) {
-                fBase.SelectRecordByXRef(pointer.XRef);
-                fView.Close();
-            }
         }
 
         public override void SetLocale()

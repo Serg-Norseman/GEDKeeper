@@ -22,6 +22,8 @@ using System;
 using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Options;
@@ -56,6 +58,14 @@ namespace GKCore.Controllers
             }
 
             fView.Name.Activate();
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.SourcesList.ListModel = new SourceCitationsListModel(baseWin, fLocalUndoman);
         }
 
         public override bool Accept()

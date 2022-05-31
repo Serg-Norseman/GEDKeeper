@@ -86,10 +86,6 @@ namespace GKUI.Forms
 
             fController = new GroupEditDlgController(this);
             fController.Init(baseWin);
-
-            fMembersList.ListModel = new GroupMembersSublistModel(baseWin, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)

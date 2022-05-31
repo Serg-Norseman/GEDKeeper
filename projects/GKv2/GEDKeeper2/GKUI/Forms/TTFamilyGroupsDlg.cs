@@ -29,10 +29,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTFamilyGroupsDlg : CommonDialog, IFragmentSearchDlg
+    public sealed partial class TTFamilyGroupsDlg : CommonDialog<IFragmentSearchDlg, FragmentSearchController>, IFragmentSearchDlg
     {
-        private readonly FragmentSearchController fController;
-
         #region View Interface
 
         ITreeView IFragmentSearchDlg.GroupsTree

@@ -31,7 +31,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTFamilyGroupsDlg : CommonDialog, IFragmentSearchDlg
+    public sealed partial class TTFamilyGroupsDlg : CommonDialog<IFragmentSearchDlg, FragmentSearchController>, IFragmentSearchDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -47,8 +47,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly FragmentSearchController fController;
 
         #region View Interface
 

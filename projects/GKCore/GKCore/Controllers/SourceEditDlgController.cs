@@ -22,6 +22,8 @@ using System;
 using BSLib.Design.MVP;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -50,6 +52,15 @@ namespace GKCore.Controllers
         public SourceEditDlgController(ISourceEditDlg view) : base(view)
         {
             fView.ShortTitle.Activate();
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.RepositoriesList.ListModel = new SourceRepositoriesSublistModel(baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
         }
 
         public override bool Accept()
@@ -87,22 +98,6 @@ namespace GKCore.Controllers
             fView.RepositoriesList.ListModel.DataOwner = fSourceRecord;
             fView.NotesList.ListModel.DataOwner = fSourceRecord;
             fView.MediaList.ListModel.DataOwner = fSourceRecord;
-        }
-
-        public void JumpToRecord(GDMRecord record)
-        {
-            if (record != null && Accept()) {
-                fBase.SelectRecordByXRef(record.XRef);
-                fView.Close();
-            }
-        }
-
-        public void JumpToRecord(GDMPointer pointer)
-        {
-            if (pointer != null && Accept()) {
-                fBase.SelectRecordByXRef(pointer.XRef);
-                fView.Close();
-            }
         }
 
         public override void SetLocale()

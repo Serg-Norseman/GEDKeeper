@@ -25,6 +25,7 @@ using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Names;
@@ -89,6 +90,23 @@ namespace GKCore.Controllers
                 #endif
                 fView.SexCombo.AddItem(name, sx, image);
             }
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.EventsList.ListModel = new EventsListModel(baseWin, fLocalUndoman, true);
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
+            fView.SourcesList.ListModel = new SourceCitationsListModel(baseWin, fLocalUndoman);
+            fView.AssociationsList.ListModel = new AssociationsListModel(baseWin, fLocalUndoman);
+            fView.GroupsList.ListModel = new GroupsSublistModel(baseWin, fLocalUndoman);
+            fView.NamesList.ListModel = new NamesSublistModel(baseWin, fLocalUndoman);
+            fView.SpousesList.ListModel = new SpousesSublistModel(baseWin, fLocalUndoman);
+            fView.UserRefList.ListModel = new URefsSublistModel(baseWin, fLocalUndoman);
+            fView.ParentsList.ListModel = new ParentsSublistModel(baseWin, fLocalUndoman);
+            fView.ChildrenList.ListModel = new IndividualChildrenListModel(baseWin, fLocalUndoman);
         }
 
         private bool IsExtendedWomanSurname()
@@ -486,22 +504,6 @@ namespace GKCore.Controllers
 
             if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
-            }
-        }
-
-        public void JumpToRecord(GDMRecord record)
-        {
-            if (record != null && Accept()) {
-                fBase.SelectRecordByXRef(record.XRef, true);
-                fView.Close();
-            }
-        }
-
-        public void JumpToRecord(GDMPointer pointer)
-        {
-            if (pointer != null && Accept()) {
-                fBase.SelectRecordByXRef(pointer.XRef, true);
-                fView.Close();
             }
         }
 

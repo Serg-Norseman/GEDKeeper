@@ -278,18 +278,6 @@ namespace GKUI.Forms
 
             fController = new PersonEditDlgController(this);
             fController.Init(baseWin);
-
-            fEventsList.ListModel = new EventsListModel(baseWin, fController.LocalUndoman, true);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
-            fAssociationsList.ListModel = new AssociationsListModel(baseWin, fController.LocalUndoman);
-            fGroupsList.ListModel = new GroupsSublistModel(baseWin, fController.LocalUndoman);
-            fNamesList.ListModel = new NamesSublistModel(baseWin, fController.LocalUndoman);
-            fSpousesList.ListModel = new SpousesSublistModel(baseWin, fController.LocalUndoman);
-            fUserRefList.ListModel = new URefsSublistModel(baseWin, fController.LocalUndoman);
-            fParentsList.ListModel = new ParentsSublistModel(baseWin, fController.LocalUndoman);
-            fChildrenList.ListModel = new IndividualChildrenListModel(baseWin, fController.LocalUndoman);
         }
 
         private void cbSex_SelectedIndexChanged(object sender, EventArgs e)

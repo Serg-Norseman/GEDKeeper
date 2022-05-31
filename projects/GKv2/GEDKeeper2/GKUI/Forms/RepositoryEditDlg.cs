@@ -64,8 +64,6 @@ namespace GKUI.Forms
 
             fController = new RepositoryEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void btnAddress_Click(object sender, EventArgs e)

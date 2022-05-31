@@ -22,6 +22,8 @@ using System;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -59,6 +61,13 @@ namespace GKCore.Controllers
             for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
                 fView.GoalType.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
             }
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
         }
 
         public override bool Accept()

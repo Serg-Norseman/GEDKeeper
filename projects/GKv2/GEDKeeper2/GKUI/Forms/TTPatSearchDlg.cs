@@ -27,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTPatSearchDlg : CommonDialog, IPatriarchsSearchDlg
+    public sealed partial class TTPatSearchDlg : CommonDialog<IPatriarchsSearchDlg, PatriarchsSearchController>, IPatriarchsSearchDlg
     {
-        private readonly PatriarchsSearchController fController;
-
         private GKListView ListPatriarchs;
 
         #region View Interface

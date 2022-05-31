@@ -22,29 +22,44 @@ using BSLib.Design.MVP;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.Lists;
+using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Types;
 using GKTests;
+using GKTests.Stubs;
 using GKUI.Platform;
 using NSubstitute;
+using NSubstitute.Core;
 using NUnit.Framework;
 
 namespace GKCore.Controllers
 {
     [TestFixture]
-    public class ControllerTests
+    public class ControllerTests : CustomWindowTest
     {
+        private IBaseWindow fBaseWin;
+
         [TestFixtureSetUp]
         public void SetUp()
         {
             TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
+
+            fBaseWin = new BaseWindowStub(true);
         }
 
         private static void SubstituteControl<T>(IView dialog, string ctlName) where T : class, IControl
         {
             var substControl = Substitute.For<T>();
             dialog.GetControl(ctlName).Returns(substControl);
+        }
+
+        [Test]
+        public void Test_AddressEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new AddressEditDlgController(view);
         }
 
         [Test]
@@ -100,6 +115,102 @@ namespace GKCore.Controllers
         }
 
         [Test]
+        public void Test_BaseWinController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new BaseWinController(view);
+        }
+
+        [Test]
+        public void Test_CircleChartWinController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new CircleChartWinController(view);
+        }
+
+        [Test]
+        public void Test_CommonFilterDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new CommonFilterDlgController(view);
+        }
+
+        [Test]
+        public void Test_CommunicationEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new CommunicationEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_DayTipsDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new DayTipsDlgController(view);
+        }
+
+        [Test]
+        public void Test_EventEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new EventEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_FamilyEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new FamilyEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_FilePropertiesDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new FilePropertiesDlgController(view);
+        }
+
+        [Test]
+        public void Test_FragmentSearchController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new FragmentSearchController(view);
+        }
+
+        [Test]
+        public void Test_GroupEditDlgController()
+        {
+            var view = Substitute.For<IGroupEditDlg>();
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ILabel>(view, "lblName");
+            SubstituteControl<ITabPage>(view, "pageMembers");
+            SubstituteControl<ITabPage>(view, "pageNotes");
+            SubstituteControl<ITabPage>(view, "pageMultimedia");
+
+            view.MembersList.Returns(Substitute.For<ISheetList>());
+            view.NotesList.Returns(Substitute.For<ISheetList>());
+            view.MediaList.Returns(Substitute.For<ISheetList>());
+
+            var controller = new GroupEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var group = fBaseWin.Context.Tree.CreateGroup();
+
+            controller.GroupRecord = group;
+            Assert.AreEqual(group, controller.GroupRecord);
+
+            view.Name.Text = "sample group";
+
+            controller.Accept();
+
+            Assert.AreEqual("sample group", group.GroupName);
+
+            controller.JumpToRecord(null); // nothing
+            controller.JumpToRecord(group); // simulate jump to self
+        }
+
+        [Test]
         public void Test_LanguageEditDlgController()
         {
             var view = Substitute.For<ILanguageEditDlg>();
@@ -132,26 +243,333 @@ namespace GKCore.Controllers
         }
 
         [Test]
+        public void Test_LanguageSelectDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new LanguageSelectDlgController(view);
+        }
+
+        [Test]
+        public void Test_LocationEditDlgController()
+        {
+            var view = Substitute.For<ILocationEditDlg>();
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ITabPage>(view, "pageCommon");
+            SubstituteControl<ITabPage>(view, "pageNotes");
+            SubstituteControl<ITabPage>(view, "pageMultimedia");
+            SubstituteControl<ILabel>(view, "lblName");
+            SubstituteControl<ILabel>(view, "lblLatitude");
+            SubstituteControl<ILabel>(view, "lblLongitude");
+            SubstituteControl<IButton>(view, "btnShowOnMap");
+            SubstituteControl<IGroupBox>(view, "grpSearch");
+            SubstituteControl<IButton>(view, "btnSearch");
+            SubstituteControl<IButton>(view, "btnSelect");
+            SubstituteControl<IButton>(view, "btnSelectName");
+
+            view.MapBrowser.Returns(Substitute.For<IMapBrowser>());
+            view.NotesList.Returns(Substitute.For<ISheetList>());
+            view.MediaList.Returns(Substitute.For<ISheetList>());
+            view.GeoCoordsList.Returns(Substitute.For<IListView>());
+
+            var controller = new LocationEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var locRec = fBaseWin.Context.Tree.CreateLocation();
+
+            controller.LocationRecord = locRec;
+            Assert.AreEqual(locRec, controller.LocationRecord);
+
+            view.Name.Text = "sample location";
+
+            controller.Accept();
+
+            Assert.AreEqual("sample location", locRec.LocationName);
+
+            var geoPoint = controller.GetSelectedGeoPoint();
+            Assert.AreEqual(null, geoPoint);
+
+            controller.Search();
+
+            controller.SelectCoords();
+
+            controller.SelectName();
+
+            controller.SelectGeoPoint();
+
+            controller.ShowOnMap();
+        }
+
+        [Test]
+        public void Test_MapsViewerWinController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new MapsViewerWinController(view);
+        }
+
+        [Test]
+        public void Test_MediaEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new MediaEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_MediaViewerController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new MediaViewerController(view);
+        }
+
+        [Test]
+        public void Test_NameEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new NameEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_NoteEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new NoteEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_OptionsDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new OptionsDlgController(view);
+        }
+
+        [Test]
+        public void Test_OrganizerController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new OrganizerController(view);
+        }
+
+        [Test]
+        public void Test_ParentsEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new ParentsEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_PatriarchsSearchController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new PatriarchsSearchController(view);
+        }
+
+        [Test]
+        public void Test_PersonalNameEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new PersonalNameEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_PersonEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new PersonEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_PersonsFilterDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new PersonsFilterDlgController(view);
+        }
+
+        [Test]
+        public void Test_PlacesManagerController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new PlacesManagerController(view);
+        }
+
+        [Test]
+        public void Test_PortraitSelectDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new PortraitSelectDlgController(view);
+        }
+
+        [Test]
+        public void Test_QuickSearchDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new QuickSearchDlgController(view);
+        }
+
+        [Test]
+        public void Test_RecMergeController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new RecMergeController(view);
+        }
+
+        [Test]
+        public void Test_RecordInfoDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new RecordInfoDlgController(view);
+        }
+
+        [Test]
+        public void Test_RecordSelectDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new RecordSelectDlgController(view);
+        }
+
+        [Test]
+        public void Test_RelationshipCalculatorDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new RelationshipCalculatorDlgController(view);
+        }
+
+        [Test]
+        public void Test_RepositoryEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new RepositoryEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_ResearchEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new ResearchEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_ScriptEditWinController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new ScriptEditWinController(view);
+        }
+
+        [Test]
+        public void Test_SlideshowController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new SlideshowController(view);
+        }
+
+        [Test]
+        public void Test_SourceCitEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new SourceCitEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_SourceEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new SourceEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_StatisticsWinController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new StatisticsWinController(view);
+        }
+
+        [Test]
+        public void Test_TaskEditDlgController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new TaskEditDlgController(view);
+        }
+
+        [Test]
+        public void Test_TreeChartWinController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new TreeChartWinController(view);
+        }
+
+        [Test]
+        public void Test_TreeCheckController()
+        {
+            var view = Substitute.For<ITreeCheckDlg>();
+            //var controller = new TreeCheckController(view);
+        }
+
+        [Test]
+        public void Test_TreeCompareController()
+        {
+            var view = Substitute.For<ITreeCompareDlg>();
+            //var controller = new TreeCompareController(view);
+        }
+
+        [Test]
+        public void Test_TreeFilterDlgController()
+        {
+            var view = Substitute.For<ITreeFilterDlg>();
+            //var controller = new TreeFilterDlgController(view);
+        }
+
+        [Test]
+        public void Test_TreeMergeController()
+        {
+            var view = Substitute.For<ITreeMergeDlg>();
+            //var controller = new TreeMergeController(view);
+        }
+
+        [Test]
+        public void Test_TreeSplitController()
+        {
+            var view = Substitute.For<ITreeSplitDlg>();
+            SubstituteControl<ITabPage>(view, "pageTreeSplit");
+            SubstituteControl<IButton>(view, "btnClose");
+            SubstituteControl<IButton>(view, "btnSelectAll");
+            SubstituteControl<IButton>(view, "btnSelectFamily");
+            SubstituteControl<IButton>(view, "btnSelectAncestors");
+            SubstituteControl<IButton>(view, "btnSelectDescendants");
+            SubstituteControl<IButton>(view, "btnDelete");
+            SubstituteControl<IButton>(view, "btnSave");
+
+            var controller = new TreeSplitController(view);
+            controller.Init(fBaseWin);
+
+            GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            Assert.IsNotNull(iRec);
+
+            controller.Select(iRec, Tools.TreeTools.TreeWalkMode.twmAll);
+
+            ModalFormHandler = MessageBox_OkHandler;
+            controller.Delete(); // <<- ui.ShowMessage()
+        }
+
+        [Test]
         public void Test_UserRefEditDlgController()
         {
-            var dlg = Substitute.For<IUserRefEditDlg>();
-            SubstituteControl<IButton>(dlg, "btnAccept");
-            SubstituteControl<IButton>(dlg, "btnCancel");
-            SubstituteControl<ILabel>(dlg, "lblReference");
-            SubstituteControl<IComboBox>(dlg, "cmbRef");
-            SubstituteControl<ILabel>(dlg, "lblRefType");
-            SubstituteControl<IComboBox>(dlg, "cmbRefType");
+            var view = Substitute.For<IUserRefEditDlg>();
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ILabel>(view, "lblReference");
+            SubstituteControl<IComboBox>(view, "cmbRef");
+            SubstituteControl<ILabel>(view, "lblRefType");
+            SubstituteControl<IComboBox>(view, "cmbRefType");
 
-            var controllerInstance = new UserRefEditDlgController(dlg);
+            var controller = new UserRefEditDlgController(view);
             var userRef = new GDMUserReference();
 
-            controllerInstance.UserReference = userRef;
-            Assert.AreEqual(userRef, controllerInstance.UserReference);
+            controller.UserReference = userRef;
+            Assert.AreEqual(userRef, controller.UserReference);
 
-            dlg.Ref.Text = "sample text2";
-            dlg.RefType.Text = "sample text3";
+            view.Ref.Text = "sample text2";
+            view.RefType.Text = "sample text3";
 
-            controllerInstance.Accept();
+            controller.Accept();
 
             Assert.AreEqual("sample text2", userRef.StringValue);
             Assert.AreEqual("sample text3", userRef.ReferenceType);

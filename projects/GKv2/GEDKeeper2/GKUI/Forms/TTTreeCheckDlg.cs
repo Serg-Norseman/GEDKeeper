@@ -26,10 +26,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTTreeCheckDlg : CommonDialog, ITreeCheckDlg
+    public sealed partial class TTTreeCheckDlg : CommonDialog<ITreeCheckDlg, TreeCheckController>, ITreeCheckDlg
     {
-        private readonly TreeCheckController fController;
-
         private GKListView ListChecks;
 
         #region View Interface

@@ -111,9 +111,6 @@ namespace GKUI.Forms
 
             fController = new CommunicationEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void btnPersonAdd_Click(object sender, EventArgs e)

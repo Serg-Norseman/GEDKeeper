@@ -117,10 +117,6 @@ namespace GKUI.Forms
 
             fController = new SourceEditDlgController(this);
             fController.Init(baseWin);
-
-            fRepositoriesList.ListModel = new SourceRepositoriesSublistModel(baseWin, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)

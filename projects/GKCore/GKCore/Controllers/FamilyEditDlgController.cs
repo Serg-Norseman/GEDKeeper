@@ -21,6 +21,8 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Operations;
@@ -56,6 +58,17 @@ namespace GKCore.Controllers
             for (int i = 0; i < GKData.MarriageStatus.Length; i++) {
                 fView.MarriageStatus.Add(LangMan.LS(GKData.MarriageStatus[i].Name));
             }
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.ChildrenList.ListModel = new FamilyChildrenListModel(baseWin, fLocalUndoman);
+            fView.EventsList.ListModel = new EventsListModel(baseWin, fLocalUndoman, false);
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
+            fView.SourcesList.ListModel = new SourceCitationsListModel(baseWin, fLocalUndoman);
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)
@@ -169,22 +182,6 @@ namespace GKCore.Controllers
         {
             if (BaseController.DeleteFamilyWife(fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
-            }
-        }
-
-        public void JumpToRecord(GDMRecord record)
-        {
-            if (record != null && Accept()) {
-                fBase.SelectRecordByXRef(record.XRef, true);
-                fView.Close();
-            }
-        }
-
-        public void JumpToRecord(GDMPointer pointer)
-        {
-            if (pointer != null && Accept()) {
-                fBase.SelectRecordByXRef(pointer.XRef, true);
-                fView.Close();
             }
         }
 

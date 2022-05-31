@@ -131,13 +131,18 @@ namespace GDModel
     }
 
 
-    public interface IGDMRecord : IGDMStructWithLists, IGDMStructWithUserReferences
+    public interface IGDMPointerHost
+    {
+        string XRef { get; }
+    }
+
+
+    public interface IGDMRecord : IGDMPointerHost, IGDMStructWithLists, IGDMStructWithUserReferences
     {
         string AutomatedRecordID { get; }
         GDMChangeDate ChangeDate { get; }
         GDMRecordType RecordType { get; }
         string UID { get; set; }
-        string XRef { get; }
     }
 
 

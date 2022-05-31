@@ -20,7 +20,6 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
-using GDModel;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -28,10 +27,8 @@ using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTRecMergeDlg : CommonDialog, IRecMergeDlg
+    public sealed partial class TTRecMergeDlg : CommonDialog<IRecMergeDlg, RecMergeController>, IRecMergeDlg
     {
-        private readonly RecMergeController fController;
-
         #region View Interface
 
         IMergeControl IRecMergeDlg.MergeCtl

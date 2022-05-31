@@ -109,9 +109,6 @@ namespace GKUI.Forms
 
             fController = new MediaEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
         }
 
         private void btnFileSelect_Click(object sender, EventArgs e)

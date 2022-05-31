@@ -27,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTTreeMergeDlg : CommonDialog, ITreeMergeDlg
+    public sealed partial class TTTreeMergeDlg : CommonDialog<ITreeMergeDlg, TreeMergeController>, ITreeMergeDlg
     {
-        private readonly TreeMergeController fController;
-
         #region View Interface
 
         ITextBox ITreeMergeDlg.UpdateBase
