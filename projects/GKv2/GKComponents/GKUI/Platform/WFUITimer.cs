@@ -28,7 +28,7 @@ namespace GKUI.Platform
     /// <summary>
     /// WinForms-specific UI timer.
     /// </summary>
-    public sealed class WinUITimer : BaseObject, ITimer
+    public sealed class WFUITimer : BaseObject, ITimer
     {
         private readonly Timer fInnerTimer;
         private readonly EventHandler fElapsedHandler;
@@ -54,7 +54,7 @@ namespace GKUI.Platform
             set { fInnerTimer.Interval = (int)value; }
         }
 
-        public WinUITimer(double msInterval, EventHandler elapsedHandler)
+        public WFUITimer(double msInterval, EventHandler elapsedHandler)
         {
             fElapsedHandler = elapsedHandler;
 

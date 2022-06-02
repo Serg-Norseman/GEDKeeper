@@ -92,30 +92,30 @@ namespace GKCore.Controllers
         {
             if (fChildLink != null) {
                 GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fChildLink);
-                fView.SetParentsAvl(true);
+                SetParentsAvl(true);
 
                 GDMIndividualRecord father, mother;
                 fBase.Context.Tree.GetSpouses(family, out father, out mother);
 
                 if (father != null) {
-                    fView.SetFatherAvl(true);
+                    SetFatherAvl(true);
                     fView.Father.Text = GKUtils.GetNameString(father, true, false);
                 } else {
-                    fView.SetFatherAvl(false);
+                    SetFatherAvl(false);
                     fView.Father.Text = "";
                 }
 
                 if (mother != null) {
-                    fView.SetMotherAvl(true);
+                    SetMotherAvl(true);
                     fView.Mother.Text = GKUtils.GetNameString(mother, true, false);
                 } else {
-                    fView.SetMotherAvl(false);
+                    SetMotherAvl(false);
                     fView.Mother.Text = "";
                 }
             } else {
-                fView.SetParentsAvl(false);
-                fView.SetFatherAvl(false);
-                fView.SetMotherAvl(false);
+                SetParentsAvl(false);
+                SetFatherAvl(false);
+                SetMotherAvl(false);
 
                 fView.Father.Text = "";
                 fView.Mother.Text = "";
@@ -156,6 +156,23 @@ namespace GKCore.Controllers
             if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
+        }
+
+        private void SetParentsAvl(bool avail)
+        {
+            GetControl<IButton>("btnParentsEdit").Enabled = avail;
+        }
+
+        private void SetFatherAvl(bool avail)
+        {
+            GetControl<IButton>("btnFatherAdd").Enabled = !avail;
+            GetControl<IButton>("btnFatherDelete").Enabled = avail;
+        }
+
+        private void SetMotherAvl(bool avail)
+        {
+            GetControl<IButton>("btnMotherAdd").Enabled = !avail;
+            GetControl<IButton>("btnMotherDelete").Enabled = avail;
         }
 
         public override void SetLocale()

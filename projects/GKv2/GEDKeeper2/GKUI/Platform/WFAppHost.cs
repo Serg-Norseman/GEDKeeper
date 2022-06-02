@@ -194,7 +194,7 @@ namespace GKUI.Platform
 
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
-            var result = new WinUITimer(msInterval, elapsedHandler);
+            var result = new WFUITimer(msInterval, elapsedHandler);
             return result;
         }
 

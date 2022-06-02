@@ -136,24 +136,10 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        private void ListTasksModify(object sender, ModifyEventArgs eArgs)
+        private void ListJumpHandler(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMTaskRecord);
-            }
-        }
-
-        private void ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMCommunicationRecord);
-            }
-        }
-
-        private void ListGroupsModify(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMRecord);
             }
         }
     }

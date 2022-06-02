@@ -73,11 +73,7 @@ namespace GKUI.Forms
 
         public void Init(string caption, bool showTipsChecked, StringList tips)
         {
-            chkShow.Checked = showTipsChecked;
-            Title = caption;
-            lblTitle.Text = caption;
-            fController.SetTips(tips);
-            fController.GetNextTip();
+            fController.InitTips(caption, showTipsChecked, tips);
         }
     }
 }

@@ -12,7 +12,46 @@
           <TableLayout Style="paddedTable8">
 
             <TableRow ScaleHeight="True">
-              <gkcom:GKMergeControl x:Name="MergeControl" Bookmark="false" MergeMode="rtNone" />
+              <TableLayout x:Name="MergeControl" Spacing="4,4">
+                <TableRow>
+                  <Label x:Name="Lab1">XXX1</Label>
+                  <Label x:Name="Lab2">XXX2</Label>
+                </TableRow>
+
+                <TableRow>
+                  <StackLayout Orientation="Horizontal" Spacing="4">
+                    <TextBox x:Name="Edit1" ReadOnly="True" Width="330" />
+                    <Button x:Name="btnRec1Select" Size="80, 26" Text="btnRec1Select" Click="btnRec1Select_Click" />
+                  </StackLayout>
+
+                  <StackLayout Orientation="Horizontal" Spacing="4">
+                    <TextBox x:Name="Edit2" ReadOnly="True" Width="330" />
+                    <Button x:Name="btnRec2Select" Size="80, 26" Text="btnRec2Select" Click="btnRec2Select_Click" />
+                  </StackLayout>
+                </TableRow>
+
+                <TableRow ScaleHeight="True">
+                  <TableCell ScaleWidth="True">
+                    <comcom:HyperView x:Name="fView1" Width="420" />
+                  </TableCell>
+
+                  <TableCell ScaleWidth="True">
+                    <comcom:HyperView x:Name="fView2" Width="420" />
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <StackLayout Orientation="Horizontal">
+                    <StackLayoutItem Expand="True" />
+                    <Button x:Name="btnMergeToLeft" Enabled="False" Size="80, 26" Click="btnMergeToLeft_Click">&lt;&lt;&lt;</Button>
+                  </StackLayout>
+
+                  <StackLayout Orientation="Horizontal">
+                    <Button x:Name="btnMergeToRight" Enabled="False" Size="80, 26" Click="btnMergeToRight_Click">&gt;&gt;&gt;</Button>
+                    <StackLayoutItem Expand="True" />
+                  </StackLayout>
+                </TableRow>
+              </TableLayout>
             </TableRow>
 
             <TableRow>

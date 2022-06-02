@@ -886,8 +886,8 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IRecMergeDlg>(fView)) {
-                    dlg.MergeCtl.SetRec1(rec1);
-                    dlg.MergeCtl.SetRec2(rec2);
+                    dlg.SetRec1(rec1);
+                    dlg.SetRec2(rec2);
                     AppHost.Instance.ShowModalX(dlg, false);
                 }
             } finally {

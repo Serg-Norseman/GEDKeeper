@@ -82,23 +82,6 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        public void SetParentsAvl(bool avail)
-        {
-            btnParentsEdit.Enabled = avail;
-        }
-
-        public void SetFatherAvl(bool avail)
-        {
-            btnFatherAdd.Enabled = !avail;
-            btnFatherDelete.Enabled = avail;
-        }
-
-        public void SetMotherAvl(bool avail)
-        {
-            btnMotherAdd.Enabled = !avail;
-            btnMotherDelete.Enabled = avail;
-        }
-
         private void btnFatherAdd_Click(object sender, EventArgs e)
         {
             fController.AddFather();

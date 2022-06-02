@@ -109,21 +109,6 @@ namespace GKCore.MVP.Controls
     /// <summary>
     /// 
     /// </summary>
-    public interface IMergeControl : IBaseControl
-    {
-        IBaseWindow Base { get; set; }
-        GDMRecordType MergeMode { get; set; }
-        GDMRecord Rec1 { get; }
-        GDMRecord Rec2 { get; }
-
-        void SetRec1(GDMRecord value);
-        void SetRec2(GDMRecord value);
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IHyperView : IBaseControl
     {
         StringList Lines { get; }

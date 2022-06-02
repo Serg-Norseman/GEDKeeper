@@ -38,13 +38,13 @@
     <TableRow ScaleHeight="True">
       <TabControl Size="600, 260">
         <TabPage x:Name="pageTasks">
-          <comcom:GKSheetList x:Name="fTasksList" OnModify="ListTasksModify" />
+          <comcom:GKSheetList x:Name="fTasksList" OnModify="ListJumpHandler" />
         </TabPage>
         <TabPage x:Name="pageCommunications">
-          <comcom:GKSheetList x:Name="fCommunicationsList" OnModify="ListCommunicationsModify" />
+          <comcom:GKSheetList x:Name="fCommunicationsList" OnModify="ListJumpHandler" />
         </TabPage>
         <TabPage x:Name="pageGroups">
-          <comcom:GKSheetList x:Name="fGroupsList" OnModify="ListGroupsModify" />
+          <comcom:GKSheetList x:Name="fGroupsList" OnModify="ListJumpHandler" />
         </TabPage>
         <TabPage x:Name="pageNotes">
           <comcom:GKSheetList x:Name="fNotesList" />

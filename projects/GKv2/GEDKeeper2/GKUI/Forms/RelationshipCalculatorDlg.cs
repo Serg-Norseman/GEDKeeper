@@ -20,7 +20,6 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;

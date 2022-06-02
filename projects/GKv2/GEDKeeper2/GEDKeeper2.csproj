@@ -68,9 +68,6 @@
     <Compile Include="GKUI\Components\FilterGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKMergeControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="GKUI\Components\TreeChartBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -242,9 +239,6 @@
     <Compile Include="GKUI\Forms\PortraitSelectDlg.Designer.cs">
       <DependentUpon>PortraitSelectDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\PrintableForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="GKUI\Forms\ProgressDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -322,9 +316,6 @@
     </Compile>
     <Compile Include="GKUI\Forms\StatisticsWin.Designer.cs">
       <DependentUpon>StatisticsWin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Forms\StatusForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="GKUI\Forms\TaskEditDlg.cs">
       <SubType>Form</SubType>

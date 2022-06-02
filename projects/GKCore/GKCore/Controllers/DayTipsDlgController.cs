@@ -57,9 +57,16 @@ namespace GKCore.Controllers
             fView.NextButton.Enabled = (fTips.Count > 0);
         }
 
-        public void SetTips(StringList tips)
+        public void InitTips(string caption, bool showTipsChecked, StringList tips)
         {
+            fView.Title = caption;
+
+            GetControl<ICheckBox>("chkShow").Checked = showTipsChecked;
+            GetControl<ILabel>("lblTitle").Text = caption;
+
             fTips.Assign(tips);
+
+            GetNextTip();
         }
 
         public override void UpdateView()

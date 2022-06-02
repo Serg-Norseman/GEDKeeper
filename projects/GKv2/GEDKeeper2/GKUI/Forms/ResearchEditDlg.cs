@@ -106,15 +106,15 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fTasksList = new GKSheetList(pageTasks);
-            fTasksList.OnModify += ListTasksModify;
+            fTasksList.OnModify += ListJumpHandler;
             fTasksList.SetControlName("fTasksList"); // for purpose of tests
 
             fCommunicationsList = new GKSheetList(pageCommunications);
-            fCommunicationsList.OnModify += ListCommunicationsModify;
+            fCommunicationsList.OnModify += ListJumpHandler;
             fCommunicationsList.SetControlName("fCommunicationsList"); // for purpose of tests
 
             fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.OnModify += ListGroupsModify;
+            fGroupsList.OnModify += ListJumpHandler;
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
             fNotesList = new GKSheetList(pageNotes);
@@ -123,24 +123,10 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        private void ListTasksModify(object sender, ModifyEventArgs eArgs)
+        private void ListJumpHandler(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMTaskRecord);
-            }
-        }
-
-        private void ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMCommunicationRecord);
-            }
-        }
-
-        private void ListGroupsModify(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMRecord);
             }
         }
     }

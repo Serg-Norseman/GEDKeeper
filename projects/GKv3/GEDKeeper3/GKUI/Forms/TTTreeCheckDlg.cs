@@ -91,10 +91,7 @@ namespace GKUI.Forms
 
         private void contextMenu_Opening(object sender, EventArgs e)
         {
-            var rec = fController.GetSelectedRecord();
-            miDetails.Enabled = (rec != null);
-            miGoToRecord.Enabled = (rec != null);
-            miCopyXRef.Enabled = (rec != null);
+            fController.OpeningContextMenu();
         }
 
         public void miCopyXRef_Click(object sender, EventArgs e)

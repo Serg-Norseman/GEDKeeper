@@ -18,7 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define MAIN_TEST
+
 #if !MONO
+#if MAIN_TEST
 
 using System;
 using System.Collections.Generic;
@@ -821,4 +824,5 @@ namespace GKUI.Forms
     }
 }
 
+#endif
 #endif

@@ -311,10 +311,6 @@ namespace GKCore.MVP.Views
         ITextBox Mother { get; }
         ITextBox ChildName { get; }
         IComboBox LinkageTypeCombo { get; }
-
-        void SetParentsAvl(bool avail);
-        void SetFatherAvl(bool avail);
-        void SetMotherAvl(bool avail);
     }
 
 
@@ -491,7 +487,6 @@ namespace GKCore.MVP.Views
     public interface ISlideshowWin : IWindow, IStatusForm
     {
         void SetImage(IImage image);
-        void UpdateControls();
     }
 
 
@@ -603,13 +598,17 @@ namespace GKCore.MVP.Views
 
     public interface IRecMergeDlg : ICommonDialog, IBaseEditor
     {
-        IMergeControl MergeCtl { get; }
+        IHyperView View1 { get; }
+        IHyperView View2 { get; }
         IButton SkipBtn { get; }
         IProgressBar ProgressBar { get; }
         ICheckBox IndistinctMatchingChk { get; }
         INumericBox NameAccuracyNum { get; }
         ICheckBox BirthYearChk { get; }
         INumericBox YearInaccuracyNum { get; }
+
+        void SetRec1(GDMRecord value);
+        void SetRec2(GDMRecord value);
     }
 
 

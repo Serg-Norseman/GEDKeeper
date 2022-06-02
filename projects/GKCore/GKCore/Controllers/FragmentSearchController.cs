@@ -121,5 +121,13 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
             GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.LSID_CopyXRef);
         }
+
+        public void OpeningContextMenu()
+        {
+            var iRec = GetSelectedPerson();
+            GetControl<IMenuItem>("miDetails").Enabled = (iRec != null);
+            GetControl<IMenuItem>("miGoToRecord").Enabled = (iRec != null);
+            GetControl<IMenuItem>("miCopyXRef").Enabled = (iRec != null);
+        }
     }
 }

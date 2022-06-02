@@ -23,6 +23,7 @@ using BSLib.DataViz.ArborGVT;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -39,7 +40,7 @@ namespace GKUI.Components
 
     public sealed class ArborSystemEx : ArborSystem
     {
-        private UITimer fTimer;
+        private ITimer fTimer;
 
         public ArborSystemEx(double repulsion, double stiffness, double friction, IArborRenderer renderer)
             : base(repulsion, stiffness, friction, renderer)
@@ -54,9 +55,7 @@ namespace GKUI.Components
 
         protected override void StartTimer()
         {
-            fTimer = new UITimer();
-            fTimer.Interval = TimerInterval / 1000;
-            fTimer.Elapsed += TimerElapsed;
+            fTimer = AppHost.Instance.CreateTimer(TimerInterval, TimerElapsed);
             fTimer.Start();
         }
 
