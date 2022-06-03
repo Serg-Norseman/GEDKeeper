@@ -46,10 +46,10 @@ namespace GKUI.Components
         public ACOptionsControl()
         {
             InitializeComponent();
-            SetLang();
+            SetLocale();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = LangMan.LS(LSID.LSID_MIOptions);
 

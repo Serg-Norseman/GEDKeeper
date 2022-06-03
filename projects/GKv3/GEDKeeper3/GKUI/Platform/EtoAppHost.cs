@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,8 +20,10 @@
 
 using System;
 using System.Globalization;
+using System.Text;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
+using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Charts;
@@ -46,6 +48,65 @@ namespace GKUI.Platform
 
         public EtoAppHost()
         {
+            InitCommonStyles();
+            InitPlatformStyles();
+        }
+
+        private static void InitCommonStyles()
+        {
+            Eto.Style.Add<TableLayout>("paddedTable", table => {
+                table.Padding = new Padding(8);
+                table.Spacing = new Size(4, 4);
+            });
+
+            Eto.Style.Add<TableLayout>("paddedTable8", table => {
+                table.Padding = new Padding(8);
+                table.Spacing = new Size(8, 8);
+            });
+
+            Eto.Style.Add<StackLayout>("vertListStack", stack => {
+                stack.Orientation = Orientation.Vertical;
+                stack.Padding = new Padding(8);
+                stack.Spacing = 4;
+            });
+
+            Eto.Style.Add<StackLayout>("horzListStack", stack => {
+                stack.Orientation = Orientation.Horizontal;
+                stack.Padding = new Padding(8);
+                stack.Spacing = 4;
+            });
+
+            Eto.Style.Add<StackLayout>("labtexStack", stack => {
+                stack.Orientation = Orientation.Vertical;
+                stack.Padding = new Padding(0);
+                stack.Spacing = 2;
+            });
+
+            Eto.Style.Add<Button>("funcBtn", button => {
+                button.ImagePosition = ButtonImagePosition.Left;
+                button.Size = new Size(160, 26);
+            });
+
+            Eto.Style.Add<Button>("dlgBtn", button => {
+                button.ImagePosition = ButtonImagePosition.Left;
+                button.Size = new Size(120, 26);
+            });
+
+            Eto.Style.Add<Button>("iconBtn", button => {
+                button.ImagePosition = ButtonImagePosition.Left;
+                button.Size = new Size(26, 26);
+            });
+        }
+
+        private static void InitPlatformStyles()
+        {
+#if OS_LINUX
+            Eto.Style.Add<Eto.GtkSharp.Forms.ToolBar.ToolBarHandler>("tbsi", h => {
+                // executed but no result
+                h.Control.ToolbarStyle = Gtk.ToolbarStyle.BothHoriz;
+                h.Control.IconSize = Gtk.IconSize.SmallToolbar;
+            });
+#endif
         }
 
         private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)
@@ -61,26 +122,23 @@ namespace GKUI.Platform
 
         public override IWindow GetActiveWindow()
         {
-            Window activeWnd = fActiveBase as Window;
+            IWindow activeWin = fActiveBase;
 
-            if (activeWnd == null) {
+            if (activeWin == null) {
                 foreach (var wnd in Application.Instance.Windows) {
                     if (wnd.HasFocus) {
-                        activeWnd = wnd;
+                        activeWin = wnd as IWindow;
                         break;
                     }
                 }
             }
 
-            return (activeWnd is IWindow) ? (IWindow)activeWnd : null;
+            return activeWin;
         }
 
-        // FIXME!
         public override IntPtr GetTopWindowHandle()
         {
-            IntPtr mainHandle = IntPtr.Zero;
-
-            return mainHandle;
+            return IntPtr.Zero;
         }
 
         public override void CloseWindow(IWindow window)
@@ -92,29 +150,19 @@ namespace GKUI.Platform
             }
         }
 
-        public override void ShowWindow(IWindow window)
-        {
-            Form frm = window as Form;
-
-            if (frm != null) {
-                frm.ShowInTaskbar = true;
-                frm.Show();
-            }
-        }
-
         public override bool ShowModalX(ICommonDialog form, bool keepModeless = false)
         {
-            IntPtr mainHandle = GetTopWindowHandle();
+            Window activeWin = GetActiveWindow() as Window;
 
             if (keepModeless) {
-                #if !__MonoCS__
+#if !MONO
                 //NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-                #endif
+#endif
             }
 
-            //UIHelper.CenterFormByParent((Form)form, mainHandle);
+            //UIHelper.CenterFormByParent((Window)form, mainHandle);
 
-            return base.ShowModalX(form, keepModeless);
+            return (form != null && form.ShowModalX(activeWin));
         }
 
         public override void EnableWindow(IWidgetForm form, bool value)
@@ -122,16 +170,16 @@ namespace GKUI.Platform
             Form frm = form as Form;
 
             if (frm != null) {
-                #if !__MonoCS__
+#if !MONO
                 //NativeMethods.EnableWindow(frm.Handle, value);
-                #endif
+#endif
             }
         }
 
         protected override void UpdateLang()
         {
             foreach (IWindow win in fRunningForms) {
-                win.SetLang();
+                win.SetLocale();
             }
         }
 
@@ -175,13 +223,13 @@ namespace GKUI.Platform
             }
         }
 
-        private static Eto.Forms.WindowState[] efWindowStates = new Eto.Forms.WindowState[] {
+        private static readonly Eto.Forms.WindowState[] efWindowStates = new Eto.Forms.WindowState[] {
             Eto.Forms.WindowState.Normal,
             Eto.Forms.WindowState.Minimized,
             Eto.Forms.WindowState.Maximized
         };
 
-        private static GKCore.Options.WindowState[] gkWindowStates = new GKCore.Options.WindowState[] {
+        private static readonly GKCore.Options.WindowState[] gkWindowStates = new GKCore.Options.WindowState[] {
             GKCore.Options.WindowState.Normal,
             GKCore.Options.WindowState.Maximized,
             GKCore.Options.WindowState.Minimized
@@ -207,7 +255,6 @@ namespace GKUI.Platform
 
         public override void Quit()
         {
-            base.Quit();
             Application.Instance.Quit();
         }
 
@@ -215,28 +262,22 @@ namespace GKUI.Platform
 
         public override int GetKeyLayout()
         {
+            // InputLanguage only exists in WinForms
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
-
-            /*#if __MonoCS__
-            // There is a bug in Mono: does not work this CurrentInputLanguage
-            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
-            #else
-            InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
-            return currentLang.Culture.KeyboardLayoutId;
-            #endif*/
         }
 
         public override void SetKeyLayout(int layout)
         {
             try {
                 CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(layout);
-
-                /*CultureInfo cultureInfo = new CultureInfo(layout);
-                InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
-                InputLanguage.CurrentInputLanguage = currentLang;*/
             } catch (Exception ex) {
-                Logger.WriteError("EtoFormsAppHost.SetKeyLayout()", ex);
+                Logger.WriteError("EtoAppHost.SetKeyLayout()", ex);
             }
+        }
+
+        public override void SetClipboardText(string text)
+        {
+            UIHelper.SetClipboardText(text);
         }
 
         #endregion
@@ -250,6 +291,11 @@ namespace GKUI.Platform
         {
             if (mdi)
                 throw new ArgumentException("MDI obsolete");
+
+#if NETCOREAPP3_1_OR_GREATER
+            // support for legacy encodings
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
 
             var appHost = new EtoAppHost();
             IContainer container = AppHost.Container;
@@ -323,18 +369,28 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
+            ControlsManager.RegisterHandlerType(typeof(RadioButtonEx), typeof(RadioButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(PasswordBox), typeof(PasswordBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(RadioMenuItem), typeof(MenuItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(CheckMenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(TextArea), typeof(TextAreaHandler));
+            ControlsManager.RegisterHandlerType(typeof(RichTextArea), typeof(RichTextAreaHandler));
+            ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
+            ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(ButtonToolItem), typeof(ButtonToolItemHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDateControl), typeof(DateControlHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKListView), typeof(ListViewHandler));
         }
 
         #endregion

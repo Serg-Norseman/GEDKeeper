@@ -56,14 +56,13 @@ namespace GKCore.MVP.Controls
     {
         bool ShowPoints { get; set; }
         bool ShowLines { get; set; }
-        ExtList<GeoPoint> MapPoints { get; }
+        IList<GeoPoint> MapPoints { get; }
 
         int AddPoint(double latitude, double longitude, string hint);
         void ClearPoints();
         void DeletePoint(int index);
         void BeginUpdate();
         void EndUpdate();
-        void InitMap();
         void RefreshPoints();
         void SaveSnapshot(string fileName);
         void SetCenter(double latitude, double longitude, int scale);
@@ -101,15 +100,9 @@ namespace GKCore.MVP.Controls
     /// <summary>
     /// 
     /// </summary>
-    public interface IMergeControl : IBaseControl
+    public interface IDateControl : IBaseControl
     {
-        IBaseWindow Base { get; set; }
-        GDMRecordType MergeMode { get; set; }
-        GDMRecord Rec1 { get; }
-        GDMRecord Rec2 { get; }
-
-        void SetRec1(GDMRecord value);
-        void SetRec2(GDMRecord value);
+        GDMCustomDate Date { get; set; }
     }
 
 

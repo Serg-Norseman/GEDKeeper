@@ -33,7 +33,7 @@ namespace GKNamesBookPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class NamesBookWidget : Form, ILocalization
+    public partial class NamesBookWidget : Form, ILocalizable
     {
         private const string CRLF = "\r\n";
 
@@ -67,7 +67,7 @@ namespace GKNamesBookPlugin
             PrepareList();
             UpdateList();
 
-            SetLang();
+            SetLocale();
         }
 
         protected override void Dispose(bool disposing)
@@ -81,9 +81,9 @@ namespace GKNamesBookPlugin
             base.Dispose(disposing);
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(NLS.LSID_MINamesBook);
         }

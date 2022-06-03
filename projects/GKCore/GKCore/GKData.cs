@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,12 +32,21 @@ namespace GKCore
         // because it including defines the path to the profile of the program.
         public const string APP_TITLE = "GEDKeeper";
 
-        public const string APP_COPYRIGHT = "Copyright © 2009-2021 by Sergey V. Zhdanovskih";
+        public const string APP_COPYRIGHT = "Copyright © 2009-2022 by Sergey V. Zhdanovskih";
+
+        public const string APP_VERSION_2X = "2.20.1.0";
+        public const string APP_VERSION_3X = "3.0.0.0";
 
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
+        public const string APP_FORUM_EN = "https://groups.google.com/g/gedkeeper-en";
+        public const string APP_CHANNEL_EN = "https://t.me/gedkeeper_en";
+
+        public const string APP_FORUM_RU = "https://groups.google.com/g/gedkeeper-ru";
+        public const string APP_CHANNEL_RU = "https://t.me/gedkeeper_ru";
+
         public const int APP_FORMAT_DEFVER = 39; // don't change it!
-        public const int APP_FORMAT_CURVER = 42; // v2.17.0
+        public const int APP_FORMAT_CURVER = 44; // v2.19.0
 
         public const string GEDCOM_EXT = "ged";
         public const string GEDCOM_SEC_EXT = "geds";
@@ -51,7 +60,7 @@ namespace GKCore
         public static readonly int HighlightUnparentedColor = 0xFFCACA;
         public static readonly int HighlightUnmarriedColor = 0xFFFFA1;
 
-        #if __MonoCS__
+        #if MONO
         public const string DEF_FONT = "Noto Sans";
         #else
         public const string DEF_FONT = "Tahoma";

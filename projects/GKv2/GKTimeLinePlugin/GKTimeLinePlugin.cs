@@ -78,7 +78,7 @@ namespace GKTimeLinePlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_MITimeLine);
 
-                if (fForm != null) fForm.SetLang();
+                if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKTimeLinePlugin.OnLanguageChange()", ex);
             }

@@ -41,7 +41,7 @@ using WFSortOrder = System.Windows.Forms.SortOrder;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [Serializable]
     public class GKListItem : ListViewItem, IListItem
@@ -142,7 +142,7 @@ namespace GKUI.Components
             }
 
             if (fValue is string && otherItem.fValue is string) {
-                return GKListView.StrCompareEx((string)fValue, (string)otherItem.fValue);
+                return GKUtils.StrCompareEx((string)fValue, (string)otherItem.fValue);
             }
 
             IComparable cv1 = fValue as IComparable;
@@ -219,7 +219,7 @@ namespace GKUI.Components
                             IComparable eitem2 = (IComparable)y;
                             result = eitem1.CompareTo(eitem2);
                         } else {
-                            result = GKListView.StrCompareEx(item1.Text, item2.Text);
+                            result = GKUtils.StrCompareEx(item1.Text, item2.Text);
                         }
                     } else if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count) {
                         ListViewItem.ListViewSubItem subitem1 = item1.SubItems[sortColumn];
@@ -230,7 +230,7 @@ namespace GKUI.Components
                             IComparable sub2 = (IComparable)subitem2;
                             result = sub1.CompareTo(sub2);
                         } else {
-                            result = GKListView.StrCompareEx(subitem1.Text, subitem2.Text);
+                            result = GKUtils.StrCompareEx(subitem1.Text, subitem2.Text);
                         }
                     }
 
@@ -266,8 +266,6 @@ namespace GKUI.Components
             }
             set {
                 if (fListMan != value) {
-                    if (fListMan != null) fListMan.Dispose();
-
                     fListMan = value;
 
                     if (fListMan != null) {
@@ -278,6 +276,16 @@ namespace GKUI.Components
                         VirtualMode = false;
                     }
                 }
+            }
+        }
+
+        public int SelectedIndex
+        {
+            get {
+                return Items.IndexOf(GetSelectedItem());
+            }
+            set {
+                SelectItem(value);
             }
         }
 
@@ -318,17 +326,6 @@ namespace GKUI.Components
             fListMan = null;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (fListMan != null) {
-                    fListMan.Dispose();
-                    fListMan = null;
-                }
-            }
-            base.Dispose(disposing);
-        }
-
         public void Activate()
         {
             Select();
@@ -337,7 +334,7 @@ namespace GKUI.Components
         public new void BeginUpdate()
         {
             if (fUpdateCount == 0) {
-                #if !__MonoCS__
+                #if !MONO
                 ListViewItemSorter = null;
                 #endif
                 base.BeginUpdate();
@@ -350,7 +347,7 @@ namespace GKUI.Components
             fUpdateCount--;
             if (fUpdateCount == 0) {
                 base.EndUpdate();
-                #if !__MonoCS__
+                #if !MONO
                 ListViewItemSorter = fColumnSorter;
                 #endif
             }
@@ -402,7 +399,7 @@ namespace GKUI.Components
                 Graphics gfx = e.Graphics;
                 Rectangle rt = e.Bounds;
 
-                #if !__MonoCS__
+                #if !MONO
                 if (VisualStyleRenderer.IsSupported) {
                     VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
                     if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
@@ -576,7 +573,7 @@ namespace GKUI.Components
                     SortContents(false);
                     VirtualListSize = fListMan.FilteredCount;
 
-                    #if __MonoCS__
+                    #if MONO
                     if (fListMan.FilteredCount != 0) {
                         TopItem = Items[0];
                     }
@@ -607,15 +604,21 @@ namespace GKUI.Components
 
         #region Public methods
 
-        public void Clear()
+        public new void Clear()
         {
-            Columns.Clear();
-            Items.Clear();
+            // identical clearing of columns and items
+            base.Clear();
         }
 
         public void ClearColumns()
         {
             Columns.Clear();
+        }
+
+        public void AddCheckedColumn(string caption, int width, bool autoSize = false)
+        {
+            CheckBoxes = true;
+            AddColumn(caption, width, autoSize);
         }
 
         public void AddColumn(string caption, int width, bool autoSize = false)
@@ -664,6 +667,15 @@ namespace GKUI.Components
         public void ClearItems()
         {
             Items.Clear();
+        }
+
+        public BSDListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
+        {
+            var item = AddItem(rowData, columnValues);
+            if (CheckBoxes) {
+                ((GKListItem)item).Checked = isChecked;
+            }
+            return item;
         }
 
         public BSDListItem AddItem(object rowData, params object[] columnValues)
@@ -788,36 +800,6 @@ namespace GKUI.Components
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.SelectItem()", ex);
             }
-        }
-
-        #endregion
-
-        #region Internal functions
-
-        internal static int StrCompareEx(string str1, string str2)
-        {
-            double val1, val2;
-            bool v1 = double.TryParse(str1, out val1);
-            bool v2 = double.TryParse(str2, out val2);
-
-            int result;
-            if (v1 && v2) {
-                if (val1 < val2) {
-                    result = -1;
-                } else if (val1 > val2) {
-                    result = +1;
-                } else {
-                    result = 0;
-                }
-            } else {
-                result = string.Compare(str1, str2, false);
-                if (str1 != "" && str2 == "") {
-                    result = -1;
-                } else if (str1 == "" && str2 != "") {
-                    result = +1;
-                }
-            }
-            return result;
         }
 
         #endregion

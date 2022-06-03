@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,13 +36,12 @@ using BSDSortOrder = BSLib.Design.BSDTypes.SortOrder;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class GKListItem : GridItem, BSDListItem
     {
         private Color fBackColor;
         private Color fForeColor;
-        private object fData;
 
         public Color BackColor
         {
@@ -62,24 +61,20 @@ namespace GKUI.Components
             set { base.Values[0] = value; }
         }
 
-        public object Data
-        {
-            get { return fData; }
-            set { fData = value; }
-        }
+        public object Data { get; set; }
 
         public GKListItem(params object[] values) : base(values)
         {
             BackColor = Colors.Transparent;
         }
 
-        public void AddSubItem(object itemValue)
-        {
-        }
-
         public int CompareTo(object obj)
         {
             return 0;
+        }
+
+        public void AddSubItem(object itemValue)
+        {
         }
 
         public void SetBackColor(IColor color)
@@ -126,7 +121,6 @@ namespace GKUI.Components
     public class GKListView : GridView, IListViewEx
     {
         private readonly ObservableExtList<GKListItem> fItems;
-        //private readonly GKListViewItems fItemsAccessor;
 
         private bool fCheckedList;
         private IListManager fListMan;
@@ -148,8 +142,6 @@ namespace GKUI.Components
             }
             set {
                 if (fListMan != value) {
-                    if (fListMan != null) fListMan.Dispose();
-
                     fListMan = value;
 
                     if (fListMan != null) {
@@ -197,17 +189,8 @@ namespace GKUI.Components
 
         public GKListView()
         {
-            //SetStyle(ControlStyles.DoubleBuffer, true);
-            //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            //SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            // Enable the OnNotifyMessage event so we get a chance to filter out
-            // Windows messages before they get to the form's WndProc
-            //SetStyle(ControlStyles.EnableNotifyMessage, true);
-            //OwnerDraw = true;
-
             fCheckedList = false;
             fItems = new ObservableExtList<GKListItem>();
-            //fItemsAccessor = new GKListViewItems(this);
             fSortColumn = 0;
             fSortOrder = BSDSortOrder.None;
 
@@ -218,20 +201,13 @@ namespace GKUI.Components
             fListMan = null;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (fListMan != null) {
-                    fListMan.Dispose();
-                    fListMan = null;
-                }
-            }
-            base.Dispose(disposing);
-        }
-
         public void Activate()
         {
-            Focus();
+            try {
+                Focus();
+            } catch {
+                // why is an exception thrown here?
+            }
         }
 
         public void BeginUpdate()
@@ -260,17 +236,15 @@ namespace GKUI.Components
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
         {
             int prevColumn = fSortColumn;
+            BSDSortOrder sortOrder;
             if (prevColumn == sortColumn && checkOrder) {
-                BSDSortOrder prevOrder = GetColumnSortOrder(sortColumn);
-                fSortOrder = (prevOrder == BSDSortOrder.Ascending) ? BSDSortOrder.Descending : BSDSortOrder.Ascending;
+                var prevOrder = GetColumnSortOrder(sortColumn);
+                sortOrder = (prevOrder == BSDSortOrder.Ascending) ? BSDSortOrder.Descending : BSDSortOrder.Ascending;
+            } else {
+                sortOrder = BSDSortOrder.Ascending;
             }
 
-            fSortColumn = sortColumn;
-
-            object rowData = GetSelectedData();
-            SortContents(true);
-            UpdateItems();
-            if (rowData != null) SelectItem(rowData);
+            Sort(sortColumn, sortOrder);
         }
 
         public void Sort(int sortColumn, BSDSortOrder sortOrder)
@@ -278,115 +252,48 @@ namespace GKUI.Components
             fSortColumn = sortColumn;
             fSortOrder = sortOrder;
 
-            object rowData = GetSelectedData();
-            SortContents(true);
-            UpdateItems();
+            var rowData = GetSelectedData();
+            BeginUpdate();
+            try {
+                SortContents(true);
+                UpdateItems();
+            } finally {
+                EndUpdate();
+            }
+
             if (rowData != null) SelectItem(rowData);
         }
 
         protected override void OnColumnHeaderClick(GridColumnEventArgs e)
         {
-            BeginUpdate();
-            try {
-                int columnIndex = this.Columns.IndexOf(e.Column);
-                SetSortColumn(columnIndex, false);
-            } finally {
-                EndUpdate();
-            }
+            var columnIndex = Columns.IndexOf(e.Column);
+            SetSortColumn(columnIndex);
 
             base.OnColumnHeaderClick(e);
         }
 
+        // In Eto not exists
         /*protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
         {
-            #if DEFAULT_HEADER
-
-            e.DrawDefault = true;
-
-            #else
-
-            using (var sf = new StringFormat())
-            {
-                Graphics gfx = e.Graphics;
-                Rectangle rt = e.Bounds;
-
-                #if !__MonoCS__
-                VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
-                if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
-                    element = VisualStyleElement.Header.Item.Hot;
-                if ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected)
-                    element = VisualStyleElement.Header.Item.Pressed;
-
-                var visualStyleRenderer = new VisualStyleRenderer(element);
-                visualStyleRenderer.DrawBackground(gfx, rt);
-                #else
-                e.DrawBackground();
-                #endif
-
-                switch (e.Header.TextAlign)
-                {
-                    case HorizontalAlignment.Left:
-                        sf.Alignment = StringAlignment.Near;
-                        break;
-
-                    case HorizontalAlignment.Right:
-                        sf.Alignment = StringAlignment.Far;
-                        break;
-
-                    case HorizontalAlignment.Center:
-                        sf.Alignment = StringAlignment.Center;
-                        break;
-                }
-
-                sf.LineAlignment = StringAlignment.Center;
-                sf.Trimming = StringTrimming.EllipsisCharacter;
-                sf.FormatFlags = StringFormatFlags.NoWrap;
-
-                int w = TextRenderer.MeasureText(" ", Font).Width;
-                rt.Inflate(-(w / 5), 0);
-
-                gfx.DrawString(e.Header.Text, Font, Brushes.Black, rt, sf);
-
-                string arrow = "";
-                switch (GetColumnSortOrder(e.ColumnIndex)) {
-                    case BSDSortOrder.Ascending:
-                        arrow = "▲";
-                        break;
-                    case BSDSortOrder.Descending:
-                        arrow = "▼";
-                        break;
-                }
-
-                if (arrow != "") {
-                    using (var fnt = new Font(Font.FontFamily, Font.SizeInPoints * 0.6f, FontStyle.Regular)) {
-                        float aw = gfx.MeasureString(arrow, fnt).Width;
-                        float x = rt.Left + (rt.Width - aw) / 2.0f;
-                        gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
-                        gfx.DrawString(arrow, fnt, Brushes.Black, x, rt.Top);
-                    }
-                }
-            }
-
-            #endif
-
-            base.OnDrawColumnHeader(e);
         }*/
 
         /*protected override void OnCellFormatting(GridCellFormatEventArgs e)
         {
-            if (e.Row == fItems.IndexOf((GKListItem)SelectedItem)) {
-                e.BackgroundColor = SystemColors.Highlight;
+            var item = e.Item as GKListItem;
+            if (item == null)
+                return;
+
+            // doesn't work because selection changes don't call this method
+            if (item == SelectedItem) {
+                e.BackgroundColor = SystemColors.Selection; // exactly this value
                 e.ForegroundColor = Colors.White;
             } else {
-                var item = e.Item as GKListItem;
-                if (item != null) {
-                    if (item.BackColor != Colors.Transparent) {
-                        e.BackgroundColor = item.BackColor;
-                        e.ForegroundColor = Colors.Black;
-                    } else {
-                        e.BackgroundColor = Colors.White;
-                        e.ForegroundColor = Colors.Black;
-                    }
+                if (item.BackColor != Colors.Transparent) {
+                    e.BackgroundColor = item.BackColor;
+                    e.ForegroundColor = Colors.Black;
+                } else {
+                    e.BackgroundColor = Colors.White;
+                    e.ForegroundColor = Colors.Black;
                 }
             }
 
@@ -407,7 +314,7 @@ namespace GKUI.Components
                         bool isStr2 = val2 is string;
 
                         if (isStr1 && isStr2) {
-                            result = StrCompareEx((string)val1, (string)val2);
+                            result = GKUtils.StrCompareEx((string)val1, (string)val2);
                         } else {
                             result = val1.CompareTo(val2);
                         }
@@ -530,6 +437,7 @@ namespace GKUI.Components
             column.DataCell = cell;
             column.AutoSize = autoSize;
             column.Width = width;
+            column.Sortable = true;
             Columns.Add(column);
         }
 
@@ -620,11 +528,16 @@ namespace GKUI.Components
 
         public BSDListItem AddItem(object rowData, params object[] columnValues)
         {
+            return AddItem(rowData, false, columnValues);
+        }
+
+        public BSDListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
+        {
             object[] itemValues;
             if (fCheckedList) {
                 int num = columnValues.Length;
                 itemValues = new object[num + 1];
-                itemValues[0] = false;
+                itemValues[0] = isChecked;
                 Array.Copy(columnValues, 0, itemValues, 1, num);
             } else {
                 itemValues = columnValues;
@@ -641,19 +554,15 @@ namespace GKUI.Components
             try {
                 var result = new List<object>();
 
-                /*if (!VirtualMode) {
-                    int num = SelectedItems.Count;
-                    for (int i = 0; i < num; i++) {
-                        var lvItem = SelectedItems[i] as GKListItem;
-                        result.Add(lvItem.Data);
+                if (fListMan == null) {
+                    foreach (GKListItem item in SelectedItems) {
+                        result.Add(item.Data);
                     }
                 } else {
-                    int num = SelectedIndices.Count;
-                    for (int i = 0; i < num; i++) {
-                        int index = SelectedIndices[i];
+                    foreach (var index in SelectedRows) {
                         result.Add(fListMan.GetContentItem(index));
                     }
-                }*/
+                }
 
                 return result;
             } catch (Exception ex) {
@@ -664,6 +573,10 @@ namespace GKUI.Components
 
         public GKListItem GetSelectedItem()
         {
+            if (SelectedRow < 0) {
+                return null;
+            }
+
             var item = SelectedItem as GKListItem;
             return item;
         }
@@ -686,6 +599,7 @@ namespace GKUI.Components
         {
             if (index >= 0 && index < fItems.Count) {
                 ScrollToRow(index);
+                UnselectAll();
                 SelectRow(index);
             }
         }
@@ -732,36 +646,6 @@ namespace GKUI.Components
             ItemCheckEventHandler handler = this.ItemCheck;
             if (handler != null)
                 handler.Invoke(this, new ItemCheckEventArgs(index, newValue));
-        }
-
-        #endregion
-
-        #region Internal functions
-
-        internal static int StrCompareEx(string str1, string str2)
-        {
-            double val1, val2;
-            bool v1 = double.TryParse(str1, out val1);
-            bool v2 = double.TryParse(str2, out val2);
-
-            int result;
-            if (v1 && v2) {
-                if (val1 < val2) {
-                    result = -1;
-                } else if (val1 > val2) {
-                    result = +1;
-                } else {
-                    result = 0;
-                }
-            } else {
-                result = string.Compare(str1, str2, false);
-                if (str1 != "" && str2 == "") {
-                    result = -1;
-                } else if (str1 == "" && str2 != "") {
-                    result = +1;
-                }
-            }
-            return result;
         }
 
         #endregion

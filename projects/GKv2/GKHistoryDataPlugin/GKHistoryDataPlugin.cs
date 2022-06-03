@@ -82,7 +82,7 @@ namespace GKHistoryDataPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(HDLS.LSID_Title);
 
-                if (fForm != null) fForm.SetLang();
+                if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKHistoryDataPlugin.OnLanguageChange()", ex);
             }

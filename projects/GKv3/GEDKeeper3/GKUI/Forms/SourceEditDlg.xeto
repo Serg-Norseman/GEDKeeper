@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.SourceEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl Size="600, 260">
+        <TabPage x:Name="pageCommon">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <Label x:Name="lblShortTitle" />
+              <TextBox x:Name="txtShortTitle" TextChanged="EditShortTitle_TextChanged" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblAuthor" />
+              <TextArea x:Name="txtAuthor" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblTitle" />
+              <TextArea x:Name="txtTitle" />
+            </TableRow>
+            <TableRow ScaleHeight="True">
+              <Label x:Name="lblPublication" />
+              <TextArea x:Name="txtPublication" />
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pageText">
+          <TextArea x:Name="txtText" />
+        </TabPage>
+
+        <TabPage x:Name="pageRepositories">
+          <comcom:GKSheetList x:Name="fRepositoriesList" OnModify="ModifyReposSheet" />
+        </TabPage>
+        <TabPage x:Name="pageNotes">
+          <comcom:GKSheetList x:Name="fNotesList" />
+        </TabPage>
+        <TabPage x:Name="pageMultimedia">
+          <comcom:GKSheetList x:Name="fMediaList" />
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

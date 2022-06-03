@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,7 +28,7 @@ using Eto.Forms;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class ScrollablePanel : Scrollable
     {
@@ -110,13 +110,25 @@ namespace GKUI.Components
 
             fCanvas = new Drawable();
             fCanvas.Paint += PaintHandler;
+            fCanvas.KeyDown += KeyDownHandler;
+            fCanvas.KeyUp += KeyUpHandler;
             fCanvas.CanFocus = true;
             Content = fCanvas;
 
             fFont = SystemFonts.Label();
-            fTextColor = Colors.Black;
+            fTextColor = SystemColors.ControlText;
 
             SetImageSize(new ExtSize(100, 100), false);
+        }
+
+        private void KeyDownHandler(object sender, KeyEventArgs e)
+        {
+            OnKeyDown(e);
+        }
+
+        private void KeyUpHandler(object sender, KeyEventArgs e)
+        {
+            OnKeyUp(e);
         }
 
         protected virtual void OnFontChanged(EventArgs e)
@@ -195,18 +207,6 @@ namespace GKUI.Components
             fImageViewport = new Rectangle(destX, destY, width, height);
         }
 
-        private void SetViewportLocation(Point location)
-        {
-            fViewport.Location = location;
-            UpdateProperties();
-        }
-
-        private void SetViewportSize(Size size)
-        {
-            fViewport.Size = size;
-            UpdateProperties();
-        }
-
         // unsupported in Wpf and maybe in other platforms (exclude WinForms), don't use
         public Graphics CreateGraphics()
         {
@@ -241,10 +241,25 @@ namespace GKUI.Components
             base.OnMouseWheel(e);
         }
 
+        protected override void OnShown(EventArgs e)
+        {
+            if (Loaded) {
+                try {
+                    fViewport = VisibleRect;
+                    UpdateProperties();
+                } catch (Exception ex) {
+                    // FIXME: works in MacOS and doesn't work in Wpf
+                }
+            }
+
+            base.OnShown(e);
+        }
+
         protected override void OnSizeChanged(EventArgs e)
         {
             if (Loaded) {
-                SetViewportSize(VisibleRect.Size);
+                fViewport.Size = VisibleRect.Size;
+                UpdateProperties();
             }
             base.OnSizeChanged(e);
         }
@@ -252,7 +267,8 @@ namespace GKUI.Components
         protected override void OnScroll(ScrollEventArgs e)
         {
             if (Loaded) {
-                SetViewportLocation(VisibleRect.Location);
+                fViewport.Location = VisibleRect.Location;
+                UpdateProperties();
                 fCanvas.Invalidate();
             }
             base.OnScroll(e);

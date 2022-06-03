@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
@@ -26,6 +26,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 using GKCore.Options;
 
@@ -42,6 +43,9 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
 
             fDialog = new OptionsDlg(AppHost.Instance);
@@ -79,7 +83,6 @@ namespace GKUI.Forms
         public static void OptionsDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
             var optDlg = ((OptionsDlg)form);
-            Assert.AreEqual(GlobalOptions.Instance, optDlg.Options);
 
             optDlg.SetPage(OptionsPage.opCommon);
 

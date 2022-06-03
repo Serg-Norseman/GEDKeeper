@@ -32,7 +32,7 @@ namespace GKWordsCloudPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class WordsCloudWidget : Form, ILocalization
+    public partial class WordsCloudWidget : Form, ILocalizable
     {
         private class CloudType
         {
@@ -74,7 +74,7 @@ namespace GKWordsCloudPlugin
             }
             fMode = StatsMode.smNames;
 
-            SetLang();
+            SetLocale();
         }
 
         protected override void Dispose(bool disposing)
@@ -140,14 +140,14 @@ namespace GKWordsCloudPlugin
         {
             var item = (ComboItem<StatsMode>)cbType.SelectedItem;
             if (item != null) {
-                fMode = (StatsMode)item.Tag;
+                fMode = item.Tag;
                 UpdateCloud();
             }
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_Title);
         }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,27 +18,35 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
+    public sealed partial class UserRefEditDlg : CommonDialog<IUserRefEditDlg, UserRefEditDlgController>, IUserRefEditDlg
     {
-        private readonly UserRefEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        public GDMUserReference UserRef
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblReference;
+        private ComboBox cmbRef;
+        private Label lblRefType;
+        private ComboBox cmbRefType;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        public GDMUserReference UserReference
         {
-            get { return fController.UserRef; }
-            set { fController.UserRef = value; }
+            get { return fController.UserReference; }
+            set { fController.UserReference = value; }
         }
 
         #region View Interface
@@ -57,36 +65,10 @@ namespace GKUI.Forms
 
         public UserRefEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinUserRefEdit);
-            lblReference.Text = LangMan.LS(LSID.LSID_Reference);
-            lblRefType.Text = LangMan.LS(LSID.LSID_Type);
+            XamlReader.Load(this);
 
             fController = new UserRefEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

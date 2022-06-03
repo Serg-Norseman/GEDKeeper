@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,7 @@ using System;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCore;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -33,45 +33,26 @@ namespace GKUI.Forms
 {
     public partial class SlideshowWin : StatusForm, ISlideshowWin
     {
-        private readonly SlideshowController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private readonly ImageBox fImageCtl;
-        private ITimer fTimer;
+        private ButtonToolItem tbNext;
+        private ButtonToolItem tbPrev;
+        private ButtonToolItem tbStart;
+        private ImageBox fImageCtl;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        private readonly SlideshowController fController;
 
         public SlideshowWin(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
-            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
-
-            SuspendLayout();
-            fImageCtl = new ImageBox();
-            fImageCtl.BackgroundColor = SystemColors.ControlBackground;
-            fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
-            fImageCtl.ImageBorderColor = Colors.AliceBlue;
-            fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
-            Content = fImageCtl;
-            ResumeLayout();
-
-            WindowState = WindowState.Maximized;
-
-            SetLang();
-
-            fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
+            XamlReader.Load(this);
 
             fController = new SlideshowController(this);
             fController.Init(baseWin);
             fController.LoadList();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (fTimer != null) fTimer.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         private void SlideshowWin_Load(object sender, EventArgs e)
@@ -79,17 +60,19 @@ namespace GKUI.Forms
             fController.Next();
         }
 
+        private void SlideshowWin_Closed(object sender, EventArgs e)
+        {
+            fController.Dispose();
+        }
+
         private void SlideshowWin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Keys.Escape) Close();
         }
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            Title = LangMan.LS(LSID.LSID_Slideshow);
-            tbStart.Text = LangMan.LS(LSID.LSID_Start);
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
         }
 
         public void SetImage(IImage image)
@@ -99,25 +82,14 @@ namespace GKUI.Forms
             fImageCtl.ZoomToFit();
         }
 
-        private void SetTimer(bool active)
-        {
-            if (active) {
-                tbStart.Text = LangMan.LS(LSID.LSID_Stop);
-                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
-                fTimer.Start();
-            } else {
-                tbStart.Text = LangMan.LS(LSID.LSID_Start);
-                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
-                fTimer.Stop();
-            }
-        }
-
         private void tsbStart_Click(object sender, EventArgs e)
         {
-            if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
-                SetTimer(true);
+            bool active = fController.SwitchActive();
+
+            if (active) {
+                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
             } else {
-                SetTimer(false);
+                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
             }
         }
 
@@ -129,18 +101,6 @@ namespace GKUI.Forms
         private void tsbNext_Click(object sender, EventArgs e)
         {
             fController.Next();
-        }
-
-        private void Timer1Tick(object sender, EventArgs e)
-        {
-            fController.Next();
-        }
-
-        public void UpdateControls()
-        {
-            tbStart.Enabled = (fController.FileRefs.Count > 0);
-            tbPrev.Enabled = (fController.CurrentIndex > 0);
-            tbNext.Enabled = (fController.CurrentIndex < fController.FileRefs.Count - 1);
         }
     }
 }

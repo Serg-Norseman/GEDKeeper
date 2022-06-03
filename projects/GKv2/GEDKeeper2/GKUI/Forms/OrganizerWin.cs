@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,8 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-using BSLib;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -30,10 +28,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class OrganizerWin : CommonDialog, IOrganizerWin
+    public sealed partial class OrganizerWin : CommonDialog<IOrganizerWin, OrganizerController>, IOrganizerWin
     {
-        private readonly OrganizerController fController;
-
         private readonly GKSheetList fAdrList;
         private readonly GKSheetList fPhonesList;
         private readonly GKSheetList fMailsList;
@@ -68,30 +64,9 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fAdrList = new GKSheetList(pageAddresses);
-            fAdrList.Buttons = EnumSet<SheetButton>.Create();
-            fAdrList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fAdrList.AddColumn(LangMan.LS(LSID.LSID_Address), 100, false);
-
             fPhonesList = new GKSheetList(pageTelephones);
-            fPhonesList.Buttons = EnumSet<SheetButton>.Create();
-            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 100, false);
-
             fMailsList = new GKSheetList(pageMails);
-            fMailsList.Buttons = EnumSet<SheetButton>.Create();
-            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 100, false);
-
             fWebsList = new GKSheetList(pageWebs);
-            fWebsList.Buttons = EnumSet<SheetButton>.Create();
-            fWebsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
-
-            Title = LangMan.LS(LSID.LSID_MIOrganizer);
-            pageAddresses.Text = LangMan.LS(LSID.LSID_Addresses);
-            pageTelephones.Text = LangMan.LS(LSID.LSID_Telephones);
-            pageMails.Text = LangMan.LS(LSID.LSID_Mails);
-            pageWebs.Text = LangMan.LS(LSID.LSID_Webs);
 
             fController = new OrganizerController(this);
             fController.Init(baseWin);

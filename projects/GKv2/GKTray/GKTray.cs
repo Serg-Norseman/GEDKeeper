@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -53,6 +53,8 @@ namespace GKTray
 
         public const string APP_TITLE = "GEDKeeper Tray";
 
+        #if !MONO
+
         private MenuItem fAutorunItem;
         private readonly ContextMenu fMenu;
         private readonly List<MRUFile> fMRUFiles;
@@ -81,7 +83,7 @@ namespace GKTray
             LoadSettings();
             LoadEvents();
 
-            fTipsTimer = new System.Threading.Timer(this.TimerCallback, null, 1000, 1000*60);
+            fTipsTimer = new System.Threading.Timer(this.TimerCallback, null, 1000, 1000 * 60);
         }
 
         private MenuItem[] InitializeMenu()
@@ -224,9 +226,12 @@ namespace GKTray
             GKUtils.LoadExtFile(appPath);
         }
 
+        #endif
+
         [STAThread]
         public static void Main(string[] args)
         {
+            #if !MONO
             AppHost.CheckPortable(args);
 
             Application.EnableVisualStyles();
@@ -241,6 +246,7 @@ namespace GKTray
                     notificationIcon.fNotifyIcon.Dispose();
                 }
             }
+            #endif
         }
     }
 }

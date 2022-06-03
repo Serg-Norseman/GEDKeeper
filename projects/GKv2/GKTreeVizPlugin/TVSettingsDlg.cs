@@ -40,7 +40,7 @@ namespace GKTreeVizPlugin
             fPlugin = plugin;
             Text = fPlugin.DisplayName;
 
-            // SetLang()
+            // SetLocale()
             chkWithoutDates.Text = fPlugin.LangMan.LS(PLS.LSID_WithoutDates);
             lblMinGens.Text = fPlugin.LangMan.LS(PLS.LSID_MinGens);
             btnAccept.Text = fPlugin.LangMan.LS(PLS.LSID_Accept);

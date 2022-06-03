@@ -195,9 +195,6 @@ namespace GKCore
             Assert.IsNotNull(placeObj);
             Assert.AreEqual(null, placeObj.Name);
             Assert.IsNotNull(placeObj.Facts);
-
-            placeObj.Dispose();
-            Assert.IsNotNull(placeObj);
         }
 
         private static bool WalkProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)

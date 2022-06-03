@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,10 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
 using GKCore.Names;
@@ -29,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class NameEditDlg : CommonDialog, INameEditDlg
+    public sealed partial class NameEditDlg : CommonDialog<INameEditDlg, NameEditDlgController>, INameEditDlg
     {
-        private readonly NameEditDlgController fController;
-
         public NameEntry IName
         {
             get { return fController.NameEntry; }
@@ -70,33 +66,7 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Name);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblSex.Text = LangMan.LS(LSID.LSID_Sex);
-            grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
-            lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
-            lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
-
             fController = new NameEditDlgController(this);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void edName_KeyPress(object sender, KeyPressEventArgs e)

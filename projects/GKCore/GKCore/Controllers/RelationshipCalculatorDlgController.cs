@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,10 +20,12 @@
 
 //#define DEBUG_SOLVE
 
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Kinships;
 using GKCore.MVP;
 using GKCore.MVP.Views;
+using GKCore.Options;
 
 namespace GKCore.Controllers
 {
@@ -81,7 +83,7 @@ namespace GKCore.Controllers
                     }
 
                     kinsGraph.SetTreeRoot(fRec1);
-                    fResult = kinsGraph.GetRelationship(fRec2, true);
+                    fResult = kinsGraph.GetRelationship(fRec2, true, GlobalOptions.Instance.ShortKinshipForm);
 
                     #if DEBUG_SOLVE
                     fResult += "\r\n" + kinsGraph.IndividualsPath;
@@ -111,6 +113,16 @@ namespace GKCore.Controllers
             }
 
             fView.Result.Text = fResult;
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_RelationshipCalculator);
+
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<IButton>("btnRec1Select").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            GetControl<IButton>("btnRec2Select").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            GetControl<ILabel>("lblKinship").Text = LangMan.LS(LSID.LSID_Kinship);
         }
     }
 }

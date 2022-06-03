@@ -21,6 +21,9 @@ using System.Drawing;
 using System.IO;
 using GDModel;
 using GEDmill.Model;
+using GKCore;
+using GKCore.Interfaces;
+using GKCore.Types;
 
 namespace GEDmill.HTML
 {
@@ -33,7 +36,7 @@ namespace GEDmill.HTML
         protected List<Multimedia> fMultimediaList;
 
 
-        protected CreatorRecord(GDMTree tree, IProgressCallback progress, string w3cFile) : base(tree, progress, w3cFile)
+        protected CreatorRecord(IBaseContext context, ILangMan langMan) : base(context, langMan)
         {
             fMultimediaList = new List<Multimedia>();
         }
@@ -42,7 +45,9 @@ namespace GEDmill.HTML
         protected void AddMultimedia(GDMList<GDMMultimediaLink> multimediaLinks, string mmPrefix,
                                      string mmLargePrefix, int maxWidth, int maxHeight, Stats stats)
         {
-            // TODO: ml.GetFileReferences();
+            if (multimediaLinks == null)
+                return;
+
             var fileRefs = new List<GDMFileReference>();
             foreach (var mmLink in multimediaLinks) {
                 if (mmLink.IsPointer) {
@@ -56,76 +61,21 @@ namespace GEDmill.HTML
                         fileRefs.Add(fileRef);
                     }
                 } else {
+                    // FIXME: GK is already translating everything to pointers
                     foreach (var fileRef in mmLink.FileReferences) {
                         fileRefs.Add(fileRef);
                     }
                 }
             }
 
-            if (multimediaLinks != null) {
-                // Add extra pics added by the user on indi exclude screen.
-                AddMultimediaFileReferences(fileRefs, mmPrefix, mmLargePrefix, maxWidth, maxHeight, stats);
-            }
-        }
-
-        // Adds an HTML page footer (Record date, W3C sticker, GEDmill credit etc.)
-        protected void OutputFooter(HTMLFile f, GDMRecord r)
-        {
-            f.WriteLine("      <div id=\"footer\">");
-            if ((r.UserReferences.Count > 0)
-              || (!string.IsNullOrEmpty(r.AutomatedRecordID))
-              || (r.ChangeDate != null)
-              || (GMConfig.Instance.CustomFooter != "")) {
-                foreach (GDMUserReference urn in r.UserReferences) {
-                    string idType = EscapeHTML(urn.ReferenceType, false);
-                    if (idType == "") {
-                        idType = "User reference number";
-                    }
-                    f.WriteLine("<p>{0}: {1}</p>", idType, EscapeHTML(urn.StringValue, false));
-                }
-
-                if (!string.IsNullOrEmpty(r.AutomatedRecordID)) {
-                    f.WriteLine("<p>Record {0}</p>", r.AutomatedRecordID);
-                }
-
-                if (r.ChangeDate != null) {
-                    GDMChangeDate changeDate = r.ChangeDate;
-                    if (changeDate != null) {
-                        string dtx = changeDate.ToString();
-                        if (dtx != "") {
-                            dtx = " " + dtx;
-                        }
-                        f.WriteLine("<p id=\"changedate\">Record last changed {0}</p>", dtx);
-                    }
-                }
-
-                if (GMConfig.Instance.CustomFooter != "") {
-                    if (GMConfig.Instance.FooterIsHtml) {
-                        f.WriteLine("<p>{0}</p>", GMConfig.Instance.CustomFooter);
-                    } else {
-                        f.WriteLine("<p>{0}</p>", EscapeHTML(GMConfig.Instance.CustomFooter, false));
-                    }
-                }
-            }
-            f.WriteLine("      </div> <!-- footer -->");
-
-            f.WriteLine("<p class=\"plain\">Page created using GEDmill {0}</p>", GMConfig.SoftwareVersion);
-
-            if (GMConfig.Instance.IncludeValiditySticker) {
-                OutputValiditySticker(f);
-            }
-        }
-
-        // Adds the given list of file references to the multimedia list.
-        private void AddMultimediaFileReferences(List<GDMFileReference> fileRefs, string mmPrefix,
-                                                 string mmLargePrefix, int maxWidth, int maxHeight, Stats stats)
-        {
-            if (fileRefs == null) {
-                return;
-            }
-
+            // Adds the given list of file references to the multimedia list.
             for (int i = 0; i < fileRefs.Count; i++) {
                 GDMFileReferenceWithTitle mfr = fileRefs[i] as GDMFileReferenceWithTitle;
+                if (mfr == null) continue;
+
+                MultimediaKind mmKind = GKUtils.GetMultimediaKind(mfr.MultimediaFormat);
+                bool blockThisMediaType = (mmKind == MultimediaKind.mkNone);
+
                 string copyFilename = "";
                 int nMmOrdering = i;
                 string mmTitle = mfr.Title;
@@ -133,7 +83,6 @@ namespace GEDmill.HTML
                 string mmFormat = mfr.MultimediaFormat.ToString();
                 Rectangle rectArea = new Rectangle(0, 0, 0, 0);
                 string extPart;
-                bool blockThisMediaType = false;
 
                 // Don't trust extension on sFilename. Use our own. (Happens for .tmp files from embedded data)
                 switch (mmFormat) {
@@ -155,7 +104,6 @@ namespace GEDmill.HTML
                         extPart = ".png";
                         break;
                     case "ole":
-                        blockThisMediaType = true;
                         extPart = ".ole";
                         break;
                     default:
@@ -167,7 +115,7 @@ namespace GEDmill.HTML
                 }
                 string originalFilename = Path.GetFileName(mmFilename);
 
-                bool pictureFormat = GMHelper.IsPictureFormat(mfr);
+                bool pictureFormat = GKUtils.IsPictureFormat(mfr);
                 if (pictureFormat || GMConfig.Instance.AllowNonPictures) {
                     if (!pictureFormat && GMConfig.Instance.AllowNonPictures) {
                         stats.NonPicturesIncluded = true;
@@ -183,11 +131,7 @@ namespace GEDmill.HTML
 
                         if (!blockThisMediaType) {
                             if (pictureFormat) {
-                                // TODO
-                                /*if (mfr.m_asidPair != null) {
-                                    Rectangle rectAsidArea = mfr.m_asidPair.m_rectArea;
-                                    rectArea = new Rectangle(rectAsidArea.X, rectAsidArea.Y, rectAsidArea.Width, rectAsidArea.Height);
-                                }*/
+                                // TODO: CutoutPosition
                                 copyFilename = CopyMultimedia(mmFilename, newFilename, maxWidth, maxHeight, ref rectArea, stats);
                             } else {
                                 copyFilename = CopyMultimedia(mmFilename, newFilename, 0, 0, ref rectArea, stats);
@@ -195,6 +139,7 @@ namespace GEDmill.HTML
                         }
                     }
 
+                    // copyFilename can be empty, if file doesn't exist.
                     if (!string.IsNullOrEmpty(copyFilename)) {
                         string largeFilename = "";
                         // Copy original original version
@@ -213,11 +158,51 @@ namespace GEDmill.HTML
                         // Add format and new sFilename to multimedia list
                         Multimedia imm = new Multimedia(nMmOrdering, mmFormat, mmTitle, copyFilename, largeFilename, rectArea.Width, rectArea.Height);
                         fMultimediaList.Add(imm);
-                    } else {
-                        // Happens e.g. when original file doesn't exist.
                     }
                 }
             }
+        }
+
+        // Adds an HTML page footer (Record date, W3C sticker, GEDmill credit etc.)
+        protected void OutputFooter(HTMLFile f, GDMRecord r)
+        {
+            f.WriteLine("      <div id=\"footer\">");
+            if ((r.HasUserReferences) || (!string.IsNullOrEmpty(r.AutomatedRecordID)) || 
+                (r.ChangeDate != null) || (GMConfig.Instance.CustomFooter != "")) {
+                foreach (GDMUserReference urn in r.UserReferences) {
+                    string idType = EscapeHTML(urn.ReferenceType, false);
+                    if (idType == "") {
+                        idType = fLangMan.LS(PLS.LSID_URefNumber);
+                    }
+                    f.WriteLine("<p>{0}: {1}</p>", idType, EscapeHTML(urn.StringValue, false));
+                }
+
+                if (!string.IsNullOrEmpty(r.AutomatedRecordID)) {
+                    f.WriteLine("<p>{0} {1}</p>", fLangMan.LS(PLS.LSID_Record), r.AutomatedRecordID);
+                }
+
+                if (r.ChangeDate != null) {
+                    GDMChangeDate changeDate = r.ChangeDate;
+                    if (changeDate != null) {
+                        string dtx = changeDate.ToString();
+                        if (dtx != "") {
+                            dtx = " " + dtx;
+                        }
+                        f.WriteLine("<p id=\"changedate\">{0} {1}</p>", fLangMan.LS(PLS.LSID_RecordLastChanged), dtx);
+                    }
+                }
+
+                if (GMConfig.Instance.CustomFooter != "") {
+                    if (GMConfig.Instance.FooterIsHtml) {
+                        f.WriteLine("<p>{0}</p>", GMConfig.Instance.CustomFooter);
+                    } else {
+                        f.WriteLine("<p>{0}</p>", EscapeHTML(GMConfig.Instance.CustomFooter, false));
+                    }
+                }
+            }
+            f.WriteLine("      </div> <!-- footer -->");
+
+            f.WriteLine("<p class=\"plain\">{0} {1}</p>", fLangMan.LS(PLS.LSID_PageCreatedUsingGEDmill), GMConfig.SoftwareVersion);
         }
 
         // Outputs the HTML for the Notes section of the page
@@ -235,7 +220,7 @@ namespace GEDmill.HTML
 
                 if (noteStrings.Count > 0) {
                     f.WriteLine("<div id=\"notes\">");
-                    f.WriteLine("<h1>Notes</h1>");
+                    f.WriteLine("<h1>{0}</h1>", fLangMan.LS(PLS.LSID_Notes));
                     f.WriteLine("<ul>");
 
                     foreach (string note_string in noteStrings) {

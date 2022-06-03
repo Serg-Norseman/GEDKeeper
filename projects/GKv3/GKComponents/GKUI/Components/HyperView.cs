@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2011-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2011-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using BSLib.Design.Graphics;
+using BSLib.Design;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
@@ -36,7 +36,7 @@ namespace GKUI.Components
     public delegate void LinkEventHandler(object sender, string linkName);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class HyperView : ScrollablePanel, IHyperView
     {
@@ -97,7 +97,7 @@ namespace GKUI.Components
             fHeights = new List<int>();
             fLines = new StringList();
             fLines.OnChange += LinesChanged;
-            fLinkColor = Colors.Blue;
+            fLinkColor = SystemColors.LinkText;
             fTextSize = ExtSize.Empty;
             fWordWrap = true;
         }
@@ -125,6 +125,13 @@ namespace GKUI.Components
 
         private void ArrangeText()
         {
+            if (fLines.Count == 0)
+                return;
+
+            float maxWidth = this.ClientSize.Width - (2 * fBorderWidth);
+            if (maxWidth < 0)
+                return;
+
             try {
                 SuspendLayout();
 
@@ -136,16 +143,13 @@ namespace GKUI.Components
                     int yPos = 0;
                     int xMax = 0;
                     int lineHeight = 0;
-
-                    string text = fLines.Text;
                     Font defFont = this.Font;
-                    float maxWidth = this.ClientSize.Width - (2 * fBorderWidth);
-
-                    text = SysUtils.StripHTML(text);
 
                     var parser = new BBTextParser(AppHost.GfxProvider, defFont.Size,
                                                   new ColorHandler(fLinkColor), new ColorHandler(TextColor));
 
+                    string text = fLines.Text;
+                    text = SysUtils.StripHTML(text);
                     parser.ParseText(fChunks, text);
 
                     int line = -1;
@@ -172,52 +176,54 @@ namespace GKUI.Components
 
                         string chunkStr = chunk.Text;
                         if (!string.IsNullOrEmpty(chunkStr)) {
-                            using (var font = new Font(defFont.FamilyName, chunk.Size, (EDFontStyle)chunk.Style)) {
-                                SizeF strSize = font.MeasureString(chunkStr);
 
-                                if (fWordWrap && xPos + strSize.Width > maxWidth) {
-                                    int lastPos = 0, prevPos = 0;
-                                    string tempStr, prevStr = string.Empty;
-                                    int sliceType = -1;
-                                    while (true) {
-                                        tempStr = GetSlice(chunkStr, ref lastPos, ref sliceType);
-                                        strSize = font.MeasureString(tempStr);
-                                        if (xPos + strSize.Width <= maxWidth) {
-                                            prevStr = tempStr;
-                                            prevPos = lastPos;
-                                        } else {
-                                            if (sliceType == 0) {
-                                                // first word
-                                                if (xPos == 0) {
-                                                    string tail = chunkStr.Substring(lastPos);
-                                                    SplitChunk(chunk, k, tempStr, tail, ref chunksCount);
-                                                } else {
-                                                    ShiftChunks(k, chunksCount);
-                                                    recalcChunk = true;
-                                                }
-                                                break;
-                                            } else if (sliceType == 1 || sliceType == 2) {
-                                                // middle or tail word
-                                                string tail = chunkStr.Substring(prevPos);
-                                                SplitChunk(chunk, k, prevStr, tail, ref chunksCount);
-                                                break;
-                                            } else if (sliceType == 3) {
-                                                // one first and last word, nothing to do
-                                                break;
+                            var font = new Font(defFont.FamilyName, chunk.Size, GetFontStyle(chunk.Style), GetFontDecoration(chunk.Style));
+
+                            SizeF strSize = font.MeasureString(chunkStr);
+
+                            if (fWordWrap && xPos + strSize.Width > maxWidth) {
+                                int lastPos = 0, prevPos = 0;
+                                string tempStr, prevStr = string.Empty;
+                                int sliceType = -1;
+                                while (true) {
+                                    tempStr = GetSlice(chunkStr, ref lastPos, ref sliceType);
+                                    strSize = font.MeasureString(tempStr);
+                                    if (xPos + strSize.Width <= maxWidth) {
+                                        prevStr = tempStr;
+                                        prevPos = lastPos;
+                                    } else {
+                                        if (sliceType == 0) {
+                                            // first word
+                                            if (xPos == 0) {
+                                                string tail = chunkStr.Substring(lastPos);
+                                                SplitChunk(chunk, k, tempStr, tail, ref chunksCount);
+                                            } else {
+                                                ShiftChunks(k, chunksCount);
+                                                recalcChunk = true;
                                             }
+
+                                            break;
+                                        } else if (sliceType == 1 || sliceType == 2) {
+                                            // middle or tail word
+                                            string tail = chunkStr.Substring(prevPos);
+                                            SplitChunk(chunk, k, prevStr, tail, ref chunksCount);
+                                            break;
+                                        } else if (sliceType == 3) {
+                                            // one first and last word, nothing to do
+                                            break;
                                         }
                                     }
                                 }
-
-                                strSize = font.MeasureString(chunk.Text);
-                                chunk.Width = (int)strSize.Width;
-
-                                xPos += chunk.Width;
-                                if (xMax < xPos) xMax = xPos;
-
-                                int h = (int)strSize.Height;
-                                if (lineHeight < h) lineHeight = h;
                             }
+
+                            strSize = font.MeasureString(chunk.Text);
+                            chunk.Width = (int)strSize.Width;
+
+                            xPos += chunk.Width;
+                            if (xMax < xPos) xMax = xPos;
+
+                            int h = (int)strSize.Height;
+                            if (lineHeight < h) lineHeight = h;
 
                             if (!string.IsNullOrEmpty(chunk.URL)) {
                                 chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xPos - prevX, lineHeight);
@@ -230,11 +236,11 @@ namespace GKUI.Components
                     }
 
                     fTextSize = new ExtSize(xMax + 2 * fBorderWidth, yPos + 2 * fBorderWidth);
-                } finally {
-                    fAcceptFontChange = true;
                     SetImageSize(fTextSize);
-
+                } finally {
                     ResumeLayout();
+
+                    fAcceptFontChange = true;
                 }
             } catch (Exception ex) {
                 Logger.WriteError("HyperView.ArrangeText()", ex);
@@ -320,7 +326,7 @@ namespace GKUI.Components
                             Color chunkColor = (chunk.Color == null) ? TextColor : ((ColorHandler)chunk.Color).Handle;
                             if (brush != null) brush.Dispose();
                             brush = new SolidBrush(chunkColor);
-                            font = ProcessFont(font, chunk.Size, (EDFontStyle)chunk.Style);
+                            font = ProcessFont(font, chunk.Size, GetFontStyle(chunk.Style), GetFontDecoration(chunk.Style));
                             gfx.DrawText(font, brush, xOffset, yOffset, ct);
 
                             xOffset += chunk.Width;
@@ -329,33 +335,58 @@ namespace GKUI.Components
                 } finally {
                     fAcceptFontChange = true;
                     if (brush != null) brush.Dispose();
-                    if (font != null) font.Dispose();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("HyperView.DoPaint()", ex);
             }
         }
 
-        private Font ProcessFont(Font prevFont, float emSize, FontStyle style)
+        private Font ProcessFont(Font prevFont, float emSize, FontStyle style, FontDecoration decoration)
         {
             Font result;
             if (prevFont == null) {
                 var defFont = this.Font;
-                result = new Font(defFont.FamilyName, emSize, style);
+                result = new Font(defFont.FamilyName, emSize, style, decoration);
             } else {
-                if (prevFont.Size == emSize && prevFont.FontStyle == style) {
+                if (prevFont.Size == emSize && prevFont.FontStyle == style && prevFont.FontDecoration == decoration) {
                     result = prevFont;
                 } else {
-                    result = new Font(prevFont.FamilyName, emSize, style);
-                    prevFont.Dispose();
+                    result = new Font(prevFont.FamilyName, emSize, style, decoration);
                 }
             }
+
             return result;
+        }
+
+        private static FontDecoration GetFontDecoration(BSDTypes.FontStyle style)
+        {
+            if ((style & BSDTypes.FontStyle.Underline) == BSDTypes.FontStyle.Underline) {
+                return FontDecoration.Underline;
+            }
+
+            if ((style & BSDTypes.FontStyle.Strikeout) == BSDTypes.FontStyle.Strikeout) {
+                return FontDecoration.Strikethrough;
+            }
+
+            return FontDecoration.None;
+        }
+
+        private static FontStyle GetFontStyle(BSDTypes.FontStyle style)
+        {
+            if ((style & BSDTypes.FontStyle.Bold) == BSDTypes.FontStyle.Bold) {
+                return FontStyle.Bold;
+            }
+
+            if ((style & BSDTypes.FontStyle.Italic) == BSDTypes.FontStyle.Italic) {
+                return FontStyle.Italic;
+            }
+
+            return FontStyle.None;
         }
 
         private void DoLink(string linkName)
         {
-            LinkEventHandler eventHandler = (LinkEventHandler)OnLink;
+            var eventHandler = OnLink;
             if (eventHandler != null) eventHandler(this, linkName);
         }
 
@@ -372,7 +403,9 @@ namespace GKUI.Components
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            ArrangeText();
+            if (fAcceptFontChange) {
+                ArrangeText();
+            }
 
             base.OnSizeChanged(e);
         }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,7 +31,6 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
-
 using GKUI.Platform;
 using BSDColors = BSLib.Design.BSDConsts.Colors;
 
@@ -62,45 +61,20 @@ namespace GKUI.Components
         private bool fTraceKinships;
         private bool fTraceSelected;
 
-        private static readonly object EventPersonModify;
-        private static readonly object EventRootChanged;
-        private static readonly object EventPersonProperties;
-        private static readonly object EventZoomChanged;
-        private static readonly object EventInfoRequest;
-
         #endregion
 
         #region Public properties
 
-        public event PersonModifyEventHandler PersonModify
-        {
-            add { Events.AddHandler(EventPersonModify, value); }
-            remove { Events.RemoveHandler(EventPersonModify, value); }
-        }
+        public event PersonModifyEventHandler PersonModify;
 
-        public event RootChangedEventHandler RootChanged
-        {
-            add { Events.AddHandler(EventRootChanged, value); }
-            remove { Events.RemoveHandler(EventRootChanged, value); }
-        }
+        public event RootChangedEventHandler RootChanged;
 
-        public event MouseEventHandler PersonProperties
-        {
-            add { Events.AddHandler(EventPersonProperties, value); }
-            remove { Events.RemoveHandler(EventPersonProperties, value); }
-        }
+        public event MouseEventHandler PersonProperties;
 
-        public event EventHandler ZoomChanged
-        {
-            add { Events.AddHandler(EventZoomChanged, value); }
-            remove { Events.RemoveHandler(EventZoomChanged, value); }
-        }
+        public event EventHandler ZoomChanged;
 
-        public event InfoRequestEventHandler InfoRequest
-        {
-            add { Events.AddHandler(EventInfoRequest, value); }
-            remove { Events.RemoveHandler(EventInfoRequest, value); }
-        }
+        public event InfoRequestEventHandler InfoRequest;
+
 
         public IBaseWindow Base
         {
@@ -140,6 +114,12 @@ namespace GKUI.Components
         {
             get { return fModel.Kind; }
             set { fModel.Kind = value; }
+        }
+
+        public ITreeLayout Layout
+        {
+            get { return fModel.Layout; }
+            set { fModel.Layout = value; }
         }
 
         public TreeChartModel Model
@@ -185,15 +165,6 @@ namespace GKUI.Components
 
         #region Instance control
 
-        static TreeChartBox()
-        {
-            EventPersonModify = new object();
-            EventRootChanged = new object();
-            EventPersonProperties = new object();
-            EventZoomChanged = new object();
-            EventInfoRequest = new object();
-        }
-
         public TreeChartBox()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
@@ -217,6 +188,8 @@ namespace GKUI.Components
 
             InitTimer();
             fTween = new TweenLibrary();
+
+            SetLayout(new NativeTreeLayout());
         }
 
         public TreeChartBox(ChartRenderer renderer) : this()
@@ -234,6 +207,11 @@ namespace GKUI.Components
                 if (fComponents != null) fComponents.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void SetLayout(ITreeLayout layout)
+        {
+            fModel.Layout = layout;
         }
 
         public override void SetRenderer(ChartRenderer renderer)
@@ -356,23 +334,13 @@ namespace GKUI.Components
 
         private void DrawBackground(BackgroundMode background)
         {
-            if (background == BackgroundMode.bmNone) return;
-
-            bool bgImage = ((BackgroundImage != null) &&
-                            (background == BackgroundMode.bmAny ||
-                             background == BackgroundMode.bmImage));
-
-            if (bgImage) {
-                /*var imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
-
-                    using (Brush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile)) {
-                        gfx.FillRectangle(textureBrush, imgRect);
+            if (background == BackgroundMode.bmAny || background == BackgroundMode.bmImage) {
+                if (BackgroundImage != null) {
+                    /*using (Brush textureBrush = new TextureBrush(BackgroundImage)) {
+                        var rect = CanvasRectangle;
+                        fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, rect.Width, rect.Height);
                     }*/
-            } else {
-                bool bgFill = (background == BackgroundMode.bmAny ||
-                               background == BackgroundMode.bmImage);
-
-                if (bgFill) {
+                } else {
                     fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackColor), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
                 }
             }
@@ -433,10 +401,10 @@ namespace GKUI.Components
             }
 
             if (fOptions.BorderStyle != GfxBorderStyle.None) {
-                fRenderer.SetSmoothing(false);
+                //fRenderer.SetSmoothing(false);
                 var rt = ExtRect.CreateBounds(spx, spy, fModel.ImageWidth, fModel.ImageHeight);
                 BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
-                fRenderer.SetSmoothing(true);
+                //fRenderer.SetSmoothing(true);
             }
         }
 
@@ -489,8 +457,7 @@ namespace GKUI.Components
 
         public ExtRect GetClientRect()
         {
-            Rectangle rt = this.ClientRectangle;
-            return ExtRect.CreateBounds(rt.Left, rt.Top, rt.Width, rt.Height);
+            return UIHelper.Rt2Rt(this.ClientRectangle);
         }
 
         public void RecalcChart(bool noRedraw = false)
@@ -539,35 +506,35 @@ namespace GKUI.Components
 
         private void DoPersonModify(PersonModifyEventArgs eArgs)
         {
-            var eventHandler = (PersonModifyEventHandler)Events[EventPersonModify];
+            var eventHandler = PersonModify;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
 
         private void DoRootChanged(TreeChartPerson person)
         {
-            var eventHandler = (RootChangedEventHandler)Events[EventRootChanged];
+            var eventHandler = RootChanged;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
 
         private void DoInfoRequest(TreeChartPerson person)
         {
-            var eventHandler = (InfoRequestEventHandler)Events[EventInfoRequest];
+            var eventHandler = InfoRequest;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
 
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
-            var eventHandler = (MouseEventHandler)Events[EventPersonProperties];
+            var eventHandler = PersonProperties;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
 
         private void DoZoomChanged()
         {
-            var eventHandler = (EventHandler)Events[EventZoomChanged];
+            var eventHandler = ZoomChanged;
             if (eventHandler != null)
                 eventHandler(this, new EventArgs());
         }
@@ -700,9 +667,9 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            Point pt = e.Location;
-            fMouseX = pt.X;
-            fMouseY = pt.Y;
+            Point scrPt = e.Location;
+            fMouseX = scrPt.X;
+            fMouseY = scrPt.Y;
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -725,7 +692,7 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.ControlsVisible:
-                    fTreeControls.MouseDown(pt.X, pt.Y);
+                    fTreeControls.MouseDown(scrPt.X, scrPt.Y);
                     break;
             }
 
@@ -734,6 +701,8 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            Point scrPt = e.Location;
+
             switch (fMode) {
                 case ChartControlMode.Default:
                     TreeChartPerson mPers;
@@ -744,13 +713,13 @@ namespace GKUI.Components
                     } else {
                         SetHighlight(null);
 
-                        ITreeControl ctl = fTreeControls.Contains(e.X, e.Y);
+                        ITreeControl ctl = fTreeControls.Contains(scrPt.X, scrPt.Y);
 
                         if (ctl != null) {
                             fMode = ChartControlMode.ControlsVisible;
                             ctl.UpdateState();
                             ctl.Visible = true;
-                            ctl.MouseMove(e.X, e.Y);
+                            ctl.MouseMove(scrPt.X, scrPt.Y);
                             fActiveControl = ctl;
 
                             fToolTip.Show(ctl.Tip, this, e.X + Left, e.Y + Top, 1500);
@@ -767,13 +736,13 @@ namespace GKUI.Components
 
                 case ChartControlMode.ControlsVisible:
                     if (fActiveControl != null) {
-                        if (!(fActiveControl.Contains(e.X, e.Y) || fActiveControl.MouseCaptured)) {
+                        if (!(fActiveControl.Contains(scrPt.X, scrPt.Y) || fActiveControl.MouseCaptured)) {
                             fMode = ChartControlMode.Default;
                             fActiveControl.Visible = false;
                             fToolTip.Hide(this);
                             fActiveControl = null;
                         } else {
-                            fActiveControl.MouseMove(e.X, e.Y);
+                            fActiveControl.MouseMove(scrPt.X, scrPt.Y);
                         }
                     }
                     break;
@@ -863,7 +832,7 @@ namespace GKUI.Components
             Invalidate();
         }
 
-        private void SelectBy(TreeChartPerson person, bool needCenter)
+        public void SelectBy(TreeChartPerson person, bool needCenter)
         {
             if (person == null) return;
 

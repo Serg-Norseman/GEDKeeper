@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System.Collections.Generic;
-using BSLib;
 using GKCore.Interfaces;
 
 namespace GKCore.Operations
@@ -34,26 +33,15 @@ namespace GKCore.Operations
 
     public delegate void TransactionEventHandler(object sender, TransactionType type);
 
-    public class UndoManager : BaseObject, IUndoManager
+    public class UndoManager : IUndoManager
     {
         private const CustomOperation TRANS_DELIMITER = null;
 
-        private TransactionEventHandler fOnTransaction;
         private readonly List<IOperation> fList;
         private int fCurrentIndex;
 
 
-        public event TransactionEventHandler OnTransaction
-        {
-            add {
-                fOnTransaction = value;
-            }
-            remove {
-                if (fOnTransaction == value) {
-                    fOnTransaction = null;
-                }
-            }
-        }
+        public event TransactionEventHandler OnTransaction;
 
 
         public UndoManager()
@@ -64,21 +52,13 @@ namespace GKCore.Operations
             PushInternal(TRANS_DELIMITER);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // dummy
-            }
-            base.Dispose(disposing);
-        }
-
         #region Private methods
 
         private void Transaction(TransactionType type)
         {
-            if (fOnTransaction != null) {
-                fOnTransaction(this, type);
-            }
+            var eventHandler = OnTransaction;
+            if (eventHandler != null)
+                eventHandler(this, type);
         }
 
         private IOperation PeekInternal()

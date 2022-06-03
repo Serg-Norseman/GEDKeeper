@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,17 +22,32 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
-using GKCore;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
 using GKCore.Names;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class NameEditDlg : CommonDialog, INameEditDlg
+    public sealed partial class NameEditDlg : CommonDialog<INameEditDlg, NameEditDlgController>, INameEditDlg
     {
-        private readonly NameEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private Label lblName;
+        private TextBox txtName;
+        private Label lblSex;
+        private ComboBox cmbSex;
+        private Button btnAccept;
+        private Button btnCancel;
+        private GroupBox grpPatronymics;
+        private Label lblFemale;
+        private TextBox txtFPatr;
+        private Label lblMale;
+        private TextBox txtMPatr;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         public NameEntry IName
         {
@@ -66,38 +81,9 @@ namespace GKUI.Forms
 
         public NameEditDlg()
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Name);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblSex.Text = LangMan.LS(LSID.LSID_Sex);
-            grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
-            lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
-            lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
+            XamlReader.Load(this);
 
             fController = new NameEditDlgController(this);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void edName_KeyDown(object sender, KeyEventArgs e)

@@ -66,8 +66,7 @@ namespace GKCore.Maps
 
         public IList<GeoPoint> Geocode(string location, short results)
         {
-            //ServicePointManager.SecurityProtocol = (SecurityProtocolType)(SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls);
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)((ushort)3072 | (ushort)768 | (ushort)SecurityProtocolType.Tls);
+            GKUtils.InitSecurityProtocol();
 
             return Geocode(location, results, fLang, fRegion);
         }

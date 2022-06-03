@@ -18,12 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -41,11 +42,14 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
             fResearchRecord = new GDMResearchRecord(fBase.Context.Tree);
 
             fDialog = new ResearchEditDlg(fBase);
-            fDialog.Research = fResearchRecord;
+            fDialog.ResearchRecord = fResearchRecord;
             fDialog.Show();
         }
 
@@ -65,7 +69,7 @@ namespace GKUI.Forms
         public void Test_EnterDataAndApply()
         {
             // Empty dates
-            Assert.AreEqual(fResearchRecord, fDialog.Research);
+            Assert.AreEqual(fResearchRecord, fDialog.ResearchRecord);
 
             EnterText("txtName", fDialog, "sample text");
             SelectCombo("cmbPriority", fDialog, 1);
@@ -89,7 +93,7 @@ namespace GKUI.Forms
         public void Test_EnterDataDatesAndApply()
         {
             // Dates isn't empty
-            Assert.AreEqual(fResearchRecord, fDialog.Research);
+            Assert.AreEqual(fResearchRecord, fDialog.ResearchRecord);
 
             EnterText("txtName", fDialog, "sample text");
             EnterMaskedText("txtStartDate", fDialog, "01.01.2000");

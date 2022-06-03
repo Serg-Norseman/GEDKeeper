@@ -24,8 +24,6 @@
         private System.Windows.Forms.ToolStripButton tbPrev;
         private System.Windows.Forms.ToolStripButton tbNext;
         private System.Windows.Forms.ToolStripSeparator TBS8;
-        private System.Windows.Forms.ToolStripButton tbDocPrint;
-        private System.Windows.Forms.ToolStripButton tbDocPreview;
         private System.Windows.Forms.ToolStripButton tbSendMail;
         private System.Windows.Forms.MenuStrip MainMenu1;
         private System.Windows.Forms.ToolStripMenuItem miFile;
@@ -85,7 +83,6 @@
         private System.Windows.Forms.ToolStripButton tbTreeBoth;
         private System.Windows.Forms.StatusBarPanel StatusBarPanel1;
         private System.Windows.Forms.StatusBarPanel StatusBarPanel2;
-        private System.Windows.Forms.ToolTip ToolTip1;
         private System.Windows.Forms.ToolStripMenuItem miReports;
         private System.Windows.Forms.ToolStripMenuItem miPlugins;
         private System.Windows.Forms.ToolStripMenuItem miSlideshow;
@@ -143,8 +140,6 @@
             this.tbPrev = new System.Windows.Forms.ToolStripButton();
             this.tbNext = new System.Windows.Forms.ToolStripButton();
             this.TBS8 = new System.Windows.Forms.ToolStripSeparator();
-            this.tbDocPreview = new System.Windows.Forms.ToolStripButton();
-            this.tbDocPrint = new System.Windows.Forms.ToolStripButton();
             this.tbSendMail = new System.Windows.Forms.ToolStripButton();
             this.MainMenu1 = new System.Windows.Forms.MenuStrip();
             this.miFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -203,7 +198,6 @@
             this.miLogView = new System.Windows.Forms.ToolStripMenuItem();
             this.N13 = new System.Windows.Forms.ToolStripSeparator();
             this.miAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miContRecordAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.miContRecordEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -281,8 +275,6 @@
                                     this.tbPrev,
                                     this.tbNext,
                                     this.TBS8,
-                                    this.tbDocPreview,
-                                    this.tbDocPrint,
                                     this.tbSendMail});
             this.ToolBar1.Location = new System.Drawing.Point(0, 28);
             this.ToolBar1.Name = "ToolBar1";
@@ -447,18 +439,6 @@
             // 
             this.TBS8.Name = "TBS8";
             this.TBS8.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tbDocPreview
-            // 
-            this.tbDocPreview.Name = "tbDocPreview";
-            this.tbDocPreview.Size = new System.Drawing.Size(23, 22);
-            this.tbDocPreview.Click += new System.EventHandler(this.tbDocPreview_Click);
-            // 
-            // tbDocPrint
-            // 
-            this.tbDocPrint.Name = "tbDocPrint";
-            this.tbDocPrint.Size = new System.Drawing.Size(23, 22);
-            this.tbDocPrint.Click += new System.EventHandler(this.tbDocPrint_Click);
             // 
             // tbSendMail
             // 

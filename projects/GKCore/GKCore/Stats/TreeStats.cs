@@ -161,7 +161,9 @@ namespace GKCore.Stats
 
                 case StatsMode.smBirthPlaces:
                 case StatsMode.smDeathPlaces:
-                    v = evt.Place.StringValue;
+                    if (evt.HasPlace) {
+                        v = evt.Place.StringValue;
+                    }
                     break;
             }
 

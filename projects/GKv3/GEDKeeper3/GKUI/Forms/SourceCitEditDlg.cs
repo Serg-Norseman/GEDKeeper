@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,21 +19,39 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class SourceCitEditDlg : EditorDialog, ISourceCitEditDlg
+    public sealed partial class SourceCitEditDlg : CommonDialog<ISourceCitEditDlg, SourceCitEditDlgController>, ISourceCitEditDlg
     {
-        private readonly SourceCitEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblPage;
+        private TextBox txtPage;
+        private Label lblSource;
+        private Button btnSourceAdd;
+        private Label lblCertainty;
+        private ComboBox txtCertainty;
+        private ComboBox cmbSource;
+        private TabPage pageCommon;
+        private TabPage pageOther;
+        private TextBox txtText;
+        private GKDateControl dateCtl;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         public GDMSourceCitation SourceCitation
         {
@@ -58,44 +76,24 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
+        IDateControl ISourceCitEditDlg.DataDate
+        {
+            get { return GetControlHandler<IDateControl>(dateCtl); }
+        }
+
+        ITextBox ISourceCitEditDlg.DataText
+        {
+            get { return GetControlHandler<ITextBox>(txtText); }
+        }
+
         #endregion
 
         public SourceCitEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnSourceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinSourceCitEdit);
-            lblSource.Text = LangMan.LS(LSID.LSID_Source);
-            lblPage.Text = LangMan.LS(LSID.LSID_Page);
-            lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);
-
-            SetToolTip(btnSourceAdd, LangMan.LS(LSID.LSID_SourceAddTip));
+            XamlReader.Load(this);
 
             fController = new SourceCitEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnSourceAdd_Click(object sender, EventArgs e)

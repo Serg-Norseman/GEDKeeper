@@ -1,4 +1,78 @@
 
+## 14.04.2022 [v2.20.1]
+- Fixed support for negative coordinates in FTB files.
+- Added option to display surnames in capital letters.
+- Fixed error resetting name in person edit dialog when adding father/mother.
+- Fixed double display of the surname in the person page in the generated site.
+- Fixed an error in determining the kinship of cousins.
+- Added the feature to display age in a person's card in the tree.
+- Fixed a bug with displaying dialogs relative to the main window.
+- Fixed issue with typing Return in note editor.
+
+## 28.03.2022 [v2.20.0]
+- Fixed declension of partial names in birthday message.
+- Fixed a bug with calling the log and help in Linux.
+- Fixed display of parents' names in person and family dialogs.
+- Improved safely remove or fix media records with missing files.
+- Fixed maximum text length limit in note editor.
+- Fixed display of custom names of generalized events and facts.
+- Added a tab and an editable list of children directly in the person's dialog.
+- Added website generator plugin (GEDmill).
+- Added an option to turn off minimizing the width of tree diagrams.
+- Added the function to jump to the primary branch from the duplicate one in tree diagrams.
+- Fixed display of divorce color in descendant trees.
+- Fixed the work of the tool for splitting databases.
+- Added option to display only localities when displaying places in tree diagrams.
+- Removed locking the display of places with the "Years only" option in tree diagrams.
+- Fixed a fail in the initialization of the regional culture object, the settings did not open.
+- Added partial Kazakh localization [Erik].
+- Polish localization proofreading [Waldemar Stoczkowski].
+- Improved support for Linux Fedora packages.
+- Added initial support for Linux Manjaro packages.
+- Introduced the display of the borders of the tree diagram.
+
+## 28.09.2021 [v2.19.0]
+- Fixed a bug with filtering by locations, groups and sources.
+- Added option to display names in reverse order - first name at the beginning, surname at the end.
+- Fixed a bug in the work of events when creating an empty file, before loading any GEDCOM files.
+- Added an option for short form of kinship in the relationship calculator and tree diagrams.
+- Fixed full activation and data filling when calling plugins.
+- Fixed getter and setter of items in comboboxes of calendars and interface language.
+- Proofreading of Ukrainian localization [Oleksiy Diedush].
+- Added a sample of Taras Shevchenko's genealogy [Oleksiy Diedush].
+- Fixed focus issue in lists.
+- Fixed extracting patronymic from complex name [Alex Zaytsev].
+- Added ability to assign multiple places at once in the places manager [Alex Zaytsev].
+
+## 28.07.2021 [v2.18.0]
+- Optimized data model to save memory [Alex Zaytsev]
+  (new achievement: 635 mb file (2.674.481 records) loaded in 3:46 minutes).
+- Added option for separate depth of ancestors and descendants in tree diagrams [Milan Kosina].
+- Added option to restrict geo-search by country.
+- Added option to bold names in tree diagrams.
+- To the record list added a context menu to merge selected items.
+- In the tool for verification of database added: dialog of details, quick transition to a record
+  and copying XRef to clipboard.
+- In the tool for analyzing connectivity/fragmentation of data, added: display of an identifier,
+  a dialog of details and a quick transition to a person record.
+- Implemented support for years between 32 BC and 32 AD [Alex Zaytsev].
+- Fixed slow display of large notes with html markup inside.
+- Added some links to open data [Alex Zaytsev].
+- Fixed a bug in the language editing dialog [Alex Zaytsev].
+- Fixed drawing horizontal lines to adopted child in descendants diagram [Alex Zaytsev].
+- Fixed bug with Hungarian date format for event editing dialog.
+- Fixed pre-populating names for new records [Alex Zaytsev].
+- Fixed patronymic editing according to the language of the name [Alex Zaytsev].
+- Improved import of GEDCOM format from Ages files in terms of determining adopted children.
+- Added optional feature to display dates and places in separate lines in tree diagrams.
+- Fixed line break error in the information panel.
+- Added feature of downloading and viewing multimedia via http links.
+- Added transition to record of selected person from tree diagram.
+- Added display of scale in the status bar of tree diagrams.
+- Added three new reports: places, sources and repositories.
+- Added experimental support for the Family.Show file format.
+- Improved support of Geni file loading.
+
 ## 14.03.2021 [v2.17.0]
 - Fixed a logical error in the default records filtering method.
 - Optimized data model to save memory when loading large files (over 100 MB).

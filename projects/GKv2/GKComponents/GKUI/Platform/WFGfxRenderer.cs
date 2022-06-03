@@ -80,7 +80,6 @@ namespace GKUI.Platform
                                        float width, float height)
         {
             var sdImage = ((ImageHandler)image).Handle;
-            //fCanvas.DrawImage(sdImage, x, y, width, height);
 
             using (var attributes = new ImageAttributes()) {
                 ColorMatrix matrix = new ColorMatrix();
@@ -156,6 +155,15 @@ namespace GKUI.Platform
                     Pen sdPen = ((PenHandler)pen).Handle;
                     fCanvas.DrawPath(sdPen, path);
                 }
+            }
+        }
+
+        public override void FillRectangle(IBrush brush,
+                                           float x, float y, float width, float height)
+        {
+            if (brush != null) {
+                Brush sdBrush = ((BrushHandler)brush).Handle;
+                fCanvas.FillRectangle(sdBrush, x, y, width, height);
             }
         }
 

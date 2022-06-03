@@ -146,6 +146,37 @@ namespace GKCore
         }
 
         [Test]
+        public void Test_GetPlaceStr()
+        {
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+
+            GDMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.BIRT);
+            Assert.IsNotNull(evt);
+
+            //evt.Place.StringValue = "Ivanovo";
+            Assert.AreEqual("Ivanovo", GKUtils.GetPlaceStr(evt, false, false));
+            Assert.AreEqual("Ivanovo", GKUtils.GetPlaceStr(evt, false, true));
+
+            evt.Place.StringValue = "Ivanovo, Ivanovo obl., Russia";
+            Assert.AreEqual("Ivanovo, Ivanovo obl., Russia", GKUtils.GetPlaceStr(evt, false, false));
+            Assert.AreEqual("Ivanovo", GKUtils.GetPlaceStr(evt, false, true));
+
+            evt.Place.StringValue = "";
+            Assert.AreEqual("", GKUtils.GetPlaceStr(evt, false, false));
+            Assert.AreEqual("", GKUtils.GetPlaceStr(evt, false, true));
+
+            evt.Place.StringValue = ", Ivanovo obl., Russia";
+            Assert.AreEqual(", Ivanovo obl., Russia", GKUtils.GetPlaceStr(evt, false, false));
+            Assert.AreEqual("", GKUtils.GetPlaceStr(evt, false, true));
+
+            GlobalOptions.Instance.ReversePlaceEntitiesOrder = true;
+
+            evt.Place.StringValue = "Russia, Ivanovo obl., Ivanovo";
+            Assert.AreEqual("Russia, Ivanovo obl., Ivanovo", GKUtils.GetPlaceStr(evt, false, false));
+            Assert.AreEqual("Ivanovo", GKUtils.GetPlaceStr(evt, false, true));
+        }
+
+        [Test]
         public void Test_GetNameParts()
         {
             string surname = "", name = "", patronymic = "";
@@ -483,7 +514,7 @@ namespace GKCore
         [Test]
         public void Test_GetContainerName()
         {
-            #if !__MonoCS__
+            #if !MONO
             Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true)); // archive
             Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false)); // storage
             #endif

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,10 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Forms;
 using BSLib.Design.MVP;
+using GKCore;
 using GKCore.Interfaces;
+using GKCore.MVP;
 
 namespace GKUI.Forms
 {
@@ -50,7 +54,7 @@ namespace GKUI.Forms
             fComponents = new Container();
             fToolTip = new ToolTip(this.fComponents);
 
-            fControlsManager = new ControlsManager();
+            fControlsManager = new ControlsManager(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -61,7 +65,7 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        public void SetToolTip(Component component, string toolTip)
+        public void SetToolTip(object component, string toolTip)
         {
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
                 if (component is Control) {
@@ -74,7 +78,17 @@ namespace GKUI.Forms
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControlHandler<T>(control);
+            return fControlsManager.GetControl<T>(control);
+        }
+
+        public object GetControl(string controlName)
+        {
+            var field = this.GetType().GetField(controlName, BindingFlags.NonPublic | BindingFlags.Instance);
+            object result = field.GetValue(this);
+            if (result == null) {
+                result = this.Controls.Find(controlName, true);
+            }
+            return result;
         }
     }
 
@@ -90,9 +104,20 @@ namespace GKUI.Forms
             Show();
         }
 
-        public virtual void SetLang()
+        public virtual void SetLocale()
         {
         }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CommonWindow<TView, TController> : CommonWindow
+        where TView : IView
+        where TController : FormController<TView>
+    {
+        protected TController fController;
     }
 
 
@@ -104,6 +129,46 @@ namespace GKUI.Forms
         public virtual bool ShowModalX(object owner)
         {
             return (ShowDialog() == DialogResult.OK);
+        }
+
+        protected virtual void CancelClickHandler(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CommonDialog<TView, TController> : CommonDialog
+        where TView : IView
+        where TController : DialogController<TView>
+    {
+        protected TController fController;
+
+        protected virtual void AcceptClickHandler(object sender, EventArgs e)
+        {
+            try {
+                DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+            } catch (Exception ex) {
+                Logger.WriteError("CommonDialog<>.AcceptClickHandler()", ex);
+            }
+        }
+
+        protected override void CancelClickHandler(object sender, EventArgs e)
+        {
+            try {
+                DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+            } catch (Exception ex) {
+                Logger.WriteError("CommonDialog<>.CancelClickHandler()", ex);
+            }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

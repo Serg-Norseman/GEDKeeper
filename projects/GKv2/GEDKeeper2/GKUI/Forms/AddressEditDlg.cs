@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,11 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -32,10 +29,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
+    public sealed partial class AddressEditDlg : CommonDialog<IAddressEditDlg, AddressEditDlgController>, IAddressEditDlg
     {
-        private readonly AddressEditDlgController fController;
-
         private readonly GKSheetList fPhonesList;
         private readonly GKSheetList fMailsList;
         private readonly GKSheetList fWebsList;
@@ -101,31 +96,14 @@ namespace GKUI.Forms
             fPhonesList = new GKSheetList(pagePhones);
             fPhonesList.SetControlName("fPhonesList"); // for purpose of tests
             fPhonesList.OnModify += ListModify;
-            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
 
             fMailsList = new GKSheetList(pageEmails);
             fMailsList.SetControlName("fMailsList"); // for purpose of tests
             fMailsList.OnModify += ListModify;
-            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
 
             fWebsList = new GKSheetList(pageWebPages);
             fWebsList.SetControlName("fWebsList"); // for purpose of tests
             fWebsList.OnModify += ListModify;
-            fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Address);
-            pageCommon.Text = LangMan.LS(LSID.LSID_Address);
-            lblCountry.Text = LangMan.LS(LSID.LSID_AdCountry);
-            lblState.Text = LangMan.LS(LSID.LSID_AdState);
-            lblCity.Text = LangMan.LS(LSID.LSID_AdCity);
-            lblPostalCode.Text = LangMan.LS(LSID.LSID_AdPostalCode);
-            lblAddress.Text = LangMan.LS(LSID.LSID_Address);
-            pagePhones.Text = LangMan.LS(LSID.LSID_Telephones);
-            pageEmails.Text = LangMan.LS(LSID.LSID_EMails);
-            pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);
@@ -143,22 +121,6 @@ namespace GKUI.Forms
             } else if (sender == fWebsList) {
                 fController.DoWebsAction(eArgs.Action, itemTag);
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

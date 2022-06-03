@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
@@ -27,6 +27,7 @@ using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -43,11 +44,14 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
             fGroupRecord = new GDMGroupRecord(fBase.Context.Tree);
 
             fDialog = new GroupEditDlg(fBase);
-            fDialog.Group = fGroupRecord;
+            fDialog.GroupRecord = fGroupRecord;
             fDialog.Show();
         }
 
@@ -66,7 +70,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fGroupRecord, fDialog.Group);
+            Assert.AreEqual(fGroupRecord, fDialog.GroupRecord);
 
             var sheetTester = new GKSheetListTester("fMembersList", fDialog);
             //EnumSet<SheetButton> buttons = sheetTester.Properties.Buttons;
@@ -91,7 +95,7 @@ namespace GKUI.Forms
 
         public static void GroupEditDlg_Handler(GroupEditDlg dlg)
         {
-            GDMGroupRecord groupRecord = dlg.Group;
+            GDMGroupRecord groupRecord = dlg.GroupRecord;
 
             // members
             Assert.AreEqual(0, groupRecord.Members.Count);

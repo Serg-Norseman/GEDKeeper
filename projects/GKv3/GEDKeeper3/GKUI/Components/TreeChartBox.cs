@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -114,6 +114,12 @@ namespace GKUI.Components
             set { fModel.Kind = value; }
         }
 
+        public ITreeLayout Layout
+        {
+            get { return fModel.Layout; }
+            set { fModel.Layout = value; }
+        }
+
         public TreeChartModel Model
         {
             get { return fModel; }
@@ -173,6 +179,8 @@ namespace GKUI.Components
 
             InitTimer();
             fTween = new TweenLibrary();
+
+            SetLayout(new NativeTreeLayout());
         }
 
         public TreeChartBox(ChartRenderer renderer) : this()
@@ -190,6 +198,11 @@ namespace GKUI.Components
                 if (fTreeControls != null) fTreeControls.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void SetLayout(ITreeLayout layout)
+        {
+            fModel.Layout = layout;
         }
 
         public override void SetRenderer(ChartRenderer renderer)
@@ -307,23 +320,13 @@ namespace GKUI.Components
 
         private void DrawBackground(BackgroundMode background)
         {
-            if (background == BackgroundMode.bmNone) return;
-
-            bool bgImage = false; /*((BackgroundImage != null) &&
-                            (background == BackgroundMode.bmAny ||
-                             background == BackgroundMode.bmImage));*/
-
-            if (bgImage) {
-                /*var imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
-
-                    using (Brush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile)) {
-                        gfx.FillRectangle(textureBrush, imgRect);
-                    }*/
-            } else {
-                bool bgFill = (background == BackgroundMode.bmAny ||
-                               background == BackgroundMode.bmImage);
-
-                if (bgFill) {
+            if (background == BackgroundMode.bmAny || background == BackgroundMode.bmImage) {
+                if (BackgroundImage != null) {
+                    using (Brush textureBrush = new TextureBrush(BackgroundImage)) {
+                        var rect = CanvasRectangle;
+                        fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, rect.Width, rect.Height);
+                    }
+                } else {
                     fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackgroundColor), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
                 }
             }
@@ -382,10 +385,10 @@ namespace GKUI.Components
             }
 
             if (fOptions.BorderStyle != GfxBorderStyle.None) {
-                fRenderer.SetSmoothing(false);
+                //fRenderer.SetSmoothing(false);
                 var rt = ExtRect.CreateBounds(spx, spy, fModel.ImageWidth, fModel.ImageHeight);
                 BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
-                fRenderer.SetSmoothing(true);
+                //fRenderer.SetSmoothing(true);
             }
         }
 
@@ -504,35 +507,35 @@ namespace GKUI.Components
 
         private void DoPersonModify(PersonModifyEventArgs eArgs)
         {
-            var eventHandler = (PersonModifyEventHandler)PersonModify;
+            var eventHandler = PersonModify;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
 
         private void DoRootChanged(TreeChartPerson person)
         {
-            var eventHandler = (RootChangedEventHandler)RootChanged;
+            var eventHandler = RootChanged;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
 
         private void DoInfoRequest(TreeChartPerson person)
         {
-            var eventHandler = (InfoRequestEventHandler)InfoRequest;
+            var eventHandler = InfoRequest;
             if (eventHandler != null)
                 eventHandler(this, person);
         }
 
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
-            var eventHandler = (/*Mouse*/ EventHandler)PersonProperties;
+            var eventHandler = PersonProperties;
             if (eventHandler != null)
                 eventHandler(this, eArgs);
         }
 
         private void DoZoomChanged()
         {
-            var eventHandler = (EventHandler)ZoomChanged;
+            var eventHandler = ZoomChanged;
             if (eventHandler != null)
                 eventHandler(this, new EventArgs());
         }
@@ -542,20 +545,23 @@ namespace GKUI.Components
             switch (e.Key) {
                 case Keys.F4:
                     ToggleCollapse();
+                    e.Handled = true;
                     break;
 
-                case Keys.Plus:
+                case Keys.Add:
                     SetScale(fModel.Scale + 0.05f);
                     e.Handled = true;
                     break;
 
-                case Keys.Minus:
+                case Keys.Subtract:
                     SetScale(fModel.Scale - 0.05f);
                     e.Handled = true;
                     break;
-            }
 
-            base.OnKeyDown(e);
+                default:
+                    base.OnKeyDown(e);
+                    break;
+            }
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -730,6 +736,7 @@ namespace GKUI.Components
 
                         if (ctl != null) {
                             fMode = ChartControlMode.ControlsVisible;
+                            ctl.UpdateState();
                             ctl.Visible = true;
                             ctl.MouseMove(scrPt.X, scrPt.Y);
                             fActiveControl = ctl;
@@ -851,7 +858,7 @@ namespace GKUI.Components
             Invalidate();
         }
 
-        private void SelectBy(TreeChartPerson person, bool needCenter)
+        public void SelectBy(TreeChartPerson person, bool needCenter)
         {
             if (person == null) return;
 
@@ -899,11 +906,6 @@ namespace GKUI.Components
                 fTween.StartTween(UpdateScrollPosition, srcX, srcY, dstX, dstY, TweenAnimation.EaseInOutQuad, timeInterval);
             }
         }
-
-        /*private void SetScroll(int x, int y)
-        {
-            UpdateScrollPosition(x, y);
-        }*/
 
         #endregion
 

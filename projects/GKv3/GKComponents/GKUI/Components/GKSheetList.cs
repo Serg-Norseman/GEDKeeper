@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -92,44 +92,41 @@ namespace GKUI.Components
         }
 
 
-        public GKSheetList(Panel owner)
+        public GKSheetList()
         {
-            if (owner == null)
-                throw new ArgumentNullException("owner");
-
             fBtnMoveDown = new Button();
             fBtnMoveDown.Image = UIHelper.LoadResourceImage("Resources.btn_down.gif");
-            fBtnMoveDown.Size = UIHelper.ShortButtonSize;
+            fBtnMoveDown.Style = "iconBtn";
             fBtnMoveDown.ToolTip = LangMan.LS(LSID.LSID_RecordMoveDown);
             fBtnMoveDown.Click += ItemMoveDown;
 
             fBtnMoveUp = new Button();
             fBtnMoveUp.Image = UIHelper.LoadResourceImage("Resources.btn_up.gif");
-            fBtnMoveUp.Size = UIHelper.ShortButtonSize;
+            fBtnMoveUp.Style = "iconBtn";
             fBtnMoveUp.ToolTip = LangMan.LS(LSID.LSID_RecordMoveUp);
             fBtnMoveUp.Click += ItemMoveUp;
 
             fBtnLinkJump = new Button();
             fBtnLinkJump.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            fBtnLinkJump.Size = UIHelper.ShortButtonSize;
+            fBtnLinkJump.Style = "iconBtn";
             fBtnLinkJump.ToolTip = LangMan.LS(LSID.LSID_RecordGoto);
             fBtnLinkJump.Click += ItemJump;
 
             fBtnDelete = new Button();
             fBtnDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            fBtnDelete.Size = UIHelper.ShortButtonSize;
+            fBtnDelete.Style = "iconBtn";
             fBtnDelete.ToolTip = LangMan.LS(LSID.LSID_MIRecordDelete);
             fBtnDelete.Click += ItemDelete;
 
             fBtnEdit = new Button();
             fBtnEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            fBtnEdit.Size = UIHelper.ShortButtonSize;
+            fBtnEdit.Style = "iconBtn";
             fBtnEdit.ToolTip = LangMan.LS(LSID.LSID_MIRecordEdit);
             fBtnEdit.Click += ItemEdit;
 
             fBtnAdd = new Button();
             fBtnAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            fBtnAdd.Size = UIHelper.ShortButtonSize;
+            fBtnAdd.Style = "iconBtn";
             fBtnAdd.ToolTip = LangMan.LS(LSID.LSID_MIRecordAdd);
             fBtnAdd.Click += ItemAdd;
 
@@ -139,26 +136,38 @@ namespace GKUI.Components
 
             SuspendLayout();
 
-            var toolbar = new DefStackLayout(Orientation.Vertical, 4,
-                                             fBtnAdd, fBtnEdit, fBtnDelete,
-                                             fBtnLinkJump, fBtnMoveUp, fBtnMoveDown);
+            var toolbar = new StackLayout() {
+                Orientation = Orientation.Vertical,
+                Spacing = 4,
+                Items = { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown }
+            };
 
-            var tab = new TableLayout(2, 1);
-            tab.Spacing = new Size(4, 4);
-            tab.SetColumnScale(0, true);
-            tab.SetColumnScale(1, false);
-            tab.Add(fList, 0, 0);
-            tab.Add(toolbar, 1, 0);
+            Content = new TableLayout() {
+                Spacing = new Size(4, 4),
+                Rows = {
+                    new TableRow() {
+                        Cells = {
+                            new TableCell(fList, true),
+                            new TableCell(toolbar, false)
+                        }
+                    }
+                }
+            };
 
-            Content = tab;
             ResumeLayout();
+
+            fButtons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
+            fListModel = null;
+        }
+
+        public GKSheetList(Panel owner) : this()
+        {
+            if (owner == null)
+                throw new ArgumentNullException("owner");
 
             owner.SuspendLayout();
             owner.Content = this;
             owner.ResumeLayout();
-
-            fButtons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
-            fListModel = null;
         }
 
         protected override void Dispose(bool disposing)
@@ -242,12 +251,15 @@ namespace GKUI.Components
 
         private void RestoreSelected(object itemData)
         {
+            Activate();
+            fList.Activate();
+
             if (itemData != null) fList.SelectItem(itemData);
         }
 
         private void DoBeforeChange(ModifyEventArgs eArgs)
         {
-            var eventHandler = (ModifyEventHandler)OnBeforeChange;
+            var eventHandler = OnBeforeChange;
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
             }
@@ -265,7 +277,7 @@ namespace GKUI.Components
                 }
             }
 
-            var eventHandler = (ModifyEventHandler)OnModify;
+            var eventHandler = OnModify;
             if (eventHandler != null) {
                 eventHandler(this, eArgs);
             }
@@ -275,9 +287,8 @@ namespace GKUI.Components
         {
             var args = new ItemValidatingEventArgs(item);
 
-            var eventHandler = (ItemValidatingEventHandler)OnItemValidating;
-            if (eventHandler == null)
-            {
+            var eventHandler = OnItemValidating;
+            if (eventHandler == null) {
                 return true;
             }
 

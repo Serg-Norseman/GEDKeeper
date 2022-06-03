@@ -76,7 +76,7 @@ namespace GKNamesBookPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(NLS.LSID_MINamesBook);
 
-                if (fForm != null) fForm.SetLang();
+                if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKNamesBookPlugin.OnLanguageChange()", ex);
             }

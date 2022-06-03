@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,16 +23,31 @@ using System.ComponentModel;
 using System.IO;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class ScriptEditWin : CommonDialog, IScriptEditWin
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private ToolBar ToolBar1;
+        private ButtonToolItem tbLoadScript;
+        private ButtonToolItem tbRun;
+        private TextArea txtDebugOutput;
+        private TextArea txtScriptText;
+        private ButtonToolItem tbSaveScript;
+        private ButtonToolItem tbNewScript;
+        private Splitter splitContainer1;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
         private readonly ScriptEditWinController fController;
 
         private string fFileName;
@@ -136,12 +151,7 @@ namespace GKUI.Forms
 
         public ScriptEditWin(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            tbNewScript.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
-            tbLoadScript.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
-            tbSaveScript.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
-            tbRun.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
+            XamlReader.Load(this);
 
             fController = new ScriptEditWinController(this);
             fController.Init(baseWin);
@@ -149,16 +159,11 @@ namespace GKUI.Forms
             txtScriptText.TextChanged += mmScriptText_TextChanged;
 
             tbNewScript_Click(this, null);
-
-            SetLang();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
-            SetToolTip(tbNewScript, LangMan.LS(LSID.LSID_NewScriptTip));
-            SetToolTip(tbLoadScript, LangMan.LS(LSID.LSID_LoadScriptTip));
-            SetToolTip(tbSaveScript, LangMan.LS(LSID.LSID_SaveScriptTip));
-            SetToolTip(tbRun, LangMan.LS(LSID.LSID_RunScriptTip));
+            fController.SetLocale();
         }
 
         private void ScriptEditWin_KeyDown(object sender, KeyEventArgs e)

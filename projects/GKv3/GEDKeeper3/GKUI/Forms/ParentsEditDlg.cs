@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,32 +19,51 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class ParentsEditDlg : EditorDialog, IParentsEditDlg
+    public partial class ParentsEditDlg : CommonDialog<IParentsEditDlg, ParentsEditDlgController>, IParentsEditDlg
     {
-        private readonly ParentsEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        public GDMChildToFamilyLink Link
+        private Button btnAccept;
+        private Button btnCancel;
+        private GroupBox GroupBox1;
+        private Label lblChildName;
+        private TextBox txtChildName;
+        private Label lblLinkageType;
+        private ComboBox cmbLinkageType;
+        private Panel panCtlParents;
+        private Label lblParents;
+        private TextBox txtFather;
+        private TextBox txtMother;
+        private Button btnParentsEdit;
+        private Button btnFatherAdd;
+        private Button btnFatherDelete;
+        private Button btnMotherAdd;
+        private Button btnMotherDelete;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        public GDMChildToFamilyLink ChildLink
         {
-            get { return fController.Link; }
-            set { fController.Link = value; }
+            get { return fController.ChildLink; }
+            set { fController.ChildLink = value; }
         }
 
-        public GDMIndividualRecord Person
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fController.Person; }
-            set { fController.Person = value; }
+            get { return fController.IndividualRecord; }
+            set { fController.IndividualRecord = value; }
         }
 
         #region View Interface
@@ -73,69 +92,10 @@ namespace GKUI.Forms
 
         public ParentsEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-
-            SetLang();
+            XamlReader.Load(this);
 
             fController = new ParentsEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        public void SetLang()
-        {
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinPersonEdit);
-            lblChildName.Text = LangMan.LS(LSID.LSID_Name);
-            lblParents.Text = LangMan.LS(LSID.LSID_Parents);
-            lblLinkageType.Text = LangMan.LS(LSID.LSID_LinkageType);
-
-            SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
-            SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
-            SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
-            SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
-            SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
-        }
-
-        public void SetParentsAvl(bool avail)
-        {
-            btnParentsEdit.Enabled = avail;
-        }
-
-        public void SetFatherAvl(bool avail)
-        {
-            btnFatherAdd.Enabled = !avail;
-            btnFatherDelete.Enabled = avail;
-        }
-
-        public void SetMotherAvl(bool avail)
-        {
-            btnMotherAdd.Enabled = !avail;
-            btnMotherDelete.Enabled = avail;
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)

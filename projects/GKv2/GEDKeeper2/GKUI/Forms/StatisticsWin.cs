@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,12 +24,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Stats;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -40,8 +38,6 @@ namespace GKUI.Forms
 
         private readonly ZGraphControl fGraph;
         private readonly GKListView fListStats;
-
-        private StatsMode fCurrentMode;
 
         #region View Interface
 
@@ -96,10 +92,6 @@ namespace GKUI.Forms
 
             fController = new StatisticsWinController(this, selectedRecords);
             fController.Init(baseWin);
-
-            fCurrentMode = StatsMode.smAncestors;
-
-            SetLang();
         }
 
         private void StatisticsWin_KeyDown(object sender, KeyEventArgs e)
@@ -109,8 +101,7 @@ namespace GKUI.Forms
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fCurrentMode = (StatsMode)cbType.SelectedIndex;
-            fController.CalcStats(fCurrentMode);
+            fController.CalcStats();
 
             fListStats.SortColumn = -1;
             fListStats.Sorting = SortOrder.None;
@@ -121,23 +112,11 @@ namespace GKUI.Forms
             fController.UpdateCommonStats();
         }
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            Title = LangMan.LS(LSID.LSID_MIStats);
-            grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
+            fController.SetLocale();
 
-            lvSummary.ClearColumns();
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100);
-
-            SetToolTip(tbExcelExport, LangMan.LS(LSID.LSID_MIExportToExcelFile));
             fController.UpdateCommonStats();
-
-            int oldIndex = cbType.SelectedIndex;
-            fController.UpdateStatsTypes();
-            cbType.SelectedIndex = oldIndex;
         }
 
         private void tbExcelExport_Click(object sender, EventArgs e)

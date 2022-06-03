@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.MapsViewerWin"
+  ShowInTaskbar="true" KeyDown="MapsViewerWin_KeyDown">
+
+  <Form.ToolBar>
+    <ToolBar TextAlign="Right" Style="tbsi">
+      <ButtonToolItem x:Name="tbLoadPlaces" Click="tbLoadPlaces_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbSaveSnapshot" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbSaveSnapshot_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbProviders" Click="tbProviders_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbClear" Click="tbClear_Click" />
+      <ButtonToolItem x:Name="tbZoomCenter" Text="Zoom Center" Click="tbZoomCenter_Click" />
+    </ToolBar>
+  </Form.ToolBar>
+
+  <TableLayout Spacing="4, 4">
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="PageControl1">
+        <TabPage x:Name="pagePlaces">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <GroupBox x:Name="grpSelection">
+                <StackLayout Style="vertListStack">
+                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radTotal" CheckedChanged="radTotal_Click" />
+                  <CheckBox x:Name="chkBirth" />
+                  <CheckBox x:Name="chkDeath" />
+                  <CheckBox x:Name="chkResidence" />
+                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radSelected" CheckedChanged="radTotal_Click" />
+                  <ComboBox x:Name="cmbPersons" ReadOnly="True" />
+                  <CheckBox x:Name="chkLinesVisible" Checked="True" />
+                  <Button x:Name="btnSelectPlaces" Enabled="False" Click="btnSelectPlaces_Click" />
+                </StackLayout>
+              </GroupBox>
+            </TableRow>
+
+            <TableRow ScaleHeight="True">
+              <TreeView x:Name="tvPlaces" MouseDoubleClick="TreePlaces_DoubleClick" />
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pageCoordinates">
+          <StackLayout Style="vertListStack">
+            <GroupBox x:Name="gbCoords">
+              <TableLayout Style="paddedTable">
+                <TableRow>
+                  <Label x:Name="lblPlace">place</Label>
+                  <TextBox x:Name="txtPlace" />
+                </TableRow>
+                <TableRow>
+                  <Label x:Name="lblLat">lat</Label>
+                  <TextBox x:Name="txtLat" />
+                </TableRow>
+                <TableRow>
+                  <Label x:Name="lblLng">lng</Label>
+                  <TextBox x:Name="txtLng" />
+                </TableRow>
+              </TableLayout>
+            </GroupBox>
+
+            <Button x:Name="btnSearch" Click="btnSearch_Click" />
+            <Button x:Name="btnAddRouteMarker" Click="btnAddRouteMarker_Click">Add Route Marker</Button>
+            <Button x:Name="btnAddPolygonMarker" Click="btnAddPolygonMarker_Click">Add Polygon Marker</Button>
+          </StackLayout>
+        </TabPage>
+      </TabControl>
+
+      <TableCell ScaleWidth="True">
+        <comcom:GKMapBrowser x:Name="fMapBrowser" Size="800, 600" />
+      </TableCell>
+
+      <StackLayout>
+        <Button x:Name="btnZoomUp" Width="32" Click="btnZoomUp_Click">+</Button>
+        <StackLayoutItem Expand="True">
+          <Slider x:Name="trkZoom" Orientation="Vertical" ValueChanged="trkZoom_ValueChanged" />
+        </StackLayoutItem>
+        <Button x:Name="btnZoomDown" Width="32" Click="btnZoomDown_Click">-</Button>
+      </StackLayout>
+    </TableRow>
+  </TableLayout>
+
+</Form>

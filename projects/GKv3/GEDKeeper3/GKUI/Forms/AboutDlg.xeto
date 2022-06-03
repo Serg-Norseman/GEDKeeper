@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.AboutDlg"
+  AbortButton="{x:Reference btnClose}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <Panel>
+        <StackLayout Spacing="8">
+          <StackLayout Spacing="8" Orientation="Horizontal">
+
+            <StackLayoutItem>
+              <StackLayout Spacing="8">
+                <ImageView Image="{Resource Resources.image_logo.png, GKCore}" />
+                <Label x:Name="lblVersion" Font="Bold+12pt" />
+              </StackLayout>
+            </StackLayoutItem>
+
+            <StackLayoutItem Expand="True" />
+
+          </StackLayout>
+
+          <Label x:Name="lblCopyright" Font="Bold+12pt" />
+          <StackLayoutItem Expand="True" />
+          <LinkButton x:Name="lblProjSite" Font="Bold" Click="LabelMail_Click">https://gedkeeper.net/</LinkButton>
+          <LinkButton x:Name="lblMail" Font="Bold" Click="LabelMail_Click">mailto:gedkeeper@yandex.ru</LinkButton>
+          <LinkButton x:Name="lblForum" Font="Bold" Click="LabelMail_Click" />
+          <LinkButton x:Name="lblChannel" Font="Bold" Click="LabelMail_Click" />
+        </StackLayout>
+      </Panel>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -76,16 +76,20 @@ namespace GKCore.Plugins
             Logger.WriteInfo("Plugins load path: " + path);
 
             try {
-                #if !NETSTANDARD
+#if !NETSTANDARD
                 AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
-                #else
-                #endif
+#else
+#endif
 
                 string[] pluginFiles = Directory.GetFiles(path, "*.dll");
                 foreach (string pfn in pluginFiles) {
                     try {
+#if !NETSTANDARD
                         AssemblyName assemblyName = AssemblyName.GetAssemblyName(pfn);
                         Assembly asm = Assembly.Load(assemblyName);
+#else
+                        Assembly asm = Assembly.LoadFile(pfn);
+#endif
 
                         if (asm != null) {
                             Load(host, asm);

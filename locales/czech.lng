@@ -470,7 +470,7 @@
 469=Korespondence
 470=ID opravy
 471=Zkontrolovat formát
-472=Je třeba opravit záznamy totožnosti, pokračovat?
+472=|EMF soubory (*.emf)|*.emf
 473=Počet objektů v hlavní databázi: {0}
 474=Synchronizace je dokončena.
 475=Vyhledat mužské předky
@@ -481,7 +481,7 @@
 480=Všechny soubory (*.*)|*.*
 481=Obrázky (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
 482=Scripty (*.lua)|*.lua
-483=BMP soubory (*.bmp)|*.bmp|JPEG soubory (*.jpg)|*.jpg|EMF soubory (*.emf)|*.emf|PNG soubory (*.png)|*.png|GIF soubory (*.gif)|*.gif
+483=BMP soubory (*.bmp)|*.bmp|JPEG soubory (*.jpg)|*.jpg|PNG soubory (*.png)|*.png|GIF soubory (*.gif)|*.gif
 484=Příčiny smrti
 485=Rodokmen
 486=Parametr
@@ -791,7 +791,7 @@
 790=Záznam rodiny byl zjištěn bez rodičů nebo dětí
 791=Opravdu chcete multimediální soubor odebrat?
 792=Úložiště nebylo nalezeno
-793=Soubor nenalezen
+793=Soubor "{0}" nenalezen
 794=Povolit relativní odkazy na mediální soubory
 795=Výchozí typ úložiště médií
 796=Povolit mazání mediálních souborů z úložiště a archivace
@@ -836,3 +836,17 @@
 832=Separate depth
 833=Ancestors
 834=Matches not found
+835=Short kinship form
+836=Surname first in order
+837=Borders
+838=You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?
+839=Providers
+840=Coordinates
+841=Load places
+842=Only locality
+843=Go to primary branch
+844=Minimizing width
+845={0}. Continue?
+846=Show age
+847=Surname in capitals
+848=|SVG files (*.svg)|*.svg

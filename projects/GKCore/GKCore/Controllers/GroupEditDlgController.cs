@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,10 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -31,14 +34,14 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class GroupEditDlgController : DialogController<IGroupEditDlg>
     {
-        private GDMGroupRecord fGroup;
+        private GDMGroupRecord fGroupRecord;
 
-        public GDMGroupRecord Group
+        public GDMGroupRecord GroupRecord
         {
-            get { return fGroup; }
+            get { return fGroupRecord; }
             set {
-                if (fGroup != value) {
-                    fGroup = value;
+                if (fGroupRecord != value) {
+                    fGroupRecord = value;
                     UpdateView();
                 }
             }
@@ -50,12 +53,21 @@ namespace GKCore.Controllers
             fView.Name.Activate();
         }
 
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.MembersList.ListModel = new GroupMembersSublistModel(baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
+        }
+
         public override bool Accept()
         {
             try {
-                fGroup.GroupName = fView.Name.Text;
+                fGroupRecord.GroupName = fView.Name.Text;
 
-                fBase.NotifyRecord(fGroup, RecordAction.raEdit);
+                fBase.NotifyRecord(fGroupRecord, RecordAction.raEdit);
 
                 CommitChanges();
 
@@ -68,27 +80,22 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Name.Text = (fGroup == null) ? "" : fGroup.GroupName;
+            fView.Name.Text = (fGroupRecord == null) ? "" : fGroupRecord.GroupName;
 
-            fView.MembersList.ListModel.DataOwner = fGroup;
-            fView.NotesList.ListModel.DataOwner = fGroup;
-            fView.MediaList.ListModel.DataOwner = fGroup;
+            fView.MembersList.ListModel.DataOwner = fGroupRecord;
+            fView.NotesList.ListModel.DataOwner = fGroupRecord;
+            fView.MediaList.ListModel.DataOwner = fGroupRecord;
         }
 
-        public void JumpToRecord(GDMRecord record)
+        public override void SetLocale()
         {
-            if (record != null && Accept()) {
-                fBase.SelectRecordByXRef(record.XRef);
-                fView.Close();
-            }
-        }
-
-        public void JumpToRecord(GDMPointer pointer)
-        {
-            if (pointer != null && Accept()) {
-                fBase.SelectRecordByXRef(pointer.XRef);
-                fView.Close();
-            }
+            fView.Title = LangMan.LS(LSID.LSID_WinGroupEdit);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Title);
+            GetControl<ITabPage>("pageMembers").Text = LangMan.LS(LSID.LSID_Members);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
+            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.LSID_RPMultimedia);
         }
     }
 }

@@ -25,19 +25,15 @@ using GKCore.Interfaces;
 namespace GKCore.Options
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public sealed class ProxyOptions : BaseObject, IOptions
+    public sealed class ProxyOptions : IOptions
     {
         public string Server;
         public string Port;
         public string Login;
         public string Password;
         public bool UseProxy;
-
-        public ProxyOptions()
-        {
-        }
 
         public void Assign(IOptions source)
         {

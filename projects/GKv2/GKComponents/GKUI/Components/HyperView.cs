@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2011-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2011-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,7 +35,7 @@ namespace GKUI.Components
     public delegate void LinkEventHandler(object sender, string linkName);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class HyperView : ScrollablePanel, IHyperView
     {
@@ -51,18 +51,7 @@ namespace GKUI.Components
         private ExtSize fTextSize;
         private bool fWordWrap;
 
-        private static readonly object EventLink;
-
-        static HyperView()
-        {
-            EventLink = new object();
-        }
-
-        public event LinkEventHandler OnLink
-        {
-            add { Events.AddHandler(EventLink, value); }
-            remove { Events.RemoveHandler(EventLink, value); }
-        }
+        public event LinkEventHandler OnLink;
 
         public int BorderWidth
         {
@@ -144,6 +133,13 @@ namespace GKUI.Components
 
         private void ArrangeText()
         {
+            if (fLines.Count == 0)
+                return;
+
+            float maxWidth = this.ClientSize.Width - (2 * fBorderWidth);
+            if (maxWidth < 0)
+                return;
+
             try {
                 SuspendLayout();
 
@@ -157,17 +153,14 @@ namespace GKUI.Components
                     int yPos = 0;
                     int xMax = 0;
                     int lineHeight = 0;
-
-                    string text = fLines.Text;
                     Font defFont = this.Font;
-                    float maxWidth = this.ClientSize.Width - (2 * fBorderWidth);
                     SizeF zerosz = new SizeF(0f, 0f);
-
-                    text = SysUtils.StripHTML(text);
 
                     var parser = new BBTextParser(AppHost.GfxProvider, defFont.SizeInPoints,
                                                   new ColorHandler(fLinkColor), new ColorHandler(ForeColor));
 
+                    string text = fLines.Text;
+                    text = SysUtils.StripHTML(text);
                     parser.ParseText(fChunks, text);
 
                     int line = -1;
@@ -379,7 +372,7 @@ namespace GKUI.Components
 
         private void DoLink(string linkName)
         {
-            LinkEventHandler eventHandler = (LinkEventHandler)Events[EventLink];
+            var eventHandler = OnLink;
             if (eventHandler != null) eventHandler(this, linkName);
         }
 
@@ -396,7 +389,9 @@ namespace GKUI.Components
 
         protected override void OnResize(EventArgs e)
         {
-            ArrangeText();
+            if (fAcceptFontChange) {
+                ArrangeText();
+            }
 
             base.OnResize(e);
         }

@@ -65,7 +65,7 @@
 		    this.btnAccept.TabIndex = 4;
 		    this.btnAccept.Text = "btnAccept";
 		    this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-		    this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
+		    this.btnAccept.Click += new System.EventHandler(this.AcceptClickHandler);
 		    // 
 		    // btnCancel
 		    // 
@@ -78,7 +78,7 @@
 		    this.btnCancel.TabIndex = 5;
 		    this.btnCancel.Text = "btnCancel";
 		    this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-		    this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+		    this.btnCancel.Click += new System.EventHandler(this.CancelClickHandler);
 		    // 
 		    // GroupBox1
 		    // 
@@ -194,7 +194,7 @@
 		    // 
 		    // txtHusband
 		    // 
-		    this.txtHusband.ForeColor = System.Drawing.SystemColors.Control;
+		    this.txtHusband.ForeColor = System.Drawing.SystemColors.ControlText;
 		    this.txtHusband.Location = new System.Drawing.Point(110, 31);
 		    this.txtHusband.Margin = new System.Windows.Forms.Padding(2);
 		    this.txtHusband.Name = "txtHusband";
@@ -204,7 +204,7 @@
 		    // 
 		    // txtWife
 		    // 
-		    this.txtWife.ForeColor = System.Drawing.SystemColors.Control;
+		    this.txtWife.ForeColor = System.Drawing.SystemColors.ControlText;
 		    this.txtWife.Location = new System.Drawing.Point(110, 68);
 		    this.txtWife.Margin = new System.Windows.Forms.Padding(2);
 		    this.txtWife.Name = "txtWife";

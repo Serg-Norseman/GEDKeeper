@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
@@ -44,6 +44,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
@@ -71,7 +72,7 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fNoteRecord, fDialog.NoteRecord);
 
-            EnterText("txtNote", fDialog, "sample text");
+            EnterRichText("txtNote", fDialog, "sample text");
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fNoteRecord.Lines.Text);
@@ -81,7 +82,7 @@ namespace GKUI.Forms
 
         public static void NoteEditDlg_Handler(NoteEditDlg dlg)
         {
-            EnterText("txtNote", dlg, "sample text");
+            EnterRichText("txtNote", dlg, "sample text");
             ClickButton("btnAccept", dlg);
 
             Assert.AreEqual("sample text", dlg.NoteRecord.Lines.Text);

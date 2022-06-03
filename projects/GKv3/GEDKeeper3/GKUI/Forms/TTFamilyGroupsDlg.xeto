@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.TTFamilyGroupsDlg"
+  AbortButton="{x:Reference btnClose}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl>
+        <TabPage x:Name="pageFamilyGroups">
+          <TableLayout Style="paddedTable8">
+            <TableRow ScaleHeight="True">
+              <TreeView x:Name="tvGroups" Size="780, 340" LabelEdit="False" MouseDoubleClick="tvGroups_DoubleClick">
+                <TreeView.ContextMenu>
+                  <ContextMenu Opening="contextMenu_Opening">
+                    <ButtonMenuItem x:Name="miDetails" Click="miDetails_Click" />
+                    <ButtonMenuItem x:Name="miGoToRecord" Click="miGoToRecord_Click" />
+                    <ButtonMenuItem x:Name="miCopyXRef" Click="miCopyXRef_Click" />
+                  </ContextMenu>
+                </TreeView.ContextMenu>
+              </TreeView>
+            </TableRow>
+
+            <TableRow>
+              <StackLayout Spacing="4" Orientation="Horizontal">
+                <Button x:Name="btnAnalyseGroups" Height="26" Click="btnAnalyseGroups_Click" />
+                <StackLayoutItem Expand="True">
+                  <comcom:LogChart x:Name="gkLogChart1" Height="26" OnHintRequest="HintRequestEventHandler" />
+                </StackLayoutItem>
+              </StackLayout>
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

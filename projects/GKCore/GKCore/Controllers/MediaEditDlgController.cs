@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,10 @@
 
 using System;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Options;
@@ -33,15 +36,15 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class MediaEditDlgController : DialogController<IMediaEditDlg>
     {
-        private GDMMultimediaRecord fMediaRec;
+        private GDMMultimediaRecord fMultimediaRecord;
         private bool fIsNew;
 
-        public GDMMultimediaRecord MediaRec
+        public GDMMultimediaRecord MultimediaRecord
         {
-            get { return fMediaRec; }
+            get { return fMultimediaRecord; }
             set {
-                if (fMediaRec != value) {
-                    fMediaRec = value;
+                if (fMultimediaRecord != value) {
+                    fMultimediaRecord = value;
                     UpdateView();
                 }
             }
@@ -57,10 +60,18 @@ namespace GKCore.Controllers
             fView.Name.Activate();
         }
 
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.SourcesList.ListModel = new SourceCitationsListModel(baseWin, fLocalUndoman);
+        }
+
         public override bool Accept()
         {
             try {
-                GDMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+                GDMFileReferenceWithTitle fileRef = fMultimediaRecord.FileReferences[0];
 
                 if (fIsNew) {
                     MediaStoreType gst = fView.StoreType.GetSelectedTag<MediaStoreType>();
@@ -82,7 +93,7 @@ namespace GKCore.Controllers
                 UpdateControls();
 
                 fLocalUndoman.Commit();
-                fBase.NotifyRecord(fMediaRec, RecordAction.raEdit);
+                fBase.NotifyRecord(fMultimediaRecord, RecordAction.raEdit);
 
                 return true;
             } catch (Exception ex) {
@@ -93,15 +104,15 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.NotesList.ListModel.DataOwner = fMediaRec;
-            fView.SourcesList.ListModel.DataOwner = fMediaRec;
+            fView.NotesList.ListModel.DataOwner = fMultimediaRecord;
+            fView.SourcesList.ListModel.DataOwner = fMultimediaRecord;
 
             UpdateControls();
         }
 
         private void UpdateControls()
         {
-            GDMFileReferenceWithTitle fileRef = fMediaRec.FileReferences[0];
+            GDMFileReferenceWithTitle fileRef = fMultimediaRecord.FileReferences[0];
 
             fIsNew = (fileRef.StringValue == "");
 
@@ -200,7 +211,23 @@ namespace GKCore.Controllers
                 Accept();
             }
 
-            fBase.ShowMedia(fMediaRec, true);
+            fBase.ShowMedia(fMultimediaRecord, true);
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_RPMultimedia);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.LSID_Common);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
+            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.LSID_RPSources);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Title);
+            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.LSID_Type);
+            GetControl<ILabel>("lblStoreType").Text = LangMan.LS(LSID.LSID_StoreType);
+            GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.LSID_File);
+            GetControl<IButton>("btnView").Text = LangMan.LS(LSID.LSID_View) + @"...";
         }
     }
 }

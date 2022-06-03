@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,7 @@
 
 using System;
 using Eto.Forms;
-using GKCore;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -29,14 +29,24 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class CommonFilterDlg : CommonDialog, ICommonFilterDlg
+    public partial class CommonFilterDlg : CommonDialog<ICommonFilterDlg, CommonFilterDlgController>, ICommonFilterDlg
     {
-        private readonly CommonFilterDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private TabControl tabsFilters;
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabPage pageFieldsFilter;
+        private TabPage pageSpecificFilter;
+        private Button btnReset;
+        private FilterGridView filterView;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         private readonly IBaseWindow fBase;
         private readonly IListManager fListMan;
-
-        private FilterGridView filterView;
 
         public IBaseWindow Base
         {
@@ -59,10 +69,7 @@ namespace GKUI.Forms
 
         public CommonFilterDlg()
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            XamlReader.Load(this);
         }
 
         public CommonFilterDlg(IBaseWindow baseWin, IListManager listMan) : this()
@@ -75,73 +82,18 @@ namespace GKUI.Forms
 
             fBase = baseWin;
             fListMan = listMan;
+
             fController = new CommonFilterDlgController(this, listMan);
             fController.Init(baseWin);
 
-            filterView = new FilterGridView(fListMan);
-            filterView.Height = 260;
-            tsFieldsFilter.Content = filterView;
-
-            SetLang();
+            filterView.ListMan = fListMan;
 
             fController.UpdateView();
-            this.KeyDown += Form_KeyDown;
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            try {
-                AcceptChanges();
-                DialogResult = DialogResult.Ok;
-            } catch (Exception ex) {
-                Logger.WriteError("CommonFilterDlg.btnAccept_Click()", ex);
-                DialogResult = DialogResult.None;
-            }
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            DoReset();
-        }
-
-        public virtual void AcceptChanges()
-        {
-            fController.Accept();
-            DialogResult = DialogResult.Ok;
-        }
-
-        public void SetLang()
-        {
-            GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
-            GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);
-
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            btnReset.Text = LangMan.LS(LSID.LSID_DlgReset);
-            tsFieldsFilter.Text = LangMan.LS(LSID.LSID_FieldsFilter);
-        }
-
-        public virtual void DoReset()
-        {
-            fListMan.Filter.Clear();
-            fController.UpdateView();
-        }
-
-        private void Form_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key) {
-                case Keys.I:
-                    if (e.Control) {
-                        FilterCondition fcond = new FilterCondition(0, ConditionKind.ck_Contains, "");
-                        filterView.AddCondition(fcond);
-                    }
-                    break;
-
-                case Keys.D:
-                    if (e.Control) {
-                    }
-                    break;
-            }
+            fController.Reset();
         }
     }
 }

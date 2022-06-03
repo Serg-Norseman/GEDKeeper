@@ -76,7 +76,7 @@ namespace GKFoldersPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_MIFolders);
 
-                if (fForm != null) fForm.SetLang();
+                if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKFoldersPlugin.OnLanguageChange()", ex);
             }

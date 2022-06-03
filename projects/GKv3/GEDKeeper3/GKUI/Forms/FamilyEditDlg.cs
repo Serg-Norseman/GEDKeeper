@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,9 +19,9 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -33,20 +33,46 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class FamilyEditDlg : EditorDialog, IFamilyEditDlg
+    public partial class FamilyEditDlg : CommonDialog<IFamilyEditDlg, FamilyEditDlgController>, IFamilyEditDlg
     {
-        private readonly FamilyEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private readonly GKSheetList fChildrenList;
-        private readonly GKSheetList fEventsList;
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
-        private readonly GKSheetList fSourcesList;
+        private TabPage pageEvents;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageSources;
+        private TabPage pageChilds;
+        private Button btnAccept;
+        private Button btnCancel;
+        private GroupBox GroupBox1;
+        private Label lblHusband;
+        private TextBox txtHusband;
+        private Button btnHusbandAdd;
+        private Button btnHusbandDelete;
+        private Button btnHusbandSel;
+        private Button btnWifeSel;
+        private Button btnWifeDelete;
+        private Button btnWifeAdd;
+        private TextBox txtWife;
+        private Label lblWife;
+        private Label lblStatus;
+        private ComboBox cmbMarriageStatus;
+        private Label lblRestriction;
+        private ComboBox cmbRestriction;
+        private GKSheetList fChildrenList;
+        private GKSheetList fEventsList;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
+        private GKSheetList fSourcesList;
 
-        public GDMFamilyRecord Family
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        public GDMFamilyRecord FamilyRecord
         {
-            get { return fController.Family; }
-            set { fController.Family = value; }
+            get { return fController.FamilyRecord; }
+            set { fController.FamilyRecord = value; }
         }
 
         #region View Interface
@@ -100,61 +126,10 @@ namespace GKUI.Forms
 
         public FamilyEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnHusbandAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnHusbandDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnHusbandSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnWifeAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnWifeDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnWifeSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-
-            txtHusband.TextChanged += EditSpouse_TextChanged;
-            txtWife.TextChanged += EditSpouse_TextChanged;
-
-            fChildrenList = new GKSheetList(pageChilds);
-            fChildrenList.OnItemValidating += FamilyEditDlg_ItemValidating;
-            fChildrenList.OnModify += ModifyChildrenSheet;
-
-            fEventsList = new GKSheetList(pageEvents);
-
-            fNotesList = new GKSheetList(pageNotes);
-
-            fMediaList = new GKSheetList(pageMultimedia);
-
-            fSourcesList = new GKSheetList(pageSources);
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GroupBox1.Text = LangMan.LS(LSID.LSID_Family);
-            lblHusband.Text = LangMan.LS(LSID.LSID_Husband);
-            lblWife.Text = LangMan.LS(LSID.LSID_Wife);
-            lblStatus.Text = LangMan.LS(LSID.LSID_Status);
-            pageChilds.Text = LangMan.LS(LSID.LSID_Childs);
-            pageEvents.Text = LangMan.LS(LSID.LSID_Events);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
-
-            SetToolTip(btnHusbandAdd, LangMan.LS(LSID.LSID_HusbandAddTip));
-            SetToolTip(btnHusbandDelete, LangMan.LS(LSID.LSID_HusbandDeleteTip));
-            SetToolTip(btnHusbandSel, LangMan.LS(LSID.LSID_HusbandSelTip));
-            SetToolTip(btnWifeAdd, LangMan.LS(LSID.LSID_WifeAddTip));
-            SetToolTip(btnWifeDelete, LangMan.LS(LSID.LSID_WifeDeleteTip));
-            SetToolTip(btnWifeSel, LangMan.LS(LSID.LSID_WifeSelTip));
+            XamlReader.Load(this);
 
             fController = new FamilyEditDlgController(this);
             fController.Init(baseWin);
-
-            fChildrenList.ListModel = new ChildrenListModel(baseWin, fController.LocalUndoman);
-            fEventsList.ListModel = new EventsListModel(baseWin, fController.LocalUndoman, false);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
         }
 
         public void LockEditor(bool locked)
@@ -201,22 +176,6 @@ namespace GKUI.Forms
             if (eArgs.Action == RecordAction.raJump) {
                 fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)

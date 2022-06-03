@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.TTTreeCompareDlg"
+  AbortButton="{x:Reference btnClose}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl>
+        <TabPage x:Name="pageTreeCompare">
+          <TableLayout Style="paddedTable8">
+
+            <TableRow>
+              <GroupBox x:Name="grpMatchType">
+                <TableLayout Spacing="4, 4">
+                  <TableRow>
+                    <comcom:RadioButtonEx GroupIndex="1" x:Name="radMatchInternal" Checked="True" CheckedChanged="rbtnMatch_CheckedChanged" />
+                  </TableRow>
+
+                  <TableRow ScaleHeight="True">
+                    <StackLayout Spacing="4">
+                      <comcom:RadioButtonEx GroupIndex="1" x:Name="radMathExternal" CheckedChanged="rbtnMatch_CheckedChanged" />
+                      <StackLayout Spacing="4" Orientation="Horizontal">
+                        <Label x:Name="lblFile" />
+                        <TextBox x:Name="txtCompareFile" Enabled="False" ReadOnly="True" Width="500" />
+                        <StackLayoutItem Expand="True" />
+                        <Button x:Name="btnFileChoose" Style="dlgBtn" Enabled="False" Click="btnFileChoose_Click" />
+                      </StackLayout>
+                    </StackLayout>
+                  </TableRow>
+
+                  <TableRow>
+                    <StackLayout Spacing="4" Orientation="Horizontal">
+                      <comcom:RadioButtonEx GroupIndex="1" x:Name="radAnalysis" CheckedChanged="rbtnMatch_CheckedChanged" />
+                      <StackLayoutItem Expand="True" />
+                      <Button x:Name="btnMatch" Style="dlgBtn" Click="btnMatch_Click" />
+                    </StackLayout>
+                  </TableRow>
+                </TableLayout>
+              </GroupBox>
+            </TableRow>
+
+            <TableRow ScaleHeight="True">
+              <TextArea x:Name="ListCompare" ReadOnly="True" Height="160" />
+            </TableRow>
+
+          </TableLayout>
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

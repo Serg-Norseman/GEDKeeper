@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -84,7 +84,6 @@ namespace GKCore.Cultures
             return nm;
         }
 
-        // TODO: pull the code down the hierarchy
         public NamePartsRet GetNameParts(GDMPersonalName personalName)
         {
             if (personalName == null)
@@ -92,43 +91,19 @@ namespace GKCore.Cultures
 
             bool hasPatronymic = HasPatronymic();
 
-            string stdSurname, stdName, stdPatronymic;
+            string surname = personalName.Surname;
+            string marriedSurname = personalName.MarriedName;
+            string name = personalName.Given;
+            string patronymic = personalName.PatronymicName;
 
-            // extracting standard parts
-            stdSurname = personalName.Surname;
-
-            if (hasPatronymic) {
-                string firstPart = personalName.FirstPart;
-                string[] parts = firstPart.Split(' ');
-                if (parts.Length > 1) {
-                    stdName = parts[0];
-                    stdPatronymic = parts[1];
-                } else {
-                    stdName = firstPart;
-                    stdPatronymic = string.Empty;
-                }
-            } else {
-                stdName = personalName.FirstPart;
-                stdPatronymic = string.Empty;
-            }
-
-            // extracting sub-tags parts (high priority if any)
-            string surname = personalName.Pieces.Surname;
-            string name = personalName.Pieces.Given;
-            string patronymic = personalName.Pieces.PatronymicName;
-            string marriedSurname = personalName.Pieces.MarriedName;
-
-            if (hasPatronymic && !string.IsNullOrEmpty(name)) {
-                string[] parts = name.Split(' ');
-                if (string.IsNullOrEmpty(patronymic) && parts.Length > 1) {
-                    name = parts[0];
-                    patronymic = parts[1];
+            if (hasPatronymic && string.IsNullOrEmpty(patronymic) && !string.IsNullOrEmpty(name)) {
+                string firstPart = name;
+                int si = firstPart.LastIndexOf(' ');
+                if (si != -1) {
+                    name = firstPart.Substring(0, si);
+                    patronymic = firstPart.Substring(si + 1, firstPart.Length - si - 1);
                 }
             }
-
-            surname = !string.IsNullOrEmpty(surname) ? surname : stdSurname;
-            name = !string.IsNullOrEmpty(name) ? name : stdName;
-            patronymic = !string.IsNullOrEmpty(patronymic) ? patronymic : stdPatronymic;
 
             return new NamePartsRet(surname, marriedSurname, name, patronymic, this);
         }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
@@ -62,18 +63,18 @@ namespace GKCore.Controllers
         {
         }
 
-        public void CalcStats(StatsMode mode)
+        public void CalcStats()
         {
-            fCurrentMode = mode;
+            fCurrentMode = fView.StatsType.GetSelectedTag<StatsMode>();
 
-            fView.ListStats.SetColumnCaption(0, LangMan.LS(GKData.StatsTitles[(int)mode].Cap));
+            fView.ListStats.SetColumnCaption(0, LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap));
             fView.ListStats.SetColumnCaption(1, LangMan.LS(LSID.LSID_Value));
 
             fView.ListStats.BeginUpdate();
             fView.ListStats.ClearItems();
             try {
                 fCurrentValues = new List<StatsItem>();
-                fTreeStats.GetSpecStats(mode, fCurrentValues);
+                fTreeStats.GetSpecStats(fCurrentMode, fCurrentValues);
 
                 foreach (StatsItem lv in fCurrentValues) {
                     fView.ListStats.AddItem(null, lv.Caption, lv.GetDisplayString());
@@ -82,9 +83,9 @@ namespace GKCore.Controllers
                 fView.ListStats.EndUpdate();
             }
 
-            fChartTitle = LangMan.LS(GKData.StatsTitles[(int)mode].Title);
+            fChartTitle = LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Title);
 
-            switch (mode) {
+            switch (fCurrentMode) {
                 case StatsMode.smAge:
                     fChartXTitle = LangMan.LS(LSID.LSID_Age);
                     fChartYTitle = LangMan.LS(LSID.LSID_People);
@@ -102,7 +103,7 @@ namespace GKCore.Controllers
                 case StatsMode.smDeathYears:
                 case StatsMode.smDeathTenYears:
                     {
-                        switch (mode) {
+                        switch (fCurrentMode) {
                             case StatsMode.smBirthYears:
                             case StatsMode.smDeathYears:
                                 fChartXTitle = LangMan.LS(LSID.LSID_Years);
@@ -114,7 +115,7 @@ namespace GKCore.Controllers
                                 break;
                         }
 
-                        switch (mode) {
+                        switch (fCurrentMode) {
                             case StatsMode.smBirthYears:
                             case StatsMode.smBirthTenYears:
                                 fChartYTitle = LangMan.LS(LSID.LSID_HowBirthes);
@@ -162,15 +163,15 @@ namespace GKCore.Controllers
 
         public void UpdateStatsTypes()
         {
-            ICulture culture = fBase.Context.Culture;
+            bool hasPatronymic = (fBase == null) ? false : fBase.Context.Culture.HasPatronymic();
 
             fView.StatsType.BeginUpdate();
             fView.StatsType.Clear();
             for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {
-                if (sm == StatsMode.smPatronymics && !culture.HasPatronymic()) continue;
+                if (sm == StatsMode.smPatronymics && !hasPatronymic) continue;
 
                 GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
-                fView.StatsType.Add(LangMan.LS(tr.Title));
+                fView.StatsType.AddItem(LangMan.LS(tr.Title), sm);
             }
             fView.StatsType.EndUpdate();
         }
@@ -230,6 +231,26 @@ namespace GKCore.Controllers
                 LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap),
                 LangMan.LS(LSID.LSID_Value),
                 fCurrentValues);
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_MIStats);
+
+            GetControl<IGroupBox>("grpSummary").Text = LangMan.LS(LSID.LSID_Summary);
+
+            var lvSummary = fView.Summary;
+            lvSummary.ClearColumns();
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300, false);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100, false);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100, false);
+            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100, false);
+
+            SetToolTip("tbExcelExport", LangMan.LS(LSID.LSID_MIExportToExcelFile));
+
+            int oldIndex = fView.StatsType.SelectedIndex;
+            UpdateStatsTypes();
+            fView.StatsType.SelectedIndex = oldIndex;
         }
     }
 }

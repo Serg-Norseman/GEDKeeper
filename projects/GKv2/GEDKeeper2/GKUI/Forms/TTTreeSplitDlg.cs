@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -28,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTTreeSplitDlg : CommonDialog, ITreeSplitDlg
+    public sealed partial class TTTreeSplitDlg : CommonDialog<ITreeSplitDlg, TreeSplitController>, ITreeSplitDlg
     {
-        private readonly TreeSplitController fController;
-
         #region View Interface
 
         IListViewEx ITreeSplitDlg.SelectedList
@@ -52,29 +49,8 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            ListSelected.AddColumn("-", 300);
-            ListSkipped.AddColumn("-", 300);
-
             fController = new TreeSplitController(this);
             fController.Init(baseWin);
-
-            SetLang();
-        }
-
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_3);
-            pageTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnSelectAll.Text = LangMan.LS(LSID.LSID_SelAll);
-            btnSelectFamily.Text = LangMan.LS(LSID.LSID_SelFamily);
-            btnSelectAncestors.Text = LangMan.LS(LSID.LSID_SelAncestors);
-            btnSelectDescendants.Text = LangMan.LS(LSID.LSID_SelDescendants);
-            btnDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
-            btnSave.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
-
-            ListSelected.SetColumnCaption(0, LangMan.LS(LSID.LSID_Person));
-            ListSkipped.SetColumnCaption(0, LangMan.LS(LSID.LSID_Person));
         }
 
         private void btnSelectFamily_Click(object sender, EventArgs e)

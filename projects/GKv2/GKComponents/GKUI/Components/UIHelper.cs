@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BSLib;
 using BSLib.Design;
@@ -33,7 +34,7 @@ using GKCore.Options;
 
 namespace GKUI.Components
 {
-    #if !__MonoCS__
+    #if !MONO
     using Microsoft.Win32;
     #endif
 
@@ -52,6 +53,16 @@ namespace GKUI.Components
             return new RectangleF(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
         }
 
+        public static ExtRect Rt2Rt(Rectangle ert)
+        {
+            return ExtRect.CreateBounds(ert.Left, ert.Top, ert.Width, ert.Height);
+        }
+
+        public static ExtRectF Rt2Rt(RectangleF ert)
+        {
+            return ExtRectF.CreateBounds(ert.Left, ert.Top, ert.Width, ert.Height);
+        }
+
         public static ExtRect NormalizeFormRect(ExtRect winRect)
         {
             // Travis CI does not have access to UI and tests aren't performed.
@@ -65,7 +76,7 @@ namespace GKUI.Components
 
             Screen screen = Screen.FromRectangle(Rt2Rt(winRect));
             if (screen != null) {
-                Rectangle workArea = screen.WorkingArea;
+                var workArea = screen.WorkingArea;
 
                 int width = winRect.GetWidth();
                 int height = winRect.GetHeight();
@@ -138,24 +149,24 @@ namespace GKUI.Components
             // is located.
             Screen screen = Screen.FromHandle(parent);
             if (screen != null) {
-                Rectangle workArea = screen.WorkingArea;
+                var workArea = screen.WorkingArea;
 
                 form.Left = workArea.Left + ((workArea.Width - form.Width) >> 1);
                 form.Top = workArea.Top + ((workArea.Height - form.Height) >> 1);
             }
         }
 
-        public static T GetSelectedTag<T>(ComboBox comboBox)
+        public static T GetSelectedTag<T>(this ComboBox comboBox)
         {
-            GKComboItem<T> comboItem = comboBox.SelectedItem as GKComboItem<T>;
+            var comboItem = comboBox.SelectedItem as ComboItem<T>;
             T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
             return itemTag;
         }
 
-        public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue, bool allowDefault = true)
+        public static void SetSelectedTag<T>(this ComboBox comboBox, T tagValue, bool allowDefault = true)
         {
             foreach (object item in comboBox.Items) {
-                GKComboItem<T> comboItem = item as GKComboItem<T>;
+                var comboItem = item as ComboItem<T>;
 
                 if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
                     comboBox.SelectedItem = item;
@@ -165,6 +176,35 @@ namespace GKUI.Components
 
             if (allowDefault) {
                 comboBox.SelectedIndex = 0;
+            }
+        }
+
+        public static ToolStripMenuItem AddToolStripItem(ContextMenuStrip contextMenu, string text, object tag, EventHandler clickHandler)
+        {
+            var tsItem = new ToolStripMenuItem(text, null, clickHandler);
+            tsItem.Tag = tag;
+            contextMenu.Items.Add(tsItem);
+            return tsItem;
+        }
+
+        public static T GetMenuItemTag<T>(ContextMenuStrip contextMenu, object sender)
+        {
+            foreach (ToolStripMenuItem tsItem in contextMenu.Items) {
+                tsItem.Checked = false;
+            }
+            var senderItem = ((ToolStripMenuItem)sender);
+            ((ToolStripMenuItem)sender).Checked = true;
+            return (T)senderItem.Tag;
+        }
+
+        public static void SetMenuItemTag<T>(ContextMenuStrip contextMenu, T value)
+        {
+            foreach (ToolStripMenuItem tsItem in contextMenu.Items) {
+                T itemTag = (T)tsItem.Tag;
+                if (Equals(itemTag, value)) {
+                    tsItem.PerformClick();
+                    break;
+                }
             }
         }
 
@@ -246,24 +286,35 @@ namespace GKUI.Components
         {
             TextBox tb = (sender as TextBox);
             if (tb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
-                tb.Text = ConvertHelper.UniformName(tb.Text);
+                tb.Text = GKUtils.UniformName(tb.Text);
             }
 
             ComboBox cmb = (sender as ComboBox);
             if (cmb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
-                cmb.Text = ConvertHelper.UniformName(cmb.Text);
+                cmb.Text = GKUtils.UniformName(cmb.Text);
             }
         }
 
+        public static void FixToolStrip(ToolStrip toolStrip)
+        {
+            #if MONO
+            // dirty hack: Mono ToolStrip does not support correct AutoSize
+            toolStrip.AutoSize = false;
+            toolStrip.Height = 27;
+            #endif
+        }
+
         #region Application's autorun
-        #if !__MonoCS__
+        #if !MONO
 
         public static void RegisterStartup()
         {
             if (!IsStartupItem()) {
                 RegistryKey rkApp = GetRunKey();
-                string trayPath = GKUtils.GetAppPath() + "GKTray.exe";
-                rkApp.SetValue(GKData.APP_TITLE, trayPath);
+                if (rkApp != null) {
+                    string trayPath = GKUtils.GetAppPath() + "GKTray.exe";
+                    rkApp.SetValue(GKData.APP_TITLE, trayPath);
+                }
             }
         }
 
@@ -271,14 +322,16 @@ namespace GKUI.Components
         {
             if (IsStartupItem()) {
                 RegistryKey rkApp = GetRunKey();
-                rkApp.DeleteValue(GKData.APP_TITLE, false);
+                if (rkApp != null) {
+                    rkApp.DeleteValue(GKData.APP_TITLE, false);
+                }
             }
         }
 
         public static bool IsStartupItem()
         {
             RegistryKey rkApp = GetRunKey();
-            return (rkApp.GetValue(GKData.APP_TITLE) != null);
+            return (rkApp != null && rkApp.GetValue(GKData.APP_TITLE) != null);
         }
 
         private static RegistryKey GetRunKey()
@@ -289,5 +342,35 @@ namespace GKUI.Components
 
         #endif
         #endregion
+
+        public static void DrawArrowLine(Graphics gfx, Color fillColor, Pen pen, float x1, float y1, float x2, float y2, int arrLength = 8)
+        {
+            gfx.DrawLine(pen, x1, y1, x2, y2);
+
+            var m = x2 - x1 == 0 ? 0 : (y2 - y1) / (x2 - x1);
+            var degree = Math.Atan(m);
+            var toLeft = x2 > x1 ? 0 : Math.PI;
+
+            var degree1 = degree + 5 * Math.PI / 6 + toLeft;
+            var degree2 = degree + 7 * Math.PI / 6 + toLeft;
+
+            var px1 = x2 + (float)Math.Cos(degree1) * arrLength;
+            var py1 = y2 + (float)Math.Sin(degree1) * arrLength;
+
+            var px2 = x2 + (float)Math.Cos(degree2) * arrLength;
+            var py2 = y2 + (float)Math.Sin(degree2) * arrLength;
+
+            var mp1 = new PointF(x2, y2);
+            var mp2 = new PointF(px1, py1);
+            var mp3 = new PointF(px2, py2);
+
+            using (var brush = new SolidBrush(fillColor)) {
+                GraphicsPath path = new GraphicsPath();
+                path.AddLine(mp1, mp2);
+                path.AddLine(mp2, mp3);
+                path.AddLine(mp3, mp1);
+                gfx.FillPath(brush, path);
+            }
+        }
     }
 }

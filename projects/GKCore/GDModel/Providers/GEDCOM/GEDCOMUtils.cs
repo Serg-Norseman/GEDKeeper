@@ -368,10 +368,10 @@ namespace GDModel.Providers.GEDCOM
 
             if (!string.IsNullOrEmpty(strValue)) {
                 var parser = new GEDCOMParser(strValue, true);
-                x1 = parser.RequestNextInt();
-                y1 = parser.RequestNextInt();
-                x2 = parser.RequestNextInt();
-                y2 = parser.RequestNextInt();
+                x1 = parser.RequestNextSignedInt();
+                y1 = parser.RequestNextSignedInt();
+                x2 = parser.RequestNextSignedInt();
+                y2 = parser.RequestNextSignedInt();
             }
 
             position.SetRawData(x1, y1, x2, y2);
@@ -487,7 +487,6 @@ namespace GDModel.Providers.GEDCOM
                 ParseDate(owner, date.Before, strTok);
             } else if (dateType == 2) { // "BET"
                 strTok.Next();
-                //result = GEDCOMProvider.FixFTB(result);
                 ParseDate(owner, date.After, strTok);
                 strTok.SkipWhitespaces();
 
@@ -497,7 +496,6 @@ namespace GDModel.Providers.GEDCOM
 
                 strTok.Next();
                 strTok.SkipWhitespaces();
-                //result = GEDCOMProvider.FixFTB(result);
                 ParseDate(owner, date.Before, strTok);
             }
 
@@ -566,6 +564,7 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
+        // Format: [ <YEAR>[B.C.] | <MONTH> <YEAR> | <DAY> <MONTH> <YEAR> ] (see p.45-46)
         public static string ParseDate(GDMTree owner, GEDCOMParser strTok, out GDMApproximated approximated,
                                        out GDMCalendar calendar, out short year, out bool yearBC,
                                        out string yearModifier, out byte month, out byte day)
@@ -659,6 +658,12 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
+            // extract negative years
+            if (token == GEDCOMToken.Symbol && strTok.GetSymbol() == '-') {
+                yearBC = true;
+                token = strTok.Next();
+            }
+
             // extract year
             if (token == GEDCOMToken.Number) {
                 year = (short)strTok.GetNumber();
@@ -699,6 +704,11 @@ namespace GDModel.Providers.GEDCOM
                 token = strTok.Next();
             }
 
+            if (day > 0 && month == 0 && year == GDMDate.UNKNOWN_YEAR) {
+                year = day;
+                day = 0;
+            }
+
             //date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);
             string result = strTok.GetRest();
             return result;
@@ -723,17 +733,9 @@ namespace GDModel.Providers.GEDCOM
 
         public static string ParseName(string strValue, GDMPersonalName persName)
         {
-            string firstPart, surname, lastPart;
-            string result = ParseName(strValue, out firstPart, out surname, out lastPart);
-            persName.SetNameParts(firstPart, surname, lastPart);
-            return result;
-        }
-
-        public static string ParseName(string strValue, out string firstPart, out string surname, out string lastPart)
-        {
-            firstPart = string.Empty;
-            surname = string.Empty;
-            lastPart = string.Empty;
+            string firstPart = string.Empty;
+            string surname = string.Empty;
+            string lastPart = string.Empty;
 
             if (string.IsNullOrEmpty(strValue)) {
                 return string.Empty;
@@ -772,6 +774,10 @@ namespace GDModel.Providers.GEDCOM
                 lastPart = strValue.Substring(ss, strLen - ss);
             }
 
+            persName.Given = firstPart;
+            persName.Surname = surname;
+            persName.NameSuffix = lastPart;
+
             return string.Empty;
         }
 
@@ -789,8 +795,26 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // see "THE GEDCOM STANDARD Release 5.5.1", p.54 ("NAME_PERSONAL")
-        public static string GetNameTagValue(string firstPart, string surname, string lastPart)
+        public static string GetNameTagValue(GDMPersonalName personalName)
         {
+            string firstPart = personalName.FirstPart;
+            string surname = personalName.Surname;
+            string lastPart = personalName.NameSuffix;
+
+            if (!string.IsNullOrEmpty(personalName.NamePrefix)) {
+                if (!string.IsNullOrEmpty(firstPart)) {
+                    firstPart = " " + firstPart;
+                }
+                firstPart = personalName.NamePrefix + firstPart;
+            }
+
+            if (!string.IsNullOrEmpty(personalName.SurnamePrefix)) {
+                if (!string.IsNullOrEmpty(surname)) {
+                    surname = " " + surname;
+                }
+                surname = personalName.SurnamePrefix + surname;
+            }
+
             string result = firstPart;
             if (!string.IsNullOrEmpty(surname)) {
                 result += " /" + surname + "/";
@@ -1064,7 +1088,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] PedigreeLinkageTypes = new string[] {
+        public static readonly string[] PedigreeLinkageTypes = new string[] {
             "", "adopted", "birth", "foster" };
 
         public static GDMPedigreeLinkageType GetPedigreeLinkageTypeVal(string str)
@@ -1078,7 +1102,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] ChildLinkageStatuses = new string[] {
+        public static readonly string[] ChildLinkageStatuses = new string[] {
             "", "challenged", "disproven", "proven" };
 
         public static GDMChildLinkageStatus GetChildLinkageStatusVal(string str)
@@ -1092,7 +1116,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] CommunicationTypes = new string[] {
+        public static readonly string[] CommunicationTypes = new string[] {
             "call", "email", "fax", "letter", "tape", "visit" };
 
         public static GDMCommunicationType GetCommunicationTypeVal(string str)
@@ -1256,7 +1280,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] MediaTypes = new string[] {
+        public static readonly string[] MediaTypes = new string[] {
             "", "audio", "book", "card", "electronic", "fiche", "film", "magazine",
             "manuscript", "map", "newspaper", "photo", "tombstone", "video", "z" };
 
@@ -1308,7 +1332,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] NameTypes = new string[] {
+        public static readonly string[] NameTypes = new string[] {
             "", "aka", "birth", "immigrant", "maiden", "married" };
 
         public static GDMNameType GetNameTypeVal(string str)
@@ -1563,7 +1587,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static string[] MarriageStatuses = new string[] {
+        public static readonly string[] MarriageStatuses = new string[] {
             "", "married", "marrnotreg", "notmarr" };
 
         public static GDMMarriageStatus GetMarriageStatusVal(string str)
@@ -1669,7 +1693,7 @@ namespace GDModel.Providers.GEDCOM
             return tagA.CompareTo(tagB);
         }
 
-        public static GEDCOMTagType[] IndiEvents = new GEDCOMTagType[] {
+        public static readonly GEDCOMTagType[] IndiEvents = new GEDCOMTagType[] {
             GEDCOMTagType.ADOP, GEDCOMTagType.BAPM, GEDCOMTagType.BARM, GEDCOMTagType.BASM, GEDCOMTagType.BIRT,
             GEDCOMTagType.BLES, GEDCOMTagType.BURI, GEDCOMTagType.CENS, GEDCOMTagType.CHR, GEDCOMTagType.CHRA,
             GEDCOMTagType.CONF, GEDCOMTagType.CREM, GEDCOMTagType.DEAT, GEDCOMTagType.EMIG, GEDCOMTagType.EVEN,
@@ -1684,7 +1708,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static GEDCOMTagType[] IndiAttrs = new GEDCOMTagType[] {
+        public static readonly GEDCOMTagType[] IndiAttrs = new GEDCOMTagType[] {
             GEDCOMTagType.CAST, GEDCOMTagType.DSCR, GEDCOMTagType.EDUC, GEDCOMTagType.FACT, GEDCOMTagType.IDNO,
             GEDCOMTagType.NATI, GEDCOMTagType.NCHI, GEDCOMTagType.NMR, GEDCOMTagType.OCCU, GEDCOMTagType.PROP,
             GEDCOMTagType.RELI, GEDCOMTagType.RESI, GEDCOMTagType.SSN, GEDCOMTagType.TITL,
@@ -1701,7 +1725,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static GEDCOMTagType[] FamEvents = new GEDCOMTagType[] {
+        public static readonly GEDCOMTagType[] FamEvents = new GEDCOMTagType[] {
             GEDCOMTagType.ANUL, GEDCOMTagType.CENS, GEDCOMTagType.DIV, GEDCOMTagType.DIVF, GEDCOMTagType.ENGA,
             GEDCOMTagType.EVEN, GEDCOMTagType.MARB, GEDCOMTagType.MARC, GEDCOMTagType.MARL, GEDCOMTagType.MARR,
             GEDCOMTagType.MARS, GEDCOMTagType.RESI,

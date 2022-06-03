@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -26,6 +27,8 @@ using GKCore.Tools;
 
 namespace GKCore.Controllers
 {
+    public enum TreeMatchType { tmtInternal, tmtExternal, tmtAnalysis }
+
     /// <summary>
     /// 
     /// </summary>
@@ -58,7 +61,7 @@ namespace GKCore.Controllers
 
         public void Match()
         {
-            TreeMatchType type = fView.GetTreeMatchType();
+            TreeMatchType type = GetTreeMatchType();
 
             fView.CompareOutput.Clear();
             var tree = fBase.Context.Tree;
@@ -87,6 +90,40 @@ namespace GKCore.Controllers
                         break;
                     }
             }
+        }
+
+        public TreeMatchType GetTreeMatchType()
+        {
+            TreeMatchType type =
+                ((GetControl<IRadioButton>("radMatchInternal").Checked) ?
+                 TreeMatchType.tmtInternal :
+                 ((GetControl<IRadioButton>("radMathExternal").Checked) ? TreeMatchType.tmtExternal : TreeMatchType.tmtAnalysis));
+
+            return type;
+        }
+
+        public void ChangeTreeMatchType()
+        {
+            TreeMatchType type = GetTreeMatchType();
+
+            GetControl<ILabel>("lblFile").Enabled = (type == TreeMatchType.tmtExternal);
+            GetControl<ITextBox>("txtCompareFile").Enabled = (type == TreeMatchType.tmtExternal);
+            GetControl<IButton>("btnFileChoose").Enabled = (type == TreeMatchType.tmtExternal);
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_ToolOp_1);
+
+            GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.LSID_ToolOp_1);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.LSID_MIFile);
+            GetControl<IButton>("btnFileChoose").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.LSID_MatchType);
+            GetControl<IRadioButton>("radMatchInternal").Text = LangMan.LS(LSID.LSID_MatchInternal);
+            GetControl<IRadioButton>("radMathExternal").Text = LangMan.LS(LSID.LSID_MathExternal);
+            GetControl<IRadioButton>("radAnalysis").Text = LangMan.LS(LSID.LSID_Analyze);
+            GetControl<IButton>("btnMatch").Text = LangMan.LS(LSID.LSID_Match);
         }
     }
 }

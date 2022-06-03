@@ -25,7 +25,7 @@ namespace GDModel
 {
     public sealed class GDMAddress : GDMTag
     {
-        private GDMLines fLines;
+        private readonly GDMLines fLines;
         private string fAddressLine1;
         private string fAddressLine2;
         private string fAddressLine3;

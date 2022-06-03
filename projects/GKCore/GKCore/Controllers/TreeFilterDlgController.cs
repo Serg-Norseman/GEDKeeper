@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,8 +20,10 @@
 
 using System;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Charts;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -44,12 +46,13 @@ namespace GKCore.Controllers
 
         public TreeFilterDlgController(ITreeFilterDlg view) : base(view)
         {
+            fView.PersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
         }
 
         public override bool Accept()
         {
             try {
-                fFilter.BranchCut = (ChartFilter.BranchCutType)fView.GetCutModeRadio();
+                fFilter.BranchCut = GetCutModeRadio();
                 if (fFilter.BranchCut == ChartFilter.BranchCutType.Years) {
                     fFilter.BranchYear = (int)fView.YearNum.Value;
                 } else if (fFilter.BranchCut == ChartFilter.BranchCutType.Persons) {
@@ -78,31 +81,32 @@ namespace GKCore.Controllers
             }
         }
 
+        public override bool Cancel()
+        {
+            fFilter.Reset();
+            return true;
+        }
+
         public override void UpdateView()
         {
             GDMTree tree = fBase.Context.Tree;
             fTemp = fFilter.BranchPersons;
 
-            var values = new StringList();
-            int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                GDMRecord rec = tree[i];
-                if (rec.RecordType == GDMRecordType.rtSource) {
-                    values.AddObject((rec as GDMSourceRecord).ShortTitle, rec);
-                }
-            }
-            values.Sort();
+            fView.SourceCombo.Clear();
             fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
             fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
             fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
-            fView.SourceCombo.AddStrings(values);
+            var sources = GKUtils.GetSources(tree);
+            foreach (var item in sources) {
+                fView.SourceCombo.AddItem<GDMRecord>(item.ShortTitle, item);
+            }
 
             UpdateControls();
         }
 
         public void UpdateControls()
         {
-            fView.SetCutModeRadio((int)fFilter.BranchCut);
+            SetCutModeRadio(fFilter.BranchCut);
             fView.YearNum.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Years);
             fView.PersonsList.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Persons);
             fView.YearNum.Text = fFilter.BranchYear.ToString();
@@ -147,6 +151,56 @@ namespace GKCore.Controllers
             }
 
             UpdateControls();
+        }
+
+
+        private void SetCutModeRadio(ChartFilter.BranchCutType cutMode)
+        {
+            switch (cutMode) {
+                case ChartFilter.BranchCutType.None:
+                    GetControl<IRadioButton>("rbCutNone").Checked = true;
+                    break;
+                case ChartFilter.BranchCutType.Years:
+                    GetControl<IRadioButton>("rbCutYears").Checked = true;
+                    break;
+                case ChartFilter.BranchCutType.Persons:
+                    GetControl<IRadioButton>("rbCutPersons").Checked = true;
+                    break;
+            }
+        }
+
+        private ChartFilter.BranchCutType GetCutModeRadio()
+        {
+            var cutMode = ChartFilter.BranchCutType.None;
+            if (GetControl<IRadioButton>("rbCutNone").Checked)
+                cutMode = ChartFilter.BranchCutType.None;
+            if (GetControl<IRadioButton>("rbCutYears").Checked)
+                cutMode = ChartFilter.BranchCutType.Years;
+            if (GetControl<IRadioButton>("rbCutPersons").Checked)
+                cutMode = ChartFilter.BranchCutType.Persons;
+            return cutMode;
+        }
+
+        public void ChangeCutMode()
+        {
+            fFilter.BranchCut = GetCutModeRadio();
+            UpdateControls();
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_MIFilter);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<IGroupBox>("rgBranchCut").Text = LangMan.LS(LSID.LSID_BranchCut);
+            GetControl<IRadioButton>("rbCutNone").Text = LangMan.LS(LSID.LSID_Not);
+            GetControl<IRadioButton>("rbCutYears").Text = LangMan.LS(LSID.LSID_BCut_Years);
+            GetControl<ILabel>("lblYear").Text = LangMan.LS(LSID.LSID_Year);
+            GetControl<IRadioButton>("rbCutPersons").Text = LangMan.LS(LSID.LSID_BCut_Persons);
+            GetControl<ILabel>("lblRPSources").Text = LangMan.LS(LSID.LSID_RPSources);
+
+            fView.PersonsList.AddColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -28,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTPatSearchDlg : CommonDialog, IPatriarchsSearchDlg
+    public sealed partial class TTPatSearchDlg : CommonDialog<IPatriarchsSearchDlg, PatriarchsSearchController>, IPatriarchsSearchDlg
     {
-        private readonly PatriarchsSearchController fController;
-
         private GKListView ListPatriarchs;
 
         #region View Interface
@@ -59,29 +56,11 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fController = new PatriarchsSearchController(this);
-            fController.Init(baseWin);
-
             ListPatriarchs = UIHelper.CreateListView(Panel3);
             ListPatriarchs.DoubleClick += ListPatriarchs_DblClick;
-            ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
-            ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
-            ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
-            ListPatriarchs.AddColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
 
-            SetLang();
-        }
-
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_8);
-            pagePatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            lblMinGenerations.Text = LangMan.LS(LSID.LSID_MinGenerations);
-            btnSetPatriarch.Text = LangMan.LS(LSID.LSID_SetPatFlag);
-            btnPatSearch.Text = LangMan.LS(LSID.LSID_Search);
-            chkWithoutDates.Text = LangMan.LS(LSID.LSID_WithoutDates);
-            btnPatriarchsDiagram.Text = LangMan.LS(LSID.LSID_PatriarchsDiagram);
+            fController = new PatriarchsSearchController(this);
+            fController.Init(baseWin);
         }
 
         private void ListPatriarchs_DblClick(object sender, EventArgs e)

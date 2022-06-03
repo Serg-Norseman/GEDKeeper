@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
@@ -26,6 +26,7 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -43,11 +44,14 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
             fSourceRecord = new GDMSourceRecord(fBase.Context.Tree);
 
             fDialog = new SourceEditDlg(fBase);
-            fDialog.Model = fSourceRecord;
+            fDialog.SourceRecord = fSourceRecord;
             fDialog.Show();
         }
 
@@ -66,7 +70,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fSourceRecord, fDialog.Model);
+            Assert.AreEqual(fSourceRecord, fDialog.SourceRecord);
 
             var txtShortTitle = new TextBoxTester("txtShortTitle");
             txtShortTitle.Enter("sample text");
@@ -93,7 +97,7 @@ namespace GKUI.Forms
 
         public static void SourceEditDlg_Handler(SourceEditDlg dlg)
         {
-            GDMSourceRecord srcRecord = dlg.Model;
+            GDMSourceRecord srcRecord = dlg.SourceRecord;
             SelectTab("tabsData", dlg, 2);
 
             // repositories

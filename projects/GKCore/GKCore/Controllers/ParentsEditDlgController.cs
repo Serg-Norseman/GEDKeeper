@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -31,24 +32,24 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class ParentsEditDlgController : DialogController<IParentsEditDlg>
     {
-        private GDMChildToFamilyLink fLink;
-        private GDMIndividualRecord fPerson;
+        private GDMChildToFamilyLink fChildLink;
+        private GDMIndividualRecord fIndividualRecord;
 
-        public GDMChildToFamilyLink Link
+        public GDMChildToFamilyLink ChildLink
         {
-            get { return fLink; }
+            get { return fChildLink; }
             set {
-                if (fLink != value) {
-                    fLink = value;
+                if (fChildLink != value) {
+                    fChildLink = value;
                     UpdateView();
                 }
             }
         }
 
-        public GDMIndividualRecord Person
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fPerson; }
-            set { fPerson = value; }
+            get { return fIndividualRecord; }
+            set { fIndividualRecord = value; }
         }
 
 
@@ -62,11 +63,11 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fLink.PedigreeLinkageType = (GDMPedigreeLinkageType)fView.LinkageTypeCombo.SelectedIndex;
+                fChildLink.PedigreeLinkageType = (GDMPedigreeLinkageType)fView.LinkageTypeCombo.SelectedIndex;
 
                 fLocalUndoman.Commit();
 
-                fBase.NotifyRecord(fPerson, RecordAction.raEdit);
+                fBase.NotifyRecord(fIndividualRecord, RecordAction.raEdit);
 
                 return true;
             } catch (Exception ex) {
@@ -78,8 +79,8 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
-                fView.ChildName.Text = GKUtils.GetNameString(fPerson, true, false);
-                fView.LinkageTypeCombo.SelectedIndex = (sbyte)fLink.PedigreeLinkageType;
+                fView.ChildName.Text = GKUtils.GetNameString(fIndividualRecord, true, false);
+                fView.LinkageTypeCombo.SelectedIndex = (sbyte)fChildLink.PedigreeLinkageType;
 
                 UpdateControls();
             } catch (Exception ex) {
@@ -89,32 +90,32 @@ namespace GKCore.Controllers
 
         public void UpdateControls()
         {
-            if (fLink != null) {
-                GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fLink);
-                fView.SetParentsAvl(true);
+            if (fChildLink != null) {
+                GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fChildLink);
+                SetParentsAvl(true);
 
                 GDMIndividualRecord father, mother;
                 fBase.Context.Tree.GetSpouses(family, out father, out mother);
 
                 if (father != null) {
-                    fView.SetFatherAvl(true);
+                    SetFatherAvl(true);
                     fView.Father.Text = GKUtils.GetNameString(father, true, false);
                 } else {
-                    fView.SetFatherAvl(false);
+                    SetFatherAvl(false);
                     fView.Father.Text = "";
                 }
 
                 if (mother != null) {
-                    fView.SetMotherAvl(true);
+                    SetMotherAvl(true);
                     fView.Mother.Text = GKUtils.GetNameString(mother, true, false);
                 } else {
-                    fView.SetMotherAvl(false);
+                    SetMotherAvl(false);
                     fView.Mother.Text = "";
                 }
             } else {
-                fView.SetParentsAvl(false);
-                fView.SetFatherAvl(false);
-                fView.SetMotherAvl(false);
+                SetParentsAvl(false);
+                SetFatherAvl(false);
+                SetMotherAvl(false);
 
                 fView.Father.Text = "";
                 fView.Mother.Text = "";
@@ -123,7 +124,7 @@ namespace GKCore.Controllers
 
         public void EditParents()
         {
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fPerson, false, null);
+            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family != null && BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null)) {
                 UpdateControls();
             }
@@ -131,30 +132,64 @@ namespace GKCore.Controllers
 
         public void AddFather()
         {
-            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
         public void DeleteFather()
         {
-            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
         public void AddMother()
         {
-            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
         public void DeleteMother()
         {
-            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fPerson)) {
+            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
+        }
+
+        private void SetParentsAvl(bool avail)
+        {
+            GetControl<IButton>("btnParentsEdit").Enabled = avail;
+        }
+
+        private void SetFatherAvl(bool avail)
+        {
+            GetControl<IButton>("btnFatherAdd").Enabled = !avail;
+            GetControl<IButton>("btnFatherDelete").Enabled = avail;
+        }
+
+        private void SetMotherAvl(bool avail)
+        {
+            GetControl<IButton>("btnMotherAdd").Enabled = !avail;
+            GetControl<IButton>("btnMotherDelete").Enabled = avail;
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_WinPersonEdit);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ILabel>("lblChildName").Text = LangMan.LS(LSID.LSID_Name);
+            GetControl<ILabel>("lblParents").Text = LangMan.LS(LSID.LSID_Parents);
+            GetControl<ILabel>("lblLinkageType").Text = LangMan.LS(LSID.LSID_LinkageType);
+
+            SetToolTip("btnParentsEdit", LangMan.LS(LSID.LSID_ParentsEditTip));
+            SetToolTip("btnFatherAdd", LangMan.LS(LSID.LSID_FatherAddTip));
+            SetToolTip("btnFatherDelete", LangMan.LS(LSID.LSID_FatherDeleteTip));
+            SetToolTip("btnMotherAdd", LangMan.LS(LSID.LSID_MotherAddTip));
+            SetToolTip("btnMotherDelete", LangMan.LS(LSID.LSID_MotherDeleteTip));
         }
     }
 }

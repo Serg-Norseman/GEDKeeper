@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,10 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Windows.Forms;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -30,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class PortraitSelectDlg : EditorDialog, IPortraitSelectDlg
+    public sealed partial class PortraitSelectDlg : CommonDialog<IPortraitSelectDlg, PortraitSelectDlgController>, IPortraitSelectDlg
     {
-        private readonly PortraitSelectDlgController fController;
-
         public GDMMultimediaLink MultimediaLink
         {
             get { return fController.MultimediaLink; }
@@ -49,11 +44,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
         public PortraitSelectDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -62,11 +52,6 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_PortraitSelect);
 
             fController = new PortraitSelectDlgController(this);
             fController.Init(baseWin);

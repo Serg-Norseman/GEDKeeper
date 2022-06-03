@@ -79,7 +79,7 @@ namespace GKImageViewerPlugin
                 fDisplayName = fLangMan.LS(PLS.LSID_ImgViewer);
 
                 if (fForm != null)
-                    fForm.SetLang();
+                    fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKImageViewerPlugin.OnLanguageChange()", ex);
             }

@@ -37,7 +37,7 @@ namespace GDModel
     }
 
 
-    public sealed class GDMIndividualRecord : GDMRecordWithEvents
+    public sealed class GDMIndividualRecord : GDMRecordWithEvents, IGDMIndividualRecord
     {
         private GDMList<GDMAssociation> fAssociations;
         private GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
@@ -47,9 +47,20 @@ namespace GDModel
         private GDMSex fSex;
 
 
+        public bool HasAssociations
+        {
+            get { return fAssociations != null && fAssociations.Count != 0; }
+        }
+
         public GDMList<GDMAssociation> Associations
         {
-            get { return fAssociations; }
+            get {
+                if (fAssociations == null) {
+                    fAssociations = new GDMList<GDMAssociation>();
+                }
+
+                return fAssociations;
+            }
         }
 
         public bool Bookmark
@@ -73,9 +84,20 @@ namespace GDModel
             get { return fChildToFamilyLinks; }
         }
 
+        public bool HasGroups
+        {
+            get { return fGroups != null && fGroups.Count != 0; }
+        }
+
         public GDMList<GDMPointer> Groups
         {
-            get { return fGroups; }
+            get {
+                if (fGroups == null) {
+                    fGroups = new GDMList<GDMPointer>();
+                }
+
+                return fGroups;
+            }
         }
 
         public bool Patriarch
@@ -115,9 +137,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.INDI);
 
-            fAssociations = new GDMList<GDMAssociation>();
             fChildToFamilyLinks = new GDMList<GDMChildToFamilyLink>();
-            fGroups = new GDMList<GDMPointer>();
             fPersonalNames = new GDMList<GDMPersonalName>();
             fSpouseToFamilyLinks = new GDMList<GDMSpouseToFamilyLink>();
         }
@@ -125,9 +145,9 @@ namespace GDModel
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fAssociations.Dispose();
+                if (fAssociations != null) fAssociations.Dispose();
                 fChildToFamilyLinks.Dispose();
-                fGroups.Dispose();
+                if (fGroups != null) fGroups.Dispose();
                 fPersonalNames.Dispose();
                 fSpouseToFamilyLinks.Dispose();
             }
@@ -138,9 +158,9 @@ namespace GDModel
         {
             base.TrimExcess();
 
-            fAssociations.TrimExcess();
+            if (fAssociations != null) fAssociations.TrimExcess();
             fChildToFamilyLinks.TrimExcess();
-            fGroups.TrimExcess();
+            if (fGroups != null) fGroups.TrimExcess();
             fPersonalNames.TrimExcess();
             fSpouseToFamilyLinks.TrimExcess();
         }
@@ -184,13 +204,16 @@ namespace GDModel
             }
             fSpouseToFamilyLinks.Clear();
 
-            for (int i = fGroups.Count - 1; i >= 0; i--) {
-                var group = fTree.GetPtrValue<GDMGroupRecord>(fGroups[i]);
-                group.RemoveMember(this);
+            if (fGroups != null) {
+                for (int i = fGroups.Count - 1; i >= 0; i--) {
+                    var group = fTree.GetPtrValue<GDMGroupRecord>(fGroups[i]);
+                    group.RemoveMember(this);
+                }
+                fGroups.Clear();
             }
-            fGroups.Clear();
 
-            fAssociations.Clear();
+            if (fAssociations != null) fAssociations.Clear();
+
             fPersonalNames.Clear();
         }
 
@@ -198,12 +221,13 @@ namespace GDModel
         {
             return base.IsEmpty() && (fSex == GDMSex.svUnknown) && (fPersonalNames.Count == 0)
                 && (fChildToFamilyLinks.Count == 0) && (fSpouseToFamilyLinks.Count == 0)
-                && (fAssociations.Count == 0) && (fGroups.Count == 0);
+                && (fAssociations == null || fAssociations.Count == 0)
+                && (fGroups == null || fGroups.Count == 0);
         }
 
         public int IndexOfGroup(GDMGroupRecord groupRec)
         {
-            if (groupRec != null) {
+            if (groupRec != null && fGroups != null) {
                 int num = fGroups.Count;
                 for (int i = 0; i < num; i++) {
                     if (fGroups[i].XRef == groupRec.XRef) {
@@ -344,12 +368,12 @@ namespace GDModel
                 targetIndi.SpouseToFamilyLinks.Add(stfLink);
             }
 
-            while (fAssociations.Count > 0) {
+            while (fAssociations != null && fAssociations.Count > 0) {
                 GDMAssociation obj = fAssociations.Extract(0);
                 targetIndi.Associations.Add(obj);
             }
 
-            while (fGroups.Count > 0) {
+            while (fGroups != null && fGroups.Count > 0) {
                 GDMPointer obj = fGroups.Extract(0);
                 targetIndi.Groups.Add(obj);
             }
@@ -359,9 +383,9 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
 
-            fAssociations.ReplaceXRefs(map);
+            if (fAssociations != null) fAssociations.ReplaceXRefs(map);
             fChildToFamilyLinks.ReplaceXRefs(map);
-            fGroups.ReplaceXRefs(map);
+            if (fGroups != null) fGroups.ReplaceXRefs(map);
             fPersonalNames.ReplaceXRefs(map);
             fSpouseToFamilyLinks.ReplaceXRefs(map);
         }
@@ -396,6 +420,11 @@ namespace GDModel
             }
 
             return new LifeDatesRet(birthEvent, deathEvent);
+        }
+
+        public GDMPersonalName GetPrimaryPersonalName()
+        {
+            return (fPersonalNames.Count <= 0) ? null : fPersonalNames[0];
         }
 
         public string GetPrimaryFullName()
@@ -500,13 +529,15 @@ namespace GDModel
             if (mediaRec == null) return null;
             GDMMultimediaLink mmLink = null;
 
-            int num = MultimediaLinks.Count;
-            for (int i = 0; i < num; i++) {
-                GDMMultimediaLink lnk = MultimediaLinks[i];
+            if (HasMultimediaLinks) {
+                int num = MultimediaLinks.Count;
+                for (int i = 0; i < num; i++) {
+                    GDMMultimediaLink lnk = MultimediaLinks[i];
 
-                if (lnk.XRef == mediaRec.XRef) {
-                    mmLink = lnk;
-                    break;
+                    if (lnk.XRef == mediaRec.XRef) {
+                        mmLink = lnk;
+                        break;
+                    }
                 }
             }
 
@@ -521,6 +552,7 @@ namespace GDModel
         public GDMMultimediaLink GetPrimaryMultimediaLink()
         {
             GDMMultimediaLink result = null;
+            if (!HasMultimediaLinks) return result;
 
             int num = MultimediaLinks.Count;
             for (int i = 0; i < num; i++) {

@@ -76,14 +76,18 @@ namespace GKCore.Export
 
         private void SetPen(IPen pen)
         {
-            IColor color = pen.Color;
-            fCanvas.SetRGBColorStroke(color.GetR(), color.GetG(), color.GetB());
-            fCanvas.SetLineWidth(pen.Width);
+            if (pen != null) {
+                IColor color = pen.Color;
+                fCanvas.SetRGBColorStroke(color.GetR(), color.GetG(), color.GetB());
+                fCanvas.SetLineWidth(pen.Width);
+            }
         }
 
         private void SetFillColor(IColor color)
         {
-            fCanvas.SetColorFill(new BaseColor(color.GetR(), color.GetG(), color.GetB()));
+            if (color != null) {
+                fCanvas.SetColorFill(new BaseColor(color.GetR(), color.GetG(), color.GetB()));
+            }
         }
 
         private float CheckVal(float value, bool yAxis = false, float yOffset = 0)
@@ -224,16 +228,24 @@ namespace GKCore.Export
 
             fCanvas.Rectangle(x, y, width, height);
 
-            if (pen != null && !fillColor.IsTransparent()) {
+            if (pen != null && (fillColor != null && !fillColor.IsTransparent())) {
                 SetPen(pen);
                 SetFillColor(fillColor);
                 fCanvas.ClosePathFillStroke();
             } else if (pen != null) {
                 SetPen(pen);
                 fCanvas.ClosePathStroke();
-            } else if (!fillColor.IsTransparent()) {
+            } else if (fillColor != null && !fillColor.IsTransparent()) {
                 SetFillColor(fillColor);
                 fCanvas.Fill();
+            }
+        }
+
+        public override void FillRectangle(IBrush brush,
+                                           float x, float y, float width, float height)
+        {
+            if (brush != null) {
+                // TODO
             }
         }
 
@@ -247,14 +259,14 @@ namespace GKCore.Export
 
             fCanvas.RoundRectangle(x, y, width, height, radius);
 
-            if (pen != null && !fillColor.IsTransparent()) {
+            if (pen != null && (fillColor != null && !fillColor.IsTransparent())) {
                 SetPen(pen);
                 SetFillColor(fillColor);
                 fCanvas.ClosePathFillStroke();
             } else if (pen != null) {
                 SetPen(pen);
                 fCanvas.ClosePathStroke();
-            } else if (!fillColor.IsTransparent()) {
+            } else if (fillColor != null && !fillColor.IsTransparent()) {
                 SetFillColor(fillColor);
                 fCanvas.Fill();
             }

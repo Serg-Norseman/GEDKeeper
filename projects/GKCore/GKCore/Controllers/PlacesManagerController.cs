@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -68,9 +70,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void CreateLocationRecord()
+        public void CreateLocationRecord(IList<object> placesList)
         {
-            PlaceObj pObj = fView.PlacesList.GetSelectedData() as PlaceObj;
+            PlaceObj pObj = placesList.Count > 0 ? (PlaceObj) placesList[0] : null;
             if (pObj == null) return;
 
             if (pObj.Name.IndexOf("[*]") == 0) {
@@ -79,16 +81,32 @@ namespace GKCore.Controllers
                 GDMLocationRecord locRec = fBase.Context.SelectRecord(GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
                 if (locRec == null) return;
 
-                int num = pObj.Facts.Count;
-                for (int i = 0; i < num; i++) {
-                    GDMCustomEvent evt = pObj.Facts[i];
-                    evt.Place.StringValue = locRec.LocationName;
-                    evt.Place.Location.XRef = locRec.XRef;
+                for (var pi = 0; pi < placesList.Count; pi++) {
+                    PlaceObj place = (PlaceObj) placesList[pi];
+                    int num = place.Facts.Count;
+                    for (int i = 0; i < num; i++) {
+                        GDMCustomEvent evt = place.Facts[i];
+                        evt.Place.StringValue = locRec.LocationName;
+                        evt.Place.Location.XRef = locRec.XRef;
+                    }
                 }
 
                 CheckPlaces();
                 fBase.RefreshLists(false);
             }
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_ToolOp_9);
+
+            GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.LSID_ToolOp_9);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<IButton>("btnIntoList").Text = LangMan.LS(LSID.LSID_InsertIntoBook);
+            GetControl<IButton>("btnAnalysePlaces").Text = LangMan.LS(LSID.LSID_Analyze);
+
+            fView.PlacesList.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
+            fView.PlacesList.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
         }
     }
 }

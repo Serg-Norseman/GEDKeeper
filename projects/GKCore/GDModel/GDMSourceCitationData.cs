@@ -25,8 +25,8 @@ namespace GDModel
 {
     public sealed class GDMSourceCitationData : GDMTag
     {
-        private GDMDateValue fDate;
-        private GDMTextTag fText;
+        private readonly GDMDateValue fDate;
+        private readonly GDMTextTag fText;
 
 
         public GDMDateValue Date

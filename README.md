@@ -4,26 +4,20 @@
 [![Website](https://img.shields.io/badge/www-gedkeeper.net-0099BC.svg?maxAge=3600)](https://gedkeeper.net/)
 [![forums](https://img.shields.io/badge/join-the%20forums-yellowgreen.svg)](http://groups.google.com/group/gedkeeper-en)
 [![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-brightgreen.svg)](https://t.me/gedkeeper_chat_en)
-[![wiki](https://img.shields.io/badge/browse-the%20wiki-orange.svg)](https://github.com/Serg-Norseman/GEDKeeper/wiki)
 [![donate](https://img.shields.io/badge/make%20a-donation-greenblue.svg)](https://sourceforge.net/p/gedkeeper/donate/)
 
 [![Change Log](https://img.shields.io/badge/Change%20Log-green)](CHANGELOG.md)
 [![GitHub release](https://img.shields.io/github/release/Serg-Norseman/GEDKeeper.svg?label=Latest&maxAge=60)](https://github.com/Serg-Norseman/GEDKeeper/releases/latest)
 [![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)
 
-[![Build Status](https://travis-ci.org/Serg-Norseman/GEDKeeper.svg?branch=master)](https://travis-ci.org/Serg-Norseman/GEDKeeper)
 [![Build status](https://ci.appveyor.com/api/projects/status/h0u8iwr3kvy6o9x1?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/gedkeeper)
 [![codecov.io](https://codecov.io/github/Serg-Norseman/GEDKeeper/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/GEDKeeper?branch=master)
 [![Coverity Status](https://scan.coverity.com/projects/10037/badge.svg)](https://scan.coverity.com/projects/serg-norseman-gedkeeper)
 [![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=gedkeeper&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=gedkeeper)
-[![BCH compliance](https://bettercodehub.com/edge/badge/Serg-Norseman/GEDKeeper?branch=master)](https://bettercodehub.com/)
 [![CodeFactor](https://www.codefactor.io/repository/github/serg-norseman/gedkeeper/badge)](https://www.codefactor.io/repository/github/serg-norseman/gedkeeper)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/gedkeeper/localized.svg)](https://crowdin.com/project/gedkeeper)
 
-[GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=600&user=serg-norseman)
 
-
-## English
 The **GEDKeeper** program is for working with personal genealogical databases.
 
 The program is designed with an extremely simple and intuitive interface. 
@@ -40,17 +34,14 @@ but not limited to, the following:
 The aim of this program is to be a quick and effective means of conducting personal 
 genealogical database development.
 
-To enhance the capabilities of the program it supports scripts using [Lua](https://www.lua.org/)
-and plug-ins written in [.NET](https://dotnet.microsoft.com/).
+To enhance the capabilities of the program it supports scripts using Lua and plug-ins written in .NET.
 
 The latest releases can be downloaded from [releases](https://github.com/serg-norseman/gedkeeper/releases) 
-or from the homepage site on [GitHub.io](https://gedkeeper.github.io/). 
-Alternatively, why not try the [Sourceforge](https://sourceforge.net/projects/gedkeeper/) 
-site (this is very popular).
+or from the [homepage site](https://gedkeeper.net/). Alternatively [SourceForge](https://sourceforge.net/projects/gedkeeper/) site.
 
-Project's main site: [http://en.gedkeeper.net/](http://en.gedkeeper.net/)
+Project's homepage site: [http://gedkeeper.net/](http://gedkeeper.net/)
 
-Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/forum/#!forum/gedkeeper-en)
+Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/gedkeeper-en)
 
 ### Support
 
@@ -69,49 +60,8 @@ Have a bug or a feature request? Please first search for existing and closed [is
 If your problem or idea is not addressed yet, please open a new issue.
 
 
-## Russian
-Программа **GEDKeeper** предназначена для ведения личной генеалогической базы данных.
-
-Программа разработана так, чтобы интерфейс был максимально простым и интуитивно 
-понятным. Программа очень просто устанавливается на компьютер, полностью 
-поддерживает формат GEDCOM, не имеет ограничений по количеству персон и 
-поколений, позволяет генерировать родословные росписи, строить несколько видов 
-деревьев, а также выводить на печать и сохранять их изображения, обеспечивает 
-быструю навигацию, фильтрацию, поиск и возможности добавления 
-мультимедиа-материалов. Кроме того есть вывод географических данных на карты 
-Google Maps (© Google).
-
-Цель программы - максимально быстрое и эффективное средство ведения личной 
-генеалогической базы данных.
-
-Для расширения возможностей программы поддерживаются скрипты на Lua и плагины.
-
-Новые релизы могут быть загружены на странице [releases](https://github.com/serg-norseman/gedkeeper/releases) 
-или на домашней страничке проекта [GitHub.io](https://gedkeeper.github.io/index_rus.html). 
-Альтернативно можно пробовать загрузить на сайте 
-[Sourceforge](https://sourceforge.net/projects/gedkeeper/) (более популярен).
-
-Основной сайт проекта: [http://ru.gedkeeper.net/](http://ru.gedkeeper.net/)
-
-Группа сообщества: [Google Groups: GEDKeeper (ru)](https://groups.google.com/forum/#!forum/gedkeeper-ru)
-
-### Поддержка
-
-Проект полностью свободен, я не налагаю никаких ограничений на его использование. Я просто люблю делать полезные вещи.
-Если у вас есть желание помочь, расскажите друзьям о проекте или пожертвуйте на его развитие. Благодарю!
-
-### Содействие
-
-Любое участие приветствуются. Вклад в развитие может закрыть проблему, исправить ошибку, добавить новый блок,
-улучшить существующий код, добавить новую функцию и т.д.
-
-### Ошибки и запросы функций
-
-Есть ошибка или запрос новой функции? Сначала найдите существующие и закрытые проблемы.
-Если ваша проблема или идея еще не решены, создайте новую.
-
-
 ## Implementations
+
 - Legacy (NET4.0 & WinForms based), "GEDKeeper2"
 - Cross-platform (NET Standard & Eto based), codenamed "GEDKeeper3", interface grinding stage
 - Future mobile (NET Standard & Xamarin based), codenamed "GEDKeeperX", initial experience
@@ -119,21 +69,29 @@ Google Maps (© Google).
 
 ## Supported languages
 
-
-cze, deu, enu, fra, ita, pol, rus, ukr, zho
+- Chinese (simplified)
+- Czech
+- English
+- French
+- German
+- Italian
+- Kazakh (cyrillic), partial
+- Polish
+- Russian
+- Ukrainian
 
 
 ## Docs & Help
 
 - [Contributing guide](/CONTRIBUTING.md)
 - [Coding style guide](/CODINGSTYLE.md)
-- [Testing](/TESTING.md)
+- [Development](/DEVELOPMENT.md)
 - [FAQ](/FAQ.md)
 - [Changelog](/CHANGELOG.md)
 
 
 ## Links
 
-https://gedkeeper.github.io/
+https://gedkeeper.net/
 
 https://sourceforge.net/projects/gedkeeper/

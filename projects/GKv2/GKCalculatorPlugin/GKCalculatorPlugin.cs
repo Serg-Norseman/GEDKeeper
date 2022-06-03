@@ -80,7 +80,7 @@ namespace GKCalculatorPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_MICalc);
 
-                if (fForm != null) fForm.SetLang();
+                if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKCalculatorPlugin.OnLanguageChange()", ex);
             }

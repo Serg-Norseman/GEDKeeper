@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,10 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -31,14 +34,14 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class RepositoryEditDlgController : DialogController<IRepositoryEditDlg>
     {
-        private GDMRepositoryRecord fRepository;
+        private GDMRepositoryRecord fRepositoryRecord;
 
-        public GDMRepositoryRecord Repository
+        public GDMRepositoryRecord RepositoryRecord
         {
-            get { return fRepository; }
+            get { return fRepositoryRecord; }
             set {
-                if (fRepository != value) {
-                    fRepository = value;
+                if (fRepositoryRecord != value) {
+                    fRepositoryRecord = value;
                     UpdateView();
                 }
             }
@@ -50,12 +53,19 @@ namespace GKCore.Controllers
             fView.Name.Activate();
         }
 
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+        }
+
         public override bool Accept()
         {
             try {
-                fRepository.RepositoryName = fView.Name.Text;
+                fRepositoryRecord.RepositoryName = fView.Name.Text;
 
-                fBase.NotifyRecord(fRepository, RecordAction.raEdit);
+                fBase.NotifyRecord(fRepositoryRecord, RecordAction.raEdit);
 
                 CommitChanges();
 
@@ -68,14 +78,24 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Name.Text = fRepository.RepositoryName;
+            fView.Name.Text = fRepositoryRecord.RepositoryName;
 
-            fView.NotesList.ListModel.DataOwner = fRepository;
+            fView.NotesList.ListModel.DataOwner = fRepositoryRecord;
         }
 
         public void ModifyAddress()
         {
-            BaseController.ModifyAddress(fBase, fRepository.Address);
+            BaseController.ModifyAddress(fBase, fRepositoryRecord.Address);
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_Repository);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Title);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
+            GetControl<IButton>("btnAddress").Text = LangMan.LS(LSID.LSID_Address) + @"...";
         }
     }
 }

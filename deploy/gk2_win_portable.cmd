@@ -1,10 +1,7 @@
 @echo off
 cls
-rem "GEDKeeper", the personal genealogical database editor.
-rem Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
-rem This file is part of "GEDKeeper".
 
-set GKVER=2.17.0
+set GKVER=2.20.1
 
 set lstfile=".\listfile.txt"
 set out_fn="gedkeeper_%GKVER%_win_portable"
@@ -16,32 +13,9 @@ echo Processing portable installation start
 del .\*.zip /q
 del ..\appdata\*.* /q
 
-echo "..\GEDKeeper2.exe" > %lstfile%
-echo "..\GEDKeeper2.exe.config" >> %lstfile%
-echo "..\GKComponents.dll" >> %lstfile%
-echo "..\GKCore.dll" >> %lstfile%
-echo "..\GKTray.exe" >> %lstfile%
-
-echo "..\BSLib.dll" >> %lstfile%
-echo "..\BSLib.DataViz.Model.dll" >> %lstfile%
-echo "..\BSLib.Design.dll" >> %lstfile%
-echo "..\BSLib.Design.WFHandlers.dll" >> %lstfile%
-echo "..\BSLib.Linguistics.dll" >> %lstfile%
-echo "..\DotNetRtfWriter.dll" >> %lstfile%
-echo "..\ExcelLibrary.dll" >> %lstfile%
-echo "..\GMap.NET.Core.dll" >> %lstfile%
-echo "..\GMap.NET.WindowsForms.dll" >> %lstfile%
-echo "..\itextsharp.dll" >> %lstfile%
-echo "..\lua51.dll" >> %lstfile%
-echo "..\LuaInterface.dll" >> %lstfile%
-echo "..\NLog.dll" >> %lstfile%
-echo "..\nVLC.dll" >> %lstfile%
-echo "..\Ude.dll" >> %lstfile%
-echo "..\YamlSerializer.dll" >> %lstfile%
-echo "..\ZedGraph.dll" >> %lstfile%
-
 echo "..\LICENSE" >> %lstfile%
 
+echo "..\bin\" >> %lstfile%
 echo "..\appdata\" >> %lstfile%
 echo "..\locales\" >> %lstfile%
 echo "..\plugins\" >> %lstfile%

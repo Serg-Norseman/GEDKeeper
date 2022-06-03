@@ -9,7 +9,6 @@
 
 		private void InitializeComponent()
 		{
-		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PortraitSelectDlg));
 		    this.panel1 = new System.Windows.Forms.Panel();
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
@@ -39,7 +38,7 @@
 		    this.btnAccept.TabIndex = 3;
 		    this.btnAccept.Text = "btnAccept";
 		    this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-		    this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
+		    this.btnAccept.Click += new System.EventHandler(this.AcceptClickHandler);
 		    // 
 		    // btnCancel
 		    // 

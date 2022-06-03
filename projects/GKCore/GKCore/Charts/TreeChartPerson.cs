@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using BSLib.Design.Graphics;
@@ -32,7 +33,7 @@ using BSDColors = BSLib.Design.BSDConsts.Colors;
 namespace GKCore.Charts
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class PersonModifyEventArgs : EventArgs
     {
@@ -51,15 +52,17 @@ namespace GKCore.Charts
         pfAncWalk, pfDescWalk, // walk flags
         pfHasInvAnc, pfHasInvDesc, // invisible flags
         pfSpecialMark, // debug flag for special goals
+        pfOutsideKin, pfCanExpand, pfAdopted,
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public class TreeChartPerson : BaseObject
+    public class TreeChartPerson
     {
         private readonly TreeChartModel fModel;
 
+        private string fAge;
         private string fBirthDate;
         private string fBirthPlace;
         private string fDeathDate;
@@ -72,8 +75,8 @@ namespace GKCore.Charts
         private GDMIndividualRecord fRec;
         private EnumSet<SpecialUserRef> fSigns;
         private GDMSex fSex;
-        private PersonList fChilds;
-        private PersonList fSpouses;
+        private List<TreeChartPerson> fChilds;
+        private List<TreeChartPerson> fSpouses;
         private IImage fPortrait;
         private int fPortraitWidth;
 
@@ -90,9 +93,7 @@ namespace GKCore.Charts
         public TreeChartPerson Father;
         public TreeChartPerson Mother;
         public TreeChartPerson Parent;
-        public bool CanExpand;
         public int Generation;
-        public bool OutsideKin;
         public string Kinship;
         public string[] Lines;
         public Vertex Node;
@@ -102,32 +103,12 @@ namespace GKCore.Charts
         public bool IsCollapsed;
         public bool IsVisible;
         public IColor UserColor;
-        public bool Adopted;
         public int NameLines;
 
 
-        public IImage Portrait
+        public int Height
         {
-            get { return fPortrait; }
-        }
-
-        public int PortraitWidth
-        {
-            get { return fPortraitWidth; }
-        }
-
-        public bool Divorced
-        {
-            get {
-                return fFlags.Contains(PersonFlag.pfDivorced);
-            }
-            set {
-                if (value) {
-                    fFlags.Include(PersonFlag.pfDivorced);
-                } else {
-                    fFlags.Exclude(PersonFlag.pfDivorced);
-                }
-            }
+            get { return fHeight; }
         }
 
         public bool IsDup
@@ -144,23 +125,14 @@ namespace GKCore.Charts
             }
         }
 
-        public int Height
+        public IImage Portrait
         {
-            get { return fHeight; }
+            get { return fPortrait; }
         }
 
-        public bool IsDead
+        public int PortraitWidth
         {
-            get {
-                return fFlags.Contains(PersonFlag.pfIsDead);
-            }
-            set {
-                if (value) {
-                    fFlags.Include(PersonFlag.pfIsDead);
-                } else {
-                    fFlags.Exclude(PersonFlag.pfIsDead);
-                }
-            }
+            get { return fPortraitWidth; }
         }
 
         public int PtX
@@ -222,6 +194,7 @@ namespace GKCore.Charts
             get { return fWidth; }
         }
 
+
         public TreeChartPerson(TreeChartModel model)
         {
             fModel = model;
@@ -232,18 +205,6 @@ namespace GKCore.Charts
             UserColor = null;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // don't dispose portrait - he's from cache!
-                //if (fPortrait != null) fPortrait.Dispose();
-
-                if (fChilds != null) fChilds.Dispose();
-                if (fSpouses != null) fSpouses.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         public bool HasFlag(PersonFlag flag)
         {
             return fFlags.Contains(flag);
@@ -252,6 +213,15 @@ namespace GKCore.Charts
         public void SetFlag(PersonFlag flag)
         {
             fFlags.Include(flag);
+        }
+
+        public void SetFlag(PersonFlag flag, bool value)
+        {
+            if (value) {
+                fFlags.Include(flag);
+            } else {
+                fFlags.Exclude(flag);
+            }
         }
 
         public TreeChartPerson GetChild(int index)
@@ -282,7 +252,7 @@ namespace GKCore.Charts
         {
             if (child == null) return;
 
-            if (fChilds == null) fChilds = new PersonList(false);
+            if (fChilds == null) fChilds = new List<TreeChartPerson>();
 
             fChilds.Add(child);
         }
@@ -291,7 +261,7 @@ namespace GKCore.Charts
         {
             if (spouse == null) return;
 
-            if (fSpouses == null) fSpouses = new PersonList(false);
+            if (fSpouses == null) fSpouses = new List<TreeChartPerson>();
 
             fSpouses.Add(spouse);
         }
@@ -318,40 +288,45 @@ namespace GKCore.Charts
                     var lifeDates = iRec.GetLifeDates();
                     DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
 
-                    IsDead = (lifeDates.DeathEvent != null);
-                    fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, false);
-                    fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, false);
+                    SetFlag(PersonFlag.pfIsDead, (lifeDates.DeathEvent != null));
+                    GlobalOptions glob = GlobalOptions.Instance;
+                    fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, glob.ShowDatesSign);
+                    fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, glob.ShowDatesSign);
 
-                    if (!options.OnlyYears) {
-                        if (options.ShowPlaces) {
-                            fBirthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false);
-                            if (!string.IsNullOrEmpty(fBirthPlace) && !options.SeparateDatesAndPlacesLines) {
-                                if (!string.IsNullOrEmpty(fBirthDate)) {
-                                    fBirthDate += ", ";
-                                }
-                                fBirthDate += fBirthPlace;
+                    if (options.ShowPlaces) {
+                        fBirthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false, options.OnlyLocality);
+                        if (!string.IsNullOrEmpty(fBirthPlace) && !options.SeparateDatesAndPlacesLines) {
+                            if (!string.IsNullOrEmpty(fBirthDate)) {
+                                fBirthDate += ", ";
                             }
-
-                            fDeathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false);
-                            if (!string.IsNullOrEmpty(fDeathPlace) && !options.SeparateDatesAndPlacesLines) {
-                                if (!string.IsNullOrEmpty(fDeathDate)) {
-                                    fDeathDate += ", ";
-                                }
-                                fDeathDate += fDeathPlace;
-                            }
+                            fBirthDate += fBirthPlace;
                         }
 
-                        if (!string.IsNullOrEmpty(fBirthDate)) {
-                            fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
-                        }
-                        if (!string.IsNullOrEmpty(fDeathDate)) {
-                            fDeathDate = ImportUtils.STD_DEATH_SIGN + " " + fDeathDate;
+                        fDeathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false, options.OnlyLocality);
+                        if (!string.IsNullOrEmpty(fDeathPlace) && !options.SeparateDatesAndPlacesLines) {
+                            if (!string.IsNullOrEmpty(fDeathDate)) {
+                                fDeathDate += ", ";
+                            }
+                            fDeathDate += fDeathPlace;
                         }
                     }
 
-                    if (options.SignsVisible) {
-                        EnumSet<SpecialUserRef> signs = EnumSet<SpecialUserRef>.Create();
+                    if (options.AgeVisible) {
+                        int age = GKUtils.GetAgeLD(lifeDates, -1);
+                        fAge = (age == -1) ? "" : age.ToString();
+                    } else {
+                        fAge = "";
+                    }
 
+                    if (!string.IsNullOrEmpty(fBirthDate)) {
+                        fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
+                    }
+                    if (!string.IsNullOrEmpty(fDeathDate)) {
+                        fDeathDate = ImportUtils.STD_DEATH_SIGN + " " + fDeathDate;
+                    }
+
+                    fSigns = EnumSet<SpecialUserRef>.Create();
+                    if (options.SignsVisible && fRec.HasUserReferences) {
                         int num = fRec.UserReferences.Count;
                         for (int i = 0; i < num; i++) {
                             string rs = fRec.UserReferences[i].StringValue;
@@ -359,14 +334,10 @@ namespace GKCore.Charts
                             for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
                                 string sur = LangMan.LS(GKData.SpecialUserRefs[(int)cps].Title);
                                 if (rs == sur) {
-                                    signs.Include(cps);
+                                    fSigns.Include(cps);
                                 }
                             }
                         }
-
-                        fSigns = signs;
-                    } else {
-                        fSigns = EnumSet<SpecialUserRef>.Create();
                     }
 
                     if (options.PortraitsVisible) {
@@ -395,7 +366,8 @@ namespace GKCore.Charts
                     fBirthPlace = "";
                     fDeathDate = "";
                     fDeathPlace = "";
-                    IsDead = false;
+                    fAge = "";
+                    SetFlag(PersonFlag.pfIsDead, false);
                     fSex = GDMSex.svUnknown;
                     fSigns = EnumSet<SpecialUserRef>.Create();
 
@@ -445,7 +417,20 @@ namespace GKCore.Charts
                     idx++;
                 }
 
-                if (!options.OnlyYears) {
+                if (options.OnlyYears && !options.ShowPlaces) {
+                    string lifeYears = "[ ";
+                    lifeYears += (fBirthDate == "") ? "?" : fBirthDate;
+                    if (HasFlag(PersonFlag.pfIsDead)) {
+                        lifeYears += (fDeathDate == "") ? " - ?" : " - " + fDeathDate;
+                    }
+                    if (!string.IsNullOrEmpty(fAge)) {
+                        lifeYears += string.Concat(" (", fAge, ")");
+                    }
+                    lifeYears += " ]";
+
+                    Lines[idx] = lifeYears;
+                    idx++;
+                } else {
                     if (options.BirthDateVisible) {
                         Lines[idx] = fBirthDate;
                         idx++;
@@ -465,16 +450,6 @@ namespace GKCore.Charts
                             idx++;
                         }
                     }
-                } else {
-                    string lifeYears = "[ ";
-                    lifeYears += (fBirthDate == "") ? "?" : fBirthDate;
-                    if (IsDead) {
-                        lifeYears += (fDeathDate == "") ? " - ?" : " - " + fDeathDate;
-                    }
-                    lifeYears += " ]";
-
-                    Lines[idx] = lifeYears;
-                    idx++;
                 }
 
                 if (options.Kinship) {
@@ -500,8 +475,7 @@ namespace GKCore.Charts
                 fFlags.Exclude(PersonFlag.pfHasInvDesc);
             }
 
-            CanExpand |= fFlags.Contains(PersonFlag.pfHasInvAnc);
-            CanExpand |= fFlags.Contains(PersonFlag.pfHasInvDesc);
+            SetFlag(PersonFlag.pfCanExpand, fFlags.Contains(PersonFlag.pfHasInvAnc) || fFlags.Contains(PersonFlag.pfHasInvDesc));
         }
 
         public void CalcBounds(int lines, ChartRenderer renderer)
@@ -597,15 +571,17 @@ namespace GKCore.Charts
                 return UserColor;
             }
 
+            bool divorced = HasFlag(PersonFlag.pfDivorced);
+
             IColor result;
             TreeChartOptions options = fModel.Options;
             switch (fSex) {
                 case GDMSex.svMale:
-                    result = Divorced ? options.UnHusbandColor : options.MaleColor;
+                    result = divorced ? options.UnHusbandColor : options.MaleColor;
                     break;
 
                 case GDMSex.svFemale:
-                    result = Divorced ? options.UnWifeColor : options.FemaleColor;
+                    result = divorced ? options.UnWifeColor : options.FemaleColor;
                     break;
 
                 default:

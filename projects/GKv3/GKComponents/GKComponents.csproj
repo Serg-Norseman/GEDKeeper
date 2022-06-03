@@ -1,131 +1,38 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
-  <PropertyGroup>
-    <ProjectGuid>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <OutputType>Library</OutputType>
-    <AssemblyName>GKComponents</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <NoWin32Manifest>False</NoWin32Manifest>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <WarningLevel>4</WarningLevel>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
-    <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <StartAction>Project</StartAction>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\</OutputPath>
-    <DebugSymbols>False</DebugSymbols>
-    <DebugType>None</DebugType>
-    <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(CIMode)'=='true'">
-    <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="BSLib">
-      <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.DataViz.Model, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.Design">
-      <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Forms.2.4.1\lib\netstandard1.0\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj">
-      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
-      <Name>GKCore.nstd</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="GKUI\Components\ArborViewer.cs" />
-    <Compile Include="GKUI\Platform\ControlHandlers.cs" />
-    <Compile Include="GKUI\Components\GKTabControl.cs" />
-    <Compile Include="GKUI\Components\ScrollablePanel.cs" />
-    <Compile Include="GKUI\Components\DefStackLayout.cs" />
-    <Compile Include="GKUI\Components\DefTableLayout.cs" />
-    <Compile Include="GKUI\Platform\EtoGfxRenderer.cs" />
-    <Compile Include="GKUI\Platform\EtoStdDialogs.cs" />
-    <Compile Include="GKUI\Platform\EUITimer.cs" />
-    <Compile Include="GKUI\Components\GKComboBox.cs" />
-    <Compile Include="GKUI\Components\GKComboItem.cs" />
-    <Compile Include="GKUI\Components\GKDateBox.cs" />
-    <Compile Include="GKUI\Components\GKInputBox.cs" />
-    <Compile Include="GKUI\Components\GKListView.cs" />
-    <Compile Include="GKUI\Platform\MenuItemEx.cs" />
-    <Compile Include="GKUI\Components\GKPortrait.cs" />
-    <Compile Include="GKUI\Components\GKSheetList.cs" />
-    <Compile Include="GKUI\Components\GKTreeNode.cs" />
-    <Compile Include="GKUI\Components\HyperView.cs" />
-    <Compile Include="GKUI\Components\ImageBox.cs" />
-    <Compile Include="GKUI\Components\ImageView.cs" />
-    <Compile Include="GKUI\Components\LogChart.cs" />
-    <Compile Include="GKUI\Components\MediaPlayer.cs" />
-    <Compile Include="GKUI\Components\MediaPlayer.design.cs">
-      <DependentUpon>MediaPlayer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Components\ObservableExtList.cs" />
-    <Compile Include="GKUI\Components\UIHelper.cs" />
-    <Compile Include="GKUI\Platform\EtoGraphics.cs" />
-    <Compile Include="GKUI\Components\WizardPages.cs" />
-    <Compile Include="GKUI\Components\ZGraphControl.cs" />
-    <Compile Include="GKUI\Forms\CommonForm.cs" />
-    <Compile Include="GKUI\Platform\EtoGfxProvider.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Eto.Forms.2.4.1\build\Eto.Forms.targets" Condition="Exists('..\packages\Eto.Forms.2.4.1\build\Eto.Forms.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <RootNamespace />
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Eto.Forms.2.4.1\build\Eto.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Eto.Forms.2.4.1\build\Eto.Forms.targets'))" />
-  </Target>
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.Model">
+            <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.Design">
+            <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+        <ProjectReference Include="..\..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj" />
+        <ProjectReference Include="..\..\GKMap\GKMap.EtoForms\GKMap.EtoForms.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Eto.Forms" Version="2.7.0" />
+        <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.0" />
+        <PackageReference Include="OxyPlot.Eto" Version="1.1.0" />
+        <PackageReference Include="LibVLCSharp" Version="3.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="GKUI\Components\GKTextBox.cs" />
+    </ItemGroup>
+
 </Project>

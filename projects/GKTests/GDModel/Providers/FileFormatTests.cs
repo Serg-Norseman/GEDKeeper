@@ -47,7 +47,7 @@ namespace GDModel.Providers
                         inArray = inMem.ToArray();
                     }
 
-                    var gedcomProvider = new GEDCOMProvider(tree);
+                    var gedcomProvider = new GEDCOMProvider(tree, true);
                     gedcomProvider.LoadFromStreamExt(inStream, inStream);
 
                     using (MemoryStream outStream = new MemoryStream()) {
@@ -232,6 +232,18 @@ namespace GDModel.Providers
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
                 Assert.AreEqual("Test1\r\ntest2\r\ntest3\r\nbadline badline badline badline", noteRec1.Lines.Text);
+            }
+        }
+
+        [Test]
+        public void Test_FTB_BadPosition()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftb_badpos.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
+
+                //GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
+                //Assert.IsNotNull(noteRec1);
+                //Assert.AreEqual("Test1\r\ntest2\r\ntest3\r\nbadline badline badline badline", noteRec1.Lines.Text);
             }
         }
 
@@ -425,6 +437,28 @@ namespace GDModel.Providers
                 Assert.AreEqual(31, dtx.Year);
                 Assert.AreEqual(false, dtx.YearBC);
                 Assert.AreEqual("031", dtx.StringValue);
+            }
+        }
+
+        [Test]
+        public void Test_Geni_NegativeYears()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_neg_years.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+
+                var iRec = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec);
+
+                GDMDateRange dtx;
+                GDMCustomEvent evt;
+
+                evt = iRec.FindEvent("BIRT");
+                dtx = evt.Date.Value as GDMDateRange;
+                Assert.IsNotNull(dtx);
+                Assert.AreEqual(25, dtx.After.Year);
+                Assert.AreEqual(true, dtx.After.YearBC);
+                Assert.AreEqual(29, dtx.Before.Year);
+                Assert.AreEqual(false, dtx.Before.YearBC);
             }
         }
 

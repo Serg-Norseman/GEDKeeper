@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,7 +32,7 @@ using GKUI.Platform;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
+    public sealed partial class RecordSelectDlg : CommonDialog, IRecordSelectDialog
     {
         public delegate void UpdateDelegate();
 
@@ -70,12 +70,6 @@ namespace GKUI.Forms
 
             btnSelect.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLang()
-            Title = LangMan.LS(LSID.LSID_WinRecordSelect);
-            btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);
-            btnSelect.Text = LangMan.LS(LSID.LSID_DlgSelect);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);

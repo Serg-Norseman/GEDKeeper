@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,11 +19,10 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -32,16 +31,26 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RepositoryEditDlg : EditorDialog, IRepositoryEditDlg
+    public sealed partial class RepositoryEditDlg : CommonDialog<IRepositoryEditDlg, RepositoryEditDlgController>, IRepositoryEditDlg
     {
-        private readonly RepositoryEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private readonly GKSheetList fNotesList;
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblName;
+        private TextBox txtName;
+        private TabPage pageNotes;
+        private Button btnAddress;
+        private GKSheetList fNotesList;
 
-        public GDMRepositoryRecord Repository
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        public GDMRepositoryRecord RepositoryRecord
         {
-            get { return fController.Repository; }
-            set { fController.Repository = value; }
+            get { return fController.RepositoryRecord; }
+            set { fController.RepositoryRecord = value; }
         }
 
         #region View Interface
@@ -60,46 +69,15 @@ namespace GKUI.Forms
 
         public RepositoryEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fNotesList = new GKSheetList(pageNotes);
-
-            // SetLang()
-            Title = LangMan.LS(LSID.LSID_Repository);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            lblName.Text = LangMan.LS(LSID.LSID_Title);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
+            XamlReader.Load(this);
 
             fController = new RepositoryEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
             fController.ModifyAddress();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

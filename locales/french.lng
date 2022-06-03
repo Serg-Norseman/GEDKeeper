@@ -470,7 +470,7 @@
 469=Correspondance
 470=Correction de ID
 471=Vérifier le format
-472=Nécessite de correction des ids, continuer?
+472=|EMF files (*.emf)|*.emf
 473=Le nombre d'objets dans une base de données principale: {0}
 474=Sync terminée.
 475=Recherche patriarches
@@ -481,7 +481,7 @@
 480=Tous les fichiers (*.*)|*.*
 481=Images (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
 482=Scripts (*.lua)|*.lua
-483=Les fichiers BMP(*.bmp)|*.bmp|JPEG files (*.jpg)|*.jpg|EMF files (*.emf)|*.emf|PNG files (*.png)|*.png|GIF files (*.gif)|*.gif
+483=Les fichiers BMP(*.bmp)|*.bmp|JPEG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|GIF files (*.gif)|*.gif
 484=Les causes de décès
 485=Pedigree
 486=Paramètre
@@ -791,7 +791,7 @@
 790=Fiche familiale détectée sans parents ni enfants
 791=Are you sure you want to remove multimedia file?
 792=Storage not found
-793=File not found
+793=File "{0}" not found
 794=Allow relative references to media files
 795=Default media storage type
 796=Allow delete media files from storage and archive
@@ -836,3 +836,17 @@
 832=Separate depth
 833=Ancestors
 834=Matches not found
+835=Short kinship form
+836=Surname first in order
+837=Borders
+838=You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?
+839=Providers
+840=Coordinates
+841=Load places
+842=Only locality
+843=Go to primary branch
+844=Minimizing width
+845={0}. Continue?
+846=Show age
+847=Surname in capitals
+848=|SVG files (*.svg)|*.svg

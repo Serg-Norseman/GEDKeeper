@@ -18,21 +18,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKTests;
-using GKTests.Stubs;
-using NUnit.Framework;
 using GKTests.ControlTesters;
+using GKTests.Stubs;
+using GKUI.Platform;
+using NUnit.Framework;
 
 namespace GKUI.Forms
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [TestFixture]
     public class CommonFilterDlgTests : CustomWindowTest
@@ -44,6 +45,9 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
             fListMan = new IndividualListMan(fContext);
@@ -55,7 +59,6 @@ namespace GKUI.Forms
         public override void TearDown()
         {
             fDialog.Dispose();
-            fListMan.Dispose();
         }
 
         [Test]

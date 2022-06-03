@@ -19,6 +19,7 @@
 using System;
 using System.IO;
 using System.Text;
+using GKCore.Interfaces;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -26,20 +27,23 @@ namespace GEDmill.HTML
     /// <summary>
     /// Used to create an HTML file with a standard header and footer.
     /// </summary>
-    public class HTMLFile
+    public sealed class HTMLFile
     {
         private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(HTMLFile).Name);
 
+        private readonly ILangMan fLangMan;
         private FileStream fStream;
         private StreamWriter fWriter;
 
 
         // Constructor. Creates a file with the given name and writes a standard HTML header.
-        public HTMLFile(string filename, string title, string description, string keywords)
+        public HTMLFile(ILangMan langMan, string filename, string title, string description, string keywords)
         {
+            fLangMan = langMan;
+
             // This is for CJ who ended up with 17000 files plastered all over her desktop...
             if (GMHelper.IsDesktop(filename)) {
-                throw new HTMLException("A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop.");
+                throw new HTMLException(fLangMan.LS(PLS.LSID_DesktopException));
             }
 
             fLogger.WriteInfo("HTMLFile : " + filename);
@@ -51,9 +55,9 @@ namespace GEDmill.HTML
             }
             fStream = null;
             try {
-                fStream = new FileStream(filename, FileMode.Create);
+                fStream = new FileStream(filename, FileMode.Create, FileAccess.Write);
             } catch (NotSupportedException) {
-                throw new HTMLException(string.Format("A problem occurred when creating an HTML file:\r\nThe path or filename {0} is not valid.", filename));
+                throw new HTMLException(string.Format(fLangMan.LS(PLS.LSID_PathException), filename));
             }
 
             if (fStream != null) {
@@ -63,7 +67,7 @@ namespace GEDmill.HTML
                 fWriter.WriteLine("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
                 fWriter.WriteLine("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">");
                 fWriter.WriteLine("  <head>");
-                fWriter.WriteLine("    <link rel=\"stylesheet\" type=\"text/css\" href=\"" + GMConfig.Instance.StylesheetFilename + ".css\" />");
+                fWriter.WriteLine("    <link rel=\"stylesheet\" type=\"text/css\" href=\"" + GMConfig.StylesheetFilename + "\" />");
                 if (GMConfig.Instance.AllowMultipleImages) // Multiple images feature is currently (10Dec08) the only thing that uses javascript
                 {
                     fWriter.WriteLine("    <script type=\"text/javascript\" src=\"gedmill.js\"></script>");

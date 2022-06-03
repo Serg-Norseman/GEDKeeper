@@ -10,24 +10,6 @@ rmdir .\GEDKeeper3\obj /s /q
 rmdir .\GKComponents\bin /s /q
 rmdir .\GKComponents\obj /s /q
 
-rmdir .\GEDKeeper3.Gtk2\bin /s /q
-rmdir .\GEDKeeper3.Gtk2\obj /s /q
-
-rmdir .\GEDKeeper3.Gtk3\bin /s /q
-rmdir .\GEDKeeper3.Gtk3\obj /s /q
-
-rmdir .\GEDKeeper3.Mac\bin /s /q
-rmdir .\GEDKeeper3.Mac\obj /s /q
-
-rmdir .\GEDKeeper3.WinForms\bin /s /q
-rmdir .\GEDKeeper3.WinForms\obj /s /q
-
-rmdir .\GEDKeeper3.Wpf\bin /s /q
-rmdir .\GEDKeeper3.Wpf\obj /s /q
-
-rmdir .\GKBenchmarks\bin /s /q
-rmdir .\GKBenchmarks\obj /s /q
-
 rem <<< Plugins cleaning >>>
 
 rmdir .\GKSamplePlugin\bin /s /q

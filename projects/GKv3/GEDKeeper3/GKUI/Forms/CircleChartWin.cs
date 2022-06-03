@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using BSLib.Design.Graphics;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -35,6 +36,20 @@ namespace GKUI.Forms
 {
     public partial class CircleChartWin : PrintableForm, ICircleChartWin
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private ToolBar ToolBar1;
+        private ButtonToolItem tbImageSave;
+        private ButtonToolItem tbPrev;
+        private ButtonToolItem tbNext;
+        private ButtonToolItem tbDocPreview;
+        private ButtonToolItem tbDocPrint;
+        private ButtonToolItem tbOptions;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
         private readonly CircleChartWinController fController;
 
         private readonly IBaseWindow fBaseWin;
@@ -56,14 +71,7 @@ namespace GKUI.Forms
 
         public CircleChartWin(IBaseWindow baseWin, GDMIndividualRecord startPerson, CircleChartType type)
         {
-            InitializeComponent();
-
-            tbImageSave.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
-            tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
-            tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
-            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
-            tbOptions.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
+            XamlReader.Load(this);
 
             fBaseWin = baseWin;
 
@@ -76,8 +84,6 @@ namespace GKUI.Forms
             fCircleChart.RootPerson = startPerson;
             fCircleChart.Options.Assign(GlobalOptions.Instance.CircleChartOptions);
             Content = fCircleChart;
-
-            SetLang();
 
             fController = new CircleChartWinController(this);
             fController.Init(fBaseWin);
@@ -147,21 +153,11 @@ namespace GKUI.Forms
             AppHost.Instance.ShowOptions(OptionsPage.opCircleChart);
         }
 
-        #region ILocalization implementation
+        #region ILocalizable implementation
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            if (fCircleChart.ChartType == CircleChartType.Ancestors) {
-                Title = LangMan.LS(LSID.LSID_AncestorsCircle);
-            } else {
-                Title = LangMan.LS(LSID.LSID_DescendantsCircle);
-            }
-
-            SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
-            SetToolTip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
-            SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,12 +40,18 @@ namespace GKCore
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_names_01.ged")) {
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
-                Assert.AreEqual("Александра Анатольевна Лазорева (Иванова)", iRec1.GetPrimaryFullName());
+
+                // first stage, NAME reads: surname "Лазорева (Иванова)"
+                // second stage, SURN reads: surname "Иванова"
+                // subordinate SURN tag overrides surname from NAME tag
+                // inappropriate information is lost
+                Assert.AreEqual("Анна Мария Анатольевна Иванова", iRec1.GetPrimaryFullName());
+
                 // std-surn exists and double, but sub-surn has only second part
                 // sub-givn exists, but sub-patn is not
                 var parts = GKUtils.GetNameParts(ctx.Tree, iRec1);
                 Assert.AreEqual("Иванова", parts.Surname);
-                Assert.AreEqual("Александра", parts.Name);
+                Assert.AreEqual("Анна Мария", parts.Name);
                 Assert.AreEqual("Анатольевна", parts.Patronymic);
 
                 GDMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -28,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTTreeMergeDlg : CommonDialog, ITreeMergeDlg
+    public sealed partial class TTTreeMergeDlg : CommonDialog<ITreeMergeDlg, TreeMergeController>, ITreeMergeDlg
     {
-        private readonly TreeMergeController fController;
-
         #region View Interface
 
         ITextBox ITreeMergeDlg.UpdateBase
@@ -54,19 +51,6 @@ namespace GKUI.Forms
 
             fController = new TreeMergeController(this);
             fController.Init(baseWin);
-
-            SetLang();
-        }
-
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_2);
-            pageTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnTreeMerge.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            lblMasterBase.Text = LangMan.LS(LSID.LSID_MasterBase);
-            lblOtherBase.Text = LangMan.LS(LSID.LSID_OtherBase);
-            edMasterBase.Text = LangMan.LS(LSID.LSID_CurrentBase);
         }
 
         private void btnTreeMerge_Click(object sender, EventArgs e)

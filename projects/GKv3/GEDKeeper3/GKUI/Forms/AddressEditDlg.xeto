@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.AddressEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl Size="600, 260">
+        <TabPage x:Name="pageCommon">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <Label x:Name="lblCountry" />
+              <TextBox x:Name="txtCountry" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblState" />
+              <TextBox x:Name="txtState" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblCity" />
+              <TextBox x:Name="txtCity" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblPostalCode" />
+              <TextBox x:Name="txtPostalCode" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblAddress" />
+              <TextBox x:Name="txtAddress" />
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pagePhones">
+          <comcom:GKSheetList x:Name="fPhonesList" OnModify="ListModify" />
+        </TabPage>
+        <TabPage x:Name="pageEmails">
+          <comcom:GKSheetList x:Name="fMailsList" OnModify="ListModify" />
+        </TabPage>
+        <TabPage x:Name="pageWebPages">
+          <comcom:GKSheetList x:Name="fWebsList" OnModify="ListModify" />
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

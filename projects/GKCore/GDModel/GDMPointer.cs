@@ -22,7 +22,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public class GDMPointer : GDMTag
+    public class GDMPointer : GDMTag, IGDMPointerHost
     {
         private string fXRef;
 

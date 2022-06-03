@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Cultures;
@@ -35,13 +36,13 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class PersonalNameEditDlgController : DialogController<IPersonalNameEditDlg>
     {
-        private GDMIndividualRecord fIndividual;
+        private GDMIndividualRecord fIndividualRecord;
         private GDMPersonalName fPersonalName;
 
-        public GDMIndividualRecord Individual
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fIndividual; }
-            set { fIndividual = value; }
+            get { return fIndividualRecord; }
+            set { fIndividualRecord = value; }
         }
 
         public GDMPersonalName PersonalName
@@ -72,11 +73,10 @@ namespace GKCore.Controllers
             try {
                 GKUtils.SetNameParts(fPersonalName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
 
-                GDMPersonalNamePieces pieces = fPersonalName.Pieces;
-                pieces.Nickname = fView.Nickname.Text;
-                pieces.Prefix = fView.NamePrefix.Text;
-                pieces.SurnamePrefix = fView.SurnamePrefix.Text;
-                pieces.Suffix = fView.NameSuffix.Text;
+                fPersonalName.Nickname = fView.Nickname.Text;
+                fPersonalName.NamePrefix = fView.NamePrefix.Text;
+                fPersonalName.SurnamePrefix = fView.SurnamePrefix.Text;
+                fPersonalName.NameSuffix = fView.NameSuffix.Text;
 
                 fPersonalName.NameType = (GDMNameType)fView.NameType.SelectedIndex;
                 fPersonalName.Language = fView.Language.GetSelectedTag<GDMLanguageID>();
@@ -93,25 +93,25 @@ namespace GKCore.Controllers
         private bool IsExtendedWomanSurname()
         {
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (fIndividual.Sex == GDMSex.svFemale);
+                (fIndividualRecord.Sex == GDMSex.svFemale);
             return result;
         }
 
         public override void UpdateView()
         {
-            var parts = GKUtils.GetNameParts(fBase.Context.Tree, fIndividual, fPersonalName, false);
+            var parts = GKUtils.GetNameParts(fBase.Context.Tree, fIndividualRecord, fPersonalName, false);
 
             fView.Surname.Text = parts.Surname;
             fView.Name.Text = parts.Name;
             fView.Patronymic.Text = parts.Patronymic;
             fView.NameType.SelectedIndex = (sbyte)fPersonalName.NameType;
 
-            fView.NamePrefix.Text = fPersonalName.Pieces.Prefix;
-            fView.Nickname.Text = fPersonalName.Pieces.Nickname;
-            fView.SurnamePrefix.Text = fPersonalName.Pieces.SurnamePrefix;
-            fView.NameSuffix.Text = fPersonalName.Pieces.Suffix;
+            fView.NamePrefix.Text = fPersonalName.NamePrefix;
+            fView.Nickname.Text = fPersonalName.Nickname;
+            fView.SurnamePrefix.Text = fPersonalName.SurnamePrefix;
+            fView.NameSuffix.Text = fPersonalName.NameSuffix;
 
-            fView.MarriedSurname.Text = fPersonalName.Pieces.MarriedName;
+            fView.MarriedSurname.Text = fPersonalName.MarriedName;
 
             if (!IsExtendedWomanSurname()) {
                 fView.SurnameLabel.Text = LangMan.LS(LSID.LSID_Surname);
@@ -148,6 +148,24 @@ namespace GKCore.Controllers
             }
 
             return result;
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_Name);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ILabel>("lblSurname").Text = LangMan.LS(LSID.LSID_Surname);
+            GetControl<ILabel>("lblMarriedSurname").Text = LangMan.LS(LSID.LSID_MarriedSurname);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Name);
+            GetControl<ILabel>("lblPatronymic").Text = LangMan.LS(LSID.LSID_Patronymic);
+            GetControl<ILabel>("lblNickname").Text = LangMan.LS(LSID.LSID_Nickname);
+            GetControl<ILabel>("lblSurnamePrefix").Text = LangMan.LS(LSID.LSID_SurnamePrefix);
+            GetControl<ILabel>("lblNamePrefix").Text = LangMan.LS(LSID.LSID_NamePrefix);
+            GetControl<ILabel>("lblNameSuffix").Text = LangMan.LS(LSID.LSID_NameSuffix);
+            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.LSID_Type);
+            GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.LSID_Language);
         }
     }
 }

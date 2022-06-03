@@ -28,7 +28,7 @@ using GKCore.Interfaces;
 
 namespace GKFoldersPlugin
 {
-    public partial class FoldersWidget : Form, ILocalization
+    public partial class FoldersWidget : Form, ILocalizable
     {
         private readonly Plugin fPlugin;
 
@@ -48,7 +48,7 @@ namespace GKFoldersPlugin
             fFolders.Sorted = true;
             fFilterFolder = string.Empty;
 
-            SetLang();
+            SetLocale();
         }
 
         private void Form_Resize(object sender, EventArgs e)
@@ -240,9 +240,9 @@ namespace GKFoldersPlugin
             }
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_MIFolders);
         }

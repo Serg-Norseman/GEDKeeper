@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,11 +19,10 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -33,17 +32,36 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class CommunicationEditDlg : EditorDialog, ICommunicationEditDlg
+    public sealed partial class CommunicationEditDlg : CommonDialog<ICommunicationEditDlg, CommunicationEditDlgController>, ICommunicationEditDlg
     {
-        private readonly CommunicationEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
+        private GroupBox GroupBox1;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblTheme;
+        private TextBox txtName;
+        private Label lblDate;
+        private GKDateBox txtDate;
+        private Label lblType;
+        private ComboBox cmbCorrType;
+        private ComboBox txtDir;
+        private Label lblCorresponder;
+        private TextBox txtCorresponder;
+        private Button btnPersonAdd;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
 
-        public GDMCommunicationRecord Communication
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        public GDMCommunicationRecord CommunicationRecord
         {
-            get { return fController.Communication; }
-            set { fController.Communication = value; }
+            get { return fController.CommunicationRecord; }
+            set { fController.CommunicationRecord = value; }
         }
 
         #region View Interface
@@ -87,49 +105,12 @@ namespace GKUI.Forms
 
         public CommunicationEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnPersonAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-
-            fNotesList = new GKSheetList(pageNotes);
-            fMediaList = new GKSheetList(pageMultimedia);
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinCommunicationEdit);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            lblTheme.Text = LangMan.LS(LSID.LSID_Theme);
-            lblCorresponder.Text = LangMan.LS(LSID.LSID_Corresponder);
-            lblType.Text = LangMan.LS(LSID.LSID_Type);
-            lblDate.Text = LangMan.LS(LSID.LSID_Date);
-
-            SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
+            txtDate.Provider = new FixedMaskedTextProvider("00/00/0000");
 
             fController = new CommunicationEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnPersonAdd_Click(object sender, EventArgs e)

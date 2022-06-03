@@ -92,7 +92,7 @@ namespace GKUI.Platform
             {
                 UIHelper.ConvertFileDialogFilters(ofd, filter);
 
-                //if (filterIndex > 0) ofd.FilterIndex = filterIndex;
+                if (filterIndex > 0) ofd.CurrentFilterIndex = filterIndex - 1;
             }
 
             ofd.MultiSelect = multiSelect;
@@ -110,7 +110,7 @@ namespace GKUI.Platform
         {
             using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName))
             {
-                //sfd.OverwritePrompt = overwritePrompt;
+                // OverwritePrompt is not supported
                 if (sfd.ShowDialog(null) == DialogResult.Ok) {
                     return sfd.FileName;
                 } else {
@@ -134,7 +134,7 @@ namespace GKUI.Platform
             {
                 UIHelper.ConvertFileDialogFilters(sfd, filter);
 
-                //if (filterIndex > 0) sfd.FilterIndex = filterIndex;
+                if (filterIndex > 0) sfd.CurrentFilterIndex = filterIndex - 1;
             }
 
             if (!string.IsNullOrEmpty(suggestedFileName))

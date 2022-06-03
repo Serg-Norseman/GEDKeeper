@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.MVP;
@@ -71,6 +72,10 @@ namespace GKCore.Controllers
                     fSourceCitation.Page = fView.Page.Text;
                     fSourceCitation.CertaintyAssessment = fView.Certainty.SelectedIndex;
 
+                    fSourceCitation.Data.Date.ParseString(fView.DataDate.Date.StringValue);
+                    fSourceCitation.Data.Text.Clear();
+                    fSourceCitation.Data.Text.Lines.Text = fView.DataText.Text;
+
                     return true;
                 }
             } catch (Exception ex) {
@@ -86,6 +91,9 @@ namespace GKCore.Controllers
 
             fView.Page.Text = fSourceCitation.Page;
             fView.Certainty.SelectedIndex = fSourceCitation.CertaintyAssessment;
+
+            fView.DataDate.Date = fSourceCitation.Data.Date.Value;
+            fView.DataText.Text = fSourceCitation.Data.Text.Lines.Text.Trim();
         }
 
         public void AddSource()
@@ -105,6 +113,8 @@ namespace GKCore.Controllers
 
             fBase.Context.GetSourcesList(fSourcesList);
             RefreshSourcesList("");
+
+            fView.Source.Activate();
         }
 
         public void RefreshSourcesList(string filter)
@@ -126,6 +136,21 @@ namespace GKCore.Controllers
             } finally {
                 fView.Source.EndUpdate();
             }
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_WinSourceCitEdit);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.LSID_Common);
+            GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.LSID_Other);
+            GetControl<ILabel>("lblSource").Text = LangMan.LS(LSID.LSID_Source);
+            GetControl<ILabel>("lblPage").Text = LangMan.LS(LSID.LSID_Page);
+            GetControl<ILabel>("lblCertainty").Text = LangMan.LS(LSID.LSID_Certainty);
+
+            SetToolTip("btnSourceAdd", LangMan.LS(LSID.LSID_SourceAddTip));
         }
     }
 }

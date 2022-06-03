@@ -18,20 +18,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System.Windows.Forms;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [TestFixture]
     public class PersonsFilterDlgTests : CustomWindowTest
@@ -42,6 +43,9 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
             fListMan = new IndividualListMan(fBase.Context);
 
@@ -52,7 +56,6 @@ namespace GKUI.Forms
         public override void TearDown()
         {
             fDialog.Dispose();
-            fListMan.Dispose();
         }
 
         [Test]

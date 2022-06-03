@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -65,6 +66,23 @@ namespace GKCore.Controllers
                 FilterCondition fcond = fListMan.Filter.Conditions[i];
                 fView.FilterGrid.AddCondition(fcond);
             }
+        }
+
+        public void Reset()
+        {
+            fListMan.Filter.Clear();
+            UpdateView();
+        }
+
+        public override void SetLocale()
+        {
+            GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
+            GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<IButton>("btnReset").Text = LangMan.LS(LSID.LSID_DlgReset);
+            GetControl<ITabPage>("pageFieldsFilter").Text = LangMan.LS(LSID.LSID_FieldsFilter);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -101,6 +101,33 @@ namespace GKCore.Controllers
             if (iRec == null) return;
 
             BaseController.ViewRecordInfo(fBase, iRec);
+        }
+
+        public void CopySelectedXRef()
+        {
+            var rec = GetSelectedPerson();
+            if (rec != null)
+                AppHost.Instance.SetClipboardText(rec.XRef);
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_ToolOp_6);
+
+            GetControl<ITabPage>("pageFamilyGroups").Text = LangMan.LS(LSID.LSID_ToolOp_6);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<IButton>("btnAnalyseGroups").Text = LangMan.LS(LSID.LSID_Analyze);
+            GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.LSID_Details);
+            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
+            GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.LSID_CopyXRef);
+        }
+
+        public void OpeningContextMenu()
+        {
+            var iRec = GetSelectedPerson();
+            GetControl<IMenuItem>("miDetails").Enabled = (iRec != null);
+            GetControl<IMenuItem>("miGoToRecord").Enabled = (iRec != null);
+            GetControl<IMenuItem>("miCopyXRef").Enabled = (iRec != null);
         }
     }
 }

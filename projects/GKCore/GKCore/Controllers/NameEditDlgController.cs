@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -80,6 +81,19 @@ namespace GKCore.Controllers
                 fView.FPatr.Text = fIName.F_Patronymic;
                 fView.MPatr.Text = fIName.M_Patronymic;
             }
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_Name);
+
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Name);
+            GetControl<ILabel>("lblSex").Text = LangMan.LS(LSID.LSID_Sex);
+            GetControl<IGroupBox>("grpPatronymics").Text = LangMan.LS(LSID.LSID_Patronymic);
+            GetControl<ILabel>("lblFemale").Text = LangMan.LS(LSID.LSID_PatFemale);
+            GetControl<ILabel>("lblMale").Text = LangMan.LS(LSID.LSID_PatMale);
         }
     }
 }

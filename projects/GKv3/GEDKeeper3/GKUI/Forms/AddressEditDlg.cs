@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,8 +22,8 @@ using System;
 using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -33,13 +33,33 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class AddressEditDlg : EditorDialog, IAddressEditDlg
+    public sealed partial class AddressEditDlg : CommonDialog<IAddressEditDlg, AddressEditDlgController>, IAddressEditDlg
     {
-        private readonly AddressEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private readonly GKSheetList fPhonesList;
-        private readonly GKSheetList fMailsList;
-        private readonly GKSheetList fWebsList;
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabPage pagePhones;
+        private TabPage pageEmails;
+        private TabPage pageCommon;
+        private TabPage pageWebPages;
+        private Label lblCountry;
+        private Label lblState;
+        private Label lblCity;
+        private Label lblPostalCode;
+        private Label lblAddress;
+        private TextBox txtCountry;
+        private TextBox txtState;
+        private TextBox txtCity;
+        private TextBox txtPostalCode;
+        private TextBox txtAddress;
+        private GKSheetList fPhonesList;
+        private GKSheetList fMailsList;
+        private GKSheetList fWebsList;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         public GDMAddress Address
         {
@@ -94,36 +114,7 @@ namespace GKUI.Forms
 
         public AddressEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fPhonesList = new GKSheetList(pagePhones);
-            fPhonesList.OnModify += ListModify;
-            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
-
-            fMailsList = new GKSheetList(pageEmails);
-            fMailsList.OnModify += ListModify;
-            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
-
-            fWebsList = new GKSheetList(pageWebPages);
-            fWebsList.OnModify += ListModify;
-            fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Address);
-            pageCommon.Text = LangMan.LS(LSID.LSID_Address);
-            lblCountry.Text = LangMan.LS(LSID.LSID_AdCountry);
-            lblState.Text = LangMan.LS(LSID.LSID_AdState);
-            lblCity.Text = LangMan.LS(LSID.LSID_AdCity);
-            lblPostalCode.Text = LangMan.LS(LSID.LSID_AdPostalCode);
-            lblAddress.Text = LangMan.LS(LSID.LSID_Address);
-            pagePhones.Text = LangMan.LS(LSID.LSID_Telephones);
-            pageEmails.Text = LangMan.LS(LSID.LSID_EMails);
-            pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
+            XamlReader.Load(this);
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);
@@ -141,22 +132,6 @@ namespace GKUI.Forms
             } else if (sender == fWebsList) {
                 fController.DoWebsAction(eArgs.Action, itemTag);
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

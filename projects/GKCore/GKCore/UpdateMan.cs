@@ -34,11 +34,6 @@ namespace GKCore
     {
         private const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
 
-        #if NET35 || NET40
-        private const int Tls11 = 768;
-        private const int Tls12 = 3072;
-        #endif
-
         public static Version GetLastVersion(out string url)
         {
             Version newVersion = null;
@@ -46,16 +41,7 @@ namespace GKCore
 
             XmlTextReader reader = null;
             try {
-                try {
-                    #if NET35 || NET40
-                    ServicePointManager.SecurityProtocol = (SecurityProtocolType)(ServicePointManager.SecurityProtocol | (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12);
-                    #else
-                    ServicePointManager.SecurityProtocol = (SecurityProtocolType)(ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
-                    #endif
-                } catch (Exception ex) {
-                    // crash on WinXP, TLS 1.2 not supported
-                    Logger.WriteError("UpdateMan.GetLastVersion.SP()", ex);
-                }
+                GKUtils.InitSecurityProtocol();
 
                 HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(UpdateURL);
                 webRequest.ContentType = "text/xml; encoding='utf-8'";
@@ -103,15 +89,16 @@ namespace GKCore
         {
             try {
                 Version curVersion = AppHost.GetAppVersion();
+                if (curVersion == null) return;
 
                 string url;
                 Version newVersion = GetLastVersion(out url);
+                if (newVersion == null) return;
 
                 if (curVersion.CompareTo(newVersion) < 0) {
-                    string question = "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?";
-
                     #if !CI_MODE
-                    if (AppHost.StdDialogs.ShowQuestionYN(string.Format(question, curVersion, newVersion))) {
+                    string question = LangMan.LS(LSID.LSID_UpdateToLatestVersion, curVersion, newVersion);
+                    if (AppHost.StdDialogs.ShowQuestionYN(question)) {
                         Process.Start(url);
                     }
                     #endif
@@ -124,7 +111,7 @@ namespace GKCore
         public static void CheckUpdate()
         {
             try {
-                #if __MonoCS__
+                #if MONO
                 DesktopType desktopType = SysUtils.GetDesktopType();
                 if (desktopType == DesktopType.Unity) {
                     // In Ubuntu 1604 LTS (Unity desktop), this method leads to a

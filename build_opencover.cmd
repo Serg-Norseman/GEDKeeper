@@ -1,5 +1,4 @@
 call clean.cmd
-call clean_all.cmd
 
 path=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin;C:\Program Files (x86)\NUnit 2.6.4\bin
 

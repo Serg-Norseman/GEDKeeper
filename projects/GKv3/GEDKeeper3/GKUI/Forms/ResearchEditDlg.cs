@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,12 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -34,19 +32,42 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
+    public partial class ResearchEditDlg : CommonDialog<IResearchEditDlg, ResearchEditDlgController>, IResearchEditDlg
     {
-        private readonly ResearchEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private readonly GKSheetList fTasksList;
-        private readonly GKSheetList fCommunicationsList;
-        private readonly GKSheetList fGroupsList;
-        private readonly GKSheetList fNotesList;
+        private GroupBox GroupBox1;
+        private TextBox txtName;
+        private Label lblName;
+        private TabPage pageNotes;
+        private TabPage pageTasks;
+        private Button btnAccept;
+        private Button btnCancel;
+        private Label lblPriority;
+        private ComboBox cmbPriority;
+        private TabPage pageCommunications;
+        private Label lblStatus;
+        private ComboBox cmbStatus;
+        private Label lblStartDate;
+        private GKDateBox txtStartDate;
+        private Label lblStopDate;
+        private GKDateBox txtStopDate;
+        private Label lblPercent;
+        private NumericStepper nudPercent;
+        private TabPage pageGroups;
+        private GKSheetList fTasksList;
+        private GKSheetList fCommunicationsList;
+        private GKSheetList fGroupsList;
+        private GKSheetList fNotesList;
 
-        public GDMResearchRecord Research
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        public GDMResearchRecord ResearchRecord
         {
-            get { return fController.Research; }
-            set { fController.Research = value; }
+            get { return fController.ResearchRecord; }
+            set { fController.ResearchRecord = value; }
         }
 
         #region View Interface
@@ -106,85 +127,20 @@ namespace GKUI.Forms
 
         public ResearchEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fTasksList = new GKSheetList(pageTasks);
-            fTasksList.OnModify += ListTasksModify;
-
-            fCommunicationsList = new GKSheetList(pageCommunications);
-            fCommunicationsList.OnModify += ListCommunicationsModify;
-
-            fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.OnModify += ListGroupsModify;
-
-            fNotesList = new GKSheetList(pageNotes);
-
-            SetLang();
+            txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
+            txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
 
             fController = new ResearchEditDlgController(this);
             fController.Init(baseWin);
-
-            fTasksList.ListModel = new ResTasksSublistModel(baseWin, fController.LocalUndoman);
-            fCommunicationsList.ListModel = new ResCommunicationsSublistModel(baseWin, fController.LocalUndoman);
-            fGroupsList.ListModel = new ResGroupsSublistModel(baseWin, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
         }
 
-        public void SetLang()
-        {
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinResearchEdit);
-            pageTasks.Text = LangMan.LS(LSID.LSID_RPTasks);
-            pageCommunications.Text = LangMan.LS(LSID.LSID_RPCommunications);
-            pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            lblName.Text = LangMan.LS(LSID.LSID_Title);
-            lblPriority.Text = LangMan.LS(LSID.LSID_Priority);
-            lblStatus.Text = LangMan.LS(LSID.LSID_Status);
-            lblPercent.Text = LangMan.LS(LSID.LSID_Percent);
-            lblStartDate.Text = LangMan.LS(LSID.LSID_StartDate);
-            lblStopDate.Text = LangMan.LS(LSID.LSID_StopDate);
-        }
-
-        private void ListTasksModify(object sender, ModifyEventArgs eArgs)
+        private void ListJumpHandler(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMTaskRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMRecord);
             }
-        }
-
-        private void ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMCommunicationRecord);
-            }
-        }
-
-        private void ListGroupsModify(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
-            }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

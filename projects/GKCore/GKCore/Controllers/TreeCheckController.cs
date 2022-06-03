@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using System.Text;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
@@ -119,6 +120,42 @@ namespace GKCore.Controllers
             if (rec == null) return;
 
             BaseController.ViewRecordInfo(fBase, rec);
+        }
+
+        public void CopySelectedXRefs(IList<object> list)
+        {
+            var text = new StringBuilder();
+            foreach (var item in list) {
+                var checkObj = (TreeTools.CheckObj)item;
+                text.Append(checkObj.Rec.XRef);
+                text.Append("\r\n");
+            }
+            AppHost.Instance.SetClipboardText(text.ToString());
+        }
+
+        public void OpeningContextMenu()
+        {
+            var rec = GetSelectedRecord();
+            GetControl<IMenuItem>("miDetails").Enabled = (rec != null);
+            GetControl<IMenuItem>("miGoToRecord").Enabled = (rec != null);
+            GetControl<IMenuItem>("miCopyXRef").Enabled = (rec != null);
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_ToolOp_7);
+
+            GetControl<ITabPage>("pageTreeCheck").Text = LangMan.LS(LSID.LSID_ToolOp_7);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<IButton>("btnAnalyseBase").Text = LangMan.LS(LSID.LSID_Analyze);
+            GetControl<IButton>("btnBaseRepair").Text = LangMan.LS(LSID.LSID_Repair);
+            GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.LSID_Details);
+            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
+            GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.LSID_CopyXRef);
+
+            fView.ChecksList.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
+            fView.ChecksList.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
+            fView.ChecksList.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
         }
     }
 }

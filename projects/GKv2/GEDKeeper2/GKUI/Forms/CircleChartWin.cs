@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -67,6 +67,8 @@ namespace GKUI.Forms
 
             ToolBar1.Visible = true;
 
+            UIHelper.FixToolStrip(ToolBar1);
+
             fBaseWin = baseWin;
 
             fCircleChart = new CircleChart();
@@ -81,8 +83,6 @@ namespace GKUI.Forms
             fCircleChart.Dock = DockStyle.Fill;
             Controls.Add(fCircleChart);
             Controls.SetChildIndex(fCircleChart, 0);
-
-            SetLang();
 
             fController = new CircleChartWinController(this);
             fController.Init(fBaseWin);
@@ -144,21 +144,11 @@ namespace GKUI.Forms
             AppHost.Instance.ShowOptions(OptionsPage.opCircleChart);
         }
 
-        #region ILocalization implementation
+        #region ILocalizable implementation
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            if (fCircleChart.ChartType == CircleChartType.Ancestors) {
-                Title = LangMan.LS(LSID.LSID_AncestorsCircle);
-            } else {
-                Title = LangMan.LS(LSID.LSID_DescendantsCircle);
-            }
-
-            SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
-            SetToolTip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
-            SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
         }
 
         #endregion

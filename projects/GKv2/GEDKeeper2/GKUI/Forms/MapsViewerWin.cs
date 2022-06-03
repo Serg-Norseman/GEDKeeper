@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Globalization;
 using System.Windows.Forms;
 using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
@@ -28,6 +29,10 @@ using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
+using GKMap;
+using GKMap.MapObjects;
+using GKMap.MapProviders;
+using GKMap.WinForms;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -110,9 +115,9 @@ namespace GKUI.Forms
             if (e.KeyCode == Keys.Escape) Close();
         }
 
-        private void btnSaveImage_Click(object sender, EventArgs e)
+        private void tbSaveSnapshot_Click(object sender, EventArgs e)
         {
-            fController.SaveImage();
+            fController.SaveSnapshot();
         }
 
         private void btnSelectPlaces_Click(object sender, EventArgs e)
@@ -128,7 +133,6 @@ namespace GKUI.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            fController.LoadPlaces();
             Activate();
         }
 
@@ -136,32 +140,58 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            tbSaveSnapshot.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
+
+            UIHelper.FixToolStrip(ToolBar1);
+
             fMapBrowser = new GKMapBrowser();
             fMapBrowser.Dock = DockStyle.Fill;
-            Panel1.Controls.Add(fMapBrowser);
+            panClient.Controls.Add(this.fMapBrowser, 0, 0);
 
-            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
-            fController.Init(baseWin);
+            PopulateContextMenus();
 
             radTotal.Checked = true;
             radTotal_Click(null, null);
 
-            SetLang();
+            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
+            fController.Init(baseWin);
+
+            if (!GMapControl.IsDesignerHosted) {
+                fMapBrowser.MapControl.OnMapTypeChanged += MainMap_OnMapTypeChanged;
+                fMapBrowser.MapControl.OnMapZoomChanged += MainMap_OnMapZoomChanged;
+
+                // get zoom  
+                trkZoom.Minimum = fMapBrowser.MapControl.MinZoom * 100;
+                trkZoom.Maximum = fMapBrowser.MapControl.MaxZoom * 100;
+                trkZoom.TickFrequency = 100;
+
+                if (fMapBrowser.MapControl.Zoom >= fMapBrowser.MapControl.MinZoom && fMapBrowser.MapControl.Zoom <= fMapBrowser.MapControl.MaxZoom) {
+                    trkZoom.Value = fMapBrowser.MapControl.Zoom * 100;
+                }
+
+                // get position
+                txtLat.Text = fMapBrowser.MapControl.Position.Lat.ToString(CultureInfo.InvariantCulture);
+                txtLng.Text = fMapBrowser.MapControl.Position.Lng.ToString(CultureInfo.InvariantCulture);
+            }
         }
 
-        public override void SetLang()
+        private void PopulateContextMenus()
         {
-            Title = LangMan.LS(LSID.LSID_MIMap);
-            pagePlaces.Text = LangMan.LS(LSID.LSID_RPLocations);
-            grpSelection.Text = LangMan.LS(LSID.LSID_MapSelection);
-            radTotal.Text = LangMan.LS(LSID.LSID_MapSelOnAll);
-            chkBirth.Text = LangMan.LS(LSID.LSID_MSBirthPlaces);
-            chkDeath.Text = LangMan.LS(LSID.LSID_MSDeathPlaces);
-            chkResidence.Text = LangMan.LS(LSID.LSID_MSResiPlace);
-            radSelected.Text = LangMan.LS(LSID.LSID_MapSelOnSelected);
-            btnSaveImage.Text = LangMan.LS(LSID.LSID_SaveImage);
-            btnSelectPlaces.Text = LangMan.LS(LSID.LSID_Show);
-            chkLinesVisible.Text = LangMan.LS(LSID.LSID_LinesVisible);
+            var providers = GMapProviders.List;
+            foreach (var prv in providers) {
+                UIHelper.AddToolStripItem(MenuProviders, prv.Name, prv, miProviderX_Click);
+            }
+        }
+
+        private void miProviderX_Click(object sender, EventArgs e)
+        {
+            var provider = UIHelper.GetMenuItemTag<GMapProvider>(MenuProviders, sender);
+            fMapBrowser.MapControl.MapProvider = provider;
+        }
+
+        public override void SetLocale()
+        {
+            fController.SetLocale();
         }
 
         public ITVNode FindTreeNode(string place)
@@ -178,6 +208,83 @@ namespace GKUI.Forms
             }
 
             return null;
+        }
+
+        private void tbLoadPlaces_Click(object sender, EventArgs e)
+        {
+            fController.LoadPlaces();
+        }
+
+        private void tbClear_Click(object sender, EventArgs e)
+        {
+            fMapBrowser.Objects.Clear();
+        }
+
+        private void tbZoomCenter_Click(object sender, EventArgs e)
+        {
+            fMapBrowser.MapControl.ZoomAndCenterMarkers("objects");
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            try {
+                double lat = double.Parse(txtLat.Text, CultureInfo.InvariantCulture);
+                double lng = double.Parse(txtLng.Text, CultureInfo.InvariantCulture);
+
+                fMapBrowser.MapControl.Position = new PointLatLng(lat, lng);
+            } catch (Exception ex) {
+                MessageBox.Show("incorrect coordinate format: " + ex.Message);
+            }
+        }
+
+        private void txtPlace_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((Keys)e.KeyChar == Keys.Enter) {
+                GeocoderStatusCode status = fMapBrowser.MapControl.SetPositionByKeywords(txtPlace.Text);
+                if (status != GeocoderStatusCode.Success) {
+                    AppHost.StdDialogs.ShowError("Geocoder can't find: '" + txtPlace.Text + "', reason: " + status);
+                }
+            }
+        }
+
+        private void MainMap_OnMapTypeChanged(GMapProvider type)
+        {
+            //cmbMapType.SelectedItem = type;
+            trkZoom.Minimum = fMapBrowser.MapControl.MinZoom * 100;
+            trkZoom.Maximum = fMapBrowser.MapControl.MaxZoom * 100;
+            fMapBrowser.MapControl.ZoomAndCenterMarkers("objects");
+        }
+
+        private void MainMap_OnMapZoomChanged()
+        {
+            trkZoom.Value = (int)(fMapBrowser.MapControl.Zoom * 100.0);
+        }
+
+        private void trkZoom_ValueChanged(object sender, EventArgs e)
+        {
+            fMapBrowser.MapControl.Zoom = (int)Math.Floor(trkZoom.Value / 100.0);
+        }
+
+        private void btnZoomUp_Click(object sender, EventArgs e)
+        {
+            fMapBrowser.MapControl.Zoom = fMapBrowser.MapControl.Zoom + 1;
+        }
+
+        private void btnZoomDown_Click(object sender, EventArgs e)
+        {
+            fMapBrowser.MapControl.Zoom = ((int)(fMapBrowser.MapControl.Zoom + 0.99)) - 1;
+        }
+
+        private void btnAddRouteMarker_Click(object sender, EventArgs e)
+        {
+            fMapBrowser.AddMarker(fMapBrowser.TargetPosition, GMarkerIconType.blue_small, MarkerTooltipMode.OnMouseOver, "");
+            fMapBrowser.GenerateRoute();
+        }
+
+        private void btnAddPolygonMarker_Click(object sender, EventArgs e)
+        {
+            fMapBrowser.AddMarker(fMapBrowser.TargetPosition, GMarkerIconType.purple_small, MarkerTooltipMode.OnMouseOver, "");
+            fMapBrowser.GeneratePolygon();
         }
     }
 }

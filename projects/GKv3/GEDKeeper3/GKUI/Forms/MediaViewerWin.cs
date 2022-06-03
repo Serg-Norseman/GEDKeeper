@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,8 +22,8 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using BSLib.Design.Graphics;
-using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -36,19 +36,18 @@ namespace GKUI.Forms
     public partial class MediaViewerWin : CommonWindow, IMediaViewerWin
     {
         private readonly MediaViewerController fController;
-        private ITimer fTimer;
         private Control fViewer;
 
-        public GDMFileReferenceWithTitle FileRef
+        public GDMFileReferenceWithTitle FileReference
         {
-            get { return fController.FileRef; }
-            set { fController.FileRef = value; }
+            get { return fController.FileReference; }
+            set { fController.FileReference = value; }
         }
 
-        public GDMMultimediaRecord Multimedia
+        public GDMMultimediaRecord MultimediaRecord
         {
-            get { return fController.Multimedia; }
-            set { fController.Multimedia = value; }
+            get { return fController.MultimediaRecord; }
+            set { fController.MultimediaRecord = value; }
         }
 
         public void SetViewText(string text)
@@ -105,9 +104,6 @@ namespace GKUI.Forms
 
             fController.ProcessPortraits(imageCtl, fileRef);
 
-            fTimer = AppHost.Instance.CreateTimer(100.0f, InitViewer_Tick);
-            fTimer.Start();
-
             SetViewControl(imageCtl);
         }
 
@@ -120,8 +116,7 @@ namespace GKUI.Forms
         {
             if (ctl == null) return;
             fViewer = ctl;
-            fViewer.Size = new Size(1000, 600);
-            SetLang();
+            SetLocale();
 
             SuspendLayout();
             Content = fViewer;
@@ -130,43 +125,24 @@ namespace GKUI.Forms
 
         public MediaViewerWin(IBaseWindow baseWin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
-            SetLang();
+            SetLocale();
 
             fController = new MediaViewerController(this);
             fController.Init(baseWin);
         }
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            var localizable = fViewer as ILocalization;
-            if (localizable != null) localizable.SetLang();
+            var localizable = fViewer as ILocalizable;
+            if (localizable != null) localizable.SetLocale();
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            if (fViewer != null) {
-                fViewer.Focus();
-                fViewer.Invalidate();
-
-                /*var imageViewer = fViewer as GKUI.Components.ImageView;
-                if (imageViewer != null) {
-                    imageViewer.ZoomToFit();
-                }*/
-            }
-        }
-
-        // dirty temporary hack
-        private void InitViewer_Tick(object sender, EventArgs e)
-        {
-            var imageViewer = fViewer as GKUI.Components.ImageView;
-            if (imageViewer != null && !imageViewer.Viewport.Size.IsEmpty) {
-                imageViewer.ZoomToFit();
-                fTimer.Stop();
-            }
+            if (fViewer != null) fViewer.Focus();
         }
 
         private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)

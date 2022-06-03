@@ -16,6 +16,7 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Windows.Forms;
 
 namespace GEDmill.ListView
@@ -23,7 +24,7 @@ namespace GEDmill.ListView
     /// <summary>
     /// Holds a name (both surname and first names) for use in a list box and provides sorting by surname then firstname.
     /// </summary>
-    public class LVNameItem : ListViewItem.ListViewSubItem
+    public class LVNameItem : ListViewItem.ListViewSubItem, IComparable, IComparable<LVNameItem>
     {
         // The surname (for sorting)
         private string fSurname;
@@ -57,6 +58,11 @@ namespace GEDmill.ListView
             }
 
             return name;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return CompareTo((LVNameItem)obj);
         }
 
         // To sort the list

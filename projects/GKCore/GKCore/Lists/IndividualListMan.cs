@@ -161,15 +161,17 @@ namespace GKCore.Lists
 
         private string GetGroups()
         {
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
 
-            int count = fRec.Groups.Count;
-            for (int idx = 0; idx < count; idx++) {
-                GDMGroupRecord grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(fRec.Groups[idx]);
-                if (grp != null) {
-                    if (idx > 0) result.Append("; ");
+            if (fRec.HasGroups) {
+                int count = fRec.Groups.Count;
+                for (int idx = 0; idx < count; idx++) {
+                    GDMGroupRecord grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(fRec.Groups[idx]);
+                    if (grp != null) {
+                        if (idx > 0) result.Append("; ");
 
-                    result.Append(grp.GroupName);
+                        result.Append(grp.GroupName);
+                    }
                 }
             }
 
@@ -182,13 +184,14 @@ namespace GKCore.Lists
 
             bool result = false;
 
-            bool hasAddr = GlobalOptions.Instance.PlacesWithAddress;
-
-            int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++) {
-                string place = GKUtils.GetPlaceStr(fRec.Events[i], hasAddr);
-                result = IsMatchesMask(place, fltResidence);
-                if (result) break;
+            if (fRec.HasEvents) {
+                bool includeAddr = GlobalOptions.Instance.PlacesWithAddress;
+                int num = fRec.Events.Count;
+                for (int i = 0; i < num; i++) {
+                    string place = GKUtils.GetPlaceStr(fRec.Events[i], includeAddr);
+                    result = IsMatchesMask(place, fltResidence);
+                    if (result) break;
+                }
             }
 
             return result;
@@ -200,10 +203,12 @@ namespace GKCore.Lists
 
             bool result = false;
 
-            int num = fRec.Events.Count;
-            for (int i = 0; i < num; i++) {
-                result = IsMatchesMask(fRec.Events[i].StringValue, fltEventVal);
-                if (result) break;
+            if (fRec.HasEvents) {
+                int num = fRec.Events.Count;
+                for (int i = 0; i < num; i++) {
+                    result = IsMatchesMask(fRec.Events[i].StringValue, fltEventVal);
+                    if (result) break;
+                }
             }
 
             return result;
@@ -223,8 +228,7 @@ namespace GKCore.Lists
             {
                 bool isLive = (buf_dd == null);
 
-                switch (iFilter.FilterLifeMode)
-                {
+                switch (iFilter.FilterLifeMode) {
                     case FilterLifeMode.lmOnlyAlive:
                         if (!isLive) return false;
                         break;
@@ -243,17 +247,16 @@ namespace GKCore.Lists
                         break;
                 }
 
-                switch (iFilter.FilterGroupMode)
-                {
+                switch (iFilter.FilterGroupMode) {
                     case FilterGroupMode.All:
                         break;
 
                     case FilterGroupMode.None:
-                        if (fRec.Groups.Count != 0) return false;
+                        if (fRec.HasGroups) return false;
                         break;
 
                     case FilterGroupMode.Any:
-                        if (fRec.Groups.Count == 0) return false;
+                        if (!fRec.HasGroups) return false;
                         break;
 
                     case FilterGroupMode.Selected:
@@ -261,17 +264,16 @@ namespace GKCore.Lists
                         break;
                 }
 
-                switch (iFilter.SourceMode)
-                {
+                switch (iFilter.SourceMode) {
                     case FilterGroupMode.All:
                         break;
 
                     case FilterGroupMode.None:
-                        if (fRec.SourceCitations.Count != 0) return false;
+                        if (fRec.HasSourceCitations) return false;
                         break;
 
                     case FilterGroupMode.Any:
-                        if (fRec.SourceCitations.Count == 0) return false;
+                        if (!fRec.HasSourceCitations) return false;
                         break;
 
                     case FilterGroupMode.Selected:
@@ -306,7 +308,7 @@ namespace GKCore.Lists
 
                 switch (defNameFormat) {
                     case NameFormat.nfFNP:
-                        result = GKUtils.GetNameString(fRec, true, false);
+                        result = GKUtils.GetNameString(fRec, GlobalOptions.Instance.SurnameFirstInOrder, false);
                         break;
 
                     case NameFormat.nfF_NP:
@@ -627,10 +629,12 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GDMPointer ptr in iRec.Groups) {
-                    var grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(ptr);
-                    if (grp != null) {
-                        fSheetList.AddItem(grp, new object[] { grp.GroupName });
+                if (iRec.HasGroups) {
+                    foreach (GDMPointer ptr in iRec.Groups) {
+                        var grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(ptr);
+                        if (grp != null) {
+                            fSheetList.AddItem(grp, new object[] { grp.GroupName });
+                        }
                     }
                 }
 
@@ -730,7 +734,7 @@ namespace GKCore.Lists
                             persName = new GDMPersonalName();
                         }
 
-                        dlg.Individual = iRec;
+                        dlg.IndividualRecord = iRec;
                         dlg.PersonalName = persName;
                         result = AppHost.Instance.ShowModalX(dlg, false);
 
@@ -839,8 +843,8 @@ namespace GKCore.Lists
                 case RecordAction.raEdit:
                     if (cfLink != null) {
                         using (var dlg = AppHost.ResolveDialog<IParentsEditDlg>(fBaseWin)) {
-                            dlg.Person = iRec;
-                            dlg.Link = cfLink;
+                            dlg.IndividualRecord = iRec;
+                            dlg.ChildLink = cfLink;
                             result = AppHost.Instance.ShowModalX(dlg, false);
                         }
                     }
@@ -1016,8 +1020,10 @@ namespace GKCore.Lists
                 fSheetList.BeginUpdate();
                 fSheetList.ClearItems();
 
-                foreach (GDMUserReference uref in iRec.UserReferences) {
-                    fSheetList.AddItem(uref, new object[] { uref.StringValue, uref.ReferenceType });
+                if (iRec.HasUserReferences) {
+                    foreach (GDMUserReference uref in iRec.UserReferences) {
+                        fSheetList.AddItem(uref, new object[] { uref.StringValue, uref.ReferenceType });
+                    }
                 }
 
                 fSheetList.EndUpdate();
@@ -1044,7 +1050,7 @@ namespace GKCore.Lists
                             userRef = new GDMUserReference();
                         }
 
-                        dlg.UserRef = userRef;
+                        dlg.UserReference = userRef;
                         result = AppHost.Instance.ShowModalX(dlg, false);
 
                         if (!exists) {

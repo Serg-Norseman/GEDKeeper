@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.DayTipsDlg"
+  AbortButton="{x:Reference btnClose}" Title=" " Topmost="True">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TableLayout>
+        <TableRow>
+          <TableCell>
+            <Scrollable BackgroundColor="Gray" Border="Line" Width="100">
+              <StackLayout Orientation="Vertical" Padding="8" HorizontalContentAlignment="Center" VerticalContentAlignment="Top">
+                <ImageView Size="41, 43" Image="{Resource Resources.image_tips_light.png, GKCore}" />
+              </StackLayout>
+            </Scrollable>
+          </TableCell>
+
+          <TableCell>
+            <StackLayout>
+              <Scrollable BackgroundColor="White" Border="Line" Height="50">
+                <StackLayout Orientation="Horizontal" Padding="8" VerticalContentAlignment="Top">
+                  <Label x:Name="lblTitle" Width="370" Font="Bold+16pt" TextAlignment="Left" VerticalAlignment="Center" />
+                </StackLayout>
+              </Scrollable>
+
+              <Scrollable BackgroundColor="White" Border="Line" Height="204">
+                <StackLayout Orientation="Horizontal" Padding="8">
+                  <TextBox x:Name="txtTip" Size="370, 154" ReadOnly="True" ShowBorder="False" />
+                </StackLayout>
+              </Scrollable>
+            </StackLayout>
+          </TableCell>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <CheckBox x:Name="chkShow" Checked="True" />
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnNextTip" Style="dlgBtn" Click="btnNextTip_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

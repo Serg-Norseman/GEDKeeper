@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,6 +24,9 @@ using System.Windows.Forms;
 
 namespace GKUI.Components
 {
+    /// <summary>
+    /// TabControl with support for images in tabs and the ability to close tabs.
+    /// </summary>
     public class GKTabControl : TabControl
     {
         private const int TAB_PADDING = 5;

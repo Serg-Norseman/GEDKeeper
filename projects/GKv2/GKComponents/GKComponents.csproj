@@ -1,72 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <Import Project="..\..\GKConfigurations.targets" />
   <PropertyGroup>
     <ProjectGuid>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <AssemblyName>GKComponents</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <NoWin32Manifest>False</NoWin32Manifest>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
-    <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <StartAction>Project</StartAction>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\</OutputPath>
-    <DebugSymbols>False</DebugSymbols>
-    <DebugType>None</DebugType>
-    <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(CIMode)'=='true'">
-    <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(MonoCS)'=='true'">
-    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup Condition="!$(DefineConstants.Contains(';__MonoCS__'))">
-    <Reference Include="GMap.NET.Core">
-      <HintPath>..\..\libs\mswin\GMap.NET.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="GMap.NET.WindowsForms">
-      <HintPath>..\..\libs\mswin\GMap.NET.WindowsForms.dll</HintPath>
-    </Reference>
+  <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
     <Reference Include="nVLC">
       <HintPath>..\..\libs\mswin\nVLC.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition="$(DefineConstants.Contains(';__MonoCS__'))">
-    <Reference Include="GMap.NET.Core">
-      <HintPath>..\..\libs\linux\GMap.NET.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="GMap.NET.WindowsForms">
-      <HintPath>..\..\libs\linux\GMap.NET.WindowsForms.dll</HintPath>
-    </Reference>
+  <ItemGroup Condition=" '$(MonoCS)' == 'true' ">
     <Reference Include="nVLC">
       <HintPath>..\..\libs\linux\nVLC.dll</HintPath>
     </Reference>
@@ -101,13 +55,18 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKComboItem.cs" />
-    <Compile Include="GKUI\Components\GKDateBox.cs" />
+    <Compile Include="GKUI\Components\GKDateBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\GKDateControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKListView.cs" />
     <Compile Include="GKUI\Components\GKMapBrowser.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKPortrait.cs">
       <SubType>UserControl</SubType>
@@ -115,14 +74,24 @@
     <Compile Include="GKUI\Components\GKSheetList.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\GKTabControl.cs" />
+    <Compile Include="GKUI\Components\GKTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\ScrollablePanel.cs" />
-    <Compile Include="GKUI\Components\HyperView.cs" />
-    <Compile Include="GKUI\Components\ImageBox.cs" />
-    <Compile Include="GKUI\Components\ImageView.cs" />
+    <Compile Include="GKUI\Components\ScrollablePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\HyperView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ImageBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ImageView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\LogChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -133,14 +102,26 @@
       <DependentUpon>MediaPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\UIHelper.cs" />
-    <Compile Include="GKUI\Components\WizardPages.cs" />
-    <Compile Include="GKUI\Components\ZGraphControl.cs" />
-    <Compile Include="GKUI\Forms\CommonForm.cs" />
+    <Compile Include="GKUI\Components\WizardPages.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\ZGraphControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\CommonForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\PrintableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\StatusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Platform\ControlHandlers.cs" />
     <Compile Include="GKUI\Platform\WFGfxProvider.cs" />
     <Compile Include="GKUI\Platform\WFGfxRenderer.cs" />
     <Compile Include="GKUI\Platform\WFStdDialogs.cs" />
-    <Compile Include="GKUI\Platform\WinUITimer.cs" />
+    <Compile Include="GKUI\Platform\WFUITimer.cs" />
     <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -148,10 +129,15 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\GKMap\GKMap.Core\GKMap.Core.csproj">
+      <Project>{d0c39d9d-bed0-418b-9a5e-713176caf40c}</Project>
+      <Name>GKMap.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GKMap\GKMap.WinForms\GKMap.WinForms.csproj">
+      <Project>{e06def77-f933-42fb-afd7-db2d0d8d6a98}</Project>
+      <Name>GKMap.WinForms</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKUI\Forms" />
-    <Folder Include="GKUI\Platform" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

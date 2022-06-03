@@ -1,25 +1,21 @@
 @echo off
 
-set GKVER=2.17.0
-
 call .\clean.cmd
-call .\clean_all.cmd
 
-set CONFIG_TYPE=Debug
-for %%a in (release Release RELEASE) do if (%%a)==(%1) SET CONFIG_TYPE=Release
+set MSBDIR=@%WINDIR%\Microsoft.NET\Framework\v4.0.30319
+%MSBDIR%\msbuild.exe projects\GEDKeeper2.mswin.sln /p:Configuration=Release /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.0 /v:quiet
 
-call .\build_all.mswin.x86.cmd %CONFIG_TYPE%
-
-set BUILD_STATUS=%ERRORLEVEL% 
+set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS%==0 goto installer
-if not %BUILD_STATUS%==0 goto fail 
- 
-:fail 
+if not %BUILD_STATUS%==0 goto fail
+
+:fail
 pause 
 exit /b %BUILD_STATUS% 
- 
-:installer 
-"C:\Program Files (x86)\NSIS\makensis.exe" .\deploy\gk2_win_setup.nsi
-"c:\Program Files\7-zip\7z.exe" a -tzip -mx5 -scsWIN .\deploy\gedkeeper_%GKVER%_win.zip .\deploy\gedkeeper_%GKVER%_winsetup.exe
-pause 
+
+:installer
+cd .\deploy
+call gk2_win_installer.cmd
+cd ..
+pause
 exit /b 0

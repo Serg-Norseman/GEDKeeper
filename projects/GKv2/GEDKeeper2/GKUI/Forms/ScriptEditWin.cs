@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -143,22 +143,19 @@ namespace GKUI.Forms
             tbSaveScript.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
             tbRun.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
+            UIHelper.FixToolStrip(ToolBar1);
+
             fController = new ScriptEditWinController(this);
             fController.Init(baseWin);
 
             txtScriptText.TextChanged += mmScriptText_TextChanged;
 
             tbNewScript_Click(this, null);
-
-            SetLang();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
-            SetToolTip(tbNewScript, LangMan.LS(LSID.LSID_NewScriptTip));
-            SetToolTip(tbLoadScript, LangMan.LS(LSID.LSID_LoadScriptTip));
-            SetToolTip(tbSaveScript, LangMan.LS(LSID.LSID_SaveScriptTip));
-            SetToolTip(tbRun, LangMan.LS(LSID.LSID_RunScriptTip));
+            fController.SetLocale();
         }
 
         private void ScriptEditWin_KeyDown(object sender, KeyEventArgs e)

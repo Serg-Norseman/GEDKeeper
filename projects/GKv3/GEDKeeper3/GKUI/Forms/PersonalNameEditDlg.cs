@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,11 +19,10 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -31,14 +30,41 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PersonalNameEditDlg: EditorDialog, IPersonalNameEditDlg
+    public partial class PersonalNameEditDlg: CommonDialog<IPersonalNameEditDlg, PersonalNameEditDlgController>, IPersonalNameEditDlg
     {
-        private readonly PersonalNameEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        public GDMIndividualRecord Individual
+        private TextBox txtMarriedSurname;
+        private Label lblMarriedSurname;
+        private ComboBox cmbNameType;
+        private Label lblType;
+        private TextBox txtNickname;
+        private TextBox txtNameSuffix;
+        private TextBox txtNamePrefix;
+        private TextBox txtSurnamePrefix;
+        private TextBox txtPatronymic;
+        private TextBox txtName;
+        private TextBox txtSurname;
+        private Label lblNickname;
+        private Label lblNameSuffix;
+        private Label lblNamePrefix;
+        private Label lblSurnamePrefix;
+        private Button btnCancel;
+        private Label lblPatronymic;
+        private Label lblName;
+        private Button btnAccept;
+        private Label lblSurname;
+        private ComboBox cmbLanguage;
+        private Label lblLanguage;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fController.Individual; }
-            set { fController.Individual = value; }
+            get { return fController.IndividualRecord; }
+            set { fController.IndividualRecord = value; }
         }
 
         public GDMPersonalName PersonalName
@@ -108,32 +134,10 @@ namespace GKUI.Forms
 
         public PersonalNameEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            SetLang();
+            XamlReader.Load(this);
 
             fController = new PersonalNameEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_Name);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-            lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
-            lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
-            lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
-            lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
-            lblType.Text = LangMan.LS(LSID.LSID_Type);
-            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
         }
 
         private void edName_KeyDown(object sender, KeyEventArgs e)
@@ -148,22 +152,6 @@ namespace GKUI.Forms
         private void txtXName_Leave(object sender, EventArgs e)
         {
             UIHelper.ProcessName(sender);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void cmbLanguage_SelectedIndexChanged(object sender, EventArgs e)

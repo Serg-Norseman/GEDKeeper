@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
@@ -26,6 +26,7 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -42,11 +43,14 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
             fTaskRecord = new GDMTaskRecord(fBase.Context.Tree);
 
             fDialog = new TaskEditDlg(fBase);
-            fDialog.Task = fTaskRecord;
+            fDialog.TaskRecord = fTaskRecord;
             fDialog.Show();
         }
 
@@ -65,7 +69,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fTaskRecord, fDialog.Task);
+            Assert.AreEqual(fTaskRecord, fDialog.TaskRecord);
 
             SelectCombo("txtPriority", fDialog, 1);
 
@@ -83,7 +87,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataDatesAndApply()
         {
-            Assert.AreEqual(fTaskRecord, fDialog.Task);
+            Assert.AreEqual(fTaskRecord, fDialog.TaskRecord);
 
             SelectCombo("txtPriority", fDialog, 1);
             EnterMaskedText("txtStartDate", fDialog, "01.01.2000");

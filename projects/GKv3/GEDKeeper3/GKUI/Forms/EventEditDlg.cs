@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,8 +23,8 @@ using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -34,13 +34,39 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class EventEditDlg : EditorDialog, IEventEditDlg
+    public sealed partial class EventEditDlg : CommonDialog<IEventEditDlg, EventEditDlgController>, IEventEditDlg
     {
-        private readonly EventEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
-        private readonly GKSheetList fSourcesList;
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageSources;
+        private Button btnAddress;
+        private TabPage pageCommon;
+        private Label lblEvent;
+        private Label lblPlace;
+        private Label lblDate;
+        private Label lblCause;
+        private Label lblOrg;
+        private Label lblAttrValue;
+        private ComboBox cmbEventType;
+        private TextBox txtEventName;
+        private TextBox txtEventPlace;
+        private TextBox txtEventCause;
+        private TextBox txtEventOrg;
+        private ComboBox txtAttribute;
+        private Button btnPlaceAdd;
+        private Button btnPlaceDelete;
+        private GKDateControl dateCtl;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
+        private GKSheetList fSourcesList;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         public GDMCustomEvent Event
         {
@@ -70,39 +96,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbEventType); }
         }
 
-        IComboBox IEventEditDlg.EventDateType
+        IDateControl IEventEditDlg.Date
         {
-            get { return GetControlHandler<IComboBox>(cmbEventDateType); }
-        }
-
-        ICheckBox IEventEditDlg.Date1BC
-        {
-            get { return GetControlHandler<ICheckBox>(btnBC1); }
-        }
-
-        ICheckBox IEventEditDlg.Date2BC
-        {
-            get { return GetControlHandler<ICheckBox>(btnBC2); }
-        }
-
-        IComboBox IEventEditDlg.Date1Calendar
-        {
-            get { return GetControlHandler<IComboBox>(cmbDate1Calendar); }
-        }
-
-        IComboBox IEventEditDlg.Date2Calendar
-        {
-            get { return GetControlHandler<IComboBox>(cmbDate2Calendar); }
-        }
-
-        IDateBox IEventEditDlg.Date1
-        {
-            get { return GetControlHandler<IDateBox>(txtEventDate1); }
-        }
-
-        IDateBox IEventEditDlg.Date2
-        {
-            get { return GetControlHandler<IDateBox>(txtEventDate2); }
+            get { return GetControlHandler<IDateControl>(dateCtl); }
         }
 
         IComboBox IEventEditDlg.Attribute
@@ -134,45 +130,10 @@ namespace GKUI.Forms
 
         public EventEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnPlaceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnPlaceDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-
-            fNotesList = new GKSheetList(pageNotes);
-            fMediaList = new GKSheetList(pageMultimedia);
-            fSourcesList = new GKSheetList(pageSources);
-
-            // SetLang()
-            Title = LangMan.LS(LSID.LSID_Event);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
-            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            lblEvent.Text = LangMan.LS(LSID.LSID_Event);
-            lblAttrValue.Text = LangMan.LS(LSID.LSID_Value);
-            lblPlace.Text = LangMan.LS(LSID.LSID_Place);
-            lblDate.Text = LangMan.LS(LSID.LSID_Date);
-            lblCause.Text = LangMan.LS(LSID.LSID_Cause);
-            lblOrg.Text = LangMan.LS(LSID.LSID_Agency);
-
-            SetToolTip(btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
-            SetToolTip(btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
-
-            SetToolTip(txtEventDate1, txtEventDate1.RegionalDatePattern);
-            SetToolTip(txtEventDate2, txtEventDate2.RegionalDatePattern);
+            XamlReader.Load(this);
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
         }
 
         public void SetLocationMode(bool active)
@@ -188,22 +149,6 @@ namespace GKUI.Forms
                 btnPlaceAdd.Enabled = true;
                 btnPlaceDelete.Enabled = false;
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnAddress_Click(object sender, EventArgs e)
@@ -228,35 +173,9 @@ namespace GKUI.Forms
             fController.RemovePlace();
         }
 
-        private void txtEventDateX_DragOver(object sender, DragEventArgs e)
-        {
-            // FIXME: don't work in Eto 2.4.1?
-            var data = e.Data.Text;
-            e.Effects = !string.IsNullOrEmpty(data) ? DragEffects.Move : DragEffects.None;
-        }
-
-        private void txtEventDateX_DragDrop(object sender, DragEventArgs e)
-        {
-            // FIXME: don't work in Eto 2.4.1?
-            try {
-                /*if (e.Data.GetDataPresent(typeof(string))) {
-                    string txt = e.Data.GetData(typeof(string)) as string;
-                    string[] dt = ((MaskedTextBox)sender).Text.Split('.');
-                    ((MaskedTextBox)sender).Text = dt[0] + '.' + dt[1] + '.' + txt;
-                }*/
-            } catch (Exception ex) {
-                Logger.WriteError("EventEditDlg.DragDrop()", ex);
-            }
-        }
-
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
         {
             fController.ChangeEventType();
-        }
-
-        private void EditEventDateType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            fController.ChangeDateType();
         }
     }
 }

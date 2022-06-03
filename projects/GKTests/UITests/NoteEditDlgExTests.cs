@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using GDModel;
 using GKCore.Interfaces;
@@ -42,6 +42,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
@@ -77,7 +78,7 @@ namespace GKUI.Forms
             ClickToolStripMenuItem("miSelectAndCopy", fDialog);
             ClickToolStripMenuItem("miClear", fDialog);
 
-            var txtNote = new TextBoxTester("txtNote");
+            var txtNote = new RichTextBoxTester("txtNote");
             txtNote.Enter("sample text");
             Assert.AreEqual("sample text", txtNote.Text);
 

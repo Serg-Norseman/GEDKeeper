@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -46,8 +46,7 @@ namespace GKCore.Kinships
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fGraph.Dispose();
             }
             base.Dispose(disposing);
@@ -95,7 +94,7 @@ namespace GKCore.Kinships
             fGraph.FindPathTree(root);
         }
 
-        public string GetRelationship(GDMIndividualRecord targetRec, bool fullFormat = false)
+        public string GetRelationship(GDMIndividualRecord targetRec, bool fullFormat = false, bool shortForm = false)
         {
             if (targetRec == null) return "???";
             Vertex target = fGraph.FindVertex(targetRec.XRef);
@@ -124,15 +123,14 @@ namespace GKCore.Kinships
                     if (tmp != "") tmp += ", ";
                     tmp += xFrom.XRef + ">" + GKData.RelationSigns[(int)curRel] + ">" + xTo.XRef;
 
-                    if (prevRel != RelationKind.rkUndefined)
-                    {
+                    if (prevRel != RelationKind.rkUndefined) {
                         int g, lev;
                         finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out lev);
                         great += g;
 
                         // it's gap
                         if (finRel == RelationKind.rkUndefined && fullFormat) {
-                            part = GetRelationPart(src, prev_tgt, prevRel, great);
+                            part = GetRelationPart(src, prev_tgt, prevRel, great, shortForm);
                             src = prev_tgt;
                             great = 0;
                             prevRel = RelationKind.rkNone;
@@ -151,10 +149,10 @@ namespace GKCore.Kinships
                 IndividualsPath = targetRec.XRef + " [" + tmp + "]";
 
                 if (!fullFormat) {
-                    string relRes = FixRelation(targetRec, finRel, great);
+                    string relRes = FixRelation(targetRec, finRel, great, shortForm);
                     return relRes;
                 } else {
-                    part = GetRelationPart(src, tgt, finRel, great);
+                    part = GetRelationPart(src, tgt, finRel, great, shortForm);
 
                     if (fullRel.Length > 0) fullRel += ", ";
                     fullRel += part;
@@ -167,12 +165,12 @@ namespace GKCore.Kinships
             }
         }
 
-        private string GetRelationPart(GDMIndividualRecord ind1, GDMIndividualRecord ind2, RelationKind xrel, int great)
+        private string GetRelationPart(GDMIndividualRecord ind1, GDMIndividualRecord ind2, RelationKind xrel, int great, bool shortForm)
         {
             if (ind1 == null || ind2 == null)
                 return "???";
 
-            string rel = FixRelation(ind2, xrel, great);
+            string rel = FixRelation(ind2, xrel, great, shortForm);
             string name1 = fContext.Culture.GetPossessiveName(ind1);
             string name2 = GKUtils.GetNameString(ind2, true, false);
 
@@ -184,11 +182,9 @@ namespace GKCore.Kinships
         {
             RelationKind resRel = rel;
 
-            switch (rel)
-            {
+            switch (rel) {
                 case RelationKind.rkParent:
-                    switch (xTo.Sex)
-                    {
+                    switch (xTo.Sex) {
                         case GDMSex.svMale:
                             resRel = RelationKind.rkFather;
                             break;
@@ -199,8 +195,7 @@ namespace GKCore.Kinships
                     break;
 
                 case RelationKind.rkSpouse:
-                    switch (xTo.Sex)
-                    {
+                    switch (xTo.Sex) {
                         case GDMSex.svMale:
                             resRel = RelationKind.rkHusband;
                             break;
@@ -211,8 +206,7 @@ namespace GKCore.Kinships
                     break;
 
                 case RelationKind.rkChild:
-                    switch (xTo.Sex)
-                    {
+                    switch (xTo.Sex) {
                         case GDMSex.svMale:
                             resRel = RelationKind.rkSon;
                             break;
@@ -230,50 +224,47 @@ namespace GKCore.Kinships
             return resRel;
         }
 
-        private static string FixRelation(GDMIndividualRecord target, RelationKind rel, int great)
+        private static string FixRelation(GDMIndividualRecord target, RelationKind rel, int great, bool shortForm)
         {
             string tmp = "";
-            if (great != 0)
-            {
-                if (rel == RelationKind.rkUncle || rel == RelationKind.rkAunt)
-                {
+            if (great != 0) {
+                if (rel == RelationKind.rkUncle || rel == RelationKind.rkAunt) {
                     tmp = GKData.Numerals[great] + GKData.NumKinship[(int)target.Sex] + " ";
                     if (rel == RelationKind.rkUncle) {
                         rel = RelationKind.rkGrandfather;
                     } else if (rel == RelationKind.rkAunt) {
                         rel = RelationKind.rkGrandmother;
                     }
-                }
-                else if (rel == RelationKind.rkNephew || rel == RelationKind.rkNiece)
-                {
+                } else if (rel == RelationKind.rkNephew || rel == RelationKind.rkNiece) {
                     tmp = GKData.Numerals[great] + GKData.NumKinship[(int)target.Sex] + " ";
                     if (rel == RelationKind.rkNephew) {
                         rel = RelationKind.rkBrother;
                     } else if (rel == RelationKind.rkNiece) {
                         rel = RelationKind.rkSister;
                     }
-                }
-                else
-                {
-                    if (rel != RelationKind.rkUndefined)
-                    {
-                        tmp = GetGreat(great);
+                } else {
+                    if (rel != RelationKind.rkUndefined) {
+                        tmp = GetGreat(great, shortForm);
                     }
                 }
-            }
-            else
-            {
+            } else {
                 tmp = "";
             }
             return tmp + LangMan.LS(GKData.RelationKinds[(int)rel]);
         }
 
-        private static string GetGreat(int n)
+        private static string GetGreat(int n, bool shortForm)
         {
             string result = "";
-            for (int i = 1; i <= n; i++)
-            {
-                result += LangMan.LS(GKData.GreatPrefix);
+            if (!shortForm) {
+                for (int i = 1; i <= n; i++) {
+                    result += LangMan.LS(GKData.GreatPrefix);
+                }
+            } else {
+                result = LangMan.LS(GKData.GreatPrefix);
+                if (n > 1) {
+                    result += string.Format("({0})", n);
+                }
             }
             return result;
         }

@@ -32,7 +32,7 @@ namespace GKCore.Interfaces
     public delegate IListItem CreateListItemHandler(object itemValue, object data);
 
 
-    public interface IListSource : IDisposable
+    public interface IListSource
     {
         EnumSet<RecordAction> AllowedActions { get; }
         IBaseContext BaseContext { get; }

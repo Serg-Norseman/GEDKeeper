@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,17 +20,33 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
-using GKCore;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTTreeCompareDlg : CommonDialog, ITreeCompareDlg
+    public sealed partial class TTTreeCompareDlg : CommonDialog<ITreeCompareDlg, TreeCompareController>, ITreeCompareDlg
     {
-        private readonly TreeCompareController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private TabPage pageTreeCompare;
+        private TextArea ListCompare;
+        private Button btnClose;
+        private Label lblFile;
+        private TextBox txtCompareFile;
+        private Button btnFileChoose;
+        private RadioButton radAnalysis;
+        private Button btnMatch;
+        private RadioButton radMathExternal;
+        private RadioButton radMatchInternal;
+        private GroupBox grpMatchType;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         #region View Interface
 
@@ -48,43 +64,15 @@ namespace GKUI.Forms
 
         public TTTreeCompareDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            SetLang();
+            XamlReader.Load(this);
 
             fController = new TreeCompareController(this);
             fController.Init(baseWin);
         }
 
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_1);
-            pageTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            lblFile.Text = LangMan.LS(LSID.LSID_MIFile);
-            btnFileChoose.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            grpMatchType.Text = LangMan.LS(LSID.LSID_MatchType);
-            radMatchInternal.Text = LangMan.LS(LSID.LSID_MatchInternal);
-            radMathExternal.Text = LangMan.LS(LSID.LSID_MathExternal);
-            radAnalysis.Text = LangMan.LS(LSID.LSID_Analyze);
-            btnMatch.Text = LangMan.LS(LSID.LSID_Match);
-        }
-
         private void btnFileChoose_Click(object sender, EventArgs e)
         {
             fController.SelectExternalFile();
-        }
-
-        public TreeMatchType GetTreeMatchType()
-        {
-            TreeMatchType type =
-                ((radMatchInternal.Checked) ?
-                 TreeMatchType.tmtInternal :
-                 ((radMathExternal.Checked) ? TreeMatchType.tmtExternal : TreeMatchType.tmtAnalysis));
-
-            return type;
         }
 
         private void btnMatch_Click(object sender, EventArgs e)
@@ -94,11 +82,7 @@ namespace GKUI.Forms
 
         private void rbtnMatch_CheckedChanged(object sender, EventArgs e)
         {
-            TreeMatchType type = GetTreeMatchType();
-
-            lblFile.Enabled = (type == TreeMatchType.tmtExternal);
-            txtCompareFile.Enabled = (type == TreeMatchType.tmtExternal);
-            btnFileChoose.Enabled = (type == TreeMatchType.tmtExternal);
+            fController.ChangeTreeMatchType();
         }
     }
 }

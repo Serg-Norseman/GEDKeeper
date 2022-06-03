@@ -34,3 +34,4 @@ build_sonarqube.cmd
 /LuaInterface.dll.config
 
 /projects/GKv3/packages/**/
+.idea/

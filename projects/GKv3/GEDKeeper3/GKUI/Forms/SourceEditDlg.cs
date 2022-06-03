@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,9 +19,9 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -33,18 +33,38 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class SourceEditDlg : EditorDialog, ISourceEditDlg
+    public sealed partial class SourceEditDlg : CommonDialog<ISourceEditDlg, SourceEditDlgController>, ISourceEditDlg
     {
-        private readonly SourceEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
-        private readonly GKSheetList fRepositoriesList;
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageRepositories;
+        private TabPage pageText;
+        private TextArea txtText;
+        private TabPage pageCommon;
+        private Label lblShortTitle;
+        private TextBox txtShortTitle;
+        private Label lblAuthor;
+        private TextArea txtAuthor;
+        private Label lblTitle;
+        private TextArea txtTitle;
+        private Label lblPublication;
+        private TextArea txtPublication;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
+        private GKSheetList fRepositoriesList;
 
-        public GDMSourceRecord Model
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        public GDMSourceRecord SourceRecord
         {
-            get { return fController.Model; }
-            set { fController.Model = value; }
+            get { return fController.SourceRecord; }
+            set { fController.SourceRecord = value; }
         }
 
         #region View Interface
@@ -93,37 +113,10 @@ namespace GKUI.Forms
 
         public SourceEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fNotesList = new GKSheetList(pageNotes);
-            fMediaList = new GKSheetList(pageMultimedia);
-
-            fRepositoriesList = new GKSheetList(pageRepositories);
-            fRepositoriesList.OnModify += ModifyReposSheet;
-
-            // SetLang()
-            Title = LangMan.LS(LSID.LSID_Source);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            lblShortTitle.Text = LangMan.LS(LSID.LSID_ShortTitle);
-            lblAuthor.Text = LangMan.LS(LSID.LSID_Author);
-            lblTitle.Text = LangMan.LS(LSID.LSID_Title);
-            lblPublication.Text = LangMan.LS(LSID.LSID_Publication);
-            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            pageText.Text = LangMan.LS(LSID.LSID_Text);
-            pageRepositories.Text = LangMan.LS(LSID.LSID_RPRepositories);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            XamlReader.Load(this);
 
             fController = new SourceEditDlgController(this);
             fController.Init(baseWin);
-
-            fRepositoriesList.ListModel = new SourceRepositoriesSublistModel(baseWin, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
@@ -132,22 +125,6 @@ namespace GKUI.Forms
             if (eArgs.Action == RecordAction.raJump && cit != null) {
                 fController.JumpToRecord(cit);
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void EditShortTitle_TextChanged(object sender, EventArgs e)

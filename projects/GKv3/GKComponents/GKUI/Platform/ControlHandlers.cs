@@ -22,16 +22,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BSLib;
+using BSLib.Design;
 using BSLib.Design.Graphics;
 using BSLib.Design.MVP;
 using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
+using GDModel;
 using GKCore.MVP.Controls;
 using GKUI.Components;
 
 namespace GKUI.Platform
 {
+    using BSDListItem = BSLib.Design.MVP.Controls.IListItem;
+
+
     public abstract class BaseControlHandler<T, TThis> : ControlHandler<T, TThis>, IBaseControl
         where T : Control
         where TThis : ControlHandler<T, TThis>
@@ -57,6 +62,12 @@ namespace GKUI.Platform
     {
         public LabelHandler(Label control) : base(control)
         {
+        }
+
+        public IColor BackColor
+        {
+            get { return new ColorHandler(Control.BackgroundColor); }
+            set { Control.BackgroundColor = ((ColorHandler)value).Handle; }
         }
 
         public string Text
@@ -316,9 +327,144 @@ namespace GKUI.Platform
         }
     }
 
+    public sealed class PasswordBoxHandler : BaseControlHandler<PasswordBox, PasswordBoxHandler>, ITextBox
+    {
+        public PasswordBoxHandler(PasswordBox control) : base(control)
+        {
+        }
+
+        public new bool Enabled
+        {
+            get { return Control.Enabled; }
+            set {
+                Control.Enabled = value;
+                SetBackColor();
+            }
+        }
+
+        public string[] Lines
+        {
+            get { return UIHelper.Convert(Control.Text); }
+            set { /* TODO! */ }
+        }
+
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set {
+                Control.ReadOnly = value;
+                SetBackColor();
+            }
+        }
+
+        public string SelectedText
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public void AppendText(string text)
+        {
+            //Control.Append(text, true);
+        }
+
+        public void Clear()
+        {
+            Control.Text = string.Empty;
+        }
+
+        private void SetBackColor()
+        {
+            Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
+        }
+
+        public void Copy()
+        {
+            UIHelper.SetClipboardText(Control.Text);
+        }
+
+        public void SelectAll()
+        {
+        }
+    }
+
     public sealed class TextAreaHandler : BaseControlHandler<TextArea, TextAreaHandler>, ITextBox
     {
         public TextAreaHandler(TextArea control) : base(control)
+        {
+        }
+
+        public new bool Enabled
+        {
+            get { return Control.Enabled; }
+            set {
+                Control.Enabled = value;
+                SetBackColor();
+            }
+        }
+
+        public string[] Lines
+        {
+            get { return UIHelper.Convert(Control.Text); }
+            set { /* TODO! */ }
+        }
+
+        public bool ReadOnly
+        {
+            get { return Control.ReadOnly; }
+            set {
+                Control.ReadOnly = value;
+                SetBackColor();
+            }
+        }
+
+        public string SelectedText
+        {
+            get { return Control.SelectedText; }
+            set { Control.SelectedText = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public void AppendText(string text)
+        {
+            Control.Append(text, true);
+        }
+
+        public void Clear()
+        {
+            Control.Text = string.Empty;
+        }
+
+        private void SetBackColor()
+        {
+            Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
+        }
+
+        public void Copy()
+        {
+            UIHelper.SetClipboardText(Control.SelectedText);
+        }
+
+        public void SelectAll()
+        {
+            Control.SelectAll();
+        }
+    }
+
+    public sealed class RichTextAreaHandler : BaseControlHandler<RichTextArea, RichTextAreaHandler>, ITextBox
+    {
+        public RichTextAreaHandler(RichTextArea control) : base(control)
         {
         }
 
@@ -490,9 +636,9 @@ namespace GKUI.Platform
         }
     }
 
-    public sealed class NumericBoxHandler : BaseControlHandler<NumericUpDown, NumericBoxHandler>, INumericBox
+    public sealed class NumericBoxHandler : BaseControlHandler<NumericStepper, NumericBoxHandler>, INumericBox
     {
-        public NumericBoxHandler(NumericUpDown control) : base(control)
+        public NumericBoxHandler(NumericStepper control) : base(control)
         {
         }
 
@@ -625,16 +771,30 @@ namespace GKUI.Platform
         }
     }
 
-    public sealed class MenuItemHandler : ControlHandler<ButtonMenuItem, MenuItemHandler>, IMenuItem
+    public sealed class MenuItemHandler : ControlHandler<MenuItem, MenuItemHandler>, IMenuItem
     {
-        public MenuItemHandler(ButtonMenuItem control) : base(control)
+        public MenuItemHandler(MenuItem control) : base(control)
         {
         }
 
         public bool Checked
         {
-            get { return false; }
-            set { }
+            get {
+                if (Control is RadioMenuItem) {
+                    return ((RadioMenuItem)Control).Checked;
+                } else if (Control is CheckMenuItem) {
+                    return ((CheckMenuItem)Control).Checked;
+                } else {
+                    return false;
+                }
+            }
+            set {
+                if (Control is RadioMenuItem) {
+                    ((RadioMenuItem)Control).Checked = value;
+                } else if (Control is CheckMenuItem) {
+                    ((CheckMenuItem)Control).Checked = value;
+                }
+            }
         }
 
         public bool Enabled
@@ -649,21 +809,200 @@ namespace GKUI.Platform
             set { Control.Tag = value; }
         }
 
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
         public int ItemsCount
         {
-            get { return Control.Items.Count; }
+            get { return (Control is ButtonMenuItem) ? ((ButtonMenuItem)Control).Items.Count : 0; }
         }
 
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
         {
-            var item = new MenuItemEx(text, tag, image, action);
-            Control.Items.Add(item);
-            return item;
+            if (Control is ButtonMenuItem) {
+                var item = new MenuItemEx(text, tag, image, action);
+                ((ButtonMenuItem)Control).Items.Add(item);
+                return item;
+            } else {
+                return null;
+            }
         }
 
         public void ClearItems()
         {
-            Control.Items.Clear();
+            if (Control is ButtonMenuItem) {
+                ((ButtonMenuItem)Control).Items.Clear();
+            }
+        }
+    }
+
+
+    public class ButtonToolItemHandler : ControlHandler<ButtonToolItem, ButtonToolItemHandler>, IButtonToolItem
+    {
+        public ButtonToolItemHandler(ButtonToolItem control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+    }
+
+
+    public sealed class DateControlHandler : BaseControlHandler<GKDateControl, DateControlHandler>, IDateControl
+    {
+        public GDMCustomDate Date
+        {
+            get { return Control.Date; }
+            set { Control.Date = value; }
+        }
+
+        public DateControlHandler(GKDateControl control) : base(control)
+        {
+        }
+    }
+
+
+    public sealed class ListViewHandler : BaseControlHandler<GKListView, ListViewHandler>, IListView
+    {
+        public ListViewHandler(GKListView control) : base(control)
+        {
+        }
+
+        public IListViewItems Items
+        {
+            get { return ((IListView)Control).Items; }
+        }
+
+        public int SelectedIndex
+        {
+            get { return Control.SelectedIndex; }
+            set { Control.SelectedIndex = value; }
+        }
+
+        public int SortColumn
+        {
+            get { return Control.SortColumn; }
+            set { Control.SortColumn = value; }
+        }
+
+        public void AddCheckedColumn(string caption, int width, bool autoSize = false)
+        {
+            Control.AddColumn(caption, width, autoSize);
+        }
+
+        public void AddColumn(string caption, int width, bool autoSize)
+        {
+            Control.AddColumn(caption, width, autoSize);
+        }
+
+        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
+        {
+            Control.AddColumn(caption, width, autoSize, textAlign);
+        }
+
+        public BSDListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
+        {
+            return Control.AddItem(rowData, isChecked, columnValues);
+        }
+
+        public BSDListItem AddItem(object rowData, params object[] columnValues)
+        {
+            return Control.AddItem(rowData, columnValues);
+        }
+
+        public void BeginUpdate()
+        {
+            Control.BeginUpdate();
+        }
+
+        public void Clear()
+        {
+            Control.Clear();
+        }
+
+        public void ClearColumns()
+        {
+            Control.ClearColumns();
+        }
+
+        public void ClearItems()
+        {
+            Control.ClearItems();
+        }
+
+        public void EndUpdate()
+        {
+            Control.EndUpdate();
+        }
+
+        public object GetSelectedData()
+        {
+            return Control.GetSelectedData();
+        }
+
+        public void SelectItem(object rowData)
+        {
+            Control.SelectItem(rowData);
+        }
+
+        public void SetColumnCaption(int index, string caption)
+        {
+            Control.SetColumnCaption(index, caption);
+        }
+
+        public void SetSortColumn(int sortColumn, bool checkOrder = true)
+        {
+            Control.SetSortColumn(sortColumn, checkOrder);
+        }
+
+        public void Sort(int sortColumn, BSDTypes.SortOrder sortOrder)
+        {
+            Control.Sort(sortColumn, sortOrder);
+        }
+
+        public void UpdateContents(bool columnsChanged = false)
+        {
+            Control.UpdateContents(columnsChanged);
+        }
+    }
+
+
+    public sealed class TabPageHandler : BaseControlHandler<TabPage, TabPageHandler>, ITabPage
+    {
+        public TabPageHandler(TabPage control) : base(control)
+        {
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+    }
+
+
+    public sealed class GroupBoxHandler : BaseControlHandler<GroupBox, GroupBoxHandler>, IGroupBox
+    {
+        public GroupBoxHandler(GroupBox control) : base(control)
+        {
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
         }
     }
 }

@@ -36,9 +36,9 @@ using BSDColors = BSLib.Design.BSDConsts.Colors;
 namespace GKCore.Lists
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public abstract class ListSource : BaseObject, IListSource
+    public abstract class ListSource : IListSource
     {
         protected sealed class MapColumnRec
         {
@@ -111,7 +111,7 @@ namespace GKCore.Lists
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public abstract class ListManager : ListSource, IListManager
     {
@@ -188,14 +188,6 @@ namespace GKCore.Lists
             CreateFilter();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // dummy
-            }
-            base.Dispose(disposing);
-        }
-
         protected virtual void CreateFilter()
         {
             fFilter = new ListFilter();
@@ -203,12 +195,12 @@ namespace GKCore.Lists
 
         protected bool IsMatchesMask(string str, string mask)
         {
-            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(mask)) {
+            if (string.IsNullOrEmpty(mask) || mask == "*") {
                 return true;
             }
 
-            if (mask == "*") {
-                return true;
+            if (string.IsNullOrEmpty(str)) {
+                return false;
             }
 
             if (fMask != mask) {
@@ -433,7 +425,7 @@ namespace GKCore.Lists
 
                 case DataType.dtGEDCOMDate:
                     return val.ToString();
-                    
+
                 default:
                     return val.ToString();
             }

@@ -54,7 +54,7 @@ namespace GKCore
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class BaseContext : BaseObject, IBaseContext
     {
@@ -171,7 +171,6 @@ namespace GKCore
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fUndoman.Dispose();
                 fTree.Dispose();
             }
             base.Dispose(disposing);
@@ -204,9 +203,7 @@ namespace GKCore
 
         public void ImportNames(GDMIndividualRecord iRec)
         {
-            if (Culture is RussianCulture) {
-                AppHost.NamesTable.ImportNames(this, iRec);
-            }
+            AppHost.NamesTable.ImportNames(this, iRec);
         }
 
         public GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, GDMCustomDate evDate, string evPlace)
@@ -816,7 +813,7 @@ namespace GKCore
 
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
                     } else {
-                        stream = new FileStream(targetFn, FileMode.Open);
+                        stream = new FileStream(targetFn, FileMode.Open, FileAccess.Read);
                     }
                     break;
 
@@ -836,13 +833,19 @@ namespace GKCore
                     break;
 
                 case MediaStoreType.mstRelativeReference:
-                    string treeName = fFileName;
-                    targetFn = GetTreePath(treeName) + targetFn;
-                    stream = new FileStream(targetFn, FileMode.Open);
-                    break;
-
                 case MediaStoreType.mstReference:
-                    stream = new FileStream(targetFn, FileMode.Open);
+                    if (gst == MediaStoreType.mstRelativeReference) {
+                        string treeName = fFileName;
+                        targetFn = GetTreePath(treeName) + targetFn;
+                    }
+                    if (!File.Exists(targetFn)) {
+                        if (throwException) {
+                            throw new MediaFileNotFoundException(targetFn);
+                        }
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound, targetFn));
+                    } else {
+                        stream = new FileStream(targetFn, FileMode.Open, FileAccess.Read);
+                    }
                     break;
 
                 case MediaStoreType.mstURL:
@@ -869,7 +872,7 @@ namespace GKCore
 
                     case MediaStoreType.mstArchive:
                         fileName = GKUtils.GetTempDir() + Path.GetFileName(targetFn);
-                        FileStream fs = new FileStream(fileName, FileMode.Create);
+                        FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
                         try {
                             if (!File.Exists(GetArcFileName())) {
                                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
@@ -1026,15 +1029,15 @@ namespace GKCore
                         break;
 
                     case MediaStoreStatus.mssFileNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound));
+                        result = AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_FileNotFound, fileName)));
                         break;
 
                     case MediaStoreStatus.mssStgNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_StgNotFound));
+                        result = AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_StgNotFound)));
                         break;
 
                     case MediaStoreStatus.mssArcNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        result = AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_ArcNotFound)));
                         break;
 
                     case MediaStoreStatus.mssBadData:
@@ -1428,7 +1431,7 @@ namespace GKCore
             if (string.IsNullOrEmpty(password)) {
                 GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
 
-                var gedcomProvider = new GEDCOMProvider(fTree);
+                var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames);
                 gedcomProvider.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
             } else {
                 SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
@@ -1445,7 +1448,7 @@ namespace GKCore
                 GEDCOMCharacterSet charSet = GlobalOptions.Instance.DefCharacterSet;
                 GKUtils.PrepareHeader(fTree, rfn, charSet, false);
 
-                var gedcomProvider = new GEDCOMProvider(fTree);
+                var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames);
                 gedcomProvider.SaveToFile(rfn, charSet);
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.CriticalSave()", ex);
@@ -1536,7 +1539,7 @@ namespace GKCore
 
             using (var cryptic = CreateCSP(GS_MAJOR_VER, GS_MINOR_VER, password)) {
                 using (CryptoStream crStream = new CryptoStream(stream, cryptic.CreateEncryptor(), CryptoStreamMode.Write)) {
-                    var gedcomProvider = new GEDCOMProvider(fTree);
+                    var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames);
                     gedcomProvider.SaveToStreamExt(crStream, charSet);
                     crStream.Flush();
                 }
@@ -1627,7 +1630,7 @@ namespace GKCore
         /// <summary>
         /// This method performs a basic locking of the records for their
         /// editors.
-        /// 
+        ///
         /// The original idea was to call the methods Lock/Unlock records,
         /// in the edit dialogs of the records. However, it would be unsafe,
         /// because in the case of a failure of dialogue, the record would
@@ -1661,13 +1664,13 @@ namespace GKCore
 
         #region UI control functions
 
-        public GDMFamilyRecord SelectFamily(GDMIndividualRecord target)
+        public GDMFamilyRecord SelectFamily(GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild)
         {
             GDMFamilyRecord result;
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
-                    dlg.SetTarget(TargetMode.tmFamilyChild, target, GDMSex.svUnknown);
+                    dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
                     dlg.FastFilter = "*";
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {

@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if __MonoCS__
+#if MONO
 #define NLUA
 #endif
 
@@ -55,21 +55,12 @@ namespace GKCore
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public class ScriptEngine : BaseObject
+    public class ScriptEngine
     {
         private ITextBox fDebugOutput;
         private IBaseWindow fBase;
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // dummy
-            }
-            base.Dispose(disposing);
-        }
 
         public void lua_run(string script, IBaseWindow baseWin, ITextBox debugOutput)
         {
@@ -342,13 +333,13 @@ namespace GKCore
         public int gt_get_person_associations_count(object recPtr)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
-            return (iRec == null) ? 0 : iRec.Associations.Count;
+            return (iRec == null || !iRec.HasAssociations) ? 0 : iRec.Associations.Count;
         }
 
         public object gt_get_person_association(object recPtr, int idx)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
-            if (iRec == null) return null;
+            if (iRec == null || !iRec.HasAssociations) return null;
 
             GDMAssociation asso = iRec.Associations[idx];
             return asso;
@@ -369,7 +360,7 @@ namespace GKCore
         public void gt_delete_person_association(object recPtr, int idx)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
-            if (iRec == null) return;
+            if (iRec == null || !iRec.HasAssociations) return;
 
             iRec.Associations.DeleteAt(idx);
         }
@@ -447,7 +438,7 @@ namespace GKCore
         public string gt_get_event_place(object evPtr)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
-            return (evt == null) ? string.Empty : evt.Place.StringValue;
+            return (evt == null || !evt.HasPlace) ? string.Empty : evt.Place.StringValue;
         }
 
         public void gt_set_event_value(object evPtr, string value)
@@ -560,7 +551,7 @@ namespace GKCore
         {
             GDMFamilyRecord fRec = familyPtr as GDMFamilyRecord;
             if (fRec == null) return;
-            
+
             GDMIndividualRecord spRec = spousePtr as GDMIndividualRecord;
             fRec.AddSpouse(spRec);
         }
@@ -683,7 +674,7 @@ namespace GKCore
         public int gt_get_person_groups_count(object recPtr)
         {
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
-            return (rec == null) ? -1 : rec.Groups.Count;
+            return (rec == null || !rec.HasGroups) ? 0 : rec.Groups.Count;
         }
 
         public object gt_get_person_group(object recPtr, int grIdx)

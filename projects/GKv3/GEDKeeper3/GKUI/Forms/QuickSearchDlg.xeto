@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.QuickSearchDlg"
+  KeyDown="SearchPanel_KeyDown" Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+
+  <TableLayout Padding="4" Spacing="4, 0">
+
+    <TableRow>
+      <TextBox x:Name="txtSearchPattern" Width="160" TextChanged="SearchPattern_TextChanged"/>
+      <Button x:Name="btnPrev" Style="iconBtn" Image="{Resource Resources.btn_left.gif, GKCore}" Click="FindPrev_Click" />
+      <Button x:Name="btnNext" Style="iconBtn" Image="{Resource Resources.btn_right.gif, GKCore}" Click="FindNext_Click" />
+    </TableRow>
+
+  </TableLayout>
+
+</Form>

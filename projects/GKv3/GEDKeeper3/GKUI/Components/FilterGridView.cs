@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,20 +73,28 @@ namespace GKUI.Components
         }
 
 
-        private readonly IListManager fListMan;
+        private IListManager fListMan;
         private ObservableCollection<FilterConditionRow> fCollection;
         private string[] fFields;
 
 
-        public FilterGridView(IListManager listMan)
+        public IListManager ListMan
+        {
+            get {
+                return fListMan;
+            }
+            set {
+                fListMan = value;
+                fFields = fListMan.CreateFields();
+                InitGrid();
+            }
+        }
+
+
+        public FilterGridView()
         {
             fCollection = new ObservableCollection<FilterConditionRow>();
             DataStore = fCollection;
-
-            fListMan = listMan;
-            fFields = fListMan.CreateFields();
-
-            InitGrid();
         }
 
         public int Count
@@ -102,6 +110,13 @@ namespace GKUI.Components
         public void AddCondition(FilterCondition fcond)
         {
             fCollection.Add(new FilterConditionRow(this, fcond));
+        }
+
+        public void RemoveCondition(int index)
+        {
+            if (index >= 0 && index < fCollection.Count) {
+                fCollection.RemoveAt(index);
+            }
         }
 
         public void Clear()
@@ -176,5 +191,27 @@ namespace GKUI.Components
         */
 
         #endregion
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            switch (e.Key) {
+                case Keys.I:
+                    if (e.Control) {
+                        FilterCondition fcond = new FilterCondition(0, ConditionKind.ck_Contains, "");
+                        AddCondition(fcond);
+                    }
+                    break;
+
+                case Keys.D:
+                    if (e.Control) {
+                        RemoveCondition(SelectedRow);
+                    }
+                    break;
+
+                default:
+                    base.OnKeyDown(e);
+                    break;
+            }
+        }
     }
 }

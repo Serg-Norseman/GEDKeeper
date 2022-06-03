@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,18 +20,66 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
-using GKCore;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
+using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PersonsFilterDlg : CommonFilterDlg, IPersonsFilterDlg
+    public partial class PersonsFilterDlg : CommonDialog, ICommonFilterDlg, IPersonsFilterDlg
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private TabControl tabsFilters;
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabPage pageFieldsFilter;
+        private TabPage pageSpecificFilter;
+        private Button btnReset;
+        private FilterGridView filterView;
+        private ComboBox cmbEventVal;
+        private ComboBox cmbSource;
+        private ComboBox cmbGroup;
+        private ComboBox cmbResidence;
+        private MaskedTextBox txtAliveBeforeDate;
+        private RadioButton rbSexMale;
+        private RadioButton rbSexAll;
+        private RadioButton rbSexFemale;
+        private GroupBox rgSex;
+        private ComboBox txtName;
+        private RadioButton rbAll;
+        private RadioButton rbOnlyLive;
+        private RadioButton rbOnlyDead;
+        private RadioButton rbAliveBefore;
+        private GroupBox rgLife;
+        private Label lblEventsMask;
+        private Label lblAliveBefore;
+        private Label lblSources;
+        private CheckBox chkOnlyPatriarchs;
+        private Label lblGroups;
+        private Label lblPlaceMask;
+        private Label lblNameMask;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        private readonly CommonFilterDlgController fCommonController;
         private readonly PersonsFilterDlgController fController;
 
+        private readonly IBaseWindow fBase;
+        private readonly IListManager fListMan;
+
         #region View Interface
+
+        public IFilterGridView FilterGrid
+        {
+            get { return filterView; }
+        }
 
         IComboBox IPersonsFilterDlg.SourceCombo
         {
@@ -129,40 +177,32 @@ namespace GKUI.Forms
 
         public PersonsFilterDlg()
         {
-            InitializeComponent();
+            XamlReader.Load(this);
+
+            txtAliveBeforeDate.Provider = new FixedMaskedTextProvider("00/00/0000");
         }
 
-        public PersonsFilterDlg(IBaseWindow baseWin, IListManager listMan) : base(baseWin, listMan)
+        public PersonsFilterDlg(IBaseWindow baseWin, IListManager listMan) : this()
         {
-            InitializeComponent();
+            if (baseWin == null)
+                throw new ArgumentNullException("baseWin");
+
+            if (listMan == null)
+                throw new ArgumentNullException("listMan");
+
+            fBase = baseWin;
+            fListMan = listMan;
+            filterView.ListMan = fListMan;
+
+            fCommonController = new CommonFilterDlgController(this, listMan);
+            fCommonController.Init(baseWin);
+            fCommonController.UpdateView();
 
             tabsFilters.SelectedIndex = 1;
 
             fController = new PersonsFilterDlgController(this, listMan);
             fController.Init(baseWin);
-
-            SetSpecificLang();
             fController.UpdateView();
-        }
-
-        public void SetSpecificLang()
-        {
-            Title = LangMan.LS(LSID.LSID_MIFilter);
-            pageSpecificFilter.Text = LangMan.LS(LSID.LSID_PersonsFilter);
-            rbAll.Text = LangMan.LS(LSID.LSID_All);
-            rbOnlyLive.Text = LangMan.LS(LSID.LSID_OnlyAlive);
-            rbOnlyDead.Text = LangMan.LS(LSID.LSID_OnlyDied);
-            rbAliveBefore.Text = LangMan.LS(LSID.LSID_AliveBefore).ToLower();
-            rbSexAll.Text = LangMan.LS(LSID.LSID_All);
-            rbSexMale.Text = LangMan.LS(LSID.LSID_OnlyMans);
-            rbSexFemale.Text = LangMan.LS(LSID.LSID_OnlyWomans);
-            lblAliveBefore.Text = LangMan.LS(LSID.LSID_AliveBefore) + ":";
-            lblNameMask.Text = LangMan.LS(LSID.LSID_NameMask);
-            lblPlaceMask.Text = LangMan.LS(LSID.LSID_PlaceMask);
-            lblEventsMask.Text = LangMan.LS(LSID.LSID_EventMask);
-            lblGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            lblSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            chkOnlyPatriarchs.Text = LangMan.LS(LSID.LSID_OnlyPatriarchs);
         }
 
         private void rgLife_CheckedChanged(object sender, EventArgs e)
@@ -170,16 +210,16 @@ namespace GKUI.Forms
             txtAliveBeforeDate.Enabled = rbAliveBefore.Checked;
         }
 
-        public override void DoReset()
+        private void btnAccept_Click(object sender, EventArgs e)
         {
-            base.DoReset();
-            fController.UpdateView();
+            DialogResult = (fCommonController.Accept() && fController.Accept()) ? DialogResult.Ok : DialogResult.None;
         }
 
-        public override void AcceptChanges()
+        private void btnReset_Click(object sender, EventArgs e)
         {
-            base.AcceptChanges();
-            fController.Accept();
+            fListMan.Filter.Clear();
+            fCommonController.UpdateView();
+            fController.UpdateView();
         }
     }
 }

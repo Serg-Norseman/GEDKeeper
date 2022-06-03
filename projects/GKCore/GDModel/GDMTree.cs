@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -147,8 +147,6 @@ namespace GDModel
 
         private GEDCOMFormat fFormat;
         private int[] fLastIDs;
-        private EventHandler fOnChange;
-        private EventHandler fOnChanging;
         private ProgressEventHandler fOnProgressEvent;
         private GDMTreeState fState;
         private int fUpdateCount;
@@ -186,17 +184,9 @@ namespace GDModel
             set { fState = value; }
         }
 
-        public event EventHandler OnChange
-        {
-            add { fOnChange = value; }
-            remove { if (fOnChange == value) fOnChange = null; }
-        }
+        public event EventHandler OnChange;
 
-        public event EventHandler OnChanging
-        {
-            add { fOnChanging = value; }
-            remove { if (fOnChanging == value) fOnChanging = null; }
-        }
+        public event EventHandler OnChanging;
 
         public ProgressEventHandler OnProgress
         {
@@ -585,6 +575,8 @@ namespace GDModel
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = fRecords[i];
+                if (!rec.HasMultimediaLinks) continue;
+
                 for (int j = rec.MultimediaLinks.Count - 1; j >= 0; j--) {
                     if (rec.MultimediaLinks[j].XRef == mRec.XRef) {
                         rec.MultimediaLinks.DeleteAt(j);
@@ -649,6 +641,8 @@ namespace GDModel
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = fRecords[i];
+                if (!rec.HasSourceCitations) continue;
+
                 for (int j = rec.SourceCitations.Count - 1; j >= 0; j--) {
                     if (rec.SourceCitations[j].XRef == srcRec.XRef) {
                         rec.SourceCitations.DeleteAt(j);
@@ -709,13 +703,15 @@ namespace GDModel
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
                 var evsRec = fRecords[i] as GDMRecordWithEvents;
-                if (evsRec != null) {
-                    for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
-                        GDMPointer evLocation = evsRec.Events[j].Place.Location;
+                if (evsRec == null || !evsRec.HasEvents) continue;
 
-                        if (evLocation.XRef == locRec.XRef) {
-                            evLocation.XRef = string.Empty;
-                        }
+                for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
+                    var evt = evsRec.Events[j];
+                    if (!evt.HasPlace) continue;
+
+                    GDMPointer evLocation = evt.Place.Location;
+                    if (evLocation.XRef == locRec.XRef) {
+                        evLocation.XRef = string.Empty;
                     }
                 }
             }
@@ -731,13 +727,15 @@ namespace GDModel
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
                 var evsRec = fRecords[i] as GDMRecordWithEvents;
-                if (evsRec != null) {
-                    for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
-                        GDMPlace evPlace = evsRec.Events[j].Place;
+                if (evsRec == null || !evsRec.HasEvents) continue;
 
-                        if (evPlace.Location.XRef == locRec.XRef) {
-                            evPlace.StringValue = locRec.LocationName;
-                        }
+                for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
+                    var evt = evsRec.Events[j];
+                    if (!evt.HasPlace) continue;
+
+                    GDMPlace evPlace = evt.Place;
+                    if (evPlace.Location.XRef == locRec.XRef) {
+                        evPlace.StringValue = locRec.LocationName;
                     }
                 }
             }
@@ -821,15 +819,19 @@ namespace GDModel
 
         private void Changed()
         {
-            if (fUpdateCount == 0 && fOnChange != null) {
-                fOnChange(this, new EventArgs());
+            if (fUpdateCount == 0) {
+                var eventHandler = OnChange;
+                if (eventHandler != null)
+                    eventHandler(this, new EventArgs());
             }
         }
 
         private void Changing()
         {
-            if (fUpdateCount == 0 && fOnChanging != null) {
-                fOnChanging(this, new EventArgs());
+            if (fUpdateCount == 0) {
+                var eventHandler = OnChanging;
+                if (eventHandler != null)
+                    eventHandler(this, new EventArgs());
             }
         }
 
@@ -846,6 +848,18 @@ namespace GDModel
             }
 
             return result;
+        }
+
+        public GDMFamilyRecord FindChildFamily(GDMIndividualRecord individualRec, GDMIndividualRecord childRec)
+        {
+            int num = individualRec.SpouseToFamilyLinks.Count;
+            for (int i = 0; i < num; i++) {
+                var family = GetPtrValue<GDMFamilyRecord>(individualRec.SpouseToFamilyLinks[i]);
+                if (family.IndexOfChild(childRec) >= 0) {
+                    return family;
+                }
+            }
+            return null;
         }
 
         public GDMLines GetNoteLines(GDMNotes notes)

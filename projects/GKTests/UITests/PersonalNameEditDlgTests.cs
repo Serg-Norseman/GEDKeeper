@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
@@ -26,6 +26,7 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -44,12 +45,15 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
             fPerson = new GDMIndividualRecord(fBase.Context.Tree);
             fPersonalName = new GDMPersonalName();
 
             fDialog = new PersonalNameEditDlg(fBase);
-            fDialog.Individual = fPerson;
+            fDialog.IndividualRecord = fPerson;
             fDialog.PersonalName = fPersonalName;
             fDialog.Show();
         }
@@ -77,7 +81,7 @@ namespace GKUI.Forms
 
             ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual("sample text", fPersonalName.Pieces.Surname);
+            Assert.AreEqual("sample text", fPersonalName.Surname);
         }
 
         #region Handlers for external tests

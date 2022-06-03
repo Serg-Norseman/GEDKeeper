@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,10 +19,8 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -31,16 +29,14 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RepositoryEditDlg : EditorDialog, IRepositoryEditDlg
+    public sealed partial class RepositoryEditDlg : CommonDialog<IRepositoryEditDlg, RepositoryEditDlgController>, IRepositoryEditDlg
     {
-        private readonly RepositoryEditDlgController fController;
-
         private readonly GKSheetList fNotesList;
 
-        public GDMRepositoryRecord Repository
+        public GDMRepositoryRecord RepositoryRecord
         {
-            get { return fController.Repository; }
-            set { fController.Repository = value; }
+            get { return fController.RepositoryRecord; }
+            set { fController.RepositoryRecord = value; }
         }
 
         #region View Interface
@@ -66,39 +62,13 @@ namespace GKUI.Forms
 
             fNotesList = new GKSheetList(pageNotes);
 
-            // SetLang()
-            Title = LangMan.LS(LSID.LSID_Repository);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            lblName.Text = LangMan.LS(LSID.LSID_Title);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
-
             fController = new RepositoryEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
             fController.ModifyAddress();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

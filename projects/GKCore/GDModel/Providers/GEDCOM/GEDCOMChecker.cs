@@ -31,10 +31,10 @@ namespace GDModel.Providers.GEDCOM
     /// </summary>
     public class GEDCOMChecker
     {
-        private IBaseContext fBaseContext;
-        private GEDCOMFormat fFormat;
-        private IProgressController fProgress;
-        private GDMTree fTree;
+        private readonly IBaseContext fBaseContext;
+        private readonly GEDCOMFormat fFormat;
+        private readonly IProgressController fProgress;
+        private readonly GDMTree fTree;
 
         private GEDCOMChecker(IBaseContext baseContext, IProgressController progress)
         {
@@ -103,6 +103,8 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithNotes(IGDMStructWithNotes tag)
         {
+            if (!tag.HasNotes) return;
+
             for (int i = tag.Notes.Count - 1; i >= 0; i--) {
                 GDMNotes note = tag.Notes[i];
                 if (!note.IsPointer) {
@@ -116,6 +118,8 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithSourceCitations(IGDMStructWithSourceCitations tag)
         {
+            if (!tag.HasSourceCitations) return;
+
             for (int i = tag.SourceCitations.Count - 1; i >= 0; i--) {
                 GDMSourceCitation sourCit = tag.SourceCitations[i];
                 if (!sourCit.IsPointer) {
@@ -129,6 +133,8 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckTagWithMultimediaLinks(IGDMStructWithMultimediaLinks tag)
         {
+            if (!tag.HasMultimediaLinks) return;
+
             for (int i = tag.MultimediaLinks.Count - 1; i >= 0; i--) {
                 GDMMultimediaLink mmLink = tag.MultimediaLinks[i];
                 if (!mmLink.IsPointer) {
@@ -188,10 +194,12 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
-            CheckEventPlace(evt.Place);
+            if (evt.HasPlace) {
+                CheckEventPlace(evt.Place);
+            }
         }
 
-        private void CheckUserRef(GDMIndividualRecord iRec, GDMUserReference userRef)
+        private void CheckUserRef(GDMRecord rec, GDMUserReference userRef)
         {
         }
 
@@ -205,16 +213,14 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckIndividualRecord(GDMIndividualRecord iRec)
         {
-            for (int i = 0, num = iRec.Events.Count; i < num; i++) {
-                GDMCustomEvent evt = iRec.Events[i];
+            if (iRec.HasEvents) {
+                for (int i = 0, num = iRec.Events.Count; i < num; i++) {
+                    GDMCustomEvent evt = iRec.Events[i];
 
-                CheckEvent(evt);
+                    CheckEvent(evt);
 
-                fBaseContext.CollectEventValues(evt);
-            }
-
-            for (int i = 0, num = iRec.UserReferences.Count; i < num; i++) {
-                CheckUserRef(iRec, iRec.UserReferences[i]);
+                    fBaseContext.CollectEventValues(evt);
+                }
             }
 
             for (int i = 0, num = iRec.PersonalNames.Count; i < num; i++) {
@@ -239,10 +245,12 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
-            for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
-                var asso = iRec.Associations[i];
-                CheckPointerWithNotes(asso);
-                CheckTagWithSourceCitations(asso);
+            if (iRec.HasAssociations) {
+                for (int i = 0, num = iRec.Associations.Count; i < num; i++) {
+                    var asso = iRec.Associations[i];
+                    CheckPointerWithNotes(asso);
+                    CheckTagWithSourceCitations(asso);
+                }
             }
 
             fBaseContext.ImportNames(iRec);
@@ -262,10 +270,12 @@ namespace GDModel.Providers.GEDCOM
                 var mrelTag = FindSubTagValue(childLink, "_MREL");
                 if (frelTag == "ADOPTED" && mrelTag == "ADOPTED") {
                     GDMChildToFamilyLink ctfLink = childRec.FindChildToFamilyLink(fam);
-                    ctfLink.PedigreeLinkageType = GDMPedigreeLinkageType.plAdopted;
+                    if (ctfLink != null) {
+                        ctfLink.PedigreeLinkageType = GDMPedigreeLinkageType.plAdopted;
 
-                    childLink.DeleteTag("_FREL");
-                    childLink.DeleteTag("_MREL");
+                        childLink.DeleteTag("_FREL");
+                        childLink.DeleteTag("_MREL");
+                    }
                 }
             }
         }
@@ -278,9 +288,11 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckFamilyRecord(GDMFamilyRecord fam)
         {
-            for (int i = 0, num = fam.Events.Count; i < num; i++) {
-                GDMCustomEvent evt = fam.Events[i];
-                CheckEvent(evt);
+            if (fam.HasEvents) {
+                for (int i = 0, num = fam.Events.Count; i < num; i++) {
+                    GDMCustomEvent evt = fam.Events[i];
+                    CheckEvent(evt);
+                }
             }
 
             for (int i = fam.Children.Count - 1; i >= 0; i--) {
@@ -349,6 +361,12 @@ namespace GDModel.Providers.GEDCOM
         private void CheckRecord(GDMRecord rec, int fileVer)
         {
             CheckStructWL(rec);
+
+            if (rec.HasUserReferences) {
+                for (int i = 0, num = rec.UserReferences.Count; i < num; i++) {
+                    CheckUserRef(rec, rec.UserReferences[i]);
+                }
+            }
 
             // TODO
             // INDI: remove AFN, RFN - discuss???
@@ -458,7 +476,6 @@ namespace GDModel.Providers.GEDCOM
                         }
                     }
 
-                    // obsolete: AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IDsCorrectNeed))
                     if (!xrefValid) {
                         ConvertIdentifiers();
                     }

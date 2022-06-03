@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -75,8 +75,7 @@ namespace GKUI.Forms
             tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
             tbOptions.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
 
-            tbDocPrint.Visible = true;
-            tbDocPreview.Visible = true;
+            UIHelper.FixToolStrip(ToolBar1);
 
             miModeBoth.Tag = TreeChartKind.ckBoth;
             miModeAncestors.Tag = TreeChartKind.ckAncestors;
@@ -88,7 +87,6 @@ namespace GKUI.Forms
             fTreeBox = new TreeChartBox(new WFGfxRenderer());
             fTreeBox.Name = "fTreeBox";
             fTreeBox.Base = fBase;
-            fTreeBox.DragOver += ImageTree_DragOver;
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
             fTreeBox.InfoRequest += ImageTree_InfoRequest;
@@ -103,7 +101,9 @@ namespace GKUI.Forms
 
             PopulateContextMenus();
 
-            SetLang();
+            miGensInfCommon.Checked = true;
+            miGensInfAncestors.Checked = true;
+            miGensInfDescendants.Checked = true;
 
             miCertaintyIndex.Checked = fTreeBox.Options.CertaintyIndexVisible;
             fTreeBox.CertaintyIndex = fTreeBox.Options.CertaintyIndexVisible;
@@ -132,6 +132,7 @@ namespace GKUI.Forms
         {
             base.OnLoad(e);
             fTreeBox.Select();
+            UpdateControls();
         }
 
         protected override IPrintable GetPrintable()
@@ -211,15 +212,6 @@ namespace GKUI.Forms
             fController.SaveSnapshot();
         }
 
-        private void ImageTree_DragOver(object sender, DragEventArgs e)
-        {
-            /*if (e.Data.GetDataPresent(typeof(string))) {
-				e.Effect = DragDropEffects.Move;
-			} else {
-				e.Effect = DragDropEffects.None;
-			}*/
-        }
-
         private void ImageTree_PersonProperties(object sender, MouseEventArgs e)
         {
             MenuPerson.Show(fTreeBox, new Point(e.X, e.Y));
@@ -252,61 +244,47 @@ namespace GKUI.Forms
 
         private void PopulateContextMenus()
         {
-            miGensInfCommon = AddToolStripItem(MenuGensCommon, "Inf", -1, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "1", 1, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "2", 2, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "3", 3, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "4", 4, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "5", 5, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "6", 6, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "7", 7, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "8", 8, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "9", 9, miGensX_Click);
+            miGensInfCommon = UIHelper.AddToolStripItem(MenuGensCommon, "Inf", -1, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "1", 1, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "2", 2, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "3", 3, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "4", 4, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "5", 5, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "6", 6, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "7", 7, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "8", 8, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "9", 9, miGensX_Click);
 
-            miGensInfAncestors = AddToolStripItem(MenuGensAncestors, "Inf", -1, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "1", 1, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "2", 2, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "3", 3, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "4", 4, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "5", 5, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "6", 6, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "7", 7, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "8", 8, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "9", 9, miGensXAncestors_Click);
+            miGensInfAncestors = UIHelper.AddToolStripItem(MenuGensAncestors, "Inf", -1, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "1", 1, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "2", 2, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "3", 3, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "4", 4, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "5", 5, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "6", 6, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "7", 7, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "8", 8, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "9", 9, miGensXAncestors_Click);
 
-            miGensInfDescendants = AddToolStripItem(MenuGensDescendants, "Inf", -1, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "1", 1, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "2", 2, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "3", 3, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "4", 4, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "5", 5, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "6", 6, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "7", 7, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "8", 8, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "9", 9, miGensXDescendants_Click);
-        }
+            miGensInfDescendants = UIHelper.AddToolStripItem(MenuGensDescendants, "Inf", -1, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "1", 1, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "2", 2, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "3", 3, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "4", 4, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "5", 5, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "6", 6, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "7", 7, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "8", 8, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "9", 9, miGensXDescendants_Click);
 
-        private ToolStripMenuItem AddToolStripItem(ContextMenuStrip contextMenu, string text, object tag, EventHandler clickHandler)
-        {
-            var tsItem = new ToolStripMenuItem(text, null, clickHandler);
-            tsItem.Tag = tag;
-            contextMenu.Items.Add(tsItem);
-            return tsItem;
-        }
-
-        private int GetGensMenuDepth(ContextMenuStrip contextMenu, object sender)
-        {
-            foreach (ToolStripMenuItem tsItem in contextMenu.Items) {
-                tsItem.Checked = false;
+            for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.CrossCorners; bs++) {
+                UIHelper.AddToolStripItem(MenuBorders, bs.ToString(), (int)bs, miBorderX_Click);
             }
-            var senderItem = ((ToolStripMenuItem)sender);
-            ((ToolStripMenuItem)sender).Checked = true;
-            return (int)senderItem.Tag;
         }
 
         private void miGensX_Click(object sender, EventArgs e)
         {
-            int depth = GetGensMenuDepth(MenuGensCommon, sender);
+            int depth = UIHelper.GetMenuItemTag<int>(MenuGensCommon, sender);
             fTreeBox.DepthLimitAncestors = depth;
             fTreeBox.DepthLimitDescendants = depth;
             GenChart();
@@ -314,27 +292,16 @@ namespace GKUI.Forms
 
         private void miGensXAncestors_Click(object sender, EventArgs e)
         {
-            int depth = GetGensMenuDepth(MenuGensAncestors, sender);
+            int depth = UIHelper.GetMenuItemTag<int>(MenuGensAncestors, sender);
             fTreeBox.DepthLimitAncestors = depth;
             GenChart();
         }
 
         private void miGensXDescendants_Click(object sender, EventArgs e)
         {
-            int depth = GetGensMenuDepth(MenuGensDescendants, sender);
+            int depth = UIHelper.GetMenuItemTag<int>(MenuGensDescendants, sender);
             fTreeBox.DepthLimitDescendants = depth;
             GenChart();
-        }
-
-        private void SetupDepth(ContextMenuStrip contextMenu, int depth)
-        {
-            foreach (ToolStripMenuItem tsItem in contextMenu.Items) {
-                int itemDepth = (int)tsItem.Tag;
-                if (itemDepth == depth) {
-                    tsItem.PerformClick();
-                    break;
-                }
-            }
         }
 
         private void SetupDepth()
@@ -346,11 +313,20 @@ namespace GKUI.Forms
             tbGensDescendants.Visible = treeOptions.SeparateDepth;
 
             if (!treeOptions.SeparateDepth) {
-                SetupDepth(MenuGensCommon, treeOptions.DepthLimit);
+                UIHelper.SetMenuItemTag(MenuGensCommon, treeOptions.DepthLimit);
             } else {
-                SetupDepth(MenuGensAncestors, treeOptions.DepthLimitAncestors);
-                SetupDepth(MenuGensDescendants, treeOptions.DepthLimitDescendants);
+                UIHelper.SetMenuItemTag(MenuGensAncestors, treeOptions.DepthLimitAncestors);
+                UIHelper.SetMenuItemTag(MenuGensDescendants, treeOptions.DepthLimitDescendants);
             }
+
+            UIHelper.SetMenuItemTag(MenuBorders, (int)GlobalOptions.Instance.TreeChartOptions.BorderStyle);
+        }
+
+        private void miBorderX_Click(object sender, EventArgs e)
+        {
+            int borderStyle = UIHelper.GetMenuItemTag<int>(MenuBorders, sender);
+            GlobalOptions.Instance.TreeChartOptions.BorderStyle = (GfxBorderStyle)borderStyle;
+            fTreeBox.Invalidate();
         }
 
         private void miEdit_Click(object sender, EventArgs e)
@@ -473,6 +449,9 @@ namespace GKUI.Forms
             miFatherAdd.Enabled = fController.ParentIsRequired(GDMSex.svMale);
             miMotherAdd.Enabled = fController.ParentIsRequired(GDMSex.svFemale);
             miGoToRecord.Enabled = fController.SelectedPersonIsReal();
+
+            TreeChartPerson p = fTreeBox.Selected;
+            miGoToPrimaryBranch.Enabled = (p != null && p.Rec != null && p.IsDup);
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)
@@ -493,6 +472,11 @@ namespace GKUI.Forms
         private void miGoToRecord_Click(object sender, EventArgs e)
         {
             fController.GoToRecord();
+        }
+
+        private void miGoToPrimaryBranch_Click(object sender, EventArgs e)
+        {
+            fController.GoToPrimaryBranch();
         }
 
         #endregion
@@ -520,48 +504,11 @@ namespace GKUI.Forms
 
         #endregion
 
-        #region ILocalization implementation
+        #region ILocalizable implementation
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            tbGensCommon.Text = LangMan.LS(LSID.LSID_Generations);
-            tbGensAncestors.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Ancestors);
-            tbGensDescendants.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Descendants);
-            tbModes.Text = LangMan.LS(LSID.LSID_ModesTip);
-
-            miGensInfCommon.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInfCommon.Checked = true;
-            miGensInfAncestors.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInfAncestors.Checked = true;
-            miGensInfDescendants.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInfDescendants.Checked = true;
-            miModeBoth.Text = LangMan.LS(LSID.LSID_TM_Both);
-            miModeAncestors.Text = LangMan.LS(LSID.LSID_TM_Ancestors);
-            miModeDescendants.Text = LangMan.LS(LSID.LSID_TM_Descendants);
-            miEdit.Text = LangMan.LS(LSID.LSID_DoEdit);
-            miFatherAdd.Text = LangMan.LS(LSID.LSID_FatherAdd);
-            miMotherAdd.Text = LangMan.LS(LSID.LSID_MotherAdd);
-            miFamilyAdd.Text = LangMan.LS(LSID.LSID_FamilyAdd);
-            miSpouseAdd.Text = LangMan.LS(LSID.LSID_SpouseAdd);
-            miSonAdd.Text = LangMan.LS(LSID.LSID_SonAdd);
-            miDaughterAdd.Text = LangMan.LS(LSID.LSID_DaughterAdd);
-            miDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
-            miRebuildTree.Text = LangMan.LS(LSID.LSID_RebuildTree);
-            miRebuildKinships.Text = LangMan.LS(LSID.LSID_RebuildKinships);
-            miFillColor.Text = LangMan.LS(LSID.LSID_FillColor);
-            miFillImage.Text = LangMan.LS(LSID.LSID_FillImage);
-            miTraceSelected.Text = LangMan.LS(LSID.LSID_TM_TraceSelected);
-            miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
-            miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
-            miSelectColor.Text = LangMan.LS(LSID.LSID_SelectColor);
-            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-
-            SetToolTip(tbModes, LangMan.LS(LSID.LSID_ModesTip));
-            SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
-            SetToolTip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
-            SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
         }
 
         #endregion

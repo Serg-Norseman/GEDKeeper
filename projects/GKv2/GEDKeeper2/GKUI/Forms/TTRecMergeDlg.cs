@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -29,15 +28,18 @@ using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTRecMergeDlg : CommonDialog, IRecMergeDlg
+    public sealed partial class TTRecMergeDlg : CommonDialog<IRecMergeDlg, RecMergeController>, IRecMergeDlg
     {
-        private readonly RecMergeController fController;
-
         #region View Interface
 
-        IMergeControl IRecMergeDlg.MergeCtl
+        IHyperView IRecMergeDlg.View1
         {
-            get { return MergeControl; }
+            get { return fView1; }
+        }
+
+        IHyperView IRecMergeDlg.View2
+        {
+            get { return fView2; }
         }
 
         IButton IRecMergeDlg.SkipBtn
@@ -78,47 +80,16 @@ namespace GKUI.Forms
 
             fController = new RecMergeController(this);
             fController.Init(baseWin);
-
-            MergeControl.Base = baseWin;
-            MergeControl.MergeMode = fController.RMMode;
-
-            SetLang();
-        }
-
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_4);
-            pageMerge.Text = LangMan.LS(LSID.LSID_RecMerge);
-            pageMergeOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
-            btnAutoSearch.Text = LangMan.LS(LSID.LSID_RM_Search);
-            btnSkip.Text = LangMan.LS(LSID.LSID_RM_Skip);
-            rgMode.Text = LangMan.LS(LSID.LSID_RM_Records);
-            radPersons.Text = LangMan.LS(LSID.LSID_RPIndividuals);
-            radNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            radFamilies.Text = LangMan.LS(LSID.LSID_RPFamilies);
-            radSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            grpSearchPersons.Text = LangMan.LS(LSID.LSID_RM_SearchPersons);
-            chkIndistinctMatching.Text = LangMan.LS(LSID.LSID_RM_IndistinctMatching);
-            chkBirthYear.Text = LangMan.LS(LSID.LSID_RM_BirthYear);
-            lblNameAccuracy.Text = LangMan.LS(LSID.LSID_RM_NameAccuracy);
-            lblYearInaccuracy.Text = LangMan.LS(LSID.LSID_RM_YearInaccuracy);
-            grpMergeOther.Text = LangMan.LS(LSID.LSID_Other);
-            chkBookmarkMerged.Text = LangMan.LS(LSID.LSID_BookmarkMerged);
         }
 
         private void radMergeMode_Click(object sender, EventArgs e)
         {
-            if (radPersons.Checked) fController.RMMode = GDMRecordType.rtIndividual;
-            if (radNotes.Checked) fController.RMMode = GDMRecordType.rtNote;
-            if (radFamilies.Checked) fController.RMMode = GDMRecordType.rtFamily;
-            if (radSources.Checked) fController.RMMode = GDMRecordType.rtSource;
-
-            MergeControl.MergeMode = fController.RMMode;
+            fController.ChangeOption();
         }
 
         private void chkBookmarkMerged_CheckedChanged(object sender, EventArgs e)
         {
-            MergeControl.Bookmark = chkBookmarkMerged.Checked;
+            fController.ChangeOption();
         }
 
         private void btnSkip_Click(object sender, EventArgs e)
@@ -130,6 +101,36 @@ namespace GKUI.Forms
         {
             fController.Reset();
             fController.SearchDuplicates();
+        }
+
+        private void btnRec1Select_Click(object sender, EventArgs e)
+        {
+            fController.SelectRec1();
+        }
+
+        private void btnRec2Select_Click(object sender, EventArgs e)
+        {
+            fController.SelectRec2();
+        }
+
+        private void btnMergeToLeft_Click(object sender, EventArgs e)
+        {
+            fController.MergeToLeft();
+        }
+
+        private void btnMergeToRight_Click(object sender, EventArgs e)
+        {
+            fController.MergeToRight();
+        }
+
+        public void SetRec1(GDMRecord value)
+        {
+            fController.SetRec1(value);
+        }
+
+        public void SetRec2(GDMRecord value)
+        {
+            fController.SetRec2(value);
         }
     }
 }

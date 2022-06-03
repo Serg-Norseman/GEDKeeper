@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -31,14 +32,14 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class UserRefEditDlgController : DialogController<IUserRefEditDlg>
     {
-        private GDMUserReference fUserRef;
+        private GDMUserReference fUserReference;
 
-        public GDMUserReference UserRef
+        public GDMUserReference UserReference
         {
-            get { return fUserRef; }
+            get { return fUserReference; }
             set {
-                if (fUserRef != value) {
-                    fUserRef = value;
+                if (fUserReference != value) {
+                    fUserReference = value;
                     UpdateView();
                 }
             }
@@ -57,8 +58,8 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fUserRef.StringValue = fView.Ref.Text;
-                fUserRef.ReferenceType = fView.RefType.Text;
+                fUserReference.StringValue = fView.Ref.Text;
+                fUserReference.ReferenceType = fView.RefType.Text;
 
                 return true;
             } catch (Exception ex) {
@@ -69,8 +70,17 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Ref.Text = fUserRef.StringValue;
-            fView.RefType.Text = fUserRef.ReferenceType;
+            fView.Ref.Text = fUserReference.StringValue;
+            fView.RefType.Text = fUserReference.ReferenceType;
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_WinUserRefEdit);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<ILabel>("lblReference").Text = LangMan.LS(LSID.LSID_Reference);
+            GetControl<ILabel>("lblRefType").Text = LangMan.LS(LSID.LSID_Type);
         }
     }
 }

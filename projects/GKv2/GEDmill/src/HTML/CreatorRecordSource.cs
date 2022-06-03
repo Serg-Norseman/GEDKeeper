@@ -21,6 +21,7 @@ using System.Collections;
 using System.IO;
 using GDModel;
 using GEDmill.Model;
+using GKCore.Interfaces;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -36,7 +37,7 @@ namespace GEDmill.HTML
         private GDMSourceRecord fSourceRecord;
 
 
-        public CreatorRecordSource(GDMTree tree, IProgressCallback progress, string w3cFile, GDMSourceRecord sr) : base(tree, progress, w3cFile)
+        public CreatorRecordSource(IBaseContext context, ILangMan langMan, GDMSourceRecord sr) : base(context, langMan)
         {
             fSourceRecord = sr;
         }
@@ -50,15 +51,15 @@ namespace GEDmill.HTML
             }
 
             // Create the strings to use for the HTML file.
-            string pageDescription = "GEDmill GEDCOM to HTML page for " + fSourceRecord.ShortTitle;
-            string keywords = "family tree history " + fSourceRecord.ShortTitle;
+            string pageDescription = fLangMan.LS(PLS.LSID_PageDescription) + " " + fSourceRecord.ShortTitle;
+            string keywords = fLangMan.LS(PLS.LSID_Keywords) + " " + fSourceRecord.ShortTitle;
             string filename = string.Concat(GMConfig.Instance.OutputFolder, "\\sour", fSourceRecord.XRef);
-            string fullFilename = string.Concat(filename, ".", GMConfig.Instance.HtmlExtension);
+            string fullFilename = string.Concat(filename, ".html");
 
             HTMLFile f = null;
             try {
                 // Create a new file with an HTML header.    
-                f = new HTMLFile(fullFilename, fSourceRecord.ShortTitle, pageDescription, keywords);
+                f = new HTMLFile(fLangMan, fullFilename, fSourceRecord.ShortTitle, pageDescription, keywords);
 
                 // Create a navbar to main site, front page etc.
                 OutputPageHeader(f, "", "", true);
@@ -73,7 +74,7 @@ namespace GEDmill.HTML
                 f.WriteLine("          <div id=\"names\">");
                 string sourName = fSourceRecord.ShortTitle;
                 if (sourName == "") {
-                    sourName = "Source ";
+                    sourName = fLangMan.LS(PLS.LSID_Source) + " ";
                     bool gotSourceName = false;
                     // Try user reference number
                     foreach (var userRef in fSourceRecord.UserReferences) {
@@ -127,10 +128,10 @@ namespace GEDmill.HTML
                 f.WriteLine("          </div> <!-- names -->");
                 f.WriteLine("        </div> <!-- summary -->");
 
-                // Collect together multimedia links.
-                if (GMConfig.Instance.AllowMultimedia) {
-                    // Fill m_alMultimediaList:
-                    AddMultimedia(fSourceRecord.MultimediaLinks, string.Concat(fSourceRecord.XRef, "mms"), string.Concat(fSourceRecord.XRef, "mos"), GMConfig.Instance.MaxSourceImageWidth, GMConfig.Instance.MaxSourceImageHeight, stats);
+                // Collect together multimedia links
+                if (GMConfig.Instance.AllowMultimedia && fSourceRecord.HasMultimediaLinks) {
+                    AddMultimedia(fSourceRecord.MultimediaLinks, string.Concat(fSourceRecord.XRef, "mms"), string.Concat(fSourceRecord.XRef, "mos"), 
+                                  GMConfig.Instance.MaxSourceImageWidth, GMConfig.Instance.MaxSourceImageHeight, stats);
                 }
 
                 // Add pics
@@ -143,7 +144,7 @@ namespace GEDmill.HTML
                 }
                 if (!string.IsNullOrEmpty(cleanText)) {
                     f.WriteLine("        <div id=\"text\">");
-                    f.WriteLine("          <h1>Text</h1>");
+                    f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.LSID_Text));
                     f.WriteLine("          <p class=\"pretext\">");
                     f.WriteLine(EscapeHTML(cleanText, false));
                     f.WriteLine("            </p>");
@@ -155,7 +156,7 @@ namespace GEDmill.HTML
 
                 if (!GMConfig.Instance.SupressBackreferences) {
                     f.WriteLine("        <div id=\"citations\">");
-                    f.WriteLine("          <h1>Citations</h1>");
+                    f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.LSID_Citations));
                     f.WriteLine("          <ul>");
 
                     var htBackrefs = GMHelper.MakeBackReferences(fSourceRecord);
@@ -198,7 +199,7 @@ namespace GEDmill.HTML
             if (fMultimediaList.Count > 0) {
                 f.WriteLine("        <div id=\"sourcePics\">");
                 foreach (Multimedia iMultimedia in fMultimediaList) {
-                    string nonPicMainFilename = "multimedia/" + GMHelper.NonPicFilename(iMultimedia.Format, false, GMConfig.Instance.LinkOriginalPicture);
+                    string nonPicMainFilename = "multimedia/" + NonPicFilename(iMultimedia.Format, false, GMConfig.Instance.LinkOriginalPicture);
 
                     string imageTitle = "";
                     string altName = "";
@@ -213,7 +214,7 @@ namespace GEDmill.HTML
                     if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
                         // Must be a picture.
                         if (altName == "") {
-                            altName = "Image for this source";
+                            altName = fLangMan.LS(PLS.LSID_ImageForThisSource);
                         }
                         if (iMultimedia.LargeFileName.Length > 0) {
                             f.WriteLine(string.Concat("            <a href=\"", iMultimedia.LargeFileName, "\"><img src=\"", iMultimedia.FileName, "\" alt=\"", altName, "\" /></a>")); // TODO: clip and scale properly. Use MainForm.s_config to set a max scale
@@ -223,7 +224,7 @@ namespace GEDmill.HTML
                     } else {
                         // Other multimedia
                         if (altName == "") {
-                            altName = "Media for this source";
+                            altName = fLangMan.LS(PLS.LSID_MediaForThisSource);
                         }
 
                         if (GMConfig.Instance.LinkOriginalPicture) {

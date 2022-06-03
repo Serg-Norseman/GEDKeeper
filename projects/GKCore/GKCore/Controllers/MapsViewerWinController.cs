@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,17 +32,17 @@ using GKCore.MVP.Views;
 namespace GKCore.Controllers
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class MapsViewerWinController : FormController<IMapsViewerWin>
     {
-        private readonly ExtList<GeoPoint> fMapPoints;
+        private readonly List<GeoPoint> fMapPoints;
         private readonly List<GDMRecord> fSelectedPersons;
-        private readonly ExtList<MapPlace> fPlaces;
+        private readonly List<MapPlace> fPlaces;
 
         private ITVNode fBaseRoot;
 
-        public ExtList<MapPlace> Places
+        public IList<MapPlace> Places
         {
             get { return fPlaces; }
         }
@@ -54,8 +54,8 @@ namespace GKCore.Controllers
 
         public MapsViewerWinController(IMapsViewerWin view, List<GDMRecord> selectedPersons) : base(view)
         {
-            fMapPoints = new ExtList<GeoPoint>(true);
-            fPlaces = new ExtList<MapPlace>(true);
+            fMapPoints = new List<GeoPoint>();
+            fPlaces = new List<MapPlace>();
             fSelectedPersons = selectedPersons;
         }
 
@@ -76,8 +76,6 @@ namespace GKCore.Controllers
 
                 IProgressController progress = AppHost.Progress;
                 GDMTree tree = fBase.Context.Tree;
-
-                fView.MapBrowser.InitMap();
 
                 fView.PersonsCombo.BeginUpdate();
                 fView.PlacesTree.BeginUpdate();
@@ -100,7 +98,7 @@ namespace GKCore.Controllers
                             int num2 = ind.Events.Count;
                             for (int j = 0; j < num2; j++) {
                                 GDMCustomEvent ev = ind.Events[j];
-                                if (!string.IsNullOrEmpty(ev.Place.StringValue)) {
+                                if (ev.HasPlace && !string.IsNullOrEmpty(ev.Place.StringValue)) {
                                     AddPlace(ev.Place, ind, ev);
                                     pCnt++;
                                 }
@@ -119,7 +117,9 @@ namespace GKCore.Controllers
                     personValues.Sort();
                     fView.PersonsCombo.Clear();
                     fView.PersonsCombo.AddItem<GDMIndividualRecord>(LangMan.LS(LSID.LSID_NotSelected), null);
-                    fView.PersonsCombo.AddStrings(personValues);
+                    for (int i = 0; i < personValues.Count; i++) {
+                        fView.PersonsCombo.AddItem<GDMIndividualRecord>(personValues[i], personValues.GetObject(i) as GDMIndividualRecord);
+                    }
 
                     fView.SelectPlacesBtn.Enabled = true;
                 } finally {
@@ -210,7 +210,7 @@ namespace GKCore.Controllers
                     var placeRef = place.PlaceRefs[j];
                     GDMCustomEvent evt = placeRef.Event;
                     var evtType = evt.GetTagType();
-                    bool checkEventType = (condBirth && evtType == GEDCOMTagType.BIRT) || 
+                    bool checkEventType = (condBirth && evtType == GEDCOMTagType.BIRT) ||
                         (condDeath && evtType == GEDCOMTagType.DEAT) || (condResidence && evtType == GEDCOMTagType.RESI);
 
                     if ((ind != null && (placeRef.Owner == ind)) || checkEventType) {
@@ -221,7 +221,7 @@ namespace GKCore.Controllers
 
             if (ind != null) {
                 // sort points by date
-                fMapPoints.QuickSort(MapPointsCompare);
+                SortHelper.QuickSort(fMapPoints, MapPointsCompare);
             }
 
             PlacesLoader.CopyPoints(fView.MapBrowser, fMapPoints, ind != null);
@@ -233,14 +233,42 @@ namespace GKCore.Controllers
         }
 
         // TODO: localize?
-        public void SaveImage()
+        public void SaveSnapshot()
         {
-            string filter1 = "Image files|*.jpg";
+            try {
+                string filter1 = "Image files|*.jpg";
 
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fileName)) {
-                fView.MapBrowser.SaveSnapshot(fileName);
+                string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
+                if (!string.IsNullOrEmpty(fileName)) {
+                    fView.MapBrowser.SaveSnapshot(fileName);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("SaveSnapshot()", ex);
+                AppHost.StdDialogs.ShowError("Image failed to save: " + ex.Message);
             }
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_MIMap);
+
+            GetControl<ITabPage>("pagePlaces").Text = LangMan.LS(LSID.LSID_RPLocations);
+            GetControl<IGroupBox>("grpSelection").Text = LangMan.LS(LSID.LSID_MapSelection);
+            GetControl<IRadioButton>("radTotal").Text = LangMan.LS(LSID.LSID_MapSelOnAll);
+            GetControl<ICheckBox>("chkBirth").Text = LangMan.LS(LSID.LSID_MSBirthPlaces);
+            GetControl<ICheckBox>("chkDeath").Text = LangMan.LS(LSID.LSID_MSDeathPlaces);
+            GetControl<ICheckBox>("chkResidence").Text = LangMan.LS(LSID.LSID_MSResiPlace);
+            GetControl<IRadioButton>("radSelected").Text = LangMan.LS(LSID.LSID_MapSelOnSelected);
+            //btnSaveImage.Text = LangMan.LS(LSID.LSID_SaveImage);
+            GetControl<IButton>("btnSelectPlaces").Text = LangMan.LS(LSID.LSID_Show);
+            GetControl<ICheckBox>("chkLinesVisible").Text = LangMan.LS(LSID.LSID_LinesVisible);
+            GetControl<IButtonToolItem>("tbLoadPlaces").Text = LangMan.LS(LSID.LSID_LoadPlaces);
+            GetControl<IButtonToolItem>("tbProviders").Text = LangMan.LS(LSID.LSID_Providers);
+            GetControl<ITabPage>("pageCoordinates").Text = LangMan.LS(LSID.LSID_Coordinates);
+            GetControl<IButtonToolItem>("tbClear").Text = LangMan.LS(LSID.LSID_Clear);
+            GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.LSID_Search);
+
+            SetToolTip("tbSaveSnapshot", LangMan.LS(LSID.LSID_ImageSaveTip));
         }
     }
 }

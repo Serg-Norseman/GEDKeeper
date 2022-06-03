@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.TreeFilterDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}"
+  Load="TreeFilterDlg_Load">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TableLayout>
+        <TableRow ScaleHeight="True">
+          <GroupBox x:Name="rgBranchCut">
+            <TableLayout Style="paddedTable">
+              <TableRow>
+                <comcom:RadioButtonEx x:Name="rbCutNone" GroupIndex="1" Checked="True" CheckedChanged="rbCutX_CheckedChanged" />
+              </TableRow>
+
+              <TableRow>
+                <comcom:RadioButtonEx x:Name="rbCutYears" GroupIndex="1" CheckedChanged="rbCutX_CheckedChanged" />
+              </TableRow>
+
+              <TableRow>
+                <StackLayout Orientation="Horizontal" Spacing="20">
+                  <StackLayoutItem />
+                  <StackLayout Orientation="Horizontal" Spacing="4">
+                    <Label x:Name="lblYear" />
+                    <NumericStepper x:Name="edYear" Increment="10" MaxValue="3000" />
+                  </StackLayout>
+                </StackLayout>
+              </TableRow>
+
+              <TableRow>
+                <comcom:RadioButtonEx x:Name="rbCutPersons" GroupIndex="1" CheckedChanged="rbCutX_CheckedChanged" />
+              </TableRow>
+
+              <TableRow ScaleHeight="True">
+                <comcom:GKSheetList x:Name="fPersonsList" OnModify="ListModify" />
+              </TableRow>
+            </TableLayout>
+          </GroupBox>
+        </TableRow>
+
+        <TableRow>
+          <StackLayout Orientation="Horizontal" Spacing="4">
+            <Label x:Name="lblRPSources" />
+            <ComboBox x:Name="cmbSource" ReadOnly="True" Width="260" />
+          </StackLayout>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

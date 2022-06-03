@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using BSLib.Design.MVP;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
@@ -64,12 +65,14 @@ namespace GKCore.MVP
 
         protected void CommitChanges()
         {
-            fLocalUndoman.Commit();
+            if (fLocalUndoman != null)
+                fLocalUndoman.Commit();
         }
 
         protected void RollbackChanges()
         {
-            fLocalUndoman.Rollback();
+            if (fLocalUndoman != null)
+                fLocalUndoman.Rollback();
         }
 
         /// <summary>
@@ -78,7 +81,7 @@ namespace GKCore.MVP
         /// <returns>if `true`, discard dialog closing events</returns>
         public bool CheckChangesPersistence()
         {
-            if (GlobalOptions.Instance.DialogClosingWarn && fLocalUndoman.HasChanges()) {
+            if (GlobalOptions.Instance.DialogClosingWarn && fLocalUndoman != null && fLocalUndoman.HasChanges()) {
                 return (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_WarningOfDialogUnsavedChanges)));
             } else {
                 return false;
@@ -90,6 +93,14 @@ namespace GKCore.MVP
             base.Init(baseWin);
             if (fBase != null) {
                 fLocalUndoman = new ChangeTracker(fBase.Context);
+            }
+        }
+
+        public void JumpToRecord(IGDMPointerHost pointer)
+        {
+            if (pointer != null && Accept()) {
+                fBase.SelectRecordByXRef(pointer.XRef);
+                fView.Close();
             }
         }
     }

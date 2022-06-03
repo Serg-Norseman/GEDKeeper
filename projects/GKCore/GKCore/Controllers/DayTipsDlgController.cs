@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 
@@ -56,13 +57,28 @@ namespace GKCore.Controllers
             fView.NextButton.Enabled = (fTips.Count > 0);
         }
 
-        public void SetTips(StringList tips)
+        public void InitTips(string caption, bool showTipsChecked, StringList tips)
         {
+            fView.Title = caption;
+
+            GetControl<ICheckBox>("chkShow").Checked = showTipsChecked;
+            GetControl<ILabel>("lblTitle").Text = caption;
+
             fTips.Assign(tips);
+
+            GetNextTip();
         }
 
         public override void UpdateView()
         {
+        }
+
+        public override void SetLocale()
+        {
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<ICheckBox>("chkShow").Text = LangMan.LS(LSID.LSID_StartupTips);
+            GetControl<IButton>("btnNextTip").Text = LangMan.LS(LSID.LSID_Next);
+            GetControl<ILabel>("lblTitle").Text = LangMan.LS(LSID.LSID_YouKnowWhat);
         }
     }
 }

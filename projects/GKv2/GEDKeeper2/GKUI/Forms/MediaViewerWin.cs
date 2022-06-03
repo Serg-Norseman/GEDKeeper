@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,16 +37,16 @@ namespace GKUI.Forms
         private readonly MediaViewerController fController;
         private Control fViewer;
 
-        public GDMFileReferenceWithTitle FileRef
+        public GDMFileReferenceWithTitle FileReference
         {
-            get { return fController.FileRef; }
-            set { fController.FileRef = value; }
+            get { return fController.FileReference; }
+            set { fController.FileReference = value; }
         }
 
-        public GDMMultimediaRecord Multimedia
+        public GDMMultimediaRecord MultimediaRecord
         {
-            get { return fController.Multimedia; }
-            set { fController.Multimedia = value; }
+            get { return fController.MultimediaRecord; }
+            set { fController.MultimediaRecord = value; }
         }
 
         public void SetViewText(string text)
@@ -100,7 +100,7 @@ namespace GKUI.Forms
 
         public void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef)
         {
-            var imageCtl = new ImageView();
+            var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(img);
 
             fController.ProcessPortraits(imageCtl, fileRef);
@@ -117,7 +117,7 @@ namespace GKUI.Forms
         {
             if (ctl == null) return;
             fViewer = ctl;
-            SetLang();
+            SetLocale();
 
             SuspendLayout();
 
@@ -134,16 +134,16 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            SetLang();
+            SetLocale();
 
             fController = new MediaViewerController(this);
             fController.Init(baseWin);
         }
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            var localizable = fViewer as ILocalization;
-            if (localizable != null) localizable.SetLang();
+            var localizable = fViewer as ILocalizable;
+            if (localizable != null) localizable.SetLocale();
         }
 
         protected override void OnLoad(EventArgs e)

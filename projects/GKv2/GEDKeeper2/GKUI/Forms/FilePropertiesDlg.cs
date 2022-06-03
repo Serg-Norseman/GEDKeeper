@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,9 +19,7 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -29,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class FilePropertiesDlg : CommonDialog, IFilePropertiesDlg
+    public sealed partial class FilePropertiesDlg : CommonDialog<IFilePropertiesDlg, FilePropertiesDlgController>, IFilePropertiesDlg
     {
-        private readonly FilePropertiesDlgController fController;
-
         public IBaseWindow Base
         {
             get { return fController.Base; }
@@ -75,37 +71,9 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnLangEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
 
-            // SetLang()
-            Title = LangMan.LS(LSID.LSID_MIFileProperties);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            pageAuthor.Text = LangMan.LS(LSID.LSID_Author);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblAddress.Text = LangMan.LS(LSID.LSID_Address);
-            lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
-            pageOther.Text = LangMan.LS(LSID.LSID_Other);
-            lvRecordStats.SetColumnCaption(0, LangMan.LS(LSID.LSID_RM_Records));
-            lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
-
             fController = new FilePropertiesDlgController(this);
             fController.Init(baseWin);
             fController.UpdateView();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnLangEdit_Click(object sender, EventArgs e)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,25 +20,52 @@
 
 using System;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.MVP.Views;
-using GKUI.Components;
+using GKCore.Options;
 
 namespace GKUI.Forms
 {
     public sealed partial class AboutDlg : CommonDialog, IAboutDlg
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private Label lblProduct;
+        private Label lblVersion;
+        private Label lblCopyright;
+        private LinkButton lblMail;
+        private Button btnClose;
+        private LinkButton lblProjSite;
+        private LinkButton lblForum;
+        private LinkButton lblChannel;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
         public AboutDlg()
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            //<Label x:Name="lblProduct" Font="Bold+20pt" />
+            //<StackLayoutItem HorizontalAlignment="Right">
+            //<ImageView Image="{Resource Resources.icon_gedkeeper.png, GKCore}" />
+            //</StackLayoutItem>
 
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            lblProduct.Text = GKData.APP_TITLE;
+            //lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();
+
+            if (GlobalOptions.Instance.GetLanguageSign() == "rus") {
+                lblForum.Text = GKData.APP_FORUM_RU;
+                lblChannel.Text = GKData.APP_CHANNEL_RU;
+            } else {
+                lblForum.Text = GKData.APP_FORUM_EN;
+                lblChannel.Text = GKData.APP_CHANNEL_EN;
+            }
         }
 
         private void LabelMail_Click(object sender, EventArgs e)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,23 +18,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class RecordInfoDlg : CommonDialog, IRecordInfoDlg
     {
-        private readonly RecordInfoDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        public IBaseWindow Base
-        {
-            get { return fController.Base; }
-        }
+        private HyperView hyperView1;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        private readonly RecordInfoDlgController fController;
 
         public GDMRecord Record
         {
@@ -53,10 +57,7 @@ namespace GKUI.Forms
 
         public RecordInfoDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            Title = LangMan.LS(LSID.LSID_MIFileProperties);
-            hyperView1.OnLink += HyperViewLink;
+            XamlReader.Load(this);
 
             fController = new RecordInfoDlgController(this);
             fController.Init(baseWin);

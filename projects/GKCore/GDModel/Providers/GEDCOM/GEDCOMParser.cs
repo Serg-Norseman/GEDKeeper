@@ -297,6 +297,26 @@ namespace GDModel.Providers.GEDCOM
             return GetNumber();
         }
 
+        public int RequestNextSignedInt()
+        {
+            var token = Next();
+
+            bool neg = (token == GEDCOMToken.Symbol && GetSymbol() == '-');
+            if (neg) {
+                token = Next();
+            }
+
+            if (token != GEDCOMToken.Number) {
+                throw new GEDCOMParserException("Required integer not found");
+            }
+
+            int number = GetNumber();
+            if (neg) {
+                number = -number;
+            }
+            return number;
+        }
+
         public int TokenLength()
         {
             return fTokenEnd - fSavePos;

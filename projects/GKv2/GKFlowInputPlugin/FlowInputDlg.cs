@@ -103,7 +103,7 @@ namespace GKFlowInputPlugin
                 cbPersonLink.Items.Add(fLangMan.LS(PersonLinks[(int)pl]));
             }
 
-            SetLang();
+            SetLocale();
         }
 
         protected override void Dispose(bool disposing)
@@ -116,9 +116,9 @@ namespace GKFlowInputPlugin
 
         #endregion
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             btnParse.Text = fLangMan.LS(FLS.LSID_DlgAppend);
             btnClose.Text = fLangMan.LS(FLS.LSID_DlgClose);

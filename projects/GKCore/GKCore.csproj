@@ -1,73 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <Import Project="..\GKConfigurations.targets" />
   <PropertyGroup>
     <ProjectGuid>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <AssemblyName>GKCore</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <NoWin32Manifest>False</NoWin32Manifest>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
-    <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <StartAction>Project</StartAction>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\</OutputPath>
-    <DebugSymbols>False</DebugSymbols>
-    <DebugType>None</DebugType>
-    <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Framework)' == 'NET20' ">
-    <DefineConstants>NET20</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Framework)' == 'NET35' ">
-    <DefineConstants>NET35</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Framework)' == 'NET40' ">
-    <DefineConstants>NET40</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">
-    <DefineConstants>$(DefineConstants);NET40</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Framework)' == 'NET45' ">
-    <DefineConstants>NET45</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(CIMode)' == 'true' ">
-    <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(MonoCS)' == 'true' ">
-    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(MonoCS)' == 'false' ">
-    <DefineConstants>$(DefineConstants);LUA_DLL</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup Condition="!$(DefineConstants.Contains(';__MonoCS__'))">
+  <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
     <Reference Include="LuaInterface">
       <HintPath>..\libs\mswin\LuaInterface.dll</HintPath>
     </Reference>
@@ -76,7 +24,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup Condition="$(DefineConstants.Contains(';__MonoCS__'))">
+  <ItemGroup Condition=" '$(MonoCS)' == 'true' ">
     <Reference Include="KopiLua">
       <HintPath>..\libs\linux\KopiLua.dll</HintPath>
     </Reference>
@@ -96,6 +44,9 @@
     </Reference>
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.SQLite">
+      <HintPath>..\libs\BSLib.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="DotNetRtfWriter">
       <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
@@ -121,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Controllers\OptionsDlgController.cs" />
+    <Compile Include="GKCore\Export\XLSWriter.cs" />
     <Compile Include="GDModel\GDMException.cs" />
     <Compile Include="GDModel\GDMAddress.cs" />
     <Compile Include="GDModel\GDMAssociation.cs" />
@@ -175,7 +128,6 @@
     <Compile Include="GDModel\GDMNoteRecord.cs" />
     <Compile Include="GDModel\GDMNotes.cs" />
     <Compile Include="GDModel\GDMPersonalName.cs" />
-    <Compile Include="GDModel\GDMPersonalNamePieces.cs" />
     <Compile Include="GDModel\GDMPlace.cs" />
     <Compile Include="GDModel\GDMPointer.cs" />
     <Compile Include="GDModel\GDMPointerWithNotes.cs" />
@@ -200,6 +152,8 @@
     <Compile Include="GKCore\Charts\IChart.cs" />
     <Compile Include="GKCore\Charts\ICircleChart.cs" />
     <Compile Include="GKCore\Charts\ITreeControl.cs" />
+    <Compile Include="GKCore\Charts\ITreeLayout.cs" />
+    <Compile Include="GKCore\Charts\NativeTreeLayout.cs" />
     <Compile Include="GKCore\Charts\SvgGraphics.cs" />
     <Compile Include="GKCore\Charts\SVGRenderer.cs" />
     <Compile Include="GKCore\Charts\TCGenerationsControl.cs" />
@@ -257,6 +211,9 @@
     <Compile Include="GKCore\Controllers\TreeSplitController.cs" />
     <Compile Include="GKCore\Controllers\UserRefEditDlgController.cs" />
     <Compile Include="GKCore\Cultures\CulturesPool.cs" />
+    <Compile Include="GKCore\Cultures\CzechCulture.cs" />
+    <Compile Include="GKCore\Database\GKDatabase.cs" />
+    <Compile Include="GKCore\Database\GKDBNameEntry.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
     <Compile Include="GKCore\GKVarCache.cs" />
@@ -276,7 +233,7 @@
     <Compile Include="GKCore\Interfaces\IListFilter.cs" />
     <Compile Include="GKCore\Interfaces\IListManager.cs" />
     <Compile Include="GKCore\Interfaces\IListViewEx.cs" />
-    <Compile Include="GKCore\Interfaces\ILocalization.cs" />
+    <Compile Include="GKCore\Interfaces\ILocalizable.cs" />
     <Compile Include="GKCore\Interfaces\IOptions.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsControl.cs" />
     <Compile Include="GKCore\Interfaces\IGraphicsProvider.cs" />
@@ -321,6 +278,7 @@
     <Compile Include="GKCore\Types\MediaStoreStatus.cs" />
     <Compile Include="GKCore\Types\MediaStoreType.cs" />
     <Compile Include="GKCore\Types\MultimediaKind.cs" />
+    <Compile Include="GKCore\Types\NamedRegion.cs" />
     <Compile Include="GKCore\Types\NameFormat.cs" />
     <Compile Include="GKCore\Types\NamePartsRet.cs" />
     <Compile Include="GKCore\Types\PatriarchObj.cs" />

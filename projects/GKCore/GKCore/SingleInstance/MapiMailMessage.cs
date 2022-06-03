@@ -1,4 +1,4 @@
-﻿#if !__MonoCS__
+﻿#if !MONO
 
 using System;
 using System.Collections;

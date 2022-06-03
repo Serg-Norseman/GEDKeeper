@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.EventEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl Size="600, 360">
+        <TabPage x:Name="pageCommon">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <Label x:Name="lblEvent" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <ComboBox x:Name="cmbEventType" Width="180" ReadOnly="True" SelectedIndexChanged="EditEventType_SelectedIndexChanged" />
+                <TextBox x:Name="txtEventName" Width="200" />
+              </StackLayout>
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblAttrValue" />
+              <ComboBox x:Name="txtAttribute" />
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblPlace" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <StackLayoutItem Expand="True">
+                  <TextBox x:Name="txtEventPlace" KeyDown="EditEventPlace_KeyDown" />
+                </StackLayoutItem>
+                <Button x:Name="btnPlaceAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Enabled="False" Click="btnPlaceAdd_Click" />
+                <Button x:Name="btnPlaceDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Enabled="False" Click="btnPlaceDelete_Click" />
+              </StackLayout>
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblDate" />
+              <comcom:GKDateControl x:Name="dateCtl" />
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblCause" />
+              <TextBox x:Name="txtEventCause" />
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblOrg" />
+              <TextBox x:Name="txtEventOrg" />
+            </TableRow>
+
+            <TableRow ScaleHeight="True" />
+          </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pageNotes">
+          <comcom:GKSheetList x:Name="fNotesList" />
+        </TabPage>
+        <TabPage x:Name="pageMultimedia">
+          <comcom:GKSheetList x:Name="fMediaList" />
+        </TabPage>
+        <TabPage x:Name="pageSources">
+          <comcom:GKSheetList x:Name="fSourcesList" />
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem HorizontalAlignment="Left">
+          <Button x:Name="btnAddress" Style="dlgBtn" Click="btnAddress_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

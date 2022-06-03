@@ -11,7 +11,69 @@
     <h1>Change log</h1>
 
     <p>
-        <b>??.??.2021 [v2.18.0]</b><ul>
+        <b>??.??.2022 [v2.20.2]</b><ul>
+            <li>(*) Fixed a bug in the database splitting tool.
+        </ul>
+    </p>
+
+    <p>
+        <b>14.04.2022 [v2.20.1]</b><ul>
+            <li>(*) Fixed support for negative coordinates in FTB files.
+            <li>(+) Added option to display surnames in capital letters.
+            <li>(*) Fixed error resetting name in person edit dialog when adding father/mother.
+            <li>(*) Fixed double display of the surname in the person page in the generated site.
+            <li>(*) Fixed an error in determining the kinship of cousins.
+            <li>(+) Added the feature to display age in a person's card in the tree.
+            <li>(*) Fixed a bug with displaying dialogs relative to the main window.
+            <li>(*) Fixed issue with typing Return in note editor.
+        </ul>
+    </p>
+
+    <p>
+        <b>28.03.2022 [v2.20.0]</b><ul>
+            <li>(*) Fixed declension of partial names in birthday message.
+            <li>(*) Fixed a bug with calling the log and help in Linux.
+            <li>(*) Fixed display of parents' names in person and family dialogs.
+            <li>(*) Improved safely remove or fix media records with missing files.
+            <li>(*) Fixed maximum text length limit in note editor.
+            <li>(*) Fixed display of custom names of generalized events and facts.
+            <li>(+) Added a tab and an editable list of children directly in the person's dialog.
+            <li>(+) Added website generator plugin (GEDmill).
+            <li>(+) Added an option to turn off minimizing the width of tree diagrams.
+            <li>(+) Added the function to jump to the primary branch from the duplicate one in tree diagrams.
+            <li>(*) Fixed display of divorce color in descendant trees.
+            <li>(*) Fixed the work of the tool for splitting databases.
+            <li>(+) Added option to display only localities when displaying places in tree diagrams.
+            <li>(*) Removed locking the display of places with the "Years only" option in tree diagrams.
+            <li>(*) Fixed a fail in the initialization of the regional culture object, the settings did not open.
+            <li>(+) Added partial Kazakh localization [Erik].
+            <li>(*) Polish localization proofreading [Waldemar Stoczkowski].
+            <li>(*) Improved support for Linux Fedora packages.
+            <li>(+) Added initial support for Linux Manjaro packages.
+            <li>(+) Introduced the display of the borders of the tree diagram.
+        </ul>
+    </p>
+
+    <p>
+        <b>28.09.2021 [v2.19.0]</b><ul>
+            <li>(*) Fixed a bug with filtering by locations, groups and sources.
+            <li>(+) Added option to display names in reverse order - first name at the beginning, surname at the end.
+            <li>(*) Fixed a bug in the work of events when creating an empty file, before loading any GEDCOM files.
+            <li>(+) Added an option for short form of kinship in the relationship calculator and tree diagrams.
+            <li>(*) Fixed full activation and data filling when calling plugins.
+            <li>(*) Fixed getter and setter of items in comboboxes of calendars and interface language.
+            <li>(*) Proofreading of Ukrainian localization [Oleksiy Diedush].
+            <li>(*) Added a sample of Taras Shevchenko's genealogy [Oleksiy Diedush].
+            <li>(*) Fixed focus issue in lists.
+            <li>(*) Fixed extracting patronymic from complex name [Alex Zaytsev].
+            <li>(+) Added ability to assign multiple places at once in the places manager [Alex Zaytsev].
+        </ul>
+    </p>
+
+    <p>
+        <b>28.07.2021 [v2.18.0]</b><ul>
+            <li>(*) Optimized data model to save memory [Alex Zaytsev]
+                (new achievement: 635 mb file (2.674.481 records) loaded in 3:46 minutes).
             <li>(+) Added option for separate depth of ancestors and descendants in tree diagrams [Milan Kosina].
             <li>(+) Added option to restrict geo-search by country.
             <li>(+) Added option to bold names in tree diagrams.

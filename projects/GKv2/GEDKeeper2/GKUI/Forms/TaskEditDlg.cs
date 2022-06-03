@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,10 +19,8 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -32,16 +30,14 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TaskEditDlg : EditorDialog, ITaskEditDlg
+    public sealed partial class TaskEditDlg : CommonDialog<ITaskEditDlg, TaskEditDlgController>, ITaskEditDlg
     {
-        private readonly TaskEditDlgController fController;
-
         private readonly GKSheetList fNotesList;
 
-        public GDMTaskRecord Task
+        public GDMTaskRecord TaskRecord
         {
-            get { return fController.Task; }
-            set { fController.Task = value; }
+            get { return fController.TaskRecord; }
+            set { fController.TaskRecord = value; }
         }
 
         #region View Interface
@@ -93,38 +89,8 @@ namespace GKUI.Forms
 
             fNotesList = new GKSheetList(pageNotes);
 
-            // SetLang()
-            Title = LangMan.LS(LSID.LSID_WinTaskEdit);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            lblGoal.Text = LangMan.LS(LSID.LSID_Goal);
-            lblPriority.Text = LangMan.LS(LSID.LSID_Priority);
-            lblStartDate.Text = LangMan.LS(LSID.LSID_StartDate);
-            lblStopDate.Text = LangMan.LS(LSID.LSID_StopDate);
-
-            SetToolTip(btnGoalSelect, LangMan.LS(LSID.LSID_GoalSelectTip));
-
             fController = new TaskEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnGoalSelect_Click(object sender, EventArgs e)

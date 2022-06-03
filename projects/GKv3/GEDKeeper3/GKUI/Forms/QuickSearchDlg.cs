@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,16 +21,25 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
-using GKCore;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private TextBox txtSearchPattern;
+        private Button btnPrev;
+        private Button btnNext;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
         private readonly QuickSearchDlgController fController;
 
         #region View Interface
@@ -44,14 +53,9 @@ namespace GKUI.Forms
 
         public QuickSearchDlg(IWorkWindow workWindow)
         {
-            InitializeComponent();
-
-            btnPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
+            XamlReader.Load(this);
 
             fController = new QuickSearchDlgController(this, workWindow);
-
-            SetLang();
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)
@@ -87,12 +91,9 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
-            Title = LangMan.LS(LSID.LSID_Search);
-            //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
-            SetToolTip(btnPrev, LangMan.LS(LSID.LSID_FindPrevious));
-            SetToolTip(btnNext, LangMan.LS(LSID.LSID_FindNext));
+            fController.SetLocale();
         }
     }
 }

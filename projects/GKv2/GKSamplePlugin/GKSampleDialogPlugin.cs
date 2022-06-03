@@ -68,8 +68,8 @@ namespace GKSamplePlugin
 
         public ICommonDialog CreateDialog(params object[] parameters)
         {
-            IBaseWindow baseWin = (parameters.Length > 0) ? (IBaseWindow)parameters[0] : null;
-            return new PersonEditDlgEx(baseWin);
+            IBaseWindow baseWin = (parameters.Length > 0) ? (parameters[0] as IBaseWindow) : null;
+            return (baseWin == null) ? null : new PersonEditDlgEx(baseWin);
         }
 
         #endregion

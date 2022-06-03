@@ -191,7 +191,7 @@ namespace GKCore
 
             GDMIndividualRecord iRec2 = fContext.Tree.CreateIndividual();
             GDMPersonalName persName = new GDMPersonalName();
-            persName.SetNameParts("Иван Иванович", "Иванов", "");
+            persName.ParseString("Иван Иванович /Иванов/");
             iRec2.PersonalNames.Add(persName);
 
             Assert.AreEqual("Иванова Ивана Ивановича", rusCulture.GetPossessiveName(iRec2));

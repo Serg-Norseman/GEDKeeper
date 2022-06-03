@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,10 +19,8 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -30,10 +28,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class AssociationEditDlg : EditorDialog, IAssociationEditDlg
+    public sealed partial class AssociationEditDlg : CommonDialog<IAssociationEditDlg, AssociationEditDlgController>, IAssociationEditDlg
     {
-        private readonly AssociationEditDlgController fController;
-
         public GDMAssociation Association
         {
             get { return fController.Association; }
@@ -62,33 +58,8 @@ namespace GKUI.Forms
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Association);
-            lblRelation.Text = LangMan.LS(LSID.LSID_Relation);
-            lblPerson.Text = LangMan.LS(LSID.LSID_Person);
-
-            SetToolTip(btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
-
             fController = new AssociationEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnPersonAdd_Click(object sender, EventArgs e)

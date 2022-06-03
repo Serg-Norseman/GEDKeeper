@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,8 +20,7 @@
 
 using System;
 using Eto.Forms;
-using BSLib;
-using GKCore;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -30,14 +29,22 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class OrganizerWin : CommonDialog, IOrganizerWin
+    public sealed partial class OrganizerWin : CommonDialog<IOrganizerWin, OrganizerController>, IOrganizerWin
     {
-        private readonly OrganizerController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private readonly GKSheetList fAdrList;
-        private readonly GKSheetList fPhonesList;
-        private readonly GKSheetList fMailsList;
-        private readonly GKSheetList fWebsList;
+        private TabPage pageAddresses;
+        private TabPage pageTelephones;
+        private TabPage pageMails;
+        private TabPage pageWebs;
+        private GKSheetList fAdrList;
+        private GKSheetList fPhonesList;
+        private GKSheetList fMailsList;
+        private GKSheetList fWebsList;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         #region View Interface
 
@@ -65,33 +72,7 @@ namespace GKUI.Forms
 
         public OrganizerWin(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            fAdrList = new GKSheetList(pageAddresses);
-            fAdrList.Buttons = EnumSet<SheetButton>.Create();
-            fAdrList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fAdrList.AddColumn(LangMan.LS(LSID.LSID_Address), 100, false);
-
-            fPhonesList = new GKSheetList(pageTelephones);
-            fPhonesList.Buttons = EnumSet<SheetButton>.Create();
-            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 100, false);
-
-            fMailsList = new GKSheetList(pageMails);
-            fMailsList.Buttons = EnumSet<SheetButton>.Create();
-            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 100, false);
-
-            fWebsList = new GKSheetList(pageWebs);
-            fWebsList.Buttons = EnumSet<SheetButton>.Create();
-            fWebsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
-
-            Title = LangMan.LS(LSID.LSID_MIOrganizer);
-            pageAddresses.Text = LangMan.LS(LSID.LSID_Addresses);
-            pageTelephones.Text = LangMan.LS(LSID.LSID_Telephones);
-            pageMails.Text = LangMan.LS(LSID.LSID_Mails);
-            pageWebs.Text = LangMan.LS(LSID.LSID_Webs);
+            XamlReader.Load(this);
 
             fController = new OrganizerController(this);
             fController.Init(baseWin);

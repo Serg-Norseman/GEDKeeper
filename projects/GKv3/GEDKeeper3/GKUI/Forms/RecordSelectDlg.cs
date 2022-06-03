@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -31,8 +32,20 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
+    public sealed partial class RecordSelectDlg : CommonDialog, IRecordSelectDialog
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private Button btnSelect;
+        private Button btnCreate;
+        private Button btnCancel;
+        private Panel panList;
+        public TextBox txtFastFilter;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
         private readonly RecordSelectDlgController fController;
 
         private GKListView fListRecords;
@@ -63,16 +76,7 @@ namespace GKUI.Forms
 
         public RecordSelectDlg(IBaseWindow baseWin, GDMRecordType recType)
         {
-            InitializeComponent();
-
-            btnSelect.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLang()
-            Title = LangMan.LS(LSID.LSID_WinRecordSelect);
-            btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);
-            btnSelect.Text = LangMan.LS(LSID.LSID_DlgSelect);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            XamlReader.Load(this);
 
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);

@@ -23,7 +23,7 @@ namespace GKCore.Interfaces
     /// <summary>
     /// 
     /// </summary>
-    public interface IOptionsControl : ILocalization
+    public interface IOptionsControl : ILocalizable
     {
         IOptions Options { get; set; }
         

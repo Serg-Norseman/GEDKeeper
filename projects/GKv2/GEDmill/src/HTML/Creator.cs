@@ -24,6 +24,7 @@ using System.IO;
 using System.Text;
 using GDModel;
 using GEDmill.Model;
+using GKCore.Interfaces;
 using GKCore.Logging;
 
 namespace GEDmill.HTML
@@ -35,27 +36,23 @@ namespace GEDmill.HTML
     {
         private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Creator).Name);
 
-        protected const string PageDescription = "GEDmill GEDCOM to HTML family history website";
+        protected readonly ILangMan fLangMan;
+
+        protected IBaseContext fContext;
 
         // The raw data that we are turning into a website.
         protected GDMTree fTree;
-
-        // Pointer to the window showing the progress bar, so that web page creation progress can be shown to user.
-        private IProgressCallback fProgressWindow;
 
         // The same multimedia file may be referenced multiple times. 
         // This hash prevents it being copied to the output directory more than once.
         private static Dictionary<string, FilenameAndSize> fCopiedFiles = new Dictionary<string, FilenameAndSize>();
 
-        // The sFilename for the Valid XHTML sticker image.
-        private string fW3CFile;
 
-
-        protected Creator(GDMTree tree, IProgressCallback progress, string w3cFile)
+        protected Creator(IBaseContext context, ILangMan langMan)
         {
-            fTree = tree;
-            fProgressWindow = progress;
-            fW3CFile = w3cFile;
+            fContext = context;
+            fTree = fContext.Tree;
+            fLangMan = langMan;
         }
 
         // This clears the static list of all multimedia files copied to the output directory (and possibly renamed).
@@ -68,7 +65,7 @@ namespace GEDmill.HTML
         // Set hardSpace to false if you want to keep first space as breakable, true if you want all nbsp.
         // TODO: Surely there is a .Net function to do this (WebUtility.HtmlEncode)?
         // TODO: Might want to preserve <a> links in the HTML in case user has specified them in their data.
-        public static string EscapeHTML(string original, bool hardSpace)
+        protected static string EscapeHTML(string original, bool hardSpace)
         {
             if (string.IsNullOrEmpty(original)) {
                 return string.Empty;
@@ -81,7 +78,6 @@ namespace GEDmill.HTML
             int tabPos = 0;
             bool doneCRLF = false;
             bool doneSpace = false;
-            int length = original.Length;
             int n = 0;
             foreach (char c in original) {
                 switch (c) {
@@ -352,16 +348,16 @@ namespace GEDmill.HTML
         }
 
         // Generates navbar at top of page, in header div
-        protected static void OutputPageHeader(HTMLFile f, string previousChildLink, string nextChildLink, bool includeIndexLink)
+        protected void OutputPageHeader(HTMLFile f, string previousChildLink, string nextChildLink, bool includeIndexLink)
         {
             if (GMConfig.Instance.IncludeNavbar) {
                 string frontPageLink = "";
                 if (GMConfig.Instance.FrontPageFilename != "") {
-                    frontPageLink += string.Concat("<a href=\"", GMConfig.Instance.FrontPageFilename, ".", GMConfig.Instance.HtmlExtension, "\">front page</a>");
+                    frontPageLink += string.Concat("<a href=\"", GMConfig.Instance.FrontPageFilename, ".html", "\">", fLangMan.LS(PLS.LSID_FrontPage), "</a>");
                 }
                 string mainSiteLink = "";
                 if (GMConfig.Instance.MainWebsiteLink != "") {
-                    mainSiteLink += string.Concat("<a href=\"", GMConfig.Instance.MainWebsiteLink, "\">main site</a>");
+                    mainSiteLink += string.Concat("<a href=\"", GMConfig.Instance.MainWebsiteLink, "\">", fLangMan.LS(PLS.LSID_MainSite), "</a>");
                 }
 
                 bool includeNavbar = previousChildLink != ""
@@ -383,7 +379,7 @@ namespace GEDmill.HTML
                     }
 
                     if (includeIndexLink) {
-                        f.WriteLine(string.Concat("<li><a href=\"individuals1.", GMConfig.Instance.HtmlExtension, "\">index</a></li>"));
+                        f.WriteLine(string.Concat("<li><a href=\"individuals1.html\">", fLangMan.LS(PLS.LSID_Index), "</a></li>"));
                     }
 
                     if (frontPageLink != "") {
@@ -413,12 +409,12 @@ namespace GEDmill.HTML
             fLogger.WriteInfo(string.Format("CopyMultimedia( {0}, {1}, {2} )", fullFilename, maxWidth, maxHeight));
 
             if (!File.Exists(fullFilename)) {
-                return "";
+                return string.Empty;
             }
 
             string result = fullFilename;
 
-            if (newFilename == "") {
+            if (string.IsNullOrEmpty(newFilename)) {
                 newFilename = Path.GetFileName(fullFilename);
             }
 
@@ -434,7 +430,7 @@ namespace GEDmill.HTML
                     asidFilename = string.Concat(asidFilename, "(", maxWidth.ToString(), "x", maxHeight.ToString(), ")");
                 }
 
-                if (fullFilename != null && GMConfig.Instance.OutputFolder != null && GMConfig.Instance.OutputFolder != "") {
+                if (fullFilename != null && !string.IsNullOrEmpty(GMConfig.Instance.OutputFolder)) {
                     // Have we already copied the sFilename?
                     if (fCopiedFiles.ContainsKey(asidFilename)) {
                         var filenameAndSize = fCopiedFiles[asidFilename];
@@ -526,28 +522,15 @@ namespace GEDmill.HTML
             return result;
         }
 
-        // Outputs the HTML to display the W3C Valid XHTML image on the page.
-        protected void OutputValiditySticker(HTMLFile f)
-        {
-            f.WriteLine("<p class=\"plain\">");
-            f.WriteLine("<a href=\"http://validator.w3.org/check?uri=referer\"><img");
-            f.WriteLine("src=\"" + fW3CFile + "\"");
-            f.WriteLine("style=\"margin-top:4px\"");
-            f.WriteLine("alt=\"Valid XHTML 1.0 Strict\" height=\"31\" width=\"88\" /></a>");
-            f.WriteLine("</p>");
-        }
-
         // Creates link HTML for the individual e.g. <a href="indiI1.html">Fred Bloggs</a>
         protected static string MakeLink(GDMIndividualRecord ir)
         {
-            string name = ir.GetPrimaryFullName();
-            string dummy = "";
-            if (name == "") {
-                name = GMConfig.Instance.UnknownName;
-            } else if (!GMHelper.GetVisibility(ir) && !GMConfig.Instance.UseWithheldNames) {
+            string name;
+            if (!GMHelper.GetVisibility(ir) && !GMConfig.Instance.UseWithheldNames) {
                 name = GMConfig.Instance.ConcealedName;
             } else {
-                name = GMHelper.CapitaliseName(name, ref dummy, ref dummy);
+                string dummy;
+                name = GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out dummy, out dummy);
             }
             return MakeLink(ir, name);
         }
@@ -577,14 +560,12 @@ namespace GEDmill.HTML
         // The string is just the sFilename, not a fully qualified path.
         protected static string GetIndividualHTMLFilename(GDMIndividualRecord ir)
         {
-            string relativeFilename = string.Concat("indi", ir.XRef, ".", GMConfig.Instance.HtmlExtension);
-            if (GMConfig.Instance.UserRecFilename) {
-                if (ir.UserReferences.Count > 0) {
-                    GDMUserReference urn = ir.UserReferences[0];
-                    string filenameUserRef = EscapeFilename(urn.StringValue);
-                    if (filenameUserRef.Length > 0) {
-                        relativeFilename = string.Concat("indi", filenameUserRef, ".", GMConfig.Instance.HtmlExtension);
-                    }
+            string relativeFilename = string.Concat("indi", ir.XRef, ".html");
+            if (GMConfig.Instance.UserRecFilename && ir.HasUserReferences) {
+                GDMUserReference urn = ir.UserReferences[0];
+                string filenameUserRef = EscapeFilename(urn.StringValue);
+                if (filenameUserRef.Length > 0) {
+                    relativeFilename = string.Concat("indi", filenameUserRef, ".html");
                 }
             }
             return relativeFilename;
@@ -631,7 +612,7 @@ namespace GEDmill.HTML
 
             if (maxWidth != 0 && maxHeight != 0) {
                 // If image is too big then shrink it. (Can't always use GetThumbnailImage because that might use embedded thumbnail).
-                GMHelper.ScaleAreaToFit(ref rectNewArea, maxWidth, maxHeight);
+                ScaleAreaToFit(ref rectNewArea, maxWidth, maxHeight);
             }
 
             Bitmap bitmapNew = new Bitmap(rectNewArea.Width, rectNewArea.Height, PixelFormat.Format24bppRgb);
@@ -700,6 +681,62 @@ namespace GEDmill.HTML
 
             rectArea = rectNewArea;
             return filenameNew;
+        }
+
+        // Modifies rectNew to fit within the limits given, keeping its aspect ratio
+        protected static void ScaleAreaToFit(ref Rectangle rectangle, int maxWidth, int maxHeight)
+        {
+            if (rectangle.Height > maxHeight) {
+                // Image won't fit horizontally, so scale in both directions til it will
+                rectangle.Width = (rectangle.Width * maxHeight) / rectangle.Height;
+                rectangle.Height = maxHeight;
+            }
+
+            if (rectangle.Width > maxWidth) {
+                // Image won't fit horizontally, so scale in both directions til it will
+                rectangle.Height = (rectangle.Height * maxWidth) / rectangle.Width;
+                rectangle.Width = maxWidth;
+            }
+        }
+
+        protected static string MakeLinkNumber(GDMSourceCitation sourCit, int sourceCount, bool hasComma)
+        {
+            string comma = hasComma ? "," : "";
+            return string.Concat("<span class=\"reference\">", comma, sourceCount.ToString(), "</span>");
+        }
+
+        // Returns a string to use in the list of references at the bottom of the page
+        protected static string MakeLinkText(GDMTree tree, GDMSourceCitation sourCit, int sourceCount)
+        {
+            var sourRec = tree.GetPtrValue<GDMSourceRecord>(sourCit);
+            return string.Concat(sourceCount.ToString(), ". ", /*m_sSourceDescription*/sourRec.ShortTitle);
+        }
+
+        // Returns the name of the alternative picture file to display for non-diaplayable files of the given format
+        protected static string NonPicFilename(string format, bool small, bool clickToDownload)
+        {
+            string filename;
+            switch (format.ToLower()) {
+                case "wav":
+                case "mp3":
+                case "mid":
+                case "midi":
+                case "rmi":
+                case "au":
+                case "wma":
+                    filename = small ? "gmaudio_sm.png" : clickToDownload ? "gmaudio.png" : "gmaudion.png";
+                    break;
+                case "avi":
+                case "mpeg":
+                case "mpg":
+                case "wmv":
+                    filename = small ? "gmvideo_sm.png" : clickToDownload ? "gmvideo.png" : "gmvideon.png";
+                    break;
+                default:
+                    filename = small ? "gmdoc_sm.png" : clickToDownload ? "gmdoc.png" : "gmdocn.png";
+                    break;
+            }
+            return filename;
         }
     }
 }

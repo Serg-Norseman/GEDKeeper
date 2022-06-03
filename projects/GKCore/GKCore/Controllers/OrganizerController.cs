@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 
@@ -31,6 +34,10 @@ namespace GKCore.Controllers
     {
         public OrganizerController(IOrganizerWin view) : base(view)
         {
+            fView.AdrList.Buttons = EnumSet<SheetButton>.Create();
+            fView.PhonesList.Buttons = EnumSet<SheetButton>.Create();
+            fView.MailsList.Buttons = EnumSet<SheetButton>.Create();
+            fView.WebsList.Buttons = EnumSet<SheetButton>.Create();
         }
 
         public override void UpdateView()
@@ -63,10 +70,10 @@ namespace GKCore.Controllers
             fView.WebsList.ResizeColumn(1);
         }
 
-        private void PrepareEvent(string iName, GDMCustomEvent ev)
+        private void PrepareEvent(string iName, IGDMStructWithAddress ev)
         {
+            if (!ev.HasAddress) return;
             GDMAddress addr = ev.Address;
-            if (addr == null) return;
 
             string addrStr = addr.Lines.Text.Trim();
             if (addrStr != "") {
@@ -88,6 +95,28 @@ namespace GKCore.Controllers
             foreach (GDMTag tag in addr.WebPages) {
                 fView.WebsList.AddItem(null, iName, tag.StringValue);
             }
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_MIOrganizer);
+
+            GetControl<ITabPage>("pageAddresses").Text = LangMan.LS(LSID.LSID_Addresses);
+            GetControl<ITabPage>("pageTelephones").Text = LangMan.LS(LSID.LSID_Telephones);
+            GetControl<ITabPage>("pageMails").Text = LangMan.LS(LSID.LSID_Mails);
+            GetControl<ITabPage>("pageWebs").Text = LangMan.LS(LSID.LSID_Webs);
+
+            fView.AdrList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
+            fView.AdrList.AddColumn(LangMan.LS(LSID.LSID_Address), 100, false);
+
+            fView.PhonesList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
+            fView.PhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 100, false);
+
+            fView.MailsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
+            fView.MailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 100, false);
+
+            fView.WebsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
+            fView.WebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
         }
     }
 }

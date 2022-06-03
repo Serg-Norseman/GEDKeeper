@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.MVP.Controls;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -46,6 +47,17 @@ namespace GKCore.Controllers
             TreeTools.MergeTreeFile(fBase.Context.Tree, fileName, fView.SyncLog, true);
             fBase.Context.Modified = true;
             fBase.RefreshLists(false);
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_ToolOp_2);
+            GetControl<ITabPage>("pageTreeMerge").Text = LangMan.LS(LSID.LSID_ToolOp_2);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<IButton>("btnTreeMerge").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            GetControl<ILabel>("lblMasterBase").Text = LangMan.LS(LSID.LSID_MasterBase);
+            GetControl<ILabel>("lblOtherBase").Text = LangMan.LS(LSID.LSID_OtherBase);
+            GetControl<ITextBox>("edMasterBase").Text = LangMan.LS(LSID.LSID_CurrentBase);
         }
     }
 }

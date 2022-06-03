@@ -32,7 +32,7 @@ namespace GKTimeLinePlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class TimeLineWidget : Form, ILocalization
+    public partial class TimeLineWidget : Form, ILocalizable
     {
         private readonly Plugin fPlugin;
 
@@ -49,7 +49,7 @@ namespace GKTimeLinePlugin
 
             fPlugin = plugin;
 
-            SetLang();
+            SetLocale();
         }
 
         private void TimeLineWidget_Load(object sender, EventArgs e)
@@ -112,6 +112,7 @@ namespace GKTimeLinePlugin
                 if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
                 GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
+                if (!iRec.HasEvents) continue;
 
                 for (int k = 0, evNum = iRec.Events.Count; k < evNum; k++) {
                     GDMCustomEvent ev = iRec.Events[k];
@@ -198,9 +199,9 @@ namespace GKTimeLinePlugin
             return result;
         }
 
-        #region ILocalization support
+        #region ILocalizable support
 
-        public void SetLang()
+        public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_MITimeLine);
 

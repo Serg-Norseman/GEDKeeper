@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BSLib.DataViz.ArborGVT;
 using GKCore;
-using GKUI.Platform;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -41,7 +41,7 @@ namespace GKUI.Components
 
     public sealed class ArborSystemEx : ArborSystem
     {
-        private WinUITimer fTimer;
+        private ITimer fTimer;
 
         public ArborSystemEx(double repulsion, double stiffness, double friction, IArborRenderer renderer)
             : base(repulsion, stiffness, friction, renderer)
@@ -56,7 +56,7 @@ namespace GKUI.Components
 
         protected override void StartTimer()
         {
-            fTimer = new WinUITimer(TimerInterval/* / 1000*/, TimerElapsed);
+            fTimer = AppHost.Instance.CreateTimer(TimerInterval, TimerElapsed);
             fTimer.Start();
         }
 
@@ -74,9 +74,9 @@ namespace GKUI.Components
             return new ArborNodeEx(sign);
         }
 
-        protected override ArborEdge CreateEdge(ArborNode src, ArborNode tgt, double len, double stiffness, bool directed = false)
+        protected override ArborEdge CreateEdge(ArborNode source, ArborNode target, double length, double stiffness, bool directed = false)
         {
-            return new ArborEdge(src, tgt, len, stiffness, directed);
+            return new ArborEdge(source, target, length, stiffness, directed);
         }
     }
 
@@ -138,8 +138,7 @@ namespace GKUI.Components
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fSys.Dispose();
                 fDrawFont.Dispose();
                 fWhiteBrush.Dispose();
@@ -173,9 +172,6 @@ namespace GKUI.Components
                 }
 
                 using (Pen grayPen = new Pen(Color.Gray, 1)) {
-                    grayPen.StartCap = LineCap.NoAnchor;
-                    grayPen.EndCap = LineCap.ArrowAnchor;
-
                     foreach (ArborEdge edge in fSys.Edges) {
                         var srcNode = edge.Source as ArborNodeEx;
                         var tgtNode = edge.Target as ArborNodeEx;
@@ -187,7 +183,7 @@ namespace GKUI.Components
                         ArborPoint head = (tail.IsNull()) ? ArborPoint.Null : intersect_line_box(tail, pt2, tgtNode.Box);
 
                         if (!head.IsNull() && !tail.IsNull()) {
-                            gfx.DrawLine(grayPen, (int)tail.X, (int)tail.Y, (int)head.X, (int)head.Y);
+                            UIHelper.DrawArrowLine(gfx, Color.Gray, grayPen, (float)tail.X, (float)tail.Y, (float)head.X, (float)head.Y);
                         }
                     }
                 }

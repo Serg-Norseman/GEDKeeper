@@ -41,9 +41,20 @@ namespace GDModel
         private GDMRestriction fRestriction;
 
 
+        public bool HasEvents
+        {
+            get { return fEvents != null && fEvents.Count != 0; }
+        }
+
         public GDMList<GDMCustomEvent> Events
         {
-            get { return fEvents; }
+            get {
+                if (fEvents == null) {
+                    fEvents = new GDMList<GDMCustomEvent>();
+                }
+
+                return fEvents;
+            }
         }
 
         public GDMRestriction Restriction
@@ -55,13 +66,12 @@ namespace GDModel
 
         protected GDMRecordWithEvents(GDMTree tree) : base(tree)
         {
-            fEvents = new GDMList<GDMCustomEvent>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fEvents.Dispose();
+                if (fEvents != null) fEvents.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -70,21 +80,21 @@ namespace GDModel
         {
             base.TrimExcess();
 
-            fEvents.TrimExcess();
+            if (fEvents != null) fEvents.TrimExcess();
         }
 
         public override void Clear()
         {
             base.Clear();
 
-            fEvents.Clear();
+            if (fEvents != null) fEvents.Clear();
             fRestriction = GDMRestriction.rnNone;
         }
 
         public override bool IsEmpty()
         {
             // Restrictions are not checked because they are not important if other fields are empty.
-            return base.IsEmpty() && (fEvents.Count == 0);
+            return base.IsEmpty() && (fEvents == null || fEvents.Count == 0);
         }
 
         public override void Assign(GDMTag source)
@@ -95,11 +105,13 @@ namespace GDModel
 
             base.Assign(source);
 
-            for (int i = 0, count = sourceRec.fEvents.Count; i < count; i++) {
-                GDMCustomEvent sourceEvent = sourceRec.fEvents[i];
-                GDMCustomEvent copy = (GDMCustomEvent)Activator.CreateInstance(sourceEvent.GetType());
-                copy.Assign(sourceEvent);
-                AddEvent(copy);
+            if (sourceRec.fEvents != null) {
+                for (int i = 0, count = sourceRec.fEvents.Count; i < count; i++) {
+                    GDMCustomEvent sourceEvent = sourceRec.fEvents[i];
+                    GDMCustomEvent copy = (GDMCustomEvent)Activator.CreateInstance(sourceEvent.GetType());
+                    copy.Assign(sourceEvent);
+                    AddEvent(copy);
+                }
             }
 
             fRestriction = sourceRec.Restriction;
@@ -113,7 +125,7 @@ namespace GDModel
 
             base.MoveTo(targetRecord);
 
-            while (fEvents.Count > 0) {
+            while (fEvents != null && fEvents.Count > 0) {
                 GDMCustomEvent obj = fEvents.Extract(0);
                 target.AddEvent(obj);
             }
@@ -124,12 +136,13 @@ namespace GDModel
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            fEvents.ReplaceXRefs(map);
+            if (fEvents != null) fEvents.ReplaceXRefs(map);
         }
 
         public GDMCustomEvent FindEvent(string eventName)
         {
             GDMCustomEvent result = null;
+            if (fEvents == null) return result;
 
             int num = fEvents.Count;
             for (int i = 0; i < num; i++) {
@@ -147,6 +160,7 @@ namespace GDModel
         public GDMCustomEvent FindEvent(GEDCOMTagType eventType)
         {
             GDMCustomEvent result = null;
+            if (fEvents == null) return result;
 
             int evtType = (int)eventType;
             int num = fEvents.Count;
@@ -171,13 +185,29 @@ namespace GDModel
             float result = 0;
             float wsum = 0;
 
-            int num1 = fEvents.Count;
-            for (int i = 0; i < num1; i++) {
-                GDMCustomEvent evt = fEvents[i];
+            if (fEvents != null) {
+                int num1 = fEvents.Count;
+                for (int i = 0; i < num1; i++) {
+                    GDMCustomEvent evt = fEvents[i];
+                    if (!evt.HasSourceCitations) continue;
 
-                int num2 = evt.SourceCitations.Count;
-                for (int k = 0; k < num2; k++) {
-                    GDMSourceCitation cit = evt.SourceCitations[k];
+                    int num2 = evt.SourceCitations.Count;
+                    for (int k = 0; k < num2; k++) {
+                        GDMSourceCitation cit = evt.SourceCitations[k];
+
+                        int ca = cit.GetValidCertaintyAssessment();
+                        int weight = (ca + 1);
+
+                        result += (CA_VALUES[ca] * weight);
+                        wsum += weight;
+                    }
+                }
+            }
+
+            if (HasSourceCitations) {
+                int num3 = SourceCitations.Count;
+                for (int i = 0; i < num3; i++) {
+                    GDMSourceCitation cit = SourceCitations[i];
 
                     int ca = cit.GetValidCertaintyAssessment();
                     int weight = (ca + 1);
@@ -185,17 +215,6 @@ namespace GDModel
                     result += (CA_VALUES[ca] * weight);
                     wsum += weight;
                 }
-            }
-
-            int num3 = SourceCitations.Count;
-            for (int i = 0; i < num3; i++) {
-                GDMSourceCitation cit = SourceCitations[i];
-
-                int ca = cit.GetValidCertaintyAssessment();
-                int weight = (ca + 1);
-
-                result += (CA_VALUES[ca] * weight);
-                wsum += weight;
             }
 
             if (wsum != 0.0f) {

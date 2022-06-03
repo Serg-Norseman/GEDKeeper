@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.ProgressDlg"
+  Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <StackLayout Spacing="2">
+        <Label x:Name="lblTitle" />
+        <ProgressBar x:Name="ProgressBar1" Size="380, 20" />
+      </StackLayout>
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <TableLayout Spacing="4, 4">
+        <TableRow>
+          <Label x:Name="lblTimePassed" />
+          <Label x:Name="lblPassedVal" TextAlignment="Right" />
+        </TableRow>
+
+        <TableRow>
+          <Label x:Name="lblTimeRemain" />
+          <Label x:Name="lblRemainVal" TextAlignment="Right" />
+        </TableRow>
+
+        <TableRow>
+          <Label x:Name="lblTimeTotal" />
+          <Label x:Name="lblTotalVal" TextAlignment="Right" />
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Click="btnCancel_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Form>

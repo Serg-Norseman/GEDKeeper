@@ -27,7 +27,7 @@ namespace GDModel
     public sealed class GDMLocationRecord : GDMRecord
     {
         private string fLocationName;
-        private GDMMap fMap;
+        private readonly GDMMap fMap;
 
 
         public string LocationName

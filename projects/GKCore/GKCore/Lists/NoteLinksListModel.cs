@@ -72,6 +72,7 @@ namespace GKCore.Lists
                     noteRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtNote, null) as GDMNoteRecord;
                     if (noteRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GDMObject)dataOwner, noteRec);
+                        notes = dataOwner.FindNotes(noteRec);
                     }
                     break;
 
@@ -107,6 +108,10 @@ namespace GKCore.Lists
             }
 
             if (result) {
+                if (eArgs.Action == RecordAction.raAdd) {
+                    eArgs.ItemData = notes;
+                }
+
                 fBaseWin.Context.Modified = true;
                 eArgs.IsChanged = true;
             }

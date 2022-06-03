@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.PersonEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <GroupBox x:Name="GroupBox1">
+        <TableLayout Style="paddedTable">
+          <TableRow>
+            <TableCell ScaleWidth="True">
+              <TableLayout x:Name="personLayout" Spacing="4, 4">
+                <TableRow>
+                  <StackLayout Spacing="2">
+                    <Label x:Name="lblSurname" />
+                    <TextBox x:Name="txtSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
+                  </StackLayout>
+                  <StackLayout Spacing="2">
+                    <Label x:Name="lblSurnamePrefix" />
+                    <TextBox x:Name="txtSurnamePrefix" Width="180" KeyDown="txtXName_KeyDown" />
+                  </StackLayout>
+                  <TableCell />
+                </TableRow>
+
+                <TableRow>
+                  <StackLayout Spacing="2">
+                    <Label x:Name="lblMarriedSurname" />
+                    <TextBox x:Name="txtMarriedSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
+                  </StackLayout>
+                  <StackLayout Spacing="2">
+                    <Label x:Name="lblNamePrefix" />
+                    <TextBox x:Name="txtNamePrefix" Width="180" KeyDown="txtXName_KeyDown" />
+                  </StackLayout>
+                  <StackLayout Spacing="2">
+                    <Label x:Name="lblSex" />
+                    <ComboBox x:Name="cmbSex" ReadOnly="true" Width="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" />
+                  </StackLayout>
+                </TableRow>
+
+                <TableRow>
+                  <StackLayout Spacing="2">
+                    <Label x:Name="lblName" />
+                    <TextBox x:Name="txtName" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
+                  </StackLayout>
+                  <StackLayout Spacing="2">
+                    <Label x:Name="lblNameSuffix" />
+                    <TextBox x:Name="txtNameSuffix" Width="180" KeyDown="txtXName_KeyDown" />
+                  </StackLayout>
+                  <CheckBox x:Name="chkBookmark" />
+                </TableRow>
+
+                <TableRow>
+                  <StackLayout Spacing="2">
+                    <Label x:Name="lblPatronymic" />
+                    <ComboBox x:Name="cmbPatronymic" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
+                  </StackLayout>
+                  <StackLayout Spacing="2">
+                    <Label x:Name="lblNickname" />
+                    <TextBox x:Name="txtNickname" Width="180" KeyDown="txtXName_KeyDown" />
+                  </StackLayout>
+                  <CheckBox x:Name="chkPatriarch" />
+                </TableRow>
+              </TableLayout>
+            </TableCell>
+
+            <TableCell>
+              <TableLayout x:Name="portraitLayout" Spacing="0, 4">
+                <TableRow ScaleHeight="True">
+                  <Scrollable Border="Bezel">
+                    <comcom:GKPortrait x:Name="imgPortrait" Size="140, 160" />
+                  </Scrollable>
+                </TableRow>
+                <TableRow>
+                  <StackLayout Orientation="Horizontal" Spacing="4">
+                    <StackLayoutItem Expand="True" />
+                    <Button x:Name="btnPortraitAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnPortraitAdd_Click" />
+                    <Button x:Name="btnPortraitDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="btnPortraitDelete_Click" />
+                    <StackLayoutItem Expand="True" />
+                  </StackLayout>
+                </TableRow>
+              </TableLayout>
+            </TableCell>
+          </TableRow>
+        </TableLayout>
+      </GroupBox>
+    </TableRow>
+
+    <TableRow>
+      <GroupBox x:Name="panCtlParents">
+        <TableLayout x:Name="parentsTab" Style="paddedTable">
+          <TableRow>
+            <TableCell>
+              <Label x:Name="lblParents" />
+            </TableCell>
+
+            <TableCell ScaleWidth="True">
+              <TextBox x:Name="txtFather" Enabled="False" Width="100" />
+            </TableCell>
+
+            <TableCell ScaleWidth="True">
+              <TextBox x:Name="txtMother" Enabled="False" Width="100" />
+            </TableCell>
+
+            <TableCell>
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <Button x:Name="btnParentsAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnParentsAdd_Click" />
+                <Button x:Name="btnParentsEdit" Style="iconBtn" Image="{Resource Resources.btn_rec_edit.gif, GKCore}" Click="btnParentsEdit_Click" />
+                <Button x:Name="btnParentsDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="btnParentsDelete_Click" />
+              </StackLayout>
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell />
+
+            <TableCell ScaleWidth="True">
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <Button x:Name="btnFatherAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnFatherAdd_Click" />
+                <Button x:Name="btnFatherDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="btnFatherDelete_Click" />
+                <Button x:Name="btnFatherSel" Style="iconBtn" Image="{Resource Resources.btn_jump.gif, GKCore}" Click="btnFatherSel_Click" />
+              </StackLayout>
+            </TableCell>
+
+            <TableCell ScaleWidth="True">
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <Button x:Name="btnMotherAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnMotherAdd_Click" />
+                <Button x:Name="btnMotherDelete" Style="iconBtn" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="btnMotherDelete_Click" />
+                <Button x:Name="btnMotherSel" Style="iconBtn" Image="{Resource Resources.btn_jump.gif, GKCore}" Click="btnMotherSel_Click" />
+              </StackLayout>
+            </TableCell>
+
+            <TableCell />
+          </TableRow>
+        </TableLayout>
+      </GroupBox>
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <TabControl>
+        <TabPage x:Name="pageEvents">
+          <comcom:GKSheetList x:Name="fEventsList" />
+        </TabPage>
+
+        <TabPage x:Name="pageSpouses">
+          <comcom:GKSheetList x:Name="fSpousesList" OnModify="ModifySpousesSheet" OnBeforeChange="BeforeChangeSpousesSheet" />
+        </TabPage>
+
+        <TabPage x:Name="pageNames">
+          <comcom:GKSheetList x:Name="fNamesList" OnModify="ModifyNamesSheet" />
+        </TabPage>
+
+        <TabPage x:Name="pageAssociations">
+          <comcom:GKSheetList x:Name="fAssociationsList" OnModify="ModifyAssociationsSheet" />
+        </TabPage>
+
+        <TabPage x:Name="pageGroups">
+          <comcom:GKSheetList x:Name="fGroupsList" OnModify="ModifyGroupsSheet" />
+        </TabPage>
+
+        <TabPage x:Name="pageNotes">
+          <comcom:GKSheetList x:Name="fNotesList" />
+        </TabPage>
+
+        <TabPage x:Name="pageMultimedia">
+          <comcom:GKSheetList x:Name="fMediaList" />
+        </TabPage>
+
+        <TabPage x:Name="pageSources">
+          <comcom:GKSheetList x:Name="fSourcesList" />
+        </TabPage>
+
+        <TabPage x:Name="pageUserRefs">
+          <comcom:GKSheetList x:Name="fUserRefList" />
+        </TabPage>
+
+        <TabPage x:Name="pageParents">
+          <comcom:GKSheetList x:Name="fParentsList" OnModify="ModifyParentsSheet" />
+        </TabPage>
+
+        <TabPage x:Name="pageChilds">
+          <comcom:GKSheetList x:Name="fChildrenList" OnModify="ModifyChildrenSheet" OnItemValidating="PersonEditDlg_ItemValidating" />
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem HorizontalAlignment="Left">
+          <Label x:Name="lblRestriction" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Left">
+          <ComboBox x:Name="cmbRestriction" ReadOnly="True" Width="180" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
+        </StackLayoutItem>
+
+        <StackLayoutItem Expand="True" />
+
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnNameCopy" Style="iconBtn" Image="{Resource Resources.btn_copy.gif, GKCore}" Click="btnNameCopy_Click" />
+        </StackLayoutItem>
+
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

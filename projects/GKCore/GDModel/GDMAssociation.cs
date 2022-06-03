@@ -35,22 +35,32 @@ namespace GDModel
             set { fRelation = value; }
         }
 
+        public bool HasSourceCitations
+        {
+            get { return fSourceCitations != null && fSourceCitations.Count != 0; }
+        }
+
         public GDMList<GDMSourceCitation> SourceCitations
         {
-            get { return fSourceCitations; }
+            get {
+                if (fSourceCitations == null) {
+                    fSourceCitations = new GDMList<GDMSourceCitation>();
+                }
+
+                return fSourceCitations;
+            }
         }
 
 
         public GDMAssociation()
         {
             SetName(GEDCOMTagType.ASSO);
-            fSourceCitations = new GDMList<GDMSourceCitation>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fSourceCitations.Dispose();
+                if (fSourceCitations != null) fSourceCitations.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -59,25 +69,26 @@ namespace GDModel
         {
             base.TrimExcess();
 
-            fSourceCitations.TrimExcess();
+            if (fSourceCitations != null) fSourceCitations.TrimExcess();
         }
 
         public override void Clear()
         {
             base.Clear();
-            fSourceCitations.Clear();
+            if (fSourceCitations != null) fSourceCitations.Clear();
             fRelation = string.Empty;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && string.IsNullOrEmpty(fRelation) && (fSourceCitations.Count == 0);
+            return base.IsEmpty() && string.IsNullOrEmpty(fRelation)
+                && (fSourceCitations == null || fSourceCitations.Count == 0);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            fSourceCitations.ReplaceXRefs(map);
+            if (fSourceCitations != null) fSourceCitations.ReplaceXRefs(map);
         }
 
         public override void Assign(GDMTag source)
@@ -89,7 +100,7 @@ namespace GDModel
             base.Assign(sourceObj);
 
             fRelation = sourceObj.fRelation;
-            AssignList(sourceObj.fSourceCitations, fSourceCitations);
+            if (sourceObj.fSourceCitations != null) AssignList(sourceObj.fSourceCitations, SourceCitations);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using BSLib;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -28,7 +30,7 @@ using GKCore.Types;
 namespace GKCore.Controllers
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class PatriarchsSearchController : DialogController<IPatriarchsSearchDlg>
     {
@@ -57,11 +59,11 @@ namespace GKCore.Controllers
         public void Search()
         {
             fView.PatriarchsList.BeginUpdate();
-            ExtList<PatriarchObj> lst = null;
+            IList<PatriarchObj> lst = null;
             try {
                 fView.PatriarchsList.ClearItems();
                 lst = PatriarchsMan.GetPatriarchsList(fBase.Context, (int)fView.MinGensNum.Value, !fView.WithoutDatesCheck.Checked);
-                lst.QuickSort(PatriarchsCompare);
+                SortHelper.QuickSort(lst, PatriarchsCompare);
 
                 int num = lst.Count;
                 for (int i = 0; i < num; i++) {
@@ -73,7 +75,6 @@ namespace GKCore.Controllers
                     });
                 }
             } finally {
-                if (lst != null) lst.Dispose();
                 fView.PatriarchsList.EndUpdate();
             }
         }
@@ -96,6 +97,24 @@ namespace GKCore.Controllers
         {
             var wnd = AppHost.Container.Resolve<IPatriarchsViewer>(fBase, (int)fView.MinGensNum.Value);
             wnd.Show(false);
+        }
+
+        public override void SetLocale()
+        {
+            fView.Title = LangMan.LS(LSID.LSID_ToolOp_8);
+
+            GetControl<ITabPage>("pagePatSearch").Text = LangMan.LS(LSID.LSID_ToolOp_8);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
+            GetControl<ILabel>("lblMinGenerations").Text = LangMan.LS(LSID.LSID_MinGenerations);
+            GetControl<IButton>("btnSetPatriarch").Text = LangMan.LS(LSID.LSID_SetPatFlag);
+            GetControl<IButton>("btnPatSearch").Text = LangMan.LS(LSID.LSID_Search);
+            GetControl<ICheckBox>("chkWithoutDates").Text = LangMan.LS(LSID.LSID_WithoutDates);
+            GetControl<IButton>("btnPatriarchsDiagram").Text = LangMan.LS(LSID.LSID_PatriarchsDiagram);
+
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
         }
     }
 }

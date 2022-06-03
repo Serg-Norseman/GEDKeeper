@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.FilePropertiesDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl Size="500, 340">
+        <TabPage x:Name="pageAuthor">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <Label x:Name="lblName" />
+              <TextBox x:Name="txtName" />
+            </TableRow>
+            <TableRow ScaleHeight="True">
+              <Label x:Name="lblAddress" />
+              <TextArea x:Name="txtAddress" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblTelephone" />
+              <TextBox x:Name="txtTel" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblLanguage" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <StackLayoutItem Expand="True">
+                  <TextBox x:Name="txtLanguage" ReadOnly="True" />
+                </StackLayoutItem>
+                <Button x:Name="btnLangEdit" Style="iconBtn" Image="{Resource Resources.btn_rec_edit.gif, GKCore}" Click="btnLangEdit_Click" />
+              </StackLayout>
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pageOther">
+          <comcom:GKListView x:Name="lvRecordStats" />
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

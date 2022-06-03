@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -30,9 +31,22 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTFamilyGroupsDlg : CommonDialog, IFragmentSearchDlg
+    public sealed partial class TTFamilyGroupsDlg : CommonDialog<IFragmentSearchDlg, FragmentSearchController>, IFragmentSearchDlg
     {
-        private readonly FragmentSearchController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private Button btnClose;
+        private TabPage pageFamilyGroups;
+        private TreeView tvGroups;
+        private GKUI.Components.LogChart gkLogChart1;
+        private Button btnAnalyseGroups;
+        private ButtonMenuItem miDetails;
+        private ButtonMenuItem miGoToRecord;
+        private ButtonMenuItem miCopyXRef;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         #region View Interface
 
@@ -50,27 +64,12 @@ namespace GKUI.Forms
 
         public TTFamilyGroupsDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            XamlReader.Load(this);
 
             fController = new FragmentSearchController(this);
             fController.Init(baseWin);
 
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
-
-            SetLang();
-        }
-
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_6);
-            pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnAnalyseGroups.Text = LangMan.LS(LSID.LSID_Analyze);
-            miDetails.Text = LangMan.LS(LSID.LSID_Details);
-            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-            miCopyXRef.Text = LangMan.LS(LSID.LSID_CopyXRef);
         }
 
         private void btnAnalyseGroups_Click(object sender, EventArgs e)
@@ -102,18 +101,12 @@ namespace GKUI.Forms
 
         private void contextMenu_Opening(object sender, EventArgs e)
         {
-            var iRec = fController.GetSelectedPerson();
-            miDetails.Enabled = (iRec != null);
-            miGoToRecord.Enabled = (iRec != null);
-            miCopyXRef.Enabled = (iRec != null);
+            fController.OpeningContextMenu();
         }
 
         public void miCopyXRef_Click(object sender, EventArgs e)
         {
-            var rec = fController.GetSelectedPerson();
-            if (rec == null) return;
-
-            UIHelper.SetClipboardText(rec.XRef);
+            fController.CopySelectedXRef();
         }
     }
 }

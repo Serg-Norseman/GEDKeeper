@@ -21,7 +21,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using GDModel;
+using GKCore;
 using GKCore.Logging;
+using GKCore.Types;
 
 namespace GEDmill.MiniTree
 {
@@ -77,16 +79,10 @@ namespace GEDmill.MiniTree
                     FirstName = "";
                     Surname = Name = GMConfig.Instance.ConcealedName;
                 } else {
-                    var irName = ir.GetPrimaryFullName();
-                    if (irName != "") {
-                        Name = GMHelper.CapitaliseName(irName, ref FirstName, ref Surname);
-                    } else {
-                        FirstName = "";
-                        Surname = Name = GMConfig.Instance.UnknownName;
-                    }
+                    Name = GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out FirstName, out Surname);
                 }
 
-                Date = Concealed ? string.Empty : GMHelper.GetLifeDatesStr(ir);
+                Date = Concealed ? string.Empty : GetLifeDatesStr(ir);
             }
         }
 
@@ -94,7 +90,7 @@ namespace GEDmill.MiniTree
         private SizeF fSizeTotal;
 
         // Reference to the global gedcom data
-        private GDMTree fTree;
+        private readonly GDMTree fTree;
 
 
         // Returns the height of the whole tree diagram.
@@ -179,7 +175,7 @@ namespace GEDmill.MiniTree
             }
 
             // Save using FileStream to try to avoid crash (only seen by customers)
-            FileStream fs = new FileStream(fileName, FileMode.Create);
+            FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
             bmp.Save(fs, imageFormat);
             fs.Close();
 
@@ -299,9 +295,9 @@ namespace GEDmill.MiniTree
                     bool addedSubject = false;
                     int nSpouses = 0;
                     var ecbCrossbar = MiniTreeGroup.ECrossbar.Solid;
-                    var indiFamilies = GMHelper.GetFamilyList(fTree, irSubject);
 
-                    foreach (GDMFamilyRecord famRec in indiFamilies) {
+                    foreach (var link in irSubject.SpouseToFamilyLinks) {
+                        GDMFamilyRecord famRec = fTree.GetPtrValue(link);
                         GDMIndividualRecord irSpouse = fTree.GetSpouseBy(famRec, irSubject);
 
                         if (famRec.Husband.XRef != irSubject.XRef) {
@@ -449,7 +445,15 @@ namespace GEDmill.MiniTree
         // Returns true if the supplied record is valid for inclusion in the tree
         private static bool Exists(GDMIndividualRecord ir)
         {
-            return (ir != null && GMHelper.GetVisibility(ir));
+            return GMHelper.GetVisibility(ir);
+        }
+
+        private static string GetLifeDatesStr(GDMIndividualRecord record)
+        {
+            var lifeDates = record.GetLifeDates();
+            string birthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, DateFormat.dfYYYY, false);
+            string deathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, DateFormat.dfYYYY, false);
+            return birthDate + " - " + deathDate;
         }
     }
 }

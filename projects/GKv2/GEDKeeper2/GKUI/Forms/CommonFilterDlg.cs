@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -29,10 +28,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class CommonFilterDlg : CommonDialog, ICommonFilterDlg
+    public partial class CommonFilterDlg : CommonDialog<ICommonFilterDlg, CommonFilterDlgController>, ICommonFilterDlg
     {
-        private readonly CommonFilterDlgController fController;
-
         private readonly IBaseWindow fBase;
         private readonly IListManager fListMan;
 
@@ -75,56 +72,26 @@ namespace GKUI.Forms
 
             fBase = baseWin;
             fListMan = listMan;
+
             fController = new CommonFilterDlgController(this, listMan);
             fController.Init(baseWin);
 
             filterView = new FilterGridView(fListMan);
             filterView.Dock = DockStyle.Fill;
             filterView.Name = "dataGridView1";
-            tsFieldsFilter.Controls.Add(filterView);
-
-            SetLang();
+            pageFieldsFilter.Controls.Add(filterView);
 
             fController.UpdateView();
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
+        public virtual void Reset()
         {
-            try {
-                AcceptChanges();
-                DialogResult = DialogResult.OK;
-            } catch (Exception ex) {
-                Logger.WriteError("CommonFilterDlg.btnAccept_Click()", ex);
-                DialogResult = DialogResult.None;
-            }
+            fController.Reset();
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            DoReset();
-        }
-
-        public virtual void AcceptChanges()
-        {
-            fController.Accept();
-            DialogResult = DialogResult.OK;
-        }
-
-        public void SetLang()
-        {
-            GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
-            GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);
-
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            btnReset.Text = LangMan.LS(LSID.LSID_DlgReset);
-            tsFieldsFilter.Text = LangMan.LS(LSID.LSID_FieldsFilter);
-        }
-
-        public virtual void DoReset()
-        {
-            fListMan.Filter.Clear();
-            fController.UpdateView();
+            Reset();
         }
     }
 }

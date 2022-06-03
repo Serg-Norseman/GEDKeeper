@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -45,6 +44,8 @@ namespace GKUI.Forms
             tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
+            UIHelper.FixToolStrip(toolStrip1);
+
             SuspendLayout();
             fImageCtl = new ImageBox();
             fImageCtl.Dock = DockStyle.Fill;
@@ -61,8 +62,6 @@ namespace GKUI.Forms
 
             WindowState = FormWindowState.Maximized;
 
-            SetLang();
-
             fController = new SlideshowController(this);
             fController.Init(baseWin);
             fController.LoadList();
@@ -75,7 +74,7 @@ namespace GKUI.Forms
 
         private void SlideshowWin_Closed(object sender, FormClosedEventArgs e)
         {
-            SetTimer(false);
+            fController.Dispose();
         }
 
         private void SlideshowWin_KeyDown(object sender, KeyEventArgs e)
@@ -83,11 +82,9 @@ namespace GKUI.Forms
             if (e.KeyCode == Keys.Escape) Close();
         }
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            Title = LangMan.LS(LSID.LSID_Slideshow);
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
         }
 
         public void SetImage(IImage image)
@@ -97,24 +94,14 @@ namespace GKUI.Forms
             fImageCtl.ZoomToFit();
         }
 
-        private void SetTimer(bool active)
-        {
-            if (active) {
-                tbStart.Text = LangMan.LS(LSID.LSID_Stop);
-                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
-            } else {
-                tbStart.Text = LangMan.LS(LSID.LSID_Start);
-                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
-            }
-            timer1.Enabled = active;
-        }
-
         private void tsbStart_Click(object sender, EventArgs e)
         {
-            if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
-                SetTimer(true);
+            bool active = fController.SwitchActive();
+
+            if (active) {
+                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
             } else {
-                SetTimer(false);
+                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
             }
         }
 
@@ -126,18 +113,6 @@ namespace GKUI.Forms
         private void tsbNext_Click(object sender, EventArgs e)
         {
             fController.Next();
-        }
-
-        private void Timer1Tick(object sender, EventArgs e)
-        {
-            fController.Next();
-        }
-
-        public void UpdateControls()
-        {
-            tbStart.Enabled = (fController.FileRefs.Count > 0);
-            tbPrev.Enabled = (fController.CurrentIndex > 0);
-            tbNext.Enabled = (fController.CurrentIndex < fController.FileRefs.Count - 1);
         }
     }
 }

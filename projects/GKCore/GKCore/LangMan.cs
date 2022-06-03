@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -521,7 +521,7 @@ namespace GKCore
         /* 469 */ LSID_Communication,
         /* 470 */ LSID_IDsCorrect,
         /* 471 */ LSID_FormatCheck,
-        /* 472 */ LSID_IDsCorrectNeed, // obsolete
+        /* 472 */ LSID_EmfFilter,
         /* 473 */ LSID_MainBaseSize,
         /* 474 */ LSID_SyncFin,
         /* 475 */ LSID_PatSearch,
@@ -893,8 +893,22 @@ namespace GKCore
         /* 832 */ LSID_SeparateDepth,
         /* 833 */ LSID_Ancestors,
         /* 834 */ LSID_MatchesNotFound,
+        /* 835 */ LSID_ShortKinshipForm,
+        /* 836 */ LSID_SurnameFirstInOrder,
+        /* 837 */ LSID_Borders,
+        /* 838 */ LSID_UpdateToLatestVersion,
+        /* 839 */ LSID_Providers,
+        /* 840 */ LSID_Coordinates,
+        /* 841 */ LSID_LoadPlaces,
+        /* 842 */ LSID_OnlyLocality,
+        /* 843 */ LSID_GoToPrimaryBranch,
+        /* 844 */ LSID_MinimizingWidth,
+        /* 845 */ LSID_ContinueQuestion,
+        /* 846 */ LSID_ShowAge,
+        /* 847 */ LSID_SurnameInCapitals,
+        /* 848 */ LSID_SvgFilter,
 
-        /* 000 */ LSID_Last = LSID_MatchesNotFound
+        /* 000 */ LSID_Last = LSID_SvgFilter
     }
 
 
@@ -1698,7 +1712,7 @@ namespace GKCore
             /* 790 */ "Family record detected without family",
             /* 791 */ "Are you sure you want to remove multimedia file?",
             /* 792 */ "Storage not found",
-            /* 793 */ "File not found",
+            /* 793 */ "File \"{0}\" not found",
             /* 794 */ "Allow relative references to media files",
             /* 795 */ "Default media storage type",
             /* 796 */ "Allow delete media files from storage and archive",
@@ -1743,6 +1757,20 @@ namespace GKCore
             /* 832 */ "Separate depth",
             /* 833 */ "Ancestors",
             /* 834 */ "Matches not found",
+            /* 835 */ "Short kinship form",
+            /* 836 */ "Surname first in order",
+            /* 837 */ "Borders",
+            /* 838 */ "You've got version {0} of GEDKeeper. Would you like to update to the latest version {1}?",
+            /* 839 */ "Providers",
+            /* 840 */ "Coordinates",
+            /* 841 */ "Load places",
+            /* 842 */ "Only locality",
+            /* 843 */ "Go to primary branch",
+            /* 844 */ "Minimizing width",
+            /* 845 */ "{0}. Continue?",
+            /* 846 */ "Show age",
+            /* 847 */ "Surname in capitals",
+            /* 848 */ "|SVG files (*.svg)|*.svg",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
@@ -1750,6 +1778,11 @@ namespace GKCore
         public static string LS(LSID lsid)
         {
             return fLangMan.LS(lsid);
+        }
+
+        public static string LS(LSID lsid, params object[] args)
+        {
+            return string.Format(fLangMan.LS(lsid), args);
         }
 
         public static void DefInit()

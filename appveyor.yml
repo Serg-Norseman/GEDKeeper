@@ -1,6 +1,6 @@
 image: Visual Studio 2015
 
-version: 2.17.0.{build}
+version: 2.20.1.{build}
 configuration: Debug
 platform: x86
 skip_tags: true
@@ -37,5 +37,5 @@ build:
   verbosity: minimal
 
 test_script:
-  - .\packages\OpenCover.4.7.1189\tools\OpenCover.Console.exe -register -target:"packages\NUnit.ConsoleRunner.3.12.0\tools\nunit3-console.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"GKTests.dll /framework:net-4.5" -output:".\coverage.xml" -filter:"+[*]* "
+  - .\packages\OpenCover.4.7.1221\tools\OpenCover.Console.exe -register -target:"packages\NUnit.ConsoleRunner.3.12.0\tools\nunit3-console.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"GKTests.dll /framework:net-4.5" -output:".\coverage.xml" -filter:"+[*]* "
   - codecov -f "coverage.xml" -X gcov

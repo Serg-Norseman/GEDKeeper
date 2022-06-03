@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -27,10 +26,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTPlacesManagerDlg : CommonDialog, IPlacesManagerDlg
+    public sealed partial class TTPlacesManagerDlg : CommonDialog<IPlacesManagerDlg, PlacesManagerController>, IPlacesManagerDlg
     {
-        private readonly PlacesManagerController fController;
-
         private GKListView ListPlaces;
 
         #region View Interface
@@ -48,15 +45,11 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fController = new PlacesManagerController(this);
-            fController.Init(baseWin);
-
             ListPlaces = UIHelper.CreateListView(Panel4);
             ListPlaces.DoubleClick += ListPlaces_DblClick;
-            ListPlaces.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
-            ListPlaces.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
 
-            SetLang();
+            fController = new PlacesManagerController(this);
+            fController.Init(baseWin);
         }
 
         protected override void Dispose(bool disposing)
@@ -67,15 +60,6 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_9);
-            pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
-            btnAnalysePlaces.Text = LangMan.LS(LSID.LSID_Analyze);
-        }
-
         private void btnAnalysePlaces_Click(object sender, EventArgs e)
         {
             fController.CheckPlaces();
@@ -83,12 +67,12 @@ namespace GKUI.Forms
 
         private void btnIntoList_Click(object sender, EventArgs e)
         {
-            fController.CreateLocationRecord();
+            fController.CreateLocationRecord(ListPlaces.GetSelectedItems());
         }
 
         private void ListPlaces_DblClick(object sender, EventArgs e)
         {
-            fController.CreateLocationRecord();
+            fController.CreateLocationRecord(ListPlaces.GetSelectedItems());
         }
     }
 }

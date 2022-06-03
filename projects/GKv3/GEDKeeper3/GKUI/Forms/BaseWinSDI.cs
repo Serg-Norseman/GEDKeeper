@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using BSLib;
 using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -42,6 +43,97 @@ namespace GKUI.Forms
 {
     public sealed partial class BaseWinSDI : CommonWindow, IBaseWindowView
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private TableLayout StatusBar;
+        private Label panStatusText;
+        private Eto.Forms.ImageView panStatusShieldImage;
+        private ToolBar ToolBar1;
+        private ButtonToolItem tbFileNew;
+        private ButtonToolItem tbFileLoad;
+        private ButtonToolItem tbFileSave;
+        private ButtonToolItem tbRecordAdd;
+        private ButtonToolItem tbRecordEdit;
+        private ButtonToolItem tbRecordDelete;
+        private ButtonToolItem tbFilter;
+        private ButtonToolItem tbTreeAncestors;
+        private ButtonToolItem tbTreeDescendants;
+        private ButtonToolItem tbPedigree;
+        private ButtonToolItem tbStats;
+        private ButtonToolItem tbPrev;
+        private ButtonToolItem tbNext;
+        private ButtonToolItem tbSendMail;
+        private MenuBar MainMenu1;
+        private ButtonMenuItem miFile;
+        private ButtonMenuItem miFileNew;
+        private ButtonMenuItem miFileLoad;
+        private ButtonMenuItem miMRUFiles;
+        private ButtonMenuItem miFileSave;
+        private ButtonMenuItem miFileSaveAs;
+        private ButtonMenuItem miFileClose;
+        private ButtonMenuItem miFileProperties;
+        private ButtonMenuItem miExportToExcelFile;
+        private ButtonMenuItem miExportToFamilyBook;
+        private ButtonMenuItem miExportToTreesAlbum;
+        private ButtonMenuItem miTreeTools;
+        private ButtonMenuItem miExit;
+        private ButtonMenuItem miEdit;
+        private ButtonMenuItem miRecordAdd;
+        private ButtonMenuItem miRecordEdit;
+        private ButtonMenuItem miRecordDelete;
+        private ButtonMenuItem miSearch;
+        private ButtonMenuItem miFilter;
+        private ButtonMenuItem miOptions;
+        private ButtonMenuItem miPedigree;
+        private ButtonMenuItem miTreeAncestors;
+        private ButtonMenuItem miTreeDescendants;
+        private ButtonMenuItem miPedigree_dAboville;
+        private ButtonMenuItem miPedigree_Konovalov;
+        private ButtonMenuItem miMap;
+        private ButtonMenuItem miStats;
+        private ButtonMenuItem miHelp;
+        private ButtonMenuItem miContext;
+        private ButtonMenuItem miLogSend;
+        private ButtonMenuItem miLogView;
+        private ButtonMenuItem miAbout;
+        private ContextMenu MenuMRU;
+        private ContextMenu MenuPedigree;
+        private ButtonMenuItem miPedigree_dAboville2;
+        private ButtonMenuItem miPedigree_Konovalov2;
+        private ButtonMenuItem miOrganizer;
+        private ButtonMenuItem miService;
+        private ButtonMenuItem miScripts;
+        private ButtonMenuItem miExport;
+        private ButtonMenuItem miTreeBoth;
+        private ButtonMenuItem miAncestorsCircle;
+        private ButtonToolItem tbTreeBoth;
+        private ButtonMenuItem miReports;
+        private ButtonMenuItem miPlugins;
+        private ButtonMenuItem miSlideshow;
+        private ButtonToolItem tbLoadMRU;
+        private ButtonMenuItem miPedigreeAscend;
+        private ButtonMenuItem miDescendantsCircle;
+        private ButtonMenuItem miRelationshipCalculator;
+        private TabControl tabsRecords;
+        private ButtonMenuItem miContRecordDuplicate;
+        private ButtonMenuItem miContRecordDelete;
+        private ButtonMenuItem miContRecordEdit;
+        private ButtonMenuItem miContRecordMerge;
+        private ContextMenu contextMenu;
+        private ButtonMenuItem miContRecordAdd;
+        private ButtonMenuItem miTreeCompare;
+        private ButtonMenuItem miTreeMerge;
+        private ButtonMenuItem miTreeSplit;
+        private ButtonMenuItem miRecMerge;
+        private ButtonMenuItem miFamilyGroups;
+        private ButtonMenuItem miTreeCheck;
+        private ButtonMenuItem miPatSearch;
+        private ButtonMenuItem miPlacesManager;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
         #region Private fields
 
         private readonly BaseWinController fController;
@@ -82,29 +174,8 @@ namespace GKUI.Forms
 
         public BaseWinSDI()
         {
+            XamlReader.Load(this);
             InitializeComponent();
-
-            Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
-            tbFileNew.Image = UIHelper.LoadResourceImage("Resources.btn_create_new.gif");
-            tbFileLoad.Image = UIHelper.LoadResourceImage("Resources.btn_load.gif");
-            tbFileSave.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
-            tbRecordAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            tbRecordEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            tbRecordDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            tbFilter.Image = UIHelper.LoadResourceImage("Resources.btn_filter.gif");
-            tbTreeAncestors.Image = UIHelper.LoadResourceImage("Resources.btn_tree_ancestry.gif");
-            tbTreeDescendants.Image = UIHelper.LoadResourceImage("Resources.btn_tree_descendants.gif");
-            tbTreeBoth.Image = UIHelper.LoadResourceImage("Resources.btn_tree_both.gif");
-            tbPedigree.Image = UIHelper.LoadResourceImage("Resources.btn_scroll.gif");
-            tbStats.Image = UIHelper.LoadResourceImage("Resources.btn_table.gif");
-            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
-            //tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
-            //tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
-            tbSendMail.Image = UIHelper.LoadResourceImage("Resources.btn_mail.gif");
-
-            //tbDocPrint.Visible = false;
-            //tbDocPreview.Visible = false;
 
             AppHost.Instance.LoadWindow(this);
 
@@ -113,7 +184,6 @@ namespace GKUI.Forms
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
 
             tabsRecords.SuspendLayout();
-
             CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GDMRecordType.rtIndividual);
             CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GDMRecordType.rtFamily);
             CreatePage(LangMan.LS(LSID.LSID_RPNotes), GDMRecordType.rtNote);
@@ -125,10 +195,7 @@ namespace GKUI.Forms
             CreatePage(LangMan.LS(LSID.LSID_RPTasks), GDMRecordType.rtTask);
             CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GDMRecordType.rtCommunication);
             CreatePage(LangMan.LS(LSID.LSID_RPLocations), GDMRecordType.rtLocation);
-
             tabsRecords.ResumeLayout();
-
-            SetLang();
         }
 
         protected override void Dispose(bool disposing)
@@ -139,14 +206,33 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
+        private void InitializeComponent()
+        {
+            MenuMRU = new ContextMenu();
+
+            miPedigree_dAboville2 = new ButtonMenuItem(miPedigree_dAbovilleClick);
+            miPedigree_Konovalov2 = new ButtonMenuItem(miPedigree_KonovalovClick);
+            MenuPedigree = new ContextMenu();
+            MenuPedigree.Items.AddRange(new MenuItem[] { miPedigree_dAboville2, miPedigree_Konovalov2 });
+
+            miContRecordAdd = new ButtonMenuItem(miRecordAdd_Click);
+            miContRecordEdit = new ButtonMenuItem(miRecordEdit_Click);
+            miContRecordDelete = new ButtonMenuItem(miRecordDelete_Click);
+            miContRecordDuplicate = new ButtonMenuItem(miRecordDuplicate_Click);
+            miContRecordMerge = new ButtonMenuItem(miRecordMerge_Click);
+            contextMenu = new ContextMenu();
+            contextMenu.Items.AddRange(new MenuItem[] { miContRecordAdd, miContRecordEdit, miContRecordDelete, miContRecordDuplicate, miContRecordMerge });
+            contextMenu.Opening += contextMenu_Opening;
+        }
+
         private void CreatePage(string pageText, GDMRecordType recType)
         {
             var summary = new HyperView();
             summary.BorderWidth = 4;
             summary.OnLink += mPersonSummaryLink;
-            summary.Font = UIHelper.GetDefaultFont();
 
             var recView = new GKListView();
+            recView.AllowMultipleSelection = true;
             recView.MouseDoubleClick += miRecordEdit_Click;
             recView.SelectedItemsChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
@@ -300,6 +386,18 @@ namespace GKUI.Forms
             fController.SelectSummaryLink(linkName);
         }
 
+        private void tbLoadMRU_Click(object sender, EventArgs e)
+        {
+            if (MenuMRU.Items.Count > 0) {
+                MenuMRU.Show(this);
+            }
+        }
+
+        private void tbPedigree_Click(object sender, EventArgs e)
+        {
+            MenuPedigree.Show(this);
+        }
+
         #endregion
 
         #region Basic function
@@ -446,8 +544,8 @@ namespace GKUI.Forms
                 MediaViewerWin mediaViewer = new MediaViewerWin(this);
                 try {
                     try {
-                        mediaViewer.Multimedia = mediaRec;
-                        mediaViewer.FileRef = fileRef;
+                        mediaViewer.MultimediaRecord = mediaRec;
+                        mediaViewer.FileReference = fileRef;
                         if (modal) {
                             mediaViewer.Show();
                         } else {
@@ -466,88 +564,11 @@ namespace GKUI.Forms
 
         #endregion
 
-        #region ILocalization implementation
+        #region ILocalizable implementation
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            miFile.Text = LangMan.LS(LSID.LSID_MIFile);
-            miEdit.Text = LangMan.LS(LSID.LSID_MIEdit);
-            miPedigree.Text = LangMan.LS(LSID.LSID_MIPedigree);
-            miService.Text = LangMan.LS(LSID.LSID_MIService);
-            //miWindow.Text = LangMan.LS(LSID.LSID_MIWindow);
-            miHelp.Text = LangMan.LS(LSID.LSID_MIHelp);
-
-            miFileNew.Text = LangMan.LS(LSID.LSID_MIFileNew);
-            miFileLoad.Text = LangMan.LS(LSID.LSID_MIFileLoad);
-            miMRUFiles.Text = LangMan.LS(LSID.LSID_MIMRUFiles);
-            miFileSave.Text = LangMan.LS(LSID.LSID_MIFileSave);
-            miFileSaveAs.Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
-            miFileClose.Text = LangMan.LS(LSID.LSID_MIFileClose);
-            miFileProperties.Text = LangMan.LS(LSID.LSID_MIFileProperties) + @"...";
-            miExport.Text = LangMan.LS(LSID.LSID_MIExport);
-            miExportToFamilyBook.Text = LangMan.LS(LSID.LSID_MIExportToFamilyBook);
-            miExportToTreesAlbum.Text = LangMan.LS(LSID.LSID_TreesAlbum);
-            miExportToExcelFile.Text = LangMan.LS(LSID.LSID_MIExportToExcelFile);
-            miExit.Text = LangMan.LS(LSID.LSID_MIExit);
-
-            miRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
-            miRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
-            miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
-
-            miTreeAncestors.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
-            miTreeDescendants.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
-            miTreeBoth.Text = LangMan.LS(LSID.LSID_MITreeBoth);
-            miPedigreeAscend.Text = LangMan.LS(LSID.LSID_MIPedigreeAscend);
-            miPedigree_dAboville.Text = LangMan.LS(LSID.LSID_MIPedigree_dAboville);
-            miPedigree_Konovalov.Text = LangMan.LS(LSID.LSID_MIPedigree_Konovalov);
-
-            miMap.Text = LangMan.LS(LSID.LSID_MIMap) + @"...";
-            miStats.Text = LangMan.LS(LSID.LSID_MIStats) + @"...";
-            miSearch.Text = LangMan.LS(LSID.LSID_Search);
-            miAncestorsCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
-            miDescendantsCircle.Text = LangMan.LS(LSID.LSID_DescendantsCircle);
-            miRelationshipCalculator.Text = LangMan.LS(LSID.LSID_RelationshipCalculator);
-
-            miOrganizer.Text = LangMan.LS(LSID.LSID_MIOrganizer) + @"...";
-            miSlideshow.Text = LangMan.LS(LSID.LSID_Slideshow) + @"...";
-            miScripts.Text = LangMan.LS(LSID.LSID_MIScripts);
-            miTreeTools.Text = LangMan.LS(LSID.LSID_MITreeTools);
-            miFilter.Text = LangMan.LS(LSID.LSID_MIFilter) + @"...";
-            miOptions.Text = LangMan.LS(LSID.LSID_MIOptions) + @"...";
-
-            //miWinCascade.Text = LangMan.LS(LSID.LSID_MIWinCascade);
-            //miWinHTile.Text = LangMan.LS(LSID.LSID_MIWinHTile);
-            //miWinVTile.Text = LangMan.LS(LSID.LSID_MIWinVTile);
-            //miWinMinimize.Text = LangMan.LS(LSID.LSID_MIWinMinimize);
-            //miWinArrange.Text = LangMan.LS(LSID.LSID_MIWinArrange);
-
-            miContext.Text = LangMan.LS(LSID.LSID_MIContext);
-            miAbout.Text = LangMan.LS(LSID.LSID_MIAbout) + @"...";
-            miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
-            miLogView.Text = LangMan.LS(LSID.LSID_LogView);
-            miPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
-            miReports.Text = LangMan.LS(LSID.LSID_Reports);
-
-            SetToolTip(tbFileNew, LangMan.LS(LSID.LSID_FileNewTip));
-            SetToolTip(tbFileLoad, LangMan.LS(LSID.LSID_FileLoadTip));
-            SetToolTip(tbFileSave, LangMan.LS(LSID.LSID_FileSaveTip));
-            SetToolTip(tbRecordAdd, LangMan.LS(LSID.LSID_RecordAddTip));
-            SetToolTip(tbRecordEdit, LangMan.LS(LSID.LSID_RecordEditTip));
-            SetToolTip(tbRecordDelete, LangMan.LS(LSID.LSID_RecordDeleteTip));
-            SetToolTip(tbFilter, LangMan.LS(LSID.LSID_FilterTip));
-            SetToolTip(tbTreeAncestors, LangMan.LS(LSID.LSID_TreeAncestorsTip));
-            SetToolTip(tbTreeDescendants, LangMan.LS(LSID.LSID_TreeDescendantsTip));
-            SetToolTip(tbTreeBoth, LangMan.LS(LSID.LSID_TreeBothTip));
-            SetToolTip(tbPedigree, LangMan.LS(LSID.LSID_PedigreeTip));
-            miPedigree_dAboville2.Text = LangMan.LS(LSID.LSID_Pedigree_dAbovilleTip);
-            miPedigree_Konovalov2.Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
-            SetToolTip(tbStats, LangMan.LS(LSID.LSID_StatsTip));
-
-            //SetTooltip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
-            //SetTooltip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
-
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
 
             int num = miPlugins.Items.Count;
             for (int i = 0; i < num; i++) {
@@ -567,21 +588,6 @@ namespace GKUI.Forms
             tabsRecords.Pages[ 8].Text = LangMan.LS(LSID.LSID_RPTasks);
             tabsRecords.Pages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
             tabsRecords.Pages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
-
-            miContRecordAdd.Text = LangMan.LS(LSID.LSID_MIRecordAdd);
-            miContRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
-            miContRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
-            miContRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
-            miContRecordMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
-
-            miTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
-            miTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
-            miTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
-            miRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
-            miFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
-            miTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
-            miPatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
-            miPlacesManager.Text = LangMan.LS(LSID.LSID_ToolOp_9);
         }
 
         #endregion
@@ -702,20 +708,10 @@ namespace GKUI.Forms
 
         #region From MainWin
 
-        private void tbDocPrint_Click(object sender, EventArgs e)
-        {
-            // obsolete
-        }
-
-        private void tbDocPreview_Click(object sender, EventArgs e)
-        {
-            // obsolete
-        }
-
         public void Restore()
         {
-            if (this.WindowState == Eto.Forms.WindowState.Minimized) {
-                this.WindowState = Eto.Forms.WindowState.Normal;
+            if (WindowState == Eto.Forms.WindowState.Minimized) {
+                WindowState = Eto.Forms.WindowState.Normal;
             }
         }
 
@@ -746,6 +742,13 @@ namespace GKUI.Forms
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.Form_DragDrop()", ex);
             }
+        }
+
+        void IBaseWindowView.LoadBase(string fileName)
+        {
+            Application.Instance.Invoke(delegate () {
+                AppHost.Instance.LoadBase(this, fileName);
+            });
         }
 
         private void UpdateShieldState()
@@ -832,9 +835,6 @@ namespace GKUI.Forms
                 tbFilter.Enabled = miFilter.Enabled;
 
                 miSearch.Enabled = (workWin != null && workWin.AllowQuickSearch());
-
-                //tbDocPrint.Enabled = (curChart != null && curChart.AllowPrint());
-                //tbDocPreview.Enabled = (curChart != null && curChart.AllowPrint());
 
                 miTreeTools.Enabled = baseEn;
                 miExportToFamilyBook.Enabled = baseEn;

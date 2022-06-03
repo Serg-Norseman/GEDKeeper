@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,20 +19,15 @@
  */
 
 using System;
-using System.Text;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using GKCore.Tools;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTTreeCheckDlg : CommonDialog, ITreeCheckDlg
+    public sealed partial class TTTreeCheckDlg : CommonDialog<ITreeCheckDlg, TreeCheckController>, ITreeCheckDlg
     {
-        private readonly TreeCheckController fController;
-
         private GKListView ListChecks;
 
         #region View Interface
@@ -50,30 +45,13 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            fController = new TreeCheckController(this);
-            fController.Init(baseWin);
-
             ListChecks = UIHelper.CreateListView(panProblemsContainer);
             ListChecks.DoubleClick += ListChecks_DblClick;
             ListChecks.CheckBoxes = true;
-            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
-            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
-            ListChecks.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
             ListChecks.ContextMenuStrip = contextMenu;
 
-            SetLang();
-        }
-
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_ToolOp_7);
-            pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            btnAnalyseBase.Text = LangMan.LS(LSID.LSID_Analyze);
-            btnBaseRepair.Text = LangMan.LS(LSID.LSID_Repair);
-            miDetails.Text = LangMan.LS(LSID.LSID_Details);
-            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-            miCopyXRef.Text = LangMan.LS(LSID.LSID_CopyXRef);
+            fController = new TreeCheckController(this);
+            fController.Init(baseWin);
         }
 
         private void btnAnalyseBase_Click(object sender, EventArgs e)
@@ -103,23 +81,13 @@ namespace GKUI.Forms
 
         private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var rec = fController.GetSelectedRecord();
-            miDetails.Enabled = (rec != null);
-            miGoToRecord.Enabled = (rec != null);
-            miCopyXRef.Enabled = (rec != null);
+            fController.OpeningContextMenu();
         }
 
         public void miCopyXRef_Click(object sender, EventArgs e)
         {
             var list = ListChecks.GetSelectedItems();
-            var text = new StringBuilder();
-            foreach (var item in list) {
-                var checkObj = (TreeTools.CheckObj)item;
-                text.Append(checkObj.Rec.XRef);
-                text.Append("\r\n");
-            }
-
-            UIHelper.SetClipboardText(text.ToString());
+            fController.CopySelectedXRefs(list);
         }
     }
 }

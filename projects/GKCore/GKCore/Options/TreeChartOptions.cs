@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,9 +35,9 @@ namespace GKCore.Options
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public sealed class TreeChartOptions : BaseObject, IOptions
+    public sealed class TreeChartOptions : IOptions
     {
         public static readonly int MALE_COLOR = -3750145; // FFC6C6FF
         public static readonly int FEMALE_COLOR = -14650; // FFFFC6C6
@@ -68,6 +68,10 @@ namespace GKCore.Options
         public bool DottedLinesOfAdoptedChildren;
         public bool SeparateDatesAndPlacesLines;
         public bool BoldNames;
+        public bool OnlyLocality;
+        public bool MinimizingWidth;
+        //public bool RootSpousesAncestors;
+        public bool AgeVisible;
 
         public bool AutoAlign; // debug option, for future purposes
         public GfxBorderStyle BorderStyle;
@@ -122,6 +126,10 @@ namespace GKCore.Options
             SeparateDatesAndPlacesLines = false;
             BoldNames = false;
             SeparateDepth = false;
+            OnlyLocality = false;
+            MinimizingWidth = true;
+            //RootSpousesAncestors = true;
+            AgeVisible = false;
 
             AutoAlign = true;
             BorderStyle = GfxBorderStyle.None;
@@ -182,6 +190,10 @@ namespace GKCore.Options
             SeparateDatesAndPlacesLines = srcOptions.SeparateDatesAndPlacesLines;
             BoldNames = srcOptions.BoldNames;
             SeparateDepth = srcOptions.SeparateDepth;
+            BorderStyle = srcOptions.BorderStyle;
+            OnlyLocality = srcOptions.OnlyLocality;
+            MinimizingWidth = srcOptions.MinimizingWidth;
+            AgeVisible = srcOptions.AgeVisible;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -220,6 +232,10 @@ namespace GKCore.Options
             DottedLinesOfAdoptedChildren = iniFile.ReadBool("Chart", "DottedLinesOfAdoptedChildren", false);
             SeparateDatesAndPlacesLines = iniFile.ReadBool("Chart", "SeparateDatesAndPlacesLines", false);
             BoldNames = iniFile.ReadBool("Chart", "BoldNames", false);
+            BorderStyle = (GfxBorderStyle)iniFile.ReadInteger("Chart", "BorderStyle", 0);
+            OnlyLocality = iniFile.ReadBool("Chart", "OnlyLocality", false);
+            MinimizingWidth = iniFile.ReadBool("Chart", "MinimizingWidth", true);
+            AgeVisible = iniFile.ReadBool("Chart", "AgeVisible", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -274,6 +290,10 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "DottedLinesOfAdoptedChildren", DottedLinesOfAdoptedChildren);
             iniFile.WriteBool("Chart", "SeparateDatesAndPlacesLines", SeparateDatesAndPlacesLines);
             iniFile.WriteBool("Chart", "BoldNames", BoldNames);
+            iniFile.WriteInteger("Chart", "BorderStyle", (int)BorderStyle);
+            iniFile.WriteBool("Chart", "OnlyLocality", OnlyLocality);
+            iniFile.WriteBool("Chart", "MinimizingWidth", MinimizingWidth);
+            iniFile.WriteBool("Chart", "AgeVisible", AgeVisible);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());

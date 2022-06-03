@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,11 +19,10 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -32,9 +31,34 @@ using GKUI.Platform;
 
 namespace GKUI.Forms
 {
-    public sealed partial class NoteEditDlgEx : EditorDialog, INoteEditDlgEx
+    public sealed partial class NoteEditDlgEx : CommonDialog<INoteEdit, NoteEditDlgExController>, INoteEdit
     {
-        private readonly NoteEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private Button btnAccept;
+        private Button btnCancel;
+        private RichTextArea txtNote;
+        private HyperView hyperView1;
+        private ButtonToolItem cmbSizes;
+        private ContextMenu menuSizes;
+        private ButtonMenuItem miClear;
+        private ButtonMenuItem miExport;
+        private ButtonMenuItem miImport;
+        private ButtonMenuItem miSelectAndCopy;
+        private ButtonToolItem ddbtnActions;
+        private ContextMenu menuActions;
+        private ButtonToolItem btnURL;
+        private ButtonToolItem btnUnderline;
+        private ButtonToolItem btnItalic;
+        private ButtonToolItem btnBold;
+        private TabPage pagePreview;
+        private ToolBar toolStrip1;
+        private TabPage pageEditor;
+        private TabControl tabControl1;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         public GDMNoteRecord NoteRecord
         {
@@ -56,40 +80,40 @@ namespace GKUI.Forms
             InitializeComponent();
             FillSizes();
 
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Note);
-
-            ddbtnActions.Text = LangMan.LS(LSID.LSID_Actions);
-            miSelectAndCopy.Text = LangMan.LS(LSID.LSID_SelectAndCopy);
-            miImport.Text = LangMan.LS(LSID.LSID_Import);
-            miExport.Text = LangMan.LS(LSID.LSID_MIExport);
-            miClear.Text = LangMan.LS(LSID.LSID_Clear);
-            pageEditor.Text = LangMan.LS(LSID.LSID_Note);
-            pagePreview.Text = LangMan.LS(LSID.LSID_DocPreview);
-
-            fController = new NoteEditDlgController(this);
+            fController = new NoteEditDlgExController(this);
             fController.Init(baseWin);
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
+        private void InitializeComponent()
         {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
+            XamlReader.Load(this);
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
+            //btnBold.Font=new Font("Tahoma", 9F, FontStyle.Bold);
+            //btnItalic.Font=new Font("Tahoma", 9F, FontStyle.Italic);
+            //btnUnderline.Font=new Font("Tahoma", 9F, FontStyle.None, FontDecoration.Underline);
+            //btnURL.Font=new Font("Tahoma", 9F, FontStyle.None, FontDecoration.Underline);
+            //btnURL.TextColor=Colors.Blue;
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
+            menuSizes = new ContextMenu();
+
+            miSelectAndCopy = new ButtonMenuItem();
+            miSelectAndCopy.Click += miSelectAndCopy_Click;
+
+            miImport = new ButtonMenuItem();
+            miImport.Click += miImport_Click;
+
+            miExport = new ButtonMenuItem();
+            miExport.Click += miExport_Click;
+
+            miClear = new ButtonMenuItem();
+            miClear.Click += miClear_Click;
+
+            menuActions = new ContextMenu();
+            menuActions.Items.AddRange(new MenuItem[] {
+                                           miSelectAndCopy,
+                                           miImport,
+                                           miExport,
+                                           miClear});
         }
 
         private void FillSizes()
@@ -144,6 +168,17 @@ namespace GKUI.Forms
         private void miClear_Click(object sender, EventArgs e)
         {
             fController.Clear();
+        }
+
+        private void cmbSizes_Click(object sender, EventArgs e)
+        {
+            //cmbSizes.SelectedIndexChanged=cmbSizes_SelectedIndexChanged;
+            menuSizes.Show(this);
+        }
+
+        private void ddbtnActions_Click(object sender, EventArgs e)
+        {
+            menuActions.Show(this);
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)

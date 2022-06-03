@@ -50,8 +50,10 @@ namespace GKTests.Stubs
         public void SelectByRec(GDMRecord record) {}
         public bool AllowFilter() { return false; }
         public void SetFilter() {}
-        public void SetLang() {}
+        public void SetLocale() {}
         public void Show(bool showInTaskbar) {}
+        public object GetControl(string controlName) { return null; }
+        public void SetToolTip(object component, string toolTip) { }
     }
 
     internal class ProgressStub : IProgressController

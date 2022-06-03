@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-
+using GKCore;
 using GKCore.Interfaces;
 using nVLC;
 using nVLC.Events;
@@ -30,9 +30,9 @@ using nVLC.Players;
 
 namespace GKUI.Components
 {
-    public partial class MediaPlayer : UserControl, ILocalization
+    public partial class MediaPlayer : UserControl, ILocalizable
     {
-        #if !__MonoCS__
+        #if !MONO
         private const bool FIND_LIBVLC = true;
         #else
         private const bool FIND_LIBVLC = false;
@@ -79,15 +79,14 @@ namespace GKUI.Components
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
+            if (disposing && (components != null)) {
                 fPlayer.Stop();
                 components.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
         }
 
@@ -147,7 +146,7 @@ namespace GKUI.Components
         {
             if (fMedia == null) {
                 if (string.IsNullOrEmpty(fMediaFile)) {
-                    MessageBox.Show("Please select media path first", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    AppHost.StdDialogs.ShowError("Please select media path first");
                     return;
                 }
 

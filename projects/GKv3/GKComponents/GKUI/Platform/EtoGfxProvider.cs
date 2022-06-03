@@ -117,11 +117,12 @@ namespace GKUI.Platform
             }
         }
 
-        public IImage GetResourceImage(string resName, bool makeTransp)
+        public IImage LoadResourceImage(string resName, bool makeTransp)
         {
             Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
 
             if (makeTransp) {
+                // TODO
                 // only for 24, 32 bit images
                 /*Color pixColor = img.GetPixel(0, 0);
                 if (pixColor != Colors.Transparent) {
@@ -131,17 +132,6 @@ namespace GKUI.Platform
                         gfx.Clear(pixColor);
                     }
                 }*/
-            }
-
-            return new ImageHandler(img);
-        }
-
-        // TODO: Temp version, on future
-        public IImage LoadResourceImage(string resName, bool makeTransp)
-        {
-            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
-
-            if (makeTransp) {
             }
 
             return new ImageHandler(img);
@@ -288,8 +278,7 @@ namespace GKUI.Platform
 
         public ExtSizeF GetTextSize(string text, IFont font, object target)
         {
-            //Graphics gfx = target as Graphics;
-            if (/*gfx != null && */font != null) {
+            if (font != null) {
                 Font sdFnt = ((FontHandler)font).Handle;
                 var size = sdFnt.MeasureString(text);
                 return new ExtSizeF(size.Width, size.Height);
@@ -302,7 +291,8 @@ namespace GKUI.Platform
         {
             string fontName;
             if (Application.Instance.Platform.IsGtk) {
-                fontName = "Noto Sans";
+                //fontName = "Noto Sans";
+                fontName = "Sans";
             } else {
                 fontName = "Verdana"; // "Tahoma";
             }

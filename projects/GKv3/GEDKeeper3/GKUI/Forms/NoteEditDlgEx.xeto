@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.NoteEditDlgEx"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <Dialog.ToolBar>
+    <ToolBar TextAlign="Right" Style="tbsi">
+      <ButtonToolItem x:Name="btnBold" Text="B" Click="btnBold_Click" />
+      <ButtonToolItem x:Name="btnItalic" Text="I" Click="btnItalic_Click" />
+      <ButtonToolItem x:Name="btnUnderline" Text="U" Click="btnUnderline_Click" />
+      <ButtonToolItem x:Name="btnURL" Text="URL" Click="btnURL_Click" />
+      <ButtonToolItem x:Name="cmbSizes" Click="cmbSizes_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="ddbtnActions" Click="ddbtnActions_Click" />
+    </ToolBar>
+  </Dialog.ToolBar>
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabControl1" Size="400, 260" SelectedIndexChanged="tabControl1_SelectedIndexChanged">
+        <TabPage x:Name="pageEditor">
+          <RichTextArea x:Name="txtNote" AcceptsReturn="True" AcceptsTab="False" />
+        </TabPage>
+
+        <TabPage x:Name="pagePreview">
+          <comcom:HyperView x:Name="hyperView1" />
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.TreeChartWin"
+  Size="1020, 760" ShowInTaskbar="true" KeyDown="TreeChartWin_KeyDown">
+
+  <Form.ToolBar>
+    <ToolBar TextAlign="Right" Style="tbsi">
+      <ButtonToolItem x:Name="tbImageSave" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbImageSave_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbGensCommon" Click="tbGensCommon_Click" />
+      <ButtonToolItem x:Name="tbGensAncestors" Click="tbGensAncestors_Click" />
+      <ButtonToolItem x:Name="tbGensDescendants" Click="tbGensDescendants_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbModes" Click="tbModes_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbFilter" Image="{Resource Resources.btn_filter.gif, GKCore}" Click="ToolBar1_ButtonClick" />
+      <ButtonToolItem x:Name="tbPrev" Image="{Resource Resources.btn_left.gif, GKCore}" Enabled="False" Click="ToolBar1_ButtonClick" />
+      <ButtonToolItem x:Name="tbNext" Image="{Resource Resources.btn_right.gif, GKCore}" Enabled="False" Click="ToolBar1_ButtonClick" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbDocPreview" Image="{Resource Resources.btn_preview.gif, GKCore}" Click="tbDocPreview_Click" />
+      <ButtonToolItem x:Name="tbDocPrint" Image="{Resource Resources.btn_print.gif, GKCore}" Click="tbDocPrint_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbOptions" Image="{Resource Resources.btn_tools.gif, GKCore}" Click="tbOptions_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbBorders" Click="tbBorders_Click" />
+    </ToolBar>
+  </Form.ToolBar>
+
+</Form>

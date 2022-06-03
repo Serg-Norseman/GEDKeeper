@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -50,8 +49,6 @@ namespace GKUI.Forms
             btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             fController = new QuickSearchDlgController(this, workWindow);
-
-            SetLang();
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)
@@ -87,12 +84,9 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
-            Title = LangMan.LS(LSID.LSID_Search);
-            //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
-            SetToolTip(btnPrev, LangMan.LS(LSID.LSID_FindPrevious));
-            SetToolTip(btnNext, LangMan.LS(LSID.LSID_FindNext));
+            fController.SetLocale();
         }
     }
 }

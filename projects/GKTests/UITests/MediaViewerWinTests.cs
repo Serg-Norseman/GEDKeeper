@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,18 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
-using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
-using BSLib.Design.Graphics;
-using BSLib.Design.Handlers;
 using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -42,22 +39,18 @@ namespace GKUI.Forms
     {
         private IBaseWindow fBase;
         private MediaViewerWin fDialog;
-        private GDMFileReferenceWithTitle fileRef;
+        private GDMMultimediaRecord fMediaRec;
 
         public override void Setup()
         {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
             fBase = new BaseWindowStub();
-
-            GDMMultimediaRecord mmRec = fBase.Context.Tree.CreateMultimedia();
-            mmRec.FileReferences.Add(new GDMFileReferenceWithTitle());
-            fileRef = mmRec.FileReferences[0];
-
-            fileRef.Title = "File Title 2";
-            fileRef.LinkFile("shaytan_plant.jpg");
-            fileRef.MediaType = GDMMediaType.mtPhoto;
+            fMediaRec = fBase.Context.Tree.CreateMultimedia();
 
             fDialog = new MediaViewerWin(fBase);
-            fDialog.Multimedia = mmRec;
+            fDialog.MultimediaRecord = fMediaRec;
             fDialog.Show();
         }
 
@@ -66,101 +59,115 @@ namespace GKUI.Forms
             fDialog.Dispose();
         }
 
+        private GDMFileReferenceWithTitle GetTestMultimedia(
+            string resName, GDMMultimediaFormat multimediaFormat, out string targetName)
+        {
+            targetName = TestUtils.PrepareTestFile(resName);
+
+            fMediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
+            var fileRefV = fMediaRec.FileReferences[0];
+
+            fileRefV.Title = "File Title";
+            fileRefV.LinkFile(targetName);
+            fileRefV.MediaType = GDMMediaType.mtManuscript;
+            fileRefV.MultimediaFormat = multimediaFormat;
+            
+            return fileRefV;
+        }
+
         [Test]
         public void Test_Image()
         {
-            Assert.AreEqual(null, fDialog.FileRef);
-            fDialog.FileRef = fileRef;
-            Assert.AreEqual(fileRef, fDialog.FileRef);
+            string targetName;
+            var fileRefV = GetTestMultimedia("shaytan_plant.jpg", GDMMultimediaFormat.mfJPG, out targetName);
+            try {
+                Assert.IsTrue(File.Exists(targetName));
 
-            Bitmap img = new Bitmap(TestUtils.LoadResourceStream("shaytan_plant.jpg"));
-            IImage portableImage = new ImageHandler(img);
+                fDialog.FileReference = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.FileReference);
 
-            fDialog.SetViewImage(portableImage, fileRef);
-            fDialog.Refresh();
+                fDialog.Refresh();
 
-            ClickToolStripButton("btnZoomIn", fDialog);
-            ClickToolStripButton("btnZoomOut", fDialog);
-            ClickToolStripButton("btnSizeToFit", fDialog);
+                ClickToolStripButton("btnZoomIn", fDialog);
+                ClickToolStripButton("btnZoomOut", fDialog);
+                ClickToolStripButton("btnSizeToFit", fDialog);
 
-            KeyDownForm(fDialog.Name, Keys.Escape);
+                KeyDownForm(fDialog.Name, Keys.Escape);
+            } finally {
+                TestUtils.RemoveTestFile(targetName);
+            }
         }
 
         [Test]
         public void Test_Text()
         {
-            Assert.AreEqual(null, fDialog.FileRef);
-            fDialog.FileRef = fileRef;
-            Assert.AreEqual(fileRef, fDialog.FileRef);
+            string targetName;
+            var fileRefV = GetTestMultimedia("lorem_ipsum.txt", GDMMultimediaFormat.mfTXT, out targetName);
+            try {
+                Assert.IsTrue(File.Exists(targetName));
 
-            Stream stm = TestUtils.LoadResourceStream("lorem_ipsum.txt");
-            string text;
-            using (StreamReader strd = new StreamReader(stm, Encoding.UTF8)) {
-                text = strd.ReadToEnd();
+                fDialog.FileReference = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.FileReference);
+
+                fDialog.Refresh();
+
+                KeyDownForm(fDialog.Name, Keys.Escape);
+            } finally {
+                TestUtils.RemoveTestFile(targetName);
             }
-
-            fDialog.SetViewText(text);
-            fDialog.Refresh();
-
-            KeyDownForm(fDialog.Name, Keys.Escape);
         }
 
         [Test]
         public void Test_RTF()
         {
-            Assert.AreEqual(null, fDialog.FileRef);
-            fDialog.FileRef = fileRef;
-            Assert.AreEqual(fileRef, fDialog.FileRef);
+            string targetName;
+            var fileRefV = GetTestMultimedia("lorem_ipsum.rtf", GDMMultimediaFormat.mfRTF, out targetName);
+            try {
+                Assert.IsTrue(File.Exists(targetName));
 
-            Stream stm = TestUtils.LoadResourceStream("lorem_ipsum.txt");
-            string text;
-            using (StreamReader strd = new StreamReader(stm, Encoding.UTF8)) {
-                text = strd.ReadToEnd();
+                fDialog.FileReference = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.FileReference);
+
+                fDialog.Refresh();
+
+                KeyDownForm(fDialog.Name, Keys.Escape);
+            } finally {
+                TestUtils.RemoveTestFile(targetName);
             }
-
-            fDialog.SetViewRTF(text);
-            fDialog.Refresh();
-
-            KeyDownForm(fDialog.Name, Keys.Escape);
         }
 
         [Test]
         public void Test_HTML()
         {
-            Assert.AreEqual(null, fDialog.FileRef);
-            fDialog.FileRef = fileRef;
-            Assert.AreEqual(fileRef, fDialog.FileRef);
+            string targetName;
+            var fileRefV = GetTestMultimedia("lorem_ipsum.htm", GDMMultimediaFormat.mfHTM, out targetName);
+            try {
+                Assert.IsTrue(File.Exists(targetName));
 
-            Stream stm = TestUtils.LoadResourceStream("lorem_ipsum.txt");
+                fDialog.FileReference = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.FileReference);
 
-            fDialog.SetViewHTML(stm);
-            fDialog.Refresh();
+                fDialog.Refresh();
 
-            KeyDownForm(fDialog.Name, Keys.Escape);
+                KeyDownForm(fDialog.Name, Keys.Escape);
+            } finally {
+                TestUtils.RemoveTestFile(targetName);
+            }
         }
 
         #if !CI_MODE
         [Test]
         public void Test_Video()
         {
-            string targetName = TestUtils.PrepareTestFile("test_video.3gp");
+            string targetName;
+            var fileRefV = GetTestMultimedia("test_video.3gp", GDMMultimediaFormat.mfMKV, out targetName);
 
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                GDMMultimediaRecord mmRecV = fBase.Context.Tree.CreateMultimedia();
-                mmRecV.FileReferences.Add(new GDMFileReferenceWithTitle());
-                var fileRefV = mmRecV.FileReferences[0];
+                fDialog.FileReference = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.FileReference);
 
-                fileRefV.Title = "File Title 2";
-                fileRefV.LinkFile(targetName);
-                fileRefV.MediaType = GDMMediaType.mtVideo;
-                fileRefV.MultimediaFormat = GDMMultimediaFormat.mfMKV;
-
-                fDialog.FileRef = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.FileRef);
-
-                fDialog.SetViewMedia(targetName);
                 fDialog.Refresh();
 
                 ClickButton("btnPlay", fDialog);

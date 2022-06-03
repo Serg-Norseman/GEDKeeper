@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,26 +26,18 @@ using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Components;
+using GKUI.Forms;
 
 namespace GKImageViewerPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class ImageViewerWin : Form, IWindow
+    public partial class ImageViewerWin : CommonWindow
     {
         private ImageView fImageCtl;
         private readonly Plugin fPlugin;
 
-        #region View Interface
-
-        public string Title
-        {
-            get { return base.Text; }
-            set { base.Text = value; }
-        }
-
-        #endregion
 
         public ImageViewerWin(Plugin plugin)
         {
@@ -55,7 +47,7 @@ namespace GKImageViewerPlugin
 
             fPlugin = plugin;
 
-            SetLang();
+            SetLocale();
         }
 
         private void ImageViewerWin_FormClosed(object sender, FormClosedEventArgs e)
@@ -101,7 +93,7 @@ namespace GKImageViewerPlugin
                             fImageCtl = new ImageView();
 
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                                     fImageCtl.OpenImage(new Bitmap(fs));
                                 }
                             } catch (Exception ex) {
@@ -125,7 +117,7 @@ namespace GKImageViewerPlugin
                             txtBox.ScrollBars = ScrollBars.Both;
 
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                                     using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
                                         txtBox.Text = strd.ReadToEnd();
                                     }
@@ -144,7 +136,7 @@ namespace GKImageViewerPlugin
                             rtfBox.ReadOnly = true;
 
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                                     using (StreamReader strd = new StreamReader(fs)) {
                                         rtfBox.Text = strd.ReadToEnd();
                                     }
@@ -161,7 +153,7 @@ namespace GKImageViewerPlugin
                         {
                             var browser = new WebBrowser();
                             try {
-                                using (Stream fs = new FileStream(fileName, FileMode.Open)) {
+                                using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                                     browser.DocumentStream = fs;
                                 }
                             } catch (Exception ex) {
@@ -191,21 +183,15 @@ namespace GKImageViewerPlugin
             }
         }
 
-        public void Show(bool showInTaskbar)
-        {
-            ShowInTaskbar = showInTaskbar;
-            Show();
-        }
+        #region ILocalizable support
 
-        #region ILocalization support
-
-        public void SetLang()
+        public override void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_ImgViewer);
             tbFileLoad.ToolTipText = fPlugin.LangMan.LS(PLS.LSID_FileLoad);
 
             if (fImageCtl != null) {
-                fImageCtl.SetLang();
+                fImageCtl.SetLocale();
             }
         }
 

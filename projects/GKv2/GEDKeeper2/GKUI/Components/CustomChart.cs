@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,36 +33,16 @@ namespace GKUI.Components
 {
     public abstract class CustomChart : ScrollablePanel, IPrintable
     {
-        private static readonly object EventNavRefresh;
-
-
         private readonly NavigationStack<GDMRecord> fNavman;
         protected ChartRenderer fRenderer;
 
 
-        public event EventHandler NavRefresh
-        {
-            add { Events.AddHandler(EventNavRefresh, value); }
-            remove { Events.RemoveHandler(EventNavRefresh, value); }
-        }
+        public event EventHandler NavRefresh;
 
-
-        static CustomChart()
-        {
-            EventNavRefresh = new object();
-        }
 
         protected CustomChart()
         {
             fNavman = new NavigationStack<GDMRecord>();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                //if (fNavman != null) fNavman.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -214,10 +194,10 @@ namespace GKUI.Components
         public IImage GetPrintableImage()
         {
             ExtSize imageSize = GetImageSize();
-            var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
 
             Image image;
             using (var gfx = CreateGraphics()) {
+                var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
                 image = new Metafile(gfx.GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
             }
 
@@ -304,7 +284,7 @@ namespace GKUI.Components
 
         private void DoNavRefresh()
         {
-            var eventHandler = (EventHandler)Events[EventNavRefresh];
+            var eventHandler = NavRefresh;
             if (eventHandler != null) eventHandler(this, null);
         }
 

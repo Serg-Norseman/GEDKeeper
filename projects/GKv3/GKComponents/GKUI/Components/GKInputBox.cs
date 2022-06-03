@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -172,50 +172,41 @@ namespace GKUI.Components
 
         private void InitializeComponent()
         {
-            SuspendLayout();
-
             if (fPasswordMode) {
                 txtValue = new PasswordBox();
                 ((PasswordBox)txtValue).PasswordChar = '*';
             } else {
                 txtValue = new TextBox();
             }
-            txtValue.Size = new Size(354, 20);
+            txtValue.Width = 360;
 
             label1 = new Label();
-            //label1.Size = new Size(35, 13);
-            label1.Text = "label1";
 
             btnAccept = new Button();
             btnAccept.ImagePosition = ButtonImagePosition.Left;
-            btnAccept.Size = new Size(130, 26);
-            btnAccept.Text = "btnAccept";
+            btnAccept.Size = new Size(120, 26);
             btnAccept.Click += btnAccept_Click;
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
-            btnCancel.Size = new Size(130, 26);
-            btnCancel.Text = "btnCancel";
+            btnCancel.Size = new Size(120, 26);
             btnCancel.Click += btnCancel_Click;
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            Content = new DefTableLayout {
+            Content = new TableLayout {
+                Padding = 8,
+                Spacing = new Size(8, 8),
                 Rows = {
-                    new TableRow(label1),
-                    new TableRow(txtValue),
-                    UIHelper.MakeDialogFooter(null, btnAccept, btnCancel)
+                    new StackLayout() { Orientation = Orientation.Vertical, Spacing = 2, Items = { label1, txtValue } },
+                    new StackLayout() { Orientation = Orientation.Horizontal, Spacing = 8, Items = { null, btnAccept, btnCancel } }
                 }
             };
 
             Maximizable = false;
             Minimizable = false;
             ShowInTaskbar = false;
-            Title = "InputBox";
             Topmost = true;
-
-            SetPredefProperties(380, 100);
-            ResumeLayout();
         }
 
         #endregion

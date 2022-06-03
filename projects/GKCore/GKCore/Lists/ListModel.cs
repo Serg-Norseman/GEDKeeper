@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using BSLib.Design.MVP;
 using BSLib.Design.MVP.Controls;
 using GDModel;
@@ -89,6 +90,7 @@ namespace GKCore.Lists
 
     public interface ISheetList : IBaseControl
     {
+        EnumSet<SheetButton> Buttons { get; set; }
         ListModel ListModel { get; set; }
         bool ReadOnly { get; set; }
 

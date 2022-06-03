@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,15 +21,28 @@
 using System;
 using BSLib;
 using BSLib.Design.MVP.Controls;
-using GKCore;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public partial class DayTipsDlg : CommonDialog, IDayTipsDlg
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private CheckBox chkShow;
+        private Button btnNextTip;
+        private Button btnClose;
+        private Label lblTitle;
+        private Eto.Forms.ImageView Image1;
+        private TextBox txtTip;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
         private readonly DayTipsDlgController fController;
 
         public bool ShowTipsChecked
@@ -59,18 +72,9 @@ namespace GKUI.Forms
 
         public DayTipsDlg()
         {
-            InitializeComponent();
-
-            Image1.Image = UIHelper.LoadResourceImage("Resources.image_tips_light.png");
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            XamlReader.Load(this);
 
             fController = new DayTipsDlgController(this);
-
-            // SetLang()
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            chkShow.Text = LangMan.LS(LSID.LSID_StartupTips);
-            btnNextTip.Text = LangMan.LS(LSID.LSID_Next);
-            lblTitle.Text = LangMan.LS(LSID.LSID_YouKnowWhat);
         }
 
         private void btnNextTip_Click(object sender, EventArgs e)
@@ -80,11 +84,7 @@ namespace GKUI.Forms
 
         public void Init(string caption, bool showTipsChecked, StringList tips)
         {
-            chkShow.Checked = showTipsChecked;
-            Title = caption;
-            lblTitle.Text = caption;
-            fController.SetTips(tips);
-            fController.GetNextTip();
+            fController.InitTips(caption, showTipsChecked, tips);
         }
     }
 }

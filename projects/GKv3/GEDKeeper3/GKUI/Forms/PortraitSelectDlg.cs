@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,23 +18,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class PortraitSelectDlg : EditorDialog, IPortraitSelectDlg
+    public sealed partial class PortraitSelectDlg : CommonDialog<IPortraitSelectDlg, PortraitSelectDlgController>, IPortraitSelectDlg
     {
-        private readonly PortraitSelectDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private ITimer fTimer;
+        private Button btnAccept;
+        private Button btnCancel;
+        private GKUI.Components.ImageView imageView1;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         public GDMMultimediaLink MultimediaLink
         {
@@ -51,50 +55,12 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
         public PortraitSelectDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_PortraitSelect);
-
-            fTimer = AppHost.Instance.CreateTimer(100.0f, InitViewer_Tick);
-            fTimer.Start();
+            XamlReader.Load(this);
 
             fController = new PortraitSelectDlgController(this);
             fController.Init(baseWin);
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            if (imageView1 != null) {
-                imageView1.Focus();
-                imageView1.Invalidate();
-                imageView1.ZoomToFit();
-            }
-        }
-
-        // dirty temporary hack
-        private void InitViewer_Tick(object sender, EventArgs e)
-        {
-            if (imageView1 != null && !imageView1.Viewport.Size.IsEmpty) {
-                imageView1.ZoomToFit();
-                fTimer.Stop();
-            }
         }
     }
 }

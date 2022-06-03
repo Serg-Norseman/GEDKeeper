@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Charts;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 
@@ -37,14 +38,28 @@ namespace GKCore.Controllers
         {
         }
 
-        // TODO: update localization
         public void SaveSnapshot()
         {
-            string filters = LangMan.LS(LSID.LSID_TreeImagesFilter) + "|SVG files (*.svg)|*.svg";
+            string filters = GKUtils.GetImageFilter(true);
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", filters, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName)) {
                 fView.CircleChart.SaveSnapshot(fileName);
             }
+        }
+
+        public override void SetLocale()
+        {
+            if (fView.CircleChart.ChartType == CircleChartType.Ancestors) {
+                fView.Title = LangMan.LS(LSID.LSID_AncestorsCircle);
+            } else {
+                fView.Title = LangMan.LS(LSID.LSID_DescendantsCircle);
+            }
+
+            SetToolTip("tbImageSave", LangMan.LS(LSID.LSID_ImageSaveTip));
+            SetToolTip("tbDocPrint", LangMan.LS(LSID.LSID_DocPrint));
+            SetToolTip("tbDocPreview", LangMan.LS(LSID.LSID_DocPreview));
+            SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
+            SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
         }
     }
 }

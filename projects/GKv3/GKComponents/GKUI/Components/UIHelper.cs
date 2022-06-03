@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using BSLib.Design;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
@@ -37,10 +38,6 @@ namespace GKUI.Components
     /// </summary>
     public static class UIHelper
     {
-        public static readonly Size ShortButtonSize = new Size(24, 24);
-        public static readonly Size LongButtonSize = new Size(120, 24);
-
-
         public static Rectangle Rt2Rt(ExtRect ert)
         {
             return new Rectangle(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
@@ -74,7 +71,7 @@ namespace GKUI.Components
 
             Screen screen = Screen.FromRectangle(Rt2Rt(winRect));
             if (screen != null) {
-                RectangleF workArea = screen.WorkingArea;
+                var workArea = screen.WorkingArea;
 
                 int width = winRect.GetWidth();
                 int height = winRect.GetHeight();
@@ -137,7 +134,7 @@ namespace GKUI.Components
             }
         }
 
-        public static void CenterFormByParent(Form form, Rectangle parentRect)
+        public static void CenterFormByParent(Window form, Rectangle parentRect)
         {
             if (form == null) return;
 
@@ -147,7 +144,7 @@ namespace GKUI.Components
             // is located.
             Screen screen = Screen.FromRectangle(parentRect);
             if (screen != null) {
-                RectangleF workArea = screen.WorkingArea;
+                var workArea = screen.WorkingArea;
 
                 int fx = (int)workArea.Left + (((int)workArea.Width - form.Width) >> 1);
                 int fy = (int)workArea.Top + (((int)workArea.Height - form.Height) >> 1);
@@ -155,17 +152,17 @@ namespace GKUI.Components
             }
         }
 
-        public static T GetSelectedTag<T>(ComboBox comboBox)
+        public static T GetSelectedTag<T>(this ComboBox comboBox)
         {
-            GKComboItem<T> comboItem = comboBox.SelectedValue as GKComboItem<T>;
+            var comboItem = comboBox.SelectedValue as ComboItem<T>;
             T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
             return itemTag;
         }
 
-        public static void SetSelectedTag<T>(ComboBox comboBox, T tagValue, bool allowDefault = true)
+        public static void SetSelectedTag<T>(this ComboBox comboBox, T tagValue, bool allowDefault = true)
         {
             foreach (object item in comboBox.Items) {
-                GKComboItem<T> comboItem = item as GKComboItem<T>;
+                var comboItem = item as ComboItem<T>;
 
                 if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
                     comboBox.SelectedValue = item;
@@ -175,6 +172,37 @@ namespace GKUI.Components
 
             if (allowDefault) {
                 comboBox.SelectedIndex = 0;
+            }
+        }
+
+        public static RadioMenuItem AddToolStripItem(ContextMenu contextMenu, string text, object tag, EventHandler<EventArgs> clickHandler)
+        {
+            var tsItem = new RadioMenuItem();
+            tsItem.Text = text;
+            tsItem.Tag = tag;
+            tsItem.Click += clickHandler;
+            contextMenu.Items.Add(tsItem);
+            return tsItem;
+        }
+
+        public static T GetMenuItemTag<T>(ContextMenu contextMenu, object sender)
+        {
+            foreach (RadioMenuItem tsItem in contextMenu.Items) {
+                tsItem.Checked = false;
+            }
+            var senderItem = ((RadioMenuItem)sender);
+            ((RadioMenuItem)sender).Checked = true;
+            return (T)senderItem.Tag;
+        }
+
+        public static void SetMenuItemTag<T>(ContextMenu contextMenu, T value)
+        {
+            foreach (RadioMenuItem tsItem in contextMenu.Items) {
+                T itemTag = (T)tsItem.Tag;
+                if (Equals(itemTag, value)) {
+                    tsItem.PerformClick();
+                    break;
+                }
             }
         }
 
@@ -191,17 +219,6 @@ namespace GKUI.Components
             parent.Content = recView;
 
             return recView;
-        }
-
-        public static GKListView CreateListView(Panel parent)
-        {
-            if (parent == null)
-                throw new ArgumentNullException("parent");
-
-            GKListView listView = new GKListView();
-            parent.Content = listView;
-
-            return listView;
         }
 
         public static IColor ConvertColor(Color color)
@@ -250,12 +267,12 @@ namespace GKUI.Components
         {
             TextBox tb = (sender as TextBox);
             if (tb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
-                tb.Text = ConvertHelper.UniformName(tb.Text);
+                tb.Text = GKUtils.UniformName(tb.Text);
             }
 
             ComboBox cmb = (sender as ComboBox);
             if (cmb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
-                cmb.Text = ConvertHelper.UniformName(cmb.Text);
+                cmb.Text = GKUtils.UniformName(cmb.Text);
             }
         }
 
@@ -294,48 +311,10 @@ namespace GKUI.Components
             return new Font(fontName, size);
         }
 
-        private const bool USE_CLIENT_SIZE_PRESET = false;
-
-        public static void SetPredefProperties(Window window, int width, int height, bool fontPreset = true)
-        {
-            SetPredefProperties(window, width, height, USE_CLIENT_SIZE_PRESET, fontPreset);
-        }
-
-        public static void SetPredefProperties(Window window, int width, int height, bool useClientSizePreset, bool fontPreset)
-        {
-            if (useClientSizePreset) {
-                window.ClientSize = new Size(width, height);
-            }
-
-            if (fontPreset) {
-                UIHelper.SetControlFont(window, GetDefaultFont());
-            }
-        }
-
         public static string[] Convert(string text)
         {
             var strList = new StringList(text);
             return strList.ToArray();
-        }
-
-        // FIXME: replace to TableLayout.Horizontal(), same
-        public static TableRow MakeDialogFooter(params TableCell[] cells)
-        {
-            var row = new TableRow();
-            foreach (var cell in cells) row.Cells.Add(cell);
-
-            return new TableRow {
-                ScaleHeight = false,
-                Cells = {
-                    new TableLayout {
-                        Padding = 0,
-                        Spacing = new Size(10, 10),
-                        Rows = {
-                            row
-                        }
-                    }
-                }
-            };
         }
 
         public static void ConvertFileDialogFilters(FileDialog fileDlg, string filter)
@@ -351,8 +330,36 @@ namespace GKUI.Components
                 string exts = filterParts[idx + 1];
                 string[] extensions = exts.Split(',');
 
-                fileDlg.Filters.Add(new FileDialogFilter(name, extensions));
+                fileDlg.Filters.Add(new FileFilter(name, extensions));
             }
+        }
+
+        public static void DrawArrowLine(Graphics gfx, Color fillColor, Pen pen, float x1, float y1, float x2, float y2, int arrLength = 8)
+        {
+            gfx.DrawLine(pen, x1, y1, x2, y2);
+
+            var m = x2 - x1 == 0 ? 0 : (y2 - y1) / (x2 - x1);
+            var degree = Math.Atan(m);
+            var toLeft = x2 > x1 ? 0 : Math.PI;
+
+            var degree1 = degree + 5 * Math.PI / 6 + toLeft;
+            var degree2 = degree + 7 * Math.PI / 6 + toLeft;
+
+            var px1 = x2 + (float)Math.Cos(degree1) * arrLength;
+            var py1 = y2 + (float)Math.Sin(degree1) * arrLength;
+
+            var px2 = x2 + (float)Math.Cos(degree2) * arrLength;
+            var py2 = y2 + (float)Math.Sin(degree2) * arrLength;
+
+            var mp1 = new PointF(x2, y2);
+            var mp2 = new PointF(px1, py1);
+            var mp3 = new PointF(px2, py2);
+
+            GraphicsPath path = new GraphicsPath();
+            path.AddLine(mp1, mp2);
+            path.AddLine(mp2, mp3);
+            path.AddLine(mp3, mp1);
+            gfx.FillPath(fillColor, path);
         }
     }
 }

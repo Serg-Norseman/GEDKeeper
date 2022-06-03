@@ -30,7 +30,6 @@
         private System.Windows.Forms.ToolStripMenuItem miFillImage;
         private System.Windows.Forms.ToolStripSeparator N9;
         private System.ComponentModel.IContainer components;
-        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripSeparator tbs2;
         private System.Windows.Forms.ToolStripSeparator tbs1;
         private System.Windows.Forms.ToolStripMenuItem miFatherAdd;
@@ -53,6 +52,10 @@
         private System.Windows.Forms.ContextMenuStrip MenuGensAncestors;
         private System.Windows.Forms.ToolStripDropDownButton tbGensDescendants;
         private System.Windows.Forms.ContextMenuStrip MenuGensDescendants;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripDropDownButton tbBorders;
+        private System.Windows.Forms.ContextMenuStrip MenuBorders;
+        private System.Windows.Forms.ToolStripMenuItem miGoToPrimaryBranch;
 
         private void InitializeComponent()
         {
@@ -106,11 +109,11 @@
             this.miRebuildKinships = new System.Windows.Forms.ToolStripMenuItem();
             this.N10 = new System.Windows.Forms.ToolStripSeparator();
             this.miSelectColor = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbBorders = new System.Windows.Forms.ToolStripDropDownButton();
+            this.MenuBorders = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miGoToPrimaryBranch = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolBar1.SuspendLayout();
-            this.MenuGensCommon.SuspendLayout();
-            this.MenuGensAncestors.SuspendLayout();
-            this.MenuGensDescendants.SuspendLayout();
             this.MenuModes.SuspendLayout();
             this.MenuPerson.SuspendLayout();
             this.SuspendLayout();
@@ -134,10 +137,12 @@
             this.toolStripSeparator2,
             this.tbDocPreview,
             this.tbDocPrint,
-            this.tbOptions});
+            this.tbOptions,
+            this.toolStripSeparator3,
+            this.tbBorders});
             this.ToolBar1.Location = new System.Drawing.Point(0, 0);
             this.ToolBar1.Name = "ToolBar1";
-            this.ToolBar1.Size = new System.Drawing.Size(658, 25);
+            this.ToolBar1.Size = new System.Drawing.Size(771, 25);
             this.ToolBar1.TabIndex = 0;
             // 
             // tbImageSave
@@ -155,40 +160,38 @@
             // 
             this.tbGensCommon.DropDown = this.MenuGensCommon;
             this.tbGensCommon.Name = "tbGensCommon";
-            this.tbGensCommon.Size = new System.Drawing.Size(57, 22);
+            this.tbGensCommon.Size = new System.Drawing.Size(108, 22);
             this.tbGensCommon.Text = "tbGensCommon";
             // 
             // MenuGensCommon
             // 
             this.MenuGensCommon.Name = "MenuGensCommon";
             this.MenuGensCommon.OwnerItem = this.tbGensCommon;
-            this.MenuGensCommon.Size = new System.Drawing.Size(89, 224);
+            this.MenuGensCommon.Size = new System.Drawing.Size(61, 4);
             // 
             // tbGensAncestors
             // 
             this.tbGensAncestors.DropDown = this.MenuGensAncestors;
             this.tbGensAncestors.Name = "tbGensAncestors";
-            this.tbGensAncestors.Size = new System.Drawing.Size(57, 22);
+            this.tbGensAncestors.Size = new System.Drawing.Size(109, 22);
             this.tbGensAncestors.Text = "tbGensAncestors";
             // 
             // MenuGensAncestors
             // 
             this.MenuGensAncestors.Name = "MenuGensAncestors";
-            this.MenuGensAncestors.OwnerItem = this.tbGensAncestors;
-            this.MenuGensAncestors.Size = new System.Drawing.Size(89, 224);
+            this.MenuGensAncestors.Size = new System.Drawing.Size(61, 4);
             // 
             // tbGensDescendants
             // 
             this.tbGensDescendants.DropDown = this.MenuGensDescendants;
             this.tbGensDescendants.Name = "tbGensDescendants";
-            this.tbGensDescendants.Size = new System.Drawing.Size(57, 22);
+            this.tbGensDescendants.Size = new System.Drawing.Size(124, 22);
             this.tbGensDescendants.Text = "tbGensDescendants";
             // 
             // MenuGensDescendants
             // 
             this.MenuGensDescendants.Name = "MenuGensDescendants";
-            this.MenuGensDescendants.OwnerItem = this.tbGensDescendants;
-            this.MenuGensDescendants.Size = new System.Drawing.Size(89, 224);
+            this.MenuGensDescendants.Size = new System.Drawing.Size(61, 4);
             // 
             // tbs2
             // 
@@ -364,13 +367,14 @@
             this.miDelete,
             this.N11,
             this.miGoToRecord,
+            this.miGoToPrimaryBranch,
             this.N3,
             this.miRebuildTree,
             this.miRebuildKinships,
             this.N10,
             this.miSelectColor});
             this.MenuPerson.Name = "MenuPerson";
-            this.MenuPerson.Size = new System.Drawing.Size(173, 320);
+            this.MenuPerson.Size = new System.Drawing.Size(173, 298);
             this.MenuPerson.Opening += new System.ComponentModel.CancelEventHandler(this.MenuPerson_Opening);
             // 
             // miEdit
@@ -451,6 +455,13 @@
             this.miGoToRecord.Text = "miGoToRecord";
             this.miGoToRecord.Click += new System.EventHandler(this.miGoToRecord_Click);
             // 
+            // miGoToPrimaryBranch
+            // 
+            this.miGoToPrimaryBranch.Name = "miGoToPrimaryBranch";
+            this.miGoToPrimaryBranch.Size = new System.Drawing.Size(172, 22);
+            this.miGoToPrimaryBranch.Text = "miGoToPrimaryBranch";
+            this.miGoToPrimaryBranch.Click += new System.EventHandler(this.miGoToPrimaryBranch_Click);
+            // 
             // N3
             // 
             this.N3.Name = "N3";
@@ -482,11 +493,29 @@
             this.miSelectColor.Text = "miSelectColor";
             this.miSelectColor.Click += new System.EventHandler(this.miSelectColor_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tbBorders
+            // 
+            this.tbBorders.DropDown = this.MenuBorders;
+            this.tbBorders.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbBorders.Name = "tbBorders";
+            this.tbBorders.Size = new System.Drawing.Size(71, 22);
+            this.tbBorders.Text = "tbBorders";
+            // 
+            // MenuBorders
+            // 
+            this.MenuBorders.Name = "MenuBorders";
+            this.MenuBorders.Size = new System.Drawing.Size(61, 4);
+            // 
             // TreeChartWin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(658, 362);
+            this.ClientSize = new System.Drawing.Size(771, 362);
             this.Controls.Add(this.ToolBar1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.KeyPreview = true;
@@ -499,13 +528,11 @@
             this.Controls.SetChildIndex(this.ToolBar1, 0);
             this.ToolBar1.ResumeLayout(false);
             this.ToolBar1.PerformLayout();
-            this.MenuGensCommon.ResumeLayout(false);
-            this.MenuGensAncestors.ResumeLayout(false);
-            this.MenuGensDescendants.ResumeLayout(false);
             this.MenuModes.ResumeLayout(false);
             this.MenuPerson.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
     }
 }

@@ -26,7 +26,7 @@ using System.Text;
 
 namespace GKCore
 {
-    #if !__MonoCS__
+    #if !MONO
     using GKCore.MapiMail;
     #endif
 
@@ -50,7 +50,7 @@ namespace GKCore
 
         public static bool IsUnicodeEncoding(Encoding encoding)
         {
-            return (encoding == Encoding.Unicode || encoding == Encoding.UTF7 || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
+            return (encoding != null) && (encoding == Encoding.Unicode || encoding == Encoding.UTF7 || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
         }
 
         #endregion
@@ -68,7 +68,7 @@ namespace GKCore
 
             try
             {
-                #if __MonoCS__
+                #if MONO
 
                 const string mailto = "'{0}' --subject '{1}' --body '{2}' --attach {3}";
                 string args = string.Format(mailto, address, subject, body, attach);

@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
@@ -114,6 +114,12 @@ namespace GKTests
         public static void EnterText(string name, Form form, string value)
         {
             var textBox = new TextBoxTester(name, form);
+            textBox.Enter(value);
+        }
+
+        public static void EnterRichText(string name, Form form, string value)
+        {
+            var textBox = new RichTextBoxTester(name, form);
             textBox.Enter(value);
         }
 

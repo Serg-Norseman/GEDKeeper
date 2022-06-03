@@ -28,11 +28,9 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class ChildrenListModel : ListModel
+    public abstract class ChildrenListModel : ListModel
     {
+
         public ChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
@@ -42,6 +40,31 @@ namespace GKCore.Lists
             fListColumns.AddColumn(LSID.LSID_Name, 300, false);
             fListColumns.AddColumn(LSID.LSID_BirthDate, 100, false);
             fListColumns.ResetDefaults();
+        }
+
+        protected void FillFamilyChildren(GDMTree tree, GDMFamilyRecord family)
+        {
+            int idx = 0;
+            foreach (GDMIndividualLink ptr in family.Children) {
+                idx += 1;
+                GDMIndividualRecord child = tree.GetPtrValue(ptr);
+
+                fSheetList.AddItem(child, new object[] {
+                        idx, GKUtils.GetNameString(child, true, false),
+                        new GDMDateItem(GKUtils.GetBirthDate(child))
+                    });
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class FamilyChildrenListModel : ChildrenListModel
+    {
+        public FamilyChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
         }
 
         public override void UpdateContents()
@@ -54,20 +77,11 @@ namespace GKCore.Lists
                 fSheetList.ClearItems();
 
                 var tree = fBaseWin.Context.Tree;
-                int idx = 0;
-                foreach (GDMIndividualLink ptr in family.Children) {
-                    idx += 1;
-                    GDMIndividualRecord child = tree.GetPtrValue(ptr);
-
-                    fSheetList.AddItem(child, new object[] {
-                        idx, GKUtils.GetNameString(child, true, false),
-                        new GDMDateItem(GKUtils.GetBirthDate(child))
-                    });
-                }
+                FillFamilyChildren(tree, family);
 
                 fSheetList.EndUpdate();
             } catch (Exception ex) {
-                Logger.WriteError("ChildrenListModel.UpdateContents()", ex);
+                Logger.WriteError("FamilyChildrenListModel.UpdateContents()", ex);
             }
         }
 
@@ -97,6 +111,82 @@ namespace GKCore.Lists
                     result = (child != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachChildQuery)));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, family);
+                    }
+                    break;
+            }
+
+            if (result) {
+                fBaseWin.Context.Modified = true;
+                eArgs.IsChanged = true;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class IndividualChildrenListModel : ChildrenListModel
+    {
+        public IndividualChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        {
+        }
+
+        public override void UpdateContents()
+        {
+            var indiRec = fDataOwner as GDMIndividualRecord;
+            if (fSheetList == null || indiRec == null)
+                return;
+
+            try {
+                fSheetList.BeginUpdate();
+                fSheetList.ClearItems();
+
+                var tree = fBaseWin.Context.Tree;
+                foreach (GDMSpouseToFamilyLink spouseLink in indiRec.SpouseToFamilyLinks) {
+                    GDMFamilyRecord family = tree.GetPtrValue<GDMFamilyRecord>(spouseLink);
+                    FillFamilyChildren(tree, family);
+                }
+
+                fSheetList.EndUpdate();
+            } catch (Exception ex) {
+                Logger.WriteError("IndividualChildrenListModel.UpdateContents()", ex);
+            }
+        }
+
+        public override void Modify(object sender, ModifyEventArgs eArgs)
+        {
+            var indiRec = fDataOwner as GDMIndividualRecord;
+            if (fBaseWin == null || fSheetList == null || indiRec == null)
+                return;
+
+            GDMIndividualRecord child = eArgs.ItemData as GDMIndividualRecord;
+            GDMTree tree = fBaseWin.Context.Tree;
+
+            bool result = false;
+
+            switch (eArgs.Action) {
+                case RecordAction.raAdd:
+                    GDMFamilyRecord family = fBaseWin.Context.SelectFamily(indiRec, TargetMode.tmFamilySpouse);
+                    if (family != null && fBaseWin.Context.IsAvailableRecord(family)) {
+                        GDMIndividualRecord target = (indiRec.Sex == GDMSex.svMale) ? indiRec : null;
+                        child = fBaseWin.Context.SelectPerson(target, TargetMode.tmParent, GDMSex.svUnknown);
+                        result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
+                        if (result) {
+                            result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
+                        }
+                    }
+                    break;
+
+                case RecordAction.raEdit:
+                    result = (BaseController.ModifyIndividual(fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svUnknown));
+                    break;
+
+                case RecordAction.raDelete:
+                    result = (child != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachChildQuery)));
+                    if (result) {
+                        GDMFamilyRecord family2 = tree.FindChildFamily(indiRec, child);
+                        result = (family2 != null) && fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, family2);
                     }
                     break;
             }

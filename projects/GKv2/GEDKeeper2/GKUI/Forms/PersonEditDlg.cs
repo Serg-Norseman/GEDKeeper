@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,10 +36,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PersonEditDlg : EditorDialog, IPersonEditDlg
+    public partial class PersonEditDlg : CommonDialog<IPersonEditDlg, PersonEditDlgController>, IPersonEditDlg
     {
-        private readonly PersonEditDlgController fController;
-
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fSpousesList;
         private readonly GKSheetList fAssociationsList;
@@ -50,11 +48,12 @@ namespace GKUI.Forms
         private readonly GKSheetList fUserRefList;
         private readonly GKSheetList fNamesList;
         private readonly GKSheetList fParentsList;
+        private readonly GKSheetList fChildrenList;
 
-        public GDMIndividualRecord Person
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fController.Person; }
-            set { fController.Person = value; }
+            get { return fController.IndividualRecord; }
+            set { fController.IndividualRecord = value; }
         }
 
         public GDMIndividualRecord Target
@@ -120,6 +119,11 @@ namespace GKUI.Forms
         ISheetList IPersonEditDlg.ParentsList
         {
             get { return fParentsList; }
+        }
+
+        ISheetList IPersonEditDlg.ChildrenList
+        {
+            get { return fChildrenList; }
         }
 
         IPortraitControl IPersonEditDlg.Portrait
@@ -264,68 +268,16 @@ namespace GKUI.Forms
             fParentsList.SetControlName("fParentsList"); // for purpose of tests
             fParentsList.OnModify += ModifyParentsSheet;
 
+            fChildrenList = new GKSheetList(pageChilds);
+            fChildrenList.SetControlName("fChildsList"); // for purpose of tests
+            fChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
+            fChildrenList.OnModify += ModifyChildrenSheet;
+
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
 
-            SetLang();
-
             fController = new PersonEditDlgController(this);
             fController.Init(baseWin);
-
-            fEventsList.ListModel = new EventsListModel(baseWin, fController.LocalUndoman, true);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
-            fAssociationsList.ListModel = new AssociationsListModel(baseWin, fController.LocalUndoman);
-
-            fGroupsList.ListModel = new GroupsSublistModel(baseWin, fController.LocalUndoman);
-            fNamesList.ListModel = new NamesSublistModel(baseWin, fController.LocalUndoman);
-            fSpousesList.ListModel = new SpousesSublistModel(baseWin, fController.LocalUndoman);
-            fUserRefList.ListModel = new URefsSublistModel(baseWin, fController.LocalUndoman);
-            fParentsList.ListModel = new ParentsSublistModel(baseWin, fController.LocalUndoman);
-        }
-
-        public void SetLang()
-        {
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinPersonEdit);
-            lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-            lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
-            lblSex.Text = LangMan.LS(LSID.LSID_Sex);
-            lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
-            lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
-            lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
-            chkPatriarch.Text = LangMan.LS(LSID.LSID_Patriarch);
-            chkBookmark.Text = LangMan.LS(LSID.LSID_Bookmark);
-            lblParents.Text = LangMan.LS(LSID.LSID_Parents);
-            pageEvents.Text = LangMan.LS(LSID.LSID_Events);
-            pageSpouses.Text = LangMan.LS(LSID.LSID_Spouses);
-            pageAssociations.Text = LangMan.LS(LSID.LSID_Associations);
-            pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
-            lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
-            pageNames.Text = LangMan.LS(LSID.LSID_Names);
-            pageParents.Text = LangMan.LS(LSID.LSID_Parents);
-
-            SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
-            SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
-            SetToolTip(btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
-            SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
-            SetToolTip(btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
-            SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
-            SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
-            SetToolTip(btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
-            SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
-            SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
-            SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
-            SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
         }
 
         private void cbSex_SelectedIndexChanged(object sender, EventArgs e)
@@ -368,29 +320,17 @@ namespace GKUI.Forms
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fController.UpdateControls();
-        }
+            if (cmbRestriction.Focused) {
+                fController.AcceptTempData();
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
+                fController.UpdateControls();
+            }
         }
 
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown || eArgs.Action == RecordAction.raEdit) {
-                fController.UpdateNameControls(fController.Person.PersonalNames[0]);
+                fController.UpdateNameControls(fController.IndividualRecord.PersonalNames[0]);
             }
         }
 
@@ -429,10 +369,23 @@ namespace GKUI.Forms
             }
         }
 
+        private void PersonEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
+        {
+            var record = e.Item as GDMRecord;
+            e.IsAvailable = record == null || fController.Base.Context.IsAvailableRecord(record);
+        }
+
+        private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raJump) {
+                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
+            }
+        }
+
         private void Names_TextChanged(object sender, EventArgs e)
         {
             Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
-                                  cmbPatronymic.Text, fController.Person.GetXRefNum());
+                                  cmbPatronymic.Text, fController.IndividualRecord.GetXRefNum());
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)
@@ -482,7 +435,7 @@ namespace GKUI.Forms
 
         private void btnNameCopy_Click(object sender, EventArgs e)
         {
-            UIHelper.SetClipboardText(GKUtils.GetNameString(fController.Person, true, false));
+            fController.CopyPersonName();
         }
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)

@@ -75,6 +75,16 @@ namespace GKCore.Export
         {
         }
 
+        public override bool SupportedText()
+        {
+            return true;
+        }
+
+        public override bool SupportedTables()
+        {
+            return true;
+        }
+
         public override void BeginWrite()
         {
             PaperOrientation po = (fAlbumPage) ? PaperOrientation.Landscape : PaperOrientation.Portrait;

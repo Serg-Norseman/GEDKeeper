@@ -32,6 +32,7 @@ using GDModel;
 using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.MVP;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Options;
@@ -54,7 +55,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class BaseWinController : Controller<IBaseWindowView>
+    public sealed class BaseWinController : FormController<IBaseWindowView>
     {
         private readonly List<GDMRecord> fChangedRecords;
         private readonly IBaseContext fContext;
@@ -151,6 +152,7 @@ namespace GKCore.Controllers
             if (fContext.FileSave(fileName)) {
                 fContext.Modified = false;
                 ChangeFileName();
+                AppHost.Instance.BaseSaved(fView, fileName);
             }
         }
 
@@ -609,8 +611,7 @@ namespace GKCore.Controllers
         {
             GDMRecordType rt = GetSelectedRecordType();
             IListManager listMan = GetRecordsListManByType(rt);
-            IList<ISearchResult> result = listMan.FindAll(searchPattern);
-            //IList<ISearchResult> result = fContext.FindAll(rt, searchPattern);
+            IList<ISearchResult> result = (listMan == null) ? new List<ISearchResult>() : listMan.FindAll(searchPattern);
             return result;
         }
 
@@ -666,6 +667,92 @@ namespace GKCore.Controllers
         {
         }
 
+        public override void SetLocale()
+        {
+            GetControl<IMenuItem>("miFile").Text = LangMan.LS(LSID.LSID_MIFile);
+            GetControl<IMenuItem>("miEdit").Text = LangMan.LS(LSID.LSID_MIEdit);
+            GetControl<IMenuItem>("miPedigree").Text = LangMan.LS(LSID.LSID_MIPedigree);
+            GetControl<IMenuItem>("miService").Text = LangMan.LS(LSID.LSID_MIService);
+            GetControl<IMenuItem>("miReports").Text = LangMan.LS(LSID.LSID_Reports);
+            GetControl<IMenuItem>("miPlugins").Text = LangMan.LS(LSID.LSID_Plugins);
+            GetControl<IMenuItem>("miHelp").Text = LangMan.LS(LSID.LSID_MIHelp);
+
+            GetControl<IMenuItem>("miFileNew").Text = LangMan.LS(LSID.LSID_MIFileNew);
+            GetControl<IMenuItem>("miFileLoad").Text = LangMan.LS(LSID.LSID_MIFileLoad);
+            GetControl<IMenuItem>("miMRUFiles").Text = LangMan.LS(LSID.LSID_MIMRUFiles);
+            GetControl<IMenuItem>("miFileSave").Text = LangMan.LS(LSID.LSID_MIFileSave);
+            GetControl<IMenuItem>("miFileSaveAs").Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
+            GetControl<IMenuItem>("miFileClose").Text = LangMan.LS(LSID.LSID_MIFileClose);
+            GetControl<IMenuItem>("miFileProperties").Text = LangMan.LS(LSID.LSID_MIFileProperties) + @"...";
+            GetControl<IMenuItem>("miExport").Text = LangMan.LS(LSID.LSID_MIExport);
+            GetControl<IMenuItem>("miExportToFamilyBook").Text = LangMan.LS(LSID.LSID_MIExportToFamilyBook);
+            GetControl<IMenuItem>("miExportToTreesAlbum").Text = LangMan.LS(LSID.LSID_TreesAlbum);
+            GetControl<IMenuItem>("miExportToExcelFile").Text = LangMan.LS(LSID.LSID_MIExportToExcelFile);
+            GetControl<IMenuItem>("miExit").Text = LangMan.LS(LSID.LSID_MIExit);
+
+            GetControl<IMenuItem>("miRecordAdd").Text = LangMan.LS(LSID.LSID_MIRecordAdd);
+            GetControl<IMenuItem>("miRecordEdit").Text = LangMan.LS(LSID.LSID_MIRecordEdit);
+            GetControl<IMenuItem>("miRecordDelete").Text = LangMan.LS(LSID.LSID_MIRecordDelete);
+            GetControl<IMenuItem>("miSearch").Text = LangMan.LS(LSID.LSID_Search);
+            GetControl<IMenuItem>("miFilter").Text = LangMan.LS(LSID.LSID_MIFilter) + @"...";
+
+            GetControl<IMenuItem>("miTreeAncestors").Text = LangMan.LS(LSID.LSID_MITreeAncestors);
+            GetControl<IMenuItem>("miTreeDescendants").Text = LangMan.LS(LSID.LSID_MITreeDescendants);
+            GetControl<IMenuItem>("miTreeBoth").Text = LangMan.LS(LSID.LSID_MITreeBoth);
+            GetControl<IMenuItem>("miPedigreeAscend").Text = LangMan.LS(LSID.LSID_MIPedigreeAscend);
+            GetControl<IMenuItem>("miPedigree_dAboville").Text = LangMan.LS(LSID.LSID_MIPedigree_dAboville);
+            GetControl<IMenuItem>("miPedigree_Konovalov").Text = LangMan.LS(LSID.LSID_MIPedigree_Konovalov);
+            GetControl<IMenuItem>("miMap").Text = LangMan.LS(LSID.LSID_MIMap) + @"...";
+            GetControl<IMenuItem>("miStats").Text = LangMan.LS(LSID.LSID_MIStats) + @"...";
+            GetControl<IMenuItem>("miAncestorsCircle").Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            GetControl<IMenuItem>("miDescendantsCircle").Text = LangMan.LS(LSID.LSID_DescendantsCircle);
+            GetControl<IMenuItem>("miRelationshipCalculator").Text = LangMan.LS(LSID.LSID_RelationshipCalculator);
+
+            GetControl<IMenuItem>("miOrganizer").Text = LangMan.LS(LSID.LSID_MIOrganizer) + @"...";
+            GetControl<IMenuItem>("miSlideshow").Text = LangMan.LS(LSID.LSID_Slideshow) + @"...";
+            GetControl<IMenuItem>("miScripts").Text = LangMan.LS(LSID.LSID_MIScripts);
+            GetControl<IMenuItem>("miTreeTools").Text = LangMan.LS(LSID.LSID_MITreeTools);
+            GetControl<IMenuItem>("miOptions").Text = LangMan.LS(LSID.LSID_MIOptions) + @"...";
+
+            GetControl<IMenuItem>("miTreeCompare").Text = LangMan.LS(LSID.LSID_ToolOp_1);
+            GetControl<IMenuItem>("miTreeMerge").Text = LangMan.LS(LSID.LSID_ToolOp_2);
+            GetControl<IMenuItem>("miTreeSplit").Text = LangMan.LS(LSID.LSID_ToolOp_3);
+            GetControl<IMenuItem>("miRecMerge").Text = LangMan.LS(LSID.LSID_ToolOp_4);
+            GetControl<IMenuItem>("miFamilyGroups").Text = LangMan.LS(LSID.LSID_ToolOp_6);
+            GetControl<IMenuItem>("miTreeCheck").Text = LangMan.LS(LSID.LSID_ToolOp_7);
+            GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.LSID_ToolOp_8);
+            GetControl<IMenuItem>("miPlacesManager").Text = LangMan.LS(LSID.LSID_ToolOp_9);
+
+            GetControl<IMenuItem>("miContext").Text = LangMan.LS(LSID.LSID_MIContext);
+            GetControl<IMenuItem>("miAbout").Text = LangMan.LS(LSID.LSID_MIAbout) + @"...";
+            GetControl<IMenuItem>("miLogSend").Text = LangMan.LS(LSID.LSID_LogSend);
+            GetControl<IMenuItem>("miLogView").Text = LangMan.LS(LSID.LSID_LogView);
+
+            SetToolTip("tbFileNew", LangMan.LS(LSID.LSID_FileNewTip));
+            SetToolTip("tbFileLoad", LangMan.LS(LSID.LSID_FileLoadTip));
+            SetToolTip("tbFileSave", LangMan.LS(LSID.LSID_FileSaveTip));
+            SetToolTip("tbRecordAdd", LangMan.LS(LSID.LSID_RecordAddTip));
+            SetToolTip("tbRecordEdit", LangMan.LS(LSID.LSID_RecordEditTip));
+            SetToolTip("tbRecordDelete", LangMan.LS(LSID.LSID_RecordDeleteTip));
+            SetToolTip("tbFilter", LangMan.LS(LSID.LSID_FilterTip));
+            SetToolTip("tbTreeAncestors", LangMan.LS(LSID.LSID_TreeAncestorsTip));
+            SetToolTip("tbTreeDescendants", LangMan.LS(LSID.LSID_TreeDescendantsTip));
+            SetToolTip("tbTreeBoth", LangMan.LS(LSID.LSID_TreeBothTip));
+            SetToolTip("tbPedigree", LangMan.LS(LSID.LSID_PedigreeTip));
+            SetToolTip("tbStats", LangMan.LS(LSID.LSID_StatsTip));
+            SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
+            SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
+
+            GetControl<IMenuItem>("miPedigree_dAboville2").Text = LangMan.LS(LSID.LSID_Pedigree_dAbovilleTip);
+            GetControl<IMenuItem>("miPedigree_Konovalov2").Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
+
+            GetControl<IMenuItem>("miContRecordAdd").Text = LangMan.LS(LSID.LSID_MIRecordAdd);
+            GetControl<IMenuItem>("miContRecordEdit").Text = LangMan.LS(LSID.LSID_MIRecordEdit);
+            GetControl<IMenuItem>("miContRecordDelete").Text = LangMan.LS(LSID.LSID_MIRecordDelete);
+            GetControl<IMenuItem>("miContRecordDuplicate").Text = LangMan.LS(LSID.LSID_RecordDuplicate);
+            GetControl<IMenuItem>("miContRecordMerge").Text = LangMan.LS(LSID.LSID_ToolOp_4);
+        }
+
         #region Dialogs
 
         private void ShowCommonFilter(GDMRecordType rt, IListManager listMan)
@@ -688,7 +775,7 @@ namespace GKCore.Controllers
 
         public void ExportToFamilyBook()
         {
-            //#if __MonoCS__
+            //#if MONO
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             //#endif
@@ -700,7 +787,7 @@ namespace GKCore.Controllers
 
         public void ExportToTreesAlbum()
         {
-            //#if __MonoCS__
+            //#if MONO
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             //#endif
@@ -799,8 +886,8 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IRecMergeDlg>(fView)) {
-                    dlg.MergeCtl.SetRec1(rec1);
-                    dlg.MergeCtl.SetRec2(rec2);
+                    dlg.SetRec1(rec1);
+                    dlg.SetRec2(rec2);
                     AppHost.Instance.ShowModalX(dlg, false);
                 }
             } finally {
@@ -854,7 +941,7 @@ namespace GKCore.Controllers
 
         public void ShowMap()
         {
-            //#if __MonoCS__
+            //#if MONO
             //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
             //#else
             var mapsWin = AppHost.Container.Resolve<IMapsViewerWin>(fView);

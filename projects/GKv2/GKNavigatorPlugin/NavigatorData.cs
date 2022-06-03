@@ -67,22 +67,25 @@ namespace GKNavigatorPlugin
             GDMRecord gRecord = record as GDMRecord;
             if (gRecord == null) return;
 
-            string recName = GKUtils.GetRecordName(baseWin.Context.Tree, gRecord, false);
+            try {
+                string recName = GKUtils.GetRecordName(baseWin.Context.Tree, gRecord, false);
 
-            int index = Find(gRecord);
-            if (index >= 0) {
-                fChangedRecords.RemoveAt(index);
-            }
+                int index = Find(gRecord);
+                if (index >= 0) {
+                    fChangedRecords.RemoveAt(index);
+                }
 
-            switch (action) {
-                case RecordAction.raAdd:
-                case RecordAction.raEdit:
-                    fChangedRecords.Add(new RecordInfo(action, gRecord.XRef, recName, gRecord.RecordType, gRecord));
-                    break;
+                switch (action) {
+                    case RecordAction.raAdd:
+                    case RecordAction.raEdit:
+                        fChangedRecords.Add(new RecordInfo(action, gRecord.XRef, recName, gRecord.RecordType, gRecord));
+                        break;
 
-                case RecordAction.raDelete:
-                    fChangedRecords.Add(new RecordInfo(action, gRecord.XRef, recName, gRecord.RecordType, null));
-                    break;
+                    case RecordAction.raDelete:
+                        fChangedRecords.Add(new RecordInfo(action, gRecord.XRef, recName, gRecord.RecordType, null));
+                        break;
+                }
+            } catch (Exception ex) {
             }
         }
 

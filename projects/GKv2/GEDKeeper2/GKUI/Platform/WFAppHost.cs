@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -50,13 +50,6 @@ namespace GKUI.Platform
         #endif
 
 
-        private readonly ApplicationContext fAppContext;
-
-        public ApplicationContext AppContext
-        {
-            get { return fAppContext; }
-        }
-
         static WFAppHost()
         {
             SetAppSign("GEDKeeper2");
@@ -64,38 +57,39 @@ namespace GKUI.Platform
 
         public WFAppHost()
         {
-            fAppContext = new ApplicationContext();
-            Application.ApplicationExit += this.OnApplicationExit;
         }
 
         private void OnApplicationExit(object sender, EventArgs e)
         {
+            //AppHost.Instance.SaveLastBases();
         }
 
         public override void Init(string[] args, bool isMDI)
         {
             base.Init(args, isMDI);
+            Application.ApplicationExit += OnApplicationExit;
         }
 
-        // FIXME
         public override IWindow GetActiveWindow()
         {
-            Form activeForm = Form.ActiveForm;
+            IWindow activeWin = Form.ActiveForm as IWindow;
 
-            // only for tests!
-            if (activeForm == null && fRunningForms.Count > 0) {
-                activeForm = (Form)fRunningForms[0];
+            if (activeWin == null) {
+                activeWin = fActiveBase;
             }
 
-            return (activeForm is IWindow) ? (IWindow)activeForm : null;
+            // only for tests!
+            if (activeWin == null && fRunningForms.Count > 0) {
+                activeWin = fRunningForms[0];
+            }
+
+            return activeWin;
         }
 
-        // FIXME!
         public override IntPtr GetTopWindowHandle()
         {
-            IntPtr mainHandle = IntPtr.Zero;
-
-            return mainHandle;
+            var ownerForm = GetActiveWindow() as Form;
+            return (ownerForm == null) ? IntPtr.Zero : ownerForm.Handle;
         }
 
         public override void CloseWindow(IWindow window)
@@ -103,17 +97,7 @@ namespace GKUI.Platform
             base.CloseWindow(window);
 
             if (fRunningForms.Count == 0) {
-                fAppContext.ExitThread();
-            }
-        }
-
-        public override void ShowWindow(IWindow window)
-        {
-            Form frm = window as Form;
-
-            if (frm != null) {
-                frm.ShowInTaskbar = true;
-                frm.Show();
+                Application.ExitThread();
             }
         }
 
@@ -126,7 +110,7 @@ namespace GKUI.Platform
                     if (win is IBaseWindow) {
                         IntPtr handle = ((Form)win).Handle;
 
-                        #if !__MonoCS__
+                        #if !MONO
                         PostMessageExt(handle, WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
                         #endif
                     }
@@ -143,7 +127,7 @@ namespace GKUI.Platform
             Form frm = form as Form;
 
             if (frm != null) {
-                #if !__MonoCS__
+                #if !MONO
                 EnableWindowExt(frm.Handle, value);
                 #endif
             }
@@ -152,7 +136,7 @@ namespace GKUI.Platform
         protected override void UpdateLang()
         {
             foreach (IWindow win in fRunningForms) {
-                win.SetLang();
+                win.SetLocale();
             }
         }
 
@@ -210,13 +194,12 @@ namespace GKUI.Platform
 
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
-            var result = new WinUITimer(msInterval, elapsedHandler);
+            var result = new WFUITimer(msInterval, elapsedHandler);
             return result;
         }
 
         public override void Quit()
         {
-            base.Quit();
             Application.Exit();
         }
 
@@ -224,7 +207,7 @@ namespace GKUI.Platform
 
         public override int GetKeyLayout()
         {
-            #if __MonoCS__
+            #if MONO
             // There is a bug in Mono: does not work this CurrentInputLanguage
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
             #else
@@ -240,8 +223,13 @@ namespace GKUI.Platform
                 InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
                 InputLanguage.CurrentInputLanguage = currentLang;
             } catch (Exception ex) {
-                Logger.WriteError("WinFormsAppHost.SetKeyLayout()", ex);
+                Logger.WriteError("WFAppHost.SetKeyLayout()", ex);
             }
+        }
+
+        public override void SetClipboardText(string text)
+        {
+            UIHelper.SetClipboardText(text);
         }
 
         #endregion
@@ -336,10 +324,17 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripMenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripComboBox), typeof(ToolStripComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(RichTextBox), typeof(RichTextBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
+            ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolStripButton), typeof(ButtonToolItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolStripDropDownButton), typeof(DropDownToolItemHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDateControl), typeof(DateControlHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKListView), typeof(ListViewHandler));
         }
 
         #endregion
@@ -349,7 +344,7 @@ namespace GKUI.Platform
         public const uint WM_USER = 0x0400;
         public const uint WM_KEEPMODELESS = WM_USER + 111;
 
-        #if !__MonoCS__
+        #if !MONO
 
         [SecurityCritical, SuppressUnmanagedCodeSecurity]
         [DllImport("user32.dll", EntryPoint="PostMessage", SetLastError = true)]

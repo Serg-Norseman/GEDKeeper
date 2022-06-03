@@ -3,7 +3,6 @@
 	partial class SlideshowWin
 	{
 		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.ToolStripButton tbNext;
 		private System.Windows.Forms.ToolStripButton tbPrev;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -18,7 +17,6 @@
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.tbPrev = new System.Windows.Forms.ToolStripButton();
 			this.tbNext = new System.Windows.Forms.ToolStripButton();
-			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -67,11 +65,6 @@
 			this.tbNext.Size = new System.Drawing.Size(24, 24);
 			this.tbNext.Text = "tbNext";
 			this.tbNext.Click += new System.EventHandler(this.tsbNext_Click);
-			// 
-			// timer1
-			// 
-			this.timer1.Interval = 1000;
-			this.timer1.Tick += new System.EventHandler(this.Timer1Tick);
 			// 
 			// SlideshowWin
 			// 

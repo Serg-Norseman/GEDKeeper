@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,11 +19,9 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -31,10 +29,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class NoteEditDlgEx : EditorDialog, INoteEditDlgEx
+    public sealed partial class NoteEditDlgEx : CommonDialog<INoteEdit, NoteEditDlgExController>, INoteEditDlgEx
     {
-        private readonly NoteEditDlgController fController;
-
         public GDMNoteRecord NoteRecord
         {
             get { return fController.NoteRecord; }
@@ -55,40 +51,24 @@ namespace GKUI.Forms
             InitializeComponent();
             FillSizes();
 
+            txtNote.Enter += RichTextBox_Enter;
+            txtNote.Leave += RichTextBox_Leave;
+
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_Note);
-
-            ddbtnActions.Text = LangMan.LS(LSID.LSID_Actions);
-            miSelectAndCopy.Text = LangMan.LS(LSID.LSID_SelectAndCopy);
-            miImport.Text = LangMan.LS(LSID.LSID_Import);
-            miExport.Text = LangMan.LS(LSID.LSID_MIExport);
-            miClear.Text = LangMan.LS(LSID.LSID_Clear);
-            pageEditor.Text = LangMan.LS(LSID.LSID_Note);
-            pagePreview.Text = LangMan.LS(LSID.LSID_DocPreview);
-
-            fController = new NoteEditDlgController(this);
+            fController = new NoteEditDlgExController(this);
             fController.Init(baseWin);
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
+        private void RichTextBox_Enter(object sender, EventArgs e)
         {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
+            AcceptButton = null;
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void RichTextBox_Leave(object sender, EventArgs e)
         {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
+            AcceptButton = btnAccept;
         }
 
         private void FillSizes()

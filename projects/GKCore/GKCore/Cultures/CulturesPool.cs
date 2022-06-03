@@ -84,6 +84,10 @@ namespace GKCore.Cultures
                     culture = new ItalianCulture();
                     break;
 
+                case GDMLanguageID.Czech:
+                    culture = new CzechCulture();
+                    break;
+
                 case GDMLanguageID.Cantonese:
                 case GDMLanguageID.Mandrin:
                     culture = new ChineseCulture();

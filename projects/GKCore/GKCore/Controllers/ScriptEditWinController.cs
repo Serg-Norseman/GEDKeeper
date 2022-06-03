@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,7 +27,7 @@ using GKCore.MVP.Views;
 namespace GKCore.Controllers
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class ScriptEditWinController : DialogController<IScriptEditWin>
     {
@@ -81,12 +81,19 @@ namespace GKCore.Controllers
         {
             try {
                 fView.DebugOutput.Clear();
-                using (ScriptEngine scrEngine = new ScriptEngine()) {
-                    scrEngine.lua_run(fView.ScriptText.Text, fBase, fView.DebugOutput);
-                }
+                var scrEngine = new ScriptEngine();
+                scrEngine.lua_run(fView.ScriptText.Text, fBase, fView.DebugOutput);
             } catch (Exception ex) {
                 Logger.WriteError("ScriptEditWin.Run()", ex);
             }
+        }
+
+        public override void SetLocale()
+        {
+            SetToolTip("tbNewScript", LangMan.LS(LSID.LSID_NewScriptTip));
+            SetToolTip("tbLoadScript", LangMan.LS(LSID.LSID_LoadScriptTip));
+            SetToolTip("tbSaveScript", LangMan.LS(LSID.LSID_SaveScriptTip));
+            SetToolTip("tbRun", LangMan.LS(LSID.LSID_RunScriptTip));
         }
     }
 }

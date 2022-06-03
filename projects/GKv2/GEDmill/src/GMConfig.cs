@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Globalization;
 using BSLib;
 using GKCore;
+using GKCore.Interfaces;
 using GKCL = GKCore.Logging;
 
 namespace GEDmill
@@ -36,10 +37,10 @@ namespace GEDmill
         public const string LOG_LEVEL = "WARN";
 
         // The current version of this app, for display purposes.
-        public static string SoftwareVersion = "1.11.0";
+        public const string SoftwareVersion = "1.12.0.0";
 
         // The name of the app for display purposes
-        public static string SoftwareName = "GEDmill " + SoftwareVersion;
+        public const string SoftwareName = "GEDmill";
 
         // Filename for the online help (as in "on the same system", as opposed to offline e.g. printed manual)
         public static string HelpFilename = "GEDmill Help.chm";
@@ -49,14 +50,17 @@ namespace GEDmill
         // Filename used to store users config
         public const string ConfigFilename = "GEDmillPlugin.ini";
 
+        // Name to use for stylesheet css file.
+        public const string StylesheetFilename = "gedmill-style.css";
+
+
+        private ILangMan fLangMan;
+
         // Name to use where no other name is available
         public string UnknownName;
 
         // How to capitalise individuals' names
         public int NameCapitalisation;
-
-        // File extension for html files
-        public string HtmlExtension;
 
         // Absolute sFilename of image to use as background
         public string BackgroundImage;
@@ -118,12 +122,6 @@ namespace GEDmill
         // Allow multiple multimedia files per individual. Enables m_nMaxNumberMultimediaFiles.
         public bool AllowMultipleImages;
 
-        // If true will not overwrite existing front page file.
-        public bool PreserveFrontPage;
-
-        // If true will not overwrite existing style sheet css file.
-        public bool PreserveStylesheet;
-
         // Whether to create autorun.inf and autoplay.exe files
         public bool CreateCDROMFiles;
 
@@ -132,9 +130,6 @@ namespace GEDmill
 
         // Link to users main website, put at top of each indi page.
         public string MainWebsiteLink;
-
-        // Name to use for stylesheet css file.
-        public string StylesheetFilename;
 
         // Name to user for individuals who appear but have their information withheld
         public string ConcealedName;
@@ -268,9 +263,6 @@ namespace GEDmill
         // If true, "Last updated <date>" appears on home page.
         public bool AddHomePageCreateTime;
 
-        // If true, pages get "Valid XHTML" validator link at bottom.
-        public bool IncludeValiditySticker;
-
         // If true, nickName else otherName appears in brackets in individual's index entry.
         public bool IncludeNickNamesInIndex;
 
@@ -323,22 +315,44 @@ namespace GEDmill
             }
         }
 
+        // Construct the HTTP URL for the created site's landing page
+        public string FrontPageURL
+        {
+            get {
+                return string.Concat(OutputFolder, "\\", FrontPageFilename, ".html");
+            }
+        }
+
+        // Construct the HTTP URL for the created site's help page
+        public string HelpPageURL
+        {
+            get {
+                return string.Concat(OutputFolder, "\\", "help.html");
+            }
+        }
+
 
         // Constructor, sets default values for the config
         private GMConfig()
         {
             ApplicationPath = GMHelper.GetAppPath();
             AppDataPath = AppHost.GetAppDataPathStatic();
+        }
+
+        // Reset those settings that can be modified by the user on the config screen.
+        public void Reset(ILangMan langMan)
+        {
+            fLangMan = langMan;
+
             BackgroundImage = ApplicationPath + "\\bg-gedmill.jpg";
             FrontPageImageFilename = ApplicationPath + "\\gedmill.jpg";
 
             RestrictConfidential = false;
             RestrictPrivacy = false;
             OutputFolder = "";
-            UnknownName = "<unknown>"; // "no name" implied we knew them and they had no name.
+            UnknownName = langMan.LS(PLS.LSID_UnknownName); // "no name" implied we knew them and they had no name.
             NameCapitalisation = 1;
             Version = "1.11.0";
-            HtmlExtension = "html";
             CopyMultimedia = true;
             ImageFolder = "multimedia";
             RelativiseMultimedia = false;
@@ -346,8 +360,8 @@ namespace GEDmill
             MaxImageHeight = 160;
             MaxNumberMultimediaFiles = 32;
             AgeForOccupation = 50;
-            NoSurname = "No Surname";
-            IndexTitle = "Index Of Names";
+            NoSurname = langMan.LS(PLS.LSID_NoSurname);
+            IndexTitle = langMan.LS(PLS.LSID_IndexTitle);
             MaxSourceImageWidth = 800;
             MaxSourceImageHeight = 800;
             MaxThumbnailImageWidth = 45;
@@ -355,7 +369,7 @@ namespace GEDmill
             FirstRecordXRef = "";
             InputFilename = "";
             TabSpaces = 8;
-            PlaceWord = "in";
+            PlaceWord = langMan.LS(PLS.LSID_PlaceWord);
             CapitaliseEventDescriptions = true;
             RestrictAssociatedSources = true;
             RenameMultimedia = true;
@@ -365,28 +379,57 @@ namespace GEDmill
 
             OwnersName = Environment.UserName;
 
-            SiteTitle = "Family history";
+            SiteTitle = langMan.LS(PLS.LSID_SiteTitle);
             if (!string.IsNullOrEmpty(OwnersName))
                 SiteTitle += " of " + OwnersName;
 
-            // Reset those settings that can be modified by the user on the config screen.
-            Reset();
-        }
-
-        // Construct the HTTP URL for the created site's landing page
-        public string FrontPageURL
-        {
-            get {
-                return string.Concat(OutputFolder, "\\", FrontPageFilename, ".", HtmlExtension);
-            }
-        }
-
-        // Construct the HTTP URL for the created site's help page
-        public string HelpPageURL
-        {
-            get {
-                return string.Concat(OutputFolder, "\\", "help.", HtmlExtension);
-            }
+            TreeFontName = "Arial";
+            TreeFontSize = 8.0f;
+            TargetTreeWidth = 800;
+            MiniTreeImageFormat = "gif";
+            MiniTreeColourBranch = ConvertColour("#000000");
+            MiniTreeColourIndiBorder = ConvertColour("#000000");
+            MiniTreeColourIndiBackground = ConvertColour("#ffffd2");
+            MiniTreeColourIndiHighlight = ConvertColour("#ffffff");
+            MiniTreeColourIndiBgConcealed = ConvertColour("#cccccc");
+            MiniTreeColourIndiFgConcealed = ConvertColour("#000000");
+            MiniTreeColourIndiShade = ConvertColour("#ffffd2");
+            MiniTreeColourIndiText = ConvertColour("#000000");
+            MiniTreeColourIndiLink = ConvertColour("#3333ff");
+            MiniTreeColourBackground = ConvertColour("#aaaaaa");
+            FakeMiniTreeTransparency = false;
+            ShowMiniTrees = true;
+            UserEmailAddress = "";
+            KeyIndividuals = new List<string>();
+            MultiPageIndexes = true;
+            IndividualsPerIndexPage = 1000;
+            OpenWebsiteOnExit = true;
+            FrontPageFilename = "home";
+            AllowMultipleImages = false;
+            CreateCDROMFiles = false;
+            AllowNonPictures = true;
+            MainWebsiteLink = "";
+            OnlyConceal = false;
+            ConcealedName = langMan.LS(PLS.LSID_ConcealedName);
+            LinkOriginalPicture = false;
+            RenameOriginalPicture = false;
+            ExcludeFileDir = "";
+            ExcludeFileName = "";
+            ObfuscateEmails = false;
+            AddHomePageCreateTime = true;
+            IncludeNickNamesInIndex = true;
+            CustomFooter = "";
+            IncludeUserRefInIndex = false;
+            OccupationHeadline = true;
+            CommentaryIsHtml = false;
+            FooterIsHtml = false;
+            UserRecFilename = false;
+            IncludeNavbar = true;
+            UseWithheldNames = false;
+            ConserveTreeWidth = false;
+            KeepSiblingOrder = false;
+            AllowMultimedia = true;
+            SupressBackreferences = false;
         }
 
         // Serialise all the config settings
@@ -400,7 +443,6 @@ namespace GEDmill
                     ini.WriteString("Common", "OutputFolder", OutputFolder);
                     ini.WriteString("Common", "UnknownName", UnknownName);
                     ini.WriteInteger("Common", "NameCapitalisation", NameCapitalisation);
-                    ini.WriteString("Common", "HtmlExtension", HtmlExtension);
                     ini.WriteBool("Common", "CopyMultimedia", CopyMultimedia);
                     ini.WriteString("Common", "ImageFolder", ImageFolder);
                     ini.WriteBool("Common", "RelativiseMultimedia", RelativiseMultimedia);
@@ -462,9 +504,6 @@ namespace GEDmill
                     ini.WriteInteger("Common", "MaxThumbnailImageWidth", MaxThumbnailImageWidth);
                     ini.WriteInteger("Common", "MaxThumbnailImageHeight", MaxThumbnailImageHeight);
                     ini.WriteString("Common", "MainWebsiteLink", MainWebsiteLink);
-                    ini.WriteBool("Common", "PreserveFrontPage", PreserveFrontPage);
-                    ini.WriteBool("Common", "PreserveStylesheet", PreserveStylesheet);
-                    ini.WriteString("Common", "StylesheetFilename", StylesheetFilename);
                     ini.WriteString("Common", "MiniTreeColourIndiBgConcealed", ConvertColour(MiniTreeColourIndiBgConcealed));
                     ini.WriteBool("Common", "OnlyConceal", OnlyConceal);
                     ini.WriteString("Common", "ConcealedName", ConcealedName);
@@ -475,7 +514,6 @@ namespace GEDmill
                     ini.WriteString("Common", "ExcludeFileName", ExcludeFileName);
                     ini.WriteBool("Common", "ObfuscateEmails", ObfuscateEmails);
                     ini.WriteBool("Common", "AddHomePageCreateTime", AddHomePageCreateTime);
-                    ini.WriteBool("Common", "IncludeValiditySticker", IncludeValiditySticker);
                     ini.WriteBool("Common", "IncludeNickNamesInIndex", IncludeNickNamesInIndex);
                     ini.WriteString("Common", "CustomFooter", CustomFooter);
                     ini.WriteBool("Common", "IncludeUserRefInIndex", IncludeUserRefInIndex);
@@ -489,31 +527,23 @@ namespace GEDmill
                     ini.WriteBool("Common", "AllowMultimedia", AllowMultimedia);
                     ini.WriteBool("Common", "SupressBackreferences", SupressBackreferences);
                     ini.WriteBool("Common", "KeepSiblingOrder", KeepSiblingOrder);
-
-                    int versionMajor = 1, versionMinor = 11, versionPatch = 0;
-                    ini.WriteInteger("Common", "VersionMajor", versionMajor);
-                    ini.WriteInteger("Common", "VersionMinor", versionMinor);
-                    ini.WriteInteger("Common", "VersionPatch", versionPatch);
                 }
             } catch (Exception ex) {
-                fLogger.WriteError("CConfig.StoreSettings()", ex);
+                fLogger.WriteError("GMConfig.Save()", ex);
             }
         }
 
         // Deserialise all the settings
         public void Load()
         {
-            int versionMajor = 0, versionMinor = 0, versionPatch = 0;
-
             try {
                 using (var ini = new IniFile(AppDataPath + ConfigFilename)) {
                     Version = ini.ReadString("Common", "Version", "");
                     RestrictConfidential = ini.ReadBool("Common", "RestrictConfidential", false);
                     RestrictPrivacy = ini.ReadBool("Common", "RestrictPrivacy", false);
                     OutputFolder = ini.ReadString("Common", "OutputFolder", "");
-                    UnknownName = ini.ReadString("Common", "UnknownName", "<unknown>");
+                    UnknownName = ini.ReadString("Common", "UnknownName", fLangMan.LS(PLS.LSID_UnknownName));
                     NameCapitalisation = ini.ReadInteger("Common", "NameCapitalisation", 1);
-                    HtmlExtension = ini.ReadString("Common", "HtmlExtension", "html");
                     CopyMultimedia = ini.ReadBool("Common", "CopyMultimedia", true);
                     ImageFolder = ini.ReadString("Common", "ImageFolder", "multimedia");
                     RelativiseMultimedia = ini.ReadBool("Common", "RelativiseMultimedia", false);
@@ -523,17 +553,17 @@ namespace GEDmill
                     MaxNumberMultimediaFiles = ini.ReadInteger("Common", "MaxNumberMultimediaFiles", 32);
                     AgeForOccupation = ini.ReadInteger("Common", "AgeForOccupation", 50);
                     OwnersName = ini.ReadString("Common", "OwnersName", "");
-                    NoSurname = ini.ReadString("Common", "NoSurname", "No Surname");
-                    IndexTitle = ini.ReadString("Common", "IndexTitle", "Index Of Names");
+                    NoSurname = ini.ReadString("Common", "NoSurname", fLangMan.LS(PLS.LSID_NoSurname));
+                    IndexTitle = ini.ReadString("Common", "IndexTitle", fLangMan.LS(PLS.LSID_IndexTitle));
                     MaxSourceImageWidth = ini.ReadInteger("Common", "MaxSourceImageWidth", 800);
                     MaxSourceImageHeight = ini.ReadInteger("Common", "MaxSourceImageHeight", 800);
                     FirstRecordXRef = ini.ReadString("Common", "FirstRecordXRef", "");
-                    SiteTitle = ini.ReadString("Common", "SiteTitle", "Family history");
+                    SiteTitle = ini.ReadString("Common", "SiteTitle", fLangMan.LS(PLS.LSID_SiteTitle));
                     InputFilename = ini.ReadString("Common", "InputFilename", "");
                     ApplicationPath = ini.ReadString("Common", "ApplicationPath", "");
                     FrontPageImageFilename = ini.ReadString("Common", "FrontPageImageFilename", "");
                     TabSpaces = ini.ReadInteger("Common", "TabSpaces", 8);
-                    PlaceWord = ini.ReadString("Common", "PlaceWord", "in");
+                    PlaceWord = ini.ReadString("Common", "PlaceWord", fLangMan.LS(PLS.LSID_PlaceWord));
                     CapitaliseEventDescriptions = ini.ReadBool("Common", "CapitaliseEventDescriptions", true);
                     RestrictAssociatedSources = ini.ReadBool("Common", "RestrictAssociatedSources", true);
                     RenameMultimedia = ini.ReadBool("Common", "RenameMultimedia", true);
@@ -573,12 +603,9 @@ namespace GEDmill
                     MaxThumbnailImageWidth = ini.ReadInteger("Common", "MaxThumbnailImageWidth", 45);
                     MaxThumbnailImageHeight = ini.ReadInteger("Common", "MaxThumbnailImageHeight", 45);
                     MainWebsiteLink = ini.ReadString("Common", "MainWebsiteLink", "");
-                    PreserveFrontPage = ini.ReadBool("Common", "PreserveFrontPage", false);
-                    PreserveStylesheet = ini.ReadBool("Common", "PreserveStylesheet", false);
-                    StylesheetFilename = ini.ReadString("Common", "StylesheetFilename", "gedmill-style");
                     MiniTreeColourIndiBgConcealed = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiBgConcealed", "#cccccc"));
                     OnlyConceal = ini.ReadBool("Common", "OnlyConceal", false);
-                    ConcealedName = ini.ReadString("Common", "ConcealedName", "Private Record");
+                    ConcealedName = ini.ReadString("Common", "ConcealedName", fLangMan.LS(PLS.LSID_ConcealedName));
                     MiniTreeColourIndiFgConcealed = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiFgConcealed", "#000000"));
                     LinkOriginalPicture = ini.ReadBool("Common", "LinkOriginalPicture", false);
                     RenameOriginalPicture = ini.ReadBool("Common", "RenameOriginalPicture", false);
@@ -586,7 +613,6 @@ namespace GEDmill
                     ExcludeFileName = ini.ReadString("Common", "ExcludeFileName", "");
                     ObfuscateEmails = ini.ReadBool("Common", "ObfuscateEmails", false);
                     AddHomePageCreateTime = ini.ReadBool("Common", "AddHomePageCreateTime", true);
-                    IncludeValiditySticker = ini.ReadBool("Common", "IncludeValiditySticker", false);
                     IncludeNickNamesInIndex = ini.ReadBool("Common", "IncludeNickNamesInIndex", true);
                     CustomFooter = ini.ReadString("Common", "CustomFooter", "");
                     IncludeUserRefInIndex = ini.ReadBool("Common", "IncludeUserRefInIndex", false);
@@ -600,70 +626,10 @@ namespace GEDmill
                     AllowMultimedia = ini.ReadBool("Common", "AllowMultimedia", true);
                     SupressBackreferences = ini.ReadBool("Common", "SupressBackreferences", false);
                     KeepSiblingOrder = ini.ReadBool("Common", "KeepSiblingOrder", false);
-
-                    versionMajor = ini.ReadInteger("Common", "VersionMajor", 0);
-                    versionMinor = ini.ReadInteger("Common", "VersionMinor", 0);
-                    versionPatch = ini.ReadInteger("Common", "VersionPatch", 0);
                 }
             } catch (Exception ex) {
-                fLogger.WriteError("CConfig.Load()", ex);
+                fLogger.WriteError("GMConfig.Load()", ex);
             }
-        }
-
-        // Reset those settings that can be modified by the user on the config screen.
-        public void Reset()
-        {
-            TreeFontName = "Arial";
-            TreeFontSize = 8.0f;
-            TargetTreeWidth = 800;
-            MiniTreeImageFormat = "gif";
-            MiniTreeColourBranch = ConvertColour("#000000");
-            MiniTreeColourIndiBorder = ConvertColour("#000000");
-            MiniTreeColourIndiBackground = ConvertColour("#ffffd2");
-            MiniTreeColourIndiHighlight = ConvertColour("#ffffff");
-            MiniTreeColourIndiBgConcealed = ConvertColour("#cccccc");
-            MiniTreeColourIndiFgConcealed = ConvertColour("#000000");
-            MiniTreeColourIndiShade = ConvertColour("#ffffd2");
-            MiniTreeColourIndiText = ConvertColour("#000000");
-            MiniTreeColourIndiLink = ConvertColour("#3333ff");
-            MiniTreeColourBackground = ConvertColour("#aaaaaa");
-            FakeMiniTreeTransparency = false;
-            ShowMiniTrees = true;
-            UserEmailAddress = "";
-            KeyIndividuals = new List<string>();
-            MultiPageIndexes = true;
-            IndividualsPerIndexPage = 1000;
-            OpenWebsiteOnExit = true;
-            FrontPageFilename = "home";
-            AllowMultipleImages = false;
-            CreateCDROMFiles = false;
-            AllowNonPictures = true;
-            MainWebsiteLink = "";
-            PreserveFrontPage = false;
-            PreserveStylesheet = false;
-            StylesheetFilename = "gedmill-style";
-            OnlyConceal = false;
-            ConcealedName = "Private Record";
-            LinkOriginalPicture = false;
-            RenameOriginalPicture = false;
-            ExcludeFileDir = "";
-            ExcludeFileName = "";
-            ObfuscateEmails = false;
-            AddHomePageCreateTime = true;
-            IncludeValiditySticker = false;
-            IncludeNickNamesInIndex = true;
-            CustomFooter = "";
-            IncludeUserRefInIndex = false;
-            OccupationHeadline = true;
-            CommentaryIsHtml = false;
-            FooterIsHtml = false;
-            UserRecFilename = false;
-            IncludeNavbar = true;
-            UseWithheldNames = false;
-            ConserveTreeWidth = false;
-            KeepSiblingOrder = false;
-            AllowMultimedia = true;
-            SupressBackreferences = false;
         }
 
         // Converts a string of the form #RRGGBB to a Color instance.
@@ -709,8 +675,7 @@ namespace GEDmill
         // Used when storing colours in the config.
         private static string ConvertColour(Color c)
         {
-            string s = string.Format("{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
-            return s;
+            return string.Format("{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
         }
     }
 }

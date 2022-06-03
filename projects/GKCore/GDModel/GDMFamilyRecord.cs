@@ -36,11 +36,11 @@ namespace GDModel
     }
 
 
-    public sealed class GDMFamilyRecord : GDMRecordWithEvents
+    public sealed class GDMFamilyRecord : GDMRecordWithEvents, IGDMFamilyRecord
     {
-        private GDMList<GDMIndividualLink> fChildren;
-        private GDMIndividualLink fHusband;
-        private GDMIndividualLink fWife;
+        private readonly GDMList<GDMIndividualLink> fChildren;
+        private readonly GDMIndividualLink fHusband;
+        private readonly GDMIndividualLink fWife;
         private GDMMarriageStatus fStatus;
 
 
@@ -276,6 +276,11 @@ namespace GDModel
                     fWife.XRef = string.Empty;
                     break;
             }
+        }
+
+        public bool HasSpouse(GDMIndividualRecord spouse)
+        {
+            return (spouse != null) && (fHusband.XRef == spouse.XRef || fWife.XRef == spouse.XRef);
         }
 
         public bool AddChild(GDMIndividualRecord child)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using BSLib.DataViz.ArborGVT;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -39,7 +40,7 @@ namespace GKUI.Components
 
     public sealed class ArborSystemEx : ArborSystem
     {
-        private UITimer fTimer;
+        private ITimer fTimer;
 
         public ArborSystemEx(double repulsion, double stiffness, double friction, IArborRenderer renderer)
             : base(repulsion, stiffness, friction, renderer)
@@ -54,9 +55,7 @@ namespace GKUI.Components
 
         protected override void StartTimer()
         {
-            fTimer = new UITimer();
-            fTimer.Interval = TimerInterval / 1000;
-            fTimer.Elapsed += TimerElapsed;
+            fTimer = AppHost.Instance.CreateTimer(TimerInterval, TimerElapsed);
             fTimer.Start();
         }
 
@@ -74,9 +73,9 @@ namespace GKUI.Components
             return new ArborNodeEx(sign);
         }
 
-        protected override ArborEdge CreateEdge(ArborNode src, ArborNode tgt, double len, double stiffness, bool directed = false)
+        protected override ArborEdge CreateEdge(ArborNode source, ArborNode target, double length, double stiffness, bool directed = false)
         {
-            return new ArborEdge(src, tgt, len, stiffness, directed);
+            return new ArborEdge(source, target, length, stiffness, directed);
         }
     }
 
@@ -110,13 +109,7 @@ namespace GKUI.Components
 
         public ArborViewer()
         {
-            //base.BorderStyle = BorderStyle.Fixed3D;
-            //base.TabStop = true;
             base.BackgroundColor = Colors.White;
-
-            //base.DoubleBuffered = true;
-            //base.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            //base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
             // repulsion - отталкивание, stiffness - тугоподвижность, friction - сила трения
             fSys = new ArborSystemEx(10000, 500/*1000*/, 0.1, this);
@@ -138,8 +131,7 @@ namespace GKUI.Components
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fSys.Dispose();
                 fDrawFont.Dispose();
                 fWhiteBrush.Dispose();
@@ -173,9 +165,6 @@ namespace GKUI.Components
                 }
 
                 using (Pen grayPen = new Pen(Colors.Gray, 1)) {
-                    //grayPen.StartCap = PenLineCap.NoAnchor;
-                    //grayPen.EndCap = PenLineCap.ArrowAnchor;
-
                     foreach (ArborEdge edge in fSys.Edges) {
                         var srcNode = edge.Source as ArborNodeEx;
                         var tgtNode = edge.Target as ArborNodeEx;
@@ -187,7 +176,7 @@ namespace GKUI.Components
                         ArborPoint head = (tail.IsNull()) ? ArborPoint.Null : intersect_line_box(tail, pt2, tgtNode.Box);
 
                         if (!head.IsNull() && !tail.IsNull()) {
-                            gfx.DrawLine(grayPen, (int)tail.X, (int)tail.Y, (int)head.X, (int)head.Y);
+                            UIHelper.DrawArrowLine(gfx, Colors.Gray, grayPen, (float)tail.X, (float)tail.Y, (float)head.X, (float)head.Y);
                         }
                     }
                 }

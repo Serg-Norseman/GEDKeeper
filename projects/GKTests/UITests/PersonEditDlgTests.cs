@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System;
 using System.Windows.Forms;
@@ -52,7 +52,7 @@ namespace GKUI.Forms
             fIndividualRecord = fBase.Context.CreatePersonEx("Ivan", "", "Smith", GDMSex.svMale, true);
 
             fDialog = new PersonEditDlg(fBase);
-            fDialog.Person = fIndividualRecord;
+            fDialog.IndividualRecord = fIndividualRecord;
             fDialog.Show();
         }
 
@@ -71,7 +71,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fIndividualRecord, fDialog.Person);
+            Assert.AreEqual(fIndividualRecord, fDialog.IndividualRecord);
             Assert.AreEqual(null, fDialog.Target);
             Assert.AreEqual(TargetMode.tmNone, fDialog.TargetMode);
 

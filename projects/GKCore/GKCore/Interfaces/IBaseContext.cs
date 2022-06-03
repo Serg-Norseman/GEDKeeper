@@ -103,7 +103,7 @@ namespace GKCore.Interfaces
         GDMSex DefineSex(string iName, string iPatr);
         void CheckPersonSex(GDMIndividualRecord iRec);
 
-        GDMFamilyRecord SelectFamily(GDMIndividualRecord target);
+        GDMFamilyRecord SelectFamily(GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild);
         GDMIndividualRecord SelectPerson(GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex);
         GDMRecord SelectRecord(GDMRecordType mode, params object[] args);
         GDMFamilyRecord GetChildFamily(GDMIndividualRecord iChild,

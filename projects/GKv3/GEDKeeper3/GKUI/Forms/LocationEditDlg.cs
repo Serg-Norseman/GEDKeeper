@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,9 +19,9 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -33,13 +33,34 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class LocationEditDlg : EditorDialog, ILocationEditDlg
+    public sealed partial class LocationEditDlg : CommonDialog<ILocationEditDlg, LocationEditDlgController>, ILocationEditDlg
     {
-        private readonly LocationEditDlgController fController;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private readonly GKMapBrowser fMapBrowser;
-        private readonly GKSheetList fMediaList;
-        private readonly GKSheetList fNotesList;
+        private Button btnAccept;
+        private Button btnCancel;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageCommon;
+        private Label lblName;
+        private TextBox txtName;
+        private Label lblLatitude;
+        private TextBox txtLatitude;
+        private Label lblLongitude;
+        private TextBox txtLongitude;
+        private GroupBox grpSearch;
+        private GKListView ListGeoCoords;
+        private Button btnSearch;
+        private Button btnSelect;
+        private Button btnSelectName;
+        private Button btnShowOnMap;
+        private GKMapBrowser fMapBrowser;
+        private GKSheetList fMediaList;
+        private GKSheetList fNotesList;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
 
         public GDMLocationRecord LocationRecord
         {
@@ -88,45 +109,10 @@ namespace GKUI.Forms
 
         public LocationEditDlg(IBaseWindow baseWin)
         {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fMapBrowser = new GKMapBrowser();
-            fMapBrowser.InitMap();
-            fMapBrowser.ShowLines = false;
-            panMap.Content = fMapBrowser;
-
-            fNotesList = new GKSheetList(pageNotes);
-            fMediaList = new GKSheetList(pageMultimedia);
-
-            // SetLang()
-            Title = LangMan.LS(LSID.LSID_Location);
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            pageCommon.Text = LangMan.LS(LSID.LSID_Common);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            lblName.Text = LangMan.LS(LSID.LSID_Title);
-            lblLatitude.Text = LangMan.LS(LSID.LSID_Latitude);
-            lblLongitude.Text = LangMan.LS(LSID.LSID_Longitude);
-            ListGeoCoords.SetColumnCaption(0, LangMan.LS(LSID.LSID_Title));
-            ListGeoCoords.SetColumnCaption(1, LangMan.LS(LSID.LSID_Latitude));
-            ListGeoCoords.SetColumnCaption(2, LangMan.LS(LSID.LSID_Longitude));
-            btnShowOnMap.Text = LangMan.LS(LSID.LSID_Show);
-            grpSearch.Text = LangMan.LS(LSID.LSID_SearchCoords);
-            btnSearch.Text = LangMan.LS(LSID.LSID_Search);
-            btnSelect.Text = LangMan.LS(LSID.LSID_SelectCoords);
-            btnSelectName.Text = LangMan.LS(LSID.LSID_SelectName);
-
-            SetToolTip(btnShowOnMap, LangMan.LS(LSID.LSID_ShowOnMapTip));
+            XamlReader.Load(this);
 
             fController = new LocationEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void EditName_KeyDown(object sender, KeyEventArgs e)
@@ -134,22 +120,6 @@ namespace GKUI.Forms
             if (e.Key == Keys.Down && e.Control) {
                 txtName.Text = txtName.Text.ToLower();
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

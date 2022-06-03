@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,10 +19,7 @@
  */
 
 using System;
-using System.Windows.Forms;
-using BSLib;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -32,10 +29,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TreeFilterDlg : EditorDialog, ITreeFilterDlg
+    public sealed partial class TreeFilterDlg : CommonDialog<ITreeFilterDlg, TreeFilterDlgController>, ITreeFilterDlg
     {
-        private readonly TreeFilterDlgController fController;
-
         private readonly GKSheetList fPersonsList;
 
         public ChartFilter Filter
@@ -61,31 +56,21 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
-        void ITreeFilterDlg.SetCutModeRadio(int cutMode)
-        {
-            switch (cutMode) {
-                case 0:
-                    rbCutNone.Checked = true;
-                    break;
-                case 1:
-                    rbCutYears.Checked = true;
-                    break;
-                case 2:
-                    rbCutPersons.Checked = true;
-                    break;
-            }
-        }
-
-        int ITreeFilterDlg.GetCutModeRadio()
-        {
-            int cutMode = 0;
-            if (rbCutNone.Checked) cutMode = 0;
-            if (rbCutYears.Checked) cutMode = 1;
-            if (rbCutPersons.Checked) cutMode = 2;
-            return cutMode;
-        }
-
         #endregion
+
+        public TreeFilterDlg(IBaseWindow baseWin)
+        {
+            InitializeComponent();
+
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+
+            fPersonsList = new GKSheetList(Panel1);
+            fPersonsList.OnModify += ListModify;
+
+            fController = new TreeFilterDlgController(this);
+            fController.Init(baseWin);
+        }
 
         private void ListModify(object sender, ModifyEventArgs eArgs)
         {
@@ -96,50 +81,12 @@ namespace GKUI.Forms
 
         private void rbCutNoneClick(object sender, EventArgs e)
         {
-            fController.Filter.BranchCut = (ChartFilter.BranchCutType)((ITreeFilterDlg)this).GetCutModeRadio();
-            fController.UpdateControls();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            fController.Filter.Reset();
+            fController.ChangeCutMode();
         }
 
         private void TreeFilterDlg_Load(object sender, EventArgs e)
         {
             fController.UpdateView();
-        }
-
-        public TreeFilterDlg(IBaseWindow baseWin)
-        {
-            InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            fPersonsList = new GKSheetList(Panel1);
-            fPersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
-            fPersonsList.OnModify += ListModify;
-            fPersonsList.AddColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_MIFilter);
-            rgBranchCut.Text = LangMan.LS(LSID.LSID_BranchCut);
-            rbCutNone.Text = LangMan.LS(LSID.LSID_Not);
-            rbCutYears.Text = LangMan.LS(LSID.LSID_BCut_Years);
-            lblYear.Text = LangMan.LS(LSID.LSID_Year);
-            rbCutPersons.Text = LangMan.LS(LSID.LSID_BCut_Persons);
-            lblRPSources.Text = LangMan.LS(LSID.LSID_RPSources);
-
-            fController = new TreeFilterDlgController(this);
-            fController.Init(baseWin);
         }
     }
 }

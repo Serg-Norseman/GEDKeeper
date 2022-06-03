@@ -18,11 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !__MonoCS__
+#if !MONO
 
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
+using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 

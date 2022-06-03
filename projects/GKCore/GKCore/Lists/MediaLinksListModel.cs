@@ -80,6 +80,7 @@ namespace GKCore.Lists
                     mmRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
                     if (mmRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GDMObject)dataOwner, mmRec);
+                        mmLink = dataOwner.FindMultimediaLink(mmRec);
                     }
                     break;
 
@@ -100,9 +101,7 @@ namespace GKCore.Lists
                 case RecordAction.raMoveDown:
                     {
                         int idx = dataOwner.MultimediaLinks.IndexOf(mmLink);
-
-                        switch (eArgs.Action)
-                        {
+                        switch (eArgs.Action) {
                             case RecordAction.raMoveUp:
                                 dataOwner.MultimediaLinks.Exchange(idx - 1, idx);
                                 break;
@@ -111,13 +110,16 @@ namespace GKCore.Lists
                                 dataOwner.MultimediaLinks.Exchange(idx, idx + 1);
                                 break;
                         }
-
                         result = true;
                     }
                     break;
             }
 
             if (result) {
+                if (eArgs.Action == RecordAction.raAdd) {
+                    eArgs.ItemData = mmLink;
+                }
+
                 fBaseWin.Context.Modified = true;
                 eArgs.IsChanged = true;
             }

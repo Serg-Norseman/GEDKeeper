@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Components"
+  x:Class="GKUI.Components.MediaPlayer">
+
+  <TableLayout>
+    <TableRow ScaleHeight="True">
+      <Panel x:Name="pnlVideo" BackgroundColor="Black" />
+    </TableRow>
+
+    <TableRow>
+      <TableLayout>
+        <TableRow>
+          <StackLayout Orientation="Horizontal">
+            <StackLayoutItem Expand="True">
+              <Slider x:Name="trkPosition" MaxValue="100" ValueChanged="trkPosition_Scroll" />
+            </StackLayoutItem>
+            <StackLayoutItem HorizontalAlignment="Right">
+              <Label x:Name="lblDuration" Text="00:00:00 / 00:00:00" />
+            </StackLayoutItem>
+          </StackLayout>
+        </TableRow>
+
+        <TableRow>
+          <StackLayout Orientation="Horizontal">
+            <Button x:Name="btnPause" ImagePosition="Overlay" Size="40, 40" Click="btnPause_Click" />
+            <Button x:Name="btnPlay" ImagePosition="Overlay" Size="40, 40" Click="btnPlay_Click" />
+            <Button x:Name="btnStop" ImagePosition="Overlay" Size="40, 40" Click="btnStop_Click" />
+            <StackLayoutItem Expand="True" />
+            <Button x:Name="btnMute" ImagePosition="Overlay" Size="40, 40" Click="btnMute_Click" />
+            <Slider x:Name="trkVolume" MaxValue="100" Size="116, 45" ValueChanged="trkVolume_Scroll" />
+          </StackLayout>
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+  </TableLayout>
+
+</Panel>

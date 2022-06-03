@@ -47,7 +47,7 @@ namespace GKCore.Charts
 
         public override void BeginDrawing()
         {
-            fWriter = new StreamWriter(new FileStream(fFileName, FileMode.Create), Encoding.UTF8);
+            fWriter = new StreamWriter(new FileStream(fFileName, FileMode.Create, FileAccess.Write), Encoding.UTF8);
             fGfx = new SvgGraphics(fWriter, ExtRectF.CreateBounds(0, 0, fWidth, fHeight));
             fGfx.BeginDrawing();
         }
@@ -119,6 +119,14 @@ namespace GKCore.Charts
                     fGfx.SetColor(pen.Color);
                     fGfx.DrawRect(x, y, width, height, pen.Width);
                 }
+            }
+        }
+
+        public override void FillRectangle(IBrush brush,
+                                           float x, float y, float width, float height)
+        {
+            if (fGfx != null && brush != null) {
+                // TODO
             }
         }
 

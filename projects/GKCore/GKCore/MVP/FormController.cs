@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,7 +30,10 @@ namespace GKCore.MVP
     {
         protected IBaseWindow fBase;
 
-        // TODO: remove IBaseWindow to IBaseContext, everywhere!
+        private readonly ControlsManager fControlsManager;
+
+
+        // TODO: change IBaseWindow to IBaseContext, everywhere!
         public IBaseWindow Base
         {
             get { return fBase; }
@@ -39,11 +42,29 @@ namespace GKCore.MVP
 
         protected FormController(TView view) : base(view)
         {
+            fControlsManager = new ControlsManager(view);
+            SetLocale();
         }
 
         public virtual void Init(IBaseWindow baseWin)
         {
             fBase = baseWin;
+        }
+
+        protected T GetControl<T>(string controlName) where T : class, IControl
+        {
+            return fControlsManager.GetControl<T>(controlName);
+        }
+
+        public virtual void SetLocale()
+        {
+            // dummy
+        }
+
+        protected virtual void SetToolTip(string componentName, string toolTip)
+        {
+            var ctl = fView.GetControl(componentName);
+            fView.SetToolTip(ctl, toolTip);
         }
     }
 }

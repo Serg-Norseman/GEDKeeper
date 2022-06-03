@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,9 +29,9 @@ using GKUI.Platform;
 
 [assembly: AssemblyTitle("GEDKeeper")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("GEDKeeper")]
+[assembly: AssemblyProduct(GKData.APP_TITLE)]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
-[assembly: AssemblyVersion("2.17.0.0")]
+[assembly: AssemblyVersion(GKData.APP_VERSION_2X)]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
@@ -44,31 +44,14 @@ namespace GKUI
     /// </summary>
     public static class GKProgram
     {
-        private static void LogSysInfo()
-        {
-            try {
-                #if __MonoCS__
-                Logger.WriteInfo("Mono Version: " + SysUtils.GetMonoVersion());
-                Logger.WriteInfo("Desktop Type: " + SysUtils.GetDesktopType().ToString());
-                #endif
-
-                // There should be no links to the application infrastructure
-                Assembly execAssembly = Assembly.GetExecutingAssembly();
-                Logger.WriteInfo("CLR Version: " + execAssembly.ImageRuntimeVersion);
-                Logger.WriteInfo("GK Version: " + execAssembly.GetName().Version.ToString());
-            } catch {
-                // dummy
-            }
-        }
-
         [STAThread]
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             WFAppHost.ConfigureBootstrap(false);
             AppHost.CheckPortable(args);
             Logger.Init(AppHost.GetLogFilename());
-            LogSysInfo();
+            AppHost.LogSysInfo();
 
             Application.ThreadException += ExExceptionHandler;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
@@ -84,7 +67,7 @@ namespace GKUI
                         var appHost = (WFAppHost)AppHost.Instance;
                         appHost.Init(args, false);
 
-                        Application.Run(appHost.AppContext);
+                        Application.Run();
                     } finally {
                         AppHost.DoneSettings();
                     }

@@ -29,23 +29,15 @@ using GKCore.Interfaces;
 namespace GKCore.Names
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public sealed class NamesTable : BaseObject, INamesTable
+    public sealed class NamesTable : INamesTable
     {
         private readonly Dictionary<string, NameEntry> fNames;
 
         public NamesTable()
         {
             fNames = new Dictionary<string, NameEntry>();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // dummy
-            }
-            base.Dispose(disposing);
         }
 
         #region Internal functions
@@ -84,8 +76,16 @@ namespace GKCore.Names
             try {
                 fNames.Clear();
 
+                Encoding defaultEncoding;
+                try {
+                    // legacy encoding
+                    defaultEncoding = Encoding.GetEncoding(1251);
+                } catch {
+                    defaultEncoding = Encoding.UTF8;
+                }
+
                 using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                    using (StreamReader reader = FileHelper.OpenStreamReader(fileStream, Encoding.GetEncoding(1251))) {
+                    using (StreamReader reader = FileHelper.OpenStreamReader(fileStream, defaultEncoding)) {
                         while (reader.Peek() != -1) {
                             string line = reader.ReadLine();
                             if (string.IsNullOrEmpty(line)) continue;
@@ -222,8 +222,14 @@ namespace GKCore.Names
         {
             if (context == null || iRec == null) return;
 
+            var persName = (iRec.PersonalNames.Count > 0) ? iRec.PersonalNames[0] : null;
+            if (persName == null) return;
+
+            ICulture culture = GKUtils.DefineCulture(context.Tree, persName);
+            if (culture == null || !culture.HasPatronymic()) return;
+
             try {
-                var parts = GKUtils.GetNameParts(context.Tree, iRec, false);
+                var parts = GKUtils.GetNameParts(context.Tree, iRec, persName, false);
                 string childName = parts.Name;
                 string childPat = parts.Patronymic;
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,6 +36,8 @@ namespace GKUI.Components
         protected ChartRenderer fRenderer;
 
 
+        public Image BackgroundImage { get; set; }
+
         public event EventHandler NavRefresh;
 
 
@@ -46,67 +48,76 @@ namespace GKUI.Components
             fNavman = new NavigationStack<GDMRecord>();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
-        }
-
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            e.Handled = true;
             switch (e.Key) {
+                case Keys.Keypad4:
                 case Keys.Left:
                     AdjustScroll(-SmallChange, 0);
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad6:
                 case Keys.Right:
                     AdjustScroll(+SmallChange, 0);
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad8:
                 case Keys.Up:
                     AdjustScroll(0, -SmallChange);
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad2:
                 case Keys.Down:
                     AdjustScroll(0, +SmallChange);
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad9:
                 case Keys.PageUp:
                     if (Keys.None == e.Modifiers) {
                         AdjustScroll(0, -LargeChange);
                     } else if (Keys.Shift == e.Modifiers) {
                         AdjustScroll(-LargeChange, 0);
                     }
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad3:
                 case Keys.PageDown:
                     if (Keys.None == e.Modifiers) {
                         AdjustScroll(0, +LargeChange);
                     } else if (Keys.Shift == e.Modifiers) {
                         AdjustScroll(+LargeChange, 0);
                     }
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad7:
                 case Keys.Home:
                     if (Keys.None == e.Modifiers) {
                         AdjustScroll(0, -Viewport.Height);
                     } else if (Keys.Shift == e.Modifiers) {
                         AdjustScroll(-Viewport.Width, 0);
                     }
+                    e.Handled = true;
                     break;
 
+                case Keys.Keypad1:
                 case Keys.End:
                     if (Keys.None == e.Modifiers) {
                         AdjustScroll(0, Viewport.Height);
                     } else if (Keys.Shift == e.Modifiers) {
                         AdjustScroll(+Viewport.Width, 0);
                     }
+                    e.Handled = true;
                     break;
 
                 case Keys.Backspace:
                     NavPrev();
+                    e.Handled = true;
                     break;
 
                 default:
@@ -129,16 +140,6 @@ namespace GKUI.Components
         public IImage GetPrintableImage()
         {
             ExtSize imageSize = GetImageSize();
-            var frameRect = new Rectangle(0, 0, imageSize.Width, imageSize.Height);
-
-            /*Image image;
-            using (var gfx = CreateGraphics()) {
-                image = new Metafile(gfx.GetHdc(), frameRect, MetafileFrameUnit.Pixel, EmfType.EmfOnly);
-            }
-
-            using (Graphics gfx = Graphics.FromImage(image)) {
-                RenderStaticImage(gfx, true);
-            }*/
 
             var image = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
             using (Graphics gfx = new Graphics(image)) {
@@ -187,18 +188,10 @@ namespace GKUI.Components
                     imFmt = ImageFormat.Gif;
                 } else if (ext == ".jpg") {
                     imFmt = ImageFormat.Jpeg;
-                } /*else if (ext == ".emf") {
-                    imFmt = ImageFormat.Emf;
-                }*/
+                } else if (ext == ".emf") {
+                    /* Emf is not supported */
+                }
 
-                /*Image pic;
-                if (Equals(imFmt, ImageFormat.Emf)) {
-                    using (var gfx = CreateGraphics()) {
-                        pic = new Metafile(fileName, gfx.GetHdc());
-                    }
-                } else {
-                    pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
-                }*/
 
                 Bitmap pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
                 try {
@@ -225,7 +218,7 @@ namespace GKUI.Components
 
         private void DoNavRefresh()
         {
-            var eventHandler = (EventHandler)NavRefresh;
+            var eventHandler = NavRefresh;
             if (eventHandler != null) eventHandler(this, null);
         }
 

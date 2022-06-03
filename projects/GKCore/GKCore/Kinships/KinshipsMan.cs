@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,24 +35,28 @@ namespace GKCore.Kinships
 
         static KinshipsMan()
         {
-            InitKinships();
-        }
-
-        private static void RegisterKinship(RelationSet prevRels, RelationSet currRels, RelationKind finRel, sbyte great, sbyte level)
-        {
-            fKinships.Add(new KinshipRec(prevRels, currRels, finRel, great, level));
-        }
-
-        private static void InitKinships()
-        {
             fKinships = new List<KinshipRec>();
 
             RegisterKinship(
                 RelationSet.Create(RelationKind.rkNone),
-                RelationSet.Create(RelationKind.rkFather, RelationKind.rkMother,
-                    RelationKind.rkHusband, RelationKind.rkWife, RelationKind.rkSon, RelationKind.rkDaughter),
+                RelationSet.Create(RelationKind.rkFather, RelationKind.rkMother, RelationKind.rkHusband, RelationKind.rkWife, RelationKind.rkSon, RelationKind.rkDaughter),
                 RelationKind.rkSame, 0, 0);
 
+            /*
+             *  __________         _____________
+             * |          |       |             |
+             * | wife (0) | ----> | husband (1) |
+             * |__________|       |_____________|
+             *                       |
+             *                       |
+             *               ________v_________
+             *              |                  |
+             *              | son/daughter (2) |
+             *              |__________________|
+             * 
+             * 1) prevRelation: none, curRelation: husband
+             * 2) prevRelation: husband, curRelation: son -> finRelation from (2) to (0) = same(son)
+             */
             RegisterKinship(
                 RelationSet.Create(RelationKind.rkHusband, RelationKind.rkWife),
                 RelationSet.Create(RelationKind.rkSon, RelationKind.rkDaughter),
@@ -171,12 +175,12 @@ namespace GKCore.Kinships
             RegisterKinship(
                 RelationSet.Create(RelationKind.rkUncle, RelationKind.rkAunt),
                 RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkNiece, 0, 1);
+                RelationKind.rkNiece, 1, 1);
 
             RegisterKinship(
                 RelationSet.Create(RelationKind.rkUncle, RelationKind.rkAunt),
                 RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkNephew, 0, 1);
+                RelationKind.rkNephew, 1, 1);
 
 
             RegisterKinship(
@@ -221,6 +225,11 @@ namespace GKCore.Kinships
                 RelationKind.rkSisterInLaw_W, 0, 1);
         }
 
+        private static void RegisterKinship(RelationSet prevRels, RelationSet currRels, RelationKind finRel, sbyte great, sbyte level)
+        {
+            fKinships.Add(new KinshipRec(prevRels, currRels, finRel, great, level));
+        }
+
         public static RelationKind FindKinship(RelationKind prev, RelationKind cur, out int great, out int level)
         {
             RelationKind finRel = RelationKind.rkUndefined;
@@ -241,6 +250,7 @@ namespace GKCore.Kinships
                     }
 
                     finRel = rel;
+                    break;
                 }
             }
 

@@ -19,7 +19,7 @@
  */
 
 using System;
-using BSLib;
+using System.Collections.Generic;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
 using NSubstitute;
@@ -47,11 +47,10 @@ namespace GKCore
         [Test]
         public void Test_MapPlace()
         {
-            using (var mapPlace = new MapPlace()) {
-                Assert.IsNotNull(mapPlace);
-                Assert.IsNotNull(mapPlace.Points);
-                Assert.IsNotNull(mapPlace.PlaceRefs);
-            }
+            var mapPlace = new MapPlace();
+            Assert.IsNotNull(mapPlace);
+            Assert.IsNotNull(mapPlace.Points);
+            Assert.IsNotNull(mapPlace.PlaceRefs);
         }
 
         [Test]
@@ -102,7 +101,7 @@ namespace GKCore
         [Test]
         public void Test_AddPoint()
         {
-            var gmapPoints = new ExtList<GeoPoint>();
+            var gmapPoints = new List<GeoPoint>();
 
             PlacesLoader.AddPoint(gmapPoints, new GeoPoint(0, 0, "test"), new PlaceRef(null, null));
             Assert.AreEqual(1, gmapPoints.Count);
@@ -118,7 +117,7 @@ namespace GKCore
 
             Assert.Throws(typeof(ArgumentNullException), () => { PlacesLoader.CopyPoints(mapBrowser, null, true); });
 
-            var gmapPoints = new ExtList<GeoPoint>();
+            var gmapPoints = new List<GeoPoint>();
             gmapPoints.Add(new GeoPoint(0, 0, "test"));
             PlacesLoader.CopyPoints(mapBrowser, gmapPoints, true);
         }
@@ -126,13 +125,13 @@ namespace GKCore
         [Test]
         public void Test_GetPointsFrame()
         {
-            CoordsRect coordsRect = PlacesLoader.GetPointsFrame(null);
+            var coordsRect = PlacesLoader.GetPointsFrame(null);
             Assert.AreEqual(0.0d, coordsRect.MinLon);
             Assert.AreEqual(0.0d, coordsRect.MinLat);
             Assert.AreEqual(0.0d, coordsRect.MaxLon);
             Assert.AreEqual(0.0d, coordsRect.MaxLat);
 
-            ExtList<GeoPoint> mapPoints = new ExtList<GeoPoint>();
+            var mapPoints = new List<GeoPoint>();
             mapPoints.Add(new GeoPoint(11, 13, "pt1"));
             mapPoints.Add(new GeoPoint(22, 25, "pt1"));
             coordsRect = PlacesLoader.GetPointsFrame(mapPoints);

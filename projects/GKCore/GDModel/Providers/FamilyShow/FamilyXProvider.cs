@@ -178,7 +178,7 @@ namespace GDModel.Providers.FamilyShow
                             }
                         } else if (xr.NodeType == XmlNodeType.Text) {
                             string nodeValue = xr.Value;
-                            if (!string.IsNullOrEmpty(nodeValue)) {
+                            if (!string.IsNullOrEmpty(nodeValue) && (lastIndividual != null)) {
                                 switch (lastTagType) {
                                     case FXTag.Gender:
                                         if (nodeValue == "Male") {
@@ -194,7 +194,7 @@ namespace GDModel.Providers.FamilyShow
                                         break;
 
                                     case FXTag.FirstName:
-                                        lastIndividual.PersonalNames[0].FirstPart = nodeValue;
+                                        lastIndividual.PersonalNames[0].Given = nodeValue;
                                         break;
 
                                     case FXTag.LastName:
@@ -202,7 +202,7 @@ namespace GDModel.Providers.FamilyShow
                                         break;
 
                                     case FXTag.Suffix:
-                                        lastIndividual.PersonalNames[0].LastPart = nodeValue;
+                                        lastIndividual.PersonalNames[0].NameSuffix = nodeValue;
                                         break;
 
                                     case FXTag.IsLiving:

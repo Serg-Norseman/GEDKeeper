@@ -19,15 +19,14 @@
  */
 
 using System.Collections.Generic;
-using BSLib;
 using GDModel;
 
 namespace GKCore.Tools
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public sealed class PlaceObj : BaseObject
+    public sealed class PlaceObj
     {
         public readonly string Name;
         public readonly List<GDMCustomEvent> Facts;
@@ -36,14 +35,6 @@ namespace GKCore.Tools
         {
             Name = name;
             Facts = new List<GDMCustomEvent>();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                // dummy
-            }
-            base.Dispose(disposing);
         }
     }
 }

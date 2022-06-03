@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -37,6 +38,53 @@ namespace GKUI.Forms
 {
     public partial class TreeChartWin : PrintableForm, ITreeChartWin
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private ToolBar ToolBar1;
+        private ButtonToolItem tbImageSave;
+        private ContextMenu MenuPerson;
+        private ButtonMenuItem miEdit;
+        private ButtonMenuItem miSpouseAdd;
+        private ButtonMenuItem miSonAdd;
+        private ButtonMenuItem miDaughterAdd;
+        private ButtonMenuItem miFamilyAdd;
+        private ButtonMenuItem miDelete;
+        private ButtonMenuItem miRebuildKinships;
+        private ButtonToolItem tbModes;
+        private ContextMenu MenuModes;
+        private RadioMenuItem miModeBoth;
+        private RadioMenuItem miModeAncestors;
+        private RadioMenuItem miModeDescendants;
+        private CheckMenuItem miTraceSelected;
+        private CheckMenuItem miTraceKinships;
+        private CheckMenuItem miCertaintyIndex;
+        private ButtonMenuItem miRebuildTree;
+        private ButtonMenuItem miFillColor;
+        private ButtonMenuItem miFillImage;
+        private ButtonMenuItem miFatherAdd;
+        private ButtonMenuItem miMotherAdd;
+        private ButtonMenuItem miSelectColor;
+        private ButtonMenuItem miGoToRecord;
+        private ButtonMenuItem miGoToPrimaryBranch;
+        private ButtonToolItem tbDocPrint;
+        private ButtonToolItem tbDocPreview;
+        private ButtonToolItem tbFilter;
+        private ButtonToolItem tbPrev;
+        private ButtonToolItem tbNext;
+        private ButtonToolItem tbOptions;
+        private ButtonToolItem tbGensCommon;
+        private ContextMenu MenuGensCommon;
+        private ButtonToolItem tbGensAncestors;
+        private ContextMenu MenuGensAncestors;
+        private ButtonToolItem tbGensDescendants;
+        private ContextMenu MenuGensDescendants;
+        private ButtonToolItem tbBorders;
+        private ContextMenu MenuBorders;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
         private readonly TreeChartWinController fController;
 
         private readonly IBaseWindow fBase;
@@ -67,14 +115,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            tbFilter.Image = UIHelper.LoadResourceImage("Resources.btn_filter.gif");
-            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
-            tbImageSave.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
-            tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
-            tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
-            tbOptions.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
-
             miModeBoth.Tag = TreeChartKind.ckBoth;
             miModeAncestors.Tag = TreeChartKind.ckAncestors;
             miModeDescendants.Tag = TreeChartKind.ckDescendants;
@@ -84,7 +124,6 @@ namespace GKUI.Forms
 
             fTreeBox = new TreeChartBox(new EtoGfxRenderer());
             fTreeBox.Base = fBase;
-            //fTreeBox.DragOver += ImageTree_DragOver;
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
             fTreeBox.InfoRequest += ImageTree_InfoRequest;
@@ -96,7 +135,9 @@ namespace GKUI.Forms
 
             PopulateContextMenus();
 
-            SetLang();
+            miGensInfCommon.Checked = true;
+            miGensInfAncestors.Checked = true;
+            miGensInfDescendants.Checked = true;
 
             miCertaintyIndex.Checked = fTreeBox.Options.CertaintyIndexVisible;
             fTreeBox.CertaintyIndex = fTreeBox.Options.CertaintyIndexVisible;
@@ -118,6 +159,115 @@ namespace GKUI.Forms
             if (disposing) {
             }
             base.Dispose(disposing);
+        }
+
+        private void InitializeComponent()
+        {
+            XamlReader.Load(this);
+
+            MenuGensCommon = new ContextMenu();
+            MenuGensAncestors = new ContextMenu();
+            MenuGensDescendants = new ContextMenu();
+            MenuBorders = new ContextMenu();
+
+            miModeBoth = new RadioMenuItem();
+            miModeBoth.Click += miModeItem_Click;
+
+            miModeAncestors = new RadioMenuItem();
+            miModeAncestors.Click += miModeItem_Click;
+
+            miModeDescendants = new RadioMenuItem();
+            miModeDescendants.Click += miModeItem_Click;
+
+            miTraceSelected = new CheckMenuItem();
+            miTraceSelected.Click += miTraceSelected_Click;
+
+            miTraceKinships = new CheckMenuItem();
+            miTraceKinships.Click += miTraceKinships_Click;
+
+            miCertaintyIndex = new CheckMenuItem();
+            miCertaintyIndex.Click += miCertaintyIndex_Click;
+
+            miFillColor = new ButtonMenuItem();
+            miFillColor.Click += miFillColor_Click;
+
+            miFillImage = new ButtonMenuItem();
+            miFillImage.Click += miFillImage_Click;
+
+            MenuModes = new ContextMenu();
+            MenuModes.Items.AddRange(new MenuItem[] {
+                                         miModeBoth,
+                                         miModeAncestors,
+                                         miModeDescendants,
+                                         new SeparatorMenuItem(),
+                                         miTraceSelected,
+                                         miTraceKinships,
+                                         miCertaintyIndex,
+                                         new SeparatorMenuItem(),
+                                         miFillColor,
+                                         miFillImage,
+                                         new SeparatorMenuItem()});
+
+            miEdit = new ButtonMenuItem();
+            miEdit.Click += miEdit_Click;
+
+            miFatherAdd = new ButtonMenuItem();
+            miFatherAdd.Click += miFatherAdd_Click;
+
+            miMotherAdd = new ButtonMenuItem();
+            miMotherAdd.Click += miMotherAdd_Click;
+
+            miFamilyAdd = new ButtonMenuItem();
+            miFamilyAdd.Click += miFamilyAdd_Click;
+
+            miSpouseAdd = new ButtonMenuItem();
+            miSpouseAdd.Click += miSpouseAdd_Click;
+
+            miSonAdd = new ButtonMenuItem();
+            miSonAdd.Click += miSonAdd_Click;
+
+            miDaughterAdd = new ButtonMenuItem();
+            miDaughterAdd.Click += miDaughterAdd_Click;
+
+            miDelete = new ButtonMenuItem();
+            miDelete.Click += miDelete_Click;
+
+            miRebuildTree = new ButtonMenuItem();
+            miRebuildTree.Click += miRebuildTree_Click;
+
+            miRebuildKinships = new ButtonMenuItem();
+            miRebuildKinships.Click += miRebuildKinships_Click;
+
+            miSelectColor = new ButtonMenuItem();
+            miSelectColor.Click += miSelectColor_Click;
+
+            miGoToRecord = new ButtonMenuItem();
+            miGoToRecord.Click += miGoToRecord_Click;
+
+            miGoToPrimaryBranch = new ButtonMenuItem();
+            miGoToPrimaryBranch.Click += miGoToPrimaryBranch_Click;
+
+            MenuPerson = new ContextMenu();
+            MenuPerson.Items.AddRange(new MenuItem[] {
+                                          miEdit,
+                                          new SeparatorMenuItem(),
+                                          miFatherAdd,
+                                          miMotherAdd,
+                                          miFamilyAdd,
+                                          miSpouseAdd,
+                                          miSonAdd,
+                                          miDaughterAdd,
+                                          new SeparatorMenuItem(),
+                                          miDelete,
+                                          new SeparatorMenuItem(),
+                                          miGoToRecord,
+                                          miGoToPrimaryBranch,
+                                          new SeparatorMenuItem(),
+                                          miRebuildTree,
+                                          miRebuildKinships,
+                                          new SeparatorMenuItem(),
+                                          miSelectColor});
+            MenuPerson.Opening += MenuPerson_Opening;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -204,19 +354,9 @@ namespace GKUI.Forms
             fController.SaveSnapshot();
         }
 
-        // FIXME: Eto restriction
-        /*private void ImageTree_DragOver(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(typeof(string))) {
-				e.Effect = DragDropEffects.Move;
-			} else {
-				e.Effect = DragDropEffects.None;
-			}
-        }*/
-
         private void ImageTree_PersonProperties(object sender, EventArgs e)
         {
-            MenuPerson.Show(fTreeBox /*, new Point(e.X, e.Y)*/); // FIXME: GKv3 DevRestr
+            MenuPerson.Show(fTreeBox, ((MouseEventArgs)e).Location);
         }
 
         private void ImageTree_RootChanged(object sender, TreeChartPerson person)
@@ -246,63 +386,47 @@ namespace GKUI.Forms
 
         private void PopulateContextMenus()
         {
-            miGensInfCommon = AddToolStripItem(MenuGensCommon, "Inf", -1, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "1", 1, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "2", 2, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "3", 3, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "4", 4, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "5", 5, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "6", 6, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "7", 7, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "8", 8, miGensX_Click);
-            AddToolStripItem(MenuGensCommon, "9", 9, miGensX_Click);
+            miGensInfCommon = UIHelper.AddToolStripItem(MenuGensCommon, "Inf", -1, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "1", 1, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "2", 2, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "3", 3, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "4", 4, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "5", 5, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "6", 6, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "7", 7, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "8", 8, miGensX_Click);
+            UIHelper.AddToolStripItem(MenuGensCommon, "9", 9, miGensX_Click);
 
-            miGensInfAncestors = AddToolStripItem(MenuGensAncestors, "Inf", -1, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "1", 1, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "2", 2, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "3", 3, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "4", 4, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "5", 5, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "6", 6, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "7", 7, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "8", 8, miGensXAncestors_Click);
-            AddToolStripItem(MenuGensAncestors, "9", 9, miGensXAncestors_Click);
+            miGensInfAncestors = UIHelper.AddToolStripItem(MenuGensAncestors, "Inf", -1, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "1", 1, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "2", 2, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "3", 3, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "4", 4, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "5", 5, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "6", 6, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "7", 7, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "8", 8, miGensXAncestors_Click);
+            UIHelper.AddToolStripItem(MenuGensAncestors, "9", 9, miGensXAncestors_Click);
 
-            miGensInfDescendants = AddToolStripItem(MenuGensDescendants, "Inf", -1, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "1", 1, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "2", 2, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "3", 3, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "4", 4, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "5", 5, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "6", 6, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "7", 7, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "8", 8, miGensXDescendants_Click);
-            AddToolStripItem(MenuGensDescendants, "9", 9, miGensXDescendants_Click);
-        }
+            miGensInfDescendants = UIHelper.AddToolStripItem(MenuGensDescendants, "Inf", -1, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "1", 1, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "2", 2, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "3", 3, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "4", 4, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "5", 5, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "6", 6, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "7", 7, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "8", 8, miGensXDescendants_Click);
+            UIHelper.AddToolStripItem(MenuGensDescendants, "9", 9, miGensXDescendants_Click);
 
-        private RadioMenuItem AddToolStripItem(ContextMenu contextMenu, string text, object tag, EventHandler<EventArgs> clickHandler)
-        {
-            var tsItem = new RadioMenuItem();
-            tsItem.Text = text;
-            tsItem.Tag = tag;
-            tsItem.Click += clickHandler;
-            contextMenu.Items.Add(tsItem);
-            return tsItem;
-        }
-
-        private int GetGensMenuDepth(ContextMenu contextMenu, object sender)
-        {
-            foreach (RadioMenuItem tsItem in contextMenu.Items) {
-                tsItem.Checked = false;
+            for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.CrossCorners; bs++) {
+                UIHelper.AddToolStripItem(MenuBorders, bs.ToString(), (int)bs, miBorderX_Click);
             }
-            var senderItem = ((RadioMenuItem)sender);
-            ((RadioMenuItem)sender).Checked = true;
-            return (int)senderItem.Tag;
         }
 
         private void miGensX_Click(object sender, EventArgs e)
         {
-            int depth = GetGensMenuDepth(MenuGensCommon, sender);
+            int depth = UIHelper.GetMenuItemTag<int>(MenuGensCommon, sender);
             fTreeBox.DepthLimitAncestors = depth;
             fTreeBox.DepthLimitDescendants = depth;
             GenChart();
@@ -310,27 +434,16 @@ namespace GKUI.Forms
 
         private void miGensXAncestors_Click(object sender, EventArgs e)
         {
-            int depth = GetGensMenuDepth(MenuGensAncestors, sender);
+            int depth = UIHelper.GetMenuItemTag<int>(MenuGensAncestors, sender);
             fTreeBox.DepthLimitAncestors = depth;
             GenChart();
         }
 
         private void miGensXDescendants_Click(object sender, EventArgs e)
         {
-            int depth = GetGensMenuDepth(MenuGensDescendants, sender);
+            int depth = UIHelper.GetMenuItemTag<int>(MenuGensDescendants, sender);
             fTreeBox.DepthLimitDescendants = depth;
             GenChart();
-        }
-
-        private void SetupDepth(ContextMenu contextMenu, int depth)
-        {
-            foreach (RadioMenuItem tsItem in contextMenu.Items) {
-                int itemDepth = (int)tsItem.Tag;
-                if (itemDepth == depth) {
-                    tsItem.PerformClick();
-                    break;
-                }
-            }
         }
 
         private void SetupDepth()
@@ -342,11 +455,20 @@ namespace GKUI.Forms
             tbGensDescendants.Enabled = treeOptions.SeparateDepth;
 
             if (!treeOptions.SeparateDepth) {
-                SetupDepth(MenuGensCommon, treeOptions.DepthLimit);
+                UIHelper.SetMenuItemTag(MenuGensCommon, treeOptions.DepthLimit);
             } else {
-                SetupDepth(MenuGensAncestors, treeOptions.DepthLimitAncestors);
-                SetupDepth(MenuGensDescendants, treeOptions.DepthLimitDescendants);
+                UIHelper.SetMenuItemTag(MenuGensAncestors, treeOptions.DepthLimitAncestors);
+                UIHelper.SetMenuItemTag(MenuGensDescendants, treeOptions.DepthLimitDescendants);
             }
+
+            UIHelper.SetMenuItemTag(MenuBorders, (int)GlobalOptions.Instance.TreeChartOptions.BorderStyle);
+        }
+
+        private void miBorderX_Click(object sender, EventArgs e)
+        {
+            int borderStyle = UIHelper.GetMenuItemTag<int>(MenuBorders, sender);
+            GlobalOptions.Instance.TreeChartOptions.BorderStyle = (GfxBorderStyle)borderStyle;
+            fTreeBox.Invalidate();
         }
 
         private void miEdit_Click(object sender, EventArgs e)
@@ -416,7 +538,7 @@ namespace GKUI.Forms
             using (var colorDialog1 = new ColorDialog()) {
                 if (colorDialog1.ShowDialog(this) != DialogResult.Ok) return;
 
-                //fTreeBox.BackgroundImage = null;
+                fTreeBox.BackgroundImage = null;
                 fTreeBox.BackgroundColor = colorDialog1.Color;
                 fTreeBox.Invalidate();
             }
@@ -424,13 +546,13 @@ namespace GKUI.Forms
 
         private void miFillImage_Click(object sender, EventArgs e)
         {
-            /*string fileName = AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
+            string fileName = AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             Image img = new Bitmap(fileName);
             fTreeBox.BackgroundImage = img;
-            fTreeBox.BackgroundImageLayout = ImageLayout.Tile;
-            fTreeBox.Invalidate();*/
+            //fTreeBox.BackgroundImageLayout = ImageLayout.Tile;
+            fTreeBox.Invalidate();
         }
 
         private void miModeItem_Click(object sender, EventArgs e)
@@ -464,6 +586,9 @@ namespace GKUI.Forms
             miFatherAdd.Enabled = fController.ParentIsRequired(GDMSex.svMale);
             miMotherAdd.Enabled = fController.ParentIsRequired(GDMSex.svFemale);
             miGoToRecord.Enabled = fController.SelectedPersonIsReal();
+
+            TreeChartPerson p = fTreeBox.Selected;
+            miGoToPrimaryBranch.Enabled = (p != null && p.Rec != null && p.IsDup);
         }
 
         private void tbDocPreview_Click(object sender, EventArgs e)
@@ -484,6 +609,36 @@ namespace GKUI.Forms
         private void miGoToRecord_Click(object sender, EventArgs e)
         {
             fController.GoToRecord();
+        }
+
+        private void miGoToPrimaryBranch_Click(object sender, EventArgs e)
+        {
+            fController.GoToPrimaryBranch();
+        }
+
+        private void tbGensCommon_Click(object sender, EventArgs e)
+        {
+            MenuGensCommon.Show(this);
+        }
+
+        private void tbGensAncestors_Click(object sender, EventArgs e)
+        {
+            MenuGensAncestors.Show(this);
+        }
+
+        private void tbGensDescendants_Click(object sender, EventArgs e)
+        {
+            MenuGensDescendants.Show(this);
+        }
+
+        private void tbModes_Click(object sender, EventArgs e)
+        {
+            MenuModes.Show(this);
+        }
+
+        private void tbBorders_Click(object sender, EventArgs e)
+        {
+            MenuBorders.Show(this);
         }
 
         #endregion
@@ -511,48 +666,11 @@ namespace GKUI.Forms
 
         #endregion
 
-        #region ILocalization implementation
+        #region ILocalizable implementation
 
-        public override void SetLang()
+        public override void SetLocale()
         {
-            tbGensCommon.Text = LangMan.LS(LSID.LSID_Generations);
-            tbGensAncestors.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Ancestors);
-            tbGensDescendants.Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Descendants);
-            tbModes.Text = LangMan.LS(LSID.LSID_ModesTip);
-
-            miGensInfCommon.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInfCommon.Checked = true;
-            miGensInfAncestors.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInfAncestors.Checked = true;
-            miGensInfDescendants.Text = LangMan.LS(LSID.LSID_Unlimited);
-            miGensInfDescendants.Checked = true;
-            miModeBoth.Text = LangMan.LS(LSID.LSID_TM_Both);
-            miModeAncestors.Text = LangMan.LS(LSID.LSID_TM_Ancestors);
-            miModeDescendants.Text = LangMan.LS(LSID.LSID_TM_Descendants);
-            miEdit.Text = LangMan.LS(LSID.LSID_DoEdit);
-            miFatherAdd.Text = LangMan.LS(LSID.LSID_FatherAdd);
-            miMotherAdd.Text = LangMan.LS(LSID.LSID_MotherAdd);
-            miFamilyAdd.Text = LangMan.LS(LSID.LSID_FamilyAdd);
-            miSpouseAdd.Text = LangMan.LS(LSID.LSID_SpouseAdd);
-            miSonAdd.Text = LangMan.LS(LSID.LSID_SonAdd);
-            miDaughterAdd.Text = LangMan.LS(LSID.LSID_DaughterAdd);
-            miDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
-            miRebuildTree.Text = LangMan.LS(LSID.LSID_RebuildTree);
-            miRebuildKinships.Text = LangMan.LS(LSID.LSID_RebuildKinships);
-            miFillColor.Text = LangMan.LS(LSID.LSID_FillColor);
-            miFillImage.Text = LangMan.LS(LSID.LSID_FillImage);
-            miTraceSelected.Text = LangMan.LS(LSID.LSID_TM_TraceSelected);
-            miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
-            miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
-            miSelectColor.Text = LangMan.LS(LSID.LSID_SelectColor);
-            miGoToRecord.Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-
-            SetToolTip(tbModes, LangMan.LS(LSID.LSID_ModesTip));
-            SetToolTip(tbImageSave, LangMan.LS(LSID.LSID_ImageSaveTip));
-            SetToolTip(tbDocPrint, LangMan.LS(LSID.LSID_DocPrint));
-            SetToolTip(tbDocPreview, LangMan.LS(LSID.LSID_DocPreview));
-            SetToolTip(tbPrev, LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip(tbNext, LangMan.LS(LSID.LSID_NextRec));
+            fController.SetLocale();
         }
 
         #endregion

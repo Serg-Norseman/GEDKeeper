@@ -36,9 +36,9 @@ namespace GKCore.Options
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public sealed class PedigreeOptions : BaseObject, IOptions
+    public sealed class PedigreeOptions : IOptions
     {
         public PedigreeFormat Format;
         public bool IncludeAttributes;

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms"
+  x:Class="GKUI.Forms.TTTreeMergeDlg"
+  AbortButton="{x:Reference btnClose}" Maximizable="False" Minimizable="False" ShowInTaskbar="False">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl>
+        <TabPage x:Name="pageTreeMerge">
+
+          <TableLayout Style="paddedTable8">
+
+            <TableRow>
+              <TableLayout Spacing="4, 4">
+                <TableRow>
+                  <Label x:Name="lblMasterBase" />
+                  <TextBox x:Name="edMasterBase" Width="600" Enabled="False" ReadOnly="True" />
+                </TableRow>
+
+                <TableRow>
+                  <Label x:Name="lblOtherBase" />
+                  <StackLayout Spacing="4" Orientation="Horizontal">
+                    <StackLayoutItem Expand="True">
+                      <TextBox x:Name="edUpdateBase" ReadOnly="True" />
+                    </StackLayoutItem>
+                    <StackLayoutItem HorizontalAlignment="Right">
+                      <Button x:Name="btnTreeMerge" Click="btnTreeMerge_Click" />
+                    </StackLayoutItem>
+                  </StackLayout>
+                </TableRow>
+              </TableLayout>
+            </TableRow>
+
+            <TableRow ScaleHeight="True">
+              <TextArea x:Name="mSyncRes" ReadOnly="true" Height="160" />
+            </TableRow>
+
+          </TableLayout>
+
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

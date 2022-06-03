@@ -23,9 +23,10 @@ namespace GKCore.Types
     public enum TargetMode
     {
         tmNone,
-        tmParent,
-        tmChild,
-        tmSpouse,
-        tmFamilyChild
+        tmParent,       // select child for parent
+        tmChild,        // select parent for child
+        tmSpouse,       // select spouse for indi
+        tmFamilyChild,  // select family for child
+        tmFamilySpouse, // select family with spouse for indi
     }
 }

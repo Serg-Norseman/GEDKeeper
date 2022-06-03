@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,11 +27,12 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
+using GKCore.Types;
 using GKUI.Platform;
 
 namespace GKUI.Components
 {
-    public class ImageView : Panel, ILocalization, IImageView
+    public class ImageView : Panel, ILocalizable, IImageView
     {
         private ImageBox imageBox;
         private Panel toolStrip;
@@ -75,11 +76,6 @@ namespace GKUI.Components
             }
         }
 
-        public Rectangle Viewport
-        {
-            get { return imageBox.Viewport; }
-        }
-
 
         public ImageView()
         {
@@ -93,7 +89,7 @@ namespace GKUI.Components
             Focus();
         }
 
-        public void SetLang()
+        public void SetLocale()
         {
             btnSizeToFit.ToolTip = LangMan.LS(LSID.LSID_SizeToFit);
             btnZoomIn.ToolTip = LangMan.LS(LSID.LSID_ZoomIn);
@@ -179,11 +175,11 @@ namespace GKUI.Components
         {
             if (image != null) {
                 imageBox.BeginUpdate();
-                imageBox.Image = image;
-                imageBox.ZoomToFit();
-                imageBox.EndUpdate();
 
-                UpdateZoomLevels();
+                imageBox.Image = image;
+                ZoomToFit();
+
+                imageBox.EndUpdate();
             }
         }
 
@@ -228,8 +224,11 @@ namespace GKUI.Components
 
         private void cbZoomLevels_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
-            imageBox.Zoom = zoom;
+            if (cbZoomLevels.HasFocus) {
+                // number w/out '%'
+                int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
+                imageBox.Zoom = zoom;
+            }
         }
     }
 }

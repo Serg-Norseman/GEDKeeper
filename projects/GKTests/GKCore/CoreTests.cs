@@ -93,7 +93,7 @@ namespace GKCore
         [Test]
         public void Test_Tween()
         {
-            #if !__MonoCS__
+            #if !MONO
             var tween = new GKCore.Charts.TweenLibrary();
             tween.StartTween(TweenHandler, 0, 0, 10, 10, GKCore.Charts.TweenAnimation.EaseInOutQuad, 20);
             #endif
@@ -102,7 +102,7 @@ namespace GKCore
         [Test]
         public void Test_SysUtils()
         {
-            #if __MonoCS__
+            #if MONO
             Assert.IsTrue(SysUtils.IsUnix());
             Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
             Assert.IsFalse(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
@@ -279,7 +279,7 @@ namespace GKCore
 
                 navStack.Current = test;
                 navStack.Current = test2;
-                
+
                 Assert.AreEqual(test, navStack.Back());
                 Assert.AreEqual(test2, navStack.Next());
             }
@@ -288,68 +288,66 @@ namespace GKCore
         [Test]
         public void Test_NamesTable()
         {
-            using (NamesTable namesTable = new NamesTable())
-            {
-                Assert.IsNotNull(namesTable);
-                
-                NameEntry nameEntry = namesTable.AddName("Ivan");
-                Assert.IsNotNull(nameEntry);
-                Assert.AreEqual("Ivan", nameEntry.Name);
+            var namesTable = new NamesTable();
+            Assert.IsNotNull(namesTable);
 
-                nameEntry = namesTable.FindName("Ivan");
-                Assert.IsNotNull(nameEntry);
+            NameEntry nameEntry = namesTable.AddName("Ivan");
+            Assert.IsNotNull(nameEntry);
+            Assert.AreEqual("Ivan", nameEntry.Name);
 
-                string pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svMale);
-                Assert.IsNull(pat);
+            nameEntry = namesTable.FindName("Ivan");
+            Assert.IsNotNull(nameEntry);
 
-                string name = namesTable.GetNameByPatronymic("Ivanovich");
-                Assert.AreEqual("", name);
+            string pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svMale);
+            Assert.IsNull(pat);
 
-                GDMSex sex = namesTable.GetSexByName("Ivan");
-                Assert.AreEqual(GDMSex.svUnknown, sex);
-                
-                namesTable.SetName("Ivan", "Ivanovich", GDMSex.svMale);
-                namesTable.SetName("Ivan", "Ivanovna", GDMSex.svFemale);
+            string name = namesTable.GetNameByPatronymic("Ivanovich");
+            Assert.AreEqual("", name);
 
-                pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svMale);
-                Assert.AreEqual("Ivanovich", pat);
+            GDMSex sex = namesTable.GetSexByName("Ivan");
+            Assert.AreEqual(GDMSex.svUnknown, sex);
 
-                pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svFemale);
-                Assert.AreEqual("Ivanovna", pat);
+            namesTable.SetName("Ivan", "Ivanovich", GDMSex.svMale);
+            namesTable.SetName("Ivan", "Ivanovna", GDMSex.svFemale);
 
-                name = namesTable.GetNameByPatronymic("Ivanovich");
-                Assert.AreEqual("Ivan", name);
+            pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svMale);
+            Assert.AreEqual("Ivanovich", pat);
 
-                name = namesTable.GetNameByPatronymic("Ivanovna");
-                Assert.AreEqual("Ivan", name);
+            pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svFemale);
+            Assert.AreEqual("Ivanovna", pat);
 
-                namesTable.SetNameSex("Maria", GDMSex.svFemale);
-                sex = namesTable.GetSexByName("Maria");
-                Assert.AreEqual(GDMSex.svFemale, sex);
+            name = namesTable.GetNameByPatronymic("Ivanovich");
+            Assert.AreEqual("Ivan", name);
 
-                namesTable.SetName("", "", GDMSex.svUnknown);
-                namesTable.SetNameSex("", GDMSex.svUnknown);
+            name = namesTable.GetNameByPatronymic("Ivanovna");
+            Assert.AreEqual("Ivan", name);
 
-                namesTable.SetName("Anna", "Ivanovna", GDMSex.svFemale);
-                sex = namesTable.GetSexByName("Anna");
-                Assert.AreEqual(GDMSex.svFemale, sex);
+            namesTable.SetNameSex("Maria", GDMSex.svFemale);
+            sex = namesTable.GetSexByName("Maria");
+            Assert.AreEqual(GDMSex.svFemale, sex);
 
-                GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
-                Assert.IsNotNull(iRec);
-                namesTable.ImportNames(fContext, iRec);
+            namesTable.SetName("", "", GDMSex.svUnknown);
+            namesTable.SetNameSex("", GDMSex.svUnknown);
 
-                namesTable.ImportNames(null, null);
+            namesTable.SetName("Anna", "Ivanovna", GDMSex.svFemale);
+            sex = namesTable.GetSexByName("Anna");
+            Assert.AreEqual(GDMSex.svFemale, sex);
 
-                sex = namesTable.GetSexByName("Anna");
-                Assert.AreEqual(GDMSex.svFemale, sex);
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            Assert.IsNotNull(iRec);
+            namesTable.ImportNames(fContext, iRec);
 
-                string namesFile = TestUtils.GetTempFilePath("names.txt");
-                try {
-                    namesTable.SaveToFile(namesFile);
-                    namesTable.LoadFromFile(namesFile);
-                } finally {
-                    TestUtils.RemoveTestFile(namesFile);
-                }
+            namesTable.ImportNames(null, null);
+
+            sex = namesTable.GetSexByName("Anna");
+            Assert.AreEqual(GDMSex.svFemale, sex);
+
+            string namesFile = TestUtils.GetTempFilePath("names.txt");
+            try {
+                namesTable.SaveToFile(namesFile);
+                namesTable.LoadFromFile(namesFile);
+            } finally {
+                TestUtils.RemoveTestFile(namesFile);
             }
         }
 
@@ -380,9 +378,8 @@ namespace GKCore
         [Test]
         public void Test_LuaScripts()
         {
-            using (ScriptEngine script = new ScriptEngine()) {
-                script.lua_run("gk_print(\"Hello\")", null, null);
-            }
+            var script = new ScriptEngine();
+            script.lua_run("gk_print(\"Hello\")", null, null);
         }
 
         [Test]

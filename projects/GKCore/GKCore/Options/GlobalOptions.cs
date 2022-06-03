@@ -36,7 +36,7 @@ namespace GKCore.Options
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class GlobalOptions : BaseObject
     {
@@ -96,6 +96,9 @@ namespace GKCore.Options
         private string fGeoSearchCountry;
         private readonly ListOptionsCollection fListOptions;
         private bool fReadabilityHighlightRows;
+        private bool fReversePlaceEntitiesOrder;
+        private bool fShortKinshipForm;
+        private bool fSurnameFirstInOrder;
 
 
         public static GlobalOptions Instance
@@ -267,6 +270,8 @@ namespace GKCore.Options
             set { fInterfaceLang = value; }
         }
 
+        public bool KeepRichNames { get; set; }
+
         public IList<LangRecord> Languages
         {
             get { return fLanguages; }
@@ -367,6 +372,21 @@ namespace GKCore.Options
             get { return fResidenceFilters; }
         }
 
+        /// <summary>
+        /// Hidden option for non-standard order.
+        /// </summary>
+        public bool ReversePlaceEntitiesOrder
+        {
+            get { return fReversePlaceEntitiesOrder; }
+            set { fReversePlaceEntitiesOrder = value; }
+        }
+
+        public bool ShortKinshipForm
+        {
+            get { return fShortKinshipForm; }
+            set { fShortKinshipForm = value; }
+        }
+
         public bool ShowDatesCalendar
         {
             get { return fShowDatesCalendar; }
@@ -384,6 +404,14 @@ namespace GKCore.Options
             get { return fShowTips; }
             set { fShowTips = value; }
         }
+
+        public bool SurnameFirstInOrder
+        {
+            get { return fSurnameFirstInOrder; }
+            set { fSurnameFirstInOrder = value; }
+        }
+
+        public bool SurnameInCapitals { get; set; }
 
         public TreeChartOptions TreeChartOptions
         {
@@ -442,27 +470,27 @@ namespace GKCore.Options
 
             fListOptions = new ListOptionsCollection();
             fReadabilityHighlightRows = true;
+            fShortKinshipForm = false;
+            fSurnameFirstInOrder = true;
 
             fCharsetDetection = false;
             fFirstCapitalLetterInNames = false;
             fGeoSearchCountry = string.Empty;
+
+            KeepRichNames = true;
+            fReversePlaceEntitiesOrder = false;
+            SurnameInCapitals = false;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
                 fLastBases.Dispose();
-                //fLanguages.Dispose();
                 fRelations.Dispose();
 
                 fResidenceFilters.Dispose();
                 fNameFilters.Dispose();
-                //FMRUFiles.Dispose();
                 fEventFilters.Dispose();
-
-                fProxy.Dispose();
-                fPedigreeOptions.Dispose();
-                fTreeChartOptions.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -670,6 +698,10 @@ namespace GKCore.Options
             fCharsetDetection = ini.ReadBool("Common", "CharsetDetection", false);
             fFirstCapitalLetterInNames = ini.ReadBool("Common", "FirstCapitalLetterInNames", false);
             fDialogClosingWarn = ini.ReadBool("Common", "DialogClosingWarn", false);
+            fShortKinshipForm = ini.ReadBool("Common", "ShortKinshipForm", false);
+            fSurnameFirstInOrder = ini.ReadBool("Common", "SurnameFirstInOrder", true);
+            SurnameInCapitals = ini.ReadBool("Common", "SurnameInCapitals", false);
+            fUseExtendedNotes = ini.ReadBool("Common", "UseExtendedNotes", false);
 
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -679,6 +711,8 @@ namespace GKCore.Options
 
             fGeocoder = ini.ReadString("Common", "Geocoder", "Google");
             fGeoSearchCountry = ini.ReadString("Common", "GeoSearchCountry", "");
+
+            KeepRichNames = ini.ReadBool("Common", "KeepRichNames", true);
 
             int kl = ini.ReadInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
             AppHost.Instance.SetKeyLayout(kl);
@@ -737,6 +771,8 @@ namespace GKCore.Options
             fListOptions.LoadFromFile(ini);
 
             LoadPluginsFromFile(ini);
+
+            fReversePlaceEntitiesOrder = ini.ReadBool("Common", "ReversePlaceEntitiesOrder", false);
         }
 
         public void LoadFromFile(string fileName)
@@ -789,6 +825,10 @@ namespace GKCore.Options
             ini.WriteBool("Common", "CharsetDetection", fCharsetDetection);
             ini.WriteBool("Common", "FirstCapitalLetterInNames", fFirstCapitalLetterInNames);
             ini.WriteBool("Common", "DialogClosingWarn", fDialogClosingWarn);
+            ini.WriteBool("Common", "ShortKinshipForm", fShortKinshipForm);
+            ini.WriteBool("Common", "SurnameFirstInOrder", fSurnameFirstInOrder);
+            ini.WriteBool("Common", "SurnameInCapitals", SurnameInCapitals);
+            ini.WriteBool("Common", "UseExtendedNotes", fUseExtendedNotes);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 
@@ -800,6 +840,8 @@ namespace GKCore.Options
 
             ini.WriteString("Common", "Geocoder", fGeocoder);
             ini.WriteString("Common", "GeoSearchCountry", fGeoSearchCountry);
+
+            ini.WriteBool("Common", "KeepRichNames", KeepRichNames);
 
             fTreeChartOptions.SaveToFile(ini);
             fPedigreeOptions.SaveToFile(ini);
@@ -875,6 +917,8 @@ namespace GKCore.Options
             fListOptions.SaveToFile(ini);
 
             SavePluginsToFile(ini);
+
+            ini.WriteBool("Common", "ReversePlaceEntitiesOrder", fReversePlaceEntitiesOrder);
         }
 
         public void SaveToFile(string fileName)

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.ResearchEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <GroupBox x:Name="GroupBox1">
+        <TableLayout Style="paddedTable">
+          <TableRow>
+            <Label x:Name="lblName" />
+            <TextBox x:Name="txtName" />
+          </TableRow>
+          <TableRow>
+            <Label x:Name="lblPriority" />
+            <StackLayout Orientation="Horizontal" Spacing="4">
+              <ComboBox x:Name="cmbPriority" ReadOnly="True" />
+              <Label x:Name="lblStatus" />
+              <ComboBox x:Name="cmbStatus" ReadOnly="True" />
+              <Label x:Name="lblPercent" />
+              <NumericStepper x:Name="nudPercent" Increment="5" />
+            </StackLayout>
+          </TableRow>
+          <TableRow>
+            <Label x:Name="lblStartDate" />
+            <StackLayout Orientation="Horizontal" Spacing="4">
+              <comcom:GKDateBox x:Name="txtStartDate" />
+              <Label x:Name="lblStopDate" />
+              <comcom:GKDateBox x:Name="txtStopDate" />
+            </StackLayout>
+          </TableRow>
+        </TableLayout>
+      </GroupBox>
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <TabControl Size="600, 260">
+        <TabPage x:Name="pageTasks">
+          <comcom:GKSheetList x:Name="fTasksList" OnModify="ListJumpHandler" />
+        </TabPage>
+        <TabPage x:Name="pageCommunications">
+          <comcom:GKSheetList x:Name="fCommunicationsList" OnModify="ListJumpHandler" />
+        </TabPage>
+        <TabPage x:Name="pageGroups">
+          <comcom:GKSheetList x:Name="fGroupsList" OnModify="ListJumpHandler" />
+        </TabPage>
+        <TabPage x:Name="pageNotes">
+          <comcom:GKSheetList x:Name="fNotesList" />
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>
