@@ -3,8 +3,9 @@
 
 using System;
 using System.Collections;
+using Xamarin.Forms;
 
-namespace Xamarin.Forms
+namespace GKUI.Platform
 {
     /// <summary>
     /// Combo box with search option

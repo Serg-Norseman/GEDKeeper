@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,9 @@
 
 using System;
 using BSLib.Design.MVP;
+using GKCore;
 using GKCore.Interfaces;
+using GKCore.MVP;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
@@ -50,10 +52,10 @@ namespace GKUI.Forms
 
         public CommonForm()
         {
-            fControlsManager = new ControlsManager();
+            fControlsManager = new ControlsManager(this);
         }
 
-        public void SetToolTip(VisualElement component, string toolTip)
+        public void SetToolTip(object component, string toolTip)
         {
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
                 // not supported
@@ -74,9 +76,18 @@ namespace GKUI.Forms
         {
         }
 
+        public object GetControl(string controlName)
+        {
+            return FindByName(controlName);
+        }
+
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControlHandler<T>(control);
+            return fControlsManager.GetControl<T>(control);
+        }
+
+        public virtual void SetLocale()
+        {
         }
     }
 
@@ -94,10 +105,6 @@ namespace GKUI.Forms
         {
             //ShowInTaskbar = showInTaskbar;
             //Show();
-        }
-
-        public virtual void SetLang()
-        {
         }
     }
 
@@ -137,15 +144,55 @@ namespace GKUI.Forms
             }
         }*/
 
-        protected async virtual void CancelClickHandler(object sender, EventArgs e)
+        protected async virtual void AcceptClickHandler(object sender, EventArgs e)
         {
             //Close(DialogResult.Cancel);
             await Navigation.PopAsync();
         }
 
-        public void SetPredefProperties(int width, int height, bool fontPreset = true)
+        protected async virtual void CancelClickHandler(object sender, EventArgs e)
         {
-            //UIHelper.SetPredefProperties(this, width, height, fontPreset);
+            //Close(DialogResult.Cancel);
+            await Navigation.PopAsync();
         }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CommonDialog<TView, TController> : CommonDialog
+        where TView : IView
+        where TController : DialogController<TView>
+    {
+        protected TController fController;
+
+        protected async override void AcceptClickHandler(object sender, EventArgs e)
+        {
+            try {
+                fController.Accept();
+                await Navigation.PopAsync();
+                //DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+            } catch (Exception ex) {
+                Logger.WriteError("CommonDialog<>.AcceptClickHandler()", ex);
+            }
+        }
+
+        protected async override void CancelClickHandler(object sender, EventArgs e)
+        {
+            try {
+                fController.Cancel();
+                await Navigation.PopAsync();
+                //DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+            } catch (Exception ex) {
+                Logger.WriteError("CommonDialog<>.CancelClickHandler()", ex);
+            }
+        }
+
+        /*protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = fController.CheckChangesPersistence();
+        }*/
     }
 }

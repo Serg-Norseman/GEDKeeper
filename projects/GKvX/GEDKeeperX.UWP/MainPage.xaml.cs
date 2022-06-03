@@ -6,7 +6,7 @@
         {
             InitializeComponent();
 
-            LoadApplication(new GEDKeeperX.App());
+            LoadApplication(new GKUI.App());
         }
     }
 }

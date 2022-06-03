@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,11 +20,9 @@
 
 using System;
 using BSLib.Design.MVP.Controls;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
@@ -52,13 +50,9 @@ namespace GKUI.Forms
             InitializeComponent();
 
             //KeyDown += SearchPanel_KeyDown;
-            //btnPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            //btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
             // TextChanged="SearchPattern_TextChanged" - FIXME: Avalonia not supported
 
             fController = new QuickSearchDlgController(this, workWindow);
-
-            SetLang();
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)
@@ -93,13 +87,5 @@ namespace GKUI.Forms
                     break;
             }
         }*/
-
-        public void SetLang()
-        {
-            Title = LangMan.LS(LSID.LSID_Search);
-            //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
-            //SetToolTip(btnPrev, LangMan.LS(LSID.LSID_FindPrevious));
-            //SetToolTip(btnNext, LangMan.LS(LSID.LSID_FindNext));
-        }
     }
 }

@@ -60,6 +60,12 @@ namespace GKUI.Platform
         {
         }
 
+        public IColor BackColor
+        {
+            get { return new ColorHandler(Control.BackgroundColor); }
+            set { Control.BackgroundColor = ((ColorHandler)value).Handle; }
+        }
+
         public string Text
         {
             get { return Control.Text; }

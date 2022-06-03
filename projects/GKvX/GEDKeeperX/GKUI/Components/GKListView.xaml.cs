@@ -7,6 +7,12 @@ namespace GKUI.Components
 {
     public sealed partial class GKListView : View, IListViewEx
     {
+        public int SelectedIndex
+        {
+            get { return 0; }
+            set { }
+        }
+
         public GKListView()
         {
             //InitializeComponent();
@@ -35,6 +41,15 @@ namespace GKUI.Components
 
         public void Activate()
         {
+        }
+
+        public void AddCheckedColumn(string caption, int width, bool autoSize = false)
+        {
+        }
+
+        public IListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
+        {
+            return null;
         }
 
         public void AddColumn(string caption, int width, bool autoSize)

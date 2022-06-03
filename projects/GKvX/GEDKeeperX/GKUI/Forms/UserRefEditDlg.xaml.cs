@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,47 +18,40 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
+using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class UserRefEditDlg : EditorDialog, IUserRefEditDlg
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class UserRefEditDlg : CommonDialog<IUserRefEditDlg, UserRefEditDlgController>, IUserRefEditDlg
     {
-        private readonly UserRefEditDlgController fController;
-
-        public GDMUserReference UserRef
+        public GDMUserReference UserReference
         {
-            get { return fController.UserRef; }
-            set { fController.UserRef = value; }
+            get { return fController.UserReference; }
+            set { fController.UserReference = value; }
         }
 
         #region View Interface
 
         IComboBox IUserRefEditDlg.Ref
         {
-            get { return fControlsManager.GetControlHandler<IComboBox>(cmbRef); }
+            get { return fControlsManager.GetControl<IComboBox>(cmbRef); }
         }
 
         IComboBox IUserRefEditDlg.RefType
         {
-            get { return fControlsManager.GetControlHandler<IComboBox>(cmbRefType); }
+            get { return fControlsManager.GetControl<IComboBox>(cmbRefType); }
         }
 
         #endregion
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            //DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
 
         public UserRefEditDlg() : this(null)
         {
@@ -67,16 +60,6 @@ namespace GKUI.Forms
         public UserRefEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
-
-            //btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            //btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
-            // SetLang()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinUserRefEdit);
-            lblReference.Text = LangMan.LS(LSID.LSID_Reference);
-            lblRefType.Text = LangMan.LS(LSID.LSID_Type);
 
             fController = new UserRefEditDlgController(this);
             fController.Init(baseWin);

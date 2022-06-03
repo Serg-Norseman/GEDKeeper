@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,17 +18,40 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Interfaces;
+using GKCore;
+using GKUI.Forms;
+using GKUI.Platform;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
-namespace GKUI.Forms
+namespace GKUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class EditorDialog : CommonDialog, IBaseEditor
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class App : Application
     {
-        public EditorDialog()
+        public App()
         {
+            InitializeComponent();
+
+            XFAppHost.ConfigureBootstrap(false);
+            LangMan.DefInit();
+
+            MainPage = new MainPage();
+        }
+
+        protected override void OnStart()
+        {
+            // Handle when your app starts
+        }
+
+        protected override void OnSleep()
+        {
+            // Handle when your app sleeps
+        }
+
+        protected override void OnResume()
+        {
+            // Handle when your app resumes
         }
     }
 }
