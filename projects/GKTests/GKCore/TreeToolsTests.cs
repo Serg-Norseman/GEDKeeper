@@ -226,11 +226,13 @@ namespace GKCore
         [Test]
         public void Test_GenPatriarchsGraphviz()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GenPatriarchsGraphviz(null, "", 0, false); });
+            var progress = Substitute.For<IProgressController>();
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GenPatriarchsGraphviz(null, "", 0, false, progress); });
 
             string filename = TestUtils.GetTempFilePath("test.gvf");
             try {
-                TreeTools.GenPatriarchsGraphviz(fBaseWin, filename, 0, false);
+                TreeTools.GenPatriarchsGraphviz(fBaseWin, filename, 0, false, progress);
             } finally {
                 TestUtils.RemoveTestFile(filename);
             }
@@ -285,8 +287,10 @@ namespace GKCore
         [Test]
         public void Test_GetUnlinkedNamesakes()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(null); });
-            List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(fBaseWin);
+            var progress = Substitute.For<IProgressController>();
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(null, progress); });
+            List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(fBaseWin, progress);
         }
 
         [Test]
@@ -336,6 +340,8 @@ namespace GKCore
         [Test]
         public void Test_SearchPlaces()
         {
+            var progress = Substitute.For<IProgressController>();
+
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchPlaces_Clear(null); });
 
             StringList placesList = new StringList();
@@ -343,7 +349,7 @@ namespace GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchPlaces(fBaseWin.Context.Tree, null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.SearchPlaces(fBaseWin.Context.Tree, placesList, null); });
 
-            TreeTools.SearchPlaces(fBaseWin.Context.Tree, placesList, AppHost.Progress);
+            TreeTools.SearchPlaces(fBaseWin.Context.Tree, placesList, progress);
             Assert.IsTrue(placesList.IndexOf("Ivanovo") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("unknown") >= 0); // <- TestStubs
             Assert.IsTrue(placesList.IndexOf("Far Forest") >= 0); // <- TestStubs

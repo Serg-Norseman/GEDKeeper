@@ -69,66 +69,69 @@ namespace GKCore.Controllers
             return res;
         }
 
+        private void LoadPlacesInt(StringList personValues, IProgressController progress)
+        {
+            GDMTree tree = fBase.Context.Tree;
+            progress.Begin(LangMan.LS(LSID.LSID_LoadingLocations), tree.RecordsCount);
+            try {
+                int num = tree.RecordsCount;
+                for (int i = 0; i < num; i++) {
+                    GDMRecord rec = tree[i];
+                    bool res = rec is GDMIndividualRecord && IsSelected(rec);
+
+                    if (res) {
+                        GDMIndividualRecord ind = rec as GDMIndividualRecord;
+                        int pCnt = 0;
+
+                        int num2 = ind.Events.Count;
+                        for (int j = 0; j < num2; j++) {
+                            GDMCustomEvent ev = ind.Events[j];
+                            if (ev.HasPlace && !string.IsNullOrEmpty(ev.Place.StringValue)) {
+                                AddPlace(ev.Place, ind, ev);
+                                pCnt++;
+                            }
+                        }
+
+                        if (pCnt > 0) {
+                            personValues.AddObject(GKUtils.GetNameString(ind, true, false) + " [" + pCnt.ToString() + "]", ind);
+                        }
+                    }
+
+                    progress.Increment();
+                }
+            } finally {
+                progress.End();
+            }
+        }
+
         public void LoadPlaces()
         {
             try {
                 PlacesCache.Instance.Load();
-
-                IProgressController progress = AppHost.Progress;
-                GDMTree tree = fBase.Context.Tree;
-
                 fView.PersonsCombo.BeginUpdate();
                 fView.PlacesTree.BeginUpdate();
-                progress.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), tree.RecordsCount);
-                try {
-                    fBaseRoot = fView.PlacesTree.AddNode(null, LangMan.LS(LSID.LSID_RPLocations), null);
+                StringList personValues = new StringList();
+                fBaseRoot = fView.PlacesTree.AddNode(null, LangMan.LS(LSID.LSID_RPLocations), null);
+                fPlaces.Clear();
 
-                    fPlaces.Clear();
-                    var personValues = new StringList();
+                AppHost.Instance.ExecuteWork((controller) => {
+                    LoadPlacesInt(personValues, controller);
+                });
 
-                    int num = tree.RecordsCount;
-                    for (int i = 0; i < num; i++) {
-                        GDMRecord rec = tree[i];
-                        bool res = rec is GDMIndividualRecord && IsSelected(rec);
+                fView.PlacesTree.Expand(fBaseRoot);
 
-                        if (res) {
-                            GDMIndividualRecord ind = rec as GDMIndividualRecord;
-                            int pCnt = 0;
-
-                            int num2 = ind.Events.Count;
-                            for (int j = 0; j < num2; j++) {
-                                GDMCustomEvent ev = ind.Events[j];
-                                if (ev.HasPlace && !string.IsNullOrEmpty(ev.Place.StringValue)) {
-                                    AddPlace(ev.Place, ind, ev);
-                                    pCnt++;
-                                }
-                            }
-
-                            if (pCnt > 0) {
-                                personValues.AddObject(GKUtils.GetNameString(ind, true, false) + " [" + pCnt.ToString() + "]", ind);
-                            }
-                        }
-
-                        progress.ProgressStep();
-                    }
-
-                    fView.PlacesTree.Expand(fBaseRoot);
-
-                    personValues.Sort();
-                    fView.PersonsCombo.Clear();
-                    fView.PersonsCombo.AddItem<GDMIndividualRecord>(LangMan.LS(LSID.LSID_NotSelected), null);
-                    for (int i = 0; i < personValues.Count; i++) {
-                        fView.PersonsCombo.AddItem<GDMIndividualRecord>(personValues[i], personValues.GetObject(i) as GDMIndividualRecord);
-                    }
-
-                    fView.SelectPlacesBtn.Enabled = true;
-                } finally {
-                    progress.ProgressDone();
-                    fView.PlacesTree.EndUpdate();
-                    fView.PersonsCombo.EndUpdate();
-
-                    PlacesCache.Instance.Save();
+                personValues.Sort();
+                fView.PersonsCombo.Clear();
+                fView.PersonsCombo.AddItem<GDMIndividualRecord>(LangMan.LS(LSID.LSID_NotSelected), null);
+                for (int i = 0; i < personValues.Count; i++) {
+                    fView.PersonsCombo.AddItem(personValues[i], personValues.GetObject(i) as GDMIndividualRecord);
                 }
+
+                fView.SelectPlacesBtn.Enabled = true;
+
+                fView.PlacesTree.EndUpdate();
+                fView.PersonsCombo.EndUpdate();
+                PlacesCache.Instance.Save();
             } catch (Exception ex) {
                 Logger.WriteError("MapsViewerWin.PlacesLoad()", ex);
             }

@@ -52,10 +52,14 @@ namespace GKCore.Controllers
             fView.ExternalBase.Text = fileName;
         }
 
+        private IProgressController fProgressController;
+
         private void DuplicateFoundFunc(GDMIndividualRecord indivA, GDMIndividualRecord indivB)
         {
-            fView.CompareOutput.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
-            fView.CompareOutput.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
+            fProgressController.InvokeEx(() => {
+                fView.CompareOutput.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
+                fView.CompareOutput.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
+            });
         }
 
         public void Match()
@@ -67,9 +71,10 @@ namespace GKCore.Controllers
 
             switch (type) {
                 case TreeMatchType.tmtInternal:
-                    AppHost.Instance.ExecuteWork((progressPtr) => {
-                        var controller = (IProgressController)progressPtr;
+                    AppHost.Instance.ExecuteWork((controller) => {
+                        fProgressController = controller;
                         TreeTools.FindDuplicates(tree, tree, 90 /*min: 80-85*/, DuplicateFoundFunc, controller);
+                        fProgressController = null;
                     });
                     break;
 
@@ -80,8 +85,7 @@ namespace GKCore.Controllers
                 case TreeMatchType.tmtAnalysis:
                     {
                         List<TreeTools.ULIndividual> uln = null;
-                        AppHost.Instance.ExecuteWork((progressPtr) => {
-                            var controller = (IProgressController)progressPtr;
+                        AppHost.Instance.ExecuteWork((controller) => {
                             uln = TreeTools.GetUnlinkedNamesakes(fBase, controller);
                         });
 

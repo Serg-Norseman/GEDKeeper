@@ -24,21 +24,29 @@ using System.Threading;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class ProgressDlg : Form, IProgressController
     {
+        private readonly ManualResetEvent fInitEvent;
         private readonly ManualResetEvent fCancelEvent;
-        private bool fRequiresClose;
+        private bool fRequiresClose = true;
         private DateTime fStartTime;
         private int fVal;
+
+
+        public ThreadError ThreadError { get; set; }
+
 
         public ProgressDlg()
         {
             InitializeComponent();
 
+            ShowInTaskbar = false;
+
+            ThreadError = new ThreadError(1, "No error");
+            fInitEvent = new ManualResetEvent(false);
             fCancelEvent = new ManualResetEvent(false);
 
             Text = LangMan.LS(LSID.LSID_Progress);
@@ -48,17 +56,47 @@ namespace GKUI.Forms
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fCancelEvent.Dispose();
+                fInitEvent.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            fRequiresClose = true;
+            ControlBox = false;
+            fInitEvent.Set();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            fRequiresClose = false;
+            fCancelEvent.Set();
+            base.OnClosing(e);
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+            Cursor.Show();
             fCancelEvent.Set();
         }
 
-        #region Private methods
+        #region Progression methods
 
-        private void DoInit(string title, int max, bool cancelable = false)
+        private void DoSetText(string text)
         {
-            lblTitle.Text = title;
-            ProgressBar1.Maximum = max;
+            lblTitle.Text = text;
+        }
+
+        private void DoBegin(int maximum, bool cancelable)
+        {
+            ProgressBar1.Maximum = maximum;
             ProgressBar1.Minimum = 0;
             ProgressBar1.Value = 0;
             fStartTime = DateTime.Now;
@@ -68,14 +106,45 @@ namespace GKUI.Forms
             DoStep(0);
         }
 
-        private void DoDone()
+        private void DoBegin(string title, int maximum, bool cancelable = false)
+        {
+            DoSetText(title);
+            DoBegin(maximum, cancelable);
+        }
+
+        private void DoEnd()
         {
             Close();
+        }
+
+        private void DoEnd(ThreadError threadError)
+        {
+            ThreadError.Error = threadError.Error;
+            ThreadError.Message = threadError.Message;
+
+            if (ThreadError.Error == 1) {
+                DialogResult = DialogResult.Cancel;
+            } else if (ThreadError.Error == 2) {
+                DialogResult = DialogResult.Abort;
+            } else if (ThreadError.Error == 3) {
+                DialogResult = DialogResult.Retry;
+            } else {
+                DialogResult = DialogResult.OK;
+            }
+        }
+
+        private void DoIncrement(int val)
+        {
+            DoStep(fVal + val);
         }
 
         private void DoStep(int value)
         {
             if (fVal == value) return;
+
+            // strange float bug
+            if (fStartTime.Ticks == 0)
+                fStartTime = DateTime.Now;
 
             fVal = value;
             ProgressBar1.Value = fVal;
@@ -85,7 +154,7 @@ namespace GKUI.Forms
             if (pos == 0.0d) pos = 1;
 
             TimeSpan passTime = DateTime.Now - fStartTime;
-            TimeSpan restTime = new TimeSpan((long)Math.Truncate((passTime.Ticks / pos) * (max - pos)));
+            TimeSpan restTime = new TimeSpan((long)((passTime.Ticks / pos) * (max - pos)));
             TimeSpan sumTime = passTime + restTime;
 
             lblPassedVal.Text = TimeSpanToString(passTime);
@@ -98,13 +167,74 @@ namespace GKUI.Forms
             return string.Format(null, "{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
         }
 
-        private void InvokeEx(MethodInvoker method)
+        public bool IsCanceled
+        {
+            get {
+                return fCancelEvent.WaitOne(0, false);
+            }
+        }
+
+        public void Begin(int maximum, bool cancelable)
+        {
+            fInitEvent.WaitOne();
+            InvokeEx(delegate {
+                DoBegin(maximum, cancelable);
+            });
+        }
+
+        public void Begin(string title, int maximum, bool cancelable = false)
+        {
+            InvokeEx(delegate {
+                DoBegin(title, maximum, cancelable);
+            });
+        }
+
+        public void End()
+        {
+            InvokeEx(delegate {
+                if (fRequiresClose) {
+                    DoEnd();
+                }
+            });
+        }
+
+        public void End(ThreadError threadError)
+        {
+            if (fRequiresClose) {
+                InvokeEx(delegate {
+                    DoEnd(threadError);
+                });
+            }
+        }
+
+        public void SetText(string text)
+        {
+            InvokeEx(delegate {
+                DoSetText(text);
+            });
+        }
+
+        public void Increment(int val = 1)
+        {
+            InvokeEx(delegate {
+                DoIncrement(val);
+            });
+        }
+
+        public void StepTo(int value)
+        {
+            InvokeEx(delegate {
+                DoStep(value);
+            });
+        }
+
+        public void InvokeEx(Action action)
         {
             try {
                 if (InvokeRequired) {
-                    BeginInvoke(method, null);
+                    BeginInvoke(action, null);
                 } else {
-                    method();
+                    action();
                 }
             } catch {
                 // dummy
@@ -112,146 +242,5 @@ namespace GKUI.Forms
         }
 
         #endregion
-
-        #region Protected methods
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            fRequiresClose = true;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            fRequiresClose = false;
-            fCancelEvent.Set();
-            base.OnClosing(e);
-        }
-
-        void IProgressController.ProgressInit(string title, int max, bool cancelable = false)
-        {
-            InvokeEx(delegate {
-                DoInit(title, max, cancelable);
-            });
-        }
-
-        void IProgressController.ProgressDone()
-        {
-            InvokeEx(delegate {
-                if (fRequiresClose) {
-                    DoDone();
-                }
-            });
-        }
-
-        void IProgressController.ProgressStep()
-        {
-            InvokeEx(delegate {
-                DoStep(fVal + 1);
-            });
-        }
-
-        void IProgressController.ProgressStep(int value)
-        {
-            InvokeEx(delegate {
-                DoStep(value);
-            });
-        }
-
-        bool IProgressController.IsCanceled
-        {
-            get {
-                return fCancelEvent.WaitOne(0, false);
-            }
-        }
-
-        #endregion
-    }
-
-    public sealed class ProgressController : IProgressController
-    {
-        private bool fCancelable;
-        private volatile bool fFormLoaded;
-        private int fMax;
-        //private ManualResetEvent fMRE = new ManualResetEvent(false);
-        private IntPtr fParentHandle;
-        private ProgressDlg fProgressForm;
-        private Thread fThread;
-        private string fTitle;
-        private int fVal;
-
-        public void ProgressInit(string title, int max, bool cancelable = false)
-        {
-            if (fProgressForm != null) {
-                ((IProgressController)fProgressForm).ProgressInit(title, max, cancelable);
-            } else {
-                fFormLoaded = false;
-                fTitle = title;
-                fMax = max;
-                fCancelable = cancelable;
-                fParentHandle = AppHost.Instance.GetTopWindowHandle();
-
-                fThread = new Thread(ShowProgressForm);
-                fThread.SetApartmentState(ApartmentState.STA);
-                fThread.Start();
-
-                while (!fFormLoaded) {
-                    Thread.Sleep(50);
-                }
-                //fMRE.WaitOne();
-            }
-
-            fVal = 0;
-        }
-
-        public void ProgressDone()
-        {
-            if (fProgressForm != null) {
-                ((IProgressController)fProgressForm).ProgressDone();
-                //fProgressForm.Dispose();
-                fProgressForm = null;
-            }
-        }
-
-        public void ProgressStep()
-        {
-            if (fProgressForm != null) {
-                ((IProgressController)fProgressForm).ProgressStep(fVal++);
-            }
-        }
-
-        public void ProgressStep(int value)
-        {
-            if (fProgressForm != null) {
-                ((IProgressController)fProgressForm).ProgressStep(value);
-            }
-        }
-
-        private void ShowProgressForm()
-        {
-            fProgressForm = new ProgressDlg();
-            ((IProgressController)fProgressForm).ProgressInit(fTitle, fMax, fCancelable);
-            fProgressForm.Load += ProgressForm_Load;
-
-            if (fParentHandle != IntPtr.Zero) {
-                UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
-            }
-
-            fProgressForm.ShowDialog();
-            //fProgressForm.Close();
-        }
-
-        private void ProgressForm_Load(object sender, EventArgs e)
-        {
-            //fMRE.Set();
-            fFormLoaded = true;
-        }
-
-        public bool IsCanceled
-        {
-            get {
-                return (fProgressForm != null) && ((IProgressController)fProgressForm).IsCanceled;
-            }
-        }
     }
 }

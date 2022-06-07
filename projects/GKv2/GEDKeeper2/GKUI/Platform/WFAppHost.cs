@@ -204,18 +204,60 @@ namespace GKUI.Platform
             Application.Exit();
         }
 
-        public override void ExecuteWork(ParameterizedThreadStart proc)
+        public override void ExecuteWork(ProgressStart proc)
         {
+            var activeWnd = GetActiveWindow() as Form;
+
             using (var progressForm = new ProgressDlg()) {
-                var workerThread = new Thread(proc);
+                var workerThread = new Thread((obj) => {
+                    proc((IProgressController)obj);
+                });
+
                 try {
-                    workerThread.SetApartmentState(ApartmentState.STA);
                     workerThread.Start(progressForm);
 
-                    progressForm.ShowDialog();
+                    progressForm.ShowDialog(activeWnd);
                 } catch (Exception ex) {
-                    Logger.WriteInfo(ex.Message);
+                    Logger.WriteError("ExecuteWork()", ex);
                 }
+            }
+        }
+
+        public override bool ExecuteWorkExt(ProgressStart proc, string title)
+        {
+            var activeWnd = GetActiveWindow() as Form;
+
+            using (var progressForm = new ProgressDlg()) {
+                progressForm.Text = title;
+
+                var threadWorker = new Thread((obj) => {
+                    proc((IProgressController)obj);
+                });
+
+                DialogResult dialogResult = DialogResult.Abort;
+                try {
+                    threadWorker.Start(progressForm);
+
+                    dialogResult = progressForm.ShowDialog(activeWnd);
+                } finally {
+                    threadWorker.Join();
+                }
+
+                if (dialogResult == DialogResult.Abort) {
+                    if (progressForm.ThreadError.Message == "") {
+                        // Abort means there were file IO errors
+                        StdDialogs.ShowAlert("UnkProblem" /*fLangMan.LS(PLS.LSID_UnkProblem)*/);
+                    } else {
+                        // Abort means there were file IO errors
+                        StdDialogs.ShowAlert(progressForm.ThreadError.Message);
+                    }
+                }
+
+                if (dialogResult != DialogResult.OK) {
+                    return false;
+                }
+
+                return true;
             }
         }
 
@@ -271,7 +313,6 @@ namespace GKUI.Platform
             // controls and other
             container.Register<IStdDialogs, WFStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
-            container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
 
             // dialogs

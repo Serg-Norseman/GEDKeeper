@@ -259,14 +259,28 @@ namespace GKUI.Platform
             Application.Instance.Quit();
         }
 
-        public override void ExecuteWork(ParameterizedThreadStart proc)
+        public override void ExecuteWork(ProgressStart proc)
         {
+            var activeWnd = GetActiveWindow() as Window;
+
             using (var progressForm = new ProgressDlg()) {
-                progressForm.Show();
-                Application.Instance.Invoke(async () => {
-                    proc(progressForm);
+                var workerThread = new Thread((obj) => {
+                    proc((IProgressController)obj);
                 });
+
+                try {
+                    workerThread.Start(progressForm);
+
+                    progressForm.ShowModal(activeWnd);
+                } catch (Exception ex) {
+                    Logger.WriteError("ExecuteWork()", ex);
+                }
             }
+        }
+
+        public override bool ExecuteWorkExt(ProgressStart proc, string title)
+        {
+            return false;
         }
 
         #region KeyLayout functions
@@ -319,7 +333,6 @@ namespace GKUI.Platform
             // controls and other
             container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProviderEx, EtoGfxProvider>(LifeCycle.Singleton);
-            container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
 
             // dialogs

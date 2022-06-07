@@ -47,8 +47,7 @@ namespace GKCore.Controllers
 
         public void CheckBase()
         {
-            AppHost.Instance.ExecuteWork((progressPtr) => {
-                var controller = (IProgressController)progressPtr;
+            AppHost.Instance.ExecuteWork((controller) => {
                 TreeTools.CheckBase(fBase, fChecksList, controller);
             });
 

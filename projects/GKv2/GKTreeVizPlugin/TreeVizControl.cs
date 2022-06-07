@@ -423,7 +423,11 @@ namespace GKTreeVizPlugin
                 fSys.SetViewSize(50, 50);
                 fSys.OnStop += OnArborStop;
 
-                var patList = PatriarchsMan.GetPatriarchsLinks(baseWin.Context, minGens, false, loneSuppress);
+                IList<PatriarchObj> patList = null;
+                AppHost.Instance.ExecuteWork((controller) => {
+                    patList = PatriarchsMan.GetPatriarchsLinks(baseWin.Context, minGens, false, loneSuppress, controller);
+                });
+
                 int num = patList.Count;
                 for (int i = 0; i < num; i++) {
                     PatriarchObj pObj = patList[i];

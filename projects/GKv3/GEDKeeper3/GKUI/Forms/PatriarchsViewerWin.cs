@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using BSLib.DataViz.ArborGVT;
 using BSLib.DataViz.SmartGraph;
 using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
@@ -39,29 +40,19 @@ namespace GKUI.Forms
         private ArborViewer arborViewer1;
         private bool fTipShow;
 
-        private void InitializeComponent()
-        {
-            ClientSize = new Size(800, 600);
-            Load += Form_Load;
-            Title = "PatriarchsViewer";
-
-            arborViewer1 = new ArborViewer();
-            arborViewer1.BackgroundColor = Colors.White;
-            arborViewer1.EnergyDebug = false;
-            arborViewer1.NodesDragging = false;
-            arborViewer1.MouseMove += ArborViewer1_MouseMove;
-
-            Content = arborViewer1;
-        }
-
         public PatriarchsViewerWin(IBaseWindow baseWin, int minGens)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             fBase = baseWin;
             fTipShow = false;
 
-            using (Graph graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true)) {
+            Graph graph = null;
+            AppHost.Instance.ExecuteWork((controller) => {
+                graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true, controller);
+            });
+
+            using (graph) {
                 ArborSystem sys = arborViewer1.Sys;
 
                 foreach (Vertex vtx in graph.Vertices) {

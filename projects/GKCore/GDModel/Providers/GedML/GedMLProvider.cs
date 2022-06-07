@@ -56,7 +56,7 @@ namespace GDModel.Providers.GedML
         {
             fTree.State = GDMTreeState.osLoading;
             try {
-                ProgressEventHandler progressHandler = fTree.OnProgress;
+                var progressCallback = fTree.ProgressCallback;
 
                 long fileSize = fileStream.Length;
                 int progress = 0;
@@ -119,11 +119,11 @@ namespace GDModel.Providers.GedML
                             }
                         }
 
-                        if (progressHandler != null) {
+                        if (progressCallback != null) {
                             int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
                             if (progress != newProgress) {
                                 progress = newProgress;
-                                progressHandler(fTree, progress);
+                                progressCallback.StepTo(progress);
                             }
                         }
                     }

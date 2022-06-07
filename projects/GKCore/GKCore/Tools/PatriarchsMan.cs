@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,12 +33,11 @@ namespace GKCore.Tools
     public static class PatriarchsMan
     {
         public static IList<PatriarchObj> GetPatriarchsList(IBaseContext context,
-                                                              int gensMin, bool datesCheck)
+                                                              int gensMin, bool datesCheck, IProgressController progress, bool progressDone)
         {
             var patList = new List<PatriarchObj>();
 
-            IProgressController progress = AppHost.Progress;
-            progress.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), context.Tree.RecordsCount);
+            progress.Begin(LangMan.LS(LSID.LSID_PatSearch), context.Tree.RecordsCount);
 
             try {
                 int num = context.Tree.RecordsCount;
@@ -72,10 +71,11 @@ namespace GKCore.Tools
                         }
                     }
 
-                    progress.ProgressStep();
+                    progress.Increment();
                 }
             } finally {
-                progress.ProgressDone();
+                if (progressDone)
+                    progress.End();
             }
 
             return patList;
@@ -83,12 +83,11 @@ namespace GKCore.Tools
 
         public static IList<PatriarchObj> GetPatriarchsLinks(IBaseContext context,
                                                                int gensMin, bool datesCheck,
-                                                               bool loneSuppress)
+                                                               bool loneSuppress, IProgressController progress)
         {
-            var patList = GetPatriarchsList(context, gensMin, datesCheck);
+            var patList = GetPatriarchsList(context, gensMin, datesCheck, progress, false);
 
-            IProgressController progress = AppHost.Progress;
-            progress.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
+            progress.Begin(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
             try {
                 int num2 = patList.Count;
                 for (int i = 0; i < num2; i++) {
@@ -110,10 +109,10 @@ namespace GKCore.Tools
                         }
                     }
 
-                    progress.ProgressStep();
+                    progress.Increment();
                 }
             } finally {
-                progress.ProgressDone();
+                progress.End();
             }
 
             if (loneSuppress) {
@@ -153,12 +152,14 @@ namespace GKCore.Tools
         }
 
         public static Graph GetPatriarchsGraph(IBaseContext context, int gensMin,
-                                               bool datesCheck, bool loneSuppress)
+                                               bool datesCheck, bool loneSuppress,
+                                               IProgressController progress)
         {
             Graph graph = new Graph();
 
             try {
-                var patList = GetPatriarchsList(context, gensMin, datesCheck);
+                var patList = GetPatriarchsList(context, gensMin, datesCheck, progress, false);
+
                 var pgNodes = new GKVarCache<GDMFamilyRecord, PGNode>();
 
                 // prepare
@@ -174,10 +175,9 @@ namespace GKCore.Tools
                     }
                 }
 
-                IProgressController progress = AppHost.Progress;
                 try {
                     int patCount = patList.Count;
-                    progress.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patCount);
+                    progress.Begin(LangMan.LS(LSID.LSID_LinksSearch), patCount);
 
                     for (int i = 0; i < patCount; i++) {
                         PatriarchObj patr = patList[i];
@@ -200,10 +200,10 @@ namespace GKCore.Tools
                             }
                         }
 
-                        progress.ProgressStep();
+                        progress.Increment();
                     }
                 } finally {
-                    progress.ProgressDone();
+                    progress.End();
                 }
 
                 // create graph

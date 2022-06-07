@@ -47,7 +47,12 @@ namespace GKUI.Forms
             fTip = new ToolTip();
             fTipShow = false;
 
-            using (Graph graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true)) {
+            Graph graph = null;
+            AppHost.Instance.ExecuteWork((controller) => {
+                graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true, controller);
+            });
+
+            using (graph) {
                 ArborSystem sys = arborViewer1.Sys;
 
                 foreach (Vertex vtx in graph.Vertices) {

@@ -1548,7 +1548,7 @@ namespace GKCore
                         int progress = (int)((size / flen) * 100);
                         if (progress != reportedProgress) {
                             reportedProgress = progress;
-                            progressController.ProgressStep(reportedProgress);
+                            progressController.StepTo(reportedProgress);
                         }
                     }
 

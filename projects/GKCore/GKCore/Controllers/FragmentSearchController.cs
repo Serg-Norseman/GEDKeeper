@@ -45,8 +45,7 @@ namespace GKCore.Controllers
         {
             List<List<GDMRecord>> treeFragments = null;
 
-            AppHost.Instance.ExecuteWork((progressPtr) => {
-                var controller = (IProgressController)progressPtr;
+            AppHost.Instance.ExecuteWork((controller) => {
                 treeFragments = TreeTools.SearchTreeFragments(fBase.Context.Tree, controller);
             });
 

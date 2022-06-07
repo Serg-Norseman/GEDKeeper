@@ -56,8 +56,7 @@ namespace GKCore.Controllers
         {
             fView.PlacesList.BeginUpdate();
             try {
-                AppHost.Instance.ExecuteWork((progressPtr) => {
-                    var controller = (IProgressController)progressPtr;
+                AppHost.Instance.ExecuteWork((controller) => {
                     TreeTools.SearchPlaces(fBase.Context.Tree, fPlaces, controller);
                 });
 

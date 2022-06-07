@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -250,7 +250,9 @@ namespace GKCore
 
         public abstract void Quit();
 
-        public abstract void ExecuteWork(ParameterizedThreadStart proc);
+        public abstract void ExecuteWork(ProgressStart proc);
+
+        public abstract bool ExecuteWorkExt(ProgressStart proc, string title);
 
         #region Executing environment
 
@@ -929,16 +931,6 @@ namespace GKCore
                     fOptions = GlobalOptions.Instance;
                 }
                 return fOptions;
-            }
-        }
-
-        public static IProgressController Progress
-        {
-            get {
-                if (fProgressController == null) {
-                    fProgressController = fIocContainer.Resolve<IProgressController>();
-                }
-                return fProgressController;
             }
         }
 
