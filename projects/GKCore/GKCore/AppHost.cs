@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
-using System.Threading;
 using BSLib;
 using BSLib.Design.IoC;
 using GKCore.Interfaces;
@@ -38,8 +37,6 @@ using GKCore.Types;
 namespace GKCore
 {
     internal delegate void OnMessageReceivedInvoker(MessageEventArgs e);
-
-    public delegate void ParameterizedProgressProc(IProgressController controller);
 
     /// <summary>
     /// Global controller of UI for the isolation

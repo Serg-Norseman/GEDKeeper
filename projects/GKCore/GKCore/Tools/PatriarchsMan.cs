@@ -202,23 +202,23 @@ namespace GKCore.Tools
 
                         progress.Increment();
                     }
+
+                    // create graph
+                    for (int i = 0; i < patCount; i++) {
+                        PatriarchObj patNode = patList[i];
+                        PL_WalkDescLinks(context.Tree, graph, pgNodes, null, patNode.IRec);
+                    }
+
+                    if (loneSuppress) {
+                        for (int i = patCount - 1; i >= 0; i--) {
+                            PatriarchObj patr = patList[i];
+                            if (patr.Links.Count == 0)
+                                patList.RemoveAt(i);
+                        }
+                    }
                 } finally {
                     progress.End();
                 }
-
-                // create graph
-                int count3 = patList.Count;
-                for (int i = 0; i < count3; i++) {
-                    PatriarchObj patNode = patList[i];
-                    PL_WalkDescLinks(context.Tree, graph, pgNodes, null, patNode.IRec);
-                }
-
-                    /*if (gpl_params.aLoneSuppress) {
-				for (int i = aList.Count - 1; i >= 0; i--) {
-					PatriarchObj patr = aList[i] as PatriarchObj;
-					if (patr.ILinks.Count == 0) aList.Delete(i);
-				}
-				aList.Pack();*/
             } catch (Exception ex) {
                 Logger.WriteError("PatriarchsMan.GetPatriarchsGraph()", ex);
             }

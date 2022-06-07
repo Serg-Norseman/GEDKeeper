@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,6 +36,7 @@ namespace GKUI.Forms
     public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
     {
         private readonly IBaseWindow fBase;
+        private readonly int fMinGens;
         private readonly ToolTip fTip;
         private bool fTipShow;
 
@@ -44,12 +45,16 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fBase = baseWin;
+            fMinGens = minGens;
             fTip = new ToolTip();
             fTipShow = false;
+        }
 
+        private void LoadGraph()
+        {
             Graph graph = null;
             AppHost.Instance.ExecuteWork((controller) => {
-                graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true, controller);
+                graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, fMinGens, false, true, controller);
             });
 
             using (graph) {
@@ -67,12 +72,11 @@ namespace GKUI.Forms
                     sys.AddEdge(edge.Source.Sign, edge.Target.Sign);
                 }
             }
-
-            arborViewer1.NodesDragging = true;
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
+            LoadGraph();
             arborViewer1.start();
         }
 

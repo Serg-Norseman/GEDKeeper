@@ -36,8 +36,16 @@ namespace GKUI.Forms
 {
     public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
     {
-        private readonly IBaseWindow fBase;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
         private ArborViewer arborViewer1;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        private readonly IBaseWindow fBase;
+        private readonly int fMinGens;
         private bool fTipShow;
 
         public PatriarchsViewerWin(IBaseWindow baseWin, int minGens)
@@ -45,11 +53,16 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fBase = baseWin;
-            fTipShow = false;
+            fMinGens = minGens;
 
+            fTipShow = false;
+        }
+
+        private void LoadGraph()
+        {
             Graph graph = null;
             AppHost.Instance.ExecuteWork((controller) => {
-                graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true, controller);
+                graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, fMinGens, false, true, controller);
             });
 
             using (graph) {
@@ -67,12 +80,11 @@ namespace GKUI.Forms
                     sys.AddEdge(edge.Source.Sign, edge.Target.Sign);
                 }
             }
-
-            arborViewer1.NodesDragging = true;
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
+            LoadGraph();
             arborViewer1.start();
         }
 

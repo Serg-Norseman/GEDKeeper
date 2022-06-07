@@ -4,5 +4,5 @@
   x:Class="GKUI.Forms.PatriarchsViewerWin"
   ShowInTaskbar="True" Size="800, 600" Load="Form_Load" Title="PatriarchsViewer">
 
-  <comcom:ArborViewer x:Name="arborViewer1" BackgroundColor="White" EnergyDebug="False" NodesDragging="False" MouseMove="ArborViewer1_MouseMove" />
+  <comcom:ArborViewer x:Name="arborViewer1" BackgroundColor="White" EnergyDebug="False" NodesDragging="True" MouseMove="ArborViewer1_MouseMove" />
 </Form>
