@@ -102,10 +102,10 @@ namespace GKUI.Forms
             radPersons.Properties.Checked = true;
 
             RecordSelectDlgTests.SetSelectItemHandler(0);
-            ClickButton("MergeControl.btnRec1Select", form);
+            ClickButton("btnRec1Select", form);
 
             RecordSelectDlgTests.SetSelectItemHandler(1);
-            ClickButton("MergeControl.btnRec2Select", form);
+            ClickButton("btnRec2Select", form);
 
             ClickButton("btnAutoSearch", form);
 

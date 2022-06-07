@@ -29,14 +29,12 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PersonalNameEditDlg: EditorDialog, IPersonalNameEditDlg
+    public partial class PersonalNameEditDlg: CommonDialog<IPersonalNameEditDlg, PersonalNameEditDlgController>, IPersonalNameEditDlg
     {
-        private readonly PersonalNameEditDlgController fController;
-
-        public GDMIndividualRecord Individual
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fController.Individual; }
-            set { fController.Individual = value; }
+            get { return fController.IndividualRecord; }
+            set { fController.IndividualRecord = value; }
         }
 
         public GDMPersonalName PersonalName
@@ -125,22 +123,6 @@ namespace GKUI.Forms
         private void txtXName_Leave(object sender, EventArgs e)
         {
             UIHelper.ProcessName(sender);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void cmbLanguage_SelectedIndexChanged(object sender, EventArgs e)

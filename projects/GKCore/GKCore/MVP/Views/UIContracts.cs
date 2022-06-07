@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -89,7 +89,7 @@ namespace GKCore.MVP.Views
 
     public interface ICommunicationEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMCommunicationRecord Communication { get; set; }
+        GDMCommunicationRecord CommunicationRecord { get; set; }
 
         ITextBox Corresponder { get; }
         IComboBox CorrType { get; }
@@ -138,7 +138,7 @@ namespace GKCore.MVP.Views
 
     public interface IFamilyEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMFamilyRecord Family { get; set; }
+        GDMFamilyRecord FamilyRecord { get; set; }
 
         void SetTarget(TargetMode targetType, GDMIndividualRecord target);
         void LockEditor(bool locked);
@@ -171,7 +171,7 @@ namespace GKCore.MVP.Views
 
     public interface IGroupEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMGroupRecord Group { get; set; }
+        GDMGroupRecord GroupRecord { get; set; }
 
         ITextBox Name { get; }
 
@@ -230,7 +230,7 @@ namespace GKCore.MVP.Views
 
     public interface IMediaEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMMultimediaRecord MediaRec { get; set; }
+        GDMMultimediaRecord MultimediaRecord { get; set; }
 
         ISheetList NotesList { get; }
         ISheetList SourcesList { get; }
@@ -245,8 +245,8 @@ namespace GKCore.MVP.Views
 
     public interface IMediaViewerWin : IWindow
     {
-        GDMFileReferenceWithTitle FileRef { get; set; }
-        GDMMultimediaRecord Multimedia { get; set; }
+        GDMFileReferenceWithTitle FileReference { get; set; }
+        GDMMultimediaRecord MultimediaRecord { get; set; }
 
         void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef);
         void SetViewMedia(string mediaFile);
@@ -304,23 +304,19 @@ namespace GKCore.MVP.Views
 
     public interface IParentsEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMChildToFamilyLink Link { get; set; }
-        GDMIndividualRecord Person { get; set; }
+        GDMChildToFamilyLink ChildLink { get; set; }
+        GDMIndividualRecord IndividualRecord { get; set; }
 
         ITextBox Father { get; }
         ITextBox Mother { get; }
         ITextBox ChildName { get; }
         IComboBox LinkageTypeCombo { get; }
-
-        void SetParentsAvl(bool avail);
-        void SetFatherAvl(bool avail);
-        void SetMotherAvl(bool avail);
     }
 
 
     public interface IPersonalNameEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMIndividualRecord Individual { get; set; }
+        GDMIndividualRecord IndividualRecord { get; set; }
         GDMPersonalName PersonalName { get; set; }
 
         ILabel SurnameLabel { get; }
@@ -339,7 +335,7 @@ namespace GKCore.MVP.Views
 
     public interface IPersonEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMIndividualRecord Person { get; set; }
+        GDMIndividualRecord IndividualRecord { get; set; }
         GDMIndividualRecord Target { get; set; }
         TargetMode TargetMode { get; set; }
         void SetNeedSex(GDMSex needSex);
@@ -444,7 +440,7 @@ namespace GKCore.MVP.Views
 
     public interface IRepositoryEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMRepositoryRecord Repository { get; set; }
+        GDMRepositoryRecord RepositoryRecord { get; set; }
 
         ISheetList NotesList { get; }
         ITextBox Name { get; }
@@ -453,7 +449,7 @@ namespace GKCore.MVP.Views
 
     public interface IResearchEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMResearchRecord Research { get; set; }
+        GDMResearchRecord ResearchRecord { get; set; }
 
         ISheetList TasksList { get; }
         ISheetList CommunicationsList { get; }
@@ -491,7 +487,6 @@ namespace GKCore.MVP.Views
     public interface ISlideshowWin : IWindow, IStatusForm
     {
         void SetImage(IImage image);
-        void UpdateControls();
     }
 
 
@@ -508,8 +503,10 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface ISourceEditDlg : ICommonDialog, IBaseEditor, IView<GDMSourceRecord, ISourceEditDlg>
+    public interface ISourceEditDlg : ICommonDialog, IBaseEditor
     {
+        GDMSourceRecord SourceRecord { get; set; }
+
         ISheetList NotesList { get; }
         ISheetList MediaList { get; }
         ISheetList RepositoriesList { get; }
@@ -533,7 +530,7 @@ namespace GKCore.MVP.Views
 
     public interface ITaskEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMTaskRecord Task { get; set; }
+        GDMTaskRecord TaskRecord { get; set; }
 
         ISheetList NotesList { get; }
         IComboBox Priority { get; }
@@ -560,15 +557,12 @@ namespace GKCore.MVP.Views
         ISheetList PersonsList { get; }
         INumericBox YearNum { get; }
         IComboBox SourceCombo { get; }
-
-        int GetCutModeRadio();
-        void SetCutModeRadio(int cutMode);
     }
 
 
     public interface IUserRefEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMUserReference UserRef { get; set; }
+        GDMUserReference UserReference { get; set; }
 
         IComboBox Ref { get; }
         IComboBox RefType { get; }
@@ -604,13 +598,17 @@ namespace GKCore.MVP.Views
 
     public interface IRecMergeDlg : ICommonDialog, IBaseEditor
     {
-        IMergeControl MergeCtl { get; }
+        IHyperView View1 { get; }
+        IHyperView View2 { get; }
         IButton SkipBtn { get; }
         IProgressBar ProgressBar { get; }
         ICheckBox IndistinctMatchingChk { get; }
         INumericBox NameAccuracyNum { get; }
         ICheckBox BirthYearChk { get; }
         INumericBox YearInaccuracyNum { get; }
+
+        void SetRec1(GDMRecord value);
+        void SetRec2(GDMRecord value);
     }
 
 
@@ -619,8 +617,6 @@ namespace GKCore.MVP.Views
         IListViewEx ChecksList { get; }
     }
 
-
-    public enum TreeMatchType { tmtInternal, tmtExternal, tmtAnalysis }
 
     public interface ITreeCompareDlg : ICommonDialog, IBaseEditor
     {

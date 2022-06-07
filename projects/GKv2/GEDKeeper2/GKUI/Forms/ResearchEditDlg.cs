@@ -18,11 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -33,19 +30,17 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class ResearchEditDlg : EditorDialog, IResearchEditDlg
+    public partial class ResearchEditDlg : CommonDialog<IResearchEditDlg, ResearchEditDlgController>, IResearchEditDlg
     {
-        private readonly ResearchEditDlgController fController;
-
         private readonly GKSheetList fTasksList;
         private readonly GKSheetList fCommunicationsList;
         private readonly GKSheetList fGroupsList;
         private readonly GKSheetList fNotesList;
 
-        public GDMResearchRecord Research
+        public GDMResearchRecord ResearchRecord
         {
-            get { return fController.Research; }
-            set { fController.Research = value; }
+            get { return fController.ResearchRecord; }
+            set { fController.ResearchRecord = value; }
         }
 
         #region View Interface
@@ -111,63 +106,28 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fTasksList = new GKSheetList(pageTasks);
-            fTasksList.OnModify += ListTasksModify;
+            fTasksList.OnModify += ListJumpHandler;
             fTasksList.SetControlName("fTasksList"); // for purpose of tests
 
             fCommunicationsList = new GKSheetList(pageCommunications);
-            fCommunicationsList.OnModify += ListCommunicationsModify;
+            fCommunicationsList.OnModify += ListJumpHandler;
             fCommunicationsList.SetControlName("fCommunicationsList"); // for purpose of tests
 
             fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.OnModify += ListGroupsModify;
+            fGroupsList.OnModify += ListJumpHandler;
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
             fNotesList = new GKSheetList(pageNotes);
 
             fController = new ResearchEditDlgController(this);
             fController.Init(baseWin);
-
-            fTasksList.ListModel = new ResTasksSublistModel(baseWin, fController.LocalUndoman);
-            fCommunicationsList.ListModel = new ResCommunicationsSublistModel(baseWin, fController.LocalUndoman);
-            fGroupsList.ListModel = new ResGroupsSublistModel(baseWin, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
         }
 
-        private void ListTasksModify(object sender, ModifyEventArgs eArgs)
+        private void ListJumpHandler(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMTaskRecord);
+                fController.JumpToRecord(eArgs.ItemData as GDMRecord);
             }
-        }
-
-        private void ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMCommunicationRecord);
-            }
-        }
-
-        private void ListGroupsModify(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
-            }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

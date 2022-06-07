@@ -67,7 +67,7 @@ namespace GKCore.Controllers
                     try {
                         baseWin.Context.LockRecord(mediaRec);
 
-                        dlg.MediaRec = mediaRec;
+                        dlg.MultimediaRecord = mediaRec;
                         result = (AppHost.Instance.ShowModalX(dlg, false));
                     } finally {
                         baseWin.Context.UnlockRecord(mediaRec);
@@ -154,7 +154,7 @@ namespace GKCore.Controllers
                     try {
                         baseWin.Context.LockRecord(sourceRec);
 
-                        dlg.Model = sourceRec;
+                        dlg.SourceRecord = sourceRec;
                         result = (AppHost.Instance.ShowModalX(dlg, false));
                     } finally {
                         baseWin.Context.UnlockRecord(sourceRec);
@@ -226,7 +226,7 @@ namespace GKCore.Controllers
                     try {
                         baseWin.Context.LockRecord(repRec);
 
-                        dlg.Repository = repRec;
+                        dlg.RepositoryRecord = repRec;
                         result = AppHost.Instance.ShowModalX(dlg, false);
                     } finally {
                         baseWin.Context.UnlockRecord(repRec);
@@ -266,7 +266,7 @@ namespace GKCore.Controllers
                     try {
                         baseWin.Context.LockRecord(groupRec);
 
-                        dlg.Group = groupRec;
+                        dlg.GroupRecord = groupRec;
                         result = (AppHost.Instance.ShowModalX(dlg, false));
                     } finally {
                         baseWin.Context.UnlockRecord(groupRec);
@@ -306,7 +306,7 @@ namespace GKCore.Controllers
                     try {
                         baseWin.Context.LockRecord(researchRec);
 
-                        dlg.Research = researchRec;
+                        dlg.ResearchRecord = researchRec;
                         result = AppHost.Instance.ShowModalX(dlg, false);
                     } finally {
                         baseWin.Context.UnlockRecord(researchRec);
@@ -346,7 +346,7 @@ namespace GKCore.Controllers
                     try {
                         baseWin.Context.LockRecord(taskRec);
 
-                        dlg.Task = taskRec;
+                        dlg.TaskRecord = taskRec;
                         result = AppHost.Instance.ShowModalX(dlg, false);
                     } finally {
                         baseWin.Context.UnlockRecord(taskRec);
@@ -386,7 +386,7 @@ namespace GKCore.Controllers
                     try {
                         baseWin.Context.LockRecord(commRec);
 
-                        dlg.Communication = commRec;
+                        dlg.CommunicationRecord = commRec;
                         result = AppHost.Instance.ShowModalX(dlg, false);
                     } finally {
                         baseWin.Context.UnlockRecord(commRec);
@@ -494,7 +494,7 @@ namespace GKCore.Controllers
                     try {
                         baseWin.Context.LockRecord(indivRec);
 
-                        dlg.Person = indivRec;
+                        dlg.IndividualRecord = indivRec;
 
                         if (targetMode != TargetMode.tmNone) {
                             if (needSex == GDMSex.svMale || needSex == GDMSex.svFemale) {
@@ -554,7 +554,7 @@ namespace GKCore.Controllers
                     try {
                         baseWin.Context.LockRecord(familyRec);
 
-                        dlg.Family = familyRec;
+                        dlg.FamilyRecord = familyRec;
                         dlg.SetTarget(targetType, target);
 
                         result = (AppHost.Instance.ShowModalX(dlg, false));

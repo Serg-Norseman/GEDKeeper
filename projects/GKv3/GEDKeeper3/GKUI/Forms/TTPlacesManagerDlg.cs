@@ -28,7 +28,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTPlacesManagerDlg : CommonDialog, IPlacesManagerDlg
+    public sealed partial class TTPlacesManagerDlg : CommonDialog<IPlacesManagerDlg, PlacesManagerController>, IPlacesManagerDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -42,8 +42,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly PlacesManagerController fController;
 
         #region View Interface
 

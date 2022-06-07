@@ -28,6 +28,8 @@ using GKCore.Tools;
 
 namespace GKCore.Controllers
 {
+    public enum TreeMatchType { tmtInternal, tmtExternal, tmtAnalysis }
+
     /// <summary>
     /// 
     /// </summary>

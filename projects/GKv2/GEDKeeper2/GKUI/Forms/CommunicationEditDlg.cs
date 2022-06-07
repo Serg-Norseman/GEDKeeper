@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Controllers;
@@ -31,17 +30,15 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class CommunicationEditDlg : EditorDialog, ICommunicationEditDlg
+    public sealed partial class CommunicationEditDlg : CommonDialog<ICommunicationEditDlg, CommunicationEditDlgController>, ICommunicationEditDlg
     {
-        private readonly CommunicationEditDlgController fController;
-
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
 
-        public GDMCommunicationRecord Communication
+        public GDMCommunicationRecord CommunicationRecord
         {
-            get { return fController.Communication; }
-            set { fController.Communication = value; }
+            get { return fController.CommunicationRecord; }
+            set { fController.CommunicationRecord = value; }
         }
 
         #region View Interface
@@ -96,25 +93,6 @@ namespace GKUI.Forms
 
             fController = new CommunicationEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnPersonAdd_Click(object sender, EventArgs e)

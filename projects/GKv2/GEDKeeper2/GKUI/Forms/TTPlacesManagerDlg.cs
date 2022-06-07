@@ -26,10 +26,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTPlacesManagerDlg : CommonDialog, IPlacesManagerDlg
+    public sealed partial class TTPlacesManagerDlg : CommonDialog<IPlacesManagerDlg, PlacesManagerController>, IPlacesManagerDlg
     {
-        private readonly PlacesManagerController fController;
-
         private GKListView ListPlaces;
 
         #region View Interface
@@ -49,7 +47,6 @@ namespace GKUI.Forms
 
             ListPlaces = UIHelper.CreateListView(Panel4);
             ListPlaces.DoubleClick += ListPlaces_DblClick;
-
 
             fController = new PlacesManagerController(this);
             fController.Init(baseWin);

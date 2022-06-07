@@ -143,7 +143,6 @@ namespace GKUI.Forms
 
             fController = new PersonsFilterDlgController(this, listMan);
             fController.Init(baseWin);
-
             fController.UpdateView();
         }
 
@@ -152,16 +151,10 @@ namespace GKUI.Forms
             txtAliveBeforeDate.Enabled = rbAliveBefore.Checked;
         }
 
-        public override void DoReset()
+        public override void Reset()
         {
-            base.DoReset();
+            base.Reset();
             fController.UpdateView();
-        }
-
-        public override void AcceptChanges()
-        {
-            base.AcceptChanges();
-            fController.Accept();
         }
     }
 }

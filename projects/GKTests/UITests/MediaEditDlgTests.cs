@@ -52,7 +52,7 @@ namespace GKUI.Forms
             fMultimediaRecord.FileReferences.Add(new GDMFileReferenceWithTitle());
 
             fDialog = new MediaEditDlg(fBase);
-            fDialog.MediaRec = fMultimediaRecord;
+            fDialog.MultimediaRecord = fMultimediaRecord;
             fDialog.Show();
         }
 
@@ -71,7 +71,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fMultimediaRecord, fDialog.MediaRec);
+            Assert.AreEqual(fMultimediaRecord, fDialog.MultimediaRecord);
 
             var txtName = new TextBoxTester("txtName");
             txtName.Enter("sample text");

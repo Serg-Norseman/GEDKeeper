@@ -48,7 +48,7 @@ namespace GKUI.Forms
             fRepositoryRecord = new GDMRepositoryRecord(fBase.Context.Tree);
 
             fDialog = new RepositoryEditDlg(fBase);
-            fDialog.Repository = fRepositoryRecord;
+            fDialog.RepositoryRecord = fRepositoryRecord;
             fDialog.Show();
         }
 
@@ -67,7 +67,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fRepositoryRecord, fDialog.Repository);
+            Assert.AreEqual(fRepositoryRecord, fDialog.RepositoryRecord);
 
             ModalFormHandler = Dialog_Cancel_Handler;
             ClickButton("btnAddress", fDialog);

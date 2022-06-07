@@ -22,14 +22,16 @@ using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
+using GDModel;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTRecMergeDlg : CommonDialog, IRecMergeDlg
+    public sealed partial class TTRecMergeDlg : CommonDialog<IRecMergeDlg, RecMergeController>, IRecMergeDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -52,19 +54,32 @@ namespace GKUI.Forms
         private RadioButton radSources;
         private CheckBox chkBookmarkMerged;
         private GroupBox grpMergeOther;
-        private GKUI.Components.GKMergeControl MergeControl;
         private CheckBox chkIndistinctMatching;
+
+        private Button btnMergeToRight;
+        private Button btnMergeToLeft;
+        private Button btnRec2Select;
+        private Button btnRec1Select;
+        private TextBox Edit2;
+        private TextBox Edit1;
+        private Label Lab2;
+        private Label Lab1;
+        private HyperView fView1;
+        private HyperView fView2;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly RecMergeController fController;
-
         #region View Interface
 
-        IMergeControl IRecMergeDlg.MergeCtl
+        IHyperView IRecMergeDlg.View1
         {
-            get { return MergeControl; }
+            get { return fView1; }
+        }
+
+        IHyperView IRecMergeDlg.View2
+        {
+            get { return fView2; }
         }
 
         IButton IRecMergeDlg.SkipBtn
@@ -105,19 +120,16 @@ namespace GKUI.Forms
 
             fController = new RecMergeController(this);
             fController.Init(baseWin);
-
-            MergeControl.Base = baseWin;
-            MergeControl.MergeMode = fController.RMMode;
         }
 
         private void radMergeMode_Click(object sender, EventArgs e)
         {
-            fController.ChangeMergeMode();
+            fController.ChangeOption();
         }
 
         private void chkBookmarkMerged_CheckedChanged(object sender, EventArgs e)
         {
-            MergeControl.Bookmark = chkBookmarkMerged.Checked.GetValueOrDefault();
+            fController.ChangeOption();
         }
 
         private void btnSkip_Click(object sender, EventArgs e)
@@ -129,6 +141,36 @@ namespace GKUI.Forms
         {
             fController.Reset();
             fController.SearchDuplicates();
+        }
+
+        private void btnRec1Select_Click(object sender, EventArgs e)
+        {
+            fController.SelectRec1();
+        }
+
+        private void btnRec2Select_Click(object sender, EventArgs e)
+        {
+            fController.SelectRec2();
+        }
+
+        private void btnMergeToLeft_Click(object sender, EventArgs e)
+        {
+            fController.MergeToLeft();
+        }
+
+        private void btnMergeToRight_Click(object sender, EventArgs e)
+        {
+            fController.MergeToRight();
+        }
+
+        public void SetRec1(GDMRecord value)
+        {
+            fController.SetRec1(value);
+        }
+
+        public void SetRec2(GDMRecord value)
+        {
+            fController.SetRec2(value);
         }
     }
 }

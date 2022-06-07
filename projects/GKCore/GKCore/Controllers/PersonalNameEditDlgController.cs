@@ -36,13 +36,13 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class PersonalNameEditDlgController : DialogController<IPersonalNameEditDlg>
     {
-        private GDMIndividualRecord fIndividual;
+        private GDMIndividualRecord fIndividualRecord;
         private GDMPersonalName fPersonalName;
 
-        public GDMIndividualRecord Individual
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fIndividual; }
-            set { fIndividual = value; }
+            get { return fIndividualRecord; }
+            set { fIndividualRecord = value; }
         }
 
         public GDMPersonalName PersonalName
@@ -93,13 +93,13 @@ namespace GKCore.Controllers
         private bool IsExtendedWomanSurname()
         {
             bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (fIndividual.Sex == GDMSex.svFemale);
+                (fIndividualRecord.Sex == GDMSex.svFemale);
             return result;
         }
 
         public override void UpdateView()
         {
-            var parts = GKUtils.GetNameParts(fBase.Context.Tree, fIndividual, fPersonalName, false);
+            var parts = GKUtils.GetNameParts(fBase.Context.Tree, fIndividualRecord, fPersonalName, false);
 
             fView.Surname.Text = parts.Surname;
             fView.Name.Text = parts.Name;

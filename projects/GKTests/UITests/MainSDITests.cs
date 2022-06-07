@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define MAIN_TEST
+
 #if !MONO
+#if MAIN_TEST
 
 using System;
 using System.Collections.Generic;
@@ -568,7 +571,7 @@ namespace GKUI.Forms
 
         private void FamilyEditDlg_Handler(FamilyEditDlg dlg)
         {
-            GDMFamilyRecord familyRecord = dlg.Family;
+            GDMFamilyRecord familyRecord = dlg.FamilyRecord;
             var tabs = new TabControlTester("tabsFamilyData", dlg);
 
             // father
@@ -624,7 +627,7 @@ namespace GKUI.Forms
 
         private void PersonEditDlg_Handler(PersonEditDlg dlg)
         {
-            GDMIndividualRecord indiRecord = dlg.Person;
+            GDMIndividualRecord indiRecord = dlg.IndividualRecord;
 
             SelectCombo("cmbSex", dlg, 1); // male
 
@@ -762,7 +765,7 @@ namespace GKUI.Forms
 
         public void ResearchEditDlg_Handler(ResearchEditDlg dlg)
         {
-            GDMResearchRecord resRecord = dlg.Research;
+            GDMResearchRecord resRecord = dlg.ResearchRecord;
 
             // tasks
             SelectTab("tabsData", dlg, 0);
@@ -821,4 +824,5 @@ namespace GKUI.Forms
     }
 }
 
+#endif
 #endif

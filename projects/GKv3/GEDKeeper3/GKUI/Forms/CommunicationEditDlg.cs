@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.ComponentModel;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
@@ -33,7 +32,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class CommunicationEditDlg : EditorDialog, ICommunicationEditDlg
+    public sealed partial class CommunicationEditDlg : CommonDialog<ICommunicationEditDlg, CommunicationEditDlgController>, ICommunicationEditDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -59,12 +58,10 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly CommunicationEditDlgController fController;
-
-        public GDMCommunicationRecord Communication
+        public GDMCommunicationRecord CommunicationRecord
         {
-            get { return fController.Communication; }
-            set { fController.Communication = value; }
+            get { return fController.CommunicationRecord; }
+            set { fController.CommunicationRecord = value; }
         }
 
         #region View Interface
@@ -114,25 +111,6 @@ namespace GKUI.Forms
 
             fController = new CommunicationEditDlgController(this);
             fController.Init(baseWin);
-
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnPersonAdd_Click(object sender, EventArgs e)

@@ -22,7 +22,6 @@ using System;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -31,10 +30,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class SourceCitEditDlg : EditorDialog, ISourceCitEditDlg
+    public sealed partial class SourceCitEditDlg : CommonDialog<ISourceCitEditDlg, SourceCitEditDlgController>, ISourceCitEditDlg
     {
-        private readonly SourceCitEditDlgController fController;
-
         public GDMSourceCitation SourceCitation
         {
             get { return fController.SourceCitation; }
@@ -80,22 +77,6 @@ namespace GKUI.Forms
 
             fController = new SourceCitEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void btnSourceAdd_Click(object sender, EventArgs e)

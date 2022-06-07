@@ -317,7 +317,7 @@ namespace GKUI.Platform
             if (mdi)
                 throw new ArgumentException("MDI obsolete");
 
-#if NETCOREAPP3_1 || NET6_0
+#if NETCOREAPP3_1_OR_GREATER
             // support for legacy encodings
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif

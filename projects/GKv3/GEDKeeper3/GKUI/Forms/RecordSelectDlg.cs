@@ -32,7 +32,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
+    public sealed partial class RecordSelectDlg : CommonDialog, IRecordSelectDialog
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051

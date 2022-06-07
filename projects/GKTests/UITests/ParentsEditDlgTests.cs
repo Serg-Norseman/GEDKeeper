@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -50,8 +50,8 @@ namespace GKUI.Forms
             fChildLink = new GDMChildToFamilyLink();
 
             fDialog = new ParentsEditDlg(fBase);
-            fDialog.Person = fIndividual;
-            fDialog.Link = fChildLink;
+            fDialog.IndividualRecord = fIndividual;
+            fDialog.ChildLink = fChildLink;
             fDialog.Show();
         }
 
@@ -71,7 +71,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fIndividual, fDialog.Person);
+            Assert.AreEqual(fIndividual, fDialog.IndividualRecord);
 
             ModalFormHandler = Dialog_Cancel_Handler;
             ClickButton("btnFatherAdd", fDialog);

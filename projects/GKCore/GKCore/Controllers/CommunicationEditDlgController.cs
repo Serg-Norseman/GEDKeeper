@@ -21,6 +21,8 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -32,15 +34,15 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class CommunicationEditDlgController : DialogController<ICommunicationEditDlg>
     {
-        private GDMCommunicationRecord fCommunication;
+        private GDMCommunicationRecord fCommunicationRecord;
         private GDMIndividualRecord fTempInd;
 
-        public GDMCommunicationRecord Communication
+        public GDMCommunicationRecord CommunicationRecord
         {
-            get { return fCommunication; }
+            get { return fCommunicationRecord; }
             set {
-                if (fCommunication != value) {
-                    fCommunication = value;
+                if (fCommunicationRecord != value) {
+                    fCommunicationRecord = value;
                     UpdateView();
                 }
             }
@@ -63,15 +65,23 @@ namespace GKCore.Controllers
             fView.Name.Activate();
         }
 
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
+        }
+
         public override bool Accept()
         {
             try {
-                fCommunication.CommName = fView.Name.Text;
-                fCommunication.CommunicationType = (GDMCommunicationType)fView.CorrType.SelectedIndex;
-                fCommunication.Date.Assign(GDMDate.CreateByFormattedStr(fView.Date.NormalizeDate, true));
-                fCommunication.SetCorresponder((GDMCommunicationDir)fView.Dir.SelectedIndex, fTempInd);
+                fCommunicationRecord.CommName = fView.Name.Text;
+                fCommunicationRecord.CommunicationType = (GDMCommunicationType)fView.CorrType.SelectedIndex;
+                fCommunicationRecord.Date.Assign(GDMDate.CreateByFormattedStr(fView.Date.NormalizeDate, true));
+                fCommunicationRecord.SetCorresponder((GDMCommunicationDir)fView.Dir.SelectedIndex, fTempInd);
 
-                fBase.NotifyRecord(fCommunication, RecordAction.raEdit);
+                fBase.NotifyRecord(fCommunicationRecord, RecordAction.raEdit);
 
                 CommitChanges();
 
@@ -85,24 +95,24 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
-                fView.NotesList.ListModel.DataOwner = fCommunication;
-                fView.MediaList.ListModel.DataOwner = fCommunication;
+                fView.NotesList.ListModel.DataOwner = fCommunicationRecord;
+                fView.MediaList.ListModel.DataOwner = fCommunicationRecord;
 
-                if (fCommunication == null) {
+                if (fCommunicationRecord == null) {
                     fView.Name.Text = "";
                     fView.CorrType.SelectedIndex = -1;
                     fView.Date.Text = "";
                     fView.Dir.SelectedIndex = 0;
                     fView.Corresponder.Text = "";
                 } else {
-                    fView.Name.Text = fCommunication.CommName;
-                    fView.CorrType.SelectedIndex = (int)fCommunication.CommunicationType;
-                    fView.Date.NormalizeDate = fCommunication.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                    fView.Name.Text = fCommunicationRecord.CommName;
+                    fView.CorrType.SelectedIndex = (int)fCommunicationRecord.CommunicationType;
+                    fView.Date.NormalizeDate = fCommunicationRecord.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
-                    fTempInd = fBase.Context.Tree.GetPtrValue(fCommunication.Corresponder);
+                    fTempInd = fBase.Context.Tree.GetPtrValue(fCommunicationRecord.Corresponder);
 
                     if (fTempInd != null) {
-                        fView.Dir.SelectedIndex = (int)fCommunication.CommDirection;
+                        fView.Dir.SelectedIndex = (int)fCommunicationRecord.CommDirection;
                         fView.Corresponder.Text = GKUtils.GetNameString(fTempInd, true, false);
                     } else {
                         fView.Dir.SelectedIndex = 0;

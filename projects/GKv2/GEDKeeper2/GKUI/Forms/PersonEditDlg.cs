@@ -36,10 +36,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PersonEditDlg : EditorDialog, IPersonEditDlg
+    public partial class PersonEditDlg : CommonDialog<IPersonEditDlg, PersonEditDlgController>, IPersonEditDlg
     {
-        private readonly PersonEditDlgController fController;
-
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fSpousesList;
         private readonly GKSheetList fAssociationsList;
@@ -52,10 +50,10 @@ namespace GKUI.Forms
         private readonly GKSheetList fParentsList;
         private readonly GKSheetList fChildrenList;
 
-        public GDMIndividualRecord Person
+        public GDMIndividualRecord IndividualRecord
         {
-            get { return fController.Person; }
-            set { fController.Person = value; }
+            get { return fController.IndividualRecord; }
+            set { fController.IndividualRecord = value; }
         }
 
         public GDMIndividualRecord Target
@@ -280,19 +278,6 @@ namespace GKUI.Forms
 
             fController = new PersonEditDlgController(this);
             fController.Init(baseWin);
-
-            fEventsList.ListModel = new EventsListModel(baseWin, fController.LocalUndoman, true);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
-            fSourcesList.ListModel = new SourceCitationsListModel(baseWin, fController.LocalUndoman);
-            fAssociationsList.ListModel = new AssociationsListModel(baseWin, fController.LocalUndoman);
-
-            fGroupsList.ListModel = new GroupsSublistModel(baseWin, fController.LocalUndoman);
-            fNamesList.ListModel = new NamesSublistModel(baseWin, fController.LocalUndoman);
-            fSpousesList.ListModel = new SpousesSublistModel(baseWin, fController.LocalUndoman);
-            fUserRefList.ListModel = new URefsSublistModel(baseWin, fController.LocalUndoman);
-            fParentsList.ListModel = new ParentsSublistModel(baseWin, fController.LocalUndoman);
-            fChildrenList.ListModel = new IndividualChildrenListModel(baseWin, fController.LocalUndoman);
         }
 
         private void cbSex_SelectedIndexChanged(object sender, EventArgs e)
@@ -342,26 +327,10 @@ namespace GKUI.Forms
             }
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
-        }
-
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
             if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown || eArgs.Action == RecordAction.raEdit) {
-                fController.UpdateNameControls(fController.Person.PersonalNames[0]);
+                fController.UpdateNameControls(fController.IndividualRecord.PersonalNames[0]);
             }
         }
 
@@ -416,7 +385,7 @@ namespace GKUI.Forms
         private void Names_TextChanged(object sender, EventArgs e)
         {
             Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
-                                  cmbPatronymic.Text, fController.Person.GetXRefNum());
+                                  cmbPatronymic.Text, fController.IndividualRecord.GetXRefNum());
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)

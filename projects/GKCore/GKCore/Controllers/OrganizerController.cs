@@ -18,8 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 
@@ -32,6 +34,10 @@ namespace GKCore.Controllers
     {
         public OrganizerController(IOrganizerWin view) : base(view)
         {
+            fView.AdrList.Buttons = EnumSet<SheetButton>.Create();
+            fView.PhonesList.Buttons = EnumSet<SheetButton>.Create();
+            fView.MailsList.Buttons = EnumSet<SheetButton>.Create();
+            fView.WebsList.Buttons = EnumSet<SheetButton>.Create();
         }
 
         public override void UpdateView()

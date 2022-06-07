@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
@@ -32,18 +31,16 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class SourceEditDlg : EditorDialog, ISourceEditDlg
+    public sealed partial class SourceEditDlg : CommonDialog<ISourceEditDlg, SourceEditDlgController>, ISourceEditDlg
     {
-        private readonly SourceEditDlgController fController;
-
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fRepositoriesList;
 
-        public GDMSourceRecord Model
+        public GDMSourceRecord SourceRecord
         {
-            get { return fController.Model; }
-            set { fController.Model = value; }
+            get { return fController.SourceRecord; }
+            set { fController.SourceRecord = value; }
         }
 
         #region View Interface
@@ -106,10 +103,6 @@ namespace GKUI.Forms
 
             fController = new SourceEditDlgController(this);
             fController.Init(baseWin);
-
-            fRepositoriesList.ListModel = new SourceRepositoriesSublistModel(baseWin, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
@@ -118,22 +111,6 @@ namespace GKUI.Forms
             if (eArgs.Action == RecordAction.raJump && cit != null) {
                 fController.JumpToRecord(cit);
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void EditShortTitle_TextChanged(object sender, EventArgs e)

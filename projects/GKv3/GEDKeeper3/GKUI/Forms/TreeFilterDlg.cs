@@ -19,7 +19,6 @@
  */
 
 using System;
-using BSLib;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
@@ -32,7 +31,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TreeFilterDlg : EditorDialog, ITreeFilterDlg
+    public sealed partial class TreeFilterDlg : CommonDialog<ITreeFilterDlg, TreeFilterDlgController>, ITreeFilterDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -51,8 +50,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly TreeFilterDlgController fController;
 
         public ChartFilter Filter
         {
@@ -77,37 +74,11 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
-        void ITreeFilterDlg.SetCutModeRadio(int cutMode)
-        {
-            switch (cutMode) {
-                case 0:
-                    rbCutNone.Checked = true;
-                    break;
-                case 1:
-                    rbCutYears.Checked = true;
-                    break;
-                case 2:
-                    rbCutPersons.Checked = true;
-                    break;
-            }
-        }
-
-        int ITreeFilterDlg.GetCutModeRadio()
-        {
-            int cutMode = 0;
-            if (rbCutNone.Checked) cutMode = 0;
-            if (rbCutYears.Checked) cutMode = 1;
-            if (rbCutPersons.Checked) cutMode = 2;
-            return cutMode;
-        }
-
         #endregion
 
         public TreeFilterDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
-
-            fPersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
 
             fController = new TreeFilterDlgController(this);
             fController.Init(baseWin);
@@ -122,19 +93,7 @@ namespace GKUI.Forms
 
         private void rbCutX_CheckedChanged(object sender, EventArgs e)
         {
-            fController.Filter.BranchCut = (ChartFilter.BranchCutType)((ITreeFilterDlg)this).GetCutModeRadio();
-            fController.UpdateControls();
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            fController.Filter.Reset();
-            Close(DialogResult.Cancel);
+            fController.ChangeCutMode();
         }
 
         private void TreeFilterDlg_Load(object sender, EventArgs e)

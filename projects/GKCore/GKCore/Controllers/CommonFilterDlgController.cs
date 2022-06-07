@@ -68,6 +68,12 @@ namespace GKCore.Controllers
             }
         }
 
+        public void Reset()
+        {
+            fListMan.Filter.Clear();
+            UpdateView();
+        }
+
         public override void SetLocale()
         {
             GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);

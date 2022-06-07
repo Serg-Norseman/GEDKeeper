@@ -19,10 +19,8 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -30,10 +28,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class NoteEditDlg : EditorDialog, INoteEditDlg
+    public sealed partial class NoteEditDlg : CommonDialog<INoteEdit, NoteEditDlgController>, INoteEditDlg
     {
-        private readonly NoteEditDlgController fController;
-
         public GDMNoteRecord NoteRecord
         {
             get { return fController.NoteRecord; }
@@ -71,22 +67,6 @@ namespace GKUI.Forms
         private void RichTextBox_Leave(object sender, EventArgs e)
         {
             AcceptButton = btnAccept;
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

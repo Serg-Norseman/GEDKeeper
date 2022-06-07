@@ -27,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTTreeCompareDlg : CommonDialog, ITreeCompareDlg
+    public sealed partial class TTTreeCompareDlg : CommonDialog<ITreeCompareDlg, TreeCompareController>, ITreeCompareDlg
     {
-        private readonly TreeCompareController fController;
-
         #region View Interface
 
         ITextBox ITreeCompareDlg.ExternalBase

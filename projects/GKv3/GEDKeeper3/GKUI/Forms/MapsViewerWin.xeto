@@ -70,7 +70,7 @@
       </TabControl>
 
       <TableCell ScaleWidth="True">
-        <Panel x:Name="Panel1" Size="800, 600" />
+        <comcom:GKMapBrowser x:Name="fMapBrowser" Size="800, 600" />
       </TableCell>
 
       <StackLayout>

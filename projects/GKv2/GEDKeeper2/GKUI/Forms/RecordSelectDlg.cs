@@ -32,7 +32,7 @@ using GKUI.Platform;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RecordSelectDlg : EditorDialog, IRecordSelectDialog
+    public sealed partial class RecordSelectDlg : CommonDialog, IRecordSelectDialog
     {
         public delegate void UpdateDelegate();
 

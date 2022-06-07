@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Controllers;
@@ -31,18 +29,16 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class GroupEditDlg : EditorDialog, IGroupEditDlg
+    public sealed partial class GroupEditDlg : CommonDialog<IGroupEditDlg, GroupEditDlgController>, IGroupEditDlg
     {
-        private readonly GroupEditDlgController fController;
-
         private readonly GKSheetList fMembersList;
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
 
-        public GDMGroupRecord Group
+        public GDMGroupRecord GroupRecord
         {
-            get { return fController.Group; }
-            set { fController.Group = value; }
+            get { return fController.GroupRecord; }
+            set { fController.GroupRecord = value; }
         }
 
         #region View Interface
@@ -85,10 +81,6 @@ namespace GKUI.Forms
 
             fController = new GroupEditDlgController(this);
             fController.Init(baseWin);
-
-            fMembersList.ListModel = new GroupMembersSublistModel(baseWin, fController.LocalUndoman);
-            fNotesList.ListModel = new NoteLinksListModel(baseWin, fController.LocalUndoman);
-            fMediaList.ListModel = new MediaLinksListModel(baseWin, fController.LocalUndoman);
         }
 
         private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
@@ -96,22 +88,6 @@ namespace GKUI.Forms
             if (eArgs.Action == RecordAction.raJump) {
                 fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
     }
 }

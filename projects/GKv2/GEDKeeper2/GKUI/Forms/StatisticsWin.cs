@@ -24,12 +24,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
-using GKCore.Stats;
 using GKUI.Components;
 
 namespace GKUI.Forms

@@ -38,13 +38,13 @@
     <TableRow ScaleHeight="True">
       <TabControl Size="600, 260">
         <TabPage x:Name="pageTasks">
-          <comcom:GKSheetList x:Name="fTasksList" OnModify="ListTasksModify" />
+          <comcom:GKSheetList x:Name="fTasksList" OnModify="ListJumpHandler" />
         </TabPage>
         <TabPage x:Name="pageCommunications">
-          <comcom:GKSheetList x:Name="fCommunicationsList" OnModify="ListCommunicationsModify" />
+          <comcom:GKSheetList x:Name="fCommunicationsList" OnModify="ListJumpHandler" />
         </TabPage>
         <TabPage x:Name="pageGroups">
-          <comcom:GKSheetList x:Name="fGroupsList" OnModify="ListGroupsModify" />
+          <comcom:GKSheetList x:Name="fGroupsList" OnModify="ListJumpHandler" />
         </TabPage>
         <TabPage x:Name="pageNotes">
           <comcom:GKSheetList x:Name="fNotesList" />
@@ -56,10 +56,10 @@
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
         </StackLayoutItem>
         <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="btnCancel_Click" />
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
         </StackLayoutItem>
       </StackLayout>
     </TableRow>

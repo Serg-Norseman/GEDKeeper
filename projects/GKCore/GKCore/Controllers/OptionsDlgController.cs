@@ -577,7 +577,7 @@ namespace GKCore.Controllers
             UpdatePlugins();
         }
 
-        public void AcceptChanges()
+        public override bool Accept()
         {
             // common
             AcceptProxyOptions();
@@ -601,6 +601,8 @@ namespace GKCore.Controllers
 
             // plugins
             AcceptPlugins();
+
+            return true;
         }
 
         public override void SetLocale()

@@ -21,6 +21,8 @@
 using System;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Types;
@@ -32,14 +34,14 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class ResearchEditDlgController : DialogController<IResearchEditDlg>
     {
-        private GDMResearchRecord fResearch;
+        private GDMResearchRecord fResearchRecord;
 
-        public GDMResearchRecord Research
+        public GDMResearchRecord ResearchRecord
         {
-            get { return fResearch; }
+            get { return fResearchRecord; }
             set {
-                if (fResearch != value) {
-                    fResearch = value;
+                if (fResearchRecord != value) {
+                    fResearchRecord = value;
                     UpdateView();
                 }
             }
@@ -57,19 +59,29 @@ namespace GKCore.Controllers
             }
         }
 
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.TasksList.ListModel = new ResTasksSublistModel(baseWin, fLocalUndoman);
+            fView.CommunicationsList.ListModel = new ResCommunicationsSublistModel(baseWin, fLocalUndoman);
+            fView.GroupsList.ListModel = new ResGroupsSublistModel(baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+        }
+
         public override bool Accept()
         {
             try {
-                fResearch.ResearchName = fView.Name.Text;
-                fResearch.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
-                fResearch.Status = (GDMResearchStatus)fView.Status.SelectedIndex;
-                fResearch.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
-                fResearch.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
-                fResearch.Percent = int.Parse(fView.Percent.Text);
+                fResearchRecord.ResearchName = fView.Name.Text;
+                fResearchRecord.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
+                fResearchRecord.Status = (GDMResearchStatus)fView.Status.SelectedIndex;
+                fResearchRecord.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
+                fResearchRecord.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
+                fResearchRecord.Percent = int.Parse(fView.Percent.Text);
 
                 fLocalUndoman.Commit();
 
-                fBase.NotifyRecord(fResearch, RecordAction.raEdit);
+                fBase.NotifyRecord(fResearchRecord, RecordAction.raEdit);
 
                 return true;
             } catch (Exception ex) {
@@ -80,7 +92,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            if (fResearch == null) {
+            if (fResearchRecord == null) {
                 fView.Name.Text = "";
                 fView.Priority.SelectedIndex = -1;
                 fView.Status.SelectedIndex = -1;
@@ -88,34 +100,18 @@ namespace GKCore.Controllers
                 fView.StopDate.Text = "";
                 fView.Percent.Value = 0;
             } else {
-                fView.Name.Text = fResearch.ResearchName;
-                fView.Priority.SelectedIndex = (int)fResearch.Priority;
-                fView.Status.SelectedIndex = (int)fResearch.Status;
-                fView.StartDate.NormalizeDate = fResearch.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.StopDate.NormalizeDate = fResearch.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.Percent.Value = fResearch.Percent;
+                fView.Name.Text = fResearchRecord.ResearchName;
+                fView.Priority.SelectedIndex = (int)fResearchRecord.Priority;
+                fView.Status.SelectedIndex = (int)fResearchRecord.Status;
+                fView.StartDate.NormalizeDate = fResearchRecord.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.StopDate.NormalizeDate = fResearchRecord.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                fView.Percent.Value = fResearchRecord.Percent;
             }
 
-            fView.NotesList.ListModel.DataOwner = fResearch;
-            fView.TasksList.ListModel.DataOwner = fResearch;
-            fView.CommunicationsList.ListModel.DataOwner = fResearch;
-            fView.GroupsList.ListModel.DataOwner = fResearch;
-        }
-
-        public void JumpToRecord(GDMRecord record)
-        {
-            if (record != null && Accept()) {
-                fBase.SelectRecordByXRef(record.XRef);
-                fView.Close();
-            }
-        }
-
-        public void JumpToRecord(GDMPointer pointer)
-        {
-            if (pointer != null && Accept()) {
-                fBase.SelectRecordByXRef(pointer.XRef);
-                fView.Close();
-            }
+            fView.NotesList.ListModel.DataOwner = fResearchRecord;
+            fView.TasksList.ListModel.DataOwner = fResearchRecord;
+            fView.CommunicationsList.ListModel.DataOwner = fResearchRecord;
+            fView.GroupsList.ListModel.DataOwner = fResearchRecord;
         }
 
         public override void SetLocale()

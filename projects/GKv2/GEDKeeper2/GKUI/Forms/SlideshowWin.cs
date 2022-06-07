@@ -114,12 +114,5 @@ namespace GKUI.Forms
         {
             fController.Next();
         }
-
-        public void UpdateControls()
-        {
-            tbStart.Enabled = (fController.FileRefs.Count > 0);
-            tbPrev.Enabled = (fController.CurrentIndex > 0);
-            tbNext.Enabled = (fController.CurrentIndex < fController.FileRefs.Count - 1);
-        }
     }
 }

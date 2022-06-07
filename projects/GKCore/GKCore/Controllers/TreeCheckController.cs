@@ -136,6 +136,14 @@ namespace GKCore.Controllers
             AppHost.Instance.SetClipboardText(text.ToString());
         }
 
+        public void OpeningContextMenu()
+        {
+            var rec = GetSelectedRecord();
+            GetControl<IMenuItem>("miDetails").Enabled = (rec != null);
+            GetControl<IMenuItem>("miGoToRecord").Enabled = (rec != null);
+            GetControl<IMenuItem>("miCopyXRef").Enabled = (rec != null);
+        }
+
         public override void SetLocale()
         {
             fView.Title = LangMan.LS(LSID.LSID_ToolOp_7);

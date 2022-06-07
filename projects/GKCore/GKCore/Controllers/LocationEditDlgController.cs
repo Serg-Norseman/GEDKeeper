@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Maps;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -52,6 +54,14 @@ namespace GKCore.Controllers
         public LocationEditDlgController(ILocationEditDlg view) : base(view)
         {
             fView.Name.Activate();
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
         }
 
         public override bool Accept()

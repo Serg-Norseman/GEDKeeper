@@ -30,11 +30,6 @@ namespace GKUI.Forms
     {
         private readonly RecordInfoDlgController fController;
 
-        public IBaseWindow Base
-        {
-            get { return fController.Base; }
-        }
-
         public GDMRecord Record
         {
             get { return fController.Record; }

@@ -207,6 +207,10 @@ namespace GKUI.Components
                         RemoveCondition(SelectedRow);
                     }
                     break;
+
+                default:
+                    base.OnKeyDown(e);
+                    break;
             }
         }
     }

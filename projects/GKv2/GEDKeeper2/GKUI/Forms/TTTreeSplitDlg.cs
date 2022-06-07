@@ -27,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTTreeSplitDlg : CommonDialog, ITreeSplitDlg
+    public sealed partial class TTTreeSplitDlg : CommonDialog<ITreeSplitDlg, TreeSplitController>, ITreeSplitDlg
     {
-        private readonly TreeSplitController fController;
-
         #region View Interface
 
         IListViewEx ITreeSplitDlg.SelectedList

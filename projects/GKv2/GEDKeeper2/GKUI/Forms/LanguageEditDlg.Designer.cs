@@ -31,7 +31,7 @@
             this.btnAccept.TabIndex = 3;
             this.btnAccept.Text = "btnAccept";
             this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
+            this.btnAccept.Click += new System.EventHandler(this.AcceptClickHandler);
             // 
             // btnCancel
             // 
@@ -43,7 +43,7 @@
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.CancelClickHandler);
             // 
             // lblLanguage
             // 

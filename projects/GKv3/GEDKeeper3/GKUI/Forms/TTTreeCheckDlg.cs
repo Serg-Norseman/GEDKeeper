@@ -28,7 +28,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTTreeCheckDlg : CommonDialog, ITreeCheckDlg
+    public sealed partial class TTTreeCheckDlg : CommonDialog<ITreeCheckDlg, TreeCheckController>, ITreeCheckDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -44,8 +44,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly TreeCheckController fController;
 
         #region View Interface
 
@@ -93,10 +91,7 @@ namespace GKUI.Forms
 
         private void contextMenu_Opening(object sender, EventArgs e)
         {
-            var rec = fController.GetSelectedRecord();
-            miDetails.Enabled = (rec != null);
-            miGoToRecord.Enabled = (rec != null);
-            miCopyXRef.Enabled = (rec != null);
+            fController.OpeningContextMenu();
         }
 
         public void miCopyXRef_Click(object sender, EventArgs e)

@@ -29,7 +29,7 @@ using GKCore.Names;
 
 namespace GKUI.Forms
 {
-    public sealed partial class NameEditDlg : CommonDialog, INameEditDlg
+    public sealed partial class NameEditDlg : CommonDialog<INameEditDlg, NameEditDlgController>, INameEditDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -48,8 +48,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly NameEditDlgController fController;
 
         public NameEntry IName
         {
@@ -86,22 +84,6 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new NameEditDlgController(this);
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
         }
 
         private void edName_KeyDown(object sender, KeyEventArgs e)

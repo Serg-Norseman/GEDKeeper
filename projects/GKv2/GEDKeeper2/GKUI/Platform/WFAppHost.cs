@@ -195,7 +195,7 @@ namespace GKUI.Platform
 
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
-            var result = new WinUITimer(msInterval, elapsedHandler);
+            var result = new WFUITimer(msInterval, elapsedHandler);
             return result;
         }
 
@@ -385,6 +385,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripButton), typeof(ButtonToolItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolStripDropDownButton), typeof(DropDownToolItemHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));

@@ -20,7 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -29,10 +28,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class CommonFilterDlg : CommonDialog, ICommonFilterDlg
+    public partial class CommonFilterDlg : CommonDialog<ICommonFilterDlg, CommonFilterDlgController>, ICommonFilterDlg
     {
-        private readonly CommonFilterDlgController fController;
-
         private readonly IBaseWindow fBase;
         private readonly IListManager fListMan;
 
@@ -87,32 +84,14 @@ namespace GKUI.Forms
             fController.UpdateView();
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
+        public virtual void Reset()
         {
-            try {
-                AcceptChanges();
-                DialogResult = DialogResult.OK;
-            } catch (Exception ex) {
-                Logger.WriteError("CommonFilterDlg.btnAccept_Click()", ex);
-                DialogResult = DialogResult.None;
-            }
+            fController.Reset();
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            DoReset();
-        }
-
-        public virtual void AcceptChanges()
-        {
-            fController.Accept();
-            DialogResult = DialogResult.OK;
-        }
-
-        public virtual void DoReset()
-        {
-            fListMan.Filter.Clear();
-            fController.UpdateView();
+            Reset();
         }
     }
 }

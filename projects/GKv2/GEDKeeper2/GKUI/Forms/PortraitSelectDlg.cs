@@ -18,10 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Windows.Forms;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -30,10 +27,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class PortraitSelectDlg : EditorDialog, IPortraitSelectDlg
+    public sealed partial class PortraitSelectDlg : CommonDialog<IPortraitSelectDlg, PortraitSelectDlgController>, IPortraitSelectDlg
     {
-        private readonly PortraitSelectDlgController fController;
-
         public GDMMultimediaLink MultimediaLink
         {
             get { return fController.MultimediaLink; }
@@ -48,11 +43,6 @@ namespace GKUI.Forms
         }
 
         #endregion
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.OK : DialogResult.None;
-        }
 
         public PortraitSelectDlg(IBaseWindow baseWin)
         {

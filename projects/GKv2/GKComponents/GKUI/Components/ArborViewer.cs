@@ -24,7 +24,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BSLib.DataViz.ArborGVT;
 using GKCore;
-using GKUI.Platform;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
@@ -41,7 +41,7 @@ namespace GKUI.Components
 
     public sealed class ArborSystemEx : ArborSystem
     {
-        private WinUITimer fTimer;
+        private ITimer fTimer;
 
         public ArborSystemEx(double repulsion, double stiffness, double friction, IArborRenderer renderer)
             : base(repulsion, stiffness, friction, renderer)
@@ -56,7 +56,7 @@ namespace GKUI.Components
 
         protected override void StartTimer()
         {
-            fTimer = new WinUITimer(TimerInterval/* / 1000*/, TimerElapsed);
+            fTimer = AppHost.Instance.CreateTimer(TimerInterval, TimerElapsed);
             fTimer.Start();
         }
 

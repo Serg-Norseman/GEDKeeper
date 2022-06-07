@@ -74,16 +74,6 @@ namespace GKUI.Forms
         private readonly IBaseWindow fBase;
         private readonly IListManager fListMan;
 
-        public IBaseWindow Base
-        {
-            get { return fBase; }
-        }
-
-        public IListManager ListMan
-        {
-            get { return fListMan; }
-        }
-
         #region View Interface
 
         public IFilterGridView FilterGrid

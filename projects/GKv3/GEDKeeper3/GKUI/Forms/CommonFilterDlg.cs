@@ -29,7 +29,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class CommonFilterDlg : CommonDialog, ICommonFilterDlg
+    public partial class CommonFilterDlg : CommonDialog<ICommonFilterDlg, CommonFilterDlgController>, ICommonFilterDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -44,8 +44,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly CommonFilterDlgController fController;
 
         private readonly IBaseWindow fBase;
         private readonly IListManager fListMan;
@@ -93,15 +91,9 @@ namespace GKUI.Forms
             fController.UpdateView();
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
-
         private void btnReset_Click(object sender, EventArgs e)
         {
-            fListMan.Filter.Clear();
-            fController.UpdateView();
+            fController.Reset();
         }
     }
 }

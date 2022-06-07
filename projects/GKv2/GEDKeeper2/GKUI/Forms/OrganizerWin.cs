@@ -20,7 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-using BSLib;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -29,10 +28,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class OrganizerWin : CommonDialog, IOrganizerWin
+    public sealed partial class OrganizerWin : CommonDialog<IOrganizerWin, OrganizerController>, IOrganizerWin
     {
-        private readonly OrganizerController fController;
-
         private readonly GKSheetList fAdrList;
         private readonly GKSheetList fPhonesList;
         private readonly GKSheetList fMailsList;
@@ -67,16 +64,9 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fAdrList = new GKSheetList(pageAddresses);
-            fAdrList.Buttons = EnumSet<SheetButton>.Create();
-
             fPhonesList = new GKSheetList(pageTelephones);
-            fPhonesList.Buttons = EnumSet<SheetButton>.Create();
-
             fMailsList = new GKSheetList(pageMails);
-            fMailsList.Buttons = EnumSet<SheetButton>.Create();
-
             fWebsList = new GKSheetList(pageWebs);
-            fWebsList.Buttons = EnumSet<SheetButton>.Create();
 
             fController = new OrganizerController(this);
             fController.Init(baseWin);

@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
@@ -29,7 +28,7 @@ using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class PortraitSelectDlg : EditorDialog, IPortraitSelectDlg
+    public sealed partial class PortraitSelectDlg : CommonDialog<IPortraitSelectDlg, PortraitSelectDlgController>, IPortraitSelectDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -40,8 +39,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly PortraitSelectDlgController fController;
 
         public GDMMultimediaLink MultimediaLink
         {
@@ -57,11 +54,6 @@ namespace GKUI.Forms
         }
 
         #endregion
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
-        }
 
         public PortraitSelectDlg(IBaseWindow baseWin)
         {
