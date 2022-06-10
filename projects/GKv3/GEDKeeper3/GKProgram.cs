@@ -22,6 +22,7 @@ using System;
 using System.Reflection;
 using Eto.Forms;
 using GKCore;
+using GKCore.SingleInstance;
 using GKUI.Platform;
 
 [assembly: AssemblyTitle("GEDKeeper3")]
@@ -41,21 +42,24 @@ namespace GEDKeeper3
         [STAThread]
         public static void Main(string[] args)
         {
-            EtoAppHost.ConfigureBootstrap(false);
-            AppHost.CheckPortable(args);
-            Logger.Init(AppHost.GetLogFilename());
-            AppHost.LogSysInfo();
+            EtoAppHost.Startup(args);
 
             var application = new Application();
 
-            AppHost.InitSettings();
-            try {
-                var appHost = (EtoAppHost)AppHost.Instance;
-                appHost.Init(args, false);
+            using (var tracker = new SingleInstanceTracker(GKData.APP_TITLE, AppHost.GetSingleInstanceEnforcer)) {
+                if (tracker.IsFirstInstance) {
+                    AppHost.InitSettings();
+                    try {
+                        var appHost = (EtoAppHost)AppHost.Instance;
+                        appHost.Init(args, false);
 
-                application.Run();
-            } finally {
-                AppHost.DoneSettings();
+                        application.Run();
+                    } finally {
+                        AppHost.DoneSettings();
+                    }
+                } else {
+                    tracker.SendMessageToFirstInstance(args);
+                }
             }
         }
     }

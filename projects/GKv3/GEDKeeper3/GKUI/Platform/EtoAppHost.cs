@@ -427,5 +427,22 @@ namespace GKUI.Platform
         }
 
         #endregion
+
+        public static void Startup(string[] args)
+        {
+            ConfigureBootstrap(false);
+            CheckPortable(args);
+            Logger.Init(GetLogFilename());
+            LogSysInfo();
+
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
+        }
+
+        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs e)
+        {
+            // Saving the copy for restoration
+            AppHost.Instance.CriticalSave();
+            Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)e.ExceptionObject);
+        }
     }
 }

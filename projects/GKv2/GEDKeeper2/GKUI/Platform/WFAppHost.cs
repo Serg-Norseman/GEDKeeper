@@ -416,5 +416,32 @@ namespace GKUI.Platform
         #endif
 
         #endregion
+
+        public static void Startup(string[] args)
+        {
+            ConfigureBootstrap(false);
+            CheckPortable(args);
+            Logger.Init(GetLogFilename());
+            LogSysInfo();
+
+            Application.ThreadException += ExExceptionHandler;
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+        }
+
+        private static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
+        {
+            Logger.WriteError("GK.ExExceptionHandler()", args.Exception);
+        }
+
+        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            // Saving the copy for restoration
+            AppHost.Instance.CriticalSave();
+            Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)args.ExceptionObject);
+        }
     }
 }

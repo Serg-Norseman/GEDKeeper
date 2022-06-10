@@ -21,7 +21,6 @@
 using System;
 using System.Reflection;
 using System.Security.Permissions;
-using System.Threading;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.SingleInstance;
@@ -33,9 +32,6 @@ using GKUI.Platform;
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
 [assembly: AssemblyVersion(GKData.APP_VERSION_2X)]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("")]
-[assembly: AssemblyKeyName("")]
 
 namespace GKUI
 {
@@ -48,19 +44,9 @@ namespace GKUI
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
         public static void Main(string[] args)
         {
-            WFAppHost.ConfigureBootstrap(false);
-            AppHost.CheckPortable(args);
-            Logger.Init(AppHost.GetLogFilename());
-            AppHost.LogSysInfo();
+            WFAppHost.Startup(args);
 
-            Application.ThreadException += ExExceptionHandler;
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            using (SingleInstanceTracker tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer)) {
+            using (var tracker = new SingleInstanceTracker(GKData.APP_TITLE, AppHost.GetSingleInstanceEnforcer)) {
                 if (tracker.IsFirstInstance) {
                     AppHost.InitSettings();
                     try {
@@ -75,23 +61,6 @@ namespace GKUI
                     tracker.SendMessageToFirstInstance(args);
                 }
             }
-        }
-
-        private static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
-        {
-            return AppHost.Instance;
-        }
-
-        private static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
-        {
-            Logger.WriteError("GK.ExExceptionHandler()", args.Exception);
-        }
-
-        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
-        {
-            // Saving the copy for restoration
-            AppHost.Instance.CriticalSave();
-            Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)args.ExceptionObject);
         }
     }
 }

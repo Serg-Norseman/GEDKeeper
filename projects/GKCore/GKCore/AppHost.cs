@@ -842,6 +842,11 @@ namespace GKCore
 
         #region ISingleInstanceEnforcer implementation
 
+        public static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
+        {
+            return AppHost.Instance;
+        }
+
         void ISingleInstanceEnforcer.OnMessageReceived(MessageEventArgs e)
         {
             OnMessageReceivedInvoker invoker = delegate(MessageEventArgs eventArgs) {
