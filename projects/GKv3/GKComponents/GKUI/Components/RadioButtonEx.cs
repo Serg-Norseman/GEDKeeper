@@ -37,6 +37,9 @@ namespace GKUI.Components
         {
             base.OnCheckedChanged(e);
 
+            if (!HasFocus)
+                return;
+
             if (GroupIndex != 0 && Checked) {
                 CheckRecursive(ParentWindow);
             }
@@ -50,6 +53,7 @@ namespace GKUI.Components
             foreach (var ctl in container.Controls) {
                 var rbOther = ctl as RadioButtonEx;
                 if (rbOther != null && rbOther != this && rbOther.GroupIndex == this.GroupIndex) {
+                    // FIXME: don't work for Gtk
                     rbOther.Checked = false;
                 }
 

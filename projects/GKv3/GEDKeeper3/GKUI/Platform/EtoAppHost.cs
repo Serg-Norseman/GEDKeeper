@@ -101,10 +101,19 @@ namespace GKUI.Platform
         private static void InitPlatformStyles()
         {
 #if OS_LINUX
+            // FIXME: don't work
             Eto.Style.Add<Eto.GtkSharp.Forms.ToolBar.ToolBarHandler>("tbsi", h => {
                 // executed but no result
                 h.Control.ToolbarStyle = Gtk.ToolbarStyle.BothHoriz;
+                //h.Control.ToolbarStyle = Gtk.ToolbarStyle.Icons;
                 h.Control.IconSize = Gtk.IconSize.SmallToolbar;
+            });
+
+            Eto.Style.Add<Eto.GtkSharp.Forms.Controls.GridColumnHandler>(null, h => {
+                Pango.FontDescription tpf = new Pango.FontDescription();
+                tpf.Weight = Pango.Weight.Normal;
+                h.Control.Button.ModifyFont(tpf);
+                h.Control.Button.ModifyFg(Gtk.StateType.Normal, new Gdk.Color(0, 0, 0));
             });
 #endif
         }

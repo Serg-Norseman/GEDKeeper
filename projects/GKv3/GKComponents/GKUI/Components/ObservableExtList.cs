@@ -35,7 +35,7 @@ namespace GKUI.Components
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public IListItem this[int index]
+        IListItem IListViewItems.this[int index]
         {
             get { return (BSDListItem)base[index]; }
         }
