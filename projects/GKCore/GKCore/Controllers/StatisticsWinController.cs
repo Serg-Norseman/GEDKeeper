@@ -227,10 +227,12 @@ namespace GKCore.Controllers
 
         public void ExportToExcel()
         {
-            fTreeStats.WriteStatsReport(fChartTitle,
-                LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap),
-                LangMan.LS(LSID.LSID_Value),
-                fCurrentValues);
+            AppHost.Instance.ExecuteWork((controller) => {
+                fTreeStats.WriteStatsReport(fChartTitle,
+                    LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap),
+                    LangMan.LS(LSID.LSID_Value),
+                    fCurrentValues, controller);
+            });
         }
 
         public override void SetLocale()

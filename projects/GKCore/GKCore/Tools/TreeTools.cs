@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using BSLib.Design.MVP.Controls;
@@ -132,7 +133,7 @@ namespace GKCore.Tools
             return null;
         }
 
-        public static void GenPatriarchsGraphviz(IBaseWindow baseWin, string outpath, int minGens, bool loneSuppress = true)
+        public static void GenPatriarchsGraphviz(IBaseWindow baseWin, string outpath, int minGens, bool loneSuppress, IProgressController progress)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
@@ -140,7 +141,8 @@ namespace GKCore.Tools
             string[] options = { "ratio=auto" };
             GraphvizWriter gvw = new GraphvizWriter("Family Tree", options);
 
-            var patList = PatriarchsMan.GetPatriarchsLinks(baseWin.Context, minGens, false, loneSuppress);
+            var patList = PatriarchsMan.GetPatriarchsLinks(baseWin.Context, minGens, false, loneSuppress, progress);
+
             int num = patList.Count;
             for (int i = 0; i < num; i++) {
                 PatriarchObj pObj = patList[i];
@@ -772,7 +774,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void CheckBase(IBaseWindow baseWin, List<CheckObj> checksList)
+        public static void CheckBase(IBaseWindow baseWin, List<CheckObj> checksList, IProgressController progress)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
@@ -780,14 +782,13 @@ namespace GKCore.Tools
             if (checksList == null)
                 throw new ArgumentNullException("checksList");
 
-            IProgressController progress = AppHost.Progress;
             try {
                 GDMTree tree = baseWin.Context.Tree;
-                progress.ProgressInit(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
+                progress.Begin(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
                 checksList.Clear();
 
                 for (int i = 0, num = tree.RecordsCount; i < num; i++) {
-                    progress.ProgressStep();
+                    progress.Increment();
 
                     GDMRecord rec = tree[i];
                     switch (rec.RecordType) {
@@ -805,7 +806,7 @@ namespace GKCore.Tools
                     }
                 }
             } finally {
-                progress.ProgressDone();
+                progress.End();
             }
         }
 
@@ -1092,7 +1093,7 @@ namespace GKCore.Tools
             public GDMIndividualRecord IRec;
         }
 
-        public static List<ULIndividual> GetUnlinkedNamesakes(IBaseWindow baseWin)
+        public static List<ULIndividual> GetUnlinkedNamesakes(IBaseWindow baseWin, IProgressController progress)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
@@ -1103,8 +1104,7 @@ namespace GKCore.Tools
 
             Dictionary<string, List<GDMIndividualRecord>> families = new Dictionary<string, List<GDMIndividualRecord>>();
 
-            IProgressController progress = AppHost.Progress;
-            progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount, true);
+            progress.Begin(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount, true);
 
             // make a table of surnames and persons, related to these surnames
             int num = tree.RecordsCount;
@@ -1130,10 +1130,10 @@ namespace GKCore.Tools
                 }
 
                 if (progress.IsCanceled) break;
-                progress.ProgressStep();
+                progress.Increment();
             }
 
-            progress.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "2", families.Count, true);
+            progress.Begin(LangMan.LS(LSID.LSID_Stage) + "2", families.Count, true);
 
             // find all persons of one surname, not related by ties of kinship
             foreach (KeyValuePair<string, List<GDMIndividualRecord>> entry in families) {
@@ -1167,12 +1167,12 @@ namespace GKCore.Tools
                 }
 
                 if (progress.IsCanceled) break;
-                progress.ProgressStep();
+                progress.Increment();
             }
 
             result.Sort(new IndividualRecordComparer());
 
-            progress.ProgressDone();
+            progress.End();
 
             return result;
         }
@@ -1201,7 +1201,7 @@ namespace GKCore.Tools
             mParams.YearsInaccuracy = 3;
             mParams.CheckEventPlaces = false;
 
-            pc.ProgressInit(LangMan.LS(LSID.LSID_DuplicatesSearch), treeA.RecordsCount, true);
+            pc.Begin(LangMan.LS(LSID.LSID_DuplicatesSearch), treeA.RecordsCount, true);
             try {
                 for (int i = 0; i < treeA.RecordsCount; i++) {
                     GDMRecord recA = treeA[i];
@@ -1220,11 +1220,10 @@ namespace GKCore.Tools
                     }
 
                     if (pc.IsCanceled) break;
-                    pc.ProgressStep();
-                    Thread.Sleep(1);
+                    pc.Increment();
                 }
             } finally {
-                pc.ProgressDone();
+                pc.End();
             }
         }
 
@@ -1397,10 +1396,10 @@ namespace GKCore.Tools
 
             try {
                 int recsCount = tree.RecordsCount;
-                pc.ProgressInit(LangMan.LS(LSID.LSID_PlacesPrepare), recsCount);
+                pc.Begin(LangMan.LS(LSID.LSID_PlacesPrepare), recsCount);
 
                 for (int i = 0; i < recsCount; i++) {
-                    pc.ProgressStep();
+                    pc.Increment();
 
                     var evsRec = tree[i] as GDMRecordWithEvents;
                     if (evsRec != null && evsRec.HasEvents) {
@@ -1413,7 +1412,7 @@ namespace GKCore.Tools
                     }
                 }
             } finally {
-                pc.ProgressDone();
+                pc.End();
             }
         }
 
@@ -1423,13 +1422,13 @@ namespace GKCore.Tools
 
         public static List<List<GDMRecord>> SearchTreeFragments(GDMTree tree, IProgressController progress)
         {
-            List<List<GDMRecord>> result = new List<List<GDMRecord>>();
+            var result = new List<List<GDMRecord>>();
 
             if (progress != null) {
-                progress.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), tree.RecordsCount);
+                progress.Begin(LangMan.LS(LSID.LSID_CheckFamiliesConnection), tree.RecordsCount);
             }
 
-            List<GDMRecord> prepared = new List<GDMRecord>();
+            var prepared = new List<GDMRecord>();
             try {
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
@@ -1444,14 +1443,14 @@ namespace GKCore.Tools
                     }
 
                     if (progress != null) {
-                        progress.ProgressStep();
+                        progress.Increment();
                     }
                 }
             } finally {
                 prepared.Clear();
 
                 if (progress != null) {
-                    progress.ProgressDone();
+                    progress.End();
                 }
             }
 

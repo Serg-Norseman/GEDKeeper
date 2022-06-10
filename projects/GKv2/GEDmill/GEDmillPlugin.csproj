@@ -139,7 +139,6 @@
     <Compile Include="src\Model\IndexPage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\IProgressCallback.cs" />
     <Compile Include="src\Model\Multimedia.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -158,15 +157,6 @@
     </Compile>
     <Compile Include="src\Model\StringTuple.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\Model\ThreadError.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="src\ProgressWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\ProgressWindow.Designer.cs">
-      <DependentUpon>ProgressWindow.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

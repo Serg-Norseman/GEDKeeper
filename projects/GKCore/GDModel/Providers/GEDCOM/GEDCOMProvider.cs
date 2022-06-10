@@ -252,7 +252,7 @@ namespace GDModel.Providers.GEDCOM
         {
             fTree.State = GDMTreeState.osLoading;
             try {
-                ProgressEventHandler progressHandler = fTree.OnProgress;
+                var progressCallback = fTree.ProgressCallback;
 
                 fDefaultEncoding = GetDefaultEncoding();
                 fSourceEncoding = fDefaultEncoding;
@@ -341,11 +341,11 @@ namespace GDModel.Providers.GEDCOM
                         }
                     }
 
-                    if (progressHandler != null) {
+                    if (progressCallback != null) {
                         int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
                         if (progress != newProgress) {
                             progress = newProgress;
-                            progressHandler(fTree, progress);
+                            progressCallback.StepTo(progress);
                         }
                     }
                 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -149,17 +149,9 @@ namespace GKTextSearchPlugin
                     {
                         indexer.SetStemmer(stemmer);
 
-                        IProgressController progress = AppHost.Progress;
-                        progress.ProgressInit(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Context.Tree.RecordsCount);
-                        int num = baseWin.Context.Tree.RecordsCount;
-                        for (int i = 0; i < num; i++)
-                        {
-                            GDMRecord record = baseWin.Context.Tree[i];
-                            if (IsIndexedRecord(record)) ReindexRecord(baseWin, database, indexer, record);
-
-                            progress.ProgressStep();
-                        }
-                        progress.ProgressDone();
+                        AppHost.Instance.ExecuteWork((controller) => {
+                            ReindexInt(baseWin, database, indexer, controller);
+                        });
 
                         SetDBLastChange(baseWin, database);
                     }
@@ -167,6 +159,20 @@ namespace GKTextSearchPlugin
             } catch (Exception ex) {
                 Logger.WriteError("SearchManager.ReindexBase()", ex);
             }
+        }
+
+        private void ReindexInt(IBaseWindow baseWin, WritableDatabase database, TermGenerator indexer, IProgressController progress)
+        {
+            progress.Begin(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Context.Tree.RecordsCount);
+            int num = baseWin.Context.Tree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                GDMRecord record = baseWin.Context.Tree[i];
+                if (IsIndexedRecord(record))
+                    ReindexRecord(baseWin, database, indexer, record);
+
+                progress.Increment();
+            }
+            progress.End();
         }
 
         public void UpdateRecord(IBaseWindow baseWin, GDMRecord record)

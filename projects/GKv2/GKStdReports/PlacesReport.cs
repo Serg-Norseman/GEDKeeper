@@ -49,7 +49,11 @@ namespace GKStdReports
             fWriter.NewLine();
 
             var places = new StringList();
-            TreeTools.SearchPlaces(fBase.Context.Tree, places, AppHost.Progress, false);
+
+            AppHost.Instance.ExecuteWork((controller) => {
+                TreeTools.SearchPlaces(fBase.Context.Tree, places, controller, false);
+            });
+
             places.Sort();
 
             fWriter.BeginTable(1, places.Count + 1);

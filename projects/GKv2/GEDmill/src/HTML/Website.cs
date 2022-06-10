@@ -24,6 +24,7 @@ using GEDmill.MiniTree;
 using GEDmill.Model;
 using GKCore.Interfaces;
 using GKCore.Logging;
+using GKUI.Forms;
 
 namespace GEDmill.HTML
 {
@@ -43,21 +44,17 @@ namespace GEDmill.HTML
         // The raw data that we are turning into a website.
         private readonly GDMTree fTree;
 
-        // Pointer to the window showing the progress bar, so that web page creation progress can be shown to user.
-        private readonly IProgressCallback fProgressWindow;
 
-
-        public Website(IBaseContext context, IProgressCallback progress, string outputFolder, ILangMan langMan)
+        public Website(IBaseContext context, string outputFolder, ILangMan langMan)
         {
             fContext = context;
             fTree = fContext.Tree;
-            fProgressWindow = progress;
             fOutputFolder = outputFolder;
             fLangMan = langMan;
         }
 
         // The heart of GEDmill is here.
-        public void Create()
+        public void Create(IProgressController progressWnd)
         {
             fLogger.WriteInfo("Website::Create()");
 
@@ -92,73 +89,73 @@ namespace GEDmill.HTML
                 // Here goes....
 
                 // Start the progress indicator.
-                fProgressWindow.Begin(0, progressMax);
-                if (fProgressWindow.IsAborting) {
+                progressWnd.Begin(progressMax, true);
+                if (progressWnd.IsCanceled) {
                     return;
                 }
                 // Copy the images to use in place of non-pic multimedia files.
-                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CopyingMultimedia));
+                progressWnd.SetText(fLangMan.LS(PLS.LSID_CopyingMultimedia));
                 CopyIcons();
-                if (fProgressWindow.IsAborting) {
+                if (progressWnd.IsCanceled) {
                     return;
                 }
-                fProgressWindow.StepTo(++progress);
+                progressWnd.StepTo(++progress);
 
                 // Create the index creator for use by the individuals records creator.
                 var indiIndexCreator = new CreatorIndexIndividuals(fContext, fLangMan);
 
                 // Copy the image for the background of the webpages.
-                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CopyingBackground));
+                progressWnd.SetText(fLangMan.LS(PLS.LSID_CopyingBackground));
                 string backgroundImageFilename = CopyBackgroundImage();
-                if (fProgressWindow.IsAborting) {
+                if (progressWnd.IsCanceled) {
                     return;
                 }
-                fProgressWindow.StepTo(++progress);
+                progressWnd.StepTo(++progress);
 
                 // Create the style sheet
-                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingStyleSheet));
+                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingStyleSheet));
                 string cssFilename = string.Concat(fOutputFolder, "\\", GMConfig.StylesheetFilename);
                 if (GMConfig.StylesheetFilename.Length > 0) {
                     var csc = new CreatorStylesheet(fContext, fLangMan, cssFilename, backgroundImageFilename);
                     csc.Create();
                 }
 
-                if (fProgressWindow.IsAborting) {
+                if (progressWnd.IsCanceled) {
                     return;
                 }
 
-                fProgressWindow.StepTo(++progress);
+                progressWnd.StepTo(++progress);
 
                 // Create the pages for the individual records.
-                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualPages));
+                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualPages));
                 var indiList = fTree.GetRecords<GDMIndividualRecord>();
                 foreach (GDMIndividualRecord ir in indiList) {
                     var ipc = new CreatorRecordIndividual(fContext, fLangMan, ir, indiIndexCreator, paintbox);
                     if (ipc.Create(stats)) {
                         stats.Individuals++;
                     }
-                    if (fProgressWindow.IsAborting) {
+                    if (progressWnd.IsCanceled) {
                         return;
                     }
 
-                    fProgressWindow.StepTo(++progress);
+                    progressWnd.StepTo(++progress);
                 }
 
                 // Create the index for the individual records pages.
-                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualsIndex));
+                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualsIndex));
                 indiIndexCreator.Create();
-                if (fProgressWindow.IsAborting) {
+                if (progressWnd.IsCanceled) {
                     return;
                 }
 
-                fProgressWindow.StepTo(++progress);
+                progressWnd.StepTo(++progress);
 
                 // Clear list of copied files, so that source images get copied afresh
                 // and so get resized differently to any indi images based on the same file.
                 Creator.ClearCopiedFilesList();
 
                 // Create the pages for the source records.
-                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingSourcePages));
+                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingSourcePages));
                 var sourList = fTree.GetRecords<GDMSourceRecord>();
                 foreach (GDMSourceRecord sr in sourList) {
                     var spc = new CreatorRecordSource(fContext, fLangMan, sr);
@@ -166,54 +163,54 @@ namespace GEDmill.HTML
                         stats.Sources++;
                     }
 
-                    if (fProgressWindow.IsAborting) {
+                    if (progressWnd.IsCanceled) {
                         return;
                     }
 
-                    fProgressWindow.StepTo(++progress);
+                    progressWnd.StepTo(++progress);
                 }
 
-                if (fProgressWindow.IsAborting) {
+                if (progressWnd.IsCanceled) {
                     return;
                 }
 
                 // Create the front page
-                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingFrontPage));
+                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingFrontPage));
                 if (GMConfig.Instance.FrontPageFilename.Length > 0) {
                     CreatorFrontPage fpc = new CreatorFrontPage(fContext, fLangMan, stats);
                     fpc.Create();
                 }
-                fProgressWindow.StepTo(++progress);
-                if (fProgressWindow.IsAborting) {
+                progressWnd.StepTo(++progress);
+                if (progressWnd.IsCanceled) {
                     return;
                 }
                 
                 // Copy the CD ROM autorun file
-                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingCDROMFiles));
+                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingCDROMFiles));
                 if (GMConfig.Instance.CreateCDROMFiles) {
                     CreateCDROMFiles();
                 }
-                if (fProgressWindow.IsAborting) {
+                if (progressWnd.IsCanceled) {
                     return;
                 }
 
-                fProgressWindow.StepTo(++progress);
+                progressWnd.StepTo(++progress);
 
                 // Copy the Javascript
-                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_CreatingJSFile));
+                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingJSFile));
                 // Currently (10Dec08) the only thing that uses javascript is the multiple images feature.
                 if (GMConfig.Instance.AllowMultipleImages) {
                     CreateJavascriptFiles();
                 }
-                if (fProgressWindow.IsAborting) {
+                if (progressWnd.IsCanceled) {
                     return;
                 }
 
-                fProgressWindow.StepTo(++progress);
+                progressWnd.StepTo(++progress);
 
                 // Done
                 fLogger.WriteInfo("Website::CreateFinished");
-                fProgressWindow.SetText(fLangMan.LS(PLS.LSID_Done));
+                progressWnd.SetText(fLangMan.LS(PLS.LSID_Done));
                 threaderror.Error = 0;
                 threaderror.Message = "";
             } catch (ArgumentException e) {
@@ -237,8 +234,8 @@ namespace GEDmill.HTML
                 threaderror.Message = "";
             } finally {
                 fLogger.WriteInfo("Thread ending...");
-                if (fProgressWindow != null) {
-                    fProgressWindow.End(threaderror);
+                if (progressWnd != null) {
+                    progressWnd.End(threaderror);
                 }
             }
         }

@@ -21,6 +21,7 @@
 using System;
 using System.Globalization;
 using System.Text;
+using System.Threading;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
 using Eto.Drawing;
@@ -267,6 +268,30 @@ namespace GKUI.Platform
             Application.Instance.Quit();
         }
 
+        public override void ExecuteWork(ProgressStart proc)
+        {
+            var activeWnd = GetActiveWindow() as Window;
+
+            using (var progressForm = new ProgressDlg()) {
+                var workerThread = new Thread((obj) => {
+                    proc((IProgressController)obj);
+                });
+
+                try {
+                    workerThread.Start(progressForm);
+
+                    progressForm.ShowModal(activeWnd);
+                } catch (Exception ex) {
+                    Logger.WriteError("ExecuteWork()", ex);
+                }
+            }
+        }
+
+        public override bool ExecuteWorkExt(ProgressStart proc, string title)
+        {
+            return false;
+        }
+
         #region KeyLayout functions
 
         public override int GetKeyLayout()
@@ -317,7 +342,6 @@ namespace GKUI.Platform
             // controls and other
             container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProviderEx, EtoGfxProvider>(LifeCycle.Singleton);
-            container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
 
             // dialogs

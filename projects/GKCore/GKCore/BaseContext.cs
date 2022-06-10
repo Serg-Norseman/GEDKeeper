@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1134,16 +1134,17 @@ namespace GKCore
         {
 #if FILECOPY_EX
 
-            IProgressController progress = AppHost.Progress;
-            try {
-                progress.ProgressInit(LangMan.LS(LSID.LSID_CopyingFile), 100);
+            AppHost.Instance.ExecuteWork((controller) => {
+                try {
+                    controller.Begin(LangMan.LS(LSID.LSID_CopyingFile), 100);
 
-                var source = new FileInfo(sourceFileName);
-                var target = new FileInfo(destFileName);
-                GKUtils.CopyFile(source, target, progress);
-            } finally {
-                progress.ProgressDone();
-            }
+                    var source = new FileInfo(sourceFileName);
+                    var target = new FileInfo(destFileName);
+                    GKUtils.CopyFile(source, target, controller);
+                } finally {
+                    controller.End();
+                }
+            });
 
 #else
 
@@ -1253,11 +1254,6 @@ namespace GKCore
             fFileName = fileName;
         }
 
-        private void LoadProgress(object sender, int progress)
-        {
-            AppHost.Progress.ProgressStep(progress);
-        }
-
         public void Clear()
         {
             fTree.Clear();
@@ -1300,31 +1296,27 @@ namespace GKCore
                     return false;
                 }
 
-                IProgressController progress;
                 if (!showProgress) {
-                    progress = null;
+                    FileLoad(fileProvider, fileName, pw, null);
                 } else {
-                    progress = AppHost.Progress;
-                    progress.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
-                    fTree.OnProgress += LoadProgress;
+                    AppHost.Instance.ExecuteWork((controller) => {
+                        controller.Begin(LangMan.LS(LSID.LSID_Loading), 100);
+                        FileLoad(fileProvider, fileName, pw, controller);
+                        controller.End();
+                    });
                 }
 
-                try {
-                    FileLoad(fileProvider, fileName, pw);
+                AppHost.ForceGC();
+
+                if (checkValidation) {
+                    AppHost.Instance.ExecuteWork((controller) => {
+                        GEDCOMChecker.CheckGEDCOMFormat(this, controller);
+                    });
+
                     AppHost.ForceGC();
-
-                    if (checkValidation) {
-                        GEDCOMChecker.CheckGEDCOMFormat(this, progress);
-                        AppHost.ForceGC();
-                    }
-
-                    result = true;
-                } finally {
-                    if (progress != null) {
-                        fTree.OnProgress -= LoadProgress;
-                        progress.ProgressDone();
-                    }
                 }
+
+                result = true;
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.FileLoad()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
@@ -1333,13 +1325,17 @@ namespace GKCore
             return result;
         }
 
-        private void FileLoad(FileProvider fileProvider, string fileName, string password)
+        private void FileLoad(FileProvider fileProvider, string fileName, string password, IProgressController progress)
         {
+            fTree.ProgressCallback = progress;
+
             if (string.IsNullOrEmpty(password)) {
                 fileProvider.LoadFromFile(fileName, GlobalOptions.Instance.CharsetDetection);
             } else {
                 LoadFromSecFile(fileName, password, GlobalOptions.Instance.CharsetDetection);
             }
+
+            fTree.ProgressCallback = null;
 
             fFileName = fileName;
         }

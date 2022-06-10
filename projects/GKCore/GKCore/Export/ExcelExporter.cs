@@ -37,21 +37,11 @@ namespace GKCore.Export
             fSelectedRecords = baseWin.GetContentList(GDMRecordType.rtIndividual);
         }
 
-        public override void Generate(bool show)
-        {
 #if !NETSTANDARD
-            fPath = AppHost.StdDialogs.GetSaveFile("Excel files (*.xls)|*.xls");
-            if (string.IsNullOrEmpty(fPath)) return;
-
-            fWriter = new XLSWriter();
-            fWriter.BeginWrite();
-
+        private void GenerateInt(IProgressController progress)
+        {
             int recordsCount = fTree.RecordsCount;
-
-            IProgressController progress = AppHost.Progress;
-            progress.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", recordsCount);
-
-            var dateFormat = GlobalOptions.Instance.DefDateFormat;
+            progress.Begin(LangMan.LS(LSID.LSID_MIExport) + "...", recordsCount);
             try {
                 fWriter.BeginTable(12, recordsCount + 1);
 
@@ -68,6 +58,7 @@ namespace GKCore.Export
                 fWriter.AddTableCell(LangMan.LS(LSID.LSID_Age));
                 fWriter.AddTableCell(LangMan.LS(LSID.LSID_LifeExpectancy));
 
+                var dateFormat = GlobalOptions.Instance.DefDateFormat;
                 for (int i = 0; i < recordsCount; i++) {
                     GDMRecord rec = fTree[i];
                     if (rec.RecordType == GDMRecordType.rtIndividual) {
@@ -91,19 +82,33 @@ namespace GKCore.Export
                             fWriter.AddTableCell(GKUtils.GetLifeExpectancyStr(ind));
                         }
                     }
-
-                    progress.ProgressStep();
+                    progress.Increment();
                 }
+            } finally {
+                progress.End();
+            }
+        }
+#endif
 
-                fWriter.SetFileName(fPath);
-                fWriter.EndWrite();
+        public override void Generate(bool show)
+        {
+#if !NETSTANDARD
+            fPath = AppHost.StdDialogs.GetSaveFile("Excel files (*.xls)|*.xls");
+            if (string.IsNullOrEmpty(fPath)) return;
+
+            fWriter = new XLSWriter();
+            fWriter.BeginWrite();
+
+            AppHost.Instance.ExecuteWork((controller) => {
+                GenerateInt(controller);
+            });
+
+            fWriter.SetFileName(fPath);
+            fWriter.EndWrite();
 
 #if !CI_MODE
-                if (show) ShowResult();
+            if (show) ShowResult();
 #endif
-            } finally {
-                progress.ProgressDone();
-            }
 #endif
         }
     }

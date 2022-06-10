@@ -31,6 +31,7 @@ using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Logging;
 using GKCore.Types;
+using GKUI.Forms;
 
 namespace GEDmill
 {
@@ -1581,43 +1582,13 @@ namespace GEDmill
 
             fLogger.WriteInfo("Starting progress window");
 
-            var progressWindow = new ProgressWindow();
-            progressWindow.Text = fLangMan.LS(PLS.LSID_CreatingWebsite);
+            var website = new Website(fBase.Context, outputFolder, fLangMan);
 
-            var website = new Website(fBase.Context, progressWindow, outputFolder, fLangMan);
-            var threadWorker = new Thread(website.Create);
-
-            fLogger.WriteInfo("Starting progress thread");
-
-            DialogResult dialogResult = DialogResult.Abort;
-            try {
-                threadWorker.Start();
-                dialogResult = progressWindow.ShowDialog(this);
-            } catch (HTMLException e) {
-                ShowAlert(e.Message);
-            } finally {
-                threadWorker.Join();
-            }
-
-            if (dialogResult == DialogResult.Abort) {
-                fLogger.WriteInfo("Thread aborted");
-                if (progressWindow.ThreadError.Message == "") {
-                    // Abort means there were file IO errors
-                    ShowAlert(fLangMan.LS(PLS.LSID_UnkProblem));
-                } else {
-                    // Abort means there were file IO errors
-                    ShowAlert(progressWindow.ThreadError.Message);
-                }
-            }
-
-            if (dialogResult != DialogResult.OK) {
-                fLogger.WriteInfo("Dialog not OK");
-                return false;
-            }
+            bool res = AppHost.Instance.ExecuteWorkExt(website.Create, fLangMan.LS(PLS.LSID_CreatingWebsite));
 
             fLogger.WriteInfo("Website create done.");
 
-            return true;
+            return res;
         }
 
         // Enable the current page of the wizard

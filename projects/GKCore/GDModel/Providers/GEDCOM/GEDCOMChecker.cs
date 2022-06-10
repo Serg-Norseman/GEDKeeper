@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -406,7 +406,7 @@ namespace GDModel.Providers.GEDCOM
 
         private void ConvertIdentifiers()
         {
-            fProgress.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), fTree.RecordsCount * 2);
+            fProgress.Begin(LangMan.LS(LSID.LSID_IDsCorrect), fTree.RecordsCount * 2);
             GDMXRefReplacer repMap = new GDMXRefReplacer();
             try {
                 int recsCount = fTree.RecordsCount;
@@ -417,18 +417,18 @@ namespace GDModel.Providers.GEDCOM
                         string newXRef = fTree.NewXRef(rec, true);
                         repMap.AddXRef(rec, oldXRef, newXRef);
                     }
-                    fProgress.ProgressStep();
+                    fProgress.Increment();
                 }
 
                 fTree.Header.ReplaceXRefs(repMap);
                 for (int i = 0; i < recsCount; i++) {
                     GDMRecord rec = fTree[i];
                     rec.ReplaceXRefs(repMap);
-                    fProgress.ProgressStep();
+                    fProgress.Increment();
                 }
             } finally {
                 repMap.Dispose();
-                fProgress.ProgressDone();
+                fProgress.End();
             }
         }
 
@@ -454,7 +454,7 @@ namespace GDModel.Providers.GEDCOM
                     fileVer = -1;
                 }
 
-                fProgress.ProgressInit(LangMan.LS(LSID.LSID_FormatCheck), 100);
+                fProgress.Begin(LangMan.LS(LSID.LSID_FormatCheck), 100);
                 try {
                     bool xrefValid = true;
                     bool isExtraneous = (fFormat != GEDCOMFormat.gf_Native);
@@ -472,7 +472,7 @@ namespace GDModel.Providers.GEDCOM
                         int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / num);
                         if (progress != newProgress) {
                             progress = newProgress;
-                            fProgress.ProgressStep(progress);
+                            fProgress.StepTo(progress);
                         }
                     }
 
@@ -484,7 +484,7 @@ namespace GDModel.Providers.GEDCOM
 
                     result = true;
                 } finally {
-                    fProgress.ProgressDone();
+                    fProgress.End();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GEDCOMChecker.CheckFormat()", ex);
