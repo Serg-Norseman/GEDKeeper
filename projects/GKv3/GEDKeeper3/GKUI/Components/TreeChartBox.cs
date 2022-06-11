@@ -751,8 +751,10 @@ namespace GKUI.Components
                 case ChartControlMode.DragImage:
                     Point pt = new Point(e.Location);
                     AdjustScroll(-(pt.X - fMouseX), -(pt.Y - fMouseY));
+#if !OS_LINUX
                     fMouseX = pt.X;
                     fMouseY = pt.Y;
+#endif
                     break;
 
                 case ChartControlMode.ControlsVisible:
