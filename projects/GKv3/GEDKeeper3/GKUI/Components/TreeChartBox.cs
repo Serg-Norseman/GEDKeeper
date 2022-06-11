@@ -625,7 +625,12 @@ namespace GKUI.Components
             var result = MouseAction.None;
             person = null;
 
-            Point mpt = GetImageRelativeLocation(e.Location);
+            Point mpt;
+#if !OS_LINUX
+            mpt = GetImageRelativeLocation(e.Location);
+#else
+            mpt = new Point(e.Location);
+#endif
             int aX = mpt.X;
             int aY = mpt.Y;
 
