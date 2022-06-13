@@ -17,6 +17,7 @@ using Eto.GtkSharp.Forms.ToolBar;
 #if OS_MACOS
 using Eto.Mac.Forms.ToolBar;
 using MonoMac.AppKit;
+using MonoMac.CoreGraphics;
 #endif
 
 namespace GKUI.Platform
@@ -184,18 +185,23 @@ namespace GKUI.Platform
 
 #if OS_MACOS
 
-    public class ButtonToolItemHandler : ToolItemHandler<NSToolbarItem, ButtonToolItem>, ButtonToolItem.IHandler
+    public class DropDownToolItemHandler : ToolItemHandler<NSToolbarItem, DropDownToolItem>, DropDownToolItem.IHandler
     {
         ContextMenu contextMenu;
+
+        public new string Text
+        {
+            get { return Button.Title; }
+            set { Button.Title = value; }
+        }
 
         public override void InvokeButton()
         {
             Widget.OnClick(EventArgs.Empty);
 
-            var ctxMenu = contextMenu.ControlObject as NSMenu /* ??? */;
+            var ctxMenu = contextMenu.ControlObject as NSMenu;
             if (ctxMenu != null) {
-                // https://github.com/picoe/Eto/blob/1b4821b375827b8348969bf1684216e0a70131d1/src/Eto.Mac/Forms/Menu/ContextMenuHandler.cs
-                // ???
+                ctxMenu.PopUpMenu(null, Button.Frame.Location, Button.Superview);
             }
         }
 
