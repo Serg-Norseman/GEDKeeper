@@ -21,6 +21,7 @@
 //define DEBUG_IMAGE
 
 using System;
+using System.Runtime.InteropServices;
 using BSLib;
 using BSLib.Design;
 using BSLib.Design.Graphics;
@@ -614,14 +615,23 @@ namespace GKUI.Components
             var result = MouseAction.None;
             person = null;
 
+            /*
+             * In Eto/Gtk, mouse events coming to Scrollable handlers have coordinates 
+             * with the origin of the Scrollable control if no key is pressed and 
+             * with the origin of the nested Canvas if any key is pressed.
+             */
+
             Point mpt;
-#if !OS_LINUX
-            mpt = GetImageRelativeLocation(e.Location);
-#else
-            mpt = new Point(e.Location);
-#endif
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || e.Buttons == MouseButtons.None) {
+                mpt = GetImageRelativeLocation(e.Location);
+            } else {
+                mpt = new Point(e.Location);
+            }
             int aX = mpt.X;
             int aY = mpt.Y;
+
+            // for debug purposes
+            //Console.WriteLine(e.Location.ToString() + " / " + mpt.ToString());
 
             int num = fModel.Persons.Count;
             for (int i = 0; i < num; i++) {
@@ -762,6 +772,10 @@ namespace GKUI.Components
                     break;
             }
 
+#if OS_LINUX
+            InvalidateContent();
+#endif
+
             e.Handled = true;
             base.OnMouseMove(e);
         }
@@ -769,6 +783,11 @@ namespace GKUI.Components
         protected override void OnMouseUp(MouseEventArgs e)
         {
             Point scrPt = new Point(e.Location);
+
+            PointF mpt = e.Location;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                mpt = GetControlRelativeLocation(mpt);
+            }
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -782,7 +801,7 @@ namespace GKUI.Components
                         case MouseAction.Properties:
                             SelectBy(mPers, false);
                             if (fSelected == mPers && fSelected.Rec != null) {
-                                DoPersonProperties(new MouseEventArgs(e.Buttons, Keys.None, e.Location));
+                                DoPersonProperties(new MouseEventArgs(e.Buttons, Keys.None, mpt));
                             }
                             break;
 

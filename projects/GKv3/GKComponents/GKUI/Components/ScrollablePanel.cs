@@ -179,36 +179,29 @@ namespace GKUI.Components
             fHasHScroll = (fViewport.Width < fImageSize.Width);
             fHasVScroll = (fViewport.Height < fImageSize.Height);
 
-            //int sourX, sourY;
             int destX, destY;
 
             if (fHasHScroll) {
-                //sourX = 0;
                 destX = 0;
                 fMouseOffsetX = fViewport.Left;
             } else {
                 if (fCenteredImage) {
-                    //sourX = 0;
                     destX = (fViewport.Width - fImageSize.Width) / 2;
                     fMouseOffsetX = -destX;
                 } else {
-                    //sourX = 0;
                     destX = 0;
                     fMouseOffsetX = 0;
                 }
             }
 
             if (fHasVScroll) {
-                //sourY = 0;
                 destY = 0;
                 fMouseOffsetY = fViewport.Top;
             } else {
                 if (fCenteredImage) {
-                    //sourY = 0;
                     destY = (fViewport.Height - fImageSize.Height) / 2;
                     fMouseOffsetY = -destY;
                 } else {
-                    //sourY = 0;
                     destY = 0;
                     fMouseOffsetY = 0;
                 }
@@ -336,9 +329,14 @@ namespace GKUI.Components
             return new Point((int)mpt.X + fMouseOffsetX, (int)mpt.Y + fMouseOffsetY);
         }
 
-        protected Point GetScrollRelativeLocation(PointF mpt)
+        protected PointF GetControlRelativeLocation(PointF mpt)
         {
-            return new Point((int)mpt.X + fViewport.Left, (int)mpt.Y + fViewport.Top);
+            return new PointF(mpt.X - fMouseOffsetX, mpt.Y - fMouseOffsetY);
+        }
+
+        protected void InvalidateContent()
+        {
+            fCanvas.Invalidate();
         }
     }
 }
