@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:gkplat="clr-namespace:GKUI.Platform"
   x:Class="GKUI.Forms.BaseWinSDI"
   GotFocus="Form_Activated" LostFocus="Form_Deactivate" Closing="Form_Closing" Closed="Form_Closed"
   Load="Form_Load" KeyDown="Form_KeyDown" AllowDrop="true" DragDrop="Form_DragDrop" DragEnter="Form_DragEnter"
@@ -10,7 +10,14 @@
     <ToolBar TextAlign="Right" Style="tbsi">
       <ButtonToolItem x:Name="tbFileNew" Image="{Resource Resources.btn_create_new.gif, GKCore}" Click="miFileNew_Click" />
       <ButtonToolItem x:Name="tbFileLoad" Image="{Resource Resources.btn_load.gif, GKCore}" Click="miFileLoad_Click" />
-      <ButtonToolItem x:Name="tbLoadMRU" Text="▼" Click="tbLoadMRU_Click" />
+
+      <gkplat:DropDownToolItem x:Name="tbLoadMRU" Text="▼">
+        <gkplat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="MenuMRU">
+          </ContextMenu>
+        </gkplat:DropDownToolItem.ContextMenu>
+      </gkplat:DropDownToolItem>
+
       <ButtonToolItem x:Name="tbFileSave" Image="{Resource Resources.btn_save.gif, GKCore}" Click="miFileSave_Click" />
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbRecordAdd" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="miRecordAdd_Click" />
@@ -23,7 +30,16 @@
       <ButtonToolItem x:Name="tbTreeDescendants" Image="{Resource Resources.btn_tree_descendants.gif, GKCore}" Click="miTreeDescendants_Click" />
       <ButtonToolItem x:Name="tbTreeBoth" Image="{Resource Resources.btn_tree_both.gif, GKCore}" Click="miTreeBoth_Click" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbPedigree" Image="{Resource Resources.btn_scroll.gif, GKCore}" Click="tbPedigree_Click" />
+
+      <gkplat:DropDownToolItem x:Name="tbPedigree" Image="{Resource Resources.btn_scroll.gif, GKCore}">
+        <gkplat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="MenuPedigree">
+            <ButtonMenuItem x:Name="miPedigree_dAboville2" Click="miPedigree_dAbovilleClick" />
+            <ButtonMenuItem x:Name="miPedigree_Konovalov2" Click="miPedigree_KonovalovClick" />
+          </ContextMenu>
+        </gkplat:DropDownToolItem.ContextMenu>
+      </gkplat:DropDownToolItem>
+
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbStats" Image="{Resource Resources.btn_table.gif, GKCore}" Click="miStats_Click" />
       <SeparatorToolItem />

@@ -59,7 +59,7 @@ namespace GKUI.Forms
         private ButtonToolItem tbFilter;
         private ButtonToolItem tbTreeAncestors;
         private ButtonToolItem tbTreeDescendants;
-        private ButtonToolItem tbPedigree;
+        private DropDownToolItem tbPedigree;
         private ButtonToolItem tbStats;
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
@@ -111,7 +111,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miReports;
         private ButtonMenuItem miPlugins;
         private ButtonMenuItem miSlideshow;
-        private ButtonToolItem tbLoadMRU;
+        private DropDownToolItem tbLoadMRU;
         private ButtonMenuItem miPedigreeAscend;
         private ButtonMenuItem miDescendantsCircle;
         private ButtonMenuItem miRelationshipCalculator;
@@ -208,13 +208,6 @@ namespace GKUI.Forms
 
         private void InitializeComponent()
         {
-            MenuMRU = new ContextMenu();
-
-            miPedigree_dAboville2 = new ButtonMenuItem(miPedigree_dAbovilleClick);
-            miPedigree_Konovalov2 = new ButtonMenuItem(miPedigree_KonovalovClick);
-            MenuPedigree = new ContextMenu();
-            MenuPedigree.Items.AddRange(new MenuItem[] { miPedigree_dAboville2, miPedigree_Konovalov2 });
-
             miContRecordAdd = new ButtonMenuItem(miRecordAdd_Click);
             miContRecordEdit = new ButtonMenuItem(miRecordEdit_Click);
             miContRecordDelete = new ButtonMenuItem(miRecordDelete_Click);
@@ -384,18 +377,6 @@ namespace GKUI.Forms
         private void mPersonSummaryLink(object sender, string linkName)
         {
             fController.SelectSummaryLink(linkName);
-        }
-
-        private void tbLoadMRU_Click(object sender, EventArgs e)
-        {
-            if (MenuMRU.Items.Count > 0) {
-                MenuMRU.Show(this);
-            }
-        }
-
-        private void tbPedigree_Click(object sender, EventArgs e)
-        {
-            MenuPedigree.Show(this);
         }
 
         #endregion
