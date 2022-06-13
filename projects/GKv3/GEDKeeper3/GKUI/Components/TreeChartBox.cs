@@ -439,26 +439,15 @@ namespace GKUI.Components
 
         #region Sizes and adjustment routines
 
-        /*private ExtRect GetImageViewport()
-        {
-            ExtRect viewport;
-
-            var imageSize = GetImageSize();
-            if (!imageSize.IsEmpty) {
-                Rectangle scrollableViewport = this.Viewport;
-                viewport = ExtRect.CreateBounds(
-                    scrollableViewport.Left, scrollableViewport.Top,
-                    scrollableViewport.Width, scrollableViewport.Height);
-            } else {
-                viewport = ExtRect.Empty;
-            }
-
-            return viewport;
-        }*/
-
         public ExtRect GetClientRect()
         {
-            return UIHelper.Rt2Rt(base.Viewport);
+            return UIHelper.Rt2Rt(base.ClientRectangle);
+        }
+
+        public ExtPoint GetDrawOrigin()
+        {
+            var viewportLoc = base.Viewport.Location;
+            return new ExtPoint(viewportLoc.X, viewportLoc.Y);
         }
 
         public void RecalcChart(bool noRedraw = false)
@@ -687,11 +676,9 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            Point pt = new Point(e.Location);
-            fMouseX = pt.X;
-            fMouseY = pt.Y;
-
-            Point scrPt = GetScrollRelativeLocation(e.Location);
+            Point scrPt = new Point(e.Location);
+            fMouseX = scrPt.X;
+            fMouseY = scrPt.Y;
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -724,8 +711,7 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            //Point ctPt = new Point((int)e.Location.X, (int)e.Location.Y);
-            Point scrPt = GetScrollRelativeLocation(e.Location);
+            Point scrPt = new Point(e.Location);
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -754,11 +740,10 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.DragImage:
-                    Point pt = new Point(e.Location);
-                    AdjustScroll(-(pt.X - fMouseX), -(pt.Y - fMouseY));
+                    AdjustScroll(-(scrPt.X - fMouseX), -(scrPt.Y - fMouseY));
 #if !OS_LINUX
-                    fMouseX = pt.X;
-                    fMouseY = pt.Y;
+                    fMouseX = scrPt.X;
+                    fMouseY = scrPt.Y;
 #endif
                     break;
 
@@ -783,7 +768,7 @@ namespace GKUI.Components
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            Point scrPt = GetScrollRelativeLocation(e.Location);
+            Point scrPt = new Point(e.Location);
 
             switch (fMode) {
                 case ChartControlMode.Default:

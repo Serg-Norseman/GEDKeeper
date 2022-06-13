@@ -59,6 +59,17 @@ namespace GKUI.Components
             set { fCenteredImage = value; }
         }
 
+        /// <summary>
+        /// Gets the rectangle that represents the client area of the control.
+        /// </summary>
+        public Rectangle ClientRectangle
+        {
+            get {
+                var clientSize = base.ClientSize;
+                return new Rectangle(0, 0, clientSize.Width, clientSize.Height);
+            }
+        }
+
         public Font Font
         {
             get { return fFont; }
@@ -96,6 +107,9 @@ namespace GKUI.Components
             set { fTextColor = value; }
         }
 
+        /// <summary>
+        /// The rectangle that is visible to the user.
+        /// </summary>
         public Rectangle Viewport
         {
             get { return fViewport; }
@@ -258,7 +272,7 @@ namespace GKUI.Components
         protected override void OnSizeChanged(EventArgs e)
         {
             if (Loaded) {
-                fViewport.Size = VisibleRect.Size;
+                fViewport = VisibleRect;
                 UpdateProperties();
             }
             base.OnSizeChanged(e);
@@ -267,7 +281,7 @@ namespace GKUI.Components
         protected override void OnScroll(ScrollEventArgs e)
         {
             if (Loaded) {
-                fViewport.Location = VisibleRect.Location;
+                fViewport = VisibleRect;
                 UpdateProperties();
                 fCanvas.Invalidate();
             }

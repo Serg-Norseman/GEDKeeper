@@ -66,6 +66,7 @@ namespace GKCore.Charts
         void GenChart(bool rootCenter);
         void GenChart(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter);
         ExtRect GetClientRect();
+        ExtPoint GetDrawOrigin();
         ExtSize GetImageSize();
         ExtPoint GetOffsets();
         void Invalidate();

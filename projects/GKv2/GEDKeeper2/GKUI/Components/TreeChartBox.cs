@@ -460,6 +460,13 @@ namespace GKUI.Components
             return UIHelper.Rt2Rt(this.ClientRectangle);
         }
 
+        public ExtPoint GetDrawOrigin()
+        {
+            // For a component without a large nested canvas,
+            // the render origin is independent of the viewport.
+            return new ExtPoint(0, 0);
+        }
+
         public void RecalcChart(bool noRedraw = false)
         {
             Graphics gfx = null;
@@ -728,10 +735,9 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.DragImage:
-                    Point pt = e.Location;
-                    AdjustScroll(-(pt.X - fMouseX), -(pt.Y - fMouseY));
-                    fMouseX = pt.X;
-                    fMouseY = pt.Y;
+                    AdjustScroll(-(scrPt.X - fMouseX), -(scrPt.Y - fMouseY));
+                    fMouseX = scrPt.X;
+                    fMouseY = scrPt.Y;
                     break;
 
                 case ChartControlMode.ControlsVisible:
