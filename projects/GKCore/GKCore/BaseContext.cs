@@ -61,6 +61,7 @@ namespace GKCore
         #region Private fields
 
         private ICulture fCulture;
+        private GDMLanguageID fDefaultLanguage;
         private string fFileName;
         private bool fModified;
         private ShieldState fShieldState;
@@ -86,6 +87,12 @@ namespace GKCore
                 }
                 return fCulture;
             }
+        }
+
+        public GDMLanguageID DefaultLanguage
+        {
+            get { return fDefaultLanguage; }
+            set { fDefaultLanguage = value; }
         }
 
         public string FileName

@@ -64,6 +64,7 @@
             this.lvData.TabIndex = 0;
             this.lvData.UseCompatibleStateImageBehavior = false;
             this.lvData.View = System.Windows.Forms.View.Details;
+            this.lvData.SelectedIndexChanged += lvData_SelectedIndexChanged;
             // 
             // NavigatorWidget
             // 

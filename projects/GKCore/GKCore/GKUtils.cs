@@ -3064,18 +3064,34 @@ namespace GKCore
             return result.Trim();
         }
 
-        public static string GetNameString(GDMIndividualRecord iRec, bool firstSurname, bool includePieces)
+        private static GDMPersonalName GetPersonalNameByLang(GDMIndividualRecord iRec, GDMLanguageID defLang)
+        {
+            GDMPersonalName result;
+
+            int count = iRec.PersonalNames.Count;
+            if (count == 0) {
+                result = null;
+            } else {
+                result = iRec.PersonalNames[0];
+                for (int i = 1; i < count; i++) {
+                    var pn = iRec.PersonalNames[i];
+                    if (pn.Language == defLang) {
+                        result = pn;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static string GetNameString(GDMIndividualRecord iRec, bool firstSurname, bool includePieces, GDMLanguageID defLang = GDMLanguageID.Unknown)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            string result;
-            if (iRec.PersonalNames.Count > 0) {
-                GDMPersonalName np = iRec.PersonalNames[0];
-                result = GetNameString(iRec, np, firstSurname, includePieces);
-            } else {
-                result = "";
-            }
+            GDMPersonalName pn = GetPersonalNameByLang(iRec, defLang);
+            string result = (pn == null) ? string.Empty : GetNameString(iRec, pn, firstSurname, includePieces);
             return result;
         }
 
@@ -3120,16 +3136,13 @@ namespace GKCore
             return nameParts;
         }
 
-        public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, bool formatted = true)
+        public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, bool formatted = true, GDMLanguageID defLang = GDMLanguageID.Unknown)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            if (iRec.PersonalNames.Count > 0) {
-                return GetNameParts(tree, iRec, iRec.PersonalNames[0], formatted);
-            } else {
-                return new NamePartsRet();
-            }
+            GDMPersonalName pn = GetPersonalNameByLang(iRec, defLang);
+            return (pn == null) ? NamePartsRet.Empty : GetNameParts(tree, iRec, iRec.PersonalNames[0], formatted);
         }
 
         public static ICulture DefineCulture(GDMTree tree, GDMPersonalName personalName)

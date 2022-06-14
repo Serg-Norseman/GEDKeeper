@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -305,14 +305,15 @@ namespace GKCore.Lists
             } else {
                 NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
                 NamePartsRet parts;
+                GDMLanguageID defLang = fBaseContext.DefaultLanguage;
 
                 switch (defNameFormat) {
                     case NameFormat.nfFNP:
-                        result = GKUtils.GetNameString(fRec, GlobalOptions.Instance.SurnameFirstInOrder, false);
+                        result = GKUtils.GetNameString(fRec, GlobalOptions.Instance.SurnameFirstInOrder, false, defLang);
                         break;
 
                     case NameFormat.nfF_NP:
-                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fRec);
+                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fRec, true, defLang);
                         switch (colSubtype) {
                             case 0:
                                 result = parts.Surname;
@@ -324,7 +325,7 @@ namespace GKCore.Lists
                         break;
 
                     case NameFormat.nfF_N_P:
-                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fRec);
+                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fRec, true, defLang);
                         switch (colSubtype) {
                             case 0:
                                 result = parts.Surname;

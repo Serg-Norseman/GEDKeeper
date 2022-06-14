@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,26 +22,17 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
 namespace GKNavigatorPlugin
 {
-    public enum DataCategory
-    {
-        Root,
-        RecentActivity,
-        JumpHistory,
-        PotencialProblems,
-        Filters,
-        Bookmarks,
-        Records
-    }
-
     public partial class NavigatorWidget : Form, ILocalizable
     {
         private readonly Plugin fPlugin;
+        private readonly ILangMan fLangMan;
 
         private IBaseWindow fBase;
         private string fDatabaseName;
@@ -64,12 +55,14 @@ namespace GKNavigatorPlugin
         private TreeNode tnRecsTask;
         private TreeNode tnRecsCommunication;
         private TreeNode tnRecsLocation;
+        private TreeNode tnLanguages;
 
         public NavigatorWidget(Plugin plugin)
         {
             InitializeComponent();
 
             fPlugin = plugin;
+            fLangMan = fPlugin.LangMan;
 
             InitControls();
             SetLocale();
@@ -87,6 +80,7 @@ namespace GKNavigatorPlugin
             tnFilters = CreateNode(tnRecAct, "Filters", DataCategory.Filters);
 
             tnBookmarks = CreateNode(tnRoot, "Bookmarks", DataCategory.Bookmarks);
+            tnLanguages = CreateNode(tnRoot, "Languages", DataCategory.Languages);
 
             tnRecords = tnRoot.Nodes.Add("Records");
             tnRecsIndividual = CreateNode(tnRecords, "Individuals", GDMRecordType.rtIndividual);
@@ -107,13 +101,13 @@ namespace GKNavigatorPlugin
         public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_Navigator);
-
-            // FIXME: translations
-            tnRecAct.Text = "Recent Activity";
-            tnJumpHist.Text = "Jump history";
-            tnProblems.Text = "Potencial problems";
-            tnFilters.Text = "Filters";
-            tnBookmarks.Text = "Bookmarks";
+            tnRecAct.Text = fLangMan.LS(PLS.LSID_RecentActivity);
+            tnJumpHist.Text = fLangMan.LS(PLS.LSID_JumpHistory);
+            tnProblems.Text = fLangMan.LS(PLS.LSID_PotencialProblems);
+            tnFilters.Text = fLangMan.LS(PLS.LSID_Filters);
+            tnBookmarks.Text = fLangMan.LS(PLS.LSID_Bookmarks);
+            tnLanguages.Text = fLangMan.LS(PLS.LSID_Languages);
+            tnRecords.Text = fLangMan.LS(PLS.LSID_Records);
         }
 
         #endregion
@@ -132,8 +126,7 @@ namespace GKNavigatorPlugin
 
         public void BaseChanged(IBaseWindow baseWin)
         {
-            if (fBase != baseWin && fBase != null)
-            {
+            if (fBase != baseWin && fBase != null) {
             }
 
             fBase = baseWin;
@@ -218,8 +211,7 @@ namespace GKNavigatorPlugin
 
         private void ShowData(DataCategory category, GDMRecordType recordType)
         {
-            switch (category)
-            {
+            switch (category) {
                 case DataCategory.RecentActivity:
                     lvData.Clear();
                     break;
@@ -241,17 +233,21 @@ namespace GKNavigatorPlugin
                     break;
 
                 case DataCategory.Records:
-                    fBase.ShowRecordsTab(recordType);
                     ShowRecordsData(recordType);
+                    break;
+
+                case DataCategory.Languages:
+                    ShowLanguages();
                     break;
             }
         }
 
         private void ShowRecordsData(GDMRecordType recordType)
         {
+            fBase.ShowRecordsTab(recordType);
+
             lvData.BeginUpdate();
-            try
-            {
+            try {
                 lvData.Clear();
                 lvData.AddColumn("Action", 20, true);
                 lvData.AddColumn("XRef", 20, true);
@@ -261,8 +257,7 @@ namespace GKNavigatorPlugin
                 BaseData baseData = fPlugin.Data[fBase.Context.FileName];
                 if (baseData == null) return;
 
-                foreach (var recordInfo in baseData.ChangedRecords)
-                {
+                foreach (var recordInfo in baseData.ChangedRecords) {
                     if (recordInfo.Type != recordType) continue;
 
                     string act = "";
@@ -278,15 +273,52 @@ namespace GKNavigatorPlugin
                             break;
                     }
 
-                    lvData.AddItem(null, new object[] { act,
-                                       recordInfo.XRef,
-                                       recordInfo.Name,
-                                       recordInfo.Time.ToString() });
+                    lvData.AddItem(recordInfo, new object[] { act, recordInfo.XRef, recordInfo.Name, recordInfo.Time.ToString() });
                 }
-            }
-            finally
-            {
+            } finally {
                 lvData.EndUpdate();
+            }
+        }
+
+        private void ShowLanguages()
+        {
+            lvData.BeginUpdate();
+            try {
+                lvData.Clear();
+                lvData.AddColumn("Language", 200);
+
+                var baseContext = fBase.Context;
+
+                foreach (var lang in baseContext.LangsList) {
+                    lvData.AddItem(lang, new object[] { GEDCOMUtils.GetLanguageStr(lang) });
+                }
+            } finally {
+                lvData.EndUpdate();
+            }
+        }
+
+        private void lvData_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            var itemData = lvData.GetSelectedData();
+            if (itemData == null) return;
+
+            object tag = treeView1.SelectedNode.Tag;
+            if (tag == null) return;
+
+            if (tag is GDMRecordType) {
+
+            } else if (tag is DataCategory) {
+                var dataCat = (DataCategory)tag;
+
+                switch (dataCat) {
+                    case DataCategory.Languages: {
+                            var lang = (GDMLanguageID)itemData;
+                            fBase.Context.DefaultLanguage = lang;
+                            fBase.ShowRecordsTab(GDMRecordType.rtIndividual);
+                            fBase.RefreshRecordsView(GDMRecordType.rtIndividual);
+                        }
+                        break;
+                }
             }
         }
     }

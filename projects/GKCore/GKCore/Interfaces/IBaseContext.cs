@@ -31,6 +31,7 @@ namespace GKCore.Interfaces
     public interface IBaseContext : IDisposable
     {
         ICulture Culture { get; }
+        GDMLanguageID DefaultLanguage { get; set; }
         string FileName { get; }
         GDMTree Tree { get; }
         ValuesCollection ValuesCollection { get; }

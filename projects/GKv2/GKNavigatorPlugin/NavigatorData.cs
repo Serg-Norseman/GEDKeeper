@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,6 +27,19 @@ using GKCore.Types;
 
 namespace GKNavigatorPlugin
 {
+    public enum DataCategory
+    {
+        Root,
+        RecentActivity,
+        JumpHistory,
+        PotencialProblems,
+        Filters,
+        Bookmarks,
+        Records,
+        Languages,
+    }
+
+
     public sealed class RecordInfo
     {
         public readonly GDMRecordType Type;
@@ -91,14 +104,12 @@ namespace GKNavigatorPlugin
 
         public int Find(GDMRecord record)
         {
-            for (int i = 0; i < fChangedRecords.Count; i++)
-            {
+            for (int i = 0; i < fChangedRecords.Count; i++) {
                 RecordInfo recInfo = fChangedRecords[i];
                 if (recInfo.Record == record) {
                     return i;
                 }
             }
-
             return -1;
         }
     }
