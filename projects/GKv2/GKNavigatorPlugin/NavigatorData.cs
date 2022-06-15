@@ -156,5 +156,35 @@ namespace GKNavigatorPlugin
             fBases.Remove(oldName);
             fBases.Add(newName, b_data);
         }
+
+        public IList<GDMIndividualRecord> SearchBookmarks(IBaseContext baseContext)
+        {
+            var result = new List<GDMIndividualRecord>();
+
+            AppHost.Instance.ExecuteWork((controller) => {
+                var tree = baseContext.Tree;
+                int num = tree.RecordsCount;
+
+                controller.Begin("PatSearch", num);
+
+                for (int i = 0; i < num; i++) {
+                    GDMRecord rec = tree[i];
+
+                    if (rec.RecordType == GDMRecordType.rtIndividual) {
+                        GDMIndividualRecord iRec = rec as GDMIndividualRecord;
+
+                        if (iRec.Bookmark) {
+                            result.Add(iRec);
+                        }
+                    }
+
+                    controller.Increment();
+                }
+
+                controller.End();
+            });
+
+            return result;
+        }
     }
 }

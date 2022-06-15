@@ -19,13 +19,13 @@
  */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Components;
 
 namespace GKTimeLinePlugin
 {
@@ -45,8 +45,6 @@ namespace GKTimeLinePlugin
         {
             InitializeComponent();
 
-            Location = new Point(10, Screen.PrimaryScreen.WorkingArea.Height - Height - 10);
-
             fPlugin = plugin;
 
             SetLocale();
@@ -54,6 +52,9 @@ namespace GKTimeLinePlugin
 
         private void TimeLineWidget_Load(object sender, EventArgs e)
         {
+            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Left, WidgetVerticalLocation.Bottom);
+            this.Location = new System.Drawing.Point(loc.X, loc.Y);
+
             fPlugin.Host.WidgetShow(fPlugin);
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }

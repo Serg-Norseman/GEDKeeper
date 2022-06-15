@@ -390,6 +390,44 @@ namespace GKCore
             if (widInfo.MenuItem != null) widInfo.MenuItem.Checked = false;
         }
 
+        public abstract ExtRect GetActiveScreenWorkingArea();
+
+        public ExtPoint WidgetLocate(ExtRect formBounds, WidgetHorizontalLocation horizontalLocation, WidgetVerticalLocation verticalLocation)
+        {
+            const int ScrPadding = 0;
+
+            var screenWorkingArea = GetActiveScreenWorkingArea();
+
+            int locX = 0;
+            int locY = 0;
+
+            switch (horizontalLocation) {
+                case WidgetHorizontalLocation.Left:
+                    locX = ScrPadding;
+                    break;
+                case WidgetHorizontalLocation.Center:
+                    locX = (screenWorkingArea.Width - formBounds.Width) / 2;
+                    break;
+                case WidgetHorizontalLocation.Right:
+                    locX = screenWorkingArea.Width - formBounds.Width - ScrPadding;
+                    break;
+            }
+
+            switch (verticalLocation) {
+                case WidgetVerticalLocation.Top:
+                    locY = ScrPadding;
+                    break;
+                case WidgetVerticalLocation.Center:
+                    locY = (screenWorkingArea.Height - formBounds.Height) / 2;
+                    break;
+                case WidgetVerticalLocation.Bottom:
+                    locY = screenWorkingArea.Height - formBounds.Height - ScrPadding;
+                    break;
+            }
+
+            return new ExtPoint(locX, locY);
+        }
+
         public bool IsWidgetActive(IWidget widget)
         {
             WidgetInfo widInfo = FindWidgetInfo(widget);

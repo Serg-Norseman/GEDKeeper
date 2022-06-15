@@ -94,6 +94,7 @@ namespace GKTests.Stubs
         }
 
         public IBaseContext Context { get { return fContext; } }
+        public NavigationStack<GDMRecord> Navman { get { return null; } }
         public IHost Host { get { return fHost; } }
         public bool Modified { get { return false; } set {} }
         public GDMTree Tree { get { return fTree; } }
@@ -131,6 +132,7 @@ namespace GKTests.Stubs
         public void SetExternalFilter(ExternalFilterHandler filterHandler, 
                                       GDMRecordType recType = GDMRecordType.rtNone) { }
         public GDMRecord GetSelectedRecordEx() { return null; }
+        public ExtRect GetActiveScreenWorkingArea() { return ExtRect.Empty; }
     }
 
     public class TestPlugin : OrdinaryPlugin

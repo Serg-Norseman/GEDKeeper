@@ -58,6 +58,11 @@ namespace GKUI.Forms
             get { return fContext; }
         }
 
+        public NavigationStack<GDMRecord> Navman
+        {
+            get { return fController.Navman; }
+        }
+
         #endregion
 
         #region View Interface

@@ -22,6 +22,7 @@ using System;
 using System.Globalization;
 using System.Text;
 using System.Threading;
+using BSLib;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
 using Eto.Drawing;
@@ -290,6 +291,13 @@ namespace GKUI.Platform
         public override bool ExecuteWorkExt(ProgressStart proc, string title)
         {
             return false;
+        }
+
+        public override ExtRect GetActiveScreenWorkingArea()
+        {
+            var activeForm = GetActiveWindow() as Form;
+            var screen = Screen.FromRectangle(activeForm.Bounds);
+            return UIHelper.Rt2Rt(new Rectangle(screen.WorkingArea));
         }
 
         #region KeyLayout functions

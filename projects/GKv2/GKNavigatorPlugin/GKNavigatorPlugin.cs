@@ -45,6 +45,28 @@ namespace GKNavigatorPlugin
         /* 006 */ LSID_Bookmarks,
         /* 007 */ LSID_Languages,
         /* 008 */ LSID_Records,
+
+        /* 009 */ LSID_Individuals,
+        /* 010 */ LSID_Families,
+        /* 011 */ LSID_Notes,
+        /* 012 */ LSID_Multimedia,
+        /* 013 */ LSID_Sources,
+        /* 014 */ LSID_Repositories,
+        /* 015 */ LSID_Groups,
+        /* 016 */ LSID_Researches,
+        /* 017 */ LSID_Tasks,
+        /* 018 */ LSID_Communications,
+        /* 019 */ LSID_Locations,
+
+        /* 020 */ LSID_Language,
+        /* 021 */ LSID_Person,
+        /* 022 */ LSID_Record,
+        /* 023 */ LSID_Time,
+        /* 024 */ LSID_Name,
+        /* 025 */ LSID_Action,
+        /* 026 */ LSID_26,
+        /* 027 */ LSID_27,
+        /* 028 */ LSID_28,
     }
 
     public sealed class Plugin : WidgetPlugin, ISubscriber

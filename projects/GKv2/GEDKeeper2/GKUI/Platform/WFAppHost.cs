@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
 using System.Windows.Forms;
+using BSLib;
 using BSLib.Design.Handlers;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
@@ -259,6 +260,13 @@ namespace GKUI.Platform
 
                 return true;
             }
+        }
+
+        public override ExtRect GetActiveScreenWorkingArea()
+        {
+            var activeForm = GetActiveWindow() as Form;
+            var screen = Screen.FromRectangle(activeForm.Bounds);
+            return UIHelper.Rt2Rt(screen.WorkingArea);
         }
 
         #region KeyLayout functions

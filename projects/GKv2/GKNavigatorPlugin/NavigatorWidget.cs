@@ -26,6 +26,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Components;
 
 namespace GKNavigatorPlugin
 {
@@ -100,7 +101,7 @@ namespace GKNavigatorPlugin
 
         public void SetLocale()
         {
-            Text = fPlugin.LangMan.LS(PLS.LSID_Navigator);
+            Text = fLangMan.LS(PLS.LSID_Navigator);
             tnRecAct.Text = fLangMan.LS(PLS.LSID_RecentActivity);
             tnJumpHist.Text = fLangMan.LS(PLS.LSID_JumpHistory);
             tnProblems.Text = fLangMan.LS(PLS.LSID_PotencialProblems);
@@ -114,6 +115,9 @@ namespace GKNavigatorPlugin
 
         private void NavigatorWidget_Load(object sender, EventArgs e)
         {
+            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Bottom);
+            this.Location = new System.Drawing.Point(loc.X, loc.Y);
+
             fPlugin.Host.WidgetShow(fPlugin);
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }
@@ -167,17 +171,17 @@ namespace GKNavigatorPlugin
                     treeView1.BeginUpdate();
 
                     tnRoot.Text = dbName;
-                    tnRecsIndividual.Text = FmtTitle("Individuals", stats[(int)GDMRecordType.rtIndividual]);
-                    tnRecsFamily.Text = FmtTitle("Families", stats[(int)GDMRecordType.rtFamily]);
-                    tnRecsNote.Text = FmtTitle("Notes", stats[(int)GDMRecordType.rtNote]);
-                    tnRecsMultimedia.Text = FmtTitle("Multimedia", stats[(int)GDMRecordType.rtMultimedia]);
-                    tnRecsSource.Text = FmtTitle("Sources", stats[(int)GDMRecordType.rtSource]);
-                    tnRecsRepository.Text = FmtTitle("Repositories", stats[(int)GDMRecordType.rtRepository]);
-                    tnRecsGroup.Text = FmtTitle("Groups", stats[(int)GDMRecordType.rtGroup]);
-                    tnRecsResearch.Text = FmtTitle("Researches", stats[(int)GDMRecordType.rtResearch]);
-                    tnRecsTask.Text = FmtTitle("Tasks", stats[(int)GDMRecordType.rtTask]);
-                    tnRecsCommunication.Text = FmtTitle("Communications", stats[(int)GDMRecordType.rtCommunication]);
-                    tnRecsLocation.Text = FmtTitle("Locations", stats[(int)GDMRecordType.rtLocation]);
+                    tnRecsIndividual.Text = FmtTitle(fLangMan.LS(PLS.LSID_Individuals), stats[(int)GDMRecordType.rtIndividual]);
+                    tnRecsFamily.Text = FmtTitle(fLangMan.LS(PLS.LSID_Families), stats[(int)GDMRecordType.rtFamily]);
+                    tnRecsNote.Text = FmtTitle(fLangMan.LS(PLS.LSID_Notes), stats[(int)GDMRecordType.rtNote]);
+                    tnRecsMultimedia.Text = FmtTitle(fLangMan.LS(PLS.LSID_Multimedia), stats[(int)GDMRecordType.rtMultimedia]);
+                    tnRecsSource.Text = FmtTitle(fLangMan.LS(PLS.LSID_Sources), stats[(int)GDMRecordType.rtSource]);
+                    tnRecsRepository.Text = FmtTitle(fLangMan.LS(PLS.LSID_Repositories), stats[(int)GDMRecordType.rtRepository]);
+                    tnRecsGroup.Text = FmtTitle(fLangMan.LS(PLS.LSID_Groups), stats[(int)GDMRecordType.rtGroup]);
+                    tnRecsResearch.Text = FmtTitle(fLangMan.LS(PLS.LSID_Researches), stats[(int)GDMRecordType.rtResearch]);
+                    tnRecsTask.Text = FmtTitle(fLangMan.LS(PLS.LSID_Tasks), stats[(int)GDMRecordType.rtTask]);
+                    tnRecsCommunication.Text = FmtTitle(fLangMan.LS(PLS.LSID_Communications), stats[(int)GDMRecordType.rtCommunication]);
+                    tnRecsLocation.Text = FmtTitle(fLangMan.LS(PLS.LSID_Locations), stats[(int)GDMRecordType.rtLocation]);
 
                     treeView1.ExpandAll();
                 } finally {
@@ -217,7 +221,7 @@ namespace GKNavigatorPlugin
                     break;
 
                 case DataCategory.JumpHistory:
-                    lvData.Clear();
+                    ShowJumpHistory();
                     break;
 
                 case DataCategory.PotencialProblems:
@@ -229,7 +233,7 @@ namespace GKNavigatorPlugin
                     break;
 
                 case DataCategory.Bookmarks:
-                    lvData.Clear();
+                    ShowBookmarks();
                     break;
 
                 case DataCategory.Records:
@@ -242,6 +246,42 @@ namespace GKNavigatorPlugin
             }
         }
 
+        private void lvData_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            var itemData = lvData.GetSelectedData();
+            if (itemData == null) return;
+
+            object tag = treeView1.SelectedNode.Tag;
+            if (tag == null) return;
+
+            if (tag is GDMRecordType) {
+                SelectRecordInfo((RecordInfo)itemData);
+            } else if (tag is DataCategory) {
+                var dataCat = (DataCategory)tag;
+
+                switch (dataCat) {
+                    case DataCategory.JumpHistory:
+                        SelectRecord((GDMRecord)itemData);
+                        break;
+
+                    case DataCategory.Bookmarks:
+                        SelectRecord((GDMRecord)itemData);
+                        break;
+
+                    case DataCategory.Languages:
+                        SelectLanguage((GDMLanguageID)itemData);
+                        break;
+                }
+            }
+        }
+
+        private void SelectRecord(GDMRecord iRec)
+        {
+            fBase.SelectByRec(iRec);
+        }
+
+        #region Records Data
+
         private void ShowRecordsData(GDMRecordType recordType)
         {
             fBase.ShowRecordsTab(recordType);
@@ -249,10 +289,10 @@ namespace GKNavigatorPlugin
             lvData.BeginUpdate();
             try {
                 lvData.Clear();
-                lvData.AddColumn("Action", 20, true);
+                lvData.AddColumn(fLangMan.LS(PLS.LSID_Action), 20, true);
                 lvData.AddColumn("XRef", 20, true);
-                lvData.AddColumn("Name", 20, true);
-                lvData.AddColumn("Time", 20, true);
+                lvData.AddColumn(fLangMan.LS(PLS.LSID_Name), 20, true);
+                lvData.AddColumn(fLangMan.LS(PLS.LSID_Time), 20, true);
 
                 BaseData baseData = fPlugin.Data[fBase.Context.FileName];
                 if (baseData == null) return;
@@ -275,51 +315,98 @@ namespace GKNavigatorPlugin
 
                     lvData.AddItem(recordInfo, new object[] { act, recordInfo.XRef, recordInfo.Name, recordInfo.Time.ToString() });
                 }
+
+                lvData.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             } finally {
                 lvData.EndUpdate();
             }
         }
+
+        private void SelectRecordInfo(RecordInfo recInfo)
+        {
+            if (recInfo.Action != RecordAction.raDelete)
+                SelectRecord(recInfo.Record);
+        }
+
+        #endregion
+
+        #region JumpHistory
+
+        private void ShowJumpHistory()
+        {
+            var tree = fBase.Context.Tree;
+            var navArray = fBase.Navman.FullArray;
+
+            lvData.BeginUpdate();
+            try {
+                lvData.Clear();
+                lvData.AddColumn(fLangMan.LS(PLS.LSID_Record), 400);
+
+                foreach (var rec in navArray) {
+                    lvData.AddItem(rec, new object[] { GKUtils.GetRecordName(tree, rec, true) });
+                }
+
+                lvData.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            } finally {
+                lvData.EndUpdate();
+            }
+        }
+
+        #endregion
+
+        #region Bookmarks
+
+        private void ShowBookmarks()
+        {
+            fBase.ShowRecordsTab(GDMRecordType.rtIndividual);
+
+            var bookmarks = fPlugin.Data.SearchBookmarks(fBase.Context);
+
+            lvData.BeginUpdate();
+            try {
+                lvData.Clear();
+                lvData.AddColumn(fLangMan.LS(PLS.LSID_Person), 400);
+
+                foreach (var iRec in bookmarks) {
+                    lvData.AddItem(iRec, new object[] { GKUtils.GetNameString(iRec, true, false) });
+                }
+
+                lvData.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            } finally {
+                lvData.EndUpdate();
+            }
+        }
+
+        #endregion
+
+        #region Languages
 
         private void ShowLanguages()
         {
             lvData.BeginUpdate();
             try {
                 lvData.Clear();
-                lvData.AddColumn("Language", 200);
+                lvData.AddColumn(fLangMan.LS(PLS.LSID_Language), 200);
 
                 var baseContext = fBase.Context;
 
                 foreach (var lang in baseContext.LangsList) {
                     lvData.AddItem(lang, new object[] { GEDCOMUtils.GetLanguageStr(lang) });
                 }
+
+                lvData.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             } finally {
                 lvData.EndUpdate();
             }
         }
 
-        private void lvData_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void SelectLanguage(GDMLanguageID lang)
         {
-            var itemData = lvData.GetSelectedData();
-            if (itemData == null) return;
-
-            object tag = treeView1.SelectedNode.Tag;
-            if (tag == null) return;
-
-            if (tag is GDMRecordType) {
-
-            } else if (tag is DataCategory) {
-                var dataCat = (DataCategory)tag;
-
-                switch (dataCat) {
-                    case DataCategory.Languages: {
-                            var lang = (GDMLanguageID)itemData;
-                            fBase.Context.DefaultLanguage = lang;
-                            fBase.ShowRecordsTab(GDMRecordType.rtIndividual);
-                            fBase.RefreshRecordsView(GDMRecordType.rtIndividual);
-                        }
-                        break;
-                }
-            }
+            fBase.Context.DefaultLanguage = lang;
+            fBase.ShowRecordsTab(GDMRecordType.rtIndividual);
+            fBase.RefreshRecordsView(GDMRecordType.rtIndividual);
         }
+
+        #endregion
     }
 }
