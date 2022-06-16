@@ -24,6 +24,7 @@ using GDModel;
 using GKCore.Charts;
 using GKCore.MVP;
 using GKCore.MVP.Views;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -286,6 +287,15 @@ namespace GKCore.Controllers
             if (pers != null) {
                 fView.TreeBox.SelectBy(pers, true);
             }
+        }
+
+        public void SetupDepth()
+        {
+            var treeOptions = GlobalOptions.Instance.TreeChartOptions;
+
+            GetControl<IButtonToolItem>("tbGensCommon").Visible = !treeOptions.SeparateDepth;
+            GetControl<IButtonToolItem>("tbGensAncestors").Visible = treeOptions.SeparateDepth;
+            GetControl<IButtonToolItem>("tbGensDescendants").Visible = treeOptions.SeparateDepth;
         }
 
         public override void SetLocale()

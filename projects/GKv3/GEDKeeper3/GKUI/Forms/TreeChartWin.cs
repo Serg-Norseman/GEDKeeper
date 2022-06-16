@@ -444,9 +444,7 @@ namespace GKUI.Forms
         {
             var treeOptions = GlobalOptions.Instance.TreeChartOptions;
 
-            tbGensCommon.Enabled = !treeOptions.SeparateDepth;
-            tbGensAncestors.Enabled = treeOptions.SeparateDepth;
-            tbGensDescendants.Enabled = treeOptions.SeparateDepth;
+            fController.SetupDepth();
 
             if (!treeOptions.SeparateDepth) {
                 UIHelper.SetMenuItemTag(MenuGensCommon, treeOptions.DepthLimit);
