@@ -46,8 +46,8 @@ namespace GEDKeeper3
 
             var application = new Application();
 
-            // see GEDKeeper3/GKUI/Platform/DropDownToolItem.cs
             application.Platform.Add<DropDownToolItem.IHandler>(() => new DropDownToolItemHandler());
+            application.Platform.Add<NativeHostControl.IHandler>(() => new NativeHostControlHandler());
 
             using (var tracker = new SingleInstanceTracker(GKData.APP_TITLE, AppHost.GetSingleInstanceEnforcer)) {
                 if (tracker.IsFirstInstance) {
