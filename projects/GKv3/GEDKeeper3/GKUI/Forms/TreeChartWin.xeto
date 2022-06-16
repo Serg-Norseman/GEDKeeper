@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:complat="clr-namespace:GKUI.Platform;assembly=GKComponents"
   x:Class="GKUI.Forms.TreeChartWin"
   Size="1020, 760" ShowInTaskbar="true" KeyDown="TreeChartWin_KeyDown">
 
@@ -8,11 +8,37 @@
     <ToolBar TextAlign="Right" Style="tbsi">
       <ButtonToolItem x:Name="tbImageSave" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbImageSave_Click" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbGensCommon" Click="tbGensCommon_Click" />
-      <ButtonToolItem x:Name="tbGensAncestors" Click="tbGensAncestors_Click" />
-      <ButtonToolItem x:Name="tbGensDescendants" Click="tbGensDescendants_Click" />
+
+      <complat:DropDownToolItem x:Name="tbGensCommon">
+        <complat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="MenuGensCommon">
+          </ContextMenu>
+        </complat:DropDownToolItem.ContextMenu>
+      </complat:DropDownToolItem>
+
+      <complat:DropDownToolItem x:Name="tbGensAncestors">
+        <complat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="MenuGensAncestors">
+          </ContextMenu>
+        </complat:DropDownToolItem.ContextMenu>
+      </complat:DropDownToolItem>
+
+      <complat:DropDownToolItem x:Name="tbGensDescendants">
+        <complat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="MenuGensDescendants">
+          </ContextMenu>
+        </complat:DropDownToolItem.ContextMenu>
+      </complat:DropDownToolItem>
+
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbModes" Click="tbModes_Click" />
+
+      <complat:DropDownToolItem x:Name="tbModes">
+        <complat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="MenuModes">
+          </ContextMenu>
+        </complat:DropDownToolItem.ContextMenu>
+      </complat:DropDownToolItem>
+
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbFilter" Image="{Resource Resources.btn_filter.gif, GKCore}" Click="ToolBar1_ButtonClick" />
       <ButtonToolItem x:Name="tbPrev" Image="{Resource Resources.btn_left.gif, GKCore}" Enabled="False" Click="ToolBar1_ButtonClick" />
@@ -23,7 +49,13 @@
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbOptions" Image="{Resource Resources.btn_tools.gif, GKCore}" Click="tbOptions_Click" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbBorders" Click="tbBorders_Click" />
+
+      <complat:DropDownToolItem x:Name="tbBorders">
+        <complat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="MenuBorders">
+          </ContextMenu>
+        </complat:DropDownToolItem.ContextMenu>
+      </complat:DropDownToolItem>
     </ToolBar>
   </Form.ToolBar>
 

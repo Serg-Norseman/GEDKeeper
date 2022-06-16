@@ -31,7 +31,7 @@ using GKUI.Platform;
 
 namespace GKUI.Forms
 {
-    public sealed partial class NoteEditDlgEx : CommonDialog<INoteEdit, NoteEditDlgExController>, INoteEdit
+    public sealed partial class NoteEditDlgEx : CommonDialog<INoteEdit, NoteEditDlgExController>, INoteEditDlgEx
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -40,13 +40,13 @@ namespace GKUI.Forms
         private Button btnCancel;
         private RichTextArea txtNote;
         private HyperView hyperView1;
-        private ButtonToolItem cmbSizes;
+        private DropDownToolItem cmbSizes;
         private ContextMenu menuSizes;
         private ButtonMenuItem miClear;
         private ButtonMenuItem miExport;
         private ButtonMenuItem miImport;
         private ButtonMenuItem miSelectAndCopy;
-        private ButtonToolItem ddbtnActions;
+        private DropDownToolItem ddbtnActions;
         private ContextMenu menuActions;
         private ButtonToolItem btnURL;
         private ButtonToolItem btnUnderline;
@@ -94,8 +94,6 @@ namespace GKUI.Forms
             //btnURL.Font=new Font("Tahoma", 9F, FontStyle.None, FontDecoration.Underline);
             //btnURL.TextColor=Colors.Blue;
 
-            menuSizes = new ContextMenu();
-
             miSelectAndCopy = new ButtonMenuItem();
             miSelectAndCopy.Click += miSelectAndCopy_Click;
 
@@ -108,7 +106,6 @@ namespace GKUI.Forms
             miClear = new ButtonMenuItem();
             miClear.Click += miClear_Click;
 
-            menuActions = new ContextMenu();
             menuActions.Items.AddRange(new MenuItem[] {
                                            miSelectAndCopy,
                                            miImport,
@@ -168,17 +165,6 @@ namespace GKUI.Forms
         private void miClear_Click(object sender, EventArgs e)
         {
             fController.Clear();
-        }
-
-        private void cmbSizes_Click(object sender, EventArgs e)
-        {
-            //cmbSizes.SelectedIndexChanged=cmbSizes_SelectedIndexChanged;
-            menuSizes.Show(this);
-        }
-
-        private void ddbtnActions_Click(object sender, EventArgs e)
-        {
-            menuActions.Show(this);
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)

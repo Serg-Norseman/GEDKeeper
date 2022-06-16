@@ -28,7 +28,7 @@ using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class NoteEditDlg : CommonDialog<INoteEdit, NoteEditDlgController>, INoteEdit
+    public sealed partial class NoteEditDlg : CommonDialog<INoteEdit, NoteEditDlgController>, INoteEditDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051

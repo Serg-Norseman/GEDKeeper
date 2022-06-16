@@ -34,6 +34,7 @@ using GKMap.EtoForms;
 using GKMap.MapObjects;
 using GKMap.MapProviders;
 using GKUI.Components;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -55,7 +56,7 @@ namespace GKUI.Forms
         private CheckBox chkLinesVisible;
         private ButtonToolItem tbLoadPlaces;
         private ButtonToolItem tbSaveSnapshot;
-        private ButtonToolItem tbProviders;
+        private DropDownToolItem tbProviders;
         private ContextMenu MenuProviders;
         private ButtonToolItem tbClear;
         private ButtonToolItem tbZoomCenter;
@@ -177,7 +178,6 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            MenuProviders = new ContextMenu();
             PopulateContextMenus();
 
             radTotal.Checked = true;
@@ -252,11 +252,6 @@ namespace GKUI.Forms
         private void tbZoomCenter_Click(object sender, EventArgs e)
         {
             fMapBrowser.MapControl.ZoomAndCenterMarkers("objects");
-        }
-
-        private void tbProviders_Click(object sender, EventArgs e)
-        {
-            MenuProviders.Show(this);
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

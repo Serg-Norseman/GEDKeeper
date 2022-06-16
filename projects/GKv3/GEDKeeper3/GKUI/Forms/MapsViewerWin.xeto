@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  xmlns:complat="clr-namespace:GKUI.Platform;assembly=GKComponents"
   x:Class="GKUI.Forms.MapsViewerWin"
   ShowInTaskbar="true" KeyDown="MapsViewerWin_KeyDown">
 
@@ -10,7 +11,14 @@
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbSaveSnapshot" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbSaveSnapshot_Click" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbProviders" Click="tbProviders_Click" />
+
+      <complat:DropDownToolItem x:Name="tbProviders">
+        <complat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="MenuProviders">
+          </ContextMenu>
+        </complat:DropDownToolItem.ContextMenu>
+      </complat:DropDownToolItem>
+
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbClear" Click="tbClear_Click" />
       <ButtonToolItem x:Name="tbZoomCenter" Text="Zoom Center" Click="tbZoomCenter_Click" />
