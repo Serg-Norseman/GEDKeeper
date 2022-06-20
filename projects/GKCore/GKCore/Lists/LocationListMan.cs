@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,20 +24,21 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    public enum LocationColumnType
-    {
-        ctName,
-        ctLati,
-        ctLong,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class LocationListMan : ListManager
+    public sealed class LocationListMan : ListManager<GDMLocationRecord>
     {
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctName,
+            ctLati,
+            ctLong,
+            ctChangeDate
+        }
+
+
         private GDMLocationRecord fRec;
 
 
@@ -46,13 +47,14 @@ namespace GKCore.Lists
         {
         }
 
-        public static ListColumns CreateLocationListColumns()
+        public static ListColumns<GDMLocationRecord> CreateLocationListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMLocationRecord>();
 
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
 
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true, true);
             result.AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
             result.AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
@@ -73,27 +75,30 @@ namespace GKCore.Lists
 
         public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GDMLocationRecord);
+            fRec = (GDMLocationRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((LocationColumnType)colType)
-            {
-                case LocationColumnType.ctName:
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fRec.GetId();
+                    break;
+
+                case ColumnType.ctName:
                     result = fRec.LocationName;
                     break;
 
-                case LocationColumnType.ctLati:
+                case ColumnType.ctLati:
                     result = fRec.Map.Lati;
                     break;
 
-                case LocationColumnType.ctLong:
+                case ColumnType.ctLong:
                     result = fRec.Map.Long;
                     break;
 
-                case LocationColumnType.ctChangeDate:
+                case ColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }

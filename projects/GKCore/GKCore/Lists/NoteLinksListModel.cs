@@ -28,7 +28,7 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public sealed class NoteLinksListModel : ListModel
+    public sealed class NoteLinksListModel : SheetModel<GDMNotes>
     {
         public NoteLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
@@ -46,11 +46,11 @@ namespace GKCore.Lists
             if (fSheetList == null || dataOwner == null) return;
 
             try {
-                fSheetList.ClearItems();
+                fSheetList.ListView.ClearItems();
 
                 foreach (GDMNotes note in dataOwner.Notes) {
                     GDMLines noteLines = fBaseContext.Tree.GetNoteLines(note);
-                    fSheetList.AddItem(note, new object[] { noteLines.Text.Trim() });
+                    fSheetList.ListView.AddItem(note, new object[] { noteLines.Text.Trim() });
                 }
             } catch (Exception ex) {
                 Logger.WriteError("NoteLinksListModel.UpdateContents()", ex);

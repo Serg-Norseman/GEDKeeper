@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,9 +21,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-
 using BSLib;
 using GKCore.Interfaces;
+using GKCore.Options;
 
 namespace GKCore.Lists
 {
@@ -63,7 +63,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public class ListColumns : IListColumns
+    public class ListColumns<T> : IListColumns
     {
         private readonly List<ListColumn> fColumns;
         private readonly List<ListColumn> fOrderedColumns;
@@ -92,42 +92,41 @@ namespace GKCore.Lists
             fColumns = new List<ListColumn>();
             fOrderedColumns = new List<ListColumn>();
 
-            InitColumnStatics();
             ResetDefaults();
-        }
-
-        protected virtual void InitColumnStatics()
-        {
-            // dummy
         }
 
         public void AddColumn(LSID colName, int defWidth, bool autosize = false)
         {
-            AddColumn(colName, DataType.dtString, defWidth, true, autosize, null, null);
+            AddColumn(colName, DataType.dtString, defWidth, true, autosize, null, null, null, null);
         }
 
-        public void AddColumn(LSID colName, DataType dataType,
-                              int defWidth, bool defActive,
-                              bool autosize = false)
+        public void AddColumn(LSID colName, int defWidth, Func<T, object> valueLookup, Func<T, string> displayStringLookup, bool autosize = false)
         {
-            AddColumn(colName, dataType, defWidth, defActive, autosize, null, null);
+            AddColumn(colName, DataType.dtString, defWidth, true, autosize, null, null, valueLookup, displayStringLookup);
         }
 
-        public void AddColumn(LSID colName, DataType dataType,
-                              int defWidth, bool defActive, bool autosize,
-                              string format, NumberFormatInfo nfi)
+        public void AddColumn(LSID colName, DataType dataType, int defWidth, bool defActive, bool autosize = false)
+        {
+            AddColumn(colName, dataType, defWidth, defActive, autosize, null, null, null, null);
+        }
+
+        public void AddColumn(LSID colName, DataType dataType, int defWidth, bool defActive, bool autosize, string format, NumberFormatInfo nfi)
+        {
+            AddColumn(colName, dataType, defWidth, defActive, autosize, format, nfi, null, null);
+        }
+
+        public void AddColumn(LSID colName, DataType dataType, int defWidth, bool defActive, bool autosize, string format, NumberFormatInfo nfi,
+                              Func<T, object> valueLookup, Func<T, string> displayStringLookup)
         {
             fLastId += 1;
-            ListColumn cs = new ListColumn((byte)fLastId, colName, dataType,
-                                           defWidth, defActive, autosize, format, nfi);
+            ListColumn cs = new ListColumn((byte)fLastId, colName, dataType, defWidth, defActive, autosize, format, nfi);
             fColumns.Add(cs);
         }
 
         public void ResetDefaults()
         {
             int num = fColumns.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 var cs = fColumns[i];
 
                 cs.Order = i;
@@ -140,13 +139,12 @@ namespace GKCore.Lists
 
         public void CopyTo(IListColumns target)
         {
-            ListColumns targetColumns = target as ListColumns;
+            ListColumns<T> targetColumns = target as ListColumns<T>;
             if (targetColumns == null)
                 throw new ArgumentNullException("target");
 
             int num = fColumns.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 var srcCol = fColumns[i];
                 var tgtCol = targetColumns.fColumns[i];
 
@@ -158,14 +156,18 @@ namespace GKCore.Lists
             targetColumns.UpdateOrders();
         }
 
-        public void LoadFromFile(IniFile iniFile, string section)
+        public void LoadFromFile(IniFile iniFile, string section, int optsVersion)
         {
             if (iniFile == null) return;
 
             int num = fColumns.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 int colId = iniFile.ReadInteger(section, "ColType_" + i, i);
+
+                if (optsVersion == 1 && optsVersion < GlobalOptions.OPTS_VERSION) {
+                    // In version 2.21 (OptsVersion=2) there was a transition in column handling
+                    colId += 1;
+                }
 
                 ListColumn col = fColumns[colId];
 
@@ -190,8 +192,7 @@ namespace GKCore.Lists
             if (iniFile == null) return;
 
             int idx = -1;
-            foreach (var col in fOrderedColumns)
-            {
+            foreach (var col in fOrderedColumns) {
                 idx += 1;
                 iniFile.WriteInteger(section, "ColType_" + idx, col.Id);
                 iniFile.WriteBool(section, "ColActive_" + idx, col.CurActive);

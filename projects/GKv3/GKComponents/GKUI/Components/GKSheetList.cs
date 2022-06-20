@@ -23,9 +23,9 @@ using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
-using BSDListItem = BSLib.Design.MVP.Controls.IListItem;
 
 namespace GKUI.Components
 {
@@ -43,7 +43,7 @@ namespace GKUI.Components
         private readonly GKListView fList;
 
         private EnumSet<SheetButton> fButtons;
-        private ListModel fListModel;
+        private ISheetModel fListModel;
         private bool fReadOnly;
 
 
@@ -65,7 +65,7 @@ namespace GKUI.Components
             }
         }
 
-        public ListModel ListModel
+        public ISheetModel ListModel
         {
             get { return fListModel; }
             set {
@@ -83,6 +83,11 @@ namespace GKUI.Components
 
                 UpdateSheet();
             }
+        }
+
+        public IListViewEx ListView
+        {
+            get { return fList; }
         }
 
         public bool ReadOnly
@@ -307,7 +312,7 @@ namespace GKUI.Components
 
         private void ItemEdit(object sender, EventArgs e)
         {
-            object itemData = GetSelectedData();
+            object itemData = fList.GetSelectedData();
             if (fReadOnly || itemData == null) return;
 
             if (!ValidateItem(itemData)) return;
@@ -319,7 +324,7 @@ namespace GKUI.Components
 
         private void ItemDelete(object sender, EventArgs e)
         {
-            object itemData = GetSelectedData();
+            object itemData = fList.GetSelectedData();
             if (fReadOnly || itemData == null) return;
 
             if (!ValidateItem(itemData)) return;
@@ -330,7 +335,7 @@ namespace GKUI.Components
 
         private void ItemJump(object sender, EventArgs e)
         {
-            object itemData = GetSelectedData();
+            object itemData = fList.GetSelectedData();
             if (itemData == null) return;
 
             if (!ValidateItem(itemData)) return;
@@ -341,7 +346,7 @@ namespace GKUI.Components
 
         private void ItemMoveUp(object sender, EventArgs e)
         {
-            object itemData = GetSelectedData();
+            object itemData = fList.GetSelectedData();
             if (fReadOnly || itemData == null) return;
 
             var eArgs = new ModifyEventArgs(RecordAction.raMoveUp, itemData);
@@ -351,7 +356,7 @@ namespace GKUI.Components
 
         private void ItemMoveDown(object sender, EventArgs e)
         {
-            object itemData = GetSelectedData();
+            object itemData = fList.GetSelectedData();
             if (fReadOnly || itemData == null) return;
 
             var eArgs = new ModifyEventArgs(RecordAction.raMoveDown, itemData);
@@ -360,46 +365,6 @@ namespace GKUI.Components
         }
 
         #endregion
-
-        public void ClearColumns()
-        {
-            fList.ClearColumns();
-        }
-
-        public void ResizeColumn(int columnIndex)
-        {
-            fList.ResizeColumn(columnIndex);
-        }
-
-        public void AddColumn(string caption, int width, bool autoSize)
-        {
-            fList.AddColumn(caption, width, autoSize);
-        }
-
-        public void BeginUpdate()
-        {
-            fList.BeginUpdate();
-        }
-
-        public void EndUpdate()
-        {
-            fList.EndUpdate();
-        }
-
-        public BSDListItem AddItem(object rowData, params object[] columnValues)
-        {
-            return fList.AddItem(rowData, columnValues);
-        }
-
-        public void ClearItems()
-        {
-            fList.ClearItems();
-        }
-
-        public void SelectItem(int index)
-        {
-            fList.SelectItem(index);
-        }
 
         public void UpdateSheet()
         {
@@ -413,11 +378,6 @@ namespace GKUI.Components
 
                 fListModel.UpdateContents();
             }
-        }
-
-        public object GetSelectedData()
-        {
-            return fList.GetSelectedData();
         }
     }
 }

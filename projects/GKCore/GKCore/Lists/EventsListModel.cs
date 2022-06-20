@@ -28,7 +28,7 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public sealed class EventsListModel : ListModel
+    public sealed class EventsListModel : SheetModel<GDMCustomEvent>
     {
         private readonly bool fPersonsMode;
 
@@ -57,7 +57,7 @@ namespace GKCore.Lists
             if (fSheetList == null || dataOwner == null) return;
 
             try {
-                fSheetList.ClearItems();
+                fSheetList.ListView.ClearItems();
 
                 for (int i = 0; i < dataOwner.Events.Count; i++) {
                     GDMCustomEvent evt = dataOwner.Events[i];
@@ -77,12 +77,12 @@ namespace GKCore.Lists
                     }
                     itemsData[4] = GKUtils.GetEventCause(evt);
 
-                    fSheetList.AddItem(evt, itemsData);
+                    fSheetList.ListView.AddItem(evt, itemsData);
                 }
 
-                fSheetList.ResizeColumn(1);
-                fSheetList.ResizeColumn(2);
-                fSheetList.ResizeColumn(3);
+                fSheetList.ListView.ResizeColumn(1);
+                fSheetList.ListView.ResizeColumn(2);
+                fSheetList.ListView.ResizeColumn(3);
             } catch (Exception ex) {
                 Logger.WriteError("EventsListModel.UpdateContents()", ex);
             }

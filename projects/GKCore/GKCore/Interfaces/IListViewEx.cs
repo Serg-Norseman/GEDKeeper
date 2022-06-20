@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,5 +30,7 @@ namespace GKCore.Interfaces
         IListManager ListMan { get; set; }
 
         void DeleteRecord(object data);
+        void ResizeColumn(int columnIndex);
+        void SelectItem(int index);
     }
 }

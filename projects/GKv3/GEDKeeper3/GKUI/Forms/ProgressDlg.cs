@@ -28,7 +28,7 @@ using GKCore.Interfaces;
 
 namespace GKUI.Forms
 {
-    public sealed partial class ProgressDlg : Dialog, IProgressController
+    public sealed partial class ProgressDlg : CommonDialog, IProgressController
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051

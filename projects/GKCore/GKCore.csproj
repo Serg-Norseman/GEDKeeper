@@ -335,10 +335,9 @@
     <Compile Include="GKCore\Lists\GDMDateItem.cs" />
     <Compile Include="GKCore\Lists\ChildrenListModel.cs" />
     <Compile Include="GKCore\Lists\EventsListModel.cs" />
-    <Compile Include="GKCore\Lists\ListModel.cs" />
+    <Compile Include="GKCore\Lists\SheetModel.cs" />
     <Compile Include="GKCore\Lists\MediaLinksListModel.cs" />
     <Compile Include="GKCore\Lists\NoteLinksListModel.cs" />
-    <Compile Include="GKCore\Lists\RecordsListModel.cs" />
     <Compile Include="GKCore\Lists\SourceCitationsListModel.cs" />
     <Compile Include="GKCore\Lists\GroupListMan.cs" />
     <Compile Include="GKCore\Lists\IndividualListMan.cs" />
@@ -394,6 +393,7 @@
     <Compile Include="GKCore\YamlHelper.cs" />
     <Compile Include="GKCore\MVP\FormController.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="GKCore\Lists\ListSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">

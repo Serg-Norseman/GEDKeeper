@@ -79,19 +79,19 @@ namespace GKCore.Controllers
 
         public void UpdateLists()
         {
-            fView.PhonesList.ClearItems();
+            fView.PhonesList.ListView.ClearItems();
             foreach (GDMTag tag in fAddress.PhoneNumbers) {
-                fView.PhonesList.AddItem(tag, tag.StringValue);
+                fView.PhonesList.ListView.AddItem(tag, tag.StringValue);
             }
 
-            fView.MailsList.ClearItems();
+            fView.MailsList.ListView.ClearItems();
             foreach (GDMTag tag in fAddress.EmailAddresses) {
-                fView.MailsList.AddItem(tag, tag.StringValue);
+                fView.MailsList.ListView.AddItem(tag, tag.StringValue);
             }
 
-            fView.WebsList.ClearItems();
+            fView.WebsList.ListView.ClearItems();
             foreach (GDMTag tag in fAddress.WebPages) {
-                fView.WebsList.AddItem(tag, tag.StringValue);
+                fView.WebsList.ListView.AddItem(tag, tag.StringValue);
             }
         }
 
@@ -186,9 +186,9 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageEmails").Text = LangMan.LS(LSID.LSID_EMails);
             GetControl<ITabPage>("pageWebPages").Text = LangMan.LS(LSID.LSID_WebSites);
 
-            fView.PhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
-            fView.MailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
-            fView.WebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
+            fView.PhonesList.ListView.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
+            fView.MailsList.ListView.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
+            fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
         }
     }
 }

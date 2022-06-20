@@ -1433,6 +1433,27 @@ namespace GKCore
             return result;
         }
 
+        public static string GetGroupsStr(GDMTree tree, GDMIndividualRecord iRec)
+        {
+            var result = new StringBuilder();
+
+            if (iRec.HasGroups) {
+                var groups = iRec.Groups;
+                int count = groups.Count;
+                for (int idx = 0; idx < count; idx++) {
+                    GDMGroupRecord grp = tree.GetPtrValue<GDMGroupRecord>(groups[idx]);
+                    if (grp != null) {
+                        if (idx > 0)
+                            result.Append("; ");
+
+                        result.Append(grp.GroupName);
+                    }
+                }
+            }
+
+            return result.ToString();
+        }
+
         #endregion
 
         #region Tree utils

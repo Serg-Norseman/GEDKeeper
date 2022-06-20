@@ -27,7 +27,7 @@ using GKCore.Interfaces;
 
 namespace GKUI.Forms
 {
-    public sealed partial class ProgressDlg : Form, IProgressController
+    public sealed partial class ProgressDlg : CommonDialog, IProgressController
     {
         private readonly ManualResetEvent fInitEvent;
         private readonly ManualResetEvent fCancelEvent;

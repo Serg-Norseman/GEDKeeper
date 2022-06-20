@@ -209,7 +209,7 @@ namespace GKUI.Platform
         {
             var activeWnd = GetActiveWindow() as Form;
 
-            using (var progressForm = new ProgressDlg()) {
+            using (var progressForm = ResolveDialog<IProgressController>()) {
                 var workerThread = new Thread((obj) => {
                     proc((IProgressController)obj);
                 });
@@ -217,7 +217,7 @@ namespace GKUI.Platform
                 try {
                     workerThread.Start(progressForm);
 
-                    progressForm.ShowDialog(activeWnd);
+                    progressForm.ShowModalX(activeWnd);
                 } catch (Exception ex) {
                     Logger.WriteError("ExecuteWork()", ex);
                 }
@@ -375,6 +375,8 @@ namespace GKUI.Platform
             container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
             container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
+
+            container.Register<IProgressController, ProgressDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));

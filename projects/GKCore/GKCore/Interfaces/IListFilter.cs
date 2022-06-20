@@ -19,6 +19,8 @@
  */
 
 using System.Collections.Generic;
+using BSLib;
+using GKCore.Lists;
 using GKCore.Types;
 
 namespace GKCore.Interfaces
@@ -32,10 +34,12 @@ namespace GKCore.Interfaces
         dtGEDCOMDate
     }
 
+
     public enum ConditionKind
     {
         ck_NotEq, ck_LT, ck_LET, ck_Eq, ck_GET, ck_GT, ck_Contains, ck_NotContains
     }
+
 
     public class FilterCondition
     {
@@ -51,22 +55,32 @@ namespace GKCore.Interfaces
         }
     }
 
+
     public interface IListFilter
     {
         List<FilterCondition> Conditions { get; }
         void Clear();
     }
 
+
     public interface IIndividualListFilter : IListFilter
     {
         FilterLifeMode FilterLifeMode { get; set; }
     }
 
+
     public interface IListColumns
     {
+        int Count { get; }
+        ListColumn this[int index] { get; }
+        IList<ListColumn> OrderedColumns { get; }
+
         void CopyTo(IListColumns target);
         bool MoveColumn(int idx, bool up);
         void ResetDefaults();
         void UpdateOrders();
+
+        void LoadFromFile(IniFile iniFile, string section, int optsVersion);
+        void SaveToFile(IniFile iniFile, string section);
     }
 }

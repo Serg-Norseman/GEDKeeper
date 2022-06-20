@@ -110,7 +110,7 @@ namespace GKCore.Controllers
             fView.YearNum.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Years);
             fView.PersonsList.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Persons);
             fView.YearNum.Text = fFilter.BranchYear.ToString();
-            fView.PersonsList.ClearItems();
+            fView.PersonsList.ListView.ClearItems();
 
             if (!string.IsNullOrEmpty(fTemp)) {
                 string[] tmpRefs = fTemp.Split(';');
@@ -119,7 +119,7 @@ namespace GKCore.Controllers
                 for (int i = 0; i < num; i++) {
                     string xref = tmpRefs[i];
                     GDMIndividualRecord p = fBase.Context.Tree.XRefIndex_Find(xref) as GDMIndividualRecord;
-                    if (p != null) fView.PersonsList.AddItem(p, GKUtils.GetNameString(p, true, false));
+                    if (p != null) fView.PersonsList.ListView.AddItem(p, GKUtils.GetNameString(p, true, false));
                 }
             }
 
@@ -200,7 +200,7 @@ namespace GKCore.Controllers
             GetControl<IRadioButton>("rbCutPersons").Text = LangMan.LS(LSID.LSID_BCut_Persons);
             GetControl<ILabel>("lblRPSources").Text = LangMan.LS(LSID.LSID_RPSources);
 
-            fView.PersonsList.AddColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
+            fView.PersonsList.ListView.AddColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,18 +27,19 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public enum GroupColumnType
-    {
-        ctName,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GroupListMan : ListManager
+    public sealed class GroupListMan : ListManager<GDMGroupRecord>
     {
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctName,
+            ctChangeDate
+        }
+
+
         private GDMGroupRecord fRec;
 
 
@@ -47,10 +48,11 @@ namespace GKCore.Lists
         {
         }
 
-        public static ListColumns CreateGroupListColumns()
+        public static ListColumns<GDMGroupRecord> CreateGroupListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMGroupRecord>();
 
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Group, DataType.dtString, 400, true, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
@@ -69,19 +71,22 @@ namespace GKCore.Lists
 
         public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GDMGroupRecord);
+            fRec = (GDMGroupRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((GroupColumnType)colType)
-            {
-                case GroupColumnType.ctName:
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fRec.GetId();
+                    break;
+
+                case ColumnType.ctName:
                     result = fRec.GroupName;
                     break;
 
-                case GroupColumnType.ctChangeDate:
+                case ColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
@@ -93,7 +98,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GroupMembersSublistModel : ListModel
+    public sealed class GroupMembersSublistModel : SheetModel<GDMIndividualLink>
     {
         public GroupMembersSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
@@ -110,18 +115,18 @@ namespace GKCore.Lists
             if (fSheetList == null || grp == null) return;
 
             try {
-                fSheetList.BeginUpdate();
-                fSheetList.ClearItems();
+                fSheetList.ListView.BeginUpdate();
+                fSheetList.ListView.ClearItems();
 
                 var tree = fBaseWin.Context.Tree;
                 foreach (GDMIndividualLink ptrMember in grp.Members) {
                     GDMIndividualRecord member = tree.GetPtrValue(ptrMember);
                     if (member == null) continue;
 
-                    fSheetList.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });
+                    fSheetList.ListView.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });
                 }
 
-                fSheetList.EndUpdate();
+                fSheetList.ListView.EndUpdate();
             } catch (Exception ex) {
                 Logger.WriteError("GroupMembersSublistModel.UpdateContents()", ex);
             }

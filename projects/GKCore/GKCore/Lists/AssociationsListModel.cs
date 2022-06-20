@@ -31,7 +31,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public class AssociationsListModel : ListModel
+    public class AssociationsListModel : SheetModel<GDMAssociation>
     {
         public AssociationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
@@ -50,14 +50,14 @@ namespace GKCore.Lists
             if (fSheetList == null || person == null) return;
 
             try {
-                fSheetList.ClearItems();
+                fSheetList.ListView.ClearItems();
                 if (!person.HasAssociations) return;
 
                 foreach (GDMAssociation ast in person.Associations) {
                     var relIndi = fBaseContext.Tree.GetPtrValue(ast);
                     string nm = ((relIndi == null) ? string.Empty : GKUtils.GetNameString(relIndi, true, false));
 
-                    fSheetList.AddItem(ast, new object[] { ast.Relation, nm });
+                    fSheetList.ListView.AddItem(ast, new object[] { ast.Relation, nm });
                 }
             } catch (Exception ex) {
                 Logger.WriteError("AssociationsListModel.UpdateContents()", ex);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,21 +23,22 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    public enum CommunicationColumnType
-    {
-        ctCommName,
-        ctCorresponder,
-        ctCommType,
-        ctDate,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class CommunicationListMan : ListManager
+    public sealed class CommunicationListMan : ListManager<GDMCommunicationRecord>
     {
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctCommName,
+            ctCorresponder,
+            ctCommType,
+            ctDate,
+            ctChangeDate
+        }
+
+
         private GDMCommunicationRecord fRec;
 
 
@@ -46,11 +47,12 @@ namespace GKCore.Lists
         {
         }
 
-        public static ListColumns CreateCommunicationListColumns()
+        public static ListColumns<GDMCommunicationRecord> CreateCommunicationListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMCommunicationRecord>();
 
             // not to change the order of these lines in their changes
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Theme, DataType.dtString, 300, true, true);
             result.AddColumn(LSID.LSID_Corresponder, DataType.dtString, 200, true);
             result.AddColumn(LSID.LSID_Type, DataType.dtString, 90, true);
@@ -72,31 +74,34 @@ namespace GKCore.Lists
 
         public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GDMCommunicationRecord);
+            fRec = (GDMCommunicationRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((CommunicationColumnType)colType)
-            {
-                case CommunicationColumnType.ctCommName:
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fRec.GetId();
+                    break;
+
+                case ColumnType.ctCommName:
                     result = fRec.CommName;
                     break;
 
-                case CommunicationColumnType.ctCorresponder:
+                case ColumnType.ctCorresponder:
                     result = GKUtils.GetCorresponderStr(fBaseContext.Tree, fRec, false);
                     break;
 
-                case CommunicationColumnType.ctCommType:
+                case ColumnType.ctCommType:
                     result = LangMan.LS(GKData.CommunicationNames[(int)fRec.CommunicationType]);
                     break;
 
-                case CommunicationColumnType.ctDate:
+                case ColumnType.ctDate:
                     result = GetDateValue(fRec.Date, isVisible);
                     break;
 
-                case CommunicationColumnType.ctChangeDate:
+                case ColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }

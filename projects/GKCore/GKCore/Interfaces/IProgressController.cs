@@ -50,7 +50,7 @@ namespace GKCore.Interfaces
     /// This defines an interface which can be implemented by UI elements
     /// which indicate the progress of a long operation.
     /// </summary>
-    public interface IProgressController : IGDMProgressCallback
+    public interface IProgressController : IGDMProgressCallback, ICommonDialog
     {
         /// <summary>
         /// If this property is true, then you should abort work

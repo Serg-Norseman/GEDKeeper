@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,19 +23,20 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    public enum FamilyColumnType
-    {
-        ctFamilyStr,
-        ctMarriageDate,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class FamilyListMan : ListManager
+    public sealed class FamilyListMan : ListManager<GDMFamilyRecord>
     {
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctFamilyStr,
+            ctMarriageDate,
+            ctChangeDate
+        }
+
+
         private GDMFamilyRecord fRec;
 
 
@@ -44,10 +45,11 @@ namespace GKCore.Lists
         {
         }
 
-        public static ListColumns CreateFamilyListColumns()
+        public static ListColumns<GDMFamilyRecord> CreateFamilyListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMFamilyRecord>();
 
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Spouses, DataType.dtString, 300, true, true);
             result.AddColumn(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
@@ -67,23 +69,26 @@ namespace GKCore.Lists
 
         public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GDMFamilyRecord);
+            fRec = (GDMFamilyRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((FamilyColumnType)colType)
-            {
-                case FamilyColumnType.ctFamilyStr:
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fRec.GetId();
+                    break;
+
+                case ColumnType.ctFamilyStr:
                     result = GKUtils.GetFamilyString(fBaseContext.Tree, fRec);
                     break;
 
-                case FamilyColumnType.ctMarriageDate:
+                case ColumnType.ctMarriageDate:
                     result = GetDateValue(GKUtils.GetMarriageDate(fRec), isVisible);
                     break;
 
-                case FamilyColumnType.ctChangeDate:
+                case ColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }

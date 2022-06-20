@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,18 +23,19 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    public enum RepositoryColumnType
-    {
-        ctName,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class RepositoryListMan : ListManager
+    public sealed class RepositoryListMan : ListManager<GDMRepositoryRecord>
     {
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctName,
+            ctChangeDate
+        }
+
+
         private GDMRepositoryRecord fRec;
 
 
@@ -43,10 +44,11 @@ namespace GKCore.Lists
         {
         }
 
-        public static ListColumns CreateRepositoryListColumns()
+        public static ListColumns<GDMRepositoryRecord> CreateRepositoryListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMRepositoryRecord>();
 
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Repository, DataType.dtString, 400, true, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
@@ -65,19 +67,22 @@ namespace GKCore.Lists
 
         public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GDMRepositoryRecord);
+            fRec = (GDMRepositoryRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((RepositoryColumnType)colType)
-            {
-                case RepositoryColumnType.ctName:
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fRec.GetId();
+                    break;
+
+                case ColumnType.ctName:
                     result = fRec.RepositoryName;
                     break;
 
-                case RepositoryColumnType.ctChangeDate:
+                case ColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }

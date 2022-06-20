@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -46,6 +47,11 @@ namespace GKCore
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
+        }
+
+        private static IListItem CreateListItem(object data, object[] columnValues)
+        {
+            return new GKListItem(columnValues[0], data);
         }
 
         [Test]
@@ -140,28 +146,23 @@ namespace GKCore
 
             var listView = Substitute.For<IListViewEx>();
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, grpRec);
+            listManager.CreateListItem(0, grpRec, CreateListItem);
 
             //
             var colVal = listManager.GetColumnInternalValue(0);
             Assert.IsNotNull(colVal);
 
-            var data = listManager.GetItemData(grpRec);
-            Assert.IsNotNull(data);
-            Assert.IsTrue(data.Length > 0);
-
             //
             IListFilter filter = listManager.Filter;
             IListColumns listColumns = listManager.ListColumns;
 
-            ListColumns copyColumns = GroupListMan.CreateGroupListColumns();
+            var copyColumns = GroupListMan.CreateGroupListColumns();
             listColumns.CopyTo(copyColumns);
 
             Assert.Throws(typeof(ArgumentNullException), () => { listColumns.CopyTo(null); });
 
             listManager.QuickFilter = "*";
-            listManager.AddCondition((byte)GroupColumnType.ctName, ConditionKind.ck_Contains, "*roup*");
+            listManager.AddCondition((byte)GroupListMan.ColumnType.ctName, ConditionKind.ck_Contains, "*roup*");
             Assert.IsTrue(listManager.CheckFilter());
         }
 
@@ -188,8 +189,7 @@ namespace GKCore
 
             var listView = Substitute.For<IListViewEx>();
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, communicationRec);
+            listManager.CreateListItem(0, communicationRec, CreateListItem);
         }
 
         [Test]
@@ -210,8 +210,7 @@ namespace GKCore
 
             var listView = Substitute.For<IListViewEx>();
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, familyRec);
+            listManager.CreateListItem(0, familyRec, CreateListItem);
         }
 
         private bool ExtFilterHandler(GDMRecord record)
@@ -244,18 +243,15 @@ namespace GKCore
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfFNP;
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, individualRec);
+            listManager.CreateListItem(0, individualRec, CreateListItem);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_NP;
             listManager.UpdateColumns(listView);
-            listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, individualRec);
+            listManager.CreateListItem(0, individualRec, CreateListItem);
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_N_P;
             listManager.UpdateColumns(listView);
-            listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, individualRec);
+            listManager.CreateListItem(0, individualRec, CreateListItem);
         }
 
         [Test]
@@ -276,8 +272,7 @@ namespace GKCore
 
             var listView = Substitute.For<IListViewEx>();
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, locationRec);
+            listManager.CreateListItem(0, locationRec, CreateListItem);
         }
 
         [Test]
@@ -298,8 +293,7 @@ namespace GKCore
 
             var listView = Substitute.For<IListViewEx>();
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, mediaRec);
+            listManager.CreateListItem(0, mediaRec, CreateListItem);
         }
 
         [Test]
@@ -321,10 +315,9 @@ namespace GKCore
 
             var listView = Substitute.For<IListViewEx>();
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, noteRec);
+            listManager.CreateListItem(0, noteRec, CreateListItem);
             noteRec.Clear();
-            listManager.UpdateItem(0, listItem, noteRec);
+            listManager.CreateListItem(0, noteRec, CreateListItem);
         }
 
         [Test]
@@ -345,8 +338,7 @@ namespace GKCore
 
             var listView = Substitute.For<IListViewEx>();
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, repositoryRec);
+            listManager.CreateListItem(0, repositoryRec, CreateListItem);
         }
 
         [Test]
@@ -367,8 +359,7 @@ namespace GKCore
 
             var listView = Substitute.For<IListViewEx>();
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, researchRec);
+            listManager.CreateListItem(0, researchRec, CreateListItem);
         }
 
         [Test]
@@ -389,8 +380,7 @@ namespace GKCore
 
             var listView = Substitute.For<IListViewEx>();
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, sourceRec);
+            listManager.CreateListItem(0, sourceRec, CreateListItem);
         }
 
         [Test]
@@ -411,8 +401,7 @@ namespace GKCore
 
             var listView = Substitute.For<IListViewEx>();
             listManager.UpdateColumns(listView);
-            var listItem = new GKListItem("", null);
-            listManager.UpdateItem(0, listItem, taskRec);
+            listManager.CreateListItem(0, taskRec, CreateListItem);
         }
     }
 }

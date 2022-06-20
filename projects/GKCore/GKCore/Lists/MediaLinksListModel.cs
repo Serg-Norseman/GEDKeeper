@@ -28,7 +28,7 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public sealed class MediaLinksListModel : ListModel
+    public sealed class MediaLinksListModel : SheetModel<GDMMultimediaLink>
     {
         public MediaLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
@@ -47,7 +47,7 @@ namespace GKCore.Lists
             if (fSheetList == null || dataOwner == null) return;
 
             try {
-                fSheetList.ClearItems();
+                fSheetList.ListView.ClearItems();
 
                 foreach (GDMMultimediaLink mmLink in dataOwner.MultimediaLinks) {
                     GDMMultimediaRecord mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
@@ -57,7 +57,7 @@ namespace GKCore.Lists
 
                     GDMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
 
-                    fSheetList.AddItem(mmLink, new object[] { fileRef.Title,
+                    fSheetList.ListView.AddItem(mmLink, new object[] { fileRef.Title,
                                            LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]) });
                 }
             } catch (Exception ex) {

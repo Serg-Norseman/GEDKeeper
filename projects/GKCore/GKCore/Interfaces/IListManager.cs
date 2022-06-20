@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using BSLib;
 using BSLib.Design.MVP.Controls;
@@ -29,7 +28,7 @@ namespace GKCore.Interfaces
 {
     public delegate bool ExternalFilterHandler(GDMRecord record);
 
-    public delegate IListItem CreateListItemHandler(object itemValue, object data);
+    public delegate IListItem CreateListItemHandler(object data, object[] columnValues);
 
 
     public interface IListSource
@@ -41,6 +40,11 @@ namespace GKCore.Interfaces
 
         void UpdateColumns(IListViewEx listView);
         void UpdateContents();
+    }
+
+
+    public interface IListSource<T> : IListSource
+    {
     }
 
 
@@ -58,22 +62,23 @@ namespace GKCore.Interfaces
         string GetColumnName(int columnId);
 
         void ChangeColumnWidth(int colIndex, int colWidth);
-        IListItem CreateListItem(object rowData, CreateListItemHandler handler);
+        IListItem CreateListItem(int itemIndex, object rowData, CreateListItemHandler handler);
         bool DeleteRecord(object data);
         GDMRecord GetContentItem(int itemIndex);
-        object[] GetItemData(object rowData);
         List<GDMRecord> GetRecordsList();
         int IndexOfRecord(object data);
         bool IsColumnAutosize(int colIndex);
         void SortContents(int sortColumn, bool sortAscending);
-        void UpdateItem(int itemIndex, IListItem item, object rowData);
-
-        void UpdateItemProps(IListItem item, object rowData);
 
         string[] CreateFields();
         ConditionKind GetCondByName(string condName);
         int GetFieldColumnId(string[] fields, string fieldName);
 
         IList<ISearchResult> FindAll(string searchPattern);
+    }
+
+
+    public interface IListManager<T> : IListManager, IListSource<T>
+    {
     }
 }

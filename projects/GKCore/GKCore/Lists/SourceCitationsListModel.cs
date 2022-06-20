@@ -28,7 +28,7 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public sealed class SourceCitationsListModel : ListModel
+    public sealed class SourceCitationsListModel : SheetModel<GDMSourceCitation>
     {
         public SourceCitationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
@@ -49,7 +49,7 @@ namespace GKCore.Lists
             if (fSheetList == null || dataOwner == null) return;
 
             try {
-                fSheetList.ClearItems();
+                fSheetList.ListView.ClearItems();
 
                 foreach (GDMSourceCitation cit in dataOwner.SourceCitations) {
                     var sourceRec = fBaseContext.Tree.GetPtrValue<GDMSourceRecord>(cit);
@@ -57,13 +57,13 @@ namespace GKCore.Lists
 
                     int ca = cit.GetValidCertaintyAssessment();
 
-                    fSheetList.AddItem(cit, new object[] { sourceRec.Originator.Lines.Text.Trim(),
+                    fSheetList.ListView.AddItem(cit, new object[] { sourceRec.Originator.Lines.Text.Trim(),
                         sourceRec.ShortTitle, cit.Page,
                         LangMan.LS(GKData.CertaintyAssessments[ca])
                     });
                 }
 
-                fSheetList.ResizeColumn(1);
+                fSheetList.ListView.ResizeColumn(1);
             } catch (Exception ex) {
                 Logger.WriteError("SourceCitationsListModel.UpdateContents()", ex);
             }

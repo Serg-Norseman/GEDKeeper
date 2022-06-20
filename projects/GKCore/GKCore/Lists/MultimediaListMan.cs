@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,20 +23,21 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    public enum MultimediaColumnType
-    {
-        ctTitle,
-        ctMediaType,
-        ctFileRef,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class MultimediaListMan : ListManager
+    public sealed class MultimediaListMan : ListManager<GDMMultimediaRecord>
     {
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctTitle,
+            ctMediaType,
+            ctFileRef,
+            ctChangeDate
+        }
+
+
         private GDMMultimediaRecord fRec;
 
 
@@ -45,10 +46,11 @@ namespace GKCore.Lists
         {
         }
 
-        public static ListColumns CreateMultimediaListColumns()
+        public static ListColumns<GDMMultimediaRecord> CreateMultimediaListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMMultimediaRecord>();
 
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Title, DataType.dtString, 150, true, true);
             result.AddColumn(LSID.LSID_Type, DataType.dtString, 85, true);
             result.AddColumn(LSID.LSID_File, DataType.dtString, 300, true);
@@ -71,7 +73,7 @@ namespace GKCore.Lists
 
         public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GDMMultimediaRecord);
+            fRec = (GDMMultimediaRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -82,20 +84,24 @@ namespace GKCore.Lists
             }
 
             object result = null;
-            switch ((MultimediaColumnType)colType) {
-                case MultimediaColumnType.ctTitle:
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fRec.GetId();
+                    break;
+
+                case ColumnType.ctTitle:
                     result = fileRef.Title;
                     break;
 
-                case MultimediaColumnType.ctMediaType:
+                case ColumnType.ctMediaType:
                     result = LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]);
                     break;
 
-                case MultimediaColumnType.ctFileRef:
+                case ColumnType.ctFileRef:
                     result = fileRef.StringValue;
                     break;
 
-                case MultimediaColumnType.ctChangeDate:
+                case ColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }

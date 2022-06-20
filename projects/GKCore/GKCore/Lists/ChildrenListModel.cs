@@ -28,7 +28,7 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public abstract class ChildrenListModel : ListModel
+    public abstract class ChildrenListModel : SheetModel<GDMIndividualLink>
     {
 
         public ChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
@@ -49,7 +49,7 @@ namespace GKCore.Lists
                 idx += 1;
                 GDMIndividualRecord child = tree.GetPtrValue(ptr);
 
-                fSheetList.AddItem(child, new object[] {
+                fSheetList.ListView.AddItem(child, new object[] {
                         idx, GKUtils.GetNameString(child, true, false),
                         new GDMDateItem(GKUtils.GetBirthDate(child))
                     });
@@ -73,13 +73,13 @@ namespace GKCore.Lists
             if (fSheetList == null || family == null) return;
 
             try {
-                fSheetList.BeginUpdate();
-                fSheetList.ClearItems();
+                fSheetList.ListView.BeginUpdate();
+                fSheetList.ListView.ClearItems();
 
                 var tree = fBaseWin.Context.Tree;
                 FillFamilyChildren(tree, family);
 
-                fSheetList.EndUpdate();
+                fSheetList.ListView.EndUpdate();
             } catch (Exception ex) {
                 Logger.WriteError("FamilyChildrenListModel.UpdateContents()", ex);
             }
@@ -139,8 +139,8 @@ namespace GKCore.Lists
                 return;
 
             try {
-                fSheetList.BeginUpdate();
-                fSheetList.ClearItems();
+                fSheetList.ListView.BeginUpdate();
+                fSheetList.ListView.ClearItems();
 
                 var tree = fBaseWin.Context.Tree;
                 foreach (GDMSpouseToFamilyLink spouseLink in indiRec.SpouseToFamilyLinks) {
@@ -148,7 +148,7 @@ namespace GKCore.Lists
                     FillFamilyChildren(tree, family);
                 }
 
-                fSheetList.EndUpdate();
+                fSheetList.ListView.EndUpdate();
             } catch (Exception ex) {
                 Logger.WriteError("IndividualChildrenListModel.UpdateContents()", ex);
             }

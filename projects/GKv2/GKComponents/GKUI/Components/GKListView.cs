@@ -479,24 +479,18 @@ namespace GKUI.Components
 
         #region Virtual mode with ListSource
 
-        private static IListItem CreateListItem(object itemValue, object data)
+        private static IListItem CreateListItem(object data, object[] columnValues)
         {
-            return new GKListItem(itemValue, data);
+            IListItem result = new GKListItem(columnValues[0], data);
+            for (int i = 1, num = columnValues.Length; i < num; i++)
+                result.AddSubItem(columnValues[i]);
+            return result;
         }
 
         private GKListItem GetVirtualItem(int itemIndex)
         {
-            GKListItem newItem;
-
             object rowData = fListMan.GetContentItem(itemIndex);
-            if (rowData == null) {
-                newItem = null;
-            } else {
-                newItem = fListMan.CreateListItem(rowData, CreateListItem) as GKListItem;
-                fListMan.UpdateItem(itemIndex, newItem, rowData);
-            }
-
-            return newItem;
+            return (rowData == null) ? null : fListMan.CreateListItem(itemIndex, rowData, CreateListItem) as GKListItem;
         }
 
         protected override void OnCacheVirtualItems(CacheVirtualItemsEventArgs e)

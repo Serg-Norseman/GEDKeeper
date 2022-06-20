@@ -42,10 +42,10 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.AdrList.ClearItems();
-            fView.PhonesList.ClearItems();
-            fView.MailsList.ClearItems();
-            fView.WebsList.ClearItems();
+            fView.AdrList.ListView.ClearItems();
+            fView.PhonesList.ListView.ClearItems();
+            fView.MailsList.ListView.ClearItems();
+            fView.WebsList.ListView.ClearItems();
 
             int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++) {
@@ -60,14 +60,14 @@ namespace GKCore.Controllers
                 }
             }
 
-            fView.AdrList.ResizeColumn(0);
-            fView.AdrList.ResizeColumn(1);
-            fView.PhonesList.ResizeColumn(0);
-            fView.PhonesList.ResizeColumn(1);
-            fView.MailsList.ResizeColumn(0);
-            fView.MailsList.ResizeColumn(1);
-            fView.WebsList.ResizeColumn(0);
-            fView.WebsList.ResizeColumn(1);
+            fView.AdrList.ListView.ResizeColumn(0);
+            fView.AdrList.ListView.ResizeColumn(1);
+            fView.PhonesList.ListView.ResizeColumn(0);
+            fView.PhonesList.ListView.ResizeColumn(1);
+            fView.MailsList.ListView.ResizeColumn(0);
+            fView.MailsList.ListView.ResizeColumn(1);
+            fView.WebsList.ListView.ResizeColumn(0);
+            fView.WebsList.ListView.ResizeColumn(1);
         }
 
         private void PrepareEvent(string iName, IGDMStructWithAddress ev)
@@ -81,19 +81,19 @@ namespace GKCore.Controllers
                 if (city != "") {
                     addrStr = city + ", " + addrStr;
                 }
-                fView.AdrList.AddItem(null, iName, addrStr);
+                fView.AdrList.ListView.AddItem(null, iName, addrStr);
             }
 
             foreach (GDMTag tag in addr.PhoneNumbers) {
-                fView.PhonesList.AddItem(null, iName, tag.StringValue);
+                fView.PhonesList.ListView.AddItem(null, iName, tag.StringValue);
             }
 
             foreach (GDMTag tag in addr.EmailAddresses) {
-                fView.MailsList.AddItem(null, iName, tag.StringValue);
+                fView.MailsList.ListView.AddItem(null, iName, tag.StringValue);
             }
 
             foreach (GDMTag tag in addr.WebPages) {
-                fView.WebsList.AddItem(null, iName, tag.StringValue);
+                fView.WebsList.ListView.AddItem(null, iName, tag.StringValue);
             }
         }
 
@@ -106,17 +106,17 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageMails").Text = LangMan.LS(LSID.LSID_Mails);
             GetControl<ITabPage>("pageWebs").Text = LangMan.LS(LSID.LSID_Webs);
 
-            fView.AdrList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fView.AdrList.AddColumn(LangMan.LS(LSID.LSID_Address), 100, false);
+            fView.AdrList.ListView.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
+            fView.AdrList.ListView.AddColumn(LangMan.LS(LSID.LSID_Address), 100, false);
 
-            fView.PhonesList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fView.PhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 100, false);
+            fView.PhonesList.ListView.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
+            fView.PhonesList.ListView.AddColumn(LangMan.LS(LSID.LSID_Telephone), 100, false);
 
-            fView.MailsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fView.MailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 100, false);
+            fView.MailsList.ListView.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
+            fView.MailsList.ListView.AddColumn(LangMan.LS(LSID.LSID_Mail), 100, false);
 
-            fView.WebsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
-            fView.WebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
+            fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
+            fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
         }
     }
 }

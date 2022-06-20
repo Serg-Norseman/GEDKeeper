@@ -215,7 +215,7 @@ namespace GKUI.Components
                 throw new ArgumentNullException("baseContext");
 
             GKListView recView = new GKListView();
-            recView.ListMan = ListManager.Create(baseContext, recType);
+            recView.ListMan = ListManager<GDMRecord>.Create(baseContext, recType);
             parent.Content = recView;
 
             return recView;

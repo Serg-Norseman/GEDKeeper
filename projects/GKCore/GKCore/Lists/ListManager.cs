@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,8 +29,6 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Search;
-using GKCore.Types;
-
 using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Lists
@@ -38,82 +36,7 @@ namespace GKCore.Lists
     /// <summary>
     ///
     /// </summary>
-    public abstract class ListSource : IListSource
-    {
-        protected sealed class MapColumnRec
-        {
-            public byte ColType;
-            public byte ColSubtype;
-
-            public MapColumnRec(byte colType, byte colSubtype)
-            {
-                ColType = colType;
-                ColSubtype = colSubtype;
-            }
-        }
-
-        private EnumSet<RecordAction> fAllowedActions;
-        private bool fColumnsHaveBeenChanged;
-
-        protected readonly IBaseContext fBaseContext;
-        protected readonly List<MapColumnRec> fColumnsMap;
-        protected readonly ListColumns fListColumns;
-
-
-        public EnumSet<RecordAction> AllowedActions
-        {
-            get { return fAllowedActions; }
-            set { fAllowedActions = value; }
-        }
-
-        public IBaseContext BaseContext
-        {
-            get { return fBaseContext; }
-        }
-
-        public bool ColumnsHaveBeenChanged
-        {
-            get { return fColumnsHaveBeenChanged; }
-            set { fColumnsHaveBeenChanged = value; }
-        }
-
-        public IListColumns ListColumns
-        {
-            get { return fListColumns; }
-        }
-
-
-        protected ListSource(IBaseContext baseContext, ListColumns defaultListColumns)
-        {
-            fAllowedActions = new EnumSet<RecordAction>();
-            fBaseContext = baseContext;
-            fColumnsMap = new List<MapColumnRec>();
-            fListColumns = defaultListColumns;
-        }
-
-        protected void AddColumn(IListViewEx list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
-        {
-            if (list == null)
-                throw new ArgumentNullException("list");
-
-            list.AddColumn(caption, width, autoSize);
-            fColumnsMap.Add(new MapColumnRec(colType, colSubtype));
-        }
-
-        protected void ColumnsMap_Clear()
-        {
-            fColumnsMap.Clear();
-        }
-
-        public abstract void UpdateColumns(IListViewEx listView);
-
-        public abstract void UpdateContents();
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    public abstract class ListManager : ListSource, IListManager
+    public abstract class ListManager<T> : ListSource<T>, IListManager<T>
     {
         public sealed class ValItem
         {
@@ -179,7 +102,7 @@ namespace GKCore.Lists
         }
 
 
-        protected ListManager(IBaseContext baseContext, ListColumns defaultListColumns, GDMRecordType recordType) :
+        protected ListManager(IBaseContext baseContext, ListColumns<T> defaultListColumns, GDMRecordType recordType) :
             base(baseContext, defaultListColumns)
         {
             fContentList = new List<ValItem>();
@@ -306,6 +229,13 @@ namespace GKCore.Lists
             return GetColumnValueEx(colrec.ColType, colrec.ColSubtype, false);
         }
 
+        /// <summary>
+        /// Getting the value of a column cell.
+        /// </summary>
+        /// <param name="colType">Basic column type.</param>
+        /// <param name="colSubtype">Column subtype.</param>
+        /// <param name="isVisible">Value target sign - for display or sorting functions.</param>
+        /// <returns></returns>
         protected virtual object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             return null;
@@ -315,19 +245,16 @@ namespace GKCore.Lists
         {
         }
 
-        public virtual object[] GetItemData(object rowData)
+        private object[] GetItemData(object rowData)
         {
             GDMRecord rec = rowData as GDMRecord;
             if (rec == null) return null;
 
             Fetch(rec);
 
-            object[] result = new object[fColumnsMap.Count];
-            result[0] = rec.GetXRefNum();
-
             int num = fColumnsMap.Count;
-            for (int i = 1; i < num; i++)
-            {
+            object[] result = new object[num];
+            for (int i = 0; i < num; i++) {
                 MapColumnRec colrec = fColumnsMap[i];
 
                 // aColIndex - from 1
@@ -340,50 +267,19 @@ namespace GKCore.Lists
             return result;
         }
 
-        public virtual void UpdateItemProps(IListItem item, object rowData)
+        public virtual IListItem CreateListItem(int itemIndex, object rowData, CreateListItemHandler handler)
         {
-        }
+            if (rowData == null || handler == null) return null;
 
-        public virtual void UpdateItem(int itemIndex, IListItem item, object rowData)
-        {
-            GDMRecord rec = rowData as GDMRecord;
-            if (item == null || rec == null) return;
+            object[] columnValues = GetItemData(rowData);
 
-            Fetch(rec);
-
-            int num = fColumnsMap.Count;
-            for (int i = 1; i < num; i++)
-            {
-                MapColumnRec colrec = fColumnsMap[i];
-
-                // aColIndex - from 1
-                ListColumn cs = fListColumns[colrec.ColType];
-                object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, true);
-                string res = ConvertColumnValue(val, cs);
-
-                item.AddSubItem(res);
-            }
+            IListItem item = handler(rowData, columnValues);
 
             if (GlobalOptions.Instance.ReadabilityHighlightRows && MathHelper.IsOdd(itemIndex)) {
                 item.SetBackColor(ChartRenderer.GetColor(BSDColors.LightGray));
             }
-        }
 
-        public override void UpdateColumns(IListViewEx listView)
-        {
-            if (listView == null) return;
-
-            ColumnsMap_Clear();
-            AddColumn(listView, "№", 50, false, 0, 0);
-
-            int num = fListColumns.Count;
-            for (int i = 0; i < num; i++) {
-                ListColumn cs = fListColumns.OrderedColumns[i];
-
-                AddColumn(listView, LangMan.LS(cs.ColName), cs.CurWidth, false, cs.Id, 0);
-            }
-
-            ColumnsHaveBeenChanged = false;
+            return item;
         }
 
         public string GetColumnName(int columnId)
@@ -438,7 +334,7 @@ namespace GKCore.Lists
                     return val;
 
                 case DataType.dtInteger:
-                    return ConvertHelper.ParseInt(val, 0);
+                    return ConvertHelper.ParseLong(val, 0);
 
                 case DataType.dtFloat:
                     return ConvertHelper.ParseFloat(val, 0.0);
@@ -520,9 +416,9 @@ namespace GKCore.Lists
             bool res = true;
 
             try {
-                int num = Filter.Conditions.Count;
-                for (int i = 0; i < num; i++) {
-                    FilterCondition fcond = Filter.Conditions[i];
+                var conditions = Filter.Conditions;
+                for (int i = 0, num = conditions.Count; i < num; i++) {
+                    FilterCondition fcond = conditions[i];
                     res = res && CheckCondition(fcond);
                 }
             } catch (Exception ex) {
@@ -558,7 +454,7 @@ namespace GKCore.Lists
 
         public void ChangeColumnWidth(int colIndex, int colWidth)
         {
-            if (colIndex <= 0) return;
+            if (colIndex < 0) return;
 
             MapColumnRec colrec = fColumnsMap[colIndex];
             ListColumn props = FindColumnProps(colrec.ColType);
@@ -570,7 +466,7 @@ namespace GKCore.Lists
 
         public bool IsColumnAutosize(int colIndex)
         {
-            if (colIndex <= 0) return false;
+            if (colIndex < 0) return false;
 
             MapColumnRec colrec = fColumnsMap[colIndex];
             ListColumn props = FindColumnProps(colrec.ColType);
@@ -607,14 +503,8 @@ namespace GKCore.Lists
                 int num = fContentList.Count;
                 for (int i = 0; i < num; i++) {
                     ValItem valItem = fContentList[i];
-                    GDMRecord rec = valItem.Record;
-
-                    if (sortColumn == 0) {
-                        valItem.ColumnValue = rec.GetId();
-                    } else {
-                        Fetch(rec);
-                        valItem.ColumnValue = GetColumnInternalValue(sortColumn);
-                    }
+                    Fetch(valItem.Record);
+                    valItem.ColumnValue = GetColumnInternalValue(sortColumn);
                 }
 
                 fXSortFactor = (sortAscending ? 1 : -1);
@@ -663,14 +553,6 @@ namespace GKCore.Lists
             return result;
         }
 
-        public IListItem CreateListItem(object rowData, CreateListItemHandler handler)
-        {
-            GDMRecord record = rowData as GDMRecord;
-            if (record == null || handler == null) return null;
-
-            return handler(record.GetXRefNum(), record);
-        }
-
         public GDMRecord GetContentItem(int itemIndex)
         {
             GDMRecord result;
@@ -707,9 +589,9 @@ namespace GKCore.Lists
             return false;
         }
 
-        public static ListManager Create(IBaseContext baseContext, GDMRecordType recType)
+        public static IListManager Create(IBaseContext baseContext, GDMRecordType recType)
         {
-            ListManager result = null;
+            IListManager result = null;
 
             switch (recType) {
                 case GDMRecordType.rtIndividual:
@@ -770,7 +652,7 @@ namespace GKCore.Lists
 
         public string[] CreateFields()
         {
-            ListColumns listColumns = (ListColumns)ListColumns;
+            ListColumns<T> listColumns = (ListColumns<T>)ListColumns;
             string[] fields = new string[listColumns.Count + 1]; // +empty item
             fields[0] = "";
 

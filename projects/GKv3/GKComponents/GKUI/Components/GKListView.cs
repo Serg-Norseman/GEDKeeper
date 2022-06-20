@@ -352,6 +352,11 @@ namespace GKUI.Components
             }
         }
 
+        private BSDListItem CreateListItem(object data, object[] columnValues)
+        {
+            return AddItem(data, false, columnValues);
+        }
+
         private void UpdateItems()
         {
             if (fListMan == null) return;
@@ -363,9 +368,7 @@ namespace GKUI.Components
                 object rowData = fListMan.GetContentItem(i);
 
                 if (rowData != null) {
-                    object[] itemData = fListMan.GetItemData(rowData);
-                    GKListItem newItem = (GKListItem)AddItem(rowData, itemData);
-                    fListMan.UpdateItemProps(newItem, rowData);
+                    fListMan.CreateListItem(i, rowData, CreateListItem);
                 }
             }
         }

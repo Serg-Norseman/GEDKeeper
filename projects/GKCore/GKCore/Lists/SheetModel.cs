@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using BSLib;
 using BSLib.Design.MVP;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
@@ -91,23 +90,31 @@ namespace GKCore.Lists
     public interface ISheetList : IBaseControl
     {
         EnumSet<SheetButton> Buttons { get; set; }
-        ListModel ListModel { get; set; }
+        ISheetModel ListModel { get; set; }
+        IListViewEx ListView { get; }
         bool ReadOnly { get; set; }
 
-        void AddColumn(string caption, int width, bool autoSize);
-        IListItem AddItem(object rowData, params object[] columnValues);
-        void BeginUpdate();
-        void EndUpdate();
-        void ClearColumns();
-        void ClearItems();
-        void ResizeColumn(int columnIndex);
         void UpdateSheet();
     }
+
+
+    public interface ISheetModel
+    {
+        EnumSet<RecordAction> AllowedActions { get; set; }
+        GDMObject DataOwner { get; set; }
+        ISheetList SheetList { get; set; }
+        bool ColumnsHaveBeenChanged { get; set; }
+
+        void Modify(object sender, ModifyEventArgs eArgs);
+        void UpdateColumns(IListViewEx listView);
+        void UpdateContents();
+    }
+
 
     /// <summary>
     /// 
     /// </summary>
-    public abstract class ListModel : ListSource
+    public abstract class SheetModel<T> : ListSource<T>, ISheetModel
     {
         protected ISheetList fSheetList;
         protected readonly IBaseWindow fBaseWin;
@@ -138,27 +145,11 @@ namespace GKCore.Lists
             }
         }
 
-        protected ListModel(IBaseWindow baseWin, ChangeTracker undoman) :
-            base(baseWin.Context, new ListColumns())
+        protected SheetModel(IBaseWindow baseWin, ChangeTracker undoman) :
+            base(baseWin.Context, new ListColumns<T>())
         {
             fBaseWin = baseWin;
             fUndoman = undoman;
-        }
-
-        public override void UpdateColumns(IListViewEx listView)
-        {
-            if (listView == null) return;
-
-            ColumnsMap_Clear();
-
-            int num = fListColumns.Count;
-            for (int i = 0; i < num; i++) {
-                ListColumn cs = fListColumns.OrderedColumns[i];
-
-                AddColumn(listView, LangMan.LS(cs.ColName), cs.CurWidth, false, cs.Id, 0);
-            }
-
-            ColumnsHaveBeenChanged = false;
         }
 
         public abstract void Modify(object sender, ModifyEventArgs eArgs);

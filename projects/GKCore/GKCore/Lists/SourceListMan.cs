@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,20 +27,21 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public enum SourceColumnType
-    {
-        ctShortName,
-        ctAuthor,
-        ctTitle,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SourceListMan : ListManager
+    public sealed class SourceListMan : ListManager<GDMSourceRecord>
     {
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctShortName,
+            ctAuthor,
+            ctTitle,
+            ctChangeDate
+        }
+
+
         private GDMSourceRecord fRec;
 
 
@@ -49,10 +50,11 @@ namespace GKCore.Lists
         {
         }
 
-        public static ListColumns CreateSourceListColumns()
+        public static ListColumns<GDMSourceRecord> CreateSourceListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMSourceRecord>();
 
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_ShortTitle, DataType.dtString, 120, true, true);
             result.AddColumn(LSID.LSID_Author, DataType.dtString, 200, true);
             result.AddColumn(LSID.LSID_Title, DataType.dtString, 200, true);
@@ -73,27 +75,30 @@ namespace GKCore.Lists
 
         public override void Fetch(GDMRecord aRec)
         {
-            fRec = (aRec as GDMSourceRecord);
+            fRec = (GDMSourceRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((SourceColumnType)colType)
-            {
-                case SourceColumnType.ctShortName:
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fRec.GetId();
+                    break;
+
+                case ColumnType.ctShortName:
                     result = fRec.ShortTitle.Trim();
                     break;
 
-                case SourceColumnType.ctAuthor:
+                case ColumnType.ctAuthor:
                     result = fRec.Originator.Lines.Text.Trim();
                     break;
 
-                case SourceColumnType.ctTitle:
+                case ColumnType.ctTitle:
                     result = fRec.Title.Lines.Text.Trim();
                     break;
 
-                case SourceColumnType.ctChangeDate:
+                case ColumnType.ctChangeDate:
                     result = fRec.ChangeDate.ChangeDateTime;
                     break;
             }
@@ -105,7 +110,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SourceRepositoriesSublistModel : ListModel
+    public sealed class SourceRepositoriesSublistModel : SheetModel<GDMRepositoryCitation>
     {
         public SourceRepositoriesSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
@@ -122,17 +127,17 @@ namespace GKCore.Lists
             if (fSheetList == null || source == null) return;
 
             try {
-                fSheetList.BeginUpdate();
-                fSheetList.ClearItems();
+                fSheetList.ListView.BeginUpdate();
+                fSheetList.ListView.ClearItems();
 
                 foreach (GDMRepositoryCitation repCit in source.RepositoryCitations) {
                     GDMRepositoryRecord rep = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repCit);
                     if (rep == null) continue;
 
-                    fSheetList.AddItem(repCit, new object[] { rep.RepositoryName });
+                    fSheetList.ListView.AddItem(repCit, new object[] { rep.RepositoryName });
                 }
 
-                fSheetList.EndUpdate();
+                fSheetList.ListView.EndUpdate();
             } catch (Exception ex) {
                 Logger.WriteError("SourceRepositoriesSublistModel.UpdateContents()", ex);
             }

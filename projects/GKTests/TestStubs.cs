@@ -59,6 +59,16 @@ namespace GKTests.Stubs
 
     internal class ProgressStub : IProgressController
     {
+        public bool Enabled { get; set; }
+        public void Activate() { }
+        public void Close() { }
+        public string Title { get; set; }
+        public void Dispose() { }
+        public void SetToolTip(object component, string toolTip) { }
+        public object GetControl(string controlName) { return null; }
+        public bool ShowModalX(object owner) { return true; }
+
+
         public bool IsCanceled { get { return false; } }
 
         public void Begin(int maximum, bool cancelable) { }
