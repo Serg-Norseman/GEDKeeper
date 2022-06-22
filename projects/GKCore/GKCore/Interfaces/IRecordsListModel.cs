@@ -19,51 +19,10 @@
  */
 
 using System.Collections.Generic;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 
 namespace GKCore.Interfaces
 {
-    public delegate bool ExternalFilterHandler(GDMRecord record);
-
-    public delegate IListItem CreateListItemHandler(object data, object[] columnValues);
-
-
-    public interface IListSource
-    {
-        IBaseContext BaseContext { get; }
-        bool ColumnsHaveBeenChanged { get; set; }
-        ExternalFilterHandler ExternalFilter { get; set; }
-        IListFilter Filter { get; }
-        int FilteredCount { get; }
-        IListColumns ListColumns { get; }
-        int TotalCount { get; }
-        string QuickFilter { get; set; }
-
-        void AddCondition(byte columnId, ConditionKind condition, string value);
-        void ChangeColumnWidth(int colIndex, int colWidth);
-        string[] CreateFields();
-        IListItem CreateListItem(int itemIndex, object rowData, CreateListItemHandler handler);
-        bool DeleteItem(object data);
-        DataType GetColumnDataType(int columnId);
-        string GetColumnName(int columnId);
-        ConditionKind GetCondByName(string condName);
-        object GetContentItem(int itemIndex);
-        int GetFieldColumnId(string[] fields, string fieldName);
-        int IndexOfItem(object data);
-        bool IsColumnAutosize(int colIndex);
-        void SortContents(int sortColumn, bool sortAscending);
-        void UpdateColumns(IListViewEx listView);
-        void UpdateContents();
-    }
-
-
-    public interface IListSource<T> : IListSource
-        where T : GDMTag
-    {
-    }
-
-
     public interface IRecordsListModel : IListSource
     {
         GDMRecordType RecordType { get; }

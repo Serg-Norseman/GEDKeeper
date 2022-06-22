@@ -232,6 +232,7 @@
     <Compile Include="GKCore\Interfaces\IHost.cs" />
     <Compile Include="GKCore\Interfaces\ILangMan.cs" />
     <Compile Include="GKCore\Interfaces\IListFilter.cs" />
+    <Compile Include="GKCore\Interfaces\IListSource.cs" />
     <Compile Include="GKCore\Interfaces\IRecordsListModel.cs" />
     <Compile Include="GKCore\Interfaces\IListViewEx.cs" />
     <Compile Include="GKCore\Interfaces\ILocalizable.cs" />

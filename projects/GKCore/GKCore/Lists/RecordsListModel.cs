@@ -86,7 +86,7 @@ namespace GKCore.Lists
             var result = new List<GDMRecord>(size);
 
             for (int i = 0; i < size; i++) {
-                result.Add(ContentList[i].Record);
+                result.Add((GDMRecord)ContentList[i].Record);
             }
 
             return result;
@@ -100,7 +100,7 @@ namespace GKCore.Lists
 
             int num = ContentList.Count;
             for (int i = 0; i < num; i++) {
-                GDMRecord rec = ContentList[i].Record;
+                GDMRecord rec = (GDMRecord)ContentList[i].Record;
 
                 string recName = GKUtils.GetRecordName(fBaseContext.Tree, rec, false);
                 if (GKUtils.MatchesRegex(recName, regex)) {

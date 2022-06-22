@@ -18,7 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define VIRT_LIST
+
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using BSLib;
 using BSLib.Design;
@@ -139,6 +142,7 @@ namespace GKUI.Components
         private readonly ObservableExtList<GKListItem> fItems;
 
         private bool fCheckedList;
+        private bool fIsVirtual;
         private IListSource fListMan;
         private bool fSorting;
         private int fSortColumn;
@@ -164,7 +168,14 @@ namespace GKUI.Components
                         fSorting = true;
                         fSortColumn = 0;
                         fSortOrder = BSDSortOrder.Ascending;
+
+#if VIRT_LIST
+                        DataStore = fListMan.ContentList;
+                        fIsVirtual = true;
+#endif
                     } else {
+                        DataStore = fItems;
+                        fIsVirtual = false;
                     }
                 }
             }
@@ -206,6 +217,7 @@ namespace GKUI.Components
         public GKListView()
         {
             fCheckedList = false;
+            fIsVirtual = false;
             fItems = new ObservableExtList<GKListItem>();
             fSortColumn = 0;
             fSortOrder = BSDSortOrder.None;
@@ -229,7 +241,7 @@ namespace GKUI.Components
         public void BeginUpdate()
         {
             if (fUpdateCount == 0) {
-                DataStore = null;
+                //DataStore = null;
                 fItems.BeginUpdate();
             }
             fUpdateCount++;
@@ -240,7 +252,7 @@ namespace GKUI.Components
             fUpdateCount--;
             if (fUpdateCount == 0) {
                 fItems.EndUpdate();
-                DataStore = fItems;
+                //DataStore = fItems;
             }
         }
 
@@ -400,7 +412,9 @@ namespace GKUI.Components
 
                 object tempRec = GetSelectedData();
 
-                BeginUpdate();
+                if (!fIsVirtual)
+                    BeginUpdate();
+
                 try {
                     if (columnsChanged || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
                         Columns.Clear();
@@ -409,11 +423,14 @@ namespace GKUI.Components
 
                     fListMan.UpdateContents();
                     SortContents(false);
-                    UpdateItems();
+
+                    if (!fIsVirtual)
+                        UpdateItems();
 
                     ResizeColumns();
                 } finally {
-                    EndUpdate();
+                    if (!fIsVirtual)
+                        EndUpdate();
                 }
 
                 if (tempRec != null) SelectItem(tempRec);
@@ -449,7 +466,12 @@ namespace GKUI.Components
 
         public void AddColumn(string caption, int width, bool autoSize = false)
         {
-            var cell = new TextBoxCell(Columns.Count);
+            int colIndex = Columns.Count;
+            var cell = new TextBoxCell(colIndex);
+
+            if (fIsVirtual) {
+                cell.Binding = Binding.Property<ContentItem, string>(r => fListMan.GetColumnExternalValue(r, colIndex));
+            }
 
             GridColumn column = new GridColumn();
             column.HeaderText = caption;
@@ -602,21 +624,24 @@ namespace GKUI.Components
 
         public object GetSelectedData()
         {
-            var item = GetSelectedItem();
-            return (item != null) ? item.Data : null;
-        }
+            if (!fIsVirtual) {
+                var item = GetSelectedItem();
+                return (item != null) ? item.Data : null;
+            } else {
+                if (SelectedRow < 0) {
+                    return null;
+                }
 
-        private void SelectItem(GKListItem item)
-        {
-            if (item != null) {
-                int idx = fItems.IndexOf(item);
-                SelectItem(idx);
+                var item = SelectedItem as ContentItem;
+                return item.Record;
             }
         }
 
         public void SelectItem(int index)
         {
-            if (index >= 0 && index < fItems.Count) {
+            ICollection contentList = (fIsVirtual) ? (ICollection)fListMan.ContentList : (ICollection)fItems;
+
+            if (index >= 0 && index < contentList.Count) {
                 ScrollToRow(index);
                 UnselectAll();
                 SelectRow(index);
@@ -633,9 +658,7 @@ namespace GKUI.Components
                 } else {
                     int num = fItems.Count;
                     for (int i = 0; i < num; i++) {
-                        var item = (GKListItem)fItems[i];
-
-                        if (item.Data == rowData) {
+                        if (fItems[i].Data == rowData) {
                             SelectItem(i);
                             return;
                         }

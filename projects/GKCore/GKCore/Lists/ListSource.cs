@@ -36,17 +36,6 @@ namespace GKCore.Lists
     public abstract class ListSource<T> : IListSource<T>
         where T : GDMTag
     {
-        public sealed class ContentItem
-        {
-            public readonly T Record;
-            public object SortValue;
-
-            public ContentItem(T record)
-            {
-                Record = record;
-            }
-        }
-
         protected sealed class MapColumnRec
         {
             public byte ColType;
@@ -539,6 +528,14 @@ namespace GKCore.Lists
             return GetColumnValueEx(colrec.ColType, colrec.ColSubtype, false);
         }
 
+        private string GetColumnDisplayValue(int colIndex)
+        {
+            MapColumnRec colrec = fColumnsMap[colIndex];
+            ListColumn cs = fListColumns[colrec.ColType];
+            object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, true);
+            return ConvertColumnValue(val, cs);
+        }
+
         /// <summary>
         /// Getting the value of a column cell.
         /// </summary>
@@ -555,6 +552,22 @@ namespace GKCore.Lists
 
         #region Items and content processing
 
+        private object[] fItemData;
+        private T fVirtualFetchedRecord;
+
+        public string GetColumnExternalValue(ContentItem contentItem, int colIndex)
+        {
+            var queryRec = (T)contentItem.Record;
+
+            // "super fetch"
+            if (fVirtualFetchedRecord != queryRec) {
+                fItemData = GetItemData(queryRec);
+                fVirtualFetchedRecord = queryRec;
+            }
+
+            return (fItemData == null) ? string.Empty : (string)fItemData[colIndex];
+        }
+
         protected object[] GetItemData(object rowData)
         {
             T rec = rowData as T;
@@ -566,13 +579,7 @@ namespace GKCore.Lists
             int num = fColumnsMap.Count;
             object[] result = new object[num];
             for (int i = 0; i < num; i++) {
-                MapColumnRec colrec = fColumnsMap[i];
-
-                // aColIndex - from 1
-                ListColumn cs = fListColumns[colrec.ColType];
-                object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, true);
-                string res = ConvertColumnValue(val, cs);
-                result[i] = res;
+                result[i] = GetColumnDisplayValue(i);
             }
 
             return result;
@@ -689,7 +696,7 @@ namespace GKCore.Lists
                 int num = fContentList.Count;
                 for (int i = 0; i < num; i++) {
                     ContentItem valItem = fContentList[i];
-                    Fetch(valItem.Record);
+                    Fetch((T)valItem.Record);
                     valItem.SortValue = GetColumnInternalValue(sortColumn);
                 }
 
