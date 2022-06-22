@@ -132,7 +132,7 @@ namespace GKTests.Stubs
         public List<GDMRecord> GetContentList(GDMRecordType recType) { return null; }
         public StringList GetRecordContent(GDMRecord record) { return null; }
         public string GetRecordName(GDMRecord record, bool signed) { return string.Empty; }
-        public IListManager GetRecordsListManByType(GDMRecordType recType) { return null; }
+        public IRecordsListModel GetRecordsListManByType(GDMRecordType recType) { return null; }
         public GDMIndividualRecord GetSelectedPerson() { return null; }
         public GDMRecordType GetSelectedRecordType() { return GDMRecordType.rtIndividual; }
         public void RefreshLists(bool columnsChanged) { }

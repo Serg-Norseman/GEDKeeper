@@ -36,11 +36,11 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class PersonsFilterDlgController : DialogController<IPersonsFilterDlg>
     {
-        private readonly IndividualListMan fListMan;
+        private readonly IndividualListModel fListMan;
 
-        public PersonsFilterDlgController(IPersonsFilterDlg view, IListManager listMan) : base(view)
+        public PersonsFilterDlgController(IPersonsFilterDlg view, IRecordsListModel listMan) : base(view)
         {
-            fListMan = (IndividualListMan)listMan;
+            fListMan = (IndividualListModel)listMan;
         }
 
         private static void SaveFilter(string flt, StringList filters)

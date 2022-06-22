@@ -26,37 +26,29 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class CommunicationListMan : ListManager<GDMCommunicationRecord>
+    public sealed class FamilyListModel : RecordsListModel<GDMFamilyRecord>
     {
         public enum ColumnType
         {
             ctXRefNum,
-            ctCommName,
-            ctCorresponder,
-            ctCommType,
-            ctDate,
+            ctFamilyStr,
+            ctMarriageDate,
             ctChangeDate
         }
 
 
-        private GDMCommunicationRecord fRec;
-
-
-        public CommunicationListMan(IBaseContext baseContext) :
-            base(baseContext, CreateCommunicationListColumns(), GDMRecordType.rtCommunication)
+        public FamilyListModel(IBaseContext baseContext) :
+            base(baseContext, CreateFamilyListColumns(), GDMRecordType.rtFamily)
         {
         }
 
-        public static ListColumns<GDMCommunicationRecord> CreateCommunicationListColumns()
+        public static ListColumns<GDMFamilyRecord> CreateFamilyListColumns()
         {
-            var result = new ListColumns<GDMCommunicationRecord>();
+            var result = new ListColumns<GDMFamilyRecord>();
 
-            // not to change the order of these lines in their changes
             result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Theme, DataType.dtString, 300, true, true);
-            result.AddColumn(LSID.LSID_Corresponder, DataType.dtString, 200, true);
-            result.AddColumn(LSID.LSID_Type, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_Date, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_Spouses, DataType.dtString, 300, true, true);
+            result.AddColumn(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
@@ -65,16 +57,11 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fRec.CommName, QuickFilter);
+            bool res = (fBaseContext.IsRecordAccess(fFetchedRec.Restriction) && IsMatchesMask(GKUtils.GetFamilyString(fBaseContext.Tree, fFetchedRec), QuickFilter));
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
-        }
-
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (GDMCommunicationRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -82,27 +69,19 @@ namespace GKCore.Lists
             object result = null;
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
-                    result = fRec.GetId();
+                    result = fFetchedRec.GetId();
                     break;
 
-                case ColumnType.ctCommName:
-                    result = fRec.CommName;
+                case ColumnType.ctFamilyStr:
+                    result = GKUtils.GetFamilyString(fBaseContext.Tree, fFetchedRec);
                     break;
 
-                case ColumnType.ctCorresponder:
-                    result = GKUtils.GetCorresponderStr(fBaseContext.Tree, fRec, false);
-                    break;
-
-                case ColumnType.ctCommType:
-                    result = LangMan.LS(GKData.CommunicationNames[(int)fRec.CommunicationType]);
-                    break;
-
-                case ColumnType.ctDate:
-                    result = GetDateValue(fRec.Date, isVisible);
+                case ColumnType.ctMarriageDate:
+                    result = GetDateValue(GKUtils.GetMarriageDate(fFetchedRec), isVisible);
                     break;
 
                 case ColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

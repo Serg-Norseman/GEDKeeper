@@ -73,12 +73,12 @@ namespace GKUI.Components
         }
 
 
-        private IListManager fListMan;
+        private IRecordsListModel fListMan;
         private ObservableCollection<FilterConditionRow> fCollection;
         private string[] fFields;
 
 
-        public IListManager ListMan
+        public IRecordsListModel ListMan
         {
             get {
                 return fListMan;

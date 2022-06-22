@@ -30,7 +30,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SourceListMan : ListManager<GDMSourceRecord>
+    public sealed class SourceListModel : RecordsListModel<GDMSourceRecord>
     {
         public enum ColumnType
         {
@@ -42,10 +42,7 @@ namespace GKCore.Lists
         }
 
 
-        private GDMSourceRecord fRec;
-
-
-        public SourceListMan(IBaseContext baseContext) :
+        public SourceListModel(IBaseContext baseContext) :
             base(baseContext, CreateSourceListColumns(), GDMRecordType.rtSource)
         {
         }
@@ -66,16 +63,11 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fRec.ShortTitle, QuickFilter);
+            bool res = IsMatchesMask(fFetchedRec.ShortTitle, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
-        }
-
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (GDMSourceRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -83,23 +75,23 @@ namespace GKCore.Lists
             object result = null;
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
-                    result = fRec.GetId();
+                    result = fFetchedRec.GetId();
                     break;
 
                 case ColumnType.ctShortName:
-                    result = fRec.ShortTitle.Trim();
+                    result = fFetchedRec.ShortTitle.Trim();
                     break;
 
                 case ColumnType.ctAuthor:
-                    result = fRec.Originator.Lines.Text.Trim();
+                    result = fFetchedRec.Originator.Lines.Text.Trim();
                     break;
 
                 case ColumnType.ctTitle:
-                    result = fRec.Title.Lines.Text.Trim();
+                    result = fFetchedRec.Title.Lines.Text.Trim();
                     break;
 
                 case ColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
@@ -110,9 +102,11 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SourceRepositoriesSublistModel : SheetModel<GDMRepositoryCitation>
+    public sealed class SourceRepositoriesListModel : SheetModel<GDMRepositoryCitation>
     {
-        public SourceRepositoriesSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        private GDMRepositoryRecord fRepoRec;
+
+        public SourceRepositoriesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
@@ -121,32 +115,39 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMRepositoryCitation aRec)
+        {
+            base.Fetch(aRec);
+            fRepoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fRepoRec.RepositoryName;
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var source = fDataOwner as GDMSourceRecord;
-            if (fSheetList == null || source == null) return;
+            if (source == null) return;
 
             try {
-                fSheetList.ListView.BeginUpdate();
-                fSheetList.ListView.ClearItems();
-
-                foreach (GDMRepositoryCitation repCit in source.RepositoryCitations) {
-                    GDMRepositoryRecord rep = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repCit);
-                    if (rep == null) continue;
-
-                    fSheetList.ListView.AddItem(repCit, new object[] { rep.RepositoryName });
-                }
-
-                fSheetList.ListView.EndUpdate();
+                UpdateStructList(source.RepositoryCitations);
             } catch (Exception ex) {
-                Logger.WriteError("SourceRepositoriesSublistModel.UpdateContents()", ex);
+                Logger.WriteError("SourceRepositoriesListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var source = fDataOwner as GDMSourceRecord;
-            if (fBaseWin == null || fSheetList == null || source == null) return;
+            if (fBaseWin == null || source == null) return;
 
             GDMRepositoryCitation cit = eArgs.ItemData as GDMRepositoryCitation;
 

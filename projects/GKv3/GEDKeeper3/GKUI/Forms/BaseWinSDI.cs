@@ -235,7 +235,7 @@ namespace GKUI.Forms
             recView.SelectedItemsChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
             recView.ContextMenu = contextMenu;
-            recView.ListMan = ListManager<GDMRecord>.Create(fContext, recType);
+            recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType);
 
             Splitter spl = new Splitter();
             spl.Panel1 = recView;
@@ -403,7 +403,7 @@ namespace GKUI.Forms
             return fController.GetHyperViewByType(recType);
         }
 
-        public IListManager GetRecordsListManByType(GDMRecordType recType)
+        public IRecordsListModel GetRecordsListManByType(GDMRecordType recType)
         {
             return fController.GetRecordsListManByType(recType);
         }

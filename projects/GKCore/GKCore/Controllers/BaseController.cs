@@ -452,7 +452,7 @@ namespace GKCore.Controllers
         {
             baseWin.Context.ImportNames(indivRec);
 
-            IListManager listMan = baseWin.GetRecordsListManByType(GDMRecordType.rtIndividual);
+            IRecordsListModel listMan = baseWin.GetRecordsListManByType(GDMRecordType.rtIndividual);
             if (listMan == null) return;
 
             IndividualListFilter iFilter = (IndividualListFilter)listMan.Filter;

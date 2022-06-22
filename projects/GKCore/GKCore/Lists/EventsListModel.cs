@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -51,38 +51,44 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fStructList.IndexOf(fFetchedRec) + 1;
+                    break;
+                case 1:
+                    result = GKUtils.GetEventName(fFetchedRec);
+                    break;
+                case 2:
+                    result = new GDMDateItem(fFetchedRec.Date.Value);
+                    break;
+                case 3:
+                    if (fPersonsMode) {
+                        string st = fFetchedRec.Place.StringValue;
+                        if (fFetchedRec.StringValue != "") {
+                            st = st + " [" + fFetchedRec.StringValue + "]";
+                        }
+                        result = st;
+                    } else {
+                        result = fFetchedRec.Place.StringValue;
+                    }
+                    break;
+                case 4:
+                    result = GKUtils.GetEventCause(fFetchedRec);
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var dataOwner = fDataOwner as GDMRecordWithEvents;
-            if (fSheetList == null || dataOwner == null) return;
+            if (dataOwner == null) return;
 
             try {
-                fSheetList.ListView.ClearItems();
-
-                for (int i = 0; i < dataOwner.Events.Count; i++) {
-                    GDMCustomEvent evt = dataOwner.Events[i];
-
-                    object[] itemsData = new object[5];
-                    itemsData[0] = (i + 1);
-                    itemsData[1] = GKUtils.GetEventName(evt);
-                    itemsData[2] = new GDMDateItem(evt.Date.Value);
-                    if (fPersonsMode) {
-                        string st = evt.Place.StringValue;
-                        if (evt.StringValue != "") {
-                            st = st + " [" + evt.StringValue + "]";
-                        }
-                        itemsData[3] = st;
-                    } else {
-                        itemsData[3] = evt.Place.StringValue;
-                    }
-                    itemsData[4] = GKUtils.GetEventCause(evt);
-
-                    fSheetList.ListView.AddItem(evt, itemsData);
-                }
-
-                fSheetList.ListView.ResizeColumn(1);
-                fSheetList.ListView.ResizeColumn(2);
-                fSheetList.ListView.ResizeColumn(3);
+                UpdateStructList(dataOwner.Events);
             } catch (Exception ex) {
                 Logger.WriteError("EventsListModel.UpdateContents()", ex);
             }
@@ -91,7 +97,7 @@ namespace GKCore.Lists
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             GDMRecordWithEvents record = fDataOwner as GDMRecordWithEvents;
-            if (fBaseWin == null || fSheetList == null || record == null) return;
+            if (fBaseWin == null || record == null) return;
 
             GDMCustomEvent evt = eArgs.ItemData as GDMCustomEvent;
 

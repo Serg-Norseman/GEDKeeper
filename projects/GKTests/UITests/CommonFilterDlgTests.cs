@@ -39,7 +39,7 @@ namespace GKUI.Forms
     public class CommonFilterDlgTests : CustomWindowTest
     {
         private IBaseContext fContext;
-        private IListManager fListMan;
+        private IRecordsListModel fListMan;
         private IBaseWindow fBase;
         private CommonFilterDlg fDialog;
 
@@ -50,7 +50,7 @@ namespace GKUI.Forms
 
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
-            fListMan = new IndividualListMan(fContext);
+            fListMan = new IndividualListModel(fContext);
 
             fDialog = new CommonFilterDlg(fBase, fListMan);
             fDialog.Show();
@@ -90,7 +90,7 @@ namespace GKUI.Forms
             CommonFilterDlg cfDlg = ((CommonFilterDlg)form);
             Assert.IsNotNull(cfDlg.Base);
 
-            IListManager listMan = cfDlg.ListMan;
+            IRecordsListModel listMan = cfDlg.ListMan;
 
             SelectTab("tabsFilters", form, 0);
 

@@ -29,12 +29,12 @@ namespace GKUI.Components
 {
     public class FilterGridView : DataGridView, IFilterGridView
     {
-        private readonly IListManager fListMan;
+        private readonly IRecordsListModel fListMan;
         private string[] fFields;
         private MaskedTextBox fMaskedTextBox;
 
 
-        public FilterGridView(IListManager listMan)
+        public FilterGridView(IRecordsListModel listMan)
         {
             AllowUserToResizeRows = false;
             ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;

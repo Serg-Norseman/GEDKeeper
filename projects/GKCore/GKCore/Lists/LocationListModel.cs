@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Globalization;
 using GDModel;
 using GKCore.Interfaces;
 
@@ -26,30 +27,34 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class RepositoryListMan : ListManager<GDMRepositoryRecord>
+    public sealed class LocationListModel : RecordsListModel<GDMLocationRecord>
     {
         public enum ColumnType
         {
             ctXRefNum,
             ctName,
+            ctLati,
+            ctLong,
             ctChangeDate
         }
 
 
-        private GDMRepositoryRecord fRec;
-
-
-        public RepositoryListMan(IBaseContext baseContext) :
-            base(baseContext, CreateRepositoryListColumns(), GDMRecordType.rtRepository)
+        public LocationListModel(IBaseContext baseContext) :
+            base(baseContext, CreateLocationListColumns(), GDMRecordType.rtLocation)
         {
         }
 
-        public static ListColumns<GDMRepositoryRecord> CreateRepositoryListColumns()
+        public static ListColumns<GDMLocationRecord> CreateLocationListColumns()
         {
-            var result = new ListColumns<GDMRepositoryRecord>();
+            var result = new ListColumns<GDMLocationRecord>();
+
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
 
             result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Repository, DataType.dtString, 400, true, true);
+            result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true, true);
+            result.AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
+            result.AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
@@ -58,16 +63,11 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fRec.RepositoryName, QuickFilter);
+            bool res = IsMatchesMask(fFetchedRec.LocationName, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
-        }
-
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (GDMRepositoryRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -75,15 +75,23 @@ namespace GKCore.Lists
             object result = null;
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
-                    result = fRec.GetId();
+                    result = fFetchedRec.GetId();
                     break;
 
                 case ColumnType.ctName:
-                    result = fRec.RepositoryName;
+                    result = fFetchedRec.LocationName;
+                    break;
+
+                case ColumnType.ctLati:
+                    result = fFetchedRec.Map.Lati;
+                    break;
+
+                case ColumnType.ctLong:
+                    result = fFetchedRec.Map.Long;
                     break;
 
                 case ColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

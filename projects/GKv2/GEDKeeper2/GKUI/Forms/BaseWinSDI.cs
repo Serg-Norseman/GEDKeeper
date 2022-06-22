@@ -337,7 +337,7 @@ namespace GKUI.Forms
             return fController.GetHyperViewByType(recType);
         }
 
-        public IListManager GetRecordsListManByType(GDMRecordType recType)
+        public IRecordsListModel GetRecordsListManByType(GDMRecordType recType)
         {
             return fController.GetRecordsListManByType(recType);
         }

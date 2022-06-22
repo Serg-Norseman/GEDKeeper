@@ -79,7 +79,7 @@ namespace GKCore.Lists
     }
 
 
-    public sealed class IndividualListMan : ListManager<GDMIndividualRecord>
+    public sealed class IndividualListModel : RecordsListModel<GDMIndividualRecord>
     {
         public enum ColumnType
         {
@@ -112,13 +112,12 @@ namespace GKCore.Lists
         }
 
 
-        private GDMIndividualRecord fRec;
         private GDMGroupRecord filter_grp;
         private UDN filter_abd;
         private GDMSourceRecord filter_source;
 
 
-        public IndividualListMan(IBaseContext baseContext) :
+        public IndividualListModel(IBaseContext baseContext) :
             base(baseContext, CreateIndividualListColumns(), GDMRecordType.rtIndividual)
         {
         }
@@ -169,9 +168,9 @@ namespace GKCore.Lists
 
             bool result = false;
 
-            if (fRec.HasEvents) {
+            if (fFetchedRec.HasEvents) {
                 bool includeAddr = GlobalOptions.Instance.PlacesWithAddress;
-                var events = fRec.Events;
+                var events = fFetchedRec.Events;
                 for (int i = 0, num = events.Count; i < num; i++) {
                     string place = GKUtils.GetPlaceStr(events[i], includeAddr);
                     result = IsMatchesMask(place, fltResidence);
@@ -188,8 +187,8 @@ namespace GKCore.Lists
 
             bool result = false;
 
-            if (fRec.HasEvents) {
-                var events = fRec.Events;
+            if (fFetchedRec.HasEvents) {
+                var events = fFetchedRec.Events;
                 for (int i = 0, num = events.Count; i < num; i++) {
                     result = IsMatchesMask(events[i].StringValue, fltEventVal);
                     if (result) break;
@@ -205,11 +204,11 @@ namespace GKCore.Lists
 
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
-            if ((iFilter.Sex == GDMSex.svUnknown || fRec.Sex == iFilter.Sex)
+            if ((iFilter.Sex == GDMSex.svUnknown || fFetchedRec.Sex == iFilter.Sex)
                 && (IsMatchesMask(buf_fullname, iFilter.Name))
                 && (IsMatchesPlace(iFilter.Residence))
                 && (IsMatchesEventVal(iFilter.EventVal))
-                && (!iFilter.PatriarchOnly || fRec.Patriarch))
+                && (!iFilter.PatriarchOnly || fFetchedRec.Patriarch))
             {
                 bool isLive = (buf_dd == null);
 
@@ -237,15 +236,15 @@ namespace GKCore.Lists
                         break;
 
                     case FilterGroupMode.None:
-                        if (fRec.HasGroups) return false;
+                        if (fFetchedRec.HasGroups) return false;
                         break;
 
                     case FilterGroupMode.Any:
-                        if (!fRec.HasGroups) return false;
+                        if (!fFetchedRec.HasGroups) return false;
                         break;
 
                     case FilterGroupMode.Selected:
-                        if (fRec.IndexOfGroup(filter_grp) < 0) return false;
+                        if (fFetchedRec.IndexOfGroup(filter_grp) < 0) return false;
                         break;
                 }
 
@@ -254,15 +253,15 @@ namespace GKCore.Lists
                         break;
 
                     case FilterGroupMode.None:
-                        if (fRec.HasSourceCitations) return false;
+                        if (fFetchedRec.HasSourceCitations) return false;
                         break;
 
                     case FilterGroupMode.Any:
-                        if (!fRec.HasSourceCitations) return false;
+                        if (!fFetchedRec.HasSourceCitations) return false;
                         break;
 
                     case FilterGroupMode.Selected:
-                        if (fRec.IndexOfSource(filter_source) < 0) return false;
+                        if (fFetchedRec.IndexOfSource(filter_source) < 0) return false;
                         break;
                 }
 
@@ -274,9 +273,9 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction) && IsMatchesMask(buf_fullname, QuickFilter));
+            bool res = (fBaseContext.IsRecordAccess(fFetchedRec.Restriction) && IsMatchesMask(buf_fullname, QuickFilter));
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec) && CheckSpecificFilter();
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec) && CheckSpecificFilter();
 
             return res;
         }
@@ -286,7 +285,7 @@ namespace GKCore.Lists
             object result = null;
 
             if (colSubtype == -1) {
-                result = GKUtils.GetNameString(fRec, true, false);
+                result = GKUtils.GetNameString(fFetchedRec, true, false);
             } else {
                 NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
                 NamePartsRet parts;
@@ -294,11 +293,11 @@ namespace GKCore.Lists
 
                 switch (defNameFormat) {
                     case NameFormat.nfFNP:
-                        result = GKUtils.GetNameString(fRec, GlobalOptions.Instance.SurnameFirstInOrder, false, defLang);
+                        result = GKUtils.GetNameString(fFetchedRec, GlobalOptions.Instance.SurnameFirstInOrder, false, defLang);
                         break;
 
                     case NameFormat.nfF_NP:
-                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fRec, true, defLang);
+                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fFetchedRec, true, defLang);
                         switch (colSubtype) {
                             case 0:
                                 result = parts.Surname;
@@ -310,7 +309,7 @@ namespace GKCore.Lists
                         break;
 
                     case NameFormat.nfF_N_P:
-                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fRec, true, defLang);
+                        parts = GKUtils.GetNameParts(fBaseContext.Tree, fFetchedRec, true, defLang);
                         switch (colSubtype) {
                             case 0:
                                 result = parts.Surname;
@@ -335,11 +334,11 @@ namespace GKCore.Lists
 
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
-                    result = fRec.GetId();
+                    result = fFetchedRec.GetId();
                     break;
 
                 case ColumnType.ctPatriarch:
-                    result = ((fRec.Patriarch) ? "*" : " ");
+                    result = ((fFetchedRec.Patriarch) ? "*" : " ");
                     break;
 
                 case ColumnType.ctName:
@@ -347,11 +346,11 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctNick:
-                    result = GKUtils.GetNickString(fRec);
+                    result = GKUtils.GetNickString(fFetchedRec);
                     break;
 
                 case ColumnType.ctSex:
-                    result = GKUtils.SexChar(fRec.Sex);
+                    result = GKUtils.SexChar(fFetchedRec.Sex);
                     break;
 
                 case ColumnType.ctBirthDate:
@@ -375,20 +374,20 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctAge:
-                    result = (isVisible) ? (object)GKUtils.GetAgeStr(fRec, -1) : GKUtils.GetAge(fRec, -1);
+                    result = (isVisible) ? (object)GKUtils.GetAgeStr(fFetchedRec, -1) : GKUtils.GetAge(fFetchedRec, -1);
                     break;
 
                 case ColumnType.ctLifeExpectancy:
-                    result = (isVisible) ? (object)GKUtils.GetLifeExpectancyStr(fRec) : GKUtils.GetLifeExpectancy(fRec);
+                    result = (isVisible) ? (object)GKUtils.GetLifeExpectancyStr(fFetchedRec) : GKUtils.GetLifeExpectancy(fFetchedRec);
                     break;
 
                 case ColumnType.ctDaysForBirth:
-                    int days = GKUtils.GetDaysForBirth(fRec);
+                    int days = GKUtils.GetDaysForBirth(fFetchedRec);
                     result = (days >= 0) ? (object)days : null;
                     break;
 
                 case ColumnType.ctGroups:
-                    result = GKUtils.GetGroupsStr(fBaseContext.Tree, fRec);
+                    result = GKUtils.GetGroupsStr(fBaseContext.Tree, fFetchedRec);
                     break;
 
                 case ColumnType.ctReligion:
@@ -428,11 +427,11 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
 
                 case ColumnType.ctBookmark:
-                    result = ((fRec.Bookmark) ? "*" : " ");
+                    result = ((fFetchedRec.Bookmark) ? "*" : " ");
                     break;
 
                 case ColumnType.ctTitle:
@@ -478,11 +477,11 @@ namespace GKCore.Lists
         private string buf_mili_rank;
         private string buf_title;
 
-        public override void Fetch(GDMRecord aRec)
+        public override void Fetch(GDMIndividualRecord aRec)
         {
-            fRec = (GDMIndividualRecord)aRec;
+            base.Fetch(aRec);
 
-            buf_fullname = GKUtils.GetNameString(fRec, true, false);
+            buf_fullname = GKUtils.GetNameString(fFetchedRec, true, false);
             buf_bd = null;
             buf_dd = null;
             buf_residence = "";
@@ -499,9 +498,9 @@ namespace GKCore.Lists
 
             GlobalOptions gOptions = GlobalOptions.Instance;
 
-            int num = fRec.Events.Count;
+            int num = fFetchedRec.Events.Count;
             for (int i = 0; i < num; i++) {
-                GDMCustomEvent ev = fRec.Events[i];
+                GDMCustomEvent ev = fFetchedRec.Events[i];
                 GEDCOMTagType evtType = ev.GetTagType();
 
                 if (evtType == GEDCOMTagType.BIRT && buf_bd == null) {
@@ -539,9 +538,9 @@ namespace GKCore.Lists
             var item = base.CreateListItem(itemIndex, rowData, handler);
 
             GlobalOptions gOptions = GlobalOptions.Instance;
-            if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons)) {
+            if ((fFetchedRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons)) {
                 item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnparentedColor));
-            } else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons)) {
+            } else if ((fFetchedRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons)) {
                 item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnmarriedColor));
             }
 
@@ -550,7 +549,7 @@ namespace GKCore.Lists
 
         public override void UpdateColumns(IListViewEx listView)
         {
-            ColumnsMap_Clear();
+            fColumnsMap.Clear();
 
             NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
             IListColumns columns = this.ListColumns;
@@ -586,9 +585,11 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GroupsSublistModel : SheetModel<GDMPointer>
+    public sealed class IndiGroupsListModel : SheetModel<GDMPointer>
     {
-        public GroupsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        private GDMGroupRecord fGroupRec;
+
+        public IndiGroupsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
@@ -597,34 +598,39 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMPointer aRec)
+        {
+            base.Fetch(aRec);
+            fGroupRec = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fGroupRec.GroupName;
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (fSheetList == null || iRec == null) return;
+            if (iRec == null || !iRec.HasGroups) return;
 
             try {
-                fSheetList.ListView.BeginUpdate();
-                fSheetList.ListView.ClearItems();
-
-                if (iRec.HasGroups) {
-                    foreach (GDMPointer ptr in iRec.Groups) {
-                        var grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(ptr);
-                        if (grp != null) {
-                            fSheetList.ListView.AddItem(grp, new object[] { grp.GroupName });
-                        }
-                    }
-                }
-
-                fSheetList.ListView.EndUpdate();
+                UpdateStructList(iRec.Groups);
             } catch (Exception ex) {
-                Logger.WriteError("GroupsSublistModel.UpdateContent()", ex);
+                Logger.WriteError("IndiGroupsListModel.UpdateContent()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+            if (fBaseWin == null || iRec == null) return;
 
             GDMGroupRecord groupRec = eArgs.ItemData as GDMGroupRecord;
 
@@ -658,9 +664,9 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class NamesSublistModel : SheetModel<GDMPersonalName>
+    public sealed class IndiNamesListModel : SheetModel<GDMPersonalName>
     {
-        public NamesSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public IndiNamesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
@@ -672,31 +678,39 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = GKUtils.GetNameString((GDMIndividualRecord)fDataOwner, fFetchedRec, true, false);
+                    break;
+                case 1:
+                    result = LangMan.LS(GKData.NameTypes[(int)fFetchedRec.NameType]);
+                    break;
+                case 2:
+                    result = GEDCOMUtils.GetLanguageStr(fFetchedRec.Language);
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (fSheetList == null || iRec == null) return;
+            if (iRec == null) return;
 
             try {
-                fSheetList.ListView.BeginUpdate();
-                fSheetList.ListView.ClearItems();
-
-                foreach (GDMPersonalName pn in iRec.PersonalNames) {
-                    string lang = GEDCOMUtils.GetLanguageStr(pn.Language);
-                    fSheetList.ListView.AddItem(pn, new object[] { GKUtils.GetNameString(iRec, pn, true, false),
-                                                          LangMan.LS(GKData.NameTypes[(int)pn.NameType]), lang });
-                }
-
-                fSheetList.ListView.EndUpdate();
+                UpdateStructList(iRec.PersonalNames);
             } catch (Exception ex) {
-                Logger.WriteError("NamesSublistModel.UpdateContents()", ex);
+                Logger.WriteError("IndiNamesListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+            if (fBaseWin == null || iRec == null) return;
 
             GDMPersonalName persName = eArgs.ItemData as GDMPersonalName;
 
@@ -763,9 +777,11 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ParentsSublistModel : SheetModel<GDMChildToFamilyLink>
+    public sealed class IndiParentsListModel : SheetModel<GDMChildToFamilyLink>
     {
-        public ParentsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        private GDMFamilyRecord fFamRec;
+
+        public IndiParentsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
@@ -776,34 +792,42 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMChildToFamilyLink aRec)
+        {
+            base.Fetch(aRec);
+            fFamRec = fBaseContext.Tree.GetPtrValue(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = GKUtils.GetFamilyString(fBaseContext.Tree, fFamRec);
+                    break;
+                case 1:
+                    result = LangMan.LS(GKData.ParentTypes[(int)fFetchedRec.PedigreeLinkageType]);
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (fSheetList == null || iRec == null) return;
+            if (iRec == null) return;
 
             try {
-                fSheetList.ListView.BeginUpdate();
-                fSheetList.ListView.ClearItems();
-
-                foreach (GDMChildToFamilyLink cfLink in iRec.ChildToFamilyLinks) {
-                    GDMFamilyRecord famRec = fBaseContext.Tree.GetPtrValue(cfLink);
-
-                    fSheetList.ListView.AddItem(cfLink, new object[] {
-                        GKUtils.GetFamilyString(fBaseContext.Tree, famRec),
-                        LangMan.LS(GKData.ParentTypes[(int)cfLink.PedigreeLinkageType])
-                    });
-                }
-
-                fSheetList.ListView.EndUpdate();
+                UpdateStructList(iRec.ChildToFamilyLinks);
             } catch (Exception ex) {
-                Logger.WriteError("ParentsSublistModel.UpdateContents()", ex);
+                Logger.WriteError("IndiParentsListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+            if (fBaseWin == null || iRec == null) return;
 
             GDMChildToFamilyLink cfLink = eArgs.ItemData as GDMChildToFamilyLink;
 
@@ -861,9 +885,12 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SpousesSublistModel : SheetModel<GDMSpouseToFamilyLink>
+    public sealed class IndiSpousesListModel : SheetModel<GDMSpouseToFamilyLink>
     {
-        public SpousesSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        private GDMFamilyRecord fFamilyRec;
+        private string fRelName;
+
+        public IndiSpousesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
@@ -875,51 +902,66 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMSpouseToFamilyLink aRec)
+        {
+            base.Fetch(aRec);
+
+            var iRec = (GDMIndividualRecord)fDataOwner;
+
+            fFamilyRec = fBaseContext.Tree.GetPtrValue(fFetchedRec);
+            if (fFamilyRec == null) {
+                fRelName = string.Empty;
+                return;
+            }
+
+            GDMIndividualRecord relPerson;
+
+            if (iRec.Sex == GDMSex.svMale) {
+                relPerson = fBaseContext.Tree.GetPtrValue(fFamilyRec.Wife);
+                fRelName = LangMan.LS(LSID.LSID_UnkFemale);
+            } else {
+                relPerson = fBaseContext.Tree.GetPtrValue(fFamilyRec.Husband);
+                fRelName = LangMan.LS(LSID.LSID_UnkMale);
+            }
+
+            if (relPerson != null) {
+                fRelName = GKUtils.GetNameString(relPerson, true, false);
+            }
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fStructList.IndexOf(fFetchedRec) + 1;
+                    break;
+                case 1:
+                    result = fRelName;
+                    break;
+                case 2:
+                    result = new GDMDateItem(GKUtils.GetMarriageDate(fFamilyRec));
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (fSheetList == null || iRec == null) return;
+            if (iRec == null) return;
 
             try {
-                fSheetList.ListView.BeginUpdate();
-                fSheetList.ListView.ClearItems();
-
-                int idx = 0;
-                foreach (GDMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks) {
-                    idx += 1;
-
-                    GDMFamilyRecord family = fBaseContext.Tree.GetPtrValue(spLink);
-                    if (family == null) continue;
-
-                    GDMIndividualRecord relPerson;
-                    string relName;
-
-                    if (iRec.Sex == GDMSex.svMale) {
-                        relPerson = fBaseContext.Tree.GetPtrValue(family.Wife);
-                        relName = LangMan.LS(LSID.LSID_UnkFemale);
-                    } else {
-                        relPerson = fBaseContext.Tree.GetPtrValue(family.Husband);
-                        relName = LangMan.LS(LSID.LSID_UnkMale);
-                    }
-
-                    if (relPerson != null) {
-                        relName = GKUtils.GetNameString(relPerson, true, false);
-                    }
-
-                    fSheetList.ListView.AddItem(family, new object[] { idx,
-                                           relName, new GDMDateItem(GKUtils.GetMarriageDate(family)) } );
-                }
-
-                fSheetList.ListView.EndUpdate();
+                UpdateStructList(iRec.SpouseToFamilyLinks);
             } catch (Exception ex) {
-                Logger.WriteError("SpousesSublistModel.UpdateContents()", ex);
+                Logger.WriteError("IndiSpousesListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+            if (fBaseWin == null || iRec == null) return;
 
             GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
 
@@ -976,9 +1018,9 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class URefsSublistModel : SheetModel<GDMUserReference>
+    public sealed class URefsListModel : SheetModel<GDMUserReference>
     {
-        public URefsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public URefsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
@@ -988,31 +1030,36 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fFetchedRec.StringValue;
+                    break;
+                case 1:
+                    result = fFetchedRec.ReferenceType;
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (fSheetList == null || iRec == null) return;
+            if (iRec == null || !iRec.HasUserReferences) return;
 
             try {
-                fSheetList.ListView.BeginUpdate();
-                fSheetList.ListView.ClearItems();
-
-                if (iRec.HasUserReferences) {
-                    foreach (GDMUserReference uref in iRec.UserReferences) {
-                        fSheetList.ListView.AddItem(uref, new object[] { uref.StringValue, uref.ReferenceType });
-                    }
-                }
-
-                fSheetList.ListView.EndUpdate();
+                UpdateStructList(iRec.UserReferences);
             } catch (Exception ex) {
-                Logger.WriteError("URefsSublistModel.UpdateContents()", ex);
+                Logger.WriteError("URefsListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (fBaseWin == null || fSheetList == null || iRec == null) return;
+            if (fBaseWin == null || iRec == null) return;
 
             GDMUserReference userRef = eArgs.ItemData as GDMUserReference;
 

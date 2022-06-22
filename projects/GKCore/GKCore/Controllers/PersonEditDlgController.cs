@@ -101,11 +101,11 @@ namespace GKCore.Controllers
             fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
             fView.SourcesList.ListModel = new SourceCitationsListModel(baseWin, fLocalUndoman);
             fView.AssociationsList.ListModel = new AssociationsListModel(baseWin, fLocalUndoman);
-            fView.GroupsList.ListModel = new GroupsSublistModel(baseWin, fLocalUndoman);
-            fView.NamesList.ListModel = new NamesSublistModel(baseWin, fLocalUndoman);
-            fView.SpousesList.ListModel = new SpousesSublistModel(baseWin, fLocalUndoman);
-            fView.UserRefList.ListModel = new URefsSublistModel(baseWin, fLocalUndoman);
-            fView.ParentsList.ListModel = new ParentsSublistModel(baseWin, fLocalUndoman);
+            fView.GroupsList.ListModel = new IndiGroupsListModel(baseWin, fLocalUndoman);
+            fView.NamesList.ListModel = new IndiNamesListModel(baseWin, fLocalUndoman);
+            fView.SpousesList.ListModel = new IndiSpousesListModel(baseWin, fLocalUndoman);
+            fView.UserRefList.ListModel = new URefsListModel(baseWin, fLocalUndoman);
+            fView.ParentsList.ListModel = new IndiParentsListModel(baseWin, fLocalUndoman);
             fView.ChildrenList.ListModel = new IndividualChildrenListModel(baseWin, fLocalUndoman);
         }
 

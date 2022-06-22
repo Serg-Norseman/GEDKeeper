@@ -63,9 +63,9 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.TasksList.ListModel = new ResTasksSublistModel(baseWin, fLocalUndoman);
-            fView.CommunicationsList.ListModel = new ResCommunicationsSublistModel(baseWin, fLocalUndoman);
-            fView.GroupsList.ListModel = new ResGroupsSublistModel(baseWin, fLocalUndoman);
+            fView.TasksList.ListModel = new ResTasksListModel(baseWin, fLocalUndoman);
+            fView.CommunicationsList.ListModel = new ResCommunicationsListModel(baseWin, fLocalUndoman);
+            fView.GroupsList.ListModel = new ResGroupsListModel(baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
         }
 

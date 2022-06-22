@@ -131,7 +131,7 @@ namespace GKCore
         [Test]
         public void Test_LMGroup()
         {
-            var listManager = new GroupListMan(fContext);
+            var listManager = new GroupListModel(fContext);
             Assert.IsNotNull(listManager);
 
             var grpRec = fContext.Tree.XRefIndex_Find("G1") as GDMGroupRecord;
@@ -156,20 +156,20 @@ namespace GKCore
             IListFilter filter = listManager.Filter;
             IListColumns listColumns = listManager.ListColumns;
 
-            var copyColumns = GroupListMan.CreateGroupListColumns();
+            var copyColumns = GroupListModel.CreateGroupListColumns();
             listColumns.CopyTo(copyColumns);
 
             Assert.Throws(typeof(ArgumentNullException), () => { listColumns.CopyTo(null); });
 
             listManager.QuickFilter = "*";
-            listManager.AddCondition((byte)GroupListMan.ColumnType.ctName, ConditionKind.ck_Contains, "*roup*");
+            listManager.AddCondition((byte)GroupListModel.ColumnType.ctName, ConditionKind.ck_Contains, "*roup*");
             Assert.IsTrue(listManager.CheckFilter());
         }
 
         [Test]
         public void Test_LMCommunication()
         {
-            var listManager = new CommunicationListMan(fContext);
+            var listManager = new CommunicationListModel(fContext);
             Assert.IsNotNull(listManager);
 
             Assert.IsNotNull(listManager.ContentList);
@@ -195,7 +195,7 @@ namespace GKCore
         [Test]
         public void Test_LMFamily()
         {
-            var listManager = new FamilyListMan(fContext);
+            var listManager = new FamilyListModel(fContext);
             Assert.IsNotNull(listManager);
 
             var familyRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
@@ -221,7 +221,7 @@ namespace GKCore
         [Test]
         public void Test_LMIndividual()
         {
-            var listManager = new IndividualListMan(fContext);
+            var listManager = new IndividualListModel(fContext);
             Assert.IsNotNull(listManager);
 
             var individualRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
@@ -257,7 +257,7 @@ namespace GKCore
         [Test]
         public void Test_LMLocation()
         {
-            var listManager = new LocationListMan(fContext);
+            var listManager = new LocationListModel(fContext);
             Assert.IsNotNull(listManager);
 
             var locationRec = fContext.Tree.XRefIndex_Find("L1") as GDMLocationRecord;
@@ -278,7 +278,7 @@ namespace GKCore
         [Test]
         public void Test_LMMultimedia()
         {
-            var listManager = new MultimediaListMan(fContext);
+            var listManager = new MultimediaListModel(fContext);
             Assert.IsNotNull(listManager);
 
             var mediaRec = fContext.Tree.XRefIndex_Find("O1") as GDMMultimediaRecord;
@@ -299,7 +299,7 @@ namespace GKCore
         [Test]
         public void Test_LMNote()
         {
-            var listManager = new NoteListMan(fContext);
+            var listManager = new NoteListModel(fContext);
             Assert.IsNotNull(listManager);
 
             var noteRec = new GDMNoteRecord(null);
@@ -323,7 +323,7 @@ namespace GKCore
         [Test]
         public void Test_LMRepository()
         {
-            var listManager = new RepositoryListMan(fContext);
+            var listManager = new RepositoryListModel(fContext);
             Assert.IsNotNull(listManager);
 
             var repositoryRec = fContext.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
@@ -344,7 +344,7 @@ namespace GKCore
         [Test]
         public void Test_LMResearch()
         {
-            var listManager = new ResearchListMan(fContext);
+            var listManager = new ResearchListModel(fContext);
             Assert.IsNotNull(listManager);
 
             var researchRec = fContext.Tree.XRefIndex_Find("RS1") as GDMResearchRecord;
@@ -365,7 +365,7 @@ namespace GKCore
         [Test]
         public void Test_LMSource()
         {
-            var listManager = new SourceListMan(fContext);
+            var listManager = new SourceListModel(fContext);
             Assert.IsNotNull(listManager);
 
             var sourceRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
@@ -386,7 +386,7 @@ namespace GKCore
         [Test]
         public void Test_LMTask()
         {
-            var listManager = new TaskListMan(fContext);
+            var listManager = new TaskListModel(fContext);
             Assert.IsNotNull(listManager);
 
             var taskRec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;

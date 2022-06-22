@@ -19,10 +19,8 @@
  */
 
 using System.Collections.Generic;
-using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
@@ -33,52 +31,51 @@ namespace GKCore.Interfaces
 
     public interface IListSource
     {
-        EnumSet<RecordAction> AllowedActions { get; }
         IBaseContext BaseContext { get; }
         bool ColumnsHaveBeenChanged { get; set; }
+        ExternalFilterHandler ExternalFilter { get; set; }
+        IListFilter Filter { get; }
+        int FilteredCount { get; }
         IListColumns ListColumns { get; }
+        int TotalCount { get; }
+        string QuickFilter { get; set; }
 
+        void AddCondition(byte columnId, ConditionKind condition, string value);
+        void ChangeColumnWidth(int colIndex, int colWidth);
+        string[] CreateFields();
+        IListItem CreateListItem(int itemIndex, object rowData, CreateListItemHandler handler);
+        bool DeleteItem(object data);
+        DataType GetColumnDataType(int columnId);
+        string GetColumnName(int columnId);
+        ConditionKind GetCondByName(string condName);
+        object GetContentItem(int itemIndex);
+        int GetFieldColumnId(string[] fields, string fieldName);
+        int IndexOfItem(object data);
+        bool IsColumnAutosize(int colIndex);
+        void SortContents(int sortColumn, bool sortAscending);
         void UpdateColumns(IListViewEx listView);
         void UpdateContents();
     }
 
 
     public interface IListSource<T> : IListSource
+        where T : GDMTag
     {
     }
 
 
-    public interface IListManager : IListSource
+    public interface IRecordsListModel : IListSource
     {
-        ExternalFilterHandler ExternalFilter { get; set; }
-        IListFilter Filter { get; }
-        int FilteredCount { get; }
-        string QuickFilter { get; set; }
         GDMRecordType RecordType { get; }
-        int TotalCount { get; }
 
-        void AddCondition(byte columnId, ConditionKind condition, string value);
-        DataType GetColumnDataType(int columnId);
-        string GetColumnName(int columnId);
-
-        void ChangeColumnWidth(int colIndex, int colWidth);
-        IListItem CreateListItem(int itemIndex, object rowData, CreateListItemHandler handler);
-        bool DeleteRecord(object data);
-        GDMRecord GetContentItem(int itemIndex);
         List<GDMRecord> GetRecordsList();
-        int IndexOfRecord(object data);
-        bool IsColumnAutosize(int colIndex);
-        void SortContents(int sortColumn, bool sortAscending);
-
-        string[] CreateFields();
-        ConditionKind GetCondByName(string condName);
-        int GetFieldColumnId(string[] fields, string fieldName);
 
         IList<ISearchResult> FindAll(string searchPattern);
     }
 
 
-    public interface IListManager<T> : IListManager, IListSource<T>
+    public interface IRecordsListModel<T> : IRecordsListModel, IListSource<T>
+        where T : GDMRecord
     {
     }
 }

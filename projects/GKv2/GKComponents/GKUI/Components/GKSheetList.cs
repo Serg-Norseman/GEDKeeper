@@ -78,6 +78,7 @@ namespace GKUI.Components
                     fListModel = value;
 
                     if (fListModel != null) {
+                        fList.ListMan = fListModel;
                         fListModel.SheetList = this;
                     }
                 }
@@ -391,15 +392,7 @@ namespace GKUI.Components
         public void UpdateSheet()
         {
             UpdateButtons();
-
-            if (fListModel != null) {
-                if (fList.Columns.Count == 0 || fListModel.ColumnsHaveBeenChanged) {
-                    fList.ClearColumns();
-                    fListModel.UpdateColumns(fList);
-                }
-
-                fListModel.UpdateContents();
-            }
+            fList.UpdateContents();
         }
     }
 }

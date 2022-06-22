@@ -30,7 +30,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GroupListMan : ListManager<GDMGroupRecord>
+    public sealed class GroupListModel : RecordsListModel<GDMGroupRecord>
     {
         public enum ColumnType
         {
@@ -40,10 +40,7 @@ namespace GKCore.Lists
         }
 
 
-        private GDMGroupRecord fRec;
-
-
-        public GroupListMan(IBaseContext baseContext) :
+        public GroupListModel(IBaseContext baseContext) :
             base(baseContext, CreateGroupListColumns(), GDMRecordType.rtGroup)
         {
         }
@@ -62,16 +59,11 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fRec.GroupName, QuickFilter);
+            bool res = IsMatchesMask(fFetchedRec.GroupName, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
-        }
-
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (GDMGroupRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -79,15 +71,15 @@ namespace GKCore.Lists
             object result = null;
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
-                    result = fRec.GetId();
+                    result = fFetchedRec.GetId();
                     break;
 
                 case ColumnType.ctName:
-                    result = fRec.GroupName;
+                    result = fFetchedRec.GroupName;
                     break;
 
                 case ColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
@@ -98,9 +90,11 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GroupMembersSublistModel : SheetModel<GDMIndividualLink>
+    public sealed class GroupMembersListModel : SheetModel<GDMIndividualLink>
     {
-        public GroupMembersSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        private GDMIndividualRecord fMember;
+
+        public GroupMembersListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete /*, RecordAction.raJump*/);
@@ -109,33 +103,39 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMIndividualLink aRec)
+        {
+            base.Fetch(aRec);
+            fMember = fBaseContext.Tree.GetPtrValue(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = GKUtils.GetNameString(fMember, true, false);
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var grp = fDataOwner as GDMGroupRecord;
-            if (fSheetList == null || grp == null) return;
+            if (grp == null) return;
 
             try {
-                fSheetList.ListView.BeginUpdate();
-                fSheetList.ListView.ClearItems();
-
-                var tree = fBaseWin.Context.Tree;
-                foreach (GDMIndividualLink ptrMember in grp.Members) {
-                    GDMIndividualRecord member = tree.GetPtrValue(ptrMember);
-                    if (member == null) continue;
-
-                    fSheetList.ListView.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });
-                }
-
-                fSheetList.ListView.EndUpdate();
+                UpdateStructList(grp.Members);
             } catch (Exception ex) {
-                Logger.WriteError("GroupMembersSublistModel.UpdateContents()", ex);
+                Logger.WriteError("GroupMembersListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var grp = fDataOwner as GDMGroupRecord;
-            if (fBaseWin == null || fSheetList == null || grp == null) return;
+            if (fBaseWin == null || grp == null) return;
 
             GDMIndividualRecord member = eArgs.ItemData as GDMIndividualRecord;
 

@@ -45,7 +45,7 @@ namespace GKCore.Controllers
         public OptionsDlgController(IOptionsDlg view) : base(view)
         {
             fOptions = GlobalOptions.Instance;
-            fTempColumns = IndividualListMan.CreateIndividualListColumns();
+            fTempColumns = IndividualListModel.CreateIndividualListColumns();
 
             FillGeoSearchCountries();
         }

@@ -72,7 +72,7 @@ namespace GKTimeLinePlugin
                 // restore filter's default state
                 if (fBase != null)
                 {
-                    IListManager listMan = fBase.GetRecordsListManByType(GDMRecordType.rtIndividual);
+                    IRecordsListModel listMan = fBase.GetRecordsListManByType(GDMRecordType.rtIndividual);
                     if (listMan != null) {
                         listMan.ExternalFilter = null;
                         ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
@@ -88,7 +88,7 @@ namespace GKTimeLinePlugin
 
                 if (fBase != null)
                 {
-                    IListManager listMan = fBase.GetRecordsListManByType(GDMRecordType.rtIndividual);
+                    IRecordsListModel listMan = fBase.GetRecordsListManByType(GDMRecordType.rtIndividual);
 
                     if (listMan != null)
                     {

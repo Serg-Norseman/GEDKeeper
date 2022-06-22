@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,6 +30,8 @@ namespace GKCore.Lists
 {
     public sealed class NoteLinksListModel : SheetModel<GDMNotes>
     {
+        private GDMLines fNoteLines;
+
         public NoteLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
@@ -40,18 +42,30 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMNotes aRec)
+        {
+            base.Fetch(aRec);
+            fNoteLines = fBaseContext.Tree.GetNoteLines(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fNoteLines.Text.Trim();
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var dataOwner = fDataOwner as IGDMStructWithNotes;
-            if (fSheetList == null || dataOwner == null) return;
+            if (dataOwner == null) return;
 
             try {
-                fSheetList.ListView.ClearItems();
-
-                foreach (GDMNotes note in dataOwner.Notes) {
-                    GDMLines noteLines = fBaseContext.Tree.GetNoteLines(note);
-                    fSheetList.ListView.AddItem(note, new object[] { noteLines.Text.Trim() });
-                }
+                UpdateStructList(dataOwner.Notes);
             } catch (Exception ex) {
                 Logger.WriteError("NoteLinksListModel.UpdateContents()", ex);
             }
@@ -60,7 +74,7 @@ namespace GKCore.Lists
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var dataOwner = fDataOwner as IGDMStructWithNotes;
-            if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
+            if (fBaseWin == null || dataOwner == null) return;
 
             GDMNotes notes = eArgs.ItemData as GDMNotes;
 

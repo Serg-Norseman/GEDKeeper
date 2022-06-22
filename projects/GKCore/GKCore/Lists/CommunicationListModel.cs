@@ -26,30 +26,34 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class NoteListMan : ListManager<GDMNoteRecord>
+    public sealed class CommunicationListModel : RecordsListModel<GDMCommunicationRecord>
     {
         public enum ColumnType
         {
             ctXRefNum,
-            ctText,
+            ctCommName,
+            ctCorresponder,
+            ctCommType,
+            ctDate,
             ctChangeDate
         }
 
 
-        private GDMNoteRecord fRec;
-
-
-        public NoteListMan(IBaseContext baseContext) :
-            base(baseContext, CreateNoteListColumns(), GDMRecordType.rtNote)
+        public CommunicationListModel(IBaseContext baseContext) :
+            base(baseContext, CreateCommunicationListColumns(), GDMRecordType.rtCommunication)
         {
         }
 
-        public static ListColumns<GDMNoteRecord> CreateNoteListColumns()
+        public static ListColumns<GDMCommunicationRecord> CreateCommunicationListColumns()
         {
-            var result = new ListColumns<GDMNoteRecord>();
+            var result = new ListColumns<GDMCommunicationRecord>();
 
+            // not to change the order of these lines in their changes
             result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Note, DataType.dtString, 400, true);
+            result.AddColumn(LSID.LSID_Theme, DataType.dtString, 300, true, true);
+            result.AddColumn(LSID.LSID_Corresponder, DataType.dtString, 200, true);
+            result.AddColumn(LSID.LSID_Type, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_Date, DataType.dtString, 90, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
@@ -58,16 +62,11 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fRec.Lines, QuickFilter);
+            bool res = IsMatchesMask(fFetchedRec.CommName, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
-        }
-
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (GDMNoteRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -75,17 +74,27 @@ namespace GKCore.Lists
             object result = null;
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
-                    result = fRec.GetId();
+                    result = fFetchedRec.GetId();
                     break;
 
-                case ColumnType.ctText:
-                    string noteText = GKUtils.MergeStrings(fRec.Lines);
-                    //string noteText = GKUtils.TruncateStrings(fRec.Note, GKData.NOTE_NAME_MAX_LENGTH);
-                    result = noteText;
+                case ColumnType.ctCommName:
+                    result = fFetchedRec.CommName;
+                    break;
+
+                case ColumnType.ctCorresponder:
+                    result = GKUtils.GetCorresponderStr(fBaseContext.Tree, fFetchedRec, false);
+                    break;
+
+                case ColumnType.ctCommType:
+                    result = LangMan.LS(GKData.CommunicationNames[(int)fFetchedRec.CommunicationType]);
+                    break;
+
+                case ColumnType.ctDate:
+                    result = GetDateValue(fFetchedRec.Date, isVisible);
                     break;
 
                 case ColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

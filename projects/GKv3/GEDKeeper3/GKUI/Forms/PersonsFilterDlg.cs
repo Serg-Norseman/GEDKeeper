@@ -72,7 +72,7 @@ namespace GKUI.Forms
         private readonly PersonsFilterDlgController fController;
 
         private readonly IBaseWindow fBase;
-        private readonly IListManager fListMan;
+        private readonly IRecordsListModel fListMan;
 
         #region View Interface
 
@@ -182,7 +182,7 @@ namespace GKUI.Forms
             txtAliveBeforeDate.Provider = new FixedMaskedTextProvider("00/00/0000");
         }
 
-        public PersonsFilterDlg(IBaseWindow baseWin, IListManager listMan) : this()
+        public PersonsFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan) : this()
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");

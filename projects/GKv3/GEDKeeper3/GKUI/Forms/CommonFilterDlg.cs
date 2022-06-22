@@ -46,14 +46,14 @@ namespace GKUI.Forms
         #endregion
 
         private readonly IBaseWindow fBase;
-        private readonly IListManager fListMan;
+        private readonly IRecordsListModel fListMan;
 
         public IBaseWindow Base
         {
             get { return fBase; }
         }
 
-        public IListManager ListMan
+        public IRecordsListModel ListMan
         {
             get { return fListMan; }
         }
@@ -72,7 +72,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
         }
 
-        public CommonFilterDlg(IBaseWindow baseWin, IListManager listMan) : this()
+        public CommonFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan) : this()
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");

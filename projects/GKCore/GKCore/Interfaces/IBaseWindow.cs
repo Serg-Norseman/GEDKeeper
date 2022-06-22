@@ -52,7 +52,7 @@ namespace GKCore.Interfaces
         void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone);
         List<GDMRecord> GetContentList(GDMRecordType recType);
         StringList GetRecordContent(GDMRecord record);
-        IListManager GetRecordsListManByType(GDMRecordType recType);
+        IRecordsListModel GetRecordsListManByType(GDMRecordType recType);
         GDMIndividualRecord GetSelectedPerson();
         GDMRecordType GetSelectedRecordType();
         GDMRecord GetSelectedRecordEx();

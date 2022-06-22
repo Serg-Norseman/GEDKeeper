@@ -98,29 +98,41 @@ namespace GKCore.Lists
     }
 
 
-    public interface ISheetModel
+    public interface ISheetModel : IListSource
     {
         EnumSet<RecordAction> AllowedActions { get; set; }
         GDMObject DataOwner { get; set; }
         ISheetList SheetList { get; set; }
-        bool ColumnsHaveBeenChanged { get; set; }
 
         void Modify(object sender, ModifyEventArgs eArgs);
-        void UpdateColumns(IListViewEx listView);
-        void UpdateContents();
+    }
+
+
+    public interface ISheetModel<T> : ISheetModel
+        where T : GDMTag
+    {
     }
 
 
     /// <summary>
     /// 
     /// </summary>
-    public abstract class SheetModel<T> : ListSource<T>, ISheetModel
+    public abstract class SheetModel<T> : ListSource<T>, ISheetModel<T>
+        where T : GDMTag
     {
+        private EnumSet<RecordAction> fAllowedActions;
         protected ISheetList fSheetList;
         protected readonly IBaseWindow fBaseWin;
         protected readonly ChangeTracker fUndoman;
         protected GDMObject fDataOwner;
+        protected GDMList<T> fStructList;
 
+
+        public EnumSet<RecordAction> AllowedActions
+        {
+            get { return fAllowedActions; }
+            set { fAllowedActions = value; }
+        }
 
         public GDMObject DataOwner
         {
@@ -129,27 +141,40 @@ namespace GKCore.Lists
             }
             set {
                 fDataOwner = value;
-                UpdateContents();
+                if (fSheetList != null) {
+                    fSheetList.UpdateSheet();
+                }
             }
         }
 
         public ISheetList SheetList
         {
-            get {
-                return fSheetList;
-            }
-            set {
-                if (fSheetList != value) {
-                    fSheetList = value;
-                }
-            }
+            get { return fSheetList; }
+            set { fSheetList = value; }
         }
+
 
         protected SheetModel(IBaseWindow baseWin, ChangeTracker undoman) :
             base(baseWin.Context, new ListColumns<T>())
         {
+            fAllowedActions = new EnumSet<RecordAction>();
             fBaseWin = baseWin;
             fUndoman = undoman;
+        }
+
+        protected void UpdateStructList(GDMList<T> structList)
+        {
+            fStructList = structList;
+
+            int contentSize = fStructList.Count;
+            InitContent(contentSize);
+
+            for (int i = 0; i < contentSize; i++) {
+                T rec = fStructList[i];
+                AddFilteredContent(rec);
+            }
+
+            DoneContent();
         }
 
         public abstract void Modify(object sender, ModifyEventArgs eArgs);

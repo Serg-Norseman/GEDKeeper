@@ -27,7 +27,7 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IListViewEx : IListView
     {
-        IListManager ListMan { get; set; }
+        IListSource ListMan { get; set; }
 
         void DeleteRecord(object data);
         void ResizeColumn(int columnIndex);

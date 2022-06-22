@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,6 +30,8 @@ namespace GKCore.Lists
 {
     public sealed class MediaLinksListModel : SheetModel<GDMMultimediaLink>
     {
+        private GDMFileReferenceWithTitle fFileRef;
+
         public MediaLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
@@ -41,25 +43,35 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMMultimediaLink aRec)
+        {
+            base.Fetch(aRec);
+
+            GDMMultimediaRecord mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(fFetchedRec);
+            fFileRef = (mmRec == null || mmRec.FileReferences.Count == 0) ? null : mmRec.FileReferences[0];
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fFileRef.Title;
+                    break;
+                case 1:
+                    result = LangMan.LS(GKData.MediaTypes[(int)fFileRef.MediaType]);
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var dataOwner = fDataOwner as IGDMStructWithMultimediaLinks;
-            if (fSheetList == null || dataOwner == null) return;
+            if (dataOwner == null) return;
 
             try {
-                fSheetList.ListView.ClearItems();
-
-                foreach (GDMMultimediaLink mmLink in dataOwner.MultimediaLinks) {
-                    GDMMultimediaRecord mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
-                    if (mmRec == null) continue;
-
-                    if (mmRec.FileReferences.Count == 0) continue;
-
-                    GDMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
-
-                    fSheetList.ListView.AddItem(mmLink, new object[] { fileRef.Title,
-                                           LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]) });
-                }
+                UpdateStructList(dataOwner.MultimediaLinks);
             } catch (Exception ex) {
                 Logger.WriteError("MediaLinksListModel.UpdateContents()", ex);
             }
@@ -68,7 +80,7 @@ namespace GKCore.Lists
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var dataOwner = fDataOwner as IGDMStructWithMultimediaLinks;
-            if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
+            if (fBaseWin == null || dataOwner == null) return;
 
             GDMMultimediaLink mmLink = eArgs.ItemData as GDMMultimediaLink;
 

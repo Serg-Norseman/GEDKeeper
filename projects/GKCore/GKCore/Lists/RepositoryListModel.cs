@@ -26,34 +26,27 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class MultimediaListMan : ListManager<GDMMultimediaRecord>
+    public sealed class RepositoryListModel : RecordsListModel<GDMRepositoryRecord>
     {
         public enum ColumnType
         {
             ctXRefNum,
-            ctTitle,
-            ctMediaType,
-            ctFileRef,
+            ctName,
             ctChangeDate
         }
 
 
-        private GDMMultimediaRecord fRec;
-
-
-        public MultimediaListMan(IBaseContext baseContext) :
-            base(baseContext, CreateMultimediaListColumns(), GDMRecordType.rtMultimedia)
+        public RepositoryListModel(IBaseContext baseContext) :
+            base(baseContext, CreateRepositoryListColumns(), GDMRecordType.rtRepository)
         {
         }
 
-        public static ListColumns<GDMMultimediaRecord> CreateMultimediaListColumns()
+        public static ListColumns<GDMRepositoryRecord> CreateRepositoryListColumns()
         {
-            var result = new ListColumns<GDMMultimediaRecord>();
+            var result = new ListColumns<GDMRepositoryRecord>();
 
             result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Title, DataType.dtString, 150, true, true);
-            result.AddColumn(LSID.LSID_Type, DataType.dtString, 85, true);
-            result.AddColumn(LSID.LSID_File, DataType.dtString, 300, true);
+            result.AddColumn(LSID.LSID_Repository, DataType.dtString, 400, true, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
@@ -62,47 +55,27 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            GDMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
+            bool res = IsMatchesMask(fFetchedRec.RepositoryName, QuickFilter);
 
-            bool res = IsMatchesMask(fileRef.Title, QuickFilter);
-
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
         }
 
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (GDMMultimediaRecord)aRec;
-        }
-
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
-            GDMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
-            if (fileRef == null) {
-                return null;
-            }
-
             object result = null;
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
-                    result = fRec.GetId();
+                    result = fFetchedRec.GetId();
                     break;
 
-                case ColumnType.ctTitle:
-                    result = fileRef.Title;
-                    break;
-
-                case ColumnType.ctMediaType:
-                    result = LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]);
-                    break;
-
-                case ColumnType.ctFileRef:
-                    result = fileRef.StringValue;
+                case ColumnType.ctName:
+                    result = fFetchedRec.RepositoryName;
                     break;
 
                 case ColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

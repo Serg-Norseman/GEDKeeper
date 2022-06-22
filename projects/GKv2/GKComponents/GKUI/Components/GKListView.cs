@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -248,7 +248,7 @@ namespace GKUI.Components
 
         private GKListItem[] fCache;
         private int fCacheFirstItem;
-        private IListManager fListMan;
+        private IListSource fListMan;
         private int fSortColumn;
         private BSDSortOrder fSortOrder;
         private int fUpdateCount;
@@ -259,7 +259,7 @@ namespace GKUI.Components
             get { return fItemsAccessor; }
         }
 
-        public IListManager ListMan
+        public IListSource ListMan
         {
             get {
                 return fListMan;
@@ -589,7 +589,7 @@ namespace GKUI.Components
             // crash protection: when you delete records from the diagrams,
             // between the actual deleting a record and updating the list
             // may take a few requests to update the list's items which does not already exist
-            if (fListMan != null && fListMan.DeleteRecord(data)) {
+            if (fListMan != null && fListMan.DeleteItem(data)) {
                 VirtualListSize = fListMan.FilteredCount;
             }
         }
@@ -771,7 +771,7 @@ namespace GKUI.Components
             try {
                 if (fListMan != null) {
                     // "virtual" mode
-                    int idx = fListMan.IndexOfRecord(rowData);
+                    int idx = fListMan.IndexOfItem(rowData);
                     if (idx >= 0) {
                         ListViewItem item = Items[idx];
 

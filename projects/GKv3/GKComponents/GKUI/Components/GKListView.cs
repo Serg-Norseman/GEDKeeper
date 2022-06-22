@@ -36,6 +36,22 @@ using BSDSortOrder = BSLib.Design.BSDTypes.SortOrder;
 namespace GKUI.Components
 {
     /// <summary>
+    /// 
+    /// </summary>
+    public class ObservableExtList<T> : ExtObservableList<T>, IListViewItems where T : BSDListItem
+    {
+        BSDListItem IListViewItems.this[int index]
+        {
+            get { return (BSDListItem)base[index]; }
+        }
+
+        public ObservableExtList()
+        {
+        }
+    }
+
+
+    /// <summary>
     ///
     /// </summary>
     public class GKListItem : GridItem, BSDListItem
@@ -123,7 +139,7 @@ namespace GKUI.Components
         private readonly ObservableExtList<GKListItem> fItems;
 
         private bool fCheckedList;
-        private IListManager fListMan;
+        private IListSource fListMan;
         private bool fSorting;
         private int fSortColumn;
         private BSDSortOrder fSortOrder;
@@ -135,7 +151,7 @@ namespace GKUI.Components
             get { return fItems; }
         }
 
-        public IListManager ListMan
+        public IListSource ListMan
         {
             get {
                 return fListMan;
@@ -411,7 +427,7 @@ namespace GKUI.Components
             // crash protection: when you delete records from the diagrams,
             // between the actual deleting a record and updating the list
             // may take a few requests to update the list's items which does not already exist
-            if (fListMan != null && fListMan.DeleteRecord(data)) {
+            if (fListMan != null && fListMan.DeleteItem(data)) {
                 /*VirtualListSize = fListMan.FilteredCount;*/
             }
         }
@@ -612,7 +628,7 @@ namespace GKUI.Components
             try {
                 if (fListMan != null) {
                     // "virtual" mode
-                    int idx = fListMan.IndexOfRecord(rowData);
+                    int idx = fListMan.IndexOfItem(rowData);
                     SelectItem(idx);
                 } else {
                     int num = fItems.Count;

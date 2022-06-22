@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Globalization;
 using GDModel;
 using GKCore.Interfaces;
 
@@ -27,37 +26,33 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class LocationListMan : ListManager<GDMLocationRecord>
+    public sealed class TaskListModel : RecordsListModel<GDMTaskRecord>
     {
         public enum ColumnType
         {
             ctXRefNum,
-            ctName,
-            ctLati,
-            ctLong,
+            ctGoal,
+            ctPriority,
+            ctStartDate,
+            ctStopDate,
             ctChangeDate
         }
 
 
-        private GDMLocationRecord fRec;
-
-
-        public LocationListMan(IBaseContext baseContext) :
-            base(baseContext, CreateLocationListColumns(), GDMRecordType.rtLocation)
+        public TaskListModel(IBaseContext baseContext) :
+            base(baseContext, CreateTaskListColumns(), GDMRecordType.rtTask)
         {
         }
 
-        public static ListColumns<GDMLocationRecord> CreateLocationListColumns()
+        public static ListColumns<GDMTaskRecord> CreateTaskListColumns()
         {
-            var result = new ListColumns<GDMLocationRecord>();
-
-            NumberFormatInfo nfi = new NumberFormatInfo();
-            nfi.NumberDecimalSeparator = ".";
+            var result = new ListColumns<GDMTaskRecord>();
 
             result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true, true);
-            result.AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
-            result.AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
+            result.AddColumn(LSID.LSID_Goal, DataType.dtString, 300, true, true);
+            result.AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_StartDate, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_StopDate, DataType.dtString, 90, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
@@ -66,16 +61,11 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fRec.LocationName, QuickFilter);
+            bool res = IsMatchesMask(GKUtils.GetTaskGoalStr(fBaseContext.Tree, fFetchedRec), QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
-        }
-
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (GDMLocationRecord)aRec;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -83,23 +73,27 @@ namespace GKCore.Lists
             object result = null;
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
-                    result = fRec.GetId();
+                    result = fFetchedRec.GetId();
                     break;
 
-                case ColumnType.ctName:
-                    result = fRec.LocationName;
+                case ColumnType.ctGoal:
+                    result = GKUtils.GetTaskGoalStr(fBaseContext.Tree, fFetchedRec);
                     break;
 
-                case ColumnType.ctLati:
-                    result = fRec.Map.Lati;
+                case ColumnType.ctPriority:
+                    result = LangMan.LS(GKData.PriorityNames[(int)fFetchedRec.Priority]);
                     break;
 
-                case ColumnType.ctLong:
-                    result = fRec.Map.Long;
+                case ColumnType.ctStartDate:
+                    result = GetDateValue(fFetchedRec.StartDate, isVisible);
+                    break;
+
+                case ColumnType.ctStopDate:
+                    result = GetDateValue(fFetchedRec.StopDate, isVisible);
                     break;
 
                 case ColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

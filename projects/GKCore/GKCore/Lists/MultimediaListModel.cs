@@ -26,36 +26,34 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class TaskListMan : ListManager<GDMTaskRecord>
+    public sealed class MultimediaListModel : RecordsListModel<GDMMultimediaRecord>
     {
         public enum ColumnType
         {
             ctXRefNum,
-            ctGoal,
-            ctPriority,
-            ctStartDate,
-            ctStopDate,
+            ctTitle,
+            ctMediaType,
+            ctFileRef,
             ctChangeDate
         }
 
 
-        private GDMTaskRecord fRec;
+        private GDMFileReferenceWithTitle fFileRef;
 
 
-        public TaskListMan(IBaseContext baseContext) :
-            base(baseContext, CreateTaskListColumns(), GDMRecordType.rtTask)
+        public MultimediaListModel(IBaseContext baseContext) :
+            base(baseContext, CreateMultimediaListColumns(), GDMRecordType.rtMultimedia)
         {
         }
 
-        public static ListColumns<GDMTaskRecord> CreateTaskListColumns()
+        public static ListColumns<GDMMultimediaRecord> CreateMultimediaListColumns()
         {
-            var result = new ListColumns<GDMTaskRecord>();
+            var result = new ListColumns<GDMMultimediaRecord>();
 
             result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Goal, DataType.dtString, 300, true, true);
-            result.AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_StartDate, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_StopDate, DataType.dtString, 90, true);
+            result.AddColumn(LSID.LSID_Title, DataType.dtString, 150, true, true);
+            result.AddColumn(LSID.LSID_Type, DataType.dtString, 85, true);
+            result.AddColumn(LSID.LSID_File, DataType.dtString, 300, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
@@ -64,44 +62,45 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(GKUtils.GetTaskGoalStr(fBaseContext.Tree, fRec), QuickFilter);
+            bool res = IsMatchesMask(fFileRef.Title, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
         }
 
-        public override void Fetch(GDMRecord aRec)
+        public override void Fetch(GDMMultimediaRecord aRec)
         {
-            fRec = (GDMTaskRecord)aRec;
+            base.Fetch(aRec);
+            fFileRef = fFetchedRec.FileReferences[0];
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
+            if (fFileRef == null) {
+                return null;
+            }
+
             object result = null;
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
-                    result = fRec.GetId();
+                    result = fFetchedRec.GetId();
                     break;
 
-                case ColumnType.ctGoal:
-                    result = GKUtils.GetTaskGoalStr(fBaseContext.Tree, fRec);
+                case ColumnType.ctTitle:
+                    result = fFileRef.Title;
                     break;
 
-                case ColumnType.ctPriority:
-                    result = LangMan.LS(GKData.PriorityNames[(int)fRec.Priority]);
+                case ColumnType.ctMediaType:
+                    result = LangMan.LS(GKData.MediaTypes[(int)fFileRef.MediaType]);
                     break;
 
-                case ColumnType.ctStartDate:
-                    result = GetDateValue(fRec.StartDate, isVisible);
-                    break;
-
-                case ColumnType.ctStopDate:
-                    result = GetDateValue(fRec.StopDate, isVisible);
+                case ColumnType.ctFileRef:
+                    result = fFileRef.StringValue;
                     break;
 
                 case ColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

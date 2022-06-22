@@ -459,7 +459,7 @@ namespace GKCore.Options
             fAutoSortSpouses = false;
             fCheckTreeSize = true;
 
-            fIndividualListColumns = IndividualListMan.CreateIndividualListColumns();
+            fIndividualListColumns = IndividualListModel.CreateIndividualListColumns();
             fIndividualListColumns.ResetDefaults();
 
             fLanguages = new List<LangRecord>();

@@ -26,32 +26,30 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class FamilyListMan : ListManager<GDMFamilyRecord>
+    public sealed class NoteListModel : RecordsListModel<GDMNoteRecord>
     {
         public enum ColumnType
         {
             ctXRefNum,
-            ctFamilyStr,
-            ctMarriageDate,
+            ctText,
             ctChangeDate
         }
 
 
-        private GDMFamilyRecord fRec;
+        private GDMLines fFetchedLines;
 
 
-        public FamilyListMan(IBaseContext baseContext) :
-            base(baseContext, CreateFamilyListColumns(), GDMRecordType.rtFamily)
+        public NoteListModel(IBaseContext baseContext) :
+            base(baseContext, CreateNoteListColumns(), GDMRecordType.rtNote)
         {
         }
 
-        public static ListColumns<GDMFamilyRecord> CreateFamilyListColumns()
+        public static ListColumns<GDMNoteRecord> CreateNoteListColumns()
         {
-            var result = new ListColumns<GDMFamilyRecord>();
+            var result = new ListColumns<GDMNoteRecord>();
 
             result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Spouses, DataType.dtString, 300, true, true);
-            result.AddColumn(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
+            result.AddColumn(LSID.LSID_Note, DataType.dtString, 400, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
@@ -60,16 +58,17 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction) && IsMatchesMask(GKUtils.GetFamilyString(fBaseContext.Tree, fRec), QuickFilter));
+            bool res = IsMatchesMask(fFetchedLines, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
         }
 
-        public override void Fetch(GDMRecord aRec)
+        public override void Fetch(GDMNoteRecord aRec)
         {
-            fRec = (GDMFamilyRecord)aRec;
+            base.Fetch(aRec);
+            fFetchedLines = fFetchedRec.Lines;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -77,19 +76,17 @@ namespace GKCore.Lists
             object result = null;
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
-                    result = fRec.GetId();
+                    result = fFetchedRec.GetId();
                     break;
 
-                case ColumnType.ctFamilyStr:
-                    result = GKUtils.GetFamilyString(fBaseContext.Tree, fRec);
-                    break;
-
-                case ColumnType.ctMarriageDate:
-                    result = GetDateValue(GKUtils.GetMarriageDate(fRec), isVisible);
+                case ColumnType.ctText:
+                    string noteText = GKUtils.MergeStrings(fFetchedLines);
+                    //string noteText = GKUtils.TruncateStrings(fRec.Note, GKData.NOTE_NAME_MAX_LENGTH);
+                    result = noteText;
                     break;
 
                 case ColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
