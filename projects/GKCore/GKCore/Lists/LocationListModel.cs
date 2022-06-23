@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Globalization;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 
 namespace GKCore.Lists
@@ -48,13 +48,10 @@ namespace GKCore.Lists
         {
             var result = new ListColumns<GDMLocationRecord>();
 
-            NumberFormatInfo nfi = new NumberFormatInfo();
-            nfi.NumberDecimalSeparator = ".";
-
             result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true, true);
-            result.AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
-            result.AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
+            result.AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, false, GEDCOMUtils.CoordFormat, GEDCOMUtils.CoordNumberFormatInfo);
+            result.AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, false, GEDCOMUtils.CoordFormat, GEDCOMUtils.CoordNumberFormatInfo);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();

@@ -21,7 +21,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using BSLib;
-using BSLib.Design.MVP.Controls;
+using BSLib.Design.Graphics;
 using GDModel;
 using GKCore.Charts;
 using GKCore.Interfaces;
@@ -52,16 +52,13 @@ namespace GKCore.Lists
             fRecordType = recordType;
         }
 
-        public override IListItem CreateListItem(int itemIndex, object rowData, CreateListItemHandler handler)
+        public override IColor GetBackgroundColor(int itemIndex, object rowData)
         {
-            var item = base.CreateListItem(itemIndex, rowData, handler);
-            if (item == null) return null;
-
             if (GlobalOptions.Instance.ReadabilityHighlightRows && MathHelper.IsOdd(itemIndex)) {
-                item.SetBackColor(ChartRenderer.GetColor(BSDColors.LightGray));
+                return ChartRenderer.GetColor(BSDColors.LightGray);
             }
 
-            return item;
+            return null;
         }
 
         public override void UpdateContents()

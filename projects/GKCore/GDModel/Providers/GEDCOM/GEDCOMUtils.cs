@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -204,11 +204,13 @@ namespace GDModel.Providers.GEDCOM
             return result * sign;
         }
 
-        public static string GetFloatStr(double value)
+
+        public static readonly NumberFormatInfo CoordNumberFormatInfo = new NumberFormatInfo() { NumberDecimalSeparator = "." };
+        public static readonly string CoordFormat = "0.000000";
+
+        public static string CoordToStr(double val)
         {
-            NumberFormatInfo nfi = new NumberFormatInfo();
-            nfi.NumberDecimalSeparator = ".";
-            return value.ToString("0.000000", nfi);
+            return val.ToString(CoordFormat, CoordNumberFormatInfo);
         }
 
         #endregion

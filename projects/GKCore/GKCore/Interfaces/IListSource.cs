@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 
@@ -59,8 +60,25 @@ namespace GKCore.Interfaces
         bool DeleteItem(object data);
         DataType GetColumnDataType(int columnId);
         string GetColumnName(int columnId);
+
+        /// <summary>
+        /// Getting internal (raw) or display values for columns.
+        /// </summary>
+        /// <param name="colIndex">Column index</param>
+        /// <param name="isVisible">Flag for display values</param>
+        /// <returns></returns>
+        object GetColumnValue(int colIndex, bool isVisible);
+
+        /// <summary>
+        /// Getting display values for binding columns of lists with virtualization (caching).
+        /// </summary>
+        /// <param name="contentItem">Internal intermediate item of list</param>
+        /// <param name="colIndex">Column index</param>
+        /// <returns></returns>
         string GetColumnExternalValue(ContentItem contentItem, int colIndex);
-        object GetColumnInternalValue(int colIndex);
+
+        IColor GetBackgroundColor(int itemIndex, object rowData);
+
         ConditionKind GetCondByName(string condName);
         object GetContentItem(int itemIndex);
         int GetFieldColumnId(string[] fields, string fieldName);

@@ -18,15 +18,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace GKCore
 {
+    public interface IUpdatableCollection : ICollection
+    {
+        void BeginUpdate();
+        void EndUpdate();
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
-    public class ExtObservableList<T> : List<T>, INotifyCollectionChanged
+    public class ExtObservableList<T> : List<T>, IUpdatableCollection, INotifyCollectionChanged
     {
         private int fUpdateCount;
 

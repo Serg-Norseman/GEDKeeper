@@ -21,7 +21,7 @@
 using System;
 using BSLib;
 using BSLib.Calendar;
-using BSLib.Design.MVP.Controls;
+using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Charts;
@@ -533,18 +533,22 @@ namespace GKCore.Lists
             }
         }
 
-        public override IListItem CreateListItem(int itemIndex, object rowData, CreateListItemHandler handler)
+        public override IColor GetBackgroundColor(int itemIndex, object rowData)
         {
-            var item = base.CreateListItem(itemIndex, rowData, handler);
+            var indiRec = (GDMIndividualRecord)rowData;
 
             GlobalOptions gOptions = GlobalOptions.Instance;
-            if ((fFetchedRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons)) {
-                item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnparentedColor));
-            } else if ((fFetchedRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons)) {
-                item.SetBackColor(ChartRenderer.GetColor(GKData.HighlightUnmarriedColor));
+            if (gOptions.ListHighlightUnparentedPersons && (indiRec.ChildToFamilyLinks.Count == 0)) {
+                return ChartRenderer.GetColor(GKData.HighlightUnparentedColor);
+            } else if (gOptions.ListHighlightUnmarriedPersons && (indiRec.SpouseToFamilyLinks.Count == 0)) {
+                return ChartRenderer.GetColor(GKData.HighlightUnmarriedColor);
+            } else {
+                if (!gOptions.ListHighlightUnparentedPersons && !gOptions.ListHighlightUnmarriedPersons) {
+                    return base.GetBackgroundColor(itemIndex, rowData);
+                } else {
+                    return null;
+                }
             }
-
-            return item;
         }
 
         public override void UpdateColumns(IListViewEx listView)

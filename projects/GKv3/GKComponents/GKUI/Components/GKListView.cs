@@ -18,11 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define VIRT_LIST
+//#define DEBUG_WPF_CELLS
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using BSLib;
 using BSLib.Design;
 using BSLib.Design.Graphics;
@@ -150,6 +150,11 @@ namespace GKUI.Components
         private int fUpdateCount;
 
 
+        private IUpdatableCollection ContentList
+        {
+            get { return (IUpdatableCollection)this.DataStore; }
+        }
+
         IListViewItems IListView.Items
         {
             get { return fItems; }
@@ -169,10 +174,8 @@ namespace GKUI.Components
                         fSortColumn = 0;
                         fSortOrder = BSDSortOrder.Ascending;
 
-#if VIRT_LIST
                         DataStore = fListMan.ContentList;
                         fIsVirtual = true;
-#endif
                     } else {
                         DataStore = fItems;
                         fIsVirtual = false;
@@ -184,7 +187,12 @@ namespace GKUI.Components
         public int SelectedIndex
         {
             get {
-                int index = fItems.IndexOf(SelectedItem as GKListItem);
+                int index;
+                if (!fIsVirtual) {
+                    index = fItems.IndexOf(SelectedItem as GKListItem);
+                } else {
+                    index = fListMan.ContentList.IndexOf(SelectedItem as ContentItem);
+                }
                 return index;
             }
             set {
@@ -241,8 +249,7 @@ namespace GKUI.Components
         public void BeginUpdate()
         {
             if (fUpdateCount == 0) {
-                //DataStore = null;
-                fItems.BeginUpdate();
+                ContentList.BeginUpdate();
             }
             fUpdateCount++;
         }
@@ -251,8 +258,7 @@ namespace GKUI.Components
         {
             fUpdateCount--;
             if (fUpdateCount == 0) {
-                fItems.EndUpdate();
-                //DataStore = fItems;
+                ContentList.EndUpdate();
             }
         }
 
@@ -281,10 +287,13 @@ namespace GKUI.Components
             fSortOrder = sortOrder;
 
             var rowData = GetSelectedData();
+
             BeginUpdate();
             try {
-                SortContents(true);
-                UpdateItems();
+                SortContents();
+
+                if (!fIsVirtual)
+                    UpdateInternalItems();
             } finally {
                 EndUpdate();
             }
@@ -305,28 +314,64 @@ namespace GKUI.Components
         {
         }*/
 
-        /*protected override void OnCellFormatting(GridCellFormatEventArgs e)
+        protected override void OnSelectionChanged(EventArgs e)
         {
-            var item = e.Item as GKListItem;
-            if (item == null)
-                return;
+            base.OnSelectionChanged(e);
 
-            // doesn't work because selection changes don't call this method
-            if (item == SelectedItem) {
-                e.BackgroundColor = SystemColors.Selection; // exactly this value
-                e.ForegroundColor = Colors.White;
-            } else {
-                if (item.BackColor != Colors.Transparent) {
-                    e.BackgroundColor = item.BackColor;
-                    e.ForegroundColor = Colors.Black;
-                } else {
-                    e.BackgroundColor = Colors.White;
-                    e.ForegroundColor = Colors.Black;
-                }
+#if !DEBUG_WPF_CELLS
+            // FIXME: [Wpf]GridView.ReloadData(...) is very slow, Eto 2.7.0 #2245
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                return;
+            }
+#endif
+
+            base.ReloadData(base.SelectedRow);
+        }
+
+        private int fRowFormatting = -1;
+        private Color fRowBackColor = Colors.White;
+
+        protected override void OnCellFormatting(GridCellFormatEventArgs e)
+        {
+            base.OnCellFormatting(e);
+
+#if !DEBUG_WPF_CELLS
+            // FIXME: [Wpf]GridView.ReloadData(...) is very slow, Eto 2.7.0 #2245
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                return;
+            }
+#endif
+
+            // FIXME: doesn't work correctly because selection changes don't call this method (Eto <= 2.7.0)
+            // This method only works with OnSelectionChanged -> ReloadData(SelectedRow)
+            if (e.Row == base.SelectedRow) {
+                e.BackgroundColor = SystemColors.Selection;
+                e.ForegroundColor = SystemColors.SelectionText;
+                return;
             }
 
-            base.OnCellFormatting(e);
-        }*/
+            if (fIsVirtual) {
+                var item = e.Item as ContentItem;
+                if (item != null) {
+                    if (fRowFormatting != e.Row) {
+                        var backColor = fListMan.GetBackgroundColor(e.Row, item.Record);
+                        fRowBackColor = (backColor != null) ? ((ColorHandler)backColor).Handle : Colors.White;
+                        fRowFormatting = e.Row;
+                    }
+                    e.BackgroundColor = fRowBackColor;
+                }
+            } else {
+                var item = e.Item as GKListItem;
+                if (item != null) {
+                    if (item.BackColor != Colors.Transparent) {
+                        e.BackgroundColor = item.BackColor;
+                    } else {
+                        e.BackgroundColor = Colors.White;
+                    }
+                }
+            }
+            e.ForegroundColor = SystemColors.ControlText;
+        }
 
         private int CompareItems(GKListItem item1, GKListItem item2)
         {
@@ -357,7 +402,7 @@ namespace GKUI.Components
             return result;
         }
 
-        #region Virtual mode with ListSource
+#region Virtual mode with ListSource
 
         // In Eto not exists
         /*protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
@@ -369,7 +414,7 @@ namespace GKUI.Components
             base.OnColumnWidthChanged(e);
         }*/
 
-        private void SortContents(bool restoreSelected)
+        private void SortContents()
         {
             if (fSorting) {
                 if (fListMan != null) {
@@ -385,7 +430,7 @@ namespace GKUI.Components
             return AddItem(data, false, columnValues);
         }
 
-        private void UpdateItems()
+        private void UpdateInternalItems()
         {
             if (fListMan == null) return;
 
@@ -412,9 +457,7 @@ namespace GKUI.Components
 
                 object tempRec = GetSelectedData();
 
-                if (!fIsVirtual)
-                    BeginUpdate();
-
+                BeginUpdate();
                 try {
                     if (columnsChanged || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
                         Columns.Clear();
@@ -422,15 +465,14 @@ namespace GKUI.Components
                     }
 
                     fListMan.UpdateContents();
-                    SortContents(false);
+                    SortContents();
 
                     if (!fIsVirtual)
-                        UpdateItems();
+                        UpdateInternalItems();
 
                     ResizeColumns();
                 } finally {
-                    if (!fIsVirtual)
-                        EndUpdate();
+                    EndUpdate();
                 }
 
                 if (tempRec != null) SelectItem(tempRec);
@@ -445,13 +487,12 @@ namespace GKUI.Components
             // between the actual deleting a record and updating the list
             // may take a few requests to update the list's items which does not already exist
             if (fListMan != null && fListMan.DeleteItem(data)) {
-                /*VirtualListSize = fListMan.FilteredCount;*/
             }
         }
 
-        #endregion
+#endregion
 
-        #region Public methods
+#region Public methods
 
         public void Clear()
         {
@@ -612,36 +653,24 @@ namespace GKUI.Components
             }
         }
 
-        public GKListItem GetSelectedItem()
+        public object GetSelectedData()
         {
             if (SelectedRow < 0) {
                 return null;
             }
 
-            var item = SelectedItem as GKListItem;
-            return item;
-        }
-
-        public object GetSelectedData()
-        {
             if (!fIsVirtual) {
-                var item = GetSelectedItem();
+                var item = SelectedItem as GKListItem;
                 return (item != null) ? item.Data : null;
             } else {
-                if (SelectedRow < 0) {
-                    return null;
-                }
-
                 var item = SelectedItem as ContentItem;
-                return item.Record;
+                return (item != null) ? item.Record : null;
             }
         }
 
         public void SelectItem(int index)
         {
-            ICollection contentList = (fIsVirtual) ? (ICollection)fListMan.ContentList : (ICollection)fItems;
-
-            if (index >= 0 && index < contentList.Count) {
+            if (index >= 0 && index < ContentList.Count) {
                 ScrollToRow(index);
                 UnselectAll();
                 SelectRow(index);
@@ -669,9 +698,9 @@ namespace GKUI.Components
             }
         }
 
-        #endregion
+#endregion
 
-        #region CheckedList
+#region CheckedList
 
         protected override void OnCellEdited(GridViewCellEventArgs e)
         {
@@ -690,6 +719,6 @@ namespace GKUI.Components
                 handler.Invoke(this, new ItemCheckEventArgs(index, newValue));
         }
 
-        #endregion
+#endregion
     }
 }

@@ -91,9 +91,10 @@ namespace GKUI.Components
         public HyperView()
         {
             CenteredImage = false;
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
                 BackgroundColor = SystemColors.WindowBackground;
-            } else {
+            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 BackgroundColor = SystemColors.Control;
             }
 

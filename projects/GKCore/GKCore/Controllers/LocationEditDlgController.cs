@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Maps;
@@ -91,8 +92,8 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             fView.Name.Text = fLocationRecord.LocationName;
-            fView.Latitude.Text = PlacesLoader.CoordToStr(fLocationRecord.Map.Lati);
-            fView.Longitude.Text = PlacesLoader.CoordToStr(fLocationRecord.Map.Long);
+            fView.Latitude.Text = GEDCOMUtils.CoordToStr(fLocationRecord.Map.Lati);
+            fView.Longitude.Text = GEDCOMUtils.CoordToStr(fLocationRecord.Map.Long);
 
             fView.NotesList.ListModel.DataOwner = fLocationRecord;
             fView.MediaList.ListModel.DataOwner = fLocationRecord;
@@ -125,8 +126,8 @@ namespace GKCore.Controllers
                 for (int i = 0; i < num; i++) {
                     GeoPoint pt = searchPoints[i];
 
-                    fView.GeoCoordsList.AddItem(pt, pt.Hint, 
-                        PlacesLoader.CoordToStr(pt.Latitude), PlacesLoader.CoordToStr(pt.Longitude));
+                    fView.GeoCoordsList.AddItem(pt, pt.Hint,
+                        GEDCOMUtils.CoordToStr(pt.Latitude), GEDCOMUtils.CoordToStr(pt.Longitude));
 
                     fView.MapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
 
@@ -145,8 +146,8 @@ namespace GKCore.Controllers
             GeoPoint pt = GetSelectedGeoPoint();
             if (pt == null) return;
 
-            fView.Latitude.Text = PlacesLoader.CoordToStr(pt.Latitude);
-            fView.Longitude.Text = PlacesLoader.CoordToStr(pt.Longitude);
+            fView.Latitude.Text = GEDCOMUtils.CoordToStr(pt.Latitude);
+            fView.Longitude.Text = GEDCOMUtils.CoordToStr(pt.Longitude);
         }
 
         public void SelectName()

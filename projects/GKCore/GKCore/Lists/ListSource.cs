@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using BSLib;
 using BSLib.Calendar;
+using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
@@ -377,10 +378,11 @@ namespace GKCore.Lists
             bool res = true;
 
             try {
-                var conditions = Filter.Conditions;
+                var conditions = fFilter.Conditions;
                 for (int i = 0, num = conditions.Count; i < num; i++) {
                     FilterCondition fcond = conditions[i];
                     res = res && CheckCondition(fcond);
+                    if (!res) break;
                 }
             } catch (Exception ex) {
                 Logger.WriteError("ListSource.CheckCommonFilter()", ex);
@@ -471,7 +473,6 @@ namespace GKCore.Lists
             return result;
         }
 
-        // used only in UpdateItem
         protected static string ConvertColumnValue(object val, ListColumn cs)
         {
             if (val == null)
@@ -521,19 +522,17 @@ namespace GKCore.Lists
             return val;
         }
 
-        public object GetColumnInternalValue(int colIndex)
+        public object GetColumnValue(int colIndex, bool isVisible)
         {
-            // col_index - from 1
             MapColumnRec colrec = fColumnsMap[colIndex];
-            return GetColumnValueEx(colrec.ColType, colrec.ColSubtype, false);
-        }
+            object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, isVisible);
 
-        private string GetColumnDisplayValue(int colIndex)
-        {
-            MapColumnRec colrec = fColumnsMap[colIndex];
-            ListColumn cs = fListColumns[colrec.ColType];
-            object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, true);
-            return ConvertColumnValue(val, cs);
+            if (isVisible) {
+                ListColumn cs = fListColumns[colrec.ColType];
+                return ConvertColumnValue(val, cs);
+            } else {
+                return val;
+            }
         }
 
         /// <summary>
@@ -579,7 +578,7 @@ namespace GKCore.Lists
             int num = fColumnsMap.Count;
             object[] result = new object[num];
             for (int i = 0; i < num; i++) {
-                result[i] = GetColumnDisplayValue(i);
+                result[i] = GetColumnValue(i, true);
             }
 
             return result;
@@ -594,7 +593,17 @@ namespace GKCore.Lists
 
             IListItem item = handler(rowData, columnValues);
 
+            var backColor = GetBackgroundColor(itemIndex, fFetchedRec);
+            if (backColor != null) {
+                item.SetBackColor(backColor);
+            }
+
             return item;
+        }
+
+        public virtual IColor GetBackgroundColor(int itemIndex, object rowData)
+        {
+            return null;
         }
 
         public object GetContentItem(int itemIndex)
@@ -693,15 +702,19 @@ namespace GKCore.Lists
         public void SortContents(int sortColumn, bool sortAscending)
         {
             try {
+                fContentList.BeginUpdate();
+
                 int num = fContentList.Count;
                 for (int i = 0; i < num; i++) {
                     ContentItem valItem = fContentList[i];
                     Fetch((T)valItem.Record);
-                    valItem.SortValue = GetColumnInternalValue(sortColumn);
+                    valItem.SortValue = GetColumnValue(sortColumn, false);
                 }
 
                 fXSortFactor = (sortAscending ? 1 : -1);
                 ListTimSort<ContentItem>.Sort(fContentList, CompareItems);
+
+                fContentList.EndUpdate();
             } catch (Exception ex) {
                 Logger.WriteError("ListSource.SortContents()", ex);
             }

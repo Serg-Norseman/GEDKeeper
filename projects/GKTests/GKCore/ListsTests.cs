@@ -149,7 +149,7 @@ namespace GKCore
             listManager.CreateListItem(0, grpRec, CreateListItem);
 
             //
-            var colVal = listManager.GetColumnInternalValue(0);
+            var colVal = listManager.GetColumnValue(0, false);
             Assert.IsNotNull(colVal);
 
             //

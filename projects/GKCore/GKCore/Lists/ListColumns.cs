@@ -97,30 +97,18 @@ namespace GKCore.Lists
 
         public void AddColumn(LSID colName, int defWidth, bool autosize = false)
         {
-            AddColumn(colName, DataType.dtString, defWidth, true, autosize, null, null, null, null);
-        }
-
-        public void AddColumn(LSID colName, int defWidth, Func<T, object> valueLookup, Func<T, string> displayStringLookup, bool autosize = false)
-        {
-            AddColumn(colName, DataType.dtString, defWidth, true, autosize, null, null, valueLookup, displayStringLookup);
+            AddColumn(colName, DataType.dtString, defWidth, true, autosize, null, null);
         }
 
         public void AddColumn(LSID colName, DataType dataType, int defWidth, bool defActive, bool autosize = false)
         {
-            AddColumn(colName, dataType, defWidth, defActive, autosize, null, null, null, null);
+            AddColumn(colName, dataType, defWidth, defActive, autosize, null, null);
         }
 
         public void AddColumn(LSID colName, DataType dataType, int defWidth, bool defActive, bool autosize, string format, NumberFormatInfo nfi)
         {
-            AddColumn(colName, dataType, defWidth, defActive, autosize, format, nfi, null, null);
-        }
-
-        public void AddColumn(LSID colName, DataType dataType, int defWidth, bool defActive, bool autosize, string format, NumberFormatInfo nfi,
-                              Func<T, object> valueLookup, Func<T, string> displayStringLookup)
-        {
             fLastId += 1;
-            ListColumn cs = new ListColumn((byte)fLastId, colName, dataType, defWidth, defActive, autosize, format, nfi);
-            fColumns.Add(cs);
+            fColumns.Add(new ListColumn((byte)fLastId, colName, dataType, defWidth, defActive, autosize, format, nfi));
         }
 
         public void ResetDefaults()
