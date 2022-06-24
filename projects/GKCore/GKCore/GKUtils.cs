@@ -1433,6 +1433,27 @@ namespace GKCore
             return result;
         }
 
+        public static string GetGroupsStr(GDMTree tree, GDMIndividualRecord iRec)
+        {
+            var result = new StringBuilder();
+
+            if (iRec.HasGroups) {
+                var groups = iRec.Groups;
+                int count = groups.Count;
+                for (int idx = 0; idx < count; idx++) {
+                    GDMGroupRecord grp = tree.GetPtrValue<GDMGroupRecord>(groups[idx]);
+                    if (grp != null) {
+                        if (idx > 0)
+                            result.Append("; ");
+
+                        result.Append(grp.GroupName);
+                    }
+                }
+            }
+
+            return result.ToString();
+        }
+
         #endregion
 
         #region Tree utils
@@ -1548,7 +1569,7 @@ namespace GKCore
                         int progress = (int)((size / flen) * 100);
                         if (progress != reportedProgress) {
                             reportedProgress = progress;
-                            progressController.ProgressStep(reportedProgress);
+                            progressController.StepTo(reportedProgress);
                         }
                     }
 
@@ -3064,18 +3085,34 @@ namespace GKCore
             return result.Trim();
         }
 
-        public static string GetNameString(GDMIndividualRecord iRec, bool firstSurname, bool includePieces)
+        private static GDMPersonalName GetPersonalNameByLang(GDMIndividualRecord iRec, GDMLanguageID defLang)
+        {
+            GDMPersonalName result;
+
+            int count = iRec.PersonalNames.Count;
+            if (count == 0) {
+                result = null;
+            } else {
+                result = iRec.PersonalNames[0];
+                for (int i = 1; i < count; i++) {
+                    var pn = iRec.PersonalNames[i];
+                    if (pn.Language == defLang) {
+                        result = pn;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static string GetNameString(GDMIndividualRecord iRec, bool firstSurname, bool includePieces, GDMLanguageID defLang = GDMLanguageID.Unknown)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            string result;
-            if (iRec.PersonalNames.Count > 0) {
-                GDMPersonalName np = iRec.PersonalNames[0];
-                result = GetNameString(iRec, np, firstSurname, includePieces);
-            } else {
-                result = "";
-            }
+            GDMPersonalName pn = GetPersonalNameByLang(iRec, defLang);
+            string result = (pn == null) ? string.Empty : GetNameString(iRec, pn, firstSurname, includePieces);
             return result;
         }
 
@@ -3120,16 +3157,13 @@ namespace GKCore
             return nameParts;
         }
 
-        public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, bool formatted = true)
+        public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, bool formatted = true, GDMLanguageID defLang = GDMLanguageID.Unknown)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            if (iRec.PersonalNames.Count > 0) {
-                return GetNameParts(tree, iRec, iRec.PersonalNames[0], formatted);
-            } else {
-                return new NamePartsRet();
-            }
+            GDMPersonalName pn = GetPersonalNameByLang(iRec, defLang);
+            return (pn == null) ? NamePartsRet.Empty : GetNameParts(tree, iRec, iRec.PersonalNames[0], formatted);
         }
 
         public static ICulture DefineCulture(GDMTree tree, GDMPersonalName personalName)

@@ -132,7 +132,7 @@ namespace GKTests
         public static void SelectSheetListItem(string name, Form form, int value)
         {
             var sheetTester = new GKSheetListTester(name, form);
-            sheetTester.Properties.SelectItem(value);
+            sheetTester.Properties.ListView.SelectItem(value);
         }
 
         public static void EnterNumeric(string name, Form form, int value)

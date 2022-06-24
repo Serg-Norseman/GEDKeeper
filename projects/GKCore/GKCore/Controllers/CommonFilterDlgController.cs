@@ -31,9 +31,9 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class CommonFilterDlgController : DialogController<ICommonFilterDlg>
     {
-        private readonly IListManager fListMan;
+        private readonly IRecordsListModel fListMan;
 
-        public CommonFilterDlgController(ICommonFilterDlg view, IListManager listMan) : base(view)
+        public CommonFilterDlgController(ICommonFilterDlg view, IRecordsListModel listMan) : base(view)
         {
             fListMan = listMan;
         }

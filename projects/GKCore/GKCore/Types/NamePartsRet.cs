@@ -24,6 +24,9 @@ namespace GKCore.Types
 {
     public sealed class NamePartsRet
     {
+        public static readonly NamePartsRet Empty = new NamePartsRet();
+
+
         // Simple or maiden surname
         public string Surname;
 

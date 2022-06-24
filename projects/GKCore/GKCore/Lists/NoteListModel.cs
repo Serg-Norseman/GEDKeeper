@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,30 +23,32 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    public enum NoteColumnType
-    {
-        ctText,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class NoteListMan : ListManager
+    public sealed class NoteListModel : RecordsListModel<GDMNoteRecord>
     {
-        private GDMNoteRecord fRec;
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctText,
+            ctChangeDate
+        }
 
 
-        public NoteListMan(IBaseContext baseContext) :
+        private GDMLines fFetchedLines;
+
+
+        public NoteListModel(IBaseContext baseContext) :
             base(baseContext, CreateNoteListColumns(), GDMRecordType.rtNote)
         {
         }
 
-        public static ListColumns CreateNoteListColumns()
+        public static ListColumns<GDMNoteRecord> CreateNoteListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMNoteRecord>();
 
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Note, DataType.dtString, 400, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
@@ -56,31 +58,35 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fRec.Lines, QuickFilter);
+            bool res = IsMatchesMask(fFetchedLines, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
         }
 
-        public override void Fetch(GDMRecord aRec)
+        public override void Fetch(GDMNoteRecord aRec)
         {
-            fRec = (aRec as GDMNoteRecord);
+            base.Fetch(aRec);
+            fFetchedLines = fFetchedRec.Lines;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((NoteColumnType)colType)
-            {
-                case NoteColumnType.ctText:
-                    string noteText = GKUtils.MergeStrings(fRec.Lines);
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fFetchedRec.GetId();
+                    break;
+
+                case ColumnType.ctText:
+                    string noteText = GKUtils.MergeStrings(fFetchedLines);
                     //string noteText = GKUtils.TruncateStrings(fRec.Note, GKData.NOTE_NAME_MAX_LENGTH);
                     result = noteText;
                     break;
 
-                case NoteColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                case ColumnType.ctChangeDate:
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

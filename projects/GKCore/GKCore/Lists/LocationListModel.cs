@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,44 +18,40 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Globalization;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    public enum LocationColumnType
-    {
-        ctName,
-        ctLati,
-        ctLong,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class LocationListMan : ListManager
+    public sealed class LocationListModel : RecordsListModel<GDMLocationRecord>
     {
-        private GDMLocationRecord fRec;
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctName,
+            ctLati,
+            ctLong,
+            ctChangeDate
+        }
 
 
-        public LocationListMan(IBaseContext baseContext) :
+        public LocationListModel(IBaseContext baseContext) :
             base(baseContext, CreateLocationListColumns(), GDMRecordType.rtLocation)
         {
         }
 
-        public static ListColumns CreateLocationListColumns()
+        public static ListColumns<GDMLocationRecord> CreateLocationListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMLocationRecord>();
 
-            NumberFormatInfo nfi = new NumberFormatInfo();
-            nfi.NumberDecimalSeparator = ".";
-
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true, true);
-            result.AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
-            result.AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, false, "0.000000", nfi);
+            result.AddColumn(LSID.LSID_Latitude, DataType.dtFloat, 120, true, false, GEDCOMUtils.CoordFormat, GEDCOMUtils.CoordNumberFormatInfo);
+            result.AddColumn(LSID.LSID_Longitude, DataType.dtFloat, 120, true, false, GEDCOMUtils.CoordFormat, GEDCOMUtils.CoordNumberFormatInfo);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
@@ -64,37 +60,35 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fRec.LocationName, QuickFilter);
+            bool res = IsMatchesMask(fFetchedRec.LocationName, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
-        }
-
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (aRec as GDMLocationRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((LocationColumnType)colType)
-            {
-                case LocationColumnType.ctName:
-                    result = fRec.LocationName;
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fFetchedRec.GetId();
                     break;
 
-                case LocationColumnType.ctLati:
-                    result = fRec.Map.Lati;
+                case ColumnType.ctName:
+                    result = fFetchedRec.LocationName;
                     break;
 
-                case LocationColumnType.ctLong:
-                    result = fRec.Map.Long;
+                case ColumnType.ctLati:
+                    result = fFetchedRec.Map.Lati;
                     break;
 
-                case LocationColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                case ColumnType.ctLong:
+                    result = fFetchedRec.Map.Long;
+                    break;
+
+                case ColumnType.ctChangeDate:
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

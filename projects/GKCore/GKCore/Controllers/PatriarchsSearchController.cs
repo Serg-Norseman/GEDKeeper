@@ -62,7 +62,13 @@ namespace GKCore.Controllers
             IList<PatriarchObj> lst = null;
             try {
                 fView.PatriarchsList.ClearItems();
-                lst = PatriarchsMan.GetPatriarchsList(fBase.Context, (int)fView.MinGensNum.Value, !fView.WithoutDatesCheck.Checked);
+
+                var minGens = (int)fView.MinGensNum.Value;
+                var withoutDates = !fView.WithoutDatesCheck.Checked;
+                AppHost.Instance.ExecuteWork((controller) => {
+                    lst = PatriarchsMan.GetPatriarchsList(fBase.Context, minGens, withoutDates, controller, true);
+                });
+
                 SortHelper.QuickSort(lst, PatriarchsCompare);
 
                 int num = lst.Count;

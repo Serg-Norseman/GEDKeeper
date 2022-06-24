@@ -130,8 +130,6 @@ namespace GKUI.Components
 
         public CircleChart()
         {
-            CenteredImage = true;
-
             fRenderer = new EtoGfxRenderer();
             fModel = new CircleChartModel();
             fModel.SetRenderer(fRenderer);

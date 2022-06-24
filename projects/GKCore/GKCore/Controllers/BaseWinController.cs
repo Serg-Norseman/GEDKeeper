@@ -390,7 +390,7 @@ namespace GKCore.Controllers
             bool result = false;
             if (record != null) {
                 IListViewEx rView = GetRecordsViewByType(record.RecordType);
-                result = (rView != null && rView.ListMan.IndexOfRecord(record) >= 0);
+                result = (rView != null && rView.ListMan.IndexOfItem(record) >= 0);
             }
             return result;
         }
@@ -438,10 +438,10 @@ namespace GKCore.Controllers
             return view;
         }
 
-        public IListManager GetRecordsListManByType(GDMRecordType recType)
+        public IRecordsListModel GetRecordsListManByType(GDMRecordType recType)
         {
             IListViewEx rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : rView.ListMan;
+            return (rView == null) ? null : (IRecordsListModel)rView.ListMan;
         }
 
         public GDMRecord GetSelectedRecordEx()
@@ -481,7 +481,7 @@ namespace GKCore.Controllers
         public List<GDMRecord> GetContentList(GDMRecordType recType)
         {
             IListViewEx rView = GetRecordsViewByType(recType);
-            return (rView == null) ? null : rView.ListMan.GetRecordsList();
+            return (rView == null) ? null : ((IRecordsListModel)rView.ListMan).GetRecordsList();
         }
 
         public void RestoreListsSettings()
@@ -610,7 +610,7 @@ namespace GKCore.Controllers
         public IList<ISearchResult> FindAll(string searchPattern)
         {
             GDMRecordType rt = GetSelectedRecordType();
-            IListManager listMan = GetRecordsListManByType(rt);
+            IRecordsListModel listMan = GetRecordsListManByType(rt);
             IList<ISearchResult> result = (listMan == null) ? new List<ISearchResult>() : listMan.FindAll(searchPattern);
             return result;
         }
@@ -620,7 +620,7 @@ namespace GKCore.Controllers
             if (!fView.AllowFilter()) return;
 
             GDMRecordType rt = GetSelectedRecordType();
-            IListManager listMan = GetRecordsListManByType(rt);
+            IRecordsListModel listMan = GetRecordsListManByType(rt);
             if (listMan == null) return;
 
             switch (rt) {
@@ -755,7 +755,7 @@ namespace GKCore.Controllers
 
         #region Dialogs
 
-        private void ShowCommonFilter(GDMRecordType rt, IListManager listMan)
+        private void ShowCommonFilter(GDMRecordType rt, IRecordsListModel listMan)
         {
             using (var dlg = AppHost.Container.Resolve<ICommonFilterDlg>(fView, listMan)) {
                 if (AppHost.Instance.ShowModalX(dlg, false)) {
@@ -764,7 +764,7 @@ namespace GKCore.Controllers
             }
         }
 
-        private void ShowPersonsFilter(GDMRecordType rt, IListManager listMan)
+        private void ShowPersonsFilter(GDMRecordType rt, IRecordsListModel listMan)
         {
             using (var dlg = AppHost.Container.Resolve<IPersonsFilterDlg>(fView, listMan)) {
                 if (AppHost.Instance.ShowModalX(dlg, false)) {

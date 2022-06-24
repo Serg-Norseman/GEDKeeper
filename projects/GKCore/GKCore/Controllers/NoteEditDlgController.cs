@@ -152,6 +152,11 @@ namespace GKCore.Controllers
         {
             base.SetLocale();
 
+#if NETSTANDARD
+            // only for GKv3 (DropDownToolItem), not for GKv2 (ComboBox)
+            GetControl<IButtonToolItem>("cmbSizes").Text = "Sizes";
+#endif
+
             GetControl<IButtonToolItem>("ddbtnActions").Text = LangMan.LS(LSID.LSID_Actions);
             GetControl<IMenuItem>("miSelectAndCopy").Text = LangMan.LS(LSID.LSID_SelectAndCopy);
             GetControl<IMenuItem>("miImport").Text = LangMan.LS(LSID.LSID_Import);

@@ -59,6 +59,17 @@ namespace GKUI.Components
             set { fCenteredImage = value; }
         }
 
+        /// <summary>
+        /// Gets the rectangle that represents the client area of the control.
+        /// </summary>
+        public Rectangle ClientRectangle
+        {
+            get {
+                var clientSize = base.ClientSize;
+                return new Rectangle(0, 0, clientSize.Width, clientSize.Height);
+            }
+        }
+
         public Font Font
         {
             get { return fFont; }
@@ -96,6 +107,9 @@ namespace GKUI.Components
             set { fTextColor = value; }
         }
 
+        /// <summary>
+        /// The rectangle that is visible to the user.
+        /// </summary>
         public Rectangle Viewport
         {
             get { return fViewport; }
@@ -165,36 +179,29 @@ namespace GKUI.Components
             fHasHScroll = (fViewport.Width < fImageSize.Width);
             fHasVScroll = (fViewport.Height < fImageSize.Height);
 
-            //int sourX, sourY;
             int destX, destY;
 
             if (fHasHScroll) {
-                //sourX = 0;
                 destX = 0;
                 fMouseOffsetX = fViewport.Left;
             } else {
                 if (fCenteredImage) {
-                    //sourX = 0;
                     destX = (fViewport.Width - fImageSize.Width) / 2;
                     fMouseOffsetX = -destX;
                 } else {
-                    //sourX = 0;
                     destX = 0;
                     fMouseOffsetX = 0;
                 }
             }
 
             if (fHasVScroll) {
-                //sourY = 0;
                 destY = 0;
                 fMouseOffsetY = fViewport.Top;
             } else {
                 if (fCenteredImage) {
-                    //sourY = 0;
                     destY = (fViewport.Height - fImageSize.Height) / 2;
                     fMouseOffsetY = -destY;
                 } else {
-                    //sourY = 0;
                     destY = 0;
                     fMouseOffsetY = 0;
                 }
@@ -258,7 +265,7 @@ namespace GKUI.Components
         protected override void OnSizeChanged(EventArgs e)
         {
             if (Loaded) {
-                fViewport.Size = VisibleRect.Size;
+                fViewport = VisibleRect;
                 UpdateProperties();
             }
             base.OnSizeChanged(e);
@@ -267,7 +274,7 @@ namespace GKUI.Components
         protected override void OnScroll(ScrollEventArgs e)
         {
             if (Loaded) {
-                fViewport.Location = VisibleRect.Location;
+                fViewport = VisibleRect;
                 UpdateProperties();
                 fCanvas.Invalidate();
             }
@@ -322,9 +329,14 @@ namespace GKUI.Components
             return new Point((int)mpt.X + fMouseOffsetX, (int)mpt.Y + fMouseOffsetY);
         }
 
-        protected Point GetScrollRelativeLocation(PointF mpt)
+        protected PointF GetControlRelativeLocation(PointF mpt)
         {
-            return new Point((int)mpt.X + fViewport.Left, (int)mpt.Y + fViewport.Top);
+            return new PointF(mpt.X - fMouseOffsetX, mpt.Y - fMouseOffsetY);
+        }
+
+        protected void InvalidateContent()
+        {
+            fCanvas.Invalidate();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,35 +28,34 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public enum ResearchColumnType
-    {
-        ctName,
-        ctPriority,
-        ctStatus,
-        ctStartDate,
-        ctStopDate,
-        ctPercent,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ResearchListMan : ListManager
+    public sealed class ResearchListModel : RecordsListModel<GDMResearchRecord>
     {
-        private GDMResearchRecord fRec;
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctName,
+            ctPriority,
+            ctStatus,
+            ctStartDate,
+            ctStopDate,
+            ctPercent,
+            ctChangeDate
+        }
 
 
-        public ResearchListMan(IBaseContext baseContext) :
+        public ResearchListModel(IBaseContext baseContext) :
             base(baseContext, CreateResearchListColumns(), GDMRecordType.rtResearch)
         {
         }
 
-        public static ListColumns CreateResearchListColumns()
+        public static ListColumns<GDMResearchRecord> CreateResearchListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMResearchRecord>();
 
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true, true);
             result.AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
             result.AddColumn(LSID.LSID_Status, DataType.dtString, 90, true);
@@ -71,49 +70,47 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fRec.ResearchName, QuickFilter);
+            bool res = IsMatchesMask(fFetchedRec.ResearchName, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
-        }
-
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (aRec as GDMResearchRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((ResearchColumnType)colType)
-            {
-                case ResearchColumnType.ctName:
-                    result = fRec.ResearchName;
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fFetchedRec.GetId();
                     break;
 
-                case ResearchColumnType.ctPriority:
-                    result = LangMan.LS(GKData.PriorityNames[(int)fRec.Priority]);
+                case ColumnType.ctName:
+                    result = fFetchedRec.ResearchName;
                     break;
 
-                case ResearchColumnType.ctStatus:
-                    result = LangMan.LS(GKData.StatusNames[(int)fRec.Status]);
+                case ColumnType.ctPriority:
+                    result = LangMan.LS(GKData.PriorityNames[(int)fFetchedRec.Priority]);
                     break;
 
-                case ResearchColumnType.ctStartDate:
-                    result = GetDateValue(fRec.StartDate, isVisible);
+                case ColumnType.ctStatus:
+                    result = LangMan.LS(GKData.StatusNames[(int)fFetchedRec.Status]);
                     break;
 
-                case ResearchColumnType.ctStopDate:
-                    result = GetDateValue(fRec.StopDate, isVisible);
+                case ColumnType.ctStartDate:
+                    result = GetDateValue(fFetchedRec.StartDate, isVisible);
                     break;
 
-                case ResearchColumnType.ctPercent:
-                    result = fRec.Percent;
+                case ColumnType.ctStopDate:
+                    result = GetDateValue(fFetchedRec.StopDate, isVisible);
                     break;
 
-                case ResearchColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                case ColumnType.ctPercent:
+                    result = fFetchedRec.Percent;
+                    break;
+
+                case ColumnType.ctChangeDate:
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
@@ -124,9 +121,11 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ResTasksSublistModel : ListModel
+    public sealed class ResTasksListModel : SheetModel<GDMPointer>
     {
-        public ResTasksSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        private GDMTaskRecord fTaskRec;
+
+        public ResTasksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
@@ -138,36 +137,48 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMPointer aRec)
+        {
+            base.Fetch(aRec);
+            fTaskRec = fBaseContext.Tree.GetPtrValue<GDMTaskRecord>(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = GKUtils.GetTaskGoalStr(fBaseContext.Tree, fTaskRec);
+                    break;
+                case 1:
+                    result = LangMan.LS(GKData.PriorityNames[(int)fTaskRec.Priority]);
+                    break;
+                case 2:
+                    result = new GDMDateItem(fTaskRec.StartDate);
+                    break;
+                case 3:
+                    result = new GDMDateItem(fTaskRec.StopDate);
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var research = fDataOwner as GDMResearchRecord;
-            if (fSheetList == null || research == null) return;
+            if (research == null) return;
 
             try {
-                fSheetList.BeginUpdate();
-                fSheetList.ClearItems();
-
-                foreach (GDMPointer taskPtr in research.Tasks) {
-                    var task = fBaseContext.Tree.GetPtrValue<GDMTaskRecord>(taskPtr);
-                    if (task == null) continue;
-
-                    fSheetList.AddItem(task, new object[] { GKUtils.GetTaskGoalStr(fBaseContext.Tree, task),
-                        LangMan.LS(GKData.PriorityNames[(int)task.Priority]),
-                        new GDMDateItem(task.StartDate),
-                        new GDMDateItem(task.StopDate)
-                    });
-                }
-
-                fSheetList.EndUpdate();
+                UpdateStructList(research.Tasks);
             } catch (Exception ex) {
-                Logger.WriteError("ResTasksSublistModel.UpdateContents()", ex);
+                Logger.WriteError("ResTasksListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var research = fDataOwner as GDMResearchRecord;
-            if (fBaseWin == null || fSheetList == null || research == null) return;
+            if (fBaseWin == null || research == null) return;
 
             GDMTaskRecord task = eArgs.ItemData as GDMTaskRecord;
 
@@ -202,9 +213,11 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ResCommunicationsSublistModel : ListModel
+    public sealed class ResCommunicationsListModel : SheetModel<GDMPointer>
     {
-        public ResCommunicationsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        private GDMCommunicationRecord fCommRec;
+
+        public ResCommunicationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
@@ -216,36 +229,48 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMPointer aRec)
+        {
+            base.Fetch(aRec);
+            fCommRec = fBaseContext.Tree.GetPtrValue<GDMCommunicationRecord>(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fCommRec.CommName;
+                    break;
+                case 1:
+                    result = GKUtils.GetCorresponderStr(fBaseWin.Context.Tree, fCommRec, false);
+                    break;
+                case 2:
+                    result = LangMan.LS(GKData.CommunicationNames[(int)fCommRec.CommunicationType]);
+                    break;
+                case 3:
+                    result = new GDMDateItem(fCommRec.Date);
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var research = fDataOwner as GDMResearchRecord;
-            if (fSheetList == null || research == null) return;
+            if (research == null) return;
 
             try {
-                fSheetList.BeginUpdate();
-                fSheetList.ClearItems();
-
-                foreach (GDMPointer commPtr in research.Communications) {
-                    var corr = fBaseContext.Tree.GetPtrValue<GDMCommunicationRecord>(commPtr);
-                    if (corr == null) continue;
-
-                    fSheetList.AddItem(corr, new object[] { corr.CommName,
-                        GKUtils.GetCorresponderStr(fBaseWin.Context.Tree, corr, false),
-                        LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]),
-                        new GDMDateItem(corr.Date)
-                    });
-                }
-
-                fSheetList.EndUpdate();
+                UpdateStructList(research.Communications);
             } catch (Exception ex) {
-                Logger.WriteError("ResCommunicationsSublistModel.UpdateContents()", ex);
+                Logger.WriteError("ResCommunicationsListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var research = fDataOwner as GDMResearchRecord;
-            if (fBaseWin == null || fSheetList == null || research == null) return;
+            if (fBaseWin == null || research == null) return;
 
             GDMCommunicationRecord comm = eArgs.ItemData as GDMCommunicationRecord;
 
@@ -280,9 +305,11 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ResGroupsSublistModel : ListModel
+    public sealed class ResGroupsListModel : SheetModel<GDMPointer>
     {
-        public ResGroupsSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        private GDMGroupRecord fGroupRec;
+
+        public ResGroupsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
@@ -291,32 +318,39 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMPointer aRec)
+        {
+            base.Fetch(aRec);
+            fGroupRec = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fGroupRec.GroupName;
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var research = fDataOwner as GDMResearchRecord;
-            if (fSheetList == null || research == null) return;
+            if (research == null) return;
 
             try {
-                fSheetList.BeginUpdate();
-                fSheetList.ClearItems();
-
-                foreach (GDMPointer groupPtr in research.Groups) {
-                    var grp = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(groupPtr);
-                    if (grp == null) continue;
-
-                    fSheetList.AddItem(grp, new object[] { grp.GroupName });
-                }
-
-                fSheetList.EndUpdate();
+                UpdateStructList(research.Groups);
             } catch (Exception ex) {
-                Logger.WriteError("ResGroupsSublistModel.UpdateContents()", ex);
+                Logger.WriteError("ResGroupsListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var research = fDataOwner as GDMResearchRecord;
-            if (fBaseWin == null || fSheetList == null || research == null) return;
+            if (fBaseWin == null || research == null) return;
 
             GDMGroupRecord group = eArgs.ItemData as GDMGroupRecord;
 

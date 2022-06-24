@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -428,7 +428,7 @@ namespace GKCore.Stats
         }
 
         // TODO: localize filter?
-        public void WriteStatsReport(string title, string cap1, string cap2, List<StatsItem> vals)
+        public void WriteStatsReport(string title, string cap1, string cap2, List<StatsItem> vals, IProgressController progress)
         {
 #if !NETSTANDARD
             if (vals == null) return;
@@ -436,29 +436,25 @@ namespace GKCore.Stats
             string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
             if (string.IsNullOrEmpty(fileName)) return;
 
-            IProgressController progress = AppHost.Progress;
-            try
-            {
+            try {
                 int rowsCount = vals.Count;
-                progress.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", rowsCount);
+                progress.Begin(LangMan.LS(LSID.LSID_MIExport) + "...", rowsCount);
 
-                try
-                {
+                try {
                     Workbook workbook = new Workbook();
                     Worksheet worksheet = new Worksheet(title);
 
-                    worksheet.Cells[0,  1] = new Cell(cap1);
-                    worksheet.Cells[0,  2] = new Cell(cap2);
+                    worksheet.Cells[0, 1] = new Cell(cap1);
+                    worksheet.Cells[0, 2] = new Cell(cap2);
 
                     int row = 1;
-                    for (int i = 0; i < rowsCount; i++)
-                    {
+                    for (int i = 0; i < rowsCount; i++) {
                         StatsItem item = vals[i];
                         worksheet.Cells[row, 1] = new Cell(item.Caption);
                         worksheet.Cells[row, 2] = new Cell(item.GetDisplayString());
 
                         row++;
-                        progress.ProgressStep();
+                        progress.Increment();
                     }
 
                     workbook.Worksheets.Add(worksheet);
@@ -467,14 +463,10 @@ namespace GKCore.Stats
                     if (File.Exists(fileName)) {
                         Process.Start(fileName);
                     }
+                } finally {
+                    progress.End();
                 }
-                finally
-                {
-                    progress.ProgressDone();
-                }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.WriteError("TreeStats.WriteStatsReport()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }

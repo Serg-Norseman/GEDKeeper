@@ -131,7 +131,7 @@ namespace GKUI.Forms
             InitializeComponent();
         }
 
-        public PersonsFilterDlg(IBaseWindow baseWin, IListManager listMan) : base(baseWin, listMan)
+        public PersonsFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan) : base(baseWin, listMan)
         {
             InitializeComponent();
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,8 +28,10 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public sealed class SourceCitationsListModel : ListModel
+    public sealed class SourceCitationsListModel : SheetModel<GDMSourceCitation>
     {
+        private GDMSourceRecord fSourceRec;
+
         public SourceCitationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
@@ -43,27 +45,39 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMSourceCitation aRec)
+        {
+            base.Fetch(aRec);
+            fSourceRec = fBaseContext.Tree.GetPtrValue<GDMSourceRecord>(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fSourceRec.Originator.Lines.Text.Trim();
+                    break;
+                case 1:
+                    result = fSourceRec.ShortTitle;
+                    break;
+                case 2:
+                    result = fFetchedRec.Page;
+                    break;
+                case 3:
+                    result = LangMan.LS(GKData.CertaintyAssessments[fFetchedRec.GetValidCertaintyAssessment()]);
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var dataOwner = fDataOwner as IGDMStructWithSourceCitations;
-            if (fSheetList == null || dataOwner == null) return;
+            if (dataOwner == null) return;
 
             try {
-                fSheetList.ClearItems();
-
-                foreach (GDMSourceCitation cit in dataOwner.SourceCitations) {
-                    var sourceRec = fBaseContext.Tree.GetPtrValue<GDMSourceRecord>(cit);
-                    if (sourceRec == null) continue;
-
-                    int ca = cit.GetValidCertaintyAssessment();
-
-                    fSheetList.AddItem(cit, new object[] { sourceRec.Originator.Lines.Text.Trim(),
-                        sourceRec.ShortTitle, cit.Page,
-                        LangMan.LS(GKData.CertaintyAssessments[ca])
-                    });
-                }
-
-                fSheetList.ResizeColumn(1);
+                UpdateStructList(dataOwner.SourceCitations);
             } catch (Exception ex) {
                 Logger.WriteError("SourceCitationsListModel.UpdateContents()", ex);
             }
@@ -72,7 +86,7 @@ namespace GKCore.Lists
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var dataOwner = fDataOwner as IGDMStructWithSourceCitations;
-            if (fBaseWin == null || fSheetList == null || dataOwner == null) return;
+            if (fBaseWin == null || dataOwner == null) return;
 
             GDMSourceCitation aCit = eArgs.ItemData as GDMSourceCitation;
 

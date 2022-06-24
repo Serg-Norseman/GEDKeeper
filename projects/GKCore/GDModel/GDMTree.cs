@@ -25,7 +25,10 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public delegate void ProgressEventHandler(object sender, int progress);
+    public interface IGDMProgressCallback
+    {
+        void StepTo(int val);
+    }
 
 
     public enum GDMTreeState
@@ -147,7 +150,7 @@ namespace GDModel
 
         private GEDCOMFormat fFormat;
         private int[] fLastIDs;
-        private ProgressEventHandler fOnProgressEvent;
+        private IGDMProgressCallback fProgressCallback;
         private GDMTreeState fState;
         private int fUpdateCount;
 
@@ -188,10 +191,10 @@ namespace GDModel
 
         public event EventHandler OnChanging;
 
-        public ProgressEventHandler OnProgress
+        public IGDMProgressCallback ProgressCallback
         {
-            get { return fOnProgressEvent; }
-            set { fOnProgressEvent = value; }
+            get { return fProgressCallback; }
+            set { fProgressCallback = value; }
         }
 
 

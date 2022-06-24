@@ -51,7 +51,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miFamilyAdd;
         private ButtonMenuItem miDelete;
         private ButtonMenuItem miRebuildKinships;
-        private ButtonToolItem tbModes;
+        private DropDownToolItem tbModes;
         private ContextMenu MenuModes;
         private RadioMenuItem miModeBoth;
         private RadioMenuItem miModeAncestors;
@@ -73,13 +73,13 @@ namespace GKUI.Forms
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
         private ButtonToolItem tbOptions;
-        private ButtonToolItem tbGensCommon;
+        private DropDownToolItem tbGensCommon;
         private ContextMenu MenuGensCommon;
-        private ButtonToolItem tbGensAncestors;
+        private DropDownToolItem tbGensAncestors;
         private ContextMenu MenuGensAncestors;
-        private ButtonToolItem tbGensDescendants;
+        private DropDownToolItem tbGensDescendants;
         private ContextMenu MenuGensDescendants;
-        private ButtonToolItem tbBorders;
+        private DropDownToolItem tbBorders;
         private ContextMenu MenuBorders;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
@@ -165,11 +165,6 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            MenuGensCommon = new ContextMenu();
-            MenuGensAncestors = new ContextMenu();
-            MenuGensDescendants = new ContextMenu();
-            MenuBorders = new ContextMenu();
-
             miModeBoth = new RadioMenuItem();
             miModeBoth.Click += miModeItem_Click;
 
@@ -194,7 +189,6 @@ namespace GKUI.Forms
             miFillImage = new ButtonMenuItem();
             miFillImage.Click += miFillImage_Click;
 
-            MenuModes = new ContextMenu();
             MenuModes.Items.AddRange(new MenuItem[] {
                                          miModeBoth,
                                          miModeAncestors,
@@ -450,9 +444,7 @@ namespace GKUI.Forms
         {
             var treeOptions = GlobalOptions.Instance.TreeChartOptions;
 
-            tbGensCommon.Enabled = !treeOptions.SeparateDepth;
-            tbGensAncestors.Enabled = treeOptions.SeparateDepth;
-            tbGensDescendants.Enabled = treeOptions.SeparateDepth;
+            fController.SetupDepth();
 
             if (!treeOptions.SeparateDepth) {
                 UIHelper.SetMenuItemTag(MenuGensCommon, treeOptions.DepthLimit);
@@ -614,31 +606,6 @@ namespace GKUI.Forms
         private void miGoToPrimaryBranch_Click(object sender, EventArgs e)
         {
             fController.GoToPrimaryBranch();
-        }
-
-        private void tbGensCommon_Click(object sender, EventArgs e)
-        {
-            MenuGensCommon.Show(this);
-        }
-
-        private void tbGensAncestors_Click(object sender, EventArgs e)
-        {
-            MenuGensAncestors.Show(this);
-        }
-
-        private void tbGensDescendants_Click(object sender, EventArgs e)
-        {
-            MenuGensDescendants.Show(this);
-        }
-
-        private void tbModes_Click(object sender, EventArgs e)
-        {
-            MenuModes.Show(this);
-        }
-
-        private void tbBorders_Click(object sender, EventArgs e)
-        {
-            MenuBorders.Show(this);
         }
 
         #endregion

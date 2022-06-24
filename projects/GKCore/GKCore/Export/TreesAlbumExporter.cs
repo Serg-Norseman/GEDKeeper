@@ -90,7 +90,10 @@ namespace GKCore.Export
                 treeBox.Height = (int)pageHeight;
                 treeBox.Width = (int)pageWidth;
 
-                fPatList = PatriarchsMan.GetPatriarchsList(fBase.Context, 2, false);
+                AppHost.Instance.ExecuteWork((controller) => {
+                    fPatList = PatriarchsMan.GetPatriarchsList(fBase.Context, 2, false, controller, true);
+                });
+
                 SortHelper.QuickSort(fPatList, PatriarchsCompare);
 
                 int num = fPatList.Count;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,33 +23,30 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    public enum FamilyColumnType
-    {
-        ctFamilyStr,
-        ctMarriageDate,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class FamilyListMan : ListManager
+    public sealed class RepositoryListModel : RecordsListModel<GDMRepositoryRecord>
     {
-        private GDMFamilyRecord fRec;
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctName,
+            ctChangeDate
+        }
 
 
-        public FamilyListMan(IBaseContext baseContext) :
-            base(baseContext, CreateFamilyListColumns(), GDMRecordType.rtFamily)
+        public RepositoryListModel(IBaseContext baseContext) :
+            base(baseContext, CreateRepositoryListColumns(), GDMRecordType.rtRepository)
         {
         }
 
-        public static ListColumns CreateFamilyListColumns()
+        public static ListColumns<GDMRepositoryRecord> CreateRepositoryListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMRepositoryRecord>();
 
-            result.AddColumn(LSID.LSID_Spouses, DataType.dtString, 300, true, true);
-            result.AddColumn(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
+            result.AddColumn(LSID.LSID_Repository, DataType.dtString, 400, true, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
@@ -58,33 +55,27 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (fBaseContext.IsRecordAccess(fRec.Restriction) && IsMatchesMask(GKUtils.GetFamilyString(fBaseContext.Tree, fRec), QuickFilter));
+            bool res = IsMatchesMask(fFetchedRec.RepositoryName, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
-        }
-
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (aRec as GDMFamilyRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((FamilyColumnType)colType)
-            {
-                case FamilyColumnType.ctFamilyStr:
-                    result = GKUtils.GetFamilyString(fBaseContext.Tree, fRec);
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fFetchedRec.GetId();
                     break;
 
-                case FamilyColumnType.ctMarriageDate:
-                    result = GetDateValue(GKUtils.GetMarriageDate(fRec), isVisible);
+                case ColumnType.ctName:
+                    result = fFetchedRec.RepositoryName;
                     break;
 
-                case FamilyColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                case ColumnType.ctChangeDate:
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

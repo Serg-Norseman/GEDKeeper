@@ -21,6 +21,7 @@
 //define DEBUG_IMAGE
 
 using System;
+using System.Runtime.InteropServices;
 using BSLib;
 using BSLib.Design;
 using BSLib.Design.Graphics;
@@ -439,26 +440,15 @@ namespace GKUI.Components
 
         #region Sizes and adjustment routines
 
-        /*private ExtRect GetImageViewport()
-        {
-            ExtRect viewport;
-
-            var imageSize = GetImageSize();
-            if (!imageSize.IsEmpty) {
-                Rectangle scrollableViewport = this.Viewport;
-                viewport = ExtRect.CreateBounds(
-                    scrollableViewport.Left, scrollableViewport.Top,
-                    scrollableViewport.Width, scrollableViewport.Height);
-            } else {
-                viewport = ExtRect.Empty;
-            }
-
-            return viewport;
-        }*/
-
         public ExtRect GetClientRect()
         {
-            return UIHelper.Rt2Rt(base.Viewport);
+            return UIHelper.Rt2Rt(base.ClientRectangle);
+        }
+
+        public ExtPoint GetDrawOrigin()
+        {
+            var viewportLoc = base.Viewport.Location;
+            return new ExtPoint(viewportLoc.X, viewportLoc.Y);
         }
 
         public void RecalcChart(bool noRedraw = false)
@@ -625,9 +615,23 @@ namespace GKUI.Components
             var result = MouseAction.None;
             person = null;
 
-            Point mpt = GetImageRelativeLocation(e.Location);
+            /*
+             * In Eto/Gtk, mouse events coming to Scrollable handlers have coordinates 
+             * with the origin of the Scrollable control if no key is pressed and 
+             * with the origin of the nested Canvas if any key is pressed.
+             */
+
+            Point mpt;
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || e.Buttons == MouseButtons.None) {
+                mpt = GetImageRelativeLocation(e.Location);
+            } else {
+                mpt = new Point(e.Location);
+            }
             int aX = mpt.X;
             int aY = mpt.Y;
+
+            // for debug purposes
+            //Console.WriteLine(e.Location.ToString() + " / " + mpt.ToString());
 
             int num = fModel.Persons.Count;
             for (int i = 0; i < num; i++) {
@@ -682,11 +686,9 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            Point pt = new Point(e.Location);
-            fMouseX = pt.X;
-            fMouseY = pt.Y;
-
-            Point scrPt = GetScrollRelativeLocation(e.Location);
+            Point scrPt = new Point(e.Location);
+            fMouseX = scrPt.X;
+            fMouseY = scrPt.Y;
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -719,8 +721,7 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            //Point ctPt = new Point((int)e.Location.X, (int)e.Location.Y);
-            Point scrPt = GetScrollRelativeLocation(e.Location);
+            Point scrPt = new Point(e.Location);
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -749,10 +750,11 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.DragImage:
-                    Point pt = new Point(e.Location);
-                    AdjustScroll(-(pt.X - fMouseX), -(pt.Y - fMouseY));
-                    fMouseX = pt.X;
-                    fMouseY = pt.Y;
+                    AdjustScroll(-(scrPt.X - fMouseX), -(scrPt.Y - fMouseY));
+#if !OS_LINUX
+                    fMouseX = scrPt.X;
+                    fMouseY = scrPt.Y;
+#endif
                     break;
 
                 case ChartControlMode.ControlsVisible:
@@ -770,13 +772,22 @@ namespace GKUI.Components
                     break;
             }
 
+#if OS_LINUX
+            InvalidateContent();
+#endif
+
             e.Handled = true;
             base.OnMouseMove(e);
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            Point scrPt = GetScrollRelativeLocation(e.Location);
+            Point scrPt = new Point(e.Location);
+
+            PointF mpt = e.Location;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                mpt = GetControlRelativeLocation(mpt);
+            }
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -790,7 +801,7 @@ namespace GKUI.Components
                         case MouseAction.Properties:
                             SelectBy(mPers, false);
                             if (fSelected == mPers && fSelected.Rec != null) {
-                                DoPersonProperties(new MouseEventArgs(e.Buttons, Keys.None, e.Location));
+                                DoPersonProperties(new MouseEventArgs(e.Buttons, Keys.None, mpt));
                             }
                             break;
 

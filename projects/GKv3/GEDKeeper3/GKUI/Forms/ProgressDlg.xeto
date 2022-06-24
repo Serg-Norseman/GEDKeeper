@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms"
   x:Class="GKUI.Forms.ProgressDlg"
   Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
@@ -43,4 +43,4 @@
 
   </TableLayout>
 
-</Form>
+</Dialog>

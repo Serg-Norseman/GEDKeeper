@@ -221,7 +221,7 @@ namespace GKUI.Components
             recView.LabelEdit = false;
             recView.FullRowSelect = true;
             recView.View = View.Details;
-            recView.ListMan = ListManager.Create(baseContext, recType);
+            recView.ListMan = RecordsListModel<GDMRecord>.Create(baseContext, recType);
             recView.Dock = DockStyle.Fill;
 
             parent.Controls.Add(recView);

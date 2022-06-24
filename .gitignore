@@ -15,6 +15,7 @@
 /appdata/
 Eto.xml
 *.log
+*.user
 
 gource-gk.cmd
 code_heat.sh

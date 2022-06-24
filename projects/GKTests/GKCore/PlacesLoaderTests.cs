@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using GDModel.Providers.GEDCOM;
 using GKCore.Maps;
 using GKCore.MVP.Controls;
 using NSubstitute;
@@ -152,7 +153,7 @@ namespace GKCore
         [Test]
         public void Test_CoordToStr()
         {
-            string coord = PlacesLoader.CoordToStr(2.005216);
+            string coord = GEDCOMUtils.CoordToStr(2.005216);
             Assert.AreEqual("2.005216", coord);
         }
 

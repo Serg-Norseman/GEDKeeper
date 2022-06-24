@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,8 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using BSLib;
 using GDModel;
 using GKCore.MVP.Controls;
 
@@ -139,13 +137,6 @@ namespace GKCore.Maps
             }
 
             return result;
-        }
-
-        public static string CoordToStr(double val)
-        {
-            NumberFormatInfo nfi = new NumberFormatInfo();
-            nfi.NumberDecimalSeparator = ".";
-            return val.ToString("0.000000", nfi);
         }
     }
 }

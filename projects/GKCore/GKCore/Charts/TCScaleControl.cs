@@ -115,26 +115,33 @@ namespace GKCore.Charts
         {
             if (gfx == null) return;
 
+            var drawOrigin = fChart.GetDrawOrigin();
+            var drawRect = fDestRect;
+            drawRect.Offset(drawOrigin.X, drawOrigin.Y);
+
             /* Render the top icon without scaling. */
             ExtRect sourceRect = ExtRect.CreateBounds(0, 0, Width, SCALE_Y1 + SHADOW_TOP);
-            ExtRect destinationRect = ExtRect.CreateBounds(fDestRect.Left, fDestRect.Top,
+            ExtRect destinationRect = ExtRect.CreateBounds(drawRect.Left, drawRect.Top,
                                                       Width, SCALE_Y1 + SHADOW_TOP);
             gfx.DrawImage(fControlsImage, destinationRect, sourceRect);
             /* Render the bottom icon without scaling. */
             sourceRect = ExtRect.CreateBounds(0, SCALE_Y2, Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
-            destinationRect = ExtRect.CreateBounds(fDestRect.Left,
-                                            fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)),
+            destinationRect = ExtRect.CreateBounds(drawRect.Left,
+                                            drawRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)),
                                             Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
             gfx.DrawImage(fControlsImage, destinationRect, sourceRect);
             /* Render the vertical bar with scaling of Y's (there's still no
              * scaling for X's). Image source must ignore some shadows at the
              * top and bottom. */
             sourceRect = ExtRect.CreateBounds(0, SCALE_Y1 + SHADOW_TOP, Width, Height - (SCALE_Y2 + SHADOW_BOTTOM));
-            destinationRect = ExtRect.CreateBounds(fDestRect.Left, fDestRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
-                                            fDestRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) - (fDestRect.Top + SCALE_Y1 + SHADOW_TOP));
+            destinationRect = ExtRect.CreateBounds(drawRect.Left, drawRect.Top + SCALE_Y1 + SHADOW_TOP, Width,
+                                            drawRect.Bottom - (Height - (SCALE_Y2 + SHADOW_BOTTOM)) - (drawRect.Top + SCALE_Y1 + SHADOW_TOP));
             gfx.DrawImage(fControlsImage, destinationRect, sourceRect);
+            /* Render the thumb without scaling. */
             if (fDCount > 0) {
-                gfx.DrawImage(fControlsImage, GetDRect(fThumbPos), THUMB_RECT);
+                var thumbRect = GetDRect(fThumbPos);
+                thumbRect.Offset(drawOrigin.X, drawOrigin.Y);
+                gfx.DrawImage(fControlsImage, thumbRect, THUMB_RECT);
             }
         }
 

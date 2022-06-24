@@ -216,6 +216,7 @@
     <Compile Include="GKCore\Database\GKDBNameEntry.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
+    <Compile Include="GKCore\ExtObservableList.cs" />
     <Compile Include="GKCore\GKVarCache.cs" />
     <Compile Include="GKCore\GKException.cs" />
     <Compile Include="GKCore\Import\ImportUtils.cs" />
@@ -231,7 +232,8 @@
     <Compile Include="GKCore\Interfaces\IHost.cs" />
     <Compile Include="GKCore\Interfaces\ILangMan.cs" />
     <Compile Include="GKCore\Interfaces\IListFilter.cs" />
-    <Compile Include="GKCore\Interfaces\IListManager.cs" />
+    <Compile Include="GKCore\Interfaces\IListSource.cs" />
+    <Compile Include="GKCore\Interfaces\IRecordsListModel.cs" />
     <Compile Include="GKCore\Interfaces\IListViewEx.cs" />
     <Compile Include="GKCore\Interfaces\ILocalizable.cs" />
     <Compile Include="GKCore\Interfaces\IOptions.cs" />
@@ -330,28 +332,27 @@
     <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
     <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\Lists\AssociationsListModel.cs" />
-    <Compile Include="GKCore\Lists\CommunicationListMan.cs" />
-    <Compile Include="GKCore\Lists\FamilyListMan.cs" />
+    <Compile Include="GKCore\Lists\CommunicationListModel.cs" />
+    <Compile Include="GKCore\Lists\FamilyListModel.cs" />
     <Compile Include="GKCore\Lists\GDMDateItem.cs" />
     <Compile Include="GKCore\Lists\ChildrenListModel.cs" />
     <Compile Include="GKCore\Lists\EventsListModel.cs" />
-    <Compile Include="GKCore\Lists\ListModel.cs" />
+    <Compile Include="GKCore\Lists\SheetModel.cs" />
     <Compile Include="GKCore\Lists\MediaLinksListModel.cs" />
     <Compile Include="GKCore\Lists\NoteLinksListModel.cs" />
-    <Compile Include="GKCore\Lists\RecordsListModel.cs" />
     <Compile Include="GKCore\Lists\SourceCitationsListModel.cs" />
-    <Compile Include="GKCore\Lists\GroupListMan.cs" />
-    <Compile Include="GKCore\Lists\IndividualListMan.cs" />
+    <Compile Include="GKCore\Lists\GroupListModel.cs" />
+    <Compile Include="GKCore\Lists\IndividualListModel.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
     <Compile Include="GKCore\Lists\ListFilter.cs" />
-    <Compile Include="GKCore\Lists\ListManager.cs" />
-    <Compile Include="GKCore\Lists\LocationListMan.cs" />
-    <Compile Include="GKCore\Lists\MultimediaListMan.cs" />
-    <Compile Include="GKCore\Lists\NoteListMan.cs" />
-    <Compile Include="GKCore\Lists\RepositoryListMan.cs" />
-    <Compile Include="GKCore\Lists\ResearchListMan.cs" />
-    <Compile Include="GKCore\Lists\SourceListMan.cs" />
-    <Compile Include="GKCore\Lists\TaskListMan.cs" />
+    <Compile Include="GKCore\Lists\RecordsListModel.cs" />
+    <Compile Include="GKCore\Lists\LocationListModel.cs" />
+    <Compile Include="GKCore\Lists\MultimediaListModel.cs" />
+    <Compile Include="GKCore\Lists\NoteListModel.cs" />
+    <Compile Include="GKCore\Lists\RepositoryListModel.cs" />
+    <Compile Include="GKCore\Lists\ResearchListModel.cs" />
+    <Compile Include="GKCore\Lists\SourceListModel.cs" />
+    <Compile Include="GKCore\Lists\TaskListModel.cs" />
     <Compile Include="GKCore\Maps\PlacesLoader.cs" />
     <Compile Include="GKCore\Operations\ChangeTracker.cs" />
     <Compile Include="GKCore\Operations\CustomOperation.cs" />
@@ -394,6 +395,7 @@
     <Compile Include="GKCore\YamlHelper.cs" />
     <Compile Include="GKCore\MVP\FormController.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="GKCore\Lists\ListSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">

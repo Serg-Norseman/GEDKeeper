@@ -40,7 +40,7 @@ namespace GKCore.Options
     /// </summary>
     public sealed class GlobalOptions : BaseObject
     {
-        public const int OPTS_VERSION = 1;
+        public const int OPTS_VERSION = 2;
 
         private static GlobalOptions fInstance = null;
 
@@ -60,7 +60,7 @@ namespace GKCore.Options
         private readonly StringList fRelations;
         private readonly StringList fResidenceFilters;
         private bool fShowTips;
-        private readonly ListColumns fIndividualListColumns;
+        private readonly IListColumns fIndividualListColumns;
         private bool fListHighlightUnmarriedPersons;
         private bool fListHighlightUnparentedPersons;
         private ExtRect fMWinRect;
@@ -259,7 +259,7 @@ namespace GKCore.Options
             set { fGeoSearchCountry = value; }
         }
 
-        public ListColumns IndividualListColumns
+        public IListColumns IndividualListColumns
         {
             get { return fIndividualListColumns; }
         }
@@ -459,7 +459,7 @@ namespace GKCore.Options
             fAutoSortSpouses = false;
             fCheckTreeSize = true;
 
-            fIndividualListColumns = IndividualListMan.CreateIndividualListColumns();
+            fIndividualListColumns = IndividualListModel.CreateIndividualListColumns();
             fIndividualListColumns.ResetDefaults();
 
             fLanguages = new List<LangRecord>();
@@ -748,7 +748,7 @@ namespace GKCore.Options
                 fRelations.Add(ini.ReadString("Relations", "Relation_" + i.ToString(), ""));
             }
 
-            fIndividualListColumns.LoadFromFile(ini, "PersonsColumns");
+            fIndividualListColumns.LoadFromFile(ini, "PersonsColumns", optsVersion);
 
             fListHighlightUnmarriedPersons = ini.ReadBool("ListPersons", "HighlightUnmarried", false);
             fListHighlightUnparentedPersons = ini.ReadBool("ListPersons", "HighlightUnparented", false);

@@ -119,10 +119,14 @@ namespace GKCore.Charts
         {
             if (gfx == null) return;
 
+            var drawOrigin = fChart.GetDrawOrigin();
+            var drawRect = fDestRect;
+            drawRect.Offset(drawOrigin.X, drawOrigin.Y);
+
             int intervalHeight = 2;
-            int segmentHeight = ((fDestRect.Height - (9 /* intervals */ * intervalHeight)) / 10);
-            int ctX = fDestRect.Left + (fDestRect.Width / 2);
-            int ctY = fDestRect.Top;
+            int segmentHeight = ((drawRect.Height - (9 /* intervals */ * intervalHeight)) / 10);
+            int ctX = drawRect.Left + (drawRect.Width / 2);
+            int ctY = drawRect.Top;
             int inRad = 0;
             float ang1 = (180 - SEGMENT_ANGLE) / 2.0f;
             float ang2 = ang1 + SEGMENT_ANGLE;

@@ -21,6 +21,7 @@
 using System.Collections.Generic;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -53,10 +54,14 @@ namespace GKCore.Controllers
             fView.ExternalBase.Text = fileName;
         }
 
+        private IProgressController fProgressController;
+
         private void DuplicateFoundFunc(GDMIndividualRecord indivA, GDMIndividualRecord indivB)
         {
-            fView.CompareOutput.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
-            fView.CompareOutput.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
+            fProgressController.InvokeEx(() => {
+                fView.CompareOutput.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
+                fView.CompareOutput.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
+            });
         }
 
         public void Match()
@@ -68,7 +73,11 @@ namespace GKCore.Controllers
 
             switch (type) {
                 case TreeMatchType.tmtInternal:
-                    TreeTools.FindDuplicates(tree, tree, 90 /*min: 80-85*/, DuplicateFoundFunc, AppHost.Progress);
+                    AppHost.Instance.ExecuteWork((controller) => {
+                        fProgressController = controller;
+                        TreeTools.FindDuplicates(tree, tree, 90 /*min: 80-85*/, DuplicateFoundFunc, controller);
+                        fProgressController = null;
+                    });
                     break;
 
                 case TreeMatchType.tmtExternal:
@@ -77,7 +86,10 @@ namespace GKCore.Controllers
 
                 case TreeMatchType.tmtAnalysis:
                     {
-                        List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(fBase);
+                        List<TreeTools.ULIndividual> uln = null;
+                        AppHost.Instance.ExecuteWork((controller) => {
+                            uln = TreeTools.GetUnlinkedNamesakes(fBase, controller);
+                        });
 
                         fView.CompareOutput.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
                         if (uln != null && uln.Count > 0) {

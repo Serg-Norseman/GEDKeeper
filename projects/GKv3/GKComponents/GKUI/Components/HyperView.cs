@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using BSLib;
 using BSLib.Design;
 using Eto.Drawing;
@@ -90,6 +91,12 @@ namespace GKUI.Components
         public HyperView()
         {
             CenteredImage = false;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                BackgroundColor = SystemColors.WindowBackground;
+            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                BackgroundColor = SystemColors.Control;
+            }
 
             fAcceptFontChange = true;
             fChunks = new List<BBTextChunk>();

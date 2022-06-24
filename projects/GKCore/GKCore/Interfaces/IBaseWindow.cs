@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,6 +29,8 @@ namespace GKCore.Interfaces
     {
         IBaseContext Context { get; }
 
+        NavigationStack<GDMRecord> Navman { get; }
+
         void AddRecord();
         void CheckAutosave();
         void CreateNewFile();
@@ -50,7 +52,7 @@ namespace GKCore.Interfaces
         void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone);
         List<GDMRecord> GetContentList(GDMRecordType recType);
         StringList GetRecordContent(GDMRecord record);
-        IListManager GetRecordsListManByType(GDMRecordType recType);
+        IRecordsListModel GetRecordsListManByType(GDMRecordType recType);
         GDMIndividualRecord GetSelectedPerson();
         GDMRecordType GetSelectedRecordType();
         GDMRecord GetSelectedRecordEx();

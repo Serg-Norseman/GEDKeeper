@@ -33,7 +33,7 @@ namespace GKCore.Controllers
     public class OptionsDlgController : DialogController<IOptionsDlg>
     {
         private GlobalOptions fOptions;
-        private readonly ListColumns fTempColumns;
+        private readonly IListColumns fTempColumns;
 
 
         public GlobalOptions Options
@@ -45,7 +45,7 @@ namespace GKCore.Controllers
         public OptionsDlgController(IOptionsDlg view) : base(view)
         {
             fOptions = GlobalOptions.Instance;
-            fTempColumns = IndividualListMan.CreateIndividualListColumns();
+            fTempColumns = IndividualListModel.CreateIndividualListColumns();
 
             FillGeoSearchCountries();
         }

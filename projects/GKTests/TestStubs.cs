@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using BSLib;
 using BSLib.Design.Graphics;
@@ -58,11 +59,26 @@ namespace GKTests.Stubs
 
     internal class ProgressStub : IProgressController
     {
-        public void ProgressInit(string title, int max, bool cancelable = false) {}
-        public void ProgressDone() {}
-        public void ProgressStep() {}
-        public void ProgressStep(int value) {}
+        public bool Enabled { get; set; }
+        public void Activate() { }
+        public void Close() { }
+        public string Title { get; set; }
+        public void Dispose() { }
+        public void SetToolTip(object component, string toolTip) { }
+        public object GetControl(string controlName) { return null; }
+        public bool ShowModalX(object owner) { return true; }
+
+
         public bool IsCanceled { get { return false; } }
+
+        public void Begin(int maximum, bool cancelable) { }
+        public void Begin(string title, int max, bool cancelable = false) { }
+        public void End() { }
+        public void End(ThreadError threadError) { }
+        public void SetText(string text) { }
+        public void Increment(int val) { }
+        public void StepTo(int val) { }
+        public void InvokeEx(Action action) { }
     }
 
     internal class BaseWindowStub : WorkWindowStub, IBaseWindow
@@ -88,6 +104,7 @@ namespace GKTests.Stubs
         }
 
         public IBaseContext Context { get { return fContext; } }
+        public NavigationStack<GDMRecord> Navman { get { return null; } }
         public IHost Host { get { return fHost; } }
         public bool Modified { get { return false; } set {} }
         public GDMTree Tree { get { return fTree; } }
@@ -115,7 +132,7 @@ namespace GKTests.Stubs
         public List<GDMRecord> GetContentList(GDMRecordType recType) { return null; }
         public StringList GetRecordContent(GDMRecord record) { return null; }
         public string GetRecordName(GDMRecord record, bool signed) { return string.Empty; }
-        public IListManager GetRecordsListManByType(GDMRecordType recType) { return null; }
+        public IRecordsListModel GetRecordsListManByType(GDMRecordType recType) { return null; }
         public GDMIndividualRecord GetSelectedPerson() { return null; }
         public GDMRecordType GetSelectedRecordType() { return GDMRecordType.rtIndividual; }
         public void RefreshLists(bool columnsChanged) { }
@@ -125,6 +142,7 @@ namespace GKTests.Stubs
         public void SetExternalFilter(ExternalFilterHandler filterHandler, 
                                       GDMRecordType recType = GDMRecordType.rtNone) { }
         public GDMRecord GetSelectedRecordEx() { return null; }
+        public ExtRect GetActiveScreenWorkingArea() { return ExtRect.Empty; }
     }
 
     public class TestPlugin : OrdinaryPlugin

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  xmlns:complat="clr-namespace:GKUI.Platform;assembly=GKComponents"
   x:Class="GKUI.Forms.NoteEditDlgEx"
   DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
 
@@ -10,9 +11,22 @@
       <ButtonToolItem x:Name="btnItalic" Text="I" Click="btnItalic_Click" />
       <ButtonToolItem x:Name="btnUnderline" Text="U" Click="btnUnderline_Click" />
       <ButtonToolItem x:Name="btnURL" Text="URL" Click="btnURL_Click" />
-      <ButtonToolItem x:Name="cmbSizes" Click="cmbSizes_Click" />
+
+      <complat:DropDownToolItem x:Name="cmbSizes">
+        <complat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="menuSizes">
+          </ContextMenu>
+        </complat:DropDownToolItem.ContextMenu>
+      </complat:DropDownToolItem>
+
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="ddbtnActions" Click="ddbtnActions_Click" />
+
+      <complat:DropDownToolItem x:Name="ddbtnActions">
+        <complat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="menuActions">
+          </ContextMenu>
+        </complat:DropDownToolItem.ContextMenu>
+      </complat:DropDownToolItem>
     </ToolBar>
   </Dialog.ToolBar>
 

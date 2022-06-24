@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,29 +18,29 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using BSLib.Design.MVP.Controls;
 
-using BSDListItem = BSLib.Design.MVP.Controls.IListItem;
-
-namespace GKUI.Components
+namespace GKCore
 {
+    public interface IUpdatableCollection : ICollection
+    {
+        void BeginUpdate();
+        void EndUpdate();
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
-    public class ObservableExtList<T> : List<T>, INotifyCollectionChanged, IListViewItems where T : BSDListItem
+    public class ExtObservableList<T> : List<T>, IUpdatableCollection, INotifyCollectionChanged
     {
         private int fUpdateCount;
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public IListItem this[int index]
-        {
-            get { return (BSDListItem)base[index]; }
-        }
-
-        public ObservableExtList()
+        public ExtObservableList()
         {
         }
 

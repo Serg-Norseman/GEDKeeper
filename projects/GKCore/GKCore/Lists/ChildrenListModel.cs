@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,8 +28,9 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public abstract class ChildrenListModel : ListModel
+    public abstract class ChildrenListModel : SheetModel<GDMIndividualLink>
     {
+        private GDMIndividualRecord fChildRec;
 
         public ChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
@@ -42,18 +43,27 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
-        protected void FillFamilyChildren(GDMTree tree, GDMFamilyRecord family)
+        public override void Fetch(GDMIndividualLink aRec)
         {
-            int idx = 0;
-            foreach (GDMIndividualLink ptr in family.Children) {
-                idx += 1;
-                GDMIndividualRecord child = tree.GetPtrValue(ptr);
+            base.Fetch(aRec);
+            fChildRec = fBaseContext.Tree.GetPtrValue(fFetchedRec);
+        }
 
-                fSheetList.AddItem(child, new object[] {
-                        idx, GKUtils.GetNameString(child, true, false),
-                        new GDMDateItem(GKUtils.GetBirthDate(child))
-                    });
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fStructList.IndexOf(fFetchedRec) + 1;
+                    break;
+                case 1:
+                    result = GKUtils.GetNameString(fChildRec, true, false);
+                    break;
+                case 2:
+                    result = new GDMDateItem(GKUtils.GetBirthDate(fChildRec));
+                    break;
             }
+            return result;
         }
     }
 
@@ -70,16 +80,10 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var family = fDataOwner as GDMFamilyRecord;
-            if (fSheetList == null || family == null) return;
+            if (family == null) return;
 
             try {
-                fSheetList.BeginUpdate();
-                fSheetList.ClearItems();
-
-                var tree = fBaseWin.Context.Tree;
-                FillFamilyChildren(tree, family);
-
-                fSheetList.EndUpdate();
+                UpdateStructList(family.Children);
             } catch (Exception ex) {
                 Logger.WriteError("FamilyChildrenListModel.UpdateContents()", ex);
             }
@@ -88,7 +92,7 @@ namespace GKCore.Lists
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var family = fDataOwner as GDMFamilyRecord;
-            if (fBaseWin == null || fSheetList == null || family == null) return;
+            if (fBaseWin == null || family == null) return;
 
             GDMIndividualRecord child = eArgs.ItemData as GDMIndividualRecord;
 
@@ -128,27 +132,28 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class IndividualChildrenListModel : ChildrenListModel
     {
+        private GDMList<GDMIndividualLink> fTotalChildren;
+
         public IndividualChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
+            fTotalChildren = new GDMList<GDMIndividualLink>();
         }
 
         public override void UpdateContents()
         {
             var indiRec = fDataOwner as GDMIndividualRecord;
-            if (fSheetList == null || indiRec == null)
-                return;
+            if (indiRec == null) return;
 
             try {
-                fSheetList.BeginUpdate();
-                fSheetList.ClearItems();
+                fTotalChildren.Clear();
 
                 var tree = fBaseWin.Context.Tree;
                 foreach (GDMSpouseToFamilyLink spouseLink in indiRec.SpouseToFamilyLinks) {
                     GDMFamilyRecord family = tree.GetPtrValue<GDMFamilyRecord>(spouseLink);
-                    FillFamilyChildren(tree, family);
+                    fTotalChildren.AddRange(family.Children);
                 }
 
-                fSheetList.EndUpdate();
+                UpdateStructList(fTotalChildren);
             } catch (Exception ex) {
                 Logger.WriteError("IndividualChildrenListModel.UpdateContents()", ex);
             }
@@ -157,8 +162,7 @@ namespace GKCore.Lists
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var indiRec = fDataOwner as GDMIndividualRecord;
-            if (fBaseWin == null || fSheetList == null || indiRec == null)
-                return;
+            if (fBaseWin == null || indiRec == null) return;
 
             GDMIndividualRecord child = eArgs.ItemData as GDMIndividualRecord;
             GDMTree tree = fBaseWin.Context.Tree;

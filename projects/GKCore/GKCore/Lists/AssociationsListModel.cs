@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,8 +31,10 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public class AssociationsListModel : ListModel
+    public class AssociationsListModel : SheetModel<GDMAssociation>
     {
+        private GDMIndividualRecord fRelIndi;
+
         public AssociationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
@@ -44,21 +46,33 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMAssociation aRec)
+        {
+            base.Fetch(aRec);
+            fRelIndi = fBaseContext.Tree.GetPtrValue(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fFetchedRec.Relation;
+                    break;
+                case 1:
+                    result = ((fRelIndi == null) ? string.Empty : GKUtils.GetNameString(fRelIndi, true, false));
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var person = fDataOwner as GDMIndividualRecord;
-            if (fSheetList == null || person == null) return;
+            if (person == null || !person.HasAssociations) return;
 
             try {
-                fSheetList.ClearItems();
-                if (!person.HasAssociations) return;
-
-                foreach (GDMAssociation ast in person.Associations) {
-                    var relIndi = fBaseContext.Tree.GetPtrValue(ast);
-                    string nm = ((relIndi == null) ? string.Empty : GKUtils.GetNameString(relIndi, true, false));
-
-                    fSheetList.AddItem(ast, new object[] { ast.Relation, nm });
-                }
+                UpdateStructList(person.Associations);
             } catch (Exception ex) {
                 Logger.WriteError("AssociationsListModel.UpdateContents()", ex);
             }
@@ -67,7 +81,7 @@ namespace GKCore.Lists
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var person = fDataOwner as GDMIndividualRecord;
-            if (fBaseWin == null || fSheetList == null || person == null) return;
+            if (fBaseWin == null || person == null) return;
 
             bool result = false;
 

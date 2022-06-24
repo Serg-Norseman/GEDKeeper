@@ -22,7 +22,9 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Threading;
 using System.Windows.Forms;
+using BSLib;
 using BSLib.Design.Handlers;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
@@ -203,6 +205,70 @@ namespace GKUI.Platform
             Application.Exit();
         }
 
+        public override void ExecuteWork(ProgressStart proc)
+        {
+            var activeWnd = GetActiveWindow() as Form;
+
+            using (var progressForm = ResolveDialog<IProgressController>()) {
+                var workerThread = new Thread((obj) => {
+                    proc((IProgressController)obj);
+                });
+
+                try {
+                    workerThread.Start(progressForm);
+
+                    progressForm.ShowModalX(activeWnd);
+                } catch (Exception ex) {
+                    Logger.WriteError("ExecuteWork()", ex);
+                }
+            }
+        }
+
+        public override bool ExecuteWorkExt(ProgressStart proc, string title)
+        {
+            var activeWnd = GetActiveWindow() as Form;
+
+            using (var progressForm = new ProgressDlg()) {
+                progressForm.Text = title;
+
+                var threadWorker = new Thread((obj) => {
+                    proc((IProgressController)obj);
+                });
+
+                DialogResult dialogResult = DialogResult.Abort;
+                try {
+                    threadWorker.Start(progressForm);
+
+                    dialogResult = progressForm.ShowDialog(activeWnd);
+                } finally {
+                    threadWorker.Join();
+                }
+
+                if (dialogResult == DialogResult.Abort) {
+                    if (progressForm.ThreadError.Message == "") {
+                        // Abort means there were file IO errors
+                        StdDialogs.ShowAlert("UnkProblem" /*fLangMan.LS(PLS.LSID_UnkProblem)*/);
+                    } else {
+                        // Abort means there were file IO errors
+                        StdDialogs.ShowAlert(progressForm.ThreadError.Message);
+                    }
+                }
+
+                if (dialogResult != DialogResult.OK) {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        public override ExtRect GetActiveScreenWorkingArea()
+        {
+            var activeForm = GetActiveWindow() as Form;
+            var screen = Screen.FromRectangle(activeForm.Bounds);
+            return UIHelper.Rt2Rt(screen.WorkingArea);
+        }
+
         #region KeyLayout functions
 
         public override int GetKeyLayout()
@@ -255,7 +321,6 @@ namespace GKUI.Platform
             // controls and other
             container.Register<IStdDialogs, WFStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
-            container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
 
             // dialogs
@@ -311,6 +376,8 @@ namespace GKUI.Platform
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
             container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
 
+            container.Register<IProgressController, ProgressDlg>(LifeCycle.Transient);
+
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
@@ -359,5 +426,32 @@ namespace GKUI.Platform
         #endif
 
         #endregion
+
+        public static void Startup(string[] args)
+        {
+            ConfigureBootstrap(false);
+            CheckPortable(args);
+            Logger.Init(GetLogFilename());
+            LogSysInfo();
+
+            Application.ThreadException += ExExceptionHandler;
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+        }
+
+        private static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
+        {
+            Logger.WriteError("GK.ExExceptionHandler()", args.Exception);
+        }
+
+        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            // Saving the copy for restoration
+            AppHost.Instance.CriticalSave();
+            Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)args.ExceptionObject);
+        }
     }
 }

@@ -21,6 +21,8 @@
 using System;
 using System.Globalization;
 using System.Text;
+using System.Threading;
+using BSLib;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
 using Eto.Drawing;
@@ -101,10 +103,19 @@ namespace GKUI.Platform
         private static void InitPlatformStyles()
         {
 #if OS_LINUX
+            // FIXME: don't work
             Eto.Style.Add<Eto.GtkSharp.Forms.ToolBar.ToolBarHandler>("tbsi", h => {
                 // executed but no result
                 h.Control.ToolbarStyle = Gtk.ToolbarStyle.BothHoriz;
+                //h.Control.ToolbarStyle = Gtk.ToolbarStyle.Icons;
                 h.Control.IconSize = Gtk.IconSize.SmallToolbar;
+            });
+
+            Eto.Style.Add<Eto.GtkSharp.Forms.Controls.GridColumnHandler>(null, h => {
+                Pango.FontDescription tpf = new Pango.FontDescription();
+                tpf.Weight = Pango.Weight.Normal;
+                h.Control.Button.ModifyFont(tpf);
+                h.Control.Button.ModifyFg(Gtk.StateType.Normal, new Gdk.Color(0, 0, 0));
             });
 #endif
         }
@@ -258,6 +269,37 @@ namespace GKUI.Platform
             Application.Instance.Quit();
         }
 
+        public override void ExecuteWork(ProgressStart proc)
+        {
+            var activeWnd = GetActiveWindow() as Window;
+
+            using (var progressForm = ResolveDialog<IProgressController>()) {
+                var workerThread = new Thread((obj) => {
+                    proc((IProgressController)obj);
+                });
+
+                try {
+                    workerThread.Start(progressForm);
+
+                    progressForm.ShowModalX(activeWnd);
+                } catch (Exception ex) {
+                    Logger.WriteError("ExecuteWork()", ex);
+                }
+            }
+        }
+
+        public override bool ExecuteWorkExt(ProgressStart proc, string title)
+        {
+            return false;
+        }
+
+        public override ExtRect GetActiveScreenWorkingArea()
+        {
+            var activeForm = GetActiveWindow() as Form;
+            var screen = Screen.FromRectangle(activeForm.Bounds);
+            return UIHelper.Rt2Rt(new Rectangle(screen.WorkingArea));
+        }
+
         #region KeyLayout functions
 
         public override int GetKeyLayout()
@@ -308,7 +350,6 @@ namespace GKUI.Platform
             // controls and other
             container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProviderEx, EtoGfxProvider>(LifeCycle.Singleton);
-            container.Register<IProgressController, ProgressController>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
 
             // dialogs
@@ -364,6 +405,8 @@ namespace GKUI.Platform
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
             container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
 
+            container.Register<IProgressController, ProgressDlg>(LifeCycle.Transient);
+
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
@@ -385,6 +428,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ButtonToolItem), typeof(ButtonToolItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(DropDownToolItem), typeof(ButtonToolItemHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
@@ -394,5 +438,22 @@ namespace GKUI.Platform
         }
 
         #endregion
+
+        public static void Startup(string[] args)
+        {
+            ConfigureBootstrap(false);
+            CheckPortable(args);
+            Logger.Init(GetLogFilename());
+            LogSysInfo();
+
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
+        }
+
+        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs e)
+        {
+            // Saving the copy for restoration
+            AppHost.Instance.CriticalSave();
+            Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)e.ExceptionObject);
+        }
     }
 }

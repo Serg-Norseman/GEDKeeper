@@ -360,8 +360,8 @@ namespace GKUI.Forms
                 ModalFormHandler = EditorDlg_btnAccept_Handler;
                 ClickToolStripButton("tbRecordEdit", fMainWin);
 
-                IListManager listMan = baseWin.GetRecordsListManByType(rt);
-                listMan.AddCondition((byte)PersonColumnType.ctPatriarch, ConditionKind.ck_Contains, "test"); // any first column
+                IRecordsListModel listMan = baseWin.GetRecordsListManByType(rt);
+                listMan.AddCondition((byte)IndividualListModel.ColumnType.ctPatriarch, ConditionKind.ck_Contains, "test"); // any first column
 
                 ModalFormHandler = CommonFilterDlgTests.CommonFilterDlg_btnAccept_Handler;
                 ClickToolStripButton("tbFilter", fMainWin);

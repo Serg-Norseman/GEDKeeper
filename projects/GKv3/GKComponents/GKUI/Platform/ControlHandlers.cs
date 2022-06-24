@@ -840,9 +840,9 @@ namespace GKUI.Platform
     }
 
 
-    public class ButtonToolItemHandler : ControlHandler<ButtonToolItem, ButtonToolItemHandler>, IButtonToolItem
+    public class ButtonToolItemHandler : ControlHandler<ToolItem, ButtonToolItemHandler>, IButtonToolItem
     {
-        public ButtonToolItemHandler(ButtonToolItem control) : base(control)
+        public ButtonToolItemHandler(ToolItem control) : base(control)
         {
         }
 
@@ -856,6 +856,12 @@ namespace GKUI.Platform
         {
             get { return Control.Text; }
             set { Control.Text = value; }
+        }
+
+        public bool Visible
+        {
+            get { return Control.Visible; }
+            set { Control.Visible = value; }
         }
     }
 

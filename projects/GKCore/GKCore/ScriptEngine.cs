@@ -242,17 +242,20 @@ namespace GKCore
 
         public void gk_progress_init(int length, string title)
         {
-            AppHost.Progress.ProgressInit(title, length);
+            // FIXME!
+            //AppHost.Progress.ProgressInit(title, length);
         }
 
         public void gk_progress_done()
         {
-            AppHost.Progress.ProgressDone();
+            // FIXME!
+            //AppHost.Progress.ProgressDone();
         }
 
         public void gk_progress_step()
         {
-            AppHost.Progress.ProgressStep();
+            // FIXME!
+            //AppHost.Progress.ProgressStep();
         }
 
         public void gk_update_view()

@@ -58,6 +58,11 @@ namespace GKUI.Forms
             get { return fContext; }
         }
 
+        public NavigationStack<GDMRecord> Navman
+        {
+            get { return fController.Navman; }
+        }
+
         #endregion
 
         #region View Interface
@@ -332,7 +337,7 @@ namespace GKUI.Forms
             return fController.GetHyperViewByType(recType);
         }
 
-        public IListManager GetRecordsListManByType(GDMRecordType recType)
+        public IRecordsListModel GetRecordsListManByType(GDMRecordType recType)
         {
             return fController.GetRecordsListManByType(recType);
         }

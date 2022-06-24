@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -651,20 +651,18 @@ namespace GKPedigreeImporterPlugin
 
         #region Integral loading
 
-        private bool AnalyseRaw()
+        private bool AnalyseRaw(IProgressController progress)
         {
             if (SourceType == SourceType.stTable) {
                 return false;
             }
 
             try {
-                IProgressController progress = AppHost.Progress;
-
                 try {
                     int[] numberStats = new int[3];
 
                     int num = fRawContents.Count;
-                    progress.ProgressInit(fLangMan.LS(ILS.LSID_Analyzing), num);
+                    progress.Begin(fLangMan.LS(ILS.LSID_Analyzing), num);
 
                     for (int i = 0; i < num; i++) {
                         string txt = fRawContents[i].Trim();
@@ -692,7 +690,7 @@ namespace GKPedigreeImporterPlugin
                             rawLine.Type = RawLineType.rltEOF;
                         }
 
-                        progress.ProgressStep(i + 1);
+                        progress.StepTo(i + 1);
                     }
 
                     if (numberStats[1] > numberStats[2]) {
@@ -703,7 +701,7 @@ namespace GKPedigreeImporterPlugin
 
                     return true;
                 } finally {
-                    progress.ProgressDone();
+                    progress.End();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("Importer.AnalyseRaw()", ex);
@@ -713,23 +711,26 @@ namespace GKPedigreeImporterPlugin
 
         public bool ImportContent()
         {
-            AnalyseRaw();
+            AppHost.Instance.ExecuteWork((controller) => {
+                AnalyseRaw(controller);
+            });
 
+            bool result = false;
             switch (SourceType)
             {
                 case SourceType.stText:
-                    return ImportTextContent();
+                    result = ImportTextContent();
+                    break;
 
                 case SourceType.stTable:
-                    #if !NO_DEPEND
-                    return ImportTableContent();
-                    #else
-                    return false;
-                    #endif
-
-                default:
-                    return false;
+#if !NO_DEPEND
+                    AppHost.Instance.ExecuteWork((controller) => {
+                        result = ImportTableContent(controller);
+                    });
+#endif
+                    break;
             }
+            return result;
         }
 
         private bool ImportTextContent()
@@ -787,7 +788,7 @@ namespace GKPedigreeImporterPlugin
         }
 
         #if !NO_DEPEND
-        private bool ImportTableContent()
+        private bool ImportTableContent(IProgressController progress)
         {
             try
             {
@@ -810,14 +811,13 @@ namespace GKPedigreeImporterPlugin
                 MSOExcel.Worksheet sheet = excel.Worksheets[1] as MSOExcel.Worksheet;
                 //sheet.Activate();
 
-                IProgressController progress = AppHost.Progress;
                 GDMLines buffer = new GDMLines();
                 try
                 {
                     int rowsCount = sheet.UsedRange.Rows.Count;
                     //int colsCount = sheet.UsedRange.Columns.Count;
 
-                    progress.ProgressInit(fLangMan.LS(ILS.LSID_Loading), rowsCount);
+                    progress.Begin(fLangMan.LS(ILS.LSID_Loading), rowsCount);
 
                     MSOExcel.Range excelRange = sheet.UsedRange;
                     object[,] valueArray = (object[,])excelRange.get_Value(MSOExcel.XlRangeValueDataType.xlRangeValueDefault);
@@ -892,7 +892,7 @@ namespace GKPedigreeImporterPlugin
                                 break;
                         }
 
-                        progress.ProgressStep(row);
+                        progress.StepTo(row);
                     }
 
                     // hack: processing last items before end
@@ -902,7 +902,7 @@ namespace GKPedigreeImporterPlugin
                 }
                 finally
                 {
-                    progress.ProgressDone();
+                    progress.End();
 
                     buffer.Clear();
                     buffer = null;
@@ -920,16 +920,15 @@ namespace GKPedigreeImporterPlugin
         }
         #endif
 
-        private bool LoadRawText()
+        private bool LoadRawText(IProgressController progress)
         {
             SourceType = SourceType.stText;
 
             try {
                 using (Stream fs = new FileStream(fFileName, FileMode.Open, FileAccess.Read))
                 using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
-                    IProgressController progress = AppHost.Progress;
                     try {
-                        progress.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
+                        progress.Begin(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
 
                         int lineNum = 0;
                         while (strd.Peek() != -1) {
@@ -939,16 +938,16 @@ namespace GKPedigreeImporterPlugin
                                 fRawContents.AddObject(txt, new RawLine(lineNum));
                             }
 
-                            progress.ProgressStep((int)strd.BaseStream.Position);
+                            progress.StepTo((int)strd.BaseStream.Position);
                             lineNum++;
                         }
                         fRawContents.AddObject("", new RawLine(lineNum));
                     } finally {
-                        progress.ProgressDone();
+                        progress.End();
                     }
                 }
 
-                return AnalyseRaw();
+                return AnalyseRaw(progress);
             } catch (Exception ex) {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
                 Logger.WriteError("Importer.LoadRawText()", ex);
@@ -957,72 +956,65 @@ namespace GKPedigreeImporterPlugin
         }
 
         #if !NO_DEPEND
-        private bool LoadRawWord()
+        private bool LoadRawWord(IProgressController progress)
         {
             SourceType = SourceType.stText;
 
-            try
-            {
+            try {
                 MSOWord.Application wordApp;
-                try
-                {
+                try {
                     wordApp = new MSOWord.Application();
-                }
-                catch
-                {
+                } catch {
                     return false;
                 }
 
-                IProgressController progress = AppHost.Progress;
-                try
-                {
+                try {
                     wordApp.Visible = DEBUG_WORD;
                     wordApp.WindowState = MSOWord.WdWindowState.wdWindowStateMaximize;
 
                     MSOWord.Document doc = wordApp.Documents.Open(fFileName);
 
-                    progress.ProgressInit(fLangMan.LS(ILS.LSID_Loading), doc.Paragraphs.Count);
+                    progress.Begin(fLangMan.LS(ILS.LSID_Loading), doc.Paragraphs.Count);
 
                     int lineNum = 0;
-                    for (int i = 0; i < doc.Paragraphs.Count; i++)
-                    {
-                        string txt = doc.Paragraphs[i+1].Range.Text;
+                    for (int i = 0; i < doc.Paragraphs.Count; i++) {
+                        string txt = doc.Paragraphs[i + 1].Range.Text;
                         txt = txt.Trim();
 
                         if (!string.IsNullOrEmpty(txt)) {
                             fRawContents.AddObject(txt, new RawLine(lineNum));
                         }
 
-                        progress.ProgressStep(i + 1);
+                        progress.StepTo(i + 1);
                         lineNum++;
                     }
                     fRawContents.AddObject("", new RawLine(lineNum));
 
-                    return AnalyseRaw();
-                }
-                finally
-                {
-                    progress.ProgressDone();
+                    return AnalyseRaw(progress);
+                } finally {
+                    progress.End();
 
                     object saveOptionsObject = MSOWord.WdSaveOptions.wdDoNotSaveChanges;
                     wordApp.Quit(ref saveOptionsObject);
                     wordApp = null;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
                 Logger.WriteError("Importer.LoadRawWord()", ex);
                 return false;
             }
         }
-        #endif
+#endif
 
         private bool LoadRawExcel()
         {
             SourceType = SourceType.stTable;
 
-            return AnalyseRaw();
+            bool result = false;
+            AppHost.Instance.ExecuteWork((controller) => {
+                result = AnalyseRaw(controller);
+            });
+            return result;
         }
 
         public bool LoadRawData(string fileName)
@@ -1032,30 +1024,25 @@ namespace GKPedigreeImporterPlugin
             fFileName = fileName;
             string ext = FileHelper.GetFileExtension(fileName);
 
-            if (ext == ".txt")
-            {
-                return LoadRawText();
-            }
-            else if (ext == ".doc")
-            {
-                #if !NO_DEPEND
-                return LoadRawWord();
-                #else
-                return false;
-                #endif
-            }
-            else if (ext == ".xls")
-            {
-                #if !NO_DEPEND
+            bool result = false;
+            if (ext == ".txt") {
+                AppHost.Instance.ExecuteWork((controller) => {
+                    result = LoadRawText(controller);
+                });
+            } else if (ext == ".doc") {
+#if !NO_DEPEND
+                AppHost.Instance.ExecuteWork((controller) => {
+                    result = LoadRawWord(controller);
+                });
+#endif
+            } else if (ext == ".xls") {
+#if !NO_DEPEND
                 return LoadRawExcel();
-                #else
-                return false;
-                #endif
-            }
-            else
-            {
+#endif
+            } else {
                 throw new ImporterException(fLangMan.LS(ILS.LSID_FormatUnsupported));
             }
+            return result;
         }
 
         #endregion

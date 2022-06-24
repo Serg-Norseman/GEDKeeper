@@ -37,7 +37,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class PersonsFilterDlgTests : CustomWindowTest
     {
-        private IListManager fListMan;
+        private IRecordsListModel fListMan;
         private IBaseWindow fBase;
         private PersonsFilterDlg fDialog;
 
@@ -47,7 +47,7 @@ namespace GKUI.Forms
             WFAppHost.ConfigureBootstrap(false);
 
             fBase = new BaseWindowStub();
-            fListMan = new IndividualListMan(fBase.Context);
+            fListMan = new IndividualListModel(fBase.Context);
 
             fDialog = new PersonsFilterDlg(fBase, fListMan);
             fDialog.Show();

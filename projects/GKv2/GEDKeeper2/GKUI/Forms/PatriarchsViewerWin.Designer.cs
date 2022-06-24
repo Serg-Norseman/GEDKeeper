@@ -29,7 +29,7 @@
             this.arborViewer1.Location = new System.Drawing.Point(0, 0);
             this.arborViewer1.Margin = new System.Windows.Forms.Padding(4);
             this.arborViewer1.Name = "arborViewer1";
-            this.arborViewer1.NodesDragging = false;
+            this.arborViewer1.NodesDragging = true;
             this.arborViewer1.Size = new System.Drawing.Size(1105, 645);
             this.arborViewer1.TabIndex = 0;
             this.arborViewer1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ArborViewer1_MouseMove);

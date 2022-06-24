@@ -41,7 +41,6 @@ namespace GDModel
 
         private void OnTreeChange(object sender, EventArgs e) {}
         private void OnTreeChanging(object sender, EventArgs e) {}
-        private void OnTreeProgress(object sender, int progress) {}
 
         [Test]
         public void Test_Common()
@@ -54,7 +53,8 @@ namespace GDModel
             // Tests of event handlers
             tree.OnChange += OnTreeChange;
             tree.OnChanging += OnTreeChanging;
-            tree.OnProgress += OnTreeProgress;
+
+            tree.ProgressCallback = null;
 
             tree.BeginUpdate();
             Assert.IsTrue(tree.IsUpdated());
@@ -133,7 +133,6 @@ namespace GDModel
 
             tree.OnChange -= OnTreeChange;
             tree.OnChanging -= OnTreeChanging;
-            tree.OnProgress -= OnTreeProgress;
 
             int size = 0;
             var enum1 = tree.GetEnumerator(GDMRecordType.rtNone);

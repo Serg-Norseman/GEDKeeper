@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,30 +27,29 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public enum GroupColumnType
-    {
-        ctName,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GroupListMan : ListManager
+    public sealed class GroupListModel : RecordsListModel<GDMGroupRecord>
     {
-        private GDMGroupRecord fRec;
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctName,
+            ctChangeDate
+        }
 
 
-        public GroupListMan(IBaseContext baseContext) :
+        public GroupListModel(IBaseContext baseContext) :
             base(baseContext, CreateGroupListColumns(), GDMRecordType.rtGroup)
         {
         }
 
-        public static ListColumns CreateGroupListColumns()
+        public static ListColumns<GDMGroupRecord> CreateGroupListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMGroupRecord>();
 
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Group, DataType.dtString, 400, true, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
@@ -60,29 +59,27 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fRec.GroupName, QuickFilter);
+            bool res = IsMatchesMask(fFetchedRec.GroupName, QuickFilter);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
-        }
-
-        public override void Fetch(GDMRecord aRec)
-        {
-            fRec = (aRec as GDMGroupRecord);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((GroupColumnType)colType)
-            {
-                case GroupColumnType.ctName:
-                    result = fRec.GroupName;
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fFetchedRec.GetId();
                     break;
 
-                case GroupColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                case ColumnType.ctName:
+                    result = fFetchedRec.GroupName;
+                    break;
+
+                case ColumnType.ctChangeDate:
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;
@@ -93,9 +90,11 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GroupMembersSublistModel : ListModel
+    public sealed class GroupMembersListModel : SheetModel<GDMIndividualLink>
     {
-        public GroupMembersSublistModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        private GDMIndividualRecord fMember;
+
+        public GroupMembersListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete /*, RecordAction.raJump*/);
@@ -104,33 +103,39 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
+        public override void Fetch(GDMIndividualLink aRec)
+        {
+            base.Fetch(aRec);
+            fMember = fBaseContext.Tree.GetPtrValue(fFetchedRec);
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = GKUtils.GetNameString(fMember, true, false);
+                    break;
+            }
+            return result;
+        }
+
         public override void UpdateContents()
         {
             var grp = fDataOwner as GDMGroupRecord;
-            if (fSheetList == null || grp == null) return;
+            if (grp == null) return;
 
             try {
-                fSheetList.BeginUpdate();
-                fSheetList.ClearItems();
-
-                var tree = fBaseWin.Context.Tree;
-                foreach (GDMIndividualLink ptrMember in grp.Members) {
-                    GDMIndividualRecord member = tree.GetPtrValue(ptrMember);
-                    if (member == null) continue;
-
-                    fSheetList.AddItem(member, new object[] { GKUtils.GetNameString(member, true, false) });
-                }
-
-                fSheetList.EndUpdate();
+                UpdateStructList(grp.Members);
             } catch (Exception ex) {
-                Logger.WriteError("GroupMembersSublistModel.UpdateContents()", ex);
+                Logger.WriteError("GroupMembersListModel.UpdateContents()", ex);
             }
         }
 
         public override void Modify(object sender, ModifyEventArgs eArgs)
         {
             var grp = fDataOwner as GDMGroupRecord;
-            if (fBaseWin == null || fSheetList == null || grp == null) return;
+            if (fBaseWin == null || grp == null) return;
 
             GDMIndividualRecord member = eArgs.ItemData as GDMIndividualRecord;
 

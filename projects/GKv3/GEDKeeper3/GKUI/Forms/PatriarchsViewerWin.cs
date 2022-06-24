@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using BSLib.DataViz.ArborGVT;
 using BSLib.DataViz.SmartGraph;
 using Eto.Drawing;
 using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
@@ -35,33 +36,36 @@ namespace GKUI.Forms
 {
     public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
     {
-        private readonly IBaseWindow fBase;
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
         private ArborViewer arborViewer1;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
+        private readonly IBaseWindow fBase;
+        private readonly int fMinGens;
         private bool fTipShow;
-
-        private void InitializeComponent()
-        {
-            ClientSize = new Size(800, 600);
-            Load += Form_Load;
-            Title = "PatriarchsViewer";
-
-            arborViewer1 = new ArborViewer();
-            arborViewer1.BackgroundColor = Colors.White;
-            arborViewer1.EnergyDebug = false;
-            arborViewer1.NodesDragging = false;
-            arborViewer1.MouseMove += ArborViewer1_MouseMove;
-
-            Content = arborViewer1;
-        }
 
         public PatriarchsViewerWin(IBaseWindow baseWin, int minGens)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             fBase = baseWin;
-            fTipShow = false;
+            fMinGens = minGens;
 
-            using (Graph graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true)) {
+            fTipShow = false;
+        }
+
+        private void LoadGraph()
+        {
+            Graph graph = null;
+            AppHost.Instance.ExecuteWork((controller) => {
+                graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, fMinGens, false, true, controller);
+            });
+
+            using (graph) {
                 ArborSystem sys = arborViewer1.Sys;
 
                 foreach (Vertex vtx in graph.Vertices) {
@@ -76,12 +80,11 @@ namespace GKUI.Forms
                     sys.AddEdge(edge.Source.Sign, edge.Target.Sign);
                 }
             }
-
-            arborViewer1.NodesDragging = true;
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
+            LoadGraph();
             arborViewer1.start();
         }
 

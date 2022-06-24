@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using BSLib;
 using BSLib.Design.MVP;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
@@ -91,29 +90,49 @@ namespace GKCore.Lists
     public interface ISheetList : IBaseControl
     {
         EnumSet<SheetButton> Buttons { get; set; }
-        ListModel ListModel { get; set; }
+        ISheetModel ListModel { get; set; }
+        IListViewEx ListView { get; }
         bool ReadOnly { get; set; }
 
-        void AddColumn(string caption, int width, bool autoSize);
-        IListItem AddItem(object rowData, params object[] columnValues);
-        void BeginUpdate();
-        void EndUpdate();
-        void ClearColumns();
-        void ClearItems();
-        void ResizeColumn(int columnIndex);
         void UpdateSheet();
     }
+
+
+    public interface ISheetModel : IListSource
+    {
+        EnumSet<RecordAction> AllowedActions { get; set; }
+        GDMObject DataOwner { get; set; }
+        ISheetList SheetList { get; set; }
+
+        void Modify(object sender, ModifyEventArgs eArgs);
+    }
+
+
+    public interface ISheetModel<T> : ISheetModel
+        where T : GDMTag
+    {
+    }
+
 
     /// <summary>
     /// 
     /// </summary>
-    public abstract class ListModel : ListSource
+    public abstract class SheetModel<T> : ListSource<T>, ISheetModel<T>
+        where T : GDMTag
     {
+        private EnumSet<RecordAction> fAllowedActions;
         protected ISheetList fSheetList;
         protected readonly IBaseWindow fBaseWin;
         protected readonly ChangeTracker fUndoman;
         protected GDMObject fDataOwner;
+        protected GDMList<T> fStructList;
 
+
+        public EnumSet<RecordAction> AllowedActions
+        {
+            get { return fAllowedActions; }
+            set { fAllowedActions = value; }
+        }
 
         public GDMObject DataOwner
         {
@@ -122,43 +141,40 @@ namespace GKCore.Lists
             }
             set {
                 fDataOwner = value;
-                UpdateContents();
+                if (fSheetList != null) {
+                    fSheetList.UpdateSheet();
+                }
             }
         }
 
         public ISheetList SheetList
         {
-            get {
-                return fSheetList;
-            }
-            set {
-                if (fSheetList != value) {
-                    fSheetList = value;
-                }
-            }
+            get { return fSheetList; }
+            set { fSheetList = value; }
         }
 
-        protected ListModel(IBaseWindow baseWin, ChangeTracker undoman) :
-            base(baseWin.Context, new ListColumns())
+
+        protected SheetModel(IBaseWindow baseWin, ChangeTracker undoman) :
+            base(baseWin.Context, new ListColumns<T>())
         {
+            fAllowedActions = new EnumSet<RecordAction>();
             fBaseWin = baseWin;
             fUndoman = undoman;
         }
 
-        public override void UpdateColumns(IListViewEx listView)
+        protected void UpdateStructList(GDMList<T> structList)
         {
-            if (listView == null) return;
+            fStructList = structList;
 
-            ColumnsMap_Clear();
+            int contentSize = fStructList.Count;
+            InitContent(contentSize);
 
-            int num = fListColumns.Count;
-            for (int i = 0; i < num; i++) {
-                ListColumn cs = fListColumns.OrderedColumns[i];
-
-                AddColumn(listView, LangMan.LS(cs.ColName), cs.CurWidth, false, cs.Id, 0);
+            for (int i = 0; i < contentSize; i++) {
+                T rec = fStructList[i];
+                AddFilteredContent(rec);
             }
 
-            ColumnsHaveBeenChanged = false;
+            DoneContent();
         }
 
         public abstract void Modify(object sender, ModifyEventArgs eArgs);

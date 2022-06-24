@@ -252,7 +252,7 @@ namespace GDModel.Providers.GEDCOM
         {
             fTree.State = GDMTreeState.osLoading;
             try {
-                ProgressEventHandler progressHandler = fTree.OnProgress;
+                var progressCallback = fTree.ProgressCallback;
 
                 fDefaultEncoding = GetDefaultEncoding();
                 fSourceEncoding = fDefaultEncoding;
@@ -341,11 +341,11 @@ namespace GDModel.Providers.GEDCOM
                         }
                     }
 
-                    if (progressHandler != null) {
+                    if (progressCallback != null) {
                         int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
                         if (progress != newProgress) {
                             progress = newProgress;
-                            progressHandler(fTree, progress);
+                            progressCallback.StepTo(progress);
                         }
                     }
                 }
@@ -1874,8 +1874,8 @@ namespace GDModel.Providers.GEDCOM
             WriteTagValue(stream, level, tag);
 
             level += 1;
-            WriteTagLine(stream, level, GEDCOMTagName.LATI, GEDCOMUtils.GetFloatStr(map.Lati), true);
-            WriteTagLine(stream, level, GEDCOMTagName.LONG, GEDCOMUtils.GetFloatStr(map.Long), true);
+            WriteTagLine(stream, level, GEDCOMTagName.LATI, GEDCOMUtils.CoordToStr(map.Lati), true);
+            WriteTagLine(stream, level, GEDCOMTagName.LONG, GEDCOMUtils.CoordToStr(map.Long), true);
             return true;
         }
 

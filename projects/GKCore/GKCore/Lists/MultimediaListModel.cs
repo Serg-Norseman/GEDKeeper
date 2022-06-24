@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,32 +23,34 @@ using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {
-    public enum MultimediaColumnType
-    {
-        ctTitle,
-        ctMediaType,
-        ctFileRef,
-        ctChangeDate
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class MultimediaListMan : ListManager
+    public sealed class MultimediaListModel : RecordsListModel<GDMMultimediaRecord>
     {
-        private GDMMultimediaRecord fRec;
+        public enum ColumnType
+        {
+            ctXRefNum,
+            ctTitle,
+            ctMediaType,
+            ctFileRef,
+            ctChangeDate
+        }
 
 
-        public MultimediaListMan(IBaseContext baseContext) :
+        private GDMFileReferenceWithTitle fFileRef;
+
+
+        public MultimediaListModel(IBaseContext baseContext) :
             base(baseContext, CreateMultimediaListColumns(), GDMRecordType.rtMultimedia)
         {
         }
 
-        public static ListColumns CreateMultimediaListColumns()
+        public static ListColumns<GDMMultimediaRecord> CreateMultimediaListColumns()
         {
-            var result = new ListColumns();
+            var result = new ListColumns<GDMMultimediaRecord>();
 
+            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.LSID_Title, DataType.dtString, 150, true, true);
             result.AddColumn(LSID.LSID_Type, DataType.dtString, 85, true);
             result.AddColumn(LSID.LSID_File, DataType.dtString, 300, true);
@@ -60,43 +62,45 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            GDMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
+            bool res = IsMatchesMask(fFileRef.Title, QuickFilter);
 
-            bool res = IsMatchesMask(fileRef.Title, QuickFilter);
-
-            res = res && CheckCommonFilter() && CheckExternalFilter(fRec);
+            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
         }
 
-        public override void Fetch(GDMRecord aRec)
+        public override void Fetch(GDMMultimediaRecord aRec)
         {
-            fRec = (aRec as GDMMultimediaRecord);
+            base.Fetch(aRec);
+            fFileRef = fFetchedRec.FileReferences[0];
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
-            GDMFileReferenceWithTitle fileRef = fRec.FileReferences[0];
-            if (fileRef == null) {
+            if (fFileRef == null) {
                 return null;
             }
 
             object result = null;
-            switch ((MultimediaColumnType)colType) {
-                case MultimediaColumnType.ctTitle:
-                    result = fileRef.Title;
+            switch ((ColumnType)colType) {
+                case ColumnType.ctXRefNum:
+                    result = fFetchedRec.GetId();
                     break;
 
-                case MultimediaColumnType.ctMediaType:
-                    result = LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]);
+                case ColumnType.ctTitle:
+                    result = fFileRef.Title;
                     break;
 
-                case MultimediaColumnType.ctFileRef:
-                    result = fileRef.StringValue;
+                case ColumnType.ctMediaType:
+                    result = LangMan.LS(GKData.MediaTypes[(int)fFileRef.MediaType]);
                     break;
 
-                case MultimediaColumnType.ctChangeDate:
-                    result = fRec.ChangeDate.ChangeDateTime;
+                case ColumnType.ctFileRef:
+                    result = fFileRef.StringValue;
+                    break;
+
+                case ColumnType.ctChangeDate:
+                    result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
             return result;

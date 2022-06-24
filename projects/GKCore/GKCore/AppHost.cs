@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -247,6 +247,10 @@ namespace GKCore
 
         public abstract void Quit();
 
+        public abstract void ExecuteWork(ProgressStart proc);
+
+        public abstract bool ExecuteWorkExt(ProgressStart proc, string title);
+
         #region Executing environment
 
         private static Assembly GetAssembly()
@@ -384,6 +388,44 @@ namespace GKCore
             if (widInfo == null) return;
 
             if (widInfo.MenuItem != null) widInfo.MenuItem.Checked = false;
+        }
+
+        public abstract ExtRect GetActiveScreenWorkingArea();
+
+        public ExtPoint WidgetLocate(ExtRect formBounds, WidgetHorizontalLocation horizontalLocation, WidgetVerticalLocation verticalLocation)
+        {
+            const int ScrPadding = 0;
+
+            var screenWorkingArea = GetActiveScreenWorkingArea();
+
+            int locX = 0;
+            int locY = 0;
+
+            switch (horizontalLocation) {
+                case WidgetHorizontalLocation.Left:
+                    locX = ScrPadding;
+                    break;
+                case WidgetHorizontalLocation.Center:
+                    locX = (screenWorkingArea.Width - formBounds.Width) / 2;
+                    break;
+                case WidgetHorizontalLocation.Right:
+                    locX = screenWorkingArea.Width - formBounds.Width - ScrPadding;
+                    break;
+            }
+
+            switch (verticalLocation) {
+                case WidgetVerticalLocation.Top:
+                    locY = ScrPadding;
+                    break;
+                case WidgetVerticalLocation.Center:
+                    locY = (screenWorkingArea.Height - formBounds.Height) / 2;
+                    break;
+                case WidgetVerticalLocation.Bottom:
+                    locY = screenWorkingArea.Height - formBounds.Height - ScrPadding;
+                    break;
+            }
+
+            return new ExtPoint(locX, locY);
         }
 
         public bool IsWidgetActive(IWidget widget)
@@ -838,6 +880,11 @@ namespace GKCore
 
         #region ISingleInstanceEnforcer implementation
 
+        public static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
+        {
+            return AppHost.Instance;
+        }
+
         void ISingleInstanceEnforcer.OnMessageReceived(MessageEventArgs e)
         {
             OnMessageReceivedInvoker invoker = delegate(MessageEventArgs eventArgs) {
@@ -924,16 +971,6 @@ namespace GKCore
                     fOptions = GlobalOptions.Instance;
                 }
                 return fOptions;
-            }
-        }
-
-        public static IProgressController Progress
-        {
-            get {
-                if (fProgressController == null) {
-                    fProgressController = fIocContainer.Resolve<IProgressController>();
-                }
-                return fProgressController;
             }
         }
 

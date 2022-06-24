@@ -31,7 +31,7 @@ namespace GKUI.Forms
     public partial class CommonFilterDlg : CommonDialog<ICommonFilterDlg, CommonFilterDlgController>, ICommonFilterDlg
     {
         private readonly IBaseWindow fBase;
-        private readonly IListManager fListMan;
+        private readonly IRecordsListModel fListMan;
 
         private FilterGridView filterView;
 
@@ -40,7 +40,7 @@ namespace GKUI.Forms
             get { return fBase; }
         }
 
-        public IListManager ListMan
+        public IRecordsListModel ListMan
         {
             get { return fListMan; }
         }
@@ -62,7 +62,7 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
         }
 
-        public CommonFilterDlg(IBaseWindow baseWin, IListManager listMan) : this()
+        public CommonFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan) : this()
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
