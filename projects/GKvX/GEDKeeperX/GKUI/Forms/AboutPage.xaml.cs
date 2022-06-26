@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,8 @@
  */
 
 using System;
+using GKCore;
+using GKCore.Options;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -30,14 +32,30 @@ namespace GKUI.Forms
         public AboutPage()
         {
             InitializeComponent();
-            Title = "About";
-            LogoImage.Source = ImageSource.FromResource(@"Resources.gk_logo.png");
-            AppNameLabel.Text = GKCore.GKData.APP_TITLE + " " + GKCore.AppHost.GetAppVersion();
+
+            // FontSize="12" FontAttributes="Bold"
+
+            Title = LangMan.LS(LSID.LSID_MIAbout);
+            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
+            //lblProduct.Text = GKData.APP_TITLE;
+            lblVersion.Text = @"Version " + AppHost.GetAppVersion();
+            lblCopyright.Text = AppHost.GetAppCopyright();
+
+            if (GlobalOptions.Instance.GetLanguageSign() == "rus") {
+                lblForum.Text = GKData.APP_FORUM_RU;
+                lblChannel.Text = GKData.APP_CHANNEL_RU;
+            } else {
+                lblForum.Text = GKData.APP_FORUM_EN;
+                lblChannel.Text = GKData.APP_CHANNEL_EN;
+            }
         }
 
-        private void OpenWeb_Clicked(object sender, EventArgs e)
+        private void lblURL_Clicked(object sender, EventArgs e)
         {
-            Device.OpenUri(new Uri("https://gedkeeper.github.io/"));
+            var btn = sender as Button;
+            if (btn != null) {
+                Device.OpenUri(new Uri(btn.Text));
+            }
         }
     }
 }

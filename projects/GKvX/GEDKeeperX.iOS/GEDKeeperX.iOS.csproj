@@ -136,6 +136,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj">
+      <Project>{80BB677B-48EF-46CF-9476-C9C81E6D58AE}</Project>
+      <Name>GKCore.nstd</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GEDKeeperX\GEDKeeperX.csproj">
       <Project>{F69BEF29-4CED-4508-B412-C43065144063}</Project>
       <Name>GEDKeeperX</Name>

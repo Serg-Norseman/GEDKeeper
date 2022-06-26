@@ -25,7 +25,7 @@ namespace GKUI.Components
             }
         }
 
-        public IListManager ListMan
+        public IListSource ListMan
         {
             get => throw new System.NotImplementedException();
             set => throw new System.NotImplementedException();
@@ -111,6 +111,14 @@ namespace GKUI.Components
         }
 
         public void UpdateContents(bool columnsChanged = false)
+        {
+        }
+
+        public void ResizeColumn(int columnIndex)
+        {
+        }
+
+        public void SelectItem(int index)
         {
         }
     }

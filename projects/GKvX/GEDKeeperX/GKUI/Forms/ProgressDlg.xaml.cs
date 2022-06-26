@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,7 +27,7 @@ using Xamarin.Forms.Xaml;
 namespace GKUI.Forms
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public sealed partial class ProgressDlg : CommonForm
+    public sealed partial class ProgressDlg : CommonForm, IProgressController
     {
         private int fMaximum;
         private DateTime fStartTime;
@@ -104,7 +104,11 @@ namespace GKUI.Forms
             base.OnClosing(e);
         }*/
 
-        internal void ProgressInit(string title, int max)
+        public void Begin(int maximum, bool cancelable)
+        {
+        }
+
+        public void Begin(string title, int maximum, bool cancelable = false)
         {
             try {
                 //DoInit(title, max);
@@ -114,7 +118,7 @@ namespace GKUI.Forms
             }
         }
 
-        internal void ProgressDone()
+        public void End()
         {
             try {
                 if (fRequiresClose) {
@@ -126,7 +130,15 @@ namespace GKUI.Forms
             }
         }
 
-        internal void ProgressStep()
+        public void End(ThreadError threadError)
+        {
+        }
+
+        public void SetText(string text)
+        {
+        }
+
+        public void Increment(int value = 1)
         {
             try {
                 //DoStep(fVal + 1);
@@ -136,7 +148,7 @@ namespace GKUI.Forms
             }
         }
 
-        internal void ProgressStep(int value)
+        public void StepTo(int value)
         {
             try {
                 //DoStep(value);
@@ -153,93 +165,15 @@ namespace GKUI.Forms
             }
         }
 
+        public void InvokeEx(Action action)
+        {
+        }
+
+        public bool ShowModalX(object owner)
+        {
+            return true;
+        }
+
         #endregion
-    }
-
-    public sealed class ProgressController : IProgressController
-    {
-        //private ManualResetEvent fMRE = new ManualResetEvent(false);
-
-        private volatile bool fFormLoaded;
-        private int fMax;
-        private IntPtr fParentHandle;
-        private ProgressDlg fProgressForm;
-        //private Thread fThread;
-        private string fTitle;
-        private int fVal;
-
-        public void ProgressInit(string title, int max, bool cancelable = false)
-        {
-            if (fProgressForm != null) {
-                fProgressForm.ProgressInit(title, max);
-            } else {
-                fFormLoaded = false;
-                fTitle = title;
-                fMax = max;
-                fParentHandle = AppHost.Instance.GetTopWindowHandle();
-
-                ShowProgressForm();
-                //fThread = new Thread(ShowProgressForm);
-                //fThread.SetApartmentState(ApartmentState.STA);
-                //fThread.Start();
-
-                while (!fFormLoaded)
-                {
-                    Thread.Sleep(100);
-                }
-                //fMRE.WaitOne();
-            }
-
-            fVal = 0;
-        }
-
-        public void ProgressDone()
-        {
-            if (fProgressForm != null) {
-                fProgressForm.ProgressDone();
-                fProgressForm = null;
-            }
-        }
-
-        public void ProgressStep()
-        {
-            if (fProgressForm != null) {
-                fProgressForm.ProgressStep(fVal++);
-            }
-        }
-
-        public void ProgressStep(int value)
-        {
-            if (fProgressForm != null) {
-                fProgressForm.ProgressStep(value);
-            }
-        }
-
-        private void ShowProgressForm()
-        {
-            fProgressForm = new ProgressDlg();
-            fProgressForm.ProgressInit(fTitle, fMax);
-            //fProgressForm.Opened += ProgressForm_Load;
-
-            /*if (fParentHandle != IntPtr.Zero) {
-                UIHelper.CenterFormByParent(fProgressForm, fParentHandle);
-            }*/
-
-            //fProgressForm.Show();
-            //fProgressForm.Close();
-        }
-
-        private void ProgressForm_Load(object sender, EventArgs e)
-        {
-            //fMRE.Set();
-            fFormLoaded = true;
-        }
-
-        public bool IsCanceled
-        {
-            get {
-                return (fProgressForm != null) && fProgressForm.IsCanceled;
-            }
-        }
     }
 }

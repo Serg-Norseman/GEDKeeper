@@ -13,6 +13,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GEDKeeperX", "GEDKeeperX\GE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.nstd", "..\GKCore\GKCore.nstd.csproj", "{80BB677B-48EF-46CF-9476-C9C81E6D58AE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{A853C7C7-CAAB-467D-92C1-8B7D6AED39D4}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\locales\Chinese Simplified.lng = ..\..\locales\Chinese Simplified.lng
+		..\..\locales\czech.lng = ..\..\locales\czech.lng
+		..\..\locales\English.lng = ..\..\locales\English.lng
+		..\..\locales\french.lng = ..\..\locales\french.lng
+		..\..\locales\german.lng = ..\..\locales\german.lng
+		..\..\locales\italian.lng = ..\..\locales\italian.lng
+		..\..\locales\kazakh_cyrillic.lng = ..\..\locales\kazakh_cyrillic.lng
+		..\..\locales\polish.lng = ..\..\locales\polish.lng
+		..\..\locales\russian.lng = ..\..\locales\russian.lng
+		..\..\locales\ukrainian.lng = ..\..\locales\ukrainian.lng
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

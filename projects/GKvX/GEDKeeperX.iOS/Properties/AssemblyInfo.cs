@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
+using GKCore;
 
 [assembly: AssemblyTitle("GEDKeeperX.iOS")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("GEDKeeperX")]
-[assembly: AssemblyCopyright("Copyright © 2018 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyProduct(GKData.APP_TITLE)]
+[assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
+[assembly: AssemblyVersion(GKData.APP_VERSION_3X)]
 [assembly: AssemblyCulture("")]

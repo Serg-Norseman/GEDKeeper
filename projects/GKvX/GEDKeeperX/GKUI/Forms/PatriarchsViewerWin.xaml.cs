@@ -21,6 +21,7 @@
 using System;
 using BSLib.DataViz.ArborGVT;
 using BSLib.DataViz.SmartGraph;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -35,6 +36,7 @@ namespace GKUI.Forms
     public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
     {
         private readonly IBaseWindow fBase;
+        private readonly int fMinGens;
         private bool fTipShow;
 
         public PatriarchsViewerWin() : this(null, 0)
@@ -46,18 +48,27 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fBase = baseWin;
+            fMinGens = minGens;
             fTipShow = false;
 
             Appearing += Form_Load;
 
             arborViewer.EnergyDebug = true;
             arborViewer.NodesDragging = true;
+        }
 
+        private void LoadGraph()
+        {
             if (fBase == null) {
                 return;
             }
 
-            using (Graph graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, minGens, false, true)) {
+            Graph graph = null;
+            AppHost.Instance.ExecuteWork((controller) => {
+                graph = PatriarchsMan.GetPatriarchsGraph(fBase.Context, fMinGens, false, true, controller);
+            });
+
+            using (graph) {
                 ArborSystem sys = arborViewer.Sys;
 
                 foreach (Vertex vtx in graph.Vertices) {
@@ -72,12 +83,11 @@ namespace GKUI.Forms
                     sys.AddEdge(edge.Source.Sign, edge.Target.Sign);
                 }
             }
-
-            arborViewer.NodesDragging = true;
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
+            //LoadGraph();
             ArborSystem.CreateSample(arborViewer.Sys.Graph);
             arborViewer.Start();
         }
