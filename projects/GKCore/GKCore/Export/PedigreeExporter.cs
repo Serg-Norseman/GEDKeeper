@@ -208,11 +208,11 @@ namespace GKCore.Export
             fTree.GetParents(person.IRec, out father, out mother);
 
             if (father != null) {
-                fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont, idLink(father), fLinkFont);
+                fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fLinkFont, idLink(father));
             }
 
             if (mother != null) {
-                fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont, idLink(mother), fLinkFont);
+                fWriter.AddParagraphLink(LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fLinkFont, idLink(mother));
             }
 
             var evList = new List<PedigreeEvent>();
@@ -492,10 +492,7 @@ namespace GKCore.Export
 
         protected override void InternalGenerate()
         {
-            bool isRtf = false;
-#if !NETSTANDARD
-            isRtf = (fWriter is RTFWriter);
-#endif
+            bool isRtf = (fWriter is RTFWriter);
 
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
             IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);

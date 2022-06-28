@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -17,8 +17,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#if !NETSTANDARD
 
 using BSLib.Design.Graphics;
 using Elistia.DotNetRtfWriter;
@@ -93,7 +91,7 @@ namespace GKCore.Export
 
         public override void EndWrite()
         {
-            fDocument.save(fFileName);
+            fDocument.Save(fFileName);
         }
 
         public override void EnablePageNumbers()
@@ -118,46 +116,39 @@ namespace GKCore.Export
             par.Text.Append(text);
             int end = par.Text.Length - 1;
 
-            RtfCharFormat fmt = par.addCharFormat(beg, end);
+            RtfCharFormat fmt = par.AddCharFormat(beg, end);
             fmt.Font = fntStr.FD;
             fmt.FgColor = fntStr.Color;
             fmt.FontSize = fntStr.Size;
-            if (fntStr.Bold) fmt.FontStyle.addStyle(FontStyleFlag.Bold);
-            if (fntStr.Underline) fmt.FontStyle.addStyle(FontStyleFlag.Underline);
+            if (fntStr.Bold) fmt.FontStyle.AddStyle(FontStyleFlag.Bold);
+            if (fntStr.Underline) fmt.FontStyle.AddStyle(FontStyleFlag.Underline);
 
             return fmt;
         }
 
         public override void AddParagraph(string text, IFont font, TextAlignment alignment)
         {
-            RtfParagraph par = fDocument.addParagraph();
+            RtfParagraph par = fDocument.AddParagraph();
             par.Alignment = iAlignments[(int)alignment];
             AddParagraphChunk(par, text, font);
         }
 
         public override void AddParagraph(string text, IFont font)
         {
-            RtfParagraph par = fDocument.addParagraph();
+            RtfParagraph par = fDocument.AddParagraph();
             AddParagraphChunk(par, text, font);
         }
 
         public override void AddParagraphAnchor(string text, IFont font, string anchor)
         {
-            RtfParagraph par = fDocument.addParagraph();
+            RtfParagraph par = fDocument.AddParagraph();
             RtfCharFormat fmt = AddParagraphChunk(par, text, font);
             fmt.Bookmark = anchor;
         }
 
         public override void AddParagraphLink(string text, IFont font, string link)
         {
-            RtfParagraph par = fDocument.addParagraph();
-            RtfCharFormat fmt = AddParagraphChunk(par, text, font);
-            fmt.LocalHyperlink = link;
-        }
-
-        public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont)
-        {
-            RtfParagraph par = fDocument.addParagraph();
+            RtfParagraph par = fDocument.AddParagraph();
             RtfCharFormat fmt = AddParagraphChunk(par, text, font);
             fmt.LocalHyperlink = link;
         }
@@ -167,9 +158,9 @@ namespace GKCore.Export
             if (string.IsNullOrEmpty(name)) name = "Times New Roman";
 
             FontStruct fntStr = new FontStruct();
-            fntStr.FD = fDocument.createFont(name);
+            fntStr.FD = fDocument.CreateFont(name);
             fntStr.OriginalColor = color;
-            fntStr.Color = fDocument.createColor(new RtfColor(color.GetCode()));
+            fntStr.Color = fDocument.CreateColor(new RtfColor(color.GetCode()));
             fntStr.Size = size;
             fntStr.Bold = bold;
             fntStr.Underline = underline;
@@ -195,7 +186,7 @@ namespace GKCore.Export
 
         public override void AddListItem(string text, IFont font)
         {
-            RtfParagraph par = fDocument.addParagraph();
+            RtfParagraph par = fDocument.AddParagraph();
 
             FontStruct fntStr = ((FontHandler)font).Handle;
             var symFont = CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
@@ -206,7 +197,7 @@ namespace GKCore.Export
 
         public override void AddListItemLink(string text, IFont font, string link, IFont linkFont)
         {
-            RtfParagraph par = fDocument.addParagraph();
+            RtfParagraph par = fDocument.AddParagraph();
 
             FontStruct fntStr = ((FontHandler)font).Handle;
             var symFont = CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
@@ -224,7 +215,7 @@ namespace GKCore.Export
                                             float spacingBefore, float spacingAfter,
                                             float indent = 0.0f, bool keepTogether = false)
         {
-            fParagraph = fDocument.addParagraph();
+            fParagraph = fDocument.AddParagraph();
             fParagraph.Alignment = iAlignments[(int)alignment];
             
             var margins = fParagraph.Margins;
@@ -250,7 +241,7 @@ namespace GKCore.Export
         public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false)
         {
             RtfCharFormat fmt = AddParagraphChunk(fParagraph, text, font);
-            if (sup) fmt.FontStyle.addStyle(FontStyleFlag.Super);
+            if (sup) fmt.FontStyle.AddStyle(FontStyleFlag.Super);
             fmt.LocalHyperlink = link;
         }
 
@@ -265,7 +256,7 @@ namespace GKCore.Export
 
         public override void BeginTable(int columnsCount, int rowsCount)
         {
-            fTable = fDocument.addTable(rowsCount, columnsCount, 0);
+            fTable = fDocument.AddTable(rowsCount, columnsCount, 0);
             fTableRow = 0;
             fTableCol = 0;
         }
@@ -284,9 +275,9 @@ namespace GKCore.Export
 
         public override void AddTableCell(string content, IFont font, TextAlignment alignment)
         {
-            var cell = fTable.cell(fTableRow, fTableCol);
+            var cell = fTable.Cell(fTableRow, fTableCol);
             if (!string.IsNullOrEmpty(content)) {
-                var par = cell.addParagraph();
+                var par = cell.AddParagraph();
                 par.Alignment = iAlignments[(int)alignment];
                 AddParagraphChunk(par, content, font);
             }
@@ -299,5 +290,3 @@ namespace GKCore.Export
         }
     }
 }
-
-#endif

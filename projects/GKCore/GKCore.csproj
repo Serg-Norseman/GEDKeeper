@@ -48,8 +48,8 @@
     <Reference Include="BSLib.SQLite">
       <HintPath>..\libs\BSLib.SQLite.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetRtfWriter">
-      <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
+    <Reference Include="RtfWriter">
+      <HintPath>..\libs\RtfWriter.dll</HintPath>
     </Reference>
     <Reference Include="ExcelLibrary">
       <HintPath>..\libs\ExcelLibrary.dll</HintPath>

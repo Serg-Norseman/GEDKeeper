@@ -135,11 +135,6 @@ namespace GKCore.Export
             fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\"><a href=\"#"+link+"\">"+text+"</a></p>");
         }
 
-        public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont)
-        {
-            fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\"><a href=\"#"+link+"\">"+text+"</a></p>");
-        }
-
         public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
         {
             string style;

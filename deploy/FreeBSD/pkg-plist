@@ -3,7 +3,7 @@ bin/gedkeeper
 %%DATADIR%%/BSLib.Linguistics.dll
 %%DATADIR%%/BSLib.SmartGraph.dll
 %%DATADIR%%/BSLib.dll
-%%DATADIR%%/DotNetRtfWriter.dll
+%%DATADIR%%/RtfWriter.dll
 %%DATADIR%%/ExcelLibrary.dll
 %%DATADIR%%/GEDKeeper2.exe
 %%DATADIR%%/GKComponents.dll
@@ -305,7 +305,7 @@ bin/gedkeeper
 %%DATADIR%%/plugins/BSLib.Linguistics.dll
 %%DATADIR%%/plugins/BSLib.SmartGraph.dll
 %%DATADIR%%/plugins/BSLib.dll
-%%DATADIR%%/plugins/DotNetRtfWriter.dll
+%%DATADIR%%/plugins/RtfWriter.dll
 %%DATADIR%%/plugins/ExcelLibrary.dll
 %%DATADIR%%/plugins/GKCalculatorPlugin.dll
 %%DATADIR%%/plugins/GKCalculatorPlugin.enu

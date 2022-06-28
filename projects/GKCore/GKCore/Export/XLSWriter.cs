@@ -91,10 +91,6 @@ namespace GKCore.Export
         {
         }
 
-        public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont)
-        {
-        }
-
         public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
         {
             return null;

@@ -89,7 +89,6 @@ namespace GKCore.Export
         public abstract void AddParagraph(string text, IFont font, TextAlignment alignment);
         public abstract void AddParagraphAnchor(string text, IFont font, string anchor);
         public abstract void AddParagraphLink(string text, IFont font, string link);
-        public abstract void AddParagraphLink(string text, IFont font, string link, IFont linkFont);
 
         public abstract IFont CreateFont(string name, float size, bool bold, bool underline, IColor color);
         public abstract void NewPage();

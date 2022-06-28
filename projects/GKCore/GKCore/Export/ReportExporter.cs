@@ -79,11 +79,7 @@ namespace GKCore.Export
             if (string.Equals(ext, ".html")) {
                 writer = new HTMLWriter();
             } else if (string.Equals(ext, ".rtf")) {
-                #if !NETSTANDARD
                 writer = new RTFWriter();
-                #else
-                writer = new HTMLWriter();
-                #endif
             } else {
                 #if !NETSTANDARD
                 writer = new PDFWriter();

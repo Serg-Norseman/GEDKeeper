@@ -924,7 +924,6 @@ namespace GKCore
         private static IGraphicsProviderEx fGfxProvider;
         private static PathReplacer fPathReplacer;
         private static INamesTable fNamesTable;
-        private static IProgressController fProgressController;
         private static PluginsMan fPlugins;
         private static GlobalOptions fOptions;
 

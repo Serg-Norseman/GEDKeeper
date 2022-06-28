@@ -248,19 +248,6 @@ namespace GKCore.Export
             }
         }
 
-        public override void AddParagraphLink(string text, IFont font, string link, IFont linkFont)
-        {
-            Paragraph pg = new Paragraph();
-            pg.Add(new Chunk(text, ((FontHandler)font).Handle));
-            pg.Add(new Chunk(link, ((FontHandler)linkFont).Handle).SetLocalGoto(link));
-
-            if (fMulticolumns) {
-                fColumns.AddElement(pg);
-            } else {
-                fDocument.Add(pg);
-            }
-        }
-
         public override void BeginMulticolumns(int columnCount, float columnSpacing)
         {
             fMulticolumns = true;

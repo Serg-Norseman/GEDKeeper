@@ -3,13 +3,7 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>GKCore</AssemblyName>
     <RootNamespace />
-    <Company />
-    <Product>GEDKeeper</Product>
-    <Copyright>Copyright © 2014-2022 Sergey V. Zhdanovskih</Copyright>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <FileVersion>3.0.0.0</FileVersion>
-    <Authors>Sergey V. Zhdanovskih</Authors>
-    <Version>3.0.0</Version>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
@@ -18,9 +12,6 @@
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="WindowsBase" />
 
-    <Reference Include="DotNetRtfWriter">
-      <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
-    </Reference>
     <Reference Include="ExcelLibrary">
       <HintPath>..\libs\ExcelLibrary.dll</HintPath>
     </Reference>
@@ -49,6 +40,9 @@
     </Reference>
     <Reference Include="NLua">
       <HintPath>..\libs\linux\NLua.dll</HintPath>
+    </Reference>
+    <Reference Include="RtfWriter">
+      <HintPath>..\libs\netstd\RtfWriter.dll</HintPath>
     </Reference>
     <Reference Include="Ude">
       <HintPath>..\libs\Ude.dll</HintPath>
