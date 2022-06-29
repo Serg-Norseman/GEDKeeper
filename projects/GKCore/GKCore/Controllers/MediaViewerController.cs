@@ -92,7 +92,7 @@ namespace GKCore.Controllers
 
                             switch (fFileReference.MultimediaFormat) {
                                 case GDMMultimediaFormat.mfTXT:
-                                    using (StreamReader strd = new StreamReader(fs)) {
+                                    using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
                                         string text = strd.ReadToEnd();
                                         fView.SetViewText(text);
                                     }

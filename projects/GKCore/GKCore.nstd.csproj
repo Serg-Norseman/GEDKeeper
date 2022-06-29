@@ -44,8 +44,8 @@
     <Reference Include="RtfWriter">
       <HintPath>..\libs\netstd\RtfWriter.dll</HintPath>
     </Reference>
-    <Reference Include="Ude">
-      <HintPath>..\libs\Ude.dll</HintPath>
+    <Reference Include="UtfUnknown">
+      <HintPath>..\libs\UtfUnknown.dll</HintPath>
     </Reference>
     <Reference Include="YamlSerializer">
       <HintPath>..\libs\YamlSerializer.dll</HintPath>

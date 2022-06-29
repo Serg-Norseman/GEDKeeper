@@ -289,7 +289,7 @@ Section "$(gkreq)"
     File "..\bin\LuaInterface.dll"
     File "..\bin\NLog.dll"
     File "..\bin\nVLC.dll"
-    File "..\bin\Ude.dll"
+    File "..\bin\UtfUnknown.dll"
     File "..\bin\YamlSerializer.dll"
     File "..\bin\ZedGraph.dll"
 

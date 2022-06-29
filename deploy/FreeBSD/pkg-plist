@@ -13,7 +13,7 @@ bin/gedkeeper
 %%DATADIR%%/KopiLua.dll
 %%DATADIR%%/NLog.dll
 %%DATADIR%%/NLua.dll
-%%DATADIR%%/Ude.dll
+%%DATADIR%%/UtfUnknown.dll
 %%DATADIR%%/YamlSerializer.dll
 %%DATADIR%%/ZedGraph.dll
 %%DATADIR%%/itextsharp.dll
@@ -405,7 +405,7 @@ bin/gedkeeper
 %%DATADIR%%/plugins/KopiLua.dll
 %%DATADIR%%/plugins/NLog.dll
 %%DATADIR%%/plugins/NLua.dll
-%%DATADIR%%/plugins/Ude.dll
+%%DATADIR%%/plugins/UtfUnknown.dll
 %%DATADIR%%/plugins/XapianCSharp.dll
 %%DATADIR%%/plugins/YamlSerializer.dll
 %%DATADIR%%/plugins/ZedGraph.dll

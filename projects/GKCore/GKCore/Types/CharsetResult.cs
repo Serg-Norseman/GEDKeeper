@@ -27,5 +27,11 @@ namespace GKCore.Types
     {
         public string Charset;
         public float Confidence;
+
+        public CharsetResult(string charset, float confidence)
+        {
+            Charset = charset;
+            Confidence = confidence;
+        }
     }
 }

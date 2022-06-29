@@ -36,7 +36,7 @@ using GKCore.Import;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
-using Ude;
+using UtfUnknown;
 
 namespace GKCore
 {
@@ -443,21 +443,19 @@ namespace GKCore
 
         public static CharsetResult DetectCharset(Stream stream, int bufferSize = 32768)
         {
-            var result = new CharsetResult();
+            var result = new CharsetResult(null, 0.0f);
 
-            ICharsetDetector cdet = new CharsetDetector();
             byte[] buffer = new byte[bufferSize];
             int read = stream.Read(buffer, 0, buffer.Length);
             if (read > 0) {
-                cdet.Feed(buffer, 0, read);
-                cdet.DataEnd();
+                var detRes = CharsetDetector.DetectFromBytes(buffer, 0, read);
                 stream.Seek(0, SeekOrigin.Begin);
 
-                result.Charset = cdet.Charset;
-                result.Confidence = cdet.Confidence;
-            } else {
-                result.Charset = null;
-                result.Confidence = 0.0f;
+                var cdet = detRes.Detected;
+                if (cdet != null) {
+                    result.Charset = cdet.EncodingName;
+                    result.Confidence = cdet.Confidence;
+                }
             }
 
             return result;
@@ -465,11 +463,10 @@ namespace GKCore
 
         public static StreamReader GetDetectedStreamReader(Stream stream)
         {
-            // TODO: implement detection of encoding
             Encoding defaultEncoding;
             try {
-                // legacy encoding
-                defaultEncoding = Encoding.GetEncoding(1251);
+                var chRes = DetectCharset(stream);
+                defaultEncoding = (chRes.Charset == null) ? Encoding.UTF8 : Encoding.GetEncoding(chRes.Charset);
             } catch {
                 defaultEncoding = Encoding.UTF8;
             }

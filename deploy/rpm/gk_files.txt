@@ -21,7 +21,7 @@
 ../bin/NLua.dll
 ../bin/NLog.dll
 ../bin/nVLC.dll
-../bin/Ude.dll
+../bin/UtfUnknown.dll
 ../bin/YamlSerializer.dll
 ../bin/ZedGraph.dll
 ../LICENSE

@@ -108,7 +108,7 @@ namespace GDModel.Providers
             using (BaseContext ctx = new BaseContext(null)) {
                 using (Stream stmGed1 = TestUtils.LoadResourceStream("test_gk_utf8.ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
-                    Assert.AreEqual("UTF-8", charsetRes.Charset);
+                    Assert.AreEqual("utf-8", charsetRes.Charset);
                     Assert.AreEqual(1.0f, charsetRes.Confidence);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
@@ -130,8 +130,8 @@ namespace GDModel.Providers
             using (BaseContext ctx = new BaseContext(null)) {
                 using (Stream stmGed1 = TestUtils.LoadResourceStream("test_ahn_ansi(win1250).ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
-                    Assert.AreEqual("windows-1252", charsetRes.Charset);
-                    Assert.GreaterOrEqual(charsetRes.Confidence, 0.5f);
+                    Assert.AreEqual("windows-1250", charsetRes.Charset);
+                    Assert.GreaterOrEqual(charsetRes.Confidence, 0.77f);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
@@ -153,7 +153,7 @@ namespace GDModel.Providers
                 using (Stream stmGed1 = TestUtils.LoadResourceStream("test_agelong_ansel(win1251).ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual("windows-1251", charsetRes.Charset);
-                    Assert.GreaterOrEqual(charsetRes.Confidence, 0.7f);
+                    Assert.GreaterOrEqual(charsetRes.Confidence, 0.46f);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
@@ -175,7 +175,7 @@ namespace GDModel.Providers
                 using (Stream stmGed1 = TestUtils.LoadResourceStream("test_ftb6_ansi(win1251).ged")) {
                     var charsetRes = GKUtils.DetectCharset(stmGed1);
                     Assert.AreEqual("windows-1251", charsetRes.Charset);
-                    Assert.GreaterOrEqual(charsetRes.Confidence, 0.9f);
+                    Assert.GreaterOrEqual(charsetRes.Confidence, 0.69f);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
