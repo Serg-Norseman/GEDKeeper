@@ -406,7 +406,9 @@ namespace GDModel.Providers.GEDCOM
 
         private void ConvertIdentifiers()
         {
-            fProgress.Begin(LangMan.LS(LSID.LSID_IDsCorrect), fTree.RecordsCount * 2);
+            if (fProgress != null)
+                fProgress.Begin(LangMan.LS(LSID.LSID_IDsCorrect), fTree.RecordsCount * 2);
+
             GDMXRefReplacer repMap = new GDMXRefReplacer();
             try {
                 int recsCount = fTree.RecordsCount;
@@ -417,18 +419,24 @@ namespace GDModel.Providers.GEDCOM
                         string newXRef = fTree.NewXRef(rec, true);
                         repMap.AddXRef(rec, oldXRef, newXRef);
                     }
-                    fProgress.Increment();
+
+                    if (fProgress != null)
+                        fProgress.Increment();
                 }
 
                 fTree.Header.ReplaceXRefs(repMap);
                 for (int i = 0; i < recsCount; i++) {
                     GDMRecord rec = fTree[i];
                     rec.ReplaceXRefs(repMap);
-                    fProgress.Increment();
+
+                    if (fProgress != null)
+                        fProgress.Increment();
                 }
             } finally {
                 repMap.Dispose();
-                fProgress.End();
+
+                if (fProgress != null)
+                    fProgress.End();
             }
         }
 
@@ -454,7 +462,9 @@ namespace GDModel.Providers.GEDCOM
                     fileVer = -1;
                 }
 
-                fProgress.Begin(LangMan.LS(LSID.LSID_FormatCheck), 100);
+                if (fProgress != null)
+                    fProgress.Begin(LangMan.LS(LSID.LSID_FormatCheck), 100);
+
                 try {
                     bool xrefValid = true;
                     bool isExtraneous = (fFormat != GEDCOMFormat.gf_Native);
@@ -472,7 +482,9 @@ namespace GDModel.Providers.GEDCOM
                         int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / num);
                         if (progress != newProgress) {
                             progress = newProgress;
-                            fProgress.StepTo(progress);
+
+                            if (fProgress != null)
+                                fProgress.StepTo(progress);
                         }
                     }
 
@@ -484,7 +496,8 @@ namespace GDModel.Providers.GEDCOM
 
                     result = true;
                 } finally {
-                    fProgress.End();
+                    if (fProgress != null)
+                        fProgress.End();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GEDCOMChecker.CheckFormat()", ex);
@@ -498,9 +511,6 @@ namespace GDModel.Providers.GEDCOM
         {
             if (baseContext == null)
                 throw new ArgumentNullException("baseContext");
-
-            if (pc == null)
-                throw new ArgumentNullException("pc");
 
             var instance = new GEDCOMChecker(baseContext, pc);
             return instance.CheckFormat();

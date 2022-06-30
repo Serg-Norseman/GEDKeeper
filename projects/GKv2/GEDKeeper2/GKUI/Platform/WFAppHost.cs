@@ -209,6 +209,16 @@ namespace GKUI.Platform
         {
             var activeWnd = GetActiveWindow() as Form;
 
+            // FIXME: dirty hack
+            // In test mode, when a stub is substituted for the real form, 
+            // the modal show of the dialog does not block further code execution after ExecuteWork.
+            if (TEST_MODE) {
+                using (var progressForm = ResolveDialog<IProgressController>()) {
+                    proc(progressForm);
+                }
+                return;
+            }
+
             using (var progressForm = ResolveDialog<IProgressController>()) {
                 var workerThread = new Thread((obj) => {
                     proc((IProgressController)obj);

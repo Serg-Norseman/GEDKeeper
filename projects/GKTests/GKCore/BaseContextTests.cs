@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,6 +40,8 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
+            WFAppHost.TEST_MODE = true;
+
             TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);
             TestUtils.InitProgressStub();
@@ -236,7 +238,7 @@ namespace GKCore
 
             try {
                 using (BaseContext ctx = new BaseContext(null)) {
-                    ctx.FileLoad(sourFile);
+                    ctx.FileLoad(sourFile, false);
                     ctx.FileSave(destFile);
                     ctx.CriticalSave();
                 }

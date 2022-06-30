@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define FILECOPY_EX
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -1137,27 +1135,23 @@ namespace GKCore
             return false;
         }
 
-        private void CopyFile(string sourceFileName, string destFileName)
+        private void CopyFile(string sourceFileName, string destFileName, bool showProgress = true)
         {
-#if FILECOPY_EX
+            if (showProgress) {
+                AppHost.Instance.ExecuteWork((controller) => {
+                    try {
+                        controller.Begin(LangMan.LS(LSID.LSID_CopyingFile), 100);
 
-            AppHost.Instance.ExecuteWork((controller) => {
-                try {
-                    controller.Begin(LangMan.LS(LSID.LSID_CopyingFile), 100);
-
-                    var source = new FileInfo(sourceFileName);
-                    var target = new FileInfo(destFileName);
-                    GKUtils.CopyFile(source, target, controller);
-                } finally {
-                    controller.End();
-                }
-            });
-
-#else
-
-            File.Copy(sourceFileName, destFileName, false);
-
-#endif
+                        var source = new FileInfo(sourceFileName);
+                        var target = new FileInfo(destFileName);
+                        GKUtils.CopyFile(source, target, controller);
+                    } finally {
+                        controller.End();
+                    }
+                });
+            } else {
+                File.Copy(sourceFileName, destFileName, false);
+            }
         }
 
         public IImage LoadMediaImage(GDMFileReference fileReference, bool throwException)
@@ -1267,9 +1261,9 @@ namespace GKCore
             fUndoman.Clear();
         }
 
-        public bool FileLoad(string fileName)
+        public bool FileLoad(string fileName, bool showProgress = true)
         {
-            return FileLoad(fileName, true, true, true);
+            return FileLoad(fileName, true, showProgress, true);
         }
 
         public bool FileLoad(string fileName, bool loadSecure, bool showProgress, bool checkValidation)
@@ -1316,9 +1310,13 @@ namespace GKCore
                 AppHost.ForceGC();
 
                 if (checkValidation) {
-                    AppHost.Instance.ExecuteWork((controller) => {
-                        GEDCOMChecker.CheckGEDCOMFormat(this, controller);
-                    });
+                    if (!showProgress) {
+                        GEDCOMChecker.CheckGEDCOMFormat(this, null);
+                    } else {
+                        AppHost.Instance.ExecuteWork((controller) => {
+                            GEDCOMChecker.CheckGEDCOMFormat(this, controller);
+                        });
+                    }
 
                     AppHost.ForceGC();
                 }
