@@ -80,7 +80,7 @@ namespace GKUI.Forms
             Assert.IsNotNull(iRec2);
             Assert.AreEqual("Ivanova Maria Petrovna", GKUtils.GetRecordName(baseContext.Tree, iRec2, false));
 
-            WFAppHost.TEST_MODE = true; // FIXME: dirty hack
+            AppHost.TEST_MODE = true; // FIXME: dirty hack
 
             RecordSelectDlgTests.SetSelectItemHandler(0);
             ClickButton("btnRec1Select", form);

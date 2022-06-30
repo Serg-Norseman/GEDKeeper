@@ -93,22 +93,23 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
         }
 
-        public static void GroupEditDlg_Handler(GroupEditDlg dlg)
+        [Test]
+        public void Test_Common()
         {
-            GDMGroupRecord groupRecord = dlg.GroupRecord;
+            GDMGroupRecord groupRecord = fDialog.GroupRecord;
 
             // members
             Assert.AreEqual(0, groupRecord.Members.Count);
-            RecordSelectDlgTests.SetSelectItemHandler(0);
-            ClickToolStripButton("fMembersList_ToolBar_btnAdd", dlg);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
+            ClickToolStripButton("fMembersList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual(1, groupRecord.Members.Count);
 
-            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
-            SelectSheetListItem("fMembersList", dlg, 0);
-            ClickToolStripButton("fMembersList_ToolBar_btnDelete", dlg);
+            SelectSheetListItem("fMembersList", fDialog, 0);
+            SetModalFormHandler(this, MessageBox_YesHandler);
+            ClickToolStripButton("fMembersList_ToolBar_btnDelete", fDialog);
             Assert.AreEqual(0, groupRecord.Members.Count);
 
-            ClickButton("btnAccept", dlg);
+            ClickButton("btnAccept", fDialog);
         }
 
         #endregion

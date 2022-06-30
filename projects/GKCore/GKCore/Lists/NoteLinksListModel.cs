@@ -76,7 +76,7 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGDMStructWithNotes;
             if (fBaseWin == null || dataOwner == null) return;
 
-            GDMNotes notes = eArgs.ItemData as GDMNotes;
+            var notes = eArgs.ItemData as GDMNotes;
 
             bool result = false;
 

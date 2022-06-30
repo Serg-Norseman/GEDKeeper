@@ -180,7 +180,7 @@ namespace GKCore.Lists
             var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || research == null) return;
 
-            GDMTaskRecord task = eArgs.ItemData as GDMTaskRecord;
+            var task = fBaseContext.Tree.GetPtrValue<GDMTaskRecord>(eArgs.ItemData as GDMPointer);
 
             bool result = false;
 
@@ -195,8 +195,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (task != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachTaskQuery)))
-                    {
+                    if (task != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachTaskQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskRemove, research, task);
                     }
                     break;
@@ -272,7 +271,7 @@ namespace GKCore.Lists
             var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || research == null) return;
 
-            GDMCommunicationRecord comm = eArgs.ItemData as GDMCommunicationRecord;
+            var comm = fBaseContext.Tree.GetPtrValue<GDMCommunicationRecord>(eArgs.ItemData as GDMPointer);
 
             bool result = false;
 
@@ -287,8 +286,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (comm != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachCommunicationQuery)))
-                    {
+                    if (comm != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachCommunicationQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationRemove, research, comm);
                     }
                     break;
@@ -352,7 +350,7 @@ namespace GKCore.Lists
             var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || research == null) return;
 
-            GDMGroupRecord group = eArgs.ItemData as GDMGroupRecord;
+            var group = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(eArgs.ItemData as GDMPointer);
 
             bool result = false;
 
@@ -363,8 +361,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (group != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)))
-                    {
+                    if (group != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupRemove, research, group);
                     }
                     break;

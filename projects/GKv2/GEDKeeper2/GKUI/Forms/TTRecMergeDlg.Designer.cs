@@ -148,6 +148,7 @@
             this.btnRec1Select.Size = new System.Drawing.Size(81, 25);
             this.btnRec1Select.TabIndex = 13;
             this.btnRec1Select.Text = "btnRec1Select";
+            this.btnRec1Select.Click += new System.EventHandler(this.btnRec1Select_Click);
             // 
             // btnRec2Select
             // 
@@ -156,6 +157,7 @@
             this.btnRec2Select.Size = new System.Drawing.Size(81, 25);
             this.btnRec2Select.TabIndex = 14;
             this.btnRec2Select.Text = "btnRec2Select";
+            this.btnRec2Select.Click += new System.EventHandler(this.btnRec2Select_Click);
             // 
             // btnMergeToLeft
             // 
@@ -165,6 +167,7 @@
             this.btnMergeToLeft.Size = new System.Drawing.Size(81, 25);
             this.btnMergeToLeft.TabIndex = 15;
             this.btnMergeToLeft.Text = "<<<";
+            this.btnMergeToLeft.Click += new System.EventHandler(this.btnMergeToLeft_Click);
             // 
             // btnMergeToRight
             // 
@@ -174,6 +177,7 @@
             this.btnMergeToRight.Size = new System.Drawing.Size(81, 25);
             this.btnMergeToRight.TabIndex = 16;
             this.btnMergeToRight.Text = ">>>";
+            this.btnMergeToRight.Click += new System.EventHandler(this.btnMergeToRight_Click);
             // 
             // fView1
             // 

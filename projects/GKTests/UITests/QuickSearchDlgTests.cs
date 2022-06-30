@@ -36,23 +36,27 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        public static void QuickSearch_Test(Form mainWin)
+        public static void QuickSearch_Test(NUnitFormTest formTest, Form mainWin)
         {
             ClickToolStripMenuItem("miSearch", mainWin);
 
             var searchPanel = new FormTester("QuickSearchDlg");
-            Form frm = searchPanel.Properties;
+            var frm = (QuickSearchDlg)searchPanel.Properties;
 
             // handlers for empty text
             ClickButton("btnPrev", frm);
             ClickButton("btnNext", frm);
-            // enter text
-            var txtSearchPattern = new TextBoxTester("txtSearchPattern", frm);
-            txtSearchPattern.Enter("John");
+
+            EnterText("txtSearchPattern", frm, "John");
             // handlers for entered text? - msgbox processing
 
+            // NoMatchesFound error msg
+            SetModalFormHandler(formTest, MessageBox_OkHandler);
             KeyDownForm(frm.Name, Keys.Enter);
+
+            SetModalFormHandler(formTest, MessageBox_OkHandler);
             KeyDownForm(frm.Name, Keys.Enter | Keys.Shift);
+
             KeyDownForm(frm.Name, Keys.Escape);
         }
 

@@ -44,6 +44,13 @@ namespace GKCore
     /// </summary>
     public abstract class AppHost : IHost, ISingleInstanceEnforcer
     {
+        #if CI_MODE
+        public static bool TEST_MODE = true;
+        #else
+        public static bool TEST_MODE = false;
+        #endif
+
+
         private static string fAppSign;
         private static AppHost fInstance = null;
         private static string fAppDataPath = null;

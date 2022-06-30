@@ -137,7 +137,7 @@ namespace GKCore.Lists
             var grp = fDataOwner as GDMGroupRecord;
             if (fBaseWin == null || grp == null) return;
 
-            GDMIndividualRecord member = eArgs.ItemData as GDMIndividualRecord;
+            var member = fBaseContext.Tree.GetPtrValue(eArgs.ItemData as GDMIndividualLink);
 
             bool result = false;
 

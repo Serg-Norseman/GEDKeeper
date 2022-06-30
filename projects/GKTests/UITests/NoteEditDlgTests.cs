@@ -80,19 +80,19 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        public static void NoteEditDlg_Handler(NoteEditDlg dlg)
+        [Test]
+        public void Test_Common()
         {
-            EnterRichText("txtNote", dlg, "sample text");
-            ClickButton("btnAccept", dlg);
+            EnterRichText("txtNote", fDialog, "sample text");
+            ClickButton("btnAccept", fDialog);
 
-            Assert.AreEqual("sample text", dlg.NoteRecord.Lines.Text);
+            Assert.AreEqual("sample text", fDialog.NoteRecord.Lines.Text);
         }
 
         public static void NoteAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {
-            var txtNote = new TextBoxTester("txtNote", form);
-            txtNote.Enter("sample text");
-            Assert.AreEqual("sample text", txtNote.Text);
+            EnterRichText("txtNote", form, "sample text");
+            //Assert.AreEqual("sample text", txtNote.Text);
 
             ClickButton("btnAccept", form);
         }

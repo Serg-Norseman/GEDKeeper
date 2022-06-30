@@ -636,7 +636,7 @@ namespace GKCore.Lists
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
 
-            GDMGroupRecord groupRec = eArgs.ItemData as GDMGroupRecord;
+            GDMGroupRecord groupRec = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(eArgs.ItemData as GDMPointer);
 
             bool result = false;
 
@@ -967,7 +967,7 @@ namespace GKCore.Lists
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
 
-            GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
+            var family = fBaseContext.Tree.GetPtrValue<GDMFamilyRecord>(eArgs.ItemData as GDMSpouseToFamilyLink);
 
             bool result = false;
 

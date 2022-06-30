@@ -88,7 +88,7 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGDMStructWithSourceCitations;
             if (fBaseWin == null || dataOwner == null) return;
 
-            GDMSourceCitation aCit = eArgs.ItemData as GDMSourceCitation;
+            var aCit = eArgs.ItemData as GDMSourceCitation;
 
             bool result = false;
 

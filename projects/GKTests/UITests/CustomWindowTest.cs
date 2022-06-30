@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,8 +22,12 @@
 
 using System;
 using System.Windows.Forms;
-using NUnit.Extensions.Forms;
+using GDModel;
+using GKCore;
 using GKTests.ControlTesters;
+using GKUI.Forms;
+using NUnit.Extensions.Forms;
+using NUnit.Framework;
 
 namespace GKTests
 {
@@ -286,6 +290,67 @@ namespace GKTests
         {
             fFormTest = formTest;
             fFormTest.ModalFormHandler = modalFormHandler;
+        }
+
+        protected void StructsDlg_Handler(GDMRecordWithEvents record, Form dlg, TabControlTester tabs, int[] tabIndexes)
+        {
+            AppHost.TEST_MODE = true; // FIXME: dirty hack
+
+            // notes
+            tabs.SelectTab(tabIndexes[0]);
+
+            Assert.AreEqual(0, record.Notes.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(this, NoteEditDlgTests.NoteAdd_Mini_Handler);
+            ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, record.Notes.Count);
+
+            SelectSheetListItem("fNotesList", dlg, 0);
+            ModalFormHandler = NoteEditDlgTests.NoteAdd_Mini_Handler;
+            ClickToolStripButton("fNotesList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, record.Notes.Count);
+
+            SelectSheetListItem("fNotesList", dlg, 0);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickToolStripButton("fNotesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, record.Notes.Count);
+
+            // media
+            tabs.SelectTab(tabIndexes[1]);
+
+            // FIXME
+            /*Assert.AreEqual(0, record.MultimediaLinks.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(this, MediaEditDlgTests.MediaAdd_Mini_Handler);
+            ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, record.MultimediaLinks.Count);
+
+            SelectSheetListItem("fMediaList", dlg, 0);
+            ModalFormHandler = MediaEditDlgTests.MediaAdd_Mini_Handler;
+            ClickToolStripButton("fMediaList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, record.MultimediaLinks.Count);
+
+            SelectSheetListItem("fMediaList", dlg, 0);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickToolStripButton("fMediaList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, record.MultimediaLinks.Count);*/
+
+            // sources
+            tabs.SelectTab(tabIndexes[2]);
+
+            // FIXME
+            /*Assert.AreEqual(0, record.SourceCitations.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(this, SourceEditDlgTests.SourceAdd_Mini_Handler);
+            ClickToolStripButton("fSourcesList_ToolBar_btnAdd", dlg);
+            Assert.AreEqual(1, record.SourceCitations.Count);
+
+            SelectSheetListItem("fSourcesList", dlg, 0);
+            ModalFormHandler = SourceEditDlgTests.SourceAdd_Mini_Handler;
+            ClickToolStripButton("fSourcesList_ToolBar_btnEdit", dlg);
+            Assert.AreEqual(1, record.SourceCitations.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            SelectSheetListItem("fSourcesList", dlg, 0);
+            ClickToolStripButton("fSourcesList_ToolBar_btnDelete", dlg);
+            Assert.AreEqual(0, record.SourceCitations.Count);*/
         }
     }
 }

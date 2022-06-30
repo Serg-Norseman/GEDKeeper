@@ -40,7 +40,7 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WFAppHost.TEST_MODE = true;
+            AppHost.TEST_MODE = true;
 
             TestUtils.InitGEDCOMProviderTest();
             WFAppHost.ConfigureBootstrap(false);

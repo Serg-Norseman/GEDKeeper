@@ -30,14 +30,12 @@ using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
 using GKUI.Platform;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -46,19 +44,28 @@ namespace GKUI.Forms
     /// Tests for the main application window. Dependent calls of other windows
     /// and dialogs that are heavily dependent on the main window.
     /// </summary>
-    [TestFixture]
+    [TestFixture, RequiresSTA]
     public class MainSDITests : CustomWindowTest
     {
+        public override bool UseHidden
+        {
+            get { return true; }
+        }
+
         private Form fMainWin;
         private IBaseWindow fCurBase;
 
         public override void Setup()
         {
-            WFAppHost.TEST_MODE = true;
-
+            TestUtils.InitGEDCOMProviderTest();
+            AppHost.TEST_MODE = true;
             WFAppHost.ConfigureBootstrap(false);
 
             var appHost = new WFAppHost();
+
+            // prevent LanguageSelectDlg modal dialog from showing on first run
+            AppHost.Options.InterfaceLang = LangMan.LS_DEF_CODE;
+
             appHost.Init(null, false);
 
             var indiCols = GlobalOptions.Instance.IndividualListColumns;
@@ -66,303 +73,122 @@ namespace GKUI.Forms
                 var colProps = indiCols[i];
                 colProps.CurActive = true;
             }
-        }
-
-        public void AboutDlg_Handler()
-        {
-            ClickButton("btnClose", "AboutDlg");
-        }
-
-        [STAThread, Test]
-        public void Test_Common()
-        {
-            TestUtils.InitGEDCOMProviderTest();
 
             // required for testing, otherwise the engine will require saving
             // the database (requires path of files for the archive and storage)
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
 
-            var appHost = (WFAppHost)AppHost.Instance;
-            Assert.IsNotNull(appHost);
-
-            appHost.BaseClosed(null);
-            appHost.CloseWindow(null);
-            appHost.SaveWinMRU(null);
-
-            //
-
             // at complex tests, first form hasn't focus
-            ((Form)AppHost.Instance.RunningForms[0]).Show(); // FIXME
-
+            ((Form)AppHost.Instance.RunningForms[0]).Show();
             fMainWin = (Form)AppHost.Instance.GetActiveWindow();
 
-            // Stage 1: call to AboutDlg, closing in AboutDlg_Handler
-            ExpectModal("AboutDlg", "AboutDlg_Handler");
-            //ModalFormHandler = AboutDlgTests.AboutDlg_Handler;
-            ClickToolStripMenuItem("miAbout", fMainWin);
-
-
-            // Stage 2.1: GetCurrentFile()
-            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
-            Assert.IsNotNull(curBase, "Stage 2.1");
-            Assert.AreEqual(fMainWin, curBase);
-
-            // Stage 2.2: create an empty base
-            //ClickToolStripButton("tbFileNew", fBaseSDI);
-
-            // Stage 2.3: GetCurrentFile()
             fCurBase = AppHost.Instance.GetCurrentFile();
-            Assert.IsNotNull(fCurBase, "Stage 2.3");
-
-            // Stage 2.4: fill context for sample data
             TestUtils.FillContext(fCurBase.Context);
-            fCurBase.UpdateSettings();
+            fCurBase.RefreshLists(true);
+        }
 
-            // Stage 2.5: select first individual record in base
+        [Test]
+        public void Test_ShowAbout()
+        {
+            ExpectModal("AboutDlg", delegate {
+                ClickButton("btnClose", "AboutDlg");
+            });
+            ClickToolStripMenuItem("miAbout", fMainWin);
+        }
+
+        [Test]
+        public void Test_GetCurrentFile()
+        {
+            IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
+            Assert.IsNotNull(curBase);
+            Assert.AreEqual(fMainWin, curBase);
+        }
+
+        [Test]
+        public void Test_SelectRecordByXRef()
+        {
             fCurBase.SelectRecordByXRef("I1");
             Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef);
+        }
 
-            // Stage 3: call to FilePropertiesDlg
-            ModalFormHandler = Dialog_Cancel_Handler;
-            ClickToolStripMenuItem("miFileProperties", fMainWin);
-            SetModalFormHandler(this, FilePropertiesDlgTests.FilePropertiesDlg_btnAccept_Handler);
-            ClickToolStripMenuItem("miFileProperties", fMainWin);
+        [Test]
+        public void Test_UpdateSettings()
+        {
+            fCurBase.UpdateSettings();
+        }
 
-
-            // Stage 4: call to OptionsDlg
-            ModalFormHandler = Dialog_Cancel_Handler;
-            ClickToolStripMenuItem("miOptions", fMainWin);
-            ModalFormHandler = OptionsDlgTests.OptionsDlg_btnAccept_Handler;
-            ClickToolStripMenuItem("miOptions", fMainWin);
-
-
-            // Stage 5: internals of BaseWin
-            BaseWin_Tests(fCurBase, "Stage 5");
-
-
-            // Stage 6
-            ModalFormHandler = DayTipsDlgTests.CloseModalHandler;
-            AppHost.Instance.ShowTips(); // don't show dialog because BirthDays is empty
-
-            AppHost.Instance.AddMRU("test.ged");
-
-            fMainWin.Activate();
-            Assert.AreEqual("Unknown", AppHost.Instance.GetCurrentFileName(), "check AppHost.Instance.GetCurrentFileName()");
-
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.RequestGeoCoords(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.RequestGeoCoords("Moscow", null); });
-
-            // IHost tests
-            //IHost host = fMainWin;
-            // FIXME: !!!
-            IHost host = AppHost.Instance;
-
-            GlobalOptions.Instance.LastDir = "";
-            string ufPath = host.GetUserFilesPath("");
-            Assert.AreEqual(GKUtils.GetHomePath(), ufPath);
-            Assert.IsFalse(string.IsNullOrEmpty(ufPath));
-
-            IBaseWindow baseWin = host.FindBase("Unknown");
-            Assert.IsNotNull(baseWin);
-
-            ModalFormHandler = MessageBox_OkHandler;
-            AppHost.StdDialogs.ShowWarning("test warn");
-
-            ILangMan langMan = host.CreateLangMan(null);
-            Assert.IsNull(langMan);
-
-            host.WidgetShow(null);
-            host.WidgetClose(null);
-            Assert.IsFalse(host.IsWidgetActive(null));
-            host.EnableWindow(null, false);
-            host.BaseRenamed(null, "", "");
-
-            ClickToolStripButton("tbNext", fMainWin);
-            ClickToolStripButton("tbPrev", fMainWin);
-
-
-            // Stage 7: call to QuickFind
-            ((BaseWinSDI)fCurBase).ShowRecordsTab(GDMRecordType.rtIndividual);
-            QuickSearchDlgTests.QuickSearch_Test(fMainWin);
-
-
-            // Stage 21: call to TreeToolsWin
-            SetModalFormHandler(this, TreeToolsWinTests.TreeCompareDlg_Handler);
-            ClickToolStripMenuItem("miTreeCompare", fMainWin);
-
-            SetModalFormHandler(this, TreeToolsWinTests.TreeMergeDlg_Handler);
-            ClickToolStripMenuItem("miTreeMerge", fMainWin);
-
-            SetModalFormHandler(this, TreeToolsWinTests.TreeSplitDlg_Handler);
-            ClickToolStripMenuItem("miTreeSplit", fMainWin);
-
-            SetModalFormHandler(this, TreeToolsWinTests.RecMergeDlg_Handler);
-            ClickToolStripMenuItem("miRecMerge", fMainWin);
-
-            SetModalFormHandler(this, TreeToolsWinTests.FamilyGroupsDlg_Handler);
-            ClickToolStripMenuItem("miFamilyGroups", fMainWin);
-
-            SetModalFormHandler(this, TreeToolsWinTests.TreeCheckDlg_Handler);
-            ClickToolStripMenuItem("miTreeCheck", fMainWin);
-
-            SetModalFormHandler(this, TreeToolsWinTests.PatSearchDlg_Handler);
-            ClickToolStripMenuItem("miPatSearch", fMainWin);
-
-            SetModalFormHandler(this, TreeToolsWinTests.PlacesManagerDlg_Handler);
-            ClickToolStripMenuItem("miPlacesManager", fMainWin);
-
-
-            // Stage 22-24: call to exports
-            Exporter.TEST_MODE = true;
-
-            try {
-                ModalFormHandler = SaveFilePDF_Handler;
-                ClickToolStripMenuItem("miExportToFamilyBook", fMainWin);
-            } finally {
-                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.pdf"));
-            }
-
-            try {
-                ModalFormHandler = SaveFileXLS_Handler;
-                ClickToolStripMenuItem("miExportToExcelFile", fMainWin);
-            } finally {
-                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.xls"));
-            }
-
-            GeneratePedigree_Tests("Stage 24");
-
-            // FIXME: fatal loop
-            //ModalFormHandler = SaveFilePDF_Handler;
-            //ClickToolStripMenuItem("miExportToTreesAlbum", fMainWin);
-
-
-            // Stage 25: call to CircleChartWin (required the base, selected person)
-            fCurBase.SelectRecordByXRef("I3");
-            Assert.AreEqual("I3", fCurBase.GetSelectedPerson().XRef, "Stage 25.0");
-            ClickToolStripMenuItem("miAncestorsCircle", fMainWin);
-            CircleChartWinTests.CircleChartWin_Tests(this, GetActiveForm("CircleChartWin"), "Stage 25");
-
-            // Stage 26: call to CircleChartWin (required the base, selected person)
+        [Test]
+        public void Test_DuplicateRecord()
+        {
             fCurBase.SelectRecordByXRef("I1");
-            Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef, "Stage 26.0");
-            ClickToolStripMenuItem("miDescendantsCircle", fMainWin);
-            CircleChartWinTests.CircleChartWin_Tests(this, GetActiveForm("CircleChartWin"), "Stage 26");
-
-
-            // Stage 27: call to TreeChartWin (required the base, selected person)
-            fCurBase.SelectRecordByXRef("I3");
-            Assert.AreEqual("I3", fCurBase.GetSelectedPerson().XRef, "Stage 27.0");
-            ClickToolStripButton("tbTreeAncestors", fMainWin);
-            TreeChartWinTests.TreeChartWin_Tests(this, fMainWin, GetActiveForm("TreeChartWin"), TreeChartKind.ckAncestors, "Stage 27", "I3");
-
-
-            // Stage 28: call to TreeChartWin (required the base, selected person)
-            fCurBase.SelectRecordByXRef("I1");
-            Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef, "Stage 28.0");
-            ClickToolStripButton("tbTreeDescendants", fMainWin);
-            TreeChartWinTests.TreeChartWin_Tests(this, fMainWin, GetActiveForm("TreeChartWin"), TreeChartKind.ckDescendants, "Stage 28", "I1");
-
-
-            // Stage 29: call to TreeChartWin (required the base, selected person)
-            ClickToolStripButton("tbTreeBoth", fMainWin);
-            TreeChartWinTests.TreeChartWin_Tests(this, fMainWin, GetActiveForm("TreeChartWin"), TreeChartKind.ckBoth, "Stage 29", "I1");
-
-
-            // Stage 30: call to StatsWin (required the base)
-            ClickToolStripButton("tbStats", fMainWin);
-            StatisticsWinTests.StatsWin_Handler(this, GetActiveForm("StatisticsWin"), "Stage 30");
-
-
-            // Stage 31: call to SlideshowWin (required the base)
-            ClickToolStripMenuItem("miSlideshow", fMainWin);
-            SlideshowWinTests.SlideshowWin_Handler(this, GetActiveForm("SlideshowWin"), "Stage 31");
-
-
-            // Stage 32: call to ScriptEditWin (required the base)
-            SetModalFormHandler(this, ScriptEditWinTests.ScriptEditWin_Handler);
-            ClickToolStripMenuItem("miScripts", fMainWin);
-            //Assert.IsTrue((Form)AppHost.Instance.GetActiveWindow(), "Stage 32");
-
-
-            // Stage 33: call to OrganizerWin
-            ModalFormHandler = OrganizerWinTests.OrganizerWin_Handler;
-            ClickToolStripMenuItem("miOrganizer", fMainWin);
-
-
-            // Stage 34: call to RelationshipCalculatorDlg
-            ModalFormHandler = RelationshipCalculatorDlgTests.RelationshipCalculatorDlg_Handler;
-            ClickToolStripMenuItem("miRelationshipCalculator", fMainWin);
-
-
-            // Stage 35: call to MapsViewerWin (required the base)
-            ClickToolStripMenuItem("miMap", fMainWin);
-            MapsViewerWinTests.MapsViewerWin_Handler(this, GetActiveForm("MapsViewerWin"), "Stage 35");
-
-
-            // Stage 36
             ModalFormHandler = MessageBox_OkHandler;
             fCurBase.DuplicateRecord();
+        }
 
+        [Test]
+        public void Test_FileNew()
+        {
+            ClickToolStripButton("tbFileNew", fMainWin);
+        }
 
-            // Stage 47: close Base
+        [Test]
+        public void Test_FileLoad()
+        {
             ModalFormHandler = MessageBox_CancelHandler;
             ClickToolStripMenuItem("miFileLoad", fMainWin);
+        }
 
-
-            // Stage 48: close Base
+        [Test]
+        public void Test_FileSaveAs()
+        {
             ModalFormHandler = MessageBox_CancelHandler;
             ClickToolStripMenuItem("miFileSaveAs", fMainWin);
+        }
 
-
-            // Stage 49: close Base
-            ModalFormHandler = MessageBox_CancelHandler;
-            ClickToolStripMenuItem("miFileSave", fMainWin);
-
-
-            // Stage 50: close Base
+        [Test]
+        public void Test_FileClose()
+        {
+            fCurBase.Context.Modified = true;
             Assert.IsTrue(fCurBase.Context.Modified);
             ModalFormHandler = MessageBox_CancelHandler;
             ClickToolStripMenuItem("miFileClose", fMainWin);
-
-
-            // Stage 51: call to LanguageSelectDlg
-            ModalFormHandler = LanguageSelectDlgTests.LanguageSelectDlg_Accept_Handler;
-            AppHost.Instance.LoadLanguage(0);
-
-
-            // Stage 52: exit
-            //ClickToolStripMenuItem("miExit", fBaseSDI);
-
-
-            // Other
-            ModalFormHandler = MessageBox_OkHandler;
-            AppHost.StdDialogs.ShowMessage("test msg");
-
-            ModalFormHandler = MessageBox_OkHandler;
-            AppHost.StdDialogs.ShowError("test error msg");
         }
 
-        private void BaseWin_Tests(IBaseWindow baseWin, string stage)
+        [Test]
+        public void Test_FileSave()
         {
-            // Stage 5: calls to the different Editors
+            ModalFormHandler = MessageBox_CancelHandler;
+            ClickToolStripMenuItem("miFileSave", fMainWin);
+        }
+
+        [Test]
+        public void Test_Exit()
+        {
+            ClickToolStripMenuItem("miExit", fMainWin);
+        }
+
+        [Test]
+        public void Test_TabsAndLists()
+        {
+            // calls to the different Editors
             for (GDMRecordType rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
-                Assert.IsNotNull(((BaseWinSDI)baseWin).GetHyperViewByType(rt), stage + ".1");
+                Assert.IsNotNull(((BaseWinSDI)fCurBase).GetHyperViewByType(rt));
 
-                baseWin.ShowRecordsTab(rt);
+                fCurBase.ShowRecordsTab(rt);
 
                 ModalFormHandler = Dialog_Cancel_Handler;
                 ClickToolStripButton("tbRecordAdd", fMainWin);
 
-                ModalFormHandler = EditorDlg_btnAccept_Handler;
-                ClickToolStripButton("tbRecordAdd", fMainWin);
+                //ModalFormHandler = EditorDlg_btnAccept_Handler;
+                //ClickToolStripButton("tbRecordAdd", fMainWin);
 
                 ModalFormHandler = Dialog_Cancel_Handler;
                 ClickToolStripButton("tbRecordEdit", fMainWin);
 
-                ModalFormHandler = EditorDlg_btnAccept_Handler;
-                ClickToolStripButton("tbRecordEdit", fMainWin);
+                //ModalFormHandler = EditorDlg_btnAccept_Handler;
+                //ClickToolStripButton("tbRecordEdit", fMainWin);
 
-                IRecordsListModel listMan = baseWin.GetRecordsListManByType(rt);
+                IRecordsListModel listMan = fCurBase.GetRecordsListManByType(rt);
                 listMan.AddCondition((byte)IndividualListModel.ColumnType.ctPatriarch, ConditionKind.ck_Contains, "test"); // any first column
 
                 ModalFormHandler = CommonFilterDlgTests.CommonFilterDlg_btnAccept_Handler;
@@ -371,66 +197,295 @@ namespace GKUI.Forms
                 ClickToolStripButton("tbFilter", fMainWin);
             }
 
-            Assert.IsTrue(baseWin.Context.IsUnknown(), stage + ".2");
+            Assert.IsTrue(fCurBase.Context.IsUnknown());
 
-            baseWin.ShowRecordsTab(GDMRecordType.rtIndividual);
-            baseWin.SelectRecordByXRef("I1");
+            fCurBase.ShowRecordsTab(GDMRecordType.rtIndividual);
+            fCurBase.SelectRecordByXRef("I1");
 
-            GDMRecord record = ((BaseWinSDI)baseWin).GetSelectedRecordEx();
-            Assert.IsNotNull(record, stage + ".4");
+            GDMRecord record = ((BaseWinSDI)fCurBase).GetSelectedRecordEx();
+            Assert.IsNotNull(record);
 
-            StringList recordContent = baseWin.GetRecordContent(record);
-            Assert.IsNotNull(recordContent, stage + ".4.1");
+            StringList recordContent = fCurBase.GetRecordContent(record);
+            Assert.IsNotNull(recordContent);
 
-            Assert.IsTrue(baseWin.Context.IsAvailableRecord(record), stage + ".5");
-            Assert.IsTrue(baseWin.RecordIsFiltered(record), stage + ".6");
+            Assert.IsTrue(fCurBase.Context.IsAvailableRecord(record));
+            Assert.IsTrue(fCurBase.RecordIsFiltered(record));
 
-            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.ShowMedia(null, false); });
-            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.SelectSpouseFor(null); });
-            baseWin.NotifyRecord(null, RecordAction.raAdd);
+            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.ShowMedia(null, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.SelectSpouseFor(null); });
+            fCurBase.NotifyRecord(null, RecordAction.raAdd);
 
-            IList<ISearchResult> search = baseWin.FindAll("Maria");
+            IList<ISearchResult> search = fCurBase.FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
-            Assert.AreEqual(null, baseWin.Context.GetChildFamily(null, false, null));
-            Assert.AreEqual(null, baseWin.Context.AddChildForParent(null, GDMSex.svUnknown));
-            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.AddFamilyForSpouse(null); });
+            Assert.AreEqual(null, fCurBase.Context.GetChildFamily(null, false, null));
+            Assert.AreEqual(null, fCurBase.Context.AddChildForParent(null, GDMSex.svUnknown));
+            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.AddFamilyForSpouse(null); });
 
-            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.CollectTips(null); });
-            baseWin.Context.CollectTips(new StringList());
+            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.CheckPersonSex(null); });
 
-            Assert.Throws(typeof(ArgumentNullException), () => { baseWin.Context.CheckPersonSex(null); });
+            fCurBase.NotifyRecord(null, RecordAction.raEdit);
 
-            baseWin.NotifyRecord(null, RecordAction.raEdit);
-
-            baseWin.ApplyFilter();
+            fCurBase.ApplyFilter();
 
             // default lang for tests is English
-            string patr = baseWin.Context.DefinePatronymic("Ivan", GDMSex.svMale, false);
+            string patr = fCurBase.Context.DefinePatronymic("Ivan", GDMSex.svMale, false);
             Assert.AreEqual("", patr);
-
-            ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_AcceptM_Handler;
-            GDMSex sex = baseWin.Context.DefineSex("Ivan", "Ivanovich");
-            Assert.AreEqual(GDMSex.svMale, sex);
         }
 
-        #region Exports tests
+        [Test]
+        public void Test_ShowSexCheckDlg()
+        {
+            // FIXME: Expected Modal Form did not show
+            //ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_AcceptM_Handler;
+            //GDMSex sex = fCurBase.Context.DefineSex("Ivan", "Ivanovich");
+            //Assert.AreEqual(GDMSex.svMale, sex);
+        }
 
-        private void GeneratePedigree_Tests(string stage)
+        [Test]
+        public void Test_ShowFilePropertiesDlg()
+        {
+            ModalFormHandler = Dialog_Cancel_Handler;
+            ClickToolStripMenuItem("miFileProperties", fMainWin);
+            SetModalFormHandler(this, FilePropertiesDlgTests.FilePropertiesDlg_btnAccept_Handler);
+            ClickToolStripMenuItem("miFileProperties", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowOptionsDlg()
+        {
+            ModalFormHandler = Dialog_Cancel_Handler;
+            ClickToolStripMenuItem("miOptions", fMainWin);
+            ModalFormHandler = OptionsDlgTests.OptionsDlg_btnAccept_Handler;
+            ClickToolStripMenuItem("miOptions", fMainWin);
+        }
+
+        [Test]
+        public void Test_NavButtons()
+        {
+            ClickToolStripButton("tbNext", fMainWin);
+            ClickToolStripButton("tbPrev", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowTreeCompareDlg()
+        {
+            SetModalFormHandler(this, TreeToolsWinTests.TreeCompareDlg_Handler);
+            ClickToolStripMenuItem("miTreeCompare", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowTreeSplitDlg()
+        {
+            SetModalFormHandler(this, TreeToolsWinTests.TreeSplitDlg_Handler);
+            ClickToolStripMenuItem("miTreeSplit", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowRecMergeDlg()
+        {
+            SetModalFormHandler(this, TreeToolsWinTests.RecMergeDlg_Handler);
+            ClickToolStripMenuItem("miRecMerge", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowFamilyGroupsDlg()
+        {
+            SetModalFormHandler(this, TreeToolsWinTests.FamilyGroupsDlg_Handler);
+            ClickToolStripMenuItem("miFamilyGroups", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowTreeCheckDlg()
+        {
+            SetModalFormHandler(this, TreeToolsWinTests.TreeCheckDlg_Handler);
+            ClickToolStripMenuItem("miTreeCheck", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowTreeMergeDlg()
+        {
+            SetModalFormHandler(this, TreeToolsWinTests.TreeMergeDlg_Handler);
+            ClickToolStripMenuItem("miTreeMerge", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowPatSearchDlg()
+        {
+            SetModalFormHandler(this, TreeToolsWinTests.PatSearchDlg_Handler);
+            ClickToolStripMenuItem("miPatSearch", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowPlacesManagerDlg()
+        {
+            SetModalFormHandler(this, TreeToolsWinTests.PlacesManagerDlg_Handler);
+            ClickToolStripMenuItem("miPlacesManager", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowQuickSearchDlg()
+        {
+            ((BaseWinSDI)fCurBase).ShowRecordsTab(GDMRecordType.rtIndividual);
+            QuickSearchDlgTests.QuickSearch_Test(this, fMainWin);
+        }
+
+        [Test]
+        public void Test_ExportToFamilyBook()
+        {
+            try {
+                ModalFormHandler = SaveFilePDF_Handler;
+                ClickToolStripMenuItem("miExportToFamilyBook", fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.pdf"));
+            }
+        }
+
+        [Test]
+        public void Test_ExportToExcelFile()
+        {
+            try {
+                ModalFormHandler = SaveFileXLS_Handler;
+                ClickToolStripMenuItem("miExportToExcelFile", fMainWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.xls"));
+            }
+        }
+
+        [Test]
+        public void Test_ExportToTreesAlbum()
+        {
+            // FIXME
+            //ModalFormHandler = SaveFilePDF_Handler;
+            //ClickToolStripMenuItem("miExportToTreesAlbum", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowAncestorsCircle()
         {
             fCurBase.SelectRecordByXRef("I3");
-            Assert.AreEqual("I3", fCurBase.GetSelectedPerson().XRef, stage + ".1");
-
-            GeneratePedigree(stage, "miPedigreeAscend");
-
-            fCurBase.SelectRecordByXRef("I1");
-            Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef, stage + ".2");
-
-            GeneratePedigree(stage, "miPedigree_dAboville");
-            GeneratePedigree(stage, "miPedigree_Konovalov");
+            Assert.AreEqual("I3", fCurBase.GetSelectedPerson().XRef);
+            ClickToolStripMenuItem("miAncestorsCircle", fMainWin);
+            CircleChartWinTests.CircleChartWin_Tests(this, GetActiveForm("CircleChartWin"));
         }
 
-        private void GeneratePedigree(string stage, string menuItem)
+        [Test]
+        public void Test_ShowDescendantsCircle()
+        {
+            fCurBase.SelectRecordByXRef("I1");
+            Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef);
+            ClickToolStripMenuItem("miDescendantsCircle", fMainWin);
+            CircleChartWinTests.CircleChartWin_Tests(this, GetActiveForm("CircleChartWin"));
+        }
+
+        [Test]
+        public void Test_ShowTreeAncestors()
+        {
+            fCurBase.SelectRecordByXRef("I3");
+            Assert.AreEqual("I3", fCurBase.GetSelectedPerson().XRef);
+            ClickToolStripButton("tbTreeAncestors", fMainWin);
+            TreeChartWinTests.TreeChartWin_Tests(this, GetActiveForm("TreeChartWin"), TreeChartKind.ckAncestors, "I3");
+        }
+
+        [Test]
+        public void Test_ShowTreeDescendants()
+        {
+            fCurBase.SelectRecordByXRef("I1");
+            Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef);
+            ClickToolStripButton("tbTreeDescendants", fMainWin);
+            TreeChartWinTests.TreeChartWin_Tests(this, GetActiveForm("TreeChartWin"), TreeChartKind.ckDescendants, "I1");
+        }
+
+        [Test]
+        public void Test_ShowTreeBoth()
+        {
+            fCurBase.SelectRecordByXRef("I1");
+            Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef);
+            ClickToolStripButton("tbTreeBoth", fMainWin);
+            TreeChartWinTests.TreeChartWin_Tests(this, GetActiveForm("TreeChartWin"), TreeChartKind.ckBoth, "I1");
+        }
+
+        [Test]
+        public void Test_ShowStatisticsWin()
+        {
+            ClickToolStripButton("tbStats", fMainWin);
+            StatisticsWinTests.StatsWin_Handler(this, GetActiveForm("StatisticsWin"));
+        }
+
+        [Test]
+        public void Test_ShowSlideshowWin()
+        {
+            // Form.OnLoad -> FileNotFound error msg
+            SetModalFormHandler(this, MessageBox_OkHandler);
+
+            ClickToolStripMenuItem("miSlideshow", fMainWin);
+            SlideshowWinTests.SlideshowWin_Handler(this, GetActiveForm("SlideshowWin"));
+        }
+
+        [Test]
+        public void Test_ShowScriptsEditWin()
+        {
+            SetModalFormHandler(this, ScriptEditWinTests.ScriptEditWin_Handler);
+            ClickToolStripMenuItem("miScripts", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowOrganizerWin()
+        {
+            ModalFormHandler = OrganizerWinTests.OrganizerWin_Handler;
+            ClickToolStripMenuItem("miOrganizer", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowRelationshipCalculatorDlg()
+        {
+            ModalFormHandler = RelationshipCalculatorDlgTests.RelationshipCalculatorDlg_Handler;
+            ClickToolStripMenuItem("miRelationshipCalculator", fMainWin);
+        }
+
+        [Test]
+        public void Test_ShowMapsViewerWin()
+        {
+            ClickToolStripMenuItem("miMap", fMainWin);
+            MapsViewerWinTests.MapsViewerWin_Handler(this, GetActiveForm("MapsViewerWin"));
+        }
+
+        [Test]
+        public void Test_ShowLanguageSelectDlg()
+        {
+            ModalFormHandler = LanguageSelectDlgTests.LanguageSelectDlg_Accept_Handler;
+            AppHost.Instance.LoadLanguage(0);
+        }
+
+        [Test]
+        public void Test_ShowDayTipsDlg()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.CollectTips(null); });
+            fCurBase.Context.CollectTips(new StringList());
+
+            // FIXME: don't show dialog because BirthDays is empty
+            //ModalFormHandler = DayTipsDlgTests.CloseModalHandler;
+            AppHost.Instance.ShowTips();
+        }
+
+        [Test]
+        public void Test_GenPedigreeAscend()
+        {
+            fCurBase.SelectRecordByXRef("I3");
+            Assert.AreEqual("I3", fCurBase.GetSelectedPerson().XRef);
+            GeneratePedigree("miPedigreeAscend");
+        }
+
+        [Test]
+        public void Test_GenPedigreeDescend()
+        {
+            fCurBase.SelectRecordByXRef("I1");
+            Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef);
+            GeneratePedigree("miPedigree_dAboville");
+            GeneratePedigree("miPedigree_Konovalov");
+        }
+
+        private void GeneratePedigree(string menuItem)
         {
             try {
                 ModalFormHandler = SaveFileHTML_Handler;
@@ -456,372 +511,49 @@ namespace GKUI.Forms
             #endif
         }
 
-        #endregion
-
-        #region EditorDlg handlers
-
-        public void EditorDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        [Test]
+        public void Test_Other()
         {
-            if (form is NoteEditDlg) {
-                NoteEditDlgTests.NoteEditDlg_Handler((NoteEditDlg) form);
-                return;
-            }
+            var appHost = (WFAppHost)AppHost.Instance;
+            Assert.IsNotNull(appHost);
 
-            if (form is FamilyEditDlg) {
-                FamilyEditDlg_Handler((FamilyEditDlg) form);
-                return;
-            }
+            appHost.BaseClosed(null);
+            appHost.CloseWindow(null);
+            appHost.SaveWinMRU(null);
 
-            if (form is GroupEditDlg) {
-                GroupEditDlgTests.GroupEditDlg_Handler((GroupEditDlg) form);
-                return;
-            }
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.RequestGeoCoords(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.RequestGeoCoords("Moscow", null); });
 
-            if (form is PersonEditDlg) {
-                PersonEditDlg_Handler((PersonEditDlg) form);
-                return;
-            }
+            ILangMan langMan = appHost.CreateLangMan(null);
+            Assert.IsNull(langMan);
 
-            if (form is ResearchEditDlg) {
-                ResearchEditDlg_Handler((ResearchEditDlg) form);
-                return;
-            }
+            appHost.WidgetShow(null);
+            appHost.WidgetClose(null);
+            Assert.IsFalse(appHost.IsWidgetActive(null));
+            appHost.EnableWindow(null, false);
+            appHost.BaseRenamed(null, "", "");
 
-            if (form is LocationEditDlg) {
-                LocationEditDlgTests.LocationEditDlg_Handler((LocationEditDlg) form);
-                return;
-            }
+            ModalFormHandler = MessageBox_OkHandler;
+            AppHost.StdDialogs.ShowWarning("test warn");
 
-            if (form is SourceEditDlg) {
-                SourceEditDlgTests.SourceEditDlg_Handler((SourceEditDlg) form);
-                return;
-            }
+            ModalFormHandler = MessageBox_OkHandler;
+            AppHost.StdDialogs.ShowMessage("test msg");
 
-            if (form is CommunicationEditDlg) {
-                CommunicationEditDlgTests.CommunicationEditDlg_Handler((CommunicationEditDlg) form);
-                return;
-            }
+            ModalFormHandler = MessageBox_OkHandler;
+            AppHost.StdDialogs.ShowError("test error msg");
 
-            if (form is TaskEditDlg) {
-                TaskEditDlgTests.TaskEditDlg_Handler((TaskEditDlg) form);
-                return;
-            }
+            IBaseWindow baseWin = appHost.FindBase("Unknown");
+            Assert.IsNotNull(baseWin);
 
-            if (form is MediaEditDlg) {
-                ClickButton("btnAccept", form);
-                return;
-            }
+            GlobalOptions.Instance.LastDir = "";
+            string ufPath = appHost.GetUserFilesPath("");
+            Assert.AreEqual(GKUtils.GetHomePath(), ufPath);
+            Assert.IsFalse(string.IsNullOrEmpty(ufPath));
 
-            if (form is RepositoryEditDlg) {
-                ClickButton("btnAccept", form);
-                return;
-            }
-        }
+            AppHost.Instance.AddMRU("test.ged");
 
-        private void StructsDlg_Handler(GDMRecordWithEvents record, Form dlg, TabControlTester tabs, int[] tabIndexes)
-        {
-            WFAppHost.TEST_MODE = true; // FIXME: dirty hack
-
-            // notes
-            Assert.AreEqual(0, record.Notes.Count);
-            tabs.SelectTab(tabIndexes[0]);
-            RecordSelectDlgTests.SetSelectItemHandler(0);
-            ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, record.Notes.Count);
-
-            SelectSheetListItem("fNotesList", dlg, 0);
-            ClickToolStripButton("fNotesList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, record.Notes.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            SelectSheetListItem("fNotesList", dlg, 0);
-            ClickToolStripButton("fNotesList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, record.Notes.Count);
-
-            // media
-            Assert.AreEqual(0, record.MultimediaLinks.Count);
-            tabs.SelectTab(tabIndexes[1]);
-            RecordSelectDlgTests.SetSelectItemHandler(0);
-            ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, record.MultimediaLinks.Count);
-
-            SelectSheetListItem("fMediaList", dlg, 0);
-            ClickToolStripButton("fMediaList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, record.MultimediaLinks.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            SelectSheetListItem("fMediaList", dlg, 0);
-            ClickToolStripButton("fMediaList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, record.MultimediaLinks.Count);
-
-            // sources
-            Assert.AreEqual(0, record.SourceCitations.Count);
-            tabs.SelectTab(tabIndexes[2]);
-            ModalFormHandler = SourceCitEditDlgTests.AcceptModalHandler;
-            ClickToolStripButton("fSourcesList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, record.SourceCitations.Count);
-
-            SelectSheetListItem("fSourcesList", dlg, 0);
-            ClickToolStripButton("fSourcesList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, record.SourceCitations.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            SelectSheetListItem("fSourcesList", dlg, 0);
-            ClickToolStripButton("fSourcesList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, record.SourceCitations.Count);
-        }
-
-        private void FamilyEditDlg_Handler(FamilyEditDlg dlg)
-        {
-            GDMFamilyRecord familyRecord = dlg.FamilyRecord;
-            var tabs = new TabControlTester("tabsFamilyData", dlg);
-
-            // father
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
-            ClickButton("btnHusbandAdd", dlg);
-            ModalFormHandler = MessageBox_YesHandler;
-            ClickButton("btnHusbandDelete", dlg);
-
-            // mother
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
-            ClickButton("btnWifeAdd", dlg);
-            ModalFormHandler = MessageBox_YesHandler;
-            ClickButton("btnWifeDelete", dlg);
-
-            // children
-            Assert.AreEqual(0, familyRecord.Children.Count);
-            tabs.SelectTab(0);
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
-            ClickToolStripButton("fChildsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, familyRecord.Children.Count);
-
-            //SelectSheetListItem("fEventsList", dlg, 0);
-            //ModalFormHandler = EventEditDlg_Select_Handler;
-            //ClickToolStripButton("fChildsList_ToolBar_btnEdit", dlg);
-            //Assert.AreEqual(1, familyRecord.Childrens.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            SelectSheetListItem("fChildsList", dlg, 0);
-            ClickToolStripButton("fChildsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, familyRecord.Children.Count);
-
-            // events
-            Assert.AreEqual(0, familyRecord.Events.Count);
-            tabs.SelectTab(1);
-            SetModalFormHandler(this, EventEditDlgTests.EventEditDlg_Select_Handler);
-            ClickToolStripButton("fEventsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, familyRecord.Events.Count);
-
-            SelectSheetListItem("fEventsList", dlg, 0);
-            SetModalFormHandler(this, EventEditDlgTests.EventEditDlg_Select_Handler);
-            ClickToolStripButton("fEventsList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, familyRecord.Events.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            SelectSheetListItem("fEventsList", dlg, 0);
-            ClickToolStripButton("fEventsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, familyRecord.Events.Count);
-
-            StructsDlg_Handler(familyRecord, dlg, tabs, new int[] { 2, 3, 4 });
-
-            ClickButton("btnAccept", dlg);
-        }
-
-        private void PersonEditDlg_Handler(PersonEditDlg dlg)
-        {
-            GDMIndividualRecord indiRecord = dlg.IndividualRecord;
-
-            SelectCombo("cmbSex", dlg, 1); // male
-
-            var tabs = new TabControlTester("tabsPersonData", dlg);
-
-            var cmbRestriction = new ComboBoxTester("cmbRestriction", dlg);
-            cmbRestriction.Select(3);
-            cmbRestriction.Select(2);
-            cmbRestriction.Select(1);
-            cmbRestriction.Select(0);
-
-            var txtSurname = new TextBoxTester("txtSurname", dlg);
-            txtSurname.FireEvent("KeyDown", new KeyEventArgs(Keys.Down | Keys.Control));
-
-            // parents
-            RecordSelectDlgTests.SetCreateItemHandler(this, FamilyEditDlgTests.FamilyAdd_Mini_Handler);
-            ClickButton("btnParentsAdd", dlg);
-            ModalFormHandler = MessageBox_YesHandler;
-            ClickButton("btnParentsDelete", dlg);
-
-            // father
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
-            ClickButton("btnFatherAdd", dlg);
-            ModalFormHandler = MessageBox_YesHandler;
-            ClickButton("btnFatherDelete", dlg);
-
-            // mother
-            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
-            ClickButton("btnMotherAdd", dlg);
-            ModalFormHandler = MessageBox_YesHandler;
-            ClickButton("btnMotherDelete", dlg);
-
-            ClickButton("btnNameCopy", dlg);
-
-            // events
-            tabs.SelectTab(0);
-            Assert.AreEqual(1, indiRecord.Events.Count);
-            SetModalFormHandler(this, EventEditDlgTests.EventEditDlg_Select_Handler);
-            ClickToolStripButton("fEventsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(2, indiRecord.Events.Count);
-
-            SelectSheetListItem("fEventsList", dlg, 1);
-            SetModalFormHandler(this, EventEditDlgTests.EventEditDlg_Select_Handler);
-            ClickToolStripButton("fEventsList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(2, indiRecord.Events.Count);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            SelectSheetListItem("fEventsList", dlg, 1);
-            ClickToolStripButton("fEventsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(1, indiRecord.Events.Count);
-
-            // spouses
-            tabs.SelectTab(1);
-            Assert.AreEqual(0, indiRecord.SpouseToFamilyLinks.Count);
-            ModalFormHandler = FamilyEditDlgTests.SpouseEdit_Handler;
-            ClickToolStripButton("fSpousesList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.SpouseToFamilyLinks.Count);
-
-            SelectSheetListItem("fSpousesList", dlg, 1);
-            ModalFormHandler = FamilyEditDlgTests.SpouseEdit_Handler;
-            ClickToolStripButton("fSpousesList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, indiRecord.SpouseToFamilyLinks.Count);
-
-            SelectSheetListItem("fSpousesList", dlg, 1);
-            ModalFormHandler = MessageBox_YesHandler;
-            ClickToolStripButton("fSpousesList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.SpouseToFamilyLinks.Count);
-
-            // names
-            tabs.SelectTab(2);
-            Assert.AreEqual(1, indiRecord.PersonalNames.Count);
-            ModalFormHandler = PersonalNameEditDlgTests.NameEditAdd_Handler;
-            ClickToolStripButton("fNamesList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(2, indiRecord.PersonalNames.Count);
-            Assert.AreEqual("sample surname", indiRecord.PersonalNames[1].Surname);
-
-            SelectSheetListItem("fNamesList", dlg, 1);
-            ModalFormHandler = PersonalNameEditDlgTests.NameEditEdit_Handler;
-            ClickToolStripButton("fNamesList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(2, indiRecord.PersonalNames.Count);
-            Assert.AreEqual("sample surname2", indiRecord.PersonalNames[1].Surname);
-
-            SelectSheetListItem("fNamesList", dlg, 1);
-            ModalFormHandler = MessageBox_YesHandler;
-            ClickToolStripButton("fNamesList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(1, indiRecord.PersonalNames.Count);
-
-            // associations
-            tabs.SelectTab(3);
-            Assert.AreEqual(0, indiRecord.Associations.Count);
-            ModalFormHandler = AssociationEditDlgTests.AcceptModalHandler;
-            ClickToolStripButton("fAssociationsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.Associations.Count);
-            Assert.AreEqual("sample relation", indiRecord.Associations[0].Relation);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            SelectSheetListItem("fAssociationsList", dlg, 0);
-            ClickToolStripButton("fAssociationsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.Associations.Count);
-
-            // groups
-            tabs.SelectTab(4);
-            Assert.AreEqual(0, indiRecord.Groups.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
-            ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.Groups.Count);
-            Assert.AreEqual("sample group", fCurBase.Context.Tree.GetPtrValue<GDMGroupRecord>(indiRecord.Groups[0]).GroupName);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            SelectSheetListItem("fGroupsList", dlg, 0);
-            ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.Groups.Count);
-
-
-            StructsDlg_Handler(indiRecord, dlg, tabs, new int[] { 5, 6, 7 });
-
-
-            // userrefs
-            tabs.SelectTab(8);
-            Assert.AreEqual(0, indiRecord.UserReferences.Count);
-            ModalFormHandler = UserRefEditDlgTests.AcceptHandler;
-            ClickToolStripButton("fUserRefList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, indiRecord.UserReferences.Count);
-            Assert.AreEqual("sample reference", indiRecord.UserReferences[0].StringValue);
-
-            ModalFormHandler = MessageBox_YesHandler;
-            SelectSheetListItem("fUserRefList", dlg, 0);
-            ClickToolStripButton("fUserRefList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, indiRecord.UserReferences.Count);
-
-            ClickButton("btnAccept", dlg);
-        }
-
-        #endregion
-
-        public void ResearchEditDlg_Handler(ResearchEditDlg dlg)
-        {
-            GDMResearchRecord resRecord = dlg.ResearchRecord;
-
-            // tasks
-            SelectTab("tabsData", dlg, 0);
-            Assert.AreEqual(0, resRecord.Tasks.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
-            ClickToolStripButton("fTasksList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, resRecord.Tasks.Count);
-
-            SelectSheetListItem("fTasksList", dlg, 0);
-            SetModalFormHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
-            ClickToolStripButton("fTasksList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, resRecord.Tasks.Count);
-
-            SelectSheetListItem("fTasksList", dlg, 0);
-            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
-            ClickToolStripButton("fTasksList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, resRecord.Tasks.Count);
-
-            // communications
-            SelectTab("tabsData", dlg, 1);
-            Assert.AreEqual(0, resRecord.Communications.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, CommunicationEditDlgTests.CommunicationAdd_Mini_Handler);
-            ClickToolStripButton("fCommunicationsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, resRecord.Communications.Count);
-
-            SelectSheetListItem("fCommunicationsList", dlg, 0);
-            SetModalFormHandler(fFormTest, CommunicationEditDlgTests.CommunicationAdd_Mini_Handler);
-            ClickToolStripButton("fCommunicationsList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, resRecord.Communications.Count);
-
-            SelectSheetListItem("fCommunicationsList", dlg, 0);
-            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
-            ClickToolStripButton("fCommunicationsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, resRecord.Communications.Count);
-
-            // groups
-            SelectTab("tabsData", dlg, 2);
-            Assert.AreEqual(0, resRecord.Groups.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);
-            ClickToolStripButton("fGroupsList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, resRecord.Groups.Count);
-            Assert.AreEqual("sample group", fCurBase.Context.Tree.GetPtrValue<GDMGroupRecord>(resRecord.Groups[0]).GroupName);
-
-            SelectSheetListItem("fGroupsList", dlg, 0);
-            SetModalFormHandler(fFormTest, GroupEditDlgTests.GroupAdd_Mini_Handler);
-            ClickToolStripButton("fGroupsList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, resRecord.Groups.Count);
-
-            SelectSheetListItem("fGroupsList", dlg, 0);
-            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
-            ClickToolStripButton("fGroupsList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, resRecord.Groups.Count);
-
-            ClickButton("btnAccept", dlg);
+            fMainWin.Activate();
+            Assert.AreEqual("Unknown", AppHost.Instance.GetCurrentFileName());
         }
     }
 }

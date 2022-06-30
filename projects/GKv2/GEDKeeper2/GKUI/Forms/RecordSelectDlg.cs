@@ -133,7 +133,7 @@ namespace GKUI.Forms
 
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            if (!WFAppHost.TEST_MODE) {
+            if (!AppHost.TEST_MODE) {
                 if (fChangeTimer == null) {
                     fChangeTimer = new System.Timers.Timer(500);
                     fChangeTimer.AutoReset = false;

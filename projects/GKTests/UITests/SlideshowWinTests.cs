@@ -50,39 +50,21 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        public static void SlideshowWin_Handler(CustomWindowTest formTest, Form frm, string stageMessage)
+        public static void SlideshowWin_Handler(CustomWindowTest formTest, Form frm)
         {
-            Assert.IsInstanceOf(typeof(SlideshowWin), frm, stageMessage);
+            Assert.IsInstanceOf(typeof(SlideshowWin), frm);
+            var slidesWin = (SlideshowWin)frm;
 
-            SlideshowWin slidesWin = (SlideshowWin)frm;
+            //ClickToolStripButton("tbStart", frm); // start
+            //ClickToolStripButton("tbStart", frm); // stop
 
-            /*
-            Assert.IsNotNull(slidesWin.FindAll(""));
-
-            Assert.AreEqual(false, slidesWin.AllowFilter());
-            slidesWin.SetFilter();
-
-            slidesWin.SelectByRec(null);
-            slidesWin.UpdateSettings();
-
-            Assert.AreEqual(false, slidesWin.AllowQuickSearch());
-            slidesWin.QuickSearch();
-
-            Assert.AreEqual(false, slidesWin.NavCanBackward());
-            slidesWin.NavPrev();
-
-            Assert.AreEqual(false, slidesWin.NavCanForward());
-            slidesWin.NavNext();
-            */
-
-            ClickToolStripButton("tbStart", frm); // start
-            ClickToolStripButton("tbStart", frm); // stop
-
+            SetModalFormHandler(formTest, MessageBox_OkHandler);
             ClickToolStripButton("tbNext", frm);
+
+            SetModalFormHandler(formTest, MessageBox_OkHandler);
             ClickToolStripButton("tbPrev", frm);
 
             KeyDownForm(frm.Name, Keys.Escape);
-            frm.Dispose();
         }
 
         #endregion

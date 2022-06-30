@@ -149,7 +149,7 @@ namespace GKCore.Lists
             var source = fDataOwner as GDMSourceRecord;
             if (fBaseWin == null || source == null) return;
 
-            GDMRepositoryCitation cit = eArgs.ItemData as GDMRepositoryCitation;
+            var cit = eArgs.ItemData as GDMRepositoryCitation;
 
             bool result = false;
 

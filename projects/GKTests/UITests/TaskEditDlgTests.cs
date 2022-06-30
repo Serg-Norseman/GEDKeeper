@@ -113,24 +113,25 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
         }
 
-        public static void TaskEditDlg_Handler(TaskEditDlg dlg)
+        [Test]
+        public void Test_Common()
         {
-            SelectCombo("cmbGoalType", dlg, 3);
-            ClickButton("btnGoalSelect", dlg);
+            SelectCombo("cmbGoalType", fDialog, 3);
+            ClickButton("btnGoalSelect", fDialog);
 
-            SelectCombo("cmbGoalType", dlg, 2);
-            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, SourceEditDlgTests.SourceAdd_Mini_Handler);
-            ClickButton("btnGoalSelect", dlg);
+            SelectCombo("cmbGoalType", fDialog, 2);
+            RecordSelectDlgTests.SetCreateItemHandler(this, SourceEditDlgTests.SourceAdd_Mini_Handler);
+            ClickButton("btnGoalSelect", fDialog);
 
-            SelectCombo("cmbGoalType", dlg, 1);
-            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, FamilyEditDlgTests.FamilyAdd_Mini_Handler);
-            ClickButton("btnGoalSelect", dlg);
+            SelectCombo("cmbGoalType", fDialog, 1);
+            RecordSelectDlgTests.SetCreateItemHandler(this, FamilyEditDlgTests.FamilyAdd_Mini_Handler);
+            ClickButton("btnGoalSelect", fDialog);
 
-            SelectCombo("cmbGoalType", dlg, 0);
-            PersonEditDlgTests.SetCreateIndividualHandler(fFormTest, GDMSex.svMale);
-            ClickButton("btnGoalSelect", dlg);
+            SelectCombo("cmbGoalType", fDialog, 0);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
+            ClickButton("btnGoalSelect", fDialog);
 
-            ClickButton("btnAccept", dlg);
+            ClickButton("btnAccept", fDialog);
         }
 
         #endregion

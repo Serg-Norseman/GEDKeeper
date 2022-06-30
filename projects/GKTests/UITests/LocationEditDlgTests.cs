@@ -22,7 +22,11 @@
 
 using System;
 using System.Windows.Forms;
+using GDModel;
+using GKCore.Interfaces;
 using GKTests;
+using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 using NUnit.Extensions.Forms;
 
@@ -34,6 +38,28 @@ namespace GKUI.Forms
     [TestFixture]
     public class LocationEditDlgTests : CustomWindowTest
     {
+        private GDMLocationRecord fLocationRecord;
+        private IBaseWindow fBase;
+        private LocationEditDlg fDialog;
+
+        public override void Setup()
+        {
+            TestUtils.InitGEDCOMProviderTest();
+            WFAppHost.ConfigureBootstrap(false);
+
+            fBase = new BaseWindowStub();
+            fLocationRecord = new GDMLocationRecord(fBase.Context.Tree);
+
+            fDialog = new LocationEditDlg(fBase);
+            fDialog.LocationRecord = fLocationRecord;
+            fDialog.Show();
+        }
+
+        public override void TearDown()
+        {
+            fDialog.Dispose();
+            fLocationRecord.Dispose();
+        }
 
         #region Handlers for external tests
 
@@ -44,21 +70,22 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
         }
 
-        public static void LocationEditDlg_Handler(LocationEditDlg dlg)
+        [Test]
+        public void Test_Common()
         {
-            SelectTab("tabsData", dlg, 0);
+            SelectTab("tabsData", fDialog, 0);
 
-            EnterText("txtName", dlg, "Moscow");
+            EnterText("txtName", fDialog, "Moscow");
 
-            var listGeoCoords = new ListViewTester("ListGeoCoords", dlg);
+            var listGeoCoords = new ListViewTester("ListGeoCoords", fDialog);
             listGeoCoords.FireEvent("Click", new EventArgs());
 
-            ClickButton("btnSearch", dlg);
-            ClickButton("btnSelect", dlg);
-            ClickButton("btnSelectName", dlg);
-            ClickButton("btnShowOnMap", dlg);
+            ClickButton("btnSearch", fDialog);
+            ClickButton("btnSelect", fDialog);
+            ClickButton("btnSelectName", fDialog);
+            ClickButton("btnShowOnMap", fDialog);
 
-            ClickButton("btnAccept", dlg);
+            ClickButton("btnAccept", fDialog);
         }
 
         #endregion

@@ -43,9 +43,9 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        public static void TreeChartWin_Tests(CustomWindowTest formTest, Form mainWin, Form frm, TreeChartKind kind, string stage, string checkXRef)
+        public static void TreeChartWin_Tests(CustomWindowTest formTest, Form frm, TreeChartKind kind, string checkXRef)
         {
-            Assert.IsInstanceOf(typeof(TreeChartWin), frm, stage);
+            Assert.IsInstanceOf(typeof(TreeChartWin), frm);
 
             TreeChartWin tcWin = frm as TreeChartWin;
 
@@ -156,13 +156,8 @@ namespace GKUI.Forms
             //ModalFormHandler = PrintPreviewDialog_Handler;
             //ClickToolStripButton("tbDocPrint", fMainWin);
 
-            try {
-                formTest.ModalFormHandler = PrintDialog_Handler;
-                ClickToolStripButton("tbDocPreview", mainWin);
-            } catch (Exception) {
-                // AppVeyor tests crashed, because "No printers are installed"
-                // No Fail, or Ignore, or etc - not yet divide this test into smaller correct parts
-            }
+            formTest.ModalFormHandler = PrintDialog_Handler;
+            ClickToolStripButton("tbDocPreview", tcWin);
 
             KeyDownForm(frm.Name, Keys.Escape);
             frm.Dispose();

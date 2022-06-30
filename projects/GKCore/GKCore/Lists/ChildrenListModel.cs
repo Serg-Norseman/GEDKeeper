@@ -32,7 +32,7 @@ namespace GKCore.Lists
     {
         private GDMIndividualRecord fChildRec;
 
-        public ChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        protected ChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
@@ -94,13 +94,14 @@ namespace GKCore.Lists
             var family = fDataOwner as GDMFamilyRecord;
             if (fBaseWin == null || family == null) return;
 
-            GDMIndividualRecord child = eArgs.ItemData as GDMIndividualRecord;
+            GDMTree tree = fBaseWin.Context.Tree;
+            GDMIndividualRecord child = tree.GetPtrValue(eArgs.ItemData as GDMIndividualLink);
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    child = fBaseWin.Context.SelectPerson(fBaseWin.Context.Tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
+                    child = fBaseWin.Context.SelectPerson(tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
@@ -164,8 +165,8 @@ namespace GKCore.Lists
             var indiRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || indiRec == null) return;
 
-            GDMIndividualRecord child = eArgs.ItemData as GDMIndividualRecord;
             GDMTree tree = fBaseWin.Context.Tree;
+            GDMIndividualRecord child = tree.GetPtrValue(eArgs.ItemData as GDMIndividualLink);
 
             bool result = false;
 

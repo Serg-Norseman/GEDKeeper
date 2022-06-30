@@ -82,7 +82,7 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGDMStructWithMultimediaLinks;
             if (fBaseWin == null || dataOwner == null) return;
 
-            GDMMultimediaLink mmLink = eArgs.ItemData as GDMMultimediaLink;
+            var mmLink = eArgs.ItemData as GDMMultimediaLink;
 
             bool result = false;
 

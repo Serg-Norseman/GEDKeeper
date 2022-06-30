@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,7 +27,6 @@ using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Platform;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -73,10 +72,9 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fMultimediaRecord, fDialog.MultimediaRecord);
 
-            var txtName = new TextBoxTester("txtName");
-            txtName.Enter("sample text");
-            Assert.AreEqual("sample text", txtName.Text);
+            EnterText("txtName", fDialog, "sample text");
 
+            // FIXME: process any file
             //ModalFormHandler = OpenFile_Cancel_Handler;
             //ClickButton("btnFileSelect", fDialog);
 
@@ -89,7 +87,7 @@ namespace GKUI.Forms
 
         public static void MediaAdd_Mini_Handler(string name, IntPtr ptr, Form form)
         {
-            //EnterText("txtName", "sample text");
+            EnterText("txtName", form, "sample text");
 
             ClickButton("btnAccept", form);
         }

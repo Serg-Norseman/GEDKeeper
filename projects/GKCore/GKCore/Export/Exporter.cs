@@ -31,8 +31,6 @@ namespace GKCore.Export
     /// </summary>
     public abstract class Exporter : BaseObject, IExporter
     {
-        public static bool TEST_MODE = false;
-
         protected readonly IBaseWindow fBase;
         protected GlobalOptions fOptions;
         protected string fPath;
@@ -66,7 +64,7 @@ namespace GKCore.Export
 
         protected void ShowResult()
         {
-            if (TEST_MODE) return;
+            if (AppHost.TEST_MODE) return;
 
             GKUtils.LoadExtFile(fPath);
         }

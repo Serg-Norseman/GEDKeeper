@@ -95,23 +95,24 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
         }
 
-        public static void SourceEditDlg_Handler(SourceEditDlg dlg)
+        [Test]
+        public void Test_Common()
         {
-            GDMSourceRecord srcRecord = dlg.SourceRecord;
-            SelectTab("tabsData", dlg, 2);
+            GDMSourceRecord srcRecord = fDialog.SourceRecord;
+            SelectTab("tabsData", fDialog, 2);
 
             // repositories
             Assert.AreEqual(0, srcRecord.RepositoryCitations.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, TaskEditDlgTests.TaskAdd_Mini_Handler);
-            ClickToolStripButton("fRepositoriesList_ToolBar_btnAdd", dlg);
+            RecordSelectDlgTests.SetCreateItemHandler(this, TaskEditDlgTests.TaskAdd_Mini_Handler);
+            ClickToolStripButton("fRepositoriesList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual(1, srcRecord.RepositoryCitations.Count);
 
-            SelectSheetListItem("fRepositoriesList", dlg, 0);
-            SetModalFormHandler(fFormTest, MessageBox_YesHandler);
-            ClickToolStripButton("fRepositoriesList_ToolBar_btnDelete", dlg);
+            SelectSheetListItem("fRepositoriesList", fDialog, 0);
+            SetModalFormHandler(this, MessageBox_YesHandler);
+            ClickToolStripButton("fRepositoriesList_ToolBar_btnDelete", fDialog);
             Assert.AreEqual(0, srcRecord.RepositoryCitations.Count);
 
-            ClickButton("btnAccept", dlg);
+            ClickButton("btnAccept", fDialog);
         }
 
         #endregion

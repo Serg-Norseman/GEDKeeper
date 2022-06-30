@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,6 +27,7 @@ using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Platform;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -80,6 +81,64 @@ namespace GKUI.Forms
             // FIXME: fail! why?!
             //ClickButton("btnHusbandSel", fDialog);
             //ClickButton("btnWifeSel", fDialog);
+
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [STAThread]
+        [Test]
+        public void Test_Common()
+        {
+            GDMFamilyRecord familyRecord = fDialog.FamilyRecord;
+            var tabs = new TabControlTester("tabsFamilyData", fDialog);
+
+            // father
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
+            ClickButton("btnHusbandAdd", fDialog);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickButton("btnHusbandDelete", fDialog);
+
+            // mother
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
+            ClickButton("btnWifeAdd", fDialog);
+            ModalFormHandler = MessageBox_YesHandler;
+            ClickButton("btnWifeDelete", fDialog);
+
+            // children
+            Assert.AreEqual(0, familyRecord.Children.Count);
+            tabs.SelectTab(0);
+            PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svFemale);
+            ClickToolStripButton("fChildsList_ToolBar_btnAdd", fDialog);
+            Assert.AreEqual(1, familyRecord.Children.Count);
+
+            SelectSheetListItem("fChildsList", fDialog, 0);
+            ModalFormHandler = PersonEditDlgTests.IndividualEdit_Mini_Handler;
+            ClickToolStripButton("fChildsList_ToolBar_btnEdit", fDialog);
+            Assert.AreEqual(1, familyRecord.Children.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            SelectSheetListItem("fChildsList", fDialog, 0);
+            ClickToolStripButton("fChildsList_ToolBar_btnDelete", fDialog);
+            Assert.AreEqual(0, familyRecord.Children.Count);
+
+            // events
+            Assert.AreEqual(0, familyRecord.Events.Count);
+            tabs.SelectTab(1);
+            SetModalFormHandler(this, EventEditDlgTests.EventEditDlg_Select_Handler);
+            ClickToolStripButton("fEventsList_ToolBar_btnAdd", fDialog);
+            Assert.AreEqual(1, familyRecord.Events.Count);
+
+            SelectSheetListItem("fEventsList", fDialog, 0);
+            SetModalFormHandler(this, EventEditDlgTests.EventEditDlg_Select_Handler);
+            ClickToolStripButton("fEventsList_ToolBar_btnEdit", fDialog);
+            Assert.AreEqual(1, familyRecord.Events.Count);
+
+            ModalFormHandler = MessageBox_YesHandler;
+            SelectSheetListItem("fEventsList", fDialog, 0);
+            ClickToolStripButton("fEventsList_ToolBar_btnDelete", fDialog);
+            Assert.AreEqual(0, familyRecord.Events.Count);
+
+            StructsDlg_Handler(familyRecord, fDialog, tabs, new int[] { 2, 3, 4 });
 
             ClickButton("btnAccept", fDialog);
         }

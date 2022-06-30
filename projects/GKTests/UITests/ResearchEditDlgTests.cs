@@ -108,6 +108,66 @@ namespace GKUI.Forms
             Assert.AreEqual("01 JAN 2000", fResearchRecord.StartDate.StringValue);
             Assert.AreEqual("02 FEB 2000", fResearchRecord.StopDate.StringValue);
         }
+
+        [Test]
+        public void Test_Common()
+        {
+            GDMResearchRecord resRecord = fDialog.ResearchRecord;
+
+            // tasks
+            SelectTab("tabsData", fDialog, 0);
+            Assert.AreEqual(0, resRecord.Tasks.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(this, TaskEditDlgTests.TaskAdd_Mini_Handler);
+            ClickToolStripButton("fTasksList_ToolBar_btnAdd", fDialog);
+            Assert.AreEqual(1, resRecord.Tasks.Count);
+
+            SelectSheetListItem("fTasksList", fDialog, 0);
+            SetModalFormHandler(this, TaskEditDlgTests.TaskAdd_Mini_Handler);
+            ClickToolStripButton("fTasksList_ToolBar_btnEdit", fDialog);
+            Assert.AreEqual(1, resRecord.Tasks.Count);
+
+            SelectSheetListItem("fTasksList", fDialog, 0);
+            SetModalFormHandler(this, MessageBox_YesHandler);
+            ClickToolStripButton("fTasksList_ToolBar_btnDelete", fDialog);
+            Assert.AreEqual(0, resRecord.Tasks.Count);
+
+            // communications
+            SelectTab("tabsData", fDialog, 1);
+            Assert.AreEqual(0, resRecord.Communications.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(this, CommunicationEditDlgTests.CommunicationAdd_Mini_Handler);
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnAdd", fDialog);
+            Assert.AreEqual(1, resRecord.Communications.Count);
+
+            SelectSheetListItem("fCommunicationsList", fDialog, 0);
+            SetModalFormHandler(this, CommunicationEditDlgTests.CommunicationAdd_Mini_Handler);
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnEdit", fDialog);
+            Assert.AreEqual(1, resRecord.Communications.Count);
+
+            SelectSheetListItem("fCommunicationsList", fDialog, 0);
+            SetModalFormHandler(this, MessageBox_YesHandler);
+            ClickToolStripButton("fCommunicationsList_ToolBar_btnDelete", fDialog);
+            Assert.AreEqual(0, resRecord.Communications.Count);
+
+            // groups
+            SelectTab("tabsData", fDialog, 2);
+            Assert.AreEqual(0, resRecord.Groups.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
+            ClickToolStripButton("fGroupsList_ToolBar_btnAdd", fDialog);
+            Assert.AreEqual(1, resRecord.Groups.Count);
+            Assert.AreEqual("sample group", fBase.Context.Tree.GetPtrValue<GDMGroupRecord>(resRecord.Groups[0]).GroupName);
+
+            SelectSheetListItem("fGroupsList", fDialog, 0);
+            SetModalFormHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
+            ClickToolStripButton("fGroupsList_ToolBar_btnEdit", fDialog);
+            Assert.AreEqual(1, resRecord.Groups.Count);
+
+            SelectSheetListItem("fGroupsList", fDialog, 0);
+            SetModalFormHandler(this, MessageBox_YesHandler);
+            ClickToolStripButton("fGroupsList_ToolBar_btnDelete", fDialog);
+            Assert.AreEqual(0, resRecord.Groups.Count);
+
+            ClickButton("btnAccept", fDialog);
+        }
     }
 }
 

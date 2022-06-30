@@ -23,6 +23,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using GDModel;
+using GKCore;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
@@ -76,9 +77,13 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        public static void StatsWin_Handler(CustomWindowTest formTest, Form frm, string stageMessage)
+        public static void StatsWin_Handler(CustomWindowTest formTest, Form frm)
         {
-            Assert.IsInstanceOf(typeof(StatisticsWin), frm, stageMessage);
+            Assert.IsInstanceOf(typeof(StatisticsWin), frm);
+            var statsWin = (StatisticsWin)frm;
+
+            var cbType = new ToolStripComboBoxTester("cbType", frm);
+            cbType.Select(0);
 
             formTest.ModalFormHandler = SaveFile_Cancel_Handler;
             ClickToolStripButton("tbExcelExport", frm);

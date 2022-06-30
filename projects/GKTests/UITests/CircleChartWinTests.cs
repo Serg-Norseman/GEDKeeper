@@ -38,9 +38,9 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        public static void CircleChartWin_Tests(CustomWindowTest formTest, Form frm, string stage)
+        public static void CircleChartWin_Tests(CustomWindowTest formTest, Form frm)
         {
-            Assert.IsInstanceOf(typeof(CircleChartWin), frm, stage);
+            Assert.IsInstanceOf(typeof(CircleChartWin), frm);
 
             CircleChartWin ccWin = frm as CircleChartWin;
 

@@ -49,9 +49,9 @@ namespace GKUI.Forms
 
         #region Handlers for external tests
 
-        public static void MapsViewerWin_Handler(CustomWindowTest formTest, Form form, string stageMessage)
+        public static void MapsViewerWin_Handler(CustomWindowTest formTest, Form form)
         {
-            Assert.IsInstanceOf(typeof(MapsViewerWin), form, stageMessage);
+            Assert.IsInstanceOf(typeof(MapsViewerWin), form);
 
             ClickRadioButton("radTotal", form);
 

@@ -45,13 +45,6 @@ namespace GKUI.Platform
     [Serializable]
     public sealed class WFAppHost : AppHost
     {
-        #if CI_MODE
-        public static bool TEST_MODE = true;
-        #else
-        public static bool TEST_MODE = false;
-        #endif
-
-
         static WFAppHost()
         {
             SetAppSign("GEDKeeper2");
