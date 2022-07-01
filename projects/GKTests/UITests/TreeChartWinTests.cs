@@ -153,11 +153,13 @@ namespace GKUI.Forms
                 TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.svg"));
             }
 
-            //ModalFormHandler = PrintPreviewDialog_Handler;
-            //ClickToolStripButton("tbDocPrint", fMainWin);
+#if !CI_MODE
+            //formTest.ModalFormHandler = PrintDialog_Handler;
+            //ClickToolStripButton("tbDocPrint", tcWin);
 
             formTest.ModalFormHandler = PrintDialog_Handler;
             ClickToolStripButton("tbDocPreview", tcWin);
+#endif
 
             KeyDownForm(frm.Name, Keys.Escape);
             frm.Dispose();

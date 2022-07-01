@@ -195,12 +195,6 @@ namespace GKTests
             form.Close();
         }
 
-        public static void PrintPreviewDialog_Handler(string name, IntPtr ptr, Form form)
-        {
-            form.Refresh();
-            form.Close();
-        }
-
         private static string fOpenedFileName;
 
         public static void SetOpenedFile(NUnitFormTest formTest, string fileName)
