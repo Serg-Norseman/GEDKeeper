@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@
 using System;
 using System.Windows.Forms;
 using GKTests;
-using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -38,7 +37,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fDialog = new DayTipsDlg();
             fDialog.Show();

@@ -52,6 +52,9 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs">
+      <Link>GlobalSuppressions.cs</Link>
+    </Compile>
     <Compile Include="GKProgram.cs" />
     <Compile Include="GKUI\Components\ACOptionsControl.cs">
       <SubType>UserControl</SubType>
@@ -396,7 +399,6 @@
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Platform\WFAppHost.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

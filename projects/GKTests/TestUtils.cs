@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,6 +29,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests.Stubs;
+using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKTests
@@ -37,8 +38,10 @@ namespace GKTests
     {
         public static void InitGEDCOMProviderTest()
         {
+            // forced initialization of GEDCOM tag property tables
             GKUtils.InitGEDCOM();
 
+            // checking initialization of GEDCOM tag properties
             var tagProps = GEDCOMTagsTable.GetTagProps("BIRT");
             Assert.IsNotNull(tagProps);
             Assert.AreEqual((int)GEDCOMTagType.BIRT, tagProps.TagId);
@@ -49,6 +52,13 @@ namespace GKTests
             AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
         }
 
+        public static void InitUITest()
+        {
+            InitGEDCOMProviderTest();
+            AppHost.TEST_MODE = true;
+            WFAppHost.ConfigureBootstrap(false);
+        }
+
         public static BaseContext CreateContext(IBaseWindow baseWin = null)
         {
             BaseContext context = new BaseContext(baseWin);
@@ -57,6 +67,9 @@ namespace GKTests
             return context;
         }
 
+        /// <summary>
+        /// Generating a basic set of test data.
+        /// </summary>
         public static void FillContext(IBaseContext context)
         {
             // a null result if the record is not defined

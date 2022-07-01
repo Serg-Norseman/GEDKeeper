@@ -27,7 +27,6 @@ using GKCore.Interfaces;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -45,8 +44,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
             fIndividualRecord = fBase.Context.CreatePersonEx("Ivan", "", "Smith", GDMSex.svMale, true);
@@ -203,10 +201,6 @@ namespace GKUI.Forms
             SelectSheetListItem("fGroupsList", fDialog, 0);
             ClickToolStripButton("fGroupsList_ToolBar_btnDelete", fDialog);
             Assert.AreEqual(0, indiRecord.Groups.Count);
-
-
-            StructsDlg_Handler(indiRecord, fDialog, tabs, new int[] { 5, 6, 7 });
-
 
             // userrefs
             tabs.SelectTab(8);

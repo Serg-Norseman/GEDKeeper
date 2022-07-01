@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,8 +26,6 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -43,8 +41,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
 
@@ -66,9 +63,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            var txtName = new TextBoxTester("txtName");
-            txtName.Enter("sample text");
-            Assert.AreEqual("sample text", txtName.Text);
+            EnterText("txtName", fDialog, "sample text");
 
             ClickButton("btnAccept", fDialog);
 

@@ -71,6 +71,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalSuppressions.cs">
+      <Link>GlobalSuppressions.cs</Link>
+    </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKCore\Controllers\OptionsDlgController.cs" />
     <Compile Include="GKCore\Export\XLSWriter.cs" />
@@ -394,7 +397,6 @@
     <Compile Include="GKCore\ValuesCollection.cs" />
     <Compile Include="GKCore\YamlHelper.cs" />
     <Compile Include="GKCore\MVP\FormController.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GKCore\Lists\ListSource.cs" />
   </ItemGroup>
   <ItemGroup>

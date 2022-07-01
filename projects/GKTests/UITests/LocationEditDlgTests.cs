@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,9 +26,8 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
-using NUnit.Framework;
 using NUnit.Extensions.Forms;
+using NUnit.Framework;
 
 namespace GKUI.Forms
 {
@@ -44,8 +43,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
             fLocationRecord = new GDMLocationRecord(fBase.Context.Tree);
@@ -59,15 +57,6 @@ namespace GKUI.Forms
         {
             fDialog.Dispose();
             fLocationRecord.Dispose();
-        }
-
-        #region Handlers for external tests
-
-        public static void LocationAdd_Mini_Handler(string name, IntPtr ptr, Form form)
-        {
-            EnterText("txtName", form, "sample location");
-
-            ClickButton("btnAccept", form);
         }
 
         [Test]
@@ -86,6 +75,15 @@ namespace GKUI.Forms
             ClickButton("btnShowOnMap", fDialog);
 
             ClickButton("btnAccept", fDialog);
+        }
+
+        #region Handlers for external tests
+
+        public static void LocationAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtName", form, "sample location");
+
+            ClickButton("btnAccept", form);
         }
 
         #endregion

@@ -20,6 +20,7 @@
 
 #if !MONO
 
+using GKCore.Interfaces;
 using GKTests;
 using NUnit.Framework;
 
@@ -47,6 +48,18 @@ namespace GKUI.Forms
         [Test]
         public void Test_Common()
         {
+            fDialog.Begin(100, true);
+            fDialog.SetText("Test1");
+            Assert.IsFalse(fDialog.IsCanceled);
+            fDialog.Increment();
+            fDialog.StepTo(10);
+            fDialog.End();
+
+            fDialog.Begin("Test2", 100, true);
+            fDialog.End(new ThreadError(10, "fail"));
+
+            fDialog.InvokeEx(() => { });
+
             fDialog.Close();
         }
     }

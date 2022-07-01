@@ -101,6 +101,10 @@ namespace GDModel
             Assert.IsNull(father);
             Assert.IsNull(mother);
 
+            fContext.Tree.GetParents(null, out father, out mother);
+            Assert.IsNull(father);
+            Assert.IsNull(mother);
+
             indiRec.Sex = GDMSex.svMale;
             Assert.AreEqual(GDMSex.svMale, indiRec.Sex);
 

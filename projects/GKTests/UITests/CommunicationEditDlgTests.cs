@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,7 +26,6 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -44,8 +43,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
             fContext = fBase.Context;
@@ -95,15 +93,6 @@ namespace GKUI.Forms
             Assert.AreEqual("02 FEB 2000", fCommunicationRecord.Date.StringValue);
         }
 
-        #region Handlers for external tests
-
-        public static void CommunicationAdd_Mini_Handler(string name, IntPtr ptr, Form form)
-        {
-            //EnterText("edName", form, "sample group");
-
-            ClickButton("btnAccept", form);
-        }
-
         [Test]
         public void Test_Common()
         {
@@ -111,6 +100,15 @@ namespace GKUI.Forms
             ClickButton("btnPersonAdd", fDialog);
 
             ClickButton("btnAccept", fDialog);
+        }
+
+        #region Handlers for external tests
+
+        public static void CommunicationAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            //EnterText("edName", form, "sample group");
+
+            ClickButton("btnAccept", form);
         }
 
         #endregion

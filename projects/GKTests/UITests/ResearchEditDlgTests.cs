@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,6 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -42,8 +41,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
             fResearchRecord = new GDMResearchRecord(fBase.Context.Tree);
@@ -68,13 +66,14 @@ namespace GKUI.Forms
         [Test]
         public void Test_EnterDataAndApply()
         {
-            // Empty dates
             Assert.AreEqual(fResearchRecord, fDialog.ResearchRecord);
 
             EnterText("txtName", fDialog, "sample text");
             SelectCombo("cmbPriority", fDialog, 1);
             SelectCombo("cmbStatus", fDialog, 1);
             EnterNumeric("nudPercent", fDialog, 11);
+            EnterMaskedText("txtStartDate", fDialog, "01.01.2000");
+            EnterMaskedText("txtStopDate", fDialog, "02.02.2000");
 
             // The links to other records can be added or edited only in MainWinTests
             // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
@@ -85,26 +84,6 @@ namespace GKUI.Forms
             Assert.AreEqual(GDMResearchPriority.rpLow, fResearchRecord.Priority);
             Assert.AreEqual(GDMResearchStatus.rsInProgress, fResearchRecord.Status);
             Assert.AreEqual(11, fResearchRecord.Percent);
-            Assert.AreEqual("", fResearchRecord.StartDate.StringValue);
-            Assert.AreEqual("", fResearchRecord.StopDate.StringValue);
-        }
-
-        [Test]
-        public void Test_EnterDataDatesAndApply()
-        {
-            // Dates isn't empty
-            Assert.AreEqual(fResearchRecord, fDialog.ResearchRecord);
-
-            EnterText("txtName", fDialog, "sample text");
-            EnterMaskedText("txtStartDate", fDialog, "01.01.2000");
-            EnterMaskedText("txtStopDate", fDialog, "02.02.2000");
-
-            // The links to other records can be added or edited only in MainWinTests
-            // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
-
-            ClickButton("btnAccept", fDialog);
-
-            Assert.AreEqual("sample text", fResearchRecord.ResearchName);
             Assert.AreEqual("01 JAN 2000", fResearchRecord.StartDate.StringValue);
             Assert.AreEqual("02 FEB 2000", fResearchRecord.StopDate.StringValue);
         }

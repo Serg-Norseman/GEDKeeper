@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,8 +26,6 @@ using GDModel;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -44,8 +42,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
             fSourceRecord = new GDMSourceRecord(fBase.Context.Tree);
@@ -72,27 +69,13 @@ namespace GKUI.Forms
         {
             Assert.AreEqual(fSourceRecord, fDialog.SourceRecord);
 
-            var txtShortTitle = new TextBoxTester("txtShortTitle");
-            txtShortTitle.Enter("sample text");
-            Assert.AreEqual("sample text", txtShortTitle.Text);
-
-            var txtAuthor = new TextBoxTester("txtAuthor");
-            txtAuthor.Enter("sample text");
-            Assert.AreEqual("sample text", txtAuthor.Text);
+            EnterText("txtShortTitle", fDialog, "sample text");
+            EnterText("txtAuthor", fDialog, "sample text");
 
             ClickButton("btnAccept", fDialog);
 
             Assert.AreEqual("sample text", fSourceRecord.ShortTitle);
             Assert.AreEqual("sample text", fSourceRecord.Originator.Lines.Text);
-        }
-
-        #region Handlers for external tests
-
-        public static void SourceAdd_Mini_Handler(string name, IntPtr ptr, Form form)
-        {
-            EnterText("txtShortTitle", form, "sample text");
-
-            ClickButton("btnAccept", form);
         }
 
         [Test]
@@ -113,6 +96,15 @@ namespace GKUI.Forms
             Assert.AreEqual(0, srcRecord.RepositoryCitations.Count);
 
             ClickButton("btnAccept", fDialog);
+        }
+
+        #region Handlers for external tests
+
+        public static void SourceAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtShortTitle", form, "sample text");
+
+            ClickButton("btnAccept", form);
         }
 
         #endregion

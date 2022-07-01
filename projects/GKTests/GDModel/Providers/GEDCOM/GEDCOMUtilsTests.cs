@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,52 @@ namespace GDModel.Providers.GEDCOM
     [TestFixture]
     public class GEDCOMUtilsTests
     {
+        #region Exceptions
+        
+        [Test]
+        public void Test_GEDCOMEmptyFileException()
+        {
+            var instance = new GEDCOMEmptyFileException();
+            Assert.AreEqual("GEDCOM file is empty", instance.Message);
+        }
+
+        [Test]
+        public void Test_GEDCOMBlobDecodeException()
+        {
+            var instance = new GEDCOMBlobDecodeException();
+            Assert.AreEqual("Blob decoding error", instance.Message);
+        }
+
+        [Test]
+        public void Test_GEDCOMIntDateException()
+        {
+            var instance = new GEDCOMIntDateException("about a century ago");
+            Assert.AreEqual("The interpreted date 'about a century ago' doesn't start with a valid ident", instance.Message);
+        }
+
+        [Test]
+        public void Test_GEDCOMRangeDateExceptionn()
+        {
+            var instance = new GEDCOMRangeDateException("100 200");
+            Assert.AreEqual("The range date '100 200' doesn't contain 'and' token", instance.Message);
+        }
+
+        [Test]
+        public void Test_GEDCOMInvalidFormatException()
+        {
+            var instance = new GEDCOMInvalidFormatException("Syntax error in line 10");
+            Assert.AreEqual("Syntax error in line 10", instance.Message);
+        }
+
+        [Test]
+        public void Test_GEDCOMParserException()
+        {
+            var instance = new GEDCOMParserException("Required integer not found");
+            Assert.AreEqual("Required integer not found", instance.Message);
+        }
+
+        #endregion
+
         [Test]
         public void Test_GetSignByRecord()
         {

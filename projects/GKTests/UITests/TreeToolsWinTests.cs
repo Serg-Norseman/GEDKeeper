@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,8 +23,8 @@
 using System;
 using System.Windows.Forms;
 using GKTests;
-using NUnit.Framework;
 using NUnit.Extensions.Forms;
+using NUnit.Framework;
 
 namespace GKUI.Forms
 {
@@ -98,8 +98,7 @@ namespace GKUI.Forms
             CheckBox("chkBookmarkMerged", form, true);
             CheckBox("chkBookmarkMerged", form, false);
 
-            var radPersons = new RadioButtonTester("radPersons", form);
-            radPersons.Properties.Checked = true;
+            CheckRadioButton("radPersons", form, true);
 
             RecordSelectDlgTests.SetSelectItemHandler(0);
             ClickButton("btnRec1Select", form);

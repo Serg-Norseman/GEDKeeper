@@ -100,6 +100,9 @@ namespace GDModel
             mmLink.Title = "Title1";
             Assert.AreEqual("Title1", mmLink.Title);
 
+            var foundLink = indiv.FindMultimediaLink(mediaRec);
+            Assert.AreEqual(mmLink, foundLink);
+
             string buf = TestUtils.GetTagStreamText(mmLink, 1);
             Assert.AreEqual("1 OBJE @O2@\r\n"+
                             "2 TITL Title1\r\n", buf);

@@ -124,6 +124,9 @@ namespace GDModel
                 int idx = indiv.IndexOfSource(sourRec);
                 Assert.AreEqual(0, idx);
 
+                var foundSrcCit = indiv.FindSourceCitation(sourRec);
+                Assert.AreEqual(srcCit, foundSrcCit);
+
                 Assert.AreEqual("p2", srcCit.Page);
                 Assert.AreEqual(3, srcCit.CertaintyAssessment);
                 Assert.AreEqual(3, srcCit.GetValidCertaintyAssessment());

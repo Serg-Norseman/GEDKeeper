@@ -24,7 +24,6 @@ using System;
 using System.Windows.Forms;
 using GDModel;
 using GKTests;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -76,15 +75,13 @@ namespace GKUI.Forms
 
         public static void SexCheckDlgTests_AcceptM_Handler(string name, IntPtr ptr, Form form)
         {
-            var rbMale = new RadioButtonTester("rbMale", form);
-            rbMale.Properties.Checked = true;
+            CheckRadioButton("rbMale", form, true);
             ClickButton("btnAccept", form);
         }
 
         public static void SexCheckDlgTests_AcceptF_Handler(string name, IntPtr ptr, Form form)
         {
-            var rbFemale = new RadioButtonTester("rbFemale", form);
-            rbFemale.Properties.Checked = true;
+            CheckRadioButton("rbFemale", form, true);
             ClickButton("btnAccept", form);
         }
 

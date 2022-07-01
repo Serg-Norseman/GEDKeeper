@@ -23,10 +23,11 @@
 using System;
 using System.Windows.Forms;
 using GDModel;
+using GKCore;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -43,8 +44,8 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
+            LangMan.DefInit();
 
             fBase = new BaseWindowStub();
             fMultimediaRecord = new GDMMultimediaRecord(fBase.Context.Tree);
@@ -67,27 +68,33 @@ namespace GKUI.Forms
             ClickButton("btnCancel", fDialog);
         }
 
-        [Test]
+        [Test, STAThread]
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fMultimediaRecord, fDialog.MultimediaRecord);
 
-            EnterText("txtName", fDialog, "sample text");
+            fFormTest = this;
+            MultimediaRecord_Add_Handler(null, IntPtr.Zero, fDialog);
 
-            // FIXME: process any file
-            //ModalFormHandler = OpenFile_Cancel_Handler;
-            //ClickButton("btnFileSelect", fDialog);
-
-            ClickButton("btnAccept", fDialog);
-
-            //Assert.AreEqual("sample text", fMultimediaRecord.GetFileTitle());
+            Assert.AreEqual("sample text", fMultimediaRecord.GetFileTitle());
         }
 
         #region Handlers for external tests
 
-        public static void MediaAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        public static void MultimediaRecord_Add_Handler(string name, IntPtr ptr, Form form)
         {
             EnterText("txtName", form, "sample text");
+            SelectCombo("cmbMediaType", form, 1);
+            GlobalOptions.Instance.AllowMediaStoreReferences = true;
+            SelectCombo("cmbStoreType", form, 0); // Reference
+
+            string sourFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
+            try {
+                SetOpenedFile(fFormTest, sourFile);
+                ClickButton("btnFileSelect", form);
+            } finally {
+                TestUtils.RemoveTestFile(sourFile);
+            }
 
             ClickButton("btnAccept", form);
         }

@@ -156,6 +156,12 @@ namespace GKCore.Controllers
         {
             fView.StoreType.Clear();
 
+            // 0. Ref if allowed
+            // 1. Stg
+            // 2. Arc if allowed
+            // 3. RelRef if allowed
+            // 4. Url
+
             if (allowRef) {
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name),
                     MediaStoreType.mstReference);

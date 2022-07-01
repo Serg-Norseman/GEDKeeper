@@ -23,7 +23,6 @@
 using System;
 using System.Windows.Forms;
 using GDModel;
-using GKCore;
 using GKTests.ControlTesters;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
@@ -151,6 +150,12 @@ namespace GKTests
             chk.Properties.Checked = value;
         }
 
+        public static void CheckRadioButton(string name, Form form, bool value)
+        {
+            var radBtn = new RadioButtonTester(name, form);
+            radBtn.Properties.Checked = value;
+        }
+
         public static void KeyDownForm(string formName, Keys keyData)
         {
             var formTester = new FormTester(formName);
@@ -194,6 +199,20 @@ namespace GKTests
         {
             form.Refresh();
             form.Close();
+        }
+
+        private static string fOpenedFileName;
+
+        public static void SetOpenedFile(NUnitFormTest formTest, string fileName)
+        {
+            fOpenedFileName = fileName;
+            formTest.ModalFormHandler = OpenFile_Accept_Handler;
+        }
+
+        public static void OpenFile_Accept_Handler(string name, IntPtr hWnd, Form form)
+        {
+            var openDlg = new OpenFileDialogTester(hWnd);
+            openDlg.OpenFile(fOpenedFileName);
         }
 
         public static void OpenFile_Cancel_Handler(string name, IntPtr hWnd, Form form)
@@ -292,13 +311,8 @@ namespace GKTests
             fFormTest.ModalFormHandler = modalFormHandler;
         }
 
-        protected void StructsDlg_Handler(GDMRecordWithEvents record, Form dlg, TabControlTester tabs, int[] tabIndexes)
+        protected void NotesSheet_Handler(GDMRecordWithEvents record, Form dlg)
         {
-            AppHost.TEST_MODE = true; // FIXME: dirty hack
-
-            // notes
-            tabs.SelectTab(tabIndexes[0]);
-
             Assert.AreEqual(0, record.Notes.Count);
             RecordSelectDlgTests.SetCreateItemHandler(this, NoteEditDlgTests.NoteAdd_Mini_Handler);
             ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
@@ -313,44 +327,42 @@ namespace GKTests
             ModalFormHandler = MessageBox_YesHandler;
             ClickToolStripButton("fNotesList_ToolBar_btnDelete", dlg);
             Assert.AreEqual(0, record.Notes.Count);
+        }
 
-            // media
-            tabs.SelectTab(tabIndexes[1]);
-
-            // FIXME
-            /*Assert.AreEqual(0, record.MultimediaLinks.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(this, MediaEditDlgTests.MediaAdd_Mini_Handler);
+        protected void MediaSheet_Handler(GDMRecordWithEvents record, Form dlg)
+        {
+            Assert.AreEqual(0, record.MultimediaLinks.Count);
+            RecordSelectDlgTests.SetCreateItemHandler(this, MediaEditDlgTests.MultimediaRecord_Add_Handler);
             ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, record.MultimediaLinks.Count);
 
             SelectSheetListItem("fMediaList", dlg, 0);
-            ModalFormHandler = MediaEditDlgTests.MediaAdd_Mini_Handler;
+            ModalFormHandler = MediaEditDlgTests.MultimediaRecord_Add_Handler;
             ClickToolStripButton("fMediaList_ToolBar_btnEdit", dlg);
             Assert.AreEqual(1, record.MultimediaLinks.Count);
 
             SelectSheetListItem("fMediaList", dlg, 0);
             ModalFormHandler = MessageBox_YesHandler;
             ClickToolStripButton("fMediaList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, record.MultimediaLinks.Count);*/
+            Assert.AreEqual(0, record.MultimediaLinks.Count);
+        }
 
-            // sources
-            tabs.SelectTab(tabIndexes[2]);
-
-            // FIXME
-            /*Assert.AreEqual(0, record.SourceCitations.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(this, SourceEditDlgTests.SourceAdd_Mini_Handler);
+        protected void SourceCitSheet_Handler(GDMRecordWithEvents record, Form dlg)
+        {
+            Assert.AreEqual(0, record.SourceCitations.Count);
+            ModalFormHandler = SourceCitEditDlgTests.AcceptModalHandler;
             ClickToolStripButton("fSourcesList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, record.SourceCitations.Count);
 
             SelectSheetListItem("fSourcesList", dlg, 0);
-            ModalFormHandler = SourceEditDlgTests.SourceAdd_Mini_Handler;
+            ModalFormHandler = SourceCitEditDlgTests.AcceptModalHandler;
             ClickToolStripButton("fSourcesList_ToolBar_btnEdit", dlg);
             Assert.AreEqual(1, record.SourceCitations.Count);
 
             ModalFormHandler = MessageBox_YesHandler;
             SelectSheetListItem("fSourcesList", dlg, 0);
             ClickToolStripButton("fSourcesList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, record.SourceCitations.Count);*/
+            Assert.AreEqual(0, record.SourceCitations.Count);
         }
     }
 }

@@ -23,10 +23,10 @@
 using System;
 using System.Windows.Forms;
 using GDModel;
+using GKCore;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -44,8 +44,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
             fFamilyRecord = new GDMFamilyRecord(fBase.Context.Tree);
@@ -67,29 +66,13 @@ namespace GKUI.Forms
             ClickButton("btnCancel", fDialog);
         }
 
-        [Test]
+        [Test, STAThread]
         public void Test_EnterDataAndApply()
         {
-            Assert.AreEqual(fFamilyRecord, fDialog.FamilyRecord);
+            GDMFamilyRecord familyRecord = fDialog.FamilyRecord;
 
             SelectCombo("cmbMarriageStatus", fDialog, 0);
 
-            // The links to other records can be added or edited only in MainWinTests
-            // (where there is a complete infrastructure of the calls to BaseWin.ModifyX)
-
-            // empty family record, no effects
-            // FIXME: fail! why?!
-            //ClickButton("btnHusbandSel", fDialog);
-            //ClickButton("btnWifeSel", fDialog);
-
-            ClickButton("btnAccept", fDialog);
-        }
-
-        [STAThread]
-        [Test]
-        public void Test_Common()
-        {
-            GDMFamilyRecord familyRecord = fDialog.FamilyRecord;
             var tabs = new TabControlTester("tabsFamilyData", fDialog);
 
             // father
@@ -138,7 +121,43 @@ namespace GKUI.Forms
             ClickToolStripButton("fEventsList_ToolBar_btnDelete", fDialog);
             Assert.AreEqual(0, familyRecord.Events.Count);
 
-            StructsDlg_Handler(familyRecord, fDialog, tabs, new int[] { 2, 3, 4 });
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [Test, STAThread]
+        public void Test_NotesSheet()
+        {
+            GDMFamilyRecord familyRecord = fDialog.FamilyRecord;
+            var tabs = new TabControlTester("tabsFamilyData", fDialog);
+            tabs.SelectTab(2);
+
+            NotesSheet_Handler(familyRecord, fDialog);
+
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [Test, STAThread]
+        public void Test_MediaSheet()
+        {
+            LangMan.DefInit();
+
+            GDMFamilyRecord familyRecord = fDialog.FamilyRecord;
+            var tabs = new TabControlTester("tabsFamilyData", fDialog);
+            tabs.SelectTab(3);
+
+            MediaSheet_Handler(familyRecord, fDialog);
+
+            ClickButton("btnAccept", fDialog);
+        }
+
+        [Test, STAThread]
+        public void Test_SourceCitSheet()
+        {
+            GDMFamilyRecord familyRecord = fDialog.FamilyRecord;
+            var tabs = new TabControlTester("tabsFamilyData", fDialog);
+            tabs.SelectTab(4);
+
+            SourceCitSheet_Handler(familyRecord, fDialog);
 
             ClickButton("btnAccept", fDialog);
         }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,9 +25,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
 using NUnit.Framework;
-using NUnit.Extensions.Forms;
 
 namespace GKUI.Forms
 {
@@ -43,8 +41,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
             fListMan = new IndividualListModel(fBase.Context);
@@ -98,11 +95,8 @@ namespace GKUI.Forms
             ClickRadioButton("rgLife.rbAliveBefore", form);
             ClickRadioButton("rgLife.rbAll", form);
 
-            var rbSexMale = new RadioButtonTester("rbSexMale", form);
-            rbSexMale.Properties.Checked = true;
-
-            var rbOnlyLive = new RadioButtonTester("rbOnlyLive", form);
-            rbOnlyLive.Properties.Checked = true;
+            CheckRadioButton("rbSexMale", form, true);
+            CheckRadioButton("rbOnlyLive", form, true);
 
             EnterCombo("txtName", form, "*Ivan*");
 

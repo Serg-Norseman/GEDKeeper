@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,13 +34,10 @@ using GKUI.Platform;
 
 [assembly: AssemblyTitle("GKTray")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2018 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyProduct(GKData.APP_TITLE)]
+[assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
+[assembly: AssemblyVersion(GKData.APP_VERSION_2X)]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("")]
-[assembly: AssemblyKeyName("")]
 
 namespace GKTray
 {
