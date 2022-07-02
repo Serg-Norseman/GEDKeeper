@@ -88,29 +88,30 @@ namespace GKCore.Controllers
                     case MultimediaKind.mkText:
                         {
                             Stream fs = fBase.Context.MediaLoad(fFileReference, false);
-                            bool disposeStream = (fs != null);
+                            if (fs != null) {
+                                bool disposeStream = true;
+                                switch (fFileReference.MultimediaFormat) {
+                                    case GDMMultimediaFormat.mfTXT:
+                                        using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
+                                            string text = strd.ReadToEnd();
+                                            fView.SetViewText(text);
+                                        }
+                                        break;
 
-                            switch (fFileReference.MultimediaFormat) {
-                                case GDMMultimediaFormat.mfTXT:
-                                    using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
-                                        string text = strd.ReadToEnd();
-                                        fView.SetViewText(text);
-                                    }
-                                    break;
+                                    case GDMMultimediaFormat.mfRTF:
+                                        using (StreamReader strd = new StreamReader(fs)) {
+                                            string text = strd.ReadToEnd();
+                                            fView.SetViewRTF(text);
+                                        }
+                                        break;
 
-                                case GDMMultimediaFormat.mfRTF:
-                                    using (StreamReader strd = new StreamReader(fs)) {
-                                        string text = strd.ReadToEnd();
-                                        fView.SetViewRTF(text);
-                                    }
-                                    break;
-
-                                case GDMMultimediaFormat.mfHTM:
-                                    disposeStream = false;
-                                    fView.SetViewHTML(fs);
-                                    break;
+                                    case GDMMultimediaFormat.mfHTM:
+                                        disposeStream = false;
+                                        fView.SetViewHTML(fs);
+                                        break;
+                                }
+                                if (disposeStream) fs.Dispose();
                             }
-                            if (disposeStream) fs.Dispose();
                             break;
                         }
                 }

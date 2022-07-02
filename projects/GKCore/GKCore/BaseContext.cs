@@ -43,14 +43,6 @@ using GKCore.Types;
 
 namespace GKCore
 {
-    public class MediaFileNotFoundException : GKException
-    {
-        public MediaFileNotFoundException(string fileName)
-            : base(string.Format("Media file {0} not found", fileName))
-        {
-        }
-    }
-
     /// <summary>
     ///
     /// </summary>

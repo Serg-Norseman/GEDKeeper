@@ -181,10 +181,10 @@ namespace GEDmill.HTML
                     } else {
                         nCmp = string.Compare(initial, lastInitial, true, CultureInfo.CurrentCulture);
                     }
+
                     if (nCmp != 0) {
                         if (currentLetterList != null) {
-                            IndexLetter letter = new IndexLetter(lastInitial, lastTitle, currentLetterList);
-                            letters.Add(letter);
+                            letters.Add(new IndexLetter(lastInitial, lastTitle, currentLetterList));
                             currentLetterList = null;
                         }
                         if (currentLetterList == null) {
@@ -193,12 +193,13 @@ namespace GEDmill.HTML
                         lastInitial = initial;
                         lastTitle = title;
                     }
-                    currentLetterList.Add(tuple);
+
+                    if (currentLetterList != null)
+                        currentLetterList.Add(tuple);
                 }
             }
             if (currentLetterList != null) {
-                IndexLetter letter = new IndexLetter(lastInitial, lastTitle, currentLetterList);
-                letters.Add(letter);
+                letters.Add(new IndexLetter(lastInitial, lastTitle, currentLetterList));
                 currentLetterList = null;
             }
             return letters;

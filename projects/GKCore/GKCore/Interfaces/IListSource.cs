@@ -88,10 +88,4 @@ namespace GKCore.Interfaces
         void UpdateColumns(IListViewEx listView);
         void UpdateContents();
     }
-
-
-    public interface IListSource<T> : IListSource
-        where T : GDMTag
-    {
-    }
 }

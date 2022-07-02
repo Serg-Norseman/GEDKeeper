@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,7 +36,6 @@ namespace GKStdReports
     public class ContemporariesReport : ReportExporter
     {
         private readonly GDMIndividualRecord fPerson;
-        private IFont fTitleFont, fChapFont, fTextFont;
         private CommonStats fStats;
 
         public ContemporariesReport(IBaseWindow baseWin, GDMIndividualRecord selectedPerson)
@@ -76,17 +75,17 @@ namespace GKStdReports
         {
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
 
-            fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
-            fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
-            fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
+            var titleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
+            var chapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
+            var textFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
             var stats = new TreeStats(fBase.Context, fBase.GetContentList(GDMRecordType.rtIndividual));
             fStats = stats.GetCommonStats();
 
-            fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, titleFont, TextAlignment.taLeft);
 
             var personRange = GetIndividualDates(fPerson);
-            fWriter.AddParagraph(GetPersonalInfo(fPerson), fChapFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(GetPersonalInfo(fPerson), chapFont, TextAlignment.taLeft);
             
             fWriter.BeginList();
 
@@ -97,7 +96,7 @@ namespace GKStdReports
                 var indRange = GetIndividualDates(iRec);
                 try {
                     if (personRange.IsOverlapped(indRange)) {
-                        fWriter.AddListItem(" " + GetPersonalInfo(iRec), fTextFont);
+                        fWriter.AddListItem(" " + GetPersonalInfo(iRec), textFont);
                     }
                 } catch (Exception ex) {
                     Logger.WriteError("ContemporariesReport.InternalGenerate()", ex);

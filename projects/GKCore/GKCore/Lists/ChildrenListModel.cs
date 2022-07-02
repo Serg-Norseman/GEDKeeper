@@ -133,7 +133,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class IndividualChildrenListModel : ChildrenListModel
     {
-        private GDMList<GDMIndividualLink> fTotalChildren;
+        private readonly GDMList<GDMIndividualLink> fTotalChildren;
 
         public IndividualChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {

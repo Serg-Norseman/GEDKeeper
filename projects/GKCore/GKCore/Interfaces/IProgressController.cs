@@ -98,7 +98,7 @@ namespace GKCore.Interfaces
         /// <summary>
         /// Call this method from the worker thread to increase the progress counter by a specified value.
         /// </summary>
-        /// <param name="val">The amount by which to increment the progress indicator</param>
+        /// <param name="value">The amount by which to increment the progress indicator</param>
         /// <remarks>You must have called one of the Begin() methods prior to this call.</remarks>
         void StepTo(int value);
 

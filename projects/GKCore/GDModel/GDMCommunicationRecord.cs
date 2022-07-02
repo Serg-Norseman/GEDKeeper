@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -53,9 +53,9 @@ namespace GDModel
     {
         private string fCommName;
         private GDMCommunicationType fCommunicationType;
-        private GDMDate fDate;
+        private readonly GDMDate fDate;
         private GDMCommunicationDir fCommDirection;
-        private GDMIndividualLink fCorresponder;
+        private readonly GDMIndividualLink fCorresponder;
 
 
         public GDMDate Date

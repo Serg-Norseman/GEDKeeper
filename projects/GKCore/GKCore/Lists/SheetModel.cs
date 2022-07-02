@@ -108,16 +108,10 @@ namespace GKCore.Lists
     }
 
 
-    public interface ISheetModel<T> : ISheetModel
-        where T : GDMTag
-    {
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public abstract class SheetModel<T> : ListSource<T>, ISheetModel<T>
+    public abstract class SheetModel<T> : ListSource<T>, ISheetModel
         where T : GDMTag
     {
         private EnumSet<RecordAction> fAllowedActions;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,6 +29,14 @@ namespace GKCore
     {
         public GKException(string message)
             : base(message)
+        {
+        }
+    }
+
+    public class MediaFileNotFoundException : GKException
+    {
+        public MediaFileNotFoundException(string fileName)
+            : base(string.Format("Media file '{0}' not found", fileName))
         {
         }
     }

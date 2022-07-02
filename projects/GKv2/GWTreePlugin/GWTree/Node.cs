@@ -4,7 +4,6 @@ using GDModel;
 
 namespace GWTree
 {
-    [Flags]
     public enum ProcessStage
     {
         None,

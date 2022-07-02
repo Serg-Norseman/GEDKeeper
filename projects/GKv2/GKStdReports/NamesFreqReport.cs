@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,8 +42,6 @@ namespace GKStdReports
             }
         }
 
-        private IFont fTitleFont, fChapFont, fTextFont;
-
         public NamesFreqReport(IBaseWindow baseWin)
             : base(baseWin, false)
         {
@@ -54,11 +52,11 @@ namespace GKStdReports
         {
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
 
-            fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
-            fChapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
-            fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
+            var titleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
+            var chapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
+            var textFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
-            fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, titleFont, TextAlignment.taLeft);
 
             var names = new List<NameItem>();
             var surnames = new List<NameItem>();
@@ -87,17 +85,17 @@ namespace GKStdReports
             SortHelper.QuickSort(names, ItemsCompare);
             SortHelper.QuickSort(surnames, ItemsCompare);
 
-            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Names), fChapFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Names), chapFont, TextAlignment.taLeft);
             fWriter.BeginList();
             foreach (var item in names) {
-                fWriter.AddListItem(" " + item.Name + "\t" + item.Amount, fTextFont);
+                fWriter.AddListItem(" " + item.Name + "\t" + item.Amount, textFont);
             }
             fWriter.EndList();
 
-            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Surnames), fChapFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Surnames), chapFont, TextAlignment.taLeft);
             fWriter.BeginList();
             foreach (var item in surnames) {
-                fWriter.AddListItem(" " + item.Name + "\t" + item.Amount, fTextFont);
+                fWriter.AddListItem(" " + item.Name + "\t" + item.Amount, textFont);
             }
             fWriter.EndList();
         }

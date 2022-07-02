@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,15 +24,25 @@ using GKCore.Types;
 
 namespace GDModel
 {
-    public sealed class GDMRepositoryRecord : GDMRecord
+    public sealed class GDMRepositoryRecord : GDMRecord, IGDMStructWithAddress
     {
         private GDMAddress fAddress;
         private string fRepositoryName;
 
 
+        public bool HasAddress
+        {
+            get { return fAddress != null && !fAddress.IsEmpty(); }
+        }
+
         public GDMAddress Address
         {
-            get { return fAddress; }
+            get {
+                if (fAddress == null) {
+                    fAddress = new GDMAddress();
+                }
+                return fAddress;
+            }
         }
 
         public string RepositoryName
@@ -46,7 +56,6 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.REPO);
 
-            fAddress = new GDMAddress();
             fRepositoryName = string.Empty;
         }
 
@@ -54,7 +63,7 @@ namespace GDModel
         {
             base.TrimExcess();
 
-            fAddress.TrimExcess();
+            if (fAddress != null) fAddress.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -65,7 +74,7 @@ namespace GDModel
 
             base.Assign(otherRepo);
 
-            fAddress.Assign(otherRepo.fAddress);
+            if (otherRepo.fAddress != null) Address.Assign(otherRepo.fAddress);
             fRepositoryName = otherRepo.fRepositoryName;
         }
 
@@ -73,13 +82,14 @@ namespace GDModel
         {
             base.Clear();
 
-            fAddress.Clear();
+            if (fAddress != null) fAddress.Clear();
             fRepositoryName = string.Empty;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fAddress.IsEmpty() && string.IsNullOrEmpty(fRepositoryName);
+            return base.IsEmpty() && string.IsNullOrEmpty(fRepositoryName)
+                && (fAddress == null || fAddress.IsEmpty());
         }
 
         // TODO: connect to use
@@ -95,7 +105,7 @@ namespace GDModel
         public override void ReplaceXRefs(GDMXRefReplacer map)
         {
             base.ReplaceXRefs(map);
-            fAddress.ReplaceXRefs(map);
+            if (fAddress != null) fAddress.ReplaceXRefs(map);
         }
     }
 }

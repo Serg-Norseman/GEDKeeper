@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,10 +33,10 @@ namespace GDModel
         private string fAddressState;
         private string fAddressPostalCode;
         private string fAddressCountry;
-        private GDMList<GDMTag> fPhoneList;
-        private GDMList<GDMTag> fEmailList;
-        private GDMList<GDMTag> fFaxList;
-        private GDMList<GDMTag> fWWWList;
+        private readonly GDMList<GDMTag> fPhoneList;
+        private readonly GDMList<GDMTag> fEmailList;
+        private readonly GDMList<GDMTag> fFaxList;
+        private readonly GDMList<GDMTag> fWWWList;
 
 
         public GDMLines Lines

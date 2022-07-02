@@ -55,12 +55,12 @@ namespace GDModel
         private string fResearchName;
         private GDMResearchPriority fPriority;
         private GDMResearchStatus fStatus;
-        private GDMDate fStartDate;
-        private GDMDate fStopDate;
+        private readonly GDMDate fStartDate;
+        private readonly GDMDate fStopDate;
         private int fPercent;
-        private GDMList<GDMPointer> fTasks;
-        private GDMList<GDMPointer> fCommunications;
-        private GDMList<GDMPointer> fGroups;
+        private readonly GDMList<GDMPointer> fTasks;
+        private readonly GDMList<GDMPointer> fCommunications;
+        private readonly GDMList<GDMPointer> fGroups;
 
 
         public string ResearchName

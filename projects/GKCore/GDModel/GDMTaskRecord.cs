@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -39,8 +39,8 @@ namespace GDModel
     {
         private string fGoal;
         private GDMResearchPriority fPriority;
-        private GDMDate fStartDate;
-        private GDMDate fStopDate;
+        private readonly GDMDate fStartDate;
+        private readonly GDMDate fStopDate;
 
 
         public string Goal

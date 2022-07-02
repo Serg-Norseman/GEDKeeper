@@ -34,7 +34,7 @@ namespace GKCore.Lists
     /// <summary>
     ///
     /// </summary>
-    public abstract class ListSource<T> : IListSource<T>
+    public abstract class ListSource<T> : IListSource
         where T : GDMTag
     {
         protected sealed class MapColumnRec
@@ -394,11 +394,7 @@ namespace GKCore.Lists
 
         protected bool CheckExternalFilter(GDMRecord rec)
         {
-            bool res = true;
-            if (fExternalFilter != null) {
-                res = res && fExternalFilter(rec);
-            }
-            return res;
+            return (fExternalFilter == null || fExternalFilter(rec));
         }
 
         public string[] CreateFields()
@@ -590,6 +586,8 @@ namespace GKCore.Lists
                 return null;
 
             object[] columnValues = GetItemData(rowData);
+            if (columnValues == null)
+                return null;
 
             IListItem item = handler(rowData, columnValues);
 

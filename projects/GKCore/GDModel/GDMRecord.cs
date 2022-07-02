@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -52,7 +52,7 @@ namespace GDModel
     {
         protected GDMTree fTree;
         private string fAutomatedRecordID;
-        private GDMChangeDate fChangeDate;
+        private readonly GDMChangeDate fChangeDate;
         private string fUID;
         private string fXRef;
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,8 +30,6 @@ namespace GKStdReports
 {
     public sealed class RepositoriesReport : ReportExporter
     {
-        private IFont fTitleFont, fTextFont, fHeaderFont;
-
         public RepositoriesReport(IBaseWindow baseWin)
             : base(baseWin, false)
         {
@@ -42,11 +40,11 @@ namespace GKStdReports
         {
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
 
-            fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
-            fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
-            fHeaderFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
+            var titleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
+            var textFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
+            var headerFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
 
-            fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, titleFont, TextAlignment.taLeft);
             fWriter.NewLine();
 
             var repositories = new List<GDMRepositoryRecord>();
@@ -63,16 +61,19 @@ namespace GKStdReports
             fWriter.BeginTable(2, repositories.Count + 1);
 
             fWriter.BeginTableRow(true);
-            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Name), fHeaderFont, TextAlignment.taLeft);
-            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Address), fHeaderFont, TextAlignment.taLeft);
+            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Name), headerFont, TextAlignment.taLeft);
+            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Address), headerFont, TextAlignment.taLeft);
             fWriter.EndTableRow();
 
             for (int i = 0; i < repositories.Count; i++) {
                 repoRec = repositories[i];
 
                 fWriter.BeginTableRow(false);
-                fWriter.AddTableCell(repoRec.RepositoryName, fTextFont, TextAlignment.taLeft);
-                fWriter.AddTableCell(repoRec.Address.Lines.Text, fTextFont, TextAlignment.taLeft);
+                fWriter.AddTableCell(repoRec.RepositoryName, textFont, TextAlignment.taLeft);
+
+                if (repoRec.HasAddress)
+                    fWriter.AddTableCell(repoRec.Address.Lines.Text, textFont, TextAlignment.taLeft);
+
                 fWriter.EndTableRow();
             }
             fWriter.EndTable();

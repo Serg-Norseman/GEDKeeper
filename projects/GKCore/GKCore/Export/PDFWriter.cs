@@ -410,9 +410,10 @@ namespace GKCore.Export
         {
         }
 
-        public override void AddTableCell(string content, IFont font, TextAlignment alignment)
+        public override void AddTableCell(string content, IFont font = null, TextAlignment alignment = TextAlignment.taLeft)
         {
-            itCell cell = new itCell(new Phrase(content, ((FontHandler)font).Handle));
+            itFont itf = (font == null) ? null : ((FontHandler)font).Handle;
+            itCell cell = new itCell(new Phrase(content, itf));
             cell.HorizontalAlignment = iAlignments[(int)alignment];
             //cell.GrayFill
             fTable.AddCell(cell);

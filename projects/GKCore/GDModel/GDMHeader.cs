@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -157,17 +157,17 @@ namespace GDModel
     /// </summary>
     public sealed class GDMHeader : GDMTag
     {
-        private GDMHeaderCharSet fCharacterSet;
+        private readonly GDMHeaderCharSet fCharacterSet;
         private string fCopyright;
-        private GDMHeaderFile fFile;
-        private GDMHeaderGEDCOM fGEDCOM;
+        private readonly GDMHeaderFile fFile;
+        private readonly GDMHeaderGEDCOM fGEDCOM;
         private GDMLanguageID fLanguage;
-        private GDMTextTag fNote;
-        private GDMPlace fPlace;
+        private readonly GDMTextTag fNote;
+        private readonly GDMPlace fPlace;
         private string fReceivingSystemName;
-        private GDMHeaderSource fSource;
-        private GDMPointer fSubmission;
-        private GDMPointer fSubmitter;
+        private readonly GDMHeaderSource fSource;
+        private readonly GDMPointer fSubmission;
+        private readonly GDMPointer fSubmitter;
         private DateTime fTransmissionDateTime;
 
 

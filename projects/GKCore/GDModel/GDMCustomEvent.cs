@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -51,7 +51,6 @@ namespace GDModel
                 if (fAddress == null) {
                     fAddress = new GDMAddress();
                 }
-
                 return fAddress;
             }
         }
@@ -226,9 +225,11 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fAddress == null || fAddress.IsEmpty()) && string.IsNullOrEmpty(fAgency) && string.IsNullOrEmpty(fCause)
-                && string.IsNullOrEmpty(fClassification) && fDate.IsEmpty() && (fPlace == null || fPlace.IsEmpty())
-                && string.IsNullOrEmpty(fReligiousAffilation) && (fRestriction == GDMRestriction.rnNone)
+            return base.IsEmpty()
+                && string.IsNullOrEmpty(fClassification) && string.IsNullOrEmpty(fCause) && fDate.IsEmpty()
+                && string.IsNullOrEmpty(fAgency) && (fRestriction == GDMRestriction.rnNone) && string.IsNullOrEmpty(fReligiousAffilation)
+                && (fPlace == null || fPlace.IsEmpty())
+                && (fAddress == null || fAddress.IsEmpty())
                 && (fNotes == null || fNotes.Count == 0)
                 && (fSourceCitations == null || fSourceCitations.Count == 0)
                 && (fMultimediaLinks == null || fMultimediaLinks.Count == 0);

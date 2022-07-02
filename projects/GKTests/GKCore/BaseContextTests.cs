@@ -52,6 +52,13 @@ namespace GKCore
         }
 
         [Test]
+        public void Test_Exceptions()
+        {
+            var instance = new MediaFileNotFoundException("test.ogg");
+            Assert.AreEqual("Media file 'test.ogg' not found", instance.Message);
+        }
+
+        [Test]
         public void Test_Common()
         {
             Assert.IsNull(fContext.Viewer);

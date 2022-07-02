@@ -27,8 +27,8 @@ namespace GDModel
 {
     public sealed class GDMDateRange : GDMCustomDate
     {
-        private GDMDate fDateAfter;
-        private GDMDate fDateBefore;
+        private readonly GDMDate fDateAfter;
+        private readonly GDMDate fDateBefore;
 
         public GDMDate After
         {

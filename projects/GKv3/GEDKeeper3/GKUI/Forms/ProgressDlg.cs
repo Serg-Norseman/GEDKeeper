@@ -227,10 +227,10 @@ namespace GKUI.Forms
             });
         }
 
-        public void Increment(int val = 1)
+        public void Increment(int value = 1)
         {
             InvokeEx(delegate {
-                DoIncrement(val);
+                DoIncrement(value);
             });
         }
 

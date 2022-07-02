@@ -27,8 +27,8 @@ namespace GDModel
 {
     public sealed class GDMDatePeriod : GDMCustomDate
     {
-        private GDMDate fDateFrom;
-        private GDMDate fDateTo;
+        private readonly GDMDate fDateFrom;
+        private readonly GDMDate fDateTo;
 
         public GDMDate DateFrom
         {

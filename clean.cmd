@@ -13,6 +13,8 @@ del .\appdata\GEDKeeper2.nms
 
 del .\TestResult.xml
 del .\coverageResults.txt
+del .\NUnitResults.xml
+del .\opencover.xml
 
 rmdir .\cov-int /s /q
 del .\coverity.zip

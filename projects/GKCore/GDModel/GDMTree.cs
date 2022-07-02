@@ -27,7 +27,7 @@ namespace GDModel
 {
     public interface IGDMProgressCallback
     {
-        void StepTo(int val);
+        void StepTo(int value);
     }
 
 

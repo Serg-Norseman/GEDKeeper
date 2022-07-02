@@ -1598,11 +1598,6 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        private static bool IsTextTag(string tagName)
-        {
-            return (tagName == GEDCOMTagName.CONT || tagName == GEDCOMTagName.CONC);
-        }
-
         private static bool IsTextTag(GEDCOMTagType tag)
         {
             return (tag == GEDCOMTagType.CONT || tag == GEDCOMTagType.CONC);

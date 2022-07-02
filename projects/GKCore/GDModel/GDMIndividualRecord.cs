@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,10 +40,10 @@ namespace GDModel
     public sealed class GDMIndividualRecord : GDMRecordWithEvents, IGDMIndividualRecord
     {
         private GDMList<GDMAssociation> fAssociations;
-        private GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
+        private readonly GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
         private GDMList<GDMPointer> fGroups;
-        private GDMList<GDMPersonalName> fPersonalNames;
-        private GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
+        private readonly GDMList<GDMPersonalName> fPersonalNames;
+        private readonly GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
         private GDMSex fSex;
 
 

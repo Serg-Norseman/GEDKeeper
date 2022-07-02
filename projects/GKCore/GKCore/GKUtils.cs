@@ -2467,7 +2467,8 @@ namespace GKCore
                         summary.Add("[u][b][size=+1]" + repositoryRec.RepositoryName.Trim() + "[/size][/b][/u]");
                         summary.Add("");
 
-                        ShowAddressSummary(repositoryRec.Address, summary);
+                        if (repositoryRec.HasAddress)
+                            ShowAddressSummary(repositoryRec.Address, summary);
 
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_RPSources) + ":");

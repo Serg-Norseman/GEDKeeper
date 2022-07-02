@@ -246,9 +246,10 @@ namespace GKCore.Export
             fStream.WriteLine("</tr>");
         }
 
-        public override void AddTableCell(string content, IFont font, TextAlignment alignment)
+        public override void AddTableCell(string content, IFont font = null, TextAlignment alignment = TextAlignment.taLeft)
         {
-            fStream.WriteLine("<td class=\""+((FontHandler)font).Handle+"\">" + content + "</td>");
+            string tdClass = (font == null) ? string.Empty : string.Format(" class=\"{0}\"", ((FontHandler)font).Handle);
+            fStream.WriteLine("<td" + tdClass + ">" + content + "</td>");
 
             fTableCol += 1;
             if (fTableCol == fTableColsCount) {

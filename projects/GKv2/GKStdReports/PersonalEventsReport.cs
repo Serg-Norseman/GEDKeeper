@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -61,7 +61,6 @@ namespace GKStdReports
         }
 
         private readonly GDMIndividualRecord fPerson;
-        private IFont fTitleFont, fChapFont, fTextFont;
 
         public bool ShowAges = true;
 
@@ -89,12 +88,10 @@ namespace GKStdReports
         {
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
 
-            fTitleFont = fWriter.CreateFont("", 14f, true, false, clrBlack);
-            fChapFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
-            fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
+            var titleFont = fWriter.CreateFont("", 14f, true, false, clrBlack);
+            var textFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
-            //fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
-            fWriter.AddParagraph(GKUtils.GetNameString(fPerson, true, false), fTitleFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(GKUtils.GetNameString(fPerson, true, false), titleFont, TextAlignment.taLeft);
             fWriter.NewLine();
 
             IBaseContext baseContext = fBase.Context;
@@ -151,7 +148,7 @@ namespace GKStdReports
                 if (evt.HasPlace && evt.Place.StringValue != "") {
                     li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
                 }
-                fWriter.AddListItem("   " + li, fTextFont);
+                fWriter.AddListItem("   " + li, textFont);
 
                 if (evObj.Rec is GDMIndividualRecord) {
                     GDMIndividualRecord iRec = (GDMIndividualRecord)evObj.Rec;
@@ -159,10 +156,10 @@ namespace GKStdReports
                     if (evt.GetTagType() == GEDCOMTagType.BIRT) {
                         if (evObj.Type == EventType.Personal) {
                             if (father != null) {
-                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", fTextFont);
+                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", textFont);
                             }
                             if (mother != null) {
-                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", fTextFont);
+                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", textFont);
                             }
                         } else if (evObj.Type == EventType.Child) {
                             if (iRec.Sex == GDMSex.svMale) {
@@ -171,7 +168,7 @@ namespace GKStdReports
                                 st = LangMan.LS(LSID.LSID_RK_Daughter) + ": ";
                             }
                             st = ConvertHelper.UniformName(st) + GKUtils.GetNameString(iRec, true, false);
-                            fWriter.AddListItem("   " + "   " + st, fTextFont);
+                            fWriter.AddListItem("   " + "   " + st, textFont);
                         }
                     }
                 } else if (evObj.Rec is GDMFamilyRecord) {
@@ -195,7 +192,7 @@ namespace GKStdReports
                     } else {
                         sps = st + unk;
                     }
-                    fWriter.AddListItem("   " + "   " + sps, fTextFont);
+                    fWriter.AddListItem("   " + "   " + sps, textFont);
                 }
             }
 

@@ -109,7 +109,6 @@ namespace GKCore.Export
         private static RtfCharFormat AddParagraphChunk(RtfParagraph par, string text, IFont font)
         {
             FontStruct fntStr = ((FontHandler)font).Handle;
-
             par.DefaultCharFormat.Font = fntStr.FD;
 
             int beg = par.Text.Length;
@@ -273,7 +272,7 @@ namespace GKCore.Export
         {
         }
 
-        public override void AddTableCell(string content, IFont font, TextAlignment alignment)
+        public override void AddTableCell(string content, IFont font = null, TextAlignment alignment = TextAlignment.taLeft)
         {
             var cell = fTable.Cell(fTableRow, fTableCol);
             if (!string.IsNullOrEmpty(content)) {

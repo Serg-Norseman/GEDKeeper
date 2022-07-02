@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,8 +29,6 @@ namespace GKStdReports
 {
     public sealed class PlacesReport : ReportExporter
     {
-        private IFont fTitleFont, fTextFont, fHeaderFont;
-
         public PlacesReport(IBaseWindow baseWin)
             : base(baseWin, false)
         {
@@ -41,11 +39,11 @@ namespace GKStdReports
         {
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
 
-            fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
-            fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
-            fHeaderFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
+            var titleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
+            var textFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
+            var headerFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
 
-            fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(fTitle, titleFont, TextAlignment.taLeft);
             fWriter.NewLine();
 
             var places = new StringList();
@@ -59,14 +57,14 @@ namespace GKStdReports
             fWriter.BeginTable(1, places.Count + 1);
 
             fWriter.BeginTableRow(true);
-            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Name), fHeaderFont, TextAlignment.taLeft);
+            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Name), headerFont, TextAlignment.taLeft);
             fWriter.EndTableRow();
 
             for (int i = 0; i < places.Count; i++) {
                 PlaceObj placeObj = (PlaceObj)places.GetObject(i);
 
                 fWriter.BeginTableRow(false);
-                fWriter.AddTableCell(placeObj.Name, fTextFont, TextAlignment.taLeft);
+                fWriter.AddTableCell(placeObj.Name, textFont, TextAlignment.taLeft);
                 fWriter.EndTableRow();
             }
             fWriter.EndTable();

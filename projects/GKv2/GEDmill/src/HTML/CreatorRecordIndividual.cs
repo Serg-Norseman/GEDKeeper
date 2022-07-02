@@ -466,14 +466,8 @@ namespace GEDmill.HTML
                                 }
 
                                 sourceRefs = AddSources(ref fReferenceList, ies.SourceCitations);
-
-                                if (spouseDeathDate != null) {
-                                    Event iEvent = new Event(spouseDeathDate, "_SPOUSEDIED", string.Concat(fLangMan.LS(PLS.LSID_death_of), " ", spouseLink, place, ".", sourceRefs), "", null, false, GMConfig.Instance.CapitaliseEventDescriptions);
-                                    fEventList.Add(iEvent);
-                                } else {
-                                    Event iEvent = new Event(null, "_SPOUSEDIED", string.Concat(fLangMan.LS(PLS.LSID_death_of), " ", spouseLink, place, ".", sourceRefs), "", null, false, GMConfig.Instance.CapitaliseEventDescriptions);
-                                    fAttributeList.Add(iEvent);
-                                }
+                                var iEvent = new Event(spouseDeathDate, "_SPOUSEDIED", string.Concat(fLangMan.LS(PLS.LSID_death_of), " ", spouseLink, place, ".", sourceRefs), "", null, false, GMConfig.Instance.CapitaliseEventDescriptions);
+                                fEventList.Add(iEvent);
                             }
                             break;
                         }

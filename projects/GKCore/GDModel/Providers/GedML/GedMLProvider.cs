@@ -62,12 +62,11 @@ namespace GDModel.Providers.GedML
                 int progress = 0;
                 var invariantText = GEDCOMUtils.InvariantTextInfo;
 
-                var strTok = new GEDCOMParser(false);
                 GDMTag curRecord = null;
                 GDMTag curTag = null;
                 var stack = new Stack<StackTuple>(9);
 
-                XmlReaderSettings settings = new XmlReaderSettings();
+                var settings = new XmlReaderSettings();
                 settings.DtdProcessing = DtdProcessing.Ignore;
 
                 int tagLevel = -1;

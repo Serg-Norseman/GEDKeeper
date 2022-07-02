@@ -91,8 +91,6 @@ namespace GKCore.Export
         private readonly ShieldState fShieldState;
         private StringList fSourceList;
 
-        private IFont fTitleFont;
-        private IFont fChapFont;
         private IFont fPersonFont;
         private IFont fLinkFont;
         private IFont fTextFont, fSupText;
@@ -497,8 +495,6 @@ namespace GKCore.Export
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
             IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
-            fTitleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
-            fChapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);
             fPersonFont = fWriter.CreateFont("", 12f/*10f*/, true, false, clrBlack);
             fLinkFont = fWriter.CreateFont("", 10f/*8f*/, false, true, clrBlue);
             fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, clrBlack);
@@ -508,7 +504,10 @@ namespace GKCore.Export
 
             bool includeGens = fOptions.PedigreeOptions.IncludeGenerations;
 
-            fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taCenter);
+            var titleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
+            fWriter.AddParagraph(fTitle, titleFont, TextAlignment.taCenter);
+
+            var chapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);
 
             fPersonList = new List<PedigreePerson>();
             fSourceList = new StringList();
@@ -526,7 +525,7 @@ namespace GKCore.Export
                         string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvertHelper.GetRome(curLevel);
 
                         fWriter.BeginParagraph(TextAlignment.taLeft, 12f, 6f);
-                        fWriter.AddParagraphChunk(genTitle, fChapFont);
+                        fWriter.AddParagraphChunk(genTitle, chapFont);
                         fWriter.EndParagraph();
                     }
 
@@ -535,7 +534,7 @@ namespace GKCore.Export
 
                 if (fSourceList.Count > 0) {
                     fWriter.BeginParagraph(TextAlignment.taCenter, 12f, 6f);
-                    fWriter.AddParagraphChunk(LangMan.LS(LSID.LSID_RPSources), fChapFont);
+                    fWriter.AddParagraphChunk(LangMan.LS(LSID.LSID_RPSources), chapFont);
                     fWriter.EndParagraph();
 
                     int num2 = fSourceList.Count;

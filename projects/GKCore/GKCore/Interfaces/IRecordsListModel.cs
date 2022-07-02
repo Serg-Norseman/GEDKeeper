@@ -33,7 +33,7 @@ namespace GKCore.Interfaces
     }
 
 
-    public interface IRecordsListModel<T> : IRecordsListModel, IListSource<T>
+    public interface IRecordsListModel<T> : IRecordsListModel
         where T : GDMRecord
     {
     }

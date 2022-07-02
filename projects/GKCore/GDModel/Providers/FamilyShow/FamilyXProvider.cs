@@ -74,7 +74,7 @@ namespace GDModel.Providers.FamilyShow
         {
 #if !NETSTANDARD
             using (Package package = Package.Open(inputStream, FileMode.Open, FileAccess.Read)) {
-                PackagePart documentPart = package.GetPart(new Uri("/" + OPCContentFileName, UriKind.Relative));
+                PackagePart documentPart = package.GetPart(new Uri(@"/" + OPCContentFileName, UriKind.Relative));
                 using (MemoryStream memStream = new MemoryStream()) {
                     OPCUtility.CopyStream(documentPart.GetStream(), memStream);
                     memStream.Position = 0;
