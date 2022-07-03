@@ -43,6 +43,11 @@
                       <ComboBox x:Name="cmbGeoSearchCountry" ReadOnly="True" />
                     </TableRow>
 
+                    <TableRow>
+                      <Label x:Name="lblCertaintyAlgorithm" />
+                      <ComboBox x:Name="cmbCertaintyAlgorithm" ReadOnly="True" />
+                    </TableRow>
+
                   </TableLayout>
 
                   <StackLayoutItem Expand="True" />

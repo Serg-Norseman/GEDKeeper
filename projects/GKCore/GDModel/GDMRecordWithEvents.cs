@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -177,54 +177,6 @@ namespace GDModel
         }
 
         public abstract GDMCustomEvent AddEvent(GDMCustomEvent evt);
-
-        private static readonly float[] CA_VALUES = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
-
-        public float GetCertaintyAssessment()
-        {
-            float result = 0;
-            float wsum = 0;
-
-            if (fEvents != null) {
-                int num1 = fEvents.Count;
-                for (int i = 0; i < num1; i++) {
-                    GDMCustomEvent evt = fEvents[i];
-                    if (!evt.HasSourceCitations) continue;
-
-                    int num2 = evt.SourceCitations.Count;
-                    for (int k = 0; k < num2; k++) {
-                        GDMSourceCitation cit = evt.SourceCitations[k];
-
-                        int ca = cit.GetValidCertaintyAssessment();
-                        int weight = (ca + 1);
-
-                        result += (CA_VALUES[ca] * weight);
-                        wsum += weight;
-                    }
-                }
-            }
-
-            if (HasSourceCitations) {
-                int num3 = SourceCitations.Count;
-                for (int i = 0; i < num3; i++) {
-                    GDMSourceCitation cit = SourceCitations[i];
-
-                    int ca = cit.GetValidCertaintyAssessment();
-                    int weight = (ca + 1);
-
-                    result += (CA_VALUES[ca] * weight);
-                    wsum += weight;
-                }
-            }
-
-            if (wsum != 0.0f) {
-                result /= wsum;
-            } else {
-                result = 0.0f;
-            }
-
-            return result;
-        }
 
         public UDN GetUDN(string eventSign)
         {

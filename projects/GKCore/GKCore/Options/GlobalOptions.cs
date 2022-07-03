@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -163,6 +163,8 @@ namespace GKCore.Options
             get { return fAutoSortSpouses; }
             set { fAutoSortSpouses = value; }
         }
+
+        public CertaintyAlgorithm CertaintyAlgorithm { get; set; }
 
         public bool CharsetDetection
         {
@@ -480,6 +482,7 @@ namespace GKCore.Options
             KeepRichNames = true;
             fReversePlaceEntitiesOrder = false;
             SurnameInCapitals = false;
+            CertaintyAlgorithm = CertaintyAlgorithm.WeightedAverage;
         }
 
         protected override void Dispose(bool disposing)
@@ -773,6 +776,7 @@ namespace GKCore.Options
             LoadPluginsFromFile(ini);
 
             fReversePlaceEntitiesOrder = ini.ReadBool("Common", "ReversePlaceEntitiesOrder", false);
+            CertaintyAlgorithm = (CertaintyAlgorithm)ini.ReadInteger("Common", "CertaintyAlgorithm", 0);
         }
 
         public void LoadFromFile(string fileName)
@@ -919,6 +923,7 @@ namespace GKCore.Options
             SavePluginsToFile(ini);
 
             ini.WriteBool("Common", "ReversePlaceEntitiesOrder", fReversePlaceEntitiesOrder);
+            ini.WriteInteger("Common", "CertaintyAlgorithm", (int)CertaintyAlgorithm);
         }
 
         public void SaveToFile(string fileName)

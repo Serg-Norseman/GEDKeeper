@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using BSLib.DataViz.TreeMap;
 using GDModel;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Tools;
 
@@ -109,7 +110,7 @@ namespace GKDataQualityPlugin
                                 iRec = (GDMIndividualRecord)groupRecords[j];
                                 prepared.Add(iRec);
 
-                                quality += iRec.GetCertaintyAssessment();
+                                quality += GKUtils.GetCertaintyAssessment(iRec);
                             }
                             quality /= groupSize;
 

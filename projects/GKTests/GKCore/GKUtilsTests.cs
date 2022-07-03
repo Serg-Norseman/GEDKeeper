@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -652,6 +652,15 @@ namespace GKCore
         public void Test_GetRecordContent()
         {
             GKUtils.GetRecordContent(null, null, null);
+        }
+
+        [Test]
+        public void Test_GetCertaintyAssessment()
+        {
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I5") as GDMIndividualRecord;
+
+            float ca = GKUtils.GetCertaintyAssessment(iRec);
+            Assert.AreEqual(0.0f, ca);
         }
     }
 }

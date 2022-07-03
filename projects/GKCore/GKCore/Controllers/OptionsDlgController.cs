@@ -151,6 +151,8 @@ namespace GKCore.Controllers
                 }
             }
             combo.SetSelectedTag(fOptions.InterfaceLang, true);
+
+            GetControl<IComboBox>("cmbCertaintyAlgorithm").SetSelectedTag(fOptions.CertaintyAlgorithm);
         }
 
         public void AcceptOtherOptions()
@@ -168,6 +170,8 @@ namespace GKCore.Controllers
             if (item != null) {
                 AppHost.Instance.LoadLanguage(item.Tag);
             }
+
+            fOptions.CertaintyAlgorithm = GetControl<IComboBox>("cmbCertaintyAlgorithm").GetSelectedTag<CertaintyAlgorithm>();
         }
 
         public void UpdatePedigreesOptions()
@@ -641,6 +645,13 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.LSID_Language);
             GetControl<ILabel>("lblGeocoder").Text = LangMan.LS(LSID.LSID_Geocoder);
             GetControl<ILabel>("lblGeoSearchCountry").Text = LangMan.LS(LSID.LSID_GeoSearchCountryRestriction);
+
+            GetControl<ILabel>("lblCertaintyAlgorithm").Text = LangMan.LS(LSID.LSID_CertaintyAlgorithm);
+            var cmbCA = GetControl<IComboBox>("cmbCertaintyAlgorithm");
+            cmbCA.Clear();
+            for (var ca = CertaintyAlgorithm.WeightedAverage; ca <= CertaintyAlgorithm.Maximum; ca++) {
+                cmbCA.AddItem(ca.ToString(), ca);
+            }
 
             // Multimedia
             GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.LSID_RPMultimedia);

@@ -137,9 +137,6 @@ namespace GDModel
             indiRec.Clear();
             Assert.IsTrue(indiRec.IsEmpty());
 
-            float ca = indiRec.GetCertaintyAssessment();
-            Assert.AreEqual(0.0f, ca);
-
 
             Assert.IsNull(indiRec.GetPrimaryMultimediaLink());
             GDMMultimediaLink mmLink = indiRec.SetPrimaryMultimediaLink(null);

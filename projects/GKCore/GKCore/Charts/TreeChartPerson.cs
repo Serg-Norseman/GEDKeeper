@@ -356,7 +356,7 @@ namespace GKCore.Charts
                         }
                     }
 
-                    CertaintyAssessment = iRec.GetCertaintyAssessment();
+                    CertaintyAssessment = GKUtils.GetCertaintyAssessment(iRec);
                 } else {
                     fSurname = "";
                     fName = "< ? >";

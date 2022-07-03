@@ -907,8 +907,9 @@ namespace GKCore
         /* 846 */ LSID_ShowAge,
         /* 847 */ LSID_SurnameInCapitals,
         /* 848 */ LSID_SvgFilter,
+        /* 849 */ LSID_CertaintyAlgorithm,
 
-        /* 000 */ LSID_Last = LSID_SvgFilter
+        /* 000 */ LSID_Last = LSID_CertaintyAlgorithm
     }
 
 
@@ -1771,6 +1772,7 @@ namespace GKCore
             /* 846 */ "Show age",
             /* 847 */ "Surname in capitals",
             /* 848 */ "|SVG files (*.svg)|*.svg",
+            /* 849 */ "Certainty assessment algorithm",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

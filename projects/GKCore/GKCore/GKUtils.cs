@@ -1451,6 +1451,93 @@ namespace GKCore
             return result.ToString();
         }
 
+        private static readonly float[] CA_VALUES = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
+
+        private static void GetCertaintyVars(IGDMStructWithSourceCitations str, CertaintyAlgorithm algorithm, ref float result, ref float wsum)
+        {
+            for (int k = 0, num = str.SourceCitations.Count; k < num; k++) {
+                var cit = str.SourceCitations[k];
+                int ca = cit.GetValidCertaintyAssessment();
+                float value = CA_VALUES[ca];
+
+                switch (algorithm) {
+                    case CertaintyAlgorithm.WeightedAverage:
+                        int weight = (ca + 1);
+                        result += (value * weight);
+                        wsum += weight;
+                        break;
+                    case CertaintyAlgorithm.Average:
+                        result += value;
+                        wsum += 1;
+                        break;
+                    case CertaintyAlgorithm.Minimum:
+                        result = Math.Min(result, value);
+                        break;
+                    case CertaintyAlgorithm.Maximum:
+                        result = Math.Max(result, value);
+                        break;
+                }
+            }
+        }
+
+        public static float GetCertaintyAssessment(IGDMRecordWithEvents record, CertaintyAlgorithm algorithm)
+        {
+            // variables initialization
+            float result = 0;
+            float wsum = 0;
+            switch (algorithm) {
+                case CertaintyAlgorithm.WeightedAverage:
+                case CertaintyAlgorithm.Average:
+                    result = 0;
+                    wsum = 0;
+                    break;
+
+                case CertaintyAlgorithm.Minimum:
+                    result = 1;
+                    break;
+
+                case CertaintyAlgorithm.Maximum:
+                    result = 0;
+                    break;
+            }
+
+            if (record.HasEvents) {
+                for (int i = 0, num = record.Events.Count; i < num; i++) {
+                    GDMCustomEvent evt = record.Events[i];
+                    if (evt.HasSourceCitations) {
+                        GetCertaintyVars(evt, algorithm, ref result, ref wsum);
+                    }
+                }
+            }
+
+            if (record.HasSourceCitations) {
+                GetCertaintyVars(record, algorithm, ref result, ref wsum);
+            }
+
+            // result finalization
+            switch (algorithm) {
+                case CertaintyAlgorithm.WeightedAverage:
+                case CertaintyAlgorithm.Average:
+                    if (wsum != 0.0f) {
+                        result /= wsum;
+                    } else {
+                        result = 0.0f;
+                    }
+                    break;
+
+                case CertaintyAlgorithm.Minimum:
+                case CertaintyAlgorithm.Maximum:
+                    break;
+            }
+
+            return result;
+        }
+
+        public static float GetCertaintyAssessment(IGDMRecordWithEvents record)
+        {
+            return GetCertaintyAssessment(record, GlobalOptions.Instance.CertaintyAlgorithm);
+        }
+
         #endregion
 
         #region Tree utils

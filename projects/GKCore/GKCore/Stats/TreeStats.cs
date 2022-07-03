@@ -98,7 +98,7 @@ namespace GKCore.Stats
                 int vMAge = GKUtils.GetMarriageAge(fTree, ind);
                 stats.mage.TakeVal(vMAge, ind.Sex, true);
 
-                float vCI = ind.GetCertaintyAssessment();
+                float vCI = GKUtils.GetCertaintyAssessment(ind);
                 stats.cIndex.TakeVal(vCI, ind.Sex, false);
             }
             
@@ -305,7 +305,7 @@ namespace GKCore.Stats
                     break;
 
                 case StatsMode.smCertaintyIndex:
-                    CheckVal(values, string.Format("{0:0.00}", iRec.GetCertaintyAssessment()));
+                    CheckVal(values, string.Format("{0:0.00}", GKUtils.GetCertaintyAssessment(iRec)));
                     break;
 
                 case StatsMode.smBirthByMonth:
