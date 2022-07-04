@@ -38,14 +38,11 @@
     <Reference Include="BSLib.Linguistics">
       <HintPath>..\libs\netstd\BSLib.Linguistics.dll</HintPath>
     </Reference>
-    <Reference Include="NLua">
-      <HintPath>..\libs\linux\NLua.dll</HintPath>
-    </Reference>
     <Reference Include="RtfWriter">
       <HintPath>..\libs\netstd\RtfWriter.dll</HintPath>
     </Reference>
     <Reference Include="UtfUnknown">
-      <HintPath>..\libs\UtfUnknown.dll</HintPath>
+      <HintPath>..\libs\netstd\UtfUnknown.dll</HintPath>
     </Reference>
     <Reference Include="YamlSerializer">
       <HintPath>..\libs\YamlSerializer.dll</HintPath>
@@ -171,5 +168,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+    <PackageReference Include="NLua" Version="1.6.0" />
   </ItemGroup>
 </Project>
