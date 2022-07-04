@@ -780,19 +780,19 @@ namespace GKUI.Platform
         public bool Checked
         {
             get {
-                if (Control is RadioMenuItem) {
-                    return ((RadioMenuItem)Control).Checked;
-                } else if (Control is CheckMenuItem) {
-                    return ((CheckMenuItem)Control).Checked;
+                if (Control is RadioMenuItem rmi) {
+                    return rmi.Checked;
+                } else if (Control is CheckMenuItem cmi) {
+                    return cmi.Checked;
                 } else {
                     return false;
                 }
             }
             set {
-                if (Control is RadioMenuItem) {
-                    ((RadioMenuItem)Control).Checked = value;
-                } else if (Control is CheckMenuItem) {
-                    ((CheckMenuItem)Control).Checked = value;
+                if (Control is RadioMenuItem rmi) {
+                    rmi.Checked = value;
+                } else if (Control is CheckMenuItem cmi) {
+                    cmi.Checked = value;
                 }
             }
         }
@@ -855,7 +855,12 @@ namespace GKUI.Platform
         public string Text
         {
             get { return Control.Text; }
-            set { Control.Text = value; }
+            set {
+                // Bug in all windows where controllers use GetControl<IButtonToolItem>("???").Text = "..."
+                // Console.WriteLine("ButtonToolItemHandler.SetText(): " + Control.Text + " -> " + value);
+                // Debugging showed that real values ​​come here (Gtk)
+                Control.Text = value;
+            }
         }
 
         public bool Visible

@@ -182,8 +182,6 @@ namespace GKUI.Forms
             XamlReader.Load(this);
             InitializeComponent();
 
-            AppHost.Instance.LoadWindow(this);
-
             fController = new BaseWinController(this);
             fContext = fController.Context;
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
@@ -296,7 +294,6 @@ namespace GKUI.Forms
 
         private void Form_Closed(object sender, EventArgs e)
         {
-            AppHost.Instance.CloseWindow(this);
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)

@@ -98,6 +98,18 @@ namespace GKUI.Forms
         public virtual void SetLocale()
         {
         }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            AppHost.Instance.LoadWindow(this);
+            base.OnLoad(e);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            AppHost.Instance.CloseWindow(this);
+            base.OnClosed(e);
+        }
     }
 
 
