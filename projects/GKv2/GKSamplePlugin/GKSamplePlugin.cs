@@ -20,6 +20,7 @@
 
 using System;
 using System.Reflection;
+using BSLib;
 using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Interfaces;
@@ -89,6 +90,14 @@ namespace GKSamplePlugin
                 result = false;
             }
             return result;
+        }
+
+        public void LoadOptions(IniFile ini)
+        {
+        }
+
+        public void SaveOptions(IniFile ini)
+        {
         }
     }
 }

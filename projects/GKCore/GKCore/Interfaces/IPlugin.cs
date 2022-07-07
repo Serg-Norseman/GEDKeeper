@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using BSLib.Design.Graphics;
 
 namespace GKCore.Interfaces
@@ -89,5 +90,8 @@ namespace GKCore.Interfaces
         void OnHostActivate();
         void OnHostDeactivate();
         void OnLanguageChange();
+
+        void LoadOptions(IniFile ini);
+        void SaveOptions(IniFile ini);
     }
 }

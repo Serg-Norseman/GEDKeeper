@@ -19,7 +19,9 @@
  */
 
 using System;
+using System.IO;
 using System.Reflection;
+using BSLib;
 using BSLib.Design.Graphics;
 using GKCore;
 using GKCore.Interfaces;
@@ -37,19 +39,39 @@ namespace GKBackupPlugin
     public enum PLS
     {
         /* 001 */ LSID_Backup,
+        /* 002 */ LSID_Enabled,
+        /* 003 */ LSID_Folder,
+        /* 004 */ LSID_FolderChoose,
     }
 
     public sealed class Plugin : WidgetPlugin
     {
         private string fDisplayName = "GKBackupPlugin";
         private ILangMan fLangMan;
+        private BackupWidget fForm;
+
+        private bool fExtendedBackupEnabled = false;
+        private string fFolder = string.Empty;
+
 
         public override string DisplayName { get { return fDisplayName; } }
         public override ILangMan LangMan { get { return fLangMan; } }
         public override IImage Icon { get { return null; } }
         public override PluginCategory Category { get { return PluginCategory.Tool; } }
 
-        //private BackupWidget fForm;
+
+        public bool ExtendedBackupEnabled
+        {
+            get { return fExtendedBackupEnabled; }
+            set { fExtendedBackupEnabled = value; }
+        }
+
+        public string Folder
+        {
+            get { return fFolder; }
+            set { fFolder = value; }
+        }
+
 
         public Plugin()
         {
@@ -58,30 +80,30 @@ namespace GKBackupPlugin
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                /*if (fForm != null) {
+                if (fForm != null) {
                     fForm.Dispose();
                     fForm = null;
-                }*/
+                }
             }
             base.Dispose(disposing);
         }
 
         internal void CloseForm()
         {
-            /*if (fForm != null) {
+            if (fForm != null) {
                 fForm = null;
-            }*/
+            }
         }
 
         public override void Execute()
         {
-            /*if (!Host.IsWidgetActive(this)) {
+            if (!Host.IsWidgetActive(this)) {
                 fForm = new BackupWidget(this);
                 fForm.Show();
             } else {
                 fForm.Close();
                 fForm = null;
-            }*/
+            }
         }
 
         public override void OnLanguageChange()
@@ -90,7 +112,7 @@ namespace GKBackupPlugin
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_Backup);
 
-                //if (fForm != null) fForm.SetLocale();
+                if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {
                 Logger.WriteError("GKBackupPlugin.OnLanguageChange()", ex);
             }
@@ -110,6 +132,25 @@ namespace GKBackupPlugin
 
         public override void BaseSaved(IBaseWindow baseWin, string fileName)
         {
+            if (fExtendedBackupEnabled) {
+                string pureFileName = Path.GetFileName(fileName);
+                string backupFileName = Path.Combine(fFolder, pureFileName);
+
+                baseWin.Context.CopyFile(fileName, backupFileName, true);
+                baseWin.Context.MoveMediaContainers(fileName, backupFileName, true);
+            }
+        }
+
+        public override void LoadOptions(IniFile ini)
+        {
+            fExtendedBackupEnabled = ini.ReadBool("GKBackupPlugin", "ExtendedBackupEnabled", false);
+            fFolder = ini.ReadString("GKBackupPlugin", "Folder", string.Empty);
+        }
+
+        public override void SaveOptions(IniFile ini)
+        {
+            ini.WriteBool("GKBackupPlugin", "ExtendedBackupEnabled", fExtendedBackupEnabled);
+            ini.WriteString("GKBackupPlugin", "Folder", fFolder);
         }
     }
 }

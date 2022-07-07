@@ -45,6 +45,12 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <OutputPath>..\..\..\plugins\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>..\..\..\plugins\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
@@ -53,9 +59,16 @@
       <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackupWidget.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BackupWidget.Designer.cs">
+      <DependentUpon>BackupWidget.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKBackupPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +76,14 @@
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GKBackupPlugin.enu">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKBackupPlugin.rus">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

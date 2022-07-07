@@ -70,5 +70,7 @@ namespace GKCore.Interfaces
         ILangMan CreateLangMan(object sender);
         void UpdateControls(bool forceDeactivate, bool blockDependent = false);
         void ShowHelpTopic(string topic);
+
+        string SelectFolder(string folderPath);
     }
 }

@@ -272,6 +272,14 @@ namespace GKUI.Platform
             return UIHelper.Rt2Rt(screen.WorkingArea);
         }
 
+        public override string SelectFolder(string folderPath)
+        {
+            using (var fldDlg = new FolderBrowserDialog()) {
+                fldDlg.SelectedPath = folderPath;
+                return (fldDlg.ShowDialog() != DialogResult.OK) ? string.Empty : fldDlg.SelectedPath;
+            }
+        }
+
         #region KeyLayout functions
 
         public override int GetKeyLayout()

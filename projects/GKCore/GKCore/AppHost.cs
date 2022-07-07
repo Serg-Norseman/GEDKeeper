@@ -883,6 +883,8 @@ namespace GKCore
             fAutosaveTimer.Enabled = AppHost.Options.Autosave;
         }
 
+        public abstract string SelectFolder(string folderPath);
+
         #endregion
 
         #region ISingleInstanceEnforcer implementation
@@ -1054,13 +1056,13 @@ namespace GKCore
 
         public static void DoneSettings()
         {
-            Plugins.Unload();
-
             NamesTable.SaveToFile(GetAppDataPathStatic() + "GEDKeeper2.nms");
 
             var options = GlobalOptions.Instance;
             options.SaveToFile(GetAppDataPathStatic() + "GEDKeeper2.ini");
             options.Dispose();
+
+            Plugins.Unload();
         }
 
         public static void ForceGC()

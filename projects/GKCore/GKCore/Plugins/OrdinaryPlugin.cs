@@ -87,5 +87,13 @@ namespace GKCore.Plugins
 
             return assembly.GetManifestResourceStream(resName);
         }
+
+        public virtual void LoadOptions(IniFile ini)
+        {
+        }
+
+        public virtual void SaveOptions(IniFile ini)
+        {
+        }
     }
 }

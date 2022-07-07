@@ -8,6 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Reference Include="BSLib">
+          <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
+        </Reference>
         <Reference Include="BSLib.Design">
             <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
         </Reference>

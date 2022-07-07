@@ -26,6 +26,7 @@ using BSLib;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Plugins;
 using GKCore.Types;
 
 namespace GKCore.Options
@@ -649,6 +650,8 @@ namespace GKCore.Options
                     var plgName = plugin.GetType().Name;
                     dlgPlugin.Enabled = ini.ReadBool("Plugins", plgName + ".Enabled", false);
                 }
+
+                plugin.LoadOptions(ini);
             }
         }
 
@@ -666,6 +669,8 @@ namespace GKCore.Options
                     var plgName = plugin.GetType().Name;
                     ini.WriteBool("Plugins", plgName + ".Enabled", dlgPlugin.Enabled);
                 }
+
+                plugin.SaveOptions(ini);
             }
         }
 
@@ -725,29 +730,25 @@ namespace GKCore.Options
             fProxy.LoadFromFile(ini);
 
             int cnt = ini.ReadInteger("NameFilters", "Count", 0);
-            for (int i = 0; i < cnt; i++)
-            {
+            for (int i = 0; i < cnt; i++) {
                 string st = ini.ReadString("NameFilters", "Filter_" + i.ToString(), "");
                 if (st != "") fNameFilters.Add(st);
             }
 
             cnt = ini.ReadInteger("ResidenceFilters", "Count", 0);
-            for (int i = 0; i < cnt; i++)
-            {
+            for (int i = 0; i < cnt; i++) {
                 fResidenceFilters.Add(ini.ReadString("ResidenceFilters", "Filter_" + i.ToString(), ""));
             }
 
             cnt = ini.ReadInteger("EventFilters", "Count", 0);
-            for (int i = 0; i < cnt; i++)
-            {
+            for (int i = 0; i < cnt; i++) {
                 fEventFilters.Add(ini.ReadString("EventFilters", "EventVal_" + i.ToString(), ""));
             }
 
             LoadMRUFromFile(ini, fMRUFiles);
 
             cnt = ini.ReadInteger("Relations", "Count", 0);
-            for (int i = 0; i < cnt; i++)
-            {
+            for (int i = 0; i < cnt; i++) {
                 fRelations.Add(ini.ReadString("Relations", "Relation_" + i.ToString(), ""));
             }
 
@@ -763,8 +764,7 @@ namespace GKCore.Options
             fMWinState = (WindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
 
             cnt = ini.ReadInteger("LastBases", "Count", 0);
-            for (int i = 0; i < cnt; i++)
-            {
+            for (int i = 0; i < cnt; i++) {
                 string st = ini.ReadString("LastBases", "LB" + i.ToString(), "");
                 AddLastBase(st);
             }
@@ -773,10 +773,10 @@ namespace GKCore.Options
 
             fListOptions.LoadFromFile(ini);
 
-            LoadPluginsFromFile(ini);
-
             fReversePlaceEntitiesOrder = ini.ReadBool("Common", "ReversePlaceEntitiesOrder", false);
             CertaintyAlgorithm = (CertaintyAlgorithm)ini.ReadInteger("Common", "CertaintyAlgorithm", 0);
+
+            LoadPluginsFromFile(ini);
         }
 
         public void LoadFromFile(string fileName)
@@ -785,11 +785,8 @@ namespace GKCore.Options
                 throw new ArgumentNullException("fileName");
 
             try {
-                IniFile ini = new IniFile(fileName);
-                try {
+                using (var ini = new IniFile(fileName)) {
                     LoadFromFile(ini);
-                } finally {
-                    ini.Dispose();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GlobalOptions.LoadFromFile()", ex);
@@ -855,36 +852,31 @@ namespace GKCore.Options
 
             int cnt = fNameFilters.Count;
             ini.WriteInteger("NameFilters", "Count", cnt);
-            for (int i = 0; i < cnt; i++)
-            {
+            for (int i = 0; i < cnt; i++) {
                 ini.WriteString("NameFilters", "Filter_" + i.ToString(), fNameFilters[i]);
             }
 
             cnt = fResidenceFilters.Count;
             ini.WriteInteger("ResidenceFilters", "Count", cnt);
-            for (int i = 0; i < cnt; i++)
-            {
+            for (int i = 0; i < cnt; i++) {
                 ini.WriteString("ResidenceFilters", "Filter_" + i.ToString(), fResidenceFilters[i]);
             }
 
             cnt = fEventFilters.Count;
             ini.WriteInteger("EventFilters", "Count", cnt);
-            for (int i = 0; i < cnt; i++)
-            {
+            for (int i = 0; i < cnt; i++) {
                 ini.WriteString("EventFilters", "EventVal_" + i.ToString(), fEventFilters[i]);
             }
 
             cnt = fMRUFiles.Count;
             ini.WriteInteger("Common", "MRUFiles_Count", cnt);
-            for (int i = 0; i < cnt; i++)
-            {
+            for (int i = 0; i < cnt; i++) {
                 fMRUFiles[i].SaveToFile(ini, "MRUFile_" + i.ToString());
             }
 
             cnt = fRelations.Count;
             ini.WriteInteger("Relations", "Count", cnt);
-            for (int i = 0; i < cnt; i++)
-            {
+            for (int i = 0; i < cnt; i++) {
                 ini.WriteString("Relations", "Relation_" + i.ToString(), fRelations[i]);
             }
 
@@ -920,10 +912,10 @@ namespace GKCore.Options
 
             fListOptions.SaveToFile(ini);
 
-            SavePluginsToFile(ini);
-
             ini.WriteBool("Common", "ReversePlaceEntitiesOrder", fReversePlaceEntitiesOrder);
             ini.WriteInteger("Common", "CertaintyAlgorithm", (int)CertaintyAlgorithm);
+
+            SavePluginsToFile(ini);
         }
 
         public void SaveToFile(string fileName)
@@ -932,12 +924,8 @@ namespace GKCore.Options
                 throw new ArgumentNullException("fileName");
 
             try {
-                IniFile ini = new IniFile(fileName);
-
-                try {
+                using (var ini = new IniFile(fileName)) {
                     SaveToFile(ini);
-                } finally {
-                    ini.Dispose();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GlobalOptions.SaveToFile()", ex);

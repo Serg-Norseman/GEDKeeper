@@ -743,7 +743,7 @@ namespace GKCore
             }
         }
 
-        private void MoveMediaContainers(string oldFileName, string newFileName)
+        public void MoveMediaContainers(string oldFileName, string newFileName, bool createCopy = false)
         {
             // do nothing if file name is not changed
             if (string.IsNullOrEmpty(oldFileName) || string.Equals(oldFileName, newFileName)) return;
@@ -757,12 +757,20 @@ namespace GKCore
             // move the archive and the storage folder to a new location
             if (hasArc) {
                 string newArc = newPath + Path.DirectorySeparatorChar + GKUtils.GetContainerName(newName, true);
-                File.Move(GetArcFileName(), newArc);
+                if (!createCopy) {
+                    File.Move(GetArcFileName(), newArc);
+                } else {
+                    CopyFile(GetArcFileName(), newArc, true);
+                }
             }
 
             if (hasStg) {
                 string newStg = newPath + Path.DirectorySeparatorChar + GKUtils.GetContainerName(newName, false);
-                Directory.Move(GetStgFolder(false), newStg);
+                if (!createCopy) {
+                    Directory.Move(GetStgFolder(false), newStg);
+                } else {
+                    // TODO!
+                }
             }
         }
 
@@ -1127,7 +1135,7 @@ namespace GKCore
             return false;
         }
 
-        private void CopyFile(string sourceFileName, string destFileName, bool showProgress = true)
+        public void CopyFile(string sourceFileName, string destFileName, bool showProgress = true)
         {
             if (showProgress) {
                 AppHost.Instance.ExecuteWork((controller) => {
