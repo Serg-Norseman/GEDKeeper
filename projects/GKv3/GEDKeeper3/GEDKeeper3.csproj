@@ -98,6 +98,7 @@
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
         <PackageReference Include="Eto.Platform.Gtk" Version="2.7.0" />
+        <PackageReference Include="LibVLCSharp.GTK" Version="3.6.6" />
     </ItemGroup>
 
 

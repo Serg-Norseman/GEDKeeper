@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
@@ -67,10 +68,7 @@ namespace GKUI.Components
             btnStop.Image = UIHelper.LoadResourceImage("Resources.btn_stop.png");
             btnMute.Image = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
 
-            Core.Initialize();
-            fLibVLC = new LibVLC();
-            fMedia = null;
-            fPlayer = null;
+            InitVLC();
 
             trkVolume.Value = Math.Max(0, 100);
             trkVolume_Scroll(null, null);
@@ -92,35 +90,59 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
 
+        private void InitVLC()
+        {
+            try {
+                fMedia = null;
+                fPlayer = null;
+                Core.Initialize();
+                fLibVLC = new LibVLC();
+            } catch (Exception ex) {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                    Console.WriteLine("MediaPlayer.InitVLC(): " + ex.Message);
+                } else {
+                    Logger.WriteError("MediaPlayer.InitVLC()", ex);
+                }
+            }
+        }
+
         private void Play()
         {
-            if (fMedia == null) {
-                if (string.IsNullOrEmpty(fMediaFile)) {
-                    AppHost.StdDialogs.ShowError("Please select media path first");
-                    return;
+            try {
+                if (fMedia == null) {
+                    if (string.IsNullOrEmpty(fMediaFile)) {
+                        AppHost.StdDialogs.ShowError("Please select media path first");
+                        return;
+                    }
+
+                    MpAttach(IntPtr.Zero);
+                    fPlayer = new VLCMediaPlayer(fLibVLC);
+                    fPlayer.PositionChanged += Events_PlayerPositionChanged;
+                    fPlayer.TimeChanged += Events_TimeChanged;
+                    fPlayer.EndReached += Events_MediaEnded;
+                    fPlayer.Stopped += Events_PlayerStopped;
+                    MpAttach(pnlVideo.NativeHandle);
+
+                    // https://github.com/videolan/libvlcsharp/blob/3.x/docs/linux-setup.md
+                    // Gtk: MissingMethodException: Method not found: 'Void LibVLCSharp.Shared.Media..ctor(LibVLCSharp.Shared.LibVLC, System.IO.Stream, System.String[])'
+                    // and other two!
+                    string[] opts = new string[] { };
+                    fMedia = new Media(fLibVLC, new FileStream(fMediaFile, FileMode.Open, FileAccess.Read, FileShare.Read), opts);
+                    //fMedia = new Media(fLibVLC, fMediaFile, FromType.FromPath);
+                    fMedia.DurationChanged += Events_DurationChanged;
+                    fMedia.StateChanged += Events_StateChanged;
+                    fMedia.ParsedChanged += Events_ParsedChanged;
+                    fMedia.Parse();
                 }
 
-                fMedia = new Media(fLibVLC, fMediaFile);
-                fMedia.DurationChanged += Events_DurationChanged;
-                fMedia.StateChanged += Events_StateChanged;
-                fMedia.ParsedChanged += Events_ParsedChanged;
-
-                //System.Diagnostics.Debug.Print(this.ParentWindow.NativeHandle.ToString());
-                //System.Diagnostics.Debug.Print(this.NativeHandle.ToString());
-
-                MpAttach(IntPtr.Zero);
-                fPlayer = new VLCMediaPlayer(fMedia);
-                MpAttach(pnlVideo.NativeHandle);
-
-                fPlayer.PositionChanged += Events_PlayerPositionChanged;
-                fPlayer.TimeChanged += Events_TimeChanged;
-                fPlayer.EndReached += Events_MediaEnded;
-                fPlayer.Stopped += Events_PlayerStopped;
-
-                fMedia.Parse();
+                fPlayer.Play(fMedia);
+            } catch (Exception ex) {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                    Console.WriteLine("MediaPlayer.Play(): " + ex.Message);
+                } else {
+                    Logger.WriteError("MediaPlayer.Play()", ex);
+                }
             }
-
-            fPlayer.Play();
         }
 
         private void MpAttach(IntPtr handle)
@@ -206,6 +228,7 @@ namespace GKUI.Components
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
+            Console.WriteLine("Play(): " + fMediaFile);
             Play();
         }
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using System.Security;
 
 #if OS_MSWIN
 using Eto.Wpf.Forms;
@@ -57,6 +59,21 @@ namespace GKUI.Platform
 
     public class GtkUserControl : DrawingArea
     {
+        const string linux_libgdk_x11_name = "libgdk-x11-2.0.so.0";
+
+        [SuppressUnmanagedCodeSecurity, DllImport(linux_libgdk_x11_name)]
+        static extern IntPtr gdk_x11_drawable_get_xid(IntPtr gdkDisplay);
+
+        public IntPtr XID
+        {
+            get {
+                // checked (VideoView)!
+                var xid = gdk_x11_drawable_get_xid(GdkWindow.Handle);
+                Console.WriteLine("xid: " + xid);
+                return xid;
+            }
+        }
+
         public bool IsInitialized { get; private set; }
 
         public GtkUserControl()
@@ -70,7 +87,7 @@ namespace GKUI.Platform
     /// </summary>
     public class NativeHostControlHandler : GtkControl<GtkUserControl, NativeHostControl, NativeHostControl.ICallback>, NativeHostControl.IHandler
     {
-        public new IntPtr NativeHandle => Control.Handle;
+        public new IntPtr NativeHandle => Control.XID;
 
         public bool IsInitialized => Control.IsInitialized;
 
