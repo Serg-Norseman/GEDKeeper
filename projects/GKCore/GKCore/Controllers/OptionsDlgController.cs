@@ -290,6 +290,7 @@ namespace GKCore.Controllers
 
             GetControl<ICheckBox>("chkShowDatesCalendar").Checked = fOptions.ShowDatesCalendar;
             GetControl<ICheckBox>("chkShowDatesSigns").Checked = fOptions.ShowDatesSign;
+            GetControl<ICheckBox>("chkLocalizedCalendarSignatures").Checked = fOptions.LocalizedCalendarSignatures;
 
             GetControl<ICheckBox>("chkPlacesWithAddress").Checked = fOptions.PlacesWithAddress;
             GetControl<ICheckBox>("chkHighlightUnparented").Checked = fOptions.ListHighlightUnparentedPersons;
@@ -336,6 +337,7 @@ namespace GKCore.Controllers
             }
             fOptions.ShowDatesCalendar = GetControl<ICheckBox>("chkShowDatesCalendar").Checked;
             fOptions.ShowDatesSign = GetControl<ICheckBox>("chkShowDatesSigns").Checked;
+            fOptions.LocalizedCalendarSignatures = GetControl<ICheckBox>("chkLocalizedCalendarSignatures").Checked;
 
             fOptions.PlacesWithAddress = GetControl<ICheckBox>("chkPlacesWithAddress").Checked;
             fOptions.ListHighlightUnparentedPersons = GetControl<ICheckBox>("chkHighlightUnparented").Checked;
@@ -750,6 +752,7 @@ namespace GKCore.Controllers
             GetControl<IGroupBox>("grpDateFormat").Text = LangMan.LS(LSID.LSID_DateFormat);
             GetControl<ICheckBox>("chkShowDatesCalendar").Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
             GetControl<ICheckBox>("chkShowDatesSigns").Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
+            GetControl<ICheckBox>("chkLocalizedCalendarSignatures").Text = LangMan.LS(LSID.LSID_LocalizedCalendarSignaturesOptLabel);
 
             GetControl<IGroupBox>("grpAdvancedNames").Text = LangMan.LS(LSID.LSID_AdditionalNames);
             GetControl<ICheckBox>("chkExtendWomanSurnames").Text = LangMan.LS(LSID.LSID_ExtendedWomanSurnames);

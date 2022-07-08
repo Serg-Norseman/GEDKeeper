@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore
@@ -207,8 +209,7 @@ namespace GKCore
             GreatPrefix = LSID.LSID_RK_GreatPrefix;
 
             // TODO: need to find a way of localization
-            NumKinship = new string[]
-            {
+            NumKinship = new string[] {
                 "-",
                 "юродный",
                 "юродная",
@@ -216,8 +217,7 @@ namespace GKCore
             };
 
             // TODO: need to find a way of localization
-            Numerals = new string[]
-            {
+            Numerals = new string[] {
                 "-",
                 "дво",
                 "тро",
@@ -229,8 +229,7 @@ namespace GKCore
                 "девяти"
             };
 
-            RelationSigns = new string[]
-            {
+            RelationSigns = new string[] {
                 "?",
                 "P",
                 "S",
@@ -267,8 +266,7 @@ namespace GKCore
                 "-"
             };
 
-            RelationKinds = new LSID[]
-            {
+            RelationKinds = new LSID[] {
                 LSID.LSID_RK_Unk,
                 LSID.LSID_None,
                 LSID.LSID_None,
@@ -305,9 +303,7 @@ namespace GKCore
                 LSID.LSID_RK_Unk
             };
 
-
-            SpecialUserRefs = new SpecialUserRef[]
-            {
+            SpecialUserRefs = new SpecialUserRef[] {
                 new SpecialUserRef(LSID.LSID_RI_GeorgeKnight, ""),
                 new SpecialUserRef(LSID.LSID_USSR_WWII_Combatant, ""),
                 new SpecialUserRef(LSID.LSID_USSR_WWII_KilledInBattle, ""),
@@ -319,34 +315,26 @@ namespace GKCore
                 new SpecialUserRef(LSID.LSID_Religion_TheOldBelievers, "")
             };
 
-
-            CertaintyAssessments = new LSID[]
-            {
+            CertaintyAssessments = new LSID[] {
                 LSID.LSID_Cert_1,
                 LSID.LSID_Cert_2,
                 LSID.LSID_Cert_3,
                 LSID.LSID_Cert_4
             };
 
-
-            GoalNames = new LSID[]
-            {
+            GoalNames = new LSID[] {
                 LSID.LSID_G_1,
                 LSID.LSID_G_2,
                 LSID.LSID_G_3,
                 LSID.LSID_G_4
             };
 
-
-            CommunicationDirs = new LSID[]
-            {
+            CommunicationDirs = new LSID[] {
                 LSID.LSID_CD_1,
                 LSID.LSID_CD_2
             };
 
-
-            CommunicationNames = new LSID[]
-            {
+            CommunicationNames = new LSID[] {
                 LSID.LSID_Com_1,
                 LSID.LSID_Com_2,
                 LSID.LSID_Com_3,
@@ -355,9 +343,7 @@ namespace GKCore
                 LSID.LSID_Com_6
             };
 
-
-            StatusNames = new LSID[]
-            {
+            StatusNames = new LSID[] {
                 LSID.LSID_RStat_1,
                 LSID.LSID_RStat_2,
                 LSID.LSID_RStat_3,
@@ -366,9 +352,7 @@ namespace GKCore
                 LSID.LSID_RStat_6
             };
 
-
-            PriorityNames = new LSID[]
-            {
+            PriorityNames = new LSID[] {
                 LSID.LSID_Prt_1,
                 LSID.LSID_Prt_2,
                 LSID.LSID_Prt_3,
@@ -376,9 +360,7 @@ namespace GKCore
                 LSID.LSID_Prt_5
             };
 
-
-            MediaTypes = new LSID[]
-            {
+            MediaTypes = new LSID[] {
                 LSID.LSID_DefaultValue, // TODO: may be LSID.LSID_MT_15 (Unknown)?
                 LSID.LSID_MT_02,
                 LSID.LSID_MT_03,
@@ -396,16 +378,13 @@ namespace GKCore
                 //LSID.LSID_MT_15 <Unknown removed to first position>
             };
 
-
-            GKStoreTypes = new StoreTypeRec[]
-            {
+            GKStoreTypes = new StoreTypeRec[] {
                 new StoreTypeRec(LSID.LSID_STRef, ""),
                 new StoreTypeRec(LSID.LSID_STStg, "stg:"),
                 new StoreTypeRec(LSID.LSID_STArc, "arc:"),
                 new StoreTypeRec(LSID.LSID_STRel, "rel:"),
                 new StoreTypeRec(LSID.LSID_STWeb, "http")
             };
-
 
             FamilyEvents = new EventStruct[] {
                 new EventStruct(LSID.LSID_Event, GEDCOMTagName.EVEN, PersonEventKind.ekEvent),
@@ -420,10 +399,11 @@ namespace GKCore
                 new EventStruct(LSID.LSID_FEvt_9, GEDCOMTagName.DIV, PersonEventKind.ekEvent),
             };
 
-
+            // гр|юл|евр|фр|рим|исл(хид?)|?
+            // н.ст.|ст.ст.|евр|фр|рим|исл(хид?)|?
+            // G|J|H|FR|R|I|?
             // FIXME: use calendars for StrToGEDCOMDate() and class EventEditDlg
-            DateCalendars = new CalendarStruct[]
-            {
+            DateCalendars = new CalendarStruct[] {
                 new CalendarStruct(LSID.LSID_Cal_Gregorian, " [G]", true),
                 new CalendarStruct(LSID.LSID_Cal_Julian, " [J]", true),
                 new CalendarStruct(LSID.LSID_Cal_Hebrew, " [H]", false), // !
@@ -505,26 +485,21 @@ namespace GKCore
             PersonEvents = array6;
 
 
-            MarriageStatus = new MarStatusStruct[]
-            {
+            MarriageStatus = new MarStatusStruct[] {
                 new MarStatusStruct(LSID.LSID_Unknown, ""),
                 new MarStatusStruct(LSID.LSID_MarrRegistered, "MARRIED"),
                 new MarStatusStruct(LSID.LSID_MarrNotRegistered, "MARRNOTREG"),
                 new MarStatusStruct(LSID.LSID_MarrDivorced, "NOTMARR")
             };
 
-
-            SexData = new SexStruct[]
-            {
+            SexData = new SexStruct[] {
                 new SexStruct(LSID.LSID_SexU, "U"),
                 new SexStruct(LSID.LSID_SexM, "M"),
                 new SexStruct(LSID.LSID_SexF, "F"),
                 new SexStruct(LSID.LSID_SexX, "X")
             };
 
-
-            RecordTypes = new LSID[]
-            {
+            RecordTypes = new LSID[] {
                 LSID.LSID_None,
                 LSID.LSID_Person,
                 LSID.LSID_Family,
@@ -541,9 +516,7 @@ namespace GKCore
                 LSID.LSID_Submitter
             };
 
-
-            Restrictions = new LSID[]
-            {
+            Restrictions = new LSID[] {
                 LSID.LSID_RestrictNone,
                 LSID.LSID_RestrictLocked,
                 LSID.LSID_RestrictConfidential,
@@ -590,8 +563,7 @@ namespace GKCore
             StatsTitles[35] = new StatsTitleStruct(LSID.LSID_BirthByMonth, LSID.LSID_BirthByMonth);
             StatsTitles[36] = new StatsTitleStruct(LSID.LSID_Demography, LSID.LSID_Demography);
 
-            CheckSolveNames = new LSID[]
-            {
+            CheckSolveNames = new LSID[] {
                 LSID.LSID_RM_Skip,
                 LSID.LSID_SetIsDead,
                 LSID.LSID_DefineSex,
@@ -599,13 +571,11 @@ namespace GKCore
                 LSID.LSID_DoEdit
             };
 
-            CondSigns = new string[]
-            {
+            CondSigns = new string[] {
                 "!=", "<", "<=", "==", "=>", ">", "contains", "not contains"
             };
 
-            NameTypes = new LSID[]
-            {
+            NameTypes = new LSID[] {
                 LSID.LSID_DefaultValue,
                 LSID.LSID_NTAka,
                 LSID.LSID_NTBirth,
@@ -622,6 +592,19 @@ namespace GKCore
             };
 
             BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";
+        }
+
+        public static string GetCalendarSign(GDMCalendar calendar)
+        {
+            var globOptions = GlobalOptions.Instance;
+            int ix = (int)calendar;
+            if (!globOptions.LocalizedCalendarSignatures) {
+                return GKData.DateCalendars[ix].Sign;
+            } else {
+                string signs = LangMan.LS(LSID.LSID_LocalizedCalendarSignaturesValues);
+                string[] parts = signs.Split('|');
+                return " " + ((ix < parts.Length) ? parts[ix] : GKData.DateCalendars[ix].Sign);
+            }
         }
     }
 }

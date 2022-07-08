@@ -303,6 +303,8 @@ namespace GKCore.Options
             get { return fListOptions; }
         }
 
+        public bool LocalizedCalendarSignatures { get; set; }
+
         public bool LoadRecentFiles
         {
             get { return fLoadRecentFiles; }
@@ -484,6 +486,7 @@ namespace GKCore.Options
             fReversePlaceEntitiesOrder = false;
             SurnameInCapitals = false;
             CertaintyAlgorithm = CertaintyAlgorithm.WeightedAverage;
+            LocalizedCalendarSignatures = true;
         }
 
         protected override void Dispose(bool disposing)
@@ -775,6 +778,7 @@ namespace GKCore.Options
 
             fReversePlaceEntitiesOrder = ini.ReadBool("Common", "ReversePlaceEntitiesOrder", false);
             CertaintyAlgorithm = (CertaintyAlgorithm)ini.ReadInteger("Common", "CertaintyAlgorithm", 0);
+            LocalizedCalendarSignatures = ini.ReadBool("Common", "LocalizedCalendarSignatures", false);
 
             LoadPluginsFromFile(ini);
         }
@@ -914,6 +918,7 @@ namespace GKCore.Options
 
             ini.WriteBool("Common", "ReversePlaceEntitiesOrder", fReversePlaceEntitiesOrder);
             ini.WriteInteger("Common", "CertaintyAlgorithm", (int)CertaintyAlgorithm);
+            ini.WriteBool("Common", "LocalizedCalendarSignatures", LocalizedCalendarSignatures);
 
             SavePluginsToFile(ini);
         }

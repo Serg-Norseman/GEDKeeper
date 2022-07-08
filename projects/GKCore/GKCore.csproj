@@ -220,6 +220,7 @@
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
     <Compile Include="GKCore\ExtObservableList.cs" />
+    <Compile Include="GKCore\GKExtensions.cs" />
     <Compile Include="GKCore\GKVarCache.cs" />
     <Compile Include="GKCore\GKException.cs" />
     <Compile Include="GKCore\Import\ImportUtils.cs" />

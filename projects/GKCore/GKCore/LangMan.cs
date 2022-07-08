@@ -908,8 +908,10 @@ namespace GKCore
         /* 847 */ LSID_SurnameInCapitals,
         /* 848 */ LSID_SvgFilter,
         /* 849 */ LSID_CertaintyAlgorithm,
+        /* 850 */ LSID_LocalizedCalendarSignaturesOptLabel,
+        /* 851 */ LSID_LocalizedCalendarSignaturesValues,
 
-        /* 000 */ LSID_Last = LSID_CertaintyAlgorithm
+        /* 000 */ LSID_Last = LSID_LocalizedCalendarSignaturesValues
     }
 
 
@@ -1773,6 +1775,8 @@ namespace GKCore
             /* 847 */ "Surname in capitals",
             /* 848 */ "|SVG files (*.svg)|*.svg",
             /* 849 */ "Certainty assessment algorithm",
+            /* 850 */ "Localized calendar signatures",
+            /* 851 */ "G|J|H|FR|R|I|?",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

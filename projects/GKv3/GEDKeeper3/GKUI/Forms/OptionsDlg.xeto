@@ -345,6 +345,7 @@
                       <StackLayoutItem />
                       <CheckBox x:Name="chkShowDatesSigns" />
                       <CheckBox x:Name="chkShowDatesCalendar" />
+                      <CheckBox x:Name="chkLocalizedCalendarSignatures" />
 
                     </StackLayout>
                   </GroupBox>
