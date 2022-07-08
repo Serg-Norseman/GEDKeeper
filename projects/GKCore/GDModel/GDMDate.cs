@@ -583,7 +583,7 @@ namespace GDModel
             }
 
             if (showCalendar) {
-                result = result + GKData.GetCalendarSign(fCalendar);
+                result = result + GKUtils.GetCalendarSign(fCalendar);
             }
 
             return result;

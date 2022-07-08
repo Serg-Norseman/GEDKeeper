@@ -375,8 +375,7 @@ namespace GKCore
         {
             if (tempRec == null) return string.Empty;
 
-            switch (gt)
-            {
+            switch (gt) {
                 case GDMGoalType.gtIndividual:
                     return GetNameString(((GDMIndividualRecord)tempRec), true, false);
 
@@ -853,24 +852,20 @@ namespace GKCore
             string result = " (";
 
             string ds = GetBirthDate(iRec, GlobalOptions.Instance.DefDateFormat, false);
-            if (ds == "")
-            {
+            if (ds == "") {
                 ds = "?";
             }
             result += ds;
 
             ds = GetDeathDate(iRec, GlobalOptions.Instance.DefDateFormat, false);
-            if (ds == "")
-            {
+            if (ds == "") {
                 GDMCustomEvent ev = iRec.FindEvent(GEDCOMTagType.DEAT);
-                if (ev != null)
-                {
+                if (ev != null) {
                     ds = "?";
                 }
             }
 
-            if (ds != "")
-            {
+            if (ds != "") {
                 result = result + " - " + ds;
             }
 
@@ -911,22 +906,18 @@ namespace GKCore
                 case PedigreeFormat.Excess:
                     {
                         string ds = GetBirthDate(iRec, GlobalOptions.Instance.DefDateFormat, true);
-                        if (ds == "")
-                        {
+                        if (ds == "") {
                             ds = "?";
                         }
                         result += ds;
                         ds = GetDeathDate(iRec, GlobalOptions.Instance.DefDateFormat, true);
-                        if (ds == "")
-                        {
+                        if (ds == "") {
                             GDMCustomEvent ev = iRec.FindEvent(GEDCOMTagType.DEAT);
-                            if (ev != null)
-                            {
+                            if (ev != null) {
                                 ds = "?";
                             }
                         }
-                        if (ds != "")
-                        {
+                        if (ds != "") {
                             result = result + " - " + ds;
                         }
                     }
@@ -1135,6 +1126,19 @@ namespace GKCore
             }
 
             return distance;
+        }
+
+        public static string GetCalendarSign(GDMCalendar calendar)
+        {
+            var globOptions = GlobalOptions.Instance;
+            int ix = (int)calendar;
+            if (!globOptions.LocalizedCalendarSignatures) {
+                return GKData.DateCalendars[ix].Sign;
+            } else {
+                string signs = LangMan.LS(LSID.LSID_LocalizedCalendarSignaturesValues);
+                string[] parts = signs.Split('|');
+                return " " + ((ix < parts.Length) ? parts[ix] : GKData.DateCalendars[ix].Sign);
+            }
         }
 
         #endregion
@@ -1709,39 +1713,31 @@ namespace GKCore
 
         private static void ShowAddressSummary(GDMAddress address, StringList summary)
         {
-            if (address != null && !address.IsEmpty() && summary != null)
-            {
+            if (address != null && !address.IsEmpty() && summary != null) {
                 summary.Add("    " + LangMan.LS(LSID.LSID_Address) + ":");
 
                 string ts = "";
-                if (address.AddressCountry != "")
-                {
+                if (address.AddressCountry != "") {
                     ts = ts + address.AddressCountry + ", ";
                 }
-                if (address.AddressState != "")
-                {
+                if (address.AddressState != "") {
                     ts = ts + address.AddressState + ", ";
                 }
-                if (address.AddressCity != "")
-                {
+                if (address.AddressCity != "") {
                     ts += address.AddressCity;
                 }
-                if (ts != "")
-                {
+                if (ts != "") {
                     summary.Add("    " + ts);
                 }
 
                 ts = "";
-                if (address.AddressPostalCode != "")
-                {
+                if (address.AddressPostalCode != "") {
                     ts = ts + address.AddressPostalCode + ", ";
                 }
-                if (address.Lines.Text.Trim() != "")
-                {
+                if (address.Lines.Text.Trim() != "") {
                     ts += address.Lines.Text.Trim();
                 }
-                if (ts != "")
-                {
+                if (ts != "") {
                     summary.Add("    " + ts);
                 }
 
@@ -2814,8 +2810,7 @@ namespace GKCore
         public static string GetStoreFolder(MultimediaKind mmKind)
         {
             string result = "";
-            switch (mmKind)
-            {
+            switch (mmKind) {
                 case MultimediaKind.mkNone:
                     result = "unknown";
                     break;
@@ -2841,8 +2836,7 @@ namespace GKCore
 
         public static MultimediaKind GetMultimediaKind(GDMMultimediaFormat format)
         {
-            switch (format)
-            {
+            switch (format) {
                 case GDMMultimediaFormat.mfNone:
                     return MultimediaKind.mkNone;
 

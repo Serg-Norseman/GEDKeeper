@@ -18,9 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore
@@ -413,77 +411,74 @@ namespace GKCore
                 new CalendarStruct(LSID.LSID_Unknown, "", false)
             };
 
+            DateKinds = new DateKindStruct[] {
+                new DateKindStruct(LSID.LSID_DK_0, 1), // 1
+                new DateKindStruct(LSID.LSID_DK_1, 2), // 2
+                new DateKindStruct(LSID.LSID_DK_2, 1), // 1
+                new DateKindStruct(LSID.LSID_DK_3, 3), // 1,2
+                new DateKindStruct(LSID.LSID_DK_4, 1), // 1
+                new DateKindStruct(LSID.LSID_DK_5, 2), // 2
+                new DateKindStruct(LSID.LSID_DK_6, 3), // 1,2
+                new DateKindStruct(LSID.LSID_DK_7, 1), // 1
+                new DateKindStruct(LSID.LSID_DK_8, 1), // 1
+                new DateKindStruct(LSID.LSID_DK_9, 1)  // 1
+            };
 
-            DateKindStruct[] array5 = new DateKindStruct[10];
-            array5[0] = new DateKindStruct(LSID.LSID_DK_0, 1); // 1
-            array5[1] = new DateKindStruct(LSID.LSID_DK_1, 2); // 2
-            array5[2] = new DateKindStruct(LSID.LSID_DK_2, 1); // 1
-            array5[3] = new DateKindStruct(LSID.LSID_DK_3, 3); // 1,2
-            array5[4] = new DateKindStruct(LSID.LSID_DK_4, 1); // 1
-            array5[5] = new DateKindStruct(LSID.LSID_DK_5, 2); // 2
-            array5[6] = new DateKindStruct(LSID.LSID_DK_6, 3); // 1,2
-            array5[7] = new DateKindStruct(LSID.LSID_DK_7, 1); // 1
-            array5[8] = new DateKindStruct(LSID.LSID_DK_8, 1); // 1
-            array5[9] = new DateKindStruct(LSID.LSID_DK_9, 1); // 1
-            DateKinds = array5;
+            PersonEvents = new EventStruct[] {
+                new EventStruct(LSID.LSID_Event, GEDCOMTagName.EVEN, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Birth, GEDCOMTagName.BIRT, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Adoption, GEDCOMTagName.ADOP, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Christening, GEDCOMTagName.CHR, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Graduation, GEDCOMTagName.GRAD, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Retirement, GEDCOMTagName.RETI, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Naturalization, GEDCOMTagName.NATU, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Emigration, GEDCOMTagName.EMIG, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Immigration, GEDCOMTagName.IMMI, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Census, GEDCOMTagName.CENS, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_LastWill, GEDCOMTagName.WILL, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_ProbateOfWill, GEDCOMTagName.PROB, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Death, GEDCOMTagName.DEAT, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Burial, GEDCOMTagName.BURI, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Cremation, GEDCOMTagName.CREM, PersonEventKind.ekEvent),
 
+                new EventStruct(LSID.LSID_Fact, GEDCOMTagName.FACT, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_Religion, GEDCOMTagName.RELI, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_Nationality, GEDCOMTagName.NATI, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_Residence, GEDCOMTagName.RESI, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_PhysicalDesc, GEDCOMTagName.DSCR, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_NationalIDNumber, GEDCOMTagName.IDNO, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_SocialSecurityNumber, GEDCOMTagName.SSN, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_ChildsCount, GEDCOMTagName.NCHI, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_MarriagesCount, GEDCOMTagName.NMR, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_Education, GEDCOMTagName.EDUC, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_Occupation, GEDCOMTagName.OCCU, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_Caste, GEDCOMTagName.CAST, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_Property, GEDCOMTagName.PROP, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_NobilityTitle, GEDCOMTagName.TITL, PersonEventKind.ekFact),
 
-            EventStruct[] array6 = new EventStruct[49];
-            array6[ 0] = new EventStruct(LSID.LSID_Event, GEDCOMTagName.EVEN, PersonEventKind.ekEvent);
-            array6[ 1] = new EventStruct(LSID.LSID_Birth, GEDCOMTagName.BIRT, PersonEventKind.ekEvent);
-            array6[ 2] = new EventStruct(LSID.LSID_Adoption, GEDCOMTagName.ADOP, PersonEventKind.ekEvent);
-            array6[ 3] = new EventStruct(LSID.LSID_Christening, GEDCOMTagName.CHR, PersonEventKind.ekEvent);
-            array6[ 4] = new EventStruct(LSID.LSID_Graduation, GEDCOMTagName.GRAD, PersonEventKind.ekEvent);
-            array6[ 5] = new EventStruct(LSID.LSID_Retirement, GEDCOMTagName.RETI, PersonEventKind.ekEvent);
-            array6[ 6] = new EventStruct(LSID.LSID_Naturalization, GEDCOMTagName.NATU, PersonEventKind.ekEvent);
-            array6[ 7] = new EventStruct(LSID.LSID_Emigration, GEDCOMTagName.EMIG, PersonEventKind.ekEvent);
-            array6[ 8] = new EventStruct(LSID.LSID_Immigration, GEDCOMTagName.IMMI, PersonEventKind.ekEvent);
-            array6[ 9] = new EventStruct(LSID.LSID_Census, GEDCOMTagName.CENS, PersonEventKind.ekEvent);
-            array6[10] = new EventStruct(LSID.LSID_LastWill, GEDCOMTagName.WILL, PersonEventKind.ekEvent);
-            array6[11] = new EventStruct(LSID.LSID_ProbateOfWill, GEDCOMTagName.PROB, PersonEventKind.ekEvent);
-            array6[12] = new EventStruct(LSID.LSID_Death, GEDCOMTagName.DEAT, PersonEventKind.ekEvent);
-            array6[13] = new EventStruct(LSID.LSID_Burial, GEDCOMTagName.BURI, PersonEventKind.ekEvent);
-            array6[14] = new EventStruct(LSID.LSID_Cremation, GEDCOMTagName.CREM, PersonEventKind.ekEvent);
+                new EventStruct(LSID.LSID_Travel, GEDCOMTagName._TRAVEL, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_Hobby, GEDCOMTagName._HOBBY, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_Award, GEDCOMTagName._AWARD, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_Mili, GEDCOMTagName._MILI, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_MiliInd, GEDCOMTagName._MILI_IND, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_MiliDis, GEDCOMTagName._MILI_DIS, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_MiliRank, GEDCOMTagName._MILI_RANK, PersonEventKind.ekFact),
 
-            array6[15] = new EventStruct(LSID.LSID_Fact, GEDCOMTagName.FACT, PersonEventKind.ekFact);
-            array6[16] = new EventStruct(LSID.LSID_Religion, GEDCOMTagName.RELI, PersonEventKind.ekFact);
-            array6[17] = new EventStruct(LSID.LSID_Nationality, GEDCOMTagName.NATI, PersonEventKind.ekFact);
-            array6[18] = new EventStruct(LSID.LSID_Residence, GEDCOMTagName.RESI, PersonEventKind.ekFact);
-            array6[19] = new EventStruct(LSID.LSID_PhysicalDesc, GEDCOMTagName.DSCR, PersonEventKind.ekFact);
-            array6[20] = new EventStruct(LSID.LSID_NationalIDNumber, GEDCOMTagName.IDNO, PersonEventKind.ekFact);
-            array6[21] = new EventStruct(LSID.LSID_SocialSecurityNumber, GEDCOMTagName.SSN, PersonEventKind.ekFact);
-            array6[22] = new EventStruct(LSID.LSID_ChildsCount, GEDCOMTagName.NCHI, PersonEventKind.ekFact);
-            array6[23] = new EventStruct(LSID.LSID_MarriagesCount, GEDCOMTagName.NMR, PersonEventKind.ekFact);
-            array6[24] = new EventStruct(LSID.LSID_Education, GEDCOMTagName.EDUC, PersonEventKind.ekFact);
-            array6[25] = new EventStruct(LSID.LSID_Occupation, GEDCOMTagName.OCCU, PersonEventKind.ekFact);
-            array6[26] = new EventStruct(LSID.LSID_Caste, GEDCOMTagName.CAST, PersonEventKind.ekFact);
-            array6[27] = new EventStruct(LSID.LSID_Property, GEDCOMTagName.PROP, PersonEventKind.ekFact);
-            array6[28] = new EventStruct(LSID.LSID_NobilityTitle, GEDCOMTagName.TITL, PersonEventKind.ekFact);
+                new EventStruct(LSID.LSID_BloodGroup, GEDCOMTagName._BGRO, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_HairColor, GEDCOMTagName._HAIR, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_EyesColor, GEDCOMTagName._EYES, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_MDNAHaplogroup, GEDCOMTagName._MDNA, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_YDNAHaplogroup, GEDCOMTagName._YDNA, PersonEventKind.ekFact),
 
-            array6[29] = new EventStruct(LSID.LSID_Travel, GEDCOMTagName._TRAVEL, PersonEventKind.ekFact);
-            array6[30] = new EventStruct(LSID.LSID_Hobby, GEDCOMTagName._HOBBY, PersonEventKind.ekFact);
-            array6[31] = new EventStruct(LSID.LSID_Award, GEDCOMTagName._AWARD, PersonEventKind.ekFact);
-            array6[32] = new EventStruct(LSID.LSID_Mili, GEDCOMTagName._MILI, PersonEventKind.ekFact);
-            array6[33] = new EventStruct(LSID.LSID_MiliInd, GEDCOMTagName._MILI_IND, PersonEventKind.ekFact);
-            array6[34] = new EventStruct(LSID.LSID_MiliDis, GEDCOMTagName._MILI_DIS, PersonEventKind.ekFact);
-            array6[35] = new EventStruct(LSID.LSID_MiliRank, GEDCOMTagName._MILI_RANK, PersonEventKind.ekFact);
-
-            array6[36] = new EventStruct(LSID.LSID_BloodGroup, GEDCOMTagName._BGRO, PersonEventKind.ekFact);
-            array6[37] = new EventStruct(LSID.LSID_HairColor, GEDCOMTagName._HAIR, PersonEventKind.ekFact);
-            array6[38] = new EventStruct(LSID.LSID_EyesColor, GEDCOMTagName._EYES, PersonEventKind.ekFact);
-            array6[39] = new EventStruct(LSID.LSID_MDNAHaplogroup, GEDCOMTagName._MDNA, PersonEventKind.ekFact);
-            array6[40] = new EventStruct(LSID.LSID_YDNAHaplogroup, GEDCOMTagName._YDNA, PersonEventKind.ekFact);
-
-            array6[41] = new EventStruct(LSID.LSID_Baptism, GEDCOMTagName.BAPM, PersonEventKind.ekEvent);
-            array6[42] = new EventStruct(LSID.LSID_BarMitzvah, GEDCOMTagName.BARM, PersonEventKind.ekEvent);
-            array6[43] = new EventStruct(LSID.LSID_BatMitzvah, GEDCOMTagName.BASM, PersonEventKind.ekEvent);
-            array6[44] = new EventStruct(LSID.LSID_Blessing, GEDCOMTagName.BLES, PersonEventKind.ekEvent);
-            array6[45] = new EventStruct(LSID.LSID_AdultChristening, GEDCOMTagName.CHRA, PersonEventKind.ekEvent);
-            array6[46] = new EventStruct(LSID.LSID_Confirmation, GEDCOMTagName.CONF, PersonEventKind.ekEvent);
-            array6[47] = new EventStruct(LSID.LSID_FirstCommunion, GEDCOMTagName.FCOM, PersonEventKind.ekEvent);
-            array6[48] = new EventStruct(LSID.LSID_Ordination, GEDCOMTagName.ORDN, PersonEventKind.ekEvent);
-            PersonEvents = array6;
-
+                new EventStruct(LSID.LSID_Baptism, GEDCOMTagName.BAPM, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_BarMitzvah, GEDCOMTagName.BARM, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_BatMitzvah, GEDCOMTagName.BASM, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Blessing, GEDCOMTagName.BLES, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_AdultChristening, GEDCOMTagName.CHRA, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Confirmation, GEDCOMTagName.CONF, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FirstCommunion, GEDCOMTagName.FCOM, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_Ordination, GEDCOMTagName.ORDN, PersonEventKind.ekEvent),
+            };
 
             MarriageStatus = new MarStatusStruct[] {
                 new MarStatusStruct(LSID.LSID_Unknown, ""),
@@ -523,45 +518,45 @@ namespace GKCore
                 LSID.LSID_RestrictPrivacy
             };
 
-
-            StatsTitles = new StatsTitleStruct[37];
-            StatsTitles[0] = new StatsTitleStruct(LSID.LSID_AncestorsCount, LSID.LSID_Name);
-            StatsTitles[1] = new StatsTitleStruct(LSID.LSID_DescendantsCount, LSID.LSID_Name);
-            StatsTitles[2] = new StatsTitleStruct(LSID.LSID_GenerationsCount, LSID.LSID_Name);
-            StatsTitles[3] = new StatsTitleStruct(LSID.LSID_Surname, LSID.LSID_Surname);
-            StatsTitles[4] = new StatsTitleStruct(LSID.LSID_Name, LSID.LSID_Name);
-            StatsTitles[5] = new StatsTitleStruct(LSID.LSID_Patronymic, LSID.LSID_Patronymic);
-            StatsTitles[6] = new StatsTitleStruct(LSID.LSID_Age, LSID.LSID_Age);
-            StatsTitles[7] = new StatsTitleStruct(LSID.LSID_LifeExpectancy, LSID.LSID_Age);
-            StatsTitles[8] = new StatsTitleStruct(LSID.LSID_BirthYears, LSID.LSID_BirthYears);
-            StatsTitles[9] = new StatsTitleStruct(LSID.LSID_BirthYearsDec, LSID.LSID_BirthYears);
-            StatsTitles[10] = new StatsTitleStruct(LSID.LSID_DeathYears, LSID.LSID_DeathYears);
-            StatsTitles[11] = new StatsTitleStruct(LSID.LSID_DeathYearsDec, LSID.LSID_DeathYears);
-            StatsTitles[12] = new StatsTitleStruct(LSID.LSID_ChildsCount, LSID.LSID_Name);
-            StatsTitles[13] = new StatsTitleStruct(LSID.LSID_DistrChilds, LSID.LSID_ChildsCount);
-            StatsTitles[14] = new StatsTitleStruct(LSID.LSID_BirthPlace, LSID.LSID_BirthPlace);
-            StatsTitles[15] = new StatsTitleStruct(LSID.LSID_DeathPlace, LSID.LSID_DeathPlace);
-            StatsTitles[16] = new StatsTitleStruct(LSID.LSID_Residence, LSID.LSID_Residence);
-            StatsTitles[17] = new StatsTitleStruct(LSID.LSID_Occupation, LSID.LSID_Occupation);
-            StatsTitles[18] = new StatsTitleStruct(LSID.LSID_Religion, LSID.LSID_Religion);
-            StatsTitles[19] = new StatsTitleStruct(LSID.LSID_Nationality, LSID.LSID_Nationality);
-            StatsTitles[20] = new StatsTitleStruct(LSID.LSID_Education, LSID.LSID_Education);
-            StatsTitles[21] = new StatsTitleStruct(LSID.LSID_Caste, LSID.LSID_Caste);
-            StatsTitles[22] = new StatsTitleStruct(LSID.LSID_AgeFirstborn, LSID.LSID_Name);
-            StatsTitles[23] = new StatsTitleStruct(LSID.LSID_MarriagesCount, LSID.LSID_Name);
-            StatsTitles[24] = new StatsTitleStruct(LSID.LSID_MarriagesAge, LSID.LSID_Name);
-            StatsTitles[25] = new StatsTitleStruct(LSID.LSID_DiffSpouses, LSID.LSID_Family);
-            StatsTitles[26] = new StatsTitleStruct(LSID.LSID_Hobby, LSID.LSID_Hobby);
-            StatsTitles[27] = new StatsTitleStruct(LSID.LSID_Award, LSID.LSID_Award);
-            StatsTitles[28] = new StatsTitleStruct(LSID.LSID_Mili, LSID.LSID_Mili);
-            StatsTitles[29] = new StatsTitleStruct(LSID.LSID_MiliInd, LSID.LSID_MiliInd);
-            StatsTitles[30] = new StatsTitleStruct(LSID.LSID_MiliDis, LSID.LSID_MiliDis);
-            StatsTitles[31] = new StatsTitleStruct(LSID.LSID_MiliRank, LSID.LSID_MiliRank);
-            StatsTitles[32] = new StatsTitleStruct(LSID.LSID_AAF_1, LSID.LSID_AAF_1);
-            StatsTitles[33] = new StatsTitleStruct(LSID.LSID_AAF_2, LSID.LSID_AAF_2);
-            StatsTitles[34] = new StatsTitleStruct(LSID.LSID_CertaintyIndex, LSID.LSID_CertaintyIndex);
-            StatsTitles[35] = new StatsTitleStruct(LSID.LSID_BirthByMonth, LSID.LSID_BirthByMonth);
-            StatsTitles[36] = new StatsTitleStruct(LSID.LSID_Demography, LSID.LSID_Demography);
+            StatsTitles = new StatsTitleStruct[] {
+                new StatsTitleStruct(LSID.LSID_AncestorsCount, LSID.LSID_Name),
+                new StatsTitleStruct(LSID.LSID_DescendantsCount, LSID.LSID_Name),
+                new StatsTitleStruct(LSID.LSID_GenerationsCount, LSID.LSID_Name),
+                new StatsTitleStruct(LSID.LSID_Surname, LSID.LSID_Surname),
+                new StatsTitleStruct(LSID.LSID_Name, LSID.LSID_Name),
+                new StatsTitleStruct(LSID.LSID_Patronymic, LSID.LSID_Patronymic),
+                new StatsTitleStruct(LSID.LSID_Age, LSID.LSID_Age),
+                new StatsTitleStruct(LSID.LSID_LifeExpectancy, LSID.LSID_Age),
+                new StatsTitleStruct(LSID.LSID_BirthYears, LSID.LSID_BirthYears),
+                new StatsTitleStruct(LSID.LSID_BirthYearsDec, LSID.LSID_BirthYears),
+                new StatsTitleStruct(LSID.LSID_DeathYears, LSID.LSID_DeathYears),
+                new StatsTitleStruct(LSID.LSID_DeathYearsDec, LSID.LSID_DeathYears),
+                new StatsTitleStruct(LSID.LSID_ChildsCount, LSID.LSID_Name),
+                new StatsTitleStruct(LSID.LSID_DistrChilds, LSID.LSID_ChildsCount),
+                new StatsTitleStruct(LSID.LSID_BirthPlace, LSID.LSID_BirthPlace),
+                new StatsTitleStruct(LSID.LSID_DeathPlace, LSID.LSID_DeathPlace),
+                new StatsTitleStruct(LSID.LSID_Residence, LSID.LSID_Residence),
+                new StatsTitleStruct(LSID.LSID_Occupation, LSID.LSID_Occupation),
+                new StatsTitleStruct(LSID.LSID_Religion, LSID.LSID_Religion),
+                new StatsTitleStruct(LSID.LSID_Nationality, LSID.LSID_Nationality),
+                new StatsTitleStruct(LSID.LSID_Education, LSID.LSID_Education),
+                new StatsTitleStruct(LSID.LSID_Caste, LSID.LSID_Caste),
+                new StatsTitleStruct(LSID.LSID_AgeFirstborn, LSID.LSID_Name),
+                new StatsTitleStruct(LSID.LSID_MarriagesCount, LSID.LSID_Name),
+                new StatsTitleStruct(LSID.LSID_MarriagesAge, LSID.LSID_Name),
+                new StatsTitleStruct(LSID.LSID_DiffSpouses, LSID.LSID_Family),
+                new StatsTitleStruct(LSID.LSID_Hobby, LSID.LSID_Hobby),
+                new StatsTitleStruct(LSID.LSID_Award, LSID.LSID_Award),
+                new StatsTitleStruct(LSID.LSID_Mili, LSID.LSID_Mili),
+                new StatsTitleStruct(LSID.LSID_MiliInd, LSID.LSID_MiliInd),
+                new StatsTitleStruct(LSID.LSID_MiliDis, LSID.LSID_MiliDis),
+                new StatsTitleStruct(LSID.LSID_MiliRank, LSID.LSID_MiliRank),
+                new StatsTitleStruct(LSID.LSID_AAF_1, LSID.LSID_AAF_1),
+                new StatsTitleStruct(LSID.LSID_AAF_2, LSID.LSID_AAF_2),
+                new StatsTitleStruct(LSID.LSID_CertaintyIndex, LSID.LSID_CertaintyIndex),
+                new StatsTitleStruct(LSID.LSID_BirthByMonth, LSID.LSID_BirthByMonth),
+                new StatsTitleStruct(LSID.LSID_Demography, LSID.LSID_Demography),
+            };
 
             CheckSolveNames = new LSID[] {
                 LSID.LSID_RM_Skip,
@@ -592,19 +587,6 @@ namespace GKCore
             };
 
             BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";
-        }
-
-        public static string GetCalendarSign(GDMCalendar calendar)
-        {
-            var globOptions = GlobalOptions.Instance;
-            int ix = (int)calendar;
-            if (!globOptions.LocalizedCalendarSignatures) {
-                return GKData.DateCalendars[ix].Sign;
-            } else {
-                string signs = LangMan.LS(LSID.LSID_LocalizedCalendarSignaturesValues);
-                string[] parts = signs.Split('|');
-                return " " + ((ix < parts.Length) ? parts[ix] : GKData.DateCalendars[ix].Sign);
-            }
         }
     }
 }
