@@ -143,6 +143,7 @@ namespace GKTests.Stubs
                                       GDMRecordType recType = GDMRecordType.rtNone) { }
         public GDMRecord GetSelectedRecordEx() { return null; }
         public ExtRect GetActiveScreenWorkingArea() { return ExtRect.Empty; }
+        public void UpdateMRU() { }
     }
 
     public class TestPlugin : OrdinaryPlugin

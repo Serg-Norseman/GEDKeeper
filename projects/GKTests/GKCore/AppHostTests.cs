@@ -20,7 +20,7 @@
 
 using System;
 using GKCore.Types;
-using GKUI.Platform;
+using GKTests;
 using NUnit.Framework;
 
 namespace GKCore
@@ -31,7 +31,7 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
         }
 
         [Test]

@@ -30,6 +30,12 @@ namespace GDModel
     [TestFixture]
     public class GDMDateRangeTests
     {
+        [TestFixtureSetUp]
+        public void SetUp()
+        {
+            TestUtils.InitUITest();
+        }
+
         [Test]
         public void Test_Common()
         {

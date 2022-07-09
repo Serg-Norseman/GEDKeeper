@@ -75,7 +75,7 @@ namespace GKUI.Forms
         public object GetControl(string controlName)
         {
             var field = this.GetType().GetField(controlName, BindingFlags.NonPublic | BindingFlags.Instance);
-            object result = field.GetValue(this);
+            object result = (field == null) ? null : field.GetValue(this);
             if (result == null) {
                 result = this.FindChild(controlName);
             }

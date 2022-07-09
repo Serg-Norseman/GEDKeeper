@@ -27,7 +27,6 @@ using GKTests;
 using GKTests.ControlTesters;
 using GKTests.Stubs;
 using GKUI.Forms;
-using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKFlowInputPlugin
@@ -99,7 +98,8 @@ namespace GKFlowInputPlugin
 
         public override void Setup()
         {
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
+
             fBase = new BaseWindowStub(false);
 
             fLangMan = new FITestLangMan();

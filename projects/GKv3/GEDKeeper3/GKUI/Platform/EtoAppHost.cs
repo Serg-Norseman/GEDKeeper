@@ -152,15 +152,6 @@ namespace GKUI.Platform
             return IntPtr.Zero;
         }
 
-        public override void CloseWindow(IWindow window)
-        {
-            base.CloseWindow(window);
-
-            if (fRunningForms.Count == 0) {
-                Application.Instance.Quit();
-            }
-        }
-
         public override bool ShowModalX(ICommonDialog form, bool keepModeless = false)
         {
             Window activeWin = GetActiveWindow() as Window;
@@ -187,51 +178,11 @@ namespace GKUI.Platform
             }
         }
 
-        protected override void UpdateLang()
+        public override void SaveWinState(IBaseWindow baseWin, MRUFile mf)
         {
-            foreach (IWindow win in fRunningForms) {
-                win.SetLocale();
-            }
-        }
-
-        public override void ApplyOptions()
-        {
-            base.ApplyOptions();
-
-            foreach (IWindow win in fRunningForms) {
-                if (win is IWorkWindow) {
-                    (win as IWorkWindow).UpdateSettings();
-                }
-            }
-        }
-
-        public override void BaseClosed(IBaseWindow baseWin)
-        {
-            base.BaseClosed(baseWin);
-
-            SaveWinMRU(baseWin);
-        }
-
-        protected override void UpdateMRU()
-        {
-            foreach (IWindow win in fRunningForms) {
-                if (win is IBaseWindow) {
-                    (win as BaseWinSDI).UpdateMRU();
-                }
-            }
-        }
-
-        public override void SaveWinMRU(IBaseWindow baseWin)
-        {
-            if (baseWin != null) {
-                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-                if (idx >= 0) {
-                    var frm = baseWin as Form;
-                    MRUFile mf = AppHost.Options.MRUFiles[idx];
-                    mf.WinRect = UIHelper.GetFormRect(frm);
-                    mf.WinState = gkWindowStates[(int)frm.WindowState];
-                }
-            }
+            var frm = baseWin as Form;
+            mf.WinRect = UIHelper.GetFormRect(frm);
+            mf.WinState = gkWindowStates[(int)frm.WindowState];
         }
 
         private static readonly Eto.Forms.WindowState[] efWindowStates = new Eto.Forms.WindowState[] {
@@ -246,16 +197,10 @@ namespace GKUI.Platform
             GKCore.Options.WindowState.Minimized
         };
 
-        public override void RestoreWinMRU(IBaseWindow baseWin)
+        public override void RestoreWinState(IBaseWindow baseWin, MRUFile mf)
         {
-            if (baseWin != null) {
-                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-                if (idx >= 0) {
-                    var frm = baseWin as Form;
-                    MRUFile mf = AppHost.Options.MRUFiles[idx];
-                    UIHelper.RestoreFormRect(frm, mf.WinRect, efWindowStates[(int)mf.WinState]);
-                }
-            }
+            var frm = baseWin as Form;
+            UIHelper.RestoreFormRect(frm, mf.WinRect, efWindowStates[(int)mf.WinState]);
         }
 
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
@@ -271,7 +216,7 @@ namespace GKUI.Platform
 
         public override void ExecuteWork(ProgressStart proc)
         {
-            var activeWnd = GetActiveWindow() as Window;
+            var activeWnd = GetActiveWindow();
 
             using (var progressForm = ResolveDialog<IProgressController>()) {
                 var workerThread = new Thread((obj) => {
@@ -337,11 +282,8 @@ namespace GKUI.Platform
         /// <summary>
         /// This function implements initialization of IoC-container for WinForms presentation.
         /// </summary>
-        public static void ConfigureBootstrap(bool mdi)
+        public static void ConfigureBootstrap()
         {
-            if (mdi)
-                throw new ArgumentException("MDI obsolete");
-
 #if NETCOREAPP3_1_OR_GREATER
             // support for legacy encodings
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -449,7 +391,7 @@ namespace GKUI.Platform
 
         public static void Startup(string[] args)
         {
-            ConfigureBootstrap(false);
+            ConfigureBootstrap();
             CheckPortable(args);
             Logger.Init(GetLogFilename());
             LogSysInfo();

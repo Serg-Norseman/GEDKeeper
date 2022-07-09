@@ -36,6 +36,12 @@ namespace GDModel
     [TestFixture]
     public class GDMDateTests
     {
+        [TestFixtureSetUp]
+        public void SetUp()
+        {
+            TestUtils.InitUITest();
+        }
+
         [Test]
         public void Test_Common()
         {

@@ -47,16 +47,17 @@ namespace GKTests
             Assert.AreEqual((int)GEDCOMTagType.BIRT, tagProps.TagId);
         }
 
-        public static void InitProgressStub()
-        {
-            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
-        }
-
         public static void InitUITest()
         {
             InitGEDCOMProviderTest();
             AppHost.TEST_MODE = true;
-            WFAppHost.ConfigureBootstrap(false);
+
+            // GlobalOptions -> IGraphicsProviderEx
+            WFAppHost.ConfigureBootstrap();
+
+            LangMan.DefInit();
+
+            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
         }
 
         public static BaseContext CreateContext(IBaseWindow baseWin = null)

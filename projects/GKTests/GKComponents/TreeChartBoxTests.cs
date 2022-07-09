@@ -24,10 +24,9 @@ using System.Windows.Forms;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKTests.Stubs;
-using GKUI.Platform;
-using NUnit.Framework;
 using GKTests;
+using GKTests.Stubs;
+using NUnit.Framework;
 
 namespace GKUI.Components
 {
@@ -40,8 +39,7 @@ namespace GKUI.Components
 
         public override void Setup()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
 

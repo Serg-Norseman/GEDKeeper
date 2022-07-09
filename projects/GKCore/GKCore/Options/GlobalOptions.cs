@@ -486,7 +486,7 @@ namespace GKCore.Options
             fReversePlaceEntitiesOrder = false;
             SurnameInCapitals = false;
             CertaintyAlgorithm = CertaintyAlgorithm.WeightedAverage;
-            LocalizedCalendarSignatures = true;
+            LocalizedCalendarSignatures = false;
         }
 
         protected override void Dispose(bool disposing)

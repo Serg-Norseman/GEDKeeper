@@ -22,7 +22,6 @@
 
 using System.Windows.Forms;
 using GKTests;
-using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKUI.Components
@@ -33,8 +32,7 @@ namespace GKUI.Components
         [TestFixtureSetUp]
         public void SetUp()
         {
-            // GKMapBrowser -> GlobalOptions -> IGraphicsProviderEx
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
         }
 
         [Test]

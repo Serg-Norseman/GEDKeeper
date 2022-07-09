@@ -693,8 +693,8 @@ namespace GKUI.Forms
 
         public void Restore()
         {
-            if (WindowState == Eto.Forms.WindowState.Minimized) {
-                WindowState = Eto.Forms.WindowState.Normal;
+            if (WindowState == WindowState.Minimized) {
+                WindowState = WindowState.Normal;
             }
         }
 

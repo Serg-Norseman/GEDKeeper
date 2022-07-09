@@ -19,7 +19,7 @@
  */
 
 using BSLib;
-using GKUI.Platform;
+using GKTests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -31,7 +31,7 @@ namespace GKCore.Charts
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
         }
 
         [Test]

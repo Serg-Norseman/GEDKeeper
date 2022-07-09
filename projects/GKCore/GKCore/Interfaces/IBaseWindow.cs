@@ -48,6 +48,7 @@ namespace GKCore.Interfaces
         void ShowMedia(GDMMultimediaRecord mediaRec, bool modal);
         void ShowRecordsTab(GDMRecordType recType);
         void UpdateControls(bool forceDeactivate, bool blockDependent = false);
+        void UpdateMRU();
 
         void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone);
         List<GDMRecord> GetContentList(GDMRecordType recType);

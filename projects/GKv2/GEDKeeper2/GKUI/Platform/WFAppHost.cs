@@ -87,15 +87,6 @@ namespace GKUI.Platform
             return (ownerForm == null) ? IntPtr.Zero : ownerForm.Handle;
         }
 
-        public override void CloseWindow(IWindow window)
-        {
-            base.CloseWindow(window);
-
-            if (fRunningForms.Count == 0) {
-                Application.ExitThread();
-            }
-        }
-
         public override bool ShowModalX(ICommonDialog form, bool keepModeless = false)
         {
             IntPtr mainHandle = GetTopWindowHandle();
@@ -122,69 +113,24 @@ namespace GKUI.Platform
             Form frm = form as Form;
 
             if (frm != null) {
-                #if !MONO
+#if !MONO
                 EnableWindowExt(frm.Handle, value);
-                #endif
+#endif
             }
         }
 
-        protected override void UpdateLang()
+        public override void SaveWinState(IBaseWindow baseWin, MRUFile mf)
         {
-            foreach (IWindow win in fRunningForms) {
-                win.SetLocale();
-            }
+            var frm = baseWin as Form;
+            mf.WinRect = UIHelper.GetFormRect(frm);
+            mf.WinState = (WindowState)frm.WindowState;
         }
 
-        public override void ApplyOptions()
+        public override void RestoreWinState(IBaseWindow baseWin, MRUFile mf)
+
         {
-            base.ApplyOptions();
-
-            foreach (IWindow win in fRunningForms) {
-                if (win is IWorkWindow) {
-                    (win as IWorkWindow).UpdateSettings();
-                }
-            }
-        }
-
-        public override void BaseClosed(IBaseWindow baseWin)
-        {
-            base.BaseClosed(baseWin);
-
-            SaveWinMRU(baseWin);
-        }
-
-        protected override void UpdateMRU()
-        {
-            foreach (IWindow win in fRunningForms) {
-                if (win is IBaseWindow) {
-                    (win as BaseWinSDI).UpdateMRU();
-                }
-            }
-        }
-
-        public override void SaveWinMRU(IBaseWindow baseWin)
-        {
-            if (baseWin != null) {
-                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-                if (idx >= 0) {
-                    var frm = baseWin as Form;
-                    MRUFile mf = AppHost.Options.MRUFiles[idx];
-                    mf.WinRect = UIHelper.GetFormRect(frm);
-                    mf.WinState = (WindowState)frm.WindowState;
-                }
-            }
-        }
-
-        public override void RestoreWinMRU(IBaseWindow baseWin)
-        {
-            if (baseWin != null) {
-                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-                if (idx >= 0) {
-                    var frm = baseWin as Form;
-                    MRUFile mf = AppHost.Options.MRUFiles[idx];
-                    UIHelper.RestoreFormRect(frm, mf.WinRect, (FormWindowState)mf.WinState);
-                }
-            }
+            var frm = baseWin as Form;
+            UIHelper.RestoreFormRect(frm, mf.WinRect, (FormWindowState)mf.WinState);
         }
 
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
@@ -196,11 +142,12 @@ namespace GKUI.Platform
         public override void Quit()
         {
             Application.Exit();
+            //Application.ExitThread();
         }
 
         public override void ExecuteWork(ProgressStart proc)
         {
-            var activeWnd = GetActiveWindow() as Form;
+            var activeWnd = GetActiveWindow();
 
             // FIXME: dirty hack
             // In test mode, when a stub is substituted for the real form, 
@@ -316,11 +263,8 @@ namespace GKUI.Platform
         /// <summary>
         /// This function implements initialization of IoC-container for WinForms presentation.
         /// </summary>
-        public static void ConfigureBootstrap(bool mdi)
+        public static void ConfigureBootstrap()
         {
-            if (mdi)
-                throw new ArgumentException("MDI obsolete");
-
             var appHost = new WFAppHost();
             IContainer container = AppHost.Container;
 
@@ -440,7 +384,7 @@ namespace GKUI.Platform
 
         public static void Startup(string[] args)
         {
-            ConfigureBootstrap(false);
+            ConfigureBootstrap();
             CheckPortable(args);
             Logger.Init(GetLogFilename());
             LogSysInfo();

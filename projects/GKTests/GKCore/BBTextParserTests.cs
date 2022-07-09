@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using BSLib.Design.Handlers;
 using GKCore.BBText;
-using GKUI.Platform;
+using GKTests;
 using NUnit.Framework;
 
 namespace GKCore
@@ -33,7 +33,7 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
         }
 
         [Test]

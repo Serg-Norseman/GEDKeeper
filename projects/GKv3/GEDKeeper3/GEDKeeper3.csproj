@@ -9,6 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="..\..\GlobalSuppressions.cs">
+            <Link>GlobalSuppressions.cs</Link>
+        </Compile>
         <Reference Include="BSLib">
             <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
         </Reference>
@@ -31,28 +34,15 @@
     </ItemGroup>
 
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'MSWin_Debug' ">
+    <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
         <DefineConstants>OS_MSWIN</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'MSWin_Release' ">
-        <DefineConstants>OS_MSWIN</DefineConstants>
-
         <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Linux_Debug' ">
+    <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
         <DefineConstants>OS_LINUX</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'Linux_Release' ">
-        <DefineConstants>OS_LINUX</DefineConstants>
-
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'MacOS_Debug' ">
-        <DefineConstants>OS_MACOS</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'MacOS_Release' ">
+    <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
         <DefineConstants>OS_MACOS</DefineConstants>
     </PropertyGroup>
 
@@ -78,6 +68,7 @@
         <OutputType>WinExe</OutputType>
         <OutputPath>..\..\..\bin\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <StartupObject>GEDKeeper3.GKProgram</StartupObject>
 
         <ApplicationIcon>icon_gedkeeper.ico</ApplicationIcon>
@@ -93,6 +84,7 @@
         <OutputType>exe</OutputType>
         <OutputPath>..\..\..\bin\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <StartupObject>GEDKeeper3.GKProgram</StartupObject>
     </PropertyGroup>
 

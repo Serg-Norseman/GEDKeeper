@@ -30,7 +30,6 @@ using GKCore.Options;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
 using GKUI.Components;
 using NUnit.Framework;
 
@@ -44,8 +43,7 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
         }

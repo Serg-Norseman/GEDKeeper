@@ -173,6 +173,10 @@ namespace GKCore
         public virtual void CloseWindow(IWindow window)
         {
             fRunningForms.Remove(window);
+
+            if (fRunningForms.Count == 0) {
+                Quit();
+            }
         }
 
         public string GetCurrentFileName()
@@ -222,13 +226,47 @@ namespace GKCore
 
         public abstract void EnableWindow(IWidgetForm form, bool value);
 
-        public abstract void SaveWinMRU(IBaseWindow baseWin);
+        public void SaveWinMRU(IBaseWindow baseWin)
+        {
+            if (baseWin != null) {
+                int idx = Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+                if (idx >= 0) {
+                    MRUFile mf = Options.MRUFiles[idx];
+                    SaveWinState(baseWin, mf);
+                }
+            }
+        }
 
-        public abstract void RestoreWinMRU(IBaseWindow baseWin);
+        public abstract void SaveWinState(IBaseWindow baseWin, MRUFile mf);
 
-        protected abstract void UpdateLang();
+        public abstract void RestoreWinState(IBaseWindow baseWin, MRUFile mf);
 
-        protected abstract void UpdateMRU();
+        public void RestoreWinMRU(IBaseWindow baseWin)
+        {
+            if (baseWin != null) {
+                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+                if (idx >= 0) {
+                    MRUFile mf = AppHost.Options.MRUFiles[idx];
+                    RestoreWinState(baseWin, mf);
+                }
+            }
+        }
+
+        protected void UpdateLang()
+        {
+            foreach (IWindow win in fRunningForms) {
+                win.SetLocale();
+            }
+        }
+
+        protected void UpdateMRU()
+        {
+            foreach (IWindow win in fRunningForms) {
+                if (win is IBaseWindow) {
+                    ((IBaseWindow)win).UpdateMRU();
+                }
+            }
+        }
 
         public void SaveLastBases()
         {
@@ -474,6 +512,8 @@ namespace GKCore
             foreach (WidgetInfo widgetInfo in fActiveWidgets) {
                 widgetInfo.Widget.BaseClosed(baseWin);
             }
+
+            SaveWinMRU(baseWin);
         }
 
         public virtual void BaseRenamed(IBaseWindow baseWin, string oldName, string newName)
@@ -874,13 +914,18 @@ namespace GKCore
         public virtual void ApplyOptions()
         {
             double interval = AppHost.Options.AutosaveInterval /* min */ * 60 * 1000;
-
             if (fAutosaveTimer == null) {
                 fAutosaveTimer = CreateTimer(interval, AutosaveTimer_Tick);
             } else {
                 fAutosaveTimer.Interval = interval;
             }
             fAutosaveTimer.Enabled = AppHost.Options.Autosave;
+
+            foreach (IWindow win in fRunningForms) {
+                if (win is IWorkWindow) {
+                    (win as IWorkWindow).UpdateSettings();
+                }
+            }
         }
 
         public abstract string SelectFolder(string folderPath);

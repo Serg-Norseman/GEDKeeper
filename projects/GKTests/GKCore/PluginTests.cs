@@ -23,8 +23,8 @@ using System.Reflection;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 using GKCore.Types;
+using GKTests;
 using GKTests.Stubs;
-using GKUI.Platform;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -36,7 +36,7 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
         }
 
         [Test]

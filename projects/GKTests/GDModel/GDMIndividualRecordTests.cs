@@ -23,7 +23,6 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
 using GKTests;
-using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GDModel
@@ -36,10 +35,7 @@ namespace GDModel
         [TestFixtureSetUp]
         public void SetUp()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            // TempDirtyHack: some functions are references to GlobalOptions (and GfxInit)
-            // TODO: replace to mocks
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);

@@ -20,7 +20,7 @@
 
 using System.IO;
 using GDModel;
-using GKUI.Platform;
+using GKTests;
 using NUnit.Framework;
 
 namespace GKCore.Database
@@ -34,7 +34,7 @@ namespace GKCore.Database
         [TestFixtureSetUp]
         public void SetUp()
         {
-            WFAppHost.ConfigureBootstrap(false);
+            TestUtils.InitUITest();
         }
 
         [Test]

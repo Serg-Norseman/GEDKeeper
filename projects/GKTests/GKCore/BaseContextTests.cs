@@ -27,7 +27,6 @@ using GKCore.Cultures;
 using GKCore.Operations;
 using GKCore.Types;
 using GKTests;
-using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKCore
@@ -40,12 +39,7 @@ namespace GKCore
         [TestFixtureSetUp]
         public void SetUp()
         {
-            AppHost.TEST_MODE = true;
-
-            TestUtils.InitGEDCOMProviderTest();
-            WFAppHost.ConfigureBootstrap(false);
-            TestUtils.InitProgressStub();
-            LangMan.DefInit();
+            TestUtils.InitUITest();
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
