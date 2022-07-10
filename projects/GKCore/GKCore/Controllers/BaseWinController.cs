@@ -60,6 +60,7 @@ namespace GKCore.Controllers
         private readonly List<GDMRecord> fChangedRecords;
         private readonly IBaseContext fContext;
         private GDMRecord fDelayedTransitionRecord;
+        private bool fHasToolbar;
         private readonly NavigationStack<GDMRecord> fNavman;
         private readonly TabParts[] fTabParts;
 
@@ -68,18 +69,25 @@ namespace GKCore.Controllers
             get { return fContext; }
         }
 
+        public bool HasToolbar
+        {
+            get { return fHasToolbar; }
+            set { fHasToolbar = value; }
+        }
+
         public NavigationStack<GDMRecord> Navman
         {
             get { return fNavman; }
         }
 
 
-        public BaseWinController(IBaseWindowView view) : base(view)
+        public BaseWinController(IBaseWindowView view, bool hasToolbar) : base(view)
         {
             fContext = new BaseContext(view);
             fChangedRecords = new List<GDMRecord>();
             fNavman = new NavigationStack<GDMRecord>();
             fTabParts = new TabParts[(int)GDMRecordType.rtLast + 1];
+            fHasToolbar = hasToolbar;
         }
 
         protected override void Dispose(bool disposing)
@@ -667,6 +675,79 @@ namespace GKCore.Controllers
         {
         }
 
+        public void UpdateNavControls()
+        {
+            try {
+                if (fHasToolbar) {
+                    GetControl<IToolItem>("tbPrev").Enabled = NavCanBackward();
+                    GetControl<IToolItem>("tbNext").Enabled = NavCanForward();
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.UpdateNavControls()", ex);
+            }
+        }
+
+        public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
+        {
+            try {
+                IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
+                IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
+                IChartWindow curChart = ((workWin is IChartWindow) ? ((IChartWindow)workWin) : null);
+
+                GDMRecordType rt = (curBase == null) ? GDMRecordType.rtNone : curBase.GetSelectedRecordType();
+                bool baseEn = (rt != GDMRecordType.rtNone);
+                bool indivEn = baseEn && rt == GDMRecordType.rtIndividual;
+
+                GetControl<IMenuItem>("miFileSave").Enabled = baseEn || (curChart != null);
+                GetControl<IMenuItem>("miFileSaveAs").Enabled = GetControl<IMenuItem>("miFileSave").Enabled;
+                GetControl<IMenuItem>("miFileClose").Enabled = baseEn;
+                GetControl<IMenuItem>("miFileProperties").Enabled = baseEn;
+                GetControl<IMenuItem>("miExportToExcelFile").Enabled = baseEn;
+
+                GetControl<IMenuItem>("miRecordAdd").Enabled = baseEn;
+                GetControl<IMenuItem>("miRecordEdit").Enabled = baseEn;
+                GetControl<IMenuItem>("miRecordDelete").Enabled = baseEn;
+                GetControl<IMenuItem>("miFilter").Enabled = (workWin != null && workWin.AllowFilter());
+                GetControl<IMenuItem>("miSearch").Enabled = (workWin != null && workWin.AllowQuickSearch());
+
+                GetControl<IMenuItem>("miPedigree").Enabled = indivEn;
+                GetControl<IMenuItem>("miTreeAncestors").Enabled = indivEn;
+                GetControl<IMenuItem>("miTreeDescendants").Enabled = indivEn;
+                GetControl<IMenuItem>("miTreeBoth").Enabled = indivEn;
+                GetControl<IMenuItem>("miPedigree_dAboville").Enabled = indivEn;
+                GetControl<IMenuItem>("miPedigree_Konovalov").Enabled = indivEn;
+                GetControl<IMenuItem>("miStats").Enabled = baseEn;
+                GetControl<IMenuItem>("miExportToFamilyBook").Enabled = baseEn;
+                GetControl<IMenuItem>("miExportToTreesAlbum").Enabled = baseEn;
+
+                GetControl<IMenuItem>("miTreeTools").Enabled = baseEn;
+                GetControl<IMenuItem>("miOrganizer").Enabled = baseEn;
+                GetControl<IMenuItem>("miSlideshow").Enabled = baseEn;
+                GetControl<IMenuItem>("miScripts").Enabled = baseEn;
+
+                if (fHasToolbar) {
+                    GetControl<IToolItem>("tbFileSave").Enabled = GetControl<IMenuItem>("miFileSave").Enabled;
+                    GetControl<IToolItem>("tbRecordAdd").Enabled = GetControl<IMenuItem>("miRecordAdd").Enabled;
+                    GetControl<IToolItem>("tbRecordEdit").Enabled = GetControl<IMenuItem>("miRecordEdit").Enabled;
+                    GetControl<IToolItem>("tbRecordDelete").Enabled = GetControl<IMenuItem>("miRecordDelete").Enabled;
+                    GetControl<IToolItem>("tbStats").Enabled = GetControl<IMenuItem>("miStats").Enabled;
+                    GetControl<IToolItem>("tbFilter").Enabled = GetControl<IMenuItem>("miFilter").Enabled;
+                    GetControl<IToolItem>("tbTreeAncestors").Enabled = GetControl<IMenuItem>("miTreeAncestors").Enabled;
+                    GetControl<IToolItem>("tbTreeDescendants").Enabled = GetControl<IMenuItem>("miTreeDescendants").Enabled;
+                    GetControl<IToolItem>("tbTreeBoth").Enabled = GetControl<IMenuItem>("miTreeBoth").Enabled;
+                    GetControl<IToolItem>("tbPedigree").Enabled = GetControl<IMenuItem>("miPedigree").Enabled;
+                }
+
+                UpdateNavControls();
+
+                if (workWin != null && !blockDependent) {
+                    workWin.UpdateControls();
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.UpdateControls()", ex);
+            }
+        }
+
         public override void SetLocale()
         {
             try {
@@ -729,23 +810,25 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miLogSend").Text = LangMan.LS(LSID.LSID_LogSend);
                 GetControl<IMenuItem>("miLogView").Text = LangMan.LS(LSID.LSID_LogView);
 
-                SetToolTip("tbFileNew", LangMan.LS(LSID.LSID_FileNewTip));
-                SetToolTip("tbFileLoad", LangMan.LS(LSID.LSID_FileLoadTip));
-                SetToolTip("tbFileSave", LangMan.LS(LSID.LSID_FileSaveTip));
-                SetToolTip("tbRecordAdd", LangMan.LS(LSID.LSID_RecordAddTip));
-                SetToolTip("tbRecordEdit", LangMan.LS(LSID.LSID_RecordEditTip));
-                SetToolTip("tbRecordDelete", LangMan.LS(LSID.LSID_RecordDeleteTip));
-                SetToolTip("tbFilter", LangMan.LS(LSID.LSID_FilterTip));
-                SetToolTip("tbTreeAncestors", LangMan.LS(LSID.LSID_TreeAncestorsTip));
-                SetToolTip("tbTreeDescendants", LangMan.LS(LSID.LSID_TreeDescendantsTip));
-                SetToolTip("tbTreeBoth", LangMan.LS(LSID.LSID_TreeBothTip));
-                SetToolTip("tbPedigree", LangMan.LS(LSID.LSID_PedigreeTip));
-                SetToolTip("tbStats", LangMan.LS(LSID.LSID_StatsTip));
-                SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
-                SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
+                if (fHasToolbar) {
+                    SetToolTip("tbFileNew", LangMan.LS(LSID.LSID_FileNewTip));
+                    SetToolTip("tbFileLoad", LangMan.LS(LSID.LSID_FileLoadTip));
+                    SetToolTip("tbFileSave", LangMan.LS(LSID.LSID_FileSaveTip));
+                    SetToolTip("tbRecordAdd", LangMan.LS(LSID.LSID_RecordAddTip));
+                    SetToolTip("tbRecordEdit", LangMan.LS(LSID.LSID_RecordEditTip));
+                    SetToolTip("tbRecordDelete", LangMan.LS(LSID.LSID_RecordDeleteTip));
+                    SetToolTip("tbFilter", LangMan.LS(LSID.LSID_FilterTip));
+                    SetToolTip("tbTreeAncestors", LangMan.LS(LSID.LSID_TreeAncestorsTip));
+                    SetToolTip("tbTreeDescendants", LangMan.LS(LSID.LSID_TreeDescendantsTip));
+                    SetToolTip("tbTreeBoth", LangMan.LS(LSID.LSID_TreeBothTip));
+                    SetToolTip("tbPedigree", LangMan.LS(LSID.LSID_PedigreeTip));
+                    SetToolTip("tbStats", LangMan.LS(LSID.LSID_StatsTip));
+                    SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
+                    SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
 
-                GetControl<IMenuItem>("miPedigree_dAboville2").Text = LangMan.LS(LSID.LSID_Pedigree_dAbovilleTip);
-                GetControl<IMenuItem>("miPedigree_Konovalov2").Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
+                    GetControl<IMenuItem>("miPedigree_dAboville2").Text = LangMan.LS(LSID.LSID_Pedigree_dAbovilleTip);
+                    GetControl<IMenuItem>("miPedigree_Konovalov2").Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
+                }
 
                 GetControl<IMenuItem>("miContRecordAdd").Text = LangMan.LS(LSID.LSID_MIRecordAdd);
                 GetControl<IMenuItem>("miContRecordEdit").Text = LangMan.LS(LSID.LSID_MIRecordEdit);

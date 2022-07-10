@@ -109,7 +109,7 @@ namespace GKUI.Forms
 
             UIHelper.FixToolStrip(ToolBar1);
 
-            fController = new BaseWinController(this);
+            fController = new BaseWinController(this, true);
             fContext = fController.Context;
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
 
@@ -210,7 +210,7 @@ namespace GKUI.Forms
 
                 fController.UpdatePluginsItems();
                 UpdateMRU();
-                UpdateControls(false);
+                fController.UpdateControls(false);
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.Form_Load()", ex);
             }
@@ -728,77 +728,9 @@ namespace GKUI.Forms
             }
         }
 
-        public void UpdateNavControls()
-        {
-            try {
-                IWorkWindow workWin = this;
-
-                tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
-                tbNext.Enabled = (workWin != null && workWin.NavCanForward());
-            } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.UpdateNavControls()", ex);
-            }
-        }
-
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
         {
-            try {
-                IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
-                IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
-                IChartWindow curChart = ((workWin is IChartWindow) ? ((IChartWindow) workWin) : null);
-
-                GDMRecordType rt = (curBase == null) ? GDMRecordType.rtNone : curBase.GetSelectedRecordType();
-                bool baseEn = (rt != GDMRecordType.rtNone);
-
-                miFileSave.Enabled = baseEn || (curChart != null);
-                miFileSaveAs.Enabled = miFileSave.Enabled;
-                tbFileSave.Enabled = miFileSave.Enabled;
-
-                miRecordAdd.Enabled = baseEn;
-                tbRecordAdd.Enabled = miRecordAdd.Enabled;
-                miRecordEdit.Enabled = baseEn;
-                tbRecordEdit.Enabled = miRecordEdit.Enabled;
-                miRecordDelete.Enabled = baseEn;
-                tbRecordDelete.Enabled = miRecordDelete.Enabled;
-                miStats.Enabled = baseEn;
-                tbStats.Enabled = miStats.Enabled;
-
-                miFilter.Enabled = (workWin != null && workWin.AllowFilter());
-                tbFilter.Enabled = miFilter.Enabled;
-
-                miSearch.Enabled = (workWin != null && workWin.AllowQuickSearch());
-
-                miTreeTools.Enabled = baseEn;
-                miExportToFamilyBook.Enabled = baseEn;
-                miExportToTreesAlbum.Enabled = baseEn;
-                miExportToExcelFile.Enabled = baseEn;
-                miFileClose.Enabled = baseEn;
-                miFileProperties.Enabled = baseEn;
-                miOrganizer.Enabled = baseEn;
-                miSlideshow.Enabled = baseEn;
-                miScripts.Enabled = baseEn;
-
-                bool indivEn = baseEn && rt == GDMRecordType.rtIndividual;
-
-                miTreeAncestors.Enabled = indivEn;
-                tbTreeAncestors.Enabled = miTreeAncestors.Enabled;
-                miTreeDescendants.Enabled = indivEn;
-                tbTreeDescendants.Enabled = miTreeDescendants.Enabled;
-                miTreeBoth.Enabled = indivEn;
-                tbTreeBoth.Enabled = miTreeBoth.Enabled;
-                miPedigree.Enabled = indivEn;
-                tbPedigree.Enabled = miPedigree.Enabled;
-                miPedigree_dAboville.Enabled = indivEn;
-                miPedigree_Konovalov.Enabled = indivEn;
-
-                UpdateNavControls();
-
-                if (workWin != null && !blockDependent) {
-                    workWin.UpdateControls();
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.UpdateControls()", ex);
-            }
+            fController.UpdateControls(forceDeactivate, blockDependent);
         }
 
         private void miExit_Click(object sender, EventArgs e)
