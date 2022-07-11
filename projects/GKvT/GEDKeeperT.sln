@@ -1,0 +1,70 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GEDKeeperT", "GEDKeeperT\GEDKeeperT.csproj", "{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.nstd", "..\GKCore\GKCore.nstd.csproj", "{10D619AF-E1CD-4F4A-9C19-5E434300B48F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89782CA9-48D0-451A-AEB1-4E1771CEAC47}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.editorconfig = ..\..\.editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8EEE8-8592-420C-B5C5-E6DDBA389BA1}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\locales\Chinese Simplified.lng = ..\..\locales\Chinese Simplified.lng
+		..\..\locales\czech.lng = ..\..\locales\czech.lng
+		..\..\locales\English.lng = ..\..\locales\English.lng
+		..\..\locales\french.lng = ..\..\locales\french.lng
+		..\..\locales\german.lng = ..\..\locales\german.lng
+		..\..\locales\italian.lng = ..\..\locales\italian.lng
+		..\..\locales\kazakh_cyrillic.lng = ..\..\locales\kazakh_cyrillic.lng
+		..\..\locales\polish.lng = ..\..\locales\polish.lng
+		..\..\locales\russian.lng = ..\..\locales\russian.lng
+		..\..\locales\ukrainian.lng = ..\..\locales\ukrainian.lng
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Linux_Debug|Any CPU = Linux_Debug|Any CPU
+		Linux_Release|Any CPU = Linux_Release|Any CPU
+		MacOS_Debug|Any CPU = MacOS_Debug|Any CPU
+		MacOS_Release|Any CPU = MacOS_Release|Any CPU
+		MSWin_Debug|Any CPU = MSWin_Debug|Any CPU
+		MSWin_Release|Any CPU = MSWin_Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Linux_Debug|Any CPU.ActiveCfg = Linux_Debug|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Linux_Debug|Any CPU.Build.0 = Linux_Debug|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Linux_Release|Any CPU.ActiveCfg = Linux_Release|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Linux_Release|Any CPU.Build.0 = Linux_Release|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.MacOS_Debug|Any CPU.ActiveCfg = MacOS_Debug|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.MacOS_Debug|Any CPU.Build.0 = MacOS_Debug|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.MacOS_Release|Any CPU.ActiveCfg = MacOS_Release|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.MacOS_Release|Any CPU.Build.0 = MacOS_Release|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.MSWin_Debug|Any CPU.ActiveCfg = MSWin_Debug|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.MSWin_Debug|Any CPU.Build.0 = MSWin_Debug|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.MSWin_Release|Any CPU.ActiveCfg = MSWin_Release|Any CPU
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.MSWin_Release|Any CPU.Build.0 = MSWin_Release|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Linux_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Linux_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Linux_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Linux_Release|Any CPU.Build.0 = Release|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.MacOS_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.MacOS_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.MacOS_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.MacOS_Release|Any CPU.Build.0 = Release|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.MSWin_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.MSWin_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.MSWin_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.MSWin_Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C05CBCB7-0B24-41CC-8BDC-E5BB79045E5D}
+	EndGlobalSection
+EndGlobal

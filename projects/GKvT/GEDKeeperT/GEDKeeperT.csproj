@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <OutputType>exe</OutputType>
+        <RootNamespace />
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <StartupObject>GEDKeeperT.GKProgram</StartupObject>
+        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release</Configurations>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.Design">
+            <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.Model">
+            <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+        <PackageReference Include="Terminal.Gui" Version="1.6.4" />
+    </ItemGroup>
+
+
+    <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
+        <DefineConstants>OS_MSWIN</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
+        <DefineConstants>OS_LINUX</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
+        <DefineConstants>OS_MACOS</DefineConstants>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(Configuration.Contains('_Debug')) ">
+        <DebugSymbols>True</DebugSymbols>
+        <DebugType>Full</DebugType>
+        <Optimize>False</Optimize>
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+        <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(DefineConstants.Contains('_Release')) ">
+        <DebugSymbols>False</DebugSymbols>
+        <DebugType>None</DebugType>
+        <Optimize>True</Optimize>
+        <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+        <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
+        <OutputPath>..\..\..\bin\</OutputPath>
+        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
+        <OutputPath>..\..\..\bin\</OutputPath>
+        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
+        <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
+    </PropertyGroup>
+
+    <Target Name="MacBundleLocaleFiles" BeforeTargets="MacFinishBundle">
+        <ItemGroup>
+            <LocaleFiles Include="GEDKeeper\locales\**\*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(LocaleFiles)" DestinationFolder="$(OutputContents)\locales\%(RecursiveDir)" />
+    </Target>
+
+</Project>
