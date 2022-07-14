@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="GKUI.App">
+
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="dlgBtn" TargetType="Button">
+                <Setter Property="HeightRequest" Value="32" />
+                <Setter Property="WidthRequest" Value="120" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="ContentLayout" Value="Left, 8" />
+            </Style>
+
+            <Style x:Key="iconBtn" TargetType="Button">
+                <Setter Property="HeightRequest" Value="32" />
+                <Setter Property="WidthRequest" Value="34" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>

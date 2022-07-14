@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform"
+    x:Class="GKUI.Forms.AboutPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!--Page Level Resources: Compatibile with Xamarin Live Player -->
+            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Accent">#96d1ff</Color>
+            <Color x:Key="LightTextColor">#999999</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
+
+        <StackLayout Spacing="8">
+            <StackLayout Spacing="8" Orientation="Horizontal">
+
+                <StackLayout Spacing="8">
+                    <Image Source="{plat:ImageResourceExt Resources.image_logo.png}" />
+                    <Label x:Name="lblVersion" Font="Bold+12pt" />
+                </StackLayout>
+
+                <Label HorizontalOptions="FillAndExpand" />
+
+            </StackLayout>
+
+            <Label x:Name="lblCopyright" Font="Bold+12pt" />
+            <Label VerticalOptions="FillAndExpand" />
+            <Button x:Name="lblProjSite" Font="Bold" Clicked="lblURL_Clicked"
+                        BackgroundColor="{StaticResource Primary}" TextColor="White" Text="https://gedkeeper.net/" />
+            <Button x:Name="lblMail" Font="Bold" Clicked="lblURL_Clicked"
+                        BackgroundColor="{StaticResource Primary}" TextColor="White" Text="mailto:gedkeeper@yandex.ru" />
+            <Button x:Name="lblForum" Font="Bold" Clicked="lblURL_Clicked"
+                        BackgroundColor="{StaticResource Primary}" TextColor="White" />
+            <Button x:Name="lblChannel" Font="Bold" Clicked="lblURL_Clicked"
+                        BackgroundColor="{StaticResource Primary}" TextColor="White" />
+        </StackLayout>
+
+        <StackLayout Spacing="8" Orientation="Horizontal">
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnClose" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" />
+        </StackLayout>
+
+    </StackLayout>
+
+</ContentPage>

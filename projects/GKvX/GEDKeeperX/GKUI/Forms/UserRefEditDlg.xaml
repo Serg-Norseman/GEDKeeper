@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:mvp="clr-namespace:GKCore.MVP.Views;assembly=GKCore" xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    x:Class="GKUI.Forms.UserRefEditDlg"
+    x:TypeArguments="mvp:IUserRefEditDlg, contr:UserRefEditDlgController">
+
+    <ContentPage.Resources>
+    </ContentPage.Resources>
+
+    <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
+
+        <Grid ColumnSpacing="4" RowSpacing="4">
+            <Grid.Children>
+                <Label x:Name="lblReference" Grid.Column="0" Grid.Row="0" />
+                <plat:XFComboBox x:Name="cmbRef" WidthRequest="300" Grid.Column="1" Grid.Row="0" />
+
+                <Label x:Name="lblRefType" Grid.Column="0" Grid.Row="1" />
+                <plat:XFComboBox x:Name="cmbRefType" WidthRequest="300" Grid.Column="1" Grid.Row="1" />
+            </Grid.Children>
+        </Grid>
+
+        <StackLayout Spacing="8" Orientation="Horizontal">
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>
