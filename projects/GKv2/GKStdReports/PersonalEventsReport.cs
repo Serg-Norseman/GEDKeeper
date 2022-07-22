@@ -167,7 +167,7 @@ namespace GKStdReports
                             } else {
                                 st = LangMan.LS(LSID.LSID_RK_Daughter) + ": ";
                             }
-                            st = ConvertHelper.UniformName(st) + GKUtils.GetNameString(iRec, true, false);
+                            st = StringHelper.UniformName(st) + GKUtils.GetNameString(iRec, true, false);
                             fWriter.AddListItem("   " + "   " + st, textFont);
                         }
                     }

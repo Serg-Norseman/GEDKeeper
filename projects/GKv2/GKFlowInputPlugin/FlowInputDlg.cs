@@ -304,9 +304,9 @@ namespace GKFlowInputPlugin
                 return;
             }
 
-            string fam = ConvertHelper.UniformName(tokens[0]);
-            string nam = ConvertHelper.UniformName(tokens[1]);
-            string pat = ConvertHelper.UniformName(tokens[2]);
+            string fam = StringHelper.UniformName(tokens[0]);
+            string nam = StringHelper.UniformName(tokens[1]);
+            string pat = StringHelper.UniformName(tokens[2]);
 
             GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(nam, pat, fam, fSimpleTempSex, false);
             if (CheckBirth.Checked) {

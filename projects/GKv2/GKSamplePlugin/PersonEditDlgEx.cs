@@ -382,7 +382,7 @@ namespace GKSamplePlugin
         {
             TextBox tb = (sender as TextBox);
             if (tb != null && e.KeyCode == Keys.Down && e.Control) {
-                tb.Text = ConvertHelper.UniformName(tb.Text);
+                tb.Text = StringHelper.UniformName(tb.Text);
             }
         }
 

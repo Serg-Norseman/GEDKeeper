@@ -324,7 +324,7 @@ namespace GKPedigreeImporterPlugin
             }
 
             if (SurnamesNormalize) {
-                f_fam = ConvertHelper.UniformName(f_fam);
+                f_fam = StringHelper.UniformName(f_fam);
             }
 
             return new PersonNameRet(f_name, f_pat, f_fam, bd, dd);

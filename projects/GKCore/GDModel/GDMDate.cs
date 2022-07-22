@@ -321,15 +321,15 @@ namespace GDModel
             int month;
             switch (calendar) {
                 case GDMCalendar.dcHebrew:
-                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthHebrewArray, su);
+                    month = ArrayHelper.IndexOf(GEDCOMConsts.GEDCOMMonthHebrewArray, su);
                     break;
 
                 case GDMCalendar.dcFrench:
-                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthFrenchArray, su);
+                    month = ArrayHelper.IndexOf(GEDCOMConsts.GEDCOMMonthFrenchArray, su);
                     break;
 
                 default:
-                    month = Algorithms.IndexOf(GEDCOMConsts.GEDCOMMonthArray, su);
+                    month = ArrayHelper.IndexOf(GEDCOMConsts.GEDCOMMonthArray, su);
                     break;
             }
 

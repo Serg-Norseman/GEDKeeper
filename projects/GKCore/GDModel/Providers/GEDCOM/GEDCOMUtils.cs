@@ -401,7 +401,7 @@ namespace GDModel.Providers.GEDCOM
             var token = strTok.CurrentToken;
             if (token == GEDCOMToken.Word) {
                 string su = strTok.GetWord();
-                idx = Algorithms.BinarySearch(GEDCOMConsts.GEDCOMDateTypes, su, string.CompareOrdinal);
+                idx = ArrayHelper.BinarySearch(GEDCOMConsts.GEDCOMDateTypes, su, string.CompareOrdinal);
             }
             var dateType = (idx < 0) ? GEDCOMDateType.SIMP : (GEDCOMDateType)idx;
 
@@ -479,7 +479,7 @@ namespace GDModel.Providers.GEDCOM
                 // error!
             }
             string su = strTok.GetWord();
-            int dateType = Algorithms.BinarySearch(GEDCOMConsts.GEDCOMDateRangeArray, su, string.CompareOrdinal);
+            int dateType = ArrayHelper.BinarySearch(GEDCOMConsts.GEDCOMDateRangeArray, su, string.CompareOrdinal);
 
             if (dateType == 0) { // "AFT"
                 strTok.Next();
@@ -595,7 +595,7 @@ namespace GDModel.Providers.GEDCOM
             token = strTok.CurrentToken;
             if (token == GEDCOMToken.Word) {
                 string su = InvariantTextInfo.ToUpper(strTok.GetWord());
-                int idx = Algorithms.BinarySearch(GEDCOMConsts.GEDCOMDateApproximatedArray, su, string.CompareOrdinal);
+                int idx = ArrayHelper.BinarySearch(GEDCOMConsts.GEDCOMDateApproximatedArray, su, string.CompareOrdinal);
                 if (idx >= 0) {
                     approximated = (GDMApproximated)idx;
                     strTok.Next();
@@ -608,7 +608,7 @@ namespace GDModel.Providers.GEDCOM
             if (token == GEDCOMToken.XRef) {
                 // FIXME: check for errors
                 var escapeStr = "@" + strTok.GetWord() + "@";
-                int idx = Algorithms.IndexOf(GEDCOMConsts.GEDCOMDateEscapeArray, escapeStr);
+                int idx = ArrayHelper.IndexOf(GEDCOMConsts.GEDCOMDateEscapeArray, escapeStr);
                 if (idx >= 0) {
                     calendar = (GDMCalendar)idx;
                 }
@@ -980,7 +980,7 @@ namespace GDModel.Providers.GEDCOM
                 val = GEDCOMUtils.InvariantTextInfo.ToLower(val.Trim());
             }
 
-            int idx = Algorithms.BinarySearch<string>(values, val, string.CompareOrdinal);
+            int idx = ArrayHelper.BinarySearch<string>(values, val, string.CompareOrdinal);
             if (idx >= 0) {
                 #if PCL
                 return (T)Convert.ChangeType(idx, typeof(T), null);
@@ -1705,7 +1705,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static bool IsIndiEvent(GEDCOMTagType tag)
         {
-            int idx = Algorithms.BinarySearch<GEDCOMTagType>(IndiEvents, tag, CompareGEDCOMTag);
+            int idx = ArrayHelper.BinarySearch<GEDCOMTagType>(IndiEvents, tag, CompareGEDCOMTag);
             return idx >= 0;
         }
 
@@ -1722,7 +1722,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static bool IsIndiAttr(GEDCOMTagType tag)
         {
-            int idx = Algorithms.BinarySearch<GEDCOMTagType>(IndiAttrs, tag, CompareGEDCOMTag);
+            int idx = ArrayHelper.BinarySearch<GEDCOMTagType>(IndiAttrs, tag, CompareGEDCOMTag);
             return idx >= 0;
         }
 
@@ -1735,7 +1735,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static bool IsFamEvent(GEDCOMTagType tag)
         {
-            int idx = Algorithms.BinarySearch<GEDCOMTagType>(FamEvents, tag, CompareGEDCOMTag);
+            int idx = ArrayHelper.BinarySearch<GEDCOMTagType>(FamEvents, tag, CompareGEDCOMTag);
             return idx >= 0;
         }
 
