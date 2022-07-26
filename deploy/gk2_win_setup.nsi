@@ -290,7 +290,7 @@ Section "$(gkreq)"
     File "..\bin\NLog.dll"
     File "..\bin\nVLC.dll"
     File "..\bin\UtfUnknown.dll"
-    File "..\bin\YamlSerializer.dll"
+    File "..\bin\YamlDotNet.dll"
     File "..\bin\ZedGraph.dll"
 
     File "..\LICENSE"

@@ -622,7 +622,7 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (iRec == null || !iRec.HasGroups) return;
+            if (iRec == null) return;
 
             try {
                 UpdateStructList(iRec.Groups);
@@ -1051,7 +1051,7 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (iRec == null || !iRec.HasUserReferences) return;
+            if (iRec == null) return;
 
             try {
                 UpdateStructList(iRec.UserReferences);

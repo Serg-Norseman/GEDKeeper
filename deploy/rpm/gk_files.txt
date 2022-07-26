@@ -22,7 +22,7 @@
 ../bin/NLog.dll
 ../bin/nVLC.dll
 ../bin/UtfUnknown.dll
-../bin/YamlSerializer.dll
+../bin/YamlDotNet.dll
 ../bin/ZedGraph.dll
 ../LICENSE
 ../locales/

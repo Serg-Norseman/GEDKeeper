@@ -63,8 +63,7 @@ namespace GKCore
                 // loading database
                 using (var reader = new StreamReader(fileName)) {
                     string content = reader.ReadToEnd();
-                    var rawData = YamlHelper.Deserialize(content, typeof(HolidaysList));
-                    fHolidays = rawData[0] as HolidaysList;
+                    fHolidays = YamlHelper.Deserialize<HolidaysList>(content);
                 }
 
                 // processing dates

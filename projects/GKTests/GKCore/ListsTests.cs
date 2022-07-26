@@ -109,20 +109,33 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_Lists()
+        public void Test_ListColumn()
         {
             var colStatic = new ListColumn(0, 0, DataType.dtString, 0, true);
             Assert.IsNotNull(colStatic);
             Assert.AreEqual(0, colStatic.Order);
             Assert.AreEqual(false, colStatic.CurActive);
             Assert.AreEqual(0, colStatic.CurWidth);
+        }
 
-            //
+        [Test]
+        public void Test_ListFilter()
+        {
             var listFilter = new ListFilter();
             Assert.IsNotNull(listFilter);
             Assert.AreEqual(0, listFilter.Conditions.Count);
             listFilter.Clear();
             Assert.AreEqual(0, listFilter.Conditions.Count);
+        }
+
+        [Test]
+        public void Test_ListFilter_Yaml()
+        {
+            var filter = new ListFilter();
+            filter.Conditions.Add(new FilterCondition(1, ConditionKind.ck_Contains, "Kostrom"));
+
+            string yaml = YamlHelper.Serialize(filter);
+            Assert.AreEqual("Conditions:\r\n- ColumnIndex: 1\r\n  Condition: ck_Contains\r\n  Value: Kostrom\r\n", yaml);
         }
 
         [Test]

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,8 +19,8 @@
  */
 
 using System;
-using System.Yaml;
-using System.Yaml.Serialization;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace GKCore
 {
@@ -29,15 +29,17 @@ namespace GKCore
     /// </summary>
     public static class YamlHelper
     {
-        private static readonly YamlSerializer serializer;
+        private static readonly ISerializer serializer;
+        private static readonly IDeserializer deserializer;
 
         static YamlHelper()
         {
-            var config = new YamlConfig();
-            config.DontUseVerbatimTag = true;
-            config.OmitTagForRootNode = true;
-            config.EmitYamlVersion = false;
-            serializer = new YamlSerializer(config);
+            serializer = new SerializerBuilder().Build();
+            //config.DontUseVerbatimTag = true;
+            //config.OmitTagForRootNode = true;
+            //config.EmitYamlVersion = false;
+
+            deserializer = new DeserializerBuilder().Build();
         }
 
         public static string Serialize(object target)
@@ -45,14 +47,9 @@ namespace GKCore
             return serializer.Serialize(target);
         }
 
-        public static object Deserialize(string value)
+        public static T Deserialize<T>(string value)
         {
-            return serializer.Deserialize(value)[0];
-        }
-
-        public static object[] Deserialize(string value, params Type[] types)
-        {
-            return serializer.Deserialize(value, types);
+            return deserializer.Deserialize<T>(value);
         }
     }
 }

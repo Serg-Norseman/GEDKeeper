@@ -166,9 +166,4 @@ ZipStorer
     https://zipstorer.codeplex.com
     https://github.com/jaime-olivares/zipstorer
 
-
-YamlSerializer
-    Licensed under The MIT License (MIT).
-    (C) Osamu TAKEUCHI, https://yamlserializer.codeplex.com/
-    (C) fork Sergey Zhdanovskih, https://github.com/serg-norseman/YamlSerializer
 ```

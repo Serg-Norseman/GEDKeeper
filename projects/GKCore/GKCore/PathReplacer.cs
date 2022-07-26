@@ -60,8 +60,7 @@ namespace GKCore
                 // loading database
                 using (var reader = new StreamReader(fileName)) {
                     string content = reader.ReadToEnd();
-                    var rawData = YamlHelper.Deserialize(content, typeof(PathsMappingsList));
-                    fPathsMappings = rawData[0] as PathsMappingsList;
+                    fPathsMappings = YamlHelper.Deserialize<PathsMappingsList>(content);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("PathReplacer.Load()", ex);

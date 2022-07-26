@@ -69,7 +69,7 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var person = fDataOwner as GDMIndividualRecord;
-            if (person == null || !person.HasAssociations) return;
+            if (person == null) return;
 
             try {
                 UpdateStructList(person.Associations);

@@ -14,7 +14,7 @@ bin/gedkeeper
 %%DATADIR%%/NLog.dll
 %%DATADIR%%/NLua.dll
 %%DATADIR%%/UtfUnknown.dll
-%%DATADIR%%/YamlSerializer.dll
+%%DATADIR%%/YamlDotNet.dll
 %%DATADIR%%/ZedGraph.dll
 %%DATADIR%%/itextsharp.dll
 %%DATADIR%%/locales/Chinese Simplified.lng
@@ -407,7 +407,7 @@ bin/gedkeeper
 %%DATADIR%%/plugins/NLua.dll
 %%DATADIR%%/plugins/UtfUnknown.dll
 %%DATADIR%%/plugins/XapianCSharp.dll
-%%DATADIR%%/plugins/YamlSerializer.dll
+%%DATADIR%%/plugins/YamlDotNet.dll
 %%DATADIR%%/plugins/ZedGraph.dll
 %%DATADIR%%/plugins/_XapianSharp.dll
 %%DATADIR%%/plugins/csgl.dll

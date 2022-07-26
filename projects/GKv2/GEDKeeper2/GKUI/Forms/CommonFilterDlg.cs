@@ -84,6 +84,11 @@ namespace GKUI.Forms
             fController.UpdateView();
         }
 
+        public virtual bool Accept()
+        {
+            return fController.Accept();
+        }
+
         public virtual void Reset()
         {
             fController.Reset();
@@ -92,6 +97,11 @@ namespace GKUI.Forms
         private void btnReset_Click(object sender, EventArgs e)
         {
             Reset();
+        }
+
+        protected override void AcceptClickHandler(object sender, EventArgs e)
+        {
+            DialogResult = Accept() ? DialogResult.OK : DialogResult.None;
         }
     }
 }

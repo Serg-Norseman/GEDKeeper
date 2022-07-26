@@ -28,7 +28,7 @@ namespace GKUI.Forms
 {
     public partial class PersonsFilterDlg : CommonFilterDlg, IPersonsFilterDlg
     {
-        private readonly PersonsFilterDlgController fController;
+        private readonly PersonsFilterDlgController fPersonsFilterDlgController;
 
         #region View Interface
 
@@ -141,9 +141,9 @@ namespace GKUI.Forms
             #endif
             tabsFilters.SelectedIndex = 1;
 
-            fController = new PersonsFilterDlgController(this, listMan);
-            fController.Init(baseWin);
-            fController.UpdateView();
+            fPersonsFilterDlgController = new PersonsFilterDlgController(this, listMan);
+            fPersonsFilterDlgController.Init(baseWin);
+            fPersonsFilterDlgController.UpdateView();
         }
 
         private void rgLife_CheckedChanged(object sender, EventArgs e)
@@ -151,10 +151,15 @@ namespace GKUI.Forms
             txtAliveBeforeDate.Enabled = rbAliveBefore.Checked;
         }
 
+        public override bool Accept()
+        {
+            return base.Accept() && fPersonsFilterDlgController.Accept();
+        }
+
         public override void Reset()
         {
             base.Reset();
-            fController.UpdateView();
+            fPersonsFilterDlgController.UpdateView();
         }
     }
 }

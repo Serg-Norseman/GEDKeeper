@@ -41,12 +41,6 @@
     <Reference Include="RtfWriter">
       <HintPath>..\libs\netstd\RtfWriter.dll</HintPath>
     </Reference>
-    <Reference Include="UtfUnknown">
-      <HintPath>..\libs\netstd\UtfUnknown.dll</HintPath>
-    </Reference>
-    <Reference Include="YamlSerializer">
-      <HintPath>..\libs\YamlSerializer.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -169,5 +163,7 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="NLua" Version="1.6.0" />
+    <PackageReference Include="YamlDotNet" Version="12.0.0" />
+    <PackageReference Include="UTF.Unknown" Version="2.5.1" />
   </ItemGroup>
 </Project>

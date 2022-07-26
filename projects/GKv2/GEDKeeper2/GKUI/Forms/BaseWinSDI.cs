@@ -224,6 +224,8 @@ namespace GKUI.Forms
             fController.SaveListsSettings();
 
             AppHost.Instance.BaseClosed(this);
+
+            FormClosing -= Form_Closing;
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)

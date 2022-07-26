@@ -142,7 +142,6 @@ namespace GKUI.Platform
         public override void Quit()
         {
             Application.Exit();
-            //Application.ExitThread();
         }
 
         public override void ExecuteWork(ProgressStart proc)

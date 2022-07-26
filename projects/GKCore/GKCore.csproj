@@ -66,8 +66,8 @@
     <Reference Include="UtfUnknown">
       <HintPath>..\libs\UtfUnknown.dll</HintPath>
     </Reference>
-    <Reference Include="YamlSerializer">
-      <HintPath>..\libs\YamlSerializer.dll</HintPath>
+    <Reference Include="YamlDotNet">
+      <HintPath>..\libs\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

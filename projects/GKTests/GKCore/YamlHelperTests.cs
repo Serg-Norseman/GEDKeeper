@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -41,14 +41,12 @@ namespace GKCore
 
             using (var reader = new StreamReader("test.yaml")) {
                 string content = reader.ReadToEnd();
-                var obj = YamlHelper.Deserialize(content) as Dictionary<object, object>;
+                var obj = YamlHelper.Deserialize<Dictionary<object, object>>(content);
                 Assert.IsNotNull(obj);
                 Assert.AreEqual("test test test", obj["Name"]);
-                Assert.AreEqual(dtx, obj["BirthDay"]);
+                Assert.AreEqual("2009-01-08T00:00:00.0000000", obj["BirthDay"]);
 
-                var obj2 = YamlHelper.Deserialize(content, typeof(Person));
-                Assert.IsNotNull(obj2);
-                var p2 = obj2[0] as Person;
+                var p2 = YamlHelper.Deserialize<Person>(content);
                 Assert.IsNotNull(p2);
                 Assert.AreEqual("test test test", p2.Name);
                 Assert.AreEqual(dtx, p2.BirthDay);
