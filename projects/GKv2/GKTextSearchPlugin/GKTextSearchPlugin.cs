@@ -143,6 +143,11 @@ namespace GKTextSearchPlugin
             #endif
         }
 
+        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
+        {
+            // dummy
+        }
+
         #endregion
     }
 }

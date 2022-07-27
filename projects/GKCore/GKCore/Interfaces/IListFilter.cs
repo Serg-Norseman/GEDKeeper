@@ -59,7 +59,13 @@ namespace GKCore.Interfaces
     public interface IListFilter
     {
         List<FilterCondition> Conditions { get; }
+
+        void Assign(IListFilter other);
         void Clear();
+        string ToString(IListSource listSource);
+
+        void Deserialize(string value);
+        string Serialize();
     }
 
 

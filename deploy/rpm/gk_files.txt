@@ -23,6 +23,7 @@
 ../bin/nVLC.dll
 ../bin/UtfUnknown.dll
 ../bin/YamlDotNet.dll
+../bin/Newtonsoft.Json.dll
 ../bin/ZedGraph.dll
 ../LICENSE
 ../locales/

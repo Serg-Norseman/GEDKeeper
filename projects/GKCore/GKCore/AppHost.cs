@@ -25,6 +25,7 @@ using System.Net;
 using System.Reflection;
 using BSLib;
 using BSLib.Design.IoC;
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.MVP.Views;
@@ -403,6 +404,11 @@ namespace GKCore
             Plugins.NotifyRecord(baseWin, record, action);
         }
 
+        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
+        {
+            Plugins.NotifyFilter(baseWin, recType, listSource, filter);
+        }
+
         public string GetAppDataPath()
         {
             return GetAppDataPathStatic();
@@ -470,7 +476,7 @@ namespace GKCore
                     break;
             }
 
-            return new ExtPoint(locX, locY);
+            return new ExtPoint(screenWorkingArea.Left + locX, screenWorkingArea.Top + locY);
         }
 
         public bool IsWidgetActive(IWidget widget)

@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Text;
 using BSLib;
 using BSLib.Calendar;
 using BSLib.Design.Graphics;
@@ -63,8 +64,7 @@ namespace GKCore.Lists
 
             FilterGroupMode = FilterGroupMode.All;
             GroupRef = "";
-            if (FilterLifeMode != FilterLifeMode.lmTimeLocked)
-            {
+            if (FilterLifeMode != FilterLifeMode.lmTimeLocked) {
                 FilterLifeMode = FilterLifeMode.lmAll;
             }
             Name = "*";
@@ -75,6 +75,76 @@ namespace GKCore.Lists
             SourceMode = FilterGroupMode.All;
             SourceRef = "";
             EventVal = "*";
+        }
+
+        public override string ToString(IListSource listSource)
+        {
+            if (listSource == null)
+                return string.Empty;
+
+            var sb = new StringBuilder();
+
+            if (Sex != GDMSex.svUnknown)
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_Sex), GKUtils.SexStr(Sex)));
+
+            if (Name != "*")
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_NameMask), Name));
+
+            if (Residence != "*")
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_PlaceMask), Residence));
+
+            if (EventVal != "*")
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_EventMask), EventVal));
+
+            if (PatriarchOnly)
+                AddCSChunk(sb, string.Format("{0}", LangMan.LS(LSID.LSID_OnlyPatriarchs)));
+
+            if (FilterGroupMode != FilterGroupMode.All)
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_RPGroups), GroupRef));
+
+            if (SourceMode != FilterGroupMode.All)
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_RPSources), SourceRef));
+
+            AddCSChunk(sb, base.ToString(listSource));
+
+            return sb.ToString();
+        }
+
+        private static void AddCSChunk(StringBuilder sb, string chunk)
+        {
+            if (string.IsNullOrEmpty(chunk))
+                return;
+
+            if (sb.Length != 0)
+                sb.Append(", ");
+
+            sb.Append(chunk);
+        }
+
+        public override void Assign(IListFilter other)
+        {
+            var otherFilter = other as IndividualListFilter;
+            if (otherFilter == null)
+                throw new ArgumentNullException("other");
+
+            base.Assign(otherFilter);
+
+            AliveBeforeDate = otherFilter.AliveBeforeDate;
+            FilterGroupMode = otherFilter.FilterGroupMode;
+            GroupRef = otherFilter.GroupRef;
+            Name = otherFilter.Name;
+            PatriarchOnly = otherFilter.PatriarchOnly;
+            Residence = otherFilter.Residence;
+            Sex = otherFilter.Sex;
+            SourceMode = otherFilter.SourceMode;
+            SourceRef = otherFilter.SourceRef;
+            EventVal = otherFilter.EventVal;
+        }
+
+        public override void Deserialize(string value)
+        {
+            var instance = JsonHelper.Deserialize<IndividualListFilter>(value);
+            Assign(instance);
         }
     }
 

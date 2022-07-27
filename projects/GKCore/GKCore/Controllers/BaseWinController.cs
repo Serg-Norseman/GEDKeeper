@@ -846,6 +846,7 @@ namespace GKCore.Controllers
         {
             using (var dlg = AppHost.Container.Resolve<ICommonFilterDlg>(fView, listMan)) {
                 if (AppHost.Instance.ShowModalX(dlg, false)) {
+                    AppHost.Instance.NotifyFilter(fView, rt, listMan, listMan.Filter);
                     ApplyFilter(rt);
                 }
             }
@@ -855,6 +856,7 @@ namespace GKCore.Controllers
         {
             using (var dlg = AppHost.Container.Resolve<IPersonsFilterDlg>(fView, listMan)) {
                 if (AppHost.Instance.ShowModalX(dlg, false)) {
+                    AppHost.Instance.NotifyFilter(fView, rt, listMan, listMan.Filter);
                     ApplyFilter(rt);
                 }
             }

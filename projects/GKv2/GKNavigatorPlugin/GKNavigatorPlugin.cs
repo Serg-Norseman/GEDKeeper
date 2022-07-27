@@ -21,6 +21,7 @@
 using System;
 using System.Reflection;
 using BSLib.Design.Graphics;
+using GDModel;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
@@ -64,7 +65,7 @@ namespace GKNavigatorPlugin
         /* 023 */ LSID_Time,
         /* 024 */ LSID_Name,
         /* 025 */ LSID_Action,
-        /* 026 */ LSID_26,
+        /* 026 */ LSID_Filter,
         /* 027 */ LSID_27,
         /* 028 */ LSID_28,
     }
@@ -170,6 +171,14 @@ namespace GKNavigatorPlugin
 
             string baseName = baseWin.Context.FileName;
             fData[baseName].NotifyRecord(baseWin, record, action);
+        }
+
+        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
+        {
+            if (baseWin == null || filter == null) return;
+
+            string baseName = baseWin.Context.FileName;
+            fData[baseName].NotifyFilter(baseWin, recType, listSource, filter);
         }
     }
 }

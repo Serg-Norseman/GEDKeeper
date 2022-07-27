@@ -19,6 +19,7 @@
  */
 
 using BSLib;
+using GDModel;
 using GKCore.Types;
 
 namespace GKCore.Interfaces
@@ -53,6 +54,7 @@ namespace GKCore.Interfaces
         void BaseRenamed(IBaseWindow baseWin, string oldName, string newName);
         void BaseSaved(IBaseWindow baseWin, string fileName);
         void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
+        void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter);
         void SelectedIndexChanged(IBaseWindow baseWin);
         void TabChanged(IBaseWindow baseWin);
 

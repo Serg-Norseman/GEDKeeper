@@ -165,5 +165,6 @@
     <PackageReference Include="NLua" Version="1.6.0" />
     <PackageReference Include="YamlDotNet" Version="12.0.0" />
     <PackageReference Include="UTF.Unknown" Version="2.5.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 </Project>

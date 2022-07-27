@@ -229,7 +229,7 @@ namespace GKNavigatorPlugin
                     break;
 
                 case DataCategory.Filters:
-                    lvData.Clear();
+                    ShowFilters();
                     break;
 
                 case DataCategory.Bookmarks:
@@ -262,6 +262,10 @@ namespace GKNavigatorPlugin
                 switch (dataCat) {
                     case DataCategory.JumpHistory:
                         SelectRecord((GDMRecord)itemData);
+                        break;
+
+                    case DataCategory.Filters:
+                        SelectFilter((FilterInfo)itemData);
                         break;
 
                     case DataCategory.Bookmarks:
@@ -349,6 +353,43 @@ namespace GKNavigatorPlugin
                 lvData.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             } finally {
                 lvData.EndUpdate();
+            }
+        }
+
+        #endregion
+
+        #region Filters
+
+        private void ShowFilters()
+        {
+            fBase.ShowRecordsTab(GDMRecordType.rtIndividual);
+
+            lvData.BeginUpdate();
+            try {
+                lvData.Clear();
+                lvData.AddColumn(fLangMan.LS(PLS.LSID_Filter), 400);
+
+                BaseData baseData = fPlugin.Data[fBase.Context.FileName];
+                if (baseData == null) return;
+
+                foreach (var filterInfo in baseData.ChangedFilters) {
+                    lvData.AddItem(filterInfo, new object[] { filterInfo.FilterView });
+                }
+
+                lvData.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            } finally {
+                lvData.EndUpdate();
+            }
+        }
+
+        private void SelectFilter(FilterInfo filterInfo)
+        {
+            try {
+                fBase.ShowRecordsTab(filterInfo.RecType);
+                filterInfo.ListSource.Filter.Deserialize(filterInfo.FilterContent);
+                fBase.ApplyFilter(filterInfo.RecType);
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
             }
         }
 

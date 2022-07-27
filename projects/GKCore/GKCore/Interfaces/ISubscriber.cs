@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GDModel;
 using GKCore.Types;
 
 namespace GKCore.Interfaces
@@ -28,5 +29,6 @@ namespace GKCore.Interfaces
     public interface ISubscriber
     {
         void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
+        void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter);
     }
 }

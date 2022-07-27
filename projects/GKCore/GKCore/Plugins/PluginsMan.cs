@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-
+using GDModel;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -139,6 +139,22 @@ namespace GKCore.Plugins
                     }
                 } catch (Exception ex) {
                     Logger.WriteError("PluginsMan.NotifyRecord()", ex);
+                }
+            }
+        }
+
+        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
+        {
+            if (baseWin == null || filter == null) return;
+
+            for (int i = 0, count = fPlugins.Count; i < count; i++) {
+                try {
+                    ISubscriber subscriber = (fPlugins[i] as ISubscriber);
+                    if (subscriber != null) {
+                        subscriber.NotifyFilter(baseWin, recType, listSource, filter);
+                    }
+                } catch (Exception ex) {
+                    Logger.WriteError("PluginsMan.NotifyFilter()", ex);
                 }
             }
         }

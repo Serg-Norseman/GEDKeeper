@@ -61,9 +61,32 @@ namespace GKNavigatorPlugin
     }
 
 
+    public sealed class FilterInfo
+    {
+        public readonly GDMRecordType RecType;
+        public readonly IListSource ListSource;
+        public readonly string FilterContent;
+        public readonly string FilterView;
+
+        public FilterInfo(GDMRecordType recType, IListSource listSource, IListFilter filter)
+        {
+            RecType = recType;
+            ListSource = listSource;
+            FilterContent = filter.Serialize();
+            FilterView = filter.ToString(listSource);
+        }
+    }
+
+
     public sealed class BaseData
     {
+        private readonly List<FilterInfo> fChangedFilters;
         private readonly List<RecordInfo> fChangedRecords;
+
+        public List<FilterInfo> ChangedFilters
+        {
+            get { return fChangedFilters; }
+        }
 
         public List<RecordInfo> ChangedRecords
         {
@@ -72,6 +95,7 @@ namespace GKNavigatorPlugin
 
         public BaseData()
         {
+            fChangedFilters = new List<FilterInfo>();
             fChangedRecords = new List<RecordInfo>();
         }
 
@@ -111,6 +135,13 @@ namespace GKNavigatorPlugin
                 }
             }
             return -1;
+        }
+
+        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
+        {
+            if (listSource == null || filter == null) return;
+
+            fChangedFilters.Add(new FilterInfo(recType, listSource, filter));
         }
     }
 
