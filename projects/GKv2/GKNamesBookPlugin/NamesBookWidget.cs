@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,7 +26,9 @@ using System.Text;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
+using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKNamesBookPlugin
 {
@@ -56,10 +58,6 @@ namespace GKNamesBookPlugin
             InitializeComponent();
 
             fPlugin = plugin;
-            
-            Screen scr = Screen.PrimaryScreen;
-            Location = new Point(scr.WorkingArea.Width - Width - 10, (scr.WorkingArea.Height - Height) / 2);
-
             fNames = new List<NameRecord>();
             fChurchFNames = new StringList();
             fChurchMNames = new StringList();
@@ -92,6 +90,9 @@ namespace GKNamesBookPlugin
 
         private void NamesBookWidget_Load(object sender, EventArgs e)
         {
+            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Center);
+            this.Location = new Point(loc.X, loc.Y);
+
             fPlugin.Host.WidgetShow(fPlugin);
         }
 

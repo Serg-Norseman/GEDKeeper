@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKFoldersPlugin
 {
@@ -39,8 +40,6 @@ namespace GKFoldersPlugin
         public FoldersWidget(Plugin plugin)
         {
             InitializeComponent();
-
-            Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - Width - 10, 50);
 
             fPlugin = plugin;
             fFolders = new StringList();
@@ -58,6 +57,9 @@ namespace GKFoldersPlugin
 
         private void FoldersWidget_Load(object sender, EventArgs e)
         {
+            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Top);
+            this.Location = new Point(loc.X, loc.Y);
+
             fPlugin.Host.WidgetShow(fPlugin);
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }

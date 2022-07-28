@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,11 +19,11 @@
  */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
-
 using BSLib;
+using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKCalculatorPlugin
 {
@@ -40,10 +40,6 @@ namespace GKCalculatorPlugin
             InitializeComponent();
 
             fPlugin = plugin;
-
-            Screen scr = Screen.PrimaryScreen;
-            Location = new Point(scr.WorkingArea.Width - Width - 10, scr.WorkingArea.Height - Height - 10);
-
             fCalc = new ExpCalculator();
             lbOutput.Items.Clear();
 
@@ -52,6 +48,9 @@ namespace GKCalculatorPlugin
 
         private void CalcWidget_Load(object sender, EventArgs e)
         {
+            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Bottom);
+            this.Location = new System.Drawing.Point(loc.X, loc.Y);
+
             fPlugin.Host.WidgetShow(fPlugin);
         }
 
@@ -62,19 +61,14 @@ namespace GKCalculatorPlugin
 
         private void edExpression_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Return)
-            {
+            if (e.KeyCode == Keys.Return) {
                 string res;
-                try
-                {
+                try {
                     res = fCalc.Calc(edExpression.Text).ToString();
-                    if (chkPutToClipboard.Checked)
-                    {
+                    if (chkPutToClipboard.Checked) {
                         Clipboard.SetDataObject(res);
                     }
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     res = "[ ??? ]";
                 }
                 lbOutput.Items.Add("> " + edExpression.Text);
@@ -86,8 +80,7 @@ namespace GKCalculatorPlugin
 
         private void edCalcResult_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
+            if (e.Button == MouseButtons.Left) {
                 edCalcResult.DoDragDrop(edCalcResult.Text, DragDropEffects.Move);
             }
         }
@@ -99,7 +92,8 @@ namespace GKCalculatorPlugin
 
         private void lbOutput_DoubleClick(object sender, EventArgs e)
         {
-            if (lbOutput.SelectedIndex < 0 || lbOutput.SelectedIndex >= lbOutput.Items.Count) return;
+            if (lbOutput.SelectedIndex < 0 || lbOutput.SelectedIndex >= lbOutput.Items.Count)
+                return;
 
             string line = (string)lbOutput.Items[lbOutput.SelectedIndex];
             if (line.StartsWith("> ", StringComparison.Ordinal)) {

@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKBackupPlugin
 {
@@ -39,14 +40,14 @@ namespace GKBackupPlugin
 
             fPlugin = plugin;
 
-            Screen scr = Screen.PrimaryScreen;
-            Location = new Point(scr.WorkingArea.Width - Width - 10, scr.WorkingArea.Height - Height - 10);
-
             SetLocale();
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
+            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Bottom);
+            this.Location = new Point(loc.X, loc.Y);
+
             fPlugin.Host.WidgetShow(fPlugin);
 
             chkEnabled.Checked = fPlugin.ExtendedBackupEnabled;

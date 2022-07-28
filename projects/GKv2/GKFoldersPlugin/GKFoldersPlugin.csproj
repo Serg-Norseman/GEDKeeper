@@ -44,6 +44,10 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
+      <Name>GKComponents</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="GKFoldersPlugin.enu">

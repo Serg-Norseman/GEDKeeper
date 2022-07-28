@@ -445,7 +445,9 @@ namespace GKCore
 
         public ExtPoint WidgetLocate(ExtRect formBounds, WidgetHorizontalLocation horizontalLocation, WidgetVerticalLocation verticalLocation)
         {
-            const int ScrPadding = 0;
+            const int ScrPaddingX = 10;
+            const int ScrPaddingYt = 50;
+            const int ScrPaddingYb = 10;
 
             var screenWorkingArea = GetActiveScreenWorkingArea();
 
@@ -454,25 +456,25 @@ namespace GKCore
 
             switch (horizontalLocation) {
                 case WidgetHorizontalLocation.Left:
-                    locX = ScrPadding;
+                    locX = ScrPaddingX;
                     break;
                 case WidgetHorizontalLocation.Center:
                     locX = (screenWorkingArea.Width - formBounds.Width) / 2;
                     break;
                 case WidgetHorizontalLocation.Right:
-                    locX = screenWorkingArea.Width - formBounds.Width - ScrPadding;
+                    locX = screenWorkingArea.Width - formBounds.Width - ScrPaddingX;
                     break;
             }
 
             switch (verticalLocation) {
                 case WidgetVerticalLocation.Top:
-                    locY = ScrPadding;
+                    locY = ScrPaddingYt;
                     break;
                 case WidgetVerticalLocation.Center:
                     locY = (screenWorkingArea.Height - formBounds.Height) / 2;
                     break;
                 case WidgetVerticalLocation.Bottom:
-                    locY = screenWorkingArea.Height - formBounds.Height - ScrPadding;
+                    locY = screenWorkingArea.Height - formBounds.Height - ScrPaddingYb;
                     break;
             }
 
