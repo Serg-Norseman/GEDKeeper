@@ -2015,8 +2015,8 @@ namespace GKCore
                 if (rec.RecordType == GDMRecordType.rtIndividual) {
                     var iRec = rec as GDMIndividualRecord;
 
-                    num = iRec.MultimediaLinks.Count;
-                    for (int k = 0; i < num; i++) {
+                    int num2 = iRec.MultimediaLinks.Count;
+                    for (int k = 0; k < num2; k++) {
                         var mmLink = iRec.MultimediaLinks[k];
                         if (mmLink.XRef == mmRec.XRef && mmLink.IsPrimary) {
                             string indiName = GKUtils.GetNameString(iRec, true, false);
