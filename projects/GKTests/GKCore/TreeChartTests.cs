@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -216,9 +216,6 @@ namespace GKCore
                 Assert.AreEqual(15, model.Margins);
 
                 Assert.IsNull(model.Options);
-
-                model.PathDebug = true;
-                Assert.AreEqual(true, model.PathDebug);
 
                 Assert.IsNotNull(model.Persons);
 

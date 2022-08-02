@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define DEBUG_SOLVE
-
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Kinships;
@@ -84,10 +82,6 @@ namespace GKCore.Controllers
 
                     kinsGraph.SetTreeRoot(fRec1);
                     fResult = kinsGraph.GetRelationship(fRec2, true, GlobalOptions.Instance.ShortKinshipForm);
-
-                    #if DEBUG_SOLVE
-                    fResult += "\r\n" + kinsGraph.IndividualsPath;
-                    #endif
                 }
             }
 

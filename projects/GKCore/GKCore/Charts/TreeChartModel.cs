@@ -93,7 +93,6 @@ namespace GKCore.Charts
         private int fMargins;
         private int fNodePadding;
         private TreeChartOptions fOptions;
-        private bool fPathDebug;
         private TreeChartPerson fRoot;
         private float fScale;
         private IImage[] fSignsPic;
@@ -200,12 +199,6 @@ namespace GKCore.Charts
         {
             get { return fOptions; }
             set { fOptions = value; }
-        }
-
-        public bool PathDebug
-        {
-            get { return fPathDebug; }
-            set { fPathDebug = value; }
         }
 
         public IList<TreeChartPerson> Persons
@@ -798,10 +791,6 @@ namespace GKCore.Charts
                     kinship = "-";
                 }
                 target.Kinship = "[" + kinship + "]";
-
-                if (fPathDebug) {
-                    target.PathDebug = fGraph.IndividualsPath;
-                }
             }
         }
 
@@ -857,10 +846,6 @@ namespace GKCore.Charts
             }
 
             if (fOptions.Kinship) {
-                lines++;
-            }
-
-            if (fPathDebug) {
                 lines++;
             }
 

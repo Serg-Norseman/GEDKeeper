@@ -31,15 +31,15 @@ namespace GKCore.Kinships
         public RelationSet CurrRels;
         public RelationKind FinRel;
         public short Great;
-        public short Level;
+        public short Degree;
 
-        public KinshipRec(RelationSet prevRels, RelationSet currRels, RelationKind finRel, short great, short level)
+        public KinshipRec(RelationSet prevRels, RelationSet currRels, RelationKind finRel, short great, short degree)
         {
             PrevRels = prevRels;
             CurrRels = currRels;
             FinRel = finRel;
             Great = great;
-            Level = level;
+            Degree = degree;
         }
     }
 }

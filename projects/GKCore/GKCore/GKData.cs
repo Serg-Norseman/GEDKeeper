@@ -176,7 +176,6 @@ namespace GKCore
         public static readonly LSID[] CertaintyAssessments;
         public static readonly SpecialUserRef[] SpecialUserRefs;
         public static readonly LSID[] RelationKinds;
-        public static readonly string[] RelationSigns;
         public static readonly string[] Numerals;
         public static readonly string[] NumKinship;
         public static readonly LSID GreatPrefix;
@@ -225,43 +224,6 @@ namespace GKCore
                 "семи",
                 "восьми",
                 "девяти"
-            };
-
-            RelationSigns = new string[] {
-                "?",
-                "P",
-                "S",
-                "C",
-                "F",
-                "M",
-                "H",
-                "W",
-                "Sn",
-                "Dg",
-                "Gf",
-                "Gm",
-                "Gs",
-                "Gd",
-                "Br",
-                "St",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-"
             };
 
             RelationKinds = new LSID[] {

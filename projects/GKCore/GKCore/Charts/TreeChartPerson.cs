@@ -97,7 +97,6 @@ namespace GKCore.Charts
         public string Kinship;
         public string[] Lines;
         public Vertex Node;
-        public string PathDebug;
         public ExtRect PortraitArea;
         public string MarriageDate;
         public bool IsCollapsed;
@@ -455,11 +454,6 @@ namespace GKCore.Charts
                 if (options.Kinship) {
                     Lines[idx] = Kinship;
                     idx++;
-                }
-
-                if (fModel.PathDebug) {
-                    Lines[idx] = PathDebug;
-                    //idx++;
                 }
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartPerson.InitInfo()", ex);
