@@ -2018,7 +2018,7 @@ namespace GKCore
                     int num2 = iRec.MultimediaLinks.Count;
                     for (int k = 0; k < num2; k++) {
                         var mmLink = iRec.MultimediaLinks[k];
-                        if (mmLink.XRef == mmRec.XRef && mmLink.IsPrimary) {
+                        if (mmLink.XRef == mmRec.XRef /*&& mmLink.IsPrimary*/) {
                             string indiName = GKUtils.GetNameString(iRec, true, false);
                             ExtRect region = mmLink.CutoutPosition.Value;
                             result.AddObject(indiName, region);
@@ -2942,6 +2942,37 @@ namespace GKCore
 
             MultimediaKind mmKind = GetMultimediaKind(fileRef.MultimediaFormat);
             return (mmKind == MultimediaKind.mkImage);
+        }
+
+        public static bool MayContainPortrait(GDMMultimediaRecord mmRec)
+        {
+            if (mmRec == null || mmRec.FileReferences.Count == 0)
+                return false;
+
+            var mmRef = mmRec.FileReferences[0];
+            if (!IsPictureFormat(mmRef))
+                return false;
+
+            switch (mmRef.MediaType) {
+                case GDMMediaType.mtUnknown:
+                case GDMMediaType.mtAudio:
+                case GDMMediaType.mtManuscript:
+                case GDMMediaType.mtMap:
+                    return false;
+
+                case GDMMediaType.mtBook:
+                case GDMMediaType.mtCard:
+                case GDMMediaType.mtElectronic:
+                case GDMMediaType.mtFiche:
+                case GDMMediaType.mtFilm:
+                case GDMMediaType.mtMagazine:
+                case GDMMediaType.mtNewspaper:
+                case GDMMediaType.mtPhoto:
+                case GDMMediaType.mtTombstone:
+                case GDMMediaType.mtVideo:
+                default:
+                    return true;
+            }
         }
 
         public static void InitSecurityProtocol()

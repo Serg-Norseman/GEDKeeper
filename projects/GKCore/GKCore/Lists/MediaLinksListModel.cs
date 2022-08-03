@@ -93,6 +93,10 @@ namespace GKCore.Lists
                     if (mmRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GDMObject)dataOwner, mmRec);
                         mmLink = dataOwner.FindMultimediaLink(mmRec);
+
+                        if (result && mmLink != null && (dataOwner is GDMIndividualRecord) && GKUtils.MayContainPortrait(mmRec)) {
+                            BaseController.SelectPortraitRegion(fBaseWin, mmLink);
+                        }
                     }
                     break;
 

@@ -993,6 +993,16 @@ namespace GKCore.Controllers
             return result;
         }
 
+        public static bool SelectPortraitRegion(IBaseWindow baseWin, GDMMultimediaLink mmLink)
+        {
+            bool result;
+            using (var selectDlg = AppHost.ResolveDialog<IPortraitSelectDlg>(baseWin)) {
+                selectDlg.MultimediaLink = mmLink;
+                result = AppHost.Instance.ShowModalX(selectDlg, false);
+            }
+            return result;
+        }
+
         public static bool AddIndividualPortrait(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
         {
             bool result = false;
@@ -1010,10 +1020,7 @@ namespace GKCore.Controllers
             mmLink = iRec.SetPrimaryMultimediaLink(mmRec);
 
             // select portrait area
-            using (var selectDlg = AppHost.ResolveDialog<IPortraitSelectDlg>(baseWin)) {
-                selectDlg.MultimediaLink = mmLink;
-                result = AppHost.Instance.ShowModalX(selectDlg, false);
-            }
+            result = SelectPortraitRegion(baseWin, mmLink);
 
             if (result) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitAttach, iRec, mmLink);
