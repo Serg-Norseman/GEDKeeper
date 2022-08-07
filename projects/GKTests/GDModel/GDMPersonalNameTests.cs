@@ -167,7 +167,7 @@ namespace GDModel
 
             //
 
-            string buf = TestUtils.GetTagStreamText(persName, 1);
+            string buf = GEDCOMProvider.GetTagStreamText(persName, 1);
             Assert.AreEqual("1 NAME Lt. Petr Ivanovich /de Fedoroff/ Suffix\r\n"+
                             "2 LANG Polish\r\n"+ // extension
                             "2 TYPE birth\r\n"+
@@ -192,7 +192,7 @@ namespace GDModel
                 iRec.AddPersonalName(nameCopy);
                 nameCopy.Assign(persName);
 
-                string buf2 = TestUtils.GetTagStreamText(nameCopy, 1);
+                string buf2 = GEDCOMProvider.GetTagStreamText(nameCopy, 1);
                 Assert.AreEqual("1 NAME Lt. Petr Ivanovich /de Fedoroff/ Suffix\r\n"+
                                 "2 TYPE birth\r\n"+
                                 "2 NOTE persname notes\r\n"+

@@ -524,7 +524,7 @@ namespace GDModel.Providers.GEDCOM
             WriteTagLine(writer, 0, GEDCOMTagName.TRLR, string.Empty);
         }
 
-        public static void WriteRecordEx(StreamWriter writer, GDMRecord record)
+        private static void WriteRecordEx(StreamWriter writer, GDMRecord record)
         {
             switch (record.RecordType) {
                 case GDMRecordType.rtIndividual:
@@ -1530,7 +1530,7 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        public static bool WriteSourceData(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteSourceData(StreamWriter stream, int level, GDMTag tag)
         {
             GDMSourceData sourData = (GDMSourceData)tag;
 
@@ -1724,7 +1724,7 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        public static bool WriteBaseTag(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteBaseTag(StreamWriter stream, int level, GDMTag tag)
         {
             if (tag.IsEmpty() && GEDCOMProvider.SkipEmptyTag(tag.Id)) return false;
 
@@ -2002,7 +2002,7 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        public static bool WriteMultimediaLink(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteMultimediaLink(StreamWriter stream, int level, GDMTag tag)
         {
             GDMMultimediaLink mmLink = (GDMMultimediaLink)tag;
 
@@ -2081,7 +2081,7 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        public static bool WriteSourceCitation(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteSourceCitation(StreamWriter stream, int level, GDMTag tag)
         {
             if (tag.IsEmpty() && GEDCOMProvider.SkipEmptyTag(tag.Id)) return false;
 
@@ -2306,7 +2306,7 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        public static bool WritePersonalName(StreamWriter stream, int level, GDMTag tag)
+        private static bool WritePersonalName(StreamWriter stream, int level, GDMTag tag)
         {
             GDMPersonalName persName = (GDMPersonalName)tag;
 
@@ -2691,6 +2691,39 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._STOPDATE, GEDCOMTagName._STOPDATE);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._STATUS, GEDCOMTagName._STATUS);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._TASK, GEDCOMTagName._TASK);
+        }
+
+        #endregion
+
+        #region Utilities
+
+        public static string GetTagStreamText(GDMTag tag, int level, bool debugWrite = true)
+        {
+            DebugWrite = debugWrite;
+
+            string result;
+            using (MemoryStream stm = new MemoryStream()) {
+                using (StreamWriter fs = new StreamWriter(stm)) {
+                    if (tag is GDMRecord) {
+                        WriteRecordEx(fs, (GDMRecord)tag);
+                    } else if (tag is GDMIndividualEvent) {
+                        WriteCustomEvent(fs, 1, tag);
+                    } else if (tag is GDMPersonalName) {
+                        WritePersonalName(fs, 1, tag);
+                    } else if (tag is GDMMultimediaLink) {
+                        WriteMultimediaLink(fs, 1, tag);
+                    } else if (tag is GDMSourceCitation) {
+                        WriteSourceCitation(fs, 1, tag);
+                    } else if (tag is GDMSourceData) {
+                        WriteSourceData(fs, 1, tag);
+                    } else {
+                        WriteBaseTag(fs, level, tag);
+                    }
+                    fs.Flush();
+                    result = Encoding.UTF8.GetString(stm.ToArray());
+                }
+            }
+            return result;
         }
 
         #endregion

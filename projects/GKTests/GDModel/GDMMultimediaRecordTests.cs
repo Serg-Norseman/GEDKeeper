@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -73,7 +74,7 @@ namespace GDModel
 
                     media2.Assign(mediaRec);
 
-                    string buf = TestUtils.GetTagStreamText(media2, 0);
+                    string buf = GEDCOMProvider.GetTagStreamText(media2, 0);
                     Assert.AreEqual("0 @O3@ OBJE\r\n" +
                                     "1 FILE sample.png\r\n" +
                                     "2 FORM png\r\n" +
@@ -103,7 +104,7 @@ namespace GDModel
             var foundLink = indiv.FindMultimediaLink(mediaRec);
             Assert.AreEqual(mmLink, foundLink);
 
-            string buf = TestUtils.GetTagStreamText(mmLink, 1);
+            string buf = GEDCOMProvider.GetTagStreamText(mmLink, 1);
             Assert.AreEqual("1 OBJE @O2@\r\n"+
                             "2 TITL Title1\r\n", buf);
 

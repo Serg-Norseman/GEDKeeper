@@ -910,8 +910,11 @@ namespace GKCore
         /* 849 */ LSID_CertaintyAlgorithm,
         /* 850 */ LSID_LocalizedCalendarSignaturesOptLabel,
         /* 851 */ LSID_LocalizedCalendarSignaturesValues,
+        /* 852 */ LSID_Copy,
+        /* 853 */ LSID_Cut,
+        /* 854 */ LSID_Paste,
 
-        /* 000 */ LSID_Last = LSID_LocalizedCalendarSignaturesValues
+        /* 000 */ LSID_Last = LSID_Paste
     }
 
 
@@ -1777,6 +1780,9 @@ namespace GKCore
             /* 849 */ "Certainty assessment algorithm",
             /* 850 */ "Localized calendar signatures",
             /* 851 */ "G|J|H|FR|R|I|?",
+            /* 852 */ "Copy",
+            /* 853 */ "Cut",
+            /* 854 */ "Paste",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKTests;
+using GDModel.Providers.GEDCOM;
 using NUnit.Framework;
 
 namespace GDModel
@@ -48,7 +48,7 @@ namespace GDModel
                     childLink2.Assign(childLink);
                     iRec.ChildToFamilyLinks.Add(childLink2);
 
-                    string buf = TestUtils.GetTagStreamText(iRec, 0);
+                    string buf = GEDCOMProvider.GetTagStreamText(iRec, 0);
                     Assert.AreEqual("0 INDI\r\n" +
                                     "1 SEX U\r\n" +
                                     "1 FAMC\r\n" +

@@ -30,6 +30,9 @@ namespace GKCore.Types
         raDelete,
         raJump,
         raMoveUp,
-        raMoveDown
+        raMoveDown,
+        raCopy,
+        raCut,
+        raPaste,
     }
 }

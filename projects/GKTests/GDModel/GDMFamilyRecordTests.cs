@@ -22,7 +22,6 @@ using System;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
-using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
@@ -58,7 +57,7 @@ namespace GDModel
 
                 fam2.Assign(famRec);
 
-                string buf = TestUtils.GetTagStreamText(fam2, 0);
+                string buf = GEDCOMProvider.GetTagStreamText(fam2, 0);
                 Assert.AreEqual("0 @F2@ FAM\r\n" +
                                 "1 RESN locked\r\n" +
                                 "1 HUSB @I2@\r\n" +

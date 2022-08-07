@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -92,7 +93,7 @@ namespace GDModel
                     task2.Assign(taskRec);
 
                     // FIXME: goal format invalid!
-                    string buf = TestUtils.GetTagStreamText(task2, 0);
+                    string buf = GEDCOMProvider.GetTagStreamText(task2, 0);
                     Assert.AreEqual("0 @TK2@ _TASK\r\n" +
                                     "1 _STARTDATE 20 JAN 2013\r\n" +
                                     "1 _STOPDATE 21 JAN 2013\r\n" +

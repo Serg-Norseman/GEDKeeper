@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKTests;
+using GDModel.Providers.GEDCOM;
 using NUnit.Framework;
 
 namespace GDModel
@@ -50,7 +50,7 @@ namespace GDModel
                     // test of output format
                     var iRec = new GDMIndividualRecord(null);
                     iRec.UserReferences.Add(uref2);
-                    string buf = TestUtils.GetTagStreamText(iRec, 0);
+                    string buf = GEDCOMProvider.GetTagStreamText(iRec, 0);
                     Assert.AreEqual("0 INDI\r\n"+
                                     "1 REFN ref\r\n"+
                                     "2 TYPE test\r\n"+

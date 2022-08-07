@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
 using GKTests;
@@ -217,7 +218,7 @@ namespace GDModel
 
                 sour2.Assign(sourRec);
 
-                string buf = TestUtils.GetTagStreamText(sour2, 0);
+                string buf = GEDCOMProvider.GetTagStreamText(sour2, 0);
                 Assert.AreEqual("0 @S2@ SOUR\r\n" +
                                 "1 TITL title\r\n" +
                                 "1 PUBL publication\r\n" +

@@ -83,7 +83,10 @@ namespace GKCore.Lists
         lbDelete,
         lbJump,
         lbMoveUp,
-        lbMoveDown
+        lbMoveDown,
+        lbCopy,
+        lbCut,
+        lbPaste
     }
 
 

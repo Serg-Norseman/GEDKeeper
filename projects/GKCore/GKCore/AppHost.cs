@@ -57,6 +57,7 @@ namespace GKCore
         private static string fAppDataPath = null;
 
         private readonly List<WidgetInfo> fActiveWidgets;
+        private readonly List<object> fInternalClipboard;
         private readonly StringList fTips;
 
         protected IBaseWindow fActiveBase;
@@ -89,6 +90,7 @@ namespace GKCore
             fInstance = this;
 
             fActiveWidgets = new List<WidgetInfo>();
+            fInternalClipboard = new List<object>();
             fRunningForms = new List<IWindow>();
             fTips = new StringList();
         }
@@ -287,8 +289,6 @@ namespace GKCore
 
         public abstract void SetKeyLayout(int layout);
 
-        public abstract void SetClipboardText(string text);
-
         public abstract ITimer CreateTimer(double msInterval, EventHandler elapsedHandler);
 
         public abstract void Quit();
@@ -296,6 +296,49 @@ namespace GKCore
         public abstract void ExecuteWork(ProgressStart proc);
 
         public abstract bool ExecuteWorkExt(ProgressStart proc, string title);
+
+        #region Extended clipboard functions
+
+        public abstract void SetClipboardText(string text);
+
+        //public abstract void SetClipboardObject(string objTypeName, string objContent);
+
+        //public abstract string GetClipboardObject(string objTypeName);
+
+        public void SetClipboardObj(object obj)
+        {
+            /*string objName = obj.GetType().FullName;
+            string objContent = GEDCOMProvider.GetTagStreamText(obj, 1, false);
+            AppHost.Instance.SetClipboardObject(objName, objContent);*/
+
+            if (obj == null)
+                return;
+
+            fInternalClipboard.Clear();
+            fInternalClipboard.Add(obj);
+        }
+
+        public T GetClipboardObj<T>() where T : class
+        {
+            /*string objName = typeof(T).FullName;
+            string objContent = AppHost.Instance.GetClipboardObject(objName);
+            if (!string.IsNullOrEmpty(objContent)) {
+                T result = new T();
+                //GEDCOMProvider.SetTagStreamText(result, objContent);
+                return result;
+            }
+            return null;*/
+
+            foreach (var obj in fInternalClipboard) {
+                if (obj.GetType().IsDerivedFromOrImplements(typeof(T))) {
+                    return (T)obj;
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
 
         #region Executing environment
 

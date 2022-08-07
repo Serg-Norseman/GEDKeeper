@@ -37,7 +37,8 @@ namespace GKCore.Lists
             fPersonsMode = personsMode;
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
-                RecordAction.raMoveUp, RecordAction.raMoveDown);
+                RecordAction.raMoveUp, RecordAction.raMoveDown,
+                RecordAction.raCopy, RecordAction.raPaste);
 
             fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
             fListColumns.AddColumn(LSID.LSID_Event, 90, false);
@@ -169,6 +170,30 @@ namespace GKCore.Lists
                             result = true;
                         }
                         break;
+
+                    case RecordAction.raCopy:
+                        {
+                            object obj = null;
+                            if (evt is GDMIndividualEvent) {
+                                obj = (evt as GDMIndividualEvent).Clone();
+                            } else if (evt is GDMIndividualAttribute) {
+                                obj = (evt as GDMIndividualAttribute).Clone();
+                            } else if (evt is GDMFamilyEvent) {
+                                obj = (evt as GDMFamilyEvent).Clone();
+                            }
+                            AppHost.Instance.SetClipboardObj(obj);
+                        }
+                        break;
+
+                    case RecordAction.raCut:
+                        break;
+
+                    case RecordAction.raPaste:
+                        evt = AppHost.Instance.GetClipboardObj<GDMCustomEvent>();
+                        if (evt != null) {
+                            result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, evt);
+                        }
+                        break;
                 }
             } catch (Exception ex) {
                 Logger.WriteError("EventsListModel.Modify()", ex);
@@ -176,7 +201,7 @@ namespace GKCore.Lists
             }
 
             if (result) {
-                if (eArgs.Action == RecordAction.raAdd) {
+                if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raPaste) {
                     eArgs.ItemData = evt;
                 }
 

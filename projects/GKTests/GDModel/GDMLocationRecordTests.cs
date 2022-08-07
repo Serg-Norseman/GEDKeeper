@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
 using GKTests;
@@ -68,7 +69,7 @@ namespace GDModel
 
                     loc2.Assign(locRec);
 
-                    string buf = TestUtils.GetTagStreamText(loc2, 0);
+                    string buf = GEDCOMProvider.GetTagStreamText(loc2, 0);
                     Assert.AreEqual("0 @L3@ _LOC\r\n" +
                                     "1 MAP\r\n" +
                                     "2 LATI 5.111111\r\n" +
@@ -82,7 +83,7 @@ namespace GDModel
                 locRec.Clear();
                 Assert.IsTrue(locRec.IsEmpty());
 
-                string buf1 = TestUtils.GetTagStreamText(locRec, 0);
+                string buf1 = GEDCOMProvider.GetTagStreamText(locRec, 0);
                 Assert.AreEqual("0 @L1@ _LOC\r\n", buf1);
             }
         }

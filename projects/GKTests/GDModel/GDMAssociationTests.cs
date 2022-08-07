@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -71,7 +72,7 @@ namespace GDModel
                     asso2.Assign(association);
                     iRec2.Associations.Add(asso2);
 
-                    string buf = TestUtils.GetTagStreamText(iRec2, 0);
+                    string buf = GEDCOMProvider.GetTagStreamText(iRec2, 0);
                     Assert.AreEqual("0 INDI\r\n" +
                                     "1 SEX U\r\n" +
                                     "1 ASSO @I1@\r\n" +

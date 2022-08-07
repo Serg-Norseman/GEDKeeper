@@ -19,8 +19,8 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 using GKCore.Types;
-using GKTests;
 using NUnit.Framework;
 
 namespace GDModel
@@ -52,7 +52,7 @@ namespace GDModel
 
                     repo2.Assign(repoRec);
 
-                    string buf = TestUtils.GetTagStreamText(repo2, 0);
+                    string buf = GEDCOMProvider.GetTagStreamText(repo2, 0);
                     Assert.AreEqual("0 @R2@ REPO\r\n" +
                                     "1 NAME Test Repository\r\n" +
                                     "1 ADDR\r\n" +

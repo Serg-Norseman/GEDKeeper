@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -67,7 +68,7 @@ namespace GDModel
 
                     comm2.Assign(comRec);
 
-                    string buf = TestUtils.GetTagStreamText(comm2, 0);
+                    string buf = GEDCOMProvider.GetTagStreamText(comm2, 0);
                     Assert.AreEqual("0 @CM2@ _COMM\r\n" +
                                     "1 DATE 23 JAN 2013\r\n" +
                                     "1 NAME Test Communication\r\n" +

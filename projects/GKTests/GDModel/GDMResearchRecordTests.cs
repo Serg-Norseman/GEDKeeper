@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKTests;
 using NUnit.Framework;
@@ -80,7 +81,7 @@ namespace GDModel
                     resRec.Assign(null);
                 });
 
-                string buf = TestUtils.GetTagStreamText(resRec, 0);
+                string buf = GEDCOMProvider.GetTagStreamText(resRec, 0);
                 Assert.AreEqual("0 @RS2@ _RESEARCH\r\n" +
                                 "1 _STARTDATE 20 JAN 2013\r\n" +
                                 "1 _STOPDATE 21 JAN 2013\r\n" +

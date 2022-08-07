@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using GDModel.Providers.GEDCOM;
 using GKTests;
 using NUnit.Framework;
 
@@ -103,7 +104,7 @@ namespace GDModel
                     iRec.Events.Add(evt);
                     evt.Address.Assign(addr);
 
-                    string buf = TestUtils.GetTagStreamText(iRec, 0);
+                    string buf = GEDCOMProvider.GetTagStreamText(iRec, 0);
                     Assert.AreEqual("0 INDI\r\n" +
                                     "1 SEX U\r\n" +
                                     "1 BIRT\r\n" +

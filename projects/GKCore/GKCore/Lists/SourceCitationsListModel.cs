@@ -36,7 +36,8 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
-                RecordAction.raMoveUp, RecordAction.raMoveDown);
+                RecordAction.raMoveUp, RecordAction.raMoveDown,
+                RecordAction.raCopy, RecordAction.raPaste);
 
             fListColumns.AddColumn(LSID.LSID_Author, 70, false);
             fListColumns.AddColumn(LSID.LSID_Title, 180, false);
@@ -120,10 +121,24 @@ namespace GKCore.Lists
                         result = true;
                     }
                     break;
+
+                case RecordAction.raCopy:
+                    AppHost.Instance.SetClipboardObj(aCit.Clone());
+                    break;
+
+                case RecordAction.raCut:
+                    break;
+
+                case RecordAction.raPaste:
+                    aCit = AppHost.Instance.GetClipboardObj<GDMSourceCitation>();
+                    if (aCit != null) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitAdd, fDataOwner, aCit);
+                    }
+                    break;
             }
 
             if (result) {
-                if (eArgs.Action == RecordAction.raAdd) {
+                if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raPaste) {
                     eArgs.ItemData = aCit;
                 }
 

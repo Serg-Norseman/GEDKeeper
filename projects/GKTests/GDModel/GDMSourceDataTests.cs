@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKTests;
+using GDModel.Providers.GEDCOM;
 using NUnit.Framework;
 
 namespace GDModel
@@ -47,7 +47,7 @@ namespace GDModel
                 note.Lines.Text = "test sourcedata notes";
                 data.Notes.Add(note);
 
-                string buf = TestUtils.GetTagStreamText(data, 0);
+                string buf = GEDCOMProvider.GetTagStreamText(data, 0);
                 Assert.AreEqual("1 DATA\r\n" +
                                 "2 NOTE test sourcedata notes\r\n" +
                                 "2 AGNC test agency\r\n" +

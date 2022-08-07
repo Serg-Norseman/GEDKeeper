@@ -119,7 +119,7 @@ namespace GDModel
 
                     var iRec = new GDMIndividualRecord(null);
                     iRec.Events.Add(copyEvent);
-                    string buf1 = TestUtils.GetTagStreamText(iRec, 0);
+                    string buf1 = GEDCOMProvider.GetTagStreamText(iRec, 0);
                     Assert.AreEqual("0 INDI\r\n" +
                                     "1 SEX U\r\n" +
                                     "1 BIRT\r\n" +

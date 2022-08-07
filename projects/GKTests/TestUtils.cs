@@ -196,35 +196,6 @@ namespace GKTests
             Assert.IsNotNull(commRec, "commRec != null");
         }
 
-        public static string GetTagStreamText(GDMTag tag, int level, bool debugWrite = true)
-        {
-            GEDCOMProvider.DebugWrite = debugWrite;
-
-            string result;
-            using (MemoryStream stm = new MemoryStream()) {
-                using (StreamWriter fs = new StreamWriter(stm)) {
-                    if (tag is GDMRecord) {
-                        GEDCOMProvider.WriteRecordEx(fs, (GDMRecord)tag);
-                    } else {
-                        if (tag is GDMPersonalName) {
-                            GEDCOMProvider.WritePersonalName(fs, 1, tag);
-                        } else if (tag is GDMMultimediaLink) {
-                            GEDCOMProvider.WriteMultimediaLink(fs, 1, tag);
-                        } else if (tag is GDMSourceCitation) {
-                            GEDCOMProvider.WriteSourceCitation(fs, 1, tag);
-                        } else if (tag is GDMSourceData) {
-                            GEDCOMProvider.WriteSourceData(fs, 1, tag);
-                        } else {
-                            GEDCOMProvider.WriteBaseTag(fs, level, tag);
-                        }
-                    }
-                    fs.Flush();
-                    result = Encoding.ASCII.GetString(stm.ToArray());
-                }
-            }
-            return result;
-        }
-
         public static DateTime ParseDT(string dtx)
         {
             return DateTime.ParseExact(dtx, "dd.MM.yyyy", CultureInfo.InvariantCulture);

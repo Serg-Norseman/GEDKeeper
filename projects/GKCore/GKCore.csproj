@@ -417,6 +417,8 @@
     <EmbeddedResource Include="Resources\btn_accept.gif" />
     <EmbeddedResource Include="Resources\btn_cancel.gif" />
     <EmbeddedResource Include="Resources\btn_copy.gif" />
+    <EmbeddedResource Include="Resources\btn_cut.gif" />
+    <EmbeddedResource Include="Resources\btn_paste.gif" />
     <EmbeddedResource Include="Resources\btn_create_new.gif" />
     <EmbeddedResource Include="Resources\btn_down.gif" />
     <EmbeddedResource Include="Resources\btn_excel.gif" />

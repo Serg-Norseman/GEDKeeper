@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Types;
 using GKTests;
@@ -85,7 +86,7 @@ namespace GDModel
 
                     group2.Assign(groupRec);
 
-                    string buf = TestUtils.GetTagStreamText(group2, 0);
+                    string buf = GEDCOMProvider.GetTagStreamText(group2, 0);
                     Assert.AreEqual("0 @G4@ _GROUP\r\n" +
                                     "1 NAME Test Group\r\n" +
                                     "1 _MEMBER @I1@\r\n", buf);

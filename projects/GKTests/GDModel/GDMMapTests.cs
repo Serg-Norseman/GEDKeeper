@@ -19,7 +19,7 @@
  */
 
 using System;
-using GKTests;
+using GDModel.Providers.GEDCOM;
 using NUnit.Framework;
 
 namespace GDModel
@@ -49,7 +49,7 @@ namespace GDModel
                     evt.SetName("BIRT");
                     iRec.Events.Add(evt);
                     evt.Place.Map.Assign(map);
-                    string buf = TestUtils.GetTagStreamText(iRec, 1);
+                    string buf = GEDCOMProvider.GetTagStreamText(iRec, 1);
                     Assert.AreEqual("0 INDI\r\n" +
                                     "1 SEX U\r\n" +
                                     "1 BIRT\r\n" +

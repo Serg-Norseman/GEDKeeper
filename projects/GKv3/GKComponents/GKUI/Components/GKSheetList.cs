@@ -40,6 +40,9 @@ namespace GKUI.Components
         private readonly Button fBtnLinkJump;
         private readonly Button fBtnMoveUp;
         private readonly Button fBtnMoveDown;
+        private readonly Button fBtnCopy;
+        private readonly Button fBtnCut;
+        private readonly Button fBtnPaste;
         private readonly GKListView fList;
 
         private EnumSet<SheetButton> fButtons;
@@ -100,41 +103,15 @@ namespace GKUI.Components
 
         public GKSheetList()
         {
-            fBtnMoveDown = new Button();
-            fBtnMoveDown.Image = UIHelper.LoadResourceImage("Resources.btn_down.gif");
-            fBtnMoveDown.Style = "iconBtn";
-            fBtnMoveDown.ToolTip = LangMan.LS(LSID.LSID_RecordMoveDown);
-            fBtnMoveDown.Click += ItemMoveDown;
-
-            fBtnMoveUp = new Button();
-            fBtnMoveUp.Image = UIHelper.LoadResourceImage("Resources.btn_up.gif");
-            fBtnMoveUp.Style = "iconBtn";
-            fBtnMoveUp.ToolTip = LangMan.LS(LSID.LSID_RecordMoveUp);
-            fBtnMoveUp.Click += ItemMoveUp;
-
-            fBtnLinkJump = new Button();
-            fBtnLinkJump.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            fBtnLinkJump.Style = "iconBtn";
-            fBtnLinkJump.ToolTip = LangMan.LS(LSID.LSID_RecordGoto);
-            fBtnLinkJump.Click += ItemJump;
-
-            fBtnDelete = new Button();
-            fBtnDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            fBtnDelete.Style = "iconBtn";
-            fBtnDelete.ToolTip = LangMan.LS(LSID.LSID_MIRecordDelete);
-            fBtnDelete.Click += ItemDelete;
-
-            fBtnEdit = new Button();
-            fBtnEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            fBtnEdit.Style = "iconBtn";
-            fBtnEdit.ToolTip = LangMan.LS(LSID.LSID_MIRecordEdit);
-            fBtnEdit.Click += ItemEdit;
-
-            fBtnAdd = new Button();
-            fBtnAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            fBtnAdd.Style = "iconBtn";
-            fBtnAdd.ToolTip = LangMan.LS(LSID.LSID_MIRecordAdd);
-            fBtnAdd.Click += ItemAdd;
+            fBtnPaste = CreateButton("btnPaste", UIHelper.LoadResourceImage("Resources.btn_paste.gif"), LangMan.LS(LSID.LSID_Paste), ItemPaste);
+            fBtnCut = CreateButton("btnCut", UIHelper.LoadResourceImage("Resources.btn_cut.gif"), LangMan.LS(LSID.LSID_Cut), ItemCut);
+            fBtnCopy = CreateButton("btnCopy", UIHelper.LoadResourceImage("Resources.btn_copy.gif"), LangMan.LS(LSID.LSID_Copy), ItemCopy);
+            fBtnMoveDown = CreateButton("btnDown", UIHelper.LoadResourceImage("Resources.btn_down.gif"), LangMan.LS(LSID.LSID_RecordMoveDown), ItemMoveDown);
+            fBtnMoveUp = CreateButton("btnUp", UIHelper.LoadResourceImage("Resources.btn_up.gif"), LangMan.LS(LSID.LSID_RecordMoveUp), ItemMoveUp);
+            fBtnLinkJump = CreateButton("btnJump",  UIHelper.LoadResourceImage("Resources.btn_jump.gif"), LangMan.LS(LSID.LSID_RecordGoto), ItemJump);
+            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.LSID_MIRecordDelete), ItemDelete);
+            fBtnEdit = CreateButton("btnEdit", UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif"), LangMan.LS(LSID.LSID_MIRecordEdit), ItemEdit);
+            fBtnAdd = CreateButton( "btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.LSID_MIRecordAdd), ItemAdd);
 
             fList = new GKListView();
             fList.MouseDoubleClick += List_DoubleClick;
@@ -145,7 +122,7 @@ namespace GKUI.Components
             var toolbar = new StackLayout() {
                 Orientation = Orientation.Vertical,
                 Spacing = 4,
-                Items = { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown }
+                Items = { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste }
             };
 
             Content = new TableLayout() {
@@ -178,9 +155,11 @@ namespace GKUI.Components
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 fList.Dispose();
+                fBtnPaste.Dispose();
+                fBtnCut.Dispose();
+                fBtnCopy.Dispose();
                 fBtnLinkJump.Dispose();
                 fBtnMoveUp.Dispose();
                 fBtnMoveDown.Dispose();
@@ -189,6 +168,16 @@ namespace GKUI.Components
                 fBtnAdd.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public Button CreateButton(string name, Image image, string toolTip, EventHandler<EventArgs> click)
+        {
+            var btn = new Button();
+            btn.Style = "iconBtn";
+            btn.Image = image;
+            btn.ToolTip = toolTip;
+            btn.Click += click;
+            return btn;
         }
 
         public void Activate()
@@ -207,6 +196,9 @@ namespace GKUI.Components
                 fBtnLinkJump.Visible = fButtons.Contains(SheetButton.lbJump);
                 fBtnMoveUp.Visible = fButtons.Contains(SheetButton.lbMoveUp);
                 fBtnMoveDown.Visible = fButtons.Contains(SheetButton.lbMoveDown);
+                fBtnCopy.Visible = fButtons.Contains(SheetButton.lbCopy);
+                fBtnCut.Visible = fButtons.Contains(SheetButton.lbCut);
+                fBtnPaste.Visible = fButtons.Contains(SheetButton.lbPaste);
                 //fToolBar.Enabled = !fButtons.IsEmpty();
             } else {
                 EnumSet<RecordAction> allowedActions = fListModel.AllowedActions;
@@ -216,6 +208,9 @@ namespace GKUI.Components
                 fBtnLinkJump.Visible = allowedActions.Contains(RecordAction.raJump);
                 fBtnMoveUp.Visible = allowedActions.Contains(RecordAction.raMoveUp);
                 fBtnMoveDown.Visible = allowedActions.Contains(RecordAction.raMoveDown);
+                fBtnCopy.Visible = allowedActions.Contains(RecordAction.raCopy);
+                fBtnCut.Visible = allowedActions.Contains(RecordAction.raCut);
+                fBtnPaste.Visible = allowedActions.Contains(RecordAction.raPaste);
                 //fToolBar.Visible = !allowedActions.IsEmpty();
             }
         }
@@ -228,6 +223,9 @@ namespace GKUI.Components
             fBtnEdit.Enabled = !fReadOnly;
             fBtnMoveUp.Enabled = !fReadOnly;
             fBtnMoveDown.Enabled = !fReadOnly;
+            fBtnCopy.Enabled = !fReadOnly;
+            fBtnCut.Enabled = !fReadOnly;
+            fBtnPaste.Enabled = !fReadOnly;
 
             fList.BackgroundColor = (fReadOnly) ? SystemColors.Control : SystemColors.WindowBackground;
         }
@@ -239,8 +237,7 @@ namespace GKUI.Components
 
         private void List_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control)
-            {
+            if (e.Control) {
                 switch (e.Key) {
                     case Keys.I:
                         ItemAdd(sender, e);
@@ -250,6 +247,16 @@ namespace GKUI.Components
                         break;
                     case Keys.Enter:
                         ItemEdit(sender, e);
+                        break;
+
+                    case Keys.C:
+                        ItemCopy(sender, e);
+                        break;
+                    case Keys.X:
+                        ItemCut(sender, e);
+                        break;
+                    case Keys.V:
+                        ItemPaste(sender, e);
                         break;
                 }
             }
@@ -361,6 +368,35 @@ namespace GKUI.Components
             if (fReadOnly || itemData == null) return;
 
             var eArgs = new ModifyEventArgs(RecordAction.raMoveDown, itemData);
+            DoModify(eArgs);
+            RestoreSelected(eArgs.ItemData);
+        }
+
+        private void ItemCopy(object sender, EventArgs e)
+        {
+            object itemData = fList.GetSelectedData();
+            if (fReadOnly || itemData == null) return;
+
+            var eArgs = new ModifyEventArgs(RecordAction.raCopy, itemData);
+            DoModify(eArgs);
+            RestoreSelected(eArgs.ItemData);
+        }
+
+        private void ItemCut(object sender, EventArgs e)
+        {
+            object itemData = fList.GetSelectedData();
+            if (fReadOnly || itemData == null) return;
+
+            var eArgs = new ModifyEventArgs(RecordAction.raCut, itemData);
+            DoModify(eArgs);
+        }
+
+        private void ItemPaste(object sender, EventArgs e)
+        {
+            object itemData = fList.GetSelectedData();
+            if (fReadOnly) return;
+
+            var eArgs = new ModifyEventArgs(RecordAction.raPaste, null);
             DoModify(eArgs);
             RestoreSelected(eArgs.ItemData);
         }

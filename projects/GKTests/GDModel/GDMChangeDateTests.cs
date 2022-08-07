@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 using GKTests;
 using NUnit.Framework;
 
@@ -56,7 +57,7 @@ namespace GDModel
                     iRec.UID = "12345";
                     iRec.ChangeDate.Assign(chd2);
 
-                    string buf = TestUtils.GetTagStreamText(iRec, 0, false);
+                    string buf = GEDCOMProvider.GetTagStreamText(iRec, 0, false);
                     Assert.AreEqual("0 INDI\r\n" +
                                     "1 _UID 12345\r\n" +
                                     "1 CHAN\r\n" +
