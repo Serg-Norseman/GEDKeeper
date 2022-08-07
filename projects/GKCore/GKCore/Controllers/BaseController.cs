@@ -794,67 +794,73 @@ namespace GKCore.Controllers
             return result;
         }
 
+        private static string GetDeleteMessage(IBaseWindow baseWin, GDMRecord record)
+        {
+            string msg = "";
+            switch (record.RecordType) {
+                case GDMRecordType.rtIndividual:
+                    msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GDMIndividualRecord)record), true, false));
+                    break;
+
+                case GDMRecordType.rtFamily:
+                    msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString(baseWin.Context.Tree, (GDMFamilyRecord)record));
+                    break;
+
+                case GDMRecordType.rtNote: {
+                        string value = GKUtils.TruncateStrings(((GDMNoteRecord)(record)).Lines, GKData.NOTE_NAME_MAX_LENGTH);
+                        if (string.IsNullOrEmpty(value)) {
+                            value = string.Format("#{0}", record.GetId().ToString());
+                        }
+                        msg = string.Format(LangMan.LS(LSID.LSID_NoteDeleteQuery), value);
+                        break;
+                    }
+
+                case GDMRecordType.rtMultimedia:
+                    msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GDMMultimediaRecord)record).GetFileTitle());
+                    break;
+
+                case GDMRecordType.rtSource:
+                    msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GDMSourceRecord)record).ShortTitle);
+                    break;
+
+                case GDMRecordType.rtRepository:
+                    msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GDMRepositoryRecord)record).RepositoryName);
+                    break;
+
+                case GDMRecordType.rtGroup:
+                    msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GDMGroupRecord)record).GroupName);
+                    break;
+
+                case GDMRecordType.rtResearch:
+                    msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GDMResearchRecord)record).ResearchName);
+                    break;
+
+                case GDMRecordType.rtTask:
+                    msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery),
+                                        GKUtils.GetTaskGoalStr(baseWin.Context.Tree, (GDMTaskRecord)record));
+                    break;
+
+                case GDMRecordType.rtCommunication:
+                    msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GDMCommunicationRecord)record).CommName);
+                    break;
+
+                case GDMRecordType.rtLocation:
+                    msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GDMLocationRecord)record).LocationName);
+                    break;
+            }
+            return msg;
+        }
+
         public static bool DeleteRecord(IBaseWindow baseWin, GDMRecord record, bool confirm)
         {
-            bool result = false;
+            bool result;
 
-            if (record != null) {
-                string msg = "";
-                switch (record.RecordType) {
-                    case GDMRecordType.rtIndividual:
-                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GDMIndividualRecord)record), true, false));
-                        break;
-
-                    case GDMRecordType.rtFamily:
-                        msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString(baseWin.Context.Tree, (GDMFamilyRecord)record));
-                        break;
-
-                    case GDMRecordType.rtNote:
-                        {
-                            string value = GKUtils.TruncateStrings(((GDMNoteRecord) (record)).Lines, GKData.NOTE_NAME_MAX_LENGTH);
-                            if (string.IsNullOrEmpty(value))
-                            {
-                                value = string.Format("#{0}", record.GetId().ToString());
-                            }
-                            msg = string.Format(LangMan.LS(LSID.LSID_NoteDeleteQuery), value);
-                            break;
-                        }
-
-                    case GDMRecordType.rtMultimedia:
-                        msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GDMMultimediaRecord)record).GetFileTitle());
-                        break;
-
-                    case GDMRecordType.rtSource:
-                        msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GDMSourceRecord)record).ShortTitle);
-                        break;
-
-                    case GDMRecordType.rtRepository:
-                        msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GDMRepositoryRecord)record).RepositoryName);
-                        break;
-
-                    case GDMRecordType.rtGroup:
-                        msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GDMGroupRecord)record).GroupName);
-                        break;
-
-                    case GDMRecordType.rtResearch:
-                        msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GDMResearchRecord)record).ResearchName);
-                        break;
-
-                    case GDMRecordType.rtTask:
-                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery),
-                                            GKUtils.GetTaskGoalStr(baseWin.Context.Tree, (GDMTaskRecord)record));
-                        break;
-
-                    case GDMRecordType.rtCommunication:
-                        msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GDMCommunicationRecord)record).CommName);
-                        break;
-
-                    case GDMRecordType.rtLocation:
-                        msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GDMLocationRecord)record).LocationName);
-                        break;
-                }
-
-                if (confirm && AppHost.StdDialogs.ShowQuestionYN(msg)) {
+            if (record == null) {
+                result = false;
+            } else {
+                if (confirm && !AppHost.StdDialogs.ShowQuestionYN(GetDeleteMessage(baseWin, record))) {
+                    result = false;
+                } else {
                     result = baseWin.Context.DeleteRecord(record);
                 }
             }
