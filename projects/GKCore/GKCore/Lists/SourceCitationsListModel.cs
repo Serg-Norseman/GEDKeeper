@@ -39,10 +39,10 @@ namespace GKCore.Lists
                 RecordAction.raMoveUp, RecordAction.raMoveDown,
                 RecordAction.raCopy, RecordAction.raPaste);
 
-            fListColumns.AddColumn(LSID.LSID_Author, 70, false);
-            fListColumns.AddColumn(LSID.LSID_Title, 180, false);
-            fListColumns.AddColumn(LSID.LSID_Page, 90, false);
+            fListColumns.AddColumn(LSID.LSID_Title, 260, false);
+            fListColumns.AddColumn(LSID.LSID_Page, 80, false);
             fListColumns.AddColumn(LSID.LSID_Certainty, 220, false);
+            fListColumns.AddColumn(LSID.LSID_Author, 70, false);
             fListColumns.ResetDefaults();
         }
 
@@ -57,16 +57,16 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = fSourceRec.Originator.Lines.Text.Trim();
-                    break;
-                case 1:
                     result = fSourceRec.ShortTitle;
                     break;
-                case 2:
+                case 1:
                     result = fFetchedRec.Page;
                     break;
-                case 3:
+                case 2:
                     result = LangMan.LS(GKData.CertaintyAssessments[fFetchedRec.GetValidCertaintyAssessment()]);
+                    break;
+                case 3:
+                    result = fSourceRec.Originator.Lines.Text.Trim();
                     break;
             }
             return result;
