@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -263,18 +263,19 @@ namespace GKCore.Export
                 WriteEventList(person, evList);
             }
 
-            if (fOptions.PedigreeOptions.IncludeNotes && person.IRec.HasNotes) {
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPNotes) + ":", fTextFont);
+            WriteNotes(person.IRec);
+        }
 
-                fWriter.BeginList();
+        private void WriteNotes(IGDMStructWithNotes swn, string indent = "")
+        {
+            if (swn != null && fOptions.PedigreeOptions.IncludeNotes && swn.HasNotes) {
+                fWriter.AddParagraph(indent + LangMan.LS(LSID.LSID_RPNotes) + ":", fTextFont);
 
-                int notesCount = person.IRec.Notes.Count;
+                int notesCount = swn.Notes.Count;
                 for (int j = 0; j < notesCount; j++) {
-                    GDMLines noteLines = fTree.GetNoteLines(person.IRec.Notes[j]);
-                    fWriter.AddListItem(" " + GKUtils.MergeStrings(noteLines), fTextFont);
+                    GDMLines noteLines = fTree.GetNoteLines(swn.Notes[j]);
+                    fWriter.AddParagraph(indent + " — " + GKUtils.MergeStrings(noteLines), fTextFont);
                 }
-
-                fWriter.EndList();
             }
         }
 
@@ -354,16 +355,12 @@ namespace GKCore.Export
                 GDMCustomEvent evt = evObj.Event;
                 string li;
 
+                fWriter.BeginListItem();
+
                 if (evObj.IRec == person.IRec) {
-                    string st = GKUtils.GetEventName(evt);
+                    li = GKUtils.GetEventStr(evt);
 
-                    string dt = GKUtils.GEDCOMEventToDateStr(evt, dateFormat, false);
-                    li = dt + ": " + st + ".";
-                    if (evt.HasPlace && evt.Place.StringValue != "") {
-                        li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
-                    }
-
-                    fWriter.AddListItem(" " + li, fTextFont);
+                    fWriter.AddParagraphChunk(" " + li, fTextFont);
                 } else {
                     string dt = (evt == null) ? "?" : GKUtils.GEDCOMEventToDateStr(evt, dateFormat, false);
 
@@ -373,8 +370,13 @@ namespace GKCore.Export
                     PedigreePerson prs = FindPerson(evObj.IRec);
                     string id = (prs != null) ? prs.Id : "";
 
-                    fWriter.AddListItemLink(" " + li + " ", fTextFont, id, fLinkFont);
+                    fWriter.AddParagraphChunk(" " + li + " ", fTextFont);
+                    fWriter.AddParagraphChunkLink(id, fLinkFont, id);
                 }
+
+                WriteNotes(evt, "\t");
+
+                fWriter.EndListItem();
             }
 
             fWriter.EndList();
@@ -499,6 +501,7 @@ namespace GKCore.Export
             fLinkFont = fWriter.CreateFont("", 10f/*8f*/, false, true, clrBlue);
             fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, clrBlack);
             fSupText = fWriter.CreateFont("", (isRtf ? 12f : 5f) /*5f*/, false, false, clrBlue);
+            var chapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);
 
             fFormat = fOptions.PedigreeOptions.Format;
 
@@ -506,8 +509,6 @@ namespace GKCore.Export
 
             var titleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
             fWriter.AddParagraph(fTitle, titleFont, TextAlignment.taCenter);
-
-            var chapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);
 
             fPersonList = new List<PedigreePerson>();
             fSourceList = new StringList();

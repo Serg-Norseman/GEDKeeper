@@ -75,22 +75,6 @@ namespace GKCore.Export
         {
         }
 
-        public override void AddParagraph(string text, IFont font, TextAlignment alignment)
-        {
-        }
-
-        public override void AddParagraph(string text, IFont font)
-        {
-        }
-
-        public override void AddParagraphAnchor(string text, IFont font, string anchor)
-        {
-        }
-
-        public override void AddParagraphLink(string text, IFont font, string link)
-        {
-        }
-
         public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
         {
             return null;
@@ -109,6 +93,14 @@ namespace GKCore.Export
         }
 
         public override void EndList()
+        {
+        }
+
+        public override void BeginListItem()
+        {
+        }
+
+        public override void EndListItem()
         {
         }
 
@@ -139,10 +131,6 @@ namespace GKCore.Export
         }
 
         public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false)
-        {
-        }
-
-        public override void AddNote(string text, IFont font)
         {
         }
 

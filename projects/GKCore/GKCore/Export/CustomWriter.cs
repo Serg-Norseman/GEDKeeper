@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -85,10 +85,26 @@ namespace GKCore.Export
         public abstract void EndWrite();
         public abstract void EnablePageNumbers();
 
-        public abstract void AddParagraph(string text, IFont font);
-        public abstract void AddParagraph(string text, IFont font, TextAlignment alignment);
-        public abstract void AddParagraphAnchor(string text, IFont font, string anchor);
-        public abstract void AddParagraphLink(string text, IFont font, string link);
+        public void AddParagraph(string text, IFont font, TextAlignment alignment = TextAlignment.taLeft)
+        {
+            BeginParagraph(alignment, 0, 0, 0);
+            AddParagraphChunk(text, font);
+            EndParagraph();
+        }
+
+        public void AddParagraphAnchor(string text, IFont font, string anchor)
+        {
+            BeginParagraph(TextAlignment.taLeft, 0, 0, 0);
+            AddParagraphChunkAnchor(text, font, anchor);
+            EndParagraph();
+        }
+
+        public void AddParagraphLink(string text, IFont font, string link)
+        {
+            BeginParagraph(TextAlignment.taLeft, 0, 0, 0);
+            AddParagraphChunkLink(text, font, link);
+            EndParagraph();
+        }
 
         public abstract IFont CreateFont(string name, float size, bool bold, bool underline, IColor color);
         public abstract void NewPage();
@@ -98,9 +114,24 @@ namespace GKCore.Export
         public abstract void EndMulticolumns();
 
         public abstract void BeginList();
-        public abstract void AddListItem(string text, IFont font);
-        public abstract void AddListItemLink(string text, IFont font, string link, IFont linkFont);
         public abstract void EndList();
+        public abstract void BeginListItem();
+        public abstract void EndListItem();
+
+        public virtual void AddListItem(string text, IFont font)
+        {
+            BeginListItem();
+            AddParagraphChunk(text, font);
+            EndListItem();
+        }
+
+        public virtual void AddListItemLink(string text, IFont font, string link, IFont linkFont)
+        {
+            BeginListItem();
+            AddParagraphChunk(text, font);
+            AddParagraphChunkLink(link, linkFont, link);
+            EndListItem();
+        }
 
         public abstract void BeginParagraph(TextAlignment alignment,
                                             float spacingBefore, float spacingAfter,
@@ -109,8 +140,6 @@ namespace GKCore.Export
         public abstract void AddParagraphChunkAnchor(string text, IFont font, string anchor);
         public abstract void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false);
         public abstract void EndParagraph();
-
-        public abstract void AddNote(string text, IFont font);
 
         public abstract void AddImage(IImage image);
 

@@ -21,6 +21,7 @@
 using BSLib.Design.Graphics;
 using Elistia.DotNetRtfWriter;
 using BSLib;
+using System.Collections.Generic;
 
 namespace GKCore.Export
 {
@@ -64,13 +65,14 @@ namespace GKCore.Export
         private readonly Align[] iAlignments = new Align[] { Align.Left, Align.Center, Align.Right, Align.FullyJustify };
 
         private RtfDocument fDocument;
-        private RtfParagraph fParagraph;
+        private Stack<RtfParagraph> fStack;
         private RtfTable fTable;
         private int fTableCol;
         private int fTableRow;
 
         public RTFWriter()
         {
+            fStack = new Stack<RtfParagraph>();
         }
 
         public override bool SupportedText()
@@ -106,8 +108,28 @@ namespace GKCore.Export
         {
         }
 
+        public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
+        {
+            if (string.IsNullOrEmpty(name)) name = "Times New Roman";
+
+            FontStruct fntStr = new FontStruct();
+            fntStr.FD = fDocument.CreateFont(name);
+            fntStr.OriginalColor = color;
+            fntStr.Color = fDocument.CreateColor(new RtfColor(color.GetCode()));
+            fntStr.Size = size;
+            fntStr.Bold = bold;
+            fntStr.Underline = underline;
+
+            return new FontHandler(fntStr);
+        }
+
+        #region Internal support
+
         private static RtfCharFormat AddParagraphChunk(RtfParagraph par, string text, IFont font)
         {
+            if (par == null || font == null || string.IsNullOrEmpty(text))
+                return null;
+
             FontStruct fntStr = ((FontHandler)font).Handle;
             par.DefaultCharFormat.Font = fntStr.FD;
 
@@ -125,47 +147,24 @@ namespace GKCore.Export
             return fmt;
         }
 
-        public override void AddParagraph(string text, IFont font, TextAlignment alignment)
+        private RtfParagraph GetCurrentContainer<T>() where T : RtfParagraph
         {
-            RtfParagraph par = fDocument.AddParagraph();
-            par.Alignment = iAlignments[(int)alignment];
-            AddParagraphChunk(par, text, font);
+            var item = (fStack.Count == 0) ? null : fStack.Peek();
+            while (item != null && !item.GetType().IsDerivedFromOrImplements(typeof(T))) {
+                fStack.Pop();
+                item = (fStack.Count == 0) ? null : fStack.Peek();
+            }
+            return item;
         }
 
-        public override void AddParagraph(string text, IFont font)
+        private void EndContainer()
         {
-            RtfParagraph par = fDocument.AddParagraph();
-            AddParagraphChunk(par, text, font);
+            var item = (fStack.Count == 0) ? null : fStack.Pop();
+            if (item != null) {
+            }
         }
 
-        public override void AddParagraphAnchor(string text, IFont font, string anchor)
-        {
-            RtfParagraph par = fDocument.AddParagraph();
-            RtfCharFormat fmt = AddParagraphChunk(par, text, font);
-            fmt.Bookmark = anchor;
-        }
-
-        public override void AddParagraphLink(string text, IFont font, string link)
-        {
-            RtfParagraph par = fDocument.AddParagraph();
-            RtfCharFormat fmt = AddParagraphChunk(par, text, font);
-            fmt.LocalHyperlink = link;
-        }
-
-        public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
-        {
-            if (string.IsNullOrEmpty(name)) name = "Times New Roman";
-
-            FontStruct fntStr = new FontStruct();
-            fntStr.FD = fDocument.CreateFont(name);
-            fntStr.OriginalColor = color;
-            fntStr.Color = fDocument.CreateColor(new RtfColor(color.GetCode()));
-            fntStr.Size = size;
-            fntStr.Bold = bold;
-            fntStr.Underline = underline;
-
-            return new FontHandler(fntStr);
-        }
+        #endregion
 
         public override void BeginMulticolumns(int columnCount, float columnSpacing)
         {
@@ -183,70 +182,88 @@ namespace GKCore.Export
         {
         }
 
+        public override void BeginListItem()
+        {
+            BeginParagraph(TextAlignment.taLeft, 0, 0, 0);
+        }
+
+        public override void EndListItem()
+        {
+            EndContainer();
+        }
+
         public override void AddListItem(string text, IFont font)
         {
-            RtfParagraph par = fDocument.AddParagraph();
+            BeginListItem();
 
+            var p = GetCurrentContainer<RtfParagraph>();
             FontStruct fntStr = ((FontHandler)font).Handle;
             var symFont = CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
+            AddParagraphChunk(p, "\t· ", symFont);
 
-            AddParagraphChunk(par, "\t· ", symFont);
-            AddParagraphChunk(par, text, font);
+            AddParagraphChunk(text, font);
+
+            EndListItem();
         }
 
         public override void AddListItemLink(string text, IFont font, string link, IFont linkFont)
         {
-            RtfParagraph par = fDocument.AddParagraph();
+            BeginListItem();
 
+            var p = GetCurrentContainer<RtfParagraph>();
             FontStruct fntStr = ((FontHandler)font).Handle;
             var symFont = CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
+            AddParagraphChunk(p, "\t· ", symFont);
 
-            AddParagraphChunk(par, "\t· ", symFont);
-            AddParagraphChunk(par, text, font);
+            AddParagraphChunk(text, font);
+            AddParagraphChunkLink(link, linkFont, link);
 
-            if (!string.IsNullOrEmpty(link)) {
-                RtfCharFormat fmt = AddParagraphChunk(par, link, linkFont);
-                fmt.LocalHyperlink = link;
-            }
+            EndListItem();
         }
 
         public override void BeginParagraph(TextAlignment alignment,
                                             float spacingBefore, float spacingAfter,
                                             float indent = 0.0f, bool keepTogether = false)
         {
-            fParagraph = fDocument.AddParagraph();
-            fParagraph.Alignment = iAlignments[(int)alignment];
-            
-            var margins = fParagraph.Margins;
+            var paragraph = fDocument.AddParagraph();
+            paragraph.Alignment = iAlignments[(int)alignment];
+            paragraph.FirstLineIndent = indent;
+
+            var margins = paragraph.Margins;
             margins[Direction.Top] = spacingBefore;
             margins[Direction.Bottom] = spacingAfter;
+
+            fStack.Push(paragraph);
         }
 
         public override void EndParagraph()
         {
+            EndContainer();
         }
 
         public override void AddParagraphChunk(string text, IFont font)
         {
-            AddParagraphChunk(fParagraph, text, font);
+            var p = GetCurrentContainer<RtfParagraph>();
+            AddParagraphChunk(p, text, font);
         }
 
         public override void AddParagraphChunkAnchor(string text, IFont font, string anchor)
         {
-            RtfCharFormat fmt = AddParagraphChunk(fParagraph, text, font);
-            fmt.Bookmark = anchor;
+            var p = GetCurrentContainer<RtfParagraph>();
+            RtfCharFormat fmt = AddParagraphChunk(p, text, font);
+            if (fmt != null) {
+                fmt.Bookmark = anchor;
+            }
         }
 
         public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false)
         {
-            RtfCharFormat fmt = AddParagraphChunk(fParagraph, text, font);
-            if (sup) fmt.FontStyle.AddStyle(FontStyleFlag.Super);
-            fmt.LocalHyperlink = link;
-        }
-
-        public override void AddNote(string text, IFont font)
-        {
-            
+            var p = GetCurrentContainer<RtfParagraph>();
+            RtfCharFormat fmt = AddParagraphChunk(p, text, font);
+            if (fmt != null) {
+                if (sup) fmt.FontStyle.AddStyle(FontStyleFlag.Super);
+                fmt.LocalHyperlink = link;
+            }
         }
 
         public override void AddImage(IImage image)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,6 +32,7 @@ using itImage = iTextSharp.text.Image;
 using itTable = iTextSharp.text.pdf.PdfPTable;
 using itCell = iTextSharp.text.pdf.PdfPCell;
 using itRectangle = iTextSharp.text.Rectangle;
+using System.Collections.Generic;
 
 namespace GKCore.Export
 {
@@ -99,14 +100,15 @@ namespace GKCore.Export
         private float fColumnWidth;
         private SimpleColumnText fColumns;
         private Document fDocument;
-        private List fList;
         private bool fMulticolumns;
         private PdfWriter fPdfWriter;
-        private Paragraph p;
         private itTable fTable;
+        private Stack<ITextElementArray> fStack;
 
         public PDFWriter()
         {
+            fStack = new Stack<ITextElementArray>();
+
             //fBaseFont = BaseFont.CreateFont(GKUtils.GetLangsPath() + "fonts/FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
 
             Stream fontStream = GetType().Assembly.GetManifestResourceStream("Resources.fonts.FreeSans.ttf");
@@ -181,11 +183,7 @@ namespace GKCore.Export
         {
             var pg = new Paragraph(Chunk.NEWLINE) { SpacingAfter = spacingAfter };
 
-            if (fMulticolumns) {
-                fColumns.AddElement(pg);
-            } else {
-                fDocument.Add(pg);
-            }
+            AddElement(pg);
         }
 
         public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
@@ -199,54 +197,41 @@ namespace GKCore.Export
             return new FontHandler(new itFont(fBaseFont, size, style, clr));
         }
 
-        public override void AddParagraph(string text, IFont font)
-        {
-            var pg = new Paragraph(text, ((FontHandler)font).Handle) { Alignment = Element.ALIGN_LEFT };
+        #region Internal support
 
+        private void AddElement(IElement o)
+        {
             if (fMulticolumns) {
-                fColumns.AddElement(pg);
+                fColumns.AddElement(o);
             } else {
-                fDocument.Add(pg);
+                fDocument.Add(o);
             }
         }
 
-        public override void AddParagraph(string text, IFont font, TextAlignment alignment)
+        private ITextElementArray GetCurrentContainer<T>() where T : ITextElementArray
         {
-            int al = iAlignments[(int)alignment];
-            
-            var pg = new Paragraph(text, ((FontHandler)font).Handle) { Alignment = al };
+            var item = (fStack.Count == 0) ? null : fStack.Peek();
+            while (item != null && !item.GetType().IsDerivedFromOrImplements(typeof(T))) {
+                fStack.Pop();
+                item = (fStack.Count == 0) ? null : fStack.Peek();
+            }
+            return item;
+        }
 
-            if (fMulticolumns) {
-                fColumns.AddElement(pg);
-            } else {
-                fDocument.Add(pg);
+        private void EndContainer()
+        {
+            var item = (fStack.Count == 0) ? null : fStack.Pop();
+            if (item != null) {
+                var cont = (fStack.Count == 0) ? null : fStack.Peek();
+                if (cont != null) {
+                    cont.Add(item);
+                } else {
+                    AddElement(item);
+                }
             }
         }
 
-        public override void AddParagraphAnchor(string text, IFont font, string anchor)
-        {
-            Chunk chunk = new Chunk(text, ((FontHandler)font).Handle);
-            chunk.SetLocalDestination(anchor);
-            var pg = new Paragraph(chunk);
-
-            if (fMulticolumns) {
-                fColumns.AddElement(pg);
-            } else {
-                fDocument.Add(pg);
-            }
-        }
-
-        public override void AddParagraphLink(string text, IFont font, string link)
-        {
-            Paragraph pg = new Paragraph();
-            pg.Add(new Chunk(text, ((FontHandler)font).Handle).SetLocalGoto(link));
-
-            if (fMulticolumns) {
-                fColumns.AddElement(pg);
-            } else {
-                fDocument.Add(pg);
-            }
-        }
+        #endregion
 
         public override void BeginMulticolumns(int columnCount, float columnSpacing)
         {
@@ -263,65 +248,57 @@ namespace GKCore.Export
 
         public override void BeginList()
         {
-            fList = new List(List.UNORDERED);
-            fList.SetListSymbol("\u2022");
-            fList.IndentationLeft = 10f;
+            var list = new List(List.UNORDERED);
+            list.SetListSymbol("\u2022");
+            list.IndentationLeft = 10f;
+
+            fStack.Push(list);
         }
 
         public override void EndList()
         {
-            if (fMulticolumns) {
-                fColumns.AddElement(fList);
-            } else {
-                fDocument.Add(fList);
-            }
+            EndContainer();
         }
 
-        public override void AddListItem(string text, IFont font)
+        public override void BeginListItem()
         {
-            fList.Add(new ListItem(new Chunk(text, ((FontHandler)font).Handle)));
+            var listItem = new ListItem();
+            fStack.Push(listItem);
         }
 
-        public override void AddListItemLink(string text, IFont font, string link, IFont linkFont)
+        public override void EndListItem()
         {
-            Paragraph p1 = new Paragraph();
-            p1.Add(new Chunk(text, ((FontHandler)font).Handle));
-
-            if (!string.IsNullOrEmpty(link)) {
-                p1.Add(new Chunk(link, ((FontHandler)linkFont).Handle).SetLocalGoto(link));
-            }
-
-            fList.Add(new ListItem(p1));
+            EndContainer();
         }
 
         public override void BeginParagraph(TextAlignment alignment,
                                             float spacingBefore, float spacingAfter,
                                             float indent = 0.0f, bool keepTogether = false)
         {
-            p = new Paragraph();
+            var p = new Paragraph();
             p.Alignment = iAlignments[(int)alignment];
             p.SpacingBefore = spacingBefore;
             p.SpacingAfter = spacingAfter;
             p.IndentationLeft = indent;
             p.KeepTogether = keepTogether;
+
+            fStack.Push(p);
         }
 
         public override void EndParagraph()
         {
-            if (fMulticolumns) {
-                fColumns.AddElement(p);
-            } else {
-                fDocument.Add(p);
-            }
+            EndContainer();
         }
 
         public override void AddParagraphChunk(string text, IFont font)
         {
+            var p = GetCurrentContainer<ITextElementArray>();
             p.Add(new Chunk(text, ((FontHandler)font).Handle));
         }
 
         public override void AddParagraphChunkAnchor(string text, IFont font, string anchor)
         {
+            var p = GetCurrentContainer<ITextElementArray>();
             p.Add(new Chunk(text, ((FontHandler)font).Handle).SetLocalDestination(anchor));
         }
 
@@ -336,16 +313,12 @@ namespace GKCore.Export
                 chunk.SetLocalGoto(link);
                 //chunk.SetUnderline(0.5f, 3f);
             }
-            
+
+            var p = GetCurrentContainer<ITextElementArray>();
             p.Add(chunk);
         }
 
-        public override void AddNote(string text, IFont font)
-        {
-            
-        }
-
-        // FIXME: add to other writers?
+        // FIXME: unused; add to other writers?
         public void AddLineSeparator()
         {
             var line1 = new it.pdf.draw.LineSeparator(0.0f, 100.0f, BaseColor.BLACK, Element.ALIGN_LEFT, 1);
@@ -370,11 +343,7 @@ namespace GKCore.Export
                 //Paragraph imgpar = new Paragraph(new Chunk(img, 0, 0, true));
                 //imgpar.KeepTogether = true;
 
-                if (fMulticolumns) {
-                    fColumns.AddElement(img);
-                } else {
-                    fDocument.Add(img);
-                }
+                AddElement(img);
             }
         }
 
@@ -466,13 +435,13 @@ namespace GKCore.Export
     internal class SimpleColumnText : ColumnText
     {
         private readonly Document fDocument;
-        private readonly System.Collections.Generic.List<Rectangle> fColumns;
+        private readonly List<itRectangle> fColumns;
         private int fCurrentColumn;
 
         public SimpleColumnText(Document document, PdfContentByte content, int columnCount, float columnSpacing) : base(content)
         {
             fDocument = document;
-            fColumns = new System.Collections.Generic.List<Rectangle>();
+            fColumns = new List<itRectangle>();
             fCurrentColumn = 0;
             CalculateColumnBoundries(columnCount, columnSpacing);
         }

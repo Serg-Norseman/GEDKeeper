@@ -595,6 +595,11 @@ namespace GKCore
             return result;
         }
 
+        public static bool IsAttribute(GDMCustomEvent evt)
+        {
+            return (evt != null && GetPersonEventKindBySign(evt.GetTagName()) == PersonEventKind.ekFact);
+        }
+
         public static PersonEventKind GetPersonEventKindBySign(string sign)
         {
             int idx = GetPersonEventIndex(sign);
@@ -671,6 +676,20 @@ namespace GKCore
                 }
             }
             return st + ": " + iAttr.StringValue + place;
+        }
+
+        public static string GetEventStr(GDMCustomEvent evt)
+        {
+            string st = GetEventName(evt);
+            string dt = GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false);
+
+            string attrVal = (IsAttribute(evt) && !string.IsNullOrEmpty(evt.StringValue)) ? string.Format(" `{0}`", evt.StringValue) : string.Empty;
+
+            string result = dt + ": " + st + attrVal + ".";
+            if (evt.HasPlace && evt.Place.StringValue != "") {
+                result = result + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
+            }
+            return result;
         }
 
         public static string GetEventDesc(GDMTree tree, GDMCustomEvent evt, bool hyperLink = true)

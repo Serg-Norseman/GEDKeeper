@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -115,26 +115,6 @@ namespace GKCore.Export
         {
         }
 
-        public override void AddParagraph(string text, IFont font, TextAlignment alignment)
-        {
-            fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\">"+text+"</p>");
-        }
-
-        public override void AddParagraph(string text, IFont font)
-        {
-            fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\">"+text+"</p>");
-        }
-
-        public override void AddParagraphAnchor(string text, IFont font, string anchor)
-        {
-            fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\"><a name=\""+anchor+"\">"+text+"</a></p>");
-        }
-
-        public override void AddParagraphLink(string text, IFont font, string link)
-        {
-            fStream.WriteLine("<p class=\""+((FontHandler)font).Handle+"\"><a href=\"#"+link+"\">"+text+"</a></p>");
-        }
-
         public override IFont CreateFont(string name, float size, bool bold, bool underline, IColor color)
         {
             string style;
@@ -170,19 +150,14 @@ namespace GKCore.Export
             fStream.WriteLine("</ul>");
         }
 
-        public override void AddListItem(string text, IFont font)
+        public override void BeginListItem()
         {
-            fStream.WriteLine("<li class=\""+((FontHandler)font).Handle+"\">"+text+"</li>");
+            fStream.WriteLine("<li>");
         }
 
-        public override void AddListItemLink(string text, IFont font, string link, IFont linkFont)
+        public override void EndListItem()
         {
-            string alink = "";
-            if (!string.IsNullOrEmpty(link)) {
-                alink = "<a href=\"#" + link + "\">" + link + "</a>";
-            }
-
-            fStream.WriteLine("<li class=\""+((FontHandler)font).Handle+"\">" + text + alink + "</li>");
+            fStream.WriteLine("</li>");
         }
 
         public override void BeginParagraph(TextAlignment alignment,
@@ -199,23 +174,23 @@ namespace GKCore.Export
 
         public override void AddParagraphChunk(string text, IFont font)
         {
-            fStream.WriteLine(text);
+            fStream.WriteLine("<span class=\"" + ((FontHandler)font).Handle + "\">" + text + "</span>");
         }
 
         public override void AddParagraphChunkAnchor(string text, IFont font, string anchor)
         {
-            fStream.WriteLine("<a name=\""+anchor+"\">"+text+"</a>");
+            fStream.WriteLine("<a name=\""+anchor+"\">");
+            AddParagraphChunk(text, font);
+            fStream.WriteLine("</a>");
         }
 
         public override void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false)
         {
+            fStream.WriteLine("<a href=\"#" + link + "\">");
             if (sup) fStream.WriteLine("<sup>");
-            fStream.WriteLine("<a href=\"#"+link+"\">"+text+"</a>");
+            AddParagraphChunk(text, font);
             if (sup) fStream.WriteLine("</sup>");
-        }
-
-        public override void AddNote(string text, IFont font)
-        {
+            fStream.WriteLine("</a>");
         }
 
         public override void AddImage(IImage image)
