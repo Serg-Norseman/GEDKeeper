@@ -109,7 +109,7 @@ namespace GKUI.Forms
 
         private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            //fTempColumns.OrderedColumns[e.Index].CurActive = (e.NewValue == CheckState.Checked);
+            fController.TempColumns.OrderedColumns[e.Index].CurActive = (e.NewValue == CheckState.Checked);
         }
 
         public void SetPage(OptionsPage page)

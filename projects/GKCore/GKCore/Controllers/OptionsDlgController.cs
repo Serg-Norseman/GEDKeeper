@@ -41,6 +41,11 @@ namespace GKCore.Controllers
             get { return fOptions; }
         }
 
+        public IListColumns TempColumns
+        {
+            get { return fTempColumns; }
+        }
+
 
         public OptionsDlgController(IOptionsDlg view) : base(view)
         {
