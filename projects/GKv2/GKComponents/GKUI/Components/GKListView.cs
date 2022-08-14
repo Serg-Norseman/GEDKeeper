@@ -749,44 +749,46 @@ namespace GKUI.Components
             }
         }
 
-        private void SelectItem(GKListItem item)
+        private void SelectItem(int index, GKListItem item)
         {
             if (item != null) {
                 SelectedIndices.Clear();
                 item.Selected = true;
-                item.EnsureVisible();
+
+                // in Mono `item.EnsureVisible()` doesn't work
+                //item.EnsureVisible();
+
+                EnsureVisible(index);
             }
         }
 
         public void SelectItem(int index)
         {
             if (index >= 0 && index < Items.Count) {
-                var item = Items[index] as GKListItem;
-                SelectItem(item);
+                var item = (GKListItem)Items[index];
+                SelectItem(index, item);
             }
         }
 
         public void SelectItem(object rowData)
         {
+            if (rowData == null)
+                return;
+
             try {
                 if (fListMan != null) {
                     // "virtual" mode
                     int idx = fListMan.IndexOfItem(rowData);
                     if (idx >= 0) {
-                        ListViewItem item = Items[idx];
-
-                        SelectedIndices.Clear();
-                        item.Selected = true;
-                        // in Mono `item.EnsureVisible()` doesn't work
-                        EnsureVisible(idx);
+                        var item = (GKListItem)Items[idx];
+                        SelectItem(idx, item);
                     }
                 } else {
                     int num = Items.Count;
                     for (int i = 0; i < num; i++) {
                         var item = (GKListItem)Items[i];
-
                         if (item.Data == rowData) {
-                            SelectItem(item);
+                            SelectItem(i, item);
                             return;
                         }
                     }

@@ -99,7 +99,7 @@ namespace GKCore.MVP
         public void JumpToRecord(IGDMPointerHost pointer)
         {
             if (pointer != null && Accept()) {
-                fBase.SelectRecordByXRef(pointer.XRef);
+                fBase.SelectRecordByXRef(pointer.XRef, true);
                 fView.Close();
             }
         }
