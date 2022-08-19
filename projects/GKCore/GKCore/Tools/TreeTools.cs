@@ -538,6 +538,7 @@ namespace GKCore.Tools
             cdStgNotFound,
             cdArcNotFound,
             cdFileNotFound,
+            cdHalfLink
         }
 
         public enum CheckSolve
@@ -610,9 +611,91 @@ namespace GKCore.Tools
             }
         }
 
+        private static void CheckIndividualLinks(GDMTree tree, GDMIndividualRecord iRec, List<CheckObj> checksList)
+        {
+            for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--) {
+                var sfl = iRec.SpouseToFamilyLinks[i];
+                if (sfl == null) {
+                    iRec.SpouseToFamilyLinks.DeleteAt(i);
+                    continue;
+                }
+
+                GDMFamilyRecord family = tree.GetPtrValue(sfl);
+                if (family == null) {
+                    iRec.SpouseToFamilyLinks.DeleteAt(i);
+                    continue;
+                }
+
+                if (!family.HasSpouse(iRec)) {
+                    CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdHalfLink, CheckSolve.csSkip);
+                    checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonHasHalfLinkOfSpouseToFamily), iRec.XRef, family.XRef);
+                    checksList.Add(checkObj);
+                }
+            }
+
+            for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--) {
+                var cfl = iRec.ChildToFamilyLinks[i];
+                if (cfl == null) {
+                    iRec.ChildToFamilyLinks.DeleteAt(i);
+                    continue;
+                }
+
+                GDMFamilyRecord family = tree.GetPtrValue(cfl);
+                if (family == null) {
+                    iRec.ChildToFamilyLinks.DeleteAt(i);
+                    continue;
+                }
+
+                if (!family.HasChild(iRec)) {
+                    CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdHalfLink, CheckSolve.csSkip);
+                    checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonHasHalfLinkOfChildToFamily), iRec.XRef, family.XRef);
+                    checksList.Add(checkObj);
+                }
+            }
+        }
+
+        private static void CheckFamilyLinks(GDMTree tree, GDMFamilyRecord fRec, List<CheckObj> checksList)
+        {
+            var husb = tree.GetPtrValue<GDMIndividualRecord>(fRec.Husband);
+            if (husb != null && husb.IndexOfSpouse(fRec) < 0) {
+                CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdHalfLink, CheckSolve.csSkip);
+                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_FamilyHasHalfLinkOfHusbandToPerson), fRec.XRef, husb.XRef);
+                checksList.Add(checkObj);
+            }
+
+            var wife = tree.GetPtrValue<GDMIndividualRecord>(fRec.Wife);
+            if (wife != null && wife.IndexOfSpouse(fRec) < 0) {
+                CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdHalfLink, CheckSolve.csSkip);
+                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_FamilyHasHalfLinkOfWifeToPerson), fRec.XRef, wife.XRef);
+                checksList.Add(checkObj);
+            }
+
+            for (int j = fRec.Children.Count - 1; j >= 0; j--) {
+                var cl = fRec.Children[j];
+                if (cl == null) {
+                    fRec.Children.DeleteAt(j);
+                    continue;
+                }
+
+                GDMIndividualRecord child = tree.GetPtrValue(cl);
+                if (child == null) {
+                    fRec.Children.DeleteAt(j);
+                    continue;
+                }
+
+                if (child.FindChildToFamilyLink(fRec) == null) {
+                    CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdHalfLink, CheckSolve.csSkip);
+                    checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_FamilyHasHalfLinkOfChildToParentsFamily), fRec.XRef, child.XRef);
+                    checksList.Add(checkObj);
+                }
+            }
+        }
+
         private static void CheckIndividualRecord(GDMTree tree, GDMIndividualRecord iRec, List<CheckObj> checksList)
         {
             CheckRecordWithEvents(iRec, checksList);
+
+            CheckIndividualLinks(tree, iRec, checksList);
 
             if (iRec.FindEvent(GEDCOMTagType.DEAT) == null) {
                 int age = GKUtils.GetAge(iRec, -1);
@@ -667,6 +750,8 @@ namespace GKCore.Tools
         private static void CheckFamilyRecord(GDMTree tree, GDMFamilyRecord fRec, List<CheckObj> checksList)
         {
             CheckRecordWithEvents(fRec, checksList);
+
+            CheckFamilyLinks(tree, fRec, checksList);
 
             var husb = tree.GetPtrValue<GDMIndividualRecord>(fRec.Husband);
             var wife = tree.GetPtrValue<GDMIndividualRecord>(fRec.Wife);

@@ -913,8 +913,13 @@ namespace GKCore
         /* 852 */ LSID_Copy,
         /* 853 */ LSID_Cut,
         /* 854 */ LSID_Paste,
+        /* 855 */ LSID_PersonHasHalfLinkOfSpouseToFamily,
+        /* 856 */ LSID_PersonHasHalfLinkOfChildToFamily,
+        /* 857 */ LSID_FamilyHasHalfLinkOfHusbandToPerson,
+        /* 858 */ LSID_FamilyHasHalfLinkOfWifeToPerson,
+        /* 859 */ LSID_FamilyHasHalfLinkOfChildToParentsFamily,
 
-        /* 000 */ LSID_Last = LSID_Paste
+        /* 000 */ LSID_Last = LSID_FamilyHasHalfLinkOfChildToParentsFamily
     }
 
 
@@ -1783,6 +1788,11 @@ namespace GKCore
             /* 852 */ "Copy",
             /* 853 */ "Cut",
             /* 854 */ "Paste",
+            /* 855 */ "Person `{0}` has a half link of spouse to family `{1}`",
+            /* 856 */ "Person `{0}` has a half link of child to family `{1}`",
+            /* 857 */ "Family `{0}` has a half link of husband to person `{1}`",
+            /* 858 */ "Family `{0}` has a half link of wife to person `{1}`",
+            /* 859 */ "Family `{0}` has a half link of child to parents family `{1}`",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

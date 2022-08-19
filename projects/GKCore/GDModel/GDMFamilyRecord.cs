@@ -307,5 +307,10 @@ namespace GDModel
 
             return true;
         }
+
+        public bool HasChild(GDMIndividualRecord child)
+        {
+            return IndexOfChild(child) >= 0;
+        }
     }
 }
