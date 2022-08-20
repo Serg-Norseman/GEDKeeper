@@ -918,8 +918,9 @@ namespace GKCore
         /* 857 */ LSID_FamilyHasHalfLinkOfHusbandToPerson,
         /* 858 */ LSID_FamilyHasHalfLinkOfWifeToPerson,
         /* 859 */ LSID_FamilyHasHalfLinkOfChildToParentsFamily,
+        /* 860 */ LSID_GarbledSpouses,
 
-        /* 000 */ LSID_Last = LSID_FamilyHasHalfLinkOfChildToParentsFamily
+        /* 000 */ LSID_Last = LSID_GarbledSpouses
     }
 
 
@@ -1793,6 +1794,7 @@ namespace GKCore
             /* 857 */ "Family `{0}` has a half link of husband to person `{1}`",
             /* 858 */ "Family `{0}` has a half link of wife to person `{1}`",
             /* 859 */ "Family `{0}` has a half link of child to parents family `{1}`",
+            /* 860 */ "Family `{0}` has garbled spouses",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

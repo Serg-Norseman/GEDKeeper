@@ -538,7 +538,12 @@ namespace GKCore.Tools
             cdStgNotFound,
             cdArcNotFound,
             cdFileNotFound,
-            cdHalfLink
+            cdHalfSpsFamLink,
+            cdHalfChdFamLink,
+            cdHalfFamHusbLink,
+            cdHalfFamWifeLink,
+            cdHalfFamChldLink,
+            cdGarbledSpouses,
         }
 
         public enum CheckSolve
@@ -548,6 +553,7 @@ namespace GKCore.Tools
             csDefineSex,
             csRemove,
             csEdit,
+            csRepair,
         }
 
         public sealed class CheckObj
@@ -556,12 +562,21 @@ namespace GKCore.Tools
             public CheckDiag Diag;
             public GDMRecord Rec;
             public CheckSolve Solve;
+            public GDMRecord Target;
 
             public CheckObj(GDMRecord rec, CheckDiag diag, CheckSolve solve)
             {
                 Rec = rec;
                 Diag = diag;
                 Solve = solve;
+            }
+
+            public CheckObj(GDMRecord rec, GDMRecord target, CheckDiag diag, CheckSolve solve)
+            {
+                Rec = rec;
+                Diag = diag;
+                Solve = solve;
+                Target = target;
             }
 
             public string GetRecordName(GDMTree tree)
@@ -627,7 +642,7 @@ namespace GKCore.Tools
                 }
 
                 if (!family.HasSpouse(iRec)) {
-                    CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdHalfLink, CheckSolve.csSkip);
+                    CheckObj checkObj = new CheckObj(iRec, family, CheckDiag.cdHalfSpsFamLink, CheckSolve.csRepair);
                     checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonHasHalfLinkOfSpouseToFamily), iRec.XRef, family.XRef);
                     checksList.Add(checkObj);
                 }
@@ -647,7 +662,7 @@ namespace GKCore.Tools
                 }
 
                 if (!family.HasChild(iRec)) {
-                    CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdHalfLink, CheckSolve.csSkip);
+                    CheckObj checkObj = new CheckObj(iRec, family, CheckDiag.cdHalfChdFamLink, CheckSolve.csRepair);
                     checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonHasHalfLinkOfChildToFamily), iRec.XRef, family.XRef);
                     checksList.Add(checkObj);
                 }
@@ -658,15 +673,21 @@ namespace GKCore.Tools
         {
             var husb = tree.GetPtrValue<GDMIndividualRecord>(fRec.Husband);
             if (husb != null && husb.IndexOfSpouse(fRec) < 0) {
-                CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdHalfLink, CheckSolve.csSkip);
+                CheckObj checkObj = new CheckObj(fRec, husb, CheckDiag.cdHalfFamHusbLink, CheckSolve.csRepair);
                 checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_FamilyHasHalfLinkOfHusbandToPerson), fRec.XRef, husb.XRef);
                 checksList.Add(checkObj);
             }
 
             var wife = tree.GetPtrValue<GDMIndividualRecord>(fRec.Wife);
             if (wife != null && wife.IndexOfSpouse(fRec) < 0) {
-                CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdHalfLink, CheckSolve.csSkip);
+                CheckObj checkObj = new CheckObj(fRec, wife, CheckDiag.cdHalfFamWifeLink, CheckSolve.csRepair);
                 checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_FamilyHasHalfLinkOfWifeToPerson), fRec.XRef, wife.XRef);
+                checksList.Add(checkObj);
+            }
+
+            if ((husb != null && husb.Sex != GDMSex.svMale) || (wife != null && wife.Sex != GDMSex.svFemale)) {
+                CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdGarbledSpouses, CheckSolve.csRepair);
+                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_GarbledSpouses), fRec.XRef);
                 checksList.Add(checkObj);
             }
 
@@ -684,7 +705,7 @@ namespace GKCore.Tools
                 }
 
                 if (child.FindChildToFamilyLink(fRec) == null) {
-                    CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdHalfLink, CheckSolve.csSkip);
+                    CheckObj checkObj = new CheckObj(fRec, child, CheckDiag.cdHalfFamChldLink, CheckSolve.csRepair);
                     checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_FamilyHasHalfLinkOfChildToParentsFamily), fRec.XRef, child.XRef);
                     checksList.Add(checkObj);
                 }
@@ -904,35 +925,34 @@ namespace GKCore.Tools
                 throw new ArgumentNullException("checkObj");
 
             GDMTree tree = baseWin.Context.Tree;
-            GDMIndividualRecord iRec;
 
             switch (checkObj.Diag) {
-                case CheckDiag.cdPersonLonglived:
-                    iRec = checkObj.Rec as GDMIndividualRecord;
-                    baseWin.Context.CreateEventEx(iRec, GEDCOMTagName.DEAT, "", "");
-                    baseWin.NotifyRecord(iRec, RecordAction.raEdit);
+                case CheckDiag.cdPersonLonglived: {
+                        var iRec = checkObj.Rec as GDMIndividualRecord;
+                        baseWin.Context.CreateEventEx(iRec, GEDCOMTagName.DEAT, "", "");
+                        baseWin.NotifyRecord(iRec, RecordAction.raEdit);
+                    }
                     break;
 
-                case CheckDiag.cdPersonSexless:
-                    iRec = checkObj.Rec as GDMIndividualRecord;
-                    baseWin.Context.CheckPersonSex(iRec);
-                    baseWin.NotifyRecord(iRec, RecordAction.raEdit);
+                case CheckDiag.cdPersonSexless: {
+                        var iRec = checkObj.Rec as GDMIndividualRecord;
+                        baseWin.Context.CheckPersonSex(iRec);
+                        baseWin.NotifyRecord(iRec, RecordAction.raEdit);
+                    }
                     break;
 
                 case CheckDiag.cdEmptyFamily:
                     tree.DeleteRecord(checkObj.Rec);
                     break;
 
-                case CheckDiag.cdFatherAsChild:
-                    {
-                        var fRec = ((GDMFamilyRecord)checkObj.Rec);
+                case CheckDiag.cdFatherAsChild: {
+                        var fRec = (GDMFamilyRecord)checkObj.Rec;
                         fRec.DeleteChild(fRec.Husband);
                     }
                     break;
 
-                case CheckDiag.cdMotherAsChild:
-                    {
-                        var fRec = ((GDMFamilyRecord)checkObj.Rec);
+                case CheckDiag.cdMotherAsChild: {
+                        var fRec = (GDMFamilyRecord)checkObj.Rec;
                         fRec.DeleteChild(fRec.Wife);
                     }
                     break;
@@ -948,6 +968,114 @@ namespace GKCore.Tools
                         BaseController.EditRecord(baseWin, checkObj.Rec);
                     }
                     break;
+
+                case CheckDiag.cdLiveYearsInvalid:
+                    break;
+
+                case CheckDiag.cdStrangeSpouse:
+                    break;
+
+                case CheckDiag.cdStrangeParent:
+                    break;
+
+                case CheckDiag.csCycle:
+                    break;
+
+                case CheckDiag.cdChildWithoutParents:
+                    break;
+
+                case CheckDiag.cdFamilyRecordWithoutFamily:
+                    break;
+
+                case CheckDiag.cdMediaRecordWithoutFiles:
+                    break;
+
+                case CheckDiag.cdStgNotFound:
+                    break;
+
+                case CheckDiag.cdArcNotFound:
+                    break;
+
+                case CheckDiag.cdFileNotFound:
+                    break;
+
+                case CheckDiag.cdHalfSpsFamLink:
+                    if (checkObj.Solve == CheckSolve.csRepair) {
+                        var indiRec = (GDMIndividualRecord)checkObj.Rec;
+                        var famRec = (GDMFamilyRecord)checkObj.Target;
+
+                        // fuse: these two problems often occur together
+                        CheckAndRepairGarbledSpouses(tree, famRec);
+
+                        switch (indiRec.Sex) {
+                            case GDMSex.svMale:
+                                famRec.Husband.XRef = indiRec.XRef;
+                                break;
+
+                            case GDMSex.svFemale:
+                                famRec.Wife.XRef = indiRec.XRef;
+                                break;
+                        }
+                    }
+                    break;
+
+                case CheckDiag.cdHalfChdFamLink:
+                    if (checkObj.Solve == CheckSolve.csRepair) {
+                        var indiRec = (GDMIndividualRecord)checkObj.Rec;
+                        var famRec = (GDMFamilyRecord)checkObj.Target;
+
+                        famRec.Children.Add(new GDMChildLink(indiRec.XRef));
+                    }
+                    break;
+
+                case CheckDiag.cdHalfFamHusbLink:
+                    if (checkObj.Solve == CheckSolve.csRepair) {
+                        var famRec = (GDMFamilyRecord)checkObj.Rec;
+                        var husb = (GDMIndividualRecord)checkObj.Target;
+
+                        husb.SpouseToFamilyLinks.Add(new GDMSpouseToFamilyLink(famRec.XRef));
+                    }
+                    break;
+
+                case CheckDiag.cdHalfFamWifeLink:
+                    if (checkObj.Solve == CheckSolve.csRepair) {
+                        var famRec = (GDMFamilyRecord)checkObj.Rec;
+                        var wife = (GDMIndividualRecord)checkObj.Target;
+
+                        wife.SpouseToFamilyLinks.Add(new GDMSpouseToFamilyLink(famRec.XRef));
+                    }
+                    break;
+
+                case CheckDiag.cdHalfFamChldLink:
+                    if (checkObj.Solve == CheckSolve.csRepair) {
+                        var famRec = (GDMFamilyRecord)checkObj.Rec;
+                        var child = (GDMIndividualRecord)checkObj.Target;
+
+                        child.ChildToFamilyLinks.Add(new GDMChildToFamilyLink(famRec.XRef));
+                    }
+                    break;
+
+                case CheckDiag.cdGarbledSpouses:
+                    if (checkObj.Solve == CheckSolve.csRepair) {
+                        var famRec = (GDMFamilyRecord)checkObj.Rec;
+
+                        CheckAndRepairGarbledSpouses(tree, famRec);
+                    }
+                    break;
+            }
+        }
+
+        private static void CheckAndRepairGarbledSpouses(GDMTree tree, GDMFamilyRecord famRec)
+        {
+            var husb = tree.GetPtrValue<GDMIndividualRecord>(famRec.Husband);
+            var wife = tree.GetPtrValue<GDMIndividualRecord>(famRec.Wife);
+
+            if ((husb != null && husb.Sex != GDMSex.svMale) || (wife != null && wife.Sex != GDMSex.svFemale)) {
+                var husbXRef = famRec.Husband.XRef;
+                var wifeXRef = famRec.Wife.XRef;
+
+                famRec.Husband.XRef = wifeXRef;
+                famRec.Wife.XRef = husbXRef;
             }
         }
 

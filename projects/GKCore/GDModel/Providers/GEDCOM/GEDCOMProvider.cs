@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -667,7 +667,7 @@ namespace GDModel.Providers.GEDCOM
                 curTag = famRec.Wife;
                 curTag.ParseString(tagValue);
             } else if (tagType == GEDCOMTagType.CHIL) {
-                curTag = famRec.Children.Add(new GDMIndividualLink(tagId, tagValue));
+                curTag = famRec.Children.Add(new GDMChildLink(tagId, tagValue));
             } else if (tagType == GEDCOMTagType._STAT) {
                 famRec.Status = GEDCOMUtils.GetMarriageStatusVal(tagValue);
             } else if (GEDCOMUtils.IsFamEvent(tagType)) {

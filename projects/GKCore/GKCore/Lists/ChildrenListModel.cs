@@ -28,7 +28,7 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public abstract class ChildrenListModel : SheetModel<GDMIndividualLink>
+    public abstract class ChildrenListModel : SheetModel<GDMChildLink>
     {
         private GDMIndividualRecord fChildRec;
 
@@ -43,7 +43,7 @@ namespace GKCore.Lists
             fListColumns.ResetDefaults();
         }
 
-        public override void Fetch(GDMIndividualLink aRec)
+        public override void Fetch(GDMChildLink aRec)
         {
             base.Fetch(aRec);
             fChildRec = fBaseContext.Tree.GetPtrValue(fFetchedRec);
@@ -133,11 +133,11 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class IndividualChildrenListModel : ChildrenListModel
     {
-        private readonly GDMList<GDMIndividualLink> fTotalChildren;
+        private readonly GDMList<GDMChildLink> fTotalChildren;
 
         public IndividualChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
-            fTotalChildren = new GDMList<GDMIndividualLink>();
+            fTotalChildren = new GDMList<GDMChildLink>();
         }
 
         public override void UpdateContents()

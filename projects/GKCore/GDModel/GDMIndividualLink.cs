@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,15 +18,37 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GDModel.Providers.GEDCOM;
+
 namespace GDModel
 {
-    public sealed class GDMIndividualLink : GDMPointer
+    public class GDMIndividualLink : GDMPointer
     {
         public GDMIndividualLink()
         {
         }
 
         public GDMIndividualLink(int tagId, string tagValue) : this()
+        {
+            SetNameValue(tagId, tagValue);
+        }
+    }
+
+
+    public sealed class GDMChildLink : GDMIndividualLink
+    {
+        public GDMChildLink()
+        {
+            SetName(GEDCOMTagType.CHIL);
+        }
+
+        public GDMChildLink(string childXRef)
+        {
+            SetName(GEDCOMTagType.CHIL);
+            XRef = childXRef;
+        }
+
+        public GDMChildLink(int tagId, string tagValue)
         {
             SetNameValue(tagId, tagValue);
         }

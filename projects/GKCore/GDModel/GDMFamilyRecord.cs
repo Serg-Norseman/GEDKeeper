@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,13 +38,13 @@ namespace GDModel
 
     public sealed class GDMFamilyRecord : GDMRecordWithEvents, IGDMFamilyRecord
     {
-        private readonly GDMList<GDMIndividualLink> fChildren;
+        private readonly GDMList<GDMChildLink> fChildren;
         private readonly GDMIndividualLink fHusband;
         private readonly GDMIndividualLink fWife;
         private GDMMarriageStatus fStatus;
 
 
-        public GDMList<GDMIndividualLink> Children
+        public GDMList<GDMChildLink> Children
         {
             get { return fChildren; }
         }
@@ -72,7 +72,7 @@ namespace GDModel
 
             fHusband = new GDMIndividualLink((int)GEDCOMTagType.HUSB, string.Empty);
             fWife = new GDMIndividualLink((int)GEDCOMTagType.WIFE, string.Empty);
-            fChildren = new GDMList<GDMIndividualLink>();
+            fChildren = new GDMList<GDMChildLink>();
         }
 
         protected override void Dispose(bool disposing)
@@ -197,7 +197,7 @@ namespace GDModel
             targetFamily.Status = fStatus;
 
             while (fChildren.Count > 0) {
-                GDMIndividualLink obj = fChildren.Extract(0);
+                var obj = fChildren.Extract(0);
                 targetFamily.Children.Add(obj);
             }
         }
@@ -239,12 +239,7 @@ namespace GDModel
                 return false;
             }
 
-            GDMSex sex = spouse.Sex;
-            if (sex == GDMSex.svUnknown || sex == GDMSex.svIntersex) {
-                return false;
-            }
-
-            switch (sex) {
+            switch (spouse.Sex) {
                 case GDMSex.svMale:
                     fHusband.XRef = spouse.XRef;
                     break;
@@ -252,11 +247,13 @@ namespace GDModel
                 case GDMSex.svFemale:
                     fWife.XRef = spouse.XRef;
                     break;
+
+                case GDMSex.svUnknown:
+                case GDMSex.svIntersex:
+                    return false;
             }
 
-            GDMSpouseToFamilyLink spLink = new GDMSpouseToFamilyLink();
-            spLink.XRef = this.XRef;
-            spouse.SpouseToFamilyLinks.Add(spLink);
+            spouse.SpouseToFamilyLinks.Add(new GDMSpouseToFamilyLink(this.XRef));
 
             return true;
         }
@@ -287,13 +284,9 @@ namespace GDModel
         {
             if (child == null) return false;
 
-            GDMIndividualLink ptr = new GDMIndividualLink((int)GEDCOMTagType.CHIL, string.Empty);
-            ptr.XRef = child.XRef;
-            fChildren.Add(ptr);
+            fChildren.Add(new GDMChildLink(child.XRef));
 
-            GDMChildToFamilyLink chLink = new GDMChildToFamilyLink();
-            chLink.XRef = this.XRef;
-            child.ChildToFamilyLinks.Add(chLink);
+            child.ChildToFamilyLinks.Add(new GDMChildToFamilyLink(this.XRef));
 
             return true;
         }

@@ -525,7 +525,8 @@ namespace GKCore
                 LSID.LSID_SetIsDead,
                 LSID.LSID_DefineSex,
                 LSID.LSID_DoDelete,
-                LSID.LSID_DoEdit
+                LSID.LSID_DoEdit,
+                LSID.LSID_Repair
             };
 
             CondSigns = new string[] {
