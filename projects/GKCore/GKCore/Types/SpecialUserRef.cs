@@ -28,6 +28,7 @@ namespace GKCore.Types
         urUSSR_FallInBattle,
         urUSSR_RearVeteran,
         urUSSR_Repression,
+        urUSSR_CPSUMember,
 
         urRelig_IslamSym,
         urRelig_LatinCross,

@@ -471,6 +471,7 @@
     <EmbeddedResource Include="Resources\tg_soldier.gif" />
     <EmbeddedResource Include="Resources\tg_soldier_fall.gif" />
     <EmbeddedResource Include="Resources\tg_veteran_rear.gif" />
+    <EmbeddedResource Include="Resources\tg_cpsu.png" />
     <EmbeddedResource Include="Resources\btn_organizer.gif" />
     <EmbeddedResource Include="Resources\btn_slideshow.png" />
     <EmbeddedResource Include="Resources\btn_mail.gif" />

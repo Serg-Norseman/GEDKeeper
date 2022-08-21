@@ -269,6 +269,7 @@ namespace GKCore
                 new SpecialUserRef(LSID.LSID_USSR_WWII_KilledInBattle, ""),
                 new SpecialUserRef(LSID.LSID_USSR_WWII_WorkerInRear, ""),
                 new SpecialUserRef(LSID.LSID_USSR_Repressed, ""),
+                new SpecialUserRef(LSID.LSID_USSR_CPSUMember, ""),
                 new SpecialUserRef(LSID.LSID_Religion_Islam, ""),
                 new SpecialUserRef(LSID.LSID_Religion_Catholicism, ""),
                 new SpecialUserRef(LSID.LSID_Religion_Orthodoxy, ""),
