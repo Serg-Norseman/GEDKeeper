@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -145,6 +145,20 @@ namespace GDModel
             member.Groups.DeleteAt(member.IndexOfGroup(this));
 
             return true;
+        }
+
+        public override void MoveTo(GDMRecord targetRecord)
+        {
+            var targetGroup = targetRecord as GDMGroupRecord;
+            if (targetGroup == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+
+            base.MoveTo(targetRecord);
+
+            while (fMembers.Count > 0) {
+                var obj = fMembers.Extract(0);
+                targetGroup.Members.Add(obj);
+            }
         }
     }
 }

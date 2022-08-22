@@ -863,3 +863,4 @@
 859=Family `{0}` has a half link of child to parents family `{1}`
 860=Family `{0}` has garbled spouses
 861=USSR:CPSU member
+862=Attention: when merging archive records, the name and address are not transferred! Proceed?

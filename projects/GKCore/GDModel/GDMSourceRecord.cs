@@ -241,5 +241,20 @@ namespace GDModel
                 }
             }
         }
+
+        public GDMRepositoryCitation FindRepository(GDMRepositoryRecord repoRec)
+        {
+            if (repoRec != null) {
+                int num = fRepositoryCitations.Count;
+                for (int i = 0; i < num; i++) {
+                    var repoCit = fRepositoryCitations[i];
+                    if (repoCit.XRef == repoRec.XRef) {
+                        return repoCit;
+                    }
+                }
+            }
+
+            return null;
+        }
     }
 }

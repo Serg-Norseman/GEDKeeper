@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using BSLib;
 using GKCore.Interfaces;
 
@@ -920,8 +919,9 @@ namespace GKCore
         /* 859 */ LSID_FamilyHasHalfLinkOfChildToParentsFamily,
         /* 860 */ LSID_GarbledSpouses,
         /* 861 */ LSID_USSR_CPSUMember,
+        /* 862 */ LSID_RepoRecsMergeWarning,
 
-        /* 000 */ LSID_Last = LSID_USSR_CPSUMember
+        /* 000 */ LSID_Last = LSID_RepoRecsMergeWarning
     }
 
 
@@ -1797,6 +1797,7 @@ namespace GKCore
             /* 859 */ "Family `{0}` has a half link of child to parents family `{1}`",
             /* 860 */ "Family `{0}` has garbled spouses",
             /* 861 */ "USSR:CPSU member",
+            /* 862 */ "Attention: when merging archive records, the name and address are not transferred! Proceed?",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

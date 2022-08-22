@@ -494,6 +494,12 @@ namespace GKCore.Tools
             if (sourceRec == null)
                 throw new ArgumentNullException("sourceRec");
 
+            if (targetRec.RecordType == GDMRecordType.rtRepository) {
+                if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RepoRecsMergeWarning))) {
+                    return;
+                }
+            }
+
             using (var repMap = new GDMXRefReplacer()) {
                 repMap.AddXRef(sourceRec, sourceRec.XRef, targetRec.XRef);
 

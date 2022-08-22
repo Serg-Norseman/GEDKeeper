@@ -39,6 +39,7 @@ namespace GKCore.Lists
                 RecordAction.raMoveUp, RecordAction.raMoveDown,
                 RecordAction.raCopy, RecordAction.raPaste);
 
+            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
             fListColumns.AddColumn(LSID.LSID_Title, 260, false);
             fListColumns.AddColumn(LSID.LSID_Page, 80, false);
             fListColumns.AddColumn(LSID.LSID_Certainty, 220, false);
@@ -57,15 +58,18 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = fSourceRec.ShortTitle;
+                    result = fStructList.IndexOf(fFetchedRec) + 1;
                     break;
                 case 1:
-                    result = fFetchedRec.Page;
+                    result = fSourceRec.ShortTitle;
                     break;
                 case 2:
-                    result = LangMan.LS(GKData.CertaintyAssessments[fFetchedRec.GetValidCertaintyAssessment()]);
+                    result = fFetchedRec.Page;
                     break;
                 case 3:
+                    result = LangMan.LS(GKData.CertaintyAssessments[fFetchedRec.GetValidCertaintyAssessment()]);
+                    break;
+                case 4:
                     result = fSourceRec.Originator.Lines.Text.Trim();
                     break;
             }

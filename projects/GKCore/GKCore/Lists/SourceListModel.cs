@@ -109,7 +109,8 @@ namespace GKCore.Lists
         public SourceRepositoriesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
-                RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
+                RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump,
+                RecordAction.raCopy, RecordAction.raPaste);
 
             fListColumns.AddColumn(LSID.LSID_Repository, 300, false);
             fListColumns.ResetDefaults();
@@ -150,26 +151,46 @@ namespace GKCore.Lists
             if (fBaseWin == null || source == null) return;
 
             var cit = eArgs.ItemData as GDMRepositoryCitation;
+            GDMRepositoryRecord repoRec = null;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    GDMRepositoryRecord rep = fBaseWin.Context.SelectRecord(GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
-                    if (rep != null) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, rep);
+                    repoRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
+                    if (repoRec != null) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, repoRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
                     if (cit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery))) {
-                        var repRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(cit);
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, repRec);
+                        repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(cit);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, repoRec);
+                    }
+                    break;
+
+                case RecordAction.raCopy:
+                    AppHost.Instance.SetClipboardObj(cit.Clone());
+                    break;
+
+                case RecordAction.raCut:
+                    break;
+
+                case RecordAction.raPaste:
+                    cit = AppHost.Instance.GetClipboardObj<GDMRepositoryCitation>();
+                    if (cit != null) {
+                        repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(cit);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, repoRec);
                     }
                     break;
             }
 
             if (result) {
+                if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raPaste) {
+                    eArgs.ItemData = source.FindRepository(repoRec);
+                }
+
                 fBaseWin.Context.Modified = true;
                 eArgs.IsChanged = true;
             }
