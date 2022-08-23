@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -83,7 +83,7 @@ namespace GDModel
 
         public bool IsEmpty()
         {
-            return (base.Count <= 0);
+            return (base.Count <= 0) || (base.Count == 1 && (base[0] == "" || base[0] == LINE_BREAK));
         }
 
         public void Assign(GDMLines source)
