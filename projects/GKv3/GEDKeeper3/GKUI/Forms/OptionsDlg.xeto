@@ -300,6 +300,8 @@
 
                     </TableLayout>
 
+                    <CheckBox x:Name="chkUseExtraControls" />
+
                   </StackLayout>
 
                 </TableRow>

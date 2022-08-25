@@ -159,6 +159,7 @@
         private System.Windows.Forms.Label lblCertaintyAlgorithm;
         private System.Windows.Forms.ComboBox cmbCertaintyAlgorithm;
         private System.Windows.Forms.CheckBox chkLocalizedCalendarSignatures;
+        private System.Windows.Forms.CheckBox chkUseExtraControls;
 
         private void InitializeComponent()
         {
@@ -319,6 +320,7 @@
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.chkUseExtraControls = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -923,6 +925,7 @@
             // pageTreeChart
             // 
             this.pageTreeChart.BackColor = System.Drawing.SystemColors.Control;
+            this.pageTreeChart.Controls.Add(this.chkUseExtraControls);
             this.pageTreeChart.Controls.Add(this.chkSeparateDepth);
             this.pageTreeChart.Controls.Add(this.numDefaultDepth);
             this.pageTreeChart.Controls.Add(this.lblDefaultDepth);
@@ -940,6 +943,15 @@
             this.pageTreeChart.Size = new System.Drawing.Size(713, 712);
             this.pageTreeChart.TabIndex = 3;
             this.pageTreeChart.Text = "pageTreeChart";
+            // 
+            // chkUseExtraControls
+            // 
+            this.chkUseExtraControls.Location = new System.Drawing.Point(434, 644);
+            this.chkUseExtraControls.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkUseExtraControls.Name = "chkUseExtraControls";
+            this.chkUseExtraControls.Size = new System.Drawing.Size(254, 22);
+            this.chkUseExtraControls.TabIndex = 12;
+            this.chkUseExtraControls.Text = "chkUseExtraControls";
             // 
             // chkSeparateDepth
             // 

@@ -485,6 +485,8 @@ namespace GKCore.Controllers
             GetControl<INumericBox>("numDefaultDepthAncestors").Value = fOptions.TreeChartOptions.DepthLimitAncestors;
             GetControl<INumericBox>("numDefaultDepthDescendants").Value = fOptions.TreeChartOptions.DepthLimitDescendants;
 
+            GetControl<ICheckBox>("chkUseExtraControls").Checked = fOptions.TreeChartOptions.UseExtraControls;
+
             UpdateTreeChartFont();
         }
 
@@ -558,6 +560,8 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.DepthLimit = (int)GetControl<INumericBox>("numDefaultDepth").Value;
             fOptions.TreeChartOptions.DepthLimitAncestors = (int)GetControl<INumericBox>("numDefaultDepthAncestors").Value;
             fOptions.TreeChartOptions.DepthLimitDescendants = (int)GetControl<INumericBox>("numDefaultDepthDescendants").Value;
+
+            fOptions.TreeChartOptions.UseExtraControls = GetControl<ICheckBox>("chkUseExtraControls").Checked;
         }
 
         public override void UpdateView()
@@ -730,6 +734,8 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblDefaultDepth").Text = LangMan.LS(LSID.LSID_DefaultDepth);
             GetControl<ILabel>("lblDefaultDepthAncestors").Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_Ancestors);
             GetControl<ILabel>("lblDefaultDepthDescendants").Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_Descendants);
+
+            GetControl<ICheckBox>("chkUseExtraControls").Text = LangMan.LS(LSID.LSID_UseExtraControls);
 
             GetControl<ITabPage>("pageAncCircle").Text = LangMan.LS(LSID.LSID_AncestorsCircle);
 

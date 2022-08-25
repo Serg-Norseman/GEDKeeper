@@ -920,8 +920,9 @@ namespace GKCore
         /* 860 */ LSID_GarbledSpouses,
         /* 861 */ LSID_USSR_CPSUMember,
         /* 862 */ LSID_RepoRecsMergeWarning,
+        /* 863 */ LSID_UseExtraControls,
 
-        /* 000 */ LSID_Last = LSID_RepoRecsMergeWarning
+        /* 000 */ LSID_Last = LSID_UseExtraControls
     }
 
 
@@ -1798,6 +1799,7 @@ namespace GKCore
             /* 860 */ "Family `{0}` has garbled spouses",
             /* 861 */ "USSR:CPSU member",
             /* 862 */ "Attention: when merging archive records, the name and address are not transferred! Proceed?",
+            /* 863 */ "Use extra controls",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

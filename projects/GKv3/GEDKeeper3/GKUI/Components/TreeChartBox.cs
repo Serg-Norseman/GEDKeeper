@@ -733,18 +733,20 @@ namespace GKUI.Components
                     } else {
                         SetHighlight(null);
 
-                        ITreeControl ctl = fTreeControls.Contains(scrPt.X, scrPt.Y);
+                        if (GlobalOptions.Instance.TreeChartOptions.UseExtraControls) {
+                            ITreeControl ctl = fTreeControls.Contains(scrPt.X, scrPt.Y);
 
-                        if (ctl != null) {
-                            fMode = ChartControlMode.ControlsVisible;
-                            ctl.UpdateState();
-                            ctl.Visible = true;
-                            ctl.MouseMove(scrPt.X, scrPt.Y);
-                            fActiveControl = ctl;
+                            if (ctl != null) {
+                                fMode = ChartControlMode.ControlsVisible;
+                                ctl.UpdateState();
+                                ctl.Visible = true;
+                                ctl.MouseMove(scrPt.X, scrPt.Y);
+                                fActiveControl = ctl;
 
-                            //pt = new Point(pt.X + Left, pt.Y + Top);
-                            //fToolTip.Show(ctl.Tip, this, pt, 1500);
-                            ToolTip = ctl.Tip;
+                                //pt = new Point(pt.X + Left, pt.Y + Top);
+                                //fToolTip.Show(ctl.Tip, this, pt, 1500);
+                                ToolTip = ctl.Tip;
+                            }
                         }
                     }
                     break;

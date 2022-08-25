@@ -98,6 +98,8 @@ namespace GKCore.Options
         public int DepthLimitAncestors { get; set; }
         public int DepthLimitDescendants { get; set; }
 
+        public bool UseExtraControls { get; set; }
+
         public TreeChartOptions()
         {
             FamilyVisible = true;
@@ -150,6 +152,8 @@ namespace GKCore.Options
             LevelDistance = TreeChartModel.DEF_LEVEL_DISTANCE;
             Margins = TreeChartModel.DEF_MARGINS;
             SpouseDistance = TreeChartModel.DEF_SPOUSE_DISTANCE;
+
+            UseExtraControls = true;
         }
 
         public void Assign(IOptions source)
@@ -199,6 +203,8 @@ namespace GKCore.Options
             LevelDistance = srcOptions.LevelDistance;
             Margins = srcOptions.Margins;
             SpouseDistance = srcOptions.SpouseDistance;
+
+            UseExtraControls = srcOptions.UseExtraControls;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -257,6 +263,8 @@ namespace GKCore.Options
             DepthLimit = iniFile.ReadInteger("Chart", "DepthLimit", -1);
             DepthLimitAncestors = iniFile.ReadInteger("Chart", "DepthLimitAncestors", -1);
             DepthLimitDescendants = iniFile.ReadInteger("Chart", "DepthLimitDescendants", -1);
+
+            UseExtraControls = iniFile.ReadBool("Chart", "UseExtraControls", true);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -315,6 +323,8 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "DepthLimit", DepthLimit);
             iniFile.WriteInteger("Chart", "DepthLimitAncestors", DepthLimitAncestors);
             iniFile.WriteInteger("Chart", "DepthLimitDescendants", DepthLimitDescendants);
+
+            iniFile.WriteBool("Chart", "UseExtraControls", UseExtraControls);
         }
     }
 }
