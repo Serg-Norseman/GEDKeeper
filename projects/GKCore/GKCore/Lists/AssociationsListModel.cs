@@ -39,7 +39,8 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
-                RecordAction.raJump);
+                RecordAction.raJump,
+                RecordAction.raCopy, RecordAction.raPaste);
 
             fListColumns.AddColumn(LSID.LSID_Relation, 300, false);
             fListColumns.AddColumn(LSID.LSID_Person, 200, false);
@@ -87,8 +88,7 @@ namespace GKCore.Lists
 
             GDMAssociation ast = eArgs.ItemData as GDMAssociation;
 
-            switch (eArgs.Action)
-            {
+            switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
                     using (var dlg = AppHost.ResolveDialog<IAssociationEditDlg>(fBaseWin)) {
@@ -115,9 +115,27 @@ namespace GKCore.Lists
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationRemove, person, ast);
                     }
                     break;
+
+                case RecordAction.raCopy:
+                    AppHost.Instance.SetClipboardObj(ast.Clone());
+                    break;
+
+                case RecordAction.raCut:
+                    break;
+
+                case RecordAction.raPaste:
+                    ast = AppHost.Instance.GetClipboardObj<GDMAssociation>();
+                    if (ast != null) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationAdd, person, ast);
+                    }
+                    break;
             }
 
             if (result) {
+                if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raPaste) {
+                    eArgs.ItemData = ast;
+                }
+
                 fBaseWin.Context.Modified = true;
                 eArgs.IsChanged = true;
             }
