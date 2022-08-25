@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms" xmlns:components="clr-namespace:GKUI.Components;assembly=GKComponents"
-  x:Class="GKUI.Forms.RecordInfoDlg">
+  x:Class="GKUI.Forms.RecordInfoDlg" KeyDown="Form_KeyDown">
 
-  <components:HyperView x:Name="hyperView1" BorderWidth="0" LinkColor="Blue" WordWrap="True" Size="620, 400" OnLink="HyperViewLink" />
+  <components:HyperView x:Name="hyperView1" BorderWidth="0" LinkColor="Blue" WordWrap="True" Size="640, 480" OnLink="HyperViewLink" />
 
 </Dialog>

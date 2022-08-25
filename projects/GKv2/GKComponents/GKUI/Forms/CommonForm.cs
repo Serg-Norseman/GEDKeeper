@@ -182,5 +182,18 @@ namespace GKUI.Forms
             base.OnClosing(e);
             e.Cancel = fController.CheckChangesPersistence();
         }
+
+        /// <summary>
+        /// This is necessary so that when user switch to the desired tab,
+        /// its nested control can immediately receive events - this is useful for bulk data input.
+        /// </summary>
+        protected static void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var tabCtl = (TabControl)sender;
+            var selectedTab = tabCtl.SelectedTab;
+            if (selectedTab != null && selectedTab.Controls.Count >= 1) {
+                selectedTab.Controls[0].Focus();
+            }
+        }
     }
 }

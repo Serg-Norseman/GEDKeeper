@@ -140,6 +140,7 @@ namespace GKUI.Components
             ResumeLayout(false);
 
             Dock = DockStyle.Fill;
+            KeyDown += List_KeyDown;
 
             fButtons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
             fListModel = null;

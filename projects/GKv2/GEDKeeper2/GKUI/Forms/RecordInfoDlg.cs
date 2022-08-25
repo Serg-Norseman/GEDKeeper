@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Windows.Forms;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Interfaces;
@@ -57,6 +58,12 @@ namespace GKUI.Forms
         private void HyperViewLink(object sender, string linkName)
         {
             fController.SelectLink(linkName);
+        }
+
+        private void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+                Close();
         }
     }
 }

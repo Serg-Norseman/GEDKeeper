@@ -98,6 +98,8 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
             btnHusbandAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");

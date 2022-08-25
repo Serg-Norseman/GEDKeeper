@@ -37,6 +37,7 @@ namespace GKUI.Forms
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
+        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageSources;
         private Button btnAccept;
@@ -106,6 +107,8 @@ namespace GKUI.Forms
         public MediaEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
+
+            tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fController = new MediaEditDlgController(this);
             fController.Init(baseWin);

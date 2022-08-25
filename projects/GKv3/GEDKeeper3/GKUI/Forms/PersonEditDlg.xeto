@@ -138,7 +138,7 @@
     </TableRow>
 
     <TableRow ScaleHeight="True">
-      <TabControl>
+      <TabControl x:Name="tabsData">
         <TabPage x:Name="pageEvents">
           <comcom:GKSheetList x:Name="fEventsList" />
         </TabPage>

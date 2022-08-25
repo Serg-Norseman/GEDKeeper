@@ -7,7 +7,7 @@
   <TableLayout Style="paddedTable8">
 
     <TableRow ScaleHeight="True">
-      <TabControl Size="600, 360">
+      <TabControl x:Name="tabsData" Size="600, 360">
         <TabPage x:Name="pageCommon">
           <TableLayout Style="paddedTable">
             <TableRow>

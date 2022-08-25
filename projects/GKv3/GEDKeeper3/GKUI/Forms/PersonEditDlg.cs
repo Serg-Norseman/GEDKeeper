@@ -42,6 +42,7 @@ namespace GKUI.Forms
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
+        private TabControl tabsData;
         private TabPage pageEvents;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
@@ -271,6 +272,8 @@ namespace GKUI.Forms
         public PersonEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
+
+            tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);

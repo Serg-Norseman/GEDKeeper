@@ -2,7 +2,7 @@
 {
     partial class PersonEditDlg
     {
-        private System.Windows.Forms.TabControl tabsPersonData;
+        private System.Windows.Forms.TabControl tabsData;
         private System.Windows.Forms.TabPage pageEvents;
         private System.Windows.Forms.TabPage pageNotes;
         private System.Windows.Forms.TabPage pageMultimedia;
@@ -101,7 +101,7 @@
             this.txtNameSuffix = new System.Windows.Forms.TextBox();
             this.txtNickname = new System.Windows.Forms.TextBox();
             this.btnNameCopy = new System.Windows.Forms.Button();
-            this.tabsPersonData = new System.Windows.Forms.TabControl();
+            this.tabsData = new System.Windows.Forms.TabControl();
             this.pageEvents = new System.Windows.Forms.TabPage();
             this.pageSpouses = new System.Windows.Forms.TabPage();
             this.pageNames = new System.Windows.Forms.TabPage();
@@ -115,7 +115,7 @@
             this.pageChilds = new System.Windows.Forms.TabPage();
             this.GroupBox1.SuspendLayout();
             this.panCtlParents.SuspendLayout();
-            this.tabsPersonData.SuspendLayout();
+            this.tabsData.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnAccept
@@ -566,24 +566,24 @@
             // 
             // tabsPersonData
             // 
-            this.tabsPersonData.Controls.Add(this.pageEvents);
-            this.tabsPersonData.Controls.Add(this.pageSpouses);
-            this.tabsPersonData.Controls.Add(this.pageNames);
-            this.tabsPersonData.Controls.Add(this.pageAssociations);
-            this.tabsPersonData.Controls.Add(this.pageGroups);
-            this.tabsPersonData.Controls.Add(this.pageNotes);
-            this.tabsPersonData.Controls.Add(this.pageMultimedia);
-            this.tabsPersonData.Controls.Add(this.pageSources);
-            this.tabsPersonData.Controls.Add(this.pageUserRefs);
-            this.tabsPersonData.Controls.Add(this.pageParents);
-            this.tabsPersonData.Controls.Add(this.pageChilds);
-            this.tabsPersonData.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tabsPersonData.Location = new System.Drawing.Point(0, 258);
-            this.tabsPersonData.Margin = new System.Windows.Forms.Padding(2);
-            this.tabsPersonData.Name = "tabsPersonData";
-            this.tabsPersonData.SelectedIndex = 0;
-            this.tabsPersonData.Size = new System.Drawing.Size(699, 256);
-            this.tabsPersonData.TabIndex = 1;
+            this.tabsData.Controls.Add(this.pageEvents);
+            this.tabsData.Controls.Add(this.pageSpouses);
+            this.tabsData.Controls.Add(this.pageNames);
+            this.tabsData.Controls.Add(this.pageAssociations);
+            this.tabsData.Controls.Add(this.pageGroups);
+            this.tabsData.Controls.Add(this.pageNotes);
+            this.tabsData.Controls.Add(this.pageMultimedia);
+            this.tabsData.Controls.Add(this.pageSources);
+            this.tabsData.Controls.Add(this.pageUserRefs);
+            this.tabsData.Controls.Add(this.pageParents);
+            this.tabsData.Controls.Add(this.pageChilds);
+            this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tabsData.Location = new System.Drawing.Point(0, 258);
+            this.tabsData.Margin = new System.Windows.Forms.Padding(2);
+            this.tabsData.Name = "tabsPersonData";
+            this.tabsData.SelectedIndex = 0;
+            this.tabsData.Size = new System.Drawing.Size(699, 256);
+            this.tabsData.TabIndex = 1;
             // 
             // pageEvents
             // 
@@ -694,7 +694,7 @@
             this.CancelButton = this.btnCancel;
             this.Title = "PersonEditDlg";
             this.ClientSize = new System.Drawing.Size(699, 563);
-            this.Controls.Add(this.tabsPersonData);
+            this.Controls.Add(this.tabsData);
             this.Controls.Add(this.lblRestriction);
             this.Controls.Add(this.btnNameCopy);
             this.Controls.Add(this.btnAccept);
@@ -714,7 +714,7 @@
             this.GroupBox1.PerformLayout();
             this.panCtlParents.ResumeLayout(false);
             this.panCtlParents.PerformLayout();
-            this.tabsPersonData.ResumeLayout(false);
+            this.tabsData.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

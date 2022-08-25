@@ -2,7 +2,7 @@
 {
 	partial class FamilyEditDlg
 	{
-		private System.Windows.Forms.TabControl tabsFamilyData;
+		private System.Windows.Forms.TabControl tabsData;
 		private System.Windows.Forms.TabPage pageEvents;
 		private System.Windows.Forms.TabPage pageNotes;
 		private System.Windows.Forms.TabPage pageMultimedia;
@@ -45,14 +45,14 @@
 		    this.cmbMarriageStatus = new System.Windows.Forms.ComboBox();
 		    this.lblRestriction = new System.Windows.Forms.Label();
 		    this.cmbRestriction = new System.Windows.Forms.ComboBox();
-		    this.tabsFamilyData = new System.Windows.Forms.TabControl();
+		    this.tabsData = new System.Windows.Forms.TabControl();
 		    this.pageChilds = new System.Windows.Forms.TabPage();
 		    this.pageEvents = new System.Windows.Forms.TabPage();
 		    this.pageNotes = new System.Windows.Forms.TabPage();
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
 		    this.pageSources = new System.Windows.Forms.TabPage();
 		    this.GroupBox1.SuspendLayout();
-		    this.tabsFamilyData.SuspendLayout();
+		    this.tabsData.SuspendLayout();
 		    this.SuspendLayout();
 		    // 
 		    // btnAccept
@@ -243,18 +243,18 @@
 		    // 
 		    // tabsFamilyData
 		    // 
-		    this.tabsFamilyData.Controls.Add(this.pageChilds);
-		    this.tabsFamilyData.Controls.Add(this.pageEvents);
-		    this.tabsFamilyData.Controls.Add(this.pageNotes);
-		    this.tabsFamilyData.Controls.Add(this.pageMultimedia);
-		    this.tabsFamilyData.Controls.Add(this.pageSources);
-		    this.tabsFamilyData.Dock = System.Windows.Forms.DockStyle.Top;
-		    this.tabsFamilyData.Location = new System.Drawing.Point(0, 158);
-		    this.tabsFamilyData.Margin = new System.Windows.Forms.Padding(2);
-		    this.tabsFamilyData.Name = "tabsFamilyData";
-		    this.tabsFamilyData.SelectedIndex = 0;
-		    this.tabsFamilyData.Size = new System.Drawing.Size(708, 320);
-		    this.tabsFamilyData.TabIndex = 1;
+		    this.tabsData.Controls.Add(this.pageChilds);
+		    this.tabsData.Controls.Add(this.pageEvents);
+		    this.tabsData.Controls.Add(this.pageNotes);
+		    this.tabsData.Controls.Add(this.pageMultimedia);
+		    this.tabsData.Controls.Add(this.pageSources);
+		    this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
+		    this.tabsData.Location = new System.Drawing.Point(0, 158);
+		    this.tabsData.Margin = new System.Windows.Forms.Padding(2);
+		    this.tabsData.Name = "tabsFamilyData";
+		    this.tabsData.SelectedIndex = 0;
+		    this.tabsData.Size = new System.Drawing.Size(708, 320);
+		    this.tabsData.TabIndex = 1;
 		    // 
 		    // pageChilds
 		    // 
@@ -308,7 +308,7 @@
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 		    this.CancelButton = this.btnCancel;
 		    this.ClientSize = new System.Drawing.Size(708, 535);
-		    this.Controls.Add(this.tabsFamilyData);
+		    this.Controls.Add(this.tabsData);
 		    this.Controls.Add(this.GroupBox1);
 		    this.Controls.Add(this.btnAccept);
 		    this.Controls.Add(this.btnCancel);
@@ -325,7 +325,7 @@
 		    this.Text = "FamilyEditDlg";
 		    this.GroupBox1.ResumeLayout(false);
 		    this.GroupBox1.PerformLayout();
-		    this.tabsFamilyData.ResumeLayout(false);
+		    this.tabsData.ResumeLayout(false);
 		    this.ResumeLayout(false);
 		    this.PerformLayout();
 		}

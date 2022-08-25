@@ -38,6 +38,7 @@ namespace GKUI.Forms
 
         private Button btnAccept;
         private Button btnCancel;
+        private TabControl tabsData;
         private Label lblName;
         private TextBox txtName;
         private TabPage pageNotes;
@@ -70,6 +71,8 @@ namespace GKUI.Forms
         public RepositoryEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
+
+            tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fController = new RepositoryEditDlgController(this);
             fController.Init(baseWin);

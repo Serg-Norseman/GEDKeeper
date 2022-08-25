@@ -40,7 +40,7 @@
     </TableRow>
 
     <TableRow ScaleHeight="True">
-      <TabControl Size="600, 260">
+      <TabControl x:Name="tabsData" Size="600, 260">
         <TabPage x:Name="pageChilds">
           <comcom:GKSheetList x:Name="fChildrenList" OnItemValidating="FamilyEditDlg_ItemValidating" OnModify="ModifyChildrenSheet" />
         </TabPage>

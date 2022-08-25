@@ -41,6 +41,7 @@ namespace GKUI.Forms
 
         private Button btnAccept;
         private Button btnCancel;
+        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
         private TabPage pageSources;
@@ -131,6 +132,8 @@ namespace GKUI.Forms
         public EventEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
+
+            tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);

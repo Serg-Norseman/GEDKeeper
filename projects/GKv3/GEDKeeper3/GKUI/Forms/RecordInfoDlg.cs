@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
@@ -67,6 +68,12 @@ namespace GKUI.Forms
         private void HyperViewLink(object sender, string linkName)
         {
             fController.SelectLink(linkName);
+        }
+
+        private void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Escape)
+                Close();
         }
     }
 }

@@ -212,6 +212,8 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+
             txtMarriedSurname.TextChanged += Names_TextChanged;
             txtSurname.TextChanged += Names_TextChanged;
             txtName.TextChanged += Names_TextChanged;

@@ -40,6 +40,7 @@ namespace GKUI.Forms
 
         private Button btnAccept;
         private Button btnCancel;
+        private TabControl tabsData;
         private TabPage pageNotes;
         private TabPage pageMultimedia;
         private TabPage pageRepositories;
@@ -114,6 +115,8 @@ namespace GKUI.Forms
         public SourceEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
+
+            tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fController = new SourceEditDlgController(this);
             fController.Init(baseWin);
