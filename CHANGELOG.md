@@ -1,4 +1,26 @@
 
+## 28.08.2022 [v2.21.0]
+- Changed the display of several families of parents in the information panel.
+- Added diagnostics for several families of parents in personal records.
+- Added option to turn off extra tree chart controls.
+- Added copy/paste operations in the list of associations.
+- Improved merging of group and repository records, added copy/paste citations to repositories.
+- Added functions of repair broken/partial links.
+- Added new diagnostic for broken/partial links between persons and families.
+- Added output of notes of events/facts in pedigrees.
+- Added copy/paste operations in the lists of events (persons and families) and citations to sources.
+- Added selection of person portrait areas for any number of arbitrary image files.
+- Fixed bug with displaying portrait areas in collective photos.
+- Improved relationship calculator.
+- Switching previously used filters has been added to the Navigator plugin.
+- Updated Czech translation [Jerry Verner].
+- Added option to display localized signatures for calendars in dates.
+- Added extended file backup plugin.
+- Added an option to select the сertainty assessment algorithm.
+- Improved and included in the distribution plugin Navigator.
+- Added the feature to switch languages for display names in the Navigator plugin.
+- Fixed a bug in the database splitting tool.
+
 ## 14.04.2022 [v2.20.1]
 - Fixed support for negative coordinates in FTB files.
 - Added option to display surnames in capital letters.

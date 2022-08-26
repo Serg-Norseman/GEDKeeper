@@ -1,6 +1,6 @@
 #!/bin/sh
 
-APP_VER="2.20.1"
+APP_VER="2.21.0"
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 rm -rf ~/rpmbuild/
