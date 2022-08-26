@@ -2394,6 +2394,99 @@ namespace GKCore
             }
         }
 
+        public static void ShowParentsInfo(GDMTree tree, GDMIndividualRecord iRec, StringList summary)
+        {
+            if (summary == null)
+                return;
+
+            try {
+                for (int p = 0; p < iRec.ChildToFamilyLinks.Count; p++) {
+                    var ctfLink = iRec.ChildToFamilyLinks[p];
+                    var famRec = tree.GetPtrValue(ctfLink);
+
+                    GDMIndividualRecord father, mother;
+                    tree.GetSpouses(famRec, out father, out mother);
+
+                    if (father != null || mother != null) {
+                        var plType = ctfLink.PedigreeLinkageType;
+                        string linkType =
+                            (plType == GDMPedigreeLinkageType.plNone || plType == GDMPedigreeLinkageType.plBirth) ?
+                            string.Empty : string.Format(" ({0})", LangMan.LS(GKData.ParentTypes[(int)plType]));
+
+                        summary.Add("");
+                        summary.Add(LangMan.LS(LSID.LSID_Parents) + linkType + ":");
+
+                        string st;
+
+                        st = (father == null) ? LangMan.LS(LSID.LSID_UnkMale) : HyperLink(father.XRef, GetNameString(father, true, false), 0);
+                        summary.Add("  " + LangMan.LS(LSID.LSID_Father) + ": " + st + GetLifeStr(father));
+
+                        st = (mother == null) ? LangMan.LS(LSID.LSID_UnkFemale) : HyperLink(mother.XRef, GetNameString(mother, true, false), 0);
+                        summary.Add("  " + LangMan.LS(LSID.LSID_Mother) + ": " + st + GetLifeStr(mother));
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowParentsInfo()", ex);
+            }
+        }
+
+        public static void ShowSpousesInfo(IBaseContext baseContext, GDMTree tree, GDMIndividualRecord iRec, StringList summary)
+        {
+            if (summary == null)
+                return;
+
+            try {
+                int num = iRec.SpouseToFamilyLinks.Count;
+                for (int i = 0; i < num; i++) {
+                    GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
+                    if (family == null) continue;
+                    if (!baseContext.IsRecordAccess(family.Restriction)) continue;
+
+                    string st;
+                    GDMIndividualRecord spRec;
+                    string unk;
+                    if (iRec.Sex == GDMSex.svMale) {
+                        spRec = tree.GetPtrValue(family.Wife);
+                        st = LangMan.LS(LSID.LSID_Wife) + ": ";
+                        unk = LangMan.LS(LSID.LSID_UnkFemale);
+                    } else {
+                        spRec = tree.GetPtrValue(family.Husband);
+                        st = LangMan.LS(LSID.LSID_Husband) + ": ";
+                        unk = LangMan.LS(LSID.LSID_UnkMale);
+                    }
+                    string marr = GetMarriageDateStr(family, GlobalOptions.Instance.DefDateFormat);
+                    if (marr != "") {
+                        marr = LangMan.LS(LSID.LSID_LMarriage) + " " + marr;
+                    } else {
+                        marr = LangMan.LS(LSID.LSID_LFamily);
+                    }
+
+                    summary.Add("");
+                    if (spRec != null) {
+                        st = st + HyperLink(spRec.XRef, GetNameString(spRec, true, false), 0) + " (" + HyperLink(family.XRef, marr, 0) + ")";
+                    } else {
+                        st = st + unk + " (" + HyperLink(family.XRef, marr, 0) + ")";
+                    }
+                    summary.Add(st);
+
+                    int chNum = family.Children.Count;
+                    if (chNum != 0) {
+                        summary.Add("");
+                        summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
+
+                        for (int k = 0; k < chNum; k++) {
+                            GDMIndividualRecord child = tree.GetPtrValue(family.Children[k]);
+                            if (child == null) continue;
+
+                            summary.Add("    " + HyperLink(child.XRef, GetNameString(child, true, false), 0) + GetLifeStr(child));
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.ShowSpousesInfo()", ex);
+            }
+        }
+
         public static void ShowPersonInfo(IBaseContext baseContext, GDMIndividualRecord iRec, StringList summary)
         {
             if (summary == null) return;
@@ -2408,76 +2501,9 @@ namespace GKCore
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + GetNameString(iRec, true, true) + "[/size][/u][/b]");
                         summary.Add(LangMan.LS(LSID.LSID_Sex) + ": " + SexStr(iRec.Sex));
-                        try {
-                            GDMIndividualRecord father, mother;
-                            tree.GetParents(iRec, out father, out mother);
 
-                            if (father != null || mother != null) {
-                                summary.Add("");
-                                summary.Add(LangMan.LS(LSID.LSID_Parents) + ":");
-
-                                string st;
-
-                                st = (father == null) ? LangMan.LS(LSID.LSID_UnkMale) : HyperLink(father.XRef, GetNameString(father, true, false), 0);
-                                summary.Add("  " + LangMan.LS(LSID.LSID_Father) + ": " + st + GetLifeStr(father));
-
-                                st = (mother == null) ? LangMan.LS(LSID.LSID_UnkFemale) : HyperLink(mother.XRef, GetNameString(mother, true, false), 0);
-                                summary.Add("  " + LangMan.LS(LSID.LSID_Mother) + ": " + st + GetLifeStr(mother));
-                            }
-                        } catch (Exception ex) {
-                            Logger.WriteError("GKUtils.ShowPersonInfo().Parents()", ex);
-                        }
-
-                        try {
-                            int num = iRec.SpouseToFamilyLinks.Count;
-                            for (int i = 0; i < num; i++) {
-                                GDMFamilyRecord family = tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
-                                if (family == null) continue;
-                                if (!baseContext.IsRecordAccess(family.Restriction)) continue;
-
-                                string st;
-                                GDMIndividualRecord spRec;
-                                string unk;
-                                if (iRec.Sex == GDMSex.svMale) {
-                                    spRec = tree.GetPtrValue(family.Wife);
-                                    st = LangMan.LS(LSID.LSID_Wife) + ": ";
-                                    unk = LangMan.LS(LSID.LSID_UnkFemale);
-                                } else {
-                                    spRec = tree.GetPtrValue(family.Husband);
-                                    st = LangMan.LS(LSID.LSID_Husband) + ": ";
-                                    unk = LangMan.LS(LSID.LSID_UnkMale);
-                                }
-                                string marr = GetMarriageDateStr(family, GlobalOptions.Instance.DefDateFormat);
-                                if (marr != "") {
-                                    marr = LangMan.LS(LSID.LSID_LMarriage) + " " + marr;
-                                } else {
-                                    marr = LangMan.LS(LSID.LSID_LFamily);
-                                }
-
-                                summary.Add("");
-                                if (spRec != null) {
-                                    st = st + HyperLink(spRec.XRef, GetNameString(spRec, true, false), 0) + " (" + HyperLink(family.XRef, marr, 0) + ")";
-                                } else {
-                                    st = st + unk + " (" + HyperLink(family.XRef, marr, 0) + ")";
-                                }
-                                summary.Add(st);
-
-                                int chNum = family.Children.Count;
-                                if (chNum != 0) {
-                                    summary.Add("");
-                                    summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
-
-                                    for (int k = 0; k < chNum; k++) {
-                                        GDMIndividualRecord child = tree.GetPtrValue(family.Children[k]);
-                                        if (child == null) continue;
-
-                                        summary.Add("    " + HyperLink(child.XRef, GetNameString(child, true, false), 0) + GetLifeStr(child));
-                                    }
-                                }
-                            }
-                        } catch (Exception ex) {
-                            Logger.WriteError("GKUtils.ShowPersonInfo().Families()", ex);
-                        }
+                        ShowParentsInfo(tree, iRec, summary);
+                        ShowSpousesInfo(baseContext, tree, iRec, summary);
 
                         RecListIndividualEventsRefresh(baseContext, iRec, summary);
                         RecListNotesRefresh(baseContext, iRec, summary);

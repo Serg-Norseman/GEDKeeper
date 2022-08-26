@@ -921,8 +921,9 @@ namespace GKCore
         /* 861 */ LSID_USSR_CPSUMember,
         /* 862 */ LSID_RepoRecsMergeWarning,
         /* 863 */ LSID_UseExtraControls,
+        /* 864 */ LSID_SeveralFamiliesOfParents,
 
-        /* 000 */ LSID_Last = LSID_UseExtraControls
+        /* 000 */ LSID_Last = LSID_SeveralFamiliesOfParents
     }
 
 
@@ -1800,6 +1801,7 @@ namespace GKCore
             /* 861 */ "USSR:CPSU member",
             /* 862 */ "Attention: when merging archive records, the name and address are not transferred! Proceed?",
             /* 863 */ "Use extra controls",
+            /* 864 */ "Several families of parents `{0}`",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

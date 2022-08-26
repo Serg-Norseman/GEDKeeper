@@ -550,6 +550,7 @@ namespace GKCore.Tools
             cdHalfFamWifeLink,
             cdHalfFamChldLink,
             cdGarbledSpouses,
+            cdSeveralParents,
         }
 
         public enum CheckSolve
@@ -634,26 +635,6 @@ namespace GKCore.Tools
 
         private static void CheckIndividualLinks(GDMTree tree, GDMIndividualRecord iRec, List<CheckObj> checksList)
         {
-            for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--) {
-                var sfl = iRec.SpouseToFamilyLinks[i];
-                if (sfl == null) {
-                    iRec.SpouseToFamilyLinks.DeleteAt(i);
-                    continue;
-                }
-
-                GDMFamilyRecord family = tree.GetPtrValue(sfl);
-                if (family == null) {
-                    iRec.SpouseToFamilyLinks.DeleteAt(i);
-                    continue;
-                }
-
-                if (!family.HasSpouse(iRec)) {
-                    CheckObj checkObj = new CheckObj(iRec, family, CheckDiag.cdHalfSpsFamLink, CheckSolve.csRepair);
-                    checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonHasHalfLinkOfSpouseToFamily), iRec.XRef, family.XRef);
-                    checksList.Add(checkObj);
-                }
-            }
-
             for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--) {
                 var cfl = iRec.ChildToFamilyLinks[i];
                 if (cfl == null) {
@@ -668,8 +649,34 @@ namespace GKCore.Tools
                 }
 
                 if (!family.HasChild(iRec)) {
-                    CheckObj checkObj = new CheckObj(iRec, family, CheckDiag.cdHalfChdFamLink, CheckSolve.csRepair);
+                    var checkObj = new CheckObj(iRec, family, CheckDiag.cdHalfChdFamLink, CheckSolve.csRepair);
                     checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonHasHalfLinkOfChildToFamily), iRec.XRef, family.XRef);
+                    checksList.Add(checkObj);
+                }
+            }
+
+            if (iRec.ChildToFamilyLinks.Count > 1) {
+                var checkObj = new CheckObj(iRec, CheckDiag.cdSeveralParents, CheckSolve.csSkip);
+                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_SeveralFamiliesOfParents), iRec.XRef);
+                checksList.Add(checkObj);
+            }
+
+            for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--) {
+                var sfl = iRec.SpouseToFamilyLinks[i];
+                if (sfl == null) {
+                    iRec.SpouseToFamilyLinks.DeleteAt(i);
+                    continue;
+                }
+
+                GDMFamilyRecord family = tree.GetPtrValue(sfl);
+                if (family == null) {
+                    iRec.SpouseToFamilyLinks.DeleteAt(i);
+                    continue;
+                }
+
+                if (!family.HasSpouse(iRec)) {
+                    var checkObj = new CheckObj(iRec, family, CheckDiag.cdHalfSpsFamLink, CheckSolve.csRepair);
+                    checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonHasHalfLinkOfSpouseToFamily), iRec.XRef, family.XRef);
                     checksList.Add(checkObj);
                 }
             }
