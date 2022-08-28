@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if !MONO
+
 using BSLib.Design.MVP;
 using BSLib.Design.MVP.Controls;
 using GDModel;
@@ -657,3 +659,5 @@ namespace GKCore.Controllers
         }
     }
 }
+
+#endif

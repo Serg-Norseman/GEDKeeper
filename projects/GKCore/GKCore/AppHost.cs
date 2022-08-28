@@ -113,8 +113,8 @@ namespace GKCore
         {
             try {
                 #if MONO
-                Logger.LogWrite("Mono Version: " + SysUtils.GetMonoVersion());
-                Logger.LogWrite("Desktop Type: " + SysUtils.GetDesktopType().ToString());
+                Logger.WriteInfo("Mono Version: " + SysUtils.GetMonoVersion());
+                Logger.WriteInfo("Desktop Type: " + SysUtils.GetDesktopType().ToString());
                 #endif
 
                 // There should be no links to the application infrastructure
