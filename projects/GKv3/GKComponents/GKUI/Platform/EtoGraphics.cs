@@ -282,9 +282,63 @@ namespace GKUI.Platform
 
         public byte[] GetBytes()
         {
+            return GetBytes("bmp");
+        }
+
+        public byte[] GetBytes(string format)
+        {
+            ImageFormat imgFormat = ImageFormat.Bitmap;
+            switch (format) {
+                case "bmp":
+                    imgFormat = ImageFormat.Bitmap;
+                    break;
+
+                case "gif":
+                    imgFormat = ImageFormat.Gif;
+                    break;
+
+                case "jpeg":
+                    imgFormat = ImageFormat.Jpeg;
+                    break;
+
+                case "png":
+                    imgFormat = ImageFormat.Png;
+                    break;
+
+                case "tiff":
+                    imgFormat = ImageFormat.Tiff;
+                    break;
+            }
+
             using (var stream = new MemoryStream()) {
-                ((Bitmap)Handle).Save(stream, ImageFormat.Bitmap);
+                ((Bitmap)Handle).Save(stream, imgFormat);
                 return stream.ToArray();
+            }
+        }
+
+        public IImage Resize(int newWidth, int newHeight)
+        {
+            var original = Handle as Bitmap;
+
+            int imgWidth = original.Width;
+            int imgHeight = original.Height;
+
+            if (newWidth != imgWidth || newHeight != imgHeight) {
+                float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, newWidth, newHeight);
+                imgWidth = (int)(imgWidth * ratio);
+                imgHeight = (int)(imgHeight * ratio);
+
+                Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
+                using (var graphic = new Graphics(newImage)) {
+                    graphic.AntiAlias = true;
+                    graphic.ImageInterpolation = ImageInterpolation.High;
+                    graphic.PixelOffsetMode = PixelOffsetMode.Half;
+                    graphic.DrawImage(original, 0, 0, imgWidth, imgHeight);
+                }
+
+                return new ImageHandler(newImage);
+            } else {
+                return this;
             }
         }
     }

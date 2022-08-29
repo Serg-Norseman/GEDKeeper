@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -76,6 +76,7 @@ namespace GKCore.Charts
             }
         }
 
+        private bool fInlineImages;
         private bool fInGroup;
         private bool fInPolyline;
         private string fLastColor;
@@ -84,22 +85,25 @@ namespace GKCore.Charts
         private bool fStartedPolyline;
         private State fState;
 
+        private readonly string fFileName;
         private readonly IFormatProvider fFmt;
         private readonly Stack<State> fStates;
         private readonly ExtRectF fViewBox;
         private readonly TextWriter fWriter;
 
-        public SvgGraphics(TextWriter tw, ExtRectF viewBox)
+        public SvgGraphics(string fileName, TextWriter tw, ExtRectF viewBox, bool inlineImages = true)
         {
+            fFileName = fileName;
             fFmt = CultureInfo.InvariantCulture;
             fState = new State();
             fStates = new Stack<State>();
             fViewBox = viewBox;
             fWriter = tw;
+            fInlineImages = inlineImages;
         }
 
-        public SvgGraphics(Stream s, ExtRectF viewBox)
-            : this(new StreamWriter(s, System.Text.Encoding.UTF8), viewBox)
+        public SvgGraphics(string fileName, Stream s, ExtRectF viewBox, bool embeddedImages = true)
+            : this(fileName, new StreamWriter(s, System.Text.Encoding.UTF8), viewBox, embeddedImages)
         {
         }
 
@@ -441,8 +445,35 @@ namespace GKCore.Charts
                 s.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"));
         }
 
-        public void DrawImage(IImage img, float x, float y, float width, float height)
+        public void DrawImage(IImage img, float x, float y, float width, float height, string imName)
         {
+            try {
+                if (img != null) {
+                    var bytes = img.Resize((int)width, (int)height).GetBytes("png");
+
+                    if (!fInlineImages && !string.IsNullOrEmpty(imName)) {
+                        string imFileName = Path.GetFileNameWithoutExtension(fFileName);
+                        string imFileDir = Path.GetDirectoryName(fFileName) + Path.DirectorySeparatorChar + imFileName;
+                        string imFilePath = imFileDir + Path.DirectorySeparatorChar + imName + ".png";
+                        string imFileRef = "." + Path.DirectorySeparatorChar + imFileName + Path.DirectorySeparatorChar + imName + ".png";
+
+                        if (!Directory.Exists(imFileDir)) {
+                            Directory.CreateDirectory(imFileDir);
+                        }
+
+                        File.WriteAllBytes(imFilePath, bytes);
+
+                        WriteLine("<image x=\"{0}\" y=\"{1}\" width=\"{2}px\" height=\"{3}px\" href=\"{4}\" />",
+                            x, y, width, height, imFileRef);
+                    } else {
+                        var base64 = Convert.ToBase64String(bytes);
+                        WriteLine("<image x=\"{0}\" y=\"{1}\" width=\"{2}px\" height=\"{3}px\" href=\"data:image/jpeg;charset=utf-8;base64,{4}\" />",
+                            x, y, width, height, base64);
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("SvgGraphics.DrawImage()", ex);
+            }
         }
     }
 }

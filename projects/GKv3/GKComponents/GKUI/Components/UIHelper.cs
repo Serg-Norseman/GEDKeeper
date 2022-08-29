@@ -20,8 +20,8 @@
 
 using System;
 using BSLib;
-using BSLib.Design;
 using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
 using GDModel;

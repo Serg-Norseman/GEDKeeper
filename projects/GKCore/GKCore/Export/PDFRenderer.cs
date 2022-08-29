@@ -112,7 +112,7 @@ namespace GKCore.Export
         }
 
         public override void DrawImage(IImage image, float x, float y,
-                                       float width, float height)
+                                       float width, float height, string imName)
         {
             x = CheckVal(x, false);
             y = CheckVal(y, true, height);

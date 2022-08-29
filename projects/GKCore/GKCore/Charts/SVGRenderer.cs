@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System.IO;
 using System.Text;
 using BSLib;
 using BSLib.Design.Graphics;
+using GKCore.Options;
 
 namespace GKCore.Charts
 {
@@ -48,7 +49,7 @@ namespace GKCore.Charts
         public override void BeginDrawing()
         {
             fWriter = new StreamWriter(new FileStream(fFileName, FileMode.Create, FileAccess.Write), Encoding.UTF8);
-            fGfx = new SvgGraphics(fWriter, ExtRectF.CreateBounds(0, 0, fWidth, fHeight));
+            fGfx = new SvgGraphics(fFileName, fWriter, ExtRectF.CreateBounds(0, 0, fWidth, fHeight), GlobalOptions.Instance.TreeChartOptions.UseInlineImagesInSvg);
             fGfx.BeginDrawing();
         }
 
@@ -74,9 +75,11 @@ namespace GKCore.Charts
             // dummy
         }
 
-        public override void DrawImage(IImage image, float x, float y, float width, float height)
+        public override void DrawImage(IImage image, float x, float y, float width, float height, string imName)
         {
-            // dont implemented yet
+            if (fGfx != null && image != null) {
+                fGfx.DrawImage(image, x, y, width, height, imName);
+            }
         }
 
         public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)

@@ -1508,7 +1508,7 @@ namespace GKCore.Charts
                 if (person.Portrait != null) {
                     ExtRect portRt = person.PortraitArea.GetOffset(prt.Left, prt.Top);
                     fRenderer.DrawImage(person.Portrait, portRt.Left, portRt.Top,
-                                        portRt.GetWidth(), portRt.GetHeight());
+                                        portRt.GetWidth(), portRt.GetHeight(), person.Rec.XRef);
 
                     prt.Left += person.PortraitWidth;
                 }
@@ -1545,7 +1545,7 @@ namespace GKCore.Charts
                         if (!person.Signs.Contains(cps)) continue;
 
                         IImage pic = fSignsPic[(int)cps];
-                        fRenderer.DrawImage(pic, brt.Right, brt.Top - 21 + i * pic.Height);
+                        fRenderer.DrawImage(pic, brt.Right, brt.Top - 21 + i * pic.Height, cps.ToString());
                         i++;
                     }
                 }
@@ -1554,17 +1554,17 @@ namespace GKCore.Charts
                 if (drawMode == ChartDrawMode.dmInteractive) {
                     if (person.HasFlag(PersonFlag.pfCanExpand)) {
                         ExtRect expRt = GetExpanderRect(brt);
-                        fRenderer.DrawImage(fExpPic, expRt.Left, expRt.Top);
+                        fRenderer.DrawImage(fExpPic, expRt.Left, expRt.Top, string.Empty);
                     }
 
                     if (person.IsCollapsed) {
                         ExtRect expRt = GetPersonExpandRect(brt);
-                        fRenderer.DrawImage(fPersExpPic, expRt.Left, expRt.Top);
+                        fRenderer.DrawImage(fPersExpPic, expRt.Left, expRt.Top, string.Empty);
                     }
 
                     if (person.Selected) {
                         ExtRect infoRt = GetInfoRect(brt);
-                        fRenderer.DrawImage(fInfoPic, infoRt.Left, infoRt.Top);
+                        fRenderer.DrawImage(fInfoPic, infoRt.Left, infoRt.Top, string.Empty);
                     }
 
                     // draw CI only for existing individuals

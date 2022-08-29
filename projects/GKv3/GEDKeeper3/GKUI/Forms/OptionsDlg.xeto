@@ -441,6 +441,14 @@
 
         </TabPage>
 
+        <TabPage x:Name="pageSpecials" Padding="8">
+          <StackLayout Style="vertListStack">
+            <CheckBox x:Name="chkUseInlineImagesInSvg" />
+            <CheckBox x:Name="chkUseExtendedNotes" />
+            <CheckBox x:Name="chkKeepRichNames" />
+          </StackLayout>
+        </TabPage>
+
         <TabPage x:Name="pagePlugins" Padding="8">
           <comcom:GKListView x:Name="lvPlugins" />
         </TabPage>

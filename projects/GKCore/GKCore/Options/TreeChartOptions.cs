@@ -99,6 +99,7 @@ namespace GKCore.Options
         public int DepthLimitDescendants { get; set; }
 
         public bool UseExtraControls { get; set; }
+        public bool UseInlineImagesInSvg { get; set; }
 
         public TreeChartOptions()
         {
@@ -154,6 +155,7 @@ namespace GKCore.Options
             SpouseDistance = TreeChartModel.DEF_SPOUSE_DISTANCE;
 
             UseExtraControls = true;
+            UseInlineImagesInSvg = true;
         }
 
         public void Assign(IOptions source)
@@ -205,6 +207,7 @@ namespace GKCore.Options
             SpouseDistance = srcOptions.SpouseDistance;
 
             UseExtraControls = srcOptions.UseExtraControls;
+            UseInlineImagesInSvg = srcOptions.UseInlineImagesInSvg;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -265,6 +268,7 @@ namespace GKCore.Options
             DepthLimitDescendants = iniFile.ReadInteger("Chart", "DepthLimitDescendants", -1);
 
             UseExtraControls = iniFile.ReadBool("Chart", "UseExtraControls", true);
+            UseInlineImagesInSvg = iniFile.ReadBool("Chart", "UseInlineImagesInSvg", true);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -325,6 +329,7 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "DepthLimitDescendants", DepthLimitDescendants);
 
             iniFile.WriteBool("Chart", "UseExtraControls", UseExtraControls);
+            iniFile.WriteBool("Chart", "UseInlineImagesInSvg", UseInlineImagesInSvg);
         }
     }
 }

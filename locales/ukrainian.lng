@@ -866,3 +866,7 @@
 862=Attention: when merging archive records, the name and address are not transferred! Proceed?
 863=Use extra controls
 864=Several families of parents `{0}`
+865=Specials
+866=Use inline images in SVG
+867=Use extended notes
+868=Keep rich names (only advanced users)

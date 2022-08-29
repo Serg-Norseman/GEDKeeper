@@ -43,9 +43,19 @@ namespace GKUI.Components
     /// </summary>
     public class ObservableExtList<T> : ExtObservableList<T>, IListViewItems where T : BSDListItem
     {
-        BSDListItem IListViewItems.this[int index]
+        BSDListItem IControlItems<BSDListItem>.this[int index]
         {
             get { return (BSDListItem)base[index]; }
+        }
+
+        BSDListItem this[int index]
+        {
+            get { return (BSDListItem)base[index]; }
+        }
+
+        public int Count
+        {
+            get { return base.Count; }
         }
 
         public ObservableExtList()

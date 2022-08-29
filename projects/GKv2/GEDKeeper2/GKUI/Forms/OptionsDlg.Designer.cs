@@ -160,6 +160,10 @@
         private System.Windows.Forms.ComboBox cmbCertaintyAlgorithm;
         private System.Windows.Forms.CheckBox chkLocalizedCalendarSignatures;
         private System.Windows.Forms.CheckBox chkUseExtraControls;
+        private System.Windows.Forms.TabPage pageSpecials;
+        private System.Windows.Forms.CheckBox chkUseInlineImagesInSvg;
+        private System.Windows.Forms.CheckBox chkUseExtendedNotes;
+        private System.Windows.Forms.CheckBox chkKeepRichNames;
 
         private void InitializeComponent()
         {
@@ -321,6 +325,10 @@
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.chkUseExtraControls = new System.Windows.Forms.CheckBox();
+            this.pageSpecials = new System.Windows.Forms.TabPage();
+            this.chkUseInlineImagesInSvg = new System.Windows.Forms.CheckBox();
+            this.chkUseExtendedNotes = new System.Windows.Forms.CheckBox();
+            this.chkKeepRichNames = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -362,6 +370,7 @@
             this.grpPedigree.SuspendLayout();
             this.grpPedigreeFormat.SuspendLayout();
             this.pagePlugins.SuspendLayout();
+            this.pageSpecials.SuspendLayout();
             this.SuspendLayout();
             // 
             // PageControl1
@@ -371,6 +380,7 @@
             this.PageControl1.Controls.Add(this.pageCharts);
             this.PageControl1.Controls.Add(this.pageUIView);
             this.PageControl1.Controls.Add(this.pagePedigree);
+            this.PageControl1.Controls.Add(this.pageSpecials);
             this.PageControl1.Controls.Add(this.pagePlugins);
             this.PageControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.PageControl1.Location = new System.Drawing.Point(0, 0);
@@ -2119,6 +2129,47 @@
             this.radCompact.TabIndex = 2;
             this.radCompact.Text = "radCompact";
             // 
+            // pageSpecials
+            // 
+            this.pageSpecials.Controls.Add(this.chkUseInlineImagesInSvg);
+            this.pageSpecials.Controls.Add(this.chkUseExtendedNotes);
+            this.pageSpecials.Controls.Add(this.chkKeepRichNames);
+            this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
+            this.pageSpecials.Location = new System.Drawing.Point(4, 26);
+            this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
+            this.pageSpecials.Name = "pageSpecials";
+            this.pageSpecials.Padding = new System.Windows.Forms.Padding(10);
+            this.pageSpecials.Size = new System.Drawing.Size(741, 762);
+            this.pageSpecials.TabIndex = 5;
+            this.pageSpecials.Text = "pageSpecials";
+            // 
+            // chkUseInlineImagesInSvg
+            // 
+            this.chkUseInlineImagesInSvg.Location = new System.Drawing.Point(20, 20);
+            this.chkUseInlineImagesInSvg.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkUseInlineImagesInSvg.Name = "chkUseInlineImagesInSvg";
+            this.chkUseInlineImagesInSvg.Size = new System.Drawing.Size(254, 22);
+            this.chkUseInlineImagesInSvg.TabIndex = 12;
+            this.chkUseInlineImagesInSvg.Text = "chkUseInlineImagesInSvg";
+            // 
+            // chkUseExtendedNotes
+            // 
+            this.chkUseExtendedNotes.Location = new System.Drawing.Point(20, 61);
+            this.chkUseExtendedNotes.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkUseExtendedNotes.Name = "chkUseExtendedNotes";
+            this.chkUseExtendedNotes.Size = new System.Drawing.Size(400, 22);
+            this.chkUseExtendedNotes.TabIndex = 12;
+            this.chkUseExtendedNotes.Text = "chkUseExtendedNotes";
+            // 
+            // chkKeepRichNames
+            // 
+            this.chkKeepRichNames.Location = new System.Drawing.Point(20, 102);
+            this.chkKeepRichNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkKeepRichNames.Name = "chkKeepRichNames";
+            this.chkKeepRichNames.Size = new System.Drawing.Size(600, 22);
+            this.chkKeepRichNames.TabIndex = 12;
+            this.chkKeepRichNames.Text = "chkKeepRichNames";
+            // 
             // pagePlugins
             // 
             this.pagePlugins.BackColor = System.Drawing.SystemColors.Control;
@@ -2128,7 +2179,7 @@
             this.pagePlugins.Name = "pagePlugins";
             this.pagePlugins.Padding = new System.Windows.Forms.Padding(10);
             this.pagePlugins.Size = new System.Drawing.Size(741, 762);
-            this.pagePlugins.TabIndex = 5;
+            this.pagePlugins.TabIndex = 6;
             this.pagePlugins.Text = "pagePlugins";
             // 
             // lvPlugins
@@ -2266,6 +2317,7 @@
             this.pagePedigree.ResumeLayout(false);
             this.grpPedigree.ResumeLayout(false);
             this.grpPedigreeFormat.ResumeLayout(false);
+            this.pageSpecials.ResumeLayout(false);
             this.pagePlugins.ResumeLayout(false);
             this.ResumeLayout(false);
         }

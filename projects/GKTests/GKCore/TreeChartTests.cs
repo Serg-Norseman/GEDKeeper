@@ -248,7 +248,7 @@ namespace GKCore
         public void Test_SvgGraphics()
         {
             using (MemoryStream stm = new MemoryStream()) {
-                var svg = new SvgGraphics(stm, ExtRectF.CreateBounds(0, 0, 100, 100));
+                var svg = new SvgGraphics("", stm, ExtRectF.CreateBounds(0, 0, 100, 100), true);
 
                 svg.BeginDrawing();
                 svg.Clear(UIHelper.ConvertColor(Color.Yellow));
@@ -269,7 +269,7 @@ namespace GKCore
                 svg.FillRoundedRect(80, 80, 10, 10, 3);
 
                 svg.DrawCircleSegment(0, 0, 10, 20, 0, 17, null, null);
-                svg.DrawImage(null, 0, 0, 100, 100);
+                svg.DrawImage(null, 0, 0, 100, 100, string.Empty);
                 svg.DrawPolygon(new ExtPointF[] {}, null, null);
                 svg.DrawString("x", 10, 10);
 

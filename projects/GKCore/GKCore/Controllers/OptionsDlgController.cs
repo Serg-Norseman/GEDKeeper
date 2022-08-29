@@ -357,6 +357,20 @@ namespace GKCore.Controllers
             fOptions.SurnameInCapitals = GetControl<ICheckBox>("chkSurnameInCapitals").Checked;
         }
 
+        public void UpdateSpecials()
+        {
+            GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked = fOptions.TreeChartOptions.UseInlineImagesInSvg;
+            GetControl<ICheckBox>("chkUseExtendedNotes").Checked = fOptions.UseExtendedNotes;
+            GetControl<ICheckBox>("chkKeepRichNames").Checked = fOptions.KeepRichNames;
+        }
+
+        public void AcceptSpecials()
+        {
+            fOptions.TreeChartOptions.UseInlineImagesInSvg = GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked;
+            fOptions.UseExtendedNotes = GetControl<ICheckBox>("chkUseExtendedNotes").Checked;
+            fOptions.KeepRichNames = GetControl<ICheckBox>("chkKeepRichNames").Checked;
+        }
+
         public void UpdatePlugins()
         {
             var listView = GetControl<IListView>("lvPlugins");
@@ -588,6 +602,9 @@ namespace GKCore.Controllers
             // pedigrees
             UpdatePedigreesOptions();
 
+            // specials
+            UpdateSpecials();
+
             // plugins
             UpdatePlugins();
         }
@@ -613,6 +630,9 @@ namespace GKCore.Controllers
 
             // pedigrees
             AcceptPedigreesOptions();
+
+            // specials
+            AcceptSpecials();
 
             // plugins
             AcceptPlugins();
@@ -787,6 +807,12 @@ namespace GKCore.Controllers
             GetControl<IGroupBox>("grpPedigreeFormat").Text = LangMan.LS(LSID.LSID_PedigreeFormat);
             GetControl<IRadioButton>("radExcess").Text = LangMan.LS(LSID.LSID_PF1);
             GetControl<IRadioButton>("radCompact").Text = LangMan.LS(LSID.LSID_PF2);
+
+            // Specials
+            GetControl<ITabPage>("pageSpecials").Text = LangMan.LS(LSID.LSID_Specials);
+            GetControl<ICheckBox>("chkUseInlineImagesInSvg").Text = LangMan.LS(LSID.LSID_UseInlineImagesInSvg);
+            GetControl<ICheckBox>("chkUseExtendedNotes").Text = LangMan.LS(LSID.LSID_UseExtendedNotes);
+            GetControl<ICheckBox>("chkKeepRichNames").Text = LangMan.LS(LSID.LSID_KeepRichNames);
 
             // Plugins
             GetControl<ITabPage>("pagePlugins").Text = LangMan.LS(LSID.LSID_Plugins);

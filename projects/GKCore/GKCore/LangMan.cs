@@ -922,8 +922,12 @@ namespace GKCore
         /* 862 */ LSID_RepoRecsMergeWarning,
         /* 863 */ LSID_UseExtraControls,
         /* 864 */ LSID_SeveralFamiliesOfParents,
+        /* 865 */ LSID_Specials,
+        /* 866 */ LSID_UseInlineImagesInSvg,
+        /* 867 */ LSID_UseExtendedNotes,
+        /* 868 */ LSID_KeepRichNames,
 
-        /* 000 */ LSID_Last = LSID_SeveralFamiliesOfParents
+        /* 000 */ LSID_Last = LSID_KeepRichNames
     }
 
 
@@ -1802,6 +1806,10 @@ namespace GKCore
             /* 862 */ "Attention: when merging archive records, the name and address are not transferred! Proceed?",
             /* 863 */ "Use extra controls",
             /* 864 */ "Several families of parents `{0}`",
+            /* 865 */ "Specials",
+            /* 866 */ "Use inline images in SVG",
+            /* 867 */ "Use extended notes",
+            /* 868 */ "Keep rich names",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

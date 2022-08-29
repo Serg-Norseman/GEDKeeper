@@ -85,13 +85,13 @@ namespace GKCore.Charts
 
         public abstract void SetTarget(object target);
 
-        public void DrawImage(IImage image, float x, float y)
+        public void DrawImage(IImage image, float x, float y, string imName)
         {
-            DrawImage(image, x, y, image.Width, image.Height);
+            DrawImage(image, x, y, image.Width, image.Height, imName);
         }
 
         public abstract void DrawImage(IImage image, float x, float y,
-                                       float width, float height);
+                                       float width, float height, string imName);
         public abstract void DrawImage(IImage image, ExtRect destinationRect,
                                        ExtRect sourceRect);
 

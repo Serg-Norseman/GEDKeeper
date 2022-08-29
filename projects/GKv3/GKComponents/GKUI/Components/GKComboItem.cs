@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,12 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib.Design;
 using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using GKUI.Platform;
-using EFListItem = Eto.Forms.IListItem;
 using EFImageListItem = Eto.Forms.IImageListItem;
+using EFListItem = Eto.Forms.IListItem;
 
 namespace GKUI.Components
 {

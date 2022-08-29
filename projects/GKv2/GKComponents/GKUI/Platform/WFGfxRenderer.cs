@@ -77,7 +77,7 @@ namespace GKUI.Platform
         }
 
         public override void DrawImage(IImage image, float x, float y,
-                                       float width, float height)
+                                       float width, float height, string imName)
         {
             var sdImage = ((ImageHandler)image).Handle;
 
