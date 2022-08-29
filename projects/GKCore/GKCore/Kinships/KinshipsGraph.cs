@@ -182,9 +182,13 @@ namespace GKCore.Kinships
 
         private static string GetRelationName(GDMIndividualRecord target, RelationKind rel, int great, int degree, bool shortForm)
         {
-            string tmp;
-            tmp = KinshipsMan.GetDegree(degree, target.Sex);
-            tmp += KinshipsMan.GetGreat(great, shortForm);
+            string tmp = string.Empty;
+
+            if (rel != RelationKind.rkUndefined) {
+                tmp = KinshipsMan.GetDegree(degree, target.Sex);
+                tmp += KinshipsMan.GetGreat(great, shortForm);
+            }
+
             return tmp + LangMan.LS(GKData.RelationKinds[(int)rel]);
         }
 
