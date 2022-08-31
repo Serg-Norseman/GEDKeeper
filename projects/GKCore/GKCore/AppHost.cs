@@ -149,6 +149,7 @@ namespace GKCore
                     }
 
                     ProcessHolidays();
+                    ProcessTips();
                 } finally {
                     EndLoading();
                 }
@@ -796,9 +797,9 @@ namespace GKCore
 
         public void ProcessHolidays()
         {
-            try
-            {
-                if (!AppHost.Options.ShowTips) return;
+            try {
+                if (!AppHost.Options.ShowTips)
+                    return;
 
                 Holidays holidays = new Holidays();
 
@@ -809,10 +810,27 @@ namespace GKCore
                 }
 
                 holidays.CollectTips(fTips);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.WriteError("AppHost.ProcessHolidays()", ex);
+            }
+        }
+
+        public void ProcessTips()
+        {
+            try {
+                if (!AppHost.Options.ShowTips)
+                    return;
+
+                var tips = new Tips();
+
+                string lngSign = AppHost.Options.GetLanguageSign();
+                if (!string.IsNullOrEmpty(lngSign)) {
+                    tips.Load(GKUtils.GetLangsPath() + "tips_" + lngSign + ".yaml");
+                }
+
+                tips.CollectTips(fTips);
+            } catch (Exception ex) {
+                Logger.WriteError("AppHost.ProcessTips()", ex);
             }
         }
 

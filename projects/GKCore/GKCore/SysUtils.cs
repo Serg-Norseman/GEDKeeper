@@ -240,5 +240,18 @@ namespace GKCore
             }
             return new string(array, 0, arrayIndex);
         }
+
+        public static void Shuffle<T>(this T[] array)
+        {
+            var rng = new Random();
+
+            int n = array.Length;
+            while (n > 1) {
+                int k = rng.Next(n--);
+                T temp = array[n];
+                array[n] = array[k];
+                array[k] = temp;
+            }
+        }
     }
 }
