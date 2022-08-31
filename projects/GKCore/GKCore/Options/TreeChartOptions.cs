@@ -70,7 +70,7 @@ namespace GKCore.Options
         public bool BoldNames;
         public bool OnlyLocality;
         public bool MinimizingWidth;
-        //public bool RootSpousesAncestors;
+        public bool RootSpousesAncestors;
         public bool AgeVisible;
 
         public bool AutoAlign; // debug option, for future purposes
@@ -131,7 +131,7 @@ namespace GKCore.Options
             SeparateDepth = false;
             OnlyLocality = false;
             MinimizingWidth = true;
-            //RootSpousesAncestors = true;
+            RootSpousesAncestors = true;
             AgeVisible = false;
 
             AutoAlign = true;

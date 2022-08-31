@@ -344,6 +344,11 @@ namespace GKCore.Charts
             fTree = sourceModel.fTree;
         }
 
+        private bool IsPseudoFullTree()
+        {
+            return fOptions.RootSpousesAncestors && fKind == TreeChartKind.ckBoth;
+        }
+
         public void GenChart(GDMIndividualRecord indiRec, TreeChartKind kind, bool rootCenter)
         {
             fKind = kind;
@@ -712,9 +717,9 @@ namespace GKCore.Charts
                                 // additionally display the ancestors of the spouses of the central person
                                 // a problem in calculating the position of the branches of the ancestors of the spouses
                                 // (in GK, the branches are positioned depending on the gender of the spouse)
-                                /*if (fOptions.RootSpousesAncestors && fKind == TreeChartKind.ckBoth && indiRec == fRoot.Rec) {
+                                if (IsPseudoFullTree() && indiRec == fRoot.Rec) {
                                     DoPersonAncestorsStep(resParent, false);
-                                }*/
+                                }
                             }
                         } else {
                             resParent = result;
@@ -1036,8 +1041,27 @@ namespace GKCore.Charts
         {
             Array.Clear(fEdges, 0, fEdges.Length);
 
-            var prev = new List<TreeChartPerson>();
-            RecalcAnc(prev, fRoot, fMargins, fMargins);
+            if (IsPseudoFullTree()) {
+                if (fRoot.Sex == GDMSex.svMale) {
+                    var prev = new List<TreeChartPerson>();
+                    RecalcAnc(prev, fRoot, fMargins, fMargins);
+                }
+
+                int spousesCount = fRoot.GetSpousesCount();
+                for (int i = 0; i < spousesCount; i++) {
+                    TreeChartPerson sp = fRoot.GetSpouse(i);
+                    var prev = new List<TreeChartPerson>();
+                    RecalcAnc(prev, sp, fMargins, fMargins);
+                }
+
+                if (fRoot.Sex == GDMSex.svFemale) {
+                    var prev = new List<TreeChartPerson>();
+                    RecalcAnc(prev, fRoot, fMargins, fMargins);
+                }
+            } else {
+                var prev = new List<TreeChartPerson>();
+                RecalcAnc(prev, fRoot, fMargins, fMargins);
+            }
         }
 
         private bool ShiftDesc(TreeChartPerson person, int offset, bool isSingle, bool verify = false)
@@ -1764,7 +1788,24 @@ namespace GKCore.Charts
         public void Draw(ChartDrawMode drawMode)
         {
             InitGraphics();
-            Draw(fRoot, fKind, drawMode);
+
+            if (IsPseudoFullTree()) {
+                if (fRoot.Sex == GDMSex.svMale) {
+                    Draw(fRoot, fKind, drawMode);
+                }
+
+                int spousesCount = fRoot.GetSpousesCount();
+                for (int i = 0; i < spousesCount; i++) {
+                    TreeChartPerson sp = fRoot.GetSpouse(i);
+                    Draw(sp, TreeChartKind.ckAncestors, drawMode);
+                }
+
+                if (fRoot.Sex == GDMSex.svFemale) {
+                    Draw(fRoot, fKind, drawMode);
+                }
+            } else {
+                Draw(fRoot, fKind, drawMode);
+            }
         }
 
         private void Draw(TreeChartPerson person, TreeChartKind dirKind, ChartDrawMode drawMode)
