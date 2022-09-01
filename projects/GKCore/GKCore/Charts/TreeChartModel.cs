@@ -349,6 +349,11 @@ namespace GKCore.Charts
             return fOptions.RootSpousesAncestors && fKind == TreeChartKind.ckBoth;
         }
 
+        private bool IsPFTRootSpouse(TreeChartPerson person)
+        {
+            return (IsPseudoFullTree() && person != null && person.BaseSpouse == fRoot);
+        }
+
         public void GenChart(GDMIndividualRecord indiRec, TreeChartKind kind, bool rootCenter)
         {
             fKind = kind;
@@ -1034,6 +1039,7 @@ namespace GKCore.Charts
             Array.Clear(fEdges, 0, fEdges.Length);
 
             if (IsPseudoFullTree()) {
+                // the man's spouses align to his right
                 if (fRoot.Sex == GDMSex.svMale) {
                     RecalcAnc(fRoot, fMargins, fMargins);
                 }
@@ -1044,6 +1050,7 @@ namespace GKCore.Charts
                     RecalcAnc(sp, fMargins, fMargins);
                 }
 
+                // the woman's spouses align to her left
                 if (fRoot.Sex == GDMSex.svFemale) {
                     RecalcAnc(fRoot, fMargins, fMargins);
                 }
@@ -1055,6 +1062,9 @@ namespace GKCore.Charts
         private bool ShiftDesc(TreeChartPerson person, int offset, bool isSingle, bool verify = false)
         {
             if (person == null) return true;
+
+            if (IsPseudoFullTree() && (person == fRoot || person.BaseSpouse == fRoot))
+                return true;
 
             if (person == fRoot) {
                 isSingle = false;
@@ -1187,7 +1197,8 @@ namespace GKCore.Charts
             person.IsVisible = true;
 
             int gen = person.Generation;
-            if (predef) {
+
+            if (predef && !IsPFTRootSpouse(person)) {
                 person.PtX = ptX;
                 person.PtY = ptY;
             }
@@ -1198,6 +1209,7 @@ namespace GKCore.Charts
                 ShiftDesc(person, bound - person.Rect.Left, true);
             }
 
+            // the man's spouses align to his right
             if (person.Sex == GDMSex.svMale) {
                 RecalcDescChilds(person);
                 fEdges[gen] = person.Rect.Right;
@@ -1212,16 +1224,7 @@ namespace GKCore.Charts
                     int spX = 0;
 
                     /*if (IsPseudoFullTree() && person == fRoot) {
-                        if (sp.Father != null && sp.Mother != null) {
-                            // alignment of child coordinates between parents
-                            spX = (sp.Father.PtX + sp.Mother.PtX) / 2;
-                        } else if (sp.Father != null) {
-                            spX = sp.Father.PtX;
-                        } else if (sp.Mother != null) {
-                            spX = sp.Mother.PtX;
-                        }
-
-                        //spX = sp.PtX;
+                        spX = sp.PtX;
                     } else*/ {
                         int spOffset = (fBranchDistance + sp.Width / 2);
 
@@ -1247,6 +1250,7 @@ namespace GKCore.Charts
                 }
             }
 
+            // the woman's spouses align to her left
             if (person.Sex == GDMSex.svFemale) {
                 RecalcDescChilds(person);
                 fEdges[gen] = person.Rect.Right;
@@ -1793,6 +1797,7 @@ namespace GKCore.Charts
             InitGraphics();
 
             if (IsPseudoFullTree()) {
+                // the man's spouses align to his right
                 if (fRoot.Sex == GDMSex.svMale) {
                     Draw(fRoot, fKind, drawMode);
                 }
@@ -1803,6 +1808,7 @@ namespace GKCore.Charts
                     Draw(sp, TreeChartKind.ckAncestors, drawMode);
                 }
 
+                // the woman's spouses align to her left
                 if (fRoot.Sex == GDMSex.svFemale) {
                     Draw(fRoot, fKind, drawMode);
                 }
