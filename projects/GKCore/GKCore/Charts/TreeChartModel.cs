@@ -271,11 +271,11 @@ namespace GKCore.Charts
 
         private static IImage PrepareImage(string name, bool makeTransp)
         {
-            if (name == null) return null;
+            if (string.IsNullOrEmpty(name))
+                return null;
 
             try {
-                var result = AppHost.GfxProvider.LoadResourceImage(name, makeTransp);
-                return result;
+                return AppHost.GfxProvider.LoadResourceImage(name, makeTransp);
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartModel.PrepareImage()", ex);
                 return null;
@@ -285,20 +285,11 @@ namespace GKCore.Charts
         private void InitSigns()
         {
             try {
-                var signsPic = new IImage[10];
-                signsPic[0] = PrepareImage("tg_george_cross.gif", true);
-
-                signsPic[1] = PrepareImage("tg_soldier.gif", true);
-                signsPic[2] = PrepareImage("tg_soldier_fall.gif", true);
-                signsPic[3] = PrepareImage("tg_veteran_rear.gif", true);
-                signsPic[4] = PrepareImage("tg_barbed_wire.gif", true);
-                signsPic[5] = PrepareImage("tg_cpsu.png", false);
-
-                signsPic[6] = PrepareImage("tg_islam_sym.gif", false);
-                signsPic[7] = PrepareImage("tg_latin_cross.gif", false);
-                signsPic[8] = PrepareImage("tg_orthodox_cross.gif", false);
-                signsPic[9] = PrepareImage("tg_oldritual_cross.gif", false);
-                fSignsPic = signsPic;
+                int uRefsNum = GKData.SpecialUserRefs.Length;
+                fSignsPic = new IImage[uRefsNum];
+                for (int i = 0; i < uRefsNum; i++) {
+                    fSignsPic[i] = PrepareImage(GKData.SpecialUserRefs[i].ResName, false);
+                }
 
                 fExpPic = PrepareImage("btn_expand.gif", true);
                 fPersExpPic = PrepareImage("btn_expand2.gif", true);
@@ -967,6 +958,11 @@ namespace GKCore.Charts
             while (pp != null);
         }
 
+        /// <summary>
+        /// If the option to minimize the diagram width is not selected,
+        /// the function takes the right edge from the previous branch of the given generation,
+        /// otherwise it searches for the rightmost edge from the current generation and all subsequent ones.
+        /// </summary>
         private int GetEdge(int gen)
         {
             int result = fEdges[gen];
@@ -1026,6 +1022,10 @@ namespace GKCore.Charts
             }
         }
 
+        /// <summary>
+        /// The function returns the Y-coordinate of the next generation,
+        /// depending on the type of movement (ancestors, descendants) and the chart inversion option.
+        /// </summary>
         private int NextGenY(TreeChartPerson person, bool ancestors)
         {
             int sign = (ancestors) ? -1 : +1;
@@ -1576,7 +1576,7 @@ namespace GKCore.Charts
                         if (!person.Signs.Contains(cps)) continue;
 
                         IImage pic = fSignsPic[(int)cps];
-                        fRenderer.DrawImage(pic, brt.Right, brt.Top - 21 + i * pic.Height, cps.ToString());
+                        fRenderer.DrawImage(pic, brt.Right + 1, brt.Top - 21 + i * pic.Height, cps.ToString());
                         i++;
                     }
                 }

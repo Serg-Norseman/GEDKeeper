@@ -152,7 +152,8 @@ namespace GKCore
             public LSID Title;
             public string ResName;
 
-            public SpecialUserRef(LSID title, string resName) {
+            public SpecialUserRef(LSID title, string resName)
+            {
                 Title = title;
                 ResName = resName;
             }
@@ -264,16 +265,16 @@ namespace GKCore
             };
 
             SpecialUserRefs = new SpecialUserRef[] {
-                new SpecialUserRef(LSID.LSID_RI_GeorgeKnight, ""),
-                new SpecialUserRef(LSID.LSID_USSR_WWII_Combatant, ""),
-                new SpecialUserRef(LSID.LSID_USSR_WWII_KilledInBattle, ""),
-                new SpecialUserRef(LSID.LSID_USSR_WWII_WorkerInRear, ""),
-                new SpecialUserRef(LSID.LSID_USSR_Repressed, ""),
-                new SpecialUserRef(LSID.LSID_USSR_CPSUMember, ""),
-                new SpecialUserRef(LSID.LSID_Religion_Islam, ""),
-                new SpecialUserRef(LSID.LSID_Religion_Catholicism, ""),
-                new SpecialUserRef(LSID.LSID_Religion_Orthodoxy, ""),
-                new SpecialUserRef(LSID.LSID_Religion_TheOldBelievers, "")
+                new SpecialUserRef(LSID.LSID_RI_GeorgeKnight, "tg_george_cross.gif"),
+                new SpecialUserRef(LSID.LSID_USSR_WWII_Combatant, "tg_soldier.gif"),
+                new SpecialUserRef(LSID.LSID_USSR_WWII_KilledInBattle, "tg_soldier_fall.gif"),
+                new SpecialUserRef(LSID.LSID_USSR_WWII_WorkerInRear, "tg_veteran_rear.gif"),
+                new SpecialUserRef(LSID.LSID_USSR_Repressed, "tg_barbed_wire.gif"),
+                new SpecialUserRef(LSID.LSID_USSR_CPSUMember, "tg_cpsu.png"),
+                new SpecialUserRef(LSID.LSID_Religion_Islam, "tg_islam_sym.gif"),
+                new SpecialUserRef(LSID.LSID_Religion_Catholicism, "tg_latin_cross.gif"),
+                new SpecialUserRef(LSID.LSID_Religion_Orthodoxy, "tg_orthodox_cross.gif"),
+                new SpecialUserRef(LSID.LSID_Religion_TheOldBelievers, "tg_oldritual_cross.gif"),
             };
 
             CertaintyAssessments = new LSID[] {
