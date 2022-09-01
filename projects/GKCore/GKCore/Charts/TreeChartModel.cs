@@ -953,8 +953,7 @@ namespace GKCore.Charts
             TreeChartPerson pp = person;
             if (pp == null) return;
 
-            do
-            {
+            do {
                 pp.PtX += offset;
                 fEdges[pp.Generation] = pp.Rect.Right;
 
@@ -976,7 +975,7 @@ namespace GKCore.Charts
             return result;
         }
 
-        private void RecalcAnc(List<TreeChartPerson> prev, TreeChartPerson person, int ptX, int ptY)
+        private void RecalcAnc(TreeChartPerson person, int ptX, int ptY)
         {
             if (person == null) return;
 
@@ -994,15 +993,6 @@ namespace GKCore.Charts
 
             fEdges[gen] = person.Rect.Right;
 
-            prev.Add(person);
-            if (person.Rect.Top < 0) {
-                offset = 0 - person.Rect.Top + fMargins;
-                int num = prev.Count;
-                for (int i = 0; i < num; i++) {
-                    prev[i].PtY += offset;
-                }
-            }
-
             person.IsVisible = true;
 
             if (person.IsCollapsed) {
@@ -1010,10 +1000,12 @@ namespace GKCore.Charts
             }
 
             if (person.Father != null && person.Mother != null) {
-                RecalcAnc(prev, person.Father, person.PtX - (fSpouseDistance + person.Father.Width / 2), NextGenY(person, true));
-                RecalcAnc(prev, person.Mother, person.PtX + (fSpouseDistance + person.Mother.Width / 2), NextGenY(person, true));
+                RecalcAnc(person.Father, person.PtX - (fSpouseDistance + person.Father.Width / 2), NextGenY(person, true));
+                RecalcAnc(person.Mother, person.PtX + (fSpouseDistance + person.Mother.Width / 2), NextGenY(person, true));
 
+                // alignment of child coordinates between parents
                 person.PtX = (person.Father.PtX + person.Mother.PtX) / 2;
+
                 fEdges[gen] = person.Rect.Right;
             } else {
                 TreeChartPerson anc = null;
@@ -1024,7 +1016,7 @@ namespace GKCore.Charts
                 }
 
                 if (anc != null) {
-                    RecalcAnc(prev, anc, person.PtX, NextGenY(person, true));
+                    RecalcAnc(anc, person.PtX, NextGenY(person, true));
                 }
             }
         }
@@ -1043,24 +1035,20 @@ namespace GKCore.Charts
 
             if (IsPseudoFullTree()) {
                 if (fRoot.Sex == GDMSex.svMale) {
-                    var prev = new List<TreeChartPerson>();
-                    RecalcAnc(prev, fRoot, fMargins, fMargins);
+                    RecalcAnc(fRoot, fMargins, fMargins);
                 }
 
                 int spousesCount = fRoot.GetSpousesCount();
                 for (int i = 0; i < spousesCount; i++) {
                     TreeChartPerson sp = fRoot.GetSpouse(i);
-                    var prev = new List<TreeChartPerson>();
-                    RecalcAnc(prev, sp, fMargins, fMargins);
+                    RecalcAnc(sp, fMargins, fMargins);
                 }
 
                 if (fRoot.Sex == GDMSex.svFemale) {
-                    var prev = new List<TreeChartPerson>();
-                    RecalcAnc(prev, fRoot, fMargins, fMargins);
+                    RecalcAnc(fRoot, fMargins, fMargins);
                 }
             } else {
-                var prev = new List<TreeChartPerson>();
-                RecalcAnc(prev, fRoot, fMargins, fMargins);
+                RecalcAnc(fRoot, fMargins, fMargins);
             }
         }
 
@@ -1196,6 +1184,8 @@ namespace GKCore.Charts
         {
             if (person == null) return;
 
+            person.IsVisible = true;
+
             int gen = person.Generation;
             if (predef) {
                 person.PtX = ptX;
@@ -1213,24 +1203,37 @@ namespace GKCore.Charts
                 fEdges[gen] = person.Rect.Right;
             }
 
-            person.IsVisible = true;
-
             int spousesCount = person.GetSpousesCount();
             if (spousesCount > 0) {
                 TreeChartPerson prev = person;
                 for (int i = 0; i < spousesCount; i++) {
                     TreeChartPerson sp = person.GetSpouse(i);
-                    int spOffset = (fBranchDistance + sp.Width / 2);
+
                     int spX = 0;
 
-                    switch (person.Sex) {
-                        case GDMSex.svMale:
-                            spX = prev.Rect.Right + spOffset;
-                            break;
+                    /*if (IsPseudoFullTree() && person == fRoot) {
+                        if (sp.Father != null && sp.Mother != null) {
+                            // alignment of child coordinates between parents
+                            spX = (sp.Father.PtX + sp.Mother.PtX) / 2;
+                        } else if (sp.Father != null) {
+                            spX = sp.Father.PtX;
+                        } else if (sp.Mother != null) {
+                            spX = sp.Mother.PtX;
+                        }
 
-                        case GDMSex.svFemale:
-                            spX = prev.Rect.Left - spOffset;
-                            break;
+                        //spX = sp.PtX;
+                    } else*/ {
+                        int spOffset = (fBranchDistance + sp.Width / 2);
+
+                        switch (person.Sex) {
+                            case GDMSex.svMale:
+                                spX = prev.Rect.Right + spOffset;
+                                break;
+
+                            case GDMSex.svFemale:
+                                spX = prev.Rect.Left - spOffset;
+                                break;
+                        }
                     }
 
                     RecalcDesc(sp, spX, person.PtY, true);
