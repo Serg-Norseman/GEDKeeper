@@ -535,10 +535,8 @@ namespace GKCore.Charts
 
                 if (fRoot != null && fRoot.Rec == iRec) {
                     result = fRoot;
-                    result.Parent = parent;
                 } else {
                     result = CreatePerson(iRec, generation);
-                    result.Parent = parent;
 
                     if (!outsideKin && parent != null) {
                         parent.AddChild(result);
@@ -1042,14 +1040,49 @@ namespace GKCore.Charts
             }
         }
 
+        private void ShiftBranch(TreeChartPerson person, int offset)
+        {
+            if (person == null)
+                return;
+
+            ShiftBranch(person.Father, offset);
+            ShiftBranch(person.Mother, offset);
+            person.PtX += offset;
+        }
+
+        private void ShiftSpousesFrom(TreeChartPerson person, int offset)
+        {
+            //if (offset < 0)
+            //    return;
+
+            var basePerson = person.BaseSpouse;
+            var curSpouseIdx = basePerson.IndexOfSpouse(person);
+            for (int i = curSpouseIdx; i < basePerson.GetSpousesCount(); i++) {
+                var sp = basePerson.GetSpouse(i);
+                ShiftBranch(sp, offset);
+            }
+            ShiftBranch(basePerson, offset);
+        }
+
         private bool ShiftDesc(TreeChartPerson person, int offset, bool isSingle, bool verify = false)
         {
             if (person == null) return true;
 
-            if (IsExtendedTree() && (person == fRoot || (person.HasFlag(PersonFlag.pfRootSpouse) && person.HasFlag(PersonFlag.pfHasInvAnc))))
-                return true;
+            if (IsExtendedTree()) {
+                if (person.BaseSpouse == fRoot && person.Sex == GDMSex.svMale) {
+                    ShiftSpousesFrom(person, offset);
+                    return true; // required
+                }
 
-            if (person == fRoot) {
+                /*if ((person == fRoot || person.BaseSpouse == fRoot) && offset < 0)
+                    return true;*/
+
+                // pattern: center man and one or more wives -> her parents are moved to the correct position and her coordinates are at their center
+                if (person == fRoot || (person.BaseSpouse == fRoot && person.HasFlag(PersonFlag.pfHasInvAnc)))
+                    return true;
+            }
+
+            if (person == fRoot || (IsExtendedTree() && person.BaseSpouse == fRoot)) {
                 isSingle = false;
             }
 
@@ -1064,17 +1097,29 @@ namespace GKCore.Charts
                 if (!res) return false;
             } else {
                 if (!isSingle) {
+                    // shifts the parents of the central person
+                    // following its shifts due to the growth of branches of descendants
+
                     res = ShiftDesc(person.Father, offset, false, verify);
                     if (!res) return false;
 
                     res = ShiftDesc(person.Mother, offset, false, verify);
                     if (!res) return false;
                 } else {
+                    // following the shifts of a person due to the growth of branches of descendants,
+                    // shifts that of her parents, along which the branch came
+
+                    TreeChartPerson parent = null;
                     if (person.HasFlag(PersonFlag.pfDescByFather)) {
-                        res = ShiftDesc(person.Father, offset, true, verify);
-                        if (!res) return false;
+                        parent = person.Father;
                     } else if (person.HasFlag(PersonFlag.pfDescByMother)) {
-                        res = ShiftDesc(person.Mother, offset, true, verify);
+                        parent = person.Mother;
+                    }
+
+                    if (IsExtRootSpouse(parent) && parent.Sex == GDMSex.svMale) {
+                        ShiftSpousesFrom(parent, offset);
+                    } else {
+                        res = ShiftDesc(parent, offset, true, verify);
                         if (!res) return false;
                     }
                 }

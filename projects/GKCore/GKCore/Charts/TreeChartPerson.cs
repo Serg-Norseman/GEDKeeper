@@ -93,7 +93,6 @@ namespace GKCore.Charts
         public float CertaintyAssessment;
         public TreeChartPerson Father;
         public TreeChartPerson Mother;
-        public TreeChartPerson Parent;
         public int Generation;
         public string Kinship;
         public string[] Lines;
@@ -104,6 +103,7 @@ namespace GKCore.Charts
         public bool IsVisible;
         public IColor UserColor;
         public int NameLines;
+        public string XRef;
 
 
         public int Height
@@ -248,6 +248,11 @@ namespace GKCore.Charts
             return result;
         }
 
+        public int IndexOfSpouse(TreeChartPerson spouse)
+        {
+            return (fSpouses == null) ? -1 : fSpouses.IndexOf(spouse);
+        }
+
         public void AddChild(TreeChartPerson child)
         {
             if (child == null) return;
@@ -272,6 +277,8 @@ namespace GKCore.Charts
                 fRec = iRec;
 
                 if (iRec != null) {
+                    XRef = iRec.XRef;
+
                     if (!fModel.PreparedIndividuals.Contains(iRec.XRef)) {
                         fModel.PreparedIndividuals.Add(iRec.XRef);
                     }
