@@ -53,6 +53,7 @@ namespace GKCore.Charts
         pfHasInvAnc, pfHasInvDesc, // invisible flags
         pfSpecialMark, // debug flag for special goals
         pfOutsideKin, pfCanExpand, pfAdopted,
+        pfRootSpouse
     }
 
     /// <summary>
@@ -271,7 +272,7 @@ namespace GKCore.Charts
                 fRec = iRec;
 
                 if (iRec != null) {
-                    if (fModel.PreparedIndividuals.IndexOf(iRec.XRef) < 0) {
+                    if (!fModel.PreparedIndividuals.Contains(iRec.XRef)) {
                         fModel.PreparedIndividuals.Add(iRec.XRef);
                     }
 
