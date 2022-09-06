@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//#define DEBUG_RECALC
+
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -339,7 +341,12 @@ namespace GKCore.Charts
 
         private bool IsExtendedTree()
         {
-            return fOptions.RootSpousesAncestors && fKind == TreeChartKind.ckBoth;
+            return fOptions.ExtendedTree && fKind == TreeChartKind.ckBoth;
+        }
+
+        private bool IsExtPerson(TreeChartPerson person)
+        {
+            return IsExtendedTree() && (person == fRoot || person.BaseSpouse == fRoot);
         }
 
         private bool IsExtRootSpouse(TreeChartPerson person)
@@ -943,6 +950,14 @@ namespace GKCore.Charts
             return result;
         }
 
+        private int GetCurrentBranchLeftBound(int generation)
+        {
+            int edge = GetEdge(generation);
+            int offset = (edge > 0) ? fBranchDistance : fMargins;
+            int bound = edge + offset;
+            return bound;
+        }
+
         /// <summary>
         /// The function returns the Y-coordinate of the next generation,
         /// depending on the type of movement (ancestors, descendants) and the chart inversion option.
@@ -978,10 +993,8 @@ namespace GKCore.Charts
 
             int gen = person.Generation;
 
-            int edge = GetEdge(gen);
-            int offset = (edge > 0) ? fBranchDistance : fMargins;
-            int bound = edge + offset;
-            if (person.Rect.Left <= bound) {
+            int bound = GetCurrentBranchLeftBound(gen);
+            if (person.Rect.Left < bound) {
                 ShiftAnc(person, bound - person.Rect.Left);
             }
 
@@ -1040,71 +1053,133 @@ namespace GKCore.Charts
             }
         }
 
-        private void ShiftBranch(TreeChartPerson person, int offset)
+        private static void WriteDebugInfo(string method, TreeChartPerson person)
+        {
+#if DEBUG_RECALC
+            var persName = ((person.Rec == null) ? "" : GKUtils.GetNameString(person.Rec, true, false));
+            Logger.WriteInfo(string.Format("{0}({1})", method, persName));
+#endif
+        }
+
+        /// <summary>
+        /// Shift all ancestors of a given person.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <param name="offset"></param>
+        /// <returns>
+        ///     if true, then the shift of the previous iteration can be performed
+        /// </returns>
+        private bool ShiftBranch(TreeChartPerson person, int offset)
         {
             if (person == null)
-                return;
+                return true;
 
-            ShiftBranch(person.Father, offset);
-            ShiftBranch(person.Mother, offset);
+            if (!ShiftBranch(person.Father, offset)) return false;
+            if (!ShiftBranch(person.Mother, offset)) return false;
+
             person.PtX += offset;
+            return true;
         }
 
-        private void ShiftSpousesFrom(TreeChartPerson person, int offset)
+        /// <summary>
+        /// Shift spouse and central person (if female) if needed to shift their descendants.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <param name="offset"></param>
+        /// <returns>
+        ///     if true, then the shift of the previous iteration can be performed
+        /// </returns>
+        private bool ShiftSpousesFrom(TreeChartPerson person, int offset)
         {
-            //if (offset < 0)
-            //    return;
+            // can not move the ancestors of the spouses to the left,
+            // because there may be ancestors of the central person or another spouse;
+            // it is impossible to find out exactly where the other branch is on the left,
+            // because at this stage, we do not know which branch is being processed
+            if (offset < 0)
+                return false;
 
-            var basePerson = person.BaseSpouse;
-            var curSpouseIdx = basePerson.IndexOfSpouse(person);
-            for (int i = curSpouseIdx; i < basePerson.GetSpousesCount(); i++) {
-                var sp = basePerson.GetSpouse(i);
-                ShiftBranch(sp, offset);
+            WriteDebugInfo("ShiftSpousesFrom", person);
+
+            TreeChartPerson basePerson, rPers = null;
+            int startIndex;
+
+            if (person.BaseSpouse == null) {
+                // root
+                basePerson = person;
+                startIndex = (person.Sex == GDMSex.svMale) ? 0 : basePerson.GetSpousesCount();
+            } else {
+                // root spouse
+                basePerson = person.BaseSpouse;
+                startIndex = basePerson.IndexOfSpouse(person);
+
+                // only a woman can be on the right as a central person,
+                // so if we move her spouse, we need to move her
+                if (person.Sex == GDMSex.svMale) {
+                    rPers = basePerson;
+                }
             }
-            ShiftBranch(basePerson, offset);
+
+            for (int i = startIndex; i < basePerson.GetSpousesCount(); i++) {
+                var sp = basePerson.GetSpouse(i);
+                if (!ShiftBranch(sp, offset)) return false;
+            }
+
+            if (rPers != null) {
+                if (!ShiftBranch(rPers, offset)) return false;
+            }
+
+            return true;
         }
 
+        /// <summary>
+        /// Recursive shift of all higher ancestors (straight line).
+        /// </summary>
+        /// <param name="person"></param>
+        /// <param name="offset"></param>
+        /// <param name="isSingle">
+        ///     If true - a shift only along the line of the parent (father OR mother) along which the detour came,
+        ///     otherwise (only for the central person and her spouses) - a shift of both mother and father.
+        /// </param>
+        /// <param name="verify">
+        ///     If true - check for violation of the boundary of the left branch,
+        ///     taking into account the distance between the branches and the offset.
+        /// </param>
+        /// <returns>
+        ///     If the result is false, then abort the process
+        ///     (without shifting the current node and all previously passed).
+        /// </returns>
         private bool ShiftDesc(TreeChartPerson person, int offset, bool isSingle, bool verify = false)
         {
-            if (person == null) return true;
+            if (person == null || offset == 0) return true;
 
-            if (IsExtendedTree()) {
-                if (person.BaseSpouse == fRoot && person.Sex == GDMSex.svMale) {
-                    ShiftSpousesFrom(person, offset);
-                    return true; // required
-                }
-
-                /*if ((person == fRoot || person.BaseSpouse == fRoot) && offset < 0)
-                    return true;*/
-
-                // pattern: center man and one or more wives -> her parents are moved to the correct position and her coordinates are at their center
-                if (person == fRoot || (person.BaseSpouse == fRoot && person.HasFlag(PersonFlag.pfHasInvAnc)))
-                    return true;
-            }
-
-            if (person == fRoot || (IsExtendedTree() && person.BaseSpouse == fRoot)) {
-                isSingle = false;
-            }
+            WriteDebugInfo("ShiftDesc", person);
 
             // fix #189
             if (verify && (person.Rect.Left + offset < fEdges[person.Generation] + fBranchDistance)) {
                 return false;
             }
 
-            bool res = true;
+            if (person == fRoot || (IsExtendedTree() && person.BaseSpouse == fRoot)) {
+                isSingle = false;
+            }
+
+            if (IsExtendedTree() && (/*person == fRoot || */person.BaseSpouse == fRoot)) {
+                return ShiftSpousesFrom(person, offset);
+            }
+            else 
             if (person.BaseSpouse != null && (person.BaseSpouse.Sex == GDMSex.svFemale || person.BaseSpouse.GetSpousesCount() == 1)) {
-                res = ShiftDesc(person.BaseSpouse, offset, isSingle, verify);
-                if (!res) return false;
+                if (!ShiftDesc(person.BaseSpouse, offset, isSingle, verify))
+                    return false;
             } else {
                 if (!isSingle) {
                     // shifts the parents of the central person
                     // following its shifts due to the growth of branches of descendants
 
-                    res = ShiftDesc(person.Father, offset, false, verify);
-                    if (!res) return false;
+                    if (!ShiftDesc(person.Father, offset, false, verify))
+                        return false;
 
-                    res = ShiftDesc(person.Mother, offset, false, verify);
-                    if (!res) return false;
+                    if (!ShiftDesc(person.Mother, offset, false, verify))
+                        return false;
                 } else {
                     // following the shifts of a person due to the growth of branches of descendants,
                     // shifts that of her parents, along which the branch came
@@ -1115,13 +1190,8 @@ namespace GKCore.Charts
                     } else if (person.HasFlag(PersonFlag.pfDescByMother)) {
                         parent = person.Mother;
                     }
-
-                    if (IsExtRootSpouse(parent) && parent.Sex == GDMSex.svMale) {
-                        ShiftSpousesFrom(parent, offset);
-                    } else {
-                        res = ShiftDesc(parent, offset, true, verify);
-                        if (!res) return false;
-                    }
+                    if (!ShiftDesc(parent, offset, true, verify))
+                        return false;
                 }
             }
 
@@ -1137,6 +1207,8 @@ namespace GKCore.Charts
 
             int childrenCount = person.GetChildsCount();
             if (childrenCount == 0) return;
+
+            WriteDebugInfo("RecalcDescChilds", person);
 
             bool alignPair = person.BaseSpouse != null && person.BaseSpouse.GetSpousesCount() == 1;
             int centX = 0;
@@ -1184,10 +1256,13 @@ namespace GKCore.Charts
             // However, this may be a problem (reason of #189) in the case if a shift initiated from descendants,
             // must be performed to the left with an overlay on an already formed side branch.
 
-            if (!fOptions.AutoAlign) {
+            if (!fOptions.AutoAlign || IsExtPerson(person)) {
                 return;
             }
 
+            WriteDebugInfo("RecalcDescChilds.AutoAlign", person);
+
+            // FIXME: displacement #1
             if (alignPair) {
                 int offset;
                 switch (person.Sex) {
@@ -1222,6 +1297,8 @@ namespace GKCore.Charts
         {
             if (person == null) return;
 
+            WriteDebugInfo("RecalcDesc", person);
+
             person.IsVisible = true;
 
             int gen = person.Generation;
@@ -1231,8 +1308,7 @@ namespace GKCore.Charts
                 person.PtY = ptY;
             }
 
-            int offset = (fEdges[gen] > 0) ? fBranchDistance : fMargins;
-            int bound = fEdges[gen] + offset;
+            int bound = GetCurrentBranchLeftBound(gen);
             if (person.Rect.Left < bound) {
                 ShiftDesc(person, bound - person.Rect.Left, true);
             }
@@ -1249,22 +1325,18 @@ namespace GKCore.Charts
                 for (int i = 0; i < spousesCount; i++) {
                     TreeChartPerson sp = person.GetSpouse(i);
 
+                    // position of spouses by default
+                    // without regard to other factors and subsequent children
                     int spX = 0;
+                    int spOffset = (fBranchDistance + sp.Width / 2);
+                    switch (person.Sex) {
+                        case GDMSex.svMale:
+                            spX = prev.Rect.Right + spOffset;
+                            break;
 
-                    /*if (IsPseudoFullTree() && person == fRoot) {
-                        spX = sp.PtX;
-                    } else*/ {
-                        int spOffset = (fBranchDistance + sp.Width / 2);
-
-                        switch (person.Sex) {
-                            case GDMSex.svMale:
-                                spX = prev.Rect.Right + spOffset;
-                                break;
-
-                            case GDMSex.svFemale:
-                                spX = prev.Rect.Left - spOffset;
-                                break;
-                        }
+                        case GDMSex.svFemale:
+                            spX = prev.Rect.Left - spOffset;
+                            break;
                     }
 
                     RecalcDesc(sp, spX, person.PtY, true);
@@ -1291,14 +1363,18 @@ namespace GKCore.Charts
             }
 
             // Fix of long-distance displacement of male nodes in the presence of more than
-            // one marriage and a large tree of descendants from the first wife
-            if (person.Sex == GDMSex.svMale && spousesCount >= 2) {
+            // one marriage and a large tree of descendants from the first wife.
+            // Warning: hard breaks ancestors location in case of extended tree mode!
+            // FIXME: displacement #2
+            if (!IsExtendedTree() && (person.Sex == GDMSex.svMale && spousesCount >= 2)) {
+                WriteDebugInfo("RecalcDesc.FixLDD", person);
+
                 var firstWife = person.GetSpouse(0);
                 if (firstWife.GetChildsCount() > 0) {
                     int d = firstWife.Rect.Left - person.Rect.Right;
                     if (d > fBranchDistance * 1.5f) {
                         //person.SetFlag(PersonFlag.pfSpecialMark);
-                        offset = (d - fBranchDistance);
+                        int offset = (d - fBranchDistance);
                         ShiftDesc(person, offset, true);
                     }
                 }
@@ -1773,31 +1849,39 @@ namespace GKCore.Charts
                     crY = person.PtY - fLevelDistance / 2;
                 }
 
-                int cx = 0;
+                bool vertLineBySpouse;
+                int cx = 0, spXB = 0, spXE = 0;
                 if (person.BaseSpouse == null || (person.BaseSpouse.GetSpousesCount() > 1)) {
                     cx = person.PtX;
                     spbBeg = person.PtY + person.Height - 1;
+                    vertLineBySpouse = true;
                 } else {
                     switch (person.Sex) {
                         case GDMSex.svMale:
-                            cx = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
+                            spXB = person.Rect.Right;
+                            spXE = person.BaseSpouse.Rect.Left;
                             break;
 
                         case GDMSex.svFemale:
-                            cx = (person.BaseSpouse.Rect.Right + person.Rect.Left) / 2;
+                            spXB = person.BaseSpouse.Rect.Right;
+                            spXE = person.Rect.Left;
                             break;
                     }
 
+                    cx = (spXB + spXE) / 2;
                     spbBeg -= spbOfs / 2;
+                    vertLineBySpouse = false;
                 }
-
-                DrawLine(cx, spbBeg, cx, crY); // v
 
                 TreeChartPerson child0 = person.GetChild(0);
                 int chY = (!fOptions.InvertedTree) ? child0.PtY : child0.PtY + child0.Height;
+                int chXB = child0.PtX;
+                int chXE = child0.PtX;
 
                 for (int i = 0; i < childrenCount; i++) {
                     TreeChartPerson child = person.GetChild(i);
+
+                    chXE = child.PtX;
 
                     bool dotted = IsDottedLines(child);
                     var linePen = (!dotted) ? fLinePen : fDottedLinePen;
@@ -1815,6 +1899,18 @@ namespace GKCore.Charts
                     }
 
                     DrawLine(child.PtX, crY, child.PtX, chY, linePen, decorativeLinePen); // v
+                }
+
+                // vertical line from the horizontal junction of spouses to the horizontal junction of children
+                if (vertLineBySpouse) {
+                    DrawLine(cx, spbBeg, cx, crY); // v
+                } else {
+                    int chXM = (chXB + chXE) / 2;
+                    if (chXM >= spXB && chXM <= spXE) {
+                        DrawLine(chXM, spbBeg, chXM, crY); // v
+                    } else {
+                        DrawLine(cx, spbBeg, cx, crY); // v
+                    }
                 }
             }
         }

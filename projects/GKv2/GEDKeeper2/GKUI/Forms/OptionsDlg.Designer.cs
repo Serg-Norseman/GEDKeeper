@@ -164,6 +164,8 @@
         private System.Windows.Forms.CheckBox chkUseInlineImagesInSvg;
         private System.Windows.Forms.CheckBox chkUseExtendedNotes;
         private System.Windows.Forms.CheckBox chkKeepRichNames;
+        private System.Windows.Forms.CheckBox chkMaximizeChartWindows;
+        private System.Windows.Forms.CheckBox chkExtendedTree;
 
         private void InitializeComponent()
         {
@@ -329,6 +331,8 @@
             this.chkUseInlineImagesInSvg = new System.Windows.Forms.CheckBox();
             this.chkUseExtendedNotes = new System.Windows.Forms.CheckBox();
             this.chkKeepRichNames = new System.Windows.Forms.CheckBox();
+            this.chkMaximizeChartWindows = new System.Windows.Forms.CheckBox();
+            this.chkExtendedTree = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2134,6 +2138,8 @@
             this.pageSpecials.Controls.Add(this.chkUseInlineImagesInSvg);
             this.pageSpecials.Controls.Add(this.chkUseExtendedNotes);
             this.pageSpecials.Controls.Add(this.chkKeepRichNames);
+            this.pageSpecials.Controls.Add(this.chkMaximizeChartWindows);
+            this.pageSpecials.Controls.Add(this.chkExtendedTree);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
             this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
@@ -2169,6 +2175,24 @@
             this.chkKeepRichNames.Size = new System.Drawing.Size(600, 22);
             this.chkKeepRichNames.TabIndex = 12;
             this.chkKeepRichNames.Text = "chkKeepRichNames";
+            // 
+            // chkMaximizeChartWindows
+            // 
+            this.chkMaximizeChartWindows.Location = new System.Drawing.Point(20, 143);
+            this.chkMaximizeChartWindows.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkMaximizeChartWindows.Name = "chkMaximizeChartWindows";
+            this.chkMaximizeChartWindows.Size = new System.Drawing.Size(600, 22);
+            this.chkMaximizeChartWindows.TabIndex = 12;
+            this.chkMaximizeChartWindows.Text = "chkMaximizeChartWindows";
+            // 
+            // chkExtendedTree
+            // 
+            this.chkExtendedTree.Location = new System.Drawing.Point(20, 184);
+            this.chkExtendedTree.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkExtendedTree.Name = "chkExtendedTree";
+            this.chkExtendedTree.Size = new System.Drawing.Size(600, 22);
+            this.chkExtendedTree.TabIndex = 12;
+            this.chkExtendedTree.Text = "chkExtendedTree";
             // 
             // pagePlugins
             // 

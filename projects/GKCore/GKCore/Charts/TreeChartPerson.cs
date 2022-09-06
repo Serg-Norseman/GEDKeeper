@@ -103,7 +103,6 @@ namespace GKCore.Charts
         public bool IsVisible;
         public IColor UserColor;
         public int NameLines;
-        public string XRef;
 
 
         public int Height
@@ -277,8 +276,6 @@ namespace GKCore.Charts
                 fRec = iRec;
 
                 if (iRec != null) {
-                    XRef = iRec.XRef;
-
                     if (!fModel.PreparedIndividuals.Contains(iRec.XRef)) {
                         fModel.PreparedIndividuals.Add(iRec.XRef);
                     }

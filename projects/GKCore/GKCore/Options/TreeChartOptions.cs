@@ -70,7 +70,6 @@ namespace GKCore.Options
         public bool BoldNames;
         public bool OnlyLocality;
         public bool MinimizingWidth;
-        public bool RootSpousesAncestors;
         public bool AgeVisible;
 
         public bool AutoAlign; // debug option, for future purposes
@@ -100,6 +99,8 @@ namespace GKCore.Options
 
         public bool UseExtraControls { get; set; }
         public bool UseInlineImagesInSvg { get; set; }
+        public bool ExtendedTree { get; set; }
+
 
         public TreeChartOptions()
         {
@@ -131,7 +132,6 @@ namespace GKCore.Options
             SeparateDepth = false;
             OnlyLocality = false;
             MinimizingWidth = true;
-            RootSpousesAncestors = true;
             AgeVisible = false;
 
             AutoAlign = true;
@@ -156,6 +156,7 @@ namespace GKCore.Options
 
             UseExtraControls = true;
             UseInlineImagesInSvg = true;
+            ExtendedTree = false;
         }
 
         public void Assign(IOptions source)
@@ -208,6 +209,7 @@ namespace GKCore.Options
 
             UseExtraControls = srcOptions.UseExtraControls;
             UseInlineImagesInSvg = srcOptions.UseInlineImagesInSvg;
+            ExtendedTree = srcOptions.ExtendedTree;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -269,6 +271,7 @@ namespace GKCore.Options
 
             UseExtraControls = iniFile.ReadBool("Chart", "UseExtraControls", true);
             UseInlineImagesInSvg = iniFile.ReadBool("Chart", "UseInlineImagesInSvg", true);
+            ExtendedTree = iniFile.ReadBool("Chart", "ExtendedTree", false);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -330,6 +333,7 @@ namespace GKCore.Options
 
             iniFile.WriteBool("Chart", "UseExtraControls", UseExtraControls);
             iniFile.WriteBool("Chart", "UseInlineImagesInSvg", UseInlineImagesInSvg);
+            iniFile.WriteBool("Chart", "ExtendedTree", ExtendedTree);
         }
     }
 }

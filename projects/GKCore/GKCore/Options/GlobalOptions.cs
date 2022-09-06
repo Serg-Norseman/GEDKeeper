@@ -311,6 +311,8 @@ namespace GKCore.Options
             set { fLoadRecentFiles = value; }
         }
 
+        public bool MaximizeChartWindows { get; set; }
+
         public MediaStoreType MediaStoreDefault
         {
             get { return fMediaStoreDefault; }
@@ -487,6 +489,7 @@ namespace GKCore.Options
             SurnameInCapitals = false;
             CertaintyAlgorithm = CertaintyAlgorithm.WeightedAverage;
             LocalizedCalendarSignatures = false;
+            MaximizeChartWindows = false;
         }
 
         protected override void Dispose(bool disposing)
@@ -779,6 +782,7 @@ namespace GKCore.Options
             fReversePlaceEntitiesOrder = ini.ReadBool("Common", "ReversePlaceEntitiesOrder", false);
             CertaintyAlgorithm = (CertaintyAlgorithm)ini.ReadInteger("Common", "CertaintyAlgorithm", 0);
             LocalizedCalendarSignatures = ini.ReadBool("Common", "LocalizedCalendarSignatures", false);
+            MaximizeChartWindows = ini.ReadBool("Common", "MaximizeChartWindows", false);
 
             LoadPluginsFromFile(ini);
         }
@@ -919,6 +923,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "ReversePlaceEntitiesOrder", fReversePlaceEntitiesOrder);
             ini.WriteInteger("Common", "CertaintyAlgorithm", (int)CertaintyAlgorithm);
             ini.WriteBool("Common", "LocalizedCalendarSignatures", LocalizedCalendarSignatures);
+            ini.WriteBool("Common", "MaximizeChartWindows", MaximizeChartWindows);
 
             SavePluginsToFile(ini);
         }

@@ -362,6 +362,8 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked = fOptions.TreeChartOptions.UseInlineImagesInSvg;
             GetControl<ICheckBox>("chkUseExtendedNotes").Checked = fOptions.UseExtendedNotes;
             GetControl<ICheckBox>("chkKeepRichNames").Checked = fOptions.KeepRichNames;
+            GetControl<ICheckBox>("chkMaximizeChartWindows").Checked = fOptions.MaximizeChartWindows;
+            GetControl<ICheckBox>("chkExtendedTree").Checked = fOptions.TreeChartOptions.ExtendedTree;
         }
 
         public void AcceptSpecials()
@@ -369,6 +371,8 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.UseInlineImagesInSvg = GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked;
             fOptions.UseExtendedNotes = GetControl<ICheckBox>("chkUseExtendedNotes").Checked;
             fOptions.KeepRichNames = GetControl<ICheckBox>("chkKeepRichNames").Checked;
+            fOptions.MaximizeChartWindows = GetControl<ICheckBox>("chkMaximizeChartWindows").Checked;
+            fOptions.TreeChartOptions.ExtendedTree = GetControl<ICheckBox>("chkExtendedTree").Checked;
         }
 
         public void UpdatePlugins()
@@ -813,6 +817,8 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkUseInlineImagesInSvg").Text = LangMan.LS(LSID.LSID_UseInlineImagesInSvg);
             GetControl<ICheckBox>("chkUseExtendedNotes").Text = LangMan.LS(LSID.LSID_UseExtendedNotes);
             GetControl<ICheckBox>("chkKeepRichNames").Text = LangMan.LS(LSID.LSID_KeepRichNames);
+            GetControl<ICheckBox>("chkMaximizeChartWindows").Text = LangMan.LS(LSID.LSID_MaximizeChartWindows);
+            GetControl<ICheckBox>("chkExtendedTree").Text = LangMan.LS(LSID.LSID_ExtendedTree);
 
             // Plugins
             GetControl<ITabPage>("pagePlugins").Text = LangMan.LS(LSID.LSID_Plugins);
