@@ -147,6 +147,14 @@ namespace GKUI.Forms
             AppHost.Instance.ShowOptions(OptionsPage.opCircleChart);
         }
 
+        private void miFanMode_Click(object sender, EventArgs e)
+        {
+            miFanMode.Checked = !miFanMode.Checked;
+
+            fCircleChart.Model.FanMode = miFanMode.Checked;
+            fCircleChart.Changed();
+        }
+
         #region ILocalizable implementation
 
         public override void SetLocale()

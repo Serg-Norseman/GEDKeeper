@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:complat="clr-namespace:GKUI.Platform;assembly=GKComponents"
   x:Class="GKUI.Forms.CircleChartWin"
   Size="1020, 760" ShowInTaskbar="true" KeyDown="CircleChartWin_KeyDown">
 
@@ -14,6 +14,13 @@
       <ButtonToolItem x:Name="tbDocPreview" Image="{Resource Resources.btn_preview.gif, GKCore}" Click="tbDocPreview_Click" />
       <ButtonToolItem x:Name="tbDocPrint" Image="{Resource Resources.btn_print.gif, GKCore}" Click="tbDocPrint_Click" />
       <SeparatorToolItem />
+      <complat:DropDownToolItem x:Name="tbModes">
+        <complat:DropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="MenuModes">
+            <CheckMenuItem x:Name="miFanMode" Click="miFanMode_Click" />
+          </ContextMenu>
+        </complat:DropDownToolItem.ContextMenu>
+      </complat:DropDownToolItem>
       <ButtonToolItem x:Name="tbOptions" Image="{Resource Resources.btn_tools.gif, GKCore}" Click="tbOptions_Click" />
     </ToolBar>
   </Form.ToolBar>

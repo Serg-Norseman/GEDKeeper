@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.MVP.Controls;
 using GKCore.Charts;
 using GKCore.MVP;
 using GKCore.MVP.Views;
@@ -55,11 +56,15 @@ namespace GKCore.Controllers
                 fView.Title = LangMan.LS(LSID.LSID_DescendantsCircle);
             }
 
+            GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.LSID_ModesTip);
+            GetControl<IMenuItem>("miFanMode").Text = LangMan.LS(LSID.LSID_FanMode);
+
             SetToolTip("tbImageSave", LangMan.LS(LSID.LSID_ImageSaveTip));
             SetToolTip("tbDocPrint", LangMan.LS(LSID.LSID_DocPrint));
             SetToolTip("tbDocPreview", LangMan.LS(LSID.LSID_DocPreview));
             SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
             SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
+            SetToolTip("tbOptions", LangMan.LS(LSID.LSID_MIOptions));
         }
     }
 }

@@ -31,6 +31,7 @@ using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKCore.Options;
 using GKUI.Components;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -46,6 +47,8 @@ namespace GKUI.Forms
         private ButtonToolItem tbDocPreview;
         private ButtonToolItem tbDocPrint;
         private ButtonToolItem tbOptions;
+        private DropDownToolItem tbModes;
+        private CheckMenuItem miFanMode;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -154,6 +157,12 @@ namespace GKUI.Forms
         private void tbOptions_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowOptions(OptionsPage.opCircleChart);
+        }
+
+        private void miFanMode_Click(object sender, EventArgs e)
+        {
+            fCircleChart.Model.FanMode = miFanMode.Checked;
+            fCircleChart.Changed();
         }
 
         #region ILocalizable implementation

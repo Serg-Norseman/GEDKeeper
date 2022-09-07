@@ -928,8 +928,9 @@ namespace GKCore
         /* 868 */ LSID_KeepRichNames,
         /* 869 */ LSID_MaximizeChartWindows,
         /* 870 */ LSID_ExtendedTree,
+        /* 871 */ LSID_FanMode,
 
-        /* 000 */ LSID_Last = LSID_ExtendedTree
+        /* 000 */ LSID_Last = LSID_FanMode
     }
 
 
@@ -1814,6 +1815,7 @@ namespace GKCore
             /* 868 */ "Keep rich names",
             /* 869 */ "Maximize chart windows",
             /* 870 */ "Extended tree",
+            /* 871 */ "Fan chart (only ancestors)",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -270,6 +270,7 @@ namespace GKUI.Components
         {
             if (fChartType == CircleChartType.Ancestors) {
                 fModel.GroupsMode = !fModel.GroupsMode;
+                Invalidate();
             }
 
             base.OnDoubleClick(e);
@@ -440,6 +441,8 @@ namespace GKUI.Components
         /// <param name="forciblyCentered"></param>
         public override void RenderImage(RenderTarget target, bool forciblyCentered = false)
         {
+            fRenderer.SetSmoothing(true);
+
             PointF center = GetCenter(target);
 
             var backColor = fModel.Options.BrushColor[9];
