@@ -152,6 +152,9 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             SetupDepth();
+
+            if (GlobalOptions.Instance.MaximizeChartWindows)
+                this.WindowState = Eto.Forms.WindowState.Maximized;
         }
 
         protected override void Dispose(bool disposing)

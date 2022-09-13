@@ -131,6 +131,10 @@ namespace GKUI.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            if (GlobalOptions.Instance.MaximizeChartWindows)
+                this.WindowState = FormWindowState.Maximized;
+
             fTreeBox.Select();
             UpdateControls();
         }

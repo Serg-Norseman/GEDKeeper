@@ -91,6 +91,10 @@ namespace GKUI.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            if (GlobalOptions.Instance.MaximizeChartWindows)
+                this.WindowState = FormWindowState.Maximized;
+
             fCircleChart.Select();
             UpdateControls();
         }
@@ -142,6 +146,14 @@ namespace GKUI.Forms
         private void tbOptions_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowOptions(OptionsPage.opCircleChart);
+        }
+
+        private void miFanMode_Click(object sender, EventArgs e)
+        {
+            miFanMode.Checked = !miFanMode.Checked;
+
+            fCircleChart.Model.FanMode = miFanMode.Checked;
+            fCircleChart.Changed();
         }
 
         #region ILocalizable implementation

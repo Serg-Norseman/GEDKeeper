@@ -926,8 +926,11 @@ namespace GKCore
         /* 866 */ LSID_UseInlineImagesInSvg,
         /* 867 */ LSID_UseExtendedNotes,
         /* 868 */ LSID_KeepRichNames,
+        /* 869 */ LSID_MaximizeChartWindows,
+        /* 870 */ LSID_ExtendedTree,
+        /* 871 */ LSID_FanMode,
 
-        /* 000 */ LSID_Last = LSID_KeepRichNames
+        /* 000 */ LSID_Last = LSID_FanMode
     }
 
 
@@ -1810,6 +1813,9 @@ namespace GKCore
             /* 866 */ "Use inline images in SVG",
             /* 867 */ "Use extended notes",
             /* 868 */ "Keep rich names",
+            /* 869 */ "Maximize chart windows",
+            /* 870 */ "Extended tree",
+            /* 871 */ "Fan chart (only ancestors)",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

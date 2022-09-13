@@ -66,6 +66,7 @@ namespace GKCore.Charts
         public int GroupIndex;
         public AncPersonSegment FatherSegment;
         public AncPersonSegment MotherSegment;
+        public GDMSex ParentLine;
 
         public AncPersonSegment(int generation) : base(generation)
         {
@@ -99,6 +100,8 @@ namespace GKCore.Charts
 
         private readonly IBrush[] fCircleBrushes;
         private readonly IBrush[] fDarkBrushes;
+        public IColor fFemaleColor;
+        public IColor fMaleColor;
 
         private IBaseWindow fBase;
         private ExtRectF fBounds;
@@ -112,8 +115,10 @@ namespace GKCore.Charts
         private int fVisibleGenerations;
 
         #region Only ancestors circle
+        private bool fFanMode;
         private int fGroupCount;
         private bool fGroupsMode;
+        private bool fParentsColors;
         #endregion
 
         public IFont Font;
@@ -128,6 +133,16 @@ namespace GKCore.Charts
         public ExtRectF Bounds
         {
             get { return fBounds; }
+        }
+
+        public bool FanMode
+        {
+            get {
+                return fFanMode;
+            }
+            set {
+                fFanMode = value;
+            }
         }
 
         public float GenWidth
@@ -168,6 +183,12 @@ namespace GKCore.Charts
         {
             get { return fOptions; }
             set { fOptions = value; }
+        }
+
+        public bool ParentsColors
+        {
+            get { return fParentsColors; }
+            set { fParentsColors = value; }
         }
 
         public float PenWidth
@@ -215,7 +236,9 @@ namespace GKCore.Charts
             fDarkBrushes = new IBrush[CircleChartOptions.MAX_BRUSHES];
 
             fBounds = new ExtRectF();
+            fFanMode = false;
             fGenWidth = CircleChartModel.DEFAULT_GEN_WIDTH;
+            fParentsColors = false;
             fSegments = new List<CircleSegment>();
             fSelected = null;
             fVisibleGenerations = MAX_GENERATIONS;
@@ -231,21 +254,22 @@ namespace GKCore.Charts
 
         public void CreateBrushes()
         {
-            for (int i = 0; i < fOptions.BrushColor.Length; i++)
-            {
+            for (int i = 0; i < fOptions.BrushColor.Length; i++) {
                 IColor col = fOptions.BrushColor[i];
 
                 fCircleBrushes[i] = fRenderer.CreateSolidBrush(col);
                 fDarkBrushes[i] = fRenderer.CreateSolidBrush(col.Darker(0.2f));
             }
 
+            fFemaleColor = ChartRenderer.GetColor(TreeChartOptions.FEMALE_COLOR).Darker(0.4f);
+            fMaleColor = ChartRenderer.GetColor(TreeChartOptions.MALE_COLOR).Darker(0.4f);
+
             fPen = fRenderer.CreatePen(fOptions.BrushColor[10], 1.0f);
         }
 
         public void DisposeBrushes()
         {
-            for (int i = 0; i < fOptions.BrushColor.Length; i++)
-            {
+            for (int i = 0; i < fOptions.BrushColor.Length; i++) {
                 if (fCircleBrushes[i] != null) fCircleBrushes[i].Dispose();
                 if (fDarkBrushes[i] != null) fDarkBrushes[i].Dispose();
             }
@@ -299,15 +323,12 @@ namespace GKCore.Charts
             CircleSegment result = null;
 
             int numberOfSegments = fSegments.Count;
-            for (int i = 0; i < numberOfSegments; i++)
-            {
+            for (int i = 0; i < numberOfSegments; i++) {
                 CircleSegment segment = fSegments[i];
                 double startAng = segment.StartAngle;
                 double endAng = startAng + segment.WedgeAngle;
 
-                if ((segment.IntRad <= rad && rad < segment.ExtRad) &&
-                    (startAng <= angle && angle < endAng))
-                {
+                if ((segment.IntRad <= rad && rad < segment.ExtRad) && (startAng <= angle && angle < endAng)) {
                     result = segment;
                     break;
                 }
@@ -501,16 +522,33 @@ namespace GKCore.Charts
             DefineSegment(segment, 0, 0, inRad, 0 - 90.0f, 360.0f);
             fSegments.Add(segment);
 
+            float fullAngle, zeroAngle, hcMth, hcFth, ro;
+            if (!fFanMode) {
+                fullAngle = 360.0f;
+                zeroAngle = 0 - 90.0f;
+
+                ro = 90.0f;
+                hcMth = 90.0f;
+                hcFth = 270.0f;
+            } else {
+                fullAngle = 240.0f;
+                zeroAngle = 0 - 90.0f - fullAngle / 2;
+
+                ro = 60.0f;
+                hcMth = 60.0f;
+                hcFth = 180.0f;
+            }
+
             int maxSteps = 1;
             for (int gen = 1; gen <= fVisibleGenerations; gen++) {
                 inRad = startRad + ((gen - 1) * fGenWidth);
                 float extRad = inRad + fGenWidth;
 
                 maxSteps *= 2;
-                float wedgeAngle = (360.0f / maxSteps);
+                float wedgeAngle = (fullAngle / maxSteps);
 
                 for (int step = 0; step < maxSteps; step++) {
-                    float startAngle = (step * wedgeAngle) - 90.0f;
+                    float startAngle = zeroAngle + (step * wedgeAngle);
 
                     segment = new AncPersonSegment(gen);
                     DefineSegment(segment, 0, inRad, extRad, startAngle, wedgeAngle);
@@ -527,8 +565,6 @@ namespace GKCore.Charts
             AncPersonSegment rootSegment = SetSegmentParams(0, fRootPerson, 0, -1);
             if (rootSegment == null) return;
 
-            rootSegment.WedgeAngle = 360.0f;
-
             GDMIndividualRecord father = null, mother = null;
             GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(fRootPerson);
             if (fam != null && fBase.Context.IsRecordAccess(fam.Restriction)) {
@@ -536,11 +572,11 @@ namespace GKCore.Charts
             }
 
             if (mother != null) {
-                rootSegment.MotherSegment = TraverseAncestors(mother, 90f, 1, CircleChartModel.CENTER_RAD, 90.0f, 1, -1);
+                rootSegment.MotherSegment = TraverseAncestors(mother, fullAngle, hcMth, 1, CircleChartModel.CENTER_RAD, ro, 1, -1, GDMSex.svFemale);
             }
 
             if (father != null) {
-                rootSegment.FatherSegment = TraverseAncestors(father, 270.0f, 1, CircleChartModel.CENTER_RAD, 90.0f, 1, -1);
+                rootSegment.FatherSegment = TraverseAncestors(father, fullAngle, hcFth, 1, CircleChartModel.CENTER_RAD, ro, 1, -1, GDMSex.svMale);
             }
         }
 
@@ -552,15 +588,15 @@ namespace GKCore.Charts
 
             AncPersonSegment segment = (AncPersonSegment)fSegments[index];
             segment.IRec = rec;
-            segment.Rad = rad;
+            segment.Rad = rad; // it is necessary for text positioning
             segment.GroupIndex = groupIndex;
             return segment;
         }
 
-        private AncPersonSegment TraverseAncestors(GDMIndividualRecord iRec, float v, int gen, float rad, float ro, int prevSteps, int groupIndex)
+        private AncPersonSegment TraverseAncestors(GDMIndividualRecord iRec, float fullAngle, float v, int gen, float rad, float ro, int prevSteps,
+            int groupIndex, GDMSex parentLine)
         {
-            try
-            {
+            try {
                 fIndividualsCount++;
 
                 if (fGroupsMode && groupIndex == -1) {
@@ -572,19 +608,19 @@ namespace GKCore.Charts
                     }
                 }
 
+                // number of people in a generation
                 int genSize = 1 << gen;
-                float ang = (360.0f / genSize);
 
+                // segment angle per person
+                float ang = (fullAngle / genSize);
+
+                // segment index
                 int idx = prevSteps + (int)(v / ang);
+
                 AncPersonSegment segment = SetSegmentParams(idx, iRec, rad, groupIndex);
 
-                if (segment != null && gen < fVisibleGenerations)
-                {
-                    float inRad = rad;
-                    float extRad = rad + fGenWidth;
-
-                    segment.IntRad = inRad - 50;
-                    segment.ExtRad = extRad - 50;
+                if (segment != null && gen < fVisibleGenerations) {
+                    segment.ParentLine = parentLine;
 
                     GDMIndividualRecord father = null, mother = null;
                     GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(iRec);
@@ -592,23 +628,21 @@ namespace GKCore.Charts
                         fBase.Context.Tree.GetSpouses(fam, out father, out mother);
                     }
 
-                    int ps = prevSteps + genSize;
+                    int nextSteps = prevSteps + genSize;
 
                     if (father != null) {
                         v -= (Math.Abs(ang - ro) / 2.0f);
-                        segment.FatherSegment = TraverseAncestors(father, v, gen + 1, rad + fGenWidth, ro / 2.0f, ps, groupIndex);
+                        segment.FatherSegment = TraverseAncestors(father, fullAngle, v, gen + 1, rad + fGenWidth, ro / 2.0f, nextSteps, groupIndex, parentLine);
                     }
 
                     if (mother != null) {
                         v += (ang / 2.0f);
-                        segment.MotherSegment = TraverseAncestors(mother, v, gen + 1, rad + fGenWidth, ro / 2.0f, ps, groupIndex);
+                        segment.MotherSegment = TraverseAncestors(mother, fullAngle, v, gen + 1, rad + fGenWidth, ro / 2.0f, nextSteps, groupIndex, parentLine);
                     }
                 }
 
                 return segment;
-            }
-            catch
-            {
+            } catch {
                 return null;
             }
         }
@@ -637,9 +671,29 @@ namespace GKCore.Charts
                     } else {
                         brIndex = (segment.Gen == 0) ? CircleChartModel.CENTRAL_INDEX : segment.Gen - 1;
                     }
-                    IBrush brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
+
+                    bool brushDispose;
+                    IBrush brush;
+                    if (!fParentsColors) {
+                        brush = (fSelected == segment) ? fDarkBrushes[brIndex] : fCircleBrushes[brIndex];
+                        brushDispose = false;
+                    } else {
+                        IColor color;
+                        if (segment.ParentLine == GDMSex.svFemale) {
+                            color = fFemaleColor;
+                        } else {
+                            color = fMaleColor;
+                        }
+
+                        brush = fRenderer.CreateSolidBrush(color.Lighter(0.15f * segment.Gen));
+                        brushDispose = true;
+                    }
 
                     DrawSegment(segment, fPen, brush);
+
+                    if (brushDispose) {
+                        brush.Dispose();
+                    }
                 }
             }
         }

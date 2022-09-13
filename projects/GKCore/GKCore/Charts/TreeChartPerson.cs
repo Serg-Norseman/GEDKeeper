@@ -53,6 +53,7 @@ namespace GKCore.Charts
         pfHasInvAnc, pfHasInvDesc, // invisible flags
         pfSpecialMark, // debug flag for special goals
         pfOutsideKin, pfCanExpand, pfAdopted,
+        pfRootSpouse
     }
 
     /// <summary>
@@ -92,7 +93,6 @@ namespace GKCore.Charts
         public float CertaintyAssessment;
         public TreeChartPerson Father;
         public TreeChartPerson Mother;
-        public TreeChartPerson Parent;
         public int Generation;
         public string Kinship;
         public string[] Lines;
@@ -247,6 +247,11 @@ namespace GKCore.Charts
             return result;
         }
 
+        public int IndexOfSpouse(TreeChartPerson spouse)
+        {
+            return (fSpouses == null) ? -1 : fSpouses.IndexOf(spouse);
+        }
+
         public void AddChild(TreeChartPerson child)
         {
             if (child == null) return;
@@ -271,7 +276,7 @@ namespace GKCore.Charts
                 fRec = iRec;
 
                 if (iRec != null) {
-                    if (fModel.PreparedIndividuals.IndexOf(iRec.XRef) < 0) {
+                    if (!fModel.PreparedIndividuals.Contains(iRec.XRef)) {
                         fModel.PreparedIndividuals.Add(iRec.XRef);
                     }
 

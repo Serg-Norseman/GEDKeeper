@@ -446,6 +446,8 @@
             <CheckBox x:Name="chkUseInlineImagesInSvg" />
             <CheckBox x:Name="chkUseExtendedNotes" />
             <CheckBox x:Name="chkKeepRichNames" />
+            <CheckBox x:Name="chkMaximizeChartWindows" />
+            <CheckBox x:Name="chkExtendedTree" />
           </StackLayout>
         </TabPage>
 

@@ -2,6 +2,7 @@
 {
     partial class CircleChartWin
     {
+        private System.ComponentModel.IContainer components;
         private System.Windows.Forms.ToolStrip ToolBar1;
         private System.Windows.Forms.ToolStripButton tbImageSave;
         private System.Windows.Forms.ToolStripSeparator tbs1;
@@ -12,18 +13,23 @@
         private System.Windows.Forms.ToolStripButton tbDocPrint;
         private System.Windows.Forms.ToolStripSeparator tbs3;
         private System.Windows.Forms.ToolStripButton tbOptions;
+        private System.Windows.Forms.ToolStripDropDownButton tbModes;
+        private System.Windows.Forms.ContextMenuStrip MenuModes;
+        private System.Windows.Forms.ToolStripMenuItem miFanMode;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 this.fCircleChart.Dispose();
+                if (components != null)
+                    components.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.ToolBar1 = new System.Windows.Forms.ToolStrip();
             this.tbImageSave = new System.Windows.Forms.ToolStripButton();
             this.tbs1 = new System.Windows.Forms.ToolStripSeparator();
@@ -34,6 +40,9 @@
             this.tbDocPrint = new System.Windows.Forms.ToolStripButton();
             this.tbs3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbOptions = new System.Windows.Forms.ToolStripButton();
+            this.tbModes = new System.Windows.Forms.ToolStripDropDownButton();
+            this.MenuModes = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miFanMode = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolBar1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,6 +59,7 @@
                                              this.tbDocPreview,
                                              this.tbDocPrint,
                                              this.tbs3,
+                                             this.tbModes,
                                              this.tbOptions});
             this.ToolBar1.Location = new System.Drawing.Point(0, 0);
             this.ToolBar1.Name = "ToolBar1";
@@ -117,6 +127,27 @@
             this.tbOptions.Size = new System.Drawing.Size(23, 22);
             this.tbOptions.Text = "tbOptions";
             this.tbOptions.Click += new System.EventHandler(this.tbOptions_Click);
+            // 
+            // tbModes
+            // 
+            this.tbModes.DropDown = this.MenuModes;
+            this.tbModes.Name = "tbModes";
+            this.tbModes.Size = new System.Drawing.Size(13, 22);
+            // 
+            // MenuModes
+            // 
+            this.MenuModes.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miFanMode});
+            this.MenuModes.Name = "MenuModes";
+            this.MenuModes.OwnerItem = this.tbModes;
+            this.MenuModes.Size = new System.Drawing.Size(187, 198);
+            // 
+            // miFanMode
+            //
+            this.miFanMode.Name = "miFanMode";
+            this.miFanMode.Size = new System.Drawing.Size(186, 22);
+            this.miFanMode.Text = "miFanMode";
+            this.miFanMode.Click += new System.EventHandler(this.miFanMode_Click);
             // 
             // CircleChartWin
             // 
