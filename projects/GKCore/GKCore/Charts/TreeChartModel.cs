@@ -1902,7 +1902,7 @@ namespace GKCore.Charts
                 }
 
                 // vertical line from the horizontal junction of spouses to the horizontal junction of children
-                if (vertLineBySpouse) {
+                if (vertLineBySpouse || (cx >= chXB && cx <= chXE)) {
                     DrawLine(cx, spbBeg, cx, crY); // v
                 } else {
                     int chXM = (chXB + chXE) / 2;
