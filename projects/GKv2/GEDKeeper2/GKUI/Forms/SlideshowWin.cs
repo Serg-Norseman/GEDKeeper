@@ -60,8 +60,6 @@ namespace GKUI.Forms
             Controls.SetChildIndex(fImageCtl, 0);
             ResumeLayout(false);
 
-            WindowState = FormWindowState.Maximized;
-
             fController = new SlideshowController(this);
             fController.Init(baseWin);
             fController.LoadList();
@@ -69,6 +67,8 @@ namespace GKUI.Forms
 
         private void SlideshowWin_Load(object sender, EventArgs e)
         {
+            WindowState = FormWindowState.Maximized;
+
             fController.Next();
         }
 

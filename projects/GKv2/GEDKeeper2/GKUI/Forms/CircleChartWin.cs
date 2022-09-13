@@ -86,14 +86,15 @@ namespace GKUI.Forms
 
             fController = new CircleChartWinController(this);
             fController.Init(fBaseWin);
-
-            if (GlobalOptions.Instance.MaximizeChartWindows)
-                this.WindowState = FormWindowState.Maximized;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            if (GlobalOptions.Instance.MaximizeChartWindows)
+                this.WindowState = FormWindowState.Maximized;
+
             fCircleChart.Select();
             UpdateControls();
         }
