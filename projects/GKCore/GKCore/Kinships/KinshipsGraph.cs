@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
@@ -154,7 +155,12 @@ namespace GKCore.Kinships
                     string relRes = GetRelationName(targetRec, finRel, great, degree, shortForm);
                     return relRes;
                 } else {
-                    part = GetRelationPart(src, tgt, finRel, great, degree, shortForm);
+                    GDMIndividualRecord start = null;
+                    if (edgesPath.Any()) {
+                        start = (GDMIndividualRecord) edgesPath.First().Source.Value;
+                    }
+
+                    part = GetRelationPart(start, targetRec, finRel, great, degree, shortForm);
 
                     if (fullRel.Length > 0) fullRel += ", ";
                     fullRel += part;
