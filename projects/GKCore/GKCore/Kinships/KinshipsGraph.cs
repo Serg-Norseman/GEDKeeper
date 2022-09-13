@@ -105,11 +105,16 @@ namespace GKCore.Kinships
                 GDMIndividualRecord src = null, tgt = null, prev_tgt = null;
                 string part, fullRel = "";
 
+                GDMIndividualRecord starting = null;
+
                 var edgesPath = fGraph.GetPath(target);
                 foreach (Edge edge in edgesPath) {
                     prev_tgt = tgt;
                     src = (GDMIndividualRecord)edge.Source.Value;
                     tgt = (GDMIndividualRecord)edge.Target.Value;
+
+                    if(starting ==null) { starting = src; }
+
                     RelationKind curRel = KinshipsMan.FixLink(tgt.Sex, (RelationKind)((int)edge.Value));
 
                     if (prevRel != RelationKind.rkUndefined) {
@@ -132,8 +137,10 @@ namespace GKCore.Kinships
                         degree += deg;
 
                         if (finRel == RelationKind.rkUndefined && fullFormat) {
-                            part = GetRelationPart(src, prev_tgt, prevRel, great, degree, shortForm);
+                            part = GetRelationPart(starting, src, prevRel, great, degree, shortForm);
                             src = prev_tgt;
+
+                            starting = prev_tgt;
                             great = 0;
                             degree = 0;
                             prevRel = RelationKind.rkNone;
@@ -154,13 +161,7 @@ namespace GKCore.Kinships
                     string relRes = GetRelationName(targetRec, finRel, great, degree, shortForm);
                     return relRes;
                 } else {
-                    GDMIndividualRecord start = null;
-                    var enumerator = edgesPath.GetEnumerator();
-                    if (enumerator.MoveNext()) {
-                        start = (GDMIndividualRecord) enumerator.Current.Source.Value;
-                    }
-
-                    part = GetRelationPart(start, targetRec, finRel, great, degree, shortForm);
+                    part = GetRelationPart(starting, tgt, finRel, great, degree, shortForm);
 
                     if (fullRel.Length > 0) fullRel += ", ";
                     fullRel += part;
