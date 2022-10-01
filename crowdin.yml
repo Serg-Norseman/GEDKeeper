@@ -1,3 +1,0 @@
-files:
-  - source: /l10n/English.ini
-    translation: /l10n/%language%.ini

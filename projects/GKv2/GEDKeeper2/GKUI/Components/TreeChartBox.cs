@@ -116,12 +116,6 @@ namespace GKUI.Components
             set { fModel.Kind = value; }
         }
 
-        public ITreeLayout Layout
-        {
-            get { return fModel.Layout; }
-            set { fModel.Layout = value; }
-        }
-
         public TreeChartModel Model
         {
             get { return fModel; }
@@ -188,8 +182,6 @@ namespace GKUI.Components
 
             InitTimer();
             fTween = new TweenLibrary();
-
-            SetLayout(new NativeTreeLayout());
         }
 
         public TreeChartBox(ChartRenderer renderer) : this()
@@ -207,11 +199,6 @@ namespace GKUI.Components
                 if (fComponents != null) fComponents.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public void SetLayout(ITreeLayout layout)
-        {
-            fModel.Layout = layout;
         }
 
         public override void SetRenderer(ChartRenderer renderer)
