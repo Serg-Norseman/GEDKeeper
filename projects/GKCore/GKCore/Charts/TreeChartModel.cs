@@ -19,6 +19,7 @@
  */
 
 //#define DEBUG_RECALC
+//#define DESK_METHOD
 
 using System;
 using System.Collections.Generic;
@@ -55,8 +56,10 @@ namespace GKCore.Charts
     /// </summary>
     public class TreeChartModel : ChartModel
     {
+        private const int EDGES_SIZE = 255; // -127..+127, 0..254, 255, 1 unused
+
         public const int DEF_MARGINS = 24;
-        public const int DEF_SPOUSE_DISTANCE = 10;
+        public const int DEF_SPOUSE_DISTANCE = 20;
         public const int DEF_BRANCH_DISTANCE = 40;
         public const int DEF_LEVEL_DISTANCE = 46;
         public const float HIGHLIGHTED_VAL = 0.1f;
@@ -80,7 +83,11 @@ namespace GKCore.Charts
         private IPen fDottedLinePen;
         private IPen fDottedDecorativeLinePen;
         private IFont fDrawFont;
+#if !DESK_METHOD
         private int[] fEdges;
+#else
+        private TreeChartDesk fDesk;
+#endif
         private IImage fExpPic;
         private IImage fInfoPic;
         private IImage fPersExpPic;
@@ -96,6 +103,7 @@ namespace GKCore.Charts
         private int fNodePadding;
         private TreeChartOptions fOptions;
         private TreeChartPerson fRoot;
+        private GDMIndividualRecord fRootRec;
         private float fScale;
         private IImage[] fSignsPic;
         private IBrush fSolidBlack;
@@ -237,7 +245,11 @@ namespace GKCore.Charts
         {
             fDepthLimitAncestors = -1;
             fDepthLimitDescendants = -1;
-            fEdges = new int[256];
+#if !DESK_METHOD
+            fEdges = new int[EDGES_SIZE];
+#else
+            fDesk = new TreeChartDesk();
+#endif
             fFilter = new ChartFilter();
             fFilterData = new GKVarCache<GDMIndividualRecord, bool>();
             fGraph = null;
@@ -262,6 +274,9 @@ namespace GKCore.Charts
                 DoneSigns();
                 if (fBoldFont != null) fBoldFont.Dispose();
                 if (fDrawFont != null) fDrawFont.Dispose();
+#if DESK_METHOD
+                fDesk.Clear();
+#endif
             }
             base.Dispose(disposing);
         }
@@ -339,7 +354,7 @@ namespace GKCore.Charts
 
         private bool IsExtPerson(TreeChartPerson person)
         {
-            return IsExtendedTree() && (person == fRoot || person.BaseSpouse == fRoot);
+            return IsExtendedTree() && (person.Rec == fRootRec || person.HasFlag(PersonFlag.pfRootSpouse));
         }
 
         private bool IsExtRootSpouse(TreeChartPerson person)
@@ -347,38 +362,35 @@ namespace GKCore.Charts
             return IsExtendedTree() && person != null && person.HasFlag(PersonFlag.pfRootSpouse);
         }
 
-        public void GenChart(GDMIndividualRecord indiRec, TreeChartKind kind, bool rootCenter)
+        public void GenChart(GDMIndividualRecord indiRec, TreeChartKind kind)
         {
-            fKind = kind;
             fPersons.Clear();
             fGraph.Clear();
-            DoFilter(indiRec);
-            fRoot = null;
             fPreparedIndividuals.Clear();
+            fPreparedFamilies.Clear();
+            fRoot = null;
+#if DESK_METHOD
+            fDesk.Reset();
+#endif
 
-            switch (fKind) {
-                case TreeChartKind.ckAncestors:
-                    fPreparedFamilies.Clear();
-                    fRoot = DoAncestorsStep(null, indiRec, 1);
-                    break;
-
-                case TreeChartKind.ckDescendants:
-                    fPreparedFamilies.Clear();
-                    fRoot = DoDescendantsStep(null, indiRec, 1);
-                    break;
-
-                case TreeChartKind.ckBoth:
-                    fPreparedFamilies.Clear();
-                    fRoot = DoAncestorsStep(null, indiRec, 1);
-                    fPreparedFamilies.Clear();
-                    DoDescendantsStep(null, indiRec, 1);
-                    break;
-            }
-
+            fKind = kind;
+            DoFilter(indiRec);
+            fRootRec = indiRec;
+            fRoot = VisitPerson(null, indiRec, 0);
             fKinRoot = fRoot;
         }
 
         #region Tree walking
+
+        private bool RequireAncestors(TreeChartPerson person)
+        {
+            return ((fKind == TreeChartKind.ckAncestors || fKind == TreeChartKind.ckBoth) && (person.Rec == fRootRec || person.HasFlag(PersonFlag.pfRootSpouse)));
+        }
+
+        private bool RequireDescendants(TreeChartPerson person)
+        {
+            return ((fKind == TreeChartKind.ckDescendants || fKind == TreeChartKind.ckBoth) && (person.Generation >= 0));
+        }
 
         private TreeChartPerson CreatePerson(GDMIndividualRecord iRec, int generation, bool prevSearch = false)
         {
@@ -399,95 +411,98 @@ namespace GKCore.Charts
             return result;
         }
 
-        private void DoPersonAncestorsStep(TreeChartPerson personNode, bool dupFlag)
+        private void VisitAncestors(TreeChartPerson personNode, bool dupFlag)
         {
+            if (personNode == null) return;
+
             try {
-                if (personNode != null) {
-                    personNode.SetFlag(PersonFlag.pfAncWalk);
+                personNode.SetFlag(PersonFlag.pfAncWalk);
 
-                    var indiRec = personNode.Rec;
+                var indiRec = personNode.Rec;
 
-                    if ((fDepthLimitAncestors <= -1 || personNode.Generation != fDepthLimitAncestors) && indiRec.ChildToFamilyLinks.Count > 0 && !dupFlag) {
-                        GDMChildToFamilyLink childLink = indiRec.ChildToFamilyLinks[0];
-                        personNode.SetFlag(PersonFlag.pfAdopted, (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted));
-                        GDMFamilyRecord family = fTree.GetPtrValue(childLink);
+                if ((fDepthLimitAncestors <= -1 || Math.Abs(personNode.Generation) != fDepthLimitAncestors) && indiRec.ChildToFamilyLinks.Count > 0 && !dupFlag) {
+                    GDMChildToFamilyLink childLink = indiRec.ChildToFamilyLinks[0];
+                    personNode.SetFlag(PersonFlag.pfAdopted, (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted));
+                    GDMFamilyRecord family = fTree.GetPtrValue(childLink);
 
-                        bool isDup = fPreparedFamilies.Contains(family.XRef);
-                        if (!isDup)
-                            fPreparedFamilies.Add(family.XRef);
+                    bool isDup = fPreparedFamilies.Contains(family.XRef);
+                    if (!isDup) fPreparedFamilies.Add(family.XRef);
 
-                        if (fContext.IsRecordAccess(family.Restriction)) {
-                            GDMIndividualRecord iFather, iMother;
-                            fTree.GetSpouses(family, out iFather, out iMother);
+                    if (fContext.IsRecordAccess(family.Restriction)) {
+                        GDMIndividualRecord iFather, iMother;
+                        fTree.GetSpouses(family, out iFather, out iMother);
 
-                            bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
+                        bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
 
-                            if (iFather != null && fContext.IsRecordAccess(iFather.Restriction)) {
-                                personNode.Father = DoAncestorsStep(personNode, iFather, personNode.Generation + 1, isDup);
-                            }
+                        if (iFather != null && fContext.IsRecordAccess(iFather.Restriction)) {
+                            personNode.Father = VisitParent(personNode, iFather, personNode.Generation - 1, isDup);
+                        }
 
-                            if (iMother != null && fContext.IsRecordAccess(iMother.Restriction)) {
-                                personNode.Mother = DoAncestorsStep(personNode, iMother, personNode.Generation + 1, isDup);
-                            }
+                        if (iMother != null && fContext.IsRecordAccess(iMother.Restriction)) {
+                            personNode.Mother = VisitParent(personNode, iMother, personNode.Generation - 1, isDup);
+                        }
 
-                            if (personNode.Father != null && personNode.Mother != null && fOptions.Kinship) {
-                                fGraph.AddRelation(personNode.Father.Node, personNode.Mother.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
-                            }
+                        if (personNode.Father != null && personNode.Mother != null && fOptions.Kinship) {
+                            fGraph.AddRelation(personNode.Father.Node, personNode.Mother.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
+                        }
 
-                            if (fOptions.MarriagesDates) {
-                                DateFormat dateFormat = (fOptions.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
-                                var marDate = GKUtils.GetMarriageDateStr(family, dateFormat, GlobalOptions.Instance.ShowDatesSign);
-                                if (!string.IsNullOrEmpty(marDate)) {
-                                    if (personNode.Father != null) {
-                                        personNode.Father.MarriageDate = marDate;
-                                    } else if (personNode.Mother != null) {
-                                        personNode.Mother.MarriageDate = marDate;
-                                    }
+                        if (fOptions.MarriagesDates) {
+                            DateFormat dateFormat = (fOptions.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+                            var marDate = GKUtils.GetMarriageDateStr(family, dateFormat, GlobalOptions.Instance.ShowDatesSign);
+                            if (!string.IsNullOrEmpty(marDate)) {
+                                if (personNode.Father != null) {
+                                    personNode.Father.MarriageDate = marDate;
+                                } else if (personNode.Mother != null) {
+                                    personNode.Mother.MarriageDate = marDate;
                                 }
                             }
                         }
-                    } else {
-                        if (indiRec.ChildToFamilyLinks.Count > 0) {
-                            personNode.SetFlag(PersonFlag.pfHasInvAnc);
-                        }
                     }
-
-                    if (fTree.GetTotalChildrenCount(indiRec) > 1 || indiRec.SpouseToFamilyLinks.Count > 1) {
-                        personNode.SetFlag(PersonFlag.pfHasInvDesc);
+                } else {
+                    if (indiRec.ChildToFamilyLinks.Count > 0) {
+                        personNode.SetFlag(PersonFlag.pfHasInvAnc);
                     }
                 }
+
+                if (fTree.GetTotalChildrenCount(indiRec) > 1 || indiRec.SpouseToFamilyLinks.Count > 1) {
+                    personNode.SetFlag(PersonFlag.pfHasInvDesc);
+                }
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartModel.DoPersonAncestorsStep()", ex);
+                Logger.WriteError("TreeChartModel.VisitAncestors()", ex);
                 throw;
             }
         }
 
-        private TreeChartPerson DoAncestorsStep(TreeChartPerson childNode, GDMIndividualRecord parentRec, int generation,
+        private TreeChartPerson VisitParent(TreeChartPerson childNode, GDMIndividualRecord parentRec, int generation,
             bool dupFlag = false, bool divorced = false)
         {
+            if (parentRec == null) return null;
+
             try {
                 TreeChartPerson result = null;
 
-                if (parentRec != null) {
-                    result = CreatePerson(parentRec, generation);
+                result = CreatePerson(parentRec, generation);
 
-                    result.SetFlag(PersonFlag.pfDivorced, divorced);
-                    result.IsDup = dupFlag;
+                result.SetFlag(PersonFlag.pfDivorced, divorced);
+                result.IsDup = dupFlag;
 
-                    if (childNode != null) {
-                        result.AddChild(childNode);
+#if DESK_METHOD
+                fDesk.Add(result);
+#endif
 
-                        if (fOptions.Kinship) {
-                            fGraph.AddRelation(childNode.Node, result.Node, RelationKind.rkParent, RelationKind.rkChild);
-                        }
+                if (childNode != null) {
+                    result.AddChild(childNode);
+
+                    if (fOptions.Kinship) {
+                        fGraph.AddRelation(childNode.Node, result.Node, RelationKind.rkParent, RelationKind.rkChild);
                     }
-
-                    DoPersonAncestorsStep(result, dupFlag);
                 }
+
+                VisitAncestors(result, dupFlag);
 
                 return result;
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartModel.DoAncestorsStep()", ex);
+                Logger.WriteError("TreeChartModel.VisitParent()", ex);
                 throw;
             }
         }
@@ -553,7 +568,7 @@ namespace GKCore.Charts
             }
         }
 
-        private TreeChartPerson DoDescendantsStep(TreeChartPerson parent, GDMIndividualRecord indiRec, int level)
+        private TreeChartPerson VisitPerson(TreeChartPerson parent, GDMIndividualRecord indiRec, int generation)
         {
             try {
                 TreeChartPerson result = null;
@@ -566,186 +581,181 @@ namespace GKCore.Charts
 
                 bool skipChildless = fOptions.ChildlessExclude && fContext.IsChildless(indiRec);
 
-                if (!skipChildless || level <= 1 || spousesNum != 0) {
-                    if (!CheckDescendantFilter(indiRec, level))
-                        return null;
+                if (skipChildless && generation != 0 && spousesNum == 0)
+                    return null;
 
-                    result = AddDescPerson(parent, indiRec, false, level);
+                if (!CheckDescendantFilter(indiRec, generation))
+                    return null;
 
-                    for (int i = 0; i < spousesNum; i++) {
-                        GDMFamilyRecord family = fTree.GetPtrValue(indiRec.SpouseToFamilyLinks[i]);
+                result = AddDescPerson(parent, indiRec, false, generation);
 
-                        // protection against invalid third-party files
-                        if (family == null) {
-                            Logger.WriteError("TreeChartModel.DoDescendantsStep(): null pointer to family");
-                            continue;
-                        }
+#if DESK_METHOD
+                if (!fDesk.Exists(result))
+                    fDesk.Add(result);
+#endif
 
-                        bool isDup = fPreparedFamilies.Contains(family.XRef);
-                        if (!isDup) fPreparedFamilies.Add(family.XRef);
+                // the man's spouses align to his right
+                if (result.Sex == GDMSex.svMale && RequireAncestors(result)) {
+                    VisitAncestors(result, false);
+                }
 
-                        if (!fContext.IsRecordAccess(family.Restriction)) continue;
+                for (int i = 0; i < spousesNum; i++) {
+                    GDMFamilyRecord family = fTree.GetPtrValue(indiRec.SpouseToFamilyLinks[i]);
+                    if (family == null || !fContext.IsRecordAccess(family.Restriction)) continue;
 
-                        bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
+                    bool isDup = fPreparedFamilies.Contains(family.XRef);
+                    if (!isDup) fPreparedFamilies.Add(family.XRef);
 
-                        result.SetFlag(PersonFlag.pfDivorced, divorced);
+                    bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
+                    result.SetFlag(PersonFlag.pfDivorced, divorced);
 
-                        TreeChartPerson resParent = null;
-                        TreeChartPerson ft = null;
-                        TreeChartPerson mt = null;
-                        PersonFlag descFlag = PersonFlag.pfDescByFather;
-                        bool invalidSpouse = false;
-                        bool skipUnk = false;
+                    TreeChartPerson resParent = null;
+                    TreeChartPerson ft = null;
+                    TreeChartPerson mt = null;
+                    PersonFlag descFlag = PersonFlag.pfDescByFather;
+                    bool skipUnk = false;
 
-                        switch (indiRec.Sex) {
-                            case GDMSex.svFemale: {
-                                    GDMIndividualRecord sp = fTree.GetPtrValue(family.Husband);
-                                    skipUnk = skipUnkSpouses && (sp == null);
+                    switch (indiRec.Sex) {
+                        case GDMSex.svFemale: {
+                                GDMIndividualRecord sp = fTree.GetPtrValue(family.Husband);
+                                skipUnk = skipUnkSpouses && (sp == null);
 
-                                    if (!skipUnk) {
-                                        resParent = AddDescPerson(null, sp, true, level);
-                                        resParent.Sex = GDMSex.svMale;
-                                        resParent.SetFlag(PersonFlag.pfSpouse);
-                                        resParent.SetFlag(PersonFlag.pfDivorced, divorced);
+                                if (!skipUnk) {
+                                    resParent = AddDescPerson(null, sp, true, generation);
+                                    resParent.Sex = GDMSex.svMale;
+                                    resParent.SetFlag(PersonFlag.pfSpouse);
+                                    resParent.SetFlag(PersonFlag.pfDivorced, divorced);
 
-                                        ft = resParent;
-                                        ft.IsDup = isDup;
+#if DESK_METHOD
+                                    fDesk.AddBefore(result, resParent);
+#endif
 
-                                        mt = result;
-                                        mt.IsDup = isDup;
+                                    ft = resParent;
+                                    ft.IsDup = isDup;
 
-                                        descFlag = PersonFlag.pfDescByFather;
-                                    } else {
-                                        resParent = null;
-                                        mt = result;
-                                        mt.IsDup = isDup;
-                                        descFlag = PersonFlag.pfDescByMother;
-                                    }
-                                    break;
+                                    mt = result;
+                                    mt.IsDup = isDup;
+
+                                    descFlag = PersonFlag.pfDescByFather;
+                                } else {
+                                    resParent = null;
+                                    mt = result;
+                                    mt.IsDup = isDup;
+                                    descFlag = PersonFlag.pfDescByMother;
                                 }
-
-                            case GDMSex.svMale: {
-                                    GDMIndividualRecord sp = fTree.GetPtrValue(family.Wife);
-                                    skipUnk = skipUnkSpouses && (sp == null);
-
-                                    if (!skipUnk) {
-                                        resParent = AddDescPerson(null, sp, true, level);
-                                        resParent.Sex = GDMSex.svFemale;
-                                        resParent.SetFlag(PersonFlag.pfSpouse);
-                                        resParent.SetFlag(PersonFlag.pfDivorced, divorced);
-
-                                        ft = result;
-                                        ft.IsDup = isDup;
-
-                                        mt = resParent;
-                                        mt.IsDup = isDup;
-
-                                        descFlag = PersonFlag.pfDescByMother;
-                                    } else {
-                                        resParent = null;
-                                        ft = result;
-                                        ft.IsDup = isDup;
-                                        descFlag = PersonFlag.pfDescByFather;
-                                    }
-                                    break;
-                                }
-
-                            default:
-                                invalidSpouse = true;
-                                Logger.WriteError("TreeChartModel.DoDescendantsStep(): sex of spouse is undetermined");
                                 break;
-                        }
+                            }
 
-                        if (invalidSpouse) {
+                        case GDMSex.svMale: {
+                                GDMIndividualRecord sp = fTree.GetPtrValue(family.Wife);
+                                skipUnk = skipUnkSpouses && (sp == null);
+
+                                if (!skipUnk) {
+                                    resParent = AddDescPerson(null, sp, true, generation);
+                                    resParent.Sex = GDMSex.svFemale;
+                                    resParent.SetFlag(PersonFlag.pfSpouse);
+                                    resParent.SetFlag(PersonFlag.pfDivorced, divorced);
+
+#if DESK_METHOD
+                                    fDesk.Add(resParent);
+#endif
+
+                                    ft = result;
+                                    ft.IsDup = isDup;
+
+                                    mt = resParent;
+                                    mt.IsDup = isDup;
+
+                                    descFlag = PersonFlag.pfDescByMother;
+                                } else {
+                                    resParent = null;
+                                    ft = result;
+                                    ft.IsDup = isDup;
+                                    descFlag = PersonFlag.pfDescByFather;
+                                }
+                                break;
+                            }
+
+                        default:
+                            // sex of spouse is undetermined
                             continue;
+                    }
+
+                    if (resParent != null) {
+                        if (fOptions.Kinship) {
+                            fGraph.AddRelation(result.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
                         }
 
-                        if (resParent != null) {
+                        result.AddSpouse(resParent);
+                        resParent.BaseSpouse = result;
+                        resParent.BaseFamily = family;
+
+                        if (resParent.Rec != null) {
+                            if (fOptions.MarriagesDates) {
+                                //DateFormat dateFormat = (fOptions.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+                                DateFormat dateFormat = DateFormat.dfYYYY;
+                                GlobalOptions glob = GlobalOptions.Instance;
+                                var marDate = GKUtils.GetMarriageDateStr(family, dateFormat, glob.ShowDatesSign);
+                                resParent.MarriageDate = marDate;
+                            }
+
+                            if (resParent.Rec.ChildToFamilyLinks.Count > 0) {
+                                resParent.SetFlag(PersonFlag.pfHasInvAnc);
+                            }
+
+                            if (resParent.Rec.SpouseToFamilyLinks.Count > 1) {
+                                resParent.SetFlag(PersonFlag.pfHasInvDesc);
+                            }
+
+                            // additionally display the ancestors of the spouses of the central person
+                            if (IsExtendedTree() && indiRec == fRootRec) {
+                                resParent.SetFlag(PersonFlag.pfRootSpouse);
+                                VisitAncestors(resParent, false);
+                            }
+                        }
+                    } else {
+                        resParent = result;
+                    }
+
+                    if (RequireDescendants(result) && (fDepthLimitDescendants <= -1 || Math.Abs(generation) != fDepthLimitDescendants) && (!isDup)) {
+                        int num2 = family.Children.Count;
+                        for (int j = 0; j < num2; j++) {
+                            var childRec = fTree.GetPtrValue(family.Children[j]);
+                            if (childRec == null || !fContext.IsRecordAccess(childRec.Restriction)) continue;
+
+                            TreeChartPerson child = VisitPerson(resParent, childRec, generation + 1);
+                            if (child == null) continue;
+
+                            child.Father = ft;
+                            child.Mother = mt;
+                            child.SetFlag(descFlag);
+
+                            GDMChildToFamilyLink childLink = childRec.FindChildToFamilyLink(family);
+                            if (childLink != null && (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted)) {
+                                child.SetFlag(PersonFlag.pfAdopted, true);
+                            }
+
                             if (fOptions.Kinship) {
-                                fGraph.AddRelation(result.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
+                                if (ft != null) fGraph.AddRelation(child.Node, ft.Node, RelationKind.rkParent, RelationKind.rkChild);
+                                if (mt != null) fGraph.AddRelation(child.Node, mt.Node, RelationKind.rkParent, RelationKind.rkChild);
                             }
-
-                            result.AddSpouse(resParent);
-                            resParent.BaseSpouse = result;
-                            resParent.BaseFamily = family;
-
-                            if (resParent.Rec != null) {
-                                if (fOptions.MarriagesDates) {
-                                    //DateFormat dateFormat = (fOptions.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
-                                    DateFormat dateFormat = DateFormat.dfYYYY;
-                                    GlobalOptions glob = GlobalOptions.Instance;
-                                    var marDate = GKUtils.GetMarriageDateStr(family, dateFormat, glob.ShowDatesSign);
-                                    resParent.MarriageDate = marDate;
-                                }
-
-                                if (resParent.Rec.ChildToFamilyLinks.Count > 0) {
-                                    resParent.SetFlag(PersonFlag.pfHasInvAnc);
-                                }
-
-                                if (resParent.Rec.SpouseToFamilyLinks.Count > 1) {
-                                    resParent.SetFlag(PersonFlag.pfHasInvDesc);
-                                }
-
-                                // additionally display the ancestors of the spouses of the central person
-                                if (IsExtendedTree() && indiRec == fRoot.Rec) {
-                                    resParent.SetFlag(PersonFlag.pfRootSpouse);
-                                    DoPersonAncestorsStep(resParent, false);
-                                }
-                            }
-                        } else {
-                            resParent = result;
                         }
-
-                        if ((fDepthLimitDescendants <= -1 || level != fDepthLimitDescendants) && (!isDup)) {
-                            int num2 = family.Children.Count;
-                            for (int j = 0; j < num2; j++) {
-                                var childRec = fTree.GetPtrValue(family.Children[j]);
-
-                                // protection against invalid third-party files
-                                if (childRec == null) {
-                                    Logger.WriteError("TreeChartModel.DoDescendantsStep(): null pointer to child");
-                                    continue;
-                                }
-
-                                if (!fContext.IsRecordAccess(childRec.Restriction)) continue;
-
-                                TreeChartPerson child = DoDescendantsStep(resParent, childRec, level + 1);
-                                if (child == null) continue;
-
-                                child.Father = ft;
-                                child.Mother = mt;
-                                child.SetFlag(descFlag);
-
-                                GDMChildToFamilyLink childLink = childRec.FindChildToFamilyLink(family);
-                                if (childLink != null) {
-                                    child.SetFlag(PersonFlag.pfAdopted, (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted));
-                                }
-
-                                if (fOptions.Kinship) {
-                                    if (ft != null) {
-                                        fGraph.AddRelation(child.Node, ft.Node, RelationKind.rkParent, RelationKind.rkChild);
-                                    }
-                                    if (mt != null) {
-                                        fGraph.AddRelation(child.Node, mt.Node, RelationKind.rkParent, RelationKind.rkChild);
-                                    }
-                                }
-                            }
-                        } else {
-                            if (family.Children.Count > 0) {
-                                if (ft != null) {
-                                    ft.SetFlag(PersonFlag.pfHasInvDesc);
-                                }
-                                if (mt != null) {
-                                    mt.SetFlag(PersonFlag.pfHasInvDesc);
-                                }
-                            }
+                    } else {
+                        if (family.Children.Count > 0) {
+                            if (ft != null) ft.SetFlag(PersonFlag.pfHasInvDesc);
+                            if (mt != null) mt.SetFlag(PersonFlag.pfHasInvDesc);
                         }
                     }
                 }
 
+                // the man's spouses align to his right
+                if (result.Sex == GDMSex.svFemale && RequireAncestors(result)) {
+                    VisitAncestors(result, false);
+                }
+
                 return result;
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartModel.DoDescendantsStep()", ex);
+                Logger.WriteError("TreeChartModel.VisitPerson()", ex);
                 throw;
             }
         }
@@ -901,11 +911,11 @@ namespace GKCore.Charts
             fImageWidth = fTreeBounds.GetWidth() + fMargins * 2;
         }
 
-        public void RecalcChart(bool noRedraw = false)
+        public void RecalcChart()
         {
             Predef();
-
             RecalcPersonBounds();
+            //ClearEdges();
 
             switch (fKind) {
                 case TreeChartKind.ckAncestors:
@@ -925,105 +935,11 @@ namespace GKCore.Charts
             RecalcTreeBounds();
         }
 
-        /// <summary>
-        /// If the option to minimize the diagram width is not selected,
-        /// the function takes the right edge from the previous branch of the given generation,
-        /// otherwise it searches for the rightmost edge from the current generation and all subsequent ones.
-        /// </summary>
-        private int GetEdge(int gen)
-        {
-            int result = fEdges[gen];
-
-            if (!fOptions.MinimizingWidth) {
-                for (int i = gen + 1; i < 256; i++) {
-                    result = Math.Max(result, fEdges[i]);
-                }
-            }
-
-            return result;
-        }
-
-        private int GetCurrentBranchLeftBound(int generation)
-        {
-            int edge = GetEdge(generation);
-            int offset = (edge > 0) ? fBranchDistance : fMargins;
-            int bound = edge + offset;
-            return bound;
-        }
-
-        /// <summary>
-        /// The function returns the Y-coordinate of the next generation,
-        /// depending on the type of movement (ancestors, descendants) and the chart inversion option.
-        /// </summary>
-        private int NextGenY(TreeChartPerson person, bool ancestors)
-        {
-            int sign = (ancestors) ? -1 : +1;
-            int sign2 = (!fOptions.InvertedTree) ? +1 : -1;
-            int offset = (fLevelDistance + person.Height) * sign * sign2;
-            return person.PtY + offset;
-        }
-
-        private void ShiftAnc(TreeChartPerson person, int offset)
-        {
-            TreeChartPerson pp = person;
-            if (pp == null) return;
-
-            do {
-                pp.PtX += offset;
-                fEdges[pp.Generation] = pp.Rect.Right;
-
-                pp = (pp.GetChildsCount() < 1) ? null : pp.GetChild(0);
-            }
-            while (pp != null);
-        }
-
-        private void RecalcAnc(TreeChartPerson person, int ptX, int ptY)
-        {
-            if (person == null) return;
-
-            person.PtX = ptX;
-            person.PtY = ptY;
-
-            int gen = person.Generation;
-
-            int bound = GetCurrentBranchLeftBound(gen);
-            if (person.Rect.Left < bound) {
-                ShiftAnc(person, bound - person.Rect.Left);
-            }
-
-            fEdges[gen] = person.Rect.Right;
-
-            person.IsVisible = true;
-
-            if (person.IsCollapsed) {
-                return;
-            }
-
-            if (person.Father != null && person.Mother != null) {
-                RecalcAnc(person.Father, person.PtX - (fSpouseDistance + person.Father.Width / 2), NextGenY(person, true));
-                RecalcAnc(person.Mother, person.PtX + (fSpouseDistance + person.Mother.Width / 2), NextGenY(person, true));
-
-                // alignment of child coordinates between parents
-                person.PtX = (person.Father.PtX + person.Mother.PtX) / 2;
-
-                fEdges[gen] = person.Rect.Right;
-            } else {
-                TreeChartPerson anc = null;
-                if (person.Father != null) {
-                    anc = person.Father;
-                } else if (person.Mother != null) {
-                    anc = person.Mother;
-                }
-
-                if (anc != null) {
-                    RecalcAnc(anc, person.PtX, NextGenY(person, true));
-                }
-            }
-        }
-
         private void RecalcAncestorsChart()
         {
-            Array.Clear(fEdges, 0, fEdges.Length);
+#if !DESK_METHOD
+            ClearEdges();
+#endif
 
             if (IsExtendedTree()) {
                 // the man's spouses align to his right
@@ -1043,6 +959,159 @@ namespace GKCore.Charts
                 }
             } else {
                 RecalcAnc(fRoot, fMargins, fMargins);
+            }
+        }
+
+        private void RecalcDescendantsChart(bool predef)
+        {
+#if !DESK_METHOD
+            ClearEdges();
+#endif
+            RecalcDesc(fRoot, fMargins, fMargins, predef);
+        }
+
+#if !DESK_METHOD
+        private void ClearEdges()
+        {
+            Array.Clear(fEdges, 0, EDGES_SIZE);
+        }
+#endif
+
+        private void SetEdge(int generation, int value)
+        {
+#if !DESK_METHOD
+            if (generation < -127 || generation > 127)
+                throw new ArgumentOutOfRangeException("generation");
+
+            int index = generation + 127;
+            fEdges[index] = value;
+#endif
+        }
+
+        private void SetEdge(TreeChartPerson person)
+        {
+            SetEdge(person.Generation, person.Rect.Right);
+        }
+
+        /// <summary>
+        /// If the option to minimize the diagram width is not selected,
+        /// the function takes the right edge from the previous branch of the given generation,
+        /// otherwise it searches for the rightmost edge from the current generation and all subsequent ones.
+        /// </summary>
+        private int GetEdge(TreeChartPerson person, bool ancestors)
+        {
+#if !DESK_METHOD
+            int generation = person.Generation;
+
+            if (generation < -127 || generation > 127)
+                throw new ArgumentOutOfRangeException("generation");
+
+            int index = generation + 127;
+            int result = fEdges[index];
+
+            if (!fOptions.MinimizingWidth) {
+                if (ancestors) {
+                    for (int i = index - 1; i >= 0; i--) {
+                        result = Math.Max(result, fEdges[i]);
+                    }
+                } else {
+                    for (int i = index + 1; i < EDGES_SIZE; i++) {
+                        result = Math.Max(result, fEdges[i]);
+                    }
+                }
+            }
+
+            return result;
+#else
+            var left = fDesk.GetBefore(person);
+
+            if (left == null) {
+                return 0;
+            } else {
+                return left.Rect.Right;
+            }
+#endif
+        }
+
+        private int GetCurrentBranchLeftBound(TreeChartPerson person, bool ancestors)
+        {
+            int edge = GetEdge(person, ancestors);
+            int offset = (edge > 0) ? fBranchDistance : fMargins;
+            int bound = edge + offset;
+            return bound;
+        }
+
+        /// <summary>
+        /// The function returns the Y-coordinate of the next generation,
+        /// depending on the type of movement (ancestors, descendants) and the chart inversion option.
+        /// </summary>
+        private int NextGenY(TreeChartPerson person, bool ancestors)
+        {
+            int sign = (ancestors) ? -1 : +1;
+            int sign2 = (!fOptions.InvertedTree) ? +1 : -1;
+            int offset = (fLevelDistance + person.Height) * sign * sign2;
+            return person.PtY + offset;
+        }
+
+        /// <summary>
+        /// A recursive shift of previously passed generations of descendants is needed in this case:
+        /// if the previously passed generation did not intersect on the left, and on the current generation
+        /// the left branch hangs over the previous ones, only the current generation will be broken to the right,
+        /// and the underlying ones will remain under the overhanging left branch.
+        /// </summary>
+        private void ShiftAnc(TreeChartPerson person, int offset)
+        {
+            TreeChartPerson pp = person;
+            if (pp == null) return;
+
+            do {
+                pp.PtX += offset;
+                SetEdge(pp);
+
+                pp = (pp.GetChildsCount() < 1) ? null : pp.GetChild(0);
+            }
+            while (pp != null && pp.Generation <= 0);
+        }
+
+        private void RecalcAnc(TreeChartPerson person, int ptX, int ptY)
+        {
+            if (person == null) return;
+
+            person.PtX = ptX;
+            person.PtY = ptY;
+
+            int bound = GetCurrentBranchLeftBound(person, true);
+            if (person.Rect.Left < bound) {
+                ShiftAnc(person, bound - person.Rect.Left);
+            }
+
+            SetEdge(person);
+
+            person.IsVisible = true;
+
+            if (person.IsCollapsed) {
+                return;
+            }
+
+            if (person.Father != null && person.Mother != null) {
+                RecalcAnc(person.Father, person.PtX - (fSpouseDistance + person.Father.Width / 2), NextGenY(person, true));
+                RecalcAnc(person.Mother, person.PtX + (fSpouseDistance + person.Mother.Width / 2), NextGenY(person, true));
+
+                // alignment of child coordinates between parents
+                person.PtX = (person.Father.PtX + person.Mother.PtX) / 2;
+
+                SetEdge(person);
+            } else {
+                TreeChartPerson parent = null;
+                if (person.Father != null) {
+                    parent = person.Father;
+                } else if (person.Mother != null) {
+                    parent = person.Mother;
+                }
+
+                if (parent != null) {
+                    RecalcAnc(parent, person.PtX, NextGenY(person, true));
+                }
             }
         }
 
@@ -1148,15 +1217,15 @@ namespace GKCore.Charts
             WriteDebugInfo("ShiftDesc", person);
 
             // fix #189
-            if (verify && (person.Rect.Left + offset < fEdges[person.Generation] + fBranchDistance)) {
+            if (verify && (person.Rect.Left + offset < GetEdge(person, false) + fBranchDistance)) {
                 return false;
             }
 
-            if (person == fRoot || (IsExtendedTree() && person.BaseSpouse == fRoot)) {
+            if (person == fRoot || (IsExtendedTree() && person.HasFlag(PersonFlag.pfRootSpouse))) {
                 isSingle = false;
             }
 
-            if (IsExtendedTree() && (/*person == fRoot || */person.BaseSpouse == fRoot)) {
+            if (IsExtendedTree() && (/*person == fRoot || */person.HasFlag(PersonFlag.pfRootSpouse))) {
                 return ShiftSpousesFrom(person, offset);
             }
             else 
@@ -1237,11 +1306,6 @@ namespace GKCore.Charts
                 curX = child.Rect.Right + fBranchDistance;
             }
 
-            curX = person.GetChild(0).PtX;
-            if (childrenCount > 1) {
-                curX += (person.GetChild(childrenCount - 1).PtX - curX) / 2;
-            }
-
             // This code is designed to align parents in the center of the location of children (across width),
             // because in the process of drawing children, various kinds of displacement are formed,
             // and the initial arrangement of the parents can be very laterally,
@@ -1249,11 +1313,14 @@ namespace GKCore.Charts
             // However, this may be a problem (reason of #189) in the case if a shift initiated from descendants,
             // must be performed to the left with an overlay on an already formed side branch.
 
-            if (!fOptions.AutoAlign || IsExtPerson(person)) {
-                return;
-            }
+            if (IsExtPerson(person)) return;
 
             WriteDebugInfo("RecalcDescChilds.AutoAlign", person);
+
+            curX = person.GetChild(0).PtX;
+            if (childrenCount > 1) {
+                curX += (person.GetChild(childrenCount - 1).PtX - curX) / 2;
+            }
 
             // FIXME: displacement #1
             if (alignPair) {
@@ -1262,7 +1329,7 @@ namespace GKCore.Charts
                     case GDMSex.svMale:
                         // fix #189
                         offset = curX - (fBranchDistance + person.Width) / 2 + 1 - person.PtX;
-                        if (person.Rect.Left + offset < fEdges[person.Generation]) {
+                        if (person.Rect.Left + offset < GetEdge(person, false)) {
                             return;
                         }
 
@@ -1273,7 +1340,7 @@ namespace GKCore.Charts
                     case GDMSex.svFemale:
                         // fix #189
                         offset = curX - (fBranchDistance + person.BaseSpouse.Width) / 2 + 1 - person.BaseSpouse.PtX;
-                        if (person.BaseSpouse.Rect.Left + offset < fEdges[person.BaseSpouse.Generation]) {
+                        if (person.BaseSpouse.Rect.Left + offset < GetEdge(person.BaseSpouse, false)) {
                             return;
                         }
 
@@ -1294,14 +1361,12 @@ namespace GKCore.Charts
 
             person.IsVisible = true;
 
-            int gen = person.Generation;
-
             if (predef && !IsExtRootSpouse(person)) {
                 person.PtX = ptX;
                 person.PtY = ptY;
             }
 
-            int bound = GetCurrentBranchLeftBound(gen);
+            int bound = GetCurrentBranchLeftBound(person, false);
             if (person.Rect.Left < bound) {
                 ShiftDesc(person, bound - person.Rect.Left, true);
             }
@@ -1309,7 +1374,7 @@ namespace GKCore.Charts
             // the man's spouses align to his right
             if (person.Sex == GDMSex.svMale) {
                 RecalcDescChilds(person);
-                fEdges[gen] = person.Rect.Right;
+                SetEdge(person);
             }
 
             int spousesCount = person.GetSpousesCount();
@@ -1346,13 +1411,13 @@ namespace GKCore.Charts
             // the woman's spouses align to her left
             if (person.Sex == GDMSex.svFemale) {
                 RecalcDescChilds(person);
-                fEdges[gen] = person.Rect.Right;
+                SetEdge(person);
             }
 
             // FIXME: Temporary hack: if this person does not specify a particular sex,
             // then breaks the normal sequence of formation of coordinates.
             if (person.Sex == GDMSex.svUnknown || person.Sex == GDMSex.svIntersex) {
-                fEdges[gen] = person.Rect.Right;
+                SetEdge(person);
             }
 
             // Fix of long-distance displacement of male nodes in the presence of more than
@@ -1372,12 +1437,6 @@ namespace GKCore.Charts
                     }
                 }
             }
-        }
-
-        private void RecalcDescendantsChart(bool predef)
-        {
-            Array.Clear(fEdges, 0, fEdges.Length);
-            RecalcDesc(fRoot, fMargins, fMargins, predef);
         }
 
         #endregion
@@ -1869,12 +1928,11 @@ namespace GKCore.Charts
                 TreeChartPerson child0 = person.GetChild(0);
                 int chY = (!fOptions.InvertedTree) ? child0.PtY : child0.PtY + child0.Height;
                 int chXB = child0.PtX;
-                int chXE = child0.PtX;
+                int chXE = (childrenCount > 1) ? person.GetChild(childrenCount - 1).PtX : child0.PtX;
+                int chXM = (chXB + chXE) / 2;
 
                 for (int i = 0; i < childrenCount; i++) {
                     TreeChartPerson child = person.GetChild(i);
-
-                    chXE = child.PtX;
 
                     bool dotted = IsDottedLines(child);
                     var linePen = (!dotted) ? fLinePen : fDottedLinePen;
@@ -1882,12 +1940,11 @@ namespace GKCore.Charts
 
                     if (childrenCount > 1) {
                         int jX;
-                        if (i < childrenCount / 2) {
-                            jX = Math.Min(cx, person.GetChild(i + 1).PtX);
+                        if (child.PtX < chXM) {
+                            jX = Math.Min(chXM, person.GetChild(i + 1).PtX);
                         } else {
-                            jX = Math.Max(cx, person.GetChild(i - 1).PtX);
+                            jX = Math.Max(chXM, person.GetChild(i - 1).PtX);
                         }
-
                         DrawLine(child.PtX, crY, jX, crY, linePen, decorativeLinePen); // h
                     }
 
@@ -1898,7 +1955,6 @@ namespace GKCore.Charts
                 if (vertLineBySpouse || (cx >= chXB && cx <= chXE)) {
                     DrawLine(cx, spbBeg, cx, crY); // v
                 } else {
-                    int chXM = (chXB + chXE) / 2;
                     if (chXM >= spXB && chXM <= spXE) {
                         DrawLine(chXM, spbBeg, chXM, crY); // v
                     } else {

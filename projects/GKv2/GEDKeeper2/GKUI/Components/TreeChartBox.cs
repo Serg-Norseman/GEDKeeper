@@ -260,7 +260,7 @@ namespace GKUI.Components
             try {
                 fSelected = null;
 
-                fModel.GenChart(iRec, kind, rootCenter);
+                fModel.GenChart(iRec, kind);
 
                 RecalcChart();
 
@@ -403,8 +403,8 @@ namespace GKUI.Components
                     deepModel.SetRenderer(fRenderer);
                     deepModel.DepthLimitAncestors = 2;
                     deepModel.DepthLimitDescendants = 2;
-                    deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth, true);
-                    deepModel.RecalcChart(true);
+                    deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth);
+                    deepModel.RecalcChart();
 
                     var pers = deepModel.FindPersonByRec(fSelected.Rec);
                     if (pers == null) {
@@ -463,7 +463,7 @@ namespace GKUI.Components
             }
 
             try {
-                fModel.RecalcChart(noRedraw);
+                fModel.RecalcChart();
             } finally {
                 if (fRenderer is WFGfxRenderer && gfx != null) {
                     gfx.Dispose();

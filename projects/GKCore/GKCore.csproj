@@ -78,6 +78,7 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Charts\TreeChartDesk.cs" />
     <Compile Include="GKCore\Controllers\OptionsDlgController.cs" />
     <Compile Include="GKCore\Export\XLSWriter.cs" />
     <Compile Include="GDModel\GDMException.cs" />

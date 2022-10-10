@@ -72,7 +72,6 @@ namespace GKCore.Options
         public bool MinimizingWidth;
         public bool AgeVisible;
 
-        public bool AutoAlign; // debug option, for future purposes
         public GfxBorderStyle BorderStyle;
         public DeepMode DeepMode;
 
@@ -134,7 +133,6 @@ namespace GKCore.Options
             MinimizingWidth = true;
             AgeVisible = false;
 
-            AutoAlign = true;
             BorderStyle = GfxBorderStyle.None;
             DeepMode = DeepMode.None;
 
