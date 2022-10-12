@@ -280,63 +280,52 @@ namespace GKUI.Components
             this.chkBC2 = new System.Windows.Forms.CheckBox();
             this.chkBC1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
-            // 
-            // cmbDateType
-            // 
+
             this.cmbDateType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDateType.Location = new System.Drawing.Point(2, 2);
             this.cmbDateType.Name = "cmbDateType";
             this.cmbDateType.Size = new System.Drawing.Size(135, 25);
             this.cmbDateType.TabIndex = 1;
             this.cmbDateType.SelectedIndexChanged += cmbDateType_SelectedIndexChanged;
-            // 
-            // txtDate1
-            // 
+
             this.txtDate1.AllowDrop = true;
             this.txtDate1.BackColor = System.Drawing.SystemColors.Window;
-            this.txtDate1.Culture = new System.Globalization.CultureInfo("");
             this.txtDate1.Location = new System.Drawing.Point(145, 2);
-            this.txtDate1.Mask = "00/00/0000";
             this.txtDate1.Name = "txtDate1";
-            this.txtDate1.NormalizeDate = "__.__.____";
             this.txtDate1.Size = new System.Drawing.Size(158, 24);
             this.txtDate1.TabIndex = 2;
-            this.txtDate1.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.txtDate1.DragOver += txtDateX_DragOver;
             this.txtDate1.DragDrop += txtDateX_DragDrop;
-            // 
-            // txtDate2
-            // 
-            this.txtDate2.AllowDrop = true;
-            this.txtDate2.Culture = new System.Globalization.CultureInfo("");
-            this.txtDate2.Location = new System.Drawing.Point(313, 2);
-            this.txtDate2.Mask = "00/00/0000";
-            this.txtDate2.Name = "txtDate2";
-            this.txtDate2.NormalizeDate = "__.__.____";
-            this.txtDate2.Size = new System.Drawing.Size(158, 24);
-            this.txtDate2.TabIndex = 3;
-            this.txtDate2.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.txtDate2.DragOver += txtDateX_DragOver;
-            this.txtDate2.DragDrop += txtDateX_DragDrop;
-            // 
-            // cmbDate1Calendar
-            // 
+
             this.cmbDate1Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDate1Calendar.Location = new System.Drawing.Point(145, 33);
             this.cmbDate1Calendar.Name = "cmbDate1Calendar";
             this.cmbDate1Calendar.Size = new System.Drawing.Size(107, 25);
-            this.cmbDate1Calendar.TabIndex = 4;
-            // 
-            // cmbDate2Calendar
-            // 
+            this.cmbDate1Calendar.TabIndex = 3;
+
+            this.chkBC1.AutoSize = true;
+            this.chkBC1.Location = new System.Drawing.Point(259, 33);
+            this.chkBC1.Name = "chkBC1";
+            this.chkBC1.Size = new System.Drawing.Size(47, 21);
+            this.chkBC1.TabIndex = 4;
+            this.chkBC1.Text = "BC";
+            this.chkBC1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkBC1.UseVisualStyleBackColor = true;
+
+            this.txtDate2.AllowDrop = true;
+            this.txtDate2.Location = new System.Drawing.Point(313, 2);
+            this.txtDate2.Name = "txtDate2";
+            this.txtDate2.Size = new System.Drawing.Size(158, 24);
+            this.txtDate2.TabIndex = 5;
+            this.txtDate2.DragOver += txtDateX_DragOver;
+            this.txtDate2.DragDrop += txtDateX_DragDrop;
+
             this.cmbDate2Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDate2Calendar.Location = new System.Drawing.Point(313, 33);
             this.cmbDate2Calendar.Name = "cmbDate2Calendar";
             this.cmbDate2Calendar.Size = new System.Drawing.Size(107, 25);
             this.cmbDate2Calendar.TabIndex = 6;
-            // 
-            // chkBC2
-            // 
+
             this.chkBC2.AutoSize = true;
             this.chkBC2.Location = new System.Drawing.Point(427, 33);
             this.chkBC2.Name = "chkBC2";
@@ -345,20 +334,7 @@ namespace GKUI.Components
             this.chkBC2.Text = "BC";
             this.chkBC2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkBC2.UseVisualStyleBackColor = true;
-            // 
-            // chkBC1
-            // 
-            this.chkBC1.AutoSize = true;
-            this.chkBC1.Location = new System.Drawing.Point(259, 33);
-            this.chkBC1.Name = "chkBC1";
-            this.chkBC1.Size = new System.Drawing.Size(47, 21);
-            this.chkBC1.TabIndex = 5;
-            this.chkBC1.Text = "BC";
-            this.chkBC1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkBC1.UseVisualStyleBackColor = true;
-            // 
-            // GKDateControl
-            // 
+
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.chkBC2);

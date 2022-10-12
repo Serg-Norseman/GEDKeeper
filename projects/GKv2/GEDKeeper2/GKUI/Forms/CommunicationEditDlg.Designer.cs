@@ -114,11 +114,9 @@
 		    // txtDate
 		    // 
 		    this.txtDate.Location = new System.Drawing.Point(392, 78);
-		    this.txtDate.Mask = "00/00/0000";
 		    this.txtDate.Name = "txtDate";
 		    this.txtDate.Size = new System.Drawing.Size(225, 24);
 		    this.txtDate.TabIndex = 9;
-		    this.txtDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 		    // 
 		    // cmbCorrType
 		    // 

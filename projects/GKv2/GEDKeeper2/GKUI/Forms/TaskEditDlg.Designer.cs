@@ -113,20 +113,16 @@
 		    // txtStartDate
 		    // 
 		    this.txtStartDate.Location = new System.Drawing.Point(101, 78);
-		    this.txtStartDate.Mask = "00/00/0000";
 		    this.txtStartDate.Name = "txtStartDate";
 		    this.txtStartDate.Size = new System.Drawing.Size(225, 24);
 		    this.txtStartDate.TabIndex = 7;
-		    this.txtStartDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 		    // 
 		    // txtStopDate
 		    // 
 		    this.txtStopDate.Location = new System.Drawing.Point(437, 78);
-		    this.txtStopDate.Mask = "00/00/0000";
 		    this.txtStopDate.Name = "txtStopDate";
 		    this.txtStopDate.Size = new System.Drawing.Size(225, 24);
 		    this.txtStopDate.TabIndex = 9;
-		    this.txtStopDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 		    // 
 		    // cmbGoalType
 		    // 

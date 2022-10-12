@@ -47,7 +47,7 @@ namespace GKUI.Components
 
         public GKDateBox()
         {
-            Culture = new CultureInfo("");
+            Culture = CultureInfo.InvariantCulture;
             TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
 
             fRegionalDatePattern = GetShortDatePattern();
@@ -66,6 +66,8 @@ namespace GKUI.Components
             var culture = CultureInfo.CurrentCulture; // work
             //var culture = new CultureInfo("en-US"); // debug
             //var culture = new CultureInfo("hu-HU"); // debug
+            //var culture = new CultureInfo("zh-CN"); // debug
+            //var culture = new CultureInfo("en-CA"); // debug
 
             var dtf = culture.DateTimeFormat;
             var dateSeparators = dtf.DateSeparator.ToCharArray();
