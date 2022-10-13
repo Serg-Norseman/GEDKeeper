@@ -29,11 +29,6 @@ using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Options
 {
-    public enum DeepMode
-    {
-        None, Background, Foreground
-    }
-
     /// <summary>
     ///
     /// </summary>
@@ -73,7 +68,7 @@ namespace GKCore.Options
         public bool AgeVisible;
 
         public GfxBorderStyle BorderStyle;
-        public DeepMode DeepMode;
+        public bool DeepMode;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -134,7 +129,7 @@ namespace GKCore.Options
             AgeVisible = false;
 
             BorderStyle = GfxBorderStyle.None;
-            DeepMode = DeepMode.None;
+            DeepMode = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -233,7 +228,7 @@ namespace GKCore.Options
             TraceSelected = iniFile.ReadBool("Chart", "TraceSelected", true);
             ChildlessExclude = iniFile.ReadBool("Chart", "ChildlessExclude", false);
             Decorative = iniFile.ReadBool("Chart", "Decorative", true);
-            //DeepMode = (DeepMode)iniFile.ReadInteger("Chart", "DeepMode", 0);
+            DeepMode = iniFile.ReadBool("Chart", "DeepMode", false);
             InvertedTree = iniFile.ReadBool("Chart", "InvertedTree", false);
             MarriagesDates = iniFile.ReadBool("Chart", "MarriagesDates", false);
             ShowPlaces = iniFile.ReadBool("Chart", "ShowPlaces", false);
@@ -295,7 +290,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "TraceSelected", TraceSelected);
             iniFile.WriteBool("Chart", "ChildlessExclude", ChildlessExclude);
             iniFile.WriteBool("Chart", "Decorative", Decorative);
-            //iniFile.WriteInteger("Chart", "DeepMode", (int)DeepMode);
+            iniFile.WriteBool("Chart", "DeepMode", DeepMode);
             iniFile.WriteBool("Chart", "InvertedTree", InvertedTree);
             iniFile.WriteBool("Chart", "MarriagesDates", MarriagesDates);
             iniFile.WriteBool("Chart", "ShowPlaces", ShowPlaces);

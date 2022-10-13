@@ -166,6 +166,7 @@
         private System.Windows.Forms.CheckBox chkKeepRichNames;
         private System.Windows.Forms.CheckBox chkMaximizeChartWindows;
         private System.Windows.Forms.CheckBox chkExtendedTree;
+        private System.Windows.Forms.CheckBox chkDeepTree;
 
         private void InitializeComponent()
         {
@@ -333,6 +334,7 @@
             this.chkKeepRichNames = new System.Windows.Forms.CheckBox();
             this.chkMaximizeChartWindows = new System.Windows.Forms.CheckBox();
             this.chkExtendedTree = new System.Windows.Forms.CheckBox();
+            this.chkDeepTree = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2140,6 +2142,7 @@
             this.pageSpecials.Controls.Add(this.chkKeepRichNames);
             this.pageSpecials.Controls.Add(this.chkMaximizeChartWindows);
             this.pageSpecials.Controls.Add(this.chkExtendedTree);
+            this.pageSpecials.Controls.Add(this.chkDeepTree);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
             this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
@@ -2193,6 +2196,15 @@
             this.chkExtendedTree.Size = new System.Drawing.Size(600, 22);
             this.chkExtendedTree.TabIndex = 12;
             this.chkExtendedTree.Text = "chkExtendedTree";
+            // 
+            // chkDeepTree
+            // 
+            this.chkDeepTree.Location = new System.Drawing.Point(20, 225);
+            this.chkDeepTree.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkDeepTree.Name = "chkDeepTree";
+            this.chkDeepTree.Size = new System.Drawing.Size(600, 22);
+            this.chkDeepTree.TabIndex = 12;
+            this.chkDeepTree.Text = "chkDeepTree";
             // 
             // pagePlugins
             // 

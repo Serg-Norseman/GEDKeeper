@@ -374,18 +374,12 @@ namespace GKUI.Components
             }
             #endif
 
-            bool hasDeep = (fSelected != null && fSelected != fModel.Root && fSelected.Rec != null);
-
-            if (hasDeep && fOptions.DeepMode == DeepMode.Background) {
-                DrawDeep(fOptions.DeepMode, spx, spy);
+            if (fOptions.DeepMode && (fSelected != null && fSelected != fModel.Root && fSelected.Rec != null)) {
+                DrawDeep(spx, spy);
             }
 
             fRenderer.SetTranslucent(0.0f);
             fModel.Draw(drawMode);
-
-            if (hasDeep && fOptions.DeepMode == DeepMode.Foreground) {
-                DrawDeep(fOptions.DeepMode, spx, spy);
-            }
 
             if (fOptions.BorderStyle != GfxBorderStyle.None) {
                 //fRenderer.SetSmoothing(false);
@@ -395,7 +389,7 @@ namespace GKUI.Components
             }
         }
 
-        private void DrawDeep(DeepMode mode, int spx, int spy)
+        private void DrawDeep(int spx, int spy)
         {
             try {
                 using (var deepModel = new TreeChartModel()) {
@@ -417,19 +411,7 @@ namespace GKUI.Components
                     deepModel.SetOffsets(dmX, dmY);
                     deepModel.VisibleArea = ExtRect.CreateBounds(0, 0, deepModel.ImageWidth, deepModel.ImageHeight);
 
-                    switch (mode) {
-                        case DeepMode.Background:
-                            fRenderer.SetTranslucent(0.75f);
-                            break;
-
-                        case DeepMode.Foreground:
-                            fRenderer.SetTranslucent(0.25f);
-                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 2.0f);
-                            IColor bColor = ChartRenderer.GetColor(BSDColors.White);
-                            fRenderer.DrawRoundedRectangle(xpen, bColor, dmX, dmY, deepModel.ImageWidth, deepModel.ImageHeight, 6);
-                            fRenderer.SetTranslucent(0.00f);
-                            break;
-                    }
+                    fRenderer.SetTranslucent(0.75f);
 
                     deepModel.Draw(ChartDrawMode.dmStatic);
                 }

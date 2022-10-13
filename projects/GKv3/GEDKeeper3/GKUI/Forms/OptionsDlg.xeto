@@ -448,6 +448,7 @@
             <CheckBox x:Name="chkKeepRichNames" />
             <CheckBox x:Name="chkMaximizeChartWindows" />
             <CheckBox x:Name="chkExtendedTree" />
+            <CheckBox x:Name="chkDeepTree" />
           </StackLayout>
         </TabPage>
 

@@ -115,12 +115,6 @@ namespace GKUI.Components
             set { fModel.Kind = value; }
         }
 
-        public ITreeLayout Layout
-        {
-            get { return fModel.Layout; }
-            set { fModel.Layout = value; }
-        }
-
         public TreeChartModel Model
         {
             get { return fModel; }
@@ -180,8 +174,6 @@ namespace GKUI.Components
 
             InitTimer();
             fTween = new TweenLibrary();
-
-            SetLayout(new NativeTreeLayout());
         }
 
         public TreeChartBox(ChartRenderer renderer) : this()
@@ -199,11 +191,6 @@ namespace GKUI.Components
                 if (fTreeControls != null) fTreeControls.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public void SetLayout(ITreeLayout layout)
-        {
-            fModel.Layout = layout;
         }
 
         public override void SetRenderer(ChartRenderer renderer)
@@ -260,7 +247,7 @@ namespace GKUI.Components
             try {
                 fSelected = null;
 
-                fModel.GenChart(iRec, kind, rootCenter);
+                fModel.GenChart(iRec, kind);
 
                 RecalcChart();
 
@@ -372,18 +359,12 @@ namespace GKUI.Components
             }
             #endif
 
-            bool hasDeep = (fSelected != null && fSelected != fModel.Root && fSelected.Rec != null);
-
-            if (hasDeep && fOptions.DeepMode == DeepMode.Background) {
-                DrawDeep(fOptions.DeepMode, spx, spy);
+            if (fOptions.DeepMode && (fSelected != null && fSelected != fModel.Root && fSelected.Rec != null)) {
+                DrawDeep(spx, spy);
             }
 
             fRenderer.SetTranslucent(0.0f);
             fModel.Draw(drawMode);
-
-            if (hasDeep && fOptions.DeepMode == DeepMode.Foreground) {
-                DrawDeep(fOptions.DeepMode, spx, spy);
-            }
 
             if (fOptions.BorderStyle != GfxBorderStyle.None) {
                 //fRenderer.SetSmoothing(false);
@@ -393,7 +374,7 @@ namespace GKUI.Components
             }
         }
 
-        private void DrawDeep(DeepMode mode, int spx, int spy)
+        private void DrawDeep(int spx, int spy)
         {
             try {
                 using (var deepModel = new TreeChartModel()) {
@@ -401,8 +382,8 @@ namespace GKUI.Components
                     deepModel.SetRenderer(fRenderer);
                     deepModel.DepthLimitAncestors = 2;
                     deepModel.DepthLimitDescendants = 2;
-                    deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth, true);
-                    deepModel.RecalcChart(true);
+                    deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth);
+                    deepModel.RecalcChart();
 
                     var pers = deepModel.FindPersonByRec(fSelected.Rec);
                     if (pers == null) {
@@ -415,19 +396,7 @@ namespace GKUI.Components
                     deepModel.SetOffsets(dmX, dmY);
                     deepModel.VisibleArea = ExtRect.CreateBounds(0, 0, deepModel.ImageWidth, deepModel.ImageHeight);
 
-                    switch (mode) {
-                        case DeepMode.Background:
-                            fRenderer.SetTranslucent(0.75f);
-                            break;
-
-                        case DeepMode.Foreground:
-                            fRenderer.SetTranslucent(0.25f);
-                            IPen xpen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 2.0f);
-                            IColor bColor = ChartRenderer.GetColor(BSDColors.White);
-                            fRenderer.DrawRoundedRectangle(xpen, bColor, dmX, dmY, deepModel.ImageWidth, deepModel.ImageHeight, 6);
-                            fRenderer.SetTranslucent(0.00f);
-                            break;
-                    }
+                    fRenderer.SetTranslucent(0.75f);
 
                     deepModel.Draw(ChartDrawMode.dmStatic);
                 }
@@ -460,7 +429,7 @@ namespace GKUI.Components
             }
 
             try {
-                fModel.RecalcChart(noRedraw);
+                fModel.RecalcChart();
             } finally {
                 if (fRenderer is EtoGfxRenderer && gfx != null) {
                     gfx.Dispose();
