@@ -26,6 +26,7 @@ using GDModel;
 using GEDmill.Model;
 using GKCore.Interfaces;
 using GKCore.Logging;
+using GKCore.Types;
 
 namespace GEDmill.HTML
 {
@@ -713,23 +714,14 @@ namespace GEDmill.HTML
         }
 
         // Returns the name of the alternative picture file to display for non-diaplayable files of the given format
-        protected static string NonPicFilename(string format, bool small, bool clickToDownload)
+        protected static string NonPicFilename(MultimediaKind format, bool small, bool clickToDownload)
         {
             string filename;
-            switch (format.ToLower()) {
-                case "wav":
-                case "mp3":
-                case "mid":
-                case "midi":
-                case "rmi":
-                case "au":
-                case "wma":
+            switch (format) {
+                case MultimediaKind.mkAudio:
                     filename = small ? "gmaudio_sm.png" : clickToDownload ? "gmaudio.png" : "gmaudion.png";
                     break;
-                case "avi":
-                case "mpeg":
-                case "mpg":
-                case "wmv":
+                case MultimediaKind.mkVideo:
                     filename = small ? "gmvideo_sm.png" : clickToDownload ? "gmvideo.png" : "gmvideon.png";
                     break;
                 default:

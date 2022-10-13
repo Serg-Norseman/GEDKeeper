@@ -50,21 +50,13 @@ namespace GEDmill.HTML
 
             var fileRefs = new List<GDMFileReference>();
             foreach (var mmLink in multimediaLinks) {
-                if (mmLink.IsPointer) {
-                    var mmRec = fTree.GetPtrValue(mmLink);
-                    if (!GMHelper.GetVisibility(mmRec)) {
-                        // user chose not to show this picture
-                        continue;
-                    }
+                if (!mmLink.IsPointer) continue;
 
-                    foreach (var fileRef in mmRec.FileReferences) {
-                        fileRefs.Add(fileRef);
-                    }
-                } else {
-                    // FIXME: GK is already translating everything to pointers
-                    foreach (var fileRef in mmLink.FileReferences) {
-                        fileRefs.Add(fileRef);
-                    }
+                var mmRec = fTree.GetPtrValue(mmLink);
+                if (!GMHelper.GetVisibility(mmRec)) continue;
+
+                foreach (var fileRef in mmRec.FileReferences) {
+                    fileRefs.Add(fileRef);
                 }
             }
 
@@ -79,40 +71,9 @@ namespace GEDmill.HTML
                 string copyFilename = "";
                 int nMmOrdering = i;
                 string mmTitle = mfr.Title;
-                string mmFilename = mfr.StringValue;
-                string mmFormat = mfr.MultimediaFormat.ToString();
+                string mmFilename = fContext.MediaLoad(mfr);
                 Rectangle rectArea = new Rectangle(0, 0, 0, 0);
-                string extPart;
-
-                // Don't trust extension on sFilename. Use our own. (Happens for .tmp files from embedded data)
-                switch (mmFormat) {
-                    case "bmp":
-                        extPart = ".bmp";
-                        break;
-                    case "gif":
-                        extPart = ".gif";
-                        break;
-                    case "jpg":
-                    case "jpeg":
-                        extPart = ".jpg";
-                        break;
-                    case "tiff":
-                    case "tif":
-                        extPart = ".tif";
-                        break;
-                    case "png":
-                        extPart = ".png";
-                        break;
-                    case "ole":
-                        extPart = ".ole";
-                        break;
-                    default:
-                        extPart = Path.GetExtension(mmFilename);
-                        if (extPart.ToUpper() == ".TMP") {
-                            extPart = "." + mmFormat;
-                        }
-                        break;
-                }
+                string extPart = Path.GetExtension(mmFilename);
                 string originalFilename = Path.GetFileName(mmFilename);
 
                 bool pictureFormat = GKUtils.IsPictureFormat(mfr);
@@ -156,7 +117,7 @@ namespace GEDmill.HTML
                         }
 
                         // Add format and new sFilename to multimedia list
-                        Multimedia imm = new Multimedia(nMmOrdering, mmFormat, mmTitle, copyFilename, largeFilename, rectArea.Width, rectArea.Height);
+                        Multimedia imm = new Multimedia(nMmOrdering, mmKind, mmTitle, copyFilename, largeFilename, rectArea.Width, rectArea.Height);
                         fMultimediaList.Add(imm);
                     }
                 }

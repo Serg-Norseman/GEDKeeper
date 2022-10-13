@@ -17,6 +17,7 @@
  */
 
 using System;
+using GKCore.Types;
 
 namespace GEDmill.Model
 {
@@ -25,7 +26,7 @@ namespace GEDmill.Model
     /// </summary>
     public class Multimedia : IComparable, IComparable<Multimedia>
     {
-        public string Format;
+        public MultimediaKind Format;
         public string Title;
         public string FileName;
         public int Width;
@@ -36,7 +37,7 @@ namespace GEDmill.Model
         public int Ordering;
 
 
-        public Multimedia(int ordering, string format, string title, string filename, string largeFilename, int width, int height)
+        public Multimedia(int ordering, MultimediaKind format, string title, string filename, string largeFilename, int width, int height)
         {
             Format = format;
             Title = title;
