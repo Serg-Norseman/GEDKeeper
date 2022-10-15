@@ -47,6 +47,7 @@ namespace GKCalendarPlugin
         private string[] fIslamicWeekdays;
         private string[] fPersianMonths;
         private string[] fPersianWeekdays;
+        private string[] fByzantineMonths;
 
         public CalendarWidget(Plugin plugin)
         {
@@ -101,6 +102,9 @@ namespace GKCalendarPlugin
                 CalendarConverter.jd_to_julian(jd, out year, out month, out day);
                 AddCItem(jd, year, month, day, fClassicMonths, fClassicWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Julian));
 
+                CalendarConverter.jd_to_byzantine(jd, out year, out month, out day, CalendarConverter.ByzantineStyle.September);
+                AddCItem(jd, year, month, day, fByzantineMonths, fClassicWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Byzantine));
+
                 CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
                 AddCItem(jd, year, month, day, fHebrewMonths, fHebrewWeekdays, "", fPlugin.LangMan.LS(PLS.LSID_Cal_Hebrew));
 
@@ -144,6 +148,7 @@ namespace GKCalendarPlugin
             fIslamicWeekdays = CalendarData.InitNames(langMan.LS(PLS.LSID_IslamicWeekdays));
             fPersianMonths = CalendarData.InitNames(langMan.LS(PLS.LSID_PersianMonths));
             fPersianWeekdays = CalendarData.InitNames(langMan.LS(PLS.LSID_PersianWeekdays));
+            fByzantineMonths = CalendarData.InitNames(langMan.LS(PLS.LSID_ByzantineMonths));
 
             qtc_DateSelected(null, null);
         }
