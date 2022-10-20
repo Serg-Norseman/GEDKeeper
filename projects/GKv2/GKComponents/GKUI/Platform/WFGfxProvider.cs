@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -47,6 +47,8 @@ namespace GKUI.Platform
 
             using (Bitmap bmp = new Bitmap(fileName))
             {
+                UIHelper.NormalizeOrientation(bmp);
+
                 // cloning is necessary to release the resource
                 // loaded from the image stream
                 Bitmap resImage = (Bitmap)bmp.Clone();
@@ -73,6 +75,8 @@ namespace GKUI.Platform
 
             using (Bitmap bmp = new Bitmap(stream))
             {
+                UIHelper.NormalizeOrientation(bmp);
+
                 // cloning is necessary to release the resource
                 // loaded from the image stream
                 Bitmap resImage = (Bitmap)bmp.Clone();
@@ -88,6 +92,8 @@ namespace GKUI.Platform
 
             using (Bitmap bmp = new Bitmap(stream))
             {
+                UIHelper.NormalizeOrientation(bmp);
+
                 bool cutoutIsEmpty = cutoutArea.IsEmpty();
                 int imgWidth = (cutoutIsEmpty) ? bmp.Width : cutoutArea.GetWidth();
                 int imgHeight = (cutoutIsEmpty) ? bmp.Height : cutoutArea.GetHeight();

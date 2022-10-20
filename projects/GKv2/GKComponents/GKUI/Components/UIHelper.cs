@@ -372,5 +372,41 @@ namespace GKUI.Components
                 gfx.FillPath(brush, path);
             }
         }
+
+        private const int ExifOrientationTagId = 274;
+
+        public static void NormalizeOrientation(Image image)
+        {
+            if (image == null || Array.IndexOf(image.PropertyIdList, ExifOrientationTagId) < 0) return;
+
+            int orientation = image.GetPropertyItem(ExifOrientationTagId).Value[0];
+            if (orientation >= 1 && orientation <= 8) {
+                switch (orientation) {
+                    case 2:
+                        image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        break;
+                    case 3:
+                        image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                        break;
+                    case 4:
+                        image.RotateFlip(RotateFlipType.Rotate180FlipX);
+                        break;
+                    case 5:
+                        image.RotateFlip(RotateFlipType.Rotate90FlipX);
+                        break;
+                    case 6:
+                        image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        break;
+                    case 7:
+                        image.RotateFlip(RotateFlipType.Rotate270FlipX);
+                        break;
+                    case 8:
+                        image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                        break;
+                }
+
+                image.RemovePropertyItem(ExifOrientationTagId);
+            }
+        }
     }
 }
