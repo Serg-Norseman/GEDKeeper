@@ -1,11 +1,9 @@
-![Logo](../master/dev_info/gk_logo_full_v01.png)
+![Logo](../master/gk_logo_full.png)
 
 
 [![Website](https://img.shields.io/badge/www-gedkeeper.net-0099BC.svg?maxAge=3600)](https://gedkeeper.net/)
 [![forums](https://img.shields.io/badge/join-the%20forums-yellowgreen.svg)](http://groups.google.com/group/gedkeeper-en)
 [![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-brightgreen.svg)](https://t.me/gedkeeper_chat_en)
-[![donate](https://img.shields.io/badge/make%20a-donation-greenblue.svg)](https://sourceforge.net/p/gedkeeper/donate/)
-
 [![Change Log](https://img.shields.io/badge/Change%20Log-green)](CHANGELOG.md)
 [![GitHub release](https://img.shields.io/github/release/Serg-Norseman/GEDKeeper.svg?label=Latest&maxAge=60)](https://github.com/Serg-Norseman/GEDKeeper/releases/latest)
 [![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)

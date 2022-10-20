@@ -756,8 +756,6 @@ namespace GKUI.Components
                 item.Selected = true;
 
                 // in Mono `item.EnsureVisible()` doesn't work
-                //item.EnsureVisible();
-
                 EnsureVisible(index);
             }
         }

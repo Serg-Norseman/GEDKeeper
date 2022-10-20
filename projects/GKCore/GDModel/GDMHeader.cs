@@ -23,7 +23,6 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    // TODO: remove and work with string idents
     public enum GEDCOMCharacterSet
     {
         csASCII,

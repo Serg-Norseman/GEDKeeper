@@ -393,7 +393,6 @@ namespace GKUI.Components
 
         private void ItemPaste(object sender, EventArgs e)
         {
-            object itemData = fList.GetSelectedData();
             if (fReadOnly) return;
 
             var eArgs = new ModifyEventArgs(RecordAction.raPaste, null);

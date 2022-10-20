@@ -33,7 +33,7 @@ namespace GKCore
         {
             get {
                 if (fSerializerSettings == null) {
-                    var converters = new List<JsonConverter> { new StringEnumConverter { CamelCaseText = false } };
+                    var converters = new List<JsonConverter> { new StringEnumConverter { NamingStrategy = new CamelCaseNamingStrategy() } };
                     var resolver = new DefaultContractResolver();
                     fSerializerSettings = new JsonSerializerSettings {
                         ContractResolver = resolver,

@@ -352,10 +352,10 @@ namespace GKCore.Charts
             return fOptions.ExtendedTree && fKind == TreeChartKind.ckBoth;
         }
 
-        private bool IsExtPerson(TreeChartPerson person)
+        /*private bool IsExtPerson(TreeChartPerson person)
         {
             return IsExtendedTree() && (person.Rec == fRootRec || person.HasFlag(PersonFlag.pfRootSpouse));
-        }
+        }*/
 
         private bool IsExtRootSpouse(TreeChartPerson person)
         {
@@ -435,11 +435,11 @@ namespace GKCore.Charts
                         bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
 
                         if (iFather != null && fContext.IsRecordAccess(iFather.Restriction)) {
-                            personNode.Father = VisitParent(personNode, iFather, personNode.Generation - 1, isDup);
+                            personNode.Father = VisitParent(personNode, iFather, personNode.Generation - 1, isDup, divorced);
                         }
 
                         if (iMother != null && fContext.IsRecordAccess(iMother.Restriction)) {
-                            personNode.Mother = VisitParent(personNode, iMother, personNode.Generation - 1, isDup);
+                            personNode.Mother = VisitParent(personNode, iMother, personNode.Generation - 1, isDup, divorced);
                         }
 
                         if (personNode.Father != null && personNode.Mother != null && fOptions.Kinship) {
@@ -612,7 +612,7 @@ namespace GKCore.Charts
                     TreeChartPerson resParent = null;
                     TreeChartPerson ft = null;
                     TreeChartPerson mt = null;
-                    PersonFlag descFlag = PersonFlag.pfDescByFather;
+                    PersonFlag descFlag;
                     bool skipUnk = false;
 
                     switch (indiRec.Sex) {

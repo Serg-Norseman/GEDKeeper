@@ -261,21 +261,6 @@ namespace GDModel
             throw new GDMDateException("The string {0} is not a valid {1} month identifier", str, calendar.ToString());
         }
 
-        private static string IntToGEDCOMMonth(int m)
-        {
-            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthArray[m - 1];
-        }
-
-        private static string IntToGEDCOMMonthFrench(int m)
-        {
-            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthFrenchArray[m - 1];
-        }
-
-        private static string IntToGEDCOMMonthHebrew(int m)
-        {
-            return (m == 0) ? string.Empty : GEDCOMConsts.GEDCOMMonthHebrewArray[m - 1];
-        }
-
         #endregion
 
         protected override string GetStringValue()
