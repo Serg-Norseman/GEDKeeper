@@ -66,9 +66,7 @@ namespace GKCore.Options
         public bool OnlyLocality;
         public bool MinimizingWidth;
         public bool AgeVisible;
-
         public GfxBorderStyle BorderStyle;
-        public bool DeepMode;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -127,9 +125,7 @@ namespace GKCore.Options
             OnlyLocality = false;
             MinimizingWidth = true;
             AgeVisible = false;
-
             BorderStyle = GfxBorderStyle.None;
-            DeepMode = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -228,7 +224,6 @@ namespace GKCore.Options
             TraceSelected = iniFile.ReadBool("Chart", "TraceSelected", true);
             ChildlessExclude = iniFile.ReadBool("Chart", "ChildlessExclude", false);
             Decorative = iniFile.ReadBool("Chart", "Decorative", true);
-            DeepMode = iniFile.ReadBool("Chart", "DeepMode", false);
             InvertedTree = iniFile.ReadBool("Chart", "InvertedTree", false);
             MarriagesDates = iniFile.ReadBool("Chart", "MarriagesDates", false);
             ShowPlaces = iniFile.ReadBool("Chart", "ShowPlaces", false);
@@ -290,7 +285,6 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "TraceSelected", TraceSelected);
             iniFile.WriteBool("Chart", "ChildlessExclude", ChildlessExclude);
             iniFile.WriteBool("Chart", "Decorative", Decorative);
-            iniFile.WriteBool("Chart", "DeepMode", DeepMode);
             iniFile.WriteBool("Chart", "InvertedTree", InvertedTree);
             iniFile.WriteBool("Chart", "MarriagesDates", MarriagesDates);
             iniFile.WriteBool("Chart", "ShowPlaces", ShowPlaces);

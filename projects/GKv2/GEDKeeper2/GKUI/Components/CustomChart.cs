@@ -25,7 +25,6 @@ using System.Windows.Forms;
 using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
-using GDModel;
 using GKCore;
 using GKCore.Charts;
 
@@ -33,7 +32,7 @@ namespace GKUI.Components
 {
     public abstract class CustomChart : ScrollablePanel, IPrintable
     {
-        private readonly NavigationStack<GDMRecord> fNavman;
+        private readonly NavigationStack<object> fNavman;
         protected ChartRenderer fRenderer;
 
 
@@ -42,7 +41,7 @@ namespace GKUI.Components
 
         protected CustomChart()
         {
-            fNavman = new NavigationStack<GDMRecord>();
+            fNavman = new NavigationStack<object>();
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -293,7 +292,7 @@ namespace GKUI.Components
         public bool NavAdd(object obj)
         {
             if (obj != null) {
-                fNavman.Current = (GDMRecord)obj;
+                fNavman.Current = obj;
                 return true;
             }
             return false;

@@ -167,7 +167,6 @@
         private System.Windows.Forms.CheckBox chkKeepRichNames;
         private System.Windows.Forms.CheckBox chkMaximizeChartWindows;
         private System.Windows.Forms.CheckBox chkExtendedTree;
-        private System.Windows.Forms.CheckBox chkDeepTree;
 
         private void InitializeComponent()
         {
@@ -336,7 +335,6 @@
             this.chkKeepRichNames = new System.Windows.Forms.CheckBox();
             this.chkMaximizeChartWindows = new System.Windows.Forms.CheckBox();
             this.chkExtendedTree = new System.Windows.Forms.CheckBox();
-            this.chkDeepTree = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1252,7 +1250,8 @@
             this.grpTreePersons.Text = "grpTreePersons";
             // 
             // chkSurname
-            // 
+            //
+            this.chkSurname.AutoSize = true;
             this.chkSurname.Location = new System.Drawing.Point(6, 6);
             this.chkSurname.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSurname.Name = "chkSurname";
@@ -1263,6 +1262,7 @@
             // 
             // chkName
             // 
+            this.chkName.AutoSize = true;
             this.chkName.Location = new System.Drawing.Point(6, 32);
             this.chkName.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkName.Name = "chkName";
@@ -1273,6 +1273,7 @@
             // 
             // chkPatronymic
             // 
+            this.chkPatronymic.AutoSize = true;
             this.chkPatronymic.Location = new System.Drawing.Point(6, 59);
             this.chkPatronymic.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkPatronymic.Name = "chkPatronymic";
@@ -1283,6 +1284,7 @@
             // 
             // chkDiffLines
             // 
+            this.chkDiffLines.AutoSize = true;
             this.chkDiffLines.Location = new System.Drawing.Point(26, 85);
             this.chkDiffLines.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkDiffLines.Name = "chkDiffLines";
@@ -1293,6 +1295,7 @@
             // 
             // chkBirthDate
             // 
+            this.chkBirthDate.AutoSize = true;
             this.chkBirthDate.Location = new System.Drawing.Point(6, 110);
             this.chkBirthDate.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkBirthDate.Name = "chkBirthDate";
@@ -1303,6 +1306,7 @@
             // 
             // chkMarriagesDates
             // 
+            this.chkMarriagesDates.AutoSize = true;
             this.chkMarriagesDates.Location = new System.Drawing.Point(6, 214);
             this.chkMarriagesDates.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkMarriagesDates.Name = "chkMarriagesDates";
@@ -1313,6 +1317,7 @@
             // 
             // chkDeathDate
             // 
+            this.chkDeathDate.AutoSize = true;
             this.chkDeathDate.Location = new System.Drawing.Point(6, 136);
             this.chkDeathDate.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkDeathDate.Name = "chkDeathDate";
@@ -1323,6 +1328,7 @@
             // 
             // chkKinship
             // 
+            this.chkKinship.AutoSize = true;
             this.chkKinship.Location = new System.Drawing.Point(6, 239);
             this.chkKinship.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkKinship.Name = "chkKinship";
@@ -1333,6 +1339,7 @@
             // 
             // chkDefaultPortraits
             // 
+            this.chkDefaultPortraits.AutoSize = true;
             this.chkDefaultPortraits.Location = new System.Drawing.Point(26, 342);
             this.chkDefaultPortraits.Margin = new System.Windows.Forms.Padding(30, 0, 0, 5);
             this.chkDefaultPortraits.Name = "chkDefaultPortraits";
@@ -1343,6 +1350,7 @@
             // 
             // chkShowAge
             // 
+            this.chkShowAge.AutoSize = true;
             this.chkShowAge.Location = new System.Drawing.Point(26, 188);
             this.chkShowAge.Margin = new System.Windows.Forms.Padding(30, 0, 0, 5);
             this.chkShowAge.Name = "chkShowAge";
@@ -1353,6 +1361,7 @@
             // 
             // chkOnlyYears
             // 
+            this.chkOnlyYears.AutoSize = true;
             this.chkOnlyYears.Location = new System.Drawing.Point(26, 161);
             this.chkOnlyYears.Margin = new System.Windows.Forms.Padding(30, 0, 0, 5);
             this.chkOnlyYears.Name = "chkOnlyYears";
@@ -1363,6 +1372,7 @@
             // 
             // chkSignsVisible
             // 
+            this.chkSignsVisible.AutoSize = true;
             this.chkSignsVisible.Location = new System.Drawing.Point(6, 265);
             this.chkSignsVisible.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSignsVisible.Name = "chkSignsVisible";
@@ -1373,6 +1383,7 @@
             // 
             // chkOnlyLocality
             // 
+            this.chkOnlyLocality.AutoSize = true;
             this.chkOnlyLocality.Location = new System.Drawing.Point(26, 474);
             this.chkOnlyLocality.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkOnlyLocality.Name = "chkOnlyLocality";
@@ -1383,6 +1394,7 @@
             // 
             // chkSeparateDAPLines
             // 
+            this.chkSeparateDAPLines.AutoSize = true;
             this.chkSeparateDAPLines.Location = new System.Drawing.Point(26, 448);
             this.chkSeparateDAPLines.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSeparateDAPLines.Name = "chkSeparateDAPLines";
@@ -1393,6 +1405,7 @@
             // 
             // chkShowPlaces
             // 
+            this.chkShowPlaces.AutoSize = true;
             this.chkShowPlaces.Location = new System.Drawing.Point(6, 421);
             this.chkShowPlaces.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkShowPlaces.Name = "chkShowPlaces";
@@ -1403,6 +1416,7 @@
             // 
             // chkMinimizingWidth
             // 
+            this.chkMinimizingWidth.AutoSize = true;
             this.chkMinimizingWidth.Location = new System.Drawing.Point(6, 604);
             this.chkMinimizingWidth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkMinimizingWidth.Name = "chkMinimizingWidth";
@@ -1413,6 +1427,7 @@
             // 
             // chkBoldNames
             // 
+            this.chkBoldNames.AutoSize = true;
             this.chkBoldNames.Location = new System.Drawing.Point(6, 578);
             this.chkBoldNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkBoldNames.Name = "chkBoldNames";
@@ -1423,6 +1438,7 @@
             // 
             // chkDottedLinesOfAdoptedChildren
             // 
+            this.chkDottedLinesOfAdoptedChildren.AutoSize = true;
             this.chkDottedLinesOfAdoptedChildren.Location = new System.Drawing.Point(6, 551);
             this.chkDottedLinesOfAdoptedChildren.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkDottedLinesOfAdoptedChildren.Name = "chkDottedLinesOfAdoptedChildren";
@@ -1433,6 +1449,7 @@
             // 
             // chkCheckTreeSize
             // 
+            this.chkCheckTreeSize.AutoSize = true;
             this.chkCheckTreeSize.Location = new System.Drawing.Point(6, 525);
             this.chkCheckTreeSize.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkCheckTreeSize.Name = "chkCheckTreeSize";
@@ -1443,6 +1460,7 @@
             // 
             // chkHideUnknownSpouses
             // 
+            this.chkHideUnknownSpouses.AutoSize = true;
             this.chkHideUnknownSpouses.Location = new System.Drawing.Point(6, 499);
             this.chkHideUnknownSpouses.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkHideUnknownSpouses.Name = "chkHideUnknownSpouses";
@@ -1453,6 +1471,7 @@
             // 
             // chkInvertedTree
             // 
+            this.chkInvertedTree.AutoSize = true;
             this.chkInvertedTree.Location = new System.Drawing.Point(6, 369);
             this.chkInvertedTree.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkInvertedTree.Name = "chkInvertedTree";
@@ -1463,6 +1482,7 @@
             // 
             // chkChildlessExclude
             // 
+            this.chkChildlessExclude.AutoSize = true;
             this.chkChildlessExclude.Location = new System.Drawing.Point(6, 395);
             this.chkChildlessExclude.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkChildlessExclude.Name = "chkChildlessExclude";
@@ -1473,6 +1493,7 @@
             // 
             // chkTreeDecorative
             // 
+            this.chkTreeDecorative.AutoSize = true;
             this.chkTreeDecorative.Location = new System.Drawing.Point(6, 291);
             this.chkTreeDecorative.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkTreeDecorative.Name = "chkTreeDecorative";
@@ -1483,6 +1504,7 @@
             // 
             // chkPortraitsVisible
             // 
+            this.chkPortraitsVisible.AutoSize = true;
             this.chkPortraitsVisible.Location = new System.Drawing.Point(6, 318);
             this.chkPortraitsVisible.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkPortraitsVisible.Name = "chkPortraitsVisible";
@@ -2159,7 +2181,6 @@
             this.pageSpecials.Controls.Add(this.chkKeepRichNames);
             this.pageSpecials.Controls.Add(this.chkMaximizeChartWindows);
             this.pageSpecials.Controls.Add(this.chkExtendedTree);
-            this.pageSpecials.Controls.Add(this.chkDeepTree);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
             this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
@@ -2213,15 +2234,6 @@
             this.chkExtendedTree.Size = new System.Drawing.Size(600, 22);
             this.chkExtendedTree.TabIndex = 12;
             this.chkExtendedTree.Text = "chkExtendedTree";
-            // 
-            // chkDeepTree
-            // 
-            this.chkDeepTree.Location = new System.Drawing.Point(20, 225);
-            this.chkDeepTree.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkDeepTree.Name = "chkDeepTree";
-            this.chkDeepTree.Size = new System.Drawing.Size(600, 22);
-            this.chkDeepTree.TabIndex = 12;
-            this.chkDeepTree.Text = "chkDeepTree";
             // 
             // pagePlugins
             // 

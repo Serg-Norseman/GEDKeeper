@@ -32,7 +32,7 @@ namespace GKUI.Components
 {
     public abstract class CustomChart : ScrollablePanel, IPrintable
     {
-        private readonly NavigationStack<GDMRecord> fNavman;
+        private readonly NavigationStack<object> fNavman;
         protected ChartRenderer fRenderer;
 
 
@@ -45,7 +45,7 @@ namespace GKUI.Components
         {
             CenteredImage = true;
 
-            fNavman = new NavigationStack<GDMRecord>();
+            fNavman = new NavigationStack<object>();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -227,7 +227,7 @@ namespace GKUI.Components
         public bool NavAdd(object obj)
         {
             if (obj != null) {
-                fNavman.Current = (GDMRecord)obj;
+                fNavman.Current = obj;
                 return true;
             }
             return false;

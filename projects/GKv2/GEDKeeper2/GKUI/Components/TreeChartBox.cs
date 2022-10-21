@@ -258,6 +258,19 @@ namespace GKUI.Components
             if (iRec == null) return;
 
             try {
+                GenChartInt(iRec, kind, rootCenter);
+
+                NavAdd(new TreeChartNavItem(iRec, kind));
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartBox.GenChart()", ex);
+            }
+        }
+
+        private void GenChartInt(GDMIndividualRecord iRec, TreeChartKind kind, bool rootCenter)
+        {
+            if (iRec == null) return;
+
+            try {
                 fSelected = null;
 
                 fModel.GenChart(iRec, kind);
@@ -266,10 +279,9 @@ namespace GKUI.Components
 
                 if (rootCenter) CenterPerson(fModel.Root, false);
 
-                NavAdd(iRec);
                 DoRootChanged(fModel.Root);
             } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.GenChart()", ex);
+                Logger.WriteError("TreeChartBox.GenChartInt()", ex);
             }
         }
 
@@ -374,49 +386,12 @@ namespace GKUI.Components
             }
             #endif
 
-            if (fOptions.DeepMode && (fSelected != null && fSelected != fModel.Root && fSelected.Rec != null)) {
-                DrawDeep(spx, spy);
-            }
-
             fRenderer.SetTranslucent(0.0f);
             fModel.Draw(drawMode);
 
             if (fOptions.BorderStyle != GfxBorderStyle.None) {
-                //fRenderer.SetSmoothing(false);
                 var rt = ExtRect.CreateBounds(spx, spy, fModel.ImageWidth, fModel.ImageHeight);
                 BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
-                //fRenderer.SetSmoothing(true);
-            }
-        }
-
-        private void DrawDeep(int spx, int spy)
-        {
-            try {
-                using (var deepModel = new TreeChartModel()) {
-                    deepModel.Assign(fModel);
-                    deepModel.SetRenderer(fRenderer);
-                    deepModel.DepthLimitAncestors = 2;
-                    deepModel.DepthLimitDescendants = 2;
-                    deepModel.GenChart(fSelected.Rec, TreeChartKind.ckBoth);
-                    deepModel.RecalcChart();
-
-                    var pers = deepModel.FindPersonByRec(fSelected.Rec);
-                    if (pers == null) {
-                        Logger.WriteError("TreeChartBox.DrawDeep(): unexpected failure");
-                        return;
-                    }
-
-                    int dmX = (spx + (fSelected.PtX - pers.PtX));
-                    int dmY = (spy + (fSelected.PtY - pers.PtY));
-                    deepModel.SetOffsets(dmX, dmY);
-                    deepModel.VisibleArea = ExtRect.CreateBounds(0, 0, deepModel.ImageWidth, deepModel.ImageHeight);
-
-                    fRenderer.SetTranslucent(0.75f);
-
-                    deepModel.Draw(ChartDrawMode.dmStatic);
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("TreeChartBox.DrawDeep()", ex);
             }
         }
 
@@ -747,8 +722,8 @@ namespace GKUI.Components
                             break;
 
                         case MouseAction.Expand:
-                            DoRootChanged(mPers);
                             GenChart(mPers.Rec, TreeChartKind.ckBoth, true);
+                            DoRootChanged(mPers);
                             break;
 
                         case MouseAction.PersonExpand:
@@ -780,8 +755,10 @@ namespace GKUI.Components
 
         protected override void SetNavObject(object obj)
         {
-            var iRec = obj as GDMIndividualRecord;
-            GenChart(iRec, TreeChartKind.ckBoth, true);
+            var navItem = obj as TreeChartNavItem;
+            if (navItem == null) return;
+
+            GenChartInt(navItem.IndiRec, navItem.ChartKind, true);
         }
 
         private void SetSelected(TreeChartPerson value)

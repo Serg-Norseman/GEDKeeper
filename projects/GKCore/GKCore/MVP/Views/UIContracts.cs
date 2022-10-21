@@ -546,7 +546,7 @@ namespace GKCore.MVP.Views
     {
         ITreeChart TreeBox { get; }
 
-        void GenChart(TreeChartKind chartKind);
+        void GenChart(GDMIndividualRecord startPerson, TreeChartKind chartKind);
     }
 
 

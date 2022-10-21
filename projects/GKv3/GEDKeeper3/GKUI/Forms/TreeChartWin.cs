@@ -111,7 +111,7 @@ namespace GKUI.Forms
 
         #endregion
 
-        public TreeChartWin(IBaseWindow baseWin, GDMIndividualRecord startPerson)
+        public TreeChartWin(IBaseWindow baseWin)
         {
             InitializeComponent();
 
@@ -120,7 +120,6 @@ namespace GKUI.Forms
             miModeDescendants.Tag = TreeChartKind.ckDescendants;
 
             fBase = baseWin;
-            fPerson = startPerson;
 
             fTreeBox = new TreeChartBox(new EtoGfxRenderer());
             fTreeBox.Base = fBase;
@@ -555,7 +554,7 @@ namespace GKUI.Forms
             TreeChartKind newMode = (TreeChartKind)((RadioMenuItem)sender).Tag;
             if (fTreeBox.Model.Kind == newMode) return;
 
-            GenChart(newMode);
+            GenChart(fPerson, newMode);
         }
 
         private void miRebuildTree_Click(object sender, EventArgs e)
@@ -617,15 +616,18 @@ namespace GKUI.Forms
 
         public void GenChart()
         {
-            GenChart(fTreeBox.Model.Kind);
+            if (fPerson != null) {
+                GenChart(fPerson, fTreeBox.Model.Kind);
+            }
         }
 
-        public void GenChart(TreeChartKind chartKind)
+        public void GenChart(GDMIndividualRecord startPerson, TreeChartKind chartKind)
         {
             try {
-                if (fPerson == null) {
+                if (startPerson == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 } else {
+                    fPerson = startPerson;
                     fTreeBox.GenChart(fPerson, chartKind, true);
                     UpdateControls();
                 }
