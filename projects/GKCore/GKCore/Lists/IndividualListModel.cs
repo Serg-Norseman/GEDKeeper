@@ -746,6 +746,7 @@ namespace GKCore.Lists
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveDown, RecordAction.raMoveUp);
 
+            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
             fListColumns.AddColumn(LSID.LSID_Name, 350, false);
             fListColumns.AddColumn(LSID.LSID_Type, 100, false);
             fListColumns.AddColumn(LSID.LSID_Language, 150, false);
@@ -757,12 +758,15 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = GKUtils.GetNameString((GDMIndividualRecord)fDataOwner, fFetchedRec, true, false);
+                    result = fStructList.IndexOf(fFetchedRec) + 1;
                     break;
                 case 1:
-                    result = LangMan.LS(GKData.NameTypes[(int)fFetchedRec.NameType]);
+                    result = GKUtils.GetNameString((GDMIndividualRecord)fDataOwner, fFetchedRec, true, false);
                     break;
                 case 2:
+                    result = LangMan.LS(GKData.NameTypes[(int)fFetchedRec.NameType]);
+                    break;
+                case 3:
                     result = GEDCOMUtils.GetLanguageStr(fFetchedRec.Language);
                     break;
             }
@@ -861,6 +865,7 @@ namespace GKCore.Lists
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveDown, RecordAction.raMoveUp);
 
+            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
             fListColumns.AddColumn(LSID.LSID_Name, 350, false);
             fListColumns.AddColumn(LSID.LSID_Type, 100, false);
             fListColumns.ResetDefaults();
@@ -877,9 +882,12 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = GKUtils.GetFamilyString(fBaseContext.Tree, fFamRec);
+                    result = fStructList.IndexOf(fFetchedRec) + 1;
                     break;
                 case 1:
+                    result = GKUtils.GetFamilyString(fBaseContext.Tree, fFamRec);
+                    break;
+                case 2:
                     result = LangMan.LS(GKData.ParentTypes[(int)fFetchedRec.PedigreeLinkageType]);
                     break;
             }

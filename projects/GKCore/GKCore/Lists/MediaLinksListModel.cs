@@ -38,6 +38,7 @@ namespace GKCore.Lists
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveUp, RecordAction.raMoveDown);
 
+            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
             fListColumns.AddColumn(LSID.LSID_RPMultimedia, 300, false);
             fListColumns.AddColumn(LSID.LSID_Type, 300, false);
             fListColumns.ResetDefaults();
@@ -56,9 +57,12 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = fFileRef.Title;
+                    result = fStructList.IndexOf(fFetchedRec) + 1;
                     break;
                 case 1:
+                    result = fFileRef.Title;
+                    break;
+                case 2:
                     result = LangMan.LS(GKData.MediaTypes[(int)fFileRef.MediaType]);
                     break;
             }

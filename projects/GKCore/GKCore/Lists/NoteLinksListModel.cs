@@ -38,6 +38,7 @@ namespace GKCore.Lists
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveUp, RecordAction.raMoveDown);
 
+            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
             fListColumns.AddColumn(LSID.LSID_Note, 500, false);
             fListColumns.ResetDefaults();
         }
@@ -53,6 +54,9 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
+                    result = fStructList.IndexOf(fFetchedRec) + 1;
+                    break;
+                case 1:
                     result = fNoteLines.Text.Trim();
                     break;
             }
