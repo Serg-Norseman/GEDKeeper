@@ -49,6 +49,20 @@ namespace GKStdReports
         LSID_Address,
         LSID_Places_Title,
         LSID_Repository,
+        LSID_AncestorStatistics_Title,
+        LSID_RootIndividual,
+        LSID_ImplexFactor,
+        LSID_ConsanguinityFactor,
+        LSID_Generation,
+        LSID_Possible,
+        LSID_Known,
+        LSID_KnownPercent,
+        LSID_Cumul,
+        LSID_CumulPercent,
+        LSID_Diff,
+        LSID_Implex,
+        LSID_CommonAncestors,
+        LSID_ConsanguinityCommonAncestors,
     }
 
 
@@ -209,6 +223,28 @@ namespace GKStdReports
             if (curBase == null) return;
 
             using (var report = new PlacesReport(curBase)) {
+                report.Generate(true);
+            }
+        }
+    }
+
+
+    public class AncStatsPlugin : StdReportPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_AncestorStatistics_Title); } }
+
+        public override void Execute()
+        {
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            var selPerson = curBase.GetSelectedPerson();
+            if (selPerson == null) {
+                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.LSID_NotSelectedPerson));
+                return;
+            }
+
+            using (var report = new AncestorStatisticsReport(curBase, selPerson)) {
                 report.Generate(true);
             }
         }
