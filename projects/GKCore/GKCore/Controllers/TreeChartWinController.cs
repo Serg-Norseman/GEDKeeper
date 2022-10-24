@@ -243,6 +243,14 @@ namespace GKCore.Controllers
             fBase.Activate();
         }
 
+        public void OpenInNewWindow()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            BaseController.ShowTreeChart(fBase, p.Rec, TreeChartKind.ckBoth);
+        }
+
         public bool SelectedPersonIsReal()
         {
             TreeChartPerson p = fView.TreeBox.Selected;
@@ -330,6 +338,7 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miSelectColor").Text = LangMan.LS(LSID.LSID_SelectColor);
             GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
             GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.LSID_GoToPrimaryBranch);
+            GetControl<IMenuItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.LSID_OpenInNewWindow);
 
             SetToolTip("tbModes", LangMan.LS(LSID.LSID_ModesTip));
             SetToolTip("tbImageSave", LangMan.LS(LSID.LSID_ImageSaveTip));

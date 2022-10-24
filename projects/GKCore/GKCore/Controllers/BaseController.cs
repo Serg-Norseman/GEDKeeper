@@ -20,6 +20,7 @@
 
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Views;
@@ -1056,6 +1057,19 @@ namespace GKCore.Controllers
                 return true;
             }
             return false;
+        }
+
+        public static void ShowTreeChart(IBaseWindow baseWin, GDMIndividualRecord selPerson, TreeChartKind chartKind)
+        {
+            if (selPerson == null) return;
+
+            if (DetectCycle(baseWin.Context.Tree, selPerson)) return;
+
+            if (TreeChartModel.CheckTreeChartSize(baseWin.Context.Tree, selPerson, chartKind)) {
+                var fmChart = AppHost.Container.Resolve<ITreeChartWin>(baseWin);
+                fmChart.GenChart(selPerson, chartKind);
+                AppHost.Instance.ShowWindow(fmChart);
+            }
         }
 
         #endregion

@@ -1085,16 +1085,7 @@ namespace GKCore.Controllers
 
         public void ShowTreeChart(TreeChartKind chartKind)
         {
-            var selPerson = GetSelectedPerson();
-            if (selPerson == null) return;
-
-            if (BaseController.DetectCycle(fContext.Tree, selPerson)) return;
-
-            if (TreeChartModel.CheckTreeChartSize(fContext.Tree, selPerson, chartKind)) {
-                var fmChart = AppHost.Container.Resolve<ITreeChartWin>(fView);
-                fmChart.GenChart(selPerson, chartKind);
-                AppHost.Instance.ShowWindow(fmChart);
-            }
+            BaseController.ShowTreeChart(fView, GetSelectedPerson(), chartKind);
         }
 
         public void ShowCircleChart(CircleChartType chartKind)

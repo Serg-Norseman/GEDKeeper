@@ -929,8 +929,9 @@ namespace GKCore
         /* 869 */ LSID_MaximizeChartWindows,
         /* 870 */ LSID_ExtendedTree,
         /* 871 */ LSID_FanMode,
+        /* 872 */ LSID_OpenInNewWindow,
 
-        /* 000 */ LSID_Last = LSID_FanMode
+        /* 000 */ LSID_Last = LSID_OpenInNewWindow
     }
 
 
@@ -1816,6 +1817,7 @@ namespace GKCore
             /* 869 */ "Maximize chart windows",
             /* 870 */ "Extended tree",
             /* 871 */ "Fan chart (only ancestors)",
+            /* 872 */ "Open in new window",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -67,6 +67,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miSelectColor;
         private ButtonMenuItem miGoToRecord;
         private ButtonMenuItem miGoToPrimaryBranch;
+        private ButtonMenuItem miOpenInNewWindow;
         private ButtonToolItem tbDocPrint;
         private ButtonToolItem tbDocPreview;
         private ButtonToolItem tbFilter;
@@ -243,6 +244,9 @@ namespace GKUI.Forms
             miGoToPrimaryBranch = new ButtonMenuItem();
             miGoToPrimaryBranch.Click += miGoToPrimaryBranch_Click;
 
+            miOpenInNewWindow = new ButtonMenuItem();
+            miOpenInNewWindow.Click += miOpenInNewWindow_Click;
+
             MenuPerson = new ContextMenu();
             MenuPerson.Items.AddRange(new MenuItem[] {
                                           miEdit,
@@ -258,6 +262,7 @@ namespace GKUI.Forms
                                           new SeparatorMenuItem(),
                                           miGoToRecord,
                                           miGoToPrimaryBranch,
+                                          miOpenInNewWindow,
                                           new SeparatorMenuItem(),
                                           miRebuildTree,
                                           miRebuildKinships,
@@ -579,7 +584,10 @@ namespace GKUI.Forms
         {
             miFatherAdd.Enabled = fController.ParentIsRequired(GDMSex.svMale);
             miMotherAdd.Enabled = fController.ParentIsRequired(GDMSex.svFemale);
-            miGoToRecord.Enabled = fController.SelectedPersonIsReal();
+
+            bool isRealPerson = fController.SelectedPersonIsReal();
+            miGoToRecord.Enabled = isRealPerson;
+            miOpenInNewWindow.Enabled = isRealPerson;
 
             TreeChartPerson p = fTreeBox.Selected;
             miGoToPrimaryBranch.Enabled = (p != null && p.Rec != null && p.IsDup);
@@ -608,6 +616,11 @@ namespace GKUI.Forms
         private void miGoToPrimaryBranch_Click(object sender, EventArgs e)
         {
             fController.GoToPrimaryBranch();
+        }
+
+        private void miOpenInNewWindow_Click(object sender, EventArgs e)
+        {
+            fController.OpenInNewWindow();
         }
 
         #endregion

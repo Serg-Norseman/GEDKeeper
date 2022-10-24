@@ -56,6 +56,7 @@
         private System.Windows.Forms.ToolStripDropDownButton tbBorders;
         private System.Windows.Forms.ContextMenuStrip MenuBorders;
         private System.Windows.Forms.ToolStripMenuItem miGoToPrimaryBranch;
+        private System.Windows.Forms.ToolStripMenuItem miOpenInNewWindow;
 
         private void InitializeComponent()
         {
@@ -113,6 +114,7 @@
             this.tbBorders = new System.Windows.Forms.ToolStripDropDownButton();
             this.MenuBorders = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miGoToPrimaryBranch = new System.Windows.Forms.ToolStripMenuItem();
+            this.miOpenInNewWindow = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolBar1.SuspendLayout();
             this.MenuModes.SuspendLayout();
             this.MenuPerson.SuspendLayout();
@@ -368,6 +370,7 @@
             this.N11,
             this.miGoToRecord,
             this.miGoToPrimaryBranch,
+            this.miOpenInNewWindow,
             this.N3,
             this.miRebuildTree,
             this.miRebuildKinships,
@@ -461,6 +464,13 @@
             this.miGoToPrimaryBranch.Size = new System.Drawing.Size(172, 22);
             this.miGoToPrimaryBranch.Text = "miGoToPrimaryBranch";
             this.miGoToPrimaryBranch.Click += new System.EventHandler(this.miGoToPrimaryBranch_Click);
+            // 
+            // miOpenInNewWindow
+            // 
+            this.miOpenInNewWindow.Name = "miOpenInNewWindow";
+            this.miOpenInNewWindow.Size = new System.Drawing.Size(172, 22);
+            this.miOpenInNewWindow.Text = "miOpenInNewWindow";
+            this.miOpenInNewWindow.Click += new System.EventHandler(this.miOpenInNewWindow_Click);
             // 
             // N3
             // 

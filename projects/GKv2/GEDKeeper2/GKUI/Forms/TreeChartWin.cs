@@ -449,7 +449,10 @@ namespace GKUI.Forms
         {
             miFatherAdd.Enabled = fController.ParentIsRequired(GDMSex.svMale);
             miMotherAdd.Enabled = fController.ParentIsRequired(GDMSex.svFemale);
-            miGoToRecord.Enabled = fController.SelectedPersonIsReal();
+
+            bool isRealPerson = fController.SelectedPersonIsReal();
+            miGoToRecord.Enabled = isRealPerson;
+            miOpenInNewWindow.Enabled = isRealPerson;
 
             TreeChartPerson p = fTreeBox.Selected;
             miGoToPrimaryBranch.Enabled = (p != null && p.Rec != null && p.IsDup);
@@ -478,6 +481,11 @@ namespace GKUI.Forms
         private void miGoToPrimaryBranch_Click(object sender, EventArgs e)
         {
             fController.GoToPrimaryBranch();
+        }
+
+        private void miOpenInNewWindow_Click(object sender, EventArgs e)
+        {
+            fController.OpenInNewWindow();
         }
 
         #endregion
