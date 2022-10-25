@@ -150,7 +150,7 @@ namespace GKCore.Lists
             var source = fDataOwner as GDMSourceRecord;
             if (fBaseWin == null || source == null) return;
 
-            var cit = eArgs.ItemData as GDMRepositoryCitation;
+            var repoCit = eArgs.ItemData as GDMRepositoryCitation;
             GDMRepositoryRecord repoRec = null;
 
             bool result = false;
@@ -164,23 +164,23 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (cit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery))) {
-                        repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(cit);
+                    if (repoCit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery))) {
+                        repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, repoRec);
                     }
                     break;
 
                 case RecordAction.raCopy:
-                    AppHost.Instance.SetClipboardObj(cit.Clone());
+                    AppHost.Instance.SetClipboardObj(repoCit);
                     break;
 
                 case RecordAction.raCut:
                     break;
 
                 case RecordAction.raPaste:
-                    cit = AppHost.Instance.GetClipboardObj<GDMRepositoryCitation>();
-                    if (cit != null) {
-                        repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(cit);
+                    repoCit = AppHost.Instance.GetClipboardObj<GDMRepositoryCitation>();
+                    if (repoCit != null) {
+                        repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, repoRec);
                     }
                     break;

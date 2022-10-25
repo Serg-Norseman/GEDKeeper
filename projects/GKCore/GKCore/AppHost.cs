@@ -315,7 +315,13 @@ namespace GKCore
             if (obj == null)
                 return;
 
-            fInternalClipboard.Clear();
+            for (int i = fInternalClipboard.Count - 1; i >= 0; i--) {
+                var item = fInternalClipboard[i];
+                if (item.GetType().IsDerivedFromOrImplements(obj.GetType())) {
+                    fInternalClipboard.RemoveAt(i);
+                }
+            }
+
             fInternalClipboard.Add(obj);
         }
 

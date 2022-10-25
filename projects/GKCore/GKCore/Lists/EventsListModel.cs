@@ -172,17 +172,7 @@ namespace GKCore.Lists
                         break;
 
                     case RecordAction.raCopy:
-                        {
-                            object obj = null;
-                            if (evt is GDMIndividualEvent) {
-                                obj = (evt as GDMIndividualEvent).Clone();
-                            } else if (evt is GDMIndividualAttribute) {
-                                obj = (evt as GDMIndividualAttribute).Clone();
-                            } else if (evt is GDMFamilyEvent) {
-                                obj = (evt as GDMFamilyEvent).Clone();
-                            }
-                            AppHost.Instance.SetClipboardObj(obj);
-                        }
+                        AppHost.Instance.SetClipboardObj(evt);
                         break;
 
                     case RecordAction.raCut:
@@ -191,6 +181,13 @@ namespace GKCore.Lists
                     case RecordAction.raPaste:
                         evt = AppHost.Instance.GetClipboardObj<GDMCustomEvent>();
                         if (evt != null) {
+                            if (evt is GDMIndividualEvent) {
+                                evt = (evt as GDMIndividualEvent).Clone();
+                            } else if (evt is GDMIndividualAttribute) {
+                                evt = (evt as GDMIndividualAttribute).Clone();
+                            } else if (evt is GDMFamilyEvent) {
+                                evt = (evt as GDMFamilyEvent).Clone();
+                            }
                             result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, evt);
                         }
                         break;

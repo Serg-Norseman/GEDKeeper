@@ -93,26 +93,26 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as IGDMStructWithSourceCitations;
             if (fBaseWin == null || dataOwner == null) return;
 
-            var aCit = eArgs.ItemData as GDMSourceCitation;
+            var srcCit = eArgs.ItemData as GDMSourceCitation;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    result = BaseController.ModifySourceCitation(fBaseWin, fUndoman, dataOwner, ref aCit);
+                    result = BaseController.ModifySourceCitation(fBaseWin, fUndoman, dataOwner, ref srcCit);
                     break;
 
                 case RecordAction.raDelete:
                     if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSourceQuery))) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, aCit);
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, srcCit);
                     }
                     break;
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
                     {
-                        int idx = dataOwner.SourceCitations.IndexOf(aCit);
+                        int idx = dataOwner.SourceCitations.IndexOf(srcCit);
                         switch (eArgs.Action) {
                             case RecordAction.raMoveUp:
                                 dataOwner.SourceCitations.Exchange(idx - 1, idx);
@@ -127,23 +127,24 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raCopy:
-                    AppHost.Instance.SetClipboardObj(aCit.Clone());
+                    AppHost.Instance.SetClipboardObj(srcCit);
                     break;
 
                 case RecordAction.raCut:
                     break;
 
                 case RecordAction.raPaste:
-                    aCit = AppHost.Instance.GetClipboardObj<GDMSourceCitation>();
-                    if (aCit != null) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitAdd, fDataOwner, aCit);
+                    srcCit = AppHost.Instance.GetClipboardObj<GDMSourceCitation>();
+                    if (srcCit != null) {
+                        srcCit = srcCit.Clone();
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitAdd, fDataOwner, srcCit);
                     }
                     break;
             }
 
             if (result) {
                 if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raPaste) {
-                    eArgs.ItemData = aCit;
+                    eArgs.ItemData = srcCit;
                 }
 
                 fBaseWin.Context.Modified = true;

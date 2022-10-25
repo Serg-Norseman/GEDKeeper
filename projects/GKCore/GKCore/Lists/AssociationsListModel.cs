@@ -117,7 +117,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raCopy:
-                    AppHost.Instance.SetClipboardObj(ast.Clone());
+                    AppHost.Instance.SetClipboardObj(ast);
                     break;
 
                 case RecordAction.raCut:
@@ -126,6 +126,7 @@ namespace GKCore.Lists
                 case RecordAction.raPaste:
                     ast = AppHost.Instance.GetClipboardObj<GDMAssociation>();
                     if (ast != null) {
+                        ast = ast.Clone();
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationAdd, person, ast);
                     }
                     break;
