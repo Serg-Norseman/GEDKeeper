@@ -127,7 +127,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raCopy:
-                    AppHost.Instance.SetClipboardObj(srcCit);
+                    AppHost.Instance.SetClipboardObj<GDMSourceCitation>(srcCit);
                     break;
 
                 case RecordAction.raCut:

@@ -117,7 +117,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raCopy:
-                    AppHost.Instance.SetClipboardObj(ast);
+                    AppHost.Instance.SetClipboardObj<GDMAssociation>(ast);
                     break;
 
                 case RecordAction.raCut:

@@ -306,7 +306,7 @@ namespace GKCore
 
         //public abstract string GetClipboardObject(string objTypeName);
 
-        public void SetClipboardObj(object obj)
+        public void SetClipboardObj<T>(object obj) where T : class
         {
             /*string objName = obj.GetType().FullName;
             string objContent = GEDCOMProvider.GetTagStreamText(obj, 1, false);
@@ -317,12 +317,12 @@ namespace GKCore
 
             for (int i = fInternalClipboard.Count - 1; i >= 0; i--) {
                 var item = fInternalClipboard[i];
-                if (item.GetType().IsDerivedFromOrImplements(obj.GetType())) {
+                if (item.GetType().IsDerivedFromOrImplements(typeof(T))) {
                     fInternalClipboard.RemoveAt(i);
                 }
             }
 
-            fInternalClipboard.Add(obj);
+            fInternalClipboard.Insert(0, obj);
         }
 
         public T GetClipboardObj<T>() where T : class

@@ -172,7 +172,7 @@ namespace GKCore.Lists
                         break;
 
                     case RecordAction.raCopy:
-                        AppHost.Instance.SetClipboardObj(evt);
+                        AppHost.Instance.SetClipboardObj<GDMCustomEvent>(evt);
                         break;
 
                     case RecordAction.raCut:
