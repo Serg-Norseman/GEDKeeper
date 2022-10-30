@@ -360,7 +360,11 @@ namespace GKCore.Controllers
 
                     switch (fTargetMode) {
                         case TargetMode.tmParent:
-                            fView.Surname.Text = parts.Surname;
+                            if (sx == GDMSex.svFemale) {
+                                fView.Surname.Text = culture.GetMarriedSurname(parts.Surname);
+                            } else {
+                                fView.Surname.Text = parts.Surname;
+                            }
                             if (culture.HasPatronymic()) {
                                 AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GDMSex.svMale));
                                 AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GDMSex.svFemale));

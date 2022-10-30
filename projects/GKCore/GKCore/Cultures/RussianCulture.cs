@@ -91,7 +91,9 @@ namespace GKCore.Cultures
                 char lastSym = res[res.Length - 1];
 
                 if (CONSONANTS.IndexOf(lastSym) >= 0) {
-                    res = res + "а";
+                    if (!res.EndsWith("ких")) {
+                        res = res + "а";
+                    }
                 } else if (res.EndsWith("кий")) {
                     res = res.Substring(0, res.Length - 3) + "кая";
                 } else if (res.EndsWith("ный")) {
