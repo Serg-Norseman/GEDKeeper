@@ -14,13 +14,16 @@
 		private System.Windows.Forms.ToolStripMenuItem miGoToRecord;
 		private System.Windows.Forms.ToolStripSeparator N1;
 		private System.Windows.Forms.ToolStripMenuItem miCopyXRef;
+        private System.Windows.Forms.TabPage pageOptions;
+        private System.Windows.Forms.CheckBox chkCheckPersonPlaces;
 
-		private void InitializeComponent()
+        private void InitializeComponent()
 		{
 		    this.components = new System.ComponentModel.Container();
 		    this.tabsTools = new System.Windows.Forms.TabControl();
 		    this.pageTreeCheck = new System.Windows.Forms.TabPage();
-		    this.btnAnalyseBase = new System.Windows.Forms.Button();
+            this.pageOptions = new System.Windows.Forms.TabPage();
+            this.btnAnalyseBase = new System.Windows.Forms.Button();
 		    this.btnBaseRepair = new System.Windows.Forms.Button();
 		    this.panProblemsContainer = new System.Windows.Forms.Panel();
 		    this.btnClose = new System.Windows.Forms.Button();
@@ -29,15 +32,18 @@
 		    this.miGoToRecord = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miCopyXRef = new System.Windows.Forms.ToolStripMenuItem();
 		    this.N1 = new System.Windows.Forms.ToolStripSeparator();
-		    this.tabsTools.SuspendLayout();
+            this.chkCheckPersonPlaces = new System.Windows.Forms.CheckBox();
+            this.tabsTools.SuspendLayout();
 		    this.pageTreeCheck.SuspendLayout();
-		    this.contextMenu.SuspendLayout();
+            this.pageOptions.SuspendLayout();
+            this.contextMenu.SuspendLayout();
 		    this.SuspendLayout();
 		    // 
 		    // tabsTools
 		    // 
 		    this.tabsTools.Controls.Add(this.pageTreeCheck);
-		    this.tabsTools.Location = new System.Drawing.Point(11, 10);
+            this.tabsTools.Controls.Add(this.pageOptions);
+            this.tabsTools.Location = new System.Drawing.Point(11, 10);
 		    this.tabsTools.Name = "tabsTools";
 		    this.tabsTools.SelectedIndex = 0;
 		    this.tabsTools.Size = new System.Drawing.Size(1010, 545);
@@ -53,10 +59,19 @@
 		    this.pageTreeCheck.Size = new System.Drawing.Size(1002, 515);
 		    this.pageTreeCheck.TabIndex = 6;
 		    this.pageTreeCheck.Text = "pageTreeCheck";
-		    // 
-		    // btnAnalyseBase
-		    // 
-		    this.btnAnalyseBase.Location = new System.Drawing.Point(17, 464);
+            // 
+            // pageOptions
+            // 
+            this.pageOptions.Controls.Add(this.chkCheckPersonPlaces);
+            this.pageOptions.Location = new System.Drawing.Point(4, 26); 
+            this.pageOptions.Name = "pageOptions";
+            this.pageOptions.Size = new System.Drawing.Size(1002, 515);
+            this.pageOptions.TabIndex = 6;
+            this.pageOptions.Text = "pageOptions";
+            // 
+            // btnAnalyseBase
+            // 
+            this.btnAnalyseBase.Location = new System.Drawing.Point(17, 464);
 		    this.btnAnalyseBase.Name = "btnAnalyseBase";
 		    this.btnAnalyseBase.Size = new System.Drawing.Size(203, 30);
 		    this.btnAnalyseBase.TabIndex = 0;
@@ -127,10 +142,19 @@
 		    // 
 		    this.N1.Name = "N1";
 		    this.N1.Size = new System.Drawing.Size(174, 6);
-		    // 
-		    // TTTreeCheckDlg
-		    // 
-		    this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            // 
+            // chkCheckPersonPlaces
+            // 
+            this.chkCheckPersonPlaces.Location = new System.Drawing.Point(10, 10);
+            this.chkCheckPersonPlaces.Name = "chkCheckPersonPlaces";
+            this.chkCheckPersonPlaces.Size = new System.Drawing.Size(319, 24);
+            this.chkCheckPersonPlaces.TabIndex = 0;
+            this.chkCheckPersonPlaces.Text = "chkCheckPersonPlaces";
+            this.chkCheckPersonPlaces.UseVisualStyleBackColor = true;
+            // 
+            // TTTreeCheckDlg
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 		    this.CancelButton = this.btnClose;
 		    this.ClientSize = new System.Drawing.Size(1034, 625);
@@ -147,7 +171,8 @@
 		    this.Text = "TreeToolsWin";
 		    this.Title = "TreeToolsWin";
 		    this.tabsTools.ResumeLayout(false);
-		    this.pageTreeCheck.ResumeLayout(false);
+            this.pageTreeCheck.ResumeLayout(false);
+            this.pageOptions.ResumeLayout(false);
 		    this.contextMenu.ResumeLayout(false);
 		    this.ResumeLayout(false);
 

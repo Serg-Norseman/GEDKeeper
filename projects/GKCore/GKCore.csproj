@@ -279,6 +279,7 @@
     <Compile Include="GKCore\SysUtils.cs" />
     <Compile Include="GKCore\Tips.cs" />
     <Compile Include="GKCore\Tools\PatriarchsMan.cs" />
+    <Compile Include="GKCore\Tools\TreeInspector.cs" />
     <Compile Include="GKCore\Types\CertaintyAlgorithm.cs" />
     <Compile Include="GKCore\Types\CharsetResult.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />

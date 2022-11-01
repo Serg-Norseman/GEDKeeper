@@ -192,6 +192,17 @@ namespace GKCore.Kinships
             string tmp = string.Empty;
 
             if (rel != RelationKind.rkUndefined) {
+                if (degree == 1) {
+                    if (rel == RelationKind.rkSister) {
+                        rel = RelationKind.rkCousinF;
+                        degree = 0;
+                    }
+                    if (rel == RelationKind.rkBrother) {
+                        rel = RelationKind.rkCousinM;
+                        degree = 0;
+                    }
+                }
+
                 tmp = KinshipsMan.GetDegree(degree, target.Sex);
                 tmp += KinshipsMan.GetGreat(great, shortForm);
             }

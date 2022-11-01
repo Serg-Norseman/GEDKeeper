@@ -155,10 +155,6 @@
           <comcom:GKSheetList x:Name="fAssociationsList" OnModify="ModifyAssociationsSheet" />
         </TabPage>
 
-        <TabPage x:Name="pageGroups">
-          <comcom:GKSheetList x:Name="fGroupsList" OnModify="ModifyGroupsSheet" />
-        </TabPage>
-
         <TabPage x:Name="pageNotes">
           <comcom:GKSheetList x:Name="fNotesList" />
         </TabPage>
@@ -169,6 +165,10 @@
 
         <TabPage x:Name="pageSources">
           <comcom:GKSheetList x:Name="fSourcesList" />
+        </TabPage>
+
+        <TabPage x:Name="pageGroups">
+          <comcom:GKSheetList x:Name="fGroupsList" OnModify="ModifyGroupsSheet" />
         </TabPage>
 
         <TabPage x:Name="pageUserRefs">

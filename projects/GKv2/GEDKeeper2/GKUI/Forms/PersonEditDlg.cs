@@ -250,10 +250,6 @@ namespace GKUI.Forms
             fAssociationsList.OnModify += ModifyAssociationsSheet;
             fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
 
-            fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
-            fGroupsList.OnModify += ModifyGroupsSheet;
-
             fNotesList = new GKSheetList(pageNotes);
             fNotesList.SetControlName("fNotesList"); // for purpose of tests
 
@@ -262,6 +258,10 @@ namespace GKUI.Forms
 
             fSourcesList = new GKSheetList(pageSources);
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
+
+            fGroupsList = new GKSheetList(pageGroups);
+            fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
+            fGroupsList.OnModify += ModifyGroupsSheet;
 
             fUserRefList = new GKSheetList(pageUserRefs);
             fUserRefList.SetControlName("fUserRefList"); // for purpose of tests

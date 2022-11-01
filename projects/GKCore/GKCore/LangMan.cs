@@ -930,8 +930,10 @@ namespace GKCore
         /* 870 */ LSID_ExtendedTree,
         /* 871 */ LSID_FanMode,
         /* 872 */ LSID_OpenInNewWindow,
+        /* 873 */ LSID_UnknownPlaceOfPerson,
+        /* 874 */ LSID_CheckPersonPlaces,
 
-        /* 000 */ LSID_Last = LSID_OpenInNewWindow
+        /* 000 */ LSID_Last = LSID_CheckPersonPlaces
     }
 
 
@@ -1818,6 +1820,8 @@ namespace GKCore
             /* 870 */ "Extended tree",
             /* 871 */ "Fan chart (only ancestors)",
             /* 872 */ "Open in new window",
+            /* 873 */ "Unknown place of person",
+            /* 874 */ "Check person places",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Text;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -34,11 +33,15 @@ namespace GKCore.Controllers
     /// </summary>
     public class TreeCheckController : DialogController<ITreeCheckDlg>
     {
-        private readonly List<TreeTools.CheckObj> fChecksList;
+        private readonly List<TreeInspector.CheckObj> fChecksList;
+        private readonly TreeInspectionOptions fOptions;
 
         public TreeCheckController(ITreeCheckDlg view) : base(view)
         {
-            fChecksList = new List<TreeTools.CheckObj>();
+            fChecksList = new List<TreeInspector.CheckObj>();
+
+            fOptions = new TreeInspectionOptions();
+            fOptions.CheckIndividualPlaces = false;
         }
 
         public override void UpdateView()
@@ -47,15 +50,17 @@ namespace GKCore.Controllers
 
         public void CheckBase()
         {
+            fOptions.CheckIndividualPlaces = GetControl<ICheckBox>("chkCheckPersonPlaces").Checked;
+
             AppHost.Instance.ExecuteWork((controller) => {
-                TreeTools.CheckBase(fBase, fChecksList, controller);
+                TreeInspector.CheckBase(fBase, fChecksList, controller, fOptions);
             });
 
             fView.ChecksList.BeginUpdate();
             try {
                 fView.ChecksList.ClearItems();
 
-                foreach (TreeTools.CheckObj checkObj in fChecksList) {
+                foreach (TreeInspector.CheckObj checkObj in fChecksList) {
                     fView.ChecksList.AddItem(checkObj, new object[] {
                         checkObj.GetRecordName(fBase.Context.Tree),
                         checkObj.Comment,
@@ -77,8 +82,8 @@ namespace GKCore.Controllers
                 for (int i = 0; i < num; i++) {
                     IListItem item = fView.ChecksList.Items[i];
                     if (item.Checked) {
-                        var checkObj = item.Data as TreeTools.CheckObj;
-                        TreeTools.RepairProblem(fBase, checkObj);
+                        var checkObj = item.Data as TreeInspector.CheckObj;
+                        TreeInspector.RepairProblem(fBase, checkObj);
                     }
                 }
             } finally {
@@ -98,7 +103,7 @@ namespace GKCore.Controllers
 
         public GDMRecord GetSelectedRecord()
         {
-            return ((TreeTools.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
+            return ((TreeInspector.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
         }
 
         public IList<GDMRecord> GetCheckedRecords()
@@ -109,7 +114,7 @@ namespace GKCore.Controllers
             for (int i = 0; i < num; i++) {
                 IListItem item = fView.ChecksList.Items[i];
                 if (item.Checked) {
-                    var checkObj = item.Data as TreeTools.CheckObj;
+                    var checkObj = item.Data as TreeInspector.CheckObj;
                     result.Add(checkObj.Rec);
                 }
             }
@@ -129,7 +134,7 @@ namespace GKCore.Controllers
         {
             var text = new StringBuilder();
             foreach (var item in list) {
-                var checkObj = (TreeTools.CheckObj)item;
+                var checkObj = (TreeInspector.CheckObj)item;
                 text.Append(checkObj.Rec.XRef);
                 text.Append("\r\n");
             }
@@ -155,6 +160,9 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.LSID_Details);
             GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
             GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.LSID_CopyXRef);
+
+            GetControl<ITabPage>("pageOptions").Text = LangMan.LS(LSID.LSID_MIOptions);
+            GetControl<ICheckBox>("chkCheckPersonPlaces").Text = LangMan.LS(LSID.LSID_CheckPersonPlaces);
 
             fView.ChecksList.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
             fView.ChecksList.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);

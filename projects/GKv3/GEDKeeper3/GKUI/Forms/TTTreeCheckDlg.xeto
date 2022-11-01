@@ -31,6 +31,12 @@
             </TableRow>
           </TableLayout>
         </TabPage>
+
+        <TabPage x:Name="pageOptions">
+          <StackLayout Style="vertListStack">
+            <CheckBox x:Name="chkCheckPersonPlaces" />
+          </StackLayout>
+        </TabPage>
       </TabControl>
     </TableRow>
 
