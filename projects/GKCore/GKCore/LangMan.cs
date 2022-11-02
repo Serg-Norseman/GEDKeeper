@@ -933,8 +933,10 @@ namespace GKCore
         /* 873 */ LSID_UnknownPlaceOfPerson,
         /* 874 */ LSID_CheckPersonPlaces,
         /* 875 */ LSID_HighlightInaccessibleFiles,
+        /* 876 */ LSID_DifferenceBetweenSpousesIsAbnormallyHigh,
+        /* 877 */ LSID_DifferenceBetweenSiblingsIsAbnormallyHigh,
 
-        /* 000 */ LSID_Last = LSID_HighlightInaccessibleFiles
+        /* 000 */ LSID_Last = LSID_DifferenceBetweenSiblingsIsAbnormallyHigh
     }
 
 
@@ -1824,6 +1826,8 @@ namespace GKCore
             /* 873 */ "Unknown place of person",
             /* 874 */ "Check person places",
             /* 875 */ "Highlight inaccessible files",
+            /* 876 */ "The difference between spouses is abnormally high `{0}`",
+            /* 877 */ "The difference between siblings is abnormally high `{0}`",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

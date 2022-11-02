@@ -198,7 +198,7 @@ namespace GKCore
         public const int MAX_FATHER_AGE = 85; // max. age of father at child's birth
         public const int MIN_MARRIAGE_AGE = 13; // min. age for marriage
         public const int MAX_SPOUSES_DIFF = 90; // max. age difference between spouses
-        public const int MAX_BRT_SST_DIFF = 40; // max. age difference between brothers/sisters
+        public const int MAX_SIBLINGS_DIFF = 40; // max. age difference between brothers/sisters
 
 
         static GKData()

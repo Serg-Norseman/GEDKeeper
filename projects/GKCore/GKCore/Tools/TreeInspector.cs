@@ -68,6 +68,8 @@ namespace GKCore.Tools
             cdGarbledSpouses,
             cdSeveralParents,
             cdUnknownPlaceOfPerson,
+            cdHighSpousesDifference,
+            cdHighSiblingsDifference,
         }
 
         public enum CheckSolve
@@ -297,14 +299,14 @@ namespace GKCore.Tools
             }
 
             int iAge = GKUtils.GetMarriageAge(tree, iRec);
-            if (iAge > 0 && (iAge <= 13 || iAge >= 50)) {
+            if (iAge > 0 && (iAge <= GKData.MIN_MARRIAGE_AGE || iAge >= GKData.PROVED_LIFE_LENGTH)) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeSpouse, CheckSolve.csSkip);
                 checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeSpouse), iAge.ToString());
                 checksList.Add(checkObj);
             }
 
             iAge = GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(tree, iRec));
-            if (iAge > 0 && (iAge <= 13 || iAge >= 50)) {
+            if (iAge > 0 && ((iAge <= GKData.MIN_PARENT_AGE) || (sex == GDMSex.svFemale && iAge >= GKData.MAX_MOTHER_AGE) || (sex == GDMSex.svMale && iAge >= GKData.MAX_FATHER_AGE))) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeParent, CheckSolve.csSkip);
                 checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeParent), iAge.ToString());
                 checksList.Add(checkObj);
@@ -364,11 +366,21 @@ namespace GKCore.Tools
                         checkObj.Comment = LangMan.LS(LSID.LSID_MotherAsChild);
                         checksList.Add(checkObj);
                     }
+
+                    int spousesDiff = GKUtils.GetSpousesDiff(tree, fRec);
+                    if (spousesDiff > GKData.MAX_SPOUSES_DIFF) {
+                        CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdHighSpousesDifference, CheckSolve.csSkip);
+                        checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_DifferenceBetweenSpousesIsAbnormallyHigh), spousesDiff);
+                        checksList.Add(checkObj);
+                    }
                 }
 
                 bool hasDup = false;
+                int minBirth = int.MaxValue, maxBirth = int.MinValue;
+
                 for (int i = 0; i < chNum; i++) {
                     var child1 = fRec.Children[i];
+
                     for (int k = i + 1; k < chNum; k++) {
                         var child2 = fRec.Children[k];
                         if (child2.XRef == child1.XRef) {
@@ -376,12 +388,28 @@ namespace GKCore.Tools
                             break;
                         }
                     }
-                    if (hasDup) break;
+
+                    var childRec = tree.GetPtrValue<GDMIndividualRecord>(child1);
+                    int yBirth = childRec.GetChronologicalYear(GEDCOMTagName.BIRT);
+                    if (yBirth != 0) {
+                        if (yBirth < minBirth) minBirth = yBirth;
+                        if (yBirth > maxBirth) maxBirth = yBirth;
+                    }
                 }
+
                 if (hasDup) {
                     CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdDuplicateChildren, CheckSolve.csEdit);
                     checkObj.Comment = LangMan.LS(LSID.LSID_DuplicateChildrenInFamily);
                     checksList.Add(checkObj);
+                }
+
+                if (minBirth != int.MaxValue && maxBirth != int.MinValue) {
+                    int delta = (maxBirth - minBirth);
+                    if (delta > GKData.MAX_SIBLINGS_DIFF) {
+                        CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdHighSiblingsDifference, CheckSolve.csSkip);
+                        checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_DifferenceBetweenSiblingsIsAbnormallyHigh), delta);
+                        checksList.Add(checkObj);
+                    }
                 }
             }
         }
