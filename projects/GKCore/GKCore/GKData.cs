@@ -59,6 +59,7 @@ namespace GKCore
 
         public static readonly int HighlightUnparentedColor = 0xFFCACA;
         public static readonly int HighlightUnmarriedColor = 0xFFFFA1;
+        public static readonly int HighlightInaccessibleFiles = 0xFFCACA;
 
         #if MONO
         public const string DEF_FONT = "Noto Sans";
@@ -192,12 +193,10 @@ namespace GKCore
         /// Bounds checks data for correctness.
         /// </summary>
         public const int PROVED_LIFE_LENGTH = 122; // max. duration of a person's life (proved)
-
-        // TODO: implement checks and options!
         public const int MIN_PARENT_AGE = 10; // min. age of parent at child's birth
         public const int MAX_MOTHER_AGE = 55; // max. age of mother at child's birth
         public const int MAX_FATHER_AGE = 85; // max. age of father at child's birth
-        public const int MIN_MARRIAGE_AGE = 15; // min. age for marriage
+        public const int MIN_MARRIAGE_AGE = 13; // min. age for marriage
         public const int MAX_SPOUSES_DIFF = 90; // max. age difference between spouses
         public const int MAX_BRT_SST_DIFF = 40; // max. age difference between brothers/sisters
 

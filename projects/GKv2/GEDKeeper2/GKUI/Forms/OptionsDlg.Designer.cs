@@ -167,6 +167,7 @@
         private System.Windows.Forms.CheckBox chkKeepRichNames;
         private System.Windows.Forms.CheckBox chkMaximizeChartWindows;
         private System.Windows.Forms.CheckBox chkExtendedTree;
+        private System.Windows.Forms.CheckBox chkHighlightInaccessibleFiles;
 
         private void InitializeComponent()
         {
@@ -335,6 +336,7 @@
             this.chkKeepRichNames = new System.Windows.Forms.CheckBox();
             this.chkMaximizeChartWindows = new System.Windows.Forms.CheckBox();
             this.chkExtendedTree = new System.Windows.Forms.CheckBox();
+            this.chkHighlightInaccessibleFiles = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -817,6 +819,7 @@
             this.pageMultimedia.Controls.Add(this.chkAllowMediaDirectRefs);
             this.pageMultimedia.Controls.Add(this.chkEmbeddedMediaPlayer);
             this.pageMultimedia.Controls.Add(this.chkRemovableMediaWarning);
+            this.pageMultimedia.Controls.Add(this.chkHighlightInaccessibleFiles);
             this.pageMultimedia.Location = new System.Drawing.Point(4, 26);
             this.pageMultimedia.Margin = new System.Windows.Forms.Padding(2);
             this.pageMultimedia.Name = "pageMultimedia";
@@ -914,6 +917,16 @@
             this.chkRemovableMediaWarning.Size = new System.Drawing.Size(206, 21);
             this.chkRemovableMediaWarning.TabIndex = 10;
             this.chkRemovableMediaWarning.Text = "chkRemovableMediaWarning";
+            // 
+            // chkHighlightInaccessibleFiles
+            // 
+            this.chkHighlightInaccessibleFiles.AutoSize = true;
+            this.chkHighlightInaccessibleFiles.Location = new System.Drawing.Point(20, 350);
+            this.chkHighlightInaccessibleFiles.Margin = new System.Windows.Forms.Padding(10);
+            this.chkHighlightInaccessibleFiles.Name = "chkHighlightInaccessibleFiles";
+            this.chkHighlightInaccessibleFiles.Size = new System.Drawing.Size(206, 21);
+            this.chkHighlightInaccessibleFiles.TabIndex = 11;
+            this.chkHighlightInaccessibleFiles.Text = "chkHighlightInaccessibleFiles";
             // 
             // pageCharts
             // 

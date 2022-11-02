@@ -932,8 +932,9 @@ namespace GKCore
         /* 872 */ LSID_OpenInNewWindow,
         /* 873 */ LSID_UnknownPlaceOfPerson,
         /* 874 */ LSID_CheckPersonPlaces,
+        /* 875 */ LSID_HighlightInaccessibleFiles,
 
-        /* 000 */ LSID_Last = LSID_CheckPersonPlaces
+        /* 000 */ LSID_Last = LSID_HighlightInaccessibleFiles
     }
 
 
@@ -1822,6 +1823,7 @@ namespace GKCore
             /* 872 */ "Open in new window",
             /* 873 */ "Unknown place of person",
             /* 874 */ "Check person places",
+            /* 875 */ "Highlight inaccessible files",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

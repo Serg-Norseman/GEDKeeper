@@ -18,8 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib.Design.Graphics;
 using GDModel;
+using GKCore.Charts;
 using GKCore.Interfaces;
+using GKCore.Options;
+using GKCore.Types;
 
 namespace GKCore.Lists
 {
@@ -103,6 +107,22 @@ namespace GKCore.Lists
                     result = fFetchedRec.ChangeDate.ChangeDateTime;
                     break;
             }
+            return result;
+        }
+
+        public override IColor GetBackgroundColor(int itemIndex, object rowData)
+        {
+            IColor result = null;
+
+            GlobalOptions gOptions = GlobalOptions.Instance;
+            if (gOptions.HighlightInaccessibleFiles) {
+                string fileName;
+                MediaStoreStatus storeStatus = fBaseContext.VerifyMediaFile(fFileRef, out fileName);
+                if (storeStatus != MediaStoreStatus.mssExists) {
+                    return ChartRenderer.GetColor(GKData.HighlightInaccessibleFiles);
+                }
+            }
+
             return result;
         }
     }

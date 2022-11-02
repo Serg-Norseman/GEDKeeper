@@ -176,17 +176,17 @@ namespace GDModel.Providers.GEDCOM
         _BOOKMARK, // [GK]
         _CENN, // Census Name [BKW6]
         _ELEC, // Election [???] INDI.ATTR
-        _EXCM, // Excommunication [???] INDI.ATTR
+        _EXCM, // Excommunication [FTM] INDI.ATTR
         _EYES, // [Gen] INDI.ATTR
         _FOLDER, // [GK]
         _GOAL, // [GK]
         _GRP, // Group record [Genney]
         _HAIR, // [BKW6, PAF] INDI.ATTR
-        _HOBBY, // [???] INDI.ATTR
+        _HOBBY, // Hobby [GK] INDI.ATTR
         _LANG, // [GK], outdated, replaced by LANG
         _MARN, // Married Surname [BKW6]
         _MARNM, // Married Surname [AQ3, PAF5, Geni]
-        _MDCL, // Medical condition [???] INDI.ATTR
+        _MDCL, // Medical condition [FTM, FTW] INDI.ATTR
         _MDNA, // [MyFamilyTree] INDI.ATTR
         _MEMBER, // [GK]
         _MIDN, // Middle Name [WikiTree]
@@ -194,6 +194,7 @@ namespace GDModel.Providers.GEDCOM
         _MILI_DIS, // [GK] INDI.ATTR
         _MILI_IND, // [GK] INDI.ATTR
         _MILI_RANK, // [GK] INDI.ATTR
+        _MILT, // Military Services [FTM, PAF5]
         _OBIT, // Obituary [???] INDI.ATTR
         _PATN, // Patronymic Name
         _PATRIARCH, // [GK]
@@ -204,8 +205,10 @@ namespace GDModel.Providers.GEDCOM
         _PRIM, // [PhpGedView, AQ3, PAF5, FO7]
         _PRIM_CUTOUT, // [FTB]
         _PRIORITY, // [GK]
+        _RACE, // Race [Gen, FTW, Reunion]
         _RELN, // Religious Name [BKW6]
         _REV, // [GK]
+        _SLDN, // Soldier name [BKW6, PAF5]
         _STARTDATE, // [GK]
         _STAT,
         _STATUS, // [GK]
@@ -364,15 +367,16 @@ namespace GDModel.Providers.GEDCOM
         public const string _BGRO = "_BGRO"; // [MyFamilyTree]
         public const string _CENN = "_CENN"; // Census Name [BKW6]
         public const string _ELEC = "_ELEC"; // Election [???]
-        public const string _EXCM = "_EXCM"; // Excommunication [???]
+        public const string _EXCM = "_EXCM"; // Excommunication [FTM]
         public const string _EYES = "_EYES"; // [Gen]
         public const string _GRP = "_GRP"; // Group record [Genney]
         public const string _HAIR = "_HAIR"; // [BKW6, PAF]
-        public const string _HOBBY = "_HOBBY";
+        public const string _HOBBY = "_HOBBY"; // Hobby [GK]
         public const string _LOC = "_LOC"; // [GEDCOM 5.5EL]
         public const string _MARN = "_MARN"; // Married Surname [BKW6]
-        public const string _MDCL = "_MDCL"; // Medical condition [???]
+        public const string _MDCL = "_MDCL"; // Medical condition [FTM, FTW]
         public const string _MDNA = "_MDNA"; // [MyFamilyTree]
+        public const string _MILT = "_MILT"; // Military Services [FTM, PAF5]
         public const string _OBIT = "_OBIT"; // Obituary [???]
         public const string _PATN = "_PATN"; // Patronymic Name
         public const string _PLAC = "_PLAC"; // Place/Location record [Family Historian]
@@ -380,7 +384,9 @@ namespace GDModel.Providers.GEDCOM
         public const string _POSITION = "_POSITION";
         public const string _PRIM = "_PRIM"; // [PhpGedView, AQ3, PAF5, FO7]
         public const string _PRIM_CUTOUT = "_PRIM_CUTOUT"; // [FTB]
+        public const string _RACE = "_RACE"; // Race [Gen, FTW, Reunion]
         public const string _RELN = "_RELN"; // Religious Name [BKW6]
+        public const string _SLDN = "_SLDN"; // Soldier name [BKW6, PAF5]
         public const string _STAT = "_STAT";
         public const string _TRAVEL = "_TRAVEL";
         public const string _UID = "_UID"; // 

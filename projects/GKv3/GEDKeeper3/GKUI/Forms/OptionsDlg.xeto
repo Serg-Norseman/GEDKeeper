@@ -136,6 +136,7 @@
             <CheckBox x:Name="chkAllowDeleteMediaFileFromStgArc" />
             <CheckBox x:Name="chkAllowDeleteMediaFileFromRefs" />
             <CheckBox x:Name="chkDeleteMediaFileWithoutConfirm" />
+            <CheckBox x:Name="chkHighlightInaccessibleFiles" />
 
           </StackLayout>
         </TabPage>

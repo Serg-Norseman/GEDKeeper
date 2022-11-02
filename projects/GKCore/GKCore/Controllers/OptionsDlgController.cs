@@ -404,6 +404,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkAllowDeleteMediaFileFromStgArc").Checked = fOptions.AllowDeleteMediaFileFromStgArc;
             GetControl<ICheckBox>("chkAllowDeleteMediaFileFromRefs").Checked = fOptions.AllowDeleteMediaFileFromRefs;
             GetControl<ICheckBox>("chkDeleteMediaFileWithoutConfirm").Checked = fOptions.DeleteMediaFileWithoutConfirm;
+            GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Checked = fOptions.HighlightInaccessibleFiles;
         }
 
         public void AcceptMediaOptions()
@@ -416,6 +417,7 @@ namespace GKCore.Controllers
             fOptions.AllowDeleteMediaFileFromStgArc = GetControl<ICheckBox>("chkAllowDeleteMediaFileFromStgArc").Checked;
             fOptions.AllowDeleteMediaFileFromRefs = GetControl<ICheckBox>("chkAllowDeleteMediaFileFromRefs").Checked;
             fOptions.DeleteMediaFileWithoutConfirm = GetControl<ICheckBox>("chkDeleteMediaFileWithoutConfirm").Checked;
+            fOptions.HighlightInaccessibleFiles = GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Checked;
         }
 
         public void UpdateBackupOptions()
@@ -708,6 +710,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkAllowDeleteMediaFileFromStgArc").Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromStgArc);
             GetControl<ICheckBox>("chkAllowDeleteMediaFileFromRefs").Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromRefs);
             GetControl<ICheckBox>("chkDeleteMediaFileWithoutConfirm").Text = LangMan.LS(LSID.LSID_DeleteMediaFileWithoutConfirm);
+            GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Text = LangMan.LS(LSID.LSID_HighlightInaccessibleFiles);
 
             // Charts
             GetControl<ITabPage>("pageCharts").Text = LangMan.LS(LSID.LSID_Charts);

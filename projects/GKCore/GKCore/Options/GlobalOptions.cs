@@ -286,6 +286,8 @@ namespace GKCore.Options
             set { fLastDir = value; }
         }
 
+        public bool HighlightInaccessibleFiles { get; set; }
+
         public bool ListHighlightUnmarriedPersons
         {
             get { return fListHighlightUnmarriedPersons; }
@@ -490,6 +492,7 @@ namespace GKCore.Options
             CertaintyAlgorithm = CertaintyAlgorithm.WeightedAverage;
             LocalizedCalendarSignatures = false;
             MaximizeChartWindows = false;
+            HighlightInaccessibleFiles = false;
         }
 
         protected override void Dispose(bool disposing)
@@ -783,6 +786,7 @@ namespace GKCore.Options
             CertaintyAlgorithm = (CertaintyAlgorithm)ini.ReadInteger("Common", "CertaintyAlgorithm", 0);
             LocalizedCalendarSignatures = ini.ReadBool("Common", "LocalizedCalendarSignatures", false);
             MaximizeChartWindows = ini.ReadBool("Common", "MaximizeChartWindows", false);
+            HighlightInaccessibleFiles = ini.ReadBool("Common", "HighlightInaccessibleFiles", false);
 
             LoadPluginsFromFile(ini);
         }
@@ -924,6 +928,7 @@ namespace GKCore.Options
             ini.WriteInteger("Common", "CertaintyAlgorithm", (int)CertaintyAlgorithm);
             ini.WriteBool("Common", "LocalizedCalendarSignatures", LocalizedCalendarSignatures);
             ini.WriteBool("Common", "MaximizeChartWindows", MaximizeChartWindows);
+            ini.WriteBool("Common", "HighlightInaccessibleFiles", HighlightInaccessibleFiles);
 
             SavePluginsToFile(ini);
         }
