@@ -38,6 +38,7 @@ namespace GKCore.Lists
             ctShortName,
             ctAuthor,
             ctTitle,
+            ctRepositories,
             ctChangeDate
         }
 
@@ -55,6 +56,7 @@ namespace GKCore.Lists
             result.AddColumn(LSID.LSID_ShortTitle, DataType.dtString, 120, true, true);
             result.AddColumn(LSID.LSID_Author, DataType.dtString, 200, true);
             result.AddColumn(LSID.LSID_Title, DataType.dtString, 200, true);
+            result.AddColumn(LSID.LSID_RPRepositories, DataType.dtString, 200, true);
             result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
@@ -88,6 +90,10 @@ namespace GKCore.Lists
 
                 case ColumnType.ctTitle:
                     result = fFetchedRec.Title.Lines.Text.Trim();
+                    break;
+
+                case ColumnType.ctRepositories:
+                    result = GKUtils.GetSourceRepositories(fBaseContext.Tree, fFetchedRec);
                     break;
 
                 case ColumnType.ctChangeDate:

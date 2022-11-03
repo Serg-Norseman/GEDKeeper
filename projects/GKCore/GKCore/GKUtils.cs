@@ -2848,6 +2848,21 @@ namespace GKCore
             }
         }
 
+        public static string GetSourceRepositories(GDMTree tree, GDMSourceRecord sourceRecord)
+        {
+            string repositories = string.Empty;
+            foreach (GDMRepositoryCitation repoCit in sourceRecord.RepositoryCitations) {
+                GDMRepositoryRecord repoRec = tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
+                if (repoRec == null || string.IsNullOrEmpty(repoRec.RepositoryName)) continue;
+
+                if (repositories.Length != 0) {
+                    repositories += ", ";
+                }
+                repositories += repoRec.RepositoryName;
+            }
+            return repositories;
+        }
+
         #endregion
 
         #region Multimedia support (static)
