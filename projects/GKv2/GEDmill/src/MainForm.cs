@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 using GDModel;
 using GEDmill.HTML;
@@ -31,7 +30,6 @@ using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Logging;
 using GKCore.Types;
-using GKUI.Forms;
 
 namespace GEDmill
 {
@@ -98,7 +96,7 @@ namespace GEDmill
             helpProvider.SetHelpKeyword(btnHelp, "HelpButtonHelpKeyword");
             helpProvider.SetHelpNavigator(btnHelp, HelpNavigator.TableOfContents);
             helpProvider.SetShowHelp(btnHelp, true);
-            helpProvider.HelpNamespace = GMConfig.Instance.ApplicationPath + "\\" + GMConfig.HelpFilename;
+            helpProvider.HelpNamespace = GMHelper.GetAppPath() + "\\" + GMConfig.HelpFilename;
 
             fCurrentPanel = PanelKind.Welcome;
             fConfigPanelVisible = false;
@@ -199,7 +197,6 @@ namespace GEDmill
             lblConfigCustomFooter.Text = fLangMan.LS(PLS.LSID_ConfigCustomFooter);
             chkConfigFooterIsHtml.Text = fLangMan.LS(PLS.LSID_IsHtml);
             chkConfigStats.Text = fLangMan.LS(PLS.LSID_ConfigStats);
-            chkConfigCdrom.Text = fLangMan.LS(PLS.LSID_ConfigCdrom);
             chkConfigMultiPageIndex.Text = fLangMan.LS(PLS.LSID_ConfigMultiPageIndex);
             chkConfigUserRefInIndex.Text = fLangMan.LS(PLS.LSID_ConfigUserRefInIndex);
             lblConfigMultiPageIndexNumber.Text = fLangMan.LS(PLS.LSID_ConfigMultiPageIndexNumber);
@@ -234,7 +231,6 @@ namespace GEDmill
             chkConfigHideEmails.Text = fLangMan.LS(PLS.LSID_ConfigHideEmails);
             chkConfigOccupationHeadline.Text = fLangMan.LS(PLS.LSID_ConfigOccupationHeadline);
             chkConfigIncludeTreeDiagrams.Text = fLangMan.LS(PLS.LSID_ConfigIncludeTreeDiagrams);
-            lblConfigTreeDiagramsFormat.Text = fLangMan.LS(PLS.LSID_ConfigTreeDiagramsFormat);
             chkConfigTreeDiagramsFakeBg.Text = fLangMan.LS(PLS.LSID_ConfigTreeDiagramsFakeBg);
             chkConfigConserveTreeWidth.Text = fLangMan.LS(PLS.LSID_ConfigConserveTreeWidth);
             chkConfigKeepSiblingOrder.Text = fLangMan.LS(PLS.LSID_ConfigKeepSiblingOrder);
@@ -373,7 +369,7 @@ namespace GEDmill
 
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            string helpFile = GMConfig.Instance.ApplicationPath + "\\" + GMConfig.HelpFilename;
+            string helpFile = GMHelper.GetAppPath() + "\\" + GMConfig.HelpFilename;
 
             if (fConfigPanelVisible) {
                 switch (tabcontrolConfigPanel.SelectedIndex) {
@@ -1191,8 +1187,6 @@ namespace GEDmill
             bool includeTreeDiagrams = chkConfigIncludeTreeDiagrams.Checked;
 
             chkConfigTreeDiagramsFakeBg.Enabled = includeTreeDiagrams;
-            lblConfigTreeDiagramsFormat.Enabled = includeTreeDiagrams;
-            cmbConfigTreeDiagramsFormat.Enabled = includeTreeDiagrams;
             gbMiniTreeColours.Enabled = includeTreeDiagrams;
             btnConfigMiniTreeColourIndiBackground.Enabled = includeTreeDiagrams;
             btnConfigMiniTreeColourIndiHighlight.Enabled = includeTreeDiagrams;
@@ -1253,10 +1247,10 @@ namespace GEDmill
             while (true) {
                 switch (fCurrentPanel) {
                     case PanelKind.Welcome:
-                        GMConfig.Instance.InputFilename = fBase.Context.FileName;
-                        fLogger.WriteInfo("Selected file: " + GMConfig.Instance.InputFilename);
+                        string inputFilename = fBase.Context.FileName;
+                        fLogger.WriteInfo("Selected file: " + inputFilename);
                         if (GMConfig.Instance.OutputFolder == "") {
-                            GMConfig.Instance.OutputFolder = Path.GetDirectoryName(GMConfig.Instance.InputFilename);
+                            GMConfig.Instance.OutputFolder = Path.GetDirectoryName(inputFilename);
                             GMConfig.Instance.OutputFolder += "\\GEDmill_Output";
                         }
                         GMConfig.Instance.FirstRecordXRef = "";
@@ -1680,7 +1674,6 @@ namespace GEDmill
             txtConfigCommentary.Text = GMConfig.Instance.CommentaryText;
             chkConfigCommentaryIsHtml.Checked = GMConfig.Instance.CommentaryIsHtml;
             chkConfigStats.Checked = GMConfig.Instance.ShowFrontPageStats;
-            chkConfigCdrom.Checked = GMConfig.Instance.CreateCDROMFiles;
             chkConfigNonPictures.Checked = GMConfig.Instance.AllowNonPictures;
             chkConfigIndiImages.Checked = GMConfig.Instance.AllowMultipleImages;
             chkConfigIncludeTreeDiagrams.Checked = GMConfig.Instance.ShowMiniTrees;
@@ -1693,9 +1686,6 @@ namespace GEDmill
             } else {
                 txtConfigUserLink.Text = GMConfig.Instance.MainWebsiteLink;
             }
-            cmbConfigTreeDiagramsFormat.Items.Clear();
-            cmbConfigTreeDiagramsFormat.Items.AddRange(new object[] { "gif", "png" });
-            cmbConfigTreeDiagramsFormat.SelectedIndex = (GMConfig.Instance.MiniTreeImageFormat == "png" ? 1 : 0);
             chkConfigMultiPageIndex.Checked = GMConfig.Instance.MultiPageIndexes;
             chkConfigUserRefInIndex.Checked = GMConfig.Instance.IncludeUserRefInIndex;
             txtConfigMultiPageIndexNumber.Text = GMConfig.Instance.IndividualsPerIndexPage.ToString();
@@ -1917,7 +1907,6 @@ namespace GEDmill
             GMConfig.Instance.ShowMiniTrees = chkConfigIncludeTreeDiagrams.Checked;
             GMConfig.Instance.FakeMiniTreeTransparency = chkConfigTreeDiagramsFakeBg.Checked;
             GMConfig.Instance.UserEmailAddress = txtConfigEmail.Text;
-            GMConfig.Instance.CreateCDROMFiles = chkConfigCdrom.Checked;
             GMConfig.Instance.AllowMultipleImages = chkConfigIndiImages.Checked;
             GMConfig.Instance.AllowNonPictures = chkConfigNonPictures.Checked;
             GMConfig.Instance.LinkOriginalPicture = chkConfigKeepOriginals.Checked;
@@ -1941,7 +1930,6 @@ namespace GEDmill
             }
 
             GMConfig.Instance.MainWebsiteLink = mainWebsiteLink;
-            GMConfig.Instance.MiniTreeImageFormat = (cmbConfigTreeDiagramsFormat.SelectedIndex == 1 ? "png" : "gif");
             GMConfig.Instance.MultiPageIndexes = chkConfigMultiPageIndex.Checked;
             GMConfig.Instance.IncludeUserRefInIndex = chkConfigUserRefInIndex.Checked;
 

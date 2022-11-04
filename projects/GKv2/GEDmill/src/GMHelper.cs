@@ -315,7 +315,7 @@ namespace GEDmill
 
         public static string GetNowDateStr()
         {
-            string result = DateTime.Now.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
+            string result = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", DateTimeFormatInfo.InvariantInfo);
             return result;
         }
     }

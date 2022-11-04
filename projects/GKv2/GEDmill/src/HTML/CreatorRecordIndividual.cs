@@ -279,10 +279,7 @@ namespace GEDmill.HTML
                     marriageNote += GetNoteText(ns);
                 }
 
-                string marriedString = fLangMan.LS(PLS.LSID_Married);
-                if (fr.Status == GDMMarriageStatus.MarrNotRegistered) {
-                    marriedString = fLangMan.LS(PLS.LSID_PartnerOf);
-                }
+                string marriedString = GetMarriedString(fr);
                 marriedString += " ";
 
                 if (marriageDate != null) {
@@ -294,6 +291,27 @@ namespace GEDmill.HTML
                     fAttributeList.Insert(0, iEvent);
                 }
             }
+        }
+
+        private string GetMarriedString(GDMFamilyRecord fr)
+        {
+            string result;
+            switch (fr.Status) {
+                case GDMMarriageStatus.Unknown:
+                default:
+                    result = fLangMan.LS(PLS.LSID_MaritalStatusUnknown);
+                    break;
+                case GDMMarriageStatus.MarrRegistered:
+                    result = fLangMan.LS(PLS.LSID_Married);
+                    break;
+                case GDMMarriageStatus.MarrNotRegistered:
+                    result = fLangMan.LS(PLS.LSID_PartnerOf);
+                    break;
+                case GDMMarriageStatus.MarrDivorced:
+                    result = fLangMan.LS(PLS.LSID_divorced);
+                    break;
+            }
+            return result;
         }
 
         // Goes through all families this person was a irSibling in and finds their frParents and siblings.
@@ -985,25 +1003,13 @@ namespace GEDmill.HTML
         // Writes the HTML for the mini tree diagram, including the image alMap data. 
         private void OutputMiniTree(HTMLFile f)
         {
-            ImageFormat imageFormat;
-            string miniTreeExtn;
-            string imageFormatString = GMConfig.Instance.MiniTreeImageFormat;
-            switch (imageFormatString) {
-                case "png":
-                    imageFormat = ImageFormat.Png;
-                    miniTreeExtn = "png";
-                    break;
-                default:
-                    imageFormat = ImageFormat.Gif;
-                    miniTreeExtn = "gif";
-                    break;
-            }
+            string miniTreeExtn = "png";
 
             string relativeTreeFilename = string.Concat("tree", fIndiRec.XRef, ".", miniTreeExtn);
             string fullTreeFilename = string.Concat(GMConfig.Instance.OutputFolder, "\\", relativeTreeFilename);
 
             var treeDrawer = new TreeDrawer(fTree);
-            var map = treeDrawer.CreateMiniTree(fPaintbox, fIndiRec, fullTreeFilename, GMConfig.Instance.TargetTreeWidth, imageFormat);
+            var map = treeDrawer.CreateMiniTree(fPaintbox, fIndiRec, fullTreeFilename, GMConfig.Instance.TargetTreeWidth);
             if (map != null) {
                 // Add space to height so that IE's horiz scroll bar has room and doesn't create a vertical scroll bar.
                 f.WriteLine("    <div id=\"minitree\" style=\"height:{0}px;\">", treeDrawer.Height + 20);
@@ -1669,11 +1675,7 @@ namespace GEDmill.HTML
             }
 
             // Nasty hack for Family Historian using strings to denote marital status
-            if (fr.Status == GDMMarriageStatus.Unknown) {
-                marriageNote += fLangMan.LS(PLS.LSID_MaritalStatusUnknown);
-            } else {
-                marriageNote += fr.Status.ToString();
-            }
+            marriageNote += GetMarriedString(fr);
 
             return marriageNote;
         }

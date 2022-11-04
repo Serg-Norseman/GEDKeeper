@@ -108,7 +108,7 @@ namespace GEDmill.MiniTree
         // This is the main tree drawing method.
         // irSubject is the individual for whom the tree is based. 
         // nTargeWidth is the width below which the layout is free to use up space to produce a nice tree.
-        public List<MiniTreeMap> CreateMiniTree(Paintbox paintbox, GDMIndividualRecord ir, string fileName, int targetWidth, ImageFormat imageFormat)
+        public List<MiniTreeMap> CreateMiniTree(Paintbox paintbox, GDMIndividualRecord ir, string fileName, int targetWidth)
         {
             // First calculate size required for tree, by iterating through individuals and building a data structure
             MiniTreeGroup mtgParent = CreateDataStructure(ir);
@@ -158,8 +158,6 @@ namespace GEDmill.MiniTree
             // Do background fill
             if (GMConfig.Instance.FakeMiniTreeTransparency && paintbox.BrushFakeTransparency != null) {
                 g.FillRectangle(paintbox.BrushFakeTransparency, 0, 0, nTotalWidth, nTotalHeight);
-            } else if (imageFormat == ImageFormat.Gif && paintbox.BrushBgGif != null) {
-                g.FillRectangle(paintbox.BrushBgGif, 0, 0, nTotalWidth, nTotalHeight);
             }
 
             List<MiniTreeMap> alMap = new List<MiniTreeMap>();
@@ -176,81 +174,11 @@ namespace GEDmill.MiniTree
 
             // Save using FileStream to try to avoid crash (only seen by customers)
             FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            bmp.Save(fs, imageFormat);
+            bmp.Save(fs, ImageFormat.Png);
             fs.Close();
 
             g.Dispose();
             bmp.Dispose();
-
-            // For gifs we need to reload and set transparency colour
-            if (imageFormat == ImageFormat.Gif && !GMConfig.Instance.FakeMiniTreeTransparency) {
-                var imageGif = Image.FromFile(fileName);
-                var colorPalette = imageGif.Palette;
-
-                // Creates a new GIF image with a modified colour palette
-                if (colorPalette != null) {
-                    // Create a new 8 bit per pixel image
-                    Bitmap bm = new Bitmap(imageGif.Width, imageGif.Height, PixelFormat.Format8bppIndexed);
-
-                    // Get it's palette
-                    ColorPalette colorpaletteNew = bm.Palette;
-
-                    // Copy all the entries from the old palette removing any transparency
-                    int n = 0;
-                    foreach (Color c in colorPalette.Entries) {
-                        colorpaletteNew.Entries[n++] = Color.FromArgb(255, c);
-                    }
-
-                    // Now to copy the actual bitmap data
-                    // Lock the source and destination bits
-                    BitmapData src = ((Bitmap)imageGif).LockBits(new Rectangle(0, 0, imageGif.Width, imageGif.Height), ImageLockMode.ReadOnly, imageGif.PixelFormat);
-                    BitmapData dst = bm.LockBits(new Rectangle(0, 0, bm.Width, bm.Height), ImageLockMode.WriteOnly, bm.PixelFormat);
-
-                    // Uses pointers so we need unsafe code.
-                    // The project is also compiled with /unsafe
-                    byte backColor = 0;
-                    unsafe {
-                        backColor = ((byte*)src.Scan0.ToPointer())[0]; // Assume transparent colour appears as first pixel.
-
-                        byte* src_ptr = ((byte*)src.Scan0.ToPointer());
-                        byte* dst_ptr = ((byte*)dst.Scan0.ToPointer());
-                        // May be useful: System.Runtime.InteropServices.Marshal.Copy(IntPtr source, byte[], destination, int start, int length)
-                        // May be useful: System.IO.MemoryStream ms = new System.IO.MemoryStream(src_ptr);
-                        int width = imageGif.Width;
-                        int src_stride = src.Stride - width;
-                        int dst_stride = dst.Stride - width;
-                        for (int y = 0; y < imageGif.Height; y++) {
-                            // Can't convert IntPtr to byte[]: Buffer.BlockCopy( src_ptr, 0, dst_ptr, 0, width );
-                            int x = width;
-                            while (x-- > 0) {
-                                *dst_ptr++ = *src_ptr++;
-                            }
-                            src_ptr += src_stride;
-                            dst_ptr += dst_stride;
-                        }
-                    }
-
-                    // Set the newly selected transparency
-                    colorpaletteNew.Entries[backColor] = Color.FromArgb(0, Color.Magenta);
-
-                    // Re-insert the palette
-                    bm.Palette = colorpaletteNew;
-
-                    // All done, unlock the bitmaps
-                    ((Bitmap)imageGif).UnlockBits(src);
-                    bm.UnlockBits(dst);
-
-                    imageGif.Dispose();
-
-                    // Set the new image in place
-                    imageGif = bm;
-                    colorPalette = imageGif.Palette;
-
-                    fLogger.WriteInfo("Re-saving mini gif as " + fileName);
-
-                    imageGif.Save(fileName, imageFormat);
-                }
-            }
 
             return alMap;
         }

@@ -68,7 +68,7 @@ namespace GEDmill.HTML
                 sw.WriteLine("  color: #000000;");
                 sw.WriteLine("  text-align: left;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif;   ");
-                sw.WriteLine("  font-size:8pt;");
+                sw.WriteLine("  font-size: 8pt;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("IMG {");
@@ -76,87 +76,87 @@ namespace GEDmill.HTML
                 sw.WriteLine("}");
 
                 sw.WriteLine("H1 {");
-                sw.WriteLine("  margin:10px 0 4px 0; ");
+                sw.WriteLine("  margin: 10px 0 4px 0; ");
                 sw.WriteLine("  text-align: left;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
-                sw.WriteLine("  font-size:26pt;");
+                sw.WriteLine("  font-size: 26pt;");
                 sw.WriteLine("  font-weight: bold;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#summary {");
-                sw.WriteLine("  margin-bottom:40px;");
+                sw.WriteLine("  margin-bottom: 40px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#parents H1 {");
-                sw.WriteLine("  font-size:14pt;");
+                sw.WriteLine("  font-size: 14pt;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#parents P {");
-                sw.WriteLine("  margin:4px 4px 4px 11px;");
+                sw.WriteLine("  margin: 4px 4px 4px 11px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#parents {");
-                sw.WriteLine("  margin-bottom:25px;");
+                sw.WriteLine("  margin-bottom: 25px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#events H1 {");
-                sw.WriteLine("  font-size:14pt;");
+                sw.WriteLine("  font-size: 14pt;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#facts H1 {");
-                sw.WriteLine("  font-size:14pt;");
+                sw.WriteLine("  font-size: 14pt;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#notes H1 {");
-                sw.WriteLine("  font-size:14pt;");
+                sw.WriteLine("  font-size: 14pt;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#citations H1 {");
-                sw.WriteLine("  font-size:14pt;");
+                sw.WriteLine("  font-size: 14pt;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#citations {");
                 sw.WriteLine("  font-family:  Verdana, Arial, Helvetica, sans-serif; ");
                 sw.WriteLine("  text-align: left;");
-                sw.WriteLine("  font-size:10pt;");
+                sw.WriteLine("  font-size: 10pt;");
                 sw.WriteLine("  margin-top: 22px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#text H1 {");
-                sw.WriteLine("  font-size:14pt;");
+                sw.WriteLine("  font-size: 14pt;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#references H1 {");
-                sw.WriteLine("  font-size:14pt;");
+                sw.WriteLine("  font-size: 14pt;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
                 sw.WriteLine("}");
 
                 sw.WriteLine("H2 {");
-                sw.WriteLine("  margin:0 0 4px 0; ");
+                sw.WriteLine("  margin: 0 0 4px 0; ");
                 sw.WriteLine("  text-align: left;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
-                sw.WriteLine("  font-size:12pt;");
+                sw.WriteLine("  font-size: 12pt;");
                 sw.WriteLine("  font-weight: normal;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("H3 {");
-                sw.WriteLine("  margin:0 0 4px 0; ");
+                sw.WriteLine("  margin: 0 0 4px 0; ");
                 sw.WriteLine("  text-align: left;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
-                sw.WriteLine("  font-size:10pt;");
+                sw.WriteLine("  font-size: 10pt;");
                 sw.WriteLine("  font-weight: normal;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("P {");
-                sw.WriteLine("  margin:0; ");
+                sw.WriteLine("  margin: 0; ");
                 sw.WriteLine("  text-align:left; ");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
-                sw.WriteLine("  font-size:10pt;");
+                sw.WriteLine("  font-size: 10pt;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("A {");
@@ -164,27 +164,27 @@ namespace GEDmill.HTML
                 sw.WriteLine("}");
 
                 sw.WriteLine("A:link {");
-                sw.WriteLine("  color:#1344e9;");
+                sw.WriteLine("  color: #1344e9;");
                 sw.WriteLine("  background-color: inherit;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("A:visited {");
-                sw.WriteLine("  color:#0c2d9a;");
+                sw.WriteLine("  color: #0c2d9a;");
                 sw.WriteLine("  background-color: inherit;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("A:hover {");
-                sw.WriteLine("  color:#0000ff;");
+                sw.WriteLine("  color: #0000ff;");
                 sw.WriteLine("  background-color: inherit;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("A:active {");
-                sw.WriteLine("  color:#0c2d9a;");
+                sw.WriteLine("  color: #0c2d9a;");
                 sw.WriteLine("  background-color: inherit;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("A.email {");
-                sw.WriteLine("  font-family: 'Courier New',monospace;");
+                sw.WriteLine("  font-family: 'Courier New', monospace;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("UL {");
@@ -196,28 +196,28 @@ namespace GEDmill.HTML
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#cover H1 {");
-                sw.WriteLine("  text-align:center;");
-                sw.WriteLine("  padding-bottom:38px;");
+                sw.WriteLine("  text-align: center;");
+                sw.WriteLine("  padding-bottom: 38px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#cover P {");
-                sw.WriteLine("  text-align:center;");
-                sw.WriteLine("  padding-bottom:28px;");
+                sw.WriteLine("  text-align: center;");
+                sw.WriteLine("  padding-bottom: 28px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#cover DIV#links P {");
-                sw.WriteLine("  font-size:12pt;");
+                sw.WriteLine("  font-size: 12pt;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#page {");
-                sw.WriteLine("  width:800px; ");
-                sw.WriteLine("  margin:0 auto;");
-                sw.WriteLine("  position:relative;");
+                sw.WriteLine("  width: 800px; ");
+                sw.WriteLine("  margin: 0 auto;");
+                sw.WriteLine("  position: relative;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#header {");
-                sw.WriteLine("  width:800px;");
-                sw.WriteLine("  margin:0 auto;");
+                sw.WriteLine("  width: 800px;");
+                sw.WriteLine("  margin: 0 auto;");
 
                 sw.WriteLine("}");
                 sw.WriteLine("#header ul {");
@@ -226,10 +226,10 @@ namespace GEDmill.HTML
 
                 sw.WriteLine("}");
                 sw.WriteLine("#header li {");
-                sw.WriteLine("  display:inline;");
-                sw.WriteLine("  font-size:14px;");
-                sw.WriteLine("  padding:2px 4px 2px 6px;");
-                sw.WriteLine("  line-height:20px;");
+                sw.WriteLine("  display: inline;");
+                sw.WriteLine("  font-size: 14px;");
+                sw.WriteLine("  padding: 2px 4px 2px 6px;");
+                sw.WriteLine("  line-height: 20px;");
                 sw.WriteLine("}");
 
                 // For multiple images we like to keep a constant margin down the rhs to accomodate them (IE). Otherwise we just let images float and text spread around them.
@@ -245,53 +245,53 @@ namespace GEDmill.HTML
 
                 sw.WriteLine("DIV#individualSummary P {");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
-                sw.WriteLine("  font-size:22pt;");
+                sw.WriteLine("  font-size: 22pt;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#photos {");
-                sw.WriteLine("  position:relative;");
-                sw.WriteLine("  float:right;");
-                sw.WriteLine("  margin-top:16px;");
-                sw.WriteLine("  text-align:center;");
+                sw.WriteLine("  position: relative;");
+                sw.WriteLine("  float: right;");
+                sw.WriteLine("  margin-top: 16px;");
+                sw.WriteLine("  text-align: center;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#mainphoto {");
-                sw.WriteLine("  width:" + (GMConfig.Instance.MaxImageWidth + 2) + "px;");
-                sw.WriteLine("  height:" + (GMConfig.Instance.MaxImageHeight + 40) + "px;");
-                sw.WriteLine("  overflow:auto;");
+                sw.WriteLine("  width: " + (GMConfig.Instance.MaxImageWidth + 2) + "px;");
+                sw.WriteLine("  height: " + (GMConfig.Instance.MaxImageHeight + 40) + "px;");
+                sw.WriteLine("  overflow: auto;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("IMG#mainphoto_img {");
-                sw.WriteLine("  border:1px solid black;");
+                sw.WriteLine("  border: 1px solid black;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("P#mainphoto_title {");
-                sw.WriteLine("  font-family:serif;");
-                sw.WriteLine("  font-weight:bold;");
-                sw.WriteLine("  text-align:center;");
+                sw.WriteLine("  font-family: serif;");
+                sw.WriteLine("  font-weight: bold;");
+                sw.WriteLine("  text-align: center;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("P#sourcepic_title {");
-                sw.WriteLine("  font-family:serif;");
-                sw.WriteLine("  font-weight:bold;");
+                sw.WriteLine("  font-family: serif;");
+                sw.WriteLine("  font-weight: bold;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#miniphotos {");
-                sw.WriteLine("  width:" + (GMConfig.Instance.MaxImageWidth + 2) + "px;");
-                sw.WriteLine("  text-align:left;");
+                sw.WriteLine("  width: " + (GMConfig.Instance.MaxImageWidth + 2) + "px;");
+                sw.WriteLine("  text-align: left;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV.miniphoto {");
-                sw.WriteLine("  float:left;");
-                sw.WriteLine("  width:" + (GMConfig.Instance.MaxThumbnailImageWidth + 3) + "px;");
-                sw.WriteLine("  height:" + (GMConfig.Instance.MaxThumbnailImageHeight + 3) + "px;");
+                sw.WriteLine("  float: left;");
+                sw.WriteLine("  width: " + (GMConfig.Instance.MaxThumbnailImageWidth + 3) + "px;");
+                sw.WriteLine("  height: " + (GMConfig.Instance.MaxThumbnailImageHeight + 3) + "px;");
                 sw.WriteLine("  text-align:center;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("IMG.miniphoto_img {");
                 sw.WriteLine("  border: 1px solid blue;");
-                sw.WriteLine("  width:" + (GMConfig.Instance.MaxThumbnailImageWidth + 3) + "px;");
-                sw.WriteLine("  height:" + (GMConfig.Instance.MaxThumbnailImageHeight + 3) + "px;");
+                sw.WriteLine("  width: " + (GMConfig.Instance.MaxThumbnailImageWidth + 3) + "px;");
+                sw.WriteLine("  height: " + (GMConfig.Instance.MaxThumbnailImageHeight + 3) + "px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#names {");
@@ -301,15 +301,15 @@ namespace GEDmill.HTML
                 sw.WriteLine("}");
 
                 sw.WriteLine(".reference {");
-                sw.WriteLine("  font-size:8pt;");
-                sw.WriteLine("  vertical-align:super;");
-                sw.WriteLine("  font-weight:normal;");
+                sw.WriteLine("  font-size: 8pt;");
+                sw.WriteLine("  vertical-align: super;");
+                sw.WriteLine("  font-weight: normal;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
                 sw.WriteLine("  line-height: 6pt;");
                 sw.WriteLine("}");
 
                 sw.WriteLine(".nicknames {");
-                sw.WriteLine("  font-size:12pt;");
+                sw.WriteLine("  font-size: 12pt;");
                 sw.WriteLine("  font-weight: normal;");
                 sw.WriteLine("  font-style: italic;");
                 sw.WriteLine("}");
@@ -323,19 +323,19 @@ namespace GEDmill.HTML
                 sw.WriteLine("}");
 
                 sw.WriteLine("P.plain {");
-                sw.WriteLine("  font-size:11px;");
-                sw.WriteLine("  text-align:right;");
+                sw.WriteLine("  font-size: 11px;");
+                sw.WriteLine("  text-align: right;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("P.plain A {");
                 sw.WriteLine("  text-decoration: none;");
-                sw.WriteLine("  color:inherit;");
+                sw.WriteLine("  color: inherit;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#headingsLinks P {");
                 sw.WriteLine("  margin-bottom: 18px;");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif; ");
-                sw.WriteLine("  font-size:12pt;");
+                sw.WriteLine("  font-size: 12pt;");
                 sw.WriteLine("  font-weight: bold;");
                 sw.WriteLine("  text-align: center;");
                 sw.WriteLine("  border-top: 1px solid gray;");
@@ -343,7 +343,7 @@ namespace GEDmill.HTML
                 sw.WriteLine("}");
 
                 sw.WriteLine("#index TD {");
-                sw.WriteLine("  width:360px;");
+                sw.WriteLine("  width: 360px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#events {");
@@ -358,21 +358,21 @@ namespace GEDmill.HTML
                 sw.WriteLine("#text {");
                 sw.WriteLine("  font-family: 'Times New Roman', serif; ");
                 sw.WriteLine("  text-align: left;");
-                sw.WriteLine("  font-size:13pt;");
+                sw.WriteLine("  font-size: 13pt;");
                 sw.WriteLine("  margin: 22px 0 0 0;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#notes {");
                 sw.WriteLine("  font-family: 'Times New Roman', serif; ");
                 sw.WriteLine("  text-align: left;");
-                sw.WriteLine("  font-size:13pt;");
+                sw.WriteLine("  font-size: 13pt;");
                 sw.WriteLine("  margin-top: 22px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#references {");
                 sw.WriteLine("  font-family:  Verdana, Arial, Helvetica, sans-serif; ");
                 sw.WriteLine("  text-align: left;");
-                sw.WriteLine("  font-size:10pt;");
+                sw.WriteLine("  font-size: 10pt;");
                 sw.WriteLine("  margin-top: 22px;");
                 sw.WriteLine("}");
 
@@ -382,14 +382,14 @@ namespace GEDmill.HTML
 
                 sw.WriteLine("#notes UL {");
                 sw.WriteLine("  list-style-type: disc;");
-                sw.WriteLine("  margin-left:8px;");
-                sw.WriteLine("  padding-left:0px;");
+                sw.WriteLine("  margin-left: 8px;");
+                sw.WriteLine("  padding-left: 0px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#notes LI {");
-                sw.WriteLine("  text-align:left; ");
+                sw.WriteLine("  text-align: left; ");
                 sw.WriteLine("  font-family: Verdana, Arial, Helvetica, sans-serif;");
-                sw.WriteLine("  font-size:10pt;");
+                sw.WriteLine("  font-size: 10pt;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#sourcePics {");
@@ -399,8 +399,8 @@ namespace GEDmill.HTML
                 sw.WriteLine("P.pretext {");
                 sw.WriteLine("  font-family: \"Courier New\", monospace; ");
                 sw.WriteLine("  text-align: left;");
-                sw.WriteLine("  font-size:10pt;");
-                sw.WriteLine("  font-weight:normal;");
+                sw.WriteLine("  font-size: 10pt;");
+                sw.WriteLine("  font-weight: normal;");
                 sw.WriteLine("  margin: 0 0 0 0;");
                 sw.WriteLine("}");
 
@@ -409,8 +409,8 @@ namespace GEDmill.HTML
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#footer P {");
-                sw.WriteLine("  font-size:11px;");
-                sw.WriteLine("  text-align:right;");
+                sw.WriteLine("  font-size: 11px;");
+                sw.WriteLine("  text-align: right;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#events TD {");
@@ -424,32 +424,32 @@ namespace GEDmill.HTML
                 sw.WriteLine("}");
 
                 sw.WriteLine("#events TD.date {");
-                sw.WriteLine("  width:160px;");
+                sw.WriteLine("  width: 160px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#facts TD.date {");
-                sw.WriteLine("  width:160px;");
+                sw.WriteLine("  width: 160px;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("TD.date P {");
-                sw.WriteLine("  font-weight:normal;");
+                sw.WriteLine("  font-weight: normal;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("TD.event P {");
-                sw.WriteLine("  font-weight:normal;");
+                sw.WriteLine("  font-weight: normal;");
                 sw.WriteLine("  line-height: 14pt;"); // Stops IE truncating bottom of gedcomLine
-                sw.WriteLine("  margin-bottom:2px;"); // No this does actually.
+                sw.WriteLine("  margin-bottom: 2px;"); // No this does actually.
                 sw.WriteLine("}");
 
                 sw.WriteLine("TD P.important {");
-                sw.WriteLine("  font-weight:bold;");
+                sw.WriteLine("  font-weight: bold;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("#minitree {");
-                sw.WriteLine("  position:relative;");
-                sw.WriteLine("  width:100%;");
-                sw.WriteLine("  overflow:auto;");
-                sw.WriteLine("  text-align:center;");
+                sw.WriteLine("  position: relative;");
+                sw.WriteLine("  width: 100%;");
+                sw.WriteLine("  overflow: auto;");
+                sw.WriteLine("  text-align: center;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#keyindividuals P {");
@@ -457,16 +457,16 @@ namespace GEDmill.HTML
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV#keyindividuals UL {");
-                sw.WriteLine("  text-align:center;");
-                sw.WriteLine("  margin-left:auto;");
-                sw.WriteLine("  margin-right:auto;");
-                sw.WriteLine("  font-size:10pt;");
+                sw.WriteLine("  text-align: center;");
+                sw.WriteLine("  margin-left: auto;");
+                sw.WriteLine("  margin-right: auto;");
+                sw.WriteLine("  font-size: 10pt;");
                 sw.WriteLine("}");
 
                 sw.WriteLine("DIV.hr {");
-                sw.WriteLine("  height:0;");
-                sw.WriteLine("  border-top:1px solid #eee;");
-                sw.WriteLine("  border-bottom:1px solid #aaa;");
+                sw.WriteLine("  height: 0;");
+                sw.WriteLine("  border-top: 1px solid #eee;");
+                sw.WriteLine("  border-bottom: 1px solid #aaa;");
                 sw.WriteLine("}");
             } catch (IOException e) {
                 fLogger.WriteError("Caught IO Exception(5) : ", e);

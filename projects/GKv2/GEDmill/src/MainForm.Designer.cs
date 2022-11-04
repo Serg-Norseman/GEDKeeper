@@ -79,7 +79,6 @@
         private System.Windows.Forms.Label lblConfigIndexName;
         private System.Windows.Forms.Label lblConfigIndexNameExtn;
         private System.Windows.Forms.CheckBox chkConfigStats;
-        private System.Windows.Forms.CheckBox chkConfigCdrom;
         private System.Windows.Forms.CheckBox chkConfigIndiImages;
         private System.Windows.Forms.CheckBox chkConfigNonPictures;
         private System.Windows.Forms.CheckBox chkConfigKeepOriginals;
@@ -90,8 +89,6 @@
         private System.Windows.Forms.TextBox txtConfigMultiPageIndexNumber;
         private System.Windows.Forms.CheckBox chkConfigIncludeTreeDiagrams;
         private System.Windows.Forms.CheckBox chkConfigTreeDiagramsFakeBg;
-        private System.Windows.Forms.Label lblConfigTreeDiagramsFormat;
-        private System.Windows.Forms.ComboBox cmbConfigTreeDiagramsFormat;
         private System.Windows.Forms.CheckBox chkConfigSupressBackreferences;
         private System.Windows.Forms.Label lblWelcomeVersion;
         private System.Windows.Forms.Label lblWelcomeSubtitle;
@@ -225,15 +222,12 @@
             chkConfigStats = new System.Windows.Forms.CheckBox();
             chkConfigIncludeTreeDiagrams = new System.Windows.Forms.CheckBox();
             chkConfigTreeDiagramsFakeBg = new System.Windows.Forms.CheckBox();
-            lblConfigTreeDiagramsFormat = new System.Windows.Forms.Label();
-            cmbConfigTreeDiagramsFormat = new System.Windows.Forms.ComboBox();
             chkConfigMultiPageIndex = new System.Windows.Forms.CheckBox();
             chkConfigUserRefInIndex = new System.Windows.Forms.CheckBox();
             lblConfigMultiPageIndexNumber = new System.Windows.Forms.Label();
             txtConfigMultiPageIndexNumber = new System.Windows.Forms.TextBox();
             chkConfigIndiImages = new System.Windows.Forms.CheckBox();
             chkConfigNonPictures = new System.Windows.Forms.CheckBox();
-            chkConfigCdrom = new System.Windows.Forms.CheckBox();
             chkConfigRenameOriginals = new System.Windows.Forms.CheckBox();
             chkConfigKeepOriginals = new System.Windows.Forms.CheckBox();
             panelWelcome = new System.Windows.Forms.Panel();
@@ -759,14 +753,6 @@
             chkConfigStats.Text = "Include website &statistics";
             chkConfigStats.TabIndex = 12;
             //
-            // chkConfigCdrom
-            // 
-            chkConfigCdrom.Location = new System.Drawing.Point(266, 30);
-            chkConfigCdrom.Name = "chkConfigCdrom";
-            chkConfigCdrom.Size = new System.Drawing.Size(200, 20);
-            chkConfigCdrom.Text = "Create CD-ROM &auto-run files";
-            chkConfigCdrom.TabIndex = 13;
-            //
             // chkConfigMultiPageIndex
             // 
             chkConfigMultiPageIndex.Location = new System.Drawing.Point(266, 53);
@@ -1204,25 +1190,6 @@
             chkConfigIncludeTreeDiagrams.TabIndex = 2;
             chkConfigIncludeTreeDiagrams.Text = "Include &tree diagrams";
             chkConfigIncludeTreeDiagrams.Click += new System.EventHandler(chkConfigIncludeTreeDiagrams_Click);
-            // 
-            // lblConfigTreeDiagramsFormat
-            // 
-            lblConfigTreeDiagramsFormat.Location = new System.Drawing.Point(22, 25);
-            lblConfigTreeDiagramsFormat.Name = "lblConfigTreeDiagramsFormat";
-            lblConfigTreeDiagramsFormat.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            lblConfigTreeDiagramsFormat.Size = new System.Drawing.Size(134, 24);
-            lblConfigTreeDiagramsFormat.TabIndex = 3;
-            lblConfigTreeDiagramsFormat.Text = "&File format:";
-            lblConfigTreeDiagramsFormat.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            //
-            // cmbConfigTreeDiagramsFormat
-            // 
-            cmbConfigTreeDiagramsFormat.Location = new System.Drawing.Point(158, 30);
-            cmbConfigTreeDiagramsFormat.Name = "cmbConfigTreeDiagramsFormat";
-            cmbConfigTreeDiagramsFormat.Size = new System.Drawing.Size(85, 20);
-            cmbConfigTreeDiagramsFormat.TabIndex = 4;
-            cmbConfigTreeDiagramsFormat.DropDownWidth = 40;
-            cmbConfigTreeDiagramsFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             //
             // chkConfigTreeDiagramsFakeBg
             // 
@@ -1488,7 +1455,6 @@
             pageSettingsWebpages.Controls.Add(chkConfigUserRefInIndex);
             pageSettingsWebpages.Controls.Add(lblConfigMultiPageIndexNumber);
             pageSettingsWebpages.Controls.Add(txtConfigMultiPageIndexNumber);
-            pageSettingsWebpages.Controls.Add(chkConfigCdrom);
             pageSettingsWebpages.Controls.Add(lblConfigCustomFooter);
             pageSettingsWebpages.Controls.Add(txtConfigCustomFooter);
             pageSettingsWebpages.Controls.Add(lblConfigFooterIsHtml);
@@ -1561,8 +1527,6 @@
             pageSettingsTreeDiagrams.Text = "Tree Diagrams";
             pageSettingsTreeDiagrams.Controls.Add(chkConfigIncludeTreeDiagrams);
             pageSettingsTreeDiagrams.Controls.Add(chkConfigTreeDiagramsFakeBg);
-            pageSettingsTreeDiagrams.Controls.Add(lblConfigTreeDiagramsFormat);
-            pageSettingsTreeDiagrams.Controls.Add(cmbConfigTreeDiagramsFormat);
             pageSettingsTreeDiagrams.Controls.Add(chkConfigConserveTreeWidth);
             pageSettingsTreeDiagrams.Controls.Add(chkConfigKeepSiblingOrder);
             pageSettingsTreeDiagrams.Controls.Add(gbMiniTreeColours);

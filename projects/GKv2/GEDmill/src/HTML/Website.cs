@@ -76,7 +76,6 @@ namespace GEDmill.HTML
                   + 1  // Individuals Index
                   + gfstats[(int)GDMRecordType.rtSource]
                   + 1  // Front page
-                  + 1  // CD ROM (Doesn't matter here that CD ROM autorun might not be included.)
                   + 1; // Scripts (Doesn't matter here that scripts might not be included.)
 
                 // The paintbox with which to draw the mini tree
@@ -119,11 +118,9 @@ namespace GEDmill.HTML
                     var csc = new CreatorStylesheet(fContext, fLangMan, cssFilename, backgroundImageFilename);
                     csc.Create();
                 }
-
                 if (progressWnd.IsCanceled) {
                     return;
                 }
-
                 progressWnd.StepTo(++progress);
 
                 // Create the pages for the individual records.
@@ -137,7 +134,6 @@ namespace GEDmill.HTML
                     if (progressWnd.IsCanceled) {
                         return;
                     }
-
                     progressWnd.StepTo(++progress);
                 }
 
@@ -147,7 +143,6 @@ namespace GEDmill.HTML
                 if (progressWnd.IsCanceled) {
                     return;
                 }
-
                 progressWnd.StepTo(++progress);
 
                 // Clear list of copied files, so that source images get copied afresh
@@ -184,17 +179,6 @@ namespace GEDmill.HTML
                 if (progressWnd.IsCanceled) {
                     return;
                 }
-                
-                // Copy the CD ROM autorun file
-                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingCDROMFiles));
-                if (GMConfig.Instance.CreateCDROMFiles) {
-                    CreateCDROMFiles();
-                }
-                if (progressWnd.IsCanceled) {
-                    return;
-                }
-
-                progressWnd.StepTo(++progress);
 
                 // Copy the Javascript
                 progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingJSFile));
@@ -205,7 +189,6 @@ namespace GEDmill.HTML
                 if (progressWnd.IsCanceled) {
                     return;
                 }
-
                 progressWnd.StepTo(++progress);
 
                 // Done
@@ -247,23 +230,23 @@ namespace GEDmill.HTML
             try {
                 // uint num_copied = 0;
                 Rectangle rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmaudio.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmaudio.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmaudio_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmaudio_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmaudion.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmaudion.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmvideo.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmvideo.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmvideo_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmvideo_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmvideon.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmvideon.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmdoc.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmdoc.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmdoc_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmdoc_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
                 rectNewArea = new Rectangle(0, 0, 0, 0);
-                Creator.CopyMultimedia(GMConfig.Instance.ApplicationPath + "\\gmdocn.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
+                Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmdocn.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
             } catch (IOException e) {
                 fLogger.WriteError("Caught io exception while copying nonpic images: {0}", e);
             } catch (ArgumentException e) {
@@ -291,47 +274,11 @@ namespace GEDmill.HTML
             return backgroundImage;
         }
 
-        // Copy the CD ROM autorun loader program.
-        private void CreateCDROMFiles()
-        {
-            string homepageUrl = string.Concat(GMConfig.Instance.FrontPageFilename, ".html");
-
-            if (homepageUrl != null && !string.IsNullOrEmpty(fOutputFolder)) {
-                string fileopenSrc = GMConfig.Instance.ApplicationPath + "\\fileopen.exe";
-                string fileopenDest = fOutputFolder + "\\fileopen.exe";
-                string autorunDest = fOutputFolder + "\\autorun.inf";
-
-                // Copy fileopen.exe into output folder
-                if (File.Exists(fileopenDest)) {
-                    File.SetAttributes(fileopenDest, FileAttributes.Normal);
-                    File.Delete(fileopenDest);
-                }
-                fLogger.WriteInfo("Copying fileopen.exe");
-                File.Copy(fileopenSrc, fileopenDest, true);
-
-                // Create autorun.inf
-                if (File.Exists(autorunDest)) {
-                    File.SetAttributes(autorunDest, FileAttributes.Normal);
-                    File.Delete(autorunDest);
-                }
-                fLogger.WriteInfo("Creating autorun.inf");
-
-                FileStream fs = new FileStream(autorunDest, FileMode.Create, FileAccess.Write);
-                StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.ASCII);
-
-                sw.WriteLine("[AUTORUN]");
-                sw.WriteLine(string.Concat("open=fileopen.exe \"", homepageUrl, "\""));
-                sw.WriteLine("");
-
-                sw.Close();
-            }
-        }
-
         // Copy the javascript picture-selection script.
         private void CreateJavascriptFiles()
         {
             if (!string.IsNullOrEmpty(fOutputFolder)) {
-                string jsSrc = GMConfig.Instance.ApplicationPath + "\\gedmill.js";
+                string jsSrc = GMHelper.GetAppPath() + "\\gedmill.js";
                 string jsDest = fOutputFolder + "\\gedmill.js";
                 if (File.Exists(jsSrc)) {
                     // Copy gedmill.js into output folder

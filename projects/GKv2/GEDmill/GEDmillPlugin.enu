@@ -22,7 +22,6 @@ Creating individual pages
 Creating individuals index
 Creating source pages
 Creating front page
-Creating CD-ROM files
 Creating Javascript file
 Done
 User reference number
@@ -59,7 +58,7 @@ Text
 Image for this source
 Media for this source
 This website contains records on
-Website created{0} using GEDmill.
+Website created{0} using GEDKeeper->GEDmill.
 individuals
 sources
 multimedia files
@@ -139,7 +138,7 @@ User ref
 Pics
 Individuals
 No Surname
-Index Of Names
+Index of Names
 Family history
 Private Record
 <unknown>
@@ -183,7 +182,6 @@ the above text is HTML)
 Link to your website: (with http:// prefix)
 Text for page footer:
 Include website statistics
-Create CD-ROM auto-run files
 Multi-page individuals index
 User Reference numbers in index
 Individuals per index page:
@@ -213,7 +211,6 @@ Start events with a capital letter
 Don't show email addresses
 Show occupation in page heading
 Include tree diagrams
-File format:
 Simulate transparency
 Conserve tree width
 Keep sibling order from GEDCOM

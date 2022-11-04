@@ -45,16 +45,11 @@ namespace GEDmill.MiniTree
         public Font Font;
         public ColorPalette Palette;
         public TextureBrush BrushFakeTransparency;
-        public SolidBrush BrushBgGif;
-        public Color ColourGifTransparent;
 
 
         // Construct the paintbox, reading values for the colours etc from the config.
         public Paintbox(GMConfig config)
         {
-            ColourGifTransparent = Color.Magenta;
-            BrushBgGif = new SolidBrush(ColourGifTransparent);
-
             BrushBg = new SolidBrush(config.MiniTreeColourBackground);
             BrushBox = new SolidBrush(config.MiniTreeColourIndiBackground);
             BrushBoxHighlight = new SolidBrush(config.MiniTreeColourIndiHighlight);
@@ -76,7 +71,6 @@ namespace GEDmill.MiniTree
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                BrushBgGif.Dispose();
                 BrushBg.Dispose();
                 BrushBox.Dispose();
                 BrushBoxHighlight.Dispose();

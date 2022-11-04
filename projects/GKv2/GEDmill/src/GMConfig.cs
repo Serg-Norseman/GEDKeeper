@@ -122,9 +122,6 @@ namespace GEDmill
         // Allow multiple multimedia files per individual. Enables m_nMaxNumberMultimediaFiles.
         public bool AllowMultipleImages;
 
-        // Whether to create autorun.inf and autoplay.exe files
-        public bool CreateCDROMFiles;
-
         // Whether to include files that aren't pictures as multimedia objects
         public bool AllowNonPictures;
 
@@ -203,9 +200,6 @@ namespace GEDmill
         // Folder in which to dump all the html output
         public string OutputFolder;
 
-        // Which version number of the software this config file is for
-        public string Version;
-
         // Name of owner used in titles, descriptions of pages.
         public string OwnersName;
 
@@ -215,17 +209,8 @@ namespace GEDmill
         // Title to put on front page of website
         public string SiteTitle;
 
-        // Filename of gedcom file to parse
-        public string InputFilename;
-
-        // Path to folder containing this application.
-        public string ApplicationPath;
-
         // Path to application's data
         public string AppDataPath;
-
-        // String indicating image format to use to store mini tree file
-        public string MiniTreeImageFormat;
 
         // If true, the background image will be used to fill in the background of mini trees, giving the effect that they are transparent.
         public bool FakeMiniTreeTransparency;
@@ -323,19 +308,10 @@ namespace GEDmill
             }
         }
 
-        // Construct the HTTP URL for the created site's help page
-        public string HelpPageURL
-        {
-            get {
-                return string.Concat(OutputFolder, "\\", "help.html");
-            }
-        }
-
 
         // Constructor, sets default values for the config
         private GMConfig()
         {
-            ApplicationPath = GMHelper.GetAppPath();
             AppDataPath = AppHost.GetAppDataPathStatic();
         }
 
@@ -344,15 +320,14 @@ namespace GEDmill
         {
             fLangMan = langMan;
 
-            BackgroundImage = ApplicationPath + "\\bg-gedmill.jpg";
-            FrontPageImageFilename = ApplicationPath + "\\gedmill.jpg";
+            BackgroundImage = GMHelper.GetAppPath() + "\\gedmill-bg.jpg";
+            FrontPageImageFilename = GMHelper.GetAppPath() + "\\gedmill.jpg";
 
             RestrictConfidential = false;
             RestrictPrivacy = false;
             OutputFolder = "";
             UnknownName = langMan.LS(PLS.LSID_UnknownName); // "no name" implied we knew them and they had no name.
             NameCapitalisation = 1;
-            Version = "1.11.0";
             CopyMultimedia = true;
             ImageFolder = "multimedia";
             RelativiseMultimedia = false;
@@ -367,7 +342,6 @@ namespace GEDmill
             MaxThumbnailImageWidth = 45;
             MaxThumbnailImageHeight = 45;
             FirstRecordXRef = "";
-            InputFilename = "";
             TabSpaces = 8;
             PlaceWord = langMan.LS(PLS.LSID_PlaceWord);
             CapitaliseEventDescriptions = true;
@@ -386,7 +360,6 @@ namespace GEDmill
             TreeFontName = "Arial";
             TreeFontSize = 8.0f;
             TargetTreeWidth = 800;
-            MiniTreeImageFormat = "gif";
             MiniTreeColourBranch = ConvertColour("#000000");
             MiniTreeColourIndiBorder = ConvertColour("#000000");
             MiniTreeColourIndiBackground = ConvertColour("#ffffd2");
@@ -406,7 +379,6 @@ namespace GEDmill
             OpenWebsiteOnExit = true;
             FrontPageFilename = "home";
             AllowMultipleImages = false;
-            CreateCDROMFiles = false;
             AllowNonPictures = true;
             MainWebsiteLink = "";
             OnlyConceal = false;
@@ -432,113 +404,11 @@ namespace GEDmill
             SupressBackreferences = false;
         }
 
-        // Serialise all the config settings
-        public void Save()
-        {
-            try {
-                using (var ini = new IniFile(AppDataPath + ConfigFilename)) {
-                    ini.WriteString("Common", "Version", Version);
-                    ini.WriteBool("Common", "RestrictConfidential", RestrictConfidential);
-                    ini.WriteBool("Common", "RestrictPrivacy", RestrictPrivacy);
-                    ini.WriteString("Common", "OutputFolder", OutputFolder);
-                    ini.WriteString("Common", "UnknownName", UnknownName);
-                    ini.WriteInteger("Common", "NameCapitalisation", NameCapitalisation);
-                    ini.WriteBool("Common", "CopyMultimedia", CopyMultimedia);
-                    ini.WriteString("Common", "ImageFolder", ImageFolder);
-                    ini.WriteBool("Common", "RelativiseMultimedia", RelativiseMultimedia);
-                    ini.WriteString("Common", "BackgroundImage", BackgroundImage);
-                    ini.WriteInteger("Common", "MaxImageWidth", MaxImageWidth);
-                    ini.WriteInteger("Common", "MaxImageHeight", MaxImageHeight);
-                    ini.WriteInteger("Common", "MaxNumberMultimediaFiles", MaxNumberMultimediaFiles);
-                    ini.WriteInteger("Common", "AgeForOccupation", AgeForOccupation);
-                    ini.WriteString("Common", "OwnersName", OwnersName);
-                    ini.WriteString("Common", "NoSurname", NoSurname);
-                    ini.WriteString("Common", "IndexTitle", IndexTitle);
-                    ini.WriteInteger("Common", "MaxSourceImageWidth", MaxSourceImageWidth);
-                    ini.WriteInteger("Common", "MaxSourceImageHeight", MaxSourceImageHeight);
-                    ini.WriteString("Common", "FirstRecordXRef", FirstRecordXRef);
-                    ini.WriteString("Common", "SiteTitle", SiteTitle);
-                    ini.WriteString("Common", "InputFilename", InputFilename);
-                    ini.WriteString("Common", "ApplicationPath", ApplicationPath);
-                    ini.WriteString("Common", "FrontPageImageFilename", FrontPageImageFilename);
-                    ini.WriteInteger("Common", "TabSpaces", TabSpaces);
-                    ini.WriteString("Common", "PlaceWord", PlaceWord);
-                    ini.WriteBool("Common", "CapitaliseEventDescriptions", CapitaliseEventDescriptions);
-                    ini.WriteBool("Common", "RestrictAssociatedSources", RestrictAssociatedSources);
-                    ini.WriteBool("Common", "RenameMultimedia", RenameMultimedia);
-                    ini.WriteBool("Common", "IndexLetterPerPage", IndexLetterPerPage);
-                    ini.WriteString("Common", "MiniTreeColourBranch", ConvertColour(MiniTreeColourBranch));
-                    ini.WriteString("Common", "MiniTreeColourIndiBorder", ConvertColour(MiniTreeColourIndiBorder));
-                    ini.WriteString("Common", "MiniTreeColourIndiBackground", ConvertColour(MiniTreeColourIndiBackground));
-                    ini.WriteString("Common", "MiniTreeColourIndiHighlight", ConvertColour(MiniTreeColourIndiHighlight));
-                    ini.WriteString("Common", "MiniTreeColourIndiShade", ConvertColour(MiniTreeColourIndiShade));
-                    ini.WriteBool("Common", "ShowFrontPageStats", ShowFrontPageStats);
-                    ini.WriteString("Common", "CommentaryText", CommentaryText);
-                    ini.WriteString("Common", "TreeFontName", TreeFontName);
-                    ini.WriteFloat("Common", "TreeFontSize", TreeFontSize);
-                    ini.WriteInteger("Common", "TargetTreeWidth", TargetTreeWidth);
-                    ini.WriteString("Common", "MiniTreeImageFormat", MiniTreeImageFormat);
-                    ini.WriteString("Common", "MiniTreeColourIndiText", ConvertColour(MiniTreeColourIndiText));
-                    ini.WriteString("Common", "MiniTreeColourIndiLink", ConvertColour(MiniTreeColourIndiLink));
-                    ini.WriteString("Common", "MiniTreeColourBackground", ConvertColour(MiniTreeColourBackground));
-                    ini.WriteBool("Common", "ShowMiniTrees", ShowMiniTrees);
-                    ini.WriteString("Common", "UserEmailAddress", UserEmailAddress);
-                    ini.WriteBool("Common", "FakeMiniTreeTransparency", FakeMiniTreeTransparency);
-
-                    if (KeyIndividuals != null) {
-                        int keyIndividualsCount = KeyIndividuals.Count;
-                        ini.WriteInteger("Individuals", "Count", keyIndividualsCount);
-                        for (int i = 0; i < keyIndividualsCount; i++) {
-                            string keyXref = KeyIndividuals[i];
-                            ini.WriteString("Individuals", "I_" + i, keyXref);
-                        }
-                    }
-
-                    ini.WriteBool("Common", "MultiPageIndexes", MultiPageIndexes);
-                    ini.WriteInteger("Common", "IndividualsPerIndexPage", IndividualsPerIndexPage);
-                    ini.WriteBool("Common", "OpenWebsiteOnExit", OpenWebsiteOnExit);
-                    ini.WriteString("Common", "FrontPageFilename", FrontPageFilename);
-                    ini.WriteBool("Common", "CreateCDROMFiles", CreateCDROMFiles);
-                    ini.WriteBool("Common", "AllowMultipleImages", AllowMultipleImages);
-                    ini.WriteBool("Common", "AllowNonPictures", AllowNonPictures);
-                    ini.WriteInteger("Common", "MaxThumbnailImageWidth", MaxThumbnailImageWidth);
-                    ini.WriteInteger("Common", "MaxThumbnailImageHeight", MaxThumbnailImageHeight);
-                    ini.WriteString("Common", "MainWebsiteLink", MainWebsiteLink);
-                    ini.WriteString("Common", "MiniTreeColourIndiBgConcealed", ConvertColour(MiniTreeColourIndiBgConcealed));
-                    ini.WriteBool("Common", "OnlyConceal", OnlyConceal);
-                    ini.WriteString("Common", "ConcealedName", ConcealedName);
-                    ini.WriteString("Common", "MiniTreeColourIndiFgConcealed", ConvertColour(MiniTreeColourIndiFgConcealed));
-                    ini.WriteBool("Common", "LinkOriginalPicture", LinkOriginalPicture);
-                    ini.WriteBool("Common", "RenameOriginalPicture", RenameOriginalPicture);
-                    ini.WriteString("Common", "ExcludeFileDir", ExcludeFileDir);
-                    ini.WriteString("Common", "ExcludeFileName", ExcludeFileName);
-                    ini.WriteBool("Common", "ObfuscateEmails", ObfuscateEmails);
-                    ini.WriteBool("Common", "AddHomePageCreateTime", AddHomePageCreateTime);
-                    ini.WriteBool("Common", "IncludeNickNamesInIndex", IncludeNickNamesInIndex);
-                    ini.WriteString("Common", "CustomFooter", CustomFooter);
-                    ini.WriteBool("Common", "IncludeUserRefInIndex", IncludeUserRefInIndex);
-                    ini.WriteBool("Common", "OccupationHeadline", OccupationHeadline);
-                    ini.WriteBool("Common", "CommentaryIsHtml", CommentaryIsHtml);
-                    ini.WriteBool("Common", "FooterIsHtml", FooterIsHtml);
-                    ini.WriteBool("Common", "UserRecFilename", UserRecFilename);
-                    ini.WriteBool("Common", "IncludeNavbar", IncludeNavbar);
-                    ini.WriteBool("Common", "UseWithheldNames", UseWithheldNames);
-                    ini.WriteBool("Common", "ConserveTreeWidth", ConserveTreeWidth);
-                    ini.WriteBool("Common", "AllowMultimedia", AllowMultimedia);
-                    ini.WriteBool("Common", "SupressBackreferences", SupressBackreferences);
-                    ini.WriteBool("Common", "KeepSiblingOrder", KeepSiblingOrder);
-                }
-            } catch (Exception ex) {
-                fLogger.WriteError("GMConfig.Save()", ex);
-            }
-        }
-
         // Deserialise all the settings
         public void Load()
         {
             try {
                 using (var ini = new IniFile(AppDataPath + ConfigFilename)) {
-                    Version = ini.ReadString("Common", "Version", "");
                     RestrictConfidential = ini.ReadBool("Common", "RestrictConfidential", false);
                     RestrictPrivacy = ini.ReadBool("Common", "RestrictPrivacy", false);
                     OutputFolder = ini.ReadString("Common", "OutputFolder", "");
@@ -547,7 +417,7 @@ namespace GEDmill
                     CopyMultimedia = ini.ReadBool("Common", "CopyMultimedia", true);
                     ImageFolder = ini.ReadString("Common", "ImageFolder", "multimedia");
                     RelativiseMultimedia = ini.ReadBool("Common", "RelativiseMultimedia", false);
-                    BackgroundImage = ini.ReadString("Common", "BackgroundImage", "");
+                    BackgroundImage = ini.ReadString("Common", "BackgroundImage", BackgroundImage);
                     MaxImageWidth = ini.ReadInteger("Common", "MaxImageWidth", 160);
                     MaxImageHeight = ini.ReadInteger("Common", "MaxImageHeight", 160);
                     MaxNumberMultimediaFiles = ini.ReadInteger("Common", "MaxNumberMultimediaFiles", 32);
@@ -559,9 +429,7 @@ namespace GEDmill
                     MaxSourceImageHeight = ini.ReadInteger("Common", "MaxSourceImageHeight", 800);
                     FirstRecordXRef = ini.ReadString("Common", "FirstRecordXRef", "");
                     SiteTitle = ini.ReadString("Common", "SiteTitle", fLangMan.LS(PLS.LSID_SiteTitle));
-                    InputFilename = ini.ReadString("Common", "InputFilename", "");
-                    ApplicationPath = ini.ReadString("Common", "ApplicationPath", "");
-                    FrontPageImageFilename = ini.ReadString("Common", "FrontPageImageFilename", "");
+                    FrontPageImageFilename = ini.ReadString("Common", "FrontPageImageFilename", FrontPageImageFilename);
                     TabSpaces = ini.ReadInteger("Common", "TabSpaces", 8);
                     PlaceWord = ini.ReadString("Common", "PlaceWord", fLangMan.LS(PLS.LSID_PlaceWord));
                     CapitaliseEventDescriptions = ini.ReadBool("Common", "CapitaliseEventDescriptions", true);
@@ -578,7 +446,6 @@ namespace GEDmill
                     TreeFontName = ini.ReadString("Common", "TreeFontName", "Arial");
                     TreeFontSize = (float)ini.ReadFloat("Common", "TreeFontSize", 8.0f);
                     TargetTreeWidth = ini.ReadInteger("Common", "TargetTreeWidth", 800);
-                    MiniTreeImageFormat = ini.ReadString("Common", "MiniTreeImageFormat", "gif");
                     MiniTreeColourIndiText = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiText", "#000000"));
                     MiniTreeColourIndiLink = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiLink", "#3333ff"));
                     MiniTreeColourBackground = ConvertColour(ini.ReadString("Common", "MiniTreeColourBackground", "#aaaaaa"));
@@ -597,7 +464,6 @@ namespace GEDmill
                     IndividualsPerIndexPage = ini.ReadInteger("Common", "IndividualsPerIndexPage", 1000);
                     OpenWebsiteOnExit = ini.ReadBool("Common", "OpenWebsiteOnExit", true);
                     FrontPageFilename = ini.ReadString("Common", "FrontPageFilename", "home");
-                    CreateCDROMFiles = ini.ReadBool("Common", "CreateCDROMFiles", false);
                     AllowMultipleImages = ini.ReadBool("Common", "AllowMultipleImages", false);
                     AllowNonPictures = ini.ReadBool("Common", "AllowNonPictures", true);
                     MaxThumbnailImageWidth = ini.ReadInteger("Common", "MaxThumbnailImageWidth", 45);
@@ -629,6 +495,102 @@ namespace GEDmill
                 }
             } catch (Exception ex) {
                 fLogger.WriteError("GMConfig.Load()", ex);
+            }
+        }
+
+        // Serialise all the config settings
+        public void Save()
+        {
+            try {
+                using (var ini = new IniFile(AppDataPath + ConfigFilename)) {
+                    ini.WriteBool("Common", "RestrictConfidential", RestrictConfidential);
+                    ini.WriteBool("Common", "RestrictPrivacy", RestrictPrivacy);
+                    ini.WriteString("Common", "OutputFolder", OutputFolder);
+                    ini.WriteString("Common", "UnknownName", UnknownName);
+                    ini.WriteInteger("Common", "NameCapitalisation", NameCapitalisation);
+                    ini.WriteBool("Common", "CopyMultimedia", CopyMultimedia);
+                    ini.WriteString("Common", "ImageFolder", ImageFolder);
+                    ini.WriteBool("Common", "RelativiseMultimedia", RelativiseMultimedia);
+                    ini.WriteString("Common", "BackgroundImage", BackgroundImage);
+                    ini.WriteInteger("Common", "MaxImageWidth", MaxImageWidth);
+                    ini.WriteInteger("Common", "MaxImageHeight", MaxImageHeight);
+                    ini.WriteInteger("Common", "MaxNumberMultimediaFiles", MaxNumberMultimediaFiles);
+                    ini.WriteInteger("Common", "AgeForOccupation", AgeForOccupation);
+                    ini.WriteString("Common", "OwnersName", OwnersName);
+                    ini.WriteString("Common", "NoSurname", NoSurname);
+                    ini.WriteString("Common", "IndexTitle", IndexTitle);
+                    ini.WriteInteger("Common", "MaxSourceImageWidth", MaxSourceImageWidth);
+                    ini.WriteInteger("Common", "MaxSourceImageHeight", MaxSourceImageHeight);
+                    ini.WriteString("Common", "FirstRecordXRef", FirstRecordXRef);
+                    ini.WriteString("Common", "SiteTitle", SiteTitle);
+                    ini.WriteString("Common", "FrontPageImageFilename", FrontPageImageFilename);
+                    ini.WriteInteger("Common", "TabSpaces", TabSpaces);
+                    ini.WriteString("Common", "PlaceWord", PlaceWord);
+                    ini.WriteBool("Common", "CapitaliseEventDescriptions", CapitaliseEventDescriptions);
+                    ini.WriteBool("Common", "RestrictAssociatedSources", RestrictAssociatedSources);
+                    ini.WriteBool("Common", "RenameMultimedia", RenameMultimedia);
+                    ini.WriteBool("Common", "IndexLetterPerPage", IndexLetterPerPage);
+                    ini.WriteString("Common", "MiniTreeColourBranch", ConvertColour(MiniTreeColourBranch));
+                    ini.WriteString("Common", "MiniTreeColourIndiBorder", ConvertColour(MiniTreeColourIndiBorder));
+                    ini.WriteString("Common", "MiniTreeColourIndiBackground", ConvertColour(MiniTreeColourIndiBackground));
+                    ini.WriteString("Common", "MiniTreeColourIndiHighlight", ConvertColour(MiniTreeColourIndiHighlight));
+                    ini.WriteString("Common", "MiniTreeColourIndiShade", ConvertColour(MiniTreeColourIndiShade));
+                    ini.WriteBool("Common", "ShowFrontPageStats", ShowFrontPageStats);
+                    ini.WriteString("Common", "CommentaryText", CommentaryText);
+                    ini.WriteString("Common", "TreeFontName", TreeFontName);
+                    ini.WriteFloat("Common", "TreeFontSize", TreeFontSize);
+                    ini.WriteInteger("Common", "TargetTreeWidth", TargetTreeWidth);
+                    ini.WriteString("Common", "MiniTreeColourIndiText", ConvertColour(MiniTreeColourIndiText));
+                    ini.WriteString("Common", "MiniTreeColourIndiLink", ConvertColour(MiniTreeColourIndiLink));
+                    ini.WriteString("Common", "MiniTreeColourBackground", ConvertColour(MiniTreeColourBackground));
+                    ini.WriteBool("Common", "ShowMiniTrees", ShowMiniTrees);
+                    ini.WriteString("Common", "UserEmailAddress", UserEmailAddress);
+                    ini.WriteBool("Common", "FakeMiniTreeTransparency", FakeMiniTreeTransparency);
+
+                    if (KeyIndividuals != null) {
+                        int keyIndividualsCount = KeyIndividuals.Count;
+                        ini.WriteInteger("Individuals", "Count", keyIndividualsCount);
+                        for (int i = 0; i < keyIndividualsCount; i++) {
+                            string keyXref = KeyIndividuals[i];
+                            ini.WriteString("Individuals", "I_" + i, keyXref);
+                        }
+                    }
+
+                    ini.WriteBool("Common", "MultiPageIndexes", MultiPageIndexes);
+                    ini.WriteInteger("Common", "IndividualsPerIndexPage", IndividualsPerIndexPage);
+                    ini.WriteBool("Common", "OpenWebsiteOnExit", OpenWebsiteOnExit);
+                    ini.WriteString("Common", "FrontPageFilename", FrontPageFilename);
+                    ini.WriteBool("Common", "AllowMultipleImages", AllowMultipleImages);
+                    ini.WriteBool("Common", "AllowNonPictures", AllowNonPictures);
+                    ini.WriteInteger("Common", "MaxThumbnailImageWidth", MaxThumbnailImageWidth);
+                    ini.WriteInteger("Common", "MaxThumbnailImageHeight", MaxThumbnailImageHeight);
+                    ini.WriteString("Common", "MainWebsiteLink", MainWebsiteLink);
+                    ini.WriteString("Common", "MiniTreeColourIndiBgConcealed", ConvertColour(MiniTreeColourIndiBgConcealed));
+                    ini.WriteBool("Common", "OnlyConceal", OnlyConceal);
+                    ini.WriteString("Common", "ConcealedName", ConcealedName);
+                    ini.WriteString("Common", "MiniTreeColourIndiFgConcealed", ConvertColour(MiniTreeColourIndiFgConcealed));
+                    ini.WriteBool("Common", "LinkOriginalPicture", LinkOriginalPicture);
+                    ini.WriteBool("Common", "RenameOriginalPicture", RenameOriginalPicture);
+                    ini.WriteString("Common", "ExcludeFileDir", ExcludeFileDir);
+                    ini.WriteString("Common", "ExcludeFileName", ExcludeFileName);
+                    ini.WriteBool("Common", "ObfuscateEmails", ObfuscateEmails);
+                    ini.WriteBool("Common", "AddHomePageCreateTime", AddHomePageCreateTime);
+                    ini.WriteBool("Common", "IncludeNickNamesInIndex", IncludeNickNamesInIndex);
+                    ini.WriteString("Common", "CustomFooter", CustomFooter);
+                    ini.WriteBool("Common", "IncludeUserRefInIndex", IncludeUserRefInIndex);
+                    ini.WriteBool("Common", "OccupationHeadline", OccupationHeadline);
+                    ini.WriteBool("Common", "CommentaryIsHtml", CommentaryIsHtml);
+                    ini.WriteBool("Common", "FooterIsHtml", FooterIsHtml);
+                    ini.WriteBool("Common", "UserRecFilename", UserRecFilename);
+                    ini.WriteBool("Common", "IncludeNavbar", IncludeNavbar);
+                    ini.WriteBool("Common", "UseWithheldNames", UseWithheldNames);
+                    ini.WriteBool("Common", "ConserveTreeWidth", ConserveTreeWidth);
+                    ini.WriteBool("Common", "AllowMultimedia", AllowMultimedia);
+                    ini.WriteBool("Common", "SupressBackreferences", SupressBackreferences);
+                    ini.WriteBool("Common", "KeepSiblingOrder", KeepSiblingOrder);
+                }
+            } catch (Exception ex) {
+                fLogger.WriteError("GMConfig.Save()", ex);
             }
         }
 
