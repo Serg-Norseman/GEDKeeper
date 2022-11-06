@@ -280,7 +280,7 @@ namespace GKUI.Forms
             UIHelper.AddToolStripItem(MenuGensDescendants, "8", 8, miGensXDescendants_Click);
             UIHelper.AddToolStripItem(MenuGensDescendants, "9", 9, miGensXDescendants_Click);
 
-            for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.CrossCorners; bs++) {
+            for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.Last; bs++) {
                 UIHelper.AddToolStripItem(MenuBorders, bs.ToString(), (int)bs, miBorderX_Click);
             }
         }

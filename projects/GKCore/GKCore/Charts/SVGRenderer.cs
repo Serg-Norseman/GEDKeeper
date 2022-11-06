@@ -237,5 +237,10 @@ namespace GKCore.Charts
                 fGfx.SaveState();
             }
         }
+
+        public override IImage CreateSphere(int rad, IColor color)
+        {
+            return null;
+        }
     }
 }

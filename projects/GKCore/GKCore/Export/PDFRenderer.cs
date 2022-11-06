@@ -311,6 +311,11 @@ namespace GKCore.Export
         public override void SetTranslucent(float value)
         {
         }
+
+        public override IImage CreateSphere(int rad, IColor color)
+        {
+            return null;
+        }
     }
 }
 
