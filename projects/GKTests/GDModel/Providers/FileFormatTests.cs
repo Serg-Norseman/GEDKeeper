@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -120,6 +120,27 @@ namespace GDModel.Providers
                     Assert.IsNotNull(iRec1);
 
                     Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
+                }
+            }
+        }
+
+        [Test]
+        public void Test_gedcom4j_UTF8()
+        {
+            using (BaseContext ctx = new BaseContext(null)) {
+                using (Stream stmGed1 = TestUtils.LoadResourceStream("test_gc4j_utf8.ged")) {
+                    var charsetRes = GKUtils.DetectCharset(stmGed1);
+                    Assert.AreEqual("utf-8", charsetRes.Charset);
+                    Assert.AreEqual(1.0f, charsetRes.Confidence);
+
+                    var gedcomProvider = new GEDCOMProvider(ctx.Tree);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1, true);
+
+                    Assert.AreEqual(GEDCOMFormat.gf_gedcom4j, ctx.Tree.Format);
+
+                    var iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                    Assert.IsNotNull(iRec1);
+                    Assert.AreEqual("John Grüber", iRec1.GetPrimaryFullName());
                 }
             }
         }
@@ -288,6 +309,26 @@ namespace GDModel.Providers
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
                 Assert.AreEqual("Tom Thompson", iRec1.GetPrimaryFullName());
+            }
+        }
+
+        [Test]
+        public void Test_FamilyHistorian2()
+        {
+            var progress = Substitute.For<IProgressController>();
+
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_famhist2.ged")) {
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
+
+                Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
+
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+                Assert.AreEqual("Tom Thompson", iRec1.GetPrimaryFullName());
+
+                var locRec1 = ctx.Tree.XRefIndex_Find("L2") as GDMLocationRecord; // Pn -> Ln
+                Assert.IsNotNull(locRec1);
+                Assert.AreEqual("Lima, Peru", locRec1.LocationName);
             }
         }
 
@@ -483,6 +524,27 @@ namespace GDModel.Providers
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_genney.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Genney, ctx.Tree.Format);
+            }
+        }
+
+        [Test]
+        public void Test_Ages_Adopted()
+        {
+            var progress = Substitute.For<IProgressController>();
+
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ages_adop.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_AGES, ctx.Tree.Format);
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
+
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                Assert.AreEqual("2nd son adopted", iRec1.GetPrimaryFullName());
+
+                Assert.AreEqual(1, iRec1.ChildToFamilyLinks.Count);
+                var ctfLink = iRec1.ChildToFamilyLinks[0];
+                Assert.IsNotNull(ctfLink);
+                Assert.AreEqual(GDMPedigreeLinkageType.plAdopted, ctfLink.PedigreeLinkageType);
             }
         }
 

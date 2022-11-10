@@ -558,6 +558,9 @@ namespace GKCore.Controllers
             SubstituteControl<IMenuItem>(view, "miGoToRecord");
             SubstituteControl<IMenuItem>(view, "miCopyXRef");
 
+            SubstituteControl<ITabPage>(view, "pageOptions");
+            SubstituteControl<ICheckBox>(view, "chkCheckPersonPlaces");
+
             view.ChecksList.Returns(Substitute.For<IListViewEx>());
 
             var controller = new TreeCheckController(view);

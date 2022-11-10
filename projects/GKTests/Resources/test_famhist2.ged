@@ -1,0 +1,107 @@
+0 HEAD
+1 SOUR FAMILY_HISTORIAN
+2 VERS 6.2.2
+2 NAME Family Historian
+2 CORP Calico Pie Limited
+1 FILE famhistcustomtags.ged
+1 GEDC
+2 VERS 5.5
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+1 _ROOT @I1@
+0 @SUBM001@ SUBM
+1 NAME Matt /Harrah/
+1 _EMAIL info@internet.com
+1 _WEB http://www.internet.com
+0 @R0000@ REPO
+1 NAME National Archives
+1 _EMAIL info@internet.com
+1 _WEB http://www.internet.com
+0 @I1@ INDI
+1 NAME Tom /Thompson/
+2 _USED Tony
+1 SEX M
+1 _ATTR wasd
+2 TYPE Ordinance
+2 DATE 12 MAR 1934
+1 BIRT
+2 _EMAIL info@internet.com
+2 _WEB http://www.internet.com
+2 DATE 1 JAN 1940
+2 PLAC Ansted, WV, USA
+2 _SHAN Wally Witness
+3 ROLE Disinterested Observer
+3 NOTE It was sorta awkward
+2 _SHAR @I3@
+3 ROLE Birthing Coach
+3 NOTE Passed out during delivery
+1 _ATTR xxx
+2 TYPE DNA Markers
+2 DATE 2 FEB 1942
+2 PLAC Charleston, WV, USA
+2 _EMAIL info@internet.com
+2 _WEB http://www.internet.com
+1 EMIG
+2 PLAC Liverpool
+2 _PLAC America
+1 IMMI
+2 PLAC America
+2 _PLAC Liverpool
+1 _ATTR waiter
+2 TYPE Employment
+2 DATE 5 MAY 1945
+2 PLAC Montana
+1 FAMC @F1@
+1 SOUR @S1@
+2 PAGE The whole thing
+2 DATA
+3 DATE 1985
+3 TEXT See this?
+2 QUAY 3
+1 OBJE @O1@
+2 _ASID 1
+0 @I2@ INDI
+1 NAME Terry /Thompson/
+1 SEX M
+1 FAMS @F1@
+0 @I3@ INDI
+1 NAME Theresa /Taylor/
+1 SEX F
+1 FAMS @F1@
+0 @F1@ FAM
+1 HUSB @I2@
+1 WIFE @I3@
+1 CHIL @I1@
+1 _STAT Never Married
+0 @O1@ OBJE
+1 FORM jpeg
+1 TITL photo
+1 _NOTE Picture is a bit small and may not be him.
+1 _FILE photo.jpg
+1 FILE photo.jpg
+1 _DATE 7 JUL 1977
+1 _KEYS Picture
+1 NOTE This is a note
+2 _ASID 1
+2 _AREA {154,46,243,127}
+2 _EXCL ALL
+2 _CAPT Y
+0 @S1@ SOUR
+1 AUTH Diedre
+1 TITL Rumor
+1 ABBR Diedre said
+1 _TYPE Hearsay
+1 TEXT This is his picture
+1 NOTE Diedre is known not to be very reliable
+0 @P1@ _PLAC Ansted, WV, USA
+0 @P2@ _PLAC Lima, Peru
+0 @P3@ _PLAC Charleston, WV, USA
+0 @P4@ _PLAC rhode island
+0 @P5@ _PLAC Montana
+0 @P6@ _PLAC Maine
+0 @P7@ _PLAC Connecticut
+0 @P8@ _PLAC Florida
+0 @P9@ _PLAC North Carolina
+0 @P10@ _PLAC Kansas
+0 @P11@ _PLAC Nice, France
+0 TRLR

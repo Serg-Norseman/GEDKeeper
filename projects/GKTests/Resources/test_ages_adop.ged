@@ -1,0 +1,38 @@
+0 HEAD
+1 SOUR AGES
+2 VERS 2.1.0
+2 NAME Ages!
+2 CORP Daub EDV-Beratung
+3 ADDR Glashuetter Weg 105
+4 CONT 22889 Tangstedt
+4 CONT Germany
+3 WWW http://www.daubnet.com
+1 DEST AGES
+1 CHAR UTF-8
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+0 @I0@ INDI
+1 NAME father //
+1 SEX M
+1 FAMS @F0@
+0 @I1@ INDI
+1 NAME mother //
+1 SEX F
+1 FAMS @F0@
+0 @I2@ INDI
+1 NAME 1st son /native/
+1 SEX M
+1 FAMC @F0@
+0 @I3@ INDI
+1 NAME 2nd son /adopted/
+1 SEX M
+1 FAMC @F0@
+0 @F0@ FAM
+1 HUSB @I0@
+1 WIFE @I1@
+1 CHIL @I2@
+1 CHIL @I3@
+2 _FREL ADOPTED
+2 _MREL ADOPTED
+0 TRLR

@@ -76,8 +76,17 @@ namespace GDModel.Providers.GEDCOM
                 mmRec.FileReferences.Add(tgtFileRef);
             }
 
+            var isPrimary = mmLink.IsPrimary;
+            var isPrimaryCutout = mmLink.IsPrimaryCutout;
+            GDMCutoutPosition cutoutPosition = new GDMCutoutPosition();
+            cutoutPosition.Assign(mmLink.CutoutPosition);
+
             mmLink.Clear();
             mmLink.XRef = mmRec.XRef;
+
+            mmLink.IsPrimary = isPrimary;
+            mmLink.IsPrimaryCutout = isPrimaryCutout;
+            mmLink.CutoutPosition.Assign(cutoutPosition);
         }
 
         private void TransformSourceCitation(GDMSourceCitation sourCit)

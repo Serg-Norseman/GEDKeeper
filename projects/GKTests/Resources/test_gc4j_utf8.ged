@@ -1,0 +1,41 @@
+0 HEAD
+1 SOUR gedcom4j
+2 NAME gedcom4j
+2 VERS 1.0.0
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 CHAR ANSI
+
+0 @I1@ INDI
+1 NAME John /Grüber/
+
+0 @I2@ INDI
+1 NAME Mary /Hægermann/
+
+0 @I3@ INDI
+1 NAME Abraham /Smîth/
+
+0 @I4@ INDI
+1 NAME Betsy /Großmann/
+
+0 @I5@ INDI
+1 NAME Cleo /Nôrden/
+
+0 @I6@ INDI
+1 NAME Elizabeth /Jåckson/
+
+0 @I7@ INDI
+1 NAME Daniel /Ćuarón/
+
+0 @I8@ INDI
+1 NAME Michael /Garçon/
+
+0 @I9@ INDI
+1 NAME Ellen /Łowenstėin/
+
+0 @I10@ INDI
+1 NAME Fred /Ûlrich/
+1 SEX M
+
+0 TRLR

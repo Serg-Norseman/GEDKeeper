@@ -35,6 +35,7 @@ namespace GDModel.Providers.GEDCOM
         gf_FamilyHistorian,
         gf_FamilyTreeMaker,
         gf_FTB,
+        gf_gedcom4j,
         gf_GeneWeb,
         gf_Geni,
         gf_Genney,

@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 
@@ -71,6 +72,18 @@ namespace GDModel
         public GDMCutoutPosition()
         {
             SetName(GEDCOMTagType._POSITION);
+        }
+
+        public override void Assign(GDMTag source)
+        {
+            GDMCutoutPosition sourceObj = (source as GDMCutoutPosition);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            fX1 = sourceObj.fX1;
+            fY1 = sourceObj.fY1;
+            fX2 = sourceObj.fX2;
+            fY2 = sourceObj.fY2;
         }
 
         protected override string GetStringValue()
