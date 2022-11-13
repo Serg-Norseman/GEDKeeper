@@ -32,6 +32,8 @@
         private System.Windows.Forms.Label Lab1;
         private GKUI.Components.HyperView fView1;
         private GKUI.Components.HyperView fView2;
+        private System.Windows.Forms.Button btnEditRight;
+        private System.Windows.Forms.Button btnEditLeft;
 
         private void InitializeComponent()
         {
@@ -65,6 +67,8 @@
             this.edNameAccuracy = new System.Windows.Forms.NumericUpDown();
             this.edYearInaccuracy = new System.Windows.Forms.NumericUpDown();
             this.chkBirthYear = new System.Windows.Forms.CheckBox();
+            this.btnEditLeft = new System.Windows.Forms.Button();
+            this.btnEditRight = new System.Windows.Forms.Button();
             this.PageControl1.SuspendLayout();
             this.pageMerge.SuspendLayout();
             this.pageMergeOptions.SuspendLayout();
@@ -97,6 +101,8 @@
             this.pageMerge.Controls.Add(this.btnRec2Select);
             this.pageMerge.Controls.Add(this.btnMergeToLeft);
             this.pageMerge.Controls.Add(this.btnMergeToRight);
+            this.pageMerge.Controls.Add(this.btnEditLeft);
+            this.pageMerge.Controls.Add(this.btnEditRight);
             this.pageMerge.Controls.Add(this.fView2);
             this.pageMerge.Controls.Add(this.btnAutoSearch);
             this.pageMerge.Controls.Add(this.btnSkip);
@@ -178,6 +184,26 @@
             this.btnMergeToRight.TabIndex = 16;
             this.btnMergeToRight.Text = ">>>";
             this.btnMergeToRight.Click += new System.EventHandler(this.btnMergeToRight_Click);
+            // 
+            // btnEditLeft
+            // 
+            this.btnEditLeft.Enabled = false;
+            this.btnEditLeft.Location = new System.Drawing.Point(14, 371);
+            this.btnEditLeft.Name = "btnEditLeft";
+            this.btnEditLeft.Size = new System.Drawing.Size(120, 25);
+            this.btnEditLeft.TabIndex = 15;
+            this.btnEditLeft.Text = "Edit";
+            this.btnEditLeft.Click += new System.EventHandler(this.btnEditLeft_Click);
+            // 
+            // btnEditRight
+            // 
+            this.btnEditRight.Enabled = false;
+            this.btnEditRight.Location = new System.Drawing.Point(822, 371);
+            this.btnEditRight.Name = "btnEditRight";
+            this.btnEditRight.Size = new System.Drawing.Size(120, 25);
+            this.btnEditRight.TabIndex = 16;
+            this.btnEditRight.Text = "Edit";
+            this.btnEditRight.Click += new System.EventHandler(this.btnEditRight_Click);
             // 
             // fView1
             // 

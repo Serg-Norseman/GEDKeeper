@@ -2123,6 +2123,11 @@ namespace GKCore
                         }
 
                         summary.Add("  " + HyperLink(sourceRec.XRef, nm, 0));
+
+                        var text = sourCit.Data.Text;
+                        if (!text.IsEmpty()) {
+                            summary.Add("    " + text.Lines.Text);
+                        }
                     }
                 }
             } catch (Exception ex) {

@@ -21,6 +21,7 @@
 using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -155,6 +156,8 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkBookmarkMerged").Text = LangMan.LS(LSID.LSID_BookmarkMerged);
             GetControl<IButton>("btnRec1Select").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
             GetControl<IButton>("btnRec2Select").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+            GetControl<IButton>("btnEditLeft").Text = LangMan.LS(LSID.LSID_DoEdit);
+            GetControl<IButton>("btnEditRight").Text = LangMan.LS(LSID.LSID_DoEdit);
         }
 
         public void ChangeOption()
@@ -171,6 +174,9 @@ namespace GKCore.Controllers
         {
             GetControl<IButton>("btnMergeToLeft").Enabled = (fRec1 != null && fRec2 != null);
             GetControl<IButton>("btnMergeToRight").Enabled = (fRec1 != null && fRec2 != null);
+
+            GetControl<IButton>("btnEditLeft").Enabled = GetControl<IButton>("btnMergeToLeft").Enabled;
+            GetControl<IButton>("btnEditRight").Enabled = GetControl<IButton>("btnMergeToRight").Enabled;
         }
 
         public void SetRec1(GDMRecord value)
@@ -231,6 +237,23 @@ namespace GKCore.Controllers
             TreeTools.MergeRecord(fBase, fRec2, fRec1, fBookmark);
             SetRec1(null);
             SetRec2(fRec2);
+        }
+
+        private bool EditRecord(GDMRecord record)
+        {
+            return (record != null && BaseController.EditRecord(fBase, record));
+        }
+
+        public void EditLeft()
+        {
+            if (EditRecord(fRec1))
+                SetRec1(fRec1);
+        }
+
+        public void EditRight()
+        {
+            if (EditRecord(fRec2))
+                SetRec2(fRec2);
         }
     }
 }

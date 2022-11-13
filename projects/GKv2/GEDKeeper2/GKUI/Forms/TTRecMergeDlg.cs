@@ -132,5 +132,15 @@ namespace GKUI.Forms
         {
             fController.SetRec2(value);
         }
+
+        private void btnEditLeft_Click(object sender, EventArgs e)
+        {
+            fController.EditLeft();
+        }
+
+        private void btnEditRight_Click(object sender, EventArgs e)
+        {
+            fController.EditRight();
+        }
     }
 }

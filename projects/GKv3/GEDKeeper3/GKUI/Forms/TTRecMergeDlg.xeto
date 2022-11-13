@@ -42,6 +42,7 @@
 
                 <TableRow>
                   <StackLayout Orientation="Horizontal">
+                    <Button x:Name="btnEditLeft" Enabled="False" Size="120, 26" Click="btnEditLeft_Click">&lt;&lt;&lt;</Button>
                     <StackLayoutItem Expand="True" />
                     <Button x:Name="btnMergeToLeft" Enabled="False" Size="80, 26" Click="btnMergeToLeft_Click">&lt;&lt;&lt;</Button>
                   </StackLayout>
@@ -49,6 +50,7 @@
                   <StackLayout Orientation="Horizontal">
                     <Button x:Name="btnMergeToRight" Enabled="False" Size="80, 26" Click="btnMergeToRight_Click">&gt;&gt;&gt;</Button>
                     <StackLayoutItem Expand="True" />
+                    <Button x:Name="btnEditRight" Enabled="False" Size="120, 26" Click="btnEditRight_Click">&gt;&gt;&gt;</Button>
                   </StackLayout>
                 </TableRow>
               </TableLayout>
