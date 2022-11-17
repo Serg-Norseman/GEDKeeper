@@ -68,12 +68,14 @@ namespace GKCore.Export
             public readonly GDMIndividualRecord IRec;
             public readonly GDMCustomEvent Event;
             public readonly UDN Date;
+            public readonly List<string> Sources;
 
             public PedigreeEvent(GDMIndividualRecord iRec, GDMCustomEvent evt)
             {
                 IRec = iRec;
                 Event = evt;
                 Date = (evt == null) ? UDN.CreateEmpty() : evt.Date.GetUDN();
+                Sources = new List<string>();
             }
         }
 
@@ -137,18 +139,14 @@ namespace GKCore.Export
             return res;
         }
 
-        private void WritePerson(PedigreePerson person)
+        private void WriteSourceCitations(List<string> sources)
         {
-            fWriter.BeginParagraph(TextAlignment.taJustify, 6f, 6f);
-            fWriter.AddParagraphChunkAnchor(GetIdStr(person) + ". " + GKUtils.GetNameString(person.IRec, true, false), fPersonFont, person.Id);
-            fWriter.AddParagraphChunk(GKUtils.GetPedigreeLifeStr(person.IRec, fOptions.PedigreeOptions.Format), fTextFont);
-
-            if (fOptions.PedigreeOptions.IncludeSources && person.Sources.Count > 0) {
+            if (fOptions.PedigreeOptions.IncludeSources && sources.Count > 0) {
                 fWriter.AddParagraphChunk(" ", fTextFont);
 
-                int num = person.Sources.Count;
+                int num = sources.Count;
                 for (int i = 0; i < num; i++) {
-                    string lnk = person.Sources[i];
+                    string lnk = sources[i];
 
                     if (i > 0) {
                         fWriter.AddParagraphChunkLink(", ", fTextFont, "", true);
@@ -157,6 +155,15 @@ namespace GKCore.Export
                     fWriter.AddParagraphChunkLink(lnk, fSupText, "src_" + lnk, true);
                 }
             }
+        }
+
+        private void WritePerson(PedigreePerson person)
+        {
+            fWriter.BeginParagraph(TextAlignment.taJustify, 6f, 6f);
+            fWriter.AddParagraphChunkAnchor(GetIdStr(person) + ". " + GKUtils.GetNameString(person.IRec, true, false), fPersonFont, person.Id);
+            fWriter.AddParagraphChunk(GKUtils.GetPedigreeLifeStr(person.IRec, fOptions.PedigreeOptions.Format), fTextFont);
+
+            WriteSourceCitations(person.Sources);
 
             fWriter.EndParagraph();
 
@@ -222,7 +229,9 @@ namespace GKCore.Export
                 for (i = 0; i < num; i++) {
                     GDMCustomEvent evt = person.IRec.Events[i];
                     if (!(evt is GDMIndividualAttribute) || fOptions.PedigreeOptions.IncludeAttributes) {
-                        evList.Add(new PedigreeEvent(person.IRec, evt));
+                        var pEvt = new PedigreeEvent(person.IRec, evt);
+                        ProcessSourceCitations(evt, pEvt.Sources);
+                        evList.Add(pEvt);
                     }
                 }
                 WriteEventList(person, evList);
@@ -258,7 +267,10 @@ namespace GKCore.Export
                 int childrenCount = family.Children.Count;
                 for (int j = 0; j < childrenCount; j++) {
                     GDMIndividualRecord child = fTree.GetPtrValue(family.Children[j]);
-                    evList.Add(new PedigreeEvent(child, child.FindEvent(GEDCOMTagType.BIRT)));
+                    var evt = child.FindEvent(GEDCOMTagType.BIRT);
+                    var pEvt = new PedigreeEvent(child, evt);
+                    ProcessSourceCitations(evt, pEvt.Sources);
+                    evList.Add(pEvt);
                 }
                 WriteEventList(person, evList);
             }
@@ -374,6 +386,8 @@ namespace GKCore.Export
                     fWriter.AddParagraphChunkLink(id, fLinkFont, id);
                 }
 
+                WriteSourceCitations(evObj.Sources);
+
                 WriteNotes(evt, "\t");
 
                 fWriter.EndListItem();
@@ -389,22 +403,12 @@ namespace GKCore.Export
             list[index2] = f;
         }
 
-        private void GenStep(PedigreePerson parent, GDMIndividualRecord iRec, int level, int familyOrder)
+        private void ProcessSourceCitations(IGDMStructWithSourceCitations swsc, List<string> sources)
         {
-            if (iRec == null) return;
-
-            PedigreePerson res = new PedigreePerson();
-            res.Parent = parent;
-            res.IRec = iRec;
-            res.Level = level;
-            res.ChildIdx = 0;
-            res.FamilyOrder = familyOrder;
-            fPersonList.Add(res);
-
-            if (fOptions.PedigreeOptions.IncludeSources && iRec.HasSourceCitations) {
-                int num = iRec.SourceCitations.Count;
+            if (fOptions.PedigreeOptions.IncludeSources && swsc.HasSourceCitations) {
+                int num = swsc.SourceCitations.Count;
                 for (int i = 0; i < num; i++) {
-                    var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(iRec.SourceCitations[i]);
+                    var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(swsc.SourceCitations[i]);
                     if (sourceRec == null) continue;
 
                     int srcIndex = fSourceList.IndexOfObject(sourceRec);
@@ -419,9 +423,24 @@ namespace GKCore.Export
                         srcIndex = fSourceList.AddObject(srcName, sourceRec);
                     }
 
-                    res.Sources.Add((srcIndex + 1).ToString());
+                    sources.Add((srcIndex + 1).ToString());
                 }
             }
+        }
+
+        private void GenStep(PedigreePerson parent, GDMIndividualRecord iRec, int level, int familyOrder)
+        {
+            if (iRec == null) return;
+
+            PedigreePerson res = new PedigreePerson();
+            res.Parent = parent;
+            res.IRec = iRec;
+            res.Level = level;
+            res.ChildIdx = 0;
+            res.FamilyOrder = familyOrder;
+            fPersonList.Add(res);
+
+            ProcessSourceCitations(iRec, res.Sources);
 
             if (fKind == PedigreeKind.Ascend) {
                 if (iRec.ChildToFamilyLinks.Count > 0) {
