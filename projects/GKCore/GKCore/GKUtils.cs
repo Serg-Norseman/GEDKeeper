@@ -3268,13 +3268,16 @@ namespace GKCore
             if (count == 0) {
                 result = null;
             } else {
-                result = iRec.PersonalNames[0];
-                for (int i = 1; i < count; i++) {
+                result = null;
+                for (int i = 0; i < count; i++) {
                     var pn = iRec.PersonalNames[i];
                     if (pn.Language == defLang) {
                         result = pn;
                         break;
                     }
+                }
+                if (result == null) {
+                    result = iRec.PersonalNames[0];
                 }
             }
 
