@@ -568,6 +568,7 @@ namespace GKUI.Components
             int num = fModel.Persons.Count;
             for (int i = 0; i < num; i++) {
                 TreeChartPerson p = fModel.Persons[i];
+                if (!p.IsVisible) continue;
                 ExtRect persRt = p.Rect;
 
                 if (persRt.Contains(aX, aY)) {
