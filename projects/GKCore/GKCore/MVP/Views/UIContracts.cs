@@ -570,7 +570,7 @@ namespace GKCore.MVP.Views
 
 
 
-    public interface IFragmentSearchDlg : ICommonDialog, IBaseEditor
+    public interface IFragmentSearchDlg : IWindow
     {
         ITreeView GroupsTree { get; }
         ILogChart LogChart { get; }

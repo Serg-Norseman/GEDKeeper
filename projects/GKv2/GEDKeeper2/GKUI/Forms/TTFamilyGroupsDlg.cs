@@ -29,7 +29,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTFamilyGroupsDlg : CommonDialog<IFragmentSearchDlg, FragmentSearchController>, IFragmentSearchDlg
+    public sealed partial class TTFamilyGroupsDlg : CommonWindow<IFragmentSearchDlg, FragmentSearchController>, IFragmentSearchDlg
     {
         #region View Interface
 
@@ -49,12 +49,15 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
             fController = new FragmentSearchController(this);
             fController.Init(baseWin);
 
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
+        }
+
+        public override void SetLocale()
+        {
+            fController.SetLocale();
         }
 
         private void btnAnalyseGroups_Click(object sender, EventArgs e)

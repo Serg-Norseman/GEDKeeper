@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
-  x:Class="GKUI.Forms.TTFamilyGroupsDlg"
-  AbortButton="{x:Reference btnClose}">
+  x:Class="GKUI.Forms.TTFamilyGroupsDlg">
 
   <TableLayout Style="paddedTable8">
 
@@ -35,15 +34,6 @@
       </TabControl>
     </TableRow>
 
-    <TableRow>
-      <StackLayout Spacing="8" Orientation="Horizontal">
-        <StackLayoutItem Expand="True" />
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
-        </StackLayoutItem>
-      </StackLayout>
-    </TableRow>
-
   </TableLayout>
 
-</Dialog>
+</Form>

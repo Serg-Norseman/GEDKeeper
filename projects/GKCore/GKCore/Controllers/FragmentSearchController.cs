@@ -21,7 +21,6 @@
 using System.Collections.Generic;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Tools;
@@ -94,8 +93,8 @@ namespace GKCore.Controllers
             GDMIndividualRecord iRec = GetSelectedPerson();
             if (iRec == null) return;
 
-            fView.Close();
             fBase.SelectRecordByXRef(iRec.XRef);
+            fBase.Activate();
         }
 
         public void ShowDetails()
@@ -118,7 +117,6 @@ namespace GKCore.Controllers
             fView.Title = LangMan.LS(LSID.LSID_ToolOp_6);
 
             GetControl<ITabPage>("pageFamilyGroups").Text = LangMan.LS(LSID.LSID_ToolOp_6);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
             GetControl<IButton>("btnAnalyseGroups").Text = LangMan.LS(LSID.LSID_Analyze);
             GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.LSID_Details);
             GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);

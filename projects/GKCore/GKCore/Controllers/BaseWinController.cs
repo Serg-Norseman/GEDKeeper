@@ -1011,12 +1011,9 @@ namespace GKCore.Controllers
         public void ShowFamilyGroups()
         {
             try {
-                fContext.BeginUpdate();
-                using (var dlg = AppHost.Container.Resolve<IFragmentSearchDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, false);
-                }
+                var dlg = AppHost.Container.Resolve<IFragmentSearchDlg>(fView);
+                AppHost.Instance.ShowWindow(dlg);
             } finally {
-                fContext.EndUpdate();
             }
         }
 

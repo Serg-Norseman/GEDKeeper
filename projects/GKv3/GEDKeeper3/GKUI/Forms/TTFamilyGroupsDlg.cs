@@ -31,7 +31,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class TTFamilyGroupsDlg : CommonDialog<IFragmentSearchDlg, FragmentSearchController>, IFragmentSearchDlg
+    public sealed partial class TTFamilyGroupsDlg : CommonWindow<IFragmentSearchDlg, FragmentSearchController>, IFragmentSearchDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -70,6 +70,11 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
+        }
+
+        public override void SetLocale()
+        {
+            fController.SetLocale();
         }
 
         private void btnAnalyseGroups_Click(object sender, EventArgs e)

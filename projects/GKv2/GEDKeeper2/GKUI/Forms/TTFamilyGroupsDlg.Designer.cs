@@ -3,7 +3,6 @@
 	partial class TTFamilyGroupsDlg
 	{
 		private System.Windows.Forms.TabControl tabsTools;
-		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pageFamilyGroups;
 		private System.Windows.Forms.TreeView tvGroups;
 		private GKUI.Components.LogChart gkLogChart1;
@@ -28,7 +27,6 @@
 		    this.miGoToRecord = new System.Windows.Forms.ToolStripMenuItem();
 		    this.N1 = new System.Windows.Forms.ToolStripSeparator();
 		    this.miCopyXRef = new System.Windows.Forms.ToolStripMenuItem();
-		    this.btnClose = new System.Windows.Forms.Button();
 		    this.tabsTools.SuspendLayout();
 		    this.pageFamilyGroups.SuspendLayout();
 		    this.contextMenu.SuspendLayout();
@@ -123,26 +121,12 @@
 		    this.miCopyXRef.Text = "miCopyXRef";
 		    this.miCopyXRef.Click += new System.EventHandler(this.miCopyXRef_Click);
 		    // 
-		    // btnClose
-		    // 
-		    this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-		    this.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-		    this.btnClose.Location = new System.Drawing.Point(726, 466);
-		    this.btnClose.Margin = new System.Windows.Forms.Padding(2);
-		    this.btnClose.Name = "btnClose";
-		    this.btnClose.Size = new System.Drawing.Size(91, 24);
-		    this.btnClose.TabIndex = 1;
-		    this.btnClose.Text = "btnClose";
-		    this.btnClose.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-		    // 
 		    // TTFamilyGroupsDlg
 		    // 
 		    this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-		    this.CancelButton = this.btnClose;
-		    this.ClientSize = new System.Drawing.Size(827, 500);
+		    this.ClientSize = new System.Drawing.Size(827, 454);
 		    this.Controls.Add(this.tabsTools);
-		    this.Controls.Add(this.btnClose);
 		    this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 		    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 		    this.KeyPreview = true;
