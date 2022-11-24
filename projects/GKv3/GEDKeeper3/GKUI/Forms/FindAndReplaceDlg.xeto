@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.FindAndReplaceDlg"
+  KeyDown="Form_KeyDown" Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <TableLayout Style="paddedTable">
+        <TableRow>
+          <Label x:Name="lblPattern" />
+          <ComboBox x:Name="cmbPattern" />
+        </TableRow>
+        <TableRow>
+          <Label x:Name="lblReplacement" />
+          <ComboBox x:Name="cmbReplacement" />
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <StackLayout Orientation="Horizontal" Spacing="4">
+        <StackLayout Orientation="Vertical" Spacing="4">
+          <CheckBox x:Name="chkMatchCase" />
+          <CheckBox x:Name="chkMatchWildcards" />
+          <CheckBox x:Name="chkWholeWord" />
+          <StackLayoutItem Expand="True" />
+        </StackLayout>
+
+        <StackLayoutItem Expand="True" />
+
+        <GroupBox x:Name="gbFilters">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <Label x:Name="lblRecord" />
+              <ComboBox x:Name="cmbRecord" />
+            </TableRow>
+            <TableRow>
+              <Label x:Name="lblProperty" />
+              <ComboBox x:Name="cmbProperty" />
+            </TableRow>
+          </TableLayout>
+        </GroupBox>
+      </StackLayout>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem HorizontalAlignment="Left">
+          <Button x:Name="btnPrev" Style="dlgBtn" Click="btnPrev_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Left">
+          <Button x:Name="btnNext" Style="dlgBtn" Click="btnNext_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnReplace" Style="dlgBtn" Click="btnReplace_Click" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnReplaceAll" Style="dlgBtn" Click="btnReplaceAll_Click" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Form>

@@ -594,10 +594,6 @@ namespace GKUI.Forms
         public void QuickSearch()
         {
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
-
-            Rectangle client = ClientRectangle;
-            qsDlg.Location = PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
-
             qsDlg.Show();
         }
 

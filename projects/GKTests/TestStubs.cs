@@ -144,6 +144,7 @@ namespace GKTests.Stubs
         public GDMRecord GetSelectedRecordEx() { return null; }
         public ExtRect GetActiveScreenWorkingArea() { return ExtRect.Empty; }
         public void UpdateMRU() { }
+        public void UpdateChangedRecords(GDMRecord select = null) { }
     }
 
     public class TestPlugin : OrdinaryPlugin

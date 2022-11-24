@@ -525,13 +525,16 @@ namespace GKCore
 
         public const RegexOptions RegexOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
 
-        public static Regex InitMaskRegex(string mask)
+        public static Regex InitMaskRegex(string mask, bool ignoreCase = true)
         {
             Regex result = null;
 
             string regexStr = PrepareMask(mask);
             if (!string.IsNullOrEmpty(regexStr)) {
-                result = new Regex(regexStr, RegexOpts);
+                RegexOptions regexOpts = RegexOptions.Compiled;
+                if (ignoreCase) regexOpts |= RegexOptions.IgnoreCase;
+
+                result = new Regex(regexStr, regexOpts);
             }
 
             return result;

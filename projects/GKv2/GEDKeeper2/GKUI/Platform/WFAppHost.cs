@@ -218,6 +218,15 @@ namespace GKUI.Platform
             return UIHelper.Rt2Rt(screen.WorkingArea);
         }
 
+        public override void WidgetLocate(IWidgetForm view, WidgetHorizontalLocation horizontalLocation, WidgetVerticalLocation verticalLocation)
+        {
+            var form = view as Form;
+            if (form != null) {
+                var loc = WidgetLocate(UIHelper.Rt2Rt(form.Bounds), horizontalLocation, verticalLocation);
+                form.Location = new System.Drawing.Point(loc.X, loc.Y);
+            }
+        }
+
         public override string SelectFolder(string folderPath)
         {
             using (var fldDlg = new FolderBrowserDialog()) {
@@ -346,6 +355,7 @@ namespace GKUI.Platform
             container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
             container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
+            container.Register<IFARDlg, FindAndReplaceDlg>(LifeCycle.Transient);
 
             container.Register<IProgressController, ProgressDlg>(LifeCycle.Transient);
 

@@ -158,6 +158,11 @@ namespace GKCore.MVP.Views
     }
 
 
+    public interface IFARDlg : IWindow, IWidgetForm
+    {
+    }
+
+
     public interface IFilePropertiesDlg : ICommonDialog, IBaseEditor
     {
         IListView RecordStats { get; }
@@ -407,7 +412,7 @@ namespace GKCore.MVP.Views
     }
 
 
-    public interface IQuickSearchDlg : IView, ILocalizable
+    public interface IQuickSearchDlg : IView, ILocalizable, IWidgetForm
     {
         ITextBox SearchPattern { get; }
     }

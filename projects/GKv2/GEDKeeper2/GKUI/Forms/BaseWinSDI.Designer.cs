@@ -48,6 +48,7 @@
         private System.Windows.Forms.ToolStripMenuItem miRecordDelete;
         private System.Windows.Forms.ToolStripSeparator N15;
         private System.Windows.Forms.ToolStripMenuItem miSearch;
+        private System.Windows.Forms.ToolStripMenuItem miFindAndReplace;
         private System.Windows.Forms.ToolStripSeparator N6;
         private System.Windows.Forms.ToolStripMenuItem miFilter;
         private System.Windows.Forms.ToolStripSeparator N7;
@@ -162,6 +163,7 @@
             this.miRecordDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.N15 = new System.Windows.Forms.ToolStripSeparator();
             this.miSearch = new System.Windows.Forms.ToolStripMenuItem();
+            this.miFindAndReplace = new System.Windows.Forms.ToolStripMenuItem();
             this.miFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.miPedigree = new System.Windows.Forms.ToolStripMenuItem();
             this.miTreeAncestors = new System.Windows.Forms.ToolStripMenuItem();
@@ -580,6 +582,7 @@
                                     this.miRecordDelete,
                                     this.N15,
                                     this.miSearch,
+                                    this.miFindAndReplace,
                                     this.miFilter});
             this.miEdit.Name = "miEdit";
             this.miEdit.Size = new System.Drawing.Size(47, 24);
@@ -620,6 +623,14 @@
             this.miSearch.Size = new System.Drawing.Size(235, 24);
             this.miSearch.Text = "miSearch";
             this.miSearch.Click += new System.EventHandler(this.miSearch_Click);
+            // 
+            // miFindAndReplace
+            // 
+            this.miFindAndReplace.Name = "miFindAndReplace";
+            this.miFindAndReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+            this.miFindAndReplace.Size = new System.Drawing.Size(235, 24);
+            this.miFindAndReplace.Text = "miFindAndReplace";
+            this.miFindAndReplace.Click += new System.EventHandler(this.miFindAndReplace_Click);
             // 
             // miFilter
             // 

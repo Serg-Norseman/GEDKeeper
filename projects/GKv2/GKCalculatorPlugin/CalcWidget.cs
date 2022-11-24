@@ -48,8 +48,7 @@ namespace GKCalculatorPlugin
 
         private void CalcWidget_Load(object sender, EventArgs e)
         {
-            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Bottom);
-            this.Location = new System.Drawing.Point(loc.X, loc.Y);
+            AppHost.Instance.WidgetLocate(this, WidgetHorizontalLocation.Right, WidgetVerticalLocation.Bottom);
 
             fPlugin.Host.WidgetShow(fPlugin);
         }

@@ -134,6 +134,12 @@
     <Compile Include="GKUI\Forms\FilePropertiesDlg.Designer.cs">
       <DependentUpon>FilePropertiesDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\FindAndReplaceDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\FindAndReplaceDlg.designer.cs">
+      <DependentUpon>FindAndReplaceDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\GroupEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>

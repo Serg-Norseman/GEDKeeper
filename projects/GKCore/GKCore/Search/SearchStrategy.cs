@@ -33,6 +33,13 @@ namespace GKCore.Search
         private IList<ISearchResult> fCurrentResults;
         private ISearchResult fCurResult;
 
+
+        public ISearchResult CurResult
+        {
+            get { return fCurResult; }
+        }
+
+
         public SearchStrategy(IWorkWindow workWindow, string searchPattern)
         {
             if (searchPattern == null)

@@ -382,7 +382,7 @@
 381=Šířka obrázku je více než 65 000 pixelů. Nelze uložit.
 382=Zpět
 383=Další
-384=<?>
+384=Previous
 385=Další
 386=Víte že ...
 387=Načíst a vyhledat místa
@@ -879,3 +879,12 @@
 875=Highlight inaccessible files
 876=The difference between spouses is abnormally high `{0}`
 877=The difference between siblings is abnormally high `{0}`
+878=Find and Replace
+879=Find
+880=Replace with
+881=Match case
+882=Match wildcards
+883=Whole word
+884=Replace
+885=Replace all
+886=Property

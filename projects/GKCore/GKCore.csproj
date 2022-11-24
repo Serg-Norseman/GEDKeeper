@@ -80,6 +80,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKCore\Charts\TreeChartDesk.cs" />
     <Compile Include="GKCore\Charts\TreeChartNavItem.cs" />
+    <Compile Include="GKCore\Controllers\FARDlgController.cs" />
     <Compile Include="GKCore\Controllers\OptionsDlgController.cs" />
     <Compile Include="GKCore\Export\XLSWriter.cs" />
     <Compile Include="GDModel\GDMException.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="GKCore\Options\ListOptions.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
     <Compile Include="GKCore\Plugins\WidgetPlugin.cs" />
+    <Compile Include="GKCore\Search\FARPropertyType.cs" />
     <Compile Include="GKCore\Search\SearchResult.cs" />
     <Compile Include="GKCore\Search\SearchStrategy.cs" />
     <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />
@@ -406,6 +408,7 @@
     <Compile Include="GKCore\YamlHelper.cs" />
     <Compile Include="GKCore\MVP\FormController.cs" />
     <Compile Include="GKCore\Lists\ListSource.cs" />
+    <Compile Include="GKCore\Search\FARStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">

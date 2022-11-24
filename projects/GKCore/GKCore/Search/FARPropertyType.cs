@@ -18,18 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
-using GKCore.Interfaces;
-
 namespace GKCore.Search
 {
-    public class SearchResult : ISearchResult
+    public enum FARPropertyType
     {
-        public readonly GDMRecord Record;
-
-        public SearchResult(GDMRecord record)
-        {
-            Record = record;
-        }
+        ptName,
+        ptPlace,
+        ptAddress,
+        ptFact,
+        ptEvent,
     }
 }

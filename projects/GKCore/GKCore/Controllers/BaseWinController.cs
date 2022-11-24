@@ -776,6 +776,7 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miRecordEdit").Text = LangMan.LS(LSID.LSID_MIRecordEdit);
                 GetControl<IMenuItem>("miRecordDelete").Text = LangMan.LS(LSID.LSID_MIRecordDelete);
                 GetControl<IMenuItem>("miSearch").Text = LangMan.LS(LSID.LSID_Search);
+                GetControl<IMenuItem>("miFindAndReplace").Text = LangMan.LS(LSID.LSID_FindAndReplace);
                 GetControl<IMenuItem>("miFilter").Text = LangMan.LS(LSID.LSID_MIFilter) + @"...";
 
                 GetControl<IMenuItem>("miTreeAncestors").Text = LangMan.LS(LSID.LSID_MITreeAncestors);
@@ -1155,6 +1156,12 @@ namespace GKCore.Controllers
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinController.UpdatePluginsItems()", ex);
             }
+        }
+
+        public void FindAndReplace()
+        {
+            var win = AppHost.Container.Resolve<IFARDlg>(fView);
+            AppHost.Instance.ShowWindow(win);
         }
 
         #endregion

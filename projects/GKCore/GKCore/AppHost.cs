@@ -493,6 +493,8 @@ namespace GKCore
 
         public abstract ExtRect GetActiveScreenWorkingArea();
 
+        public abstract void WidgetLocate(IWidgetForm view, WidgetHorizontalLocation horizontalLocation, WidgetVerticalLocation verticalLocation);
+
         public ExtPoint WidgetLocate(ExtRect formBounds, WidgetHorizontalLocation horizontalLocation, WidgetVerticalLocation verticalLocation)
         {
             const int ScrPaddingX = 10;

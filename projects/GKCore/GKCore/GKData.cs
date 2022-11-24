@@ -187,6 +187,7 @@ namespace GKCore
         public static readonly LSID[] ParentTypes;
         public static readonly string[] CondSigns;
         public static readonly string BloodGroups;
+        public static readonly LSID[] PropertyTypes;
 
 
         /// <summary>
@@ -416,7 +417,7 @@ namespace GKCore
                 new EventStruct(LSID.LSID_Education, GEDCOMTagName.EDUC, PersonEventKind.ekFact),
                 new EventStruct(LSID.LSID_Occupation, GEDCOMTagName.OCCU, PersonEventKind.ekFact),
                 new EventStruct(LSID.LSID_Caste, GEDCOMTagName.CAST, PersonEventKind.ekFact),
-                new EventStruct(LSID.LSID_Property, GEDCOMTagName.PROP, PersonEventKind.ekFact),
+                new EventStruct(LSID.LSID_PersonalProperty, GEDCOMTagName.PROP, PersonEventKind.ekFact),
                 new EventStruct(LSID.LSID_NobilityTitle, GEDCOMTagName.TITL, PersonEventKind.ekFact),
 
                 new EventStruct(LSID.LSID_Travel, GEDCOMTagName._TRAVEL, PersonEventKind.ekFact),
@@ -551,6 +552,14 @@ namespace GKCore
             };
 
             BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";
+
+            PropertyTypes = new LSID[] {
+                LSID.LSID_Name,
+                LSID.LSID_Place,
+                LSID.LSID_Address,
+                LSID.LSID_Fact,
+                LSID.LSID_Event,
+            };
         }
     }
 }

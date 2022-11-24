@@ -382,7 +382,7 @@
 381=Impossibile salvare immagini con più di 65'000 pixel di larghezza
 382=Indietro
 383=Avanti
-384=<?>
+384=Previous
 385=Seguente
 386=Sapete che…
 387=Caricare e cercare luoghi
@@ -879,3 +879,12 @@
 875=Highlight inaccessible files
 876=The difference between spouses is abnormally high `{0}`
 877=The difference between siblings is abnormally high `{0}`
+878=Find and Replace
+879=Find
+880=Replace with
+881=Match case
+882=Match wildcards
+883=Whole word
+884=Replace
+885=Replace all
+886=Property

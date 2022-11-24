@@ -572,10 +572,6 @@ namespace GKUI.Forms
             if (!AllowQuickSearch()) return;
 
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
-
-            Rectangle client = ClientRectangle;
-            qsDlg.Location = PointToScreen(new Point(client.Left, client.Bottom - qsDlg.Height));
-
             qsDlg.Show();
         }
 
@@ -848,6 +844,11 @@ namespace GKUI.Forms
         private void miSearch_Click(object sender, EventArgs e)
         {
             (this as IWorkWindow).QuickSearch();
+        }
+
+        private void miFindAndReplace_Click(object sender, EventArgs e)
+        {
+            fController.FindAndReplace();
         }
 
         private void miFilter_Click(object sender, EventArgs e)

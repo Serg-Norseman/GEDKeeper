@@ -47,6 +47,7 @@ namespace GKCore.Interfaces
         void SelectRecordByXRef(string xref, bool delayedTransition = false);
         void ShowMedia(GDMMultimediaRecord mediaRec, bool modal);
         void ShowRecordsTab(GDMRecordType recType);
+        void UpdateChangedRecords(GDMRecord select = null);
         void UpdateControls(bool forceDeactivate, bool blockDependent = false);
         void UpdateMRU();
 

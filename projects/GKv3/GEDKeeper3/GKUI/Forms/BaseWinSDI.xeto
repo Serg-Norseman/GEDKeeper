@@ -75,7 +75,8 @@
         <ButtonMenuItem x:Name="miRecordEdit" Image="{Resource Resources.btn_rec_edit.gif, GKCore}" Click="miRecordEdit_Click" />
         <ButtonMenuItem x:Name="miRecordDelete" Shortcut="CommonModifier+L" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="miRecordDelete_Click" />
         <SeparatorMenuItem />
-        <ButtonMenuItem x:Name="miSearch" Image="{Resource Resources.btn_search.gif, GKCore}" Click="miSearch_Click" />
+        <ButtonMenuItem x:Name="miSearch" Shortcut="CommonModifier+Q" Image="{Resource Resources.btn_search.gif, GKCore}" Click="miSearch_Click" />
+        <ButtonMenuItem x:Name="miFindAndReplace" Shortcut="CommonModifier+H" Click="miFindAndReplace_Click" />
         <ButtonMenuItem x:Name="miFilter" Shortcut="CommonModifier+F" Image="{Resource Resources.btn_filter.gif, GKCore}" Click="miFilter_Click" />
       </ButtonMenuItem>
 

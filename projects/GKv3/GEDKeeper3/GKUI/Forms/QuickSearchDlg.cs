@@ -22,6 +22,7 @@ using System;
 using BSLib.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
+using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -56,6 +57,12 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new QuickSearchDlgController(this, workWindow);
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            AppHost.Instance.WidgetLocate(this, WidgetHorizontalLocation.Left, WidgetVerticalLocation.Bottom);
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)

@@ -387,7 +387,7 @@ namespace GKCore
         /* 339 */ LSID_SocialSecurityNumber,
         /* 340 */ LSID_ChildsCount,
         /* 341 */ LSID_MarriagesCount,
-        /* 342 */ LSID_Property,
+        /* 342 */ LSID_PersonalProperty,
         /* 343 */ LSID_NobilityTitle,
         /* 344 */ LSID_Travel,
         /* 345 */ LSID_Hobby,
@@ -936,7 +936,17 @@ namespace GKCore
         /* 876 */ LSID_DifferenceBetweenSpousesIsAbnormallyHigh,
         /* 877 */ LSID_DifferenceBetweenSiblingsIsAbnormallyHigh,
 
-        /* 000 */ LSID_Last = LSID_DifferenceBetweenSiblingsIsAbnormallyHigh
+        /* 878 */ LSID_FindAndReplace,
+        /* 879 */ LSID_Find,
+        /* 880 */ LSID_ReplaceWith,
+        /* 881 */ LSID_MatchCase,
+        /* 882 */ LSID_MatchWildcards,
+        /* 883 */ LSID_WholeWord,
+        /* 884 */ LSID_Replace,
+        /* 885 */ LSID_ReplaceAll,
+        /* 886 */ LSID_Property,
+
+        /* 000 */ LSID_Last = LSID_Property
     }
 
 
@@ -1331,7 +1341,7 @@ namespace GKCore
             /* 381 */ "Image width is more than 65,000 pixels. Unable to save.",
             /* 382 */ "Back",
             /* 383 */ "Next",
-            /* 384 */ "<?>",
+            /* 384 */ "Previous",
             /* 385 */ "Next",
             /* 386 */ "You know that ...",
             /* 387 */ "Loading and searching places",
@@ -1828,6 +1838,16 @@ namespace GKCore
             /* 875 */ "Highlight inaccessible files",
             /* 876 */ "The difference between spouses is abnormally high `{0}`",
             /* 877 */ "The difference between siblings is abnormally high `{0}`",
+
+            /* 878 */ "Find and Replace",
+            /* 879 */ "Find",
+            /* 880 */ "Replace with",
+            /* 881 */ "Match case",
+            /* 882 */ "Match wildcards",
+            /* 883 */ "Whole word",
+            /* 884 */ "Replace",
+            /* 885 */ "Replace all",
+            /* 886 */ "Property",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -21,6 +21,7 @@
 using System;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
+using GKCore;
 using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
@@ -49,6 +50,12 @@ namespace GKUI.Forms
             btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             fController = new QuickSearchDlgController(this, workWindow);
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            AppHost.Instance.WidgetLocate(this, WidgetHorizontalLocation.Left, WidgetVerticalLocation.Bottom);
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)

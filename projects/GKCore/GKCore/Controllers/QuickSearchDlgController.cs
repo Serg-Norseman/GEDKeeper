@@ -50,9 +50,9 @@ namespace GKCore.Controllers
 
         private void SelectResult(SearchResult result)
         {
-            if (result == null || result.Result == null) return;
-
-            fWorkWindow.SelectByRec(result.Result as GDMIndividualRecord);
+            if (result != null && result.Record != null) {
+                fWorkWindow.SelectByRec(result.Record);
+            }
         }
 
         public void FindNext()

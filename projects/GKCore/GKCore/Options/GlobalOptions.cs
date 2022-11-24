@@ -93,6 +93,8 @@ namespace GKCore.Options
         private bool fCharsetDetection;
         private bool fCheckTreeSize;
         private bool fDialogClosingWarn;
+        private readonly StringList fFARPatterns;
+        private readonly StringList fFARReplacements;
         private bool fFirstCapitalLetterInNames;
         private string fGeoSearchCountry;
         private readonly ListOptionsCollection fListOptions;
@@ -230,6 +232,16 @@ namespace GKCore.Options
         {
             get { return fExtendedNames; }
             set { fExtendedNames = value; }
+        }
+
+        public StringList FARPatterns
+        {
+            get { return fFARPatterns; }
+        }
+
+        public StringList FARReplacements
+        {
+            get { return fFARReplacements; }
         }
 
         public FileBackup FileBackup
@@ -493,11 +505,17 @@ namespace GKCore.Options
             LocalizedCalendarSignatures = false;
             MaximizeChartWindows = false;
             HighlightInaccessibleFiles = false;
+
+            fFARPatterns = new StringList();
+            fFARReplacements = new StringList();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                fFARPatterns.Dispose();
+                fFARReplacements.Dispose();
+
                 fLastBases.Dispose();
                 fRelations.Dispose();
 
@@ -683,6 +701,23 @@ namespace GKCore.Options
             }
         }
 
+        private void LoadStringList(IniFile ini, StringList list, string section, string itemPrefix = "Item_")
+        {
+            int cnt = ini.ReadInteger(section, "Count", 0);
+            for (int i = 0; i < cnt; i++) {
+                list.Add(ini.ReadString(section, itemPrefix + i.ToString(), ""));
+            }
+        }
+
+        private void SaveStringList(IniFile ini, StringList list, string section, string itemPrefix = "Item_")
+        {
+            int cnt = list.Count;
+            ini.WriteInteger(section, "Count", cnt);
+            for (int i = 0; i < cnt; i++) {
+                ini.WriteString(section, itemPrefix + i.ToString(), list[i]);
+            }
+        }
+
         public void LoadFromFile(IniFile ini)
         {
             if (ini == null)
@@ -787,6 +822,9 @@ namespace GKCore.Options
             LocalizedCalendarSignatures = ini.ReadBool("Common", "LocalizedCalendarSignatures", false);
             MaximizeChartWindows = ini.ReadBool("Common", "MaximizeChartWindows", false);
             HighlightInaccessibleFiles = ini.ReadBool("Common", "HighlightInaccessibleFiles", false);
+
+            LoadStringList(ini, fFARPatterns, "FARPatterns");
+            LoadStringList(ini, fFARReplacements, "FARReplacements");
 
             LoadPluginsFromFile(ini);
         }
@@ -929,6 +967,9 @@ namespace GKCore.Options
             ini.WriteBool("Common", "LocalizedCalendarSignatures", LocalizedCalendarSignatures);
             ini.WriteBool("Common", "MaximizeChartWindows", MaximizeChartWindows);
             ini.WriteBool("Common", "HighlightInaccessibleFiles", HighlightInaccessibleFiles);
+
+            SaveStringList(ini, fFARPatterns, "FARPatterns");
+            SaveStringList(ini, fFARReplacements, "FARReplacements");
 
             SavePluginsToFile(ini);
         }
