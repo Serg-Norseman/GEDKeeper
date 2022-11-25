@@ -22,7 +22,6 @@ using System;
 using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Views;
 using GKCore.Options;
@@ -87,7 +86,6 @@ namespace GKCore.Controllers
             GetControl<IComboBox>("cmbPattern").AddStrings(GlobalOptions.Instance.FARPatterns);
             GetControl<IComboBox>("cmbReplacement").AddStrings(GlobalOptions.Instance.FARReplacements);
 
-            GetControl<ICheckBox>("chkMatchWildcards").Enabled = false; // TODO: next version
             GetControl<ICheckBox>("chkWholeWord").Enabled = false; // TODO: next version
 
             GetControl<IComboBox>("cmbRecord").SetSelectedTag(GDMRecordType.rtIndividual);
@@ -95,8 +93,6 @@ namespace GKCore.Controllers
 
             GetControl<IComboBox>("cmbProperty").SetSelectedTag(FARPropertyType.ptName);
             GetControl<IComboBox>("cmbProperty").Enabled = false; // TODO: next version
-
-            GetControl<IButton>("btnReplaceAll").Enabled = false; // TODO: next version
         }
 
         private void GetParameters()
@@ -147,18 +143,22 @@ namespace GKCore.Controllers
             }
         }
 
+        private bool RequireResults()
+        {
+            GetParameters();
+
+            if (fStrategy == null || !fStrategy.HasResults()) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
+                return false;
+            }
+
+            return true;
+        }
+
         public void Prev()
         {
             try {
-                GetParameters();
-
-                if (fStrategy == null) return;
-
-                if (!fStrategy.HasResults()) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
-                    return;
-                }
-
+                if (!RequireResults()) return;
                 SelectResult(fStrategy.FindPrev() as SearchResult);
             } catch (Exception ex) {
                 Logger.WriteError("FARDlgController.Prev()", ex);
@@ -168,15 +168,7 @@ namespace GKCore.Controllers
         public void Next()
         {
             try {
-                GetParameters();
-
-                if (fStrategy == null) return;
-
-                if (!fStrategy.HasResults()) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
-                    return;
-                }
-
+                if (!RequireResults()) return;
                 SelectResult(fStrategy.FindNext() as SearchResult);
             } catch (Exception ex) {
                 Logger.WriteError("FARDlgController.Next()", ex);
@@ -186,7 +178,7 @@ namespace GKCore.Controllers
         public void Replace()
         {
             try {
-                //GetParameters();
+                if (!RequireResults()) return;
                 fStrategy.ReplaceCurrent();
             } catch (Exception ex) {
                 Logger.WriteError("FARDlgController.Replace()", ex);
@@ -196,7 +188,8 @@ namespace GKCore.Controllers
         public void ReplaceAll()
         {
             try {
-                //GetParameters();
+                if (!RequireResults()) return;
+                fStrategy.ReplaceAll();
             } catch (Exception ex) {
                 Logger.WriteError("FARDlgController.ReplaceAll()", ex);
             }

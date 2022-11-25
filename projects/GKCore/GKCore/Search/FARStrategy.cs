@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using GDModel;
 using GKCore.Interfaces;
@@ -55,22 +54,14 @@ namespace GKCore.Search
     }
 
 
-    public class FARStrategy : ISearchStrategy
+    public class FARStrategy : BaseSearchStrategy
     {
         private readonly IBaseWindow fBaseWindow;
         private FARParameters fParameters;
-        private IList<ISearchResult> fCurrentResults;
-        private ISearchResult fCurResult;
 
         // runtime
         private Regex fPatternRegex;
         private StringComparison fStrComparison;
-
-
-        public ISearchResult CurResult
-        {
-            get { return fCurResult; }
-        }
 
 
         public FARStrategy(IBaseWindow baseWindow, FARParameters parameters)
@@ -80,7 +71,6 @@ namespace GKCore.Search
 
             fBaseWindow = baseWindow;
             fParameters = parameters;
-
             fCurrentResults = FindAll();
         }
 
@@ -108,7 +98,7 @@ namespace GKCore.Search
             return string.Empty;
         }
 
-        public IList<ISearchResult> FindAll()
+        public override IList<ISearchResult> FindAll()
         {
             List<ISearchResult> result = new List<ISearchResult>();
 
@@ -160,10 +150,10 @@ namespace GKCore.Search
 
         #endregion
 
-        public void ReplaceCurrent()
+        private void Replace(ISearchResult res)
         {
-            if (fCurResult != null) {
-                var farResult = (FARSearchResult)fCurResult;
+            if (res != null) {
+                var farResult = (FARSearchResult)res;
                 farResult.Replacer(farResult.Property);
                 fBaseWindow.NotifyRecord(farResult.Record, Types.RecordAction.raEdit);
                 fBaseWindow.UpdateChangedRecords(farResult.Record);
@@ -171,39 +161,20 @@ namespace GKCore.Search
             }
         }
 
-        public bool HasResults()
+        public void ReplaceCurrent()
         {
-            return (fCurrentResults != null && fCurrentResults.Count > 0);
+            if (CurResult != null) {
+                Replace(CurResult);
+            }
         }
 
-        public ISearchResult FindNext()
+        public void ReplaceAll()
         {
-            if (fCurResult == null) {
-                if (fCurrentResults == null) fCurrentResults = FindAll();
+            if (!HasResults()) return;
 
-                fCurResult = fCurrentResults.FirstOrDefault();
-            } else {
-                int idx = fCurrentResults.IndexOf(fCurResult) + 1;
-
-                fCurResult = (idx < fCurrentResults.Count) ? fCurrentResults[idx] : null;
+            while (FindNext() != null) {
+                Replace(CurResult);
             }
-
-            return fCurResult;
-        }
-
-        public ISearchResult FindPrev()
-        {
-            if (fCurResult == null) {
-                if (fCurrentResults == null) fCurrentResults = FindAll();
-
-                fCurResult = fCurrentResults.LastOrDefault();
-            } else {
-                int idx = fCurrentResults.IndexOf(fCurResult) - 1;
-
-                fCurResult = (idx >= 0) ? fCurrentResults[idx] : null;
-            }
-
-            return fCurResult;
         }
     }
 }

@@ -274,6 +274,7 @@
     <Compile Include="GKCore\Options\ListOptions.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
     <Compile Include="GKCore\Plugins\WidgetPlugin.cs" />
+    <Compile Include="GKCore\Search\BaseSearchStrategy.cs" />
     <Compile Include="GKCore\Search\FARPropertyType.cs" />
     <Compile Include="GKCore\Search\SearchResult.cs" />
     <Compile Include="GKCore\Search\SearchStrategy.cs" />
