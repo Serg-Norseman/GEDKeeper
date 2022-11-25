@@ -1,4 +1,26 @@
 
+## 28.11.2022 [v2.22.0]
+- Added feature "Find and Replace".
+- Fixed inconsistent display of names between list of persons and the information panel.
+- Added output of event sources to the pedigree report.
+- Improved support for portrait photos when importing files from FTB.
+- Added option to highlight inaccessible media files.
+- Added new diagnostic: detection of persons without any places.
+- Added "Open in new window" function in tree chart.
+- Added a new ancestry statistics report.
+- Added automatic photo orientation correction.
+- Updated German localization [Flexmaen].
+- Fixed output of multimedia files in the GEDmill website generator.
+- Fixed entering dates in regional formats.
+- Added fan chart mode to ancestor circle chart.
+- Added options to enable extended tree mode and maximize chart windows.
+- Added an extended mode for displaying trees - with the ancestors of the spouses of the central person.
+- Added output method and a file with useful tips for working with the program.
+- Added options for advanced users: enable extended notes and disable saving "rich" names in GEDCOM files.
+- Added option to save portraits inline in SVG files (or external files).
+- Added output of portraits in SVG export files of tree diagrams.
+- Fixed display error of some relationships [se-sss].
+
 ## 28.08.2022 [v2.21.0]
 - Changed the display of several families of parents in the information panel.
 - Added diagnostics for several families of parents in personal records.
