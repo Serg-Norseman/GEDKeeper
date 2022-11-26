@@ -800,7 +800,7 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miTreeCompare").Text = LangMan.LS(LSID.LSID_ToolOp_1);
                 GetControl<IMenuItem>("miTreeMerge").Text = LangMan.LS(LSID.LSID_ToolOp_2);
                 GetControl<IMenuItem>("miTreeSplit").Text = LangMan.LS(LSID.LSID_ToolOp_3);
-                GetControl<IMenuItem>("miRecMerge").Text = LangMan.LS(LSID.LSID_ToolOp_4);
+                GetControl<IMenuItem>("miRecMerge").Text = LangMan.LS(LSID.LSID_MergeDuplicates);
                 GetControl<IMenuItem>("miFamilyGroups").Text = LangMan.LS(LSID.LSID_ToolOp_6);
                 GetControl<IMenuItem>("miTreeCheck").Text = LangMan.LS(LSID.LSID_ToolOp_7);
                 GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.LSID_ToolOp_8);
@@ -835,7 +835,7 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miContRecordEdit").Text = LangMan.LS(LSID.LSID_MIRecordEdit);
                 GetControl<IMenuItem>("miContRecordDelete").Text = LangMan.LS(LSID.LSID_MIRecordDelete);
                 GetControl<IMenuItem>("miContRecordDuplicate").Text = LangMan.LS(LSID.LSID_RecordDuplicate);
-                GetControl<IMenuItem>("miContRecordMerge").Text = LangMan.LS(LSID.LSID_ToolOp_4);
+                GetControl<IMenuItem>("miContRecordMerge").Text = LangMan.LS(LSID.LSID_MergeDuplicates);
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.SetLocale()", ex);
             }
@@ -964,20 +964,6 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeCheckDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, false);
-                }
-            } finally {
-                fContext.EndUpdate();
-            }
-        }
-
-        public void ShowRecMerge(GDMRecord rec1, GDMRecord rec2)
-        {
-            try {
-                fContext.BeginUpdate();
-                using (var dlg = AppHost.Container.Resolve<IRecMergeDlg>(fView)) {
-                    dlg.SetRec1(rec1);
-                    dlg.SetRec2(rec2);
                     AppHost.Instance.ShowModalX(dlg, false);
                 }
             } finally {

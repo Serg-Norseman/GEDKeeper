@@ -488,6 +488,11 @@ namespace GKUI.Forms
             fController.OpenInNewWindow();
         }
 
+        private void miMergeDuplicates_Click(object sender, EventArgs e)
+        {
+            fController.MergeDuplicates();
+        }
+
         #endregion
 
         #region IChartWindow implementation

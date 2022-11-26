@@ -68,6 +68,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miGoToRecord;
         private ButtonMenuItem miGoToPrimaryBranch;
         private ButtonMenuItem miOpenInNewWindow;
+        private ButtonMenuItem miMergeDuplicates;
         private ButtonToolItem tbDocPrint;
         private ButtonToolItem tbDocPreview;
         private ButtonToolItem tbFilter;
@@ -247,6 +248,9 @@ namespace GKUI.Forms
             miOpenInNewWindow = new ButtonMenuItem();
             miOpenInNewWindow.Click += miOpenInNewWindow_Click;
 
+            miMergeDuplicates = new ButtonMenuItem();
+            miMergeDuplicates.Click += miMergeDuplicates_Click;
+
             MenuPerson = new ContextMenu();
             MenuPerson.Items.AddRange(new MenuItem[] {
                                           miEdit,
@@ -263,6 +267,7 @@ namespace GKUI.Forms
                                           miGoToRecord,
                                           miGoToPrimaryBranch,
                                           miOpenInNewWindow,
+                                          miMergeDuplicates,
                                           new SeparatorMenuItem(),
                                           miRebuildTree,
                                           miRebuildKinships,
@@ -621,6 +626,11 @@ namespace GKUI.Forms
         private void miOpenInNewWindow_Click(object sender, EventArgs e)
         {
             fController.OpenInNewWindow();
+        }
+
+        private void miMergeDuplicates_Click(object sender, EventArgs e)
+        {
+            fController.MergeDuplicates();
         }
 
         #endregion

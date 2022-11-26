@@ -356,7 +356,7 @@ namespace GKUI.Forms
             var recView = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
             if (recView != null) {
                 var items = recView.GetSelectedItems();
-                fController.ShowRecMerge(
+                BaseController.ShowRecMerge(this,
                     items.Count > 0 ? items[0] as GDMRecord : null,
                     items.Count > 1 ? items[1] as GDMRecord : null
                 );
@@ -843,7 +843,7 @@ namespace GKUI.Forms
 
         private void miTTRecMerge_Click(object sender, EventArgs e)
         {
-            fController.ShowRecMerge(null, null);
+            BaseController.ShowRecMerge(this, null, null);
         }
 
         private void miTTPlacesManager_Click(object sender, EventArgs e)

@@ -565,7 +565,7 @@ namespace GKCore
         /* 512 */ LSID_ToolOp_1,
         /* 513 */ LSID_ToolOp_2,
         /* 514 */ LSID_ToolOp_3,
-        /* 515 */ LSID_ToolOp_4,
+        /* 515 */ LSID_MergeDuplicates,
         /* 516 */ LSID_SearchUnlinkedNamesakes,
         /* 517 */ LSID_ToolOp_6,
         /* 518 */ LSID_ToolOp_7,

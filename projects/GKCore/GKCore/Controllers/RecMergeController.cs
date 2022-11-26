@@ -136,7 +136,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_ToolOp_4);
+            fView.Title = LangMan.LS(LSID.LSID_MergeDuplicates);
 
             GetControl<ITabPage>("pageMerge").Text = LangMan.LS(LSID.LSID_RecMerge);
             GetControl<ITabPage>("pageMergeOptions").Text = LangMan.LS(LSID.LSID_MIOptions);

@@ -57,6 +57,7 @@
         private System.Windows.Forms.ContextMenuStrip MenuBorders;
         private System.Windows.Forms.ToolStripMenuItem miGoToPrimaryBranch;
         private System.Windows.Forms.ToolStripMenuItem miOpenInNewWindow;
+        private System.Windows.Forms.ToolStripMenuItem miMergeDuplicates;
 
         private void InitializeComponent()
         {
@@ -115,6 +116,7 @@
             this.MenuBorders = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miGoToPrimaryBranch = new System.Windows.Forms.ToolStripMenuItem();
             this.miOpenInNewWindow = new System.Windows.Forms.ToolStripMenuItem();
+            this.miMergeDuplicates = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolBar1.SuspendLayout();
             this.MenuModes.SuspendLayout();
             this.MenuPerson.SuspendLayout();
@@ -371,6 +373,7 @@
             this.miGoToRecord,
             this.miGoToPrimaryBranch,
             this.miOpenInNewWindow,
+            this.miMergeDuplicates,
             this.N3,
             this.miRebuildTree,
             this.miRebuildKinships,
@@ -471,6 +474,13 @@
             this.miOpenInNewWindow.Size = new System.Drawing.Size(172, 22);
             this.miOpenInNewWindow.Text = "miOpenInNewWindow";
             this.miOpenInNewWindow.Click += new System.EventHandler(this.miOpenInNewWindow_Click);
+            // 
+            // miMergeDuplicates
+            // 
+            this.miMergeDuplicates.Name = "miMergeDuplicates";
+            this.miMergeDuplicates.Size = new System.Drawing.Size(217, 24);
+            this.miMergeDuplicates.Text = "miMergeDuplicates";
+            this.miMergeDuplicates.Click += new System.EventHandler(this.miMergeDuplicates_Click);
             // 
             // N3
             // 

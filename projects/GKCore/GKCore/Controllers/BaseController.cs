@@ -1045,6 +1045,20 @@ namespace GKCore.Controllers
             return false;
         }
 
+        public static void ShowRecMerge(IBaseWindow baseWin, GDMRecord rec1, GDMRecord rec2)
+        {
+            try {
+                baseWin.Context.BeginUpdate();
+                using (var dlg = AppHost.Container.Resolve<IRecMergeDlg>(baseWin)) {
+                    dlg.SetRec1(rec1);
+                    dlg.SetRec2(rec2);
+                    AppHost.Instance.ShowModalX(dlg, false);
+                }
+            } finally {
+                baseWin.Context.EndUpdate();
+            }
+        }
+
         #endregion
 
         #region Aux

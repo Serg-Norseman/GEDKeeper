@@ -251,6 +251,14 @@ namespace GKCore.Controllers
             BaseController.ShowTreeChart(fBase, p.Rec, TreeChartKind.ckBoth);
         }
 
+        public void MergeDuplicates()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p == null || p.Rec == null) return;
+
+            BaseController.ShowRecMerge(fBase, p.Rec, null);
+        }
+
         public bool SelectedPersonIsReal()
         {
             TreeChartPerson p = fView.TreeBox.Selected;
@@ -339,6 +347,7 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
             GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.LSID_GoToPrimaryBranch);
             GetControl<IMenuItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.LSID_OpenInNewWindow);
+            GetControl<IMenuItem>("miMergeDuplicates").Text = LangMan.LS(LSID.LSID_MergeDuplicates);
 
             SetToolTip("tbModes", LangMan.LS(LSID.LSID_ModesTip));
             SetToolTip("tbImageSave", LangMan.LS(LSID.LSID_ImageSaveTip));
