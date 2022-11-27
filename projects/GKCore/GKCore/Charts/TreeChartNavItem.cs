@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma warning disable CS0659, CS0661
+
 using System;
 using GDModel;
 

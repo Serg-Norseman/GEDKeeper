@@ -706,8 +706,7 @@ namespace GKMap.WinForms
             }
         }
 
-#if !DESIGN
-#if DEBUG
+#if DEBUG_RENDER
         private int fCounter;
         private readonly Font fDebugFont = new Font(FontFamily.GenericSansSerif, 12, FontStyle.Regular);
         private DateTime fStart;
@@ -717,7 +716,7 @@ namespace GKMap.WinForms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-#if DEBUG
+#if DEBUG_RENDER
             fStart = DateTime.Now;
 #endif
 
@@ -732,7 +731,7 @@ namespace GKMap.WinForms
 
             base.OnPaint(e);
 
-#if DEBUG
+#if DEBUG_RENDER
             fEnd = DateTime.Now;
             fDelta = (int)(fEnd - fStart).TotalMilliseconds;
 #endif
@@ -746,7 +745,6 @@ namespace GKMap.WinForms
             fCore.DrawMap(g);
             OnPaintOverlays(g);
         }
-#endif
 
         /// <summary>
         /// override, to render something more

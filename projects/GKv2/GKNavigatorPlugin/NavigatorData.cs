@@ -123,6 +123,7 @@ namespace GKNavigatorPlugin
                         break;
                 }
             } catch (Exception ex) {
+                Logger.WriteError("BaseData.NotifyRecord()", ex);
             }
         }
 

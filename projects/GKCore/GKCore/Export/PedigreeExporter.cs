@@ -405,7 +405,7 @@ namespace GKCore.Export
 
         private void ProcessSourceCitations(IGDMStructWithSourceCitations swsc, List<string> sources)
         {
-            if (fOptions.PedigreeOptions.IncludeSources && swsc.HasSourceCitations) {
+            if (fOptions.PedigreeOptions.IncludeSources && swsc != null && swsc.HasSourceCitations) {
                 int num = swsc.SourceCitations.Count;
                 for (int i = 0; i < num; i++) {
                     var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(swsc.SourceCitations[i]);

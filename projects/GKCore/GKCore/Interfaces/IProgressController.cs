@@ -100,7 +100,7 @@ namespace GKCore.Interfaces
         /// </summary>
         /// <param name="value">The amount by which to increment the progress indicator</param>
         /// <remarks>You must have called one of the Begin() methods prior to this call.</remarks>
-        void StepTo(int value);
+        new void StepTo(int value);
 
         /// <summary>
         /// Call this method from the worker thread to step the progress meter to a particular value.

@@ -54,12 +54,14 @@ namespace GKUI.Forms
             fDialog.Increment();
             fDialog.StepTo(10);
             fDialog.End();
+        }
 
+        [Test]
+        public void Test_Common2()
+        {
             fDialog.Begin("Test2", 100, true);
-            fDialog.End(new ThreadError(10, "fail"));
-
             fDialog.InvokeEx(() => { });
-
+            fDialog.End(new ThreadError(10, "fail"));
             fDialog.Close();
         }
     }

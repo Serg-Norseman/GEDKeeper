@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma warning disable CS0612
+
 #define MAIN_TEST
 
 #if !MONO
@@ -289,8 +291,8 @@ namespace GKUI.Forms
         [Test]
         public void Test_ShowFamilyGroupsDlg()
         {
-            SetModalFormHandler(this, TreeToolsWinTests.FamilyGroupsDlg_Handler);
             ClickToolStripMenuItem("miFamilyGroups", fMainWin);
+            TreeToolsWinTests.FamilyGroupsDlg_Handler(this, GetActiveForm("TTFamilyGroupsDlg"));
         }
 
         [Test]

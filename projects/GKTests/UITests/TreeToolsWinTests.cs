@@ -113,7 +113,7 @@ namespace GKUI.Forms
             form.Close();
         }
 
-        public static void FamilyGroupsDlg_Handler(string name, IntPtr ptr, Form form)
+        public static void FamilyGroupsDlg_Handler(CustomWindowTest formTest, Form form)
         {
             var tabs = new TabControlTester("tabsTools", form);
 
