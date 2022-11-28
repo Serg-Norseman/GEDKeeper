@@ -87,6 +87,7 @@ namespace GDModel
             int hash;
             foreach (GDMCustomEvent evt1 in iRec.Events) {
                 hash = evt1.GetHashCode();
+                SysUtils.DoNotInline(hash);
             }
         }
 
@@ -102,6 +103,7 @@ namespace GDModel
             while (enumer.MoveNext()) {
                 GDMCustomEvent evt1 = enumer.Current;
                 hash = evt1.GetHashCode();
+                SysUtils.DoNotInline(hash);
             }
         }
 
@@ -115,6 +117,7 @@ namespace GDModel
             for (int i = 0; i < iRec.Events.Count; i++) {
                 GDMCustomEvent evt1 = iRec.Events[i];
                 hash = evt1.GetHashCode();
+                SysUtils.DoNotInline(hash);
             }
         }
     }

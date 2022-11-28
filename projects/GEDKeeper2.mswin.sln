@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2", "GKv2\GEDKeeper2\GEDKeeper2.csproj", "{19B7D80A-37FD-4E49-9F59-87FA41B677E2}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{F5B0E1E6-6FA7-4EEA-905A-B32125985C14}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTreeVizPlugin", "GKv2\GKTreeVizPlugin\GKTreeVizPlugin.csproj", "{29156CC1-79B1-473D-93F4-62340686FFC3}"
@@ -48,8 +50,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKBackupPlugin", "GKv2\GKBackupPlugin\GKBackupPlugin.csproj", "{D0E58F68-8706-4308-924B-BE56A03B3C99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKGenetixPlugin", "GKGenetix\GKGenetixPlugin\GKGenetixPlugin.csproj", "{DF48872B-3E78-409C-B43C-1EFD46B0BBC4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2", "GKv2\GEDKeeper2\GEDKeeper2.csproj", "{19B7D80A-37FD-4E49-9F59-87FA41B677E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTests", "GKTests\GKTests.csproj", "{A8B53A6B-40A6-40BA-A671-03FC911BC37B}"
 EndProject

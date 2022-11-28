@@ -22,7 +22,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using BSLib.Design.IoC;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -220,10 +219,14 @@ namespace GKTests
             string fileName = GetTempFilePath(resName);
 
             using (Stream inStream = TestUtils.LoadResourceStream(resName)) {
-                long size = inStream.Length;
+                int size = (int)inStream.Length;
                 byte[] buffer = new byte[size];
-                int res = inStream.Read(buffer, 0, (int)size);
-                File.WriteAllBytes(fileName, buffer);
+                int res = inStream.Read(buffer, 0, size);
+                if (res == size) {
+                    File.WriteAllBytes(fileName, buffer);
+                } else {
+                    throw new Exception("Resource stream not fully read");
+                }
             }
 
             return fileName;

@@ -174,7 +174,6 @@ namespace GDModel
         public void Test_Common2()
         {
             GDMSourceRecord sourRec = fContext.Tree.CreateSource();
-            GDMIndividualRecord indiv = fContext.Tree.CreateIndividual();
             GDMRepositoryRecord repRec = fContext.Tree.CreateRepository();
 
             Assert.IsNotNull(sourRec.Data);

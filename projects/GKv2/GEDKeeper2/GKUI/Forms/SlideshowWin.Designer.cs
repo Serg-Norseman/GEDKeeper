@@ -2,7 +2,6 @@
 {
 	partial class SlideshowWin
 	{
-		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.ToolStripButton tbNext;
 		private System.Windows.Forms.ToolStripButton tbPrev;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -11,7 +10,6 @@
 
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.tbStart = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();

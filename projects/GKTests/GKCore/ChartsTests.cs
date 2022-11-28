@@ -58,11 +58,11 @@ namespace GKCore.Charts
         public void Test_TCGenerationsControl()
         {
             var treeChart = Substitute.For<ITreeChart>();
-            var chartRenderer = Substitute.For<ChartRenderer>();
 
             var instance = new TCGenerationsControl(treeChart, TreeChartKind.ckAncestors);
             Assert.IsNotNull(instance);
 
+            //var chartRenderer = Substitute.For<ChartRenderer>();
             //instance.Draw(chartRenderer);
 
             var tip = instance.Tip;
@@ -78,11 +78,11 @@ namespace GKCore.Charts
         public void Test_TCScaleControl()
         {
             var treeChart = Substitute.For<ITreeChart>();
-            var chartRenderer = Substitute.For<ChartRenderer>();
 
             var instance = new TCScaleControl(treeChart);
             Assert.IsNotNull(instance);
 
+            //var chartRenderer = Substitute.For<ChartRenderer>();
             //instance.Draw(chartRenderer);
 
             var tip = instance.Tip;
@@ -98,11 +98,11 @@ namespace GKCore.Charts
         public void Test_TCPersonControl()
         {
             var treeChart = Substitute.For<ITreeChart>();
-            var chartRenderer = Substitute.For<ChartRenderer>();
 
             var instance = new TCPersonControl(treeChart);
             Assert.IsNotNull(instance);
 
+            //var chartRenderer = Substitute.For<ChartRenderer>();
             //instance.Draw(chartRenderer);
 
             var tip = instance.Tip;

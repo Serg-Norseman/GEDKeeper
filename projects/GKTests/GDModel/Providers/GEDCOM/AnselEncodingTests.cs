@@ -110,11 +110,9 @@ namespace GDModel.Providers.GEDCOM
             var ansel = new AnselEncoding();
 
             byte[] bytes = null;
-            char[] chars = null;
             Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetChars(null, 0, 0, null, 0); });
             bytes = new byte[0];
             Assert.Throws(typeof(ArgumentNullException), () => { ansel.GetChars(bytes, 0, 0, null, 0); });
-            chars = new char[] { ' ' };
         }
 
         [Test]

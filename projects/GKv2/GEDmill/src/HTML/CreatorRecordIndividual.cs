@@ -19,16 +19,15 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GEDmill.MiniTree;
 using GEDmill.Model;
+using GKCore;
+using GKCore.Interfaces;
 using GKCore.Logging;
 using GKCore.Types;
-using GDModel.Providers.GEDCOM;
-using GKCore.Interfaces;
-using GKCore;
 
 namespace GEDmill.HTML
 {
@@ -420,10 +419,8 @@ namespace GEDmill.HTML
                 // Add entries for this individual's other names
                 if (!fConcealed && !fUnknownName) {
                     for (int i = 1; i < fIndiRec.PersonalNames.Count; i++) {
-                        string otherName;
-                        string otherFirstName;
-                        string otherSurname;
-                        otherName = GMHelper.CapitaliseName(fIndiRec.PersonalNames[i], out otherFirstName, out otherSurname); // Also splits name into first name and surname
+                        string otherFirstName, otherSurname;
+                        GMHelper.CapitaliseName(fIndiRec.PersonalNames[i], out otherFirstName, out otherSurname); // Also splits name into first name and surname
                         fIndiIndexCreator.AddIndividualToIndex(otherFirstName, otherSurname, fUnknownName, alterEgo, lifeDates, fConcealed, relativeFilename, userRef);
                     }
                 }

@@ -2132,10 +2132,9 @@ namespace GEDmill
 
             // At last, try to create the folder
             failed = false;
-            DirectoryInfo directoryInfo = null;
             fLogger.WriteInfo("Creating output folder.");
             try {
-                directoryInfo = Directory.CreateDirectory(outputFolder);
+                Directory.CreateDirectory(outputFolder);
             }
             // Order of catches is important here, due to hierarchy of exception classes.
             catch (DirectoryNotFoundException e) {

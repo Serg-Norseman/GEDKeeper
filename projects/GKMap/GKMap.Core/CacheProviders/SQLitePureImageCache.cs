@@ -544,8 +544,7 @@ namespace GKMap.CacheProviders
                     if (!string.IsNullOrEmpty(fAttachSqlQuery)) {
                         using (DbCommand com = cn.CreateCommand()) {
                             com.CommandText = fAttachSqlQuery;
-                            int x = com.ExecuteNonQuery();
-                            //Debug.WriteLine("Attach: " + x);
+                            com.ExecuteNonQuery();
                         }
                     }
 
@@ -569,8 +568,7 @@ namespace GKMap.CacheProviders
                     if (!string.IsNullOrEmpty(fDetachSqlQuery)) {
                         using (DbCommand com = cn.CreateCommand()) {
                             com.CommandText = fDetachSqlQuery;
-                            int x = com.ExecuteNonQuery();
-                            //Debug.WriteLine("Detach: " + x);
+                            com.ExecuteNonQuery();
                         }
                     }
 

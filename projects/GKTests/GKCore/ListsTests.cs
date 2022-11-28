@@ -135,7 +135,11 @@ namespace GKCore
             filter.Conditions.Add(new FilterCondition(1, ConditionKind.ck_Contains, "Kostrom"));
 
             string yaml = YamlHelper.Serialize(filter);
-            Assert.AreEqual("Conditions:\r\n- ColumnIndex: 1\r\n  Condition: ck_Contains\r\n  Value: Kostrom\r\n", yaml);
+            string expected = "Conditions:\r\n- ColumnIndex: 1\r\n  Condition: ck_Contains\r\n  Value: Kostrom\r\n";
+#if MONO
+            expected = expected.Replace("\r\n", "\n");
+#endif
+            Assert.AreEqual(expected, yaml);
         }
 
         [Test]

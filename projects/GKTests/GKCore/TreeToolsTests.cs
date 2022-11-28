@@ -284,6 +284,7 @@ namespace GKCore
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(null, progress); });
             List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(fBaseWin, progress);
+            Assert.IsNotNull(uln);
         }
 
         [Test]

@@ -223,7 +223,6 @@ namespace GKCore
             fContext.CollectEventValues(null);
             Assert.AreEqual(0, fContext.ValuesCollection.Count);
 
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             var evt = new GDMIndividualAttribute((int)GEDCOMTagType._AWARD, "Congressional Gold Medal");
 
             fContext.CollectEventValues(evt);

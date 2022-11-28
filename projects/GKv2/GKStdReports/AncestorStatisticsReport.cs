@@ -50,7 +50,7 @@ namespace GKStdReports
         {
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
             fTitleFont = fWriter.CreateFont("", 22f, true, false, clrBlack);
-            fChaptFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
+            fChaptFont = fWriter.CreateFont("", 14f, true, false, clrBlack);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
 
             ClearStats();
@@ -187,7 +187,7 @@ namespace GKStdReports
             if (fImplexCommonIndiMap.Count == 0) return;
 
             // Print table of common individuals
-            WriteLine(RLS.LSID_CommonAncestors);
+            fWriter.AddParagraph(Localize(RLS.LSID_CommonAncestors), fChaptFont);
             foreach (var itr in fImplexCommonIndiMap.Values) {
                 WriteLine(GetName(itr));
             }

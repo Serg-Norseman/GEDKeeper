@@ -31,7 +31,6 @@ namespace GKCore.Export
     public class XLSWriter : CustomWriter
     {
         private int fColumnsCount;
-        private int fRowsCount;
         private int fTableCol;
         private int fTableRow;
         private Workbook fWorkbook;
@@ -141,8 +140,6 @@ namespace GKCore.Export
         public override void BeginTable(int columnsCount, int rowsCount)
         {
             fColumnsCount = columnsCount;
-            fRowsCount = rowsCount;
-
             fTableRow = 1;
             fTableCol = 1;
         }

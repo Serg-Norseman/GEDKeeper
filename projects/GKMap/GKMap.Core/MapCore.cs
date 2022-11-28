@@ -56,10 +56,6 @@ namespace GKMap
         public GPoint DragPoint;
         public GPoint CompensationOffset;
 
-        public GPoint MouseDown;
-        public GPoint MouseCurrent;
-        public GPoint MouseLastZoom;
-
         public bool InvertedMouseWheelZooming { get; set; }
 
         /// <summary>
@@ -88,6 +84,12 @@ namespace GKMap
         }
 
         public TileMatrix Matrix { get; private set; }
+
+        public GPoint MouseCurrent { get; set; }
+
+        public GPoint MouseDown { get; set; }
+
+        public GPoint MouseLastZoom { get; set; }
 
         public bool MouseIn
         {
@@ -440,8 +442,8 @@ namespace GKMap
             this.Width = width;
             this.Height = height;
 
-            fSizeOfMapArea.Width = 1 + (Width / fProvider.Projection.TileSize.Width) / 2;
-            fSizeOfMapArea.Height = 1 + (Height / fProvider.Projection.TileSize.Height) / 2;
+            var tileSize = fProvider.Projection.TileSize;
+            fSizeOfMapArea = new GSize(1 + (Width / tileSize.Width) / 2, 1 + (Height / tileSize.Height) / 2);
 
             Debug.WriteLine("OnMapSizeChanged, w: " + width + ", h: " + height + ", size: " + fSizeOfMapArea);
 
@@ -1280,8 +1282,7 @@ namespace GKMap
             if (fMouseIn && !IsDragging) {
                 if (MouseLastZoom.X != eX && MouseLastZoom.Y != eY) {
                     fView.Position = FromLocalToLatLng(eX, eY);
-                    MouseLastZoom.X = eX;
-                    MouseLastZoom.Y = eY;
+                    MouseLastZoom = new GPoint(eX, eY);
                 }
 
                 fView.SetMousePositionToMapCenter();

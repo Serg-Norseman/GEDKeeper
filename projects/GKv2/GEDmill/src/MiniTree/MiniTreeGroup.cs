@@ -76,6 +76,11 @@ namespace GEDmill.MiniTree
             set { fBoxLeft = value; }
         }
 
+        public MiniTreeGroup Parent
+        {
+            get { return fParent; }
+        }
+
         // Returns the right-most box. (Used when drawing horizontal gedcomLine from which children hang.)
         public MiniTreeIndividual RightBox
         {
