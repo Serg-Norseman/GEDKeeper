@@ -116,7 +116,7 @@ namespace GKCore
         public void Test_MergeTree_SelfTest()
         {
             using (var ctx1 = new BaseContext(null)) {
-                IBaseWindow baseWin = new BaseWindowStub(ctx1);
+                //IBaseWindow baseWin = new BaseWindowStub(ctx1);
 
                 using (Stream stmGed1 = TestUtils.LoadResourceStream("test1.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx1.Tree);
@@ -312,7 +312,7 @@ namespace GKCore
             var logBox = Substitute.For<ITextBox>();
 
             using (var ctx1 = new BaseContext(null)) {
-                IBaseWindow baseWin = new BaseWindowStub(ctx1);
+                //IBaseWindow baseWin = new BaseWindowStub(ctx1);
 
                 using (Stream stmGed1 = TestUtils.LoadResourceStream("test1.ged")) {
                     var gedcomProvider = new GEDCOMProvider(ctx1.Tree);

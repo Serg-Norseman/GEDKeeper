@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml;
 using GDModel.Providers.GEDCOM;
@@ -42,12 +41,11 @@ namespace GDModel.Providers.FamilyShow
         private const string OPCContentFileName = "content.xml";
 
 
-        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         static FamilyXProvider()
         {
             // Static initialization of the GEDCOMProvider is needed, 
             // otherwise the standard tag identifiers are out of sync
-            var formats = GEDCOMProvider.GEDCOMFormats;
+            SysUtils.DoNotInline(GEDCOMProvider.GEDCOMFormats);
         }
 
         public FamilyXProvider(GDMTree tree) : base(tree)

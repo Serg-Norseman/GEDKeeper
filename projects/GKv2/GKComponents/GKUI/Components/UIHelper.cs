@@ -460,8 +460,8 @@ namespace GKUI.Components
                 }
 
                 Bitmap ballImage = new Bitmap(dd, dd);
-                var canvas = Graphics.FromImage(ballImage);
 
+                //var canvas = Graphics.FromImage(ballImage);
                 //Color rr = colors[maxr / 2];
                 //canvas.FillEllipse(new SolidBrush(rr), 0, 0, dd, dd);
 

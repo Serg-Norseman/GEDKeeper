@@ -99,16 +99,14 @@ namespace GKMap.MapProviders.Google
                             int count = gc.Count;
                             if (count > 0) {
                                 string ver = string.Format("m@{0}", gc[1].Value);
-                                string old = GMapProviders.GoogleMap.Version;
-
                                 GMapProviders.GoogleMap.Version = ver;
 
                                 string verh = string.Format("h@{0}", gc[1].Value);
-                                string oldh = GMapProviders.GoogleHybridMap.Version;
-
                                 GMapProviders.GoogleHybridMap.Version = verh;
 
 #if DEBUG
+                                string old = GMapProviders.GoogleMap.Version;
+                                string oldh = GMapProviders.GoogleHybridMap.Version;
                                 Debug.WriteLine("GMapProviders.GoogleMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
                                 Debug.WriteLine("GMapProviders.GoogleHybridMap.Version: " + verh + ", " + (verh == oldh ? "OK" : "old: " + oldh + ", consider updating source"));
 
@@ -126,10 +124,10 @@ namespace GKMap.MapProviders.Google
                             int count = gc.Count;
                             if (count > 0) {
                                 string ver = gc[1].Value;
-                                string old = GMapProviders.GoogleSatelliteMap.Version;
-
                                 GMapProviders.GoogleSatelliteMap.Version = ver;
+
 #if DEBUG
+                                string old = GMapProviders.GoogleSatelliteMap.Version;
                                 Debug.WriteLine("GMapProviders.GoogleSatelliteMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
                                 if (Debugger.IsAttached && ver != old) {
                                     Thread.Sleep(1111);
@@ -145,10 +143,10 @@ namespace GKMap.MapProviders.Google
                             int count = gc.Count;
                             if (count > 1) {
                                 string ver = string.Format("t@{0},r@{1}", gc[1].Value, gc[2].Value);
-                                string old = GMapProviders.GoogleTerrainMap.Version;
-
                                 GMapProviders.GoogleTerrainMap.Version = ver;
+
 #if DEBUG
+                                string old = GMapProviders.GoogleTerrainMap.Version;
                                 Debug.WriteLine("GMapProviders.GoogleTerrainMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
                                 if (Debugger.IsAttached && ver != old) {
                                     Thread.Sleep(1111);

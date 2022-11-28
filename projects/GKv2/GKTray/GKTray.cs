@@ -43,14 +43,14 @@ namespace GKTray
 {
     public sealed class GKTray
     {
+        public const string APP_TITLE = "GEDKeeper Tray";
+
+        #if !MONO
+
         private class TipInfo
         {
             public DateTime LastTime;
         }
-
-        public const string APP_TITLE = "GEDKeeper Tray";
-
-        #if !MONO
 
         private MenuItem fAutorunItem;
         private readonly ContextMenu fMenu;

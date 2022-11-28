@@ -92,7 +92,6 @@ namespace GKCore
         public void Test_ExcelExporter()
         {
             BaseWindowStub baseWin = new BaseWindowStub();
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 
             Assert.Throws(typeof(ArgumentNullException), () => { new ExcelExporter(null); });
@@ -106,7 +105,6 @@ namespace GKCore
         public void Test_FamilyBookExporter()
         {
             BaseWindowStub baseWin = new BaseWindowStub();
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 
             Assert.Throws(typeof(ArgumentNullException), () => { new FamilyBookExporter(null); });
@@ -120,7 +118,6 @@ namespace GKCore
         public void Test_TreesAlbumExporter()
         {
             BaseWindowStub baseWin = new BaseWindowStub();
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             baseWin.Context.ShieldState = ShieldState.None;
 
             Assert.Throws(typeof(ArgumentNullException), () => { new TreesAlbumExporter(null); });

@@ -127,19 +127,13 @@ namespace GKCore.Tools
 
         private static void CheckRecordWithEvents(GDMRecordWithEvents rec, List<CheckObj> checksList)
         {
-            var dateZero = new DateTime(0);
-
             int num = rec.Events.Count;
             for (int i = 0; i < num; i++) {
                 GDMCustomEvent evt = rec.Events[i];
 
                 bool invalid = false;
                 try {
-                    var dtx = evt.Date.GetDateTime();
-
-                    /*if (dtx == dateZero) {
-                        invalid = true;
-                    }*/
+                    SysUtils.DoNotInline(evt.Date.GetDateTime());
                 } catch {
                     invalid = true;
                 }

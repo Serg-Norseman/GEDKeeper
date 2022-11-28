@@ -384,7 +384,7 @@ namespace GKCore.Tools
                 }
 
                 sourceRec.MoveTo(targetRec);
-                bool res = baseWin.Context.DeleteRecord(sourceRec);
+                baseWin.Context.DeleteRecord(sourceRec);
 
                 if (targetRec.RecordType == GDMRecordType.rtIndividual && bookmark) {
                     ((GDMIndividualRecord)targetRec).Bookmark = true;
