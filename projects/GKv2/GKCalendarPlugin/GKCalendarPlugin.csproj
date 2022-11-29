@@ -40,6 +40,9 @@
     <Compile Include="CalendarWidget.Designer.cs">
       <DependentUpon>CalendarWidget.cs</DependentUpon>
     </Compile>
+    <Compile Include="HistoryDateBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="GKCalendarPlugin.enu">
@@ -66,8 +69,6 @@
       <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -31,8 +31,8 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKCalendarPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calendar plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2014 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyCopyright("Copyright © 2014-2022 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyCulture("")]
 
 namespace GKCalendarPlugin
@@ -65,6 +65,12 @@ namespace GKCalendarPlugin
 
         LSID_Cal_Byzantine,
         LSID_ByzantineMonths,
+
+        LSID_Day,
+        LSID_Month,
+        LSID_Year,
+        LSID_SourceDate,
+        LSID_ConvertedDate,
     }
 
     public sealed class Plugin : WidgetPlugin

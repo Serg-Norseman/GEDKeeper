@@ -164,9 +164,16 @@ namespace GKCore.Plugins
             if (sender == null)
                 return null;
 
+            return CreateLangMan(sender.GetType().Assembly);
+        }
+
+        public static ILangMan CreateLangMan(Assembly asm)
+        {
+            if (asm == null)
+                return null;
+
             string lngSign = GlobalOptions.Instance.GetLanguageSign();
 
-            Assembly asm = sender.GetType().Assembly;
             Module[] mods = asm.GetModules();
             string asmFile = mods[0].FullyQualifiedName;
 

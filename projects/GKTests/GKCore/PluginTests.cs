@@ -142,7 +142,8 @@ namespace GKCore
             pluginsMan.OnLanguageChange();
             pluginsMan.NotifyRecord(null, null, RecordAction.raAdd);
 
-            Assert.AreEqual(null, pluginsMan.CreateLangMan(null));
+            object sender = null;
+            Assert.AreEqual(null, pluginsMan.CreateLangMan(sender));
         }
     }
 }
