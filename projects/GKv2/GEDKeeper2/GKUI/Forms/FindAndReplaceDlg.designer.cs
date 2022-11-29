@@ -46,7 +46,7 @@
             this.btnReplace.Margin = new System.Windows.Forms.Padding(2);
             this.btnReplace.Name = "btnReplace";
             this.btnReplace.Size = new System.Drawing.Size(112, 30);
-            this.btnReplace.TabIndex = 5;
+            this.btnReplace.TabIndex = 14;
             this.btnReplace.Text = "btnReplace";
             this.btnReplace.Click += new System.EventHandler(this.btnReplace_Click);
             // 
@@ -56,7 +56,7 @@
             this.btnReplaceAll.Margin = new System.Windows.Forms.Padding(2);
             this.btnReplaceAll.Name = "btnReplaceAll";
             this.btnReplaceAll.Size = new System.Drawing.Size(112, 30);
-            this.btnReplaceAll.TabIndex = 6;
+            this.btnReplaceAll.TabIndex = 15;
             this.btnReplaceAll.Text = "btnReplaceAll";
             this.btnReplaceAll.Click += new System.EventHandler(this.btnReplaceAll_Click);
             // 
@@ -71,7 +71,7 @@
             this.gbFilters.Name = "gbFilters";
             this.gbFilters.Padding = new System.Windows.Forms.Padding(2);
             this.gbFilters.Size = new System.Drawing.Size(373, 85);
-            this.gbFilters.TabIndex = 0;
+            this.gbFilters.TabIndex = 7;
             this.gbFilters.TabStop = false;
             // 
             // lblProperty
@@ -81,7 +81,7 @@
             this.lblProperty.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
             this.lblProperty.Name = "lblProperty";
             this.lblProperty.Size = new System.Drawing.Size(74, 17);
-            this.lblProperty.TabIndex = 28;
+            this.lblProperty.TabIndex = 10;
             this.lblProperty.Text = "lblProperty";
             // 
             // cmbProperty
@@ -91,7 +91,7 @@
             this.cmbProperty.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.cmbProperty.Name = "cmbProperty";
             this.cmbProperty.Size = new System.Drawing.Size(213, 25);
-            this.cmbProperty.TabIndex = 29;
+            this.cmbProperty.TabIndex = 11;
             // 
             // lblRecord
             // 
@@ -100,7 +100,7 @@
             this.lblRecord.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblRecord.Name = "lblRecord";
             this.lblRecord.Size = new System.Drawing.Size(64, 17);
-            this.lblRecord.TabIndex = 26;
+            this.lblRecord.TabIndex = 8;
             this.lblRecord.Text = "lblRecord";
             // 
             // cmbRecord
@@ -110,7 +110,7 @@
             this.cmbRecord.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.cmbRecord.Name = "cmbRecord";
             this.cmbRecord.Size = new System.Drawing.Size(213, 25);
-            this.cmbRecord.TabIndex = 27;
+            this.cmbRecord.TabIndex = 9;
             // 
             // lblPattern
             // 
@@ -119,7 +119,7 @@
             this.lblPattern.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPattern.Name = "lblPattern";
             this.lblPattern.Size = new System.Drawing.Size(65, 17);
-            this.lblPattern.TabIndex = 20;
+            this.lblPattern.TabIndex = 0;
             this.lblPattern.Text = "lblPattern";
             // 
             // cmbPattern
@@ -128,7 +128,7 @@
             this.cmbPattern.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.cmbPattern.Name = "cmbPattern";
             this.cmbPattern.Size = new System.Drawing.Size(448, 25);
-            this.cmbPattern.TabIndex = 21;
+            this.cmbPattern.TabIndex = 1;
             // 
             // chkMatchCase
             // 
@@ -137,7 +137,7 @@
             this.chkMatchCase.Margin = new System.Windows.Forms.Padding(2);
             this.chkMatchCase.Name = "chkMatchCase";
             this.chkMatchCase.Size = new System.Drawing.Size(118, 21);
-            this.chkMatchCase.TabIndex = 22;
+            this.chkMatchCase.TabIndex = 4;
             this.chkMatchCase.Text = "chkMatchCase";
             // 
             // chkMatchWildcards
@@ -147,7 +147,7 @@
             this.chkMatchWildcards.Margin = new System.Windows.Forms.Padding(2);
             this.chkMatchWildcards.Name = "chkMatchWildcards";
             this.chkMatchWildcards.Size = new System.Drawing.Size(148, 21);
-            this.chkMatchWildcards.TabIndex = 23;
+            this.chkMatchWildcards.TabIndex = 5;
             this.chkMatchWildcards.Text = "chkMatchWildcards";
             // 
             // lblReplacement
@@ -157,7 +157,7 @@
             this.lblReplacement.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
             this.lblReplacement.Name = "lblReplacement";
             this.lblReplacement.Size = new System.Drawing.Size(99, 17);
-            this.lblReplacement.TabIndex = 24;
+            this.lblReplacement.TabIndex = 2;
             this.lblReplacement.Text = "lblReplacement";
             // 
             // cmbReplacement
@@ -166,7 +166,7 @@
             this.cmbReplacement.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this.cmbReplacement.Name = "cmbReplacement";
             this.cmbReplacement.Size = new System.Drawing.Size(448, 25);
-            this.cmbReplacement.TabIndex = 25;
+            this.cmbReplacement.TabIndex = 3;
             // 
             // chkWholeWord
             // 
@@ -175,7 +175,7 @@
             this.chkWholeWord.Margin = new System.Windows.Forms.Padding(2);
             this.chkWholeWord.Name = "chkWholeWord";
             this.chkWholeWord.Size = new System.Drawing.Size(126, 21);
-            this.chkWholeWord.TabIndex = 26;
+            this.chkWholeWord.TabIndex = 6;
             this.chkWholeWord.Text = "chkWholeWord";
             // 
             // btnPrev
@@ -184,7 +184,7 @@
             this.btnPrev.Margin = new System.Windows.Forms.Padding(2);
             this.btnPrev.Name = "btnPrev";
             this.btnPrev.Size = new System.Drawing.Size(112, 30);
-            this.btnPrev.TabIndex = 27;
+            this.btnPrev.TabIndex = 12;
             this.btnPrev.Text = "btnPrev";
             this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
             // 
@@ -194,7 +194,7 @@
             this.btnNext.Margin = new System.Windows.Forms.Padding(2);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(112, 30);
-            this.btnNext.TabIndex = 28;
+            this.btnNext.TabIndex = 13;
             this.btnNext.Text = "btnNext";
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
