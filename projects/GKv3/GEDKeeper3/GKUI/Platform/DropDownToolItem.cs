@@ -8,6 +8,7 @@ using Eto.Wpf;
 using Eto.Wpf.Forms.ToolBar;
 using swc = System.Windows.Controls;
 using sw = System.Windows;
+using swm = System.Windows.Media;
 #endif
 
 #if OS_LINUX
@@ -30,15 +31,16 @@ namespace GKUI.Platform
         readonly swc.Image swcImage;
         readonly swc.TextBlock label;
         ContextMenu contextMenu;
+        readonly sw.Shapes.Path arrow;
 
         public DropDownToolItemHandler()
         {
             Control = new swc.Button();
             swcImage = new swc.Image { MaxHeight = 16, MaxWidth = 16 };
             label = new swc.TextBlock();
-            var panel = new swc.StackPanel { Orientation = swc.Orientation.Horizontal };
-            panel.Children.Add(swcImage);
-            panel.Children.Add(label);
+            // Text="▼/▾"
+            arrow = new sw.Shapes.Path { Data = swm.Geometry.Parse("M 0 0 L 3 4 L 6 0 Z"), VerticalAlignment = sw.VerticalAlignment.Center, Margin = new sw.Thickness(8, 2, 0, 0), Fill = swm.Brushes.Black };
+            var panel = new swc.StackPanel { Orientation = swc.Orientation.Horizontal, Children = { swcImage, label, arrow } };
             Control.Content = panel;
             Control.Click += Control_Click;
             sw.Automation.AutomationProperties.SetLabeledBy(Control, label);

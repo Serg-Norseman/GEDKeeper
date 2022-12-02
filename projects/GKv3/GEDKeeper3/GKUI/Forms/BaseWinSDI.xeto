@@ -11,7 +11,7 @@
       <ButtonToolItem x:Name="tbFileNew" Image="{Resource Resources.btn_create_new.gif, GKCore}" Click="miFileNew_Click" />
       <ButtonToolItem x:Name="tbFileLoad" Image="{Resource Resources.btn_load.gif, GKCore}" Click="miFileLoad_Click" />
 
-      <complat:DropDownToolItem x:Name="tbLoadMRU" Text="▼">
+      <complat:DropDownToolItem x:Name="tbLoadMRU">
         <complat:DropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuMRU">
           </ContextMenu>
