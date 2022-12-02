@@ -493,9 +493,9 @@ namespace GKCore
 
         public abstract ExtRect GetActiveScreenWorkingArea();
 
-        public abstract void WidgetLocate(IWidgetForm view, WidgetHorizontalLocation horizontalLocation, WidgetVerticalLocation verticalLocation);
+        public abstract void WidgetLocate(IWidgetForm view, WidgetLocation location);
 
-        public ExtPoint WidgetLocate(ExtRect formBounds, WidgetHorizontalLocation horizontalLocation, WidgetVerticalLocation verticalLocation)
+        protected ExtPoint WidgetLocate(ExtRect formBounds, WidgetLocation location)
         {
             const int ScrPaddingX = 10;
             const int ScrPaddingYt = 50;
@@ -506,28 +506,20 @@ namespace GKCore
             int locX = 0;
             int locY = 0;
 
-            switch (horizontalLocation) {
-                case WidgetHorizontalLocation.Left:
-                    locX = ScrPaddingX;
-                    break;
-                case WidgetHorizontalLocation.Center:
-                    locX = (screenWorkingArea.Width - formBounds.Width) / 2;
-                    break;
-                case WidgetHorizontalLocation.Right:
-                    locX = screenWorkingArea.Width - formBounds.Width - ScrPaddingX;
-                    break;
+            if ((location & WidgetLocation.HLeft) != WidgetLocation.None) {
+                locX = ScrPaddingX;
+            } else if ((location & WidgetLocation.HCenter) != WidgetLocation.None) {
+                locX = (screenWorkingArea.Width - formBounds.Width) / 2;
+            } else if ((location & WidgetLocation.HRight) != WidgetLocation.None) {
+                locX = screenWorkingArea.Width - formBounds.Width - ScrPaddingX;
             }
 
-            switch (verticalLocation) {
-                case WidgetVerticalLocation.Top:
-                    locY = ScrPaddingYt;
-                    break;
-                case WidgetVerticalLocation.Center:
-                    locY = (screenWorkingArea.Height - formBounds.Height) / 2;
-                    break;
-                case WidgetVerticalLocation.Bottom:
-                    locY = screenWorkingArea.Height - formBounds.Height - ScrPaddingYb;
-                    break;
+            if ((location & WidgetLocation.VTop) != WidgetLocation.None) {
+                locY = ScrPaddingYt;
+            } else if ((location & WidgetLocation.VCenter) != WidgetLocation.None) {
+                locY = (screenWorkingArea.Height - formBounds.Height) / 2;
+            } else if ((location & WidgetLocation.VBottom) != WidgetLocation.None) {
+                locY = screenWorkingArea.Height - formBounds.Height - ScrPaddingYb;
             }
 
             return new ExtPoint(screenWorkingArea.Left + locX, screenWorkingArea.Top + locY);

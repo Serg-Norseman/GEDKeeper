@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -28,14 +27,13 @@ using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKNamesBookPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class NamesBookWidget : Form, ILocalizable
+    public partial class NamesBookWidget : Form, IWidgetForm
     {
         private const string CRLF = "\r\n";
 
@@ -90,8 +88,7 @@ namespace GKNamesBookPlugin
 
         private void NamesBookWidget_Load(object sender, EventArgs e)
         {
-            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Center);
-            this.Location = new Point(loc.X, loc.Y);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VCenter);
 
             fPlugin.Host.WidgetShow(fPlugin);
         }

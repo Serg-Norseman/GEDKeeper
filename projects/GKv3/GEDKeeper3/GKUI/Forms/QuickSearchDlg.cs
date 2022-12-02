@@ -62,7 +62,7 @@ namespace GKUI.Forms
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            AppHost.Instance.WidgetLocate(this, WidgetHorizontalLocation.Left, WidgetVerticalLocation.Bottom);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HLeft | WidgetLocation.VBottom);
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)

@@ -26,11 +26,10 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
-using GKUI.Components;
 
 namespace GKNavigatorPlugin
 {
-    public partial class NavigatorWidget : Form, ILocalizable
+    public partial class NavigatorWidget : Form, IWidgetForm
     {
         private readonly Plugin fPlugin;
         private readonly ILangMan fLangMan;
@@ -115,8 +114,7 @@ namespace GKNavigatorPlugin
 
         private void NavigatorWidget_Load(object sender, EventArgs e)
         {
-            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Bottom);
-            this.Location = new System.Drawing.Point(loc.X, loc.Y);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
 
             fPlugin.Host.WidgetShow(fPlugin);
             BaseChanged(fPlugin.Host.GetCurrentFile());

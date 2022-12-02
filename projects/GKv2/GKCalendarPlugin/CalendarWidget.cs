@@ -19,29 +19,18 @@
  */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
-using BSLib.Calendar;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKCalendarPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class CalendarWidget : Form, ILocalizable
+    public partial class CalendarWidget : Form, IWidgetForm
     {
         private readonly Plugin fPlugin;
-
-        private string[] fBahaiMonths;
-        private string[] fClassicMonths;
-        private string[] fHebrewMonths;
-        private string[] fIndianCivilMonths;
-        private string[] fIslamicMonths;
-        private string[] fPersianMonths;
-        private string[] fByzantineMonths;
 
         public CalendarWidget(Plugin plugin)
         {
@@ -59,8 +48,7 @@ namespace GKCalendarPlugin
 
         private void CalendarWidget_Load(object sender, EventArgs e)
         {
-            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Top);
-            this.Location = new Point(loc.X, loc.Y);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VTop);
 
             fPlugin.Host.WidgetShow(fPlugin);
         }
@@ -85,14 +73,6 @@ namespace GKCalendarPlugin
             Text = langMan.LS(PLS.LSID_MICalendar);
             grpSourceDate.Text = langMan.LS(PLS.LSID_SourceDate);
             grpConvertedDate.Text = langMan.LS(PLS.LSID_ConvertedDate);
-
-            fBahaiMonths = CalendarData.InitNames(langMan.LS(PLS.LSID_BahaiMonths));
-            fClassicMonths = CalendarData.InitNames(langMan.LS(PLS.LSID_ClassicMonths));
-            fHebrewMonths = CalendarData.InitNames(langMan.LS(PLS.LSID_HebrewMonths));
-            fIndianCivilMonths = CalendarData.InitNames(langMan.LS(PLS.LSID_IndianCivilMonths));
-            fIslamicMonths = CalendarData.InitNames(langMan.LS(PLS.LSID_IslamicMonths));
-            fPersianMonths = CalendarData.InitNames(langMan.LS(PLS.LSID_PersianMonths));
-            fByzantineMonths = CalendarData.InitNames(langMan.LS(PLS.LSID_ByzantineMonths));
         }
 
         #endregion

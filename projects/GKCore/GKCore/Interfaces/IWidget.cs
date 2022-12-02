@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,11 +18,29 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+
 namespace GKCore.Interfaces
 {
+    [Flags]
+    public enum WidgetLocation : uint
+    {
+        None = 0,
+
+        HLeft = 1,
+        HCenter = 2,
+        HRight = 4,
+
+        VTop = 8,
+        VCenter = 16,
+        VBottom = 32
+    }
+
+
     public interface IWidgetForm : ILocalizable
     {
     }
+
 
     public interface IWidget
     {

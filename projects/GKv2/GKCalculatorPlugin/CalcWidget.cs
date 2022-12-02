@@ -23,7 +23,6 @@ using System.Windows.Forms;
 using BSLib;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKCalculatorPlugin
 {
@@ -48,7 +47,7 @@ namespace GKCalculatorPlugin
 
         private void CalcWidget_Load(object sender, EventArgs e)
         {
-            AppHost.Instance.WidgetLocate(this, WidgetHorizontalLocation.Right, WidgetVerticalLocation.Bottom);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
 
             fPlugin.Host.WidgetShow(fPlugin);
         }

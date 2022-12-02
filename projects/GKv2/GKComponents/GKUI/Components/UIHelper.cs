@@ -23,9 +23,9 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BSLib;
-using BSLib.Design;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
@@ -34,9 +34,9 @@ using GKCore.Options;
 
 namespace GKUI.Components
 {
-    #if !MONO
+#if !MONO
     using Microsoft.Win32;
-    #endif
+#endif
 
     /// <summary>
     /// Static functions only for UI implementation.

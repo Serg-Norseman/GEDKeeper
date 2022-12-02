@@ -24,20 +24,6 @@ using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
-    public enum WidgetHorizontalLocation
-    {
-        Left,
-        Center,
-        Right
-    }
-
-    public enum WidgetVerticalLocation
-    {
-        Top,
-        Center,
-        Bottom
-    }
-
     public interface IHost
     {
         IBaseWindow GetCurrentFile(bool extMode = false);
@@ -63,7 +49,6 @@ namespace GKCore.Interfaces
         bool IsWidgetActive(IWidget widget);
         void WidgetShow(IWidget widget);
         void WidgetClose(IWidget widget);
-        ExtPoint WidgetLocate(ExtRect formBounds, WidgetHorizontalLocation horizontalLocation, WidgetVerticalLocation verticalLocation);
 
         void EnableWindow(IWidgetForm form, bool value);
         bool ShowModalX(ICommonDialog form, bool keepModeless = false);

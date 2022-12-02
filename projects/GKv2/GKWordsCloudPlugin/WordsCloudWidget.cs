@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using BSLib.Design;
+using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Stats;

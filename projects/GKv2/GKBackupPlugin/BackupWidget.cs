@@ -19,11 +19,9 @@
  */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKBackupPlugin
 {
@@ -45,8 +43,7 @@ namespace GKBackupPlugin
 
         private void Form_Load(object sender, EventArgs e)
         {
-            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Bottom);
-            this.Location = new Point(loc.X, loc.Y);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
 
             fPlugin.Host.WidgetShow(fPlugin);
 

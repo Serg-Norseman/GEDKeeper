@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib.Design;
 using BSLib.Design.Graphics;
+using BSLib.Design.MVP.Controls;
 
 namespace GKUI.Components
 {

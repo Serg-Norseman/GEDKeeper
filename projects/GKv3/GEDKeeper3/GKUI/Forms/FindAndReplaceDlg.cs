@@ -70,7 +70,7 @@ namespace GKUI.Forms
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            AppHost.Instance.WidgetLocate(this, WidgetHorizontalLocation.Right, WidgetVerticalLocation.Bottom);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)

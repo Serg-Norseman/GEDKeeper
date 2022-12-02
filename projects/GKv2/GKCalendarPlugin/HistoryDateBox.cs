@@ -21,7 +21,7 @@
 using System;
 using System.Windows.Forms;
 using BSLib.Calendar;
-using BSLib.Design;
+using BSLib.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 
@@ -29,20 +29,22 @@ namespace GKCalendarPlugin
 {
     public enum Calendar
     {
-        Gregorian, Julian, Hebrew, Islamic,
-        Persian, Indian, Bahai, Byzantine,
+        Gregorian, Julian, Byzantine,
+        Hebrew, Islamic,
+        Persian, Indian,
+        //Bahai,
 
         First = Gregorian,
-        Last = Byzantine
+        Last = Indian
     }
 
     public class HistoryDateBox : UserControl
     {
         private static PLS[] fCalendarNames = new PLS[] {
-            PLS.LSID_Cal_Gregorian, PLS.LSID_Cal_Julian,
+            PLS.LSID_Cal_Gregorian, PLS.LSID_Cal_Julian, PLS.LSID_Cal_Byzantine,
             PLS.LSID_Cal_Hebrew, PLS.LSID_Cal_Islamic,
             PLS.LSID_Cal_Persian, PLS.LSID_Cal_Indian,
-            PLS.LSID_Cal_Bahai, PLS.LSID_Cal_Byzantine,
+            //PLS.LSID_Cal_Bahai,
         };
 
 
@@ -126,6 +128,9 @@ namespace GKCalendarPlugin
                     case Calendar.Julian:
                         result = CalendarConverter.julian_to_jd(year, month, day);
                         break;
+                    case Calendar.Byzantine:
+                        //result = CalendarConverter.byzantine_to_jd(year, month, day);
+                        break;
                     case Calendar.Hebrew:
                         result = CalendarConverter.hebrew_to_jd(year, month, day);
                         break;
@@ -138,12 +143,9 @@ namespace GKCalendarPlugin
                     case Calendar.Indian:
                         result = CalendarConverter.indian_civil_to_jd(year, month, day);
                         break;
-                    case Calendar.Bahai:
+                    //case Calendar.Bahai:
                         //result = CalendarConverter.bahai_to_jd(year, month, day);
-                        break;
-                    case Calendar.Byzantine:
-                        //result = CalendarConverter.byzantine_to_jd(year, month, day);
-                        break;
+                        //break;
                 }
             } catch {
             }
@@ -166,6 +168,9 @@ namespace GKCalendarPlugin
                         case Calendar.Julian:
                             CalendarConverter.jd_to_julian(value, out year, out month, out day);
                             break;
+                        case Calendar.Byzantine:
+                            CalendarConverter.jd_to_byzantine(value, out year, out month, out day, CalendarConverter.ByzantineStyle.March);
+                            break;
                         case Calendar.Hebrew:
                             CalendarConverter.jd_to_hebrew(value, out year, out month, out day);
                             break;
@@ -178,12 +183,9 @@ namespace GKCalendarPlugin
                         case Calendar.Indian:
                             CalendarConverter.jd_to_indian_civil(value, out year, out month, out day);
                             break;
-                        case Calendar.Bahai:
+                        //case Calendar.Bahai:
                             //result = CalendarConverter.bahai_to_jd(value, out year, out month, out day);
-                            break;
-                        case Calendar.Byzantine:
-                            //result = CalendarConverter.byzantine_to_jd(value, out year, out month, out day);
-                            break;
+                            //break;
                     }
                 }
 
@@ -220,6 +222,9 @@ namespace GKCalendarPlugin
                     case Calendar.Julian:
                         months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_ClassicMonths));
                         break;
+                    case Calendar.Byzantine:
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_ByzantineMonths));
+                        break;
                     case Calendar.Hebrew:
                         months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_HebrewMonths));
                         break;
@@ -232,12 +237,9 @@ namespace GKCalendarPlugin
                     case Calendar.Indian:
                         months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_IndianCivilMonths));
                         break;
-                    case Calendar.Bahai:
-                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_BahaiMonths));
-                        break;
-                    case Calendar.Byzantine:
-                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_ByzantineMonths));
-                        break;
+                    //case Calendar.Bahai:
+                        //months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_BahaiMonths));
+                        //break;
                 }
 
                 if (months != null) {

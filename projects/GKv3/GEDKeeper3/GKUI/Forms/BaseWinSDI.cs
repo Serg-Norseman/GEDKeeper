@@ -188,18 +188,20 @@ namespace GKUI.Forms
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
 
             tabsRecords.SuspendLayout();
-            CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GDMRecordType.rtIndividual);
-            CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GDMRecordType.rtFamily);
-            CreatePage(LangMan.LS(LSID.LSID_RPNotes), GDMRecordType.rtNote);
-            CreatePage(LangMan.LS(LSID.LSID_RPMultimedia), GDMRecordType.rtMultimedia);
-            CreatePage(LangMan.LS(LSID.LSID_RPSources), GDMRecordType.rtSource);
-            CreatePage(LangMan.LS(LSID.LSID_RPRepositories), GDMRecordType.rtRepository);
-            CreatePage(LangMan.LS(LSID.LSID_RPGroups), GDMRecordType.rtGroup);
-            CreatePage(LangMan.LS(LSID.LSID_RPResearches), GDMRecordType.rtResearch);
-            CreatePage(LangMan.LS(LSID.LSID_RPTasks), GDMRecordType.rtTask);
-            CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GDMRecordType.rtCommunication);
-            CreatePage(LangMan.LS(LSID.LSID_RPLocations), GDMRecordType.rtLocation);
+            CreatePage("Individuals", GDMRecordType.rtIndividual);
+            CreatePage("Families", GDMRecordType.rtFamily);
+            CreatePage("Notes", GDMRecordType.rtNote);
+            CreatePage("Multimedia", GDMRecordType.rtMultimedia);
+            CreatePage("Sources", GDMRecordType.rtSource);
+            CreatePage("Repositories", GDMRecordType.rtRepository);
+            CreatePage("Groups", GDMRecordType.rtGroup);
+            CreatePage("Researches", GDMRecordType.rtResearch);
+            CreatePage("Tasks", GDMRecordType.rtTask);
+            CreatePage("Communications", GDMRecordType.rtCommunication);
+            CreatePage("Locations", GDMRecordType.rtLocation);
             tabsRecords.ResumeLayout();
+
+            fController.SetLocale();
         }
 
         protected override void Dispose(bool disposing)
@@ -553,25 +555,6 @@ namespace GKUI.Forms
         public override void SetLocale()
         {
             fController.SetLocale();
-
-            int num = miPlugins.Items.Count;
-            for (int i = 0; i < num; i++) {
-                MenuItem mi = miPlugins.Items[i];
-                IPlugin plugin = (IPlugin)mi.Tag;
-                mi.Text = plugin.DisplayName;
-            }
-
-            tabsRecords.Pages[ 0].Text = LangMan.LS(LSID.LSID_RPIndividuals);
-            tabsRecords.Pages[ 1].Text = LangMan.LS(LSID.LSID_RPFamilies);
-            tabsRecords.Pages[ 2].Text = LangMan.LS(LSID.LSID_RPNotes);
-            tabsRecords.Pages[ 3].Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            tabsRecords.Pages[ 4].Text = LangMan.LS(LSID.LSID_RPSources);
-            tabsRecords.Pages[ 5].Text = LangMan.LS(LSID.LSID_RPRepositories);
-            tabsRecords.Pages[ 6].Text = LangMan.LS(LSID.LSID_RPGroups);
-            tabsRecords.Pages[ 7].Text = LangMan.LS(LSID.LSID_RPResearches);
-            tabsRecords.Pages[ 8].Text = LangMan.LS(LSID.LSID_RPTasks);
-            tabsRecords.Pages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
-            tabsRecords.Pages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
         }
 
         #endregion

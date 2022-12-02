@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -760,8 +760,36 @@ namespace GKUI.Platform
 
     public sealed class TabControlHandler : BaseControlHandler<TabControl, TabControlHandler>, ITabControl
     {
+        private class TabPageItems : ITabPages
+        {
+            private TabControl fTabControl;
+
+            public ITabPage this[int index]
+            {
+                get {
+                    if (index < 0 || index >= fTabControl.Pages.Count)
+                        throw new ArgumentOutOfRangeException("index");
+
+                    return new TabPageHandler(fTabControl.Pages[index]);
+                }
+            }
+
+            public int Count
+            {
+                get { return fTabControl.Pages.Count; }
+            }
+
+            public TabPageItems(TabControl control)
+            {
+                fTabControl = control;
+            }
+        }
+
+        private TabPageItems fItems;
+
         public TabControlHandler(TabControl control) : base(control)
         {
+            fItems = new TabPageItems(control);
         }
 
         public int SelectedIndex
@@ -769,12 +797,52 @@ namespace GKUI.Platform
             get { return Control.SelectedIndex; }
             set { Control.SelectedIndex = value; }
         }
+
+        public ITabPages Pages
+        {
+            get { return fItems; }
+        }
     }
+
+    internal class MenuSubItems : IMenuItems
+    {
+        private MenuItem fItem;
+
+        public IMenuItem this[int index]
+        {
+            get {
+                var btnItem = fItem as ButtonMenuItem;
+                if (btnItem == null)
+                    throw new Exception("Type mismatch");
+
+                if (index < 0 || index >= btnItem.Items.Count)
+                    throw new ArgumentOutOfRangeException("index");
+
+                return new MenuItemHandler(btnItem.Items[index]);
+            }
+        }
+
+        public int Count
+        {
+            get {
+                return (fItem is ButtonMenuItem) ? ((ButtonMenuItem)fItem).Items.Count : 0;
+            }
+        }
+
+        public MenuSubItems(MenuItem control)
+        {
+            fItem = control;
+        }
+    }
+
 
     public sealed class MenuItemHandler : ControlHandler<MenuItem, MenuItemHandler>, IMenuItem
     {
+        private MenuSubItems fItems;
+
         public MenuItemHandler(MenuItem control) : base(control)
         {
+            fItems = new MenuSubItems(control);
         }
 
         public bool Checked
@@ -803,6 +871,11 @@ namespace GKUI.Platform
             set { Control.Enabled = value; }
         }
 
+        public IMenuItems SubItems
+        {
+            get { return fItems; }
+        }
+
         public object Tag
         {
             get { return Control.Tag; }
@@ -813,11 +886,6 @@ namespace GKUI.Platform
         {
             get { return Control.Text; }
             set { Control.Text = value; }
-        }
-
-        public int ItemsCount
-        {
-            get { return (Control is ButtonMenuItem) ? ((ButtonMenuItem)Control).Items.Count : 0; }
         }
 
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)

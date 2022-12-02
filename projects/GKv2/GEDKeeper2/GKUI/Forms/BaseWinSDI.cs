@@ -113,20 +113,22 @@ namespace GKUI.Forms
             fContext = fController.Context;
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
 
-            CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GDMRecordType.rtIndividual);
-            CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GDMRecordType.rtFamily);
-            CreatePage(LangMan.LS(LSID.LSID_RPNotes), GDMRecordType.rtNote);
-            CreatePage(LangMan.LS(LSID.LSID_RPMultimedia), GDMRecordType.rtMultimedia);
-            CreatePage(LangMan.LS(LSID.LSID_RPSources), GDMRecordType.rtSource);
-            CreatePage(LangMan.LS(LSID.LSID_RPRepositories), GDMRecordType.rtRepository);
-            CreatePage(LangMan.LS(LSID.LSID_RPGroups), GDMRecordType.rtGroup);
-            CreatePage(LangMan.LS(LSID.LSID_RPResearches), GDMRecordType.rtResearch);
-            CreatePage(LangMan.LS(LSID.LSID_RPTasks), GDMRecordType.rtTask);
-            CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GDMRecordType.rtCommunication);
-            CreatePage(LangMan.LS(LSID.LSID_RPLocations), GDMRecordType.rtLocation);
+            tabsRecords.SuspendLayout();
+            CreatePage("Individuals", GDMRecordType.rtIndividual);
+            CreatePage("Families", GDMRecordType.rtFamily);
+            CreatePage("Notes", GDMRecordType.rtNote);
+            CreatePage("Multimedia", GDMRecordType.rtMultimedia);
+            CreatePage("Sources", GDMRecordType.rtSource);
+            CreatePage("Repositories", GDMRecordType.rtRepository);
+            CreatePage("Groups", GDMRecordType.rtGroup);
+            CreatePage("Researches", GDMRecordType.rtResearch);
+            CreatePage("Tasks", GDMRecordType.rtTask);
+            CreatePage("Communications", GDMRecordType.rtCommunication);
+            CreatePage("Locations", GDMRecordType.rtLocation);
+            tabsRecords.ResumeLayout();
             tabsRecords.SelectedIndex = 0;
 
-            SetLocale();
+            fController.SetLocale();
         }
 
         protected override void Dispose(bool disposing)
@@ -488,25 +490,6 @@ namespace GKUI.Forms
         public override void SetLocale()
         {
             fController.SetLocale();
-
-            int num = miPlugins.DropDownItems.Count;
-            for (int i = 0; i < num; i++) {
-                ToolStripItem mi = miPlugins.DropDownItems[i];
-                IPlugin plugin = (IPlugin)mi.Tag;
-                mi.Text = plugin.DisplayName;
-            }
-
-            tabsRecords.TabPages[ 0].Text = LangMan.LS(LSID.LSID_RPIndividuals);
-            tabsRecords.TabPages[ 1].Text = LangMan.LS(LSID.LSID_RPFamilies);
-            tabsRecords.TabPages[ 2].Text = LangMan.LS(LSID.LSID_RPNotes);
-            tabsRecords.TabPages[ 3].Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            tabsRecords.TabPages[ 4].Text = LangMan.LS(LSID.LSID_RPSources);
-            tabsRecords.TabPages[ 5].Text = LangMan.LS(LSID.LSID_RPRepositories);
-            tabsRecords.TabPages[ 6].Text = LangMan.LS(LSID.LSID_RPGroups);
-            tabsRecords.TabPages[ 7].Text = LangMan.LS(LSID.LSID_RPResearches);
-            tabsRecords.TabPages[ 8].Text = LangMan.LS(LSID.LSID_RPTasks);
-            tabsRecords.TabPages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
-            tabsRecords.TabPages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
         }
 
         #endregion

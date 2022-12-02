@@ -19,17 +19,15 @@
  */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKFoldersPlugin
 {
-    public partial class FoldersWidget : Form, ILocalizable
+    public partial class FoldersWidget : Form, IWidgetForm
     {
         private readonly Plugin fPlugin;
 
@@ -52,13 +50,12 @@ namespace GKFoldersPlugin
 
         private void Form_Resize(object sender, EventArgs e)
         {
-            Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - Width - 10, 50);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VTop);
         }
 
         private void FoldersWidget_Load(object sender, EventArgs e)
         {
-            var loc = AppHost.Instance.WidgetLocate(UIHelper.Rt2Rt(this.Bounds), WidgetHorizontalLocation.Right, WidgetVerticalLocation.Top);
-            this.Location = new Point(loc.X, loc.Y);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VTop);
 
             fPlugin.Host.WidgetShow(fPlugin);
             BaseChanged(fPlugin.Host.GetCurrentFile());

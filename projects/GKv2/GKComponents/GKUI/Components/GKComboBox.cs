@@ -20,8 +20,8 @@
 
 using System.Drawing;
 using System.Windows.Forms;
-using BSLib.Design;
 using BSLib.Design.Handlers;
+using BSLib.Design.MVP.Controls;
 
 namespace GKUI.Components
 {

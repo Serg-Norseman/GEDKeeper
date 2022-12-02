@@ -245,11 +245,11 @@ namespace GKUI.Platform
             return UIHelper.Rt2Rt(new Rectangle(screen.WorkingArea));
         }
 
-        public override void WidgetLocate(IWidgetForm view, WidgetHorizontalLocation horizontalLocation, WidgetVerticalLocation verticalLocation)
+        public override void WidgetLocate(IWidgetForm view, WidgetLocation location)
         {
             var form = view as Form;
             if (form != null) {
-                var loc = WidgetLocate(UIHelper.Rt2Rt(form.Bounds), horizontalLocation, verticalLocation);
+                var loc = WidgetLocate(UIHelper.Rt2Rt(form.Bounds), location);
                 form.Location = new Point(loc.X, loc.Y);
             }
         }
