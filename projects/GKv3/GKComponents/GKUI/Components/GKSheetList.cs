@@ -139,7 +139,7 @@ namespace GKUI.Components
 
             ResumeLayout();
 
-            fButtons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
+            Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
             fListModel = null;
         }
 

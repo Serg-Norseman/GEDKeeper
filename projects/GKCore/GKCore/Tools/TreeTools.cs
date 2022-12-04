@@ -225,13 +225,15 @@ namespace GKCore.Tools
             if (mode == TreeWalkMode.twmNone) return;
 
             if (mode == TreeWalkMode.twmAll || mode == TreeWalkMode.twmAncestors) {
-                GDMFamilyRecord family = tree.GetParentsFamily(iRec);
-                if (family != null) {
-                    GDMIndividualRecord father, mother;
-                    tree.GetSpouses(family, out father, out mother);
+                for (int i = 0, num = iRec.ChildToFamilyLinks.Count; i < num; i++) {
+                    var family = tree.GetPtrValue(iRec.ChildToFamilyLinks[i]);
+                    if (family != null) {
+                        GDMIndividualRecord father, mother;
+                        tree.GetSpouses(family, out father, out mother);
 
-                    WalkTreeInt(tree, father, mode, walkProc, extData);
-                    WalkTreeInt(tree, mother, mode, walkProc, extData);
+                        WalkTreeInt(tree, father, mode, walkProc, extData);
+                        WalkTreeInt(tree, mother, mode, walkProc, extData);
+                    }
                 }
             }
 

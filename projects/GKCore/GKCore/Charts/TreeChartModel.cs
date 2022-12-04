@@ -1870,11 +1870,6 @@ namespace GKCore.Charts
 
             // draw lines of children
             if (!person.IsCollapsed && childrenCount != 0) {
-                // draw children
-                for (int i = 0; i < childrenCount; i++) {
-                    Draw(person.GetChild(i), TreeChartKind.ckDescendants, drawMode);
-                }
-
                 int crY;
                 if (!fOptions.InvertedTree) {
                     crY = person.PtY + person.Height + fLevelDistance / 2;
@@ -1941,6 +1936,11 @@ namespace GKCore.Charts
                     } else {
                         DrawLine(cx, spbBeg, cx, crY); // v
                     }
+                }
+
+                // draw children
+                for (int i = 0; i < childrenCount; i++) {
+                    Draw(person.GetChild(i), TreeChartKind.ckDescendants, drawMode);
                 }
             }
         }

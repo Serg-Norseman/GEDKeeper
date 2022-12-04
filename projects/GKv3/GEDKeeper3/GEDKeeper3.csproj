@@ -36,11 +36,9 @@
 
     <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
         <DefineConstants>OS_MSWIN</DefineConstants>
-        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     </PropertyGroup>
     <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
         <DefineConstants>OS_LINUX</DefineConstants>
-        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     </PropertyGroup>
     <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
         <DefineConstants>OS_MACOS</DefineConstants>
@@ -63,6 +61,7 @@
         <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
     </PropertyGroup>
 
+
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
         <TargetFramework>net6.0-windows</TargetFramework>
         <OutputType>WinExe</OutputType>
@@ -70,8 +69,9 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <StartupObject>GEDKeeper3.GKProgram</StartupObject>
-
         <ApplicationIcon>icon_gedkeeper.ico</ApplicationIcon>
+
+        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     </PropertyGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
@@ -86,6 +86,8 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <StartupObject>GEDKeeper3.GKProgram</StartupObject>
+
+        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     </PropertyGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
