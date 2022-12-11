@@ -2,7 +2,7 @@
 {
 	partial class OrganizerWin
 	{
-		private System.Windows.Forms.TabControl tabsData;
+		private GKUI.Components.GKTabControl tabsData;
 		private System.Windows.Forms.TabPage pageAddresses;
 		private System.Windows.Forms.TabPage pageTelephones;
 		private System.Windows.Forms.TabPage pageMails;
@@ -10,7 +10,7 @@
 
 		private void InitializeComponent()
 		{
-		    this.tabsData = new System.Windows.Forms.TabControl();
+		    this.tabsData = new GKUI.Components.GKTabControl();
 		    this.pageAddresses = new System.Windows.Forms.TabPage();
 		    this.pageTelephones = new System.Windows.Forms.TabPage();
 		    this.pageMails = new System.Windows.Forms.TabPage();

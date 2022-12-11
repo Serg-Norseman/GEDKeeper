@@ -2,7 +2,7 @@
 {
 	partial class TTTreeCheckDlg
 	{
-		private System.Windows.Forms.TabControl tabsTools;
+		private GKUI.Components.GKTabControl tabsTools;
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pageTreeCheck;
 		private System.Windows.Forms.Button btnBaseRepair;
@@ -20,7 +20,7 @@
         private void InitializeComponent()
 		{
 		    this.components = new System.ComponentModel.Container();
-		    this.tabsTools = new System.Windows.Forms.TabControl();
+		    this.tabsTools = new GKUI.Components.GKTabControl();
 		    this.pageTreeCheck = new System.Windows.Forms.TabPage();
             this.pageOptions = new System.Windows.Forms.TabPage();
             this.btnAnalyseBase = new System.Windows.Forms.Button();

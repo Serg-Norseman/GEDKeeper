@@ -38,6 +38,7 @@ using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform;
+using GKUI.Themes;
 
 namespace GKUI.Forms
 {
@@ -211,6 +212,7 @@ namespace GKUI.Forms
                 ((IWorkWindow)this).UpdateSettings();
 
                 fController.UpdatePluginsItems();
+                UpdateThemesItems();
                 UpdateMRU();
                 fController.UpdateControls(false);
             } catch (Exception ex) {
@@ -706,6 +708,46 @@ namespace GKUI.Forms
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.UpdateMRU()", ex);
+            }
+        }
+
+        private void ThemeClick(object sender, EventArgs e)
+        {
+            var mItem = (ToolStripMenuItem)sender;
+            foreach (ToolStripMenuItem mi in mItem.GetCurrentParent().Items) {
+                mi.Checked = mItem == mi;
+            }
+
+            var theme = (Theme)mItem.Tag;
+            ThemeManager.SetTheme(theme.Name);
+            ApplyTheme();
+        }
+
+        public void UpdateThemesItems()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes))
+                return;
+
+            try {
+                miThemes.DropDownItems.Clear();
+
+                var themes = ThemeManager.Themes;
+                int num = themes.Count;
+                for (int i = 0; i < num; i++) {
+                    var theme = themes[i];
+
+                    MenuItemEx mi = new MenuItemEx(theme.Name, theme);
+                    mi.Click += ThemeClick;
+                    miThemes.DropDownItems.Add(mi);
+
+                    if (i == 0) {
+                        mi.Checked = true;
+                    }
+                }
+
+                miThemes.Enabled = (miThemes.DropDownItems.Count > 0);
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinSDI.UpdateThemesItems()", ex);
             }
         }
 

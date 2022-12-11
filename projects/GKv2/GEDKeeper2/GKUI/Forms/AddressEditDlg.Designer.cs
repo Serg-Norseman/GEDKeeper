@@ -4,7 +4,7 @@
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.TabControl tabsAddrData;
+		private GKUI.Components.GKTabControl tabsAddrData;
 		private System.Windows.Forms.TabPage pagePhones;
 		private System.Windows.Forms.TabPage pageEmails;
 		private System.Windows.Forms.TabPage pageCommon;
@@ -24,7 +24,7 @@
 		{
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.tabsAddrData = new System.Windows.Forms.TabControl();
+			this.tabsAddrData = new GKUI.Components.GKTabControl();
 			this.pageCommon = new System.Windows.Forms.TabPage();
 			this.lblCountry = new System.Windows.Forms.Label();
 			this.lblState = new System.Windows.Forms.Label();

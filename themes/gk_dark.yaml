@@ -1,0 +1,53 @@
+﻿---
+Name: GK Dark
+Colors:
+  - Element: Editor
+    Value: "#FFFFFF"
+  - Element: EditorText
+    Value: "#000000"
+
+  - Element: Control
+    Value: "#2C2C2C"
+  - Element: ControlText
+    Value: "#FFFFFF"
+
+  - Element: Window
+    Value: "#2C2C2C"
+  - Element: WindowText
+    Value: "#FFFFFF"
+
+  - Element: Dialog
+    Value: "#343B57"
+  - Element: DialogText
+    Value: "#FFFFFF"
+
+  - Element: ButtonFace
+    Value: "#5D67C7"
+  - Element: AccentButtonFace
+    Value: "#7046A6"
+  - Element: ButtonBorder
+    Value: "#3C339F"
+  - Element: ButtonText
+    Value: "#FFFFFF"
+
+  - Element: Strip
+    Value: "#202020"
+  - Element: Dropdown
+    Value: "#202020"
+  - Element: MenuBorder
+    Value: "#F7F7F7"
+  - Element: MenuItemSelected
+    Value: "#4B5781"
+
+  - Element: Link
+    Value: "#D5D5FF"
+
+  - Element: Grid
+    Value: "#2C2C2C"
+  - Element: GridHeader
+    Value: "#3B3B3B"
+  - Element: GridHeaderText
+    Value: "#FFFFFF"
+  - Element: GridText
+    Value: "#FFFFFF"
+...

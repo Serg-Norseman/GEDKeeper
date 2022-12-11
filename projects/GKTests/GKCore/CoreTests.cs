@@ -358,9 +358,6 @@ namespace GKCore
             Assert.IsNotNull(listItem);
             Assert.AreEqual("Test", listItem.ToString());
 
-            GKListSubItem listSubItem = new GKListSubItem("Test");
-            Assert.IsNotNull(listSubItem);
-
             MenuItemEx tsMenuItem = new MenuItemEx("Test", null);
             Assert.IsNotNull(tsMenuItem);
 

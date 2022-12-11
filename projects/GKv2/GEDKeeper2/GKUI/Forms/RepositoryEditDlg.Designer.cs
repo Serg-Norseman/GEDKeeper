@@ -7,7 +7,7 @@
 		private System.Windows.Forms.GroupBox GroupBox1;
 		private System.Windows.Forms.Label lblName;
 		private System.Windows.Forms.TextBox txtName;
-		private System.Windows.Forms.TabControl tabsData;
+		private GKUI.Components.GKTabControl tabsData;
 		private System.Windows.Forms.TabPage pageNotes;
 		private System.Windows.Forms.Button btnAddress;
 
@@ -19,7 +19,7 @@
 			this.lblName = new System.Windows.Forms.Label();
 			this.txtName = new System.Windows.Forms.TextBox();
 			this.btnAddress = new System.Windows.Forms.Button();
-			this.tabsData = new System.Windows.Forms.TabControl();
+			this.tabsData = new GKUI.Components.GKTabControl();
 			this.pageNotes = new System.Windows.Forms.TabPage();
 			this.GroupBox1.SuspendLayout();
 			this.tabsData.SuspendLayout();

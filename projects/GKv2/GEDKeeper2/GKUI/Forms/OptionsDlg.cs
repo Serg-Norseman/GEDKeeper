@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
@@ -161,6 +162,26 @@ namespace GKUI.Forms
         private void rgFNPFormat_CheckedChanged(object sender, EventArgs e)
         {
             fController.ChangeFNPFormat();
+        }
+
+        public override bool SkipTheme(Component component)
+        {
+            if (component == panMaleColor || component == panFemaleColor || component == panUnkSexColor || component == panUnHusbandColor || component == panUnWifeColor) {
+                return true;
+            }
+
+            // FIXME: temporariry hack for AncCircleOptions control
+            if (component is Control) {
+                var control = (Control)component;
+                string compName = control.Name;
+                if (compName == "acbLine" || compName == "acbBack" || compName == "acbText" || compName == "acb7" || compName == "acb6" ||
+                    compName == "acb5" || compName == "acb4" || compName == "acb3" || compName == "acb2" || compName == "acb1" ||
+                    compName == "acb0") {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

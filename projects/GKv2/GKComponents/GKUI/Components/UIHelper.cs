@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.Windows.Forms;
 using BSLib;
 using BSLib.Design.Graphics;
@@ -475,6 +476,43 @@ namespace GKUI.Components
             }
 
             return ball;
+        }
+
+
+        // Converts a string of the form #RRGGBB to a Color instance.
+        // Used when retrieving colours from the config.
+        public static Color ParseColor(string s)
+        {
+            if (string.IsNullOrEmpty(s)) {
+                return Color.Black;
+            }
+
+            int r = 0, g = 0, b = 0;
+
+            if (s[0] != '#') {
+                s = '#' + s;
+            }
+
+            switch (s.Length) {
+                case 4:
+                    s = s.Substring(1);
+                    goto case 3;
+                case 3:
+                    r = int.Parse(s.Substring(0, 1), NumberStyles.HexNumber);
+                    g = int.Parse(s.Substring(1, 1), NumberStyles.HexNumber);
+                    b = int.Parse(s.Substring(2, 1), NumberStyles.HexNumber);
+                    break;
+                case 7:
+                    s = s.Substring(1);
+                    goto case 6;
+                case 6:
+                    r = int.Parse(s.Substring(0, 2), NumberStyles.HexNumber);
+                    g = int.Parse(s.Substring(2, 2), NumberStyles.HexNumber);
+                    b = int.Parse(s.Substring(4, 2), NumberStyles.HexNumber);
+                    break;
+            }
+
+            return Color.FromArgb(r, g, b);
         }
     }
 }

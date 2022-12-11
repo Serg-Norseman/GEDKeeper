@@ -2,7 +2,7 @@
 {
 	partial class TTPatSearchDlg
 	{
-		private System.Windows.Forms.TabControl tabsTools;
+		private GKUI.Components.GKTabControl tabsTools;
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pagePatSearch;
 		private System.Windows.Forms.Button btnPatSearch;
@@ -15,7 +15,7 @@
 
 		private void InitializeComponent()
 		{
-		    this.tabsTools = new System.Windows.Forms.TabControl();
+		    this.tabsTools = new GKUI.Components.GKTabControl();
 		    this.pagePatSearch = new System.Windows.Forms.TabPage();
 		    this.btnPatriarchsDiagram = new System.Windows.Forms.Button();
 		    this.chkWithoutDates = new System.Windows.Forms.CheckBox();

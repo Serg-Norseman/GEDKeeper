@@ -11,7 +11,7 @@
 		private System.Windows.Forms.Label lblCertainty;
 		private System.Windows.Forms.ComboBox txtCertainty;
 		private System.Windows.Forms.ComboBox cmbSource;
-		private System.Windows.Forms.TabControl tabsData;
+		private GKUI.Components.GKTabControl tabsData;
 		private System.Windows.Forms.TabPage pageCommon;
 		private System.Windows.Forms.TabPage pageOther;
 		private System.Windows.Forms.TextBox txtText;
@@ -21,7 +21,7 @@
 		{
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
-		    this.tabsData = new System.Windows.Forms.TabControl();
+		    this.tabsData = new GKUI.Components.GKTabControl();
 		    this.pageCommon = new System.Windows.Forms.TabPage();
 		    this.lblPage = new System.Windows.Forms.Label();
 		    this.txtPage = new System.Windows.Forms.TextBox();

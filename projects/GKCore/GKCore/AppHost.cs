@@ -134,7 +134,7 @@ namespace GKCore
             StartupWork();
         }
 
-        public void StartupWork()
+        public virtual void StartupWork()
         {
             try {
                 ApplyOptions();
@@ -998,6 +998,11 @@ namespace GKCore
         }
 
         public abstract string SelectFolder(string folderPath);
+
+        public virtual bool HasFeatureSupport(Feature feature)
+        {
+            return false;
+        }
 
         #endregion
 

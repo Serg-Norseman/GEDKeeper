@@ -2,7 +2,7 @@
 {
 	partial class TTPlacesManagerDlg
 	{
-		private System.Windows.Forms.TabControl tabsTools;
+		private GKUI.Components.GKTabControl tabsTools;
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pagePlaceManage;
 		private System.Windows.Forms.Panel Panel4;
@@ -11,7 +11,7 @@
 
 		private void InitializeComponent()
 		{
-		    this.tabsTools = new System.Windows.Forms.TabControl();
+		    this.tabsTools = new GKUI.Components.GKTabControl();
 		    this.pagePlaceManage = new System.Windows.Forms.TabPage();
 		    this.Panel4 = new System.Windows.Forms.Panel();
 		    this.btnIntoList = new System.Windows.Forms.Button();

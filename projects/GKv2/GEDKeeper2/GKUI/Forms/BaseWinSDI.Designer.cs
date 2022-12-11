@@ -92,7 +92,7 @@
         private System.Windows.Forms.ToolStripMenuItem miDescendantsCircle;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem miRelationshipCalculator;
-        private System.Windows.Forms.TabControl tabsRecords;
+        private GKUI.Components.GKTabControl tabsRecords;
         private System.Windows.Forms.ToolStripMenuItem miContRecordDuplicate;
         private System.Windows.Forms.ToolStripMenuItem miContRecordMerge;
         private System.Windows.Forms.ToolStripMenuItem miContRecordDelete;
@@ -107,6 +107,7 @@
         private System.Windows.Forms.ToolStripMenuItem miTreeCheck;
         private System.Windows.Forms.ToolStripMenuItem miPatSearch;
         private System.Windows.Forms.ToolStripMenuItem miPlacesManager;
+        private System.Windows.Forms.ToolStripMenuItem miThemes;
 
         private void InitializeComponent()
         {
@@ -206,7 +207,7 @@
             this.miContRecordDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.miContRecordDuplicate = new System.Windows.Forms.ToolStripMenuItem();
             this.miContRecordMerge = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabsRecords = new System.Windows.Forms.TabControl();
+            this.tabsRecords = new GKUI.Components.GKTabControl();
             this.miTreeCompare = new System.Windows.Forms.ToolStripMenuItem();
             this.miTreeMerge = new System.Windows.Forms.ToolStripMenuItem();
             this.miTreeSplit = new System.Windows.Forms.ToolStripMenuItem();
@@ -215,6 +216,7 @@
             this.miTreeCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.miPatSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.miPlacesManager = new System.Windows.Forms.ToolStripMenuItem();
+            this.miThemes = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel2)).BeginInit();
             this.ToolBar1.SuspendLayout();
@@ -790,6 +792,7 @@
                                     this.miScripts,
                                     this.miTreeTools,
                                     this.N10,
+                                    this.miThemes,
                                     this.miOptions});
             this.miService.Name = "miService";
             this.miService.Size = new System.Drawing.Size(68, 24);
@@ -904,6 +907,12 @@
             this.miOptions.Size = new System.Drawing.Size(204, 24);
             this.miOptions.Text = "miOptions";
             this.miOptions.Click += new System.EventHandler(this.miOptions_Click);
+            // 
+            // miThemes
+            // 
+            this.miThemes.Name = "miThemes";
+            this.miThemes.Size = new System.Drawing.Size(204, 24);
+            this.miThemes.Text = "miThemes";
             // 
             // miReports
             // 

@@ -2,7 +2,7 @@
 {
     partial class OptionsDlg
     {
-        private System.Windows.Forms.TabControl PageControl1;
+        private GKUI.Components.GKTabControl PageControl1;
         private System.Windows.Forms.TabPage pageCommon;
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Button btnCancel;
@@ -33,7 +33,7 @@
         private System.Windows.Forms.TextBox txtProxyLogin;
         private System.Windows.Forms.TextBox txtProxyPass;
         private System.Windows.Forms.TabPage pageUIView;
-        private System.Windows.Forms.TabControl PageControl2;
+        private GKUI.Components.GKTabControl PageControl2;
         private System.Windows.Forms.TabPage pageViewCommon;
         private System.Windows.Forms.TabPage pageViewPersons;
         private GKUI.Components.GKListView lstPersonColumns;
@@ -78,7 +78,7 @@
         private GKUI.Components.GKListView lvPlugins;
         private System.Windows.Forms.TabPage pagePlugins;
         private System.Windows.Forms.Label lblChartFont;
-        private System.Windows.Forms.TabControl tabsCharts;
+        private GKUI.Components.GKTabControl tabsCharts;
         private System.Windows.Forms.TabPage pageCharts;
         private System.Windows.Forms.Label lblMaleColor;
         private System.Windows.Forms.Label lblFemaleColor;
@@ -171,7 +171,7 @@
 
         private void InitializeComponent()
         {
-            this.PageControl1 = new System.Windows.Forms.TabControl();
+            this.PageControl1 = new GKUI.Components.GKTabControl();
             this.pageCommon = new System.Windows.Forms.TabPage();
             this.lblCertaintyAlgorithm = new System.Windows.Forms.Label();
             this.cmbCertaintyAlgorithm = new System.Windows.Forms.ComboBox();
@@ -218,7 +218,7 @@
             this.chkEmbeddedMediaPlayer = new System.Windows.Forms.CheckBox();
             this.chkRemovableMediaWarning = new System.Windows.Forms.CheckBox();
             this.pageCharts = new System.Windows.Forms.TabPage();
-            this.tabsCharts = new System.Windows.Forms.TabControl();
+            this.tabsCharts = new GKUI.Components.GKTabControl();
             this.pageTreeChart = new System.Windows.Forms.TabPage();
             this.chkSeparateDepth = new System.Windows.Forms.CheckBox();
             this.numDefaultDepth = new System.Windows.Forms.NumericUpDown();
@@ -279,7 +279,7 @@
             this.pageAncCircle = new System.Windows.Forms.TabPage();
             this.ancOptionsControl1 = new GKUI.Components.ACOptionsControl();
             this.pageUIView = new System.Windows.Forms.TabPage();
-            this.PageControl2 = new System.Windows.Forms.TabControl();
+            this.PageControl2 = new GKUI.Components.GKTabControl();
             this.pageViewCommon = new System.Windows.Forms.TabPage();
             this.chkSurnameFirstInOrder = new System.Windows.Forms.CheckBox();
             this.grpAdvancedNames = new System.Windows.Forms.GroupBox();

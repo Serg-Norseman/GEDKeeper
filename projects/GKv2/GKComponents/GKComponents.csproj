@@ -54,6 +54,12 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKUI\Components\ArborViewer.cs" />
+    <Compile Include="GKUI\Components\FilterGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Components\GKTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -75,9 +81,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKSheetList.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Components\GKTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\GKTextBox.cs">
@@ -105,6 +108,7 @@
       <DependentUpon>MediaPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Components\UIHelper.cs" />
+    <Compile Include="GKUI\Components\Win32.cs" />
     <Compile Include="GKUI\Components\WizardPages.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -125,6 +129,10 @@
     <Compile Include="GKUI\Platform\WFGfxRenderer.cs" />
     <Compile Include="GKUI\Platform\WFStdDialogs.cs" />
     <Compile Include="GKUI\Platform\WFUITimer.cs" />
+    <Compile Include="GKUI\Themes\Theme.cs" />
+    <Compile Include="GKUI\Themes\ThemeColor.cs" />
+    <Compile Include="GKUI\Themes\ThemeFile.cs" />
+    <Compile Include="GKUI\Themes\ThemeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">
@@ -140,6 +148,12 @@
       <Name>GKMap.WinForms</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="GKUI\Components\GKTabControl.resx">
+      <DependentUpon>GKTabControl.cs</DependentUpon>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GKTabControl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

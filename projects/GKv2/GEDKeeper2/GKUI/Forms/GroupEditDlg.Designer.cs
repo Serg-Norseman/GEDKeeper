@@ -5,7 +5,7 @@
 		private System.Windows.Forms.GroupBox GroupBox1;
 		private System.Windows.Forms.TextBox edName;
 		private System.Windows.Forms.Label lblName;
-		private System.Windows.Forms.TabControl tabsGroupData;
+		private GKUI.Components.GKTabControl tabsGroupData;
 		private System.Windows.Forms.TabPage pageNotes;
 		private System.Windows.Forms.TabPage pageMultimedia;
 		private System.Windows.Forms.TabPage pageMembers;
@@ -19,7 +19,7 @@
 			this.edName = new System.Windows.Forms.TextBox();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.tabsGroupData = new System.Windows.Forms.TabControl();
+			this.tabsGroupData = new GKUI.Components.GKTabControl();
 			this.pageMembers = new System.Windows.Forms.TabPage();
 			this.pageNotes = new System.Windows.Forms.TabPage();
 			this.pageMultimedia = new System.Windows.Forms.TabPage();

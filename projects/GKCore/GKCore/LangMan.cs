@@ -946,7 +946,9 @@ namespace GKCore
         /* 885 */ LSID_ReplaceAll,
         /* 886 */ LSID_Property,
 
-        /* 000 */ LSID_Last = LSID_Property
+        /* 887 */ LSID_Themes,
+
+        /* 000 */ LSID_Last = LSID_Themes
     }
 
 
@@ -1848,6 +1850,8 @@ namespace GKCore
             /* 884 */ "Replace",
             /* 885 */ "Replace all",
             /* 886 */ "Property",
+
+            /* 887 */ "Themes",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

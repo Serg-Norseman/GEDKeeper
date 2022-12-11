@@ -4,7 +4,7 @@
     {
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.StatusBar StatusBar1;
-        private System.Windows.Forms.TabControl PageControl1;
+        private GKUI.Components.GKTabControl PageControl1;
         private System.Windows.Forms.TabPage pagePlaces;
         private System.Windows.Forms.TreeView tvPlaces;
         private System.Windows.Forms.GroupBox grpSelection;
@@ -66,7 +66,7 @@
             this.tbClear = new System.Windows.Forms.ToolStripButton();
             this.tbZoomCenter = new System.Windows.Forms.ToolStripButton();
             this.StatusBar1 = new System.Windows.Forms.StatusBar();
-            this.PageControl1 = new System.Windows.Forms.TabControl();
+            this.PageControl1 = new GKUI.Components.GKTabControl();
             this.pagePlaces = new System.Windows.Forms.TabPage();
             this.tvPlaces = new System.Windows.Forms.TreeView();
             this.grpSelection = new System.Windows.Forms.GroupBox();

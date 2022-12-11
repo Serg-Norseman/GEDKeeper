@@ -68,9 +68,6 @@
     <Compile Include="GKUI\Components\CustomChart.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Components\FilterGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKUI\Components\TreeChartBox.cs">
       <SubType>Component</SubType>
     </Compile>
