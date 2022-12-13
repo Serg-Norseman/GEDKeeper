@@ -27,7 +27,7 @@
   </PropertyGroup>
   <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
     <Reference Include="NUnitForms">
-      <HintPath>libs\NUnitForms.dll</HintPath>
+      <HintPath>..\libs\NUnitForms.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -47,10 +47,10 @@
       <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
     <Reference Include="NSubstitute">
-      <HintPath>libs\NSubstitute.dll</HintPath>
+      <HintPath>..\libs\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>libs\nunit.framework.dll</HintPath>
+      <HintPath>..\libs\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
