@@ -50,4 +50,11 @@ Colors:
     Value: "#1F308D"
   - Element: GridText
     Value: "#1F308D"
+
+  - Element: HighlightUnparentedIndi
+    Value: "#FFCACA"
+  - Element: HighlightUnmarriedIndi
+    Value: "#FFFFA1"
+  - Element: HighlightInaccessibleFiles
+    Value: "#FFCACA"
 ...

@@ -79,6 +79,10 @@ namespace GKUI.Themes
                 { ThemeColor.GridHeader, SystemColors.Window },             // checked
                 { ThemeColor.GridHeaderText, SystemColors.WindowText },     // checked
                 { ThemeColor.GridText, SystemColors.WindowText },           // checked
+
+                { ThemeColor.HighlightUnparentedIndi, Color.FromArgb(0xFFCACA) },       // GK only
+                { ThemeColor.HighlightUnmarriedIndi, Color.FromArgb(0xFFFFA1) },        // GK only
+                { ThemeColor.HighlightInaccessibleFiles, Color.FromArgb(0xFFCACA) },    // GK only
             }, true);
         }
 
@@ -139,6 +143,10 @@ namespace GKUI.Themes
         public static void ApplyTheme(IThemedView view)
         {
             if (view == null || fCurrentTheme == null) return;
+
+            GKData.HighlightUnparentedColor = fCurrentTheme.Colors[ThemeColor.HighlightUnparentedIndi].ToArgb();
+            GKData.HighlightUnmarriedColor = fCurrentTheme.Colors[ThemeColor.HighlightUnmarriedIndi].ToArgb();
+            GKData.HighlightInaccessibleFiles = fCurrentTheme.Colors[ThemeColor.HighlightInaccessibleFiles].ToArgb();
 
             var form = view as Form;
             if (form != null) {
@@ -436,6 +444,10 @@ namespace GKUI.Themes
                 foreach (ToolStripItem item in dropdownItem.DropDownItems) {
                     ApplyTheme(view, item, theme);
                 }
+            } else if (ctl is ToolStripSeparator) {
+                if (theme.SysDefault) {
+                } else {
+                }
             }
         }
 
@@ -449,8 +461,8 @@ namespace GKUI.Themes
         private static void ThemeUserControlHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (UserControl)component;
-            ctl.BackColor = theme.Colors[ThemeColor.Editor];
-            ctl.ForeColor = theme.Colors[ThemeColor.EditorText];
+            ctl.BackColor = theme.Colors[ThemeColor.Control];
+            ctl.ForeColor = theme.Colors[ThemeColor.ControlText];
         }
 
         private static void RegisterControlHandlers()
@@ -543,25 +555,66 @@ namespace GKUI.Themes
                 fTheme = theme;
             }
 
+            private void RenderSeparatorInternal(Graphics g, ToolStripItem item, Rectangle bounds, bool vertical)
+            {
+                Color separatorDark = fTheme.Colors[ThemeColor.MenuBorder];
+                Color separatorLight = fTheme.Colors[ThemeColor.MenuBorder];
+                using (Pen pen = new Pen(separatorDark))
+                using (Pen pen2 = new Pen(separatorLight))  {
+                    bool isSeparator = item is ToolStripSeparator;
+                    bool isNotDropdown = false;
+                    if (isSeparator) {
+                        if (vertical) {
+                            if (!item.IsOnDropDown) {
+                                bounds.Y += 3;
+                                bounds.Height = Math.Max(0, bounds.Height - 6);
+                            }
+                        } else {
+                            ToolStripDropDownMenu toolStripDropDownMenu = item.GetCurrentParent() as ToolStripDropDownMenu;
+                            if (toolStripDropDownMenu != null) {
+                                if (toolStripDropDownMenu.RightToLeft == RightToLeft.No) {
+                                    bounds.X += toolStripDropDownMenu.Padding.Left - 2;
+                                    bounds.Width = toolStripDropDownMenu.Width - bounds.X;
+                                } else {
+                                    bounds.X += 2;
+                                    bounds.Width = toolStripDropDownMenu.Width - bounds.X - toolStripDropDownMenu.Padding.Right;
+                                }
+                            } else {
+                                isNotDropdown = true;
+                            }
+                        }
+                    }
+
+                    if (vertical) {
+                        if (bounds.Height >= 4) {
+                            bounds.Inflate(0, -2);
+                        }
+
+                        bool rtl = item.RightToLeft == RightToLeft.Yes;
+                        Pen pen3 = (rtl ? pen2 : pen);
+                        Pen pen4 = (rtl ? pen : pen2);
+                        int num = bounds.Width / 2;
+                        g.DrawLine(pen3, num, bounds.Top, num, bounds.Bottom - 1);
+                        num++;
+                        g.DrawLine(pen4, num, bounds.Top + 1, num, bounds.Bottom);
+                    } else {
+                        if (isNotDropdown && bounds.Width >= 4) {
+                            bounds.Inflate(-2, 0);
+                        }
+
+                        int num2 = bounds.Height / 2;
+                        g.DrawLine(pen, bounds.Left, num2, bounds.Right - 1, num2);
+                        if (!isSeparator || isNotDropdown) {
+                            num2++;
+                            g.DrawLine(pen2, bounds.Left + 1, num2, bounds.Right - 1, num2);
+                        }
+                    }
+                }
+            }
+
             protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
             {
-                /*if ((e.Item as ToolStripSeparator) == null) {
-                    base.OnRenderSeparator(e);
-                    return;
-                }
-                Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
-                bounds.Y += 3;
-                bounds.Height = Math.Max(0, bounds.Height - 6);
-                if (bounds.Height >= 4)
-                    bounds.Inflate(0, -2);
-                int x = bounds.Width / 2;
-                using (Pen pen = new Pen(fTheme.Colors[ThemeColor.MenuBorder]))
-                    e.Graphics.DrawLine(pen, x, bounds.Top, x, bounds.Bottom - 1);
-                using (Pen pen = new Pen(Color.Blue))
-                    e.Graphics.DrawLine(pen, x + 1, bounds.Top + 1, x + 1, bounds.Bottom);*/
-
-                e.Item.ForeColor = fTheme.Colors[ThemeColor.MenuBorder];
-                base.OnRenderSeparator(e);
+                RenderSeparatorInternal(e.Graphics, e.Item, e.Item.Bounds, e.Vertical);
             }
 
             protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)

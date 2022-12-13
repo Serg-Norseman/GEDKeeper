@@ -50,5 +50,10 @@ namespace GKUI.Themes
         GridHeader,
         GridHeaderText,
         GridText,
+
+        // GEDKeeper specific
+        HighlightUnparentedIndi,
+        HighlightUnmarriedIndi,
+        HighlightInaccessibleFiles,
     }
 }
