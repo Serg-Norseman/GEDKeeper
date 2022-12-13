@@ -1611,11 +1611,7 @@ namespace GKCore
 
         public static string GetBinPath()
         {
-            Assembly asm = Assembly.GetEntryAssembly();
-            if (asm == null) {
-                asm = Assembly.GetExecutingAssembly();
-            }
-
+            var asm = SysUtils.GetExecutingAssembly();
             Module[] mods = asm.GetModules();
             string fn = mods[0].FullyQualifiedName;
             return Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
