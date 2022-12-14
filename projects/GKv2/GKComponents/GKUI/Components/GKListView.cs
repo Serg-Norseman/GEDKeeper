@@ -537,7 +537,7 @@ namespace GKUI.Components
             }
         }
 
-        protected void ResetCache()
+        public void ResetCache()
         {
             fCache = null;
         }

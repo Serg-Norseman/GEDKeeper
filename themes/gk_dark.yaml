@@ -1,6 +1,11 @@
 ﻿---
 Name: GK Dark
-Colors:
+Elements:
+  - Element: Font
+    Value: "Verdana"
+  - Element: FontSize
+    Value: "8.25"
+
   - Element: Editor
     Value: "#FFFFFF"
   - Element: EditorText

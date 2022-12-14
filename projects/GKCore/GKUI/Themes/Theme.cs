@@ -18,42 +18,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
+
 namespace GKUI.Themes
 {
-    public enum ThemeColor
+    public sealed class ThemeElementsDictionary : Dictionary<ThemeElement, object>
     {
-        Editor,     // TextBox and derived, ComboBox
-        EditorText,
+    }
 
-        Control,    // Panel, GroupBox, TabPage
-        ControlText,
 
-        Window,     // Form
-        WindowText,
+    public sealed class Theme
+    {
+        public string Name { get; private set; }
+        public ThemeElementsDictionary Elements { get; private set; }
+        public bool SysDefault { get; private set; }
 
-        Dialog,     // Form
-        DialogText,
-
-        ButtonFace, // Buttons
-        AccentButtonFace,
-        ButtonBorder,
-        ButtonText,
-
-        Strip,      // MenuStrip, ToolStrip
-        Dropdown,
-        MenuBorder,
-        MenuItemSelected,
-
-        Link,
-
-        Grid,       // ListView and DataGridView
-        GridHeader,
-        GridHeaderText,
-        GridText,
-
-        // GEDKeeper specific
-        HighlightUnparentedIndi,
-        HighlightUnmarriedIndi,
-        HighlightInaccessibleFiles,
+        public Theme(string name, ThemeElementsDictionary elements, bool sysDefault = false)
+        {
+            Name = name;
+            Elements = elements;
+            SysDefault = sysDefault;
+        }
     }
 }

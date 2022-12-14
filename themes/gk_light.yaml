@@ -1,6 +1,11 @@
 ﻿---
 Name: GK Light
-Colors:
+Elements:
+  - Element: Font
+    Value: "Calibri"
+  - Element: FontSize
+    Value: "9"
+
   - Element: Editor
     Value: "#FFFFFF"
   - Element: EditorText

@@ -20,7 +20,7 @@
 
 namespace GKUI.Themes
 {
-    internal sealed class TFColor
+    internal sealed class TFElement
     {
         public string Element;
         public string Value;
@@ -29,11 +29,11 @@ namespace GKUI.Themes
     internal class ThemeFile
     {
         public string Name { get; set; }
-        public TFColor[] Colors { get; set; }
+        public TFElement[] Elements { get; set; }
 
         public ThemeFile()
         {
-            Colors = new TFColor[0];
+            Elements = new TFElement[0];
         }
     }
 }

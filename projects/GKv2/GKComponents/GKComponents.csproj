@@ -129,9 +129,6 @@
     <Compile Include="GKUI\Platform\WFGfxRenderer.cs" />
     <Compile Include="GKUI\Platform\WFStdDialogs.cs" />
     <Compile Include="GKUI\Platform\WFUITimer.cs" />
-    <Compile Include="GKUI\Themes\Theme.cs" />
-    <Compile Include="GKUI\Themes\ThemeColor.cs" />
-    <Compile Include="GKUI\Themes\ThemeFile.cs" />
     <Compile Include="GKUI\Themes\ThemeManager.cs" />
   </ItemGroup>
   <ItemGroup>

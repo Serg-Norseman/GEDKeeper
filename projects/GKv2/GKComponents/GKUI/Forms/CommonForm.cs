@@ -26,7 +26,6 @@ using BSLib.Design.MVP;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP;
-using GKCore.Themes;
 using GKUI.Themes;
 
 namespace GKUI.Forms

@@ -18,13 +18,45 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.ComponentModel;
-
-namespace GKCore.Themes
+namespace GKUI.Themes
 {
-    public interface IThemedView
+    public enum ThemeElement
     {
-        void ApplyTheme();
-        bool SkipTheme(Component control);
+        Font,       // Form, Window, Dialog
+        FontSize,
+
+        Editor,     // TextBox and derived, ComboBox
+        EditorText,
+
+        Control,    // Panel, GroupBox, TabPage
+        ControlText,
+
+        Window,     // Form
+        WindowText,
+
+        Dialog,     // Form
+        DialogText,
+
+        ButtonFace, // Buttons
+        AccentButtonFace,
+        ButtonBorder,
+        ButtonText,
+
+        Strip,      // MenuStrip, ToolStrip
+        Dropdown,
+        MenuBorder,
+        MenuItemSelected,
+
+        Link,
+
+        Grid,       // ListView and DataGridView
+        GridHeader,
+        GridHeaderText,
+        GridText,
+
+        // GEDKeeper specific
+        HighlightUnparentedIndi,
+        HighlightUnmarriedIndi,
+        HighlightInaccessibleFiles,
     }
 }

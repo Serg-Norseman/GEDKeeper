@@ -18,22 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
-using System.Drawing;
+using System.ComponentModel;
 
 namespace GKUI.Themes
 {
-    public sealed class Theme
+    public interface IThemedView
     {
-        public string Name { get; private set; }
-        public Dictionary<ThemeColor, Color> Colors { get; private set; }
-        public bool SysDefault { get; private set; }
-
-        public Theme(string name, Dictionary<ThemeColor, Color> colors, bool sysDefault = false)
-        {
-            Name = name;
-            Colors = colors;
-            SysDefault = sysDefault;
-        }
+        void ApplyTheme();
+        bool SkipTheme(Component control);
     }
 }
