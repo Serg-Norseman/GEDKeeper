@@ -129,13 +129,17 @@ namespace GKUI.Forms
 
         protected override void OnLoad(EventArgs e)
         {
-            AppHost.Instance.LoadWindow(this);
+            if (!DesignMode) {
+                AppHost.Instance.LoadWindow(this);
+            }
             base.OnLoad(e);
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            AppHost.Instance.CloseWindow(this);
+            if (!DesignMode) {
+                AppHost.Instance.CloseWindow(this);
+            }
             base.OnClosed(e);
         }
     }

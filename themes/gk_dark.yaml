@@ -56,6 +56,8 @@ Elements:
   - Element: GridText
     Value: "#FFFFFF"
 
+  - Element: HighlightReadabilityRows
+    Value: "#3E3E3E"
   - Element: HighlightUnparentedIndi
     Value: "#780000"
   - Element: HighlightUnmarriedIndi

@@ -36,7 +36,7 @@ Elements:
     Value: "#FFFFFF"
 
   - Element: Strip
-    Value: "#CED3DE"
+    Value: "#7F8697" #"#CED3DE"
   - Element: Dropdown
     Value: "#7F8697"
   - Element: MenuBorder
@@ -56,6 +56,8 @@ Elements:
   - Element: GridText
     Value: "#1F308D"
 
+  - Element: HighlightReadabilityRows
+    Value: "#ADB9CC"
   - Element: HighlightUnparentedIndi
     Value: "#FFCACA"
   - Element: HighlightUnmarriedIndi

@@ -82,6 +82,7 @@ namespace GKUI.Themes
                 { ThemeElement.GridHeaderText, SystemColors.WindowText },     // checked
                 { ThemeElement.GridText, SystemColors.WindowText },           // checked
 
+                { ThemeElement.HighlightReadabilityRows, Color.FromArgb(0xEFEFEF) },      // GK only
                 { ThemeElement.HighlightUnparentedIndi, Color.FromArgb(0xFFCACA) },       // GK only
                 { ThemeElement.HighlightUnmarriedIndi, Color.FromArgb(0xFFFFA1) },        // GK only
                 { ThemeElement.HighlightInaccessibleFiles, Color.FromArgb(0xFFCACA) },    // GK only
@@ -158,6 +159,7 @@ namespace GKUI.Themes
         {
             if (view == null || fCurrentTheme == null) return;
 
+            GKData.HighlightReadabilityRows = GetThemeColor(ThemeElement.HighlightReadabilityRows).ToArgb();
             GKData.HighlightUnparentedColor = GetThemeColor(ThemeElement.HighlightUnparentedIndi).ToArgb();
             GKData.HighlightUnmarriedColor = GetThemeColor(ThemeElement.HighlightUnmarriedIndi).ToArgb();
             GKData.HighlightInaccessibleFiles = GetThemeColor(ThemeElement.HighlightInaccessibleFiles).ToArgb();
@@ -302,6 +304,15 @@ namespace GKUI.Themes
             ctl.BackColor = GetThemeColor(ThemeElement.Control);
             ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
             ctl.LinkColor = GetThemeColor(ThemeElement.Link);
+            ctl.BorderStyle = (theme.SysDefault) ? BorderStyle.Fixed3D : BorderStyle.FixedSingle;
+        }
+
+        private static void ThemeCustomChartHandler(IThemedView view, Component component, Theme theme)
+        {
+            var ctl = (CustomChart)component;
+            ctl.BackColor = GetThemeColor(ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BorderStyle = (theme.SysDefault) ? BorderStyle.Fixed3D : BorderStyle.FixedSingle;
         }
 
         private static void GetParentDependentColors(Control control, Theme theme, out Color backColor, out Color foreColor)
@@ -363,19 +374,6 @@ namespace GKUI.Themes
                 var ctl = (ListView)component;
                 ctl.BackColor = GetThemeColor(ThemeElement.Grid);
                 ctl.ForeColor = GetThemeColor(ThemeElement.GridText);
-            }
-        }
-
-        private static void ThemeMenuStripHandler(IThemedView view, Component component, Theme theme)
-        {
-            var ctl = (MenuStrip)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Strip);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ButtonText);
-
-            ctl.Renderer = (theme.SysDefault) ? new ToolStripProfessionalRenderer() : new TSRenderer(theme);
-
-            foreach (ToolStripItem item in ctl.Items) {
-                ApplyTheme(view, item, theme);
             }
         }
 
@@ -507,6 +505,9 @@ namespace GKUI.Themes
                 if (theme.SysDefault) {
                 } else {
                 }
+            } else if (ctl is ToolStripStatusLabel) {
+                var statusLabel = (ToolStripStatusLabel)ctl;
+                statusLabel.BorderStyle = (theme.SysDefault) ? Border3DStyle.Sunken : Border3DStyle.Adjust; // Flat
             }
         }
 
@@ -529,7 +530,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(Button), ThemeButtonHandler);                 // ready +
             RegisterControlHandler(typeof(CheckBox), ThemeCheckBoxHandler);             // ?
             RegisterControlHandler(typeof(ComboBox), ThemeComboBoxHandler);             // ?
-            RegisterControlHandler(typeof(ContextMenuStrip), ThemeMenuStripHandler);    // ?
+            RegisterControlHandler(typeof(ContextMenuStrip), ThemeToolStripHandler);    // ?
             RegisterControlHandler(typeof(DataGridView), ThemeDataGridViewHandler);     // ?
             RegisterControlHandler(typeof(Form), ThemeFormHandler);                     // ?
             RegisterControlHandler(typeof(GroupBox), ThemeGroupBoxHandler);             // ?
@@ -537,7 +538,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(ListBox), ThemeListBoxHandler);               // ? (only plugins, not host)
             RegisterControlHandler(typeof(ListView), ThemeListViewHandler);             // ?
             RegisterControlHandler(typeof(MaskedTextBox), ThemeTextBoxHandler);         // ?
-            RegisterControlHandler(typeof(MenuStrip), ThemeMenuStripHandler);           // ?
+            RegisterControlHandler(typeof(MenuStrip), ThemeToolStripHandler);           // ?
             RegisterControlHandler(typeof(NumericUpDown), ThemeNumericUpDownHandler);   // ?
             RegisterControlHandler(typeof(Panel), ThemePanelHandler);                   // ?
             RegisterControlHandler(typeof(PictureBox), ThemePictureBoxHandler);         // ?
@@ -548,6 +549,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(SplitContainer), ThemePanelHandler);          // ?
             RegisterControlHandler(typeof(StatusBar), ThemeStatusBarHandler);           // ?
             RegisterControlHandler(typeof(StatusBarPanel), ThemeStatusBarPanelHandler); // ?
+            RegisterControlHandler(typeof(StatusStrip), ThemeToolStripHandler);         // ?
             RegisterControlHandler(typeof(TableLayoutPanel), ThemePanelHandler);        // ?
             RegisterControlHandler(typeof(TabControl), ThemeTabControlHandler);         // ?
             RegisterControlHandler(typeof(TabPage), ThemeTabPageHandler);               // ?
@@ -558,6 +560,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(ToolStripDropDownButton), ThemeToolStripItemHandler); // ?
             RegisterControlHandler(typeof(ToolStripMenuItem), ThemeToolStripItemHandler);       // ?
             RegisterControlHandler(typeof(ToolStripSeparator), ThemeToolStripItemHandler);      // ?
+            RegisterControlHandler(typeof(ToolStripStatusLabel), ThemeToolStripItemHandler);    // ?
             RegisterControlHandler(typeof(TrackBar), ThemePanelHandler);                // ?
             RegisterControlHandler(typeof(TreeView), ThemeTreeViewHandler);             // ?
 
@@ -576,6 +579,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);                // ?
             RegisterControlHandler(typeof(ImageView), ThemeUserControlHandler);         // ?
             RegisterControlHandler(typeof(LogChart), ThemePanelHandler);                // ?
+            RegisterControlHandler(typeof(CustomChart), ThemeCustomChartHandler);       // ?
         }
 
         private static void RegisterControlHandler(Type controlType, ThemeControlHandler handler)
@@ -704,35 +708,6 @@ namespace GKUI.Themes
                 return Color.Black;
             }
 
-            public override Color MenuItemSelected
-            {
-                get { return GetThemeColor(ThemeElement.MenuItemSelected); }
-            }
-
-            public override Color MenuItemBorder
-            {
-                get { return GetThemeColor(ThemeElement.MenuBorder); }
-            }
-
-            public override Color MenuBorder
-            {
-                get { return GetThemeColor(ThemeElement.MenuBorder); }
-            }
-
-            public override Color SeparatorDark
-            {
-                get { return Color.Red; }
-            }
-
-            public override Color MenuItemSelectedGradientBegin
-            {
-                get { return GetThemeColor(ThemeElement.Dropdown); }
-            }
-            public override Color MenuItemSelectedGradientEnd
-            {
-                get { return GetThemeColor(ThemeElement.Dropdown); }
-            }
-
             public override Color ImageMarginGradientBegin
             {
                 get { return GetThemeColor(ThemeElement.Dropdown); }
@@ -746,9 +721,14 @@ namespace GKUI.Themes
                 get { return GetThemeColor(ThemeElement.Dropdown); }
             }
 
-            public override Color ToolStripDropDownBackground
+            public override Color MenuBorder
             {
-                get { return GetThemeColor(ThemeElement.Dropdown); }
+                get { return GetThemeColor(ThemeElement.MenuBorder); }
+            }
+
+            public override Color MenuItemBorder
+            {
+                get { return GetThemeColor(ThemeElement.MenuBorder); }
             }
 
             public override Color MenuItemPressedGradientBegin
@@ -764,6 +744,20 @@ namespace GKUI.Themes
                 get { return GetThemeColor(ThemeElement.Dropdown); }
             }
 
+            public override Color MenuItemSelected
+            {
+                get { return GetThemeColor(ThemeElement.MenuItemSelected); }
+            }
+
+            public override Color MenuItemSelectedGradientBegin
+            {
+                get { return GetThemeColor(ThemeElement.Dropdown); }
+            }
+            public override Color MenuItemSelectedGradientEnd
+            {
+                get { return GetThemeColor(ThemeElement.Dropdown); }
+            }
+
             public override Color MenuStripGradientBegin
             {
                 get { return GetThemeColor(ThemeElement.Strip); }
@@ -771,6 +765,25 @@ namespace GKUI.Themes
             public override Color MenuStripGradientEnd
             {
                 get { return GetThemeColor(ThemeElement.Strip); }
+            }
+
+            public override Color SeparatorDark
+            {
+                get { return Color.Red; }
+            }
+
+            public override Color ToolStripContentPanelGradientBegin
+            {
+                get { return GetThemeColor(ThemeElement.Strip); }
+            }
+            public override Color ToolStripContentPanelGradientEnd
+            {
+                get { return GetThemeColor(ThemeElement.Strip); }
+            }
+
+            public override Color ToolStripDropDownBackground
+            {
+                get { return GetThemeColor(ThemeElement.Dropdown); }
             }
 
             public override Color ToolStripGradientBegin
@@ -782,15 +795,6 @@ namespace GKUI.Themes
                 get { return GetThemeColor(ThemeElement.Strip); }
             }
             public override Color ToolStripGradientEnd
-            {
-                get { return GetThemeColor(ThemeElement.Strip); }
-            }
-
-            public override Color ToolStripContentPanelGradientBegin
-            {
-                get { return GetThemeColor(ThemeElement.Strip); }
-            }
-            public override Color ToolStripContentPanelGradientEnd
             {
                 get { return GetThemeColor(ThemeElement.Strip); }
             }

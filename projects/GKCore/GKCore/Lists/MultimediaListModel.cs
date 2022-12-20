@@ -112,18 +112,13 @@ namespace GKCore.Lists
 
         public override IColor GetBackgroundColor(int itemIndex, object rowData)
         {
-            IColor result = null;
-
             GlobalOptions gOptions = GlobalOptions.Instance;
-            if (gOptions.HighlightInaccessibleFiles) {
-                string fileName;
-                MediaStoreStatus storeStatus = fBaseContext.VerifyMediaFile(fFileRef, out fileName);
-                if (storeStatus != MediaStoreStatus.mssExists) {
-                    return ChartRenderer.GetColor(GKData.HighlightInaccessibleFiles);
-                }
+            string fileName;
+            if (gOptions.HighlightInaccessibleFiles && fBaseContext.VerifyMediaFile(fFileRef, out fileName) != MediaStoreStatus.mssExists) {
+                return ChartRenderer.GetColor(GKData.HighlightInaccessibleFiles);
+            } else {
+                return base.GetBackgroundColor(itemIndex, rowData);
             }
-
-            return result;
         }
     }
 }

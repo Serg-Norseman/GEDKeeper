@@ -26,6 +26,7 @@ using BSLib.Calendar;
 using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 
@@ -601,6 +602,9 @@ namespace GKCore.Lists
 
         public virtual IColor GetBackgroundColor(int itemIndex, object rowData)
         {
+            if (GlobalOptions.Instance.ReadabilityHighlightRows && MathHelper.IsOdd(itemIndex)) {
+                return ChartRenderer.GetColor(GKData.HighlightReadabilityRows);
+            }
             return null;
         }
 

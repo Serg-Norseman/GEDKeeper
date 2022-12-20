@@ -211,6 +211,7 @@ namespace GKUI.Forms
             try {
                 ((IWorkWindow)this).UpdateSettings();
 
+                UpdateShieldState();
                 fController.UpdatePluginsItems();
                 UpdateThemesItems();
                 UpdateMRU();
@@ -509,7 +510,7 @@ namespace GKUI.Forms
                 statusLine = statusLine + ", " + LangMan.LS(LSID.LSID_SBFiltered) + ": " + listMan.FilteredCount.ToString();
             }
 
-            StatusBar.Panels[0].Text = statusLine;
+            StatusBar.Items[0].Text = statusLine;
         }
 
         void IWorkWindow.UpdateSettings()
@@ -609,11 +610,6 @@ namespace GKUI.Forms
 
         #region From MainWin
 
-        private void Form_Resize(object sender, EventArgs e)
-        {
-            StatusBar.Panels[0].Width = Width - 50;
-        }
-
         public void Restore()
         {
             if (WindowState == FormWindowState.Minimized) {
@@ -660,25 +656,18 @@ namespace GKUI.Forms
             }
         }
 
-        private void StatusBar_DrawItem(object sender, StatusBarDrawItemEventArgs sbdevent)
-        {
-            UpdateShieldState(sbdevent);
-        }
-
-        private void UpdateShieldState(StatusBarDrawItemEventArgs sbdevent)
+        private void UpdateShieldState()
         {
             Bitmap img = (Bitmap)((ImageHandler)fController.GetShieldImage()).Handle;
             if (img != null) {
-                sbdevent.Graphics.DrawImage(img, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
+                StatusBarPanel2.Image = img;
             }
         }
 
-        private void StatusBar_PanelClick(object sender, StatusBarPanelClickEventArgs e)
+        private void StatusBar_PanelClick(object sender, EventArgs e)
         {
-            if (e.StatusBarPanel == StatusBarPanel2 && e.Clicks == 2) {
-                fContext.SwitchShieldState();
-                StatusBar.Invalidate();
-            }
+            fContext.SwitchShieldState();
+            UpdateShieldState();
         }
 
         private void MRUFileClick(object sender, EventArgs e)

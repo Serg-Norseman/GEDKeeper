@@ -44,7 +44,7 @@ namespace GKUI.Forms
             }
         }
 
-        private readonly StatusBar fStatusBar;
+        private readonly StatusStrip fStatusBar;
         private readonly StatusLinesEx fStatusLines;
 
         public IStatusLines StatusLines
@@ -54,9 +54,8 @@ namespace GKUI.Forms
 
         public StatusForm()
         {
-            fStatusBar = new StatusBar();
+            fStatusBar = new StatusStrip();
             fStatusBar.Margin = new Padding(2);
-            fStatusBar.ShowPanels = true;
             Controls.Add(fStatusBar);
 
             fStatusLines = new StatusLinesEx(this);
@@ -64,32 +63,42 @@ namespace GKUI.Forms
 
         protected string GetStatusLine(int index)
         {
-            if (index < 0 || index >= fStatusBar.Panels.Count) {
+            if (index < 0 || index >= fStatusBar.Items.Count) {
                 return string.Empty;
             } else {
-                return fStatusBar.Panels[index].Text;
+                return fStatusBar.Items[index].Text;
             }
         }
 
         protected void SetStatusLine(int index, string value)
         {
-            StatusBarPanel panel;
-            if (index < 0) {
-                return;
-            } else if (index >= fStatusBar.Panels.Count) {
-                while (index >= fStatusBar.Panels.Count) {
-                    panel = new StatusBarPanel();
-                    fStatusBar.Panels.Add(panel);
-                }
+            if (index < 0) return;
+
+            fStatusBar.SuspendLayout();
+
+            ToolStripStatusLabel panel;
+            while (index >= fStatusBar.Items.Count) {
+                panel = new ToolStripStatusLabel();
+                panel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+                panel.BorderSides = ToolStripStatusLabelBorderSides.All;
+                panel.BorderStyle = Border3DStyle.Sunken;
+                fStatusBar.Items.Add(panel);
             }
 
-            panel = fStatusBar.Panels[index];
+            panel = (ToolStripStatusLabel)fStatusBar.Items[index];
             panel.Text = value;
 
-            for (int i = 0; i < fStatusBar.Panels.Count; i++) {
-                fStatusBar.Panels[i].AutoSize = StatusBarPanelAutoSize.Contents;
+            /*ToolStripStatusLabel last = null;
+            for (int i = 0; i < fStatusBar.Items.Count; i++) {
+                last = (ToolStripStatusLabel)fStatusBar.Items[i];
+                last.Spring = false;
             }
-            fStatusBar.Panels[fStatusBar.Panels.Count - 1].AutoSize = StatusBarPanelAutoSize.Spring;
+            if (last != null) {
+                last.Spring = true;
+            }*/
+
+            fStatusBar.ResumeLayout(false);
+            fStatusBar.PerformLayout();
         }
     }
 }

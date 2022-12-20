@@ -54,6 +54,9 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKUI\Components\ArborViewer.cs" />
+    <Compile Include="GKUI\Components\CustomChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\FilterGridView.cs">
       <SubType>Component</SubType>
     </Compile>

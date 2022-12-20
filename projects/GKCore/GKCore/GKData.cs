@@ -60,6 +60,7 @@ namespace GKCore
         public static int HighlightUnparentedColor = 0xFFCACA;
         public static int HighlightUnmarriedColor = 0xFFFFA1;
         public static int HighlightInaccessibleFiles = 0xFFCACA;
+        public static int HighlightReadabilityRows = 0xEFEFEF;
 
         #if MONO
         public const string DEF_FONT = "Noto Sans";

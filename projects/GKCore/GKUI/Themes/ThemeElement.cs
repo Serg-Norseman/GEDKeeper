@@ -55,6 +55,7 @@ namespace GKUI.Themes
         GridText,
 
         // GEDKeeper specific
+        HighlightReadabilityRows,
         HighlightUnparentedIndi,
         HighlightUnmarriedIndi,
         HighlightInaccessibleFiles,
