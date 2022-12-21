@@ -57,9 +57,9 @@ If your problem or idea is not addressed yet, please open a new issue.
 
 ## Implementations
 
-- Legacy (NET4.0 & WinForms based), "GEDKeeper2"
-- Cross-platform (NET Standard & Eto based), codenamed "GEDKeeper3", interface grinding stage
-- Future mobile (NET Standard & Xamarin based), codenamed "GEDKeeperX", initial experience
+- "GEDKeeper2", standard (NET4.5.2 & WinForms based)
+- "GEDKeeper3", cross-platform (NET Standard & Eto based), interface grinding stage
+- "GEDKeeperX", future mobile (NET Standard & Xamarin based), initial experience
 
 
 ## Supported languages

@@ -112,13 +112,12 @@ namespace GKCore
         public static void LogSysInfo()
         {
             try {
-                #if MONO
+#if MONO
                 Logger.WriteInfo("Mono Version: " + SysUtils.GetMonoVersion());
                 Logger.WriteInfo("Desktop Type: " + SysUtils.GetDesktopType().ToString());
-                #endif
+#endif
 
-                // There should be no links to the application infrastructure
-                Assembly execAssembly = Assembly.GetExecutingAssembly();
+                var execAssembly = SysUtils.GetExecutingAssembly();
                 Logger.WriteInfo("CLR Version: " + execAssembly.ImageRuntimeVersion);
                 Logger.WriteInfo("GK Version: " + execAssembly.GetName().Version.ToString());
             } catch {

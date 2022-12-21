@@ -1611,11 +1611,7 @@ namespace GKCore
 
         public static string GetBinPath()
         {
-            Assembly asm = Assembly.GetEntryAssembly();
-            if (asm == null) {
-                asm = Assembly.GetExecutingAssembly();
-            }
-
+            var asm = SysUtils.GetExecutingAssembly();
             Module[] mods = asm.GetModules();
             string fn = mods[0].FullyQualifiedName;
             return Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
@@ -3045,26 +3041,19 @@ namespace GKCore
 
         public static void InitSecurityProtocol()
         {
+            try {
+#if MONO
             // Mono v4.6 doesn't contain SecurityProtocolType.Tls11
-            #if NET35 || NET40 || MONO
             const int Tls11 = 768;
             const int Tls12 = 3072;
-            #endif
-
-            try {
-                #if NET35 || NET40 || MONO
                 ServicePointManager.SecurityProtocol =
-                    (SecurityProtocolType)(ServicePointManager.SecurityProtocol |
-                                           SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |
-                                           (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12);
-                #else
+                    ServicePointManager.SecurityProtocol | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12);
+#else
                 ServicePointManager.SecurityProtocol =
-                    (SecurityProtocolType)(ServicePointManager.SecurityProtocol |
-                                           SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |
-                                           SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12);
-                #endif
+                    ServicePointManager.SecurityProtocol | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+#endif
             } catch (Exception ex) {
-                // crash on WinXP, TLS 1.2 not supported
+                // crash on WinXP (.NET <= 4.0.3), TLS 1.2 not supported
                 Logger.WriteError("GKUtils.InitSecurityProtocol()", ex);
             }
         }

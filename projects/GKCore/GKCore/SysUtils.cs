@@ -99,6 +99,15 @@ namespace GKCore
 
         #region Runtime helpers
 
+        public static Assembly GetExecutingAssembly()
+        {
+            Assembly asm = Assembly.GetEntryAssembly();
+            if (asm == null) {
+                asm = Assembly.GetExecutingAssembly();
+            }
+            return asm;
+        }
+
         public static bool ImplementsInterface(Type type, Type ifaceType)
         {
             Type[] intf = type.GetInterfaces();
