@@ -35,6 +35,7 @@ using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform;
@@ -708,8 +709,7 @@ namespace GKUI.Forms
             }
 
             var theme = (Theme)mItem.Tag;
-            ThemeManager.SetTheme(theme.Name);
-            ApplyTheme();
+            AppHost.Instance.ApplyTheme(theme.Name);
         }
 
         public void UpdateThemesItems()
@@ -718,6 +718,8 @@ namespace GKUI.Forms
                 return;
 
             try {
+                string curTheme = GlobalOptions.Instance.Theme;
+
                 miThemes.DropDownItems.Clear();
 
                 var themes = ThemeManager.Themes;
@@ -729,8 +731,12 @@ namespace GKUI.Forms
                     mi.Click += ThemeClick;
                     miThemes.DropDownItems.Add(mi);
 
-                    if (i == 0) {
+                    if (i == 0 && string.IsNullOrEmpty(curTheme)) {
                         mi.Checked = true;
+                    } else if (theme.Name == curTheme) {
+                        mi.Checked = true;
+                        ThemeManager.SetTheme(theme.Name);
+                        ApplyTheme();
                     }
                 }
 

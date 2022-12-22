@@ -2,9 +2,9 @@
 Name: GK Light
 Elements:
   - Element: Font
-    Value: "Calibri"
+    Value: "Verdana"
   - Element: FontSize
-    Value: "9"
+    Value: "8.25"
 
   - Element: Editor
     Value: "#FFFFFF"
@@ -59,7 +59,7 @@ Elements:
   - Element: HighlightReadabilityRows
     Value: "#ADB9CC"
   - Element: HighlightUnparentedIndi
-    Value: "#FFCACA"
+    Value: "#FFA8A8"
   - Element: HighlightUnmarriedIndi
     Value: "#FFFFA1"
   - Element: HighlightInaccessibleFiles

@@ -59,9 +59,9 @@ Elements:
   - Element: HighlightReadabilityRows
     Value: "#3E3E3E"
   - Element: HighlightUnparentedIndi
-    Value: "#780000"
+    Value: "#5F0F0F"
   - Element: HighlightUnmarriedIndi
-    Value: "#6D6D00"
+    Value: "#4D4D16"
   - Element: HighlightInaccessibleFiles
-    Value: "#780000"
+    Value: "#5F0F0F"
 ...

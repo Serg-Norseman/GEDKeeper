@@ -996,6 +996,11 @@ namespace GKCore
             }
         }
 
+        public virtual void ApplyTheme(string name)
+        {
+            // dummy
+        }
+
         public abstract string SelectFolder(string folderPath);
 
         public virtual bool HasFeatureSupport(Feature feature)

@@ -238,6 +238,19 @@ namespace GKUI.Platform
             }
         }
 
+        public override void ApplyTheme(string name)
+        {
+            ThemeManager.SetTheme(name);
+            GlobalOptions.Instance.Theme = name;
+
+            foreach (IWindow win in fRunningForms) {
+                IThemedView themedView = win as IThemedView;
+                if (themedView != null) {
+                    themedView.ApplyTheme();
+                }
+            }
+        }
+
         public override string SelectFolder(string folderPath)
         {
             using (var fldDlg = new FolderBrowserDialog()) {

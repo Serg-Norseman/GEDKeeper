@@ -28,6 +28,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Plugins;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Options
 {
@@ -434,6 +435,8 @@ namespace GKCore.Options
 
         public bool SurnameInCapitals { get; set; }
 
+        public string Theme { get; set; }
+
         public TreeChartOptions TreeChartOptions
         {
             get { return fTreeChartOptions; }
@@ -508,6 +511,8 @@ namespace GKCore.Options
 
             fFARPatterns = new StringList();
             fFARReplacements = new StringList();
+
+            Theme = string.Empty;
         }
 
         protected override void Dispose(bool disposing)
@@ -826,6 +831,8 @@ namespace GKCore.Options
             LoadStringList(ini, fFARPatterns, "FARPatterns");
             LoadStringList(ini, fFARReplacements, "FARReplacements");
 
+            Theme = ini.ReadString("Common", "Theme", "");
+
             LoadPluginsFromFile(ini);
         }
 
@@ -970,6 +977,8 @@ namespace GKCore.Options
 
             SaveStringList(ini, fFARPatterns, "FARPatterns");
             SaveStringList(ini, fFARReplacements, "FARReplacements");
+
+            ini.WriteString("Common", "Theme", Theme);
 
             SavePluginsToFile(ini);
         }

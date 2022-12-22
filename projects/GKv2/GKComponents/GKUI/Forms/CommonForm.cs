@@ -100,7 +100,7 @@ namespace GKUI.Forms
             }
         }
 
-        public void ApplyTheme()
+        public virtual void ApplyTheme()
         {
             ThemeManager.ApplyTheme(this);
         }
