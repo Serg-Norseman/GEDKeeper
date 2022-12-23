@@ -227,11 +227,15 @@ namespace GKCore.Controllers
 
         public void ExportToExcel()
         {
+            // TODO: localize filter?
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
+            if (string.IsNullOrEmpty(fileName)) return;
+
             AppHost.Instance.ExecuteWork((controller) => {
                 fTreeStats.WriteStatsReport(fChartTitle,
                     LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap),
                     LangMan.LS(LSID.LSID_Value),
-                    fCurrentValues, controller);
+                    fCurrentValues, fileName, controller);
             });
         }
 
