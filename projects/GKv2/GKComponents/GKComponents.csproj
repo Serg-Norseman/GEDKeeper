@@ -132,7 +132,7 @@
     <Compile Include="GKUI\Platform\WFGfxRenderer.cs" />
     <Compile Include="GKUI\Platform\WFStdDialogs.cs" />
     <Compile Include="GKUI\Platform\WFUITimer.cs" />
-    <Compile Include="GKUI\Themes\ThemeManager.cs" />
+    <Compile Include="GKUI\Platform\WFThemeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">

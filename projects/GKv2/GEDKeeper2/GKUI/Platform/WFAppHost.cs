@@ -67,15 +67,6 @@ namespace GKUI.Platform
             Application.ApplicationExit += OnApplicationExit;
         }
 
-        public override void StartupWork()
-        {
-            if (Instance.HasFeatureSupport(Feature.Themes)) {
-                ThemeManager.LoadThemes();
-            }
-
-            base.StartupWork();
-        }
-
         public override IWindow GetActiveWindow()
         {
             IWindow activeWin = Form.ActiveForm as IWindow;
@@ -238,19 +229,6 @@ namespace GKUI.Platform
             }
         }
 
-        public override void ApplyTheme(string name)
-        {
-            ThemeManager.SetTheme(name);
-            GlobalOptions.Instance.Theme = name;
-
-            foreach (IWindow win in fRunningForms) {
-                IThemedView themedView = win as IThemedView;
-                if (themedView != null) {
-                    themedView.ApplyTheme();
-                }
-            }
-        }
-
         public override string SelectFolder(string folderPath)
         {
             using (var fldDlg = new FolderBrowserDialog()) {
@@ -340,6 +318,7 @@ namespace GKUI.Platform
             container.Register<IStdDialogs, WFStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
+            container.Register<IThemeManager, WFThemeManager>(LifeCycle.Singleton);
 
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);

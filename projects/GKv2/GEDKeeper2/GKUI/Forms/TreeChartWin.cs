@@ -147,7 +147,7 @@ namespace GKUI.Forms
         public override void ApplyTheme()
         {
             base.ApplyTheme();
-            ThemeManager.ApplyTheme(this, MenuPerson);
+            AppHost.Instance.ApplyTheme(this, MenuPerson);
         }
 
         #region Interface handlers

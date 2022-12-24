@@ -32,23 +32,27 @@ using GKUI.Components;
 
 namespace GKUI.Themes
 {
-    public static class ThemeManager
+    public sealed class WFThemeManager : IThemeManager
     {
         private delegate void ThemeControlHandler(IThemedView view, Component component, Theme theme);
 
-        private static Dictionary<string, Theme> fThemes = new Dictionary<string, Theme>();
-        private static Dictionary<Type, ThemeControlHandler> fControlHandlers = new Dictionary<Type, ThemeControlHandler>();
         private static Theme fCurrentTheme;
+        private static Dictionary<Type, ThemeControlHandler> fControlHandlers = new Dictionary<Type, ThemeControlHandler>();
 
-        public static List<Theme> Themes
+        private Dictionary<string, Theme> fThemes = new Dictionary<string, Theme>();
+
+        public List<Theme> Themes
         {
             get { return fThemes.Values.ToList(); }
         }
 
-        static ThemeManager()
+        static WFThemeManager()
         {
             RegisterControlHandlers();
+        }
 
+        public WFThemeManager()
+        {
             RegisterTheme("Default", new ThemeElementsDictionary() {
                 { ThemeElement.Font, "Tahoma" },                              // checked
                 { ThemeElement.FontSize, 8.25f },                             // checked
@@ -89,7 +93,7 @@ namespace GKUI.Themes
             }, true);
         }
 
-        public static void LoadThemes()
+        public void LoadThemes()
         {
             string path = GKUtils.GetAppPath() + "themes" + Path.DirectorySeparatorChar;
             if (!Directory.Exists(path)) return;
@@ -104,7 +108,7 @@ namespace GKUI.Themes
             }
         }
 
-        public static void Load(string fileName)
+        private void Load(string fileName)
         {
             if (!File.Exists(fileName)) return;
 
@@ -142,12 +146,12 @@ namespace GKUI.Themes
             }
         }
 
-        public static void RegisterTheme(string name, ThemeElementsDictionary colors, bool sysDefault = false)
+        private void RegisterTheme(string name, ThemeElementsDictionary colors, bool sysDefault = false)
         {
             fThemes.Add(name, new Theme(name, colors, sysDefault));
         }
 
-        public static void SetTheme(string name)
+        public void SetTheme(string name)
         {
             Theme theme;
             if (fThemes.TryGetValue(name, out theme)) {
@@ -155,21 +159,21 @@ namespace GKUI.Themes
             }
         }
 
-        public static void ApplyTheme(IThemedView view)
+        public void ApplyTheme(IThemedView view)
         {
             if (view == null || fCurrentTheme == null) return;
 
-            GKData.HighlightReadabilityRows = GetThemeColor(ThemeElement.HighlightReadabilityRows).ToArgb();
-            GKData.HighlightUnparentedColor = GetThemeColor(ThemeElement.HighlightUnparentedIndi).ToArgb();
-            GKData.HighlightUnmarriedColor = GetThemeColor(ThemeElement.HighlightUnmarriedIndi).ToArgb();
-            GKData.HighlightInaccessibleFiles = GetThemeColor(ThemeElement.HighlightInaccessibleFiles).ToArgb();
+            GKData.HighlightReadabilityRows = GetThemeColor(fCurrentTheme, ThemeElement.HighlightReadabilityRows).ToArgb();
+            GKData.HighlightUnparentedColor = GetThemeColor(fCurrentTheme, ThemeElement.HighlightUnparentedIndi).ToArgb();
+            GKData.HighlightUnmarriedColor = GetThemeColor(fCurrentTheme, ThemeElement.HighlightUnmarriedIndi).ToArgb();
+            GKData.HighlightInaccessibleFiles = GetThemeColor(fCurrentTheme, ThemeElement.HighlightInaccessibleFiles).ToArgb();
 
             var form = view as Form;
             if (form != null) {
                 form.SuspendLayout();
 
-                var themeFont = GetThemeStr(ThemeElement.Font);
-                var themeFontSize = GetThemeFloat(ThemeElement.FontSize);
+                var themeFont = GetThemeStr(fCurrentTheme, ThemeElement.Font);
+                var themeFontSize = GetThemeFloat(fCurrentTheme, ThemeElement.FontSize);
                 if (form.Font.Name != themeFont) {
                     form.Font = new Font(themeFont, themeFontSize);
                 }
@@ -180,10 +184,12 @@ namespace GKUI.Themes
             }
         }
 
-        public static void ApplyTheme(IThemedView view, Component component)
+        public void ApplyTheme(IThemedView view, object component)
         {
-            ApplyTheme(view, component, fCurrentTheme);
+            ApplyTheme(view, (Component)component, fCurrentTheme);
         }
+
+        #region Control handlers
 
         private static void ApplyTheme(IThemedView view, Component component, Theme theme)
         {
@@ -206,32 +212,30 @@ namespace GKUI.Themes
             }
         }
 
-        #region Control handlers
-
-        private static Color GetThemeColor(ThemeElement element)
+        private static Color GetThemeColor(Theme theme, ThemeElement element)
         {
             object elemValue;
-            if (fCurrentTheme.Elements.TryGetValue(element, out elemValue) && elemValue is Color) {
+            if (theme.Elements.TryGetValue(element, out elemValue) && elemValue is Color) {
                 return (Color)elemValue;
             }
 
             return Color.Black;
         }
 
-        private static string GetThemeStr(ThemeElement element)
+        private static string GetThemeStr(Theme theme, ThemeElement element)
         {
             object elemValue;
-            if (fCurrentTheme.Elements.TryGetValue(element, out elemValue) && elemValue is string) {
+            if (theme.Elements.TryGetValue(element, out elemValue) && elemValue is string) {
                 return (string)elemValue;
             }
 
             return string.Empty;
         }
 
-        private static float GetThemeFloat(ThemeElement element)
+        private static float GetThemeFloat(Theme theme, ThemeElement element)
         {
             object elemValue;
-            if (fCurrentTheme.Elements.TryGetValue(element, out elemValue) && elemValue is float) {
+            if (theme.Elements.TryGetValue(element, out elemValue) && elemValue is float) {
                 return (float)elemValue;
             }
 
@@ -241,43 +245,43 @@ namespace GKUI.Themes
         private static void ThemeButtonHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (Button)component;
-            ctl.ForeColor = GetThemeColor(ThemeElement.ButtonText);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ButtonText);
 
             ctl.FlatStyle = (!theme.SysDefault) ? FlatStyle.Flat : FlatStyle.Standard;
             if (ctl.FlatStyle == FlatStyle.Flat) {
-                ctl.FlatAppearance.BorderColor = GetThemeColor(ThemeElement.ButtonBorder);
+                ctl.FlatAppearance.BorderColor = GetThemeColor(theme, ThemeElement.ButtonBorder);
                 ctl.FlatAppearance.BorderSize = 1;
             }
 
             var form = ctl.FindForm();
             if (ctl == form.AcceptButton) {
-                ctl.BackColor = GetThemeColor(ThemeElement.AccentButtonFace);
+                ctl.BackColor = GetThemeColor(theme, ThemeElement.AccentButtonFace);
             } else {
-                ctl.BackColor = GetThemeColor(ThemeElement.ButtonFace);
+                ctl.BackColor = GetThemeColor(theme, ThemeElement.ButtonFace);
             }
         }
 
         private static void ThemeCheckBoxHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (CheckBox)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
         private static void ThemeComboBoxHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (ComboBox)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Editor);
-            ctl.ForeColor = GetThemeColor(ThemeElement.EditorText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.EditorText);
         }
 
         private static void ThemeDataGridViewHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (DataGridView)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Grid);
-            ctl.ForeColor = GetThemeColor(ThemeElement.GridText);
-            ctl.ColumnHeadersDefaultCellStyle.BackColor = GetThemeColor(ThemeElement.GridHeader);
-            ctl.ColumnHeadersDefaultCellStyle.ForeColor = GetThemeColor(ThemeElement.GridHeaderText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Grid);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.GridText);
+            ctl.ColumnHeadersDefaultCellStyle.BackColor = GetThemeColor(theme, ThemeElement.GridHeader);
+            ctl.ColumnHeadersDefaultCellStyle.ForeColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
             ctl.EnableHeadersVisualStyles = (theme.SysDefault);
 
             ThemeContextMenuStripHandler(view, component, theme);
@@ -289,28 +293,28 @@ namespace GKUI.Themes
 
             if (!ctl.Modal) {
                 // window
-                ctl.BackColor = GetThemeColor(ThemeElement.Window);
-                ctl.ForeColor = GetThemeColor(ThemeElement.WindowText);
+                ctl.BackColor = GetThemeColor(theme, ThemeElement.Window);
+                ctl.ForeColor = GetThemeColor(theme, ThemeElement.WindowText);
             } else {
                 // dialog
-                ctl.BackColor = GetThemeColor(ThemeElement.Dialog);
-                ctl.ForeColor = GetThemeColor(ThemeElement.DialogText);
+                ctl.BackColor = GetThemeColor(theme, ThemeElement.Dialog);
+                ctl.ForeColor = GetThemeColor(theme, ThemeElement.DialogText);
             }
         }
 
         private static void ThemeGroupBoxHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (GroupBox)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
         private static void ThemeHyperViewHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (HyperView)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
-            ctl.LinkColor = GetThemeColor(ThemeElement.Link);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
+            ctl.LinkColor = GetThemeColor(theme, ThemeElement.Link);
             ctl.BorderStyle = (theme.SysDefault) ? BorderStyle.Fixed3D : BorderStyle.FixedSingle;
 
             ThemeContextMenuStripHandler(view, component, theme);
@@ -319,8 +323,8 @@ namespace GKUI.Themes
         private static void ThemeCustomChartHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (CustomChart)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
             ctl.BorderStyle = (theme.SysDefault) ? BorderStyle.Fixed3D : BorderStyle.FixedSingle;
 
             ThemeContextMenuStripHandler(view, component, theme);
@@ -335,13 +339,13 @@ namespace GKUI.Themes
             if (ctlParent is Form) {
                 if (!((Form)ctlParent).Modal) {
                     // window
-                    foreColor = GetThemeColor(ThemeElement.WindowText);
+                    foreColor = GetThemeColor(theme, ThemeElement.WindowText);
                 } else {
                     // dialog
-                    foreColor = GetThemeColor(ThemeElement.DialogText);
+                    foreColor = GetThemeColor(theme, ThemeElement.DialogText);
                 }
             } else {
-                foreColor = GetThemeColor(ThemeElement.ControlText);
+                foreColor = GetThemeColor(theme, ThemeElement.ControlText);
             }
         }
 
@@ -359,8 +363,8 @@ namespace GKUI.Themes
         private static void ThemeListBoxHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (ListBox)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Editor);
-            ctl.ForeColor = GetThemeColor(ThemeElement.EditorText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.EditorText);
         }
 
         private static void ThemeListViewHandler(IThemedView view, Component component, Theme theme)
@@ -368,23 +372,23 @@ namespace GKUI.Themes
             if (component is GKListView) {
                 // extended
                 var ctl = (GKListView)component;
-                ctl.BackColor = GetThemeColor(ThemeElement.Grid);
-                ctl.ForeColor = GetThemeColor(ThemeElement.GridText);
+                ctl.BackColor = GetThemeColor(theme, ThemeElement.Grid);
+                ctl.ForeColor = GetThemeColor(theme, ThemeElement.GridText);
 
                 if (theme.SysDefault) {
                     ctl.Appearance.Reset();
                 } else {
-                    ctl.Appearance.BackColor = GetThemeColor(ThemeElement.Grid);
-                    ctl.Appearance.Header = GetThemeColor(ThemeElement.GridHeader);
-                    ctl.Appearance.HeaderText = GetThemeColor(ThemeElement.GridHeaderText);
+                    ctl.Appearance.BackColor = GetThemeColor(theme, ThemeElement.Grid);
+                    ctl.Appearance.Header = GetThemeColor(theme, ThemeElement.GridHeader);
+                    ctl.Appearance.HeaderText = GetThemeColor(theme, ThemeElement.GridHeaderText);
                 }
 
                 ctl.ResetCache();
             } else {
                 // standard
                 var ctl = (ListView)component;
-                ctl.BackColor = GetThemeColor(ThemeElement.Grid);
-                ctl.ForeColor = GetThemeColor(ThemeElement.GridText);
+                ctl.BackColor = GetThemeColor(theme, ThemeElement.Grid);
+                ctl.ForeColor = GetThemeColor(theme, ThemeElement.GridText);
             }
 
             ThemeContextMenuStripHandler(view, component, theme);
@@ -393,15 +397,15 @@ namespace GKUI.Themes
         private static void ThemeNumericUpDownHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (NumericUpDown)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Editor);
-            ctl.ForeColor = GetThemeColor(ThemeElement.EditorText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.EditorText);
         }
 
         private static void ThemePanelHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (Panel)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
@@ -409,29 +413,29 @@ namespace GKUI.Themes
         private static void ThemePictureBoxHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (PictureBox)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
         private static void ThemeProgressBarHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (ProgressBar)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
         private static void ThemeRadioButtonHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (RadioButton)component;
             ctl.BackColor = ctl.Parent.BackColor;
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
         private static void ThemeTextBoxHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (TextBoxBase)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Editor);
-            ctl.ForeColor = GetThemeColor(ThemeElement.EditorText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.EditorText);
 
             //ctl.BorderStyle = (!theme.SysDefault) ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
 
@@ -441,15 +445,15 @@ namespace GKUI.Themes
         private static void ThemeScrollBarHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (ScrollBar)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
         private static void ThemeStatusBarHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (StatusBar)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
         private static void ThemeStatusBarPanelHandler(IThemedView view, Component component, Theme theme)
@@ -464,30 +468,30 @@ namespace GKUI.Themes
             if (component is GKTabControl) {
                 // extended
                 var ctl = (GKTabControl)component;
-                ctl.BackColor = GetThemeColor(ThemeElement.Control);
-                ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+                ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+                ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
 
                 if (theme.SysDefault) {
                     ctl.Appearance.Reset();
                 } else {
-                    ctl.Appearance.BackColor = GetThemeColor(ThemeElement.Control);
-                    ctl.Appearance.Tab = GetThemeColor(ThemeElement.Window);
-                    ctl.Appearance.TabHighlight = GetThemeColor(ThemeElement.Window);
-                    ctl.Appearance.TabSelected = GetThemeColor(ThemeElement.MenuItemSelected);
+                    ctl.Appearance.BackColor = GetThemeColor(theme, ThemeElement.Control);
+                    ctl.Appearance.Tab = GetThemeColor(theme, ThemeElement.Window);
+                    ctl.Appearance.TabHighlight = GetThemeColor(theme, ThemeElement.Window);
+                    ctl.Appearance.TabSelected = GetThemeColor(theme, ThemeElement.MenuItemSelected);
                 }
             } else {
                 // standard
                 var ctl = (TabControl)component;
-                ctl.BackColor = GetThemeColor(ThemeElement.Control);
-                ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+                ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+                ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
             }
         }
 
         private static void ThemeTabPageHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (TabPage)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
         private static void ThemeContextMenuStripHandler(IThemedView view, Component component, Theme theme)
@@ -501,8 +505,8 @@ namespace GKUI.Themes
         private static void ThemeToolStripHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (ToolStrip)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Strip);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ButtonText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Strip);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ButtonText);
 
             ctl.Renderer = (theme.SysDefault) ? new ToolStripProfessionalRenderer() : new TSRenderer(theme);
 
@@ -514,8 +518,8 @@ namespace GKUI.Themes
         private static void ThemeToolStripItemHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (ToolStripItem)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Dropdown);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ButtonText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Dropdown);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ButtonText);
 
             if (ctl is ToolStripDropDownItem) {
                 var dropdownItem = (ToolStripDropDownItem)ctl;
@@ -533,8 +537,8 @@ namespace GKUI.Themes
         private static void ThemeTreeViewHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (TreeView)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Editor);
-            ctl.ForeColor = GetThemeColor(ThemeElement.EditorText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.EditorText);
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
@@ -542,8 +546,8 @@ namespace GKUI.Themes
         private static void ThemeUserControlHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (UserControl)component;
-            ctl.BackColor = GetThemeColor(ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(ThemeElement.ControlText);
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
@@ -639,6 +643,16 @@ namespace GKUI.Themes
             public TSRenderer(Theme theme) : base(new TMColors(theme))
             {
                 fTheme = theme;
+            }
+
+            private Color GetThemeColor(ThemeElement element)
+            {
+                object elemValue;
+                if (fTheme.Elements.TryGetValue(element, out elemValue) && elemValue is Color) {
+                    return (Color)elemValue;
+                }
+
+                return Color.Black;
             }
 
             private void RenderSeparatorInternal(Graphics g, ToolStripItem item, Rectangle bounds, bool vertical)

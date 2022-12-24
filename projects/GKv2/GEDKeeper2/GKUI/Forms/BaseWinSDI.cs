@@ -712,7 +712,7 @@ namespace GKUI.Forms
             AppHost.Instance.ApplyTheme(theme.Name);
         }
 
-        public void UpdateThemesItems()
+        private void UpdateThemesItems()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes))
                 return;
@@ -722,7 +722,7 @@ namespace GKUI.Forms
 
                 miThemes.DropDownItems.Clear();
 
-                var themes = ThemeManager.Themes;
+                var themes = AppHost.ThemeManager.Themes;
                 int num = themes.Count;
                 for (int i = 0; i < num; i++) {
                     var theme = themes[i];
@@ -731,12 +731,8 @@ namespace GKUI.Forms
                     mi.Click += ThemeClick;
                     miThemes.DropDownItems.Add(mi);
 
-                    if (i == 0 && string.IsNullOrEmpty(curTheme)) {
+                    if ((i == 0 && string.IsNullOrEmpty(curTheme)) || (theme.Name == curTheme)) {
                         mi.Checked = true;
-                    } else if (theme.Name == curTheme) {
-                        mi.Checked = true;
-                        ThemeManager.SetTheme(theme.Name);
-                        ApplyTheme();
                     }
                 }
 

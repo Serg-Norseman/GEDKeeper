@@ -34,6 +34,7 @@ using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.SingleInstance;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore
 {
@@ -135,6 +136,11 @@ namespace GKCore
 
         public virtual void StartupWork()
         {
+            if (HasFeatureSupport(Feature.Themes)) {
+                ThemeManager.LoadThemes();
+                ThemeManager.SetTheme(GlobalOptions.Instance.Theme);
+            }
+
             try {
                 ApplyOptions();
 
@@ -996,9 +1002,36 @@ namespace GKCore
             }
         }
 
-        public virtual void ApplyTheme(string name)
+        public void ApplyTheme(string name)
         {
-            // dummy
+            if (!HasFeatureSupport(Feature.Themes))
+                return;
+
+            ThemeManager.SetTheme(name);
+            GlobalOptions.Instance.Theme = name;
+
+            foreach (IWindow win in fRunningForms) {
+                IThemedView themedView = win as IThemedView;
+                if (themedView != null) {
+                    themedView.ApplyTheme();
+                }
+            }
+        }
+
+        public void ApplyTheme(IThemedView view)
+        {
+            if (!HasFeatureSupport(Feature.Themes))
+                return;
+
+            ThemeManager.ApplyTheme(view);
+        }
+
+        public void ApplyTheme(IThemedView view, object component)
+        {
+            if (!HasFeatureSupport(Feature.Themes))
+                return;
+
+            ThemeManager.ApplyTheme(view, component);
         }
 
         public abstract string SelectFolder(string folderPath);
@@ -1058,6 +1091,7 @@ namespace GKCore
         private static INamesTable fNamesTable;
         private static PluginsMan fPlugins;
         private static GlobalOptions fOptions;
+        private static IThemeManager fThemeManager;
 
 
         public static IocContainer Container
@@ -1122,6 +1156,16 @@ namespace GKCore
                     fGfxProvider = fIocContainer.Resolve<IGraphicsProviderEx>();
                 }
                 return fGfxProvider;
+            }
+        }
+
+        public static IThemeManager ThemeManager
+        {
+            get {
+                if (fThemeManager == null) {
+                    fThemeManager = fIocContainer.Resolve<IThemeManager>();
+                }
+                return fThemeManager;
             }
         }
 
