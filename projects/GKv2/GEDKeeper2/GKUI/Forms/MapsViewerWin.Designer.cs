@@ -3,8 +3,8 @@
     partial class MapsViewerWin
     {
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.StatusBar StatusBar1;
-        private System.Windows.Forms.TabControl PageControl1;
+        private System.Windows.Forms.StatusStrip StatusBar1;
+        private GKUI.Components.GKTabControl PageControl1;
         private System.Windows.Forms.TabPage pagePlaces;
         private System.Windows.Forms.TreeView tvPlaces;
         private System.Windows.Forms.GroupBox grpSelection;
@@ -65,8 +65,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tbClear = new System.Windows.Forms.ToolStripButton();
             this.tbZoomCenter = new System.Windows.Forms.ToolStripButton();
-            this.StatusBar1 = new System.Windows.Forms.StatusBar();
-            this.PageControl1 = new System.Windows.Forms.TabControl();
+            this.StatusBar1 = new System.Windows.Forms.StatusStrip();
+            this.PageControl1 = new GKUI.Components.GKTabControl();
             this.pagePlaces = new System.Windows.Forms.TabPage();
             this.tvPlaces = new System.Windows.Forms.TreeView();
             this.grpSelection = new System.Windows.Forms.GroupBox();
@@ -526,7 +526,7 @@
             this.Controls.Add(this.StatusBar1);
             this.Controls.Add(this.ToolBar1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.KeyPreview = true;
             this.Name = "MapsViewerWin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

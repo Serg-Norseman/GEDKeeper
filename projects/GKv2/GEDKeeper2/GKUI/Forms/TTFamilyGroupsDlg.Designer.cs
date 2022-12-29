@@ -2,7 +2,7 @@
 {
 	partial class TTFamilyGroupsDlg
 	{
-		private System.Windows.Forms.TabControl tabsTools;
+		private GKUI.Components.GKTabControl tabsTools;
 		private System.Windows.Forms.TabPage pageFamilyGroups;
 		private System.Windows.Forms.TreeView tvGroups;
 		private GKUI.Components.LogChart gkLogChart1;
@@ -17,7 +17,7 @@
 		private void InitializeComponent()
 		{
 		    this.components = new System.ComponentModel.Container();
-		    this.tabsTools = new System.Windows.Forms.TabControl();
+		    this.tabsTools = new GKUI.Components.GKTabControl();
 		    this.pageFamilyGroups = new System.Windows.Forms.TabPage();
 		    this.btnAnalyseGroups = new System.Windows.Forms.Button();
 		    this.gkLogChart1 = new GKUI.Components.LogChart();

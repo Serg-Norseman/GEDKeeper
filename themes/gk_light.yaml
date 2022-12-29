@@ -1,0 +1,74 @@
+﻿---
+Name: GK Light
+Elements:
+  - Element: Font
+    Value: "Verdana"
+  - Element: FontSize
+    Value: "8.25"
+
+  - Element: Editor
+    Value: "#FFFFFF"
+  - Element: EditorText
+    Value: "#000000"
+
+  - Element: Control
+    Value: "#DFE4EB"
+  - Element: ControlText
+    Value: "#3F2756"
+
+  - Element: Window
+    Value: "#DFE4EB"
+  - Element: WindowText
+    Value: "#3F2756"
+
+  - Element: Dialog
+    Value: "#A1AABB"
+  - Element: DialogText
+    Value: "#FFFFFF"
+
+  - Element: ButtonFace
+    Value: "#5D67C7"
+  - Element: AccentButtonFace
+    Value: "#7046A6"
+  - Element: ButtonBorder
+    Value: "#3C339F"
+  - Element: ButtonText
+    Value: "#FFFFFF"
+
+  - Element: Strip
+    Value: "#7F8697"
+  - Element: Dropdown
+    Value: "#7F8697"
+  - Element: MenuBorder
+    Value: "#F7F7F7"
+  - Element: MenuItemSelected
+    Value: "#A1A7BC"
+
+  - Element: Link
+    Value: "#0000FF"
+
+  - Element: Grid
+    Value: "#CFD6E1"
+  - Element: GridHeader
+    Value: "#C4CBD8"
+  - Element: GridHeaderText
+    Value: "#1F308D"
+  - Element: GridText
+    Value: "#1F308D"
+
+  - Element: Tab
+    Value: "#DFE4EB"
+  - Element: TabHighlight
+    Value: "#DFE4EB"
+  - Element: TabSelected
+    Value: "#A1A7BC"
+
+  - Element: HighlightReadabilityRows
+    Value: "#ADB9CC"
+  - Element: HighlightUnparentedIndi
+    Value: "#FFA8A8"
+  - Element: HighlightUnmarriedIndi
+    Value: "#FFFFA1"
+  - Element: HighlightInaccessibleFiles
+    Value: "#FFCACA"
+...

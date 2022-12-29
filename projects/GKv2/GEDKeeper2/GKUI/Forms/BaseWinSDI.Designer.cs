@@ -3,7 +3,7 @@
     partial class BaseWinSDI
     {
         private System.ComponentModel.IContainer components;
-        private System.Windows.Forms.StatusBar StatusBar;
+        private System.Windows.Forms.StatusStrip StatusBar;
         private System.Windows.Forms.ToolStrip ToolBar1;
         private System.Windows.Forms.ToolStripButton tbFileNew;
         private System.Windows.Forms.ToolStripButton tbFileLoad;
@@ -82,8 +82,8 @@
         private System.Windows.Forms.ToolStripMenuItem miTreeBoth;
         private System.Windows.Forms.ToolStripMenuItem miAncestorsCircle;
         private System.Windows.Forms.ToolStripButton tbTreeBoth;
-        private System.Windows.Forms.StatusBarPanel StatusBarPanel1;
-        private System.Windows.Forms.StatusBarPanel StatusBarPanel2;
+        private System.Windows.Forms.ToolStripStatusLabel StatusBarPanel1;
+        private System.Windows.Forms.ToolStripStatusLabel StatusBarPanel2;
         private System.Windows.Forms.ToolStripMenuItem miReports;
         private System.Windows.Forms.ToolStripMenuItem miPlugins;
         private System.Windows.Forms.ToolStripMenuItem miSlideshow;
@@ -92,7 +92,7 @@
         private System.Windows.Forms.ToolStripMenuItem miDescendantsCircle;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem miRelationshipCalculator;
-        private System.Windows.Forms.TabControl tabsRecords;
+        private GKUI.Components.GKTabControl tabsRecords;
         private System.Windows.Forms.ToolStripMenuItem miContRecordDuplicate;
         private System.Windows.Forms.ToolStripMenuItem miContRecordMerge;
         private System.Windows.Forms.ToolStripMenuItem miContRecordDelete;
@@ -107,13 +107,14 @@
         private System.Windows.Forms.ToolStripMenuItem miTreeCheck;
         private System.Windows.Forms.ToolStripMenuItem miPatSearch;
         private System.Windows.Forms.ToolStripMenuItem miPlacesManager;
+        private System.Windows.Forms.ToolStripMenuItem miThemes;
 
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.StatusBar = new System.Windows.Forms.StatusBar();
-            this.StatusBarPanel1 = new System.Windows.Forms.StatusBarPanel();
-            this.StatusBarPanel2 = new System.Windows.Forms.StatusBarPanel();
+            this.StatusBar = new System.Windows.Forms.StatusStrip();
+            this.StatusBarPanel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusBarPanel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolBar1 = new System.Windows.Forms.ToolStrip();
             this.tbFileNew = new System.Windows.Forms.ToolStripButton();
             this.tbFileLoad = new System.Windows.Forms.ToolStripButton();
@@ -206,7 +207,7 @@
             this.miContRecordDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.miContRecordDuplicate = new System.Windows.Forms.ToolStripMenuItem();
             this.miContRecordMerge = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabsRecords = new System.Windows.Forms.TabControl();
+            this.tabsRecords = new GKUI.Components.GKTabControl();
             this.miTreeCompare = new System.Windows.Forms.ToolStripMenuItem();
             this.miTreeMerge = new System.Windows.Forms.ToolStripMenuItem();
             this.miTreeSplit = new System.Windows.Forms.ToolStripMenuItem();
@@ -215,8 +216,8 @@
             this.miTreeCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.miPatSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.miPlacesManager = new System.Windows.Forms.ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel2)).BeginInit();
+            this.miThemes = new System.Windows.Forms.ToolStripMenuItem();
+            this.StatusBar.SuspendLayout();
             this.ToolBar1.SuspendLayout();
             this.MenuPedigree.SuspendLayout();
             this.MainMenu1.SuspendLayout();
@@ -225,29 +226,42 @@
             // 
             // StatusBar
             // 
-            this.StatusBar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.StatusBar.Location = new System.Drawing.Point(0, 438);
-            this.StatusBar.Margin = new System.Windows.Forms.Padding(2);
+            this.StatusBar.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.StatusBarPanel1,
+            this.StatusBarPanel2});
+            this.StatusBar.Location = new System.Drawing.Point(0, 485);
             this.StatusBar.Name = "StatusBar";
-            this.StatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
-                                    this.StatusBarPanel1,
-                                    this.StatusBarPanel2});
-            this.StatusBar.ShowPanels = true;
-            this.StatusBar.Size = new System.Drawing.Size(976, 24);
+            this.StatusBar.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.StatusBar.Size = new System.Drawing.Size(704, 29);
             this.StatusBar.TabIndex = 0;
-            this.StatusBar.DrawItem += new System.Windows.Forms.StatusBarDrawItemEventHandler(this.StatusBar_DrawItem);
-            this.StatusBar.PanelClick += new System.Windows.Forms.StatusBarPanelClickEventHandler(this.StatusBar_PanelClick);
+            this.StatusBar.Text = "StatusBar";
             // 
             // StatusBarPanel1
             // 
+            this.StatusBarPanel1.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.StatusBarPanel1.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
             this.StatusBarPanel1.Name = "StatusBarPanel1";
-            this.StatusBarPanel1.Width = 50;
+            this.StatusBarPanel1.Size = new System.Drawing.Size(644, 24);
+            this.StatusBarPanel1.Spring = true;
+            this.StatusBarPanel1.Text = "StatusBarPanel1";
+            this.StatusBarPanel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // StatusBarPanel2
             // 
+            this.StatusBarPanel2.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.StatusBarPanel2.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
+            this.StatusBarPanel2.DoubleClickEnabled = true;
+            this.StatusBarPanel2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.StatusBarPanel2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.StatusBarPanel2.Name = "StatusBarPanel2";
-            this.StatusBarPanel2.Style = System.Windows.Forms.StatusBarPanelStyle.OwnerDraw;
-            this.StatusBarPanel2.Width = 24;
+            this.StatusBarPanel2.Size = new System.Drawing.Size(40, 24);
+            this.StatusBarPanel2.Text = "tool";
+            this.StatusBarPanel2.DoubleClick += new System.EventHandler(this.StatusBar_PanelClick);
             // 
             // ToolBar1
             // 
@@ -790,6 +804,7 @@
                                     this.miScripts,
                                     this.miTreeTools,
                                     this.N10,
+                                    this.miThemes,
                                     this.miOptions});
             this.miService.Name = "miService";
             this.miService.Size = new System.Drawing.Size(68, 24);
@@ -904,6 +919,12 @@
             this.miOptions.Size = new System.Drawing.Size(204, 24);
             this.miOptions.Text = "miOptions";
             this.miOptions.Click += new System.EventHandler(this.miOptions_Click);
+            // 
+            // miThemes
+            // 
+            this.miThemes.Name = "miThemes";
+            this.miThemes.Size = new System.Drawing.Size(204, 24);
+            this.miThemes.Text = "miThemes";
             // 
             // miReports
             // 
@@ -1052,9 +1073,8 @@
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form_DragEnter);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form_KeyDown);
-            this.Resize += new System.EventHandler(this.Form_Resize);
-            ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel2)).EndInit();
+            this.StatusBar.ResumeLayout(false);
+            this.StatusBar.PerformLayout();
             this.ToolBar1.ResumeLayout(false);
             this.ToolBar1.PerformLayout();
             this.MenuPedigree.ResumeLayout(false);

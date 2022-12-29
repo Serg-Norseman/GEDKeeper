@@ -1,0 +1,74 @@
+﻿---
+Name: GK Forest
+Elements:
+  - Element: Font
+    Value: "Verdana"
+  - Element: FontSize
+    Value: "8.25"
+
+  - Element: Editor
+    Value: "#FFFFFF"
+  - Element: EditorText
+    Value: "#000000"
+
+  - Element: Control
+    Value: "#B0BFA1"
+  - Element: ControlText
+    Value: "#36403B"
+
+  - Element: Window
+    Value: "#36403B"
+  - Element: WindowText
+    Value: "#CFFF57"
+
+  - Element: Dialog
+    Value: "#36403B"
+  - Element: DialogText
+    Value: "#CFFF57"
+
+  - Element: ButtonFace
+    Value: "#808057"
+  - Element: AccentButtonFace
+    Value: "#FFCE69"
+  - Element: ButtonBorder
+    Value: "#B0BFA1"
+  - Element: ButtonText
+    Value: "#FFFFFF"
+
+  - Element: Strip
+    Value: "#98A39C"
+  - Element: Dropdown
+    Value: "#98A39C"
+  - Element: MenuBorder
+    Value: "#F7F7F7"
+  - Element: MenuItemSelected
+    Value: "#A9B3AF"
+
+  - Element: Link
+    Value: "#3F46D1"
+
+  - Element: Grid
+    Value: "#B0BFA1"
+  - Element: GridHeader
+    Value: "#959D7A"
+  - Element: GridHeaderText
+    Value: "#581D35"
+  - Element: GridText
+    Value: "#36403B"
+
+  - Element: Tab
+    Value: "#B0BFA1"
+  - Element: TabHighlight
+    Value: "#B8CF8F"
+  - Element: TabSelected
+    Value: "#A4B671"
+
+  - Element: HighlightReadabilityRows
+    Value: "#A5AF8F"
+  - Element: HighlightUnparentedIndi
+    Value: "#FFA8A8"
+  - Element: HighlightUnmarriedIndi
+    Value: "#FFFFA1"
+  - Element: HighlightInaccessibleFiles
+    Value: "#FFCACA"
+...

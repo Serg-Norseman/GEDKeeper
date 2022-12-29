@@ -3,7 +3,7 @@
 	partial class CommunicationEditDlg
 	{
 		private System.Windows.Forms.GroupBox GroupBox1;
-		private System.Windows.Forms.TabControl tabsData;
+		private GKUI.Components.GKTabControl tabsData;
 		private System.Windows.Forms.TabPage pageNotes;
 		private System.Windows.Forms.TabPage pageMultimedia;
 		private System.Windows.Forms.Button btnAccept;
@@ -34,7 +34,7 @@
 		    this.txtCorresponder = new System.Windows.Forms.TextBox();
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
-		    this.tabsData = new System.Windows.Forms.TabControl();
+		    this.tabsData = new GKUI.Components.GKTabControl();
 		    this.pageNotes = new System.Windows.Forms.TabPage();
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
 		    this.GroupBox1.SuspendLayout();

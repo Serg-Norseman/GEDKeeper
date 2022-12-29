@@ -2,7 +2,7 @@
 {
     partial class PersonEditDlg
     {
-        private System.Windows.Forms.TabControl tabsData;
+        private GKUI.Components.GKTabControl tabsData;
         private System.Windows.Forms.TabPage pageEvents;
         private System.Windows.Forms.TabPage pageNotes;
         private System.Windows.Forms.TabPage pageMultimedia;
@@ -101,7 +101,7 @@
             this.txtNameSuffix = new System.Windows.Forms.TextBox();
             this.txtNickname = new System.Windows.Forms.TextBox();
             this.btnNameCopy = new System.Windows.Forms.Button();
-            this.tabsData = new System.Windows.Forms.TabControl();
+            this.tabsData = new GKUI.Components.GKTabControl();
             this.pageEvents = new System.Windows.Forms.TabPage();
             this.pageSpouses = new System.Windows.Forms.TabPage();
             this.pageNames = new System.Windows.Forms.TabPage();

@@ -2,7 +2,7 @@
 {
     partial class TTRecMergeDlg
     {
-        private System.Windows.Forms.TabControl PageControl1;
+        private GKUI.Components.GKTabControl PageControl1;
         private System.Windows.Forms.TabPage pageMerge;
         private System.Windows.Forms.Button btnAutoSearch;
         private System.Windows.Forms.Button btnSkip;
@@ -37,7 +37,7 @@
 
         private void InitializeComponent()
         {
-            this.PageControl1 = new System.Windows.Forms.TabControl();
+            this.PageControl1 = new GKUI.Components.GKTabControl();
             this.pageMerge = new System.Windows.Forms.TabPage();
             this.Lab1 = new System.Windows.Forms.Label();
             this.Lab2 = new System.Windows.Forms.Label();

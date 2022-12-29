@@ -35,9 +35,11 @@ using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform;
+using GKUI.Themes;
 
 namespace GKUI.Forms
 {
@@ -210,7 +212,9 @@ namespace GKUI.Forms
             try {
                 ((IWorkWindow)this).UpdateSettings();
 
+                UpdateShieldState();
                 fController.UpdatePluginsItems();
+                UpdateThemesItems();
                 UpdateMRU();
                 fController.UpdateControls(false);
             } catch (Exception ex) {
@@ -507,7 +511,7 @@ namespace GKUI.Forms
                 statusLine = statusLine + ", " + LangMan.LS(LSID.LSID_SBFiltered) + ": " + listMan.FilteredCount.ToString();
             }
 
-            StatusBar.Panels[0].Text = statusLine;
+            StatusBar.Items[0].Text = statusLine;
         }
 
         void IWorkWindow.UpdateSettings()
@@ -607,11 +611,6 @@ namespace GKUI.Forms
 
         #region From MainWin
 
-        private void Form_Resize(object sender, EventArgs e)
-        {
-            StatusBar.Panels[0].Width = Width - 50;
-        }
-
         public void Restore()
         {
             if (WindowState == FormWindowState.Minimized) {
@@ -658,25 +657,18 @@ namespace GKUI.Forms
             }
         }
 
-        private void StatusBar_DrawItem(object sender, StatusBarDrawItemEventArgs sbdevent)
-        {
-            UpdateShieldState(sbdevent);
-        }
-
-        private void UpdateShieldState(StatusBarDrawItemEventArgs sbdevent)
+        private void UpdateShieldState()
         {
             Bitmap img = (Bitmap)((ImageHandler)fController.GetShieldImage()).Handle;
             if (img != null) {
-                sbdevent.Graphics.DrawImage(img, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
+                StatusBarPanel2.Image = img;
             }
         }
 
-        private void StatusBar_PanelClick(object sender, StatusBarPanelClickEventArgs e)
+        private void StatusBar_PanelClick(object sender, EventArgs e)
         {
-            if (e.StatusBarPanel == StatusBarPanel2 && e.Clicks == 2) {
-                fContext.SwitchShieldState();
-                StatusBar.Invalidate();
-            }
+            fContext.SwitchShieldState();
+            UpdateShieldState();
         }
 
         private void MRUFileClick(object sender, EventArgs e)
@@ -706,6 +698,47 @@ namespace GKUI.Forms
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.UpdateMRU()", ex);
+            }
+        }
+
+        private void ThemeClick(object sender, EventArgs e)
+        {
+            var mItem = (ToolStripMenuItem)sender;
+            foreach (ToolStripMenuItem mi in mItem.GetCurrentParent().Items) {
+                mi.Checked = mItem == mi;
+            }
+
+            var theme = (Theme)mItem.Tag;
+            AppHost.Instance.ApplyTheme(theme.Name);
+        }
+
+        private void UpdateThemesItems()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes))
+                return;
+
+            try {
+                string curTheme = GlobalOptions.Instance.Theme;
+
+                miThemes.DropDownItems.Clear();
+
+                var themes = AppHost.ThemeManager.Themes;
+                int num = themes.Count;
+                for (int i = 0; i < num; i++) {
+                    var theme = themes[i];
+
+                    MenuItemEx mi = new MenuItemEx(theme.Name, theme);
+                    mi.Click += ThemeClick;
+                    miThemes.DropDownItems.Add(mi);
+
+                    if ((i == 0 && string.IsNullOrEmpty(curTheme)) || (theme.Name == curTheme)) {
+                        mi.Checked = true;
+                    }
+                }
+
+                miThemes.Enabled = (miThemes.DropDownItems.Count > 0);
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinSDI.UpdateThemesItems()", ex);
             }
         }
 

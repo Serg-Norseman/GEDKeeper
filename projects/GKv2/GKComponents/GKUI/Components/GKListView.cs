@@ -18,15 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define DEFAULT_HEADER
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using BSLib.Design;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
@@ -36,7 +33,6 @@ using GKCore.Interfaces;
 
 using BSDListItem = BSLib.Design.MVP.Controls.IListItem;
 using BSDSortOrder = BSLib.Design.BSDTypes.SortOrder;
-using WFSortOrder = System.Windows.Forms.SortOrder;
 
 namespace GKUI.Components
 {
@@ -44,7 +40,7 @@ namespace GKUI.Components
     ///
     /// </summary>
     [Serializable]
-    public class GKListItem : ListViewItem, IListItem
+    public class GKListItem : ListViewItem, BSDListItem
     {
         protected object fValue;
 
@@ -93,8 +89,7 @@ namespace GKUI.Components
 
         public void AddSubItem(object itemValue)
         {
-            GKListSubItem subItem = new GKListSubItem(itemValue);
-            SubItems.Add(subItem);
+            SubItems.Add(new GKListSubItem(itemValue));
         }
 
         public void SetBackColor(IColor color)
@@ -136,7 +131,7 @@ namespace GKUI.Components
 
         public int CompareTo(object obj)
         {
-            GKListSubItem otherItem = obj as GKListSubItem;
+            var otherItem = obj as GKListSubItem;
             if (otherItem == null) {
                 return -1;
             }
@@ -246,6 +241,7 @@ namespace GKUI.Components
         private readonly LVColumnSorter fColumnSorter;
         private readonly GKListViewItems fItemsAccessor;
 
+        private readonly ListViewAppearance fAppearance;
         private GKListItem[] fCache;
         private int fCacheFirstItem;
         private IListSource fListMan;
@@ -253,6 +249,11 @@ namespace GKUI.Components
         private BSDSortOrder fSortOrder;
         private int fUpdateCount;
 
+
+        public ListViewAppearance Appearance
+        {
+            get { return fAppearance; }
+        }
 
         IListViewItems IListView.Items
         {
@@ -303,6 +304,8 @@ namespace GKUI.Components
 
         public GKListView()
         {
+            fAppearance = new ListViewAppearance(this);
+
             SetStyle(ControlStyles.DoubleBuffer, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -388,44 +391,25 @@ namespace GKUI.Components
 
         protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
         {
-            #if DEFAULT_HEADER
+            e.DrawDefault = false;
 
-            e.DrawDefault = true;
-
-            #else
-
-            using (var sf = new StringFormat())
-            {
+            using (var sf = new StringFormat()) {
                 Graphics gfx = e.Graphics;
                 Rectangle rt = e.Bounds;
 
-                #if !MONO
-                if (VisualStyleRenderer.IsSupported) {
-                    VisualStyleElement element = VisualStyleElement.Header.Item.Normal;
-                    if ((e.State & ListViewItemStates.Hot) == ListViewItemStates.Hot)
-                        element = VisualStyleElement.Header.Item.Hot;
-                    if ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected)
-                        element = VisualStyleElement.Header.Item.Pressed;
-
-                    var visualStyleRenderer = new VisualStyleRenderer(element);
-                    visualStyleRenderer.DrawBackground(gfx, rt);
+                if ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected) {
+                    DrawHeaderBackground(gfx, fAppearance.HeaderPressed, rt);
                 } else {
-                    e.DrawBackground();
+                    DrawHeaderBackground(gfx, fAppearance.Header, rt);
                 }
-                #else
-                e.DrawBackground();
-                #endif
 
-                switch (e.Header.TextAlign)
-                {
+                switch (e.Header.TextAlign) {
                     case HorizontalAlignment.Left:
                         sf.Alignment = StringAlignment.Near;
                         break;
-
                     case HorizontalAlignment.Right:
                         sf.Alignment = StringAlignment.Far;
                         break;
-
                     case HorizontalAlignment.Center:
                         sf.Alignment = StringAlignment.Center;
                         break;
@@ -438,31 +422,67 @@ namespace GKUI.Components
                 int w = TextRenderer.MeasureText(" ", Font).Width;
                 rt.Inflate(-(w / 5), 0);
 
-                gfx.DrawString(e.Header.Text, Font, Brushes.Black, rt, sf);
+                using (var brush = new SolidBrush(fAppearance.HeaderText)) {
+                    gfx.DrawString(e.Header.Text, Font, brush, rt, sf);
+                }
 
-                string arrow = "";
                 switch (GetColumnSortOrder(e.ColumnIndex)) {
                     case BSDSortOrder.Ascending:
-                        arrow = "▲";
+                        DrawSortArrow(gfx, rt, "▲");
                         break;
                     case BSDSortOrder.Descending:
-                        arrow = "▼";
+                        DrawSortArrow(gfx, rt, "▼");
                         break;
                 }
 
-                if (arrow != "") {
-                    using (var fnt = new Font(Font.FontFamily, Font.SizeInPoints * 0.6f, FontStyle.Regular)) {
-                        float aw = gfx.MeasureString(arrow, fnt).Width;
-                        float x = rt.Left + (rt.Width - aw) / 2.0f;
-                        gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
-                        gfx.DrawString(arrow, fnt, Brushes.Black, x, rt.Top);
+                /*if (e.ColumnIndex == Columns.Count - 1) {
+                    IntPtr headerControl = Win32.GetHeaderControl(this);
+                    IntPtr hdc = Win32.GetDC(headerControl);
+                    Graphics g = Graphics.FromHdc(hdc);
+                    Rectangle rc = new Rectangle(e.Bounds.Right, e.Bounds.Top, ClientRectangle.Width - e.Bounds.X, e.Bounds.Height);
+                    using (Brush brush = new SolidBrush(fAppearance.Header)) {
+                        g.FillRectangle(brush, rc);
                     }
-                }
+                    g.Dispose();
+                    Win32.ReleaseDC(headerControl, hdc);
+                }*/
             }
 
-            #endif
-
             base.OnDrawColumnHeader(e);
+        }
+
+        private void DrawSortArrow(Graphics gfx, Rectangle rt, string arrow)
+        {
+            using (var fnt = new Font(Font.FontFamily, Font.SizeInPoints * 0.6f, FontStyle.Regular)) {
+                float aw = gfx.MeasureString(arrow, fnt).Width;
+                float x = rt.Left + (rt.Width - aw) / 2.0f;
+                gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
+                gfx.DrawString(arrow, fnt, Brushes.Black, x, rt.Top);
+            }
+        }
+
+        private static void DrawHeaderBackground(Graphics g, Color backColor, Rectangle bounds, bool classic3d = false)
+        {
+            using (Brush brush = new SolidBrush(backColor)) {
+                g.FillRectangle(brush, bounds);
+            }
+
+            Rectangle rect = bounds;
+            if (classic3d) {
+                rect.Width--;
+                rect.Height--;
+                g.DrawRectangle(SystemPens.ControlDarkDark, rect);
+                rect.Width--;
+                rect.Height--;
+                g.DrawLine(SystemPens.ControlLightLight, rect.X, rect.Y, rect.Right, rect.Y);
+                g.DrawLine(SystemPens.ControlLightLight, rect.X, rect.Y, rect.X, rect.Bottom);
+                g.DrawLine(SystemPens.ControlDark, rect.X + 1, rect.Bottom, rect.Right, rect.Bottom);
+                g.DrawLine(SystemPens.ControlDark, rect.Right, rect.Y + 1, rect.Right, rect.Bottom);
+            } else {
+                rect.Width--;
+                rect.Height--;
+                g.DrawLine(SystemPens.ControlDark, rect.Right, rect.Y + 1, rect.Right, rect.Bottom - 1);
+            }
         }
 
         protected override void OnDrawItem(DrawListViewItemEventArgs e)
@@ -517,7 +537,7 @@ namespace GKUI.Components
             }
         }
 
-        protected void ResetCache()
+        public void ResetCache()
         {
             fCache = null;
         }
@@ -527,6 +547,8 @@ namespace GKUI.Components
             if (fListMan != null && fUpdateCount == 0) {
                 fListMan.ChangeColumnWidth(e.ColumnIndex, Columns[e.ColumnIndex].Width);
             }
+
+            Invalidate();
 
             base.OnColumnWidthChanged(e);
         }
@@ -797,5 +819,114 @@ namespace GKUI.Components
         }
 
         #endregion
+    }
+
+
+    public class ListViewAppearance
+    {
+        private readonly ListView fOwner;
+        private Color fBackColor;
+        private Color fHeader;
+        private Color fHeaderPressed;
+        private Color fHeaderText;
+        private Color fInterlaced;
+        private Color fItemSelected;
+
+        public Color BackColor
+        {
+            get {
+                return fBackColor;
+            }
+            set {
+                if (fBackColor != value) {
+                    fBackColor = value;
+                    fOwner.Invalidate();
+                }
+            }
+        }
+
+        public Color Header
+        {
+            get {
+                return fHeader;
+            }
+            set {
+                if (fHeader != value) {
+                    fHeader = value;
+                    fOwner.Invalidate();
+                }
+            }
+        }
+
+        public Color HeaderPressed
+        {
+            get {
+                return fHeaderPressed;
+            }
+            set {
+                if (fHeaderPressed != value) {
+                    fHeaderPressed = value;
+                    fOwner.Invalidate();
+                }
+            }
+        }
+
+        public Color HeaderText
+        {
+            get {
+                return fHeaderText;
+            }
+            set {
+                if (fHeaderText != value) {
+                    fHeaderText = value;
+                    fOwner.Invalidate();
+                }
+            }
+        }
+
+        public Color Interlaced
+        {
+            get {
+                return fInterlaced;
+            }
+            set {
+                if (fInterlaced != value) {
+                    fInterlaced = value;
+                    fOwner.Invalidate();
+                }
+            }
+        }
+
+        public Color ItemSelected
+        {
+            get {
+                return fItemSelected;
+            }
+            set {
+                if (fItemSelected != value) {
+                    fItemSelected = value;
+                    fOwner.Invalidate();
+                }
+            }
+        }
+
+        public ListViewAppearance(ListView owner)
+        {
+            fOwner = owner;
+            Reset(false);
+        }
+
+        public void Reset(bool invalidate = true)
+        {
+            fBackColor = SystemColors.Control;
+            fHeader = SystemColors.Control;
+            fHeaderPressed = Color.FromArgb(188, 220, 244); // BCDCF4;
+            fHeaderText = SystemColors.ControlText;
+            fInterlaced = SystemColors.ControlDark;
+            fItemSelected = SystemColors.Highlight;
+
+            if (invalidate)
+                fOwner.Invalidate();
+        }
     }
 }

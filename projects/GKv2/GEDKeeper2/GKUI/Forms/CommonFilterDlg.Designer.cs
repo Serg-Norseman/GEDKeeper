@@ -4,7 +4,7 @@
 	{
         protected System.Windows.Forms.Button btnAccept;
         protected System.Windows.Forms.Button btnCancel;
-		protected System.Windows.Forms.TabControl tabsFilters;
+		protected GKUI.Components.GKTabControl tabsFilters;
         protected System.Windows.Forms.TabPage pageFieldsFilter;
         protected System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Panel pnlClient;
@@ -17,7 +17,7 @@
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.pnlClient = new System.Windows.Forms.Panel();
-		    this.tabsFilters = new System.Windows.Forms.TabControl();
+		    this.tabsFilters = new GKUI.Components.GKTabControl();
 		    this.pageFieldsFilter = new System.Windows.Forms.TabPage();
 		    this.pnlButtons.SuspendLayout();
 		    this.pnlClient.SuspendLayout();

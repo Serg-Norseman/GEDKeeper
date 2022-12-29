@@ -59,5 +59,7 @@ namespace GKCore.Interfaces
         void ShowHelpTopic(string topic);
 
         string SelectFolder(string folderPath);
+
+        bool HasFeatureSupport(Feature feature);
     }
 }

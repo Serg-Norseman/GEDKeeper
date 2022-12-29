@@ -20,13 +20,13 @@
         private System.Windows.Forms.TabPage pagePreview;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.TabPage pageEditor;
-        private System.Windows.Forms.TabControl tabControl1;
+        private GKUI.Components.GKTabControl tabControl1;
 
         private void InitializeComponent()
         {
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl1 = new GKUI.Components.GKTabControl();
             this.pageEditor = new System.Windows.Forms.TabPage();
             this.txtNote = new System.Windows.Forms.RichTextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();

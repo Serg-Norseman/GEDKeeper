@@ -12,7 +12,7 @@
 		private System.Windows.Forms.TextBox txtTel;
 		private System.Windows.Forms.TextBox txtAddress;
 		private System.Windows.Forms.TabPage pageOther;
-		private System.Windows.Forms.TabControl PageControl1;
+		private GKUI.Components.GKTabControl PageControl1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private GKUI.Components.GKListView lvRecordStats;
@@ -21,7 +21,7 @@
 		{
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
-		    this.PageControl1 = new System.Windows.Forms.TabControl();
+		    this.PageControl1 = new GKUI.Components.GKTabControl();
 		    this.pageAuthor = new System.Windows.Forms.TabPage();
 		    this.btnLangEdit = new System.Windows.Forms.Button();
 		    this.lblName = new System.Windows.Forms.Label();

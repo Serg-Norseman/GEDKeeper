@@ -2,7 +2,7 @@
 {
 	partial class TTTreeSplitDlg
 	{
-		private System.Windows.Forms.TabControl tabsTools;
+		private GKUI.Components.GKTabControl tabsTools;
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pageTreeSplit;
 		private System.Windows.Forms.Button btnSelectAll;
@@ -16,7 +16,7 @@
 
 		private void InitializeComponent()
 		{
-		    this.tabsTools = new System.Windows.Forms.TabControl();
+		    this.tabsTools = new GKUI.Components.GKTabControl();
 		    this.pageTreeSplit = new System.Windows.Forms.TabPage();
 		    this.btnSelectAll = new System.Windows.Forms.Button();
 		    this.ListSelected = new GKUI.Components.GKListView();

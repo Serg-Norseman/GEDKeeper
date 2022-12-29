@@ -41,6 +41,13 @@ namespace GKUI.Components
 
         protected CustomChart()
         {
+            BackColor = Color.White;
+            BorderStyle = BorderStyle.Fixed3D;
+            TabStop = true;
+
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            UpdateStyles();
+
             fNavman = new NavigationStack<object>();
         }
 

@@ -133,9 +133,6 @@ namespace GKUI.Components
 
         public CircleChart()
         {
-            BorderStyle = BorderStyle.Fixed3D;
-            DoubleBuffered = true;
-
             fRenderer = new WFGfxRenderer();
             fModel = new CircleChartModel();
             fModel.SetRenderer(fRenderer);

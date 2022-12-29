@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using GKCore;
 
 [assembly: AssemblyTitle("GKCore")]
@@ -7,3 +8,5 @@ using GKCore;
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
 [assembly: AssemblyVersion("4.0.0.0")]
 [assembly: AssemblyCulture("")]
+
+[assembly: InternalsVisibleTo("GKComponents")]

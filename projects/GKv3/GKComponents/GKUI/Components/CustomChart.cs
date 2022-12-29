@@ -23,7 +23,6 @@ using BSLib;
 using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
-using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKUI.Platform;

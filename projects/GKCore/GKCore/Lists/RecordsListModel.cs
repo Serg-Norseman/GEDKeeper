@@ -20,14 +20,9 @@
 
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using BSLib;
-using BSLib.Design.Graphics;
 using GDModel;
-using GKCore.Charts;
 using GKCore.Interfaces;
-using GKCore.Options;
 using GKCore.Search;
-using BSDColors = BSLib.Design.BSDConsts.Colors;
 
 namespace GKCore.Lists
 {
@@ -50,15 +45,6 @@ namespace GKCore.Lists
             base(baseContext, defaultListColumns)
         {
             fRecordType = recordType;
-        }
-
-        public override IColor GetBackgroundColor(int itemIndex, object rowData)
-        {
-            if (GlobalOptions.Instance.ReadabilityHighlightRows && MathHelper.IsOdd(itemIndex)) {
-                return ChartRenderer.GetColor(BSDColors.LightGray);
-            }
-
-            return null;
         }
 
         public override void UpdateContents()

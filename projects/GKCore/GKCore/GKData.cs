@@ -57,9 +57,10 @@ namespace GKCore
         public const string GAPI_KEY = "AIzaSyCyPx_u1PhHaN2d3ld4J8hsgASF5lOdpGY";
         public const string YAPI_KEY = "a5653896-1335-477f-aac7-10a2ba9e52c5";
 
-        public static readonly int HighlightUnparentedColor = 0xFFCACA;
-        public static readonly int HighlightUnmarriedColor = 0xFFFFA1;
-        public static readonly int HighlightInaccessibleFiles = 0xFFCACA;
+        public static int HighlightUnparentedColor = 0xFFCACA;
+        public static int HighlightUnmarriedColor = 0xFFFFA1;
+        public static int HighlightInaccessibleFiles = 0xFFCACA;
+        public static int HighlightReadabilityRows = 0xEFEFEF;
 
         #if MONO
         public const string DEF_FONT = "Noto Sans";

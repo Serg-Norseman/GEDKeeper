@@ -33,8 +33,10 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKCore.Options;
+using GKCore.Types;
 using GKUI.Components;
 using GKUI.Forms;
+using GKUI.Themes;
 
 namespace GKUI.Platform
 {
@@ -235,6 +237,20 @@ namespace GKUI.Platform
             }
         }
 
+        public override bool HasFeatureSupport(Feature feature)
+        {
+            bool result = false;
+
+#if !MONO
+            // since v2.23.0, only WinForms-based implementation, on Windows OS
+            if (feature == Feature.Themes) {
+                result = true;
+            }
+#endif
+
+            return result;
+        }
+
         #region KeyLayout functions
 
         public override int GetKeyLayout()
@@ -302,6 +318,7 @@ namespace GKUI.Platform
             container.Register<IStdDialogs, WFStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
+            container.Register<IThemeManager, WFThemeManager>(LifeCycle.Singleton);
 
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
@@ -378,6 +395,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(ToolStripButton), typeof(ButtonToolItemHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripDropDownButton), typeof(DropDownToolItemHandler));
 
+            ControlsManager.RegisterHandlerType(typeof(GKTabControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));

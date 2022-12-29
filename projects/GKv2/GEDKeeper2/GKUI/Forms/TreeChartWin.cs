@@ -32,6 +32,7 @@ using GKCore.MVP.Views;
 using GKCore.Options;
 using GKUI.Components;
 using GKUI.Platform;
+using GKUI.Themes;
 
 namespace GKUI.Forms
 {
@@ -143,6 +144,12 @@ namespace GKUI.Forms
             return fTreeBox;
         }
 
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            AppHost.Instance.ApplyTheme(this, MenuPerson);
+        }
+
         #region Interface handlers
 
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
@@ -248,37 +255,14 @@ namespace GKUI.Forms
         private void PopulateContextMenus()
         {
             miGensInfCommon = UIHelper.AddToolStripItem(MenuGensCommon, "Inf", -1, miGensX_Click);
-            UIHelper.AddToolStripItem(MenuGensCommon, "1", 1, miGensX_Click);
-            UIHelper.AddToolStripItem(MenuGensCommon, "2", 2, miGensX_Click);
-            UIHelper.AddToolStripItem(MenuGensCommon, "3", 3, miGensX_Click);
-            UIHelper.AddToolStripItem(MenuGensCommon, "4", 4, miGensX_Click);
-            UIHelper.AddToolStripItem(MenuGensCommon, "5", 5, miGensX_Click);
-            UIHelper.AddToolStripItem(MenuGensCommon, "6", 6, miGensX_Click);
-            UIHelper.AddToolStripItem(MenuGensCommon, "7", 7, miGensX_Click);
-            UIHelper.AddToolStripItem(MenuGensCommon, "8", 8, miGensX_Click);
-            UIHelper.AddToolStripItem(MenuGensCommon, "9", 9, miGensX_Click);
-
             miGensInfAncestors = UIHelper.AddToolStripItem(MenuGensAncestors, "Inf", -1, miGensXAncestors_Click);
-            UIHelper.AddToolStripItem(MenuGensAncestors, "1", 1, miGensXAncestors_Click);
-            UIHelper.AddToolStripItem(MenuGensAncestors, "2", 2, miGensXAncestors_Click);
-            UIHelper.AddToolStripItem(MenuGensAncestors, "3", 3, miGensXAncestors_Click);
-            UIHelper.AddToolStripItem(MenuGensAncestors, "4", 4, miGensXAncestors_Click);
-            UIHelper.AddToolStripItem(MenuGensAncestors, "5", 5, miGensXAncestors_Click);
-            UIHelper.AddToolStripItem(MenuGensAncestors, "6", 6, miGensXAncestors_Click);
-            UIHelper.AddToolStripItem(MenuGensAncestors, "7", 7, miGensXAncestors_Click);
-            UIHelper.AddToolStripItem(MenuGensAncestors, "8", 8, miGensXAncestors_Click);
-            UIHelper.AddToolStripItem(MenuGensAncestors, "9", 9, miGensXAncestors_Click);
-
             miGensInfDescendants = UIHelper.AddToolStripItem(MenuGensDescendants, "Inf", -1, miGensXDescendants_Click);
-            UIHelper.AddToolStripItem(MenuGensDescendants, "1", 1, miGensXDescendants_Click);
-            UIHelper.AddToolStripItem(MenuGensDescendants, "2", 2, miGensXDescendants_Click);
-            UIHelper.AddToolStripItem(MenuGensDescendants, "3", 3, miGensXDescendants_Click);
-            UIHelper.AddToolStripItem(MenuGensDescendants, "4", 4, miGensXDescendants_Click);
-            UIHelper.AddToolStripItem(MenuGensDescendants, "5", 5, miGensXDescendants_Click);
-            UIHelper.AddToolStripItem(MenuGensDescendants, "6", 6, miGensXDescendants_Click);
-            UIHelper.AddToolStripItem(MenuGensDescendants, "7", 7, miGensXDescendants_Click);
-            UIHelper.AddToolStripItem(MenuGensDescendants, "8", 8, miGensXDescendants_Click);
-            UIHelper.AddToolStripItem(MenuGensDescendants, "9", 9, miGensXDescendants_Click);
+
+            for (int i = 1; i <= 9; i++) {
+                UIHelper.AddToolStripItem(MenuGensCommon, i.ToString(), i, miGensX_Click);
+                UIHelper.AddToolStripItem(MenuGensAncestors, i.ToString(), i, miGensXAncestors_Click);
+                UIHelper.AddToolStripItem(MenuGensDescendants, i.ToString(), i, miGensXDescendants_Click);
+            }
 
             for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.Last; bs++) {
                 UIHelper.AddToolStripItem(MenuBorders, bs.ToString(), (int)bs, miBorderX_Click);

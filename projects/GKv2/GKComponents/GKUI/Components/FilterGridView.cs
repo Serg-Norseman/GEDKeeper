@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,6 +40,7 @@ namespace GKUI.Components
             ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             Margin = new Padding(2);
             MultiSelect = false;
+            RowHeadersVisible = false;
 
             fListMan = listMan;
             fFields = fListMan.CreateFields();

@@ -26,13 +26,14 @@ using BSLib.Design.MVP;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.MVP;
+using GKUI.Themes;
 
 namespace GKUI.Forms
 {
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : Form, IView
+    public class CommonForm : Form, IView, IThemedView
     {
         private readonly IContainer fComponents;
         private readonly ToolTip fToolTip;
@@ -90,6 +91,24 @@ namespace GKUI.Forms
             }
             return result;
         }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (!DesignMode) {
+                ApplyTheme();
+            }
+        }
+
+        public virtual void ApplyTheme()
+        {
+            AppHost.Instance.ApplyTheme(this);
+        }
+
+        public virtual bool SkipTheme(Component component)
+        {
+            return false;
+        }
     }
 
 
@@ -110,13 +129,17 @@ namespace GKUI.Forms
 
         protected override void OnLoad(EventArgs e)
         {
-            AppHost.Instance.LoadWindow(this);
+            if (!DesignMode) {
+                AppHost.Instance.LoadWindow(this);
+            }
             base.OnLoad(e);
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            AppHost.Instance.CloseWindow(this);
+            if (!DesignMode) {
+                AppHost.Instance.CloseWindow(this);
+            }
             base.OnClosed(e);
         }
     }

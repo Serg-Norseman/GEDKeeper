@@ -5,7 +5,7 @@
 		private System.Windows.Forms.GroupBox GroupBox1;
 		private System.Windows.Forms.TextBox txtName;
 		private System.Windows.Forms.Label lblName;
-		private System.Windows.Forms.TabControl tabsData;
+		private GKUI.Components.GKTabControl tabsData;
 		private System.Windows.Forms.TabPage pageNotes;
 		private System.Windows.Forms.TabPage pageTasks;
 		private System.Windows.Forms.Button btnAccept;
@@ -40,7 +40,7 @@
 			this.nudPercent = new System.Windows.Forms.NumericUpDown();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.tabsData = new System.Windows.Forms.TabControl();
+			this.tabsData = new GKUI.Components.GKTabControl();
 			this.pageTasks = new System.Windows.Forms.TabPage();
 			this.pageCommunications = new System.Windows.Forms.TabPage();
 			this.pageGroups = new System.Windows.Forms.TabPage();

@@ -2,7 +2,7 @@
 {
 	partial class FamilyEditDlg
 	{
-		private System.Windows.Forms.TabControl tabsData;
+		private GKUI.Components.GKTabControl tabsData;
 		private System.Windows.Forms.TabPage pageEvents;
 		private System.Windows.Forms.TabPage pageNotes;
 		private System.Windows.Forms.TabPage pageMultimedia;
@@ -45,7 +45,7 @@
 		    this.cmbMarriageStatus = new System.Windows.Forms.ComboBox();
 		    this.lblRestriction = new System.Windows.Forms.Label();
 		    this.cmbRestriction = new System.Windows.Forms.ComboBox();
-		    this.tabsData = new System.Windows.Forms.TabControl();
+		    this.tabsData = new GKUI.Components.GKTabControl();
 		    this.pageChilds = new System.Windows.Forms.TabPage();
 		    this.pageEvents = new System.Windows.Forms.TabPage();
 		    this.pageNotes = new System.Windows.Forms.TabPage();

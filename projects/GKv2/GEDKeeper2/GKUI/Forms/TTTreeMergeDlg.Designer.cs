@@ -2,7 +2,7 @@
 {
 	partial class TTTreeMergeDlg
 	{
-		private System.Windows.Forms.TabControl tabsTools;
+		private GKUI.Components.GKTabControl tabsTools;
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.TabPage pageTreeMerge;
 		private System.Windows.Forms.Label lblMasterBase;
@@ -14,7 +14,7 @@
 
 		private void InitializeComponent()
 		{
-		    this.tabsTools = new System.Windows.Forms.TabControl();
+		    this.tabsTools = new GKUI.Components.GKTabControl();
 		    this.pageTreeMerge = new System.Windows.Forms.TabPage();
 		    this.lblMasterBase = new System.Windows.Forms.Label();
 		    this.lblOtherBase = new System.Windows.Forms.Label();

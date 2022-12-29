@@ -4,7 +4,7 @@
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.TabControl tabsData;
+		private GKUI.Components.GKTabControl tabsData;
 		private System.Windows.Forms.TabPage pageNotes;
 		private System.Windows.Forms.TabPage pageMultimedia;
 		private System.Windows.Forms.TabPage pageRepositories;
@@ -24,7 +24,7 @@
 		{
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
-		    this.tabsData = new System.Windows.Forms.TabControl();
+		    this.tabsData = new GKUI.Components.GKTabControl();
 		    this.pageCommon = new System.Windows.Forms.TabPage();
 		    this.lblShortTitle = new System.Windows.Forms.Label();
 		    this.lblAuthor = new System.Windows.Forms.Label();

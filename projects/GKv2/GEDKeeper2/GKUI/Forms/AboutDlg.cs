@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.MVP.Views;
@@ -56,6 +57,14 @@ namespace GKUI.Forms
             if (lbl != null) {
                 GKUtils.LoadExtFile(lbl.Text);
             }
+        }
+
+        public override bool SkipTheme(Component component)
+        {
+            if (component == lblProduct || component == lblVersion || component == lblCopyright) {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     partial class OptionsDlg
     {
-        private System.Windows.Forms.TabControl PageControl1;
+        private GKUI.Components.GKTabControl PageControl1;
         private System.Windows.Forms.TabPage pageCommon;
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Button btnCancel;
@@ -33,7 +33,7 @@
         private System.Windows.Forms.TextBox txtProxyLogin;
         private System.Windows.Forms.TextBox txtProxyPass;
         private System.Windows.Forms.TabPage pageUIView;
-        private System.Windows.Forms.TabControl PageControl2;
+        private GKUI.Components.GKTabControl PageControl2;
         private System.Windows.Forms.TabPage pageViewCommon;
         private System.Windows.Forms.TabPage pageViewPersons;
         private GKUI.Components.GKListView lstPersonColumns;
@@ -78,7 +78,7 @@
         private GKUI.Components.GKListView lvPlugins;
         private System.Windows.Forms.TabPage pagePlugins;
         private System.Windows.Forms.Label lblChartFont;
-        private System.Windows.Forms.TabControl tabsCharts;
+        private GKUI.Components.GKTabControl tabsCharts;
         private System.Windows.Forms.TabPage pageCharts;
         private System.Windows.Forms.Label lblMaleColor;
         private System.Windows.Forms.Label lblFemaleColor;
@@ -171,7 +171,7 @@
 
         private void InitializeComponent()
         {
-            this.PageControl1 = new System.Windows.Forms.TabControl();
+            this.PageControl1 = new GKUI.Components.GKTabControl();
             this.pageCommon = new System.Windows.Forms.TabPage();
             this.lblCertaintyAlgorithm = new System.Windows.Forms.Label();
             this.cmbCertaintyAlgorithm = new System.Windows.Forms.ComboBox();
@@ -218,7 +218,7 @@
             this.chkEmbeddedMediaPlayer = new System.Windows.Forms.CheckBox();
             this.chkRemovableMediaWarning = new System.Windows.Forms.CheckBox();
             this.pageCharts = new System.Windows.Forms.TabPage();
-            this.tabsCharts = new System.Windows.Forms.TabControl();
+            this.tabsCharts = new GKUI.Components.GKTabControl();
             this.pageTreeChart = new System.Windows.Forms.TabPage();
             this.chkSeparateDepth = new System.Windows.Forms.CheckBox();
             this.numDefaultDepth = new System.Windows.Forms.NumericUpDown();
@@ -279,7 +279,7 @@
             this.pageAncCircle = new System.Windows.Forms.TabPage();
             this.ancOptionsControl1 = new GKUI.Components.ACOptionsControl();
             this.pageUIView = new System.Windows.Forms.TabPage();
-            this.PageControl2 = new System.Windows.Forms.TabControl();
+            this.PageControl2 = new GKUI.Components.GKTabControl();
             this.pageViewCommon = new System.Windows.Forms.TabPage();
             this.chkSurnameFirstInOrder = new System.Windows.Forms.CheckBox();
             this.grpAdvancedNames = new System.Windows.Forms.GroupBox();
@@ -396,7 +396,7 @@
             this.PageControl1.Margin = new System.Windows.Forms.Padding(2);
             this.PageControl1.Name = "PageControl1";
             this.PageControl1.SelectedIndex = 0;
-            this.PageControl1.Size = new System.Drawing.Size(749, 732);
+            this.PageControl1.Size = new System.Drawing.Size(749, 692);
             this.PageControl1.TabIndex = 0;
             // 
             // pageCommon
@@ -949,13 +949,12 @@
             this.tabsCharts.Margin = new System.Windows.Forms.Padding(2);
             this.tabsCharts.Name = "tabsCharts";
             this.tabsCharts.SelectedIndex = 0;
-            this.tabsCharts.Size = new System.Drawing.Size(721, 742);
+            this.tabsCharts.Size = new System.Drawing.Size(721, 702);
             this.tabsCharts.TabIndex = 0;
             // 
             // pageTreeChart
             // 
             this.pageTreeChart.BackColor = System.Drawing.SystemColors.Control;
-            this.pageTreeChart.Controls.Add(this.chkUseExtraControls);
             this.pageTreeChart.Controls.Add(this.chkSeparateDepth);
             this.pageTreeChart.Controls.Add(this.numDefaultDepth);
             this.pageTreeChart.Controls.Add(this.lblDefaultDepth);
@@ -973,15 +972,6 @@
             this.pageTreeChart.Size = new System.Drawing.Size(713, 712);
             this.pageTreeChart.TabIndex = 3;
             this.pageTreeChart.Text = "pageTreeChart";
-            // 
-            // chkUseExtraControls
-            // 
-            this.chkUseExtraControls.Location = new System.Drawing.Point(434, 600);
-            this.chkUseExtraControls.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkUseExtraControls.Name = "chkUseExtraControls";
-            this.chkUseExtraControls.Size = new System.Drawing.Size(254, 22);
-            this.chkUseExtraControls.TabIndex = 12;
-            this.chkUseExtraControls.Text = "chkUseExtraControls";
             // 
             // chkSeparateDepth
             // 
@@ -1257,7 +1247,7 @@
             this.grpTreePersons.Margin = new System.Windows.Forms.Padding(10);
             this.grpTreePersons.Name = "grpTreePersons";
             this.grpTreePersons.Padding = new System.Windows.Forms.Padding(10);
-            this.grpTreePersons.Size = new System.Drawing.Size(391, 620);
+            this.grpTreePersons.Size = new System.Drawing.Size(391, 580);
             this.grpTreePersons.TabIndex = 0;
             this.grpTreePersons.TabStop = false;
             this.grpTreePersons.Text = "grpTreePersons";
@@ -2194,6 +2184,7 @@
             this.pageSpecials.Controls.Add(this.chkKeepRichNames);
             this.pageSpecials.Controls.Add(this.chkMaximizeChartWindows);
             this.pageSpecials.Controls.Add(this.chkExtendedTree);
+            this.pageSpecials.Controls.Add(this.chkUseExtraControls);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
             this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
@@ -2247,6 +2238,15 @@
             this.chkExtendedTree.Size = new System.Drawing.Size(600, 22);
             this.chkExtendedTree.TabIndex = 12;
             this.chkExtendedTree.Text = "chkExtendedTree";
+            // 
+            // chkUseExtraControls
+            // 
+            this.chkUseExtraControls.Location = new System.Drawing.Point(20, 225);
+            this.chkUseExtraControls.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkUseExtraControls.Name = "chkUseExtraControls";
+            this.chkUseExtraControls.Size = new System.Drawing.Size(254, 22);
+            this.chkUseExtraControls.TabIndex = 12;
+            this.chkUseExtraControls.Text = "chkUseExtraControls";
             // 
             // pagePlugins
             // 
@@ -2306,7 +2306,7 @@
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(491, 742);
+            this.btnAccept.Location = new System.Drawing.Point(491, 702);
             this.btnAccept.Margin = new System.Windows.Forms.Padding(2);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(114, 30);
@@ -2319,7 +2319,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(621, 742);
+            this.btnCancel.Location = new System.Drawing.Point(621, 702);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(114, 30);
@@ -2333,7 +2333,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(749, 786);
+            this.ClientSize = new System.Drawing.Size(749, 746);
             this.Controls.Add(this.PageControl1);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);

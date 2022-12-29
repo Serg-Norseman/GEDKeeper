@@ -3,7 +3,7 @@
     partial class MediaEditDlg
     {
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.TabControl tabsData;
+        private GKUI.Components.GKTabControl tabsData;
         private System.Windows.Forms.TabPage pageNotes;
         private System.Windows.Forms.TabPage pageSources;
         private System.Windows.Forms.Button btnAccept;
@@ -32,7 +32,7 @@
 
         private void InitializeComponent()
         {
-            this.tabsData = new System.Windows.Forms.TabControl();
+            this.tabsData = new GKUI.Components.GKTabControl();
             this.pageCommon = new System.Windows.Forms.TabPage();
             this.lblName = new System.Windows.Forms.Label();
             this.lblType = new System.Windows.Forms.Label();

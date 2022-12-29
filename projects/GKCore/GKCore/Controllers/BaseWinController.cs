@@ -837,17 +837,19 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miContRecordMerge").Text = LangMan.LS(LSID.LSID_MergeDuplicates);
 
                 var tabControl = GetControl<ITabControl>("tabsRecords");
-                tabControl.Pages[0].Text = LangMan.LS(LSID.LSID_RPIndividuals);
-                tabControl.Pages[1].Text = LangMan.LS(LSID.LSID_RPFamilies);
-                tabControl.Pages[2].Text = LangMan.LS(LSID.LSID_RPNotes);
-                tabControl.Pages[3].Text = LangMan.LS(LSID.LSID_RPMultimedia);
-                tabControl.Pages[4].Text = LangMan.LS(LSID.LSID_RPSources);
-                tabControl.Pages[5].Text = LangMan.LS(LSID.LSID_RPRepositories);
-                tabControl.Pages[6].Text = LangMan.LS(LSID.LSID_RPGroups);
-                tabControl.Pages[7].Text = LangMan.LS(LSID.LSID_RPResearches);
-                tabControl.Pages[8].Text = LangMan.LS(LSID.LSID_RPTasks);
-                tabControl.Pages[9].Text = LangMan.LS(LSID.LSID_RPCommunications);
-                tabControl.Pages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
+                if (tabControl.Pages.Count >= 11) {
+                    tabControl.Pages[0].Text = LangMan.LS(LSID.LSID_RPIndividuals);
+                    tabControl.Pages[1].Text = LangMan.LS(LSID.LSID_RPFamilies);
+                    tabControl.Pages[2].Text = LangMan.LS(LSID.LSID_RPNotes);
+                    tabControl.Pages[3].Text = LangMan.LS(LSID.LSID_RPMultimedia);
+                    tabControl.Pages[4].Text = LangMan.LS(LSID.LSID_RPSources);
+                    tabControl.Pages[5].Text = LangMan.LS(LSID.LSID_RPRepositories);
+                    tabControl.Pages[6].Text = LangMan.LS(LSID.LSID_RPGroups);
+                    tabControl.Pages[7].Text = LangMan.LS(LSID.LSID_RPResearches);
+                    tabControl.Pages[8].Text = LangMan.LS(LSID.LSID_RPTasks);
+                    tabControl.Pages[9].Text = LangMan.LS(LSID.LSID_RPCommunications);
+                    tabControl.Pages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
+                }
 
                 var miPlugins = GetControl<IMenuItem>("miPlugins");
                 int num = miPlugins.SubItems.Count;
@@ -855,6 +857,11 @@ namespace GKCore.Controllers
                     var mi = miPlugins.SubItems[i];
                     IPlugin plugin = (IPlugin)mi.Tag;
                     mi.Text = plugin.DisplayName;
+                }
+
+                if (AppHost.Instance.HasFeatureSupport(Feature.Themes)) {
+                    var miThemes = GetControl<IMenuItem>("miThemes");
+                    miThemes.Text = LangMan.LS(LSID.LSID_Themes);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.SetLocale()", ex);

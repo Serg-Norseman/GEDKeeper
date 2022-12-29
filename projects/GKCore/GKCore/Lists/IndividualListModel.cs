@@ -613,11 +613,7 @@ namespace GKCore.Lists
             } else if (gOptions.ListHighlightUnmarriedPersons && (indiRec.SpouseToFamilyLinks.Count == 0)) {
                 return ChartRenderer.GetColor(GKData.HighlightUnmarriedColor);
             } else {
-                if (!gOptions.ListHighlightUnparentedPersons && !gOptions.ListHighlightUnmarriedPersons) {
-                    return base.GetBackgroundColor(itemIndex, rowData);
-                } else {
-                    return null;
-                }
+                return base.GetBackgroundColor(itemIndex, rowData);
             }
         }
 

@@ -280,12 +280,17 @@
     <Compile Include="GKCore\Search\SearchStrategy.cs" />
     <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />
     <Compile Include="GKCore\SysUtils.cs" />
+    <Compile Include="GKUI\Themes\IThemedView.cs" />
+    <Compile Include="GKUI\Themes\IThemeManager.cs" />
+    <Compile Include="GKUI\Themes\Theme.cs" />
+    <Compile Include="GKUI\Themes\ThemeElement.cs" />
     <Compile Include="GKCore\Tips.cs" />
     <Compile Include="GKCore\Tools\PatriarchsMan.cs" />
     <Compile Include="GKCore\Tools\TreeInspector.cs" />
     <Compile Include="GKCore\Types\CertaintyAlgorithm.cs" />
     <Compile Include="GKCore\Types\CharsetResult.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />
+    <Compile Include="GKCore\Types\Feature.cs" />
     <Compile Include="GKCore\Types\FileBackup.cs" />
     <Compile Include="GKCore\Types\FilterGroupMode.cs" />
     <Compile Include="GKCore\Types\FilterLifeMode.cs" />
@@ -410,6 +415,7 @@
     <Compile Include="GKCore\MVP\FormController.cs" />
     <Compile Include="GKCore\Lists\ListSource.cs" />
     <Compile Include="GKCore\Search\FARStrategy.cs" />
+    <Compile Include="GKUI\Themes\ThemeFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
