@@ -36,7 +36,7 @@ Elements:
     Value: "#FFFFFF"
 
   - Element: Strip
-    Value: "#7F8697" #"#CED3DE"
+    Value: "#7F8697"
   - Element: Dropdown
     Value: "#7F8697"
   - Element: MenuBorder
@@ -55,6 +55,13 @@ Elements:
     Value: "#1F308D"
   - Element: GridText
     Value: "#1F308D"
+
+  - Element: Tab
+    Value: "#DFE4EB"
+  - Element: TabHighlight
+    Value: "#DFE4EB"
+  - Element: TabSelected
+    Value: "#A1A7BC"
 
   - Element: HighlightReadabilityRows
     Value: "#ADB9CC"

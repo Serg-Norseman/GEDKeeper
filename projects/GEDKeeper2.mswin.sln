@@ -89,6 +89,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "themes", "themes", "{E39F7926-7961-4857-B90F-16B63F315D02}"
 	ProjectSection(SolutionItems) = preProject
 		..\themes\gk_dark.yaml = ..\themes\gk_dark.yaml
+		..\themes\gk_forest.yaml = ..\themes\gk_forest.yaml
 		..\themes\gk_light.yaml = ..\themes\gk_light.yaml
 	EndProjectSection
 EndProject

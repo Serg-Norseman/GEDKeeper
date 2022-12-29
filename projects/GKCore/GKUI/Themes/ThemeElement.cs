@@ -54,6 +54,10 @@ namespace GKUI.Themes
         GridHeaderText,
         GridText,
 
+        Tab,        // TabControl
+        TabHighlight,
+        TabSelected,
+
         // GEDKeeper specific
         HighlightReadabilityRows,
         HighlightUnparentedIndi,

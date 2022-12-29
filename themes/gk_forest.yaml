@@ -1,5 +1,5 @@
 ﻿---
-Name: GK Dark
+Name: GK Forest
 Elements:
   - Element: Font
     Value: "Verdana"
@@ -12,63 +12,63 @@ Elements:
     Value: "#000000"
 
   - Element: Control
-    Value: "#2C2C2C"
+    Value: "#B0BFA1"
   - Element: ControlText
-    Value: "#FFFFFF"
+    Value: "#36403B"
 
   - Element: Window
-    Value: "#2C2C2C"
+    Value: "#36403B"
   - Element: WindowText
-    Value: "#FFFFFF"
+    Value: "#CFFF57"
 
   - Element: Dialog
-    Value: "#343B57"
+    Value: "#36403B"
   - Element: DialogText
-    Value: "#FFFFFF"
+    Value: "#CFFF57"
 
   - Element: ButtonFace
-    Value: "#5D67C7"
+    Value: "#808057"
   - Element: AccentButtonFace
-    Value: "#7046A6"
+    Value: "#FFCE69"
   - Element: ButtonBorder
-    Value: "#3C339F"
+    Value: "#B0BFA1"
   - Element: ButtonText
     Value: "#FFFFFF"
 
   - Element: Strip
-    Value: "#202020"
+    Value: "#98A39C"
   - Element: Dropdown
-    Value: "#202020"
+    Value: "#98A39C"
   - Element: MenuBorder
     Value: "#F7F7F7"
   - Element: MenuItemSelected
-    Value: "#4B5781"
+    Value: "#A9B3AF"
 
   - Element: Link
-    Value: "#D5D5FF"
+    Value: "#3F46D1"
 
   - Element: Grid
-    Value: "#2C2C2C"
+    Value: "#B0BFA1"
   - Element: GridHeader
-    Value: "#3B3B3B"
+    Value: "#959D7A"
   - Element: GridHeaderText
-    Value: "#FFFFFF"
+    Value: "#581D35"
   - Element: GridText
-    Value: "#FFFFFF"
+    Value: "#36403B"
 
   - Element: Tab
-    Value: "#2C2C2C"
+    Value: "#B0BFA1"
   - Element: TabHighlight
-    Value: "#2C2C2C"
+    Value: "#B8CF8F"
   - Element: TabSelected
-    Value: "#4B5781"
+    Value: "#A4B671"
 
   - Element: HighlightReadabilityRows
-    Value: "#3E3E3E"
+    Value: "#A5AF8F"
   - Element: HighlightUnparentedIndi
-    Value: "#5F0F0F"
+    Value: "#FFA8A8"
   - Element: HighlightUnmarriedIndi
-    Value: "#4D4D16"
+    Value: "#FFFFA1"
   - Element: HighlightInaccessibleFiles
-    Value: "#5F0F0F"
+    Value: "#FFCACA"
 ...

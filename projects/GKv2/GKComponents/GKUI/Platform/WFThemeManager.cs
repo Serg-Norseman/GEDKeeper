@@ -86,6 +86,10 @@ namespace GKUI.Themes
                 { ThemeElement.GridHeaderText, SystemColors.WindowText },     // checked
                 { ThemeElement.GridText, SystemColors.WindowText },           // checked
 
+                { ThemeElement.Tab, SystemColors.Window },                    // checked
+                { ThemeElement.TabHighlight, SystemColors.Window },           // checked
+                { ThemeElement.TabSelected, SystemColors.Control },           // checked
+
                 { ThemeElement.HighlightReadabilityRows, Color.FromArgb(0xEFEFEF) },      // GK only
                 { ThemeElement.HighlightUnparentedIndi, Color.FromArgb(0xFFCACA) },       // GK only
                 { ThemeElement.HighlightUnmarriedIndi, Color.FromArgb(0xFFFFA1) },        // GK only
@@ -475,9 +479,9 @@ namespace GKUI.Themes
                     ctl.Appearance.Reset();
                 } else {
                     ctl.Appearance.BackColor = GetThemeColor(theme, ThemeElement.Control);
-                    ctl.Appearance.Tab = GetThemeColor(theme, ThemeElement.Window);
-                    ctl.Appearance.TabHighlight = GetThemeColor(theme, ThemeElement.Window);
-                    ctl.Appearance.TabSelected = GetThemeColor(theme, ThemeElement.MenuItemSelected);
+                    ctl.Appearance.Tab = GetThemeColor(theme, ThemeElement.Tab);
+                    ctl.Appearance.TabHighlight = GetThemeColor(theme, ThemeElement.TabHighlight);
+                    ctl.Appearance.TabSelected = GetThemeColor(theme, ThemeElement.TabSelected);
                 }
             } else {
                 // standard
