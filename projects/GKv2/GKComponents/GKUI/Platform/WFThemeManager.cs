@@ -285,7 +285,7 @@ namespace GKUI.Themes
         public IImage GetThemeImage(ThemeElement element)
         {
             object elemValue;
-            if (fCurrentTheme.Elements.TryGetValue(element, out elemValue) && elemValue is IImage) {
+            if (fCurrentTheme != null && fCurrentTheme.Elements.TryGetValue(element, out elemValue) && elemValue is IImage) {
                 return (IImage)elemValue;
             }
             return null;
@@ -295,7 +295,7 @@ namespace GKUI.Themes
 
         private static void ApplyTheme(IThemedView view, Component component, Theme theme)
         {
-            if (view.SkipTheme(component))
+            if (theme == null || view.SkipTheme(component))
                 return;
 
             ThemeControlHandler handler = GetControlHandler(component);
@@ -317,30 +317,27 @@ namespace GKUI.Themes
         private static Color GetThemeColor(Theme theme, ThemeElement element)
         {
             object elemValue;
-            if (theme.Elements.TryGetValue(element, out elemValue) && elemValue is Color) {
+            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is Color) {
                 return (Color)elemValue;
             }
-
             return Color.Black;
         }
 
         private static string GetThemeStr(Theme theme, ThemeElement element)
         {
             object elemValue;
-            if (theme.Elements.TryGetValue(element, out elemValue) && elemValue is string) {
+            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is string) {
                 return (string)elemValue;
             }
-
             return string.Empty;
         }
 
         private static float GetThemeFloat(Theme theme, ThemeElement element)
         {
             object elemValue;
-            if (theme.Elements.TryGetValue(element, out elemValue) && elemValue is float) {
+            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is float) {
                 return (float)elemValue;
             }
-
             return 0.0f;
         }
 
