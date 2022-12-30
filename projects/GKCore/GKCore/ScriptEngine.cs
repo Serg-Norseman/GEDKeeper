@@ -67,13 +67,12 @@ namespace GKCore
             fDebugOutput = debugOutput;
             fBase = baseWin;
 
-            using (Lua lvm = new Lua())
-            {
+            using (Lua lvm = new Lua()) {
                 try {
                     lua_init(lvm);
                     lvm.DoString(script);
                 } catch (Exception ex) {
-                    lua_print("> "+LangMan.LS(LSID.LSID_Error)+": " + ex.Message);
+                    lua_print("> " + LangMan.LS(LSID.LSID_Error) + ": " + ex.Message);
                 }
             }
         }
@@ -82,9 +81,8 @@ namespace GKCore
 
         private void lua_print(object text)
         {
-            if (fDebugOutput == null) return;
-
-            fDebugOutput.AppendText(text + @"\r\n");
+            if (fDebugOutput != null)
+                fDebugOutput.AppendText(text + "\r\n");
         }
 
         private void lua_register(Lua lvm, string funcName)
@@ -99,14 +97,14 @@ namespace GKCore
 
         private void lua_init(Lua lvm)
         {
-            lua_register(lvm, "gk_print");
-            lua_register(lvm, "gk_progress_init");
-            lua_register(lvm, "gk_progress_done");
-            lua_register(lvm, "gk_progress_step");
+            lua_register(lvm, "print");
+            lua_register(lvm, "progress_init");
+            lua_register(lvm, "progress_done");
+            lua_register(lvm, "progress_step");
 
-            lua_register(lvm, "gk_strpos");
-            lua_register(lvm, "gk_update_view");
-            lua_register(lvm, "gk_select_file");
+            lua_register(lvm, "strpos");
+            lua_register(lvm, "update_view");
+            lua_register(lvm, "select_file");
 
             lvm["rtNone"] = (int)GDMRecordType.rtNone;
             lvm["rtIndividual"] = (int)GDMRecordType.rtIndividual;
@@ -123,93 +121,103 @@ namespace GKCore
             lvm["rtSubmission"] = (int)GDMRecordType.rtSubmission;
             lvm["rtSubmitter"] = (int)GDMRecordType.rtSubmitter;
 
-            lua_register(lvm, "gt_get_records_count");
-            lua_register(lvm, "gt_get_record");
-            lua_register(lvm, "gt_get_record_type");
-            lua_register(lvm, "gt_get_record_type_name");
-            lua_register(lvm, "gt_get_record_xref");
-            lua_register(lvm, "gt_get_record_uid");
+            // any records
+            lua_register(lvm, "get_records_count");
+            lua_register(lvm, "get_record");
+            lua_register(lvm, "get_record_type");
+            lua_register(lvm, "get_record_type_name");
+            lua_register(lvm, "get_record_xref");
+            lua_register(lvm, "get_record_uid");
+            lua_register(lvm, "delete_record");
+            lua_register(lvm, "record_is_filtered");
+            lua_register(lvm, "select_record");
 
-            lua_register(lvm, "gt_delete_record");
-            lua_register(lvm, "gt_record_is_filtered");
-            lua_register(lvm, "gt_select_record");
+            // any record : notes
+            lua_register(lvm, "get_record_notes_count");
 
-            lua_register(lvm, "gt_create_person");
-            lua_register(lvm, "gt_create_family");
-            lua_register(lvm, "gt_create_note");
+            // any record : multimedia links
+            lua_register(lvm, "get_record_medialinks_count");
+            lua_register(lvm, "get_record_medialink");
+            lua_register(lvm, "set_medialink_primary");
 
-            lua_register(lvm, "gt_get_person_name");
-            lua_register(lvm, "gt_define_sex");
+            // any record : bind notes, sources, multimedia
+            lua_register(lvm, "bind_record_note");
+            lua_register(lvm, "bind_record_source");
 
-            lua_register(lvm, "gt_get_person_associations_count");
-            lua_register(lvm, "gt_get_person_association");
-            lua_register(lvm, "gt_delete_person_association");
+            // individual records
+            lua_register(lvm, "create_individual");
+            lua_register(lvm, "get_individual_name");
+            lua_register(lvm, "define_sex");
+            lua_register(lvm, "get_individual_sex");
+            lua_register(lvm, "set_individual_sex");
+            lua_register(lvm, "define_patronymic");
+            lua_register(lvm, "get_individual_parents_family");
+            lua_register(lvm, "get_individual_spouses_count");
+            lua_register(lvm, "get_individual_spouse_family");
+            lua_register(lvm, "get_individual_primary_medialink");
 
-            lua_register(lvm, "gt_get_person_events_count");
-            lua_register(lvm, "gt_get_person_event");
-            lua_register(lvm, "gt_delete_person_event");
+            // individual records : associations
+            lua_register(lvm, "get_individual_associations_count");
+            lua_register(lvm, "get_individual_association");
+            lua_register(lvm, "delete_individual_association");
+            lua_register(lvm, "add_individual_association");
 
-            lua_register(lvm, "gt_bind_record_note");
-            lua_register(lvm, "gt_bind_record_source");
+            // individual records : events
+            lua_register(lvm, "get_individual_events_count");
+            lua_register(lvm, "get_individual_event");
+            lua_register(lvm, "delete_individual_event");
+            lua_register(lvm, "get_individual_event_ex");
 
-            lua_register(lvm, "gt_bind_family_spouse");
-            lua_register(lvm, "gt_bind_family_child");
+            // individual records : groups
+            lua_register(lvm, "get_individual_groups_count");
+            lua_register(lvm, "get_individual_group");
 
-            lua_register(lvm, "gt_add_note_text");
+            // family records
+            lua_register(lvm, "create_family");
+            lua_register(lvm, "bind_family_spouse");
+            lua_register(lvm, "bind_family_child");
+            lua_register(lvm, "get_family_husband");
+            lua_register(lvm, "get_family_wife");
+            lua_register(lvm, "get_family_childs_count");
+            lua_register(lvm, "get_family_child");
 
-            lua_register(lvm, "gt_create_event");
+            // note records
+            lua_register(lvm, "create_note");
+            lua_register(lvm, "add_note_text");
 
-            lua_register(lvm, "gt_get_event_value");
-            lua_register(lvm, "gt_get_event_place");
-            lua_register(lvm, "gt_get_event_date");
-            lua_register(lvm, "gt_get_event_name");
+            // any record with events (individual / family)
+            lua_register(lvm, "create_event");
 
-            lua_register(lvm, "gt_set_event_value");
-            lua_register(lvm, "gt_set_event_place");
-            lua_register(lvm, "gt_set_event_date");
+            // events
+            lua_register(lvm, "get_event_value");
+            lua_register(lvm, "get_event_place");
+            lua_register(lvm, "get_event_date");
+            lua_register(lvm, "get_event_name");
+            lua_register(lvm, "set_event_value");
+            lua_register(lvm, "set_event_place");
+            lua_register(lvm, "set_event_date");
+            lua_register(lvm, "get_event_year");
 
-            lua_register(lvm, "gt_create_source");
-            lua_register(lvm, "gt_find_source");
+            // source records
+            lua_register(lvm, "create_source");
+            lua_register(lvm, "find_source");
 
-            lua_register(lvm, "gt_create_group");
-            lua_register(lvm, "gt_bind_group_member");
+            // group records
+            lua_register(lvm, "create_group");
+            lua_register(lvm, "bind_group_member");
+            lua_register(lvm, "get_group_name");
 
-            //
+            // location records
+            lua_register(lvm, "get_location_usages");
 
-            lua_register(lvm, "gt_get_person_event_ex");
-            lua_register(lvm, "gt_get_event_year");
-
-            //
-
+            // csv
             lua_register(lvm, "csv_load");
             lua_register(lvm, "csv_close");
             lua_register(lvm, "csv_get_cols");
             lua_register(lvm, "csv_get_rows");
             lua_register(lvm, "csv_get_cell");
 
-            //
-
-            lua_register(lvm, "gt_add_person_association");
-            lua_register(lvm, "gt_define_patronymic");
-            lua_register(lvm, "gt_get_person_parents_family");
-            lua_register(lvm, "gt_get_person_spouses_count");
-            lua_register(lvm, "gt_get_person_spouse_family");
-            lua_register(lvm, "gt_get_family_husband");
-            lua_register(lvm, "gt_get_family_wife");
-            lua_register(lvm, "gt_get_family_childs_count");
-            lua_register(lvm, "gt_get_family_child");
-
-            lua_register(lvm, "gt_get_location_usages");
-            lua_register(lvm, "gt_get_record_notes_count");
-            lua_register(lvm, "gt_get_person_sex");
-            lua_register(lvm, "gt_set_person_sex");
-
-            lua_register(lvm, "gt_get_person_groups_count");
-            lua_register(lvm, "gt_get_person_group");
-            lua_register(lvm, "gt_get_group_name");
-
             // experimental
-
             lua_register(lvm, "ado_open");
             lua_register(lvm, "ado_close");
             lua_register(lvm, "ado_query_open");
@@ -226,12 +234,12 @@ namespace GKCore
 
         #region Misc functions
 
-        public void gk_print(object text)
+        public void print(object text)
         {
             lua_print(text);
         }
 
-        public int gk_strpos(string substr, string str)
+        public int strpos(string substr, string str)
         {
             return str.IndexOf(substr);
         }
@@ -240,30 +248,30 @@ namespace GKCore
 
         #region UI functions
 
-        public void gk_progress_init(int length, string title)
+        public void progress_init(int length, string title)
         {
             // FIXME!
             //AppHost.Progress.ProgressInit(title, length);
         }
 
-        public void gk_progress_done()
+        public void progress_done()
         {
             // FIXME!
             //AppHost.Progress.ProgressDone();
         }
 
-        public void gk_progress_step()
+        public void progress_step()
         {
             // FIXME!
             //AppHost.Progress.ProgressStep();
         }
 
-        public void gk_update_view()
+        public void update_view()
         {
             fBase.RefreshLists(false);
         }
 
-        public string gk_select_file()
+        public string select_file()
         {
             string filename = AppHost.StdDialogs.GetOpenFile("", "", "All files (*.*)|*.*", 0, "");
             return filename;
@@ -273,82 +281,75 @@ namespace GKCore
 
         #region GEDCOM functions
 
-        public int gt_get_records_count()
+        public int get_records_count()
         {
             return fBase.Context.Tree.RecordsCount;
         }
 
-        public object gt_get_record(int idx)
+        public object get_record(int idx)
         {
             return fBase.Context.Tree[idx];
         }
 
-        public int gt_get_record_type(object recPtr)
+        public int get_record_type(object recPtr)
         {
             GDMRecord rec = recPtr as GDMRecord;
             return (rec == null) ? (int)GDMRecordType.rtNone : (int)rec.RecordType;
         }
 
-        public bool gt_delete_record(object recPtr)
+        public bool delete_record(object recPtr)
         {
             GDMRecord rec = recPtr as GDMRecord;
-            bool res = BaseController.DeleteRecord(fBase, rec, false);
-            return res;
+            return BaseController.DeleteRecord(fBase, rec, false);
         }
 
-        public string gt_get_record_xref(object recPtr)
+        public string get_record_xref(object recPtr)
         {
             GDMRecord rec = recPtr as GDMRecord;
             return (rec == null) ? string.Empty : rec.XRef;
         }
 
-        public string gt_get_record_uid(object recPtr)
+        public string get_record_uid(object recPtr)
         {
             GDMRecord rec = recPtr as GDMRecord;
             return (rec == null) ? string.Empty : rec.UID;
         }
 
-        public string gt_get_record_type_name(int recType)
+        public string get_record_type_name(int recType)
         {
-            GDMRecordType rt = (GDMRecordType)recType;
-            string rtName = rt.ToString();
-            return rtName;
+            return ((GDMRecordType)recType).ToString();
         }
 
-        public bool gt_record_is_filtered(object recPtr)
+        public bool record_is_filtered(object recPtr)
         {
             GDMRecord rec = recPtr as GDMRecord;
             return fBase.RecordIsFiltered(rec);
         }
 
-        public object gt_select_record(int recType)
+        public object select_record(int recType)
         {
-            GDMRecord rec = fBase.Context.SelectRecord((GDMRecordType)recType, null);
-            return rec;
+            return fBase.Context.SelectRecord((GDMRecordType)recType, null);
         }
 
-        public string gt_get_person_name(object recPtr)
+        public string get_individual_name(object recPtr)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
-            return ((iRec == null) ? "" : GKUtils.GetNameString(iRec, true, false));
+            return (iRec == null) ? "" : GKUtils.GetNameString(iRec, true, false);
         }
 
-        public int gt_get_person_associations_count(object recPtr)
+        public int get_individual_associations_count(object recPtr)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             return (iRec == null || !iRec.HasAssociations) ? 0 : iRec.Associations.Count;
         }
 
-        public object gt_get_person_association(object recPtr, int idx)
+        public object get_individual_association(object recPtr, int idx)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
-            if (iRec == null || !iRec.HasAssociations) return null;
-
-            GDMAssociation asso = iRec.Associations[idx];
-            return asso;
+            return (iRec == null || !iRec.HasAssociations) ? null : iRec.Associations[idx];
         }
 
-        public object gt_add_person_association(object recPtr, string rel, object assoPtr)
+        public object add_individual_association(object recPtr, string rel, object assoPtr)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null) return null;
@@ -356,11 +357,10 @@ namespace GKCore
             GDMIndividualRecord assoRec = assoPtr as GDMIndividualRecord;
             if (assoRec == null) return null;
 
-            GDMAssociation asso = iRec.AddAssociation(rel, assoRec);
-            return asso;
+            return iRec.AddAssociation(rel, assoRec);
         }
 
-        public void gt_delete_person_association(object recPtr, int idx)
+        public void delete_individual_association(object recPtr, int idx)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null || !iRec.HasAssociations) return;
@@ -368,31 +368,27 @@ namespace GKCore
             iRec.Associations.DeleteAt(idx);
         }
 
-        public int gt_get_person_events_count(object recPtr)
+        public int get_individual_events_count(object recPtr)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             return (iRec == null) ? 0 : iRec.Events.Count;
         }
 
-        public object gt_get_person_event(object recPtr, int idx)
+        public object get_individual_event(object recPtr, int idx)
+        {
+            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
+            return (iRec == null) ? null : iRec.Events[idx];
+        }
+
+        public object get_individual_event_ex(object recPtr, string sign)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null) return null;
 
-            GDMCustomEvent evt = iRec.Events[idx];
-            return evt;
+            return iRec.FindEvent(sign);
         }
 
-        public object gt_get_person_event_ex(object recPtr, string sign)
-        {
-            GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
-            if (iRec == null) return null;
-
-            GDMCustomEvent evt = iRec.FindEvent(sign);
-            return evt;
-        }
-
-        public void gt_delete_person_event(object recPtr, int idx)
+        public void delete_individual_event(object recPtr, int idx)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null) return;
@@ -400,14 +396,14 @@ namespace GKCore
             iRec.Events.DeleteAt(idx);
         }
 
-        public string gt_get_event_date(object evPtr)
+        public string get_event_date(object evPtr)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
             return (GKUtils.GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false));
         }
 
         // TODO: checking this function, its incorrect logic
-        public int gt_get_event_year(object evPtr)
+        public int get_event_year(object evPtr)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
             if (evt == null) return 0;
@@ -416,35 +412,31 @@ namespace GKCore
             return (date == null) ? 0 : date.Year;
         }
 
-        public void gt_set_event_date(object evPtr, string date)
+        public void set_event_date(object evPtr, string date)
         {
-            try
-            {
+            try {
                 GDMCustomEvent evt = evPtr as GDMCustomEvent;
-                if (evt != null && date != "")
-                {
+                if (evt != null && date != "") {
                     evt.Date.ParseString(date);
                 }
-            }
-            catch
-            {
+            } catch {
                 throw new ScriptException(LangMan.LS(LSID.LSID_DateFormatInvalid) + ": " + date);
             }
         }
 
-        public string gt_get_event_value(object evPtr)
+        public string get_event_value(object evPtr)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
             return (evt == null) ? string.Empty : evt.StringValue;
         }
 
-        public string gt_get_event_place(object evPtr)
+        public string get_event_place(object evPtr)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
             return (evt == null || !evt.HasPlace) ? string.Empty : evt.Place.StringValue;
         }
 
-        public void gt_set_event_value(object evPtr, string value)
+        public void set_event_value(object evPtr, string value)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
             if (evt == null) return;
@@ -452,7 +444,7 @@ namespace GKCore
             evt.StringValue = value;
         }
 
-        public void gt_set_event_place(object evPtr, string place)
+        public void set_event_place(object evPtr, string place)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
             if (evt == null) return;
@@ -460,19 +452,19 @@ namespace GKCore
             evt.Place.StringValue = place;
         }
 
-        public string gt_get_event_name(object evPtr)
+        public string get_event_name(object evPtr)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
             return (evt == null) ? string.Empty : evt.GetTagName();
         }
 
-        public string gt_get_person_sex(object recPtr)
+        public string get_individual_sex(object recPtr)
         {
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             return (rec == null) ? string.Empty : GKData.SexData[(int)rec.Sex].Sign;
         }
 
-        public void gt_set_person_sex(object recPtr, string strSex)
+        public void set_individual_sex(object recPtr, string strSex)
         {
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             if (rec == null) return;
@@ -481,7 +473,7 @@ namespace GKCore
             rec.Sex = sex;
         }
 
-        public object gt_create_person(string name, string patronymic, string surname, string strSex)
+        public object create_individual(string name, string patronymic, string surname, string strSex)
         {
             GDMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GDMSex.svUnknown;
 
@@ -489,42 +481,42 @@ namespace GKCore
             return iRec;
         }
 
-        public object gt_create_family()
+        public object create_family()
         {
             GDMFamilyRecord fRec = fBase.Context.Tree.CreateFamily();
             return fRec;
         }
 
-        public object gt_create_note()
+        public object create_note()
         {
             GDMNoteRecord nRec = fBase.Context.Tree.CreateNote();
             return nRec;
         }
 
-        public object gt_create_source(string name)
+        public object create_source(string name)
         {
             GDMSourceRecord srcRec = fBase.Context.Tree.CreateSource();
             srcRec.ShortTitle = name;
             return srcRec;
         }
 
-        public object gt_create_group(string name)
+        public object create_group(string name)
         {
             GDMGroupRecord grpRec = fBase.Context.Tree.CreateGroup();
             grpRec.GroupName = name;
             return grpRec;
         }
 
-        public void gt_bind_group_member(object groupPtr, object personPtr)
+        public void bind_group_member(object groupPtr, object indiPtr)
         {
             GDMGroupRecord grp = groupPtr as GDMGroupRecord;
             if (grp == null) return;
 
-            GDMIndividualRecord person = personPtr as GDMIndividualRecord;
-            grp.AddMember(person);
+            GDMIndividualRecord indiRec = indiPtr as GDMIndividualRecord;
+            grp.AddMember(indiRec);
         }
 
-        public void gt_add_note_text(object notePtr, string txt)
+        public void add_note_text(object notePtr, string txt)
         {
             GDMNoteRecord nRec = notePtr as GDMNoteRecord;
             if (nRec == null) return;
@@ -532,7 +524,7 @@ namespace GKCore
             nRec.AddNoteText(txt);
         }
 
-        public void gt_bind_record_note(object recPtr, object notePtr)
+        public void bind_record_note(object recPtr, object notePtr)
         {
             GDMRecord rec = recPtr as GDMRecord;
             if (rec == null) return;
@@ -541,7 +533,7 @@ namespace GKCore
             rec.AddNote(noteRec);
         }
 
-        public void gt_bind_record_source(object recPtr, object srcPtr, string page, int quality)
+        public void bind_record_source(object recPtr, object srcPtr, string page, int quality)
         {
             GDMRecord rec = recPtr as GDMRecord;
             if (rec == null) return;
@@ -550,7 +542,7 @@ namespace GKCore
             rec.AddSource(srcRec, page, quality);
         }
 
-        public void gt_bind_family_spouse(object familyPtr, object spousePtr)
+        public void bind_family_spouse(object familyPtr, object spousePtr)
         {
             GDMFamilyRecord fRec = familyPtr as GDMFamilyRecord;
             if (fRec == null) return;
@@ -559,7 +551,7 @@ namespace GKCore
             fRec.AddSpouse(spRec);
         }
 
-        public void gt_bind_family_child(object familyPtr, object childPtr)
+        public void bind_family_child(object familyPtr, object childPtr)
         {
             GDMFamilyRecord fRec = familyPtr as GDMFamilyRecord;
             if (fRec == null) return;
@@ -568,86 +560,75 @@ namespace GKCore
             fRec.AddChild(chRec);
         }
 
-        public string gt_define_sex(string name, string patr)
+        public string define_sex(string name, string patr)
         {
             GDMSex sx = fBase.Context.DefineSex(name, patr);
 
             return (GKData.SexData[(int)sx].Sign);
         }
 
-        public object gt_find_source(string name)
+        public object find_source(string name)
         {
-            GDMSourceRecord srcRec = fBase.Context.FindSource(name);
-            return srcRec;
+            return fBase.Context.FindSource(name);
         }
 
-        public object gt_create_event(object recPtr, string sign)
+        public object create_event(object recPtr, string sign)
         {
             GDMRecordWithEvents rec = recPtr as GDMRecordWithEvents;
             GDMCustomEvent evt = fBase.Context.CreateEventEx(rec, sign, "", "");
-
             return evt;
         }
 
-        public string gt_define_patronymic(string fatherName, string childSex, bool confirm)
+        public string define_patronymic(string fatherName, string childSex, bool confirm)
         {
             GDMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[0]) : GDMSex.svUnknown;
 
-            string childPatronymic = fBase.Context.DefinePatronymic(fatherName, sex, confirm);
-            return childPatronymic;
+            return fBase.Context.DefinePatronymic(fatherName, sex, confirm);
         }
 
-        public object gt_get_person_parents_family(object recPtr)
+        public object get_individual_parents_family(object recPtr)
         {
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
-            if (rec == null) return null;
-
-            GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(rec);
-            return fam;
+            return (rec == null) ? null : fBase.Context.Tree.GetParentsFamily(rec);
         }
 
-        public int gt_get_person_spouses_count(object recPtr)
+        public int get_individual_spouses_count(object recPtr)
         {
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             return (rec == null) ? 0 : rec.SpouseToFamilyLinks.Count;
         }
 
-        public object gt_get_person_spouse_family(object recPtr, int spIdx)
+        public object get_individual_spouse_family(object recPtr, int spIdx)
         {
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
-            if (rec == null) return null;
-
-            GDMFamilyRecord fam = fBase.Context.Tree.GetPtrValue(rec.SpouseToFamilyLinks[spIdx]);
-            return fam;
+            return (rec == null) ? null : fBase.Context.Tree.GetPtrValue(rec.SpouseToFamilyLinks[spIdx]);
         }
 
-        public object gt_get_family_husband(object recPtr)
+        public object get_family_husband(object recPtr)
         {
             GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
-            recPtr = (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Husband);
-            return recPtr;
+            return (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Husband);
         }
 
-        public object gt_get_family_wife(object recPtr)
+        public object get_family_wife(object recPtr)
         {
             GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
-            recPtr = (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Wife);
-            return recPtr;
+            return (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Wife);
         }
 
-        public int gt_get_family_childs_count(object recPtr)
+        public int get_family_childs_count(object recPtr)
         {
             GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
             return (fam == null) ? -1 : fam.Children.Count;
         }
 
-        public object gt_get_family_child(object recPtr, int childIndex)
+        public object get_family_child(object recPtr, int childIndex)
         {
             GDMFamilyRecord fam = recPtr as GDMFamilyRecord;
             return (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Children[childIndex]);
         }
 
-        public int gt_get_location_usages(object recPtr)
+        public int get_location_usages(object recPtr)
         {
             GDMLocationRecord loc = recPtr as GDMLocationRecord;
             if (loc == null) return -1;
@@ -655,44 +636,64 @@ namespace GKCore
             int usages;
 
             StringList linkList = null;
-            try
-            {
+            try {
                 linkList = GKUtils.GetLocationLinks(fBase.Context.Tree, loc);
                 usages = linkList.Count;
-            }
-            finally
-            {
+            } finally {
                 if (linkList != null) linkList.Dispose();
             }
 
             return usages;
         }
 
-        public int gt_get_record_notes_count(object recPtr)
+        public int get_record_notes_count(object recPtr)
         {
             GDMRecord rec = recPtr as GDMRecord;
             return (rec == null) ? -1 : rec.Notes.Count;
         }
 
-        public int gt_get_person_groups_count(object recPtr)
+        public int get_record_medialinks_count(object recPtr)
+        {
+            GDMRecord rec = recPtr as GDMRecord;
+            return (rec == null || !rec.HasMultimediaLinks) ? -1 : rec.MultimediaLinks.Count;
+        }
+
+        public object get_record_medialink(object recPtr, int index)
+        {
+            GDMRecord rec = recPtr as GDMRecord;
+            return (rec == null || !rec.HasMultimediaLinks) ? null : rec.MultimediaLinks[index];
+        }
+
+        public void set_medialink_primary(object linkPtr, bool value)
+        {
+            var link = linkPtr as GDMMultimediaLink;
+            if (link != null) {
+                link.IsPrimary = value;
+            }
+        }
+
+        public object get_individual_primary_medialink(object indiPtr)
+        {
+            var indiRec = indiPtr as GDMIndividualRecord;
+            return (indiRec == null || !indiRec.HasMultimediaLinks) ? null : indiRec.GetPrimaryMultimediaLink();
+        }
+
+        public int get_individual_groups_count(object recPtr)
         {
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
             return (rec == null || !rec.HasGroups) ? 0 : rec.Groups.Count;
         }
 
-        public object gt_get_person_group(object recPtr, int grIdx)
+        public object get_individual_group(object recPtr, int grIdx)
         {
             GDMIndividualRecord rec = recPtr as GDMIndividualRecord;
-            if (rec == null) return null;
-
-            var grp = fBase.Context.Tree.GetPtrValue<GDMGroupRecord>(rec.Groups[grIdx]);
-            return grp;
+            return (rec == null) ? null : fBase.Context.Tree.GetPtrValue<GDMGroupRecord>(rec.Groups[grIdx]);
         }
 
-        public string gt_get_group_name(object recPtr)
+        public string get_group_name(object recPtr)
         {
             GDMGroupRecord grp = recPtr as GDMGroupRecord;
-            return (grp == null) ? "" : grp.GroupName;
+            return (grp == null) ? string.Empty : grp.GroupName;
         }
 
         #endregion

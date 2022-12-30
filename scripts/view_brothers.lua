@@ -1,29 +1,29 @@
 
 list = {};
 
-function add_list(level, person)
+function add_list(level, individual)
   for k = 1, #list do
-    if (list[k][2] == person) then
+    if (list[k][2] == individual) then
       return;
     end
   end
 
-  list[#list+1] = { level, person };
+  list[#list+1] = { level, individual };
 end
 
 function print_list()
-  gk_print("Братья и сестры ["..#list.."]:");
+  print("Братья и сестры ["..#list.."]:");
 
   for k = 1, #list do
     level = list[k][1];
     p = list[k][2];
 
-    gk_print("["..level.."] "..get_desc(level, p)..": "..gt_get_person_name(p));
+    print("["..level.."] "..get_desc(level, p)..": "..get_individual_name(p));
   end
 end
 
-function get_desc(level, person)
-  sx = gt_get_person_sex(person);
+function get_desc(level, individual)
+  sx = get_individual_sex(individual);
   local simple = false;
   local x = "";
 
@@ -54,15 +54,15 @@ function get_desc(level, person)
   return x..kin;
 end
 
-function do_descendants(source, person, level, sub_level)
-  if (person ~= nil) then
-    local spouses = gt_get_person_spouses_count(person);
+function do_descendants(source, individual, level, sub_level)
+  if (individual ~= nil) then
+    local spouses = get_individual_spouses_count(individual);
     for i = 0, spouses-1 do
-      local spouse_family = gt_get_person_spouse_family(person, i);
-      local childs = gt_get_family_childs_count(spouse_family);
+      local spouse_family = get_individual_spouse_family(individual, i);
+      local childs = get_family_childs_count(spouse_family);
 
       for k = 0, childs-1 do
-        local child = gt_get_family_child(spouse_family, k);
+        local child = get_family_child(spouse_family, k);
 
         local y = sub_level - 1;
 
@@ -72,7 +72,7 @@ function do_descendants(source, person, level, sub_level)
           end
 
           if (y > 0) then
-            do_descendants(person, child, level, sub_level - 1);
+            do_descendants(individual, child, level, sub_level - 1);
           end
         end
       end
@@ -80,19 +80,19 @@ function do_descendants(source, person, level, sub_level)
   end
 end
 
-function do_ancestors(person, level)
-  if (person ~= nil) then
-    --gk_print(">>>"..level..": "..gt_get_person_name(person));
+function do_ancestors(individual, level)
+  if (individual ~= nil) then
+    --print(">>>"..level..": "..get_individual_name(individual));
 
-    local parents_family = gt_get_person_parents_family(person);
+    local parents_family = get_individual_parents_family(individual);
     if (parents_family ~= nil) then
-      local father = gt_get_family_husband(parents_family);
-      local mother = gt_get_family_wife(parents_family);
+      local father = get_family_husband(parents_family);
+      local mother = get_family_wife(parents_family);
 
       local x = level + 1;
 
-      do_descendants(person, father, x, x);
-      do_descendants(person, mother, x, x);
+      do_descendants(individual, father, x, x);
+      do_descendants(individual, mother, x, x);
 
       do_ancestors(father, x);
       do_ancestors(mother, x);
@@ -100,6 +100,6 @@ function do_ancestors(person, level)
   end
 end
 
-local p = gt_select_record(rtIndividual);
+local p = select_record(rtIndividual);
 do_ancestors(p, 0);
 print_list();

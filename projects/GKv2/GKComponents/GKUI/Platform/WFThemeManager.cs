@@ -556,6 +556,15 @@ namespace GKUI.Themes
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
+        private static void ThemeBaseControlHandler(IThemedView view, Component component, Theme theme)
+        {
+            var ctl = (Control)component;
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
+
+            ThemeContextMenuStripHandler(view, component, theme);
+        }
+
         private static void RegisterControlHandlers()
         {
             RegisterControlHandler(typeof(Button), ThemeButtonHandler);                 // ready +
@@ -577,7 +586,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(RadioButton), ThemeRadioButtonHandler);       // ?
             RegisterControlHandler(typeof(RichTextBox), ThemeTextBoxHandler);           // ?
             RegisterControlHandler(typeof(ScrollBar), ThemeScrollBarHandler);           // ?
-            RegisterControlHandler(typeof(SplitContainer), ThemePanelHandler);          // ?
+            RegisterControlHandler(typeof(SplitContainer), ThemeBaseControlHandler);    // ?
             RegisterControlHandler(typeof(StatusBar), ThemeStatusBarHandler);           // ?
             RegisterControlHandler(typeof(StatusBarPanel), ThemeStatusBarPanelHandler); // ?
             RegisterControlHandler(typeof(StatusStrip), ThemeToolStripHandler);         // ?
@@ -592,12 +601,12 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(ToolStripMenuItem), ThemeToolStripItemHandler);       // ?
             RegisterControlHandler(typeof(ToolStripSeparator), ThemeToolStripItemHandler);      // ?
             RegisterControlHandler(typeof(ToolStripStatusLabel), ThemeToolStripItemHandler);    // ?
-            RegisterControlHandler(typeof(TrackBar), ThemePanelHandler);                // ?
+            RegisterControlHandler(typeof(TrackBar), ThemeBaseControlHandler);                  // ?
             RegisterControlHandler(typeof(TreeView), ThemeTreeViewHandler);             // ?
 
             RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);      // ?
 
-            RegisterControlHandler(typeof(ArborViewer), ThemePanelHandler);             // ?
+            RegisterControlHandler(typeof(ArborViewer), ThemeUserControlHandler);       // ?
             RegisterControlHandler(typeof(FilterGridView), ThemeDataGridViewHandler);   // ?
             RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);       // ready +
             RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);           // ?

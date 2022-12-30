@@ -1,1 +1,1 @@
-﻿gt_define_sex("test", "test")
+﻿define_sex("test", "test")

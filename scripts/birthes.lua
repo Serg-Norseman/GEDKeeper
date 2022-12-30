@@ -1,16 +1,16 @@
 -- Определить варианты событий рождения
 
-for i = 0, gt_get_records_count() - 1 do
-  R = gt_get_record(i); -- получить запись
-  rt = gt_get_record_type(R); -- узнать её тип
+for i = 0, get_records_count() - 1 do
+  R = get_record(i); -- получить запись
+  rt = get_record_type(R); -- узнать её тип
   if (rt == rtIndividual) then
     local b_count = 0;
     local birthes = {};
     
-    for at = 0, gt_get_person_events_count(R) - 1 do
-      evt = gt_get_person_event(R, at);
-      ev_name = gt_get_event_name(evt);
-      ev_date = gt_get_event_date(evt);
+    for at = 0, get_individual_events_count(R) - 1 do
+      evt = get_individual_event(R, at);
+      ev_name = get_event_name(evt);
+      ev_date = get_event_date(evt);
 
       if (ev_name == "BIRT") then
         b_count = b_count + 1;
@@ -20,10 +20,10 @@ for i = 0, gt_get_records_count() - 1 do
 
     if (b_count > 1) then
       -- вывод на экран
-      gk_print("Персона "..gt_get_record_xref(R)..", имя: "..gt_get_person_name(R)..", событий рождения "..b_count);
+      print("Персона "..get_record_xref(R)..", имя: "..get_individual_name(R)..", событий рождения "..b_count);
 
       for k = 1, #birthes do
-        gk_print("    > факт "..birthes[k]);
+        print("    > факт "..birthes[k]);
       end
     end
   end

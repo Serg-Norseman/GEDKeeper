@@ -1,12 +1,12 @@
 
-csv_name = gk_select_file();
+csv_name = select_file();
 
 csv_load(csv_name, true);
 
 cols = csv_get_cols();
 rows = csv_get_rows();
 
-gk_print("Файл: "..csv_name..", столбцов: "..cols..", строк: "..rows);
+print("Файл: "..csv_name..", столбцов: "..cols..", строк: "..rows);
 
 for r = 0, rows-1 do
   line = "";
@@ -15,7 +15,7 @@ for r = 0, rows-1 do
     line = line..csv_get_cell(c, r).." | ";
   end
 
-  gk_print(line);
+  print(line);
 end
 
 csv_close();

@@ -1,1 +1,1 @@
-gt_get_unlinked_namesakes();
+get_unlinked_namesakes();

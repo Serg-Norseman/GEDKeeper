@@ -1,2 +1,2 @@
-gt_create_person("1", "2", "3", "F");
-gk_update_view();
+create_individual("1", "2", "3", "F");
+update_view();

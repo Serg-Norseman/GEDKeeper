@@ -1,10 +1,10 @@
-gk_print("Hello, World!!!");
+print("Hello, World!!!");
 
 width = 200
 height = 300
 
 x = 12 + 5;
-gk_print(x);
+print(x);
 
-gk_print(width);
-gk_print(height);
+print(width);
+print(height);
