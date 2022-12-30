@@ -153,6 +153,13 @@ namespace GKUI.Forms
         where TController : FormController<TView>
     {
         protected TController fController;
+
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
+        }
     }
 
 
@@ -217,6 +224,12 @@ namespace GKUI.Forms
             if (selectedTab != null && selectedTab.Controls.Count >= 1) {
                 selectedTab.Controls[0].Focus();
             }
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
     }
 }

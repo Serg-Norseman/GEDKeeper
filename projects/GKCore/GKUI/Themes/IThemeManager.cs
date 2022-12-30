@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using BSLib.Design.Graphics;
 
 namespace GKUI.Themes
 {
@@ -28,6 +29,7 @@ namespace GKUI.Themes
 
         void ApplyTheme(IThemedView view);
         void ApplyTheme(IThemedView view, object component);
+        IImage GetThemeImage(ThemeElement element);
         void LoadThemes();
         void SetTheme(string name);
     }

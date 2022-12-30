@@ -61,6 +61,11 @@ namespace GKCore.MVP
             // dummy
         }
 
+        public virtual void ApplyTheme()
+        {
+            // dummy
+        }
+
         protected virtual void SetToolTip(string componentName, string toolTip)
         {
             var ctl = fView.GetControl(componentName);

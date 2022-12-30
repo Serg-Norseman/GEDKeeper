@@ -42,11 +42,13 @@ namespace GKUI.Platform
 
         public IImage LoadImage(string fileName)
         {
-            if (fileName == null)
+            if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException("fileName");
 
-            using (Bitmap bmp = new Bitmap(fileName))
-            {
+            if (!File.Exists(fileName))
+                return null;
+
+            using (Bitmap bmp = new Bitmap(fileName)) {
                 UIHelper.NormalizeOrientation(bmp);
 
                 // cloning is necessary to release the resource

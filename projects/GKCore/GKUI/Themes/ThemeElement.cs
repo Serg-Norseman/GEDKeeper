@@ -63,5 +63,17 @@ namespace GKUI.Themes
         HighlightUnparentedIndi,
         HighlightUnmarriedIndi,
         HighlightInaccessibleFiles,
+
+        Glyph_Settings,
+        Glyph_Maps,
+    }
+
+
+    public enum ThemeElementType
+    {
+        String,
+        Float,
+        Color,
+        Image
     }
 }

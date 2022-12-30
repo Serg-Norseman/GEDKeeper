@@ -36,6 +36,7 @@ using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -866,6 +867,12 @@ namespace GKCore.Controllers
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.SetLocale()", ex);
             }
+        }
+
+        public override void ApplyTheme()
+        {
+            GetControl<IMenuItem>("miOptions").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Settings);
+            GetControl<IMenuItem>("miMap").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Maps);
         }
 
         #region Dialogs

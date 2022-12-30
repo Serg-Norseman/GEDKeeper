@@ -498,6 +498,16 @@ namespace GKUI.Forms
 
         #endregion
 
+        #region IThemedView implementation
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
+        }
+
+        #endregion
+
         #region IWorkWindow implementation
 
         void IWorkWindow.UpdateControls()

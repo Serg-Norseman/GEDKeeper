@@ -122,6 +122,7 @@ namespace GKNavigatorPlugin
 
         private void NavigatorWidget_Closed(object sender, EventArgs e)
         {
+            SelectLanguage(GDMLanguageID.Unknown);
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
         }

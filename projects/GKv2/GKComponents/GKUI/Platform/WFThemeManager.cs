@@ -26,6 +26,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using BSLib;
+using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using GKCore;
 using GKUI.Components;
@@ -38,6 +39,7 @@ namespace GKUI.Themes
 
         private static Theme fCurrentTheme;
         private static Dictionary<Type, ThemeControlHandler> fControlHandlers = new Dictionary<Type, ThemeControlHandler>();
+        private static ThemeElementType[] fThemeElementTypes;
 
         private Dictionary<string, Theme> fThemes = new Dictionary<string, Theme>();
 
@@ -53,6 +55,53 @@ namespace GKUI.Themes
 
         public WFThemeManager()
         {
+            fThemeElementTypes = new ThemeElementType[] {
+                ThemeElementType.String, // ThemeElement.Font
+                ThemeElementType.Float,  // ThemeElement.FontSize
+
+                ThemeElementType.Color, // ThemeElement.Editor
+                ThemeElementType.Color, // ThemeElement.EditorText
+
+                ThemeElementType.Color, // ThemeElement.Control
+                ThemeElementType.Color, // ThemeElement.ControlText
+
+                ThemeElementType.Color, // ThemeElement.Window
+                ThemeElementType.Color, // ThemeElement.WindowText
+
+                ThemeElementType.Color, // ThemeElement.Dialog
+                ThemeElementType.Color, // ThemeElement.DialogText
+
+                ThemeElementType.Color, // ThemeElement.ButtonFace
+                ThemeElementType.Color, // ThemeElement.AccentButtonFace
+                ThemeElementType.Color, // ThemeElement.ButtonBorder
+                ThemeElementType.Color, // ThemeElement.ButtonText
+
+                ThemeElementType.Color, // ThemeElement.Strip
+                ThemeElementType.Color, // ThemeElement.Dropdown
+                ThemeElementType.Color, // ThemeElement.MenuBorder
+                ThemeElementType.Color, // ThemeElement.MenuItemSelected
+
+                ThemeElementType.Color, // ThemeElement.Link
+
+                ThemeElementType.Color, // ThemeElement.Grid
+                ThemeElementType.Color, // ThemeElement.GridHeader
+                ThemeElementType.Color, // ThemeElement.GridHeaderText
+                ThemeElementType.Color, // ThemeElement.GridText
+
+                ThemeElementType.Color, // ThemeElement.Tab
+                ThemeElementType.Color, // ThemeElement.TabHighlight
+                ThemeElementType.Color, // ThemeElement.TabSelected
+
+                ThemeElementType.Color, // ThemeElement.HighlightReadabilityRows
+                ThemeElementType.Color, // ThemeElement.HighlightUnparentedIndi
+                ThemeElementType.Color, // ThemeElement.HighlightUnmarriedIndi
+                ThemeElementType.Color, // ThemeElement.HighlightInaccessibleFiles
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Settings
+                ThemeElementType.Image, // ThemeElement.Glyph_Maps
+            };
+
+
             RegisterTheme("Default", new ThemeElementsDictionary() {
                 { ThemeElement.Font, "Tahoma" },                              // checked
                 { ThemeElement.FontSize, 8.25f },                             // checked
@@ -94,12 +143,20 @@ namespace GKUI.Themes
                 { ThemeElement.HighlightUnparentedIndi, Color.FromArgb(0xFFCACA) },       // GK only
                 { ThemeElement.HighlightUnmarriedIndi, Color.FromArgb(0xFFFFA1) },        // GK only
                 { ThemeElement.HighlightInaccessibleFiles, Color.FromArgb(0xFFCACA) },    // GK only
+
+                { ThemeElement.Glyph_Settings, "Resources.btn_tools.gif" },
+                { ThemeElement.Glyph_Maps, "" },
             }, true);
+        }
+
+        private static string GetThemesPath()
+        {
+            return GKUtils.GetAppPath() + "themes" + Path.DirectorySeparatorChar;
         }
 
         public void LoadThemes()
         {
-            string path = GKUtils.GetAppPath() + "themes" + Path.DirectorySeparatorChar;
+            string path = GetThemesPath();
             if (!Directory.Exists(path)) return;
 
             try {
@@ -126,22 +183,27 @@ namespace GKUI.Themes
                 var themeElements = new ThemeElementsDictionary();
                 for (int i = 0; i < themeFile.Elements.Length; i++) {
                     var tfc = themeFile.Elements[i];
-                    var tcName = EnumHelper.Parse<ThemeElement>(tfc.Element);
+                    var telem = EnumHelper.Parse<ThemeElement>(tfc.Element);
+                    var telType = fThemeElementTypes[(int)telem];
 
                     object tcVal;
-                    switch (tcName) {
-                        case ThemeElement.Font:
-                            tcVal = tfc.Value;
-                            break;
-                        case ThemeElement.FontSize:
+                    switch (telType) {
+                        case ThemeElementType.Float:
                             tcVal = (float)ConvertHelper.ParseFloat(tfc.Value, 8, true);
                             break;
-                        default:
+
+                        case ThemeElementType.Color:
                             tcVal = UIHelper.ParseColor(tfc.Value);
+                            break;
+
+                        case ThemeElementType.Image:
+                        case ThemeElementType.String:
+                        default:
+                            tcVal = tfc.Value;
                             break;
                     }
 
-                    themeElements.Add(tcName, tcVal);
+                    themeElements.Add(telem, tcVal);
                 }
 
                 RegisterTheme(themeFile.Name, themeElements, false);
@@ -150,9 +212,36 @@ namespace GKUI.Themes
             }
         }
 
-        private void RegisterTheme(string name, ThemeElementsDictionary colors, bool sysDefault = false)
+        private static ThemeElementsDictionary PreProcessElements(ThemeElementsDictionary elements, bool sysDefault)
         {
-            fThemes.Add(name, new Theme(name, colors, sysDefault));
+            var result = new ThemeElementsDictionary();
+            foreach (var kvp in elements) {
+                var telem = kvp.Key;
+                var telType = fThemeElementTypes[(int)telem];
+                object telVal = kvp.Value;
+
+                if (telType == ThemeElementType.Image) {
+                    try {
+                        string imgName = telVal.ToString();
+                        if (sysDefault) {
+                            telVal = new ImageHandler(UIHelper.LoadResourceImage(imgName));
+                        } else {
+                            telVal = AppHost.GfxProvider.LoadImage(GetThemesPath() + imgName);
+                        }
+                    } catch (Exception ex) {
+                        Logger.WriteError("PreProcessElements()", ex);
+                        telVal = null;
+                    }
+                }
+
+                result.Add(telem, telVal);
+            }
+            return result;
+        }
+
+        private void RegisterTheme(string name, ThemeElementsDictionary elements, bool sysDefault = false)
+        {
+            fThemes.Add(name, new Theme(name, PreProcessElements(elements, sysDefault), sysDefault));
         }
 
         public void SetTheme(string name)
@@ -191,6 +280,15 @@ namespace GKUI.Themes
         public void ApplyTheme(IThemedView view, object component)
         {
             ApplyTheme(view, (Component)component, fCurrentTheme);
+        }
+
+        public IImage GetThemeImage(ThemeElement element)
+        {
+            object elemValue;
+            if (fCurrentTheme.Elements.TryGetValue(element, out elemValue) && elemValue is IImage) {
+                return (IImage)elemValue;
+            }
+            return null;
         }
 
         #region Control handlers
