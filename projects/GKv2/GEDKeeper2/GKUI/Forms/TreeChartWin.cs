@@ -32,7 +32,6 @@ using GKCore.MVP.Views;
 using GKCore.Options;
 using GKUI.Components;
 using GKUI.Platform;
-using GKUI.Themes;
 
 namespace GKUI.Forms
 {

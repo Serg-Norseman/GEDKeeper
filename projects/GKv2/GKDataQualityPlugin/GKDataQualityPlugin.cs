@@ -38,8 +38,8 @@ namespace GKDataQualityPlugin
     {
         /* 00 */ LSID_Title,
         /* 01 */ LSID_Hint,
-        /* 02 */ LSID_2,
-        /* 03 */ LSID_3,
+        /* 02 */ LSID_Refresh,
+        /* 03 */ LSID_ResetFilter,
         /* 04 */ LSID_4,
         /* 05 */ LSID_5
     }

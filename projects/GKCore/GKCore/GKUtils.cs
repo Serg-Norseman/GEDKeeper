@@ -2065,7 +2065,7 @@ namespace GKCore
 
                         string st = mmRec.FileReferences[0].Title;
                         summary.Add("  " + HyperLink(mmRec.XRef, st, 0) + " (" +
-                                    HyperLink("view_" + mmRec.XRef, LangMan.LS(LSID.LSID_MediaView), 0) + ")");
+                                    HyperLink(GKData.INFO_HREF_VIEW + mmRec.XRef, LangMan.LS(LSID.LSID_MediaView), 0) + ")");
                     }
                 }
             } catch (Exception ex) {
@@ -2348,7 +2348,7 @@ namespace GKCore
                         summary.Add("[u][b][size=+1]" + mediaTitle + "[/size][/b][/u]");
                         summary.Add("");
                         if (fileRef != null) {
-                            summary.Add("[ " + HyperLink("view_" + mediaRec.XRef, LangMan.LS(LSID.LSID_View), 0) + " ]");
+                            summary.Add("[ " + HyperLink(GKData.INFO_HREF_VIEW + mediaRec.XRef, LangMan.LS(LSID.LSID_View), 0) + " ]");
                         }
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
@@ -2576,6 +2576,11 @@ namespace GKCore
 
                         RecListNotesRefresh(baseContext, sourceRec, summary);
                         RecListMediaRefresh(baseContext, sourceRec, summary);
+
+                        summary.Add("");
+                        summary.Add("");
+                        summary.Add("[ " + HyperLink(GKData.INFO_HREF_FILTER_INDI + sourceRec.XRef, LangMan.LS(LSID.LSID_MIFilter), 0) + " ]");
+                        summary.Add("");
                     }
                 } finally {
                     linkList.Dispose();

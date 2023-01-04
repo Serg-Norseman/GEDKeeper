@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BSLib.DataViz.TreeMap;
 using GDModel;
@@ -31,25 +32,70 @@ namespace GKDataQualityPlugin
 {
     public partial class DataQualityWidget : Form, ILocalizable
     {
+        private class GroupMapItem : MapItem
+        {
+            public Color Color;
+            public List<GDMRecord> GroupRecords;
+
+            public GroupMapItem(MapItem parent, string name, double size) : base(parent, name, size)
+            {
+                Color = Color.Silver;
+            }
+        }
+
+
         private TreeMapViewer fDataMap;
+        private GroupMapItem fCurrentItem;
         private readonly Plugin fPlugin;
         private IBaseWindow fBase;
+        private ContextMenuStrip fContextMenu;
+
 
         public DataQualityWidget(Plugin plugin)
         {
             InitializeComponent();
 
+            var miRefresh = new ToolStripMenuItem();
+            miRefresh.Text = plugin.LangMan.LS(CLS.LSID_Refresh);
+            miRefresh.Click += miRefresh_Click;
+
+            var miResetFilter = new ToolStripMenuItem();
+            miResetFilter.Text = plugin.LangMan.LS(CLS.LSID_ResetFilter);
+            miResetFilter.Click += miResetFilter_Click;
+
+            fContextMenu = new ContextMenuStrip(this.components);
+            fContextMenu.Items.AddRange(new ToolStripItem[] {
+                miRefresh,
+                new ToolStripSeparator(),
+                miResetFilter
+            });
+
             fPlugin = plugin;
             fDataMap = new TreeMapViewer();
+            fDataMap.Model.CreatingItem += DataMap_CreateGroupItem;
             fDataMap.Dock = DockStyle.Fill;
+            fDataMap.MouseDoubleClick += DataMap_DoubleClick;
+            fDataMap.PaintItem += DataMap_PaintItem;
+            fDataMap.ContextMenuStrip = fContextMenu;
             Controls.Add(fDataMap);
 
             SetLocale();
         }
 
-        private MapItem CreateItem(MapItem parent, string name, double size, float quality)
+        private void miResetFilter_Click(object sender, EventArgs e)
         {
-            var item = fDataMap.Model.CreateItem(parent, name, size) as SimpleItem;
+            SetExternalFilter(null);
+        }
+
+        private void miRefresh_Click(object sender, EventArgs e)
+        {
+            UpdateTreeMap();
+        }
+
+        private GroupMapItem CreateItem(MapItem parent, string name, double size, float quality, List<GDMRecord> groupRecords)
+        {
+            var item = fDataMap.Model.CreateItem(parent, name, size) as GroupMapItem;
+            item.GroupRecords = groupRecords;
 
             double wavelength = Spectrum.ColdWavelength + (Spectrum.WavelengthMaximum - Spectrum.ColdWavelength) * (1.0f - quality);
             item.Color = Spectrum.WavelengthToRGB(wavelength);
@@ -65,6 +111,7 @@ namespace GKDataQualityPlugin
 
         private void DataQualityWidget_Closed(object sender, EventArgs e)
         {
+            SetExternalFilter(null);
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
         }
@@ -89,7 +136,6 @@ namespace GKDataQualityPlugin
 
             GDMTree tree = fBase.Context.Tree;
             List<GDMIndividualRecord> prepared = new List<GDMIndividualRecord>();
-            List<GDMRecord> groupRecords = new List<GDMRecord>();
             try {
                 int groupNum = 0;
                 int num = tree.RecordsCount;
@@ -97,10 +143,10 @@ namespace GKDataQualityPlugin
                     GDMRecord rec = tree[i];
 
                     if (rec.RecordType == GDMRecordType.rtIndividual) {
-                        GDMIndividualRecord iRec = rec as GDMIndividualRecord;
-                        if (prepared.IndexOf(iRec) < 0) {
+                        GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
+                        if (!prepared.Contains(iRec)) {
                             groupNum++;
-                            groupRecords.Clear();
+                            var groupRecords = new List<GDMRecord>();
 
                             TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
 
@@ -116,15 +162,56 @@ namespace GKDataQualityPlugin
 
                             string name = string.Format(hint, groupNum, groupSize, quality.ToString("0.00"));
 
-                            CreateItem(null, name, groupSize, quality);
+                            CreateItem(null, name, groupSize, quality, groupRecords);
                         }
                     }
                 }
             } finally {
-                groupRecords.Clear();
             }
 
             fDataMap.UpdateView();
+        }
+
+        private MapItem DataMap_CreateGroupItem(MapItem parent, string name, double size)
+        {
+            return new GroupMapItem(parent, name, size);
+        }
+
+        private void DataMap_PaintItem(object sender, PaintItemEventArgs args)
+        {
+            var gfx = args.Graphics;
+            var item = args.Item;
+            MapRect bounds = item.Bounds;
+            if (bounds.W > 2f && bounds.H > 2f) {
+                var simpleItem = (GroupMapItem)item;
+                gfx.FillRectangle(new SolidBrush(simpleItem.Color), bounds.X, bounds.Y, bounds.W, bounds.H);
+                gfx.DrawRectangle(fDataMap.BorderPen, bounds.X, bounds.Y, bounds.W, bounds.H);
+
+                var rect = new RectangleF(bounds.X, bounds.Y, bounds.W, bounds.H);
+                gfx.DrawString(simpleItem.Name, Font, fDataMap.HeaderBrush, rect);
+            }
+        }
+
+        private void DataMap_DoubleClick(object sender, MouseEventArgs e)
+        {
+            fCurrentItem = fDataMap.Model.FindByCoord(e.X, e.Y) as GroupMapItem;
+            if (fCurrentItem != null) {
+                SetExternalFilter(GroupFilterHandler);
+            }
+        }
+
+        private void SetExternalFilter(ExternalFilterHandler handler)
+        {
+            if (fBase != null) {
+                var listMan = fBase.GetRecordsListManByType(GDMRecordType.rtIndividual);
+                listMan.ExternalFilter = handler;
+                fBase.ApplyFilter(GDMRecordType.rtIndividual);
+            }
+        }
+
+        private bool GroupFilterHandler(GDMRecord record)
+        {
+            return (fCurrentItem != null) && fCurrentItem.GroupRecords.Contains(record);
         }
 
         #region ILocalizable support

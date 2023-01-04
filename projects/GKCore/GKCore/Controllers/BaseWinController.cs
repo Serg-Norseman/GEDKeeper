@@ -31,6 +31,7 @@ using GDModel;
 using GKCore.Charts;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.MVP;
 using GKCore.MVP.Controls;
 using GKCore.MVP.Views;
@@ -192,6 +193,12 @@ namespace GKCore.Controllers
             }
         }
 
+        private void ApplyFilter(GDMRecordType rt, IRecordsListModel listMan)
+        {
+            AppHost.Instance.NotifyFilter(fView, rt, listMan, listMan.Filter);
+            ApplyFilter(rt);
+        }
+
         public void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone)
         {
             if (fContext.Tree.RecordsCount > 0) {
@@ -344,11 +351,22 @@ namespace GKCore.Controllers
                 return;
             }
 
-            if (linkName.StartsWith("view_")) {
-                string xref = linkName.Remove(0, 5);
+            if (linkName.StartsWith(GKData.INFO_HREF_VIEW)) {
+                string xref = linkName.Remove(0, GKData.INFO_HREF_VIEW.Length);
                 var mmRec = fContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
                 if (mmRec != null) {
                     fView.ShowMedia(mmRec, false);
+                }
+            } else if (linkName.StartsWith(GKData.INFO_HREF_FILTER_INDI)) {
+                string xref = linkName.Remove(0, GKData.INFO_HREF_FILTER_INDI.Length);
+                var rec = fContext.Tree.FindXRef<GDMRecord>(xref);
+                if (rec is GDMSourceRecord) {
+                    var listMan = GetRecordsListManByType(GDMRecordType.rtIndividual);
+                    IndividualListFilter iFilter = (IndividualListFilter)listMan.Filter;
+                    iFilter.SourceMode = FilterGroupMode.Selected;
+                    iFilter.SourceRef = rec.XRef;
+                    ApplyFilter(GDMRecordType.rtIndividual, listMan);
+                    fView.ShowRecordsTab(GDMRecordType.rtIndividual);
                 }
             } else {
                 SelectRecordByXRef(linkName);
@@ -891,8 +909,7 @@ namespace GKCore.Controllers
         {
             using (var dlg = AppHost.Container.Resolve<IPersonsFilterDlg>(fView, listMan)) {
                 if (AppHost.Instance.ShowModalX(dlg, false)) {
-                    AppHost.Instance.NotifyFilter(fView, rt, listMan, listMan.Filter);
-                    ApplyFilter(rt);
+                    ApplyFilter(rt, listMan);
                 }
             }
         }
