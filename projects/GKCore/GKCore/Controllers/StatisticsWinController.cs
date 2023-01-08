@@ -21,6 +21,7 @@
 using System.Collections.Generic;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.MVP;
 using GKCore.MVP.Controls;
@@ -227,15 +228,15 @@ namespace GKCore.Controllers
 
         public void ExportToExcel()
         {
-            // TODO: localize filter?
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
-            if (string.IsNullOrEmpty(fileName)) return;
+            string fileName;
+            var writer = TableExporter.GetTableWriterWFN(out fileName);
+            if (writer == null) return;
 
             AppHost.Instance.ExecuteWork((controller) => {
                 fTreeStats.WriteStatsReport(fChartTitle,
                     LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap),
                     LangMan.LS(LSID.LSID_Value),
-                    fCurrentValues, fileName, controller);
+                    fCurrentValues, fileName, writer, controller);
             });
         }
 
@@ -252,7 +253,7 @@ namespace GKCore.Controllers
             lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100, false);
             lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100, false);
 
-            SetToolTip("tbExcelExport", LangMan.LS(LSID.LSID_MIExportToExcelFile));
+            SetToolTip("tbExcelExport", LangMan.LS(LSID.LSID_ExportTable));
 
             int oldIndex = fView.StatsType.SelectedIndex;
             UpdateStatsTypes();

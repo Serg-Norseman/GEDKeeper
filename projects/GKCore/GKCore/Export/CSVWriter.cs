@@ -18,38 +18,35 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.IO;
+using System.Text;
 using BSLib.Design.Graphics;
 
 namespace GKCore.Export
 {
-#if !NETSTANDARD
-    using ExcelLibrary.SpreadSheet;
-
     /// <summary>
     /// 
     /// </summary>
-    public class XLSWriter : TableWriter
+    public class CSVWriter : TableWriter
     {
         private int fColumnsCount;
         private int fTableCol;
         private int fTableRow;
-        private Workbook fWorkbook;
-        private Worksheet fWorksheet;
+        private StreamWriter fStream;
 
-        public XLSWriter()
+        public CSVWriter()
         {
         }
 
         public override void BeginWrite()
         {
-            fWorkbook = new Workbook();
-            fWorksheet = new Worksheet("First Sheet");
+            fStream = new StreamWriter(new FileStream(fFileName, FileMode.Create, FileAccess.Write), Encoding.UTF8);
         }
 
         public override void EndWrite()
         {
-            fWorkbook.Worksheets.Add(fWorksheet);
-            fWorkbook.Save(fFileName);
+            fStream.Flush();
+            fStream.Close();
         }
 
         public override void BeginTable(int columnsCount, int rowsCount)
@@ -61,16 +58,20 @@ namespace GKCore.Export
 
         public override void AddTableCell(string content, IFont font = null, TextAlignment alignment = TextAlignment.taLeft)
         {
+            if (fTableCol > 1) {
+                fStream.Write(";");
+            }
+
             if (!string.IsNullOrEmpty(content)) {
-                fWorksheet.Cells[fTableRow, fTableCol] = new Cell(content);
+                fStream.Write(string.Concat("\"", content, "\""));
             }
 
             fTableCol += 1;
             if (fTableCol > fColumnsCount) {
+                fStream.WriteLine();
                 fTableRow += 1;
                 fTableCol = 1;
             }
         }
     }
-#endif
 }

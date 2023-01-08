@@ -78,10 +78,12 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Export\TableWriter.cs" />
     <Compile Include="GKCore\Charts\TreeChartDesk.cs" />
     <Compile Include="GKCore\Charts\TreeChartNavItem.cs" />
     <Compile Include="GKCore\Controllers\FARDlgController.cs" />
     <Compile Include="GKCore\Controllers\OptionsDlgController.cs" />
+    <Compile Include="GKCore\Export\CSVWriter.cs" />
     <Compile Include="GKCore\Export\XLSWriter.cs" />
     <Compile Include="GDModel\GDMException.cs" />
     <Compile Include="GDModel\GDMAddress.cs" />
@@ -334,7 +336,7 @@
     <Compile Include="GKCore\Cultures\SwedishCulture.cs" />
     <Compile Include="GKCore\Cultures\TurkishCulture.cs" />
     <Compile Include="GKCore\Export\CustomWriter.cs" />
-    <Compile Include="GKCore\Export\ExcelExporter.cs" />
+    <Compile Include="GKCore\Export\TableExporter.cs" />
     <Compile Include="GKCore\Export\Exporter.cs" />
     <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
     <Compile Include="GKCore\Export\HTMLWriter.cs" />

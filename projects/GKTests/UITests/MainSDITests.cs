@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -342,11 +342,11 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_ExportToExcelFile()
+        public void Test_ExportTable()
         {
             try {
                 ModalFormHandler = SaveFileXLS_Handler;
-                ClickToolStripMenuItem("miExportToExcelFile", fMainWin);
+                ClickToolStripMenuItem("miExportTable", fMainWin);
             } finally {
                 TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.xls"));
             }

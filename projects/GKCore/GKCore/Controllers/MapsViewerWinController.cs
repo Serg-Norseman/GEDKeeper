@@ -87,7 +87,9 @@ namespace GKCore.Controllers
                         for (int j = 0; j < num2; j++) {
                             GDMCustomEvent ev = ind.Events[j];
                             if (ev.HasPlace && !string.IsNullOrEmpty(ev.Place.StringValue)) {
-                                AddPlace(ev.Place, ind, ev);
+                                progress.InvokeEx(delegate {
+                                    AddPlace(ev.Place, ind, ev);
+                                });
                                 pCnt++;
                             }
                         }

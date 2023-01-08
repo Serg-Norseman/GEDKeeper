@@ -36,7 +36,7 @@
         private System.Windows.Forms.ToolStripSeparator N1;
         private System.Windows.Forms.ToolStripMenuItem miFileProperties;
         private System.Windows.Forms.ToolStripSeparator N2;
-        private System.Windows.Forms.ToolStripMenuItem miExportToExcelFile;
+        private System.Windows.Forms.ToolStripMenuItem miExportTable;
         private System.Windows.Forms.ToolStripMenuItem miExportToFamilyBook;
         private System.Windows.Forms.ToolStripMenuItem miExportToTreesAlbum;
         private System.Windows.Forms.ToolStripSeparator N3;
@@ -155,7 +155,7 @@
             this.miFileProperties = new System.Windows.Forms.ToolStripMenuItem();
             this.N2 = new System.Windows.Forms.ToolStripSeparator();
             this.miExport = new System.Windows.Forms.ToolStripMenuItem();
-            this.miExportToExcelFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.miExportTable = new System.Windows.Forms.ToolStripMenuItem();
             this.N3 = new System.Windows.Forms.ToolStripSeparator();
             this.miExit = new System.Windows.Forms.ToolStripMenuItem();
             this.miEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -563,17 +563,17 @@
             // miExport
             // 
             this.miExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                                    this.miExportToExcelFile});
+                                    this.miExportTable});
             this.miExport.Name = "miExport";
             this.miExport.Size = new System.Drawing.Size(204, 24);
             this.miExport.Text = "miExport";
             // 
-            // miExportToExcelFile
+            // miExportTable
             // 
-            this.miExportToExcelFile.Name = "miExportToExcelFile";
-            this.miExportToExcelFile.Size = new System.Drawing.Size(212, 24);
-            this.miExportToExcelFile.Text = "miExportToExcelFile";
-            this.miExportToExcelFile.Click += new System.EventHandler(this.miExportToExcelFile_Click);
+            this.miExportTable.Name = "miExportTable";
+            this.miExportTable.Size = new System.Drawing.Size(212, 24);
+            this.miExportTable.Text = "miExportTable";
+            this.miExportTable.Click += new System.EventHandler(this.miExportTable_Click);
             // 
             // N3
             // 

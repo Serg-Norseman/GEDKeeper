@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,7 +73,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miFileSaveAs;
         private ButtonMenuItem miFileClose;
         private ButtonMenuItem miFileProperties;
-        private ButtonMenuItem miExportToExcelFile;
+        private ButtonMenuItem miExportTable;
         private ButtonMenuItem miExportToFamilyBook;
         private ButtonMenuItem miExportToTreesAlbum;
         private ButtonMenuItem miTreeTools;
@@ -789,9 +789,9 @@ namespace GKUI.Forms
             fController.ExportToTreesAlbum();
         }
 
-        private void miExportToExcelFile_Click(object sender, EventArgs e)
+        private void miExportTable_Click(object sender, EventArgs e)
         {
-            fController.ExportToExcelFile();
+            fController.ExportTable();
         }
 
         private void miFileProperties_Click(object sender, EventArgs e)

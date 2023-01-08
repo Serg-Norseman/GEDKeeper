@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,19 +38,6 @@ namespace GKCore.Lists
     public abstract class ListSource<T> : IListSource
         where T : GDMTag
     {
-        protected sealed class MapColumnRec
-        {
-            public byte ColType;
-            public byte ColSubtype;
-
-            public MapColumnRec(byte colType, byte colSubtype)
-            {
-                ColType = colType;
-                ColSubtype = colSubtype;
-            }
-        }
-
-
         private bool fColumnsHaveBeenChanged;
         private readonly ExtObservableList<ContentItem> fContentList;
         private int fTotalCount;
@@ -79,6 +66,11 @@ namespace GKCore.Lists
         {
             get { return fColumnsHaveBeenChanged; }
             set { fColumnsHaveBeenChanged = value; }
+        }
+
+        public List<MapColumnRec> ColumnsMap
+        {
+            get { return fColumnsMap; }
         }
 
         public ExtObservableList<ContentItem> ContentList
@@ -131,29 +123,35 @@ namespace GKCore.Lists
 
         #region Columns
 
-        protected void AddColumn(IListViewEx list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        protected virtual void UpdateColumnsMap()
         {
-            if (list == null)
-                throw new ArgumentNullException("list");
-
-            list.AddColumn(caption, width, autoSize);
-            fColumnsMap.Add(new MapColumnRec(colType, colSubtype));
-        }
-
-        public virtual void UpdateColumns(IListViewEx listView)
-        {
-            if (listView == null) return;
-
             fColumnsMap.Clear();
 
             int num = fListColumns.Count;
             for (int i = 0; i < num; i++) {
                 ListColumn cs = fListColumns.OrderedColumns[i];
-
-                AddColumn(listView, LangMan.LS(cs.ColName), cs.CurWidth, false, cs.Id, 0);
+                AddColumn(LangMan.LS(cs.ColName), cs.CurWidth, false, cs.Id, 0);
             }
+        }
 
-            ColumnsHaveBeenChanged = false;
+        protected void AddColumn(string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        {
+            fColumnsMap.Add(new MapColumnRec(caption, width, autoSize, colType, colSubtype));
+        }
+
+        public void UpdateColumns(IListViewEx listView)
+        {
+            UpdateColumnsMap();
+
+            if (listView != null) {
+                int num = fColumnsMap.Count;
+                for (int i = 0; i < num; i++) {
+                    var cm = fColumnsMap[i];
+                    listView.AddColumn(cm.Caption, cm.Width, cm.AutoSize);
+                }
+
+                ColumnsHaveBeenChanged = false;
+            }
         }
 
         public string GetColumnName(int columnId)
@@ -564,7 +562,7 @@ namespace GKCore.Lists
             return (fItemData == null) ? string.Empty : (string)fItemData[colIndex];
         }
 
-        protected object[] GetItemData(object rowData)
+        public object[] GetItemData(object rowData)
         {
             T rec = rowData as T;
             if (rec == null)

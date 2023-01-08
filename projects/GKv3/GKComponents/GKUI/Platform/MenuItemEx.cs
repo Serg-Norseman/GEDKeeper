@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,12 +31,23 @@ namespace GKUI.Platform
     public class MenuItemEx : ButtonMenuItem, IMenuItem
     {
         private ItemAction fAction;
+        private IImage fGlyph;
         private MenuSubItems fItems;
 
         public bool Checked
         {
             get; set;
         }
+
+        public IImage Glyph
+        {
+            get { return fGlyph; }
+            set {
+                fGlyph = value;
+                base.Image = (fGlyph == null) ? null : ((ImageHandler)fGlyph).Handle;
+            }
+        }
+
 
         public MenuItemEx(string text)
         {

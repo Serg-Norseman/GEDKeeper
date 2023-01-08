@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -720,7 +720,7 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miFileSaveAs").Enabled = GetControl<IMenuItem>("miFileSave").Enabled;
                 GetControl<IMenuItem>("miFileClose").Enabled = baseEn;
                 GetControl<IMenuItem>("miFileProperties").Enabled = baseEn;
-                GetControl<IMenuItem>("miExportToExcelFile").Enabled = baseEn;
+                GetControl<IMenuItem>("miExportTable").Enabled = baseEn;
 
                 GetControl<IMenuItem>("miRecordAdd").Enabled = baseEn;
                 GetControl<IMenuItem>("miRecordEdit").Enabled = baseEn;
@@ -787,7 +787,7 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miExport").Text = LangMan.LS(LSID.LSID_MIExport);
                 GetControl<IMenuItem>("miExportToFamilyBook").Text = LangMan.LS(LSID.LSID_MIExportToFamilyBook);
                 GetControl<IMenuItem>("miExportToTreesAlbum").Text = LangMan.LS(LSID.LSID_TreesAlbum);
-                GetControl<IMenuItem>("miExportToExcelFile").Text = LangMan.LS(LSID.LSID_MIExportToExcelFile);
+                GetControl<IMenuItem>("miExportTable").Text = LangMan.LS(LSID.LSID_ExportTable);
                 GetControl<IMenuItem>("miExit").Text = LangMan.LS(LSID.LSID_MIExit);
 
                 GetControl<IMenuItem>("miRecordAdd").Text = LangMan.LS(LSID.LSID_MIRecordAdd);
@@ -889,8 +889,10 @@ namespace GKCore.Controllers
 
         public override void ApplyTheme()
         {
-            GetControl<IMenuItem>("miOptions").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Settings);
-            GetControl<IMenuItem>("miMap").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Maps);
+            if (AppHost.Instance.HasFeatureSupport(Feature.Themes)) {
+                GetControl<IMenuItem>("miOptions").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Settings);
+                GetControl<IMenuItem>("miMap").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Maps);
+            }
         }
 
         #region Dialogs
@@ -940,9 +942,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ExportToExcelFile()
+        public void ExportTable()
         {
-            using (ExcelExporter exExp = new ExcelExporter(fView)) {
+            using (TableExporter exExp = new TableExporter(fView)) {
                 exExp.Options = AppHost.Options;
                 exExp.Generate(true);
             }

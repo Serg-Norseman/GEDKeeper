@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 using GDModel;
@@ -41,10 +42,30 @@ namespace GKCore.Interfaces
     }
 
 
+    public sealed class MapColumnRec
+    {
+        public string Caption;
+        public int Width;
+        public bool AutoSize;
+        public byte ColType;
+        public byte ColSubtype;
+
+        public MapColumnRec(string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        {
+            Caption = caption;
+            Width = width;
+            AutoSize = autoSize;
+            ColType = colType;
+            ColSubtype = colSubtype;
+        }
+    }
+
+
     public interface IListSource
     {
         IBaseContext BaseContext { get; }
         bool ColumnsHaveBeenChanged { get; set; }
+        List<MapColumnRec> ColumnsMap { get; }
         ExtObservableList<ContentItem> ContentList { get; }
         ExternalFilterHandler ExternalFilter { get; set; }
         IListFilter Filter { get; }
@@ -68,6 +89,8 @@ namespace GKCore.Interfaces
         /// <param name="isVisible">Flag for display values</param>
         /// <returns></returns>
         object GetColumnValue(int colIndex, bool isVisible);
+
+        object[] GetItemData(object rowData);
 
         /// <summary>
         /// Getting display values for binding columns of lists with virtualization (caching).

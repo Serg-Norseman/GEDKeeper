@@ -223,10 +223,12 @@ namespace GKUI.Themes
                 if (telType == ThemeElementType.Image) {
                     try {
                         string imgName = telVal.ToString();
-                        if (sysDefault) {
-                            telVal = new ImageHandler(UIHelper.LoadResourceImage(imgName));
-                        } else {
-                            telVal = AppHost.GfxProvider.LoadImage(GetThemesPath() + imgName);
+                        if (!string.IsNullOrEmpty(imgName)) {
+                            if (sysDefault) {
+                                telVal = new ImageHandler(UIHelper.LoadResourceImage(imgName));
+                            } else {
+                                telVal = AppHost.GfxProvider.LoadImage(GetThemesPath() + imgName);
+                            }
                         }
                     } catch (Exception ex) {
                         Logger.WriteError("PreProcessElements()", ex);

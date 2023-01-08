@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -838,6 +838,7 @@ namespace GKUI.Platform
 
     public sealed class MenuItemHandler : ControlHandler<MenuItem, MenuItemHandler>, IMenuItem
     {
+        private IImage fGlyph;
         private MenuSubItems fItems;
 
         public MenuItemHandler(MenuItem control) : base(control)
@@ -870,6 +871,18 @@ namespace GKUI.Platform
             get { return Control.Enabled; }
             set { Control.Enabled = value; }
         }
+
+        public IImage Glyph
+        {
+            get { return fGlyph; }
+            set {
+                if (Control is ButtonMenuItem) {
+                    fGlyph = value;
+                    ((ButtonMenuItem)Control).Image = (fGlyph == null) ? null : ((ImageHandler)fGlyph).Handle;
+                }
+            }
+        }
+
 
         public IMenuItems SubItems
         {

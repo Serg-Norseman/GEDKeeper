@@ -606,7 +606,8 @@ namespace GKMap.WinForms
         /// <returns></returns>
         public bool ZoomAndCenterMarkers(string overlayId)
         {
-            return fCore.ZoomAndCenterMarkers(overlayId);
+            bool result = fCore.ZoomAndCenterMarkers(overlayId);
+            return result;
         }
 
         /// <summary>

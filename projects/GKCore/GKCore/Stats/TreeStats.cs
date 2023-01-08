@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,18 +20,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Export;
 using GKCore.Interfaces;
 
 namespace GKCore.Stats
 {
-#if !NETSTANDARD
-    using ExcelLibrary.SpreadSheet;
-#endif
 
     /// <summary>
     /// Class for calculate various types of statistics.
@@ -427,9 +423,8 @@ namespace GKCore.Stats
             }
         }
 
-        public void WriteStatsReport(string title, string cap1, string cap2, List<StatsItem> vals, string fileName, IProgressController progress)
+        public void WriteStatsReport(string title, string cap1, string cap2, List<StatsItem> vals, string fileName, TableWriter writer, IProgressController progress)
         {
-#if !NETSTANDARD
             if (vals == null) return;
 
             try {
@@ -437,28 +432,22 @@ namespace GKCore.Stats
                 progress.Begin(LangMan.LS(LSID.LSID_MIExport) + "...", rowsCount);
 
                 try {
-                    Workbook workbook = new Workbook();
-                    Worksheet worksheet = new Worksheet(title);
+                    writer.BeginWrite();
 
-                    worksheet.Cells[0, 1] = new Cell(cap1);
-                    worksheet.Cells[0, 2] = new Cell(cap2);
-
-                    int row = 1;
+                    writer.BeginTable(2, rowsCount);
+                    writer.AddTableCell(cap1);
+                    writer.AddTableCell(cap2);
                     for (int i = 0; i < rowsCount; i++) {
                         StatsItem item = vals[i];
-                        worksheet.Cells[row, 1] = new Cell(item.Caption);
-                        worksheet.Cells[row, 2] = new Cell(item.GetDisplayString());
-
-                        row++;
+                        writer.AddTableCell(item.Caption);
+                        writer.AddTableCell(item.GetDisplayString());
                         progress.Increment();
                     }
+                    writer.EndTable();
 
-                    workbook.Worksheets.Add(worksheet);
-                    workbook.Save(fileName);
+                    writer.EndWrite();
 
-                    if (File.Exists(fileName)) {
-                        Process.Start(fileName);
-                    }
+                    GKUtils.LoadExtFile(fileName);
                 } finally {
                     progress.End();
                 }
@@ -466,7 +455,6 @@ namespace GKCore.Stats
                 Logger.WriteError("TreeStats.WriteStatsReport()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
-#endif
         }
     }
 }

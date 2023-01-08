@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -617,7 +617,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void UpdateColumns(IListViewEx listView)
+        protected override void UpdateColumnsMap()
         {
             fColumnsMap.Clear();
 
@@ -634,18 +634,18 @@ namespace GKCore.Lists
                 if (bColType == (byte)ColumnType.ctName && defNameFormat != NameFormat.nfFNP) {
                     switch (defNameFormat) {
                         case NameFormat.nfF_N_P:
-                            AddColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
-                            AddColumn(listView, LangMan.LS(LSID.LSID_Name), 100, asz, bColType, 1);
-                            AddColumn(listView, LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 2);
+                            AddColumn(LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
+                            AddColumn(LangMan.LS(LSID.LSID_Name), 100, asz, bColType, 1);
+                            AddColumn(LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 2);
                             break;
 
                         case NameFormat.nfF_NP:
-                            AddColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
-                            AddColumn(listView, LangMan.LS(LSID.LSID_Name) + "," + LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 1);
+                            AddColumn(LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
+                            AddColumn(LangMan.LS(LSID.LSID_Name) + "," + LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 1);
                             break;
                     }
                 } else {
-                    AddColumn(listView, LangMan.LS(columnProps.ColName), columnProps.CurWidth, false, bColType, 0);
+                    AddColumn(LangMan.LS(columnProps.ColName), columnProps.CurWidth, false, bColType, 0);
                 }
             }
         }

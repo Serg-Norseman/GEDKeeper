@@ -94,9 +94,9 @@ namespace GKCore
             BaseWindowStub baseWin = new BaseWindowStub();
             baseWin.Context.ShieldState = ShieldState.None;
 
-            Assert.Throws(typeof(ArgumentNullException), () => { new ExcelExporter(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { new TableExporter(null); });
 
-            using (ExcelExporter exporter = new ExcelExporter(baseWin)) {
+            using (TableExporter exporter = new TableExporter(baseWin)) {
 
             }
         }
