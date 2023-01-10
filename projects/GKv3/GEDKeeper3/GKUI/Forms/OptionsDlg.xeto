@@ -154,6 +154,10 @@
                     <StackLayout Style="vertListStack">
 
                       <CheckBox x:Name="chkSurname" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                      <StackLayout Orientation="Horizontal" Spacing="20">
+                        <StackLayoutItem />
+                        <CheckBox x:Name="chkTreeSurnameFirst" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                      </StackLayout>
                       <CheckBox x:Name="chkName" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                       <CheckBox x:Name="chkPatronymic" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                       <StackLayout Orientation="Horizontal" Spacing="20">

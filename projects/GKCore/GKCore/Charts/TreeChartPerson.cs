@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -401,24 +401,46 @@ namespace GKCore.Charts
                 // create lines
                 int idx = 0;
 
-                if (options.FamilyVisible) {
-                    Lines[idx] = fSurname;
-                    NameLines++;
-                    idx++;
-                }
+                if (options.SurnameFirstInOrder) {
+                    if (options.FamilyVisible) {
+                        Lines[idx] = fSurname;
+                        NameLines++;
+                        idx++;
+                    }
 
-                if (!options.DiffLines) {
-                    Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
-                    NameLines++;
-                    idx++;
+                    if (!options.DiffLines) {
+                        Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
+                        NameLines++;
+                        idx++;
+                    } else {
+                        Lines[idx] = nameLine;
+                        NameLines++;
+                        idx++;
+
+                        Lines[idx] = fPatronymic;
+                        NameLines++;
+                        idx++;
+                    }
                 } else {
-                    Lines[idx] = nameLine;
-                    NameLines++;
-                    idx++;
+                    if (!options.DiffLines) {
+                        Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
+                        NameLines++;
+                        idx++;
+                    } else {
+                        Lines[idx] = nameLine;
+                        NameLines++;
+                        idx++;
 
-                    Lines[idx] = fPatronymic;
-                    NameLines++;
-                    idx++;
+                        Lines[idx] = fPatronymic;
+                        NameLines++;
+                        idx++;
+                    }
+
+                    if (options.FamilyVisible) {
+                        Lines[idx] = fSurname;
+                        NameLines++;
+                        idx++;
+                    }
                 }
 
                 if (options.OnlyYears && !options.ShowPlaces) {

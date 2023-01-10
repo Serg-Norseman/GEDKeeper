@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -67,6 +67,7 @@ namespace GKCore.Options
         public bool MinimizingWidth;
         public bool AgeVisible;
         public GfxBorderStyle BorderStyle;
+        public bool SurnameFirstInOrder;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -126,6 +127,7 @@ namespace GKCore.Options
             MinimizingWidth = true;
             AgeVisible = false;
             BorderStyle = GfxBorderStyle.None;
+            SurnameFirstInOrder = true;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -190,6 +192,7 @@ namespace GKCore.Options
             OnlyLocality = srcOptions.OnlyLocality;
             MinimizingWidth = srcOptions.MinimizingWidth;
             AgeVisible = srcOptions.AgeVisible;
+            SurnameFirstInOrder = srcOptions.SurnameFirstInOrder;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -235,6 +238,7 @@ namespace GKCore.Options
             OnlyLocality = iniFile.ReadBool("Chart", "OnlyLocality", false);
             MinimizingWidth = iniFile.ReadBool("Chart", "MinimizingWidth", true);
             AgeVisible = iniFile.ReadBool("Chart", "AgeVisible", false);
+            SurnameFirstInOrder = iniFile.ReadBool("Chart", "SurnameFirstInOrder", true);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -296,6 +300,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "OnlyLocality", OnlyLocality);
             iniFile.WriteBool("Chart", "MinimizingWidth", MinimizingWidth);
             iniFile.WriteBool("Chart", "AgeVisible", AgeVisible);
+            iniFile.WriteBool("Chart", "SurnameFirstInOrder", SurnameFirstInOrder);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());

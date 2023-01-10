@@ -190,6 +190,7 @@ namespace GKUI.Forms
         private NumericStepper numDefaultDepthDescendants;
         private Label lblCertaintyAlgorithm;
         private ComboBox cmbCertaintyAlgorithm;
+        private CheckBox chkTreeSurnameFirst;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
