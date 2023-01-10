@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -78,6 +78,7 @@ namespace GKCore.Charts
         private int fBranchDistance;
         private bool fCertaintyIndex;
         private IPen fDecorativeLinePen;
+        private int fDefCharWidth;
         private int fDepthLimitAncestors;
         private int fDepthLimitDescendants;
         private IPen fDottedLinePen;
@@ -834,6 +835,10 @@ namespace GKCore.Charts
                 lines++;
             }
 
+            if (fOptions.URNotesVisible) {
+                lines++;
+            }
+
             return lines;
         }
 
@@ -842,6 +847,7 @@ namespace GKCore.Charts
             float fsz = (float)Math.Round(fOptions.DefFontSize * fScale);
             fBoldFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, true);
             fDrawFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, false);
+            fDefCharWidth = fRenderer.GetTextWidth("a", fDrawFont);
 
             fBranchDistance = (int)Math.Round(fOptions.BranchDistance * fScale);
             fLevelDistance = (int)Math.Round(fOptions.LevelDistance * fScale);
@@ -1642,6 +1648,13 @@ namespace GKCore.Charts
             }
         }
 
+        private static string TruncString(string str, int threshold)
+        {
+            if (str.Length > threshold)
+                return str.Substring(0, threshold) + "…";
+            return str;
+        }
+
         private void DrawPerson(TreeChartPerson person, ChartDrawMode drawMode)
         {
             try {
@@ -1683,6 +1696,8 @@ namespace GKCore.Charts
                 int bh = fRenderer.GetTextHeight(fBoldFont);
                 int th = fRenderer.GetTextHeight(fDrawFont);
                 int ry = prt.Top + fNodePadding;
+                int prtWidth = (prt.Right - prt.Left + 1);
+                int maxLength = (prtWidth / fDefCharWidth);
 
                 int lines = person.Lines.Length;
                 for (int k = 0; k < lines; k++) {
@@ -1699,7 +1714,12 @@ namespace GKCore.Charts
                     }
 
                     int stw = fRenderer.GetTextWidth(line, font);
-                    int rx = prt.Left + ((prt.Right - prt.Left + 1) - stw) / 2;
+                    if (fOptions.URNotesVisible && line == person.Note && stw > prtWidth) {
+                        line = TruncString(line, maxLength);
+                        stw = fRenderer.GetTextWidth(line, font);
+                    }
+
+                    int rx = prt.Left + (prtWidth - stw) / 2;
 
                     fRenderer.DrawString(line, font, fSolidBlack, rx, ry);
 

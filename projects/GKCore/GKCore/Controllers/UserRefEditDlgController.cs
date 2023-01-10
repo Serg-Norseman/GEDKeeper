@@ -53,6 +53,9 @@ namespace GKCore.Controllers
                 string sur = LangMan.LS(GKData.SpecialUserRefs[(int)ur].Title);
                 fView.Ref.Add(sur);
             }
+
+            fView.RefType.Add("");
+            fView.RefType.Add(LangMan.LS(GKData.URTreeNoteType));
         }
 
         public override bool Accept()

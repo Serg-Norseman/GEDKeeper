@@ -68,6 +68,7 @@ namespace GKCore.Options
         public bool AgeVisible;
         public GfxBorderStyle BorderStyle;
         public bool SurnameFirstInOrder;
+        public bool URNotesVisible;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -128,6 +129,7 @@ namespace GKCore.Options
             AgeVisible = false;
             BorderStyle = GfxBorderStyle.None;
             SurnameFirstInOrder = true;
+            URNotesVisible = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -193,6 +195,7 @@ namespace GKCore.Options
             MinimizingWidth = srcOptions.MinimizingWidth;
             AgeVisible = srcOptions.AgeVisible;
             SurnameFirstInOrder = srcOptions.SurnameFirstInOrder;
+            URNotesVisible = srcOptions.URNotesVisible;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -239,6 +242,7 @@ namespace GKCore.Options
             MinimizingWidth = iniFile.ReadBool("Chart", "MinimizingWidth", true);
             AgeVisible = iniFile.ReadBool("Chart", "AgeVisible", false);
             SurnameFirstInOrder = iniFile.ReadBool("Chart", "SurnameFirstInOrder", true);
+            URNotesVisible = iniFile.ReadBool("Chart", "URNotesVisible", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -301,6 +305,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "MinimizingWidth", MinimizingWidth);
             iniFile.WriteBool("Chart", "AgeVisible", AgeVisible);
             iniFile.WriteBool("Chart", "SurnameFirstInOrder", SurnameFirstInOrder);
+            iniFile.WriteBool("Chart", "URNotesVisible", URNotesVisible);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());

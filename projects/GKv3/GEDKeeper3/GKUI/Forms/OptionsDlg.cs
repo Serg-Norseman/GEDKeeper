@@ -191,6 +191,7 @@ namespace GKUI.Forms
         private Label lblCertaintyAlgorithm;
         private ComboBox cmbCertaintyAlgorithm;
         private CheckBox chkTreeSurnameFirst;
+        private CheckBox chkURNotesVisible;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion

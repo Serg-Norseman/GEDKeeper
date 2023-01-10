@@ -192,6 +192,7 @@ namespace GKCore
         public static readonly string[] CondSigns;
         public static readonly string BloodGroups;
         public static readonly LSID[] PropertyTypes;
+        public static readonly LSID URTreeNoteType;
 
 
         /// <summary>
@@ -564,6 +565,8 @@ namespace GKCore
                 LSID.LSID_Fact,
                 LSID.LSID_Event,
             };
+
+            URTreeNoteType = LSID.LSID_URTreeNoteType;
         }
     }
 }

@@ -488,6 +488,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkMinimizingWidth").Checked = fOptions.TreeChartOptions.MinimizingWidth;
             GetControl<ICheckBox>("chkShowAge").Checked = fOptions.TreeChartOptions.AgeVisible;
             GetControl<ICheckBox>("chkTreeSurnameFirst").Checked = fOptions.TreeChartOptions.SurnameFirstInOrder;
+            GetControl<ICheckBox>("chkURNotesVisible").Checked = fOptions.TreeChartOptions.URNotesVisible;
 
             GetControl<ILabel>("lblMaleColor").BackColor = fOptions.TreeChartOptions.MaleColor;
             GetControl<ILabel>("lblFemaleColor").BackColor = fOptions.TreeChartOptions.FemaleColor;
@@ -566,6 +567,7 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.MinimizingWidth = GetControl<ICheckBox>("chkMinimizingWidth").Checked;
             fOptions.TreeChartOptions.AgeVisible = GetControl<ICheckBox>("chkShowAge").Checked;
             fOptions.TreeChartOptions.SurnameFirstInOrder = GetControl<ICheckBox>("chkTreeSurnameFirst").Checked;
+            fOptions.TreeChartOptions.URNotesVisible = GetControl<ICheckBox>("chkURNotesVisible").Checked;
 
             fOptions.TreeChartOptions.MaleColor = GetControl<ILabel>("lblMaleColor").BackColor;
             fOptions.TreeChartOptions.FemaleColor = GetControl<ILabel>("lblFemaleColor").BackColor;
@@ -745,6 +747,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkMinimizingWidth").Text = LangMan.LS(LSID.LSID_MinimizingWidth);
             GetControl<ICheckBox>("chkShowAge").Text = LangMan.LS(LSID.LSID_ShowAge);
             GetControl<ICheckBox>("chkTreeSurnameFirst").Text = LangMan.LS(LSID.LSID_SurnameFirstInOrder);
+            GetControl<ICheckBox>("chkURNotesVisible").Text = LangMan.LS(LSID.LSID_ShowTreeNotes);
 
             GetControl<IGroupBox>("grpTreeDecor").Text = LangMan.LS(LSID.LSID_Decor);
             GetControl<ILabel>("lblMaleColor").Text = LangMan.LS(LSID.LSID_Man);

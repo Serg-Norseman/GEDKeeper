@@ -947,8 +947,10 @@ namespace GKCore
         /* 886 */ LSID_Property,
 
         /* 887 */ LSID_Themes,
+        /* 888 */ LSID_URTreeNoteType,
+        /* 889 */ LSID_ShowTreeNotes,
 
-        /* 000 */ LSID_Last = LSID_Themes
+        /* 000 */ LSID_Last = LSID_ShowTreeNotes
     }
 
 
@@ -1852,6 +1854,8 @@ namespace GKCore
             /* 886 */ "Property",
 
             /* 887 */ "Themes",
+            /* 888 */ "Tree note",
+            /* 889 */ "Show special notes",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

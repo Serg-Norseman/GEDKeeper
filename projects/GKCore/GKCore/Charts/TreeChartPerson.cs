@@ -103,6 +103,7 @@ namespace GKCore.Charts
         public bool IsVisible;
         public IColor UserColor;
         public int NameLines;
+        public string Note;
 
 
         public int Height
@@ -330,15 +331,25 @@ namespace GKCore.Charts
                     }
 
                     fSigns = EnumSet<SpecialUserRef>.Create();
-                    if (options.SignsVisible && fRec.HasUserReferences) {
+                    if ((options.SignsVisible || options.URNotesVisible) && fRec.HasUserReferences) {
                         int num = fRec.UserReferences.Count;
                         for (int i = 0; i < num; i++) {
-                            string rs = fRec.UserReferences[i].StringValue;
+                            var uRef = fRec.UserReferences[i];
+                            string refVal = uRef.StringValue;
+                            string refType = uRef.ReferenceType;
 
-                            for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
-                                string sur = LangMan.LS(GKData.SpecialUserRefs[(int)cps].Title);
-                                if (rs == sur) {
-                                    fSigns.Include(cps);
+                            if (options.SignsVisible) {
+                                for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
+                                    string sur = LangMan.LS(GKData.SpecialUserRefs[(int)cps].Title);
+                                    if (refVal == sur) {
+                                        fSigns.Include(cps);
+                                    }
+                                }
+                            }
+
+                            if (options.URNotesVisible) {
+                                if (refType == LangMan.LS(GKData.URTreeNoteType)) {
+                                    Note = refVal;
                                 }
                             }
                         }
@@ -376,6 +387,7 @@ namespace GKCore.Charts
                     fSigns = EnumSet<SpecialUserRef>.Create();
 
                     CertaintyAssessment = 0.0f;
+                    Note = string.Empty;
                 }
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartPerson.BuildBy()", ex);
@@ -482,6 +494,11 @@ namespace GKCore.Charts
                     Lines[idx] = Kinship;
                     idx++;
                 }
+
+                if (options.URNotesVisible) {
+                    Lines[idx] = Note;
+                    idx++;
+                }
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartPerson.InitInfo()", ex);
             }
@@ -523,7 +540,9 @@ namespace GKCore.Charts
                     }
 
                     int wt = renderer.GetTextWidth(Lines[k], font);
-                    if (maxwid < wt) maxwid = wt;
+                    if (!options.URNotesVisible || Lines[k] != Note) {
+                        if (maxwid < wt) maxwid = wt;
+                    }
                 }
 
                 int pad2side = (fModel.NodePadding * 2);
