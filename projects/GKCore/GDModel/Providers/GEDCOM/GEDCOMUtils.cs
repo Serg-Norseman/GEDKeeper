@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using BSLib;
+using GKCore;
 
 namespace GDModel.Providers.GEDCOM
 {
@@ -363,20 +364,24 @@ namespace GDModel.Providers.GEDCOM
         // CutoutPosition format: x1 y1 x2 y2
         public static string ParseCutoutPosition(string strValue, GDMCutoutPosition position)
         {
-            int x1 = 0;
-            int y1 = 0;
-            int x2 = 0;
-            int y2 = 0;
+            try {
+                int x1 = 0;
+                int y1 = 0;
+                int x2 = 0;
+                int y2 = 0;
 
-            if (!string.IsNullOrEmpty(strValue)) {
-                var parser = new GEDCOMParser(strValue, true);
-                x1 = parser.RequestNextSignedInt();
-                y1 = parser.RequestNextSignedInt();
-                x2 = parser.RequestNextSignedInt();
-                y2 = parser.RequestNextSignedInt();
+                if (!string.IsNullOrEmpty(strValue)) {
+                    var parser = new GEDCOMParser(strValue, true);
+                    x1 = parser.RequestNextSignedInt();
+                    y1 = parser.RequestNextSignedInt();
+                    x2 = parser.RequestNextSignedInt();
+                    y2 = parser.RequestNextSignedInt();
+                }
+
+                position.SetRawData(x1, y1, x2, y2);
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("GEDCOMUtils.ParseCutoutPosition({0}): ", strValue), ex);
             }
-
-            position.SetRawData(x1, y1, x2, y2);
 
             return string.Empty;
         }

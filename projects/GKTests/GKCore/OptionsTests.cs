@@ -138,10 +138,10 @@ namespace GKCore
                 globalOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden;
                 Assert.AreEqual(WomanSurnameFormat.wsfMaiden, globalOptions.WomanSurnameFormat);
 
-                globalOptions.AddLastBase("sample.ged");
-                Assert.AreEqual(1, globalOptions.GetLastBasesCount());
-                Assert.AreEqual("sample.ged", globalOptions.GetLastBase(0));
-                globalOptions.ClearLastBases();
+                globalOptions.LastBases.Add("sample.ged");
+                Assert.AreEqual(1, globalOptions.LastBases.Count);
+                Assert.AreEqual("sample.ged", globalOptions.LastBases[0]);
+                globalOptions.LastBases.Clear();
 
                 Assert.IsNotNull(globalOptions.Languages);
 

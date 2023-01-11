@@ -117,7 +117,7 @@ namespace GKCore.Interfaces
         void ProcessFamily(GDMFamilyRecord famRec);
         void ProcessIndividual(GDMIndividualRecord indiRec);
 
-        void CopyFile(string sourceFileName, string destFileName, bool showProgress = true);
+        bool CopyFile(string sourceFileName, string destFileName, bool showProgress = true);
         void MoveMediaContainers(string oldFileName, string newFileName, bool createCopy = false);
     }
 }

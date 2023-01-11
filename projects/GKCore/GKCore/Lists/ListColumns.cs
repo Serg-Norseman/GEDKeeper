@@ -148,43 +148,51 @@ namespace GKCore.Lists
         {
             if (iniFile == null) return;
 
-            int num = fColumns.Count;
-            for (int i = 0; i < num; i++) {
-                int colId = iniFile.ReadInteger(section, "ColType_" + i, i);
+            try {
+                int num = fColumns.Count;
+                for (int i = 0; i < num; i++) {
+                    int colId = iniFile.ReadInteger(section, "ColType_" + i, i);
 
-                if (optsVersion == 1 && optsVersion < GlobalOptions.OPTS_VERSION) {
-                    // In version 2.21 (OptsVersion=2) there was a transition in column handling
-                    colId += 1;
+                    if (optsVersion == 1 && optsVersion < GlobalOptions.OPTS_VERSION) {
+                        // In version 2.21 (OptsVersion=2) there was a transition in column handling
+                        colId += 1;
+                    }
+
+                    ListColumn col = fColumns[colId];
+
+                    bool colActive = iniFile.ReadBool(section, "ColActive_" + i, col.DefActive);
+                    int colWidth = iniFile.ReadInteger(section, "ColWidth_" + i, col.DefWidth);
+
+                    // protection zero/hidden columns
+                    if (colWidth <= 10) {
+                        colWidth = col.DefWidth;
+                    }
+
+                    col.Order = i;
+                    col.CurActive = colActive;
+                    col.CurWidth = colWidth;
                 }
 
-                ListColumn col = fColumns[colId];
-
-                bool colActive = iniFile.ReadBool(section, "ColActive_" + i, col.DefActive);
-                int colWidth = iniFile.ReadInteger(section, "ColWidth_" + i, col.DefWidth);
-
-                // protection zero/hidden columns
-                if (colWidth <= 10) {
-                    colWidth = col.DefWidth;
-                }
-
-                col.Order = i;
-                col.CurActive = colActive;
-                col.CurWidth = colWidth;
+                UpdateOrders();
+            } catch (Exception ex) {
+                Logger.WriteError("ListColumns.LoadFromFile()", ex);
             }
-
-            UpdateOrders();
         }
 
         public void SaveToFile(IniFile iniFile, string section)
         {
             if (iniFile == null) return;
 
-            int idx = -1;
-            foreach (var col in fOrderedColumns) {
-                idx += 1;
-                iniFile.WriteInteger(section, "ColType_" + idx, col.Id);
-                iniFile.WriteBool(section, "ColActive_" + idx, col.CurActive);
-                iniFile.WriteInteger(section, "ColWidth_" + idx, col.CurWidth);
+            try {
+                int idx = -1;
+                foreach (var col in fOrderedColumns) {
+                    idx += 1;
+                    iniFile.WriteInteger(section, "ColType_" + idx, col.Id);
+                    iniFile.WriteBool(section, "ColActive_" + idx, col.CurActive);
+                    iniFile.WriteInteger(section, "ColWidth_" + idx, col.CurWidth);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("ListColumns.SaveToFile()", ex);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,9 +26,7 @@ using BSLib;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Plugins;
 using GKCore.Types;
-using GKUI.Themes;
 
 namespace GKCore.Options
 {
@@ -291,6 +289,11 @@ namespace GKCore.Options
         public IList<LangRecord> Languages
         {
             get { return fLanguages; }
+        }
+
+        public StringList LastBases
+        {
+            get { return fLastBases; }
         }
 
         public string LastDir
@@ -619,16 +622,6 @@ namespace GKCore.Options
             }
         }
 
-        public string GetLastBase(int index)
-        {
-            return fLastBases[index];
-        }
-
-        public int GetLastBasesCount()
-        {
-            return fLastBases.Count;
-        }
-
         public int MRUFiles_IndexOf(string fileName)
         {
             int num = fMRUFiles.Count;
@@ -641,30 +634,26 @@ namespace GKCore.Options
             return -1;
         }
 
-        public void AddLastBase(string fileName)
-        {
-            fLastBases.Add(fileName);
-        }
-
-        public void ClearLastBases()
-        {
-            fLastBases.Clear();
-        }
-
-
         public static void LoadMRUFromFile(IniFile ini, List<MRUFile> mruFiles)
         {
-            int cnt = ini.ReadInteger("Common", "MRUFiles_Count", 0);
-            for (int i = 0; i < cnt; i++) {
-                string sect = "MRUFile_" + i.ToString();
-                string fn = ini.ReadString(sect, "FileName", "");
-                if (File.Exists(fn)) {
-                    MRUFile mf = new MRUFile();
-                    mf.LoadFromFile(ini, sect);
-                    mruFiles.Add(mf);
-                } else {
-                    MRUFile.DeleteKeys(ini, sect);
+            if (ini == null)
+                throw new ArgumentNullException("ini");
+
+            try {
+                int cnt = ini.ReadInteger("Common", "MRUFiles_Count", 0);
+                for (int i = 0; i < cnt; i++) {
+                    string sect = "MRUFile_" + i.ToString();
+                    string fn = ini.ReadString(sect, "FileName", "");
+                    if (File.Exists(fn)) {
+                        MRUFile mf = new MRUFile();
+                        mf.LoadFromFile(ini, sect);
+                        mruFiles.Add(mf);
+                    } else {
+                        MRUFile.DeleteKeys(ini, sect);
+                    }
                 }
+            } catch (Exception ex) {
+                Logger.WriteError("GlobalOptions.LoadMRUFromFile()", ex);
             }
         }
 
@@ -673,17 +662,21 @@ namespace GKCore.Options
             if (ini == null)
                 throw new ArgumentNullException("ini");
 
-            int num = AppHost.Plugins.Count;
-            for (int i = 0; i < num; i++) {
-                var plugin = AppHost.Plugins[i];
+            try {
+                int num = AppHost.Plugins.Count;
+                for (int i = 0; i < num; i++) {
+                    var plugin = AppHost.Plugins[i];
 
-                var dlgPlugin = plugin as IDialogReplacement;
-                if (dlgPlugin != null) {
-                    var plgName = plugin.GetType().Name;
-                    dlgPlugin.Enabled = ini.ReadBool("Plugins", plgName + ".Enabled", false);
+                    var dlgPlugin = plugin as IDialogReplacement;
+                    if (dlgPlugin != null) {
+                        var plgName = plugin.GetType().Name;
+                        dlgPlugin.Enabled = ini.ReadBool("Plugins", plgName + ".Enabled", false);
+                    }
+
+                    plugin.LoadOptions(ini);
                 }
-
-                plugin.LoadOptions(ini);
+            } catch (Exception ex) {
+                Logger.WriteError("GlobalOptions.LoadPluginsFromFile()", ex);
             }
         }
 
@@ -692,34 +685,53 @@ namespace GKCore.Options
             if (ini == null)
                 throw new ArgumentNullException("ini");
 
-            int num = AppHost.Plugins.Count;
-            for (int i = 0; i < num; i++) {
-                var plugin = AppHost.Plugins[i];
+            try {
+                int num = AppHost.Plugins.Count;
+                for (int i = 0; i < num; i++) {
+                    var plugin = AppHost.Plugins[i];
 
-                var dlgPlugin = plugin as IDialogReplacement;
-                if (dlgPlugin != null) {
-                    var plgName = plugin.GetType().Name;
-                    ini.WriteBool("Plugins", plgName + ".Enabled", dlgPlugin.Enabled);
+                    var dlgPlugin = plugin as IDialogReplacement;
+                    if (dlgPlugin != null) {
+                        var plgName = plugin.GetType().Name;
+                        ini.WriteBool("Plugins", plgName + ".Enabled", dlgPlugin.Enabled);
+                    }
+
+                    plugin.SaveOptions(ini);
                 }
-
-                plugin.SaveOptions(ini);
+            } catch (Exception ex) {
+                Logger.WriteError("GlobalOptions.SavePluginsToFile()", ex);
             }
         }
 
         private void LoadStringList(IniFile ini, StringList list, string section, string itemPrefix = "Item_")
         {
-            int cnt = ini.ReadInteger(section, "Count", 0);
-            for (int i = 0; i < cnt; i++) {
-                list.Add(ini.ReadString(section, itemPrefix + i.ToString(), ""));
+            if (ini == null)
+                throw new ArgumentNullException("ini");
+
+            try {
+                int cnt = ini.ReadInteger(section, "Count", 0);
+                for (int i = 0; i < cnt; i++) {
+                    string st = ini.ReadString(section, itemPrefix + i.ToString(), "");
+                    if (st != "") list.Add(st);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GlobalOptions.LoadStringList()", ex);
             }
         }
 
         private void SaveStringList(IniFile ini, StringList list, string section, string itemPrefix = "Item_")
         {
-            int cnt = list.Count;
-            ini.WriteInteger(section, "Count", cnt);
-            for (int i = 0; i < cnt; i++) {
-                ini.WriteString(section, itemPrefix + i.ToString(), list[i]);
+            if (ini == null)
+                throw new ArgumentNullException("ini");
+
+            try {
+                int cnt = list.Count;
+                ini.WriteInteger(section, "Count", cnt);
+                for (int i = 0; i < cnt; i++) {
+                    ini.WriteString(section, itemPrefix + i.ToString(), list[i]);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GlobalOptions.SaveStringList()", ex);
             }
         }
 
@@ -778,28 +790,15 @@ namespace GKCore.Options
             fPedigreeOptions.LoadFromFile(ini);
             fProxy.LoadFromFile(ini);
 
-            int cnt = ini.ReadInteger("NameFilters", "Count", 0);
-            for (int i = 0; i < cnt; i++) {
-                string st = ini.ReadString("NameFilters", "Filter_" + i.ToString(), "");
-                if (st != "") fNameFilters.Add(st);
-            }
+            LoadStringList(ini, fNameFilters, "NameFilters", "Filter_");
 
-            cnt = ini.ReadInteger("ResidenceFilters", "Count", 0);
-            for (int i = 0; i < cnt; i++) {
-                fResidenceFilters.Add(ini.ReadString("ResidenceFilters", "Filter_" + i.ToString(), ""));
-            }
+            LoadStringList(ini, fResidenceFilters, "ResidenceFilters", "Filter_");
 
-            cnt = ini.ReadInteger("EventFilters", "Count", 0);
-            for (int i = 0; i < cnt; i++) {
-                fEventFilters.Add(ini.ReadString("EventFilters", "EventVal_" + i.ToString(), ""));
-            }
+            LoadStringList(ini, fEventFilters, "EventFilters", "EventVal_");
 
             LoadMRUFromFile(ini, fMRUFiles);
 
-            cnt = ini.ReadInteger("Relations", "Count", 0);
-            for (int i = 0; i < cnt; i++) {
-                fRelations.Add(ini.ReadString("Relations", "Relation_" + i.ToString(), ""));
-            }
+            LoadStringList(ini, fRelations, "Relations", "Relation_");
 
             fIndividualListColumns.LoadFromFile(ini, "PersonsColumns", optsVersion);
 
@@ -812,11 +811,7 @@ namespace GKCore.Options
             fMWinRect.Bottom = ini.ReadInteger("Common", "MWinH", -1);
             fMWinState = (WindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
 
-            cnt = ini.ReadInteger("LastBases", "Count", 0);
-            for (int i = 0; i < cnt; i++) {
-                string st = ini.ReadString("LastBases", "LB" + i.ToString(), "");
-                AddLastBase(st);
-            }
+            LoadStringList(ini, fLastBases, "LastBases", "LB");
 
             fCircleChartOptions.LoadFromFile(ini);
 
@@ -907,35 +902,19 @@ namespace GKCore.Options
 
             fNameFilters.Sort();
 
-            int cnt = fNameFilters.Count;
-            ini.WriteInteger("NameFilters", "Count", cnt);
-            for (int i = 0; i < cnt; i++) {
-                ini.WriteString("NameFilters", "Filter_" + i.ToString(), fNameFilters[i]);
-            }
+            SaveStringList(ini, fNameFilters, "NameFilters", "Filter_");
 
-            cnt = fResidenceFilters.Count;
-            ini.WriteInteger("ResidenceFilters", "Count", cnt);
-            for (int i = 0; i < cnt; i++) {
-                ini.WriteString("ResidenceFilters", "Filter_" + i.ToString(), fResidenceFilters[i]);
-            }
+            SaveStringList(ini, fResidenceFilters, "ResidenceFilters", "Filter_");
 
-            cnt = fEventFilters.Count;
-            ini.WriteInteger("EventFilters", "Count", cnt);
-            for (int i = 0; i < cnt; i++) {
-                ini.WriteString("EventFilters", "EventVal_" + i.ToString(), fEventFilters[i]);
-            }
+            SaveStringList(ini, fEventFilters, "EventFilters", "EventVal_");
 
-            cnt = fMRUFiles.Count;
+            int cnt = fMRUFiles.Count;
             ini.WriteInteger("Common", "MRUFiles_Count", cnt);
             for (int i = 0; i < cnt; i++) {
                 fMRUFiles[i].SaveToFile(ini, "MRUFile_" + i.ToString());
             }
 
-            cnt = fRelations.Count;
-            ini.WriteInteger("Relations", "Count", cnt);
-            for (int i = 0; i < cnt; i++) {
-                ini.WriteString("Relations", "Relation_" + i.ToString(), fRelations[i]);
-            }
+            SaveStringList(ini, fRelations, "Relations", "Relation_");
 
             fIndividualListColumns.SaveToFile(ini, "PersonsColumns");
 
@@ -959,11 +938,7 @@ namespace GKCore.Options
             ini.WriteInteger("Common", "MWinH", fMWinRect.Bottom);
             ini.WriteInteger("Common", "MWinState", (int)fMWinState);
 
-            cnt = fLastBases.Count;
-            ini.WriteInteger("LastBases", "Count", cnt);
-            for (int i = 0; i < cnt; i++) {
-                ini.WriteString("LastBases", "LB" + i.ToString(), fLastBases[i]);
-            }
+            SaveStringList(ini, fLastBases, "LastBases", "LB");
 
             fCircleChartOptions.SaveToFile(ini);
 

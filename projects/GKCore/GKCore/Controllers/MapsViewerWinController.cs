@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,14 +38,9 @@ namespace GKCore.Controllers
     {
         private readonly List<GeoPoint> fMapPoints;
         private readonly List<GDMRecord> fSelectedPersons;
-        private readonly List<MapPlace> fPlaces;
+        private readonly Dictionary<string, MapPlace> fPlaces;
 
         private ITVNode fBaseRoot;
-
-        public IList<MapPlace> Places
-        {
-            get { return fPlaces; }
-        }
 
         public ITVNode TreeRoot
         {
@@ -55,7 +50,7 @@ namespace GKCore.Controllers
         public MapsViewerWinController(IMapsViewerWin view, List<GDMRecord> selectedPersons) : base(view)
         {
             fMapPoints = new List<GeoPoint>();
-            fPlaces = new List<MapPlace>();
+            fPlaces = new Dictionary<string, MapPlace>();
             fSelectedPersons = selectedPersons;
         }
 
@@ -71,6 +66,8 @@ namespace GKCore.Controllers
 
         private void LoadPlacesInt(StringList personValues, IProgressController progress)
         {
+            fPlaces.Clear();
+
             GDMTree tree = fBase.Context.Tree;
             progress.Begin(LangMan.LS(LSID.LSID_LoadingLocations), tree.RecordsCount);
             try {
@@ -87,9 +84,7 @@ namespace GKCore.Controllers
                         for (int j = 0; j < num2; j++) {
                             GDMCustomEvent ev = ind.Events[j];
                             if (ev.HasPlace && !string.IsNullOrEmpty(ev.Place.StringValue)) {
-                                progress.InvokeEx(delegate {
-                                    AddPlace(ev.Place, ind, ev);
-                                });
+                                AddPlace(ev.Place, ind, ev);
                                 pCnt++;
                             }
                         }
@@ -112,13 +107,30 @@ namespace GKCore.Controllers
                 PlacesCache.Instance.Load();
                 fView.PersonsCombo.BeginUpdate();
                 fView.PlacesTree.BeginUpdate();
+                fView.PlacesTree.Clear();
                 StringList personValues = new StringList();
                 fBaseRoot = fView.PlacesTree.AddNode(null, LangMan.LS(LSID.LSID_RPLocations), null);
-                fPlaces.Clear();
 
                 AppHost.Instance.ExecuteWork((controller) => {
                     LoadPlacesInt(personValues, controller);
                 });
+
+                foreach (var kvp in fPlaces) {
+                    string placeName = kvp.Key;
+                    MapPlace mapPlace = kvp.Value;
+
+                    ITVNode node = fView.FindTreeNode(placeName);
+                    if (node == null) {
+                        node = fView.PlacesTree.AddNode(fBaseRoot, placeName, mapPlace);
+
+                        int num = mapPlace.Points.Count;
+                        for (int i = 0; i < num; i++) {
+                            GeoPoint pt = mapPlace.Points[i];
+                            string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
+                            fView.PlacesTree.AddNode(node, ptTitle, pt);
+                        }
+                    }
+                }
 
                 fView.PlacesTree.Expand(fBaseRoot);
 
@@ -145,31 +157,17 @@ namespace GKCore.Controllers
                 var locRec = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(place.Location);
                 string placeName = (locRec != null) ? locRec.LocationName : place.StringValue;
 
-                ITVNode node = fView.FindTreeNode(placeName);
                 MapPlace mapPlace;
-
-                if (node == null) {
+                if (!fPlaces.TryGetValue(placeName, out mapPlace)) {
                     mapPlace = new MapPlace();
                     mapPlace.Name = placeName;
-                    fPlaces.Add(mapPlace);
-
-                    node = fView.PlacesTree.AddNode(fBaseRoot, placeName, mapPlace);
+                    fPlaces.Add(placeName, mapPlace);
 
                     if (locRec == null) {
                         PlacesCache.Instance.GetPlacePoints(placeName, mapPlace.Points);
                     } else {
-                        GeoPoint pt = new GeoPoint(locRec.Map.Lati, locRec.Map.Long, placeName);
-                        mapPlace.Points.Add(pt);
+                        mapPlace.Points.Add(new GeoPoint(locRec.Map.Lati, locRec.Map.Long, placeName));
                     }
-
-                    int num = mapPlace.Points.Count;
-                    for (int i = 0; i < num; i++) {
-                        GeoPoint pt = mapPlace.Points[i];
-                        string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
-                        fView.PlacesTree.AddNode(node, ptTitle, pt);
-                    }
-                } else {
-                    mapPlace = (node.Tag as MapPlace);
                 }
 
                 mapPlace.PlaceRefs.Add(new PlaceRef(owner, placeEvent));
@@ -205,9 +203,8 @@ namespace GKCore.Controllers
             fView.MapBrowser.ShowLines = (ind != null && fView.LinesVisibleCheck.Checked);
             fMapPoints.Clear();
 
-            int num = fPlaces.Count;
-            for (int i = 0; i < num; i++) {
-                MapPlace place = fPlaces[i];
+            foreach (var kvp in fPlaces) {
+                MapPlace place = kvp.Value;
                 if (place.Points.Count < 1) continue;
 
                 int num2 = place.PlaceRefs.Count;

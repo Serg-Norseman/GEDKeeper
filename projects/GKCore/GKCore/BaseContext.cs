@@ -976,7 +976,7 @@ namespace GKCore
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
 
                         string targetFn = targetDir + storeFile;
-                        CopyFile(fileName, targetFn);
+                        result = CopyFile(fileName, targetFn);
                     } catch (IOException) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExists));
                         result = false;
@@ -1135,23 +1135,36 @@ namespace GKCore
             return false;
         }
 
-        public void CopyFile(string sourceFileName, string destFileName, bool showProgress = true)
+        public bool CopyFile(string sourceFileName, string destFileName, bool showProgress = true)
         {
+            bool result = false;
+
             if (showProgress) {
                 AppHost.Instance.ExecuteWork((controller) => {
                     try {
                         controller.Begin(LangMan.LS(LSID.LSID_CopyingFile), 100);
-
-                        var source = new FileInfo(sourceFileName);
-                        var target = new FileInfo(destFileName);
-                        GKUtils.CopyFile(source, target, controller);
+                        try {
+                            var source = new FileInfo(sourceFileName);
+                            var target = new FileInfo(destFileName);
+                            GKUtils.CopyFile(source, target, controller);
+                            result = true;
+                        } catch (Exception ex) {
+                            Logger.WriteError(string.Format("BaseContext.CopyFile({0}, {1})", sourceFileName, destFileName), ex);
+                        }
                     } finally {
                         controller.End();
                     }
                 });
             } else {
-                File.Copy(sourceFileName, destFileName, false);
+                try {
+                    File.Copy(sourceFileName, destFileName, false);
+                    result = true;
+                } catch (Exception ex) {
+                    Logger.WriteError(string.Format("BaseContext.CopyFile({0}, {1})", sourceFileName, destFileName), ex);
+                }
             }
+
+            return result;
         }
 
         public IImage LoadMediaImage(GDMFileReference fileReference, bool throwException)

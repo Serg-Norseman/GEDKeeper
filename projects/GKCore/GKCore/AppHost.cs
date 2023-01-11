@@ -280,12 +280,12 @@ namespace GKCore
         public void SaveLastBases()
         {
             #if !CI_MODE
-            AppHost.Options.ClearLastBases();
+            AppHost.Options.LastBases.Clear();
 
             foreach (IWindow win in fRunningForms) {
                 var baseWin = win as IBaseWindow;
                 if (baseWin != null) {
-                    AppHost.Options.AddLastBase(baseWin.Context.FileName);
+                    AppHost.Options.LastBases.Add(baseWin.Context.FileName);
                 }
             }
             #endif
@@ -785,9 +785,9 @@ namespace GKCore
             try {
                 BeginLoading();
 
-                int num = AppHost.Options.GetLastBasesCount();
+                int num = AppHost.Options.LastBases.Count;
                 for (int i = 0; i < num; i++) {
-                    string lb = AppHost.Options.GetLastBase(i);
+                    string lb = AppHost.Options.LastBases[i];
                     if (File.Exists(lb)) {
                         AppHost.Instance.CreateBase(lb);
                         result += 1;

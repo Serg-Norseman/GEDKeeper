@@ -102,7 +102,7 @@ namespace GKNavigatorPlugin
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
             GDMRecord gRecord = record as GDMRecord;
-            if (gRecord == null) return;
+            if (baseWin == null || gRecord == null) return;
 
             try {
                 string recName = GKUtils.GetRecordName(baseWin.Context.Tree, gRecord, false);
