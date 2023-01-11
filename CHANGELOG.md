@@ -1,4 +1,15 @@
 
+## 14.01.2023 [v2.23.0]
+- Fixed bugs loading places in maps.
+- Added option to display special notes to persons in the tree (user references).
+- Added option to switch the order of surnames in the tree.
+- Export to Excel has been redesigned to export directly the contents of any list of records; added export to CSV format; function renamed to "Export table".
+- Updated processing of Lua scripts; added operation to set `Primary` flag for multimedia links.
+- Fixed bug with exporting statistics to Excel.
+- Added support for themes; font options can be set in themes and alternative icons of interface elements.
+- The .NET Framework has been updated to version 4.5.2.
+- The "Calendar" plugin completely redesigned into a date converter.
+
 ## 28.11.2022 [v2.22.0]
 - Added feature "Find and Replace".
 - Fixed inconsistent display of names between list of persons and the information panel.
