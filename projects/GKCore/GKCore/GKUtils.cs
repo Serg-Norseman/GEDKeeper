@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -3052,7 +3052,7 @@ namespace GKCore
             const int Tls11 = 768;
             const int Tls12 = 3072;
                 ServicePointManager.SecurityProtocol =
-                    ServicePointManager.SecurityProtocol | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12);
+                    ServicePointManager.SecurityProtocol | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12;
 #else
                 ServicePointManager.SecurityProtocol =
                     ServicePointManager.SecurityProtocol | SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;

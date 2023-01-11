@@ -878,9 +878,10 @@ namespace GKCore.Controllers
                     mi.Text = plugin.DisplayName;
                 }
 
-                if (AppHost.Instance.HasFeatureSupport(Feature.Themes)) {
-                    var miThemes = GetControl<IMenuItem>("miThemes");
-                    miThemes.Text = LangMan.LS(LSID.LSID_Themes);
+                var miThemes = GetControl<IMenuItem>("miThemes");
+                miThemes.Text = LangMan.LS(LSID.LSID_Themes);
+                if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) {
+                    miThemes.Enabled = false;
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.SetLocale()", ex);
