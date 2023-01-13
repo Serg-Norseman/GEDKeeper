@@ -847,7 +847,9 @@ namespace GKCore.Charts
             float fsz = (float)Math.Round(fOptions.DefFontSize * fScale);
             fBoldFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, true);
             fDrawFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, false);
-            fDefCharWidth = fRenderer.GetTextWidth("a", fDrawFont);
+            if (fRenderer != null) {
+                fDefCharWidth = fRenderer.GetTextWidth("a", fDrawFont);
+            }
 
             fBranchDistance = (int)Math.Round(fOptions.BranchDistance * fScale);
             fLevelDistance = (int)Math.Round(fOptions.LevelDistance * fScale);

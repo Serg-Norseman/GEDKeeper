@@ -35,9 +35,9 @@ namespace GKUI.Components
     [ToolboxBitmap(typeof(TabControl))]
     public class GKTabControl : TabControl
     {
-        private TabControlAppearance fAppearance;
+        private readonly TabControlAppearance fAppearance;
 
-        public TabControlAppearance Appearance
+        public new TabControlAppearance Appearance
         {
             get { return fAppearance; }
         }

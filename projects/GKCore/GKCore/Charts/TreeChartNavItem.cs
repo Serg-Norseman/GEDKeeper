@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,9 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma warning disable CS0659, CS0661
-
 using System;
+using System.Collections.Generic;
 using GDModel;
 
 namespace GKCore.Charts
@@ -44,6 +43,16 @@ namespace GKCore.Charts
         public bool Equals(TreeChartNavItem other)
         {
             return (other != null) && IndiRec == other.IndiRec && ChartKind == other.ChartKind;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked {
+                int hashCode = -846288654;
+                hashCode = hashCode * -1521134295 + EqualityComparer<GDMIndividualRecord>.Default.GetHashCode(IndiRec);
+                hashCode = hashCode * -1521134295 + ChartKind.GetHashCode();
+                return hashCode;
+            }
         }
 
         public static bool operator ==(TreeChartNavItem item, TreeChartNavItem other)
