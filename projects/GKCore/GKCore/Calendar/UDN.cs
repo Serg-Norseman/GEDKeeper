@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2016 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2016-2023 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,8 +19,9 @@
  */
 
 using System;
+using BSLib;
 
-namespace BSLib.Calendar
+namespace GKCore.Calendar
 {
     public enum UDNCalendarType { ctGregorian, ctJulian, ctHebrew, ctIslamic }
 

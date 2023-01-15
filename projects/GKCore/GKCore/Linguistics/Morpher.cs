@@ -1,6 +1,6 @@
 /*
- *  "BSLib.Linguistics".
- *  Copyright (C) 2015 by Serg V. Zhdanovskih.
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2015-2023 by Serg V. Zhdanovskih.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 using System;
 using System.Text;
 
-namespace BSLib.Linguistics.Grammar
+namespace GKCore.Linguistics.Grammar
 {
     public enum Declension
     {

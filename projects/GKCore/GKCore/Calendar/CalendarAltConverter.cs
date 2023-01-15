@@ -5,7 +5,7 @@
 
 using System;
 
-namespace BSLib.Calendar
+namespace GKCore.Calendar
 {
     /// <summary>
     /// 
