@@ -306,6 +306,10 @@ Section "$(gkreq)"
     SetOutPath "$INSTDIR\samples"
     File "..\samples\*.*"
 
+    CreateDirectory "$INSTDIR\themes"
+    SetOutPath "$INSTDIR\themes"
+    File "..\themes\*.*"
+
     CreateDirectory "$SMPROGRAMS\GEDKeeper2"
     SetOutPath "$INSTDIR\bin"
     CreateShortCut "$SMPROGRAMS\GEDKeeper2\GKTray.lnk" "$INSTDIR\bin\GKTray.exe" "" "$INSTDIR\bin\GKTray.exe" 0
@@ -624,6 +628,9 @@ Section "Uninstall"
 
     Delete "$INSTDIR\samples\*.*"
     RMDir "$INSTDIR\samples"
+
+    Delete "$INSTDIR\themes\*.*"
+    RMDir "$INSTDIR\themes"
 
     ; Remove shortcuts, if any
     Delete "$SMPROGRAMS\GEDKeeper2\*.*"
