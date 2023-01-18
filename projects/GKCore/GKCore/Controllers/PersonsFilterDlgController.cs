@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -137,6 +137,7 @@ namespace GKCore.Controllers
             fView.ResidenceCombo.AddStrings(options.ResidenceFilters);
 
             fView.EventValCombo.Clear();
+            fView.EventValCombo.Add("*");
             fView.EventValCombo.AddStrings(options.EventFilters);
 
             int lifeSel;

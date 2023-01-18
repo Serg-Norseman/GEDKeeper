@@ -27,7 +27,7 @@
  * Copyright (c) 1998, 1999 by Lawrence Philips.
  */
 
-namespace GKStdReports
+namespace GKCore.Linguistics
 {
     /// <summary>Subclass of DoubleMetaphone, Adam Nelson's (anelson@nullpointer.net)
     ///     C# implementation of Lawrence Phillips' Double Metaphone algorithm,

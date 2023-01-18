@@ -16,31 +16,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Linguistics.Grammar;
 using NUnit.Framework;
 
 namespace GKCore.Linguistics
 {
     [TestFixture]
-    public class BaseMorpherTests
+    public class MorpherTests
     {
         [Test]
         public void Test_BaseMorpher_Transliterate()
         {
-            Assert.AreEqual("Zhdanovskikh", BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "Ждановских"));
-            Assert.AreEqual("ZHDANOVSKIKH", BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ЖДАНОВСКИХ"));
+            Assert.AreEqual("Zhdanovskikh", Morpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "Ждановских"));
+            Assert.AreEqual("ZHDANOVSKIKH", Morpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ЖДАНОВСКИХ"));
 
-            Assert.AreEqual("Ждановских", BaseMorpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "Zhdanovskikh"));
-            Assert.AreEqual("ЖДАНОВСКИХ", BaseMorpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZHDANOVSKIKH"));
+            Assert.AreEqual("Ждановских", Morpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "Zhdanovskikh"));
+            Assert.AreEqual("ЖДАНОВСКИХ", Morpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZHDANOVSKIKH"));
 
-            Assert.AreEqual("ЖдАноВскИх", BaseMorpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZhdAnoVskIkh"));
-            Assert.AreEqual("ZHDANOVSKIKH", BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ZHDANOVSKIKH"));
+            Assert.AreEqual("ЖдАноВскИх", Morpher.Transliterate(TranslitScheme.ts_GOST, TranslitScheme.ts_Russian, "ZhdAnoVskIkh"));
+            Assert.AreEqual("ZHDANOVSKIKH", Morpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, "ZHDANOVSKIKH"));
         }
 
         [Test]
         public void Test_BaseMorpher_SpellNumber()
         {
-            Assert.AreEqual("сто двадцать три", BaseMorpher.SpellNumber(123));
+            Assert.AreEqual("сто двадцать три", Morpher.SpellNumber(123));
         }
 
         [Test]

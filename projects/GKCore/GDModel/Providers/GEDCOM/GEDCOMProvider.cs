@@ -2356,19 +2356,24 @@ namespace GDModel.Providers.GEDCOM
 
         private static void WritePersonalNamePieces(StreamWriter stream, int level, GDMPersonalName persName)
         {
-            // given and surname are always included in the NAME tag, and without NAME modification tags - not required
+            // Given (first + middle (second and subsequent) name) and surname are always included in the NAME tag,
+            // and without modification tags of NAME - not required.
+            // The second and subsequent parts of the middle name (patronymic) can be extracted from given name if necessary.
             if (KeepRichNames ||
-                !string.IsNullOrEmpty(persName.NamePrefix) || !string.IsNullOrEmpty(persName.SurnamePrefix) ||
-                !string.IsNullOrEmpty(persName.NameSuffix) || !string.IsNullOrEmpty(persName.PatronymicName)) {
+                !string.IsNullOrEmpty(persName.NamePrefix) || !string.IsNullOrEmpty(persName.SurnamePrefix) || !string.IsNullOrEmpty(persName.NameSuffix)) {
                 WriteTagLine(stream, level, GEDCOMTagName.SURN, persName.Surname, true);
                 WriteTagLine(stream, level, GEDCOMTagName.GIVN, persName.Given, true);
+                WriteTagLine(stream, level, GEDCOMTagName._PATN, persName.PatronymicName, true);
             }
 
-            WriteTagLine(stream, level, GEDCOMTagName._PATN, persName.PatronymicName, true);
+            // Name modifier tags that, by standard, can be included in the NAME string (other than nickname), but cannot be unambiguously extracted from it.
+            // Therefore, if they are, the main parts must also be in the file for an unambiguous interpretation.
             WriteTagLine(stream, level, GEDCOMTagName.NPFX, persName.NamePrefix, true);
             WriteTagLine(stream, level, GEDCOMTagName.NICK, persName.Nickname, true);
             WriteTagLine(stream, level, GEDCOMTagName.SPFX, persName.SurnamePrefix, true);
             WriteTagLine(stream, level, GEDCOMTagName.NSFX, persName.NameSuffix, true);
+
+            // Extended parts of the name, missing by the standard
             WriteTagLine(stream, level, GEDCOMTagName._MARN, persName.MarriedName, true);
             WriteTagLine(stream, level, GEDCOMTagName._RELN, persName.ReligiousName, true);
             WriteTagLine(stream, level, GEDCOMTagName._CENN, persName.CensusName, true);

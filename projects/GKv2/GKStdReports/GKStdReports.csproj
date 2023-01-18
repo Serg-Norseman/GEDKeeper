@@ -33,7 +33,6 @@
   <ItemGroup>
     <Compile Include="AncestorStatisticsReport.cs" />
     <Compile Include="ContemporariesReport.cs" />
-    <Compile Include="DoubleMetaphone.cs" />
     <Compile Include="GKStdReports.cs" />
     <Compile Include="PersonalEventsReport.cs" />
     <Compile Include="NamesFreqReport.cs" />
@@ -41,7 +40,6 @@
     <Compile Include="PlacesReport.cs" />
     <Compile Include="ReportExporterEx.cs" />
     <Compile Include="RepositoriesReport.cs" />
-    <Compile Include="ShortDoubleMetaphone.cs" />
     <Compile Include="SourcesReport.cs" />
   </ItemGroup>
   <ItemGroup>

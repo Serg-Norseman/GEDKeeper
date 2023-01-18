@@ -20,7 +20,7 @@
 
 using System;
 using GDModel;
-using GKCore.Linguistics.Grammar;
+using GKCore.Linguistics;
 
 namespace GKCore.Cultures
 {

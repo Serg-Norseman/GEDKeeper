@@ -78,7 +78,6 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="GKCore\Calendar\CalendarAltConverter.cs" />
     <Compile Include="GKCore\Calendar\CalendarConverter.cs" />
     <Compile Include="GKCore\Calendar\CalendarData.cs" />
     <Compile Include="GKCore\Calendar\UDN.cs" />
@@ -263,8 +262,9 @@
     <Compile Include="GKCore\Interfaces\IWidget.cs" />
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
     <Compile Include="GKCore\JsonHelper.cs" />
-    <Compile Include="GKCore\Linguistics\BaseMorpher.cs" />
+    <Compile Include="GKCore\Linguistics\DoubleMetaphone.cs" />
     <Compile Include="GKCore\Linguistics\Morpher.cs" />
+    <Compile Include="GKCore\Linguistics\ShortDoubleMetaphone.cs" />
     <Compile Include="GKCore\Logger.cs" />
     <Compile Include="GKCore\Maps\GeoPoint.cs" />
     <Compile Include="GKCore\Maps\GoogleGeocoder.cs" />
@@ -514,9 +514,6 @@
     <EmbeddedResource Include="Resources\pnl_video.png" />
     <EmbeddedResource Include="Resources\btn_info.gif" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKCore\Calendar" />
-    <Folder Include="GKCore\Linguistics" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

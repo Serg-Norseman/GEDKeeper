@@ -118,7 +118,7 @@
     <Compile Include="GKComponents\TreeChartBoxTests.cs" />
     <Compile Include="GKCore\AppHostTests.cs" />
     <Compile Include="GKCore\BaseContextTests.cs" />
-    <Compile Include="GKCore\BaseMorpherTests.cs" />
+    <Compile Include="GKCore\MorpherTests.cs" />
     <Compile Include="GKCore\BBTextParserTests.cs" />
     <Compile Include="GKCore\CalendarTests.cs" />
     <Compile Include="GKCore\ChartsTests.cs" />

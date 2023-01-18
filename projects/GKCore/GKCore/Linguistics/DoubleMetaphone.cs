@@ -27,7 +27,7 @@
 using System;
 using System.Text;
 
-namespace GKStdReports
+namespace GKCore.Linguistics
 {
     /// <summary>Implements the Double Metaphone phonetic matching algorithm published
     ///     by Lawrence Phillips in June 2000 C/C++ Users Journal.

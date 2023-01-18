@@ -24,7 +24,7 @@ using GDModel;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
-using GKCore.Linguistics.Grammar;
+using GKCore.Linguistics;
 
 namespace GKStdReports
 {
@@ -64,7 +64,7 @@ namespace GKStdReports
             for (int i = 0; i < surnames.Count; i++) {
                 string item = surnames[i];
                 string primaryKey = "", alternateKey = "";
-                string translit = BaseMorpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, item);
+                string translit = Morpher.Transliterate(TranslitScheme.ts_Russian, TranslitScheme.ts_GOST, item);
                 DoubleMetaphone.doubleMetaphone(translit, ref primaryKey, ref alternateKey);
                 fWriter.AddListItem(" " + item + "\t" + translit + "\t" + primaryKey + "\t" + alternateKey, textFont);
             }
