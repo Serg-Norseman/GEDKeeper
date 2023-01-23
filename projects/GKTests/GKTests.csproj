@@ -40,9 +40,6 @@
     <Reference Include="BSLib.Design.WFHandlers">
       <HintPath>..\libs\BSLib.Design.WFHandlers.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.Linguistics">
-      <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
-    </Reference>
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>

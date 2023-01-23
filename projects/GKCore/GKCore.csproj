@@ -39,9 +39,6 @@
     <Reference Include="BSLib.Design">
       <HintPath>..\libs\BSLib.Design.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.Linguistics">
-      <HintPath>..\libs\BSLib.Linguistics.dll</HintPath>
-    </Reference>
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>

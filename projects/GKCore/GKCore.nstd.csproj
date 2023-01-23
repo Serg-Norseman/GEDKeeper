@@ -35,9 +35,6 @@
     <Reference Include="BSLib.Design">
       <HintPath>..\libs\netstd\BSLib.Design.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.Linguistics">
-      <HintPath>..\libs\netstd\BSLib.Linguistics.dll</HintPath>
-    </Reference>
     <Reference Include="RtfWriter">
       <HintPath>..\libs\netstd\RtfWriter.dll</HintPath>
     </Reference>

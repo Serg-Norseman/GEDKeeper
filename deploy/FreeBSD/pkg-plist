@@ -1,7 +1,5 @@
 bin/gedkeeper
-%%DATADIR%%/ArborGVT.dll
-%%DATADIR%%/BSLib.Linguistics.dll
-%%DATADIR%%/BSLib.SmartGraph.dll
+%%DATADIR%%/BSLib.DataViz.Model.dll
 %%DATADIR%%/BSLib.dll
 %%DATADIR%%/RtfWriter.dll
 %%DATADIR%%/ExcelLibrary.dll
@@ -299,11 +297,8 @@ bin/gedkeeper
 %%DATADIR%%/locales/special/GKPedigreeImporterPlugin_manual_ru.docx
 %%DATADIR%%/locales/ukrainian.lng
 %%DATADIR%%/nVLC.dll
-%%DATADIR%%/plugins/ArborGVT.dll
 %%DATADIR%%/plugins/BSLib.DataViz.Model.dll
 %%DATADIR%%/plugins/BSLib.DataViz.WFControls.dll
-%%DATADIR%%/plugins/BSLib.Linguistics.dll
-%%DATADIR%%/plugins/BSLib.SmartGraph.dll
 %%DATADIR%%/plugins/BSLib.dll
 %%DATADIR%%/plugins/RtfWriter.dll
 %%DATADIR%%/plugins/ExcelLibrary.dll
