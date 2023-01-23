@@ -2021,8 +2021,12 @@ namespace GKCore.Charts
             bool result = true;
             if (!GlobalOptions.Instance.CheckTreeSize) return result;
 
+            var chartOptions = GlobalOptions.Instance.TreeChartOptions;
+
             if (chartKind == TreeChartKind.ckAncestors || chartKind == TreeChartKind.ckBoth) {
-                int ancCount = GKUtils.GetAncestorsCount(tree, iRec);
+                int ancestorsLimit = (!chartOptions.SeparateDepth) ? chartOptions.DepthLimit : chartOptions.DepthLimitAncestors;
+
+                int ancCount = GKUtils.GetAncestorsCount(tree, iRec, ancestorsLimit);
                 if (ancCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
                     return false;
@@ -2030,7 +2034,9 @@ namespace GKCore.Charts
             }
 
             if (chartKind >= TreeChartKind.ckDescendants && chartKind <= TreeChartKind.ckBoth) {
-                int descCount = GKUtils.GetDescendantsCount(tree, iRec);
+                int descendantsLimit = (!chartOptions.SeparateDepth) ? chartOptions.DepthLimit : chartOptions.DepthLimitDescendants;
+
+                int descCount = GKUtils.GetDescendantsCount(tree, iRec, descendantsLimit);
                 if (descCount > 2048) {
                     AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
                     result = false;

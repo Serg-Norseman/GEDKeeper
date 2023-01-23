@@ -1223,14 +1223,16 @@ namespace GKCore
 
         #region Individual functions
 
-        public static int GetAncestorsCount(GDMTree tree, GDMIndividualRecord iRec)
+        public static int GetAncestorsCount(GDMTree tree, GDMIndividualRecord iRec, int ancestorsLimit = -1)
         {
             var indiCounters = new GKVarCache<GDMIndividualRecord, int>(-1);
-            return GetAncestorsCount(tree, iRec, indiCounters);
+            return GetAncestorsCount(tree, iRec, indiCounters, 0, ancestorsLimit);
         }
 
-        private static int GetAncestorsCount(GDMTree tree, GDMIndividualRecord iRec, GKVarCache<GDMIndividualRecord, int> counters)
+        private static int GetAncestorsCount(GDMTree tree, GDMIndividualRecord iRec, GKVarCache<GDMIndividualRecord, int> counters, int gen, int ancestorsLimit)
         {
+            if (ancestorsLimit != -1 && gen > ancestorsLimit) return 0;
+
             int result = 0;
 
             if (iRec != null) {
@@ -1244,10 +1246,10 @@ namespace GKCore
                         GDMIndividualRecord anc;
 
                         anc = tree.GetPtrValue(family.Husband);
-                        val += GetAncestorsCount(tree, anc, counters);
+                        val += GetAncestorsCount(tree, anc, counters, gen + 1, ancestorsLimit);
 
                         anc = tree.GetPtrValue(family.Wife);
-                        val += GetAncestorsCount(tree, anc, counters);
+                        val += GetAncestorsCount(tree, anc, counters, gen + 1, ancestorsLimit);
                     }
 
                     counters[iRec] = val;
@@ -1259,14 +1261,16 @@ namespace GKCore
             return result;
         }
 
-        public static int GetDescendantsCount(GDMTree tree, GDMIndividualRecord iRec)
+        public static int GetDescendantsCount(GDMTree tree, GDMIndividualRecord iRec, int descendantsLimit = -1)
         {
             var indiCounters = new GKVarCache<GDMIndividualRecord, int>(-1);
-            return GetDescendantsCount(tree, iRec, indiCounters);
+            return GetDescendantsCount(tree, iRec, indiCounters, 0, descendantsLimit);
         }
 
-        private static int GetDescendantsCount(GDMTree tree, GDMIndividualRecord iRec, GKVarCache<GDMIndividualRecord, int> counters)
+        private static int GetDescendantsCount(GDMTree tree, GDMIndividualRecord iRec, GKVarCache<GDMIndividualRecord, int> counters, int gen, int descendantsLimit)
         {
+            if (descendantsLimit != -1 && gen > descendantsLimit) return 0;
+
             int result = 0;
 
             if (iRec != null) {
@@ -1281,7 +1285,7 @@ namespace GKCore
                         int num2 = family.Children.Count;
                         for (int j = 0; j < num2; j++) {
                             GDMIndividualRecord child = tree.GetPtrValue(family.Children[j]);
-                            val += GetDescendantsCount(tree, child, counters);
+                            val += GetDescendantsCount(tree, child, counters, gen + 1, descendantsLimit);
                         }
                     }
                     counters[iRec] = val;
