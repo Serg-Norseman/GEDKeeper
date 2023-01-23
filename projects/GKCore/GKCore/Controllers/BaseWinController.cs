@@ -715,6 +715,7 @@ namespace GKCore.Controllers
                 GDMRecordType rt = (curBase == null) ? GDMRecordType.rtNone : curBase.GetSelectedRecordType();
                 bool baseEn = (rt != GDMRecordType.rtNone);
                 bool indivEn = baseEn && rt == GDMRecordType.rtIndividual;
+                bool ifEn = baseEn && (rt == GDMRecordType.rtIndividual || rt == GDMRecordType.rtFamily);
 
                 GetControl<IMenuItem>("miFileSave").Enabled = baseEn || (curChart != null);
                 GetControl<IMenuItem>("miFileSaveAs").Enabled = GetControl<IMenuItem>("miFileSave").Enabled;
@@ -729,9 +730,9 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miSearch").Enabled = (workWin != null && workWin.AllowQuickSearch());
 
                 GetControl<IMenuItem>("miPedigree").Enabled = indivEn;
-                GetControl<IMenuItem>("miTreeAncestors").Enabled = indivEn;
-                GetControl<IMenuItem>("miTreeDescendants").Enabled = indivEn;
-                GetControl<IMenuItem>("miTreeBoth").Enabled = indivEn;
+                GetControl<IMenuItem>("miTreeAncestors").Enabled = ifEn;
+                GetControl<IMenuItem>("miTreeDescendants").Enabled = ifEn;
+                GetControl<IMenuItem>("miTreeBoth").Enabled = ifEn;
                 GetControl<IMenuItem>("miPedigree_dAboville").Enabled = indivEn;
                 GetControl<IMenuItem>("miPedigree_Konovalov").Enabled = indivEn;
                 GetControl<IMenuItem>("miStats").Enabled = baseEn;
@@ -1121,9 +1122,26 @@ namespace GKCore.Controllers
             }
         }
 
+        private GDMIndividualRecord GetSelectedPersonVar()
+        {
+            var selRec = GetSelectedRecordEx();
+
+            if (selRec is GDMFamilyRecord) {
+                var famRec = (GDMFamilyRecord)selRec;
+                var tree = fContext.Tree;
+
+                selRec = tree.GetPtrValue(famRec.Husband);
+                if (selRec == null) {
+                    selRec = tree.GetPtrValue(famRec.Wife);
+                }
+            }
+
+            return selRec as GDMIndividualRecord;
+        }
+
         public void ShowTreeChart(TreeChartKind chartKind)
         {
-            BaseController.ShowTreeChart(fView, GetSelectedPerson(), chartKind);
+            BaseController.ShowTreeChart(fView, GetSelectedPersonVar(), chartKind);
         }
 
         public void ShowCircleChart(CircleChartType chartKind)
