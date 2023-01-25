@@ -1639,6 +1639,12 @@ namespace GKCore
             return appPath + "locales" + Path.DirectorySeparatorChar;
         }
 
+        public static string GetCulturesPath()
+        {
+            string appPath = GetLangsPath();
+            return appPath + "cultures" + Path.DirectorySeparatorChar;
+        }
+
         public static string GetHelpPath(string langSign)
         {
             string appPath = GetLangsPath();

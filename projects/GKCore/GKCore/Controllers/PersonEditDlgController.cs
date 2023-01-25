@@ -315,8 +315,8 @@ namespace GKCore.Controllers
             }
 
             var locked = (fView.RestrictionCombo.SelectedIndex == (int) GDMRestriction.rnLocked);
-            fView.Patronymic.Enabled = !locked && culture.HasPatronymic();
-            fView.Surname.Enabled = !locked && culture.HasSurname();
+            fView.Patronymic.Enabled = !locked && culture.HasPatronymic;
+            fView.Surname.Enabled = !locked && culture.HasSurname;
         }
 
         public void UpdatePortrait(bool totalUpdate)
@@ -365,7 +365,7 @@ namespace GKCore.Controllers
                             } else {
                                 fView.Surname.Text = parts.Surname;
                             }
-                            if (culture.HasPatronymic()) {
+                            if (culture.HasPatronymic) {
                                 AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GDMSex.svMale));
                                 AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GDMSex.svFemale));
                                 fView.Patronymic.Text = namesTable.GetPatronymicByName(parts.Name, sx);
@@ -376,7 +376,7 @@ namespace GKCore.Controllers
                             switch (sx) {
                                 case GDMSex.svMale:
                                     fView.Surname.Text = parts.Surname;
-                                    if (culture.HasPatronymic()) {
+                                    if (culture.HasPatronymic) {
                                         fView.Name.Text = namesTable.GetNameByPatronymic(parts.Patronymic);
                                     }
                                     break;

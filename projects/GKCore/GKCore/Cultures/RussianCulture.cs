@@ -31,16 +31,9 @@ namespace GKCore.Cultures
     {
         public RussianCulture()
         {
-        }
-
-        public override bool HasPatronymic()
-        {
-            return true;
-        }
-
-        public override bool HasSurname()
-        {
-            return true;
+            // default values
+            HasPatronymic = true;
+            HasSurname = true;
         }
 
         private static string GetMaidenSurname(string surname)

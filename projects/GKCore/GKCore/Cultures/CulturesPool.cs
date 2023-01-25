@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
+using System.IO;
 using GDModel;
 using GKCore.Interfaces;
 
@@ -44,7 +46,7 @@ namespace GKCore.Cultures
 
         private static ICulture CreateCulture(GDMLanguageID langID)
         {
-            ICulture culture;
+            DefaultCulture culture;
             switch (langID) {
                 case GDMLanguageID.Russian:
                 case GDMLanguageID.Ukrainian:
@@ -100,7 +102,40 @@ namespace GKCore.Cultures
             }
 
             culture.Language = langID;
+            LoadSettings(culture);
             return culture;
+        }
+
+        private static void LoadSettings(DefaultCulture culture)
+        {
+            string fileName = GKUtils.GetCulturesPath() + culture.Language.ToString() + ".yaml";
+            if (!File.Exists(fileName)) return;
+
+            try {
+                CultureSettings cultureSettings;
+                using (var reader = new StreamReader(fileName)) {
+                    string content = reader.ReadToEnd();
+                    cultureSettings = YamlHelper.Deserialize<CultureSettings>(content);
+                }
+
+                if (cultureSettings != null) {
+                    culture.HasPatronymic = cultureSettings.HasPatronymic;
+                    culture.HasSurname = cultureSettings.HasSurname;
+                }
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("CulturesPool.LoadSettings({0})", fileName), ex);
+            }
+        }
+
+        private sealed class CultureSettings
+        {
+            public string Language { get; set; }
+            public bool HasPatronymic { get; set; }
+            public bool HasSurname { get; set; }
+
+            public CultureSettings()
+            {
+            }
         }
     }
 }

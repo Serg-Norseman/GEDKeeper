@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,16 +27,9 @@ namespace GKCore.Cultures
     {
         public SwedishCulture()
         {
-        }
-
-        public override bool HasPatronymic()
-        {
-            return false;
-        }
-
-        public override bool HasSurname()
-        {
-            return true;
+            // default values
+            HasPatronymic = false;
+            HasSurname = true;
         }
     }
 }

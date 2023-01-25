@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,8 +36,8 @@ namespace GKCore.Interfaces
     {
         GDMLanguageID Language { get; set; }
 
-        bool HasPatronymic();
-        bool HasSurname();
+        bool HasPatronymic { get; }
+        bool HasSurname { get; }
 
         string NormalizeSurname(string sn, bool aFemale);
         string GetMarriedSurname(string husbSurname);

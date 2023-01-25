@@ -370,13 +370,13 @@ namespace GKCore
 
             fContext.Tree.Header.Language = GDMLanguageID.Armenian;
             Assert.IsInstanceOf(typeof(ArmenianCulture), fContext.Culture);
-            Assert.IsTrue(fContext.Culture.HasPatronymic());
-            Assert.IsTrue(fContext.Culture.HasSurname());
+            Assert.IsTrue(fContext.Culture.HasPatronymic);
+            Assert.IsTrue(fContext.Culture.HasSurname);
 
             fContext.Tree.Header.Language = GDMLanguageID.Turkish;
             Assert.IsInstanceOf(typeof(TurkishCulture), fContext.Culture);
-            Assert.IsFalse(fContext.Culture.HasPatronymic());
-            Assert.IsTrue(fContext.Culture.HasSurname());
+            Assert.IsFalse(fContext.Culture.HasPatronymic);
+            Assert.IsTrue(fContext.Culture.HasSurname);
 
             fContext.Tree.Header.Language = GDMLanguageID.French;
             Assert.IsInstanceOf(typeof(FrenchCulture), fContext.Culture);
@@ -389,8 +389,8 @@ namespace GKCore
 
             fContext.Tree.Header.Language = GDMLanguageID.Mandrin;
             Assert.IsInstanceOf(typeof(ChineseCulture), fContext.Culture);
-            Assert.IsFalse(fContext.Culture.HasPatronymic());
-            Assert.IsTrue(fContext.Culture.HasSurname());
+            Assert.IsFalse(fContext.Culture.HasPatronymic);
+            Assert.IsTrue(fContext.Culture.HasSurname);
         }
 
         private void TransactionEventHandler(object sender, TransactionType type)

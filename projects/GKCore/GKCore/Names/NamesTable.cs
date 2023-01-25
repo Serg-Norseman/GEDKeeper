@@ -226,7 +226,7 @@ namespace GKCore.Names
             if (persName == null) return;
 
             ICulture culture = GKUtils.DefineCulture(context.Tree, persName);
-            if (culture == null || !culture.HasPatronymic()) return;
+            if (culture == null || !culture.HasPatronymic) return;
 
             try {
                 var parts = GKUtils.GetNameParts(context.Tree, iRec, persName, false);

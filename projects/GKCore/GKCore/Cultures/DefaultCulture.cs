@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,12 +32,13 @@ namespace GKCore.Cultures
     {
         public GDMLanguageID Language { get; set; }
 
+        public bool HasPatronymic { get; protected internal set; }
+        public bool HasSurname { get; protected internal set; }
+
+
         protected DefaultCulture()
         {
         }
-
-        public abstract bool HasPatronymic();
-        public abstract bool HasSurname();
 
         public virtual string NormalizeSurname(string sn, bool aFemale)
         {
@@ -89,7 +90,7 @@ namespace GKCore.Cultures
             if (personalName == null)
                 throw new ArgumentNullException("personalName");
 
-            bool hasPatronymic = HasPatronymic();
+            bool hasPatronymic = HasPatronymic;
 
             string surname = personalName.Surname;
             string marriedSurname = personalName.MarriedName;

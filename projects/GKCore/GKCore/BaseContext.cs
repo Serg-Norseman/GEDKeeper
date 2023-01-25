@@ -570,7 +570,7 @@ namespace GKCore
         public string DefinePatronymic(string name, GDMSex sex, bool confirm)
         {
             ICulture culture = this.Culture;
-            if (!culture.HasPatronymic()) return string.Empty;
+            if (!culture.HasPatronymic) return string.Empty;
 
             string result = "";
 

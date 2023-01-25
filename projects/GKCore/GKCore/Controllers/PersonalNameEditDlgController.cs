@@ -122,8 +122,8 @@ namespace GKCore.Controllers
             }
 
             ICulture culture = parts.Culture;
-            fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname();
-            fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic();
+            fView.Surname.Enabled = fView.Surname.Enabled && culture.HasSurname;
+            fView.Patronymic.Enabled = fView.Patronymic.Enabled && culture.HasPatronymic;
 
             GDMLanguageID langID = fPersonalName.Language;
             fView.Language.Text = GEDCOMUtils.GetLanguageStr(langID);
@@ -133,8 +133,8 @@ namespace GKCore.Controllers
         {
             var selectedLanguageId = GetSelectedLanguageID();
             var culture = CulturesPool.DefineCulture(selectedLanguageId);
-            fView.Surname.Enabled = culture.HasSurname();
-            fView.Patronymic.Enabled = culture.HasPatronymic();
+            fView.Surname.Enabled = culture.HasSurname;
+            fView.Patronymic.Enabled = culture.HasPatronymic;
         }
 
         private GDMLanguageID GetSelectedLanguageID()
