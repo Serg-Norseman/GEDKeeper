@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,22 +73,27 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fTaskRecord.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
-                fTaskRecord.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
-                fTaskRecord.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
-
                 GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
                 switch (gt) {
                     case GDMGoalType.gtIndividual:
                     case GDMGoalType.gtFamily:
                     case GDMGoalType.gtSource:
-                        fTaskRecord.Goal = GEDCOMUtils.EncloseXRef(fTempRec.XRef);
+                        if (fTempRec == null) {
+                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoGoalRecordSpecified));
+                            return false;
+                        } else {
+                            fTaskRecord.Goal = GEDCOMUtils.EncloseXRef(fTempRec.XRef);
+                        }
                         break;
 
                     case GDMGoalType.gtOther:
                         fTaskRecord.Goal = fView.Goal.Text;
                         break;
                 }
+
+                fTaskRecord.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
+                fTaskRecord.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
+                fTaskRecord.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
 
                 fLocalUndoman.Commit();
 

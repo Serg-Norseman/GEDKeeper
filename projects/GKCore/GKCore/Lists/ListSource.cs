@@ -322,7 +322,14 @@ namespace GKCore.Lists
             bool res = true;
 
             try {
-                object dataval = GetColumnValueEx(fcond.ColumnIndex, -1, false);
+                object dataval;
+                try {
+                    dataval = GetColumnValueEx(fcond.ColumnIndex, -1, false);
+                } catch (Exception ex) {
+                    Logger.WriteError("ListSource.CheckCondition()", ex);
+                    dataval = null;
+                }
+
                 if (dataval == null)
                     return true;
 
@@ -520,7 +527,13 @@ namespace GKCore.Lists
         public object GetColumnValue(int colIndex, bool isVisible)
         {
             MapColumnRec colrec = fColumnsMap[colIndex];
-            object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, isVisible);
+            object val;
+            try {
+                val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, isVisible);
+            } catch (Exception ex) {
+                Logger.WriteError("ListSource.GetColumnValue()", ex);
+                val = "#"; // error sign!
+            }
 
             if (isVisible) {
                 ListColumn cs = fListColumns[colrec.ColType];

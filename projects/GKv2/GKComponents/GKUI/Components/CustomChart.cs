@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -154,10 +154,10 @@ namespace GKUI.Components
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             if (Keys.None == ModifierKeys) {
-                VerticalScroll.Value = Math.Max(VerticalScroll.Value - e.Delta, 0);
+                VerticalScroll.Value = Algorithms.CheckBounds(VerticalScroll.Value - e.Delta, VerticalScroll.Minimum, VerticalScroll.Maximum);
                 PerformLayout();
             } else if (Keys.Shift == ModifierKeys) {
-                HorizontalScroll.Value = Math.Max(HorizontalScroll.Value - e.Delta, 0);
+                HorizontalScroll.Value = Algorithms.CheckBounds(HorizontalScroll.Value - e.Delta, HorizontalScroll.Minimum, HorizontalScroll.Maximum);
                 PerformLayout();
             } else {
                 base.OnMouseWheel(e);

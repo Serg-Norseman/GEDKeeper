@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,7 @@ using System.Drawing.Imaging;
 using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
+using GKCore;
 using GKCore.Charts;
 using GKUI.Components;
 
@@ -37,6 +38,8 @@ namespace GKUI.Platform
     public sealed class WFGfxRenderer : ChartRenderer
     {
         private Graphics fCanvas;
+        private ColorMatrix fColorMatrix;
+        private ImageAttributes fImageAttributes; // FIXME: disposable!
         private readonly Stack<Matrix> fTransforms;
         private float fTranslucent;
 
@@ -79,15 +82,12 @@ namespace GKUI.Platform
         public override void DrawImage(IImage image, float x, float y,
                                        float width, float height, string imName)
         {
-            var sdImage = ((ImageHandler)image).Handle;
-
-            using (var attributes = new ImageAttributes()) {
-                ColorMatrix matrix = new ColorMatrix();
-                matrix.Matrix33 = 1 - fTranslucent; // opacity 0 = completely transparent, 1 = completely opaque
-
-                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            try {
+                var sdImage = ((ImageHandler)image).Handle;
                 var destRect = new Rectangle((int)x, (int)y, (int)width, (int)height);
-                fCanvas.DrawImage(sdImage, destRect, 0, 0, sdImage.Width, sdImage.Height, GraphicsUnit.Pixel, attributes);
+                fCanvas.DrawImage(sdImage, destRect, 0, 0, sdImage.Width, sdImage.Height, GraphicsUnit.Pixel, fImageAttributes);
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("WFGfxRenderer.DrawImage({0})", imName), ex);
             }
         }
 
@@ -273,6 +273,15 @@ namespace GKUI.Platform
         public override void SetTranslucent(float value)
         {
             fTranslucent = Algorithms.CheckBounds(value, 0.0f, 1.0f);
+
+            fColorMatrix = new ColorMatrix();
+            fColorMatrix.Matrix33 = 1 - fTranslucent; // opacity 0 = completely transparent, 1 = completely opaque
+
+            if (fImageAttributes != null)
+                fImageAttributes.Dispose();
+
+            fImageAttributes = new ImageAttributes();
+            fImageAttributes.SetColorMatrix(fColorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
         }
 
         public override void ScaleTransform(float sx, float sy)

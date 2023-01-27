@@ -187,7 +187,9 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     task = fBaseWin.Context.SelectRecord(GDMRecordType.rtTask, null) as GDMTaskRecord;
-                    result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, research, task);
+                    if (task != null) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, research, task);
+                    }
                     break;
 
                 case RecordAction.raEdit:
@@ -278,7 +280,9 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     comm = fBaseWin.Context.SelectRecord(GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
-                    result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, research, comm);
+                    if (comm != null) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, research, comm);
+                    }
                     break;
 
                 case RecordAction.raEdit:
@@ -357,7 +361,9 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     group = fBaseWin.Context.SelectRecord(GDMRecordType.rtGroup, null) as GDMGroupRecord;
-                    result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, research, group);
+                    if (group != null) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, research, group);
+                    }
                     break;
 
                 case RecordAction.raDelete:

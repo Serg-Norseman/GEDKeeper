@@ -144,15 +144,13 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     member = fBaseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
-                    result = (member != null);
-                    if (result) {
+                    if (member != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, grp, member);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    result = (member != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMemberQuery)));
-                    if (result) {
+                    if (member != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMemberQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, grp, member);
                     }
                     break;

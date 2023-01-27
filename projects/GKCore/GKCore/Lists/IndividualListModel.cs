@@ -709,15 +709,13 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     groupRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtGroup, null) as GDMGroupRecord;
-                    result = (groupRec != null);
-                    if (result) {
+                    if (groupRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, iRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery)));
-                    if (result) {
+                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, iRec);
                     }
                     break;
@@ -1058,8 +1056,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (family != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery)))
-                    {
+                    if (family != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, iRec);
                     }
                     break;
@@ -1167,11 +1164,8 @@ namespace GKCore.Lists
 
                 case RecordAction.raDelete:
                     {
-                        string confirmation =
-                            !string.IsNullOrEmpty(userRef.StringValue) ? userRef.StringValue : userRef.ReferenceType;
-                        confirmation = string.Format(
-                            LangMan.LS(LSID.LSID_RemoveUserRefQuery), confirmation);
-                        if (AppHost.StdDialogs.ShowQuestionYN(confirmation)) {
+                        string confirmation = !string.IsNullOrEmpty(userRef.StringValue) ? userRef.StringValue : userRef.ReferenceType;
+                        if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveUserRefQuery, confirmation))) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, iRec, userRef);
                             fBaseWin.Context.Modified = true;
                         }

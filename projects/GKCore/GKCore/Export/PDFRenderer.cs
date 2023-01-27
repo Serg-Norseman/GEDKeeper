@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -114,13 +114,17 @@ namespace GKCore.Export
         public override void DrawImage(IImage image, float x, float y,
                                        float width, float height, string imName)
         {
-            x = CheckVal(x, false);
-            y = CheckVal(y, true, height);
-            width = CheckVal(width);
-            height = CheckVal(height);
+            try {
+                x = CheckVal(x, false);
+                y = CheckVal(y, true, height);
+                width = CheckVal(width);
+                height = CheckVal(height);
 
-            var img = ConvertImage(image);
-            fCanvas.AddImage(img, width, 0, 0, height, x, y);
+                var img = ConvertImage(image);
+                fCanvas.AddImage(img, width, 0, 0, height, x, y);
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("PDFRenderer.DrawImage({0})", imName), ex);
+            }
         }
 
         public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)

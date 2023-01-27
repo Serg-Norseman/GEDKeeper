@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.IO;
 using BSLib;
 using BSLib.Design.MVP.Controls;
 using GDModel;
@@ -80,7 +81,13 @@ namespace GKCore.Controllers
                         return false;
                     }
 
-                    bool result = fBase.Context.MediaSave(fileRef, fView.File.Text, gst);
+                    string fileName = fView.File.Text;
+                    if (string.IsNullOrEmpty(fileName) || (gst != MediaStoreType.mstURL && !File.Exists(fileName))) {
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_InvalidFileName));
+                        return false;
+                    }
+
+                    bool result = fBase.Context.MediaSave(fileRef, fileName, gst);
 
                     if (!result) {
                         return false;

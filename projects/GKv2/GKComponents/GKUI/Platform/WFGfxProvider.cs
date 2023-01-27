@@ -26,6 +26,7 @@ using System.IO;
 using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
+using GKCore;
 using GKCore.Interfaces;
 using GKUI.Components;
 
@@ -48,14 +49,19 @@ namespace GKUI.Platform
             if (!File.Exists(fileName))
                 return null;
 
-            using (Bitmap bmp = new Bitmap(fileName)) {
-                UIHelper.NormalizeOrientation(bmp);
+            try {
+                using (Bitmap bmp = new Bitmap(fileName)) {
+                    UIHelper.NormalizeOrientation(bmp);
 
-                // cloning is necessary to release the resource
-                // loaded from the image stream
-                Bitmap resImage = (Bitmap)bmp.Clone();
+                    // cloning is necessary to release the resource
+                    // loaded from the image stream
+                    Bitmap resImage = (Bitmap)bmp.Clone();
 
-                return new ImageHandler(resImage);
+                    return new ImageHandler(resImage);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("WFGfxProvider.LoadImage({0})", fileName), ex);
+                return null;
             }
         }
 

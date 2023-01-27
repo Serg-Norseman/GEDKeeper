@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -949,8 +949,10 @@ namespace GKCore
         /* 887 */ LSID_Themes,
         /* 888 */ LSID_URTreeNoteType,
         /* 889 */ LSID_ShowTreeNotes,
+        /* 890 */ LSID_NoGoalRecordSpecified,
+        /* 891 */ LSID_InvalidFileName,
 
-        /* 000 */ LSID_Last = LSID_ShowTreeNotes
+        /* 000 */ LSID_Last = LSID_InvalidFileName
     }
 
 
@@ -1856,6 +1858,8 @@ namespace GKCore
             /* 887 */ "Themes",
             /* 888 */ "Tree note",
             /* 889 */ "Show special notes",
+            /* 890 */ "No goal record specified",
+            /* 891 */ "Invalid file name"
         };
 
         private static readonly LangManager fLangMan = new LangManager();

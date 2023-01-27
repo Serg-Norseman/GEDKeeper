@@ -1449,30 +1449,35 @@ namespace GKCore.Charts
             bool result = false;
             if (person == null) return result;
 
-            switch (fFilter.BranchCut) {
-                case ChartFilter.BranchCutType.Years:
-                    int birthYear = person.GetChronologicalYear(GEDCOMTagName.BIRT);
-                    result = (birthYear != 0 && birthYear >= fFilter.BranchYear);
-                    break;
+            try {
+                switch (fFilter.BranchCut) {
+                    case ChartFilter.BranchCutType.Years:
+                        int birthYear = person.GetChronologicalYear(GEDCOMTagName.BIRT);
+                        result = (birthYear != 0 && birthYear >= fFilter.BranchYear);
+                        break;
 
-                case ChartFilter.BranchCutType.Persons:
-                    result = (fFilter.BranchPersons.IndexOf(person.XRef + ";") >= 0);
-                    break;
-            }
-
-            int num = person.SpouseToFamilyLinks.Count;
-            for (int i = 0; i < num; i++) {
-                GDMFamilyRecord family = fTree.GetPtrValue(person.SpouseToFamilyLinks[i]);
-
-                int num2 = family.Children.Count;
-                for (int j = 0; j < num2; j++) {
-                    GDMIndividualRecord child = fTree.GetPtrValue(family.Children[j]);
-                    bool resChild = DoDescendantsFilter(child);
-                    result |= resChild;
+                    case ChartFilter.BranchCutType.Persons:
+                        result = (fFilter.BranchPersons.IndexOf(person.XRef + ";") >= 0);
+                        break;
                 }
+
+                int num = person.SpouseToFamilyLinks.Count;
+                for (int i = 0; i < num; i++) {
+                    GDMFamilyRecord family = fTree.GetPtrValue(person.SpouseToFamilyLinks[i]);
+
+                    int num2 = family.Children.Count;
+                    for (int j = 0; j < num2; j++) {
+                        GDMIndividualRecord child = fTree.GetPtrValue(family.Children[j]);
+                        bool resChild = DoDescendantsFilter(child);
+                        result |= resChild;
+                    }
+                }
+
+                fFilterData[person] = result;
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartModel.DoDescendantsFilter()", ex);
             }
 
-            fFilterData[person] = result;
             return result;
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.IO;
 using System.Text;
 using BSLib;
@@ -77,8 +78,12 @@ namespace GKCore.Charts
 
         public override void DrawImage(IImage image, float x, float y, float width, float height, string imName)
         {
-            if (fGfx != null && image != null) {
-                fGfx.DrawImage(image, x, y, width, height, imName);
+            try {
+                if (fGfx != null && image != null) {
+                    fGfx.DrawImage(image, x, y, width, height, imName);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("SVGRenderer.DrawImage({0})", imName), ex);
             }
         }
 

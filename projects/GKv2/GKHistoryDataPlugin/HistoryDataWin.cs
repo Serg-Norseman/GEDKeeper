@@ -26,7 +26,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-
 using BSLib;
 using GKCore;
 using GKCore.Interfaces;
@@ -107,6 +106,10 @@ namespace GKHistoryDataPlugin
         private void LoadDataFile(string fileName)
         {
             string csvPath = AppHost.GetAppPath() + "externals/" + fileName;
+            if (!File.Exists(csvPath)) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound, fileName));
+                return;
+            }
 
             fItems.Clear();
             fLinkColumn = -1;

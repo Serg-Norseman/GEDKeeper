@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -867,6 +867,10 @@ namespace GKCore
             if (fileReference == null) return string.Empty;
 
             try {
+                if (!VerifyMediaFileWM(fileReference)) {
+                    return string.Empty;
+                }
+
                 MediaStore mediaStore = GetStoreType(fileReference);
                 string targetFn = mediaStore.FileName;
 
@@ -1058,6 +1062,32 @@ namespace GKCore
             }
         }
 
+        public bool VerifyMediaFileWM(GDMFileReference fileReference)
+        {
+            string fileName;
+            MediaStoreStatus storeStatus = VerifyMediaFile(fileReference, out fileName);
+            if (storeStatus != MediaStoreStatus.mssExists) {
+                switch (storeStatus) {
+                    case MediaStoreStatus.mssFileNotFound:
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound, fileName));
+                        break;
+
+                    case MediaStoreStatus.mssStgNotFound:
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_StgNotFound));
+                        break;
+
+                    case MediaStoreStatus.mssArcNotFound:
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        break;
+
+                    case MediaStoreStatus.mssBadData:
+                        break;
+                }
+                return false;
+            }
+            return true;
+        }
+
         public MediaStoreStatus VerifyMediaFile(GDMFileReference fileReference, out string fileName)
         {
             if (fileReference == null)
@@ -1140,27 +1170,32 @@ namespace GKCore
             bool result = false;
 
             if (showProgress) {
-                AppHost.Instance.ExecuteWork((controller) => {
-                    try {
-                        controller.Begin(LangMan.LS(LSID.LSID_CopyingFile), 100);
+                try {
+                    var source = new FileInfo(sourceFileName);
+                    var target = new FileInfo(destFileName);
+
+                    AppHost.Instance.ExecuteWork((controller) => {
                         try {
-                            var source = new FileInfo(sourceFileName);
-                            var target = new FileInfo(destFileName);
-                            GKUtils.CopyFile(source, target, controller);
-                            result = true;
-                        } catch (Exception ex) {
-                            Logger.WriteError(string.Format("BaseContext.CopyFile({0}, {1})", sourceFileName, destFileName), ex);
+                            controller.Begin(LangMan.LS(LSID.LSID_CopyingFile), 100);
+                            try {
+                                GKUtils.CopyFile(source, target, controller);
+                                result = true;
+                            } catch (Exception ex) {
+                                Logger.WriteError(string.Format("BaseContext.CopyFile.1.1({0}, {1})", sourceFileName, destFileName), ex);
+                            }
+                        } finally {
+                            controller.End();
                         }
-                    } finally {
-                        controller.End();
-                    }
-                });
+                    });
+                } catch (Exception ex) {
+                    Logger.WriteError(string.Format("BaseContext.CopyFile.1({0}, {1})", sourceFileName, destFileName), ex);
+                }
             } else {
                 try {
                     File.Copy(sourceFileName, destFileName, false);
                     result = true;
                 } catch (Exception ex) {
-                    Logger.WriteError(string.Format("BaseContext.CopyFile({0}, {1})", sourceFileName, destFileName), ex);
+                    Logger.WriteError(string.Format("BaseContext.CopyFile.2({0}, {1})", sourceFileName, destFileName), ex);
                 }
             }
 
