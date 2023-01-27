@@ -17,7 +17,7 @@
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DelaySign>False</DelaySign>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">

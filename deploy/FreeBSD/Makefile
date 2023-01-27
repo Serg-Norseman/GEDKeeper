@@ -25,7 +25,7 @@ DATADIR=	${PREFIX}/lib/${PORTNAME}
 do-build:
 	cd ${BUILD_WRKSRC} && msbuild projects/GEDKeeper2.linux.sln \
 		/p:Configuration=${_BUILD_TYPE} /p:Platform="x86" \
-		/p:MonoCS=true # /p:TargetFrameworkVersion=v4.5.2
+		/p:MonoCS=true # /p:TargetFrameworkVersion=v4.6.2
 
 do-install:
 	${PRINTF} '#!/bin/sh\n\nexec mono ${DATADIR}/GEDKeeper2.exe\

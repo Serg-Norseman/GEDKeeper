@@ -263,7 +263,7 @@ Section "$(gkreq)"
 
     SetOutPath $INSTDIR
 
-    !insertmacro CheckNetFramework "45"
+    !insertmacro CheckNetFramework "462"
 
     CreateDirectory "$INSTDIR\bin"
     SetOutPath "$INSTDIR\bin"

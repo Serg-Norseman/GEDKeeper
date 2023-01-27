@@ -3,7 +3,7 @@
 call .\clean.cmd
 
 set MSBDIR=@%WINDIR%\Microsoft.NET\Framework\v4.0.30319
-%MSBDIR%\msbuild.exe projects\GEDKeeper2.mswin.sln /p:Configuration=Release /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.5.2 /v:quiet
+%MSBDIR%\msbuild.exe projects\GEDKeeper2.mswin.sln /p:Configuration=Release /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.6.2 /v:quiet
 
 set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS%==0 goto installer

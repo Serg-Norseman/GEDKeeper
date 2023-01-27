@@ -6,7 +6,7 @@
 #export LDFLAGS=-m64
 #export LD_LIBRARY_PATH=$PWD/external/lua/linux/lib64
 
-xbuild ./projects/GEDKeeper2.linux.sln /p:Configuration=Debug /p:Platform="x86" /p:MonoCS=true /p:TargetFrameworkVersion=v4.5.2 /v:quiet
+xbuild ./projects/GEDKeeper2.linux.sln /p:Configuration=Debug /p:Platform="x86" /p:MonoCS=true /p:TargetFrameworkVersion=v4.6.2 /v:quiet
 
 export TEMP="$( mktemp -d )"
 nunit-console ./projects/GKTests/bin/Debug/GKTests.dll && rm -r "$TEMP"
