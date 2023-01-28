@@ -325,20 +325,24 @@ namespace GKTests
 
         protected void MediaSheet_Handler(GDMRecordWithEvents record, Form dlg)
         {
-            Assert.AreEqual(0, record.MultimediaLinks.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(this, MediaEditDlgTests.MultimediaRecord_Add_Handler);
-            ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
-            Assert.AreEqual(1, record.MultimediaLinks.Count);
+            try {
+                Assert.AreEqual(0, record.MultimediaLinks.Count);
+                RecordSelectDlgTests.SetCreateItemHandler(this, MediaEditDlgTests.MultimediaRecord_Add_Handler);
+                ClickToolStripButton("fMediaList_ToolBar_btnAdd", dlg);
+                Assert.AreEqual(1, record.MultimediaLinks.Count);
 
-            SelectSheetListItem("fMediaList", dlg, 0);
-            ModalFormHandler = MediaEditDlgTests.MultimediaRecord_Add_Handler;
-            ClickToolStripButton("fMediaList_ToolBar_btnEdit", dlg);
-            Assert.AreEqual(1, record.MultimediaLinks.Count);
+                SelectSheetListItem("fMediaList", dlg, 0);
+                ModalFormHandler = MediaEditDlgTests.MultimediaRecord_Add_Handler;
+                ClickToolStripButton("fMediaList_ToolBar_btnEdit", dlg);
+                Assert.AreEqual(1, record.MultimediaLinks.Count);
 
-            SelectSheetListItem("fMediaList", dlg, 0);
-            ModalFormHandler = MessageBox_YesHandler;
-            ClickToolStripButton("fMediaList_ToolBar_btnDelete", dlg);
-            Assert.AreEqual(0, record.MultimediaLinks.Count);
+                SelectSheetListItem("fMediaList", dlg, 0);
+                ModalFormHandler = MessageBox_YesHandler;
+                ClickToolStripButton("fMediaList_ToolBar_btnDelete", dlg);
+                Assert.AreEqual(0, record.MultimediaLinks.Count);
+            } finally {
+                TestUtils.RemoveTestFile(MediaEditDlgTests.MediaSampleFile);
+            }
         }
 
         protected void SourceCitSheet_Handler(GDMRecordWithEvents record, Form dlg)

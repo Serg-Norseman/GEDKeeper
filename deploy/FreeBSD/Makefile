@@ -23,7 +23,7 @@ _BUILD_TYPE=	Release
 DATADIR=	${PREFIX}/lib/${PORTNAME}
 
 do-build:
-	cd ${BUILD_WRKSRC} && msbuild projects/GEDKeeper2.linux.sln \
+	cd ${BUILD_WRKSRC} && msbuild projects/GEDKeeper2.sln \
 		/p:Configuration=${_BUILD_TYPE} /p:Platform="x86" \
 		/p:MonoCS=true # /p:TargetFrameworkVersion=v4.6.2
 

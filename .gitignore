@@ -19,11 +19,6 @@ Eto.xml
 gource-gk.cmd
 code_heat.sh
 
-/cov-int/
-build_coverity.cmd
-/projects/GEDKeeper2.mswin-cov.sln
-coverity.zip
-
 /.sonarqube/
 NUnitResults.xml
 opencover.xml

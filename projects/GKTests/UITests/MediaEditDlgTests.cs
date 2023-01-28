@@ -42,6 +42,8 @@ namespace GKUI.Forms
         private IBaseWindow fBase;
         private MediaEditDlg fDialog;
 
+        public static string MediaSampleFile;
+
         public override void Setup()
         {
             TestUtils.InitUITest();
@@ -74,7 +76,11 @@ namespace GKUI.Forms
             Assert.AreEqual(fMultimediaRecord, fDialog.MultimediaRecord);
 
             fFormTest = this;
-            MultimediaRecord_Add_Handler(null, IntPtr.Zero, fDialog);
+            try {
+                MultimediaRecord_Add_Handler(null, IntPtr.Zero, fDialog);
+            } finally {
+                TestUtils.RemoveTestFile(MediaEditDlgTests.MediaSampleFile);
+            }
 
             Assert.AreEqual("sample text", fMultimediaRecord.GetFileTitle());
         }
@@ -88,13 +94,9 @@ namespace GKUI.Forms
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
             SelectCombo("cmbStoreType", form, 0); // Reference
 
-            string sourFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
-            try {
-                SetOpenedFile(fFormTest, sourFile);
-                ClickButton("btnFileSelect", form);
-            } finally {
-                TestUtils.RemoveTestFile(sourFile);
-            }
+            MediaSampleFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
+            SetOpenedFile(fFormTest, MediaSampleFile);
+            ClickButton("btnFileSelect", form);
 
             ClickButton("btnAccept", form);
         }
