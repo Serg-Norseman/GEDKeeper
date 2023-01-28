@@ -30,6 +30,8 @@ namespace GKCore.Types
         mkImage,
         mkVideo,
         mkAudio,
-        mkText
+        mkText,
+        mkOffice,
+        mkArchive
     }
 }

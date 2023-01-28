@@ -2909,6 +2909,14 @@ namespace GKCore
                 case MultimediaKind.mkVideo:
                     result = "video";
                     break;
+
+                case MultimediaKind.mkOffice:
+                    result = "office";
+                    break;
+
+                case MultimediaKind.mkArchive:
+                    result = "archives";
+                    break;
             }
             return result + Path.DirectorySeparatorChar;
         }
@@ -2933,7 +2941,6 @@ namespace GKCore
                 case GDMMultimediaFormat.mfTXT:
                 case GDMMultimediaFormat.mfRTF:
                 case GDMMultimediaFormat.mfHTM:
-                case GDMMultimediaFormat.mfPDF:
                     return MultimediaKind.mkText;
 
                 case GDMMultimediaFormat.mfWAV:
@@ -2950,6 +2957,24 @@ namespace GKCore
                 case GDMMultimediaFormat.mfMKV:
                 case GDMMultimediaFormat.mfMOV:
                     return MultimediaKind.mkVideo;
+
+                case GDMMultimediaFormat.mfPDF:
+                case GDMMultimediaFormat.mfDJVU:
+                case GDMMultimediaFormat.mfDOC:
+                case GDMMultimediaFormat.mfDOCX:
+                case GDMMultimediaFormat.mfXLS:
+                case GDMMultimediaFormat.mfXLSX:
+                case GDMMultimediaFormat.mfPPT:
+                case GDMMultimediaFormat.mfPPTX:
+                case GDMMultimediaFormat.mfODT:
+                case GDMMultimediaFormat.mfODS:
+                case GDMMultimediaFormat.mfODP:
+                    return MultimediaKind.mkOffice;
+
+                case GDMMultimediaFormat.mfZIP:
+                case GDMMultimediaFormat.mfRAR:
+                case GDMMultimediaFormat.mf7Z:
+                    return MultimediaKind.mkArchive;
 
                 case GDMMultimediaFormat.mfOLE:
                 case GDMMultimediaFormat.mfUnknown:
@@ -3008,6 +3033,8 @@ namespace GKCore
                     return (format == GDMMultimediaFormat.mfTXT || format == GDMMultimediaFormat.mfRTF ||
                             format == GDMMultimediaFormat.mfHTM);
 
+                case MultimediaKind.mkOffice:
+                case MultimediaKind.mkArchive:
                 case MultimediaKind.mkNone:
                 default:
                     return false;

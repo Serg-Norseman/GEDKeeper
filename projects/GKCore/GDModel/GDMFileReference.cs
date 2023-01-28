@@ -79,6 +79,21 @@ namespace GDModel
         mfMKV,
         mfMOV,
 
+        mfDJVU,
+        mfDOC,
+        mfDOCX,
+        mfXLS,
+        mfXLSX,
+        mfPPT,
+        mfPPTX,
+        mfODT,
+        mfODS,
+        mfODP,
+
+        mfZIP,
+        mfRAR,
+        mf7Z,
+
         mfOLE,
         mfUnknown
     }

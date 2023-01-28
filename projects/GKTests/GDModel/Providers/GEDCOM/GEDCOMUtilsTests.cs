@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -315,6 +315,22 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(GDMMultimediaFormat.mfWMV, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfWMV)));
             Assert.AreEqual(GDMMultimediaFormat.mfMKV, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfMKV)));
             Assert.AreEqual(GDMMultimediaFormat.mfMOV, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfMOV)));
+
+            Assert.AreEqual(GDMMultimediaFormat.mfDJVU, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfDJVU)));
+            Assert.AreEqual(GDMMultimediaFormat.mfDOC, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfDOC)));
+            Assert.AreEqual(GDMMultimediaFormat.mfDOCX, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfDOCX)));
+            Assert.AreEqual(GDMMultimediaFormat.mfXLS, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfXLS)));
+            Assert.AreEqual(GDMMultimediaFormat.mfXLSX, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfXLSX)));
+            Assert.AreEqual(GDMMultimediaFormat.mfPPT, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfPPT)));
+            Assert.AreEqual(GDMMultimediaFormat.mfPPTX, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfPPTX)));
+            Assert.AreEqual(GDMMultimediaFormat.mfODT, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfODT)));
+            Assert.AreEqual(GDMMultimediaFormat.mfODS, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfODS)));
+            Assert.AreEqual(GDMMultimediaFormat.mfODP, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfODP)));
+
+            Assert.AreEqual(GDMMultimediaFormat.mfZIP, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfZIP)));
+            Assert.AreEqual(GDMMultimediaFormat.mfRAR, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfRAR)));
+            Assert.AreEqual(GDMMultimediaFormat.mf7Z, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mf7Z)));
+
             Assert.AreEqual(GDMMultimediaFormat.mfUnknown, GEDCOMUtils.GetMultimediaFormatVal("xxx"));
         }
 

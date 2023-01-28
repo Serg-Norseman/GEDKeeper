@@ -1194,6 +1194,32 @@ namespace GDModel.Providers.GEDCOM
                 result = GDMMultimediaFormat.mfMKV;
             } else if (str == "mov") {
                 result = GDMMultimediaFormat.mfMOV;
+            } else if (str == "djvu") {
+                result = GDMMultimediaFormat.mfDJVU;
+            } else if (str == "doc") {
+                result = GDMMultimediaFormat.mfDOC;
+            } else if (str == "docx") {
+                result = GDMMultimediaFormat.mfDOCX;
+            } else if (str == "xls") {
+                result = GDMMultimediaFormat.mfXLS;
+            } else if (str == "xlsx") {
+                result = GDMMultimediaFormat.mfXLSX;
+            } else if (str == "ppt") {
+                result = GDMMultimediaFormat.mfPPT;
+            } else if (str == "pptx") {
+                result = GDMMultimediaFormat.mfPPTX;
+            } else if (str == "odt") {
+                result = GDMMultimediaFormat.mfODT;
+            } else if (str == "ods") {
+                result = GDMMultimediaFormat.mfODS;
+            } else if (str == "odp") {
+                result = GDMMultimediaFormat.mfODP;
+            } else if (str == "zip") {
+                result = GDMMultimediaFormat.mfZIP;
+            } else if (str == "rar") {
+                result = GDMMultimediaFormat.mfRAR;
+            } else if (str == "7z") {
+                result = GDMMultimediaFormat.mf7Z;
             } else {
                 result = GDMMultimediaFormat.mfUnknown;
             }
@@ -1278,6 +1304,45 @@ namespace GDModel.Providers.GEDCOM
                     break;
                 case GDMMultimediaFormat.mfMOV:
                     s = "mov";
+                    break;
+                case GDMMultimediaFormat.mfDJVU:
+                    s = "djvu";
+                    break;
+                case GDMMultimediaFormat.mfDOC:
+                    s = "doc";
+                    break;
+                case GDMMultimediaFormat.mfDOCX:
+                    s = "docx";
+                    break;
+                case GDMMultimediaFormat.mfXLS:
+                    s = "xls";
+                    break;
+                case GDMMultimediaFormat.mfXLSX:
+                    s = "xlsx";
+                    break;
+                case GDMMultimediaFormat.mfPPT:
+                    s = "ppt";
+                    break;
+                case GDMMultimediaFormat.mfPPTX:
+                    s = "pptx";
+                    break;
+                case GDMMultimediaFormat.mfODT:
+                    s = "odt";
+                    break;
+                case GDMMultimediaFormat.mfODS:
+                    s = "ods";
+                    break;
+                case GDMMultimediaFormat.mfODP:
+                    s = "odp";
+                    break;
+                case GDMMultimediaFormat.mfZIP:
+                    s = "zip";
+                    break;
+                case GDMMultimediaFormat.mfRAR:
+                    s = "rar";
+                    break;
+                case GDMMultimediaFormat.mf7Z:
+                    s = "7z";
                     break;
                 default:
                     s = "";
