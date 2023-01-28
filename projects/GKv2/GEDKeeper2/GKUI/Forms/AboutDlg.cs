@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -61,7 +61,8 @@ namespace GKUI.Forms
 
         public override bool SkipTheme(Component component)
         {
-            if (component == lblProduct || component == lblVersion || component == lblCopyright) {
+            if (component == lblProduct || component == lblVersion || component == lblCopyright ||
+                component == lblMail || component == lblProjSite || component == lblForum || component == lblChannel) {
                 return true;
             }
             return false;

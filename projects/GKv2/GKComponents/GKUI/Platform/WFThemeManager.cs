@@ -97,8 +97,37 @@ namespace GKUI.Themes
                 ThemeElementType.Color, // ThemeElement.HighlightUnmarriedIndi
                 ThemeElementType.Color, // ThemeElement.HighlightInaccessibleFiles
 
-                ThemeElementType.Image, // ThemeElement.Glyph_Settings
+                ThemeElementType.Image, // ThemeElement.Glyph_FileNew
+                ThemeElementType.Image, // ThemeElement.Glyph_FileLoad
+                ThemeElementType.Image, // ThemeElement.Glyph_FileSave
+                ThemeElementType.Image, // ThemeElement.Glyph_FileProperties,
+                ThemeElementType.Image, // ThemeElement.Glyph_Export,
+                ThemeElementType.Image, // ThemeElement.Glyph_ExportTable,
+                ThemeElementType.Image, // ThemeElement.Glyph_Exit,
+
+                ThemeElementType.Image, // ThemeElement.Glyph_RecordAdd
+                ThemeElementType.Image, // ThemeElement.Glyph_RecordEdit
+                ThemeElementType.Image, // ThemeElement.Glyph_RecordDelete
+                ThemeElementType.Image, // ThemeElement.Glyph_Search
+                ThemeElementType.Image, // ThemeElement.Glyph_Filter
+
+                ThemeElementType.Image, // ThemeElement.Glyph_TreeAncestors
+                ThemeElementType.Image, // ThemeElement.Glyph_TreeDescendants
+                ThemeElementType.Image, // ThemeElement.Glyph_TreeBoth
+                ThemeElementType.Image, // ThemeElement.Glyph_Pedigree
                 ThemeElementType.Image, // ThemeElement.Glyph_Maps
+                ThemeElementType.Image, // ThemeElement.Glyph_Stats
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Organizer
+                ThemeElementType.Image, // ThemeElement.Glyph_Slideshow
+                ThemeElementType.Image, // ThemeElement.Glyph_Settings
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Help
+                ThemeElementType.Image, // ThemeElement.Glyph_About
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Prev
+                ThemeElementType.Image, // ThemeElement.Glyph_Next
+                ThemeElementType.Image, // ThemeElement.Glyph_SendMail
             };
 
 
@@ -144,8 +173,37 @@ namespace GKUI.Themes
                 { ThemeElement.HighlightUnmarriedIndi, Color.FromArgb(0xFFFFA1) },        // GK only
                 { ThemeElement.HighlightInaccessibleFiles, Color.FromArgb(0xFFCACA) },    // GK only
 
-                { ThemeElement.Glyph_Settings, "Resources.btn_tools.gif" },
+                { ThemeElement.Glyph_FileNew, "Resources.btn_create_new.gif" },
+                { ThemeElement.Glyph_FileLoad, "Resources.btn_load.gif" },
+                { ThemeElement.Glyph_FileSave, "Resources.btn_save.gif" },
+                { ThemeElement.Glyph_FileProperties, "Resources.btn_properties.gif" },
+                { ThemeElement.Glyph_Export, "Resources.btn_export.gif" },
+                { ThemeElement.Glyph_ExportTable, "Resources.btn_excel.gif" },
+                { ThemeElement.Glyph_Exit, "Resources.btn_exit.gif" },
+
+                { ThemeElement.Glyph_RecordAdd, "Resources.btn_rec_new.gif" },
+                { ThemeElement.Glyph_RecordEdit, "Resources.btn_rec_edit.gif" },
+                { ThemeElement.Glyph_RecordDelete, "Resources.btn_rec_delete.gif" },
+                { ThemeElement.Glyph_Search, "Resources.btn_search.gif" },
+                { ThemeElement.Glyph_Filter, "Resources.btn_filter.gif" },
+
+                { ThemeElement.Glyph_TreeAncestors, "Resources.btn_tree_ancestry.gif" },
+                { ThemeElement.Glyph_TreeDescendants, "Resources.btn_tree_descendants.gif" },
+                { ThemeElement.Glyph_TreeBoth, "Resources.btn_tree_both.gif" },
+                { ThemeElement.Glyph_Pedigree, "Resources.btn_scroll.gif" },
                 { ThemeElement.Glyph_Maps, "" },
+                { ThemeElement.Glyph_Stats, "Resources.btn_table.gif" },
+
+                { ThemeElement.Glyph_Organizer, "Resources.btn_organizer.gif" },
+                { ThemeElement.Glyph_Slideshow, "Resources.btn_slideshow.png" },
+                { ThemeElement.Glyph_Settings, "Resources.btn_tools.gif" },
+
+                { ThemeElement.Glyph_Help, "Resources.btn_help.gif" },
+                { ThemeElement.Glyph_About, "Resources.btn_scroll.gif" },
+
+                { ThemeElement.Glyph_Prev, "Resources.btn_left.gif" },
+                { ThemeElement.Glyph_Next, "Resources.btn_right.gif" },
+                { ThemeElement.Glyph_SendMail, "Resources.btn_mail.gif" },
             }, true);
         }
 

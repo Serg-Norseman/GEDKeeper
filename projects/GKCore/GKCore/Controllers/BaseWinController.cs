@@ -892,8 +892,53 @@ namespace GKCore.Controllers
         public override void ApplyTheme()
         {
             if (AppHost.Instance.HasFeatureSupport(Feature.Themes)) {
-                GetControl<IMenuItem>("miOptions").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Settings);
+                // menu
+                GetControl<IMenuItem>("miFileNew").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileNew);
+                GetControl<IMenuItem>("miFileLoad").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileLoad);
+                GetControl<IMenuItem>("miFileSave").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileSave);
+                GetControl<IMenuItem>("miFileProperties").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileProperties);
+                GetControl<IMenuItem>("miExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Export);
+                GetControl<IMenuItem>("miExportTable").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
+                GetControl<IMenuItem>("miExit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Exit);
+
+                GetControl<IMenuItem>("miRecordAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordAdd);
+                GetControl<IMenuItem>("miRecordEdit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordEdit);
+                GetControl<IMenuItem>("miRecordDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordDelete);
+                GetControl<IMenuItem>("miSearch").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Search);
+                GetControl<IMenuItem>("miFilter").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Filter);
+
+                GetControl<IMenuItem>("miTreeAncestors").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeAncestors);
+                GetControl<IMenuItem>("miTreeDescendants").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeDescendants);
+                GetControl<IMenuItem>("miTreeBoth").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeBoth);
+                GetControl<IMenuItem>("miPedigreeAscend").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Pedigree);
+                GetControl<IMenuItem>("miPedigree_dAboville").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Pedigree);
+                GetControl<IMenuItem>("miPedigree_Konovalov").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Pedigree);
                 GetControl<IMenuItem>("miMap").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Maps);
+                GetControl<IMenuItem>("miStats").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Stats);
+
+                GetControl<IMenuItem>("miOrganizer").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Organizer);
+                GetControl<IMenuItem>("miSlideshow").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Slideshow);
+                GetControl<IMenuItem>("miOptions").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Settings);
+
+                GetControl<IMenuItem>("miContext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Help);
+                GetControl<IMenuItem>("miAbout").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_About);
+
+                // toolbar
+                //GetControl<IMenuItem>("tbFileNew").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileNew);
+                //GetControl<IMenuItem>("tbFileLoad").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileLoad);
+                //GetControl<IMenuItem>("tbFileSave").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileSave);
+                //GetControl<IMenuItem>("tbRecordAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordAdd);
+                //GetControl<IMenuItem>("tbRecordEdit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordEdit);
+                //GetControl<IMenuItem>("tbRecordDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordDelete);
+                //GetControl<IMenuItem>("tbFilter").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Filter);
+                //GetControl<IMenuItem>("tbTreeAncestors").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeAncestors);
+                //GetControl<IMenuItem>("tbTreeDescendants").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeDescendants);
+                //GetControl<IMenuItem>("tbTreeBoth").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeBoth);
+                //GetControl<IMenuItem>("tbPedigree").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Pedigree);
+                //GetControl<IMenuItem>("tbStats").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Stats);
+                //GetControl<IMenuItem>("tbPrev").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Prev);
+                //GetControl<IMenuItem>("tbNext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next);
+                //GetControl<IMenuItem>("tbSendMail").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_SendMail);
             }
         }
 

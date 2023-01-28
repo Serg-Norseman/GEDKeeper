@@ -64,8 +64,37 @@ namespace GKUI.Themes
         HighlightUnmarriedIndi,
         HighlightInaccessibleFiles,
 
-        Glyph_Settings,
+        Glyph_FileNew,
+        Glyph_FileLoad,
+        Glyph_FileSave,
+        Glyph_FileProperties,
+        Glyph_Export,
+        Glyph_ExportTable,
+        Glyph_Exit,
+
+        Glyph_RecordAdd,
+        Glyph_RecordEdit,
+        Glyph_RecordDelete,
+        Glyph_Search,
+        Glyph_Filter,
+
+        Glyph_TreeAncestors,
+        Glyph_TreeDescendants,
+        Glyph_TreeBoth,
+        Glyph_Pedigree,
         Glyph_Maps,
+        Glyph_Stats,
+
+        Glyph_Organizer,
+        Glyph_Slideshow,
+        Glyph_Settings,
+
+        Glyph_Help,
+        Glyph_About,
+
+        Glyph_Prev,
+        Glyph_Next,
+        Glyph_SendMail,
     }
 
 
