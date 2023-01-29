@@ -18,7 +18,7 @@ namespace GKMap.MapProviders.Yandex
         public static readonly YandexHybridMapProvider Instance = new YandexHybridMapProvider();
 
         private static readonly string UrlServer = "vec";
-        private static readonly string UrlFormat = "http://{0}0{1}.{7}/tiles?l=skl&v={2}&x={3}&y={4}&z={5}&lang={6}";
+        private static readonly string UrlFormat = "https://{0}0{1}.{7}/tiles?l=skl&v={2}&x={3}&y={4}&z={5}&lang={6}";
 
         private readonly Guid fId = new Guid("78A3830F-5EE3-432C-A32E-91B7AF6BBCB9");
         private readonly string fName = "YandexHybridMap";
@@ -26,16 +26,12 @@ namespace GKMap.MapProviders.Yandex
 
         public override Guid Id
         {
-            get {
-                return fId;
-            }
+            get { return fId; }
         }
 
         public override string Name
         {
-            get {
-                return fName;
-            }
+            get { return fName; }
         }
 
         public override GMapProvider[] Overlays

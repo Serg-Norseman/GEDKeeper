@@ -18,7 +18,7 @@ namespace GKMap.MapProviders.Yandex
         public static readonly YandexSatelliteMapProvider Instance = new YandexSatelliteMapProvider();
 
         private static readonly string UrlServer = "sat";
-        private static readonly string UrlFormat = "http://{0}0{1}.{7}/tiles?l=sat&v={2}&x={3}&y={4}&z={5}&lang={6}";
+        private static readonly string UrlFormat = "https://{0}0{1}.{7}/tiles?l=sat&v={2}&x={3}&y={4}&z={5}&lang={6}";
 
         public new string Version = "3.135.0";
 
@@ -27,16 +27,12 @@ namespace GKMap.MapProviders.Yandex
 
         public override Guid Id
         {
-            get {
-                return fId;
-            }
+            get { return fId; }
         }
 
         public override string Name
         {
-            get {
-                return fName;
-            }
+            get { return fName; }
         }
 
         private YandexSatelliteMapProvider()

@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Xml;
 
-namespace GKMap.MapProviders.OpenStreetMap
+namespace GKMap.MapProviders.Etc
 {
     public abstract class OpenStreetMapProviderBase : GMapProvider, IGeocodingProvider
     {

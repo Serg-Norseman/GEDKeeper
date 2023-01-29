@@ -28,7 +28,7 @@ namespace GKUI.Forms
                     miFileProperties = new MenuItem("_Properties", "", miFileProperties_Click),
                     null,
                     miExport = new MenuBarItem("_Export", new MenuItem[] {
-                        miExportToExcelFile = new MenuItem("_ExportToExcelFile", "", miExportToExcelFile_Click),
+                        miExportTable = new MenuItem("_ExportTable", "", miExportTable_Click),
                     }),
                     null,
                     miExit = new MenuItem("_Exit", "", miExit_Click, null, null, Key.CtrlMask | Key.X)
@@ -39,6 +39,7 @@ namespace GKUI.Forms
                     miRecordDelete = new MenuItem("miRecordDelete", "", miRecordDelete_Click, null, null, Key.CtrlMask | Key.L),
                     null,
                     miSearch = new MenuItem("miSearch", "", miSearch_Click),
+                    miFindAndReplace = new MenuItem("miFindAndReplace", "", miFindAndReplace_Click),
                     miFilter = new MenuItem("miFilter", "", miFilter_Click, null, null, Key.CtrlMask | Key.F)
                 }),
                 miPedigree = new MenuBarItem("_Pedigree", new MenuItem[] {

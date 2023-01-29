@@ -46,28 +46,24 @@ namespace GKMap.MapProviders.Yandex
         public static readonly YandexMapProvider Instance = new YandexMapProvider();
 
         private static readonly string UrlServer = "vec";
-        private static readonly string UrlFormat = "http://{0}0{1}.{7}/tiles?l=map&v={2}&x={3}&y={4}&z={5}&lang={6}";
+        private static readonly string UrlFormat = "https://{0}0{1}.{7}/tiles?l=map&v={2}&x={3}&y={4}&z={5}&lang={6}";
 
         private readonly Guid fId = new Guid("82DC969D-0491-40F3-8C21-4D90B67F47EB");
         private readonly string fName = "YandexMap";
 
         public override Guid Id
         {
-            get {
-                return fId;
-            }
+            get { return fId; }
         }
 
         public override string Name
         {
-            get {
-                return fName;
-            }
+            get { return fName; }
         }
 
         private YandexMapProvider()
         {
-            RefererUrl = "http://" + ServerCom + "/";
+            RefererUrl = "https://" + ServerCom + "/";
         }
 
         public override PureImage GetTileImage(GPoint pos, int zoom)

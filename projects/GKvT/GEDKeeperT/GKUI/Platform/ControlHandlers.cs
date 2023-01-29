@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -760,8 +760,36 @@ namespace GKUI.Platform
 
     public sealed class TabControlHandler : BaseControlHandler<TabView, TabControlHandler>, ITabControl
     {
+        private class TabPageItems : ITabPages
+        {
+            private TabView fTabControl;
+
+            public ITabPage this[int index]
+            {
+                get {
+                    if (index < 0 || index >= fTabControl.Tabs.Count)
+                        throw new ArgumentOutOfRangeException("index");
+
+                    return new TabPageHandler(fTabControl.Tabs.ElementAt(index));
+                }
+            }
+
+            public int Count
+            {
+                get { return fTabControl.Tabs.Count; }
+            }
+
+            public TabPageItems(TabView control)
+            {
+                fTabControl = control;
+            }
+        }
+
+        private TabPageItems fItems;
+
         public TabControlHandler(TabView control) : base(control)
         {
+            fItems = new TabPageItems(control);
         }
 
         public int SelectedIndex
@@ -769,12 +797,51 @@ namespace GKUI.Platform
             get { return Control.TabIndex; }
             set { Control.TabIndex = value; }
         }
+
+        public ITabPages Pages
+        {
+            get { return fItems; }
+        }
+    }
+
+    internal class MenuSubItems : IMenuItems
+    {
+        private MenuItem fItem;
+
+        public IMenuItem this[int index]
+        {
+            get {
+                var btnItem = fItem as MenuBarItem;
+                if (btnItem == null)
+                    throw new Exception("Type mismatch");
+
+                if (index < 0 || index >= btnItem.Children.Length)
+                    throw new ArgumentOutOfRangeException("index");
+
+                return new MenuItemHandler(btnItem.Children[index]);
+            }
+        }
+
+        public int Count
+        {
+            get {
+                return (fItem is MenuBarItem) ? ((MenuBarItem)fItem).Children.Length : 0;
+            }
+        }
+
+        public MenuSubItems(MenuItem control)
+        {
+            fItem = control;
+        }
     }
 
     public sealed class MenuItemHandler : ControlHandler<MenuItem, MenuItemHandler>, IMenuItem
     {
+        private MenuSubItems fItems;
+
         public MenuItemHandler(MenuItem control) : base(control)
         {
+            fItems = new MenuSubItems(control);
         }
 
         public bool Checked
@@ -797,6 +864,17 @@ namespace GKUI.Platform
                     Control.CanExecute = () => { return false; };
                 }
             }
+        }
+
+        public IImage Glyph
+        {
+            get { return null; }
+            set { }
+        }
+
+        public IMenuItems SubItems
+        {
+            get { return fItems; }
         }
 
         public object Tag

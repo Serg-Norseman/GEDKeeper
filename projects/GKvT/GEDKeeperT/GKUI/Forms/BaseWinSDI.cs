@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -57,7 +57,7 @@ namespace GKUI.Forms
         private MenuItem miFileSaveAs;
         private MenuItem miFileClose;
         private MenuItem miFileProperties;
-        private MenuItem miExportToExcelFile;
+        private MenuItem miExportTable;
         private MenuItem miExportToFamilyBook;
         private MenuItem miExportToTreesAlbum;
         private MenuItem miTreeTools;
@@ -67,6 +67,7 @@ namespace GKUI.Forms
         private MenuItem miRecordEdit;
         private MenuItem miRecordDelete;
         private MenuItem miSearch;
+        private MenuItem miFindAndReplace;
         private MenuItem miFilter;
         private MenuItem miOptions;
         private MenuBarItem miPedigree;
@@ -810,9 +811,9 @@ namespace GKUI.Forms
             fController.ExportToTreesAlbum();
         }
 
-        private void miExportToExcelFile_Click()
+        private void miExportTable_Click()
         {
-            fController.ExportToExcelFile();
+            fController.ExportTable();
         }
 
         private void miFileProperties_Click()
@@ -847,7 +848,7 @@ namespace GKUI.Forms
 
         private void miTTRecMerge_Click()
         {
-            fController.ShowRecMerge(null, null);
+            BaseController.ShowRecMerge(this, null, null);
         }
 
         private void miTTPlacesManager_Click()
@@ -899,6 +900,11 @@ namespace GKUI.Forms
         private void miSearch_Click()
         {
             (this as IWorkWindow).QuickSearch();
+        }
+
+        private void miFindAndReplace_Click()
+        {
+            fController.FindAndReplace();
         }
 
         private void miFilter_Click()

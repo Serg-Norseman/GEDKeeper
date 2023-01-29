@@ -13,7 +13,6 @@ using System.Net;
 using GKMap.MapProviders.Bing;
 using GKMap.MapProviders.Etc;
 using GKMap.MapProviders.Google;
-using GKMap.MapProviders.OpenStreetMap;
 using GKMap.MapProviders.Yandex;
 
 namespace GKMap.MapProviders
@@ -26,12 +25,10 @@ namespace GKMap.MapProviders
         public static readonly EmptyProvider EmptyProvider = EmptyProvider.Instance;
 
         public static readonly OpenStreetMapProvider OpenStreetMap = OpenStreetMapProvider.Instance;
-        public static readonly OpenStreet4UMapProvider OpenStreet4UMap = OpenStreet4UMapProvider.Instance;
 
         public static readonly BingMapProvider BingMap = BingMapProvider.Instance;
         public static readonly BingSatelliteMapProvider BingSatelliteMap = BingSatelliteMapProvider.Instance;
         public static readonly BingHybridMapProvider BingHybridMap = BingHybridMapProvider.Instance;
-        public static readonly BingOSMapProvider BingOSMap = BingOSMapProvider.Instance;
 
         public static readonly GoogleMapProvider GoogleMap = GoogleMapProvider.Instance;
         public static readonly GoogleSatelliteMapProvider GoogleSatelliteMap = GoogleSatelliteMapProvider.Instance;

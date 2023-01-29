@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -111,6 +111,15 @@ namespace GKUI.Platform
         public override ExtRect GetActiveScreenWorkingArea()
         {
             throw new NotImplementedException();
+        }
+
+        public override void WidgetLocate(IWidgetForm view, WidgetLocation location)
+        {
+            var form = view as Window;
+            if (form != null) {
+                //var loc = WidgetLocate(UIHelper.Rt2Rt(form.Bounds), location);
+                //form.Location = new Point(loc.X, loc.Y);
+            }
         }
 
         public override string SelectFolder(string folderPath)

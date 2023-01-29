@@ -96,11 +96,9 @@
     <Compile Include="ProxySocket\Socks5Handler.cs" />
     <Compile Include="ProxySocket\SocksHandler.cs" />
     <Compile Include="MapProviders\Bing\BingMapProvider.cs" />
-    <Compile Include="MapProviders\Bing\BingOSMapProvider.cs" />
     <Compile Include="MapProviders\Bing\BingSatelliteMapProvider.cs" />
     <Compile Include="MapProviders\Bing\BingHybridMapProvider.cs" />
     <Compile Include="MapProviders\Etc\WikiMapiaMapProvider.cs" />
-    <Compile Include="MapProviders\OpenStreetMap\OpenStreet4UMapProvider.cs" />
     <Compile Include="MapProviders\Yandex\YandexHybridMapProvider.cs" />
     <Compile Include="MapProviders\Yandex\YandexSatelliteMapProvider.cs" />
     <Compile Include="MapProviders\Yandex\YandexMapProvider.cs" />
@@ -108,7 +106,7 @@
     <Compile Include="MapProviders\Google\GoogleHybridMapProvider.cs" />
     <Compile Include="MapProviders\Google\GoogleSatelliteMapProvider.cs" />
     <Compile Include="MapProviders\Google\GoogleMapProvider.cs" />
-    <Compile Include="MapProviders\OpenStreetMap\OpenStreetMapProvider.cs" />
+    <Compile Include="MapProviders\Etc\OpenStreetMapProvider.cs" />
     <Compile Include="MapProviders\GMapProvider.cs" />
     <Compile Include="IGeocodingProvider.cs" />
     <Compile Include="CacheProviders\SQLitePureImageCache.cs" />
