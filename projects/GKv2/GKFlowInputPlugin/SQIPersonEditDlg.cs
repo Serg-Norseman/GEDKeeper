@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,6 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
@@ -36,9 +35,12 @@ using GKCore.Types;
 using GKUI.Components;
 using GKUI.Forms;
 
-namespace GKSamplePlugin
+namespace GKFlowInputPlugin
 {
-    public partial class PersonEditDlgEx : CommonDialog<IPersonEditDlg, PersonEditDlgController>, IPersonEditDlg
+    /// <summary>
+    /// Sources Quick Input.
+    /// </summary>
+    public partial class SQIPersonEditDlg : CommonDialog<IPersonEditDlg, PersonEditDlgController>, IPersonEditDlg
     {
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fSpousesList;
@@ -210,6 +212,80 @@ namespace GKSamplePlugin
 
         #endregion
 
+        public SQIPersonEditDlg(IBaseWindow baseWin)
+        {
+            InitializeComponent();
+
+            tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+
+            txtMarriedSurname.TextChanged += Names_TextChanged;
+            txtSurname.TextChanged += Names_TextChanged;
+            txtName.TextChanged += Names_TextChanged;
+            cmbPatronymic.TextChanged += Names_TextChanged;
+
+            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
+            btnPortraitAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnPortraitDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnParentsAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
+            btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
+            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
+            btnNameCopy.Image = UIHelper.LoadResourceImage("Resources.btn_copy.gif");
+
+            fEventsList = new GKSheetList(pageEvents);
+            fEventsList.SetControlName("fEventsList"); // for purpose of tests
+
+            fSpousesList = new GKSheetList(pageSpouses);
+            fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
+            fSpousesList.OnModify += ModifySpousesSheet;
+            fSpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
+
+            fNamesList = new GKSheetList(pageNames);
+            fNamesList.OnModify += ModifyNamesSheet;
+            fNamesList.SetControlName("fNamesList"); // for purpose of tests
+
+            fAssociationsList = new GKSheetList(pageAssociations);
+            fAssociationsList.OnModify += ModifyAssociationsSheet;
+            fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
+
+            fNotesList = new GKSheetList(pageNotes);
+            fNotesList.SetControlName("fNotesList"); // for purpose of tests
+
+            fMediaList = new GKSheetList(pageMultimedia);
+            fMediaList.SetControlName("fMediaList"); // for purpose of tests
+
+            fSourcesList = new GKSheetList(pageSources);
+            fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
+
+            fGroupsList = new GKSheetList(pageGroups);
+            fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
+            fGroupsList.OnModify += ModifyGroupsSheet;
+
+            fUserRefList = new GKSheetList(pageUserRefs);
+            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
+
+            fParentsList = new GKSheetList(pageParents);
+            fParentsList.SetControlName("fParentsList"); // for purpose of tests
+            fParentsList.OnModify += ModifyParentsSheet;
+
+            fChildrenList = new GKSheetList(pageChilds);
+            fChildrenList.SetControlName("fChildsList"); // for purpose of tests
+            fChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
+            fChildrenList.OnModify += ModifyChildrenSheet;
+
+            imgPortrait.AddButton(btnPortraitAdd);
+            imgPortrait.AddButton(btnPortraitDelete);
+
+            fController = new PersonEditDlgController(this);
+            fController.Init(baseWin);
+        }
+
         private void cbSex_SelectedIndexChanged(object sender, EventArgs e)
         {
             fController.ChangeSex();
@@ -250,12 +326,16 @@ namespace GKSamplePlugin
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fController.UpdateControls();
+            if (cmbRestriction.Focused) {
+                fController.AcceptTempData();
+
+                fController.UpdateControls();
+            }
         }
 
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
-            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown) {
+            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown || eArgs.Action == RecordAction.raEdit) {
                 fController.UpdateNameControls(fController.IndividualRecord.PersonalNames[0]);
             }
         }
@@ -268,22 +348,18 @@ namespace GKSamplePlugin
             }
         }
 
+        private void BeforeChangeSpousesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raEdit) {
+                fController.AcceptTempData();
+            }
+        }
+
         private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
         {
             GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
             if (eArgs.Action == RecordAction.raJump && family != null) {
-                GDMIndividualLink spouse = null;
-                switch (fController.IndividualRecord.Sex) {
-                    case GDMSex.svMale:
-                        spouse = family.Wife;
-                        break;
-
-                    case GDMSex.svFemale:
-                        spouse = family.Husband;
-                        break;
-                }
-
-                fController.JumpToRecord(spouse);
+                fController.JumpToPersonSpouse(family);
             }
         }
 
@@ -314,8 +390,8 @@ namespace GKSamplePlugin
 
         private void Names_TextChanged(object sender, EventArgs e)
         {
-            Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
-                                 cmbPatronymic.Text, fController.IndividualRecord.GetXRefNum());
+            Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
+                                  cmbPatronymic.Text, fController.IndividualRecord.GetXRefNum());
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)
@@ -365,7 +441,7 @@ namespace GKSamplePlugin
 
         private void btnNameCopy_Click(object sender, EventArgs e)
         {
-            UIHelper.SetClipboardText(GKUtils.GetNameString(fController.IndividualRecord, true, false));
+            fController.CopyPersonName();
         }
 
         private void btnPortraitAdd_Click(object sender, EventArgs e)
@@ -378,12 +454,16 @@ namespace GKSamplePlugin
             fController.DeletePortrait();
         }
 
-        private void edSurname_KeyDown(object sender, KeyEventArgs e)
+        private void txtXName_KeyDown(object sender, KeyEventArgs e)
         {
-            TextBox tb = (sender as TextBox);
-            if (tb != null && e.KeyCode == Keys.Down && e.Control) {
-                tb.Text = StringHelper.UniformName(tb.Text);
+            if (e.KeyCode == Keys.Down && e.Control) {
+                UIHelper.ProcessName(sender);
             }
+        }
+
+        private void txtXName_Leave(object sender, EventArgs e)
+        {
+            UIHelper.ProcessName(sender);
         }
 
         private void edSurname_KeyPress(object sender, KeyPressEventArgs e)
@@ -396,120 +476,6 @@ namespace GKSamplePlugin
         public void SetNeedSex(GDMSex needSex)
         {
             cmbSex.SelectedIndex = (int)needSex;
-        }
-
-        public PersonEditDlgEx(IBaseWindow baseWin)
-        {
-            InitializeComponent();
-
-            txtMarriedSurname.TextChanged += Names_TextChanged;
-            txtSurname.TextChanged += Names_TextChanged;
-            txtName.TextChanged += Names_TextChanged;
-            cmbPatronymic.TextChanged += Names_TextChanged;
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnPortraitAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnPortraitDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnParentsAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnNameCopy.Image = UIHelper.LoadResourceImage("Resources.btn_copy.gif");
-
-            fEventsList = new GKSheetList(pageEvents);
-            fEventsList.SetControlName("fEventsList"); // for purpose of tests
-
-            fSpousesList = new GKSheetList(pageSpouses);
-            fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
-            fSpousesList.OnModify += ModifySpousesSheet;
-
-            fNamesList = new GKSheetList(pageNames);
-            fNamesList.OnModify += ModifyNamesSheet;
-            fNamesList.SetControlName("fNamesList"); // for purpose of tests
-
-            fAssociationsList = new GKSheetList(pageAssociations);
-            fAssociationsList.OnModify += ModifyAssociationsSheet;
-            fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
-
-            fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
-            fGroupsList.OnModify += ModifyGroupsSheet;
-
-            fNotesList = new GKSheetList(pageNotes);
-            fNotesList.SetControlName("fNotesList"); // for purpose of tests
-
-            fMediaList = new GKSheetList(pageMultimedia);
-            fMediaList.SetControlName("fMediaList"); // for purpose of tests
-
-            fSourcesList = new GKSheetList(pageSources);
-            fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
-
-            fUserRefList = new GKSheetList(pageUserRefs);
-            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
-
-            fParentsList = new GKSheetList(pageParents);
-            fParentsList.SetControlName("fParentsList"); // for purpose of tests
-            fParentsList.OnModify += ModifyParentsSheet;
-
-            fChildrenList = new GKSheetList(pageChilds);
-            fChildrenList.SetControlName("fChildsList"); // for purpose of tests
-            fChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
-            fChildrenList.OnModify += ModifyChildrenSheet;
-
-            imgPortrait.AddButton(btnPortraitAdd);
-            imgPortrait.AddButton(btnPortraitDelete);
-
-            fController = new PersonEditDlgController(this);
-            fController.Init(baseWin);
-        }
-
-        public void SetLocale()
-        {
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Text = LangMan.LS(LSID.LSID_WinPersonEdit);
-            lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
-            lblMarriedSurname.Text = LangMan.LS(LSID.LSID_MarriedSurname);
-            lblName.Text = LangMan.LS(LSID.LSID_Name);
-            lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
-            lblSex.Text = LangMan.LS(LSID.LSID_Sex);
-            lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
-            lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
-            lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
-            chkPatriarch.Text = LangMan.LS(LSID.LSID_Patriarch);
-            chkBookmark.Text = LangMan.LS(LSID.LSID_Bookmark);
-            lblParents.Text = LangMan.LS(LSID.LSID_Parents);
-            pageEvents.Text = LangMan.LS(LSID.LSID_Events);
-            pageSpouses.Text = LangMan.LS(LSID.LSID_Spouses);
-            pageAssociations.Text = LangMan.LS(LSID.LSID_Associations);
-            pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
-            lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
-            pageNames.Text = LangMan.LS(LSID.LSID_Names);
-            pageParents.Text = LangMan.LS(LSID.LSID_Parents);
-
-            SetToolTip(btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
-            SetToolTip(btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
-            SetToolTip(btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
-            SetToolTip(btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
-            SetToolTip(btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
-            SetToolTip(btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
-            SetToolTip(btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
-            SetToolTip(btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
-            SetToolTip(btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
-            SetToolTip(btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
-            SetToolTip(btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
-            SetToolTip(btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
         }
     }
 }

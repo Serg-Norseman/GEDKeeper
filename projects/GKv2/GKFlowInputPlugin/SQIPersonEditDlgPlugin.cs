@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,11 +24,14 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 
-namespace GKSamplePlugin
+namespace GKFlowInputPlugin
 {
-    public class PersonDialogPlugin : OrdinaryPlugin, IDialogReplacement
+    /// <summary>
+    /// Sources Quick Input.
+    /// </summary>
+    public class SQIPersonEditDlgPlugin : OrdinaryPlugin, IDialogReplacement
     {
-        private const string DISPLAY_NAME = "PersonDialogPlugin";
+        private const string DISPLAY_NAME = "SQIPersonEditDlgPlugin";
 
         private bool fEnabled;
         private ILangMan fLangMan;
@@ -55,7 +58,7 @@ namespace GKSamplePlugin
             try {
                 fLangMan = Host.CreateLangMan(this);
             } catch (Exception ex) {
-                Logger.WriteError("PersonDialogPlugin.OnLanguageChange()", ex);
+                Logger.WriteError("SQIPersonEditDlgPlugin.OnLanguageChange()", ex);
             }
         }
 
@@ -63,13 +66,13 @@ namespace GKSamplePlugin
 
         public Type GetDialogType()
         {
-            return typeof(PersonEditDlgEx);
+            return typeof(SQIPersonEditDlg);
         }
 
         public ICommonDialog CreateDialog(params object[] parameters)
         {
             IBaseWindow baseWin = (parameters.Length > 0) ? (parameters[0] as IBaseWindow) : null;
-            return (baseWin == null) ? null : new PersonEditDlgEx(baseWin);
+            return (baseWin == null) ? null : new SQIPersonEditDlg(baseWin);
         }
 
         #endregion

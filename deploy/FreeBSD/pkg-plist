@@ -365,8 +365,6 @@ bin/gedkeeper
 %%DATADIR%%/plugins/GKPedigreeImporterPlugin.pol
 %%DATADIR%%/plugins/GKPedigreeImporterPlugin.rus
 %%DATADIR%%/plugins/GKPedigreeImporterPlugin.ukr
-%%DATADIR%%/plugins/GKSamplePlugin.dll
-%%DATADIR%%/plugins/GKSamplePlugin.pdb
 %%DATADIR%%/plugins/GKStdReports.deu
 %%DATADIR%%/plugins/GKStdReports.dll
 %%DATADIR%%/plugins/GKStdReports.enu

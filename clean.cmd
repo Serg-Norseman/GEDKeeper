@@ -65,9 +65,6 @@ rmdir .\projects\GKMap\GKMap.EtoForms\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
-rmdir .\projects\GKv2\GKSamplePlugin\bin /s /q
-rmdir .\projects\GKv2\GKSamplePlugin\obj /s /q
-
 rmdir .\projects\GKv2\GKCalculatorPlugin\bin /s /q
 rmdir .\projects\GKv2\GKCalculatorPlugin\obj /s /q
 
