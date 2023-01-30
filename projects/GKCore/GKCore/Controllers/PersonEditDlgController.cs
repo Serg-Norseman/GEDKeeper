@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,7 +38,7 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PersonEditDlgController : DialogController<IPersonEditDlg>
+    public class PersonEditDlgController<T> : DialogController<T> where T : IPersonEditDlg
     {
         private GDMIndividualRecord fIndividualRecord;
         private IImage fPortraitImg;
@@ -51,6 +51,7 @@ namespace GKCore.Controllers
             set {
                 if (fIndividualRecord != value) {
                     fIndividualRecord = value;
+                    UpdateListModels(fIndividualRecord);
                     UpdateView();
                 }
             }
@@ -69,7 +70,7 @@ namespace GKCore.Controllers
         }
 
 
-        public PersonEditDlgController(IPersonEditDlg view) : base(view)
+        public PersonEditDlgController(T view) : base(view)
         {
             for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnPrivacy; res++) {
                 fView.RestrictionCombo.Add(LangMan.LS(GKData.Restrictions[(int)res]));
@@ -106,7 +107,6 @@ namespace GKCore.Controllers
             fView.SpousesList.ListModel = new IndiSpousesListModel(baseWin, fLocalUndoman);
             fView.UserRefList.ListModel = new URefsListModel(baseWin, fLocalUndoman);
             fView.ParentsList.ListModel = new IndiParentsListModel(baseWin, fLocalUndoman);
-            fView.ChildrenList.ListModel = new IndividualChildrenListModel(baseWin, fLocalUndoman);
         }
 
         private bool IsExtendedWomanSurname()
@@ -130,6 +130,14 @@ namespace GKCore.Controllers
             UpdatePortrait(true);
         }
 
+        protected virtual void AcceptNameParts(GDMPersonalName persName)
+        {
+            persName.Nickname = fView.Nickname.Text;
+            if (IsExtendedWomanSurname()) {
+                persName.MarriedName = fView.MarriedSurname.Text;
+            }
+        }
+
         public override bool Accept()
         {
             try {
@@ -142,14 +150,7 @@ namespace GKCore.Controllers
                 }
 
                 GKUtils.SetNameParts(persName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
-
-                persName.Nickname = fView.Nickname.Text;
-                persName.NamePrefix = fView.NamePrefix.Text;
-                persName.SurnamePrefix = fView.SurnamePrefix.Text;
-                persName.NameSuffix = fView.NameSuffix.Text;
-                if (IsExtendedWomanSurname()) {
-                    persName.MarriedName = fView.MarriedSurname.Text;
-                }
+                AcceptNameParts(persName);
 
                 fIndividualRecord.Sex = (GDMSex)fView.SexCombo.SelectedIndex;
                 fIndividualRecord.Patriarch = fView.Patriarch.Checked;
@@ -169,6 +170,21 @@ namespace GKCore.Controllers
             }
         }
 
+        protected virtual void UpdateListModels(GDMIndividualRecord indiRec)
+        {
+            fView.EventsList.ListModel.DataOwner = indiRec;
+            fView.NotesList.ListModel.DataOwner = indiRec;
+            fView.MediaList.ListModel.DataOwner = indiRec;
+            fView.SourcesList.ListModel.DataOwner = indiRec;
+            fView.AssociationsList.ListModel.DataOwner = indiRec;
+
+            fView.GroupsList.ListModel.DataOwner = indiRec;
+            fView.NamesList.ListModel.DataOwner = indiRec;
+            fView.SpousesList.ListModel.DataOwner = indiRec;
+            fView.UserRefList.ListModel.DataOwner = indiRec;
+            fView.ParentsList.ListModel.DataOwner = indiRec;
+        }
+
         public override void UpdateView()
         {
             try {
@@ -176,19 +192,6 @@ namespace GKCore.Controllers
                 fView.Patriarch.Checked = fIndividualRecord.Patriarch;
                 fView.Bookmark.Checked = fIndividualRecord.Bookmark;
                 fView.RestrictionCombo.SelectedIndex = (sbyte)fIndividualRecord.Restriction;
-
-                fView.EventsList.ListModel.DataOwner = fIndividualRecord;
-                fView.NotesList.ListModel.DataOwner = fIndividualRecord;
-                fView.MediaList.ListModel.DataOwner = fIndividualRecord;
-                fView.SourcesList.ListModel.DataOwner = fIndividualRecord;
-                fView.AssociationsList.ListModel.DataOwner = fIndividualRecord;
-
-                fView.GroupsList.ListModel.DataOwner = fIndividualRecord;
-                fView.NamesList.ListModel.DataOwner = fIndividualRecord;
-                fView.SpousesList.ListModel.DataOwner = fIndividualRecord;
-                fView.UserRefList.ListModel.DataOwner = fIndividualRecord;
-                fView.ParentsList.ListModel.DataOwner = fIndividualRecord;
-                fView.ChildrenList.ListModel.DataOwner = fIndividualRecord;
 
                 UpdateControls(true);
             } catch (Exception ex) {
@@ -238,25 +241,14 @@ namespace GKCore.Controllers
             UpdateNameControls(np);
             UpdateParents();
 
-            if (totalUpdate) {
-                fView.EventsList.UpdateSheet();
-                fView.NotesList.UpdateSheet();
-                fView.MediaList.UpdateSheet();
-                fView.SourcesList.UpdateSheet();
-                fView.AssociationsList.UpdateSheet();
-
-                fView.GroupsList.UpdateSheet();
-                fView.NamesList.UpdateSheet();
-                fView.SpousesList.UpdateSheet();
-                fView.UserRefList.UpdateSheet();
-                fView.ParentsList.UpdateSheet();
-                fView.ChildrenList.UpdateSheet();
-            }
-
             UpdatePortrait(totalUpdate);
 
             bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
+            UpdateLocked(locked);
+        }
 
+        protected virtual void UpdateLocked(bool locked)
+        {
             // controls lock
             fView.Name.Enabled = !locked;
 
@@ -264,10 +256,7 @@ namespace GKCore.Controllers
             fView.Patriarch.Enabled = !locked;
             fView.Bookmark.Enabled = !locked;
 
-            fView.NamePrefix.Enabled = !locked;
             fView.Nickname.Enabled = !locked;
-            fView.SurnamePrefix.Enabled = !locked;
-            fView.NameSuffix.Enabled = !locked;
 
             fView.EventsList.ReadOnly = locked;
             fView.NamesList.ReadOnly = locked;
@@ -279,10 +268,9 @@ namespace GKCore.Controllers
             fView.GroupsList.ReadOnly = locked;
             fView.UserRefList.ReadOnly = locked;
             fView.ParentsList.ReadOnly = locked;
-            fView.ChildrenList.ReadOnly = locked;
         }
 
-        public void UpdateNameControls(GDMPersonalName np)
+        public virtual void UpdateNameControls(GDMPersonalName np)
         {
             ICulture culture;
             if (np != null) {
@@ -292,12 +280,7 @@ namespace GKCore.Controllers
                 fView.Surname.Text = parts.Surname;
                 fView.Name.Text = parts.Name;
                 fView.Patronymic.Text = parts.Patronymic;
-
-                fView.NamePrefix.Text = np.NamePrefix;
                 fView.Nickname.Text = np.Nickname;
-                fView.SurnamePrefix.Text = np.SurnamePrefix;
-                fView.NameSuffix.Text = np.NameSuffix;
-
                 fView.MarriedSurname.Text = np.MarriedName;
             } else {
                 culture = fBase.Context.Culture;
@@ -305,12 +288,7 @@ namespace GKCore.Controllers
                 fView.Surname.Text = "";
                 fView.Name.Text = "";
                 fView.Patronymic.Text = "";
-
-                fView.NamePrefix.Text = "";
                 fView.Nickname.Text = "";
-                fView.SurnamePrefix.Text = "";
-                fView.NameSuffix.Text = "";
-
                 fView.MarriedSurname.Text = "";
             }
 
@@ -559,9 +537,6 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblPatronymic").Text = LangMan.LS(LSID.LSID_Patronymic);
             GetControl<ILabel>("lblSex").Text = LangMan.LS(LSID.LSID_Sex);
             GetControl<ILabel>("lblNickname").Text = LangMan.LS(LSID.LSID_Nickname);
-            GetControl<ILabel>("lblSurnamePrefix").Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            GetControl<ILabel>("lblNamePrefix").Text = LangMan.LS(LSID.LSID_NamePrefix);
-            GetControl<ILabel>("lblNameSuffix").Text = LangMan.LS(LSID.LSID_NameSuffix);
             GetControl<ICheckBox>("chkPatriarch").Text = LangMan.LS(LSID.LSID_Patriarch);
             GetControl<ICheckBox>("chkBookmark").Text = LangMan.LS(LSID.LSID_Bookmark);
             GetControl<ILabel>("lblParents").Text = LangMan.LS(LSID.LSID_Parents);
@@ -576,7 +551,6 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblRestriction").Text = LangMan.LS(LSID.LSID_Restriction);
             GetControl<ITabPage>("pageNames").Text = LangMan.LS(LSID.LSID_Names);
             GetControl<ITabPage>("pageParents").Text = LangMan.LS(LSID.LSID_Parents);
-            GetControl<ITabPage>("pageChilds").Text = LangMan.LS(LSID.LSID_Childs);
 
             SetToolTip("btnPortraitAdd", LangMan.LS(LSID.LSID_PortraitAddTip));
             SetToolTip("btnPortraitDelete", LangMan.LS(LSID.LSID_PortraitDeleteTip));

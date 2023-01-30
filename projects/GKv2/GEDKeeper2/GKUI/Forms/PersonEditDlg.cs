@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,7 +36,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PersonEditDlg : CommonDialog<IPersonEditDlg, PersonEditDlgController>, IPersonEditDlg
+    public partial class PersonEditDlg : CommonDialog<IStdPersonEditDlg, StdPersonEditDlgController>, IStdPersonEditDlg
     {
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fSpousesList;
@@ -121,7 +121,7 @@ namespace GKUI.Forms
             get { return fParentsList; }
         }
 
-        ISheetList IPersonEditDlg.ChildrenList
+        ISheetList IStdPersonEditDlg.ChildrenList
         {
             get { return fChildrenList; }
         }
@@ -161,7 +161,7 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbPatronymic); }
         }
 
-        ITextBox IPersonEditDlg.NamePrefix
+        ITextBox IStdPersonEditDlg.NamePrefix
         {
             get { return GetControlHandler<ITextBox>(txtNamePrefix); }
         }
@@ -171,12 +171,12 @@ namespace GKUI.Forms
             get { return GetControlHandler<ITextBox>(txtNickname); }
         }
 
-        ITextBox IPersonEditDlg.SurnamePrefix
+        ITextBox IStdPersonEditDlg.SurnamePrefix
         {
             get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
         }
 
-        ITextBox IPersonEditDlg.NameSuffix
+        ITextBox IStdPersonEditDlg.NameSuffix
         {
             get { return GetControlHandler<ITextBox>(txtNameSuffix); }
         }
@@ -278,7 +278,7 @@ namespace GKUI.Forms
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
 
-            fController = new PersonEditDlgController(this);
+            fController = new StdPersonEditDlgController(this);
             fController.Init(baseWin);
         }
 

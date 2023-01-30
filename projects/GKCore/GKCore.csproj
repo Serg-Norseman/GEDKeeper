@@ -75,6 +75,7 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Controllers\StdPersonEditDlgController.cs" />
     <Compile Include="GKCore\Calendar\CalendarConverter.cs" />
     <Compile Include="GKCore\Calendar\CalendarData.cs" />
     <Compile Include="GKCore\Calendar\UDN.cs" />

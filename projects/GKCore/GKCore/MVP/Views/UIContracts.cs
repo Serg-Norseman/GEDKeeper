@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -355,7 +355,6 @@ namespace GKCore.MVP.Views
         ISheetList MediaList { get; }
         ISheetList SourcesList { get; }
         ISheetList ParentsList { get; }
-        ISheetList ChildrenList { get; }
 
         IPortraitControl Portrait { get; }
         ITextBox Father { get; }
@@ -363,10 +362,7 @@ namespace GKCore.MVP.Views
         ITextBox Surname { get; }
         ITextBox Name { get; }
         IComboBox Patronymic { get; }
-        ITextBox NamePrefix { get; }
         ITextBox Nickname { get; }
-        ITextBox SurnamePrefix { get; }
-        ITextBox NameSuffix { get; }
         ITextBox MarriedSurname { get; }
 
         ILabel SurnameLabel { get; }
@@ -383,6 +379,16 @@ namespace GKCore.MVP.Views
 
         void SetPortrait(IImage portrait);
         void SetPortraitAvl(bool avail, bool locked);
+    }
+
+
+    public interface IStdPersonEditDlg : IPersonEditDlg
+    {
+        ITextBox NamePrefix { get; }
+        ITextBox SurnamePrefix { get; }
+        ITextBox NameSuffix { get; }
+
+        ISheetList ChildrenList { get; }
     }
 
 

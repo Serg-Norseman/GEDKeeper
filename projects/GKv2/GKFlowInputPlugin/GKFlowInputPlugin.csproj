@@ -46,6 +46,7 @@
     <Compile Include="SQIPersonEditDlg.Designer.cs">
       <DependentUpon>SQIPersonEditDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="SQIPersonEditDlgController.cs" />
     <Compile Include="SQIPersonEditDlgPlugin.cs" />
   </ItemGroup>
   <ItemGroup>

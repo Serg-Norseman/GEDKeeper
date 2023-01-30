@@ -669,10 +669,9 @@
             // 
             // pageParents
             // 
-            this.pageParents.BackColor = System.Drawing.SystemColors.Control;
             this.pageParents.Location = new System.Drawing.Point(4, 22);
+            this.pageParents.Margin = new System.Windows.Forms.Padding(2);
             this.pageParents.Name = "pageParents";
-            this.pageParents.Padding = new System.Windows.Forms.Padding(3);
             this.pageParents.Size = new System.Drawing.Size(691, 230);
             this.pageParents.TabIndex = 9;
             this.pageParents.Text = "pageParents";

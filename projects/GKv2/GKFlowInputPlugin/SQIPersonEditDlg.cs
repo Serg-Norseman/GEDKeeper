@@ -26,7 +26,6 @@ using BSLib.Design.Handlers;
 using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
-using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Controls;
@@ -40,7 +39,7 @@ namespace GKFlowInputPlugin
     /// <summary>
     /// Sources Quick Input.
     /// </summary>
-    public partial class SQIPersonEditDlg : CommonDialog<IPersonEditDlg, PersonEditDlgController>, IPersonEditDlg
+    public partial class SQIPersonEditDlg : CommonDialog<ISQIPersonEditDlg, SQIPersonEditDlgController>, ISQIPersonEditDlg
     {
         private readonly GKSheetList fEventsList;
         private readonly GKSheetList fSpousesList;
@@ -52,7 +51,6 @@ namespace GKFlowInputPlugin
         private readonly GKSheetList fUserRefList;
         private readonly GKSheetList fNamesList;
         private readonly GKSheetList fParentsList;
-        private readonly GKSheetList fChildrenList;
 
         public GDMIndividualRecord IndividualRecord
         {
@@ -125,11 +123,6 @@ namespace GKFlowInputPlugin
             get { return fParentsList; }
         }
 
-        ISheetList IPersonEditDlg.ChildrenList
-        {
-            get { return fChildrenList; }
-        }
-
         IPortraitControl IPersonEditDlg.Portrait
         {
             get { return imgPortrait; }
@@ -165,24 +158,9 @@ namespace GKFlowInputPlugin
             get { return GetControlHandler<IComboBox>(cmbPatronymic); }
         }
 
-        ITextBox IPersonEditDlg.NamePrefix
-        {
-            get { return GetControlHandler<ITextBox>(txtNamePrefix); }
-        }
-
         ITextBox IPersonEditDlg.Nickname
         {
             get { return GetControlHandler<ITextBox>(txtNickname); }
-        }
-
-        ITextBox IPersonEditDlg.SurnamePrefix
-        {
-            get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
-        }
-
-        ITextBox IPersonEditDlg.NameSuffix
-        {
-            get { return GetControlHandler<ITextBox>(txtNameSuffix); }
         }
 
         ITextBox IPersonEditDlg.MarriedSurname
@@ -274,15 +252,10 @@ namespace GKFlowInputPlugin
             fParentsList.SetControlName("fParentsList"); // for purpose of tests
             fParentsList.OnModify += ModifyParentsSheet;
 
-            fChildrenList = new GKSheetList(pageChilds);
-            fChildrenList.SetControlName("fChildsList"); // for purpose of tests
-            fChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
-            fChildrenList.OnModify += ModifyChildrenSheet;
-
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
 
-            fController = new PersonEditDlgController(this);
+            fController = new SQIPersonEditDlgController(this);
             fController.Init(baseWin);
         }
 
@@ -379,13 +352,6 @@ namespace GKFlowInputPlugin
         {
             var record = e.Item as GDMRecord;
             e.IsAvailable = record == null || fController.Base.Context.IsAvailableRecord(record);
-        }
-
-        private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
-            }
         }
 
         private void Names_TextChanged(object sender, EventArgs e)

@@ -33,12 +33,6 @@
         private System.Windows.Forms.Button btnParentsEdit;
         private System.Windows.Forms.Button btnParentsDelete;
         private System.Windows.Forms.CheckBox chkBookmark;
-        private System.Windows.Forms.Label lblSurnamePrefix;
-        private System.Windows.Forms.TextBox txtSurnamePrefix;
-        private System.Windows.Forms.Label lblNamePrefix;
-        private System.Windows.Forms.TextBox txtNamePrefix;
-        private System.Windows.Forms.Label lblNameSuffix;
-        private System.Windows.Forms.TextBox txtNameSuffix;
         private System.Windows.Forms.Label lblNickname;
         private System.Windows.Forms.TextBox txtNickname;
         private GKUI.Components.GKPortrait imgPortrait;
@@ -55,7 +49,10 @@
         private System.Windows.Forms.TextBox txtMarriedSurname;
         private System.Windows.Forms.Label lblMarriedSurname;
         private System.Windows.Forms.TabPage pageParents;
-        private System.Windows.Forms.TabPage pageChilds;
+        private System.Windows.Forms.TabPage pageFamily;
+        private GKUI.Components.GKTabControl tabsFamily;
+        private System.Windows.Forms.TabPage pageOther;
+        private GKUI.Components.GKTabControl tabsOther;
 
         private void InitializeComponent()
         {
@@ -70,9 +67,6 @@
             this.lblName = new System.Windows.Forms.Label();
             this.lblPatronymic = new System.Windows.Forms.Label();
             this.lblSex = new System.Windows.Forms.Label();
-            this.lblSurnamePrefix = new System.Windows.Forms.Label();
-            this.lblNamePrefix = new System.Windows.Forms.Label();
-            this.lblNameSuffix = new System.Windows.Forms.Label();
             this.lblNickname = new System.Windows.Forms.Label();
             this.btnPortraitAdd = new System.Windows.Forms.Button();
             this.btnPortraitDelete = new System.Windows.Forms.Button();
@@ -96,9 +90,6 @@
             this.btnMotherSel = new System.Windows.Forms.Button();
             this.txtFather = new System.Windows.Forms.TextBox();
             this.chkBookmark = new System.Windows.Forms.CheckBox();
-            this.txtSurnamePrefix = new System.Windows.Forms.TextBox();
-            this.txtNamePrefix = new System.Windows.Forms.TextBox();
-            this.txtNameSuffix = new System.Windows.Forms.TextBox();
             this.txtNickname = new System.Windows.Forms.TextBox();
             this.btnNameCopy = new System.Windows.Forms.Button();
             this.tabsData = new GKUI.Components.GKTabControl();
@@ -112,10 +103,15 @@
             this.pageSources = new System.Windows.Forms.TabPage();
             this.pageUserRefs = new System.Windows.Forms.TabPage();
             this.pageParents = new System.Windows.Forms.TabPage();
-            this.pageChilds = new System.Windows.Forms.TabPage();
+            this.pageFamily = new System.Windows.Forms.TabPage();
+            this.tabsFamily = new GKUI.Components.GKTabControl();
+            this.pageOther = new System.Windows.Forms.TabPage();
+            this.tabsOther = new GKUI.Components.GKTabControl();
             this.GroupBox1.SuspendLayout();
             this.panCtlParents.SuspendLayout();
             this.tabsData.SuspendLayout();
+            this.tabsFamily.SuspendLayout();
+            this.tabsOther.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnAccept
@@ -171,9 +167,6 @@
             this.GroupBox1.Controls.Add(this.lblName);
             this.GroupBox1.Controls.Add(this.lblPatronymic);
             this.GroupBox1.Controls.Add(this.lblSex);
-            this.GroupBox1.Controls.Add(this.lblSurnamePrefix);
-            this.GroupBox1.Controls.Add(this.lblNamePrefix);
-            this.GroupBox1.Controls.Add(this.lblNameSuffix);
             this.GroupBox1.Controls.Add(this.lblNickname);
             this.GroupBox1.Controls.Add(this.btnPortraitAdd);
             this.GroupBox1.Controls.Add(this.btnPortraitDelete);
@@ -185,9 +178,6 @@
             this.GroupBox1.Controls.Add(this.chkPatriarch);
             this.GroupBox1.Controls.Add(this.panCtlParents);
             this.GroupBox1.Controls.Add(this.chkBookmark);
-            this.GroupBox1.Controls.Add(this.txtSurnamePrefix);
-            this.GroupBox1.Controls.Add(this.txtNamePrefix);
-            this.GroupBox1.Controls.Add(this.txtNameSuffix);
             this.GroupBox1.Controls.Add(this.txtNickname);
             this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.GroupBox1.Location = new System.Drawing.Point(0, 0);
@@ -249,42 +239,12 @@
             // lblSex
             // 
             this.lblSex.AutoSize = true;
-            this.lblSex.Location = new System.Drawing.Point(360, 94);
+            this.lblSex.Location = new System.Drawing.Point(207, 94);
             this.lblSex.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSex.Name = "lblSex";
             this.lblSex.Size = new System.Drawing.Size(35, 13);
             this.lblSex.TabIndex = 16;
             this.lblSex.Text = "lblSex";
-            // 
-            // lblSurnamePrefix
-            // 
-            this.lblSurnamePrefix.AutoSize = true;
-            this.lblSurnamePrefix.Location = new System.Drawing.Point(207, 15);
-            this.lblSurnamePrefix.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblSurnamePrefix.Name = "lblSurnamePrefix";
-            this.lblSurnamePrefix.Size = new System.Drawing.Size(87, 13);
-            this.lblSurnamePrefix.TabIndex = 8;
-            this.lblSurnamePrefix.Text = "lblSurnamePrefix";
-            // 
-            // lblNamePrefix
-            // 
-            this.lblNamePrefix.AutoSize = true;
-            this.lblNamePrefix.Location = new System.Drawing.Point(207, 54);
-            this.lblNamePrefix.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblNamePrefix.Name = "lblNamePrefix";
-            this.lblNamePrefix.Size = new System.Drawing.Size(72, 13);
-            this.lblNamePrefix.TabIndex = 10;
-            this.lblNamePrefix.Text = "lblNamePrefix";
-            // 
-            // lblNameSuffix
-            // 
-            this.lblNameSuffix.AutoSize = true;
-            this.lblNameSuffix.Location = new System.Drawing.Point(207, 94);
-            this.lblNameSuffix.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblNameSuffix.Name = "lblNameSuffix";
-            this.lblNameSuffix.Size = new System.Drawing.Size(72, 13);
-            this.lblNameSuffix.TabIndex = 12;
-            this.lblNameSuffix.Text = "lblNameSuffix";
             // 
             // lblNickname
             // 
@@ -364,10 +324,10 @@
             // 
             this.cmbSex.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbSex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSex.Location = new System.Drawing.Point(360, 108);
+            this.cmbSex.Location = new System.Drawing.Point(207, 108);
             this.cmbSex.Margin = new System.Windows.Forms.Padding(2);
             this.cmbSex.Name = "cmbSex";
-            this.cmbSex.Size = new System.Drawing.Size(154, 22);
+            this.cmbSex.Size = new System.Drawing.Size(136, 22);
             this.cmbSex.TabIndex = 17;
             this.cmbSex.SelectedIndexChanged += new System.EventHandler(this.cbSex_SelectedIndexChanged);
             // 
@@ -523,30 +483,6 @@
             this.chkBookmark.TabIndex = 19;
             this.chkBookmark.Text = "chkBookmark";
             // 
-            // txtSurnamePrefix
-            // 
-            this.txtSurnamePrefix.Location = new System.Drawing.Point(207, 31);
-            this.txtSurnamePrefix.Margin = new System.Windows.Forms.Padding(2, 2, 16, 2);
-            this.txtSurnamePrefix.Name = "txtSurnamePrefix";
-            this.txtSurnamePrefix.Size = new System.Drawing.Size(136, 21);
-            this.txtSurnamePrefix.TabIndex = 9;
-            // 
-            // txtNamePrefix
-            // 
-            this.txtNamePrefix.Location = new System.Drawing.Point(207, 70);
-            this.txtNamePrefix.Margin = new System.Windows.Forms.Padding(2, 2, 16, 2);
-            this.txtNamePrefix.Name = "txtNamePrefix";
-            this.txtNamePrefix.Size = new System.Drawing.Size(136, 21);
-            this.txtNamePrefix.TabIndex = 11;
-            // 
-            // txtNameSuffix
-            // 
-            this.txtNameSuffix.Location = new System.Drawing.Point(207, 108);
-            this.txtNameSuffix.Margin = new System.Windows.Forms.Padding(2, 2, 16, 2);
-            this.txtNameSuffix.Name = "txtNameSuffix";
-            this.txtNameSuffix.Size = new System.Drawing.Size(136, 21);
-            this.txtNameSuffix.TabIndex = 13;
-            // 
             // txtNickname
             // 
             this.txtNickname.Location = new System.Drawing.Point(207, 147);
@@ -567,16 +503,11 @@
             // tabsPersonData
             // 
             this.tabsData.Controls.Add(this.pageEvents);
-            this.tabsData.Controls.Add(this.pageSpouses);
             this.tabsData.Controls.Add(this.pageNames);
-            this.tabsData.Controls.Add(this.pageAssociations);
-            this.tabsData.Controls.Add(this.pageGroups);
-            this.tabsData.Controls.Add(this.pageNotes);
-            this.tabsData.Controls.Add(this.pageMultimedia);
+            this.tabsData.Controls.Add(this.pageFamily);
             this.tabsData.Controls.Add(this.pageSources);
-            this.tabsData.Controls.Add(this.pageUserRefs);
-            this.tabsData.Controls.Add(this.pageParents);
-            this.tabsData.Controls.Add(this.pageChilds);
+            this.tabsData.Controls.Add(this.pageNotes);
+            this.tabsData.Controls.Add(this.pageOther);
             this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabsData.Location = new System.Drawing.Point(0, 258);
             this.tabsData.Margin = new System.Windows.Forms.Padding(2);
@@ -669,22 +600,60 @@
             // 
             // pageParents
             // 
-            this.pageParents.BackColor = System.Drawing.SystemColors.Control;
             this.pageParents.Location = new System.Drawing.Point(4, 22);
+            this.pageParents.Margin = new System.Windows.Forms.Padding(2);
             this.pageParents.Name = "pageParents";
-            this.pageParents.Padding = new System.Windows.Forms.Padding(3);
             this.pageParents.Size = new System.Drawing.Size(691, 230);
             this.pageParents.TabIndex = 9;
             this.pageParents.Text = "pageParents";
             // 
-            // pageChilds
+            // tabsFamily
             // 
-            this.pageChilds.Location = new System.Drawing.Point(4, 26);
-            this.pageChilds.Margin = new System.Windows.Forms.Padding(2);
-            this.pageChilds.Name = "pageChilds";
-            this.pageChilds.Size = new System.Drawing.Size(700, 290);
-            this.pageChilds.TabIndex = 10;
-            this.pageChilds.Text = "pageChilds";
+            this.tabsFamily.Controls.Add(this.pageSpouses);
+            this.tabsFamily.Controls.Add(this.pageParents);
+            this.tabsFamily.Controls.Add(this.pageAssociations);
+            this.tabsFamily.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabsFamily.Location = new System.Drawing.Point(0, 258);
+            this.tabsFamily.Margin = new System.Windows.Forms.Padding(2);
+            this.tabsFamily.Name = "tabsFamily";
+            this.tabsFamily.SelectedIndex = 0;
+            this.tabsFamily.Size = new System.Drawing.Size(699, 256);
+            this.tabsFamily.TabIndex = 1;
+            // 
+            // pageFamily
+            //
+            this.pageFamily.Controls.Add(this.tabsFamily);
+            this.pageFamily.BackColor = System.Drawing.SystemColors.Control;
+            this.pageFamily.Location = new System.Drawing.Point(4, 22);
+            this.pageFamily.Name = "pageFamily";
+            this.pageFamily.Padding = new System.Windows.Forms.Padding(3);
+            this.pageFamily.Size = new System.Drawing.Size(691, 230);
+            this.pageFamily.TabIndex = 9;
+            this.pageFamily.Text = "pageFamily";
+            // 
+            // tabsOther
+            // 
+            this.tabsOther.Controls.Add(this.pageMultimedia);
+            this.tabsOther.Controls.Add(this.pageGroups);
+            this.tabsOther.Controls.Add(this.pageUserRefs);
+            this.tabsOther.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabsOther.Location = new System.Drawing.Point(0, 258);
+            this.tabsOther.Margin = new System.Windows.Forms.Padding(2);
+            this.tabsOther.Name = "tabsOther";
+            this.tabsOther.SelectedIndex = 0;
+            this.tabsOther.Size = new System.Drawing.Size(699, 256);
+            this.tabsOther.TabIndex = 1;
+            // 
+            // pageOther
+            //
+            this.pageOther.Controls.Add(this.tabsOther);
+            this.pageOther.BackColor = System.Drawing.SystemColors.Control;
+            this.pageOther.Location = new System.Drawing.Point(4, 22);
+            this.pageOther.Name = "pageOther";
+            this.pageOther.Padding = new System.Windows.Forms.Padding(3);
+            this.pageOther.Size = new System.Drawing.Size(691, 230);
+            this.pageOther.TabIndex = 9;
+            this.pageOther.Text = "pageOther";
             // 
             // PersonEditDlg
             // 
@@ -714,6 +683,8 @@
             this.GroupBox1.PerformLayout();
             this.panCtlParents.ResumeLayout(false);
             this.panCtlParents.PerformLayout();
+            this.tabsFamily.ResumeLayout(false);
+            this.tabsOther.ResumeLayout(false);
             this.tabsData.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
