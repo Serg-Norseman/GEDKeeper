@@ -131,7 +131,7 @@ namespace GKCore.Linguistics
     /// <summary>
     /// 
     /// </summary>
-    public sealed class Morpher
+    public static class Morpher
     {
         private const string SWordTooShort = "Word too short";
         private const string SBaseTooShort = "Word base too short";
@@ -170,7 +170,10 @@ namespace GKCore.Linguistics
 
         public static string MorphNoun(string noun, DeclensionCase ncase, Number num, DeclensionGender gender, bool animate, bool endingstressed)
         {
-            if (((noun != null) ? noun.Length : 0) < 2) {
+            if (string.IsNullOrEmpty(noun))
+                throw new ArgumentNullException("noun");
+
+            if (noun.Length < 2) {
                 throw new Exception(SWordTooShort);
             }
 
@@ -255,7 +258,7 @@ namespace GKCore.Linguistics
             }
 
             if (decl == Declension.d1) {
-                if (((ending != null) ? ending.Length : 0) == 0 & jot) {
+                if (((ending != null) ? ending.Length : 0) == 0 && jot) {
                     _base += "й";
                 }
                 if (num == Number.nSingle) {
@@ -267,12 +270,12 @@ namespace GKCore.Linguistics
                                 ending = "ей";
                             }
                         } else {
-                            if (soft & endingstressed) {
+                            if (soft && endingstressed) {
                                 ending = "ёй";
                             }
                         }
                     }
-                    if ((ncase == DeclensionCase.Dative & jot) && endof(_base) == 'и') {
+                    if ((ncase == DeclensionCase.Dative && jot) && endof(_base) == 'и') {
                         ending = "и";
                     }
                 } else {
@@ -289,7 +292,7 @@ namespace GKCore.Linguistics
                                 vowel = 'ё';
                             } else {
                                 if (soft) {
-                                    if (jot & endingstressed) {
+                                    if (jot && endingstressed) {
                                         vowel = 'е';
                                     } else {
                                         vowel = 'и';
@@ -342,7 +345,7 @@ namespace GKCore.Linguistics
                             ending = "о";
                         }
                     }
-                    if (((ending != null) ? ending.Length : 0) == 0 & jot) {
+                    if (((ending != null) ? ending.Length : 0) == 0 && jot) {
                         _base += "й";
                     }
                     if (gender == DeclensionGender.Neutral && num == Number.nPlural && ncase == DeclensionCase.Nominative) {
@@ -360,7 +363,10 @@ namespace GKCore.Linguistics
 
         public static string MorphAdjective(String adjective, DeclensionCase c, Number q, DeclensionGender g)
         {
-            if (((adjective != null) ? adjective.Length : 0) < 4) {
+            if (string.IsNullOrEmpty(adjective))
+                throw new ArgumentNullException("adjective");
+
+            if (adjective.Length < 4) {
                 throw new Exception(SWordTooShort);
             }
 

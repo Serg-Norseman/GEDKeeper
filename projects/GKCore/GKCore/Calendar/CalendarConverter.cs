@@ -811,10 +811,10 @@ namespace GKCore.Calendar
 
             switch (style) {
                 case ByzantineStyle.March:
-                    year = month < 3 ? year += 5507 : year += 5508;
+                    year = month < 3 ? year + 5507 : year + 5508;
                     break;
                 case ByzantineStyle.September:
-                    year = month < 9 ? year += 5508 : year += 5509;
+                    year = month < 9 ? year + 5508 : year + 5509;
                     break;
             }
         }

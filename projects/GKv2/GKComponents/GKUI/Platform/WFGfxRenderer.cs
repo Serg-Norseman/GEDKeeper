@@ -38,7 +38,6 @@ namespace GKUI.Platform
     public sealed class WFGfxRenderer : ChartRenderer
     {
         private Graphics fCanvas;
-        private ColorMatrix fColorMatrix;
         private ImageAttributes fImageAttributes; // FIXME: disposable!
         private readonly Stack<Matrix> fTransforms;
         private float fTranslucent;
@@ -274,14 +273,14 @@ namespace GKUI.Platform
         {
             fTranslucent = Algorithms.CheckBounds(value, 0.0f, 1.0f);
 
-            fColorMatrix = new ColorMatrix();
-            fColorMatrix.Matrix33 = 1 - fTranslucent; // opacity 0 = completely transparent, 1 = completely opaque
+            var colorMatrix = new ColorMatrix();
+            colorMatrix.Matrix33 = 1 - fTranslucent; // opacity 0 = completely transparent, 1 = completely opaque
 
             if (fImageAttributes != null)
                 fImageAttributes.Dispose();
 
             fImageAttributes = new ImageAttributes();
-            fImageAttributes.SetColorMatrix(fColorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            fImageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
         }
 
         public override void ScaleTransform(float sx, float sy)

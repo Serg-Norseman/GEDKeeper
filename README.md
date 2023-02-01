@@ -10,7 +10,6 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/h0u8iwr3kvy6o9x1?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/gedkeeper)
 [![codecov.io](https://codecov.io/github/Serg-Norseman/GEDKeeper/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/GEDKeeper?branch=master)
-[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=gedkeeper&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=gedkeeper)
 
 
 The **GEDKeeper** program is for working with personal genealogical databases.
