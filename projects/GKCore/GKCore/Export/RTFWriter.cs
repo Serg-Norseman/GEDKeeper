@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,10 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib.Design.Graphics;
-using Elistia.DotNetRtfWriter;
-using BSLib;
 using System.Collections.Generic;
+using BSLib;
+using Elistia.DotNetRtfWriter;
+using GKCore.Design.Graphics;
 
 namespace GKCore.Export
 {

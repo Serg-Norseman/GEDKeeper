@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,20 +28,20 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using BSLib;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Controllers;
+using GKCore.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.Options;
 
 namespace GKCore
 {
-    #if !NLUA
+#if !NLUA
     using LuaInterface;
-    #else
+#else
     using NLua;
-    #endif
+#endif
 
     public class ScriptException : Exception
     {

@@ -20,8 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-using BSLib.Design.MVP.Controls;
 using GKCore.Calendar;
+using GKCore.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 

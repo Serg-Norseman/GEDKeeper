@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,10 +21,10 @@
 using System;
 using System.Threading;
 using BSLib;
-using BSLib.Design.IoC;
-using BSLib.Design.MVP;
 using GKCore;
+using GKCore.Design.MVP;
 using GKCore.Interfaces;
+using GKCore.IoC;
 using GKCore.Options;
 using Xamarin.Forms;
 using XFRadioButton = Xamarin.Forms.RadioButton;
@@ -114,6 +114,11 @@ namespace GKUI.Platform
         }
 
         public override ExtRect GetActiveScreenWorkingArea()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void WidgetLocate(IWidgetForm view, WidgetLocation location)
         {
             throw new NotImplementedException();
         }

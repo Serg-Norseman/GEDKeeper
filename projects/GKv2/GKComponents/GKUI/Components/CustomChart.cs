@@ -23,10 +23,10 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using BSLib;
-using BSLib.Design.Graphics;
-using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Charts;
+using GKCore.Design.Graphics;
+using GKUI.Platform.Handlers;
 
 namespace GKUI.Components
 {

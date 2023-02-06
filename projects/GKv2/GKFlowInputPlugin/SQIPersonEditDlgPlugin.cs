@@ -19,8 +19,8 @@
  */
 
 using System;
-using BSLib.Design.Graphics;
 using GKCore;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 

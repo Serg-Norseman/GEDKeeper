@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,9 @@
 
 using System;
 using System.Reflection;
+using GDModel;
 using GKCore;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 using GKCore.Types;
@@ -34,9 +36,6 @@ using GKCore.Types;
 
 namespace GKTextSearchPlugin
 {
-    using BSLib.Design.Graphics;
-    using GDModel;
-
     public enum TLS
     {
         LSID_PluginTitle,

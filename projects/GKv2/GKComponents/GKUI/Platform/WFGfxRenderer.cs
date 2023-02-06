@@ -24,11 +24,11 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using BSLib;
-using BSLib.Design.Graphics;
-using BSLib.Design.Handlers;
 using GKCore;
 using GKCore.Charts;
+using GKCore.Design.Graphics;
 using GKUI.Components;
+using GKUI.Platform.Handlers;
 
 namespace GKUI.Platform
 {

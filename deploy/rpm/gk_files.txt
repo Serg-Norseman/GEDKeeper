@@ -8,8 +8,6 @@
 ../bin/GKComponents.dll
 ../bin/BSLib.dll
 ../bin/BSLib.DataViz.Model.dll
-../bin/BSLib.Design.dll
-../bin/BSLib.Design.WFHandlers.dll
 ../bin/BSLib.SQLite.dll
 ../bin/RtfWriter.dll
 ../bin/ExcelLibrary.dll

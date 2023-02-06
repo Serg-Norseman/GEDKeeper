@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,11 +22,11 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using BSLib.Design.Graphics;
-using BSLib.Design.Handlers;
 using GKCore;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
+using GKUI.Platform.Handlers;
 
 [assembly: AssemblyTitle("GKCalendarPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calendar plugin")]

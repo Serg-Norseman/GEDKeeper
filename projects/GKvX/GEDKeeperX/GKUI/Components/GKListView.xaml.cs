@@ -1,5 +1,5 @@
-﻿using BSLib.Design;
-using BSLib.Design.MVP.Controls;
+﻿using GKCore.Design;
+using GKCore.Design.MVP.Controls;
 using GKCore.Interfaces;
 using Xamarin.Forms;
 

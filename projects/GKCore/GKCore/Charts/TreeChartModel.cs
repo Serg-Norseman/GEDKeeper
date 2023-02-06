@@ -25,16 +25,15 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using BSLib;
-using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Options;
 using GKCore.Search;
 using GKCore.Types;
-
-using BSDColors = BSLib.Design.BSDConsts.Colors;
+using BSDColors = GKCore.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
 {

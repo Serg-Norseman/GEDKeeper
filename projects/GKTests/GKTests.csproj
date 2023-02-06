@@ -34,12 +34,6 @@
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.Design">
-      <HintPath>..\libs\BSLib.Design.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.Design.WFHandlers">
-      <HintPath>..\libs\BSLib.Design.WFHandlers.dll</HintPath>
-    </Reference>
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
@@ -115,6 +109,7 @@
     <Compile Include="GKComponents\TreeChartBoxTests.cs" />
     <Compile Include="GKCore\AppHostTests.cs" />
     <Compile Include="GKCore\BaseContextTests.cs" />
+    <Compile Include="GKCore\IocContainerTests.cs" />
     <Compile Include="GKCore\MorpherTests.cs" />
     <Compile Include="GKCore\BBTextParserTests.cs" />
     <Compile Include="GKCore\CalendarTests.cs" />

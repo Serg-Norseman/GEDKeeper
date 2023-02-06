@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,9 +22,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using BSLib;
-using BSLib.Design.Graphics;
-using BSLib.Design.MVP;
-using BSLib.Design.MVP.Controls;
+using GKCore.Design.Graphics;
+using GKCore.Design.MVP;
+using GKCore.Design.MVP.Controls;
 using GKUI.Components;
 using Plugin.InputKit.Shared.Controls;
 using Xamarin.Forms;

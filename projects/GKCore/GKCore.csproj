@@ -36,9 +36,6 @@
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.Design">
-      <HintPath>..\libs\BSLib.Design.dll</HintPath>
-    </Reference>
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
@@ -79,6 +76,45 @@
     <Compile Include="GKCore\Calendar\CalendarConverter.cs" />
     <Compile Include="GKCore\Calendar\CalendarData.cs" />
     <Compile Include="GKCore\Calendar\UDN.cs" />
+    <Compile Include="GKCore\Design\BSDConsts.cs" />
+    <Compile Include="GKCore\Design\BSDTypes.cs" />
+    <Compile Include="GKCore\Design\Graphics\IBrush.cs" />
+    <Compile Include="GKCore\Design\Graphics\IColor.cs" />
+    <Compile Include="GKCore\Design\Graphics\IFont.cs" />
+    <Compile Include="GKCore\Design\Graphics\IGfxCirclePath.cs" />
+    <Compile Include="GKCore\Design\Graphics\IGfxCircleSegmentPath.cs" />
+    <Compile Include="GKCore\Design\Graphics\IGfxPath.cs" />
+    <Compile Include="GKCore\Design\Graphics\IGraphicsProvider.cs" />
+    <Compile Include="GKCore\Design\Graphics\IImage.cs" />
+    <Compile Include="GKCore\Design\Graphics\IPen.cs" />
+    <Compile Include="GKCore\Design\Graphics\IPrintable.cs" />
+    <Compile Include="GKCore\Design\MVP\ControlHandler.cs" />
+    <Compile Include="GKCore\Design\MVP\Controller.cs" />
+    <Compile Include="GKCore\Design\MVP\ControlsManager.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\ComboItem.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IButton.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IButtonToolItem.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\ICheckBox.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IComboBox.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IComboItem.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IControlItems.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IDateTimeBox.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IGroupBox.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\ILabel.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IListView.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IMenuItem.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\INumericBox.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IPictureBox.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IProgressBar.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IRadioButton.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\ITabControl.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\ITabPage.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\ITextBox.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\IToolItem.cs" />
+    <Compile Include="GKCore\Design\MVP\Controls\ITreeView.cs" />
+    <Compile Include="GKCore\Design\MVP\IControl.cs" />
+    <Compile Include="GKCore\Design\MVP\IController.cs" />
+    <Compile Include="GKCore\Design\MVP\IView.cs" />
     <Compile Include="GKCore\Export\TableWriter.cs" />
     <Compile Include="GKCore\Charts\TreeChartDesk.cs" />
     <Compile Include="GKCore\Charts\TreeChartNavItem.cs" />
@@ -259,6 +295,7 @@
     <Compile Include="GKCore\Interfaces\IUndoManager.cs" />
     <Compile Include="GKCore\Interfaces\IWidget.cs" />
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
+    <Compile Include="GKCore\IoC\IocContainer.cs" />
     <Compile Include="GKCore\JsonHelper.cs" />
     <Compile Include="GKCore\Linguistics\DoubleMetaphone.cs" />
     <Compile Include="GKCore\Linguistics\Morpher.cs" />
@@ -512,6 +549,12 @@
     <EmbeddedResource Include="Resources\pnl_video.png" />
     <EmbeddedResource Include="Resources\btn_info.gif" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GKCore\Design" />
+    <Folder Include="GKCore\Design\Graphics" />
+    <Folder Include="GKCore\Design\MVP" />
+    <Folder Include="GKCore\Design\MVP\Controls" />
+    <Folder Include="GKCore\IoC" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

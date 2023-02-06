@@ -22,13 +22,12 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
-using BSLib.Design.Graphics;
 using GDModel;
+using GKCore.Design.Graphics;
 using GKCore.Import;
 using GKCore.Options;
 using GKCore.Types;
-
-using BSDColors = BSLib.Design.BSDConsts.Colors;
+using BSDColors = GKCore.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
 {

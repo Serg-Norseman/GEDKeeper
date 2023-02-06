@@ -65,7 +65,7 @@
 		    this.lvData.ListMan = null;
 		    this.lvData.Location = new System.Drawing.Point(0, 28);
 		    this.lvData.Name = "lvData";
-		    this.lvData.SortOrder = BSLib.Design.BSDTypes.SortOrder.None;
+		    this.lvData.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
 		    this.lvData.OwnerDraw = true;
 		    this.lvData.Size = new System.Drawing.Size(694, 369);
 		    this.lvData.SortColumn = 0;

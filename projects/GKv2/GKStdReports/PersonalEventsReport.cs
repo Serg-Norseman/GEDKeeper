@@ -20,11 +20,11 @@
 
 using System.Collections.Generic;
 using BSLib;
-using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Calendar;
+using GKCore.Design.Graphics;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;

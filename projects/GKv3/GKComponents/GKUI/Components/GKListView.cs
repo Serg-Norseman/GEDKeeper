@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,17 +24,16 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using BSLib;
-using BSLib.Design;
-using BSLib.Design.Graphics;
-using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
+using GKCore.Design;
+using GKCore.Design.Graphics;
+using GKCore.Design.MVP.Controls;
 using GKCore.Interfaces;
-using GKUI.Platform;
-
-using BSDListItem = BSLib.Design.MVP.Controls.IListItem;
-using BSDSortOrder = BSLib.Design.BSDTypes.SortOrder;
+using GKUI.Platform.Handlers;
+using BSDListItem = GKCore.Design.MVP.Controls.IListItem;
+using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 
 namespace GKUI.Components
 {

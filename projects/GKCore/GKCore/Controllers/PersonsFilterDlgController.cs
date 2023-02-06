@@ -20,8 +20,8 @@
 
 using System;
 using BSLib;
-using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP;

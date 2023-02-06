@@ -21,13 +21,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using BSLib.Design.Handlers;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GEDmill.Model;
 using GKCore;
 using GKCore.Logging;
 using GKCore.Tools;
+using GKUI.Platform.Handlers;
 
 namespace GEDmill
 {

@@ -18,9 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib.Design.MVP.Controls;
 using GKCore;
 using GKCore.Controllers;
+using GKCore.Design.MVP.Controls;
 using GKCore.MVP.Views;
 
 namespace GKFlowInputPlugin

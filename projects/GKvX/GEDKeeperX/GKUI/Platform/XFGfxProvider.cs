@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,13 +21,13 @@
 using System;
 using System.IO;
 using BSLib;
-using BSLib.Design.Graphics;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKUI.Components;
 using Xamarin.Forms;
-using IBrush = BSLib.Design.Graphics.IBrush;
-using IImage = BSLib.Design.Graphics.IImage;
-using IPen = BSLib.Design.Graphics.IPen;
+using IBrush = GKCore.Design.Graphics.IBrush;
+using IImage = GKCore.Design.Graphics.IImage;
+using IPen = GKCore.Design.Graphics.IPen;
 
 namespace GKUI.Platform
 {

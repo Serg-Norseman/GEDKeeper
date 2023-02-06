@@ -21,11 +21,10 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using BSLib.Design.Graphics;
-using BSLib.Design.Handlers;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
+using GKCore.Design.Graphics;
+using GKCore.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Controls;
@@ -33,6 +32,7 @@ using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Forms;
+using GKUI.Platform.Handlers;
 
 namespace GKFlowInputPlugin
 {

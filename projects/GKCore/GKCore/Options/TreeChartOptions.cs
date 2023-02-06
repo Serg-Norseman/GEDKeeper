@@ -20,12 +20,11 @@
 
 using System;
 using BSLib;
-using BSLib.Design;
-using BSLib.Design.Graphics;
 using GKCore.Charts;
+using GKCore.Design;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
-
-using BSDColors = BSLib.Design.BSDConsts.Colors;
+using BSDColors = GKCore.Design.BSDConsts.Colors;
 
 namespace GKCore.Options
 {

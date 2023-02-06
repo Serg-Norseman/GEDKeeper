@@ -276,8 +276,6 @@ Section "$(gkreq)"
 
     File "..\bin\BSLib.dll"
     File "..\bin\BSLib.DataViz.Model.dll"
-    File "..\bin\BSLib.Design.dll"
-    File "..\bin\BSLib.Design.WFHandlers.dll"
     File "..\bin\BSLib.SQLite.dll"
     File "..\bin\RtfWriter.dll"
     File "..\bin\ExcelLibrary.dll"

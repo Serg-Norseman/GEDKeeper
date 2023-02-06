@@ -20,7 +20,7 @@
 
 using System.IO;
 using System.Text;
-using BSLib.Design.Graphics;
+using GKCore.Design.Graphics;
 
 namespace GKCore.Export
 {

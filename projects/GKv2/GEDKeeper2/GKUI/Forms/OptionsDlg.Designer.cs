@@ -2077,7 +2077,7 @@
             this.lstPersonColumns.SelectedIndex = -1;
             this.lstPersonColumns.Size = new System.Drawing.Size(468, 692);
             this.lstPersonColumns.SortColumn = 0;
-            this.lstPersonColumns.SortOrder = BSLib.Design.BSDTypes.SortOrder.None;
+            this.lstPersonColumns.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
             this.lstPersonColumns.TabIndex = 1;
             this.lstPersonColumns.UseCompatibleStateImageBehavior = false;
             this.lstPersonColumns.View = System.Windows.Forms.View.Details;
@@ -2307,7 +2307,7 @@
             this.lvPlugins.SelectedIndex = -1;
             this.lvPlugins.Size = new System.Drawing.Size(721, 742);
             this.lvPlugins.SortColumn = 0;
-            this.lvPlugins.SortOrder = BSLib.Design.BSDTypes.SortOrder.None;
+            this.lvPlugins.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
             this.lvPlugins.TabIndex = 0;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
             this.lvPlugins.View = System.Windows.Forms.View.Details;

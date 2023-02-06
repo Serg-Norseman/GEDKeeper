@@ -21,12 +21,12 @@
 using System;
 using System.Text;
 using BSLib;
-using BSLib.Design.Graphics;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
 using GKCore.Charts;
 using GKCore.Controllers;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.MVP.Views;
 using GKCore.Operations;

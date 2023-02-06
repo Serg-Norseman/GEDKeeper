@@ -21,9 +21,9 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
+using GKCore.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.Stats;
 using GKWordsCloudPlugin.WordsCloud;

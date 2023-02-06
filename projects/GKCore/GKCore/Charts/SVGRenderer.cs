@@ -22,7 +22,7 @@ using System;
 using System.IO;
 using System.Text;
 using BSLib;
-using BSLib.Design.Graphics;
+using GKCore.Design.Graphics;
 using GKCore.Options;
 
 namespace GKCore.Charts

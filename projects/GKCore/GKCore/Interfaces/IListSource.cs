@@ -19,9 +19,9 @@
  */
 
 using System.Collections.Generic;
-using BSLib.Design.Graphics;
-using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore.Design.Graphics;
+using GKCore.Design.MVP.Controls;
 
 namespace GKCore.Interfaces
 {

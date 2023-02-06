@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib.Design.Graphics;
+using GKCore.Design.Graphics;
 
 namespace GKCore.Export
 {

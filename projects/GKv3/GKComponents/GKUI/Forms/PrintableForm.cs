@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,10 +21,10 @@
 //define DEBUG_PRINT
 
 using BSLib;
-using BSLib.Design.Graphics;
 using Eto.Drawing;
 using Eto.Forms;
-using GKUI.Platform;
+using GKCore.Design.Graphics;
+using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms
 {

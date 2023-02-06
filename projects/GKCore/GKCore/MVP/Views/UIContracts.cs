@@ -20,11 +20,11 @@
 
 using System.IO;
 using BSLib;
-using BSLib.Design.Graphics;
-using BSLib.Design.MVP;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Charts;
+using GKCore.Design.Graphics;
+using GKCore.Design.MVP;
+using GKCore.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.MVP.Controls;

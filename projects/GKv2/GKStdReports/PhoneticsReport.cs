@@ -19,9 +19,9 @@
  */
 
 using BSLib;
-using BSLib.Design.Graphics;
 using GDModel;
 using GKCore;
+using GKCore.Design.Graphics;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Linguistics;

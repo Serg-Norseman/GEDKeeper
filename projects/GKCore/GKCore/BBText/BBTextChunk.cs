@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,8 +19,8 @@
  */
 
 using BSLib;
-using BSLib.Design;
-using BSLib.Design.Graphics;
+using GKCore.Design;
+using GKCore.Design.Graphics;
 
 namespace GKCore.BBText
 {

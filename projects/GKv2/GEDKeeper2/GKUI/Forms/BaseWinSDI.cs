@@ -25,12 +25,11 @@ using System.Drawing;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using BSLib;
-using BSLib.Design.Handlers;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
+using GKCore.Design.MVP.Controls;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.MVP.Controls;
@@ -39,6 +38,7 @@ using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform;
+using GKUI.Platform.Handlers;
 using GKUI.Themes;
 
 namespace GKUI.Forms

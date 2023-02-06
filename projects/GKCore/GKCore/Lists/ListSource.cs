@@ -22,11 +22,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using BSLib;
-using BSLib.Design.Graphics;
-using BSLib.Design.MVP.Controls;
 using GDModel;
 using GKCore.Calendar;
 using GKCore.Charts;
+using GKCore.Design.Graphics;
+using GKCore.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKCore.Options;
 

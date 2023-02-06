@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,97 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Windows.Forms;
-using BSLib.Design;
-using BSLib.Design.Handlers;
-using BSLib.Design.MVP;
-using BSLib.Design.MVP.Controls;
-using GDModel;
-using GKCore.MVP.Controls;
+using GKCore.Design;
+using GKCore.Design.MVP.Controls;
 using GKUI.Components;
 
-namespace GKUI.Platform
+namespace GKUI.Platform.Handlers
 {
-    public sealed class DateBoxHandler : BaseControlHandler<GKDateBox, DateBoxHandler>, IDateBox
-    {
-        public DateBoxHandler(GKDateBox control) : base(control)
-        {
-        }
-
-        public string NormalizeDate
-        {
-            get { return Control.NormalizeDate; }
-            set { Control.NormalizeDate = value; }
-        }
-
-        public bool ReadOnly
-        {
-            get { return Control.ReadOnly; }
-            set { Control.ReadOnly = value; }
-        }
-
-        public string SelectedText
-        {
-            get { return Control.SelectedText; }
-            set { Control.SelectedText = value; }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-
-        public void Clear()
-        {
-            Control.Clear();
-        }
-
-        public void Copy()
-        {
-            Control.Copy();
-        }
-
-        public void SelectAll()
-        {
-            Control.SelectAll();
-        }
-    }
-
-
-    public sealed class LogChartHandler : BaseControlHandler<LogChart, LogChartHandler>, ILogChart
-    {
-        public LogChartHandler(LogChart control) : base(control)
-        {
-        }
-
-        public void AddFragment(int val)
-        {
-            Control.AddFragment(val);
-        }
-
-        public void Clear()
-        {
-            Control.Clear();
-        }
-    }
-
-
-
-    public sealed class DateControlHandler : BaseControlHandler<GKDateControl, DateControlHandler>, IDateControl
-    {
-        public GDMCustomDate Date
-        {
-            get { return Control.Date; }
-            set { Control.Date = value; }
-        }
-
-        public DateControlHandler(GKDateControl control) : base(control)
-        {
-        }
-    }
-
-
     public sealed class ListViewHandler : BaseControlHandler<GKListView, ListViewHandler>, IListView
     {
         public ListViewHandler(GKListView control) : base(control)
@@ -210,35 +125,6 @@ namespace GKUI.Platform
         public void UpdateContents(bool columnsChanged = false)
         {
             Control.UpdateContents(columnsChanged);
-        }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class DropDownToolItemHandler : ControlHandler<ToolStripDropDownButton, DropDownToolItemHandler>, IButtonToolItem
-    {
-        public DropDownToolItemHandler(ToolStripDropDownButton control) : base(control)
-        {
-        }
-
-        public bool Enabled
-        {
-            get { return Control.Enabled; }
-            set { Control.Enabled = value; }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-
-        public bool Visible
-        {
-            get { return Control.Visible; }
-            set { Control.Visible = value; }
         }
     }
 }

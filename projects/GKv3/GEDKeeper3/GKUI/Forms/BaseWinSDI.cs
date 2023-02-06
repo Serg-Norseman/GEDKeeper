@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using BSLib;
-using BSLib.Design.MVP.Controls;
 using Eto.Drawing;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
@@ -30,6 +29,7 @@ using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
+using GKCore.Design.MVP.Controls;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -38,6 +38,7 @@ using GKCore.MVP.Views;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform;
+using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms
 {

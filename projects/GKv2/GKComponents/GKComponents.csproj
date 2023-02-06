@@ -32,12 +32,6 @@
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.Design">
-      <HintPath>..\..\libs\BSLib.Design.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.Design.WFHandlers">
-      <HintPath>..\..\libs\BSLib.Design.WFHandlers.dll</HintPath>
-    </Reference>
     <Reference Include="NLog">
       <HintPath>..\..\libs\NLog.dll</HintPath>
     </Reference>
@@ -127,7 +121,42 @@
     <Compile Include="GKUI\Forms\StatusForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Platform\ControlHandlers.cs" />
+    <Compile Include="GKUI\Platform\Handlers\DateBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\BaseControlHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\BrushHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\ButtonHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\ButtonToolItemHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\CheckBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\ColorHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\ComboBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\DateControlHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\DateTimeBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\DropDownToolItemHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\FontHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\GfxCirclePathHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\GfxCircleSegmentPathHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\GfxPathHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\GroupBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\ImageHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\LabelHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\ListViewHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\LogChartHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\MaskedTextBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\MenuItemEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Platform\Handlers\MenuItemHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\NumericBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\PenHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\PictureBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\ProgressBarHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\RadioButtonHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\RichTextBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\TabControlHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\TabPageHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\TextBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\ToolStripComboBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\TreeViewHandler.cs" />
     <Compile Include="GKUI\Platform\WFGfxProvider.cs" />
     <Compile Include="GKUI\Platform\WFGfxRenderer.cs" />
     <Compile Include="GKUI\Platform\WFStdDialogs.cs" />
@@ -155,5 +184,6 @@
       <LastGenOutput>GKTabControl.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,19 +20,19 @@
 
 #if !NETSTANDARD
 
+using System.Collections.Generic;
 using System.IO;
 using BSLib;
-using BSLib.Design.Graphics;
 using GKCore.Charts;
+using GKCore.Design.Graphics;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using it = iTextSharp.text;
+using itCell = iTextSharp.text.pdf.PdfPCell;
 using itFont = iTextSharp.text.Font;
 using itImage = iTextSharp.text.Image;
-using itTable = iTextSharp.text.pdf.PdfPTable;
-using itCell = iTextSharp.text.pdf.PdfPCell;
 using itRectangle = iTextSharp.text.Rectangle;
-using System.Collections.Generic;
+using itTable = iTextSharp.text.pdf.PdfPTable;
 
 namespace GKCore.Export
 {

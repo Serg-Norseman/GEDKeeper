@@ -19,9 +19,10 @@
  */
 
 using System;
-using BSLib.Design.Graphics;
-using BSLib.Design.MVP.Controls;
 using Eto.Forms;
+using GKCore.Design.Graphics;
+using GKCore.Design.MVP.Controls;
+using GKUI.Platform.Handlers;
 
 namespace GKUI.Platform
 {

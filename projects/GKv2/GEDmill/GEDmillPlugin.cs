@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2019-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,12 +21,12 @@
 using System;
 using System.Drawing;
 using System.Reflection;
-using BSLib.Design.Graphics;
-using BSLib.Design.Handlers;
 using GEDmill;
 using GKCore;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
+using GKUI.Platform.Handlers;
 using SDIcon = System.Drawing.Icon;
 
 [assembly: AssemblyTitle("GEDmillPlugin")]
