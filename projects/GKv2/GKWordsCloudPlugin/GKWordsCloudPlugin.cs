@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,8 +28,8 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKWordsCloudPlugin")]
 [assembly: AssemblyDescription("GEDKeeper WordsCloud plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2017 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyCopyright("Copyright © 2017-2023 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyCulture("")]
 
 namespace GKWordsCloudPlugin
@@ -37,11 +37,6 @@ namespace GKWordsCloudPlugin
     public enum PLS
     {
         LSID_Title,
-        LSID_1,
-        LSID_2,
-        LSID_3,
-        LSID_4,
-        LSID_5
     }
 
     public sealed class Plugin : WidgetPlugin

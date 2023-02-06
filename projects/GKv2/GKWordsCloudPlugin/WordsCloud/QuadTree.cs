@@ -51,8 +51,7 @@ namespace GKWordsCloudPlugin.WordsCloud
 
         public bool HasContent(RectangleF area)
         {
-            bool result = fRoot.HasContent(area);
-            return result;
+            return fRoot.HasContent(area);
         }
 
         public void ForEach(QuadTreeAction action)

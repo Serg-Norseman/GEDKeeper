@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using BSLib.Design.MVP.Controls;
 using GDModel;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Stats;
 using GKWordsCloudPlugin.WordsCloud;
@@ -36,10 +37,10 @@ namespace GKWordsCloudPlugin
     {
         private class CloudType
         {
-            public readonly string Name;
+            public readonly LSID Name;
             public readonly StatsMode Mode;
 
-            public CloudType(string name, StatsMode mode)
+            public CloudType(LSID name, StatsMode mode)
             {
                 Name = name;
                 Mode = mode;
@@ -47,14 +48,14 @@ namespace GKWordsCloudPlugin
         }
 
         private static readonly CloudType[] CloudTypes = new CloudType[] {
-            new CloudType("Surnames", StatsMode.smSurnames),
-            new CloudType("Names", StatsMode.smNames),
-            new CloudType("Occupation", StatsMode.smOccupation),
-            new CloudType("Religious", StatsMode.smReligious),
-            new CloudType("National", StatsMode.smNational),
-            new CloudType("Education", StatsMode.smEducation),
-            new CloudType("Caste", StatsMode.smCaste),
-            new CloudType("Hobby", StatsMode.smHobby),
+            new CloudType(LSID.LSID_Surname, StatsMode.smSurnames),
+            new CloudType(LSID.LSID_Name, StatsMode.smNames),
+            new CloudType(LSID.LSID_Occupation, StatsMode.smOccupation),
+            new CloudType(LSID.LSID_Religion, StatsMode.smReligious),
+            new CloudType(LSID.LSID_Nationality, StatsMode.smNational),
+            new CloudType(LSID.LSID_Education, StatsMode.smEducation),
+            new CloudType(LSID.LSID_Caste, StatsMode.smCaste),
+            new CloudType(LSID.LSID_Hobby, StatsMode.smHobby),
         };
 
         private readonly Plugin fPlugin;
@@ -68,10 +69,6 @@ namespace GKWordsCloudPlugin
 
             fPlugin = plugin;
             fWords = new List<Word>();
-
-            foreach (CloudType cloudType in CloudTypes) {
-                cbType.Items.Add(new ComboItem<StatsMode>(cloudType.Name, cloudType.Mode));
-            }
             fMode = StatsMode.smNames;
 
             SetLocale();
@@ -150,6 +147,15 @@ namespace GKWordsCloudPlugin
         public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_Title);
+
+            cbType.BeginUpdate();
+            int selItem = cbType.SelectedIndex;
+            cbType.Items.Clear();
+            foreach (CloudType cloudType in CloudTypes) {
+                cbType.Items.Add(new ComboItem<StatsMode>(LangMan.LS(cloudType.Name), cloudType.Mode));
+            }
+            cbType.SelectedIndex = selItem;
+            cbType.EndUpdate();
         }
 
         #endregion
