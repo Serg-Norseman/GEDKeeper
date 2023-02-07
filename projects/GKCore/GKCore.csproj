@@ -15,24 +15,13 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
-    <Reference Include="LuaInterface">
-      <HintPath>..\libs\mswin\LuaInterface.dll</HintPath>
-    </Reference>
-    <None Include="..\libs\mswin\lua51.dll">
-      <Link>lua51.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(MonoCS)' == 'true' ">
+  <ItemGroup>
     <Reference Include="KopiLua">
-      <HintPath>..\libs\linux\KopiLua.dll</HintPath>
+      <HintPath>..\libs\KopiLua.dll</HintPath>
     </Reference>
     <Reference Include="NLua">
-      <HintPath>..\libs\linux\NLua.dll</HintPath>
+      <HintPath>..\libs\NLua.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
     </Reference>

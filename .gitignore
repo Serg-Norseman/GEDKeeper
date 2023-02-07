@@ -21,7 +21,5 @@ NUnitResults.xml
 opencover.xml
 /projects/GKTests/OpenCover/
 /projects/GKTests/PartCover/
-/LuaInterface.dll.config
-
 /projects/GKv3/packages/**/
 .idea/

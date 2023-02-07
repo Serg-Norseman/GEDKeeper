@@ -18,10 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if MONO
-#define NLUA
-#endif
-
 using System;
 using System.Data;
 using System.IO;
@@ -34,15 +30,10 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Options;
+using NLua;
 
 namespace GKCore
 {
-#if !NLUA
-    using LuaInterface;
-#else
-    using NLua;
-#endif
-
     public class ScriptException : Exception
     {
         public ScriptException()

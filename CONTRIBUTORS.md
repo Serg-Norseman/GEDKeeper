@@ -119,7 +119,6 @@ Life
 
 
 Lua
-    LuaInterface, Licensed under MIT/X, Fábio Mascarenhas/Craig Presti
     NLua, Licensed under MIT, Vinicius Jarina, https://github.com/NLua/NLua
 
 
