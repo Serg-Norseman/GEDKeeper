@@ -30,7 +30,7 @@ using GKUI.Components;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 using GKCore.Charts;
-using GKCore.MVP.Views;
+using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {

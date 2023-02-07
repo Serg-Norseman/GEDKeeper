@@ -21,7 +21,7 @@
 using System.Collections.Generic;
 using GDModel;
 using GKCore.Design.Graphics;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
 
 namespace GKCore.Interfaces
 {

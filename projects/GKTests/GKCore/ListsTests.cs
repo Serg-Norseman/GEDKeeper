@@ -20,7 +20,7 @@
 
 using System;
 using GDModel;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;

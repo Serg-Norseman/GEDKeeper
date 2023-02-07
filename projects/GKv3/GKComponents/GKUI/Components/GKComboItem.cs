@@ -19,8 +19,8 @@
  */
 
 using Eto.Drawing;
+using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Design.MVP.Controls;
 using GKUI.Platform.Handlers;
 using EFImageListItem = Eto.Forms.IImageListItem;
 using EFListItem = Eto.Forms.IListItem;

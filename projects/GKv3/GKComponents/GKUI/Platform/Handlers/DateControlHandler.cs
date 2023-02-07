@@ -19,7 +19,7 @@
  */
 
 using GDModel;
-using GKCore.MVP.Controls;
+using GKCore.Design.Controls;
 using GKUI.Components;
 
 namespace GKUI.Platform.Handlers

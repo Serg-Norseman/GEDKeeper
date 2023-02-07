@@ -19,12 +19,12 @@
  */
 
 using GKCore.Design;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
 using GKUI.Components;
 
 namespace GKUI.Platform.Handlers
 {
-    using BSDListItem = GKCore.Design.MVP.Controls.IListItem;
+    using BSDListItem = GKCore.Design.Controls.IListItem;
 
     public sealed class ListViewHandler : BaseControlHandler<GKListView, ListViewHandler>, IListView
     {

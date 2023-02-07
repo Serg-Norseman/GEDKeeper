@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCore.MVP.Controls;
+using GKCore.Design.Controls;
 
 namespace GKUI.Components
 {

@@ -20,9 +20,9 @@
 
 using System.Collections.Generic;
 using GDModel;
-using GKCore.Design.MVP.Controls;
-using GKCore.MVP;
-using GKCore.MVP.Views;
+using GKCore.Design.Controls;
+using GKCore.Design;
+using GKCore.Design.Views;
 using GKCore.Tools;
 
 namespace GKCore.Controllers

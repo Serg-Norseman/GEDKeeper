@@ -21,7 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
-using GKCore.Design.MVP;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;

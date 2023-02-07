@@ -26,8 +26,8 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Design.Graphics;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKCore.MVP.Views;
 using GKCore.Options;
 using GKUI.Components;
 

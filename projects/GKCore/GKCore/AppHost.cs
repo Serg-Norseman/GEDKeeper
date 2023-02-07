@@ -28,7 +28,7 @@ using GDModel;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Maps;
-using GKCore.MVP.Views;
+using GKCore.Design.Views;
 using GKCore.Names;
 using GKCore.Options;
 using GKCore.Plugins;

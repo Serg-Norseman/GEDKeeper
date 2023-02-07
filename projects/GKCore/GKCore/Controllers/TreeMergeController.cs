@@ -18,9 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design.MVP.Controls;
-using GKCore.MVP;
-using GKCore.MVP.Views;
+using GKCore.Design.Controls;
+using GKCore.Design;
+using GKCore.Design.Views;
 using GKCore.Tools;
 
 namespace GKCore.Controllers

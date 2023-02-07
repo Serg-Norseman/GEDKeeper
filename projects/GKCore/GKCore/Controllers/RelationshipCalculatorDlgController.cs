@@ -19,10 +19,10 @@
  */
 
 using GDModel;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design;
+using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Kinships;
-using GKCore.MVP;
-using GKCore.MVP.Views;
 using GKCore.Options;
 
 namespace GKCore.Controllers

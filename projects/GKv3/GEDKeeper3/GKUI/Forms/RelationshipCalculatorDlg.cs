@@ -22,9 +22,9 @@ using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKCore.MVP.Views;
 
 namespace GKUI.Forms
 {

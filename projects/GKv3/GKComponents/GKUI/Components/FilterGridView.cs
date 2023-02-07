@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,8 +22,8 @@ using System;
 using System.Collections.ObjectModel;
 using Eto.Forms;
 using GKCore;
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 
 namespace GKUI.Components
 {

@@ -22,9 +22,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using BSLib;
+using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Design.MVP;
-using GKCore.Design.MVP.Controls;
 
 namespace GKUI.Platform.Handlers
 {

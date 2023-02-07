@@ -21,12 +21,11 @@
 #if !MONO
 
 using GDModel;
-using GKCore.Design.MVP;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design;
+using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Controls;
-using GKCore.MVP.Views;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;

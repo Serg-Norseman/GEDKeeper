@@ -19,7 +19,7 @@
  */
 
 using System.Windows.Forms;
-using GKCore.MVP.Views;
+using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {

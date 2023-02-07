@@ -18,12 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design.MVP.Controls;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
-using GKCore.MVP.Views;
+using GKCore.Design.Controls;
+using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {

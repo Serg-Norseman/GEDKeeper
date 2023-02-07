@@ -23,12 +23,9 @@
 #endif
 
 using System;
-using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Resources;
 using System.Windows.Forms;
-using GKCore;
 
 namespace GKUI.Components
 {

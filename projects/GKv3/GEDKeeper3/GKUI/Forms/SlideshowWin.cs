@@ -24,8 +24,8 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Design.Graphics;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKCore.MVP.Views;
 using GKUI.Components;
 using GKUI.Platform.Handlers;
 

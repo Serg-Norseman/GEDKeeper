@@ -20,7 +20,7 @@
 
 using System.Collections.Generic;
 using GDModel;
-using GKCore.Design.MVP;
+using GKCore.Design;
 
 namespace GKCore.Interfaces
 {

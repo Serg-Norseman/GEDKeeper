@@ -27,7 +27,7 @@ using Eto.Forms;
 using GKCore;
 using GKCore.BBText;
 using GKCore.Design;
-using GKCore.MVP.Controls;
+using GKCore.Design.Controls;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Components

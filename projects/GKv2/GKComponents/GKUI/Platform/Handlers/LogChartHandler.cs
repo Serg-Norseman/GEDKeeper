@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.MVP.Controls;
+using GKCore.Design.Controls;
 using GKUI.Components;
 
 namespace GKUI.Platform.Handlers

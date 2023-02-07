@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using System.IO;
 using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCore.Design.MVP.Controls;
-using GKCore.MVP;
-using GKCore.MVP.Views;
+using GKCore.Design.Controls;
+using GKCore.Design;
+using GKCore.Design.Views;
 using GKCore.Options;
 using GKCore.Tools;
 

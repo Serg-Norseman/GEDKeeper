@@ -23,7 +23,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.MVP.Views;
+using GKCore.Design.Views;
 using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;

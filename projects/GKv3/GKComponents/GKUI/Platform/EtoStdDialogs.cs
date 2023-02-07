@@ -23,7 +23,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design.Graphics;
-using GKCore.MVP.Views;
+using GKCore.Design.Views;
 using GKUI.Components;
 using GKUI.Platform.Handlers;
 

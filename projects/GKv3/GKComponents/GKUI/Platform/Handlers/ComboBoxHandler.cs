@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using BSLib;
 using Eto.Forms;
 using GKCore.Design.Graphics;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
 using GKUI.Components;
 
 namespace GKUI.Platform.Handlers

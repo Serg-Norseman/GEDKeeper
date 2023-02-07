@@ -22,9 +22,9 @@ using System;
 using System.Windows.Forms;
 using GDModel;
 using GKCore.Controllers;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKCore.MVP.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms

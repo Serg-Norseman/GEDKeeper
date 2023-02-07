@@ -21,8 +21,8 @@
 using System;
 using System.IO;
 using System.Text;
-using GKCore.MVP;
-using GKCore.MVP.Views;
+using GKCore.Design;
+using GKCore.Design.Views;
 
 namespace GKCore.Controllers
 {

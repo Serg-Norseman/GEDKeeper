@@ -23,11 +23,11 @@ using System.Collections.Generic;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Maps;
-using GKCore.MVP;
-using GKCore.MVP.Views;
+using GKCore.Design;
+using GKCore.Design.Views;
 
 namespace GKCore.Controllers
 {

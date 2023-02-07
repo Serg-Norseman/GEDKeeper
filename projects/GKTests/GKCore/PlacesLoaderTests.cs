@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using GDModel.Providers.GEDCOM;
 using GKCore.Maps;
-using GKCore.MVP.Controls;
+using GKCore.Design.Controls;
 using NSubstitute;
 using NUnit.Framework;
 

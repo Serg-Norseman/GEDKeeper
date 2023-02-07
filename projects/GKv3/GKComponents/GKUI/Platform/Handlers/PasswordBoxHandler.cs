@@ -20,7 +20,7 @@
 
 using Eto.Drawing;
 using Eto.Forms;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
 using GKUI.Components;
 
 namespace GKUI.Platform.Handlers

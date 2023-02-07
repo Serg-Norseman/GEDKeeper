@@ -20,8 +20,8 @@
 
 using GKCore;
 using GKCore.Controllers;
-using GKCore.Design.MVP.Controls;
-using GKCore.MVP.Views;
+using GKCore.Design.Controls;
+using GKCore.Design.Views;
 
 namespace GKFlowInputPlugin
 {

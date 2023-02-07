@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using GDModel;
-using GKCore.MVP.Controls;
+using GKCore.Design.Controls;
 
 namespace GKCore.Maps
 {

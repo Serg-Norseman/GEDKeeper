@@ -22,7 +22,7 @@ using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore;
-using GKCore.MVP.Views;
+using GKCore.Design.Views;
 using GKCore.Options;
 
 namespace GKUI.Forms

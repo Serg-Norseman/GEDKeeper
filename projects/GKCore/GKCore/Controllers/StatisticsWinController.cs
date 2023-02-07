@@ -20,12 +20,11 @@
 
 using System.Collections.Generic;
 using GDModel;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design;
+using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Export;
 using GKCore.Interfaces;
-using GKCore.MVP;
-using GKCore.MVP.Controls;
-using GKCore.MVP.Views;
 using GKCore.Stats;
 
 namespace GKCore.Controllers

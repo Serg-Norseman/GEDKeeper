@@ -20,8 +20,8 @@
 
 using GDModel;
 using GKCore.Interfaces;
-using GKCore.MVP;
-using GKCore.MVP.Views;
+using GKCore.Design;
+using GKCore.Design.Views;
 using GKCore.Search;
 
 namespace GKCore.Controllers

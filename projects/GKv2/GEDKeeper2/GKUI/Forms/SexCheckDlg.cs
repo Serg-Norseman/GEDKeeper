@@ -20,7 +20,7 @@
 
 using GDModel;
 using GKCore;
-using GKCore.MVP.Views;
+using GKCore.Design.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms

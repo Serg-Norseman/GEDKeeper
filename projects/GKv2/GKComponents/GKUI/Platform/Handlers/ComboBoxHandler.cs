@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using BSLib;
 using GKCore.Design.Graphics;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
 
 namespace GKUI.Platform.Handlers
 {

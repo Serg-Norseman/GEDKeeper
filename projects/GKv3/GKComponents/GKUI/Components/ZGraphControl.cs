@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using BSLib;
 using Eto.Forms;
 using GKCore;
-using GKCore.MVP.Controls;
+using GKCore.Design.Controls;
 using GKCore.Stats;
 using OxyPlot;
 using OxyPlot.Axes;

@@ -23,9 +23,9 @@ using System.IO;
 using BSLib;
 using GDModel;
 using GKCore.Design.Graphics;
-using GKCore.MVP;
-using GKCore.MVP.Controls;
-using GKCore.MVP.Views;
+using GKCore.Design;
+using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Types;
 
 namespace GKCore.Controllers

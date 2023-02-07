@@ -22,14 +22,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using BSLib;
+using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Design.MVP;
-using GKCore.Design.MVP.Controls;
 using GKUI.Components;
-using Plugin.InputKit.Shared.Controls;
 using Xamarin.Forms;
-using XFRadioButton = Xamarin.Forms.RadioButton;
 using XFIKCheckBox = Plugin.InputKit.Shared.Controls.CheckBox;
+using XFRadioButton = Xamarin.Forms.RadioButton;
 
 namespace GKUI.Platform
 {

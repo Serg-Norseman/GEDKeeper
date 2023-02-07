@@ -26,7 +26,7 @@ using GDModel;
 using GKCore.Calendar;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Options;
 

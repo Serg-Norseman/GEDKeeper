@@ -24,9 +24,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
 using GKCore;
+using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.Types;
 using GKUI.Platform.Handlers;
 

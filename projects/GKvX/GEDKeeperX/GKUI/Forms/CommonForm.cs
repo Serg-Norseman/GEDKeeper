@@ -20,9 +20,9 @@
 
 using System;
 using GKCore;
-using GKCore.Design.MVP;
+using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
-using GKCore.MVP;
 using Xamarin.Forms;
 
 namespace GKUI.Forms

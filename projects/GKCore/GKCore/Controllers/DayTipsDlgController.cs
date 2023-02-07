@@ -19,9 +19,9 @@
  */
 
 using BSLib;
-using GKCore.Design.MVP.Controls;
-using GKCore.MVP;
-using GKCore.MVP.Views;
+using GKCore.Design.Controls;
+using GKCore.Design;
+using GKCore.Design.Views;
 
 namespace GKCore.Controllers
 {

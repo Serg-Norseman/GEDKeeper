@@ -22,7 +22,7 @@ using System;
 using BSLib;
 using GDModel;
 using GKCore.Interfaces;
-using GKCore.MVP.Views;
+using GKCore.Design.Views;
 using GKCore.Operations;
 using GKCore.Types;
 

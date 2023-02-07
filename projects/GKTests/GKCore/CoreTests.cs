@@ -24,7 +24,7 @@ using System.Reflection;
 using System.Text;
 using BSLib;
 using GDModel;
-using GKCore.Design.MVP.Controls;
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Names;

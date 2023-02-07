@@ -19,7 +19,7 @@
  */
 
 using System.Windows.Forms;
-using GKCore.Design.MVP;
+using GKCore.Design;
 
 namespace GKUI.Platform.Handlers
 {

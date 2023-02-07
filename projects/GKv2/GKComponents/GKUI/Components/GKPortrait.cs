@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using GKCore.MVP.Controls;
+using GKCore.Design.Controls;
 
 namespace GKUI.Components
 {

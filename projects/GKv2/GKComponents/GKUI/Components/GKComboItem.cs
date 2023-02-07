@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Design.MVP.Controls;
 
 namespace GKUI.Components
 {

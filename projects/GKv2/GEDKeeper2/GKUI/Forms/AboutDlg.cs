@@ -22,7 +22,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using GKCore;
-using GKCore.MVP.Views;
+using GKCore.Design.Views;
 using GKCore.Options;
 using GKUI.Components;
 

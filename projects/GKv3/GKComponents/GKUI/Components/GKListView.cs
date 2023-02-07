@@ -28,11 +28,11 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Design.MVP.Controls;
 using GKCore.Interfaces;
 using GKUI.Platform.Handlers;
-using BSDListItem = GKCore.Design.MVP.Controls.IListItem;
+using BSDListItem = GKCore.Design.Controls.IListItem;
 using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 
 namespace GKUI.Components

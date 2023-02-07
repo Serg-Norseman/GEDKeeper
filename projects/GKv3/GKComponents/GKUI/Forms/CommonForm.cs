@@ -23,9 +23,9 @@ using System.ComponentModel;
 using System.Reflection;
 using Eto.Forms;
 using GKCore;
-using GKCore.Design.MVP;
+using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
-using GKCore.MVP;
 
 namespace GKUI.Forms
 {

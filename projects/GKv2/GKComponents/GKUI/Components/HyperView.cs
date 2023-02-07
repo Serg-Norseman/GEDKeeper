@@ -25,7 +25,7 @@ using System.Windows.Forms;
 using BSLib;
 using GKCore;
 using GKCore.BBText;
-using GKCore.MVP.Controls;
+using GKCore.Design.Controls;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Components

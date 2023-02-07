@@ -24,9 +24,9 @@ using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
+using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
-using GKCore.MVP.Controls;
 using GKCore.Types;
 using GKUI.Platform.Handlers;
 

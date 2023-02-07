@@ -20,9 +20,9 @@
 
 using System;
 using System.Windows.Forms;
+using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Design.MVP;
-using GKCore.Design.MVP.Controls;
 
 namespace GKUI.Platform.Handlers
 {
