@@ -38,6 +38,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Include="..\..\GlobalSuppressions.cs">
+            <Link>GlobalSuppressions.cs</Link>
+        </Compile>
         <Reference Include="BSLib">
             <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
         </Reference>

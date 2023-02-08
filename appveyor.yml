@@ -33,7 +33,7 @@ before_build:
   - git submodule -q update --init
 
 build:
-  project: projects/GEDKeeper2.sln
+  project: projects/GKv2/GEDKeeper2.sln
   verbosity: minimal
 
 test_script:
