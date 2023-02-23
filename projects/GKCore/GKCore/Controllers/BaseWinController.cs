@@ -345,7 +345,7 @@ namespace GKCore.Controllers
 
         public void SelectSummaryLink(string linkName)
         {
-            if (linkName.StartsWith("http")) {
+            if (linkName.StartsWith(GKData.INFO_HTTP_PREFIX)) {
                 GKUtils.LoadExtFile(linkName);
                 return;
             }

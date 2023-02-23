@@ -54,14 +54,14 @@ namespace GKCore.Controllers
 
         public void SelectLink(string linkName)
         {
-            if (linkName.StartsWith("http")) {
+            if (linkName.StartsWith(GKData.INFO_HTTP_PREFIX)) {
                 GKUtils.LoadExtFile(linkName);
                 return;
             }
 
             if (linkName.StartsWith(GKData.INFO_HREF_VIEW)) {
                 string xref = linkName.Remove(0, GKData.INFO_HREF_VIEW.Length);
-                GDMMultimediaRecord mmRec = fBase.Context.Tree.XRefIndex_Find(xref) as GDMMultimediaRecord;
+                var mmRec = fBase.Context.Tree.FindXRef<GDMMultimediaRecord>(xref);
                 if (mmRec != null) {
                     fBase.ShowMedia(mmRec, false);
                 }

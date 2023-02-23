@@ -173,7 +173,7 @@ namespace GKCore.Controllers
             if (iFilter.FilterGroupMode != FilterGroupMode.Selected) {
                 fView.GroupCombo.SelectedIndex = (int)iFilter.FilterGroupMode;
             } else {
-                GDMGroupRecord groupRec = tree.XRefIndex_Find(iFilter.GroupRef) as GDMGroupRecord;
+                var groupRec = tree.FindXRef<GDMGroupRecord>(iFilter.GroupRef);
                 if (groupRec != null) fView.GroupCombo.Text = groupRec.GroupName;
             }
 
@@ -189,7 +189,7 @@ namespace GKCore.Controllers
             if (iFilter.SourceMode != FilterGroupMode.Selected) {
                 fView.SourceCombo.SelectedIndex = (int)iFilter.SourceMode;
             } else {
-                GDMSourceRecord sourceRec = tree.XRefIndex_Find(iFilter.SourceRef) as GDMSourceRecord;
+                var sourceRec = tree.FindXRef<GDMSourceRecord>(iFilter.SourceRef);
                 if (sourceRec != null) fView.SourceCombo.Text = sourceRec.ShortTitle;
             }
         }

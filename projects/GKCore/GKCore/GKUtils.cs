@@ -177,7 +177,7 @@ namespace GKCore
             return linksList;
         }
 
-        public static string HyperLink(string xref, string text, int num)
+        public static string HyperLink(string xref, string text, int num = 0)
         {
             string result = "";
 
@@ -2185,9 +2185,9 @@ namespace GKCore
                         GDMCustomEvent evt = record.Events[i];
                         string st = GetEventName(evt);
 
-                        string sv = "";
-                        if (evt.StringValue != "") {
-                            sv = evt.StringValue + ", ";
+                        string sv = GetFactValueStr(evt);
+                        if (!string.IsNullOrEmpty(sv)) {
+                            sv = sv + ", ";
                         }
                         summary.Add("  " + st + ": " + sv + GetEventDesc(baseContext.Tree, evt));
 
@@ -2201,6 +2201,15 @@ namespace GKCore
             } catch (Exception ex) {
                 Logger.WriteError("GKUtils.RecListIndividualEventsRefresh()", ex);
             }
+        }
+
+        private static string GetFactValueStr(GDMCustomEvent evt)
+        {
+            string result = evt.StringValue;
+            if (result.StartsWith(GKData.INFO_HTTP_PREFIX)) {
+                result = HyperLink(result, result);
+            }
+            return result;
         }
 
         private static void RecListFamilyEventsRefresh(IBaseContext baseContext, GDMFamilyRecord record, StringList summary)

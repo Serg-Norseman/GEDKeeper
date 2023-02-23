@@ -529,7 +529,7 @@ namespace GKCore.Charts
 
                 case FilterGroupMode.Selected:
                     GDMSourceRecord filterSource;
-                    filterSource = string.IsNullOrEmpty(fFilter.SourceRef) ? null : fTree.XRefIndex_Find(fFilter.SourceRef) as GDMSourceRecord;
+                    filterSource = string.IsNullOrEmpty(fFilter.SourceRef) ? null : fTree.FindXRef<GDMSourceRecord>(fFilter.SourceRef);
                     if (person.IndexOfSource(filterSource) < 0) {
                         result = false;
                     }

@@ -459,14 +459,14 @@ namespace GKCore.Controllers
             IndividualListFilter iFilter = (IndividualListFilter)listMan.Filter;
 
             if (iFilter.SourceMode == FilterGroupMode.Selected) {
-                GDMSourceRecord src = baseWin.Context.Tree.XRefIndex_Find(iFilter.SourceRef) as GDMSourceRecord;
+                var src = baseWin.Context.Tree.FindXRef<GDMSourceRecord>(iFilter.SourceRef);
                 if (src != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedSourceFilter))) {
                     indivRec.AddSource(src, "", 0);
                 }
             }
 
             if (iFilter.FilterGroupMode == FilterGroupMode.Selected) {
-                GDMGroupRecord grp = baseWin.Context.Tree.XRefIndex_Find(iFilter.GroupRef) as GDMGroupRecord;
+                var grp = baseWin.Context.Tree.FindXRef<GDMGroupRecord>(iFilter.GroupRef);
                 if (grp != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_IncludedGroupFilter))) {
                     grp.AddMember(indivRec);
                 }

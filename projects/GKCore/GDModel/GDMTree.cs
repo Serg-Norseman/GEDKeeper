@@ -252,11 +252,7 @@ namespace GDModel
             if (string.IsNullOrEmpty(xref)) return null;
 
             GDMRecord record;
-            if (fXRefIndex.TryGetValue(xref, out record)) {
-                return record;
-            } else {
-                return null;
-            }
+            return fXRefIndex.TryGetValue(xref, out record) ? record : null;
         }
 
         private void ResetLastIDs()

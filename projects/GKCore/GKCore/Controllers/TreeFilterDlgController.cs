@@ -117,8 +117,7 @@ namespace GKCore.Controllers
 
                 int num = tmpRefs.Length;
                 for (int i = 0; i < num; i++) {
-                    string xref = tmpRefs[i];
-                    GDMIndividualRecord p = fBase.Context.Tree.XRefIndex_Find(xref) as GDMIndividualRecord;
+                    var p = fBase.Context.Tree.FindXRef<GDMIndividualRecord>(tmpRefs[i]);
                     if (p != null) fView.PersonsList.ListView.AddItem(p, GKUtils.GetNameString(p, true, false));
                 }
             }
@@ -126,7 +125,7 @@ namespace GKCore.Controllers
             if (fFilter.SourceMode != FilterGroupMode.Selected) {
                 fView.SourceCombo.SelectedIndex = (sbyte)fFilter.SourceMode;
             } else {
-                GDMSourceRecord srcRec = fBase.Context.Tree.XRefIndex_Find(fFilter.SourceRef) as GDMSourceRecord;
+                var srcRec = fBase.Context.Tree.FindXRef<GDMSourceRecord>(fFilter.SourceRef);
                 if (srcRec != null) fView.SourceCombo.Text = srcRec.ShortTitle;
             }
         }

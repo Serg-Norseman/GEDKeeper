@@ -62,6 +62,7 @@ namespace GKCore
         public static int HighlightInaccessibleFiles = 0xFFCACA;
         public static int HighlightReadabilityRows = 0xEFEFEF;
 
+        public const string INFO_HTTP_PREFIX = "http";
         public const string INFO_HREF_VIEW = "view_";
         public const string INFO_HREF_FILTER_INDI = "filter_indi_by_";
 
