@@ -2,4 +2,5 @@
 Language: 'Iceland'
 HasPatronymic: true
 HasSurname: false # doesn't exist and is prohibited by law from July 27, 1925
+SysCulture: 'is-IS'
 ...

@@ -25,10 +25,12 @@ using BSLib;
 using GDModel;
 using GKCore.Calendar;
 using GKCore.Charts;
-using GKCore.Design.Graphics;
+using GKCore.Cultures;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Options;
+using SGCulture = System.Globalization.CultureInfo;
 
 namespace GKCore.Lists
 {
@@ -40,6 +42,7 @@ namespace GKCore.Lists
     {
         private bool fColumnsHaveBeenChanged;
         private readonly ExtObservableList<ContentItem> fContentList;
+        private SGCulture fSysCulture;
         private int fTotalCount;
         private string fQuickFilter = "*";
         private int fXSortFactor;
@@ -700,7 +703,11 @@ namespace GKCore.Lists
             object cv2 = item2.SortValue;
 
             if (cv1 != null && cv2 != null) {
-                compRes = ((IComparable)cv1).CompareTo(cv2);
+                if (cv1 is string && cv2 is string) {
+                    compRes = string.Compare((string)cv1, (string)cv2, false, fSysCulture);
+                } else {
+                    compRes = ((IComparable)cv1).CompareTo(cv2);
+                }
             } else if (cv1 != null) {
                 compRes = -1;
             } else if (cv2 != null) {
@@ -715,6 +722,8 @@ namespace GKCore.Lists
         public void SortContents(int sortColumn, bool sortAscending)
         {
             try {
+                fSysCulture = CulturesPool.GetSystemCulture(fBaseContext.Culture);
+
                 fContentList.BeginUpdate();
 
                 int num = fContentList.Count;

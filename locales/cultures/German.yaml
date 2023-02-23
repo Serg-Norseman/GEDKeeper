@@ -2,4 +2,5 @@
 Language: 'German'
 HasPatronymic: false
 HasSurname: true
+SysCulture: 'de-DE'
 ...

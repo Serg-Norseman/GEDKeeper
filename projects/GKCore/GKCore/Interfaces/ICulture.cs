@@ -39,6 +39,8 @@ namespace GKCore.Interfaces
         bool HasPatronymic { get; }
         bool HasSurname { get; }
 
+        string SysCulture { get; }
+
         string NormalizeSurname(string sn, bool aFemale);
         string GetMarriedSurname(string husbSurname);
         GDMSex GetSex(string iName, string iPat, bool canQuery);

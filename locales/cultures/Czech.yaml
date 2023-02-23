@@ -2,4 +2,5 @@
 Language: 'Czech'
 HasPatronymic: false
 HasSurname: true
+SysCulture: 'cs-CZ'
 ...

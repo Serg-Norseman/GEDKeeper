@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using GDModel;
 using GKCore.Interfaces;
+using SGCulture = System.Globalization.CultureInfo;
 
 namespace GKCore.Cultures
 {
@@ -106,6 +107,19 @@ namespace GKCore.Cultures
             return culture;
         }
 
+        public static SGCulture GetSystemCulture(ICulture culture)
+        {
+            try {
+                if (culture == null) return SGCulture.InvariantCulture;
+
+                string sysLC = culture.SysCulture;
+                return (string.IsNullOrEmpty(sysLC)) ? SGCulture.InvariantCulture : SGCulture.GetCultureInfo(sysLC);
+            } catch (Exception ex) {
+                Logger.WriteError("CulturesPool.GetSystemCulture()", ex);
+                return SGCulture.InvariantCulture;
+            }
+        }
+
         private static void LoadSettings(DefaultCulture culture)
         {
             string fileName = GKUtils.GetCulturesPath() + culture.Language.ToString() + ".yaml";
@@ -121,6 +135,7 @@ namespace GKCore.Cultures
                 if (cultureSettings != null) {
                     culture.HasPatronymic = cultureSettings.HasPatronymic;
                     culture.HasSurname = cultureSettings.HasSurname;
+                    culture.SysCulture = cultureSettings.SysCulture;
                 }
             } catch (Exception ex) {
                 Logger.WriteError(string.Format("CulturesPool.LoadSettings({0})", fileName), ex);
@@ -132,6 +147,7 @@ namespace GKCore.Cultures
             public string Language { get; set; }
             public bool HasPatronymic { get; set; }
             public bool HasSurname { get; set; }
+            public string SysCulture { get; set; }
 
             public CultureSettings()
             {

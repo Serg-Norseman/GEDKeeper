@@ -35,6 +35,7 @@ namespace GKCore.Cultures
         public bool HasPatronymic { get; protected internal set; }
         public bool HasSurname { get; protected internal set; }
 
+        public string SysCulture { get; protected internal set; }
 
         protected DefaultCulture()
         {
