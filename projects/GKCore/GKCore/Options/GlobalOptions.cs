@@ -166,6 +166,11 @@ namespace GKCore.Options
             set { fAutoSortSpouses = value; }
         }
 
+        /// <summary>
+        /// Hidden option.
+        /// </summary>
+        public bool CalendarDifferenceYears { get; set; }
+
         public CertaintyAlgorithm CertaintyAlgorithm { get; set; }
 
         public bool CharsetDetection
@@ -518,6 +523,7 @@ namespace GKCore.Options
             fFARReplacements = new StringList();
 
             SearchAndFilterByAllNames = false;
+            CalendarDifferenceYears = false;
 
             Theme = string.Empty;
         }
@@ -831,6 +837,7 @@ namespace GKCore.Options
             LoadStringList(ini, fFARReplacements, "FARReplacements");
 
             SearchAndFilterByAllNames = ini.ReadBool("Common", "SearchAndFilterByAllNames", false);
+            CalendarDifferenceYears = ini.ReadBool("Common", "CalendarDifferenceYears", false);
 
             Theme = ini.ReadString("Common", "Theme", "");
 
@@ -960,6 +967,7 @@ namespace GKCore.Options
             SaveStringList(ini, fFARReplacements, "FARReplacements");
 
             ini.WriteBool("Common", "SearchAndFilterByAllNames", SearchAndFilterByAllNames);
+            ini.WriteBool("Common", "CalendarDifferenceYears", CalendarDifferenceYears);
 
             ini.WriteString("Common", "Theme", Theme);
 

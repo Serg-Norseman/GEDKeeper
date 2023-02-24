@@ -522,6 +522,11 @@ namespace GKCore.Calendar
             return new UDN(0);
         }
 
+        public static UDN CreateUnknown()
+        {
+            return new UDN(UDNCalendarType.ctGregorian, UnknownYear, UnknownMonth, UnknownDay);
+        }
+
         #endregion
 
         /// <summary>Checks year part of this date.</summary>
@@ -579,6 +584,27 @@ namespace GKCore.Calendar
         public int GetUnmaskedValue()
         {
             return (ValueMask & fValue);
+        }
+
+        public DateTime GetGregorianDateTime()
+        {
+            DateTime result;
+
+            if (HasKnownYear()) {
+                int jdn = GetUnmaskedValue();
+
+                int year, month, day;
+                CalendarConverter.jd_to_gregorian2(jdn, out year, out month, out day);
+
+                if (month <= 0) month = 1;
+                if (day <= 0) day = 1;
+
+                result = new DateTime(year, month, day);
+                return result;
+            }
+
+            result = new DateTime(0);
+            return result;
         }
     }
 }

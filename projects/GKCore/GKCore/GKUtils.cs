@@ -31,6 +31,7 @@ using System.Text.RegularExpressions;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Calendar;
 using GKCore.Cultures;
 using GKCore.Import;
 using GKCore.Interfaces;
@@ -996,15 +997,34 @@ namespace GKCore
             int result = -1;
 
             try {
-                int dt1 = GetChronologicalYear(ev1);
-                int dt2 = GetChronologicalYear(ev2);
+                if (!GlobalOptions.Instance.CalendarDifferenceYears) {
+                    int dt1 = GetChronologicalYear(ev1);
+                    int dt2 = GetChronologicalYear(ev2);
 
-                if (currentEnd && dt2 == 0) {
-                    dt2 = DateTime.Now.Year;
-                }
+                    if (currentEnd && dt2 == 0) {
+                        dt2 = DateTime.Now.Year;
+                    }
 
-                if (dt1 != 0 && dt2 != 0) {
-                    result = Math.Abs(dt2 - dt1);
+                    if (dt1 != 0 && dt2 != 0) {
+                        result = Math.Abs(dt2 - dt1);
+                    }
+                } else {
+                    DateTime dt1, dt2;
+                    var udn1 = (ev1 == null) ? UDN.CreateUnknown() : ev1.GetUDN();
+                    var udn2 = (ev2 == null) ? UDN.CreateUnknown() : ev2.GetUDN();
+
+                    if (currentEnd || !udn2.HasKnownYear()) {
+                        dt2 = DateTime.Now;
+                    } else {
+                        dt2 = udn2.GetGregorianDateTime();
+                    }
+
+                    if (udn1.HasKnownYear()) {
+                        dt1 = udn1.GetGregorianDateTime();
+
+                        // FIXME: Wrong! We need an iterative algorithm for controlling accuracy, taking into account leap years!
+                        result = (int)Math.Round((dt2 - dt1).TotalDays / 365.2425);
+                    }
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GKUtils.GetEventsYearsDiff()", ex);
