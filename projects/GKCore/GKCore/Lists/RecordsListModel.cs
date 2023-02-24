@@ -75,7 +75,7 @@ namespace GKCore.Lists
             return result;
         }
 
-        public IList<ISearchResult> FindAll(string searchPattern)
+        public virtual IList<ISearchResult> FindAll(string searchPattern)
         {
             List<ISearchResult> result = new List<ISearchResult>();
 

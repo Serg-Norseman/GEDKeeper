@@ -19,7 +19,9 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -27,10 +29,11 @@ using GKCore.Calendar;
 using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
+using GKCore.Search;
 using GKCore.Types;
 
 namespace GKCore.Lists
@@ -227,6 +230,23 @@ namespace GKCore.Lists
             return result;
         }
 
+        public override IList<ISearchResult> FindAll(string searchPattern)
+        {
+            var result = new List<ISearchResult>();
+            var allNames = GlobalOptions.Instance.SearchAndFilterByAllNames;
+            Regex regex = GKUtils.InitMaskRegex(searchPattern);
+
+            int num = ContentList.Count;
+            for (int i = 0; i < num; i++) {
+                var iRec = (GDMIndividualRecord)ContentList[i].Record;
+                if (GKUtils.IsMatchesNames(iRec, regex, allNames)) {
+                    result.Add(new SearchResult(iRec));
+                }
+            }
+
+            return result;
+        }
+
         protected override void CreateFilter()
         {
             fFilter = new IndividualListFilter();
@@ -268,6 +288,25 @@ namespace GKCore.Lists
             return result;
         }
 
+        private bool IsMatchesNames(string fltName)
+        {
+            var allNames = GlobalOptions.Instance.SearchAndFilterByAllNames;
+
+            if (!allNames) {
+                return IsMatchesMask(buf_fullname, fltName);
+            } else {
+                for (int k = 0; k < fFetchedRec.PersonalNames.Count; k++) {
+                    var persName = fFetchedRec.PersonalNames[k];
+
+                    string recName = GKUtils.GetNameString(fFetchedRec, persName, true, false);
+                    if (IsMatchesMask(recName, fltName)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         private bool CheckSpecificFilter()
         {
             bool result = false;
@@ -275,7 +314,7 @@ namespace GKCore.Lists
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
             if ((iFilter.Sex == GDMSex.svUnknown || fFetchedRec.Sex == iFilter.Sex)
-                && (IsMatchesMask(buf_fullname, iFilter.Name))
+                && (IsMatchesNames(iFilter.Name))
                 && (IsMatchesPlace(iFilter.Residence))
                 && (IsMatchesEventVal(iFilter.EventVal))
                 && (!iFilter.PatriarchOnly || fFetchedRec.Patriarch))

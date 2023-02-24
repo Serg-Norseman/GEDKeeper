@@ -406,6 +406,8 @@ namespace GKCore.Options
             set { fReversePlaceEntitiesOrder = value; }
         }
 
+        public bool SearchAndFilterByAllNames { get; set; }
+
         public bool ShortKinshipForm
         {
             get { return fShortKinshipForm; }
@@ -514,6 +516,8 @@ namespace GKCore.Options
 
             fFARPatterns = new StringList();
             fFARReplacements = new StringList();
+
+            SearchAndFilterByAllNames = false;
 
             Theme = string.Empty;
         }
@@ -826,6 +830,8 @@ namespace GKCore.Options
             LoadStringList(ini, fFARPatterns, "FARPatterns");
             LoadStringList(ini, fFARReplacements, "FARReplacements");
 
+            SearchAndFilterByAllNames = ini.ReadBool("Common", "SearchAndFilterByAllNames", false);
+
             Theme = ini.ReadString("Common", "Theme", "");
 
             LoadPluginsFromFile(ini);
@@ -952,6 +958,8 @@ namespace GKCore.Options
 
             SaveStringList(ini, fFARPatterns, "FARPatterns");
             SaveStringList(ini, fFARReplacements, "FARReplacements");
+
+            ini.WriteBool("Common", "SearchAndFilterByAllNames", SearchAndFilterByAllNames);
 
             ini.WriteString("Common", "Theme", Theme);
 

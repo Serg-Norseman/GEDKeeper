@@ -1483,17 +1483,13 @@ namespace GKCore.Charts
         public IList<ISearchResult> FindAll(string searchPattern)
         {
             var result = new List<ISearchResult>();
-
+            var allNames = GlobalOptions.Instance.SearchAndFilterByAllNames;
             Regex regex = GKUtils.InitMaskRegex(searchPattern);
 
             int num = fPersons.Count;
             for (int i = 0; i < num; i++) {
-                TreeChartPerson person = fPersons[i];
-                GDMIndividualRecord iRec = person.Rec;
-                if (iRec == null) continue;
-
-                string fullname = GKUtils.GetNameString(iRec, true, false);
-                if (GKUtils.MatchesRegex(fullname, regex)) {
+                GDMIndividualRecord iRec = fPersons[i].Rec;
+                if (iRec != null && GKUtils.IsMatchesNames(iRec, regex, allNames)) {
                     result.Add(new SearchResult(iRec));
                 }
             }

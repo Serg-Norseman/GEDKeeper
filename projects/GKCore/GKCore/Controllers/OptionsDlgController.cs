@@ -363,6 +363,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkKeepRichNames").Checked = fOptions.KeepRichNames;
             GetControl<ICheckBox>("chkMaximizeChartWindows").Checked = fOptions.MaximizeChartWindows;
             GetControl<ICheckBox>("chkExtendedTree").Checked = fOptions.TreeChartOptions.ExtendedTree;
+            GetControl<ICheckBox>("chkSAFByAllNames").Checked = fOptions.SearchAndFilterByAllNames;
         }
 
         public void AcceptSpecials()
@@ -372,6 +373,7 @@ namespace GKCore.Controllers
             fOptions.KeepRichNames = GetControl<ICheckBox>("chkKeepRichNames").Checked;
             fOptions.MaximizeChartWindows = GetControl<ICheckBox>("chkMaximizeChartWindows").Checked;
             fOptions.TreeChartOptions.ExtendedTree = GetControl<ICheckBox>("chkExtendedTree").Checked;
+            fOptions.SearchAndFilterByAllNames = GetControl<ICheckBox>("chkSAFByAllNames").Checked;
         }
 
         public void UpdatePlugins()
@@ -827,6 +829,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkKeepRichNames").Text = LangMan.LS(LSID.LSID_KeepRichNames);
             GetControl<ICheckBox>("chkMaximizeChartWindows").Text = LangMan.LS(LSID.LSID_MaximizeChartWindows);
             GetControl<ICheckBox>("chkExtendedTree").Text = LangMan.LS(LSID.LSID_ExtendedTree);
+            GetControl<ICheckBox>("chkSAFByAllNames").Text = LangMan.LS(LSID.LSID_SearchAndFilterByAllNames);
 
             // Plugins
             GetControl<ITabPage>("pagePlugins").Text = LangMan.LS(LSID.LSID_Plugins);

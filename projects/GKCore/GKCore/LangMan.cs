@@ -951,8 +951,9 @@ namespace GKCore
         /* 889 */ LSID_ShowTreeNotes,
         /* 890 */ LSID_NoGoalRecordSpecified,
         /* 891 */ LSID_InvalidFileName,
+        /* 892 */ LSID_SearchAndFilterByAllNames,
 
-        /* 000 */ LSID_Last = LSID_InvalidFileName
+        /* 000 */ LSID_Last = LSID_SearchAndFilterByAllNames
     }
 
 
@@ -1859,7 +1860,8 @@ namespace GKCore
             /* 888 */ "Tree note",
             /* 889 */ "Show special notes",
             /* 890 */ "No goal record specified",
-            /* 891 */ "Invalid file name"
+            /* 891 */ "Invalid file name",
+            /* 892 */ "Search and filter by all names",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

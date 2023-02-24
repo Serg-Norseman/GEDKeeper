@@ -170,6 +170,7 @@
         private System.Windows.Forms.CheckBox chkHighlightInaccessibleFiles;
         private System.Windows.Forms.CheckBox chkTreeSurnameFirst;
         private System.Windows.Forms.CheckBox chkURNotesVisible;
+        private System.Windows.Forms.CheckBox chkSAFByAllNames;
 
         private void InitializeComponent()
         {
@@ -341,6 +342,7 @@
             this.chkHighlightInaccessibleFiles = new System.Windows.Forms.CheckBox();
             this.chkTreeSurnameFirst = new System.Windows.Forms.CheckBox();
             this.chkURNotesVisible = new System.Windows.Forms.CheckBox();
+            this.chkSAFByAllNames = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2213,6 +2215,7 @@
             this.pageSpecials.Controls.Add(this.chkMaximizeChartWindows);
             this.pageSpecials.Controls.Add(this.chkExtendedTree);
             this.pageSpecials.Controls.Add(this.chkUseExtraControls);
+            this.pageSpecials.Controls.Add(this.chkSAFByAllNames);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
             this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
@@ -2227,7 +2230,7 @@
             this.chkUseInlineImagesInSvg.Location = new System.Drawing.Point(20, 20);
             this.chkUseInlineImagesInSvg.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkUseInlineImagesInSvg.Name = "chkUseInlineImagesInSvg";
-            this.chkUseInlineImagesInSvg.Size = new System.Drawing.Size(254, 22);
+            this.chkUseInlineImagesInSvg.Size = new System.Drawing.Size(360, 22);
             this.chkUseInlineImagesInSvg.TabIndex = 12;
             this.chkUseInlineImagesInSvg.Text = "chkUseInlineImagesInSvg";
             // 
@@ -2275,6 +2278,15 @@
             this.chkUseExtraControls.Size = new System.Drawing.Size(254, 22);
             this.chkUseExtraControls.TabIndex = 12;
             this.chkUseExtraControls.Text = "chkUseExtraControls";
+            // 
+            // chkSAFByAllNames
+            // 
+            this.chkSAFByAllNames.Location = new System.Drawing.Point(20, 266);
+            this.chkSAFByAllNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkSAFByAllNames.Name = "chkSAFByAllNames";
+            this.chkSAFByAllNames.Size = new System.Drawing.Size(360, 22);
+            this.chkSAFByAllNames.TabIndex = 13;
+            this.chkSAFByAllNames.Text = "chkSAFByAllNames";
             // 
             // pagePlugins
             // 

@@ -2522,7 +2522,12 @@ namespace GKCore
                         GDMTree tree = baseContext.Tree;
 
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + GetNameString(iRec, true, true) + "[/size][/u][/b]");
+
+                        for (int i = 0; i < iRec.PersonalNames.Count; i++) {
+                            var persName = iRec.PersonalNames[i];
+                            summary.Add("[u][b][size=+1]" + GetNameString(iRec, persName, true, true) + "[/size][/u][/b]");
+                        }
+
                         summary.Add(LangMan.LS(LSID.LSID_Sex) + ": " + SexStr(iRec.Sex));
 
                         ShowParentsInfo(tree, iRec, summary);
@@ -3398,6 +3403,26 @@ namespace GKCore
             }
 
             return CulturesPool.DefineCulture(langID);
+        }
+
+        public static bool IsMatchesNames(GDMIndividualRecord iRec, Regex regexNames, bool allNames)
+        {
+            if (!allNames) {
+                string recName = GetNameString(iRec, true, false);
+                if (MatchesRegex(recName, regexNames)) {
+                    return true;
+                }
+            } else {
+                for (int k = 0; k < iRec.PersonalNames.Count; k++) {
+                    var persName = iRec.PersonalNames[k];
+
+                    string recName = GetNameString(iRec, persName, true, false);
+                    if (MatchesRegex(recName, regexNames)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         #endregion
