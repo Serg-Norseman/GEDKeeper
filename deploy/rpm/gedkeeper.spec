@@ -2,7 +2,7 @@
 %define	        summary GEDKeeper - program for work with personal genealogical database
 
 Name:		gedkeeper
-Version:	2.23.0
+Version:	2.24.0
 Release:	1
 Summary:	%{summary}
 License:	GPLv3
@@ -55,5 +55,5 @@ cp -r bin \
 rm -rf %{buildroot}%{_libdir}/%{name}/scripts/readme.txt
 
 %changelog
-* Jan 14 2023 GEDKeeper - 2.23.0
+* Feb 28 2023 GEDKeeper - 2.24.0
 - New upstream release
