@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
-  x:Class="GKUI.Forms.TTFamilyGroupsDlg">
+  x:Class="GKUI.Forms.TTFamilyGroupsDlg" Closed="Form_Closed">
 
   <TableLayout Style="paddedTable8">
 
@@ -30,6 +30,17 @@
               </StackLayout>
             </TableRow>
           </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pageDataQuality">
+          <comcom:TreeMapViewer x:Name="fDataMap">
+            <comcom:TreeMapViewer.ContextMenu>
+              <ContextMenu>
+                <ButtonMenuItem x:Name="miDQRefresh" Click="miRefresh_Click" />
+                <ButtonMenuItem x:Name="miDQResetFilter" Click="miResetFilter_Click" />
+              </ContextMenu>
+            </comcom:TreeMapViewer.ContextMenu>
+          </comcom:TreeMapViewer>
         </TabPage>
       </TabControl>
     </TableRow>

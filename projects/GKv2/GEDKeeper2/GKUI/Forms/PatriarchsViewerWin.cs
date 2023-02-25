@@ -29,7 +29,7 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Tools;
 using GKCore.Types;
-using GKUI.Components;
+using ArborNodeEx = GKUI.Components.ArborNodeEx;
 
 namespace GKUI.Forms
 {

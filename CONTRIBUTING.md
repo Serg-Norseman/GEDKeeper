@@ -25,11 +25,6 @@ No code is perfect and we always welcome third-party patches. This document desc
 - Submit a pull request to the project's repository,
 - Update your ticket to mark you have submitted code and are ready for it to be reviewed. Include a link to the pull request in the ticket.
 
-# Additional resources
-
-- [GEDKeeper coding style guide](CODINGSTYLE.md)
-- [GEDKeeper chat on gitter](https://gitter.im/Serg-Norseman/GEDKeeper)
-
 
 # GEDKeeper contributors
 

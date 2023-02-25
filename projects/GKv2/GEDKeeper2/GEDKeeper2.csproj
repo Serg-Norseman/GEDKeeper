@@ -41,6 +41,9 @@
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.DataViz.WFControls">
+      <HintPath>..\..\libs\BSLib.DataViz.WFControls.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />

@@ -19,17 +19,21 @@
  */
 
 using System;
+using System.Drawing;
+using System.Windows.Forms;
+using BSLib.DataViz.TreeMap;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class TTFamilyGroupsDlg : CommonWindow<IFragmentSearchDlg, FragmentSearchController>, IFragmentSearchDlg
     {
+        private TreeMapViewer fDataMap;
+
         #region View Interface
 
         ITreeView IFragmentSearchDlg.GroupsTree
@@ -51,7 +55,20 @@ namespace GKUI.Forms
             fController = new FragmentSearchController(this);
             fController.Init(baseWin);
 
+            fDataMap = new TreeMapViewer();
+            fDataMap.Model.CreatingItem += fController.DataMap_CreateGroupItem;
+            fDataMap.Dock = DockStyle.Fill;
+            fDataMap.MouseDoubleClick += DataMap_DoubleClick;
+            fDataMap.PaintItem += DataMap_PaintItem;
+            fDataMap.ContextMenuStrip = menuDQ;
+            pageDataQuality.Controls.Add(fDataMap);
+
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
+        }
+
+        private void Form_Closed(object sender, EventArgs e)
+        {
+            fController.SetExternalFilter(null);
         }
 
         public override void SetLocale()
@@ -62,6 +79,7 @@ namespace GKUI.Forms
         private void btnAnalyseGroups_Click(object sender, EventArgs e)
         {
             fController.CheckGroups();
+            UpdateTreeMap();
         }
 
         private void tvGroups_DoubleClick(object sender, EventArgs e)
@@ -69,7 +87,7 @@ namespace GKUI.Forms
             fController.SelectPerson();
         }
 
-        private void HintRequestEventHandler(object sender, HintRequestEventArgs args)
+        private void HintRequestEventHandler(object sender, Components.HintRequestEventArgs args)
         {
             if (args == null) return;
 
@@ -95,5 +113,45 @@ namespace GKUI.Forms
         {
             fController.CopySelectedXRef();
         }
+
+        #region Data Quality
+
+        private void miResetFilter_Click(object sender, EventArgs e)
+        {
+            fController.SetExternalFilter(null);
+        }
+
+        private void miRefresh_Click(object sender, EventArgs e)
+        {
+            UpdateTreeMap();
+        }
+
+        private void UpdateTreeMap()
+        {
+            fController.UpdateTreeMap(fDataMap.Model);
+            fDataMap.UpdateView();
+        }
+
+        private void DataMap_PaintItem(object sender, PaintItemEventArgs args)
+        {
+            var gfx = args.Graphics;
+            var item = args.Item;
+            MapRect bounds = item.Bounds;
+            if (bounds.W > 2f && bounds.H > 2f) {
+                var simpleItem = (FragmentSearchController.GroupMapItem)item;
+                gfx.FillRectangle(new SolidBrush(Color.FromArgb(simpleItem.Color)), bounds.X, bounds.Y, bounds.W, bounds.H);
+                gfx.DrawRectangle(fDataMap.BorderPen, bounds.X, bounds.Y, bounds.W, bounds.H);
+
+                var rect = new RectangleF(bounds.X, bounds.Y, bounds.W, bounds.H);
+                gfx.DrawString(simpleItem.Name, Font, fDataMap.HeaderBrush, rect);
+            }
+        }
+
+        private void DataMap_DoubleClick(object sender, MouseEventArgs e)
+        {
+            fController.DoubleClickGroupItem(fDataMap.Model, e.X, e.Y);
+        }
+
+        #endregion
     }
 }

@@ -19,6 +19,8 @@
  */
 
 using System;
+using BSLib.DataViz.TreeMap;
+using Eto.Drawing;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore;
@@ -43,6 +45,10 @@ namespace GKUI.Forms
         private ButtonMenuItem miDetails;
         private ButtonMenuItem miGoToRecord;
         private ButtonMenuItem miCopyXRef;
+        private TabPage pageDataQuality;
+        private TreeMapViewer fDataMap;
+        private ButtonMenuItem miDQRefresh;
+        private ButtonMenuItem miDQResetFilter;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -68,7 +74,16 @@ namespace GKUI.Forms
             fController = new FragmentSearchController(this);
             fController.Init(baseWin);
 
+            fDataMap.Model.CreatingItem += fController.DataMap_CreateGroupItem;
+            fDataMap.MouseDoubleClick += DataMap_DoubleClick;
+            fDataMap.PaintItem += DataMap_PaintItem;
+
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
+        }
+
+        private void Form_Closed(object sender, EventArgs e)
+        {
+            fController.SetExternalFilter(null);
         }
 
         public override void SetLocale()
@@ -79,6 +94,7 @@ namespace GKUI.Forms
         private void btnAnalyseGroups_Click(object sender, EventArgs e)
         {
             fController.CheckGroups();
+            UpdateTreeMap();
         }
 
         private void tvGroups_DoubleClick(object sender, MouseEventArgs e)
@@ -112,5 +128,47 @@ namespace GKUI.Forms
         {
             fController.CopySelectedXRef();
         }
+
+        #region Data Quality
+
+        private void miResetFilter_Click(object sender, EventArgs e)
+        {
+            fController.SetExternalFilter(null);
+        }
+
+        private void miRefresh_Click(object sender, EventArgs e)
+        {
+            UpdateTreeMap();
+        }
+
+        private void UpdateTreeMap()
+        {
+            fController.UpdateTreeMap(fDataMap.Model);
+            fDataMap.UpdateView();
+        }
+
+        private void DataMap_PaintItem(object sender, PaintItemEventArgs args)
+        {
+            var gfx = args.Graphics;
+            var item = args.Item;
+            MapRect bounds = item.Bounds;
+            if (bounds.W > 2f && bounds.H > 2f) {
+                var simpleItem = (FragmentSearchController.GroupMapItem)item;
+                gfx.FillRectangle(new SolidBrush(Color.FromArgb(simpleItem.Color)), bounds.X, bounds.Y, bounds.W, bounds.H);
+                gfx.DrawRectangle(fDataMap.BorderPen, bounds.X, bounds.Y, bounds.W, bounds.H);
+
+                var rect = new RectangleF(bounds.X, bounds.Y, bounds.W, bounds.H);
+                //gfx.DrawString(simpleItem.Name, Font, fDataMap.HeaderBrush, rect);
+                gfx.DrawText(fDataMap.DrawFont, new SolidBrush(Colors.Black), rect, simpleItem.Name);
+            }
+        }
+
+        private void DataMap_DoubleClick(object sender, MouseEventArgs e)
+        {
+            Point mpt = new Point(e.Location);
+            fController.DoubleClickGroupItem(fDataMap.Model, mpt.X, mpt.Y);
+        }
+
+        #endregion
     }
 }

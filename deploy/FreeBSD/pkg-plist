@@ -322,10 +322,6 @@ bin/gedkeeper
 %%DATADIR%%/plugins/GKChroniclePlugin.ukr
 %%DATADIR%%/plugins/GKComponents.dll
 %%DATADIR%%/plugins/GKCore.dll
-%%DATADIR%%/plugins/GKDataQualityPlugin.dll
-%%DATADIR%%/plugins/GKDataQualityPlugin.enu
-%%DATADIR%%/plugins/GKDataQualityPlugin.pdb
-%%DATADIR%%/plugins/GKDataQualityPlugin.rus
 %%DATADIR%%/plugins/GKFlowInputPlugin.dll
 %%DATADIR%%/plugins/GKFlowInputPlugin.enu
 %%DATADIR%%/plugins/GKFlowInputPlugin.pdb

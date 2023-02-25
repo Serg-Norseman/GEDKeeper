@@ -952,8 +952,12 @@ namespace GKCore
         /* 890 */ LSID_NoGoalRecordSpecified,
         /* 891 */ LSID_InvalidFileName,
         /* 892 */ LSID_SearchAndFilterByAllNames,
+        /* 893 */ LSID_DataQuality,
+        /* 894 */ LSID_DQHint,
+        /* 895 */ LSID_Refresh,
+        /* 896 */ LSID_ResetFilter,
 
-        /* 000 */ LSID_Last = LSID_SearchAndFilterByAllNames
+        /* 000 */ LSID_Last = LSID_ResetFilter
     }
 
 
@@ -1862,6 +1866,10 @@ namespace GKCore
             /* 890 */ "No goal record specified",
             /* 891 */ "Invalid file name",
             /* 892 */ "Search and filter by all names",
+            /* 893 */ "Data Quality",
+            /* 894 */ "Fragment {0}, size {1}, quality {2}",
+            /* 895 */ "Refresh",
+            /* 896 */ "Reset filter",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
