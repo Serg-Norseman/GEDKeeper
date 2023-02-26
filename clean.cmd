@@ -16,9 +16,6 @@ del .\coverageResults.txt
 del .\NUnitResults.xml
 del .\opencover.xml
 
-del .\GKUpdater.ini
-del .\GKUpdater.log
-
 rem <<< Main assemblies cleaning >>>
 
 rmdir .\projects\.vs /s /q
@@ -42,12 +39,6 @@ rmdir .\projects\GKv2\GKComponents\obj /s /q
 
 rmdir .\projects\GKv2\GKTray\bin /s /q
 rmdir .\projects\GKv2\GKTray\obj /s /q
-
-rmdir .\projects\GKIntl\bin /s /q
-rmdir .\projects\GKIntl\obj /s /q
-
-rmdir .\projects\GKUpdater\bin /s /q
-rmdir .\projects\GKUpdater\obj /s /q
 
 rmdir .\projects\GKMap\GKMap.Core\bin /s /q
 rmdir .\projects\GKMap\GKMap.Core\obj /s /q
@@ -110,9 +101,6 @@ rmdir .\projects\GKv2\GKFoldersPlugin\obj /s /q
 
 rmdir .\projects\GKv2\GEDmill\bin /s /q
 rmdir .\projects\GKv2\GEDmill\obj /s /q
-
-rmdir .\projects\GKv2\GWTreePlugin\bin /s /q
-rmdir .\projects\GKv2\GWTreePlugin\obj /s /q
 
 rmdir .\projects\GKv2\GKBackupPlugin\bin /s /q
 rmdir .\projects\GKv2\GKBackupPlugin\obj /s /q

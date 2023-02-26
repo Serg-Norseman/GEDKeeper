@@ -1,3 +1,16 @@
+## 28.02.2023 [v2.24.0]
+- "Data Quality" plugin has been merged with the "Check сonnection of families" tool.
+- Added option to search and filter by all names.
+- Program language cultures linked to system cultures for improved string sorting.
+- Added handling hyperlinks in fact values.
+- Removed experimental prototype of the terminal (console) implementation of the program.
+- Removed sample plugin.
+- Added support (recognition) of multimedia formats doc(x), xls(x), ppt(x), odt, ods, odp, djvu, zip, rar, 7z.
+- The .NET Framework has been updated to version 4.6.2.
+- Fixed many bugs.
+- Added settings files for each of the supported language cultures.
+- Added the ability to build a tree from a selected family record.
+- The control of the maximum number of persons in the tree has been changed, taking into account the number of generations specified in the options.
 
 ## 14.01.2023 [v2.23.0]
 - Fixed bugs loading places in maps.

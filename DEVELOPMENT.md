@@ -4,11 +4,11 @@
 
 ### Building
 
-* Microsoft [.NET Framework](https://dotnet.microsoft.com/) 4.0.30319
+* Microsoft [.NET Framework](https://dotnet.microsoft.com/) 4.6.2
 * Microsoft [Visual Studio 2017](https://visualstudio.microsoft.com/) or later
 
 ### Testing
-* [NUnit](https://github.com/nunit) 2.6.4 (unit testing framework for .NET)
+* [NUnit](https://github.com/nunit) 2.6.4 or 3 (unit testing framework for .NET)
 
 ### Packaging
 
@@ -17,7 +17,7 @@
 
 ## For Windows
 
-Run the script `build_all_mswin.x86.cmd` from the Windows command line.
+Run the script `build_all.mswin.x86.cmd` from the Windows command line.
 
 Optionally pass the `release` option to the script to build without
 debugging information. By default the script builds the executable with
@@ -26,14 +26,12 @@ builds.
 
 ## For Mono
 
-From the Windows command line, run the script `build_all.linux.x64.cmd`.
-
-Optionally, start the Windows 10 bash shell and run the script `build_all.linux.x64.sh`.
+Run the script `build_all.linux.x64.sh` from the Linux shell.
 
 
 # The GEDKeeper testing
 
-GEDKeeper uses [NUnit 2.6.4](http://www.nunit.org/), patches should come with 
+GEDKeeper uses [NUnit 2.6.4 or 3](http://www.nunit.org/), patches should come with 
 tests and all tests should pass before a commit or branch is merged.
 
 
