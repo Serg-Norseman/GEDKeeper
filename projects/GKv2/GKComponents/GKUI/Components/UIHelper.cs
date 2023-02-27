@@ -209,7 +209,7 @@ namespace GKUI.Components
             }
         }
 
-        public static GKListView CreateRecordsView(Control parent, IBaseContext baseContext, GDMRecordType recType)
+        public static GKListView CreateRecordsView(Control parent, IBaseContext baseContext, GDMRecordType recType, bool simpleList)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");
@@ -222,7 +222,7 @@ namespace GKUI.Components
             recView.LabelEdit = false;
             recView.FullRowSelect = true;
             recView.View = View.Details;
-            recView.ListMan = RecordsListModel<GDMRecord>.Create(baseContext, recType);
+            recView.ListMan = RecordsListModel<GDMRecord>.Create(baseContext, recType, simpleList);
             recView.Dock = DockStyle.Fill;
 
             parent.Controls.Add(recView);

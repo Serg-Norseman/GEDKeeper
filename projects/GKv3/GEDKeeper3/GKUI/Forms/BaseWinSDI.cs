@@ -236,7 +236,7 @@ namespace GKUI.Forms
             recView.SelectedItemsChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
             recView.ContextMenu = contextMenu;
-            recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType);
+            recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
 
             Splitter spl = new Splitter();
             spl.Panel1 = recView;

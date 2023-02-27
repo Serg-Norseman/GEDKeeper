@@ -29,6 +29,8 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
+using GKCore.Lists;
+using GKCore.Types;
 using GKUI.Platform.Handlers;
 using BSDListItem = GKCore.Design.Controls.IListItem;
 using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
@@ -563,6 +565,16 @@ namespace GKUI.Components
                 if (restoreSelected) SelectItem(rec);
             } else {
                 Sort();
+            }
+        }
+
+        public void SortModelColumn(int columnId)
+        {
+            if (fListMan != null) {
+                int sortColumn = fListMan.GetColumnIndex(columnId);
+                if (sortColumn != -1) {
+                    SetSortColumn(sortColumn, false);
+                }
             }
         }
 

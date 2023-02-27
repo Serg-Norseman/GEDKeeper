@@ -26,6 +26,7 @@ namespace GKCore.Interfaces
     public interface IRecordsListModel : IListSource
     {
         GDMRecordType RecordType { get; }
+        bool SimpleList { get; set; }
 
         List<GDMRecord> GetRecordsList();
 

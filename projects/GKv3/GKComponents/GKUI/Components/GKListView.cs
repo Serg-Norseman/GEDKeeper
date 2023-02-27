@@ -455,6 +455,16 @@ namespace GKUI.Components
             }
         }
 
+        public void SortModelColumn(int columnId)
+        {
+            if (fListMan != null) {
+                int sortColumn = fListMan.GetColumnIndex(columnId);
+                if (sortColumn != -1) {
+                    SetSortColumn(sortColumn, false);
+                }
+            }
+        }
+
         public void UpdateContents(bool columnsChanged = false)
         {
             if (fListMan == null) return;

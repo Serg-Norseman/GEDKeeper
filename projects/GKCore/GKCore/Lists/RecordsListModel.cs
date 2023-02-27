@@ -33,6 +33,7 @@ namespace GKCore.Lists
         where T : GDMRecord
     {
         private readonly GDMRecordType fRecordType;
+        private bool fSimpleList;
 
 
         public GDMRecordType RecordType
@@ -40,6 +41,11 @@ namespace GKCore.Lists
             get { return fRecordType; }
         }
 
+        public bool SimpleList
+        {
+            get { return fSimpleList; }
+            set { fSimpleList = value; }
+        }
 
         protected RecordsListModel(IBaseContext baseContext, ListColumns<T> defaultListColumns, GDMRecordType recordType) :
             base(baseContext, defaultListColumns)
@@ -94,7 +100,7 @@ namespace GKCore.Lists
             return result;
         }
 
-        public static IRecordsListModel Create(IBaseContext baseContext, GDMRecordType recType)
+        public static IRecordsListModel Create(IBaseContext baseContext, GDMRecordType recType, bool simpleList)
         {
             IRecordsListModel result = null;
 
@@ -150,6 +156,10 @@ namespace GKCore.Lists
                 case GDMRecordType.rtSubmitter:
                     result = null;
                     break;
+            }
+
+            if (result != null) {
+                result.SimpleList = simpleList;
             }
 
             return result;

@@ -165,7 +165,7 @@ namespace GKUI.Forms
             sheet.Controls.Add(summary);
             sheet.Controls.Add(spl);
 
-            var recView = UIHelper.CreateRecordsView(sheet, fContext, recType);
+            var recView = UIHelper.CreateRecordsView(sheet, fContext, recType, false);
             recView.DoubleClick += miRecordEdit_Click;
             recView.SelectedIndexChanged += List_SelectedIndexChanged;
             recView.UpdateContents();

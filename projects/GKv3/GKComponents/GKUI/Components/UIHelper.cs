@@ -206,7 +206,7 @@ namespace GKUI.Components
             }
         }
 
-        public static GKListView CreateRecordsView(Panel parent, IBaseContext baseContext, GDMRecordType recType)
+        public static GKListView CreateRecordsView(Panel parent, IBaseContext baseContext, GDMRecordType recType, bool simpleList)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");
@@ -215,7 +215,7 @@ namespace GKUI.Components
                 throw new ArgumentNullException("baseContext");
 
             GKListView recView = new GKListView();
-            recView.ListMan = RecordsListModel<GDMRecord>.Create(baseContext, recType);
+            recView.ListMan = RecordsListModel<GDMRecord>.Create(baseContext, recType, simpleList);
             parent.Content = recView;
 
             return recView;

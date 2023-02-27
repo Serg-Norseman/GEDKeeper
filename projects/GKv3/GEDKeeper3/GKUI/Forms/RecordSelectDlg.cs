@@ -101,7 +101,7 @@ namespace GKUI.Forms
                 fListRecords.Dispose();
                 fListRecords = null;
             }
-            fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType);
+            fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType, true);
         }
 
         private void btnSelect_Click(object sender, EventArgs e)

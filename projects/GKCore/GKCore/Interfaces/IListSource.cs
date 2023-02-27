@@ -102,6 +102,7 @@ namespace GKCore.Interfaces
 
         IColor GetBackgroundColor(int itemIndex, object rowData);
 
+        int GetColumnIndex(int columnId);
         ConditionKind GetCondByName(string condName);
         object GetContentItem(int itemIndex);
         int GetFieldColumnId(string[] fields, string fieldName);

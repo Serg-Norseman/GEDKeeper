@@ -396,7 +396,7 @@ namespace GKCore.Lists
             if (colSubtype == -1) {
                 result = GKUtils.GetNameString(fFetchedRec, true, false);
             } else {
-                NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
+                NameFormat defNameFormat = (SimpleList) ? NameFormat.nfFNP : GlobalOptions.Instance.DefNameFormat;
                 NamePartsRet parts;
                 GDMLanguageID defLang = fBaseContext.DefaultLanguage;
 
@@ -660,7 +660,7 @@ namespace GKCore.Lists
         {
             fColumnsMap.Clear();
 
-            NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
+            NameFormat defNameFormat = (SimpleList) ? NameFormat.nfFNP : GlobalOptions.Instance.DefNameFormat;
             IListColumns columns = this.ListColumns;
 
             int num = columns.Count;

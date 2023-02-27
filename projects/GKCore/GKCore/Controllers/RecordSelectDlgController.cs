@@ -94,6 +94,7 @@ namespace GKCore.Controllers
                         if (fTarget.TargetMode == TargetMode.tmParent) {
                             recordsList.ListMan.ExternalFilter = ChildSelectorHandler;
                         }
+                        recordsList.SortModelColumn((int)IndividualListModel.ColumnType.ctName);
                         break;
                     }
 
@@ -101,6 +102,7 @@ namespace GKCore.Controllers
                     if (fTarget.TargetMode == TargetMode.tmFamilySpouse) {
                         recordsList.ListMan.ExternalFilter = SpouseSelectorHandler;
                     }
+                    recordsList.SortModelColumn((int)FamilyListModel.ColumnType.ctFamilyStr);
                     break;
             }
 

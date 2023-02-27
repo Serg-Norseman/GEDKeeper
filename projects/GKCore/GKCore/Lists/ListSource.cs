@@ -217,6 +217,19 @@ namespace GKCore.Lists
             }
         }
 
+        public int GetColumnIndex(int columnId)
+        {
+            int result = -1;
+            for (int i = 0, num = fListColumns.Count; i < num; i++) {
+                ListColumn columnProps = fListColumns.OrderedColumns[i];
+                if (columnProps.CurActive && columnProps.Id == columnId) {
+                    result = i;
+                    break;
+                }
+            }
+            return result;
+        }
+
         #endregion
 
         #region Mask processing

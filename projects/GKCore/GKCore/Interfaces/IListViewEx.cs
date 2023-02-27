@@ -32,5 +32,6 @@ namespace GKCore.Interfaces
         void DeleteRecord(object data);
         void ResizeColumn(int columnIndex);
         void SelectItem(int index);
+        void SortModelColumn(int columnId);
     }
 }
