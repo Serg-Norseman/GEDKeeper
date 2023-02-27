@@ -72,16 +72,12 @@ namespace GKCore.Controllers
                 using (KinshipsGraph kinsGraph = KinshipsGraph.SearchGraph(fBase.Context, fRec1)) {
                     if (kinsGraph.IsEmpty()) {
                         fResult = "Empty graph.";
-                        return;
-                    }
-
-                    if (kinsGraph.FindVertex(fRec2.XRef) == null) {
+                    } else if (kinsGraph.FindVertex(fRec2.XRef) == null) {
                         fResult = "These individuals have no common relatives.";
-                        return;
+                    } else {
+                        kinsGraph.SetTreeRoot(fRec1);
+                        fResult = kinsGraph.GetRelationship(fRec2, true, GlobalOptions.Instance.ShortKinshipForm);
                     }
-
-                    kinsGraph.SetTreeRoot(fRec1);
-                    fResult = kinsGraph.GetRelationship(fRec2, true, GlobalOptions.Instance.ShortKinshipForm);
                 }
             }
 

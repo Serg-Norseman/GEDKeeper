@@ -570,7 +570,7 @@ namespace GKUI.Components
 
         public void SortModelColumn(int columnId)
         {
-            if (fListMan != null) {
+            if (fListMan != null && !AppHost.TEST_MODE) {
                 int sortColumn = fListMan.GetColumnIndex(columnId);
                 if (sortColumn != -1) {
                     SetSortColumn(sortColumn, false);

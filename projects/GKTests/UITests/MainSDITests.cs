@@ -437,7 +437,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_ShowRelationshipCalculatorDlg()
         {
-            ModalFormHandler = RelationshipCalculatorDlgTests.RelationshipCalculatorDlg_Handler;
+            SetModalFormHandler(this, RelationshipCalculatorDlgTests.RelationshipCalculatorDlg_Handler);
             ClickToolStripMenuItem("miRelationshipCalculator", fMainWin);
         }
 

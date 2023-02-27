@@ -102,7 +102,9 @@ namespace GKUI.Forms
 
         public virtual void ApplyTheme()
         {
-            AppHost.Instance.ApplyTheme(this);
+            if (AppHost.Instance != null) {
+                AppHost.Instance.ApplyTheme(this);
+            }
         }
 
         public virtual bool SkipTheme(Component component)
