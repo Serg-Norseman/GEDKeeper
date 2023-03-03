@@ -67,11 +67,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="WordsCloudWidget.resx">
-      <DependentUpon>WordsCloudWidget.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

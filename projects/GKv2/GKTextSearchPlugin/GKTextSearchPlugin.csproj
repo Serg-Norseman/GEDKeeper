@@ -50,11 +50,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TextSearchWin.resx">
-      <DependentUpon>TextSearchWin.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="GKTextSearchPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

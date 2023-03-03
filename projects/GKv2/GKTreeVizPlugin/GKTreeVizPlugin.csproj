@@ -49,11 +49,6 @@
     <Compile Include="TVPerson.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TVSettingsDlg.resx">
-      <DependentUpon>TVSettingsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>

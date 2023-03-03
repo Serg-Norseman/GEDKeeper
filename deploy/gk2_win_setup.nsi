@@ -7,14 +7,14 @@
 !define MUI_ICON "..\projects\GKv2\GEDKeeper2\GEDKeeper2.ico"
 
 
-Unicode true
+;Unicode true
 Name "GEDKeeper"
 OutFile "gedkeeper_2.24.0_winsetup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 
 CRCCheck on
 SetCompress auto
-SetCompressor lzma
+;SetCompressor lzma
 SetDatablockOptimize on
 AllowRootDirInstall false
 XPStyle on
@@ -254,7 +254,7 @@ Section "$(gkreq)"
 
     SetOutPath $INSTDIR
 
-    !insertmacro CheckNetFramework "462"
+    !insertmacro CheckNetFramework 472
 
     CreateDirectory "$INSTDIR\bin"
     SetOutPath "$INSTDIR\bin"
@@ -495,7 +495,7 @@ SectionGroup /e "$(gkplg)"
         File "..\plugins\GKTreeVizPlugin.ukr"
         File "..\plugins\GKTreeVizPlugin.pol"
         File "..\plugins\BSLib.DataViz.Model.dll"
-        File "..\plugins\BSLib.DataViz.WFControls.dll"
+        ;File "..\plugins\BSLib.DataViz.WFControls.dll"
     SectionEnd
 
     Section "$(gkp_iv)"

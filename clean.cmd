@@ -30,6 +30,7 @@ rmdir .\projects\GKTests\OpenCover /s /q
 rmdir .\projects\GKTests\PartCover /s /q
 rmdir .\projects\GKTests\ProfilingSessions /s /q
 
+rmdir .\projects\GKv2\.vs /s /q
 rmdir .\projects\GKv2\GEDKeeper2\bin /s /q
 rmdir .\projects\GKv2\GEDKeeper2\obj /s /q
 rmdir .\projects\GKv2\GEDKeeper2\ProfilingSessions /s /q
