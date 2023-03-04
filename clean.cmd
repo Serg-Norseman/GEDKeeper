@@ -97,9 +97,6 @@ rmdir .\projects\GKv2\GKHistoryDataPlugin\obj /s /q
 rmdir .\projects\GKv2\GKStdReports\bin /s /q
 rmdir .\projects\GKv2\GKStdReports\obj /s /q
 
-rmdir .\projects\GKv2\GKFoldersPlugin\bin /s /q
-rmdir .\projects\GKv2\GKFoldersPlugin\obj /s /q
-
 rmdir .\projects\GKv2\GEDmill\bin /s /q
 rmdir .\projects\GKv2\GEDmill\obj /s /q
 
