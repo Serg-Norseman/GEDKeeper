@@ -14,6 +14,7 @@ del .\*.zip /q
 del ..\appdata\*.* /q
 
 echo "..\LICENSE" >> %lstfile%
+echo ".\make_desktop_link.bat" >> %lstfile%
 
 echo "..\bin\" >> %lstfile%
 echo "..\appdata\" >> %lstfile%
