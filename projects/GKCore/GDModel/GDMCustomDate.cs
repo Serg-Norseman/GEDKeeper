@@ -64,7 +64,7 @@ namespace GDModel
 
         public abstract DateTime GetDateTime();
         public abstract void SetDateTime(DateTime value);
-        public abstract string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar);
+        public abstract string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar, bool shorten = false);
 
         protected virtual void DateChanged()
         {

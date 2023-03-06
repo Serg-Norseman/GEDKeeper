@@ -490,6 +490,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkShowAge").Checked = fOptions.TreeChartOptions.AgeVisible;
             GetControl<ICheckBox>("chkTreeSurnameFirst").Checked = fOptions.TreeChartOptions.SurnameFirstInOrder;
             GetControl<ICheckBox>("chkURNotesVisible").Checked = fOptions.TreeChartOptions.URNotesVisible;
+            GetControl<ICheckBox>("chkShortenDateRanges").Checked = fOptions.TreeChartOptions.ShortenDateRanges;
 
             GetControl<ILabel>("lblMaleColor").BackColor = fOptions.TreeChartOptions.MaleColor;
             GetControl<ILabel>("lblFemaleColor").BackColor = fOptions.TreeChartOptions.FemaleColor;
@@ -569,6 +570,7 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.AgeVisible = GetControl<ICheckBox>("chkShowAge").Checked;
             fOptions.TreeChartOptions.SurnameFirstInOrder = GetControl<ICheckBox>("chkTreeSurnameFirst").Checked;
             fOptions.TreeChartOptions.URNotesVisible = GetControl<ICheckBox>("chkURNotesVisible").Checked;
+            fOptions.TreeChartOptions.ShortenDateRanges = GetControl<ICheckBox>("chkShortenDateRanges").Checked;
 
             fOptions.TreeChartOptions.MaleColor = GetControl<ILabel>("lblMaleColor").BackColor;
             fOptions.TreeChartOptions.FemaleColor = GetControl<ILabel>("lblFemaleColor").BackColor;
@@ -749,6 +751,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkShowAge").Text = LangMan.LS(LSID.LSID_ShowAge);
             GetControl<ICheckBox>("chkTreeSurnameFirst").Text = LangMan.LS(LSID.LSID_SurnameFirstInOrder);
             GetControl<ICheckBox>("chkURNotesVisible").Text = LangMan.LS(LSID.LSID_ShowTreeNotes);
+            GetControl<ICheckBox>("chkShortenDateRanges").Text = LangMan.LS(LSID.LSID_ShortenDateRanges);
 
             GetControl<IGroupBox>("grpTreeDecor").Text = LangMan.LS(LSID.LSID_Decor);
             GetControl<ILabel>("lblMaleColor").Text = LangMan.LS(LSID.LSID_Man);

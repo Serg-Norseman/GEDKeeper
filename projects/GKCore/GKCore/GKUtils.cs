@@ -827,9 +827,9 @@ namespace GKCore
             return result;
         }
 
-        public static string GEDCOMEventToDateStr(GDMCustomEvent evt, DateFormat format, bool sign)
+        public static string GEDCOMEventToDateStr(GDMCustomEvent evt, DateFormat format, bool sign, bool shorten = false)
         {
-            return (evt == null) ? string.Empty : evt.Date.GetDisplayStringExt(format, sign, false);
+            return (evt == null) ? string.Empty : evt.Date.GetDisplayStringExt(format, sign, false, shorten);
         }
 
         public static string CompactDate(string date)

@@ -159,9 +159,9 @@ namespace GDModel
             return (fValue == null) ? 0 : fValue.GetChronologicalYear();
         }
 
-        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar)
+        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar, bool shorten = false)
         {
-            string result = (fValue == null) ? string.Empty : fValue.GetDisplayStringExt(format, sign, showCalendar);
+            string result = (fValue == null) ? string.Empty : fValue.GetDisplayStringExt(format, sign, showCalendar, shorten);
             return result;
         }
     }

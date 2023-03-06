@@ -291,11 +291,12 @@ namespace GKCore.Charts
 
                     var lifeDates = iRec.GetLifeDates();
                     DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+                    bool shortenDateRanges = options.ShortenDateRanges && options.OnlyYears;
 
                     SetFlag(PersonFlag.pfIsDead, (lifeDates.DeathEvent != null));
                     GlobalOptions glob = GlobalOptions.Instance;
-                    fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, glob.ShowDatesSign);
-                    fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, glob.ShowDatesSign);
+                    fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, glob.ShowDatesSign, shortenDateRanges);
+                    fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, glob.ShowDatesSign, shortenDateRanges);
 
                     if (options.ShowPlaces) {
                         fBirthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false, options.OnlyLocality);

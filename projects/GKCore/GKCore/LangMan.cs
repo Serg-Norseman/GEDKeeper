@@ -956,8 +956,9 @@ namespace GKCore
         /* 894 */ LSID_DQHint,
         /* 895 */ LSID_Refresh,
         /* 896 */ LSID_ResetFilter,
+        /* 897 */ LSID_ShortenDateRanges,
 
-        /* 000 */ LSID_Last = LSID_ResetFilter
+        /* 000 */ LSID_Last = LSID_ShortenDateRanges
     }
 
 
@@ -1870,6 +1871,7 @@ namespace GKCore
             /* 894 */ "Fragment {0}, size {1}, quality {2}",
             /* 895 */ "Refresh",
             /* 896 */ "Reset filter",
+            /* 897 */ "Shorten date ranges",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

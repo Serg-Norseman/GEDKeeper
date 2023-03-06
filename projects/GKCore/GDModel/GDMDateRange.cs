@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define ShortenDateRanges
+
 using System;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
@@ -135,7 +137,7 @@ namespace GDModel
             return result;
         }
 
-        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar)
+        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar, bool shorten = false)
         {
             string result = "";
 
@@ -146,7 +148,21 @@ namespace GDModel
                 result = fDateAfter.GetDisplayString(format, true, showCalendar);
                 if (sign) result += " >";
             } else if (fDateAfter.StringValue != "" && fDateBefore.StringValue != "") {
-                result = fDateAfter.GetDisplayString(format, true, showCalendar) + " - " + fDateBefore.GetDisplayString(format, true, showCalendar);
+                var dateAfter = fDateAfter.GetDisplayString(format, true, showCalendar);
+                var dateBefore = fDateBefore.GetDisplayString(format, true, showCalendar);
+
+                if (shorten) {
+                    // FIXME: bad algorithm!
+                    string dtA = dateAfter.Replace("__.__.", "");
+                    string dtB = dateBefore.Replace("__.__.", "");
+                    if (dtA.Length == 4 && dtB.Length == 4 && dtB.StartsWith(dtA.Substring(0, 2))) {
+                        result = dtA + "/" + dtB.Substring(2);
+                    } else {
+                        result = dateAfter + " - " + dateBefore;
+                    }
+                } else {
+                    result = dateAfter + " - " + dateBefore;
+                }
             }
 
             return result;
