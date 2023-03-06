@@ -18,9 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.IO;
 using BSLib;
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.Options;
 
 namespace GKCore.Export
 {
@@ -94,8 +96,10 @@ namespace GKCore.Export
             availableFormats += "|" + "Excel files (*.xls)|*.xls";
 #endif
 
-            fileName = AppHost.StdDialogs.GetSaveFile(availableFormats);
+            fileName = AppHost.StdDialogs.GetSaveFile(GlobalOptions.Instance.ReportExportLastDir, availableFormats);
             if (string.IsNullOrEmpty(fileName)) return null;
+
+            GlobalOptions.Instance.ReportExportLastDir = Path.GetDirectoryName(fileName);
 
             TableWriter result;
 

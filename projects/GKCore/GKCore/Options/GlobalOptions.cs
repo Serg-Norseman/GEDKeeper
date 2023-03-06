@@ -411,6 +411,12 @@ namespace GKCore.Options
             set { fReversePlaceEntitiesOrder = value; }
         }
 
+        public string ScriptsLastDir { get; set; }
+
+        public string ImageExportLastDir { get; set; }
+
+        public string ReportExportLastDir { get; set; }
+
         public bool SearchAndFilterByAllNames { get; set; }
 
         public bool ShortKinshipForm
@@ -839,6 +845,10 @@ namespace GKCore.Options
             SearchAndFilterByAllNames = ini.ReadBool("Common", "SearchAndFilterByAllNames", false);
             CalendarDifferenceYears = ini.ReadBool("Common", "CalendarDifferenceYears", false);
 
+            ScriptsLastDir = ini.ReadString("Common", "ScriptsLastDir", "");
+            ImageExportLastDir = ini.ReadString("Common", "ImageExportLastDir", "");
+            ReportExportLastDir = ini.ReadString("Common", "ReportExportLastDir", "");
+
             Theme = ini.ReadString("Common", "Theme", "");
 
             LoadPluginsFromFile(ini);
@@ -968,6 +978,10 @@ namespace GKCore.Options
 
             ini.WriteBool("Common", "SearchAndFilterByAllNames", SearchAndFilterByAllNames);
             ini.WriteBool("Common", "CalendarDifferenceYears", CalendarDifferenceYears);
+
+            ini.WriteString("Common", "ScriptsLastDir", ScriptsLastDir);
+            ini.WriteString("Common", "ImageExportLastDir", ImageExportLastDir);
+            ini.WriteString("Common", "ReportExportLastDir", ReportExportLastDir);
 
             ini.WriteString("Common", "Theme", Theme);
 

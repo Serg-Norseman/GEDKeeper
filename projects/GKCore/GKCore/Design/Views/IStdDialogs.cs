@@ -36,6 +36,8 @@ namespace GKCore.Design.Views
 
         string GetSaveFile(string filter);
 
+        string GetSaveFile(string context, string filter);
+
         string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                            string suggestedFileName, bool overwritePrompt = true);
 

@@ -19,9 +19,10 @@
  */
 
 using System;
-
+using System.IO;
 using BSLib;
 using GKCore.Interfaces;
+using GKCore.Options;
 
 namespace GKCore.Export
 {
@@ -70,8 +71,10 @@ namespace GKCore.Export
             string availableFormats = LangMan.LS(LSID.LSID_HTMLFilter) + "|" + LangMan.LS(LSID.LSID_RTFFilter);
             availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
 
-            fPath = AppHost.StdDialogs.GetSaveFile(availableFormats);
+            fPath = AppHost.StdDialogs.GetSaveFile(GlobalOptions.Instance.ReportExportLastDir, availableFormats);
             if (string.IsNullOrEmpty(fPath)) return;
+
+            GlobalOptions.Instance.ReportExportLastDir = Path.GetDirectoryName(fPath);
 
             string ext = FileHelper.GetFileExtension(fPath);
 

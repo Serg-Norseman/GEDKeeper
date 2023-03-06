@@ -22,6 +22,8 @@ using GKCore.Charts;
 using GKCore.Design.Controls;
 using GKCore.Design;
 using GKCore.Design.Views;
+using GKCore.Options;
+using System.IO;
 
 namespace GKCore.Controllers
 {
@@ -42,8 +44,10 @@ namespace GKCore.Controllers
         public void SaveSnapshot()
         {
             string filters = GKUtils.GetImageFilter(true);
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", filters, 2, "jpg", "");
+            string fileName = AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ImageExportLastDir, filters, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName)) {
+                GlobalOptions.Instance.ImageExportLastDir = Path.GetDirectoryName(fileName);
+
                 fView.CircleChart.SaveSnapshot(fileName);
             }
         }

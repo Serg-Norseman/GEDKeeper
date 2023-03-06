@@ -23,6 +23,7 @@ using System.IO;
 using System.Text;
 using GKCore.Design;
 using GKCore.Design.Views;
+using GKCore.Options;
 
 namespace GKCore.Controllers
 {
@@ -53,8 +54,10 @@ namespace GKCore.Controllers
         {
             if (!fView.CheckModified()) return;
 
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
+            string fileName = AppHost.StdDialogs.GetOpenFile("", GlobalOptions.Instance.ScriptsLastDir, LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
+
+            GlobalOptions.Instance.ScriptsLastDir = Path.GetDirectoryName(fileName);
 
             using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8)) {
                 fView.ScriptText.Text = strd.ReadToEnd();
@@ -66,8 +69,10 @@ namespace GKCore.Controllers
 
         public void SaveScript()
         {
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, fView.FileName);
+            string fileName = AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ScriptsLastDir, LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, fView.FileName);
             if (string.IsNullOrEmpty(fileName)) return;
+
+            GlobalOptions.Instance.ScriptsLastDir = Path.GetDirectoryName(fileName);
 
             using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8)) {
                 strd.Write(fView.ScriptText.Text);

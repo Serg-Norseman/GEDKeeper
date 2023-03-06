@@ -111,6 +111,11 @@ namespace GKUI.Platform
             return GetSaveFile("", "", filter, 1, "", "");
         }
 
+        public string GetSaveFile(string context, string filter)
+        {
+            return GetSaveFile("", context, filter, 1, "", "");
+        }
+
         public string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                                   string suggestedFileName, bool overwritePrompt = true)
         {
