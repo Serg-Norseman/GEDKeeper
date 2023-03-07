@@ -52,12 +52,12 @@ namespace GKCore.Operations
             return DoOperation(new OrdinaryOperation(this, type, obj, newVal));
         }
 
-        public bool DoIndividualNameChange(GDMIndividualRecord iRec, string surname, string name, string patronymic)
+        public bool DoIndividualNameChange(GDMIndividualRecord iRec, string surname, string name, string patronymic, string marriedSurname, string nickname)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            return DoOperation(new IndividualNameChange(this, iRec, surname, name, patronymic));
+            return DoOperation(new IndividualNameChange(this, iRec, surname, name, patronymic, marriedSurname, nickname));
         }
     }
 }

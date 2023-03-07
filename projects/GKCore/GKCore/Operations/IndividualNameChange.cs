@@ -29,17 +29,24 @@ namespace GKCore.Operations
         private readonly string fNewSurname;
         private readonly string fNewName;
         private readonly string fNewPatronymic;
+        private readonly string fNewMarriedSurname;
+        private readonly string fNewNickname;
         private string fOldSurname;
         private string fOldName;
         private string fOldPatronymic;
+        private string fOldMarriedSurname;
+        private string fOldNickname;
 
         public IndividualNameChange(UndoManager manager, GDMIndividualRecord person,
-                                    string surname, string name, string patronymic) : base(manager)
+                                    string surname, string name, string patronymic,
+                                    string marriedSurname, string nickname) : base(manager)
         {
             fPerson = person;
             fNewSurname = surname;
             fNewName = name;
             fNewPatronymic = patronymic;
+            fNewMarriedSurname = marriedSurname;
+            fNewNickname = nickname;
         }
 
         public override bool Redo()
@@ -56,8 +63,12 @@ namespace GKCore.Operations
                 fOldSurname = parts.Surname;
                 fOldName = parts.Name;
                 fOldPatronymic = parts.Patronymic;
+                fOldMarriedSurname = np.MarriedName;
+                fOldNickname = np.Nickname;
 
                 GKUtils.SetNameParts(np, fNewSurname, fNewName, fNewPatronymic);
+                np.MarriedName = fNewMarriedSurname;
+                np.Nickname= fNewNickname;
             }
 
             return result;
@@ -69,6 +80,8 @@ namespace GKCore.Operations
 
             GDMPersonalName np = fPerson.PersonalNames[0];
             GKUtils.SetNameParts(np, fOldSurname, fOldName, fOldPatronymic);
+            np.MarriedName = fOldMarriedSurname;
+            np.Nickname = fOldNickname;
         }
     }
 }

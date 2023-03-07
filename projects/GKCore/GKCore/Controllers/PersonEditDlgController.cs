@@ -130,6 +130,16 @@ namespace GKCore.Controllers
             UpdatePortrait(true);
         }
 
+        public void AcceptTempData()
+        {
+            // It is very important for some methods
+            // For the sample: we need to have gender's value on time of call AddSpouse (for define husband/wife)
+            // And we need to have actual name's value for visible it in FamilyEditDlg
+
+            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, fIndividualRecord, (GDMSex)fView.SexCombo.SelectedIndex);
+            fLocalUndoman.DoIndividualNameChange(fIndividualRecord, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text, fView.MarriedSurname.Text, fView.Nickname.Text);
+        }
+
         protected virtual void AcceptNameParts(GDMPersonalName persName)
         {
             persName.Nickname = fView.Nickname.Text;
@@ -392,16 +402,6 @@ namespace GKCore.Controllers
             } else {
                 fView.Surname.Text = "(" + surname + ")";
             }
-        }
-
-        public void AcceptTempData()
-        {
-            // It is very important for some methods
-            // For the sample: we need to have gender's value on time of call AddSpouse (for define husband/wife)
-            // And we need to have actual name's value for visible it in FamilyEditDlg
-
-            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, fIndividualRecord, (GDMSex)fView.SexCombo.SelectedIndex);
-            fLocalUndoman.DoIndividualNameChange(fIndividualRecord, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
         }
 
         public void AddPortrait()
