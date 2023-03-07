@@ -27,3 +27,5 @@
 ../plugins/
 ../scripts/
 ../samples/
+../themes/
+../externals/resources.yaml

@@ -1085,12 +1085,13 @@ namespace GKCore
 
         private static readonly IocContainer fIocContainer;
 
-        private static IStdDialogs fStdDialogs;
+        private static ExtResources fExtResources;
         private static IGraphicsProviderEx fGfxProvider;
-        private static PathReplacer fPathReplacer;
         private static INamesTable fNamesTable;
-        private static PluginsMan fPlugins;
         private static GlobalOptions fOptions;
+        private static PathReplacer fPathReplacer;
+        private static PluginsMan fPlugins;
+        private static IStdDialogs fStdDialogs;
         private static IThemeManager fThemeManager;
 
 
@@ -1099,13 +1100,23 @@ namespace GKCore
             get { return fIocContainer; }
         }
 
-        public static PathReplacer PathReplacer
+        public static ExtResources ExtResources
         {
             get {
-                if (fPathReplacer == null) {
-                    fPathReplacer = new PathReplacer();
+                if (fExtResources == null) {
+                    fExtResources = new ExtResources();
                 }
-                return fPathReplacer;
+                return fExtResources;
+            }
+        }
+
+        public static IGraphicsProviderEx GfxProvider
+        {
+            get {
+                if (fGfxProvider == null) {
+                    fGfxProvider = fIocContainer.Resolve<IGraphicsProviderEx>();
+                }
+                return fGfxProvider;
             }
         }
 
@@ -1119,16 +1130,6 @@ namespace GKCore
             }
         }
 
-        public static PluginsMan Plugins
-        {
-            get {
-                if (fPlugins == null) {
-                    fPlugins = new PluginsMan();
-                }
-                return fPlugins;
-            }
-        }
-
         public static GlobalOptions Options
         {
             get {
@@ -1139,6 +1140,26 @@ namespace GKCore
             }
         }
 
+        public static PathReplacer PathReplacer
+        {
+            get {
+                if (fPathReplacer == null) {
+                    fPathReplacer = new PathReplacer();
+                }
+                return fPathReplacer;
+            }
+        }
+
+        public static PluginsMan Plugins
+        {
+            get {
+                if (fPlugins == null) {
+                    fPlugins = new PluginsMan();
+                }
+                return fPlugins;
+            }
+        }
+
         public static IStdDialogs StdDialogs
         {
             get {
@@ -1146,16 +1167,6 @@ namespace GKCore
                     fStdDialogs = fIocContainer.Resolve<IStdDialogs>();
                 }
                 return fStdDialogs;
-            }
-        }
-
-        public static IGraphicsProviderEx GfxProvider
-        {
-            get {
-                if (fGfxProvider == null) {
-                    fGfxProvider = fIocContainer.Resolve<IGraphicsProviderEx>();
-                }
-                return fGfxProvider;
             }
         }
 
@@ -1219,6 +1230,8 @@ namespace GKCore
             NamesTable.LoadFromFile(GetAppDataPathStatic() + "GEDKeeper2.nms");
 
             PathReplacer.Load(GKUtils.GetAppPath() + "crossplatform.yaml"); // FIXME: path
+
+            ExtResources.Load(GKUtils.GetExternalsPath() + "resources.yaml");
         }
 
         public static void DoneSettings()

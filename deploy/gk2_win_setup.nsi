@@ -299,6 +299,10 @@ Section "$(gkreq)"
     SetOutPath "$INSTDIR\themes"
     File "..\themes\*.*"
 
+    CreateDirectory "$INSTDIR\externals"
+    SetOutPath "$INSTDIR\externals"
+    File "..\externals\resources.yaml"
+
     CreateDirectory "$SMPROGRAMS\GEDKeeper2"
     SetOutPath "$INSTDIR\bin"
     CreateShortCut "$SMPROGRAMS\GEDKeeper2\GKTray.lnk" "$INSTDIR\bin\GKTray.exe" "" "$INSTDIR\bin\GKTray.exe" 0

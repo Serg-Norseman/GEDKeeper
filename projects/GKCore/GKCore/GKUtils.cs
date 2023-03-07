@@ -1677,6 +1677,12 @@ namespace GKCore
             return appPath + "backgrounds" + Path.DirectorySeparatorChar;
         }
 
+        public static string GetExternalsPath()
+        {
+            string appPath = GetAppPath();
+            return appPath + "externals" + Path.DirectorySeparatorChar;
+        }
+
         public static string GetHomePath()
         {
             string homePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
@@ -2562,6 +2568,8 @@ namespace GKCore
 
                         ShowPersonNamesakes(tree, iRec, summary);
                         ShowPersonExtInfo(tree, iRec, summary);
+
+                        ShowRFN(iRec, summary);
                     }
                 } finally {
                     summary.EndUpdate();
@@ -2569,6 +2577,28 @@ namespace GKCore
             } catch (Exception ex) {
                 Logger.WriteError("GKUtils.ShowPersonInfo()", ex);
             }
+        }
+
+        private static void ShowRFN(GDMIndividualRecord iRec, StringList summary)
+        {
+            var rfnTag = iRec.FindTag("RFN", 0);
+            if (rfnTag == null) return;
+
+            var rfnVal = rfnTag.StringValue;
+            if (string.IsNullOrEmpty(rfnVal)) return;
+
+            var parts = rfnVal.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length < 2) return;
+
+            var resourceId = parts[0];
+            var recordId = parts[1];
+
+            var url = AppHost.ExtResources.FindURL(resourceId);
+            if (string.IsNullOrEmpty(url)) return;
+
+            var fullURL = url + recordId;
+            summary.Add("");
+            summary.Add(HyperLink(fullURL, fullURL));
         }
 
         public static void ShowSourceInfo(IBaseContext baseContext, GDMSourceRecord sourceRec, StringList summary)
