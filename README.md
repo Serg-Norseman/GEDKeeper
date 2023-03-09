@@ -77,9 +77,8 @@ If your problem or idea is not addressed yet, please open a new issue.
 
 ## Docs & Help
 
-- [Contributing guide](/CONTRIBUTING.md)
+- [Contributing and Development guide](/CONTRIBUTING.md)
 - [Coding style guide](/CODINGSTYLE.md)
-- [Development](/DEVELOPMENT.md)
 - [Changelog](/CHANGELOG.md)
 
 

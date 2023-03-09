@@ -75,122 +75,116 @@ No code is perfect and we always welcome third-party patches. This document desc
   * Testing and bug fixes
 
 
-# External components
+# How to build GEDKeeper
 
-```
-Arbor
-    Licensed under the MIT license.
-    (C) 2011 Samizdat Drafting Co.
-    https://github.com/samizdatco/arbor
-    (C) 2012 Serg V. Zhdanovskih (fork to C#), 2016 Ruslan Garipov
-    https://github.com/Serg-Norseman/Arbor
+## Dependencies
 
+### Building
 
-CalendarConverter
-    Licensed under public domain.
-    (C) John Walker <http://www.fourmilab.ch/documents/calendar/>
-    (C) 2011 by Serg V. Zhdanovskih (fork to C#), 2016 Ruslan Garipov
-    https://bitbucket.org/Serg-Norseman/calendarconverter
+* Microsoft [.NET Framework](https://dotnet.microsoft.com/) 4.7.2
+* Microsoft [Visual Studio 2017](https://visualstudio.microsoft.com/) or later
 
+### Testing
+* [NUnit](https://github.com/nunit) 2.6.4 or 3 (unit testing framework for .NET)
 
-CSVReader
-    Licensed under BSD License.
-    (C) 2008 Andrew Stellman
-    http://www.stellman-greene.com/CSVReader
+### Packaging
 
+* [7-zip](https://sourceforge.net/projects/sevenzip/) compression
+* Nullsoft Scriptable Install System ([NSIS](https://sourceforge.net/projects/nsis/)) 3.04
 
-DotNetRtfWriter
-    Licensed under LGPLv3.
-    (C) Matt Buckley and Thomson Reuters, https://sourceforge.net/projects/netrtfwriter/
-    (C) Tom Dowden, https://github.com/elistia/DotNetRtfWriter
+## For Windows
 
+Run the script `build_all.mswin.x86.cmd` from the Windows command line.
 
-ExcelLibrary
-    Licensed under GPLv3.
-    https://github.com/darknessomi/excellibrary
+Optionally pass the `release` option to the script to build without
+debugging information. By default the script builds the executable with
+embedded debugging information. The script skips testing for non-debug
+builds.
+
+## For Mono
+
+Run the script `build_all.linux.x64.sh` from the Linux shell.
 
 
-ExpCalculator
-    Licensed under <unknown>
-    (C) Ivlev M.Dmitry, Sergey Pedora
-    (C) 2011 by Serg V. Zhdanovskih  (fork to C#)
+# The GEDKeeper testing
+
+GEDKeeper uses [NUnit 2.6.4 or 3](http://www.nunit.org/), patches should come with 
+tests and all tests should pass before a commit or branch is merged.
 
 
-GEDmill (Family History Website Generator)
-    Licensed under GPLv3.
-    Copyright 2009 Alexander Curtis
-    https://github.com/alexandercurtis/GEDmill
+### Quick start Windows command line
+
+ - Download the [NUnit binaries](http://github.com/nunit/nunitv2/releases/download/2.6.4/NUnit-2.6.4.zip), unzip and add to your path
+ - Build GEDKeeper project (usually in Visual Studio or SharpDevelop)
+ - `nunit-console-x86.exe projects\GKTests\bin\Debug\GKTests.dll`
 
 
-GMap.NET
-    Licensed under "FLAT EARTH LICENSE"
-    (C) radioman
-    https://github.com/radioman/greatmaps
+### Quick start Mono command line
+
+ - Download the [NUnit binaries](http://github.com/nunit/nunitv2/releases/download/2.6.4/NUnit-2.6.4.zip), unzip and place somewhere accessible
+ - Build GEDKeeper project (usually in Xamarin Studio or MonoDevelop)
+ - `mono somewhere/nunit-console ./projects/GKTests/bin/Debug/GKTests.dll`
+
+### Running Unit Tests in the IDE
+
+NUnit is not incredibly robust in the IDEs at present, so results are mixed 
+but here are some suggestions.
+
+In **Visual Studio**, NUnit has an integrated Visual Studio add-in which can be 
+downloaded from their website and used to run tests in the Test Explorer pane.
+
+In **SharpDevelop**, in the Unit Tests window, you can right click on any test, 
+and then `Run tests`, which will allow everything to work.
 
 
-IniFiles
-    Licensed under The Code Project Open License (CPOL).
-    (C) 2007 Gajatko
-    http://www.codeproject.com/Articles/20120/INI-Files
+# Frequently asked questions (FAQ)
+
+**What are the prerequisites I need on my machine to build code in this project?**
+
+On Linux
+- Xamarin Studio or MonoDevelop with [Mono](http://www.mono-project.com/) installed.
+- NUnit
+
+On Windows
+
+- Microsoft Windows® (Windows Vista or later) x86 or x64 versions 
+- Visual Studio 2010 (or later) ([Community edition](https://www.visualstudio.com/en/vs/community/))
+  or SharpDevelop 5.1 (or later) ([free IDE for C#](http://www.icsharpcode.net/OpenSource/SD/Download/))
+- .NET Framework 4.7.2
+- NUnit
 
 
-iTextSharp
-    Licensed under GNU Affero GPLv3.
-    https://github.com/itext/itextsharp
+**What platforms are supported?**
+
+GEDKeeper is cross-platform and can be run on Linux and Windows. 
+In particular, it supports the following platforms:
+
+- Windows Vista (or later) and .NET 4.7.2 (or later)
+- Linux (Debian/Ubuntu) and Mono 4.7.2 (or later)
+
+We currently do not support iOS or Android, although it is possible it could 
+be added in the future. 
 
 
-Life
-    Licensed under (something similar to zlib License).
-    (C) 1998 Ian Lane
-    (C) 2011 Serg V. Zhdanovskih (fork to C#)
-    https://github.com/Serg-Norseman/ConwayLifeGame
+**I am a new developer to the project and I want to build the project**
+
+- First download the source code you want to start with (under the Source Code tab)
+- Start selected IDE, then select File->Open -> Project/Solution 
+- Select `GEDKeeper2.sln` in the open project dialog box
+- Mouse or tab to the solution Explorer Window, right click on the solution and then choose "build solution"
 
 
-Lua
-    NLua, Licensed under MIT, Vinicius Jarina, https://github.com/NLua/NLua
+**I found a bug - how do I report it?**
+
+- Click the [Issues](https://github.com/serg-norseman/gedkeeper/issues) link.
+- Click the "New Issue" button.
+- Choose a descriptive title.
+- List the component you found the issue in.
+- List all the steps to reproduce the problem and include files or images if necessary.
+- Describe the impact to you - like blocks all my development or minor usability issue.
 
 
-CsGL for OpenGL
-    Licensed under BSD.
-    (C) 2001, Lloyd Dupont <lloyd@galador.net>
+**I have a suggestion for a new feature or some new ideas for the project. 
+How do I make a suggestion?**
 
-
-nVLC
-    Licensed under GPLv3
-    (C) Roman Ginzburg, http://www.codeproject.com/Articles/109639/nVLC
-    (C) fork Sergey Zhdanovskih, https://github.com/serg-norseman/nVLC
-
-
-SingleInstance
-    Licensed under The Code Project Open License (CPOL).
-    (C) 2007 Shy Agam
-    http://www.codeproject.com/Articles/19682/A-Pure-NET-Single-Instance-Application-Solution
-
-
-StringTokenizer
-    Licensed under (something similar to zlib License).
-    (C) 2004 Andrew Deren
-
-
-TimSort
-    Licensed under the Apache License, version 2.0.
-    (C) 2008 The Android Open Source Project
-
-
-Xapian
-    Licensed under GPLv2
-    https://xapian.org/
-
-
-ZedGraph
-    Licensed under LGPLv2.1.
-    https://github.com/discomurray/ZedGraph
-
-
-ZipStorer
-    Licensed under The MIT License (MIT).
-    (C) 2010 Jaime Olivares
-    https://zipstorer.codeplex.com
-    https://github.com/jaime-olivares/zipstorer
-
-```
+- Use the [Issues](https://github.com/serg-norseman/gedkeeper/issues) link.
