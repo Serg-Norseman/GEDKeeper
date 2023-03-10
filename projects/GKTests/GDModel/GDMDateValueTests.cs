@@ -160,5 +160,38 @@ namespace GDModel
                 Assert.IsTrue(dtx1.IsEmpty());
             }
         }
+
+        [Test]
+        public void Test_NonStdMonthes()
+        {
+            using (GDMDateValue dtx1 = new GDMDateValue()) {
+                // std
+                dtx1.ParseString("20 FEB 1746");
+                Assert.AreEqual("20 FEB 1746", dtx1.StringValue);
+
+                // Russian short
+                dtx1.ParseString("20 ФЕВ 1746");
+                Assert.AreEqual("20 FEB 1746", dtx1.StringValue);
+
+                dtx1.ParseString("20 фев 1746");
+                Assert.AreEqual("20 FEB 1746", dtx1.StringValue);
+
+                // Dutch short
+                dtx1.ParseString("20 MEI 1746");
+                Assert.AreEqual("20 MAY 1746", dtx1.StringValue);
+
+                // French short
+                dtx1.ParseString("20 AOÛ 1746");
+                Assert.AreEqual("20 AUG 1746", dtx1.StringValue);
+
+                // German short
+                dtx1.ParseString("20 MÄR 1746");
+                Assert.AreEqual("20 MAR 1746", dtx1.StringValue);
+
+                // Spanish short
+                dtx1.ParseString("20 ENE 1746");
+                Assert.AreEqual("20 JAN 1746", dtx1.StringValue);
+            }
+        }
     }
 }

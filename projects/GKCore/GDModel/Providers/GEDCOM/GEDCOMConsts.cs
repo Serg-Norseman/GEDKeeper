@@ -157,6 +157,26 @@ namespace GDModel.Providers.GEDCOM
                 new EnumTuple("ОКТ", 10), // J/G
                 new EnumTuple("НОЯ", 11), // J/G
                 new EnumTuple("ДЕК", 12), // J/G
+
+                // for files with poor standard support (Dutch/French/German/Spanish-localized names of the months)
+                new EnumTuple("MRT", 3), // Dutch
+                new EnumTuple("MEI", 5), // Dutch
+                new EnumTuple("OKT", 10), // Dutch/German
+
+                new EnumTuple("FÉV", 2), // French
+                new EnumTuple("AVR", 4), // French
+                new EnumTuple("MAI", 5), // French/German
+                new EnumTuple("AOÛ", 8), // French
+                new EnumTuple("DÉC", 12), // French
+
+                new EnumTuple("MÄR", 3), // German
+                new EnumTuple("MRZ", 3), // German
+                new EnumTuple("DEZ", 12), // German
+
+                new EnumTuple("ENE", 1), // Spanish
+                new EnumTuple("ABR", 4), // Spanish
+                new EnumTuple("AGO", 8), // Spanish
+                new EnumTuple("DIC", 12), // Spanish
             };
             // BinarySearch requires a sorted array
             Array.Sort(GEDCOMMonthValues);

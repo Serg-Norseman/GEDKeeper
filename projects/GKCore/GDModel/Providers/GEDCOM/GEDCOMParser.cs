@@ -119,13 +119,13 @@ namespace GDModel.Providers.GEDCOM
                 char ch = (fPos >= fLength) ? EOL : fData[fPos];
                 char ltr = (char)(ch | ' ');
 
-                if ((ltr >= 'a' && ltr <= 'z') || ch == '_') {
+                if ((ltr >= 'a' && ltr <= 'z') || ch == '_' || char.IsLetter(ch)) {
                     fSavePos = fPos;
                     fPos++;
                     while (true) {
                         ch = (fPos >= fLength) ? EOL : fData[fPos];
                         ltr = (char)(ch | ' ');
-                        if ((ltr >= 'a' && ltr <= 'z') || (ch >= '0' && ch <= '9') || ch == '_') {
+                        if ((ltr >= 'a' && ltr <= 'z') || ch == '_' || char.IsLetter(ch) || (ch >= '0' && ch <= '9')) {
                             fPos++;
                         } else
                             break;
