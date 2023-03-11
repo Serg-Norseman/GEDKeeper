@@ -1,24 +1,25 @@
 #!/bin/sh
 
-APP="GEDKeeper2"
 APP_VER="$1"
 DEV_PATH="/home/norseman/share/gkdev/GEDKeeper"
 PACK_PATH="gedkeeper-$APP_VER/$2"
-LIB_PATH="$PACK_PATH/usr/lib/gedkeeper"
 BIN_PATH="$PACK_PATH/usr/bin"
+LIB_PATH="$PACK_PATH/usr/lib/gedkeeper"
+EXT_PATH="$LIB_PATH/externals"
 
 rm -rf ~/$PACK_PATH
 
 mkdir -p ~/$PACK_PATH
 mkdir -p ~/$BIN_PATH
 mkdir -p ~/$LIB_PATH
+mkdir -p ~/$EXT_PATH
 mkdir -p ~/$PACK_PATH/usr/share/applications
 mkdir -p ~/$PACK_PATH/usr/share/pixmaps
 mkdir -p ~/$PACK_PATH/usr/share/mime/packages
 mkdir -p ~/$PACK_PATH/usr/share/metainfo/
 
-cp $DEV_PATH/deploy/gk2_run.sh ~/$BIN_PATH
-chmod a+x ~/$BIN_PATH/gk2_run.sh
+cp $DEV_PATH/deploy/gk_run.sh ~/$BIN_PATH
+chmod a+x ~/$BIN_PATH/gk_run.sh
 
 cp $DEV_PATH/deploy/gedkeeper.png ~/$LIB_PATH
 cp $DEV_PATH/deploy/gedkeeper.png ~/$PACK_PATH/usr/share/pixmaps
@@ -34,7 +35,7 @@ cp -r $DEV_PATH/plugins/ ~/$LIB_PATH/
 cp -r $DEV_PATH/scripts/ ~/$LIB_PATH/
 cp -r $DEV_PATH/samples/ ~/$LIB_PATH/
 cp -r $DEV_PATH/themes/ ~/$LIB_PATH/
-cp -r $DEV_PATH/externals/resources.yaml ~/$LIB_PATH/externals/
+cp -r $DEV_PATH/externals/resources.yaml ~/$EXT_PATH/
 
 find ~/$LIB_PATH/bin -type f -iname "*.dll" -exec chmod -x {} \;
 find ~/$LIB_PATH/locales -type f -exec chmod -x '{}' \;

@@ -1,4 +1,4 @@
-./gk2_run.sh
+./gk_run.sh
 ./gedkeeper.png
 ./gedkeeper.desktop
 ./application-x-gedkeeper.xml

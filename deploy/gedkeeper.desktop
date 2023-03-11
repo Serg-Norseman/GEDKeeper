@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=GEDKeeper2
+Name=GEDKeeper
 Comment=Personal genealogical database editor
 Comment[cs]=Editor osobní genealogické databáze
 Comment[de]=Persönlicher genealogischer Datenbankeditor
@@ -13,7 +13,7 @@ Comment[ru]=Редактор персональной генеалогическ
 Comment[uk]=Редактор персональної генеалогічної бази даних
 Comment[zh]=个人系谱数据库编辑器
 Path=/usr/bin/
-Exec=gk2_run.sh
+Exec=gk_run.sh
 MimeType=application/x-gedkeeper
 Icon=/usr/share/pixmaps/gedkeeper.png
 Terminal=false

@@ -77,7 +77,7 @@
     </ItemGroup>
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net472</TargetFramework>
         <OutputType>exe</OutputType>
         <OutputPath>..\..\..\bin\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

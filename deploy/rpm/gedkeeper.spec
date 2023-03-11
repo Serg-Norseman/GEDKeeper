@@ -25,7 +25,7 @@ AutoReqProv:	no
 
 %files
 %doc LICENSE
-%{_bindir}/gk2_run.sh
+%{_bindir}/gk_run.sh
 %{_libdir}/%{name}
 %{_datadir}/mime/*.xml
 %{_datadir}/applications/%{name}.desktop
@@ -40,7 +40,7 @@ find ./scripts -type f -exec chmod -x '{}' \;
 find ./samples -type f -exec chmod -x '{}' \;
 
 %install
-install -Dm 0755 gk2_run.sh %{buildroot}%{_bindir}/gk2_run.sh
+install -Dm 0755 gk_run.sh %{buildroot}%{_bindir}/gk_run.sh
 install -d 0755 %{buildroot}%{_libdir}/%{name}
 install -Dm 0644 application-x-%{name}.xml %{buildroot}%{_datadir}/mime/application-x-%{name}.xml
 install -Dm 0644 %{name}.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
