@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,13 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.ComponentModel;
+using System;
 
 namespace GKUI.Themes
 {
     public interface IThemedView
     {
         void ApplyTheme();
-        bool SkipTheme(Component control);
+        bool SkipTheme(IDisposable control);
     }
 }

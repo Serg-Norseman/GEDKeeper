@@ -34,10 +34,12 @@ using GKCore.Design.Views;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform;
 using GKUI.Platform.Handlers;
+using GKUI.Themes;
 
 namespace GKUI.Forms
 {
@@ -131,6 +133,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miTreeCheck;
         private ButtonMenuItem miPatSearch;
         private ButtonMenuItem miPlacesManager;
+        private ButtonMenuItem miThemes;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -200,6 +203,7 @@ namespace GKUI.Forms
             CreatePage("Communications", GDMRecordType.rtCommunication);
             CreatePage("Locations", GDMRecordType.rtLocation);
             tabsRecords.ResumeLayout();
+            tabsRecords.SelectedIndex = 0;
 
             fController.SetLocale();
         }
@@ -277,7 +281,9 @@ namespace GKUI.Forms
             try {
                 ((IWorkWindow)this).UpdateSettings();
 
+                UpdateShieldState();
                 fController.UpdatePluginsItems();
+                UpdateThemesItems();
                 UpdateMRU();
                 fController.UpdateControls(false);
             } catch (Exception ex) {
@@ -559,6 +565,16 @@ namespace GKUI.Forms
 
         #endregion
 
+        #region IThemedView implementation
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
+        }
+
+        #endregion
+
         #region IWorkWindow implementation
 
         void IWorkWindow.UpdateControls()
@@ -673,8 +689,8 @@ namespace GKUI.Forms
 
         public void Restore()
         {
-            if (WindowState == WindowState.Minimized) {
-                WindowState = WindowState.Normal;
+            if (WindowState == Eto.Forms.WindowState.Minimized) {
+                WindowState = Eto.Forms.WindowState.Normal;
             }
         }
 
@@ -756,6 +772,49 @@ namespace GKUI.Forms
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.UpdateMRU()", ex);
+            }
+        }
+
+        private void ThemeClick(object sender, EventArgs e)
+        {
+            var mItem = (CheckMenuItem)sender;
+            foreach (CheckMenuItem mi in ((ButtonMenuItem)mItem.Parent).Items) {
+                mi.Checked = mItem == mi;
+            }
+
+            var theme = (Theme)mItem.Tag;
+            AppHost.Instance.ApplyTheme(theme.Name);
+        }
+
+        private void UpdateThemesItems()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes))
+                return;
+
+            try {
+                string curTheme = GlobalOptions.Instance.Theme;
+
+                miThemes.Items.Clear();
+
+                var themes = AppHost.ThemeManager.Themes;
+                int num = themes.Count;
+                for (int i = 0; i < num; i++) {
+                    var theme = themes[i];
+
+                    var mi = new CheckMenuItem();
+                    mi.Text = theme.Name;
+                    mi.Tag = theme;
+                    mi.Click += ThemeClick;
+                    miThemes.Items.Add(mi);
+
+                    if ((i == 0 && string.IsNullOrEmpty(curTheme)) || (theme.Name == curTheme)) {
+                        mi.Checked = true;
+                    }
+                }
+
+                miThemes.Enabled = (miThemes.Items.Count > 0);
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinSDI.UpdateThemesItems()", ex);
             }
         }
 

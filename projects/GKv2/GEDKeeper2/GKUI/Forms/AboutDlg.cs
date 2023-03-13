@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Design.Views;
@@ -59,7 +58,7 @@ namespace GKUI.Forms
             }
         }
 
-        public override bool SkipTheme(Component component)
+        public override bool SkipTheme(IDisposable component)
         {
             if (component == lblProduct || component == lblVersion || component == lblCopyright ||
                 component == lblMail || component == lblProjSite || component == lblForum || component == lblChannel) {

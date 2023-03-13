@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -48,11 +48,6 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            //<Label x:Name="lblProduct" Font="Bold+20pt" />
-            //<StackLayoutItem HorizontalAlignment="Right">
-            //<ImageView Image="{Resource Resources.icon_gedkeeper.png, GKCore}" />
-            //</StackLayoutItem>
-
             Title = LangMan.LS(LSID.LSID_MIAbout);
             btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             //lblProduct.Text = GKData.APP_TITLE;
@@ -74,6 +69,15 @@ namespace GKUI.Forms
             if (lbl != null) {
                 GKUtils.LoadExtFile(lbl.Text);
             }
+        }
+
+        public override bool SkipTheme(IDisposable component)
+        {
+            if (component == lblProduct || component == lblVersion || component == lblCopyright ||
+                component == lblMail || component == lblProjSite || component == lblForum || component == lblChannel) {
+                return true;
+            }
+            return false;
         }
     }
 }

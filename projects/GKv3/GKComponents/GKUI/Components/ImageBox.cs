@@ -1055,13 +1055,13 @@ namespace GKUI.Components
                     break;
 
                 case Keys.PageDown:
-                case Keys.Plus:
+                case Keys.Add:
                     if (fAllowZoom)
                         ZoomIn();
                     break;
 
                 case Keys.PageUp:
-                case Keys.Minus:
+                case Keys.Subtract:
                     if (fAllowZoom)
                         ZoomOut();
                     break;

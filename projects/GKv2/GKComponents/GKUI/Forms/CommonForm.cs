@@ -107,7 +107,7 @@ namespace GKUI.Forms
             }
         }
 
-        public virtual bool SkipTheme(Component component)
+        public virtual bool SkipTheme(IDisposable component)
         {
             return false;
         }

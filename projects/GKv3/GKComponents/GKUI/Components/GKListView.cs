@@ -47,12 +47,12 @@ namespace GKUI.Components
             get { return (BSDListItem)base[index]; }
         }
 
-        BSDListItem this[int index]
+        public new BSDListItem this[int index]
         {
             get { return (BSDListItem)base[index]; }
         }
 
-        public int Count
+        public new int Count
         {
             get { return base.Count; }
         }

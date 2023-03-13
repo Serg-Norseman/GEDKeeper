@@ -47,6 +47,7 @@ namespace GKUI.Forms
         #endregion
 
         private readonly ManualResetEvent fInitEvent;
+        private readonly ManualResetEvent fBeginEvent;
         private readonly ManualResetEvent fCancelEvent;
         private bool fRequiresClose = true;
         private DateTime fStartTime;
@@ -62,6 +63,7 @@ namespace GKUI.Forms
 
             ThreadError = new ThreadError(1, "No error");
             fInitEvent = new ManualResetEvent(false);
+            fBeginEvent = new ManualResetEvent(false);
             fCancelEvent = new ManualResetEvent(false);
 
             Title = LangMan.LS(LSID.LSID_Progress);
@@ -75,6 +77,7 @@ namespace GKUI.Forms
         {
             if (disposing) {
                 fCancelEvent.Dispose();
+                fBeginEvent.Dispose();
                 fInitEvent.Dispose();
             }
             base.Dispose(disposing);
@@ -116,6 +119,8 @@ namespace GKUI.Forms
             fVal = -1;
             btnCancel.Enabled = cancelable;
 
+            fBeginEvent.Set();
+
             DoStep(0);
         }
 
@@ -153,6 +158,8 @@ namespace GKUI.Forms
 
         private void DoStep(int value)
         {
+            fBeginEvent.WaitOne();
+
             if (fVal == value) return;
 
             // strange float bug
@@ -197,6 +204,7 @@ namespace GKUI.Forms
 
         public void Begin(string title, int maximum, bool cancelable = false)
         {
+            fInitEvent.WaitOne();
             InvokeEx(delegate {
                 DoBegin(title, maximum, cancelable);
             });

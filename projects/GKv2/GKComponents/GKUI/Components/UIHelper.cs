@@ -31,10 +31,10 @@ using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
+using GKUI.Platform.Handlers;
 
 namespace GKUI.Components
 {
-    using GKUI.Platform.Handlers;
 #if !MONO
     using Microsoft.Win32;
 #endif

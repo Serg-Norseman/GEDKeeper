@@ -24,15 +24,15 @@ using System.Reflection;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Interfaces;
+using GKUI.Themes;
 
 namespace GKUI.Forms
 {
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : Form, IView
+    public class CommonForm : Form, IView, IThemedView
     {
         private readonly ControlsManager fControlsManager;
 
@@ -81,6 +81,24 @@ namespace GKUI.Forms
             }
             return result;
         }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            ApplyTheme();
+        }
+
+        public virtual void ApplyTheme()
+        {
+            if (AppHost.Instance != null) {
+                AppHost.Instance.ApplyTheme(this);
+            }
+        }
+
+        public virtual bool SkipTheme(IDisposable component)
+        {
+            return false;
+        }
     }
 
 
@@ -121,13 +139,20 @@ namespace GKUI.Forms
         where TController : FormController<TView>
     {
         protected TController fController;
+
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
+        }
     }
 
 
     /// <summary>
     /// 
     /// </summary>
-    public class CommonDialog : Dialog<DialogResult>, ICommonDialog
+    public class CommonDialog : Dialog<DialogResult>, ICommonDialog, IThemedView
     {
         private readonly ControlsManager fControlsManager;
 
@@ -204,6 +229,24 @@ namespace GKUI.Forms
             }
             return result;
         }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            ApplyTheme();
+        }
+
+        public virtual void ApplyTheme()
+        {
+            if (AppHost.Instance != null) {
+                AppHost.Instance.ApplyTheme(this);
+            }
+        }
+
+        public virtual bool SkipTheme(IDisposable component)
+        {
+            return false;
+        }
     }
 
 
@@ -251,6 +294,12 @@ namespace GKUI.Forms
             if (selectedTab != null && selectedTab.Content != null) {
                 selectedTab.Content.Focus();
             }
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
     }
 }

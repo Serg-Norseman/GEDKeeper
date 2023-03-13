@@ -116,6 +116,7 @@
           <ButtonMenuItem x:Name="miPlacesManager" Click="miTTPlacesManager_Click" />
         </ButtonMenuItem>
         <SeparatorMenuItem />
+        <ButtonMenuItem x:Name="miThemes" />
         <ButtonMenuItem x:Name="miOptions" Image="{Resource Resources.btn_tools.gif, GKCore}" Click="miOptions_Click" />
       </ButtonMenuItem>
 

@@ -33,7 +33,7 @@ namespace GKUI.Components
     /// </summary>
     public class WizardPages : Container
     {
-        private IList<WizardPage> fPages;
+        private readonly IList<WizardPage> fPages;
 
 
         public override IEnumerable<Control> Controls
@@ -51,6 +51,7 @@ namespace GKUI.Components
 
         public WizardPages()
         {
+            fPages = new List<WizardPage>();
             // TODO: not implemented yet
         }
 

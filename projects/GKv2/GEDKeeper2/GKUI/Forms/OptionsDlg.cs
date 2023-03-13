@@ -164,7 +164,7 @@ namespace GKUI.Forms
             fController.ChangeFNPFormat();
         }
 
-        public override bool SkipTheme(Component component)
+        public override bool SkipTheme(IDisposable component)
         {
             if (component == panMaleColor || component == panFemaleColor || component == panUnkSexColor || component == panUnHusbandColor || component == panUnWifeColor) {
                 return true;

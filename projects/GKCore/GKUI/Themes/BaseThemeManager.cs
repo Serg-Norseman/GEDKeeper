@@ -1,0 +1,182 @@
+﻿/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using GKCore;
+using GKCore.Design.Graphics;
+
+namespace GKUI.Themes
+{
+    public abstract class BaseThemeManager : IThemeManager
+    {
+        protected static ThemeElementType[] fThemeElementTypes;
+
+        protected static Theme fCurrentTheme;
+
+        protected Dictionary<string, Theme> fThemes = new Dictionary<string, Theme>();
+
+        public List<Theme> Themes
+        {
+            get { return fThemes.Values.ToList(); }
+        }
+
+        public BaseThemeManager()
+        {
+            fThemeElementTypes = new ThemeElementType[] {
+                ThemeElementType.String, // ThemeElement.Font
+                ThemeElementType.Float,  // ThemeElement.FontSize
+
+                ThemeElementType.Color, // ThemeElement.Editor
+                ThemeElementType.Color, // ThemeElement.EditorText
+
+                ThemeElementType.Color, // ThemeElement.Control
+                ThemeElementType.Color, // ThemeElement.ControlText
+
+                ThemeElementType.Color, // ThemeElement.Window
+                ThemeElementType.Color, // ThemeElement.WindowText
+
+                ThemeElementType.Color, // ThemeElement.Dialog
+                ThemeElementType.Color, // ThemeElement.DialogText
+
+                ThemeElementType.Color, // ThemeElement.ButtonFace
+                ThemeElementType.Color, // ThemeElement.AccentButtonFace
+                ThemeElementType.Color, // ThemeElement.ButtonBorder
+                ThemeElementType.Color, // ThemeElement.ButtonText
+
+                ThemeElementType.Color, // ThemeElement.Strip
+                ThemeElementType.Color, // ThemeElement.Dropdown
+                ThemeElementType.Color, // ThemeElement.MenuBorder
+                ThemeElementType.Color, // ThemeElement.MenuItemSelected
+
+                ThemeElementType.Color, // ThemeElement.Link
+
+                ThemeElementType.Color, // ThemeElement.Grid
+                ThemeElementType.Color, // ThemeElement.GridHeader
+                ThemeElementType.Color, // ThemeElement.GridHeaderText
+                ThemeElementType.Color, // ThemeElement.GridText
+
+                ThemeElementType.Color, // ThemeElement.Tab
+                ThemeElementType.Color, // ThemeElement.TabHighlight
+                ThemeElementType.Color, // ThemeElement.TabSelected
+
+                ThemeElementType.Color, // ThemeElement.HighlightReadabilityRows
+                ThemeElementType.Color, // ThemeElement.HighlightUnparentedIndi
+                ThemeElementType.Color, // ThemeElement.HighlightUnmarriedIndi
+                ThemeElementType.Color, // ThemeElement.HighlightInaccessibleFiles
+
+                ThemeElementType.Image, // ThemeElement.Glyph_FileNew
+                ThemeElementType.Image, // ThemeElement.Glyph_FileLoad
+                ThemeElementType.Image, // ThemeElement.Glyph_FileSave
+                ThemeElementType.Image, // ThemeElement.Glyph_FileProperties,
+                ThemeElementType.Image, // ThemeElement.Glyph_Export,
+                ThemeElementType.Image, // ThemeElement.Glyph_ExportTable,
+                ThemeElementType.Image, // ThemeElement.Glyph_Exit,
+
+                ThemeElementType.Image, // ThemeElement.Glyph_RecordAdd
+                ThemeElementType.Image, // ThemeElement.Glyph_RecordEdit
+                ThemeElementType.Image, // ThemeElement.Glyph_RecordDelete
+                ThemeElementType.Image, // ThemeElement.Glyph_Search
+                ThemeElementType.Image, // ThemeElement.Glyph_Filter
+
+                ThemeElementType.Image, // ThemeElement.Glyph_TreeAncestors
+                ThemeElementType.Image, // ThemeElement.Glyph_TreeDescendants
+                ThemeElementType.Image, // ThemeElement.Glyph_TreeBoth
+                ThemeElementType.Image, // ThemeElement.Glyph_Pedigree
+                ThemeElementType.Image, // ThemeElement.Glyph_Maps
+                ThemeElementType.Image, // ThemeElement.Glyph_Stats
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Organizer
+                ThemeElementType.Image, // ThemeElement.Glyph_Slideshow
+                ThemeElementType.Image, // ThemeElement.Glyph_Settings
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Help
+                ThemeElementType.Image, // ThemeElement.Glyph_About
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Prev
+                ThemeElementType.Image, // ThemeElement.Glyph_Next
+                ThemeElementType.Image, // ThemeElement.Glyph_SendMail
+            };
+        }
+
+        protected static string GetThemesPath()
+        {
+            return GKUtils.GetAppPath() + "themes" + Path.DirectorySeparatorChar;
+        }
+
+        public void LoadThemes()
+        {
+            string path = GetThemesPath();
+            if (!Directory.Exists(path)) return;
+
+            try {
+                string[] themeFiles = Directory.GetFiles(path, "*.yaml");
+                foreach (string fn in themeFiles) {
+                    Load(fn);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("ThemeManager.LoadThemes(" + path + ")", ex);
+            }
+        }
+
+        protected abstract void Load(string fileName);
+
+        public void SetTheme(string name)
+        {
+            Theme theme;
+            if (fThemes.TryGetValue(name, out theme)) {
+                fCurrentTheme = theme;
+            }
+        }
+
+        public abstract void ApplyTheme(IThemedView view);
+
+        public abstract void ApplyTheme(IThemedView view, object component);
+
+        public IImage GetThemeImage(ThemeElement element)
+        {
+            object elemValue;
+            if (fCurrentTheme != null && fCurrentTheme.Elements.TryGetValue(element, out elemValue) && elemValue is IImage) {
+                return (IImage)elemValue;
+            }
+            return null;
+        }
+
+        protected static string GetThemeStr(Theme theme, ThemeElement element)
+        {
+            object elemValue;
+            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is string) {
+                return (string)elemValue;
+            }
+            return string.Empty;
+        }
+
+        protected static float GetThemeFloat(Theme theme, ThemeElement element)
+        {
+            object elemValue;
+            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is float) {
+                return (float)elemValue;
+            }
+            return 0.0f;
+        }
+    }
+}

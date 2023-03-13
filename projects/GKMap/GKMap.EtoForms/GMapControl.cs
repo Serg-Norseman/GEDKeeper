@@ -701,8 +701,7 @@ namespace GKMap.EtoForms
             }
         }*/
 
-#if !DESIGN
-#if DEBUG
+#if DEBUG_RENDER
         private int fCounter;
         private readonly Font fDebugFont = new Font(FontFamilies.SansFamilyName, 12, FontStyle.None);
         private DateTime fStart;
@@ -712,7 +711,7 @@ namespace GKMap.EtoForms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-#if DEBUG
+#if DEBUG_RENDER
             fStart = DateTime.Now;
 #endif
 
@@ -727,7 +726,7 @@ namespace GKMap.EtoForms
 
             base.OnPaint(e);
 
-#if DEBUG
+#if DEBUG_RENDER
             fEnd = DateTime.Now;
             fDelta = (int)(fEnd - fStart).TotalMilliseconds;
 #endif
@@ -745,7 +744,6 @@ namespace GKMap.EtoForms
             fCore.DrawMap(g);
             OnPaintOverlays(g);
         }
-#endif
 
         /// <summary>
         /// override, to render something more

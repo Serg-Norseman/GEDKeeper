@@ -23,6 +23,7 @@ using System.IO;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
+using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKUI.Components;
@@ -41,16 +42,23 @@ namespace GKUI.Platform
 
         public IImage LoadImage(string fileName)
         {
-            if (fileName == null)
+            if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException("fileName");
 
-            using (Bitmap bmp = new Bitmap(fileName))
-            {
-                // cloning is necessary to release the resource
-                // loaded from the image stream
-                Bitmap resImage = (Bitmap)bmp.Clone();
+            if (!File.Exists(fileName))
+                return null;
 
-                return new ImageHandler(resImage);
+            try {
+                using (Bitmap bmp = new Bitmap(fileName)) {
+                    // cloning is necessary to release the resource
+                    // loaded from the image stream
+                    Bitmap resImage = (Bitmap)bmp.Clone();
+
+                    return new ImageHandler(resImage);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("EtoGfxProvider.LoadImage({0})", fileName), ex);
+                return null;
             }
         }
 

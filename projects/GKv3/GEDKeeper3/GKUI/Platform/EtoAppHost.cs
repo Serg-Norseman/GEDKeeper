@@ -32,6 +32,7 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
+using GKCore.Types;
 using GKUI.Components;
 using GKUI.Forms;
 using GKUI.Platform.Handlers;
@@ -261,6 +262,20 @@ namespace GKUI.Platform
                 fldDlg.Directory = folderPath;
                 return (fldDlg.ShowDialog(null) != DialogResult.Ok) ? string.Empty : fldDlg.Directory;
             }
+        }
+
+        public override bool HasFeatureSupport(Feature feature)
+        {
+            bool result = false;
+
+#if !MONO
+            // since v2.23.0, only WinForms-based implementation, on Windows OS
+            if (feature == Feature.Themes) {
+                result = false; // FIXME: temp disable
+            }
+#endif
+
+            return result;
         }
 
         #region KeyLayout functions
