@@ -51,7 +51,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miFamilyAdd;
         private ButtonMenuItem miDelete;
         private ButtonMenuItem miRebuildKinships;
-        private DropDownToolItem tbModes;
+        private GKDropDownToolItem tbModes;
         private ContextMenu MenuModes;
         private RadioMenuItem miModeBoth;
         private RadioMenuItem miModeAncestors;
@@ -75,13 +75,13 @@ namespace GKUI.Forms
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
         private ButtonToolItem tbOptions;
-        private DropDownToolItem tbGensCommon;
+        private GKDropDownToolItem tbGensCommon;
         private ContextMenu MenuGensCommon;
-        private DropDownToolItem tbGensAncestors;
+        private GKDropDownToolItem tbGensAncestors;
         private ContextMenu MenuGensAncestors;
-        private DropDownToolItem tbGensDescendants;
+        private GKDropDownToolItem tbGensDescendants;
         private ContextMenu MenuGensDescendants;
-        private DropDownToolItem tbBorders;
+        private GKDropDownToolItem tbBorders;
         private ContextMenu MenuBorders;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051

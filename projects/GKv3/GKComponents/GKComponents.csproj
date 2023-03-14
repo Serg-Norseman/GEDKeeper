@@ -4,7 +4,38 @@
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <RootNamespace />
+
+        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release</Configurations>
     </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
+        <DefineConstants>OS_MSWIN</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
+        <DefineConstants>OS_LINUX;MONO</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
+        <DefineConstants>OS_MACOS</DefineConstants>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(Configuration.Contains('_Debug')) ">
+        <DebugSymbols>True</DebugSymbols>
+        <DebugType>Full</DebugType>
+        <Optimize>False</Optimize>
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+        <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('_Release')) ">
+        <DebugSymbols>False</DebugSymbols>
+        <DebugType>None</DebugType>
+        <Optimize>True</Optimize>
+        <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+        <DefineConstants>$(DefineConstants);TRACE;RELEASE</DefineConstants>
+    </PropertyGroup>
+
 
     <ItemGroup>
         <Compile Include="..\..\GlobalSuppressions.cs">
@@ -25,8 +56,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Eto.Forms" Version="2.7.1" />
-        <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.1" />
+        <PackageReference Include="Eto.Forms" Version="2.7.3" />
+        <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.3" />
         <PackageReference Include="OxyPlot.Eto" Version="1.1.0" />
         <PackageReference Include="LibVLCSharp" Version="3.4.0" />
     </ItemGroup>

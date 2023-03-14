@@ -61,7 +61,7 @@ namespace GKUI.Forms
         private ButtonToolItem tbFilter;
         private ButtonToolItem tbTreeAncestors;
         private ButtonToolItem tbTreeDescendants;
-        private DropDownToolItem tbPedigree;
+        private GKDropDownToolItem tbPedigree;
         private ButtonToolItem tbStats;
         private ButtonToolItem tbPrev;
         private ButtonToolItem tbNext;
@@ -114,7 +114,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miReports;
         private ButtonMenuItem miPlugins;
         private ButtonMenuItem miSlideshow;
-        private DropDownToolItem tbLoadMRU;
+        private GKDropDownToolItem tbLoadMRU;
         private ButtonMenuItem miPedigreeAscend;
         private ButtonMenuItem miDescendantsCircle;
         private ButtonMenuItem miRelationshipCalculator;
@@ -238,18 +238,18 @@ namespace GKUI.Forms
             recView.AllowMultipleSelection = true;
             recView.MouseDoubleClick += miRecordEdit_Click;
             recView.SelectedItemsChanged += List_SelectedIndexChanged;
-            recView.UpdateContents();
             recView.ContextMenu = contextMenu;
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
+            recView.UpdateContents();
 
-            Splitter spl = new Splitter();
+            var spl = new Splitter();
             spl.Panel1 = recView;
             spl.Panel2 = summary;
             spl.RelativePosition = 300;
             spl.Orientation = Orientation.Horizontal;
             spl.FixedPanel = SplitterFixedPanel.Panel2;
 
-            TabPage tabPage = new TabPage();
+            var tabPage = new TabPage();
             tabPage.Text = pageText;
             tabPage.Content = spl;
             tabsRecords.Pages.Add(tabPage);

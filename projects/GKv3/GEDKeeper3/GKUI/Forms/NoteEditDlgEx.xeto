@@ -12,21 +12,21 @@
       <ButtonToolItem x:Name="btnUnderline" Text="U" Click="btnUnderline_Click" />
       <ButtonToolItem x:Name="btnURL" Text="URL" Click="btnURL_Click" />
 
-      <complat:DropDownToolItem x:Name="cmbSizes">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="cmbSizes">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="menuSizes">
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
 
       <SeparatorToolItem />
 
-      <complat:DropDownToolItem x:Name="ddbtnActions">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="ddbtnActions">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="menuActions">
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
     </ToolBar>
   </Dialog.ToolBar>
 

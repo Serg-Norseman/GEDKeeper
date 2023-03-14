@@ -25,7 +25,7 @@ namespace GKUI.Platform
 {
 #if OS_MSWIN
 
-    public class DropDownToolItemHandler : ToolItemHandler<swc.Button, DropDownToolItem>, DropDownToolItem.IHandler
+    public class GKDropDownToolItemHandler : ToolItemHandler<swc.Button, GKDropDownToolItem>, GKDropDownToolItem.IHandler
     {
         Image image;
         readonly swc.Image swcImage;
@@ -33,7 +33,7 @@ namespace GKUI.Platform
         ContextMenu contextMenu;
         readonly sw.Shapes.Path arrow;
 
-        public DropDownToolItemHandler()
+        public GKDropDownToolItemHandler()
         {
             Control = new swc.Button();
             swcImage = new swc.Image { MaxHeight = 16, MaxWidth = 16 };
@@ -99,7 +99,7 @@ namespace GKUI.Platform
 
 #if OS_LINUX
 
-    public class DropDownToolItemHandler : ToolItemHandler<Gtk.ToolButton, DropDownToolItem>, DropDownToolItem.IHandler
+    public class GKDropDownToolItemHandler : ToolItemHandler<Gtk.ToolButton, GKDropDownToolItem>, GKDropDownToolItem.IHandler
     {
         ContextMenu contextMenu;
 
@@ -107,6 +107,7 @@ namespace GKUI.Platform
         {
             Gtk.Toolbar tb = handler.Control;
 
+            Text = "▾";
             Control = new Gtk.ToolButton(GtkImage, Text);
             Control.IsImportant = true;
             Control.Sensitive = Enabled;
@@ -119,16 +120,16 @@ namespace GKUI.Platform
             Control.Clicked += Connector.HandleClicked;
         }
 
-        protected new DropDownToolItemConnector Connector { get { return (DropDownToolItemConnector)base.Connector; } }
+        protected new GKDropDownToolItemConnector Connector { get { return (GKDropDownToolItemConnector)base.Connector; } }
 
         protected override WeakConnector CreateConnector()
         {
-            return new DropDownToolItemConnector();
+            return new GKDropDownToolItemConnector();
         }
 
-        protected class DropDownToolItemConnector : WeakConnector
+        protected class GKDropDownToolItemConnector : WeakConnector
         {
-            public new DropDownToolItemHandler Handler { get { return (DropDownToolItemHandler)base.Handler; } }
+            public new GKDropDownToolItemHandler Handler { get { return (GKDropDownToolItemHandler)base.Handler; } }
 
             PointF showLocation;
 
@@ -167,7 +168,7 @@ namespace GKUI.Platform
 
 #if OS_MACOS
 
-    public class DropDownToolItemHandler : ToolItemHandler<NSToolbarItem, DropDownToolItem>, DropDownToolItem.IHandler
+    public class GKDropDownToolItemHandler : ToolItemHandler<NSToolbarItem, GKDropDownToolItem>, GKDropDownToolItem.IHandler
     {
         ContextMenu contextMenu;
 

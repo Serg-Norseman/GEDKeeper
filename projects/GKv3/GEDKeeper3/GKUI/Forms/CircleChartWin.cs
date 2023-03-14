@@ -47,7 +47,7 @@ namespace GKUI.Forms
         private ButtonToolItem tbDocPreview;
         private ButtonToolItem tbDocPrint;
         private ButtonToolItem tbOptions;
-        private DropDownToolItem tbModes;
+        private GKDropDownToolItem tbModes;
         private CheckMenuItem miFanMode;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051

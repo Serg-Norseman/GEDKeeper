@@ -14,13 +14,13 @@
       <ButtonToolItem x:Name="tbDocPreview" Image="{Resource Resources.btn_preview.gif, GKCore}" Click="tbDocPreview_Click" />
       <ButtonToolItem x:Name="tbDocPrint" Image="{Resource Resources.btn_print.gif, GKCore}" Click="tbDocPrint_Click" />
       <SeparatorToolItem />
-      <complat:DropDownToolItem x:Name="tbModes">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="tbModes">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuModes">
             <CheckMenuItem x:Name="miFanMode" Click="miFanMode_Click" />
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
       <ButtonToolItem x:Name="tbOptions" Image="{Resource Resources.btn_tools.gif, GKCore}" Click="tbOptions_Click" />
     </ToolBar>
   </Form.ToolBar>

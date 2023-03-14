@@ -12,12 +12,12 @@
       <ButtonToolItem x:Name="tbSaveSnapshot" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbSaveSnapshot_Click" />
       <SeparatorToolItem />
 
-      <complat:DropDownToolItem x:Name="tbProviders">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="tbProviders">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuProviders">
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
 
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbClear" Click="tbClear_Click" />

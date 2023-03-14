@@ -80,6 +80,12 @@ namespace GKUI.Platform
                 stack.Spacing = 4;
             });
 
+            Eto.Style.Add<StackLayout>("dlgFooter", stack => {
+                stack.Orientation = Orientation.Horizontal;
+                stack.Padding = new Padding(0);
+                stack.Spacing = 8;
+            });
+
             Eto.Style.Add<StackLayout>("labtexStack", stack => {
                 stack.Orientation = Orientation.Vertical;
                 stack.Padding = new Padding(0);
@@ -97,7 +103,7 @@ namespace GKUI.Platform
             });
 
             Eto.Style.Add<Button>("iconBtn", button => {
-                button.ImagePosition = ButtonImagePosition.Left;
+                button.ImagePosition = ButtonImagePosition.Overlay;
                 button.Size = new Size(26, 26);
             });
         }
@@ -404,7 +410,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ButtonToolItem), typeof(ButtonToolItemHandler));
-            ControlsManager.RegisterHandlerType(typeof(DropDownToolItem), typeof(ButtonToolItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDropDownToolItem), typeof(ButtonToolItemHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));

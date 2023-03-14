@@ -9,35 +9,35 @@
       <ButtonToolItem x:Name="tbImageSave" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbImageSave_Click" />
       <SeparatorToolItem />
 
-      <complat:DropDownToolItem x:Name="tbGensCommon">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="tbGensCommon">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuGensCommon">
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
 
-      <complat:DropDownToolItem x:Name="tbGensAncestors">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="tbGensAncestors">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuGensAncestors">
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
 
-      <complat:DropDownToolItem x:Name="tbGensDescendants">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="tbGensDescendants">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuGensDescendants">
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
 
       <SeparatorToolItem />
 
-      <complat:DropDownToolItem x:Name="tbModes">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="tbModes">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuModes">
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
 
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbFilter" Image="{Resource Resources.btn_filter.gif, GKCore}" Click="ToolBar1_ButtonClick" />
@@ -50,12 +50,12 @@
       <ButtonToolItem x:Name="tbOptions" Image="{Resource Resources.btn_tools.gif, GKCore}" Click="tbOptions_Click" />
       <SeparatorToolItem />
 
-      <complat:DropDownToolItem x:Name="tbBorders">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="tbBorders">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuBorders">
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
     </ToolBar>
   </Form.ToolBar>
 

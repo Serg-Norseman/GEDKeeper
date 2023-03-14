@@ -40,13 +40,13 @@ namespace GKUI.Forms
         private Button btnCancel;
         private RichTextArea txtNote;
         private HyperView hyperView1;
-        private DropDownToolItem cmbSizes;
+        private GKDropDownToolItem cmbSizes;
         private ContextMenu menuSizes;
         private ButtonMenuItem miClear;
         private ButtonMenuItem miExport;
         private ButtonMenuItem miImport;
         private ButtonMenuItem miSelectAndCopy;
-        private DropDownToolItem ddbtnActions;
+        private GKDropDownToolItem ddbtnActions;
         private ContextMenu menuActions;
         private ButtonToolItem btnURL;
         private ButtonToolItem btnUnderline;

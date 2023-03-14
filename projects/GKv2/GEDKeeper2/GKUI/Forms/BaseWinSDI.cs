@@ -33,6 +33,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
@@ -145,34 +146,39 @@ namespace GKUI.Forms
 
         private void CreatePage(string pageText, GDMRecordType recType)
         {
-            tabsRecords.SuspendLayout();
-            TabPage sheet = new TabPage(pageText);
-            tabsRecords.Controls.Add(sheet);
-            tabsRecords.ResumeLayout(false);
-
             var summary = new HyperView();
             summary.BorderWidth = 4;
             summary.Dock = DockStyle.Right;
             summary.Size = new Size(300, 290);
             summary.OnLink += mPersonSummaryLink;
 
-            Splitter spl = new Splitter();
+            var recView = new GKListView();
+            recView.HideSelection = false;
+            recView.LabelEdit = false;
+            recView.FullRowSelect = true;
+            recView.View = View.Details;
+            recView.Dock = DockStyle.Fill;
+            recView.DoubleClick += miRecordEdit_Click;
+            recView.SelectedIndexChanged += List_SelectedIndexChanged;
+            recView.ContextMenuStrip = contextMenu;
+            recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
+            recView.UpdateContents();
+
+            var spl = new Splitter();
             spl.Dock = DockStyle.Right;
             spl.Size = new Size(4, 290);
             spl.MinExtra = 100;
             spl.MinSize = 100;
 
-            sheet.Controls.Add(summary);
-            sheet.Controls.Add(spl);
+            var tabPage = new TabPage(pageText);
+            tabPage.Controls.Add(recView);
+            tabPage.Controls.Add(summary);
+            tabPage.Controls.Add(spl);
+            tabsRecords.Controls.Add(tabPage);
 
-            var recView = UIHelper.CreateRecordsView(sheet, fContext, recType, false);
-            recView.DoubleClick += miRecordEdit_Click;
-            recView.SelectedIndexChanged += List_SelectedIndexChanged;
-            recView.UpdateContents();
-            recView.ContextMenuStrip = contextMenu;
-
-            sheet.Controls.SetChildIndex(spl, 1);
-            sheet.Controls.SetChildIndex(summary, 2);
+            tabPage.Controls.SetChildIndex(recView, 0);
+            tabPage.Controls.SetChildIndex(spl, 1);
+            tabPage.Controls.SetChildIndex(summary, 2);
 
             fController.SetTabPart(recType, recView, summary);
         }

@@ -69,16 +69,21 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
+                try {
+                    GDMCustomDate dt = fView.Date.Date;
+                    if (dt == null) throw new ArgumentNullException("dt");
+
+                    fEvent.Date.ParseString(dt.StringValue);
+                } catch (Exception ex) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DateInvalid));
+                    throw ex;
+                }
+
                 fEvent.Place.StringValue = fView.Place.Text;
                 fBase.Context.Tree.SetPtrValue(fEvent.Place.Location, fTempLocation);
                 fEvent.Classification = fView.EventName.Text;
                 fEvent.Cause = fView.Cause.Text;
                 fEvent.Agency = fView.Agency.Text;
-
-                GDMCustomDate dt = fView.Date.Date;
-                if (dt == null) throw new ArgumentNullException("dt");
-
-                fEvent.Date.ParseString(dt.StringValue);
 
                 int eventType = fView.EventType.GetSelectedTag<int>();
                 if (fEvent is GDMFamilyEvent) {

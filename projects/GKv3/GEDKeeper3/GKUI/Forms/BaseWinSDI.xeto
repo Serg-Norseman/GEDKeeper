@@ -11,12 +11,12 @@
       <ButtonToolItem x:Name="tbFileNew" Image="{Resource Resources.btn_create_new.gif, GKCore}" Click="miFileNew_Click" />
       <ButtonToolItem x:Name="tbFileLoad" Image="{Resource Resources.btn_load.gif, GKCore}" Click="miFileLoad_Click" />
 
-      <complat:DropDownToolItem x:Name="tbLoadMRU">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="tbLoadMRU">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuMRU">
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
 
       <ButtonToolItem x:Name="tbFileSave" Image="{Resource Resources.btn_save.gif, GKCore}" Click="miFileSave_Click" />
       <SeparatorToolItem />
@@ -31,14 +31,14 @@
       <ButtonToolItem x:Name="tbTreeBoth" Image="{Resource Resources.btn_tree_both.gif, GKCore}" Click="miTreeBoth_Click" />
       <SeparatorToolItem />
 
-      <complat:DropDownToolItem x:Name="tbPedigree" Image="{Resource Resources.btn_scroll.gif, GKCore}">
-        <complat:DropDownToolItem.ContextMenu>
+      <complat:GKDropDownToolItem x:Name="tbPedigree" Image="{Resource Resources.btn_scroll.gif, GKCore}">
+        <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuPedigree">
             <ButtonMenuItem x:Name="miPedigree_dAboville2" Click="miPedigree_dAbovilleClick" />
             <ButtonMenuItem x:Name="miPedigree_Konovalov2" Click="miPedigree_KonovalovClick" />
           </ContextMenu>
-        </complat:DropDownToolItem.ContextMenu>
-      </complat:DropDownToolItem>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
 
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbStats" Image="{Resource Resources.btn_table.gif, GKCore}" Click="miStats_Click" />

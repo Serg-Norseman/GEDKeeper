@@ -55,7 +55,7 @@ namespace GKUI.Forms
         private CheckBox chkLinesVisible;
         private ButtonToolItem tbLoadPlaces;
         private ButtonToolItem tbSaveSnapshot;
-        private DropDownToolItem tbProviders;
+        private GKDropDownToolItem tbProviders;
         private ContextMenu MenuProviders;
         private ButtonToolItem tbClear;
         private ButtonToolItem tbZoomCenter;
