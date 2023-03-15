@@ -121,83 +121,6 @@ namespace GKUI.Themes
             }, true);*/
         }
 
-        protected override void Load(string fileName)
-        {
-            if (!File.Exists(fileName)) return;
-
-            try {
-                ThemeFile themeFile;
-                using (var reader = new StreamReader(fileName)) {
-                    string content = reader.ReadToEnd();
-                    themeFile = YamlHelper.Deserialize<ThemeFile>(content);
-                }
-
-                var themeElements = new ThemeElementsDictionary();
-                for (int i = 0; i < themeFile.Elements.Length; i++) {
-                    var tfc = themeFile.Elements[i];
-                    var telem = EnumHelper.Parse<ThemeElement>(tfc.Element);
-                    var telType = fThemeElementTypes[(int)telem];
-
-                    object tcVal;
-                    switch (telType) {
-                        case ThemeElementType.Float:
-                            tcVal = (float)ConvertHelper.ParseFloat(tfc.Value, 8, true);
-                            break;
-
-                        case ThemeElementType.Color:
-                            tcVal = UIHelper.ParseColor(tfc.Value);
-                            break;
-
-                        case ThemeElementType.Image:
-                        case ThemeElementType.String:
-                        default:
-                            tcVal = tfc.Value;
-                            break;
-                    }
-
-                    themeElements.Add(telem, tcVal);
-                }
-
-                RegisterTheme(themeFile.Name, themeElements, false);
-            } catch (Exception ex) {
-                Logger.WriteError("ThemeManager.Load()", ex);
-            }
-        }
-
-        private static ThemeElementsDictionary PreProcessElements(ThemeElementsDictionary elements, bool sysDefault)
-        {
-            var result = new ThemeElementsDictionary();
-            foreach (var kvp in elements) {
-                var telem = kvp.Key;
-                var telType = fThemeElementTypes[(int)telem];
-                object telVal = kvp.Value;
-
-                if (telType == ThemeElementType.Image) {
-                    try {
-                        string imgName = telVal.ToString();
-                        if (!string.IsNullOrEmpty(imgName)) {
-                            if (sysDefault) {
-                                telVal = new ImageHandler(UIHelper.LoadResourceImage(imgName));
-                            } else {
-                                telVal = AppHost.GfxProvider.LoadImage(GetThemesPath() + imgName);
-                            }
-                        }
-                    } catch (Exception ex) {
-                        Logger.WriteError("PreProcessElements()", ex);
-                        telVal = null;
-                    }
-                }
-
-                result.Add(telem, telVal);
-            }
-            return result;
-        }
-
-        private void RegisterTheme(string name, ThemeElementsDictionary elements, bool sysDefault = false)
-        {
-            fThemes.Add(name, new Theme(name, PreProcessElements(elements, sysDefault), sysDefault));
-        }
-
         public override void ApplyTheme(IThemedView view)
         {
             if (view == null || fCurrentTheme == null) return;
@@ -226,6 +149,18 @@ namespace GKUI.Themes
         public override void ApplyTheme(IThemedView view, object component)
         {
             ApplyTheme(view, (Component)component, fCurrentTheme);
+        }
+
+        protected override object PreProcessElement(object telVal, ThemeElementType telType)
+        {
+            if (telType == ThemeElementType.Color) {
+                if (telVal is int) {
+                    telVal = Color.FromArgb((int)telVal);
+                }
+                return telVal;
+            } else {
+                return telVal;
+            }
         }
 
         #region Control handlers

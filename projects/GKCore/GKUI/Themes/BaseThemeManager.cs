@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
 
@@ -138,7 +139,86 @@ namespace GKUI.Themes
             }
         }
 
-        protected abstract void Load(string fileName);
+        protected void Load(string fileName)
+        {
+            if (!File.Exists(fileName)) return;
+
+            try {
+                ThemeFile themeFile;
+                using (var reader = new StreamReader(fileName)) {
+                    string content = reader.ReadToEnd();
+                    themeFile = YamlHelper.Deserialize<ThemeFile>(content);
+                }
+
+                var themeElements = new ThemeElementsDictionary();
+                for (int i = 0; i < themeFile.Elements.Length; i++) {
+                    var tfc = themeFile.Elements[i];
+                    var telem = EnumHelper.Parse<ThemeElement>(tfc.Element);
+                    var telType = fThemeElementTypes[(int)telem];
+
+                    object tcVal;
+                    switch (telType) {
+                        case ThemeElementType.Float:
+                            tcVal = (float)ConvertHelper.ParseFloat(tfc.Value, 8, true);
+                            break;
+
+                        case ThemeElementType.Color:
+                            tcVal = SysUtils.ParseColor(tfc.Value);
+                            break;
+
+                        case ThemeElementType.Image:
+                        case ThemeElementType.String:
+                        default:
+                            tcVal = tfc.Value;
+                            break;
+                    }
+
+                    themeElements.Add(telem, tcVal);
+                }
+
+                RegisterTheme(themeFile.Name, themeElements, false);
+            } catch (Exception ex) {
+                Logger.WriteError("ThemeManager.Load()", ex);
+            }
+        }
+
+        protected abstract object PreProcessElement(object telVal, ThemeElementType telType);
+
+        private ThemeElementsDictionary PreProcessElements(ThemeElementsDictionary elements, bool sysDefault)
+        {
+            var result = new ThemeElementsDictionary();
+            foreach (var kvp in elements) {
+                var telem = kvp.Key;
+                var telType = fThemeElementTypes[(int)telem];
+                object telVal = kvp.Value;
+
+                if (telType == ThemeElementType.Image) {
+                    try {
+                        string imgName = telVal.ToString();
+                        if (!string.IsNullOrEmpty(imgName)) {
+                            if (sysDefault) {
+                                telVal = AppHost.GfxProvider.LoadResourceImage(imgName);
+                            } else {
+                                telVal = AppHost.GfxProvider.LoadImage(GetThemesPath() + imgName);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        Logger.WriteError("PreProcessElements()", ex);
+                        telVal = null;
+                    }
+                } else if (telType == ThemeElementType.Color) {
+                    telVal = PreProcessElement(telVal, telType);
+                }
+
+                result.Add(telem, telVal);
+            }
+            return result;
+        }
+
+        protected void RegisterTheme(string name, ThemeElementsDictionary elements, bool sysDefault = false)
+        {
+            fThemes.Add(name, new Theme(name, PreProcessElements(elements, sysDefault), sysDefault));
+        }
 
         public void SetTheme(string name)
         {

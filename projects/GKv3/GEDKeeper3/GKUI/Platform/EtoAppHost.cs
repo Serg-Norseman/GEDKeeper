@@ -36,6 +36,7 @@ using GKCore.Types;
 using GKUI.Components;
 using GKUI.Forms;
 using GKUI.Platform.Handlers;
+using GKUI.Themes;
 
 namespace GKUI.Platform
 {
@@ -332,6 +333,7 @@ namespace GKUI.Platform
             container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProviderEx, EtoGfxProvider>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
+            container.Register<IThemeManager, EtoThemeManager>(LifeCycle.Singleton);
 
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);

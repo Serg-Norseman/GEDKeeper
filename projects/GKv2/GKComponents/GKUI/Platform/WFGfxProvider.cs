@@ -65,6 +65,11 @@ namespace GKUI.Platform
             }
         }
 
+        public IImage LoadResourceImage(string resName)
+        {
+            return new ImageHandler(UIHelper.LoadResourceImage(resName));
+        }
+
         public void SaveImage(IImage image, string fileName)
         {
             if (image == null)

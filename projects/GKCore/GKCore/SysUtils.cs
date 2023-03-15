@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,10 +20,12 @@
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using BSLib;
 
 namespace GKCore
 {
@@ -351,6 +353,42 @@ namespace GKCore
             result.Append(str, startSearchFromIndex, charsUntilStringEnd);
 
             return result.ToString();
+        }
+
+        // Converts a string of the form #RRGGBB to a Color instance.
+        // Used when retrieving colours from the config.
+        public static int ParseColor(string s)
+        {
+            if (string.IsNullOrEmpty(s)) {
+                return 0;
+            }
+
+            int r = 0, g = 0, b = 0;
+
+            if (s[0] != '#') {
+                s = '#' + s;
+            }
+
+            switch (s.Length) {
+                case 4:
+                    s = s.Substring(1);
+                    goto case 3;
+                case 3:
+                    r = int.Parse(s.Substring(0, 1), NumberStyles.HexNumber);
+                    g = int.Parse(s.Substring(1, 1), NumberStyles.HexNumber);
+                    b = int.Parse(s.Substring(2, 1), NumberStyles.HexNumber);
+                    break;
+                case 7:
+                    s = s.Substring(1);
+                    goto case 6;
+                case 6:
+                    r = int.Parse(s.Substring(0, 2), NumberStyles.HexNumber);
+                    g = int.Parse(s.Substring(2, 2), NumberStyles.HexNumber);
+                    b = int.Parse(s.Substring(4, 2), NumberStyles.HexNumber);
+                    break;
+            }
+
+            return GfxHelper.MakeArgb(255, r, g, b);
         }
     }
 }

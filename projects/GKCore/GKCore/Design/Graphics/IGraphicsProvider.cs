@@ -42,6 +42,7 @@ namespace GKCore.Design.Graphics
         IImage CreateImage(Stream stream);
         IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
         IImage LoadImage(string fileName);
+        IImage LoadResourceImage(string resName);
         void SaveImage(IImage image, string fileName);
 
         ExtSizeF GetTextSize(string text, IFont font, object target);
