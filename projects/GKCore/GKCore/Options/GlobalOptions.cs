@@ -859,6 +859,8 @@ namespace GKCore.Options
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException("fileName");
 
+            Logger.WriteInfo("Options load path: " + fileName);
+
             try {
                 using (var ini = new IniFile(fileName)) {
                     LoadFromFile(ini);

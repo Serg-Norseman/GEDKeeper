@@ -73,7 +73,6 @@
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
         <PackageReference Include="Eto.Platform.Wpf" Version="2.7.3" />
-        <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.16" />
     </ItemGroup>
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
@@ -83,13 +82,13 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <StartupObject>GEDKeeper3.GKProgram</StartupObject>
+        <PlatformTarget>x64</PlatformTarget>
 
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     </PropertyGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
         <PackageReference Include="Eto.Platform.Gtk" Version="2.7.3" />
-        <PackageReference Include="LibVLCSharp.GTK" Version="3.6.6" />
     </ItemGroup>
 
 
@@ -102,7 +101,6 @@
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
         <PackageReference Include="Eto.Platform.Mac64" Version="2.7.3" />
-        <PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
     </ItemGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">

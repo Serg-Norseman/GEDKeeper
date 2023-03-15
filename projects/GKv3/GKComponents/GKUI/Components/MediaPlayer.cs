@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
@@ -47,6 +46,12 @@ namespace GKUI.Components
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
+
+#if OS_LINUX
+        [DllImport("libX11", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int XInitThreads();
+#endif
+
 
         private LibVLC fLibVLC;
         private Media fMedia;
@@ -93,13 +98,18 @@ namespace GKUI.Components
         private void InitVLC()
         {
             try {
+#if OS_LINUX
+                // Initializes the X threading system
+                XInitThreads();
+#endif
+
                 fMedia = null;
                 fPlayer = null;
                 Core.Initialize();
                 fLibVLC = new LibVLC();
             } catch (Exception ex) {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-                    Console.WriteLine("MediaPlayer.InitVLC(): " + ex.Message);
+                    Console.WriteLine("MediaPlayer.InitVLC(): " + ex.StackTrace.ToString());
                 } else {
                     Logger.WriteError("MediaPlayer.InitVLC()", ex);
                 }
@@ -123,12 +133,17 @@ namespace GKUI.Components
                     fPlayer.Stopped += Events_PlayerStopped;
                     MpAttach(pnlVideo.NativeHandle);
 
+#if OS_LINUX
                     // https://github.com/videolan/libvlcsharp/blob/3.x/docs/linux-setup.md
-                    // Gtk: MissingMethodException: Method not found: 'Void LibVLCSharp.Shared.Media..ctor(LibVLCSharp.Shared.LibVLC, System.IO.Stream, System.String[])'
-                    // and other two!
-                    string[] opts = new string[] { };
-                    fMedia = new Media(fLibVLC, new FileStream(fMediaFile, FileMode.Open, FileAccess.Read, FileShare.Read), opts);
-                    //fMedia = new Media(fLibVLC, fMediaFile, FromType.FromPath);
+                    // https://code.videolan.org/videolan/LibVLCSharp/blob/master/docs/linux-setup.md
+                    // works with `sudo apt install vlc` and `sudo apt install libvlc-dev`
+                    fMedia = new Media(fLibVLC, fMediaFile, FromType.FromPath);
+#else
+                    //string[] opts = new string[] { };
+                    //fMedia = new Media(fLibVLC, new FileStream(fMediaFile, FileMode.Open, FileAccess.Read, FileShare.Read), opts);
+                    fMedia = new Media(fLibVLC, fMediaFile, FromType.FromPath);
+#endif
+
                     fMedia.DurationChanged += Events_DurationChanged;
                     fMedia.StateChanged += Events_StateChanged;
                     fMedia.ParsedChanged += Events_ParsedChanged;
@@ -138,7 +153,7 @@ namespace GKUI.Components
                 fPlayer.Play(fMedia);
             } catch (Exception ex) {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-                    Console.WriteLine("MediaPlayer.Play(): " + ex.Message);
+                    Console.WriteLine("MediaPlayer.Play(): " + ex.StackTrace.ToString());
                 } else {
                     Logger.WriteError("MediaPlayer.Play()", ex);
                 }
@@ -155,6 +170,7 @@ namespace GKUI.Components
             } else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 fPlayer.NsObject = handle;
             } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                Console.WriteLine("MpAttach.Linux(): " + handle.ToString());
                 fPlayer.XWindow = (uint)handle;
             } else {
                 throw new InvalidOperationException("Unsupported OSPlatform");
