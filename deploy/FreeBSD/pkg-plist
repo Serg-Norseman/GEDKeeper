@@ -332,12 +332,6 @@ bin/gedkeeper
 %%DATADIR%%/plugins/GKHistoryDataPlugin.enu
 %%DATADIR%%/plugins/GKHistoryDataPlugin.pdb
 %%DATADIR%%/plugins/GKHistoryDataPlugin.rus
-%%DATADIR%%/plugins/GKImageViewerPlugin.dll
-%%DATADIR%%/plugins/GKImageViewerPlugin.enu
-%%DATADIR%%/plugins/GKImageViewerPlugin.pdb
-%%DATADIR%%/plugins/GKImageViewerPlugin.pol
-%%DATADIR%%/plugins/GKImageViewerPlugin.rus
-%%DATADIR%%/plugins/GKImageViewerPlugin.ukr
 %%DATADIR%%/plugins/GKLifePlugin.dll
 %%DATADIR%%/plugins/GKLifePlugin.enu
 %%DATADIR%%/plugins/GKLifePlugin.pdb
@@ -378,11 +372,6 @@ bin/gedkeeper
 %%DATADIR%%/plugins/GKTimeLinePlugin.pol
 %%DATADIR%%/plugins/GKTimeLinePlugin.rus
 %%DATADIR%%/plugins/GKTimeLinePlugin.ukr
-%%DATADIR%%/plugins/GKTreeVizPlugin.dll
-%%DATADIR%%/plugins/GKTreeVizPlugin.enu
-%%DATADIR%%/plugins/GKTreeVizPlugin.pol
-%%DATADIR%%/plugins/GKTreeVizPlugin.rus
-%%DATADIR%%/plugins/GKTreeVizPlugin.ukr
 %%DATADIR%%/plugins/GKWordsCloudPlugin.dll
 %%DATADIR%%/plugins/GKWordsCloudPlugin.enu
 %%DATADIR%%/plugins/GKWordsCloudPlugin.pdb
@@ -400,8 +389,6 @@ bin/gedkeeper
 %%DATADIR%%/plugins/Newtonsoft.Json.dll
 %%DATADIR%%/plugins/ZedGraph.dll
 %%DATADIR%%/plugins/_XapianSharp.dll
-%%DATADIR%%/plugins/csgl.dll
-%%DATADIR%%/plugins/csgl.native.dll
 %%DATADIR%%/plugins/itextsharp.dll
 %%DATADIR%%/plugins/nVLC.dll
 %%DATADIR%%/plugins/zlib1.dll

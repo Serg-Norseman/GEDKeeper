@@ -24,9 +24,6 @@ rmdir .\plugins\GKCalendarPlugin\obj /s /q
 rmdir .\plugins\GKFlowInputPlugin\bin /s /q
 rmdir .\plugins\GKFlowInputPlugin\obj /s /q
 
-rmdir .\plugins\GKImageViewerPlugin\bin /s /q
-rmdir .\plugins\GKImageViewerPlugin\obj /s /q
-
 rmdir .\plugins\GKNamesBookPlugin\bin /s /q
 rmdir .\plugins\GKNamesBookPlugin\obj /s /q
 
@@ -41,9 +38,6 @@ rmdir .\plugins\GKTextSearchPlugin\obj /s /q
 
 rmdir .\plugins\GKTimeLinePlugin\bin /s /q
 rmdir .\plugins\GKTimeLinePlugin\obj /s /q
-
-rmdir .\plugins\GKTreeVizPlugin\bin /s /q
-rmdir .\plugins\GKTreeVizPlugin\obj /s /q
 
 rmdir .\plugins\GKLifePlugin\bin /s /q
 rmdir .\plugins\GKLifePlugin\obj /s /q

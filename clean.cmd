@@ -61,9 +61,6 @@ rmdir .\projects\GKv2\GKCalendarPlugin\obj /s /q
 rmdir .\projects\GKv2\GKFlowInputPlugin\bin /s /q
 rmdir .\projects\GKv2\GKFlowInputPlugin\obj /s /q
 
-rmdir .\projects\GKv2\GKImageViewerPlugin\bin /s /q
-rmdir .\projects\GKv2\GKImageViewerPlugin\obj /s /q
-
 rmdir .\projects\GKv2\GKNamesBookPlugin\bin /s /q
 rmdir .\projects\GKv2\GKNamesBookPlugin\obj /s /q
 
@@ -78,9 +75,6 @@ rmdir .\projects\GKv2\GKTextSearchPlugin\obj /s /q
 
 rmdir .\projects\GKv2\GKTimeLinePlugin\bin /s /q
 rmdir .\projects\GKv2\GKTimeLinePlugin\obj /s /q
-
-rmdir .\projects\GKv2\GKTreeVizPlugin\bin /s /q
-rmdir .\projects\GKv2\GKTreeVizPlugin\obj /s /q
 
 rmdir .\projects\GKv2\GKLifePlugin\bin /s /q
 rmdir .\projects\GKv2\GKLifePlugin\obj /s /q
