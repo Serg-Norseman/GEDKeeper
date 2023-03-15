@@ -47,12 +47,6 @@ namespace GKUI.Components
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-#if OS_LINUX
-        [DllImport("libX11", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int XInitThreads();
-#endif
-
-
         private LibVLC fLibVLC;
         private Media fMedia;
         private string fMediaFile;
@@ -98,11 +92,6 @@ namespace GKUI.Components
         private void InitVLC()
         {
             try {
-#if OS_LINUX
-                // Initializes the X threading system
-                XInitThreads();
-#endif
-
                 fMedia = null;
                 fPlayer = null;
                 Core.Initialize();
@@ -170,7 +159,6 @@ namespace GKUI.Components
             } else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 fPlayer.NsObject = handle;
             } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-                Console.WriteLine("MpAttach.Linux(): " + handle.ToString());
                 fPlayer.XWindow = (uint)handle;
             } else {
                 throw new InvalidOperationException("Unsupported OSPlatform");
@@ -235,7 +223,9 @@ namespace GKUI.Components
 
         private void Events_ParsedChanged(object sender, MediaParsedChangedEventArgs e)
         {
+#if DEBUG
             Console.WriteLine(e.ParsedStatus);
+#endif
         }
 
         #endregion
@@ -244,7 +234,9 @@ namespace GKUI.Components
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
+#if DEBUG
             Console.WriteLine("Play(): " + fMediaFile);
+#endif
             Play();
         }
 

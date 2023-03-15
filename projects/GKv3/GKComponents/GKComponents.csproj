@@ -56,8 +56,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Eto.Forms" Version="2.7.3" />
-        <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.3" />
+        <PackageReference Include="Eto.Forms" Version="2.7.2" />
+        <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.2" />
         <PackageReference Include="OxyPlot.Eto" Version="1.1.0" />
         <PackageReference Include="LibVLCSharp" Version="3.6.8" />
     </ItemGroup>

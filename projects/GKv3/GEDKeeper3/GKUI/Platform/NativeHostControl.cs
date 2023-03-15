@@ -59,18 +59,16 @@ namespace GKUI.Platform
 
     public class GtkUserControl : DrawingArea
     {
-        const string linux_libgdk_x11_name = "libgdk-x11-2.0.so.0";
+        [DllImport("libgdk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
+        private static extern uint gdk_x11_window_get_xid(IntPtr gdkWindow);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(linux_libgdk_x11_name)]
-        static extern IntPtr gdk_x11_drawable_get_xid(IntPtr gdkDisplay);
+        [DllImport("libX11", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int XInitThreads();
 
         public IntPtr XID
         {
             get {
-                // checked (VideoView)!
-                var xid = gdk_x11_drawable_get_xid(GdkWindow.Handle);
-                Console.WriteLine("xid: " + xid);
-                return xid;
+                return new IntPtr(gdk_x11_window_get_xid(Window.Handle));
             }
         }
 
@@ -78,13 +76,13 @@ namespace GKUI.Platform
 
         public GtkUserControl()
         {
-            this.IsInitialized = true;
+            // Initializes the X threading system
+            XInitThreads();
+
+            IsInitialized = true;
         }
     }
 
-    /// <summary>
-    /// https://github.com/picoe/Eto.OpenTK/tree/master/Eto.OpenTK.Gtk
-    /// </summary>
     public class NativeHostControlHandler : GtkControl<GtkUserControl, NativeHostControl, NativeHostControl.ICallback>, NativeHostControl.IHandler
     {
         public new IntPtr NativeHandle => Control.XID;

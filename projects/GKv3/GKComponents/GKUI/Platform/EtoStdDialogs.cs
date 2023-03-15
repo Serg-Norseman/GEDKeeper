@@ -58,8 +58,7 @@ namespace GKUI.Platform
         {
             Font sdFont = ((FontHandler)font).Handle;
 
-            using (FontDialog fontDlg = new FontDialog())
-            {
+            using (FontDialog fontDlg = new FontDialog()) {
                 fontDlg.Font = sdFont;
                 return (fontDlg.ShowDialog(null) != DialogResult.Ok) ? null : new FontHandler(fontDlg.Font);
             }
@@ -68,9 +67,9 @@ namespace GKUI.Platform
         public string GetOpenFile(string title, string context, string filter,
                                   int filterIndex, string defaultExt)
         {
-            using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false))
-            {
-                if (ofd.ShowDialog(null) == DialogResult.Ok) {
+            using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false)) {
+                var dlgRes = ofd.ShowDialog(null);
+                if (dlgRes == DialogResult.Ok) {
                     return ofd.FileName;
                 } else {
                     return string.Empty;
@@ -89,10 +88,8 @@ namespace GKUI.Platform
             if (!string.IsNullOrEmpty(context))
                 ofd.Directory = new Uri(context);
 
-            if (!string.IsNullOrEmpty(filter))
-            {
+            if (!string.IsNullOrEmpty(filter)) {
                 UIHelper.ConvertFileDialogFilters(ofd, filter);
-
                 if (filterIndex > 0) ofd.CurrentFilterIndex = filterIndex - 1;
             }
 
@@ -114,8 +111,7 @@ namespace GKUI.Platform
         public string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                                   string suggestedFileName, bool overwritePrompt = true)
         {
-            using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName))
-            {
+            using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName)) {
                 // OverwritePrompt is not supported
                 if (sfd.ShowDialog(null) == DialogResult.Ok) {
                     return sfd.FileName;
@@ -136,8 +132,7 @@ namespace GKUI.Platform
             if (!string.IsNullOrEmpty(context))
                 sfd.Directory = new Uri(context);
 
-            if (!string.IsNullOrEmpty(filter))
-            {
+            if (!string.IsNullOrEmpty(filter)) {
                 UIHelper.ConvertFileDialogFilters(sfd, filter);
 
                 if (filterIndex > 0) sfd.CurrentFilterIndex = filterIndex - 1;
