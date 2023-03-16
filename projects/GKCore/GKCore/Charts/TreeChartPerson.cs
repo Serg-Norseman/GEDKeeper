@@ -25,6 +25,7 @@ using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore.Design.Graphics;
 using GKCore.Import;
+using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using BSDColors = GKCore.Design.BSDConsts.Colors;
@@ -280,7 +281,8 @@ namespace GKCore.Charts
                         fModel.PreparedIndividuals.Add(iRec.XRef);
                     }
 
-                    var parts = GKUtils.GetNameParts(fModel.Base.Context.Tree, iRec);
+                    var baseContext = fModel.Base.Context;
+                    var parts = GKUtils.GetNameParts(baseContext.Tree, iRec, true, baseContext.DefaultLanguage);
                     fSurname = parts.Surname;
                     fName = parts.Name;
                     fPatronymic = parts.Patronymic;
@@ -357,7 +359,7 @@ namespace GKCore.Charts
 
                     if (options.PortraitsVisible) {
                         try {
-                            fPortrait = PortraitsCache.Instance.GetImage(fModel.Base.Context, iRec);
+                            fPortrait = PortraitsCache.Instance.GetImage(baseContext, iRec);
 
                             if (fPortrait == null && options.DefaultPortraits) {
                                 string resName = (fSex == GDMSex.svFemale) ? "pi_female_140.png" : "pi_male_140.png";

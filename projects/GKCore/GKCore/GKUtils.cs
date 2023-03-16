@@ -3369,6 +3369,8 @@ namespace GKCore
             int count = iRec.PersonalNames.Count;
             if (count == 0) {
                 result = null;
+            } else if (defLang == GDMLanguageID.Unknown) {
+                result = iRec.PersonalNames[0];
             } else {
                 result = null;
                 for (int i = 0; i < count; i++) {
@@ -3443,7 +3445,7 @@ namespace GKCore
                 throw new ArgumentNullException("iRec");
 
             GDMPersonalName pn = GetPersonalNameByLang(iRec, defLang);
-            return (pn == null) ? NamePartsRet.Empty : GetNameParts(tree, iRec, iRec.PersonalNames[0], formatted);
+            return (pn == null) ? NamePartsRet.Empty : GetNameParts(tree, iRec, pn, formatted);
         }
 
         public static ICulture DefineCulture(GDMTree tree, GDMPersonalName personalName)
