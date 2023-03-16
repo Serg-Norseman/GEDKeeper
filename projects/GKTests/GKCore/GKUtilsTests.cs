@@ -342,7 +342,9 @@ namespace GKCore
         {
             GDMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
 
-            Assert.AreEqual(1, GKUtils.GetSpousesDiff(fContext.Tree, famRec));
+            // I1: 28 DEC 1990
+            // I2: 17 MAR 1991
+            Assert.AreEqual(0, GKUtils.GetSpousesDiff(fContext.Tree, famRec));
         }
 
         [Test]
@@ -658,6 +660,19 @@ namespace GKCore
 
             float ca = GKUtils.GetCertaintyAssessment(iRec);
             Assert.AreEqual(0.0f, ca);
+        }
+
+        [Test]
+        public void Test_GetDifferenceInYears()
+        {
+            Assert.AreEqual(2, GKUtils.GetDifferenceInYears(DateTime.Parse("2016-02-01T00:00:00"), DateTime.Parse("2019-01-31T00:00:00"))); // one day to 3 years
+            Assert.AreEqual(3, GKUtils.GetDifferenceInYears(DateTime.Parse("2016-02-01T00:00:00"), DateTime.Parse("2019-02-01T00:00:00"))); // 
+
+            Assert.AreEqual(1, GKUtils.GetDifferenceInYears(DateTime.Parse("2011-12-14T00:00:00"), DateTime.Parse("2012-12-15T00:00:00"))); // 1
+            Assert.AreEqual(1, GKUtils.GetDifferenceInYears(DateTime.Parse("2011-12-14T00:00:00"), DateTime.Parse("2012-12-14T00:00:00"))); // 1
+            Assert.AreEqual(0, GKUtils.GetDifferenceInYears(DateTime.Parse("2011-12-14T00:00:00"), DateTime.Parse("2012-12-13T00:00:00"))); // 0.91
+
+            Assert.AreEqual(19, GKUtils.GetDifferenceInYears(DateTime.Parse("1987-09-23T00:00:00"), DateTime.Parse("2007-06-15T00:00:00"))); // 3 monthes to 20
         }
     }
 }

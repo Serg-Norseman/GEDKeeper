@@ -82,7 +82,7 @@ namespace GKTests
 
             evt = iRec.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
-            evt.Date.ParseString("28 DEC 1990");
+            evt.Date.ParseString("28 DEC 1990"); // birth of i1
             evt.Place.StringValue = "Ivanovo";
 
             GDMCustomEvent evtd = context.CreateEventEx(iRec, GEDCOMTagName.DEAT, "28 DEC 2010", "Ivanovo");
@@ -92,7 +92,7 @@ namespace GKTests
             GDMIndividualRecord iRec2 = context.CreatePersonEx("Maria", "Petrovna", "Ivanova", GDMSex.svFemale, true);
             evt = iRec2.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
-            evt.Date.ParseString("17 MAR 1991");
+            evt.Date.ParseString("17 MAR 1991"); // birth of i2
             evt.Place.StringValue = "Ivanovo";
 
             iRec.AddAssociation("spouse", iRec2);
@@ -110,6 +110,7 @@ namespace GKTests
             famRec.AddSpouse(iRec);
             famRec.AddSpouse(iRec2);
             famRec.AddChild(iRec3);
+            // diff of spouses' ages < 3 monthes
 
             context.CreateEventEx(famRec, GEDCOMTagName.MARR, "01 JAN 2000", "unknown");
 
