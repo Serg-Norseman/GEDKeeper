@@ -128,9 +128,6 @@ namespace GKCore
                 globalOptions.AutosaveInterval = 10;
                 Assert.AreEqual(10, globalOptions.AutosaveInterval);
 
-                globalOptions.ExtendedNames = true;
-                Assert.AreEqual(true, globalOptions.ExtendedNames);
-
                 globalOptions.UseExtendedNotes = true;
                 Assert.AreEqual(true, globalOptions.UseExtendedNotes);
                 globalOptions.UseExtendedNotes = false;

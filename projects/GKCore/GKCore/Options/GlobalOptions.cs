@@ -71,7 +71,6 @@ namespace GKCore.Options
         private int fFileBackupEachRevisionMaxCount;
         private bool fAutosave;
         private int fAutosaveInterval;
-        private bool fExtendedNames;
         private WomanSurnameFormat fWomanSurnameFormat;
         private readonly CircleChartOptions fCircleChartOptions;
         private string fGeocoder;
@@ -223,14 +222,6 @@ namespace GKCore.Options
         public StringList EventFilters
         {
             get { return fEventFilters; }
-        }
-
-        // TODO: Need to make a decision on additional types of names:
-        // religious and according to the census (see GDMPersonalNamePieces)
-        public bool ExtendedNames
-        {
-            get { return fExtendedNames; }
-            set { fExtendedNames = value; }
         }
 
         public StringList FARPatterns
@@ -785,7 +776,6 @@ namespace GKCore.Options
             fAutosave = ini.ReadBool("Common", "Autosave", false);
             fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
 
-            fExtendedNames = ini.ReadBool("Common", "ExtendedNames", false);
             fWomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
 
             fGeocoder = ini.ReadString("Common", "Geocoder", "Google");
@@ -906,7 +896,6 @@ namespace GKCore.Options
             ini.WriteBool("Common", "Autosave", fAutosave);
             ini.WriteInteger("Common", "AutosaveInterval", fAutosaveInterval);
 
-            ini.WriteBool("Common", "ExtendedNames", fExtendedNames);
             ini.WriteInteger("Common", "WomanSurnameFormat", (int)fWomanSurnameFormat);
 
             ini.WriteString("Common", "Geocoder", fGeocoder);

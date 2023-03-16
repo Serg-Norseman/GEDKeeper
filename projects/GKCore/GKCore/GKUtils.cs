@@ -3291,7 +3291,6 @@ namespace GKCore
             return result;
         }
 
-        // TODO: what if you want to display only a surname that is missing?
         public static string GetFmtSurname(GDMSex iSex, GDMPersonalName personalName, string defSurname)
         {
             if (personalName == null)
@@ -3320,11 +3319,11 @@ namespace GKCore
                         break;
 
                     case WomanSurnameFormat.wsfMaiden:
-                        result = defSurname; // by default GEDCOMPersonalName.Surname is maiden surname
+                        result = !string.IsNullOrEmpty(defSurname) ? defSurname : marriedSurname; // by default GEDCOMPersonalName.Surname is maiden surname
                         break;
 
                     case WomanSurnameFormat.wsfMarried:
-                        result = marriedSurname;
+                        result = !string.IsNullOrEmpty(marriedSurname) ? marriedSurname : defSurname;
                         break;
 
                     default:
