@@ -138,6 +138,12 @@ namespace GKUI.Forms
             UpdateControls();
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            fController.OnClosed();
+            base.OnClosed(e);
+        }
+
         protected override IPrintable GetPrintable()
         {
             return fTreeBox;

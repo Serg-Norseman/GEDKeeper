@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using BSLib;
 using GDModel;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Interfaces
@@ -51,6 +52,7 @@ namespace GKCore.Interfaces
         void WidgetClose(IWidget widget);
 
         void EnableWindow(IWidgetForm form, bool value);
+        MRUFile GetMRUFile(IBaseWindow baseWin);
         bool ShowModalX(ICommonDialog form, bool keepModeless = false);
         void ShowWindow(IWindow window);
 

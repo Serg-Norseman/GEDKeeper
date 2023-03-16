@@ -43,6 +43,15 @@ namespace GKCore.Controllers
         {
         }
 
+        public void OnClosed()
+        {
+            var mruFile = AppHost.Instance.GetMRUFile(fBase);
+            var root = fView.TreeBox.Model.Root;
+            if (mruFile != null && root != null && root.Rec != null) {
+                mruFile.LastTreeRecord = root.Rec.XRef;
+            }
+        }
+
         public void UpdateTitle()
         {
             string kindName = "";

@@ -235,15 +235,20 @@ namespace GKCore
 
         public abstract void EnableWindow(IWidgetForm form, bool value);
 
+        public MRUFile GetMRUFile(IBaseWindow baseWin)
+        {
+            if (baseWin == null) return null;
+
+            int idx = Options.MRUFiles_IndexOf(baseWin.Context.FileName);
+            if (idx < 0) return null;
+
+            return Options.MRUFiles[idx];
+        }
+
         public void SaveWinMRU(IBaseWindow baseWin)
         {
-            if (baseWin != null) {
-                int idx = Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-                if (idx >= 0) {
-                    MRUFile mf = Options.MRUFiles[idx];
-                    SaveWinState(baseWin, mf);
-                }
-            }
+            var mf = GetMRUFile(baseWin);
+            if (mf != null) SaveWinState(baseWin, mf);
         }
 
         public abstract void SaveWinState(IBaseWindow baseWin, MRUFile mf);
@@ -252,13 +257,8 @@ namespace GKCore
 
         public void RestoreWinMRU(IBaseWindow baseWin)
         {
-            if (baseWin != null) {
-                int idx = AppHost.Options.MRUFiles_IndexOf(baseWin.Context.FileName);
-                if (idx >= 0) {
-                    MRUFile mf = AppHost.Options.MRUFiles[idx];
-                    RestoreWinState(baseWin, mf);
-                }
-            }
+            var mf = GetMRUFile(baseWin);
+            if (mf != null) RestoreWinState(baseWin, mf);
         }
 
         protected void UpdateLang()

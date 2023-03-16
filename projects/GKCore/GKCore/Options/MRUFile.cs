@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,6 +38,7 @@ namespace GKCore.Options
         public string FileName;
         public ExtRect WinRect;
         public WindowState WinState;
+        public string LastTreeRecord;
 
         public MRUFile()
         {
@@ -59,6 +60,7 @@ namespace GKCore.Options
             WinRect.Right = iniFile.ReadInteger(section, "WinR", 778);
             WinRect.Bottom = iniFile.ReadInteger(section, "WinB", 312);
             WinState = (WindowState)((uint)iniFile.ReadInteger(section, "WinState", 0));
+            LastTreeRecord = iniFile.ReadString(section, "LastTreeRecord", "");
         }
 
         public void SaveToFile(IniFile iniFile, string section)
@@ -72,6 +74,7 @@ namespace GKCore.Options
             iniFile.WriteInteger(section, "WinR", WinRect.Right);
             iniFile.WriteInteger(section, "WinB", WinRect.Bottom);
             iniFile.WriteInteger(section, "WinState", (int)WinState);
+            iniFile.WriteString(section, "LastTreeRecord", LastTreeRecord);
         }
 
         public static void DeleteKeys(IniFile iniFile, string section)
@@ -85,6 +88,7 @@ namespace GKCore.Options
             iniFile.DeleteKey(section, "WinR");
             iniFile.DeleteKey(section, "WinB");
             iniFile.DeleteKey(section, "WinState");
+            iniFile.DeleteKey(section, "LastTreeRecord");
         }
     }
 }

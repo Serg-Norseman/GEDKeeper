@@ -1075,6 +1075,15 @@ namespace GKCore.Controllers
 
         public static void ShowTreeChart(IBaseWindow baseWin, GDMIndividualRecord selPerson, TreeChartKind chartKind)
         {
+            if (baseWin == null) return;
+
+            if (selPerson == null) {
+                var mruFile = AppHost.Instance.GetMRUFile(baseWin);
+                if (mruFile != null) {
+                    selPerson = baseWin.Context.Tree.FindXRef<GDMIndividualRecord>(mruFile.LastTreeRecord);
+                }
+            }
+
             if (selPerson == null) return;
 
             if (DetectCycle(baseWin.Context.Tree, selPerson)) return;
