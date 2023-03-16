@@ -21,11 +21,11 @@
 using System;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Design;
-using GKCore.Design.Views;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -166,10 +166,25 @@ namespace GKCore.Controllers
         {
             if (fTempLocation != null) {
                 fView.Place.Text = fTempLocation.LocationName;
-                fView.SetLocationMode(true);
+                SetLocationMode(true);
             } else {
                 fView.Place.Text = fEvent.Place.StringValue;
-                fView.SetLocationMode(false);
+                SetLocationMode(false);
+            }
+        }
+
+        private void SetLocationMode(bool active)
+        {
+            if (active) {
+                fView.Place.ReadOnly = true;
+                //txtEventPlace.BackColor = SystemColors.Control;
+                GetControl<IButton>("btnPlaceAdd").Enabled = false;
+                GetControl<IButton>("btnPlaceDelete").Enabled = true;
+            } else {
+                fView.Place.ReadOnly = false;
+                //txtEventPlace.BackColor = SystemColors.Window;
+                GetControl<IButton>("btnPlaceAdd").Enabled = true;
+                GetControl<IButton>("btnPlaceDelete").Enabled = false;
             }
         }
 

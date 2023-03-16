@@ -23,8 +23,8 @@ using System.Collections;
 using System.Collections.Generic;
 using BSLib;
 using Eto.Forms;
-using GKCore.Design.Graphics;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 using GKUI.Components;
 
 namespace GKUI.Platform.Handlers
@@ -40,7 +40,7 @@ namespace GKUI.Platform.Handlers
             get { return Control.Enabled; }
             set {
                 Control.Enabled = value;
-                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+                SetAccessible(!Control.ReadOnly && Enabled);
             }
         }
 
@@ -52,7 +52,10 @@ namespace GKUI.Platform.Handlers
         public bool ReadOnly
         {
             get { return Control.ReadOnly; }
-            set { Control.ReadOnly = value; }
+            set {
+                Control.ReadOnly = value;
+                SetAccessible(!Control.ReadOnly && Enabled);
+            }
         }
 
         public int SelectedIndex

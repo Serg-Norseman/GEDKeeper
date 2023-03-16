@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using GDModel;
 using GKCore.Controllers;
@@ -114,21 +113,6 @@ namespace GKUI.Forms
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        public void SetLocationMode(bool active)
-        {
-            if (active) {
-                txtEventPlace.ReadOnly = true;
-                txtEventPlace.BackColor = SystemColors.Control;
-                btnPlaceAdd.Enabled = false;
-                btnPlaceDelete.Enabled = true;
-            } else {
-                txtEventPlace.ReadOnly = false;
-                txtEventPlace.BackColor = SystemColors.Window;
-                btnPlaceAdd.Enabled = true;
-                btnPlaceDelete.Enabled = false;
-            }
         }
 
         private void btnAddress_Click(object sender, EventArgs e)

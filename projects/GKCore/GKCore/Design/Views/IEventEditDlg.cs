@@ -42,7 +42,5 @@ namespace GKCore.Design.Views
         ISheetList NotesList { get; }
         ISheetList MediaList { get; }
         ISheetList SourcesList { get; }
-
-        void SetLocationMode(bool active);
     }
 }

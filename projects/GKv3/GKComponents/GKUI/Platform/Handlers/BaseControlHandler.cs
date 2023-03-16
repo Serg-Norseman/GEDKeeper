@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Eto.Drawing;
 using Eto.Forms;
 using GKCore.Design;
 
@@ -40,6 +41,15 @@ namespace GKUI.Platform.Handlers
         public void Activate()
         {
             Control.Focus();
+        }
+
+        protected void SetAccessible(bool value)
+        {
+#if OS_LINUX
+            Control.BackgroundColor = value ? SystemColors.ControlBackground : SystemColors.WindowBackground;
+#else
+            Control.BackgroundColor = value ? SystemColors.WindowBackground : SystemColors.Control; // win ok, mac ?
+#endif
         }
     }
 }

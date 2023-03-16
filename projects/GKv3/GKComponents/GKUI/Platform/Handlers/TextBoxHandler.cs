@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Eto.Drawing;
 using Eto.Forms;
 using GKCore.Design.Controls;
 using GKUI.Components;
@@ -36,7 +35,7 @@ namespace GKUI.Platform.Handlers
             get { return Control.Enabled; }
             set {
                 Control.Enabled = value;
-                SetBackColor();
+                SetAccessible(!Control.ReadOnly && Enabled);
             }
         }
 
@@ -51,7 +50,7 @@ namespace GKUI.Platform.Handlers
             get { return Control.ReadOnly; }
             set {
                 Control.ReadOnly = value;
-                SetBackColor();
+                SetAccessible(!Control.ReadOnly && Enabled);
             }
         }
 
@@ -75,11 +74,6 @@ namespace GKUI.Platform.Handlers
         public void Clear()
         {
             Control.Text = string.Empty;
-        }
-
-        private void SetBackColor()
-        {
-            Control.BackgroundColor = !Control.ReadOnly && Enabled ? SystemColors.WindowBackground : SystemColors.Control;
         }
 
         public void Copy()

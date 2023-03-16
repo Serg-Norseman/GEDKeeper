@@ -19,7 +19,6 @@
  */
 
 using System;
-using Eto.Drawing;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
@@ -135,21 +134,6 @@ namespace GKUI.Forms
 
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        public void SetLocationMode(bool active)
-        {
-            if (active) {
-                txtEventPlace.ReadOnly = true;
-                txtEventPlace.BackgroundColor = SystemColors.Control;
-                btnPlaceAdd.Enabled = false;
-                btnPlaceDelete.Enabled = true;
-            } else {
-                txtEventPlace.ReadOnly = false;
-                txtEventPlace.BackgroundColor = SystemColors.WindowBackground;
-                btnPlaceAdd.Enabled = true;
-                btnPlaceDelete.Enabled = false;
-            }
         }
 
         private void btnAddress_Click(object sender, EventArgs e)

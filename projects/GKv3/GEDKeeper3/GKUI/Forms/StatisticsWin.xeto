@@ -7,7 +7,7 @@
   <TableLayout>
     <TableRow>
       <GroupBox x:Name="grpSummary">
-        <comcom:GKListView x:Name="lvSummary" />
+        <comcom:GKListView x:Name="lvSummary" Height="280" />
       </GroupBox>
     </TableRow>
 
