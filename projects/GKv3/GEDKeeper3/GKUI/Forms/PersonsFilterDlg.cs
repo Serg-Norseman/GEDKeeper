@@ -178,6 +178,9 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            UIHelper.FixRadioButtons(this, rgSex);
+            UIHelper.FixRadioButtons(this, rgLife);
+
             txtAliveBeforeDate.Provider = new FixedMaskedTextProvider("00/00/0000");
         }
 

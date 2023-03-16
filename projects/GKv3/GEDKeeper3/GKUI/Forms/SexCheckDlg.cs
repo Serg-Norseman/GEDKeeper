@@ -24,6 +24,7 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Design.Views;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -47,11 +48,14 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            UIHelper.FixRadioButtons(this, grpSex);
+
             // SetLocale()
             btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             Title = LangMan.LS(LSID.LSID_WinCheckSex);
             grpSex.Text = LangMan.LS(LSID.LSID_Sex);
+            rbNone.Text = "?";
             rbMale.Text = LangMan.LS(LSID.LSID_SexM);
             rbFemale.Text = LangMan.LS(LSID.LSID_SexF);
         }

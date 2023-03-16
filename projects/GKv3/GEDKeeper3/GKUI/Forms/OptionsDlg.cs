@@ -203,6 +203,12 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            UIHelper.FixRadioButtons(this, grpFileBackup);
+            UIHelper.FixRadioButtons(this, rgFNPFormat);
+            UIHelper.FixRadioButtons(this, grpDateFormat);
+            UIHelper.FixRadioButtons(this, grpAdvancedNames);
+            UIHelper.FixRadioButtons(this, grpPedigreeFormat);
+
             fController = new OptionsDlgController(this);
 
             lstPersonColumns.Sorting = false;
@@ -323,7 +329,10 @@ namespace GKUI.Forms
 
         private void rgFNPFormat_CheckedChanged(object sender, EventArgs e)
         {
-            fController.ChangeFNPFormat();
+            // prevent triggering on incomplete initialization
+            if (fController != null) {
+                fController.ChangeFNPFormat();
+            }
         }
 
         public override bool SkipTheme(IDisposable component)

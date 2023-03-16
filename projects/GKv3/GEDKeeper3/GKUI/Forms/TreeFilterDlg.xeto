@@ -13,11 +13,11 @@
           <GroupBox x:Name="rgBranchCut">
             <TableLayout Style="paddedTable">
               <TableRow>
-                <comcom:RadioButtonEx x:Name="rbCutNone" GroupIndex="1" Checked="True" CheckedChanged="rbCutX_CheckedChanged" />
+                <RadioButton x:Name="rbCutNone" Checked="True" CheckedChanged="rbCutX_CheckedChanged" />
               </TableRow>
 
               <TableRow>
-                <comcom:RadioButtonEx x:Name="rbCutYears" GroupIndex="1" CheckedChanged="rbCutX_CheckedChanged" />
+                <RadioButton x:Name="rbCutYears" CheckedChanged="rbCutX_CheckedChanged" />
               </TableRow>
 
               <TableRow>
@@ -31,7 +31,7 @@
               </TableRow>
 
               <TableRow>
-                <comcom:RadioButtonEx x:Name="rbCutPersons" GroupIndex="1" CheckedChanged="rbCutX_CheckedChanged" />
+                <RadioButton x:Name="rbCutPersons" CheckedChanged="rbCutX_CheckedChanged" />
               </TableRow>
 
               <TableRow ScaleHeight="True">

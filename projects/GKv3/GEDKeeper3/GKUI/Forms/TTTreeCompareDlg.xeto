@@ -15,12 +15,12 @@
               <GroupBox x:Name="grpMatchType">
                 <TableLayout Spacing="4, 4">
                   <TableRow>
-                    <comcom:RadioButtonEx GroupIndex="1" x:Name="radMatchInternal" Checked="True" CheckedChanged="rbtnMatch_CheckedChanged" />
+                    <RadioButton x:Name="radMatchInternal" Checked="True" CheckedChanged="rbtnMatch_CheckedChanged" />
                   </TableRow>
 
                   <TableRow ScaleHeight="True">
                     <StackLayout Spacing="4">
-                      <comcom:RadioButtonEx GroupIndex="1" x:Name="radMathExternal" CheckedChanged="rbtnMatch_CheckedChanged" />
+                      <RadioButton x:Name="radMathExternal" CheckedChanged="rbtnMatch_CheckedChanged" />
                       <StackLayout Spacing="4" Orientation="Horizontal">
                         <Label x:Name="lblFile" />
                         <TextBox x:Name="txtCompareFile" Enabled="False" ReadOnly="True" Width="500" />
@@ -32,7 +32,7 @@
 
                   <TableRow>
                     <StackLayout Spacing="4" Orientation="Horizontal">
-                      <comcom:RadioButtonEx GroupIndex="1" x:Name="radAnalysis" CheckedChanged="rbtnMatch_CheckedChanged" />
+                      <RadioButton x:Name="radAnalysis" CheckedChanged="rbtnMatch_CheckedChanged" />
                       <StackLayoutItem Expand="True" />
                       <Button x:Name="btnMatch" Style="dlgBtn" Click="btnMatch_Click" />
                     </StackLayout>

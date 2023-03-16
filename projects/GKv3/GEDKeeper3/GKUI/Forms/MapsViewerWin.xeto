@@ -33,11 +33,11 @@
             <TableRow>
               <GroupBox x:Name="grpSelection">
                 <StackLayout Style="vertListStack">
-                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radTotal" CheckedChanged="radTotal_Click" />
+                  <RadioButton x:Name="radTotal" CheckedChanged="radTotal_Click" />
                   <CheckBox x:Name="chkBirth" />
                   <CheckBox x:Name="chkDeath" />
                   <CheckBox x:Name="chkResidence" />
-                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radSelected" CheckedChanged="radTotal_Click" />
+                  <RadioButton x:Name="radSelected" CheckedChanged="radTotal_Click" />
                   <ComboBox x:Name="cmbPersons" ReadOnly="True" />
                   <CheckBox x:Name="chkLinesVisible" Checked="True" />
                   <Button x:Name="btnSelectPlaces" Enabled="False" Click="btnSelectPlaces_Click" />

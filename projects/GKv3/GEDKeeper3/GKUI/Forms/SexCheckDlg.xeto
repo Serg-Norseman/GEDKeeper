@@ -13,9 +13,9 @@
     <TableRow ScaleHeight="True">
       <GroupBox x:Name="grpSex">
         <StackLayout Style="vertListStack">
-          <comcom:RadioButtonEx x:Name="rbNone" GroupIndex="1" Text="?" />
-          <comcom:RadioButtonEx x:Name="rbMale" GroupIndex="1" />
-          <comcom:RadioButtonEx x:Name="rbFemale" GroupIndex="1" />
+          <RadioButton x:Name="rbNone" />
+          <RadioButton x:Name="rbMale" />
+          <RadioButton x:Name="rbFemale" />
         </StackLayout>
       </GroupBox>
     </TableRow>
@@ -23,12 +23,8 @@
     <TableRow>
       <StackLayout Spacing="8" Orientation="Horizontal">
         <StackLayoutItem Expand="True" />
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
-        </StackLayoutItem>
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
-        </StackLayoutItem>
+        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
       </StackLayout>
     </TableRow>
 

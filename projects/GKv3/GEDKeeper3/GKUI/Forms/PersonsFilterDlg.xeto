@@ -9,7 +9,7 @@
     <TableRow ScaleHeight="True">
       <TabControl x:Name="tabsFilters" Size="800, 560">
         <TabPage x:Name="pageFieldsFilter">
-          <gkcom:FilterGridView x:Name="filterView" Height="260" />
+          <comcom:FilterGridView x:Name="filterView" Height="260" />
         </TabPage>
 
         <TabPage x:Name="pageSpecificFilter">
@@ -17,18 +17,18 @@
             <TableRow>
               <GroupBox x:Name="rgSex">
                 <StackLayout Style="vertListStack">
-                  <comcom:RadioButtonEx GroupIndex="1" x:Name="rbSexAll" />
-                  <comcom:RadioButtonEx GroupIndex="1" x:Name="rbSexMale" />
-                  <comcom:RadioButtonEx GroupIndex="1" x:Name="rbSexFemale" />
+                  <RadioButton x:Name="rbSexAll" />
+                  <RadioButton x:Name="rbSexMale" />
+                  <RadioButton x:Name="rbSexFemale" />
                 </StackLayout>
               </GroupBox>
 
               <GroupBox x:Name="rgLife">
                 <StackLayout Style="vertListStack">
-                  <comcom:RadioButtonEx GroupIndex="2" x:Name="rbAll" CheckedChanged="rgLife_CheckedChanged" />
-                  <comcom:RadioButtonEx GroupIndex="2" x:Name="rbOnlyLive" CheckedChanged="rgLife_CheckedChanged" />
-                  <comcom:RadioButtonEx GroupIndex="2" x:Name="rbOnlyDead" CheckedChanged="rgLife_CheckedChanged" />
-                  <comcom:RadioButtonEx GroupIndex="2" x:Name="rbAliveBefore" CheckedChanged="rgLife_CheckedChanged" />
+                  <RadioButton x:Name="rbAll" CheckedChanged="rgLife_CheckedChanged" />
+                  <RadioButton x:Name="rbOnlyLive" CheckedChanged="rgLife_CheckedChanged" />
+                  <RadioButton x:Name="rbOnlyDead" CheckedChanged="rgLife_CheckedChanged" />
+                  <RadioButton x:Name="rbAliveBefore" CheckedChanged="rgLife_CheckedChanged" />
                   <StackLayout Orientation="Horizontal" Spacing="4">
                     <Label x:Name="lblAliveBefore" />
                     <MaskedTextBox x:Name="txtAliveBeforeDate" Enabled="False" />

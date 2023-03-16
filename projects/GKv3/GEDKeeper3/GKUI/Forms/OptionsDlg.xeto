@@ -95,9 +95,9 @@
 
                   <GroupBox x:Name="grpFileBackup">
                     <StackLayout Style="vertListStack">
-                      <comcom:RadioButtonEx GroupIndex="1" x:Name="radFBNone" />
-                      <comcom:RadioButtonEx GroupIndex="1" x:Name="radFBOnlyPrev" />
-                      <comcom:RadioButtonEx GroupIndex="1" x:Name="radFBEachRevision" />
+                      <RadioButton x:Name="radFBNone" />
+                      <RadioButton x:Name="radFBOnlyPrev" />
+                      <RadioButton x:Name="radFBEachRevision" />
                     </StackLayout>
                   </GroupBox>
 
@@ -336,9 +336,9 @@
                   <GroupBox x:Name="rgFNPFormat">
                     <StackLayout Style="vertListStack">
 
-                      <comcom:RadioButtonEx GroupIndex="2" x:Name="radS_N_P" CheckedChanged="rgFNPFormat_CheckedChanged" />
-                      <comcom:RadioButtonEx GroupIndex="2" x:Name="radS_NP" CheckedChanged="rgFNPFormat_CheckedChanged" />
-                      <comcom:RadioButtonEx GroupIndex="2" x:Name="radSNP" CheckedChanged="rgFNPFormat_CheckedChanged" />
+                      <RadioButton x:Name="radS_N_P" CheckedChanged="rgFNPFormat_CheckedChanged" />
+                      <RadioButton x:Name="radS_NP" CheckedChanged="rgFNPFormat_CheckedChanged" />
+                      <RadioButton x:Name="radSNP" CheckedChanged="rgFNPFormat_CheckedChanged" />
                       <StackLayoutItem />
                       <CheckBox x:Name="chkSurnameFirstInOrder" />
 
@@ -348,8 +348,8 @@
                   <GroupBox x:Name="grpDateFormat">
                     <StackLayout Style="vertListStack">
 
-                      <comcom:RadioButtonEx GroupIndex="3" x:Name="radDMY">DD.MM.YYYY</comcom:RadioButtonEx>
-                      <comcom:RadioButtonEx GroupIndex="3" x:Name="radYMD">YYYY.MM.DD</comcom:RadioButtonEx>
+                      <RadioButton x:Name="radDMY">DD.MM.YYYY</RadioButton>
+                      <RadioButton x:Name="radYMD">YYYY.MM.DD</RadioButton>
                       <StackLayoutItem />
                       <CheckBox x:Name="chkShowDatesSigns" />
                       <CheckBox x:Name="chkShowDatesCalendar" />
@@ -366,10 +366,10 @@
 
                       <CheckBox x:Name="chkExtendWomanSurnames" CheckedChanged="chkExtendWomanSurnames_CheckedChanged" />
                       <StackLayoutItem />
-                      <comcom:RadioButtonEx GroupIndex="4" x:Name="radMaiden_Married" />
-                      <comcom:RadioButtonEx GroupIndex="4" x:Name="radMarried_Maiden" />
-                      <comcom:RadioButtonEx GroupIndex="4" x:Name="radMaiden" />
-                      <comcom:RadioButtonEx GroupIndex="4" x:Name="radMarried" />
+                      <RadioButton x:Name="radMaiden_Married" />
+                      <RadioButton x:Name="radMarried_Maiden" />
+                      <RadioButton x:Name="radMaiden" />
+                      <RadioButton x:Name="radMarried" />
 
                     </StackLayout>
                   </GroupBox>
@@ -433,8 +433,8 @@
             <StackLayout Style="vertListStack">
               <GroupBox x:Name="grpPedigreeFormat">
                 <StackLayout Style="vertListStack">
-                  <comcom:RadioButtonEx GroupIndex="5" x:Name="radExcess" />
-                  <comcom:RadioButtonEx GroupIndex="5" x:Name="radCompact" />
+                  <RadioButton x:Name="radExcess" />
+                  <RadioButton x:Name="radCompact" />
                 </StackLayout>
               </GroupBox>
 

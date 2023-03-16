@@ -399,7 +399,6 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
-            ControlsManager.RegisterHandlerType(typeof(RadioButtonEx), typeof(RadioButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(TextBox), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(PasswordBox), typeof(PasswordBoxHandler));

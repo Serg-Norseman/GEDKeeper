@@ -117,13 +117,18 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            UIHelper.FixRadioButtons(this, rgMode);
+
             fController = new RecMergeController(this);
             fController.Init(baseWin);
         }
 
         private void radMergeMode_Click(object sender, EventArgs e)
         {
-            fController.ChangeOption();
+            // prevent triggering on incomplete initialization
+            if (fController != null) {
+                fController.ChangeOption();
+            }
         }
 
         private void chkBookmarkMerged_CheckedChanged(object sender, EventArgs e)

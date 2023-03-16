@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:gkcom="clr-namespace:GKUI.Components"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents" xmlns:gkcom="clr-namespace:GKUI.Components"
   x:Class="GKUI.Forms.CommonFilterDlg"
   DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
 
@@ -9,7 +9,7 @@
     <TableRow ScaleHeight="True">
       <TabControl x:Name="tabsFilters" Size="800, 560">
         <TabPage x:Name="pageFieldsFilter">
-          <gkcom:FilterGridView x:Name="filterView" Height="260" />
+          <comcom:FilterGridView x:Name="filterView" Height="260" />
         </TabPage>
 
         <TabPage x:Name="pageSpecificFilter" Visible="False">

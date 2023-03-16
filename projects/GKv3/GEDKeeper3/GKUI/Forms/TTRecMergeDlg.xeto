@@ -79,10 +79,10 @@
             <TableRow>
               <GroupBox x:Name="rgMode">
                 <StackLayout Style="vertListStack">
-                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radPersons" Checked="true" CheckedChanged="radMergeMode_Click" />
-                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radFamilies" CheckedChanged="radMergeMode_Click" />
-                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radNotes" CheckedChanged="radMergeMode_Click" />
-                  <comcom:RadioButtonEx GroupIndex="1" x:Name="radSources" CheckedChanged="radMergeMode_Click" />
+                  <RadioButton x:Name="radPersons" Checked="true" CheckedChanged="radMergeMode_Click" />
+                  <RadioButton x:Name="radFamilies" CheckedChanged="radMergeMode_Click" />
+                  <RadioButton x:Name="radNotes" CheckedChanged="radMergeMode_Click" />
+                  <RadioButton x:Name="radSources" CheckedChanged="radMergeMode_Click" />
                 </StackLayout>
               </GroupBox>
 

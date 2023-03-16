@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Reflection;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -360,6 +361,102 @@ namespace GKUI.Components
             path.AddLine(mp2, mp3);
             path.AddLine(mp3, mp1);
             gfx.FillPath(fillColor, path);
+        }
+
+        public static void FixRadioButtons(Control instance, Control control)
+        {
+            if (control == null) return;
+
+            control.SuspendLayout();
+            RadioButton controller = null;
+            FixRadioButtonsInt(instance, control, ref controller);
+            control.ResumeLayout();
+        }
+
+        private static void FixRadioButtonsInt(Control instance, Control control, ref RadioButton controller)
+        {
+            if (control is StackLayout) {
+                var stackLayout = (StackLayout)control;
+
+                foreach (var item in stackLayout.Items) {
+                    var radBtn = item.Control as RadioButton;
+                    if (radBtn != null) {
+                        item.Control = ReplaceRadioButton(instance, radBtn, ref controller);
+                    } else {
+                        FixRadioButtonsInt(instance, item.Control, ref controller);
+                    }
+                }
+            } else if (control is TableLayout) {
+                var tableLayout = (TableLayout)control;
+
+                foreach (var row in tableLayout.Rows) {
+                    foreach (var cell in row.Cells) {
+                        var radBtn = cell.Control as RadioButton;
+                        if (radBtn != null) {
+                            cell.Control = ReplaceRadioButton(instance, radBtn, ref controller);
+                        } else {
+                            FixRadioButtonsInt(instance, cell.Control, ref controller);
+                        }
+                    }
+                }
+            } else if (control is Panel) {
+                var panel = (Panel)control;
+                FixRadioButtonsInt(instance, panel.Content, ref controller);
+            }
+        }
+
+        private static RadioButton ReplaceRadioButton(Control instance, RadioButton oldRadBtn, ref RadioButton controller)
+        {
+            var id = oldRadBtn.ID;
+            var checkedVal = oldRadBtn.Checked;
+            var textVal = oldRadBtn.Text;
+
+            var newRadBtn = new RadioButton(controller);
+
+            MoveEvents(oldRadBtn, newRadBtn, "CheckedChanged");
+
+            oldRadBtn.Dispose();
+
+            newRadBtn.ID = id;
+            newRadBtn.Checked = checkedVal;
+            newRadBtn.Text = textVal;
+            SetField(instance, id, newRadBtn);
+
+            if (controller == null) {
+                controller = newRadBtn;
+            }
+
+            return newRadBtn;
+        }
+
+        private static void MoveEvents(RadioButton source, RadioButton target, string eventName)
+        {
+            var fieldInfo = source.GetType().GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField);
+            if (fieldInfo == null) return;
+
+            MulticastDelegate eventDelegate = (MulticastDelegate)fieldInfo.GetValue(source);
+            if (eventDelegate == null) return;
+
+            foreach (var handler in eventDelegate.GetInvocationList()) {
+                target.GetType().GetEvent(eventName).AddEventHandler(target, handler);
+            }
+        }
+
+        private static void SetField(object instance, string name, object value)
+        {
+            if (instance == null)
+                return;
+
+            var instanceType = instance.GetType();
+
+            var property = instanceType.GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (property != null) {
+                property.SetValue(instance, value);
+            } else {
+                var field = instanceType.GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+                if (field != null)
+                    field.SetValue(instance, value);
+            }
         }
     }
 }

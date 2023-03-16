@@ -25,6 +25,7 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -66,6 +67,8 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            UIHelper.FixRadioButtons(this, grpMatchType);
+
             fController = new TreeCompareController(this);
             fController.Init(baseWin);
         }
@@ -82,7 +85,10 @@ namespace GKUI.Forms
 
         private void rbtnMatch_CheckedChanged(object sender, EventArgs e)
         {
-            fController.ChangeTreeMatchType();
+            // prevent triggering on incomplete initialization
+            if (fController != null) {
+                fController.ChangeTreeMatchType();
+            }
         }
     }
 }

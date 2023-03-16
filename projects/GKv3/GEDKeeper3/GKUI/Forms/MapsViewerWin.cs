@@ -177,6 +177,8 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            UIHelper.FixRadioButtons(this, grpSelection);
+
             PopulateContextMenus();
 
             radTotal.Checked = true;

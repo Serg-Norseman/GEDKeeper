@@ -80,6 +80,8 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            UIHelper.FixRadioButtons(this, rgBranchCut);
+
             fController = new TreeFilterDlgController(this);
             fController.Init(baseWin);
         }
@@ -93,7 +95,10 @@ namespace GKUI.Forms
 
         private void rbCutX_CheckedChanged(object sender, EventArgs e)
         {
-            fController.ChangeCutMode();
+            // prevent triggering on incomplete initialization
+            if (fController != null) {
+                fController.ChangeCutMode();
+            }
         }
 
         private void TreeFilterDlg_Load(object sender, EventArgs e)
