@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  x:Class="GKTimeLinePlugin.TimeLineWidget"
+  Closed="TimeLineWidget_Closed" Shown="TimeLineWidget_Shown" Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+
+  <StackLayout>
+    <Slider x:Name="tbTimeLine" SnapToTick="true" TickFrequency="1" Width="520" Orientation="Horizontal" ValueChanged="tbTimeLine_ValueChanged" />
+
+    <TableLayout Padding="2" Spacing="2, 0">
+      <TableRow>
+        <TableCell>
+          <Scrollable Border="Bezel">
+            <Label x:Name="StatusBarPanel1" Width="300" />
+          </Scrollable>
+        </TableCell>
+
+        <Scrollable Border="Bezel">
+          <Label x:Name="StatusBarPanel2" />
+        </Scrollable>
+      </TableRow>
+    </TableLayout>
+  </StackLayout>
+
+</Form>

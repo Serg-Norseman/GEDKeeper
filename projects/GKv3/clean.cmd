@@ -12,9 +12,6 @@ rmdir .\GKComponents\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
-rmdir .\GKSamplePlugin\bin /s /q
-rmdir .\GKSamplePlugin\obj /s /q
-
 rmdir .\plugins\GKCalculatorPlugin\bin /s /q
 rmdir .\plugins\GKCalculatorPlugin\obj /s /q
 
@@ -36,8 +33,8 @@ rmdir .\plugins\GKPedigreeImporterPlugin\obj /s /q
 rmdir .\plugins\GKTextSearchPlugin\bin /s /q
 rmdir .\plugins\GKTextSearchPlugin\obj /s /q
 
-rmdir .\plugins\GKTimeLinePlugin\bin /s /q
-rmdir .\plugins\GKTimeLinePlugin\obj /s /q
+rmdir .\GKTimeLinePlugin\bin /s /q
+rmdir .\GKTimeLinePlugin\obj /s /q
 
 rmdir .\plugins\GKLifePlugin\bin /s /q
 rmdir .\plugins\GKLifePlugin\obj /s /q

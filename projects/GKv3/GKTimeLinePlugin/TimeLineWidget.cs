@@ -19,7 +19,8 @@
  */
 
 using System;
-using System.Windows.Forms;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
@@ -29,6 +30,16 @@ namespace GKTimeLinePlugin
 {
     public partial class TimeLineWidget : Form, IWidgetForm
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private Label StatusBarPanel1;
+        private Label StatusBarPanel2;
+        private Slider tbTimeLine;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
         private readonly Plugin fPlugin;
         private IBaseWindow fBase;
         private int fYearMin;
@@ -37,18 +48,18 @@ namespace GKTimeLinePlugin
 
         public TimeLineWidget(Plugin plugin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
             fPlugin = plugin;
             SetLocale();
         }
 
         public void SetLocale()
         {
-            Text = fPlugin.LangMan.LS(PLS.LSID_MITimeLine);
+            Title = fPlugin.LangMan.LS(PLS.LSID_MITimeLine);
             UpdateStatus();
         }
 
-        private void TimeLineWidget_Load(object sender, EventArgs e)
+        private void TimeLineWidget_Shown(object sender, EventArgs e)
         {
             AppHost.Instance.WidgetLocate(this, WidgetLocation.HLeft | WidgetLocation.VBottom);
             fPlugin.Host.WidgetShow(fPlugin);
@@ -86,8 +97,8 @@ namespace GKTimeLinePlugin
             if (cur > max) cur = max;
 
             tbTimeLine.ValueChanged -= tbTimeLine_ValueChanged;
-            tbTimeLine.Maximum = max;
-            tbTimeLine.Minimum = min;
+            tbTimeLine.MaxValue = max;
+            tbTimeLine.MinValue = min;
             tbTimeLine.Value = cur;
             tbTimeLine.ValueChanged += tbTimeLine_ValueChanged;
         }

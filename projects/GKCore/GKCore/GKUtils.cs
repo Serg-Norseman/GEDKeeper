@@ -3490,5 +3490,76 @@ namespace GKCore
         }
 
         #endregion
+
+        #region TimeLine filters support
+
+        public static void SetBaseExternalFilter(IBaseWindow baseWindow, FilterLifeMode mode, ExternalFilterHandler filterHandler)
+        {
+            if (baseWindow != null) {
+                IRecordsListModel listMan = baseWindow.GetRecordsListManByType(GDMRecordType.rtIndividual);
+                if (listMan != null) {
+                    listMan.ExternalFilter = filterHandler;
+                    ((IIndividualListFilter)listMan.Filter).FilterLifeMode = mode;
+                }
+                baseWindow.ApplyFilter(GDMRecordType.rtIndividual);
+            }
+        }
+
+        public static void CollectTimeLineData(IBaseWindow baseWindow, out int yearMin, out int yearMax)
+        {
+            yearMin = 10000;
+            yearMax = 0;
+
+            if (baseWindow == null) return;
+
+            var tree = baseWindow.Context.Tree;
+            int num = tree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                GDMRecord rec = tree[i];
+                if (rec.RecordType != GDMRecordType.rtIndividual) continue;
+
+                GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
+                if (!iRec.HasEvents) continue;
+
+                for (int k = 0, evNum = iRec.Events.Count; k < evNum; k++) {
+                    GDMCustomEvent ev = iRec.Events[k];
+                    var evtType = ev.GetTagType();
+
+                    if (evtType == GEDCOMTagType.BIRT || evtType == GEDCOMTagType.DEAT) {
+                        int year = ev.GetChronologicalYear();
+                        if (year != 0) {
+                            if (yearMin > year) yearMin = year;
+                            if (yearMax < year) yearMax = year;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static bool FilterTimeLine(GDMIndividualRecord iRec, int yearCurrent)
+        {
+            bool result = true;
+            try {
+                int bdy = iRec.GetChronologicalYear(GEDCOMTagName.BIRT);
+                int ddy = iRec.GetChronologicalYear(GEDCOMTagName.DEAT);
+
+                if (bdy != 0 && ddy == 0) {
+                    ddy = bdy + GKData.PROVED_LIFE_LENGTH;
+                }
+
+                if (bdy == 0 && ddy != 0) {
+                    bdy = ddy - GKData.PROVED_LIFE_LENGTH;
+                }
+
+                if (yearCurrent > 0) {
+                    result = (yearCurrent >= bdy && yearCurrent <= ddy);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.FilterTimeLine()", ex);
+            }
+            return result;
+        }
+
+        #endregion
     }
 }
