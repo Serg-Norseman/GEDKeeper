@@ -78,7 +78,7 @@ namespace GKCore.Controllers
             int[] stats = fBase.Context.Tree.GetRecordStats();
             fView.RecordStats.ClearItems();
             for (int i = 1; i < stats.Length; i++) {
-                fView.RecordStats.AddItem(null, LangMan.LS(GKData.RecordTypes[i]), stats[i].ToString());
+                fView.RecordStats.AddItem(null, LangMan.LS(GKData.RecordTypes[i].Name), stats[i].ToString());
             }
         }
 

@@ -19,11 +19,12 @@
  */
 
 using GDModel;
+using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Design;
-using GKCore.Design.Views;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -40,7 +41,10 @@ namespace GKCore.Controllers
         public GDMRecordType RecType
         {
             get { return fRecType; }
-            set { fRecType = value; }
+            set {
+                fRecType = value;
+                UpdateFilters();
+            }
         }
 
         public Target Target
@@ -52,6 +56,16 @@ namespace GKCore.Controllers
         public RecordSelectDlgController(IRecordSelectDialog view) : base(view)
         {
             fTarget = new Target();
+        }
+
+        private void UpdateFilters()
+        {
+            var filters = GlobalOptions.Instance.GetRSFilters(fRecType);
+            filters.Sort();
+
+            fView.FilterBox.Clear();
+            fView.FilterBox.Add("*");
+            fView.FilterBox.AddStrings(filters);
         }
 
         public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)
@@ -80,6 +94,9 @@ namespace GKCore.Controllers
             if (string.IsNullOrEmpty(flt)) {
                 flt = "*";
             } else if (flt != "*") {
+                GKUtils.SaveFilter(flt, GlobalOptions.Instance.GetRSFilters(fRecType));
+                UpdateFilters();
+
                 flt = "*" + flt + "*";
             }
 
@@ -116,6 +133,8 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnCreate").Text = LangMan.LS(LSID.LSID_DlgAppend);
             GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.LSID_DlgSelect);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+
+            SetToolTip("txtFastFilter", LangMan.LS(LSID.LSID_PressEnterToApply));
         }
     }
 }

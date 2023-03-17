@@ -64,7 +64,7 @@ namespace GKCore.Controllers
 
             var cmbRecord = GetControl<IComboBox>("cmbRecord");
             for (var rt = GDMRecordType.rtIndividual; rt < GDMRecordType.rtFamily; rt++) {
-                cmbRecord.AddItem(LangMan.LS(GKData.RecordTypes[(int)rt]), rt);
+                cmbRecord.AddItem(LangMan.LS(GKData.RecordTypes[(int)rt].Name), rt);
             }
 
             var cmbProperty = GetControl<IComboBox>("cmbProperty");

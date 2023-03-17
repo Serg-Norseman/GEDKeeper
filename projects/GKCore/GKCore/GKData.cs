@@ -165,8 +165,20 @@ namespace GKCore
             }
         }
 
+        public sealed class RecordTypeStruct
+        {
+            public LSID Name;
+            public string Sign;
+
+            public RecordTypeStruct(LSID name, string sign)
+            {
+                Name = name;
+                Sign = sign;
+            }
+        }
+
         public static readonly LSID[] Restrictions;
-        public static readonly LSID[] RecordTypes;
+        public static readonly RecordTypeStruct[] RecordTypes;
         public static readonly SexStruct[] SexData;
         public static readonly MarStatusStruct[] MarriageStatus;
         public static readonly EventStruct[] PersonEvents;
@@ -464,21 +476,21 @@ namespace GKCore
                 new SexStruct(LSID.LSID_SexX, "X")
             };
 
-            RecordTypes = new LSID[] {
-                LSID.LSID_None,
-                LSID.LSID_Person,
-                LSID.LSID_Family,
-                LSID.LSID_Note,
-                LSID.LSID_RPMultimedia,
-                LSID.LSID_Source,
-                LSID.LSID_Repository,
-                LSID.LSID_Group,
-                LSID.LSID_Research,
-                LSID.LSID_Task,
-                LSID.LSID_Communication,
-                LSID.LSID_Location,
-                LSID.LSID_Submission,
-                LSID.LSID_Submitter
+            RecordTypes = new RecordTypeStruct[] {
+                new RecordTypeStruct(LSID.LSID_None, ""),
+                new RecordTypeStruct(LSID.LSID_Person, "Individual"),
+                new RecordTypeStruct(LSID.LSID_Family, "Family"),
+                new RecordTypeStruct(LSID.LSID_Note, "Note"),
+                new RecordTypeStruct(LSID.LSID_RPMultimedia, "Multimedia"),
+                new RecordTypeStruct(LSID.LSID_Source, "Source"),
+                new RecordTypeStruct(LSID.LSID_Repository, "Repository"),
+                new RecordTypeStruct(LSID.LSID_Group, "Group"),
+                new RecordTypeStruct(LSID.LSID_Research, "Research"),
+                new RecordTypeStruct(LSID.LSID_Task, "Task"),
+                new RecordTypeStruct(LSID.LSID_Communication, "Communication"),
+                new RecordTypeStruct(LSID.LSID_Location, "Location"),
+                new RecordTypeStruct(LSID.LSID_Submission, "Submission"),
+                new RecordTypeStruct(LSID.LSID_Submitter, "Submitter")
             };
 
             Restrictions = new LSID[] {

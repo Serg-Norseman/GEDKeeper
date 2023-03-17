@@ -33,7 +33,7 @@ namespace GKCore.Design.Views
         string FastFilter { get; set; }
         GDMRecord ResultRecord { get; set; }
 
-        ITextBox FilterBox { get; }
+        IComboBox FilterBox { get; }
         IListViewEx RecordsList { get; }
 
         void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex);

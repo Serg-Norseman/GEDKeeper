@@ -100,6 +100,7 @@ namespace GKCore.Options
         private bool fReversePlaceEntitiesOrder;
         private bool fShortKinshipForm;
         private bool fSurnameFirstInOrder;
+        private readonly Dictionary<GDMRecordType, StringList> fRSFilters;
 
 
         public static GlobalOptions Instance
@@ -516,6 +517,8 @@ namespace GKCore.Options
 
             SearchAndFilterByAllNames = false;
 
+            fRSFilters = new Dictionary<GDMRecordType, StringList>();
+
             Theme = string.Empty;
         }
 
@@ -534,6 +537,8 @@ namespace GKCore.Options
             }
             base.Dispose(disposing);
         }
+
+        #region Language
 
         private void LngPrepareProc(string fileName)
         {
@@ -623,6 +628,10 @@ namespace GKCore.Options
             }
         }
 
+        #endregion
+
+        #region MRU
+
         public int MRUFiles_IndexOf(string fileName)
         {
             int num = fMRUFiles.Count;
@@ -657,6 +666,10 @@ namespace GKCore.Options
                 Logger.WriteError("GlobalOptions.LoadMRUFromFile()", ex);
             }
         }
+
+        #endregion
+
+        #region Plugins
 
         public void LoadPluginsFromFile(IniFile ini)
         {
@@ -704,6 +717,10 @@ namespace GKCore.Options
             }
         }
 
+        #endregion
+
+        #region Any strings
+
         private void LoadStringList(IniFile ini, StringList list, string section, string itemPrefix = "Item_")
         {
             if (ini == null)
@@ -735,6 +752,54 @@ namespace GKCore.Options
                 Logger.WriteError("GlobalOptions.SaveStringList()", ex);
             }
         }
+
+        #endregion
+
+        #region Record Select Dialog Filters
+
+        public StringList GetRSFilters(GDMRecordType rt)
+        {
+            StringList result;
+            if (!fRSFilters.TryGetValue(rt, out result)) {
+                result = new StringList();
+                fRSFilters[rt] = result;
+            }
+            return result;
+        }
+
+        private void LoadRSFilters(IniFile ini)
+        {
+            if (ini == null)
+                throw new ArgumentNullException("ini");
+
+            try {
+                for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
+                    var sectName = GKData.RecordTypes[(int)rt].Sign + "_RSFilters";
+                    var list = GetRSFilters(rt);
+                    LoadStringList(ini, list, sectName, "Flt_");
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GlobalOptions.LoadRSFilters()", ex);
+            }
+        }
+
+        private void SaveRSFilters(IniFile ini)
+        {
+            if (ini == null)
+                throw new ArgumentNullException("ini");
+
+            try {
+                for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
+                    var sectName = GKData.RecordTypes[(int)rt].Sign + "_RSFilters";
+                    var list = GetRSFilters(rt);
+                    SaveStringList(ini, list, sectName, "Flt_");
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GlobalOptions.SaveRSFilters()", ex);
+            }
+        }
+
+        #endregion
 
         public void LoadFromFile(IniFile ini)
         {
@@ -831,6 +896,8 @@ namespace GKCore.Options
             ScriptsLastDir = ini.ReadString("Common", "ScriptsLastDir", "");
             ImageExportLastDir = ini.ReadString("Common", "ImageExportLastDir", "");
             ReportExportLastDir = ini.ReadString("Common", "ReportExportLastDir", "");
+
+            LoadRSFilters(ini);
 
             Theme = ini.ReadString("Common", "Theme", "");
 
@@ -965,6 +1032,8 @@ namespace GKCore.Options
             ini.WriteString("Common", "ScriptsLastDir", ScriptsLastDir);
             ini.WriteString("Common", "ImageExportLastDir", ImageExportLastDir);
             ini.WriteString("Common", "ReportExportLastDir", ReportExportLastDir);
+
+            SaveRSFilters(ini);
 
             ini.WriteString("Common", "Theme", Theme);
 

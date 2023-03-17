@@ -41,7 +41,7 @@ namespace GKUI.Forms
         private Button btnCreate;
         private Button btnCancel;
         private Panel panList;
-        public TextBox txtFastFilter;
+        public ComboBox txtFastFilter;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -61,9 +61,9 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        ITextBox IRecordSelectDialog.FilterBox
+        IComboBox IRecordSelectDialog.FilterBox
         {
-            get { return GetControlHandler<ITextBox>(txtFastFilter); }
+            get { return GetControlHandler<IComboBox>(txtFastFilter); }
         }
 
         IListViewEx IRecordSelectDialog.RecordsList
@@ -133,7 +133,15 @@ namespace GKUI.Forms
 
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            fController.UpdateView();
+            //fController.UpdateView();
+        }
+
+        private void txtFastFilter_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Enter) {
+                fController.UpdateView();
+                e.Handled = true;
+            }
         }
 
         public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)

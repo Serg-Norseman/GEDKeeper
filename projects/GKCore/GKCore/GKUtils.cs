@@ -161,6 +161,14 @@ namespace GKCore
             return s;
         }
 
+        public static void SaveFilter(string flt, StringList filters)
+        {
+            if (filters == null) return;
+
+            flt = flt.Trim();
+            if (flt != "" && flt != "*" && filters.IndexOf(flt) < 0) filters.Add(flt);
+        }
+
         public static StringList GetLocationLinks(GDMTree tree, GDMLocationRecord locRec)
         {
             var linksList = new StringList();
@@ -210,9 +218,8 @@ namespace GKCore
                 if (signed) {
                     GDMRecordType recordType = record.RecordType;
                     if (recordType != GDMRecordType.rtIndividual) {
-                        if (recordType == GDMRecordType.rtFamily || (byte)recordType - (byte)GDMRecordType.rtMultimedia < (byte)GDMRecordType.rtResearch)
-                        {
-                            sign = LangMan.LS(GKData.RecordTypes[(int)record.RecordType]) + ": ";
+                        if (recordType == GDMRecordType.rtFamily || (byte)recordType - (byte)GDMRecordType.rtMultimedia < (byte)GDMRecordType.rtResearch) {
+                            sign = LangMan.LS(GKData.RecordTypes[(int)record.RecordType].Name) + ": ";
                         }
                     } else {
                         sign = "";

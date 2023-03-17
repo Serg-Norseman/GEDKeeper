@@ -43,20 +43,14 @@ namespace GKCore.Controllers
             fListMan = (IndividualListModel)listMan;
         }
 
-        private static void SaveFilter(string flt, StringList filters)
-        {
-            flt = flt.Trim();
-            if (flt != "" && flt != "*" && filters.IndexOf(flt) < 0) filters.Add(flt);
-        }
-
         public override bool Accept()
         {
             try {
                 IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
 
-                SaveFilter(fView.NameCombo.Text, GlobalOptions.Instance.NameFilters);
-                SaveFilter(fView.ResidenceCombo.Text, GlobalOptions.Instance.ResidenceFilters);
-                SaveFilter(fView.EventValCombo.Text, GlobalOptions.Instance.EventFilters);
+                GKUtils.SaveFilter(fView.NameCombo.Text, GlobalOptions.Instance.NameFilters);
+                GKUtils.SaveFilter(fView.ResidenceCombo.Text, GlobalOptions.Instance.ResidenceFilters);
+                GKUtils.SaveFilter(fView.EventValCombo.Text, GlobalOptions.Instance.EventFilters);
 
                 iFilter.PatriarchOnly = fView.OnlyPatriarchsCheck.Checked;
 
