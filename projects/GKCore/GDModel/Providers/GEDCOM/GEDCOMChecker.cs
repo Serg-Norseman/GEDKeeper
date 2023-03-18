@@ -206,6 +206,8 @@ namespace GDModel.Providers.GEDCOM
             if (evt.HasPlace) {
                 CheckEventPlace(evt.Place);
             }
+
+            fBaseContext.IncrementEventStats(evt.GetTagName());
         }
 
         private void CheckUserRef(GDMRecord rec, GDMUserReference userRef)

@@ -94,6 +94,8 @@ namespace GKCore.Export
             string availableFormats = "CSV files (*.csv)|*.csv";
 #if !NETSTANDARD
             availableFormats += "|" + "Excel files (*.xls)|*.xls";
+#else
+            availableFormats += "|" + "Excel files (*.xlsx)|*.xlsx";
 #endif
 
             fileName = AppHost.StdDialogs.GetSaveFile(GlobalOptions.Instance.ReportExportLastDir, availableFormats);
@@ -104,12 +106,12 @@ namespace GKCore.Export
             TableWriter result;
 
             string ext = FileHelper.GetFileExtension(fileName);
-#if !NETSTANDARD
-            if (string.Equals(ext, ".xls")) {
+//#if !NETSTANDARD
+            if (string.Equals(ext, ".xls") || string.Equals(ext, ".xlsx")) {
                 result = new XLSWriter();
             }
             else
-#endif
+//#endif
             {
                 result = new CSVWriter();
             }

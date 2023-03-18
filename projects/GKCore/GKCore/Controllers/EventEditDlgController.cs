@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
@@ -85,14 +86,17 @@ namespace GKCore.Controllers
                 fEvent.Cause = fView.Cause.Text;
                 fEvent.Agency = fView.Agency.Text;
 
+                string tagName;
                 int eventType = fView.EventType.GetSelectedTag<int>();
                 if (fEvent is GDMFamilyEvent) {
-                    fEvent.SetName(GKData.FamilyEvents[eventType].Sign);
+                    tagName = GKData.FamilyEvents[eventType].Sign;
                 } else {
                     GKData.EventStruct eventProps = GKData.PersonEvents[eventType];
-                    fEvent.SetName(eventProps.Sign);
+                    tagName = eventProps.Sign;
                     fEvent.StringValue = (eventProps.Kind == PersonEventKind.ekFact) ? fView.Attribute.Text : string.Empty;
                 }
+                fEvent.SetName(tagName);
+                fBase.Context.IncrementEventStats(tagName);
 
                 if (fEvent is GDMIndividualEvent) {
                     if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
@@ -111,17 +115,48 @@ namespace GKCore.Controllers
             }
         }
 
+        private sealed class EventX
+        {
+            public string Name;
+            public int Index;
+            public int Stat;
+            public bool Use;
+
+            public EventX(string name, int index, int stat)
+            {
+                Name = name;
+                Index = index;
+                Stat = stat;
+                Use = (stat > 0);
+            }
+        }
+
+        public const string LineItem = " ------------------------------ ";
+
         private void SetEventTypes(GKData.EventStruct[] eventTypes)
         {
-            fView.EventType.Sorted = false;
+            var list = new List<EventX>();
+            var eventStats = fBase.Context.EventStats;
+            for (int i = 0; i < eventTypes.Length; i++) {
+                int stat;
+                if (!eventStats.TryGetValue(eventTypes[i].Sign, out stat)) {
+                    stat = 0;
+                }
+                list.Add(new EventX(LangMan.LS(eventTypes[i].Name), i, stat));
+            }
+            list.Sort((x, y) => { return (-10 * x.Use.CompareTo(y.Use)) + x.Name.CompareTo(y.Name); });
 
             fView.EventType.Clear();
-            int num = eventTypes.Length;
-            for (int i = 0; i < num; i++) {
-                fView.EventType.AddItem(LangMan.LS(eventTypes[i].Name), i);
+            bool use = false;
+            for (int i = 0; i < list.Count; i++) {
+                var item = list[i];
+                if (use != item.Use && i != 0) {
+                    fView.EventType.AddItem(LineItem, -1);
+                }
+                //fView.EventType.AddItem(string.Format("{0} [{1}]", item.Name, item.Stat), item.Index);
+                fView.EventType.AddItem(item.Name, item.Index);
+                use = item.Use;
             }
-
-            fView.EventType.Sorted = true;
         }
 
         public override void UpdateView()

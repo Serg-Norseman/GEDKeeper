@@ -139,6 +139,11 @@ namespace GKUI.Forms
 
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cmbEventType.Text == EventEditDlgController.LineItem) {
+                cmbEventType.SelectedIndex = 0;
+                return;
+            }
+
             fController.ChangeEventType();
         }
     }

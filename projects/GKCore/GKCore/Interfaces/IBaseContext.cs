@@ -32,6 +32,7 @@ namespace GKCore.Interfaces
     {
         ICulture Culture { get; }
         GDMLanguageID DefaultLanguage { get; set; }
+        Dictionary<string, int> EventStats { get; }
         string FileName { get; }
         GDMTree Tree { get; }
         ValuesCollection ValuesCollection { get; }
@@ -119,5 +120,7 @@ namespace GKCore.Interfaces
 
         bool CopyFile(string sourceFileName, string destFileName, bool showProgress = true);
         void MoveMediaContainers(string oldFileName, string newFileName, bool createCopy = false);
+
+        void IncrementEventStats(string tagName);
     }
 }

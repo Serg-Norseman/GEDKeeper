@@ -56,6 +56,7 @@ namespace GKCore
         private bool fModified;
         private ShieldState fShieldState;
 
+        private readonly Dictionary<string, int> fEventStats;
         private readonly List<GDMLanguageID> fLangsList;
         private readonly List<GDMRecord> fLockedRecords;
         private readonly GDMTree fTree;
@@ -83,6 +84,11 @@ namespace GKCore
         {
             get { return fDefaultLanguage; }
             set { fDefaultLanguage = value; }
+        }
+
+        public Dictionary<string, int> EventStats
+        {
+            get { return fEventStats; }
         }
 
         public string FileName
@@ -163,6 +169,7 @@ namespace GKCore
             fValuesCollection = new ValuesCollection();
             fLockedRecords = new List<GDMRecord>();
             fLangsList = new List<GDMLanguageID>();
+            fEventStats = new Dictionary<string, int>();
         }
 
         protected override void Dispose(bool disposing)
@@ -414,6 +421,17 @@ namespace GKCore
                     sources.AddObject(rec.ShortTitle, rec);
                 }
             }
+        }
+
+        public void IncrementEventStats(string tagName)
+        {
+            int val;
+            if (fEventStats.TryGetValue(tagName, out val)) {
+                val += 1;
+            } else {
+                val = 1;
+            }
+            fEventStats[tagName] = val;
         }
 
         #endregion
