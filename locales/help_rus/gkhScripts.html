@@ -1493,8 +1493,11 @@ end
             <dt>bool csv_load(string filename, bool first_line_is_schema)</dt>
             <dd>загрузить csv-таблицу, первый параметр определяет имя файла, второй - содержит ли первая строка файла заголовки колонок</dd>
 
+            <dt>bool csv_create(string fileName, int columnsCount, int rowsCount)</dt>
+            <dd>создать новую csv-таблицу с заданными именем файла, количеством столбцов и строк (обязательно)</dd>
+
             <dt>csv_close()</dt>
-            <dd>закрыть csv-таблицу</dd>
+            <dd>закрыть csv-таблицу (чтение или запись)</dd>
 
             <dt>int csv_get_cols()</dt>
             <dd>получить количество столбцов в csv-таблице</dd>
@@ -1504,6 +1507,9 @@ end
 
             <dt>string csv_get_cell(col, row)</dt>
             <dd>получить содержимое ячейки в csv-таблице (столбцы и строки нумеруются от нуля)</dd>
+
+            <dt>void csv_write_cell(string content)</dt>
+            <dd>записать значение ячейки CSV-таблицы (переводы строк выполняются автоматически согласно заданному числу столбцов)</dd>
 
 
             <dt>note_ptr create_note()</dt>

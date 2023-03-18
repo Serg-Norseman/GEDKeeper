@@ -1313,17 +1313,28 @@ end</code></pre>
             Loads CSV table from `filename` file. `first_line_is_schema`
             defines whether the first row in the file is a header row.
         </dd>
+
+        <dt>bool csv_create(string fileName, int columnsCount, int rowsCount)</dt>
+        <dd>Create a new CSV table with the given file name, number of columns and rows (required).</dd>
+
         <dt>csv_close()</dt>
-        <dd>Close previously opened CSV table.</dd>
+        <dd>Close previously opened CSV table (read or write).</dd>
+
         <dt>int csv_get_cols()</dt>
         <dd>Returns number of columns in the CSV table.</dd>
+
         <dt>int csv_get_rows()</dt>
         <dd>Returns number of rows in the CSV table.</dd>
+
         <dt>string csv_get_cell(col, row)</dt>
         <dd>
             Gets value of the specified cell in the CSV table (rows and columns
             are numbered from zero).
         </dd>
+
+		<dt>void csv_write_cell(string content)</dt>
+		<dd>Write the value of a CSV table cell (the beginning of a new line is performed automatically according to the specified number of columns).</dd>
+
         <dt>note_ptr create_note()</dt>
         <dd>Creates new note record.</dd>
         <dt>bind_record_note(record_ptr, note_ptr)</dt>

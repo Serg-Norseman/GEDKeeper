@@ -28,6 +28,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
+using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
 using NLua;
@@ -96,6 +97,7 @@ namespace GKCore
             lua_register(lvm, "strpos");
             lua_register(lvm, "update_view");
             lua_register(lvm, "select_file");
+            lua_register(lvm, "select_new_file");
 
             lvm["rtNone"] = (int)GDMRecordType.rtNone;
             lvm["rtIndividual"] = (int)GDMRecordType.rtIndividual;
@@ -207,6 +209,8 @@ namespace GKCore
             lua_register(lvm, "csv_get_cols");
             lua_register(lvm, "csv_get_rows");
             lua_register(lvm, "csv_get_cell");
+            lua_register(lvm, "csv_create");
+            lua_register(lvm, "csv_write_cell");
 
             // experimental
             lua_register(lvm, "ado_open");
@@ -265,6 +269,12 @@ namespace GKCore
         public string select_file()
         {
             string filename = AppHost.StdDialogs.GetOpenFile("", "", "All files (*.*)|*.*", 0, "");
+            return filename;
+        }
+
+        public string select_new_file()
+        {
+            string filename = AppHost.StdDialogs.GetSaveFile("", "", "All files (*.*)|*.*", 0, "", "", true);
             return filename;
         }
 
@@ -692,19 +702,34 @@ namespace GKCore
         #region CSV functions
 
         private DataTable fCSVData = null;
+        private CSVWriter fCSVWriter = null;
 
         public bool csv_load(string fileName, bool hasHeader)
         {
             bool result = false;
             if (!File.Exists(fileName)) return result;
 
-            try
-            {
+            try {
                 fCSVData = CSVReader.ReadCSVFile(fileName, Encoding.Unicode, hasHeader);
                 result = true;
+            } catch {
+                result = false;
             }
-            catch
-            {
+
+            return result;
+        }
+
+        public bool csv_create(string fileName, int columnsCount, int rowsCount)
+        {
+            bool result = false;
+
+            try {
+                fCSVWriter = new CSVWriter();
+                fCSVWriter.SetFileName(fileName);
+                fCSVWriter.BeginWrite();
+                fCSVWriter.BeginTable(columnsCount, rowsCount);
+                result = true;
+            } catch {
                 result = false;
             }
 
@@ -713,30 +738,48 @@ namespace GKCore
 
         public void csv_close()
         {
-            try
-            {
-                fCSVData.Dispose();
-            }
-            catch (Exception ex)
-            {
+            try {
+                if (fCSVData != null) {
+                    fCSVData.Dispose();
+                }
+
+                if (fCSVWriter != null) {
+                    fCSVWriter.EndTable();
+                    fCSVWriter.EndWrite();
+                    fCSVWriter.Dispose();
+                }
+            } catch (Exception ex) {
                 throw new ScriptException(ex.Message);
             }
         }
 
         public int csv_get_cols()
         {
+            if (fCSVData == null) return 0;
+
             return fCSVData.Columns.Count;
         }
 
         public int csv_get_rows()
         {
+            if (fCSVData == null) return 0;
+
             return fCSVData.Rows.Count;
         }
 
         public string csv_get_cell(int col, int row)
         {
+            if (fCSVData == null) return string.Empty;
+
             DataRow dr = fCSVData.Rows[row];
             return dr.ItemArray[col].ToString();
+        }
+
+        public void csv_write_cell(string content)
+        {
+            if (fCSVWriter == null) return;
+
+            fCSVWriter.AddTableCell(content);
         }
 
         #endregion
