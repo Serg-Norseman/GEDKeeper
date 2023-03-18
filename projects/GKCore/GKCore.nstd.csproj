@@ -8,24 +8,6 @@
         <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release</Configurations>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
-    </PropertyGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-        <Reference Include="System.Runtime.Remoting" />
-        <Reference Include="WindowsBase" />
-
-        <Reference Include="ExcelLibrary">
-            <HintPath>..\libs\ExcelLibrary.dll</HintPath>
-        </Reference>
-        <Reference Include="itextsharp">
-            <HintPath>..\libs\itextsharp.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
-    <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    </PropertyGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    </ItemGroup>
 
     <ItemGroup>
         <Reference Include="BSLib">
@@ -36,6 +18,9 @@
         </Reference>
         <Reference Include="RtfWriter">
             <HintPath>..\libs\netstd\RtfWriter.dll</HintPath>
+        </Reference>
+        <Reference Include="SwiftExcel">
+            <HintPath>..\libs\netstd\SwiftExcel.dll</HintPath>
         </Reference>
     </ItemGroup>
 

@@ -72,5 +72,52 @@ namespace GKCore.Export
             }
         }
     }
+#else
+    using SwiftExcel;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class XLSWriter : TableWriter
+    {
+        private int fColumnsCount;
+        private int fTableCol;
+        private int fTableRow;
+        private ExcelWriter fWorkbook;
+
+        public XLSWriter()
+        {
+        }
+
+        public override void BeginWrite()
+        {
+            fWorkbook = new ExcelWriter(fFileName);
+        }
+
+        public override void EndWrite()
+        {
+            fWorkbook.Save();
+        }
+
+        public override void BeginTable(int columnsCount, int rowsCount)
+        {
+            fColumnsCount = columnsCount;
+            fTableRow = 1;
+            fTableCol = 1;
+        }
+
+        public override void AddTableCell(string content, IFont font = null, TextAlignment alignment = TextAlignment.taLeft)
+        {
+            if (!string.IsNullOrEmpty(content)) {
+                fWorkbook.Write(content, fTableCol, fTableRow);
+            }
+
+            fTableCol += 1;
+            if (fTableCol > fColumnsCount) {
+                fTableRow += 1;
+                fTableCol = 1;
+            }
+        }
+    }
 #endif
 }
