@@ -9,22 +9,6 @@
     </PropertyGroup>
 
 
-    <ItemGroup>
-        <Reference Include="BSLib">
-            <HintPath>..\libs\netstd\BSLib.dll</HintPath>
-        </Reference>
-        <Reference Include="BSLib.DataViz.Model">
-            <HintPath>..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
-        </Reference>
-        <Reference Include="RtfWriter">
-            <HintPath>..\libs\netstd\RtfWriter.dll</HintPath>
-        </Reference>
-        <Reference Include="SwiftExcel">
-            <HintPath>..\libs\netstd\SwiftExcel.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
-
     <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
         <DefineConstants>OS_MSWIN</DefineConstants>
     </PropertyGroup>
@@ -68,6 +52,38 @@
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
         <OutputPath>bin\</OutputPath>
     </PropertyGroup>
+
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\libs\netstd\BSLib.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.Model">
+            <HintPath>..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
+        </Reference>
+        <Reference Include="RtfWriter">
+            <HintPath>..\libs\netstd\RtfWriter.dll</HintPath>
+        </Reference>
+        <Reference Include="SwiftExcel">
+            <HintPath>..\libs\netstd\SwiftExcel.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <None Include="packages.config" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+        <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+        <PackageReference Include="NLua" Version="1.6.0" />
+        <PackageReference Include="YamlDotNet" Version="12.0.0" />
+        <PackageReference Include="UTF.Unknown" Version="2.5.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="iTextSharp.LGPLv2.Core" Version="3.3.3" />
+    </ItemGroup>
+
 
     <ItemGroup>
         <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
@@ -158,18 +174,5 @@
         <EmbeddedResource Include="Resources\btn_volume_mute.png" />
         <EmbeddedResource Include="Resources\pnl_video.png" />
         <EmbeddedResource Include="Resources\btn_info.gif" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="packages.config" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
-        <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-        <PackageReference Include="NLua" Version="1.6.0" />
-        <PackageReference Include="YamlDotNet" Version="12.0.0" />
-        <PackageReference Include="UTF.Unknown" Version="2.5.1" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 </Project>

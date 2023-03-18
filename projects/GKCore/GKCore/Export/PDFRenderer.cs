@@ -18,7 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !NETSTANDARD
+#if NETSTANDARD
+#define UNOFF_ITS
+#endif
+
+//#if !NETSTANDARD
 
 using System;
 using BSLib;
@@ -78,7 +82,13 @@ namespace GKCore.Export
         {
             if (pen != null) {
                 IColor color = pen.Color;
+
+#if !UNOFF_ITS
                 fCanvas.SetRGBColorStroke(color.GetR(), color.GetG(), color.GetB());
+#else
+                fCanvas.SetRgbColorStroke(color.GetR(), color.GetG(), color.GetB());
+#endif
+
                 fCanvas.SetLineWidth(pen.Width);
             }
         }
@@ -323,4 +333,4 @@ namespace GKCore.Export
     }
 }
 
-#endif
+//#endif

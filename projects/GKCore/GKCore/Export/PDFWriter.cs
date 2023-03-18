@@ -18,7 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !NETSTANDARD
+#if NETSTANDARD
+#define UNOFF_ITS
+#endif
+
+//#if !NETSTANDARD
 
 using System.Collections.Generic;
 using System.IO;
@@ -38,7 +42,7 @@ namespace GKCore.Export
 {
     public class PDFWriter : CustomWriter
     {
-        internal sealed class FontHandler: TypeHandler<itFont>, IFont
+        internal sealed class FontHandler : TypeHandler<itFont>, IFont
         {
             public BaseFont BaseFont
             {
@@ -95,7 +99,7 @@ namespace GKCore.Export
         }
 
         private readonly int[] iAlignments = new int[] { Element.ALIGN_LEFT, Element.ALIGN_CENTER, Element.ALIGN_RIGHT, Element.ALIGN_JUSTIFIED };
-        
+
         private readonly BaseFont fBaseFont;
         private float fColumnWidth;
         private SimpleColumnText fColumns;
@@ -171,7 +175,7 @@ namespace GKCore.Export
 
         public override void EnablePageNumbers()
         {
-            fPdfWriter.PageEvent = new PDFWriterEvents(fBaseFont, LangMan.LS(LSID.LSID_Page)+": ");
+            fPdfWriter.PageEvent = new PDFWriterEvents(fBaseFont, LangMan.LS(LSID.LSID_Page) + ": ");
         }
 
         public override void NewPage()
@@ -181,7 +185,13 @@ namespace GKCore.Export
 
         public override void NewLine(float spacingBefore = 0.0f, float spacingAfter = 0.0f)
         {
-            var pg = new Paragraph(Chunk.NEWLINE) { SpacingAfter = spacingAfter };
+            Chunk newline;
+#if !UNOFF_ITS
+            newline = Chunk.NEWLINE;
+#else
+            newline = Chunk.Newline;
+#endif
+            var pg = new Paragraph(newline) { SpacingAfter = spacingAfter };
 
             AddElement(pg);
         }
@@ -321,7 +331,13 @@ namespace GKCore.Export
         // FIXME: unused; add to other writers?
         public void AddLineSeparator()
         {
-            var line1 = new it.pdf.draw.LineSeparator(0.0f, 100.0f, BaseColor.BLACK, Element.ALIGN_LEFT, 1);
+            BaseColor color;
+#if !UNOFF_ITS
+            color = BaseColor.BLACK;
+#else
+            color = BaseColor.Black;
+#endif
+            var line1 = new it.pdf.draw.LineSeparator(0.0f, 100.0f, color, Element.ALIGN_LEFT, 1);
             fDocument.Add(new Chunk(line1));
         }
 
@@ -451,8 +467,7 @@ namespace GKCore.Export
             float columnHeight = (fDocument.PageSize.Height - fDocument.TopMargin - fDocument.BottomMargin);
             float columnWidth = ((fDocument.PageSize.Width - fDocument.LeftMargin - fDocument.RightMargin) - (columnSpacing * (columnCount - 1))) / columnCount;
 
-            for (int x = 0; x < columnCount; x++)
-            {
+            for (int x = 0; x < columnCount; x++) {
                 float llx = ((columnWidth + columnSpacing) * x) + fDocument.LeftMargin;
                 float lly = fDocument.BottomMargin;
                 float urx = llx + columnWidth;
@@ -463,7 +478,7 @@ namespace GKCore.Export
             }
         }
 
-        public override void AddElement(IElement element)
+        public new void AddElement(IElement element)
         {
             base.AddElement(element);
 
@@ -478,7 +493,12 @@ namespace GKCore.Export
                         fDocument.NewPage();
                         fCurrentColumn = 0;
                     }
-                    SetSimpleColumn(fColumns[fCurrentColumn]);
+                    var rect = fColumns[fCurrentColumn];
+#if !UNOFF_ITS
+                    SetSimpleColumn(rect);
+#else
+                    SetSimpleColumn(rect.Left, rect.Bottom, rect.Right, rect.Top);
+#endif
                     fCurrentColumn += 1;
                 }
 
@@ -488,4 +508,4 @@ namespace GKCore.Export
     }
 }
 
-#endif
+//#endif

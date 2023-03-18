@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.2" />
     </ItemGroup>
 

@@ -84,11 +84,11 @@ namespace GKCore.Export
             } else if (string.Equals(ext, ".rtf")) {
                 writer = new RTFWriter();
             } else {
-                #if !NETSTANDARD
+                //#if !NETSTANDARD
                 writer = new PDFWriter();
-                #else
-                writer = new HTMLWriter();
-                #endif
+                //#else
+                //writer = new HTMLWriter();
+                //#endif
             }
 
             bool success = Generate(writer);
