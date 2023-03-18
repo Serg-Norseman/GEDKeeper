@@ -107,11 +107,11 @@ namespace GKLifePlugin.ConwayLife
         
         public void RestoreDefaults()
         {
-            AnimationDelay = LifeConsts.DefaultAnimationDelay;
-            BackgroundColor = LifeConsts.DefaultBackgroundColor;
-            GridHeight = LifeConsts.DefaultGridHeight;
-            GridWidth = LifeConsts.DefaultGridWidth;
-            LivingCellColor = LifeConsts.DefaultCellColor;
+            AnimationDelay = LifeViewer.DefaultAnimationDelay;
+            BackgroundColor = LifeViewer.DefaultBackgroundColor;
+            GridHeight = LifeGrid.DefaultGridHeight;
+            GridWidth = LifeGrid.DefaultGridWidth;
+            LivingCellColor = LifeViewer.DefaultCellColor;
             fModified = true;
         }
     }

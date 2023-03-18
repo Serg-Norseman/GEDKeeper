@@ -16,8 +16,19 @@ using GKUI.Components;
 
 namespace GKLifePlugin.ConwayLife
 {
+    public delegate void DoesCellLiveEvent(object sender, int x, int y, LifeGrid grid, ref bool result);
+
+    public delegate void NotifyEvent(object sender);
+
     public class LifeViewer : UserControl
     {
+        public const int DefaultAnimationDelay = 100;
+        public static readonly Color DefaultCellColor = Color.Green;
+        public static readonly Color DefaultBackgroundColor = Color.Silver;
+        public static readonly Color DefaultGridLineColor = Color.Black;
+        public const DashStyle DefaultGridLineStyle = DashStyle.Dot;
+
+
         private bool fAcceptMouseClicks;
         private int fGeneration;
         private Color fGridLineColor;
@@ -112,8 +123,8 @@ namespace GKLifePlugin.ConwayLife
             set {
                 if (value < 1)
                     throw new IndexOutOfRangeException("MaxNumberOfHistoryLevels must be greater than 0");
-                if (value > LifeConsts.MaxNumberOfHistoryLevels)
-                    throw new IndexOutOfRangeException(string.Format("MaxNumberOfHistoryLevels must be greater than {0}", LifeConsts.MaxNumberOfHistoryLevels));
+                if (value > LifeHistory.MaxNumberOfHistoryLevels)
+                    throw new IndexOutOfRangeException(string.Format("MaxNumberOfHistoryLevels must be greater than {0}", LifeHistory.MaxNumberOfHistoryLevels));
 
                 fHistory.MaxLevels = value;
             }
@@ -158,10 +169,10 @@ namespace GKLifePlugin.ConwayLife
             
             fOptions = new LifeOptions();
             fRules = new LifeRules();
-            fGrid = new LifeGrid(LifeConsts.DefaultGridWidth, LifeConsts.DefaultGridHeight);
-            fHistory = new LifeHistory(LifeConsts.DefaultNumberOfHistoryLevels);
-            fGridLineColor = LifeConsts.DefaultGridLineColor;
-            fGridLineStyle = LifeConsts.DefaultGridLineStyle;
+            fGrid = new LifeGrid(LifeGrid.DefaultGridWidth, LifeGrid.DefaultGridHeight);
+            fHistory = new LifeHistory(LifeHistory.DefaultNumberOfHistoryLevels);
+            fGridLineColor = LifeViewer.DefaultGridLineColor;
+            fGridLineStyle = LifeViewer.DefaultGridLineStyle;
         }
 
         protected override void Dispose(bool disposing)

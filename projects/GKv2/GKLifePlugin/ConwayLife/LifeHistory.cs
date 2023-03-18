@@ -15,6 +15,10 @@ namespace GKLifePlugin.ConwayLife
 {
     public sealed class LifeHistory : IDisposable
     {
+        public const int MaxNumberOfHistoryLevels = byte.MaxValue;
+        public const int DefaultNumberOfHistoryLevels = 10;
+
+
         private List<LifeGrid> fList;
         private int fMostRecent;
 

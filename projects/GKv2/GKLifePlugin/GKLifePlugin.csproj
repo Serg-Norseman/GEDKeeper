@@ -27,7 +27,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConwayLife\LifeConsts.cs" />
     <Compile Include="ConwayLife\LifeForm.cs">
       <SubType>Form</SubType>
     </Compile>

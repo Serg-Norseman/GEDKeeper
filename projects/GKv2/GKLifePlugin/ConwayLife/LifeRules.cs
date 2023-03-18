@@ -12,6 +12,10 @@ namespace GKLifePlugin.ConwayLife
 {
     public sealed class LifeRules
     {
+        public static readonly bool[] DefaultDeadCells = new bool[] { false, false, false, true, false, false, false, false, false };
+        public static readonly bool[] DefaultLiveCells = new bool[] { false, false, true, true, false, false, false, false, false };
+
+
         private bool[] fDeadCells;
         private bool[] fLiveCells;
         private bool fModified;
@@ -54,8 +58,8 @@ namespace GKLifePlugin.ConwayLife
         
         public void RestoreDefaults()
         {
-            fDeadCells = (bool[])LifeConsts.DefaultDeadCells.Clone();
-            fLiveCells = (bool[])LifeConsts.DefaultLiveCells.Clone();
+            fDeadCells = (bool[])DefaultDeadCells.Clone();
+            fLiveCells = (bool[])DefaultLiveCells.Clone();
             fModified = true;
         }
     }

@@ -14,6 +14,15 @@ namespace GKLifePlugin.ConwayLife
 {
     public sealed class LifeGrid : IDisposable, IEquatable<LifeGrid>
     {
+        public const int MinGridHeight = 5;
+        public const int MaxGridHeight = 1000;
+        public const int MinGridWidth = 5;
+        public const int MaxGridWidth = 1000;
+
+        public const int DefaultGridHeight = 200;
+        public const int DefaultGridWidth = 200;
+
+
         private short[] fGrid;
         private int fGridHeight;
         private int fGridWidth;

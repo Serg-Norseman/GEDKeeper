@@ -34,8 +34,8 @@ namespace GKLifePlugin.ConwayLife
 
             cmpLife.AcceptMouseClicks = false;
             cmpLife.MaxNumberOfHistoryLevels = 10;
-            cmpLife.GridHeight = LifeConsts.DefaultGridHeight;
-            cmpLife.GridWidth = LifeConsts.DefaultGridWidth;
+            cmpLife.GridHeight = LifeGrid.DefaultGridHeight;
+            cmpLife.GridWidth = LifeGrid.DefaultGridWidth;
             cmpLife.ShowGridLines = false;
         }
 

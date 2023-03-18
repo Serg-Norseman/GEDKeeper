@@ -28,11 +28,11 @@ namespace GKLifePlugin.ConwayLife
             fOptions = options;
             fRules = rules;
 
-            edtGridHeight.Minimum = LifeConsts.MinGridHeight;
-            edtGridHeight.Maximum = LifeConsts.MaxGridHeight;
+            edtGridHeight.Minimum = LifeGrid.MinGridHeight;
+            edtGridHeight.Maximum = LifeGrid.MaxGridHeight;
 
-            edtGridWidth.Minimum = LifeConsts.MinGridWidth;
-            edtGridWidth.Maximum = LifeConsts.MaxGridWidth;
+            edtGridWidth.Minimum = LifeGrid.MinGridWidth;
+            edtGridWidth.Maximum = LifeGrid.MaxGridWidth;
         }
 
         private void btnApply_Click(object sender, EventArgs e)
