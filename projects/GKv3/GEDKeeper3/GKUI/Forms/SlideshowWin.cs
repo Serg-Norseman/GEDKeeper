@@ -27,6 +27,7 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKUI.Components;
+using GKUI.Platform;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms
@@ -38,7 +39,7 @@ namespace GKUI.Forms
 
         private ButtonToolItem tbNext;
         private ButtonToolItem tbPrev;
-        private ButtonToolItem tbStart;
+        private GKButtonToolItem tbStart;
         private ImageBox fImageCtl;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
@@ -49,6 +50,9 @@ namespace GKUI.Forms
         public SlideshowWin(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
+
+            // while using GKButtonToolItem
+            tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
             fController = new SlideshowController(this);
             fController.Init(baseWin);

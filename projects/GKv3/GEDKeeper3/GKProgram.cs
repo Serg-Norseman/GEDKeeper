@@ -46,6 +46,7 @@ namespace GEDKeeper3
 
             var application = new Application();
 
+            application.Platform.Add<GKButtonToolItem.IHandler>(() => new GKButtonToolItemHandler());
             application.Platform.Add<GKDropDownToolItem.IHandler>(() => new GKDropDownToolItemHandler());
             application.Platform.Add<NativeHostControl.IHandler>(() => new NativeHostControlHandler());
 
