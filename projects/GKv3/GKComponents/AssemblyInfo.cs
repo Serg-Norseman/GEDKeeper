@@ -3,7 +3,7 @@ using GKCore;
 
 [assembly: AssemblyTitle("GKComponents")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("GEDKeeper3")]
+[assembly: AssemblyProduct(GKData.APP_TITLE)]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
-[assembly: AssemblyVersion("1.3.0.0")]
+[assembly: AssemblyVersion(GKData.APP_VERSION_3X)]
 [assembly: AssemblyCulture("")]

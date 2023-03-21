@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define DEBUG_WPF_CELLS
-
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -327,7 +325,7 @@ namespace GKUI.Components
         {
             base.OnSelectionChanged(e);
 
-#if !DEBUG_WPF_CELLS
+#if WPF_GVSC_BUG
             // FIXME: [Wpf]GridView.ReloadData(...) is very slow, Eto 2.7.0 #2245
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 return;
@@ -344,7 +342,7 @@ namespace GKUI.Components
         {
             base.OnCellFormatting(e);
 
-#if !DEBUG_WPF_CELLS
+#if WPF_GVSC_BUG
             // FIXME: [Wpf]GridView.ReloadData(...) is very slow, Eto 2.7.0 #2245
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 return;

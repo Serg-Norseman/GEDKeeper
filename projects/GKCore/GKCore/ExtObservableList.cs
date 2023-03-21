@@ -80,6 +80,11 @@ namespace GKCore
             ChangeRemoved(item, index);
         }
 
+        public void Replace(T item, int index)
+        {
+            ChangeReplaced(item, index);
+        }
+
         public void BeginUpdate()
         {
             if (fUpdateCount == 0) {
@@ -121,6 +126,12 @@ namespace GKCore
         {
             if (CollectionChanged != null && fUpdateCount == 0)
                 CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, item, newIndex, oldIndex));
+        }
+
+        private void ChangeReplaced(T item, int index)
+        {
+            if (CollectionChanged != null && fUpdateCount == 0)
+                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, index));
         }
 
         #endregion

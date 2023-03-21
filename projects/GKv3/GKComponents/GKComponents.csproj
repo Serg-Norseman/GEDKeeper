@@ -10,7 +10,7 @@
 
 
     <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
-        <DefineConstants>OS_MSWIN</DefineConstants>
+        <DefineConstants>OS_MSWIN;WPF_GVSC_BUG</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
         <DefineConstants>OS_LINUX;MONO</DefineConstants>
