@@ -318,15 +318,22 @@ namespace GKUI.Components
 
         private void DrawBackground(BackgroundMode background)
         {
-            if (background == BackgroundMode.bmAny || background == BackgroundMode.bmImage) {
-                if (BackgroundImage != null) {
-                    using (Brush textureBrush = new TextureBrush(BackgroundImage)) {
-                        var rect = CanvasRectangle;
-                        fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, rect.Width, rect.Height);
+            switch (background) {
+                case BackgroundMode.bmNone:
+                    break;
+
+                case BackgroundMode.bmImage:
+                case BackgroundMode.bmFill:
+                case BackgroundMode.bmAny:
+                    if (background == BackgroundMode.bmImage && BackgroundImage != null) {
+                        using (Brush textureBrush = new TextureBrush(BackgroundImage)) {
+                            var rect = CanvasRectangle;
+                            fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, rect.Width, rect.Height);
+                        }
+                    } else {
+                        fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackColor), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
                     }
-                } else {
-                    fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackgroundColor), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
-                }
+                    break;
             }
         }
 
@@ -876,7 +883,7 @@ namespace GKUI.Components
 
         public override void RenderImage(RenderTarget target, bool forciblyCentered = false)
         {
-            BackgroundMode bgMode = (target == RenderTarget.Printer) ? BackgroundMode.bmImage : BackgroundMode.bmAny;
+            BackgroundMode bgMode = (target == RenderTarget.Printer) ? BackgroundMode.bmNone : BackgroundMode.bmAny;
             ChartDrawMode drawMode = (!forciblyCentered) ? ChartDrawMode.dmStatic : ChartDrawMode.dmStaticCentered;
             InternalDraw(drawMode, bgMode);
         }

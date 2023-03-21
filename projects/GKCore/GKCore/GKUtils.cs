@@ -3568,5 +3568,32 @@ namespace GKCore
         }
 
         #endregion
+
+        #region Print support
+
+        public static void SplitImage(List<ExtRect> pages, int imageWidth, int imageHeight, int pageWidth, int pageHeight)
+        {
+            int cols = DivideRoundingUp(imageWidth, pageWidth);
+            int rows = DivideRoundingUp(imageHeight, pageHeight);
+
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
+                    int lu_x = c * pageWidth;
+                    int lu_y = r * pageHeight;
+                    int rb_x = (int)Math.Min(imageWidth, lu_x + pageWidth);
+                    int rb_y = (int)Math.Min(imageHeight, lu_y + pageHeight);
+                    pages.Add(ExtRect.Create(lu_x, lu_y, rb_x, rb_y));
+                }
+            }
+        }
+
+        public static int DivideRoundingUp(int x, int y)
+        {
+            int remainder;
+            int quotient = Math.DivRem(x, y, out remainder);
+            return remainder == 0 ? quotient : quotient + 1;
+        }
+
+        #endregion
     }
 }

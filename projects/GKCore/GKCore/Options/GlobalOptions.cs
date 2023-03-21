@@ -346,6 +346,8 @@ namespace GKCore.Options
             set { fMWinState = value; }
         }
 
+        public bool MultipagePrint { get; set; }
+
         public StringList NameFilters
         {
             get { return fNameFilters; }
@@ -518,6 +520,8 @@ namespace GKCore.Options
             SearchAndFilterByAllNames = false;
 
             fRSFilters = new Dictionary<GDMRecordType, StringList>();
+
+            MultipagePrint = false;
 
             Theme = string.Empty;
         }
@@ -899,6 +903,8 @@ namespace GKCore.Options
 
             LoadRSFilters(ini);
 
+            MultipagePrint = ini.ReadBool("Common", "MultipagePrint", false);
+
             Theme = ini.ReadString("Common", "Theme", "");
 
             LoadPluginsFromFile(ini);
@@ -1034,6 +1040,8 @@ namespace GKCore.Options
             ini.WriteString("Common", "ReportExportLastDir", ReportExportLastDir);
 
             SaveRSFilters(ini);
+
+            ini.WriteBool("Common", "MultipagePrint", MultipagePrint);
 
             ini.WriteString("Common", "Theme", Theme);
 

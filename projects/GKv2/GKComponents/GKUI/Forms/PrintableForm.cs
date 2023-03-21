@@ -20,11 +20,15 @@
 
 //define DEBUG_PRINT
 
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
 using BSLib;
+using GKCore;
 using GKCore.Design.Graphics;
+using GKCore.Options;
+using GKUI.Components;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms
@@ -34,38 +38,64 @@ namespace GKUI.Forms
     /// </summary>
     public class PrintableForm : StatusForm
     {
+        private const int PageMargin = 20;
+
+        private bool fMultipage;
+        private int fPageNumber;
+        private Rectangle fPageBounds;
+        private List<ExtRect> fPages;
+        private Image fPrintableImage;
+        private Rectangle fPrintBounds;
         private PrintDocument fPrintDoc;
+        private float fScaleFactor;
 
         protected PrintableForm()
         {
-            InitPrintDoc();
+            fPrintDoc = new PrintDocument();
+            fPrintDoc.PrintPage += printDocument1_PrintPage;
+
+            fPages = new List<ExtRect>();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fPrintDoc.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         #region Internal print support
 
-        private void InitPrintDoc()
-        {
-            fPrintDoc = new PrintDocument();
-            fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
-            fPrintDoc.PrintPage += printDocument1_PrintPage;
-        }
-
         private void InitCurDoc()
         {
+            bool multipage = GlobalOptions.Instance.MultipagePrint;
+
+            fPrintableImage = null;
+            fPages.Clear();
+            fPageNumber = 0;
+
             fPrintDoc.DocumentName = Text;
             var printable = GetPrintable();
             if (printable != null) {
-                fPrintDoc.DefaultPageSettings.Landscape = printable.IsLandscape();
-                fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
-            }
-        }
+                var pageSettings = fPrintDoc.DefaultPageSettings;
+                pageSettings.Landscape = printable.IsLandscape();
+                pageSettings.Margins = new Margins(PageMargin, PageMargin, PageMargin, PageMargin);
 
-        private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
-        {
-            var printable = GetPrintable();
-            if (printable != null) {
-                e.PageSettings.Landscape = printable.IsLandscape();
-                e.PageSettings.Margins = new Margins(25, 25, 25, 25);
+                fPrintableImage = ((ImageHandler)printable.GetPrintableImage()).Handle;
+
+                fPageBounds = pageSettings.Bounds;
+                fPrintBounds = fPageBounds;
+                fPrintBounds.Inflate(-PageMargin, -PageMargin);
+
+                fScaleFactor = GfxHelper.ZoomToFit(fPrintableImage.Width, fPrintableImage.Height, fPrintBounds.Width, fPrintBounds.Height);
+                if (fScaleFactor > 1.0f) fScaleFactor = 1.0f;
+
+                fMultipage = multipage && (fScaleFactor < 1.0f);
+
+                if (fMultipage) {
+                    GKUtils.SplitImage(fPages, fPrintableImage.Width, fPrintableImage.Height, fPrintBounds.Width, fPrintBounds.Height);
+                }
             }
         }
 
@@ -75,27 +105,33 @@ namespace GKUI.Forms
             Rectangle marginBounds = e.MarginBounds;
             Rectangle pageBounds = e.PageBounds;
 
+            //int hardMarginX = (int)(e.PageSettings.HardMarginX * 100 / gfx.DpiX);
+            //int hardMarginY = (int)(e.PageSettings.HardMarginY * 100 / gfx.DpiY);
+            //var printBounds = e.MarginBounds; //new Rectangle(hardMarginX, hardMarginY, pageBounds.Width - (hardMarginX * 2), pageBounds.Height - (hardMarginY * 2));
+
 #if DEBUG_PRINT
-            gfx.DrawRectangle(Pens.Gray, marginBounds);
+            gfx.DrawRectangle(Pens.Red, marginBounds);
 #endif
 
-            var printable = GetPrintable();
-            if (printable != null) {
-                Image img = ((ImageHandler)printable.GetPrintableImage()).Handle;
+            if (fPrintableImage != null) {
+                if (fMultipage) {
+                    var partBounds = UIHelper.Rt2Rt(fPages[fPageNumber]);
+                    gfx.DrawImage(fPrintableImage, fPrintBounds.X, fPrintBounds.Y, partBounds, GraphicsUnit.Pixel);
 
-                float imgW = img.Width;
-                float imgH = img.Height;
-                float factor = GfxHelper.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
-                if (factor > 1.0f) factor = 1.0f;
-                imgW = (imgW * factor);
-                imgH = (imgH * factor);
-                float x = (pageBounds.Width - imgW) / 2;
-                float y = (pageBounds.Height - imgH) / 2;
+                    // clipping border (may be option?)
+                    var clipBounds = new Rectangle(fPrintBounds.X, fPrintBounds.Y, partBounds.Width, partBounds.Height);
+                    gfx.DrawRectangle(Pens.LightGray, clipBounds);
 
-                gfx.DrawImage(img, x, y, imgW, imgH);
+                    e.HasMorePages = (++fPageNumber < fPages.Count);
+                } else {
+                    float imgW = (fPrintableImage.Width * fScaleFactor);
+                    float imgH = (fPrintableImage.Height * fScaleFactor);
+                    float x = (fPageBounds.Width - imgW) / 2;
+                    float y = (fPageBounds.Height - imgH) / 2;
+                    gfx.DrawImage(fPrintableImage, x, y, imgW, imgH);
+                    e.HasMorePages = false;
+                }
             }
-
-            e.HasMorePages = false;
         }
 
         #endregion
