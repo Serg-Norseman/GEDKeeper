@@ -25,7 +25,7 @@ namespace GKCore.Interfaces
     /// <summary>
     /// 
     /// </summary>
-    public interface ICommonDialog : IView
+    public interface ICommonDialog : IForm
     {
         bool ShowModalX(object owner);
     }

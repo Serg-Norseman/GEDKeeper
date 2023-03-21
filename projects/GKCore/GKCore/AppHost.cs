@@ -25,10 +25,11 @@ using System.Net;
 using System.Reflection;
 using BSLib;
 using GDModel;
+using GKCore.Design;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Maps;
-using GKCore.Design.Views;
 using GKCore.Names;
 using GKCore.Options;
 using GKCore.Plugins;
@@ -221,6 +222,10 @@ namespace GKCore
 
             fTips.Clear();
         }
+
+        public abstract void Activate();
+
+        public abstract IForm GetActiveForm();
 
         public abstract IWindow GetActiveWindow();
 

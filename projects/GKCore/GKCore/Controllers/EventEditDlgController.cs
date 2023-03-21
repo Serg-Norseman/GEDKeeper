@@ -298,6 +298,14 @@ namespace GKCore.Controllers
             }
         }
 
+        public void SendData(string signature, string data)
+        {
+            if (signature == "event_year" && !string.IsNullOrEmpty(data)) {
+                var dateControl = fView.Date;
+                dateControl.PasteValue(data);
+            }
+        }
+
         public override void SetLocale()
         {
             fView.Title = LangMan.LS(LSID.LSID_Event);

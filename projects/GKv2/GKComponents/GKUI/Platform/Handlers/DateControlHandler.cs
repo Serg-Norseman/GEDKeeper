@@ -35,5 +35,10 @@ namespace GKUI.Platform.Handlers
         public DateControlHandler(GKDateControl control) : base(control)
         {
         }
+
+        public void PasteValue(string value)
+        {
+            Control.PasteValue(value);
+        }
     }
 }

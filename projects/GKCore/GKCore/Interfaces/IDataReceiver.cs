@@ -18,16 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
-
-namespace GKCore.Design.Controls
+namespace GKCore.Interfaces
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IDateControl : IBaseControl
+    public interface IDataReceiver
     {
-        GDMCustomDate Date { get; set; }
-        void PasteValue(string value);
+        void SendData(string signature, string data);
     }
 }

@@ -18,16 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
-
-namespace GKCore.Design.Controls
+namespace GKCore.Design
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IDateControl : IBaseControl
+    public interface IForm : IView
     {
-        GDMCustomDate Date { get; set; }
-        void PasteValue(string value);
     }
 }

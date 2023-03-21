@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -63,12 +63,22 @@ namespace GKCalculatorPlugin
                 string res;
                 try {
                     res = fCalc.Calc(edExpression.Text).ToString();
+
                     if (chkPutToClipboard.Checked) {
                         Clipboard.SetDataObject(res);
+                    }
+
+                    if (chkEventsYearCalculation.Checked) {
+                        fPlugin.Host.Activate();
+                        var dataReceiver = fPlugin.Host.GetActiveForm() as IDataReceiver;
+                        if (dataReceiver != null) {
+                            dataReceiver.SendData("event_year", res);
+                        }
                     }
                 } catch (Exception) {
                     res = "[ ??? ]";
                 }
+
                 lbOutput.Items.Add("> " + edExpression.Text);
                 lbOutput.Items.Add("= " + res);
                 lbOutput.SelectedIndex = lbOutput.Items.Count - 1;
@@ -104,8 +114,9 @@ namespace GKCalculatorPlugin
 
         public void SetLocale()
         {
-            Text = fPlugin.LangMan.LS(PLS.LSID_MICalc);
-            chkPutToClipboard.Text = fPlugin.LangMan.LS(PLS.LSID_CopyResultToClipboard);
+            Text = fPlugin.LangMan.LS(PLS.Title);
+            chkPutToClipboard.Text = fPlugin.LangMan.LS(PLS.CopyResultToClipboard);
+            chkEventsYearCalculation.Text = fPlugin.LangMan.LS(PLS.EventsYearCalculation);
         }
 
         #endregion

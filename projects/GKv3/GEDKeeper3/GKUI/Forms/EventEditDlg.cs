@@ -167,5 +167,10 @@ namespace GKUI.Forms
 
             fController.ChangeEventType();
         }
+
+        public void SendData(string signature, string data)
+        {
+            fController.SendData(signature, data);
+        }
     }
 }

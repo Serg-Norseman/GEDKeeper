@@ -20,7 +20,7 @@
 
 using System;
 using System.Globalization;
-using System.Text;
+using System.Linq;
 using System.Threading;
 using BSLib;
 using Eto.Drawing;
@@ -140,17 +140,30 @@ namespace GKUI.Platform
             Application.Instance.Terminating += OnApplicationExit;
         }
 
+        public override void Activate()
+        {
+            var forms = Application.Instance.Windows.ToList();
+            if (forms.Count > 0) {
+                forms[forms.Count - 1].Focus();
+            }
+        }
+
+        public override IForm GetActiveForm()
+        {
+            foreach (var wnd in Application.Instance.Windows) {
+                if (wnd.HasFocus) {
+                    return wnd as IForm;
+                }
+            }
+            return null;
+        }
+
         public override IWindow GetActiveWindow()
         {
-            IWindow activeWin = fActiveBase;
+            IWindow activeWin = GetActiveForm() as IWindow;
 
             if (activeWin == null) {
-                foreach (var wnd in Application.Instance.Windows) {
-                    if (wnd.HasFocus) {
-                        activeWin = wnd as IWindow;
-                        break;
-                    }
-                }
+                activeWin = fActiveBase;
             }
 
             return activeWin;

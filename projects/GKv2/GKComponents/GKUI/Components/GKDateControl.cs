@@ -126,11 +126,22 @@ namespace GKUI.Components
                     string txt = data.GetData(typeof(string)) as string;
 
                     MaskedTextBox txtBox = ((MaskedTextBox)sender);
-                    string[] dt = txtBox.Text.Split('/');
-                    txtBox.Text = dt[0] + "/" + dt[1] + "/" + txt.PadLeft(4, '_');
+                    SetYear(txtBox, txt);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GKDateControl.DragDrop()", ex);
+            }
+        }
+
+        private void SetYear(MaskedTextBox txtBox, string year)
+        {
+            try {
+                if (txtBox != null) {
+                    string[] dt = txtBox.Text.Split('/');
+                    txtBox.Text = dt[0] + "/" + dt[1] + "/" + year.PadLeft(4, '_');
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GKDateControl.SetYear()", ex);
             }
         }
 
@@ -257,6 +268,15 @@ namespace GKUI.Components
                 txtDate1.NormalizeDate = "";
                 cmbDate1Calendar.SetSelectedTag<GDMCalendar>(GDMCalendar.dcGregorian);
                 chkBC1.Checked = false;
+            }
+        }
+
+        public void PasteValue(string value)
+        {
+            if (txtDate1.Enabled) {
+                SetYear(txtDate1, value);
+            } else if (txtDate2.Enabled) {
+                SetYear(txtDate2, value);
             }
         }
 

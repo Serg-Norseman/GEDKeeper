@@ -25,7 +25,7 @@ using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
-    public interface IEventEditDlg : ICommonDialog, IBaseEditor
+    public interface IEventEditDlg : ICommonDialog, IBaseEditor, IDataReceiver
     {
         GDMCustomEvent Event { get; set; }
 

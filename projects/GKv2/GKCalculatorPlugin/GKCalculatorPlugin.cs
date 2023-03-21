@@ -31,16 +31,17 @@ using GKUI.Platform.Handlers;
 [assembly: AssemblyTitle("GKCalculatorPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calculator plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2014 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyVersion("2.0.0.0")]
 [assembly: AssemblyCulture("")]
 
 namespace GKCalculatorPlugin
 {
     public enum PLS
     {
-        /* 031 */ LSID_MICalc,
-        /* 167 */ LSID_CopyResultToClipboard,
+        /* 00 */ Title,
+        /* 01 */ CopyResultToClipboard,
+        /* 02 */ EventsYearCalculation,
     }
 
     public sealed class Plugin : WidgetPlugin
@@ -78,7 +79,7 @@ namespace GKCalculatorPlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(PLS.LSID_MICalc);
+                fDisplayName = fLangMan.LS(PLS.Title);
 
                 if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {

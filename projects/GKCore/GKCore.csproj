@@ -61,6 +61,7 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Design\IForm.cs" />
     <Compile Include="GKCore\Design\Views\IAboutDlg.cs" />
     <Compile Include="GKCore\Design\Views\IAddressEditDlg.cs" />
     <Compile Include="GKCore\Design\Views\IAssociationEditDlg.cs" />
@@ -511,6 +512,7 @@
     <Compile Include="GKCore\Design\Controls\ILogChart.cs" />
     <Compile Include="GKCore\Design\Controls\IMapBrowser.cs" />
     <Compile Include="GKCore\Design\Controls\IPortraitControl.cs" />
+    <Compile Include="GKCore\Interfaces\IDataReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">

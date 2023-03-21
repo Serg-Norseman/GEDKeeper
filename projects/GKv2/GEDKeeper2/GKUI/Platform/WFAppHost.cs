@@ -67,9 +67,22 @@ namespace GKUI.Platform
             Application.ApplicationExit += OnApplicationExit;
         }
 
+        public override void Activate()
+        {
+            var forms = Application.OpenForms;
+            if (forms.Count > 0) {
+                forms[forms.Count - 1].Activate();
+            }
+        }
+
+        public override IForm GetActiveForm()
+        {
+            return Form.ActiveForm as IForm;
+        }
+
         public override IWindow GetActiveWindow()
         {
-            IWindow activeWin = Form.ActiveForm as IWindow;
+            IWindow activeWin = GetActiveForm() as IWindow;
 
             if (activeWin == null) {
                 activeWin = fActiveBase;

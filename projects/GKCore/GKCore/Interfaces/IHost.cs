@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
 using GDModel;
+using GKCore.Design;
 using GKCore.Options;
 using GKCore.Types;
 
@@ -27,6 +27,8 @@ namespace GKCore.Interfaces
 {
     public interface IHost
     {
+        void Activate();
+        IForm GetActiveForm();
         IBaseWindow GetCurrentFile(bool extMode = false);
         IWorkWindow GetWorkWindow();
 

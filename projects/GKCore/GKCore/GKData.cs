@@ -35,7 +35,7 @@ namespace GKCore
         public const string APP_COPYRIGHT = "Copyright © 2009-2023 by Sergey V. Zhdanovskih";
 
         public const string APP_VERSION_2X = "2.24.0.0";
-        public const string APP_VERSION_3X = "3.0.0.0";
+        public const string APP_VERSION_3X = "3.0.2.0";
 
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 

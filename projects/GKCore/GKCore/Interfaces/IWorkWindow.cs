@@ -24,7 +24,7 @@ using GKCore.Design;
 
 namespace GKCore.Interfaces
 {
-    public interface IWindow : IView, ILocalizable
+    public interface IWindow : IForm, ILocalizable
     {
         void Show(bool showInTaskbar);
     }
