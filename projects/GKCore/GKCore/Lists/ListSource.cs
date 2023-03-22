@@ -467,7 +467,7 @@ namespace GKCore.Lists
         protected static object GetDateValue(GDMCustomEvent evt, bool isVisible)
         {
             if (evt == null) {
-                return (isVisible) ? null : (object)UDN.CreateEmpty();
+                return (isVisible) ? null : (object)UDN.CreateUnknown();
             }
 
             return GetDateValue(evt.Date.Value, isVisible);
@@ -478,7 +478,7 @@ namespace GKCore.Lists
             object result;
 
             if (date == null) {
-                result = (isVisible) ? null : (object)UDN.CreateEmpty();
+                result = (isVisible) ? null : (object)UDN.CreateUnknown();
             } else {
                 if (isVisible) {
                     GlobalOptions glob = GlobalOptions.Instance;

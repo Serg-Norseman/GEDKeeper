@@ -181,7 +181,7 @@ namespace GDModel
         public UDN GetUDN(string eventSign)
         {
             GDMCustomEvent evt = FindEvent(eventSign);
-            return (evt == null) ? UDN.CreateEmpty() : evt.GetUDN();
+            return (evt == null) ? UDN.CreateUnknown() : evt.GetUDN();
         }
 
         /// <summary>

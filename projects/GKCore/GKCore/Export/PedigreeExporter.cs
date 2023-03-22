@@ -74,7 +74,7 @@ namespace GKCore.Export
             {
                 IRec = iRec;
                 Event = evt;
-                Date = (evt == null) ? UDN.CreateEmpty() : evt.Date.GetUDN();
+                Date = (evt == null) ? UDN.CreateUnknown() : evt.Date.GetUDN();
                 Sources = new List<string>();
             }
         }

@@ -519,7 +519,7 @@ namespace GDModel
         public static UDN GetUDNByFormattedStr(string dateStr, GDMCalendar calendar, bool aException = false)
         {
             GDMDate dtx = GDMDate.CreateByFormattedStr(dateStr, calendar, aException);
-            return (dtx != null) ? dtx.GetUDN() : UDN.CreateEmpty();
+            return (dtx != null) ? dtx.GetUDN() : UDN.CreateUnknown();
         }
 
         public string GetDisplayString(DateFormat format, bool includeBC = false, bool showCalendar = false)

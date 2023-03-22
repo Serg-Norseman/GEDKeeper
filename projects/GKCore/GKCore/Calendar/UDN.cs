@@ -599,8 +599,12 @@ namespace GKCore.Calendar
                 if (month <= 0) month = 1;
                 if (day <= 0) day = 1;
 
-                result = new DateTime(year, month, day);
-                return result;
+                try {
+                    result = new DateTime(year, month, day);
+                    return result;
+                } catch (Exception ex) {
+                    Logger.WriteError(string.Format("UDN.GetGregorianDateTime({0}, {1}, {2})", year, month, day), ex);
+                }
             }
 
             result = new DateTime(0);

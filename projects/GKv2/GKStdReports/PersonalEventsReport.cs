@@ -56,7 +56,7 @@ namespace GKStdReports
                 Type = type;
                 Rec = rec;
                 Event = evt;
-                Date = (evt == null) ? UDN.CreateEmpty() : evt.Date.GetUDN();
+                Date = (evt == null) ? UDN.CreateUnknown() : evt.Date.GetUDN();
             }
         }
 
