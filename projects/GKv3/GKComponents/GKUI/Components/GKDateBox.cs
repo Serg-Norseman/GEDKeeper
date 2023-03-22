@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Globalization;
 using Eto.Forms;
 using GKCore;
@@ -30,7 +29,7 @@ namespace GKUI.Components
     /// </summary>
     public class GKDateBox : MaskedTextBox
     {
-        private readonly string fRegionalDatePattern;
+        private static readonly string fRegionalDatePattern;
 
 
         public string RegionalDatePattern
@@ -45,55 +44,15 @@ namespace GKUI.Components
         }
 
 
+        static GKDateBox()
+        {
+            fRegionalDatePattern = GKUtils.GetShortDatePattern();
+            Logger.WriteInfo(string.Format("RegionalDatePattern: {0}", fRegionalDatePattern));
+        }
+
         public GKDateBox()
         {
-            fRegionalDatePattern = GetShortDatePattern();
-            Provider = new FixedMaskedTextProvider(GetMask(fRegionalDatePattern), CultureInfo.InvariantCulture);
-        }
-
-        private static string GetMask(string regionalDatePattern)
-        {
-            // "00/00/0000"
-            string result = regionalDatePattern.Replace('d', '0').Replace('m', '0').Replace('y', '0');
-            return result;
-        }
-
-        private static string GetShortDatePattern()
-        {
-            var culture = CultureInfo.CurrentCulture; // work
-            //var culture = new CultureInfo("en-US"); // debug
-            //var culture = new CultureInfo("hu-HU"); // debug
-
-            var dtf = culture.DateTimeFormat;
-            var dateSeparators = dtf.DateSeparator.ToCharArray();
-
-            // may contain a period, a dash, and a slash
-            var result = dtf.ShortDatePattern.ToLowerInvariant();
-
-            // normalize
-            string[] parts = result.Split(dateSeparators, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < parts.Length; i++) {
-                string part = parts[i];
-                char firstChar = part[0];
-                switch (firstChar) {
-                    case 'd':
-                    case 'm':
-                        if (part.Length < 2) {
-                            part = part.PadRight(2, firstChar);
-                        }
-                        break;
-
-                    case 'y':
-                        if (part.Length < 4) {
-                            part = part.PadRight(4, firstChar);
-                        }
-                        break;
-                }
-                parts[i] = part;
-            }
-            result = string.Join("/", parts);
-
-            return result;
+            Provider = new FixedMaskedTextProvider(GKUtils.GetDateMask(fRegionalDatePattern), CultureInfo.InvariantCulture);
         }
     }
 }

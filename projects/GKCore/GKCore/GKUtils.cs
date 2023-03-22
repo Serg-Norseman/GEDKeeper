@@ -766,6 +766,52 @@ namespace GKCore
 
         #region Date functions
 
+        public static string GetDateMask(string regionalDatePattern)
+        {
+            // "00/00/0000"
+            string result = regionalDatePattern.Replace('d', '0').Replace('m', '0').Replace('y', '0');
+            return result;
+        }
+
+        public static string GetShortDatePattern()
+        {
+            var culture = CultureInfo.CurrentCulture; // work
+            //var culture = new CultureInfo("en-US"); // debug
+            //var culture = new CultureInfo("hu-HU"); // debug
+
+            var dtf = culture.DateTimeFormat;
+            var dateSeparators = dtf.DateSeparator.ToCharArray();
+
+            // may contain a period, a dash, and a slash
+            var result = dtf.ShortDatePattern.ToLowerInvariant();
+            Logger.WriteInfo(string.Format("ShortDatePattern: {0}", result));
+
+            // normalize
+            string[] parts = result.Split(dateSeparators, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < parts.Length; i++) {
+                string part = parts[i];
+                char firstChar = part[0];
+                switch (firstChar) {
+                    case 'd':
+                    case 'm':
+                        if (part.Length < 2) {
+                            part = part.PadRight(2, firstChar);
+                        }
+                        break;
+
+                    case 'y':
+                        if (part.Length < 4) {
+                            part = part.PadRight(4, firstChar);
+                        }
+                        break;
+                }
+                parts[i] = part;
+            }
+            result = string.Join("/", parts);
+
+            return result;
+        }
+
         /// <summary>
         /// The result of the function is a "normalized date", delimited by '.' and fixed order of parts: "dd.mm.yyyy". 
         /// The pattern and regional date contain the delimiter '/'. 
@@ -778,29 +824,34 @@ namespace GKCore
         {
             if (string.IsNullOrEmpty(regionalDate)) return string.Empty;
 
-            string[] regionalParts = regionalDate.Split('/');
-            string[] patternParts = pattern.Split('/');
-            string[] resultParts = new string[3];
+            try {
+                string[] regionalParts = regionalDate.Split('/');
+                string[] patternParts = pattern.Split('/');
+                string[] resultParts = new string[3];
 
-            for (int i = 0; i < patternParts.Length; i++) {
-                string part = patternParts[i];
-                switch (part[0]) {
-                    case 'd':
-                        resultParts[0] = regionalParts[i];
-                        break;
+                for (int i = 0; i < patternParts.Length; i++) {
+                    string part = patternParts[i];
+                    switch (part[0]) {
+                        case 'd':
+                            resultParts[0] = regionalParts[i];
+                            break;
 
-                    case 'm':
-                        resultParts[1] = regionalParts[i];
-                        break;
+                        case 'm':
+                            resultParts[1] = regionalParts[i];
+                            break;
 
-                    case 'y':
-                        resultParts[2] = regionalParts[i];
-                        break;
+                        case 'y':
+                            resultParts[2] = regionalParts[i];
+                            break;
+                    }
                 }
-            }
 
-            string result = string.Join(".", resultParts);
-            return result;
+                string result = string.Join(".", resultParts);
+                return result;
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("GKUtils.GetNormalizeDate({0}, {1})", regionalDate, pattern), ex);
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -815,29 +866,34 @@ namespace GKCore
         {
             if (string.IsNullOrEmpty(normalizeDate)) return string.Empty;
 
-            string[] normalizeParts = normalizeDate.Split('.');
-            string[] patternParts = pattern.Split('/');
-            string[] resultParts = new string[3];
+            try {
+                string[] normalizeParts = normalizeDate.Split('.');
+                string[] patternParts = pattern.Split('/');
+                string[] resultParts = new string[3];
 
-            for (int i = 0; i < patternParts.Length; i++) {
-                string part = patternParts[i];
-                switch (part[0]) {
-                    case 'd':
-                        resultParts[i] = normalizeParts[0];
-                        break;
+                for (int i = 0; i < patternParts.Length; i++) {
+                    string part = patternParts[i];
+                    switch (part[0]) {
+                        case 'd':
+                            resultParts[i] = normalizeParts[0];
+                            break;
 
-                    case 'm':
-                        resultParts[i] = normalizeParts[1];
-                        break;
+                        case 'm':
+                            resultParts[i] = normalizeParts[1];
+                            break;
 
-                    case 'y':
-                        resultParts[i] = normalizeParts[2];
-                        break;
+                        case 'y':
+                            resultParts[i] = normalizeParts[2];
+                            break;
+                    }
                 }
-            }
 
-            string result = string.Join("/", resultParts);
-            return result;
+                string result = string.Join("/", resultParts);
+                return result;
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("GKUtils.GetRegionalDate({0}, {1})", normalizeDate, pattern), ex);
+                return string.Empty;
+            }
         }
 
         public static string GEDCOMEventToDateStr(GDMCustomEvent evt, DateFormat format, bool sign, bool shorten = false)
