@@ -128,7 +128,7 @@ namespace GDModel
             } else if (fDateFrom.StringValue == "" && fDateTo.StringValue != "") {
                 result = UDN.CreateBefore(fDateTo.GetUDN());
             } else if (fDateFrom.StringValue != "" && fDateTo.StringValue != "") {
-                result = UDN.CreateBetween(fDateFrom.GetUDN(), fDateTo.GetUDN());
+                result = UDN.CreateBetween(fDateFrom.GetUDN(), fDateTo.GetUDN(), false);
             } else {
                 result = UDN.CreateEmpty();
             }

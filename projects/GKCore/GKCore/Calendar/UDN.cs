@@ -489,9 +489,9 @@ namespace GKCore.Calendar
         /// <returns>A date that is "average" of the <paramref name="left"/> and <paramref name="right"/>.
         /// Both the dates must have valid year parts (must not have `IgnoreYear` flag set). Otherwise this method
         /// throws an exception.</returns>
-        public static UDN CreateBetween(UDN left, UDN right)
+        public static UDN CreateBetween(UDN left, UDN right, bool checkYears = true)
         {
-            if (((IgnoreYear & left.fValue) != 0) || ((IgnoreYear & right.fValue) != 0))
+            if (checkYears && (((IgnoreYear & left.fValue) != 0) || ((IgnoreYear & right.fValue) != 0)))
             {
                 throw new Exception("`Between` member requires dates with valid years");
             }
