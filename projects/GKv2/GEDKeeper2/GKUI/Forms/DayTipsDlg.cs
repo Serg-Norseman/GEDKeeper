@@ -75,5 +75,14 @@ namespace GKUI.Forms
         {
             fController.InitTips(caption, showTipsChecked, tips);
         }
+
+        public override bool SkipTheme(IDisposable component)
+        {
+            if (component == Shape1 || component == Shape2 || component == Shape3 ||
+                component == lblTitle || component == txtTip || component == chkShow) {
+                return true;
+            }
+            return false;
+        }
     }
 }

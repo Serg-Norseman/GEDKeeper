@@ -552,8 +552,6 @@ namespace GKCore
 
                     int days = GKUtils.GetDaysForBirth(iRec);
                     if (days >= 0 && days < 3) {
-                        string tip;
-
                         if (firstTip) {
                             tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
                             firstTip = false;
@@ -561,6 +559,7 @@ namespace GKCore
 
                         string nm = Culture.GetPossessiveName(iRec);
 
+                        string tip;
                         switch (days) {
                             case 0:
                                 tip = string.Format(LangMan.LS(LSID.LSID_BirthdayToday), nm);
@@ -572,7 +571,31 @@ namespace GKCore
                                 tip = string.Format(LangMan.LS(LSID.LSID_DaysRemained), nm, days);
                                 break;
                         }
+                        tipsList.Add(tip);
+                    }
 
+                    int years;
+                    days = GKUtils.GetDaysForBirthAnniversary(iRec, out years);
+                    if (days >= 0 && days < 3) {
+                        if (firstTip) {
+                            tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
+                            firstTip = false;
+                        }
+
+                        string nm = Culture.GetPossessiveName(iRec);
+
+                        string tip;
+                        switch (days) {
+                            case 0:
+                                tip = string.Format(LangMan.LS(LSID.LSID_AnniversaryToday), nm);
+                                break;
+                            case 1:
+                                tip = string.Format(LangMan.LS(LSID.LSID_AnniversaryTomorrow), nm);
+                                break;
+                            default:
+                                tip = string.Format(LangMan.LS(LSID.LSID_AnniversaryDaysRemained), nm, days);
+                                break;
+                        }
                         tipsList.Add(tip);
                     }
                 }

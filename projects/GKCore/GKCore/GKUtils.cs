@@ -1223,9 +1223,9 @@ namespace GKCore
                                     int curY = dtNow.Year;
                                     int curM = dtNow.Month;
                                     int curD = dtNow.Day;
-                                    double dt2 = curY + bdM / 12.0 + bdD / 12.0 / 31.0;
-                                    double dt3 = curY + curM / 12.0 + curD / 12.0 / 31.0;
-                                    bdY = (dt2 < dt3) ? (curY + 1) : curY;
+                                    double bdN = curY + bdM / 12.0 + bdD / 12.0 / 31.0;
+                                    double curN = curY + curM / 12.0 + curD / 12.0 / 31.0;
+                                    bdY = (bdN < curN) ? (curY + 1) : curY;
 
                                     // There are valid birthdays on February 29th in leap years. 
                                     // For other years, we need a correction for an acceptable day.
@@ -1240,6 +1240,59 @@ namespace GKCore
                     }
                 } catch (Exception ex) {
                     Logger.WriteError("GKUtils.GetDaysForBirth()", ex);
+                }
+            }
+
+            return distance;
+        }
+
+        public static int GetDaysForBirthAnniversary(GDMIndividualRecord iRec, out int years)
+        {
+            int distance = -1;
+            years = 0;
+
+            if (iRec != null) {
+                int bdD, bdM, bdY;
+
+                try {
+                    GDMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.DEAT);
+                    if (evt == null) {
+                        evt = iRec.FindEvent(GEDCOMTagType.BIRT);
+                        if (evt != null) {
+                            var dt = evt.Date.Value as GDMDate;
+                            if (dt != null && dt.IsValidDate()) {
+                                bdY = dt.Year;
+                                bdM = dt.Month;
+                                bdD = dt.Day;
+
+                                DateTime dtNow = DateTime.Now.Date;
+                                int curY = dtNow.Year;
+                                int curM = dtNow.Month;
+                                int curD = dtNow.Day;
+
+                                double bdN = curY + bdM / 12.0 + bdD / 12.0 / 31.0;
+                                double curN = curY + curM / 12.0 + curD / 12.0 / 31.0;
+
+                                if (bdN > curN) {
+                                    years = curY - bdY;
+                                    bool anniversary = (years % 10 == 0) || (years % 25 == 0);
+                                    if (anniversary) {
+                                        bdY = (bdN < curN) ? (curY + 1) : curY;
+
+                                        // There are valid birthdays on February 29th in leap years. 
+                                        // For other years, we need a correction for an acceptable day.
+                                        if (bdD == 29 && bdM == 2 && !DateTime.IsLeapYear(bdY)) {
+                                            bdD -= 1;
+                                        }
+
+                                        distance = DateHelper.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    Logger.WriteError("GKUtils.GetDaysForBirthAnniversary()", ex);
                 }
             }
 

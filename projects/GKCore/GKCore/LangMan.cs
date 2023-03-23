@@ -959,7 +959,11 @@ namespace GKCore
         /* 897 */ LSID_ShortenDateRanges,
         /* 898 */ LSID_PressEnterToApply,
 
-        /* 000 */ LSID_Last = LSID_PressEnterToApply
+        /* 899 */ LSID_AnniversaryToday,
+        /* 900 */ LSID_AnniversaryTomorrow,
+        /* 901 */ LSID_AnniversaryDaysRemained,
+
+        /* 000 */ LSID_Last = LSID_AnniversaryDaysRemained
     }
 
 
@@ -1874,6 +1878,10 @@ namespace GKCore
             /* 896 */ "Reset filter",
             /* 897 */ "Shorten date ranges",
             /* 898 */ "Press Enter to apply",
+
+            /* 899 */ "Today is jubilee of {0}",
+            /* 900 */ "Tomorrow is jubilee of {0}",
+            /* 901 */ "{1} days remain before the jubilee of {0}",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

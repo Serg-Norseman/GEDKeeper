@@ -10,7 +10,7 @@
       <TableLayout>
         <TableRow>
           <TableCell>
-            <Scrollable BackgroundColor="Gray" Border="Line" Width="100">
+            <Scrollable x:Name="Shape1" BackgroundColor="Gray" Border="Line" Width="100">
               <StackLayout Orientation="Vertical" Padding="8" HorizontalContentAlignment="Center" VerticalContentAlignment="Top">
                 <ImageView Size="41, 43" Image="{Resource Resources.image_tips_light.png, GKCore}" />
               </StackLayout>
@@ -19,13 +19,13 @@
 
           <TableCell>
             <StackLayout>
-              <Scrollable BackgroundColor="White" Border="Line" Height="50">
+              <Scrollable x:Name="Shape2" BackgroundColor="White" Border="Line" Height="50">
                 <StackLayout Orientation="Horizontal" Padding="8" VerticalContentAlignment="Top">
                   <Label x:Name="lblTitle" Width="370" Font="Bold+16pt" TextAlignment="Left" VerticalAlignment="Center" />
                 </StackLayout>
               </Scrollable>
 
-              <Scrollable BackgroundColor="White" Border="Line" Height="204">
+              <Scrollable x:Name="Shape3" BackgroundColor="White" Border="Line" Height="204">
                 <StackLayout Orientation="Horizontal" Padding="8">
                   <TextBox x:Name="txtTip" Size="370, 154" ReadOnly="True" ShowBorder="False" />
                 </StackLayout>

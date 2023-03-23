@@ -89,7 +89,8 @@
 		    // 
 		    this.lblTitle.BackColor = System.Drawing.Color.White;
 		    this.lblTitle.Font = new System.Drawing.Font("Arial", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.lblTitle.Location = new System.Drawing.Point(134, 19);
+            this.lblTitle.ForeColor = System.Drawing.Color.Black;
+            this.lblTitle.Location = new System.Drawing.Point(134, 19);
 		    this.lblTitle.Name = "lblTitle";
 		    this.lblTitle.Size = new System.Drawing.Size(378, 36);
 		    this.lblTitle.TabIndex = 3;

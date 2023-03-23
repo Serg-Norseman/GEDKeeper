@@ -39,6 +39,9 @@ namespace GKUI.Forms
         private Label lblTitle;
         private Eto.Forms.ImageView Image1;
         private TextBox txtTip;
+        private Scrollable Shape1;
+        private Scrollable Shape2;
+        private Scrollable Shape3;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -85,6 +88,15 @@ namespace GKUI.Forms
         public void Init(string caption, bool showTipsChecked, StringList tips)
         {
             fController.InitTips(caption, showTipsChecked, tips);
+        }
+
+        public override bool SkipTheme(IDisposable component)
+        {
+            if (component == Shape1 || component == Shape2 || component == Shape3 ||
+                component == lblTitle || component == txtTip || component == chkShow) {
+                return true;
+            }
+            return false;
         }
     }
 }
