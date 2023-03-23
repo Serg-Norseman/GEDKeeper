@@ -1,11 +1,6 @@
 # Target .NET platform
 
-The only allowed target platfrom is '.NET 4.0'. This ensures maximum coverage of users,
-and both gives ability to inexperienced or conservative users to avoid platform upgrading, and
-adds old, un-upgradable versions of Microsoft Windows (from WinXP and above) to list of the supported operating systems.
-
-The only one exception of this rule is the sub-project 'GKTests', where more higher versions of
-.NET are allowed.
+-- under revision --
 
 # Language Integrated Query (LINQ)
 

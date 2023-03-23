@@ -23,7 +23,7 @@ but not limited to, the following:
 * Can build several tree species, as well as print and save their images.
 * Provides fast navigation, filtering, and searching.
 * Able to add multimedia materials.
-* An output of geographic data using [Google© maps](https://maps.google.com).
+* An output of geographic data using [Google© maps](https://maps.google.com) and [OpenStreetMap](https://www.openstreetmap.org/).
 
 The aim of this program is to be a quick and effective means of conducting personal 
 genealogical database development.
@@ -39,8 +39,8 @@ Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/ged
 
 ### Support
 
-The project is completely free--no restrictions are imposed on its use. I just like to do useful things. 
-If you have a desire to help, tell friends about the project or [donate](https://sourceforge.net/p/gedkeeper/donate/).
+The project is completely free - no restrictions are imposed on its use. I just like to do useful things. 
+If you have a desire to help, tell friends about the project.
 Thanks!
 
 ### Contributing
@@ -57,7 +57,7 @@ If your problem or idea is not addressed yet, please open a new issue.
 ## Implementations
 
 - "GEDKeeper2", standard (NET4.7.2 & WinForms based)
-- "GEDKeeper3", cross-platform (NET Standard & Eto based), interface grinding stage
+- "GEDKeeper3", cross-platform (NET Standard & Eto based)
 - "GEDKeeperX", future mobile (NET Standard & Xamarin based), initial experience
 
 
@@ -74,6 +74,11 @@ If your problem or idea is not addressed yet, please open a new issue.
 - Russian
 - Ukrainian
 
+### Planned, search for a native speaker
+
+- Hungarian
+- Portuguese
+- Spanish
 
 ## Docs & Help
 

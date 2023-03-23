@@ -1,3 +1,25 @@
+## 28.03.2023 [v2.25.0]
+- Added display of days remaining until birth anniversaries, multiples of 10 and 25 years.
+- Added display of marker tooltips with place names and dates in maps.
+- Removed restriction on date ranges without known years.
+- Added optional multipage printing of charts.
+- Added the option to send the result of calculating the year of events from the Calculator plugin to the event editing dialog.
+- Added feature to write to CSV from Lua scripts.
+- Added sorting of event types by frequency of use in the event editing dialog.
+- Added remembering filters in the record selection dialog (filter applying is now on the Enter button).
+- Added remembering the last selected person in tree diagrams, and restoring when no other person is selected.
+- Added protection for the output of "extended woman surnames": if displaying only maiden or married surnames is selected, 
+  but there are none, then the surname that is available is displayed (especially for children).
+- Improved calculation of ages by chronological difference of years.
+- Fixed display of person names in lists and tree (always the first in the list if the filtering language is not selected in the Navigator).
+- Added recognition in files of non-standard designations of months in Russian, Dutch, French, German and Spanish.
+- Added output of links to external resources by RFN tag.
+- Fixed marriage surname and nickname reset when changing secondary structures of a person.
+- Added remembering folders for saving scripts, images and reports.
+- Added option to shorten date ranges in years only mode in tree charts.
+- Removed plugins GKFoldersPlugin, GKImageViewerPlugin, GKTreeVizPlugin.
+- The .NET Framework has been updated to version 4.7.2.
+
 ## 28.02.2023 [v2.24.0]
 - "Data Quality" plugin has been merged with the "Check сonnection of families" tool.
 - Added option to search and filter by all names.

@@ -1,10 +1,10 @@
 @echo off
 cls
 
-set GKVER=2.24.0
+set GKVER=2.25.0
 
 set lstfile=".\listfile.txt"
-set out_fn="gedkeeper_%GKVER%_win_portable"
+set out_fn="gedkeeper_%GKVER%_win86_portable"
 set zip_fn=".\%out_fn%.zip"
 set log_fn=".\%out_fn%.log"
 
