@@ -144,7 +144,7 @@ namespace GKUI.Components
                 var point = new PointLatLng(pt.Latitude, pt.Longitude);
 
                 if (fShowPoints) {
-                    AddMarker(point, GMarkerIconType.green, MarkerTooltipMode.OnMouseOver, " ");
+                    AddMarker(point, GMarkerIconType.green, MarkerTooltipMode.OnMouseOver, pt.Hint);
                     if (i == num - 1) {
                         SetCenter(pt.Latitude, pt.Longitude, -1);
                     }
@@ -333,7 +333,7 @@ namespace GKUI.Components
 
         public void SaveSnapshot(string fileName)
         {
-            Image tmpImage = fMapControl.ToImage();
+            var tmpImage = fMapControl.ToImage();
             if (tmpImage != null) {
                 using (tmpImage) {
                     tmpImage.Save(fileName);

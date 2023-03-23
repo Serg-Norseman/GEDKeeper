@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
+using GDModel;
 
 namespace GKCore.Maps
 {
@@ -27,13 +27,14 @@ namespace GKCore.Maps
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string Hint { get; set; }
-        public DateTime Date { get; set; }
+        public GDMCustomDate Date { get; set; }
 
-        public GeoPoint(double latitude, double longitude, string hint)
+        public GeoPoint(double latitude, double longitude, string hint, GDMCustomDate date = null)
         {
             Latitude = latitude;
             Longitude = longitude;
             Hint = hint;
+            Date = date;
         }
     }
 }

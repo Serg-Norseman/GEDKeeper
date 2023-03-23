@@ -21,6 +21,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using BSLib;
 using Eto.Drawing;

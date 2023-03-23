@@ -231,7 +231,7 @@ namespace GKCore.Controllers
 
         private static int MapPointsCompare(GeoPoint item1, GeoPoint item2)
         {
-            return item1.Date.CompareTo(item2.Date);
+            return (item1.Date == null || item2.Date == null) ? -1 : item1.Date.CompareTo(item2.Date);
         }
 
         // TODO: localize?

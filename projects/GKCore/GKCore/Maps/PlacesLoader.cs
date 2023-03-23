@@ -22,12 +22,12 @@ using System;
 using System.Collections.Generic;
 using GDModel;
 using GKCore.Design.Controls;
+using GKCore.Options;
 
 namespace GKCore.Maps
 {
     public class PlaceRef
     {
-        public readonly DateTime Date;
         public readonly GDMCustomEvent Event;
         public readonly GDMRecord Owner;
 
@@ -35,7 +35,6 @@ namespace GKCore.Maps
         {
             Owner = owner;
             Event = evt;
-            Date = (evt == null) ? new DateTime(0) : evt.Date.GetDateTime();
         }
     }
 
@@ -76,15 +75,15 @@ namespace GKCore.Maps
                 }
             }
 
-            pt = new GeoPoint(gmPt.Latitude, gmPt.Longitude, gmPt.Hint);
-            pt.Date = placeRef.Date;
-            mapPoints.Add(pt);
+            mapPoints.Add(new GeoPoint(gmPt.Latitude, gmPt.Longitude, gmPt.Hint, placeRef.Event.Date));
         }
 
         public static void CopyPoints(IMapBrowser browser, IList<GeoPoint> gmapPoints, bool byPerson)
         {
             if (gmapPoints == null)
                 throw new ArgumentNullException("gmapPoints");
+
+            var globOpts = GlobalOptions.Instance;
 
             browser.BeginUpdate();
             try {
@@ -94,8 +93,8 @@ namespace GKCore.Maps
                 for (int i = 0; i < num; i++) {
                     GeoPoint pt = gmapPoints[i];
                     string stHint = pt.Hint;
-                    if (byPerson) {
-                        stHint = stHint + " [" + pt.Date.ToString() + "]";
+                    if (byPerson && pt.Date != null) {
+                        stHint = stHint + " [" + pt.Date.GetDisplayStringExt(globOpts.DefDateFormat, false, false) + "]";
                     }
 
                     browser.AddPoint(pt.Latitude, pt.Longitude, stHint);

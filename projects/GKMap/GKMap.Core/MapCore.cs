@@ -985,7 +985,7 @@ namespace GKMap
                                 markerEnter(m);
                             }
 
-                            fView.Invalidate();
+                            fView.Refresh();
                         }
                     } else if (m.IsMouseOver) {
                         m.IsMouseOver = false;
@@ -997,7 +997,7 @@ namespace GKMap
                             markerLeave(m);
                         }
 
-                        fView.Invalidate();
+                        fView.Refresh();
                     }
                 }
 
@@ -1016,7 +1016,7 @@ namespace GKMap
                                 routeEnter(m);
                             }
 
-                            fView.Invalidate();
+                            fView.Refresh();
                         }
                     } else {
                         if (m.IsMouseOver) {
@@ -1029,7 +1029,7 @@ namespace GKMap
                                 routeLeave(m);
                             }
 
-                            fView.Invalidate();
+                            fView.Refresh();
                         }
                     }
                 }
@@ -1049,7 +1049,7 @@ namespace GKMap
                                 polygonEnter(m);
                             }
 
-                            fView.Invalidate();
+                            fView.Refresh();
                         }
                     } else {
                         if (m.IsMouseOver) {
@@ -1062,7 +1062,7 @@ namespace GKMap
                                 polygonLeave(m);
                             }
 
-                            fView.Invalidate();
+                            fView.Refresh();
                         }
                     }
                 }

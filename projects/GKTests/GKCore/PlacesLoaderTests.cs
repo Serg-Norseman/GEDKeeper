@@ -42,7 +42,6 @@ namespace GKCore
             var placeRef = new PlaceRef(null, null);
             Assert.IsNotNull(placeRef);
             Assert.IsNull(placeRef.Event);
-            Assert.AreEqual(0, placeRef.Date.ToBinary());
         }
 
         [Test]
