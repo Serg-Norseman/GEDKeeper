@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKWordsCloudPlugin", "GKWor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKHistoryDataPlugin", "GKHistoryDataPlugin\GKHistoryDataPlugin.csproj", "{FCAB4916-791F-4302-90A0-E409410F66BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKStdReports", "GKStdReports\GKStdReports.csproj", "{4D6E49E2-58C4-49C8-8664-C8A89D418927}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKStdReports", "..\GKStdReports\GKStdReports.csproj", "{4D6E49E2-58C4-49C8-8664-C8A89D418927}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCommunicatorPlugin", "..\GKCommunicator\GKCommunicatorPlugin\GKCommunicatorPlugin.csproj", "{304A9ACA-337E-40BC-AC18-BC3B303CBF6C}"
 EndProject
