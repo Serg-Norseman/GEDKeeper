@@ -106,8 +106,6 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            txtDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-
             fController = new CommunicationEditDlgController(this);
             fController.Init(baseWin);
         }

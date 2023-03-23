@@ -52,7 +52,9 @@ namespace GKUI.Components
 
         public GKDateBox()
         {
-            Provider = new FixedMaskedTextProvider(GKUtils.GetDateMask(fRegionalDatePattern), CultureInfo.InvariantCulture);
+            // "/" - Date separator based on the specified Culture for the mask
+            var mask = GKUtils.GetDateMask(fRegionalDatePattern).Replace("/", @"\/");
+            Provider = new FixedMaskedTextProvider(mask, CultureInfo.InvariantCulture);
         }
     }
 }

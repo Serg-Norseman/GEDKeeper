@@ -128,9 +128,6 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            txtStartDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-            txtStopDate.Provider = new FixedMaskedTextProvider("00/00/0000");
-
             fController = new ResearchEditDlgController(this);
             fController.Init(baseWin);
         }
