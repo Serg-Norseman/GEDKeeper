@@ -291,6 +291,10 @@ Section "$(gkreq)"
     CreateDirectory "$INSTDIR\locales"
     SetOutPath "$INSTDIR\locales"
 
+    CreateDirectory "$INSTDIR\locales\cultures"
+    SetOutPath "$INSTDIR\locales\cultures"
+    File "..\locales\cultures\*.*"
+
     CreateDirectory "$INSTDIR\plugins"
     SetOutPath "$INSTDIR\plugins"
 
