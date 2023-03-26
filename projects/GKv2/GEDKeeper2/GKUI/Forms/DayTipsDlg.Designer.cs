@@ -112,7 +112,7 @@
 		    this.txtTip.Location = new System.Drawing.Point(137, 69);
 		    this.txtTip.Multiline = true;
 		    this.txtTip.Name = "txtTip";
-		    this.txtTip.Size = new System.Drawing.Size(371, 154);
+		    this.txtTip.Size = new System.Drawing.Size(371, 164);
 		    this.txtTip.TabIndex = 3;
 		    // 
 		    // DayTipsDlg

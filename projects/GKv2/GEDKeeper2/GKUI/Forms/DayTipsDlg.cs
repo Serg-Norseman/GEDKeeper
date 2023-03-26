@@ -44,9 +44,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<ILabel>(lblTitle); }
         }
 
-        ITextBox IDayTipsDlg.TipText
+        ITextContainer IDayTipsDlg.TipText
         {
-            get { return GetControlHandler<ITextBox>(txtTip); }
+            get { return GetControlHandler<ITextContainer>(txtTip); }
         }
 
         IButton IDayTipsDlg.NextButton

@@ -176,9 +176,9 @@ namespace GKUI.Components
             }
         }
 
-        public static RadioMenuItem AddToolStripItem(ContextMenu contextMenu, string text, object tag, EventHandler<EventArgs> clickHandler)
+        public static RadioMenuItem AddToolStripItem(ContextMenu contextMenu, RadioMenuItem controller, string text, object tag, EventHandler<EventArgs> clickHandler)
         {
-            var tsItem = new RadioMenuItem();
+            var tsItem = new RadioMenuItem(controller);
             tsItem.Text = text;
             tsItem.Tag = tag;
             tsItem.Click += clickHandler;

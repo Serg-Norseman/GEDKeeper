@@ -27,7 +27,7 @@
 
               <Scrollable x:Name="Shape3" BackgroundColor="White" Border="Line" Height="204">
                 <StackLayout Orientation="Horizontal" Padding="8">
-                  <TextBox x:Name="txtTip" Size="370, 154" ReadOnly="True" ShowBorder="False" />
+                  <Label x:Name="txtTip" Size="370, 164" Wrap="Word" />
                 </StackLayout>
               </Scrollable>
             </StackLayout>

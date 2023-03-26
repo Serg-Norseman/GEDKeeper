@@ -208,8 +208,11 @@ namespace GKUI.Forms
         private void PopulateContextMenus()
         {
             var providers = GMapProviders.List;
+            RadioMenuItem controller = null;
             foreach (var prv in providers) {
-                UIHelper.AddToolStripItem(MenuProviders, prv.Name, prv, miProviderX_Click);
+                var item = UIHelper.AddToolStripItem(MenuProviders, controller, prv.Name, prv, miProviderX_Click);
+                if (controller == null)
+                    controller = item;
             }
         }
 

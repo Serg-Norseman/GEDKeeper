@@ -22,10 +22,13 @@ using GKCore.Design.Graphics;
 
 namespace GKCore.Design.Controls
 {
-    public interface ILabel : IBaseControl
+    public interface ITextContainer : IBaseControl
+    {
+        string Text { get; set; }
+    }
+
+    public interface ILabel : ITextContainer
     {
         IColor BackColor { get; set; }
-
-        string Text { get; set; }
     }
 }

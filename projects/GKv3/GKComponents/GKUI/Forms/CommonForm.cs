@@ -236,6 +236,15 @@ namespace GKUI.Forms
             ApplyTheme();
         }
 
+        /*protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            //BringToFront();
+            if (ParentWindow != null) {
+                ParentWindow.SendToBack();
+            }
+        }*/
+
         public virtual void ApplyTheme()
         {
             if (AppHost.Instance != null) {

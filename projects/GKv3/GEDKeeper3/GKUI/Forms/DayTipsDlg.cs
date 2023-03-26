@@ -38,7 +38,7 @@ namespace GKUI.Forms
         private Button btnClose;
         private Label lblTitle;
         private Eto.Forms.ImageView Image1;
-        private TextBox txtTip;
+        private Label txtTip;
         private Scrollable Shape1;
         private Scrollable Shape2;
         private Scrollable Shape3;
@@ -61,9 +61,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<ILabel>(lblTitle); }
         }
 
-        ITextBox IDayTipsDlg.TipText
+        ITextContainer IDayTipsDlg.TipText
         {
-            get { return GetControlHandler<ITextBox>(txtTip); }
+            get { return GetControlHandler<ITextContainer>(txtTip); }
         }
 
         IButton IDayTipsDlg.NextButton
