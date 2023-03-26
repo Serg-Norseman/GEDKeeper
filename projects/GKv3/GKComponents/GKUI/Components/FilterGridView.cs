@@ -192,6 +192,18 @@ namespace GKUI.Components
 
         #endregion
 
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            // does not receive focus without this handler,
+            // without focus does not receive keyboard events
+            if (!HasFocus) {
+                Focus();
+            }
+
+            e.Handled = true;
+            base.OnMouseDown(e);
+        }
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             switch (e.Key) {

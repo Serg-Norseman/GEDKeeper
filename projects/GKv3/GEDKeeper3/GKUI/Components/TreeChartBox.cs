@@ -574,13 +574,16 @@ namespace GKUI.Components
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || e.Buttons == MouseButtons.None) {
                 mpt = GetImageRelativeLocation(e.Location);
             } else {
-                mpt = new Point(e.Location);
+                //mpt = GetImageRelativeLocation(e.Location);
+                //mpt = new Point((e.Location));
+                var imageViewport = base.ImageViewport;
+                mpt = new Point((int)e.Location.X - imageViewport.X, (int)e.Location.Y - imageViewport.Y);
             }
             int aX = mpt.X;
             int aY = mpt.Y;
 
             // for debug purposes
-            //Console.WriteLine(e.Location.ToString() + " / " + mpt.ToString());
+            //Console.WriteLine(new Point(e.Location).ToString() + " --- " + mpt.ToString() + " --- " + MouseOffset.ToString() + " --- " + e.Buttons.ToString());
 
             int num = fModel.Persons.Count;
             for (int i = 0; i < num; i++) {

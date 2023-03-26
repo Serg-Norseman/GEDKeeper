@@ -7,3 +7,6 @@
 
 3. Eto.Forms 2.7.1-3 [Gtk]
   - GridView on cells formatting don't process selected row (selected row changing don't call cells formatting)
+
+4. Eto.Forms 2.7.3 [Gtk]
+  - GridView not selecting last (or only) row

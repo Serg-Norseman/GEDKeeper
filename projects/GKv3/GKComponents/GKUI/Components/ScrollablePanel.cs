@@ -91,6 +91,13 @@ namespace GKUI.Components
             get { return fImageViewport; }
         }
 
+        public Point MouseOffset
+        {
+            get {
+                return new Point(fMouseOffsetX, fMouseOffsetY);
+            }
+        }
+
         public bool HScroll
         {
             get { return fHasHScroll; }

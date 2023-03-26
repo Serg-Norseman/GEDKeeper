@@ -1760,8 +1760,8 @@ namespace GKCore
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
-                    dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
                     dlg.FastFilter = "*";
+                    dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
                         result = (dlg.ResultRecord as GDMFamilyRecord);
@@ -1783,8 +1783,8 @@ namespace GKCore
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtIndividual)) {
-                    dlg.SetTarget(targetMode, target, needSex);
                     dlg.FastFilter = "*";
+                    dlg.SetTarget(targetMode, target, needSex);
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
                         result = (dlg.ResultRecord as GDMIndividualRecord);
@@ -1811,6 +1811,7 @@ namespace GKCore
                     } else {
                         dlg.FastFilter = "*";
                     }
+                    dlg.SetTarget(TargetMode.tmNone, null, GDMSex.svUnknown);
 
                     if (AppHost.Instance.ShowModalX(dlg, false)) {
                         result = dlg.ResultRecord;
