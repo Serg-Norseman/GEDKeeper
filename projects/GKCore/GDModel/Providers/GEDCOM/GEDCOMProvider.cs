@@ -1623,6 +1623,19 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, null, null);
         }
 
+        private static int CheckLineLength(string str)
+        {
+            int len = Math.Min(str.Length, GEDCOMConsts.MaxLineLength);
+            // Fix for disappearing spaces when they are at the beginning of the tag value
+            // (tag parser skips all spaces between tag's name and value tokens).
+            // It is undesirable to change the logic of the parser or the functions of merging these parts -
+            // there will be much more exceptions than in this case.
+            if (len > 0 && len < str.Length && str[len] == ' ') {
+                len--;
+            }
+            return len;
+        }
+
         private static bool WriteText(StreamWriter stream, int level, IGDMTextObject textTag, bool skipTag = false)
         {
             if (textTag.IsEmpty()) return false;
@@ -1632,7 +1645,7 @@ namespace GDModel.Providers.GEDCOM
             for (int i = 0; i < strCount; i++) {
                 string str = strings[i];
 
-                int len = Math.Min(str.Length, GEDCOMConsts.MaxLineLength);
+                int len = CheckLineLength(str);
                 string sub = str.Substring(0, len);
                 str = str.Remove(0, len);
 
@@ -1644,7 +1657,7 @@ namespace GDModel.Providers.GEDCOM
                 }
 
                 while (str.Length > 0) {
-                    len = Math.Min(str.Length, GEDCOMConsts.MaxLineLength);
+                    len = CheckLineLength(str);
 
                     WriteTagLine(stream, level, GEDCOMTagName.CONC, str.Substring(0, len));
 
