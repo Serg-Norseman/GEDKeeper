@@ -102,7 +102,7 @@ namespace GKUI.Platform
             return (ownerForm == null) ? IntPtr.Zero : ownerForm.Handle;
         }
 
-        public override bool ShowModalX(ICommonDialog form, bool keepModeless = false)
+        public override bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
             IntPtr mainHandle = GetTopWindowHandle();
 
@@ -118,9 +118,9 @@ namespace GKUI.Platform
                 }
             }
 
-            UIHelper.CenterFormByParent((Form)form, mainHandle);
+            UIHelper.CenterFormByParent((Form)dialog, mainHandle);
 
-            return base.ShowModalX(form, keepModeless);
+            return base.ShowModalX(dialog, owner, keepModeless);
         }
 
         public override void EnableWindow(IWidgetForm form, bool value)

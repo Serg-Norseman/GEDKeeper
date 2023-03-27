@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -94,7 +95,7 @@ namespace GKCore.Lists
     {
         private GDMIndividualRecord fMember;
 
-        public GroupMembersListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public GroupMembersListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete /*, RecordAction.raJump*/);
@@ -143,7 +144,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    member = fBaseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
+                    member = fBaseWin.Context.SelectPerson(fOwner, null, TargetMode.tmNone, GDMSex.svUnknown);
                     if (member != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, grp, member);
                     }

@@ -171,9 +171,9 @@ namespace GKUI.Forms
     /// </summary>
     public class CommonDialog : CommonForm, ICommonDialog
     {
-        public virtual bool ShowModalX(object owner)
+        public virtual bool ShowModalX(IView owner)
         {
-            return (ShowDialog() == DialogResult.OK);
+            return (ShowDialog(owner as IWin32Window) == DialogResult.OK);
         }
 
         protected virtual void CancelClickHandler(object sender, EventArgs e)

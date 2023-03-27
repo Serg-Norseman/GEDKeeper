@@ -258,10 +258,10 @@ namespace GKCore
             Assert.AreEqual(TreeInspector.CheckDiag.cdStrangeSpouse, checksList[0].Diag);
             Assert.AreEqual(TreeInspector.CheckDiag.cdPersonLonglived, checksList[2].Diag);
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeInspector.RepairProblem(null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeInspector.RepairProblem(fBaseWin, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeInspector.RepairProblem(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeInspector.RepairProblem(null, fBaseWin, null); });
 
-            TreeInspector.RepairProblem(fBaseWin, checksList[2]);
+            TreeInspector.RepairProblem(null, fBaseWin, checksList[2]);
         }
 
         [Test]

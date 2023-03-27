@@ -25,6 +25,7 @@ using GKCore.Interfaces;
 using GKCore.Design.Views;
 using GKCore.Operations;
 using GKCore.Types;
+using GKCore.Design;
 
 namespace GKCore.Lists
 {
@@ -32,7 +33,7 @@ namespace GKCore.Lists
     {
         private readonly bool fPersonsMode;
 
-        public EventsListModel(IBaseWindow baseWin, ChangeTracker undoman, bool personsMode) : base(baseWin, undoman)
+        public EventsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman, bool personsMode) : base(owner, baseWin, undoman)
         {
             fPersonsMode = personsMode;
             AllowedActions = EnumSet<RecordAction>.Create(
@@ -123,7 +124,7 @@ namespace GKCore.Lists
                             }
 
                             dlgEventEdit.Event = newEvent;
-                            result = AppHost.Instance.ShowModalX(dlgEventEdit, true);
+                            result = AppHost.Instance.ShowModalX(dlgEventEdit, fOwner, true);
 
                             if (!result) {
                                 if (!exists) {

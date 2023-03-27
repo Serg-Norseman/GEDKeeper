@@ -22,6 +22,7 @@ using System;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -125,7 +126,7 @@ namespace GKCore.Lists
     {
         private GDMTaskRecord fTaskRec;
 
-        public ResTasksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public ResTasksListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
@@ -186,14 +187,14 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    task = fBaseWin.Context.SelectRecord(GDMRecordType.rtTask, null) as GDMTaskRecord;
+                    task = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtTask, null) as GDMTaskRecord;
                     if (task != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, research, task);
                     }
                     break;
 
                 case RecordAction.raEdit:
-                    result = (task != null && BaseController.ModifyTask(fBaseWin, ref task));
+                    result = (task != null && BaseController.ModifyTask(fOwner, fBaseWin, ref task));
                     break;
 
                 case RecordAction.raDelete:
@@ -218,7 +219,7 @@ namespace GKCore.Lists
     {
         private GDMCommunicationRecord fCommRec;
 
-        public ResCommunicationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public ResCommunicationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
@@ -279,14 +280,14 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    comm = fBaseWin.Context.SelectRecord(GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
+                    comm = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
                     if (comm != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, research, comm);
                     }
                     break;
 
                 case RecordAction.raEdit:
-                    result = (comm != null && BaseController.ModifyCommunication(fBaseWin, ref comm));
+                    result = (comm != null && BaseController.ModifyCommunication(fOwner, fBaseWin, ref comm));
                     break;
 
                 case RecordAction.raDelete:
@@ -311,7 +312,7 @@ namespace GKCore.Lists
     {
         private GDMGroupRecord fGroupRec;
 
-        public ResGroupsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public ResGroupsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
@@ -360,7 +361,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    group = fBaseWin.Context.SelectRecord(GDMRecordType.rtGroup, null) as GDMGroupRecord;
+                    group = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     if (group != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, research, group);
                     }

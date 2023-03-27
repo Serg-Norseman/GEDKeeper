@@ -22,6 +22,7 @@ using System;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -32,7 +33,7 @@ namespace GKCore.Lists
     {
         private GDMIndividualRecord fChildRec;
 
-        protected ChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        protected ChildrenListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
@@ -73,7 +74,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class FamilyChildrenListModel : ChildrenListModel
     {
-        public FamilyChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public FamilyChildrenListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
         }
 
@@ -101,7 +102,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    child = fBaseWin.Context.SelectPerson(tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
+                    child = fBaseWin.Context.SelectPerson(fOwner, tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
@@ -109,7 +110,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raEdit:
-                    result = (BaseController.ModifyIndividual(fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svUnknown));
+                    result = (BaseController.ModifyIndividual(fOwner, fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svUnknown));
                     break;
 
                 case RecordAction.raDelete:
@@ -135,7 +136,7 @@ namespace GKCore.Lists
     {
         private readonly GDMList<GDMChildLink> fTotalChildren;
 
-        public IndividualChildrenListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public IndividualChildrenListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             fTotalChildren = new GDMList<GDMChildLink>();
         }
@@ -172,10 +173,10 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    GDMFamilyRecord family = fBaseWin.Context.SelectFamily(indiRec, TargetMode.tmFamilySpouse);
+                    GDMFamilyRecord family = fBaseWin.Context.SelectFamily(fOwner, indiRec, TargetMode.tmFamilySpouse);
                     if (family != null && fBaseWin.Context.IsAvailableRecord(family)) {
                         GDMIndividualRecord target = (indiRec.Sex == GDMSex.svMale) ? indiRec : null;
-                        child = fBaseWin.Context.SelectPerson(target, TargetMode.tmParent, GDMSex.svUnknown);
+                        child = fBaseWin.Context.SelectPerson(fOwner, target, TargetMode.tmParent, GDMSex.svUnknown);
                         result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                         if (result) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
@@ -184,7 +185,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raEdit:
-                    result = (BaseController.ModifyIndividual(fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svUnknown));
+                    result = (BaseController.ModifyIndividual(fOwner, fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svUnknown));
                     break;
 
                 case RecordAction.raDelete:

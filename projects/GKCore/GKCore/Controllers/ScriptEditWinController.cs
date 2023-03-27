@@ -86,7 +86,7 @@ namespace GKCore.Controllers
         {
             try {
                 fView.DebugOutput.Clear();
-                var scrEngine = new ScriptEngine();
+                var scrEngine = new ScriptEngine(fView);
                 scrEngine.lua_run(fView.ScriptText.Text, fBase, fView.DebugOutput);
             } catch (Exception ex) {
                 Logger.WriteError("ScriptEditWin.Run()", ex);

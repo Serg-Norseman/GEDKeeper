@@ -549,7 +549,7 @@ namespace GKCore
         [Test]
         public void Test_CheckPersonSex()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.CheckPersonSex(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.CheckPersonSex(null, null); });
         }
 
         [Test]
@@ -596,14 +596,14 @@ namespace GKCore
         [Test]
         public void Test_AddChildForParent()
         {
-            var result = fContext.AddChildForParent(null, GDMSex.svMale);
+            var result = fContext.AddChildForParent(null, null, GDMSex.svMale);
             Assert.IsNull(result);
         }
 
         [Test]
         public void Test_SelectSpouseFor()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.SelectSpouseFor(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.SelectSpouseFor(null, null); });
         }
     }
 }

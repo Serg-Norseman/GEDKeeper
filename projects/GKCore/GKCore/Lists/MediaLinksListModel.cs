@@ -22,6 +22,7 @@ using System;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -32,7 +33,7 @@ namespace GKCore.Lists
     {
         private GDMFileReferenceWithTitle fFileRef;
 
-        public MediaLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public MediaLinksListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
@@ -93,13 +94,13 @@ namespace GKCore.Lists
             GDMMultimediaRecord mmRec;
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    mmRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
+                    mmRec = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
                     if (mmRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GDMObject)dataOwner, mmRec);
                         mmLink = dataOwner.FindMultimediaLink(mmRec);
 
                         if (result && mmLink != null && (dataOwner is GDMIndividualRecord) && GKUtils.MayContainPortrait(mmRec)) {
-                            BaseController.SelectPortraitRegion(fBaseWin, mmLink);
+                            BaseController.SelectPortraitRegion(fOwner, fBaseWin, mmLink);
                         }
                     }
                     break;
@@ -107,7 +108,7 @@ namespace GKCore.Lists
                 case RecordAction.raEdit:
                     if (mmLink != null) {
                         mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
-                        result = BaseController.ModifyMedia(fBaseWin, ref mmRec);
+                        result = BaseController.ModifyMedia(fOwner, fBaseWin, ref mmRec);
                     }
                     break;
 

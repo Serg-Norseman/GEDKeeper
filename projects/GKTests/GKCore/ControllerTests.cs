@@ -130,7 +130,7 @@ namespace GKCore.Controllers
 
             // substitutes of values
             view.Relation.Text.Returns(relValue);
-            baseWin.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown).Returns(relPerson);
+            baseWin.Context.SelectPerson(view, null, TargetMode.tmNone, GDMSex.svUnknown).Returns(relPerson);
 
             controller.SetPerson();
 

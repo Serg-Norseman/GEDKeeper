@@ -24,6 +24,7 @@ using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -487,7 +488,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void RepairProblem(IBaseWindow baseWin, CheckObj checkObj)
+        public static void RepairProblem(IView owner, IBaseWindow baseWin, CheckObj checkObj)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
@@ -507,7 +508,7 @@ namespace GKCore.Tools
 
                 case CheckDiag.cdPersonSexless: {
                         var iRec = checkObj.Rec as GDMIndividualRecord;
-                        baseWin.Context.CheckPersonSex(iRec);
+                        baseWin.Context.CheckPersonSex(owner, iRec);
                         baseWin.NotifyRecord(iRec, RecordAction.raEdit);
                     }
                     break;
@@ -530,13 +531,13 @@ namespace GKCore.Tools
 
                 case CheckDiag.cdDuplicateChildren:
                     if (checkObj.Solve == CheckSolve.csEdit) {
-                        BaseController.EditRecord(baseWin, checkObj.Rec);
+                        BaseController.EditRecord(owner, baseWin, checkObj.Rec);
                     }
                     break;
 
                 case CheckDiag.csDateInvalid:
                     if (checkObj.Solve == CheckSolve.csEdit) {
-                        BaseController.EditRecord(baseWin, checkObj.Rec);
+                        BaseController.EditRecord(owner, baseWin, checkObj.Rec);
                     }
                     break;
 

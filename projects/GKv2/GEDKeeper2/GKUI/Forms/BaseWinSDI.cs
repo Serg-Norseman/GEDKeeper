@@ -302,7 +302,7 @@ namespace GKUI.Forms
             var recView = contextMenu.SourceControl as GKListView;
             if (recView != null) {
                 var items = recView.GetSelectedItems();
-                BaseController.ShowRecMerge(this,
+                BaseController.ShowRecMerge(this, this,
                     items.Count > 0 ? items[0] as GDMRecord : null,
                     items.Count > 1 ? items[1] as GDMRecord : null
                 );
@@ -824,7 +824,7 @@ namespace GKUI.Forms
 
         private void miTTRecMerge_Click(object sender, EventArgs e)
         {
-            BaseController.ShowRecMerge(this, null, null);
+            BaseController.ShowRecMerge(this, this, null, null);
         }
 
         private void miTTPlacesManager_Click(object sender, EventArgs e)
@@ -844,7 +844,7 @@ namespace GKUI.Forms
 
         private void miOptions_Click(object sender, EventArgs e)
         {
-            AppHost.Instance.ShowOptions();
+            AppHost.Instance.ShowOptions(this);
         }
 
         private void miFileClose_Click(object sender, EventArgs e)

@@ -151,6 +151,7 @@ namespace GKUI.Platform
 
         public override IForm GetActiveForm()
         {
+            // Form, Dialog -> Window
             foreach (var wnd in Application.Instance.Windows) {
                 if (wnd.HasFocus) {
                     return wnd as IForm;
@@ -175,19 +176,20 @@ namespace GKUI.Platform
             return IntPtr.Zero;
         }
 
-        public override bool ShowModalX(ICommonDialog form, bool keepModeless = false)
+        public override bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
-            Window activeWin = GetActiveWindow() as Window;
+            //Window activeWin = GetActiveForm() as Window;
+            //Console.WriteLine((owner == null) ? "null" : owner.ToString());
 
-            if (keepModeless) {
+            /*if (keepModeless) {
 #if !MONO
                 //NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
 #endif
-            }
+            }*/
 
             //UIHelper.CenterFormByParent((Window)form, mainHandle);
 
-            return (form != null && form.ShowModalX(activeWin));
+            return (dialog != null && dialog.ShowModalX(owner));
         }
 
         public override void EnableWindow(IWidgetForm form, bool value)

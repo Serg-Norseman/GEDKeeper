@@ -33,6 +33,7 @@ using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
+using GKCore.Design;
 using GKCore.Import;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -119,6 +120,7 @@ namespace GKPedigreeImporterPlugin
         private readonly System.Windows.Forms.ListBox.ObjectCollection fLog;
         private readonly StringList fRawContents;
         private readonly GDMTree fTree;
+        private readonly IView fView;
 
         private Dictionary<string, GDMIndividualRecord> fPersonsList;
         private string fFileName;
@@ -141,8 +143,9 @@ namespace GKPedigreeImporterPlugin
             get { return fRawContents; }
         }
 
-        public Importer(IBaseWindow baseWin, ILangMan langMan, System.Windows.Forms.ListBox.ObjectCollection aLog)
+        public Importer(IView view, IBaseWindow baseWin, ILangMan langMan, System.Windows.Forms.ListBox.ObjectCollection aLog)
         {
+            fView = view;
             fBase = baseWin;
             fTree = baseWin.Context.Tree;
             fLog = aLog;
@@ -432,7 +435,7 @@ namespace GKPedigreeImporterPlugin
             GDMIndividualRecord result = fBase.Context.CreatePersonEx(persName.Name, persName.Patr, persName.Surname, proposeSex, false);
 
             if (proposeSex == GDMSex.svUnknown || proposeSex == GDMSex.svIntersex) {
-                fBase.Context.CheckPersonSex(result);
+                fBase.Context.CheckPersonSex(fView, result);
             }
 
             if (persName.BirthDate != "") SetEvent(result, GEDCOMTagName.BIRT, persName.BirthDate);

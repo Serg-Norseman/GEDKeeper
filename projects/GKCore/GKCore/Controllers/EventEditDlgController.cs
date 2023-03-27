@@ -62,9 +62,9 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
-            fView.SourcesList.ListModel = new SourceCitationsListModel(baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override bool Accept()
@@ -225,7 +225,7 @@ namespace GKCore.Controllers
 
         public void AddPlace()
         {
-            fTempLocation = fBase.Context.SelectRecord(GDMRecordType.rtLocation, null) as GDMLocationRecord;
+            fTempLocation = fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, null) as GDMLocationRecord;
             UpdatePlace();
         }
 
@@ -237,7 +237,7 @@ namespace GKCore.Controllers
 
         public void ModifyAddress()
         {
-            BaseController.ModifyAddress(fBase, fEvent.Address);
+            BaseController.ModifyAddress(fView, fBase, fEvent.Address);
         }
 
         private void SetAttributeMode(bool active)

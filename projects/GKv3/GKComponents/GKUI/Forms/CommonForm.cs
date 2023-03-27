@@ -205,9 +205,9 @@ namespace GKUI.Forms
             Focus();
         }
 
-        public virtual bool ShowModalX(object owner)
+        public virtual bool ShowModalX(IView owner)
         {
-            return (ShowModal((Control)owner) == DialogResult.Ok);
+            return (ShowModal(owner as Control) == DialogResult.Ok);
         }
 
         protected virtual void CancelClickHandler(object sender, EventArgs e)

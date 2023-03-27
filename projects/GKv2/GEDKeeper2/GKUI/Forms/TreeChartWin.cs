@@ -459,7 +459,7 @@ namespace GKUI.Forms
 
         private void tbOptions_Click(object sender, EventArgs e)
         {
-            AppHost.Instance.ShowOptions(OptionsPage.opTreeChart);
+            AppHost.Instance.ShowOptions(this, OptionsPage.opTreeChart);
         }
 
         private void miGoToRecord_Click(object sender, EventArgs e)

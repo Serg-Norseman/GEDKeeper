@@ -26,6 +26,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Components;
+using GKUI.Forms;
 
 namespace GKFlowInputPlugin
 {
@@ -44,7 +45,7 @@ namespace GKFlowInputPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class FlowInputDlg : Form
+    public partial class FlowInputDlg : CommonForm
     {
         private enum PersonLink
         {
@@ -373,7 +374,7 @@ namespace GKFlowInputPlugin
                     PersonLink link = GetLinkByName(lnk);
                     if (link == PersonLink.plNone) continue;
 
-                    GDMSex sx = fBase.Context.DefineSex(nm, pt);
+                    GDMSex sx = fBase.Context.DefineSex(this, nm, pt);
                     GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
 
                     if (!string.IsNullOrEmpty(age) && ConvertHelper.IsDigits(age)) {

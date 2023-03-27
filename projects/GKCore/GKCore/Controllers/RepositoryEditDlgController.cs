@@ -57,7 +57,7 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override bool Accept()
@@ -85,7 +85,7 @@ namespace GKCore.Controllers
 
         public void ModifyAddress()
         {
-            BaseController.ModifyAddress(fBase, fRepositoryRecord.Address);
+            BaseController.ModifyAddress(fView, fBase, fRepositoryRecord.Address);
         }
 
         public override void SetLocale()

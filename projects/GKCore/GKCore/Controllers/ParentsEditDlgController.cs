@@ -125,14 +125,14 @@ namespace GKCore.Controllers
         public void EditParents()
         {
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
-            if (family != null && BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null)) {
+            if (family != null && BaseController.ModifyFamily(fView, fBase, ref family, TargetMode.tmNone, null)) {
                 UpdateControls();
             }
         }
 
         public void AddFather()
         {
-            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (BaseController.AddIndividualFather(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
@@ -146,7 +146,7 @@ namespace GKCore.Controllers
 
         public void AddMother()
         {
-            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (BaseController.AddIndividualMother(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }

@@ -55,7 +55,7 @@ namespace GKCore.Interfaces
 
         void EnableWindow(IWidgetForm form, bool value);
         MRUFile GetMRUFile(IBaseWindow baseWin);
-        bool ShowModalX(ICommonDialog form, bool keepModeless = false);
+        bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false);
         void ShowWindow(IWindow window);
 
         ILangMan CreateLangMan(object sender);

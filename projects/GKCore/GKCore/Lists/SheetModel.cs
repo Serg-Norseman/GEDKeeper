@@ -122,6 +122,7 @@ namespace GKCore.Lists
         protected readonly IBaseWindow fBaseWin;
         protected readonly ChangeTracker fUndoman;
         protected GDMObject fDataOwner;
+        protected IView fOwner;
         protected GDMList<T> fStructList;
 
 
@@ -151,11 +152,12 @@ namespace GKCore.Lists
         }
 
 
-        protected SheetModel(IBaseWindow baseWin, ChangeTracker undoman) :
+        protected SheetModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) :
             base(baseWin.Context, new ListColumns<T>())
         {
             fAllowedActions = new EnumSet<RecordAction>();
             fBaseWin = baseWin;
+            fOwner = owner;
             fUndoman = undoman;
         }
 

@@ -210,24 +210,24 @@ namespace GKUI.Forms
             Assert.IsTrue(fCurBase.RecordIsFiltered(record));
 
             Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.ShowMedia(null, false); });
-            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.SelectSpouseFor(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.SelectSpouseFor(null, null); });
             fCurBase.NotifyRecord(null, RecordAction.raAdd);
 
             IList<ISearchResult> search = fCurBase.FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
             Assert.AreEqual(null, fCurBase.Context.GetChildFamily(null, false, null));
-            Assert.AreEqual(null, fCurBase.Context.AddChildForParent(null, GDMSex.svUnknown));
+            Assert.AreEqual(null, fCurBase.Context.AddChildForParent(null, null, GDMSex.svUnknown));
             Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.AddFamilyForSpouse(null); });
 
-            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.CheckPersonSex(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.CheckPersonSex(null, null); });
 
             fCurBase.NotifyRecord(null, RecordAction.raEdit);
 
             fCurBase.ApplyFilter();
 
             // default lang for tests is English
-            string patr = fCurBase.Context.DefinePatronymic("Ivan", GDMSex.svMale, false);
+            string patr = fCurBase.Context.DefinePatronymic(null, "Ivan", GDMSex.svMale, false);
             Assert.AreEqual("", patr);
         }
 

@@ -36,7 +36,7 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.ChildrenList.ListModel = new IndividualChildrenListModel(baseWin, fLocalUndoman);
+            fView.ChildrenList.ListModel = new IndividualChildrenListModel(fView, baseWin, fLocalUndoman);
         }
 
         protected override void UpdateListModels(GDMIndividualRecord indiRec)
