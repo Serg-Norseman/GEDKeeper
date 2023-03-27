@@ -53,8 +53,7 @@ namespace GKCore
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                foreach (KeyValuePair<string, IImage> pair in fMemoryCache)
-                {
+                foreach (KeyValuePair<string, IImage> pair in fMemoryCache) {
                     pair.Value.Dispose();
                 }
             }
@@ -97,7 +96,11 @@ namespace GKCore
 
                 // save image to cache
                 if (result != null) {
-                    AppHost.GfxProvider.SaveImage(result, cachedFile);
+                    try {
+                        AppHost.GfxProvider.SaveImage(result, cachedFile);
+                    } catch (Exception ex) {
+                        Logger.WriteError(string.Format("PortraitsCache.GetImage()->SaveImage({0})", cachedFile), ex);
+                    }
                 }
             }
 

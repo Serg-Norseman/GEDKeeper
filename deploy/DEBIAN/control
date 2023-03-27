@@ -1,5 +1,5 @@
 Package: gedkeeper
-Version: 3.0.2-1
+Version: 3.0.3-1
 Architecture: all
 Depends: mono-complete (>=5.12), sqlite3, vlc, libvlc-dev
 Maintainer: Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
