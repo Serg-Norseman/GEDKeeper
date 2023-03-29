@@ -54,6 +54,11 @@ namespace GKCore
             WriteMessage("INFO", msg);
         }
 
+        public static void WriteInfo(string msg, params object[] args)
+        {
+            WriteMessage("INFO", string.Format(msg, args));
+        }
+
         /// <summary>
         /// Writing exception information into text log.
         /// </summary>

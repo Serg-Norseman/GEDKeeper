@@ -46,7 +46,8 @@ namespace GKUI.Platform.Handlers
         protected void SetAccessible(bool value)
         {
 #if OS_LINUX
-            Control.BackgroundColor = value ? SystemColors.ControlBackground : SystemColors.WindowBackground;
+            // is not required and works strangely: when you change the BackgroundColor, the background color of the selected text becomes the same
+            //Control.BackgroundColor = value ? SystemColors.ControlBackground : SystemColors.WindowBackground;
 #else
             Control.BackgroundColor = value ? SystemColors.WindowBackground : SystemColors.Control; // win ok, mac ?
 #endif

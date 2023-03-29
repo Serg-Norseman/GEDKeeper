@@ -37,7 +37,7 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
@@ -45,7 +45,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Eto.Forms" Version="2.7.2" />
+        <PackageReference Include="Eto.Forms" Version="2.7.4" />
     </ItemGroup>
 
 </Project>

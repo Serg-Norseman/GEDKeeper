@@ -276,11 +276,6 @@ namespace GKUI.Forms
             fController.ResetColumnsList();
         }
 
-        private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            //fTempColumns.OrderedColumns[e.Index].CurActive = e.NewValue;
-        }
-
         public void SetPage(OptionsPage page)
         {
             switch (page) {

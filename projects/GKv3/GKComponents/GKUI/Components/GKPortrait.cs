@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2021 by Sergey V. Zhdanovskih, Igor Tyulyakov.
+ *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih, Igor Tyulyakov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,7 +31,7 @@ namespace GKUI.Components
     /// <summary>
     /// Image with the pop-up panel.
     /// </summary>
-    public class GKPortrait : Panel, IPortraitControl
+    public class GKPortrait : Scrollable, IPortraitControl
     {
         private readonly List<Button> fBtnsList;
         private int fPixelSpeed;
@@ -40,7 +40,12 @@ namespace GKUI.Components
         public Image Image
         {
             get { return fImageBox.Image; }
-            set { fImageBox.Image = value; }
+            set {
+                if (fImageBox.Image != null) {
+                    fImageBox.Image.Dispose();
+                }
+                fImageBox.Image = value;
+            }
         }
 
 
@@ -137,6 +142,10 @@ namespace GKUI.Components
 
         private void InitializeComponent()
         {
+            Border = BorderType.Bezel;
+            ExpandContentHeight = true;
+            ExpandContentWidth = true;
+
             SuspendLayout();
             //fLayout = new PixelLayout();
 

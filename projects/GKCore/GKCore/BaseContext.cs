@@ -1279,11 +1279,7 @@ namespace GKCore
                 if (stm != null) {
                     try {
                         if (stm.Length != 0) {
-                            if (thumbWidth <= 0 || thumbHeight <= 0) {
-                                Logger.WriteInfo("BaseContext.LoadMediaImage(): thumbWidth and thumbHeight must not be zero");
-                            } else {
-                                result = AppHost.GfxProvider.CreateImage(stm, thumbWidth, thumbHeight, cutoutArea);
-                            }
+                            result = AppHost.GfxProvider.CreateImage(stm, thumbWidth, thumbHeight, cutoutArea);
                         }
                     } finally {
                         stm.Dispose();
