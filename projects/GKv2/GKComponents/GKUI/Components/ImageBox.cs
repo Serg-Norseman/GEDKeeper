@@ -483,8 +483,7 @@ namespace GKUI.Components
         {
             Rectangle viewport;
 
-            if (!fImageSize.IsEmpty)
-            {
+            if (!fImageSize.IsEmpty) {
                 Rectangle innerRectangle = GetInsideViewport();
 
                 if (!HScroll && !VScroll) {
@@ -499,8 +498,7 @@ namespace GKUI.Components
                 int height = Math.Min(fScaledImageHeight - Math.Abs(AutoScrollPosition.Y), innerRectangle.Height);
 
                 viewport = new Rectangle(x, y, width, height);
-            }
-            else
+            } else
                 viewport = Rectangle.Empty;
 
             return viewport;
@@ -517,11 +515,6 @@ namespace GKUI.Components
         {
             Size clientSize = ClientSize;
             return new Rectangle(0, 0, clientSize.Width, clientSize.Height);
-        }
-
-        private RectangleF GetOffsetRectangle(ExtRect source)
-        {
-            return GetOffsetRectangle(UIHelper.Rt2Rt(source));
         }
 
         /// <summary>
@@ -552,8 +545,7 @@ namespace GKUI.Components
         {
             RectangleF region;
 
-            if (!fImageSize.IsEmpty)
-            {
+            if (!fImageSize.IsEmpty) {
                 Rectangle viewPort = GetImageViewport();
                 float sourceLeft = (-AutoScrollPosition.X / fZoomFactor);
                 float sourceTop = (-AutoScrollPosition.Y / fZoomFactor);
@@ -561,8 +553,7 @@ namespace GKUI.Components
                 float sourceHeight = (viewPort.Height / fZoomFactor);
 
                 region = new RectangleF(sourceLeft, sourceTop, sourceWidth, sourceHeight);
-            }
-            else
+            } else
                 region = RectangleF.Empty;
 
             return region;
@@ -582,26 +573,13 @@ namespace GKUI.Components
             int x, y;
 
             Rectangle viewport = GetImageViewport();
-            if (viewport.Contains(point) || fitToBounds)
-            {
+            if (viewport.Contains(point) || fitToBounds) {
                 if (AutoScrollPosition != Point.Empty)
                     point = new Point(point.X - AutoScrollPosition.X, point.Y - AutoScrollPosition.Y);
 
-                x = (int)((point.X - viewport.X) / fZoomFactor);
-                y = (int)((point.Y - viewport.Y) / fZoomFactor);
-
-                if (x < 0)
-                    x = 0;
-                else if (x > fImageSize.Width)
-                    x = fImageSize.Width;
-
-                if (y < 0)
-                    y = 0;
-                else if (y > fImageSize.Height)
-                    y = fImageSize.Height;
-            }
-            else
-            {
+                x = Algorithms.CheckBounds((int)((point.X - viewport.X) / fZoomFactor), 0, fImageSize.Width);
+                y = Algorithms.CheckBounds((int)((point.Y - viewport.Y) / fZoomFactor), 0, fImageSize.Height);
+            } else {
                 // Return Point.Empty if we couldn't match
                 x = 0;
                 y = 0;
@@ -648,8 +626,7 @@ namespace GKUI.Components
         /// </summary>
         public void ZoomIn()
         {
-            if (fSizeToFit)
-            {
+            if (fSizeToFit) {
                 int previousZoom = fZoom;
                 SizeToFit = false;
                 Zoom = previousZoom; // Stop the zoom getting reset to 100% before calculating the new zoom
@@ -663,8 +640,7 @@ namespace GKUI.Components
         /// </summary>
         public void ZoomOut()
         {
-            if (fSizeToFit)
-            {
+            if (fSizeToFit) {
                 int previousZoom = fZoom;
                 SizeToFit = false;
                 Zoom = previousZoom; // Stop the zoom getting reset to 100% before calculating the new zoom
@@ -749,15 +725,13 @@ namespace GKUI.Components
         {
             g.SetClip(viewPort, CombineMode.Exclude); // make sure the inside glow doesn't appear
 
-            using (var path = new GraphicsPath())
-            {
+            using (var path = new GraphicsPath()) {
                 path.AddRectangle(viewPort);
 
                 int glowSize = fDropShadowSize * 3;
                 const int feather = 50;
 
-                for (int i = 1; i <= glowSize; i += 2)
-                {
+                for (int i = 1; i <= glowSize; i += 2) {
                     int alpha = feather - ((feather / glowSize) * i);
 
                     var color = Color.FromArgb(alpha, fImageBorderColor);
@@ -783,8 +757,7 @@ namespace GKUI.Components
             using (var borderPen = new Pen(fImageBorderColor))
                 graphics.DrawRectangle(borderPen, viewPort);
 
-            switch (fImageBorderStyle)
-            {
+            switch (fImageBorderStyle) {
                 case ImageBoxBorderStyle.FixedSingleDropShadow:
                     DrawDropShadow(graphics, viewPort);
                     break;
@@ -818,7 +791,7 @@ namespace GKUI.Components
         {
             var color = Color.FromArgb(128, fSelectionColor);
             foreach (var region in fNamedRegions) {
-                RectangleF rect = GetOffsetRectangle(region.Region);
+                RectangleF rect = GetOffsetRectangle(UIHelper.Rt2Rt(region.Region));
 
                 using (Brush brush = new SolidBrush(color))
                     gfx.FillRectangle(brush, rect);
@@ -836,8 +809,7 @@ namespace GKUI.Components
         {
             int offset;
 
-            switch (fImageBorderStyle)
-            {
+            switch (fImageBorderStyle) {
                 case ImageBoxBorderStyle.FixedSingle:
                     offset = 1;
                     break;
@@ -945,7 +917,7 @@ namespace GKUI.Components
                     if (fShowNamedRegionTips) {
                         string tip = "";
                         foreach (var region in fNamedRegions) {
-                            RectangleF rect = GetOffsetRectangle(region.Region);
+                            RectangleF rect = GetOffsetRectangle(UIHelper.Rt2Rt(region.Region));
                             if (rect.Contains(e.Location)) {
                                 tip = region.Name;
                                 break;
@@ -1015,24 +987,23 @@ namespace GKUI.Components
                 gfx.FillRectangle(brush, innerRectangle);
 
             // draw the image
-            if (!fImageSize.IsEmpty)
+            if (fImage != null) {
                 DrawImageBorder(gfx);
 
-            if (fImage != null) {
                 gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
                 gfx.DrawImage(fImage, GetImageViewport(), GetSourceImageRegion(), GraphicsUnit.Pixel);
+
+                gfx.SetClip(GetInsideViewport());
+
+                // draw the selection
+                if (fSelectionRegion != Rectangle.Empty)
+                    DrawSelection(e);
+
+                DrawNamedRegions(gfx);
+
+                gfx.ResetClip();
             }
-
-            gfx.SetClip(GetInsideViewport());
-
-            // draw the selection
-            if (fSelectionRegion != Rectangle.Empty)
-                DrawSelection(e);
-
-            DrawNamedRegions(gfx);
-
-            gfx.ResetClip();
 
             base.OnPaint(e);
         }
@@ -1101,8 +1072,7 @@ namespace GKUI.Components
         {
             int previousZoom = fZoom;
 
-            switch (e.KeyCode)
-            {
+            switch (e.KeyCode) {
                 case Keys.Home:
                     if (fAllowZoom)
                         ActualSize();
@@ -1153,16 +1123,13 @@ namespace GKUI.Components
         /// </param>
         private void ProcessPanning(MouseEventArgs e, ImageBoxSelectionMode selectionMode)
         {
-            if (fAutoPan && !fImageSize.IsEmpty && selectionMode == ImageBoxSelectionMode.None)
-            {
-                if (!fIsPanning && (HScroll || VScroll))
-                {
+            if (fAutoPan && !fImageSize.IsEmpty && selectionMode == ImageBoxSelectionMode.None) {
+                if (!fIsPanning && (HScroll || VScroll)) {
                     fStartMousePosition = e.Location;
                     IsPanning = true;
                 }
 
-                if (fIsPanning)
-                {
+                if (fIsPanning) {
                     int x = -fStartScrollPosition.X + (fStartMousePosition.X - e.Location.X);
                     int y = -fStartScrollPosition.Y + (fStartMousePosition.Y - e.Location.Y);
 
@@ -1179,8 +1146,7 @@ namespace GKUI.Components
         /// </param>
         private void ProcessScrollingShortcuts(KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
+            switch (e.KeyCode) {
                 case Keys.Left:
                     AdjustScroll(-(e.Modifiers == Keys.None ? HorizontalScroll.SmallChange : HorizontalScroll.LargeChange), 0);
                     break;
@@ -1210,8 +1176,7 @@ namespace GKUI.Components
             if (fSelectionMode == ImageBoxSelectionMode.None) return;
 
             Point mpt = e.Location;
-            if (!fIsSelecting)
-            {
+            if (!fIsSelecting) {
                 fStartMousePosition = mpt;
                 IsSelecting = true;
                 return;
@@ -1219,24 +1184,18 @@ namespace GKUI.Components
 
             float x, y, w, h;
 
-            if (mpt.X < fStartMousePosition.X)
-            {
+            if (mpt.X < fStartMousePosition.X) {
                 x = mpt.X;
                 w = fStartMousePosition.X - mpt.X;
-            }
-            else
-            {
+            } else {
                 x = fStartMousePosition.X;
                 w = mpt.X - fStartMousePosition.X;
             }
 
-            if (mpt.Y < fStartMousePosition.Y)
-            {
+            if (mpt.Y < fStartMousePosition.Y) {
                 y = mpt.Y;
                 h = fStartMousePosition.Y - mpt.Y;
-            }
-            else
-            {
+            } else {
                 y = fStartMousePosition.Y;
                 h = mpt.Y - fStartMousePosition.Y;
             }
@@ -1260,7 +1219,7 @@ namespace GKUI.Components
         {
             int min = int.MaxValue;
             int minVal = 0;
-            
+
             int size = fZoomLevels.Count;
             if (size != 0) {
                 for (int i = 0; i < size; i++) {
@@ -1272,7 +1231,7 @@ namespace GKUI.Components
                     }
                 }
             }
-            
+
             return minVal;
         }
 
@@ -1293,7 +1252,7 @@ namespace GKUI.Components
 
             return fZoomLevels[index];
         }
-        
+
         #endregion
     }
 }

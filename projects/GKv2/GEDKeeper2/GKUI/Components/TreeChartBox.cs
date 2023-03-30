@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//define DEBUG_IMAGE
+//#define DEBUG_IMAGE
 
 using System;
 using System.ComponentModel;
@@ -616,9 +616,9 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            Point scrPt = e.Location;
-            fMouseX = scrPt.X;
-            fMouseY = scrPt.Y;
+            Point evtPt = e.Location;
+            fMouseX = evtPt.X;
+            fMouseY = evtPt.Y;
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -641,7 +641,7 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.ControlsVisible:
-                    fTreeControls.MouseDown(scrPt.X, scrPt.Y);
+                    fTreeControls.MouseDown(evtPt.X, evtPt.Y);
                     break;
             }
 
@@ -650,7 +650,7 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            Point scrPt = e.Location;
+            Point evtPt = e.Location;
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -663,13 +663,13 @@ namespace GKUI.Components
                         SetHighlight(null);
 
                         if (GlobalOptions.Instance.TreeChartOptions.UseExtraControls) {
-                            ITreeControl ctl = fTreeControls.Contains(scrPt.X, scrPt.Y);
+                            ITreeControl ctl = fTreeControls.Contains(evtPt.X, evtPt.Y);
 
                             if (ctl != null) {
                                 fMode = ChartControlMode.ControlsVisible;
                                 ctl.UpdateState();
                                 ctl.Visible = true;
-                                ctl.MouseMove(scrPt.X, scrPt.Y);
+                                ctl.MouseMove(evtPt.X, evtPt.Y);
                                 fActiveControl = ctl;
 
                                 fToolTip.Show(ctl.Tip, this, e.X + Left, e.Y + Top, 1500);
@@ -679,20 +679,20 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.DragImage:
-                    AdjustScroll(-(scrPt.X - fMouseX), -(scrPt.Y - fMouseY));
-                    fMouseX = scrPt.X;
-                    fMouseY = scrPt.Y;
+                    AdjustScroll(-(evtPt.X - fMouseX), -(evtPt.Y - fMouseY));
+                    fMouseX = evtPt.X;
+                    fMouseY = evtPt.Y;
                     break;
 
                 case ChartControlMode.ControlsVisible:
                     if (fActiveControl != null) {
-                        if (!(fActiveControl.Contains(scrPt.X, scrPt.Y) || fActiveControl.MouseCaptured)) {
+                        if (!(fActiveControl.Contains(evtPt.X, evtPt.Y) || fActiveControl.MouseCaptured)) {
                             fMode = ChartControlMode.Default;
                             fActiveControl.Visible = false;
                             fToolTip.Hide(this);
                             fActiveControl = null;
                         } else {
-                            fActiveControl.MouseMove(scrPt.X, scrPt.Y);
+                            fActiveControl.MouseMove(evtPt.X, evtPt.Y);
                         }
                     }
                     break;
@@ -820,14 +820,13 @@ namespace GKUI.Components
 
             int width = ClientSize.Width;
             int height = ClientSize.Height;
-            int dstX = ((person.PtX) - (width / 2));
-            int dstY = ((person.PtY + (person.Height / 2)) - (height / 2));
-
-            dstX = Algorithms.CheckBounds(dstX, 0, fModel.ImageWidth - width);
-            dstY = Algorithms.CheckBounds(dstY, 0, fModel.ImageHeight - height);
+            int widthMax = fModel.ImageWidth - width;
+            int heightMax = fModel.ImageHeight - height;
 
             int srcX = Math.Abs(AutoScrollPosition.X);
             int srcY = Math.Abs(AutoScrollPosition.Y);
+            int dstX = Algorithms.CheckBounds(((person.PtX) - (width / 2)), 0, widthMax);
+            int dstY = Algorithms.CheckBounds(((person.PtY + (person.Height / 2)) - (height / 2)), 0, heightMax);
 
             if ((srcX != dstX) || (srcY != dstY)) {
                 int timeInterval = animation ? 20 : 1;

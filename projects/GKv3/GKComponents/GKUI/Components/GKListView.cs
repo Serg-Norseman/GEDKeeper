@@ -414,7 +414,7 @@ namespace GKUI.Components
             return result;
         }
 
-#region Virtual mode with ListSource
+        #region Virtual mode with ListSource
 
         // In Eto not exists
         /*protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
@@ -512,9 +512,9 @@ namespace GKUI.Components
             }
         }
 
-#endregion
+        #endregion
 
-#region Public methods
+        #region Public methods
 
         public void Clear()
         {
@@ -720,9 +720,9 @@ namespace GKUI.Components
             }
         }
 
-#endregion
+        #endregion
 
-#region CheckedList
+        #region CheckedList
 
         protected override void OnCellEdited(GridViewCellEventArgs e)
         {
@@ -741,6 +741,6 @@ namespace GKUI.Components
                 handler.Invoke(this, new ItemCheckEventArgs(index, newValue));
         }
 
-#endregion
+        #endregion
     }
 }

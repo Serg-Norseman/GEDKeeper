@@ -467,7 +467,7 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            Point mpt = GetImageRelativeLocation(e.Location);
+            Point mpt = GetImageRelativeLocation(e.Location, e.Buttons != MouseButtons.None);
             mpt.Offset(-fBorderWidth, -fBorderWidth);
             fCurrentLink = null;
 

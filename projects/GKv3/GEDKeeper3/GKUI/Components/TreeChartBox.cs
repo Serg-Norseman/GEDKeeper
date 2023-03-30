@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//define DEBUG_IMAGE
+//#define DEBUG_IMAGE
 
 using System;
 using System.Runtime.InteropServices;
@@ -371,8 +371,8 @@ namespace GKUI.Components
             DrawBackground(background);
 
             #if DEBUG_IMAGE
-            using (Pen pen = new Pen(Color.Red)) {
-                fRenderer.DrawRectangle(pen, Color.Transparent, fSPX, fSPY, fImageWidth, fImageHeight);
+            using (Pen pen = new Pen(Colors.Red)) {
+                fRenderer.DrawRectangle(pen, Colors.Transparent, spx, spy, fModel.ImageWidth, fModel.ImageHeight);
             }
             #endif
 
@@ -564,26 +564,9 @@ namespace GKUI.Components
             var result = MouseAction.None;
             person = null;
 
-            /*
-             * In Eto/Gtk, mouse events coming to Scrollable handlers have coordinates 
-             * with the origin of the Scrollable control if no key is pressed and 
-             * with the origin of the nested Canvas if any key is pressed.
-             */
-
-            Point mpt;
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || e.Buttons == MouseButtons.None) {
-                mpt = GetImageRelativeLocation(e.Location);
-            } else {
-                //mpt = GetImageRelativeLocation(e.Location);
-                //mpt = new Point((e.Location));
-                var imageViewport = base.ImageViewport;
-                mpt = new Point((int)e.Location.X - imageViewport.X, (int)e.Location.Y - imageViewport.Y);
-            }
-            int aX = mpt.X;
-            int aY = mpt.Y;
-
-            // for debug purposes
-            //Console.WriteLine(new Point(e.Location).ToString() + " --- " + mpt.ToString() + " --- " + MouseOffset.ToString() + " --- " + e.Buttons.ToString());
+            Point irPt = GetImageRelativeLocation(e.Location, e.Buttons != MouseButtons.None);
+            int aX = irPt.X;
+            int aY = irPt.Y;
 
             int num = fModel.Persons.Count;
             for (int i = 0; i < num; i++) {
@@ -639,9 +622,9 @@ namespace GKUI.Components
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            Point scrPt = new Point(e.Location);
-            fMouseX = scrPt.X;
-            fMouseY = scrPt.Y;
+            Point evtPt = new Point(e.Location);
+            fMouseX = evtPt.X;
+            fMouseY = evtPt.Y;
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -664,7 +647,7 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.ControlsVisible:
-                    fTreeControls.MouseDown(scrPt.X, scrPt.Y);
+                    fTreeControls.MouseDown(evtPt.X, evtPt.Y);
                     break;
             }
 
@@ -674,7 +657,7 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            Point scrPt = new Point(e.Location);
+            Point evtPt = new Point(e.Location);
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -687,13 +670,13 @@ namespace GKUI.Components
                         SetHighlight(null);
 
                         if (GlobalOptions.Instance.TreeChartOptions.UseExtraControls) {
-                            ITreeControl ctl = fTreeControls.Contains(scrPt.X, scrPt.Y);
+                            ITreeControl ctl = fTreeControls.Contains(evtPt.X, evtPt.Y);
 
                             if (ctl != null) {
                                 fMode = ChartControlMode.ControlsVisible;
                                 ctl.UpdateState();
                                 ctl.Visible = true;
-                                ctl.MouseMove(scrPt.X, scrPt.Y);
+                                ctl.MouseMove(evtPt.X, evtPt.Y);
                                 fActiveControl = ctl;
 
                                 //pt = new Point(pt.X + Left, pt.Y + Top);
@@ -705,23 +688,23 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.DragImage:
-                    AdjustScroll(-(scrPt.X - fMouseX), -(scrPt.Y - fMouseY));
+                    AdjustScroll(-(evtPt.X - fMouseX), -(evtPt.Y - fMouseY));
 #if !OS_LINUX
-                    fMouseX = scrPt.X;
-                    fMouseY = scrPt.Y;
+                    fMouseX = evtPt.X;
+                    fMouseY = evtPt.Y;
 #endif
                     break;
 
                 case ChartControlMode.ControlsVisible:
                     if (fActiveControl != null) {
-                        if (!(fActiveControl.Contains(scrPt.X, scrPt.Y) || fActiveControl.MouseCaptured)) {
+                        if (!(fActiveControl.Contains(evtPt.X, evtPt.Y) || fActiveControl.MouseCaptured)) {
                             fMode = ChartControlMode.Default;
                             fActiveControl.Visible = false;
                             //fToolTip.Hide(this);
                             ToolTip = "";
                             fActiveControl = null;
                         } else {
-                            fActiveControl.MouseMove(scrPt.X, scrPt.Y);
+                            fActiveControl.MouseMove(evtPt.X, evtPt.Y);
                         }
                     }
                     break;
@@ -737,12 +720,8 @@ namespace GKUI.Components
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            Point scrPt = new Point(e.Location);
-
-            PointF mpt = e.Location;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-                mpt = GetControlRelativeLocation(mpt);
-            }
+            Point evtPt = new Point(e.Location);
+            PointF ctlPoint = GetControlRelativeLocation(e.Location, e.Buttons != MouseButtons.None);
 
             switch (fMode) {
                 case ChartControlMode.Default:
@@ -756,7 +735,7 @@ namespace GKUI.Components
                         case MouseAction.Properties:
                             SelectBy(mPers, false);
                             if (fSelected == mPers && fSelected.Rec != null) {
-                                DoPersonProperties(new MouseEventArgs(e.Buttons, Keys.None, mpt));
+                                DoPersonProperties(new MouseEventArgs(e.Buttons, Keys.None, ctlPoint));
                             }
                             break;
 
@@ -781,7 +760,7 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.ControlsVisible:
-                    fTreeControls.MouseUp(scrPt.X, scrPt.Y);
+                    fTreeControls.MouseUp(evtPt.X, evtPt.Y);
                     break;
             }
 
@@ -866,8 +845,8 @@ namespace GKUI.Components
 
             int srcX = viewport.Left;
             int srcY = viewport.Top;
-            int dstX = Math.Min(Math.Max(0, ((person.PtX) - (viewport.Width / 2))), widthMax);
-            int dstY = Math.Min(Math.Max(0, ((person.PtY + (person.Height / 2)) - (viewport.Height / 2))), heightMax);
+            int dstX = Algorithms.CheckBounds(((person.PtX) - (viewport.Width / 2)), 0, widthMax);
+            int dstY = Algorithms.CheckBounds(((person.PtY + (person.Height / 2)) - (viewport.Height / 2)), 0, heightMax);
 
             if ((srcX != dstX) || (srcY != dstY)) {
                 int timeInterval = animation ? 20 : 1;

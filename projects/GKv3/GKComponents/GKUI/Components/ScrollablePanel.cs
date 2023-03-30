@@ -21,6 +21,7 @@
 //#define DEBUG_VIEWPORT
 
 using System;
+using System.Runtime.InteropServices;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -331,14 +332,52 @@ namespace GKUI.Components
             if (!noRedraw) Invalidate();
         }
 
-        protected Point GetImageRelativeLocation(PointF mpt)
+        protected Point GetImageRelativeLocation(PointF mpt, bool buttons)
         {
-            return new Point((int)mpt.X + fMouseOffsetX, (int)mpt.Y + fMouseOffsetY);
+            /*
+             * In Eto/Gtk, mouse events coming to Scrollable handlers have coordinates 
+             * with the origin of the Scrollable control if no key is pressed and 
+             * with the origin of the nested Canvas if any key is pressed.
+             */
+
+            Point pt;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && buttons) {
+                int aX = (int)mpt.X - fImageViewport.X;
+                int aY = (int)mpt.Y - fImageViewport.Y;
+
+                pt = new Point(aX, aY);
+            } else {
+                pt = new Point((int)mpt.X + fMouseOffsetX, (int)mpt.Y + fMouseOffsetY);
+            }
+
+            // for debug purposes
+            //Console.WriteLine("IR: " + new Point(mpt).ToString() + " -- " + pt.ToString() + " -- " + MouseOffset.ToString() + " -- " + buttons + " -- " + fImageViewport.ToString());
+
+            return pt;
         }
 
-        protected PointF GetControlRelativeLocation(PointF mpt)
+        protected PointF GetControlRelativeLocation(PointF mpt, bool buttons)
         {
-            return new PointF(mpt.X - fMouseOffsetX, mpt.Y - fMouseOffsetY);
+            /*
+             * In Eto/Gtk, mouse events coming to Scrollable handlers have coordinates 
+             * with the origin of the Scrollable control if no key is pressed and 
+             * with the origin of the nested Canvas if any key is pressed.
+             */
+
+            PointF pt;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && buttons) {
+                int aX = (int)mpt.X - ((!fHasHScroll) ? 0 : fMouseOffsetX);
+                int aY = (int)mpt.Y - ((!fHasVScroll) ? 0 : fMouseOffsetY);
+
+                pt = new PointF(aX, aY);
+            } else {
+                pt = new PointF(mpt.X, mpt.Y);
+            }
+
+            // for debug purposes
+            //Console.WriteLine("CTL: " + new Point(mpt).ToString() + " -- " + pt.ToString() + " -- " + MouseOffset.ToString() + " -- " + buttons + " -- " + fImageViewport.ToString());
+
+            return pt;
         }
 
         protected void InvalidateContent()

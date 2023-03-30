@@ -171,6 +171,8 @@ namespace GKUI.Components
 
             ExtSize boundary = GetImageSize();
             SetImageSize(boundary, false);
+
+            InvalidateContent();
         }
 
         private void DoRootChanged(GDMIndividualRecord person)
@@ -222,9 +224,8 @@ namespace GKUI.Components
             }
         }
 
-        private CircleSegment FindSegment(PointF mpt)
+        private CircleSegment FindSegment(Point imPt)
         {
-            Point imPt = GetImageRelativeLocation(mpt);
             ExtSize imSize = GetImageSize();
             float dX = (imPt.X - imSize.Width / 2.0f) / fZoom;
             float dY = (imPt.Y - imSize.Height / 2.0f) / fZoom;
@@ -339,11 +340,13 @@ namespace GKUI.Components
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            Point irPt = GetImageRelativeLocation(e.Location, e.Buttons != MouseButtons.None);
+
             if (fMouseCaptured == MouseCaptured.mcDrag) {
                 fMouseCaptured = MouseCaptured.mcNone;
                 Cursor = Cursors.Default;
             } else if (e.Buttons == MouseButtons.Primary) {
-                CircleSegment selected = FindSegment(e.Location);
+                CircleSegment selected = FindSegment(irPt);
                 if (selected != null && selected.IRec != null) {
                     RootPerson = selected.IRec;
                 }
@@ -355,10 +358,12 @@ namespace GKUI.Components
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            Point irPt = GetImageRelativeLocation(e.Location, e.Buttons != MouseButtons.None);
+
             switch (fMouseCaptured) {
                 case MouseCaptured.mcNone:
                     {
-                        CircleSegment selected = FindSegment(e.Location);
+                        CircleSegment selected = FindSegment(irPt);
 
                         string hint = "";
                         if (!Equals(fModel.Selected, selected)) {
@@ -369,7 +374,7 @@ namespace GKUI.Components
                                 hint = /*selected.Gen.ToString() + ", " + */name;
                             }
 
-                            Invalidate();
+                            InvalidateContent();
                         }
 
                         if (!Equals(fHint, hint)) {
