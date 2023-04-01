@@ -1,7 +1,7 @@
 @echo off
 cls
 
-set GKVER=2.25.0
+set GKVER=2.25.1
 
 set lstfile=".\listfile.txt"
 set out_fn="gedkeeper_%GKVER%_win86_portable"

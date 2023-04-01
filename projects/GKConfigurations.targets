@@ -1,7 +1,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Common -->
   <PropertyGroup>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <LangVersion>5</LangVersion>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
@@ -55,7 +55,7 @@
   <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.6.2' ">
     <DefineConstants>$(DefineConstants);NET462</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.7.2' ">
+  <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.7.1' ">
     <DefineConstants>$(DefineConstants);NET472</DefineConstants>
   </PropertyGroup>
 

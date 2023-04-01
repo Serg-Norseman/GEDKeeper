@@ -1,3 +1,8 @@
+## 02.04.2023 [v2.25.1]
+- The .NET Framework has been downgraded to version 4.7.1 to be compatible with some versions of Mono (Fedora, FreeBSD).
+- Fixed error loading images that require scaling.
+- Fixed many minor bugs and shortcomings in the Linux implementation [tested by Andrey Maltsev].
+
 ## 28.03.2023 [v2.25.0]
 - Fixed bug with missing spaces in notes.
 - Updated Czech translation [Jerry Verner].

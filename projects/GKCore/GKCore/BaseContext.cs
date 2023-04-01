@@ -1493,7 +1493,7 @@ namespace GKCore
 
                 case FileBackup.fbOnlyPrev:
                     if (string.Equals(oldFileName, fileName) && File.Exists(oldFileName)) {
-                        string bakFile = Path.GetFileName(fileName) + ".bak";
+                        string bakFile = fileName + ".bak";
                         if (File.Exists(bakFile)) {
                             File.Delete(bakFile);
                         }
