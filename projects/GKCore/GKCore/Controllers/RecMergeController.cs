@@ -212,14 +212,14 @@ namespace GKCore.Controllers
 
         public void SelectRec1()
         {
-            GDMRecord irec = fBase.Context.SelectRecord(fMergeMode, null);
+            GDMRecord irec = fBase.Context.SelectRecord(fView, fMergeMode, null);
             if (irec != null)
                 SetRec1(irec);
         }
 
         public void SelectRec2()
         {
-            GDMRecord irec = fBase.Context.SelectRecord(fMergeMode, null);
+            GDMRecord irec = fBase.Context.SelectRecord(fView, fMergeMode, null);
             if (irec != null)
                 SetRec2(irec);
         }
@@ -240,7 +240,7 @@ namespace GKCore.Controllers
 
         private bool EditRecord(GDMRecord record)
         {
-            return (record != null && BaseController.EditRecord(fBase, record));
+            return (record != null && BaseController.EditRecord(fView, fBase, record));
         }
 
         public void EditLeft()

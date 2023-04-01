@@ -620,7 +620,7 @@ namespace GDModel
         [Test]
         public void Test_GetUDNByFormattedStr()
         {
-            UDN expResult = UDN.CreateEmpty();
+            UDN expResult = UDN.CreateUnknown();
             UDN result = GDMDate.GetUDNByFormattedStr("", GDMCalendar.dcGregorian);
             Assert.AreEqual(expResult, result);
         }

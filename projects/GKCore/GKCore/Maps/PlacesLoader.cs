@@ -75,7 +75,8 @@ namespace GKCore.Maps
                 }
             }
 
-            mapPoints.Add(new GeoPoint(gmPt.Latitude, gmPt.Longitude, gmPt.Hint, placeRef.Event.Date));
+            var date = (placeRef.Event == null) ? null : placeRef.Event.Date;
+            mapPoints.Add(new GeoPoint(gmPt.Latitude, gmPt.Longitude, gmPt.Hint, date));
         }
 
         public static void CopyPoints(IMapBrowser browser, IList<GeoPoint> gmapPoints, bool byPerson)

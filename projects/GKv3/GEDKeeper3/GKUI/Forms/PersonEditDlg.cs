@@ -61,7 +61,7 @@ namespace GKUI.Forms
         private TextBox txtSurname;
         private TextBox txtName;
         private ComboBox cmbPatronymic;
-        public ComboBox cmbSex;
+        public DropDown cmbSex;
         private CheckBox chkPatriarch;
         private TabPage pageUserRefs;
         private Panel panCtlParents;

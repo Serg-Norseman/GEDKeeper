@@ -69,8 +69,8 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(fView,baseWin,  fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override bool Accept()
@@ -126,7 +126,7 @@ namespace GKCore.Controllers
 
         public void SetPerson()
         {
-            fTempInd = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
+            fTempInd = fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
             fView.Corresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
         }
 

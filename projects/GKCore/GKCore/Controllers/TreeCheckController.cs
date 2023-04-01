@@ -83,7 +83,7 @@ namespace GKCore.Controllers
                     IListItem item = fView.ChecksList.Items[i];
                     if (item.Checked) {
                         var checkObj = item.Data as TreeInspector.CheckObj;
-                        TreeInspector.RepairProblem(fBase, checkObj);
+                        TreeInspector.RepairProblem(fView, fBase, checkObj);
                     }
                 }
             } finally {
@@ -127,7 +127,7 @@ namespace GKCore.Controllers
             GDMRecord rec = GetSelectedRecord();
             if (rec == null) return;
 
-            BaseController.ViewRecordInfo(fBase, rec);
+            BaseController.ViewRecordInfo(fView, fBase, rec);
         }
 
         public void CopySelectedXRefs(IList<object> list)

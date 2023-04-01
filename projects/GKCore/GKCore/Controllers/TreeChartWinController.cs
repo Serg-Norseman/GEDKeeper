@@ -95,7 +95,7 @@ namespace GKCore.Controllers
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GDMIndividualRecord child = fBase.Context.AddChildForParent(p.Rec, needSex);
+            GDMIndividualRecord child = fBase.Context.AddChildForParent(fView, p.Rec, needSex);
             if (child == null) return;
 
             UpdateChart();
@@ -117,7 +117,7 @@ namespace GKCore.Controllers
             if (p == null || p.Rec == null) return;
 
             GDMIndividualRecord iRec = p.Rec;
-            GDMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(iRec);
+            GDMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(fView, iRec);
             if (iSpouse == null) return;
 
             GDMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
@@ -147,7 +147,7 @@ namespace GKCore.Controllers
             }
 
             if (needParent) {
-                GDMIndividualRecord parent = fBase.Context.SelectPerson(p.Rec, TargetMode.tmChild, needSex);
+                GDMIndividualRecord parent = fBase.Context.SelectPerson(fView, p.Rec, TargetMode.tmChild, needSex);
                 if (parent != null) {
                     if (!familyExist) {
                         fam = fBase.Context.Tree.CreateFamily();
@@ -177,7 +177,7 @@ namespace GKCore.Controllers
             if (p == null || p.Rec == null) return;
 
             GDMIndividualRecord iRec = p.Rec;
-            if (BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svUnknown)) {
+            if (BaseController.ModifyIndividual(fView, fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svUnknown)) {
                 UpdateChart();
             }
         }
@@ -199,7 +199,7 @@ namespace GKCore.Controllers
 
             if (person.Rec != null) {
                 GDMIndividualRecord iRec = person.Rec;
-                modified = BaseController.ModifyIndividual(fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svUnknown);
+                modified = BaseController.ModifyIndividual(fView, fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svUnknown);
             } else {
                 // this is "stub" person, only in descendant tree
                 // key properties = BaseSpouse & BaseFamily
@@ -207,7 +207,7 @@ namespace GKCore.Controllers
                 GDMFamilyRecord baseFamily = person.BaseFamily;
 
                 if (baseSpouse != null && baseFamily != null) {
-                    GDMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(person.BaseSpouse.Rec);
+                    GDMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(fView, person.BaseSpouse.Rec);
 
                     if (iSpouse != null) {
                         modified = baseFamily.AddSpouse(iSpouse);
@@ -223,7 +223,7 @@ namespace GKCore.Controllers
         public void RequestInfo(TreeChartPerson person)
         {
             if (person != null) {
-                BaseController.ViewRecordInfo(fBase, person.Rec);
+                BaseController.ViewRecordInfo(fView, fBase, person.Rec);
             }
         }
 
@@ -265,7 +265,7 @@ namespace GKCore.Controllers
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            BaseController.ShowRecMerge(fBase, p.Rec, null);
+            BaseController.ShowRecMerge(fView, fBase, p.Rec, null);
         }
 
         public bool SelectedPersonIsReal()

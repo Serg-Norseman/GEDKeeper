@@ -1,5 +1,9 @@
 
-1. Eto.Forms 2.7.3 [Gtk]
+# Eto.Forms
+
+Eto.Forms v2.7.4 compatible with netfw462
+
+1. Eto.Forms 2.7.3 [Gtk] - solved 2.7.4
   - OpenFileDialog not working (ShowDialog returns Ignore instead Ok);
 
 2. Eto.Forms 2.7.1-3 [Gtk]
@@ -7,3 +11,11 @@
 
 3. Eto.Forms 2.7.1-3 [Gtk]
   - GridView on cells formatting don't process selected row (selected row changing don't call cells formatting)
+
+4. Eto.Forms 2.7.3 [Gtk]
+  - GridView not selecting last (or only) row (where AllowEmptySelection=true)
+
+# Other
+
+LibVLCSharp.GTK
+  - all versions only for net47 and above

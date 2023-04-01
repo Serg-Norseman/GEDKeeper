@@ -80,7 +80,7 @@ namespace GKCore.Controllers
             if (pObj.Name.IndexOf("[*]") == 0) {
                 AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
             } else {
-                GDMLocationRecord locRec = fBase.Context.SelectRecord(GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
+                GDMLocationRecord locRec = fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
                 if (locRec == null) return;
 
                 for (var pi = 0; pi < placesList.Count; pi++) {

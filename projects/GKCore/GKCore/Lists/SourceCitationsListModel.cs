@@ -22,6 +22,7 @@ using System;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -32,7 +33,7 @@ namespace GKCore.Lists
     {
         private GDMSourceRecord fSourceRec;
 
-        public SourceCitationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public SourceCitationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
@@ -100,7 +101,7 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    result = BaseController.ModifySourceCitation(fBaseWin, fUndoman, dataOwner, ref srcCit);
+                    result = BaseController.ModifySourceCitation(fOwner, fBaseWin, fUndoman, dataOwner, ref srcCit);
                     break;
 
                 case RecordAction.raDelete:

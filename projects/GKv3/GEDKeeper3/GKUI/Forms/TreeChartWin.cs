@@ -172,10 +172,10 @@ namespace GKUI.Forms
             miModeBoth = new RadioMenuItem();
             miModeBoth.Click += miModeItem_Click;
 
-            miModeAncestors = new RadioMenuItem();
+            miModeAncestors = new RadioMenuItem(miModeBoth);
             miModeAncestors.Click += miModeItem_Click;
 
-            miModeDescendants = new RadioMenuItem();
+            miModeDescendants = new RadioMenuItem(miModeBoth);
             miModeDescendants.Click += miModeItem_Click;
 
             miTraceSelected = new CheckMenuItem();
@@ -404,18 +404,21 @@ namespace GKUI.Forms
 
         private void PopulateContextMenus()
         {
-            miGensInfCommon = UIHelper.AddToolStripItem(MenuGensCommon, "Inf", -1, miGensX_Click);
-            miGensInfAncestors = UIHelper.AddToolStripItem(MenuGensAncestors, "Inf", -1, miGensXAncestors_Click);
-            miGensInfDescendants = UIHelper.AddToolStripItem(MenuGensDescendants, "Inf", -1, miGensXDescendants_Click);
+            miGensInfCommon = UIHelper.AddToolStripItem(MenuGensCommon, null, "Inf", -1, miGensX_Click);
+            miGensInfAncestors = UIHelper.AddToolStripItem(MenuGensAncestors, null, "Inf", -1, miGensXAncestors_Click);
+            miGensInfDescendants = UIHelper.AddToolStripItem(MenuGensDescendants, null, "Inf", -1, miGensXDescendants_Click);
 
             for (int i = 1; i <= 9; i++) {
-                UIHelper.AddToolStripItem(MenuGensCommon, i.ToString(), i, miGensX_Click);
-                UIHelper.AddToolStripItem(MenuGensAncestors, i.ToString(), i, miGensXAncestors_Click);
-                UIHelper.AddToolStripItem(MenuGensDescendants, i.ToString(), i, miGensXDescendants_Click);
+                UIHelper.AddToolStripItem(MenuGensCommon, miGensInfCommon, i.ToString(), i, miGensX_Click);
+                UIHelper.AddToolStripItem(MenuGensAncestors, miGensInfAncestors, i.ToString(), i, miGensXAncestors_Click);
+                UIHelper.AddToolStripItem(MenuGensDescendants, miGensInfDescendants, i.ToString(), i, miGensXDescendants_Click);
             }
 
+            RadioMenuItem controller = null;
             for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.Last; bs++) {
-                UIHelper.AddToolStripItem(MenuBorders, bs.ToString(), (int)bs, miBorderX_Click);
+                var item = UIHelper.AddToolStripItem(MenuBorders, controller, bs.ToString(), (int)bs, miBorderX_Click);
+                if (controller == null)
+                    controller = item;
             }
         }
 
@@ -599,7 +602,7 @@ namespace GKUI.Forms
 
         private void tbOptions_Click(object sender, EventArgs e)
         {
-            AppHost.Instance.ShowOptions(OptionsPage.opTreeChart);
+            AppHost.Instance.ShowOptions(this, OptionsPage.opTreeChart);
         }
 
         private void miGoToRecord_Click(object sender, EventArgs e)

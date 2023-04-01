@@ -97,16 +97,16 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.EventsList.ListModel = new EventsListModel(baseWin, fLocalUndoman, true);
-            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
-            fView.SourcesList.ListModel = new SourceCitationsListModel(baseWin, fLocalUndoman);
-            fView.AssociationsList.ListModel = new AssociationsListModel(baseWin, fLocalUndoman);
-            fView.GroupsList.ListModel = new IndiGroupsListModel(baseWin, fLocalUndoman);
-            fView.NamesList.ListModel = new IndiNamesListModel(baseWin, fLocalUndoman);
-            fView.SpousesList.ListModel = new IndiSpousesListModel(baseWin, fLocalUndoman);
-            fView.UserRefList.ListModel = new URefsListModel(baseWin, fLocalUndoman);
-            fView.ParentsList.ListModel = new IndiParentsListModel(baseWin, fLocalUndoman);
+            fView.EventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman, true);
+            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+            fView.AssociationsList.ListModel = new AssociationsListModel(fView, baseWin, fLocalUndoman);
+            fView.GroupsList.ListModel = new IndiGroupsListModel(fView, baseWin, fLocalUndoman);
+            fView.NamesList.ListModel = new IndiNamesListModel(fView, baseWin, fLocalUndoman);
+            fView.SpousesList.ListModel = new IndiSpousesListModel(fView, baseWin, fLocalUndoman);
+            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
+            fView.ParentsList.ListModel = new IndiParentsListModel(fView, baseWin, fLocalUndoman);
         }
 
         private bool IsExtendedWomanSurname()
@@ -406,7 +406,7 @@ namespace GKCore.Controllers
 
         public void AddPortrait()
         {
-            if (BaseController.AddIndividualPortrait(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (BaseController.AddIndividualPortrait(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 fView.MediaList.UpdateSheet();
                 UpdatePortrait(true);
             }
@@ -423,7 +423,7 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            GDMFamilyRecord family = fBase.Context.SelectFamily(fIndividualRecord);
+            GDMFamilyRecord family = fBase.Context.SelectFamily(fView, fIndividualRecord);
             if (family != null && family.IndexOfChild(fIndividualRecord) < 0) {
                 fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fIndividualRecord, family);
             }
@@ -435,7 +435,7 @@ namespace GKCore.Controllers
             AcceptTempData();
 
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
-            if (family != null && BaseController.ModifyFamily(fBase, ref family, TargetMode.tmNone, null)) {
+            if (family != null && BaseController.ModifyFamily(fView, fBase, ref family, TargetMode.tmNone, null)) {
                 UpdateControls();
             }
         }
@@ -457,7 +457,7 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            if (BaseController.AddIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (BaseController.AddIndividualFather(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
@@ -475,7 +475,7 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            if (BaseController.AddIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (BaseController.AddIndividualMother(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }

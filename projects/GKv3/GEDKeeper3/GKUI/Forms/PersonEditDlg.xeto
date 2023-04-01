@@ -13,11 +13,11 @@
             <TableCell ScaleWidth="True">
               <TableLayout x:Name="personLayout" Spacing="4, 4">
                 <TableRow>
-                  <StackLayout Spacing="2">
+                  <StackLayout Spacing="2" TabIndex="1">
                     <Label x:Name="lblSurname" />
                     <TextBox x:Name="txtSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
                   </StackLayout>
-                  <StackLayout Spacing="2">
+                  <StackLayout Spacing="2" TabIndex="5">
                     <Label x:Name="lblSurnamePrefix" />
                     <TextBox x:Name="txtSurnamePrefix" Width="180" KeyDown="txtXName_KeyDown" />
                   </StackLayout>
@@ -25,42 +25,46 @@
                 </TableRow>
 
                 <TableRow>
-                  <StackLayout Spacing="2">
+                  <StackLayout Spacing="2" TabIndex="2">
                     <Label x:Name="lblMarriedSurname" />
                     <TextBox x:Name="txtMarriedSurname" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
                   </StackLayout>
-                  <StackLayout Spacing="2">
+                  <StackLayout Spacing="2" TabIndex="6">
                     <Label x:Name="lblNamePrefix" />
                     <TextBox x:Name="txtNamePrefix" Width="180" KeyDown="txtXName_KeyDown" />
                   </StackLayout>
-                  <StackLayout Spacing="2">
+                  <StackLayout Spacing="2" TabIndex="9">
                     <Label x:Name="lblSex" />
-                    <ComboBox x:Name="cmbSex" ReadOnly="true" Width="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" />
+                    <DropDown x:Name="cmbSex" Width="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" />
                   </StackLayout>
                 </TableRow>
 
                 <TableRow>
-                  <StackLayout Spacing="2">
+                  <StackLayout Spacing="2" TabIndex="3">
                     <Label x:Name="lblName" />
                     <TextBox x:Name="txtName" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
                   </StackLayout>
-                  <StackLayout Spacing="2">
+                  <StackLayout Spacing="2" TabIndex="7">
                     <Label x:Name="lblNameSuffix" />
                     <TextBox x:Name="txtNameSuffix" Width="180" KeyDown="txtXName_KeyDown" />
                   </StackLayout>
-                  <CheckBox x:Name="chkBookmark" />
+                  <StackLayout Spacing="2" TabIndex="10">
+                    <CheckBox x:Name="chkBookmark" />
+                  </StackLayout>
                 </TableRow>
 
                 <TableRow>
-                  <StackLayout Spacing="2">
+                  <StackLayout Spacing="2" TabIndex="4">
                     <Label x:Name="lblPatronymic" />
                     <ComboBox x:Name="cmbPatronymic" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
                   </StackLayout>
-                  <StackLayout Spacing="2">
+                  <StackLayout Spacing="2" TabIndex="8">
                     <Label x:Name="lblNickname" />
                     <TextBox x:Name="txtNickname" Width="180" KeyDown="txtXName_KeyDown" />
                   </StackLayout>
-                  <CheckBox x:Name="chkPatriarch" />
+                  <StackLayout Spacing="2" TabIndex="11">
+                    <CheckBox x:Name="chkPatriarch" />
+                  </StackLayout>
                 </TableRow>
               </TableLayout>
             </TableCell>
@@ -68,9 +72,7 @@
             <TableCell>
               <TableLayout x:Name="portraitLayout" Spacing="0, 4">
                 <TableRow ScaleHeight="True">
-                  <Scrollable Border="Bezel">
-                    <comcom:GKPortrait x:Name="imgPortrait" Size="140, 160" />
-                  </Scrollable>
+                  <comcom:GKPortrait x:Name="imgPortrait" Size="140, 160" />
                 </TableRow>
                 <TableRow>
                   <StackLayout Orientation="Horizontal" Spacing="4">

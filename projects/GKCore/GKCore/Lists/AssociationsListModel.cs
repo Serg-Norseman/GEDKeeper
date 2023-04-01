@@ -25,6 +25,7 @@ using GKCore.Interfaces;
 using GKCore.Design.Views;
 using GKCore.Operations;
 using GKCore.Types;
+using GKCore.Design;
 
 namespace GKCore.Lists
 {
@@ -35,7 +36,7 @@ namespace GKCore.Lists
     {
         private GDMIndividualRecord fRelIndi;
 
-        public AssociationsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public AssociationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
@@ -98,7 +99,7 @@ namespace GKCore.Lists
                         }
 
                         dlg.Association = ast;
-                        result = AppHost.Instance.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, fOwner, false);
 
                         if (!exists) {
                             if (result) {

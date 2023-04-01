@@ -64,11 +64,11 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.ChildrenList.ListModel = new FamilyChildrenListModel(baseWin, fLocalUndoman);
-            fView.EventsList.ListModel = new EventsListModel(baseWin, fLocalUndoman, false);
-            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
-            fView.SourcesList.ListModel = new SourceCitationsListModel(baseWin, fLocalUndoman);
+            fView.ChildrenList.ListModel = new FamilyChildrenListModel(fView, baseWin, fLocalUndoman);
+            fView.EventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman, false);
+            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)
@@ -159,7 +159,7 @@ namespace GKCore.Controllers
 
         public void AddHusband()
         {
-            if (BaseController.AddFamilyHusband(fBase, fLocalUndoman, fFamilyRecord)) {
+            if (BaseController.AddFamilyHusband(fView, fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
             }
         }
@@ -173,7 +173,7 @@ namespace GKCore.Controllers
 
         public void AddWife()
         {
-            if (BaseController.AddFamilyWife(fBase, fLocalUndoman, fFamilyRecord)) {
+            if (BaseController.AddFamilyWife(fView, fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
             }
         }

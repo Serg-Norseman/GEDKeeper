@@ -67,7 +67,7 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override bool Accept()
@@ -146,17 +146,17 @@ namespace GKCore.Controllers
             GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
             switch (gt) {
                 case GDMGoalType.gtIndividual:
-                    fTempRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
+                    fTempRec = fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtFamily:
-                    fTempRec = fBase.Context.SelectRecord(GDMRecordType.rtFamily, new object[0]);
+                    fTempRec = fBase.Context.SelectRecord(fView, GDMRecordType.rtFamily, new object[0]);
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtSource:
-                    fTempRec = fBase.Context.SelectRecord(GDMRecordType.rtSource, new object[0]);
+                    fTempRec = fBase.Context.SelectRecord(fView, GDMRecordType.rtSource, new object[0]);
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 

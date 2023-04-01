@@ -29,6 +29,7 @@ using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
+using GKCore.Design;
 
 namespace GKCore.Controllers
 {
@@ -37,19 +38,19 @@ namespace GKCore.Controllers
     /// </summary>
     public static class BaseController
     {
-        public static void ViewRecordInfo(IBaseWindow baseWin, GDMRecord record)
+        public static void ViewRecordInfo(IView owner, IBaseWindow baseWin, GDMRecord record)
         {
             if (record != null) {
                 using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
                     dlg.Record = record;
-                    AppHost.Instance.ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, owner, false);
                 }
             }
         }
 
         #region Modify routines
 
-        public static bool ModifyMedia(IBaseWindow baseWin, ref GDMMultimediaRecord mediaRec)
+        public static bool ModifyMedia(IView owner, IBaseWindow baseWin, ref GDMMultimediaRecord mediaRec)
         {
             bool result;
 
@@ -69,7 +70,7 @@ namespace GKCore.Controllers
                         baseWin.Context.LockRecord(mediaRec);
 
                         dlg.MultimediaRecord = mediaRec;
-                        result = (AppHost.Instance.ShowModalX(dlg, false));
+                        result = (AppHost.Instance.ShowModalX(dlg, owner, false));
                     } finally {
                         baseWin.Context.UnlockRecord(mediaRec);
                     }
@@ -90,7 +91,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyNote(IBaseWindow baseWin, ref GDMNoteRecord noteRec)
+        public static bool ModifyNote(IView owner, IBaseWindow baseWin, ref GDMNoteRecord noteRec)
         {
             bool result;
 
@@ -110,12 +111,12 @@ namespace GKCore.Controllers
                     if (GlobalOptions.Instance.UseExtendedNotes) {
                         using (var dlg = AppHost.ResolveDialog<INoteEditDlgEx>(baseWin)) {
                             dlg.NoteRecord = noteRec;
-                            result = (AppHost.Instance.ShowModalX(dlg, false));
+                            result = (AppHost.Instance.ShowModalX(dlg, owner, false));
                         }
                     } else {
                         using (var dlg = AppHost.ResolveDialog<INoteEditDlg>(baseWin)) {
                             dlg.NoteRecord = noteRec;
-                            result = (AppHost.Instance.ShowModalX(dlg, false));
+                            result = (AppHost.Instance.ShowModalX(dlg, owner, false));
                         }
                     }
                 } finally {
@@ -137,7 +138,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifySource(IBaseWindow baseWin, ref GDMSourceRecord sourceRec)
+        public static bool ModifySource(IView owner, IBaseWindow baseWin, ref GDMSourceRecord sourceRec)
         {
             bool result;
 
@@ -156,7 +157,7 @@ namespace GKCore.Controllers
                         baseWin.Context.LockRecord(sourceRec);
 
                         dlg.SourceRecord = sourceRec;
-                        result = (AppHost.Instance.ShowModalX(dlg, false));
+                        result = (AppHost.Instance.ShowModalX(dlg, owner, false));
                     } finally {
                         baseWin.Context.UnlockRecord(sourceRec);
                     }
@@ -177,7 +178,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifySourceCitation(IBaseWindow baseWin, ChangeTracker undoman,
+        public static bool ModifySourceCitation(IView owner, IBaseWindow baseWin, ChangeTracker undoman,
                                                 IGDMStructWithSourceCitations _struct, ref GDMSourceCitation cit)
         {
             bool result;
@@ -192,7 +193,7 @@ namespace GKCore.Controllers
                     }
 
                     dlg.SourceCitation = cit;
-                    result = AppHost.Instance.ShowModalX(dlg, false);
+                    result = AppHost.Instance.ShowModalX(dlg, owner, false);
 
                     if (!exists) {
                         if (result) {
@@ -209,7 +210,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyRepository(IBaseWindow baseWin, ref GDMRepositoryRecord repRec)
+        public static bool ModifyRepository(IView owner, IBaseWindow baseWin, ref GDMRepositoryRecord repRec)
         {
             bool result;
 
@@ -228,7 +229,7 @@ namespace GKCore.Controllers
                         baseWin.Context.LockRecord(repRec);
 
                         dlg.RepositoryRecord = repRec;
-                        result = AppHost.Instance.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, owner, false);
                     } finally {
                         baseWin.Context.UnlockRecord(repRec);
                     }
@@ -249,7 +250,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyGroup(IBaseWindow baseWin, ref GDMGroupRecord groupRec)
+        public static bool ModifyGroup(IView owner, IBaseWindow baseWin, ref GDMGroupRecord groupRec)
         {
             bool result;
 
@@ -268,7 +269,7 @@ namespace GKCore.Controllers
                         baseWin.Context.LockRecord(groupRec);
 
                         dlg.GroupRecord = groupRec;
-                        result = (AppHost.Instance.ShowModalX(dlg, false));
+                        result = (AppHost.Instance.ShowModalX(dlg, owner, false));
                     } finally {
                         baseWin.Context.UnlockRecord(groupRec);
                     }
@@ -289,7 +290,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyResearch(IBaseWindow baseWin, ref GDMResearchRecord researchRec)
+        public static bool ModifyResearch(IView owner, IBaseWindow baseWin, ref GDMResearchRecord researchRec)
         {
             bool result;
 
@@ -308,7 +309,7 @@ namespace GKCore.Controllers
                         baseWin.Context.LockRecord(researchRec);
 
                         dlg.ResearchRecord = researchRec;
-                        result = AppHost.Instance.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, owner, false);
                     } finally {
                         baseWin.Context.UnlockRecord(researchRec);
                     }
@@ -329,7 +330,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyTask(IBaseWindow baseWin, ref GDMTaskRecord taskRec)
+        public static bool ModifyTask(IView owner, IBaseWindow baseWin, ref GDMTaskRecord taskRec)
         {
             bool result;
 
@@ -348,7 +349,7 @@ namespace GKCore.Controllers
                         baseWin.Context.LockRecord(taskRec);
 
                         dlg.TaskRecord = taskRec;
-                        result = AppHost.Instance.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, owner, false);
                     } finally {
                         baseWin.Context.UnlockRecord(taskRec);
                     }
@@ -369,7 +370,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyCommunication(IBaseWindow baseWin, ref GDMCommunicationRecord commRec)
+        public static bool ModifyCommunication(IView owner, IBaseWindow baseWin, ref GDMCommunicationRecord commRec)
         {
             bool result;
 
@@ -388,7 +389,7 @@ namespace GKCore.Controllers
                         baseWin.Context.LockRecord(commRec);
 
                         dlg.CommunicationRecord = commRec;
-                        result = AppHost.Instance.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, owner, false);
                     } finally {
                         baseWin.Context.UnlockRecord(commRec);
                     }
@@ -409,7 +410,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyLocation(IBaseWindow baseWin, ref GDMLocationRecord locRec)
+        public static bool ModifyLocation(IView owner, IBaseWindow baseWin, ref GDMLocationRecord locRec)
         {
             bool result;
 
@@ -428,7 +429,7 @@ namespace GKCore.Controllers
                         baseWin.Context.LockRecord(locRec);
 
                         dlg.LocationRecord = locRec;
-                        result = AppHost.Instance.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, owner, false);
                     } finally {
                         baseWin.Context.UnlockRecord(locRec);
                     }
@@ -473,7 +474,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public static bool ModifyIndividual(IBaseWindow baseWin, ref GDMIndividualRecord indivRec,
+        public static bool ModifyIndividual(IView owner, IBaseWindow baseWin, ref GDMIndividualRecord indivRec,
                                      GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex)
         {
             bool result;
@@ -505,7 +506,7 @@ namespace GKCore.Controllers
                             dlg.Target = target;
                         }
 
-                        result = (AppHost.Instance.ShowModalX(dlg, false));
+                        result = (AppHost.Instance.ShowModalX(dlg, owner, false));
                     } finally {
                         baseWin.Context.UnlockRecord(indivRec);
                     }
@@ -529,7 +530,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyFamily(IBaseWindow baseWin, ref GDMFamilyRecord familyRec, TargetMode targetType, GDMIndividualRecord target)
+        public static bool ModifyFamily(IView owner, IBaseWindow baseWin, ref GDMFamilyRecord familyRec, TargetMode targetType, GDMIndividualRecord target)
         {
             bool result;
 
@@ -558,7 +559,7 @@ namespace GKCore.Controllers
                         dlg.FamilyRecord = familyRec;
                         dlg.SetTarget(targetType, target);
 
-                        result = (AppHost.Instance.ShowModalX(dlg, false));
+                        result = (AppHost.Instance.ShowModalX(dlg, owner, false));
                     } finally {
                         baseWin.Context.UnlockRecord(familyRec);
                     }
@@ -580,7 +581,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyAddress(IBaseWindow baseWin, GDMAddress address)
+        public static bool ModifyAddress(IView owner, IBaseWindow baseWin, GDMAddress address)
         {
             bool result;
 
@@ -589,7 +590,7 @@ namespace GKCore.Controllers
 
                 using (var dlg = AppHost.ResolveDialog<IAddressEditDlg>(baseWin)) {
                     dlg.Address = address;
-                    result = (AppHost.Instance.ShowModalX(dlg, false));
+                    result = (AppHost.Instance.ShowModalX(dlg, owner, false));
                 }
             } finally {
                 baseWin.Context.EndUpdate();
@@ -598,17 +599,16 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyName(IBaseContext context, ref NameEntry nameEntry)
+        public static bool ModifyName(IView owner, IBaseContext context, ref NameEntry nameEntry)
         {
             bool result;
 
             try {
                 context.BeginUpdate();
 
-                using (var dlg = AppHost.ResolveDialog<INameEditDlg>())
-                {
+                using (var dlg = AppHost.ResolveDialog<INameEditDlg>()) {
                     dlg.IName = nameEntry;
-                    result = AppHost.Instance.ShowModalX(dlg, false);
+                    result = AppHost.Instance.ShowModalX(dlg, owner, false);
                 }
             } finally {
                 context.EndUpdate();
@@ -621,7 +621,7 @@ namespace GKCore.Controllers
 
         #region Data modification functions for UI
 
-        public static GDMRecord AddRecord(IBaseWindow baseWin, GDMRecordType rt, Target target)
+        public static GDMRecord AddRecord(IView owner, IBaseWindow baseWin, GDMRecordType rt, Target target)
         {
             bool result = false;
             GDMRecord rec = null;
@@ -636,7 +636,7 @@ namespace GKCore.Controllers
                         }
 
                         GDMIndividualRecord indivRec = null;
-                        result = ModifyIndividual(baseWin, ref indivRec, target.TargetIndividual, target.TargetMode, target.NeedSex);
+                        result = ModifyIndividual(owner, baseWin, ref indivRec, target.TargetIndividual, target.TargetMode, target.NeedSex);
                         rec = indivRec;
                         break;
                     }
@@ -650,7 +650,7 @@ namespace GKCore.Controllers
                         TargetMode famTarget = (target.TargetMode != TargetMode.tmFamilyChild) ? TargetMode.tmNone : target.TargetMode;
 
                         GDMFamilyRecord fam = null;
-                        result = ModifyFamily(baseWin, ref fam, famTarget, target.TargetIndividual);
+                        result = ModifyFamily(owner, baseWin, ref fam, famTarget, target.TargetIndividual);
                         rec = fam;
                         break;
                     }
@@ -658,7 +658,7 @@ namespace GKCore.Controllers
                 case GDMRecordType.rtNote:
                     {
                         GDMNoteRecord note = null;
-                        result = ModifyNote(baseWin, ref note);
+                        result = ModifyNote(owner, baseWin, ref note);
                         rec = note;
                         break;
                     }
@@ -666,7 +666,7 @@ namespace GKCore.Controllers
                 case GDMRecordType.rtMultimedia:
                     {
                         GDMMultimediaRecord mmRec = null;
-                        result = ModifyMedia(baseWin, ref mmRec);
+                        result = ModifyMedia(owner, baseWin, ref mmRec);
                         rec = mmRec;
                         break;
                     }
@@ -674,7 +674,7 @@ namespace GKCore.Controllers
                 case GDMRecordType.rtSource:
                     {
                         GDMSourceRecord src = null;
-                        result = ModifySource(baseWin, ref src);
+                        result = ModifySource(owner, baseWin, ref src);
                         rec = src;
                         break;
                     }
@@ -682,7 +682,7 @@ namespace GKCore.Controllers
                 case GDMRecordType.rtRepository:
                     {
                         GDMRepositoryRecord rep = null;
-                        result = ModifyRepository(baseWin, ref rep);
+                        result = ModifyRepository(owner, baseWin, ref rep);
                         rec = rep;
                         break;
                     }
@@ -690,7 +690,7 @@ namespace GKCore.Controllers
                 case GDMRecordType.rtGroup:
                     {
                         GDMGroupRecord grp = null;
-                        result = ModifyGroup(baseWin, ref grp);
+                        result = ModifyGroup(owner, baseWin, ref grp);
                         rec = grp;
                         break;
                     }
@@ -698,7 +698,7 @@ namespace GKCore.Controllers
                 case GDMRecordType.rtResearch:
                     {
                         GDMResearchRecord rsr = null;
-                        result = ModifyResearch(baseWin, ref rsr);
+                        result = ModifyResearch(owner, baseWin, ref rsr);
                         rec = rsr;
                         break;
                     }
@@ -706,7 +706,7 @@ namespace GKCore.Controllers
                 case GDMRecordType.rtTask:
                     {
                         GDMTaskRecord tsk = null;
-                        result = ModifyTask(baseWin, ref tsk);
+                        result = ModifyTask(owner, baseWin, ref tsk);
                         rec = tsk;
                         break;
                     }
@@ -714,7 +714,7 @@ namespace GKCore.Controllers
                 case GDMRecordType.rtCommunication:
                     {
                         GDMCommunicationRecord comm = null;
-                        result = ModifyCommunication(baseWin, ref comm);
+                        result = ModifyCommunication(owner, baseWin, ref comm);
                         rec = comm;
                         break;
                     }
@@ -722,7 +722,7 @@ namespace GKCore.Controllers
                 case GDMRecordType.rtLocation:
                     {
                         GDMLocationRecord loc = null;
-                        result = ModifyLocation(baseWin, ref loc);
+                        result = ModifyLocation(owner, baseWin, ref loc);
                         rec = loc;
                         break;
                     }
@@ -731,64 +731,64 @@ namespace GKCore.Controllers
             return (result) ? rec : null;
         }
 
-        public static bool EditRecord(IBaseWindow baseWin, GDMRecord rec)
+        public static bool EditRecord(IView owner, IBaseWindow baseWin, GDMRecord rec)
         {
             bool result = false;
 
             switch (rec.RecordType) {
                 case GDMRecordType.rtIndividual:
                     GDMIndividualRecord ind = rec as GDMIndividualRecord;
-                    result = ModifyIndividual(baseWin, ref ind, null, TargetMode.tmNone, GDMSex.svUnknown);
+                    result = ModifyIndividual(owner, baseWin, ref ind, null, TargetMode.tmNone, GDMSex.svUnknown);
                     break;
 
                 case GDMRecordType.rtFamily:
                     GDMFamilyRecord fam = rec as GDMFamilyRecord;
-                    result = ModifyFamily(baseWin, ref fam, TargetMode.tmNone, null);
+                    result = ModifyFamily(owner, baseWin, ref fam, TargetMode.tmNone, null);
                     break;
 
                 case GDMRecordType.rtNote:
                     GDMNoteRecord note = rec as GDMNoteRecord;
-                    result = ModifyNote(baseWin, ref note);
+                    result = ModifyNote(owner, baseWin, ref note);
                     break;
 
                 case GDMRecordType.rtMultimedia:
                     GDMMultimediaRecord mmRec = rec as GDMMultimediaRecord;
-                    result = ModifyMedia(baseWin, ref mmRec);
+                    result = ModifyMedia(owner, baseWin, ref mmRec);
                     break;
 
                 case GDMRecordType.rtSource:
                     GDMSourceRecord src = rec as GDMSourceRecord;
-                    result = ModifySource(baseWin, ref src);
+                    result = ModifySource(owner, baseWin, ref src);
                     break;
 
                 case GDMRecordType.rtRepository:
                     GDMRepositoryRecord rep = rec as GDMRepositoryRecord;
-                    result = ModifyRepository(baseWin, ref rep);
+                    result = ModifyRepository(owner, baseWin, ref rep);
                     break;
 
                 case GDMRecordType.rtGroup:
                     GDMGroupRecord grp = rec as GDMGroupRecord;
-                    result = ModifyGroup(baseWin, ref grp);
+                    result = ModifyGroup(owner, baseWin, ref grp);
                     break;
 
                 case GDMRecordType.rtResearch:
                     GDMResearchRecord rsr = rec as GDMResearchRecord;
-                    result = ModifyResearch(baseWin, ref rsr);
+                    result = ModifyResearch(owner, baseWin, ref rsr);
                     break;
 
                 case GDMRecordType.rtTask:
                     GDMTaskRecord tsk = rec as GDMTaskRecord;
-                    result = ModifyTask(baseWin, ref tsk);
+                    result = ModifyTask(owner, baseWin, ref tsk);
                     break;
 
                 case GDMRecordType.rtCommunication:
                     GDMCommunicationRecord comm = rec as GDMCommunicationRecord;
-                    result = ModifyCommunication(baseWin, ref comm);
+                    result = ModifyCommunication(owner, baseWin, ref comm);
                     break;
 
                 case GDMRecordType.rtLocation:
                     GDMLocationRecord loc = rec as GDMLocationRecord;
-                    result = ModifyLocation(baseWin, ref loc);
+                    result = ModifyLocation(owner, baseWin, ref loc);
                     break;
             }
 
@@ -869,11 +869,11 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool AddIndividualFather(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
+        public static bool AddIndividualFather(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            GDMIndividualRecord father = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GDMSex.svMale);
+            GDMIndividualRecord father = baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svMale);
             if (father != null) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
                 if (family != null) {
@@ -907,11 +907,11 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool AddIndividualMother(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
+        public static bool AddIndividualMother(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            GDMIndividualRecord mother = baseWin.Context.SelectPerson(person, TargetMode.tmChild, GDMSex.svFemale);
+            GDMIndividualRecord mother = baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svFemale);
             if (mother != null) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, mother);
                 if (family != null) {
@@ -946,12 +946,12 @@ namespace GKCore.Controllers
         }
 
 
-        public static bool AddFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
+        public static bool AddFamilyHusband(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
             var wife = baseWin.Context.Tree.GetPtrValue(family.Wife);
-            GDMIndividualRecord husband = baseWin.Context.SelectPerson(wife, TargetMode.tmSpouse, GDMSex.svMale);
+            GDMIndividualRecord husband = baseWin.Context.SelectPerson(owner, wife, TargetMode.tmSpouse, GDMSex.svMale);
             if (husband != null && family.Husband.IsEmpty()) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, husband);
             }
@@ -973,12 +973,12 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool AddFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
+        public static bool AddFamilyWife(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
             var husband = baseWin.Context.Tree.GetPtrValue(family.Husband);
-            GDMIndividualRecord wife = baseWin.Context.SelectPerson(husband, TargetMode.tmSpouse, GDMSex.svFemale);
+            GDMIndividualRecord wife = baseWin.Context.SelectPerson(owner, husband, TargetMode.tmSpouse, GDMSex.svFemale);
             if (wife != null && family.Wife.IsEmpty()) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, wife);
             }
@@ -1000,21 +1000,21 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool SelectPortraitRegion(IBaseWindow baseWin, GDMMultimediaLink mmLink)
+        public static bool SelectPortraitRegion(IView owner, IBaseWindow baseWin, GDMMultimediaLink mmLink)
         {
             bool result;
             using (var selectDlg = AppHost.ResolveDialog<IPortraitSelectDlg>(baseWin)) {
                 selectDlg.MultimediaLink = mmLink;
-                result = AppHost.Instance.ShowModalX(selectDlg, false);
+                result = AppHost.Instance.ShowModalX(selectDlg, owner, false);
             }
             return result;
         }
 
-        public static bool AddIndividualPortrait(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
+        public static bool AddIndividualPortrait(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
         {
             bool result = false;
 
-            GDMMultimediaRecord mmRec = baseWin.Context.SelectRecord(GDMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
+            GDMMultimediaRecord mmRec = baseWin.Context.SelectRecord(owner, GDMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
             if (mmRec == null) return false;
 
             // remove previous portrait link
@@ -1027,7 +1027,7 @@ namespace GKCore.Controllers
             mmLink = iRec.SetPrimaryMultimediaLink(mmRec);
 
             // select portrait area
-            result = SelectPortraitRegion(baseWin, mmLink);
+            result = SelectPortraitRegion(owner, baseWin, mmLink);
 
             if (result) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitAttach, iRec, mmLink);
@@ -1045,14 +1045,14 @@ namespace GKCore.Controllers
             return false;
         }
 
-        public static void ShowRecMerge(IBaseWindow baseWin, GDMRecord rec1, GDMRecord rec2)
+        public static void ShowRecMerge(IView owner, IBaseWindow baseWin, GDMRecord rec1, GDMRecord rec2)
         {
             try {
                 baseWin.Context.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IRecMergeDlg>(baseWin)) {
                     dlg.SetRec1(rec1);
                     dlg.SetRec2(rec2);
-                    AppHost.Instance.ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, owner, false);
                 }
             } finally {
                 baseWin.Context.EndUpdate();

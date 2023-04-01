@@ -68,7 +68,6 @@ namespace GKCore.Controllers
         {
             var listView = GetControl<IListView>("lstPersonColumns");
 
-            //lstPersonColumns.ItemCheck -= ListPersonColumns_ItemCheck;
             listView.BeginUpdate();
             try {
                 listView.ClearItems();
@@ -81,7 +80,6 @@ namespace GKCore.Controllers
             } finally {
                 listView.EndUpdate();
             }
-            //lstPersonColumns.ItemCheck += ListPersonColumns_ItemCheck;
         }
 
         public void ResetColumnsList()
@@ -114,6 +112,11 @@ namespace GKCore.Controllers
 
         public void AcceptColumnsList()
         {
+            var listView = GetControl<IListView>("lstPersonColumns");
+            for (int i = 0; i < fTempColumns.Count; i++) {
+                fTempColumns.OrderedColumns[i].CurActive = listView.Items[i].Checked;
+            }
+
             fTempColumns.CopyTo(fOptions.IndividualListColumns);
         }
 

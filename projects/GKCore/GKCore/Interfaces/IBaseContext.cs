@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using BSLib;
 using GDModel;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Types;
 
@@ -101,19 +102,19 @@ namespace GKCore.Interfaces
         GDMSourceRecord FindSource(string sourceName);
         void GetSourcesList(StringList sources);
 
-        string DefinePatronymic(string name, GDMSex sex, bool confirm);
-        GDMSex DefineSex(string iName, string iPatr);
-        void CheckPersonSex(GDMIndividualRecord iRec);
+        string DefinePatronymic(IView owner, string name, GDMSex sex, bool confirm);
+        GDMSex DefineSex(IView owner, string iName, string iPatr);
+        void CheckPersonSex(IView owner, GDMIndividualRecord iRec);
 
-        GDMFamilyRecord SelectFamily(GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild);
-        GDMIndividualRecord SelectPerson(GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex);
-        GDMRecord SelectRecord(GDMRecordType mode, params object[] args);
+        GDMFamilyRecord SelectFamily(IView owner, GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild);
+        GDMIndividualRecord SelectPerson(IView owner, GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex);
+        GDMRecord SelectRecord(IView owner, GDMRecordType mode, params object[] args);
         GDMFamilyRecord GetChildFamily(GDMIndividualRecord iChild,
                                           bool canCreate,
                                           GDMIndividualRecord newParent);
         GDMFamilyRecord AddFamilyForSpouse(GDMIndividualRecord spouse);
-        GDMIndividualRecord AddChildForParent(GDMIndividualRecord parent, GDMSex needSex);
-        GDMIndividualRecord SelectSpouseFor(GDMIndividualRecord iRec);
+        GDMIndividualRecord AddChildForParent(IView owner, GDMIndividualRecord parent, GDMSex needSex);
+        GDMIndividualRecord SelectSpouseFor(IView owner, GDMIndividualRecord iRec);
 
         void ProcessFamily(GDMFamilyRecord famRec);
         void ProcessIndividual(GDMIndividualRecord indiRec);

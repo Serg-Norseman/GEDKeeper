@@ -1,7 +1,7 @@
 @echo off
 cls
 
-set GKVER=2.25.0
+set GKVER=2.25.1
 
 set lstfile=".\listfile.txt"
 set out_fn="gedkeeper_%GKVER%_win86_portable"
@@ -23,8 +23,7 @@ echo "..\plugins\" >> %lstfile%
 echo "..\samples\" >> %lstfile%
 echo "..\scripts\" >> %lstfile%
 echo "..\themes\" >> %lstfile%
-
-echo "..\externals\resources.yaml" >> %lstfile%
+echo "..\externals\" >> %lstfile%
 
 rem "c:\Program Files\7-zip\7z.exe" a -tzip -mx5 -scsWIN %zip_fn% @%lstfile% > %log_fn%
 "c:\Program Files\7-zip\7z.exe" a -tzip -mx9 -scsWIN %zip_fn% @%lstfile%

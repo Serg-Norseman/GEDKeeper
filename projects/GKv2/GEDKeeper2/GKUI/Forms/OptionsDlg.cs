@@ -108,11 +108,6 @@ namespace GKUI.Forms
             fController.ResetColumnsList();
         }
 
-        private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            fController.TempColumns.OrderedColumns[e.Index].CurActive = (e.NewValue == CheckState.Checked);
-        }
-
         public void SetPage(OptionsPage page)
         {
             switch (page) {
@@ -161,7 +156,10 @@ namespace GKUI.Forms
 
         private void rgFNPFormat_CheckedChanged(object sender, EventArgs e)
         {
-            fController.ChangeFNPFormat();
+            // prevent triggering on incomplete initialization
+            if (fController != null) {
+                fController.ChangeFNPFormat();
+            }
         }
 
         public override bool SkipTheme(IDisposable component)

@@ -57,9 +57,9 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.MembersList.ListModel = new GroupMembersListModel(baseWin, fLocalUndoman);
-            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(baseWin, fLocalUndoman);
+            fView.MembersList.ListModel = new GroupMembersListModel(fView, baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override bool Accept()

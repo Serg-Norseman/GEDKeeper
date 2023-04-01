@@ -19,6 +19,7 @@ del .\opencover.xml
 rem <<< Main assemblies cleaning >>>
 
 rmdir .\projects\.vs /s /q
+rmdir .\locales\.vs /s /q
 rmdir .\projects\.idea /s /q
 
 rmdir .\projects\GKCore\bin /s /q

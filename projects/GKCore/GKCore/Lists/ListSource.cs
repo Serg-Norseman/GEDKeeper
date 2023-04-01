@@ -576,16 +576,16 @@ namespace GKCore.Lists
         #region Items and content processing
 
         private object[] fItemData;
-        private T fVirtualFetchedRecord;
+        private ContentItem fVirtualFetchedItem;
 
         public string GetColumnExternalValue(ContentItem contentItem, int colIndex)
         {
             var queryRec = (T)contentItem.Record;
 
             // "super fetch"
-            if (fVirtualFetchedRecord != queryRec) {
+            if (fVirtualFetchedItem != contentItem) {
                 fItemData = GetItemData(queryRec);
-                fVirtualFetchedRecord = queryRec;
+                fVirtualFetchedItem = contentItem;
             }
 
             return (fItemData == null) ? string.Empty : (string)fItemData[colIndex];

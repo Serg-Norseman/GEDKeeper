@@ -30,6 +30,7 @@ using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKCore.Logging;
 using GKCore.Types;
+using GKUI.Forms;
 
 namespace GEDmill
 {
@@ -45,7 +46,7 @@ namespace GEDmill
     /// <summary>
     /// The main from from which the application is operated. Contains the GUI controls and the control handlers.
     /// </summary>
-    public partial class MainForm : Form, ILocalizable
+    public partial class MainForm : CommonForm, ILocalizable
     {
         private static readonly GKCore.Logging.ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(MainForm).Name);
 
@@ -450,7 +451,7 @@ namespace GEDmill
         private void btnSelectKeyAdd_Click(object sender, EventArgs e)
         {
             // Use a dialog box to let them choose an individual
-            GDMIndividualRecord indiRec = fBase.Context.SelectPerson(null, TargetMode.tmNone, GDMSex.svUnknown);
+            GDMIndividualRecord indiRec = fBase.Context.SelectPerson(this, null, TargetMode.tmNone, GDMSex.svUnknown);
             if (indiRec == null) return;
 
             // Ensure they are only added once
@@ -632,7 +633,7 @@ namespace GEDmill
             if (lvIndividuals.SelectedItems.Count == 1) {
                 var lvi = lvIndividuals.SelectedItems[0] as LVItem;
                 var ir = lvi.Record as GDMIndividualRecord;
-                BaseController.ViewRecordInfo(fBase, ir);
+                BaseController.ViewRecordInfo(this, fBase, ir);
             }
         }
 
@@ -641,7 +642,7 @@ namespace GEDmill
             if (lvSources.SelectedItems.Count == 1) {
                 var lvi = lvSources.SelectedItems[0] as LVItem;
                 var sr = lvi.Record as GDMSourceRecord;
-                BaseController.ViewRecordInfo(fBase, sr);
+                BaseController.ViewRecordInfo(this, fBase, sr);
             }
         }
 

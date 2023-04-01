@@ -119,7 +119,7 @@ namespace GKUI.Forms
         private void btnCreate_Click(object sender, EventArgs e)
         {
             try {
-                GDMRecord rec = BaseController.AddRecord(fController.Base, fController.RecType, fController.Target);
+                GDMRecord rec = BaseController.AddRecord(this, fController.Base, fController.RecType, fController.Target);
                 if (rec != null) {
                     ResultRecord = rec;
                     DialogResult = DialogResult.Ok;

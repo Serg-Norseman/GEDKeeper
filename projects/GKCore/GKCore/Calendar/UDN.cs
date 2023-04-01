@@ -39,6 +39,8 @@ namespace GKCore.Calendar
         private const int DateBefore = 1 << 27;
         private const int ApproximateDate = 1 << 26;
 
+        private const int IgnoreYMD = IgnoreYear | IgnoreMonth | IgnoreDay;
+
         private const int ValueMask = 0x3FFFFFF;
 
         public const int UnknownYear = 0;
@@ -574,7 +576,7 @@ namespace GKCore.Calendar
 
         public bool IsEmpty()
         {
-            return fValue == 0;
+            return (fValue == 0) || (IgnoreYMD & fValue) == IgnoreYMD;
         }
 
         /// <summary>

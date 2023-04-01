@@ -239,6 +239,10 @@ namespace GKUI.Components
 
             AllowColumnReordering = false;
             AllowMultipleSelection = false;
+
+            // Selection of the last (or only) row does not work on left click; EtoForms issue #2443
+            AllowEmptySelection = false;
+
             DataStore = fItems;
 
             fListMan = null;
@@ -321,7 +325,7 @@ namespace GKUI.Components
         {
         }*/
 
-        protected override void OnSelectionChanged(EventArgs e)
+        /*protected override void OnSelectionChanged(EventArgs e)
         {
             base.OnSelectionChanged(e);
 
@@ -333,7 +337,7 @@ namespace GKUI.Components
 #endif
 
             base.ReloadData(base.SelectedRow);
-        }
+        }*/
 
         private int fRowFormatting = -1;
         private Color fRowBackColor = Colors.White;
@@ -351,11 +355,12 @@ namespace GKUI.Components
 
             // FIXME: doesn't work correctly because selection changes don't call this method (Eto <= 2.7.0)
             // This method only works with OnSelectionChanged -> ReloadData(SelectedRow)
-            if (e.Row == base.SelectedRow) {
+            // Gtk works correctly without this.
+            /*if (e.Row == base.SelectedRow) {
                 e.BackgroundColor = SystemColors.Selection;
                 e.ForegroundColor = SystemColors.SelectionText;
                 return;
-            }
+            }*/
 
             if (fIsVirtual) {
                 var item = e.Item as ContentItem;
@@ -409,7 +414,7 @@ namespace GKUI.Components
             return result;
         }
 
-#region Virtual mode with ListSource
+        #region Virtual mode with ListSource
 
         // In Eto not exists
         /*protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
@@ -507,9 +512,9 @@ namespace GKUI.Components
             }
         }
 
-#endregion
+        #endregion
 
-#region Public methods
+        #region Public methods
 
         public void Clear()
         {
@@ -715,9 +720,9 @@ namespace GKUI.Components
             }
         }
 
-#endregion
+        #endregion
 
-#region CheckedList
+        #region CheckedList
 
         protected override void OnCellEdited(GridViewCellEventArgs e)
         {
@@ -736,6 +741,6 @@ namespace GKUI.Components
                 handler.Invoke(this, new ItemCheckEventArgs(index, newValue));
         }
 
-#endregion
+        #endregion
     }
 }

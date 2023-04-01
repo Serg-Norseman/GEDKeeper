@@ -27,6 +27,7 @@ using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Export;
 using GKCore.Interfaces;
@@ -53,6 +54,12 @@ namespace GKCore
     {
         private ITextBox fDebugOutput;
         private IBaseWindow fBase;
+        private IView fView;
+
+        public ScriptEngine(IView view)
+        {
+            fView = view;
+        }
 
         public void lua_run(string script, IBaseWindow baseWin, ITextBox debugOutput)
         {
@@ -329,7 +336,7 @@ namespace GKCore
 
         public object select_record(int recType)
         {
-            return fBase.Context.SelectRecord((GDMRecordType)recType, null);
+            return fBase.Context.SelectRecord(fView, (GDMRecordType)recType, null);
         }
 
         public string get_individual_name(object recPtr)
@@ -563,7 +570,7 @@ namespace GKCore
 
         public string define_sex(string name, string patr)
         {
-            GDMSex sx = fBase.Context.DefineSex(name, patr);
+            GDMSex sx = fBase.Context.DefineSex(fView, name, patr);
 
             return (GKData.SexData[(int)sx].Sign);
         }
@@ -584,7 +591,7 @@ namespace GKCore
         {
             GDMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[0]) : GDMSex.svUnknown;
 
-            return fBase.Context.DefinePatronymic(fatherName, sex, confirm);
+            return fBase.Context.DefinePatronymic(fView, fatherName, sex, confirm);
         }
 
         public object get_individual_parents_family(object recPtr)

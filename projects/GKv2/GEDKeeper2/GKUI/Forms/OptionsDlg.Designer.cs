@@ -2085,7 +2085,6 @@
             this.lstPersonColumns.TabIndex = 1;
             this.lstPersonColumns.UseCompatibleStateImageBehavior = false;
             this.lstPersonColumns.View = System.Windows.Forms.View.Details;
-            this.lstPersonColumns.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ListPersonColumns_ItemCheck);
             // 
             // btnColumnUp
             // 

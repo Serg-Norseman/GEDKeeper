@@ -31,7 +31,7 @@ namespace GKCore.Design.Views
         void Init(string caption, bool showTipsChecked, StringList tips);
 
         ILabel TitleLabel { get; }
-        ITextBox TipText { get; }
+        ITextContainer TipText { get; }
         IButton NextButton { get; }
     }
 }

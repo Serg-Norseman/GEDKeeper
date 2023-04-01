@@ -216,7 +216,7 @@ namespace GKCore
 
             using (var dlg = fIocContainer.Resolve<IDayTipsDlg>()) {
                 dlg.Init(LangMan.LS(LSID.LSID_BirthDays), AppHost.Options.ShowTips, fTips);
-                ShowModalX(dlg, false);
+                ShowModalX(dlg, null, false);
                 AppHost.Options.ShowTips = dlg.ShowTipsChecked;
             }
 
@@ -610,9 +610,9 @@ namespace GKCore
             }
         }
 
-        public virtual bool ShowModalX(ICommonDialog form, bool keepModeless = false)
+        public virtual bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
-            return (form != null && form.ShowModalX(null));
+            return (dialog != null && dialog.ShowModalX(owner));
         }
 
         public void ShowHelpTopic(string topic)
@@ -863,7 +863,7 @@ namespace GKCore
         public static ushort RequestLanguage()
         {
             using (var dlg = AppHost.ResolveDialog<ILanguageSelectDlg>()) {
-                if (AppHost.Instance.ShowModalX(dlg, false)) {
+                if (AppHost.Instance.ShowModalX(dlg, null, false)) {
                     return (ushort)dlg.SelectedLanguage;
                 }
             }
@@ -963,7 +963,7 @@ namespace GKCore
 
         #endregion
 
-        public void ShowOptions()
+        public void ShowOptions(IView owner)
         {
             OptionsPage page = OptionsPage.opCommon;
             IWindow activeWin = GetActiveWindow();
@@ -976,15 +976,15 @@ namespace GKCore
                 }
             }
 
-            ShowOptions(page);
+            ShowOptions(owner, page);
         }
 
-        public void ShowOptions(OptionsPage page)
+        public void ShowOptions(IView owner, OptionsPage page)
         {
             using (var dlgOptions = AppHost.ResolveDialog<IOptionsDlg>(AppHost.Instance)) {
                 dlgOptions.SetPage(page);
 
-                if (AppHost.Instance.ShowModalX(dlgOptions)) {
+                if (AppHost.Instance.ShowModalX(dlgOptions, owner)) {
                     AppHost.Instance.ApplyOptions();
                 }
             }

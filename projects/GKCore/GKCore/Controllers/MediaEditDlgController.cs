@@ -65,8 +65,8 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
-            fView.SourcesList.ListModel = new SourceCitationsListModel(baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override bool Accept()

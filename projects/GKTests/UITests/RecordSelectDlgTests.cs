@@ -24,6 +24,7 @@ using System;
 using System.Windows.Forms;
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKTests;
 using GKTests.ControlTesters;
 using GKTests.Stubs;
@@ -76,7 +77,10 @@ namespace GKUI.Forms
 
         private static void RSD_SelectItem_Handler(string name, IntPtr ptr, Form form)
         {
-            EnterText("txtFastFilter", form, "*");
+            var dlg = form as RecordSelectDlg;
+
+            EnterCombo("txtFastFilter", form, "*");
+            //dlg.SetTarget(TargetMode.tmNone, null, GDMSex.svUnknown);
 
             var listRecords = new GKRecordsViewTester("fListRecords", form);
             listRecords.Properties.SelectItem(RSD_ItemIndex);

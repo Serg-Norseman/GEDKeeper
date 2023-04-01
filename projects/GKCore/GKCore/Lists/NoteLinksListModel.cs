@@ -22,6 +22,7 @@ using System;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -32,7 +33,7 @@ namespace GKCore.Lists
     {
         private GDMLines fNoteLines;
 
-        public NoteLinksListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public NoteLinksListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
@@ -87,7 +88,7 @@ namespace GKCore.Lists
             GDMNoteRecord noteRec;
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    noteRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtNote, null) as GDMNoteRecord;
+                    noteRec = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtNote, null) as GDMNoteRecord;
                     if (noteRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GDMObject)dataOwner, noteRec);
                         notes = dataOwner.FindNotes(noteRec);
@@ -97,7 +98,7 @@ namespace GKCore.Lists
                 case RecordAction.raEdit:
                     if (notes != null) {
                         noteRec = fBaseContext.Tree.GetPtrValue<GDMNoteRecord>(notes);
-                        result = BaseController.ModifyNote(fBaseWin, ref noteRec);
+                        result = BaseController.ModifyNote(fOwner, fBaseWin, ref noteRec);
                     }
                     break;
 

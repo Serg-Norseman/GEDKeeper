@@ -81,7 +81,7 @@ No code is perfect and we always welcome third-party patches. This document desc
 
 ### Building
 
-* Microsoft [.NET Framework](https://dotnet.microsoft.com/) 4.7.2
+* Microsoft [.NET Framework](https://dotnet.microsoft.com/) 4.7.1
 * Microsoft [Visual Studio 2017](https://visualstudio.microsoft.com/) or later
 
 ### Testing
@@ -150,7 +150,7 @@ On Windows
 - Microsoft Windows® (Windows Vista or later) x86 or x64 versions 
 - Visual Studio 2010 (or later) ([Community edition](https://www.visualstudio.com/en/vs/community/))
   or SharpDevelop 5.1 (or later) ([free IDE for C#](http://www.icsharpcode.net/OpenSource/SD/Download/))
-- .NET Framework 4.7.2
+- .NET Framework 4.7.1
 - NUnit
 
 
@@ -159,8 +159,8 @@ On Windows
 GEDKeeper is cross-platform and can be run on Linux and Windows. 
 In particular, it supports the following platforms:
 
-- Windows Vista (or later) and .NET 4.7.2 (or later)
-- Linux (Debian/Ubuntu) and Mono 4.7.2 (or later)
+- Windows Vista (or later) and .NET 4.7.1 (or later)
+- Linux (Debian/Ubuntu) and Mono 4.7.1 (or later)
 
 We currently do not support iOS or Android, although it is possible it could 
 be added in the future. 

@@ -294,7 +294,7 @@ namespace GKCore.Controllers
         {
             GDMRecordType rt = GetSelectedRecordType();
 
-            GDMRecord record = BaseController.AddRecord(fView, rt, null);
+            GDMRecord record = BaseController.AddRecord(fView, fView, rt, null);
             if (record != null) {
                 RefreshLists(false);
             }
@@ -305,7 +305,7 @@ namespace GKCore.Controllers
         public void EditRecord()
         {
             GDMRecord record = GetSelectedRecordEx();
-            if (record != null && BaseController.EditRecord(fView, record)) {
+            if (record != null && BaseController.EditRecord(fView, fView, record)) {
                 RefreshLists(false);
             }
 
@@ -946,7 +946,7 @@ namespace GKCore.Controllers
         private void ShowCommonFilter(GDMRecordType rt, IRecordsListModel listMan)
         {
             using (var dlg = AppHost.Container.Resolve<ICommonFilterDlg>(fView, listMan)) {
-                if (AppHost.Instance.ShowModalX(dlg, false)) {
+                if (AppHost.Instance.ShowModalX(dlg, fView, false)) {
                     AppHost.Instance.NotifyFilter(fView, rt, listMan, listMan.Filter);
                     ApplyFilter(rt);
                 }
@@ -956,7 +956,7 @@ namespace GKCore.Controllers
         private void ShowPersonsFilter(GDMRecordType rt, IRecordsListModel listMan)
         {
             using (var dlg = AppHost.Container.Resolve<IPersonsFilterDlg>(fView, listMan)) {
-                if (AppHost.Instance.ShowModalX(dlg, false)) {
+                if (AppHost.Instance.ShowModalX(dlg, fView, false)) {
                     ApplyFilter(rt, listMan);
                 }
             }
@@ -1002,7 +1002,7 @@ namespace GKCore.Controllers
                 fContext.BeginUpdate();
 
                 using (var dlg = AppHost.ResolveDialog<IFilePropertiesDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1015,7 +1015,7 @@ namespace GKCore.Controllers
                 fContext.BeginUpdate();
 
                 using (var dlg = AppHost.Container.Resolve<IScriptEditWin>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1027,7 +1027,7 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeSplitDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1039,7 +1039,7 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeMergeDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1051,7 +1051,7 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeCompareDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1063,7 +1063,7 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeCheckDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1075,7 +1075,7 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IPlacesManagerDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1087,7 +1087,7 @@ namespace GKCore.Controllers
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IPatriarchsSearchDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, false);
+                    AppHost.Instance.ShowModalX(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1124,14 +1124,14 @@ namespace GKCore.Controllers
         public void ShowOrganizer()
         {
             using (var dlg = AppHost.Container.Resolve<IOrganizerWin>(fView)) {
-                AppHost.Instance.ShowModalX(dlg, false);
+                AppHost.Instance.ShowModalX(dlg, fView, false);
             }
         }
 
         public void ShowRelationshipCalculator()
         {
             using (var dlg = AppHost.Container.Resolve<IRelationshipCalculatorDlg>(fView)) {
-                AppHost.Instance.ShowModalX(dlg, false);
+                AppHost.Instance.ShowModalX(dlg, fView, false);
             }
         }
 
@@ -1212,7 +1212,7 @@ namespace GKCore.Controllers
         public void ShowAbout()
         {
             using (var dlg = AppHost.Container.Resolve<IAboutDlg>()) {
-                AppHost.Instance.ShowModalX(dlg, false);
+                AppHost.Instance.ShowModalX(dlg, fView, false);
             }
         }
 

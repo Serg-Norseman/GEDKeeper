@@ -42,13 +42,13 @@ namespace GKCore.Controllers
 
         public void SelectRec1()
         {
-            GDMIndividualRecord iRec = fBase.Context.SelectRecord(GDMRecordType.rtIndividual, null) as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fBase.Context.SelectRecord(fView, GDMRecordType.rtIndividual, null) as GDMIndividualRecord;
             if (iRec != null) SetRec1(iRec);
         }
 
         public void SelectRec2()
         {
-            GDMIndividualRecord iRec = fBase.Context.SelectRecord(GDMRecordType.rtIndividual, null) as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fBase.Context.SelectRecord(fView, GDMRecordType.rtIndividual, null) as GDMIndividualRecord;
             if (iRec != null) SetRec2(iRec);
         }
 

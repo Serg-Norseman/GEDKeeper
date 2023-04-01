@@ -28,6 +28,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
 using GKCore.Charts;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
@@ -698,7 +699,7 @@ namespace GKCore.Lists
     {
         private GDMGroupRecord fGroupRec;
 
-        public IndiGroupsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public IndiGroupsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
@@ -747,7 +748,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    groupRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtGroup, null) as GDMGroupRecord;
+                    groupRec = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     if (groupRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, iRec);
                     }
@@ -773,7 +774,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class IndiNamesListModel : SheetModel<GDMPersonalName>
     {
-        public IndiNamesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public IndiNamesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
@@ -838,7 +839,7 @@ namespace GKCore.Lists
 
                         dlg.IndividualRecord = iRec;
                         dlg.PersonalName = persName;
-                        result = AppHost.Instance.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, fOwner, false);
 
                         if (!exists) {
                             if (result) {
@@ -892,7 +893,7 @@ namespace GKCore.Lists
     {
         private GDMFamilyRecord fFamRec;
 
-        public IndiParentsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public IndiParentsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
@@ -950,7 +951,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    GDMFamilyRecord family = fBaseWin.Context.SelectFamily(iRec);
+                    GDMFamilyRecord family = fBaseWin.Context.SelectFamily(fOwner, iRec);
                     if (family != null && family.IndexOfChild(iRec) < 0) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, iRec, family);
                     }
@@ -961,7 +962,7 @@ namespace GKCore.Lists
                         using (var dlg = AppHost.ResolveDialog<IParentsEditDlg>(fBaseWin)) {
                             dlg.IndividualRecord = iRec;
                             dlg.ChildLink = cfLink;
-                            result = AppHost.Instance.ShowModalX(dlg, false);
+                            result = AppHost.Instance.ShowModalX(dlg, fOwner, false);
                         }
                     }
                     break;
@@ -1005,7 +1006,7 @@ namespace GKCore.Lists
         private GDMFamilyRecord fFamilyRec;
         private string fRelName;
 
-        public IndiSpousesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public IndiSpousesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
@@ -1084,14 +1085,14 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    result = (BaseController.ModifyFamily(fBaseWin, ref family, TargetMode.tmSpouse, iRec));
+                    result = (BaseController.ModifyFamily(fOwner, fBaseWin, ref family, TargetMode.tmSpouse, iRec));
                     if (result) {
                         eArgs.ItemData = family;
                     }
                     break;
 
                 case RecordAction.raEdit:
-                    result = (BaseController.ModifyFamily(fBaseWin, ref family, TargetMode.tmNone, null));
+                    result = (BaseController.ModifyFamily(fOwner, fBaseWin, ref family, TargetMode.tmNone, null));
                     break;
 
                 case RecordAction.raDelete:
@@ -1134,7 +1135,7 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class URefsListModel : SheetModel<GDMUserReference>
     {
-        public URefsListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public URefsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
@@ -1189,7 +1190,7 @@ namespace GKCore.Lists
                         }
 
                         dlg.UserReference = userRef;
-                        result = AppHost.Instance.ShowModalX(dlg, false);
+                        result = AppHost.Instance.ShowModalX(dlg, fOwner, false);
 
                         if (!exists) {
                             if (result) {

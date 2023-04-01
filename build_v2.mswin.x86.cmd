@@ -4,7 +4,7 @@ set CONFIG_TYPE=Debug
 for %%a in (release Release RELEASE) do if (%%a)==(%1) SET CONFIG_TYPE=Release
 
 set MSBDIR=@%WINDIR%\Microsoft.NET\Framework\v4.0.30319
-%MSBDIR%\msbuild.exe projects\GKv2\GEDKeeper2.sln /p:Configuration=%CONFIG_TYPE% /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.7.2
+%MSBDIR%\msbuild.exe projects\GKv2\GEDKeeper2.sln /p:Configuration=%CONFIG_TYPE% /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.7.1
 
 set BUILD_STATUS=%ERRORLEVEL% 
 if %BUILD_STATUS%==0 goto test 

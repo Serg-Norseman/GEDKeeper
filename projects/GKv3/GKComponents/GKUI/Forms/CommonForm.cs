@@ -205,9 +205,9 @@ namespace GKUI.Forms
             Focus();
         }
 
-        public virtual bool ShowModalX(object owner)
+        public virtual bool ShowModalX(IView owner)
         {
-            return (ShowModal((Control)owner) == DialogResult.Ok);
+            return (ShowModal(owner as Control) == DialogResult.Ok);
         }
 
         protected virtual void CancelClickHandler(object sender, EventArgs e)
@@ -235,6 +235,15 @@ namespace GKUI.Forms
             base.OnLoad(e);
             ApplyTheme();
         }
+
+        /*protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            //BringToFront();
+            if (ParentWindow != null) {
+                ParentWindow.SendToBack();
+            }
+        }*/
 
         public virtual void ApplyTheme()
         {

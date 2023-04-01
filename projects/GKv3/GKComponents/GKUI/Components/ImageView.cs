@@ -120,7 +120,7 @@ namespace GKUI.Components
             cbZoomLevels = new ComboBox();
             cbZoomLevels.ReadOnly = true;
             cbZoomLevels.Size = new Size(140, 28);
-            cbZoomLevels.TextChanged /*SelectedIndexChanged*/ += cbZoomLevels_SelectedIndexChanged;
+            cbZoomLevels.TextChanged += cbZoomLevels_SelectedIndexChanged;
 
             toolStrip = new Panel();
             toolStrip.Content = new StackLayout() {
@@ -191,15 +191,20 @@ namespace GKUI.Components
 
         private void FillZoomLevels()
         {
-            cbZoomLevels.Items.Clear();
+            cbZoomLevels.TextChanged -= cbZoomLevels_SelectedIndexChanged;
 
+            cbZoomLevels.Items.Clear();
             foreach (int zoom in imageBox.ZoomLevels)
                 cbZoomLevels.Items.Add(string.Format("{0}%", zoom));
+
+            cbZoomLevels.TextChanged += cbZoomLevels_SelectedIndexChanged;
         }
 
         private void UpdateZoomLevels()
         {
+            cbZoomLevels.TextChanged -= cbZoomLevels_SelectedIndexChanged;
             cbZoomLevels.Text = string.Format("{0}%", imageBox.Zoom);
+            cbZoomLevels.TextChanged += cbZoomLevels_SelectedIndexChanged;
         }
 
         private void btnSizeToFit_Click(object sender, EventArgs e)
@@ -224,7 +229,7 @@ namespace GKUI.Components
 
         private void cbZoomLevels_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbZoomLevels.HasFocus) {
+            /*if (cbZoomLevels.HasFocus)*/ {
                 // number w/out '%'
                 int zoom = Convert.ToInt32(cbZoomLevels.Text.Substring(0, cbZoomLevels.Text.Length - 1));
                 imageBox.Zoom = zoom;

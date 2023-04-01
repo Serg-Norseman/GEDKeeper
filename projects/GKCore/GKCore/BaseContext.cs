@@ -40,6 +40,7 @@ using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Search;
 using GKCore.Types;
+using GKCore.Design;
 
 namespace GKCore
 {
@@ -608,7 +609,7 @@ namespace GKCore
 
         #region Name and sex functions
 
-        public string DefinePatronymic(string name, GDMSex sex, bool confirm)
+        public string DefinePatronymic(IView owner, string name, GDMSex sex, bool confirm)
         {
             ICulture culture = this.Culture;
             if (!culture.HasPatronymic) return string.Empty;
@@ -641,7 +642,7 @@ namespace GKCore
                     return result;
                 }
 
-                BaseController.ModifyName(this, ref n);
+                BaseController.ModifyName(owner, this, ref n);
             }
 
             switch (sex) {
@@ -657,7 +658,7 @@ namespace GKCore
             return result;
         }
 
-        public GDMSex DefineSex(string iName, string iPatr)
+        public GDMSex DefineSex(IView owner, string iName, string iPatr)
         {
             INamesTable namesTable = AppHost.NamesTable;
 
@@ -669,7 +670,7 @@ namespace GKCore
                     result = this.Culture.GetSex(iName, iPatr, false);
 
                     dlg.Sex = result;
-                    if (AppHost.Instance.ShowModalX(dlg, false)) {
+                    if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
                         result = dlg.Sex;
 
                         if (result != GDMSex.svUnknown) {
@@ -682,7 +683,7 @@ namespace GKCore
             return result;
         }
 
-        public void CheckPersonSex(GDMIndividualRecord iRec)
+        public void CheckPersonSex(IView owner, GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -692,7 +693,7 @@ namespace GKCore
 
                 if (iRec.Sex != GDMSex.svMale && iRec.Sex != GDMSex.svFemale) {
                     var parts = GKUtils.GetNameParts(fTree, iRec);
-                    iRec.Sex = DefineSex(parts.Name, parts.Patronymic);
+                    iRec.Sex = DefineSex(owner, parts.Name, parts.Patronymic);
                 }
             } finally {
                 EndUpdate();
@@ -1492,7 +1493,7 @@ namespace GKCore
 
                 case FileBackup.fbOnlyPrev:
                     if (string.Equals(oldFileName, fileName) && File.Exists(oldFileName)) {
-                        string bakFile = Path.GetFileName(fileName) + ".bak";
+                        string bakFile = fileName + ".bak";
                         if (File.Exists(bakFile)) {
                             File.Delete(bakFile);
                         }
@@ -1754,16 +1755,16 @@ namespace GKCore
 
         #region UI control functions
 
-        public GDMFamilyRecord SelectFamily(GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild)
+        public GDMFamilyRecord SelectFamily(IView owner, GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild)
         {
             GDMFamilyRecord result;
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
-                    dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
                     dlg.FastFilter = "*";
+                    dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
 
-                    if (AppHost.Instance.ShowModalX(dlg, false)) {
+                    if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
                         result = (dlg.ResultRecord as GDMFamilyRecord);
                     } else {
                         result = null;
@@ -1777,16 +1778,16 @@ namespace GKCore
             return result;
         }
 
-        public GDMIndividualRecord SelectPerson(GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex)
+        public GDMIndividualRecord SelectPerson(IView owner, GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex)
         {
             GDMIndividualRecord result;
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtIndividual)) {
-                    dlg.SetTarget(targetMode, target, needSex);
                     dlg.FastFilter = "*";
+                    dlg.SetTarget(targetMode, target, needSex);
 
-                    if (AppHost.Instance.ShowModalX(dlg, false)) {
+                    if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
                         result = (dlg.ResultRecord as GDMIndividualRecord);
                     } else {
                         result = null;
@@ -1800,7 +1801,7 @@ namespace GKCore
             return result;
         }
 
-        public GDMRecord SelectRecord(GDMRecordType mode, params object[] args)
+        public GDMRecord SelectRecord(IView owner, GDMRecordType mode, params object[] args)
         {
             GDMRecord result;
 
@@ -1811,8 +1812,9 @@ namespace GKCore
                     } else {
                         dlg.FastFilter = "*";
                     }
+                    dlg.SetTarget(TargetMode.tmNone, null, GDMSex.svUnknown);
 
-                    if (AppHost.Instance.ShowModalX(dlg, false)) {
+                    if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
                         result = dlg.ResultRecord;
                     } else {
                         result = null;
@@ -1894,7 +1896,7 @@ namespace GKCore
             return family;
         }
 
-        public GDMIndividualRecord AddChildForParent(GDMIndividualRecord parent, GDMSex needSex)
+        public GDMIndividualRecord AddChildForParent(IView owner, GDMIndividualRecord parent, GDMSex needSex)
         {
             GDMIndividualRecord resultChild = null;
 
@@ -1913,7 +1915,7 @@ namespace GKCore
                         family = fTree.GetPtrValue(parent.SpouseToFamilyLinks[0]);
                     }
 
-                    GDMIndividualRecord child = SelectPerson(fTree.GetPtrValue(family.Husband), TargetMode.tmParent, needSex);
+                    GDMIndividualRecord child = SelectPerson(owner, fTree.GetPtrValue(family.Husband), TargetMode.tmParent, needSex);
 
                     if (child != null && family.AddChild(child)) {
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
@@ -1928,7 +1930,7 @@ namespace GKCore
             return resultChild;
         }
 
-        public GDMIndividualRecord SelectSpouseFor(GDMIndividualRecord iRec)
+        public GDMIndividualRecord SelectSpouseFor(IView owner, GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException(@"iRec");
@@ -1948,7 +1950,7 @@ namespace GKCore
                     return null;
             }
 
-            return SelectPerson(iRec, TargetMode.tmSpouse, needSex);
+            return SelectPerson(owner, iRec, TargetMode.tmSpouse, needSex);
         }
 
         public void ProcessFamily(GDMFamilyRecord famRec)

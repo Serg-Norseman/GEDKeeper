@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -112,7 +113,7 @@ namespace GKCore.Lists
     {
         private GDMRepositoryRecord fRepoRec;
 
-        public SourceRepositoriesListModel(IBaseWindow baseWin, ChangeTracker undoman) : base(baseWin, undoman)
+        public SourceRepositoriesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump,
@@ -163,7 +164,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    repoRec = fBaseWin.Context.SelectRecord(GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
+                    repoRec = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
                     if (repoRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, repoRec);
                     }

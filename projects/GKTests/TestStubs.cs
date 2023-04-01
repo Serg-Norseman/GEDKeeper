@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using BSLib;
 using GDModel;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
@@ -66,7 +67,7 @@ namespace GKTests.Stubs
         public void Dispose() { }
         public void SetToolTip(object component, string toolTip) { }
         public object GetControl(string controlName) { return null; }
-        public bool ShowModalX(object owner) { return true; }
+        public bool ShowModalX(IView owner) { return true; }
 
 
         public bool IsCanceled { get { return false; } }

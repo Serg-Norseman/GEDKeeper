@@ -63,10 +63,10 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.TasksList.ListModel = new ResTasksListModel(baseWin, fLocalUndoman);
-            fView.CommunicationsList.ListModel = new ResCommunicationsListModel(baseWin, fLocalUndoman);
-            fView.GroupsList.ListModel = new ResGroupsListModel(baseWin, fLocalUndoman);
-            fView.NotesList.ListModel = new NoteLinksListModel(baseWin, fLocalUndoman);
+            fView.TasksList.ListModel = new ResTasksListModel(fView, baseWin, fLocalUndoman);
+            fView.CommunicationsList.ListModel = new ResCommunicationsListModel(fView, baseWin, fLocalUndoman);
+            fView.GroupsList.ListModel = new ResGroupsListModel(fView, baseWin, fLocalUndoman);
+            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override bool Accept()

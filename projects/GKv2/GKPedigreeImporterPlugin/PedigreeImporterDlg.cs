@@ -24,10 +24,11 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Forms;
 
 namespace GKPedigreeImporterPlugin
 {
-    public sealed partial class PedigreeImporterDlg : Form
+    public sealed partial class PedigreeImporterDlg : CommonForm
     {
         private readonly IPlugin fPlugin;
         private readonly ILangMan fLangMan;
@@ -56,7 +57,7 @@ namespace GKPedigreeImporterPlugin
             cbPersonSeparator.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NoSpecial), ";", ","});
 
             fBase = curBase;
-            fImporter = new Importer(fBase, fLangMan, lbLog.Items);
+            fImporter = new Importer(this, fBase, fLangMan, lbLog.Items);
             fCurrentStage = 0;
             fAvailableStage = 0;
 

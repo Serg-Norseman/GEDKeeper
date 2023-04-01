@@ -20,12 +20,11 @@
 
 namespace GKCore.Design.Controls
 {
-    public interface ITextBox : IBaseControl
+    public interface ITextBox : ITextContainer
     {
         string[] Lines { get; set; }
         bool ReadOnly { get; set; }
         string SelectedText { get; set; }
-        string Text { get; set; }
 
         void AppendText(string text);
         void Clear();

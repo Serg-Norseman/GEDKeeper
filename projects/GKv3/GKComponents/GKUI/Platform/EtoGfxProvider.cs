@@ -98,18 +98,19 @@ namespace GKUI.Platform
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
-            using (Bitmap bmp = new Bitmap(stream))
-            {
+            using (Bitmap bmp = new Bitmap(stream)) {
                 bool cutoutIsEmpty = cutoutArea.IsEmpty();
                 int imgWidth = (cutoutIsEmpty) ? bmp.Width : cutoutArea.GetWidth();
                 int imgHeight = (cutoutIsEmpty) ? bmp.Height : cutoutArea.GetHeight();
 
+                //Logger.WriteInfo("EtoGfxProvider.CreateImage().thumb: {0}, {1}", thumbWidth, thumbHeight);
                 if (thumbWidth > 0 && thumbHeight > 0) {
                     float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
                     imgWidth = (int)(imgWidth * ratio);
                     imgHeight = (int)(imgHeight * ratio);
                 }
 
+                //Logger.WriteInfo("EtoGfxProvider.CreateImage().ctorBitmap({0}, {1})", imgWidth, imgHeight);
                 Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
                 using (Graphics graphic = new Graphics(newImage)) {
                     graphic.AntiAlias = true;

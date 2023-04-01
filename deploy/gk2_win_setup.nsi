@@ -9,7 +9,7 @@
 
 ;Unicode true
 Name "GEDKeeper"
-OutFile "gedkeeper_2.25.0_win86.exe"
+OutFile "gedkeeper_2.25.1_win86.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 
 CRCCheck on
@@ -257,7 +257,7 @@ Section "$(gkreq)"
 
     SetOutPath $INSTDIR
 
-    !insertmacro CheckNetFramework 472
+    !insertmacro CheckNetFramework 471
 
     CreateDirectory "$INSTDIR\bin"
     SetOutPath "$INSTDIR\bin"
@@ -586,8 +586,14 @@ Section "Uninstall"
     Delete "$INSTDIR\locales\help_enu\*.*"
     RMDir "$INSTDIR\locales\help_enu"
 
+    Delete "$INSTDIR\locales\cultures\*.*"
+    RMDir "$INSTDIR\locales\cultures"
+
     Delete "$INSTDIR\locales\*.*"
     RMDir "$INSTDIR\locales"
+
+    Delete "$INSTDIR\externals\*.*"
+    RMDir "$INSTDIR\externals"
 
     Delete "$INSTDIR\scripts\*.lua"
     RMDir "$INSTDIR\scripts"

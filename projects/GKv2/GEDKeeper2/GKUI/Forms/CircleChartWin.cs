@@ -145,7 +145,7 @@ namespace GKUI.Forms
 
         private void tbOptions_Click(object sender, EventArgs e)
         {
-            AppHost.Instance.ShowOptions(OptionsPage.opCircleChart);
+            AppHost.Instance.ShowOptions(this, OptionsPage.opCircleChart);
         }
 
         private void miFanMode_Click(object sender, EventArgs e)

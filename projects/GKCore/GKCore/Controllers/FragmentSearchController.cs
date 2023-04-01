@@ -119,7 +119,7 @@ namespace GKCore.Controllers
             GDMIndividualRecord iRec = GetSelectedPerson();
             if (iRec == null) return;
 
-            BaseController.ViewRecordInfo(fBase, iRec);
+            BaseController.ViewRecordInfo(fView, fBase, iRec);
         }
 
         public void CopySelectedXRef()
