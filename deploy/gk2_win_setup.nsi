@@ -586,8 +586,14 @@ Section "Uninstall"
     Delete "$INSTDIR\locales\help_enu\*.*"
     RMDir "$INSTDIR\locales\help_enu"
 
+    Delete "$INSTDIR\locales\cultures\*.*"
+    RMDir "$INSTDIR\locales\cultures"
+
     Delete "$INSTDIR\locales\*.*"
     RMDir "$INSTDIR\locales"
+
+    Delete "$INSTDIR\externals\*.*"
+    RMDir "$INSTDIR\externals"
 
     Delete "$INSTDIR\scripts\*.lua"
     RMDir "$INSTDIR\scripts"
