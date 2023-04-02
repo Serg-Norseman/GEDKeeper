@@ -1017,13 +1017,15 @@ namespace GKCore
                     break;
 
                 case MediaStoreType.mstStorage:
+                    string targetFn = string.Empty;
                     try {
                         string targetDir = GetStgFolder(true) + storePath;
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
 
-                        string targetFn = targetDir + storeFile;
+                        targetFn = targetDir + storeFile;
                         result = CopyFile(fileName, targetFn);
-                    } catch (IOException) {
+                    } catch (IOException ex) {
+                        Logger.WriteError(string.Format("BaseContext.MediaSave({0}, {1})", fileName, targetFn), ex);
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExists));
                         result = false;
                     }

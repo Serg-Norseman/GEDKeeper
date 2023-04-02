@@ -117,7 +117,12 @@ namespace GKUI.Components
             fSys.AutoStop = false;
 
             fEnergyDebug = false;
+
+#if !OS_LINUX
             fDrawFont = new Font("Calibri", 9);
+#else
+            fDrawFont = new Font(FontFamilies.SansFamilyName, 9);
+#endif
 
             //fStrFormat = new StringFormat();
             //fStrFormat.Alignment = StringAlignment.Center;

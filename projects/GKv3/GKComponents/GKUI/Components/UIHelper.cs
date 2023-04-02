@@ -329,7 +329,14 @@ namespace GKUI.Components
                 int idx = i * 2;
                 string name = filterParts[idx];
                 string exts = filterParts[idx + 1];
+
                 string[] extensions = exts.Split(',');
+                for (int k = 0; k < extensions.Length; k++) {
+                    string ext = extensions[k];
+                    if (ext.Length > 0 && ext[0] == '*') {
+                        extensions[k] = ext.Substring(1);
+                    }
+                }
 
                 fileDlg.Filters.Add(new FileFilter(name, extensions));
             }

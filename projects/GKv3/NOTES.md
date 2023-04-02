@@ -15,6 +15,9 @@ Eto.Forms v2.7.4 compatible with netfw462
 4. Eto.Forms 2.7.3 [Gtk]
   - GridView not selecting last (or only) row (where AllowEmptySelection=true)
 
+5. Eto.Forms 2.7.4 [Gtk]
+  - SaveFileDialog.CurrentFilter is null!
+
 # Other
 
 LibVLCSharp.GTK

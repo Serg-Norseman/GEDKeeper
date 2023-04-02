@@ -208,7 +208,12 @@ namespace GKUI.Components
             fToolTip.ReshowDelay = 50;
             fToolTip.ShowAlways = true;*/
 
+#if !OS_LINUX
             fDrawFont = new Font("Calibri", 9);
+#else
+            fDrawFont = new Font(FontFamilies.SansFamilyName, 9);
+#endif
+
             fBackBuffer = null;
             fBorderPen = new Pen(Colors.Black);
             fHeaderBrush = new SolidBrush(Colors.Black);

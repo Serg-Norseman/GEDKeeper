@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.IO;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
@@ -114,7 +115,14 @@ namespace GKUI.Platform
             using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName)) {
                 // OverwritePrompt is not supported
                 if (sfd.ShowDialog(null) == DialogResult.Ok) {
-                    return sfd.FileName;
+                    string fileName = sfd.FileName;
+
+                    if (!Path.HasExtension(fileName)) {
+                        // FIXME: replace to use CurrentFilter, but in Eto 2.7.4 it's return null!
+                        fileName = Path.ChangeExtension(fileName, defaultExt);
+                    }
+
+                    return fileName;
                 } else {
                     return string.Empty;
                 }
