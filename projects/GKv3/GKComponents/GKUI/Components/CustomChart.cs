@@ -142,6 +142,10 @@ namespace GKUI.Components
 
             var image = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
             using (Graphics gfx = new Graphics(image)) {
+#if OS_LINUX
+                gfx.FillRectangle(Colors.White, 0, 0, imageSize.Width, imageSize.Height);
+#endif
+
                 fRenderer.SetTarget(gfx);
                 RenderImage(RenderTarget.Printer);
             }
