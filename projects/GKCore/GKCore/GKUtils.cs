@@ -80,7 +80,7 @@ namespace GKCore
         {
             try {
 #if !CI_MODE
-#if MONO
+#if OS_LINUX || OS_FREEBSD
                 var proc = new Process();
                 proc.EnableRaisingEvents = false;
                 proc.StartInfo.FileName = "xdg-open";

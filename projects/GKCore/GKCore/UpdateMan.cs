@@ -111,7 +111,7 @@ namespace GKCore
         public static void CheckUpdate()
         {
             try {
-                #if MONO
+                #if OS_LINUX
                 DesktopType desktopType = SysUtils.GetDesktopType();
                 if (desktopType == DesktopType.Unity) {
                     // In Ubuntu 1604 LTS (Unity desktop), this method leads to a

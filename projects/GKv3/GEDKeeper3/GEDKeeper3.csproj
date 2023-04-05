@@ -1,12 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <AssemblyName>GEDKeeper3</AssemblyName>
         <RootNamespace />
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <UseXeto>True</UseXeto>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 
-        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release</Configurations>
+        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
     </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
+        <DefineConstants>OS_MSWIN</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
+        <DefineConstants>OS_LINUX;MONO</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('FreeBSD_')) ">
+        <DefineConstants>OS_FREEBSD;MONO</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
+        <DefineConstants>OS_MACOS</DefineConstants>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(Configuration.Contains('_Debug')) ">
+        <DebugSymbols>True</DebugSymbols>
+        <DebugType>Full</DebugType>
+        <Optimize>False</Optimize>
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+        <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('_Release')) ">
+        <DebugSymbols>False</DebugSymbols>
+        <DebugType>None</DebugType>
+        <Optimize>True</Optimize>
+        <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+        <DefineConstants>$(DefineConstants);TRACE;RELEASE</DefineConstants>
+    </PropertyGroup>
+
 
     <ItemGroup>
         <Compile Include="..\..\GlobalSuppressions.cs">
@@ -31,34 +65,6 @@
     </ItemGroup>
 
 
-    <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
-        <DefineConstants>OS_MSWIN</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
-        <DefineConstants>OS_LINUX;MONO</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
-        <DefineConstants>OS_MACOS</DefineConstants>
-    </PropertyGroup>
-
-
-    <PropertyGroup Condition=" $(Configuration.Contains('_Debug')) ">
-        <DebugSymbols>True</DebugSymbols>
-        <DebugType>Full</DebugType>
-        <Optimize>False</Optimize>
-        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-        <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" $(DefineConstants.Contains('_Release')) ">
-        <DebugSymbols>False</DebugSymbols>
-        <DebugType>None</DebugType>
-        <Optimize>True</Optimize>
-        <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-        <DefineConstants>$(DefineConstants);TRACE;RELEASE</DefineConstants>
-    </PropertyGroup>
-
-
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
         <TargetFramework>net6.0-windows</TargetFramework>
         <OutputType>WinExe</OutputType>
@@ -75,8 +81,9 @@
         <PackageReference Include="Eto.Platform.Wpf" Version="2.7.4" />
     </ItemGroup>
 
-    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
-        <TargetFramework>net472</TargetFramework>
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) or $(DefineConstants.Contains('OS_FREEBSD')) ">
+        <TargetFramework>net471</TargetFramework>
         <OutputType>exe</OutputType>
         <OutputPath>..\..\..\bin\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -87,7 +94,7 @@
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     </PropertyGroup>
 
-    <ItemGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
+    <ItemGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) or $(DefineConstants.Contains('OS_FREEBSD')) ">
         <PackageReference Include="Eto.Platform.Gtk" Version="2.7.4" />
     </ItemGroup>
 

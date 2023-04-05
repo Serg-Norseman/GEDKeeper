@@ -964,11 +964,6 @@ namespace GKCore.Controllers
 
         public void ExportToFamilyBook()
         {
-            //#if MONO
-            //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
-            //#else
-            //#endif
-
             using (FamilyBookExporter fb = new FamilyBookExporter(fView)) {
                 fb.Generate(true);
             }
@@ -976,11 +971,6 @@ namespace GKCore.Controllers
 
         public void ExportToTreesAlbum()
         {
-            //#if MONO
-            //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
-            //#else
-            //#endif
-
             AppHost.StdDialogs.ShowWarning(@"This function is experimental and not completed. Only for PDF!");
 
             using (TreesAlbumExporter ta = new TreesAlbumExporter(fView)) {
@@ -1113,12 +1103,8 @@ namespace GKCore.Controllers
 
         public void ShowMap()
         {
-            //#if MONO
-            //AppHost.StdDialogs.ShowWarning(@"This function is not supported in Linux");
-            //#else
             var mapsWin = AppHost.Container.Resolve<IMapsViewerWin>(fView);
             AppHost.Instance.ShowWindow(mapsWin);
-            //#endif
         }
 
         public void ShowOrganizer()

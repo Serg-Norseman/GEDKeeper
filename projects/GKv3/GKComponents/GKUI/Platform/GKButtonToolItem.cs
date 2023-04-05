@@ -13,7 +13,7 @@ namespace GKUI.Platform
 
 #endif
 
-#if OS_LINUX
+#if OS_LINUX || OS_FREEBSD
 
     [Handler(typeof(GKButtonToolItem.IHandler))]
     public class GKButtonToolItem : ButtonToolItem

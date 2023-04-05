@@ -182,7 +182,7 @@ namespace GKUI.Platform
             //Console.WriteLine((owner == null) ? "null" : owner.ToString());
 
             /*if (keepModeless) {
-#if !MONO
+#if OS_MSWIN
                 //NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
 #endif
             }*/
@@ -197,7 +197,7 @@ namespace GKUI.Platform
             Form frm = form as Form;
 
             if (frm != null) {
-#if !MONO
+#if OS_MSWIN
                 //NativeMethods.EnableWindow(frm.Handle, value);
 #endif
             }
@@ -291,7 +291,7 @@ namespace GKUI.Platform
         {
             bool result = false;
 
-#if !MONO
+#if OS_MSWIN
             // since v2.23.0, only WinForms-based implementation, on Windows OS
             if (feature == Feature.Themes) {
                 result = false; // FIXME: temp disable

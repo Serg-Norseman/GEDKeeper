@@ -11,7 +11,7 @@ using sw = System.Windows;
 using swm = System.Windows.Media;
 #endif
 
-#if OS_LINUX
+#if OS_LINUX || OS_FREEBSD
 using Eto.GtkSharp.Forms.ToolBar;
 #endif
 
@@ -97,7 +97,7 @@ namespace GKUI.Platform
 
 #endif
 
-#if OS_LINUX
+#if OS_LINUX || OS_FREEBSD
 
     public class GKDropDownToolItemHandler : ToolItemHandler<Gtk.ToolButton, GKDropDownToolItem>, GKDropDownToolItem.IHandler
     {

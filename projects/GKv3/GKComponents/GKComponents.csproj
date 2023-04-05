@@ -3,9 +3,11 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AssemblyName>GKComponents</AssemblyName>
         <RootNamespace />
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 
-        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release</Configurations>
+        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
     </PropertyGroup>
 
 
@@ -14,6 +16,9 @@
     </PropertyGroup>
     <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
         <DefineConstants>OS_LINUX;MONO</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('FreeBSD_')) ">
+        <DefineConstants>OS_FREEBSD;MONO</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
         <DefineConstants>OS_MACOS</DefineConstants>
@@ -67,17 +72,12 @@
         <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.18" />
     </ItemGroup>
 
-    <ItemGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
+    <ItemGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) or $(DefineConstants.Contains('OS_FREEBSD')) ">
         <PackageReference Include="LibVLCSharp.GTK" Version="3.6.8" />
     </ItemGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
         <PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
-    </ItemGroup>
-
-
-    <ItemGroup>
-        <Compile Remove="GKUI\Components\GKTextBox.cs" />
     </ItemGroup>
 
 </Project>

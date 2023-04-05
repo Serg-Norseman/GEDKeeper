@@ -4,7 +4,7 @@
 using Eto.Wpf.Forms.ToolBar;
 #endif
 
-#if OS_LINUX
+#if OS_LINUX || OS_FREEBSD
 using Eto.GtkSharp;
 using Eto.GtkSharp.Forms.ToolBar;
 using Gtk;
@@ -24,7 +24,7 @@ namespace GKUI.Platform
 
 #endif
 
-#if OS_LINUX
+#if OS_LINUX || OS_FREEBSD
 
     public class GKButtonToolItemHandler : ToolItemHandler<Gtk.ToolButton, GKButtonToolItem>, GKButtonToolItem.IHandler
     {

@@ -159,6 +159,7 @@ namespace GKMap
         {
             bool isSystem = false;
 
+#if OS_MSWIN
             try {
                 using (var identity = System.Security.Principal.WindowsIdentity.GetCurrent()) {
                     isSystem = identity.IsSystem;
@@ -166,6 +167,7 @@ namespace GKMap
             } catch (Exception ex) {
                 Trace.WriteLine("SQLitePureImageCache, WindowsIdentity.GetCurrent: " + ex);
             }
+#endif
 
             var specFolder = (isSystem) ? Environment.SpecialFolder.CommonApplicationData : Environment.SpecialFolder.LocalApplicationData;
             string path = Environment.GetFolderPath(specFolder);

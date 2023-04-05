@@ -1,4 +1,4 @@
-﻿#if !MONO
+﻿#if OS_MSWIN
 
 using System;
 using System.Collections;

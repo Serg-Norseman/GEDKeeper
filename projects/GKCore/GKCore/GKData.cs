@@ -35,7 +35,7 @@ namespace GKCore
         public const string APP_COPYRIGHT = "Copyright © 2009-2023 by Sergey V. Zhdanovskih";
 
         public const string APP_VERSION_2X = "2.25.1.0";
-        public const string APP_VERSION_3X = "3.0.4.0";
+        public const string APP_VERSION_3X = "3.0.5.0";
 
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
@@ -66,7 +66,7 @@ namespace GKCore
         public const string INFO_HREF_VIEW = "view_";
         public const string INFO_HREF_FILTER_INDI = "filter_indi_by_";
 
-        #if MONO
+        #if OS_LINUX || OS_FREEBSD
         public const string DEF_FONT = "Noto Sans";
         #else
         public const string DEF_FONT = "Tahoma";

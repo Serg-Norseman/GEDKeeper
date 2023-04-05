@@ -7,7 +7,7 @@ using Eto.Wpf.Forms;
 using System.Windows.Forms;
 #endif
 
-#if OS_LINUX
+#if OS_LINUX || OS_FREEBSD
 using Eto.GtkSharp.Forms;
 using Gtk;
 #endif
@@ -55,7 +55,7 @@ namespace GKUI.Platform
 
 #endif
 
-#if OS_LINUX
+#if OS_LINUX || OS_FREEBSD
 
     public class GtkUserControl : DrawingArea
     {

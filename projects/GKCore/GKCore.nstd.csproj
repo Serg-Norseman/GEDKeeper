@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <AssemblyName>GKCore</AssemblyName>
         <RootNamespace />
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 
-        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release</Configurations>
+        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
     </PropertyGroup>
 
 
@@ -14,6 +16,9 @@
     </PropertyGroup>
     <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
         <DefineConstants>OS_LINUX;MONO</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('FreeBSD_')) ">
+        <DefineConstants>OS_FREEBSD;MONO</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
         <DefineConstants>OS_MACOS</DefineConstants>
@@ -37,19 +42,7 @@
     </PropertyGroup>
 
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
-        <OutputPath>bin\</OutputPath>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-        <OutputPath>bin\</OutputPath>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-        <OutputPath>bin\</OutputPath>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <PropertyGroup Condition="' $(Platform)' == 'AnyCPU' ">
         <OutputPath>bin\</OutputPath>
     </PropertyGroup>
 
@@ -69,10 +62,6 @@
         </Reference>
     </ItemGroup>
 
-
-    <ItemGroup>
-        <None Include="packages.config" />
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
