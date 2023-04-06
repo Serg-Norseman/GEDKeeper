@@ -3,7 +3,7 @@
 ./gedkeeper.desktop
 ./application-x-gedkeeper.xml
 ./gedkeeper.appdata.xml
-../bin/GEDKeeper2.exe
+../bin/GEDKeeper3.exe
 ../bin/GKCore.dll
 ../bin/GKComponents.dll
 ../bin/BSLib.dll

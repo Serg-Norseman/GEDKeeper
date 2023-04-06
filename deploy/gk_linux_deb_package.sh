@@ -6,7 +6,7 @@ PACK_PATH="gedkeeper-$APP_VER"
 
 rm -f ~/gedkeeper_$APP_VER-1_all.deb
 
-sh ./gk2_linux_image.sh $APP_VER
+sh ./gk_linux_image.sh $APP_VER
 
 cp -r $DEV_PATH/deploy/DEBIAN/ ~/$PACK_PATH/
 

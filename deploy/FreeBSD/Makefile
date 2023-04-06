@@ -19,20 +19,20 @@ USE_GITHUB=	yes
 GH_ACCOUNT=	Serg-Norseman
 GH_PROJECT=	GEDKeeper
 
-_BUILD_TYPE=	Release
+_BUILD_TYPE=	FreeBSD_Release
 DATADIR=	${PREFIX}/lib/${PORTNAME}
 
 do-build:
-	cd ${BUILD_WRKSRC} && msbuild projects/GKv2/GEDKeeper2.sln \
+	cd ${BUILD_WRKSRC} && msbuild projects/GKv3/GEDKeeper3.sln \
 		/p:Configuration=${_BUILD_TYPE} /p:Platform="x64" \
 		/p:MonoCS=true # /p:TargetFrameworkVersion=v4.7.1
 
 do-install:
-	${PRINTF} '#!/bin/sh\n\nexec mono ${DATADIR}/GEDKeeper2.exe\
+	${PRINTF} '#!/bin/sh\n\nexec mono ${DATADIR}/GEDKeeper3.exe\
 		"$$@"\n' > ${STAGEDIR}${PREFIX}/bin/${PORTNAME}
 	${CHMOD} +x ${STAGEDIR}${PREFIX}/bin/${PORTNAME}
 	@${MKDIR} ${STAGEDIR}${DATADIR}
-	cd ${INSTALL_WRKSRC} && ${CP} -a *.dll GEDKeeper2.exe \
+	cd ${INSTALL_WRKSRC} && ${CP} -a *.dll GEDKeeper3.exe \
 		locales plugins samples scripts ${STAGEDIR}${DATADIR}
 	@${RM} ${STAGEDIR}${DATADIR}/scripts/readme.txt
 	${INSTALL_DATA} ${INSTALL_WRKSRC}/deploy/gedkeeper.desktop \

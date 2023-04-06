@@ -1,8 +1,17 @@
 #!/bin/sh
 
-GK=./bin/GEDKeeper2.exe
+# .NET Framework build
+GK=./bin/GEDKeeper3.exe
+
+# .NET build
+#GK=./bin/GEDKeeper3
+
 if [ ! -f "$GK" ]; then
-    xbuild ./projects/GKv2/GEDKeeper2.sln /p:Configuration=Release /p:Platform="x64" /p:MonoCS=true /p:TargetFrameworkVersion=v4.7.1 /v:quiet
+    dotnet build projects/GKv3/GEDKeeper3.sln -c Linux_Debug
 fi
 
-exec /usr/bin/mono "$GK" "$@"
+# .NET Framework build
+exec /usr/bin/mono "$GK"
+
+# .NET build
+#./bin/GEDKeeper3

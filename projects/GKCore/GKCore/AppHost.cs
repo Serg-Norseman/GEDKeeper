@@ -625,7 +625,7 @@ namespace GKCore
             string helpPath = GKUtils.GetHelpPath(lngSign);
 
             if (string.IsNullOrEmpty(topic)) {
-                topic = helpPath + "GEDKeeper2.html";
+                topic = helpPath + "GEDKeeper.html";
             } else {
                 topic = helpPath + topic;
             }

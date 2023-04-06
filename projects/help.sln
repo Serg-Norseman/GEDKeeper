@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_rus", "help_rus", "{935CC8F0-6D8F-4374-B763-FC759D0FB8E1}"
 	ProjectSection(SolutionItems) = preProject
-		..\locales\help_rus\GEDKeeper2.html = ..\locales\help_rus\GEDKeeper2.html
+		..\locales\help_rus\GEDKeeper.html = ..\locales\help_rus\GEDKeeper.html
 		..\locales\help_rus\gkhAbout.html = ..\locales\help_rus\gkhAbout.html
 		..\locales\help_rus\gkhAncestorsCircle.html = ..\locales\help_rus\gkhAncestorsCircle.html
 		..\locales\help_rus\gkhAuthors.html = ..\locales\help_rus\gkhAuthors.html
@@ -84,7 +84,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_rus", "help_rus", "{93
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_enu", "help_enu", "{2CAC6FBC-93D7-4AC0-AFA5-D82387442EC1}"
 	ProjectSection(SolutionItems) = preProject
-		..\locales\help_enu\GEDKeeper2.html = ..\locales\help_enu\GEDKeeper2.html
+		..\locales\help_enu\GEDKeeper.html = ..\locales\help_enu\GEDKeeper.html
 		..\locales\help_enu\gkhAbout.html = ..\locales\help_enu\gkhAbout.html
 		..\locales\help_enu\gkhAncestorsCircle.html = ..\locales\help_enu\gkhAncestorsCircle.html
 		..\locales\help_enu\gkhAuthors.html = ..\locales\help_enu\gkhAuthors.html

@@ -3,7 +3,7 @@ bin/gedkeeper
 %%DATADIR%%/BSLib.dll
 %%DATADIR%%/RtfWriter.dll
 %%DATADIR%%/ExcelLibrary.dll
-%%DATADIR%%/GEDKeeper2.exe
+%%DATADIR%%/GEDKeeper3.exe
 %%DATADIR%%/GKComponents.dll
 %%DATADIR%%/GKCore.dll
 %%DATADIR%%/GKMap.Core.dll
@@ -20,7 +20,7 @@ bin/gedkeeper
 %%DATADIR%%/locales/czech.lng
 %%DATADIR%%/locales/french.lng
 %%DATADIR%%/locales/german.lng
-%%DATADIR%%/locales/help_enu/GEDKeeper2.html
+%%DATADIR%%/locales/help_enu/GEDKeeper.html
 %%DATADIR%%/locales/help_enu/gkhAbout.html
 %%DATADIR%%/locales/help_enu/gkhAncestorsCircle.html
 %%DATADIR%%/locales/help_enu/gkhAuthors.html
@@ -90,7 +90,7 @@ bin/gedkeeper
 %%DATADIR%%/locales/help_enu/gkhWorkNavigation.html
 %%DATADIR%%/locales/help_enu/gkhWorkOperations.html
 %%DATADIR%%/locales/help_enu/gkhWorkToolbar.html
-%%DATADIR%%/locales/help_enu/images/GEDKeeper2.png
+%%DATADIR%%/locales/help_enu/images/GEDKeeper.png
 %%DATADIR%%/locales/help_enu/images/dlgAddrEdit.gif
 %%DATADIR%%/locales/help_enu/images/dlgAssoEdit.gif
 %%DATADIR%%/locales/help_enu/images/dlgCommEdit.gif
@@ -158,7 +158,7 @@ bin/gedkeeper
 %%DATADIR%%/locales/help_enu/images/winMain_Tabs.gif
 %%DATADIR%%/locales/help_enu/images/winMain_Toolbar.gif
 %%DATADIR%%/locales/help_enu/styles.css
-%%DATADIR%%/locales/help_rus/GEDKeeper2.html
+%%DATADIR%%/locales/help_rus/GEDKeeper.html
 %%DATADIR%%/locales/help_rus/gkhAbout.html
 %%DATADIR%%/locales/help_rus/gkhAncestorsCircle.html
 %%DATADIR%%/locales/help_rus/gkhAuthors.html
@@ -228,7 +228,7 @@ bin/gedkeeper
 %%DATADIR%%/locales/help_rus/gkhWorkNavigation.html
 %%DATADIR%%/locales/help_rus/gkhWorkOperations.html
 %%DATADIR%%/locales/help_rus/gkhWorkToolbar.html
-%%DATADIR%%/locales/help_rus/images/GEDKeeper2.png
+%%DATADIR%%/locales/help_rus/images/GEDKeeper.png
 %%DATADIR%%/locales/help_rus/images/dlgAddrEdit.gif
 %%DATADIR%%/locales/help_rus/images/dlgAssoEdit.gif
 %%DATADIR%%/locales/help_rus/images/dlgCommEdit.gif

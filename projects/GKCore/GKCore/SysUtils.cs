@@ -69,10 +69,8 @@ namespace GKCore
         {
             if (!File.Exists(attach)) return;
 
-            try
-            {
-                #if OS_LINUX || OS_FREEBSD
-
+            try {
+#if !OS_MSWIN
                 const string mailto = "'{0}' --subject '{1}' --body '{2}' --attach {3}";
                 string args = string.Format(mailto, address, subject, body, attach);
 
@@ -81,18 +79,13 @@ namespace GKCore
                 proc.StartInfo.FileName = "xdg-email";
                 proc.StartInfo.Arguments = args;
                 proc.Start();
-
-                #else
-
+#else
                 MapiMailMessage message = new MapiMailMessage(subject, body);
                 message.Recipients.Add(address);
                 message.Files.Add(attach);
                 message.ShowDialog();
-
-                #endif
-            }
-            catch (Exception ex)
-            {
+#endif
+            } catch (Exception ex) {
                 Logger.WriteError("SysUtils.SendMail()", ex);
             }
         }
