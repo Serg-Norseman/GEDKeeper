@@ -18,8 +18,9 @@ del .\opencover.xml
 
 rem <<< Main assemblies cleaning >>>
 
-rmdir .\projects\.vs /s /q
 rmdir .\locales\.vs /s /q
+
+rmdir .\projects\.vs /s /q
 rmdir .\projects\.idea /s /q
 
 rmdir .\projects\GKCore\bin /s /q
@@ -42,6 +43,8 @@ rmdir .\projects\GKv2\GKComponents\obj /s /q
 rmdir .\projects\GKv2\GKTray\bin /s /q
 rmdir .\projects\GKv2\GKTray\obj /s /q
 
+rem <<< GKMap >>>
+
 rmdir .\projects\GKMap\GKMap.Core\bin /s /q
 rmdir .\projects\GKMap\GKMap.Core\obj /s /q
 
@@ -50,6 +53,17 @@ rmdir .\projects\GKMap\GKMap.WinForms\obj /s /q
 
 rmdir .\projects\GKMap\GKMap.EtoForms\bin /s /q
 rmdir .\projects\GKMap\GKMap.EtoForms\obj /s /q
+
+rem <<< GKv3 >>>
+
+rmdir .\projects\GKv3\.vs /s /q
+rmdir .\projects\GKv3\.idea /s /q
+
+rmdir .\projects\GKv3\GEDKeeper3\bin /s /q
+rmdir .\projects\GKv3\GEDKeeper3\obj /s /q
+
+rmdir .\projects\GKv3\GKComponents\bin /s /q
+rmdir .\projects\GKv3\GKComponents\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
@@ -74,9 +88,6 @@ rmdir .\projects\GKv2\GKPedigreeImporterPlugin\obj /s /q
 rmdir .\projects\GKv2\GKTextSearchPlugin\bin /s /q
 rmdir .\projects\GKv2\GKTextSearchPlugin\obj /s /q
 
-rmdir .\projects\GKv2\GKTimeLinePlugin\bin /s /q
-rmdir .\projects\GKv2\GKTimeLinePlugin\obj /s /q
-
 rmdir .\projects\GKv2\GKLifePlugin\bin /s /q
 rmdir .\projects\GKv2\GKLifePlugin\obj /s /q
 
@@ -89,11 +100,16 @@ rmdir .\projects\GKv2\GKWordsCloudPlugin\obj /s /q
 rmdir .\projects\GKv2\GKHistoryDataPlugin\bin /s /q
 rmdir .\projects\GKv2\GKHistoryDataPlugin\obj /s /q
 
-rmdir .\projects\GKStdReports\bin /s /q
-rmdir .\projects\GKStdReports\obj /s /q
-
 rmdir .\projects\GKv2\GEDmill\bin /s /q
 rmdir .\projects\GKv2\GEDmill\obj /s /q
 
 rmdir .\projects\GKv2\GKBackupPlugin\bin /s /q
 rmdir .\projects\GKv2\GKBackupPlugin\obj /s /q
+
+rem <<< Cross-platform Plugins cleaning >>>
+
+rmdir .\projects\plugins\GKStdReports\bin /s /q
+rmdir .\projects\plugins\GKStdReports\obj /s /q
+
+rmdir .\projects\plugins\GKTimeLinePlugin\bin /s /q
+rmdir .\projects\plugins\GKTimeLinePlugin\obj /s /q

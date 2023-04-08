@@ -5,10 +5,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ECED32B7-1081-48D3-A223-1CB67A2D7016}</ProjectGuid>
+    <ProjectGuid>{4D6E49E2-58C4-49C8-8664-C8A89D418927}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>GKTimeLinePlugin</RootNamespace>
-    <AssemblyName>GKTimeLinePlugin</AssemblyName>
+    <RootNamespace>GKStdReports</RootNamespace>
+    <AssemblyName>GKStdReports</AssemblyName>
     <NoWin32Manifest>False</NoWin32Manifest>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
@@ -23,39 +23,39 @@
       <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKTimeLinePlugin.cs" />
-    <Compile Include="TimeLineWidget.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TimeLineWidget.Designer.cs">
-      <DependentUpon>TimeLineWidget.cs</DependentUpon>
-    </Compile>
+    <Compile Include="AncestorStatisticsReport.cs" />
+    <Compile Include="ContemporariesReport.cs" />
+    <Compile Include="GKStdReports.cs" />
+    <Compile Include="PersonalEventsReport.cs" />
+    <Compile Include="NamesFreqReport.cs" />
+    <Compile Include="PhoneticsReport.cs" />
+    <Compile Include="PlacesReport.cs" />
+    <Compile Include="ReportExporterEx.cs" />
+    <Compile Include="RepositoriesReport.cs" />
+    <Compile Include="SourcesReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">
-      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
+      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
-      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
-      <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKTimeLinePlugin.enu">
+    <None Include="GKStdReports.deu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKTimeLinePlugin.pol">
+    <None Include="GKStdReports.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKTimeLinePlugin.rus">
+    <None Include="GKStdReports.fra">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GKTimeLinePlugin.ukr">
+    <None Include="GKStdReports.rus">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKStdReports.ukr">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

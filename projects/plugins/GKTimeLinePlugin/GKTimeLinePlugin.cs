@@ -29,7 +29,7 @@ using GKCore.Plugins;
 [assembly: AssemblyDescription("GEDKeeper TimeLine plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
 [assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 
 namespace GKTimeLinePlugin

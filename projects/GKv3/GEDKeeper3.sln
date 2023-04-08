@@ -36,9 +36,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "subprojects", "subprojects"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{B8B3F590-CF25-40FC-8454-D673B594DBF3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTimeLinePlugin", "GKTimeLinePlugin\GKTimeLinePlugin.csproj", "{ECED32B7-1081-48D3-A223-1CB67A2D7016}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTimeLinePlugin.net", "..\plugins\GKTimeLinePlugin\GKTimeLinePlugin.net.csproj", "{ECED32B7-1081-48D3-A223-1CB67A2D7016}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKStdReports.nstd", "..\GKStdReports\GKStdReports.nstd.csproj", "{364F77E2-0ABF-49E6-9BFF-484CA1B8FBE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKStdReports.nstd", "..\plugins\GKStdReports\GKStdReports.nstd.csproj", "{364F77E2-0ABF-49E6-9BFF-484CA1B8FBE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,6 +6,7 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OutputPath>..\..\..\plugins\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
         <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
     </PropertyGroup>
@@ -25,18 +26,12 @@
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.4" />
     </ItemGroup>
 
+    <Import Project="GKTimeLinePlugin.props" />
+
     <ItemGroup>
-        <None Include="GKTimeLinePlugin.enu">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Include="GKTimeLinePlugin.pol">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Include="GKTimeLinePlugin.rus">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Include="GKTimeLinePlugin.ukr">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+        <Compile Include="GKTimeLinePlugin.cs" />
+        <Compile Include="TimeLineWidget.net.cs" />
+        <EmbeddedResource Include="TimeLineWidget.net.xeto" />
     </ItemGroup>
+
 </Project>
