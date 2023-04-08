@@ -67,9 +67,6 @@ rmdir .\projects\GKv3\GKComponents\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
-rmdir .\projects\GKv2\GKCalculatorPlugin\bin /s /q
-rmdir .\projects\GKv2\GKCalculatorPlugin\obj /s /q
-
 rmdir .\projects\GKv2\GKCalendarPlugin\bin /s /q
 rmdir .\projects\GKv2\GKCalendarPlugin\obj /s /q
 
@@ -107,6 +104,9 @@ rmdir .\projects\GKv2\GKBackupPlugin\bin /s /q
 rmdir .\projects\GKv2\GKBackupPlugin\obj /s /q
 
 rem <<< Cross-platform Plugins cleaning >>>
+
+rmdir .\projects\plugins\GKCalculatorPlugin\bin /s /q
+rmdir .\projects\plugins\GKCalculatorPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKStdReports\bin /s /q
 rmdir .\projects\plugins\GKStdReports\obj /s /q

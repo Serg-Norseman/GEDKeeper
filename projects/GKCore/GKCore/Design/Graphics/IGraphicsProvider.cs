@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.IO;
 using BSLib;
 
@@ -43,6 +44,7 @@ namespace GKCore.Design.Graphics
         IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
         IImage LoadImage(string fileName);
         IImage LoadResourceImage(string resName);
+        IImage LoadResourceImage(Type baseType, string resName);
         void SaveImage(IImage image, string fileName);
 
         ExtSizeF GetTextSize(string text, IFont font, object target);

@@ -150,57 +150,59 @@
 
                 <TableRow>
 
-                  <GroupBox x:Name="grpTreePersons">
-                    <StackLayout Style="vertListStack">
+                  <GroupBox x:Name="grpTreePersons" Height="300">
+                    <Scrollable>
+                      <StackLayout Style="vertListStack">
 
-                      <CheckBox x:Name="chkSurname" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <StackLayout Orientation="Horizontal" Spacing="20">
-                        <StackLayoutItem />
-                        <CheckBox x:Name="chkTreeSurnameFirst" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      </StackLayout>
-                      <CheckBox x:Name="chkName" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkPatronymic" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <StackLayout Orientation="Horizontal" Spacing="20">
-                        <StackLayoutItem />
-                        <CheckBox x:Name="chkDiffLines" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      </StackLayout>
-                      <CheckBox x:Name="chkBirthDate" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkDeathDate" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <StackLayout Orientation="Horizontal" Spacing="20">
-                        <StackLayoutItem />
-                        <CheckBox x:Name="chkOnlyYears" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      </StackLayout>
-                      <StackLayout Orientation="Horizontal" Spacing="20">
-                        <StackLayoutItem />
-                        <CheckBox x:Name="chkShowAge" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      </StackLayout>
-                      <CheckBox x:Name="chkMarriagesDates" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkKinship" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkSignsVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkTreeDecorative" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkPortraitsVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkDefaultPortraits" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkInvertedTree" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkChildlessExclude" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkShowPlaces" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <StackLayout Orientation="Horizontal" Spacing="20">
-                        <StackLayoutItem />
-                        <CheckBox x:Name="chkSeparateDAPLines" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      </StackLayout>
-                      <StackLayout Orientation="Horizontal" Spacing="20">
-                        <StackLayoutItem />
-                        <CheckBox x:Name="chkOnlyLocality" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      </StackLayout>
-                      <CheckBox x:Name="chkHideUnknownSpouses" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkCheckTreeSize" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkDottedLinesOfAdoptedChildren" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkBoldNames" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkMinimizingWidth" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                      <CheckBox x:Name="chkURNotesVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkSurname" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                          <StackLayoutItem />
+                          <CheckBox x:Name="chkTreeSurnameFirst" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        </StackLayout>
+                        <CheckBox x:Name="chkName" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkPatronymic" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                          <StackLayoutItem />
+                          <CheckBox x:Name="chkDiffLines" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        </StackLayout>
+                        <CheckBox x:Name="chkBirthDate" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkDeathDate" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                          <StackLayoutItem />
+                          <CheckBox x:Name="chkOnlyYears" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                          <StackLayoutItem />
+                          <CheckBox x:Name="chkShowAge" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        </StackLayout>
+                        <CheckBox x:Name="chkMarriagesDates" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkKinship" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkSignsVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkTreeDecorative" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkPortraitsVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkDefaultPortraits" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkInvertedTree" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkChildlessExclude" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkShowPlaces" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                          <StackLayoutItem />
+                          <CheckBox x:Name="chkSeparateDAPLines" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                          <StackLayoutItem />
+                          <CheckBox x:Name="chkOnlyLocality" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        </StackLayout>
+                        <CheckBox x:Name="chkHideUnknownSpouses" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkCheckTreeSize" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkDottedLinesOfAdoptedChildren" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkBoldNames" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkMinimizingWidth" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkURNotesVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />
 
-                      <StackLayoutItem />
+                        <StackLayoutItem />
 
-                    </StackLayout>
+                      </StackLayout>
+                    </Scrollable>
                   </GroupBox>
 
                   <StackLayout Spacing="4">
@@ -467,14 +469,10 @@
     </TableRow>
 
     <TableRow>
-      <StackLayout Spacing="8" Orientation="Horizontal">
+      <StackLayout Style="dlgFooter">
         <StackLayoutItem Expand="True" />
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
-        </StackLayoutItem>
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
-        </StackLayoutItem>
+        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
       </StackLayout>
     </TableRow>
 

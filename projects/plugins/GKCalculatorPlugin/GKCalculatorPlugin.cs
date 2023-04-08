@@ -19,14 +19,11 @@
  */
 
 using System;
-using System.IO;
 using System.Reflection;
-using Eto.Drawing;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
-using GKUI.Platform.Handlers;
 
 [assembly: AssemblyTitle("GKCalculatorPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calculator plugin")]
@@ -91,10 +88,7 @@ namespace GKCalculatorPlugin
         {
             bool result = base.Startup(host);
             try {
-                using (Stream stmIcon = LoadResourceStream("icon_calc.gif")) {
-                    Image bmp = new Bitmap(stmIcon);
-                    fIcon = new ImageHandler(bmp);
-                }
+                fIcon = AppHost.GfxProvider.LoadResourceImage(this.GetType(), "GKCalculatorPlugin.Resources.icon_calc.gif");
             } catch (Exception ex) {
                 Logger.WriteError("GKCalculatorPlugin.Startup()", ex);
                 result = false;
