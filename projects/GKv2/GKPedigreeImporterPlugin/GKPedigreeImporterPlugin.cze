@@ -1,0 +1,37 @@
+;1029,cze,Čeština
+Import rodokmenů
+Soubor
+Vybrat
+Formát není podporován
+Chyba při načítání dat.
+Chyba analýzy: počet záznamů obsahuje mezeru.
+Uznaný osobní rekord
+Generace
+Chyba analýzy: nenalezeno v seznamu předků s číslem
+Chyba analýzy: datum
+Chyba analýzy: číslo osoby je duplicitní
+Formát čísel osob
+od D'Aboville (zatím není podporováno)
+od Konovalova
+neznámý
+Parametry textových rodokmenů
+Oddělovač čar osoby
+Formátovat jména v osobním řádku
+Formátovat řádek generace
+Oddělovač dat
+Formát data
+Parametry transformace
+Normalizovat jména (PETROV -> Petrov)
+Další >
+< Zpět
+Zavřít
+Speciální nastavení formátu osobních linek
+1) "Číslo. Jméno (*narození +úmrtí)" - data v závorkách
+Analýza
+Načítání
+Jméno Patronymické Příjmení
+Příjmení Jméno Patronymické
+žádné speciální
+Všechny podporované formáty (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Rodokmen ve formátu txt (*.txt)|*.txt |Rodokmen ve formátu csv (*.csv)|*.csv|Rodokmen ve formátu MS Word (*.doc)|*.doc|Rodokmen ve formátu MS Excel (*.xls)|*.xls
+Všechny podporované formáty (*.txt, *.csv)|*.txt;*.csv|Rodokmen ve formátu txt (*.txt)|*.txt|Rodokmen ve formátu csv (*.csv)|*.csv
+Konfliktní informace o manželích
