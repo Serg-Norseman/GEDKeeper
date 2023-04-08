@@ -19,9 +19,9 @@
  */
 
 using System;
-using System.Drawing;
 using System.IO;
 using System.Reflection;
+using Eto.Drawing;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
@@ -92,7 +92,7 @@ namespace GKCalculatorPlugin
             bool result = base.Startup(host);
             try {
                 using (Stream stmIcon = LoadResourceStream("icon_calc.gif")) {
-                    Image bmp = Image.FromStream(stmIcon);
+                    Image bmp = new Bitmap(stmIcon);
                     fIcon = new ImageHandler(bmp);
                 }
             } catch (Exception ex) {

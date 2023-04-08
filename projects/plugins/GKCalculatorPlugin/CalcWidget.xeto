@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FloatingForm xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  x:Class="GKCalculatorPlugin.CalcWidget"
+  Closed="CalcWidget_Closed" Shown="CalcWidget_Shown" Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+
+  <StackLayout Orientation="Vertical" Padding="8" Spacing="8">
+    <ListBox x:Name="lbOutput" Width="257" Height="106" MouseDoubleClick="lbOutput_DoubleClick" />
+
+    <TextBox x:Name="edExpression" Width="257" KeyDown="edExpression_KeyDown" />
+
+    <TextBox x:Name="edCalcResult" Width="257" DragOver="edCalcResult_DragOver" MouseMove="edCalcResult_MouseMove" />
+
+    <CheckBox x:Name="chkPutToClipboard" />
+
+    <CheckBox x:Name="chkEventsYearCalculation" />
+
+  </StackLayout>
+
+</FloatingForm>

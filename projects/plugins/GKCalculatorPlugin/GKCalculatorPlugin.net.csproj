@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
-        <AssemblyName>GKTimeLinePlugin</AssemblyName>
-        <RootNamespace>GKTimeLinePlugin</RootNamespace>
+        <AssemblyName>GKCalculatorPlugin</AssemblyName>
+        <RootNamespace>GKCalculatorPlugin</RootNamespace>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OutputPath>..\..\..\plugins\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -20,6 +20,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+        <ProjectReference Include="..\..\GKv3\GKComponents\GKComponents.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -27,12 +28,12 @@
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.4" />
     </ItemGroup>
 
-    <Import Project="GKTimeLinePlugin.props" />
+    <Import Project="GKCalculatorPlugin.props" />
 
     <ItemGroup>
-        <Compile Include="GKTimeLinePlugin.cs" />
-        <Compile Include="TimeLineWidget.net.cs" />
-        <EmbeddedResource Include="TimeLineWidget.xeto" />
+        <Compile Include="GKCalculatorPlugin.cs" />
+        <Compile Include="CalcWidget.net.cs" />
+        <EmbeddedResource Include="CalcWidget.xeto" />
     </ItemGroup>
 
 </Project>

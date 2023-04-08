@@ -36,30 +36,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKCalculatorPlugin.enu">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKCalculatorPlugin.pol">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKCalculatorPlugin.rus">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKCalculatorPlugin.ukr">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <EmbeddedResource Include="Resources\icon_calc.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+    <ProjectReference Include="..\..\GKv2\GKComponents\GKComponents.csproj">
       <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="GKCalculatorPlugin.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
