@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKFlowInputPlugin", "GKFlow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalculatorPlugin", "..\plugins\GKCalculatorPlugin\GKCalculatorPlugin.csproj", "{782E9338-ECA7-4095-9157-6CA003801F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalendarPlugin", "GKCalendarPlugin\GKCalendarPlugin.csproj", "{091DFD9D-5599-4EEA-A616-A55FC12E9613}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalendarPlugin", "..\plugins\GKCalendarPlugin\GKCalendarPlugin.csproj", "{091DFD9D-5599-4EEA-A616-A55FC12E9613}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKLifePlugin", "GKLifePlugin\GKLifePlugin.csproj", "{4A523280-2DEA-43C6-BE11-48BDFF283751}"
 EndProject

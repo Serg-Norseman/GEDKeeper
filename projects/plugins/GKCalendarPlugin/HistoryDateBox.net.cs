@@ -1,0 +1,331 @@
+﻿/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System;
+using System.Globalization;
+using Eto.Drawing;
+using Eto.Forms;
+using GKCore.Calendar;
+using GKCore.Interfaces;
+using GKCore.Plugins;
+using GKUI.Components;
+
+namespace GKCalendarPlugin
+{
+    public enum Calendar
+    {
+        Gregorian, Julian, Byzantine,
+        Hebrew, Islamic,
+        Persian, Indian,
+        //Bahai,
+
+        First = Gregorian,
+        Last = Indian
+    }
+
+    public class HistoryDateBox : Panel
+    {
+        private static PLS[] fCalendarNames = new PLS[] {
+            PLS.LSID_Cal_Gregorian, PLS.LSID_Cal_Julian, PLS.LSID_Cal_Byzantine,
+            PLS.LSID_Cal_Hebrew, PLS.LSID_Cal_Islamic,
+            PLS.LSID_Cal_Persian, PLS.LSID_Cal_Indian,
+            //PLS.LSID_Cal_Bahai,
+        };
+
+
+        private ILangMan fLangMan;
+        private bool fReadOnly;
+
+
+        public Calendar Calendar
+        {
+            get { return (Calendar)cmbCalendar.SelectedIndex; }
+        }
+
+        public double Date
+        {
+            get { return GetDate(); }
+            set { SetDate(value); }
+        }
+
+        public bool ReadOnly
+        {
+            get { return fReadOnly; }
+            set {
+                fReadOnly = value;
+                txtDay.ReadOnly = fReadOnly;
+                cmbMonth.Enabled = !fReadOnly;
+                txtYear.ReadOnly = fReadOnly;
+                chkBC.Enabled = !fReadOnly;
+            }
+        }
+
+
+        public event EventHandler CalendarChanged;
+
+        public event EventHandler DateChanged;
+
+
+        public HistoryDateBox()
+        {
+            InitializeComponent();
+
+            SetLocale();
+
+            cmbCalendar.SelectedIndex = (cmbCalendar.Items.Count > 0) ? 0 : -1;
+        }
+
+        public void SetLocale()
+        {
+            try {
+                // in designtime calls to GlobalOptions throws exceptions
+                fLangMan = PluginsMan.CreateLangMan(this.GetType().Assembly);
+
+                lblCalendar.Text = fLangMan.LS(PLS.LSID_MICalendar);
+                lblDay.Text = fLangMan.LS(PLS.LSID_Day);
+                lblMonth.Text = fLangMan.LS(PLS.LSID_Month);
+                lblYear.Text = fLangMan.LS(PLS.LSID_Year);
+                chkBC.Text = "B.C.";
+
+                for (Calendar hc = Calendar.First; hc <= Calendar.Last; hc++) {
+                    cmbCalendar.Items.Add(new GKComboItem<Calendar>(fLangMan.LS(fCalendarNames[(int)hc]), hc));
+                }
+            } catch {
+            }
+        }
+
+        private double GetDate()
+        {
+            double result = double.NaN;
+
+            try {
+                Calendar hc = (Calendar)cmbCalendar.SelectedIndex;
+
+                int day = int.Parse(txtDay.Text);
+                int month = cmbMonth.SelectedIndex + 1;
+                int year = int.Parse(txtYear.Text);
+                bool bc = chkBC.Checked.Value;
+
+                switch (hc) {
+                    case Calendar.Gregorian:
+                        result = CalendarConverter.gregorian_to_jd(year, month, day);
+                        break;
+                    case Calendar.Julian:
+                        result = CalendarConverter.julian_to_jd(year, month, day);
+                        break;
+                    case Calendar.Byzantine:
+                        //result = CalendarConverter.byzantine_to_jd(year, month, day);
+                        break;
+                    case Calendar.Hebrew:
+                        result = CalendarConverter.hebrew_to_jd(year, month, day);
+                        break;
+                    case Calendar.Islamic:
+                        result = CalendarConverter.islamic_to_jd(year, month, day);
+                        break;
+                    case Calendar.Persian:
+                        result = CalendarConverter.persian_to_jd(year, month, day);
+                        break;
+                    case Calendar.Indian:
+                        result = CalendarConverter.indian_civil_to_jd(year, month, day);
+                        break;
+                        //case Calendar.Bahai:
+                        //result = CalendarConverter.bahai_to_jd(year, month, day);
+                        //break;
+                }
+            } catch {
+            }
+
+            return result;
+        }
+
+        private void SetDate(double value)
+        {
+            try {
+                Calendar hc = (Calendar)cmbCalendar.SelectedIndex;
+                int day = 0, month = 1, year = 0;
+                bool bc = false;
+
+                if (!double.IsNaN(value)) {
+                    switch (hc) {
+                        case Calendar.Gregorian:
+                            CalendarConverter.jd_to_gregorian(value, out year, out month, out day);
+                            break;
+                        case Calendar.Julian:
+                            CalendarConverter.jd_to_julian(value, out year, out month, out day);
+                            break;
+                        case Calendar.Byzantine:
+                            CalendarConverter.jd_to_byzantine(value, out year, out month, out day, CalendarConverter.ByzantineStyle.March);
+                            break;
+                        case Calendar.Hebrew:
+                            CalendarConverter.jd_to_hebrew(value, out year, out month, out day);
+                            break;
+                        case Calendar.Islamic:
+                            CalendarConverter.jd_to_islamic(value, out year, out month, out day);
+                            break;
+                        case Calendar.Persian:
+                            CalendarConverter.jd_to_persian(value, out year, out month, out day);
+                            break;
+                        case Calendar.Indian:
+                            CalendarConverter.jd_to_indian_civil(value, out year, out month, out day);
+                            break;
+                            //case Calendar.Bahai:
+                            //result = CalendarConverter.bahai_to_jd(value, out year, out month, out day);
+                            //break;
+                    }
+                }
+
+                txtDay.Text = string.Format("{0:00}", day);
+                cmbMonth.SelectedIndex = month - 1;
+                txtYear.Text = string.Format("{0:0000}", year);
+                chkBC.Checked = bc;
+            } catch {
+            }
+        }
+
+        private void OnCalendarChanged()
+        {
+            var eventHandler = CalendarChanged;
+            if (eventHandler != null) eventHandler(this, new EventArgs());
+        }
+
+        private void OnDateChanged()
+        {
+            var eventHandler = DateChanged;
+            if (eventHandler != null) eventHandler(this, new EventArgs());
+        }
+
+        private void cmbCalendar_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int month = cmbMonth.SelectedIndex;
+
+            try {
+                Calendar hc = (Calendar)cmbCalendar.SelectedIndex;
+
+                string[] months = null;
+                switch (hc) {
+                    case Calendar.Gregorian:
+                    case Calendar.Julian:
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_ClassicMonths));
+                        break;
+                    case Calendar.Byzantine:
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_ByzantineMonths));
+                        break;
+                    case Calendar.Hebrew:
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_HebrewMonths));
+                        break;
+                    case Calendar.Islamic:
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_IslamicMonths));
+                        break;
+                    case Calendar.Persian:
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_PersianMonths));
+                        break;
+                    case Calendar.Indian:
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_IndianCivilMonths));
+                        break;
+                        //case Calendar.Bahai:
+                        //months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_BahaiMonths));
+                        //break;
+                }
+
+                if (months != null) {
+                    cmbMonth.Items.Clear();
+                    for (int m = 0; m < months.Length; m++) {
+                        cmbMonth.Items.Add(new GKComboItem<int>(months[m], m));
+                    }
+                }
+            } catch {
+            }
+
+            cmbMonth.SelectedIndex = month;
+
+            OnCalendarChanged();
+            OnDateChanged();
+        }
+
+        private void field_TextChanged(object sender, EventArgs e)
+        {
+            OnDateChanged();
+        }
+
+        #region Design
+
+        private Label lblCalendar;
+        private Label lblDay;
+        private Label lblMonth;
+        private Label lblYear;
+        private MaskedTextBox txtDay;
+        private MaskedTextBox txtYear;
+        private ComboBox cmbMonth;
+        private ComboBox cmbCalendar;
+        private CheckBox chkBC;
+
+        private void InitializeComponent()
+        {
+            SuspendLayout();
+
+            lblCalendar = new Label();
+            cmbCalendar = new ComboBox();
+            cmbCalendar.ReadOnly = true;
+            cmbCalendar.SelectedIndexChanged += cmbCalendar_SelectedIndexChanged;
+
+            lblDay = new Label();
+            txtDay = new MaskedTextBox();
+            txtDay.Provider = new FixedMaskedTextProvider("00", CultureInfo.InvariantCulture);
+            txtDay.TextChanged += field_TextChanged;
+
+            lblMonth = new Label();
+            cmbMonth = new ComboBox();
+            cmbMonth.ReadOnly = true;
+            cmbMonth.SelectedIndexChanged += field_TextChanged;
+
+            lblYear = new Label();
+            txtYear = new MaskedTextBox();
+            txtYear.Provider = new FixedMaskedTextProvider("0000", CultureInfo.InvariantCulture);
+            txtYear.TextChanged += field_TextChanged;
+
+            chkBC = new CheckBox();
+            chkBC.CheckedChanged += field_TextChanged;
+
+            Content = new TableLayout() {
+                Padding = new Padding(4),
+                Spacing = new Size(4, 4),
+                Rows = {
+                    new TableRow() {
+                        Cells = { lblCalendar, null, null, null }
+                    },
+                    new TableRow() {
+                        Cells = { cmbCalendar, null, null, null }
+                    },
+                    new TableRow() {
+                        Cells = { lblDay, lblMonth, lblYear, null }
+                    },
+                    new TableRow() {
+                        Cells = { txtDay, cmbMonth, txtYear, chkBC }
+                    }
+                }
+            };
+            Padding = new Padding(2);
+
+            ResumeLayout();
+        }
+
+        #endregion
+    }
+}

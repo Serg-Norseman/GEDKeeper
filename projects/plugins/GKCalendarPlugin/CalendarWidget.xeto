@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:plg="clr-namespace:GKCalendarPlugin"
+  x:Class="GKCalendarPlugin.CalendarWidget"
+  Closed="CalendarWidget_Closed" Shown="CalendarWidget_Shown" Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+
+  <StackLayout Orientation="Vertical" Padding="8" Spacing="8">
+
+    <GroupBox x:Name="grpSourceDate">
+      <StackLayout>
+        <plg:HistoryDateBox x:Name="historyDateBox1" />
+      </StackLayout>
+    </GroupBox>
+
+    <GroupBox x:Name="grpConvertedDate">
+      <StackLayout>
+        <plg:HistoryDateBox x:Name="historyDateBox2" />
+      </StackLayout>
+    </GroupBox>
+
+  </StackLayout>
+
+</Form>

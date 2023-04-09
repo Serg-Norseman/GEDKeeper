@@ -19,19 +19,16 @@
  */
 
 using System;
-using System.Drawing;
-using System.IO;
 using System.Reflection;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
-using GKUI.Platform.Handlers;
 
 [assembly: AssemblyTitle("GKCalendarPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calendar plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2014-2022 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyCulture("")]
 
@@ -120,10 +117,7 @@ namespace GKCalendarPlugin
         {
             bool result = base.Startup(host);
             try {
-                using (Stream stmIcon = LoadResourceStream("icon_time.gif")) {
-                    Image bmp = Image.FromStream(stmIcon);
-                    fIcon = new ImageHandler(bmp);
-                }
+                fIcon = AppHost.GfxProvider.LoadResourceImage(this.GetType(), "GKCalendarPlugin.Resources.icon_time.gif");
             } catch (Exception ex) {
                 Logger.WriteError("GKCalendarPlugin.Startup()", ex);
                 result = false;

@@ -257,22 +257,7 @@ namespace GKCalendarPlugin
             OnDateChanged();
         }
 
-        private void txtDay_TextChanged(object sender, EventArgs e)
-        {
-            OnDateChanged();
-        }
-
-        private void cmbMonth_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            OnDateChanged();
-        }
-
-        private void txtYear_TextChanged(object sender, EventArgs e)
-        {
-            OnDateChanged();
-        }
-
-        private void chkBC_CheckedChanged(object sender, EventArgs e)
+        private void field_TextChanged(object sender, EventArgs e)
         {
             OnDateChanged();
         }
@@ -379,7 +364,7 @@ namespace GKCalendarPlugin
             this.txtDay.Name = "txtDay";
             this.txtDay.Size = new System.Drawing.Size(45, 24);
             this.txtDay.TabIndex = 4;
-            this.txtDay.TextChanged += new System.EventHandler(this.txtDay_TextChanged);
+            this.txtDay.TextChanged += new System.EventHandler(this.field_TextChanged);
             // 
             // txtYear
             // 
@@ -389,7 +374,7 @@ namespace GKCalendarPlugin
             this.txtYear.Size = new System.Drawing.Size(59, 24);
             this.txtYear.TabIndex = 5;
             this.txtYear.ValidatingType = typeof(int);
-            this.txtYear.TextChanged += new System.EventHandler(this.txtYear_TextChanged);
+            this.txtYear.TextChanged += new System.EventHandler(this.field_TextChanged);
             // 
             // cmbMonth
             // 
@@ -401,7 +386,7 @@ namespace GKCalendarPlugin
             this.cmbMonth.Name = "cmbMonth";
             this.cmbMonth.Size = new System.Drawing.Size(240, 25);
             this.cmbMonth.TabIndex = 6;
-            this.cmbMonth.SelectedIndexChanged += new System.EventHandler(this.cmbMonth_SelectedIndexChanged);
+            this.cmbMonth.SelectedIndexChanged += new System.EventHandler(this.field_TextChanged);
             // 
             // cmbCalendar
             // 
@@ -425,7 +410,7 @@ namespace GKCalendarPlugin
             this.chkBC.TabIndex = 8;
             this.chkBC.Text = "chkBC";
             this.chkBC.UseVisualStyleBackColor = true;
-            this.chkBC.CheckedChanged += new System.EventHandler(this.chkBC_CheckedChanged);
+            this.chkBC.CheckedChanged += new System.EventHandler(this.field_TextChanged);
             // 
             // HistoryDateBox
             // 

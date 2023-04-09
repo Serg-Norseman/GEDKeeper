@@ -67,9 +67,6 @@ rmdir .\projects\GKv3\GKComponents\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
-rmdir .\projects\GKv2\GKCalendarPlugin\bin /s /q
-rmdir .\projects\GKv2\GKCalendarPlugin\obj /s /q
-
 rmdir .\projects\GKv2\GKFlowInputPlugin\bin /s /q
 rmdir .\projects\GKv2\GKFlowInputPlugin\obj /s /q
 
@@ -107,6 +104,9 @@ rem <<< Cross-platform Plugins cleaning >>>
 
 rmdir .\projects\plugins\GKCalculatorPlugin\bin /s /q
 rmdir .\projects\plugins\GKCalculatorPlugin\obj /s /q
+
+rmdir .\projects\plugins\GKCalendarPlugin\bin /s /q
+rmdir .\projects\plugins\GKCalendarPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKStdReports\bin /s /q
 rmdir .\projects\plugins\GKStdReports\obj /s /q
