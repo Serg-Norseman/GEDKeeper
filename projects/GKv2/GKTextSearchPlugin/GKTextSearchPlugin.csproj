@@ -50,6 +50,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GKTextSearchPlugin.cze">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKTextSearchPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

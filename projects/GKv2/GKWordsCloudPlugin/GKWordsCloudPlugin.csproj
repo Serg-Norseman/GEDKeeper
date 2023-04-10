@@ -54,6 +54,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GKWordsCloudPlugin.cze">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKWordsCloudPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

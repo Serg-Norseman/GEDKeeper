@@ -51,6 +51,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GKPedigreeImporterPlugin.cze">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKPedigreeImporterPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -36,6 +36,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GKHistoryDataPlugin.cze">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKHistoryDataPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

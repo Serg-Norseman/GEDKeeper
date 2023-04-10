@@ -47,6 +47,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GKNavigatorPlugin.cze">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKNavigatorPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

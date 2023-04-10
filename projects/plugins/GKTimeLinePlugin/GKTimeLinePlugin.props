@@ -2,6 +2,9 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <ItemGroup>
+        <None Include="GKTimeLinePlugin.cze">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKTimeLinePlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

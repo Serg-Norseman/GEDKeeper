@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <ItemGroup>
+        <Compile Include="AncestorStatisticsReport.cs" />
+        <Compile Include="ContemporariesReport.cs" />
+        <Compile Include="GKStdReports.cs" />
+        <Compile Include="PersonalEventsReport.cs" />
+        <Compile Include="NamesFreqReport.cs" />
+        <Compile Include="PhoneticsReport.cs" />
+        <Compile Include="PlacesReport.cs" />
+        <Compile Include="ReportExporterEx.cs" />
+        <Compile Include="RepositoriesReport.cs" />
+        <Compile Include="SourcesReport.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="GKStdReports.cze">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKStdReports.deu">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKStdReports.enu">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKStdReports.fra">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKStdReports.rus">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKStdReports.ukr">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

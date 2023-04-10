@@ -25,39 +25,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AncestorStatisticsReport.cs" />
-    <Compile Include="ContemporariesReport.cs" />
-    <Compile Include="GKStdReports.cs" />
-    <Compile Include="PersonalEventsReport.cs" />
-    <Compile Include="NamesFreqReport.cs" />
-    <Compile Include="PhoneticsReport.cs" />
-    <Compile Include="PlacesReport.cs" />
-    <Compile Include="ReportExporterEx.cs" />
-    <Compile Include="RepositoriesReport.cs" />
-    <Compile Include="SourcesReport.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="GKStdReports.deu">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKStdReports.enu">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKStdReports.fra">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKStdReports.rus">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKStdReports.ukr">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <Import Project="GKStdReports.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

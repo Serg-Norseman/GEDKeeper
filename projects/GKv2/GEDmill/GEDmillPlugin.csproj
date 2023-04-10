@@ -158,6 +158,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GEDmillPlugin.cze">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GEDmillPlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

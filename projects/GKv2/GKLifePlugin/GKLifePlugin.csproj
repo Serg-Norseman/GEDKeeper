@@ -49,6 +49,9 @@
     <Compile Include="GKLifePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GKLifePlugin.cze">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GKLifePlugin.enu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
