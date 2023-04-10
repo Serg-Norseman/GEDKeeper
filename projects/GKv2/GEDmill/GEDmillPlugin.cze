@@ -1,0 +1,247 @@
+;1029,cze,Čeština
+Generátor webových stránek (GEDmill)
+Konec
+Dokončit
+verze
+< Zpět
+Další >
+Nápověda
+Nastavení...
+OK
+Zrušit
+Tvorba webových stránek
+Kopírování multimédií
+GEDmill webová stránka rodokmenu
+historie rodokmenu
+Při vytváření souboru HTML došlo k problému:\r\nGEDmill neumístí soubory na plochu.
+Při vytváření souboru HTML došlo k problému:\r\nCesta nebo název souboru {0} nejsou platné.
+Soubor, který jste vybrali, není podporovaný typ obrázku.
+Kopírování obrázku na pozadí
+Vytváření šablony stylů
+Vytváření jednotlivých stránek
+Vytváření indexu osob
+Vytváření zdrojových stránek
+Vytvoření titulní stránky
+Vytváření Javascript souboru
+Hotovo
+Referenční číslo uživatele
+Záznam
+Záznam naposledy změněn
+Stránka vytvořena pomocí GEDmill
+Poznámky
+ne
+Návrat na hlavní stránku
+Vytvořeno dne
+přední strana
+hlavní web
+index
+Neznámý formát obrázku
+manželé s
+partner od
+dítě
+syn
+dcera
+Zdroje
+Další údaje
+Historická data
+Rodiče
+Citace
+Opravdu chcete ukončit GEDmill?
+Vyberte zadní obrázek
+Vyberte přední obrázek
+Vyberte prosím alespoň jednu osobu.
+Chybí soubor {0}. \r\nStránky budou vytvořeny bez obrázku na pozadí.
+V seznamu nejsou žádné osoby.
+Stránka GEDmill pro
+Zdroj
+Text
+Obrázek pro tento zdroj
+Média pro tento zdroj
+Tato webová stránka obsahuje záznamy o
+Web vytvořen{0} pomocí GEDKeeper->GEDmill.
+osoby
+zdroje
+multimediální soubory
+obrázky
+Klíčové osoby
+předchozí dítě
+další dítě
+úmrtí
+narození
+ (pravděpodobně)
+ (méně pravděpodobné)
+Informace o této osobě byly zadrženy.
+také známý jako
+Mini stromový diagram
+a
+od
+do
+narození
+křtiny
+křest
+úmrtí
+pohřeb
+kremace
+adopce
+bar micva
+bat micva
+požehnání
+křtiny (v dospělosti)
+potvrzení
+první přijímání
+vysvěcení
+naturalizace
+emigrace
+přistěhování
+potvrzení závěti
+sepsána závěť
+promoce
+v důchodu
+další událost
+kasta
+fyzický popis
+vzdělání
+identifikační číslo
+národnost
+počet dětí
+počet sňatků
+povolání
+vlastnictví
+náboženství
+rezidence
+Číslo sociálního pojištění
+další skutečnost
+se nikdy neoženil
+prohlášení manželství za neplatné
+zaznamenané při sčítání lidu
+rozvod
+podání žádosti o rozvod
+angažovanost
+zveřejnění zákazů sňatků
+manželská smlouva
+povolení k uzavření manželství
+vypořádání manželství
+neznámá událost
+Rodinný stav neznámý
+Vyloučit osoby, pokud nejsou navigovatelné od této osoby
+Vyloučit osoby, pokud je nelze navigovat z těchto {0} lidí
+Odebrat obrázky z tohoto zdroje
+Odebrat obrázky z těchto {0} zdrojů
+(Úvodní stránka webu je soubor {0}.{1})
+(Nebyla vygenerována žádná titulní stránka.)
+Zahrnout
+Jméno
+Narození
+Úmrtí
+Id
+Ref. číslo uživatele
+Obrázky
+Osoby
+Žádné příjmení
+Index jmén
+Rodokmen
+Soukromý záznam
+<neznámé>
+v
+Úložiště
+Při vytváření souborů webu došlo k problému
+Při procházení stromové struktury došlo k problému:\r\n\r\n{0}
+Nastavení šířky/výšky obrázku na tak velkou hodnotu může v některých prohlížečích způsobit problémy se zobrazením.\r\nOpravdu nastavit hodnotu na {0}?
+Nelze získat přístup nebo vytvořit složku.
+Složku {0} nelze smazat.\r\n{1}
+Soubor {0} nelze smazat.\r\n{1}
+Nebyly provedeny žádné změny.
+Žádné skryté multimediální soubory.
+Webové stránky
+Obrázky
+Stromové diagramy
+Pokročilé
+Tvorba webových stránek rodokmenu
+Po dokončení výběru klepněte na tlačítko Další.
+Vyloučit všechny potomky této osoby
+Vyloučit všechny předky této osoby
+Zahrnout všechny předky této osoby
+Zahrnout všechny potomky této osoby
+Vyloučit osoby, pokud nejsou navigovatelné od této osoby
+Podrobnosti a obrázky...
+Zahrnout všechny
+Vyloučit všechny
+Vyloučit všechny, kteří jsou stále naživu (a ty, kteří se narodili za posledních 100 let)
+Odebrat obrázky z vybraných zdrojů
+Zahrnout všechny zdroje
+Vyloučit všechny zdroje
+Nyní můžete určit osoby a zdroje, které nechcete na webu zobrazovat. Chcete-li zabránit jejich zobrazení, zrušte zaškrtnutí políčka vedle jejich jména – zobrazí se ti, kteří jsou zaškrtnuti.
+Kliknutím pravým tlačítkem na seznam zobrazíte další možnosti, včetně přidávání obrázků...
+Název webu:
+Klíčové osoby:
+Přidat...
+Odstranit
+Dále si můžete vybrat titulek pro titulní stránku vašeho webu. Nechte pole prázdné, pokud nechcete název.\r\n\r\nMůžete také vybrat, kteří lidé jsou hlavními osobnostmi na titulní stránce.
+Komentář k titulní straně:
+výše uvedený text je HTML)
+Odkaz na váš web: (s předponou http://)
+Text pro zápatí stránky:
+Zahrnout statistiky stránek
+Vícestránkový index jednotlivců
+Referenční čísla uživatele v indexu
+Jednotlivci na stránku indexu:
+Název souboru na titulní straně:
+E-mailová adresa na titulní stránku:
+Obrázek na pozadí:
+Procházet...
+Obrázek na přední straně:
+Maximální velikost jednotlivých obrázků
+Width:
+Výška:
+Maximální velikost zdrojových obrázků
+Povolit obrázky atd.
+Přejmenovat soubory
+Zahrnout původní soubory (v plné velikosti).
+Povolit jiné soubory než obrázky
+Více obrázků osob
+Maximální velikost miniatur obrázků
+Počet mezer pro nahrazení tabulátorů:
+Zobrazit chybějící jména jako:
+Zahrnout zadržené záznamy
+Označit zadržené záznamy s:
+tento text:
+jméno osoby
+Příjmení s VELKÝMI PÍSMENY
+Události začínat velkým písmenem
+Nezobrazovat e-mailové adresy
+Zobrazit povolání v záhlaví stránky
+Zahrnout stromová schémata
+Simulovat průhlednost
+Ušetřit šířku stromu
+Držet pořadí sourozenců z GEDCOM
+Barvy
+Vybrané pole
+Vybraný text
+Obecná schránka
+Text odkazu
+Soukromá schránka
+Soukromý text
+Manželská schránka
+Větve
+Hranice schránky
+Pro názvy souborů použijte vlastní číslo záznamu
+Seznam citujících záznamů na zdrojových stránkách
+Složka:
+Nakonec vyberte složku, ve které chcete soubory webu vytvořit. Pokud složka již neexistuje, bude pro vás vytvořena.
+Kliknutím na tlačítko Další vytvoříte webové stránky...
+Zobrazte webové stránky po dokončení programu.
+<cesta>
+Děkujeme, že používáte GEDmill.
+Soubory webových stránek byly vygenerovány a vloženy;
+Je třeba vytvořit složku {0}. \r\nToto zničí existující soubor s tímto názvem.
+GEDmill vám nedovolí vytvářet soubory přímo na ploše
+Složka {0} již existuje.\r\nChcete před vytvořením souborů webu smazat všechny soubory, které obsahuje?
+Smazáním složky {0} se nezachovají žádné existující soubory úvodní stránky a šablon stylů.\r\nPřesto smazat složku?
+Pokud složka obsahuje jiné soubory než GEDmill, budou také odstraněny.\r\nPřesto smazat složku?
+Složka, kterou jste vybrali, nebyla nalezena.
+Název složky chybí nebo je nezákonný.
+Název složky, který jste vybrali, je příliš dlouhý.
+Cesta, kterou jste vybrali, je pouze pro čtení nebo složka není prázdná.
+Nemáte správná oprávnění pro přístup ke složce.
+Název složky, který jste vybrali, má neplatný formát.
+Název složky, který jste vybrali, má nepodporovaný formát.
