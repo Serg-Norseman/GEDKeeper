@@ -8,7 +8,7 @@
 
     <TableRow>
       <GroupBox x:Name="GroupBox1">
-        <TableLayout Style="paddedTable">
+        <TableLayout Spacing="4, 0">
           <TableRow>
             <TableCell ScaleWidth="True">
               <TableLayout x:Name="personLayout" Spacing="4, 4">
@@ -91,7 +91,7 @@
 
     <TableRow>
       <GroupBox x:Name="panCtlParents">
-        <TableLayout x:Name="parentsTab" Style="paddedTable">
+        <TableLayout x:Name="parentsTab" Spacing="4, 4">
           <TableRow>
             <TableCell>
               <Label x:Name="lblParents" />
@@ -188,26 +188,13 @@
     </TableRow>
 
     <TableRow>
-      <StackLayout Spacing="8" Orientation="Horizontal">
-        <StackLayoutItem HorizontalAlignment="Left">
-          <Label x:Name="lblRestriction" />
-        </StackLayoutItem>
-        <StackLayoutItem HorizontalAlignment="Left">
-          <ComboBox x:Name="cmbRestriction" ReadOnly="True" Width="180" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
-        </StackLayoutItem>
-
+      <StackLayout Style="dlgFooter">
+        <Label x:Name="lblRestriction" />
+        <ComboBox x:Name="cmbRestriction" ReadOnly="True" Width="180" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
         <StackLayoutItem Expand="True" />
-
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnNameCopy" Style="iconBtn" Image="{Resource Resources.btn_copy.gif, GKCore}" Click="btnNameCopy_Click" />
-        </StackLayoutItem>
-
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
-        </StackLayoutItem>
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
-        </StackLayoutItem>
+        <Button x:Name="btnNameCopy" Style="iconBtn" Image="{Resource Resources.btn_copy.gif, GKCore}" Click="btnNameCopy_Click" />
+        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
       </StackLayout>
     </TableRow>
 

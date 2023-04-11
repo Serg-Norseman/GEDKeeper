@@ -198,6 +198,8 @@
                         <CheckBox x:Name="chkBoldNames" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkMinimizingWidth" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkURNotesVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkUseInlineImagesInSvg" />
+                        <CheckBox x:Name="chkExtendedTree" />
 
                         <StackLayoutItem />
 
@@ -314,8 +316,6 @@
 
                 </TableRow>
 
-                <TableRow ScaleHeight="True" />
-
               </TableLayout>
             </TabPage>
 
@@ -404,22 +404,14 @@
                   </TableCell>
 
                   <TableCell>
-                    <StackLayout Spacing="4">
+                    <StackLayout Spacing="4" Orientation="Vertical">
                       <Button x:Name="btnColumnUp" Size="26, 26" Image="{Resource Resources.btn_up.gif, GKCore}" Click="btnColumnUp_Click" />
                       <Button x:Name="btnColumnDown" Size="26, 26" Image="{Resource Resources.btn_down.gif, GKCore}" Click="btnColumnDown_Click" />
-                      <StackLayoutItem />
+                      <StackLayoutItem Expand="True" />
+                      <Button x:Name="btnDefList" Size="190, 26" Click="btnDefList_Click" />
                     </StackLayout>
                   </TableCell>
 
-                </TableRow>
-
-                <TableRow>
-                  <StackLayout Orientation="Horizontal">
-                    <StackLayoutItem HorizontalAlignment="Left">
-                      <Button x:Name="btnDefList" Size="190, 26" Click="btnDefList_Click" />
-                    </StackLayoutItem>
-                    <StackLayoutItem Expand="True" />
-                  </StackLayout>
                 </TableRow>
 
               </TableLayout>
@@ -451,11 +443,9 @@
 
         <TabPage x:Name="pageSpecials" Padding="8">
           <StackLayout Style="vertListStack">
-            <CheckBox x:Name="chkUseInlineImagesInSvg" />
             <CheckBox x:Name="chkUseExtendedNotes" />
             <CheckBox x:Name="chkKeepRichNames" />
             <CheckBox x:Name="chkMaximizeChartWindows" />
-            <CheckBox x:Name="chkExtendedTree" />
             <CheckBox x:Name="chkSAFByAllNames" />
             <CheckBox x:Name="chkShortenDateRanges" />
           </StackLayout>
