@@ -541,7 +541,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkBookmark").Text = LangMan.LS(LSID.LSID_Bookmark);
             GetControl<ILabel>("lblParents").Text = LangMan.LS(LSID.LSID_Parents);
             GetControl<ITabPage>("pageEvents").Text = LangMan.LS(LSID.LSID_Events);
-            GetControl<ITabPage>("pageSpouses").Text = LangMan.LS(LSID.LSID_Spouses);
+            GetControl<ITabPage>("pageSpouses").Text = LangMan.LS(LSID.LSID_RPFamilies);
             GetControl<ITabPage>("pageAssociations").Text = LangMan.LS(LSID.LSID_Associations);
             GetControl<ITabPage>("pageGroups").Text = LangMan.LS(LSID.LSID_RPGroups);
             GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);

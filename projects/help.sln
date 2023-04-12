@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_rus", "help_rus", "{93
 		..\locales\help_rus\gkhAncestorsCircle.html = ..\locales\help_rus\gkhAncestorsCircle.html
 		..\locales\help_rus\gkhAuthors.html = ..\locales\help_rus\gkhAuthors.html
 		..\locales\help_rus\gkhCAIndex.html = ..\locales\help_rus\gkhCAIndex.html
+		..\locales\help_rus\gkhClipboard.html = ..\locales\help_rus\gkhClipboard.html
 		..\locales\help_rus\gkhContents.html = ..\locales\help_rus\gkhContents.html
 		..\locales\help_rus\gkhDataSafety.html = ..\locales\help_rus\gkhDataSafety.html
 		..\locales\help_rus\gkhDateSpecials.html = ..\locales\help_rus\gkhDateSpecials.html
