@@ -1,6 +1,6 @@
 image: Visual Studio 2015
 
-version: 2.25.1.{build}
+version: 2.25.2.{build}
 configuration: Debug
 platform: x86
 skip_tags: true

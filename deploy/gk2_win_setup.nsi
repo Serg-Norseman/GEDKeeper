@@ -9,7 +9,7 @@
 
 ;Unicode true
 Name "GEDKeeper"
-OutFile "gedkeeper_2.25.1_win86.exe"
+OutFile "gedkeeper_2.25.2_win86.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 
 CRCCheck on

@@ -1,3 +1,10 @@
+## 14.04.2023 [v2.25.2/Windows &amp; v3.1.0/Linux]
+- The first release of the 3rd cross-platform (Windows, Linux, MacOS) generation of GEDKeeper - GKv3 has been released. 
+  This version is for Linux only.
+- Updated Czech translation of plugins [Jerry Verner].
+- Fixed many minor bugs in GKv3/Linux.
+- Help updated.
+
 ## 02.04.2023 [v2.25.1]
 - The .NET Framework has been downgraded to version 4.7.1 to be compatible with some versions of Mono (Fedora, FreeBSD).
 - Fixed error loading images that require scaling.
