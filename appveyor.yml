@@ -19,6 +19,7 @@ install:
   - nuget install NUnit.Runners -OutputDirectory packages
   - nuget install OpenCover -OutputDirectory packages
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+  - python -m pip install --upgrade pip
   - pip install codecov
 
 skip_commits:

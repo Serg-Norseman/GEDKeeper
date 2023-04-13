@@ -81,11 +81,11 @@ namespace GKUI.Forms
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                /*if (fChangeTimer != null) {
+                if (fChangeTimer != null) {
                     fChangeTimer.Stop();
                     fChangeTimer.Dispose();
                     fChangeTimer = null;
-                }*/
+                }
             }
             base.Dispose(disposing);
         }
@@ -128,11 +128,11 @@ namespace GKUI.Forms
             }
         }
 
-        //private System.Timers.Timer fChangeTimer;
+        private System.Timers.Timer fChangeTimer;
 
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            /*if (!AppHost.TEST_MODE) {
+            if (!AppHost.TEST_MODE) {
                 if (fChangeTimer == null) {
                     fChangeTimer = new System.Timers.Timer(500);
                     fChangeTimer.AutoReset = false;
@@ -145,13 +145,13 @@ namespace GKUI.Forms
                 fChangeTimer.Start();
             } else {
                 fController.UpdateView();
-            }*/
+            }
         }
 
         private void txtFastFilter_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter) {
-                fController.UpdateView();
+                fController.ChangeFilter();
                 e.Handled = true;
             }
         }

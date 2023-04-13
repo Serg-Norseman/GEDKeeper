@@ -88,15 +88,19 @@ namespace GKCore.Controllers
             return (famRec != null && famRec.HasSpouse(fTarget.TargetIndividual));
         }
 
+        public void ChangeFilter()
+        {
+            string flt = fView.FilterBox.Text;
+            GKUtils.SaveFilter(flt, GlobalOptions.Instance.GetRSFilters(fRecType));
+            UpdateFilters();
+        }
+
         public override void UpdateView()
         {
             string flt = fView.FilterBox.Text;
             if (string.IsNullOrEmpty(flt)) {
                 flt = "*";
             } else if (flt != "*") {
-                GKUtils.SaveFilter(flt, GlobalOptions.Instance.GetRSFilters(fRecType));
-                UpdateFilters();
-
                 flt = "*" + flt + "*";
             }
 
@@ -134,7 +138,7 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.LSID_DlgSelect);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
 
-            SetToolTip("txtFastFilter", LangMan.LS(LSID.LSID_PressEnterToApply));
+            SetToolTip("txtFastFilter", LangMan.LS(LSID.LSID_PressEnterToSaveFilter));
         }
     }
 }

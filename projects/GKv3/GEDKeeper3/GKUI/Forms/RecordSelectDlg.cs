@@ -133,13 +133,13 @@ namespace GKUI.Forms
 
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            //fController.UpdateView();
+            fController.UpdateView();
         }
 
         private void txtFastFilter_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Keys.Enter) {
-                fController.UpdateView();
+                fController.ChangeFilter();
                 e.Handled = true;
             }
         }

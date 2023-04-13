@@ -957,7 +957,7 @@ namespace GKCore
         /* 895 */ LSID_Refresh,
         /* 896 */ LSID_ResetFilter,
         /* 897 */ LSID_ShortenDateRanges,
-        /* 898 */ LSID_PressEnterToApply,
+        /* 898 */ LSID_PressEnterToSaveFilter,
 
         /* 899 */ LSID_AnniversaryToday,
         /* 900 */ LSID_AnniversaryTomorrow,
@@ -1877,7 +1877,7 @@ namespace GKCore
             /* 895 */ "Refresh",
             /* 896 */ "Reset filter",
             /* 897 */ "Shorten date ranges",
-            /* 898 */ "Press Enter to apply",
+            /* 898 */ "Press Enter to save the filter",
 
             /* 899 */ "Today is jubilee of {0}",
             /* 900 */ "Tomorrow is jubilee of {0}",
