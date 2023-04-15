@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKNamesBookPlugin.cs" />
+    <Compile Include="NamesBook.cs" />
     <Compile Include="NamesBookWidget.cs">
       <SubType>Form</SubType>
     </Compile>

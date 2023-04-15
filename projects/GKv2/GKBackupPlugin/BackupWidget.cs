@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,9 +25,6 @@ using GKCore.Interfaces;
 
 namespace GKBackupPlugin
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class BackupWidget : Form, IWidgetForm
     {
         private readonly Plugin fPlugin;
@@ -44,7 +41,6 @@ namespace GKBackupPlugin
         private void Form_Load(object sender, EventArgs e)
         {
             AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
-
             fPlugin.Host.WidgetShow(fPlugin);
 
             chkEnabled.Checked = fPlugin.ExtendedBackupEnabled;
@@ -73,8 +69,6 @@ namespace GKBackupPlugin
             }
         }
 
-        #region ILocalizable support
-
         public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(PLS.LSID_Backup);
@@ -82,7 +76,5 @@ namespace GKBackupPlugin
             lblFolder.Text = fPlugin.LangMan.LS(PLS.LSID_Folder);
             btnFolderChoose.Text = fPlugin.LangMan.LS(PLS.LSID_FolderChoose);
         }
-
-        #endregion
     }
 }

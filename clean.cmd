@@ -85,9 +85,6 @@ rmdir .\projects\GKv2\GKTextSearchPlugin\obj /s /q
 rmdir .\projects\GKv2\GKLifePlugin\bin /s /q
 rmdir .\projects\GKv2\GKLifePlugin\obj /s /q
 
-rmdir .\projects\GKv2\GKChroniclePlugin\bin /s /q
-rmdir .\projects\GKv2\GKChroniclePlugin\obj /s /q
-
 rmdir .\projects\GKv2\GKWordsCloudPlugin\bin /s /q
 rmdir .\projects\GKv2\GKWordsCloudPlugin\obj /s /q
 
@@ -107,6 +104,9 @@ rmdir .\projects\plugins\GKCalculatorPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKCalendarPlugin\bin /s /q
 rmdir .\projects\plugins\GKCalendarPlugin\obj /s /q
+
+rmdir .\projects\plugins\GKChroniclePlugin\bin /s /q
+rmdir .\projects\plugins\GKChroniclePlugin\obj /s /q
 
 rmdir .\projects\plugins\GKStdReports\bin /s /q
 rmdir .\projects\plugins\GKStdReports\obj /s /q

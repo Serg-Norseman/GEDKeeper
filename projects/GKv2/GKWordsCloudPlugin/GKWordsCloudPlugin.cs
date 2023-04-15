@@ -19,11 +19,15 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using GDModel;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
+using GKCore.Stats;
+using GKWordsCloudPlugin.WordsCloud;
 
 [assembly: AssemblyTitle("GKWordsCloudPlugin")]
 [assembly: AssemblyDescription("GEDKeeper WordsCloud plugin")]
@@ -112,6 +116,49 @@ namespace GKWordsCloudPlugin
         {
             if (fForm != null) {
                 fForm.BaseChanged(null);
+            }
+        }
+
+        internal class CloudType
+        {
+            public readonly LSID Name;
+            public readonly StatsMode Mode;
+
+            public CloudType(LSID name, StatsMode mode)
+            {
+                Name = name;
+                Mode = mode;
+            }
+        }
+
+        internal static readonly CloudType[] CloudTypes = new CloudType[] {
+            new CloudType(LSID.LSID_Surname, StatsMode.smSurnames),
+            new CloudType(LSID.LSID_Name, StatsMode.smNames),
+            new CloudType(LSID.LSID_Occupation, StatsMode.smOccupation),
+            new CloudType(LSID.LSID_Religion, StatsMode.smReligious),
+            new CloudType(LSID.LSID_Nationality, StatsMode.smNational),
+            new CloudType(LSID.LSID_Education, StatsMode.smEducation),
+            new CloudType(LSID.LSID_Caste, StatsMode.smCaste),
+            new CloudType(LSID.LSID_Hobby, StatsMode.smHobby),
+        };
+
+        internal void CollectData(IBaseWindow baseWin, StatsMode mode, List<Word> words)
+        {
+            words.Clear();
+
+            if (baseWin != null) {
+                List<StatsItem> vals = new List<StatsItem>();
+                TreeStats treeStats = new TreeStats(baseWin.Context, baseWin.GetContentList(GDMRecordType.rtIndividual));
+                treeStats.GetSpecStats(mode, vals);
+
+                words.Capacity = vals.Count;
+                foreach (var statsItem in vals) {
+                    string word = statsItem.Caption;
+                    if (word != "?") {
+                        words.Add(new Word(statsItem.Caption, statsItem.Value));
+                    }
+                }
+                words.Sort();
             }
         }
     }

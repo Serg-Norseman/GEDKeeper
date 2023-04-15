@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,77 +19,38 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Windows.Forms;
-using BSLib;
-using GDModel;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Components;
 
 namespace GKNamesBookPlugin
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class NamesBookWidget : Form, IWidgetForm
     {
-        private const string CRLF = "\r\n";
-
-
-        private class NameRecord
-        {
-            public string Name;
-            public string Desc;
-            public GDMSex Sex;
-            public int ChIndex;
-        }
-
         private readonly Plugin fPlugin;
-        private readonly List<NameRecord> fNames;
-        private readonly StringList fChurchFNames;
-        private readonly StringList fChurchMNames;
+        private readonly NamesBook fNamesBook;
 
         public NamesBookWidget(Plugin plugin)
         {
             InitializeComponent();
 
             fPlugin = plugin;
-            fNames = new List<NameRecord>();
-            fChurchFNames = new StringList();
-            fChurchMNames = new StringList();
+            fNamesBook = new NamesBook(plugin);
 
-            PrepareList();
             UpdateList();
 
             SetLocale();
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                fChurchFNames.Dispose();
-                fChurchMNames.Dispose();
-                //this.fNames.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        #region ILocalizable support
 
         public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(NLS.LSID_MINamesBook);
         }
 
-        #endregion
-
         private void NamesBookWidget_Load(object sender, EventArgs e)
         {
             AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VCenter);
-
             fPlugin.Host.WidgetShow(fPlugin);
         }
 
@@ -101,174 +62,23 @@ namespace GKNamesBookPlugin
         private void cbNames_SelectedIndexChanged(object sender, EventArgs e)
         {
             int idx = cbNames.SelectedIndex;
-            if (idx < 0 || idx >= cbNames.Items.Count) return;
-
-            GKComboItem item = (GKComboItem)cbNames.Items[idx];
-            NameRecord rec = (NameRecord)item.Data;
-
-            mmDesc.Text = "";
-            mmDesc.AppendText(rec.Name + CRLF);
-            mmDesc.AppendText(rec.Desc + CRLF);
-
-            if (rec.ChIndex < 0) return;
-
-            mmDesc.AppendText(CRLF);
-            mmDesc.AppendText(fPlugin.LangMan.LS(NLS.LSID_Calendar) + ":" + CRLF);
-
-            StringList lst;
-            switch (rec.Sex)
-            {
-                case GDMSex.svMale:
-                    lst = fChurchMNames;
-                    break;
-                case GDMSex.svFemale:
-                    lst = fChurchFNames;
-                    break;
-                default:
-                    return;
-            }
-
-            int num = lst.Count;
-            for (int i = rec.ChIndex + 1; i < num; i++)
-            {
-                string st = lst[i].Trim();
-                if (st[0] == '-')
-                {
-                    break;
-                }
-                st = st.Remove(0, 1);
-                mmDesc.AppendText(st + CRLF);
-            }
-        }
-
-        private static string ExtractFlags(string st)
-        {
-            bool res = (st != null);
-            if (res) {
-                res = (st.Length >= 2 && st[0] == '[' && st[st.Length - 1] == ']');
-                if (res) {
-                    st = st.Substring(1, st.Length - 2);
-                }
-                return st;
-            } else {
-                return string.Empty;
-            }
-        }
-
-        private void PrepareList()
-        {
-            using (Stream bookNames = fPlugin.LoadResourceStream("bk_names.txt")) {
-                using (StreamReader strd = new StreamReader(bookNames, Encoding.UTF8)) {
-                    while (strd.Peek() != -1) {
-                        string ns = strd.ReadLine().Trim();
-                        if (ns != "") {
-                            string[] toks = ns.Split('/');
-                            if (toks.Length >= 3) {
-                                var rec = new NameRecord();
-                                rec.Name = toks[0].Trim();
-                                rec.Desc = toks[2].Trim();
-                                string st = toks[1].Trim();
-
-                                st = ExtractFlags(st);
-                                if (!string.IsNullOrEmpty(st)) {
-                                    char c = st[0];
-                                    switch (c) {
-                                        case 'f':
-                                            rec.Sex = GDMSex.svFemale;
-                                            break;
-                                        case 'm':
-                                            rec.Sex = GDMSex.svMale;
-                                            break;
-                                    }
-                                }
-
-                                fNames.Add(rec);
-                            }
-                        }
-                    }
-                }
-            }
-
-            using (Stream bookNames = fPlugin.LoadResourceStream("bk_names_cf.txt")) {
-                using (StreamReader strd = new StreamReader(bookNames, Encoding.UTF8)) {
-                    while (strd.Peek() != -1) {
-                        string ns = strd.ReadLine().Trim();
-                        fChurchFNames.Add(ns);
-                    }
-                }
-            }
-
-            using (Stream bookNames = fPlugin.LoadResourceStream("bk_names_cm.txt")) {
-                using (StreamReader strd = new StreamReader(bookNames, Encoding.UTF8)) {
-                    while (strd.Peek() != -1) {
-                        string ns = strd.ReadLine().Trim();
-                        fChurchMNames.Add(ns);
-                    }
-                }
+            if (idx >= 0 && idx < cbNames.Items.Count) {
+                var item = (GKComboItem<NameRecord>)cbNames.Items[idx];
+                mmDesc.Text = fNamesBook.GetNameDesc(item.Tag);
             }
         }
 
         private void UpdateList()
         {
             cbNames.BeginUpdate();
-            try
-            {
+            try {
                 cbNames.Items.Clear();
-
-                foreach (NameRecord rec in fNames)
-                {
-                    string ns = rec.Name;
-                    cbNames.Items.Add(new GKComboItem(ns, rec));
-
-                    rec.ChIndex = -1;
-                    ns = ns.ToUpper();
-
-                    StringList lst;
-                    switch (rec.Sex)
-                    {
-                        case GDMSex.svMale:
-                            lst = fChurchMNames;
-                            break;
-                        case GDMSex.svFemale:
-                            lst = fChurchFNames;
-                            break;
-                        default:
-                            return;
-                    }
-
-                    int num2 = lst.Count;
-                    for (int j = 0; j < num2; j++)
-                    {
-                        string st = lst[j];
-                        if (st[0] == '-' && st.IndexOf(ns) >= 0)
-                        {
-                            rec.ChIndex = j;
-                            break;
-                        }
-                    }
+                foreach (var rec in fNamesBook.Names) {
+                    cbNames.Items.Add(new GKComboItem<NameRecord>(rec.Name, rec));
                 }
-            }
-            finally
-            {
+            } finally {
                 cbNames.EndUpdate();
             }
-        }
-    }
-
-    public class GKComboItem
-    {
-        public readonly string Caption;
-        public readonly object Data;
-
-        public GKComboItem(string caption, object data)
-        {
-            Caption = caption;
-            Data = data;
-        }
-
-        public override string ToString()
-        {
-            return Caption;
         }
     }
 }

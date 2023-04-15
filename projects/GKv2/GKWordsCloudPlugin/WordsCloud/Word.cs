@@ -30,7 +30,7 @@ namespace GKWordsCloudPlugin.WordsCloud
 
         public int CompareTo(Word other)
         {
-            return Occurrences - other.Occurrences;
+            return other.Occurrences - Occurrences;
         }
     }
 }
