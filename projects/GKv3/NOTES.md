@@ -18,6 +18,9 @@ Eto.Forms v2.7.4 compatible with netfw462
 5. Eto.Forms 2.7.4 [Gtk]
   - SaveFileDialog.CurrentFilter is null!
 
+6. Eto.Forms 2.7.4 [Gtk]
+  - A window can be active but not have focus, which causes the active window detection methods to work incorrectly.
+
 # Other
 
 LibVLCSharp.GTK

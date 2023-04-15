@@ -291,12 +291,9 @@ namespace GKUI.Platform
         {
             bool result = false;
 
-#if OS_MSWIN
-            // since v2.23.0, only WinForms-based implementation, on Windows OS
             if (feature == Feature.Themes) {
                 result = false; // FIXME: temp disable
             }
-#endif
 
             return result;
         }

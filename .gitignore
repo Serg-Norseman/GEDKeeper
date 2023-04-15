@@ -4,6 +4,7 @@
 **/ProfilingSessions/
 
 /plugins/*.*
+/plugins/**/
 /*.exe*
 /*.dll
 *.pdb

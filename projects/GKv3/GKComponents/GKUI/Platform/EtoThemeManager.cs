@@ -20,21 +20,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKUI.Components;
 using GKUI.Platform;
-using GKUI.Platform.Handlers;
 
 namespace GKUI.Themes
 {
     public sealed class EtoThemeManager : BaseThemeManager
     {
-        private delegate void ThemeControlHandler(IThemedView view, Component component, Theme theme);
+        private delegate void ThemeControlHandler(IThemedView view, IDisposable component, Theme theme);
 
         private static Dictionary<Type, ThemeControlHandler> fControlHandlers = new Dictionary<Type, ThemeControlHandler>();
 
@@ -45,42 +41,42 @@ namespace GKUI.Themes
 
         public EtoThemeManager()
         {
-            /*RegisterTheme("Default", new ThemeElementsDictionary() {
-                { ThemeElement.Font, "Tahoma" },                              // checked
-                { ThemeElement.FontSize, 8.25f },                             // checked
+            RegisterTheme("Default", new ThemeElementsDictionary() {
+                { ThemeElement.Font, "Tahoma" },                              // ???
+                { ThemeElement.FontSize, 8.25f },                             // ???
 
-                { ThemeElement.Editor, SystemColors.Window },                 // checked
-                { ThemeElement.EditorText, SystemColors.WindowText },         // checked
+                { ThemeElement.Editor, SystemColors.ControlBackground },                 // ???
+                { ThemeElement.EditorText, SystemColors.ControlText },         // ???
 
-                { ThemeElement.Control, SystemColors.Control },               // checked
-                { ThemeElement.ControlText, SystemColors.ControlText },       // checked
+                { ThemeElement.Control, Color.FromArgb(0x00000000) },               // default?! win+
+                { ThemeElement.ControlText, SystemColors.ControlText },       // ???
 
-                { ThemeElement.Window, SystemColors.Control },                // checked
-                { ThemeElement.WindowText, SystemColors.ControlText },        // checked
+                { ThemeElement.Window, SystemColors.Control },                // ???
+                { ThemeElement.WindowText, SystemColors.ControlText },        // ???
 
-                { ThemeElement.Dialog, SystemColors.Control },                // checked
-                { ThemeElement.DialogText, SystemColors.ControlText },        // checked
+                { ThemeElement.Dialog, SystemColors.Control },                // ???
+                { ThemeElement.DialogText, SystemColors.ControlText },        // ???
 
-                { ThemeElement.ButtonFace, SystemColors.ControlLight },       // checked
-                { ThemeElement.AccentButtonFace, SystemColors.ControlLight }, // checked
-                { ThemeElement.ButtonBorder, Color.Black },                   // checked
-                { ThemeElement.ButtonText, SystemColors.ControlText },        // checked
+                { ThemeElement.ButtonFace, Color.FromArgb(0xDDDDDD) },       // default?! win+
+                { ThemeElement.AccentButtonFace, Color.FromArgb(0xDDDDDD) }, // default?! win+
+                { ThemeElement.ButtonBorder, Colors.Black },                  // ???
+                { ThemeElement.ButtonText, SystemColors.ControlText },        // ???
 
-                { ThemeElement.Strip, SystemColors.Control },                 // <- ProfessionalColorTable
-                { ThemeElement.Dropdown, SystemColors.Control },              // <- ProfessionalColorTable
-                { ThemeElement.MenuBorder, SystemColors.Control },            // <- ProfessionalColorTable
-                { ThemeElement.MenuItemSelected, SystemColors.Control },      // <- ProfessionalColorTable
+                { ThemeElement.Strip, SystemColors.Control },                 // ???
+                { ThemeElement.Dropdown, SystemColors.Control },              // ???
+                { ThemeElement.MenuBorder, SystemColors.Control },            // ???
+                { ThemeElement.MenuItemSelected, SystemColors.Control },      // ???
 
-                { ThemeElement.Link, Colors.Blue },                            // checked
+                { ThemeElement.Link, Colors.Blue },                            // ???
 
-                { ThemeElement.Grid, SystemColors.Window },                   // checked
-                { ThemeElement.GridHeader, SystemColors.Window },             // checked
-                { ThemeElement.GridHeaderText, SystemColors.WindowText },     // checked
-                { ThemeElement.GridText, SystemColors.WindowText },           // checked
+                { ThemeElement.Grid, SystemColors.Control },                   // ???
+                { ThemeElement.GridHeader, SystemColors.WindowBackground },             // ???
+                { ThemeElement.GridHeaderText, SystemColors.WindowBackground },     // ???
+                { ThemeElement.GridText, SystemColors.ControlText },           // ???
 
-                { ThemeElement.Tab, SystemColors.Window },                    // checked
-                { ThemeElement.TabHighlight, SystemColors.Window },           // checked
-                { ThemeElement.TabSelected, SystemColors.Control },           // checked
+                { ThemeElement.Tab, SystemColors.WindowBackground },                    // ???
+                { ThemeElement.TabHighlight, SystemColors.WindowBackground },           // ???
+                { ThemeElement.TabSelected, SystemColors.Control },           // ???
 
                 { ThemeElement.HighlightReadabilityRows, Color.FromArgb(0xEFEFEF) },      // GK only
                 { ThemeElement.HighlightUnparentedIndi, Color.FromArgb(0xFFCACA) },       // GK only
@@ -118,7 +114,7 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_Prev, "Resources.btn_left.gif" },
                 { ThemeElement.Glyph_Next, "Resources.btn_right.gif" },
                 { ThemeElement.Glyph_SendMail, "Resources.btn_mail.gif" },
-            }, true);*/
+            }, true);
         }
 
         public override void ApplyTheme(IThemedView view)
@@ -138,9 +134,9 @@ namespace GKUI.Themes
                 var themeFontSize = GetThemeFloat(fCurrentTheme, ThemeElement.FontSize);
                 /*if (form.Font.Name != themeFont) {
                     form.Font = new Font(themeFont, themeFontSize);
-                }
+                }*/
 
-                ApplyTheme(view, form, fCurrentTheme);*/
+                ApplyTheme(view, form, fCurrentTheme);
 
                 form.ResumeLayout();
             }
@@ -148,7 +144,7 @@ namespace GKUI.Themes
 
         public override void ApplyTheme(IThemedView view, object component)
         {
-            ApplyTheme(view, (Component)component, fCurrentTheme);
+            ApplyTheme(view, (IDisposable)component, fCurrentTheme);
         }
 
         protected override object PreProcessElement(object telVal, ThemeElementType telType)
@@ -165,7 +161,7 @@ namespace GKUI.Themes
 
         #region Control handlers
 
-        private static void ApplyTheme(IThemedView view, Component component, Theme theme)
+        private static void ApplyTheme(IThemedView view, IDisposable component, Theme theme)
         {
             if (theme == null || view.SkipTheme(component))
                 return;
@@ -175,15 +171,17 @@ namespace GKUI.Themes
                 handler(view, component, theme);
             }
 
-            /*if (component is Control) {
+            if (component is Control) {
                 Control ctl = (Control)component;
 
-                ctl.Font = ((Form)view).Font;
+                //ctl.Font = ((Form)view).Font;
 
-                foreach (Control item in ctl.Controls) {
+                var container = ctl as Container;
+                if (container == null) return;
+                foreach (var item in container.Controls) {
                     ApplyTheme(view, item, theme);
                 }
-            }*/
+            }
         }
 
         private static Color GetThemeColor(Theme theme, ThemeElement element)
@@ -195,259 +193,257 @@ namespace GKUI.Themes
             return Colors.Black;
         }
 
-        private static void ThemeButtonHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeButtonHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (Button)component;
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ButtonText);
+            var ctl = (Button)component;
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
 
-            ctl.FlatStyle = (!theme.SysDefault) ? FlatStyle.Flat : FlatStyle.Standard;
-            if (ctl.FlatStyle == FlatStyle.Flat) {
-                ctl.FlatAppearance.BorderColor = GetThemeColor(theme, ThemeElement.ButtonBorder);
-                ctl.FlatAppearance.BorderSize = 1;
-            }
-
-            var form = ctl.FindForm();
-            if (ctl == form.AcceptButton) {
-                ctl.BackColor = GetThemeColor(theme, ThemeElement.AccentButtonFace);
+            var dialog = ctl.ParentWindow as Dialog;
+            if (dialog == null) {
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.ButtonFace);
             } else {
-                ctl.BackColor = GetThemeColor(theme, ThemeElement.ButtonFace);
-            }*/
+                if (ctl == dialog.DefaultButton) {
+                    ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.AccentButtonFace);
+                } else {
+                    ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.ButtonFace);
+                }
+            }
         }
 
-        private static void ThemeCheckBoxHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeCheckBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (CheckBox)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);*/
+            var ctl = (CheckBox)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
-        private static void ThemeComboBoxHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeComboBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (ComboBox)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Editor);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.EditorText);*/
+            var ctl = (ComboBox)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
         }
 
-        private static void ThemeDataGridViewHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeDataGridViewHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (DataGridView)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Grid);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.GridText);
-            ctl.ColumnHeadersDefaultCellStyle.BackColor = GetThemeColor(theme, ThemeElement.GridHeader);
-            ctl.ColumnHeadersDefaultCellStyle.ForeColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
-            ctl.EnableHeadersVisualStyles = (theme.SysDefault);
+            var ctl = (GridView)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
+            //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
+            //ctl.ColumnHeadersDefaultCellStyle.BackgroundColor = GetThemeColor(theme, ThemeElement.GridHeader);
+            //ctl.ColumnHeadersDefaultCellStyle.TextColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
+            //ctl.EnableHeadersVisualStyles = (theme.SysDefault);
 
-            ThemeContextMenuStripHandler(view, component, theme);*/
+            ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        private static void ThemeFormHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeFormHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (Form)component;
+            var ctl = (Window)component;
 
-            if (!ctl.Modal) {
+            if (!(ctl is Dialog)) {
                 // window
-                ctl.BackColor = GetThemeColor(theme, ThemeElement.Window);
-                ctl.ForeColor = GetThemeColor(theme, ThemeElement.WindowText);
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Window);
+                //ctl.TextColor = GetThemeColor(theme, ThemeElement.WindowText);
             } else {
                 // dialog
-                ctl.BackColor = GetThemeColor(theme, ThemeElement.Dialog);
-                ctl.ForeColor = GetThemeColor(theme, ThemeElement.DialogText);
-            }*/
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Dialog);
+                //ctl.TextColor = GetThemeColor(theme, ThemeElement.DialogText);
+            }
         }
 
-        private static void ThemeGroupBoxHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeGroupBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (GroupBox)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);*/
+            var ctl = (GroupBox)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
-        private static void ThemeHyperViewHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeHyperViewHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (HyperView)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
+            var ctl = (HyperView)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
             ctl.LinkColor = GetThemeColor(theme, ThemeElement.Link);
-            ctl.BorderStyle = (theme.SysDefault) ? BorderStyle.Fixed3D : BorderStyle.FixedSingle;
+            //ctl.BorderStyle = (theme.SysDefault) ? BorderStyle.Fixed3D : BorderStyle.FixedSingle;
 
-            ThemeContextMenuStripHandler(view, component, theme);*/
+            ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        private static void ThemeCustomChartHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeCustomChartHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (CustomChart)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
-            ctl.BorderStyle = (theme.SysDefault) ? BorderStyle.Fixed3D : BorderStyle.FixedSingle;
+            var ctl = (CustomChart)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
+            //ctl.BorderStyle = (theme.SysDefault) ? BorderStyle.Fixed3D : BorderStyle.FixedSingle;
 
-            ThemeContextMenuStripHandler(view, component, theme);*/
+            ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        /*private static void GetParentDependentColors(Control control, Theme theme, out Color backColor, out Color foreColor)
+        private static void GetParentDependentColors(Control control, Theme theme, out Color backgroundColor, out Color textColor)
         {
             var ctlParent = control.Parent;
 
-            backColor = ctlParent.BackColor;
+            backgroundColor = ctlParent.BackgroundColor;
 
-            if (ctlParent is Form) {
-                if (!((Form)ctlParent).Modal) {
+            if (ctlParent is Window) {
+                if (!(ctlParent is Dialog)) {
                     // window
-                    foreColor = GetThemeColor(theme, ThemeElement.WindowText);
+                    textColor = GetThemeColor(theme, ThemeElement.WindowText);
                 } else {
                     // dialog
-                    foreColor = GetThemeColor(theme, ThemeElement.DialogText);
+                    textColor = GetThemeColor(theme, ThemeElement.DialogText);
                 }
             } else {
-                foreColor = GetThemeColor(theme, ThemeElement.ControlText);
+                textColor = GetThemeColor(theme, ThemeElement.ControlText);
             }
-        }*/
-
-        private static void ThemeLabelHandler(IThemedView view, Component component, Theme theme)
-        {
-            /*var ctl = (Label)component;
-
-            Color backColor, foreColor;
-            GetParentDependentColors(ctl, theme, out backColor, out foreColor);
-
-            ctl.BackColor = backColor;
-            ctl.ForeColor = foreColor;*/
         }
 
-        private static void ThemeListBoxHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeLabelHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (ListBox)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Editor);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.EditorText);*/
+            var ctl = (Label)component;
+
+            Color backgroundColor, textColor;
+            GetParentDependentColors(ctl, theme, out backgroundColor, out textColor);
+
+            ctl.BackgroundColor = backgroundColor;
+            ctl.TextColor = textColor;
         }
 
-        private static void ThemeListViewHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeListBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*if (component is GKListView) {
+            var ctl = (ListBox)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
+        }
+
+        private static void ThemeListViewHandler(IThemedView view, IDisposable component, Theme theme)
+        {
+            if (component is GKListView) {
                 // extended
                 var ctl = (GKListView)component;
-                ctl.BackColor = GetThemeColor(theme, ThemeElement.Grid);
-                ctl.ForeColor = GetThemeColor(theme, ThemeElement.GridText);
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
+                //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
 
-                if (theme.SysDefault) {
+                /*if (theme.SysDefault) {
                     ctl.Appearance.Reset();
                 } else {
-                    ctl.Appearance.BackColor = GetThemeColor(theme, ThemeElement.Grid);
+                    ctl.Appearance.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
                     ctl.Appearance.Header = GetThemeColor(theme, ThemeElement.GridHeader);
                     ctl.Appearance.HeaderText = GetThemeColor(theme, ThemeElement.GridHeaderText);
                 }
 
-                ctl.ResetCache();
+                ctl.ResetCache();*/
             } else {
                 // standard
-                var ctl = (ListView)component;
-                ctl.BackColor = GetThemeColor(theme, ThemeElement.Grid);
-                ctl.ForeColor = GetThemeColor(theme, ThemeElement.GridText);
+                var ctl = (GridView)component;
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
+                //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
             }
 
-            ThemeContextMenuStripHandler(view, component, theme);*/
+            ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        private static void ThemeNumericUpDownHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeNumericUpDownHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (NumericUpDown)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Editor);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.EditorText);*/
+            var ctl = (NumericUpDown)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
         }
 
-        private static void ThemePanelHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemePanelHandler(IThemedView view, IDisposable component, Theme theme)
         {
             /*var ctl = (Panel)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
 
             ThemeContextMenuStripHandler(view, component, theme);*/
         }
 
-        private static void ThemePictureBoxHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemePictureBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (PictureBox)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);*/
+            var ctl = (Eto.Forms.ImageView)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
-        private static void ThemeProgressBarHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeProgressBarHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (ProgressBar)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);*/
+            var ctl = (ProgressBar)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
-        private static void ThemeRadioButtonHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeRadioButtonHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (RadioButton)component;
-            ctl.BackColor = ctl.Parent.BackColor;
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);*/
+            var ctl = (RadioButton)component;
+            ctl.BackgroundColor = ctl.Parent.BackgroundColor;
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
-        private static void ThemeTextBoxHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeTextBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (TextBoxBase)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Editor);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.EditorText);
+            var ctl = (TextControl)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
 
             //ctl.BorderStyle = (!theme.SysDefault) ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
 
-            ThemeContextMenuStripHandler(view, component, theme);*/
+            ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        private static void ThemeScrollBarHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeScrollBarHandler(IThemedView view, IDisposable component, Theme theme)
         {
             /*var ctl = (ScrollBar)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);*/
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);*/
         }
 
-        private static void ThemeStatusBarHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeStatusBarHandler(IThemedView view, IDisposable component, Theme theme)
         {
             /*var ctl = (StatusBar)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);*/
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);*/
         }
 
-        private static void ThemeStatusBarPanelHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeStatusBarPanelHandler(IThemedView view, IDisposable component, Theme theme)
         {
             //var ctl = (StatusBarPanel)component;
-            //ctl.BackColor = theme.Colors[ThemeColor.Control);
-            //ctl.ForeColor = theme.Colors[ThemeColor.ControlText);
+            //ctl.BackgroundColor = theme.Colors[ThemeColor.Control);
+            //ctl.TextColor = theme.Colors[ThemeColor.ControlText);
         }
 
-        private static void ThemeTabControlHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeTabControlHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*if (component is GKTabControl) {
+            if (component is GKTabControl) {
                 // extended
                 var ctl = (GKTabControl)component;
-                ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-                ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+                //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
 
-                if (theme.SysDefault) {
+                /*if (theme.SysDefault) {
                     ctl.Appearance.Reset();
                 } else {
-                    ctl.Appearance.BackColor = GetThemeColor(theme, ThemeElement.Control);
+                    ctl.Appearance.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
                     ctl.Appearance.Tab = GetThemeColor(theme, ThemeElement.Tab);
                     ctl.Appearance.TabHighlight = GetThemeColor(theme, ThemeElement.TabHighlight);
                     ctl.Appearance.TabSelected = GetThemeColor(theme, ThemeElement.TabSelected);
-                }
+                }*/
             } else {
                 // standard
                 var ctl = (TabControl)component;
-                ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-                ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
-            }*/
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+                //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
+            }
         }
 
-        private static void ThemeTabPageHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeTabPageHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (TabPage)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);*/
+            var ctl = (TabPage)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
-        private static void ThemeContextMenuStripHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeContextMenuStripHandler(IThemedView view, IDisposable component, Theme theme)
         {
             /*var ctl = component as Control;
             if (ctl != null && ctl.ContextMenuStrip != null) {
@@ -455,11 +451,11 @@ namespace GKUI.Themes
             }*/
         }
 
-        private static void ThemeToolStripHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeToolStripHandler(IThemedView view, IDisposable component, Theme theme)
         {
             /*var ctl = (ToolStrip)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Strip);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ButtonText);
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Strip);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
 
             ctl.Renderer = (theme.SysDefault) ? new ToolStripProfessionalRenderer() : new TSRenderer(theme);
 
@@ -468,11 +464,11 @@ namespace GKUI.Themes
             }*/
         }
 
-        private static void ThemeToolStripItemHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeToolStripItemHandler(IThemedView view, IDisposable component, Theme theme)
         {
             /*var ctl = (ToolStripItem)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Dropdown);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ButtonText);
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Dropdown);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
 
             if (ctl is ToolStripDropDownItem) {
                 var dropdownItem = (ToolStripDropDownItem)ctl;
@@ -487,29 +483,29 @@ namespace GKUI.Themes
             }*/
         }
 
-        private static void ThemeTreeViewHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeTreeViewHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (TreeView)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Editor);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.EditorText);*/
+            var ctl = (TreeView)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        private static void ThemeUserControlHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeUserControlHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (UserControl)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);*/
+            var ctl = (Panel)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        private static void ThemeBaseControlHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeBaseControlHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (Control)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);*/
+            var ctl = (Control)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
@@ -521,7 +517,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(ComboBox), ThemeComboBoxHandler);             // ?
             RegisterControlHandler(typeof(ContextMenu), ThemeToolStripHandler);    // ?
             RegisterControlHandler(typeof(GridView), ThemeDataGridViewHandler);     // ?
-            RegisterControlHandler(typeof(Form), ThemeFormHandler);                     // ?
+            RegisterControlHandler(typeof(Window), ThemeFormHandler);                     // ?
             RegisterControlHandler(typeof(GroupBox), ThemeGroupBoxHandler);             // ?
             RegisterControlHandler(typeof(Label), ThemeLabelHandler);                   // ready +
             RegisterControlHandler(typeof(ListBox), ThemeListBoxHandler);               // ? (only plugins, not host)
@@ -550,7 +546,7 @@ namespace GKUI.Themes
             //RegisterControlHandler(typeof(ToolStripMenuItem), ThemeToolStripItemHandler);       // ?
             //RegisterControlHandler(typeof(ToolStripSeparator), ThemeToolStripItemHandler);      // ?
             //RegisterControlHandler(typeof(ToolStripStatusLabel), ThemeToolStripItemHandler);    // ?
-            //RegisterControlHandler(typeof(TrackBar), ThemeBaseControlHandler);                  // ?
+            RegisterControlHandler(typeof(Slider), ThemeBaseControlHandler);                  // ?
             RegisterControlHandler(typeof(TreeView), ThemeTreeViewHandler);             // ?
 
             RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);      // ?
@@ -576,7 +572,7 @@ namespace GKUI.Themes
             fControlHandlers.Add(controlType, handler);
         }
 
-        private static ThemeControlHandler GetControlHandler(Component component)
+        private static ThemeControlHandler GetControlHandler(IDisposable component)
         {
             var compType = component.GetType();
 
