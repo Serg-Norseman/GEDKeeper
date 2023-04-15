@@ -19,8 +19,11 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using GDModel;
 using GKCore;
+using GKCore.Calendar;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
@@ -28,7 +31,7 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKChroniclePlugin")]
 [assembly: AssemblyDescription("GEDKeeper Chronicle plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2017 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2017-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 
@@ -42,6 +45,18 @@ namespace GKChroniclePlugin
         /* 03 */ LSID_Place,
         /* 04 */ LSID_Cause,
         /* 05 */ LSID_Description
+    }
+
+    internal class EventRecord
+    {
+        public readonly GDMCustomEvent Event;
+        public readonly GDMRecordWithEvents Record;
+
+        public EventRecord(GDMCustomEvent evt, GDMRecordWithEvents record)
+        {
+            Event = evt;
+            Record = record;
+        }
     }
 
     public sealed class Plugin : WidgetPlugin
@@ -110,6 +125,30 @@ namespace GKChroniclePlugin
             if (fForm != null) {
                 fForm.BaseChanged(baseWin);
             }
+        }
+
+        internal List<EventRecord> CollectData(IBaseWindow baseWin)
+        {
+            List<EventRecord> result = new List<EventRecord>();
+            if (baseWin == null)
+                return result;
+
+            int num = baseWin.Context.Tree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                var rec = baseWin.Context.Tree[i] as GDMRecordWithEvents;
+                if (rec == null || !rec.HasEvents) continue;
+
+                int eventsCount = rec.Events.Count;
+                for (int k = 0; k < eventsCount; k++) {
+                    GDMCustomEvent evt = rec.Events[k];
+                    UDN udn = evt.Date.GetUDN();
+                    if (!udn.IsEmpty()) {
+                        result.Add(new EventRecord(evt, rec));
+                    }
+                }
+            }
+
+            return result;
         }
 
         public override void BaseClosed(IBaseWindow baseWin)

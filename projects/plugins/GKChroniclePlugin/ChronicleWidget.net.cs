@@ -20,39 +20,33 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using Eto.Forms;
+using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
-using GKCore.Calendar;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKUI.Components;
 
 namespace GKChroniclePlugin
 {
-    internal class EventRecord
-    {
-        public readonly GDMCustomEvent Event;
-        public readonly GDMRecordWithEvents Record;
-
-        public EventRecord(GDMCustomEvent evt, GDMRecordWithEvents record)
-        {
-            Event = evt;
-            Record = record;
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class ChronicleWidget : Form, ILocalizable
     {
+        #region Design components
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
+
+        private GKListView lvEvents;
+
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
+        #endregion
+
         private readonly Plugin fPlugin;
         private IBaseWindow fBase;
         private List<EventRecord> fEvents;
 
         public ChronicleWidget(Plugin plugin)
         {
-            InitializeComponent();
+            XamlReader.Load(this);
 
             fPlugin = plugin;
             fEvents = new List<EventRecord>();
@@ -61,13 +55,13 @@ namespace GKChroniclePlugin
             SetLocale();
         }
 
-        private void CalcWidget_Load(object sender, EventArgs e)
+        private void Form_Shown(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetShow(fPlugin);
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }
 
-        private void CalcWidget_Closed(object sender, EventArgs e)
+        private void Form_Closed(object sender, EventArgs e)
         {
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
@@ -78,29 +72,8 @@ namespace GKChroniclePlugin
             if (fBase != baseWin) {
                 fBase = baseWin;
 
-                CollectData();
+                fEvents = fPlugin.CollectData(fBase);
                 UpdateControls();
-            }
-        }
-
-        private void CollectData()
-        {
-            fEvents.Clear();
-            if (fBase == null) return;
-
-            int num = fBase.Context.Tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                var rec = fBase.Context.Tree[i] as GDMRecordWithEvents;
-                if (rec == null || !rec.HasEvents) continue;
-
-                int eventsCount = rec.Events.Count;
-                for (int k = 0; k < eventsCount; k++) {
-                    GDMCustomEvent evt = rec.Events[k];
-                    UDN udn = evt.Date.GetUDN();
-                    if (!udn.IsEmpty()) {
-                        fEvents.Add(new EventRecord(evt, rec));
-                    }
-                }
             }
         }
 
@@ -136,13 +109,9 @@ namespace GKChroniclePlugin
             }
         }
 
-        #region ILocalizable support
-
         public void SetLocale()
         {
-            Text = fPlugin.LangMan.LS(CLS.LSID_Title);
+            Title = fPlugin.LangMan.LS(CLS.LSID_Title);
         }
-
-        #endregion
     }
 }
