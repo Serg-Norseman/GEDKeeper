@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  x:Class="GKNamesBookPlugin.NamesBookWidget"
+  Closed="Form_Closed" Shown="Form_Shown" Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+
+  <StackLayout Orientation="Vertical" Padding="8" Spacing="8">
+
+    <ComboBox x:Name="cbNames" Width="257" ReadOnly="true" SelectedIndexChanged="cbNames_SelectedIndexChanged" />
+
+    <TextArea x:Name="mmDesc" Width="257" Height="161" ReadOnly="true" />
+
+  </StackLayout>
+
+</Form>

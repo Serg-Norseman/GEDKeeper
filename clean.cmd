@@ -70,9 +70,6 @@ rem <<< Plugins cleaning >>>
 rmdir .\projects\GKv2\GKFlowInputPlugin\bin /s /q
 rmdir .\projects\GKv2\GKFlowInputPlugin\obj /s /q
 
-rmdir .\projects\GKv2\GKNamesBookPlugin\bin /s /q
-rmdir .\projects\GKv2\GKNamesBookPlugin\obj /s /q
-
 rmdir .\projects\GKv2\GKNavigatorPlugin\bin /s /q
 rmdir .\projects\GKv2\GKNavigatorPlugin\obj /s /q
 
@@ -94,10 +91,10 @@ rmdir .\projects\GKv2\GKHistoryDataPlugin\obj /s /q
 rmdir .\projects\GKv2\GEDmill\bin /s /q
 rmdir .\projects\GKv2\GEDmill\obj /s /q
 
-rmdir .\projects\GKv2\GKBackupPlugin\bin /s /q
-rmdir .\projects\GKv2\GKBackupPlugin\obj /s /q
-
 rem <<< Cross-platform Plugins cleaning >>>
+
+rmdir .\projects\plugins\GKBackupPlugin\bin /s /q
+rmdir .\projects\plugins\GKBackupPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKCalculatorPlugin\bin /s /q
 rmdir .\projects\plugins\GKCalculatorPlugin\obj /s /q
@@ -107,6 +104,9 @@ rmdir .\projects\plugins\GKCalendarPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKChroniclePlugin\bin /s /q
 rmdir .\projects\plugins\GKChroniclePlugin\obj /s /q
+
+rmdir .\projects\plugins\GKNamesBookPlugin\bin /s /q
+rmdir .\projects\plugins\GKNamesBookPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKStdReports\bin /s /q
 rmdir .\projects\plugins\GKStdReports\obj /s /q

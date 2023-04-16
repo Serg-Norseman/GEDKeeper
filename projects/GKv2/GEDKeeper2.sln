@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTextSearchPlugin", "GKTex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKPedigreeImporterPlugin", "GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.csproj", "{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNamesBookPlugin", "GKNamesBookPlugin\GKNamesBookPlugin.csproj", "{182AFE98-D3A5-471A-B9D9-C1C53DD72829}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNamesBookPlugin", "..\plugins\GKNamesBookPlugin\GKNamesBookPlugin.csproj", "{182AFE98-D3A5-471A-B9D9-C1C53DD72829}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKFlowInputPlugin", "GKFlowInputPlugin\GKFlowInputPlugin.csproj", "{66B64B00-C457-404E-AA2B-90F18127E394}"
 EndProject
@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCommunicatorPlugin", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDmillPlugin", "GEDmill\GEDmillPlugin.csproj", "{658AE6DC-A4FA-4042-A26F-E5B6CC7EF56B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKBackupPlugin", "GKBackupPlugin\GKBackupPlugin.csproj", "{D0E58F68-8706-4308-924B-BE56A03B3C99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKBackupPlugin", "..\plugins\GKBackupPlugin\GKBackupPlugin.csproj", "{D0E58F68-8706-4308-924B-BE56A03B3C99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKGenetixPlugin", "..\GKGenetix\GKGenetixPlugin\GKGenetixPlugin.csproj", "{DF48872B-3E78-409C-B43C-1EFD46B0BBC4}"
 EndProject

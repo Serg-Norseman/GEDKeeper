@@ -28,7 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKNamesBookPlugin.cs" />
-    <Compile Include="NamesBook.cs" />
     <Compile Include="NamesBookWidget.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -37,34 +36,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GKNamesBookPlugin.cze">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKNamesBookPlugin.enu">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKNamesBookPlugin.pol">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKNamesBookPlugin.rus">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKNamesBookPlugin.ukr">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <EmbeddedResource Include="Resources\bk_names.txt" />
-    <EmbeddedResource Include="Resources\bk_names_cf.txt" />
-    <EmbeddedResource Include="Resources\bk_names_cm.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">
       <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+    <ProjectReference Include="..\..\GKv2\GKComponents\GKComponents.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="GKNamesBookPlugin.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <ItemGroup>
+        <Compile Include="NamesBook.cs" />
+        <None Include="GKNamesBookPlugin.cze">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKNamesBookPlugin.enu">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKNamesBookPlugin.pol">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKNamesBookPlugin.rus">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKNamesBookPlugin.ukr">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <EmbeddedResource Include="Resources\bk_names.txt" />
+        <EmbeddedResource Include="Resources\bk_names_cf.txt" />
+        <EmbeddedResource Include="Resources\bk_names_cm.txt" />
+    </ItemGroup>
+
+</Project>
