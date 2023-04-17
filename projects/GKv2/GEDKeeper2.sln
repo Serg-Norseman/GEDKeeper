@@ -23,13 +23,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalendarPlugin", "..\plug
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKLifePlugin", "GKLifePlugin\GKLifePlugin.csproj", "{4A523280-2DEA-43C6-BE11-48BDFF283751}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNavigatorPlugin", "GKNavigatorPlugin\GKNavigatorPlugin.csproj", "{18E423A1-619C-4ED7-96BE-1BD71EACFCAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNavigatorPlugin", "..\plugins\GKNavigatorPlugin\GKNavigatorPlugin.csproj", "{18E423A1-619C-4ED7-96BE-1BD71EACFCAE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKChroniclePlugin", "..\plugins\GKChroniclePlugin\GKChroniclePlugin.csproj", "{1423A6AE-E85A-4E76-91CA-704A1C59F7DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKWordsCloudPlugin", "GKWordsCloudPlugin\GKWordsCloudPlugin.csproj", "{0EB24CA5-824B-4507-9C6E-BBBF5DB8BE57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKHistoryDataPlugin", "GKHistoryDataPlugin\GKHistoryDataPlugin.csproj", "{FCAB4916-791F-4302-90A0-E409410F66BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKHistoryDataPlugin", "..\plugins\GKHistoryDataPlugin\GKHistoryDataPlugin.csproj", "{FCAB4916-791F-4302-90A0-E409410F66BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKStdReports", "..\plugins\GKStdReports\GKStdReports.csproj", "{4D6E49E2-58C4-49C8-8664-C8A89D418927}"
 EndProject

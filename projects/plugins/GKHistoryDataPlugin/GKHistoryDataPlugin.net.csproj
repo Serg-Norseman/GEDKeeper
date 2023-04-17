@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <AssemblyName>GKHistoryDataPlugin</AssemblyName>
+        <RootNamespace>GKHistoryDataPlugin</RootNamespace>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <OutputPath>..\..\..\plugins\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+
+        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+        <ProjectReference Include="..\..\GKv3\GKComponents\GKComponents.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Eto.Forms" Version="2.7.4" />
+        <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.4" />
+    </ItemGroup>
+
+    <Import Project="GKHistoryDataPlugin.props" />
+
+    <ItemGroup>
+        <Compile Include="GKHistoryDataPlugin.cs" />
+        <Compile Include="HistoryDataWin.net.cs" />
+        <EmbeddedResource Include="HistoryDataWin.xeto" />
+    </ItemGroup>
+
+</Project>
