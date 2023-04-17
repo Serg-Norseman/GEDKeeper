@@ -13,9 +13,6 @@ using System.Windows.Forms;
 
 namespace GKLifePlugin.ConwayLife
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class OptionsForm : Form
     {
         private readonly LifeOptions fOptions;

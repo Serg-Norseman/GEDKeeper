@@ -61,12 +61,12 @@ namespace GKLifePlugin.ConwayLife
         {
             get { return fGeneration; }
         }
-        
+
         public LifeHistory History
         {
             get { return fHistory; }
         }
-        
+
         public int LiveCellCount
         {
             get { return fGrid.LiveCellCount; }
@@ -88,7 +88,7 @@ namespace GKLifePlugin.ConwayLife
             get { return fGrid.GridHeight; }
             set { SetGridSize(GridWidth, value); }
         }
-        
+
         public Color GridLineColor
         {
             get { return fGridLineColor; }
@@ -110,13 +110,13 @@ namespace GKLifePlugin.ConwayLife
                 }
             }
         }
-        
+
         public int GridWidth
         {
             get { return fGrid.GridWidth; }
             set { SetGridSize(value, GridHeight); }
         }
-        
+
         public int MaxNumberOfHistoryLevels
         {
             get { return fHistory.MaxLevels; }
@@ -145,7 +145,7 @@ namespace GKLifePlugin.ConwayLife
         {
             get { return fOptions; }
         }
-        
+
         public NotifyEvent OnChange
         {
             get { return fOnChange; }
@@ -157,16 +157,16 @@ namespace GKLifePlugin.ConwayLife
             get { return fOnDoesCellLive; }
             set { fOnDoesCellLive = value; }
         }
-        
+
         public LifeRules Rules
         {
             get { return fRules; }
         }
-        
+
         public LifeViewer()
         {
             DoubleBuffered = true;
-            
+
             fOptions = new LifeOptions();
             fRules = new LifeRules();
             fGrid = new LifeGrid(LifeGrid.DefaultGridWidth, LifeGrid.DefaultGridHeight);
@@ -188,14 +188,14 @@ namespace GKLifePlugin.ConwayLife
         {
             int ClientWidth = Width;
             int ClientHeight = Height;
-            
+
             if ((X < 0) || (X >= ClientWidth))
                 throw new IndexOutOfRangeException("X coordinate is outside the control's bounds");
             if ((Y < 0) || (Y >= ClientHeight))
                 throw new IndexOutOfRangeException("Y coordinate is outside the control's bounds");
 
             Point result = new Point();
-            
+
             int cellWidth = ClientWidth / GridWidth;
             int offsetX = (ClientWidth % GridWidth) / 2;
 
@@ -213,7 +213,7 @@ namespace GKLifePlugin.ConwayLife
             } else {
                 result.Y = offsetY + (Y - offsetY * (cellHeight + 1)) / cellHeight;
             }
-            
+
             return result;
         }
 
@@ -231,12 +231,12 @@ namespace GKLifePlugin.ConwayLife
             Rectangle result = new Rectangle(left, top, right - left + 1, bottom - top + 1);
             return result;
         }
-        
+
         protected Rectangle CellCoords(int X, int Y)
         {
             int ClientWidth = Width;
             int ClientHeight = Height;
-            
+
             if (X >= GridWidth) throw new IndexOutOfRangeException("X parameter out of range");
             if (Y >= GridHeight) throw new IndexOutOfRangeException("Y parameter out of range");
 
@@ -304,7 +304,7 @@ namespace GKLifePlugin.ConwayLife
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics gfx = e.Graphics;
-            
+
             if (fShowGridLines) {
                 using (Pen pen = new Pen(Color.Black)) {
                     DrawGridLines(gfx, pen);
@@ -315,10 +315,8 @@ namespace GKLifePlugin.ConwayLife
             Color bordColor = UIHelper.Lighter(cellColor, 0.5f);
 
             // Draw all the live cells
-            using (Brush brush = new SolidBrush(cellColor))
-            {
-                using (Pen pen = new Pen(bordColor))
-                {
+            using (Brush brush = new SolidBrush(cellColor)) {
+                using (Pen pen = new Pen(bordColor)) {
                     for (int y = 0; y < GridHeight; y++) {
                         for (int x = 0; x < GridWidth; x++) {
                             if (this[x, y] > 0) {
@@ -359,7 +357,7 @@ namespace GKLifePlugin.ConwayLife
         public void RandomCells()
         {
             Random rnd = new Random();
-            
+
             for (int x = 0; x < GridWidth; x++) {
                 for (int y = 0; y < GridHeight; y++) {
                     this[x, y] = (byte)((rnd.NextDouble() < 0.4) ? 1 : 0);

@@ -43,7 +43,7 @@ namespace GKLifePlugin.ConwayLife
                 fList.Capacity = value;
             }
         }
-        
+
         public LifeHistory(int maxLevels)
         {
             fList = new List<LifeGrid>();
@@ -55,7 +55,7 @@ namespace GKLifePlugin.ConwayLife
             Clear();
             fList = null;
         }
-        
+
         public LifeGrid Add(LifeGrid grid)
         {
             if (fList.Count < fList.Capacity) {
@@ -69,7 +69,7 @@ namespace GKLifePlugin.ConwayLife
             result.Assign(grid);
             return result;
         }
-        
+
         public void Clear()
         {
             for (int i = 0; i < fList.Count; i++) fList[i].Dispose();
@@ -81,7 +81,7 @@ namespace GKLifePlugin.ConwayLife
             int result = 0;
             while ((result < fList.Count) && !grid.Equals(this[result])) result++;
             if (result >= fList.Count) result = -1;
-            
+
             return result;
         }
     }

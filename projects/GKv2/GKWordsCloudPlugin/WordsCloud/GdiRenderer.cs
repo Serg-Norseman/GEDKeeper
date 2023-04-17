@@ -13,8 +13,6 @@
 
 using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
 using GKUI.Components;
 
 namespace GKWordsCloudPlugin.WordsCloud
@@ -43,8 +41,6 @@ namespace GKWordsCloudPlugin.WordsCloud
             MinFontSize = minFontSize;
             MaxFontSize = maxFontSize;
             fCurrentFont = new Font(FontFamily, maxFontSize, FontStyle);
-            fGraphics.SmoothingMode = SmoothingMode.AntiAlias;
-            fGraphics.TextRenderingHint = TextRenderingHint.AntiAlias;
         }
 
         public SizeF Measure(string text, int weight)

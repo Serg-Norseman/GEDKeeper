@@ -19,8 +19,8 @@
             // ToolBar1
             // 
             this.ToolBar1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TBS1,
-            this.cbType});
+                this.TBS1,
+                this.cbType});
             this.ToolBar1.Location = new System.Drawing.Point(10, 10);
             this.ToolBar1.Name = "ToolBar1";
             this.ToolBar1.Size = new System.Drawing.Size(780, 25);
@@ -46,18 +46,6 @@
             this.cloudViewer.MaxFontSize = 40;
             this.cloudViewer.MinFontSize = 4;
             this.cloudViewer.Name = "cloudViewer";
-            this.cloudViewer.Palette = new System.Drawing.Color[] {
-        System.Drawing.Color.DarkRed,
-        System.Drawing.Color.DarkBlue,
-        System.Drawing.Color.DarkGreen,
-        System.Drawing.Color.Navy,
-        System.Drawing.Color.DarkCyan,
-        System.Drawing.Color.DarkOrange,
-        System.Drawing.Color.DarkGoldenrod,
-        System.Drawing.Color.DarkKhaki,
-        System.Drawing.Color.Blue,
-        System.Drawing.Color.Red,
-        System.Drawing.Color.Green};
             this.cloudViewer.Size = new System.Drawing.Size(780, 555);
             this.cloudViewer.TabIndex = 3;
             this.cloudViewer.WeightedWords = null;
@@ -77,13 +65,12 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "WordsCloudWidget";
             this.TopMost = true;
-            this.Closed += new System.EventHandler(this.CalcWidget_Closed);
-            this.Load += new System.EventHandler(this.CalcWidget_Load);
+            this.Closed += new System.EventHandler(this.Form_Closed);
+            this.Load += new System.EventHandler(this.Form_Load);
             this.ToolBar1.ResumeLayout(false);
             this.ToolBar1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
     }
 }

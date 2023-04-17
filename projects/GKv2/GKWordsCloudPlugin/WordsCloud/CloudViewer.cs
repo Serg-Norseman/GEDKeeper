@@ -12,6 +12,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -40,7 +42,6 @@ namespace GKWordsCloudPlugin.WordsCloud
         private int fMaxWordWeight;
         private int fMinWordWeight;
         private CloudModel fModel;
-        private Color[] fPalette;
         private List<Word> fWords;
 
         public override Color BackColor
@@ -77,16 +78,6 @@ namespace GKWordsCloudPlugin.WordsCloud
             }
         }
 
-        public Color[] Palette
-        {
-            get { return fPalette; }
-            set {
-                fPalette = value;
-                BuildLayout();
-                Invalidate();
-            }
-        }
-
         public List<Word> WeightedWords
         {
             get { return fWords; }
@@ -115,10 +106,14 @@ namespace GKWordsCloudPlugin.WordsCloud
             fBackColor = Color.White;
             fMinWordWeight = 0;
             fMaxWordWeight = 0;
-            fPalette = fDefaultPalette;
 
             MaxFontSize = 68;
             MinFontSize = 6;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -130,12 +125,14 @@ namespace GKWordsCloudPlugin.WordsCloud
             }
 
             IEnumerable<Word> wordsToRedraw = fModel.GetWordsInArea(e.ClipRectangle);
-            using (Graphics graphics = e.Graphics)
-                using (ICloudRenderer graphicEngine =
-                       new GdiRenderer(graphics, Font.FontFamily, FontStyle.Regular, fPalette, MinFontSize, MaxFontSize, fMinWordWeight, fMaxWordWeight)) {
+
+            var gfx = e.Graphics;
+            gfx.SmoothingMode = SmoothingMode.AntiAlias;
+            gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
+            using (var renderer = new GdiRenderer(gfx, Font.FontFamily, FontStyle.Regular, fDefaultPalette, MinFontSize, MaxFontSize, fMinWordWeight, fMaxWordWeight)) {
                 foreach (Word word in wordsToRedraw) {
                     if (word.IsExposed) {
-                        graphicEngine.Draw(word, (fItemUnderMouse == word));
+                        renderer.Draw(word, (fItemUnderMouse == word));
                     }
                 }
             }
@@ -148,11 +145,10 @@ namespace GKWordsCloudPlugin.WordsCloud
             }
 
             using (Graphics graphics = CreateGraphics()) {
-                ICloudRenderer graphicEngine =
-                    new GdiRenderer(graphics, Font.FontFamily, FontStyle.Regular, fPalette, MinFontSize, MaxFontSize, fMinWordWeight, fMaxWordWeight);
+                var renderer = new GdiRenderer(graphics, Font.FontFamily, FontStyle.Regular, fDefaultPalette, MinFontSize, MaxFontSize, fMinWordWeight, fMaxWordWeight);
 
                 fModel = new CloudModel(Size);
-                fModel.Arrange(fWords, graphicEngine);
+                fModel.Arrange(fWords, renderer);
             }
         }
 
@@ -188,14 +184,10 @@ namespace GKWordsCloudPlugin.WordsCloud
                 (int)(original.Height + growByPixels + 1));
         }
 
-        public IEnumerable<Word> GetItemsInArea(RectangleF area)
-        {
-            return (fModel == null) ? new Word[] { } : fModel.GetWordsInArea(area);
-        }
-
         public Word GetItemAtLocation(Point location)
         {
-            IEnumerable<Word> itemsInArea = GetItemsInArea(new RectangleF(location, new SizeF(0, 0)));
+            var area = new RectangleF(location, new SizeF(0, 0));
+            IEnumerable<Word> itemsInArea = (fModel == null) ? new Word[] { } : fModel.GetWordsInArea(area);
             return itemsInArea.FirstOrDefault();
         }
     }

@@ -28,7 +28,7 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKFlowInputPlugin")]
 [assembly: AssemblyDescription("GEDKeeper FlowInput plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2014 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 
@@ -36,53 +36,46 @@ namespace GKFlowInputPlugin
 {
     public enum FLS
     {
-        /* 023 */ LSID_PluginTitle,
-        
-        /* 067 */ LSID_SexM,
-        /* 068 */ LSID_SexF,
-        /* 085 */ LSID_Surname,
-        /* 086 */ LSID_Name,
-        /* 087 */ LSID_Patronymic,
-
-        /* 100 */ LSID_DlgClose,
-        /* 102 */ LSID_DlgAppend,
-        /* 109 */ LSID_Note,
-        /* 110 */ LSID_Source,
-        /* 111 */ LSID_Page,
-        /* 123 */ LSID_BirthDate,
-        /* 124 */ LSID_DeathDate,
-        /* 151 */ LSID_Father,
-        /* 152 */ LSID_Mother,
-
-        /* 217 */ LSID_Spouse,
-
-        /* 302 */ LSID_FullName,
-        /* 303 */ LSID_BirthPlace,
-        /* 304 */ LSID_DeathPlace,
-        /* 306 */ LSID_Age,
-        /* 322 */ LSID_Birth,
-        /* 333 */ LSID_Death,
-        /* 347 */ LSID_RK_Unk,
-
-        /* 486 */ LSID_InputSimple,
-        /* 487 */ LSID_InputSource,
-        /* 488 */ LSID_SourceKind,
-        /* 489 */ LSID_SK_Rev,
-        /* 490 */ LSID_SK_Met,
-        /* 491 */ LSID_Year,
-        /* 492 */ LSID_Settlement,
-        /* 493 */ LSID_EventDate,
-        /* 494 */ LSID_EventType,
-        /* 495 */ LSID_Join,
-        /* 496 */ LSID_Comment,
-
-        /* 504 */ LSID_PLPerson,
-        /* 505 */ LSID_PLGodparent,
-        /* 506 */ LSID_Child,
-        /* 507 */ LSID_NameInvalid,
-        /* 508 */ LSID_BasePersonInvalid,
-        /* 509 */ LSID_SourceYearInvalid,
-
+        LSID_PluginTitle,
+        LSID_SexM,
+        LSID_SexF,
+        LSID_Surname,
+        LSID_Name,
+        LSID_Patronymic,
+        LSID_DlgClose,
+        LSID_DlgAppend,
+        LSID_Note,
+        LSID_Source,
+        LSID_Page,
+        LSID_BirthDate,
+        LSID_DeathDate,
+        LSID_Father,
+        LSID_Mother,
+        LSID_Spouse,
+        LSID_FullName,
+        LSID_BirthPlace,
+        LSID_DeathPlace,
+        LSID_Age,
+        LSID_Birth,
+        LSID_Death,
+        LSID_RK_Unk,
+        LSID_InputSimple,
+        LSID_InputSource,
+        LSID_SourceKind,
+        LSID_SK_Rev,
+        LSID_SK_Met,
+        LSID_Year,
+        LSID_Settlement,
+        LSID_EventDate,
+        LSID_EventType,
+        LSID_Join,
+        LSID_Comment,
+        LSID_PLPerson,
+        LSID_PLGodparent,
+        LSID_Child,
+        LSID_NameInvalid,
+        LSID_BasePersonInvalid,
+        LSID_SourceYearInvalid,
         LSID_Marriage
     }
 

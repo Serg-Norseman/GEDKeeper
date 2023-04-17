@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,10 +40,10 @@ using GKCore.Types;
 
 namespace GKPedigreeImporterPlugin
 {
-    #if !NO_DEPEND
+#if !NO_DEPEND
     using MSOExcel = Microsoft.Office.Interop.Excel;
     using MSOWord = Microsoft.Office.Interop.Word;
-    #endif
+#endif
 
     [Serializable]
     public class ImporterException : Exception
@@ -162,8 +162,7 @@ namespace GKPedigreeImporterPlugin
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (disposing) {
                 if (fRawContents != null) fRawContents.Dispose();
                 fPersonsList = null;
             }
@@ -203,10 +202,8 @@ namespace GKPedigreeImporterPlugin
 
         private static string RemoveDot(string str)
         {
-            if (!string.IsNullOrEmpty(str))
-            {
-                if (str[str.Length - 1] == '.')
-                {
+            if (!string.IsNullOrEmpty(str)) {
+                if (str[str.Length - 1] == '.') {
                     str = str.Substring(0, str.Length - 1);
                 }
                 str = str.Trim();
@@ -216,11 +213,9 @@ namespace GKPedigreeImporterPlugin
 
         private static string RemoveCommaDot(string str)
         {
-            if (!string.IsNullOrEmpty(str))
-            {
+            if (!string.IsNullOrEmpty(str)) {
                 char last = str[str.Length - 1];
-                if (last == ',' || last == '.')
-                {
+                if (last == ',' || last == '.') {
                     str = str.Substring(0, str.Length - 1);
                 }
                 str = str.Trim();
@@ -269,18 +264,17 @@ namespace GKPedigreeImporterPlugin
             }
 
             // if not Special or SpecialNotFound, then classic
-            if (string.IsNullOrEmpty(dates))
-            {
+            if (string.IsNullOrEmpty(dates)) {
                 int bd_pos = tmp.IndexOf(ImportUtils.STD_BIRTH_SIGN);
                 int dd_pos = tmp.IndexOf(ImportUtils.STD_DEATH_SIGN);
-                
+
                 int datesPos = -1;
                 if (bd_pos >= 0 && (dd_pos < 0 || dd_pos > bd_pos)) {
                     datesPos = bd_pos;
                 } else {
                     datesPos = dd_pos;
                 }
-                
+
                 if (datesPos >= 0) {
                     dates = tmp.Substring(datesPos, tmp.Length - datesPos);
                     tmp = tmp.Remove(datesPos, dates.Length).Trim(); // can be blanks at end
@@ -385,7 +379,7 @@ namespace GKPedigreeImporterPlugin
                 }
 
                 date = date.Trim();
-                
+
                 string tmp = "";
                 string[] toks = date.Split('.');
                 if (toks.Length > 3) {
@@ -446,8 +440,7 @@ namespace GKPedigreeImporterPlugin
 
         private GDMIndividualRecord ParsePerson(GDMLines buffer, string str, ref int selfId)
         {
-            try
-            {
+            try {
                 selfId = -1;
                 int marrNum = -1;
                 int pid_end = 0;
@@ -479,8 +472,7 @@ namespace GKPedigreeImporterPlugin
 
                 fPersonsList.Add(plRet.PersId, result);
 
-                if (!string.IsNullOrEmpty(plRet.ParentId))
-                {
+                if (!string.IsNullOrEmpty(plRet.ParentId)) {
                     GDMIndividualRecord parent;
                     if (fPersonsList.TryGetValue(plRet.ParentId, out parent)) {
                         AddChild(parent, marrNum, result);
@@ -490,9 +482,7 @@ namespace GKPedigreeImporterPlugin
                 }
 
                 return result;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Logger.WriteError("Importer.ParsePerson()", ex);
                 throw;
             }
@@ -631,8 +621,7 @@ namespace GKPedigreeImporterPlugin
 
         private bool IsGenerationLine(string str)
         {
-            switch (GenerationFormat)
-            {
+            switch (GenerationFormat) {
                 case GenerationFormat.gfRome:
                     return ImportUtils.IsRomeLine(str);
 
@@ -719,8 +708,7 @@ namespace GKPedigreeImporterPlugin
             });
 
             bool result = false;
-            switch (SourceType)
-            {
+            switch (SourceType) {
                 case SourceType.stText:
                     result = ImportTextContent();
                     break;
@@ -756,23 +744,22 @@ namespace GKPedigreeImporterPlugin
 
                         case RawLineType.rltPerson:
                         case RawLineType.rltRomeGeneration:
-                        case RawLineType.rltEOF:
-                        {
-                            prev_id = ParseBuffer(buffer);
-                            buffer.Clear();
+                        case RawLineType.rltEOF: {
+                                prev_id = ParseBuffer(buffer);
+                                buffer.Clear();
 
-                            switch (rawLine.Type) {
-                                case RawLineType.rltPerson:
-                                    buffer.Add(line);
-                                    break;
-                                case RawLineType.rltRomeGeneration:
-                                    fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
-                                    break;
-                                case RawLineType.rltEOF:
-                                    fLog.Add("> EOF.");
-                                    break;
+                                switch (rawLine.Type) {
+                                    case RawLineType.rltPerson:
+                                        buffer.Add(line);
+                                        break;
+                                    case RawLineType.rltRomeGeneration:
+                                        fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
+                                        break;
+                                    case RawLineType.rltEOF:
+                                        fLog.Add("> EOF.");
+                                        break;
+                                }
                             }
-                        }
                             break;
                     }
                 }
@@ -790,20 +777,16 @@ namespace GKPedigreeImporterPlugin
             return (obj == null) ? "" : obj.ToString();
         }
 
-        #if !NO_DEPEND
+#if !NO_DEPEND
         private bool ImportTableContent(IProgressController progress)
         {
-            try
-            {
+            try {
                 fLog.Clear();
 
                 MSOExcel.Application excel;
-                try
-                {
+                try {
                     excel = new MSOExcel.Application();
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     return false;
                 }
 
@@ -815,8 +798,7 @@ namespace GKPedigreeImporterPlugin
                 //sheet.Activate();
 
                 GDMLines buffer = new GDMLines();
-                try
-                {
+                try {
                     int rowsCount = sheet.UsedRange.Rows.Count;
                     //int colsCount = sheet.UsedRange.Columns.Count;
 
@@ -827,8 +809,7 @@ namespace GKPedigreeImporterPlugin
 
                     int prevId = 0;
 
-                    for (int row = 1; row <= rowsCount; row++)
-                    {
+                    for (int row = 1; row <= rowsCount; row++) {
                         string c1 = GetCell(valueArray, row, 1).Trim(); // position number
                         string c2 = GetCell(valueArray, row, 2).Trim(); // ancestor number
                         string c3 = GetCell(valueArray, row, 3).Trim(); // name, maybe start with the number of marriage
@@ -867,16 +848,14 @@ namespace GKPedigreeImporterPlugin
                             }
                         }
 
-                        switch (lineType)
-                        {
+                        switch (lineType) {
                             case RawLineType.rltComment:
                                 buffer.Add(line);
                                 break;
 
                             case RawLineType.rltPerson:
                             case RawLineType.rltRomeGeneration:
-                            case RawLineType.rltEOF:
-                                {
+                            case RawLineType.rltEOF: {
                                     prevId = ParseBuffer(buffer);
                                     buffer.Clear();
 
@@ -902,9 +881,7 @@ namespace GKPedigreeImporterPlugin
                     prevId = ParseBuffer(buffer);
 
                     return true;
-                }
-                finally
-                {
+                } finally {
                     progress.End();
 
                     buffer.Clear();
@@ -913,15 +890,13 @@ namespace GKPedigreeImporterPlugin
                     excel.Quit();
                     excel = null;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
                 Logger.WriteError("Importer.ImportTableContent()", ex);
                 return false;
             }
         }
-        #endif
+#endif
 
         private bool LoadRawText(IProgressController progress)
         {
@@ -958,7 +933,7 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        #if !NO_DEPEND
+#if !NO_DEPEND
         private bool LoadRawWord(IProgressController progress)
         {
             SourceType = SourceType.stText;

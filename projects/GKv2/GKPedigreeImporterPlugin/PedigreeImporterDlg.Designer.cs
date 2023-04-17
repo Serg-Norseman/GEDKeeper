@@ -3,12 +3,41 @@
     partial class PedigreeImporterDlg
     {
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.CheckBox chkSpecial_1;
+        private System.Windows.Forms.GroupBox grpPersonLineSpecials;
+        private System.Windows.Forms.Label lblDateFormat;
+        private System.Windows.Forms.ComboBox cbDatesFormat;
+        private System.Windows.Forms.Label lblDateSeparator;
+        private System.Windows.Forms.ComboBox cbDateSeparator;
+        private System.Windows.Forms.CheckBox chkSurnamesNormalize;
+        private System.Windows.Forms.GroupBox grpConversionParams;
+        private System.Windows.Forms.Label lblGenerationFormat;
+        private System.Windows.Forms.ComboBox cbGenerationFormat;
+        private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ListBox lbLog;
+        private System.Windows.Forms.TabPage pageResult;
+        private System.Windows.Forms.Label lblSurnameFormat;
+        private System.Windows.Forms.ComboBox cbNameFormat;
+        private System.Windows.Forms.Label lblPersonLineSeparator;
+        private System.Windows.Forms.ComboBox cbPersonSeparator;
+        private System.Windows.Forms.GroupBox grpTextPedigreesParams;
+        private System.Windows.Forms.RadioButton rbNumsUnknown;
+        private System.Windows.Forms.RadioButton rbNumsKonovalov;
+        private System.Windows.Forms.RadioButton rbNumsDAboville;
+        private System.Windows.Forms.GroupBox grpPersonIdFormat;
+        private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.TabPage pageSelect;
+        private GKUI.Components.WizardPages tabControl1;
+        private System.Windows.Forms.Button btnImportFileChoose;
+        private System.Windows.Forms.TextBox edImportFile;
+        private System.Windows.Forms.Label lblFile;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-            	if (this.fImporter != null) this.fImporter.Dispose();
+            if (disposing) {
+                if (this.fImporter != null) this.fImporter.Dispose();
                 if (components != null) components.Dispose();
             }
             base.Dispose(disposing);
@@ -383,35 +412,5 @@
             this.grpPersonLineSpecials.ResumeLayout(false);
             this.ResumeLayout(false);
         }
-        private System.Windows.Forms.CheckBox chkSpecial_1;
-        private System.Windows.Forms.GroupBox grpPersonLineSpecials;
-        private System.Windows.Forms.Label lblDateFormat;
-        private System.Windows.Forms.ComboBox cbDatesFormat;
-        private System.Windows.Forms.Label lblDateSeparator;
-        private System.Windows.Forms.ComboBox cbDateSeparator;
-        private System.Windows.Forms.CheckBox chkSurnamesNormalize;
-        private System.Windows.Forms.GroupBox grpConversionParams;
-        private System.Windows.Forms.Label lblGenerationFormat;
-        private System.Windows.Forms.ComboBox cbGenerationFormat;
-        private System.Windows.Forms.Button btnClose;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ListBox lbLog;
-        private System.Windows.Forms.TabPage pageResult;
-        private System.Windows.Forms.Label lblSurnameFormat;
-        private System.Windows.Forms.ComboBox cbNameFormat;
-        private System.Windows.Forms.Label lblPersonLineSeparator;
-        private System.Windows.Forms.ComboBox cbPersonSeparator;
-        private System.Windows.Forms.GroupBox grpTextPedigreesParams;
-        private System.Windows.Forms.RadioButton rbNumsUnknown;
-        private System.Windows.Forms.RadioButton rbNumsKonovalov;
-        private System.Windows.Forms.RadioButton rbNumsDAboville;
-        private System.Windows.Forms.GroupBox grpPersonIdFormat;
-        private System.Windows.Forms.Button btnBack;
-        private System.Windows.Forms.Button btnNext;
-        private System.Windows.Forms.TabPage pageSelect;
-        private GKUI.Components.WizardPages tabControl1;
-        private System.Windows.Forms.Button btnImportFileChoose;
-        private System.Windows.Forms.TextBox edImportFile;
-        private System.Windows.Forms.Label lblFile;
     }
 }

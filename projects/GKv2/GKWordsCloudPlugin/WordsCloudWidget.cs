@@ -55,13 +55,13 @@ namespace GKWordsCloudPlugin
             base.Dispose(disposing);
         }
 
-        private void CalcWidget_Load(object sender, EventArgs e)
+        private void Form_Load(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetShow(fPlugin);
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }
 
-        private void CalcWidget_Closed(object sender, EventArgs e)
+        private void Form_Closed(object sender, EventArgs e)
         {
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);

@@ -30,7 +30,7 @@ using GKCore.Types;
 [assembly: AssemblyTitle("GKTextSearchPlugin")]
 [assembly: AssemblyDescription("GEDKeeper TextSearch plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2014 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 
@@ -127,7 +127,7 @@ namespace GKTextSearchPlugin
 
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
-            #if !MONO
+#if !MONO
             if (baseWin == null || record == null || fSearchMan == null) return;
 
             switch (action) {
@@ -139,7 +139,7 @@ namespace GKTextSearchPlugin
                     fSearchMan.DeleteRecord(baseWin, ((GDMRecord)record).XRef);
                     break;
             }
-            #endif
+#endif
         }
 
         public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)

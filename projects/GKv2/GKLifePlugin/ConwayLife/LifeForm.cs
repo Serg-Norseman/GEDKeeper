@@ -27,7 +27,7 @@ namespace GKLifePlugin.ConwayLife
                 return cmpLife;
             }
         }
-        
+
         public LifeForm()
         {
             InitializeComponent();
@@ -47,7 +47,7 @@ namespace GKLifePlugin.ConwayLife
         private void tmrNextGeneration_Tick(object sender, EventArgs e)
         {
             if (fIsMinimised) return;
-            
+
             int Periodicity = cmpLife.NextGeneration();
             if (Periodicity > 0) {
                 tmrNextGeneration.Enabled = false;
@@ -56,7 +56,7 @@ namespace GKLifePlugin.ConwayLife
                 PatternStabilised(Periodicity);
             }
         }
-        
+
         private void cmpLife_Change(object sender)
         {
             stlGeneration.Text = "Поколений: " + cmpLife.Generation.ToString();
@@ -84,19 +84,19 @@ namespace GKLifePlugin.ConwayLife
             tbRandomise.Enabled = !tbStart.Checked;
             cmpLife.Cursor = cmpLife.AcceptMouseClicks ? Cursors.Hand : Cursors.Default;
         }
-        
+
         private void PatternStabilised(int periodicity)
         {
             string msg = (periodicity == 1) ? StaticPattern : string.Format(RepeatingPattern, periodicity);
             MessageBox.Show(msg, PatternStabilisedTitle, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
-        
+
         private void tbStep_Click(object sender, EventArgs e)
         {
             int Periodicity = cmpLife.NextGeneration();
             if (Periodicity > 0) PatternStabilised(Periodicity);
         }
-        
+
         private void tbStart_Click(object sender, EventArgs e)
         {
             tmrNextGeneration.Enabled = tbStart.Checked;
@@ -135,7 +135,7 @@ namespace GKLifePlugin.ConwayLife
             tbRandomise.Text = Viewer.Options.LS_Random;
             tbOptions.Text = Viewer.Options.LS_Options;
         }
-        
+
         private void tbOptions_Click(object sender, EventArgs e)
         {
             using (OptionsForm optsForm = new OptionsForm(cmpLife.Options, cmpLife.Rules)) {

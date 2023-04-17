@@ -3,7 +3,46 @@
     partial class OptionsForm
     {
         private System.ComponentModel.IContainer components = null;
-        
+        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.CheckBox chkLiveCell0;
+        private System.Windows.Forms.CheckBox chkDeadCell0;
+        private System.Windows.Forms.CheckBox chkDeadCell1;
+        private System.Windows.Forms.CheckBox chkDeadCell2;
+        private System.Windows.Forms.CheckBox chkDeadCell4;
+        private System.Windows.Forms.CheckBox chkDeadCell3;
+        private System.Windows.Forms.CheckBox chkDeadCell6;
+        private System.Windows.Forms.CheckBox chkDeadCell5;
+        private System.Windows.Forms.CheckBox chkDeadCell8;
+        private System.Windows.Forms.CheckBox chkDeadCell7;
+        private System.Windows.Forms.CheckBox chkLiveCell1;
+        private System.Windows.Forms.CheckBox chkLiveCell2;
+        private System.Windows.Forms.CheckBox chkLiveCell4;
+        private System.Windows.Forms.CheckBox chkLiveCell3;
+        private System.Windows.Forms.CheckBox chkLiveCell6;
+        private System.Windows.Forms.CheckBox chkLiveCell5;
+        private System.Windows.Forms.CheckBox chkLiveCell8;
+        private System.Windows.Forms.CheckBox chkLiveCell7;
+        private System.Windows.Forms.GroupBox grpLiveCells;
+        private System.Windows.Forms.GroupBox grpDeadCells;
+        private System.Windows.Forms.Button btnRestoreRuleDefaults;
+        private System.Windows.Forms.Label lblGridSizeWidth;
+        private System.Windows.Forms.Label lblGridSizeHeight;
+        private System.Windows.Forms.NumericUpDown edtGridWidth;
+        private System.Windows.Forms.NumericUpDown edtGridHeight;
+        private System.Windows.Forms.GroupBox grpCellSize;
+        private System.Windows.Forms.Label lblColourBackground;
+        private System.Windows.Forms.Label lblColourLivingCells;
+        private System.Windows.Forms.GroupBox grpColour;
+        private System.Windows.Forms.Label lblAnimationDelay;
+        private System.Windows.Forms.NumericUpDown edtAnimationDelay;
+        private System.Windows.Forms.GroupBox grpAnimation;
+        private System.Windows.Forms.Button btnRestoreGeneralDefaults;
+        private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Button btnApply;
+        private System.Windows.Forms.TabPage tabRules;
+        private System.Windows.Forms.TabPage tabGeneral;
+        private System.Windows.Forms.TabControl tabsMain;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
@@ -13,7 +52,7 @@
             }
             base.Dispose(disposing);
         }
-        
+
         private void InitializeComponent()
         {
             this.tabsMain = new System.Windows.Forms.TabControl();
@@ -525,44 +564,5 @@
             this.grpLiveCells.ResumeLayout(false);
             this.ResumeLayout(false);
         }
-        private System.Windows.Forms.ColorDialog colorDialog1;
-        private System.Windows.Forms.CheckBox chkLiveCell0;
-        private System.Windows.Forms.CheckBox chkDeadCell0;
-        private System.Windows.Forms.CheckBox chkDeadCell1;
-        private System.Windows.Forms.CheckBox chkDeadCell2;
-        private System.Windows.Forms.CheckBox chkDeadCell4;
-        private System.Windows.Forms.CheckBox chkDeadCell3;
-        private System.Windows.Forms.CheckBox chkDeadCell6;
-        private System.Windows.Forms.CheckBox chkDeadCell5;
-        private System.Windows.Forms.CheckBox chkDeadCell8;
-        private System.Windows.Forms.CheckBox chkDeadCell7;
-        private System.Windows.Forms.CheckBox chkLiveCell1;
-        private System.Windows.Forms.CheckBox chkLiveCell2;
-        private System.Windows.Forms.CheckBox chkLiveCell4;
-        private System.Windows.Forms.CheckBox chkLiveCell3;
-        private System.Windows.Forms.CheckBox chkLiveCell6;
-        private System.Windows.Forms.CheckBox chkLiveCell5;
-        private System.Windows.Forms.CheckBox chkLiveCell8;
-        private System.Windows.Forms.CheckBox chkLiveCell7;
-        private System.Windows.Forms.GroupBox grpLiveCells;
-        private System.Windows.Forms.GroupBox grpDeadCells;
-        private System.Windows.Forms.Button btnRestoreRuleDefaults;
-        private System.Windows.Forms.Label lblGridSizeWidth;
-        private System.Windows.Forms.Label lblGridSizeHeight;
-        private System.Windows.Forms.NumericUpDown edtGridWidth;
-        private System.Windows.Forms.NumericUpDown edtGridHeight;
-        private System.Windows.Forms.GroupBox grpCellSize;
-        private System.Windows.Forms.Label lblColourBackground;
-        private System.Windows.Forms.Label lblColourLivingCells;
-        private System.Windows.Forms.GroupBox grpColour;
-        private System.Windows.Forms.Label lblAnimationDelay;
-        private System.Windows.Forms.NumericUpDown edtAnimationDelay;
-        private System.Windows.Forms.GroupBox grpAnimation;
-        private System.Windows.Forms.Button btnRestoreGeneralDefaults;
-        private System.Windows.Forms.Button btnClose;
-        private System.Windows.Forms.Button btnApply;
-        private System.Windows.Forms.TabPage tabRules;
-        private System.Windows.Forms.TabPage tabGeneral;
-        private System.Windows.Forms.TabControl tabsMain;
     }
 }

@@ -20,7 +20,7 @@ namespace GKLifePlugin.ConwayLife
         private int fGridWidth;
         private Color fLivingCellColor;
         private bool fModified;
-        
+
         public string LS_LifeGame { get; set; }
         public string LS_Step { get; set; }
         public string LS_Start { get; set; }
@@ -29,7 +29,7 @@ namespace GKLifePlugin.ConwayLife
         public string LS_Clear { get; set; }
         public string LS_Random { get; set; }
         public string LS_Options { get; set; }
-        
+
         public int AnimationDelay
         {
             get { return fAnimationDelay; }
@@ -51,7 +51,7 @@ namespace GKLifePlugin.ConwayLife
                 }
             }
         }
-        
+
         public int GridHeight
         {
             get { return fGridHeight; }
@@ -62,7 +62,7 @@ namespace GKLifePlugin.ConwayLife
                 }
             }
         }
-        
+
         public int GridWidth
         {
             get { return fGridWidth; }
@@ -73,7 +73,7 @@ namespace GKLifePlugin.ConwayLife
                 }
             }
         }
-        
+
         public Color LivingCellColor
         {
             get { return fLivingCellColor; }
@@ -84,13 +84,13 @@ namespace GKLifePlugin.ConwayLife
                 }
             }
         }
-        
+
         public bool Modified
         {
             get { return fModified; }
         }
 
-        
+
         public LifeOptions()
         {
             LS_LifeGame = "Игра \"Жизнь Конвея\"";
@@ -104,7 +104,7 @@ namespace GKLifePlugin.ConwayLife
 
             RestoreDefaults();
         }
-        
+
         public void RestoreDefaults()
         {
             AnimationDelay = LifeViewer.DefaultAnimationDelay;

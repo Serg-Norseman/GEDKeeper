@@ -28,7 +28,7 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKPedigreeImporterPlugin")]
 [assembly: AssemblyDescription("GEDKeeper PedigreeImporter plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2014,2016 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.2.0.0")]
 [assembly: AssemblyCulture("")]
 
@@ -37,9 +37,9 @@ namespace GKPedigreeImporterPlugin
     public enum ILS
     {
         LSID_PluginTitle,
-        LSID_File, /* 0 */
-        LSID_DlgSelect, /* 100 */
-        LSID_FormatUnsupported, /* 396 */
+        LSID_File,
+        LSID_DlgSelect,
+        LSID_FormatUnsupported,
         LSID_DataLoadError,
         LSID_ParseError_LineSeq,
         LSID_PersonParsed,
@@ -47,7 +47,6 @@ namespace GKPedigreeImporterPlugin
         LSID_ParseError_AncNotFound,
         LSID_ParseError_DateInvalid,
         LSID_ParseError_NumDuplicate,
-
         LSID_PersonIdFormat,
         LSID_NumsDAboville,
         LSID_NumsKonovalov,

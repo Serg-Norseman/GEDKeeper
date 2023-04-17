@@ -24,17 +24,17 @@ namespace GKLifePlugin.ConwayLife
         {
             get { return fModified; }
         }
-        
+
         public bool GetDeadCells(int index)
         {
             return fDeadCells[index];
         }
-        
+
         public bool GetLiveCells(int index)
         {
             return fLiveCells[index];
         }
-        
+
         public void SetDeadCells(int index, bool value)
         {
             if (value != fDeadCells[index]) {
@@ -42,7 +42,7 @@ namespace GKLifePlugin.ConwayLife
                 fModified = true;
             }
         }
-        
+
         public void SetLiveCells(int index, bool value)
         {
             if (value != fLiveCells[index]) {
@@ -50,12 +50,12 @@ namespace GKLifePlugin.ConwayLife
                 fModified = true;
             }
         }
-        
+
         public LifeRules()
         {
             RestoreDefaults();
         }
-        
+
         public void RestoreDefaults()
         {
             fDeadCells = (bool[])DefaultDeadCells.Clone();

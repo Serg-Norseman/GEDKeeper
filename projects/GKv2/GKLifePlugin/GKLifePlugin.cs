@@ -29,7 +29,7 @@ using GKLifePlugin.ConwayLife;
 [assembly: AssemblyTitle("GKLifePlugin")]
 [assembly: AssemblyDescription("GEDKeeper Conway's Game of Life plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2009-2015 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2011-2015 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 

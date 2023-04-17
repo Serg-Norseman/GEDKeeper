@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -54,7 +53,7 @@ namespace GKPedigreeImporterPlugin
 
             cbNameFormat.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NPS), fLangMan.LS(ILS.LSID_SNP) });
 
-            cbPersonSeparator.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NoSpecial), ";", ","});
+            cbPersonSeparator.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NoSpecial), ";", "," });
 
             fBase = curBase;
             fImporter = new Importer(this, fBase, fLangMan, lbLog.Items);
@@ -98,25 +97,23 @@ namespace GKPedigreeImporterPlugin
         private void btnImportFileChoose_Click(object sender, EventArgs e)
         {
             string filter;
-            #if !MONO
+#if !MONO
             filter = fLangMan.LS(ILS.LSID_AllFiltersW);
-            #else
+#else
             filter = fLangMan.LS(ILS.LSID_AllFiltersL);
-            #endif
+#endif
 
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", filter, 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             edImportFile.Text = fileName;
 
-            try
-            {
+            try {
                 bool res = fImporter.LoadRawData(edImportFile.Text);
                 if (res) {
                     fAvailableStage++;
 
-                    switch (fImporter.CanNumbersType)
-                    {
+                    switch (fImporter.CanNumbersType) {
                         case PersonNumbersType.pnUndefined:
                             rbNumsUnknown.Checked = true;
                             break;
@@ -131,19 +128,15 @@ namespace GKPedigreeImporterPlugin
                 }
 
                 UpdateNavigation();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MessageBox.Show(ex.Message, fLangMan.LS(ILS.LSID_PluginTitle), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void ChangeStage()
         {
-            switch (fCurrentStage)
-            {
-                case 1:
-                    {
+            switch (fCurrentStage) {
+                case 1: {
                         if (rbNumsUnknown.Checked) {
                             fImporter.NumbersType = PersonNumbersType.pnUndefined;
                         } else if (rbNumsKonovalov.Checked) {
@@ -202,7 +195,7 @@ namespace GKPedigreeImporterPlugin
             if (rb == null) return;
 
             if (rb == rbNumsUnknown && rb.Checked) {
-                
+
             }
         }
 

@@ -19,8 +19,8 @@ namespace GKLifePlugin.ConwayLife
         public const int MinGridWidth = 5;
         public const int MaxGridWidth = 1000;
 
-        public const int DefaultGridHeight = 200;
-        public const int DefaultGridWidth = 200;
+        public const int DefaultGridHeight = 210;
+        public const int DefaultGridWidth = 280;
 
 
         private short[] fGrid;
@@ -52,7 +52,7 @@ namespace GKLifePlugin.ConwayLife
             }
         }
 
-        
+
         public LifeGrid()
         {
         }
@@ -79,7 +79,7 @@ namespace GKLifePlugin.ConwayLife
         {
             Array.Clear(fGrid, 0, fGridWidth * fGridHeight);
         }
-        
+
         /// <summary>
         /// Conway's default rule.
         /// </summary>
@@ -146,7 +146,7 @@ namespace GKLifePlugin.ConwayLife
             if (this[xMinus1, yPlus1] > 0) result++;
             if (this[X, yPlus1] > 0) result++;
             if (this[xPlus1, yPlus1] > 0) result++;
-            
+
             return result;
         }
 
@@ -167,7 +167,7 @@ namespace GKLifePlugin.ConwayLife
         {
             fGrid = null;
         }
-        
+
         private int CellCoordToGridOffset(int X, int Y)
         {
             if (X >= fGridWidth) throw new IndexOutOfRangeException("X parameter out of range");

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,54 +22,21 @@ using System;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Types;
 using GKUI.Components;
 using GKUI.Forms;
 
 namespace GKFlowInputPlugin
 {
-    [Serializable]
-    public class PersonScanException : Exception
-    {
-        public PersonScanException()
-        {
-        }
-
-        public PersonScanException(string message) : base(message)
-        {
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class FlowInputDlg : CommonForm
     {
-        private enum PersonLink
-        {
-            plNone,
-            plPerson,
-            plFather,
-            plMother,
-            plGodparent,
-            plSpouse,
-            plChild,
-            
-            plLast = plChild
-        }
-
-        private readonly FLS[] PersonLinks;
         private readonly IPlugin fPlugin;
         private readonly ILangMan fLangMan;
         private readonly IBaseWindow fBase;
         private readonly StringList fSourcesList;
-        
         private GDMSex fSimpleTempSex = GDMSex.svMale;
+        private readonly FlowInput fFlowInput;
 
-        #region Instance control
-        
         public FlowInputDlg(IPlugin plugin, IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -80,28 +47,19 @@ namespace GKFlowInputPlugin
             fLangMan = plugin.LangMan;
             fBase = baseWin;
             fSourcesList = new StringList();
+            fFlowInput = new FlowInput(plugin, baseWin);
 
             cbEventType.Items.AddRange(new object[] {
                                            fPlugin.LangMan.LS(FLS.LSID_Birth),
                                            fPlugin.LangMan.LS(FLS.LSID_Death),
                                            fPlugin.LangMan.LS(FLS.LSID_Marriage) });
 
-            PersonLinks = new FLS[] {
-                FLS.LSID_RK_Unk,
-                FLS.LSID_PLPerson,
-                FLS.LSID_Father,
-                FLS.LSID_Mother,
-                FLS.LSID_PLGodparent,
-                FLS.LSID_Spouse,
-                FLS.LSID_Child
-            };
-
             InitGrid(dataGridView1);
             InitSimpleControls();
             InitSourceControls();
 
             for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plChild; pl++) {
-                cbPersonLink.Items.Add(fLangMan.LS(PersonLinks[(int)pl]));
+                cbPersonLink.Items.Add(fLangMan.LS(FlowInput.PersonLinks[(int)pl]));
             }
 
             SetLocale();
@@ -110,14 +68,9 @@ namespace GKFlowInputPlugin
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fSourcesList.Dispose();
             }
             base.Dispose(disposing);
         }
-
-        #endregion
-
-        #region ILocalizable support
 
         public void SetLocale()
         {
@@ -128,10 +81,10 @@ namespace GKFlowInputPlugin
             btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexM)[0], 1);
             //this.btnFemale.Text = new string(LangMan.LS(FLS.67][0], 1);
             lblFullName.Text = fLangMan.LS(FLS.LSID_FullName);
-            CheckBirth.Text = fLangMan.LS(FLS.LSID_Birth);
+            chkBirth.Text = fLangMan.LS(FLS.LSID_Birth);
             lblBirthDate.Text = fLangMan.LS(FLS.LSID_BirthDate);
             lblBirthPlace.Text = fLangMan.LS(FLS.LSID_BirthPlace);
-            CheckDeath.Text = fLangMan.LS(FLS.LSID_Death);
+            chkDeath.Text = fLangMan.LS(FLS.LSID_Death);
             lblDeathDate.Text = fLangMan.LS(FLS.LSID_DeathDate);
             lblDeathPlace.Text = fLangMan.LS(FLS.LSID_DeathPlace);
             lblNote.Text = fLangMan.LS(FLS.LSID_Note);
@@ -149,31 +102,69 @@ namespace GKFlowInputPlugin
             rbSK_Met.Text = fLangMan.LS(FLS.LSID_SK_Met);
         }
 
-        #endregion
+        #region Parse functions
 
-        #region Utilities
-        
-        private void ShowError(string msg)
+        private void ParseSimple()
         {
-            string title = fLangMan.LS(FLS.LSID_PluginTitle);
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            fFlowInput.ParseSimple(txtFullName.Text, fSimpleTempSex,
+                chkBirth.Checked, txtBirthDate.Text, txtBirthPlace.Text,
+                chkDeath.Checked, txtDeathDate.Text, txtDeathPlace.Text,
+                txtNote.Text);
+
+            InitSimpleControls();
         }
 
-        private PersonLink GetLinkByName(string aName)
+        private static string CheckStr(string val)
         {
-            PersonLink res = PersonLink.plNone;
+            return (val == null) ? string.Empty : val;
+        }
 
-            for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plLast; pl++) {
-                if (fLangMan.LS(PersonLinks[(int)pl]) == aName) {
-                    res = pl;
-                    break;
-                }
+        // TODO: rollback changes when exception!
+        private void ParseSource()
+        {
+            int srcYear;
+            if (!int.TryParse(edSourceYear.Text, out srcYear)) {
+                fFlowInput.ShowError(fLangMan.LS(FLS.LSID_SourceYearInvalid));
+                return;
             }
 
-            return res;
+            GDMSourceRecord srcRec = fFlowInput.InitializeSource(cbSource.Text);
+            if (srcRec == null)
+                return;
+
+            string srcPage = edPage.Text;
+            string place = edPlace.Text;
+
+            int eventType = -1;
+            if (rbSK_Met.Checked) {
+                eventType = cbEventType.SelectedIndex;
+            }
+            string eventDate = edEventDate.Text;
+
+            GDMIndividualRecord iMain = null;
+
+            int num = dataGridView1.Rows.Count;
+            for (int r = 0; r < num; r++) {
+                DataGridViewRow row = dataGridView1.Rows[r];
+
+                string lnk = CheckStr((string)row.Cells[0].Value);
+                string nm = CheckStr((string)row.Cells[1].Value);
+                string pt = CheckStr((string)row.Cells[2].Value);
+                string fm = CheckStr((string)row.Cells[3].Value);
+                string age = CheckStr((string)row.Cells[4].Value);
+                string comment = CheckStr((string)row.Cells[5].Value);
+
+                fFlowInput.ParseSource(srcRec, srcYear, srcPage, place, ref iMain, lnk, nm, pt, fm, age, comment, eventType, eventDate);
+            }
+
+            InitSourceControls();
         }
 
-        public static DataGridViewColumn AddTextColumn(string colName, string headerText)
+        #endregion
+
+        #region Form handlers
+
+        private static DataGridViewColumn AddTextColumn(string colName, string headerText)
         {
             DataGridViewColumn col = new DataGridViewTextBoxColumn();
             col.HeaderText = headerText;
@@ -181,7 +172,7 @@ namespace GKFlowInputPlugin
             return col;
         }
 
-        public static DataGridViewComboBoxColumn AddComboColumn(string colName, string headerText, object[] items)
+        private static DataGridViewComboBoxColumn AddComboColumn(string colName, string headerText, object[] items)
         {
             DataGridViewComboBoxColumn col = new DataGridViewComboBoxColumn();
             col.HeaderText = headerText;
@@ -190,20 +181,16 @@ namespace GKFlowInputPlugin
             return col;
         }
 
-        #endregion
-        
-        #region Initialize controls
-        
         private void InitSimpleControls()
         {
-            EditName.Text = "";
-            EditBirthDate.Text = "";
-            EditBirthPlace.Text = "";
-            CheckBirth.Checked = false;
-            EditDeathDate.Text = "";
-            EditDeathPlace.Text = "";
-            CheckDeath.Checked = false;
-            MemoNote.Text = "";
+            txtFullName.Text = "";
+            txtBirthDate.Text = "";
+            txtBirthPlace.Text = "";
+            chkBirth.Checked = false;
+            txtDeathDate.Text = "";
+            txtDeathPlace.Text = "";
+            chkDeath.Checked = false;
+            txtNote.Text = "";
 
             fSimpleTempSex = GDMSex.svMale;
             btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexM)[0], 1);
@@ -230,9 +217,9 @@ namespace GKFlowInputPlugin
 
         private void InitGrid(DataGridView dgv)
         {
-            int num = PersonLinks.Length;
+            int num = FlowInput.PersonLinks.Length;
             object[] linksList = new object[num];
-            for (int i = 0; i < num; i++) linksList[i] = fLangMan.LS(PersonLinks[i]);
+            for (int i = 0; i < num; i++) linksList[i] = fLangMan.LS(FlowInput.PersonLinks[i]);
 
             string[] namesList = new string[0];
             string[] patrList = new string[0];
@@ -280,7 +267,7 @@ namespace GKFlowInputPlugin
                 cell.Value = e.FormattedValue;
             }
         }
- 
+
         private void dataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             var comboColumn = GetComboBoxColumn(dataGridView1.CurrentCellAddress.X);
@@ -292,183 +279,7 @@ namespace GKFlowInputPlugin
             }
         }
 
-        #endregion
-
-        #region Parse functions
-
-        private void ParseSimple()
-        {
-            string tmp = EditName.Text.ToLower();
-            string[] tokens = tmp.Split(' ');
-            if (tokens.Length < 3) {
-                ShowError(fLangMan.LS(FLS.LSID_NameInvalid));
-                return;
-            }
-
-            string fam = StringHelper.UniformName(tokens[0]);
-            string nam = StringHelper.UniformName(tokens[1]);
-            string pat = StringHelper.UniformName(tokens[2]);
-
-            GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(nam, pat, fam, fSimpleTempSex, false);
-            if (CheckBirth.Checked) {
-                fBase.Context.CreateEventEx(iRec, GEDCOMTagName.BIRT, GDMDate.CreateByFormattedStr(EditBirthDate.Text, true), EditBirthPlace.Text);
-            }
-
-            if (CheckDeath.Checked) {
-                fBase.Context.CreateEventEx(iRec, GEDCOMTagName.DEAT, GDMDate.CreateByFormattedStr(EditDeathDate.Text, true), EditDeathPlace.Text);
-            }
-
-            if (!string.IsNullOrEmpty(MemoNote.Text)) {
-                GDMNoteRecord noteRec = fBase.Context.Tree.CreateNote();
-                noteRec.SetNoteText(MemoNote.Text);
-                iRec.AddNote(noteRec);
-            }
-
-            fBase.NotifyRecord(iRec, RecordAction.raAdd);
-
-            InitSimpleControls();
-        }
-
-        private static string CheckStr(string val)
-        {
-            return (val == null) ? string.Empty : val;
-        }
-
-        // TODO: rollback changes when exception!
-        private void ParseSource()
-        {
-            int srcYear;
-            if (!int.TryParse(edSourceYear.Text, out srcYear)) {
-                ShowError(fLangMan.LS(FLS.LSID_SourceYearInvalid));
-                return;
-            }
-
-            string srcName = cbSource.Text;
-            string srcPage = edPage.Text;
-            string place = edPlace.Text;
-
-            GDMSourceRecord srcRec = null;
-            if (!string.IsNullOrEmpty(srcName)) {
-                srcRec = fBase.Context.FindSource(srcName);
-                if (srcRec == null) {
-                    srcRec = fBase.Context.Tree.CreateSource();
-                    srcRec.ShortTitle = srcName;
-                }
-            }
-
-            GDMIndividualRecord iMain = null;
-
-            int num = dataGridView1.Rows.Count;
-            for (int r = 0; r < num; r++)
-            {
-                DataGridViewRow row = dataGridView1.Rows[r];
-
-                string lnk = CheckStr((string)row.Cells[0].Value);
-                string nm = CheckStr((string)row.Cells[1].Value);
-                string pt = CheckStr((string)row.Cells[2].Value);
-                string fm = CheckStr((string)row.Cells[3].Value);
-                string age = CheckStr((string)row.Cells[4].Value);
-                string comment = CheckStr((string)row.Cells[5].Value);
-
-                if (!string.IsNullOrEmpty(lnk)) {
-                    PersonLink link = GetLinkByName(lnk);
-                    if (link == PersonLink.plNone) continue;
-
-                    GDMSex sx = fBase.Context.DefineSex(this, nm, pt);
-                    GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
-
-                    if (!string.IsNullOrEmpty(age) && ConvertHelper.IsDigits(age)) {
-                        int birthYear = srcYear - int.Parse(age);
-                        fBase.Context.CreateEventEx(iRec, GEDCOMTagName.BIRT, "ABT "+birthYear.ToString(), "");
-                    }
-
-                    if (!string.IsNullOrEmpty(place)) {
-                        GDMCustomEvent evt = fBase.Context.CreateEventEx(iRec, GEDCOMTagName.RESI, "", "");
-                        evt.Place.StringValue = place;
-                    }
-
-                    if (!string.IsNullOrEmpty(comment)) {
-                        GDMNoteRecord noteRec = fBase.Context.Tree.CreateNote();
-                        noteRec.SetNoteText(comment);
-                        iRec.AddNote(noteRec);
-                    }
-
-                    if (srcRec != null) {
-                        iRec.AddSource(srcRec, srcPage, 0);
-                    }
-
-                    fBase.NotifyRecord(iRec, RecordAction.raAdd);
-
-                    GDMFamilyRecord family = null;
-
-                    if (link == PersonLink.plPerson) {
-
-                        iMain = iRec;
-                        string evName = "";
-
-                        if (rbSK_Met.Checked) {
-                            switch (cbEventType.SelectedIndex) {
-                                case  0:
-                                    evName = GEDCOMTagName.BIRT;
-                                    break;
-                                case  1:
-                                    evName = GEDCOMTagName.DEAT;
-                                    break;
-                                case  2:
-                                    evName = GEDCOMTagName.MARR;
-                                    break;
-                            }
-                        }
-
-                        if (evName == GEDCOMTagName.BIRT || evName == GEDCOMTagName.DEAT) {
-                            GDMCustomEvent evt = fBase.Context.CreateEventEx(iRec, evName, GDMDate.CreateByFormattedStr(edEventDate.Text, false), "");
-                            evt.Place.StringValue = place;
-                        } else if (evName == GEDCOMTagName.MARR) {
-                            family = fBase.Context.GetMarriageFamily(iRec, true);
-                            GDMCustomEvent evt = fBase.Context.CreateEventEx(family, evName, GDMDate.CreateByFormattedStr(edEventDate.Text, false), "");
-                            evt.Place.StringValue = place;
-                        }
-
-                    } else {
-
-                        if (iMain == null) {
-                            throw new PersonScanException(fLangMan.LS(FLS.LSID_BasePersonInvalid));
-                        } else {
-                            switch (link) {
-                                case PersonLink.plFather:
-                                case PersonLink.plMother:
-                                    family = fBase.Context.GetParentsFamily(iMain, true);
-                                    family.AddSpouse(iRec);
-                                    break;
-
-                                case PersonLink.plGodparent:
-                                    iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
-                                    break;
-
-                                case PersonLink.plSpouse:
-                                    family = fBase.Context.GetMarriageFamily(iMain, true);
-                                    family.AddSpouse(iRec);
-                                    break;
-
-                                case PersonLink.plChild:
-                                    family = fBase.Context.GetMarriageFamily(iMain, true);
-                                    family.AddChild(iRec);
-                                    break;
-                            }
-                        }
-
-                    }
-                }
-            }
-
-            InitSourceControls();
-        }
-
-        #endregion
-
-        #region Form handlers
-
-        private void btnParseClick(object sender, EventArgs e)
+        private void btnParse_Click(object sender, EventArgs e)
         {
             try {
                 try {
@@ -485,11 +296,11 @@ namespace GKFlowInputPlugin
                     fBase.RefreshLists(false);
                 }
             } catch (Exception ex) {
-                ShowError(ex.Message);
+                fFlowInput.ShowError(ex.Message);
             }
         }
 
-        private void BtnMaleClick(object sender, EventArgs e)
+        private void btnSex_Click(object sender, EventArgs e)
         {
             switch (fSimpleTempSex) {
                 case GDMSex.svMale:
@@ -503,17 +314,17 @@ namespace GKFlowInputPlugin
             }
         }
 
-        private void EditBirthDateTextChanged(object sender, EventArgs e)
+        private void txtBirthDate_TextChanged(object sender, EventArgs e)
         {
-            CheckBirth.Checked = true;
+            chkBirth.Checked = true;
         }
 
-        private void EditDeathDateTextChanged(object sender, EventArgs e)
+        private void txtDeathDate_TextChanged(object sender, EventArgs e)
         {
-            CheckDeath.Checked = true;
+            chkDeath.Checked = true;
         }
 
-        private void RadioButton1CheckedChanged(object sender, EventArgs e)
+        private void rbX_CheckedChanged(object sender, EventArgs e)
         {
             gbMetrics.Enabled = (rbSK_Met.Checked);
         }

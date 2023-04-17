@@ -27,6 +27,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FlowInput.cs" />
     <Compile Include="GKFlowInputPlugin.cs" />
     <Compile Include="FlowInputDlg.cs">
       <SubType>Form</SubType>

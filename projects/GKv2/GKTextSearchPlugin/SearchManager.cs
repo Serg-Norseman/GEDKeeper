@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -93,10 +93,10 @@ namespace GKTextSearchPlugin
             string recLastchange = rec.ChangeDate.ToString();
             string baseSign = GetSign(baseWin);
 
-            doc.SetData(rec.XRef);							// not edit: for link from search results to gedcom-base
-            doc.AddTerm("Q" + baseSign + "_" + rec.XRef);	// not edit: specific db_rec_id - for FindDocId()
-            doc.AddValue(0, recLastchange);				    // not edit: for update check
-            doc.AddBooleanTerm("GDB" + baseSign);			// not edit: for filtering by database in Search()
+            doc.SetData(rec.XRef);                          // not edit: for link from search results to gedcom-base
+            doc.AddTerm("Q" + baseSign + "_" + rec.XRef);   // not edit: specific db_rec_id - for FindDocId()
+            doc.AddValue(0, recLastchange);                 // not edit: for update check
+            doc.AddBooleanTerm("GDB" + baseSign);           // not edit: for filtering by database in Search()
 
             indexer.SetDocument(doc);
             indexer.IndexText(ctx.Text);
@@ -119,16 +119,14 @@ namespace GKTextSearchPlugin
 
                 // updating a record
                 if (!string.Equals(recLastchange, docLastchange)) {
-                    using (Document doc = new Document())
-                    {
+                    using (Document doc = new Document()) {
                         if (SetDocumentContext(baseWin, doc, indexer, record))
                             database.ReplaceDocument(docid, doc);
                     }
                 }
             } else {
                 // only adding
-                using (Document doc = new Document())
-                {
+                using (Document doc = new Document()) {
                     if (SetDocumentContext(baseWin, doc, indexer, record))
                         database.AddDocument(doc);
                 }
@@ -144,9 +142,8 @@ namespace GKTextSearchPlugin
             try {
                 lock (fLock) {
                     using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
-                        using (TermGenerator indexer = new TermGenerator())
-                            using (Stem stemmer = new Stem("russian"))
-                    {
+                    using (TermGenerator indexer = new TermGenerator())
+                    using (Stem stemmer = new Stem("russian")) {
                         indexer.SetStemmer(stemmer);
 
                         AppHost.Instance.ExecuteWork((controller) => {
@@ -279,6 +276,34 @@ namespace GKTextSearchPlugin
             }
 
             return res;
+        }
+
+        public void ShowResults(IBaseWindow baseWin, string query, StringList strList)
+        {
+            strList.BeginUpdate();
+            try {
+                strList.Clear();
+                var searchResults = Search(baseWin, query);
+
+                strList.Add(string.Format(fPlugin.LangMan.LS(TLS.LSID_SearchResults) + "\r\n", searchResults.Count));
+
+                int num = searchResults.Count;
+                for (int i = 0; i < num; i++) {
+                    strList.Add("__________________________________________________________________________________________");
+                    strList.Add("");
+
+                    var entry = searchResults[i];
+                    strList.Add(string.Format("[b][u][size=+1]{0}: {1}%[/u] [url={2}] {2} [/url][/b][/size]",
+                                        entry.Rank, entry.Percent, entry.XRef));
+
+                    GDMRecord rec = baseWin.Context.Tree.XRefIndex_Find(entry.XRef);
+                    StringList ctx = baseWin.GetRecordContent(rec);
+                    strList.AddStrings(ctx);
+                    strList.Add("");
+                }
+            } finally {
+                strList.EndUpdate();
+            }
         }
     }
 }

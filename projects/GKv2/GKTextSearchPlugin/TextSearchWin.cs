@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,20 +19,14 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using BSLib;
-using GDModel;
 using GKCore.Interfaces;
 using GKUI.Components;
 
 namespace GKTextSearchPlugin
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class TextSearchWin : Form, ILocalizable
     {
         private readonly Plugin fPlugin;
@@ -60,69 +54,35 @@ namespace GKTextSearchPlugin
             SetLocale();
         }
 
-        private void Write(string text)
-        {
-            fResultsText.Lines.Add(text);
-        }
-
-        private void mTextLink(object sender, string linkName)
-        {
-            if (string.IsNullOrEmpty(linkName)) return;
-
-            fBase.SelectRecordByXRef(linkName);
-        }
-
-        private void btnSearch_Click(object sender, EventArgs e)
-        {
-            btnSearch.Enabled = false;
-            fResultsText.Lines.BeginUpdate();
-            try
-            {
-                fResultsText.Lines.Clear();
-                List<SearchManager.SearchEntry> searchResults = fPlugin.SearchMan.Search(fBase, txtQuery.Text);
-
-                Write(string.Format(fPlugin.LangMan.LS(TLS.LSID_SearchResults) + "\r\n", searchResults.Count));
-
-                int num = searchResults.Count;
-                for (int i = 0; i < num; i++)
-                {
-                    Write("__________________________________________________________________________________________");
-                    Write("");
-
-                    SearchManager.SearchEntry entry = searchResults[i];
-                    Write(string.Format("[b][u][size=+1]{0}: {1}%[/u] [url={2}] {2} [/url][/b][/size]",
-                                        entry.Rank, entry.Percent, entry.XRef));
-
-                    GDMRecord rec = fBase.Context.Tree.XRefIndex_Find(entry.XRef);
-                    StringList ctx = fBase.GetRecordContent(rec);
-                    fResultsText.Lines.AddStrings(ctx);
-                    Write("");
-                }
-            }
-            finally
-            {
-                fResultsText.Lines.EndUpdate();
-                btnSearch.Enabled = true;
-            }
-        }
-
-        private void TextSearchWin_Load(object sender, EventArgs e)
-        {
-            fPlugin.SearchMan.ReindexBase(fBase);
-        }
-
-        private void TextSearchWin_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            fPlugin.fForm = null;
-        }
-
-        #region ILocalizable support
-
         public void SetLocale()
         {
             btnSearch.Text = fPlugin.LangMan.LS(TLS.LSID_Search);
         }
 
-        #endregion
+        private void Form_Load(object sender, EventArgs e)
+        {
+            fPlugin.SearchMan.ReindexBase(fBase);
+        }
+
+        private void Form_Closed(object sender, FormClosedEventArgs e)
+        {
+            fPlugin.fForm = null;
+        }
+
+        private void mTextLink(object sender, string linkName)
+        {
+            if (!string.IsNullOrEmpty(linkName))
+                fBase.SelectRecordByXRef(linkName);
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            btnSearch.Enabled = false;
+            try {
+                fPlugin.SearchMan.ShowResults(fBase, txtQuery.Text, fResultsText.Lines);
+            } finally {
+                btnSearch.Enabled = true;
+            }
+        }
     }
 }
