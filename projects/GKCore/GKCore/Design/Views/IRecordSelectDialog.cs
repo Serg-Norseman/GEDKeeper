@@ -34,7 +34,7 @@ namespace GKCore.Design.Views
         GDMRecord ResultRecord { get; set; }
 
         IComboBox FilterBox { get; }
-        IListViewEx RecordsList { get; }
+        IListView RecordsList { get; }
 
         void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex);
     }

@@ -22,6 +22,7 @@ using System;
 using BSLib;
 using GDModel;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
@@ -94,7 +95,7 @@ namespace GKCore.Lists
     {
         EnumSet<SheetButton> Buttons { get; set; }
         ISheetModel ListModel { get; set; }
-        IListViewEx ListView { get; }
+        IListView ListView { get; }
         bool ReadOnly { get; set; }
 
         void UpdateSheet();

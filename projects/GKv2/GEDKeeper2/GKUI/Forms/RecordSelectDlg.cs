@@ -55,7 +55,7 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(txtFastFilter); }
         }
 
-        IListViewEx IRecordSelectDialog.RecordsList
+        IListView IRecordSelectDialog.RecordsList
         {
             get { return fListRecords; }
         }

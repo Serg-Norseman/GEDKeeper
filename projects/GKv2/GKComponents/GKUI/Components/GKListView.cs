@@ -187,7 +187,7 @@ namespace GKUI.Components
     /// <summary>
     ///
     /// </summary>
-    public class GKListView : ListView, IListViewEx
+    public class GKListView : ListView, IListView
     {
         private class LVColumnSorter : IComparer
         {

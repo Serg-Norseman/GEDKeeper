@@ -2,6 +2,12 @@
 {
 	partial class HistoryDataWin
 	{
+		private System.Windows.Forms.ToolStrip toolStrip1;
+		private System.Windows.Forms.ToolStripButton btnCheck;
+		private GKUI.Components.GKListView lvData;
+		private System.Windows.Forms.ToolStripButton btnLoadFile;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripComboBox cbDataFiles;
 
 		private void InitializeComponent()
 		{
@@ -88,18 +94,12 @@
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 		    this.Text = "HistoryData";
 		    this.TopMost = true;
-		    this.Closed += new System.EventHandler(this.HistoryDataWin_Closed);
-		    this.Load += new System.EventHandler(this.HistoryDataWin_Load);
+		    this.Closed += new System.EventHandler(this.Form_Closed);
+		    this.Load += new System.EventHandler(this.Form_Load);
 		    this.toolStrip1.ResumeLayout(false);
 		    this.toolStrip1.PerformLayout();
 		    this.ResumeLayout(false);
 		    this.PerformLayout();
 		}
-		private System.Windows.Forms.ToolStrip toolStrip1;
-		private System.Windows.Forms.ToolStripButton btnCheck;
-		private GKUI.Components.GKListView lvData;
-		private System.Windows.Forms.ToolStripButton btnLoadFile;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripComboBox cbDataFiles;
 	}
 }

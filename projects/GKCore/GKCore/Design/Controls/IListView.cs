@@ -20,6 +20,7 @@
 
 using System;
 using GKCore.Design.Graphics;
+using GKCore.Interfaces;
 
 namespace GKCore.Design.Controls
 {
@@ -49,6 +50,7 @@ namespace GKCore.Design.Controls
     public interface IListView : IBaseControl
     {
         IListViewItems Items { get; }
+        IListSource ListMan { get; set; }
         int SelectedIndex { get; set; }
         int SortColumn { get; set; }
 
@@ -61,13 +63,17 @@ namespace GKCore.Design.Controls
         void Clear();
         void ClearColumns();
         void ClearItems();
-        //void DeleteRecord(object data); // GK specific
+        void DeleteRecord(object data);
         void EndUpdate();
         object GetSelectedData();
+        void ResizeColumn(int columnIndex);
+        void ResizeColumns();
+        void SelectItem(int index);
         void SelectItem(object rowData);
         void SetColumnCaption(int index, string caption); // GK specific
         void SetSortColumn(int sortColumn, bool checkOrder = true);
         void Sort(int sortColumn, BSDTypes.SortOrder sortOrder);
+        void SortModelColumn(int columnId);
         void UpdateContents(bool columnsChanged = false); // GK specific
     }
 }

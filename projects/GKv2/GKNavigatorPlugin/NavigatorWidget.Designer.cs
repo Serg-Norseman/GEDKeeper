@@ -3,6 +3,9 @@
     partial class NavigatorWidget
     {
         private System.ComponentModel.IContainer components = null;
+        private GKUI.Components.GKListView lvData;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.TreeView treeView1;
 
         protected override void Dispose(bool disposing)
         {
@@ -82,16 +85,12 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "NavigatorWidget";
             this.TopMost = true;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.NavigatorWidget_Closed);
-            this.Load += new System.EventHandler(this.NavigatorWidget_Load);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Closed);
+            this.Load += new System.EventHandler(this.Form_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
         }
-
-        private GKUI.Components.GKListView lvData;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TreeView treeView1;
     }
 }

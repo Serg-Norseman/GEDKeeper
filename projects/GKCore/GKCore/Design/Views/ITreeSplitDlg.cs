@@ -18,13 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
     public interface ITreeSplitDlg : ICommonDialog, IBaseEditor
     {
-        IListViewEx SelectedList { get; }
-        IListViewEx SkippedList { get; }
+        IListView SelectedList { get; }
+        IListView SkippedList { get; }
     }
 }

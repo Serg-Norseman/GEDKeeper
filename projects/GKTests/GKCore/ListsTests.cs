@@ -158,7 +158,7 @@ namespace GKCore
             listManager.QuickFilter = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
             listManager.UpdateColumns(listView);
             listManager.CreateListItem(0, grpRec, CreateListItem);
 
@@ -201,7 +201,7 @@ namespace GKCore
             listManager.QuickFilter = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
             listManager.UpdateColumns(listView);
             listManager.CreateListItem(0, communicationRec, CreateListItem);
         }
@@ -222,7 +222,7 @@ namespace GKCore
             listManager.QuickFilter = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
             listManager.UpdateColumns(listView);
             listManager.CreateListItem(0, familyRec, CreateListItem);
         }
@@ -253,7 +253,7 @@ namespace GKCore
             listManager.PrepareFilter();
             listManager.ExternalFilter = ExtFilterHandler;
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
 
             GlobalOptions.Instance.DefNameFormat = NameFormat.nfFNP;
             listManager.UpdateColumns(listView);
@@ -284,7 +284,7 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
             listManager.UpdateColumns(listView);
             listManager.CreateListItem(0, locationRec, CreateListItem);
         }
@@ -305,7 +305,7 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
             listManager.UpdateColumns(listView);
             listManager.CreateListItem(0, mediaRec, CreateListItem);
         }
@@ -327,7 +327,7 @@ namespace GKCore
             listManager.QuickFilter = "*xxxxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
             listManager.UpdateColumns(listView);
             listManager.CreateListItem(0, noteRec, CreateListItem);
             noteRec.Clear();
@@ -350,7 +350,7 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
             listManager.UpdateColumns(listView);
             listManager.CreateListItem(0, repositoryRec, CreateListItem);
         }
@@ -371,7 +371,7 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
             listManager.UpdateColumns(listView);
             listManager.CreateListItem(0, researchRec, CreateListItem);
         }
@@ -392,7 +392,7 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
             listManager.UpdateColumns(listView);
             listManager.CreateListItem(0, sourceRec, CreateListItem);
         }
@@ -413,7 +413,7 @@ namespace GKCore
             listManager.QuickFilter = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
-            var listView = Substitute.For<IListViewEx>();
+            var listView = Substitute.For<IListView>();
             listManager.UpdateColumns(listView);
             listManager.CreateListItem(0, taskRec, CreateListItem);
         }

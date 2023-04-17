@@ -18,12 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
     public interface ITreeCheckDlg : ICommonDialog, IBaseEditor
     {
-        IListViewEx ChecksList { get; }
+        IListView ChecksList { get; }
     }
 }

@@ -18,12 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
     public interface IPlacesManagerDlg : ICommonDialog, IBaseEditor
     {
-        IListViewEx PlacesList { get; }
+        IListView PlacesList { get; }
     }
 }

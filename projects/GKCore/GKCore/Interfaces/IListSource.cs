@@ -20,8 +20,8 @@
 
 using System.Collections.Generic;
 using GDModel;
-using GKCore.Design.Graphics;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 
 namespace GKCore.Interfaces
 {
@@ -109,7 +109,7 @@ namespace GKCore.Interfaces
         int IndexOfItem(object data);
         bool IsColumnAutosize(int colIndex);
         void SortContents(int sortColumn, bool sortAscending);
-        void UpdateColumns(IListViewEx listView);
+        void UpdateColumns(IListView listView);
         void UpdateContents();
     }
 }

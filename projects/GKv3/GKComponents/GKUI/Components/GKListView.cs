@@ -144,7 +144,7 @@ namespace GKUI.Components
     /// <summary>
     ///
     /// </summary>
-    public class GKListView : GridView, IListViewEx
+    public class GKListView : GridView, IListView
     {
         private readonly ObservableExtList<GKListItem> fItems;
 

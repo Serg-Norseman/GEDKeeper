@@ -23,7 +23,7 @@ using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Design.Controls;
 using GKCore.Lists;
 using GKCore.Types;
 
@@ -89,7 +89,7 @@ namespace GKUI.Components
             }
         }
 
-        public IListViewEx ListView
+        public IListView ListView
         {
             get { return fList; }
         }

@@ -22,6 +22,7 @@ using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Tools;
@@ -50,12 +51,12 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IListViewEx ITreeSplitDlg.SelectedList
+        IListView ITreeSplitDlg.SelectedList
         {
             get { return ListSelected; }
         }
 
-        IListViewEx ITreeSplitDlg.SkippedList
+        IListView ITreeSplitDlg.SkippedList
         {
             get { return ListSkipped; }
         }

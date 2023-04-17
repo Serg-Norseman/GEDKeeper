@@ -22,6 +22,7 @@ using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKUI.Components;
@@ -47,7 +48,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IListViewEx ITreeCheckDlg.ChecksList
+        IListView ITreeCheckDlg.ChecksList
         {
             get { return ListChecks; }
         }

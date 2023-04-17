@@ -20,6 +20,7 @@
 
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Interfaces;
 using GKUI.Components;
 
 namespace GKUI.Platform.Handlers
@@ -33,6 +34,12 @@ namespace GKUI.Platform.Handlers
         public IListViewItems Items
         {
             get { return (IListViewItems)Control.Items; }
+        }
+
+        public IListSource ListMan
+        {
+            get { return Control.ListMan; }
+            set { Control.ListMan = value; }
         }
 
         public int SelectedIndex
@@ -92,6 +99,11 @@ namespace GKUI.Platform.Handlers
             Control.ClearItems();
         }
 
+        public void DeleteRecord(object data)
+        {
+            Control.DeleteRecord(data);
+        }
+
         public void EndUpdate()
         {
             Control.EndUpdate();
@@ -102,9 +114,24 @@ namespace GKUI.Platform.Handlers
             return Control.GetSelectedData();
         }
 
+        public void ResizeColumn(int columnIndex)
+        {
+            Control.ResizeColumn(columnIndex);
+        }
+
+        public void ResizeColumns()
+        {
+            Control.ResizeColumns();
+        }
+
         public void SelectItem(object rowData)
         {
             Control.SelectItem(rowData);
+        }
+
+        public void SelectItem(int index)
+        {
+            Control.SelectItem(index);
         }
 
         public void SetColumnCaption(int index, string caption)
@@ -120,6 +147,11 @@ namespace GKUI.Platform.Handlers
         public void Sort(int sortColumn, BSDTypes.SortOrder sortOrder)
         {
             Control.Sort(sortColumn, sortOrder);
+        }
+
+        public void SortModelColumn(int columnId)
+        {
+            Control.SortModelColumn(columnId);
         }
 
         public void UpdateContents(bool columnsChanged = false)

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,222 +19,101 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Net;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using BSLib;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Components;
 
 namespace GKHistoryDataPlugin
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class HistoryDataWin : Form, IWidgetForm
     {
-        public enum LinkState
-        {
-            Normal,
-            Invalid,
-            Duplicate
-        }
-
-        private class LinkItem
-        {
-            public GKListItem Item;
-            public LinkState State;
-
-            public LinkItem(GKListItem item)
-            {
-                Item = item;
-            }
-        }
-
+        private readonly HistoryData fData;
         private readonly Plugin fPlugin;
-        private int fLinkColumn;
-        private List<LinkItem> fItems;
 
         public HistoryDataWin(Plugin plugin)
         {
             InitializeComponent();
 
             fPlugin = plugin;
-
-            Screen scr = Screen.PrimaryScreen;
-            Location = new Point(scr.WorkingArea.Width - Width - 10, scr.WorkingArea.Height - Height - 10);
-
-            fItems = new List<LinkItem>();
-            LoadFiles();
+            fData = new HistoryData();
+            UpdateFiles();
 
             SetLocale();
         }
-
-        private void HistoryDataWin_Load(object sender, EventArgs e)
-        {
-            fPlugin.Host.WidgetShow(fPlugin);
-        }
-
-        private void HistoryDataWin_Closed(object sender, EventArgs e)
-        {
-            fPlugin.Host.WidgetClose(fPlugin);
-        }
-
-        private void LoadFiles()
-        {
-            try {
-                string csvPath = AppHost.GetAppPath() + "externals/";
-                if (!Directory.Exists(csvPath)) {
-                    Directory.CreateDirectory(csvPath);
-                }
-                string[] csvFiles = Directory.GetFiles(csvPath, "*.csv");
-
-                cbDataFiles.Items.Clear();
-                foreach (string cf in csvFiles) {
-                    cbDataFiles.Items.Add(Path.GetFileName(cf));
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("HistoryDataWin.LoadFiles()", ex);
-            }
-        }
-
-        private void LoadDataFile(string fileName)
-        {
-            string csvPath = AppHost.GetAppPath() + "externals/" + fileName;
-            if (!File.Exists(csvPath)) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound, fileName));
-                return;
-            }
-
-            fItems.Clear();
-            fLinkColumn = -1;
-            int rowNum = 0;
-            using (var csv = CSVReader.CreateFromFile(csvPath, Encoding.UTF8)) {
-                var row = csv.ReadRow();
-                while (row != null) {
-                    if (rowNum == 0) {
-                        for (int i = 0; i < row.Count; i++) {
-                            bool autoSize = (i == 0);
-                            lvData.AddColumn(row[i].ToString(), 200, autoSize);
-                        }
-                    } else {
-                        if (fLinkColumn == -1) {
-                            CheckLinkColumn(row);
-                        }
-
-                        fItems.Add(new LinkItem((GKListItem)lvData.AddItem(null, row.ToArray())));
-                    }
-
-                    row = csv.ReadRow();
-                    rowNum += 1;
-                }
-            }
-        }
-
-        private void CheckLinkColumn(List<object> row)
-        {
-            for (int i = 0; i < row.Count; i++) {
-                if (row[i].ToString().StartsWith("http")) {
-                    fLinkColumn = i;
-                    break;
-                }
-            }
-        }
-
-        private void lvData_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            GKListItem item = lvData.GetSelectedItem();
-            if (item != null && fLinkColumn != -1) {
-                GKUtils.LoadExtFile(item.SubItems[fLinkColumn].Text);
-            }
-        }
-
-        #region ILocalizable support
 
         public void SetLocale()
         {
             Text = fPlugin.LangMan.LS(HDLS.LSID_Title);
         }
 
-        #endregion
+        private void Form_Load(object sender, EventArgs e)
+        {
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
+            fPlugin.Host.WidgetShow(fPlugin);
+        }
+
+        private void Form_Closed(object sender, EventArgs e)
+        {
+            fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        private void UpdateFiles()
+        {
+            cbDataFiles.Items.Clear();
+            foreach (string cf in fData.CSVFiles) {
+                cbDataFiles.Items.Add(Path.GetFileName(cf));
+            }
+        }
+
+        private void lvData_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            GKListItem item = lvData.GetSelectedItem();
+            if (item != null && fData.LinkColumn != -1) {
+                GKUtils.LoadExtFile(item.SubItems[fData.LinkColumn].Text);
+            }
+        }
 
         private void btnCheck_Click(object sender, EventArgs e)
         {
-            try {
-                Thread worker = new Thread(WorkerMethod);
-                worker.SetApartmentState(ApartmentState.STA);
-                worker.IsBackground = true;
-                worker.Start();
-            } catch (Exception ex) {
-                Logger.WriteError("HistoryDataWin.btnCheck_Click()", ex);
+            fData.Check();
+            RefreshList();
+        }
+
+        private void RefreshList()
+        {
+            lvData.Clear();
+
+            for (int i = 0; i < fData.Headers.Length; i++) {
+                bool autoSize = (i == 0);
+                lvData.AddColumn(fData.Headers[i].ToString(), 200, autoSize);
+            }
+
+            for (int i = 0; i < fData.Items.Count; i++) {
+                var item = fData.Items[i];
+                item.Item = lvData.AddItem(null, item.Data);
+                var listItem = item.Item as GKListItem;
+
+                switch (item.State) {
+                    case LinkState.Normal:
+                        listItem.BackColor = Color.PaleGreen;
+                        break;
+                    case LinkState.Invalid:
+                        listItem.BackColor = Color.IndianRed;
+                        break;
+                    case LinkState.Duplicate:
+                        listItem.BackColor = Color.Orange;
+                        break;
+                }
             }
         }
 
         private void btnLoadFile_Click(object sender, EventArgs e)
         {
-            LoadDataFile(cbDataFiles.Text);
-        }
-
-        public static bool IsValidUrl(string url)
-        {
-            try {
-                var request = WebRequest.Create(url);
-                request.Timeout = 5000;
-                request.Method = "HEAD";
-
-                using (var response = (HttpWebResponse)request.GetResponse()) {
-                    response.Close();
-                    return response.StatusCode == HttpStatusCode.OK;
-                }
-            } catch (Exception) {
-                return false;
-            }
-        }
-
-        private void WorkerMethod()
-        {
-            try {
-                int num = fItems.Count;
-                for (int i = 0; i < num; i++) {
-                    var linkItem1 = fItems[i];
-                    string url1 = linkItem1.Item.SubItems[fLinkColumn].Text;
-
-                    for (int k = i + 1; k < num; k++) {
-                        var linkItem2 = fItems[i];
-                        string url2 = linkItem2.Item.SubItems[fLinkColumn].Text;
-
-                        if (string.Compare(url1, url2, true) == 0) {
-                            linkItem2.State = LinkState.Duplicate;
-                        }
-                    }
-                }
-
-                for (int i = 0; i < num; i++) {
-                    var linkItem = fItems[i];
-                    string url = linkItem.Item.SubItems[fLinkColumn].Text;
-                    if (!IsValidUrl(url)) {
-                        linkItem.State = LinkState.Invalid;
-                    }
-
-                    switch (linkItem.State) {
-                        case LinkState.Normal:
-                            linkItem.Item.BackColor = Color.PaleGreen;
-                            break;
-                        case LinkState.Invalid:
-                            linkItem.Item.BackColor = Color.IndianRed;
-                            break;
-                        case LinkState.Duplicate:
-                            linkItem.Item.BackColor = Color.Orange;
-                            break;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("HistoryDataWin.WorkerMethod()", ex);
+            if (fData.LoadDataFile(cbDataFiles.Text)) {
+                RefreshList();
             }
         }
     }

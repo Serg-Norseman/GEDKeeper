@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,7 +21,9 @@
 using System;
 using System.Collections.Generic;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore;
+using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -150,6 +152,7 @@ namespace GKNavigatorPlugin
     public sealed class NavigatorData
     {
         private readonly Dictionary<string, BaseData> fBases;
+        private readonly Plugin fPlugin;
 
         public BaseData this[string name]
         {
@@ -163,8 +166,9 @@ namespace GKNavigatorPlugin
             }
         }
 
-        public NavigatorData()
+        public NavigatorData(Plugin plugin)
         {
+            fPlugin = plugin;
             fBases = new Dictionary<string, BaseData>();
         }
 
@@ -187,6 +191,217 @@ namespace GKNavigatorPlugin
 
             fBases.Remove(oldName);
             fBases.Add(newName, b_data);
+        }
+
+        public void ShowItem(IBaseWindow baseWin, object tag, IListView listView)
+        {
+            if (tag is GDMRecordType) {
+                ShowData(baseWin, DataCategory.Records, (GDMRecordType)tag, listView);
+            } else if (tag is DataCategory) {
+                ShowData(baseWin, (DataCategory)tag, GDMRecordType.rtNone, listView);
+            }
+        }
+
+        public void ShowData(IBaseWindow baseWin, DataCategory category, GDMRecordType recordType, IListView listView)
+        {
+            switch (category) {
+                case DataCategory.RecentActivity:
+                    listView.Clear();
+                    break;
+
+                case DataCategory.JumpHistory:
+                    ShowJumpHistory(baseWin, listView);
+                    break;
+
+                case DataCategory.PotencialProblems:
+                    listView.Clear();
+                    break;
+
+                case DataCategory.Filters:
+                    ShowFilters(baseWin, listView);
+                    break;
+
+                case DataCategory.Bookmarks:
+                    ShowBookmarks(baseWin, listView);
+                    break;
+
+                case DataCategory.Records:
+                    ShowRecordsData(baseWin, recordType, listView);
+                    break;
+
+                case DataCategory.Languages:
+                    ShowLanguages(baseWin, listView);
+                    break;
+            }
+        }
+
+        public void SelectItem(IBaseWindow baseWin, object tag, object itemData)
+        {
+            if (tag == null) return;
+            if (itemData == null) return;
+
+            if (tag is GDMRecordType) {
+                SelectRecordInfo(baseWin, (RecordInfo)itemData);
+            } else if (tag is DataCategory) {
+                var dataCat = (DataCategory)tag;
+
+                switch (dataCat) {
+                    case DataCategory.JumpHistory:
+                        SelectRecord(baseWin, (GDMRecord)itemData);
+                        break;
+
+                    case DataCategory.Filters:
+                        SelectFilter(baseWin, (FilterInfo)itemData);
+                        break;
+
+                    case DataCategory.Bookmarks:
+                        SelectRecord(baseWin, (GDMRecord)itemData);
+                        break;
+
+                    case DataCategory.Languages:
+                        SelectLanguage(baseWin, (GDMLanguageID)itemData);
+                        break;
+                }
+            }
+        }
+
+        private void SelectRecord(IBaseWindow baseWin, GDMRecord iRec)
+        {
+            baseWin.SelectByRec(iRec);
+        }
+
+        #region Records Data
+
+        private void ShowRecordsData(IBaseWindow baseWin, GDMRecordType recordType, IListView listView)
+        {
+            baseWin.ShowRecordsTab(recordType);
+
+            listView.BeginUpdate();
+            try {
+                listView.Clear();
+                listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Action), 20, true);
+                listView.AddColumn("XRef", 20, true);
+                listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Name), 20, true);
+                listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Time), 20, true);
+
+                BaseData baseData = fPlugin.Data[baseWin.Context.FileName];
+                if (baseData == null) return;
+
+                foreach (var recordInfo in baseData.ChangedRecords) {
+                    if (recordInfo.Type != recordType) continue;
+
+                    string act = "";
+                    switch (recordInfo.Action) {
+                        case RecordAction.raAdd:
+                            act = "+";
+                            break;
+                        case RecordAction.raEdit:
+                            act = "*";
+                            break;
+                        case RecordAction.raDelete:
+                            act = "-";
+                            break;
+                    }
+
+                    listView.AddItem(recordInfo, new object[] { act, recordInfo.XRef, recordInfo.Name, recordInfo.Time.ToString() });
+                }
+
+                listView.ResizeColumns();
+            } finally {
+                listView.EndUpdate();
+            }
+        }
+
+        private void SelectRecordInfo(IBaseWindow baseWin, RecordInfo recInfo)
+        {
+            if (recInfo.Action != RecordAction.raDelete)
+                SelectRecord(baseWin, recInfo.Record);
+        }
+
+        #endregion
+
+        #region JumpHistory
+
+        private void ShowJumpHistory(IBaseWindow baseWin, IListView listView)
+        {
+            var tree = baseWin.Context.Tree;
+            var navArray = baseWin.Navman.FullArray;
+
+            listView.BeginUpdate();
+            try {
+                listView.Clear();
+                listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Record), 400, true);
+
+                foreach (var rec in navArray) {
+                    listView.AddItem(rec, new object[] { GKUtils.GetRecordName(tree, rec, true) });
+                }
+
+                listView.ResizeColumn(0);
+            } finally {
+                listView.EndUpdate();
+            }
+        }
+
+        #endregion
+
+        #region Filters
+
+        private void ShowFilters(IBaseWindow baseWin, IListView listView)
+        {
+            baseWin.ShowRecordsTab(GDMRecordType.rtIndividual);
+
+            listView.BeginUpdate();
+            try {
+                listView.Clear();
+                listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Filter), 400, true);
+
+                BaseData baseData = fPlugin.Data[baseWin.Context.FileName];
+                if (baseData == null) return;
+
+                foreach (var filterInfo in baseData.ChangedFilters) {
+                    listView.AddItem(filterInfo, new object[] { filterInfo.FilterView });
+                }
+
+                listView.ResizeColumn(0);
+            } finally {
+                listView.EndUpdate();
+            }
+        }
+
+        private void SelectFilter(IBaseWindow baseWin, FilterInfo filterInfo)
+        {
+            try {
+                baseWin.ShowRecordsTab(filterInfo.RecType);
+                filterInfo.ListSource.Filter.Deserialize(filterInfo.FilterContent);
+                baseWin.ApplyFilter(filterInfo.RecType);
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region Bookmarks
+
+        private void ShowBookmarks(IBaseWindow baseWin, IListView listView)
+        {
+            baseWin.ShowRecordsTab(GDMRecordType.rtIndividual);
+
+            var bookmarks = fPlugin.Data.SearchBookmarks(baseWin.Context);
+
+            listView.BeginUpdate();
+            try {
+                listView.Clear();
+                listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Person), 400, true);
+
+                foreach (var iRec in bookmarks) {
+                    listView.AddItem(iRec, new object[] { GKUtils.GetNameString(iRec, true, false) });
+                }
+
+                listView.ResizeColumn(0);
+            } finally {
+                listView.EndUpdate();
+            }
         }
 
         public IList<GDMIndividualRecord> SearchBookmarks(IBaseContext baseContext)
@@ -218,5 +433,38 @@ namespace GKNavigatorPlugin
 
             return result;
         }
+
+        #endregion
+
+        #region Languages
+
+        private void ShowLanguages(IBaseWindow baseWin, IListView listView)
+        {
+            listView.BeginUpdate();
+            try {
+                listView.Clear();
+                listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Language), 200, true);
+
+                var baseContext = baseWin.Context;
+
+                foreach (var lang in baseContext.LangsList) {
+                    listView.AddItem(lang, new object[] { GEDCOMUtils.GetLanguageStr(lang) });
+                }
+
+                listView.ResizeColumn(0);
+            } finally {
+                listView.EndUpdate();
+            }
+        }
+
+        public void SelectLanguage(IBaseWindow baseWin, GDMLanguageID lang)
+        {
+            baseWin.Context.DefaultLanguage = lang;
+            baseWin.ShowRecordsTab(GDMRecordType.rtIndividual);
+            baseWin.RefreshRecordsView(GDMRecordType.rtIndividual);
+        }
+
+        #endregion
+
     }
 }

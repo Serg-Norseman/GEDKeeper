@@ -30,7 +30,7 @@ using GKCore.Types;
 [assembly: AssemblyTitle("GKNavigatorPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Navigator plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2016,2022 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2016,2022-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 
@@ -90,7 +90,7 @@ namespace GKNavigatorPlugin
 
         public Plugin()
         {
-            fData = new NavigatorData();
+            fData = new NavigatorData(this);
         }
 
         protected override void Dispose(bool disposing)

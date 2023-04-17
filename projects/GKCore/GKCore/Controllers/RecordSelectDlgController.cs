@@ -22,7 +22,6 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
@@ -104,7 +103,7 @@ namespace GKCore.Controllers
                 flt = "*" + flt + "*";
             }
 
-            IListViewEx recordsList = fView.RecordsList;
+            IListView recordsList = fView.RecordsList;
             recordsList.ListMan.Filter.Clear();
             recordsList.ListMan.QuickFilter = flt;
 

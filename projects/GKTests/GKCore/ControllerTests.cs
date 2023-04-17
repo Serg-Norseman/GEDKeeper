@@ -560,7 +560,7 @@ namespace GKCore.Controllers
             SubstituteControl<ITabPage>(view, "pageOptions");
             SubstituteControl<ICheckBox>(view, "chkCheckPersonPlaces");
 
-            view.ChecksList.Returns(Substitute.For<IListViewEx>());
+            view.ChecksList.Returns(Substitute.For<IListView>());
 
             var controller = new TreeCheckController(view);
             controller.Init(fBaseWin);

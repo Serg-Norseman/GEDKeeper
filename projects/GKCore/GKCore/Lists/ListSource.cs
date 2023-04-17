@@ -142,7 +142,7 @@ namespace GKCore.Lists
             fColumnsMap.Add(new MapColumnRec(caption, width, autoSize, colType, colSubtype));
         }
 
-        public void UpdateColumns(IListViewEx listView)
+        public void UpdateColumns(IListView listView)
         {
             UpdateColumnsMap();
 
