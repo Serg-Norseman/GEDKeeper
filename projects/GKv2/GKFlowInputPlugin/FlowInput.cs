@@ -148,10 +148,22 @@ namespace GKFlowInputPlugin
             return srcRec;
         }
 
+        private static string CheckStr(string val)
+        {
+            return (val == null) ? string.Empty : val;
+        }
+
         public void ParseSource(GDMSourceRecord srcRec, int srcYear, string srcPage, string place,
             ref GDMIndividualRecord iMain, string lnk, string nm, string pt, string fm, string age, string comment,
             int eventType, string eventDate)
         {
+            lnk = CheckStr(lnk);
+            nm = CheckStr(nm);
+            pt = CheckStr(pt);
+            fm = CheckStr(fm);
+            age = CheckStr(age);
+            comment = CheckStr(comment);
+
             if (!string.IsNullOrEmpty(lnk)) {
                 PersonLink link = GetLinkByName(lnk);
                 if (link == PersonLink.plNone) return;

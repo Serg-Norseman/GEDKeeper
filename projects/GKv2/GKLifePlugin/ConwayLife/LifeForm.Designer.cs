@@ -13,7 +13,6 @@
         private System.Windows.Forms.ToolStripButton tbClear;
         private System.Windows.Forms.ToolStripButton tbRandomise;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton tbOptions;
         private ConwayLife.LifeViewer cmpLife;
         private System.Windows.Forms.ToolStripStatusLabel stlGeneration;
         private System.Windows.Forms.ToolStripStatusLabel stlLivingCells;
@@ -37,7 +36,6 @@
             this.tbClear = new System.Windows.Forms.ToolStripButton();
             this.tbRandomise = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tbOptions = new System.Windows.Forms.ToolStripButton();
             this.barStatusLine = new System.Windows.Forms.StatusStrip();
             this.stlGeneration = new System.Windows.Forms.ToolStripStatusLabel();
             this.stlLivingCells = new System.Windows.Forms.ToolStripStatusLabel();
@@ -55,9 +53,7 @@
                                              this.toolStripSeparator1,
                                              this.btnSetCells,
                                              this.tbClear,
-                                             this.tbRandomise,
-                                             this.toolStripSeparator2,
-                                             this.tbOptions});
+                                             this.tbRandomise});
             this.ToolBar1.Location = new System.Drawing.Point(0, 0);
             this.ToolBar1.Name = "ToolBar1";
             this.ToolBar1.Size = new System.Drawing.Size(923, 27);
@@ -121,15 +117,6 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
             // 
-            // tbOptions
-            // 
-            this.tbOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbOptions.Name = "tbOptions";
-            this.tbOptions.Size = new System.Drawing.Size(65, 24);
-            this.tbOptions.Text = "Options";
-            this.tbOptions.Click += new System.EventHandler(this.tbOptions_Click);
-            // 
             // barStatusLine
             // 
             this.barStatusLine.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -178,8 +165,8 @@
             this.Name = "LifeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmP1Main";
-            this.Load += new System.EventHandler(this.PluginForm_Load);
-            this.Resize += new System.EventHandler(this.PluginFormResize);
+            this.Load += new System.EventHandler(this.Form_Load);
+            this.Resize += new System.EventHandler(this.Form_Resize);
             this.ToolBar1.ResumeLayout(false);
             this.ToolBar1.PerformLayout();
             this.barStatusLine.ResumeLayout(false);

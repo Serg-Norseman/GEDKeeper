@@ -16,12 +16,15 @@ using GKUI.Components;
 
 namespace GKLifePlugin.ConwayLife
 {
-    public delegate void DoesCellLiveEvent(object sender, int x, int y, LifeGrid grid, ref bool result);
+    public delegate void DoesCellLiveEvent(object sender, int x, int y, LifeGrid grid, ref byte result);
 
     public delegate void NotifyEvent(object sender);
 
     public class LifeViewer : UserControl
     {
+        public static readonly bool[] DefaultDeadCells = new bool[] { false, false, false, true, false, false, false, false, false };
+        public static readonly bool[] DefaultLiveCells = new bool[] { false, false, true, true, false, false, false, false, false };
+
         public const int DefaultAnimationDelay = 100;
         public static readonly Color DefaultCellColor = Color.Green;
         public static readonly Color DefaultBackgroundColor = Color.Silver;
@@ -31,19 +34,14 @@ namespace GKLifePlugin.ConwayLife
 
         private bool fAcceptMouseClicks;
         private int fGeneration;
-        private Color fGridLineColor;
-        private DashStyle fGridLineStyle;
         private NotifyEvent fOnChange;
-        private DoesCellLiveEvent fOnDoesCellLive;
         private bool fShowGridLines;
 
         private readonly LifeGrid fGrid;
         private readonly LifeHistory fHistory;
-        private readonly LifeOptions fOptions;
-        private readonly LifeRules fRules;
 
 
-        public short this[int X, int Y]
+        public byte this[int X, int Y]
         {
             get {
                 return fGrid[X, Y];
@@ -89,45 +87,10 @@ namespace GKLifePlugin.ConwayLife
             set { SetGridSize(GridWidth, value); }
         }
 
-        public Color GridLineColor
-        {
-            get { return fGridLineColor; }
-            set {
-                if (value != fGridLineColor) {
-                    fGridLineColor = value;
-                    Invalidate();
-                }
-            }
-        }
-
-        public DashStyle GridLineStyle
-        {
-            get { return fGridLineStyle; }
-            set {
-                if (value != fGridLineStyle) {
-                    fGridLineStyle = value;
-                    Invalidate();
-                }
-            }
-        }
-
         public int GridWidth
         {
             get { return fGrid.GridWidth; }
             set { SetGridSize(value, GridHeight); }
-        }
-
-        public int MaxNumberOfHistoryLevels
-        {
-            get { return fHistory.MaxLevels; }
-            set {
-                if (value < 1)
-                    throw new IndexOutOfRangeException("MaxNumberOfHistoryLevels must be greater than 0");
-                if (value > LifeHistory.MaxNumberOfHistoryLevels)
-                    throw new IndexOutOfRangeException(string.Format("MaxNumberOfHistoryLevels must be greater than {0}", LifeHistory.MaxNumberOfHistoryLevels));
-
-                fHistory.MaxLevels = value;
-            }
         }
 
         public bool ShowGridLines
@@ -141,38 +104,18 @@ namespace GKLifePlugin.ConwayLife
             }
         }
 
-        public LifeOptions Options
-        {
-            get { return fOptions; }
-        }
-
         public NotifyEvent OnChange
         {
             get { return fOnChange; }
             set { fOnChange = value; }
         }
 
-        public DoesCellLiveEvent OnDoesCellLive
-        {
-            get { return fOnDoesCellLive; }
-            set { fOnDoesCellLive = value; }
-        }
-
-        public LifeRules Rules
-        {
-            get { return fRules; }
-        }
-
         public LifeViewer()
         {
             DoubleBuffered = true;
 
-            fOptions = new LifeOptions();
-            fRules = new LifeRules();
             fGrid = new LifeGrid(LifeGrid.DefaultGridWidth, LifeGrid.DefaultGridHeight);
             fHistory = new LifeHistory(LifeHistory.DefaultNumberOfHistoryLevels);
-            fGridLineColor = LifeViewer.DefaultGridLineColor;
-            fGridLineStyle = LifeViewer.DefaultGridLineStyle;
         }
 
         protected override void Dispose(bool disposing)
@@ -255,30 +198,12 @@ namespace GKLifePlugin.ConwayLife
             if (fOnChange != null) fOnChange(this);
         }
 
-        protected bool DoesCellLive(int X, int Y, LifeGrid grid)
-        {
-            bool result = grid.DoesCellLive(X, Y);
-            if (fOnDoesCellLive != null) fOnDoesCellLive(this, X, Y, grid, ref result);
-            return result;
-        }
-
-        protected void InvalidateCell(int X, int Y)
-        {
-            if (X >= GridWidth)
-                throw new IndexOutOfRangeException("X parameter out of range");
-            if (Y >= GridHeight)
-                throw new IndexOutOfRangeException("Y parameter out of range");
-
-            Rectangle rect = CellCoords(X, Y);
-            Invalidate(new Region(rect));
-        }
-
         protected override void OnMouseUp(MouseEventArgs e)
         {
             if (AcceptMouseClicks && (e.Button == MouseButtons.Left)) {
                 Point pt = CellAtPos(e.X, e.Y);
-                short val = this[pt.X, pt.Y];
-                this[pt.X, pt.Y] = (short)((val > 0) ? 0 : 1);
+                byte val = this[pt.X, pt.Y];
+                this[pt.X, pt.Y] = (byte)((val > 0) ? 0 : 1);
             }
 
             base.OnMouseUp(e);
@@ -311,7 +236,7 @@ namespace GKLifePlugin.ConwayLife
                 }
             }
 
-            Color cellColor = fOptions.LivingCellColor;
+            Color cellColor = DefaultCellColor;
             Color bordColor = UIHelper.Lighter(cellColor, 0.5f);
 
             // Draw all the live cells
@@ -339,7 +264,7 @@ namespace GKLifePlugin.ConwayLife
             base.OnResize(e);
         }
 
-        protected void SetCell(int X, int Y, short value)
+        protected void SetCell(int X, int Y, byte value)
         {
             if (this[X, Y] != value) {
                 fGrid[X, Y] = value;
@@ -373,8 +298,8 @@ namespace GKLifePlugin.ConwayLife
 
             for (int y = 0; y < GridHeight; y++) {
                 for (int x = 0; x < GridWidth; x++) {
-                    bool live = DoesCellLive(x, y, MostRecentGrid);
-                    SetCell(x, y, (short)((live) ? 1 : 0));
+                    byte live = MostRecentGrid.DoesCellLive(x, y);
+                    SetCell(x, y, live);
                 }
             }
 

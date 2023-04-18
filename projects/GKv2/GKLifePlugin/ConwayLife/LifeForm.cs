@@ -10,33 +10,48 @@
 
 using System;
 using System.Windows.Forms;
+using GKCore.Interfaces;
 
 namespace GKLifePlugin.ConwayLife
 {
-    public partial class LifeForm : Form
+    public partial class LifeForm : Form, ILocalizable
     {
         private static string PatternStabilisedTitle = "Стабильность образца";
         private static string RepeatingPattern = "Образец повторяется через каждые {0} поколений!";
         private static string StaticPattern = "Образец статичен!";
 
         private bool fIsMinimised;
+        private ILangMan fLangMan;
 
-        public LifeViewer Viewer
-        {
-            get {
-                return cmpLife;
-            }
-        }
-
-        public LifeForm()
+        public LifeForm(ILangMan langMan)
         {
             InitializeComponent();
 
+            fLangMan = langMan;
+
             cmpLife.AcceptMouseClicks = false;
-            cmpLife.MaxNumberOfHistoryLevels = 10;
-            cmpLife.GridHeight = LifeGrid.DefaultGridHeight;
-            cmpLife.GridWidth = LifeGrid.DefaultGridWidth;
             cmpLife.ShowGridLines = false;
+        }
+
+        private void Form_Load(object sender, EventArgs e)
+        {
+            SetLocale();
+            UpdateMenusAndButtons();
+        }
+
+        private void Form_Resize(object sender, EventArgs e)
+        {
+            fIsMinimised = (WindowState == FormWindowState.Minimized);
+        }
+
+        public void SetLocale()
+        {
+            Text = fLangMan.LS(PLS.LSID_LifeGame);
+            tbStep.Text = fLangMan.LS(PLS.LSID_Step);
+            tbStart.Text = fLangMan.LS(PLS.LSID_Start);
+            btnSetCells.Text = fLangMan.LS(PLS.LSID_SetCells);
+            tbClear.Text = fLangMan.LS(PLS.LSID_Clear);
+            tbRandomise.Text = fLangMan.LS(PLS.LSID_Random);
         }
 
         private void tbRandomise_Click(object sender, EventArgs e)
@@ -65,17 +80,16 @@ namespace GKLifePlugin.ConwayLife
 
         private void UpdateMenusAndButtons()
         {
-            tbOptions.Enabled = !tbStart.Checked && !btnSetCells.Checked;
             tbStep.Enabled = !tbStart.Checked && !btnSetCells.Checked;
 
             tbStart.Enabled = !btnSetCells.Checked;
             if (tbStart.Checked) {
                 cmpLife.OnChange += cmpLife_Change;
-                tbStart.Text = Viewer.Options.LS_Stop;
+                tbStart.Text = fLangMan.LS(PLS.LSID_Stop);
                 tbStart.ToolTipText = "Остановка хода поколений";
             } else {
                 cmpLife.OnChange -= cmpLife_Change;
-                tbStart.Text = Viewer.Options.LS_Start;
+                tbStart.Text = fLangMan.LS(PLS.LSID_Start);
                 tbStart.ToolTipText = "Автоматическое прохождение поколений";
             }
 
@@ -108,43 +122,10 @@ namespace GKLifePlugin.ConwayLife
             cmpLife.ClearCells();
         }
 
-        private void PluginFormResize(object sender, EventArgs e)
-        {
-            fIsMinimised = (WindowState == FormWindowState.Minimized);
-        }
-
         private void tbSetCells_Click(object sender, EventArgs e)
         {
             cmpLife.AcceptMouseClicks = btnSetCells.Checked;
             cmpLife.ShowGridLines = cmpLife.AcceptMouseClicks;
-        }
-
-        private void PluginForm_Load(object sender, EventArgs e)
-        {
-            SetLocale();
-            UpdateMenusAndButtons();
-        }
-
-        public void SetLocale()
-        {
-            Text = Viewer.Options.LS_LifeGame;
-            tbStep.Text = Viewer.Options.LS_Step;
-            tbStart.Text = Viewer.Options.LS_Start;
-            btnSetCells.Text = Viewer.Options.LS_SetCells;
-            tbClear.Text = Viewer.Options.LS_Clear;
-            tbRandomise.Text = Viewer.Options.LS_Random;
-            tbOptions.Text = Viewer.Options.LS_Options;
-        }
-
-        private void tbOptions_Click(object sender, EventArgs e)
-        {
-            using (OptionsForm optsForm = new OptionsForm(cmpLife.Options, cmpLife.Rules)) {
-                if (optsForm.ShowDialog() == DialogResult.OK) {
-                    tmrNextGeneration.Interval = cmpLife.Options.AnimationDelay;
-
-                    cmpLife.SetGridSize(cmpLife.Options.GridWidth, cmpLife.Options.GridHeight);
-                }
-            }
         }
     }
 }

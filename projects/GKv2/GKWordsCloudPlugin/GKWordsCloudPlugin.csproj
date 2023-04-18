@@ -38,7 +38,6 @@
     <Compile Include="WordsCloud\CloudViewer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WordsCloud\GdiRenderer.cs" />
     <Compile Include="WordsCloud\QuadTree.cs" />
     <Compile Include="WordsCloud\QuadTreeNode.cs" />
     <Compile Include="WordsCloud\Word.cs" />

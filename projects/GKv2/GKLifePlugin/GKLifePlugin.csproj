@@ -35,16 +35,8 @@
     </Compile>
     <Compile Include="ConwayLife\LifeGrid.cs" />
     <Compile Include="ConwayLife\LifeHistory.cs" />
-    <Compile Include="ConwayLife\LifeOptions.cs" />
-    <Compile Include="ConwayLife\LifeRules.cs" />
     <Compile Include="ConwayLife\LifeViewer.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ConwayLife\OptionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConwayLife\OptionsForm.Designer.cs">
-      <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GKLifePlugin.cs" />
   </ItemGroup>

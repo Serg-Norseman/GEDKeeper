@@ -16,12 +16,14 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
+using BSLib;
+using GKUI.Components;
 
 namespace GKWordsCloudPlugin.WordsCloud
 {
-    public class CloudViewer : Panel
+    public class CloudViewer : Panel, ICloudRenderer
     {
-        private readonly Color[] fDefaultPalette = {
+        private readonly Color[] fPalette = {
             Color.DarkRed,
             Color.DarkBlue,
             Color.DarkGreen,
@@ -43,6 +45,11 @@ namespace GKWordsCloudPlugin.WordsCloud
         private int fMinWordWeight;
         private CloudModel fModel;
         private List<Word> fWords;
+
+        private Font fCurrentFont;
+        private Graphics fGraphics;
+        private FontFamily fFontFamily;
+        private FontStyle fFontStyle;
 
         public override Color BackColor
         {
@@ -113,7 +120,19 @@ namespace GKWordsCloudPlugin.WordsCloud
 
         protected override void Dispose(bool disposing)
         {
+            if (disposing) {
+                if (fCurrentFont != null) fCurrentFont.Dispose();
+                if (fGraphics != null) fGraphics.Dispose();
+            }
             base.Dispose(disposing);
+        }
+
+        private void InitRenderer(Graphics graphics, FontFamily fontFamily, FontStyle fontStyle)
+        {
+            fGraphics = graphics;
+            fFontFamily = fontFamily;
+            fFontStyle = fontStyle;
+            fCurrentFont = new Font(fFontFamily, fMaxFontSize, fFontStyle);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -129,13 +148,13 @@ namespace GKWordsCloudPlugin.WordsCloud
             var gfx = e.Graphics;
             gfx.SmoothingMode = SmoothingMode.AntiAlias;
             gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
-            using (var renderer = new GdiRenderer(gfx, Font.FontFamily, FontStyle.Regular, fDefaultPalette, MinFontSize, MaxFontSize, fMinWordWeight, fMaxWordWeight)) {
-                foreach (Word word in wordsToRedraw) {
-                    if (word.IsExposed) {
-                        renderer.Draw(word, (fItemUnderMouse == word));
-                    }
+            InitRenderer(gfx, Font.FontFamily, FontStyle.Regular);
+            foreach (Word word in wordsToRedraw) {
+                if (word.IsExposed) {
+                    Draw(word, (fItemUnderMouse == word));
                 }
             }
+            fGraphics = null;
         }
 
         private void BuildLayout()
@@ -145,11 +164,12 @@ namespace GKWordsCloudPlugin.WordsCloud
             }
 
             using (Graphics graphics = CreateGraphics()) {
-                var renderer = new GdiRenderer(graphics, Font.FontFamily, FontStyle.Regular, fDefaultPalette, MinFontSize, MaxFontSize, fMinWordWeight, fMaxWordWeight);
+                InitRenderer(graphics, Font.FontFamily, FontStyle.Regular);
 
                 fModel = new CloudModel(Size);
-                fModel.Arrange(fWords, renderer);
+                fModel.Arrange(fWords, this);
             }
+            fGraphics = null;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -189,6 +209,41 @@ namespace GKWordsCloudPlugin.WordsCloud
             var area = new RectangleF(location, new SizeF(0, 0));
             IEnumerable<Word> itemsInArea = (fModel == null) ? new Word[] { } : fModel.GetWordsInArea(area);
             return itemsInArea.FirstOrDefault();
+        }
+
+        public SizeF Measure(string text, int weight)
+        {
+            Font font = GetFont(weight);
+            Size proposedSize = new Size(int.MaxValue, int.MaxValue);
+            return fGraphics.MeasureString(text, font, proposedSize, StringFormat.GenericTypographic);
+        }
+
+        public void Draw(Word word, bool highlight)
+        {
+            Font font = GetFont(word.Occurrences);
+            Color color = fPalette[word.Occurrences * word.Text.Length % fPalette.Length];
+            RectangleF itemRt = word.Rectangle;
+
+            if (highlight) {
+                color = UIHelper.Darker(color, 0.5f);
+            }
+
+            Brush brush = new SolidBrush(color);
+            fGraphics.DrawString(word.Text, font, brush, itemRt, StringFormat.GenericTypographic);
+
+#if DEBUG_DRAW
+            fGraphics.DrawRectangle(new Pen(color), Rectangle.Round(itemRt));
+#endif
+        }
+
+        private Font GetFont(int weight)
+        {
+            float fontSize = (float)(weight - fMinWordWeight) / (fMaxWordWeight - fMinWordWeight) * (fMaxFontSize - fMinFontSize) + fMinFontSize;
+            if (Math.Abs(fCurrentFont.Size - fontSize) > float.Epsilon) {
+                if (fCurrentFont != null) fCurrentFont.Dispose();
+                fCurrentFont = new Font(fFontFamily, fontSize, fFontStyle);
+            }
+            return fCurrentFont;
         }
     }
 }

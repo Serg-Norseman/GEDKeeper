@@ -29,7 +29,7 @@ using GKLifePlugin.ConwayLife;
 [assembly: AssemblyTitle("GKLifePlugin")]
 [assembly: AssemblyDescription("GEDKeeper Conway's Game of Life plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2011-2015 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2011-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 
@@ -59,16 +59,7 @@ namespace GKLifePlugin
 
         public override void Execute()
         {
-            using (LifeForm frm = new LifeForm()) {
-                frm.Viewer.Options.LS_LifeGame = fLangMan.LS(PLS.LSID_LifeGame);
-                frm.Viewer.Options.LS_Step = fLangMan.LS(PLS.LSID_Step);
-                frm.Viewer.Options.LS_Start = fLangMan.LS(PLS.LSID_Start);
-                frm.Viewer.Options.LS_Stop = fLangMan.LS(PLS.LSID_Stop);
-                frm.Viewer.Options.LS_SetCells = fLangMan.LS(PLS.LSID_SetCells);
-                frm.Viewer.Options.LS_Clear = fLangMan.LS(PLS.LSID_Clear);
-                frm.Viewer.Options.LS_Random = fLangMan.LS(PLS.LSID_Random);
-                frm.Viewer.Options.LS_Options = fLangMan.LS(PLS.LSID_Options);
-
+            using (LifeForm frm = new LifeForm(fLangMan)) {
                 frm.ShowDialog();
             }
         }

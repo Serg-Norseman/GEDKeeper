@@ -23,11 +23,11 @@ namespace GKLifePlugin.ConwayLife
         public const int DefaultGridWidth = 280;
 
 
-        private short[] fGrid;
+        private byte[] fGrid;
         private int fGridHeight;
         private int fGridWidth;
 
-        public short this[int X, int Y]
+        public byte this[int X, int Y]
         {
             get { return fGrid[CellCoordToGridOffset(X, Y)]; }
             set { fGrid[CellCoordToGridOffset(X, Y)] = value; }
@@ -86,21 +86,21 @@ namespace GKLifePlugin.ConwayLife
         /// <param name="X"></param>
         /// <param name="Y"></param>
         /// <returns></returns>
-        public bool DoesCellLive(int X, int Y)
+        public byte DoesCellLive(int X, int Y)
         {
             if (X >= fGridWidth) throw new IndexOutOfRangeException("X parameter out of range");
             if (Y >= fGridHeight) throw new IndexOutOfRangeException("Y parameter out of range");
 
-            bool result;
+            byte result;
             switch (NumberOfNeighbours(X, Y)) {
                 case 2:
-                    result = this[X, Y] > 0;
+                    result = this[X, Y];
                     break;
                 case 3:
-                    result = true;
+                    result = 1;
                     break;
                 default:
-                    result = false;
+                    result = 0;
                     break;
             }
             return result;
@@ -114,7 +114,7 @@ namespace GKLifePlugin.ConwayLife
             if (other.fGridWidth != fGridWidth || other.fGridHeight != fGridHeight) {
                 return false;
             } else {
-                short[] sourceGrid = other.fGrid;
+                byte[] sourceGrid = other.fGrid;
                 for (int i = 0; i < fGridHeight * fGridWidth; i++) {
                     if (fGrid[i] != sourceGrid[i]) {
                         return false;
@@ -160,7 +160,7 @@ namespace GKLifePlugin.ConwayLife
 
         private void AllocGrid()
         {
-            fGrid = new short[fGridWidth * fGridHeight];
+            fGrid = new byte[fGridWidth * fGridHeight];
         }
 
         private void FreeGrid()

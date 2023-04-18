@@ -195,7 +195,6 @@ namespace GKPedigreeImporterPlugin
             if (rb == null) return;
 
             if (rb == rbNumsUnknown && rb.Checked) {
-
             }
         }
 

@@ -33,7 +33,6 @@ namespace GKFlowInputPlugin
         private readonly IPlugin fPlugin;
         private readonly ILangMan fLangMan;
         private readonly IBaseWindow fBase;
-        private readonly StringList fSourcesList;
         private GDMSex fSimpleTempSex = GDMSex.svMale;
         private readonly FlowInput fFlowInput;
 
@@ -46,7 +45,6 @@ namespace GKFlowInputPlugin
             fPlugin = plugin;
             fLangMan = plugin.LangMan;
             fBase = baseWin;
-            fSourcesList = new StringList();
             fFlowInput = new FlowInput(plugin, baseWin);
 
             cbEventType.Items.AddRange(new object[] {
@@ -63,13 +61,6 @@ namespace GKFlowInputPlugin
             }
 
             SetLocale();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
         }
 
         public void SetLocale()
@@ -114,11 +105,6 @@ namespace GKFlowInputPlugin
             InitSimpleControls();
         }
 
-        private static string CheckStr(string val)
-        {
-            return (val == null) ? string.Empty : val;
-        }
-
         // TODO: rollback changes when exception!
         private void ParseSource()
         {
@@ -146,13 +132,12 @@ namespace GKFlowInputPlugin
             int num = dataGridView1.Rows.Count;
             for (int r = 0; r < num; r++) {
                 DataGridViewRow row = dataGridView1.Rows[r];
-
-                string lnk = CheckStr((string)row.Cells[0].Value);
-                string nm = CheckStr((string)row.Cells[1].Value);
-                string pt = CheckStr((string)row.Cells[2].Value);
-                string fm = CheckStr((string)row.Cells[3].Value);
-                string age = CheckStr((string)row.Cells[4].Value);
-                string comment = CheckStr((string)row.Cells[5].Value);
+                string lnk = (string)row.Cells[0].Value;
+                string nm = (string)row.Cells[1].Value;
+                string pt = (string)row.Cells[2].Value;
+                string fm = (string)row.Cells[3].Value;
+                string age = (string)row.Cells[4].Value;
+                string comment = (string)row.Cells[5].Value;
 
                 fFlowInput.ParseSource(srcRec, srcYear, srcPage, place, ref iMain, lnk, nm, pt, fm, age, comment, eventType, eventDate);
             }
@@ -198,13 +183,11 @@ namespace GKFlowInputPlugin
 
         private void InitSourceControls()
         {
-            fBase.Context.GetSourcesList(fSourcesList);
-
+            var sourcesList = new StringList();
+            fBase.Context.GetSourcesList(sourcesList);
             cbSource.Items.Clear();
-
-            int num = fSourcesList.Count;
-            for (int i = 0; i < num; i++) {
-                cbSource.Items.Add(fSourcesList[i]);
+            for (int i = 0; i < sourcesList.Count; i++) {
+                cbSource.Items.Add(sourcesList[i]);
             }
 
             edPage.Text = "";
