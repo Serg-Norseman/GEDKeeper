@@ -21,11 +21,18 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
-using Xapian;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Documents;
+using Lucene.Net.Index;
+using Lucene.Net.QueryParsers;
+using Lucene.Net.Search;
+using Lucene.Net.Store;
+using Directory = System.IO.Directory;
 
 namespace GKTextSearchPlugin
 {
@@ -36,100 +43,101 @@ namespace GKTextSearchPlugin
     {
         private readonly object fLock;
         private readonly Plugin fPlugin;
+        private StandardAnalyzer fAnalyzer;
+        private IndexWriter fWriter;
+        private IndexSearcher fSearcher;
 
         public SearchManager(Plugin plugin)
         {
             fPlugin = plugin;
             fLock = new object();
+
+            var dir = FSDirectory.Open(GetIndexFolder());
+            fAnalyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
+            fWriter = new IndexWriter(dir, fAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
+            fSearcher = new IndexSearcher(fWriter.GetReader());
         }
 
         #region Private methods
 
-        private static string GetSign(IBaseWindow baseWin)
+        private static string GetBaseSign(IBaseWindow baseWin)
         {
             return Path.GetFileNameWithoutExtension(baseWin.Context.FileName);
         }
 
         private static bool IsIndexedRecord(GDMRecord rec)
         {
-            return !((rec is GDMLocationRecord || rec is GDMGroupRecord));
+            var recType = rec.RecordType;
+            return (recType != GDMRecordType.rtLocation && recType != GDMRecordType.rtGroup);
         }
 
-        private static void SetDBLastChange(IBaseWindow baseWin, WritableDatabase database)
+        private void UpdateIndex()
         {
-            string dbLastchange = baseWin.Context.Tree.Header.TransmissionDateTime.ToString("yyyy.MM.dd HH:mm:ss", null);
-            database.SetMetadata(GetSign(baseWin), dbLastchange);
+            fWriter.Commit();
+            fWriter.Flush(false, false, false);
         }
 
-        private string GetXDBFolder()
+        private string GetIndexFolder()
         {
-            string xdbDir = fPlugin.Host.GetAppDataPath() + "xdb";
+            string xdbDir = fPlugin.Host.GetAppDataPath() + "ldb";
             if (!Directory.Exists(xdbDir)) Directory.CreateDirectory(xdbDir);
             return xdbDir;
         }
 
-        private static uint FindDocId(IBaseWindow baseWin, WritableDatabase database, string xref)
+        private Document FindDocument(IBaseWindow baseWin, string uid)
         {
-            uint result;
-
-            string key = "Q" + GetSign(baseWin) + "_" + xref;
-
-            using (PostingIterator p = database.PostListBegin(key)) {
-                if (p == database.PostListEnd(key)) {
-                    result = 0; // 0 - is invalid docid (see XapianManual)
-                } else {
-                    result = p.GetDocId();
-                }
-            }
-
-            return result;
+            //var searcher = new IndexSearcher(fWriter.GetReader());
+            var query = new TermQuery(new Term(FIELD_UID, uid));
+            var score = fSearcher.Search(query, 1).ScoreDocs.FirstOrDefault();
+            return (score == null) ? null : fSearcher.Doc(score.Doc);
         }
 
-        private static bool SetDocumentContext(IBaseWindow baseWin, Document doc, TermGenerator indexer, GDMRecord rec)
+        private const string FIELD_XREF = "xref";
+        private const string FIELD_UID = "uid";
+        private const string FIELD_TS = "ts";
+        private const string FIELD_DB = "db";
+        private const string FIELD_TEXT = "text";
+
+        private Document SetDocumentContext(IBaseWindow baseWin, GDMRecord rec)
         {
             StringList ctx = baseWin.GetRecordContent(rec);
-            if (ctx == null) return false;
+            if (ctx == null) return null;
 
             string recLastchange = rec.ChangeDate.ToString();
-            string baseSign = GetSign(baseWin);
+            string baseSign = GetBaseSign(baseWin);
 
-            doc.SetData(rec.XRef);                          // not edit: for link from search results to gedcom-base
-            doc.AddTerm("Q" + baseSign + "_" + rec.XRef);   // not edit: specific db_rec_id - for FindDocId()
-            doc.AddValue(0, recLastchange);                 // not edit: for update check
-            doc.AddBooleanTerm("GDB" + baseSign);           // not edit: for filtering by database in Search()
-
-            indexer.SetDocument(doc);
-            indexer.IndexText(ctx.Text);
-
-            return true;
+            var lnDoc = new Document();
+            lnDoc.Add(new Field(FIELD_XREF, rec.XRef, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+            lnDoc.Add(new Field(FIELD_UID, rec.UID, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+            lnDoc.Add(new Field(FIELD_TS, recLastchange, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+            lnDoc.Add(new Field(FIELD_DB, baseSign, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+            lnDoc.Add(new Field(FIELD_TEXT, ctx.Text, Field.Store.YES, Field.Index.ANALYZED));
+            return lnDoc;
         }
 
-        private static void ReindexRecord(IBaseWindow baseWin, WritableDatabase database, TermGenerator indexer, GDMRecord record)
+        private void ReindexRecord(IBaseWindow baseWin, GDMRecord record, bool cf)
         {
-            uint docid = FindDocId(baseWin, database, record.XRef);
+            Document doc = FindDocument(baseWin, record.UID);
 
-            if (docid != 0) {
+            if (doc != null) {
                 // checking for needed updates
                 string recLastchange = record.ChangeDate.ToString();
-                string docLastchange;
-
-                using (Document curDoc = database.GetDocument(docid)) {
-                    docLastchange = curDoc.GetValue(0);
-                }
+                string docLastchange = doc.Get(FIELD_TS);
 
                 // updating a record
                 if (!string.Equals(recLastchange, docLastchange)) {
-                    using (Document doc = new Document()) {
-                        if (SetDocumentContext(baseWin, doc, indexer, record))
-                            database.ReplaceDocument(docid, doc);
-                    }
+                    if ((doc = SetDocumentContext(baseWin, record)) != null)
+                        fWriter.UpdateDocument(new Term(FIELD_UID, record.UID), doc);
                 }
             } else {
                 // only adding
-                using (Document doc = new Document()) {
-                    if (SetDocumentContext(baseWin, doc, indexer, record))
-                        database.AddDocument(doc);
-                }
+                if ((doc = SetDocumentContext(baseWin, record)) != null)
+                    fWriter.AddDocument(doc);
+            }
+
+            if (cf) {
+                fWriter.Commit();
+                fWriter.Flush(false, false, false);
             }
         }
 
@@ -141,35 +149,26 @@ namespace GKTextSearchPlugin
 
             try {
                 lock (fLock) {
-                    using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
-                    using (TermGenerator indexer = new TermGenerator())
-                    using (Stem stemmer = new Stem("russian")) {
-                        indexer.SetStemmer(stemmer);
+                    AppHost.Instance.ExecuteWork((progress) => {
+                        progress.Begin(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Context.Tree.RecordsCount);
 
-                        AppHost.Instance.ExecuteWork((controller) => {
-                            ReindexInt(baseWin, database, indexer, controller);
-                        });
+                        int num = baseWin.Context.Tree.RecordsCount;
+                        for (int i = 0; i < num; i++) {
+                            GDMRecord record = baseWin.Context.Tree[i];
+                            if (IsIndexedRecord(record))
+                                ReindexRecord(baseWin, record, false);
 
-                        SetDBLastChange(baseWin, database);
-                    }
+                            progress.Increment();
+                        }
+
+                        progress.End();
+                    });
+
+                    UpdateIndex();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("SearchManager.ReindexBase()", ex);
             }
-        }
-
-        private void ReindexInt(IBaseWindow baseWin, WritableDatabase database, TermGenerator indexer, IProgressController progress)
-        {
-            progress.Begin(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Context.Tree.RecordsCount);
-            int num = baseWin.Context.Tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
-                GDMRecord record = baseWin.Context.Tree[i];
-                if (IsIndexedRecord(record))
-                    ReindexRecord(baseWin, database, indexer, record);
-
-                progress.Increment();
-            }
-            progress.End();
         }
 
         public void UpdateRecord(IBaseWindow baseWin, GDMRecord record)
@@ -181,33 +180,27 @@ namespace GKTextSearchPlugin
 
             try {
                 lock (fLock) {
-                    using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
-                    using (TermGenerator indexer = new TermGenerator())
-                    using (Stem stemmer = new Stem("russian")) {
-                        indexer.SetStemmer(stemmer);
+                    ReindexRecord(baseWin, record, true);
 
-                        ReindexRecord(baseWin, database, indexer, record);
-                        SetDBLastChange(baseWin, database);
-                    }
+                    UpdateIndex();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("SearchManager.UpdateRecord()", ex);
             }
         }
 
-        public void DeleteRecord(IBaseWindow baseWin, string xref)
+        public void DeleteRecord(IBaseWindow baseWin, GDMRecord record)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
 
             try {
                 lock (fLock) {
-                    using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN)) {
-                        uint docid = FindDocId(baseWin, database, xref);
-                        if (docid != 0) {
-                            database.DeleteDocument(docid);
-                            SetDBLastChange(baseWin, database);
-                        }
+                    var doc = FindDocument(baseWin, record.UID);
+                    if (doc != null) {
+                        fWriter.DeleteDocuments(new Term(FIELD_UID, record.UID));
+
+                        UpdateIndex();
                     }
                 }
             } catch (Exception ex) {
@@ -215,59 +208,46 @@ namespace GKTextSearchPlugin
             }
         }
 
-        public class SearchEntry
+        private class SearchEntry
         {
             public string XRef;
-            public long Rank;
-            public int Percent;
+            public float Rank;
         }
 
-        public List<SearchEntry> Search(IBaseWindow baseWin, string searchText)
+        private List<SearchEntry> Search(IBaseWindow baseWin, string searchText)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
-
-            const uint flags = (uint)(QueryParser.feature_flag.FLAG_PARTIAL | QueryParser.feature_flag.FLAG_WILDCARD |
-                               QueryParser.feature_flag.FLAG_PHRASE | QueryParser.feature_flag.FLAG_BOOLEAN |
-                               QueryParser.feature_flag.FLAG_LOVEHATE);
 
             List<SearchEntry> res = new List<SearchEntry>();
 
             try {
                 lock (fLock) {
-                    using (Database database = new Database(GetXDBFolder()))
-                    using (Enquire enquire = new Enquire(database))
-                    using (Stem stemmer = new Stem("russian"))
-                    using (QueryParser qp = new QueryParser()) {
-                        qp.SetStemmer(stemmer);
-                        qp.SetDatabase(database);
-                        qp.SetDefaultOp(Query.op.OP_AND);
-                        qp.SetStemmingStrategy(QueryParser.stem_strategy.STEM_SOME);
+                    MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, new[] { FIELD_TEXT }, fAnalyzer);
+                    Query searchTermQuery = queryParser.Parse(searchText);
 
-                        string qs = searchText + " ged:" + GetSign(baseWin);
-                        qp.AddBooleanPrefix("ged", "GDB");
+                    var gedQuery = new MultiPhraseQuery();
+                    gedQuery.Add(new Term(FIELD_DB, GetBaseSign(baseWin)));
 
-                        using (Query query = qp.ParseQuery(qs, flags)) {
-                            enquire.SetQuery(query);
+                    BooleanQuery aggregateQuery = new BooleanQuery() {
+                        { searchTermQuery, Occur.MUST },
+                        { gedQuery, Occur.MUST }
+                    };
 
-                            using (MSet matches = enquire.GetMSet(0, 100)) {
-                                MSetIterator m = matches.Begin();
-                                while (m != matches.End()) {
-                                    try {
-                                        using (Document mDoc = m.GetDocument()) {
-                                            SearchEntry entry = new SearchEntry();
-                                            entry.XRef = mDoc.GetData();
-                                            entry.Rank = m.GetRank() + 1;
-                                            entry.Percent = m.GetPercent();
-                                            res.Add(entry);
-                                        }
-                                    } catch (Exception ex) {
-                                        Logger.WriteError("SearchManager.Search()", ex);
-                                    }
+                    //var reader = fWriter.GetReader();
+                    //var searcher = new IndexSearcher(reader);
+                    var hits = fSearcher.Search(searchTermQuery, 20 /* top 20 */).ScoreDocs;
 
-                                    m = m.Next();
-                                }
-                            }
+                    foreach (var hit in hits) {
+                        var foundDoc = fSearcher.Doc(hit.Doc);
+
+                        try {
+                            SearchEntry entry = new SearchEntry();
+                            entry.XRef = foundDoc.Get("xref");
+                            entry.Rank = hit.Score;
+                            res.Add(entry);
+                        } catch (Exception ex) {
+                            Logger.WriteError("SearchManager.Search.1()", ex);
                         }
                     }
                 }
@@ -289,17 +269,18 @@ namespace GKTextSearchPlugin
 
                 int num = searchResults.Count;
                 for (int i = 0; i < num; i++) {
-                    strList.Add("__________________________________________________________________________________________");
-                    strList.Add("");
-
                     var entry = searchResults[i];
-                    strList.Add(string.Format("[b][u][size=+1]{0}: {1}%[/u] [url={2}] {2} [/url][/b][/size]",
-                                        entry.Rank, entry.Percent, entry.XRef));
-
                     GDMRecord rec = baseWin.Context.Tree.XRefIndex_Find(entry.XRef);
-                    StringList ctx = baseWin.GetRecordContent(rec);
-                    strList.AddStrings(ctx);
-                    strList.Add("");
+                    if (rec != null) {
+                        strList.Add("__________________________________________________________________________________________");
+                        strList.Add("");
+
+                        strList.Add(string.Format("[b][size=+1][url={0}] {0} [/url][/size][/b]", entry.XRef));
+
+                        StringList ctx = baseWin.GetRecordContent(rec);
+                        strList.AddStrings(ctx);
+                        strList.Add("");
+                    }
                 }
             } finally {
                 strList.EndUpdate();

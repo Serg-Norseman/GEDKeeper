@@ -8,6 +8,7 @@ del .\deploy\*.exe /q
 
 del .\appdata\imagecache\*.* /q
 del .\appdata\xdb\*.* /q
+del .\appdata\ldb\*.* /q
 del .\appdata\GEDKeeper2.log
 del .\appdata\GEDKeeper2.nms
 

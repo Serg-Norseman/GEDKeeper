@@ -127,19 +127,18 @@ namespace GKTextSearchPlugin
 
         public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
-#if !MONO
             if (baseWin == null || record == null || fSearchMan == null) return;
 
             switch (action) {
+                case RecordAction.raAdd:
                 case RecordAction.raEdit:
                     fSearchMan.UpdateRecord(baseWin, (GDMRecord)record);
                     break;
 
                 case RecordAction.raDelete:
-                    fSearchMan.DeleteRecord(baseWin, ((GDMRecord)record).XRef);
+                    fSearchMan.DeleteRecord(baseWin, (GDMRecord)record);
                     break;
             }
-#endif
         }
 
         public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
