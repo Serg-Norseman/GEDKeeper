@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{F5B0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTimeLinePlugin", "..\plugins\GKTimeLinePlugin\GKTimeLinePlugin.csproj", "{ECED32B7-1081-48D3-A223-1CB67A2D7016}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTextSearchPlugin", "GKTextSearchPlugin\GKTextSearchPlugin.csproj", "{BB2FCE6E-DF1F-40CC-9D7E-01CC9BE97EFA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTextSearchPlugin", "..\plugins\GKTextSearchPlugin\GKTextSearchPlugin.csproj", "{BB2FCE6E-DF1F-40CC-9D7E-01CC9BE97EFA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKPedigreeImporterPlugin", "GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.csproj", "{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}"
 EndProject

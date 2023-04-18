@@ -74,9 +74,6 @@ rmdir .\projects\GKv2\GKFlowInputPlugin\obj /s /q
 rmdir .\projects\GKv2\GKPedigreeImporterPlugin\bin /s /q
 rmdir .\projects\GKv2\GKPedigreeImporterPlugin\obj /s /q
 
-rmdir .\projects\GKv2\GKTextSearchPlugin\bin /s /q
-rmdir .\projects\GKv2\GKTextSearchPlugin\obj /s /q
-
 rmdir .\projects\GKv2\GKLifePlugin\bin /s /q
 rmdir .\projects\GKv2\GKLifePlugin\obj /s /q
 
@@ -111,6 +108,9 @@ rmdir .\projects\plugins\GKNavigatorPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKStdReports\bin /s /q
 rmdir .\projects\plugins\GKStdReports\obj /s /q
+
+rmdir .\projects\plugins\GKTextSearchPlugin\bin /s /q
+rmdir .\projects\plugins\GKTextSearchPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKTimeLinePlugin\bin /s /q
 rmdir .\projects\plugins\GKTimeLinePlugin\obj /s /q

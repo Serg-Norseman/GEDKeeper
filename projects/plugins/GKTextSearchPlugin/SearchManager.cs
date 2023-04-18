@@ -25,16 +25,27 @@ using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Documents;
-using Lucene.Net.Index;
-using Lucene.Net.QueryParsers;
-using Lucene.Net.Search;
-using Lucene.Net.Store;
-using Directory = System.IO.Directory;
+using SIODirectory = System.IO.Directory;
 
 namespace GKTextSearchPlugin
 {
+#if !LUC48
+    using Lucene.Net.Analysis.Standard;
+    using Lucene.Net.Documents;
+    using Lucene.Net.Index;
+    using Lucene.Net.QueryParsers;
+    using Lucene.Net.Search;
+    using Lucene.Net.Store;
+#else
+    using Lucene.Net.Analysis.Standard;
+    using Lucene.Net.Documents;
+    using Lucene.Net.Index;
+    using Lucene.Net.QueryParsers.Classic;
+    using Lucene.Net.Search;
+    using Lucene.Net.Store;
+    using Lucene.Net.Util;
+#endif
+
     /// <summary>
     /// 
     /// </summary>
@@ -52,9 +63,17 @@ namespace GKTextSearchPlugin
             fLock = new object();
 
             var dir = FSDirectory.Open(GetIndexFolder());
+
+#if !LUC48
             fAnalyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
             fWriter = new IndexWriter(dir, fAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
             fSearcher = new IndexSearcher(fWriter.GetReader());
+#else
+            fAnalyzer = new StandardAnalyzer(LuceneVersion.LUCENE_48);
+            var indexConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, fAnalyzer);
+            fWriter = new IndexWriter(dir, indexConfig);
+            fSearcher = new IndexSearcher(fWriter.GetReader(true));
+#endif
         }
 
         #region Private methods
@@ -73,13 +92,18 @@ namespace GKTextSearchPlugin
         private void UpdateIndex()
         {
             fWriter.Commit();
+
+#if !LUC48
             fWriter.Flush(false, false, false);
+#else
+            fWriter.Flush(triggerMerge: false, applyAllDeletes: false);
+#endif
         }
 
         private string GetIndexFolder()
         {
             string xdbDir = fPlugin.Host.GetAppDataPath() + "ldb";
-            if (!Directory.Exists(xdbDir)) Directory.CreateDirectory(xdbDir);
+            if (!SIODirectory.Exists(xdbDir)) SIODirectory.CreateDirectory(xdbDir);
             return xdbDir;
         }
 
@@ -114,7 +138,7 @@ namespace GKTextSearchPlugin
             return lnDoc;
         }
 
-        private void ReindexRecord(IBaseWindow baseWin, GDMRecord record, bool cf)
+        private void ReindexRecord(IBaseWindow baseWin, GDMRecord record)
         {
             Document doc = FindDocument(baseWin, record.UID);
 
@@ -133,11 +157,6 @@ namespace GKTextSearchPlugin
                 if ((doc = SetDocumentContext(baseWin, record)) != null)
                     fWriter.AddDocument(doc);
             }
-
-            if (cf) {
-                fWriter.Commit();
-                fWriter.Flush(false, false, false);
-            }
         }
 
         #endregion
@@ -155,7 +174,7 @@ namespace GKTextSearchPlugin
                         for (int i = 0; i < num; i++) {
                             GDMRecord record = baseWin.Context.Tree[i];
                             if (IsIndexedRecord(record))
-                                ReindexRecord(baseWin, record, false);
+                                ReindexRecord(baseWin, record);
 
                             progress.Increment();
                         }
@@ -179,7 +198,7 @@ namespace GKTextSearchPlugin
 
             try {
                 lock (fLock) {
-                    ReindexRecord(baseWin, record, true);
+                    ReindexRecord(baseWin, record);
 
                     UpdateIndex();
                 }
@@ -222,7 +241,12 @@ namespace GKTextSearchPlugin
 
             try {
                 lock (fLock) {
-                    MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, new[] { FIELD_TEXT }, fAnalyzer);
+#if !LUC48
+                    var queryParser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, new[] { FIELD_TEXT }, fAnalyzer);
+#else
+                    var queryParser = new MultiFieldQueryParser(LuceneVersion.LUCENE_48, new[] { FIELD_TEXT }, fAnalyzer);
+#endif
+
                     Query searchTermQuery = queryParser.Parse(searchText);
 
                     var gedQuery = new MultiPhraseQuery();
