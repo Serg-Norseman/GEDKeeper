@@ -4,15 +4,19 @@
   x:Class="GKTextSearchPlugin.TextSearchWin"
   Closed="Form_Closed" Shown="Form_Shown">
 
-  <StackLayout Orientation="Vertical">
+  <TableLayout Style="paddedTable8">
 
-    <StackLayout Orientation="Horizontal">
-      <TextBox x:Name="txtQuery" Width="396" />
-      <Button x:Name="btnSearch" Style="dlgBtn" Click="btnSearch_Click" />
-    </StackLayout>
+    <TableRow>
+      <StackLayout Orientation="Horizontal" Spacing="4">
+        <TextBox x:Name="txtQuery" Width="396" />
+        <Button x:Name="btnSearch" Style="dlgBtn" Click="btnSearch_Click" />
+      </StackLayout>
+    </TableRow>
 
-    <comcom:HyperView x:Name="fResultsText" Size="300, 200" OnLink="mTextLink" />
+    <TableRow>
+      <comcom:HyperView x:Name="fResultsText" OnLink="mTextLink" Width="600" Height="400" />
+    </TableRow>
 
-  </StackLayout>
+  </TableLayout>
 
 </Form>
