@@ -39,7 +39,6 @@ namespace GKTextSearchPlugin
 
             fPlugin = plugin;
             fBase = baseWin;
-            Text = fPlugin.LangMan.LS(TLS.LSID_PluginTitle) + string.Format(" [{0}]", Path.GetFileName(fBase.Context.FileName));
 
             SuspendLayout();
             fResultsText = new HyperView();
@@ -56,6 +55,7 @@ namespace GKTextSearchPlugin
 
         public void SetLocale()
         {
+            Text = fPlugin.LangMan.LS(TLS.LSID_PluginTitle) + string.Format(" [{0}]", Path.GetFileName(fBase.Context.FileName));
             btnSearch.Text = fPlugin.LangMan.LS(TLS.LSID_Search);
         }
 

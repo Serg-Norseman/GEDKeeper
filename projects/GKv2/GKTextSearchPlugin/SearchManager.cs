@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using BSLib;
 using GDModel;
@@ -60,9 +59,9 @@ namespace GKTextSearchPlugin
 
         #region Private methods
 
-        private static string GetBaseSign(IBaseWindow baseWin)
+        private static string GetBaseID(IBaseWindow baseWin)
         {
-            return Path.GetFileNameWithoutExtension(baseWin.Context.FileName);
+            return baseWin.Context.Tree.Header.File.UID;
         }
 
         private static bool IsIndexedRecord(GDMRecord rec)
@@ -104,13 +103,13 @@ namespace GKTextSearchPlugin
             if (ctx == null) return null;
 
             string recLastchange = rec.ChangeDate.ToString();
-            string baseSign = GetBaseSign(baseWin);
+            string baseID = GetBaseID(baseWin);
 
             var lnDoc = new Document();
             lnDoc.Add(new Field(FIELD_XREF, rec.XRef, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
             lnDoc.Add(new Field(FIELD_UID, rec.UID, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
             lnDoc.Add(new Field(FIELD_TS, recLastchange, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
-            lnDoc.Add(new Field(FIELD_DB, baseSign, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+            lnDoc.Add(new Field(FIELD_DB, baseID, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
             lnDoc.Add(new Field(FIELD_TEXT, ctx.Text, Field.Store.YES, Field.Index.ANALYZED));
             return lnDoc;
         }
@@ -214,7 +213,7 @@ namespace GKTextSearchPlugin
             public float Rank;
         }
 
-        private List<SearchEntry> Search(IBaseWindow baseWin, string searchText)
+        private List<SearchEntry> Search(IBaseWindow baseWin, string searchText, int resNum)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
@@ -227,7 +226,7 @@ namespace GKTextSearchPlugin
                     Query searchTermQuery = queryParser.Parse(searchText);
 
                     var gedQuery = new MultiPhraseQuery();
-                    gedQuery.Add(new Term(FIELD_DB, GetBaseSign(baseWin)));
+                    gedQuery.Add(new Term(FIELD_DB, GetBaseID(baseWin)));
 
                     BooleanQuery aggregateQuery = new BooleanQuery() {
                         { searchTermQuery, Occur.MUST },
@@ -236,7 +235,7 @@ namespace GKTextSearchPlugin
 
                     //var reader = fWriter.GetReader();
                     //var searcher = new IndexSearcher(reader);
-                    var hits = fSearcher.Search(searchTermQuery, 20 /* top 20 */).ScoreDocs;
+                    var hits = fSearcher.Search(aggregateQuery, resNum).ScoreDocs;
 
                     foreach (var hit in hits) {
                         var foundDoc = fSearcher.Doc(hit.Doc);
@@ -258,12 +257,12 @@ namespace GKTextSearchPlugin
             return res;
         }
 
-        public void ShowResults(IBaseWindow baseWin, string query, StringList strList)
+        public void ShowResults(IBaseWindow baseWin, string query, StringList strList, int resNum = 20)
         {
             strList.BeginUpdate();
             try {
                 strList.Clear();
-                var searchResults = Search(baseWin, query);
+                var searchResults = Search(baseWin, query, resNum);
 
                 strList.Add(string.Format(fPlugin.LangMan.LS(TLS.LSID_SearchResults) + "\r\n", searchResults.Count));
 

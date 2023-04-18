@@ -1361,7 +1361,9 @@ namespace GDModel.Providers.GEDCOM
             AddTagHandler addHandler = null;
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
-            if (tagType == GEDCOMTagType._REV) {
+            if (tagType == GEDCOMTagType._UID) {
+                headerFile.UID = tagValue;
+            } else if (tagType == GEDCOMTagType._REV) {
                 headerFile.Revision = GEDCOMUtils.GetIntVal(tagValue);
             } else {
                 return AddBaseTag(owner, tagLevel, tagId, tagValue);
@@ -1377,6 +1379,7 @@ namespace GDModel.Providers.GEDCOM
             if (!WriteBaseTag(stream, level, headerFile)) return false;
 
             level += 1;
+            WriteTagLine(stream, level, GEDCOMTagName._UID, headerFile.UID, true);
             WriteTagLine(stream, level, GEDCOMTagName._REV, GEDCOMUtils.GetIntStr(headerFile.Revision), true);
             return true;
         }

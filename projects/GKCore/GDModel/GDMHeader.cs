@@ -127,9 +127,23 @@ namespace GDModel
     }
 
 
-    public sealed class GDMHeaderFile : GDMValueTag
+    public sealed class GDMHeaderFile : GDMValueTag, IGDMUIDHolder
     {
+        private string fUID;
+
+
         public int Revision { get; set; }
+
+        public string UID
+        {
+            get {
+                if (string.IsNullOrEmpty(fUID)) {
+                    fUID = GEDCOMUtils.CreateUID();
+                }
+                return fUID;
+            }
+            set { fUID = value; }
+        }
 
 
         public GDMHeaderFile()
@@ -142,11 +156,12 @@ namespace GDModel
             base.Clear();
 
             Revision = 0;
+            fUID = string.Empty;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (Revision == 0);
+            return base.IsEmpty() && (Revision == 0) && string.IsNullOrEmpty(fUID);
         }
     }
 
