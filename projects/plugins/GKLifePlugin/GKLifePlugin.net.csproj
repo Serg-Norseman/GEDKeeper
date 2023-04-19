@@ -2,14 +2,12 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
-        <AssemblyName>GKTextSearchPlugin</AssemblyName>
-        <RootNamespace>GKTextSearchPlugin</RootNamespace>
+        <AssemblyName>GKLifePlugin</AssemblyName>
+        <RootNamespace>GKLifePlugin</RootNamespace>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OutputPath>..\..\..\plugins\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-        <DefineConstants>LUC48</DefineConstants>
-        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
         <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
     </PropertyGroup>
@@ -28,18 +26,15 @@
     <ItemGroup>
         <PackageReference Include="Eto.Forms" Version="2.7.4" />
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.4" />
-        <PackageReference Include="Lucene.Net" Version="4.8.0-beta00016">
-        </PackageReference>
-        <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00016" />
-        <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00016" />
     </ItemGroup>
 
-    <Import Project="GKTextSearchPlugin.props" />
+    <Import Project="GKLifePlugin.props" />
 
     <ItemGroup>
-        <Compile Include="GKTextSearchPlugin.cs" />
-        <Compile Include="TextSearchWin.net.cs" />
-        <EmbeddedResource Include="TextSearchWin.xeto" />
+        <Compile Include="GKLifePlugin.cs" />
+        <Compile Include="ConwayLife\LifeForm.net.cs" />
+        <EmbeddedResource Include="ConwayLife\LifeForm.xeto" />
+        <Compile Include="ConwayLife\LifeViewer.net.cs" />
     </ItemGroup>
 
 </Project>

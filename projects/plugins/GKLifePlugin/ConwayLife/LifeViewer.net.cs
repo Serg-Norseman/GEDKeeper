@@ -9,27 +9,19 @@
  */
 
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
+using Eto.Drawing;
+using Eto.Forms;
 using GKUI.Components;
 
 namespace GKLifePlugin.ConwayLife
 {
-    public delegate void DoesCellLiveEvent(object sender, int x, int y, LifeGrid grid, ref byte result);
-
     public delegate void NotifyEvent(object sender);
 
-    public class LifeViewer : UserControl
+    public class LifeViewer : Drawable
     {
-        public static readonly bool[] DefaultDeadCells = new bool[] { false, false, false, true, false, false, false, false, false };
-        public static readonly bool[] DefaultLiveCells = new bool[] { false, false, true, true, false, false, false, false, false };
-
-        public const int DefaultAnimationDelay = 100;
-        public static readonly Color DefaultCellColor = Color.Green;
-        public static readonly Color DefaultBackgroundColor = Color.Silver;
-        public static readonly Color DefaultGridLineColor = Color.Black;
-        public const DashStyle DefaultGridLineStyle = DashStyle.Dot;
+        public static readonly Color DefaultCellColor = Colors.Green;
+        public static readonly Color DefaultBackgroundColor = Colors.Silver;
+        public static readonly Color DefaultGridLineColor = Colors.Black;
 
 
         private bool fAcceptMouseClicks;
@@ -58,11 +50,6 @@ namespace GKLifePlugin.ConwayLife
         public int Generation
         {
             get { return fGeneration; }
-        }
-
-        public LifeHistory History
-        {
-            get { return fHistory; }
         }
 
         public int LiveCellCount
@@ -112,7 +99,7 @@ namespace GKLifePlugin.ConwayLife
 
         public LifeViewer()
         {
-            DoubleBuffered = true;
+            //DoubleBuffered = true;
 
             fGrid = new LifeGrid(LifeGrid.DefaultGridWidth, LifeGrid.DefaultGridHeight);
             fHistory = new LifeHistory(LifeHistory.DefaultNumberOfHistoryLevels);
@@ -200,8 +187,8 @@ namespace GKLifePlugin.ConwayLife
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (AcceptMouseClicks && (e.Button == MouseButtons.Left)) {
-                Point pt = CellAtPos(e.X, e.Y);
+            if (AcceptMouseClicks && (e.Buttons == MouseButtons.Primary)) {
+                Point pt = CellAtPos((int)e.Location.X, (int)e.Location.Y);
                 byte val = this[pt.X, pt.Y];
                 this[pt.X, pt.Y] = (byte)((val > 0) ? 0 : 1);
             }
@@ -231,7 +218,7 @@ namespace GKLifePlugin.ConwayLife
             Graphics gfx = e.Graphics;
 
             if (fShowGridLines) {
-                using (Pen pen = new Pen(Color.Black)) {
+                using (Pen pen = new Pen(DefaultGridLineColor)) {
                     DrawGridLines(gfx, pen);
                 }
             }
@@ -258,10 +245,10 @@ namespace GKLifePlugin.ConwayLife
             base.OnPaint(e);
         }
 
-        protected override void OnResize(EventArgs e)
+        protected override void OnSizeChanged(EventArgs e)
         {
             Invalidate();
-            base.OnResize(e);
+            base.OnSizeChanged(e);
         }
 
         protected void SetCell(int X, int Y, byte value)

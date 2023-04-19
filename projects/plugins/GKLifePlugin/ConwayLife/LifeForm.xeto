@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:conlife="clr-namespace:GKLifePlugin.ConwayLife"
+  x:Class="GKLifePlugin.ConwayLife.LifeForm"
+  SizeChanged="Form_Resize" Shown="Form_Shown" Minimizable="False">
+
+  <Form.ToolBar>
+    <ToolBar TextAlign="Right" Style="tbsi">
+      <ButtonToolItem x:Name="tbStep" Click="tbStep_Click" />
+      <CheckToolItem x:Name="tbStart" Click="tbStart_Click" />
+      <SeparatorToolItem />
+      <CheckToolItem x:Name="btnSetCells" Click="tbSetCells_Click" />
+      <ButtonToolItem x:Name="tbClear" Click="tbClear_Click" />
+      <ButtonToolItem x:Name="tbRandomise" Click="tbRandomise_Click" />
+    </ToolBar>
+  </Form.ToolBar>
+
+  <TableLayout>
+    <TableRow ScaleHeight="True">
+      <conlife:LifeViewer x:Name="cmpLife" Size="923, 324" />
+    </TableRow>
+    <TableRow>
+      <TableLayout x:Name="StatusBar">
+        <TableRow>
+
+          <Label x:Name="stlGeneration" Width="200" />
+          <Label x:Name="stlLivingCells" Width="200" />
+          <TableCell ScaleWidth="True" />
+
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+  </TableLayout>
+
+</Form>

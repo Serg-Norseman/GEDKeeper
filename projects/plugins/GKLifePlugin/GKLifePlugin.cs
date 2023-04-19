@@ -59,9 +59,8 @@ namespace GKLifePlugin
 
         public override void Execute()
         {
-            using (LifeForm frm = new LifeForm(fLangMan)) {
-                frm.ShowDialog();
-            }
+            LifeForm frm = new LifeForm(fLangMan);
+            frm.Show();
         }
 
         public override void OnLanguageChange()

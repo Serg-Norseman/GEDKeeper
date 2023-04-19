@@ -35,15 +35,6 @@ namespace GKLifePlugin.ConwayLife
             }
         }
 
-        public int MaxLevels
-        {
-            get { return fList.Capacity; }
-            set {
-                Clear();
-                fList.Capacity = value;
-            }
-        }
-
         public LifeHistory(int maxLevels)
         {
             fList = new List<LifeGrid>();

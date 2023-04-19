@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalculatorPlugin", "..\pl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalendarPlugin", "..\plugins\GKCalendarPlugin\GKCalendarPlugin.csproj", "{091DFD9D-5599-4EEA-A616-A55FC12E9613}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKLifePlugin", "GKLifePlugin\GKLifePlugin.csproj", "{4A523280-2DEA-43C6-BE11-48BDFF283751}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKLifePlugin", "..\plugins\GKLifePlugin\GKLifePlugin.csproj", "{4A523280-2DEA-43C6-BE11-48BDFF283751}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNavigatorPlugin", "..\plugins\GKNavigatorPlugin\GKNavigatorPlugin.csproj", "{18E423A1-619C-4ED7-96BE-1BD71EACFCAE}"
 EndProject

@@ -14,6 +14,11 @@ namespace GKLifePlugin.ConwayLife
 {
     public sealed class LifeGrid : IDisposable, IEquatable<LifeGrid>
     {
+        public static readonly bool[] DefaultDeadCells = new bool[] { false, false, false, true, false, false, false, false, false };
+        public static readonly bool[] DefaultLiveCells = new bool[] { false, false, true, true, false, false, false, false, false };
+
+        public const int DefaultAnimationDelay = 100;
+
         public const int MinGridHeight = 5;
         public const int MaxGridHeight = 1000;
         public const int MinGridWidth = 5;
