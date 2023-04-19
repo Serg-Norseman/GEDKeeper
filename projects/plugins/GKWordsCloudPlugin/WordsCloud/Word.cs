@@ -10,7 +10,7 @@
  */
 
 using System;
-using System.Drawing;
+using BSLib;
 
 namespace GKWordsCloudPlugin.WordsCloud
 {
@@ -19,7 +19,7 @@ namespace GKWordsCloudPlugin.WordsCloud
         public readonly string Text;
         public readonly int Occurrences;
 
-        public RectangleF Rectangle { get; internal set; }
+        public ExtRectF Rectangle { get; internal set; }
         public bool IsExposed { get; internal set; }
 
         public Word(string text, int occurrences)

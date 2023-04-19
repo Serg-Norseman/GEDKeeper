@@ -10,7 +10,7 @@
  */
 
 using System.Collections.Generic;
-using System.Drawing;
+using BSLib;
 
 namespace GKWordsCloudPlugin.WordsCloud
 {
@@ -18,7 +18,7 @@ namespace GKWordsCloudPlugin.WordsCloud
     ///   A Quadtree is a structure designed to partition space so
     ///   that it's faster to find out what is inside or outside a given
     ///   area. See http://en.wikipedia.org/wiki/Quadtree
-    ///   This QuadTree contains items that have an area (RectangleF)
+    ///   This QuadTree contains items that have an area (ExtRectF)
     ///   it will store a reference to the item in the quad
     ///   that is just big enough to hold it. Each quad has a bucket that
     ///   contain multiple items.
@@ -29,7 +29,7 @@ namespace GKWordsCloudPlugin.WordsCloud
 
         private readonly QuadTreeNode<T> fRoot;
 
-        public QuadTree(RectangleF rectangle)
+        public QuadTree(ExtRectF rectangle)
         {
             fRoot = new QuadTreeNode<T>(rectangle);
         }
@@ -44,12 +44,12 @@ namespace GKWordsCloudPlugin.WordsCloud
             fRoot.Insert(item);
         }
 
-        public IEnumerable<T> Query(RectangleF area)
+        public IEnumerable<T> Query(ExtRectF area)
         {
             return fRoot.Query(area);
         }
 
-        public bool HasContent(RectangleF area)
+        public bool HasContent(ExtRectF area)
         {
             return fRoot.HasContent(area);
         }

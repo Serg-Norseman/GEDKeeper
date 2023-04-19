@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <ItemGroup>
+        <Compile Include="WordsCloud\CloudModel.cs" />
+        <Compile Include="WordsCloud\QuadTree.cs" />
+        <Compile Include="WordsCloud\QuadTreeNode.cs" />
+        <Compile Include="WordsCloud\Word.cs" />
+
+        <None Include="GKWordsCloudPlugin.cze">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKWordsCloudPlugin.enu">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKWordsCloudPlugin.pol">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKWordsCloudPlugin.rus">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKWordsCloudPlugin.ukr">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

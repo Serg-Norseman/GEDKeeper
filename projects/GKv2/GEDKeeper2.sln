@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNavigatorPlugin", "..\plu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKChroniclePlugin", "..\plugins\GKChroniclePlugin\GKChroniclePlugin.csproj", "{1423A6AE-E85A-4E76-91CA-704A1C59F7DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKWordsCloudPlugin", "GKWordsCloudPlugin\GKWordsCloudPlugin.csproj", "{0EB24CA5-824B-4507-9C6E-BBBF5DB8BE57}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKWordsCloudPlugin", "..\plugins\GKWordsCloudPlugin\GKWordsCloudPlugin.csproj", "{0EB24CA5-824B-4507-9C6E-BBBF5DB8BE57}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKHistoryDataPlugin", "..\plugins\GKHistoryDataPlugin\GKHistoryDataPlugin.csproj", "{FCAB4916-791F-4302-90A0-E409410F66BF}"
 EndProject

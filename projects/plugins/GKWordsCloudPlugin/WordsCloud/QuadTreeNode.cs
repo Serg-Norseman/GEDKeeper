@@ -11,18 +11,18 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
+using BSLib;
 
 namespace GKWordsCloudPlugin.WordsCloud
 {
     public class QuadTreeNode<T> where T : Word
     {
-        private readonly RectangleF fBounds;
+        private readonly ExtRectF fBounds;
         private readonly Stack<T> fContents;
         private QuadTreeNode<T>[] fNodes;
 
-        public QuadTreeNode(RectangleF bounds)
+        public QuadTreeNode(ExtRectF bounds)
         {
             fBounds = bounds;
             fContents = new Stack<T>();
@@ -31,10 +31,10 @@ namespace GKWordsCloudPlugin.WordsCloud
 
         public bool IsEmpty
         {
-            get { return fBounds.IsEmpty || fNodes.Length == 0; }
+            get { return fBounds.IsEmpty() || fNodes.Length == 0; }
         }
 
-        public RectangleF Bounds
+        public ExtRectF Bounds
         {
             get { return fBounds; }
         }
@@ -71,7 +71,7 @@ namespace GKWordsCloudPlugin.WordsCloud
             get { return fContents; }
         }
 
-        public bool HasContent(RectangleF queryArea)
+        public bool HasContent(ExtRectF queryArea)
         {
             IEnumerable<T> queryResult = Query(queryArea);
             return IsEmptyEnumerable(queryResult);
@@ -89,7 +89,7 @@ namespace GKWordsCloudPlugin.WordsCloud
         /// </summary>
         /// <param name = "queryArea">
         /// <returns></returns></param>
-        public IEnumerable<T> Query(RectangleF queryArea)
+        public IEnumerable<T> Query(ExtRectF queryArea)
         {
             // this quad contains items that are not entirely contained by
             // it's four sub-quads. Iterate through the items in this quad
@@ -188,10 +188,10 @@ namespace GKWordsCloudPlugin.WordsCloud
             float halfHeight = (fBounds.Height / 2f);
 
             fNodes = new QuadTreeNode<T>[4];
-            fNodes[0] = (new QuadTreeNode<T>(new RectangleF(fBounds.Location, new SizeF(halfWidth, halfHeight))));
-            fNodes[1] = (new QuadTreeNode<T>(new RectangleF(new PointF(fBounds.Left, fBounds.Top + halfHeight), new SizeF(halfWidth, halfHeight))));
-            fNodes[2] = (new QuadTreeNode<T>(new RectangleF(new PointF(fBounds.Left + halfWidth, fBounds.Top), new SizeF(halfWidth, halfHeight))));
-            fNodes[3] = (new QuadTreeNode<T>(new RectangleF(new PointF(fBounds.Left + halfWidth, fBounds.Top + halfHeight), new SizeF(halfWidth, halfHeight))));
+            fNodes[0] = new QuadTreeNode<T>(new ExtRectF(fBounds.Left, fBounds.Top, halfWidth, halfHeight));
+            fNodes[1] = new QuadTreeNode<T>(new ExtRectF(fBounds.Left, fBounds.Top + halfHeight, halfWidth, halfHeight));
+            fNodes[2] = new QuadTreeNode<T>(new ExtRectF(fBounds.Left + halfWidth, fBounds.Top, halfWidth, halfHeight));
+            fNodes[3] = new QuadTreeNode<T>(new ExtRectF(fBounds.Left + halfWidth, fBounds.Top + halfHeight, halfWidth, halfHeight));
         }
     }
 }

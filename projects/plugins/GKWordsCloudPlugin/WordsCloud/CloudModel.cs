@@ -11,27 +11,27 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using BSLib;
 
 namespace GKWordsCloudPlugin.WordsCloud
 {
     public interface ICloudRenderer : IDisposable
     {
-        SizeF Measure(string text, int weight);
+        ExtSizeF Measure(string text, int weight);
         void Draw(Word word, bool highlight);
     }
 
     public class CloudModel
     {
-        private readonly PointF fCenter;
+        private readonly ExtPointF fCenter;
         private readonly QuadTree<Word> fQuadTree;
-        private readonly RectangleF fSurface;
+        private readonly ExtRectF fSurface;
 
-        public CloudModel(SizeF size)
+        public CloudModel(float sizeWidth, float sizeHeight)
         {
-            fSurface = new RectangleF(new PointF(0, 0), size);
+            fSurface = new ExtRectF(0, 0, sizeWidth, sizeHeight);
             fQuadTree = new QuadTree<Word>(fSurface);
-            fCenter = new PointF(fSurface.X + size.Width / 2, fSurface.Y + size.Height / 2);
+            fCenter = new ExtPointF(fSurface.Left + sizeWidth / 2, fSurface.Top + sizeHeight / 2);
         }
 
         public void Arrange(List<Word> words, ICloudRenderer renderer)
@@ -41,9 +41,9 @@ namespace GKWordsCloudPlugin.WordsCloud
             }
 
             foreach (Word word in words) {
-                SizeF size = renderer.Measure(word.Text, word.Occurrences);
+                var size = renderer.Measure(word.Text, word.Occurrences);
 
-                RectangleF freeRectangle;
+                ExtRectF freeRectangle;
                 if (TryFindFreeRectangle(size, out freeRectangle)) {
                     word.Rectangle = freeRectangle;
                     word.IsExposed = true;
@@ -52,20 +52,19 @@ namespace GKWordsCloudPlugin.WordsCloud
             }
         }
 
-        public IEnumerable<Word> GetWordsInArea(RectangleF area)
+        public IEnumerable<Word> GetWordsInArea(ExtRectF area)
         {
             return fQuadTree.Query(area);
         }
 
-        private bool IsInsideSurface(RectangleF target)
+        private bool IsInsideSurface(ExtRectF target)
         {
-            return target.X >= fSurface.X && target.Y >= fSurface.Y &&
-            target.Bottom <= fSurface.Bottom && target.Right <= fSurface.Right;
+            return target.Left >= fSurface.Left && target.Top >= fSurface.Top && target.Bottom <= fSurface.Bottom && target.Right <= fSurface.Right;
         }
 
-        public bool TryFindFreeRectangle(SizeF size, out RectangleF foundRectangle)
+        public bool TryFindFreeRectangle(ExtSizeF size, out ExtRectF foundRectangle)
         {
-            foundRectangle = RectangleF.Empty;
+            foundRectangle = ExtRectF.Empty;
             double alpha = GetStartPseudoAngle(size);
             const double stepAlpha = Math.PI / 60;
 
@@ -74,7 +73,7 @@ namespace GKWordsCloudPlugin.WordsCloud
             for (int pointIndex = 0; pointIndex < pointsOnSpital; pointIndex++) {
                 double dX = pointIndex / pointsOnSpital * Math.Sin(alpha) * fCenter.X;
                 double dY = pointIndex / pointsOnSpital * Math.Cos(alpha) * fCenter.Y;
-                foundRectangle = new RectangleF((float)(fCenter.X + dX) - size.Width / 2, (float)(fCenter.Y + dY) - size.Height / 2, size.Width, size.Height);
+                foundRectangle = new ExtRectF((float)(fCenter.X + dX) - size.Width / 2.0f, (float)(fCenter.Y + dY) - size.Height / 2.0f, size.Width, size.Height);
 
                 alpha += stepAlpha;
                 if (!IsInsideSurface(foundRectangle)) {
@@ -89,7 +88,7 @@ namespace GKWordsCloudPlugin.WordsCloud
             return false;
         }
 
-        private static float GetStartPseudoAngle(SizeF size)
+        private static float GetStartPseudoAngle(ExtSizeF size)
         {
             return size.Height * size.Width;
         }

@@ -34,16 +34,12 @@
     <Compile Include="WordsCloudWidget.Designer.cs">
       <DependentUpon>WordsCloudWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="WordsCloud\CloudModel.cs" />
     <Compile Include="WordsCloud\CloudViewer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WordsCloud\QuadTree.cs" />
-    <Compile Include="WordsCloud\QuadTreeNode.cs" />
-    <Compile Include="WordsCloud\Word.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+    <ProjectReference Include="..\..\GKv2\GKComponents\GKComponents.csproj">
       <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
       <Name>GKComponents</Name>
     </ProjectReference>
@@ -52,23 +48,6 @@
       <Name>GKCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="GKWordsCloudPlugin.cze">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKWordsCloudPlugin.enu">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKWordsCloudPlugin.pol">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKWordsCloudPlugin.rus">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GKWordsCloudPlugin.ukr">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
+  <Import Project="GKWordsCloudPlugin.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,6 +9,8 @@
  *  Adapted for the GEDKeeper project by Sergey V. Zhdanovskih in September 2017.
  */
 
+//#define DEBUG_DRAW
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,17 +26,20 @@ namespace GKWordsCloudPlugin.WordsCloud
     public class CloudViewer : Panel, ICloudRenderer
     {
         private readonly Color[] fPalette = {
-            Color.DarkRed,
-            Color.DarkBlue,
-            Color.DarkGreen,
-            Color.Navy,
-            Color.DarkCyan,
-            Color.DarkOrange,
-            Color.DarkGoldenrod,
-            Color.DarkKhaki,
             Color.Blue,
+            Color.DarkBlue,
+            Color.DarkCyan,
+            Color.DarkGoldenrod,
+            Color.DarkGray,
+            Color.DarkGreen,
+            Color.DarkKhaki,
+            Color.DarkMagenta,
+            Color.DarkOrange,
+            Color.DarkOrchid,
+            Color.DarkRed,
+            Color.Green,
+            Color.Navy,
             Color.Red,
-            Color.Green
         };
 
         private Color fBackColor;
@@ -143,7 +148,8 @@ namespace GKWordsCloudPlugin.WordsCloud
                 return;
             }
 
-            IEnumerable<Word> wordsToRedraw = fModel.GetWordsInArea(e.ClipRectangle);
+            var rect = UIHelper.Rt2Rt(e.ClipRectangle);
+            IEnumerable<Word> wordsToRedraw = fModel.GetWordsInArea(rect);
 
             var gfx = e.Graphics;
             gfx.SmoothingMode = SmoothingMode.AntiAlias;
@@ -166,7 +172,8 @@ namespace GKWordsCloudPlugin.WordsCloud
             using (Graphics graphics = CreateGraphics()) {
                 InitRenderer(graphics, Font.FontFamily, FontStyle.Regular);
 
-                fModel = new CloudModel(Size);
+                var sz = Size;
+                fModel = new CloudModel(sz.Width, sz.Height);
                 fModel.Arrange(fWords, this);
             }
             fGraphics = null;
@@ -195,34 +202,35 @@ namespace GKWordsCloudPlugin.WordsCloud
             base.OnResize(eventargs);
         }
 
-        private static Rectangle RectangleGrow(RectangleF original, int growByPixels)
+        private static Rectangle RectangleGrow(ExtRectF original, int growByPixels)
         {
             return new Rectangle(
-                (int)(original.X - growByPixels),
-                (int)(original.Y - growByPixels),
+                (int)(original.Left - growByPixels),
+                (int)(original.Top - growByPixels),
                 (int)(original.Width + growByPixels + 1),
                 (int)(original.Height + growByPixels + 1));
         }
 
         public Word GetItemAtLocation(Point location)
         {
-            var area = new RectangleF(location, new SizeF(0, 0));
+            var area = new ExtRectF(location.X, location.Y, 0, 0);
             IEnumerable<Word> itemsInArea = (fModel == null) ? new Word[] { } : fModel.GetWordsInArea(area);
             return itemsInArea.FirstOrDefault();
         }
 
-        public SizeF Measure(string text, int weight)
+        public ExtSizeF Measure(string text, int weight)
         {
             Font font = GetFont(weight);
             Size proposedSize = new Size(int.MaxValue, int.MaxValue);
-            return fGraphics.MeasureString(text, font, proposedSize, StringFormat.GenericTypographic);
+            SizeF sz = fGraphics.MeasureString(text, font, proposedSize, StringFormat.GenericTypographic);
+            return new ExtSizeF(sz.Width + 0.5f, sz.Height);
         }
 
         public void Draw(Word word, bool highlight)
         {
             Font font = GetFont(word.Occurrences);
             Color color = fPalette[word.Occurrences * word.Text.Length % fPalette.Length];
-            RectangleF itemRt = word.Rectangle;
+            var itemRt = UIHelper.Rt2Rt(word.Rectangle);
 
             if (highlight) {
                 color = UIHelper.Darker(color, 0.5f);

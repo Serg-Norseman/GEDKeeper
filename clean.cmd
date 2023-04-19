@@ -74,9 +74,6 @@ rmdir .\projects\GKv2\GKFlowInputPlugin\obj /s /q
 rmdir .\projects\GKv2\GKPedigreeImporterPlugin\bin /s /q
 rmdir .\projects\GKv2\GKPedigreeImporterPlugin\obj /s /q
 
-rmdir .\projects\GKv2\GKWordsCloudPlugin\bin /s /q
-rmdir .\projects\GKv2\GKWordsCloudPlugin\obj /s /q
-
 rmdir .\projects\GKv2\GEDmill\bin /s /q
 rmdir .\projects\GKv2\GEDmill\obj /s /q
 
@@ -114,3 +111,6 @@ rmdir .\projects\plugins\GKTextSearchPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKTimeLinePlugin\bin /s /q
 rmdir .\projects\plugins\GKTimeLinePlugin\obj /s /q
+
+rmdir .\projects\plugins\GKWordsCloudPlugin\bin /s /q
+rmdir .\projects\plugins\GKWordsCloudPlugin\obj /s /q

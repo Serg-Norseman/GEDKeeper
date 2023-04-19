@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:complat="clr-namespace:GKUI.Platform;assembly=GKComponents"
+  xmlns:wc="clr-namespace:GKWordsCloudPlugin.WordsCloud"
+  x:Class="GKWordsCloudPlugin.WordsCloudWidget"
+  Closed="Form_Closed" Shown="Form_Shown" Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+
+  <Form.ToolBar>
+    <ToolBar TextAlign="Right" Style="tbsi">
+
+      <SeparatorToolItem />
+      <complat:GKDropDownToolItem x:Name="tbType" Text="not selected">
+        <complat:GKDropDownToolItem.ContextMenu>
+          <ContextMenu x:Name="cbType">
+          </ContextMenu>
+        </complat:GKDropDownToolItem.ContextMenu>
+      </complat:GKDropDownToolItem>
+
+    </ToolBar>
+  </Form.ToolBar>
+
+  <wc:CloudViewer x:Name="cloudViewer" Size="800, 600" />
+
+</Form>
