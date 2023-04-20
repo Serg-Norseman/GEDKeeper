@@ -19,10 +19,10 @@
  */
 
 using System;
-using System.Windows.Forms;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -82,7 +82,7 @@ namespace GKFlowInputPlugin
         public void ShowError(string msg)
         {
             string title = fLangMan.LS(FLS.LSID_PluginTitle);
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            AppHost.StdDialogs.ShowError(msg, title);
         }
 
         public PersonLink GetLinkByName(string aName)

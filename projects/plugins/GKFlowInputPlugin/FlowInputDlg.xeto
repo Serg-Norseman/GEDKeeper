@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  x:Class="GKFlowInputPlugin.FlowInputDlg"
+  Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="PageControl1" Size="633, 401">
+        <TabPage x:Name="tsSimpleInput">
+
+          <TableLayout Style="paddedTable8">
+            <TableRow>
+              <StackLayout Style="labtexStack">
+                <Label x:Name="lblFullName" />
+                <StackLayout Orientation="Horizontal" Spacing="8">
+                  <TextBox x:Name="txtFullName" Width="400" />
+                  <Button x:Name="btnMale" Width="40" Click="btnSex_Click" />
+                </StackLayout>
+              </StackLayout>
+            </TableRow>
+
+            <TableRow>
+              <GroupBox x:Name="Panel1">
+                <StackLayout Orientation="Vertical" Padding="8" Spacing="8">
+                  <CheckBox x:Name="chkBirth" />
+                  <StackLayout Orientation="Horizontal" Spacing="8">
+                    <StackLayout Style="labtexStack">
+                      <Label x:Name="lblBirthDate" />
+                      <MaskedTextBox x:Name="txtBirthDate" Width="100" TextChanged="txtBirthDate_TextChanged" />
+                    </StackLayout>
+                    <StackLayout Style="labtexStack">
+                      <Label x:Name="lblBirthPlace" />
+                      <TextBox x:Name="txtBirthPlace" Width="340" TextChanged="txtBirthDate_TextChanged" />
+                    </StackLayout>
+                  </StackLayout>
+                </StackLayout>
+              </GroupBox>
+            </TableRow>
+
+            <TableRow>
+              <GroupBox x:Name="Panel2">
+                <StackLayout Orientation="Vertical" Padding="8" Spacing="8">
+                  <CheckBox x:Name="chkDeath" />
+                  <StackLayout Orientation="Horizontal" Spacing="8">
+                    <StackLayout Style="labtexStack">
+                      <Label x:Name="lblDeathDate" />
+                      <MaskedTextBox x:Name="txtDeathDate" Width="100" TextChanged="txtDeathDate_TextChanged" />
+                    </StackLayout>
+                    <StackLayout Style="labtexStack">
+                      <Label x:Name="lblDeathPlace" />
+                      <TextBox x:Name="txtDeathPlace" Width="340" TextChanged="txtDeathDate_TextChanged" />
+                    </StackLayout>
+                  </StackLayout>
+                </StackLayout>
+              </GroupBox>
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblNote" />
+            </TableRow>
+
+            <TableRow ScaleHeight="True">
+              <TextArea x:Name="txtNote" Height="120" />
+            </TableRow>
+          </TableLayout>
+
+        </TabPage>
+
+        <TabPage x:Name="tsSourceInput">
+          <TableLayout Style="paddedTable8">
+            <TableRow>
+              <GroupBox x:Name="rgSourceKind">
+                <StackLayout Orientation="Horizontal" Padding="8" Spacing="8">
+                  <RadioButton x:Name="rbSK_Rev" TextChanged="rbX_CheckedChanged" />
+                  <RadioButton x:Name="rbSK_Met" TextChanged="rbX_CheckedChanged" />
+                </StackLayout>
+              </GroupBox>
+            </TableRow>
+
+            <TableRow>
+              <GroupBox x:Name="gbSource">
+                <TableLayout Style="paddedTable8">
+                  <TableRow>
+                    <StackLayout Orientation="Horizontal" Spacing="8">
+                      <StackLayout Style="labtexStack">
+                        <Label x:Name="lblSource" />
+                        <ComboBox x:Name="cbSource" Width="220" />
+                      </StackLayout>
+
+                      <StackLayout Style="labtexStack">
+                        <Label x:Name="lblPage" />
+                        <TextBox x:Name="edPage" Width="110" />
+                      </StackLayout>
+
+                      <StackLayout Style="labtexStack">
+                        <Label x:Name="lblYear" />
+                        <TextBox x:Name="edSourceYear" Width="60" />
+                      </StackLayout>
+                    </StackLayout>
+                  </TableRow>
+
+                  <TableRow>
+                    <StackLayout Style="labtexStack">
+                      <Label x:Name="lblSettlement" />
+                      <TextBox x:Name="edPlace" Width="500" />
+                    </StackLayout>
+                  </TableRow>
+                </TableLayout>
+              </GroupBox>
+            </TableRow>
+
+            <TableRow>
+              <GroupBox x:Name="gbMetrics" Enabled="false">
+                <StackLayout Orientation="Horizontal" Padding="8" Spacing="8">
+                  <StackLayout Style="labtexStack">
+                    <Label x:Name="lblEventDate" />
+                    <MaskedTextBox x:Name="edEventDate" Width="120" />
+                  </StackLayout>
+
+                  <StackLayout Style="labtexStack">
+                    <Label x:Name="lblEventType" />
+                    <ComboBox x:Name="cbEventType" Width="140" ReadOnly="true" />
+                  </StackLayout>
+                </StackLayout>
+              </GroupBox>
+            </TableRow>
+
+            <TableRow ScaleHeight="True">
+              <GridView x:Name="dataGridView1" Height="180" />
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Style="dlgFooter">
+        <StackLayoutItem Expand="True" />
+        <Button x:Name="btnParse" Style="dlgBtn" Click="btnParse_Click" />
+        <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="btnClose_Click" />
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Form>

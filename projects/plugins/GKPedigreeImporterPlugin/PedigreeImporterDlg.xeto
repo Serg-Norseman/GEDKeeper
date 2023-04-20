@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  x:Class="GKPedigreeImporterPlugin.PedigreeImporterDlg"
+  Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabControl1" Size="633, 401">
+        <TabPage x:Name="pageSelect">
+
+          <TableLayout Style="paddedTable8">
+            <TableRow>
+
+              <StackLayout Style="labtexStack">
+                <Label x:Name="lblFile" />
+                <StackLayout Orientation="Horizontal" Spacing="8">
+                  <TextBox x:Name="edImportFile" Width="740" ReadOnly="true" />
+                  <Button x:Name="btnImportFileChoose" Style="dlgBtn" Click="btnImportFileChoose_Click" />
+                </StackLayout>
+              </StackLayout>
+
+            </TableRow>
+
+            <TableRow>
+              <StackLayout Orientation="Horizontal" Spacing="8">
+                <StackLayoutItem>
+                  <StackLayout Orientation="Vertical" Spacing="8">
+                    <GroupBox x:Name="grpPersonIdFormat">
+                      <StackLayout Orientation="Vertical" Padding="8" Spacing="8">
+                        <RadioButton x:Name="rbNumsUnknown" />
+                        <RadioButton x:Name="rbNumsKonovalov" />
+                        <RadioButton x:Name="rbNumsDAboville" />
+                      </StackLayout>
+                    </GroupBox>
+
+                    <GroupBox x:Name="grpConversionParams" Padding="8">
+                      <CheckBox x:Name="chkSurnamesNormalize" />
+                    </GroupBox>
+
+                    <GroupBox x:Name="grpPersonLineSpecials" Padding="8">
+                      <CheckBox x:Name="chkSpecial_1" />
+                    </GroupBox>
+                  </StackLayout>
+                </StackLayoutItem>
+
+                <StackLayoutItem>
+                  <GroupBox x:Name="grpTextPedigreesParams">
+                    <TableLayout Style="paddedTable8">
+                      <TableRow>
+                        <Label x:Name="lblPersonLineSeparator" />
+                        <ComboBox x:Name="cbPersonSeparator" Width="180" ReadOnly="true" Enabled="false" />
+                      </TableRow>
+
+                      <TableRow>
+                        <Label x:Name="lblSurnameFormat" />
+                        <ComboBox x:Name="cbNameFormat" Width="180" ReadOnly="true" />
+                      </TableRow>
+
+                      <TableRow>
+                        <Label x:Name="lblGenerationFormat" />
+                        <ComboBox x:Name="cbGenerationFormat" Width="180" ReadOnly="true" />
+                      </TableRow>
+
+                      <TableRow>
+                        <Label x:Name="lblDateFormat" />
+                        <ComboBox x:Name="cbDatesFormat" Width="180" ReadOnly="true" Enabled="false" />
+                      </TableRow>
+
+                      <TableRow>
+                        <Label x:Name="lblDateSeparator" />
+                        <ComboBox x:Name="cbDateSeparator" Width="180" ReadOnly="true" Enabled="false" />
+                      </TableRow>
+                    </TableLayout>
+                  </GroupBox>
+                </StackLayoutItem>
+              </StackLayout>
+            </TableRow>
+
+          </TableLayout>
+
+        </TabPage>
+
+        <TabPage x:Name="pageResult">
+          <TableLayout Style="paddedTable8">
+            <TableRow>
+              <ListBox x:Name="lbLog" Size="940, 480" />
+            </TableRow>
+          </TableLayout>
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Style="dlgFooter">
+        <StackLayoutItem Expand="True" />
+        <Button x:Name="btnBack" Style="dlgBtn" Click="btnBack_Click" />
+        <Button x:Name="btnNext" Style="dlgBtn" Click="btnNext_Click" />
+        <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="btnClose_Click" />
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Form>

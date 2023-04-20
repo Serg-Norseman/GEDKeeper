@@ -68,12 +68,6 @@ rmdir .\projects\GKv3\GKComponents\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
-rmdir .\projects\GKv2\GKFlowInputPlugin\bin /s /q
-rmdir .\projects\GKv2\GKFlowInputPlugin\obj /s /q
-
-rmdir .\projects\GKv2\GKPedigreeImporterPlugin\bin /s /q
-rmdir .\projects\GKv2\GKPedigreeImporterPlugin\obj /s /q
-
 rmdir .\projects\GKv2\GEDmill\bin /s /q
 rmdir .\projects\GKv2\GEDmill\obj /s /q
 
@@ -91,6 +85,9 @@ rmdir .\projects\plugins\GKCalendarPlugin\obj /s /q
 rmdir .\projects\plugins\GKChroniclePlugin\bin /s /q
 rmdir .\projects\plugins\GKChroniclePlugin\obj /s /q
 
+rmdir .\projects\plugins\GKFlowInputPlugin\bin /s /q
+rmdir .\projects\plugins\GKFlowInputPlugin\obj /s /q
+
 rmdir .\projects\plugins\GKHistoryDataPlugin\bin /s /q
 rmdir .\projects\plugins\GKHistoryDataPlugin\obj /s /q
 
@@ -102,6 +99,9 @@ rmdir .\projects\plugins\GKNamesBookPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKNavigatorPlugin\bin /s /q
 rmdir .\projects\plugins\GKNavigatorPlugin\obj /s /q
+
+rmdir .\projects\plugins\GKPedigreeImporterPlugin\bin /s /q
+rmdir .\projects\plugins\GKPedigreeImporterPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKStdReports\bin /s /q
 rmdir .\projects\plugins\GKStdReports\obj /s /q

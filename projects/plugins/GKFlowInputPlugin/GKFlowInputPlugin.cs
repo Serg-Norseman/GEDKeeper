@@ -94,9 +94,14 @@ namespace GKFlowInputPlugin
             IBaseWindow curBase = Host.GetCurrentFile();
             if (curBase == null) return;
 
+#if !ETO
             using (FlowInputDlg frm = new FlowInputDlg(this, curBase)) {
                 frm.ShowDialog();
             }
+#else
+            FlowInputDlg frm = new FlowInputDlg(this, curBase);
+            frm.Show();
+#endif
         }
 
         public override void OnLanguageChange()

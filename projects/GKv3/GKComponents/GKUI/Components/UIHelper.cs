@@ -465,5 +465,12 @@ namespace GKUI.Components
                     field.SetValue(instance, value);
             }
         }
+
+        public static void AddRange(this ListItemCollection items, string[] strings)
+        {
+            foreach (var str in strings) {
+                items.Add(str);
+            }
+        }
     }
 }

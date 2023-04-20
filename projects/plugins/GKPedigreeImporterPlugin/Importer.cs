@@ -27,6 +27,7 @@
 #endif
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using BSLib;
@@ -117,7 +118,7 @@ namespace GKPedigreeImporterPlugin
 
         private readonly IBaseWindow fBase;
         private readonly ILangMan fLangMan;
-        private readonly System.Windows.Forms.ListBox.ObjectCollection fLog;
+        private readonly IList fLog;
         private readonly StringList fRawContents;
         private readonly GDMTree fTree;
         private readonly IView fView;
@@ -143,7 +144,7 @@ namespace GKPedigreeImporterPlugin
             get { return fRawContents; }
         }
 
-        public Importer(IView view, IBaseWindow baseWin, ILangMan langMan, System.Windows.Forms.ListBox.ObjectCollection aLog)
+        public Importer(IView view, IBaseWindow baseWin, ILangMan langMan, IList aLog)
         {
             fView = view;
             fBase = baseWin;

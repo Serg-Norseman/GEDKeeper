@@ -208,7 +208,7 @@
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKv2\GKFlowInputPlugin\GKFlowInputPlugin.csproj">
+    <ProjectReference Include="..\plugins\GKFlowInputPlugin\GKFlowInputPlugin.csproj">
       <Project>{66b64b00-c457-404e-aa2b-90f18127e394}</Project>
       <Name>GKFlowInputPlugin</Name>
     </ProjectReference>

@@ -90,7 +90,11 @@ namespace GKPedigreeImporterPlugin
             if (curBase == null) return;
 
             PedigreeImporterDlg frm = new PedigreeImporterDlg(this, curBase);
+#if !ETO
             frm.ShowDialog();
+#else
+            frm.Show();
+#endif
         }
 
         public override void OnLanguageChange()

@@ -11,11 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTimeLinePlugin", "..\plug
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTextSearchPlugin", "..\plugins\GKTextSearchPlugin\GKTextSearchPlugin.csproj", "{BB2FCE6E-DF1F-40CC-9D7E-01CC9BE97EFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKPedigreeImporterPlugin", "GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.csproj", "{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKPedigreeImporterPlugin", "..\plugins\GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.csproj", "{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKNamesBookPlugin", "..\plugins\GKNamesBookPlugin\GKNamesBookPlugin.csproj", "{182AFE98-D3A5-471A-B9D9-C1C53DD72829}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKFlowInputPlugin", "GKFlowInputPlugin\GKFlowInputPlugin.csproj", "{66B64B00-C457-404E-AA2B-90F18127E394}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKFlowInputPlugin", "..\plugins\GKFlowInputPlugin\GKFlowInputPlugin.csproj", "{66B64B00-C457-404E-AA2B-90F18127E394}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalculatorPlugin", "..\plugins\GKCalculatorPlugin\GKCalculatorPlugin.csproj", "{782E9338-ECA7-4095-9157-6CA003801F05}"
 EndProject
