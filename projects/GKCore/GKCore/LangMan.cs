@@ -962,8 +962,10 @@ namespace GKCore
         /* 899 */ LSID_AnniversaryToday,
         /* 900 */ LSID_AnniversaryTomorrow,
         /* 901 */ LSID_AnniversaryDaysRemained,
+        /* 902 */ LSID_SourceYear,
+        /* 903 */ LSID_AgeAtYear,
 
-        /* 000 */ LSID_Last = LSID_AnniversaryDaysRemained
+        /* 000 */ LSID_Last = LSID_AgeAtYear
     }
 
 
@@ -1882,6 +1884,8 @@ namespace GKCore
             /* 899 */ "Today is jubilee of {0}",
             /* 900 */ "Tomorrow is jubilee of {0}",
             /* 901 */ "{1} days remain before the jubilee of {0}",
+            /* 902 */ "Source year",
+            /* 903 */ "Age at year",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

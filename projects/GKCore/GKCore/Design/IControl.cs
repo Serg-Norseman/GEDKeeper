@@ -31,4 +31,10 @@ namespace GKCore.Design
 
         void Activate();
     }
+
+
+    public interface ITextHolder
+    {
+        string Text { get; set; }
+    }
 }

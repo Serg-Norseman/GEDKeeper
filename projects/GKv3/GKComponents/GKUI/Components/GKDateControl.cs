@@ -119,18 +119,6 @@ namespace GKUI.Components
             }
         }
 
-        private void SetYear(MaskedTextBox txtBox, string year)
-        {
-            try {
-                if (txtBox != null) {
-                    string[] dt = txtBox.Text.Split('/');
-                    txtBox.Text = dt[0] + "/" + dt[1] + "/" + year.PadLeft(4, '_');
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("GKDateControl.SetYear()", ex);
-            }
-        }
-
         private GDMCustomDate GetDate()
         {
             GDMCustomDate result = null;
@@ -260,9 +248,9 @@ namespace GKUI.Components
         public void PasteValue(string value)
         {
             if (txtDate1.Enabled) {
-                SetYear(txtDate1, value);
+                txtDate1.SetYear(value);
             } else if (txtDate2.Enabled) {
-                SetYear(txtDate2, value);
+                txtDate2.SetYear(value);
             }
         }
 
@@ -278,34 +266,35 @@ namespace GKUI.Components
 
         private void InitializeComponent()
         {
-            this.cmbDateType = new ComboBox();
-            this.txtDate1 = new GKUI.Components.GKDateBox();
-            this.txtDate2 = new GKUI.Components.GKDateBox();
-            this.cmbDate1Calendar = new ComboBox();
-            this.cmbDate2Calendar = new ComboBox();
-            this.chkBC2 = new CheckBox();
-            this.chkBC1 = new CheckBox();
+            SuspendLayout();
 
-            this.SuspendLayout();
+            cmbDateType = new ComboBox();
+            cmbDateType.ReadOnly = true;
+            cmbDateType.SelectedIndexChanged += cmbDateType_SelectedIndexChanged;
 
-            this.cmbDateType.ReadOnly = true;
-            this.cmbDateType.SelectedIndexChanged += cmbDateType_SelectedIndexChanged;
+            txtDate1 = new GKDateBox();
+            txtDate1.AllowDrop = true;
+            txtDate1.DragOver += txtDateX_DragOver;
+            txtDate1.DragDrop += txtDateX_DragDrop;
+            txtDate1.CalcMode = true;
 
-            this.txtDate1.AllowDrop = true;
-            this.txtDate1.DragOver += txtDateX_DragOver;
-            this.txtDate1.DragDrop += txtDateX_DragDrop;
+            txtDate2 = new GKDateBox();
+            txtDate2.AllowDrop = true;
+            txtDate2.DragOver += txtDateX_DragOver;
+            txtDate2.DragDrop += txtDateX_DragDrop;
+            txtDate2.CalcMode = true;
 
-            this.txtDate2.AllowDrop = true;
-            this.txtDate2.DragOver += txtDateX_DragOver;
-            this.txtDate2.DragDrop += txtDateX_DragDrop;
+            cmbDate1Calendar = new ComboBox();
+            cmbDate1Calendar.ReadOnly = true;
 
-            this.cmbDate1Calendar.ReadOnly = true;
+            cmbDate2Calendar = new ComboBox();
+            cmbDate2Calendar.ReadOnly = true;
 
-            this.cmbDate2Calendar.ReadOnly = true;
+            chkBC1 = new CheckBox();
+            chkBC1.Text = "BC";
 
-            this.chkBC2.Text = "BC";
-
-            this.chkBC1.Text = "BC";
+            chkBC2 = new CheckBox();
+            chkBC2.Text = "BC";
 
             Content = new TableLayout {
                 Padding = new Padding(0),
@@ -323,7 +312,7 @@ namespace GKUI.Components
                 }
             };
 
-            this.ResumeLayout();
+            ResumeLayout();
         }
 
         #endregion
