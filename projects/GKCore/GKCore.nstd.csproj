@@ -10,36 +10,7 @@
         <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
     </PropertyGroup>
 
-
-    <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
-        <DefineConstants>OS_MSWIN</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
-        <DefineConstants>OS_LINUX;MONO</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition=" $(Configuration.Contains('FreeBSD_')) ">
-        <DefineConstants>OS_FREEBSD;MONO</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
-        <DefineConstants>OS_MACOS</DefineConstants>
-    </PropertyGroup>
-
-
-    <PropertyGroup Condition=" $(Configuration.Contains('_Debug')) ">
-        <DebugSymbols>True</DebugSymbols>
-        <DebugType>Full</DebugType>
-        <Optimize>False</Optimize>
-        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-        <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" $(DefineConstants.Contains('_Release')) ">
-        <DebugSymbols>False</DebugSymbols>
-        <DebugType>None</DebugType>
-        <Optimize>True</Optimize>
-        <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-        <DefineConstants>$(DefineConstants);TRACE;RELEASE</DefineConstants>
-    </PropertyGroup>
+    <Import Project="..\GKConfigurations3.targets" />
 
 
     <PropertyGroup Condition="' $(Platform)' == 'AnyCPU' ">

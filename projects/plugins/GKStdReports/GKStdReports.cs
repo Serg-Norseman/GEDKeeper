@@ -32,6 +32,12 @@ using GKCore.Plugins;
 [assembly: AssemblyVersion("0.6.0.0")]
 [assembly: AssemblyCulture("")]
 
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#elif RELEASE
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
 namespace GKStdReports
 {
     public enum RLS

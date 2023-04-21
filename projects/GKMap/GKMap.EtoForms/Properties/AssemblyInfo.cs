@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
-#else
+#elif RELEASE
 [assembly: AssemblyConfiguration("Release")]
 #endif
 

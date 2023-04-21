@@ -11,6 +11,9 @@
         <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
     </PropertyGroup>
 
+    <Import Project="..\..\GKConfigurations3.targets" />
+
+
     <ItemGroup>
         <Reference Include="BSLib">
             <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>

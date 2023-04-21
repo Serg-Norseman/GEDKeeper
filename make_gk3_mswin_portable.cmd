@@ -1,11 +1,10 @@
 @echo off
 
-set APP_VER=2.25.2
+set APP_VER=3.1.0
 
 call .\clean.cmd
 
-set MSBDIR=@%WINDIR%\Microsoft.NET\Framework\v4.0.30319
-%MSBDIR%\msbuild.exe projects\GKv2\GEDKeeper2.sln /p:Configuration=Release /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.7.1 /v:quiet
+dotnet build projects/GKv3/GEDKeeper3.sln -c MSWin_Release
 
 set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS%==0 goto installer

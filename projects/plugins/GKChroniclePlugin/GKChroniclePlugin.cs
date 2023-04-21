@@ -35,6 +35,12 @@ using GKCore.Plugins;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#elif RELEASE
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
 namespace GKChroniclePlugin
 {
     public enum CLS

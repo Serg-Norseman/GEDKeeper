@@ -32,6 +32,12 @@ using GKUI.Platform;
 [assembly: AssemblyVersion(GKData.APP_VERSION_3X)]
 [assembly: AssemblyCulture("")]
 
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#elif RELEASE
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
 namespace GEDKeeper3
 {
     /// <summary>

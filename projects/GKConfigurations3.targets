@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <SelfContained>true</SelfContained>
+        <!--PublishTrimmed>true</PublishTrimmed-->
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
+        <DefineConstants>$(DefineConstants);OS_MSWIN</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
+        <DefineConstants>$(DefineConstants);OS_LINUX;MONO</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('FreeBSD_')) ">
+        <DefineConstants>$(DefineConstants);OS_FREEBSD;MONO</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
+        <DefineConstants>$(DefineConstants);OS_MACOS</DefineConstants>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(Configuration.Contains('_Debug')) ">
+        <DebugSymbols>True</DebugSymbols>
+        <DebugType>Full</DebugType>
+        <Optimize>False</Optimize>
+        <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+        <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" $(Configuration.Contains('_Release')) ">
+        <DebugSymbols>False</DebugSymbols>
+        <DebugType>None</DebugType>
+        <Optimize>True</Optimize>
+        <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+        <DefineConstants>$(DefineConstants);TRACE;RELEASE</DefineConstants>
+    </PropertyGroup>
+
+</Project>

@@ -9,4 +9,10 @@ using GKCore;
 [assembly: AssemblyVersion("4.0.0.0")]
 [assembly: AssemblyCulture("")]
 
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#elif RELEASE
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
 [assembly: InternalsVisibleTo("GKComponents")]

@@ -34,6 +34,12 @@ using GKCore.Plugins;
 [assembly: AssemblyVersion("0.1.0.0")]
 [assembly: AssemblyCulture("")]
 
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#elif RELEASE
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
 namespace GKBackupPlugin
 {
     public enum PLS
