@@ -291,7 +291,13 @@ namespace GKUI.Platform
         {
             bool result = false;
 
-            if (feature == Feature.Themes) {
+            if (feature == Feature.MediaPlayer) {
+#if DIS_VLC
+                result = false;
+#else
+                result = true;
+#endif
+            } else if (feature == Feature.Themes) {
                 result = false; // FIXME: temp disable
             }
 

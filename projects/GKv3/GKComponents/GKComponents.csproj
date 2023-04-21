@@ -6,22 +6,23 @@
         <AssemblyName>GKComponents</AssemblyName>
         <RootNamespace />
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <DefineConstants>DIS_VLC</DefineConstants>
 
         <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
     </PropertyGroup>
 
 
     <PropertyGroup Condition=" $(Configuration.Contains('MSWin_')) ">
-        <DefineConstants>OS_MSWIN;WPF_GVSC_BUG</DefineConstants>
+        <DefineConstants>$(DefineConstants);OS_MSWIN;WPF_GVSC_BUG</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" $(Configuration.Contains('Linux_')) ">
-        <DefineConstants>OS_LINUX;MONO</DefineConstants>
+        <DefineConstants>$(DefineConstants);OS_LINUX;MONO</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" $(Configuration.Contains('FreeBSD_')) ">
-        <DefineConstants>OS_FREEBSD;MONO</DefineConstants>
+        <DefineConstants>$(DefineConstants);OS_FREEBSD;MONO</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
-        <DefineConstants>OS_MACOS</DefineConstants>
+        <DefineConstants>$(DefineConstants);OS_MACOS</DefineConstants>
     </PropertyGroup>
 
 
@@ -64,19 +65,21 @@
         <PackageReference Include="Eto.Forms" Version="2.7.4" />
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.4" />
         <PackageReference Include="OxyPlot.Eto" Version="1.1.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" !$(DefineConstants.Contains('DIS_VLC')) ">
         <PackageReference Include="LibVLCSharp" Version="3.6.8" />
     </ItemGroup>
 
-
-    <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
+    <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) and !$(DefineConstants.Contains('DIS_VLC')) ">
         <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.18" />
     </ItemGroup>
 
-    <ItemGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) or $(DefineConstants.Contains('OS_FREEBSD')) ">
+    <ItemGroup Condition=" ($(DefineConstants.Contains('OS_LINUX')) or $(DefineConstants.Contains('OS_FREEBSD'))) and !$(DefineConstants.Contains('DIS_VLC')) ">
         <PackageReference Include="LibVLCSharp.GTK" Version="3.6.8" />
     </ItemGroup>
 
-    <ItemGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
+    <ItemGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) and !$(DefineConstants.Contains('DIS_VLC')) ">
         <PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
     </ItemGroup>
 

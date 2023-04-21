@@ -401,7 +401,11 @@ namespace GKCore.Controllers
         public void UpdateMediaOptions()
         {
             GetControl<ICheckBox>("chkRemovableMediaWarning").Checked = fOptions.RemovableMediaWarning;
-            GetControl<ICheckBox>("chkEmbeddedMediaPlayer").Checked = fOptions.EmbeddedMediaPlayer;
+
+            var hasMediaPlayer = AppHost.Instance.HasFeatureSupport(Feature.MediaPlayer);
+            GetControl<ICheckBox>("chkEmbeddedMediaPlayer").Checked = fOptions.EmbeddedMediaPlayer && hasMediaPlayer;
+            GetControl<ICheckBox>("chkEmbeddedMediaPlayer").Enabled = hasMediaPlayer;
+
             GetControl<ICheckBox>("chkAllowMediaDirectRefs").Checked = fOptions.AllowMediaStoreReferences;
             GetControl<ICheckBox>("chkAllowMediaStoreRelativeReferences").Checked = fOptions.AllowMediaStoreRelativeReferences;
             GetControl<IComboBox>("cmbMediaStoreDefault").SetSelectedTag<MediaStoreType>(fOptions.MediaStoreDefault);

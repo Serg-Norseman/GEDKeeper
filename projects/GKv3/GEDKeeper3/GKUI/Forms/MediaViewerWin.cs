@@ -91,10 +91,12 @@ namespace GKUI.Forms
 
         public void SetViewMedia(string mediaFile)
         {
+#if !DIS_VLC
             var mediaPlayer = new MediaPlayer();
             mediaPlayer.MediaFile = mediaFile;
 
             SetViewControl(mediaPlayer);
+#endif
         }
 
         public void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef)
@@ -152,10 +154,12 @@ namespace GKUI.Forms
 
         private void MediaViewerWin_FormClosing(object sender, CancelEventArgs e)
         {
+#if !DIS_VLC
             var mediaPlayer = fViewer as MediaPlayer;
             if (mediaPlayer != null) {
                 mediaPlayer.btnStop_Click(null, null);
             }
+#endif
         }
     }
 }

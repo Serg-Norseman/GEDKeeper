@@ -3225,7 +3225,7 @@ namespace GKCore
 
                 case MultimediaKind.mkVideo:
                 case MultimediaKind.mkAudio:
-                    return GlobalOptions.Instance.EmbeddedMediaPlayer;
+                    return GlobalOptions.Instance.EmbeddedMediaPlayer && AppHost.Instance.HasFeatureSupport(Feature.MediaPlayer);
 
                 case MultimediaKind.mkText:
                     return (format == GDMMultimediaFormat.mfTXT || format == GDMMultimediaFormat.mfRTF ||

@@ -22,6 +22,7 @@ namespace GKCore.Types
 {
     public enum Feature
     {
+        MediaPlayer,
         Themes,
     }
 }
