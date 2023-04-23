@@ -22,7 +22,7 @@ using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
-    public interface IFARDlg : IWindow, IWidgetForm
+    public interface IFARDlg : IWindow, IWidgetForm, IWindowDependent
     {
     }
 }

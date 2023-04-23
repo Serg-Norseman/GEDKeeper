@@ -43,11 +43,13 @@ namespace GKCore.Controllers
     public sealed class TabParts
     {
         public readonly IListView ListView;
+        public readonly string SplitterName;
         public readonly IHyperView Summary;
 
-        public TabParts(IListView listView, IHyperView summary)
+        public TabParts(IListView listView, string splitterName, IHyperView summary)
         {
             ListView = listView;
+            SplitterName = splitterName;
             Summary = summary;
         }
     }
@@ -434,9 +436,41 @@ namespace GKCore.Controllers
 
         #region UI
 
-        public void SetTabPart(GDMRecordType recType, IListView listView, IHyperView summary)
+        public void SetTabPart(GDMRecordType recType, IListView listView, string splitterName, IHyperView summary)
         {
-            fTabParts[(int)recType] = new TabParts(listView, summary);
+            fTabParts[(int)recType] = new TabParts(listView, splitterName, summary);
+        }
+
+        public void SetSummaryWidth(bool uiAction)
+        {
+            if (!GlobalOptions.Instance.KeepInfoPansOverallSize)
+                return;
+
+            try {
+                int currentTab, splitterPos;
+
+                if (uiAction) {
+                    currentTab = fView.RecordTabs.SelectedIndex + 1;
+                    splitterPos = GetControl<ISplitter>(fTabParts[currentTab].SplitterName).Position;
+                    GlobalOptions.Instance.InfoPansOverallSize = splitterPos;
+                } else {
+                    currentTab = 0;
+                    splitterPos = GlobalOptions.Instance.InfoPansOverallSize;
+                    if (splitterPos <= 0) splitterPos = 300;
+                }
+
+                for (int i = 0; i < fTabParts.Length; i++) {
+                    var tab = fTabParts[i];
+                    if (i != currentTab && tab != null) {
+                        var splitterHandler = GetControl<ISplitter>(tab.SplitterName);
+                        fView.EnableSplitterEvent(splitterHandler, false);
+                        splitterHandler.Position = splitterPos;
+                        fView.EnableSplitterEvent(splitterHandler, true);
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.SetSummaryWidth()", ex);
+            }
         }
 
         public GDMRecordType GetSelectedRecordType()
@@ -576,6 +610,7 @@ namespace GKCore.Controllers
 
         public void UpdateSettings()
         {
+            SetSummaryWidth(false);
             RestoreListsSettings();
             RefreshLists(true);
         }

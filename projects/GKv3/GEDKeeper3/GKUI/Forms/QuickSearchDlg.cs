@@ -43,6 +43,11 @@ namespace GKUI.Forms
 
         private readonly QuickSearchDlgController fController;
 
+        public IWindow OwnerWindow
+        {
+            get { return fController.WorkWindow; }
+        }
+
         #region View Interface
 
         ITextBox IQuickSearchDlg.SearchPattern

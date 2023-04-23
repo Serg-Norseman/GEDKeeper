@@ -74,6 +74,12 @@ namespace GKUI.Forms
 
         #endregion
 
+        public IWindow OwnerWindow
+        {
+            get { return fController.Base; }
+        }
+
+
         public StatisticsWin(IBaseWindow baseWin, List<GDMRecord> selectedRecords)
         {
             XamlReader.Load(this);

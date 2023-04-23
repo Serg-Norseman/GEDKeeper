@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -59,5 +59,15 @@ namespace GKCore.Interfaces
         GDMRecordType GetSelectedRecordType();
         GDMRecord GetSelectedRecordEx();
         void SetExternalFilter(ExternalFilterHandler filterHandler, GDMRecordType recType = GDMRecordType.rtNone);
+    }
+
+
+    /// <summary>
+    /// Interface for all windows dependent on IWindow (IBaseWindow or IChartWindow).
+    /// </summary>
+    public interface IWindowDependent
+    {
+        //IBaseWindow Base { get; }
+        IWindow OwnerWindow { get; }
     }
 }

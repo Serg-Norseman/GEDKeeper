@@ -276,6 +276,10 @@ namespace GKCore.Options
             set { fInterfaceLang = value; }
         }
 
+        public int InfoPansOverallSize { get; set; }
+
+        public bool KeepInfoPansOverallSize { get; set; }
+
         public bool KeepRichNames { get; set; }
 
         public IList<LangRecord> Languages
@@ -522,6 +526,8 @@ namespace GKCore.Options
             fRSFilters = new Dictionary<GDMRecordType, StringList>();
 
             MultipagePrint = false;
+            InfoPansOverallSize = -1;
+            KeepInfoPansOverallSize = false;
 
             Theme = string.Empty;
         }
@@ -904,6 +910,8 @@ namespace GKCore.Options
             LoadRSFilters(ini);
 
             MultipagePrint = ini.ReadBool("Common", "MultipagePrint", false);
+            InfoPansOverallSize = ini.ReadInteger("Common", "InfoPansOverallSize", 0);
+            KeepInfoPansOverallSize = ini.ReadBool("Common", "KeepInfoPansOverallSize", false);
 
             Theme = ini.ReadString("Common", "Theme", "");
 
@@ -1042,6 +1050,8 @@ namespace GKCore.Options
             SaveRSFilters(ini);
 
             ini.WriteBool("Common", "MultipagePrint", MultipagePrint);
+            ini.WriteInteger("Common", "InfoPansOverallSize", InfoPansOverallSize);
+            ini.WriteBool("Common", "KeepInfoPansOverallSize", KeepInfoPansOverallSize);
 
             ini.WriteString("Common", "Theme", Theme);
 

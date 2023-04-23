@@ -142,7 +142,6 @@ namespace GKUI.Platform
         }
 
         public override void RestoreWinState(IBaseWindow baseWin, MRUFile mf)
-
         {
             var frm = baseWin as Form;
             UIHelper.RestoreFormRect(frm, mf.WinRect, (FormWindowState)mf.WinState);
@@ -223,6 +222,17 @@ namespace GKUI.Platform
                 }
 
                 return true;
+            }
+        }
+
+        public override void CloseDependentWindows(IWindow owner)
+        {
+            var wndArr = Application.OpenForms;
+            for (int i = wndArr.Count - 1; i >= 0; i--) {
+                Form wnd = wndArr[i];
+                if (wnd is IWindowDependent && ((IWindowDependent)wnd).OwnerWindow == owner) {
+                    wnd.Close();
+                }
             }
         }
 
@@ -407,6 +417,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripButton), typeof(ButtonToolItemHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripDropDownButton), typeof(DropDownToolItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(Splitter), typeof(SplitterHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKTabControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));

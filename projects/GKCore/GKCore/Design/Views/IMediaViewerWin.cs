@@ -25,7 +25,7 @@ using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
-    public interface IMediaViewerWin : IWindow
+    public interface IMediaViewerWin : IWindow, IWindowDependent
     {
         GDMFileReferenceWithTitle FileReference { get; set; }
         GDMMultimediaRecord MultimediaRecord { get; set; }

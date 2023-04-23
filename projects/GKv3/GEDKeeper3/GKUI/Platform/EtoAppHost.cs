@@ -263,6 +263,16 @@ namespace GKUI.Platform
             return false;
         }
 
+        public override void CloseDependentWindows(IWindow owner)
+        {
+            var wndArr = Application.Instance.Windows.ToArray();
+            foreach (var wnd in wndArr) {
+                if (wnd is IWindowDependent && ((IWindowDependent)wnd).OwnerWindow == owner) {
+                    wnd.Close();
+                }
+            }
+        }
+
         public override ExtRect GetActiveScreenWorkingArea()
         {
             var activeForm = GetActiveWindow() as Form;
@@ -433,6 +443,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(ButtonToolItem), typeof(ButtonToolItemHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDropDownToolItem), typeof(ButtonToolItemHandler));
             ControlsManager.RegisterHandlerType(typeof(GKButtonToolItem), typeof(ButtonToolItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(Splitter), typeof(SplitterHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));

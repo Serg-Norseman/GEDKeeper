@@ -48,6 +48,11 @@ namespace GKUI.Forms
         private readonly int fMinGens;
         private bool fTipShow;
 
+        public IWindow OwnerWindow
+        {
+            get { return fBase; }
+        }
+
         public PatriarchsViewerWin(IBaseWindow baseWin, int minGens)
         {
             XamlReader.Load(this);

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -49,7 +49,7 @@ namespace GKUI.Forms
 
             TreeChartWin tcWin = frm as TreeChartWin;
 
-            IBaseWindow curBase = tcWin.Base;
+            IBaseWindow curBase = tcWin.OwnerWindow as IBaseWindow;
             Assert.IsNotNull(curBase);
 
             Assert.AreEqual(kind, ((ITreeChartWin)tcWin).TreeBox.Model.Kind);

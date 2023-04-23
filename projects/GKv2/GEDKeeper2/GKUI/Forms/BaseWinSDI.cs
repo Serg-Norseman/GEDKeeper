@@ -165,10 +165,12 @@ namespace GKUI.Forms
             recView.UpdateContents();
 
             var spl = new Splitter();
+            spl.Name = "splitter" + ((int)recType).ToString();
             spl.Dock = DockStyle.Right;
             spl.Size = new Size(4, 290);
             spl.MinExtra = 100;
             spl.MinSize = 100;
+            spl.SplitterMoved += Spl_SplitterMoved;
 
             var tabPage = new TabPage(pageText);
             tabPage.Controls.Add(recView);
@@ -180,12 +182,7 @@ namespace GKUI.Forms
             tabPage.Controls.SetChildIndex(spl, 1);
             tabPage.Controls.SetChildIndex(summary, 2);
 
-            fController.SetTabPart(recType, recView, summary);
-        }
-
-        private void BaseContext_ModifiedChanged(object sender, EventArgs e)
-        {
-            fController.SetMainTitle();
+            fController.SetTabPart(recType, recView, spl.Name, summary);
         }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
@@ -241,6 +238,32 @@ namespace GKUI.Forms
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
+            AppHost.Instance.CloseDependentWindows(this);
+        }
+
+        private void Spl_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            fController.SetSummaryWidth(true);
+        }
+
+        void IBaseWindowView.EnableSplitterEvent(object controlHandler, bool enable)
+        {
+            var handler = controlHandler as SplitterHandler;
+            if (handler == null) return;
+
+            var splitter = handler.Control as Splitter;
+            if (splitter != null) {
+                if (enable) {
+                    splitter.SplitterMoved += Spl_SplitterMoved;
+                } else {
+                    splitter.SplitterMoved -= Spl_SplitterMoved;
+                }
+            }
+        }
+
+        private void BaseContext_ModifiedChanged(object sender, EventArgs e)
+        {
+            fController.SetMainTitle();
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)

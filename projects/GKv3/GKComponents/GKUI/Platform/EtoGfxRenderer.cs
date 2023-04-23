@@ -81,6 +81,9 @@ namespace GKUI.Platform
 
         public override ExtSizeF GetTextSize(string text, IFont font)
         {
+            if (string.IsNullOrEmpty(text) || font == null)
+                return ExtSizeF.Empty;
+
             Font sdFnt = ((FontHandler)font).Handle;
             var size = sdFnt.MeasureString(text);
             return new ExtSizeF(size.Width, size.Height);

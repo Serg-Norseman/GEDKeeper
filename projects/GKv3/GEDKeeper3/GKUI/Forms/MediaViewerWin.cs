@@ -50,6 +50,49 @@ namespace GKUI.Forms
             set { fController.MultimediaRecord = value; }
         }
 
+        public IWindow OwnerWindow
+        {
+            get { return fController.Base; }
+        }
+
+
+        public MediaViewerWin(IBaseWindow baseWin)
+        {
+            XamlReader.Load(this);
+
+            SetLocale();
+
+            fController = new MediaViewerController(this);
+            fController.Init(baseWin);
+        }
+
+        public override void SetLocale()
+        {
+            var localizable = fViewer as ILocalizable;
+            if (localizable != null) localizable.SetLocale();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (fViewer != null) fViewer.Focus();
+        }
+
+        private void MediaViewerWin_FormClosing(object sender, CancelEventArgs e)
+        {
+#if !DIS_VLC
+            var mediaPlayer = fViewer as MediaPlayer;
+            if (mediaPlayer != null) {
+                mediaPlayer.btnStop_Click(null, null);
+            }
+#endif
+        }
+
+        private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Escape) Close();
+        }
+
         public void SetViewText(string text)
         {
             try {
@@ -123,43 +166,6 @@ namespace GKUI.Forms
             SuspendLayout();
             Content = fViewer;
             ResumeLayout();
-        }
-
-        public MediaViewerWin(IBaseWindow baseWin)
-        {
-            XamlReader.Load(this);
-
-            SetLocale();
-
-            fController = new MediaViewerController(this);
-            fController.Init(baseWin);
-        }
-
-        public override void SetLocale()
-        {
-            var localizable = fViewer as ILocalizable;
-            if (localizable != null) localizable.SetLocale();
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            if (fViewer != null) fViewer.Focus();
-        }
-
-        private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Keys.Escape) Close();
-        }
-
-        private void MediaViewerWin_FormClosing(object sender, CancelEventArgs e)
-        {
-#if !DIS_VLC
-            var mediaPlayer = fViewer as MediaPlayer;
-            if (mediaPlayer != null) {
-                mediaPlayer.btnStop_Click(null, null);
-            }
-#endif
         }
     }
 }

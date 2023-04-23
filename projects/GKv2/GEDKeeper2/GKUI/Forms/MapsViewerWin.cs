@@ -38,9 +38,15 @@ namespace GKUI.Forms
 {
     public sealed partial class MapsViewerWin : CommonWindow, IMapsViewerWin
     {
+
+        private GKMapBrowser fMapBrowser;
+
         private readonly MapsViewerWinController fController;
 
-        private readonly GKMapBrowser fMapBrowser;
+        public IWindow OwnerWindow
+        {
+            get { return fController.Base; }
+        }
 
         #region View Interface
 
@@ -96,45 +102,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private void radTotal_Click(object sender, EventArgs e)
-        {
-            chkBirth.Enabled = radTotal.Checked;
-            chkDeath.Enabled = radTotal.Checked;
-            chkResidence.Enabled = radTotal.Checked;
-            cmbPersons.Enabled = radSelected.Checked;
-
-            if (radTotal.Checked) {
-                chkLinesVisible.Checked = false;
-            }
-            chkLinesVisible.Enabled = radSelected.Checked;
-        }
-
-        private void MapsViewerWin_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape) Close();
-        }
-
-        private void tbSaveSnapshot_Click(object sender, EventArgs e)
-        {
-            fController.SaveSnapshot();
-        }
-
-        private void btnSelectPlaces_Click(object sender, EventArgs e)
-        {
-            fController.SelectPlaces();
-        }
-
-        private void TreePlaces_DoubleClick(object sender, EventArgs e)
-        {
-            fController.SetCenter();
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            Activate();
-        }
-
         public MapsViewerWin(IBaseWindow baseWin)
         {
             InitializeComponent();
@@ -172,6 +139,45 @@ namespace GKUI.Forms
                 txtLat.Text = fMapBrowser.MapControl.Position.Lat.ToString(CultureInfo.InvariantCulture);
                 txtLng.Text = fMapBrowser.MapControl.Position.Lng.ToString(CultureInfo.InvariantCulture);
             }
+        }
+
+        private void radTotal_Click(object sender, EventArgs e)
+        {
+            chkBirth.Enabled = radTotal.Checked;
+            chkDeath.Enabled = radTotal.Checked;
+            chkResidence.Enabled = radTotal.Checked;
+            cmbPersons.Enabled = radSelected.Checked;
+
+            if (radTotal.Checked) {
+                chkLinesVisible.Checked = false;
+            }
+            chkLinesVisible.Enabled = radSelected.Checked;
+        }
+
+        private void MapsViewerWin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape) Close();
+        }
+
+        private void tbSaveSnapshot_Click(object sender, EventArgs e)
+        {
+            fController.SaveSnapshot();
+        }
+
+        private void btnSelectPlaces_Click(object sender, EventArgs e)
+        {
+            fController.SelectPlaces();
+        }
+
+        private void TreePlaces_DoubleClick(object sender, EventArgs e)
+        {
+            fController.SetCenter();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            Activate();
         }
 
         private void PopulateContextMenus()

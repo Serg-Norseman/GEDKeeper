@@ -32,6 +32,11 @@ namespace GKUI.Forms
         #region View Interface
         #endregion
 
+        public IWindow OwnerWindow
+        {
+            get { return fController.Base; }
+        }
+
         public FindAndReplaceDlg()
         {
             InitializeComponent();

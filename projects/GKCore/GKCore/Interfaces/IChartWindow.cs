@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,10 +24,8 @@ namespace GKCore.Interfaces
     /// Interface for windows of different charts with support
     /// for working functions and localization, and printing.
     /// </summary>
-    public interface IChartWindow : IWorkWindow
+    public interface IChartWindow : IWorkWindow, IWindowDependent
     {
-        IBaseWindow Base { get; }
-
         bool AllowPrint();
         void DoPrint();
         void DoPrintPreview();

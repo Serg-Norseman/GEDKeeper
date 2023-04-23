@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -44,7 +44,7 @@ namespace GKUI.Forms
 
             CircleChartWin ccWin = frm as CircleChartWin;
 
-            IBaseWindow curBase = ccWin.Base;
+            IBaseWindow curBase = ccWin.OwnerWindow as IBaseWindow;
             Assert.IsNotNull(curBase);
 
             ccWin.UpdateSettings();

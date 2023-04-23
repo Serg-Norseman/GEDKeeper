@@ -31,6 +31,7 @@ namespace GKCore.Interfaces
         IForm GetActiveForm();
         IBaseWindow GetCurrentFile(bool extMode = false);
         IWorkWindow GetWorkWindow();
+        void CloseDependentWindows(IWindow owner);
 
         string GetAppDataPath();
         string GetUserFilesPath(string filePath);

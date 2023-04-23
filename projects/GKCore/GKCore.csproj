@@ -61,6 +61,7 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Design\Controls\ISplitter.cs" />
     <Compile Include="GKCore\Design\IForm.cs" />
     <Compile Include="GKCore\Design\Views\IAboutDlg.cs" />
     <Compile Include="GKCore\Design\Views\IAddressEditDlg.cs" />

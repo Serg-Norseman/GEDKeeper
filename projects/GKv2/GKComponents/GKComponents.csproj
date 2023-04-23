@@ -142,6 +142,7 @@
     <Compile Include="GKUI\Platform\Handlers\ListViewHandler.cs" />
     <Compile Include="GKUI\Platform\Handlers\LogChartHandler.cs" />
     <Compile Include="GKUI\Platform\Handlers\MaskedTextBoxHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\SplitterHandler.cs" />
     <Compile Include="GKUI\Platform\MenuItemEx.cs">
       <SubType>Component</SubType>
     </Compile>

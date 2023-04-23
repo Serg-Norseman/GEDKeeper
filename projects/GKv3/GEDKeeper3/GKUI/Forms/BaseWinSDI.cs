@@ -243,23 +243,20 @@ namespace GKUI.Forms
             recView.UpdateContents();
 
             var spl = new Splitter();
+            spl.ID = "splitter" + ((int)recType).ToString();
             spl.Panel1 = recView;
             spl.Panel2 = summary;
             spl.RelativePosition = 300;
             spl.Orientation = Orientation.Horizontal;
             spl.FixedPanel = SplitterFixedPanel.Panel2;
+            spl.PositionChanged += Spl_PositionChanged;
 
             var tabPage = new TabPage();
             tabPage.Text = pageText;
             tabPage.Content = spl;
             tabsRecords.Pages.Add(tabPage);
 
-            fController.SetTabPart(recType, recView, summary);
-        }
-
-        private void BaseContext_ModifiedChanged(object sender, EventArgs e)
-        {
-            fController.SetMainTitle();
+            fController.SetTabPart(recType, recView, spl.ID, summary);
         }
 
         #endregion
@@ -303,6 +300,32 @@ namespace GKUI.Forms
 
         private void Form_Closed(object sender, EventArgs e)
         {
+            AppHost.Instance.CloseDependentWindows(this);
+        }
+
+        private void Spl_PositionChanged(object sender, EventArgs e)
+        {
+            fController.SetSummaryWidth(true);
+        }
+
+        void IBaseWindowView.EnableSplitterEvent(object controlHandler, bool enable)
+        {
+            var handler = controlHandler as SplitterHandler;
+            if (handler == null) return;
+
+            var splitter = handler.Control as Splitter;
+            if (splitter != null) {
+                if (enable) {
+                    splitter.PositionChanged += Spl_PositionChanged;
+                } else {
+                    splitter.PositionChanged -= Spl_PositionChanged;
+                }
+            }
+        }
+
+        private void BaseContext_ModifiedChanged(object sender, EventArgs e)
+        {
+            fController.SetMainTitle();
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)

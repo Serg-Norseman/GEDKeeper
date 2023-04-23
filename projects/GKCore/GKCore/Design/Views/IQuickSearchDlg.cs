@@ -23,7 +23,7 @@ using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
-    public interface IQuickSearchDlg : IView, ILocalizable, IWidgetForm
+    public interface IQuickSearchDlg : IView, ILocalizable, IWidgetForm, IWindowDependent
     {
         ITextBox SearchPattern { get; }
     }

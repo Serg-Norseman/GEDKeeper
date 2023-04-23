@@ -964,8 +964,9 @@ namespace GKCore
         /* 901 */ LSID_AnniversaryDaysRemained,
         /* 902 */ LSID_SourceYear,
         /* 903 */ LSID_AgeAtYear,
+        /* 904 */ LSID_KeepInfoPansOverallSize,
 
-        /* 000 */ LSID_Last = LSID_AgeAtYear
+        /* 000 */ LSID_Last = LSID_KeepInfoPansOverallSize
     }
 
 
@@ -1886,6 +1887,7 @@ namespace GKCore
             /* 901 */ "{1} days remain before the jubilee of {0}",
             /* 902 */ "Source year",
             /* 903 */ "Age at year",
+            /* 904 */ "Keep overall size of info panels",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

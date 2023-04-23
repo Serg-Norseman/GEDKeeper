@@ -89,7 +89,6 @@ namespace GKUI.Forms
 
         private readonly TreeChartWinController fController;
 
-        private readonly IBaseWindow fBase;
         private readonly TreeChartBox fTreeBox;
 
         private GDMIndividualRecord fPerson;
@@ -98,10 +97,9 @@ namespace GKUI.Forms
         private RadioMenuItem miGensInfAncestors;
         private RadioMenuItem miGensInfDescendants;
 
-
-        public IBaseWindow Base
+        public IWindow OwnerWindow
         {
-            get { return fBase; }
+            get { return fController.Base; }
         }
 
         #region View Interface
@@ -121,10 +119,8 @@ namespace GKUI.Forms
             miModeAncestors.Tag = TreeChartKind.ckAncestors;
             miModeDescendants.Tag = TreeChartKind.ckDescendants;
 
-            fBase = baseWin;
-
             fTreeBox = new TreeChartBox(new EtoGfxRenderer());
-            fTreeBox.Base = fBase;
+            fTreeBox.Base = baseWin;
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
             fTreeBox.InfoRequest += ImageTree_InfoRequest;
@@ -285,6 +281,7 @@ namespace GKUI.Forms
 
         protected override void OnClosed(EventArgs e)
         {
+            AppHost.Instance.CloseDependentWindows(this);
             fController.OnClosed();
             base.OnClosed(e);
         }
@@ -361,7 +358,7 @@ namespace GKUI.Forms
 
                 case Keys.S:
                     if (e.Control) {
-                        fBase.SaveFileEx(false);
+                        fController.Base.SaveFileEx(false);
                     }
                     break;
             }

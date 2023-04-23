@@ -23,7 +23,7 @@ using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
-    public interface ISlideshowWin : IWindow, IStatusForm
+    public interface ISlideshowWin : IWindow, IStatusForm, IWindowDependent
     {
         void SetImage(IImage image);
     }

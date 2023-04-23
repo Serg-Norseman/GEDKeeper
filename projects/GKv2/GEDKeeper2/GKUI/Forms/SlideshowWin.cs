@@ -36,6 +36,12 @@ namespace GKUI.Forms
 
         private readonly ImageBox fImageCtl;
 
+        public IWindow OwnerWindow
+        {
+            get { return fController.Base; }
+        }
+
+
         public SlideshowWin(IBaseWindow baseWin)
         {
             InitializeComponent();

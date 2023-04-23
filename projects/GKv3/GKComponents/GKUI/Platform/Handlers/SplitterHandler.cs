@@ -18,20 +18,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Eto.Forms;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 
-namespace GKCore.Design.Views
+namespace GKUI.Platform.Handlers
 {
-    public interface IBaseWindowView : IBaseWindow
+    public sealed class SplitterHandler : BaseControlHandler<Splitter, SplitterHandler>, ISplitter
     {
-        ITabControl RecordTabs { get; }
-        IMenuItem ReportsItem { get; }
-        IMenuItem PluginsItem { get; }
+        public SplitterHandler(Splitter control) : base(control)
+        {
+        }
 
-        bool CheckModified();
-        void LoadBase(string fileName);
-
-        void EnableSplitterEvent(object control, bool enable);
+        public int Position
+        {
+            get { return (int)Control.RelativePosition; }
+            set { Control.RelativePosition = value; }
+        }
     }
 }

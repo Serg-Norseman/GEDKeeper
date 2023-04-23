@@ -53,6 +53,11 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
+        public IWindow OwnerWindow
+        {
+            get { return fController.Base; }
+        }
+
         public FindAndReplaceDlg()
         {
             XamlReader.Load(this);

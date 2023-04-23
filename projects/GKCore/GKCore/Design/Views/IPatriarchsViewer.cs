@@ -22,7 +22,7 @@ using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
-    public interface IPatriarchsViewer : IWindow
+    public interface IPatriarchsViewer : IWindow, IWindowDependent
     {
     }
 }

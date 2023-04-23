@@ -47,6 +47,12 @@ namespace GKUI.Forms
 
         private readonly SlideshowController fController;
 
+        public IWindow OwnerWindow
+        {
+            get { return fController.Base; }
+        }
+
+
         public SlideshowWin(IBaseWindow baseWin)
         {
             XamlReader.Load(this);

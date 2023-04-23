@@ -435,6 +435,8 @@ namespace GKCore
 
         #region IHost implementation
 
+        public abstract void CloseDependentWindows(IWindow owner);
+
         public IWorkWindow GetWorkWindow()
         {
             IWindow activeWnd = GetActiveWindow();
@@ -448,7 +450,7 @@ namespace GKCore
             IBaseWindow result;
 
             if (extMode && curChart != null) {
-                result = curChart.Base;
+                result = curChart.OwnerWindow as IBaseWindow;
             } else {
                 result = ((activeWnd is IBaseWindow) ? ((IBaseWindow) activeWnd) : null);
             }

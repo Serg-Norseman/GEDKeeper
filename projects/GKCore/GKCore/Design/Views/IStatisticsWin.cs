@@ -23,7 +23,7 @@ using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
-    public interface IStatisticsWin : IWindow
+    public interface IStatisticsWin : IWindow, IWindowDependent
     {
         IGraphControl Graph { get; }
         IListView ListStats { get; }

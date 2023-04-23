@@ -18,20 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design.Controls;
-using GKCore.Interfaces;
-
-namespace GKCore.Design.Views
+namespace GKCore.Design.Controls
 {
-    public interface IBaseWindowView : IBaseWindow
+    public interface ISplitter : IBaseControl
     {
-        ITabControl RecordTabs { get; }
-        IMenuItem ReportsItem { get; }
-        IMenuItem PluginsItem { get; }
-
-        bool CheckModified();
-        void LoadBase(string fileName);
-
-        void EnableSplitterEvent(object control, bool enable);
+        int Position { get; set; }
     }
 }

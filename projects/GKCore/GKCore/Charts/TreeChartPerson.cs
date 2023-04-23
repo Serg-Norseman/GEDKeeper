@@ -276,6 +276,9 @@ namespace GKCore.Charts
             try {
                 fRec = iRec;
 
+                fSigns = EnumSet<SpecialUserRef>.Create();
+                Note = string.Empty;
+
                 if (iRec != null) {
                     if (!fModel.PreparedIndividuals.Contains(iRec.XRef)) {
                         fModel.PreparedIndividuals.Add(iRec.XRef);
@@ -332,7 +335,6 @@ namespace GKCore.Charts
                         fDeathDate = ImportUtils.STD_DEATH_SIGN + " " + fDeathDate;
                     }
 
-                    fSigns = EnumSet<SpecialUserRef>.Create();
                     if ((options.SignsVisible || options.URNotesVisible) && fRec.HasUserReferences) {
                         int num = fRec.UserReferences.Count;
                         for (int i = 0; i < num; i++) {
@@ -386,10 +388,8 @@ namespace GKCore.Charts
                     fAge = "";
                     SetFlag(PersonFlag.pfIsDead, false);
                     fSex = GDMSex.svUnknown;
-                    fSigns = EnumSet<SpecialUserRef>.Create();
 
                     CertaintyAssessment = 0.0f;
-                    Note = string.Empty;
                 }
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartPerson.BuildBy()", ex);

@@ -448,6 +448,7 @@
             <CheckBox x:Name="chkMaximizeChartWindows" />
             <CheckBox x:Name="chkSAFByAllNames" />
             <CheckBox x:Name="chkShortenDateRanges" />
+            <CheckBox x:Name="chkKeepInfoPansOverallSize" />
           </StackLayout>
         </TabPage>
 

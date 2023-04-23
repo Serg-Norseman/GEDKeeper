@@ -1824,6 +1824,9 @@ namespace GKCore.Charts
 
         private void DrawText(string text, float x, float y, int quad = 2)
         {
+            if (string.IsNullOrEmpty(text))
+                return;
+
             // quadrant clockwise from 00 hours
             x += fOffsetX;
             y += fOffsetY;

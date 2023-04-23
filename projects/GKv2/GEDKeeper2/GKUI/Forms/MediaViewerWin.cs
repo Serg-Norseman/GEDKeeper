@@ -49,6 +49,47 @@ namespace GKUI.Forms
             set { fController.MultimediaRecord = value; }
         }
 
+        public IWindow OwnerWindow
+        {
+            get { return fController.Base; }
+        }
+
+
+        public MediaViewerWin(IBaseWindow baseWin)
+        {
+            InitializeComponent();
+
+            SetLocale();
+
+            fController = new MediaViewerController(this);
+            fController.Init(baseWin);
+        }
+
+        public override void SetLocale()
+        {
+            var localizable = fViewer as ILocalizable;
+            if (localizable != null) localizable.SetLocale();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (fViewer != null) fViewer.Select();
+        }
+
+        private void MediaViewerWin_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var mediaPlayer = fViewer as MediaPlayer;
+            if (mediaPlayer != null) {
+                mediaPlayer.btnStop_Click(null, null);
+            }
+        }
+
+        private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape) Close();
+        }
+
         public void SetViewText(string text)
         {
             try {
@@ -128,41 +169,6 @@ namespace GKUI.Forms
             Controls.SetChildIndex(ctl, 0);
 
             ResumeLayout(false);
-        }
-
-        public MediaViewerWin(IBaseWindow baseWin)
-        {
-            InitializeComponent();
-
-            SetLocale();
-
-            fController = new MediaViewerController(this);
-            fController.Init(baseWin);
-        }
-
-        public override void SetLocale()
-        {
-            var localizable = fViewer as ILocalizable;
-            if (localizable != null) localizable.SetLocale();
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            if (fViewer != null) fViewer.Select();
-        }
-
-        private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape) Close();
-        }
-
-        private void MediaViewerWin_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            var mediaPlayer = fViewer as MediaPlayer;
-            if (mediaPlayer != null) {
-                mediaPlayer.btnStop_Click(null, null);
-            }
         }
     }
 }

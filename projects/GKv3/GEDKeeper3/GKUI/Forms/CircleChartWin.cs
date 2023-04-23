@@ -55,12 +55,11 @@ namespace GKUI.Forms
 
         private readonly CircleChartWinController fController;
 
-        private readonly IBaseWindow fBaseWin;
         private readonly CircleChart fCircleChart;
 
-        public IBaseWindow Base
+        public IWindow OwnerWindow
         {
-            get { return fBaseWin; }
+            get { return fController.Base; }
         }
 
         #region View Interface
@@ -76,10 +75,8 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            fBaseWin = baseWin;
-
             fCircleChart = new CircleChart();
-            fCircleChart.Base = fBaseWin;
+            fCircleChart.Base = baseWin;
             fCircleChart.ChartType = type;
             fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
             fCircleChart.ZoomChanged += CircleChartWin_NavRefresh;
@@ -89,7 +86,7 @@ namespace GKUI.Forms
             Content = fCircleChart;
 
             fController = new CircleChartWinController(this);
-            fController.Init(fBaseWin);
+            fController.Init(baseWin);
 
             if (GlobalOptions.Instance.MaximizeChartWindows)
                 this.WindowState = Eto.Forms.WindowState.Maximized;
@@ -108,6 +105,12 @@ namespace GKUI.Forms
             base.OnLoad(e);
             fCircleChart.Focus();
             UpdateControls();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            AppHost.Instance.CloseDependentWindows(this);
+            base.OnClosed(e);
         }
 
         protected override IPrintable GetPrintable()

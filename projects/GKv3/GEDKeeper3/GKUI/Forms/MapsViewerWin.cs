@@ -80,6 +80,11 @@ namespace GKUI.Forms
 
         private readonly MapsViewerWinController fController;
 
+        public IWindow OwnerWindow
+        {
+            get { return fController.Base; }
+        }
+
         #region View Interface
 
         IMapBrowser IMapsViewerWin.MapBrowser
@@ -134,6 +139,38 @@ namespace GKUI.Forms
 
         #endregion
 
+        public MapsViewerWin(IBaseWindow baseWin)
+        {
+            XamlReader.Load(this);
+
+            UIHelper.FixRadioButtons(this, grpSelection);
+
+            PopulateContextMenus();
+
+            radTotal.Checked = true;
+
+            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
+            fController.Init(baseWin);
+
+            if (!GMapControl.IsDesignerHosted) {
+                fMapBrowser.MapControl.OnMapTypeChanged += MainMap_OnMapTypeChanged;
+                fMapBrowser.MapControl.OnMapZoomChanged += MainMap_OnMapZoomChanged;
+
+                // get zoom  
+                trkZoom.MinValue = fMapBrowser.MapControl.MinZoom * 100;
+                trkZoom.MaxValue = fMapBrowser.MapControl.MaxZoom * 100;
+                trkZoom.TickFrequency = 100;
+
+                if (fMapBrowser.MapControl.Zoom >= fMapBrowser.MapControl.MinZoom && fMapBrowser.MapControl.Zoom <= fMapBrowser.MapControl.MaxZoom) {
+                    trkZoom.Value = fMapBrowser.MapControl.Zoom * 100;
+                }
+
+                // get position
+                txtLat.Text = fMapBrowser.MapControl.Position.Lat.ToString(CultureInfo.InvariantCulture);
+                txtLng.Text = fMapBrowser.MapControl.Position.Lng.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
         private void radTotal_Click(object sender, EventArgs e)
         {
             chkBirth.Enabled = radTotal.Checked;
@@ -171,38 +208,6 @@ namespace GKUI.Forms
         {
             base.OnLoad(e);
             Activate();
-        }
-
-        public MapsViewerWin(IBaseWindow baseWin)
-        {
-            XamlReader.Load(this);
-
-            UIHelper.FixRadioButtons(this, grpSelection);
-
-            PopulateContextMenus();
-
-            radTotal.Checked = true;
-
-            fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
-            fController.Init(baseWin);
-
-            if (!GMapControl.IsDesignerHosted) {
-                fMapBrowser.MapControl.OnMapTypeChanged += MainMap_OnMapTypeChanged;
-                fMapBrowser.MapControl.OnMapZoomChanged += MainMap_OnMapZoomChanged;
-
-                // get zoom  
-                trkZoom.MinValue = fMapBrowser.MapControl.MinZoom * 100;
-                trkZoom.MaxValue = fMapBrowser.MapControl.MaxZoom * 100;
-                trkZoom.TickFrequency = 100;
-
-                if (fMapBrowser.MapControl.Zoom >= fMapBrowser.MapControl.MinZoom && fMapBrowser.MapControl.Zoom <= fMapBrowser.MapControl.MaxZoom) {
-                    trkZoom.Value = fMapBrowser.MapControl.Zoom * 100;
-                }
-
-                // get position
-                txtLat.Text = fMapBrowser.MapControl.Position.Lat.ToString(CultureInfo.InvariantCulture);
-                txtLng.Text = fMapBrowser.MapControl.Position.Lng.ToString(CultureInfo.InvariantCulture);
-            }
         }
 
         private void PopulateContextMenus()

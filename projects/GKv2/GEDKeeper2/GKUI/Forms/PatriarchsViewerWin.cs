@@ -40,6 +40,11 @@ namespace GKUI.Forms
         private readonly ToolTip fTip;
         private bool fTipShow;
 
+        public IWindow OwnerWindow
+        {
+            get { return fBase; }
+        }
+
         public PatriarchsViewerWin(IBaseWindow baseWin, int minGens)
         {
             InitializeComponent();
