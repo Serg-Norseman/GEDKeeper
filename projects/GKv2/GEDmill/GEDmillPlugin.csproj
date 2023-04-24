@@ -45,114 +45,114 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GEDmillPlugin.cs" />
-    <Compile Include="src\GMHelper.cs" />
-    <Compile Include="src\HTML\HTMLException.cs">
+    <Compile Include="GMHelper.cs" />
+    <Compile Include="HTML\HTMLException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ListView\LVNameItem.cs" />
-    <Compile Include="src\ListView\LVNumberItem.cs" />
-    <Compile Include="src\GMConfig.cs">
+    <Compile Include="ListView\LVNameItem.cs" />
+    <Compile Include="ListView\LVNumberItem.cs" />
+    <Compile Include="GMConfig.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ListView\LVItem.cs">
+    <Compile Include="ListView\LVItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\ListView\LVStringItem.cs">
+    <Compile Include="ListView\LVStringItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Logging\ILogger.cs" />
-    <Compile Include="src\Logging\Log4NetHelper.cs" />
-    <Compile Include="src\Logging\LogManager.cs" />
-    <Compile Include="src\MainForm.Designer.cs">
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Log4NetHelper.cs" />
+    <Compile Include="Logging\LogManager.cs" />
+    <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\Model\BackReference.cs" />
-    <Compile Include="src\MainForm.cs">
+    <Compile Include="Model\BackReference.cs" />
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\HTML\Creator.cs">
+    <Compile Include="HTML\Creator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\HTML\CreatorFrontPage.cs">
+    <Compile Include="HTML\CreatorFrontPage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\HTML\CreatorIndexIndividuals.cs">
+    <Compile Include="HTML\CreatorIndexIndividuals.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\HTML\CreatorRecord.cs">
+    <Compile Include="HTML\CreatorRecord.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\HTML\CreatorRecordIndividual.cs">
+    <Compile Include="HTML\CreatorRecordIndividual.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\HTML\CreatorRecordSource.cs">
+    <Compile Include="HTML\CreatorRecordSource.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\HTML\CreatorStylesheet.cs">
+    <Compile Include="HTML\CreatorStylesheet.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\HTML\HTMLFile.cs">
+    <Compile Include="HTML\HTMLFile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\HTML\Website.cs">
+    <Compile Include="HTML\Website.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\MiniTree\MiniTreeGroup.cs">
+    <Compile Include="MiniTree\MiniTreeGroup.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\MiniTree\MiniTreeIndividual.cs">
+    <Compile Include="MiniTree\MiniTreeIndividual.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\MiniTree\MiniTreeMap.cs">
+    <Compile Include="MiniTree\MiniTreeMap.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\MiniTree\MiniTreeObject.cs">
+    <Compile Include="MiniTree\MiniTreeObject.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\MiniTree\Paintbox.cs">
+    <Compile Include="MiniTree\Paintbox.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\MiniTree\TreeDrawer.cs">
+    <Compile Include="MiniTree\TreeDrawer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\CISRecordChanges.cs">
+    <Compile Include="Model\CISRecordChanges.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\Event.cs">
+    <Compile Include="Model\Event.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\FilenameAndSize.cs">
+    <Compile Include="Model\FilenameAndSize.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\HusbandAndWife.cs">
+    <Compile Include="Model\HusbandAndWife.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\IndexLetter.cs">
+    <Compile Include="Model\IndexLetter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\IndexPage.cs">
+    <Compile Include="Model\IndexPage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\Multimedia.cs">
+    <Compile Include="Model\Multimedia.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\NameAndSource.cs">
+    <Compile Include="Model\NameAndSource.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\NameXRefPair.cs">
+    <Compile Include="Model\NameXRefPair.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\OccupationCounter.cs">
+    <Compile Include="Model\OccupationCounter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\QualifiedDate.cs" />
-    <Compile Include="src\Model\Stats.cs">
+    <Compile Include="Model\QualifiedDate.cs" />
+    <Compile Include="Model\Stats.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Model\StringTuple.cs">
+    <Compile Include="Model\StringTuple.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="src\MainForm.resx">
+    <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
