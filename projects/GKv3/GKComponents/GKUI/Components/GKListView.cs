@@ -29,6 +29,7 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Platform.Handlers;
 using BSDListItem = GKCore.Design.Controls.IListItem;
 using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
@@ -240,7 +241,7 @@ namespace GKUI.Components
             AllowColumnReordering = false;
             AllowMultipleSelection = false;
 
-            // Selection of the last (or only) row does not work on left click; EtoForms issue #2443
+            // [Gtk] Selection of the last (or only) row does not work on left click; EtoForms issue #2443
             AllowEmptySelection = false;
 
             DataStore = fItems;
@@ -329,12 +330,10 @@ namespace GKUI.Components
         {
             base.OnSelectionChanged(e);
 
-#if WPF_GVSC_BUG
             // FIXME: [Wpf]GridView.ReloadData(...) is very slow, Eto 2.7.0 #2245
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 return;
             }
-#endif
 
             base.ReloadData(base.SelectedRow);
         }*/
@@ -346,16 +345,14 @@ namespace GKUI.Components
         {
             base.OnCellFormatting(e);
 
-#if WPF_GVSC_BUG
-            // FIXME: [Wpf]GridView.ReloadData(...) is very slow, Eto 2.7.0 #2245
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.GridCellFormat)) {
                 return;
             }
-#endif
 
             // FIXME: doesn't work correctly because selection changes don't call this method (Eto <= 2.7.0)
             // This method only works with OnSelectionChanged -> ReloadData(SelectedRow)
-            // Gtk works correctly without this.
+            // In Gtk works correctly without this.
+            // In Wpf without this selected row has invalid background.
             /*if (e.Row == base.SelectedRow) {
                 e.BackgroundColor = SystemColors.Selection;
                 e.ForegroundColor = SystemColors.SelectionText;

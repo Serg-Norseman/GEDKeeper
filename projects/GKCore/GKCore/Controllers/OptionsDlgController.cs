@@ -122,7 +122,10 @@ namespace GKCore.Controllers
 
         public void UpdateProxyOptions()
         {
-            GetControl<ICheckBox>("chkUseProxy").Checked = fOptions.Proxy.UseProxy;
+            var hasInternetProxy = AppHost.Instance.HasFeatureSupport(Feature.InternetProxy);
+            GetControl<IGroupBox>("grpInternet").Enabled = hasInternetProxy;
+
+            GetControl<ICheckBox>("chkUseProxy").Checked = fOptions.Proxy.UseProxy && hasInternetProxy;
             GetControl<ITextBox>("txtProxyServer").Text = fOptions.Proxy.Server;
             GetControl<ITextBox>("txtProxyPort").Text = fOptions.Proxy.Port;
             GetControl<ITextBox>("txtProxyLogin").Text = fOptions.Proxy.Login;
@@ -141,7 +144,11 @@ namespace GKCore.Controllers
         public void UpdateOtherOptions()
         {
             GetControl<ICheckBox>("chkShowOnStart").Checked = fOptions.ShowTips;
-            GetControl<ICheckBox>("chkLoadRecentFiles").Checked = fOptions.LoadRecentFiles;
+
+            var hasRecentFilesLoad = AppHost.Instance.HasFeatureSupport(Feature.RecentFilesLoad);
+            GetControl<ICheckBox>("chkLoadRecentFiles").Checked = fOptions.LoadRecentFiles && hasRecentFilesLoad;
+            GetControl<ICheckBox>("chkLoadRecentFiles").Enabled = hasRecentFilesLoad;
+
             GetControl<ICheckBox>("chkAutoCheckUpdates").Checked = fOptions.AutoCheckUpdates;
             GetControl<ICheckBox>("chkCharsetDetection").Checked = fOptions.CharsetDetection;
             GetControl<ICheckBox>("chkDialogClosingWarn").Checked = fOptions.DialogClosingWarn;
@@ -300,8 +307,12 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkLocalizedCalendarSignatures").Checked = fOptions.LocalizedCalendarSignatures;
 
             GetControl<ICheckBox>("chkPlacesWithAddress").Checked = fOptions.PlacesWithAddress;
-            GetControl<ICheckBox>("chkHighlightUnparented").Checked = fOptions.ListHighlightUnparentedPersons;
-            GetControl<ICheckBox>("chkHighlightUnmarried").Checked = fOptions.ListHighlightUnmarriedPersons;
+
+            var hasGridCellFormat = AppHost.Instance.HasFeatureSupport(Feature.GridCellFormat);
+            GetControl<ICheckBox>("chkHighlightUnparented").Checked = fOptions.ListHighlightUnparentedPersons && hasGridCellFormat;
+            GetControl<ICheckBox>("chkHighlightUnparented").Enabled = hasGridCellFormat;
+            GetControl<ICheckBox>("chkHighlightUnmarried").Checked = fOptions.ListHighlightUnmarriedPersons && hasGridCellFormat;
+            GetControl<ICheckBox>("chkHighlightUnmarried").Enabled = hasGridCellFormat;
 
             GetControl<ICheckBox>("chkAutoSortChildren").Checked = fOptions.AutoSortChildren;
             GetControl<ICheckBox>("chkAutoSortSpouses").Checked = fOptions.AutoSortSpouses;
@@ -414,7 +425,10 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkAllowDeleteMediaFileFromStgArc").Checked = fOptions.AllowDeleteMediaFileFromStgArc;
             GetControl<ICheckBox>("chkAllowDeleteMediaFileFromRefs").Checked = fOptions.AllowDeleteMediaFileFromRefs;
             GetControl<ICheckBox>("chkDeleteMediaFileWithoutConfirm").Checked = fOptions.DeleteMediaFileWithoutConfirm;
-            GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Checked = fOptions.HighlightInaccessibleFiles;
+
+            var hasGridCellFormat = AppHost.Instance.HasFeatureSupport(Feature.GridCellFormat);
+            GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Checked = fOptions.HighlightInaccessibleFiles && hasGridCellFormat;
+            GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Enabled = hasGridCellFormat;
         }
 
         public void AcceptMediaOptions()

@@ -301,14 +301,36 @@ namespace GKUI.Platform
         {
             bool result = false;
 
-            if (feature == Feature.MediaPlayer) {
-#if DIS_VLC
-                result = false;
+            switch (feature) {
+                case Feature.GridCellFormat:
+#if OS_MSWIN
+                    result = false;
 #else
-                result = true;
+                    result = true;
 #endif
-            } else if (feature == Feature.Themes) {
-                result = false; // FIXME: temp disable
+                    break;
+
+                case Feature.InternetProxy:
+                    // Not used yet, obsolete
+                    result = false;
+                    break;
+
+                case Feature.MediaPlayer:
+#if DIS_VLC
+                    result = false;
+#else
+                    result = true;
+#endif
+                    break;
+
+                case Feature.RecentFilesLoad:
+                    // In the SDI interface, it is not clear how to implement it correctly
+                    result = false;
+                    break;
+
+                case Feature.Themes:
+                    result = false; // FIXME: temp disable
+                    break;
             }
 
             return result;

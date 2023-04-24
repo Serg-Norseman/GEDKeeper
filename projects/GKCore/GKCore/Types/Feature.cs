@@ -22,7 +22,10 @@ namespace GKCore.Types
 {
     public enum Feature
     {
+        GridCellFormat,
+        InternetProxy,
         MediaPlayer,
+        RecentFilesLoad,
         Themes,
     }
 }
