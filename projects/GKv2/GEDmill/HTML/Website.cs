@@ -17,14 +17,13 @@
  */
 
 using System;
-using System.Drawing;
 using System.IO;
+using BSLib;
 using GDModel;
 using GEDmill.MiniTree;
 using GEDmill.Model;
 using GKCore.Interfaces;
-using GKCore.Logging;
-using GKUI.Forms;
+using GKL = GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -35,13 +34,11 @@ namespace GEDmill.HTML
     /// </summary>
     public class Website
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Website).Name);
+        private static readonly GKL.ILogger fLogger = GKL.LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Website).Name);
 
         private readonly IBaseContext fContext;
         private readonly ILangMan fLangMan;
         private readonly string fOutputFolder;
-
-        // The raw data that we are turning into a website.
         private readonly GDMTree fTree;
 
 
@@ -53,13 +50,19 @@ namespace GEDmill.HTML
             fLangMan = langMan;
         }
 
-        // The heart of GEDmill is here.
+        /// <summary>
+        /// The heart of GEDmill is here.
+        /// </summary>
         public void Create(IProgressController progressWnd)
         {
             fLogger.WriteInfo("Website::Create()");
 
             // 1 means the process was aborted, for signalling back to calling thread. 2 means file nError.      
             ThreadError threaderror = new ThreadError(1, "No error");
+
+            // The paintbox with which to draw the mini tree
+            var treeDrawer = new TreeDrawer(GMConfig.Instance, fTree);
+            treeDrawer.SetBackgroundImage(GMConfig.Instance.BackgroundImage);
 
             try {
                 // The value to indicate in the progress bar to show how much of the website creation is complete.
@@ -77,10 +80,6 @@ namespace GEDmill.HTML
                   + gfstats[(int)GDMRecordType.rtSource]
                   + 1  // Front page
                   + 1; // Scripts (Doesn't matter here that scripts might not be included.)
-
-                // The paintbox with which to draw the mini tree
-                var paintbox = new Paintbox(GMConfig.Instance);
-                paintbox.SetBackgroundImage(GMConfig.Instance.BackgroundImage);
 
                 // Object to keep count of number of files created etc.
                 var stats = new Stats();
@@ -127,8 +126,8 @@ namespace GEDmill.HTML
                 progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualPages));
                 var indiList = fTree.GetRecords<GDMIndividualRecord>();
                 foreach (GDMIndividualRecord ir in indiList) {
-                    var ipc = new CreatorRecordIndividual(fContext, fLangMan, ir, indiIndexCreator, paintbox);
-                    if (ipc.Create(stats)) {
+                    var ipc = new CreatorRecordIndividual(fContext, fLangMan, ir, indiIndexCreator);
+                    if (ipc.Create(stats, treeDrawer)) {
                         stats.Individuals++;
                     }
                     if (progressWnd.IsCanceled) {
@@ -220,32 +219,35 @@ namespace GEDmill.HTML
                 if (progressWnd != null) {
                     progressWnd.End(threaderror);
                 }
+                treeDrawer.Dispose();
             }
         }
 
-        // Copy the files for the images to use in place of non-picture multimedia files.
+        /// <summary>
+        /// Copy the files for the images to use in place of non-picture multimedia files.
+        /// </summary>
         private void CopyIcons()
         {
             fLogger.WriteInfo("Copying icon files...");
             try {
                 // uint num_copied = 0;
-                Rectangle rectNewArea = new Rectangle(0, 0, 0, 0);
+                ExtRect rectNewArea = new ExtRect(0, 0, 0, 0);
                 Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmaudio.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
-                rectNewArea = new Rectangle(0, 0, 0, 0);
+                rectNewArea = new ExtRect(0, 0, 0, 0);
                 Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmaudio_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
-                rectNewArea = new Rectangle(0, 0, 0, 0);
+                rectNewArea = new ExtRect(0, 0, 0, 0);
                 Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmaudion.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
-                rectNewArea = new Rectangle(0, 0, 0, 0);
+                rectNewArea = new ExtRect(0, 0, 0, 0);
                 Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmvideo.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
-                rectNewArea = new Rectangle(0, 0, 0, 0);
+                rectNewArea = new ExtRect(0, 0, 0, 0);
                 Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmvideo_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
-                rectNewArea = new Rectangle(0, 0, 0, 0);
+                rectNewArea = new ExtRect(0, 0, 0, 0);
                 Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmvideon.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
-                rectNewArea = new Rectangle(0, 0, 0, 0);
+                rectNewArea = new ExtRect(0, 0, 0, 0);
                 Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmdoc.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
-                rectNewArea = new Rectangle(0, 0, 0, 0);
+                rectNewArea = new ExtRect(0, 0, 0, 0);
                 Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmdoc_sm.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
-                rectNewArea = new Rectangle(0, 0, 0, 0);
+                rectNewArea = new ExtRect(0, 0, 0, 0);
                 Creator.CopyMultimedia(GMHelper.GetAppPath() + "\\gmdocn.png", "", GMConfig.Instance.MaxImageWidth, GMConfig.Instance.MaxImageHeight, ref rectNewArea, null);
             } catch (IOException e) {
                 fLogger.WriteError("Caught io exception while copying nonpic images: {0}", e);
@@ -254,14 +256,16 @@ namespace GEDmill.HTML
             }
         }
 
-        // Copies the image for the background of the webpages.
-        // Returns the sFilename of the copy.
+        /// <summary>
+        /// Copies the image for the background of the webpages.
+        /// </summary>
+        /// <returns>Filename of the copy.</returns>
         private string CopyBackgroundImage()
         {
             string backgroundImage = "";
             if (!string.IsNullOrEmpty(GMConfig.Instance.BackgroundImage)) {
                 try {
-                    Rectangle newArea = new Rectangle(0, 0, 0, 0);
+                    ExtRect newArea = new ExtRect(0, 0, 0, 0);
                     backgroundImage = Creator.CopyMultimedia(GMConfig.Instance.BackgroundImage, "", 0, 0, ref newArea, null);
                 } catch (IOException e) {
                     fLogger.WriteError("Caught io exception while copying background image: {0}", e);
@@ -274,7 +278,9 @@ namespace GEDmill.HTML
             return backgroundImage;
         }
 
-        // Copy the javascript picture-selection script.
+        /// <summary>
+        /// Copy the javascript picture-selection script.
+        /// </summary>
         private void CreateJavascriptFiles()
         {
             if (!string.IsNullOrEmpty(fOutputFolder)) {

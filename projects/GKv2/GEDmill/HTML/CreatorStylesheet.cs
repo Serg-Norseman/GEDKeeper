@@ -18,7 +18,6 @@
 
 using System;
 using System.IO;
-using GEDmill.Model;
 using GKCore.Interfaces;
 using GKCore.Logging;
 

@@ -70,20 +70,19 @@ namespace GEDmill
         // Check event gets called when program builds the list. Don't want to enable buttons in that case.
         private bool fDisableRestrictsCheckEvent;
 
-        // When user redefines the mini tree colours, these hold the new colours until they click OK.
-        private Color fColorConfigMiniTreeBranch;
-        private Color fColorConfigMiniTreeIndiBorder;
-        private Color fColorConfigMiniTreeIndiBackground;
-        private Color fColorConfigMiniTreeIndiHighlight;
-        private Color fColorConfigMiniTreeIndiBgConcealed;
-        private Color fColorConfigMiniTreeIndiFgConcealed;
-        private Color fColorConfigMiniTreeIndiShade;
-        private Color fColorConfigMiniTreeIndiText;
-        private Color fColorConfigMiniTreeIndiLink;
-        private Color fColorConfigMiniTreeBackground;
+        // When user redefines the mini tree colors, these hold the new colors until they click OK.
+        private Color fConfigMiniTreeColorBranch;
+        private Color fConfigMiniTreeColorIndiBorder;
+        private Color fConfigMiniTreeColorIndiBackground;
+        private Color fConfigMiniTreeColorIndiHighlight;
+        private Color fConfigMiniTreeColorIndiBgConcealed;
+        private Color fConfigMiniTreeColorIndiFgConcealed;
+        private Color fConfigMiniTreeColorIndiShade;
+        private Color fConfigMiniTreeColorIndiText;
+        private Color fConfigMiniTreeColorIndiLink;
+        private Color fConfigMiniTreeColorBackground;
 
 
-        // Constructor. Initialise and create GUI.
         public MainForm()
         {
             InitializeComponent();
@@ -117,7 +116,6 @@ namespace GEDmill
             GMConfig.Instance.Load();
         }
 
-        // Clean up any resources being used.
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
@@ -165,7 +163,6 @@ namespace GEDmill
             pageSettingsImages.Text = fLangMan.LS(PLS.LSID_Images);
             pageSettingsGedcom.Text = "GEDCOM";
             pageSettingsTreeDiagrams.Text = fLangMan.LS(PLS.LSID_TreeDiagrams);
-            pageSettingsAdvanced.Text = fLangMan.LS(PLS.LSID_Advanced);
             pageIndividuals.Text = fLangMan.LS(PLS.LSID_Individuals);
             pageSources.Text = fLangMan.LS(PLS.LSID_Sources);
 
@@ -199,7 +196,6 @@ namespace GEDmill
             chkConfigFooterIsHtml.Text = fLangMan.LS(PLS.LSID_IsHtml);
             chkConfigStats.Text = fLangMan.LS(PLS.LSID_ConfigStats);
             chkConfigMultiPageIndex.Text = fLangMan.LS(PLS.LSID_ConfigMultiPageIndex);
-            chkConfigUserRefInIndex.Text = fLangMan.LS(PLS.LSID_ConfigUserRefInIndex);
             lblConfigMultiPageIndexNumber.Text = fLangMan.LS(PLS.LSID_ConfigMultiPageIndexNumber);
             lblConfigIndexName.Text = fLangMan.LS(PLS.LSID_ConfigIndexName);
             lblConfigEmail.Text = fLangMan.LS(PLS.LSID_ConfigEmail);
@@ -221,7 +217,6 @@ namespace GEDmill
             lblConfigThumbnailImageSize.Text = fLangMan.LS(PLS.LSID_ConfigThumbnailImageSize);
             lblConfigThumbnailImageWidth.Text = fLangMan.LS(PLS.LSID_Width);
             lblConfigThumbnailImageHeight.Text = fLangMan.LS(PLS.LSID_Height);
-            lblConfigTabSpaces.Text = fLangMan.LS(PLS.LSID_ConfigTabSpaces);
             lblConfigNoName.Text = fLangMan.LS(PLS.LSID_ConfigNoName);
             chkConfigShowWithheldRecords.Text = fLangMan.LS(PLS.LSID_ConfigShowWithheldRecords);
             gbConfigWithheldName.Text = fLangMan.LS(PLS.LSID_ConfigWithheldName);
@@ -234,18 +229,16 @@ namespace GEDmill
             chkConfigIncludeTreeDiagrams.Text = fLangMan.LS(PLS.LSID_ConfigIncludeTreeDiagrams);
             chkConfigTreeDiagramsFakeBg.Text = fLangMan.LS(PLS.LSID_ConfigTreeDiagramsFakeBg);
             chkConfigConserveTreeWidth.Text = fLangMan.LS(PLS.LSID_ConfigConserveTreeWidth);
-            chkConfigKeepSiblingOrder.Text = fLangMan.LS(PLS.LSID_ConfigKeepSiblingOrder);
-            gbMiniTreeColours.Text = fLangMan.LS(PLS.LSID_MiniTreeColours);
-            btnConfigMiniTreeColourIndiHighlight.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColourIndiHighlight);
-            btnConfigMiniTreeColourIndiText.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColourIndiText);
-            btnConfigMiniTreeColourIndiBackground.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColourIndiBackground);
-            btnConfigMiniTreeColourIndiLink.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColourIndiLink);
-            btnConfigMiniTreeColourIndiBgConcealed.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColourIndiBgConcealed);
-            btnConfigMiniTreeColourIndiFgConcealed.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColourIndiFgConcealed);
-            btnConfigMiniTreeColourIndiShade.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColourIndiShade);
-            btnConfigMiniTreeColourBranch.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColourBranch);
-            btnConfigMiniTreeColourIndiBorder.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColourIndiBorder);
-            chkConfigUserRecFilename.Text = fLangMan.LS(PLS.LSID_ConfigUserRecFilename);
+            gbMiniTreeColors.Text = fLangMan.LS(PLS.LSID_MiniTreeColors);
+            btnConfigMiniTreeColorIndiHighlight.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiHighlight);
+            btnConfigMiniTreeColorIndiText.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiText);
+            btnConfigMiniTreeColorIndiBackground.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiBackground);
+            btnConfigMiniTreeColorIndiLink.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiLink);
+            btnConfigMiniTreeColorIndiBgConcealed.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiBgConcealed);
+            btnConfigMiniTreeColorIndiFgConcealed.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiFgConcealed);
+            btnConfigMiniTreeColorIndiShade.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiShade);
+            btnConfigMiniTreeColorBranch.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorBranch);
+            btnConfigMiniTreeColorIndiBorder.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiBorder);
             chkConfigSupressBackreferences.Text = fLangMan.LS(PLS.LSID_ConfigSupressBackreferences);
             lblChooseOutput.Text = fLangMan.LS(PLS.LSID_ChooseOutput);
             btnChooseOutputBrowse.Text = fLangMan.LS(PLS.LSID_Browse);
@@ -549,58 +542,58 @@ namespace GEDmill
             EnableMiniTreeButtons();
         }
 
-        private void btnConfigMiniTreeColourIndiBackground_Click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColorIndiBackground_Click(object sender, EventArgs e)
         {
-            fColorConfigMiniTreeIndiBackground = GMHelper.SelectColor(fColorConfigMiniTreeIndiBackground);
-            SetMiniTreeColourConfigButtons();
+            fConfigMiniTreeColorIndiBackground = GMHelper.SelectColor(fConfigMiniTreeColorIndiBackground);
+            SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColourIndiHighlight_Click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColorIndiHighlight_Click(object sender, EventArgs e)
         {
-            fColorConfigMiniTreeIndiHighlight = GMHelper.SelectColor(fColorConfigMiniTreeIndiHighlight);
-            SetMiniTreeColourConfigButtons();
+            fConfigMiniTreeColorIndiHighlight = GMHelper.SelectColor(fConfigMiniTreeColorIndiHighlight);
+            SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColourIndiBgConcealed_Click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColorIndiBgConcealed_Click(object sender, EventArgs e)
         {
-            fColorConfigMiniTreeIndiBgConcealed = GMHelper.SelectColor(fColorConfigMiniTreeIndiBgConcealed);
-            SetMiniTreeColourConfigButtons();
+            fConfigMiniTreeColorIndiBgConcealed = GMHelper.SelectColor(fConfigMiniTreeColorIndiBgConcealed);
+            SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColourIndiShade_Click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColorIndiShade_Click(object sender, EventArgs e)
         {
-            fColorConfigMiniTreeIndiShade = GMHelper.SelectColor(fColorConfigMiniTreeIndiShade);
-            SetMiniTreeColourConfigButtons();
+            fConfigMiniTreeColorIndiShade = GMHelper.SelectColor(fConfigMiniTreeColorIndiShade);
+            SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColourIndiText_Click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColorIndiText_Click(object sender, EventArgs e)
         {
-            fColorConfigMiniTreeIndiText = GMHelper.SelectColor(fColorConfigMiniTreeIndiText);
-            SetMiniTreeColourConfigButtons();
+            fConfigMiniTreeColorIndiText = GMHelper.SelectColor(fConfigMiniTreeColorIndiText);
+            SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColourIndiLink_Click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColorIndiLink_Click(object sender, EventArgs e)
         {
-            fColorConfigMiniTreeIndiLink = GMHelper.SelectColor(fColorConfigMiniTreeIndiLink);
-            SetMiniTreeColourConfigButtons();
+            fConfigMiniTreeColorIndiLink = GMHelper.SelectColor(fConfigMiniTreeColorIndiLink);
+            SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColourBranch_Click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColorBranch_Click(object sender, EventArgs e)
         {
-            fColorConfigMiniTreeBranch = GMHelper.SelectColor(fColorConfigMiniTreeBranch);
-            SetMiniTreeColourConfigButtons();
+            fConfigMiniTreeColorBranch = GMHelper.SelectColor(fConfigMiniTreeColorBranch);
+            SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColourIndiBorder_Click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColorIndiBorder_Click(object sender, EventArgs e)
         {
-            fColorConfigMiniTreeIndiBorder = GMHelper.SelectColor(fColorConfigMiniTreeIndiBorder);
-            SetMiniTreeColourConfigButtons();
+            fConfigMiniTreeColorIndiBorder = GMHelper.SelectColor(fConfigMiniTreeColorIndiBorder);
+            SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColourIndiFgConcealed_Click(object sender, EventArgs e)
+        private void btnConfigMiniTreeColorIndiFgConcealed_Click(object sender, EventArgs e)
         {
-            fColorConfigMiniTreeIndiFgConcealed = GMHelper.SelectColor(fColorConfigMiniTreeIndiFgConcealed);
-            SetMiniTreeColourConfigButtons();
+            fConfigMiniTreeColorIndiFgConcealed = GMHelper.SelectColor(fConfigMiniTreeColorIndiFgConcealed);
+            SetMiniTreeColorConfigButtons();
         }
 
         private void chkConfigMultiPageIndex_Click(object sender, EventArgs e)
@@ -1046,7 +1039,9 @@ namespace GEDmill
 
         #endregion
 
-        // Shows the settings panel
+        /// <summary>
+        /// Shows the settings panel.
+        /// </summary>
         private void SwitchConfigPanelOn()
         {
             // Disable edit boxes etc. on previous panel to avoid confusing users
@@ -1074,7 +1069,9 @@ namespace GEDmill
             ShowCurrentPanel();
         }
 
-        // Hides the settings panel
+        /// <summary>
+        /// Hides the settings panel.
+        /// </summary>
         private void SwitchConfigPanelOff()
         {
             // Disable edit boxes etc. on config panel
@@ -1103,7 +1100,9 @@ namespace GEDmill
             ShowCurrentPanel();
         }
 
-        // Shows the current panel and associated wizard buttons, selected by m_currentPanel, and hides all the others.
+        /// <summary>
+        /// Shows the current panel and associated wizard buttons, selected by m_currentPanel, and hides all the others.
+        /// </summary>
         private void ShowCurrentPanel()
         {
             // Making panel3 bVisible calls check event on list view!
@@ -1166,7 +1165,9 @@ namespace GEDmill
             fDisableRestrictsCheckEvent = false;
         }
 
-        // Logic for the next page button to ensure that user has completed the current page
+        /// <summary>
+        /// Logic for the next page button to ensure that user has completed the current page.
+        /// </summary>
         private void EnableNextButton()
         {
             if (fCurrentPanel == PanelKind.OutputFolder && txtChooseOutput.Text.Length == 0) {
@@ -1176,39 +1177,44 @@ namespace GEDmill
             }
         }
 
-        // Logic for the key individuals delete button checks that an individual is selected for deletion
+        /// <summary>
+        /// Logic for the key individuals delete button checks that an individual is selected for deletion.
+        /// </summary>
         private void EnableKeyIndividualsDeleteButton()
         {
             btnSelectKeyDelete.Enabled = (lstKeyIndividuals.SelectedItems.Count > 0);
         }
 
-        // Logic for the mini tree config buttons
+        /// <summary>
+        /// Logic for the mini tree config buttons.
+        /// </summary>
         private void EnableMiniTreeButtons()
         {
             bool includeTreeDiagrams = chkConfigIncludeTreeDiagrams.Checked;
 
             chkConfigTreeDiagramsFakeBg.Enabled = includeTreeDiagrams;
-            gbMiniTreeColours.Enabled = includeTreeDiagrams;
-            btnConfigMiniTreeColourIndiBackground.Enabled = includeTreeDiagrams;
-            btnConfigMiniTreeColourIndiHighlight.Enabled = includeTreeDiagrams;
-            btnConfigMiniTreeColourIndiBgConcealed.Enabled = includeTreeDiagrams;
-            btnConfigMiniTreeColourIndiShade.Enabled = includeTreeDiagrams;
-            btnConfigMiniTreeColourIndiText.Enabled = includeTreeDiagrams;
-            btnConfigMiniTreeColourIndiLink.Enabled = includeTreeDiagrams;
-            btnConfigMiniTreeColourBranch.Enabled = includeTreeDiagrams;
-            btnConfigMiniTreeColourIndiBorder.Enabled = includeTreeDiagrams;
-            btnConfigMiniTreeColourIndiFgConcealed.Enabled = includeTreeDiagrams;
+            gbMiniTreeColors.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColorIndiBackground.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColorIndiHighlight.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColorIndiBgConcealed.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColorIndiShade.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColorIndiText.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColorIndiLink.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColorBranch.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColorIndiBorder.Enabled = includeTreeDiagrams;
+            btnConfigMiniTreeColorIndiFgConcealed.Enabled = includeTreeDiagrams;
             chkConfigConserveTreeWidth.Enabled = includeTreeDiagrams;
-            chkConfigKeepSiblingOrder.Enabled = includeTreeDiagrams;
 
             if (includeTreeDiagrams) {
-                SetMiniTreeColourConfigButtons();
+                SetMiniTreeColorConfigButtons();
             } else {
-                ClearMiniTreeColourConfigButtons();
+                ClearMiniTreeColorConfigButtons();
             }
         }
 
-        // Fills the controls in each page of the app
+        /// <summary>
+        /// Fills the controls in each page of the app
+        /// </summary>
         private void InitialiseCurrentPanel()
         {
             switch (fCurrentPanel) {
@@ -1239,7 +1245,9 @@ namespace GEDmill
             EnableNextButton();
         }
 
-        // Handles the processing needed at each stage of the app, as the user moves through each page of the wizard.
+        /// <summary>
+        /// Handles the processing needed at each stage of the app, as the user moves through each page of the wizard.
+        /// </summary>
         private bool ValidateCurrentPanel()
         {
             DialogResult result;
@@ -1336,7 +1344,9 @@ namespace GEDmill
             }
         }
 
-        // Populates the list of individuals records for inclusion/exclusion in the website
+        /// <summary>
+        /// Populates the list of individuals records for inclusion/exclusion in the website.
+        /// </summary>
         private void FillIndividualsList()
         {
             var indiRecs = fBase.Context.Tree.GetRecords<GDMIndividualRecord>();
@@ -1367,9 +1377,9 @@ namespace GEDmill
                 /*if (excludeRestricted && !ir.GetVisibility(EVisibility.Visible)) {
                     continue;
                 }*/
-
                 var lbItem = new LVItem(ir);
-                SetIndividualSubItems(lbItem, ir, true);
+
+                SetIndividualSubItems(lbItem, ir);
 
                 lbItem.Checked = GMHelper.GetVisibility(ir);
                 temporaryItemsList[nItem++] = lbItem;
@@ -1386,35 +1396,30 @@ namespace GEDmill
             fDisableRestrictsCheckEvent = false;
         }
 
-        // Attaches sub-items to a list item (before the list item is added to the list)
-        private void SetIndividualSubItems(ListViewItem lvItem, GDMIndividualRecord ir, bool checkBoxes)
+        /// <summary>
+        /// Attaches sub-items to a list item (before the list item is added to the list).
+        /// </summary>
+        private void SetIndividualSubItems(ListViewItem lvItem, GDMIndividualRecord ir)
         {
             // Save checkbox state because SubItems.Clear() clears item.Text and item.Checked as well, so replace old value after calling Clear().
             bool wasChecked = lvItem.Checked;
-            lvItem.SubItems.Clear();
-            lvItem.Checked = wasChecked;
-
-            // If the list view has check boxes, the item is for the checkbox.
-            // Otherwise the item is for the name, and so the sub items won't include the name.
-            if (checkBoxes) {
-                string surname, firstName;
-                GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out firstName, out surname);
-                lvItem.SubItems.Add(new LVNameItem(surname, firstName));
-            }
+            string surname, firstName;
+            GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out firstName, out surname);
 
             var lifeDatesX = ir.GetLifeDates();
             var birthDate = (lifeDatesX.BirthEvent == null) ? 0 : lifeDatesX.BirthEvent.Date.GetChronologicalYear();
             var deathDate = (lifeDatesX.DeathEvent == null) ? 0 : lifeDatesX.DeathEvent.Date.GetChronologicalYear();
+            string uref = (ir.HasUserReferences) ? ir.UserReferences[0].StringValue : "";
+            int nVisiblePics, nTotalPics;
+            GMHelper.CountMFRs(ir, out nTotalPics, out nVisiblePics);
 
+            lvItem.SubItems.Clear();
+            lvItem.Checked = wasChecked;
+            lvItem.SubItems.Add(new LVStringItem(GMHelper.ConstructName(surname, firstName)));
             lvItem.SubItems.Add(new LVNumberItem(birthDate, false));
             lvItem.SubItems.Add(new LVNumberItem(deathDate, false));
             lvItem.SubItems.Add(new LVStringItem(ir.XRef));
-
-            string uref = (ir.HasUserReferences) ? ir.UserReferences[0].StringValue : "";
             lvItem.SubItems.Add(new LVStringItem(uref));
-
-            int nVisiblePics, nTotalPics;
-            GMHelper.CountMFRs(ir, out nTotalPics, out nVisiblePics);
             if (nVisiblePics != nTotalPics) {
                 lvItem.SubItems.Add(new LVNumberItem(nVisiblePics, string.Format("{0}/{1}", nVisiblePics, nTotalPics)));
             } else {
@@ -1422,7 +1427,9 @@ namespace GEDmill
             }
         }
 
-        // Populates the list of source records for inclusion/exclusion in the website
+        /// <summary>
+        /// Populates the list of source records for inclusion/exclusion in the website.
+        /// </summary>
         private void FillSourcesList()
         {
             var sources = fBase.Context.Tree.GetRecords<GDMSourceRecord>();
@@ -1451,7 +1458,9 @@ namespace GEDmill
             int nItem = 0;
             foreach (GDMSourceRecord sr in sources) {
                 var item = new LVItem(sr);
+
                 SetSourceSubItems(item, sr, true);
+
                 item.Checked = GMHelper.GetVisibility(sr);
                 temporaryItemsList[nItem++] = item;
             }
@@ -1467,7 +1476,9 @@ namespace GEDmill
             fDisableRestrictsCheckEvent = false;
         }
 
-        // Attaches sub-items to a list item (before the list item is added to the list)
+        /// <summary>
+        /// Attaches sub-items to a list item (before the list item is added to the list).
+        /// </summary>
         private void SetSourceSubItems(ListViewItem lvItem, GDMSourceRecord sr, bool firstColumnIsCheckbox)
         {
             // Store checkbox value because SubItems.Clear() clears item.Text and item.Checked as well!
@@ -1556,10 +1567,13 @@ namespace GEDmill
             } else {
                 lvItem.SubItems.Add(new LVNumberItem(nTotalPics, string.Format("{0}", nTotalPics)));
             }
+
             lvItem.Checked = wasChecked;
         }
 
-        // Spawns the website creation thread, which calls CWebsite.Create to do the work.
+        /// <summary>
+        /// Spawns the website creation thread, which calls CWebsite.Create to do the work.
+        /// </summary>
         private bool CreateWebsite(string outputFolder, string imagesFolder)
         {
             fLogger.WriteInfo("Creating website");
@@ -1586,7 +1600,9 @@ namespace GEDmill
             return res;
         }
 
-        // Enable the current page of the wizard
+        /// <summary>
+        /// Enable the current page of the wizard.
+        /// </summary>
         private void EnableCurrentPanel(bool enable)
         {
             if (fConfigPanelVisible) {
@@ -1606,7 +1622,9 @@ namespace GEDmill
             pictureBox.Enabled = enable;
         }
 
-        // Reports any exception thrown during the prune operation
+        /// <summary>
+        /// Reports any exception thrown during the prune operation.
+        /// </summary>
         private void ReportRestrictError(Exception e)
         {
             ShowAlert(string.Format(fLangMan.LS(PLS.LSID_TreeError), e.StackTrace));
@@ -1614,7 +1632,9 @@ namespace GEDmill
         }
 
         // FIXME: i18l
-        // Displays the statistics of the prune operation
+        /// <summary>
+        /// Displays the statistics of the prune operation.
+        /// </summary>
         private void ShowRestrictsResult(int excluded, int included, string type)
         {
             string msg = "";
@@ -1635,7 +1655,9 @@ namespace GEDmill
         }
 
         // FIXME: i18l
-        // Displays the statistics of the remove pictures operation
+        /// <summary>
+        /// Displays the statistics of the remove pictures operation.
+        /// </summary>
         private void ShowHidePicsResult(int hidden)
         {
             string msg = "";
@@ -1647,7 +1669,9 @@ namespace GEDmill
             ShowMessage(msg);
         }
 
-        // Initialises config panel controls
+        /// <summary>
+        /// Initialises config panel controls.
+        /// </summary>
         private void LoadConfigPanelSettings()
         {
             txtConfigFrontImageEdit.Text = GMConfig.Instance.FrontPageImageFilename;
@@ -1671,7 +1695,6 @@ namespace GEDmill
             chkConfigHideEmails.Checked = GMConfig.Instance.ObfuscateEmails;
             chkConfigOccupationHeadline.Checked = GMConfig.Instance.OccupationHeadline;
             chkConfigShowWithheldRecords.Checked = GMConfig.Instance.OnlyConceal;
-            txtConfigTabSpaces.Text = GMConfig.Instance.TabSpaces.ToString();
             txtConfigCommentary.Text = GMConfig.Instance.CommentaryText;
             chkConfigCommentaryIsHtml.Checked = GMConfig.Instance.CommentaryIsHtml;
             chkConfigStats.Checked = GMConfig.Instance.ShowFrontPageStats;
@@ -1688,97 +1711,98 @@ namespace GEDmill
                 txtConfigUserLink.Text = GMConfig.Instance.MainWebsiteLink;
             }
             chkConfigMultiPageIndex.Checked = GMConfig.Instance.MultiPageIndexes;
-            chkConfigUserRefInIndex.Checked = GMConfig.Instance.IncludeUserRefInIndex;
             txtConfigMultiPageIndexNumber.Text = GMConfig.Instance.IndividualsPerIndexPage.ToString();
             chkConfigKeepOriginals.Checked = GMConfig.Instance.LinkOriginalPicture;
             chkConfigRenameOriginals.Checked = GMConfig.Instance.RenameOriginalPicture;
-            chkConfigUserRecFilename.Checked = GMConfig.Instance.UserRecFilename;
             txtConfigCustomFooter.Text = GMConfig.Instance.CustomFooter;
             chkConfigFooterIsHtml.Checked = GMConfig.Instance.FooterIsHtml;
             chkConfigConserveTreeWidth.Checked = GMConfig.Instance.ConserveTreeWidth;
-            chkConfigKeepSiblingOrder.Checked = GMConfig.Instance.KeepSiblingOrder;
             chkConfigAllowMultimedia.Checked = GMConfig.Instance.AllowMultimedia;
 
-            fColorConfigMiniTreeBranch = GMConfig.Instance.MiniTreeColourBranch;
-            fColorConfigMiniTreeIndiBorder = GMConfig.Instance.MiniTreeColourIndiBorder;
-            fColorConfigMiniTreeIndiBackground = GMConfig.Instance.MiniTreeColourIndiBackground;
-            fColorConfigMiniTreeIndiHighlight = GMConfig.Instance.MiniTreeColourIndiHighlight;
-            fColorConfigMiniTreeIndiBgConcealed = GMConfig.Instance.MiniTreeColourIndiBgConcealed;
-            fColorConfigMiniTreeIndiFgConcealed = GMConfig.Instance.MiniTreeColourIndiFgConcealed;
-            fColorConfigMiniTreeIndiShade = GMConfig.Instance.MiniTreeColourIndiShade;
-            fColorConfigMiniTreeIndiText = GMConfig.Instance.MiniTreeColourIndiText;
-            fColorConfigMiniTreeIndiLink = GMConfig.Instance.MiniTreeColourIndiLink;
-            fColorConfigMiniTreeBackground = GMConfig.Instance.MiniTreeColourBackground;
+            fConfigMiniTreeColorBranch = GMConfig.Instance.MiniTreeColorBranch;
+            fConfigMiniTreeColorIndiBorder = GMConfig.Instance.MiniTreeColorIndiBorder;
+            fConfigMiniTreeColorIndiBackground = GMConfig.Instance.MiniTreeColorIndiBackground;
+            fConfigMiniTreeColorIndiHighlight = GMConfig.Instance.MiniTreeColorIndiHighlight;
+            fConfigMiniTreeColorIndiBgConcealed = GMConfig.Instance.MiniTreeColorIndiBgConcealed;
+            fConfigMiniTreeColorIndiFgConcealed = GMConfig.Instance.MiniTreeColorIndiFgConcealed;
+            fConfigMiniTreeColorIndiShade = GMConfig.Instance.MiniTreeColorIndiShade;
+            fConfigMiniTreeColorIndiText = GMConfig.Instance.MiniTreeColorIndiText;
+            fConfigMiniTreeColorIndiLink = GMConfig.Instance.MiniTreeColorIndiLink;
+            fConfigMiniTreeColorBackground = GMConfig.Instance.MiniTreeColorBackground;
 
             chkConfigSupressBackreferences.Checked = !GMConfig.Instance.SupressBackreferences;
 
-            SetMiniTreeColourConfigButtons();
+            SetMiniTreeColorConfigButtons();
 
             EnableMultiPageIndexConfig();
             EnableMultimediaConfig();
             EnableWithheldConfig();
         }
 
-        // Colours the buttons that set the mini tree colours according to the values they control
-        private void SetMiniTreeColourConfigButtons()
+        /// <summary>
+        /// Colors the buttons that set the mini tree colors according to the values they control.
+        /// </summary>
+        private void SetMiniTreeColorConfigButtons()
         {
-            btnConfigMiniTreeColourBranch.BackColor = fColorConfigMiniTreeIndiBackground;
-            btnConfigMiniTreeColourBranch.ForeColor = fColorConfigMiniTreeBranch;
+            btnConfigMiniTreeColorBranch.BackColor = fConfigMiniTreeColorIndiBackground;
+            btnConfigMiniTreeColorBranch.ForeColor = fConfigMiniTreeColorBranch;
 
-            btnConfigMiniTreeColourIndiBorder.BackColor = fColorConfigMiniTreeIndiBackground;
-            btnConfigMiniTreeColourIndiBorder.ForeColor = fColorConfigMiniTreeIndiBorder;
+            btnConfigMiniTreeColorIndiBorder.BackColor = fConfigMiniTreeColorIndiBackground;
+            btnConfigMiniTreeColorIndiBorder.ForeColor = fConfigMiniTreeColorIndiBorder;
 
-            btnConfigMiniTreeColourIndiBackground.BackColor = fColorConfigMiniTreeIndiBackground;
-            btnConfigMiniTreeColourIndiBackground.ForeColor = fColorConfigMiniTreeIndiLink;
+            btnConfigMiniTreeColorIndiBackground.BackColor = fConfigMiniTreeColorIndiBackground;
+            btnConfigMiniTreeColorIndiBackground.ForeColor = fConfigMiniTreeColorIndiLink;
 
-            btnConfigMiniTreeColourIndiHighlight.BackColor = fColorConfigMiniTreeIndiHighlight;
-            btnConfigMiniTreeColourIndiHighlight.ForeColor = fColorConfigMiniTreeIndiText;
+            btnConfigMiniTreeColorIndiHighlight.BackColor = fConfigMiniTreeColorIndiHighlight;
+            btnConfigMiniTreeColorIndiHighlight.ForeColor = fConfigMiniTreeColorIndiText;
 
-            btnConfigMiniTreeColourIndiBgConcealed.BackColor = fColorConfigMiniTreeIndiBgConcealed;
-            btnConfigMiniTreeColourIndiBgConcealed.ForeColor = fColorConfigMiniTreeIndiFgConcealed;
+            btnConfigMiniTreeColorIndiBgConcealed.BackColor = fConfigMiniTreeColorIndiBgConcealed;
+            btnConfigMiniTreeColorIndiBgConcealed.ForeColor = fConfigMiniTreeColorIndiFgConcealed;
 
-            btnConfigMiniTreeColourIndiFgConcealed.BackColor = fColorConfigMiniTreeIndiBgConcealed;
-            btnConfigMiniTreeColourIndiFgConcealed.ForeColor = fColorConfigMiniTreeIndiFgConcealed;
+            btnConfigMiniTreeColorIndiFgConcealed.BackColor = fConfigMiniTreeColorIndiBgConcealed;
+            btnConfigMiniTreeColorIndiFgConcealed.ForeColor = fConfigMiniTreeColorIndiFgConcealed;
 
-            btnConfigMiniTreeColourIndiShade.BackColor = fColorConfigMiniTreeIndiShade;
-            btnConfigMiniTreeColourIndiShade.ForeColor = fColorConfigMiniTreeIndiLink;
+            btnConfigMiniTreeColorIndiShade.BackColor = fConfigMiniTreeColorIndiShade;
+            btnConfigMiniTreeColorIndiShade.ForeColor = fConfigMiniTreeColorIndiLink;
 
-            btnConfigMiniTreeColourIndiText.BackColor = fColorConfigMiniTreeIndiHighlight;
-            btnConfigMiniTreeColourIndiText.ForeColor = fColorConfigMiniTreeIndiText;
+            btnConfigMiniTreeColorIndiText.BackColor = fConfigMiniTreeColorIndiHighlight;
+            btnConfigMiniTreeColorIndiText.ForeColor = fConfigMiniTreeColorIndiText;
 
-            btnConfigMiniTreeColourIndiLink.BackColor = fColorConfigMiniTreeIndiBackground;
-            btnConfigMiniTreeColourIndiLink.ForeColor = fColorConfigMiniTreeIndiLink;
+            btnConfigMiniTreeColorIndiLink.BackColor = fConfigMiniTreeColorIndiBackground;
+            btnConfigMiniTreeColorIndiLink.ForeColor = fConfigMiniTreeColorIndiLink;
         }
 
-        // Used to set all buttons grey when form is disabled
-        private void ClearMiniTreeColourConfigButtons()
+        /// <summary>
+        /// Used to set all buttons grey when form is disabled.
+        /// </summary>
+        private void ClearMiniTreeColorConfigButtons()
         {
-            btnConfigMiniTreeColourBranch.BackColor = Form.DefaultBackColor;
-            btnConfigMiniTreeColourBranch.ForeColor = Form.DefaultForeColor;
+            btnConfigMiniTreeColorBranch.BackColor = Form.DefaultBackColor;
+            btnConfigMiniTreeColorBranch.ForeColor = Form.DefaultForeColor;
 
-            btnConfigMiniTreeColourIndiBorder.BackColor = Form.DefaultBackColor;
-            btnConfigMiniTreeColourIndiBorder.ForeColor = Form.DefaultForeColor;
+            btnConfigMiniTreeColorIndiBorder.BackColor = Form.DefaultBackColor;
+            btnConfigMiniTreeColorIndiBorder.ForeColor = Form.DefaultForeColor;
 
-            btnConfigMiniTreeColourIndiBackground.BackColor = Form.DefaultBackColor;
-            btnConfigMiniTreeColourIndiBackground.ForeColor = Form.DefaultForeColor;
+            btnConfigMiniTreeColorIndiBackground.BackColor = Form.DefaultBackColor;
+            btnConfigMiniTreeColorIndiBackground.ForeColor = Form.DefaultForeColor;
 
-            btnConfigMiniTreeColourIndiHighlight.BackColor = Form.DefaultBackColor;
-            btnConfigMiniTreeColourIndiHighlight.ForeColor = Form.DefaultForeColor;
+            btnConfigMiniTreeColorIndiHighlight.BackColor = Form.DefaultBackColor;
+            btnConfigMiniTreeColorIndiHighlight.ForeColor = Form.DefaultForeColor;
 
-            btnConfigMiniTreeColourIndiBgConcealed.BackColor = Form.DefaultBackColor;
-            btnConfigMiniTreeColourIndiBgConcealed.ForeColor = Form.DefaultForeColor;
+            btnConfigMiniTreeColorIndiBgConcealed.BackColor = Form.DefaultBackColor;
+            btnConfigMiniTreeColorIndiBgConcealed.ForeColor = Form.DefaultForeColor;
 
-            btnConfigMiniTreeColourIndiFgConcealed.BackColor = Form.DefaultBackColor;
-            btnConfigMiniTreeColourIndiFgConcealed.ForeColor = Form.DefaultForeColor;
+            btnConfigMiniTreeColorIndiFgConcealed.BackColor = Form.DefaultBackColor;
+            btnConfigMiniTreeColorIndiFgConcealed.ForeColor = Form.DefaultForeColor;
 
-            btnConfigMiniTreeColourIndiShade.BackColor = Form.DefaultBackColor;
-            btnConfigMiniTreeColourIndiShade.ForeColor = Form.DefaultForeColor;
+            btnConfigMiniTreeColorIndiShade.BackColor = Form.DefaultBackColor;
+            btnConfigMiniTreeColorIndiShade.ForeColor = Form.DefaultForeColor;
 
-            btnConfigMiniTreeColourIndiText.BackColor = Form.DefaultBackColor;
-            btnConfigMiniTreeColourIndiText.ForeColor = Form.DefaultForeColor;
+            btnConfigMiniTreeColorIndiText.BackColor = Form.DefaultBackColor;
+            btnConfigMiniTreeColorIndiText.ForeColor = Form.DefaultForeColor;
 
-            btnConfigMiniTreeColourIndiLink.BackColor = Form.DefaultBackColor;
-            btnConfigMiniTreeColourIndiLink.ForeColor = Form.DefaultForeColor;
+            btnConfigMiniTreeColorIndiLink.BackColor = Form.DefaultBackColor;
+            btnConfigMiniTreeColorIndiLink.ForeColor = Form.DefaultForeColor;
         }
 
         // Saves changes made in config panel back to main config.
@@ -1878,7 +1902,6 @@ namespace GEDmill
                 // Leave value unchanged
             }
 
-            GMConfig.Instance.UserRecFilename = chkConfigUserRecFilename.Checked;
             if (txtConfigNoName.Text.Length > 0) {
                 GMConfig.Instance.UnknownName = txtConfigNoName.Text;
             }
@@ -1891,17 +1914,6 @@ namespace GEDmill
             GMConfig.Instance.ObfuscateEmails = chkConfigHideEmails.Checked;
             GMConfig.Instance.OccupationHeadline = chkConfigOccupationHeadline.Checked;
             GMConfig.Instance.OnlyConceal = chkConfigShowWithheldRecords.Checked;
-
-            try {
-                // Sanity check value
-                int tabSpaces = int.Parse(txtConfigTabSpaces.Text);
-                if (tabSpaces > 0 && tabSpaces < 64) {
-                    GMConfig.Instance.TabSpaces = tabSpaces;
-                }
-            } catch (Exception) {
-                // Leave value unchanged
-            }
-
             GMConfig.Instance.CommentaryText = txtConfigCommentary.Text;
             GMConfig.Instance.CommentaryIsHtml = chkConfigCommentaryIsHtml.Checked;
             GMConfig.Instance.ShowFrontPageStats = chkConfigStats.Checked;
@@ -1932,7 +1944,6 @@ namespace GEDmill
 
             GMConfig.Instance.MainWebsiteLink = mainWebsiteLink;
             GMConfig.Instance.MultiPageIndexes = chkConfigMultiPageIndex.Checked;
-            GMConfig.Instance.IncludeUserRefInIndex = chkConfigUserRefInIndex.Checked;
 
             try {
                 // Sanity check value
@@ -1948,24 +1959,25 @@ namespace GEDmill
 
             GMConfig.Instance.FooterIsHtml = chkConfigFooterIsHtml.Checked;
             GMConfig.Instance.ConserveTreeWidth = chkConfigConserveTreeWidth.Checked;
-            GMConfig.Instance.KeepSiblingOrder = chkConfigKeepSiblingOrder.Checked;
             GMConfig.Instance.AllowMultimedia = chkConfigAllowMultimedia.Checked;
 
-            GMConfig.Instance.MiniTreeColourBranch = fColorConfigMiniTreeBranch;
-            GMConfig.Instance.MiniTreeColourIndiBorder = fColorConfigMiniTreeIndiBorder;
-            GMConfig.Instance.MiniTreeColourIndiBackground = fColorConfigMiniTreeIndiBackground;
-            GMConfig.Instance.MiniTreeColourIndiHighlight = fColorConfigMiniTreeIndiHighlight;
-            GMConfig.Instance.MiniTreeColourIndiBgConcealed = fColorConfigMiniTreeIndiBgConcealed;
-            GMConfig.Instance.MiniTreeColourIndiFgConcealed = fColorConfigMiniTreeIndiFgConcealed;
-            GMConfig.Instance.MiniTreeColourIndiShade = fColorConfigMiniTreeIndiShade;
-            GMConfig.Instance.MiniTreeColourIndiText = fColorConfigMiniTreeIndiText;
-            GMConfig.Instance.MiniTreeColourIndiLink = fColorConfigMiniTreeIndiLink;
-            GMConfig.Instance.MiniTreeColourBackground = fColorConfigMiniTreeBackground;
+            GMConfig.Instance.MiniTreeColorBranch = fConfigMiniTreeColorBranch;
+            GMConfig.Instance.MiniTreeColorIndiBorder = fConfigMiniTreeColorIndiBorder;
+            GMConfig.Instance.MiniTreeColorIndiBackground = fConfigMiniTreeColorIndiBackground;
+            GMConfig.Instance.MiniTreeColorIndiHighlight = fConfigMiniTreeColorIndiHighlight;
+            GMConfig.Instance.MiniTreeColorIndiBgConcealed = fConfigMiniTreeColorIndiBgConcealed;
+            GMConfig.Instance.MiniTreeColorIndiFgConcealed = fConfigMiniTreeColorIndiFgConcealed;
+            GMConfig.Instance.MiniTreeColorIndiShade = fConfigMiniTreeColorIndiShade;
+            GMConfig.Instance.MiniTreeColorIndiText = fConfigMiniTreeColorIndiText;
+            GMConfig.Instance.MiniTreeColorIndiLink = fConfigMiniTreeColorIndiLink;
+            GMConfig.Instance.MiniTreeColorBackground = fConfigMiniTreeColorBackground;
 
             GMConfig.Instance.SupressBackreferences = !chkConfigSupressBackreferences.Checked;
         }
 
-        // Populates the list box of individuals to link from the front page
+        /// <summary>
+        /// Populates the list box of individuals to link from the front page.
+        /// </summary>
         private void FillKeyIndividualsList()
         {
             if (GMConfig.Instance.KeyIndividuals == null) return;
@@ -2196,7 +2208,9 @@ namespace GEDmill
             return DialogResult.OK;
         }
 
-        // Logic to enable controls related to the multi-page index option
+        /// <summary>
+        /// Logic to enable controls related to the multi-page index option.
+        /// </summary>
         private void EnableMultiPageIndexConfig()
         {
             if (chkConfigMultiPageIndex.Checked) {
@@ -2208,7 +2222,9 @@ namespace GEDmill
             }
         }
 
-        // Logic to enable the controls related to multimedia content
+        /// <summary>
+        /// Logic to enable the controls related to multimedia content.
+        /// </summary>
         private void EnableMultimediaConfig()
         {
             if (chkConfigAllowMultimedia.Checked) {
@@ -2251,7 +2267,9 @@ namespace GEDmill
             }
         }
 
-        // Logic to enable the controls related to thumbnails
+        /// <summary>
+        /// Logic to enable the controls related to thumbnails.
+        /// </summary>
         private void EnableThumbnailsConfig()
         {
             if (chkConfigIndiImages.Checked) {
@@ -2269,7 +2287,9 @@ namespace GEDmill
             }
         }
 
-        // Logic to enable the controls related to withheld records
+        /// <summary>
+        /// Logic to enable the controls related to withheld records.
+        /// </summary>
         private void EnableWithheldConfig()
         {
             if (chkConfigShowWithheldRecords.Checked) {
@@ -2285,7 +2305,9 @@ namespace GEDmill
             }
         }
 
-        // Logic to enable the save changes button
+        /// <summary>
+        /// Logic to enable the save changes button.
+        /// </summary>
         private void EnablePrunePanelButtons()
         {
         }

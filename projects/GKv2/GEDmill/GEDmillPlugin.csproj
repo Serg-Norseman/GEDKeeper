@@ -46,10 +46,6 @@
   <ItemGroup>
     <Compile Include="GEDmillPlugin.cs" />
     <Compile Include="GMHelper.cs" />
-    <Compile Include="HTML\HTMLException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ListView\LVNameItem.cs" />
     <Compile Include="ListView\LVNumberItem.cs" />
     <Compile Include="GMConfig.cs">
       <SubType>Code</SubType>
@@ -97,19 +93,16 @@
     <Compile Include="HTML\Website.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MiniTree\MiniTreeGroup.cs">
+    <Compile Include="MiniTree\MTGroup.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MiniTree\MiniTreeIndividual.cs">
+    <Compile Include="MiniTree\MTIndividual.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MiniTree\MiniTreeMap.cs">
+    <Compile Include="MiniTree\MTMap.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MiniTree\MiniTreeObject.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MiniTree\Paintbox.cs">
+    <Compile Include="MiniTree\MTObject.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MiniTree\TreeDrawer.cs">

@@ -18,12 +18,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using BSLib;
 using GDModel;
 using GEDmill.Model;
 using GKCore.Interfaces;
-using GKCore.Logging;
+using GKL = GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -32,7 +32,7 @@ namespace GEDmill.HTML
     /// </summary>
     public class CreatorFrontPage : Creator
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(CreatorFrontPage).Name);
+        private static readonly GKL.ILogger fLogger = GKL.LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(CreatorFrontPage).Name);
 
         // Statistics about the website (number of files etc.)
         private Stats fStats;
@@ -43,7 +43,9 @@ namespace GEDmill.HTML
             fStats = stats;
         }
 
-        // The main method that causes the front page to be created. 
+        /// <summary>
+        /// The main method that causes the front page to be created. 
+        /// </summary>
         public void Create()
         {
             string keywords = fLangMan.LS(PLS.LSID_Keywords) + " " + GMConfig.Instance.OwnersName;
@@ -58,7 +60,7 @@ namespace GEDmill.HTML
                 f.WriteLine("<h1>{0}</h1>", EscapeHTML(title, false));
 
                 if (!string.IsNullOrEmpty(GMConfig.Instance.FrontPageImageFilename)) {
-                    Rectangle newArea = new Rectangle(0, 0, 0, 0);
+                    var newArea = new ExtRect(0, 0, 0, 0);
                     string pictureFile = CopyMultimedia(GMConfig.Instance.FrontPageImageFilename, "", 0, 0, ref newArea, null);
                     if (!string.IsNullOrEmpty(pictureFile)) {
                         f.WriteLine("<p><img src=\"{0}\" /></p>", pictureFile);

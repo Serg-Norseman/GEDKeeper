@@ -18,15 +18,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
+using BSLib;
 using GDModel;
 using GEDmill.Model;
 using GKCore.Interfaces;
-using GKCore.Logging;
 using GKCore.Types;
+using GKL = GKCore.Logging;
 
 namespace GEDmill.HTML
 {
@@ -35,7 +34,9 @@ namespace GEDmill.HTML
     /// </summary>
     public abstract class Creator
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Creator).Name);
+        private const int TAB_SPACES = 4;
+
+        private static readonly GKL.ILogger fLogger = GKL.LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Creator).Name);
 
         protected readonly ILangMan fLangMan;
 
@@ -56,7 +57,9 @@ namespace GEDmill.HTML
             fLangMan = langMan;
         }
 
-        // This clears the static list of all multimedia files copied to the output directory (and possibly renamed).
+        /// <summary>
+        /// This clears the static list of all multimedia files copied to the output directory (and possibly renamed).
+        /// </summary>
         public static void ClearCopiedFilesList()
         {
             fCopiedFiles.Clear();
@@ -74,7 +77,6 @@ namespace GEDmill.HTML
 
             fLogger.WriteInfo(string.Format("EscapeHTML({0})", original));
 
-            int tabSpaces = GMConfig.Instance.TabSpaces;
             var sb = new StringBuilder(original.Length);
             int tabPos = 0;
             bool doneCRLF = false;
@@ -151,7 +153,7 @@ namespace GEDmill.HTML
                             sb.Append("&nbsp;");
                             tabPos++;
                         }
-                        while ((tabPos % tabSpaces) != 0);
+                        while ((tabPos % TAB_SPACES) != 0);
                         doneSpace = true;
                         break;
 
@@ -167,7 +169,9 @@ namespace GEDmill.HTML
             return sb.ToString();
         }
 
-        // Converts all Javascript characters into their escaped versions
+        /// <summary>
+        /// Converts all Javascript characters into their escaped versions.
+        /// </summary>
         protected static string EscapeJavascript(string original)
         {
             if (original == null) {
@@ -188,7 +192,9 @@ namespace GEDmill.HTML
             return sb.ToString();
         }
 
-        // Converts all invalid sFilename characters into underscores
+        /// <summary>
+        /// Converts all invalid sFilename characters into underscores.
+        /// </summary>
         protected static string EscapeFilename(string original)
         {
             fLogger.WriteInfo(string.Format("EscapeFilename({0})", original));
@@ -210,7 +216,9 @@ namespace GEDmill.HTML
             return sb.ToString();
         }
 
-        // Returns a string with all email addresses replaced by value of sReplacement.
+        /// <summary>
+        /// Returns a string with all email addresses replaced by value of sReplacement.
+        /// </summary>
         protected static string ObfuscateEmail(string text)
         {
             if (text == null) {
@@ -348,7 +356,9 @@ namespace GEDmill.HTML
             return sb.ToString();
         }
 
-        // Generates navbar at top of page, in header div
+        /// <summary>
+        /// Generates navbar at top of page, in header div.
+        /// </summary>
         protected void OutputPageHeader(HTMLFile f, string previousChildLink, string nextChildLink, bool includeIndexLink)
         {
             if (GMConfig.Instance.IncludeNavbar) {
@@ -361,11 +371,7 @@ namespace GEDmill.HTML
                     mainSiteLink += string.Concat("<a href=\"", GMConfig.Instance.MainWebsiteLink, "\">", fLangMan.LS(PLS.LSID_MainSite), "</a>");
                 }
 
-                bool includeNavbar = previousChildLink != ""
-                  || nextChildLink != ""
-                  || includeIndexLink
-                  || frontPageLink != ""
-                  || mainSiteLink != "";
+                bool includeNavbar = previousChildLink != "" || nextChildLink != "" || includeIndexLink || frontPageLink != "" || mainSiteLink != "";
 
                 if (includeNavbar) {
                     f.WriteLine("    <div id=\"header\">");
@@ -405,7 +411,7 @@ namespace GEDmill.HTML
         // sArea can be {0,0,0,0} meaning use whole image
         // stats can be null if we don't care about keeping count of the multimedia files.
         public static string CopyMultimedia(string fullFilename, string newFilename, int maxWidth, int maxHeight,
-                                            ref Rectangle rectArea, Stats stats)
+                                            ref ExtRect rectArea, Stats stats)
         {
             fLogger.WriteInfo(string.Format("CopyMultimedia( {0}, {1}, {2} )", fullFilename, maxWidth, maxHeight));
 
@@ -424,7 +430,7 @@ namespace GEDmill.HTML
                 if (rectArea.Width == 0) {
                     asidFilename = fullFilename;
                 } else {
-                    asidFilename = string.Concat(fullFilename, ".", rectArea.X.ToString(), ",", rectArea.Y.ToString(), ",", rectArea.Width.ToString(), ",", rectArea.Height.ToString());
+                    asidFilename = string.Concat(fullFilename, ".", rectArea.Left.ToString(), ",", rectArea.Top.ToString(), ",", rectArea.Width.ToString(), ",", rectArea.Height.ToString());
                 }
 
                 if (maxWidth != 0 && maxHeight != 0) {
@@ -436,8 +442,7 @@ namespace GEDmill.HTML
                     if (fCopiedFiles.ContainsKey(asidFilename)) {
                         var filenameAndSize = fCopiedFiles[asidFilename];
                         result = filenameAndSize.FileName;
-                        rectArea.Width = filenameAndSize.Width;
-                        rectArea.Height = filenameAndSize.Height;
+                        rectArea = new ExtRect(rectArea.Left, rectArea.Top, filenameAndSize.Width, filenameAndSize.Height);
                     } else {
                         // Copy file into output directory
                         if (GMConfig.Instance.CopyMultimedia) {
@@ -489,7 +494,7 @@ namespace GEDmill.HTML
                             File.SetAttributes(fullFilename, FileAttributes.Normal); // Make any Read-Only files read-write.
                             if (maxWidth != 0 && maxHeight != 0) {
                                 // It must be a picture file
-                                copyFilename = ConvertAndCropImage(outputFolder, copyFilename, ref rectArea, maxWidth, maxHeight);
+                                copyFilename = GMHelper.ConvertAndCropImage(outputFolder, copyFilename, ref rectArea, maxWidth, maxHeight);
                             }
                             fCopiedFiles[asidFilename] = new FilenameAndSize(copyFilename, rectArea.Width, rectArea.Height);
                             result = copyFilename;
@@ -557,147 +562,13 @@ namespace GEDmill.HTML
             return link;
         }
 
-        // Returns a string to use as a sFilename for this individual's HTML page.
-        // The string is just the sFilename, not a fully qualified path.
+        /// <summary>
+        /// Returns a string to use as a sFilename for this individual's HTML page. The string is just the Filename, not a fully qualified path.
+        /// </summary>
         protected static string GetIndividualHTMLFilename(GDMIndividualRecord ir)
         {
             string relativeFilename = string.Concat("indi", ir.XRef, ".html");
-            if (GMConfig.Instance.UserRecFilename && ir.HasUserReferences) {
-                GDMUserReference urn = ir.UserReferences[0];
-                string filenameUserRef = EscapeFilename(urn.StringValue);
-                if (filenameUserRef.Length > 0) {
-                    relativeFilename = string.Concat("indi", filenameUserRef, ".html");
-                }
-            }
             return relativeFilename;
-        }
-
-        // Crops the specified image file to the given size. Also converts non-standard formats to standard ones.
-        // Returns sFilename in case extension has changed.
-        // sArea is changed to reflect new image size
-        private static string ConvertAndCropImage(string folder, string fileName, ref Rectangle rectArea, int maxWidth, int maxHeight)
-        {
-            fLogger.WriteInfo(string.Format("ConvertAndCropImage( {0}, {1} )", folder != null ? folder : "null", fileName != null ? fileName : "null"));
-
-            string absFilename = string.Concat(folder, fileName);
-
-            Image image = null;
-            try {
-                image = Image.FromFile(absFilename);
-            } catch (OutOfMemoryException) {
-                // Image is not a GDI compatible format
-                image = null;
-            }
-
-            if (image == null) {
-                throw (new HTMLException("Unknown image format for file " + absFilename)); // Let caller sort it out.
-            }
-
-            Rectangle rectNewArea;
-            if (rectArea.Width <= 0 || rectArea.Height <= 0) {
-                SizeF s = image.PhysicalDimension;
-                if (s.Width <= maxWidth && s.Height <= maxHeight) {
-                    maxWidth = (int)s.Width;
-                    maxHeight = (int)s.Height;
-                    // Nothing needs to be done, bitmap already correct size.
-                    // Carry on with conversion.
-                }
-                rectNewArea = new Rectangle(0, 0, (int)s.Width, (int)s.Height);
-                rectArea.X = 0;
-                rectArea.Y = 0;
-                rectArea.Width = rectNewArea.Width;
-                rectArea.Height = rectNewArea.Height;
-            } else {
-                rectNewArea = new Rectangle(0, 0, rectArea.Width, rectArea.Height);
-            }
-
-            if (maxWidth != 0 && maxHeight != 0) {
-                // If image is too big then shrink it. (Can't always use GetThumbnailImage because that might use embedded thumbnail).
-                ScaleAreaToFit(ref rectNewArea, maxWidth, maxHeight);
-            }
-
-            Bitmap bitmapNew = new Bitmap(rectNewArea.Width, rectNewArea.Height, PixelFormat.Format24bppRgb);
-            Graphics graphicsNew = Graphics.FromImage(bitmapNew);
-
-            graphicsNew.DrawImage(image, rectNewArea, rectArea, GraphicsUnit.Pixel);
-            image.Dispose();
-
-            // Find which format to save in. TODO: There must be a more elegant way!!
-            string extn = Path.GetExtension(fileName);
-            string filepart = Path.GetDirectoryName(fileName);
-            filepart += "\\" + Path.GetFileNameWithoutExtension(fileName);
-            ImageFormat imageFormat;
-            switch (extn.ToLower()) {
-                case ".jpg":
-                case ".jpeg":
-                    extn = ".jpg";
-                    imageFormat = ImageFormat.Jpeg;
-                    break;
-                case ".gif":
-                    imageFormat = ImageFormat.Gif;
-                    break;
-                case ".bmp":
-                    imageFormat = ImageFormat.Bmp;
-                    break;
-                case ".tif":
-                case ".tiff":
-                    // Tif's don't display in browsers, so convert to png.
-                    imageFormat = ImageFormat.Png;
-                    extn = ".png";
-                    break;
-                case ".exif":
-                    imageFormat = ImageFormat.Exif;
-                    break;
-                case ".png":
-                    imageFormat = ImageFormat.Png;
-                    break;
-                default:
-                    imageFormat = ImageFormat.Jpeg;
-                    break;
-            }
-
-            string filenameNew = filepart + extn;
-            string absFilenameNew = string.Concat(folder, filenameNew);
-            try {
-                if (File.Exists(absFilename)) {
-                    // Delete the old file (e.g. if converting from tif to png)
-                    File.Delete(absFilename);
-                }
-            } catch (Exception e) {
-                fLogger.WriteError(string.Format("Caught exception while removing old bitmap file {0}", absFilename), e);
-            }
-            try {
-                if (File.Exists(absFilenameNew)) {
-                    // Delete any existing file
-                    File.SetAttributes(absFilenameNew, FileAttributes.Normal);
-                    File.Delete(absFilenameNew);
-                }
-                bitmapNew.Save(absFilenameNew, imageFormat);
-            } catch (Exception e) {
-                fLogger.WriteError(string.Format("Caught exception while writing bitmap file {0}", filenameNew), e);
-                filenameNew = "";
-            }
-            graphicsNew.Dispose();
-            bitmapNew.Dispose();
-
-            rectArea = rectNewArea;
-            return filenameNew;
-        }
-
-        // Modifies rectNew to fit within the limits given, keeping its aspect ratio
-        protected static void ScaleAreaToFit(ref Rectangle rectangle, int maxWidth, int maxHeight)
-        {
-            if (rectangle.Height > maxHeight) {
-                // Image won't fit horizontally, so scale in both directions til it will
-                rectangle.Width = (rectangle.Width * maxHeight) / rectangle.Height;
-                rectangle.Height = maxHeight;
-            }
-
-            if (rectangle.Width > maxWidth) {
-                // Image won't fit horizontally, so scale in both directions til it will
-                rectangle.Height = (rectangle.Height * maxWidth) / rectangle.Width;
-                rectangle.Width = maxWidth;
-            }
         }
 
         protected static string MakeLinkNumber(GDMSourceCitation sourCit, int sourceCount, bool hasComma)
@@ -706,14 +577,18 @@ namespace GEDmill.HTML
             return string.Concat("<span class=\"reference\">", comma, sourceCount.ToString(), "</span>");
         }
 
-        // Returns a string to use in the list of references at the bottom of the page
+        /// <summary>
+        /// Returns a string to use in the list of references at the bottom of the page
+        /// </summary>
         protected static string MakeLinkText(GDMTree tree, GDMSourceCitation sourCit, int sourceCount)
         {
             var sourRec = tree.GetPtrValue<GDMSourceRecord>(sourCit);
             return string.Concat(sourceCount.ToString(), ". ", /*m_sSourceDescription*/sourRec.ShortTitle);
         }
 
-        // Returns the name of the alternative picture file to display for non-diaplayable files of the given format
+        /// <summary>
+        /// Returns the name of the alternative picture file to display for non-diaplayable files of the given format
+        /// </summary>
         protected static string NonPicFilename(MultimediaKind format, bool small, bool clickToDownload)
         {
             string filename;

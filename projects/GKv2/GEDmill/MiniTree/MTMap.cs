@@ -24,7 +24,7 @@ namespace GEDmill.MiniTree
     /// A data structure containing coordinates of a clickable sArea on the mini tree.
     /// Used to create HTML image alMap.
     /// </summary>
-    public class MiniTreeMap
+    public class MTMap
     {
         // The name of the individual in the box. Used for ALT attribute.
         public string Name;
@@ -48,7 +48,7 @@ namespace GEDmill.MiniTree
         public bool Linkable;
 
 
-        public MiniTreeMap(string name, GDMIndividualRecord ir, bool linkable, int x1, int y1, int x2, int y2)
+        public MTMap(string name, GDMIndividualRecord ir, bool linkable, int x1, int y1, int x2, int y2)
         {
             X1 = x1;
             Y1 = y1;

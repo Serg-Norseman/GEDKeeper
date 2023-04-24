@@ -43,7 +43,9 @@ namespace GEDmill.HTML
             fIndividualIndex = new List<StringTuple>();
         }
 
-        // The main method that causes the index to be created. (Note that m_individualIndex needs to be populated first using AddIndividualToIndex() ) 
+        /// <summary>
+        /// The main method that causes the index to be created (Note that m_individualIndex needs to be populated first using AddIndividualToIndex()).
+        /// </summary>
         public void Create()
         {
             fLogger.WriteInfo("Creating individuals index...");
@@ -66,7 +68,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Creates a string for the index text and adds it to the index arraylist.
+        /// <summary>
+        /// Creates a string for the index text and adds it to the index arraylist.
+        /// </summary>
         public void AddIndividualToIndex(string firstName, string surname, bool unknownName, string alterEgo, string lifeDates,
             bool concealed, string relativeFilename, string userRef)
         {
@@ -86,7 +90,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Creates the page header navbar containing links to the initial letters in the index.
+        /// <summary>
+        /// Creates the page header navbar containing links to the initial letters in the index.
+        /// </summary>
         private static string CreateIndexNavbar(List<IndexPage> pages)
         {
             string headingsLinks = "";
@@ -107,7 +113,9 @@ namespace GEDmill.HTML
             return headingsLinks;
         }
 
-        // Splits the index across multiple pages
+        /// <summary>
+        /// Splits the index across multiple pages.
+        /// </summary>
         private static List<IndexPage> CreateIndexPages(List<IndexLetter> letters)
         {
             var pages = new List<IndexPage>();
@@ -151,7 +159,9 @@ namespace GEDmill.HTML
             return pages;
         }
 
-        // Collects together the first letters of the items in the index
+        /// <summary>
+        /// Collects together the first letters of the items in the index.
+        /// </summary>
         private List<IndexLetter> CreateIndexLetters()
         {
             var letters = new List<IndexLetter>();
@@ -205,7 +215,9 @@ namespace GEDmill.HTML
             return letters;
         }
 
-        // Generates the HTML file for the given page of the index.
+        /// <summary>
+        /// Generates the HTML file for the given page of the index.
+        /// </summary>
         private void OutputIndividualsIndexPage(string headingsLinks, IndexPage indexPage)
         {
             fLogger.WriteInfo("OutputIndividualsIndexPage()");
@@ -254,7 +266,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Generates the core of the HTML file for the given page of the index.
+        /// <summary>
+        /// Generates the core of the HTML file for the given page of the index.
+        /// </summary>
         private void OutputIndexPage(IndexPage indexPage, HTMLFile f)
         {
             int nTotal = indexPage.TotalIndis + indexPage.Letters.Count;
@@ -301,7 +315,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Outputs the HTML table that lists the names in two columns.
+        /// <summary>
+        /// Outputs the HTML table that lists the names in two columns.
+        /// </summary>
         private static void OutputIndexPageColumns(HTMLFile f, List<StringTuple> firstHalf, List<StringTuple> secondHalf)
         {
             f.WriteLine("    <table id=\"index\">");
@@ -366,11 +382,8 @@ namespace GEDmill.HTML
                     sExtras2 = tuple.Third;
                     ++j;
                 }
-                if (GMConfig.Instance.IncludeUserRefInIndex) {
-                    f.WriteLine(string.Concat("        <tr><td>", sExtras1, "</td><td>", sLink1, "</td><td>", sExtras2, "</td><td>", sLink2, "</td></tr>"));
-                } else {
-                    f.WriteLine(string.Concat("        <tr><td>", sLink1, "</td><td>", sLink2, "</td></tr>"));
-                }
+
+                f.WriteLine(string.Concat("        <tr><td>", sLink1, "</td><td>", sLink2, "</td></tr>"));
             }
             f.WriteLine("    </table>");
         }

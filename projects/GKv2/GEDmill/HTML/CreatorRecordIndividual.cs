@@ -18,22 +18,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GEDmill.MiniTree;
 using GEDmill.Model;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.Logging;
 using GKCore.Types;
+using GKL = GKCore.Logging;
 
 namespace GEDmill.HTML
 {
     public class CreatorRecordIndividual : CreatorRecord
     {
-        private static readonly ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(CreatorRecordIndividual).Name);
+        private static readonly GKL.ILogger fLogger = GKL.LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(CreatorRecordIndividual).Name);
 
         // The individual record that we are creating the page for.
         private GDMIndividualRecord fIndiRec;
@@ -121,15 +121,11 @@ namespace GEDmill.HTML
         // A reference to the index creator, so that individual pages can be added to the index as they are created.
         private CreatorIndexIndividuals fIndiIndexCreator;
 
-        // The paintbox with which to draw the mini tree.
-        private Paintbox fPaintbox;
 
-
-        public CreatorRecordIndividual(IBaseContext context, ILangMan langMan, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator, Paintbox paintbox) : base(context, langMan)
+        public CreatorRecordIndividual(IBaseContext context, ILangMan langMan, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator) : base(context, langMan)
         {
             fIndiRec = ir;
             fIndiIndexCreator = indiIndexCreator;
-            fPaintbox = paintbox;
             fFirstFoundEvent = new Dictionary<string, Event>();
             fBirthdaySourceRefs = "";
             fDeathdaySourceRefs = "";
@@ -156,8 +152,10 @@ namespace GEDmill.HTML
             fParents = new List<HusbandAndWife>();
         }
 
-        // The main method that causes the page to be created.
-        public bool Create(Stats stats)
+        /// <summary>
+        /// The main method that causes the page to be created.
+        /// </summary>
+        public bool Create(Stats stats, TreeDrawer treeDrawer)
         {
             fLogger.WriteInfo("CreatorRecordIndividual.Create()");
 
@@ -250,12 +248,14 @@ namespace GEDmill.HTML
 
             AddIndividualIndexEntry(lifeDates);
 
-            OutputHTML(title);
+            OutputHTML(title, treeDrawer);
 
             return true;
         }
 
-        // Adds the marriage associated with the fr record to the list of events. Also adds irSubject death if within this person's lifetime.
+        /// <summary>
+        /// Adds the marriage associated with the fr record to the list of events. Also adds irSubject death if within this person's lifetime.
+        /// </summary>
         private void AddMarriage(GDMIndividualRecord spouse, string spouseLink, GDMFamilyRecord fr)
         {
             // Find wedding date
@@ -313,7 +313,9 @@ namespace GEDmill.HTML
             return result;
         }
 
-        // Goes through all families this person was a irSibling in and finds their frParents and siblings.
+        /// <summary>
+        /// Goes through all families this person was a irSibling in and finds their frParents and siblings.
+        /// </summary>
         private void AddParentsAndSiblings()
         {
             // Set a limit for date comparisons
@@ -386,7 +388,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Adds this individual page to the index of pages.
+        /// <summary>
+        /// Adds this individual page to the index of pages.
+        /// </summary>
         private void AddIndividualIndexEntry(string lifeDates)
         {
             string relativeFilename = GetIndividualHTMLFilename(fIndiRec);
@@ -427,7 +431,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Extracts the data from the MARR event for the fr record.
+        /// <summary>
+        /// Extracts the data from the MARR event for the fr record.
+        /// </summary>
         private string AddMarriageEvent(GDMFamilyRecord fr, string sourceRefs, out GDMDateValue marriageDate, out string marriageNote, out string marriagePlace)
         {
             // Find out when they were married
@@ -462,7 +468,9 @@ namespace GEDmill.HTML
             return sourceRefs;
         }
 
-        // Extracts the data from the DEAT event for the given individual and adds it if it was an event in the current individual's lifetime.
+        /// <summary>
+        /// Extracts the data from the DEAT event for the given individual and adds it if it was an event in the current individual's lifetime.
+        /// </summary>
         private string AddSpouseDeath(GDMIndividualRecord spouse, string spouseLink)
         {
             string sourceRefs = "";
@@ -492,7 +500,9 @@ namespace GEDmill.HTML
             return sourceRefs;
         }
 
-        // Adds birth, baptism, death etc of the children in the given fr.
+        /// <summary>
+        /// Adds birth, baptism, death etc of the children in the given fr.
+        /// </summary>
         private void AddChildrensEvents(GDMFamilyRecord famRec)
         {
             // Find out all the children.
@@ -583,7 +593,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Works through all the events records for this individual and extracts information from them.
+        /// <summary>
+        /// Works through all the events records for this individual and extracts information from them.
+        /// </summary>
         private void AddEvents()
         {
             if (fIndiRec.HasEvents && !fConcealed) {
@@ -599,7 +611,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Extracts the name information from the individual record.
+        /// <summary>
+        /// Extracts the name information from the individual record.
+        /// </summary>
         private void ConstructName()
         {
             // Construct the guy's name
@@ -646,8 +660,10 @@ namespace GEDmill.HTML
             }
         }
 
-        // Creates a file and writes into it the HTML for the individual's page.
-        private void OutputHTML(string title)
+        /// <summary>
+        /// Creates a file and writes into it the HTML for the individual's page.
+        /// </summary>
+        private void OutputHTML(string title, TreeDrawer treeDrawer)
         {
             HTMLFile f = null;
             string pageDescription = fLangMan.LS(PLS.LSID_PageDescription) + " " + fFullName;
@@ -662,7 +678,7 @@ namespace GEDmill.HTML
                     OutputPageHeader(f, fPreviousChildLink, fNextChildLink, true);
 
                     if (GMConfig.Instance.ShowMiniTrees) {
-                        OutputMiniTree(f);
+                        OutputMiniTree(f, treeDrawer);
                     }
                     f.WriteLine("    <div class=\"hr\" />");
                     f.WriteLine("");
@@ -710,7 +726,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Outputs the HTML for the list of Sources referenced in the page.
+        /// <summary>
+        /// Outputs the HTML for the list of Sources referenced in the page.
+        /// </summary>
         private void OutputSourceReferences(HTMLFile f)
         {
             if (fReferenceList.Count > 0) {
@@ -768,7 +786,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Outputs the HTML for the Other Facts section of the page.
+        /// <summary>
+        /// Outputs the HTML for the Other Facts section of the page.
+        /// </summary>
         private void OutputAttributes(HTMLFile f)
         {
             if (fAttributeList.Count > 0) {
@@ -792,7 +812,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Outputs the HTML for the Life History section of the page.
+        /// <summary>
+        /// Outputs the HTML for the Life History section of the page.
+        /// </summary>
         private void OutputEvents(HTMLFile f)
         {
             if (fEventList.Count > 0) {
@@ -823,7 +845,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Writes the "Parents" section of the page to the HTML file. 
+        /// <summary>
+        /// Writes the "Parents" section of the page to the HTML file. 
+        /// </summary>
         private void OutputParentNames(HTMLFile f)
         {
             if (fParents.Count > 0) {
@@ -859,7 +883,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Writes the individual's lifespan and occupation to the HTML file. 
+        /// <summary>
+        /// Writes the individual's lifespan and occupation to the HTML file. 
+        /// </summary>
         private void OutputIndividualSummary(HTMLFile f)
         {
             f.WriteLine("          <div id=\"individualSummary\">");
@@ -890,7 +916,9 @@ namespace GEDmill.HTML
             f.WriteLine("          </div> <!-- individualSummary -->");
         }
 
-        // Writes the individual's names to the HTML file. 
+        /// <summary>
+        /// Writes the individual's names to the HTML file. 
+        /// </summary>
         private void OutputNames(HTMLFile f)
         {
             f.WriteLine("          <div id=\"names\">");
@@ -912,7 +940,9 @@ namespace GEDmill.HTML
             f.WriteLine("          </div> <!-- names -->");
         }
 
-        // Writes the HTML for the multimedia files associated with this record. 
+        /// <summary>
+        /// Writes the HTML for the multimedia files associated with this record. 
+        /// </summary>
         private void OutputMultimedia(HTMLFile f)
         {
             if (fMultimediaList.Count > 0) {
@@ -980,8 +1010,8 @@ namespace GEDmill.HTML
                         if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
                             // Must be a picture.
                             // Scale mini pic down to thumbnail.
-                            Rectangle newArea = new Rectangle(0, 0, iMultimedia.Width, iMultimedia.Height);
-                            ScaleAreaToFit(ref newArea, GMConfig.Instance.MaxThumbnailImageWidth, GMConfig.Instance.MaxThumbnailImageHeight);
+                            ExtRect newArea = new ExtRect(0, 0, iMultimedia.Width, iMultimedia.Height);
+                            GMHelper.ScaleAreaToFit(ref newArea, GMConfig.Instance.MaxThumbnailImageWidth, GMConfig.Instance.MaxThumbnailImageHeight);
 
                             f.WriteLine(string.Concat("          <img style=\"width:", newArea.Width, "px; height:", newArea.Height, "px; margin-bottom:", GMConfig.Instance.MaxThumbnailImageHeight - newArea.Height, "px;\" class=\"miniphoto_img\" src=\"", iMultimedia.FileName, "\" alt=\"Click to select\" onclick=\"updateMainPhoto('", iMultimedia.FileName, "','", EscapeJavascript(iMultimedia.Title), "',", largeFilenameArg, ")\" />"));
                         } else {
@@ -997,21 +1027,22 @@ namespace GEDmill.HTML
             }
         }
 
-        // Writes the HTML for the mini tree diagram, including the image alMap data. 
-        private void OutputMiniTree(HTMLFile f)
+        /// <summary>
+        /// Writes the HTML for the mini tree diagram, including the image alMap data. 
+        /// </summary>
+        private void OutputMiniTree(HTMLFile f, TreeDrawer treeDrawer)
         {
             string miniTreeExtn = "png";
 
             string relativeTreeFilename = string.Concat("tree", fIndiRec.XRef, ".", miniTreeExtn);
             string fullTreeFilename = string.Concat(GMConfig.Instance.OutputFolder, "\\", relativeTreeFilename);
 
-            var treeDrawer = new TreeDrawer(fTree);
-            var map = treeDrawer.CreateMiniTree(fPaintbox, fIndiRec, fullTreeFilename, GMConfig.Instance.TargetTreeWidth);
+            var map = treeDrawer.CreateMiniTree(fIndiRec, fullTreeFilename, GMConfig.Instance.TargetTreeWidth);
             if (map != null) {
                 // Add space to height so that IE's horiz scroll bar has room and doesn't create a vertical scroll bar.
                 f.WriteLine("    <div id=\"minitree\" style=\"height:{0}px;\">", treeDrawer.Height + 20);
                 f.WriteLine("      <map name=\"treeMap\" id=\"tree\">");
-                foreach (MiniTreeMap mapItem in map) {
+                foreach (MTMap mapItem in map) {
                     if (mapItem.Linkable) {
                         string href = GetIndividualHTMLFilename(mapItem.IndiRec);
                         f.WriteLine(string.Concat("        <area alt=\"", mapItem.Name, "\" coords=\"", mapItem.X1, ",", mapItem.Y1, ",", mapItem.X2, ",", mapItem.Y2, "\" href=\"", href, "\" shape=\"rect\" />"));
@@ -1023,8 +1054,10 @@ namespace GEDmill.HTML
             }
         }
 
-        // If only one occupation for this individual, and it has no associated date, this method 
-        // ensures that we show it only in the title, not in the other facts section as well.
+        /// <summary>
+        /// If only one occupation for this individual, and it has no associated date, this method ensures
+        /// that we show it only in the title, not in the other facts section as well.
+        /// </summary>
         private void RemoveLoneOccupation()
         {
             bool sanityCheck = false;
@@ -1046,10 +1079,12 @@ namespace GEDmill.HTML
             }
         }
 
-        // Extracts the data from the given event, and creates a CIEvent instance for it and adds it to the list of events.
-        // Does specific processing if appropriate to the event.
-        // linkToOtherParty is an href link to the other party concerned in the event. Typically this is for fr events such as engagement, marriage etc where
-        // the other party would be the partner.
+        /// <summary>
+        /// Extracts the data from the given event, and creates a CIEvent instance for it and adds it to the list of events.
+        /// Does specific processing if appropriate to the event.
+        /// linkToOtherParty is an href link to the other party concerned in the event.
+        /// Typically this is for fr events such as engagement, marriage etc where the other party would be the partner.
+        /// </summary>
         private void ProcessEvent(GDMCustomEvent es, string linkToOtherParty)
         {
             fLogger.WriteInfo(string.Format("ProcessEvent( {0}, {1} )", es.GetTagName(), es.StringValue));
@@ -1599,7 +1634,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Adds the given source citations to the given list of referenced sources, and returns an HTML link string.
+        /// <summary>
+        /// Adds the given source citations to the given list of referenced sources, and returns an HTML link string.
+        /// </summary>
         private static string AddSources(ref List<GDMSourceCitation> referenceList, GDMList<GDMSourceCitation> sourceCitations)
         {
             string sourceRefs = "";
@@ -1626,7 +1663,9 @@ namespace GEDmill.HTML
             return sourceRefs;
         }
 
-        // Picks the individual's occupation closest to the given date, within the given limits.
+        /// <summary>
+        /// Picks the individual's occupation closest to the given date, within the given limits.
+        /// </summary>
         private static string BestOccupation(List<OccupationCounter> occupations, GDMDateValue givenDate,
                                              GDMDateValue lowerLimit, GDMDateValue upperLimit)
         {
@@ -1664,7 +1703,9 @@ namespace GEDmill.HTML
             return bestOc.Name;
         }
 
-        // Creates a string describing the marital status of the given fr. Prepends the string provided in marriageNote.    
+        /// <summary>
+        /// Creates a string describing the marital status of the given fr. Prepends the string provided in marriageNote.    
+        /// </summary>
         private string BuildMaritalStatusNote(GDMFamilyRecord fr, string marriageNote)
         {
             if (marriageNote != "") {

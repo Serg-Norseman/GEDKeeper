@@ -25,6 +25,17 @@ using GKCore.Logging;
 namespace GEDmill.HTML
 {
     /// <summary>
+    /// An exception that can be thrown during HTML page creation.
+    /// </summary>
+    public class HTMLException : Exception
+    {
+        public HTMLException(string message) : base(message)
+        {
+        }
+    }
+
+
+    /// <summary>
     /// Used to create an HTML file with a standard header and footer.
     /// </summary>
     public sealed class HTMLFile
@@ -36,7 +47,9 @@ namespace GEDmill.HTML
         private StreamWriter fWriter;
 
 
-        // Constructor. Creates a file with the given name and writes a standard HTML header.
+        /// <summary>
+        /// Constructor. Creates a file with the given name and writes a standard HTML header.
+        /// </summary>
         public HTMLFile(ILangMan langMan, string filename, string title, string description, string keywords)
         {
             fLangMan = langMan;
@@ -86,7 +99,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Write HTML footer and close the file.
+        /// <summary>
+        /// Write HTML footer and close the file.
+        /// </summary>
         public void Close()
         {
             fWriter.WriteLine("  </body>");

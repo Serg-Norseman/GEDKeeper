@@ -16,56 +16,58 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
-using System.Drawing;
+using BSLib;
 
 namespace GEDmill.MiniTree
 {
     /// <summary>
     /// Base class for elements in the tree diagram.
     /// </summary>
-    public abstract class MiniTreeObject
+    public abstract class MTObject
     {
+        protected readonly TreeDrawer fDrawer;
+
         // The object to the left of this one.
-        protected MiniTreeObject fLeft;
+        protected MTObject fLeft;
 
         // The object to the right of this one.
-        protected MiniTreeObject fRight;
+        protected MTObject fRight;
 
-        protected MiniTreeObject fLeftAlien;
+        protected MTObject fLeftAlien;
 
-        protected MiniTreeObject fRightAlien;
+        protected MTObject fRightAlien;
 
 
         // Tells this object about the one to its left.
-        public MiniTreeObject LeftObject
+        public MTObject LeftObject
         {
             get { return fLeft; }
             set { fLeft = value; }
         }
 
         // Tells this object about the one to its right.
-        public MiniTreeObject RightObject
+        public MTObject RightObject
         {
             get { return fRight; }
             set { fRight = value; }
         }
 
-        public MiniTreeObject LeftObjectAlien
+        public MTObject LeftObjectAlien
         {
             get { return fLeftAlien; }
             set { fLeftAlien = value; }
         }
 
-        public MiniTreeObject RightObjectAlien
+        public MTObject RightObjectAlien
         {
             get { return fRightAlien; }
             set { fRightAlien = value; }
         }
 
 
-        protected MiniTreeObject()
+        protected MTObject(TreeDrawer drawer)
         {
+            fDrawer = drawer;
             fLeft = null;
             fRight = null;
             fLeftAlien = null;
@@ -73,13 +75,10 @@ namespace GEDmill.MiniTree
         }
 
         // Calculates the size required by the element.
-        public abstract SizeF CalculateSize(Graphics g, Font f);
-
-        // Draws the element to the graphics instance.
-        public abstract void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> map);
+        public abstract ExtSizeF CalculateSize();
 
         // Calculates how to lay out this element.
-        public abstract SizeF CalculateLayout(float x, float y);
+        public abstract ExtSizeF CalculateLayout(float x, float y);
 
         // Shifts this object and all objects to its left, until one can't move.
         public abstract float PullLeft(float amount);

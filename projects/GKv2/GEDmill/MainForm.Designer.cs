@@ -36,23 +36,21 @@
         private System.Windows.Forms.TextBox txtConfigThumbnailImageWidth;
         private System.Windows.Forms.Label lblConfigThumbnailImageHeight;
         private System.Windows.Forms.TextBox txtConfigThumbnailImageHeight;
-        private System.Windows.Forms.CheckBox chkConfigUserRecFilename;
         private System.Windows.Forms.Label lblConfigCustomFooter;
         private System.Windows.Forms.TextBox txtConfigCustomFooter;
         private System.Windows.Forms.Label lblConfigFooterIsHtml;
         private System.Windows.Forms.CheckBox chkConfigFooterIsHtml;
         private System.Windows.Forms.CheckBox chkConfigConserveTreeWidth;
-        private System.Windows.Forms.CheckBox chkConfigKeepSiblingOrder;
-        private System.Windows.Forms.GroupBox gbMiniTreeColours;
-        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiBackground;
-        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiHighlight;
-        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiBgConcealed;
-        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiShade;
-        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiText;
-        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiLink;
-        private System.Windows.Forms.Button btnConfigMiniTreeColourBranch;
-        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiBorder;
-        private System.Windows.Forms.Button btnConfigMiniTreeColourIndiFgConcealed;
+        private System.Windows.Forms.GroupBox gbMiniTreeColors;
+        private System.Windows.Forms.Button btnConfigMiniTreeColorIndiBackground;
+        private System.Windows.Forms.Button btnConfigMiniTreeColorIndiHighlight;
+        private System.Windows.Forms.Button btnConfigMiniTreeColorIndiBgConcealed;
+        private System.Windows.Forms.Button btnConfigMiniTreeColorIndiShade;
+        private System.Windows.Forms.Button btnConfigMiniTreeColorIndiText;
+        private System.Windows.Forms.Button btnConfigMiniTreeColorIndiLink;
+        private System.Windows.Forms.Button btnConfigMiniTreeColorBranch;
+        private System.Windows.Forms.Button btnConfigMiniTreeColorIndiBorder;
+        private System.Windows.Forms.Button btnConfigMiniTreeColorIndiFgConcealed;
         private System.Windows.Forms.CheckBox chkConfigAllowMultimedia;
         private System.Windows.Forms.Label lblConfigNoName;
         private System.Windows.Forms.TextBox txtConfigNoName;
@@ -65,8 +63,6 @@
         private System.Windows.Forms.CheckBox chkConfigHideEmails;
         private System.Windows.Forms.CheckBox chkConfigOccupationHeadline;
         private System.Windows.Forms.CheckBox chkConfigShowWithheldRecords;
-        private System.Windows.Forms.Label lblConfigTabSpaces;
-        private System.Windows.Forms.TextBox txtConfigTabSpaces;
         private System.Windows.Forms.Label lblConfigCommentaryIsHtml;
         private System.Windows.Forms.CheckBox chkConfigCommentaryIsHtml;
         private System.Windows.Forms.Label lblConfigCommentary;
@@ -84,7 +80,6 @@
         private System.Windows.Forms.CheckBox chkConfigKeepOriginals;
         private System.Windows.Forms.CheckBox chkConfigRenameOriginals;
         private System.Windows.Forms.CheckBox chkConfigMultiPageIndex;
-        private System.Windows.Forms.CheckBox chkConfigUserRefInIndex;
         private System.Windows.Forms.Label lblConfigMultiPageIndexNumber;
         private System.Windows.Forms.TextBox txtConfigMultiPageIndexNumber;
         private System.Windows.Forms.CheckBox chkConfigIncludeTreeDiagrams;
@@ -134,7 +129,6 @@
         private System.Windows.Forms.TabPage pageSettingsImages;
         private System.Windows.Forms.TabPage pageSettingsGedcom;
         private System.Windows.Forms.TabPage pageSettingsTreeDiagrams;
-        private System.Windows.Forms.TabPage pageSettingsAdvanced;
         private System.Windows.Forms.MenuItem N1;
         private System.Windows.Forms.MenuItem N2;
         private System.Windows.Forms.MenuItem N3;
@@ -176,23 +170,21 @@
             txtConfigThumbnailImageWidth = new System.Windows.Forms.TextBox();
             lblConfigThumbnailImageHeight = new System.Windows.Forms.Label();
             txtConfigThumbnailImageHeight = new System.Windows.Forms.TextBox();
-            chkConfigUserRecFilename = new System.Windows.Forms.CheckBox();
             lblConfigCustomFooter = new System.Windows.Forms.Label();
             txtConfigCustomFooter = new System.Windows.Forms.TextBox();
             lblConfigFooterIsHtml = new System.Windows.Forms.Label();
             chkConfigFooterIsHtml = new System.Windows.Forms.CheckBox();
             chkConfigConserveTreeWidth = new System.Windows.Forms.CheckBox();
-            chkConfigKeepSiblingOrder = new System.Windows.Forms.CheckBox();
-            gbMiniTreeColours = new System.Windows.Forms.GroupBox();
-            btnConfigMiniTreeColourIndiBackground = new System.Windows.Forms.Button();
-            btnConfigMiniTreeColourIndiHighlight = new System.Windows.Forms.Button();
-            btnConfigMiniTreeColourIndiBgConcealed = new System.Windows.Forms.Button();
-            btnConfigMiniTreeColourIndiShade = new System.Windows.Forms.Button();
-            btnConfigMiniTreeColourIndiText = new System.Windows.Forms.Button();
-            btnConfigMiniTreeColourIndiLink = new System.Windows.Forms.Button();
-            btnConfigMiniTreeColourBranch = new System.Windows.Forms.Button();
-            btnConfigMiniTreeColourIndiBorder = new System.Windows.Forms.Button();
-            btnConfigMiniTreeColourIndiFgConcealed = new System.Windows.Forms.Button();
+            gbMiniTreeColors = new System.Windows.Forms.GroupBox();
+            btnConfigMiniTreeColorIndiBackground = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColorIndiHighlight = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColorIndiBgConcealed = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColorIndiShade = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColorIndiText = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColorIndiLink = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColorBranch = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColorIndiBorder = new System.Windows.Forms.Button();
+            btnConfigMiniTreeColorIndiFgConcealed = new System.Windows.Forms.Button();
             chkConfigAllowMultimedia = new System.Windows.Forms.CheckBox();
             chkConfigSupressBackreferences = new System.Windows.Forms.CheckBox();
             lblConfigNoName = new System.Windows.Forms.Label();
@@ -206,8 +198,6 @@
             chkConfigHideEmails = new System.Windows.Forms.CheckBox();
             chkConfigOccupationHeadline = new System.Windows.Forms.CheckBox();
             chkConfigShowWithheldRecords = new System.Windows.Forms.CheckBox(); ;
-            lblConfigTabSpaces = new System.Windows.Forms.Label();
-            txtConfigTabSpaces = new System.Windows.Forms.TextBox();
             lblConfigCommentary = new System.Windows.Forms.Label();
             lblConfigCommentaryIsHtml = new System.Windows.Forms.Label();
             chkConfigCommentaryIsHtml = new System.Windows.Forms.CheckBox();
@@ -223,7 +213,6 @@
             chkConfigIncludeTreeDiagrams = new System.Windows.Forms.CheckBox();
             chkConfigTreeDiagramsFakeBg = new System.Windows.Forms.CheckBox();
             chkConfigMultiPageIndex = new System.Windows.Forms.CheckBox();
-            chkConfigUserRefInIndex = new System.Windows.Forms.CheckBox();
             lblConfigMultiPageIndexNumber = new System.Windows.Forms.Label();
             txtConfigMultiPageIndexNumber = new System.Windows.Forms.TextBox();
             chkConfigIndiImages = new System.Windows.Forms.CheckBox();
@@ -270,7 +259,6 @@
             pageSettingsImages = new System.Windows.Forms.TabPage();
             pageSettingsGedcom = new System.Windows.Forms.TabPage();
             pageSettingsTreeDiagrams = new System.Windows.Forms.TabPage();
-            pageSettingsAdvanced = new System.Windows.Forms.TabPage();
             miIndiDescendantsExclude = new System.Windows.Forms.MenuItem();
             miIndiAncestorsExclude = new System.Windows.Forms.MenuItem();
             miIndiDescendantsInclude = new System.Windows.Forms.MenuItem();
@@ -761,14 +749,6 @@
             chkConfigMultiPageIndex.Text = "&Multi-page individuals index";
             chkConfigMultiPageIndex.TabIndex = 14;
             chkConfigMultiPageIndex.Click += new System.EventHandler(chkConfigMultiPageIndex_Click);
-            //
-            // chkConfigUserRefInIndex
-            //
-            chkConfigUserRefInIndex.Location = new System.Drawing.Point(266, 76);
-            chkConfigUserRefInIndex.Name = "chkConfigUserRefInIndex";
-            chkConfigUserRefInIndex.Size = new System.Drawing.Size(220, 20);
-            chkConfigUserRefInIndex.Text = "&User Reference numbers in index";
-            chkConfigUserRefInIndex.TabIndex = 15;
             // 
             // lblConfigMultiPageIndexNumber
             // 
@@ -1068,24 +1048,6 @@
             this.txtConfigThumbnailImageHeight.TabIndex = 25;
             this.txtConfigThumbnailImageHeight.Text = "";
             // 
-            // lblConfigTabSpaces
-            // 
-            lblConfigTabSpaces.Location = new System.Drawing.Point(6, 0);
-            lblConfigTabSpaces.Name = "lblConfigTabSpaces";
-            lblConfigTabSpaces.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            lblConfigTabSpaces.Size = new System.Drawing.Size(188, 24);
-            lblConfigTabSpaces.TabIndex = 1;
-            lblConfigTabSpaces.Text = "&Num spaces to replace tabs:";
-            lblConfigTabSpaces.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            //
-            // txtConfigTabSpaces
-            // 
-            txtConfigTabSpaces.Location = new System.Drawing.Point(203, 4);
-            txtConfigTabSpaces.Name = "txtConfigTabSpaces";
-            txtConfigTabSpaces.Size = new System.Drawing.Size(31, 20);
-            txtConfigTabSpaces.TabIndex = 2;
-            txtConfigTabSpaces.Text = "";
-            // 
             // lblConfigNoName
             // 
             lblConfigNoName.Location = new System.Drawing.Point(6, 24);
@@ -1207,119 +1169,103 @@
             chkConfigConserveTreeWidth.TabIndex = 6;
             chkConfigConserveTreeWidth.Text = "Conserve tree &width";
             //
-            // chkConfigKeepSiblingOrder
+            // gbMiniTreeColors
             // 
-            chkConfigKeepSiblingOrder.Location = new System.Drawing.Point(8, 114);
-            chkConfigKeepSiblingOrder.Name = "chkConfigKeepSiblingOrder";
-            chkConfigKeepSiblingOrder.Size = new System.Drawing.Size(230, 24);
-            chkConfigKeepSiblingOrder.TabIndex = 7;
-            chkConfigKeepSiblingOrder.Text = "Keep s&ibling order from GEDCOM";
+            gbMiniTreeColors.Location = new System.Drawing.Point(260, 11);
+            gbMiniTreeColors.Name = "gbMiniTreeColors";
+            gbMiniTreeColors.Size = new System.Drawing.Size(230, 224);
+            gbMiniTreeColors.TabIndex = 8;
+            gbMiniTreeColors.Text = "Colors";
+            gbMiniTreeColors.FlatStyle = System.Windows.Forms.FlatStyle.System;
             //
-            // gbMiniTreeColours
+            // btnConfigMiniTreeColorIndiHighlight
             // 
-            gbMiniTreeColours.Location = new System.Drawing.Point(260, 11);
-            gbMiniTreeColours.Name = "gbMiniTreeColours";
-            gbMiniTreeColours.Size = new System.Drawing.Size(230, 224);
-            gbMiniTreeColours.TabIndex = 8;
-            gbMiniTreeColours.Text = "Colours";
-            gbMiniTreeColours.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            btnConfigMiniTreeColorIndiHighlight.Location = new System.Drawing.Point(12, 24);
+            btnConfigMiniTreeColorIndiHighlight.Name = "btnConfigMiniTreeColorIndiHighlight";
+            btnConfigMiniTreeColorIndiHighlight.Size = new System.Drawing.Size(98, 24);
+            btnConfigMiniTreeColorIndiHighlight.TabIndex = 9;
+            btnConfigMiniTreeColorIndiHighlight.Text = "Selected &box";
+            btnConfigMiniTreeColorIndiHighlight.Click += new System.EventHandler(btnConfigMiniTreeColorIndiHighlight_Click);
             //
-            // btnConfigMiniTreeColourIndiHighlight
+            // btnConfigMiniTreeColorIndiText
             // 
-            btnConfigMiniTreeColourIndiHighlight.Location = new System.Drawing.Point(12, 24);
-            btnConfigMiniTreeColourIndiHighlight.Name = "btnConfigMiniTreeColourIndiHighlight";
-            btnConfigMiniTreeColourIndiHighlight.Size = new System.Drawing.Size(98, 24);
-            btnConfigMiniTreeColourIndiHighlight.TabIndex = 9;
-            btnConfigMiniTreeColourIndiHighlight.Text = "Selected &box";
-            btnConfigMiniTreeColourIndiHighlight.Click += new System.EventHandler(btnConfigMiniTreeColourIndiHighlight_Click);
+            btnConfigMiniTreeColorIndiText.Location = new System.Drawing.Point(122, 24);
+            btnConfigMiniTreeColorIndiText.Name = "btnConfigMiniTreeColorIndiText";
+            btnConfigMiniTreeColorIndiText.Size = new System.Drawing.Size(98, 24);
+            btnConfigMiniTreeColorIndiText.TabIndex = 10;
+            btnConfigMiniTreeColorIndiText.Text = "Selected te&xt";
+            btnConfigMiniTreeColorIndiText.Click += new System.EventHandler(btnConfigMiniTreeColorIndiText_Click);
             //
-            // btnConfigMiniTreeColourIndiText
+            // btnConfigMiniTreeColorIndiBackground
             // 
-            btnConfigMiniTreeColourIndiText.Location = new System.Drawing.Point(122, 24);
-            btnConfigMiniTreeColourIndiText.Name = "btnConfigMiniTreeColourIndiText";
-            btnConfigMiniTreeColourIndiText.Size = new System.Drawing.Size(98, 24);
-            btnConfigMiniTreeColourIndiText.TabIndex = 10;
-            btnConfigMiniTreeColourIndiText.Text = "Selected te&xt";
-            btnConfigMiniTreeColourIndiText.Click += new System.EventHandler(btnConfigMiniTreeColourIndiText_Click);
+            btnConfigMiniTreeColorIndiBackground.Location = new System.Drawing.Point(12, 60);
+            btnConfigMiniTreeColorIndiBackground.Name = "btnConfigMiniTreeColorIndiBackground";
+            btnConfigMiniTreeColorIndiBackground.Size = new System.Drawing.Size(98, 24);
+            btnConfigMiniTreeColorIndiBackground.TabIndex = 11;
+            btnConfigMiniTreeColorIndiBackground.Text = "&General box";
+            btnConfigMiniTreeColorIndiBackground.BackColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            btnConfigMiniTreeColorIndiBackground.Click += new System.EventHandler(btnConfigMiniTreeColorIndiBackground_Click);
             //
-            // btnConfigMiniTreeColourIndiBackground
+            // btnConfigMiniTreeColorIndiLink
             // 
-            btnConfigMiniTreeColourIndiBackground.Location = new System.Drawing.Point(12, 60);
-            btnConfigMiniTreeColourIndiBackground.Name = "btnConfigMiniTreeColourIndiBackground";
-            btnConfigMiniTreeColourIndiBackground.Size = new System.Drawing.Size(98, 24);
-            btnConfigMiniTreeColourIndiBackground.TabIndex = 11;
-            btnConfigMiniTreeColourIndiBackground.Text = "&General box";
-            btnConfigMiniTreeColourIndiBackground.BackColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            btnConfigMiniTreeColourIndiBackground.Click += new System.EventHandler(btnConfigMiniTreeColourIndiBackground_Click);
+            btnConfigMiniTreeColorIndiLink.Location = new System.Drawing.Point(122, 60);
+            btnConfigMiniTreeColorIndiLink.Name = "btnConfigMiniTreeColorIndiLink";
+            btnConfigMiniTreeColorIndiLink.Size = new System.Drawing.Size(98, 24);
+            btnConfigMiniTreeColorIndiLink.TabIndex = 12;
+            btnConfigMiniTreeColorIndiLink.Text = "&Link text";
+            btnConfigMiniTreeColorIndiLink.Click += new System.EventHandler(btnConfigMiniTreeColorIndiLink_Click);
             //
-            // btnConfigMiniTreeColourIndiLink
+            // btnConfigMiniTreeColorIndiBgConcealed
             // 
-            btnConfigMiniTreeColourIndiLink.Location = new System.Drawing.Point(122, 60);
-            btnConfigMiniTreeColourIndiLink.Name = "btnConfigMiniTreeColourIndiLink";
-            btnConfigMiniTreeColourIndiLink.Size = new System.Drawing.Size(98, 24);
-            btnConfigMiniTreeColourIndiLink.TabIndex = 12;
-            btnConfigMiniTreeColourIndiLink.Text = "&Link text";
-            btnConfigMiniTreeColourIndiLink.Click += new System.EventHandler(btnConfigMiniTreeColourIndiLink_Click);
+            btnConfigMiniTreeColorIndiBgConcealed.Location = new System.Drawing.Point(12, 96);
+            btnConfigMiniTreeColorIndiBgConcealed.Name = "btnConfigMiniTreeColorIndiBgConcealed";
+            btnConfigMiniTreeColorIndiBgConcealed.Size = new System.Drawing.Size(98, 24);
+            btnConfigMiniTreeColorIndiBgConcealed.TabIndex = 13;
+            btnConfigMiniTreeColorIndiBgConcealed.Text = "&Private box";
+            btnConfigMiniTreeColorIndiBgConcealed.Click += new System.EventHandler(btnConfigMiniTreeColorIndiBgConcealed_Click);
             //
-            // btnConfigMiniTreeColourIndiBgConcealed
+            // btnConfigMiniTreeColorIndiFgConcealed
             // 
-            btnConfigMiniTreeColourIndiBgConcealed.Location = new System.Drawing.Point(12, 96);
-            btnConfigMiniTreeColourIndiBgConcealed.Name = "btnConfigMiniTreeColourIndiBgConcealed";
-            btnConfigMiniTreeColourIndiBgConcealed.Size = new System.Drawing.Size(98, 24);
-            btnConfigMiniTreeColourIndiBgConcealed.TabIndex = 13;
-            btnConfigMiniTreeColourIndiBgConcealed.Text = "&Private box";
-            btnConfigMiniTreeColourIndiBgConcealed.Click += new System.EventHandler(btnConfigMiniTreeColourIndiBgConcealed_Click);
+            btnConfigMiniTreeColorIndiFgConcealed.Location = new System.Drawing.Point(122, 96);
+            btnConfigMiniTreeColorIndiFgConcealed.Name = "btnConfigMiniTreeColorIndiFgConcealed";
+            btnConfigMiniTreeColorIndiFgConcealed.Size = new System.Drawing.Size(98, 24);
+            btnConfigMiniTreeColorIndiFgConcealed.TabIndex = 14;
+            btnConfigMiniTreeColorIndiFgConcealed.Text = "P&rivate text";
+            btnConfigMiniTreeColorIndiFgConcealed.Click += new System.EventHandler(btnConfigMiniTreeColorIndiFgConcealed_Click);
             //
-            // btnConfigMiniTreeColourIndiFgConcealed
+            // btnConfigMiniTreeColorIndiShade
             // 
-            btnConfigMiniTreeColourIndiFgConcealed.Location = new System.Drawing.Point(122, 96);
-            btnConfigMiniTreeColourIndiFgConcealed.Name = "btnConfigMiniTreeColourIndiFgConcealed";
-            btnConfigMiniTreeColourIndiFgConcealed.Size = new System.Drawing.Size(98, 24);
-            btnConfigMiniTreeColourIndiFgConcealed.TabIndex = 14;
-            btnConfigMiniTreeColourIndiFgConcealed.Text = "P&rivate text";
-            btnConfigMiniTreeColourIndiFgConcealed.Click += new System.EventHandler(btnConfigMiniTreeColourIndiFgConcealed_Click);
+            btnConfigMiniTreeColorIndiShade.Location = new System.Drawing.Point(12, 132);
+            btnConfigMiniTreeColorIndiShade.Name = "btnConfigMiniTreeColorIndiShade";
+            btnConfigMiniTreeColorIndiShade.Size = new System.Drawing.Size(98, 24);
+            btnConfigMiniTreeColorIndiShade.TabIndex = 15;
+            btnConfigMiniTreeColorIndiShade.Text = "Spous&e box";
+            btnConfigMiniTreeColorIndiShade.Click += new System.EventHandler(btnConfigMiniTreeColorIndiShade_Click);
             //
-            // btnConfigMiniTreeColourIndiShade
+            // btnConfigMiniTreeColorBranch
             // 
-            btnConfigMiniTreeColourIndiShade.Location = new System.Drawing.Point(12, 132);
-            btnConfigMiniTreeColourIndiShade.Name = "btnConfigMiniTreeColourIndiShade";
-            btnConfigMiniTreeColourIndiShade.Size = new System.Drawing.Size(98, 24);
-            btnConfigMiniTreeColourIndiShade.TabIndex = 15;
-            btnConfigMiniTreeColourIndiShade.Text = "Spous&e box";
-            btnConfigMiniTreeColourIndiShade.Click += new System.EventHandler(btnConfigMiniTreeColourIndiShade_Click);
+            btnConfigMiniTreeColorBranch.Location = new System.Drawing.Point(12, 168);
+            btnConfigMiniTreeColorBranch.Name = "btnConfigMiniTreeColorBranch";
+            btnConfigMiniTreeColorBranch.Size = new System.Drawing.Size(98, 24);
+            btnConfigMiniTreeColorBranch.TabIndex = 16;
+            btnConfigMiniTreeColorBranch.Text = "Br&anches";
+            btnConfigMiniTreeColorBranch.Click += new System.EventHandler(btnConfigMiniTreeColorBranch_Click);
             //
-            // btnConfigMiniTreeColourBranch
+            // btnConfigMiniTreeColorIndiBorder
             // 
-            btnConfigMiniTreeColourBranch.Location = new System.Drawing.Point(12, 168);
-            btnConfigMiniTreeColourBranch.Name = "btnConfigMiniTreeColourBranch";
-            btnConfigMiniTreeColourBranch.Size = new System.Drawing.Size(98, 24);
-            btnConfigMiniTreeColourBranch.TabIndex = 16;
-            btnConfigMiniTreeColourBranch.Text = "Br&anches";
-            btnConfigMiniTreeColourBranch.Click += new System.EventHandler(btnConfigMiniTreeColourBranch_Click);
-            //
-            // btnConfigMiniTreeColourIndiBorder
-            // 
-            btnConfigMiniTreeColourIndiBorder.Location = new System.Drawing.Point(122, 168);
-            btnConfigMiniTreeColourIndiBorder.Name = "btnConfigMiniTreeColourIndiBorder";
-            btnConfigMiniTreeColourIndiBorder.Size = new System.Drawing.Size(98, 24);
-            btnConfigMiniTreeColourIndiBorder.TabIndex = 17;
-            btnConfigMiniTreeColourIndiBorder.Text = "Box bor&ders";
-            btnConfigMiniTreeColourIndiBorder.Click += new System.EventHandler(btnConfigMiniTreeColourIndiBorder_Click);
-            //
-            // chkConfigUserRecFilename
-            // 
-            chkConfigUserRecFilename.Location = new System.Drawing.Point(11, 112);
-            chkConfigUserRecFilename.Name = "chkConfigUserRecFilename";
-            chkConfigUserRecFilename.Size = new System.Drawing.Size(240, 24);
-            chkConfigUserRecFilename.Text = "&Use custom record number for filenames";
-            chkConfigUserRecFilename.TabIndex = 7;
+            btnConfigMiniTreeColorIndiBorder.Location = new System.Drawing.Point(122, 168);
+            btnConfigMiniTreeColorIndiBorder.Name = "btnConfigMiniTreeColorIndiBorder";
+            btnConfigMiniTreeColorIndiBorder.Size = new System.Drawing.Size(98, 24);
+            btnConfigMiniTreeColorIndiBorder.TabIndex = 17;
+            btnConfigMiniTreeColorIndiBorder.Text = "Box bor&ders";
+            btnConfigMiniTreeColorIndiBorder.Click += new System.EventHandler(btnConfigMiniTreeColorIndiBorder_Click);
             //
             // chkConfigSupressBackreferences
             // 
-            chkConfigSupressBackreferences.Location = new System.Drawing.Point(11, 136);
+            chkConfigSupressBackreferences.Location = new System.Drawing.Point(266, 30);
             chkConfigSupressBackreferences.Name = "chkConfigSupressBackreferences";
             chkConfigSupressBackreferences.Size = new System.Drawing.Size(250, 20);
-            chkConfigSupressBackreferences.Text = "List c&iting records on source pages";
+            chkConfigSupressBackreferences.Text = "List citing records on source pages";
             chkConfigSupressBackreferences.TabIndex = 8;
             // 
             // panelChooseOutput
@@ -1451,8 +1397,8 @@
             pageSettingsWebpages.Controls.Add(lblConfigIndexName);
             pageSettingsWebpages.Controls.Add(lblConfigIndexNameExtn);
             pageSettingsWebpages.Controls.Add(chkConfigStats);
+            pageSettingsWebpages.Controls.Add(chkConfigSupressBackreferences);
             pageSettingsWebpages.Controls.Add(chkConfigMultiPageIndex);
-            pageSettingsWebpages.Controls.Add(chkConfigUserRefInIndex);
             pageSettingsWebpages.Controls.Add(lblConfigMultiPageIndexNumber);
             pageSettingsWebpages.Controls.Add(txtConfigMultiPageIndexNumber);
             pageSettingsWebpages.Controls.Add(lblConfigCustomFooter);
@@ -1507,20 +1453,18 @@
             pageSettingsGedcom.Controls.Add(chkConfigHideEmails);
             pageSettingsGedcom.Controls.Add(chkConfigOccupationHeadline);
             pageSettingsGedcom.Controls.Add(chkConfigShowWithheldRecords);
-            pageSettingsGedcom.Controls.Add(lblConfigTabSpaces);
-            pageSettingsGedcom.Controls.Add(txtConfigTabSpaces);
             // 
-            // gbMiniTreeColours
+            // gbMiniTreeColors
             // 
-            gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiBackground);
-            gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiHighlight);
-            gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiBgConcealed);
-            gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiShade);
-            gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiText);
-            gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiLink);
-            gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourBranch);
-            gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiBorder);
-            gbMiniTreeColours.Controls.Add(btnConfigMiniTreeColourIndiFgConcealed);
+            gbMiniTreeColors.Controls.Add(btnConfigMiniTreeColorIndiBackground);
+            gbMiniTreeColors.Controls.Add(btnConfigMiniTreeColorIndiHighlight);
+            gbMiniTreeColors.Controls.Add(btnConfigMiniTreeColorIndiBgConcealed);
+            gbMiniTreeColors.Controls.Add(btnConfigMiniTreeColorIndiShade);
+            gbMiniTreeColors.Controls.Add(btnConfigMiniTreeColorIndiText);
+            gbMiniTreeColors.Controls.Add(btnConfigMiniTreeColorIndiLink);
+            gbMiniTreeColors.Controls.Add(btnConfigMiniTreeColorBranch);
+            gbMiniTreeColors.Controls.Add(btnConfigMiniTreeColorIndiBorder);
+            gbMiniTreeColors.Controls.Add(btnConfigMiniTreeColorIndiFgConcealed);
             // 
             // pageSettingsTreeDiagrams
             // 
@@ -1528,14 +1472,7 @@
             pageSettingsTreeDiagrams.Controls.Add(chkConfigIncludeTreeDiagrams);
             pageSettingsTreeDiagrams.Controls.Add(chkConfigTreeDiagramsFakeBg);
             pageSettingsTreeDiagrams.Controls.Add(chkConfigConserveTreeWidth);
-            pageSettingsTreeDiagrams.Controls.Add(chkConfigKeepSiblingOrder);
-            pageSettingsTreeDiagrams.Controls.Add(gbMiniTreeColours);
-            // 
-            // pageSettingsAdvanced
-            // 
-            pageSettingsAdvanced.Text = "Advanced";
-            pageSettingsAdvanced.Controls.Add(chkConfigUserRecFilename);
-            pageSettingsAdvanced.Controls.Add(chkConfigSupressBackreferences);
+            pageSettingsTreeDiagrams.Controls.Add(gbMiniTreeColors);
             // 
             // tabcontrolConfigPanel
             // 
@@ -1543,7 +1480,6 @@
             tabcontrolConfigPanel.TabPages.Add(pageSettingsImages);
             tabcontrolConfigPanel.TabPages.Add(pageSettingsGedcom);
             tabcontrolConfigPanel.TabPages.Add(pageSettingsTreeDiagrams);
-            tabcontrolConfigPanel.TabPages.Add(pageSettingsAdvanced);
             tabcontrolConfigPanel.Location = new System.Drawing.Point(0, 0);
             tabcontrolConfigPanel.Name = "tabcontrolConfigPanel";
             tabcontrolConfigPanel.Size = new System.Drawing.Size(507, 272);

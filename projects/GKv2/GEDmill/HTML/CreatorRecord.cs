@@ -17,8 +17,8 @@
  */
 
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using BSLib;
 using GDModel;
 using GEDmill.Model;
 using GKCore;
@@ -41,7 +41,9 @@ namespace GEDmill.HTML
             fMultimediaList = new List<Multimedia>();
         }
 
-        // Adds the given multimedia links to the given multimedia list.
+        /// <summary>
+        /// Adds the given multimedia links to the given multimedia list.
+        /// </summary>
         protected void AddMultimedia(GDMList<GDMMultimediaLink> multimediaLinks, string mmPrefix,
                                      string mmLargePrefix, int maxWidth, int maxHeight, Stats stats)
         {
@@ -72,7 +74,7 @@ namespace GEDmill.HTML
                 int nMmOrdering = i;
                 string mmTitle = mfr.Title;
                 string mmFilename = fContext.MediaLoad(mfr);
-                Rectangle rectArea = new Rectangle(0, 0, 0, 0);
+                ExtRect rectArea = new ExtRect(0, 0, 0, 0);
                 string extPart = Path.GetExtension(mmFilename);
                 string originalFilename = Path.GetFileName(mmFilename);
 
@@ -112,7 +114,7 @@ namespace GEDmill.HTML
                                 largeFilename = originalFilename;
                             }
 
-                            Rectangle rectLargeArea = new Rectangle(0, 0, 0, 0);
+                            ExtRect rectLargeArea = new ExtRect(0, 0, 0, 0);
                             largeFilename = CopyMultimedia(mmFilename, largeFilename, 0, 0, ref rectLargeArea, null);
                         }
 
@@ -124,7 +126,9 @@ namespace GEDmill.HTML
             }
         }
 
-        // Adds an HTML page footer (Record date, W3C sticker, GEDmill credit etc.)
+        /// <summary>
+        /// Adds an HTML page footer (Record date, W3C sticker, GEDmill credit etc.)
+        /// </summary>
         protected void OutputFooter(HTMLFile f, GDMRecord r)
         {
             f.WriteLine("      <div id=\"footer\">");
@@ -166,7 +170,9 @@ namespace GEDmill.HTML
             f.WriteLine("<p class=\"plain\">{0} {1}</p>", fLangMan.LS(PLS.LSID_PageCreatedUsingGEDmill), GMConfig.SoftwareVersion);
         }
 
-        // Outputs the HTML for the Notes section of the page
+        /// <summary>
+        /// Outputs the HTML for the Notes section of the page
+        /// </summary>
         protected void OutputNotes(HTMLFile f, GDMList<GDMNotes> notes)
         {
             if (notes.Count > 0) {

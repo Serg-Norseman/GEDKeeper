@@ -27,7 +27,7 @@ using GKCore.Logging;
 namespace GEDmill.HTML
 {
     /// <summary>
-    /// Creates the HTML for a source record page
+    /// Creates the HTML for a source record page.
     /// </summary>
     public class CreatorRecordSource : CreatorRecord
     {
@@ -42,7 +42,9 @@ namespace GEDmill.HTML
             fSourceRecord = sr;
         }
 
-        // The main method that causes the page to be created.
+        /// <summary>
+        /// The main method that causes the page to be created.
+        /// </summary>
         public bool Create(Stats stats)
         {
             // Sanity check
@@ -193,7 +195,9 @@ namespace GEDmill.HTML
             return true;
         }
 
-        // Writes the HTML for the multimedia files associated with this record. 
+        /// <summary>
+        /// Writes the HTML for the multimedia files associated with this record. 
+        /// </summary>
         private void OutputMultimedia(HTMLFile f)
         {
             if (fMultimediaList.Count > 0) {

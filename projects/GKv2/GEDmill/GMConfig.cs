@@ -92,9 +92,6 @@ namespace GEDmill
         // Filename of front webpage.
         public string FrontPageFilename;
 
-        // Number of spaces between each tab stop, when converting \t characters to html.
-        public int TabSpaces;
-
         // True if event descriptions to start with capital letter, e.g. "Born" as opposed to "born".
         public bool CapitaliseEventDescriptions;
 
@@ -146,35 +143,35 @@ namespace GEDmill
         // True to generate a separate html page for each letter of names index. Useful if index would otherwise be massive.
         public bool IndexLetterPerPage;
 
-        // HTML string representing colour to draw connecting lines in mini trees
-        public Color MiniTreeColourBranch;
+        // HTML string representing color to draw connecting lines in mini trees
+        public Color MiniTreeColorBranch;
 
-        // HTML string representing colour to draw outline of individual boxes in mini trees
-        public Color MiniTreeColourIndiBorder;
+        // HTML string representing color to draw outline of individual boxes in mini trees
+        public Color MiniTreeColorIndiBorder;
 
-        // HTML string representing colour to fill normal individual boxes in mini trees
-        public Color MiniTreeColourIndiBackground;
+        // HTML string representing color to fill normal individual boxes in mini trees
+        public Color MiniTreeColorIndiBackground;
 
-        // HTML string representing colour to fill selected individual boxes in mini trees
-        public Color MiniTreeColourIndiHighlight;
+        // HTML string representing color to fill selected individual boxes in mini trees
+        public Color MiniTreeColorIndiHighlight;
 
-        // HTML string representing colour to fill boxes for individuals marked as concealed in mini trees.
-        public Color MiniTreeColourIndiBgConcealed;
+        // HTML string representing color to fill boxes for individuals marked as concealed in mini trees.
+        public Color MiniTreeColorIndiBgConcealed;
 
-        // HTML string representing colour to write text for individuals marked as concealed in mini trees.
-        public Color MiniTreeColourIndiFgConcealed;
+        // HTML string representing color to write text for individuals marked as concealed in mini trees.
+        public Color MiniTreeColorIndiFgConcealed;
 
-        // HTML string representing colour to fill shaded individual boxes in mini trees
-        public Color MiniTreeColourIndiShade;
+        // HTML string representing color to fill shaded individual boxes in mini trees
+        public Color MiniTreeColorIndiShade;
 
-        // HTML string representing colour to draw text in individual boxes in mini trees
-        public Color MiniTreeColourIndiText;
+        // HTML string representing color to draw text in individual boxes in mini trees
+        public Color MiniTreeColorIndiText;
 
-        // HTML string representing colour to draw linkable text in individual boxes in mini trees
-        public Color MiniTreeColourIndiLink;
+        // HTML string representing color to draw linkable text in individual boxes in mini trees
+        public Color MiniTreeColorIndiLink;
 
-        // HTML string representing colour to fill entire background of mini tree diagrams
-        public Color MiniTreeColourBackground;
+        // HTML string representing color to fill entire background of mini tree diagrams
+        public Color MiniTreeColorBackground;
 
         // Whether to restrict records with RESN set to confidential
         public bool RestrictConfidential;
@@ -254,9 +251,6 @@ namespace GEDmill
         // Optional text user can have displayed in each page footer.
         public string CustomFooter;
 
-        // If true, the user's custom individual reference number will appear in the index.
-        public bool IncludeUserRefInIndex;
-
         // If true, include the individuals (most appropriate, best) occupation in page header.
         public bool OccupationHeadline;
 
@@ -266,9 +260,6 @@ namespace GEDmill
         // True indicates that text in Footer box (settings pane) should not be escaped. (i.e. HTML is preserved)
         public bool FooterIsHtml;
 
-        // True means when naming html files, to use user record number if present for sFilename.
-        public bool UserRecFilename;
-
         // If false, doesn't include the navigation bar at the top of each page.
         public bool IncludeNavbar;
 
@@ -277,9 +268,6 @@ namespace GEDmill
 
         // If true, first names are put on a different line to surnames in minitree individual boxes.
         public bool ConserveTreeWidth;
-
-        // If true, the mini tree has siblings of the selected individuals ordered as they are in the GEDCOM. False means sort them by date. Significant when some siblings have no recorded birth date
-        public bool KeepSiblingOrder;
 
         // If false, no multimedia pics, images, files etc. will appear in HTML.
         public bool AllowMultimedia;
@@ -342,7 +330,6 @@ namespace GEDmill
             MaxThumbnailImageWidth = 45;
             MaxThumbnailImageHeight = 45;
             FirstRecordXRef = "";
-            TabSpaces = 8;
             PlaceWord = langMan.LS(PLS.LSID_PlaceWord);
             CapitaliseEventDescriptions = true;
             RestrictAssociatedSources = true;
@@ -360,16 +347,16 @@ namespace GEDmill
             TreeFontName = "Arial";
             TreeFontSize = 8.0f;
             TargetTreeWidth = 800;
-            MiniTreeColourBranch = ConvertColour("#000000");
-            MiniTreeColourIndiBorder = ConvertColour("#000000");
-            MiniTreeColourIndiBackground = ConvertColour("#ffffd2");
-            MiniTreeColourIndiHighlight = ConvertColour("#ffffff");
-            MiniTreeColourIndiBgConcealed = ConvertColour("#cccccc");
-            MiniTreeColourIndiFgConcealed = ConvertColour("#000000");
-            MiniTreeColourIndiShade = ConvertColour("#ffffd2");
-            MiniTreeColourIndiText = ConvertColour("#000000");
-            MiniTreeColourIndiLink = ConvertColour("#3333ff");
-            MiniTreeColourBackground = ConvertColour("#aaaaaa");
+            MiniTreeColorBranch = ConvertColor("#000000");
+            MiniTreeColorIndiBorder = ConvertColor("#000000");
+            MiniTreeColorIndiBackground = ConvertColor("#ffffd2");
+            MiniTreeColorIndiHighlight = ConvertColor("#ffffff");
+            MiniTreeColorIndiBgConcealed = ConvertColor("#cccccc");
+            MiniTreeColorIndiFgConcealed = ConvertColor("#000000");
+            MiniTreeColorIndiShade = ConvertColor("#ffffd2");
+            MiniTreeColorIndiText = ConvertColor("#000000");
+            MiniTreeColorIndiLink = ConvertColor("#3333ff");
+            MiniTreeColorBackground = ConvertColor("#aaaaaa");
             FakeMiniTreeTransparency = false;
             ShowMiniTrees = true;
             UserEmailAddress = "";
@@ -391,15 +378,12 @@ namespace GEDmill
             AddHomePageCreateTime = true;
             IncludeNickNamesInIndex = true;
             CustomFooter = "";
-            IncludeUserRefInIndex = false;
             OccupationHeadline = true;
             CommentaryIsHtml = false;
             FooterIsHtml = false;
-            UserRecFilename = false;
             IncludeNavbar = true;
             UseWithheldNames = false;
             ConserveTreeWidth = false;
-            KeepSiblingOrder = false;
             AllowMultimedia = true;
             SupressBackreferences = false;
         }
@@ -430,25 +414,24 @@ namespace GEDmill
                     FirstRecordXRef = ini.ReadString("Common", "FirstRecordXRef", "");
                     SiteTitle = ini.ReadString("Common", "SiteTitle", fLangMan.LS(PLS.LSID_SiteTitle));
                     FrontPageImageFilename = ini.ReadString("Common", "FrontPageImageFilename", FrontPageImageFilename);
-                    TabSpaces = ini.ReadInteger("Common", "TabSpaces", 8);
                     PlaceWord = ini.ReadString("Common", "PlaceWord", fLangMan.LS(PLS.LSID_PlaceWord));
                     CapitaliseEventDescriptions = ini.ReadBool("Common", "CapitaliseEventDescriptions", true);
                     RestrictAssociatedSources = ini.ReadBool("Common", "RestrictAssociatedSources", true);
                     RenameMultimedia = ini.ReadBool("Common", "RenameMultimedia", true);
                     IndexLetterPerPage = ini.ReadBool("Common", "IndexLetterPerPage", false);
-                    MiniTreeColourBranch = ConvertColour(ini.ReadString("Common", "MiniTreeColourBranch", "#000000"));
-                    MiniTreeColourIndiBorder = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiBorder", "#000000"));
-                    MiniTreeColourIndiBackground = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiBackground", "#ffffd2"));
-                    MiniTreeColourIndiHighlight = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiHighlight", "#ffffff"));
-                    MiniTreeColourIndiShade = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiShade", "#ffffd2"));
+                    MiniTreeColorBranch = ConvertColor(ini.ReadString("Common", "MiniTreeColorBranch", "#000000"));
+                    MiniTreeColorIndiBorder = ConvertColor(ini.ReadString("Common", "MiniTreeColorIndiBorder", "#000000"));
+                    MiniTreeColorIndiBackground = ConvertColor(ini.ReadString("Common", "MiniTreeColorIndiBackground", "#ffffd2"));
+                    MiniTreeColorIndiHighlight = ConvertColor(ini.ReadString("Common", "MiniTreeColorIndiHighlight", "#ffffff"));
+                    MiniTreeColorIndiShade = ConvertColor(ini.ReadString("Common", "MiniTreeColorIndiShade", "#ffffd2"));
                     ShowFrontPageStats = ini.ReadBool("Common", "ShowFrontPageStats", true);
                     CommentaryText = ini.ReadString("Common", "CommentaryText", "");
                     TreeFontName = ini.ReadString("Common", "TreeFontName", "Arial");
                     TreeFontSize = (float)ini.ReadFloat("Common", "TreeFontSize", 8.0f);
                     TargetTreeWidth = ini.ReadInteger("Common", "TargetTreeWidth", 800);
-                    MiniTreeColourIndiText = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiText", "#000000"));
-                    MiniTreeColourIndiLink = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiLink", "#3333ff"));
-                    MiniTreeColourBackground = ConvertColour(ini.ReadString("Common", "MiniTreeColourBackground", "#aaaaaa"));
+                    MiniTreeColorIndiText = ConvertColor(ini.ReadString("Common", "MiniTreeColorIndiText", "#000000"));
+                    MiniTreeColorIndiLink = ConvertColor(ini.ReadString("Common", "MiniTreeColorIndiLink", "#3333ff"));
+                    MiniTreeColorBackground = ConvertColor(ini.ReadString("Common", "MiniTreeColorBackground", "#aaaaaa"));
                     ShowMiniTrees = ini.ReadBool("Common", "ShowMiniTrees", true);
                     UserEmailAddress = ini.ReadString("Common", "UserEmailAddress", "");
                     FakeMiniTreeTransparency = ini.ReadBool("Common", "FakeMiniTreeTransparency", false);
@@ -469,10 +452,10 @@ namespace GEDmill
                     MaxThumbnailImageWidth = ini.ReadInteger("Common", "MaxThumbnailImageWidth", 45);
                     MaxThumbnailImageHeight = ini.ReadInteger("Common", "MaxThumbnailImageHeight", 45);
                     MainWebsiteLink = ini.ReadString("Common", "MainWebsiteLink", "");
-                    MiniTreeColourIndiBgConcealed = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiBgConcealed", "#cccccc"));
+                    MiniTreeColorIndiBgConcealed = ConvertColor(ini.ReadString("Common", "MiniTreeColorIndiBgConcealed", "#cccccc"));
                     OnlyConceal = ini.ReadBool("Common", "OnlyConceal", false);
                     ConcealedName = ini.ReadString("Common", "ConcealedName", fLangMan.LS(PLS.LSID_ConcealedName));
-                    MiniTreeColourIndiFgConcealed = ConvertColour(ini.ReadString("Common", "MiniTreeColourIndiFgConcealed", "#000000"));
+                    MiniTreeColorIndiFgConcealed = ConvertColor(ini.ReadString("Common", "MiniTreeColorIndiFgConcealed", "#000000"));
                     LinkOriginalPicture = ini.ReadBool("Common", "LinkOriginalPicture", false);
                     RenameOriginalPicture = ini.ReadBool("Common", "RenameOriginalPicture", false);
                     ExcludeFileDir = ini.ReadString("Common", "ExcludeFileDir", "");
@@ -481,17 +464,14 @@ namespace GEDmill
                     AddHomePageCreateTime = ini.ReadBool("Common", "AddHomePageCreateTime", true);
                     IncludeNickNamesInIndex = ini.ReadBool("Common", "IncludeNickNamesInIndex", true);
                     CustomFooter = ini.ReadString("Common", "CustomFooter", "");
-                    IncludeUserRefInIndex = ini.ReadBool("Common", "IncludeUserRefInIndex", false);
                     OccupationHeadline = ini.ReadBool("Common", "OccupationHeadline", true);
                     CommentaryIsHtml = ini.ReadBool("Common", "CommentaryIsHtml", false);
                     FooterIsHtml = ini.ReadBool("Common", "FooterIsHtml", false);
-                    UserRecFilename = ini.ReadBool("Common", "UserRecFilename", false);
                     IncludeNavbar = ini.ReadBool("Common", "IncludeNavbar", true);
                     UseWithheldNames = ini.ReadBool("Common", "UseWithheldNames", false);
                     ConserveTreeWidth = ini.ReadBool("Common", "ConserveTreeWidth", false);
                     AllowMultimedia = ini.ReadBool("Common", "AllowMultimedia", true);
                     SupressBackreferences = ini.ReadBool("Common", "SupressBackreferences", false);
-                    KeepSiblingOrder = ini.ReadBool("Common", "KeepSiblingOrder", false);
                 }
             } catch (Exception ex) {
                 fLogger.WriteError("GMConfig.Load()", ex);
@@ -524,25 +504,24 @@ namespace GEDmill
                     ini.WriteString("Common", "FirstRecordXRef", FirstRecordXRef);
                     ini.WriteString("Common", "SiteTitle", SiteTitle);
                     ini.WriteString("Common", "FrontPageImageFilename", FrontPageImageFilename);
-                    ini.WriteInteger("Common", "TabSpaces", TabSpaces);
                     ini.WriteString("Common", "PlaceWord", PlaceWord);
                     ini.WriteBool("Common", "CapitaliseEventDescriptions", CapitaliseEventDescriptions);
                     ini.WriteBool("Common", "RestrictAssociatedSources", RestrictAssociatedSources);
                     ini.WriteBool("Common", "RenameMultimedia", RenameMultimedia);
                     ini.WriteBool("Common", "IndexLetterPerPage", IndexLetterPerPage);
-                    ini.WriteString("Common", "MiniTreeColourBranch", ConvertColour(MiniTreeColourBranch));
-                    ini.WriteString("Common", "MiniTreeColourIndiBorder", ConvertColour(MiniTreeColourIndiBorder));
-                    ini.WriteString("Common", "MiniTreeColourIndiBackground", ConvertColour(MiniTreeColourIndiBackground));
-                    ini.WriteString("Common", "MiniTreeColourIndiHighlight", ConvertColour(MiniTreeColourIndiHighlight));
-                    ini.WriteString("Common", "MiniTreeColourIndiShade", ConvertColour(MiniTreeColourIndiShade));
+                    ini.WriteString("Common", "MiniTreeColorBranch", ConvertColor(MiniTreeColorBranch));
+                    ini.WriteString("Common", "MiniTreeColorIndiBorder", ConvertColor(MiniTreeColorIndiBorder));
+                    ini.WriteString("Common", "MiniTreeColorIndiBackground", ConvertColor(MiniTreeColorIndiBackground));
+                    ini.WriteString("Common", "MiniTreeColorIndiHighlight", ConvertColor(MiniTreeColorIndiHighlight));
+                    ini.WriteString("Common", "MiniTreeColorIndiShade", ConvertColor(MiniTreeColorIndiShade));
                     ini.WriteBool("Common", "ShowFrontPageStats", ShowFrontPageStats);
                     ini.WriteString("Common", "CommentaryText", CommentaryText);
                     ini.WriteString("Common", "TreeFontName", TreeFontName);
                     ini.WriteFloat("Common", "TreeFontSize", TreeFontSize);
                     ini.WriteInteger("Common", "TargetTreeWidth", TargetTreeWidth);
-                    ini.WriteString("Common", "MiniTreeColourIndiText", ConvertColour(MiniTreeColourIndiText));
-                    ini.WriteString("Common", "MiniTreeColourIndiLink", ConvertColour(MiniTreeColourIndiLink));
-                    ini.WriteString("Common", "MiniTreeColourBackground", ConvertColour(MiniTreeColourBackground));
+                    ini.WriteString("Common", "MiniTreeColorIndiText", ConvertColor(MiniTreeColorIndiText));
+                    ini.WriteString("Common", "MiniTreeColorIndiLink", ConvertColor(MiniTreeColorIndiLink));
+                    ini.WriteString("Common", "MiniTreeColorBackground", ConvertColor(MiniTreeColorBackground));
                     ini.WriteBool("Common", "ShowMiniTrees", ShowMiniTrees);
                     ini.WriteString("Common", "UserEmailAddress", UserEmailAddress);
                     ini.WriteBool("Common", "FakeMiniTreeTransparency", FakeMiniTreeTransparency);
@@ -565,10 +544,10 @@ namespace GEDmill
                     ini.WriteInteger("Common", "MaxThumbnailImageWidth", MaxThumbnailImageWidth);
                     ini.WriteInteger("Common", "MaxThumbnailImageHeight", MaxThumbnailImageHeight);
                     ini.WriteString("Common", "MainWebsiteLink", MainWebsiteLink);
-                    ini.WriteString("Common", "MiniTreeColourIndiBgConcealed", ConvertColour(MiniTreeColourIndiBgConcealed));
+                    ini.WriteString("Common", "MiniTreeColorIndiBgConcealed", ConvertColor(MiniTreeColorIndiBgConcealed));
                     ini.WriteBool("Common", "OnlyConceal", OnlyConceal);
                     ini.WriteString("Common", "ConcealedName", ConcealedName);
-                    ini.WriteString("Common", "MiniTreeColourIndiFgConcealed", ConvertColour(MiniTreeColourIndiFgConcealed));
+                    ini.WriteString("Common", "MiniTreeColorIndiFgConcealed", ConvertColor(MiniTreeColorIndiFgConcealed));
                     ini.WriteBool("Common", "LinkOriginalPicture", LinkOriginalPicture);
                     ini.WriteBool("Common", "RenameOriginalPicture", RenameOriginalPicture);
                     ini.WriteString("Common", "ExcludeFileDir", ExcludeFileDir);
@@ -577,17 +556,14 @@ namespace GEDmill
                     ini.WriteBool("Common", "AddHomePageCreateTime", AddHomePageCreateTime);
                     ini.WriteBool("Common", "IncludeNickNamesInIndex", IncludeNickNamesInIndex);
                     ini.WriteString("Common", "CustomFooter", CustomFooter);
-                    ini.WriteBool("Common", "IncludeUserRefInIndex", IncludeUserRefInIndex);
                     ini.WriteBool("Common", "OccupationHeadline", OccupationHeadline);
                     ini.WriteBool("Common", "CommentaryIsHtml", CommentaryIsHtml);
                     ini.WriteBool("Common", "FooterIsHtml", FooterIsHtml);
-                    ini.WriteBool("Common", "UserRecFilename", UserRecFilename);
                     ini.WriteBool("Common", "IncludeNavbar", IncludeNavbar);
                     ini.WriteBool("Common", "UseWithheldNames", UseWithheldNames);
                     ini.WriteBool("Common", "ConserveTreeWidth", ConserveTreeWidth);
                     ini.WriteBool("Common", "AllowMultimedia", AllowMultimedia);
                     ini.WriteBool("Common", "SupressBackreferences", SupressBackreferences);
-                    ini.WriteBool("Common", "KeepSiblingOrder", KeepSiblingOrder);
                 }
             } catch (Exception ex) {
                 fLogger.WriteError("GMConfig.Save()", ex);
@@ -595,8 +571,8 @@ namespace GEDmill
         }
 
         // Converts a string of the form #RRGGBB to a Color instance.
-        // Used when retrieving colours from the config.
-        private static Color ConvertColour(string s)
+        // Used when retrieving colors from the config.
+        private static Color ConvertColor(string s)
         {
             if (string.IsNullOrEmpty(s)) {
                 return Color.Black;
@@ -634,8 +610,8 @@ namespace GEDmill
         }
 
         // Converts a Color instance to a string of the form #RRGGBB.
-        // Used when storing colours in the config.
-        private static string ConvertColour(Color c)
+        // Used when storing colors in the config.
+        private static string ConvertColor(Color c)
         {
             return string.Format("{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
         }

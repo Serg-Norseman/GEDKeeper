@@ -16,8 +16,7 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
-using System.Drawing;
+using BSLib;
 using GDModel;
 
 namespace GEDmill.MiniTree
@@ -27,60 +26,65 @@ namespace GEDmill.MiniTree
     /// Each box consists of text surrouned by PADDING surrouned by a single gedcomLine
     /// BORDER, surrounded by a MARGIN. (Same terminology as CSS box model.)
     /// </summary>
-    public class MiniTreeIndividual : MiniTreeObject
+    public class MTIndividual : MTObject
     {
         // Horizontal padding between boxes
         // Half size because margins don't collapse here
-        private const float MARGIN_HORIZ = 4.0f;
+        public const float MARGIN_HORIZ = 4.0f;
 
         // Vertical padding between boxes
         // Half size because margins don't collapse here
-        private const float MARGIN_VERT = 8.0f;
+        public const float MARGIN_VERT = 8.0f;
 
         // Horizontal padding around the text
-        private const float PADDING_HORIZ = 4.0f;
+        public const float PADDING_HORIZ = 4.0f;
 
         // Vertical padding around the text
-        private const float PADDING_VERT = 4.0f;
+        public const float PADDING_VERT = 4.0f;
+
+        private GDMIndividualRecord fIndiRec;
+        private ExtSizeF fSizeFirstnames;
+        private ExtSizeF fSizeSurname;
+        private ExtSizeF fSizeText;
 
         // The individual that this box represents
-        private GDMIndividualRecord fIndiRec;
+        public GDMIndividualRecord IndiRec { get { return fIndiRec; } }
 
         // Whether this box can be clicked to link to the individual record page
-        private bool fLinkable;
+        public bool Linkable { get; private set; }
 
         // Whether this box has parent boxes in the diagram
-        private bool fChild;
+        public bool Child { get; private set; }
 
         // Whether the box should be painted highlighted
-        private bool fHighlight;
+        public bool Highlight { get; private set; }
 
         // Whether the box is for a concealed record 
-        private bool fConcealed;
+        public bool Concealed { get; private set; }
 
-        // Whether the box should be painted in the shade colour
-        private bool fShade;
+        // Whether the box should be painted in the shade color
+        public bool Shade { get; private set; }
 
         // Text for the first names
-        private string fFirstnames;
+        public string Firstnames { get; private set; }
 
         // Text for the surname
-        private string fSurname;
+        public string Surname { get; private set; }
 
         // Text for the date
-        private string fDate;
+        public string Date { get; private set; }
 
         // Amount of horizontal offset required to put firstnames in centre
-        private float fFirstnamesPad;
+        public float FirstnamesPad { get; private set; }
 
         // Amount of horizontal offset required to put surname in centre
-        private float fSurnamePad;
+        public float SurnamePad { get; private set; }
 
         // Amount of horizontal offset required to put date in centre
-        private float fDatePad;
+        public float DatePad { get; private set; }
 
         // If true, name will be split over 2 lines to make boxes taller and narrower.
-        private bool fConserveWidth;
+        public bool ConserveWidth { get; private set; }
 
         // X coordinate of this box's position in diagram
         private float fX;
@@ -89,25 +93,25 @@ namespace GEDmill.MiniTree
         private float fY;
 
         // Total size of this box
-        private SizeF fSize;
+        private ExtSizeF fSize;
 
         // Total size of rectangular hull containing all the text in the box
-        private SizeF fSizeText;
+        public ExtSizeF SizeText { get { return fSizeText; } }
 
         // Size of the text required by the first names (if the conserve-width option is on)
-        private SizeF fSizeFirstnames;
+        public ExtSizeF SizeFirstnames { get { return fSizeFirstnames; } }
 
         // Size of the text required by the surname (if the conserve-width option is on)
-        private SizeF fSizeSurname;
+        public ExtSizeF SizeSurname { get { return fSizeSurname; } }
 
         // Size of the date text
-        private SizeF fSizeDate;
+        private ExtSizeF fSizeDate;
 
 
         // Accessor for the individual's name
-        private string Name
+        public string Name
         {
-            get { return string.Concat(fFirstnames, " ", fSurname); }
+            get { return string.Concat(Firstnames, " ", Surname); }
         }
 
         // Accessor for left side position of box sArea.
@@ -137,7 +141,7 @@ namespace GEDmill.MiniTree
         // The vertical centre of the box, where the tee gedcomLine between boxes should attach.
         public float TeeCentreVert
         {
-            get { return fY + MARGIN_VERT + (fSizeText.Height / 2f); }
+            get { return fY + MARGIN_VERT + (SizeText.Height / 2f); }
         }
 
         // The left edge of the box, where the tee gedcomLine between boxes should attach.
@@ -162,70 +166,71 @@ namespace GEDmill.MiniTree
         // Returns true if this box needs a gedcomLine drawing up to a parent.
         public bool HasStalk
         {
-            get { return fChild; }
+            get { return Child; }
         }
 
 
-        public MiniTreeIndividual(GDMIndividualRecord ir, string firstNames, string surname, string date,
+        public MTIndividual(TreeDrawer drawer,
+                                  GDMIndividualRecord ir, string firstNames, string surname, string date,
                                   bool createLink, bool createStalk, bool highlight, bool concealed, bool shade,
-                                  bool conserveWidth)
+                                  bool conserveWidth) : base(drawer)
         {
             fIndiRec = ir;
-            fFirstnames = firstNames;
-            fSurname = surname;
-            fDate = date;
-            fLinkable = createLink;
-            fHighlight = highlight;
-            fConcealed = concealed;
-            fChild = createStalk;
-            fShade = shade;
-            fFirstnamesPad = 0f;
-            fSurnamePad = 0f;
-            fDatePad = 0f;
-            fConserveWidth = conserveWidth;
-            fSizeText = new Size();
+            Firstnames = firstNames;
+            Surname = surname;
+            Date = date;
+            Linkable = createLink;
+            Highlight = highlight;
+            Concealed = concealed;
+            Child = createStalk;
+            Shade = shade;
+            FirstnamesPad = 0f;
+            SurnamePad = 0f;
+            DatePad = 0f;
+            ConserveWidth = conserveWidth;
+            fSizeText = new ExtSize();
         }
 
         // Calculates the size required by this box. Initialises the class fields 
         // that contain size information. Returns the overall box size.
-        public override SizeF CalculateSize(Graphics g, Font f)
+        public override ExtSizeF CalculateSize()
         {
-            fSizeDate = g.MeasureString(fDate, f);
-            if (fConserveWidth) {
-                fSizeFirstnames = g.MeasureString(fFirstnames, f);
-                fSizeSurname = g.MeasureString(fSurname, f);
+            fSizeDate = fDrawer.MeasureString(Date);
+            if (ConserveWidth) {
+                fSizeFirstnames = fDrawer.MeasureString(Firstnames);
+                fSizeSurname = fDrawer.MeasureString(Surname);
             } else {
                 fSizeFirstnames.Height = 0;
                 fSizeFirstnames.Width = 0;
-                fSizeSurname = g.MeasureString(Name, f);
+                fSizeSurname = fDrawer.MeasureString(Name);
             }
 
-            if (fSizeFirstnames.Width > fSizeSurname.Width) {
+            if (fSizeFirstnames.Width > SizeSurname.Width) {
                 if (fSizeDate.Width > fSizeFirstnames.Width) {
                     fSizeText.Width = fSizeDate.Width;
-                    fDatePad = 0f;
-                    fFirstnamesPad = (fSizeDate.Width - fSizeFirstnames.Width) / 2f;
-                    fSurnamePad = (fSizeDate.Width - fSizeSurname.Width) / 2f;
+                    DatePad = 0f;
+                    FirstnamesPad = (fSizeDate.Width - fSizeFirstnames.Width) / 2f;
+                    SurnamePad = (fSizeDate.Width - SizeSurname.Width) / 2f;
                 } else {
                     fSizeText.Width = fSizeFirstnames.Width;
-                    fDatePad = (fSizeFirstnames.Width - fSizeDate.Width) / 2f;
-                    fFirstnamesPad = 0f;
-                    fSurnamePad = (fSizeFirstnames.Width - fSizeSurname.Width) / 2f;
+                    DatePad = (fSizeFirstnames.Width - fSizeDate.Width) / 2f;
+                    FirstnamesPad = 0f;
+                    SurnamePad = (fSizeFirstnames.Width - SizeSurname.Width) / 2f;
                 }
             } else {
-                if (fSizeDate.Width > fSizeSurname.Width) {
+                if (fSizeDate.Width > SizeSurname.Width) {
                     fSizeText.Width = fSizeDate.Width;
-                    fDatePad = 0f;
-                    fFirstnamesPad = (fSizeDate.Width - fSizeFirstnames.Width) / 2f;
-                    fSurnamePad = (fSizeDate.Width - fSizeSurname.Width) / 2f;
+                    DatePad = 0f;
+                    FirstnamesPad = (fSizeDate.Width - fSizeFirstnames.Width) / 2f;
+                    SurnamePad = (fSizeDate.Width - SizeSurname.Width) / 2f;
                 } else {
-                    fSizeText.Width = fSizeSurname.Width;
-                    fDatePad = (fSizeSurname.Width - fSizeDate.Width) / 2f;
-                    fFirstnamesPad = (fSizeSurname.Width - fSizeFirstnames.Width) / 2f;
-                    fSurnamePad = 0f;
+                    fSizeText.Width = SizeSurname.Width;
+                    DatePad = (SizeSurname.Width - fSizeDate.Width) / 2f;
+                    FirstnamesPad = (SizeSurname.Width - fSizeFirstnames.Width) / 2f;
+                    SurnamePad = 0f;
                 }
             }
-            fSizeText.Height = fSizeFirstnames.Height + fSizeSurname.Height + fSizeDate.Height;
+            fSizeText.Height = fSizeFirstnames.Height + SizeSurname.Height + fSizeDate.Height;
 
             fSizeText.Width += PADDING_HORIZ * 2f;
             fSizeText.Height += PADDING_VERT * 2f;
@@ -237,60 +242,9 @@ namespace GEDmill.MiniTree
             return fSize;
         }
 
-        // Draws the actual box, and adds the region of the box to the image alMap list.
-        public override void DrawBitmap(Paintbox paintbox, Graphics g, List<MiniTreeMap> map)
-        {
-            SolidBrush solidbrushBg, solidbrushText;
-
-            if (fConcealed) {
-                solidbrushBg = paintbox.BrushBoxConcealed;
-            } else if (fHighlight) {
-                solidbrushBg = paintbox.BrushBoxHighlight;
-            } else if (fShade) {
-                solidbrushBg = paintbox.BrushBoxShade;
-            } else {
-                solidbrushBg = paintbox.BrushBox;
-            }
-
-            if (fLinkable) {
-                solidbrushText = paintbox.BrushTextLink;
-            } else if (fConcealed) {
-                solidbrushText = paintbox.BrushTextConcealed;
-            } else {
-                solidbrushText = paintbox.BrushText;
-            }
-
-            g.FillRectangle(solidbrushBg, fX + MARGIN_HORIZ, fY + MARGIN_VERT, fSizeText.Width, fSizeText.Height - 1f);
-            g.DrawRectangle(paintbox.PenBox, fX + MARGIN_HORIZ, fY + MARGIN_VERT, fSizeText.Width, fSizeText.Height - 1f);
-
-            float fTextX = fX + MARGIN_HORIZ + PADDING_HORIZ;
-            float fTextY = fY + MARGIN_VERT + PADDING_VERT;
-            if (fConserveWidth) {
-                g.DrawString(fFirstnames, paintbox.Font, solidbrushText, fTextX + fFirstnamesPad, fTextY);
-                fTextY += fSizeFirstnames.Height;
-                g.DrawString(fSurname, paintbox.Font, solidbrushText, fTextX + fSurnamePad, fTextY);
-                fTextY += fSizeSurname.Height;
-            } else {
-                g.DrawString(Name, paintbox.Font, solidbrushText, fTextX + fSurnamePad, fTextY);
-                fTextY += fSizeSurname.Height;
-            }
-
-            g.DrawString(fDate, paintbox.Font, solidbrushText, fTextX + fDatePad, fTextY);
-
-            if (fChild) {
-                g.DrawLine(paintbox.PenConnector, fX + MARGIN_HORIZ + (fSizeText.Width / 2f), fY, fX + MARGIN_HORIZ + (fSizeText.Width / 2f), fY + MARGIN_VERT/* -1f*/ );
-            }
-
-            if (fIndiRec != null) {
-                map.Add(new MiniTreeMap(Name, fIndiRec, fLinkable,
-                    (int)(fX + MARGIN_HORIZ), (int)(fY + MARGIN_VERT),
-                    (int)(fX + MARGIN_HORIZ + fSizeText.Width), (int)(fY + MARGIN_VERT + fSizeText.Height - 1f)));
-            }
-        }
-
         // Sets the location of this box. Size should have already been
         // calculated by now.
-        public override SizeF CalculateLayout(float x, float y)
+        public override ExtSizeF CalculateLayout(float x, float y)
         {
             fX = x;
             fY = y;
@@ -304,7 +258,7 @@ namespace GEDmill.MiniTree
         public override float PullLeft(float amount)
         {
             if (RightObject != null) {
-                if (RightObject is MiniTreeGroup) {
+                if (RightObject is MTGroup) {
                     // Groups are stretchy so we can ignore if they get stuck (and hence reduce 'amount')
                     RightObject.PullLeft(amount);
                 } else {
@@ -328,7 +282,7 @@ namespace GEDmill.MiniTree
         public override float PullRight(float amount)
         {
             if (LeftObject != null) {
-                if (LeftObject is MiniTreeGroup) {
+                if (LeftObject is MTGroup) {
                     // Groups are stretchy so we can ignore if they 
                     // get stuck( and hence reduce 'amount')
                     LeftObject.PullRight(amount);
@@ -354,9 +308,9 @@ namespace GEDmill.MiniTree
             if (LeftObject != null) {
                 amount = LeftObject.PushLeft(amount);
             } else if (LeftObjectAlien != null) {
-                if (LeftObjectAlien is MiniTreeIndividual) {
+                if (LeftObjectAlien is MTIndividual) {
                     // Push left until hit alien object
-                    float distance = Left - ((MiniTreeIndividual)LeftObjectAlien).Right;
+                    float distance = Left - ((MTIndividual)LeftObjectAlien).Right;
                     if (distance < amount) {
                         amount = distance;
                     }
@@ -380,9 +334,9 @@ namespace GEDmill.MiniTree
             if (RightObject != null) {
                 amount = RightObject.PushRight(amount);
             } else if (RightObjectAlien != null) {
-                if (RightObjectAlien is MiniTreeIndividual) {
+                if (RightObjectAlien is MTIndividual) {
                     // Push right until hit alien object
-                    float distance = ((MiniTreeIndividual)RightObjectAlien).Left - Right;
+                    float distance = ((MTIndividual)RightObjectAlien).Left - Right;
                     if (distance < amount) {
                         amount = distance;
                     }
