@@ -24,6 +24,9 @@ namespace GKCore.Export
 {
 #if !NETSTANDARD
     using ExcelLibrary.SpreadSheet;
+#else
+    using SwiftExcel;
+#endif
 
     /// <summary>
     /// 
@@ -33,12 +36,31 @@ namespace GKCore.Export
         private int fColumnsCount;
         private int fTableCol;
         private int fTableRow;
-        private Workbook fWorkbook;
-        private Worksheet fWorksheet;
 
         public XLSWriter()
         {
         }
+
+        public override void BeginTable(int columnsCount, int rowsCount)
+        {
+            fColumnsCount = columnsCount;
+            fTableRow = 1;
+            fTableCol = 1;
+        }
+
+        private void NextCellAndCheckEOL()
+        {
+            fTableCol += 1;
+            if (fTableCol > fColumnsCount) {
+                fTableRow += 1;
+                fTableCol = 1;
+            }
+        }
+
+#if !NETSTANDARD
+
+        private Workbook fWorkbook;
+        private Worksheet fWorksheet;
 
         public override void BeginWrite()
         {
@@ -52,42 +74,17 @@ namespace GKCore.Export
             fWorkbook.Save(fFileName);
         }
 
-        public override void BeginTable(int columnsCount, int rowsCount)
-        {
-            fColumnsCount = columnsCount;
-            fTableRow = 1;
-            fTableCol = 1;
-        }
-
         public override void AddTableCell(string content, IFont font = null, TextAlignment alignment = TextAlignment.taLeft)
         {
             if (!string.IsNullOrEmpty(content)) {
                 fWorksheet.Cells[fTableRow, fTableCol] = new Cell(content);
             }
-
-            fTableCol += 1;
-            if (fTableCol > fColumnsCount) {
-                fTableRow += 1;
-                fTableCol = 1;
-            }
+            NextCellAndCheckEOL();
         }
-    }
+
 #else
-    using SwiftExcel;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class XLSWriter : TableWriter
-    {
-        private int fColumnsCount;
-        private int fTableCol;
-        private int fTableRow;
         private ExcelWriter fWorkbook;
-
-        public XLSWriter()
-        {
-        }
 
         public override void BeginWrite()
         {
@@ -99,25 +96,13 @@ namespace GKCore.Export
             fWorkbook.Save();
         }
 
-        public override void BeginTable(int columnsCount, int rowsCount)
-        {
-            fColumnsCount = columnsCount;
-            fTableRow = 1;
-            fTableCol = 1;
-        }
-
         public override void AddTableCell(string content, IFont font = null, TextAlignment alignment = TextAlignment.taLeft)
         {
             if (!string.IsNullOrEmpty(content)) {
                 fWorkbook.Write(content, fTableCol, fTableRow);
             }
-
-            fTableCol += 1;
-            if (fTableCol > fColumnsCount) {
-                fTableRow += 1;
-                fTableCol = 1;
-            }
+            NextCellAndCheckEOL();
         }
-    }
 #endif
+    }
 }

@@ -27,7 +27,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NavigatorData.cs" />
     <Compile Include="NavigatorWidget.cs">
       <SubType>Form</SubType>
     </Compile>

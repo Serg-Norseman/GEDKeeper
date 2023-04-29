@@ -130,11 +130,19 @@ namespace GKTextSearchPlugin
             string baseID = GetBaseID(baseWin);
 
             var lnDoc = new Document();
+#if !LUC48
             lnDoc.Add(new Field(FIELD_XREF, rec.XRef, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
             lnDoc.Add(new Field(FIELD_UID, rec.UID, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
             lnDoc.Add(new Field(FIELD_TS, recLastchange, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
             lnDoc.Add(new Field(FIELD_DB, baseID, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
             lnDoc.Add(new Field(FIELD_TEXT, ctx.Text, Field.Store.YES, Field.Index.ANALYZED));
+#else
+            lnDoc.Add(new StringField(FIELD_XREF, rec.XRef, Field.Store.YES));
+            lnDoc.Add(new StringField(FIELD_UID, rec.UID, Field.Store.YES));
+            lnDoc.Add(new StringField(FIELD_TS, recLastchange, Field.Store.YES));
+            lnDoc.Add(new StringField(FIELD_DB, baseID, Field.Store.YES));
+            lnDoc.Add(new TextField(FIELD_TEXT, ctx.Text, Field.Store.YES));
+#endif
             return lnDoc;
         }
 

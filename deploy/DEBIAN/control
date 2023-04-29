@@ -1,11 +1,11 @@
 Package: gedkeeper
-Version: 3.1.0-1
+Version: 3.2.0-1
 Architecture: all
-Depends: mono-complete (>=5.12), sqlite3
+Depends: sqlite3
 Maintainer: Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
 Homepage: https://gedkeeper.github.io/
 Origin: https://github.com/serg-norseman/gedkeeper
-Installed-Size: 32400
+Installed-Size: 156312
 Section: misc
 Priority: optional
 Description: GEDKeeper

@@ -62,7 +62,7 @@ namespace GKUI.Components
         public static ExtRect NormalizeFormRect(ExtRect winRect)
         {
             // Travis CI does not have access to UI and tests aren't performed.
-            #if !CI_MODE
+#if !CI_MODE
 
             //------------------------------------------------------------------
             // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
@@ -88,7 +88,7 @@ namespace GKUI.Components
                 winRect.Bottom = winRect.Top + height - 1;
             }
 
-            #endif
+#endif
 
             return winRect;
         }

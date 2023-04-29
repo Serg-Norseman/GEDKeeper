@@ -70,24 +70,25 @@ namespace GDModel.Providers.GEDCOM
         {
         }
 
-        #if !NETSTANDARD1_6
         public override string BodyName
         {
             get { return "ansel"; }
         }
+
         public override string HeaderName
         {
             get { return "ansel"; }
         }
+
         public override bool IsMailNewsDisplay
         {
             get { return false; }
         }
+
         public override bool IsMailNewsSave
         {
             get { return false; }
         }
-        #endif
 
         public override string WebName
         {

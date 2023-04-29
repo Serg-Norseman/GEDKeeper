@@ -2,7 +2,7 @@
 %define	        summary GEDKeeper - program for work with personal genealogical database
 
 Name:		gedkeeper
-Version:	3.1.0
+Version:	3.2.0
 Release:	1
 Summary:	%{summary}
 License:	GPLv3
@@ -11,10 +11,10 @@ Url:		https://github.com/serg-norseman/gedkeeper
 Source:         %{name}-%{version}.tar.gz
 BuildArch:	x86_64
 
-Requires:	mono-core
-Requires:	mono-data
-Requires:	mono-winforms
-Requires:	lua
+#Requires:	mono-core
+#Requires:	mono-data
+#Requires:	mono-winforms
+#Requires:	lua
 Requires:	sqlite
 
 AutoReq:	no
@@ -55,5 +55,5 @@ cp -r bin \
 rm -rf %{buildroot}%{_libdir}/%{name}/scripts/readme.txt
 
 %changelog
-* Apr 14 2023 GEDKeeper - 3.1.0
+* Apr 28 2023 GEDKeeper - 3.2.0
 - New upstream release

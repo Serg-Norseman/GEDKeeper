@@ -49,6 +49,7 @@
                     <TextBox x:Name="txtNameSuffix" Width="180" KeyDown="txtXName_KeyDown" />
                   </StackLayout>
                   <StackLayout Spacing="2" TabIndex="10">
+                    <Label x:Name="dummy1">   </Label>
                     <CheckBox x:Name="chkBookmark" />
                   </StackLayout>
                 </TableRow>
@@ -63,6 +64,7 @@
                     <TextBox x:Name="txtNickname" Width="180" KeyDown="txtXName_KeyDown" />
                   </StackLayout>
                   <StackLayout Spacing="2" TabIndex="11">
+                    <Label x:Name="dummy2">   </Label>
                     <CheckBox x:Name="chkPatriarch" />
                   </StackLayout>
                 </TableRow>
@@ -70,9 +72,11 @@
             </TableCell>
 
             <TableCell>
-              <TableLayout x:Name="portraitLayout" Spacing="0, 4">
+              <TableLayout Spacing="4, 4">
                 <TableRow ScaleHeight="True">
-                  <comcom:GKPortrait x:Name="imgPortrait" Size="140, 160" />
+                  <Scrollable Border="Bezel">
+                    <comcom:GKPortrait x:Name="imgPortrait" Size="140, 160" />
+                  </Scrollable>
                 </TableRow>
                 <TableRow>
                   <StackLayout Orientation="Horizontal" Spacing="4">

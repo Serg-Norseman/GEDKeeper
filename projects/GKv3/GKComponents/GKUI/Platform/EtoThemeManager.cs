@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma warning disable CS0618
+
 using System;
 using System.Collections.Generic;
 using Eto.Drawing;
@@ -343,9 +345,9 @@ namespace GKUI.Themes
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        private static void ThemeNumericUpDownHandler(IThemedView view, IDisposable component, Theme theme)
+        private static void ThemeNumericStepperHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            var ctl = (NumericUpDown)component;
+            var ctl = (NumericStepper)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
         }
@@ -524,7 +526,7 @@ namespace GKUI.Themes
             //RegisterControlHandler(typeof(ListView), ThemeListViewHandler);             // ?
             RegisterControlHandler(typeof(MaskedTextBox), ThemeTextBoxHandler);         // ?
             RegisterControlHandler(typeof(MenuBar), ThemeToolStripHandler);           // ?
-            RegisterControlHandler(typeof(NumericUpDown), ThemeNumericUpDownHandler);   // ?
+            RegisterControlHandler(typeof(NumericStepper), ThemeNumericStepperHandler);   // ?
             RegisterControlHandler(typeof(Panel), ThemePanelHandler);                   // ?
             RegisterControlHandler(typeof(Eto.Forms.ImageView), ThemePictureBoxHandler);         // ?
             RegisterControlHandler(typeof(ProgressBar), ThemeProgressBarHandler);       // ?

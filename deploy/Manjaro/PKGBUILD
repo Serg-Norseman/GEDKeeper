@@ -1,13 +1,13 @@
 # Maintainer: Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
 
 pkgname=gedkeeper
-pkgver=3.1.0
+pkgver=3.2.0
 pkgrel=1
 pkgdesc="Personal genealogical database editor"
 arch=('x86_64')
 url="https://github.com/serg-norseman/gedkeeper"
 license=('GPLv3')
-depends=('mono' 'sqlite3')
+depends=('sqlite3')
 
 package() {
 	cp -r * $pkgdir

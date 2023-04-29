@@ -69,7 +69,7 @@ namespace GKCore.Controllers
                 fSourceRecord.Originator.Clear();
                 fSourceRecord.SetOriginatorArray(fView.Author.Lines);
                 fSourceRecord.Title.Clear();
-                fSourceRecord.SetTitleArray(fView.Title.Lines);
+                fSourceRecord.SetTitleArray(fView.DescTitle.Lines);
                 fSourceRecord.Publication.Clear();
                 fSourceRecord.SetPublicationArray(fView.Publication.Lines);
                 fSourceRecord.Text.Clear();
@@ -90,7 +90,7 @@ namespace GKCore.Controllers
         {
             fView.ShortTitle.Text = fSourceRecord.ShortTitle;
             fView.Author.Text = fSourceRecord.Originator.Lines.Text.Trim();
-            fView.Title.Text = fSourceRecord.Title.Lines.Text.Trim();
+            fView.DescTitle.Text = fSourceRecord.Title.Lines.Text.Trim();
             fView.Publication.Text = fSourceRecord.Publication.Lines.Text.Trim();
             fView.Text.Text = fSourceRecord.Text.Lines.Text.Trim();
 

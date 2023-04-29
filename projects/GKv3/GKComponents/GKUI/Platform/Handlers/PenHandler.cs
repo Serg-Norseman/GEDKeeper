@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma warning disable CS0618
+
 using BSLib;
 using Eto.Drawing;
 using GKCore.Design.Graphics;

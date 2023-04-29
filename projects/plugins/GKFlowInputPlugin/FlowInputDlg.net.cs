@@ -181,9 +181,9 @@ namespace GKFlowInputPlugin
             }
             string eventDate = edEventDate.Text;
 
-            GDMIndividualRecord iMain = null;
+            /*GDMIndividualRecord iMain = null;
 
-            /*int num = dataGridView1.Rows.Count;
+            int num = dataGridView1.Rows.Count;
             for (int r = 0; r < num; r++) {
                 DataGridViewRow row = dataGridView1.Rows[r];
                 string lnk = (string)row.Cells[0].Value;

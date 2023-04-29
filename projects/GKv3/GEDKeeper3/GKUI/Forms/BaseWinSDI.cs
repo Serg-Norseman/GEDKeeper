@@ -330,29 +330,6 @@ namespace GKUI.Forms
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.Key) {
-                    /*case Keys.I:
-						ItemAdd();
-						break;
-					case Keys.D:
-						ItemDelete();
-						break;*/
-
-                case Keys.Enter:
-                    if (e.Control) {
-                        EditRecord();
-                    }
-                    break;
-
-                case Keys.F12:
-                    break;
-
-                    /*case Keys.F:
-        			if (e.Control) {
-        				QuickFind();
-        			}
-        			break;*/
-            }
         }
 
         private void contextMenu_Opening(object sender, EventArgs e)

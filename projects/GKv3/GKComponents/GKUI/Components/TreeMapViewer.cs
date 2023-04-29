@@ -62,7 +62,7 @@ namespace GKUI.Components
     {
         //private readonly ToolTip fToolTip;
 
-        private Bitmap fBackBuffer;
+        //private Bitmap fBackBuffer;
         private Pen fBorderPen;
         private MapItem fCurrentItem;
         private Font fDrawFont;
@@ -214,7 +214,7 @@ namespace GKUI.Components
             fDrawFont = new Font(FontFamilies.SansFamilyName, 9);
 #endif
 
-            fBackBuffer = null;
+            //fBackBuffer = null;
             fBorderPen = new Pen(Colors.Black);
             fHeaderBrush = new SolidBrush(Colors.Black);
             fHighlightColor = Colors.White;
@@ -248,7 +248,7 @@ namespace GKUI.Components
 
                     fModel.CalcLayout(itemsList, new MapRect(0, 0, Width, Height), headerHeight, fItemsPadding);
 
-                    fBackBuffer = null;
+                    //fBackBuffer = null;
                     Invalidate();
                 }
             } catch {

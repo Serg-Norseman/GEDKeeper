@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,25 +18,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Interfaces;
-using GKCore.Lists;
+using System.IO;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
-namespace GKCore.Design.Views
+namespace GKUI.Platform
 {
-    public interface ISourceEditDlg : ICommonDialog, IBaseEditor
+    public static class ImageProcess
     {
-        GDMSourceRecord SourceRecord { get; set; }
-
-        ISheetList NotesList { get; }
-        ISheetList MediaList { get; }
-        ISheetList RepositoriesList { get; }
-
-        ITextBox ShortTitle { get; }
-        ITextBox Author { get; }
-        ITextBox DescTitle { get; }
-        ITextBox Publication { get; }
-        ITextBox Text { get; }
+        public static Stream AutoOrient(Stream inputStream)
+        {
+            var outputStream = new MemoryStream();
+            using (var image = Image.Load(inputStream)) {
+                image.Mutate(x => x.AutoOrient());
+                image.SaveAsBmp(outputStream);
+            }
+            return outputStream;
+        }
     }
 }

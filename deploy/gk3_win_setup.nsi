@@ -3,14 +3,13 @@
 ; This file is part of "GEDKeeper".
 
 !include "MUI2.nsh"
-!include "DotNetChecker.nsh"
-!define MUI_ICON "..\projects\GKv2\GEDKeeper2\GEDKeeper2.ico"
+!define MUI_ICON "..\projects\GKv3\GEDKeeper3\icon_gedkeeper.ico"
 
 
 ;Unicode true
 Name "GEDKeeper"
-OutFile "gedkeeper_2.26.0_win86.exe"
-InstallDir $PROGRAMFILES\GEDKeeper2
+OutFile "gedkeeper_3.2.0_win86.exe"
+InstallDir $PROGRAMFILES\GEDKeeper3
 
 CRCCheck on
 SetCompress auto
@@ -24,7 +23,7 @@ RequestExecutionLevel admin
 
 
 !insertmacro MUI_LANGUAGE "English"
-LangString gkreq ${LANG_ENGLISH} "GEDKeeper2 (required)"
+LangString gkreq ${LANG_ENGLISH} "GEDKeeper3 (required)"
 LangString gkscr ${LANG_ENGLISH} "Script samples"
 LangString gkreg ${LANG_ENGLISH} "System registration"
 LangString gklang ${LANG_ENGLISH} "Languages"
@@ -45,7 +44,7 @@ LangString gkp_navig ${LANG_ENGLISH} "Navigator"
 LangString gk_shellopen ${LANG_ENGLISH} "Open"
 
 !insertmacro MUI_LANGUAGE "Russian"
-LangString gkreq ${LANG_RUSSIAN} "GEDKeeper2 (необходимо)"
+LangString gkreq ${LANG_RUSSIAN} "GEDKeeper3 (необходимо)"
 LangString gkscr ${LANG_RUSSIAN} "Примеры скриптов"
 LangString gkreg ${LANG_RUSSIAN} "Регистрация в системе"
 LangString gklang ${LANG_RUSSIAN} "Языки"
@@ -66,7 +65,7 @@ LangString gkp_navig ${LANG_RUSSIAN} "Навигатор"
 LangString gk_shellopen ${LANG_RUSSIAN} "Открыть"
 
 !insertmacro MUI_LANGUAGE "Ukrainian"
-LangString gkreq ${LANG_UKRAINIAN} "GEDKeeper2 (потрібний)"
+LangString gkreq ${LANG_UKRAINIAN} "GEDKeeper3 (потрібний)"
 LangString gkscr ${LANG_UKRAINIAN} "Приклади скриптів"
 LangString gkreg ${LANG_UKRAINIAN} "Реєстрація в системі"
 LangString gklang ${LANG_UKRAINIAN} "Мови"
@@ -87,7 +86,7 @@ LangString gkp_navig ${LANG_UKRAINIAN} "Навігатор"
 LangString gk_shellopen ${LANG_UKRAINIAN} "Відкрити"
 
 !insertmacro MUI_LANGUAGE "Polish"
-LangString gkreq ${LANG_POLISH} "GEDKeeper2 (właściwy)"
+LangString gkreq ${LANG_POLISH} "GEDKeeper3 (właściwy)"
 LangString gkscr ${LANG_POLISH} "Przykłady skryptów"
 LangString gkreg ${LANG_POLISH} "Rejestracja w systemie"
 LangString gklang ${LANG_POLISH} "Języki"
@@ -108,7 +107,7 @@ LangString gkp_navig ${LANG_POLISH} "Nawigator"
 LangString gk_shellopen ${LANG_POLISH} "Otworz"
 
 !insertmacro MUI_LANGUAGE "French"
-LangString gkreq ${LANG_FRENCH} "GEDKeeper2 (obligatoire)"
+LangString gkreq ${LANG_FRENCH} "GEDKeeper3 (obligatoire)"
 LangString gkscr ${LANG_FRENCH} "Échantillons de script"
 LangString gkreg ${LANG_FRENCH} "Enregistrement du système"
 LangString gklang ${LANG_FRENCH} "Langues"
@@ -129,7 +128,7 @@ LangString gkp_navig ${LANG_FRENCH} "Navigateur"
 LangString gk_shellopen ${LANG_FRENCH} "Ouvrir"
 
 !insertmacro MUI_LANGUAGE "Italian"
-LangString gkreq ${LANG_ITALIAN} "GEDKeeper2 (necessario)"
+LangString gkreq ${LANG_ITALIAN} "GEDKeeper3 (necessario)"
 LangString gkscr ${LANG_ITALIAN} "Esempi di script"
 LangString gkreg ${LANG_ITALIAN} "Registrazione del sistema"
 LangString gklang ${LANG_ITALIAN} "Le lingue"
@@ -150,7 +149,7 @@ LangString gkp_navig ${LANG_ITALIAN} "Navigatore"
 LangString gk_shellopen ${LANG_ITALIAN} "Apri"
 
 !insertmacro MUI_LANGUAGE "German"
-LangString gkreq ${LANG_GERMAN} "GEDKeeper2 (benötigt)"
+LangString gkreq ${LANG_GERMAN} "GEDKeeper3 (benötigt)"
 LangString gkscr ${LANG_GERMAN} "Skript Proben"
 LangString gkreg ${LANG_GERMAN} "Systemregistrierung"
 LangString gklang ${LANG_GERMAN} "Sprachen"
@@ -171,7 +170,7 @@ LangString gkp_navig ${LANG_GERMAN} "Navigator"
 LangString gk_shellopen ${LANG_GERMAN} "Datei öffnen"
 
 !insertmacro MUI_LANGUAGE "SimpChinese"
-LangString gkreq ${LANG_SIMPCHINESE} "GEDKeeper2 (必装)"
+LangString gkreq ${LANG_SIMPCHINESE} "GEDKeeper3 (必装)"
 LangString gkscr ${LANG_SIMPCHINESE} "脚本样例"
 LangString gkreg ${LANG_SIMPCHINESE} "系统注册"
 LangString gklang ${LANG_SIMPCHINESE} "语言"
@@ -192,7 +191,7 @@ LangString gkp_navig ${LANG_SIMPCHINESE} "航海家"
 LangString gk_shellopen ${LANG_SIMPCHINESE} "打开文件"
 
 !insertmacro MUI_LANGUAGE "Czech"
-LangString gkreq ${LANG_CZECH} "GEDKeeper2 (požadováno)"
+LangString gkreq ${LANG_CZECH} "GEDKeeper3 (požadováno)"
 LangString gkscr ${LANG_CZECH} "Vzorky skriptů"
 LangString gkreg ${LANG_CZECH} "Registrace systému"
 LangString gklang ${LANG_CZECH} "Jazyky"
@@ -213,7 +212,7 @@ LangString gkp_navig ${LANG_CZECH} "Navigátor"
 LangString gk_shellopen ${LANG_CZECH} "Otevřete"
 
 !insertmacro MUI_LANGUAGE "Spanish"
-LangString gkreq ${LANG_SPANISH} "GEDKeeper2 (obligatorio)"
+LangString gkreq ${LANG_SPANISH} "GEDKeeper3 (obligatorio)"
 LangString gkscr ${LANG_SPANISH} "Ejemplos de guiones"
 LangString gkreg ${LANG_SPANISH} "Registro del sistema"
 LangString gklang ${LANG_SPANISH} "Idiomas"
@@ -236,7 +235,7 @@ LangString gk_shellopen ${LANG_SPANISH} "Abrir"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
-InstallDirRegKey HKLM "Software\GEDKeeper2" "Install_Dir"
+InstallDirRegKey HKLM "Software\GEDKeeper3" "Install_Dir"
 
 
 ; Pages
@@ -257,36 +256,12 @@ Section "$(gkreq)"
 
     SetOutPath $INSTDIR
 
-    !insertmacro CheckNetFramework 471
+    File "..\LICENSE"
 
     CreateDirectory "$INSTDIR\bin"
     SetOutPath "$INSTDIR\bin"
 
-    File "..\bin\GEDKeeper2.exe"
-    File "..\bin\GEDKeeper2.exe.config"
-    File "..\bin\GKComponents.dll"
-    File "..\bin\GKCore.dll"
-    File "..\bin\GKTray.exe"
-
-    File "..\bin\BSLib.dll"
-    File "..\bin\BSLib.DataViz.Model.dll"
-    File "..\bin\BSLib.DataViz.WFControls.dll"
-    File "..\bin\BSLib.SQLite.dll"
-    File "..\bin\RtfWriter.dll"
-    File "..\bin\ExcelLibrary.dll"
-    File "..\bin\GKMap.Core.dll"
-    File "..\bin\GKMap.WinForms.dll"
-    File "..\bin\itextsharp.dll"
-    File "..\bin\NLua.dll"
-    File "..\bin\KopiLua.dll"
-    File "..\bin\NLog.dll"
-    File "..\bin\nVLC.dll"
-    File "..\bin\UtfUnknown.dll"
-    File "..\bin\YamlDotNet.dll"
-    File "..\bin\Newtonsoft.Json.dll"
-    File "..\bin\ZedGraph.dll"
-
-    File "..\LICENSE"
+    File "..\bin\*.*"
 
     CreateDirectory "$INSTDIR\locales"
     SetOutPath "$INSTDIR\locales"
@@ -310,23 +285,23 @@ Section "$(gkreq)"
     SetOutPath "$INSTDIR\externals"
     File "..\externals\resources.yaml"
 
-    CreateDirectory "$SMPROGRAMS\GEDKeeper2"
+    CreateDirectory "$SMPROGRAMS\GEDKeeper3"
     SetOutPath "$INSTDIR\bin"
-    CreateShortCut "$SMPROGRAMS\GEDKeeper2\GKTray.lnk" "$INSTDIR\bin\GKTray.exe" "" "$INSTDIR\bin\GKTray.exe" 0
-    CreateShortCut "$SMPROGRAMS\GEDKeeper2\GEDKeeper2.lnk" "$INSTDIR\bin\GEDKeeper2.exe" "" "$INSTDIR\bin\GEDKeeper2.exe" 0
-    CreateShortCut "$DESKTOP\GEDKeeper2.lnk" "$INSTDIR\bin\GEDKeeper2.exe" "" "$INSTDIR\bin\GEDKeeper2.exe" 0
+    CreateShortCut "$SMPROGRAMS\GEDKeeper3\GKTray.lnk" "$INSTDIR\bin\GKTray.exe" "" "$INSTDIR\bin\GKTray.exe" 0
+    CreateShortCut "$SMPROGRAMS\GEDKeeper3\GEDKeeper3.lnk" "$INSTDIR\bin\GEDKeeper3.exe" "" "$INSTDIR\bin\GEDKeeper3.exe" 0
+    CreateShortCut "$DESKTOP\GEDKeeper3.lnk" "$INSTDIR\bin\GEDKeeper3.exe" "" "$INSTDIR\bin\GEDKeeper3.exe" 0
 
-    CreateShortCut "$SMPROGRAMS\GEDKeeper2\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+    CreateShortCut "$SMPROGRAMS\GEDKeeper3\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 
     ; Write the installation path into the registry
-    WriteRegStr HKLM SOFTWARE\GEDKeeper2 "Install_Dir" "$INSTDIR"
+    WriteRegStr HKLM SOFTWARE\GEDKeeper3 "Install_Dir" "$INSTDIR"
 
     ; Write the uninstall keys for Windows
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper2" "DisplayName" "GEDKeeper2"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper2" "Publisher" "Sergey V. Zhdanovskih"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper2" "UninstallString" '"$INSTDIR\uninstall.exe"'
-    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper2" "NoModify" 1
-    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper2" "NoRepair" 1
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper3" "DisplayName" "GEDKeeper3"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper3" "Publisher" "Sergey V. Zhdanovskih"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper3" "UninstallString" '"$INSTDIR\uninstall.exe"'
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper3" "NoModify" 1
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper3" "NoRepair" 1
     WriteUninstaller "uninstall.exe"
 SectionEnd
 
@@ -338,15 +313,15 @@ Section "$(gkscr)"
 SectionEnd
 
 Section "$(gkreg)"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper2.exe" "" "$INSTDIR\bin\GEDKeeper2.exe"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper2.exe" "Path" "$INSTDIR\bin"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper3.exe" "" "$INSTDIR\bin\GEDKeeper3.exe"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper3.exe" "Path" "$INSTDIR\bin"
 
     WriteRegStr HKCR ".ged" "" "GEDCOM.File"
     WriteRegStr HKCR "GEDCOM.File" "" "GEDCOM File"
-    WriteRegStr HKCR "GEDCOM.File\DefaultIcon" "" "$INSTDIR\bin\GEDKeeper2.exe,0"
+    WriteRegStr HKCR "GEDCOM.File\DefaultIcon" "" "$INSTDIR\bin\GEDKeeper3.exe,0"
     WriteRegStr HKCR "GEDCOM.File\shell" "" "open"
     WriteRegStr HKCR "GEDCOM.File\shell\open" "" "$(gk_shellopen)"
-    WriteRegStr HKCR "GEDCOM.File\shell\open\command" "" '$INSTDIR\bin\GEDKeeper2.exe "%1"'
+    WriteRegStr HKCR "GEDCOM.File\shell\open\command" "" '$INSTDIR\bin\GEDKeeper3.exe "%1"'
 SectionEnd
 
 SectionGroup /e "$(gklang)"
@@ -365,11 +340,11 @@ SectionGroup /e "$(gklang)"
         SetOutPath "$INSTDIR\locales\help_enu\images"
         File "..\locales\help_enu\images\*.*"
 
-        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Manual (English).lnk" "$INSTDIR\locales\help_enu\GEDKeeper.html" "" "$INSTDIR\locales\help_enu\GEDKeeper.html" 0
-        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Bach family (sample).lnk" "$INSTDIR\samples\Bach_Family.ged" "" "$INSTDIR\samples\Bach_Family.ged" 0
-        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Nehru-Ghandi family (sample).lnk" "$INSTDIR\samples\Nehru-Ghandi_Family.ged" "" "$INSTDIR\samples\Nehru-Ghandi_Family.ged" 0
-        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Human Mitochondria DNA Haplogroups (sample).lnk" "$INSTDIR\samples\Human_Mitochondria_DNA_Haplogroups.ged" "" "$INSTDIR\samples\Human_Mitochondria_DNA_Haplogroups.ged" 0
-        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Human Y-chromosome DNA Haplogroups (sample).lnk" "$INSTDIR\samples\Human_Y-chromosome_DNA_Haplogroups.ged" "" "$INSTDIR\samples\Human_Y-chromosome_DNA_Haplogroups.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper3\Manual (English).lnk" "$INSTDIR\locales\help_enu\GEDKeeper.html" "" "$INSTDIR\locales\help_enu\GEDKeeper.html" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper3\Bach family (sample).lnk" "$INSTDIR\samples\Bach_Family.ged" "" "$INSTDIR\samples\Bach_Family.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper3\Nehru-Ghandi family (sample).lnk" "$INSTDIR\samples\Nehru-Ghandi_Family.ged" "" "$INSTDIR\samples\Nehru-Ghandi_Family.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper3\Human Mitochondria DNA Haplogroups (sample).lnk" "$INSTDIR\samples\Human_Mitochondria_DNA_Haplogroups.ged" "" "$INSTDIR\samples\Human_Mitochondria_DNA_Haplogroups.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper3\Human Y-chromosome DNA Haplogroups (sample).lnk" "$INSTDIR\samples\Human_Y-chromosome_DNA_Haplogroups.ged" "" "$INSTDIR\samples\Human_Y-chromosome_DNA_Haplogroups.ged" 0
     SectionEnd
 
     Section "Русский"
@@ -385,17 +360,17 @@ SectionGroup /e "$(gklang)"
         SetOutPath "$INSTDIR\locales\help_rus\images"
         File "..\locales\help_rus\images\*.*"
 
-        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Справка (русский).lnk" "$INSTDIR\locales\help_rus\GEDKeeper.html" "" "$INSTDIR\locales\help_rus\GEDKeeper.html" 0
-        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Род Пушкиных (пример).lnk" "$INSTDIR\samples\Sample_Russia.ged" "" "$INSTDIR\samples\Sample_Russia.ged" 0
-        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Происхождение Человечества (пример).lnk" "$INSTDIR\samples\Human_Origins.ged" "" "$INSTDIR\samples\Human_Origins.ged" 0
-        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Древние царства (пример).lnk" "$INSTDIR\samples\Ancient_Kingdoms.ged" "" "$INSTDIR\samples\Ancient_Kingdoms.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper3\Справка (русский).lnk" "$INSTDIR\locales\help_rus\GEDKeeper.html" "" "$INSTDIR\locales\help_rus\GEDKeeper.html" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper3\Род Пушкиных (пример).lnk" "$INSTDIR\samples\Sample_Russia.ged" "" "$INSTDIR\samples\Sample_Russia.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper3\Происхождение Человечества (пример).lnk" "$INSTDIR\samples\Human_Origins.ged" "" "$INSTDIR\samples\Human_Origins.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper3\Древние царства (пример).lnk" "$INSTDIR\samples\Ancient_Kingdoms.ged" "" "$INSTDIR\samples\Ancient_Kingdoms.ged" 0
     SectionEnd
 
     Section "Українська"
         SetOutPath "$INSTDIR\locales"
         File "..\locales\ukrainian.lng"
 
-        CreateShortCut "$SMPROGRAMS\GEDKeeper2\Шевченко Тарас Григорович (приклад).lnk" "$INSTDIR\samples\Taras_Shevchenko.ged" "" "$INSTDIR\samples\Taras_Shevchenko.ged" 0
+        CreateShortCut "$SMPROGRAMS\GEDKeeper3\Шевченко Тарас Григорович (приклад).lnk" "$INSTDIR\samples\Taras_Shevchenko.ged" "" "$INSTDIR\samples\Taras_Shevchenko.ged" 0
     SectionEnd
 
     Section "Polski"
@@ -432,128 +407,81 @@ SectionGroupEnd
 SectionGroup /e "$(gkplg)"
     Section "$(gkp_calc)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKCalculatorPlugin.dll"
-        File "..\plugins\GKCalculatorPlugin.rus"
-        File "..\plugins\GKCalculatorPlugin.enu"
-        File "..\plugins\GKCalculatorPlugin.ukr"
-        File "..\plugins\GKCalculatorPlugin.pol"
+        File "..\plugins\GKCalculatorPlugin.*"
     SectionEnd
 
     Section "$(gkp_calendar)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKCalendarPlugin.dll"
-        File "..\plugins\GKCalendarPlugin.rus"
-        File "..\plugins\GKCalendarPlugin.enu"
-        File "..\plugins\GKCalendarPlugin.ukr"
-        File "..\plugins\GKCalendarPlugin.pol"
+        File "..\plugins\GKCalendarPlugin.*"
     SectionEnd
 
     Section "$(gkp_nb)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKNamesBookPlugin.dll"
-        File "..\plugins\GKNamesBookPlugin.rus"
-        File "..\plugins\GKNamesBookPlugin.enu"
-        File "..\plugins\GKNamesBookPlugin.ukr"
-        File "..\plugins\GKNamesBookPlugin.pol"
+        File "..\plugins\GKNamesBookPlugin.*"
     SectionEnd
 
     Section "$(gkp_timeline)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKTimeLinePlugin.dll"
-        File "..\plugins\GKTimeLinePlugin.rus"
-        File "..\plugins\GKTimeLinePlugin.enu"
-        File "..\plugins\GKTimeLinePlugin.ukr"
-        File "..\plugins\GKTimeLinePlugin.pol"
+        File "..\plugins\GKTimeLinePlugin.*"
     SectionEnd
 
     Section "$(gkp_flowinput)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKFlowInputPlugin.dll"
-        File "..\plugins\GKFlowInputPlugin.rus"
-        File "..\plugins\GKFlowInputPlugin.enu"
-        File "..\plugins\GKFlowInputPlugin.ukr"
-        File "..\plugins\GKFlowInputPlugin.pol"
+        File "..\plugins\GKFlowInputPlugin.*"
     SectionEnd
 
     Section "$(gkp_pi)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKPedigreeImporterPlugin.dll"
-        File "..\plugins\GKPedigreeImporterPlugin.rus"
-        File "..\plugins\GKPedigreeImporterPlugin.enu"
-        File "..\plugins\GKPedigreeImporterPlugin.ukr"
-        File "..\plugins\GKPedigreeImporterPlugin.pol"
+        File "..\plugins\GKPedigreeImporterPlugin.*"
     SectionEnd
 
     Section "$(gkp_ts)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\_XapianSharp.dll"
-        File "..\plugins\XapianCSharp.dll"
-        File "..\plugins\zlib1.dll"
-        File "..\plugins\GKTextSearchPlugin.dll"
-        File "..\plugins\GKTextSearchPlugin.rus"
-        File "..\plugins\GKTextSearchPlugin.enu"
-        File "..\plugins\GKTextSearchPlugin.ukr"
-        File "..\plugins\GKTextSearchPlugin.pol"
+        File "..\plugins\J2N.dll"
+        File "..\plugins\Lucene.Net*.dll"
+        File "..\plugins\Microsoft.Extensions.Configuration.Abstractions.dll"
+        File "..\plugins\Microsoft.Extensions.Primitives.dll"
+        File "..\plugins\Prism.dll"
+        File "..\plugins\System.*.dll"
+        File "..\plugins\GKTextSearchPlugin.*"
     SectionEnd
 
     Section "$(gkp_cl)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKLifePlugin.dll"
-        File "..\plugins\GKLifePlugin.rus"
-        File "..\plugins\GKLifePlugin.enu"
-        File "..\plugins\GKLifePlugin.ukr"
-        File "..\plugins\GKLifePlugin.pol"
+        File "..\plugins\GKLifePlugin.*"
     SectionEnd
 
     Section "$(gkp_chron)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKChroniclePlugin.dll"
-        File "..\plugins\GKChroniclePlugin.rus"
-        File "..\plugins\GKChroniclePlugin.enu"
-        File "..\plugins\GKChroniclePlugin.ukr"
-        File "..\plugins\GKChroniclePlugin.pol"
+        File "..\plugins\GKChroniclePlugin.*"
     SectionEnd
 
     Section "$(gkp_cloud)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKWordsCloudPlugin.dll"
-        File "..\plugins\GKWordsCloudPlugin.rus"
-        File "..\plugins\GKWordsCloudPlugin.enu"
-        File "..\plugins\GKWordsCloudPlugin.ukr"
-        File "..\plugins\GKWordsCloudPlugin.pol"
+        File "..\plugins\GKWordsCloudPlugin.*"
     SectionEnd
 
     Section "$(gkp_histdata)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKHistoryDataPlugin.dll"
-        File "..\plugins\GKHistoryDataPlugin.rus"
-        File "..\plugins\GKHistoryDataPlugin.enu"
+        File "..\plugins\GKHistoryDataPlugin.*"
     SectionEnd
 
     Section "$(gkp_stdreports)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKStdReports.dll"
-        File "..\plugins\GKStdReports.rus"
-        File "..\plugins\GKStdReports.enu"
-        File "..\plugins\GKStdReports.fra"
-        File "..\plugins\GKStdReports.deu"
-        File "..\plugins\GKStdReports.ukr"
+        File "..\plugins\GKStdReports.*"
     SectionEnd
 
-    Section "GEDmill"
-        SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GEDmillPlugin.dll"
-        File "..\plugins\GEDmillPlugin.rus"
-        File "..\plugins\GEDmillPlugin.enu"
-        File "..\plugins\log4net.dll"
-    SectionEnd
+;    Section "GEDmill"
+;        SetOutPath "$INSTDIR\plugins"
+;        File "..\plugins\GEDmillPlugin.dll"
+;        File "..\plugins\GEDmillPlugin.rus"
+;        File "..\plugins\GEDmillPlugin.enu"
+;        File "..\plugins\log4net.dll"
+;    SectionEnd
 
     Section "$(gkp_navig)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKNavigatorPlugin.dll"
-        File "..\plugins\GKNavigatorPlugin.rus"
-        File "..\plugins\GKNavigatorPlugin.enu"
-        File "..\plugins\GKNavigatorPlugin.ukr"
+        File "..\plugins\GKNavigatorPlugin.*"
     SectionEnd
 SectionGroupEnd
 
@@ -562,9 +490,9 @@ Section "Uninstall"
     DeleteRegKey HKCR ".ged"
     DeleteRegKey HKCR "GEDCOM.File"
 
-    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper2.exe"
-    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper2"
-    DeleteRegKey HKLM "SOFTWARE\GEDKeeper2"
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper3.exe"
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper3"
+    DeleteRegKey HKLM "SOFTWARE\GEDKeeper3"
 
     ; Remove files and uninstaller
     Delete $INSTDIR\LICENSE
@@ -608,10 +536,10 @@ Section "Uninstall"
     RMDir "$INSTDIR\themes"
 
     ; Remove shortcuts, if any
-    Delete "$SMPROGRAMS\GEDKeeper2\*.*"
-    Delete "$DESKTOP\GEDKeeper2.lnk"
+    Delete "$SMPROGRAMS\GEDKeeper3\*.*"
+    Delete "$DESKTOP\GEDKeeper3.lnk"
 
     ; Remove directories used
-    RMDir "$SMPROGRAMS\GEDKeeper2"
+    RMDir "$SMPROGRAMS\GEDKeeper3"
     RMDir "$INSTDIR"
 SectionEnd

@@ -31,10 +31,10 @@ namespace GKUI.Components
     /// <summary>
     /// Image with the pop-up panel.
     /// </summary>
-    public class GKPortrait : Scrollable, IPortraitControl
+    public class GKPortrait : Panel, IPortraitControl
     {
         private readonly List<Button> fBtnsList;
-        private int fPixelSpeed;
+        //private int fPixelSpeed;
 
 
         public Image Image
@@ -58,8 +58,7 @@ namespace GKUI.Components
             //fImageBox.SizeMode = PictureBoxSizeMode.CenterImage;
             fImageBox.Cursor = Cursors.Arrow;
 
-            fPixelSpeed = 5;
-
+            //fPixelSpeed = 5;
             //fSlidePanel.Height = 36;
             //fSlidePanel.Cursor = Cursors.Arrow;
             //fSlidePanel.Top = Height;
@@ -133,6 +132,12 @@ namespace GKUI.Components
             //CheckCursorPosition(this, e);
         }
 
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            //fImageBox.SizeToFit();
+        }
+
         #region Design
 
         private EFPictureBox fImageBox;
@@ -142,14 +147,22 @@ namespace GKUI.Components
 
         private void InitializeComponent()
         {
-            Border = BorderType.Bezel;
-            ExpandContentHeight = true;
-            ExpandContentWidth = true;
+            //Border = BorderType.Bezel;
+            //ExpandContentHeight = false;
+            //ExpandContentWidth = false;
 
             SuspendLayout();
             //fLayout = new PixelLayout();
 
             fImageBox = new EFPictureBox();
+            /*fImageBox = new ImageBox();
+            fImageBox.ImageBorderStyle = ImageBoxBorderStyle.None;
+            fImageBox.SelectionMode = ImageBoxSelectionMode.None;
+            fImageBox.AllowZoom = false;
+            //fImageBox.AutoPan = true;
+            fImageBox.SizeToFit = true;
+            fImageBox.ImagePadding = new Padding(0);*/
+
             //fImageBox.MouseLeave += CheckCursorPosition;
             //fImageBox.MouseMove += CheckCursorPosition;
 

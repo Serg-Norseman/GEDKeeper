@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net6.0</TargetFrameworks>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AssemblyName>GKComponents</AssemblyName>
         <RootNamespace />
@@ -36,6 +36,9 @@
         <PackageReference Include="Eto.Forms" Version="2.7.4" />
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.4" />
         <PackageReference Include="OxyPlot.Eto" Version="1.1.0" />
+
+        <!--PackageReference Include="ExifLibNet" Version="2.1.4" /-->
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
     </ItemGroup>
 
     <ItemGroup Condition=" !$(DefineConstants.Contains('DIS_VLC')) ">

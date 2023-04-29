@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -47,22 +47,7 @@ namespace GDModel
             }
             set {
                 Clear();
-
-                int start = 0;
-                int lbLen = LINE_BREAK.Length;
-                int pos = value.IndexOf(LINE_BREAK);
-
-                while (pos >= 0) {
-                    string s = value.Substring(start, pos - start);
-                    Add(s);
-                    start = pos + lbLen;
-                    pos = value.IndexOf(LINE_BREAK, start);
-                }
-
-                if (start <= value.Length) {
-                    string s = value.Substring(start, (value.Length - start));
-                    Add(s);
-                }
+                ParseLine(value);
             }
         }
 
@@ -78,7 +63,9 @@ namespace GDModel
 
         public GDMLines(string[] list) : this()
         {
-            AddRange(list);
+            for (int i = 0; i < list.Length; i++) {
+                ParseLine(list[i]);
+            }
         }
 
         public bool IsEmpty()
@@ -92,6 +79,41 @@ namespace GDModel
 
             Clear();
             AddRange(source);
+        }
+
+        /// <summary>
+        /// A function for safely platform-independent string splitting by newlines.
+        /// Because in some UI (Eto.Forms) string on Windows may come with '\n' delimiter instead of '\r\n'.
+        /// </summary>
+        private void ParseLine(string line)
+        {
+            if (line == null)
+                return;
+
+            if (line == string.Empty) {
+                Add(line);
+                return;
+            }
+
+            int inPos = 0, inLen = line.Length;
+            int outPos = 0, outLen = 0;
+            while (true) {
+                char ch = (inPos >= inLen) ? '\0' : line[inPos];
+                inPos += 1;
+
+                if (ch == '\r' || ch == '\n' || ch == '\0') {
+                    if (outLen > 0) {
+                        string piece = line.Substring(outPos, outLen);
+                        Add(piece);
+                    }
+                    outPos = inPos;
+                    outLen = 0;
+                } else {
+                    outLen += 1;
+                }
+
+                if (ch == '\0') break;
+            }
         }
     }
 }

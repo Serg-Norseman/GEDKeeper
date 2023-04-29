@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2021 by Sergey V. Zhdanovskih, Igor Tyulyakov.
+ *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih, Igor Tyulyakov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,7 +38,12 @@ namespace GKUI.Components
         public Image Image
         {
             get { return fImageBox.Image; }
-            set { fImageBox.Image = value; }
+            set {
+                if (fImageBox.Image != null) {
+                    fImageBox.Image.Dispose();
+                }
+                fImageBox.Image = value;
+            }
         }
 
 

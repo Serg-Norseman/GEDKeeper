@@ -25,8 +25,8 @@
     </ToolBar>
   </Form.ToolBar>
 
-  <TableLayout Spacing="4, 4">
-    <TableRow ScaleHeight="True">
+  <Splitter Orientation="Horizontal" RelativePosition="300" FixedPanel="Panel1">
+    <Splitter.Panel1>
       <TabControl x:Name="PageControl1">
         <TabPage x:Name="pagePlaces">
           <TableLayout Style="paddedTable">
@@ -76,19 +76,25 @@
           </StackLayout>
         </TabPage>
       </TabControl>
+    </Splitter.Panel1>
 
-      <TableCell ScaleWidth="True">
-        <comcom:GKMapBrowser x:Name="fMapBrowser" Size="800, 600" />
-      </TableCell>
+    <Splitter.Panel2>
+      <TableLayout Spacing="4, 4">
+        <TableRow ScaleHeight="True">
+          <TableCell ScaleWidth="True">
+            <comcom:GKMapBrowser x:Name="fMapBrowser" Size="800, 600" />
+          </TableCell>
 
-      <StackLayout>
-        <Button x:Name="btnZoomUp" Width="32" Click="btnZoomUp_Click">+</Button>
-        <StackLayoutItem Expand="True">
-          <Slider x:Name="trkZoom" Orientation="Vertical" ValueChanged="trkZoom_ValueChanged" />
-        </StackLayoutItem>
-        <Button x:Name="btnZoomDown" Width="32" Click="btnZoomDown_Click">-</Button>
-      </StackLayout>
-    </TableRow>
-  </TableLayout>
+          <StackLayout>
+            <Button x:Name="btnZoomUp" Width="32" Click="btnZoomUp_Click">+</Button>
+            <StackLayoutItem Expand="True">
+              <Slider x:Name="trkZoom" Orientation="Vertical" ValueChanged="trkZoom_ValueChanged" />
+            </StackLayoutItem>
+            <Button x:Name="btnZoomDown" Width="32" Click="btnZoomDown_Click">-</Button>
+          </StackLayout>
+        </TableRow>
+      </TableLayout>
+    </Splitter.Panel2>
+  </Splitter>
 
 </Form>

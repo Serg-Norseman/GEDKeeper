@@ -49,8 +49,8 @@ namespace GKUI.Components
 
         private CircleChartType fChartType;
         private string fHint;
-        private float fOffsetX;
-        private float fOffsetY;
+        //private float fOffsetX;
+        //private float fOffsetY;
         /* Zoom factors */
         private float fZoom = 1.0f;
         /* Mouse capturing. */
@@ -200,8 +200,8 @@ namespace GKUI.Components
         {
             var bounds = fModel.Bounds;
 
-            fOffsetX = 0;
-            fOffsetY = 0;
+            //fOffsetX = 0;
+            //fOffsetY = 0;
 
             if (target == RenderTarget.Screen) {
 

@@ -55,6 +55,12 @@ namespace GDModel
             Assert.AreEqual("list", strList1[2]);
             Assert.AreEqual("test", strList1[3]);
 
+            strList1 = new GDMLines("The1\nstring1\nlist1\ntest1");
+            Assert.AreEqual("The1", strList1[0]);
+            Assert.AreEqual("string1", strList1[1]);
+            Assert.AreEqual("list1", strList1[2]);
+            Assert.AreEqual("test1", strList1[3]);
+
             GDMLines strList2 = new GDMLines();
             strList2.Assign(null);
             strList2.Assign(strList);

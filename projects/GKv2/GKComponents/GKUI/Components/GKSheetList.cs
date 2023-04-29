@@ -265,7 +265,7 @@ namespace GKUI.Components
                     case Keys.I:
                         ItemAdd(sender, e);
                         break;
-                    case Keys.D:
+                    case Keys.L:
                         ItemDelete(sender, e);
                         break;
                     case Keys.Return:

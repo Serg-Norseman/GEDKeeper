@@ -70,7 +70,7 @@ namespace GKUI.Forms
             get { return GetControlHandler<ITextBox>(txtAuthor); }
         }
 
-        ITextBox ISourceEditDlg.Title
+        ITextBox ISourceEditDlg.DescTitle
         {
             get { return GetControlHandler<ITextBox>(txtTitle); }
         }

@@ -16,7 +16,7 @@ exit /b %BUILD_STATUS%
 
 :installer
 cd .\deploy
-call gk_win_portable.cmd %APP_VER%
+call gk3_win_installer.cmd %APP_VER%
 cd ..
 pause
 exit /b 0

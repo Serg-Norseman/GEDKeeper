@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma warning disable CS0618
+
 using Eto.Forms;
 using GKCore.Design.Controls;
 using GKUI.Components;

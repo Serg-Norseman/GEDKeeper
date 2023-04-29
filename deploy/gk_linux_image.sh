@@ -30,20 +30,25 @@ cp $DEV_PATH/deploy/gedkeeper.appdata.xml ~/$PACK_PATH/usr/share/metainfo/
 cp $DEV_PATH/LICENSE ~/$LIB_PATH
 
 cp -r $DEV_PATH/bin/ ~/$LIB_PATH/
-cp -r $DEV_PATH/locales/ ~/$LIB_PATH/
 cp -r $DEV_PATH/plugins/ ~/$LIB_PATH/
-cp -r $DEV_PATH/scripts/ ~/$LIB_PATH/
-cp -r $DEV_PATH/samples/ ~/$LIB_PATH/
-cp -r $DEV_PATH/themes/ ~/$LIB_PATH/
+
+cp -r $DEV_PATH/backgrounds/ ~/$LIB_PATH/
 cp -r $DEV_PATH/externals/resources.yaml ~/$EXT_PATH/
+cp -r $DEV_PATH/locales/ ~/$LIB_PATH/
+cp -r $DEV_PATH/samples/ ~/$LIB_PATH/
+cp -r $DEV_PATH/scripts/ ~/$LIB_PATH/
+cp -r $DEV_PATH/themes/ ~/$LIB_PATH/
 
 find ~/$LIB_PATH/bin -type f -iname "*.dll" -exec chmod -x {} \;
-find ~/$LIB_PATH/locales -type f -exec chmod -x '{}' \;
 find ~/$LIB_PATH/plugins -type f -exec chmod -x '{}' \;
-find ~/$LIB_PATH/scripts -type f -exec chmod -x '{}' \;
-find ~/$LIB_PATH/samples -type f -exec chmod -x '{}' \;
-find ~/$LIB_PATH/themes -type f -exec chmod -x '{}' \;
+
+find ~/$LIB_PATH/backgrounds -type f -exec chmod -x '{}' \;
 find ~/$LIB_PATH/externals -type f -exec chmod -x '{}' \;
+find ~/$LIB_PATH/locales -type f -exec chmod -x '{}' \;
+find ~/$LIB_PATH/samples -type f -exec chmod -x '{}' \;
+find ~/$LIB_PATH/scripts -type f -exec chmod -x '{}' \;
+find ~/$LIB_PATH/themes -type f -exec chmod -x '{}' \;
+
 chmod -x ~/$LIB_PATH/LICENSE
 chmod -x ~/$LIB_PATH/gedkeeper.png
 chmod -x ~/$PACK_PATH/usr/share/pixmaps/gedkeeper.png

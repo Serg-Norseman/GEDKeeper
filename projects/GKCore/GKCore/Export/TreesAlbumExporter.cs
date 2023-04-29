@@ -52,7 +52,6 @@ namespace GKCore.Export
         protected override void InternalGenerate()
         {
             try {
-                #if !NETSTANDARD
                 IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
                 IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
@@ -108,7 +107,6 @@ namespace GKCore.Export
                         TryRenderTreeSlice(treeBox, q, patriarch);
                     }
                 }
-                #endif
             } catch (Exception ex) {
                 Logger.WriteError("TreesAlbumExporter.InternalGenerate()", ex);
                 throw;

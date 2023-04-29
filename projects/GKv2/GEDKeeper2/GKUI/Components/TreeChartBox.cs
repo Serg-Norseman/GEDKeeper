@@ -31,6 +31,7 @@ using GKCore.Charts;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Platform;
+using GKUI.Platform.Handlers;
 
 namespace GKUI.Components
 {
@@ -330,13 +331,13 @@ namespace GKUI.Components
                 case BackgroundMode.bmImage:
                 case BackgroundMode.bmFill:
                 case BackgroundMode.bmAny:
-                    if (background == BackgroundMode.bmImage && BackgroundImage != null) {
+                    var rect = ClientRectangle;
+                    if (BackgroundImage != null) {
                         /*using (Brush textureBrush = new TextureBrush(BackgroundImage)) {
-                            var rect = CanvasRectangle;
                             fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, rect.Width, rect.Height);
                         }*/
                     } else {
-                        fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackColor), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
+                        fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackColor), 0, 0, rect.Width, rect.Height);
                     }
                     break;
             }

@@ -262,7 +262,7 @@ namespace GKUI.Components
                 try {
                     fViewport = VisibleRect;
                     UpdateProperties();
-                } catch (Exception ex) {
+                } catch {
                     // FIXME: works in MacOS and doesn't work in Wpf
                 }
             }

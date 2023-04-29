@@ -41,58 +41,12 @@ namespace GKUI.Platform
         {
         }
 
-        public IImage LoadImage(string fileName)
-        {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName");
-
-            if (!File.Exists(fileName))
-                return null;
-
-            try {
-                using (Bitmap bmp = new Bitmap(fileName)) {
-                    UIHelper.NormalizeOrientation(bmp);
-
-                    // cloning is necessary to release the resource
-                    // loaded from the image stream
-                    Bitmap resImage = (Bitmap)bmp.Clone();
-
-                    return new ImageHandler(resImage);
-                }
-            } catch (Exception ex) {
-                Logger.WriteError(string.Format("WFGfxProvider.LoadImage({0})", fileName), ex);
-                return null;
-            }
-        }
-
-        public IImage LoadResourceImage(string resName)
-        {
-            return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(resName)));
-        }
-
-        public IImage LoadResourceImage(Type baseType, string resName)
-        {
-            return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(baseType, resName)));
-        }
-
-        public void SaveImage(IImage image, string fileName)
-        {
-            if (image == null)
-                throw new ArgumentNullException("image");
-
-            if (fileName == null)
-                throw new ArgumentNullException("fileName");
-
-            ((ImageHandler)image).Handle.Save(fileName, ImageFormat.Bmp);
-        }
-
         public IImage CreateImage(Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
-            using (Bitmap bmp = new Bitmap(stream))
-            {
+            using (var bmp = new Bitmap(stream)) {
                 UIHelper.NormalizeOrientation(bmp);
 
                 // cloning is necessary to release the resource
@@ -108,8 +62,7 @@ namespace GKUI.Platform
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
-            using (Bitmap bmp = new Bitmap(stream))
-            {
+            using (var bmp = new Bitmap(stream)) {
                 UIHelper.NormalizeOrientation(bmp);
 
                 bool cutoutIsEmpty = cutoutArea.IsEmpty();
@@ -145,6 +98,40 @@ namespace GKUI.Platform
             }
         }
 
+        public IImage LoadImage(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName");
+
+            if (!File.Exists(fileName))
+                return null;
+
+            try {
+                using (Bitmap bmp = new Bitmap(fileName)) {
+                    UIHelper.NormalizeOrientation(bmp);
+
+                    // cloning is necessary to release the resource
+                    // loaded from the image stream
+                    Bitmap resImage = (Bitmap)bmp.Clone();
+
+                    return new ImageHandler(resImage);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("WFGfxProvider.LoadImage({0})", fileName), ex);
+                return null;
+            }
+        }
+
+        public IImage LoadResourceImage(string resName)
+        {
+            return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(resName)));
+        }
+
+        public IImage LoadResourceImage(Type baseType, string resName)
+        {
+            return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(baseType, resName)));
+        }
+
         public IImage LoadResourceImage(string resName, bool makeTransp)
         {
             Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
@@ -152,14 +139,25 @@ namespace GKUI.Platform
             if (makeTransp) {
                 img = (Bitmap)img.Clone();
 
-                #if MONO
+#if MONO
                 img.MakeTransparent();
-                #else
+#else
                 img.MakeTransparent(img.GetPixel(0, 0));
-                #endif
+#endif
             }
 
             return new ImageHandler(img);
+        }
+
+        public void SaveImage(IImage image, string fileName)
+        {
+            if (image == null)
+                throw new ArgumentNullException("image");
+
+            if (fileName == null)
+                throw new ArgumentNullException("fileName");
+
+            ((ImageHandler)image).Handle.Save(fileName, ImageFormat.Bmp);
         }
 
         public IGfxPath CreatePath()

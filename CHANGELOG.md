@@ -1,3 +1,12 @@
+## 28.04.2023 [v2.26.0/Windows &amp; v3.2.0/Linux,MacOS,Windows (beta)]
+- Added an option to remember the overall size of the records info panels.
+- Added control and closing of dependent windows when the main one is closed.
+- Fixed errors in displaying tree diagrams.
+- GKv3 has disabled support for the built-in VLC-based media player until a better option is found.
+- Added pop-up years calculator to event editing.
+- Implemented assembly of GKv3 package for MacOS [Alex Zaytsev].
+- Updated, cleaned up and ported to GKv3 all plugins except GEDmill.
+
 ## 14.04.2023 [v2.25.2/Windows &amp; v3.1.0/Linux]
 - The first release of the 3rd cross-platform (Windows, Linux, MacOS) generation of GEDKeeper - GKv3 has been released. 
   This version is for Linux only.

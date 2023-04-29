@@ -40,47 +40,15 @@ namespace GKUI.Platform
         {
         }
 
-        public IImage LoadImage(string fileName)
+        private static Bitmap LoadNormalized(Stream inputStream)
         {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName");
+            /*var file = ImageFile.FromStream(stream);
+            var orientation = file.Properties.Get<ExifEnumProperty<ExifLibrary.Orientation>>(ExifTag.Orientation).Value;*/
 
-            if (!File.Exists(fileName))
-                return null;
-
-            try {
-                using (Bitmap bmp = new Bitmap(fileName)) {
-                    // cloning is necessary to release the resource
-                    // loaded from the image stream
-                    Bitmap resImage = (Bitmap)bmp.Clone();
-
-                    return new ImageHandler(resImage);
-                }
-            } catch (Exception ex) {
-                Logger.WriteError(string.Format("EtoGfxProvider.LoadImage({0})", fileName), ex);
-                return null;
+            using (var transformStream = ImageProcess.AutoOrient(inputStream)) {
+                transformStream.Seek(0, SeekOrigin.Begin);
+                return new Bitmap(transformStream);
             }
-        }
-
-        public IImage LoadResourceImage(string resName)
-        {
-            return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(resName)));
-        }
-
-        public IImage LoadResourceImage(Type baseType, string resName)
-        {
-            return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(baseType, resName)));
-        }
-
-        public void SaveImage(IImage image, string fileName)
-        {
-            if (image == null)
-                throw new ArgumentNullException("image");
-
-            if (fileName == null)
-                throw new ArgumentNullException("fileName");
-
-            ((Bitmap)((ImageHandler)image).Handle).Save(fileName, ImageFormat.Bitmap);
         }
 
         public IImage CreateImage(Stream stream)
@@ -88,14 +56,8 @@ namespace GKUI.Platform
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
-            using (Bitmap bmp = new Bitmap(stream))
-            {
-                // cloning is necessary to release the resource
-                // loaded from the image stream
-                Bitmap resImage = (Bitmap)bmp.Clone();
-
-                return new ImageHandler(resImage);
-            }
+            var bmp = LoadNormalized(stream);
+            return new ImageHandler(bmp);
         }
 
         public IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
@@ -103,7 +65,7 @@ namespace GKUI.Platform
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
-            using (Bitmap bmp = new Bitmap(stream)) {
+            using (var bmp = LoadNormalized(stream)) {
                 bool cutoutIsEmpty = cutoutArea.IsEmpty();
                 int imgWidth = (cutoutIsEmpty) ? bmp.Width : cutoutArea.GetWidth();
                 int imgHeight = (cutoutIsEmpty) ? bmp.Height : cutoutArea.GetHeight();
@@ -125,9 +87,8 @@ namespace GKUI.Platform
                     if (cutoutIsEmpty) {
                         graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
                     } else {
-                        RectangleF sourRect = new RectangleF(cutoutArea.Left, cutoutArea.Top,
-                                                             cutoutArea.GetWidth(), cutoutArea.GetHeight());
-                        RectangleF destRect = new RectangleF(0, 0, imgWidth, imgHeight);
+                        var sourRect = new RectangleF(cutoutArea.Left, cutoutArea.Top, cutoutArea.Width, cutoutArea.Height);
+                        var destRect = new RectangleF(0, 0, imgWidth, imgHeight);
 
                         graphic.DrawImage(bmp, sourRect, destRect);
                     }
@@ -135,6 +96,35 @@ namespace GKUI.Platform
 
                 return new ImageHandler(newImage);
             }
+        }
+
+        public IImage LoadImage(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName");
+
+            if (!File.Exists(fileName))
+                return null;
+
+            try {
+                using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+                    var bmp = LoadNormalized(stream);
+                    return new ImageHandler(bmp);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("EtoGfxProvider.LoadImage({0})", fileName), ex);
+                return null;
+            }
+        }
+
+        public IImage LoadResourceImage(string resName)
+        {
+            return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(resName)));
+        }
+
+        public IImage LoadResourceImage(Type baseType, string resName)
+        {
+            return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(baseType, resName)));
         }
 
         public IImage LoadResourceImage(string resName, bool makeTransp)
@@ -155,6 +145,17 @@ namespace GKUI.Platform
             }
 
             return new ImageHandler(img);
+        }
+
+        public void SaveImage(IImage image, string fileName)
+        {
+            if (image == null)
+                throw new ArgumentNullException("image");
+
+            if (fileName == null)
+                throw new ArgumentNullException("fileName");
+
+            ((Bitmap)((ImageHandler)image).Handle).Save(fileName, ImageFormat.Bitmap);
         }
 
         public IGfxPath CreatePath()

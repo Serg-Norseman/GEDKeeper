@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -116,6 +116,7 @@ namespace GKUI.Components
         private int fZoom;
         private Size fImageSize;
         private float fZoomFactor;
+        private Padding fImagePadding;
 
         #endregion
 
@@ -195,6 +196,10 @@ namespace GKUI.Components
             get { return fImage; }
             set {
                 if (fImage != value) {
+                    if (fImage != null) {
+                        fImage.Dispose();
+                    }
+
                     fImage = value;
                     AdjustLayout();
                     OnImageChanged(EventArgs.Empty);
@@ -228,6 +233,21 @@ namespace GKUI.Components
                 if (fImageBorderStyle != value) {
                     fImageBorderStyle = value;
                     Invalidate();
+                }
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the image padding.
+        /// </summary>
+        /// <value>The value of image padding.</value>
+        public Padding ImagePadding
+        {
+            get { return fImagePadding; }
+            set {
+                if (fImagePadding != value) {
+                    fImagePadding = value;
+                    AdjustLayout();
                 }
             }
         }
@@ -408,6 +428,7 @@ namespace GKUI.Components
             DropShadowSize = 3;
             ImageBorderColor = SystemColors.ControlDark;
             ImageBorderStyle = ImageBoxBorderStyle.None;
+            ImagePadding = new Padding(10);
             Padding = new Padding(0);
             SelectionColor = SystemColors.Highlight;
 
@@ -418,6 +439,16 @@ namespace GKUI.Components
             fToolTip.ShowAlways = true;
 
             ActualSize();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fImage != null) {
+                    fImage.Dispose();
+                }
+            }
+            base.Dispose(disposing);
         }
 
         #endregion
@@ -659,7 +690,7 @@ namespace GKUI.Components
             AutoScrollMinSize = Size.Empty;
 
             var innerRectangle = GetInsideViewport();
-            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width - 40, innerRectangle.Height - 40);
+            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width - fImagePadding.Horizontal, innerRectangle.Height - fImagePadding.Vertical);
             double zoom = aspectRatio * 100.0;
 
             Zoom = (int)Math.Round(Math.Floor(zoom));
@@ -789,14 +820,14 @@ namespace GKUI.Components
 
         private void DrawNamedRegions(Graphics gfx)
         {
-            var color = Color.FromArgb(128, fSelectionColor);
+            //var color = Color.FromArgb(128, fSelectionColor);
             foreach (var region in fNamedRegions) {
                 RectangleF rect = GetOffsetRectangle(UIHelper.Rt2Rt(region.Region));
 
-                using (Brush brush = new SolidBrush(color))
-                    gfx.FillRectangle(brush, rect);
+                //using (Brush brush = new SolidBrush(color))
+                    //gfx.FillRectangle(brush, rect);
 
-                using (var pen = new Pen(fSelectionColor))
+                using (var pen = new Pen(fImageBorderColor, 2))
                     gfx.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
             }
         }

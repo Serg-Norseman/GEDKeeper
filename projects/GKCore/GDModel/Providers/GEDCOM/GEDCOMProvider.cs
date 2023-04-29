@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1379,7 +1379,9 @@ namespace GDModel.Providers.GEDCOM
             if (!WriteBaseTag(stream, level, headerFile)) return false;
 
             level += 1;
-            WriteTagLine(stream, level, GEDCOMTagName._UID, headerFile.UID, true);
+            if (!DebugWrite) {
+                WriteTagLine(stream, level, GEDCOMTagName._UID, headerFile.UID, true);
+            }
             WriteTagLine(stream, level, GEDCOMTagName._REV, GEDCOMUtils.GetIntStr(headerFile.Revision), true);
             return true;
         }

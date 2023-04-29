@@ -264,12 +264,32 @@ namespace GKUI.Platform
         {
             bool result = false;
 
+            switch (feature) {
+                case Feature.GridCellFormat:
+                    result = true;
+                    break;
+
+                case Feature.InternetProxy:
+                    // Not used yet, obsolete
+                    result = false;
+                    break;
+
+                case Feature.MediaPlayer:
+                    result = true;
+                    break;
+
+                case Feature.RecentFilesLoad:
+                    // In the SDI interface, it is not clear how to implement it correctly
+                    result = false;
+                    break;
+
+                case Feature.Themes:
+                    // since v2.23.0, only WinForms-based implementation, on Windows OS
 #if !MONO
-            // since v2.23.0, only WinForms-based implementation, on Windows OS
-            if (feature == Feature.Themes) {
-                result = true;
-            }
+                    result = true;
 #endif
+                    break;
+            }
 
             return result;
         }

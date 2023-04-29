@@ -310,7 +310,7 @@ namespace GKCore.Controllers
         public void UpdatePortrait(bool totalUpdate)
         {
             if (fPortraitImg == null || totalUpdate) {
-                fPortraitImg = fBase.Context.GetPrimaryBitmap(fIndividualRecord, fView.Portrait.Width, fView.Portrait.Height, false);
+                fPortraitImg = fBase.Context.GetPrimaryBitmap(fIndividualRecord, -1, -1, false);
             }
 
             IImage img = fPortraitImg;

@@ -1331,7 +1331,7 @@ namespace GKCore
             return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent(GEDCOMTagType.RESI), includeAddress);
         }
 
-        private static char[] PLACE_DELIMITERS = new char[] { ',' };
+        private static readonly char[] PLACE_DELIMITERS = new char[] { ',' };
 
         public static string GetPlaceStr(GDMCustomEvent evt, bool includeAddress, bool onlyLocality = false)
         {
@@ -2347,7 +2347,7 @@ namespace GKCore
 
                         string sv = GetFactValueStr(evt);
                         if (!string.IsNullOrEmpty(sv)) {
-                            sv = sv + ", ";
+                            sv += ", ";
                         }
                         summary.Add("  " + st + ": " + sv + GetEventDesc(baseContext.Tree, evt));
 

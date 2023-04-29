@@ -28,7 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKHistoryDataPlugin.cs" />
-    <Compile Include="HistoryData.cs" />
     <Compile Include="HistoryDataWin.cs">
       <SubType>Form</SubType>
     </Compile>

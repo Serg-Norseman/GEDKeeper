@@ -56,7 +56,7 @@ namespace GKCore.Controllers
             try {
                 string noteText = fView.Note.Text.Trim();
                 if (!string.IsNullOrEmpty(noteText)) {
-                    fNoteRecord.SetNotesArray(fView.Note.Lines);
+                    fNoteRecord.SetNoteText(noteText);
 
                     fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);
 
