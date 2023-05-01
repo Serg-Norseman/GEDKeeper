@@ -26,7 +26,7 @@ using System.Threading;
 using System.Windows.Forms;
 using BSLib;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Design.Graphics;
 using GKCore.IoC;
 using GKCore.Options;
 using GKUI.Components;
@@ -63,7 +63,7 @@ namespace GKTray
         public GKTray()
         {
             // for GlobalOptions initialization
-            AppHost.Container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
+            AppHost.Container.Register<IGraphicsProvider, WFGfxProvider>(LifeCycle.Singleton);
 
             fMRUFiles = new List<MRUFile>();
 

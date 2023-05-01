@@ -328,7 +328,6 @@
     <Compile Include="GKCore\Interfaces\ILocalizable.cs" />
     <Compile Include="GKCore\Interfaces\IOptions.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsControl.cs" />
-    <Compile Include="GKCore\Interfaces\IGraphicsProvider.cs" />
     <Compile Include="GKCore\Interfaces\IOptionsSection.cs" />
     <Compile Include="GKCore\Interfaces\IPlugin.cs" />
     <Compile Include="GKCore\Interfaces\IProgressController.cs" />

@@ -27,6 +27,7 @@ using GKCore.Interfaces;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Types;
+using BSLib;
 
 namespace GKCore.Controllers
 {
@@ -105,7 +106,7 @@ namespace GKCore.Controllers
 
             fCurrentText = fileRef.Title;
 
-            IImage img = fBase.Context.LoadMediaImage(fileRef, false);
+            IImage img = fBase.Context.LoadMediaImage(fileRef, -1, -1, ExtRect.Empty, false);
             if (img != null) {
                 fView.SetImage(img);
             }

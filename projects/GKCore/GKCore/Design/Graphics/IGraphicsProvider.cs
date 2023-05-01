@@ -40,9 +40,14 @@ namespace GKCore.Design.Graphics
 
         IGfxPath CreatePath();
 
-        IImage CreateImage(Stream stream);
-        IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
+        IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
+
+        /// <summary>
+        /// Loading an image from a file (already cached by other functions or service images/icons of application).
+        /// That is, loading without any additional processing procedures.
+        /// </summary>
         IImage LoadImage(string fileName);
+
         IImage LoadResourceImage(string resName);
         IImage LoadResourceImage(Type baseType, string resName);
         void SaveImage(IImage image, string fileName);
@@ -50,5 +55,14 @@ namespace GKCore.Design.Graphics
         ExtSizeF GetTextSize(string text, IFont font, object target);
 
         string GetDefaultFontName();
+
+        IColor CreateColor(string signature);
+
+        IGfxPath CreateCirclePath(float x, float y, float width, float height);
+        IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2);
+        IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
+                                     float ang1, float ang2);
+
+        IImage LoadResourceImage(string resName, bool makeTransp);
     }
 }

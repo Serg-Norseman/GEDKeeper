@@ -28,6 +28,7 @@ using BSLib;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Design;
+using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
@@ -359,7 +360,7 @@ namespace GKUI.Platform
 
             // controls and other
             container.Register<IStdDialogs, WFStdDialogs>(LifeCycle.Singleton);
-            container.Register<IGraphicsProviderEx, WFGfxProvider>(LifeCycle.Singleton);
+            container.Register<IGraphicsProvider, WFGfxProvider>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
             container.Register<IThemeManager, WFThemeManager>(LifeCycle.Singleton);
 

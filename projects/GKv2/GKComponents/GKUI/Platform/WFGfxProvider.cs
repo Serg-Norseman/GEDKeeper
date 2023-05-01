@@ -26,7 +26,6 @@ using System.IO;
 using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKUI.Components;
 using GKUI.Platform.Handlers;
 
@@ -35,13 +34,13 @@ namespace GKUI.Platform
     /// <summary>
     /// The main implementation of the platform-specific graphics provider for WinForms.
     /// </summary>
-    public class WFGfxProvider : IGraphicsProviderEx
+    public class WFGfxProvider : IGraphicsProvider
     {
         public WFGfxProvider()
         {
         }
 
-        public IImage CreateImage(Stream stream)
+        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
@@ -49,52 +48,47 @@ namespace GKUI.Platform
             using (var bmp = new Bitmap(stream)) {
                 UIHelper.NormalizeOrientation(bmp);
 
-                // cloning is necessary to release the resource
-                // loaded from the image stream
-                Bitmap resImage = (Bitmap)bmp.Clone();
-
-                return new ImageHandler(resImage);
-            }
-        }
-
-        public IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
-        {
-            if (stream == null)
-                throw new ArgumentNullException("stream");
-
-            using (var bmp = new Bitmap(stream)) {
-                UIHelper.NormalizeOrientation(bmp);
+                int imgWidth, imgHeight;
 
                 bool cutoutIsEmpty = cutoutArea.IsEmpty();
-                int imgWidth = (cutoutIsEmpty) ? bmp.Width : cutoutArea.GetWidth();
-                int imgHeight = (cutoutIsEmpty) ? bmp.Height : cutoutArea.GetHeight();
+                if (cutoutIsEmpty) {
+                    imgWidth = bmp.Width;
+                    imgHeight = bmp.Height;
+                } else {
+                    imgWidth = cutoutArea.Width;
+                    imgHeight = cutoutArea.Height;
+                }
 
-                if (thumbWidth > 0 && thumbHeight > 0) {
+                bool thumbIsEmpty = (thumbWidth <= 0 && thumbHeight <= 0);
+                if (!thumbIsEmpty) {
                     float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
                     imgWidth = (int)(imgWidth * ratio);
                     imgHeight = (int)(imgHeight * ratio);
                 }
 
-                Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                using (Graphics graphic = Graphics.FromImage(newImage)) {
-                    graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graphic.SmoothingMode = SmoothingMode.HighQuality;
-                    graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    graphic.CompositingQuality = CompositingQuality.HighQuality;
+                if (cutoutIsEmpty && thumbIsEmpty) {
+                    return new ImageHandler(bmp);
+                } else {
+                    Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
+                    using (Graphics graphic = Graphics.FromImage(newImage)) {
+                        graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        graphic.SmoothingMode = SmoothingMode.HighQuality;
+                        graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                        graphic.CompositingQuality = CompositingQuality.HighQuality;
 
-                    if (cutoutIsEmpty) {
-                        graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
-                    } else {
-                        Rectangle destRect = new Rectangle(0, 0, imgWidth, imgHeight);
-                        //Rectangle srcRect = cutoutArea.ToRectangle();
-                        graphic.DrawImage(bmp, destRect,
-                                          cutoutArea.Left, cutoutArea.Top,
-                                          cutoutArea.GetWidth(), cutoutArea.GetHeight(),
-                                          GraphicsUnit.Pixel);
+                        if (cutoutIsEmpty) {
+                            graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
+                        } else {
+                            //Rectangle srcRect = cutoutArea.ToRectangle();
+                            var destRect = new Rectangle(0, 0, imgWidth, imgHeight);
+                            graphic.DrawImage(bmp, destRect,
+                                              cutoutArea.Left, cutoutArea.Top,
+                                              cutoutArea.Width, cutoutArea.Height,
+                                              GraphicsUnit.Pixel);
+                        }
                     }
+                    return new ImageHandler(newImage);
                 }
-
-                return new ImageHandler(newImage);
             }
         }
 
@@ -108,8 +102,6 @@ namespace GKUI.Platform
 
             try {
                 using (Bitmap bmp = new Bitmap(fileName)) {
-                    UIHelper.NormalizeOrientation(bmp);
-
                     // cloning is necessary to release the resource
                     // loaded from the image stream
                     Bitmap resImage = (Bitmap)bmp.Clone();

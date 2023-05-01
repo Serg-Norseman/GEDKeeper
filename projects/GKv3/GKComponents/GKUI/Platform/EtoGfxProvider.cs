@@ -25,7 +25,6 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKUI.Components;
 using GKUI.Platform.Handlers;
 
@@ -34,7 +33,7 @@ namespace GKUI.Platform
     /// <summary>
     /// The main implementation of the platform-specific graphics provider for EtoForms.
     /// </summary>
-    public class EtoGfxProvider : IGraphicsProviderEx
+    public class EtoGfxProvider : IGraphicsProvider
     {
         public EtoGfxProvider()
         {
@@ -51,50 +50,50 @@ namespace GKUI.Platform
             }
         }
 
-        public IImage CreateImage(Stream stream)
-        {
-            if (stream == null)
-                throw new ArgumentNullException("stream");
-
-            var bmp = LoadNormalized(stream);
-            return new ImageHandler(bmp);
-        }
-
-        public IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
+        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
             using (var bmp = LoadNormalized(stream)) {
-                bool cutoutIsEmpty = cutoutArea.IsEmpty();
-                int imgWidth = (cutoutIsEmpty) ? bmp.Width : cutoutArea.GetWidth();
-                int imgHeight = (cutoutIsEmpty) ? bmp.Height : cutoutArea.GetHeight();
+                int imgWidth, imgHeight;
 
-                //Logger.WriteInfo("EtoGfxProvider.CreateImage().thumb: {0}, {1}", thumbWidth, thumbHeight);
-                if (thumbWidth > 0 && thumbHeight > 0) {
+                bool cutoutIsEmpty = cutoutArea.IsEmpty();
+                if (cutoutIsEmpty) {
+                    imgWidth = bmp.Width;
+                    imgHeight = bmp.Height;
+                } else {
+                    imgWidth = cutoutArea.Width;
+                    imgHeight = cutoutArea.Height;
+                }
+
+                bool thumbIsEmpty = (thumbWidth <= 0 && thumbHeight <= 0);
+                if (!thumbIsEmpty) {
                     float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
                     imgWidth = (int)(imgWidth * ratio);
                     imgHeight = (int)(imgHeight * ratio);
                 }
 
-                //Logger.WriteInfo("EtoGfxProvider.CreateImage().ctorBitmap({0}, {1})", imgWidth, imgHeight);
-                Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                using (Graphics graphic = new Graphics(newImage)) {
-                    graphic.AntiAlias = true;
-                    graphic.ImageInterpolation = ImageInterpolation.High;
-                    graphic.PixelOffsetMode = PixelOffsetMode.Half;
+                if (cutoutIsEmpty && thumbIsEmpty) {
+                    return new ImageHandler(bmp);
+                } else {
+                    Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
+                    using (Graphics graphic = new Graphics(newImage)) {
+                        graphic.AntiAlias = true;
+                        graphic.ImageInterpolation = ImageInterpolation.High;
+                        graphic.PixelOffsetMode = PixelOffsetMode.Half;
 
-                    if (cutoutIsEmpty) {
-                        graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
-                    } else {
-                        var sourRect = new RectangleF(cutoutArea.Left, cutoutArea.Top, cutoutArea.Width, cutoutArea.Height);
-                        var destRect = new RectangleF(0, 0, imgWidth, imgHeight);
+                        if (cutoutIsEmpty) {
+                            graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
+                        } else {
+                            var sourRect = new RectangleF(cutoutArea.Left, cutoutArea.Top, cutoutArea.Width, cutoutArea.Height);
+                            var destRect = new RectangleF(0, 0, imgWidth, imgHeight);
 
-                        graphic.DrawImage(bmp, sourRect, destRect);
+                            graphic.DrawImage(bmp, sourRect, destRect);
+                        }
                     }
+                    return new ImageHandler(newImage);
                 }
-
-                return new ImageHandler(newImage);
             }
         }
 
@@ -108,8 +107,7 @@ namespace GKUI.Platform
 
             try {
                 using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read)) {
-                    var bmp = LoadNormalized(stream);
-                    return new ImageHandler(bmp);
+                    return new ImageHandler(new Bitmap(stream));
                 }
             } catch (Exception ex) {
                 Logger.WriteError(string.Format("EtoGfxProvider.LoadImage({0})", fileName), ex);

@@ -31,6 +31,7 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Design;
+using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
@@ -384,7 +385,7 @@ namespace GKUI.Platform
 
             // controls and other
             container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);
-            container.Register<IGraphicsProviderEx, EtoGfxProvider>(LifeCycle.Singleton);
+            container.Register<IGraphicsProvider, EtoGfxProvider>(LifeCycle.Singleton);
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
             container.Register<IThemeManager, EtoThemeManager>(LifeCycle.Singleton);
 

@@ -24,7 +24,6 @@ using System.Collections.Generic;
 using BSLib;
 using GKCore.Design;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 
 namespace GKCore.BBText
 {
@@ -57,11 +56,11 @@ namespace GKCore.BBText
 
         private List<BBTextChunk> fChunks;
         private readonly float fDefaultFontSize;
-        private readonly IGraphicsProviderEx fGfxProvider;
+        private readonly IGraphicsProvider fGfxProvider;
         private readonly IColor fLinkColor;
         private readonly IColor fTextColor;
 
-        public BBTextParser(IGraphicsProviderEx gfxProvider, float defaultFontSize,
+        public BBTextParser(IGraphicsProvider gfxProvider, float defaultFontSize,
                             IColor linkColor, IColor textColor)
         {
             fGfxProvider = gfxProvider;

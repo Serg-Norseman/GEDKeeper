@@ -20,6 +20,8 @@
 
 using System.IO;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Bmp;
+using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
 namespace GKUI.Platform
@@ -29,9 +31,10 @@ namespace GKUI.Platform
         public static Stream AutoOrient(Stream inputStream)
         {
             var outputStream = new MemoryStream();
-            using (var image = Image.Load(inputStream)) {
+            using (var image = Image.Load<Bgr565>(inputStream)) {
                 image.Mutate(x => x.AutoOrient());
-                image.SaveAsBmp(outputStream);
+                var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
+                image.SaveAsBmp(outputStream, encoder);
             }
             return outputStream;
         }

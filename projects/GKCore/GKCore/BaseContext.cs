@@ -32,15 +32,15 @@ using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
 using GKCore.Controllers;
 using GKCore.Cultures;
+using GKCore.Design;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Search;
 using GKCore.Types;
-using GKCore.Design;
 
 namespace GKCore
 {
@@ -1246,31 +1246,6 @@ namespace GKCore
             return result;
         }
 
-        public IImage LoadMediaImage(GDMFileReference fileReference, bool throwException)
-        {
-            if (fileReference == null) return null;
-
-            IImage result = null;
-            try {
-                Stream stm = MediaLoad(fileReference, throwException);
-                if (stm != null) {
-                    try {
-                        if (stm.Length != 0) {
-                            result = AppHost.GfxProvider.CreateImage(stm);
-                        }
-                    } finally {
-                        stm.Dispose();
-                    }
-                }
-            } catch (MediaFileNotFoundException) {
-                throw;
-            } catch (Exception ex) {
-                Logger.WriteError("BaseContext.LoadMediaImage()", ex);
-                result = null;
-            }
-            return result;
-        }
-
         public IImage LoadMediaImage(GDMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException)
         {
             if (fileReference == null) return null;
@@ -1281,7 +1256,7 @@ namespace GKCore
                 if (stm != null) {
                     try {
                         if (stm.Length != 0) {
-                            result = AppHost.GfxProvider.CreateImage(stm, thumbWidth, thumbHeight, cutoutArea);
+                            result = AppHost.GfxProvider.LoadImage(stm, thumbWidth, thumbHeight, cutoutArea);
                         }
                     } finally {
                         stm.Dispose();

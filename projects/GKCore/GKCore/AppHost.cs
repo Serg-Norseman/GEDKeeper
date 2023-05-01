@@ -26,6 +26,7 @@ using System.Reflection;
 using BSLib;
 using GDModel;
 using GKCore.Design;
+using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
@@ -1095,7 +1096,7 @@ namespace GKCore
         private static readonly IocContainer fIocContainer;
 
         private static ExtResources fExtResources;
-        private static IGraphicsProviderEx fGfxProvider;
+        private static IGraphicsProvider fGfxProvider;
         private static INamesTable fNamesTable;
         private static GlobalOptions fOptions;
         private static PathReplacer fPathReplacer;
@@ -1119,11 +1120,11 @@ namespace GKCore
             }
         }
 
-        public static IGraphicsProviderEx GfxProvider
+        public static IGraphicsProvider GfxProvider
         {
             get {
                 if (fGfxProvider == null) {
-                    fGfxProvider = fIocContainer.Resolve<IGraphicsProviderEx>();
+                    fGfxProvider = fIocContainer.Resolve<IGraphicsProvider>();
                 }
                 return fGfxProvider;
             }

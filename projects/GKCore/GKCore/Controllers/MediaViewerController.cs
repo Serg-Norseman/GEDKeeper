@@ -70,7 +70,7 @@ namespace GKCore.Controllers
                 switch (mmKind) {
                     case MultimediaKind.mkImage:
                         {
-                            IImage img = fBase.Context.LoadMediaImage(fFileReference, false);
+                            IImage img = fBase.Context.LoadMediaImage(fFileReference, -1, -1, ExtRect.Empty, false);
                             if (img != null) {
                                 fView.SetViewImage(img, fFileReference);
                             }
