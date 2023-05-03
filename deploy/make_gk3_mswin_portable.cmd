@@ -2,9 +2,9 @@
 
 set APP_VER=3.2.0
 
-call .\clean.cmd
+call ..\clean.cmd
 
-dotnet build projects/GKv3/GEDKeeper3.sln -c MSWin_Release
+dotnet build ../projects/GKv3/GEDKeeper3.sln -c MSWin_Release
 
 set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS%==0 goto installer
@@ -15,8 +15,8 @@ pause
 exit /b %BUILD_STATUS% 
 
 :installer
-cd .\deploy
+rem cd .\deploy
 call gk_win_portable.cmd %APP_VER%
-cd ..
+rem cd ..
 pause
 exit /b 0

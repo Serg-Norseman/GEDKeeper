@@ -944,7 +944,7 @@ namespace GKCore
                     case MediaStoreType.mstReference: {
                             fileName = targetFn;
                             if (!File.Exists(fileName)) {
-                                string newPath = AppHost.PathReplacer.TryReplacePath(fileName);
+                                string newPath = FileHelper.NormalizeFilename(fileName);
                                 if (!string.IsNullOrEmpty(newPath)) {
                                     fileName = newPath;
                                 }
@@ -1172,7 +1172,7 @@ namespace GKCore
 
                     case MediaStoreType.mstReference:
                         if (!File.Exists(fileName)) {
-                            string xFileName = AppHost.PathReplacer.TryReplacePath(fileName);
+                            string xFileName = FileHelper.NormalizeFilename(fileName);
                             if (string.IsNullOrEmpty(xFileName)) {
                                 result = MediaStoreStatus.mssFileNotFound;
                             } else {
@@ -1246,20 +1246,44 @@ namespace GKCore
             return result;
         }
 
-        public IImage LoadMediaImage(GDMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException)
+        public IImage LoadMediaImage(GDMMultimediaRecord mmRec, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException)
         {
-            if (fileReference == null) return null;
+            if (mmRec == null || mmRec.FileReferences.Count < 1) return null;
 
             IImage result = null;
+
             try {
-                Stream stm = MediaLoad(fileReference, throwException);
-                if (stm != null) {
+                var gfxProvider = AppHost.GfxProvider;
+
+                Stream inputStream;
+
+                string cachedFile = GetCachedImageFilename(mmRec.UID);
+                if (File.Exists(cachedFile)) {
+                    // if cached, then already transformed
+                    inputStream = new FileStream(cachedFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+                } else {
+                    inputStream = MediaLoad(mmRec.FileReferences[0], throwException);
+                    if (inputStream != null) {
+                        var transformStream = gfxProvider.CheckOrientation(inputStream);
+                        if (transformStream != inputStream) {
+                            // image transformed
+                            using (var cachedStream = new FileStream(cachedFile, FileMode.CreateNew, FileAccess.Write, FileShare.Write)) {
+                                transformStream.CopyTo(cachedStream);
+                                cachedStream.Flush();
+                            }
+                            inputStream.Dispose();
+                            inputStream = transformStream;
+                        }
+                    }
+                }
+
+                if (inputStream != null) {
                     try {
-                        if (stm.Length != 0) {
-                            result = AppHost.GfxProvider.LoadImage(stm, thumbWidth, thumbHeight, cutoutArea);
+                        if (inputStream.Length != 0) {
+                            result = gfxProvider.LoadImage(inputStream, thumbWidth, thumbHeight, cutoutArea);
                         }
                     } finally {
-                        stm.Dispose();
+                        inputStream.Dispose();
                     }
                 }
             } catch (MediaFileNotFoundException) {
@@ -1268,7 +1292,13 @@ namespace GKCore
                 Logger.WriteError("BaseContext.LoadMediaImage()", ex);
                 result = null;
             }
+
             return result;
+        }
+
+        internal static string GetCachedImageFilename(string imageUID)
+        {
+            return AppHost.GetCachePath() + imageUID + ".bmp";
         }
 
         public IImage GetPrimaryBitmap(GDMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException)
@@ -1282,7 +1312,7 @@ namespace GKCore
 
                 if (mmLink != null && mmRec != null) {
                     var cutoutArea = mmLink.IsPrimaryCutout ? mmLink.CutoutPosition.Value : ExtRect.CreateEmpty();
-                    result = LoadMediaImage(mmRec.FileReferences[0], thumbWidth, thumbHeight, cutoutArea, throwException);
+                    result = LoadMediaImage(mmRec, thumbWidth, thumbHeight, cutoutArea, throwException);
                 }
             } catch (MediaFileNotFoundException) {
                 throw;

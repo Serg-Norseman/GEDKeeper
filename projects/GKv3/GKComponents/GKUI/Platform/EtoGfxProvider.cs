@@ -23,6 +23,7 @@ using System.IO;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
+using ExifLibrary;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKUI.Components;
@@ -39,15 +40,21 @@ namespace GKUI.Platform
         {
         }
 
-        private static Bitmap LoadNormalized(Stream inputStream)
+        public Stream CheckOrientation(Stream inputStream)
         {
-            /*var file = ImageFile.FromStream(stream);
-            var orientation = file.Properties.Get<ExifEnumProperty<ExifLibrary.Orientation>>(ExifTag.Orientation).Value;*/
+            Stream transformStream;
 
-            using (var transformStream = ImageProcess.AutoOrient(inputStream)) {
-                transformStream.Seek(0, SeekOrigin.Begin);
-                return new Bitmap(transformStream);
+            var file = ImageFile.FromStream(inputStream);
+            var orientProp = file.Properties.Get<ExifEnumProperty<ExifLibrary.Orientation>>(ExifTag.Orientation);
+            if (orientProp != null && orientProp.Value != ExifLibrary.Orientation.Normal) {
+                inputStream.Seek(0, SeekOrigin.Begin);
+                transformStream = ImageProcess.AutoOrient(inputStream);
+            } else {
+                transformStream = inputStream;
             }
+
+            transformStream.Seek(0, SeekOrigin.Begin);
+            return transformStream;
         }
 
         public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
@@ -55,7 +62,10 @@ namespace GKUI.Platform
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
-            using (var bmp = LoadNormalized(stream)) {
+            Bitmap bmp = new Bitmap(stream);
+            Bitmap result = null;
+
+            try {
                 int imgWidth, imgHeight;
 
                 bool cutoutIsEmpty = cutoutArea.IsEmpty();
@@ -75,7 +85,7 @@ namespace GKUI.Platform
                 }
 
                 if (cutoutIsEmpty && thumbIsEmpty) {
-                    return new ImageHandler(bmp);
+                    result = bmp;
                 } else {
                     Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
                     using (Graphics graphic = new Graphics(newImage)) {
@@ -92,9 +102,14 @@ namespace GKUI.Platform
                             graphic.DrawImage(bmp, sourRect, destRect);
                         }
                     }
-                    return new ImageHandler(newImage);
+                    result = newImage;
                 }
+            } finally {
+                if (result != bmp)
+                    bmp.Dispose();
             }
+
+            return new ImageHandler(result);
         }
 
         public IImage LoadImage(string fileName)

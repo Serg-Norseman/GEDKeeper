@@ -60,11 +60,6 @@ namespace GKCore
             base.Dispose(disposing);
         }
 
-        private static string GetCachedFilename(string imageUID)
-        {
-            return AppHost.GetCachePath() + imageUID + ".bmp";
-        }
-
         public IImage GetImage(IBaseContext context, GDMIndividualRecord iRec)
         {
             if (context == null || iRec == null) return null;
@@ -77,7 +72,7 @@ namespace GKCore
             // portrait doesn't define for individual
             if (string.IsNullOrEmpty(imageUID)) return null;
 
-            string cachedFile = GetCachedFilename(imageUID);
+            string cachedFile = BaseContext.GetCachedImageFilename(imageUID);
 
             // check in-memory cache
             if (fMemoryCache.TryGetValue(cachedFile, out result)) {
@@ -122,7 +117,7 @@ namespace GKCore
             if (string.IsNullOrEmpty(imageUID)) return;
 
             try {
-                string cachedFile = GetCachedFilename(imageUID);
+                string cachedFile = BaseContext.GetCachedImageFilename(imageUID);
 
                 if (fMemoryCache.ContainsKey(cachedFile)) {
                     fMemoryCache.Remove(cachedFile);

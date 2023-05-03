@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,17 +38,14 @@ namespace GKUI.Forms
     {
         private IBaseWindow fBase;
         private MediaViewerWin fDialog;
-        private GDMMultimediaRecord fMediaRec;
 
         public override void Setup()
         {
             TestUtils.InitUITest();
 
             fBase = new BaseWindowStub();
-            fMediaRec = fBase.Context.Tree.CreateMultimedia();
 
             fDialog = new MediaViewerWin(fBase);
-            fDialog.MultimediaRecord = fMediaRec;
             fDialog.Show();
         }
 
@@ -57,20 +54,21 @@ namespace GKUI.Forms
             fDialog.Dispose();
         }
 
-        private GDMFileReferenceWithTitle GetTestMultimedia(
+        private GDMMultimediaRecord GetTestMultimedia(
             string resName, GDMMultimediaFormat multimediaFormat, out string targetName)
         {
             targetName = TestUtils.PrepareTestFile(resName);
 
-            fMediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
-            var fileRefV = fMediaRec.FileReferences[0];
+            var mediaRec = fBase.Context.Tree.CreateMultimedia();
+            mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
+            var fileRefV = mediaRec.FileReferences[0];
 
             fileRefV.Title = "File Title";
             fileRefV.LinkFile(targetName);
             fileRefV.MediaType = GDMMediaType.mtManuscript;
             fileRefV.MultimediaFormat = multimediaFormat;
-            
-            return fileRefV;
+
+            return mediaRec;
         }
 
         [Test]
@@ -81,8 +79,8 @@ namespace GKUI.Forms
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                fDialog.FileReference = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.FileReference);
+                fDialog.MultimediaRecord = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.MultimediaRecord);
 
                 fDialog.Refresh();
 
@@ -104,8 +102,8 @@ namespace GKUI.Forms
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                fDialog.FileReference = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.FileReference);
+                fDialog.MultimediaRecord = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.MultimediaRecord);
 
                 fDialog.Refresh();
 
@@ -123,8 +121,8 @@ namespace GKUI.Forms
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                fDialog.FileReference = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.FileReference);
+                fDialog.MultimediaRecord = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.MultimediaRecord);
 
                 fDialog.Refresh();
 
@@ -142,8 +140,8 @@ namespace GKUI.Forms
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                fDialog.FileReference = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.FileReference);
+                fDialog.MultimediaRecord = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.MultimediaRecord);
 
                 fDialog.Refresh();
 
@@ -163,8 +161,8 @@ namespace GKUI.Forms
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                fDialog.FileReference = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.FileReference);
+                fDialog.MultimediaRecord = fileRefV;
+                Assert.AreEqual(fileRefV, fDialog.MultimediaRecord);
 
                 fDialog.Refresh();
 

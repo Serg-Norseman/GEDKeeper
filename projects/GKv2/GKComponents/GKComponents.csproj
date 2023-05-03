@@ -32,6 +32,9 @@
     <Reference Include="BSLib.DataViz.Model">
       <HintPath>..\..\libs\BSLib.DataViz.Model.dll</HintPath>
     </Reference>
+    <Reference Include="ExifLib">
+      <HintPath>..\..\libs\ExifLib.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\..\libs\NLog.dll</HintPath>
     </Reference>

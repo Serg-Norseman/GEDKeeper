@@ -472,7 +472,6 @@
     <Compile Include="GKCore\Options\PedigreeOptions.cs" />
     <Compile Include="GKCore\Options\ProxyOptions.cs" />
     <Compile Include="GKCore\Options\TreeChartOptions.cs" />
-    <Compile Include="GKCore\PathReplacer.cs" />
     <Compile Include="GKCore\Plugins\PluginInfo.cs" />
     <Compile Include="GKCore\Plugins\PluginsMan.cs" />
     <Compile Include="GKCore\PortraitsCache.cs" />

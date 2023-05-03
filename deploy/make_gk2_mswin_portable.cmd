@@ -2,10 +2,10 @@
 
 set APP_VER=2.26.0
 
-call .\clean.cmd
+call ..\clean.cmd
 
 set MSBDIR=@%WINDIR%\Microsoft.NET\Framework\v4.0.30319
-%MSBDIR%\msbuild.exe projects\GKv2\GEDKeeper2.sln /p:Configuration=Release /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.7.1 /v:quiet
+%MSBDIR%\msbuild.exe ..\projects\GKv2\GEDKeeper2.sln /p:Configuration=Release /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.7.1 /v:quiet
 
 set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS%==0 goto installer
@@ -16,8 +16,8 @@ pause
 exit /b %BUILD_STATUS% 
 
 :installer
-cd .\deploy
+rem cd .\deploy
 call gk_win_portable.cmd %APP_VER%
-cd ..
+rem cd ..
 pause
 exit /b 0

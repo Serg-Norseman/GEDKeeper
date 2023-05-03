@@ -272,27 +272,27 @@ namespace GKCore
                     var mmRecR = new GDMMultimediaRecord(ctx.Tree);
                     mmRecR.FileReferences.Add(new GDMFileReferenceWithTitle());
                     Assert.AreEqual(true, ctx.MediaSave(mmRecR.FileReferences[0], sourFile, MediaStoreType.mstReference));
-                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecR.FileReferences[0], -1, -1, ExtRect.Empty, false));
+                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecR, -1, -1, ExtRect.Empty, false));
                     Assert.IsNotNull(ctx.MediaLoad(mmRecR.FileReferences[0]));
 
                     var mmRecA = new GDMMultimediaRecord(ctx.Tree);
                     mmRecA.FileReferences.Add(new GDMFileReferenceWithTitle());
                     Assert.AreEqual(true, ctx.MediaSave(mmRecA.FileReferences[0], sourFile, MediaStoreType.mstArchive));
-                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecA.FileReferences[0], -1, -1, ExtRect.Empty, false));
+                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecA, -1, -1, ExtRect.Empty, false));
                     Assert.IsNotNull(ctx.MediaLoad(mmRecA.FileReferences[0]));
                     arcFileName = ctx.GetArcFileName();
 
                     var mmRecS = new GDMMultimediaRecord(ctx.Tree);
                     mmRecS.FileReferences.Add(new GDMFileReferenceWithTitle());
                     Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
-                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecS.FileReferences[0], -1, -1, ExtRect.Empty, false));
+                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecS, -1, -1, ExtRect.Empty, false));
                     Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
                     stgDirectory = ctx.GetStgFolder(false);
 
                     var mmRecRl = new GDMMultimediaRecord(ctx.Tree);
                     mmRecRl.FileReferences.Add(new GDMFileReferenceWithTitle());
                     Assert.AreEqual(true, ctx.MediaSave(mmRecRl.FileReferences[0], sourFile, MediaStoreType.mstRelativeReference));
-                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecRl.FileReferences[0], -1, -1, ExtRect.Empty, false));
+                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecRl, -1, -1, ExtRect.Empty, false));
                     Assert.IsNotNull(ctx.MediaLoad(mmRecRl.FileReferences[0]));
                 }
             } finally {

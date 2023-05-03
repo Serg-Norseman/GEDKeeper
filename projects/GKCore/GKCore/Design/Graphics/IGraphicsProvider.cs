@@ -29,6 +29,13 @@ namespace GKCore.Design.Graphics
     /// </summary>
     public interface IGraphicsProvider
     {
+        /// <summary>
+        /// Check photo orientation.
+        /// </summary>
+        /// <param name="inputStream"></param>
+        /// <returns>Returns true if normal, false if transformations are needed.</returns>
+        Stream CheckOrientation(Stream inputStream);
+
         IColor CreateColor(int argb);
         IColor CreateColor(int r, int g, int b);
         IColor CreateColor(int a, int r, int g, int b);

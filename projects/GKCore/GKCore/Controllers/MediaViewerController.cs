@@ -38,21 +38,17 @@ namespace GKCore.Controllers
         private GDMFileReferenceWithTitle fFileReference;
         private GDMMultimediaRecord fMultimedia;
 
-        public GDMFileReferenceWithTitle FileReference
-        {
-            get { return fFileReference; }
-            set {
-                if (fFileReference != value) {
-                    fFileReference = value;
-                    UpdateView();
-                }
-            }
-        }
-
         public GDMMultimediaRecord MultimediaRecord
         {
             get { return fMultimedia; }
-            set { fMultimedia = value; }
+            set {
+                fMultimedia = value;
+                GDMFileReferenceWithTitle fileRef = fMultimedia.FileReferences[0];
+                if (fFileReference != fileRef) {
+                    fFileReference = fileRef;
+                    UpdateView();
+                }
+            }
         }
 
         public MediaViewerController(IMediaViewerWin view) : base(view)
@@ -70,9 +66,9 @@ namespace GKCore.Controllers
                 switch (mmKind) {
                     case MultimediaKind.mkImage:
                         {
-                            IImage img = fBase.Context.LoadMediaImage(fFileReference, -1, -1, ExtRect.Empty, false);
+                            IImage img = fBase.Context.LoadMediaImage(fMultimedia, -1, -1, ExtRect.Empty, false);
                             if (img != null) {
-                                fView.SetViewImage(img, fFileReference);
+                                fView.SetViewImage(img);
                             }
                             break;
                         }
@@ -121,7 +117,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ProcessPortraits(IImageView imageCtl, GDMFileReferenceWithTitle fileRef)
+        public void ProcessPortraits(IImageView imageCtl)
         {
             var portraits = GKUtils.SearchPortraits(fBase.Context.Tree, fMultimedia);
 

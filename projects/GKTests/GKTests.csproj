@@ -126,7 +126,6 @@
     <Compile Include="GKCore\ListsTests.cs" />
     <Compile Include="GKCore\NamesTests.cs" />
     <Compile Include="GKCore\OptionsTests.cs" />
-    <Compile Include="GKCore\PathReplacerTests.cs" />
     <Compile Include="GKCore\PlacesLoaderTests.cs" />
     <Compile Include="GKCore\PluginTests.cs" />
     <Compile Include="GKCore\PortraitsCacheTests.cs" />

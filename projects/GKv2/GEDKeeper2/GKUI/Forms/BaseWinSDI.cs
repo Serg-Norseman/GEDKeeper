@@ -498,7 +498,6 @@ namespace GKUI.Forms
                 try {
                     try {
                         mediaViewer.MultimediaRecord = mediaRec;
-                        mediaViewer.FileReference = fileRef;
                         if (modal) {
                             mediaViewer.ShowDialog();
                         } else {

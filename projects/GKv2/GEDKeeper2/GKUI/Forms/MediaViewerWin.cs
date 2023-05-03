@@ -37,12 +37,6 @@ namespace GKUI.Forms
         private readonly MediaViewerController fController;
         private Control fViewer;
 
-        public GDMFileReferenceWithTitle FileReference
-        {
-            get { return fController.FileReference; }
-            set { fController.FileReference = value; }
-        }
-
         public GDMMultimediaRecord MultimediaRecord
         {
             get { return fController.MultimediaRecord; }
@@ -139,12 +133,12 @@ namespace GKUI.Forms
             SetViewControl(mediaPlayer);
         }
 
-        public void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef)
+        public void SetViewImage(IImage img)
         {
             var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(img);
 
-            fController.ProcessPortraits(imageCtl, fileRef);
+            fController.ProcessPortraits(imageCtl);
 
             SetViewControl(imageCtl);
         }

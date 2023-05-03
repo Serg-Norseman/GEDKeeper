@@ -24,6 +24,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using BSLib;
+using ExifLib;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKUI.Components;
@@ -40,14 +41,45 @@ namespace GKUI.Platform
         {
         }
 
+        public Stream CheckOrientation(Stream inputStream)
+        {
+            Stream transformStream;
+
+            ushort orientation;
+            try {
+                var file = new ExifReader(inputStream, true);
+                if (!file.GetTagValue(ExifTags.Orientation, out orientation)) {
+                    orientation = 1;
+                }
+            } catch {
+                orientation = 1;
+            }
+
+            if (orientation != 1) {
+                inputStream.Seek(0, SeekOrigin.Begin);
+
+                transformStream = new MemoryStream();
+                using (var bmp = new Bitmap(inputStream)) {
+                    UIHelper.NormalizeOrientation(bmp);
+                    bmp.Save(transformStream, ImageFormat.Bmp);
+                }
+            } else {
+                transformStream = inputStream;
+            }
+
+            transformStream.Seek(0, SeekOrigin.Begin);
+            return transformStream;
+        }
+
         public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
-            using (var bmp = new Bitmap(stream)) {
-                UIHelper.NormalizeOrientation(bmp);
+            Bitmap bmp = new Bitmap(stream);
+            Bitmap result = null;
 
+            try {
                 int imgWidth, imgHeight;
 
                 bool cutoutIsEmpty = cutoutArea.IsEmpty();
@@ -67,7 +99,7 @@ namespace GKUI.Platform
                 }
 
                 if (cutoutIsEmpty && thumbIsEmpty) {
-                    return new ImageHandler(bmp);
+                    result = bmp;
                 } else {
                     Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
                     using (Graphics graphic = Graphics.FromImage(newImage)) {
@@ -87,9 +119,14 @@ namespace GKUI.Platform
                                               GraphicsUnit.Pixel);
                         }
                     }
-                    return new ImageHandler(newImage);
+                    result = newImage;
                 }
+            } finally {
+                if (result != bmp)
+                    bmp.Dispose();
             }
+
+            return new ImageHandler(result);
         }
 
         public IImage LoadImage(string fileName)

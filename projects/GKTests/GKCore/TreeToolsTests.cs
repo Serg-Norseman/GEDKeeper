@@ -253,9 +253,10 @@ namespace GKCore
 
             // three records with errors + multimedia with a nonexistent file
             TreeInspector.CheckBase(fBaseWin, checksList, progress);
-            Assert.AreEqual(3 + 1, checksList.Count);
+            Assert.AreEqual(3, checksList.Count);
 
             Assert.AreEqual(TreeInspector.CheckDiag.cdStrangeSpouse, checksList[0].Diag);
+            Assert.AreEqual(TreeInspector.CheckDiag.cdStrangeSpouse, checksList[1].Diag);
             Assert.AreEqual(TreeInspector.CheckDiag.cdPersonLonglived, checksList[2].Diag);
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeInspector.RepairProblem(null, null, null); });

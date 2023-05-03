@@ -36,13 +36,25 @@ namespace GKCore.Controllers
     /// </summary>
     public class SlideshowController : FormController<ISlideshowWin>
     {
-        private readonly List<GDMFileReferenceWithTitle> fFileRefs;
+        private sealed class ImageRef
+        {
+            public GDMMultimediaRecord MediaRec;
+            public string Title;
+
+            public ImageRef(GDMMultimediaRecord mediaRec, string title)
+            {
+                MediaRec = mediaRec;
+                Title = title;
+            }
+        }
+
+        private readonly List<ImageRef> fFileRefs;
         private bool fActive;
         private int fCurrentIndex;
         private string fCurrentText;
         private ITimer fTimer;
 
-        public List<GDMFileReferenceWithTitle> FileRefs
+        /*public List<ImageRef> FileRefs
         {
             get { return fFileRefs; }
         }
@@ -50,11 +62,11 @@ namespace GKCore.Controllers
         public int CurrentIndex
         {
             get { return fCurrentIndex; }
-        }
+        }*/
 
         public SlideshowController(ISlideshowWin view) : base(view)
         {
-            fFileRefs = new List<GDMFileReferenceWithTitle>();
+            fFileRefs = new List<ImageRef>();
             fCurrentIndex = -1;
             fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
         }
@@ -83,7 +95,7 @@ namespace GKCore.Controllers
 
                 MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
                 if (mmKind == MultimediaKind.mkImage) {
-                    fFileRefs.Add(fileRef);
+                    fFileRefs.Add(new ImageRef(mediaRec, fileRef.Title));
                 }
             }
         }
@@ -102,11 +114,11 @@ namespace GKCore.Controllers
             if (fCurrentIndex < 0 || fCurrentIndex >= fFileRefs.Count) return;
 
             // Only images are in the list
-            GDMFileReferenceWithTitle fileRef = fFileRefs[fCurrentIndex];
+            var imageRef = fFileRefs[fCurrentIndex];
 
-            fCurrentText = fileRef.Title;
+            fCurrentText = imageRef.Title;
 
-            IImage img = fBase.Context.LoadMediaImage(fileRef, -1, -1, ExtRect.Empty, false);
+            IImage img = fBase.Context.LoadMediaImage(imageRef.MediaRec, -1, -1, ExtRect.Empty, false);
             if (img != null) {
                 fView.SetImage(img);
             }

@@ -81,13 +81,13 @@ namespace GKCore.Interfaces
         /// <summary>
         /// Loading an image from a multimedia link with the features to get a thumbnail for the trees and cut out a part from the whole.
         /// </summary>
-        /// <param name="fileReference"></param>
+        /// <param name="mmRec"></param>
         /// <param name="thumbWidth">thumbnail width, if <= 0 - then the image width is unchanged</param>
         /// <param name="thumbHeight">thumbnail height, if <= 0 - then the image height is unchanged</param>
         /// <param name="cutoutArea"></param>
         /// <param name="throwException"></param>
         /// <returns></returns>
-        IImage LoadMediaImage(GDMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException);
+        IImage LoadMediaImage(GDMMultimediaRecord mmRec, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException);
 
         // Used in FamilyBookExporter, TreeChart and PersonEdit
         IImage GetPrimaryBitmap(GDMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException);

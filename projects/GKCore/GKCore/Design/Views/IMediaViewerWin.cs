@@ -27,10 +27,9 @@ namespace GKCore.Design.Views
 {
     public interface IMediaViewerWin : IWindow, IWindowDependent
     {
-        GDMFileReferenceWithTitle FileReference { get; set; }
         GDMMultimediaRecord MultimediaRecord { get; set; }
 
-        void SetViewImage(IImage img, GDMFileReferenceWithTitle fileRef);
+        void SetViewImage(IImage img);
         void SetViewMedia(string mediaFile);
         void SetViewText(string text);
         void SetViewRTF(string text);

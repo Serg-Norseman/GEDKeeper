@@ -1099,7 +1099,6 @@ namespace GKCore
         private static IGraphicsProvider fGfxProvider;
         private static INamesTable fNamesTable;
         private static GlobalOptions fOptions;
-        private static PathReplacer fPathReplacer;
         private static PluginsMan fPlugins;
         private static IStdDialogs fStdDialogs;
         private static IThemeManager fThemeManager;
@@ -1147,16 +1146,6 @@ namespace GKCore
                     fOptions = GlobalOptions.Instance;
                 }
                 return fOptions;
-            }
-        }
-
-        public static PathReplacer PathReplacer
-        {
-            get {
-                if (fPathReplacer == null) {
-                    fPathReplacer = new PathReplacer();
-                }
-                return fPathReplacer;
             }
         }
 
@@ -1238,8 +1227,6 @@ namespace GKCore
             options.FindLanguages();
 
             NamesTable.LoadFromFile(GetAppDataPathStatic() + "GEDKeeper2.nms");
-
-            PathReplacer.Load(GKUtils.GetAppPath() + "crossplatform.yaml"); // FIXME: path
 
             ExtResources.Load(GKUtils.GetExternalsPath() + "resources.yaml");
         }
