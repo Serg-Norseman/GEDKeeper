@@ -441,7 +441,7 @@ SectionGroup /e "$(gkplg)"
         File "..\plugins\Lucene.Net*.dll"
         File "..\plugins\Microsoft.Extensions.Configuration.Abstractions.dll"
         File "..\plugins\Microsoft.Extensions.Primitives.dll"
-        File "..\plugins\Prism.dll"
+;        File "..\plugins\Prism.dll"
         File "..\plugins\System.*.dll"
         File "..\plugins\GKTextSearchPlugin.*"
     SectionEnd

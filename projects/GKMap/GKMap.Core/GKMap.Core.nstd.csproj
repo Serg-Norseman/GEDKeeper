@@ -6,6 +6,7 @@
         <AssemblyName>GKMap.Core</AssemblyName>
         <RootNamespace>GKMap</RootNamespace>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <DefineConstants>DIS_MONO</DefineConstants>
 
         <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
     </PropertyGroup>
@@ -13,26 +14,15 @@
     <Import Project="..\..\GKConfigurations3.targets" />
 
 
-    <ItemGroup Condition=" $(DefineConstants.Contains('MONO')) ">
-        <Reference Include="Mono.Data.Sqlite">
-            <HintPath>..\libs\Mono.Data.Sqlite.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Mono.Security">
-            <HintPath>..\libs\Mono.Security.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
+    <ItemGroup>
+        <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
     </ItemGroup>
 
-    <ItemGroup Condition=" !$(DefineConstants.Contains('MONO')) ">
-        <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
+    <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
         <PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
     </ItemGroup>
 
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
-    </ItemGroup>
 
     <ItemGroup>
         <EmbeddedResource Include="Resources\CreateTileDb.sql" />

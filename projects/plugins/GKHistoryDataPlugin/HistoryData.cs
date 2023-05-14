@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma warning disable SYSLIB0014
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -155,7 +157,9 @@ namespace GKHistoryDataPlugin
         {
             try {
                 Thread worker = new Thread(WorkerMethod);
+#if OS_MSWIN
                 worker.SetApartmentState(ApartmentState.STA);
+#endif
                 worker.IsBackground = true;
                 worker.Start();
             } catch (Exception ex) {

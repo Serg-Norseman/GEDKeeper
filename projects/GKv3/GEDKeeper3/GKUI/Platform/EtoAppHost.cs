@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma warning disable CS0618
+#pragma warning disable CS0612, CS0618
 
 using System;
 using System.Globalization;

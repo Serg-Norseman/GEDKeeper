@@ -1,4 +1,4 @@
-## 28.04.2023 [v2.26.0/Windows &amp; v3.2.0/Linux,MacOS,Windows (beta)]
+## 14.05.2023 [v2.26.0/Windows &amp; v3.2.0/Linux,MacOS,Windows]
 - Added an option to remember the overall size of the records info panels.
 - Added control and closing of dependent windows when the main one is closed.
 - Fixed errors in displaying tree diagrams.

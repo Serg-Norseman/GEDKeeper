@@ -10,86 +10,75 @@
 
     <h1>Implementations</h1>
 
-	<h2>Overview</h2>
+    <h2>Overview</h2>
 
-	<ul>
-	<li>Legacy (NET4.7.1 & WinForms), "GEDKeeper2"
-	<li>Future cross-platform desktop (NET6 & <a href="https://github.com/picoe/eto"></a>Eto.Forms), codenamed "GEDKeeper3", interface grinding stage
-	<li>Future mobile (NET Standard & <a href="https://github.com/xamarin/xamarin.forms">Xamarin</a>), codenamed "GEDKeeperX", initial experience
-	</ul>
+    <ul>
+        <li>Legacy "GEDKeeper2" (NET4.7.1 & WinForms)
+        <li>Cross-platform desktop "GEDKeeper3" (NET6 & <a href="https://github.com/picoe/eto"></a>Eto.Forms)
+        <li>Future mobile "GEDKeeperX" (NET Standard & <a href="https://github.com/xamarin/xamarin.forms">Xamarin</a>), initial experience
+    </ul>
 
-	<h2>Compatibility Matrix</h2>
+    <h2>Compatibility Matrix</h2>
 
-	<table>
-	<tr><td>Implementation</td><td>Windows</td><td>Linux</td><td>Mac OS X</td></tr>
-	<tr><td>GEDKeeper2</td><td>fully operational</td><td>fully operational</td><td>not supported</td></tr>
-	<tr><td>GEDKeeper3</td><td>in process</td><td>in process</td><td>in process</td></tr>
-	<tr><td>GEDKeeperX</td><td>initial experiment</td><td>not supported</td><td>initial experiment</td></tr>
-	</table>
+    <table>
+        <tr><td>Implementation</td><td>Windows</td><td>Linux</td><td>Mac OS X</td></tr>
+        <tr><td>GEDKeeper2</td><td>fully operational</td><td>fully operational</td><td>not supported</td></tr>
+        <tr><td>GEDKeeper3</td><td>in process</td><td>in process</td><td>in process</td></tr>
+        <tr><td>GEDKeeperX</td><td>initial experiment</td><td>not supported</td><td>initial experiment</td></tr>
+    </table>
 
-	<h2>Implementations Detail<h2>
+    <h2>Implementations Detail</h2>
 
-	<h3>GEDKeeper (GKv1)</h3>
-
-	<p>Development period: <b>08.01.2009 - 31.05.2011</b>.</p>
-	<p>Ported from Delphi to C#: <b>01.06.2011 - 20.07.2011</b>.</p>
-	<p>Specificity: Delphi, VCL.</p>
-	<p>Status: <b>finished</b>.</p>
-	<p>Last version: 1.9.1.</p>
-
-
-	<h3>GEDKeeper2 (GKv2)</h3>
-
-	<p>Development period: <b>05.08.2011 - present time</b>.</p>
-	<p>Specificity: C#, WinForms.</p>
-	<p>Status: <b>stable</b>.</p>
-	<p>Last version: 2.26.0.</p>
+    <h3>GEDKeeper (GKv1)</h3>
+    <p>Development period: <b>08.01.2009 - 31.05.2011</b>.</p>
+    <p>Ported from Delphi to C#: <b>01.06.2011 - 20.07.2011</b>.</p>
+    <p>Specificity: Delphi, VCL.</p>
+    <p>Status: <b>finished</b>.</p>
+    <p>Last version: 1.9.1.</p>
 
 
-	<h3>GEDKeeper3 (GKv3)</h3>
-
-	<p>Development period: <b>24.05.2017 - present time</b>.</p>
-	<p>Specificity: C#, <a href="https://github.com/picoe/eto">Eto.Forms</a>.</p>
-	<p>Status: <b>beta</b>.</p>
-	<p>Last version: 3.2.0.</p>
-
-
-	<h3>GEDKeeperJ</h3>
-
-	<p>Ported from C# to Java: <b>24.07.2017 - 23.09.2017</b>.</p>
-	<p>Specificity: Java, Swing.</p>
-	<p>Status: <b>discarded</b>.</p>
+    <h3>GEDKeeper2 (GKv2)</h3>
+    <p>Development period: <b>05.08.2011 - present time</b>.</p>
+    <p>Specificity: C#, WinForms.</p>
+    <p>Status: <b>stable</b>.</p>
+    <p>Last version: 2.26.0.</p>
 
 
-	<h3>GEDKeeperX (GKvX)</h3>
-
-	<p>Development period: <b>13.10.2018 - present time</b>.</p>
-	<p>Specificity: C#, <a href="https://github.com/xamarin/xamarin.forms">Xamarin</a>.</p>
-	<p>Status: <b>in developing</b>.</p>
-
-
-	<h3>GEDKeeperU (GKvU)</h3>
-
-	<p>Development period: <b>05.11.2018 - 20.05.2021</b>.</p>
-	<p>Specificity: C#, UWP.</p>
-	<p>Status: <b>discarded</b>.</p>
-	<p>Reason: using the framework (UWP) targeting only one operating system (Windows) has no future for the project.</p>
+    <h3>GEDKeeper3 (GKv3)</h3>
+    <p>Development period: <b>24.05.2017 - present time</b>.</p>
+    <p>Specificity: C#, <a href="https://github.com/picoe/eto">Eto.Forms</a>.</p>
+    <p>Status: <b>beta</b>.</p>
+    <p>Last version: 3.2.0.</p>
 
 
-	<h3>GEDKeeperA (GKvA)</h3>
+    <h3>GEDKeeperJ</h3>
+    <p>Ported from C# to Java: <b>24.07.2017 - 23.09.2017</b>.</p>
+    <p>Specificity: Java, Swing.</p>
+    <p>Status: <b>discarded</b>.</p>
 
-	<p>Development period: <b>19.05.2021 - 26.05.2021</b>.</p>
-	<p>Specificity: C#, <a href="https://github.com/AvaloniaUI/Avalonia">Avalonia</a>.</p>
-	<p>Status: <b>discarded</b>.</p>
-	<p>Reason: multiple problems with UI elements. Fully covered by the functionality of Eto.Forms in the absence of the same problems.</p>
 
-	<p>Details:<ol>
-	<li>No editable ComboBox - hard required, blocked problem;
-	<li>No spacing for grid cells - minor problem;
-	<li>No options for disable minimize/resize buttons in dialogs - minor problem;
-	<li>No masked text box - blocked problem;
-	<li>An obscure and complex way to implement graphics drawing components using pure framework means without diving into specific platform-specific renders.
-	</ol></p>
+    <h3>GEDKeeperX (GKvX)</h3>
+    <p>Development period: <b>13.10.2018 - present time</b>.</p>
+    <p>Specificity: C#, <a href="https://github.com/xamarin/xamarin.forms">Xamarin</a>.</p>
+    <p>Status: <b>in developing</b>.</p>
+
+
+    <h3>GEDKeeperU (GKvU)</h3>
+    <p>Development period: <b>05.11.2018 - 20.05.2021</b>.</p>
+    <p>Specificity: C#, UWP.</p>
+    <p>Status: <b>discarded</b>.</p>
+    <p>Reason: using the framework (UWP) targeting only one operating system (Windows) has no future for the project.</p>
+
+
+    <h3>GEDKeeperA (GKvA)</h3>
+    <p>Development period: <b>19.05.2021 - 26.05.2021</b>.</p>
+    <p>Specificity: C#, <a href="https://github.com/AvaloniaUI/Avalonia">Avalonia</a>.</p>
+    <p>Status: <b>discarded</b>.</p>
+    <p>
+        Reason: multiple problems with UI elements (no editable ComboBox, spacing for grid cells, options for disable minimize/resize buttons in dialogs, masked text box,
+        an obscure and complex way to implement graphics drawing components using pure framework means without diving into specific platform-specific renders).
+        Fully covered by the functionality of Eto.Forms in the absence of the same problems.
+    </p>
 
 </body>
 </html>

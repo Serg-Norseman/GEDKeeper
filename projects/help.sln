@@ -160,6 +160,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_enu", "help_enu", "{2C
 		..\locales\help_enu\styles.css = ..\locales\help_enu\styles.css
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{57AB86D2-7C75-47AE-9491-F958C0EA191F}"
+	ProjectSection(SolutionItems) = preProject
+		..\locales\dev\gkhDevelopment.html = ..\locales\dev\gkhDevelopment.html
+		..\locales\dev\gkhDev_Architecture.html = ..\locales\dev\gkhDev_Architecture.html
+		..\locales\dev\gkhDev_CodeStruct.html = ..\locales\dev\gkhDev_CodeStruct.html
+		..\locales\dev\gkhDev_FileFormats.html = ..\locales\dev\gkhDev_FileFormats.html
+		..\locales\dev\gkhDev_Implementations.html = ..\locales\dev\gkhDev_Implementations.html
+		..\locales\dev\gkhDev_Releases.html = ..\locales\dev\gkhDev_Releases.html
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

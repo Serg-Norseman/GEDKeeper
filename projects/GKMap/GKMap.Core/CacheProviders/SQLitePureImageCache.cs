@@ -6,6 +6,10 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
+#if DIS_MONO
+#undef MONO
+#endif
+
 #if MONO
 #undef EMBED_LIBS
 #endif
@@ -20,6 +24,23 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using GKMap.MapProviders;
+
+/*
+    <ItemGroup Condition=" $(DefineConstants.Contains('MONO')) ">
+        <Reference Include="Mono.Data.Sqlite">
+            <HintPath>..\libs\Mono.Data.Sqlite.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Mono.Security">
+            <HintPath>..\libs\Mono.Security.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup Condition=" !$(DefineConstants.Contains('MONO')) ">
+        <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
+    </ItemGroup>
+ */
 
 namespace GKMap.CacheProviders
 {
@@ -269,11 +290,7 @@ namespace GKMap.CacheProviders
 
                             tr.Commit();
                         } catch (Exception exx) {
-#if MONO
-                            Console.WriteLine("CreateEmptyDB: " + exx.ToString());
-#endif
-                            Debug.WriteLine("CreateEmptyDB: " + exx);
-
+                            WriteDebugLine("CreateEmptyDB: " + exx);
                             tr.Rollback();
                             ret = false;
                         }
@@ -282,10 +299,7 @@ namespace GKMap.CacheProviders
                     cn.Close();
                 }
             } catch (Exception ex) {
-#if MONO
-                Console.WriteLine("CreateEmptyDB: " + ex.ToString());
-#endif
-                Debug.WriteLine("CreateEmptyDB: " + ex);
+                WriteDebugLine("CreateEmptyDB: " + ex);
                 ret = false;
             }
             return ret;
@@ -315,11 +329,7 @@ namespace GKMap.CacheProviders
                                 }
                                 tr.Commit();
                             } catch (Exception exx) {
-#if MONO
-                                Console.WriteLine("PreAllocateDB: " + exx.ToString());
-#endif
-                                Debug.WriteLine("PreAllocateDB: " + exx);
-
+                                WriteDebugLine("PreAllocateDB: " + exx);
                                 tr.Rollback();
                                 ret = false;
                             }
@@ -328,10 +338,7 @@ namespace GKMap.CacheProviders
                     }
                 }
             } catch (Exception ex) {
-#if MONO
-                Console.WriteLine("PreAllocateDB: " + ex.ToString());
-#endif
-                Debug.WriteLine("PreAllocateDB: " + ex);
+                WriteDebugLine("PreAllocateDB: " + ex);
                 ret = false;
             }
             return ret;
@@ -384,11 +391,7 @@ namespace GKMap.CacheProviders
                                         NoCacheTimeColumn = false;
                                     }
                                 } catch (Exception exx) {
-#if MONO
-                                    Console.WriteLine("AlterDBAddTimeColumn: " + exx.ToString());
-#endif
-                                    Debug.WriteLine("AlterDBAddTimeColumn: " + exx);
-
+                                    WriteDebugLine("AlterDBAddTimeColumn: " + exx);
                                     tr.Rollback();
                                     ret = false;
                                 }
@@ -400,10 +403,7 @@ namespace GKMap.CacheProviders
                     ret = false;
                 }
             } catch (Exception ex) {
-#if MONO
-                Console.WriteLine("AlterDBAddTimeColumn: " + ex.ToString());
-#endif
-                Debug.WriteLine("AlterDBAddTimeColumn: " + ex);
+                WriteDebugLine("AlterDBAddTimeColumn: " + ex);
                 ret = false;
             }
             return ret;
@@ -428,7 +428,7 @@ namespace GKMap.CacheProviders
                     cn.Close();
                 }
             } catch (Exception ex) {
-                Debug.WriteLine("VacuumDb: " + ex);
+                WriteDebugLine("VacuumDb: " + ex);
                 ret = false;
             }
             return ret;
@@ -506,11 +506,7 @@ namespace GKMap.CacheProviders
                                     }
                                     tr.Commit();
                                 } catch (Exception ex) {
-#if MONO
-                                    Console.WriteLine("PutImageToCache: " + ex.ToString());
-#endif
-                                    Debug.WriteLine("PutImageToCache: " + ex);
-
+                                    WriteDebugLine("PutImageToCache: " + ex);
                                     tr.Rollback();
                                     ret = false;
                                 }
@@ -523,10 +519,7 @@ namespace GKMap.CacheProviders
                         CheckPreAllocation();
                     }
                 } catch (Exception ex) {
-#if MONO
-                    Console.WriteLine("PutImageToCache: " + ex.ToString());
-#endif
-                    Debug.WriteLine("PutImageToCache: " + ex);
+                    WriteDebugLine("PutImageToCache: " + ex);
                     ret = false;
                 }
             }
@@ -575,10 +568,7 @@ namespace GKMap.CacheProviders
                     cn.Close();
                 }
             } catch (Exception ex) {
-#if MONO
-                Console.WriteLine("GetImageFromCache: " + ex.ToString());
-#endif
-                Debug.WriteLine("GetImageFromCache: " + ex);
+                WriteDebugLine("GetImageFromCache: " + ex);
                 ret = null;
             }
 
@@ -603,13 +593,19 @@ namespace GKMap.CacheProviders
                     }
                 }
             } catch (Exception ex) {
-#if MONO
-                Console.WriteLine("DeleteOlderThan: " + ex);
-#endif
-                Debug.WriteLine("DeleteOlderThan: " + ex);
+                WriteDebugLine("DeleteOlderThan: " + ex);
             }
 
             return affectedRows;
+        }
+
+        private static void WriteDebugLine(string msg)
+        {
+#if OS_MSWIN
+            Debug.WriteLine(msg);
+#else
+            Console.WriteLine(msg);
+#endif
         }
     }
 }

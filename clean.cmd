@@ -3,12 +3,12 @@ del .\bin\* /s /q
 for /d %%p in (.\bin\*) do rd "%%p" /s /q
 
 del .\plugins\* /s /q
+for /d %%p in (.\plugins\*) do rd "%%p" /s /q
+
 del .\deploy\*.zip /q
 del .\deploy\*.exe /q
 
-del .\appdata\imagecache\*.* /q
-del .\appdata\xdb\*.* /q
-del .\appdata\ldb\*.* /q
+for /d %%p in (.\appdata\*) do rd "%%p" /s /q
 del .\appdata\GEDKeeper2.log
 del .\appdata\GEDKeeper2.nms
 
