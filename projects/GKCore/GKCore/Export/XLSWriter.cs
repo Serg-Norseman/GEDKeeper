@@ -22,7 +22,7 @@ using GKCore.Design.Graphics;
 
 namespace GKCore.Export
 {
-#if !NETSTANDARD
+#if !NETCORE
     using ExcelLibrary.SpreadSheet;
 #else
     using SwiftExcel;
@@ -57,7 +57,7 @@ namespace GKCore.Export
             }
         }
 
-#if !NETSTANDARD
+#if !NETCORE
 
         private Workbook fWorkbook;
         private Worksheet fWorksheet;

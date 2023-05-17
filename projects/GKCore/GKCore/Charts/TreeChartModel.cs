@@ -1550,10 +1550,20 @@ namespace GKCore.Charts
         {
             DoneGraphics();
 
-            fLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 1f);
-            fDottedLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 1f, new float[] {4.0F, 2.0F});
-            fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Silver), 1f);
-            fDottedDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Silver), 1f, new float[] {4.0F, 2.0F});
+            // Anti-aliasing works differently in EtoForms and WinForms.
+            int clrLine, clrDecor;
+#if GK3
+            clrLine = BSDColors.DimGray;
+            clrDecor = BSDColors.DarkGray;
+#else
+            clrLine = BSDColors.Black;
+            clrDecor = BSDColors.DimGray;
+#endif
+
+            fLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrLine), 1f);
+            fDottedLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrLine), 1f, new float[] {4.0F, 2.0F});
+            fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrDecor), 1f);
+            fDottedDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrDecor), 1f, new float[] {4.0F, 2.0F});
             fSolidBlack = fRenderer.CreateSolidBrush(ChartRenderer.GetColor(BSDColors.Black));
         }
 

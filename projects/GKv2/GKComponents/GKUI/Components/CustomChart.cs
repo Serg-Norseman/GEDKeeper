@@ -263,7 +263,12 @@ namespace GKUI.Components
                         pic = new Metafile(fileName, gfx.GetHdc());
                     }
                 } else {
-                    pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
+                    try {
+                        pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
+                    } catch {
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+                        return;
+                    }
                 }
 
                 try {

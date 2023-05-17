@@ -2,7 +2,7 @@
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms" xmlns:components="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKUI.Forms.ScriptEditWin"
-  Size="700, 420" Resizable="True" ShowInTaskbar="True" Closing="ScriptEditWin_Closing" KeyDown="ScriptEditWin_KeyDown">
+  Size="700, 520" Resizable="True" ShowInTaskbar="True" Closing="ScriptEditWin_Closing" KeyDown="ScriptEditWin_KeyDown">
 
   <Dialog.ToolBar>
     <ToolBar TextAlign="Right" Style="tbsi">

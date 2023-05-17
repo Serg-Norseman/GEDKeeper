@@ -195,8 +195,14 @@ namespace GKUI.Components
                     /* Emf is not supported */
                 }
 
+                Bitmap pic;
+                try {
+                    pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
+                } catch {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+                    return;
+                }
 
-                Bitmap pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
                 try {
                     using (Graphics gfx = new Graphics(pic)) {
                         fRenderer.SetTarget(gfx);

@@ -1,6 +1,6 @@
 ﻿// This file is part of "Family.Show".
 
-#if !NETSTANDARD
+#if !NETCORE
 
 using System;
 using System.IO;

@@ -43,7 +43,7 @@ namespace GKCore.Database
 
         static GKDatabase()
         {
-#if !NETSTANDARD
+#if !NETCORE
             SQLiteLoader.Load();
 #endif
         }

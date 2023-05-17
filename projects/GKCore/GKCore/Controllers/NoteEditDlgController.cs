@@ -152,7 +152,7 @@ namespace GKCore.Controllers
         {
             base.SetLocale();
 
-#if NETSTANDARD
+#if NETCORE
             // only for GKv3 (GKDropDownToolItem), not for GKv2 (ComboBox)
             GetControl<IButtonToolItem>("cmbSizes").Text = "Sizes";
 #endif

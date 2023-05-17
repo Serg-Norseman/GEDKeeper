@@ -92,7 +92,7 @@ namespace GKCore.Export
         public static TableWriter GetTableWriterWFN(out string fileName)
         {
             string availableFormats = "CSV files (*.csv)|*.csv";
-#if !NETSTANDARD
+#if !NETCORE
             availableFormats += "|" + "Excel files (*.xls)|*.xls";
 #else
             availableFormats += "|" + "Excel files (*.xlsx)|*.xlsx";
@@ -106,13 +106,9 @@ namespace GKCore.Export
             TableWriter result;
 
             string ext = FileHelper.GetFileExtension(fileName);
-//#if !NETSTANDARD
             if (string.Equals(ext, ".xls") || string.Equals(ext, ".xlsx")) {
                 result = new XLSWriter();
-            }
-            else
-//#endif
-            {
+            } else {
                 result = new CSVWriter();
             }
 

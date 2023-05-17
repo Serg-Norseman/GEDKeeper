@@ -58,7 +58,7 @@ namespace GKCore.Lists
                     result = fStructList.IndexOf(fFetchedRec) + 1;
                     break;
                 case 1:
-                    result = fNoteLines.Text.Trim();
+                    result = GKUtils.MergeStrings(fNoteLines, GKData.NOTE_NAME_MAX_LENGTH);
                     break;
             }
             return result;

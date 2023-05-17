@@ -53,6 +53,7 @@ namespace GKCore
         public const string LUA_EXT = "lua";
 
         public const int NOTE_NAME_MAX_LENGTH = 64;
+        public const int NOTE_NAME_DBL_MAX_LENGTH = 128;
 
         public const string GAPI_KEY = "AIzaSyCyPx_u1PhHaN2d3ld4J8hsgASF5lOdpGY";
         public const string YAPI_KEY = "a5653896-1335-477f-aac7-10a2ba9e52c5";

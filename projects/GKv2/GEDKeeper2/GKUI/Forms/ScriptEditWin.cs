@@ -71,6 +71,24 @@ namespace GKUI.Forms
         {
             get { return GetControlHandler<ITextBox>(txtDebugOutput); }
         }
+ 
+        void IScriptConsole.print(string text)
+        {
+            MethodInvoker invoker = delegate () {
+                txtDebugOutput.AppendText(text + "\r\n");
+                txtDebugOutput.ScrollToCaret();
+            };
+
+            try {
+                if (InvokeRequired) {
+                    BeginInvoke(invoker, null);
+                } else {
+                    invoker();
+                }
+            } catch {
+                // dummy
+            }
+        }
 
         #endregion
 

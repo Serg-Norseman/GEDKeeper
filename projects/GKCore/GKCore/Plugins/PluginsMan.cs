@@ -76,7 +76,7 @@ namespace GKCore.Plugins
             Logger.WriteInfo("Plugins load path: " + path);
 
             try {
-#if !NETSTANDARD
+#if !NETCORE
                 AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
 #else
 #endif
@@ -84,7 +84,7 @@ namespace GKCore.Plugins
                 string[] pluginFiles = Directory.GetFiles(path, "*.dll");
                 foreach (string pfn in pluginFiles) {
                     try {
-#if !NETSTANDARD
+#if !NETCORE
                         AssemblyName assemblyName = AssemblyName.GetAssemblyName(pfn);
                         Assembly asm = Assembly.Load(assemblyName);
 #else

@@ -87,6 +87,18 @@ namespace GKUI.Forms
             get { return GetControlHandler<ITextBox>(txtDebugOutput); }
         }
 
+        void IScriptConsole.print(string text)
+        {
+            try {
+                Application.Instance.Invoke(delegate {
+                    txtDebugOutput.Append(text + "\r\n", true);
+                });
+                Application.Instance.RunIteration();
+            } catch {
+                // dummy
+            }
+        }
+
         #endregion
 
         public bool CheckModified()

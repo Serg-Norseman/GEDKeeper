@@ -7,7 +7,7 @@
 //#define IPC_SUPPORTS
 #endif
 
-#if NETSTANDARD
+#if NETCORE
 #undef IPC_SUPPORTS
 #endif
 

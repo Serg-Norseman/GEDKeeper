@@ -27,8 +27,7 @@ using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Controllers;
-using GKCore.Design;
-using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -52,37 +51,32 @@ namespace GKCore
     /// </summary>
     public class ScriptEngine
     {
-        private ITextBox fDebugOutput;
         private IBaseWindow fBase;
-        private IView fView;
+        private IScriptConsole fView;
 
-        public ScriptEngine(IView view)
+        public ScriptEngine(IScriptConsole view)
         {
             fView = view;
         }
 
-        public void lua_run(string script, IBaseWindow baseWin, ITextBox debugOutput)
+        public void lua_run(string script, IBaseWindow baseWin)
         {
-            fDebugOutput = debugOutput;
             fBase = baseWin;
 
             using (Lua lvm = new Lua()) {
                 try {
+#if NETCORE
+                    lvm.State.Encoding = Encoding.UTF8;
+#endif
                     lua_init(lvm);
                     lvm.DoString(script);
                 } catch (Exception ex) {
-                    lua_print("> " + LangMan.LS(LSID.LSID_Error) + ": " + ex.Message);
+                    print("> " + LangMan.LS(LSID.LSID_Error) + ": " + ex.Message);
                 }
             }
         }
 
         #region Private service functions
-
-        private void lua_print(object text)
-        {
-            if (fDebugOutput != null)
-                fDebugOutput.AppendText(text + "\r\n");
-        }
 
         private void lua_register(Lua lvm, string funcName)
         {
@@ -238,7 +232,8 @@ namespace GKCore
 
         public void print(object text)
         {
-            lua_print(text);
+            if (fView != null && text != null)
+                fView.print(text.ToString());
         }
 
         public int strpos(string substr, string str)

@@ -23,7 +23,13 @@ using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
-    public interface IScriptEditWin : ICommonDialog, ILocalizable
+    public interface IScriptConsole : IView
+    {
+        void print(string text);
+    }
+
+
+    public interface IScriptEditWin : ICommonDialog, ILocalizable, IScriptConsole
     {
         ITextBox ScriptText { get; }
         ITextBox DebugOutput { get; }

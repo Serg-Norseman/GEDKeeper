@@ -18,11 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if NETSTANDARD
+#if NETCORE
 #define UNOFF_ITS
 #endif
-
-//#if !NETSTANDARD
 
 using System.Collections.Generic;
 using System.IO;
@@ -507,5 +505,3 @@ namespace GKCore.Export
         }
     }
 }
-
-//#endif

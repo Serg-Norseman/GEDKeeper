@@ -53,7 +53,7 @@ namespace GKUI.Components
 
             fBtnsList = new List<Button>();
 
-            fImageBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            fImageBox.SizeMode = PictureBoxSizeMode.Zoom;
             fImageBox.Cursor = Cursors.Arrow;
 
             fPixelSpeed = 5;

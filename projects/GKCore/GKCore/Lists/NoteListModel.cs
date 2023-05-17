@@ -80,8 +80,7 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctText:
-                    string noteText = GKUtils.MergeStrings(fFetchedLines);
-                    //string noteText = GKUtils.TruncateStrings(fRec.Note, GKData.NOTE_NAME_MAX_LENGTH);
+                    string noteText = GKUtils.MergeStrings(fFetchedLines, GKData.NOTE_NAME_DBL_MAX_LENGTH);
                     result = noteText;
                     break;
 

@@ -31,18 +31,18 @@ namespace GKCore.Design
             public const int Blue = 0x0000FF;
             public const int CadetBlue = 0x5F9EA0;
             public const int Coral = 0xFF7F50;
-            public const int DarkGray = 0xA9A9A9;
-            public const int DimGray = 0x696969;
-            public const int Gray = 0x808080;
+            public const int DarkGray = 0xA9A9A9; // 169, 169, 169
+            public const int DimGray = 0x696969; // 105, 105, 105
+            public const int Gray = 0x808080; // 128, 128, 128
             public const int HotPink = 0xFF69B4;
             public const int Ivory = 0xFFFFF0;
             public const int Khaki = 0xF0E68C;
             public const int LawnGreen = 0x7CFC00;
-            public const int LightGray = 0xDFDFDF;
+            public const int LightGray = 0xDFDFDF; // 223, 223, 223
             public const int Moccasin = 0xFFE4B5;
             public const int PaleGreen = 0x98FB98;
             public const int Red = 0xFF0000;
-            public const int Silver = 0xC0C0C0;
+            public const int Silver = 0xC0C0C0; // 192, 192, 192
             public const int Snow = 0xFFFAFA;
             public const int White = 0xFFFFFF;
 

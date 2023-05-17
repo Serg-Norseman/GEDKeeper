@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,7 +29,7 @@ using GKCore;
 
 namespace GDModel.Providers.FamilyShow
 {
-#if !NETSTANDARD
+#if !NETCORE
     using System.IO.Packaging;
 #endif
 
@@ -70,7 +70,7 @@ namespace GDModel.Providers.FamilyShow
 
         public override void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
-#if !NETSTANDARD
+#if !NETCORE
             using (Package package = Package.Open(inputStream, FileMode.Open, FileAccess.Read)) {
                 PackagePart documentPart = package.GetPart(new Uri(@"/" + OPCContentFileName, UriKind.Relative));
                 using (MemoryStream memStream = new MemoryStream()) {

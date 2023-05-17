@@ -130,7 +130,7 @@ namespace GKCore
             return result;
         }
 
-        public static string MergeStrings(GDMLines strings)
+        public static string MergeStrings(GDMLines strings, int maxLength = -1)
         {
             if (strings == null)
                 throw new ArgumentNullException("strings");
@@ -139,8 +139,16 @@ namespace GKCore
 
             int num = strings.Count;
             for (int i = 0; i < num; i++) {
-                if (result.Length != 0) result.Append(" ");
+                int curLen = result.Length;
+                if (maxLength > 0 && curLen > maxLength) break;
+
+                if (curLen != 0) result.Append(" ");
                 result.Append(strings[i].Trim());
+            }
+
+            if (maxLength > 0 && result.Length > maxLength) {
+                result.Remove(maxLength, result.Length - maxLength);
+                result.Append("…");
             }
 
             return result.ToString();
@@ -152,7 +160,7 @@ namespace GKCore
 
             if (value != null && value.Count != 0) {
                 if (size < value[0].Length) {
-                    s = value[0].Substring(0, size) + "...";
+                    s = value[0].Substring(0, size) + "…";
                 } else {
                     s = value[0];
                 }
@@ -1883,7 +1891,7 @@ namespace GKCore
         {
             string filter = LangMan.LS(LSID.LSID_TreeImagesFilter);
 
-#if !NETSTANDARD
+#if !NETCORE
             // Emf is not supported by Eto.Drawing
             filter += LangMan.LS(LSID.LSID_EmfFilter);
 #endif

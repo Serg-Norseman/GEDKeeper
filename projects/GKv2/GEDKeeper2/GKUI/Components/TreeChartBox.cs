@@ -322,7 +322,7 @@ namespace GKUI.Components
             return fModel.GetOffsets();
         }
 
-        private void DrawBackground(BackgroundMode background)
+        private void DrawBackground(RenderTarget target, BackgroundMode background)
         {
             switch (background) {
                 case BackgroundMode.bmNone:
@@ -331,19 +331,32 @@ namespace GKUI.Components
                 case BackgroundMode.bmImage:
                 case BackgroundMode.bmFill:
                 case BackgroundMode.bmAny:
-                    var rect = ClientRectangle;
-                    if (BackgroundImage != null) {
-                        /*using (Brush textureBrush = new TextureBrush(BackgroundImage)) {
-                            fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, rect.Width, rect.Height);
-                        }*/
+                    int width, height;
+                    if (target == RenderTarget.Screen) {
+                        var rect = ClientRectangle;
+                        width = rect.Width;
+                        height = rect.Height;
                     } else {
-                        fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackColor), 0, 0, rect.Width, rect.Height);
+                        // when rendering goes to a file, the fill should be on the entire area
+                        width = fModel.ImageWidth;
+                        height = fModel.ImageHeight;
+                    }
+                    if (BackgroundImage != null) {
+                        // texture filling can be done by the control itself when the property is set,
+                        // and when printing, sheet filling is not needed
+                        if (target > RenderTarget.Printer) {
+                            using (Brush textureBrush = new TextureBrush(BackgroundImage)) {
+                                fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, width, height);
+                            }
+                        }
+                    } else {
+                        fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackColor), 0, 0, width, height);
                     }
                     break;
             }
         }
 
-        private void InternalDraw(ChartDrawMode drawMode, BackgroundMode background)
+        private void InternalDraw(RenderTarget target, ChartDrawMode drawMode, BackgroundMode background)
         {
             // drawing relative offset of tree on graphics
             int spx = 0;
@@ -376,7 +389,7 @@ namespace GKUI.Components
 
             fRenderer.SetSmoothing(true);
 
-            DrawBackground(background);
+            DrawBackground(target, background);
 
             #if DEBUG_IMAGE
             using (Pen pen = new Pen(Color.Red)) {
@@ -528,7 +541,7 @@ namespace GKUI.Components
         {
             fRenderer.SetTarget(e.Graphics);
 
-            InternalDraw(ChartDrawMode.dmInteractive, BackgroundMode.bmAny);
+            InternalDraw(RenderTarget.Screen, ChartDrawMode.dmInteractive, BackgroundMode.bmAny);
 
             // interactive controls
             fTreeControls.Draw(fRenderer);
@@ -848,7 +861,7 @@ namespace GKUI.Components
         {
             BackgroundMode bgMode = (target == RenderTarget.Printer) ? BackgroundMode.bmNone : BackgroundMode.bmAny;
             ChartDrawMode drawMode = (!forciblyCentered) ? ChartDrawMode.dmStatic : ChartDrawMode.dmStaticCentered;
-            InternalDraw(drawMode, bgMode);
+            InternalDraw(target, drawMode, bgMode);
         }
 
         #endregion

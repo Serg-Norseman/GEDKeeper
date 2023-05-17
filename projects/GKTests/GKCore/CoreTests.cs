@@ -373,7 +373,7 @@ namespace GKCore
         public void Test_LuaScripts()
         {
             var script = new ScriptEngine(null);
-            script.lua_run("gk_print(\"Hello\")", null, null);
+            script.lua_run("gk_print(\"Hello\")", null);
         }
 
         [Test]
