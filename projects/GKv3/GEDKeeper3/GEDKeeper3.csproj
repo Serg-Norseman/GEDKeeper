@@ -33,7 +33,7 @@
 
     <ItemGroup>
         <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-        <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.4" />
+        <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.5" />
     </ItemGroup>
 
 
@@ -50,7 +50,7 @@
     </PropertyGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
-        <PackageReference Include="Eto.Platform.Wpf" Version="2.7.4" />
+        <PackageReference Include="Eto.Platform.Wpf" Version="2.7.5" />
     </ItemGroup>
 
 
@@ -79,7 +79,7 @@
     </PropertyGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) or $(DefineConstants.Contains('OS_FREEBSD')) ">
-        <PackageReference Include="Eto.Platform.Gtk" Version="2.7.4" />
+        <PackageReference Include="Eto.Platform.Gtk" Version="2.7.5" />
     </ItemGroup>
 
 
@@ -91,7 +91,7 @@
     </PropertyGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
-        <PackageReference Include="Eto.Platform.Mac64" Version="2.7.4" />
+        <PackageReference Include="Eto.Platform.Mac64" Version="2.7.5" />
     </ItemGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">

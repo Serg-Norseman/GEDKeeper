@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using Eto.Drawing;
+using GKCore;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
 using GKUI.Components;
@@ -64,10 +65,16 @@ namespace GKUI.Platform
         public override void DrawImage(IImage image, float x, float y,
                                        float width, float height, string imName)
         {
-            var sdImage = ((ImageHandler)image).Handle;
+            try {
+                if (fCanvas != null && image != null) {
+                    var sdImage = ((ImageHandler)image).Handle;
 
-            // TODO: implement output with transparency
-            fCanvas.DrawImage(sdImage, x, y, width, height);
+                    // TODO: implement output with transparency
+                    fCanvas.DrawImage(sdImage, x, y, width, height);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("EtoGfxRenderer.DrawImage({0})", imName), ex);
+            }
         }
 
         public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)

@@ -965,8 +965,9 @@ namespace GKCore
         /* 902 */ LSID_SourceYear,
         /* 903 */ LSID_AgeAtYear,
         /* 904 */ LSID_KeepInfoPansOverallSize,
+        /* 905 */ LSID_XRefVisible,
 
-        /* 000 */ LSID_Last = LSID_KeepInfoPansOverallSize
+        /* 000 */ LSID_Last = LSID_XRefVisible
     }
 
 
@@ -1888,6 +1889,7 @@ namespace GKCore
             /* 902 */ "Source year",
             /* 903 */ "Age at year",
             /* 904 */ "Keep overall size of info panels",
+            /* 905 */ "Identifiers (XRef)",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

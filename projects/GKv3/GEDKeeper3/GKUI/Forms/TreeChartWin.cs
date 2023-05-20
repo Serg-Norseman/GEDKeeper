@@ -59,6 +59,7 @@ namespace GKUI.Forms
         private CheckMenuItem miTraceSelected;
         private CheckMenuItem miTraceKinships;
         private CheckMenuItem miCertaintyIndex;
+        private CheckMenuItem miXRefVisible;
         private ButtonMenuItem miRebuildTree;
         private ButtonMenuItem miFillColor;
         private ButtonMenuItem miFillImage;
@@ -139,6 +140,9 @@ namespace GKUI.Forms
             miCertaintyIndex.Checked = fTreeBox.Options.CertaintyIndexVisible;
             fTreeBox.CertaintyIndex = fTreeBox.Options.CertaintyIndexVisible;
 
+            miXRefVisible.Checked = fTreeBox.Options.XRefVisible;
+            fTreeBox.XRefVisible = fTreeBox.Options.XRefVisible;
+
             miTraceSelected.Checked = fTreeBox.Options.TraceSelected;
             fTreeBox.TraceSelected = fTreeBox.Options.TraceSelected;
 
@@ -183,6 +187,9 @@ namespace GKUI.Forms
             miCertaintyIndex = new CheckMenuItem();
             miCertaintyIndex.Click += miCertaintyIndex_Click;
 
+            miXRefVisible = new CheckMenuItem();
+            miXRefVisible.Click += miXRefVisible_Click;
+
             miFillColor = new ButtonMenuItem();
             miFillColor.Click += miFillColor_Click;
 
@@ -197,6 +204,7 @@ namespace GKUI.Forms
                                          miTraceSelected,
                                          miTraceKinships,
                                          miCertaintyIndex,
+                                         miXRefVisible,
                                          new SeparatorMenuItem(),
                                          miFillColor,
                                          miFillImage,
@@ -524,6 +532,12 @@ namespace GKUI.Forms
         {
             fTreeBox.Options.CertaintyIndexVisible = miCertaintyIndex.Checked;
             fTreeBox.CertaintyIndex = miCertaintyIndex.Checked;
+        }
+
+        private void miXRefVisible_Click(object sender, EventArgs e)
+        {
+            fTreeBox.Options.XRefVisible = miXRefVisible.Checked;
+            fTreeBox.XRefVisible = miXRefVisible.Checked;
         }
 
         private void miFillColor_Click(object sender, EventArgs e)

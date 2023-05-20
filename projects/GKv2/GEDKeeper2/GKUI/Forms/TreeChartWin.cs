@@ -104,6 +104,9 @@ namespace GKUI.Forms
             miCertaintyIndex.Checked = fTreeBox.Options.CertaintyIndexVisible;
             fTreeBox.CertaintyIndex = fTreeBox.Options.CertaintyIndexVisible;
 
+            miXRefVisible.Checked = fTreeBox.Options.XRefVisible;
+            fTreeBox.XRefVisible = fTreeBox.Options.XRefVisible;
+
             miTraceSelected.Checked = fTreeBox.Options.TraceSelected;
             fTreeBox.TraceSelected = fTreeBox.Options.TraceSelected;
 
@@ -382,6 +385,14 @@ namespace GKUI.Forms
 
             fTreeBox.Options.CertaintyIndexVisible = miCertaintyIndex.Checked;
             fTreeBox.CertaintyIndex = miCertaintyIndex.Checked;
+        }
+
+        private void miXRefVisible_Click(object sender, EventArgs e)
+        {
+            miXRefVisible.Checked = !miXRefVisible.Checked;
+
+            fTreeBox.Options.XRefVisible = miXRefVisible.Checked;
+            fTreeBox.XRefVisible = miXRefVisible.Checked;
         }
 
         private void miFillColor_Click(object sender, EventArgs e)

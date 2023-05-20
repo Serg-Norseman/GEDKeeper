@@ -29,8 +29,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Eto.Forms" Version="2.7.4" />
-        <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.4" />
+        <PackageReference Include="Eto.Forms" Version="2.7.5" />
+        <PackageReference Include="Eto.Serialization.Xaml" Version="2.7.5" />
         <PackageReference Include="Lucene.Net" Version="4.8.0-beta00016" />
         <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00016" />
         <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00016" />

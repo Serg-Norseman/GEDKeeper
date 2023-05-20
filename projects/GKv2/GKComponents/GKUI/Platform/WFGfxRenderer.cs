@@ -82,9 +82,11 @@ namespace GKUI.Platform
                                        float width, float height, string imName)
         {
             try {
-                var sdImage = ((ImageHandler)image).Handle;
-                var destRect = new Rectangle((int)x, (int)y, (int)width, (int)height);
-                fCanvas.DrawImage(sdImage, destRect, 0, 0, sdImage.Width, sdImage.Height, GraphicsUnit.Pixel, fImageAttributes);
+                if (fCanvas != null && image != null) {
+                    var sdImage = ((ImageHandler)image).Handle;
+                    var destRect = new Rectangle((int)x, (int)y, (int)width, (int)height);
+                    fCanvas.DrawImage(sdImage, destRect, 0, 0, sdImage.Width, sdImage.Height, GraphicsUnit.Pixel, fImageAttributes);
+                }
             } catch (Exception ex) {
                 Logger.WriteError(string.Format("WFGfxRenderer.DrawImage({0})", imName), ex);
             }

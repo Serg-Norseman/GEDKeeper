@@ -111,6 +111,7 @@ namespace GKCore.Charts
         private GDMTree fTree;
         private ExtRect fTreeBounds;
         private ExtRect fVisibleArea;
+        private bool fXRefVisible;
 
 
         public IBaseWindow Base
@@ -238,6 +239,12 @@ namespace GKCore.Charts
         {
             get { return fVisibleArea; }
             set { fVisibleArea = value; }
+        }
+
+        public bool XRefVisible
+        {
+            get { return fXRefVisible; }
+            set { fXRefVisible = value; }
         }
 
 
@@ -843,11 +850,16 @@ namespace GKCore.Charts
 
         private void Predef()
         {
-            float fsz = (float)Math.Round(fOptions.DefFontSize * fScale);
+            float fsz = (float)Math.Round(fOptions.DefFontSize * fScale, 2);
+#if NETCORE && OS_MSWIN
+            // Eto.Forms [WPF] <= 2.7.4
+            // https://social.msdn.microsoft.com/Forums/en-US/98717e53-89f7-4d5f-823b-7184781a7b85/wpf-formattedtext-randomly-disappears-in-high-resolution-images
+            fsz = Math.Max(fsz, 5.0f);
+#endif
             fBoldFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, true);
             fDrawFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, false);
             if (fRenderer != null) {
-                fDefCharWidth = fRenderer.GetTextWidth("a", fDrawFont);
+                fDefCharWidth = fRenderer.GetTextWidth("A", fDrawFont);
             }
 
             fBranchDistance = (int)Math.Round(fOptions.BranchDistance * fScale);
@@ -1749,6 +1761,20 @@ namespace GKCore.Charts
                     }
                 }
 
+                // only for existing individuals
+                if (person.Rec != null) {
+                    // draw XRef
+                    if (fXRefVisible) {
+                        DrawText(person.Rec.XRef, brt.Right, brt.Bottom, 3, false);
+                    }
+
+                    // draw CI
+                    if (fCertaintyIndex) {
+                        string cas = string.Format("{0:0.00}", person.CertaintyAssessment);
+                        fRenderer.DrawString(cas, fDrawFont, fSolidBlack, brt.Left, brt.Bottom);
+                    }
+                }
+
                 // only interactive mode
                 if (drawMode == ChartDrawMode.dmInteractive) {
                     if (person.HasFlag(PersonFlag.pfCanExpand)) {
@@ -1764,12 +1790,6 @@ namespace GKCore.Charts
                     if (person.Selected) {
                         ExtRect infoRt = GetInfoRect(brt);
                         fRenderer.DrawImage(fInfoPic, infoRt.Left, infoRt.Top, string.Empty);
-                    }
-
-                    // draw CI only for existing individuals
-                    if (fCertaintyIndex && person.Rec != null) {
-                        string cas = string.Format("{0:0.00}", person.CertaintyAssessment);
-                        fRenderer.DrawString(cas, fDrawFont, fSolidBlack, brt.Left, brt.Bottom);
                     }
                 }
             } catch (Exception ex) {
@@ -1832,14 +1852,16 @@ namespace GKCore.Charts
             }
         }
 
-        private void DrawText(string text, float x, float y, int quad = 2)
+        private void DrawText(string text, float x, float y, int quad, bool offset = true)
         {
             if (string.IsNullOrEmpty(text))
                 return;
 
             // quadrant clockwise from 00 hours
-            x += fOffsetX;
-            y += fOffsetY;
+            if (offset) {
+                x += fOffsetX;
+                y += fOffsetY;
+            }
             ExtSizeF tsz = fRenderer.GetTextSize(text, fDrawFont);
 
             switch (quad) {
@@ -1913,7 +1935,7 @@ namespace GKCore.Charts
                 }
 
                 bool vertLineBySpouse;
-                int cx = 0, spXB = 0, spXE = 0;
+                int cx, spXB = 0, spXE = 0;
                 if (person.BaseSpouse == null || (person.BaseSpouse.GetSpousesCount() > 1)) {
                     cx = person.PtX;
                     spbBeg = person.PtY + person.Height - 1;

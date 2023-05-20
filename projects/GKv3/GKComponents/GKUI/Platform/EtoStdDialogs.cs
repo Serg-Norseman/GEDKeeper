@@ -61,7 +61,13 @@ namespace GKUI.Platform
 
             using (FontDialog fontDlg = new FontDialog()) {
                 fontDlg.Font = sdFont;
-                return (fontDlg.ShowDialog(null) != DialogResult.Ok) ? null : new FontHandler(fontDlg.Font);
+                Font selectedFont = null;
+                fontDlg.FontChanged += delegate {
+                    // need to handle this event for OS X, where the dialog is a floating window
+                    selectedFont = fontDlg.Font;
+                };
+                // do not get the font here, it may return immediately with a result of DialogResult.None on certain platforms
+                return (fontDlg.ShowDialog(null) != DialogResult.Ok) ? null : new FontHandler(selectedFont);
             }
         }
 

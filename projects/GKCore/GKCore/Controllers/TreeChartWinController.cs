@@ -354,6 +354,7 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miTraceSelected").Text = LangMan.LS(LSID.LSID_TM_TraceSelected);
             GetControl<IMenuItem>("miTraceKinships").Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
             GetControl<IMenuItem>("miCertaintyIndex").Text = LangMan.LS(LSID.LSID_CertaintyIndex);
+            GetControl<IMenuItem>("miXRefVisible").Text = LangMan.LS(LSID.LSID_XRefVisible);
             GetControl<IMenuItem>("miSelectColor").Text = LangMan.LS(LSID.LSID_SelectColor);
             GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
             GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.LSID_GoToPrimaryBranch);

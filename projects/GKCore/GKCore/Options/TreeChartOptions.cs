@@ -54,6 +54,7 @@ namespace GKCore.Options
         public bool DefaultPortraits;
         public bool SignsVisible;
         public bool CertaintyIndexVisible;
+        public bool XRefVisible;
         public bool TraceSelected;
         public bool InvertedTree;
         public bool MarriagesDates;
@@ -113,6 +114,7 @@ namespace GKCore.Options
             DefaultPortraits = false;
             SignsVisible = false;
             CertaintyIndexVisible = false;
+            XRefVisible = false;
             TraceSelected = true;
             ChildlessExclude = false;
             Decorative = true;
@@ -171,6 +173,7 @@ namespace GKCore.Options
             DefaultPortraits = srcOptions.DefaultPortraits;
             SignsVisible = srcOptions.SignsVisible;
             CertaintyIndexVisible = srcOptions.CertaintyIndexVisible;
+            XRefVisible = srcOptions.XRefVisible;
             TraceSelected = srcOptions.TraceSelected;
             ChildlessExclude = srcOptions.ChildlessExclude;
             Decorative = srcOptions.Decorative;
@@ -271,6 +274,7 @@ namespace GKCore.Options
             UseExtraControls = iniFile.ReadBool("Chart", "UseExtraControls", true);
             UseInlineImagesInSvg = iniFile.ReadBool("Chart", "UseInlineImagesInSvg", true);
             ExtendedTree = iniFile.ReadBool("Chart", "ExtendedTree", false);
+            XRefVisible = iniFile.ReadBool("Chart", "XRefVisible", false);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -335,6 +339,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "UseExtraControls", UseExtraControls);
             iniFile.WriteBool("Chart", "UseInlineImagesInSvg", UseInlineImagesInSvg);
             iniFile.WriteBool("Chart", "ExtendedTree", ExtendedTree);
+            iniFile.WriteBool("Chart", "XRefVisible", XRefVisible);
         }
     }
 }

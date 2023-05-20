@@ -123,13 +123,15 @@ namespace GKCore.Export
                                        float width, float height, string imName)
         {
             try {
-                x = CheckVal(x, false);
-                y = CheckVal(y, true, height);
-                width = CheckVal(width);
-                height = CheckVal(height);
+                if (fCanvas != null && image != null) {
+                    x = CheckVal(x, false);
+                    y = CheckVal(y, true, height);
+                    width = CheckVal(width);
+                    height = CheckVal(height);
 
-                var img = ConvertImage(image);
-                fCanvas.AddImage(img, width, 0, 0, height, x, y);
+                    var img = ConvertImage(image);
+                    fCanvas.AddImage(img, width, 0, 0, height, x, y);
+                }
             } catch (Exception ex) {
                 Logger.WriteError(string.Format("PDFRenderer.DrawImage({0})", imName), ex);
             }

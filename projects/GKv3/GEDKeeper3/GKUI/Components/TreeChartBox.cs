@@ -151,6 +151,17 @@ namespace GKUI.Components
             set { fTraceKinships = value; }
         }
 
+        public bool XRefVisible
+        {
+            get {
+                return fModel.XRefVisible;
+            }
+            set {
+                fModel.XRefVisible = value;
+                Invalidate();
+            }
+        }
+
         #endregion
 
         #region Instance control

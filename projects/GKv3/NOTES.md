@@ -21,6 +21,12 @@ Eto.Forms v2.7.4 compatible with netfw462
 6. Eto.Forms 2.7.4 [Gtk]
   - A window can be active but not have focus, which causes the active window detection methods to work incorrectly.
 
+7. Eto.Forms 2.7.4 [WPF]
+  - Text randomly disappears in high resolution images.
+
+8. Eto.Forms 2.7.4 [WPF]
+  - FontDialog don't return selected font.
+
 # Other
 
 LibVLCSharp.GTK

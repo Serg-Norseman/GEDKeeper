@@ -24,6 +24,7 @@
         private System.Windows.Forms.ToolStripMenuItem miTraceSelected;
         private System.Windows.Forms.ToolStripMenuItem miTraceKinships;
         private System.Windows.Forms.ToolStripMenuItem miCertaintyIndex;
+        private System.Windows.Forms.ToolStripMenuItem miXRefVisible;
         private System.Windows.Forms.ToolStripMenuItem miRebuildTree;
         private System.Windows.Forms.ToolStripSeparator N8;
         private System.Windows.Forms.ToolStripMenuItem miFillColor;
@@ -81,6 +82,7 @@
             this.miTraceSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.miTraceKinships = new System.Windows.Forms.ToolStripMenuItem();
             this.miCertaintyIndex = new System.Windows.Forms.ToolStripMenuItem();
+            this.miXRefVisible = new System.Windows.Forms.ToolStripMenuItem();
             this.N8 = new System.Windows.Forms.ToolStripSeparator();
             this.miFillColor = new System.Windows.Forms.ToolStripMenuItem();
             this.miFillImage = new System.Windows.Forms.ToolStripMenuItem();
@@ -218,6 +220,7 @@
             this.miTraceSelected,
             this.miTraceKinships,
             this.miCertaintyIndex,
+            this.miXRefVisible,
             this.N8,
             this.miFillColor,
             this.miFillImage,
@@ -272,6 +275,13 @@
             this.miCertaintyIndex.Size = new System.Drawing.Size(186, 22);
             this.miCertaintyIndex.Text = "miCertaintyIndex";
             this.miCertaintyIndex.Click += new System.EventHandler(this.miCertaintyIndex_Click);
+            // 
+            // miXRefVisible
+            // 
+            this.miXRefVisible.Name = "miXRefVisible";
+            this.miXRefVisible.Size = new System.Drawing.Size(186, 22);
+            this.miXRefVisible.Text = "miXRefVisible";
+            this.miXRefVisible.Click += new System.EventHandler(this.miXRefVisible_Click);
             // 
             // N8
             // 

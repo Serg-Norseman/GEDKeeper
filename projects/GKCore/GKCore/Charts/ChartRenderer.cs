@@ -179,7 +179,7 @@ namespace GKCore.Charts
                                         bool inside, bool clockwise, IFont font, IBrush brush)
         {
             ExtSizeF size = GetTextSize(text, font);
-            radius = radius + size.Height / 2.0f;
+            radius += size.Height / 2.0f;
 
             float textAngle = Math.Min((float)MathHelper.RadiansToDegrees((size.Width * 1.75f) / radius), wedgeAngle);
             float deltaAngle = (wedgeAngle - textAngle) / 2.0f;
