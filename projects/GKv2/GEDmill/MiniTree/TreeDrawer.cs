@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using BSLib;
@@ -102,19 +103,19 @@ namespace GEDmill.MiniTree
 
         public TreeDrawer(GMConfig config, GDMTree tree)
         {
-            fBrushBg = new SolidBrush(config.MiniTreeColorBackground);
-            fBrushBox = new SolidBrush(config.MiniTreeColorIndiBackground);
-            fBrushBoxHighlight = new SolidBrush(config.MiniTreeColorIndiHighlight);
-            fBrushBoxConcealed = new SolidBrush(config.MiniTreeColorIndiBgConcealed);
-            fBrushBoxShade = new SolidBrush(config.MiniTreeColorIndiShade);
-            fBrushText = new SolidBrush(config.MiniTreeColorIndiText);
-            fBrushTextLink = new SolidBrush(config.MiniTreeColorIndiLink);
-            fBrushTextConcealed = new SolidBrush(config.MiniTreeColorIndiFgConcealed);
+            fBrushBg = new SolidBrush(Color.FromArgb(config.MiniTreeColorBackground));
+            fBrushBox = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiBackground));
+            fBrushBoxHighlight = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiHighlight));
+            fBrushBoxConcealed = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiBgConcealed));
+            fBrushBoxShade = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiShade));
+            fBrushText = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiText));
+            fBrushTextLink = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiLink));
+            fBrushTextConcealed = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiFgConcealed));
 
-            fPenConnector = new Pen(config.MiniTreeColorBranch, 1.0f);
-            fPenConnectorDotted = new Pen(config.MiniTreeColorBranch, 1.0f);
-            fPenConnectorDotted.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-            fPenBox = new Pen(config.MiniTreeColorIndiBorder, 1.0f);
+            fPenConnector = new Pen(Color.FromArgb(config.MiniTreeColorBranch), 1.0f);
+            fPenConnectorDotted = new Pen(Color.FromArgb(config.MiniTreeColorBranch), 1.0f);
+            fPenConnectorDotted.DashStyle = DashStyle.Dot;
+            fPenBox = new Pen(Color.FromArgb(config.MiniTreeColorIndiBorder), 1.0f);
             fBrushFakeTransparency = null;
             fFont = new Font(config.TreeFontName, config.TreeFontSize);
 
@@ -425,7 +426,7 @@ namespace GEDmill.MiniTree
                             mtiRightmostSibling = AddToGroup(irSpouse, mtgSiblings);
                             // Subject is female so all but last husband have dotted bars
                             ecbCrossbar = ECrossbar.DottedLeft;
-                        } else if (Exists(irSubject) && !addedSubject) {
+                        } else if (GMHelper.GetVisibility(irSubject) && !addedSubject) {
                             // Subject is male, so need to put them in now, before their children.
                             // (Otherwise they get added as a regular sibling later)
                             var boxtext = GetCBoxText(irSubject);
@@ -452,7 +453,7 @@ namespace GEDmill.MiniTree
                         // Add children by this spouse                   
                         MTIndividual mtiChild = null;
                         while ((irGrandChild = GetChild(famRec, grandChildren, null)) != null) {
-                            if (Exists(irGrandChild)) {
+                            if (GMHelper.GetVisibility(irGrandChild)) {
                                 var boxtext = GetCBoxText(irGrandChild);
                                 mtiChild = mtgOffspring.AddIndividual(irGrandChild, boxtext.FirstName, boxtext.Surname, boxtext.Date, true, true, false, boxtext.Concealed, false);
 
@@ -503,7 +504,7 @@ namespace GEDmill.MiniTree
                             mtgOffspring.RightBox = mtiWife;
                         }
                     }
-                } else if (Exists(irSibling)) {
+                } else if (GMHelper.GetVisibility(irSibling)) {
                     // A sibling (not the subject).
                     var boxtext = GetCBoxText(irSibling);
                     mtgSiblings.AddIndividual(irSibling, boxtext.FirstName, boxtext.Surname, boxtext.Date, true, familyParents != null, true, boxtext.Concealed, false);
@@ -547,7 +548,7 @@ namespace GEDmill.MiniTree
         private static MTIndividual AddToGroup(GDMIndividualRecord ir, MTGroup mtg)
         {
             MTIndividual mti;
-            if (Exists(ir)) {
+            if (GMHelper.GetVisibility(ir)) {
                 var boxtext = GetCBoxText(ir);
                 mti = mtg.AddIndividual(ir, boxtext.FirstName, boxtext.Surname, boxtext.Date, true, false, false, boxtext.Concealed, true);
             } else {
@@ -556,15 +557,9 @@ namespace GEDmill.MiniTree
             return mti;
         }
 
-        // Returns true if the supplied record is valid for inclusion in the tree
-        private static bool Exists(GDMIndividualRecord ir)
-        {
-            return GMHelper.GetVisibility(ir);
-        }
-
         private static CBoxText GetCBoxText(GDMIndividualRecord ir)
         {
-            CBoxText result = new CBoxText();
+            var result = new CBoxText();
             result.FirstName = "";
             result.Surname = "";
             result.Concealed = !GMHelper.GetVisibility(ir);

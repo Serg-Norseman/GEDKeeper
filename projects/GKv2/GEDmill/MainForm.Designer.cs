@@ -8,7 +8,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnSettingsCancel;
-        private System.Windows.Forms.Button btnHelp;
         private System.Windows.Forms.Panel panelWelcome;
         private System.Windows.Forms.Panel panelChooseOutput;
         private System.Windows.Forms.Panel panelRecords;
@@ -121,7 +120,6 @@
         private System.Windows.Forms.MenuItem miIndividualDetails;
         private System.Windows.Forms.MenuItem miSourceRemovePics;
         private System.Windows.Forms.MenuItem miSourceDetails;
-        private System.Windows.Forms.HelpProvider helpProvider;
         private System.Windows.Forms.TabControl tabcontrolRestrictRecords;
         private System.Windows.Forms.TabPage pageIndividuals;
         private System.Windows.Forms.TabPage pageSources;
@@ -146,7 +144,6 @@
             btnNext = new System.Windows.Forms.Button();
             btnBack = new System.Windows.Forms.Button();
             btnCancel = new System.Windows.Forms.Button();
-            btnHelp = new System.Windows.Forms.Button();
             btnSettings = new System.Windows.Forms.Button();
             btnSettingsCancel = new System.Windows.Forms.Button();
             lblConfigFrontImageEdit = new System.Windows.Forms.Label();
@@ -254,7 +251,6 @@
             lblAllDoneStartFile = new System.Windows.Forms.Label();
             menuIndividuals = new System.Windows.Forms.ContextMenu();
             menuSources = new System.Windows.Forms.ContextMenu();
-            helpProvider = new System.Windows.Forms.HelpProvider();
             pageSettingsWebpages = new System.Windows.Forms.TabPage();
             pageSettingsImages = new System.Windows.Forms.TabPage();
             pageSettingsGedcom = new System.Windows.Forms.TabPage();
@@ -310,14 +306,6 @@
             btnCancel.TabIndex = 10;
             btnCancel.Text = "&Quit";
             btnCancel.Click += new System.EventHandler(btnCancel_Click);
-            // 
-            // btnHelp
-            // 
-            btnHelp.Location = new System.Drawing.Point(186, 288);
-            btnHelp.Name = "btnHelp";
-            btnHelp.TabIndex = 11;
-            btnHelp.Text = "&Help";
-            btnHelp.Click += new System.EventHandler(btnHelp_Click);
             // 
             // btnSettings
             // 
@@ -1499,7 +1487,6 @@
             Controls.Add(btnCancel);
             Controls.Add(btnSettings);
             Controls.Add(btnSettingsCancel);
-            Controls.Add(btnHelp);
             Controls.Add(btnBack);
             Controls.Add(btnNext);
             Controls.Add(pictureBox);

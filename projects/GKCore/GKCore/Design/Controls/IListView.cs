@@ -36,6 +36,7 @@ namespace GKCore.Design.Controls
         void SetBackColor(IColor color);
         void SetForeColor(IColor color);
         void SetFont(IFont font);
+        void SetSubItem(int index, object value);
     }
 
 

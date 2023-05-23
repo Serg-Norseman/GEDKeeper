@@ -30,30 +30,22 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.Data">
-      <Name>System.Data</Name>
-    </Reference>
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
-    <Reference Include="System.Xml">
-      <Name>System.XML</Name>
-    </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GEDmillPlugin.cs" />
+    <Compile Include="GMGfx.cs" />
     <Compile Include="GMHelper.cs" />
-    <Compile Include="ListView\LVNumberItem.cs" />
     <Compile Include="GMConfig.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ListView\LVItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ListView\LVStringItem.cs">
+    <Compile Include="LVItem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Logging\ILogger.cs" />
@@ -174,5 +166,6 @@
       <Name>GKComponents</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

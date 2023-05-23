@@ -23,7 +23,6 @@ using System.IO;
 using System.Windows.Forms;
 using GDModel;
 using GEDmill.HTML;
-using GEDmill.ListView;
 using GEDmill.Model;
 using GKCore;
 using GKCore.Controllers;
@@ -71,16 +70,16 @@ namespace GEDmill
         private bool fDisableRestrictsCheckEvent;
 
         // When user redefines the mini tree colors, these hold the new colors until they click OK.
-        private Color fConfigMiniTreeColorBranch;
-        private Color fConfigMiniTreeColorIndiBorder;
-        private Color fConfigMiniTreeColorIndiBackground;
-        private Color fConfigMiniTreeColorIndiHighlight;
-        private Color fConfigMiniTreeColorIndiBgConcealed;
-        private Color fConfigMiniTreeColorIndiFgConcealed;
-        private Color fConfigMiniTreeColorIndiShade;
-        private Color fConfigMiniTreeColorIndiText;
-        private Color fConfigMiniTreeColorIndiLink;
-        private Color fConfigMiniTreeColorBackground;
+        private int fConfigMiniTreeColorBranch;
+        private int fConfigMiniTreeColorIndiBorder;
+        private int fConfigMiniTreeColorIndiBackground;
+        private int fConfigMiniTreeColorIndiHighlight;
+        private int fConfigMiniTreeColorIndiBgConcealed;
+        private int fConfigMiniTreeColorIndiFgConcealed;
+        private int fConfigMiniTreeColorIndiShade;
+        private int fConfigMiniTreeColorIndiText;
+        private int fConfigMiniTreeColorIndiLink;
+        private int fConfigMiniTreeColorBackground;
 
 
         public MainForm()
@@ -92,11 +91,6 @@ namespace GEDmill
             // Set some values that scale the size of the GUI
             fDefaultButtonSize = new Point(75, 23);
             fConfigButtonSize = new Point(92, 23);
-
-            helpProvider.SetHelpKeyword(btnHelp, "HelpButtonHelpKeyword");
-            helpProvider.SetHelpNavigator(btnHelp, HelpNavigator.TableOfContents);
-            helpProvider.SetShowHelp(btnHelp, true);
-            helpProvider.HelpNamespace = GMHelper.GetAppPath() + "\\" + GMConfig.HelpFilename;
 
             fCurrentPanel = PanelKind.Welcome;
             fConfigPanelVisible = false;
@@ -155,7 +149,6 @@ namespace GEDmill
             btnCancel.Text = fLangMan.LS(PLS.LSID_Quit);
             btnBack.Text = fLangMan.LS(PLS.LSID_Back);
             btnNext.Text = fLangMan.LS(PLS.LSID_Next);
-            btnHelp.Text = fLangMan.LS(PLS.LSID_Help);
             btnSettings.Text = fLangMan.LS(PLS.LSID_Settings);
             btnSettingsCancel.Text = fLangMan.LS(PLS.LSID_Cancel);
 
@@ -287,7 +280,6 @@ namespace GEDmill
             btnBack.Enabled = false;
             btnCancel.Enabled = false;
             btnSettings.Enabled = false;
-            btnHelp.Enabled = false;
 
             if (ValidateCurrentPanel()) {
                 if ((int)fCurrentPanel < 9) // Allow for extra ftp panels
@@ -313,7 +305,6 @@ namespace GEDmill
             btnBack.Enabled = true;
             btnCancel.Enabled = true;
             btnSettings.Enabled = true;
-            btnHelp.Enabled = true;
 
             EnableCurrentPanel(true);
         }
@@ -358,52 +349,6 @@ namespace GEDmill
 
                 GMConfig.Instance.Save();
                 Close();
-            }
-        }
-
-        private void btnHelp_Click(object sender, EventArgs e)
-        {
-            string helpFile = GMHelper.GetAppPath() + "\\" + GMConfig.HelpFilename;
-
-            if (fConfigPanelVisible) {
-                switch (tabcontrolConfigPanel.SelectedIndex) {
-                    case 0:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsWebpages.htm");
-                        break;
-                    case 1:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsImages.htm");
-                        break;
-                    case 2:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsGEDCOM.htm");
-                        break;
-                    case 3:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsTrees.htm");
-                        break;
-                    case 4:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SettingsAdvanced.htm");
-                        break;
-                    default:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "FrontPage.htm");
-                        break;
-                }
-            } else {
-                switch (fCurrentPanel) {
-                    case PanelKind.RestrictRecords:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "ExcludingPeople_2.htm");
-                        break;
-                    case PanelKind.WebsiteTitleAndKeys:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SetTheTitle_3.htm");
-                        break;
-                    case PanelKind.OutputFolder:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "SelectingOutputFile_4.htm");
-                        break;
-                    case PanelKind.Finish:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "FinishScreen_5.htm");
-                        break;
-                    default:
-                        Help.ShowHelp(btnHelp, helpFile, HelpNavigator.Topic, "FrontPage.htm");
-                        break;
-                }
             }
         }
 
@@ -544,55 +489,55 @@ namespace GEDmill
 
         private void btnConfigMiniTreeColorIndiBackground_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiBackground = GMHelper.SelectColor(fConfigMiniTreeColorIndiBackground);
+            fConfigMiniTreeColorIndiBackground = GMGfx.SelectColor(fConfigMiniTreeColorIndiBackground);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiHighlight_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiHighlight = GMHelper.SelectColor(fConfigMiniTreeColorIndiHighlight);
+            fConfigMiniTreeColorIndiHighlight = GMGfx.SelectColor(fConfigMiniTreeColorIndiHighlight);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiBgConcealed_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiBgConcealed = GMHelper.SelectColor(fConfigMiniTreeColorIndiBgConcealed);
+            fConfigMiniTreeColorIndiBgConcealed = GMGfx.SelectColor(fConfigMiniTreeColorIndiBgConcealed);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiShade_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiShade = GMHelper.SelectColor(fConfigMiniTreeColorIndiShade);
+            fConfigMiniTreeColorIndiShade = GMGfx.SelectColor(fConfigMiniTreeColorIndiShade);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiText_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiText = GMHelper.SelectColor(fConfigMiniTreeColorIndiText);
+            fConfigMiniTreeColorIndiText = GMGfx.SelectColor(fConfigMiniTreeColorIndiText);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiLink_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiLink = GMHelper.SelectColor(fConfigMiniTreeColorIndiLink);
+            fConfigMiniTreeColorIndiLink = GMGfx.SelectColor(fConfigMiniTreeColorIndiLink);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorBranch_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorBranch = GMHelper.SelectColor(fConfigMiniTreeColorBranch);
+            fConfigMiniTreeColorBranch = GMGfx.SelectColor(fConfigMiniTreeColorBranch);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiBorder_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiBorder = GMHelper.SelectColor(fConfigMiniTreeColorIndiBorder);
+            fConfigMiniTreeColorIndiBorder = GMGfx.SelectColor(fConfigMiniTreeColorIndiBorder);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiFgConcealed_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiFgConcealed = GMHelper.SelectColor(fConfigMiniTreeColorIndiFgConcealed);
+            fConfigMiniTreeColorIndiFgConcealed = GMGfx.SelectColor(fConfigMiniTreeColorIndiFgConcealed);
             SetMiniTreeColorConfigButtons();
         }
 
@@ -1051,7 +996,6 @@ namespace GEDmill
             fConfigPanelVisible = true;
 
             // Disable buttons while config panel shown
-            btnHelp.Visible = false;
             btnBack.Visible = false;
             btnNext.Visible = false;
             btnCancel.Visible = false; // To give the panel a "modal" feeling
@@ -1081,7 +1025,6 @@ namespace GEDmill
             fConfigPanelVisible = false;
 
             // Restore buttons states
-            btnHelp.Visible = true;
             btnBack.Enabled = true;
             btnNext.Visible = true;
             btnCancel.Visible = true;
@@ -1131,14 +1074,11 @@ namespace GEDmill
                     btnCancel.Text = fLangMan.LS(PLS.LSID_Finish);
                     // Can't go back , because we can't undo the file creations.
                     btnBack.Visible = false;
-                    btnHelp.Location = new Point(8, 288);
                     btnCancel.Location = new Point(424, 288);
                     btnNext.Visible = false;
                 } else if (fCurrentPanel > PanelKind.Finish) {
-                    btnHelp.Location = new Point(8, 288);
                     btnNext.Text = fLangMan.LS(PLS.LSID_Finish);
                     btnCancel.Visible = false;
-                    btnHelp.Visible = false;
                     // Can't go back , because we can't undo the file creations.
                     btnBack.Visible = false;
                 } else if (fCurrentPanel == PanelKind.WebsiteTitleAndKeys) {
@@ -1152,7 +1092,6 @@ namespace GEDmill
                     btnCancel.Visible = true;
                     btnCancel.Text = fLangMan.LS(PLS.LSID_Quit);
                     btnCancel.Location = new Point(8, 288);
-                    btnHelp.Visible = true;
                 }
 
                 if (fCurrentPanel == PanelKind.RestrictRecords) {
@@ -1415,15 +1354,15 @@ namespace GEDmill
 
             lvItem.SubItems.Clear();
             lvItem.Checked = wasChecked;
-            lvItem.SubItems.Add(new LVStringItem(GMHelper.ConstructName(surname, firstName)));
-            lvItem.SubItems.Add(new LVNumberItem(birthDate, false));
-            lvItem.SubItems.Add(new LVNumberItem(deathDate, false));
-            lvItem.SubItems.Add(new LVStringItem(ir.XRef));
-            lvItem.SubItems.Add(new LVStringItem(uref));
+            lvItem.SubItems.Add(GMHelper.ConstructName(surname, firstName));
+            lvItem.SubItems.Add(birthDate.ToString());
+            lvItem.SubItems.Add(deathDate.ToString());
+            lvItem.SubItems.Add(ir.XRef);
+            lvItem.SubItems.Add(uref);
             if (nVisiblePics != nTotalPics) {
-                lvItem.SubItems.Add(new LVNumberItem(nVisiblePics, string.Format("{0}/{1}", nVisiblePics, nTotalPics)));
+                lvItem.SubItems.Add(string.Format("{0}/{1}", nVisiblePics, nTotalPics));
             } else {
-                lvItem.SubItems.Add(new LVNumberItem(nTotalPics, string.Format("{0}", nTotalPics)));
+                lvItem.SubItems.Add(string.Format("{0}", nTotalPics));
             }
         }
 
@@ -1488,7 +1427,7 @@ namespace GEDmill
 
             if (firstColumnIsCheckbox) {
                 // First nColumn (ie. item) is checkbox, so first sub-item is title.
-                lvItem.SubItems.Add(new LVStringItem(sr.ShortTitle));
+                lvItem.SubItems.Add(sr.ShortTitle);
             }
 
             string repositories = "";
@@ -1503,7 +1442,7 @@ namespace GEDmill
                     }
                 }
             }
-            lvItem.SubItems.Add(new LVStringItem(repositories));
+            lvItem.SubItems.Add(repositories);
 
             int nBirths = 0;
             int nMarriages = 0;
@@ -1553,19 +1492,19 @@ namespace GEDmill
                 }
             }
 
-            lvItem.SubItems.Add(new LVNumberItem(nCitations));
-            lvItem.SubItems.Add(new LVNumberItem(nBirths));
-            lvItem.SubItems.Add(new LVNumberItem(nMarriages));
-            lvItem.SubItems.Add(new LVNumberItem(nDeaths));
-            lvItem.SubItems.Add(new LVStringItem(sr.XRef));
+            lvItem.SubItems.Add(nCitations.ToString());
+            lvItem.SubItems.Add(nBirths.ToString());
+            lvItem.SubItems.Add(nMarriages.ToString());
+            lvItem.SubItems.Add(nDeaths.ToString());
+            lvItem.SubItems.Add(sr.XRef);
 
             int nVisiblePics, nTotalPics;
             GMHelper.CountMFRs(sr, out nTotalPics, out nVisiblePics);
 
             if (nVisiblePics != nTotalPics) {
-                lvItem.SubItems.Add(new LVNumberItem(nVisiblePics, string.Format("{0}/{1}", nVisiblePics, nTotalPics)));
+                lvItem.SubItems.Add(string.Format("{0}/{1}", nVisiblePics, nTotalPics));
             } else {
-                lvItem.SubItems.Add(new LVNumberItem(nTotalPics, string.Format("{0}", nTotalPics)));
+                lvItem.SubItems.Add(string.Format("{0}", nTotalPics));
             }
 
             lvItem.Checked = wasChecked;
@@ -1744,32 +1683,32 @@ namespace GEDmill
         /// </summary>
         private void SetMiniTreeColorConfigButtons()
         {
-            btnConfigMiniTreeColorBranch.BackColor = fConfigMiniTreeColorIndiBackground;
-            btnConfigMiniTreeColorBranch.ForeColor = fConfigMiniTreeColorBranch;
+            btnConfigMiniTreeColorBranch.BackColor = Color.FromArgb(fConfigMiniTreeColorIndiBackground);
+            btnConfigMiniTreeColorBranch.ForeColor = Color.FromArgb(fConfigMiniTreeColorBranch);
 
-            btnConfigMiniTreeColorIndiBorder.BackColor = fConfigMiniTreeColorIndiBackground;
-            btnConfigMiniTreeColorIndiBorder.ForeColor = fConfigMiniTreeColorIndiBorder;
+            btnConfigMiniTreeColorIndiBorder.BackColor = Color.FromArgb(fConfigMiniTreeColorIndiBackground);
+            btnConfigMiniTreeColorIndiBorder.ForeColor = Color.FromArgb(fConfigMiniTreeColorIndiBorder);
 
-            btnConfigMiniTreeColorIndiBackground.BackColor = fConfigMiniTreeColorIndiBackground;
-            btnConfigMiniTreeColorIndiBackground.ForeColor = fConfigMiniTreeColorIndiLink;
+            btnConfigMiniTreeColorIndiBackground.BackColor = Color.FromArgb(fConfigMiniTreeColorIndiBackground);
+            btnConfigMiniTreeColorIndiBackground.ForeColor = Color.FromArgb(fConfigMiniTreeColorIndiLink);
 
-            btnConfigMiniTreeColorIndiHighlight.BackColor = fConfigMiniTreeColorIndiHighlight;
-            btnConfigMiniTreeColorIndiHighlight.ForeColor = fConfigMiniTreeColorIndiText;
+            btnConfigMiniTreeColorIndiHighlight.BackColor = Color.FromArgb(fConfigMiniTreeColorIndiHighlight);
+            btnConfigMiniTreeColorIndiHighlight.ForeColor = Color.FromArgb(fConfigMiniTreeColorIndiText);
 
-            btnConfigMiniTreeColorIndiBgConcealed.BackColor = fConfigMiniTreeColorIndiBgConcealed;
-            btnConfigMiniTreeColorIndiBgConcealed.ForeColor = fConfigMiniTreeColorIndiFgConcealed;
+            btnConfigMiniTreeColorIndiBgConcealed.BackColor = Color.FromArgb(fConfigMiniTreeColorIndiBgConcealed);
+            btnConfigMiniTreeColorIndiBgConcealed.ForeColor = Color.FromArgb(fConfigMiniTreeColorIndiFgConcealed);
 
-            btnConfigMiniTreeColorIndiFgConcealed.BackColor = fConfigMiniTreeColorIndiBgConcealed;
-            btnConfigMiniTreeColorIndiFgConcealed.ForeColor = fConfigMiniTreeColorIndiFgConcealed;
+            btnConfigMiniTreeColorIndiFgConcealed.BackColor = Color.FromArgb(fConfigMiniTreeColorIndiBgConcealed);
+            btnConfigMiniTreeColorIndiFgConcealed.ForeColor = Color.FromArgb(fConfigMiniTreeColorIndiFgConcealed);
 
-            btnConfigMiniTreeColorIndiShade.BackColor = fConfigMiniTreeColorIndiShade;
-            btnConfigMiniTreeColorIndiShade.ForeColor = fConfigMiniTreeColorIndiLink;
+            btnConfigMiniTreeColorIndiShade.BackColor = Color.FromArgb(fConfigMiniTreeColorIndiShade);
+            btnConfigMiniTreeColorIndiShade.ForeColor = Color.FromArgb(fConfigMiniTreeColorIndiLink);
 
-            btnConfigMiniTreeColorIndiText.BackColor = fConfigMiniTreeColorIndiHighlight;
-            btnConfigMiniTreeColorIndiText.ForeColor = fConfigMiniTreeColorIndiText;
+            btnConfigMiniTreeColorIndiText.BackColor = Color.FromArgb(fConfigMiniTreeColorIndiHighlight);
+            btnConfigMiniTreeColorIndiText.ForeColor = Color.FromArgb(fConfigMiniTreeColorIndiText);
 
-            btnConfigMiniTreeColorIndiLink.BackColor = fConfigMiniTreeColorIndiBackground;
-            btnConfigMiniTreeColorIndiLink.ForeColor = fConfigMiniTreeColorIndiLink;
+            btnConfigMiniTreeColorIndiLink.BackColor = Color.FromArgb(fConfigMiniTreeColorIndiBackground);
+            btnConfigMiniTreeColorIndiLink.ForeColor = Color.FromArgb(fConfigMiniTreeColorIndiLink);
         }
 
         /// <summary>

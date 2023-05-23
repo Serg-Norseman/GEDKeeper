@@ -123,6 +123,12 @@ namespace GKUI.Components
         public void SetFont(IFont font)
         {
         }
+
+        public void SetSubItem(int index, object value)
+        {
+            if (index >= 0 && index < base.Values.Length)
+                base.Values[index] = value;
+        }
     }
 
 

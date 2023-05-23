@@ -20,7 +20,7 @@ using System;
 using System.Windows.Forms;
 using GDModel;
 
-namespace GEDmill.ListView
+namespace GEDmill
 {
     // Special class of ListViewItem can represent individual/source records.
     public class LVItem : ListViewItem, IComparable, IComparable<LVItem>

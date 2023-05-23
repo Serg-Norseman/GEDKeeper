@@ -383,5 +383,13 @@ namespace GKCore
 
             return GfxHelper.MakeArgb(255, r, g, b);
         }
+
+        public static string StringifyColor(int argb)
+        {
+            //string.Format("{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B);
+            argb &= 0xFFFFFF;
+            string result = argb.ToString("X6");
+            return result;
+        }
     }
 }

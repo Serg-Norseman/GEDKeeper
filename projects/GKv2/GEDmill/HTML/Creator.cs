@@ -494,7 +494,7 @@ namespace GEDmill.HTML
                             File.SetAttributes(fullFilename, FileAttributes.Normal); // Make any Read-Only files read-write.
                             if (maxWidth != 0 && maxHeight != 0) {
                                 // It must be a picture file
-                                copyFilename = GMHelper.ConvertAndCropImage(outputFolder, copyFilename, ref rectArea, maxWidth, maxHeight);
+                                copyFilename = GMGfx.ConvertAndCropImage(outputFolder, copyFilename, ref rectArea, maxWidth, maxHeight);
                             }
                             fCopiedFiles[asidFilename] = new FilenameAndSize(copyFilename, rectArea.Width, rectArea.Height);
                             result = copyFilename;

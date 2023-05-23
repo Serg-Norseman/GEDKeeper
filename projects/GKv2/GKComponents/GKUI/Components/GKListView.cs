@@ -93,6 +93,11 @@ namespace GKUI.Components
             SubItems.Add(new GKListSubItem(itemValue));
         }
 
+        public void SetSubItem(int index, object value)
+        {
+            SubItems[index] = new GKListSubItem(value);
+        }
+
         public void SetBackColor(IColor color)
         {
             var colorHandler = color as ColorHandler;
