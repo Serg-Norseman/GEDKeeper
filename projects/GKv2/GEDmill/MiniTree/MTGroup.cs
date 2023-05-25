@@ -99,7 +99,7 @@ namespace GEDmill.MiniTree
         }
 
 
-        public MTGroup(TreeDrawer drawer) : base(drawer)
+        public MTGroup(ITreeDrawer drawer) : base(drawer)
         {
             fMembers = null;
             fSize = new ExtSizeF(0.0f, 0.0f);

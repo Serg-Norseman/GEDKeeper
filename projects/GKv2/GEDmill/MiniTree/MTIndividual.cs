@@ -170,7 +170,7 @@ namespace GEDmill.MiniTree
         }
 
 
-        public MTIndividual(TreeDrawer drawer,
+        public MTIndividual(ITreeDrawer drawer,
                                   GDMIndividualRecord ir, string firstNames, string surname, string date,
                                   bool createLink, bool createStalk, bool highlight, bool concealed, bool shade,
                                   bool conserveWidth) : base(drawer)

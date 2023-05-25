@@ -1,4 +1,4 @@
-/* 
+﻿/* 
  * Copyright 2009 Alexander Curtis <alex@logicmill.com>
  * This file is part of GEDmill - A family history website creator
  * 
@@ -16,11 +16,7 @@
  * along with GEDmill.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using BSLib;
 using GDModel;
@@ -28,28 +24,6 @@ using GKL = GKCore.Logging;
 
 namespace GEDmill.MiniTree
 {
-    /// <summary>
-    /// Data structure containing the information to put in the boxes in the tree
-    /// </summary>
-    internal struct CBoxText
-    {
-        // Individual's name
-        public string Name;
-
-        // Dates to put in the box
-        public string Date;
-
-        // Individual's first name
-        public string FirstName;
-
-        // Individual's surname
-        public string Surname;
-
-        // Whether the information is private
-        public bool Concealed;
-    }
-
-
     /*
      * In this file, Parents are the top generation, siblings are the middle generation (including the subject of the tree),
      * and children are the bottom generation. Subject's spouses come in middle generation.
@@ -64,35 +38,37 @@ namespace GEDmill.MiniTree
      *              |                                |_________________|          |_________________|                     |
      *              |_____________________________________________________________________________________________________|
      */
-
-    /// <summary>
-    /// Class that calculates and draws a mini tree diagram
-    /// </summary>
-    public class TreeDrawer : BaseObject
+    public class MTTree
     {
-        private static readonly GKL.ILogger fLogger = GKL.LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(TreeDrawer).Name);
+        private static readonly GKL.ILogger fLogger = GKL.LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(MTTree).Name);
+
+        /// <summary>
+        /// Data structure containing the information to put in the boxes in the tree
+        /// </summary>
+        private struct CBoxText
+        {
+            // Individual's name
+            public string Name;
+
+            // Dates to put in the box
+            public string Date;
+
+            // Individual's first name
+            public string FirstName;
+
+            // Individual's surname
+            public string Surname;
+
+            // Whether the information is private
+            public bool Concealed;
+        }
+
+        private readonly GMConfig fConfig;
+        private readonly GDMTree fTree;
+        private readonly ITreeDrawer fTreeDrawer;
 
         // Total size of the tree
-        private SizeF fSizeTotal;
-
-        private SolidBrush fBrushBg;
-        private SolidBrush fBrushBox;
-        private SolidBrush fBrushBoxHighlight;
-        private SolidBrush fBrushBoxConcealed;
-        private SolidBrush fBrushBoxShade;
-        private SolidBrush fBrushText;
-        private SolidBrush fBrushTextLink;
-        private SolidBrush fBrushTextConcealed;
-        private Pen fPenConnector;
-        private Pen fPenConnectorDotted;
-        private Pen fPenBox;
-        private Font fFont;
-        private TextureBrush fBrushFakeTransparency;
-        private Graphics fTempGfx;
-
-        // Reference to the global gedcom data
-        private readonly GDMTree fTree;
-
+        private ExtSizeF fSizeTotal;
 
         // Returns the height of the whole tree diagram.
         public int Height
@@ -100,69 +76,11 @@ namespace GEDmill.MiniTree
             get { return (int)fSizeTotal.Height; }
         }
 
-
-        public TreeDrawer(GMConfig config, GDMTree tree)
+        public MTTree(GMConfig config, GDMTree tree, ITreeDrawer treeDrawer)
         {
-            fBrushBg = new SolidBrush(Color.FromArgb(config.MiniTreeColorBackground));
-            fBrushBox = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiBackground));
-            fBrushBoxHighlight = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiHighlight));
-            fBrushBoxConcealed = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiBgConcealed));
-            fBrushBoxShade = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiShade));
-            fBrushText = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiText));
-            fBrushTextLink = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiLink));
-            fBrushTextConcealed = new SolidBrush(Color.FromArgb(config.MiniTreeColorIndiFgConcealed));
-
-            fPenConnector = new Pen(Color.FromArgb(config.MiniTreeColorBranch), 1.0f);
-            fPenConnectorDotted = new Pen(Color.FromArgb(config.MiniTreeColorBranch), 1.0f);
-            fPenConnectorDotted.DashStyle = DashStyle.Dot;
-            fPenBox = new Pen(Color.FromArgb(config.MiniTreeColorIndiBorder), 1.0f);
-            fBrushFakeTransparency = null;
-            fFont = new Font(config.TreeFontName, config.TreeFontSize);
-
+            fConfig = config;
             fTree = tree;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                fBrushBg.Dispose();
-                fBrushBox.Dispose();
-                fBrushBoxHighlight.Dispose();
-                fBrushBoxConcealed.Dispose();
-                fBrushBoxShade.Dispose();
-                fBrushText.Dispose();
-                fBrushTextLink.Dispose();
-                fBrushTextConcealed.Dispose();
-                fPenConnector.Dispose();
-                fPenConnectorDotted.Dispose();
-                fPenBox.Dispose();
-                fFont.Dispose();
-                if (fBrushFakeTransparency != null) {
-                    fBrushFakeTransparency.Dispose();
-                }
-            }
-            base.Dispose(disposing);
-        }
-
-        // Sets the brush used to fill the background to the graphics image provided.
-        public void SetBackgroundImage(string filename)
-        {
-            if (!string.IsNullOrEmpty(filename)) {
-                try {
-                    Image bgImage = Image.FromFile(filename);
-                    fBrushFakeTransparency = new TextureBrush(bgImage);
-                } catch (Exception e) {
-                    // e.g. System.IO.FileNotFoundException
-                    fLogger.WriteError("SetBackgroundImage()", e);
-                    fBrushFakeTransparency = null;
-                }
-            }
-        }
-
-        public ExtSizeF MeasureString(string text)
-        {
-            var sz = fTempGfx.MeasureString(text, fFont);
-            return new ExtSizeF(sz.Width, sz.Height);
+            fTreeDrawer = treeDrawer;
         }
 
         // This is the main tree drawing method.
@@ -175,21 +93,13 @@ namespace GEDmill.MiniTree
 
             // For each individual calculate size of box required for display using helper function
             // There must be a better way to get a graphics:
-            Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format24bppRgb);
-            using (Graphics g = Graphics.FromImage(bmp)) {
-                fTempGfx = g;
-
-                Font f = fFont;
-                // Record what font windows actually used, in case it chose a different one
-                GMConfig.Instance.TreeFontName = f.Name;
-                GMConfig.Instance.TreeFontSize = f.Size;
-
+            fTreeDrawer.InitTempGfx(1, 1, 24, false);
+            try {
                 // Recursively calculate sizes of other groups
                 mtgParent.CalculateSize();
-
-                fTempGfx = null;
+            } finally {
+                fTreeDrawer.DoneTempGfx();
             }
-            bmp.Dispose();
 
             // Now calculate sizes of each row
             // Total width includes irSubject, their spouses and their siblings.
@@ -206,7 +116,7 @@ namespace GEDmill.MiniTree
             mtgParent.Compress();
 
             var rect = mtgParent.GetExtent();
-            fSizeTotal = new SizeF(rect.Width, rect.Height);
+            fSizeTotal = new ExtSizeF(rect.Width, rect.Height);
             mtgParent.Translate(-rect.Left, -rect.Top);
 
             // Calculate offset for each row
@@ -217,16 +127,9 @@ namespace GEDmill.MiniTree
 
             List<MTMap> alMap = new List<MTMap>();
 
-            bmp = new Bitmap(nTotalWidth, nTotalHeight, PixelFormat.Format32bppArgb);
-            using (var g = Graphics.FromImage(bmp)) {
-                fTempGfx = g;
-
-                // Do background fill
-                if (GMConfig.Instance.FakeMiniTreeTransparency && fBrushFakeTransparency != null) {
-                    g.FillRectangle(fBrushFakeTransparency, 0, 0, nTotalWidth, nTotalHeight);
-                }
-
-                DrawGroup(mtgParent, alMap);
+            fTreeDrawer.InitTempGfx(nTotalWidth, nTotalHeight, 32, true);
+            try {
+                fTreeDrawer.DrawGroup(mtgParent, alMap);
 
                 // Save the bitmap
                 fLogger.WriteInfo("Saving mini tree as " + fileName);
@@ -238,143 +141,14 @@ namespace GEDmill.MiniTree
                 }
 
                 // Save using FileStream to try to avoid crash (only seen by customers)
-                FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-                bmp.Save(fs, ImageFormat.Png);
-                fs.Close();
-
-                fTempGfx = null;
+                using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
+                    fTreeDrawer.SaveTempGfx(fs);
+                }
+            } finally {
+                fTreeDrawer.DoneTempGfx();
             }
-            bmp.Dispose();
 
             return alMap;
-        }
-
-        // Draws the group to the graphics instance.
-        public void DrawGroup(MTGroup group, List<MTMap> map)
-        {
-            if (group.Members == null) {
-                // Empty group
-                return;
-            }
-
-            foreach (var obj in group.Members) {
-                if (obj is MTGroup) {
-                    var mtg = (MTGroup)obj;
-                    if (mtg.LeftBox != null && mtg.RightBox != null) {
-                        // Draw crossbar
-                        float crossbarLeft = mtg.LeftBox.TeeRight;
-                        float crossbarRight = mtg.RightBox.TeeLeft;
-                        float crossbarLeftGap = mtg.LeftBox.Right;
-                        float crossbarRightGap = mtg.RightBox.Left;
-                        float crossbarY = (mtg.LeftBox.TeeCentreVert + mtg.RightBox.TeeCentreVert) / 2f;
-                        switch (mtg.fCrossbar) {
-                            case ECrossbar.Solid:
-                                fTempGfx.DrawLine(fPenConnector, crossbarLeft, crossbarY, crossbarRight, crossbarY);
-                                break;
-
-                            case ECrossbar.DottedLeft:
-                                fTempGfx.DrawLine(fPenConnectorDotted, crossbarLeft, crossbarY, crossbarRightGap, crossbarY);
-                                break;
-
-                            case ECrossbar.DottedRight:
-                                fTempGfx.DrawLine(fPenConnectorDotted, crossbarLeftGap, crossbarY, crossbarRight, crossbarY);
-                                break;
-                        }
-
-                        if (mtg.StalkedIndividuals > 0) {
-                            // Draw down to individuals
-                            // Use y coord of first individual, assuming all are at the same y coord
-                            float individualY = 0f;
-                            bool haveIndividuals = false;
-                            foreach (MTObject groupObj in mtg.Members) {
-                                if (groupObj is MTIndividual) {
-                                    individualY = ((MTIndividual)groupObj).Top;
-                                    haveIndividuals = true;
-                                    break;
-                                }
-                            }
-                            float crossbarCentre = (crossbarLeft + crossbarRight) / 2f;
-                            if (haveIndividuals) {
-                                fTempGfx.DrawLine(fPenConnector, crossbarCentre, crossbarY, crossbarCentre, individualY);
-
-                                // Connect individuals
-                                var stalkMinMax = mtg.StalkMinMax;
-
-                                // Width irrelevant, using SizeF simply as a way to pass 2 floats:
-                                float stalkMin = stalkMinMax.Width;
-
-                                // Height irrelevant, using SizeF simply as a way to pass 2 floats
-                                float stalkMax = stalkMinMax.Height;
-
-                                if (crossbarCentre < stalkMin) {
-                                    stalkMin = crossbarCentre;
-                                } else if (crossbarCentre > stalkMax) {
-                                    stalkMax = crossbarCentre;
-                                }
-                                fTempGfx.DrawLine(fPenConnector, stalkMin, individualY, stalkMax, individualY);
-                            }
-                        }
-                    }
-
-                    DrawGroup(mtg, map);
-                } else if (obj is MTIndividual) {
-                    // Draw individual box
-                    DrawIndividual((MTIndividual)obj, map);
-                }
-            }
-        }
-
-        // Draws the actual box, and adds the region of the box to the image alMap list.
-        public void DrawIndividual(MTIndividual indi, List<MTMap> map)
-        {
-            SolidBrush solidbrushBg, solidbrushText;
-
-            if (indi.Concealed) {
-                solidbrushBg = fBrushBoxConcealed;
-            } else if (indi.Highlight) {
-                solidbrushBg = fBrushBoxHighlight;
-            } else if (indi.Shade) {
-                solidbrushBg = fBrushBoxShade;
-            } else {
-                solidbrushBg = fBrushBox;
-            }
-
-            if (indi.Linkable) {
-                solidbrushText = fBrushTextLink;
-            } else if (indi.Concealed) {
-                solidbrushText = fBrushTextConcealed;
-            } else {
-                solidbrushText = fBrushText;
-            }
-
-            fTempGfx.FillRectangle(solidbrushBg, indi.Left + MTIndividual.MARGIN_HORIZ, indi.Top + MTIndividual.MARGIN_VERT, indi.SizeText.Width, indi.SizeText.Height - 1f);
-            fTempGfx.DrawRectangle(fPenBox, indi.Left + MTIndividual.MARGIN_HORIZ, indi.Top + MTIndividual.MARGIN_VERT, indi.SizeText.Width, indi.SizeText.Height - 1f);
-
-            float fTextX = indi.Left + MTIndividual.MARGIN_HORIZ + MTIndividual.PADDING_HORIZ;
-            float fTextY = indi.Top + MTIndividual.MARGIN_VERT + MTIndividual.PADDING_VERT;
-            if (indi.ConserveWidth) {
-                fTempGfx.DrawString(indi.Firstnames, fFont, solidbrushText, fTextX + indi.FirstnamesPad, fTextY);
-                fTextY += indi.SizeFirstnames.Height;
-                fTempGfx.DrawString(indi.Surname, fFont, solidbrushText, fTextX + indi.SurnamePad, fTextY);
-                fTextY += indi.SizeSurname.Height;
-            } else {
-                fTempGfx.DrawString(indi.Name, fFont, solidbrushText, fTextX + indi.SurnamePad, fTextY);
-                fTextY += indi.SizeSurname.Height;
-            }
-
-            fTempGfx.DrawString(indi.Date, fFont, solidbrushText, fTextX + indi.DatePad, fTextY);
-
-            if (indi.Child) {
-                fTempGfx.DrawLine(fPenConnector,
-                    indi.Left + MTIndividual.MARGIN_HORIZ + (indi.SizeText.Width / 2f), indi.Top,
-                    indi.Left + MTIndividual.MARGIN_HORIZ + (indi.SizeText.Width / 2f), indi.Top + MTIndividual.MARGIN_VERT/* -1f*/ );
-            }
-
-            if (indi.IndiRec != null) {
-                map.Add(new MTMap(indi.Name, indi.IndiRec, indi.Linkable,
-                    (int)(indi.Left + MTIndividual.MARGIN_HORIZ), (int)(indi.Top + MTIndividual.MARGIN_VERT),
-                    (int)(indi.Left + MTIndividual.MARGIN_HORIZ + indi.SizeText.Width), (int)(indi.Top + MTIndividual.MARGIN_VERT + indi.SizeText.Height - 1f)));
-            }
         }
 
         // Calculate size required for tree by iterating through individuals and building a data structure.
@@ -385,14 +159,14 @@ namespace GEDmill.MiniTree
             GDMIndividualRecord husband, wife;
             fTree.GetSpouses(familyParents, out husband, out wife);
 
-            MTGroup mtgParents = new MTGroup(this);
+            MTGroup mtgParents = new MTGroup(fTreeDrawer);
             MTIndividual mtiFather = null;
             if (familyParents != null) {
                 mtiFather = AddToGroup(husband, mtgParents);
             }
 
             // Create a group for the subject and their siblings.
-            var mtgSiblings = new MTGroup(this);
+            var mtgSiblings = new MTGroup(fTreeDrawer);
 
             // Keeps count of subject's siblings (including subject)
             int siblings = 0;
@@ -404,8 +178,7 @@ namespace GEDmill.MiniTree
             MTIndividual mtiRightmostChild = null;
 
             // For each sibling (including the subject)
-            while (true)
-            {
+            while (true) {
                 GDMIndividualRecord irSibling = GetChild(familyParents, siblings, irSubject);
                 if (irSibling == null) {
                     break;
@@ -445,7 +218,7 @@ namespace GEDmill.MiniTree
                         }
 
                         // Create a box for the offspring of this marriage
-                        mtgOffspring = new MTGroup(this);
+                        mtgOffspring = new MTGroup(fTreeDrawer);
 
                         // Set crossbar that joins subject to spouse according to whether this is subject's first spouse.
                         mtgOffspring.fCrossbar = ecbCrossbar;
@@ -571,6 +344,11 @@ namespace GEDmill.MiniTree
             }
             result.Date = result.Concealed ? string.Empty : GMHelper.GetLifeDatesStr(ir);
             return result;
+        }
+
+        public ExtSizeF MeasureString(string text)
+        {
+            return fTreeDrawer.MeasureString(text);
         }
     }
 }

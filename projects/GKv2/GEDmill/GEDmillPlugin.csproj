@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GEDmillPlugin.cs" />
-    <Compile Include="GMGfx.cs" />
     <Compile Include="GMHelper.cs" />
     <Compile Include="GMConfig.cs">
       <SubType>Code</SubType>
@@ -54,6 +53,8 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MiniTree\ITreeDrawer.cs" />
+    <Compile Include="MiniTree\MTTree.cs" />
     <Compile Include="Model\BackReference.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -97,7 +98,7 @@
     <Compile Include="MiniTree\MTObject.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MiniTree\TreeDrawer.cs">
+    <Compile Include="TreeDrawer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\CISRecordChanges.cs">

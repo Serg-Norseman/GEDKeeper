@@ -25,7 +25,7 @@ namespace GEDmill.MiniTree
     /// </summary>
     public abstract class MTObject
     {
-        protected readonly TreeDrawer fDrawer;
+        protected readonly ITreeDrawer fDrawer;
 
         // The object to the left of this one.
         protected MTObject fLeft;
@@ -65,7 +65,7 @@ namespace GEDmill.MiniTree
         }
 
 
-        protected MTObject(TreeDrawer drawer)
+        protected MTObject(ITreeDrawer drawer)
         {
             fDrawer = drawer;
             fLeft = null;

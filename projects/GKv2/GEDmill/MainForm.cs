@@ -489,55 +489,55 @@ namespace GEDmill
 
         private void btnConfigMiniTreeColorIndiBackground_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiBackground = GMGfx.SelectColor(fConfigMiniTreeColorIndiBackground);
+            fConfigMiniTreeColorIndiBackground = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiBackground);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiHighlight_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiHighlight = GMGfx.SelectColor(fConfigMiniTreeColorIndiHighlight);
+            fConfigMiniTreeColorIndiHighlight = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiHighlight);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiBgConcealed_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiBgConcealed = GMGfx.SelectColor(fConfigMiniTreeColorIndiBgConcealed);
+            fConfigMiniTreeColorIndiBgConcealed = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiBgConcealed);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiShade_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiShade = GMGfx.SelectColor(fConfigMiniTreeColorIndiShade);
+            fConfigMiniTreeColorIndiShade = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiShade);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiText_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiText = GMGfx.SelectColor(fConfigMiniTreeColorIndiText);
+            fConfigMiniTreeColorIndiText = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiText);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiLink_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiLink = GMGfx.SelectColor(fConfigMiniTreeColorIndiLink);
+            fConfigMiniTreeColorIndiLink = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiLink);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorBranch_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorBranch = GMGfx.SelectColor(fConfigMiniTreeColorBranch);
+            fConfigMiniTreeColorBranch = TreeDrawer.SelectColor(fConfigMiniTreeColorBranch);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiBorder_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiBorder = GMGfx.SelectColor(fConfigMiniTreeColorIndiBorder);
+            fConfigMiniTreeColorIndiBorder = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiBorder);
             SetMiniTreeColorConfigButtons();
         }
 
         private void btnConfigMiniTreeColorIndiFgConcealed_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiFgConcealed = GMGfx.SelectColor(fConfigMiniTreeColorIndiFgConcealed);
+            fConfigMiniTreeColorIndiFgConcealed = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiFgConcealed);
             SetMiniTreeColorConfigButtons();
         }
 

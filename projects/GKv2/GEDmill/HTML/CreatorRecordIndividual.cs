@@ -155,7 +155,7 @@ namespace GEDmill.HTML
         /// <summary>
         /// The main method that causes the page to be created.
         /// </summary>
-        public bool Create(Stats stats, TreeDrawer treeDrawer)
+        public bool Create(Stats stats, MTTree miniTree)
         {
             fLogger.WriteInfo("CreatorRecordIndividual.Create()");
 
@@ -248,7 +248,7 @@ namespace GEDmill.HTML
 
             AddIndividualIndexEntry(lifeDates);
 
-            OutputHTML(title, treeDrawer);
+            OutputHTML(title, miniTree);
 
             return true;
         }
@@ -663,7 +663,7 @@ namespace GEDmill.HTML
         /// <summary>
         /// Creates a file and writes into it the HTML for the individual's page.
         /// </summary>
-        private void OutputHTML(string title, TreeDrawer treeDrawer)
+        private void OutputHTML(string title, MTTree miniTree)
         {
             HTMLFile f = null;
             string pageDescription = fLangMan.LS(PLS.LSID_PageDescription) + " " + fFullName;
@@ -678,7 +678,7 @@ namespace GEDmill.HTML
                     OutputPageHeader(f, fPreviousChildLink, fNextChildLink, true);
 
                     if (GMConfig.Instance.ShowMiniTrees) {
-                        OutputMiniTree(f, treeDrawer);
+                        OutputMiniTree(f, miniTree);
                     }
                     f.WriteLine("    <div class=\"hr\" />");
                     f.WriteLine("");
@@ -1030,17 +1030,17 @@ namespace GEDmill.HTML
         /// <summary>
         /// Writes the HTML for the mini tree diagram, including the image alMap data. 
         /// </summary>
-        private void OutputMiniTree(HTMLFile f, TreeDrawer treeDrawer)
+        private void OutputMiniTree(HTMLFile f, MTTree miniTree)
         {
             string miniTreeExtn = "png";
 
             string relativeTreeFilename = string.Concat("tree", fIndiRec.XRef, ".", miniTreeExtn);
             string fullTreeFilename = string.Concat(GMConfig.Instance.OutputFolder, "\\", relativeTreeFilename);
 
-            var map = treeDrawer.CreateMiniTree(fIndiRec, fullTreeFilename, GMConfig.Instance.TargetTreeWidth);
+            var map = miniTree.CreateMiniTree(fIndiRec, fullTreeFilename, GMConfig.Instance.TargetTreeWidth);
             if (map != null) {
                 // Add space to height so that IE's horiz scroll bar has room and doesn't create a vertical scroll bar.
-                f.WriteLine("    <div id=\"minitree\" style=\"height:{0}px;\">", treeDrawer.Height + 20);
+                f.WriteLine("    <div id=\"minitree\" style=\"height:{0}px;\">", miniTree.Height + 20);
                 f.WriteLine("      <map name=\"treeMap\" id=\"tree\">");
                 foreach (MTMap mapItem in map) {
                     if (mapItem.Linkable) {

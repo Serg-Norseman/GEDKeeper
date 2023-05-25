@@ -61,8 +61,10 @@ namespace GEDmill.HTML
             ThreadError threaderror = new ThreadError(1, "No error");
 
             // The paintbox with which to draw the mini tree
-            var treeDrawer = new TreeDrawer(GMConfig.Instance, fTree);
+            var treeDrawer = new TreeDrawer(GMConfig.Instance);
             treeDrawer.SetBackgroundImage(GMConfig.Instance.BackgroundImage);
+
+            var mtTree = new MTTree(GMConfig.Instance, fTree, treeDrawer);
 
             try {
                 // The value to indicate in the progress bar to show how much of the website creation is complete.
@@ -127,7 +129,7 @@ namespace GEDmill.HTML
                 var indiList = fTree.GetRecords<GDMIndividualRecord>();
                 foreach (GDMIndividualRecord ir in indiList) {
                     var ipc = new CreatorRecordIndividual(fContext, fLangMan, ir, indiIndexCreator);
-                    if (ipc.Create(stats, treeDrawer)) {
+                    if (ipc.Create(stats, mtTree)) {
                         stats.Individuals++;
                     }
                     if (progressWnd.IsCanceled) {
