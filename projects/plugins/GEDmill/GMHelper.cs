@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -351,6 +352,13 @@ namespace GEDmill
             string birthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, DateFormat.dfYYYY, false);
             string deathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, DateFormat.dfYYYY, false);
             return birthDate + " - " + deathDate;
+        }
+
+        public static Stream LoadResourceStream(string resName)
+        {
+            Assembly assembly = typeof(GMHelper).Assembly;
+            Stream resStream = assembly.GetManifestResourceStream(resName);
+            return resStream;
         }
     }
 }

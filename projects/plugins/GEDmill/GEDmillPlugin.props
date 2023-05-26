@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <ItemGroup>
+        <Compile Include="HTML\Creator.cs" />
+        <Compile Include="HTML\CreatorFrontPage.cs" />
+        <Compile Include="HTML\CreatorIndexIndividuals.cs" />
+        <Compile Include="HTML\CreatorRecord.cs" />
+        <Compile Include="HTML\CreatorRecordIndividual.cs" />
+        <Compile Include="HTML\CreatorRecordSource.cs" />
+        <Compile Include="HTML\CreatorStylesheet.cs" />
+        <Compile Include="HTML\HTMLFile.cs" />
+        <Compile Include="HTML\Website.cs" />
+        <Compile Include="MiniTree\MTGroup.cs" />
+        <Compile Include="MiniTree\MTIndividual.cs" />
+        <Compile Include="MiniTree\MTMap.cs" />
+        <Compile Include="MiniTree\MTObject.cs" />
+        <Compile Include="MiniTree\ITreeDrawer.cs" />
+        <Compile Include="MiniTree\MTTree.cs" />
+        <Compile Include="Model\BackReference.cs" />
+        <Compile Include="Model\CISRecordChanges.cs" />
+        <Compile Include="Model\Event.cs" />
+        <Compile Include="Model\FilenameAndSize.cs" />
+        <Compile Include="Model\HusbandAndWife.cs" />
+        <Compile Include="Model\IndexLetter.cs" />
+        <Compile Include="Model\IndexPage.cs" />
+        <Compile Include="Model\Multimedia.cs" />
+        <Compile Include="Model\NameAndSource.cs" />
+        <Compile Include="Model\NameXRefPair.cs" />
+        <Compile Include="Model\OccupationCounter.cs" />
+        <Compile Include="Model\QualifiedDate.cs" />
+        <Compile Include="Model\Stats.cs" />
+        <Compile Include="Model\StringTuple.cs" />
+        <Compile Include="GMHelper.cs" />
+        <Compile Include="GMConfig.cs" />
+        <None Include="GEDmillPlugin.cze">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GEDmillPlugin.enu">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GEDmillPlugin.rus">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="gedmill-bg.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <EmbeddedResource Include="res\gedmill.jpg" />
+        <EmbeddedResource Include="res\title.png" />
+    </ItemGroup>
+
+</Project>

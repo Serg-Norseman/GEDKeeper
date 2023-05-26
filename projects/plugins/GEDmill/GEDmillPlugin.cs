@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Drawing;
 using System.Reflection;
 using GEDmill;
 using GKCore;
@@ -27,12 +26,17 @@ using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 using GKUI.Platform.Handlers;
+
+#if !ETO
+using System.Drawing;
 using SDIcon = System.Drawing.Icon;
+#else
+#endif
 
 [assembly: AssemblyTitle("GEDmillPlugin")]
 [assembly: AssemblyDescription("GEDKeeper's GEDmill plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2009 by Alexander Curtis, 2019-2022 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2009 by Alexander Curtis, 2019-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion(GMConfig.SoftwareVersion)]
 [assembly: AssemblyCulture("")]
 
@@ -302,7 +306,9 @@ namespace GEDmill
         public override IImage Icon { get { return fIcon; } }
         public override PluginCategory Category { get { return PluginCategory.Report; } }
 
+#if !ETO
         private MainForm fForm;
+#endif
 
         protected override void Dispose(bool disposing)
         {
@@ -314,19 +320,23 @@ namespace GEDmill
 
         internal void CloseForm()
         {
+#if !ETO
             if (fForm != null) {
                 fForm = null;
             }
+#endif
         }
 
         public override void Execute()
         {
+#if !ETO
             if (!Host.IsWidgetActive(this)) {
                 fForm = new MainForm(this);
                 fForm.ShowDialog(); // FIXME
             } else {
                 fForm.Close();
             }
+#endif
         }
 
         public override void OnLanguageChange()
@@ -335,8 +345,10 @@ namespace GEDmill
                 fLangMan = Host.CreateLangMan(this);
                 fDisplayName = fLangMan.LS(PLS.LSID_Title);
 
+#if !ETO
                 if (fForm != null)
                     fForm.SetLocale();
+#endif
             } catch (Exception ex) {
                 Logger.WriteError("GEDmillPlugin.OnLanguageChange()", ex);
             }
@@ -346,11 +358,13 @@ namespace GEDmill
         {
             bool result = base.Startup(host);
             try {
+#if !ETO
                 Assembly assembly = typeof(Plugin).Assembly;
                 using (var appIcon = SDIcon.ExtractAssociatedIcon(assembly.Location)) {
                     Image bmp = appIcon.ToBitmap();
                     fIcon = new ImageHandler(bmp);
                 }
+#endif
             } catch (Exception ex) {
                 Logger.WriteError("GEDmillPlugin.Startup()", ex);
                 result = false;
@@ -372,16 +386,20 @@ namespace GEDmill
 
         public override void BaseChanged(IBaseWindow baseWin)
         {
+#if !ETO
             if (fForm != null) {
                 fForm.BaseChanged(baseWin);
             }
+#endif
         }
 
         public override void BaseClosed(IBaseWindow baseWin)
         {
+#if !ETO
             if (fForm != null) {
                 fForm.BaseChanged(null);
             }
+#endif
         }
     }
 }

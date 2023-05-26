@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="..\..\GKConfigurations.targets" />
+  <PropertyGroup>
+    <ProjectGuid>{658AE6DC-A4FA-4042-A26F-E5B6CC7EF56B}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>res\gedmill.ico</ApplicationIcon>
+    <AssemblyName>GEDmillPlugin</AssemblyName>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GEDmill</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <NoWin32Manifest>False</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <OutputPath>..\..\..\plugins\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <OutputPath>..\..\..\plugins\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GEDmillPlugin.cs" />
+    <Compile Include="LVItem.cs" />
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TreeDrawer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
+      <Project>{10d619af-e1cd-4f4a-9c19-5e434300b48f}</Project>
+      <Name>GKCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GKv2\GKComponents\GKComponents.csproj">
+      <Project>{ef9864c5-4dec-46e8-bc11-a2e5bb9bb9d4}</Project>
+      <Name>GKComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="GEDmillPlugin.props" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

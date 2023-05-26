@@ -2,7 +2,6 @@
 {
     public partial class MainForm
     {
-        private System.ComponentModel.Container components = null;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnCancel;
@@ -140,7 +139,6 @@
 
         private void InitializeComponent()
         {
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
             btnNext = new System.Windows.Forms.Button();
             btnBack = new System.Windows.Forms.Button();
             btnCancel = new System.Windows.Forms.Button();
@@ -194,7 +192,7 @@
             chkConfigCapEvents = new System.Windows.Forms.CheckBox();
             chkConfigHideEmails = new System.Windows.Forms.CheckBox();
             chkConfigOccupationHeadline = new System.Windows.Forms.CheckBox();
-            chkConfigShowWithheldRecords = new System.Windows.Forms.CheckBox(); ;
+            chkConfigShowWithheldRecords = new System.Windows.Forms.CheckBox();
             lblConfigCommentary = new System.Windows.Forms.Label();
             lblConfigCommentaryIsHtml = new System.Windows.Forms.Label();
             chkConfigCommentaryIsHtml = new System.Windows.Forms.CheckBox();
@@ -337,7 +335,6 @@
             // 
             // pictureBox
             // 
-            pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("panel1PictureBox.Image")));
             pictureBox.Location = new System.Drawing.Point(8, 8);
             pictureBox.Name = "pictureBox";
             pictureBox.Size = new System.Drawing.Size(200, 264);
@@ -346,7 +343,6 @@
             // 
             // pictureBoxWelcome
             // 
-            pictureBoxWelcome.Image = ((System.Drawing.Image)(resources.GetObject("title.Image")));
             pictureBoxWelcome.Size = new System.Drawing.Size(177, 65);
             pictureBoxWelcome.Location = new System.Drawing.Point(56, 50);
             pictureBoxWelcome.Name = "pictureBoxWelcome";
@@ -1491,7 +1487,6 @@
             Controls.Add(btnNext);
             Controls.Add(pictureBox);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            Icon = ((System.Drawing.Icon)(resources.GetObject("$Icon")));
             MaximizeBox = false;
             MaximumSize = new System.Drawing.Size(512, 355);
             MinimizeBox = false;

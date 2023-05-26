@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,22 +22,27 @@ using System;
 
 namespace GKCore.Logging
 {
-    // Levels in order of increasing priority: ALL, DEBUG, INFO, WARN, ERROR, FATAL, OFF
-    public interface ILogger
+    public sealed class LogManager
     {
-        void WriteDebug(string msg);
-        void WriteDebug(string str, params object[] args);
+        private static LogManager fLogManager;
 
-        void WriteInfo(string msg);
-        void WriteInfo(string str, params object[] args);
+        private LogManager(string logFileName, string logLevel)
+        {
+            try {
+                Log4NetHelper.Init(logFileName, logLevel);
+            } catch (Exception e) {
+                Log4NetHelper.Init(@".\fatal.log", "ERROR");
+                var l = new Log4NetHelper(GetType().ToString());
+                l.WriteError("Error while initializing the logger", e);
+            }
+        }
 
-        void WriteWarn(string msg);
-        void WriteWarn(string str, params object[] args);
-
-        void WriteError(string msg);
-        void WriteError(string msg, Exception ex);
-
-        // unused
-        void WriteNumError(int num, Exception ex);
+        public static ILogger GetLogger(string logFileName, string logLevel, string loggerName)
+        {
+            if (fLogManager == null) {
+                fLogManager = new LogManager(logFileName, logLevel);
+            }
+            return new Log4NetHelper(loggerName);
+        }
     }
 }

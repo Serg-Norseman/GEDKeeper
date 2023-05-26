@@ -86,6 +86,10 @@ namespace GEDmill
         {
             InitializeComponent();
 
+            pictureBox.Image = TreeDrawer.LoadResourceImage("gedmill.jpg");
+            pictureBoxWelcome.Image = TreeDrawer.LoadResourceImage("title.png");
+            //Icon = ((System.Drawing.Icon)(resources.GetObject("$Icon")));
+
             fLogger.WriteInfo(GMConfig.SoftwareName + " " + GMConfig.SoftwareVersion + " started");
 
             // Set some values that scale the size of the GUI
@@ -113,9 +117,6 @@ namespace GEDmill
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (components != null) {
-                    components.Dispose();
-                }
                 fPlugin.CloseForm();
             }
             base.Dispose(disposing);

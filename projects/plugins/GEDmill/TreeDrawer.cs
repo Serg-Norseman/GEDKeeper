@@ -395,5 +395,12 @@ namespace GEDmill
             rectArea = rectNewArea;
             return filenameNew;
         }
+
+        public static Bitmap LoadResourceImage(string name)
+        {
+            string resName = "GEDmill.res." + name;
+            Stream resStream = GMHelper.LoadResourceStream(resName);
+            return new Bitmap(resStream);
+        }
     }
 }

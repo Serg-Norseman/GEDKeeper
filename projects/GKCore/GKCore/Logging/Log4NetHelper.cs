@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,11 +73,11 @@ namespace GKCore.Logging
             s = s + "<appender-ref ref=\"Logs\"/>";
             s = s + "</root>";
             s = s + "</log4net>";
-            var j = new XmlDocument();
 
             TextReader tr = new StringReader(s);
-            j.Load(tr);
-            XmlConfigurator.Configure((XmlElement)j.SelectSingleNode("log4net"));
+            var xmlDoc = new XmlDocument();
+            xmlDoc.Load(tr);
+            XmlConfigurator.Configure((XmlElement)xmlDoc.SelectSingleNode("log4net"));
         }
 
         public static void InitConfiguration(string configFileName)

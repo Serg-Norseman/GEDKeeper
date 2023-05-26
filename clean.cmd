@@ -68,10 +68,8 @@ rmdir .\projects\GKv3\GKComponents\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
-rmdir .\projects\GKv2\GEDmill\bin /s /q
-rmdir .\projects\GKv2\GEDmill\obj /s /q
-
-rem <<< Cross-platform Plugins cleaning >>>
+rmdir .\projects\plugins\GEDmill\bin /s /q
+rmdir .\projects\plugins\GEDmill\obj /s /q
 
 rmdir .\projects\plugins\GKBackupPlugin\bin /s /q
 rmdir .\projects\plugins\GKBackupPlugin\obj /s /q

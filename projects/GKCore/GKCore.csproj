@@ -40,6 +40,9 @@
     <Reference Include="itextsharp">
       <HintPath>..\libs\itextsharp.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\libs\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -343,6 +346,9 @@
     <Compile Include="GKCore\Linguistics\Morpher.cs" />
     <Compile Include="GKCore\Linguistics\ShortDoubleMetaphone.cs" />
     <Compile Include="GKCore\Logger.cs" />
+    <Compile Include="GKCore\Logging\ILogger.cs" />
+    <Compile Include="GKCore\Logging\Log4NetHelper.cs" />
+    <Compile Include="GKCore\Logging\LogManager.cs" />
     <Compile Include="GKCore\Maps\GeoPoint.cs" />
     <Compile Include="GKCore\Maps\GoogleGeocoder.cs" />
     <Compile Include="GKCore\Maps\IGeocoder.cs" />

@@ -43,6 +43,7 @@
         <PackageReference Include="UTF.Unknown" Version="2.5.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="iTextSharp.LGPLv2.Core" Version="3.3.3" />
+        <PackageReference Include="log4net" Version="2.0.15" />
     </ItemGroup>
 
 
