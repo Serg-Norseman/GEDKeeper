@@ -530,7 +530,7 @@ namespace GKCore
         public void Test_TruncateStrings()
         {
             string test = GKUtils.TruncateStrings(new GDMLines("sample text for truncate"), 10);
-            Assert.AreEqual("sample tex...", test);
+            Assert.AreEqual("sample tex…", test);
         }
 
         [Test]

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,8 +32,6 @@ namespace GKCore
     /// </summary>
     public static class UpdateMan
     {
-        private const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
-
         public static Version GetLastVersion(out string url)
         {
             Version newVersion = null;
@@ -43,7 +41,7 @@ namespace GKCore
             try {
                 GKUtils.InitSecurityProtocol();
 
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(UpdateURL);
+                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(GKData.UpdateURL);
                 webRequest.ContentType = "text/xml; encoding='utf-8'";
                 webRequest.KeepAlive = false;
                 webRequest.Method = "GET";
@@ -96,12 +94,12 @@ namespace GKCore
                 if (newVersion == null) return;
 
                 if (curVersion.CompareTo(newVersion) < 0) {
-                    #if !CI_MODE
+#if !CI_MODE
                     string question = LangMan.LS(LSID.LSID_UpdateToLatestVersion, curVersion, newVersion);
                     if (AppHost.StdDialogs.ShowQuestionYN(question)) {
                         Process.Start(url);
                     }
-                    #endif
+#endif
                 }
             } catch (Exception ex) {
                 Logger.WriteError("UpdateMan.WorkerMethod()", ex);
@@ -111,7 +109,7 @@ namespace GKCore
         public static void CheckUpdate()
         {
             try {
-                #if OS_LINUX
+#if OS_LINUX
                 DesktopType desktopType = SysUtils.GetDesktopType();
                 if (desktopType == DesktopType.Unity) {
                     // In Ubuntu 1604 LTS (Unity desktop), this method leads to a
@@ -120,7 +118,7 @@ namespace GKCore
                     Logger.WriteInfo("UpdateMan.CheckUpdate(): is not supported for Unity");
                     return;
                 }
-                #endif
+#endif
 
                 Thread worker = new Thread(WorkerMethod);
                 worker.SetApartmentState(ApartmentState.STA);

@@ -37,6 +37,13 @@ namespace GKCore
         public const string APP_VERSION_2X = "2.26.1.0";
         public const string APP_VERSION_3X = "3.2.1.0";
 
+#if !GK3
+        public const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
+#else
+        public const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk3_version.xml";
+#endif
+
+
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
         public const string APP_FORUM_EN = "https://groups.google.com/g/gedkeeper-en";

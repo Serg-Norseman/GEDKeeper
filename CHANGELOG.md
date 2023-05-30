@@ -1,3 +1,14 @@
+## 30.05.2023 [v2.26.1 &amp; v3.2.1]
+- Fixed font selection in tree diagram options (GKv3).
+- Missing text issue on very large tree diagrams with very small font (GKv3) is partially resolved.
+- Added option (tree diagram window, mode menu) to display person IDs in trees (GKv2/3).
+- Crash when saving very wide trees to bitmap files (GKv2/3) has been fixed.
+- Fixed output and saving trees with background color or image to file (GKv2/3).
+- Fixed display of the Russian language when executing scripts (GKv3).
+- Adjusted line colors in trees (GKv2/3).
+- Fixed display of notes in lists (GKv3).
+- The display of portraits in the person edit dialog (GKv2) has been fixed.
+
 ## 14.05.2023 [v2.26.0/Windows &amp; v3.2.0/Linux,MacOS,Windows]
 - Added an option to remember the overall size of the records info panels.
 - Added control and closing of dependent windows when the main one is closed.
