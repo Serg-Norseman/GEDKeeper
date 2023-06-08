@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !MONO
+#if !MONO && !DIS_NUF
 
 using System;
 using System.Windows.Forms;

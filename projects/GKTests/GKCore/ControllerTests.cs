@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !MONO
+#if !MONO && !DIS_NUF
 
 using GDModel;
 using GKCore.Design;
@@ -39,8 +39,7 @@ namespace GKCore.Controllers
     {
         private IBaseWindow fBaseWin;
 
-        [TestFixtureSetUp]
-        public void SetUp()
+        public ControllerTests()
         {
             TestUtils.InitUITest();
 

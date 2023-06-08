@@ -56,7 +56,7 @@ namespace GKTests
 
             LangMan.DefInit();
 
-            AppHost.Container.Register<IProgressController, ProgressStub>(LifeCycle.Singleton, true);
+            AppHost.Container.Register<IProgressController, ProgressStub>(GKCore.IoC.LifeCycle.Singleton, true);
         }
 
         public static BaseContext CreateContext(IBaseWindow baseWin = null)

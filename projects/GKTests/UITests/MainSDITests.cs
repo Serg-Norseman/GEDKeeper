@@ -20,7 +20,7 @@
 
 #define MAIN_TEST
 
-#if !MONO
+#if !MONO && !DIS_NUF
 #if MAIN_TEST
 
 using System;
@@ -44,7 +44,7 @@ namespace GKUI.Forms
     /// Tests for the main application window. Dependent calls of other windows
     /// and dialogs that are heavily dependent on the main window.
     /// </summary>
-    [TestFixture, RequiresSTA]
+    [TestFixture]
     public class MainSDITests : CustomWindowTest
     {
         public override bool UseHidden
@@ -499,14 +499,14 @@ namespace GKUI.Forms
                 TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.rtf"));
             }
 
-            #if !MONO
+#if !MONO
             try {
                 ModalFormHandler = SaveFilePDF_Handler;
                 ClickToolStripMenuItem(menuItem, fMainWin);
             } finally {
                 TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.pdf"));
             }
-            #endif
+#endif
         }
 
         [Test]

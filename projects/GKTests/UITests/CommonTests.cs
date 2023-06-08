@@ -32,8 +32,7 @@ namespace GKUI.Components
     [TestFixture]
     public class CommonTests
     {
-        [TestFixtureSetUp]
-        public void SetUp()
+        public CommonTests()
         {
             TestUtils.InitUITest();
         }

@@ -18,8 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !MONO
+#if !MONO && !DIS_NUF
 
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
@@ -31,13 +32,12 @@ using NUnit.Framework;
 namespace GKUI.Components
 {
     [TestFixture]
-    public class ImageViewTests : CustomWindowTest
+    public class ImageViewTests : CustomWindowTest, IDisposable
     {
         private Form fForm;
         private ImageView fImageView;
 
-        [TestFixtureSetUp]
-        public void Init()
+        public ImageViewTests()
         {
             fForm = new Form();
             fForm.ClientSize = new Size(383, 221);
@@ -52,8 +52,7 @@ namespace GKUI.Components
             fForm.PerformLayout();
         }
 
-        [TestFixtureTearDown]
-        public void Done()
+        public void Dispose()
         {
             fForm.Dispose();
         }

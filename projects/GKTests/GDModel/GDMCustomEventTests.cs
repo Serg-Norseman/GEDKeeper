@@ -32,8 +32,7 @@ namespace GDModel
     {
         private BaseContext fContext;
 
-        [TestFixtureSetUp]
-        public void SetUp()
+        public GDMCustomEventTests()
         {
             TestUtils.InitGEDCOMProviderTest();
             fContext = TestUtils.CreateContext();

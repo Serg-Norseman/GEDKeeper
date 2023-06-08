@@ -40,8 +40,7 @@ namespace GKCore
     {
         private IBaseWindow fBase;
 
-        [TestFixtureSetUp]
-        public void SetUp()
+        public TreeChartTests()
         {
             TestUtils.InitUITest();
 

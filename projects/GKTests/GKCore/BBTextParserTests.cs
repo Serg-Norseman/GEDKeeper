@@ -30,8 +30,7 @@ namespace GKCore
     [TestFixture]
     public class BBTextParserTests
     {
-        [TestFixtureSetUp]
-        public void SetUp()
+        public BBTextParserTests()
         {
             TestUtils.InitUITest();
         }

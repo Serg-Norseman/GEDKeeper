@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,8 +28,7 @@ namespace GKCore
     [TestFixture]
     public class AppHostTests
     {
-        [TestFixtureSetUp]
-        public void SetUp()
+        public AppHostTests()
         {
             TestUtils.InitUITest();
         }
@@ -37,10 +36,10 @@ namespace GKCore
         [Test]
         public void Test_AppHost()
         {
-            Assert.IsNotNullOrEmpty(AppHost.GetAppPath());
-            Assert.IsNotNullOrEmpty(AppHost.GetLogFilename());
+            Assert.IsNotEmpty(AppHost.GetAppPath());
+            Assert.IsNotEmpty(AppHost.GetLogFilename());
 
-            Assert.IsNotNullOrEmpty(AppHost.Instance.GetAppDataPath());
+            Assert.IsNotEmpty(AppHost.Instance.GetAppDataPath());
 
             Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.LoadBase(null, null); });
 

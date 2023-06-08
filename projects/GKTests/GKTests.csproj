@@ -9,6 +9,7 @@
     <RootNamespace>GKTests</RootNamespace>
     <AssemblyName>GKTests</AssemblyName>
     <NoWin32Manifest>False</NoWin32Manifest>
+    <DefineConstants>DIS_NUF</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -25,7 +26,7 @@
   <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
+  <ItemGroup Condition=" '$(MonoCS)' != 'true' and '$(DIS_NUF)' == 'false' ">
     <Reference Include="NUnitForms">
       <HintPath>..\libs\NUnitForms.dll</HintPath>
     </Reference>

@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !MONO
+#if !MONO && !DIS_NUF
 
 using System.IO;
 using System.Windows.Forms;
@@ -151,7 +151,7 @@ namespace GKUI.Forms
             }
         }
 
-        #if !CI_MODE
+#if !CI_MODE
         [Test]
         public void Test_Video()
         {
@@ -176,7 +176,7 @@ namespace GKUI.Forms
                 TestUtils.RemoveTestFile(targetName);
             }
         }
-        #endif
+#endif
     }
 }
 

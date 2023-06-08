@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 #if !MONO
 
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
@@ -30,13 +31,12 @@ using NUnit.Framework;
 namespace GKUI.Components
 {
     [TestFixture]
-    public class ImageBoxTests
+    public class ImageBoxTests : IDisposable
     {
         private Form fForm;
         private ImageBox fImageBox;
 
-        [TestFixtureSetUp]
-        public void Init()
+        public ImageBoxTests()
         {
             fForm = new Form();
             fForm.ClientSize = new Size(383, 221);
@@ -51,8 +51,7 @@ namespace GKUI.Components
             fForm.PerformLayout();
         }
 
-        [TestFixtureTearDown]
-        public void Done()
+        public void Dispose()
         {
             fForm.Dispose();
         }
