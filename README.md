@@ -6,6 +6,7 @@
 [![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-brightgreen.svg)](https://t.me/gedkeeper_chat_en)
 [![Change Log](https://img.shields.io/badge/Change%20Log-green)](CHANGELOG.md)
 [![GitHub release](https://img.shields.io/github/release/Serg-Norseman/GEDKeeper.svg?label=Latest&maxAge=60)](https://github.com/Serg-Norseman/GEDKeeper/releases/latest)
+[![Crowdin](https://badges.crowdin.net/gedkeeper/localized.svg)](https://crowdin.com/project/gedkeeper)
 [![Download GEDKeeper](https://img.shields.io/sourceforge/dm/gedkeeper.svg)](https://sourceforge.net/projects/gedkeeper/files/latest/download)
 [![Download GEDKeeper](https://img.shields.io/github/downloads/Serg-Norseman/GEDKeeper/total)](https://github.com/Serg-Norseman/GEDKeeper/releases)
 

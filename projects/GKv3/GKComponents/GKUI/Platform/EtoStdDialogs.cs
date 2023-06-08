@@ -74,6 +74,7 @@ namespace GKUI.Platform
         public string GetOpenFile(string title, string context, string filter,
                                   int filterIndex, string defaultExt)
         {
+            filter = filter.Replace(',', ';');
             using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false)) {
                 var dlgRes = ofd.ShowDialog(null);
                 if (dlgRes == DialogResult.Ok) {
