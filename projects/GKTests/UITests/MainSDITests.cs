@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
@@ -44,7 +45,7 @@ namespace GKUI.Forms
     /// Tests for the main application window. Dependent calls of other windows
     /// and dialogs that are heavily dependent on the main window.
     /// </summary>
-    [TestFixture]
+    [TestFixture, RequiresThread(ApartmentState.STA)]
     public class MainSDITests : CustomWindowTest
     {
         public override bool UseHidden

@@ -21,6 +21,7 @@
 #if !MONO && !DIS_NUF
 
 using System;
+using System.Threading;
 using System.Windows.Forms;
 using GDModel;
 using GKCore;
@@ -70,7 +71,7 @@ namespace GKUI.Forms
             ClickButton("btnCancel", fDialog);
         }
 
-        [Test, STAThread]
+        [Test, RequiresThread(ApartmentState.STA)]
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fMultimediaRecord, fDialog.MultimediaRecord);

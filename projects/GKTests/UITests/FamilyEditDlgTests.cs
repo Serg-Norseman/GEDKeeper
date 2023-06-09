@@ -21,6 +21,7 @@
 #if !MONO && !DIS_NUF
 
 using System;
+using System.Threading;
 using System.Windows.Forms;
 using GDModel;
 using GKCore;
@@ -66,7 +67,7 @@ namespace GKUI.Forms
             ClickButton("btnCancel", fDialog);
         }
 
-        [Test, STAThread]
+        [Test, RequiresThread(ApartmentState.STA)]
         public void Test_EnterDataAndApply()
         {
             GDMFamilyRecord familyRecord = fDialog.FamilyRecord;
@@ -124,7 +125,7 @@ namespace GKUI.Forms
             ClickButton("btnAccept", fDialog);
         }
 
-        [Test, STAThread]
+        [Test, RequiresThread(ApartmentState.STA)]
         public void Test_NotesSheet()
         {
             GDMFamilyRecord familyRecord = fDialog.FamilyRecord;
@@ -136,7 +137,7 @@ namespace GKUI.Forms
             ClickButton("btnAccept", fDialog);
         }
 
-        [Test, STAThread]
+        [Test, RequiresThread(ApartmentState.STA)]
         public void Test_MediaSheet()
         {
             LangMan.DefInit();
@@ -150,7 +151,7 @@ namespace GKUI.Forms
             ClickButton("btnAccept", fDialog);
         }
 
-        [Test, STAThread]
+        [Test, RequiresThread(ApartmentState.STA)]
         public void Test_SourceCitSheet()
         {
             GDMFamilyRecord familyRecord = fDialog.FamilyRecord;

@@ -21,6 +21,7 @@
 #if !MONO && !DIS_NUF
 
 using System;
+using System.Threading;
 using System.Windows.Forms;
 using GDModel;
 using GKCore.Interfaces;
@@ -91,8 +92,7 @@ namespace GKUI.Forms
             ClickToolStripButton(sheetListName + "_ToolBar_btnDelete", fDialog);
         }
 
-        [STAThread]
-        [Test]
+        [Test, RequiresThread(ApartmentState.STA)]
         public void Test_Common()
         {
             GDMIndividualRecord indiRecord = fDialog.IndividualRecord;
