@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,37 +23,59 @@ namespace GKCore.Types
     public enum RelationKind
     {
         rkNone,         /* 0 */
+
         rkParent,       /* 1 */
         rkSpouse,       /* 2 */
         rkChild,        /* 3 */
+
         rkFather,       /* 4 */
         rkMother,       /* 5 */
+
         rkHusband,      /* 6 */
         rkWife,         /* 7 */
+
         rkSon,          /* 8 */
         rkDaughter,     /* 9 */
+
         rkGrandfather,
         rkGrandmother,
+
         rkGrandson,
         rkGranddaughter,
+
         rkBrother,
         rkSister,
+
         rkSonInLaw,
         rkDaughterInLaw,
+
         rkHusbandFather,
         rkHusbandMother,
+
         rkWifeFather,
         rkWifeMother,
-        rkUncle,
-        rkAunt,
+
+        rkUncle_FatherBrother,
+        rkAunt_FatherSister,
+
+        rkUncle_MotherBrother,
+        rkAunt_MotherSister,
+
         rkNephew,
         rkNiece,
+
         rkCousinM,
         rkCousinF,
+
         rkBrotherInLaw_H,
         rkSisterInLaw_H,
+
         rkBrotherInLaw_W,
         rkSisterInLaw_W,
+
+        rkStepfather,
+        rkStepmother,
+
         rkSame,
         rkUndefined
     }

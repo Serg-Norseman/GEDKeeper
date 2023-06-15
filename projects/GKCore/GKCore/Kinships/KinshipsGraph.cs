@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -98,6 +98,7 @@ namespace GKCore.Kinships
             if (target == null) return "???";
 
             try {
+                RelationKind prevprevRel = RelationKind.rkNone;
                 RelationKind prevRel = RelationKind.rkNone;
                 RelationKind finRel = RelationKind.rkNone;
                 int great = 0;
@@ -130,7 +131,7 @@ namespace GKCore.Kinships
                             g = -1;
                             deg = +1;
                         } else {
-                            finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out deg);
+                            finRel = KinshipsMan.FindKinship(prevprevRel, prevRel, curRel, out g, out deg);
                         }
 
                         great += g;
@@ -143,16 +144,19 @@ namespace GKCore.Kinships
                             starting = prev_tgt;
                             great = 0;
                             degree = 0;
+
+                            prevprevRel = prevRel;
                             prevRel = RelationKind.rkNone;
 
                             if (fullRel.Length > 0) fullRel += ", ";
                             fullRel += part;
 
-                            finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out deg);
+                            finRel = KinshipsMan.FindKinship(prevprevRel, prevRel, curRel, out g, out deg);
                             great += g;
                             degree += deg;
                         }
 
+                        prevprevRel = prevRel;
                         prevRel = finRel;
                     }
                 }

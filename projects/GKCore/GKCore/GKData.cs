@@ -276,8 +276,10 @@ namespace GKCore
                 LSID.LSID_RK_HusbandMother,
                 LSID.LSID_RK_WifeFather,
                 LSID.LSID_RK_WifeMother,
-                LSID.LSID_RK_Uncle,
-                LSID.LSID_RK_Aunt,
+                LSID.LSID_RK_Uncle_FatherBrother,
+                LSID.LSID_RK_Aunt_FatherSister,
+                LSID.LSID_RK_Uncle_MotherBrother,
+                LSID.LSID_RK_Aunt_MotherSister,
                 LSID.LSID_RK_Nephew,
                 LSID.LSID_RK_Niece,
                 LSID.LSID_RK_CousinM,
@@ -286,6 +288,8 @@ namespace GKCore
                 LSID.LSID_RK_SisterInLaw_H,
                 LSID.LSID_RK_BrotherInLaw_W,
                 LSID.LSID_RK_SisterInLaw_W,
+                LSID.LSID_RK_Stepfather,
+                LSID.LSID_RK_Stepmother,
                 LSID.LSID_None,
                 LSID.LSID_RK_Unk
             };

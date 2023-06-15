@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,10 +45,10 @@ namespace GKCore
         public void Test_KinshipsMan()
         {
             int g, deg;
-            var finRel = KinshipsMan.FindKinship(RelationKind.rkFather, RelationKind.rkSon, out g, out deg);
+            var finRel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkFather, RelationKind.rkSon, out g, out deg);
             Assert.AreEqual(RelationKind.rkBrother, finRel);
 
-            finRel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkSon, out g, out deg);
+            finRel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkNone, RelationKind.rkSon, out g, out deg);
             Assert.AreEqual(RelationKind.rkSon, finRel);
         }
 
