@@ -1,4 +1,4 @@
-﻿;1029,cze,Čeština,xt
+;1029,cze,Čeština,xt
 001=Soubor
 002=Upravit
 003=Rodokmen
@@ -18,7 +18,7 @@
 017=Exit
 018=Import
 019=Smazat
-020=Přidat zázmam
+020=Přidat záznam
 021=Upravit záznam
 022=Zrušit záznam
 023=<?>
@@ -50,7 +50,7 @@
 049=Obsah
 050=O...
 051=Záznamy
-052=Filtrované
+052=filtrované
 053=Jednotlivci
 054=Rodiny
 055=Poznámky
@@ -62,11 +62,11 @@
 061=Úkoly
 062=Komunikace
 063=Lokace
-064=neznámé
-065=neznámé
+064=neznámá
+065=neznámý
 066=?
-067=Muž
-068=Žena
+067=Mužský
+068=Ženský
 069=Neurčeno
 070=Chcete uložit změny do upraveného souboru?
 071=Specifikovaný rodič má existující rodinu "{0}". Chcete přidat dítě do této rodiny?
@@ -118,7 +118,7 @@
 117=Manželka
 118=Postavení
 119=Děti
-120=Opravdu chcete odpojit odkaz na manžela? 
+120=Opravdu chcete odpojit odkaz na manžela?
 121=Opravdu chcete odpojit odkaz na manželku?
 122=Opravdu chcete odpojit odkaz na dítě?
 123=Datum narození
@@ -128,7 +128,7 @@
 127=Členové
 128=Upravit skupinu
 129=Opravdu chcete odpojit odkaz na člena?
-130=Pohled
+130=pohled
 131=Etapa
 132=Telefonní číslo
 133=e-mail
@@ -136,7 +136,7 @@
 135=Úložiště
 136=Pokrok
 137=Uplynulý čas
-138=Zbývající čas 
+138=Zbývající čas
 139=Celkový čas
 140=Datum
 141=Text
@@ -155,7 +155,7 @@
 154=Manželé
 155=Sdružení
 156=Odkazy uživatelů
-157=Gregoriánský 
+157=Gregoriánský
 158=Juliánský
 159=Hebrejský
 160=Islámský
@@ -174,7 +174,7 @@
 173=Zeměpisná délka
 174=Ukázat
 175=Vyhledávání souřadnic
-176=Vyhledávání 
+176=Vyhledávání
 177=Vybrat souřadnice
 178=Vybrat jméno
 179=Přednost
@@ -188,7 +188,7 @@
 187=Opravdu chcete odpojit odkaz na úkol?
 188=Opravdu chcete odpojit spojení od komunikace?
 189=Opravdu chcete odpojit odkaz na skupinu?
-190=Upravit výzkum 
+190=Upravit výzkum
 191=Upravit úlohu
 192=Upravit komunikaci
 193=Chyba
@@ -226,7 +226,7 @@
 225=Pouze potomci
 226=Vyhledat kořen
 227=Upravit
-228=Přidat rodinu 
+228=Přidat rodinu
 229=Přidat manžela
 230=Přidat syna
 231=Přidat dceru
@@ -268,9 +268,9 @@
 267=Seznam osob
 268=Formát názvu v seznamech
 269=Příjmení_Jméno_Patronymic
-270=Příjmení; Jméno_Patronymic
-271=Příjmení; Jméno; Patronymic
-272=Formát data v seznamech 
+270=Příjmení | Jméno_Patronymic
+271=Příjmení | Jméno | Patronymic
+272=Formát data v seznamech
 273=Vložit text na místo
 274=Zvýraznit sirotky
 275=Zvýraznit svobodné
@@ -297,7 +297,7 @@
 296=Formát původu
 297=Přebytek
 298=Kompaktní
-299=Přejít na záznam 
+299=Přejít na záznam
 300=Přesunout záznam nahoru
 301=Přesunout záznam dolů
 302=Celé jméno
@@ -325,7 +325,7 @@
 324=Křest
 325=Promoce
 326=Odchod do důchodu
-327=Naturalizace 
+327=Naturalizace
 328=Emigrace
 329=Imigrace
 330=Sčítání lidu
@@ -351,7 +351,7 @@
 350=manžel
 351=manželka
 352=syn
-353=dcera 
+353=dcera
 354=dědeček
 355=babička
 356=vnuk
@@ -374,7 +374,7 @@
 373=švagrová
 374=švagr
 375=švagrová
-376=pra 
+376=pra
 377=<?>
 378=<?>
 379=<?>
@@ -408,10 +408,10 @@
 407=Doba před
 408=Doba od
 409=Doba mezi
-410=O
+410=Přibližně
 411=Vypočteno
-412=Odhad
-413=Zasnoubení 
+412=Odhadovaný
+413=Zasnoubení
 414=Manželství
 415=Veřejné oznámení manželství
 416=Manželská smlouva
@@ -445,7 +445,7 @@
 444=Horní
 445=Definovaný
 446=Probíhá
-447=Pozastaveno 
+447=Pozastaveno
 448=Problémy
 449=Dokončeno
 450=Staženo
@@ -476,10 +476,10 @@
 475=Vyhledat mužské předky
 476=Vyhledat odkazy
 477=Archiv nebyl nalezen, data nejsou načtena
-478=Stupnice 
+478=Stupnice
 479=GEDKeeper GEDCOM soubory (*.ged)|*.ged|GEDKeeper GEDCOM zašifrované soubory (*.geds)|*.geds
 480=Všechny soubory (*.*)|*.*
-481=Obrázky (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
+481=Obrázky (*.bmp,*.gif,*.png,*.jpg)|*.bmp,*.gif,*.png,*.jpg
 482=Scripty (*.lua)|*.lua
 483=BMP soubory (*.bmp)|*.bmp|JPEG soubory (*.jpg)|*.jpg|PNG soubory (*.png)|*.png|GIF soubory (*.gif)|*.gif
 484=Příčiny smrti
@@ -489,7 +489,7 @@
 488=Muži
 489=Ženy
 490=Filtr polí
-491=Rok 
+491=Rok
 492=PDF soubory (*.pdf)|*.pdf
 493=RTF soubory (*.rtf)|*.rtf
 494=HTML soubory (*.html)|*.html
@@ -506,7 +506,7 @@
 505=Databáze ke sloučení
 506=[aktuální databáze]
 507=K dispozici je filtr podle zdroje. Chcete přidat zdroj k nové osobě?
-508=K dispozici je filtr podle skupiny. Chcete přidat skupinu k nové osobě? 
+508=K dispozici je filtr podle skupiny. Chcete přidat skupinu k nové osobě?
 509=Vyhledávání duplikátů
 510=Neplatná hodnota
 511=Úkon
@@ -537,7 +537,7 @@
 536=Desetiletí
 537=Narozen(a)
 538=Zemřel(a)
-539=Živí 
+539=Živí
 540=Mrtví
 541=Průměrný věk
 542=Délka života
@@ -571,7 +571,7 @@
 570=Zkontrolovat rok narození
 571=Přesnost názvu, %
 572=Nepřesnost roku
-573=Opravit 
+573=Opravit
 574=Generace potomků, ne méně než
 575=Nastavit značku
 576=Zaregistrace v seznamu míst
@@ -585,7 +585,7 @@
 584=Pohlaví není určeno
 585=Rok narození více než rok úmrtí
 586=První manželství ve věku {0} let?
-587=První dítě se narodilo ve věku 0 let?
+587=První dítě se narodilo ve věku {0} let?
 588=Potomci
 589=Generace
 590=Počet odkazů
@@ -601,7 +601,7 @@
 600=Barva pozadí...
 601=Obrázek na pozadí ...
 602=Osoby ve stromu: {0}
-603=Zobrazit protokol chyb 
+603=Zobrazit protokol chyb
 604=Kruhy předků
 605=Kruh
 606=Barva textu
@@ -629,7 +629,7 @@
 628=Resetovat
 629=Pole
 630=Stav
-631=Zdroj není zadán 
+631=Zdroj není zadán
 632=Prezentace
 633=Předchozí záznam
 634=Další záznam
@@ -653,7 +653,7 @@
 652=Zobrazit typ data
 653=Vytvořit nový stromový soubor
 654=Otevřít stromový soubor
-655=Uložit soubor stromu 
+655=Uložit soubor stromu
 656=Přidat záznam (Ctrl + I)
 657=Upravit záznam (Ctrl + Enter)
 658=Smazat záznam (Ctrl + L)
@@ -678,7 +678,7 @@
 677=Odpojit rodiče rodiny
 678=Vybrat nebo přidat otce
 679=Odpojit otce
-680=Přejít k záznamu otce 
+680=Přejít k záznamu otce
 681=Vybrat nebo přidat matku
 682=Odpojit matku
 683=Přejít k záznamu matky
@@ -706,7 +706,7 @@
 705=Interní porovnávání (vyhledávání duplicit)
 706=Srovnání s jinou databází
 707=Analýza
-708=Porovnat 
+708=Porovnat
 709=Ignorovat data
 710=Zmapovat
 711=Rodinná kniha
@@ -762,7 +762,7 @@
 761=Datum sňatku
 762=Automaticky zkontrolovat aktualizace
 763=Text oblouku
-764=Album stromů 
+764=Album stromů
 765=Zobrazit místa
 766=Skrýt neznámé manžele
 767=Rozestupy
@@ -808,7 +808,7 @@
 806=Náboženství: Islám
 807=Náboženství: Katolicismus
 808=Náboženství: Pravoslaví
-809=Náboženství: Staří věřící 
+809=Náboženství: Staří věřící
 
 810=Relativní odkaz na soubor
 811=Maximální počet revizí zálohy
@@ -839,7 +839,7 @@
 835=Krátká forma příbuzenství
 836=Příjmení jako první v pořadí
 837=Rámečky
-838=Máte verzi {0} GEDKeeperu. Chcete aktualizovat na nejnovější verzi {1}?
+838=Máte verzi {0} GEDKeeper. Chcete aktualizovat na nejnovější verzi {1}?
 839=Poskytovatelé
 840=Souřadnice
 841=Načíst místa

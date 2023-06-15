@@ -1,4 +1,4 @@
-﻿;1031,deu,Deutsch,xt
+;1031,deu,Deutsch,xt
 001=&Datei
 002=&Bearbeiten
 003=Stammbaum
@@ -268,8 +268,8 @@
 267=Personenliste
 268=Namenformat in den Listen
 269=Vorname_Name_Patronymikon
-270=Vorname; Name_Patronymikon
-271=Vorname; Name; Patronymikon
+270=Vorname | Name_Patronymikon
+271=Vorname | Name | Patronymikon
 272=Datumformat in den Listen
 273=Adresse in die Ortszeilen einschliessen
 274=Personen ohne Eltern markieren
@@ -461,7 +461,7 @@
 460=Familie
 461=Quelle
 462=Anderes
-463=Beweise oder Vermutungen unzuverlässig 
+463=Beweise oder Vermutungen unzuverlässig
 464=Beweise oder Vermutungen fragwürdig
 465=Indizienbeweis
 466=Beweise eindeutige und konkret
@@ -479,7 +479,7 @@
 478=Massstab
 479=GEDKeeper GEDCOM-Dateien (*.ged)|*.ged|GEDKeeper verschlüsselte GEDCOM-Dateien (*.geds)|*.geds
 480=Alle Dateien (*.*)|*.*
-481=Bilder (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
+481=Bilder (*.bmp,*.gif,*.png,*.jpg)|*.bmp,*.gif,*.png,*.jpg
 482=Skripte (*.lua)|*.lua
 483=BMP-Dateien (*.bmp)|*.bmp|JPEG-Dateien (*.jpg)|*.jpg|PNG-Dateien (*.png)|*.png|GIF-Dateien (*.gif)|*.gif
 484=Todesursachen

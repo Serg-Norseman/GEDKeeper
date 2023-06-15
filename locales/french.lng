@@ -1,4 +1,4 @@
-﻿;1036,fra,Français,xt
+;1036,fra,Français,xt
 001=Fichier
 002=Modification
 003=Pedigree
@@ -44,9 +44,9 @@
 043=&Tuile verticale
 044=&Réduire tout
 045=&Réorganiser tout
-046=Ressources Internet
-047=Terms
-048=FAQ
+046=<?>
+047=<?>
+048=<?>
 049=Contenu
 050=À  propos de nous
 051=Records
@@ -268,8 +268,8 @@
 267=Liste des personnes
 268=Format des noms dans les listes
 269=Nom_Prénom_Patronyme
-270=Nom; Prénom_Patronyme
-271=Nom; Prénom; Patronyme
+270=Nom | Prénom_Patronyme
+271=Nom | Prénom | Patronyme
 272=Format de la date dans les listes
 273=Inclure l'adresse dans la ligne de places
 274=Mettre en surbrillance la personne sans parents
@@ -479,7 +479,7 @@
 478=échelle
 479=Fichiers GEDCOM GEDKeeper (*.ged)|*.ged|GEDKeeper crypté les fichiers GEDCOM (*.geds)|*.geds
 480=Tous les fichiers (*.*)|*.*
-481=Images (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
+481=Images (*.bmp,*.gif,*.png,*.jpg)|*.bmp,*.gif,*.png,*.jpg
 482=Scripts (*.lua)|*.lua
 483=Les fichiers BMP(*.bmp)|*.bmp|JPEG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|GIF files (*.gif)|*.gif
 484=Les causes de décès

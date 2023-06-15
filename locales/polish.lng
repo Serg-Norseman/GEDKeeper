@@ -1,4 +1,4 @@
-﻿;1045,pol,Polski,xt
+;1045,pol,Polski,xt
 001=Plik
 002=Edycja
 003=Rodowód
@@ -268,8 +268,8 @@
 267=Lista osób
 268=Format nazwy w listach
 269=Nazwisko_Nazwa_Nazwisko rodowe
-270=Nazwisko; Nazwa_Nazwisko rodowe
-271=Nazwisko; Nazwa; Nazwisko rodowe
+270=Nazwisko | Nazwa_Nazwisko rodowe
+271=Nazwisko | Nazwa | Nazwisko rodowe
 272=Format daty w listach
 273=Dołączyć adres w miejsce tekstu
 274=Podświetl nierozpoznane
@@ -479,7 +479,7 @@
 478=Skaluj
 479=Pliki GEDKeeper GEDCOM (*.ged)|*.ged|GEDKeeper GEDCOM zaszyfrowane pliki (*.geds)|*.geds
 480=Wszystkie pliki (*.*)|*.*
-481=Obrazy (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
+481=Obrazy (*.bmp,*.gif,*.png,*.jpg)|*.bmp,*.gif,*.png,*.jpg
 482=Skrypty (*.lua)|*.lua
 483=Pliki BMP (*.bmp)|*.bmp|Pliki JPEG (*.jpg)|*.jpg|Pliki PNG (*.png)|*.png|Pliki GIF (*.gif)|*.gif
 484=Przyczyny śmierci

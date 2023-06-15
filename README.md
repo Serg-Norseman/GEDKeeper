@@ -67,15 +67,17 @@ If your problem or idea is not addressed yet, please open a new issue.
 - English
 - French
 - German
+- Hungarian
+- Icelandic, partial
 - Italian
-- Kazakh (cyrillic), partial
+- Kazakh (Cyrillic), partial
 - Polish
 - Russian
+- Serbian (Latin), partial
 - Ukrainian
 
 ### Planned, search for a native speaker
 
-- Hungarian
 - Portuguese
 - Spanish
 
