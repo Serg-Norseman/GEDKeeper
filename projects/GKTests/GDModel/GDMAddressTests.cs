@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,6 +29,11 @@ namespace GDModel
     [TestFixture]
     public class GDMAddressTests
     {
+        public GDMAddressTests()
+        {
+            TestUtils.InitGEDCOMProviderTest();
+        }
+
         [Test]
         public void Test_Common()
         {

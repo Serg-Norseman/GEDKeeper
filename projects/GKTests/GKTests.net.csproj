@@ -1,0 +1,92 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0</TargetFrameworks>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AssemblyName>GKTests</AssemblyName>
+        <RootNamespace>GKTests</RootNamespace>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
+    </PropertyGroup>
+
+    <Import Project="..\GKConfigurations3.targets" />
+
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\libs\netstd\BSLib.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.Model">
+            <HintPath>..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
+        </Reference>
+        <ProjectReference Include="..\GKCore\GKCore.nstd.csproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="UTF.Unknown" Version="2.5.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
+        <PackageReference Include="NSubstitute" Version="5.0.0" />
+        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <Compile Remove="GKCore\Program.cs" />
+        <Compile Include="..\GlobalSuppressions.cs">
+            <Link>GlobalSuppressions.cs</Link>
+        </Compile>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\test1.ged" />
+        <EmbeddedResource Include="Resources\test2.ged" />
+        <EmbeddedResource Include="Resources\test_agelong_ansel%28win1251%29.ged" />
+        <EmbeddedResource Include="Resources\shaytan_plant.jpg" />
+        <EmbeddedResource Include="Resources\TGC55CLF.GED" />
+        <EmbeddedResource Include="Resources\test_stdgedcom_notes.ged" />
+        <EmbeddedResource Include="Resources\test_ansel.ged" />
+        <EmbeddedResource Include="Resources\test_video.3gp" />
+        <EmbeddedResource Include="Resources\test_ftb6_ansi%28win1251%29.ged" />
+        <EmbeddedResource Include="Resources\test_holidays.yaml" />
+        <EmbeddedResource Include="Resources\test_pathreplace.yaml" />
+        <EmbeddedResource Include="Resources\lorem_ipsum.txt" />
+        <EmbeddedResource Include="Resources\lorem_ipsum.rtf" />
+        <EmbeddedResource Include="Resources\lorem_ipsum.htm" />
+        <EmbeddedResource Include="Resources\test_names_01.ged" />
+        <EmbeddedResource Include="Resources\test_names_02.ged" />
+        <EmbeddedResource Include="Resources\test_ahn_ansi%28win1250%29.ged" />
+        <EmbeddedResource Include="Resources\test_gk_utf8.ged" />
+        <EmbeddedResource Include="Resources\test_ftb_badline.ged" />
+        <EmbeddedResource Include="Resources\test_min_indented.ged" />
+        <EmbeddedResource Include="Resources\test_empty_lines.ged" />
+        <EmbeddedResource Include="Resources\test_famhist.ged" />
+        <EmbeddedResource Include="Resources\test_ftm2008.ged" />
+        <EmbeddedResource Include="Resources\test_longline.ged" />
+        <EmbeddedResource Include="Resources\test_heredis.ged" />
+        <EmbeddedResource Include="Resources\test_aq.ged" />
+        <EmbeddedResource Include="Resources\test_geni.ged" />
+        <EmbeddedResource Include="Resources\test_legacy.ged" />
+        <EmbeddedResource Include="Resources\test_easytree.ged" />
+        <EmbeddedResource Include="Resources\test_genney.ged" />
+        <EmbeddedResource Include="Resources\test_gedml.xml" />
+        <EmbeddedResource Include="Resources\test_empty.ged" />
+        <EmbeddedResource Include="Resources\test_native.ged" />
+        <EmbeddedResource Include="Resources\test_windsor.familyx" />
+        <EmbeddedResource Include="Resources\test_mergerec.ged" />
+        <EmbeddedResource Include="Resources\test_names_03.ged" />
+        <EmbeddedResource Include="Resources\test_geni_badlines.ged" />
+        <EmbeddedResource Include="Resources\test_dates_year.ged" />
+        <EmbeddedResource Include="Resources\test_geni_srcit.ged" />
+        <EmbeddedResource Include="Resources\test_geni_neg_years.ged" />
+        <EmbeddedResource Include="Resources\test_ftb_badpos.ged" />
+        <EmbeddedResource Include="Resources\test_ages_adop.ged" />
+        <EmbeddedResource Include="Resources\test_famhist2.ged" />
+        <EmbeddedResource Include="Resources\test_gc4j_utf8.ged" />
+    </ItemGroup>
+
+</Project>
+

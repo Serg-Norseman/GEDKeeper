@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,8 +30,7 @@ namespace GKCore
     {
         private Holidays fHolidays;
 
-        [TestFixtureSetUp]
-        public void SetUp()
+        public HolidaysTests()
         {
             fHolidays = new Holidays();
         }

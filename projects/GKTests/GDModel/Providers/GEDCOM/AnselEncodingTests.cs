@@ -20,6 +20,7 @@
 
 using System;
 using System.Text;
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel.Providers.GEDCOM
@@ -27,6 +28,11 @@ namespace GDModel.Providers.GEDCOM
     [TestFixture]
     public class AnselEncodingTests
     {
+        public AnselEncodingTests()
+        {
+            TestUtils.InitGEDCOMProviderTest();
+        }
+
         [Test]
         public void Test_Common()
         {

@@ -190,11 +190,12 @@ namespace GKCore.Calendar
         }
 
         [Test(Description = "UDN Exceptions Test")]
-        [ExpectedException(typeof(Exception))]
         public void Test_Exceptions()
         {
-            UDN.CreateBetween(new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 05),
+            Assert.Throws(typeof(Exception), () => {
+                UDN.CreateBetween(new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 05),
                               new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 07));
+            });
         }
 
         [Test]

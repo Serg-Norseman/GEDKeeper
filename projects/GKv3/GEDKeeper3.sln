@@ -77,6 +77,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCommunicatorPlugin.net", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKNetUI.net", "..\GKCommunicator\GKNetUI.EtoForms\GKNetUI.net.csproj", "{D7823209-E01F-47F9-BB58-C7C54901D7BE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTests.net", "..\GKTests\GKTests.net.csproj", "{32521FE6-112C-4095-B0A8-755C5C94D00A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		FreeBSD_Debug|Any CPU = FreeBSD_Debug|Any CPU
@@ -1305,6 +1307,54 @@ Global
 		{D7823209-E01F-47F9-BB58-C7C54901D7BE}.MSWin_Release|x64.Build.0 = MSWin_Release|Any CPU
 		{D7823209-E01F-47F9-BB58-C7C54901D7BE}.MSWin_Release|x86.ActiveCfg = MSWin_Release|Any CPU
 		{D7823209-E01F-47F9-BB58-C7C54901D7BE}.MSWin_Release|x86.Build.0 = MSWin_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Debug|Any CPU.ActiveCfg = FreeBSD_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Debug|Any CPU.Build.0 = FreeBSD_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Debug|x64.ActiveCfg = FreeBSD_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Debug|x64.Build.0 = FreeBSD_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Debug|x86.ActiveCfg = FreeBSD_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Debug|x86.Build.0 = FreeBSD_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Release|Any CPU.ActiveCfg = FreeBSD_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Release|Any CPU.Build.0 = FreeBSD_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Release|x64.ActiveCfg = FreeBSD_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Release|x64.Build.0 = FreeBSD_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Release|x86.ActiveCfg = FreeBSD_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.FreeBSD_Release|x86.Build.0 = FreeBSD_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Debug|Any CPU.ActiveCfg = Linux_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Debug|Any CPU.Build.0 = Linux_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Debug|x64.ActiveCfg = Linux_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Debug|x64.Build.0 = Linux_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Debug|x86.ActiveCfg = Linux_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Debug|x86.Build.0 = Linux_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Release|Any CPU.ActiveCfg = Linux_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Release|Any CPU.Build.0 = Linux_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Release|x64.ActiveCfg = Linux_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Release|x64.Build.0 = Linux_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Release|x86.ActiveCfg = Linux_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Linux_Release|x86.Build.0 = Linux_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Debug|Any CPU.ActiveCfg = MacOS_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Debug|Any CPU.Build.0 = MacOS_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Debug|x64.ActiveCfg = MacOS_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Debug|x64.Build.0 = MacOS_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Debug|x86.ActiveCfg = MacOS_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Debug|x86.Build.0 = MacOS_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Release|Any CPU.ActiveCfg = MacOS_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Release|Any CPU.Build.0 = MacOS_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Release|x64.ActiveCfg = MacOS_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Release|x64.Build.0 = MacOS_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Release|x86.ActiveCfg = MacOS_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MacOS_Release|x86.Build.0 = MacOS_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Debug|Any CPU.ActiveCfg = MSWin_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Debug|Any CPU.Build.0 = MSWin_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Debug|x64.ActiveCfg = MSWin_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Debug|x64.Build.0 = MSWin_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Debug|x86.ActiveCfg = MSWin_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Debug|x86.Build.0 = MSWin_Debug|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Release|Any CPU.ActiveCfg = MSWin_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Release|Any CPU.Build.0 = MSWin_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Release|x64.ActiveCfg = MSWin_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Release|x64.Build.0 = MSWin_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Release|x86.ActiveCfg = MSWin_Release|Any CPU
+		{32521FE6-112C-4095-B0A8-755C5C94D00A}.MSWin_Release|x86.Build.0 = MSWin_Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
