@@ -19,10 +19,10 @@
  */
 
 using System.Collections.Generic;
-using System.Drawing;
 using GKCore.BBText;
+using GKCore.Design.Graphics;
 using GKTests;
-using GKUI.Platform.Handlers;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore
@@ -54,9 +54,8 @@ namespace GKCore
             string sample = "[size=+1][color=red][b]bold text[/b] [i][u]italic[/i] and underline[/u] qq[/color] "+
                 "[size=-1][s]strikeout[/s][/size] \r\n [url=http://test.com/~user/index.html]url text[/url][/size]";
 
-            var parser = new BBTextParser(AppHost.GfxProvider, 12.0f,
-                                          new ColorHandler(Color.Blue),
-                                          new ColorHandler(Color.Black));
+            var color = Substitute.For<IColor>();
+            var parser = new BBTextParser(AppHost.GfxProvider, 12.0f, color, color);
 
             List<BBTextChunk> chunksList = new List<BBTextChunk>();
 
@@ -85,9 +84,8 @@ namespace GKCore
         {
             string sample = "[u][b][size=+1]Ingvar [the Mighty][/size][/u][/b]";
 
-            var parser = new BBTextParser(AppHost.GfxProvider, 12.0f,
-                                          new ColorHandler(Color.Blue),
-                                          new ColorHandler(Color.Black));
+            var color = Substitute.For<IColor>();
+            var parser = new BBTextParser(AppHost.GfxProvider, 12.0f, color, color);
 
             List<BBTextChunk> chunksList = new List<BBTextChunk>();
 

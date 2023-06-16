@@ -32,9 +32,6 @@ using GKCore.Search;
 using GKCore.Stats;
 using GKCore.Types;
 using GKTests;
-using GKUI.Components;
-using GKUI.Platform;
-using GKUI.Platform.Handlers;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -348,21 +345,11 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_UIControls()
+        public void Test_Other()
         {
             ComboItem<object> comboItem = new ComboItem<object>("Test", null);
             Assert.IsNotNull(comboItem);
             Assert.AreEqual("Test", comboItem.ToString());
-
-            GKListItem listItem = new GKListItem("Test", null);
-            Assert.IsNotNull(listItem);
-            Assert.AreEqual("Test", listItem.ToString());
-
-            MenuItemEx tsMenuItem = new MenuItemEx("Test", null);
-            Assert.IsNotNull(tsMenuItem);
-
-            TreeNodeEx treeNode = new TreeNodeEx("Test", null);
-            Assert.IsNotNull(treeNode);
 
             ModifyEventArgs args = new ModifyEventArgs(RecordAction.raAdd, null);
             Assert.IsNotNull(args);

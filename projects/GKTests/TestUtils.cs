@@ -25,10 +25,10 @@ using System.Reflection;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
+using GKCore.Design.Graphics;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKCore.IoC;
 using GKTests.Stubs;
-using GKUI.Platform;
 using NUnit.Framework;
 
 namespace GKTests
@@ -37,6 +37,11 @@ namespace GKTests
     {
         public static void InitGEDCOMProviderTest()
         {
+#if NETCOREAPP3_1_OR_GREATER
+            // support for legacy encodings
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+#endif
+
             // forced initialization of GEDCOM tag property tables
             GKUtils.InitGEDCOM();
 
@@ -52,7 +57,7 @@ namespace GKTests
             AppHost.TEST_MODE = true;
 
             // GlobalOptions -> IGraphicsProviderEx
-            WFAppHost.ConfigureBootstrap();
+            AppHostStub.ConfigureBootstrap();
 
             LangMan.DefInit();
 

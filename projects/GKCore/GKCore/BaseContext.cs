@@ -1023,7 +1023,7 @@ namespace GKCore
                         if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
 
                         targetFn = targetDir + storeFile;
-                        result = CopyFile(fileName, targetFn);
+                        result = CopyFile(fileName, targetFn, !AppHost.TEST_MODE);
                     } catch (IOException ex) {
                         Logger.WriteError(string.Format("BaseContext.MediaSave({0}, {1})", fileName, targetFn), ex);
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExists));
@@ -1236,7 +1236,7 @@ namespace GKCore
                 }
             } else {
                 try {
-                    File.Copy(sourceFileName, destFileName, false);
+                    File.Copy(sourceFileName, destFileName, AppHost.TEST_MODE);
                     result = true;
                 } catch (Exception ex) {
                     Logger.WriteError(string.Format("BaseContext.CopyFile.2({0}, {1})", sourceFileName, destFileName), ex);
@@ -1559,6 +1559,12 @@ namespace GKCore
 
         private static SymmetricAlgorithm CreateCSP(byte majorVer, byte minorVer, string password)
         {
+#if NETCORE
+            const int BlockSize = 128;
+#else
+            const int BlockSize = 256;
+#endif
+
             if (majorVer >= 1) {
                 SymmetricAlgorithm csp = null;
 
@@ -1582,11 +1588,11 @@ namespace GKCore
 
                     case 2:
                         {
-                            var keyBytes = new byte[32];
+                            var keyBytes = new byte[BlockSize / 8];
                             Array.Copy(pwd, keyBytes, Math.Min(keyBytes.Length, pwd.Length));
                             csp = new RijndaelManaged();
-                            csp.KeySize = 256;
-                            csp.BlockSize = 256;
+                            csp.KeySize = BlockSize;
+                            csp.BlockSize = BlockSize;
                             csp.Key = keyBytes;
                             csp.IV = keyBytes;
                             csp.Padding = PaddingMode.PKCS7;

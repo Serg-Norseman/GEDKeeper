@@ -29,6 +29,11 @@ namespace GDModel
     [TestFixture]
     public class GDMAddressTests
     {
+        public GDMAddressTests()
+        {
+            TestUtils.InitGEDCOMProviderTest();
+        }
+
         [Test]
         public void Test_Common()
         {

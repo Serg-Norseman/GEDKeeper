@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <Import Project="..\..\GKConfigurations.targets" />
+  <PropertyGroup>
+    <ProjectGuid>{90BDD163-CEA0-4FCE-BA73-7591B71263CB}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GKTests</RootNamespace>
+    <AssemblyName>GKTestsUI2</AssemblyName>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <DefineConstants>UNDIS_NUF</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
+    <Reference Include="NUnitForms">
+      <HintPath>..\..\libs\NUnitForms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="BSLib">
+      <HintPath>..\..\libs\BSLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BSLib.DataViz.Model">
+      <HintPath>..\..\libs\BSLib.DataViz.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\libs\NSubstitute.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\libs\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UtfUnknown">
+      <HintPath>..\..\libs\UtfUnknown.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs">
+      <Link>GlobalSuppressions.cs</Link>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKComponents\CircleChartTests.cs" />
+    <Compile Include="GKComponents\GKListItemTests.cs" />
+    <Compile Include="GKComponents\HyperViewTests.cs" />
+    <Compile Include="GKComponents\ImageBoxTests.cs" />
+    <Compile Include="GKComponents\ImageViewTests.cs" />
+    <Compile Include="GKComponents\SmallComponents.cs" />
+    <Compile Include="GKComponents\TreeChartBoxTests.cs" />
+    <Compile Include="Plugins\FlowInputTests.cs" />
+    <Compile Include="ControlTesters\DataGridViewTester.cs" />
+    <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
+    <Compile Include="ControlTesters\GKSheetListTester.cs" />
+    <Compile Include="ControlTesters\MaskedTextBoxTester.cs" />
+    <Compile Include="ControlTesters\NumericUpDownTester.cs" />
+    <Compile Include="TestUtilsUI.cs" />
+    <Compile Include="UITests\AboutDlgTests.cs" />
+    <Compile Include="UITests\AddressEditDlgTests.cs" />
+    <Compile Include="UITests\AssociationEditDlgTests.cs" />
+    <Compile Include="UITests\CircleChartWinTests.cs" />
+    <Compile Include="UITests\CommonFilterDlgTests.cs" />
+    <Compile Include="UITests\CommonTests.cs" />
+    <Compile Include="UITests\CommunicationEditDlgTests.cs" />
+    <Compile Include="UITests\CustomWindowTest.cs" />
+    <Compile Include="UITests\DayTipsDlgTests.cs" />
+    <Compile Include="UITests\EventEditDlgTests.cs" />
+    <Compile Include="UITests\FamilyEditDlgTests.cs" />
+    <Compile Include="UITests\FilePropertiesDlgTests.cs" />
+    <Compile Include="UITests\GroupEditDlgTests.cs" />
+    <Compile Include="UITests\InputBoxTests.cs" />
+    <Compile Include="UITests\LanguageEditDlgTests.cs" />
+    <Compile Include="UITests\LanguageSelectDlgTests.cs" />
+    <Compile Include="UITests\LocationEditDlgTests.cs" />
+    <Compile Include="UITests\MainSDITests.cs" />
+    <Compile Include="UITests\MapsViewerWinTests.cs" />
+    <Compile Include="UITests\MediaEditDlgTests.cs" />
+    <Compile Include="UITests\MediaViewerWinTests.cs" />
+    <Compile Include="UITests\NameEditDlgTests.cs" />
+    <Compile Include="UITests\NoteEditDlgExTests.cs" />
+    <Compile Include="UITests\NoteEditDlgTests.cs" />
+    <Compile Include="UITests\OptionsDlgTests.cs" />
+    <Compile Include="UITests\OrganizerWinTests.cs" />
+    <Compile Include="UITests\ParentsEditDlgTests.cs" />
+    <Compile Include="UITests\PersonalNameEditDlgTests.cs" />
+    <Compile Include="UITests\PersonEditDlgTests.cs" />
+    <Compile Include="UITests\PersonsFilterDlgTests.cs" />
+    <Compile Include="UITests\PortraitSelectDlgTests.cs" />
+    <Compile Include="UITests\ProgressDlgTests.cs" />
+    <Compile Include="UITests\QuickSearchDlgTests.cs" />
+    <Compile Include="UITests\RecordInfoDlgTests.cs" />
+    <Compile Include="UITests\RecordSelectDlgTests.cs" />
+    <Compile Include="UITests\RelationshipCalculatorDlgTests.cs" />
+    <Compile Include="UITests\RepositoryEditDlgTests.cs" />
+    <Compile Include="UITests\ResearchEditDlgTests.cs" />
+    <Compile Include="UITests\ScriptEditWinTests.cs" />
+    <Compile Include="UITests\SexCheckDlgTests.cs" />
+    <Compile Include="UITests\SlideshowWinTests.cs" />
+    <Compile Include="UITests\SourceCitEditDlgTests.cs" />
+    <Compile Include="UITests\SourceEditDlgTests.cs" />
+    <Compile Include="UITests\StatisticsWinTests.cs" />
+    <Compile Include="UITests\TaskEditDlgTests.cs" />
+    <Compile Include="UITests\TreeChartWinTests.cs" />
+    <Compile Include="UITests\TreeFilterDlgTests.cs" />
+    <Compile Include="UITests\TreeToolsWinTests.cs" />
+    <Compile Include="UITests\UserRefEditDlgTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GKTests\GKTests.csproj">
+      <Project>{a8b53a6b-40a6-40ba-a671-03fc911bc37b}</Project>
+      <Name>GKTests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.csproj">
+      <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
+      <Name>GEDKeeper2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKComponents\GKComponents.csproj">
+      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
+      <Name>GKComponents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GKCore\GKCore.csproj">
+      <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
+      <Name>GKCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\plugins\GKFlowInputPlugin\GKFlowInputPlugin.csproj">
+      <Project>{66b64b00-c457-404e-aa2b-90f18127e394}</Project>
+      <Name>GKFlowInputPlugin</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+</Project>

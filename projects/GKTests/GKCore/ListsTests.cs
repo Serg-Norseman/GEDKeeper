@@ -26,7 +26,7 @@ using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
-using GKUI.Components;
+using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -47,7 +47,7 @@ namespace GKCore
 
         private static IListItem CreateListItem(object data, object[] columnValues)
         {
-            return new GKListItem(columnValues[0], data);
+            return new ListItemStub(columnValues[0], data);
         }
 
         [Test]
