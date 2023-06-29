@@ -14,7 +14,7 @@
 013=Export
 014=Kniha rodin...
 015=Uložit jako...
-016=Export do Excel workbook...
+016=Exportní tabulka...
 017=Exit
 018=Import
 019=Smazat
@@ -322,7 +322,7 @@
 321=Rozvedený
 322=Narození
 323=Adoptování
-324=Křest
+324=Křest (dítě)
 325=Promoce
 326=Odchod do důchodu
 327=Naturalizace
@@ -375,10 +375,10 @@
 374=švagr
 375=švagrová
 376=pra
-377=<?>
-378=<?>
-379=<?>
-380=<?>
+377=strýc
+378=teta
+379=stepfather
+380=stepmother
 381=Šířka obrázku je více než 65 000 pixelů. Nelze uložit.
 382=Zpět
 383=Další
@@ -599,7 +599,7 @@
 598=Načítání
 599=Chyba při ukládání souborů "{0}" {1}.
 600=Barva pozadí...
-601=Obrázek na pozadí ...
+601=Obrázek na pozadí...
 602=Osoby ve stromu: {0}
 603=Zobrazit protokol chyb
 604=Kruhy předků
@@ -800,7 +800,7 @@
 799=Záznam médií bez souborů
 800=Archiv nebyl nalezen
 
-801=RI: George Knight
+801=RI:George Knight
 802=SSSR: Druhá světová válka: Bitvy
 803=ZSSR: 2. světová válka: zabitý v bitvě
 804=SSSR: WWII: Pracující v týlu

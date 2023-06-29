@@ -2,7 +2,7 @@
 001=&Datei
 002=&Bearbeiten
 003=Stammbaum
-004=E&xtras
+004=Service
 005=&Fenster
 006=&Hilfe
 007=Neu
@@ -375,16 +375,16 @@
 374=Bruder von Ehefrau (Schwager)
 375=Schwester von Ehefrau (Schwägerin)
 376=Ur-
-377=<?>
-378=<?>
-379=<?>
-380=<?>
-381=Bildbreite hat mehr als 65'000 pixels, unmöglich zu speichern!
+377=uncle
+378=aunt
+379=stepfather
+380=stepmother
+381=Bildbreite hat mehr als 65'000 pixels, unmöglich zu speichern.
 382=Zurück
 383=Vorwärts
 384=Previous
 385=Weiter
-386=Wusstest du schon...?
+386=Wusstest du schon...
 387=Ortschaften herunterladen und suchen
 388=(nicht ausgewählt)
 389=Beispiel
@@ -476,7 +476,7 @@
 475=Patriarchen suchen (Familienoberhäupter)
 476=Suche Verweise
 477=Archiv nicht gefunden, Dateien wurden nicht geladen
-478=Massstab
+478=Skala
 479=GEDKeeper GEDCOM-Dateien (*.ged)|*.ged|GEDKeeper verschlüsselte GEDCOM-Dateien (*.geds)|*.geds
 480=Alle Dateien (*.*)|*.*
 481=Bilder (*.bmp,*.gif,*.png,*.jpg)|*.bmp,*.gif,*.png,*.jpg
@@ -581,7 +581,7 @@
 580=Datensatz
 581=Problem
 582=Lösung
-583=Schon verstorben (Alter {0})?
+583=Schon verstorben (Alter {0})
 584=Geschlecht undefiniert
 585=Geburtsjahr ist später als Sterbejahr
 586=Wurde die erste Ehe im Alter von {0} Jahre(n) geschlossen?
@@ -695,7 +695,7 @@
 694=Karte zeigen
 695=Quelledatensatz auswählen oder eintragen
 696=Zieldatensatz auswählen
-697=Für das Abspeichern der Typen "Archiv" und "Repositur" in eine neue Datenbank, soll vorher noch gespeichert werden?
+697=Für das Abspeichern der Typen "Archiv" und "Repositur" in eine neue Datenbank, soll vorher noch gespeichert werden
 698=Es gibt schon eine Datei mit gleichem Namen
 699=Das ist keine GEDSEC kompatible Datei
 700=Diese Person ist Mitglied einiger Familien. Kinder sollten via Eltern verknüpft werden.
@@ -713,7 +713,7 @@
 712=Inhaltsverzeichnis
 713=Persondatensätze
 714=Kataloge
-715=Geschlecht des Namen "{1}" ist unklar, ist es männlich?
+715=Geschlecht des Namen "{0}" ist unklar, ist es männlich?
 716=Automatisch speichern alle
 717=Minuten
 718=Einschliesslich der Anzahl Generationen
@@ -721,7 +721,7 @@
 720=Nachfahren Kreis
 721=Portrait Auswahl
 722=Verwandtschaftsgrad Rechner (2 Personen)
-723=#{0}# ist der/die "{1}" von *{2}*
+723={0} ist der/die {1} von {2}
 724=Heute ist der Geburtstag von {0}
 725=Morgen wird der Geburtstag von {0} sein
 726=Blutgruppe
