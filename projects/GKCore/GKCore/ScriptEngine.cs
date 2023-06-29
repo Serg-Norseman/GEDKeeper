@@ -777,11 +777,12 @@ namespace GKCore
             return dr.ItemArray[col].ToString();
         }
 
-        public void csv_write_cell(string content)
+        public void csv_write_cell(object content)
         {
             if (fCSVWriter == null) return;
 
-            fCSVWriter.AddTableCell(content);
+            string strContent = (content != null) ? content.ToString() : string.Empty;
+            fCSVWriter.AddTableCell(strContent);
         }
 
         #endregion
