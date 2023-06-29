@@ -72,14 +72,12 @@ If your problem or idea is not addressed yet, please open a new issue.
 - Italian
 - Kazakh (Cyrillic), partial
 - Polish
+- Portuguese, initial
 - Russian
 - Serbian (Latin), partial
+- Spanish, initial
 - Ukrainian
 
-### Planned, search for a native speaker
-
-- Portuguese
-- Spanish
 
 ## Docs & Help
 
