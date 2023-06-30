@@ -118,7 +118,7 @@ namespace GKCore.Controllers
                 int num = tmpRefs.Length;
                 for (int i = 0; i < num; i++) {
                     var p = fBase.Context.Tree.FindXRef<GDMIndividualRecord>(tmpRefs[i]);
-                    if (p != null) fView.PersonsList.ListView.AddItem(p, GKUtils.GetNameString(p, true, false));
+                    if (p != null) fView.PersonsList.ListView.AddItem(p, GKUtils.GetNameString(p, false));
                 }
             }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -62,7 +62,7 @@ namespace GKCore.Lists
                     result = fFetchedRec.Relation;
                     break;
                 case 1:
-                    result = ((fRelIndi == null) ? string.Empty : GKUtils.GetNameString(fRelIndi, true, false));
+                    result = ((fRelIndi == null) ? string.Empty : GKUtils.GetNameString(fRelIndi, false));
                     break;
             }
             return result;

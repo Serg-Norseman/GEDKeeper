@@ -147,8 +147,8 @@ namespace GKCore.Controllers
                 fView.LockEditor(fFamilyRecord.Restriction == GDMRestriction.rnLocked);
             }
 
-            fView.SetHusband((husband != null) ? GKUtils.GetNameString(husband, true, false) : null);
-            fView.SetWife((wife != null) ? GKUtils.GetNameString(wife, true, false) : null);
+            fView.SetHusband((husband != null) ? GKUtils.GetNameString(husband, false) : null);
+            fView.SetWife((wife != null) ? GKUtils.GetNameString(wife, false) : null);
 
             fView.ChildrenList.UpdateSheet();
             fView.EventsList.UpdateSheet();

@@ -395,7 +395,7 @@ namespace GKNavigatorPlugin
                 listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Person), 400, true);
 
                 foreach (var iRec in bookmarks) {
-                    listView.AddItem(iRec, new object[] { GKUtils.GetNameString(iRec, true, false) });
+                    listView.AddItem(iRec, new object[] { GKUtils.GetNameString(iRec, false) });
                 }
 
                 listView.ResizeColumn(0);

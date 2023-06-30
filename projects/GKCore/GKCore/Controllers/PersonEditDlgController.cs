@@ -222,7 +222,7 @@ namespace GKCore.Controllers
 
                 if (father != null) {
                     fView.SetFatherAvl(true, locked);
-                    fView.Father.Text = GKUtils.GetNameString(father, true, false);
+                    fView.Father.Text = GKUtils.GetNameString(father, false);
                 } else {
                     fView.SetFatherAvl(false, locked);
                     fView.Father.Text = "";
@@ -230,7 +230,7 @@ namespace GKCore.Controllers
 
                 if (mother != null) {
                     fView.SetMotherAvl(true, locked);
-                    fView.Mother.Text = GKUtils.GetNameString(mother, true, false);
+                    fView.Mother.Text = GKUtils.GetNameString(mother, false);
                 } else {
                     fView.SetMotherAvl(false, locked);
                     fView.Mother.Text = "";

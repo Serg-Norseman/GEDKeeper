@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -112,7 +112,7 @@ namespace GKCore.Tools
 
                 switch (Rec.RecordType) {
                     case GDMRecordType.rtIndividual:
-                        result = GKUtils.GetNameString(((GDMIndividualRecord)Rec), true, false);
+                        result = GKUtils.GetNameString(((GDMIndividualRecord)Rec), false);
                         break;
 
                     case GDMRecordType.rtFamily:

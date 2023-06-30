@@ -59,8 +59,8 @@ namespace GKCore.Controllers
         private void DuplicateFoundFunc(GDMIndividualRecord indivA, GDMIndividualRecord indivB)
         {
             fProgressController.InvokeEx(() => {
-                fView.CompareOutput.AppendText("    * [" + GKUtils.GetNameString(indivA, true, false) + "]\r\n");
-                fView.CompareOutput.AppendText("      [" + GKUtils.GetNameString(indivB, true, false) + "]\r\n\r\n");
+                fView.CompareOutput.AppendText("    * [" + GKUtils.GetNameString(indivA, false) + "]\r\n");
+                fView.CompareOutput.AppendText("      [" + GKUtils.GetNameString(indivB, false) + "]\r\n\r\n");
             });
         }
 
@@ -94,7 +94,7 @@ namespace GKCore.Controllers
                         fView.CompareOutput.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
                         if (uln != null && uln.Count > 0) {
                             foreach (TreeTools.ULIndividual indiv in uln) {
-                                fView.CompareOutput.AppendText("    - [" + indiv.Family + "] " + GKUtils.GetNameString(indiv.IRec, true, false) + "\r\n");
+                                fView.CompareOutput.AppendText("    - [" + indiv.Family + "] " + GKUtils.GetNameString(indiv.IRec, false) + "\r\n");
                             }
                         } else {
                             fView.CompareOutput.AppendText("    - not found.");

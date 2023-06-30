@@ -337,7 +337,7 @@ namespace GKCore
         public string get_individual_name(object recPtr)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
-            return (iRec == null) ? "" : GKUtils.GetNameString(iRec, true, false);
+            return (iRec == null) ? "" : GKUtils.GetNameString(iRec, false);
         }
 
         public int get_individual_associations_count(object recPtr)
