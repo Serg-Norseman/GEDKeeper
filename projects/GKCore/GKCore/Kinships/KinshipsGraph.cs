@@ -103,9 +103,11 @@ namespace GKCore.Kinships
                 int great = 0;
                 int degree = 0;
                 GDMIndividualRecord src = null, tgt = null, prev_tgt = null;
-                string part, fullRel = "";
+                string relPart = "";
 
                 GDMIndividualRecord starting = null;
+
+                System.Collections.Generic.Stack<string> relPartsStack = new System.Collections.Generic.Stack<string>();
 
                 var edgesPath = fGraph.GetPath(target);
                 foreach (Edge edge in edgesPath) {
@@ -137,7 +139,7 @@ namespace GKCore.Kinships
                         degree += deg;
 
                         if (finRel == RelationKind.rkUndefined && fullFormat) {
-                            part = GetRelationPart(starting, src, prevRel, great, degree, shortForm);
+                            relPart = GetRelationPart(starting, src, prevRel, great, degree, shortForm);
                             src = prev_tgt;
 
                             starting = prev_tgt;
@@ -145,8 +147,7 @@ namespace GKCore.Kinships
                             degree = 0;
                             prevRel = RelationKind.rkNone;
 
-                            if (fullRel.Length > 0) fullRel += ", ";
-                            fullRel += part;
+                            relPartsStack.Push(relPart);
 
                             finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out deg);
                             great += g;
@@ -161,10 +162,17 @@ namespace GKCore.Kinships
                     string relRes = GetRelationName(targetRec, finRel, great, degree, shortForm);
                     return relRes;
                 } else {
-                    part = GetRelationPart(starting, tgt, finRel, great, degree, shortForm);
+                    relPart = GetRelationPart(starting, tgt, finRel, great, degree, shortForm);
 
-                    if (fullRel.Length > 0) fullRel += ", ";
-                    fullRel += part;
+                    relPartsStack.Push(relPart);
+
+                    string fullRel = "";
+                    while (relPartsStack.Count > 0){
+                        fullRel += relPartsStack.Pop();
+                        if (relPartsStack.Count != 0) {
+                            fullRel += ", ";
+                        }
+                    }
 
                     return fullRel;
                 }
