@@ -1962,29 +1962,6 @@ namespace GKCore
             }
         }
 
-        private static void ShowEventDetailInfo(IBaseContext baseContext, GDMCustomEvent eventDetail, StringList summary)
-        {
-            if (eventDetail == null)
-                throw new ArgumentNullException("eventDetail");
-
-            if (summary != null && eventDetail.SourceCitations.Count != 0) {
-                summary.Add("   " + LangMan.LS(LSID.LSID_RPSources) + " (" + eventDetail.SourceCitations.Count.ToString() + "):");
-
-                int num = eventDetail.SourceCitations.Count;
-                for (int i = 0; i < num; i++) {
-                    GDMSourceCitation sourCit = eventDetail.SourceCitations[i];
-                    GDMSourceRecord sourceRec = baseContext.Tree.GetPtrValue<GDMSourceRecord>(sourCit);
-                    if (sourceRec == null) continue;
-
-                    string nm = "\"" + sourceRec.ShortTitle + "\"";
-                    if (!string.IsNullOrEmpty(sourCit.Page)) {
-                        nm = nm + ", " + sourCit.Page;
-                    }
-                    summary.Add("     " + HyperLink(sourceRec.XRef, nm, 0));
-                }
-            }
-        }
-
         private static void ShowEvent(GDMTree tree, GDMRecord subj, StringList aToList, GDMRecord aRec, GDMCustomEvent evt)
         {
             if (subj is GDMNoteRecord) {
@@ -2278,32 +2255,33 @@ namespace GKCore
             }
         }
 
-        private static void RecListSourcesRefresh(IBaseContext baseContext, GDMRecord record, StringList summary)
+        private static void RecListSourcesRefresh(IBaseContext baseContext, IGDMStructWithSourceCitations structWSC, StringList summary, string indent = "")
         {
-            if (record == null || summary == null) return;
+            if (structWSC == null || summary == null) return;
 
             try {
-                if (record.HasSourceCitations) {
-                    summary.Add("");
-                    summary.Add(LangMan.LS(LSID.LSID_RPSources) + " (" + record.SourceCitations.Count.ToString() + "):");
+                if (structWSC.HasSourceCitations) {
+                    if (structWSC is IGDMRecord) {
+                        summary.Add("");
+                    }
 
-                    int num = record.SourceCitations.Count;
+                    summary.Add(indent + LangMan.LS(LSID.LSID_RPSources) + " (" + structWSC.SourceCitations.Count.ToString() + "):");
+
+                    int num = structWSC.SourceCitations.Count;
                     for (int i = 0; i < num; i++) {
-                        GDMSourceCitation sourCit = record.SourceCitations[i];
+                        GDMSourceCitation sourCit = structWSC.SourceCitations[i];
                         GDMSourceRecord sourceRec = baseContext.Tree.GetPtrValue<GDMSourceRecord>(sourCit);
                         if (sourceRec == null) continue;
 
                         string nm = "\"" + sourceRec.ShortTitle + "\"";
-
-                        if (sourCit.Page != "") {
+                        if (!string.IsNullOrEmpty(sourCit.Page)) {
                             nm = nm + ", " + sourCit.Page;
                         }
-
-                        summary.Add("  " + HyperLink(sourceRec.XRef, nm, 0));
+                        summary.Add(indent + "  " + HyperLink(sourceRec.XRef, nm, 0));
 
                         var text = sourCit.Data.Text;
                         if (!text.IsEmpty()) {
-                            summary.Add("    " + text.Lines.Text);
+                            summary.Add(indent + "    " + text.Lines.Text);
                         }
                     }
                 }
@@ -2363,7 +2341,7 @@ namespace GKCore
                         if (evt.HasAddress) {
                             ShowAddressSummary(evt.Address, summary);
                         }
-                        ShowEventDetailInfo(baseContext, evt, summary);
+                        RecListSourcesRefresh(baseContext, evt, summary, "    ");
                     }
                 }
             } catch (Exception ex) {
@@ -2399,7 +2377,7 @@ namespace GKCore
                         summary.Add("  " + st + ": " + GetEventDesc(baseContext.Tree, evt));
 
                         ShowDetailCause(evt, summary);
-                        ShowEventDetailInfo(baseContext, evt, summary);
+                        RecListSourcesRefresh(baseContext, evt, summary, "    ");
                     }
                 }
             } catch (Exception ex) {
