@@ -72,8 +72,8 @@ namespace GKNavigatorPlugin
         /* 024 */ LSID_Name,
         /* 025 */ LSID_Action,
         /* 026 */ LSID_Filter,
-        /* 027 */ LSID_27,
-        /* 028 */ LSID_28,
+        /* 027 */ LSID_Associations,
+        /* 028 */ LSID_Relation,
     }
 
     public sealed class Plugin : WidgetPlugin, ISubscriber
