@@ -967,7 +967,10 @@ namespace GKCore
         /* 904 */ LSID_KeepInfoPansOverallSize,
         /* 905 */ LSID_XRefVisible,
 
-        /* 000 */ LSID_Last = LSID_XRefVisible
+        /* 906 */ LSID_RK_FathersWife,
+        /* 907 */ LSID_RK_MothersHusband,
+
+        /* 000 */ LSID_Last = LSID_RK_MothersHusband
     }
 
 
@@ -1890,6 +1893,9 @@ namespace GKCore
             /* 903 */ "Age at year",
             /* 904 */ "Keep overall size of info panels",
             /* 905 */ "Identifiers (XRef)",
+
+            /* 906 */ "father's wife",
+            /* 907 */ "mother's husband",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

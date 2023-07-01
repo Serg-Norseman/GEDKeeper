@@ -70,13 +70,13 @@ namespace GKCore.Kinships
                 RelationSet.Create(),
                 RelationSet.Create(RelationKind.rkMother),
                 RelationSet.Create(RelationKind.rkHusband),
-                RelationKind.rkFather, 0, 0);
+                /*RelationKind.rkFather*/ RelationKind.rkMothersHusband, 0, 0);
 
             RegisterKinship(
                 RelationSet.Create(),
                 RelationSet.Create(RelationKind.rkFather),
                 RelationSet.Create(RelationKind.rkWife),
-                RelationKind.rkMother, 0, 0);
+                /*RelationKind.rkMother*/ RelationKind.rkFathersWife, 0, 0);
 
 
             RegisterKinship(

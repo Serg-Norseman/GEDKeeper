@@ -22,61 +22,64 @@ namespace GKCore.Types
 {
     public enum RelationKind
     {
-        rkNone,         /* 0 */
+        rkNone                  = 0,
 
-        rkParent,       /* 1 */
-        rkSpouse,       /* 2 */
-        rkChild,        /* 3 */
+        rkParent                = 1,
+        rkSpouse                = 2,
+        rkChild                 = 3,
 
-        rkFather,       /* 4 */
-        rkMother,       /* 5 */
+        rkFather                = 4,
+        rkMother                = 5,
 
-        rkHusband,      /* 6 */
-        rkWife,         /* 7 */
+        rkHusband               = 6,
+        rkWife                  = 7,
 
-        rkSon,          /* 8 */
-        rkDaughter,     /* 9 */
+        rkSon                   = 8,
+        rkDaughter              = 9,
 
-        rkGrandfather,
-        rkGrandmother,
+        rkGrandfather           = 10,
+        rkGrandmother           = 11,
 
-        rkGrandson,
-        rkGranddaughter,
+        rkGrandson              = 12,
+        rkGranddaughter         = 13,
 
-        rkBrother,
-        rkSister,
+        rkBrother               = 14,
+        rkSister                = 15,
 
-        rkSonInLaw,
-        rkDaughterInLaw,
+        rkSonInLaw              = 16,
+        rkDaughterInLaw         = 17,
 
-        rkHusbandFather,
-        rkHusbandMother,
+        rkHusbandFather         = 18,
+        rkHusbandMother         = 19,
 
-        rkWifeFather,
-        rkWifeMother,
+        rkWifeFather            = 20,
+        rkWifeMother            = 21,
 
-        rkUncle_FatherBrother,
-        rkAunt_FatherSister,
+        rkUncle_FatherBrother   = 22,
+        rkAunt_FatherSister     = 23,
 
-        rkUncle_MotherBrother,
-        rkAunt_MotherSister,
+        rkUncle_MotherBrother   = 24,
+        rkAunt_MotherSister     = 25,
 
-        rkNephew,
-        rkNiece,
+        rkNephew                = 26,
+        rkNiece                 = 27,
 
-        rkCousinM,
-        rkCousinF,
+        rkCousinM               = 28,
+        rkCousinF               = 29,
 
-        rkBrotherInLaw_H,
-        rkSisterInLaw_H,
+        rkBrotherInLaw_H        = 30,
+        rkSisterInLaw_H         = 31,
 
-        rkBrotherInLaw_W,
-        rkSisterInLaw_W,
+        rkBrotherInLaw_W        = 32,
+        rkSisterInLaw_W         = 33,
 
-        rkStepfather,
-        rkStepmother,
+        rkStepfather            = 34,
+        rkStepmother            = 35,
 
-        rkSame,
-        rkUndefined
+        rkFathersWife           = 36,
+        rkMothersHusband        = 37,
+
+        rkSame                  = 38,
+        rkUndefined             = 39
     }
 }
