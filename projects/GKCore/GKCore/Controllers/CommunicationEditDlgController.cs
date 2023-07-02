@@ -113,7 +113,7 @@ namespace GKCore.Controllers
 
                     if (fTempInd != null) {
                         fView.Dir.SelectedIndex = (int)fCommunicationRecord.CommDirection;
-                        fView.Corresponder.Text = GKUtils.GetNameString(fTempInd, true, false);
+                        fView.Corresponder.Text = GKUtils.GetNameString(fTempInd, false);
                     } else {
                         fView.Dir.SelectedIndex = 0;
                         fView.Corresponder.Text = "";
@@ -127,7 +127,7 @@ namespace GKCore.Controllers
         public void SetPerson()
         {
             fTempInd = fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
-            fView.Corresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, true, false));
+            fView.Corresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, false));
         }
 
         public override void SetLocale()

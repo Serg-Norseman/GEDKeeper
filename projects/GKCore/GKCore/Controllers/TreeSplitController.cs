@@ -57,7 +57,7 @@ namespace GKCore.Controllers
                     if (rec is GDMIndividualRecord) {
                         cnt++;
                         GDMIndividualRecord iRec = rec as GDMIndividualRecord;
-                        string st = iRec.XRef + " / " + GKUtils.GetNameString(iRec, true, false);
+                        string st = iRec.XRef + " / " + GKUtils.GetNameString(iRec, false);
 
                         if (fSplitList.IndexOf(iRec) < 0) {
                             fView.SkippedList.AddItem(null, st);

@@ -44,6 +44,12 @@ rmdir .\projects\GKv2\GKComponents\obj /s /q
 rmdir .\projects\GKv2\GKTray\bin /s /q
 rmdir .\projects\GKv2\GKTray\obj /s /q
 
+rmdir .\projects\GKv2\GKTestsUI2\bin /s /q
+rmdir .\projects\GKv2\GKTestsUI2\obj /s /q
+rmdir .\projects\GKv2\GKTestsUI2\OpenCover /s /q
+rmdir .\projects\GKv2\GKTestsUI2\PartCover /s /q
+rmdir .\projects\GKv2\GKTestsUI2\ProfilingSessions /s /q
+
 rem <<< GKMap >>>
 
 rmdir .\projects\GKMap\GKMap.Core\bin /s /q

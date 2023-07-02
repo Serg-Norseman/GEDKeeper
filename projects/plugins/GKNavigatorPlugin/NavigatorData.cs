@@ -39,6 +39,7 @@ namespace GKNavigatorPlugin
         Bookmarks,
         Records,
         Languages,
+        Associations,
     }
 
 
@@ -232,6 +233,10 @@ namespace GKNavigatorPlugin
                 case DataCategory.Languages:
                     ShowLanguages(baseWin, listView);
                     break;
+
+                case DataCategory.Associations:
+                    ShowAssociations(baseWin, listView);
+                    break;
             }
         }
 
@@ -260,6 +265,10 @@ namespace GKNavigatorPlugin
 
                     case DataCategory.Languages:
                         SelectLanguage(baseWin, (GDMLanguageID)itemData);
+                        break;
+
+                    case DataCategory.Associations:
+                        SelectRecord(baseWin, (GDMRecord)itemData);
                         break;
                 }
             }
@@ -395,7 +404,7 @@ namespace GKNavigatorPlugin
                 listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Person), 400, true);
 
                 foreach (var iRec in bookmarks) {
-                    listView.AddItem(iRec, new object[] { GKUtils.GetNameString(iRec, true, false) });
+                    listView.AddItem(iRec, new object[] { GKUtils.GetNameString(iRec, false) });
                 }
 
                 listView.ResizeColumn(0);
@@ -466,5 +475,41 @@ namespace GKNavigatorPlugin
 
         #endregion
 
+        #region Associations
+
+        private void ShowAssociations(IBaseWindow baseWin, IListView listView)
+        {
+            listView.BeginUpdate();
+            try {
+                listView.Clear();
+                listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Person), 400, false);
+                listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Relation), 400, false);
+
+                var tree = baseWin.Context.Tree;
+                int num = tree.RecordsCount;
+                for (int i = 0; i < num; i++) {
+                    var rec = tree[i];
+                    if (rec.RecordType == GDMRecordType.rtIndividual) {
+                        var iRec = (GDMIndividualRecord)rec;
+                        if (iRec.HasAssociations) {
+                            string pnm = GKUtils.GetNameString(iRec, false);
+                            int num2 = iRec.Associations.Count;
+                            for (int k = 0; k < num2; k++) {
+                                GDMAssociation ast = iRec.Associations[k];
+                                var relIndi = tree.GetPtrValue(ast);
+                                string rnm = ((relIndi == null) ? string.Empty : GKUtils.GetNameString(relIndi, false));
+                                listView.AddItem(iRec, new object[] { pnm, ast.Relation + " " + rnm });
+                            }
+                        }
+                    }
+                }
+
+                listView.ResizeColumn(0);
+            } finally {
+                listView.EndUpdate();
+            }
+        }
+
+        #endregion
     }
 }

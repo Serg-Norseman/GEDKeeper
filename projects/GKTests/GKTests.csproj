@@ -9,6 +9,7 @@
     <RootNamespace>GKTests</RootNamespace>
     <AssemblyName>GKTests</AssemblyName>
     <NoWin32Manifest>False</NoWin32Manifest>
+    <DefineConstants>UNDIS_NUF</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -25,11 +26,6 @@
   <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
-    <Reference Include="NUnitForms">
-      <HintPath>..\libs\NUnitForms.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="BSLib">
       <HintPath>..\libs\BSLib.dll</HintPath>
@@ -45,8 +41,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="UtfUnknown">
       <HintPath>..\libs\UtfUnknown.dll</HintPath>
@@ -100,13 +94,6 @@
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMParserTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMProviderTests.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtilsTests.cs" />
-    <Compile Include="GKComponents\CircleChartTests.cs" />
-    <Compile Include="GKComponents\GKListItemTests.cs" />
-    <Compile Include="GKComponents\HyperViewTests.cs" />
-    <Compile Include="GKComponents\ImageBoxTests.cs" />
-    <Compile Include="GKComponents\ImageViewTests.cs" />
-    <Compile Include="GKComponents\SmallComponents.cs" />
-    <Compile Include="GKComponents\TreeChartBoxTests.cs" />
     <Compile Include="GKCore\AppHostTests.cs" />
     <Compile Include="GKCore\BaseContextTests.cs" />
     <Compile Include="GKCore\IocContainerTests.cs" />
@@ -136,80 +123,20 @@
     <Compile Include="GKCore\UDNTests.cs" />
     <Compile Include="GKCore\ValuesCollectionTests.cs" />
     <Compile Include="GKCore\YamlHelperTests.cs" />
-    <Compile Include="Plugins\FlowInputTests.cs" />
-    <Compile Include="TestStubs.cs" />
-    <Compile Include="ControlTesters\DataGridViewTester.cs" />
-    <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
-    <Compile Include="ControlTesters\GKSheetListTester.cs" />
-    <Compile Include="ControlTesters\MaskedTextBoxTester.cs" />
-    <Compile Include="ControlTesters\NumericUpDownTester.cs" />
+    <Compile Include="Stubs\BaseWindowStub.cs" />
+    <Compile Include="Stubs\GfxProviderStub.cs" />
+    <Compile Include="Stubs\ListItemStub.cs" />
+    <Compile Include="Stubs\ProgressStub.cs" />
+    <Compile Include="Stubs\StdDialogsStub.cs" />
+    <Compile Include="Stubs\TestPlugin.cs" />
+    <Compile Include="Stubs\AppHostStub.cs" />
+    <Compile Include="Stubs\WorkWindowStub.cs" />
     <Compile Include="TestUtils.cs" />
-    <Compile Include="UITests\AboutDlgTests.cs" />
-    <Compile Include="UITests\AddressEditDlgTests.cs" />
-    <Compile Include="UITests\AssociationEditDlgTests.cs" />
-    <Compile Include="UITests\CircleChartWinTests.cs" />
-    <Compile Include="UITests\CommonFilterDlgTests.cs" />
-    <Compile Include="UITests\CommonTests.cs" />
-    <Compile Include="UITests\CommunicationEditDlgTests.cs" />
-    <Compile Include="UITests\CustomWindowTest.cs" />
-    <Compile Include="UITests\DayTipsDlgTests.cs" />
-    <Compile Include="UITests\EventEditDlgTests.cs" />
-    <Compile Include="UITests\FamilyEditDlgTests.cs" />
-    <Compile Include="UITests\FilePropertiesDlgTests.cs" />
-    <Compile Include="UITests\GroupEditDlgTests.cs" />
-    <Compile Include="UITests\InputBoxTests.cs" />
-    <Compile Include="UITests\LanguageEditDlgTests.cs" />
-    <Compile Include="UITests\LanguageSelectDlgTests.cs" />
-    <Compile Include="UITests\LocationEditDlgTests.cs" />
-    <Compile Include="UITests\MainSDITests.cs" />
-    <Compile Include="UITests\MapsViewerWinTests.cs" />
-    <Compile Include="UITests\MediaEditDlgTests.cs" />
-    <Compile Include="UITests\MediaViewerWinTests.cs" />
-    <Compile Include="UITests\NameEditDlgTests.cs" />
-    <Compile Include="UITests\NoteEditDlgExTests.cs" />
-    <Compile Include="UITests\NoteEditDlgTests.cs" />
-    <Compile Include="UITests\OptionsDlgTests.cs" />
-    <Compile Include="UITests\OrganizerWinTests.cs" />
-    <Compile Include="UITests\ParentsEditDlgTests.cs" />
-    <Compile Include="UITests\PersonalNameEditDlgTests.cs" />
-    <Compile Include="UITests\PersonEditDlgTests.cs" />
-    <Compile Include="UITests\PersonsFilterDlgTests.cs" />
-    <Compile Include="UITests\PortraitSelectDlgTests.cs" />
-    <Compile Include="UITests\ProgressDlgTests.cs" />
-    <Compile Include="UITests\QuickSearchDlgTests.cs" />
-    <Compile Include="UITests\RecordInfoDlgTests.cs" />
-    <Compile Include="UITests\RecordSelectDlgTests.cs" />
-    <Compile Include="UITests\RelationshipCalculatorDlgTests.cs" />
-    <Compile Include="UITests\RepositoryEditDlgTests.cs" />
-    <Compile Include="UITests\ResearchEditDlgTests.cs" />
-    <Compile Include="UITests\ScriptEditWinTests.cs" />
-    <Compile Include="UITests\SexCheckDlgTests.cs" />
-    <Compile Include="UITests\SlideshowWinTests.cs" />
-    <Compile Include="UITests\SourceCitEditDlgTests.cs" />
-    <Compile Include="UITests\SourceEditDlgTests.cs" />
-    <Compile Include="UITests\StatisticsWinTests.cs" />
-    <Compile Include="UITests\TaskEditDlgTests.cs" />
-    <Compile Include="UITests\TreeChartWinTests.cs" />
-    <Compile Include="UITests\TreeFilterDlgTests.cs" />
-    <Compile Include="UITests\TreeToolsWinTests.cs" />
-    <Compile Include="UITests\UserRefEditDlgTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GKv2\GEDKeeper2\GEDKeeper2.csproj">
-      <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
-      <Name>GEDKeeper2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GKv2\GKComponents\GKComponents.csproj">
-      <Project>{EF9864C5-4DEC-46E8-BC11-A2E5BB9BB9D4}</Project>
-      <Name>GKComponents</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GKCore\GKCore.csproj">
       <Project>{10D619AF-E1CD-4F4A-9C19-5E434300B48F}</Project>
       <Name>GKCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\plugins\GKFlowInputPlugin\GKFlowInputPlugin.csproj">
-      <Project>{66b64b00-c457-404e-aa2b-90f18127e394}</Project>
-      <Name>GKFlowInputPlugin</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,8 +31,7 @@ namespace GDModel
     {
         private BaseContext fContext;
 
-        [TestFixtureSetUp]
-        public void SetUp()
+        public GDMCommunicationRecordTests()
         {
             fContext = TestUtils.CreateContext();
         }

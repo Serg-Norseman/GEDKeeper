@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !MONO
-
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
@@ -35,12 +33,11 @@ using NUnit.Framework;
 namespace GKCore.Controllers
 {
     [TestFixture]
-    public class ControllerTests : CustomWindowTest
+    public class ControllerTests
     {
         private IBaseWindow fBaseWin;
 
-        [TestFixtureSetUp]
-        public void SetUp()
+        public ControllerTests()
         {
             TestUtils.InitUITest();
 
@@ -630,7 +627,8 @@ namespace GKCore.Controllers
 
             controller.Select(iRec, Tools.TreeTools.TreeWalkMode.twmAll);
 
-            ModalFormHandler = MessageBox_OkHandler;
+            // FIXME
+            //ModalFormHandler = MessageBox_OkHandler;
             controller.Delete(); // <<- ui.ShowMessage()
         }
 
@@ -661,5 +659,3 @@ namespace GKCore.Controllers
         }
     }
 }
-
-#endif

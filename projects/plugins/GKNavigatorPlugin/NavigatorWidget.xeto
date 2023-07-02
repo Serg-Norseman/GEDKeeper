@@ -10,7 +10,7 @@
     </Splitter.Panel1>
 
     <Splitter.Panel2>
-      <comcom:GKListView x:Name="lvData" Size="391, 498" />
+      <comcom:GKListView x:Name="lvData" Size="391, 498" MouseDown="lvData_SelectedIndexChanged" />
     </Splitter.Panel2>
 
   </Splitter>

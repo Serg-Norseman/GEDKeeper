@@ -91,7 +91,7 @@ namespace GKCore.Controllers
                 fView.Person1.Text = "";
             } else {
                 fView.Label1.Text = fRec1.XRef;
-                fView.Person1.Text = GKUtils.GetNameString(fRec1, true, false);
+                fView.Person1.Text = GKUtils.GetNameString(fRec1, false);
             }
 
             if (fRec2 == null) {
@@ -99,7 +99,7 @@ namespace GKCore.Controllers
                 fView.Person2.Text = "";
             } else {
                 fView.Label2.Text = fRec2.XRef;
-                fView.Person2.Text = GKUtils.GetNameString(fRec2, true, false);
+                fView.Person2.Text = GKUtils.GetNameString(fRec2, false);
             }
 
             fView.Result.Text = fResult;

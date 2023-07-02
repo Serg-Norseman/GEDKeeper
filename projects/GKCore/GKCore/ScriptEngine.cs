@@ -337,7 +337,7 @@ namespace GKCore
         public string get_individual_name(object recPtr)
         {
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
-            return (iRec == null) ? "" : GKUtils.GetNameString(iRec, true, false);
+            return (iRec == null) ? "" : GKUtils.GetNameString(iRec, false);
         }
 
         public int get_individual_associations_count(object recPtr)
@@ -777,11 +777,12 @@ namespace GKCore
             return dr.ItemArray[col].ToString();
         }
 
-        public void csv_write_cell(string content)
+        public void csv_write_cell(object content)
         {
             if (fCSVWriter == null) return;
 
-            fCSVWriter.AddTableCell(content);
+            string strContent = (content != null) ? content.ToString() : string.Empty;
+            fCSVWriter.AddTableCell(strContent);
         }
 
         #endregion

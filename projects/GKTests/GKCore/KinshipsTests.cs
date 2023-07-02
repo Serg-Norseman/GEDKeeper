@@ -32,8 +32,7 @@ namespace GKCore
     {
         private BaseContext fContext;
 
-        [TestFixtureSetUp]
-        public void SetUp()
+        public KinshipsTests()
         {
             TestUtils.InitUITest();
 

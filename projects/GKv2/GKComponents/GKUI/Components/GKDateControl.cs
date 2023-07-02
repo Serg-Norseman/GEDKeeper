@@ -52,6 +52,7 @@ namespace GKUI.Components
             fToolTip = new ToolTip(this.fComponents);
 
             InitializeComponent();
+            SetupDragMode();
             SetLocale();
         }
 
@@ -61,6 +62,21 @@ namespace GKUI.Components
                 if (fComponents != null) fComponents.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void SetupDragMode()
+        {
+            // After migrating to NUnit3, the STAThread attribute stopped helping
+            // and tests stopped running on drag-and-drop windows.
+            if (!AppHost.TEST_MODE) {
+                this.txtDate1.AllowDrop = true;
+                this.txtDate1.DragOver += txtDateX_DragOver;
+                this.txtDate1.DragDrop += txtDateX_DragDrop;
+
+                this.txtDate2.AllowDrop = true;
+                this.txtDate2.DragOver += txtDateX_DragOver;
+                this.txtDate2.DragDrop += txtDateX_DragDrop;
+            }
         }
 
         public void Activate()
@@ -308,14 +324,11 @@ namespace GKUI.Components
             this.cmbDateType.TabIndex = 1;
             this.cmbDateType.SelectedIndexChanged += cmbDateType_SelectedIndexChanged;
 
-            this.txtDate1.AllowDrop = true;
             this.txtDate1.BackColor = System.Drawing.SystemColors.Window;
             this.txtDate1.Location = new System.Drawing.Point(145, 2);
             this.txtDate1.Name = "txtDate1";
             this.txtDate1.Size = new System.Drawing.Size(158, 24);
             this.txtDate1.TabIndex = 2;
-            this.txtDate1.DragOver += txtDateX_DragOver;
-            this.txtDate1.DragDrop += txtDateX_DragDrop;
 
             this.cmbDate1Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDate1Calendar.Location = new System.Drawing.Point(145, 33);
@@ -332,13 +345,10 @@ namespace GKUI.Components
             this.chkBC1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkBC1.UseVisualStyleBackColor = true;
 
-            this.txtDate2.AllowDrop = true;
             this.txtDate2.Location = new System.Drawing.Point(313, 2);
             this.txtDate2.Name = "txtDate2";
             this.txtDate2.Size = new System.Drawing.Size(158, 24);
             this.txtDate2.TabIndex = 5;
-            this.txtDate2.DragOver += txtDateX_DragOver;
-            this.txtDate2.DragDrop += txtDateX_DragDrop;
 
             this.cmbDate2Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDate2Calendar.Location = new System.Drawing.Point(313, 33);

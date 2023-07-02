@@ -395,7 +395,7 @@ namespace GKCore.Lists
             object result = null;
 
             if (colSubtype == -1) {
-                result = GKUtils.GetNameString(fFetchedRec, true, false);
+                result = GKUtils.GetNameString(fFetchedRec, false);
             } else {
                 NameFormat defNameFormat = (SimpleList) ? NameFormat.nfFNP : GlobalOptions.Instance.DefNameFormat;
                 NamePartsRet parts;
@@ -795,7 +795,7 @@ namespace GKCore.Lists
                     result = fStructList.IndexOf(fFetchedRec) + 1;
                     break;
                 case 1:
-                    result = GKUtils.GetNameString((GDMIndividualRecord)fDataOwner, fFetchedRec, true, false);
+                    result = GKUtils.GetNameString((GDMIndividualRecord)fDataOwner, fFetchedRec, GlobalOptions.Instance.SurnameFirstInOrder, false);
                     break;
                 case 2:
                     result = LangMan.LS(GKData.NameTypes[(int)fFetchedRec.NameType]);
@@ -1041,7 +1041,7 @@ namespace GKCore.Lists
             }
 
             if (relPerson != null) {
-                fRelName = GKUtils.GetNameString(relPerson, true, false);
+                fRelName = GKUtils.GetNameString(relPerson, false);
             }
         }
 

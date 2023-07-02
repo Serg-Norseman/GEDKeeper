@@ -19,18 +19,17 @@
  */
 
 using System;
-using System.Drawing;
 using System.IO;
 using BSLib;
 using GDModel;
 using GKCore.Charts;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
-using GKUI.Components;
-using GKUI.Platform.Handlers;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore
@@ -40,8 +39,7 @@ namespace GKCore
     {
         private IBaseWindow fBase;
 
-        [TestFixtureSetUp]
-        public void SetUp()
+        public TreeChartTests()
         {
             TestUtils.InitUITest();
 
@@ -134,17 +132,6 @@ namespace GKCore
             ExtRect psnRt = tcPerson.Rect;
             Assert.IsTrue(psnRt.IsEmpty());
 
-            tcPerson.Sex = GDMSex.svMale;
-            var color = ((ColorHandler) tcPerson.GetSelectedColor()).Handle;
-            Assert.AreEqual(Color.FromArgb(255, Color.Blue), color);
-
-            tcPerson.Sex = GDMSex.svFemale;
-            color = ((ColorHandler) tcPerson.GetSelectedColor()).Handle;
-            Assert.AreEqual(Color.FromArgb(255, Color.Red), color);
-
-            tcPerson.Sex = GDMSex.svUnknown;
-            color = ((ColorHandler) tcPerson.GetSelectedColor()).Handle;
-            Assert.AreEqual(Color.FromArgb(255, Color.Black), color);
         }
 
         [Test]
@@ -247,11 +234,13 @@ namespace GKCore
         [Test]
         public void Test_SvgGraphics()
         {
+            var color = Substitute.For<IColor>();
+
             using (MemoryStream stm = new MemoryStream()) {
                 var svg = new SvgGraphics("", stm, ExtRectF.CreateBounds(0, 0, 100, 100), true);
 
                 svg.BeginDrawing();
-                svg.Clear(UIHelper.ConvertColor(Color.Yellow));
+                svg.Clear(color);
 
                 svg.BeginEntity(null);
                 svg.DrawLine(10, 10, 50, 10, 1);
@@ -265,7 +254,7 @@ namespace GKCore
                 svg.DrawEllipse(10, 10, 30, 30, null, null);
                 svg.FillRect(50, 50, 20, 20);
 
-                svg.SetColor(UIHelper.ConvertColor(Color.Red));
+                svg.SetColor(color);
                 svg.FillRoundedRect(80, 80, 10, 10, 3);
 
                 svg.DrawCircleSegment(0, 0, 10, 20, 0, 17, null, null);

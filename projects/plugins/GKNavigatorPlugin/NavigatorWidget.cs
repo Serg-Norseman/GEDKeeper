@@ -54,6 +54,7 @@ namespace GKNavigatorPlugin
         private TreeNode tnRecsCommunication;
         private TreeNode tnRecsLocation;
         private TreeNode tnLanguages;
+        private TreeNode tnAssociations;
 
         public NavigatorWidget(Plugin plugin)
         {
@@ -79,6 +80,7 @@ namespace GKNavigatorPlugin
 
             tnBookmarks = CreateNode(tnRoot, "Bookmarks", DataCategory.Bookmarks);
             tnLanguages = CreateNode(tnRoot, "Languages", DataCategory.Languages);
+            tnAssociations = CreateNode(tnRoot, "Associations", DataCategory.Associations);
 
             tnRecords = tnRoot.Nodes.Add("Records");
             tnRecsIndividual = CreateNode(tnRecords, "Individuals", GDMRecordType.rtIndividual);
@@ -103,6 +105,7 @@ namespace GKNavigatorPlugin
             tnFilters.Text = fLangMan.LS(PLS.LSID_Filters);
             tnBookmarks.Text = fLangMan.LS(PLS.LSID_Bookmarks);
             tnLanguages.Text = fLangMan.LS(PLS.LSID_Languages);
+            tnAssociations.Text = fLangMan.LS(PLS.LSID_Associations);
             tnRecords.Text = fLangMan.LS(PLS.LSID_Records);
         }
 

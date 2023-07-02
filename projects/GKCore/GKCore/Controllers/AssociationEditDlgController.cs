@@ -75,13 +75,13 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             fView.Relation.Text = fAssociation.Relation;
-            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
+            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, false);
         }
 
         public void SetPerson()
         {
             fTempPerson = fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
-            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, true, false);
+            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, false);
         }
 
         public override void SetLocale()

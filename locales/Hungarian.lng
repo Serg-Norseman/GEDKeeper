@@ -25,8 +25,8 @@
 024=Ős fa
 025=Leszármazotti fa
 026=Teljes fa
-027=d'Aboville leszármazotti családfa
-028=Konovalov leszármazotti családfa
+027=d'Aboville leszármazotti családfája
+028=Konovalov leszármazotti családfája
 029=Térképek
 030=Statisztika
 031=Felmenő családfa
@@ -43,7 +43,7 @@
 042=&Vízszintes nézet
 043=&Függőleges nézet
 044=&Mindent kicsinyit
-045=&Mindent átrendez 
+045=&Mindent átrendez
 046=<?>
 047=<?>
 048=<?>
@@ -69,7 +69,7 @@
 068=Nő
 069=Meghatározatlan
 070=Szeretné menteni a módosított fájl módosításait?
-071=A megadott szülőnek létezik családja "{0}". Hozzá akarja-e adni a gyermeket ahhoz a családhoz??
+071=A megadott szülőnek létezik családja "{0}". Hozzá akarja-e adni a gyermeket ahhoz a családhoz?
 072=Biztosan el akar távolítani egy személyt "{0}"?
 073=Biztosan eltávolítja a családot "{0}"?
 074=Biztosan eltávolítja a jegyzetet "{0}"?
@@ -153,7 +153,7 @@
 152=Anya
 153=Szülők
 154=Házastársak
-155=Társításs
+155=Társítás
 156=Felhasználói hivatkozás
 157=Gregorián
 158=Julián
@@ -360,7 +360,6 @@
 359=lánytestvér
 360=Vő
 361=meny
-
 362=após
 363=anyós
 364=após
@@ -376,10 +375,10 @@
 374=Sógor
 375=Sógornő
 376=Nagyon jó
-377=<?>
-378=<?>
-379=<?>
-380=<?>
+377=nagybácsi
+378=nagynéni
+379=mostohaapa
+380=mostohaanya
 381=A kép szélessége több mint 65 000 pixel. Nem sikerült menteni.
 382=Vissza
 383=Következő
@@ -405,11 +404,10 @@
 403=Pontos
 404=Előtte
 405=Utánna
-
 406=Között
 407=Időszak előtt
 408=Időszak tól
-409= Időszak között
+409=Időszak között
 410=Névjegy
 411=Kiszámított
 412=Becsült
@@ -454,16 +452,16 @@
 451=Hívás
 452=E-mail cím
 453=Fax
-454=Levél:
+454=Levél
 455=Szalag
 456=látogatás
-457=kitől 
-458=neki:
+457=kitől
+458=neki
 459=Személy
 460=Család
 461=forrás
 462=egyéb
-463=Bizonytalan adat.
+463=Bizonytalan adat
 464=A bizonyítékok megkérdőjelezhető megbízhatósága
 465=Közvetett bizonyíték
 466=Közvetlen és elsődleges bizonyíték
@@ -474,7 +472,7 @@
 471=Formátum ellenőrzése
 472=|EMF fájl (*.emf)|*.emf
 473=Objektumok száma a fő adatbázisban: {0}
-474=A szinkronizálás befejeződött!
+474=A szinkronizálás befejeződött.
 475=A pátriárkák azonosítása
 476=Linkek ellenőrzése
 477=Az archívum nem található, az adatok nem töltődnek be
@@ -484,7 +482,7 @@
 481=Kép (*.bmp,*.gif,*.png,*.jpg)|*.bmp,*.gif,*.png,*.jpg
 482=Script (*.lua)|*.lua
 483=BMP fájl (*.bmp)|*.bmp|JPEG fájl (*.jpg)|*.jpg|PNG fájl (*.png)|*.png|GIF fájl (*.gif)|*.gif
-484=Halál oka:
+484=Halál oka
 485=Származás
 486=Paraméter
 487=Összesen
@@ -521,9 +519,9 @@
 518=Adatbázis ellenőrzése
 519=Keresd meg a pátriárkákat
 520=Helyek kezelése
-521=Egyezés
+521=Egyezés...
 522=Ellenőrizze a családok kapcsolatát
-523=Összes
+523=összes
 524=csak élő
 525=csak halott
 526=Korábban élt
@@ -531,14 +529,13 @@
 528=Csak nők
 529=Név maszkja
 530=Lakóhely
-531=A tények 
-
-532=Csak a  pátriárkák
+531=A tények maszkja
+532=Csak a pátriárkák
 533=Érvénytelen dátum
 534=Személyek
 535=Évek
 536=Évtized
-537=Született:
+537=Született
 538=Meghalt
 539=Élő
 540=Halott
@@ -570,7 +567,7 @@
 566=Személy keresése
 567=Közvetlen egyezés
 568=Feltételezett egyezés
-569=Második keresztnév (csak nőknél )
+569=Csak név / középső név szerint (csak nők)
 570=Ellenőrizze a születési évet
 571=A név pontossága, %
 572=Évek pontatlansága
@@ -601,8 +598,8 @@
 597=Készítsen biztonsági másolatot minden fájlváltozatról
 598=Betöltés
 599=Fájl mentési hiba "{0}"{1}.
-600=Háttér színe
-601=Háttérkép:
+600=Háttér színe...
+601=Háttérkép...
 602=Személyek a fában: {0}
 603=Tekintse meg a hibanaplót
 604=Ősök Köre
@@ -632,7 +629,7 @@
 628=Visszaállítás
 629=Mező
 630=Állapot
-631=Nem található forrás.
+631=Nem található forrás
 632=Diavetítés
 633=Előző rekord
 634=Következő bejegyzés
@@ -640,7 +637,7 @@
 636=Kezdés
 637=Megállít
 638=Demográfia
-639=Néve
+639=Névek
 640=Neve-nickneve
 641=Születési néve
 642=Migránskérdés
@@ -665,13 +662,13 @@
 661=Mutass egy leszármazotti fát
 662=Teljes fa megjelenítése
 663=Családfa
-664=Aboville családfája
-665= Konovalov családfája
+664=d'Aboville családfája
+665=Konovalov családfája
 666=Az adatok statisztikai elemzése
 667=Kép mentése
 668=Megjelenítési módok
 669=Új parancsfájlt létrehozása
-670=Parancsfájl megnyitása…
+670=Parancsfájl megnyitása
 671=Parancsfájl mentése
 672=Hajtsa végre a szkriptet
 673=Csatolja a portrét
@@ -690,7 +687,7 @@
 686=Válassza le a férjét
 687=Menj a férj nyilvántartásához
 688=Válasszon vagy adjon hozzá feleséget
-689=Válassza le a  feleséget
+689=Válassza le a feleséget
 690=Menj a feleség nyilvántartásához
 691=Válassz egy személyt
 692=Válasszon vagy adjon hozzá egy helyet
@@ -730,17 +727,17 @@
 726=Vércsoport
 727=Haja színe
 728=Szeme színe
-729=DNS csoport
-730=Y-DNS csoport
+729=mtDNS haplocsoport
+730=Y-DNS haplocsoport
 731=A felvételt a szerkesztő zárolja
 732=Maiden Vezetéknév
 733=Married Vezetéknév
 734=További nevek
 735=Bővített női vezetéknevek
-736=Formátum "Maiden (Házas)"
-737=Formátum: "Házas (lány)"
-738="Maiden" formátum
-739="Házas" formátum
+736=Formátum "Lánykori név (Házas)"
+737=Formátum: "Házassági név (Lánykori név)"
+738=Formátum "lánykori név"
+739=Formátum "Házas"
 740=H
 741=W
 742=Geokód
@@ -754,9 +751,9 @@
 750=Ma ünnep van "{0}"
 751={1} nap van hátra "{0}" születésnapjáig
 752=Ünnepnapok
-753=Használjon beágyazott médialejátszót.
-754=Allow direct hivatkozáss to media files
-755=Fájl másolása.
+753=Használjon beágyazott médialejátszót
+754=Közvetlen hivatkozások engedélyezése médiafájlokra
+755=Fájl másolása
 756=Műveletek
 757=Kijelölés és másolás
 758=№
@@ -806,12 +803,11 @@
 801=RI:George Knight
 802=Szovjetunió: II. világháború: harcoló
 803=Szovjetunió: II. világháború: csatában elesett
-804=USSR:WWII:Worker in rear
-805=USSR:Repressed
+804=Szovjetunió: II. világháború: hátországi munkás
+805=Szovjetunió: Elnyomott
 806=Vallása: Iszlám
 807=Vallása: katolikus
 808=Vallása: ortodox
-
 809=Vallás: Régen hívők
 
 810=Relatív hivatkozás a fájlhoz
@@ -829,8 +825,8 @@
 822=A nevek vastag betűtípusa
 
 823=Keresztelés
-824=Bar mitzvah
-825=Bat mitzvah
+824=Férfivé válás
+825=Nővé válás
 826=Áldás
 827=Felnőtt keresztelés
 828=Megerősítés
@@ -841,7 +837,7 @@
 833=Ősök
 834=Nincs eggyezés
 835=Rövid rokonsági forma
-836=Vezetéknév first in order
+836=Vezetéknév először sorrendben
 837=Keret
 838=Megvan a GEDKeeper {0}. verziója. Szeretne frissíteni a legújabb verzióra {1}?
 839=Határok
@@ -852,9 +848,9 @@
 844=A szélesség minimalizálása
 845={0} Folytatja?
 846=Mutasd az életkort
-847=Vezetéknév in capitals
+847=Vezetéknév nagybetűkkel
 848=|SVG fájl (*.svg)|*.svg
-849=biztos tény assessment algorithm
+849=Megbízhatóságbecslési algoritmus
 850=Lokalizált naptár aláírások
 851=G|J|H|FR|R|I|?
 852=Másolás
@@ -864,7 +860,7 @@
 856=A(z) `{0}` személynek fél kapcsolata van a gyermek és a család között: `{1}`
 857=A(z) `{0}` családnak fél kapcsolata van a férj és a személy között: `{1}`
 858=A(z) `{0}` családnak feleség és `{1}` fél kapcsolata van
-859=A(z) `{0}` családnak fél kapcsolata van a gyermek és a szülők között ({1}`).
+859=A(z) `{0}` családnak fél kapcsolata van a gyermek és a szülők között `{1}`
 860=A `{0}` család elrontott házastársakat tartalmaz
 861=Szovjetunió: SZKP tag
 862=Figyelem: archív iratok összevonásakor a név és a cím nem kerül átadásra! Folytassa?

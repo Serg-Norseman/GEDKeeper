@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -58,7 +58,7 @@ namespace GKCore.Lists
                     result = fStructList.IndexOf(fFetchedRec) + 1;
                     break;
                 case 1:
-                    result = GKUtils.GetNameString(fChildRec, true, false);
+                    result = GKUtils.GetNameString(fChildRec, false);
                     break;
                 case 2:
                     result = new GDMDateItem(GKUtils.GetBirthDate(fChildRec));
