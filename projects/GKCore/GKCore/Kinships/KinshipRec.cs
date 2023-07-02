@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,14 +27,16 @@ namespace GKCore.Kinships
 
     public sealed class KinshipRec
     {
+        public RelationSet PrevPrevRels;
         public RelationSet PrevRels;
         public RelationSet CurrRels;
         public RelationKind FinRel;
         public short Great;
         public short Degree;
 
-        public KinshipRec(RelationSet prevRels, RelationSet currRels, RelationKind finRel, short great, short degree)
+        public KinshipRec(RelationSet prevprevRels, RelationSet prevRels, RelationSet currRels, RelationKind finRel, short great, short degree)
         {
+            PrevPrevRels = prevprevRels;
             PrevRels = prevRels;
             CurrRels = currRels;
             FinRel = finRel;
