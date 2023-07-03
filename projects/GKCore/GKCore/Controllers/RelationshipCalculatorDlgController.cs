@@ -75,8 +75,8 @@ namespace GKCore.Controllers
                     } else if (kinsGraph.FindVertex(fRec2.XRef) == null) {
                         fResult = "These individuals have no common relatives.";
                     } else {
-                        kinsGraph.SetTreeRoot(fRec1);
-                        fResult = kinsGraph.GetRelationship(fRec2, true, GlobalOptions.Instance.ShortKinshipForm);
+                        kinsGraph.SetTreeRoot(fRec2);
+                        fResult = kinsGraph.GetRelationship(fRec1, true, GlobalOptions.Instance.ShortKinshipForm);
                     }
                 }
             }
