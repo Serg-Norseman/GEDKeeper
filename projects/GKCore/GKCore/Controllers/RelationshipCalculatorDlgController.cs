@@ -64,6 +64,14 @@ namespace GKCore.Controllers
             Solve();
         }
 
+        public void Swap()
+        {
+            GDMIndividualRecord fRecTmp = fRec1;
+            fRec1 = fRec2;
+            fRec2 = fRecTmp;
+            Solve();
+        }
+
         private void Solve()
         {
             fResult = "???";
@@ -113,6 +121,7 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnRec1Select").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
             GetControl<IButton>("btnRec2Select").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
             GetControl<ILabel>("lblKinship").Text = LangMan.LS(LSID.LSID_Kinship);
+            GetControl<IButton>("btnSwap").Text = LangMan.LS(LSID.LSID_Swap);
         }
     }
 }

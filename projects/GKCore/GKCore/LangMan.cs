@@ -969,8 +969,10 @@ namespace GKCore
 
         /* 906 */ LSID_RK_FathersWife,
         /* 907 */ LSID_RK_MothersHusband,
+        /* 908 */ LSID_Swap,
 
-        /* 000 */ LSID_Last = LSID_RK_MothersHusband
+        /* 000 */
+        LSID_Last = LSID_Swap
     }
 
 
@@ -1896,6 +1898,7 @@ namespace GKCore
 
             /* 906 */ "father's wife",
             /* 907 */ "mother's husband",
+            /* 908 */ "Swap",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -25,6 +25,7 @@
             this.btnRec2Select = new System.Windows.Forms.Button();
             this.txtResult = new System.Windows.Forms.TextBox();
             this.lblKinship = new System.Windows.Forms.Label();
+            this.btnSwap = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnClose
@@ -97,6 +98,16 @@
             this.btnRec2Select.Text = "btnRec2Select";
             this.btnRec2Select.Click += new System.EventHandler(this.btnRec2Select_Click);
             // 
+            // btnSwap
+            //
+            this.btnSwap.Location = new System.Drawing.Point(12, 250);
+            this.btnSwap.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSwap.Name = "btnSwap";
+            this.btnSwap.Size = new System.Drawing.Size(120, 21);
+            this.btnSwap.TabIndex = 21;
+            this.btnSwap.Text = "btnSwap";
+            this.btnSwap.Click += new System.EventHandler(this.btnSwap_Click);
+            // 
             // txtResult
             // 
             this.txtResult.Location = new System.Drawing.Point(12, 122);
@@ -130,6 +141,7 @@
             this.Controls.Add(this.Edit2);
             this.Controls.Add(this.btnRec1Select);
             this.Controls.Add(this.btnRec2Select);
+            this.Controls.Add(this.btnSwap);
             this.Controls.Add(this.btnClose);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -149,6 +161,7 @@
         private System.Windows.Forms.TextBox txtResult;
         private System.Windows.Forms.Button btnRec2Select;
         private System.Windows.Forms.Button btnRec1Select;
+        private System.Windows.Forms.Button btnSwap;
         private System.Windows.Forms.TextBox Edit2;
         private System.Windows.Forms.TextBox Edit1;
         private System.Windows.Forms.Label Lab2;
