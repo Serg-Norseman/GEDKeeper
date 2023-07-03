@@ -87,5 +87,10 @@ namespace GKUI.Forms
         {
             fController.SelectRec2();
         }
+
+        private void btnSwap_Click(object sender, EventArgs e)
+        {
+            fController.Swap();
+        }
     }
 }
