@@ -971,8 +971,7 @@ namespace GKCore
         /* 907 */ LSID_RK_MothersHusband,
         /* 908 */ LSID_Swap,
 
-        /* 000 */
-        LSID_Last = LSID_Swap
+        /* 000 */ LSID_Last = LSID_Swap
     }
 
 

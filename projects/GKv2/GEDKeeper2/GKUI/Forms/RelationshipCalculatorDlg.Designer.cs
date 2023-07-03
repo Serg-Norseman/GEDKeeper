@@ -103,7 +103,7 @@
             this.btnSwap.Location = new System.Drawing.Point(12, 250);
             this.btnSwap.Margin = new System.Windows.Forms.Padding(2);
             this.btnSwap.Name = "btnSwap";
-            this.btnSwap.Size = new System.Drawing.Size(120, 21);
+            this.btnSwap.Size = new System.Drawing.Size(120, 24);
             this.btnSwap.TabIndex = 21;
             this.btnSwap.Text = "btnSwap";
             this.btnSwap.Click += new System.EventHandler(this.btnSwap_Click);

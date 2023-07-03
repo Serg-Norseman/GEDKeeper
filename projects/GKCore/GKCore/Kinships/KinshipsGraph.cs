@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
@@ -108,7 +109,7 @@ namespace GKCore.Kinships
 
                 GDMIndividualRecord starting = null;
 
-                System.Collections.Generic.Stack<string> relPartsStack = new System.Collections.Generic.Stack<string>();
+                var relPartsStack = new Stack<string>();
 
                 var edgesPath = fGraph.GetPath(target);
                 foreach (Edge edge in edgesPath) {
@@ -116,7 +117,7 @@ namespace GKCore.Kinships
                     src = (GDMIndividualRecord)edge.Source.Value;
                     tgt = (GDMIndividualRecord)edge.Target.Value;
 
-                    if(starting ==null) { starting = src; }
+                    if (starting == null) { starting = src; }
 
                     RelationKind curRel = KinshipsMan.FixLink(tgt.Sex, (RelationKind)((int)edge.Value));
 
@@ -171,7 +172,7 @@ namespace GKCore.Kinships
                     relPartsStack.Push(relPart);
 
                     string fullRel = "";
-                    while (relPartsStack.Count > 0){
+                    while (relPartsStack.Count > 0) {
                         fullRel += relPartsStack.Pop();
                         if (relPartsStack.Count != 0) {
                             fullRel += ", ";
