@@ -185,6 +185,18 @@ namespace GKCore
             }
         }
 
+        public sealed class FARPropertyStruct
+        {
+            public LSID Name;
+            public bool Enabled;
+
+            public FARPropertyStruct(LSID name, bool enabled)
+            {
+                Name = name;
+                Enabled = enabled;
+            }
+        }
+
         public static readonly LSID[] Restrictions;
         public static readonly RecordTypeStruct[] RecordTypes;
         public static readonly SexStruct[] SexData;
@@ -212,7 +224,7 @@ namespace GKCore
         public static readonly LSID[] ParentTypes;
         public static readonly string[] CondSigns;
         public static readonly string BloodGroups;
-        public static readonly LSID[] PropertyTypes;
+        public static readonly FARPropertyStruct[] FARPropertyTypes;
         public static readonly LSID URTreeNoteType;
 
 
@@ -585,12 +597,13 @@ namespace GKCore
 
             BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";
 
-            PropertyTypes = new LSID[] {
-                LSID.LSID_Name,
-                LSID.LSID_Place,
-                LSID.LSID_Address,
-                LSID.LSID_Fact,
-                LSID.LSID_Event,
+            FARPropertyTypes = new FARPropertyStruct[] {
+                new FARPropertyStruct(LSID.LSID_Name, true),
+                new FARPropertyStruct(LSID.LSID_Place, false),
+                new FARPropertyStruct(LSID.LSID_Address, false),
+                new FARPropertyStruct(LSID.LSID_Fact, true),
+                new FARPropertyStruct(LSID.LSID_Event, false),
+                new FARPropertyStruct(LSID.LSID_Association, true),
             };
 
             URTreeNoteType = LSID.LSID_URTreeNoteType;

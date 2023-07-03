@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -116,13 +116,18 @@ namespace GKCore.Search
                 switch (rec.RecordType) {
                     case GDMRecordType.rtIndividual:
                         var indiRec = rec as GDMIndividualRecord;
-                        for (int k = 0; k < indiRec.PersonalNames.Count; k++) {
-                            var persName = indiRec.PersonalNames[k];
-                            if (FindPattern(persName.Given)) {
-                                result.Add(new FARSearchResult(rec, persName, GivenReplacer));
-                            } else if (FindPattern(persName.Surname)) {
-                                result.Add(new FARSearchResult(rec, persName, SurnameReplacer));
-                            }
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptName:
+                                FindNamePattern(result, indiRec);
+                                break;
+
+                            case FARPropertyType.ptFact:
+                                FindFactPattern(result, indiRec);
+                                break;
+
+                            case FARPropertyType.ptAssociation:
+                                FindAssociationPattern(result, indiRec);
+                                break;
                         }
                         break;
 
@@ -136,16 +141,64 @@ namespace GKCore.Search
 
         #region Handlers
 
-        private void GivenReplacer(GDMObject prop)
+        private void FindNamePattern(List<ISearchResult> result, GDMIndividualRecord indiRec)
+        {
+            for (int k = 0; k < indiRec.PersonalNames.Count; k++) {
+                var persName = indiRec.PersonalNames[k];
+                if (FindPattern(persName.Given)) {
+                    result.Add(new FARSearchResult(indiRec, persName, ReplaceGivenName));
+                } else if (FindPattern(persName.Surname)) {
+                    result.Add(new FARSearchResult(indiRec, persName, ReplaceSurname));
+                }
+            }
+        }
+
+        private void ReplaceGivenName(GDMObject prop)
         {
             var persName = (GDMPersonalName)prop;
             persName.Given = ReplacePattern(persName.Given);
         }
 
-        private void SurnameReplacer(GDMObject prop)
+        private void ReplaceSurname(GDMObject prop)
         {
             var persName = (GDMPersonalName)prop;
             persName.Surname = ReplacePattern(persName.Surname);
+        }
+
+        private void FindAssociationPattern(List<ISearchResult> result, GDMIndividualRecord indiRec)
+        {
+            if (!indiRec.HasAssociations) return;
+
+            for (int k = 0; k < indiRec.Associations.Count; k++) {
+                var ast = indiRec.Associations[k];
+                if (FindPattern(ast.Relation)) {
+                    result.Add(new FARSearchResult(indiRec, ast, ReplaceAssociationRelation));
+                }
+            }
+        }
+
+        private void ReplaceAssociationRelation(GDMObject prop)
+        {
+            var ast = (GDMAssociation)prop;
+            ast.Relation = ReplacePattern(ast.Relation);
+        }
+
+        private void FindFactPattern(List<ISearchResult> result, GDMIndividualRecord indiRec)
+        {
+            if (!indiRec.HasEvents) return;
+
+            for (int k = 0; k < indiRec.Events.Count; k++) {
+                var evt = indiRec.Events[k];
+                if (FindPattern(evt.StringValue)) {
+                    result.Add(new FARSearchResult(indiRec, evt, ReplaceFact));
+                }
+            }
+        }
+
+        private void ReplaceFact(GDMObject prop)
+        {
+            var evt = (GDMCustomEvent)prop;
+            evt.StringValue = ReplacePattern(evt.StringValue);
         }
 
         #endregion

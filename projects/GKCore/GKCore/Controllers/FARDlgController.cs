@@ -68,8 +68,11 @@ namespace GKCore.Controllers
             }
 
             var cmbProperty = GetControl<IComboBox>("cmbProperty");
-            for (var pt = FARPropertyType.ptName; pt < FARPropertyType.ptPlace; pt++) {
-                cmbProperty.AddItem(LangMan.LS(GKData.PropertyTypes[(int)pt]), pt);
+            for (var pt = FARPropertyType.ptName; pt <= FARPropertyType.ptLast; pt++) {
+                var propStruct = GKData.FARPropertyTypes[(int)pt];
+                if (propStruct.Enabled) {
+                    cmbProperty.AddItem(LangMan.LS(propStruct.Name), pt);
+                }
             }
         }
 
@@ -92,7 +95,6 @@ namespace GKCore.Controllers
             GetControl<IComboBox>("cmbRecord").Enabled = false; // TODO: next version
 
             GetControl<IComboBox>("cmbProperty").SetSelectedTag(FARPropertyType.ptName);
-            GetControl<IComboBox>("cmbProperty").Enabled = false; // TODO: next version
         }
 
         private void GetParameters()
