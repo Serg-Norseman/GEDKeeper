@@ -175,7 +175,7 @@ namespace GKCore.Controllers
                 SaveFile(oldFileName);
             } else {
                 string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
-                string newFileName = AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, false);
+                string newFileName = AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, GlobalOptions.Instance.FilesOverwriteWarn);
                 if (!string.IsNullOrEmpty(newFileName)) {
                     SaveFile(newFileName);
                     if (!isUnknown && !string.Equals(oldFileName, newFileName)) {

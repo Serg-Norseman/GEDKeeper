@@ -334,6 +334,10 @@ namespace GKUI.Platform
                 case Feature.Themes:
                     result = false; // FIXME: temp disable
                     break;
+
+                case Feature.OverwritePrompt:
+                    result = false;
+                    break;
             }
 
             return result;

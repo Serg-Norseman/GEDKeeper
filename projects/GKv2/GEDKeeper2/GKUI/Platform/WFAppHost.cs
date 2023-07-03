@@ -290,6 +290,10 @@ namespace GKUI.Platform
                     result = true;
 #endif
                     break;
+
+                case Feature.OverwritePrompt:
+                    result = true;
+                    break;
             }
 
             return result;

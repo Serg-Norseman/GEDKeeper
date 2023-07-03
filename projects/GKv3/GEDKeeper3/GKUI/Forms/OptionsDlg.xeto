@@ -449,6 +449,7 @@
             <CheckBox x:Name="chkSAFByAllNames" />
             <CheckBox x:Name="chkShortenDateRanges" />
             <CheckBox x:Name="chkKeepInfoPansOverallSize" />
+            <CheckBox x:Name="chkFilesOverwriteWarn" />
           </StackLayout>
         </TabPage>
 

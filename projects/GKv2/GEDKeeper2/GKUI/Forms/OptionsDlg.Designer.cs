@@ -173,6 +173,7 @@
         private System.Windows.Forms.CheckBox chkSAFByAllNames;
         private System.Windows.Forms.CheckBox chkShortenDateRanges;
         private System.Windows.Forms.CheckBox chkKeepInfoPansOverallSize;
+        private System.Windows.Forms.CheckBox chkFilesOverwriteWarn;
 
         private void InitializeComponent()
         {
@@ -347,6 +348,7 @@
             this.chkSAFByAllNames = new System.Windows.Forms.CheckBox();
             this.chkShortenDateRanges = new System.Windows.Forms.CheckBox();
             this.chkKeepInfoPansOverallSize = new System.Windows.Forms.CheckBox();
+            this.chkFilesOverwriteWarn = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2221,6 +2223,7 @@
             this.pageSpecials.Controls.Add(this.chkSAFByAllNames);
             this.pageSpecials.Controls.Add(this.chkShortenDateRanges);
             this.pageSpecials.Controls.Add(this.chkKeepInfoPansOverallSize);
+            this.pageSpecials.Controls.Add(this.chkFilesOverwriteWarn);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
             this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
@@ -2310,6 +2313,15 @@
             this.chkKeepInfoPansOverallSize.Size = new System.Drawing.Size(360, 22);
             this.chkKeepInfoPansOverallSize.TabIndex = 15;
             this.chkKeepInfoPansOverallSize.Text = "chkKeepInfoPansOverallSize";
+            // 
+            // chkFilesOverwriteWarn
+            // 
+            this.chkFilesOverwriteWarn.Location = new System.Drawing.Point(20, 389);
+            this.chkFilesOverwriteWarn.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkFilesOverwriteWarn.Name = "chkFilesOverwriteWarn";
+            this.chkFilesOverwriteWarn.Size = new System.Drawing.Size(360, 22);
+            this.chkFilesOverwriteWarn.TabIndex = 16;
+            this.chkFilesOverwriteWarn.Text = "chkFilesOverwriteWarn";
             // 
             // pagePlugins
             // 

@@ -27,5 +27,6 @@ namespace GKCore.Types
         MediaPlayer,
         RecentFilesLoad,
         Themes,
+        OverwritePrompt,
     }
 }

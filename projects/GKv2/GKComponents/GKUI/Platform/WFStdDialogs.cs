@@ -60,8 +60,7 @@ namespace GKUI.Platform
         {
             Font sdFont = ((FontHandler)font).Handle;
 
-            using (FontDialog fontDlg = new FontDialog())
-            {
+            using (FontDialog fontDlg = new FontDialog()) {
                 fontDlg.Font = sdFont;
                 return (fontDlg.ShowDialog() != DialogResult.OK) ? null : new FontHandler(fontDlg.Font);
             }
@@ -71,8 +70,7 @@ namespace GKUI.Platform
                                   int filterIndex, string defaultExt)
         {
             filter = filter.Replace(',', ';');
-            using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false))
-            {
+            using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false)) {
                 if (ofd.ShowDialog() == DialogResult.OK) {
                     return ofd.FileName;
                 } else {
@@ -92,8 +90,7 @@ namespace GKUI.Platform
             if (!string.IsNullOrEmpty(context))
                 ofd.InitialDirectory = context;
 
-            if (!string.IsNullOrEmpty(filter))
-            {
+            if (!string.IsNullOrEmpty(filter)) {
                 ofd.Filter = filter;
 
                 if (filterIndex > 0) ofd.FilterIndex = filterIndex;
@@ -120,8 +117,7 @@ namespace GKUI.Platform
         public string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                                   string suggestedFileName, bool overwritePrompt = true)
         {
-            using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName))
-            {
+            using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName)) {
                 sfd.OverwritePrompt = overwritePrompt;
                 if (sfd.ShowDialog() == DialogResult.OK) {
                     return sfd.FileName;
@@ -142,8 +138,7 @@ namespace GKUI.Platform
             if (!string.IsNullOrEmpty(context))
                 sfd.InitialDirectory = context;
 
-            if (!string.IsNullOrEmpty(filter))
-            {
+            if (!string.IsNullOrEmpty(filter)) {
                 sfd.Filter = filter;
 
                 if (filterIndex > 0) sfd.FilterIndex = filterIndex;

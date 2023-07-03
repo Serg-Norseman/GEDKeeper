@@ -247,6 +247,8 @@ namespace GKCore.Options
             set { fFileBackupEachRevisionMaxCount = value; }
         }
 
+        public bool FilesOverwriteWarn { get; set; }
+
         public bool FirstCapitalLetterInNames
         {
             get { return fFirstCapitalLetterInNames; }
@@ -528,6 +530,7 @@ namespace GKCore.Options
             MultipagePrint = false;
             InfoPansOverallSize = -1;
             KeepInfoPansOverallSize = false;
+            FilesOverwriteWarn = true;
 
             Theme = string.Empty;
         }
@@ -912,6 +915,7 @@ namespace GKCore.Options
             MultipagePrint = ini.ReadBool("Common", "MultipagePrint", false);
             InfoPansOverallSize = ini.ReadInteger("Common", "InfoPansOverallSize", 0);
             KeepInfoPansOverallSize = ini.ReadBool("Common", "KeepInfoPansOverallSize", false);
+            FilesOverwriteWarn = ini.ReadBool("Common", "FilesOverwriteWarn", true);
 
             Theme = ini.ReadString("Common", "Theme", "");
 
@@ -1052,6 +1056,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "MultipagePrint", MultipagePrint);
             ini.WriteInteger("Common", "InfoPansOverallSize", InfoPansOverallSize);
             ini.WriteBool("Common", "KeepInfoPansOverallSize", KeepInfoPansOverallSize);
+            ini.WriteBool("Common", "FilesOverwriteWarn", FilesOverwriteWarn);
 
             ini.WriteString("Common", "Theme", Theme);
 

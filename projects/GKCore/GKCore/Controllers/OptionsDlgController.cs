@@ -379,6 +379,10 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkExtendedTree").Checked = fOptions.TreeChartOptions.ExtendedTree;
             GetControl<ICheckBox>("chkSAFByAllNames").Checked = fOptions.SearchAndFilterByAllNames;
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked = fOptions.KeepInfoPansOverallSize;
+
+            var hasOverwritePrompt = AppHost.Instance.HasFeatureSupport(Feature.OverwritePrompt);
+            GetControl<ICheckBox>("chkFilesOverwriteWarn").Enabled = hasOverwritePrompt;
+            GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked = fOptions.FilesOverwriteWarn && hasOverwritePrompt;
         }
 
         public void AcceptSpecials()
@@ -390,6 +394,7 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.ExtendedTree = GetControl<ICheckBox>("chkExtendedTree").Checked;
             fOptions.SearchAndFilterByAllNames = GetControl<ICheckBox>("chkSAFByAllNames").Checked;
             fOptions.KeepInfoPansOverallSize = GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked;
+            fOptions.FilesOverwriteWarn = GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked;
         }
 
         public void UpdatePlugins()
@@ -857,6 +862,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkExtendedTree").Text = LangMan.LS(LSID.LSID_ExtendedTree);
             GetControl<ICheckBox>("chkSAFByAllNames").Text = LangMan.LS(LSID.LSID_SearchAndFilterByAllNames);
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Text = LangMan.LS(LSID.LSID_KeepInfoPansOverallSize);
+            GetControl<ICheckBox>("chkFilesOverwriteWarn").Text = LangMan.LS(LSID.LSID_FilesOverwriteWarn);
 
             // Plugins
             GetControl<ITabPage>("pagePlugins").Text = LangMan.LS(LSID.LSID_Plugins);
