@@ -174,6 +174,7 @@
         private System.Windows.Forms.CheckBox chkShortenDateRanges;
         private System.Windows.Forms.CheckBox chkKeepInfoPansOverallSize;
         private System.Windows.Forms.CheckBox chkFilesOverwriteWarn;
+        private System.Windows.Forms.CheckBox chkSameCardsWidth;
 
         private void InitializeComponent()
         {
@@ -349,6 +350,7 @@
             this.chkShortenDateRanges = new System.Windows.Forms.CheckBox();
             this.chkKeepInfoPansOverallSize = new System.Windows.Forms.CheckBox();
             this.chkFilesOverwriteWarn = new System.Windows.Forms.CheckBox();
+            this.chkSameCardsWidth = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1244,6 +1246,7 @@
             this.panTreePersons.Controls.Add(this.chkBoldNames);
             this.panTreePersons.Controls.Add(this.chkMinimizingWidth);
             this.panTreePersons.Controls.Add(this.chkURNotesVisible);
+            this.panTreePersons.Controls.Add(this.chkSameCardsWidth);
             this.panTreePersons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panTreePersons.Location = new System.Drawing.Point(0, 0);
             this.panTreePersons.Margin = new System.Windows.Forms.Padding(10);
@@ -1551,6 +1554,17 @@
             this.chkURNotesVisible.TabIndex = 24;
             this.chkURNotesVisible.Text = "chkURNotesVisible";
             this.chkURNotesVisible.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
+            // 
+            // chkSameCardsWidth
+            // 
+            this.chkSameCardsWidth.AutoSize = true;
+            this.chkSameCardsWidth.Location = new System.Drawing.Point(6, 682);
+            this.chkSameCardsWidth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkSameCardsWidth.Name = "chkSameCardsWidth";
+            this.chkSameCardsWidth.Size = new System.Drawing.Size(349, 21);
+            this.chkSameCardsWidth.TabIndex = 25;
+            this.chkSameCardsWidth.Text = "chkSameCardsWidth";
+            this.chkSameCardsWidth.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 
             // grpTreeDecor
             // 

@@ -971,8 +971,9 @@ namespace GKCore
         /* 907 */ LSID_RK_MothersHusband,
         /* 908 */ LSID_Swap,
         /* 909 */ LSID_FilesOverwriteWarn,
+        /* 910 */ LSID_SameCardsWidth,
 
-        /* 000 */ LSID_Last = LSID_FilesOverwriteWarn
+        /* 000 */ LSID_Last = LSID_SameCardsWidth
     }
 
 
@@ -1900,6 +1901,7 @@ namespace GKCore
             /* 907 */ "mother's husband",
             /* 908 */ "Swap",
             /* 909 */ "Warn when overwriting files",
+            /* 910 */ "Same cards width",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

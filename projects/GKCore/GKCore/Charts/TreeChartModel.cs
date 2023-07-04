@@ -877,6 +877,7 @@ namespace GKCore.Charts
 
             int lines = InitInfoSize();
 
+            int maxWidth = 0;
             int num = fPersons.Count;
             for (int i = 0; i < num; i++) {
                 TreeChartPerson p = fPersons[i];
@@ -887,6 +888,14 @@ namespace GKCore.Charts
 
                 p.IsVisible = false;
                 p.CalcBounds(lines, fRenderer);
+
+                maxWidth = Math.Max(maxWidth, p.Width);
+            }
+
+            if (fOptions.SameCardsWidth) {
+                for (int i = 0; i < num; i++) {
+                    fPersons[i].Width = maxWidth;
+                }
             }
         }
 

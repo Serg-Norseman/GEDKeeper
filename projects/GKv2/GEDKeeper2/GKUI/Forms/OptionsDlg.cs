@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Controllers;

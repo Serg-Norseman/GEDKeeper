@@ -192,6 +192,7 @@ namespace GKCore.Charts
         public int Width
         {
             get { return fWidth; }
+            set { fWidth = value; }
         }
 
 

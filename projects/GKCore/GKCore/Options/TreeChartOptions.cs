@@ -70,6 +70,7 @@ namespace GKCore.Options
         public bool SurnameFirstInOrder;
         public bool URNotesVisible;
         public bool ShortenDateRanges;
+        public bool SameCardsWidth;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -133,6 +134,7 @@ namespace GKCore.Options
             SurnameFirstInOrder = true;
             URNotesVisible = false;
             ShortenDateRanges = false;
+            SameCardsWidth = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -201,6 +203,7 @@ namespace GKCore.Options
             SurnameFirstInOrder = srcOptions.SurnameFirstInOrder;
             URNotesVisible = srcOptions.URNotesVisible;
             ShortenDateRanges = srcOptions.ShortenDateRanges;
+            SameCardsWidth = srcOptions.SameCardsWidth;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -249,6 +252,7 @@ namespace GKCore.Options
             SurnameFirstInOrder = iniFile.ReadBool("Chart", "SurnameFirstInOrder", true);
             URNotesVisible = iniFile.ReadBool("Chart", "URNotesVisible", false);
             ShortenDateRanges = iniFile.ReadBool("Chart", "ShortenDateRanges", false);
+            SameCardsWidth = iniFile.ReadBool("Chart", "SameCardsWidth", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
             FemaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FemaleColor", FEMALE_COLOR));
@@ -314,6 +318,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "SurnameFirstInOrder", SurnameFirstInOrder);
             iniFile.WriteBool("Chart", "URNotesVisible", URNotesVisible);
             iniFile.WriteBool("Chart", "ShortenDateRanges", ShortenDateRanges);
+            iniFile.WriteBool("Chart", "SameCardsWidth", SameCardsWidth);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());
             iniFile.WriteInteger("Chart", "FemaleColor", FemaleColor.ToArgb());
