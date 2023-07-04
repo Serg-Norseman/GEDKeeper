@@ -18,8 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//#define DEBUG_KINSHIPS
+
 using System;
 using System.Collections.Generic;
+using System.Text;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
@@ -110,8 +113,22 @@ namespace GKCore.Kinships
                 GDMIndividualRecord starting = null;
 
                 var relPartsStack = new Stack<string>();
+                var result = new StringBuilder();
 
                 var edgesPath = fGraph.GetPath(target);
+
+#if DEBUG_KINSHIPS
+                result.AppendLine("PATH:");
+                foreach (Edge edge in edgesPath) {
+                    src = (GDMIndividualRecord)edge.Source.Value;
+                    tgt = (GDMIndividualRecord)edge.Target.Value;
+                    RelationKind curRel = KinshipsMan.FixLink(tgt.Sex, (RelationKind)((int)edge.Value));
+                    result.AppendLine("  " + GetRelationPart(src, tgt, curRel, 0, 0, false));
+                }
+                result.AppendLine();
+                result.AppendLine("SOLVE:");
+#endif
+
                 foreach (Edge edge in edgesPath) {
                     prev_tgt = tgt;
                     src = (GDMIndividualRecord)edge.Source.Value;
@@ -140,6 +157,14 @@ namespace GKCore.Kinships
                         great += g;
                         degree += deg;
 
+#if DEBUG_KINSHIPS
+                        result.AppendLine("  " + GetRelationPart(src, tgt, curRel, 0, 0, true) + " -> " + finRel.ToString() + " " + fContext.Culture.GetPossessiveName(starting));
+                        if (finRel == RelationKind.rkBrotherInLaw_H || finRel == RelationKind.rkBrotherInLaw_W) {
+                            // for breakpoint
+                            SysUtils.DoNotInline(finRel);
+                        }
+#endif
+
                         if (finRel == RelationKind.rkUndefined && fullFormat) {
                             relPart = GetRelationPart(starting, src, prevRel, great, degree, shortForm);
                             src = prev_tgt;
@@ -163,6 +188,11 @@ namespace GKCore.Kinships
                     }
                 }
 
+#if DEBUG_KINSHIPS
+                result.AppendLine();
+                result.AppendLine("RESULT:");
+#endif
+
                 if (!fullFormat) {
                     string relRes = GetRelationName(targetRec, finRel, great, degree, shortForm);
                     return relRes;
@@ -171,15 +201,14 @@ namespace GKCore.Kinships
 
                     relPartsStack.Push(relPart);
 
-                    string fullRel = "";
                     while (relPartsStack.Count > 0) {
-                        fullRel += relPartsStack.Pop();
+                        result.Append(relPartsStack.Pop());
                         if (relPartsStack.Count != 0) {
-                            fullRel += ", ";
+                            result.Append(", ");
                         }
                     }
 
-                    return fullRel;
+                    return result.ToString();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("KinshipsGraph.GetRelationship()", ex);
@@ -192,7 +221,12 @@ namespace GKCore.Kinships
             if (ind1 == null || ind2 == null)
                 return "???";
 
-            string rel = GetRelationName(ind2, xrel, great, degree, shortForm);
+            string rel;
+#if DEBUG_KINSHIPS
+            rel = string.Format("{0} [g={1}, d={2}]", xrel.ToString(), great, degree);
+#else
+            rel = GetRelationName(ind2, xrel, great, degree, shortForm);
+#endif
             string name1 = fContext.Culture.GetPossessiveName(ind1);
             string name2 = GKUtils.GetNameString(ind2, true, false);
 

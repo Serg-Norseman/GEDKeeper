@@ -22,64 +22,67 @@ namespace GKCore.Types
 {
     public enum RelationKind
     {
-        rkNone                  = 0,
+        rkNone                  = 00,
 
-        rkParent                = 1,
-        rkSpouse                = 2,
-        rkChild                 = 3,
+        rkUndefined             = 01,
+        rkSame                  = 02,
 
-        rkFather                = 4,
-        rkMother                = 5,
+        rkParent                = 03,
+        rkSpouse                = 04,
+        rkChild                 = 05,
 
-        rkHusband               = 6,
-        rkWife                  = 7,
+        rkFather                = 06,
+        rkMother                = 07,
 
-        rkSon                   = 8,
-        rkDaughter              = 9,
+        rkHusband               = 08,
+        rkWife                  = 09,
 
-        rkGrandfather           = 10,
-        rkGrandmother           = 11,
+        rkSon                   = 10,
+        rkDaughter              = 11,
 
-        rkGrandson              = 12,
-        rkGranddaughter         = 13,
+        rkGrandfather           = 12,
+        rkGrandmother           = 13,
 
-        rkBrother               = 14,
-        rkSister                = 15,
+        rkGrandson              = 14,
+        rkGranddaughter         = 15,
 
-        rkSonInLaw              = 16,
-        rkDaughterInLaw         = 17,
+        rkBrother               = 16,
+        rkSister                = 17,
 
-        rkHusbandFather         = 18,
-        rkHusbandMother         = 19,
+        rkSonInLaw              = 18,
+        rkDaughterInLaw         = 19,
 
-        rkWifeFather            = 20,
-        rkWifeMother            = 21,
+        rkHusbandFather         = 20,
+        rkHusbandMother         = 21,
 
-        rkUncle_FatherBrother   = 22,
-        rkAunt_FatherSister     = 23,
+        rkWifeFather            = 22,
+        rkWifeMother            = 23,
 
-        rkUncle_MotherBrother   = 24,
-        rkAunt_MotherSister     = 25,
+        rkUncle_FatherBrother   = 24,
+        rkAunt_FatherSister     = 25,
 
-        rkNephew                = 26,
-        rkNiece                 = 27,
+        rkUncle_MotherBrother   = 26,
+        rkAunt_MotherSister     = 27,
 
-        rkCousinM               = 28,
-        rkCousinF               = 29,
+        rkNephew                = 28,
+        rkNiece                 = 29,
 
-        rkBrotherInLaw_H        = 30,
-        rkSisterInLaw_H         = 31,
+        rkCousinM               = 30,
+        rkCousinF               = 31,
 
-        rkBrotherInLaw_W        = 32,
-        rkSisterInLaw_W         = 33,
+        rkBrotherInLaw_H        = 32,
+        rkSisterInLaw_H         = 33,
 
-        rkStepfather            = 34,
-        rkStepmother            = 35,
+        rkBrotherInLaw_W        = 34,
+        rkSisterInLaw_W         = 35,
 
-        rkFathersWife           = 36,
-        rkMothersHusband        = 37,
+        rkStepfather            = 36,
+        rkStepmother            = 37,
 
-        rkSame                  = 38,
-        rkUndefined             = 39
+        rkFathersWife           = 38,
+        rkMothersHusband        = 39,
+
+        rkUncle_AuntHusband     = 40,
+        rkAunt_UncleWife        = 41,
     }
 }

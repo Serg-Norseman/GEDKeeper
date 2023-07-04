@@ -756,7 +756,7 @@
 755=Copying file
 756=Actions
 757=Select and copy
-758=¹
+758=â„–
 759=Reports
 760=Inverted tree
 761=Dates of marriages
@@ -912,3 +912,5 @@
 908=Swap
 909=Warn when overwriting files
 910=Same cards width
+911=uncle   ; aunt's husband
+912=aunt    ; uncle's wife
