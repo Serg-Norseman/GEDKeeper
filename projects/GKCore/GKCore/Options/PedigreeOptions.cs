@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -48,6 +48,12 @@ namespace GKCore.Options
 
         public PedigreeOptions()
         {
+            ResetDefaults();
+        }
+
+        public void ResetDefaults()
+        {
+            Format = PedigreeFormat.Excess;
             IncludeAttributes = true;
             IncludeNotes = true;
             IncludeSources = true;
@@ -71,16 +77,13 @@ namespace GKCore.Options
             if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
 
-            try
-            {
+            try {
                 Format = (PedigreeFormat)iniFile.ReadInteger("Pedigree", "Format", 0);
                 IncludeAttributes = iniFile.ReadBool("Pedigree", "IncludeAttributes", true);
                 IncludeNotes = iniFile.ReadBool("Pedigree", "IncludeNotes", true);
                 IncludeSources = iniFile.ReadBool("Pedigree", "IncludeSources", true);
                 IncludeGenerations = iniFile.ReadBool("Pedigree", "IncludeGenerations", true);
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 throw new PedigreeOptionsException("Error loading PedigreeOptions");
             }
         }

@@ -39,7 +39,7 @@
         private GKUI.Components.GKListView lstPersonColumns;
         private System.Windows.Forms.Button btnColumnUp;
         private System.Windows.Forms.Button btnColumnDown;
-        private System.Windows.Forms.Button btnDefList;
+        private System.Windows.Forms.Button btnResetDefaults;
         private System.Windows.Forms.GroupBox rgFNPFormat;
         private System.Windows.Forms.GroupBox grpDateFormat;
         private System.Windows.Forms.CheckBox chkPlacesWithAddress;
@@ -318,7 +318,7 @@
             this.lstPersonColumns = new GKUI.Components.GKListView();
             this.btnColumnUp = new System.Windows.Forms.Button();
             this.btnColumnDown = new System.Windows.Forms.Button();
-            this.btnDefList = new System.Windows.Forms.Button();
+            this.btnResetDefaults = new System.Windows.Forms.Button();
             this.pagePedigree = new System.Windows.Forms.TabPage();
             this.grpPedigree = new System.Windows.Forms.GroupBox();
             this.chkAttributes = new System.Windows.Forms.CheckBox();
@@ -2067,7 +2067,6 @@
             this.pageViewPersons.Controls.Add(this.panel1);
             this.pageViewPersons.Controls.Add(this.btnColumnUp);
             this.pageViewPersons.Controls.Add(this.btnColumnDown);
-            this.pageViewPersons.Controls.Add(this.btnDefList);
             this.pageViewPersons.Location = new System.Drawing.Point(4, 26);
             this.pageViewPersons.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewPersons.Name = "pageViewPersons";
@@ -2122,15 +2121,15 @@
             this.btnColumnDown.TabIndex = 1;
             this.btnColumnDown.Click += new System.EventHandler(this.btnColumnDown_Click);
             // 
-            // btnDefList
+            // btnResetDefaults
             // 
-            this.btnDefList.Location = new System.Drawing.Point(498, 340);
-            this.btnDefList.Margin = new System.Windows.Forms.Padding(10);
-            this.btnDefList.Name = "btnDefList";
-            this.btnDefList.Size = new System.Drawing.Size(192, 44);
-            this.btnDefList.TabIndex = 1;
-            this.btnDefList.Text = "btnDefList";
-            this.btnDefList.Click += new System.EventHandler(this.btnDefList_Click);
+            this.btnResetDefaults.Location = new System.Drawing.Point(14, 702);
+            this.btnResetDefaults.Margin = new System.Windows.Forms.Padding(10);
+            this.btnResetDefaults.Name = "btnResetDefaults";
+            this.btnResetDefaults.Size = new System.Drawing.Size(192, 30);
+            this.btnResetDefaults.TabIndex = 1;
+            this.btnResetDefaults.Text = "btnResetDefaults";
+            this.btnResetDefaults.Click += new System.EventHandler(this.btnResetDefaults_Click);
             // 
             // pagePedigree
             // 
@@ -2424,6 +2423,7 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(749, 746);
             this.Controls.Add(this.PageControl1);
+            this.Controls.Add(this.btnResetDefaults);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));

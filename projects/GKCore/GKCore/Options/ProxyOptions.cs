@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,6 +34,20 @@ namespace GKCore.Options
         public string Login;
         public string Password;
         public bool UseProxy;
+
+        public ProxyOptions()
+        {
+            ResetDefaults();
+        }
+
+        public void ResetDefaults()
+        {
+            Server = string.Empty;
+            Port = string.Empty;
+            Login = string.Empty;
+            Password = string.Empty;
+            UseProxy = false;
+        }
 
         public void Assign(IOptions source)
         {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -61,7 +61,11 @@ namespace GKCore.Options
         public ListOptions(GDMRecordType recType)
         {
             fName = RecordTypeNames[(int)recType] + "List";
+            ResetDefaults();
+        }
 
+        public void ResetDefaults()
+        {
             SortColumn = 0;
         }
 

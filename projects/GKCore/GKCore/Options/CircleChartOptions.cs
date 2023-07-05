@@ -56,6 +56,11 @@ namespace GKCore.Options
 
         public CircleChartOptions()
         {
+            ResetDefaults();
+        }
+
+        public void ResetDefaults()
+        {
             for (int i = 0; i < MAX_BRUSHES; i++) {
                 BrushColor[i] = ChartRenderer.GetColor(DefBrushColor[i]);
             }
@@ -84,20 +89,17 @@ namespace GKCore.Options
             if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
 
-            try
-            {
+            try {
                 var utils = AppHost.GfxProvider;
 
                 for (int i = 0; i < MAX_BRUSHES; i++) {
-                    BrushColor[i] = utils.CreateColor(iniFile.ReadInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), DefBrushColor[i]));
+                    BrushColor[i] = utils.CreateColor(iniFile.ReadInteger("AncestorsCircle", "Brush_" + Convert.ToString(i), DefBrushColor[i]));
                 }
 
                 ArcText = iniFile.ReadBool("AncestorsCircle", "ArcText", true);
                 HideEmptySegments = iniFile.ReadBool("AncestorsCircle", "HideEmptySegments", false);
                 LTRCorrection = iniFile.ReadBool("AncestorsCircle", "LTRCorrection", false);
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 throw new PedigreeOptionsException("Error loading AncestorsCircleOptions");
             }
         }

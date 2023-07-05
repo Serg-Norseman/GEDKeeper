@@ -75,7 +75,7 @@ namespace GKUI.Forms
         private GKListView lstPersonColumns;
         private Button btnColumnUp;
         private Button btnColumnDown;
-        private Button btnDefList;
+        private Button btnResetDefaults;
         private GroupBox rgFNPFormat;
         private GroupBox grpDateFormat;
         private CheckBox chkPlacesWithAddress;
@@ -271,9 +271,61 @@ namespace GKUI.Forms
             fController.MoveColumnDown();
         }
 
-        private void btnDefList_Click(object sender, EventArgs e)
+        private void btnResetDefaults_Click(object sender, EventArgs e)
         {
-            fController.ResetColumnsList();
+            switch (PageControl1.SelectedIndex) {
+                case 0:
+                    // common
+                    fController.ResetCommonOptions();
+                    break;
+
+                case 1:
+                    // multimedia
+                    fController.ResetMediaOptions();
+                    break;
+
+                case 2:
+                    // charts
+                    switch (tabsCharts.SelectedIndex) {
+                        case 0:
+                            // tree
+                            fController.ResetTreeChartsOptions();
+                            break;
+                        case 1:
+                            // circle
+                            fController.ResetCircleChartsOptions();
+                            break;
+                    }
+                    break;
+
+                case 3:
+                    // interface
+                    switch (PageControl2.SelectedIndex) {
+                        case 0:
+                            // all lists
+                            fController.ResetInterfaceOptions();
+                            break;
+                        case 1:
+                            // individuals
+                            fController.ResetColumnsList();
+                            break;
+                    }
+                    break;
+
+                case 4:
+                    // pedigrees
+                    fController.ResetPedigreesOptions();
+                    break;
+
+                case 5:
+                    // specials
+                    fController.ResetSpecialsOptions();
+                    break;
+
+                case 6:
+                    // plugins
+                    break;
+            }
         }
 
         public void SetPage(OptionsPage page)

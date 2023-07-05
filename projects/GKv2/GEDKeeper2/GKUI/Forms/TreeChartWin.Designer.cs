@@ -500,6 +500,7 @@
             // miRebuildTree
             // 
             this.miRebuildTree.Name = "miRebuildTree";
+            this.miRebuildTree.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.F6)));
             this.miRebuildTree.Size = new System.Drawing.Size(172, 22);
             this.miRebuildTree.Text = "miRebuildTree";
             this.miRebuildTree.Click += new System.EventHandler(this.miRebuildTree_Click);
@@ -507,6 +508,7 @@
             // miRebuildKinships
             // 
             this.miRebuildKinships.Name = "miRebuildKinships";
+            this.miRebuildKinships.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.F7)));
             this.miRebuildKinships.Size = new System.Drawing.Size(172, 22);
             this.miRebuildKinships.Text = "miRebuildKinships";
             this.miRebuildKinships.Click += new System.EventHandler(this.miRebuildKinships_Click);

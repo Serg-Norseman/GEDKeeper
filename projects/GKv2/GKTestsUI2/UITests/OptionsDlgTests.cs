@@ -98,7 +98,7 @@ namespace GKUI.Forms
 
             ClickButton("btnColumnUp", form);
             ClickButton("btnColumnDown", form);
-            ClickButton("btnDefList", form);
+            ClickButton("btnResetDefaults", form);
 
             ClickButton("btnAccept", form);
         }

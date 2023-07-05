@@ -141,6 +141,14 @@ namespace GKCore.Controllers
             fOptions.Proxy.Password = GetControl<ITextBox>("txtProxyPass").Text;
         }
 
+        public void ResetCommonOptions()
+        {
+            fOptions.ResetDefaults_Common();
+            UpdateProxyOptions();
+            UpdateBackupOptions();
+            UpdateOtherOptions();
+        }
+
         public void UpdateOtherOptions()
         {
             GetControl<ICheckBox>("chkShowOnStart").Checked = fOptions.ShowTips;
@@ -186,6 +194,12 @@ namespace GKCore.Controllers
             }
 
             fOptions.CertaintyAlgorithm = GetControl<IComboBox>("cmbCertaintyAlgorithm").GetSelectedTag<CertaintyAlgorithm>();
+        }
+
+        public void ResetPedigreesOptions()
+        {
+            fOptions.PedigreeOptions.ResetDefaults();
+            UpdatePedigreesOptions();
         }
 
         public void UpdatePedigreesOptions()
@@ -279,6 +293,13 @@ namespace GKCore.Controllers
             }
         }
 
+        public void ResetInterfaceOptions()
+        {
+            fOptions.ResetDefaults_Interface();
+            UpdateInterfaceOptions();
+            UpdateWomanSurnameFormat();
+        }
+
         public void UpdateInterfaceOptions()
         {
             switch (fOptions.DefNameFormat) {
@@ -370,13 +391,20 @@ namespace GKCore.Controllers
             fOptions.SurnameInCapitals = GetControl<ICheckBox>("chkSurnameInCapitals").Checked;
         }
 
+        public void ResetSpecialsOptions()
+        {
+            fOptions.ResetDefaults_Specials();
+            UpdateSpecials();
+        }
+
         public void UpdateSpecials()
         {
             GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked = fOptions.TreeChartOptions.UseInlineImagesInSvg;
+            GetControl<ICheckBox>("chkExtendedTree").Checked = fOptions.TreeChartOptions.ExtendedTree;
+
             GetControl<ICheckBox>("chkUseExtendedNotes").Checked = fOptions.UseExtendedNotes;
             GetControl<ICheckBox>("chkKeepRichNames").Checked = fOptions.KeepRichNames;
             GetControl<ICheckBox>("chkMaximizeChartWindows").Checked = fOptions.MaximizeChartWindows;
-            GetControl<ICheckBox>("chkExtendedTree").Checked = fOptions.TreeChartOptions.ExtendedTree;
             GetControl<ICheckBox>("chkSAFByAllNames").Checked = fOptions.SearchAndFilterByAllNames;
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked = fOptions.KeepInfoPansOverallSize;
 
@@ -388,12 +416,14 @@ namespace GKCore.Controllers
         public void AcceptSpecials()
         {
             fOptions.TreeChartOptions.UseInlineImagesInSvg = GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked;
+            fOptions.TreeChartOptions.ExtendedTree = GetControl<ICheckBox>("chkExtendedTree").Checked;
+
             fOptions.UseExtendedNotes = GetControl<ICheckBox>("chkUseExtendedNotes").Checked;
             fOptions.KeepRichNames = GetControl<ICheckBox>("chkKeepRichNames").Checked;
             fOptions.MaximizeChartWindows = GetControl<ICheckBox>("chkMaximizeChartWindows").Checked;
-            fOptions.TreeChartOptions.ExtendedTree = GetControl<ICheckBox>("chkExtendedTree").Checked;
             fOptions.SearchAndFilterByAllNames = GetControl<ICheckBox>("chkSAFByAllNames").Checked;
             fOptions.KeepInfoPansOverallSize = GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked;
+
             fOptions.FilesOverwriteWarn = GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked;
         }
 
@@ -414,6 +444,12 @@ namespace GKCore.Controllers
         public void AcceptPlugins()
         {
             // dummy for future
+        }
+
+        public void ResetMediaOptions()
+        {
+            fOptions.ResetDefaults_Media();
+            UpdateMediaOptions();
         }
 
         public void UpdateMediaOptions()
@@ -488,6 +524,12 @@ namespace GKCore.Controllers
             if (lbl != null) {
                 lbl.BackColor = AppHost.StdDialogs.SelectColor(lbl.BackColor);
             }
+        }
+
+        public void ResetTreeChartsOptions()
+        {
+            fOptions.TreeChartOptions.ResetDefaults();
+            UpdateTreeChartsOptions();
         }
 
         public void UpdateTreeChartsOptions()
@@ -619,6 +661,12 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.DepthLimitDescendants = (int)GetControl<INumericBox>("numDefaultDepthDescendants").Value;
 
             fOptions.TreeChartOptions.UseExtraControls = GetControl<ICheckBox>("chkUseExtraControls").Checked;
+        }
+
+        public void ResetCircleChartsOptions()
+        {
+            fOptions.CircleChartOptions.ResetDefaults();
+            fView.UpdateCircleChartsOptions();
         }
 
         public override void UpdateView()
@@ -841,7 +889,7 @@ namespace GKCore.Controllers
             GetControl<IRadioButton>("radMarried").Text = LangMan.LS(LSID.LSID_WSF_Married);
 
             GetControl<ITabPage>("pageViewPersons").Text = LangMan.LS(LSID.LSID_ListPersons);
-            GetControl<IButton>("btnDefList").Text = LangMan.LS(LSID.LSID_DefList);
+            GetControl<IButton>("btnResetDefaults").Text = LangMan.LS(LSID.LSID_DefList);
 
             // Pedigree
             GetControl<ITabPage>("pagePedigree").Text = LangMan.LS(LSID.LSID_Pedigrees);

@@ -100,6 +100,11 @@ namespace GKCore.Options
 
         public TreeChartOptions()
         {
+            ResetDefaults();
+        }
+
+        public void ResetDefaults()
+        {
             FamilyVisible = true;
             NameVisible = true;
             PatronymicVisible = true;
@@ -126,7 +131,6 @@ namespace GKCore.Options
             DottedLinesOfAdoptedChildren = false;
             SeparateDatesAndPlacesLines = false;
             BoldNames = false;
-            SeparateDepth = false;
             OnlyLocality = false;
             MinimizingWidth = true;
             AgeVisible = false;
@@ -151,6 +155,11 @@ namespace GKCore.Options
             LevelDistance = TreeChartModel.DEF_LEVEL_DISTANCE;
             Margins = TreeChartModel.DEF_MARGINS;
             SpouseDistance = TreeChartModel.DEF_SPOUSE_DISTANCE;
+
+            SeparateDepth = false;
+            DepthLimit = -1;
+            DepthLimitAncestors = -1;
+            DepthLimitDescendants = -1;
 
             UseExtraControls = true;
             UseInlineImagesInSvg = true;
