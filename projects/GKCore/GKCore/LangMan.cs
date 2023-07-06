@@ -975,8 +975,9 @@ namespace GKCore
 
         /* 911 */ LSID_RK_Uncle_AuntHusband,
         /* 912 */ LSID_RK_Aunt_UncleWife,
+        /* 913 */ LSID_HideDescSpouses,
 
-        /* 000 */ LSID_Last = LSID_RK_Aunt_UncleWife
+        /* 000 */ LSID_Last = LSID_HideDescSpouses
     }
 
 
@@ -1908,6 +1909,7 @@ namespace GKCore
 
             /* 911 */ "uncle",
             /* 912 */ "aunt",
+            /* 913 */ "Hide spouses of descendants",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -84,6 +84,7 @@ namespace GKUI.Forms
         private ContextMenu MenuGensDescendants;
         private GKDropDownToolItem tbBorders;
         private ContextMenu MenuBorders;
+        private CheckMenuItem miHideDescSpouses;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -149,6 +150,8 @@ namespace GKUI.Forms
             miTraceKinships.Checked = fTreeBox.TraceKinships;
             miTraceKinships.Enabled = false;
 
+            miHideDescSpouses.Checked = fTreeBox.Options.HideDescSpouses;
+
             fController = new TreeChartWinController(this);
             fController.Init(baseWin);
 
@@ -178,6 +181,9 @@ namespace GKUI.Forms
             miModeDescendants = new RadioMenuItem(miModeBoth);
             miModeDescendants.Click += miModeItem_Click;
 
+            miHideDescSpouses = new CheckMenuItem();
+            miHideDescSpouses.Click += miHideDescSpouses_Click;
+
             miTraceSelected = new CheckMenuItem();
             miTraceSelected.Click += miTraceSelected_Click;
 
@@ -200,6 +206,8 @@ namespace GKUI.Forms
                                          miModeBoth,
                                          miModeAncestors,
                                          miModeDescendants,
+                                         new SeparatorMenuItem(),
+                                         miHideDescSpouses,
                                          new SeparatorMenuItem(),
                                          miTraceSelected,
                                          miTraceKinships,
@@ -526,6 +534,12 @@ namespace GKUI.Forms
         private void miTraceKinships_Click(object sender, EventArgs e)
         {
             fTreeBox.TraceKinships = miTraceKinships.Checked;
+        }
+
+        private void miHideDescSpouses_Click(object sender, EventArgs e)
+        {
+            fTreeBox.Options.HideDescSpouses = miHideDescSpouses.Checked;
+            GenChart();
         }
 
         private void miCertaintyIndex_Click(object sender, EventArgs e)

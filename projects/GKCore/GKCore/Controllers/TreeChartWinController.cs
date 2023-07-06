@@ -360,6 +360,7 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.LSID_GoToPrimaryBranch);
             GetControl<IMenuItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.LSID_OpenInNewWindow);
             GetControl<IMenuItem>("miMergeDuplicates").Text = LangMan.LS(LSID.LSID_MergeDuplicates);
+            GetControl<IMenuItem>("miHideDescSpouses").Text = LangMan.LS(LSID.LSID_HideDescSpouses);
 
             SetToolTip("tbModes", LangMan.LS(LSID.LSID_ModesTip));
             SetToolTip("tbImageSave", LangMan.LS(LSID.LSID_ImageSaveTip));

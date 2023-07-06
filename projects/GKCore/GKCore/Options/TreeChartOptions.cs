@@ -71,6 +71,7 @@ namespace GKCore.Options
         public bool URNotesVisible;
         public bool ShortenDateRanges;
         public bool SameCardsWidth;
+        public bool HideDescSpouses; // without option's load/save
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -139,6 +140,7 @@ namespace GKCore.Options
             URNotesVisible = false;
             ShortenDateRanges = false;
             SameCardsWidth = false;
+            HideDescSpouses = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -213,6 +215,7 @@ namespace GKCore.Options
             URNotesVisible = srcOptions.URNotesVisible;
             ShortenDateRanges = srcOptions.ShortenDateRanges;
             SameCardsWidth = srcOptions.SameCardsWidth;
+            HideDescSpouses = srcOptions.HideDescSpouses;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;

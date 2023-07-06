@@ -113,6 +113,8 @@ namespace GKUI.Forms
             miTraceKinships.Checked = fTreeBox.TraceKinships;
             miTraceKinships.Visible = false;
 
+            miHideDescSpouses.Checked = fTreeBox.Options.HideDescSpouses;
+
             fController = new TreeChartWinController(this);
             fController.Init(baseWin);
 
@@ -377,6 +379,13 @@ namespace GKUI.Forms
         {
             miTraceKinships.Checked = !miTraceKinships.Checked;
             fTreeBox.TraceKinships = miTraceKinships.Checked;
+        }
+
+        private void miHideDescSpouses_Click(object sender, EventArgs e)
+        {
+            miHideDescSpouses.Checked = !miHideDescSpouses.Checked;
+            fTreeBox.Options.HideDescSpouses = miHideDescSpouses.Checked;
+            GenChart();
         }
 
         private void miCertaintyIndex_Click(object sender, EventArgs e)

@@ -60,6 +60,9 @@
         private System.Windows.Forms.ToolStripMenuItem miOpenInNewWindow;
         private System.Windows.Forms.ToolStripMenuItem miMergeDuplicates;
 
+        private System.Windows.Forms.ToolStripSeparator N15;
+        private System.Windows.Forms.ToolStripMenuItem miHideDescSpouses;
+
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -119,6 +122,8 @@
             this.miGoToPrimaryBranch = new System.Windows.Forms.ToolStripMenuItem();
             this.miOpenInNewWindow = new System.Windows.Forms.ToolStripMenuItem();
             this.miMergeDuplicates = new System.Windows.Forms.ToolStripMenuItem();
+            this.N15 = new System.Windows.Forms.ToolStripSeparator();
+            this.miHideDescSpouses = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolBar1.SuspendLayout();
             this.MenuModes.SuspendLayout();
             this.MenuPerson.SuspendLayout();
@@ -216,6 +221,8 @@
             this.miModeBoth,
             this.miModeAncestors,
             this.miModeDescendants,
+            this.N15,
+            this.miHideDescSpouses,
             this.N7,
             this.miTraceSelected,
             this.miTraceKinships,
@@ -254,6 +261,18 @@
             // 
             this.N7.Name = "N7";
             this.N7.Size = new System.Drawing.Size(183, 6);
+            // 
+            // N15
+            // 
+            this.N15.Name = "N15";
+            this.N15.Size = new System.Drawing.Size(183, 6);
+            // 
+            // miHideDescSpouses
+            // 
+            this.miHideDescSpouses.Name = "miHideDescSpouses";
+            this.miHideDescSpouses.Size = new System.Drawing.Size(186, 22);
+            this.miHideDescSpouses.Text = "miHideDescSpouses";
+            this.miHideDescSpouses.Click += new System.EventHandler(this.miHideDescSpouses_Click);
             // 
             // miTraceSelected
             // 

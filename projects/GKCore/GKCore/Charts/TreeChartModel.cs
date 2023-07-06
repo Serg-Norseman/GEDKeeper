@@ -606,6 +606,8 @@ namespace GKCore.Charts
                     VisitAncestors(result, false);
                 }
 
+                bool withoutSpouses = fOptions.HideDescSpouses;
+
                 for (int i = 0; i < spousesNum; i++) {
                     GDMFamilyRecord family = fTree.GetPtrValue(indiRec.SpouseToFamilyLinks[i]);
                     if (family == null || !fContext.IsRecordAccess(family.Restriction)) continue;
@@ -620,14 +622,14 @@ namespace GKCore.Charts
                     TreeChartPerson ft = null;
                     TreeChartPerson mt = null;
                     PersonFlag descFlag;
-                    bool skipUnk = false;
+                    bool skipSpouse = false;
 
                     switch (indiRec.Sex) {
                         case GDMSex.svFemale: {
                                 GDMIndividualRecord sp = fTree.GetPtrValue(family.Husband);
-                                skipUnk = skipUnkSpouses && (sp == null);
+                                skipSpouse = withoutSpouses || (skipUnkSpouses && (sp == null));
 
-                                if (!skipUnk) {
+                                if (!skipSpouse) {
                                     resParent = AddDescPerson(null, sp, true, generation);
                                     resParent.Sex = GDMSex.svMale;
                                     resParent.SetFlag(PersonFlag.pfSpouse);
@@ -655,9 +657,9 @@ namespace GKCore.Charts
 
                         case GDMSex.svMale: {
                                 GDMIndividualRecord sp = fTree.GetPtrValue(family.Wife);
-                                skipUnk = skipUnkSpouses && (sp == null);
+                                skipSpouse = withoutSpouses || (skipUnkSpouses && (sp == null));
 
-                                if (!skipUnk) {
+                                if (!skipSpouse) {
                                     resParent = AddDescPerson(null, sp, true, generation);
                                     resParent.Sex = GDMSex.svFemale;
                                     resParent.SetFlag(PersonFlag.pfSpouse);
