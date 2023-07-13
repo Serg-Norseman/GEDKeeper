@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define ShortenDateRanges
-
 using System;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;

@@ -422,16 +422,16 @@ namespace GKCore
             };
 
             DateKinds = new DateKindStruct[] {
-                new DateKindStruct(LSID.LSID_DK_0, 1), // 1
-                new DateKindStruct(LSID.LSID_DK_1, 2), // 2
-                new DateKindStruct(LSID.LSID_DK_2, 1), // 1
-                new DateKindStruct(LSID.LSID_DK_3, 3), // 1,2
-                new DateKindStruct(LSID.LSID_DK_4, 1), // 1
-                new DateKindStruct(LSID.LSID_DK_5, 2), // 2
-                new DateKindStruct(LSID.LSID_DK_6, 3), // 1,2
-                new DateKindStruct(LSID.LSID_DK_7, 1), // 1
-                new DateKindStruct(LSID.LSID_DK_8, 1), // 1
-                new DateKindStruct(LSID.LSID_DK_9, 1)  // 1
+                new DateKindStruct(LSID.LSID_DK_0, 1), // Exact; 1
+                new DateKindStruct(LSID.LSID_DK_1, 2), // Before; 2
+                new DateKindStruct(LSID.LSID_DK_2, 1), // After; 1
+                new DateKindStruct(LSID.LSID_DK_3, 3), // Between; 1,2
+                new DateKindStruct(LSID.LSID_DK_4, 2), // Period before (to); 2
+                new DateKindStruct(LSID.LSID_DK_5, 1), // Period from (from); 1
+                new DateKindStruct(LSID.LSID_DK_6, 3), // Period between; 1,2
+                new DateKindStruct(LSID.LSID_DK_7, 1), // About; 1
+                new DateKindStruct(LSID.LSID_DK_8, 1), // Calculated; 1
+                new DateKindStruct(LSID.LSID_DK_9, 1)  // Estimated; 1
             };
 
             PersonEvents = new EventStruct[] {

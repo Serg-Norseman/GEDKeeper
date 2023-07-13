@@ -166,15 +166,13 @@ namespace GKUI.Components
             GDMCustomDate result = null;
 
             GDMCalendar cal1 = cmbDate1Calendar.GetSelectedTag<GDMCalendar>();
-            GDMCalendar cal2 = cmbDate2Calendar.GetSelectedTag<GDMCalendar>();
-
             GDMDate gcd1 = GDMDate.CreateByFormattedStr(txtDate1.NormalizeDate, cal1, true);
             if (gcd1 == null) throw new ArgumentNullException("gcd1");
+            gcd1.YearBC = chkBC1.Checked;
 
+            GDMCalendar cal2 = cmbDate2Calendar.GetSelectedTag<GDMCalendar>();
             GDMDate gcd2 = GDMDate.CreateByFormattedStr(txtDate2.NormalizeDate, cal2, true);
             if (gcd2 == null) throw new ArgumentNullException("gcd2");
-
-            gcd1.YearBC = chkBC1.Checked;
             gcd2.YearBC = chkBC2.Checked;
 
             switch (cmbDateType.SelectedIndex) {
@@ -194,12 +192,12 @@ namespace GKUI.Components
                     result = GDMCustomDate.CreateRange(gcd1, gcd2);
                     break;
 
-                case 4: // FROM gcd1
-                    result = GDMCustomDate.CreatePeriod(gcd1, null);
+                case 4: // TO gcd2
+                    result = GDMCustomDate.CreatePeriod(null, gcd2);
                     break;
 
-                case 5: // TO gcd2
-                    result = GDMCustomDate.CreatePeriod(null, gcd2);
+                case 5: // FROM gcd1
+                    result = GDMCustomDate.CreatePeriod(gcd1, null);
                     break;
 
                 case 6: // FROM gcd1 TO gcd2
@@ -228,40 +226,32 @@ namespace GKUI.Components
                 GDMDateRange dtRange = date as GDMDateRange;
 
                 if (dtRange.After.StringValue == "" && dtRange.Before.StringValue != "") {
-                    cmbDateType.SelectedIndex = 1;
+                    cmbDateType.SelectedIndex = 1; // BEF gcd2
                 } else if (dtRange.After.StringValue != "" && dtRange.Before.StringValue == "") {
-                    cmbDateType.SelectedIndex = 2;
+                    cmbDateType.SelectedIndex = 2; // AFT gcd1
                 } else if (dtRange.After.StringValue != "" && dtRange.Before.StringValue != "") {
-                    cmbDateType.SelectedIndex = 3;
+                    cmbDateType.SelectedIndex = 3; // "BET " + gcd1 + " AND " + gcd2
                 }
 
-                txtDate1.NormalizeDate = dtRange.After.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                txtDate2.NormalizeDate = dtRange.Before.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                cmbDate1Calendar.SetSelectedTag<GDMCalendar>(dtRange.After.DateCalendar);
-                cmbDate2Calendar.SetSelectedTag<GDMCalendar>(dtRange.Before.DateCalendar);
-                chkBC1.Checked = dtRange.After.YearBC;
-                chkBC2.Checked = dtRange.Before.YearBC;
+                FillControls(1, dtRange.After);
+                FillControls(2, dtRange.Before);
             } else if (date is GDMDatePeriod) {
                 GDMDatePeriod dtPeriod = date as GDMDatePeriod;
 
-                if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue == "") {
-                    cmbDateType.SelectedIndex = 4;
-                } else if (dtPeriod.DateFrom.StringValue == "" && dtPeriod.DateTo.StringValue != "") {
-                    cmbDateType.SelectedIndex = 5;
+                if (dtPeriod.DateFrom.StringValue == "" && dtPeriod.DateTo.StringValue != "") {
+                    cmbDateType.SelectedIndex = 4; // TO gcd2
+                } else if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue == "") {
+                    cmbDateType.SelectedIndex = 5; // FROM gcd1
                 } else if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue != "") {
-                    cmbDateType.SelectedIndex = 6;
+                    cmbDateType.SelectedIndex = 6; // FROM gcd1 TO gcd2
                 }
 
-                txtDate1.NormalizeDate = dtPeriod.DateFrom.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                txtDate2.NormalizeDate = dtPeriod.DateTo.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                cmbDate1Calendar.SetSelectedTag<GDMCalendar>(dtPeriod.DateFrom.DateCalendar);
-                cmbDate2Calendar.SetSelectedTag<GDMCalendar>(dtPeriod.DateTo.DateCalendar);
-                chkBC1.Checked = dtPeriod.DateFrom.YearBC;
-                chkBC2.Checked = dtPeriod.DateTo.YearBC;
+                FillControls(1, dtPeriod.DateFrom);
+                FillControls(2, dtPeriod.DateTo);
             } else if (date is GDMDate) {
-                GDMApproximated approximated = (date as GDMDate).Approximated;
+                var dt = date as GDMDate;
 
-                switch (approximated) {
+                switch (dt.Approximated) {
                     case GDMApproximated.daExact:
                         cmbDateType.SelectedIndex = 0;
                         break;
@@ -276,14 +266,29 @@ namespace GKUI.Components
                         break;
                 }
 
-                txtDate1.NormalizeDate = (date as GDMDate).GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                cmbDate1Calendar.SetSelectedTag<GDMCalendar>((date as GDMDate).DateCalendar);
-                chkBC1.Checked = (date as GDMDate).YearBC;
+                FillControls(1, dt);
             } else {
                 cmbDateType.SelectedIndex = 0;
                 txtDate1.NormalizeDate = "";
-                cmbDate1Calendar.SetSelectedTag<GDMCalendar>(GDMCalendar.dcGregorian);
+                cmbDate1Calendar.SetSelectedTag(GDMCalendar.dcGregorian);
                 chkBC1.Checked = false;
+            }
+        }
+
+        private void FillControls(int dateIndex, GDMDate date)
+        {
+            switch (dateIndex) {
+                case 1:
+                    txtDate1.NormalizeDate = date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                    cmbDate1Calendar.SetSelectedTag(date.DateCalendar);
+                    chkBC1.Checked = date.YearBC;
+                    break;
+
+                case 2:
+                    txtDate2.NormalizeDate = date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                    cmbDate2Calendar.SetSelectedTag(date.DateCalendar);
+                    chkBC2.Checked = date.YearBC;
+                    break;
             }
         }
 
