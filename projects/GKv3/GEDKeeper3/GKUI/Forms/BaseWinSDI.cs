@@ -134,6 +134,12 @@ namespace GKUI.Forms
         private ButtonMenuItem miPatSearch;
         private ButtonMenuItem miPlacesManager;
         private ButtonMenuItem miThemes;
+        private ButtonMenuItem miWindow;
+        private ButtonMenuItem miWinCascade;
+        private ButtonMenuItem miWinHTile;
+        private ButtonMenuItem miWinVTile;
+        private ButtonMenuItem miWinMinimize;
+
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -1045,6 +1051,26 @@ namespace GKUI.Forms
         private void miContext_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowHelpTopic("");
+        }
+
+        private void miWinCascade_Click(object sender, EventArgs e)
+        {
+            AppHost.Instance.LayoutWindows(WinLayout.Cascade);
+        }
+
+        private void miWinHTile_Click(object sender, EventArgs e)
+        {
+            AppHost.Instance.LayoutWindows(WinLayout.TileHorizontal);
+        }
+
+        private void miWinVTile_Click(object sender, EventArgs e)
+        {
+            AppHost.Instance.LayoutWindows(WinLayout.TileVertical);
+        }
+
+        private void miWinMinimize_Click(object sender, EventArgs e)
+        {
+            AppHost.Instance.LayoutWindows(WinLayout.Minimize);
         }
 
         #endregion

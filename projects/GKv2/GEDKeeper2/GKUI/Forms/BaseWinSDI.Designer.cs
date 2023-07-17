@@ -108,6 +108,11 @@
         private System.Windows.Forms.ToolStripMenuItem miPatSearch;
         private System.Windows.Forms.ToolStripMenuItem miPlacesManager;
         private System.Windows.Forms.ToolStripMenuItem miThemes;
+        private System.Windows.Forms.ToolStripMenuItem miWindow;
+        private System.Windows.Forms.ToolStripMenuItem miWinCascade;
+        private System.Windows.Forms.ToolStripMenuItem miWinHTile;
+        private System.Windows.Forms.ToolStripMenuItem miWinVTile;
+        private System.Windows.Forms.ToolStripMenuItem miWinMinimize;
 
         private void InitializeComponent()
         {
@@ -217,6 +222,11 @@
             this.miPatSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.miPlacesManager = new System.Windows.Forms.ToolStripMenuItem();
             this.miThemes = new System.Windows.Forms.ToolStripMenuItem();
+            this.miWindow = new System.Windows.Forms.ToolStripMenuItem();
+            this.miWinCascade = new System.Windows.Forms.ToolStripMenuItem();
+            this.miWinHTile = new System.Windows.Forms.ToolStripMenuItem();
+            this.miWinVTile = new System.Windows.Forms.ToolStripMenuItem();
+            this.miWinMinimize = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar.SuspendLayout();
             this.ToolBar1.SuspendLayout();
             this.MenuPedigree.SuspendLayout();
@@ -471,6 +481,7 @@
                                     this.miService,
                                     this.miReports,
                                     this.miPlugins,
+                                    this.miWindow,
                                     this.miHelp});
             this.MainMenu1.Location = new System.Drawing.Point(0, 0);
             this.MainMenu1.Name = "MainMenu1";
@@ -937,6 +948,45 @@
             this.miPlugins.Name = "miPlugins";
             this.miPlugins.Size = new System.Drawing.Size(68, 24);
             this.miPlugins.Text = "Plugins";
+            // 
+            // miWindow
+            // 
+            this.miWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                                    this.miWinCascade,
+                                    this.miWinHTile,
+                                    this.miWinVTile,
+                                    this.miWinMinimize});
+            this.miWindow.Name = "miWindow";
+            this.miWindow.Size = new System.Drawing.Size(63, 20);
+            this.miWindow.Text = "Window";
+            // 
+            // miWinCascade
+            // 
+            this.miWinCascade.Name = "miWinCascade";
+            this.miWinCascade.Size = new System.Drawing.Size(158, 22);
+            this.miWinCascade.Text = "miWinCascade";
+            this.miWinCascade.Click += new System.EventHandler(this.miWinCascade_Click);
+            // 
+            // miWinHTile
+            // 
+            this.miWinHTile.Name = "miWinHTile";
+            this.miWinHTile.Size = new System.Drawing.Size(158, 22);
+            this.miWinHTile.Text = "miWinHTile";
+            this.miWinHTile.Click += new System.EventHandler(this.miWinHTile_Click);
+            // 
+            // miWinVTile
+            // 
+            this.miWinVTile.Name = "miWinVTile";
+            this.miWinVTile.Size = new System.Drawing.Size(158, 22);
+            this.miWinVTile.Text = "miWinVTile";
+            this.miWinVTile.Click += new System.EventHandler(this.miWinVTile_Click);
+            // 
+            // miWinMinimize
+            // 
+            this.miWinMinimize.Name = "miWinMinimize";
+            this.miWinMinimize.Size = new System.Drawing.Size(158, 22);
+            this.miWinMinimize.Text = "miWinMinimize";
+            this.miWinMinimize.Click += new System.EventHandler(this.miWinMinimize_Click);
             // 
             // miHelp
             // 

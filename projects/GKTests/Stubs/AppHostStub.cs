@@ -242,5 +242,9 @@ namespace GKTests.Stubs
             AppHost.Instance.CriticalSave();
             Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)e.ExceptionObject);
         }
+
+        public override void LayoutWindows(WinLayout layout)
+        {
+        }
     }
 }

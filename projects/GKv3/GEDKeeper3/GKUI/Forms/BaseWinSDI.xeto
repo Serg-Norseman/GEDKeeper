@@ -124,6 +124,13 @@
 
       <ButtonMenuItem x:Name="miPlugins" />
 
+      <ButtonMenuItem x:Name="miWindow">
+        <ButtonMenuItem x:Name="miWinCascade" Click="miWinCascade_Click" />
+        <ButtonMenuItem x:Name="miWinHTile" Click="miWinHTile_Click" />
+        <ButtonMenuItem x:Name="miWinVTile" Click="miWinVTile_Click" />
+        <ButtonMenuItem x:Name="miWinMinimize" Click="miWinMinimize_Click" />
+      </ButtonMenuItem>
+
       <ButtonMenuItem x:Name="miHelp">
         <ButtonMenuItem x:Name="miContext" Shortcut="F1" Image="{Resource Resources.btn_help.gif, GKCore}" Click="miContext_Click" />
         <SeparatorMenuItem />

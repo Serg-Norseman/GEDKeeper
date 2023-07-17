@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -297,6 +298,97 @@ namespace GKUI.Platform
             }
 
             return result;
+        }
+
+        public override void LayoutWindows(WinLayout layout)
+        {
+            var activeForm = GetActiveWindow() as Form;
+            var screen = Screen.FromRectangle(activeForm.Bounds);
+            var scrLoc = screen.WorkingArea.Location;
+            var scrSize = screen.WorkingArea.Size;
+
+            int frameBorderSize = 0;
+            var osType = SysUtils.GetOSType();
+            if (osType >= OSType.Windows10) {
+                frameBorderSize = 8;
+                scrLoc.Offset(-frameBorderSize, 0);
+            }
+
+            switch (layout) {
+                case WinLayout.Cascade: {
+                        Size newSize = new Size(Convert.ToInt32(scrSize.Width * 0.8), Convert.ToInt32(scrSize.Height * 0.8));
+                        int i = 0;
+                        foreach (IWindow win in fRunningForms) {
+                            var form = win as Form;
+                            if (form == null || !form.Visible || form.WindowState == FormWindowState.Minimized) {
+                                continue;
+                            } else if (form.WindowState == FormWindowState.Maximized) {
+                                form.WindowState = FormWindowState.Normal;
+                            }
+                            int l = 22 * i;
+                            int t = 22 * i;
+                            if (i != 0 && (l + newSize.Width > scrSize.Width || t + newSize.Height > scrSize.Height)) {
+                                i = 0;
+                                l = 22 * i;
+                                t = 22 * i;
+                            }
+                            form.Location = new Point(scrLoc.X + l, scrLoc.Y + t);
+                            form.Size = newSize;
+                            i++;
+                        }
+                        break;
+                    }
+
+                case WinLayout.TileHorizontal:
+                case WinLayout.TileVertical: {
+                        int total = 0;
+                        foreach (IWindow win in fRunningForms) {
+                            var form = win as Form;
+                            if (form == null || !form.Visible || form.WindowState == FormWindowState.Minimized) {
+                                continue;
+                            } else if (form.WindowState == FormWindowState.Maximized) {
+                                form.WindowState = FormWindowState.Normal;
+                            }
+                            total++;
+                        }
+                        if (total <= 0)
+                            return;
+
+                        Size newSize;
+                        Size offset;
+                        if (layout == WinLayout.TileHorizontal) {
+                            newSize = new Size(scrSize.Width, (scrSize.Height / total));
+                            offset = new Size(0, newSize.Height);
+                        } else {
+                            newSize = new Size((scrSize.Width / total), scrSize.Height);
+                            offset = new Size(newSize.Width, 0);
+                        }
+                        // Correction can only be after calculating the offset
+                        newSize = new Size(newSize.Width + frameBorderSize * 2, newSize.Height + frameBorderSize);
+
+                        Point nextLocation = scrLoc;
+                        foreach (IWindow win in fRunningForms) {
+                            var form = win as Form;
+                            if (form == null || !form.Visible || form.WindowState == FormWindowState.Minimized) {
+                                continue;
+                            }
+                            form.Location = nextLocation;
+                            form.Size = newSize;
+                            nextLocation += offset;
+                        }
+                        break;
+                    }
+
+                case WinLayout.Minimize: {
+                        foreach (IWindow win in fRunningForms) {
+                            var form = win as Form;
+                            if (form != null) {
+                                form.WindowState = FormWindowState.Minimized;
+                            }
+                        }
+                        break;
+                    }
+            }
         }
 
         #region KeyLayout functions

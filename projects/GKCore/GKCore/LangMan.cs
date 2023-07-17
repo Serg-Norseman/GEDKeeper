@@ -66,9 +66,9 @@ namespace GKCore
         /* 030 */ LSID_MIStats,
         /* 031 */ LSID_MIPedigreeAscend,
 
-        /* 032 */ LSID_MINamesBook, // deprecated
-        /* 033 */ LSID_MICalendar, // deprecated
-        /* 034 */ LSID_MITimeLine, // deprecated
+        /* 032 */ LSID_Deprecated_032, // deprecated
+        /* 033 */ LSID_Deprecated_033, // deprecated
+        /* 034 */ LSID_Deprecated_034, // deprecated
 
         /* 035 */ LSID_MIOrganizer,
         /* 036 */ LSID_MIScripts,
@@ -82,11 +82,11 @@ namespace GKCore
         /* 042 */ LSID_MIWinHTile,
         /* 043 */ LSID_MIWinVTile,
         /* 044 */ LSID_MIWinMinimize,
-        /* 045 */ LSID_MIWinArrange,
 
-        /* 046 */ LSID_MIGenResources, // deprecated
-        /* 047 */ LSID_MIKinshipTerms, // deprecated
-        /* 048 */ LSID_MIFAQ, // deprecated
+        /* 045 */ LSID_Deprecated_045, // deprecated
+        /* 046 */ LSID_Deprecated_046, // deprecated
+        /* 047 */ LSID_Deprecated_047, // deprecated
+        /* 048 */ LSID_Deprecated_048, // deprecated
 
         /* 049 */ LSID_MIContext,
         /* 050 */ LSID_MIAbout,

@@ -42,6 +42,16 @@ namespace GKCore
 {
     internal delegate void OnMessageReceivedInvoker(MessageEventArgs e);
 
+
+    public enum WinLayout
+    {
+        Cascade = 0,
+        TileHorizontal = 1,
+        TileVertical = 2,
+        Minimize = 3,
+    }
+
+
     /// <summary>
     /// Global controller of UI for the isolation
     /// of presentation from logic and data model (based on IoC).
@@ -310,6 +320,8 @@ namespace GKCore
         public abstract void ExecuteWork(ProgressStart proc);
 
         public abstract bool ExecuteWorkExt(ProgressStart proc, string title);
+
+        public abstract void LayoutWindows(WinLayout layout);
 
         #region Extended clipboard functions
 

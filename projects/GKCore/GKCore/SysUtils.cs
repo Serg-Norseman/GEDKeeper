@@ -29,9 +29,9 @@ using BSLib;
 
 namespace GKCore
 {
-    #if OS_MSWIN
+#if OS_MSWIN
     using GKCore.MapiMail;
-    #endif
+#endif
 
     public enum DesktopType
     {
@@ -45,6 +45,28 @@ namespace GKCore
         Mate,
         Cinnamon,
         Pantheon
+    }
+
+    public enum OSType
+    {
+        Unknown = 0,
+        Linux,
+        MacOS,
+        Windows95,
+        Windows98,
+        WindowsMe,
+        WindowsNT351,
+        WindowsNT40,
+        Windows2000,
+        WindowsXP,
+        WindowsServer2003,
+        WindowsVista,
+        //WindowsServer2008,
+        Windows7,
+        //WindowsServer2008R2,
+        Windows8,
+        Windows81,
+        Windows10,
     }
 
     public static class SysUtils
@@ -184,8 +206,7 @@ namespace GKCore
             if (!IsUnix()) {
                 deskType = DesktopType.Windows;
             } else {
-                try
-                {
+                try {
                     string strXdg = (Environment.GetEnvironmentVariable(
                         "XDG_CURRENT_DESKTOP") ?? string.Empty).Trim();
                     string strGdm = (Environment.GetEnvironmentVariable(
@@ -207,8 +228,7 @@ namespace GKCore
                     else if (strXdg.Equals("KDE", sc) || // Mint 16
                              strGdm.Equals("kde-plasma", sc)) // Ubuntu 12.04
                         deskType = DesktopType.Kde;
-                    else if (strXdg.Equals("GNOME", sc))
-                    {
+                    else if (strXdg.Equals("GNOME", sc)) {
                         if (strGdm.Equals("cinnamon", sc)) // Mint 13
                             deskType = DesktopType.Cinnamon;
                         else deskType = DesktopType.Gnome;
@@ -219,6 +239,90 @@ namespace GKCore
             }
 
             return deskType;
+        }
+
+        public static OSType GetOSType()
+        {
+            var result = OSType.Unknown;
+
+#if OS_LINUX
+            result = OSType.Linux;
+#endif
+
+#if OS_MACOS
+            result = OSType.MacOS;
+#endif
+
+#if OS_MSWIN
+            OperatingSystem osVersion = Environment.OSVersion;
+            int majorVersion = osVersion.Version.Major;
+            int minorVersion = osVersion.Version.Minor;
+
+            switch (osVersion.Platform) {
+                case PlatformID.Win32Windows: {
+                        if (majorVersion == 4) {
+                            switch (minorVersion) {
+                                case 0:
+                                    result = OSType.Windows95;
+                                    break;
+                                case 10:
+                                    result = OSType.Windows98;
+                                    break;
+                                case 90:
+                                    result = OSType.WindowsMe;
+                                    break;
+                            }
+                        }
+                        break;
+                    }
+
+                case PlatformID.Win32NT: {
+                        switch (majorVersion) {
+                            case 3:
+                                result = OSType.WindowsNT351;
+                                break;
+                            case 4:
+                                result = OSType.WindowsNT40;
+                                break;
+                            case 5:
+                                switch (minorVersion) {
+                                    case 0:
+                                        result = OSType.Windows2000;
+                                        break;
+                                    case 1:
+                                        result = OSType.WindowsXP;
+                                        break;
+                                    case 2:
+                                        result = OSType.WindowsServer2003;
+                                        break;
+                                }
+                                break;
+                            case 6:
+                                switch (minorVersion) {
+                                    case 0:
+                                        result = OSType.WindowsVista;
+                                        break;
+                                    case 1:
+                                        result = OSType.Windows7;
+                                        break;
+                                    case 2:
+                                        result = OSType.Windows8;
+                                        break;
+                                    case 3:
+                                        result = OSType.Windows81;
+                                        break;
+                                }
+                                break;
+                            case 10:
+                                result = OSType.Windows10;
+                                break;
+                        }
+                        break;
+                    }
+            }
+#endif
+
+            return result;
         }
 
         #endregion

@@ -864,6 +864,12 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miLogSend").Text = LangMan.LS(LSID.LSID_LogSend);
                 GetControl<IMenuItem>("miLogView").Text = LangMan.LS(LSID.LSID_LogView);
 
+                GetControl<IMenuItem>("miWindow").Text = LangMan.LS(LSID.LSID_MIWindow);
+                GetControl<IMenuItem>("miWinCascade").Text = LangMan.LS(LSID.LSID_MIWinCascade);
+                GetControl<IMenuItem>("miWinHTile").Text = LangMan.LS(LSID.LSID_MIWinHTile);
+                GetControl<IMenuItem>("miWinVTile").Text = LangMan.LS(LSID.LSID_MIWinVTile);
+                GetControl<IMenuItem>("miWinMinimize").Text = LangMan.LS(LSID.LSID_MIWinMinimize);
+
                 if (fHasToolbar) {
                     SetToolTip("tbFileNew", LangMan.LS(LSID.LSID_FileNewTip));
                     SetToolTip("tbFileLoad", LangMan.LS(LSID.LSID_FileLoadTip));
