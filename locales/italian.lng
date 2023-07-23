@@ -3,7 +3,7 @@
 002=Modifica
 003=Pedigree
 004=Servizio
-005=&Windows
+005=Windows
 006=Aiuto
 007=Nuovo
 008=Aprire...
@@ -43,7 +43,7 @@
 042=Caselle orizzontali
 043=Caselle verticali
 044=Riduci tutto
-045=Riorganizza tutto
+045=<?>
 046=<?>
 047=<?>
 048=<?>
@@ -468,7 +468,7 @@
 467=Ricerca
 468=Attività
 469=Corrispondenza
-470=correzione di ID
+470=Correzione di ID
 471=Verifica il formato
 472=|EMF files (*.emf)|*.emf
 473=Numero di oggetti in un data base principale {0}
@@ -789,13 +789,13 @@
 788=GedML files (*.xml)|*.xml
 789=Bambino rilevato senza genitori
 790=Rilevato record familiare senza genitori o figli
-791=Are you sure you want to remove multimedia file?
+791=Are you sure you want to remove the multimedia file?
 792=Storage not found
 793=File "{0}" non trovato
 794=Allow relative references to media files
 795=Default media storage type
-796=Allow delete media files from storage and archive
-797=Allow delete media files by direct and relative references
+796=Allow deleting media files from storage and archive
+797=Allow deleting media files by direct and relative references
 798=Delete media files without confirm
 799=Media record without files
 800=Archivio non trovato
@@ -810,18 +810,18 @@
 808=Religion:Orthodoxy
 809=Religion:The Old Believers
 
-810=Relative link to file
+810=Relative link to the file
 811=Maximum number of backup revisions
 812=First capital letter in names
 813=Default depth
 814=The dialog contains unsaved changes. Continue and save?
 815=Warn for closing dialog with unsaved changes
 816=Dotted lines of adopted children
-817=Go to person record
+817=Go to the person record
 818=Web address
 819=Separate dates and places lines
 820=Dettagli
-821=Copy XRef to clipboard
+821=Copy XRef to the clipboard
 822=Bold font of names
 
 823=Baptism
@@ -844,7 +844,7 @@
 840=Coordinate
 841=Load places
 842=Only locality
-843=Go to primary branch
+843=Go to the primary branch
 844=Minimizing width
 845={0}. Continue?
 846=Show age
@@ -856,11 +856,11 @@
 852=Copy
 853=Cut
 854=Paste
-855=Person `{0}` has a half link of spouse to family `{1}`
-856=Person `{0}` has a half link of child to family `{1}`
-857=Family `{0}` has a half link of husband to person `{1}`
-858=Family `{0}` has a half link of wife to person `{1}`
-859=Family `{0}` has a half link of child to parents family `{1}`
+855=Person `{0}` has a half link of a spouse to family `{1}`
+856=Person `{0}` has a half link of a child to family `{1}`
+857=Family `{0}` has a half link of a husband to person `{1}`
+858=Family `{0}` has a half link of a wife to person `{1}`
+859=Family `{0}` has a half link of a child to parents family `{1}`
 860=Family `{0}` has garbled spouses
 861=USSR:CPSU member
 862=Attention: when merging archive records, the name and address are not transferred! Proceed?
@@ -873,8 +873,8 @@
 869=Maximize chart windows
 870=Extended tree
 871=Fan chart (only ancestors)
-872=Open in new window
-873=Unknown place of person
+872=Open in a new window
+873=Unknown place of the person
 874=Check person places
 875=Highlight inaccessible files
 876=The difference between spouses is abnormally high `{0}`
@@ -904,7 +904,7 @@
 900=Tomorrow is jubilee of {0}
 901={1} days remain before the jubilee of {0}
 902=Source year
-903=Age at year
+903=Age at the year
 904=Keep overall size of info panels
 905=Identifiers (XRef)
 906=father's wife

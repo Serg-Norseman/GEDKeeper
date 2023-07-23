@@ -62,6 +62,7 @@ If your problem or idea is not addressed yet, please open a new issue.
 
 ## Supported languages
 
+- Belarusian, initial
 - Chinese (simplified)
 - Czech
 - English
@@ -77,6 +78,8 @@ If your problem or idea is not addressed yet, please open a new issue.
 - Serbian (Latin), partial
 - Spanish, initial
 - Ukrainian
+
+Platform for project localization: [Crowdin](https://crowdin.com/project/gedkeeper)
 
 
 ## Docs & Help
