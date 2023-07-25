@@ -429,7 +429,10 @@ namespace GKCore.Charts
 
                 if ((fDepthLimitAncestors <= -1 || Math.Abs(personNode.Generation) != fDepthLimitAncestors) && indiRec.ChildToFamilyLinks.Count > 0 && !dupFlag) {
                     GDMChildToFamilyLink childLink = indiRec.ChildToFamilyLinks[0];
-                    personNode.SetFlag(PersonFlag.pfAdopted, (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted));
+
+                    var adopted = (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted);
+                    personNode.SetFlag(PersonFlag.pfAdopted, adopted);
+
                     GDMFamilyRecord family = fTree.GetPtrValue(childLink);
 
                     bool isDup = fPreparedFamilies.Contains(family.XRef);
@@ -438,6 +441,8 @@ namespace GKCore.Charts
                     if (fContext.IsRecordAccess(family.Restriction)) {
                         GDMIndividualRecord iFather, iMother;
                         fTree.GetSpouses(family, out iFather, out iMother);
+
+                        bool commonLaw = (family.Status == GDMMarriageStatus.MarrNotRegistered);
 
                         bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
 
@@ -614,6 +619,8 @@ namespace GKCore.Charts
 
                     bool isDup = fPreparedFamilies.Contains(family.XRef);
                     if (!isDup) fPreparedFamilies.Add(family.XRef);
+
+                    bool commonLaw = (family.Status == GDMMarriageStatus.MarrNotRegistered);
 
                     bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
                     result.SetFlag(PersonFlag.pfDivorced, divorced);

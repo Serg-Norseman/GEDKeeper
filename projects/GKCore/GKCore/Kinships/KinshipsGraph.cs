@@ -292,7 +292,10 @@ namespace GKCore.Kinships
             }
 
             if (iRec.ChildToFamilyLinks.Count > 0) {
-                GDMFamilyRecord fam = context.Tree.GetParentsFamily(iRec);
+                var childLink = iRec.ChildToFamilyLinks[0];
+                bool adopted = (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted);
+
+                GDMFamilyRecord fam = context.Tree.GetPtrValue(childLink);
                 if (fam != null) {
                     GDMIndividualRecord father, mother;
                     context.Tree.GetSpouses(fam, out father, out mother);
@@ -306,6 +309,7 @@ namespace GKCore.Kinships
             for (int i = 0; i < num; i++) {
                 GDMFamilyRecord family = context.Tree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
                 GDMIndividualRecord spouse = (iRec.Sex == GDMSex.svMale) ? context.Tree.GetPtrValue(family.Wife) : context.Tree.GetPtrValue(family.Husband);
+                bool commonLaw = (family.Status == GDMMarriageStatus.MarrNotRegistered);
 
                 SearchKGInt(context, currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse);
 

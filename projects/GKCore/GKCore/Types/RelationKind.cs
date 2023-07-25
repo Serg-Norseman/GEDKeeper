@@ -49,8 +49,8 @@ namespace GKCore.Types
         rkBrother               = 16,
         rkSister                = 17,
 
-        rkSonInLaw              = 18,
-        rkDaughterInLaw         = 19,
+        rkSonInLaw              = 18,   // husband of daughter or sister
+        rkDaughterInLaw         = 19,   // wife of son or brother
 
         rkHusbandFather         = 20,
         rkHusbandMother         = 21,
@@ -70,19 +70,43 @@ namespace GKCore.Types
         rkCousinM               = 30,
         rkCousinF               = 31,
 
-        rkBrotherInLaw_H        = 32,
-        rkSisterInLaw_H         = 33,
+        rkBrotherInLaw_H        = 32,   // husband's brother
+        rkSisterInLaw_H         = 33,   // husband's sister
 
-        rkBrotherInLaw_W        = 34,
-        rkSisterInLaw_W         = 35,
+        rkBrotherInLaw_W        = 34,   // wife's brother
+        rkSisterInLaw_W         = 35,   // wife's sister
 
-        rkStepfather            = 36,
-        rkStepmother            = 37,
+        rkStepfather            = 36,   // unused yet
+        rkStepmother            = 37,   // unused yet
 
         rkFathersWife           = 38,
         rkMothersHusband        = 39,
 
         rkUncle_AuntHusband     = 40,
         rkAunt_UncleWife        = 41,
+    }
+
+
+    public enum RelationExt
+    {
+        None        = 0,
+        Blood       = 1,    // brother/sister   [ stage: kinship analysis ]
+        Uterine     = 2,    // brother/sister   [ stage: kinship analysis ]
+        Adoptive    = 3,    // father/mother    [ stage: graph generation ]
+        Adopted     = 4,    // son/daughter     [ stage: graph generation ]
+        CommonLaw   = 5,    // husband/wife     [ stage: graph generation ]
+    }
+
+
+    public sealed class RelationProps
+    {
+        public RelationKind Kind { get; private set; }
+        public RelationExt Ext { get; private set; }
+
+        public RelationProps(RelationKind kind, RelationExt ext)
+        {
+            Kind = kind;
+            Ext = ext;
+        }
     }
 }
