@@ -32,10 +32,84 @@ namespace GKCore.Kinships
     /// </summary>
     public static class KinshipsMan
     {
+        public static readonly LSID GreatPrefix;
+        public static readonly LSID[] RelationKinds;
+        public static readonly LSID[] KinDegrees;
+        public static readonly LSID[] KinExts;
+
         private static List<KinshipRec> fKinships;
 
         static KinshipsMan()
         {
+            GreatPrefix = LSID.LSID_RK_GreatPrefix;
+
+            KinDegrees = new LSID[] {
+                LSID.LSID_KinshipDegree_01,
+                LSID.LSID_KinshipDegree_02,
+                LSID.LSID_KinshipDegree_03,
+                LSID.LSID_KinshipDegree_04,
+                LSID.LSID_KinshipDegree_05,
+                LSID.LSID_KinshipDegree_06,
+                LSID.LSID_KinshipDegree_07,
+                LSID.LSID_KinshipDegree_08,
+                LSID.LSID_KinshipDegree_09,
+                LSID.LSID_KinshipDegree_10,
+            };
+
+            RelationKinds = new LSID[] {
+                /* 00 */ LSID.LSID_RK_Unk,
+                /* 01 */ LSID.LSID_RK_Unk,
+                /* 02 */ LSID.LSID_None,
+                /* 03 */ LSID.LSID_None,
+                /* 04 */ LSID.LSID_None,
+                /* 05 */ LSID.LSID_None,
+                /* 06 */ LSID.LSID_RK_Father,
+                /* 07 */ LSID.LSID_RK_Mother,
+                /* 08 */ LSID.LSID_RK_Husband,
+                /* 09 */ LSID.LSID_RK_Wife,
+                /* 10 */ LSID.LSID_RK_Son,
+                /* 11 */ LSID.LSID_RK_Daughter,
+                /* 12 */ LSID.LSID_RK_Grandfather,
+                /* 13 */ LSID.LSID_RK_Grandmother,
+                /* 14 */ LSID.LSID_RK_Grandson,
+                /* 15 */ LSID.LSID_RK_Granddaughter,
+                /* 16 */ LSID.LSID_RK_Brother,
+                /* 17 */ LSID.LSID_RK_Sister,
+                /* 18 */ LSID.LSID_RK_SonInLaw,
+                /* 19 */ LSID.LSID_RK_DaughterInLaw,
+                /* 20 */ LSID.LSID_RK_HusbandFather,
+                /* 21 */ LSID.LSID_RK_HusbandMother,
+                /* 22 */ LSID.LSID_RK_WifeFather,
+                /* 23 */ LSID.LSID_RK_WifeMother,
+                /* 24 */ LSID.LSID_RK_Uncle_FatherBrother,
+                /* 25 */ LSID.LSID_RK_Aunt_FatherSister,
+                /* 26 */ LSID.LSID_RK_Uncle_MotherBrother,
+                /* 27 */ LSID.LSID_RK_Aunt_MotherSister,
+                /* 28 */ LSID.LSID_RK_Nephew,
+                /* 29 */ LSID.LSID_RK_Niece,
+                /* 30 */ LSID.LSID_RK_CousinM,
+                /* 31 */ LSID.LSID_RK_CousinF,
+                /* 32 */ LSID.LSID_RK_BrotherInLaw_H,
+                /* 33 */ LSID.LSID_RK_SisterInLaw_H,
+                /* 34 */ LSID.LSID_RK_BrotherInLaw_W,
+                /* 35 */ LSID.LSID_RK_SisterInLaw_W,
+                /* 36 */ LSID.LSID_RK_Stepfather,
+                /* 37 */ LSID.LSID_RK_Stepmother,
+                /* 38 */ LSID.LSID_RK_FathersWife,
+                /* 39 */ LSID.LSID_RK_MothersHusband,
+                /* 40 */ LSID.LSID_RK_Uncle_AuntHusband,
+                /* 41 */ LSID.LSID_RK_Aunt_UncleWife,
+            };
+
+            KinExts = new LSID[] {
+                LSID.LSID_None,
+                LSID.LSID_RE_Blood,
+                LSID.LSID_RE_Uterine,
+                LSID.LSID_RE_Adoptive,
+                LSID.LSID_RE_Adopted,
+                LSID.LSID_RE_CommonLaw,
+            };
+
             fKinships = new List<KinshipRec>();
 
             RegisterKinship(
@@ -398,7 +472,7 @@ namespace GKCore.Kinships
 
         public static string GetDegree(int n, GDMSex sex)
         {
-            string result = (n == 0) ? string.Empty : (GKData.Numerals[n] + GKData.NumKinship[(int)sex] + " ");
+            string result = (n == 0) ? string.Empty : (LangMan.LSS(KinDegrees[n], (int)sex-1) + " ");
             return result;
         }
 
@@ -408,10 +482,10 @@ namespace GKCore.Kinships
             if (n > 0) {
                 if (!shortForm) {
                     for (int i = 1; i <= n; i++) {
-                        result += LangMan.LS(GKData.GreatPrefix);
+                        result += LangMan.LS(GreatPrefix);
                     }
                 } else {
-                    result = LangMan.LS(GKData.GreatPrefix);
+                    result = LangMan.LS(GreatPrefix);
                     if (n > 1) {
                         result += string.Format("({0})", n);
                     }

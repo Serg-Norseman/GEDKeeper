@@ -254,7 +254,7 @@ namespace GKCore.Kinships
                 tmp += KinshipsMan.GetGreat(great, shortForm);
             }
 
-            return tmp + LangMan.LS(GKData.RelationKinds[(int)rel]);
+            return tmp + LangMan.LS(KinshipsMan.RelationKinds[(int)rel]);
         }
 
         #region Search graph

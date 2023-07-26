@@ -495,5 +495,64 @@ namespace GKCore
             string result = argb.ToString("X6");
             return result;
         }
+
+        public static string GetToken(string str, string sepChars, int tokenNum)
+        {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(sepChars)) {
+                return string.Empty;
+            }
+
+            if (sepChars.IndexOf(str[str.Length - 1]) < 0) {
+                str += sepChars[0];
+            }
+
+            int tok_num = -1;
+            string tok = "";
+
+            for (int i = 0; i < str.Length; i++) {
+                if (sepChars.IndexOf(str[i]) >= 0) {
+                    tok_num++;
+                    if (tok_num == tokenNum) {
+                        return tok;
+                    }
+                    tok = string.Empty;
+                } else {
+                    tok += (str[i]);
+                }
+
+            }
+            return string.Empty;
+        }
+
+        public static string GetWordForm(string ls, int selector)
+        {
+            try {
+                string result;
+
+                string word = GetToken(ls, "[]", 0);
+                string sfx = GetToken(ls, "[]", 1);
+
+                if (string.IsNullOrEmpty(sfx)) {
+                    result = word;
+                } else {
+                    string sf = GetToken(sfx, "|", selector);
+                    if (string.IsNullOrEmpty(sf)) {
+                        result = word;
+                    } else {
+                        if (sf[0] != '-') {
+                            result = sf;
+                        } else {
+                            sf = sf.Substring(1);
+                            result = word + sf;
+                        }
+                    }
+                }
+
+                return result;
+            } catch (Exception ex) {
+                Logger.WriteError("SysUtils.GetWordForm(): " + ex.Message);
+                throw ex;
+            }
+        }
     }
 }

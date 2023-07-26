@@ -214,10 +214,6 @@ namespace GKCore
         public static readonly LSID[] GoalNames;
         public static readonly LSID[] CertaintyAssessments;
         public static readonly SpecialUserRef[] SpecialUserRefs;
-        public static readonly LSID[] RelationKinds;
-        public static readonly string[] Numerals;
-        public static readonly string[] NumKinship;
-        public static readonly LSID GreatPrefix;
         public static readonly StatsTitleStruct[] StatsTitles;
         public static readonly LSID[] CheckSolveNames;
         public static readonly LSID[] NameTypes;
@@ -242,74 +238,6 @@ namespace GKCore
 
         static GKData()
         {
-            GreatPrefix = LSID.LSID_RK_GreatPrefix;
-
-            // TODO: need to find a way of localization
-            NumKinship = new string[] {
-                "-",
-                "юродный",
-                "юродная",
-                ""
-            };
-
-            // TODO: need to find a way of localization
-            Numerals = new string[] {
-                "-",
-                "дво",
-                "тро",
-                "четверо",
-                "пяти",
-                "шести",
-                "семи",
-                "восьми",
-                "девяти"
-            };
-
-            RelationKinds = new LSID[] {
-                /* 00 */ LSID.LSID_RK_Unk,
-                /* 01 */ LSID.LSID_RK_Unk,
-                /* 02 */ LSID.LSID_None,
-                /* 03 */ LSID.LSID_None,
-                /* 04 */ LSID.LSID_None,
-                /* 05 */ LSID.LSID_None,
-                /* 06 */ LSID.LSID_RK_Father,
-                /* 07 */ LSID.LSID_RK_Mother,
-                /* 08 */ LSID.LSID_RK_Husband,
-                /* 09 */ LSID.LSID_RK_Wife,
-                /* 10 */ LSID.LSID_RK_Son,
-                /* 11 */ LSID.LSID_RK_Daughter,
-                /* 12 */ LSID.LSID_RK_Grandfather,
-                /* 13 */ LSID.LSID_RK_Grandmother,
-                /* 14 */ LSID.LSID_RK_Grandson,
-                /* 15 */ LSID.LSID_RK_Granddaughter,
-                /* 16 */ LSID.LSID_RK_Brother,
-                /* 17 */ LSID.LSID_RK_Sister,
-                /* 18 */ LSID.LSID_RK_SonInLaw,
-                /* 19 */ LSID.LSID_RK_DaughterInLaw,
-                /* 20 */ LSID.LSID_RK_HusbandFather,
-                /* 21 */ LSID.LSID_RK_HusbandMother,
-                /* 22 */ LSID.LSID_RK_WifeFather,
-                /* 23 */ LSID.LSID_RK_WifeMother,
-                /* 24 */ LSID.LSID_RK_Uncle_FatherBrother,
-                /* 25 */ LSID.LSID_RK_Aunt_FatherSister,
-                /* 26 */ LSID.LSID_RK_Uncle_MotherBrother,
-                /* 27 */ LSID.LSID_RK_Aunt_MotherSister,
-                /* 28 */ LSID.LSID_RK_Nephew,
-                /* 29 */ LSID.LSID_RK_Niece,
-                /* 30 */ LSID.LSID_RK_CousinM,
-                /* 31 */ LSID.LSID_RK_CousinF,
-                /* 32 */ LSID.LSID_RK_BrotherInLaw_H,
-                /* 33 */ LSID.LSID_RK_SisterInLaw_H,
-                /* 34 */ LSID.LSID_RK_BrotherInLaw_W,
-                /* 35 */ LSID.LSID_RK_SisterInLaw_W,
-                /* 36 */ LSID.LSID_RK_Stepfather,
-                /* 37 */ LSID.LSID_RK_Stepmother,
-                /* 38 */ LSID.LSID_RK_FathersWife,
-                /* 39 */ LSID.LSID_RK_MothersHusband,
-                /* 40 */ LSID.LSID_RK_Uncle_AuntHusband,
-                /* 41 */ LSID.LSID_RK_Aunt_UncleWife,
-            };
-
             SpecialUserRefs = new SpecialUserRef[] {
                 new SpecialUserRef(LSID.LSID_RI_GeorgeKnight, "tg_george_cross.gif"),
                 new SpecialUserRef(LSID.LSID_USSR_WWII_Combatant, "tg_soldier.gif"),

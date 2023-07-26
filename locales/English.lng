@@ -915,3 +915,23 @@
 911=uncle								; kinship: aunt's husband
 912=aunt								; kinship: uncle's wife
 913=Hide spouses of descendants			; options dialog
+
+914=blood       ; kinship extension: brother/sister, format: see 922-930
+915=uterine     ; kinship extension: brother/sister, format: see 922-930
+916=adoptive    ; kinship extension: father/mother, format: see 922-930
+917=adopted     ; kinship extension: son/daughter, format: see 922-930
+918=common-law  ; kinship extension: husband/wife, format: see 922-930
+
+919=<?>
+920=<?>
+
+921=-
+922=first   ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
+923=second  ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
+924=third   ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
+925=fourth  ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
+926=fifth   ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
+927=sixth   ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
+928=seventh ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
+929=eighth  ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
+930=ninth   ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]

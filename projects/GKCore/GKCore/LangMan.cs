@@ -977,7 +977,27 @@ namespace GKCore
         /* 912 */ LSID_RK_Aunt_UncleWife,
         /* 913 */ LSID_HideDescSpouses,
 
-        /* 000 */ LSID_Last = LSID_HideDescSpouses
+        /* 914 */ LSID_RE_Blood,
+        /* 915 */ LSID_RE_Uterine,
+        /* 916 */ LSID_RE_Adoptive,
+        /* 917 */ LSID_RE_Adopted,
+        /* 918 */ LSID_RE_CommonLaw,
+
+        /* 919 */ LSID_Reserved_919,
+        /* 920 */ LSID_Reserved_920,
+
+        /* 921 */ LSID_KinshipDegree_01,
+        /* 922 */ LSID_KinshipDegree_02,
+        /* 923 */ LSID_KinshipDegree_03,
+        /* 924 */ LSID_KinshipDegree_04,
+        /* 925 */ LSID_KinshipDegree_05,
+        /* 926 */ LSID_KinshipDegree_06,
+        /* 927 */ LSID_KinshipDegree_07,
+        /* 928 */ LSID_KinshipDegree_08,
+        /* 929 */ LSID_KinshipDegree_09,
+        /* 930 */ LSID_KinshipDegree_10,
+
+        /* 000 */ LSID_Last = LSID_KinshipDegree_10
     }
 
 
@@ -1910,6 +1930,26 @@ namespace GKCore
             /* 911 */ "uncle",
             /* 912 */ "aunt",
             /* 913 */ "Hide spouses of descendants",
+
+            /* 914 */ "blood",
+            /* 915 */ "uterine",
+            /* 916 */ "adoptive",
+            /* 917 */ "adopted",
+            /* 918 */ "common-law",
+
+            /* 919 */ "<?>",
+            /* 920 */ "<?>",
+
+            /* 921 */ "-",
+            /* 922 */ "first",
+            /* 923 */ "second",
+            /* 924 */ "third",
+            /* 925 */ "fourth",
+            /* 926 */ "fifth",
+            /* 927 */ "sixth",
+            /* 928 */ "seventh",
+            /* 929 */ "eighth",
+            /* 930 */ "ninth",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
@@ -1922,6 +1962,11 @@ namespace GKCore
         public static string LS(LSID lsid, params object[] args)
         {
             return string.Format(fLangMan.LS(lsid), args);
+        }
+
+        public static string LSS(LSID lsid, int selector)
+        {
+            return SysUtils.GetWordForm(fLangMan.LS(lsid), selector);
         }
 
         public static void DefInit()
