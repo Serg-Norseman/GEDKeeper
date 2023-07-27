@@ -447,15 +447,15 @@ namespace GKCore.Charts
                         bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
 
                         if (iFather != null && fContext.IsRecordAccess(iFather.Restriction)) {
-                            personNode.Father = VisitParent(personNode, iFather, personNode.Generation - 1, isDup, divorced);
+                            personNode.Father = VisitParent(personNode, iFather, personNode.Generation - 1, isDup, divorced, adopted);
                         }
 
                         if (iMother != null && fContext.IsRecordAccess(iMother.Restriction)) {
-                            personNode.Mother = VisitParent(personNode, iMother, personNode.Generation - 1, isDup, divorced);
+                            personNode.Mother = VisitParent(personNode, iMother, personNode.Generation - 1, isDup, divorced, adopted);
                         }
 
                         if (personNode.Father != null && personNode.Mother != null && fOptions.Kinship) {
-                            fGraph.AddRelation(personNode.Father.Node, personNode.Mother.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
+                            fGraph.AddRelation(personNode.Father.Node, personNode.Mother.Node, RelationKind.rkSpouse, RelationKind.rkSpouse, (!commonLaw ? RelationExt.None : RelationExt.CommonLaw));
                         }
 
                         if (fOptions.MarriagesDates) {
@@ -486,7 +486,7 @@ namespace GKCore.Charts
         }
 
         private TreeChartPerson VisitParent(TreeChartPerson childNode, GDMIndividualRecord parentRec, int generation,
-            bool dupFlag = false, bool divorced = false)
+            bool dupFlag = false, bool divorced = false, bool adopted = false)
         {
             if (parentRec == null) return null;
 
@@ -506,7 +506,7 @@ namespace GKCore.Charts
                     result.AddChild(childNode);
 
                     if (fOptions.Kinship) {
-                        fGraph.AddRelation(childNode.Node, result.Node, RelationKind.rkParent, RelationKind.rkChild);
+                        fGraph.AddRelation(childNode.Node, result.Node, RelationKind.rkParent, RelationKind.rkChild, (!adopted ? RelationExt.None : RelationExt.Adoption));
                     }
                 }
 
@@ -699,7 +699,7 @@ namespace GKCore.Charts
 
                     if (resParent != null) {
                         if (fOptions.Kinship) {
-                            fGraph.AddRelation(result.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
+                            fGraph.AddRelation(result.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse, (!commonLaw ? RelationExt.None : RelationExt.CommonLaw));
                         }
 
                         result.AddSpouse(resParent);
@@ -747,13 +747,12 @@ namespace GKCore.Charts
                             child.SetFlag(descFlag);
 
                             GDMChildToFamilyLink childLink = childRec.FindChildToFamilyLink(family);
-                            if (childLink != null && (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted)) {
-                                child.SetFlag(PersonFlag.pfAdopted, true);
-                            }
+                            var adopted = (childLink != null && (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted));
+                            child.SetFlag(PersonFlag.pfAdopted, adopted);
 
                             if (fOptions.Kinship) {
-                                if (ft != null) fGraph.AddRelation(child.Node, ft.Node, RelationKind.rkParent, RelationKind.rkChild);
-                                if (mt != null) fGraph.AddRelation(child.Node, mt.Node, RelationKind.rkParent, RelationKind.rkChild);
+                                if (ft != null) fGraph.AddRelation(child.Node, ft.Node, RelationKind.rkParent, RelationKind.rkChild, (!adopted ? RelationExt.None : RelationExt.Adoption));
+                                if (mt != null) fGraph.AddRelation(child.Node, mt.Node, RelationKind.rkParent, RelationKind.rkChild, (!adopted ? RelationExt.None : RelationExt.Adoption));
                             }
                         }
                     } else {

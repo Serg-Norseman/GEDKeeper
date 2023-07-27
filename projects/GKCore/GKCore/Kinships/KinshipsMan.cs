@@ -32,8 +32,20 @@ namespace GKCore.Kinships
     /// </summary>
     public static class KinshipsMan
     {
+        public sealed class RelationStruct
+        {
+            public LSID Name;
+            public bool HasExt;
+
+            public RelationStruct(LSID name, bool hasExt)
+            {
+                Name = name;
+                HasExt = hasExt;
+            }
+        }
+
         public static readonly LSID GreatPrefix;
-        public static readonly LSID[] RelationKinds;
+        public static readonly RelationStruct[] RelationKinds;
         public static readonly LSID[] KinDegrees;
         public static readonly LSID[] KinExts;
 
@@ -56,55 +68,56 @@ namespace GKCore.Kinships
                 LSID.LSID_KinshipDegree_10,
             };
 
-            RelationKinds = new LSID[] {
-                /* 00 */ LSID.LSID_RK_Unk,
-                /* 01 */ LSID.LSID_RK_Unk,
-                /* 02 */ LSID.LSID_None,
-                /* 03 */ LSID.LSID_None,
-                /* 04 */ LSID.LSID_None,
-                /* 05 */ LSID.LSID_None,
-                /* 06 */ LSID.LSID_RK_Father,
-                /* 07 */ LSID.LSID_RK_Mother,
-                /* 08 */ LSID.LSID_RK_Husband,
-                /* 09 */ LSID.LSID_RK_Wife,
-                /* 10 */ LSID.LSID_RK_Son,
-                /* 11 */ LSID.LSID_RK_Daughter,
-                /* 12 */ LSID.LSID_RK_Grandfather,
-                /* 13 */ LSID.LSID_RK_Grandmother,
-                /* 14 */ LSID.LSID_RK_Grandson,
-                /* 15 */ LSID.LSID_RK_Granddaughter,
-                /* 16 */ LSID.LSID_RK_Brother,
-                /* 17 */ LSID.LSID_RK_Sister,
-                /* 18 */ LSID.LSID_RK_SonInLaw,
-                /* 19 */ LSID.LSID_RK_DaughterInLaw,
-                /* 20 */ LSID.LSID_RK_HusbandFather,
-                /* 21 */ LSID.LSID_RK_HusbandMother,
-                /* 22 */ LSID.LSID_RK_WifeFather,
-                /* 23 */ LSID.LSID_RK_WifeMother,
-                /* 24 */ LSID.LSID_RK_Uncle_FatherBrother,
-                /* 25 */ LSID.LSID_RK_Aunt_FatherSister,
-                /* 26 */ LSID.LSID_RK_Uncle_MotherBrother,
-                /* 27 */ LSID.LSID_RK_Aunt_MotherSister,
-                /* 28 */ LSID.LSID_RK_Nephew,
-                /* 29 */ LSID.LSID_RK_Niece,
-                /* 30 */ LSID.LSID_RK_CousinM,
-                /* 31 */ LSID.LSID_RK_CousinF,
-                /* 32 */ LSID.LSID_RK_BrotherInLaw_H,
-                /* 33 */ LSID.LSID_RK_SisterInLaw_H,
-                /* 34 */ LSID.LSID_RK_BrotherInLaw_W,
-                /* 35 */ LSID.LSID_RK_SisterInLaw_W,
-                /* 36 */ LSID.LSID_RK_Stepfather,
-                /* 37 */ LSID.LSID_RK_Stepmother,
-                /* 38 */ LSID.LSID_RK_FathersWife,
-                /* 39 */ LSID.LSID_RK_MothersHusband,
-                /* 40 */ LSID.LSID_RK_Uncle_AuntHusband,
-                /* 41 */ LSID.LSID_RK_Aunt_UncleWife,
+            RelationKinds = new RelationStruct[] {
+                /* 00 */ new RelationStruct(LSID.LSID_RK_Unk, false),
+                /* 01 */ new RelationStruct(LSID.LSID_RK_Unk, false),
+                /* 02 */ new RelationStruct(LSID.LSID_None, false),
+                /* 03 */ new RelationStruct(LSID.LSID_None, false),
+                /* 04 */ new RelationStruct(LSID.LSID_None, false),
+                /* 05 */ new RelationStruct(LSID.LSID_None, false),
+                /* 06 */ new RelationStruct(LSID.LSID_RK_Father, true),
+                /* 07 */ new RelationStruct(LSID.LSID_RK_Mother, true),
+                /* 08 */ new RelationStruct(LSID.LSID_RK_Husband, true),
+                /* 09 */ new RelationStruct(LSID.LSID_RK_Wife, true),
+                /* 10 */ new RelationStruct(LSID.LSID_RK_Son, true),
+                /* 11 */ new RelationStruct(LSID.LSID_RK_Daughter, true),
+                /* 12 */ new RelationStruct(LSID.LSID_RK_Grandfather, false),
+                /* 13 */ new RelationStruct(LSID.LSID_RK_Grandmother, false),
+                /* 14 */ new RelationStruct(LSID.LSID_RK_Grandson, false),
+                /* 15 */ new RelationStruct(LSID.LSID_RK_Granddaughter, false),
+                /* 16 */ new RelationStruct(LSID.LSID_RK_Brother, true),
+                /* 17 */ new RelationStruct(LSID.LSID_RK_Sister, true),
+                /* 18 */ new RelationStruct(LSID.LSID_RK_SonInLaw, false),
+                /* 19 */ new RelationStruct(LSID.LSID_RK_DaughterInLaw, false),
+                /* 20 */ new RelationStruct(LSID.LSID_RK_HusbandFather, false),
+                /* 21 */ new RelationStruct(LSID.LSID_RK_HusbandMother, false),
+                /* 22 */ new RelationStruct(LSID.LSID_RK_WifeFather, false),
+                /* 23 */ new RelationStruct(LSID.LSID_RK_WifeMother, false),
+                /* 24 */ new RelationStruct(LSID.LSID_RK_Uncle_FatherBrother, false),
+                /* 25 */ new RelationStruct(LSID.LSID_RK_Aunt_FatherSister, false),
+                /* 26 */ new RelationStruct(LSID.LSID_RK_Uncle_MotherBrother, false),
+                /* 27 */ new RelationStruct(LSID.LSID_RK_Aunt_MotherSister, false),
+                /* 28 */ new RelationStruct(LSID.LSID_RK_Nephew, false),
+                /* 29 */ new RelationStruct(LSID.LSID_RK_Niece, false),
+                /* 30 */ new RelationStruct(LSID.LSID_RK_CousinM, false),
+                /* 31 */ new RelationStruct(LSID.LSID_RK_CousinF, false),
+                /* 32 */ new RelationStruct(LSID.LSID_RK_BrotherInLaw_H, false),
+                /* 33 */ new RelationStruct(LSID.LSID_RK_SisterInLaw_H, false),
+                /* 34 */ new RelationStruct(LSID.LSID_RK_BrotherInLaw_W, false),
+                /* 35 */ new RelationStruct(LSID.LSID_RK_SisterInLaw_W, false),
+                /* 36 */ new RelationStruct(LSID.LSID_RK_Stepfather, false),
+                /* 37 */ new RelationStruct(LSID.LSID_RK_Stepmother, false),
+                /* 38 */ new RelationStruct(LSID.LSID_RK_FathersWife, false),
+                /* 39 */ new RelationStruct(LSID.LSID_RK_MothersHusband, false),
+                /* 40 */ new RelationStruct(LSID.LSID_RK_Uncle_AuntHusband, false),
+                /* 41 */ new RelationStruct(LSID.LSID_RK_Aunt_UncleWife, false),
             };
 
             KinExts = new LSID[] {
                 LSID.LSID_None,
                 LSID.LSID_RE_Blood,
                 LSID.LSID_RE_Uterine,
+                LSID.LSID_None,
                 LSID.LSID_RE_Adoptive,
                 LSID.LSID_RE_Adopted,
                 LSID.LSID_RE_CommonLaw,
@@ -468,6 +481,12 @@ namespace GKCore.Kinships
             }
 
             return resRel;
+        }
+
+        public static string GetExt(int n, GDMSex sex)
+        {
+            string result = (n == 0 || n == 3) ? string.Empty : (LangMan.LSS(KinExts[n], (int)sex - 1) + " ");
+            return result;
         }
 
         public static string GetDegree(int n, GDMSex sex)

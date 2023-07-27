@@ -92,9 +92,10 @@ namespace GKCore.Types
         None        = 0,
         Blood       = 1,    // brother/sister   [ stage: kinship analysis ]
         Uterine     = 2,    // brother/sister   [ stage: kinship analysis ]
-        Adoptive    = 3,    // father/mother    [ stage: graph generation ]
-        Adopted     = 4,    // son/daughter     [ stage: graph generation ]
-        CommonLaw   = 5,    // husband/wife     [ stage: graph generation ]
+        Adoption    = 3,    // internal
+        Adoptive    = 4,    // father/mother    [ stage: graph generation ]
+        Adopted     = 5,    // son/daughter     [ stage: graph generation ]
+        CommonLaw   = 6,    // husband/wife     [ stage: graph generation ]
     }
 
 
