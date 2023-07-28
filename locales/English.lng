@@ -935,3 +935,5 @@
 928=seventh ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
 929=eighth  ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
 930=ninth   ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
+
+931=Extended definition of kinship

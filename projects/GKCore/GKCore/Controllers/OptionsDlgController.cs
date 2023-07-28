@@ -411,6 +411,8 @@ namespace GKCore.Controllers
             var hasOverwritePrompt = AppHost.Instance.HasFeatureSupport(Feature.OverwritePrompt);
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Enabled = hasOverwritePrompt;
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked = fOptions.FilesOverwriteWarn && hasOverwritePrompt;
+
+            GetControl<ICheckBox>("chkExtendedKinships").Checked = fOptions.ExtendedKinships;
         }
 
         public void AcceptSpecials()
@@ -425,6 +427,8 @@ namespace GKCore.Controllers
             fOptions.KeepInfoPansOverallSize = GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked;
 
             fOptions.FilesOverwriteWarn = GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked;
+
+            fOptions.ExtendedKinships = GetControl<ICheckBox>("chkExtendedKinships").Checked;
         }
 
         public void UpdatePlugins()
@@ -914,6 +918,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkSAFByAllNames").Text = LangMan.LS(LSID.LSID_SearchAndFilterByAllNames);
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Text = LangMan.LS(LSID.LSID_KeepInfoPansOverallSize);
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Text = LangMan.LS(LSID.LSID_FilesOverwriteWarn);
+            GetControl<ICheckBox>("chkExtendedKinships").Text = LangMan.LS(LSID.LSID_ExtendedKinships);
 
             // Plugins
             GetControl<ITabPage>("pagePlugins").Text = LangMan.LS(LSID.LSID_Plugins);

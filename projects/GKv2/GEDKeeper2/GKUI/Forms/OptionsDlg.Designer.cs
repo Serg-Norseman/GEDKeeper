@@ -175,6 +175,7 @@
         private System.Windows.Forms.CheckBox chkKeepInfoPansOverallSize;
         private System.Windows.Forms.CheckBox chkFilesOverwriteWarn;
         private System.Windows.Forms.CheckBox chkSameCardsWidth;
+        private System.Windows.Forms.CheckBox chkExtendedKinships;
 
         private void InitializeComponent()
         {
@@ -351,6 +352,7 @@
             this.chkKeepInfoPansOverallSize = new System.Windows.Forms.CheckBox();
             this.chkFilesOverwriteWarn = new System.Windows.Forms.CheckBox();
             this.chkSameCardsWidth = new System.Windows.Forms.CheckBox();
+            this.chkExtendedKinships = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2237,6 +2239,7 @@
             this.pageSpecials.Controls.Add(this.chkShortenDateRanges);
             this.pageSpecials.Controls.Add(this.chkKeepInfoPansOverallSize);
             this.pageSpecials.Controls.Add(this.chkFilesOverwriteWarn);
+            this.pageSpecials.Controls.Add(this.chkExtendedKinships);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
             this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
@@ -2335,6 +2338,15 @@
             this.chkFilesOverwriteWarn.Size = new System.Drawing.Size(360, 22);
             this.chkFilesOverwriteWarn.TabIndex = 16;
             this.chkFilesOverwriteWarn.Text = "chkFilesOverwriteWarn";
+            // 
+            // chkExtendedKinships
+            // 
+            this.chkExtendedKinships.Location = new System.Drawing.Point(20, 430);
+            this.chkExtendedKinships.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkExtendedKinships.Name = "chkExtendedKinships";
+            this.chkExtendedKinships.Size = new System.Drawing.Size(360, 22);
+            this.chkExtendedKinships.TabIndex = 17;
+            this.chkExtendedKinships.Text = "chkExtendedKinships";
             // 
             // pagePlugins
             // 

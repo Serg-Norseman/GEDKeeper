@@ -450,6 +450,7 @@
             <CheckBox x:Name="chkShortenDateRanges" />
             <CheckBox x:Name="chkKeepInfoPansOverallSize" />
             <CheckBox x:Name="chkFilesOverwriteWarn" />
+            <CheckBox x:Name="chkExtendedKinships" />
           </StackLayout>
         </TabPage>
 

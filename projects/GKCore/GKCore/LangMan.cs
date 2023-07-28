@@ -997,7 +997,9 @@ namespace GKCore
         /* 929 */ LSID_KinshipDegree_09,
         /* 930 */ LSID_KinshipDegree_10,
 
-        /* 000 */ LSID_Last = LSID_KinshipDegree_10
+        /* 931 */ LSID_ExtendedKinships,
+
+        /* 000 */ LSID_Last = LSID_ExtendedKinships
     }
 
 
@@ -1950,6 +1952,8 @@ namespace GKCore
             /* 928 */ "seventh",
             /* 929 */ "eighth",
             /* 930 */ "ninth",
+
+            /* 931 */ "Extended definition of kinship",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

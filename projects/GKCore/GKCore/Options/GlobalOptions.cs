@@ -122,6 +122,8 @@ namespace GKCore.Options
             get { return fEventFilters; }
         }
 
+        public bool ExtendedKinships { get; set; }
+
         public StringList FARPatterns
         {
             get { return fFARPatterns; }
@@ -388,6 +390,7 @@ namespace GKCore.Options
 
             InfoPansOverallSize = -1;
             KeepInfoPansOverallSize = false;
+            ExtendedKinships = false;
         }
 
         public void Assign(IOptions source)
@@ -760,6 +763,7 @@ namespace GKCore.Options
             InfoPansOverallSize = ini.ReadInteger("Common", "InfoPansOverallSize", 0);
             KeepInfoPansOverallSize = ini.ReadBool("Common", "KeepInfoPansOverallSize", false);
             FilesOverwriteWarn = ini.ReadBool("Common", "FilesOverwriteWarn", true);
+            ExtendedKinships = ini.ReadBool("Common", "ExtendedKinships", false);
 
             Theme = ini.ReadString("Common", "Theme", "");
 
@@ -901,6 +905,7 @@ namespace GKCore.Options
             ini.WriteInteger("Common", "InfoPansOverallSize", InfoPansOverallSize);
             ini.WriteBool("Common", "KeepInfoPansOverallSize", KeepInfoPansOverallSize);
             ini.WriteBool("Common", "FilesOverwriteWarn", FilesOverwriteWarn);
+            ini.WriteBool("Common", "ExtendedKinships", ExtendedKinships);
 
             ini.WriteString("Common", "Theme", Theme);
 

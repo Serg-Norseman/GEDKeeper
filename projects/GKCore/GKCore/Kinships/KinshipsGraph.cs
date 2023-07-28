@@ -19,7 +19,6 @@
  */
 
 //#define DEBUG_KINSHIPS
-#define KS_EXT
 
 using System;
 using System.Collections.Generic;
@@ -28,6 +27,7 @@ using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Kinships
@@ -283,17 +283,20 @@ namespace GKCore.Kinships
 
             var relStruct = KinshipsMan.RelationKinds[(int)rel];
 
-#if KS_EXT
-            if (relStruct.HasExt) {
-                tmp = KinshipsMan.GetExt((int)ext, target.Sex) + tmp;
+            if (GlobalOptions.Instance.ExtendedKinships) {
+                if (relStruct.HasExt) {
+                    tmp = KinshipsMan.GetExt((int)ext, target.Sex) + tmp;
+                }
             }
-#endif
 
             return tmp + LangMan.LS(relStruct.Name);
         }
 
         private static RelationExt FixExt(Vertex source, Vertex target, RelationKind finRel, RelationExt curExt, int degree)
         {
+            if (!GlobalOptions.Instance.ExtendedKinships)
+                return curExt;
+
             if (curExt == RelationExt.None && (finRel == RelationKind.rkBrother || finRel == RelationKind.rkSister) && (degree == 0)) {
                 var srcFather = FindEdgeTargetByRelation(source, RelationKind.rkFather);
                 var srcMother = FindEdgeTargetByRelation(source, RelationKind.rkMother);
