@@ -8,13 +8,10 @@ Summary:	%{summary}
 License:	GPLv3
 Group:		Applications/Editors
 Url:		https://github.com/serg-norseman/gedkeeper
-Source:         %{name}-%{version}.tar.gz
+Source:         %{name}.tar.gz
 BuildArch:	x86_64
 
-#Requires:	mono-core
-#Requires:	mono-data
-#Requires:	mono-winforms
-#Requires:	lua
+Requires:	dotnet-runtime-6.0
 Requires:	sqlite
 
 AutoReq:	no
@@ -33,11 +30,6 @@ AutoReqProv:	no
 
 %prep
 %setup -qc
-find . -type f -iname "*.dll" -exec chmod -x {} \;
-find ./locales -type f -exec chmod -x '{}' \;
-find ./plugins -type f -exec chmod -x '{}' \;
-find ./scripts -type f -exec chmod -x '{}' \;
-find ./samples -type f -exec chmod -x '{}' \;
 
 %install
 install -Dm 0755 gk_run.sh %{buildroot}%{_bindir}/gk_run.sh
@@ -52,7 +44,7 @@ cp -r bin \
 	scripts %{buildroot}%{_libdir}/%{name}
 
 ## E: zero-length
-rm -rf %{buildroot}%{_libdir}/%{name}/scripts/readme.txt
+#rm -rf %{buildroot}%{_libdir}/%{name}/scripts/readme.txt
 
 %changelog
 * Apr 28 2023 GEDKeeper - 3.2.1
