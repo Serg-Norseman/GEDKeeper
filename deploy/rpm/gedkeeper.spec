@@ -8,7 +8,7 @@ Summary:	%{summary}
 License:	GPLv3
 Group:		Applications/Editors
 Url:		https://github.com/serg-norseman/gedkeeper
-Source:         %{name}.tar.gz
+Source:		%{name}-%{version}.tar.gz
 BuildArch:	x86_64
 
 Requires:	dotnet-runtime-6.0
