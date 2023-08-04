@@ -9,8 +9,10 @@ Group:		Applications/Editors
 Url:		https://github.com/serg-norseman/gedkeeper
 BuildArch:	x86_64
 
+AutoReqProv:no
+AutoReq:	no
 Requires:	dotnet-runtime-6.0
-#Requires:	sqlite
+Requires:	sqlite
 
 %install
 
@@ -54,5 +56,5 @@ chmod a+x %{buildroot}%{_libdir}/%{name}/bin/GEDKeeper3
 %{summary}
 
 %changelog
-* Apr 28 2023 GEDKeeper - 3.2.1
+* Fri Apr 28 2023 GEDKeeper - 3.2.1
 - New upstream release
