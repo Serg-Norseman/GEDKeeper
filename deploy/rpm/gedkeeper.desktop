@@ -1,0 +1,23 @@
+[Desktop Entry]
+Name=GEDKeeper
+Comment=Personal genealogical database editor
+Comment[cs]=Editor osobní genealogické databáze
+Comment[de]=Persönlicher genealogischer Datenbankeditor
+Comment[es]=Editor de una base de datos genealógica personal
+Comment[fr]=L'éditeur personnelle généalogique de la base de données
+Comment[it]=Editor di un database genealogico personali
+Comment[kk]=Жеке генеалогиялық деректер қорының редакторы
+Comment[pl]=Edytor osobista baza genealogiczna
+Comment[pt]=Editor de um banco de dados genealógico pessoal
+Comment[ru]=Редактор персональной генеалогической базы данных
+Comment[uk]=Редактор персональної генеалогічної бази даних
+Comment[zh]=个人系谱数据库编辑器
+Path=/usr/bin/
+Exec=gedkeeper
+MimeType=application/x-gedkeeper
+MimeType=application/x-gedcom
+Icon=/usr/share/pixmaps/gedkeeper.png
+Terminal=false
+Type=Application
+Categories=Office
+StartupNotify=true
