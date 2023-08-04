@@ -34,9 +34,10 @@ ls -la %{buildroot}%{_libdir}/%{name}/plugins/runtimes/
 mkdir -p %{buildroot}%{_bindir}
 ln -fs %{_libdir}/%{name}/bin/GEDKeeper3 %{buildroot}%{_bindir}/%{name}
 
-#rpm --eval %{_metainfodir}		# not found ?! (TODO: check rpm version)
-#install -D deploy/application-x-%{name}.xml %{buildroot}%{_metainfodir}/%{name}.metainfo.xml
-install -D deploy/application-x-%{name}.xml %{buildroot}%{_datadir}/metainfo/%{name}.metainfo.xml
+#rpm --eval %{_metainfodir}	# not found (TODO: check rpm version, make metainfo)
+#install -D deploy/%{name}.metainfo.xml %{buildroot}%{_metainfodir}/%{name}.metainfo.xml
+#install -D deploy/%{name}.metainfo.xml %{buildroot}%{_datadir}/metainfo/%{name}.metainfo.xml
+install -D deploy/application-x-%{name}.xml %{buildroot}%{_datadir}/mime/packages/%{name}.xml
 install -D deploy/rpm/%{name}.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
 install -D deploy/%{name}.png %{buildroot}%{_datadir}/pixmaps/%{name}.png
 
@@ -48,7 +49,7 @@ chmod a+x %{buildroot}%{_libdir}/%{name}/bin/GEDKeeper3
 %license LICENSE
 %{_bindir}/%{name}
 %{_libdir}/%{name}
-%{_datadir}/metainfo/%{name}.metainfo.xml
+%{_datadir}/mime/packages/%{name}.xml
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
 
