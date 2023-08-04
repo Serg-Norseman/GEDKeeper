@@ -25,11 +25,11 @@ jobs:
 #      run: dotnet restore
 #      working-directory: projects/GKv3
     - name: Build
-      run: dotnet build -c Linux_Release
+      run: dotnet build -c Linux_Debug
+      # run: dotnet build -c Linux_Release
       working-directory: projects/GKv3
     - name: Package
-      run: bash ./gk_linux_rpm_fedora_package.sh
-      working-directory: deploy
+      run: rpmbuild --build-in-place -bb deploy/rpm/gedkeeper-gh-act.spec
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
