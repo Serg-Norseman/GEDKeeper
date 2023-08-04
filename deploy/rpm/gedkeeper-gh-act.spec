@@ -39,8 +39,8 @@ install -D deploy/rpm/%{name}.desktop %{buildroot}%{_datadir}/applications/%{nam
 install -D deploy/%{name}.png %{buildroot}%{_datadir}/pixmaps/%{name}.png
 
 cd %{buildroot}
-chmod -cRf a-x,a+rX,u+w,g-w,o-w .
-chmod -v a+x %{buildroot}%{_libdir}/%{name}/bin/GEDKeeper3
+chmod -Rf a-x,a+rX,u+w,g-w,o-w .
+chmod a+x %{buildroot}%{_libdir}/%{name}/bin/GEDKeeper3
 
 %files
 %license LICENSE
