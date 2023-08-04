@@ -15,6 +15,7 @@ Comment[zh]=个人系谱数据库编辑器
 Path=/usr/bin/
 Exec=gedkeeper
 MimeType=application/x-gedkeeper
+MimeType=application/x-gedcom
 Icon=/usr/share/pixmaps/gedkeeper.png
 Terminal=false
 Type=Application
