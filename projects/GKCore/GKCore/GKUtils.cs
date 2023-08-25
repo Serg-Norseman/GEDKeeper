@@ -84,7 +84,7 @@ namespace GKCore
                 var proc = new Process();
                 proc.EnableRaisingEvents = false;
                 proc.StartInfo.FileName = "xdg-open";
-                proc.StartInfo.Arguments = fileName;
+                proc.StartInfo.Arguments = string.Join("", "\"", fileName, "\"");
                 proc.Start();
 #else
                 if (File.Exists(fileName)) {
