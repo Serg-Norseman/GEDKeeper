@@ -630,13 +630,13 @@ namespace GKCore.Charts
 
                     int nextSteps = prevSteps + genSize;
 
+                    v -= (Math.Abs(ang - ro) / 2.0f);
                     if (father != null) {
-                        v -= (Math.Abs(ang - ro) / 2.0f);
                         segment.FatherSegment = TraverseAncestors(father, fullAngle, v, gen + 1, rad + fGenWidth, ro / 2.0f, nextSteps, groupIndex, parentLine);
                     }
 
+                    v += (ang / 2.0f);
                     if (mother != null) {
-                        v += (ang / 2.0f);
                         segment.MotherSegment = TraverseAncestors(mother, fullAngle, v, gen + 1, rad + fGenWidth, ro / 2.0f, nextSteps, groupIndex, parentLine);
                     }
                 }
