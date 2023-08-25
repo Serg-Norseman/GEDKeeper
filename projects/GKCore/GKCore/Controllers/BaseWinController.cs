@@ -1138,7 +1138,7 @@ namespace GKCore.Controllers
         {
             if (fView.CheckModified()) {
                 string fileName = Path.GetFileName(fContext.FileName);
-                SysUtils.SendMail("?", fileName, "?", fContext.FileName);
+                SysUtils.SendMail("", fileName, "?", fContext.FileName);
             }
         }
 

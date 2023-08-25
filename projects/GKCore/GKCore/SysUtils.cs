@@ -93,7 +93,8 @@ namespace GKCore
 
             try {
 #if !OS_MSWIN
-                const string mailto = "'{0}' --subject '{1}' --body '{2}' --attach {3}";
+                const string mailto = "{0} --subject \"{1}\" --body \"{2}\" --attach {3}";
+                attach = string.Join("", "\"", attach, "\"");
                 string args = string.Format(mailto, address, subject, body, attach);
 
                 var proc = new System.Diagnostics.Process();
@@ -103,7 +104,9 @@ namespace GKCore
                 proc.Start();
 #else
                 MapiMailMessage message = new MapiMailMessage(subject, body);
-                message.Recipients.Add(address);
+                if (!string.IsNullOrEmpty(address)) {
+                    message.Recipients.Add(address);
+                }
                 message.Files.Add(attach);
                 message.ShowDialog();
 #endif
