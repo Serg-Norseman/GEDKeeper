@@ -68,7 +68,7 @@ namespace GKUI.Forms
             ClickButton("btnAccept", fDialog);
 
             GDMSubmitterRecord submitter = fBase.Context.Tree.GetPtrValue<GDMSubmitterRecord>( fBase.Context.Tree.Header.Submitter);
-            Assert.AreEqual("sample text", submitter.Name.StringValue);
+            Assert.AreEqual("sample text", submitter.Name);
         }
 
         #region Handlers for external tests
@@ -86,7 +86,7 @@ namespace GKUI.Forms
             ClickButton("btnAccept", form);
 
             GDMSubmitterRecord submitter = baseContext.Tree.GetPtrValue<GDMSubmitterRecord>(baseContext.Tree.Header.Submitter);
-            Assert.AreEqual("sample text", submitter.Name.StringValue);
+            Assert.AreEqual("sample text", submitter.Name);
         }
 
         #endregion

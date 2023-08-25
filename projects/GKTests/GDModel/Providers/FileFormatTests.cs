@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -276,7 +276,7 @@ namespace GDModel.Providers
 
                 var subm = ctx.Tree.GetPtrValue<GDMSubmitterRecord>(ctx.Tree.Header.Submitter);
                 Assert.IsNotNull(subm);
-                Assert.AreEqual("John Doe", subm.Name.FullName);
+                Assert.AreEqual("John Doe", subm.Name);
             }
         }
 
@@ -569,7 +569,7 @@ namespace GDModel.Providers
 
                 GDMSubmitterRecord submRec = ctx.Tree.XRefIndex_Find("SUB1") as GDMSubmitterRecord;
                 Assert.IsNotNull(submRec);
-                Assert.AreEqual("Michael Kay", submRec.Name.FullName);
+                Assert.AreEqual("Michael Kay", submRec.Name);
 
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);

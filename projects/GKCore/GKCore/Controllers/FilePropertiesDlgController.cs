@@ -44,7 +44,7 @@ namespace GKCore.Controllers
                 fBase.Context.Tree.Header.Language = GEDCOMUtils.GetLanguageVal(fView.Language.Text);
 
                 GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
-                submitter.Name.StringValue = fView.Name.Text;
+                submitter.Name = fView.Name.Text;
                 submitter.Address.SetAddressArray(fView.Address.Lines);
 
                 if (submitter.Address.PhoneNumbers.Count > 0) {
@@ -67,7 +67,7 @@ namespace GKCore.Controllers
             fView.Language.Text = GEDCOMUtils.GetLanguageStr(fBase.Context.Tree.Header.Language);
 
             GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
-            fView.Name.Text = submitter.Name.FullName;
+            fView.Name.Text = submitter.Name;
             fView.Address.Text = submitter.Address.Lines.Text;
 
             if (submitter.Address.PhoneNumbers.Count > 0) {

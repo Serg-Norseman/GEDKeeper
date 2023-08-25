@@ -1086,9 +1086,8 @@ namespace GDModel.Providers.GEDCOM
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
             if (tagType == GEDCOMTagType.NAME) {
-                curTag = submrRec.Name;
-                curTag.ParseString(tagValue);
-                addHandler = AddPersonalNameTag;
+                submrRec.Name = tagValue;
+                return SkipReaderStackTuple(tagLevel, null, null);
             } else if (tagType == GEDCOMTagType.ADDR) {
                 curTag = submrRec.Address;
                 curTag.ParseString(tagValue);
@@ -1114,7 +1113,7 @@ namespace GDModel.Providers.GEDCOM
             WriteRecord(stream, level, submrRec);
 
             level += 1;
-            WritePersonalName(stream, level, submrRec.Name);
+            WriteTagLine(stream, level, GEDCOMTagName.NAME, submrRec.Name, true);
             WriteList(stream, level, submrRec.Languages, WriteBaseTag);
             WriteAddress(stream, level, submrRec.Address);
             WriteTagLine(stream, level, GEDCOMTagName.RFN, submrRec.RegisteredReference, true);
@@ -1740,6 +1739,16 @@ namespace GDModel.Providers.GEDCOM
                 }
                 return new StackTuple(level, tag, addHandler);
             }
+        }
+
+        internal static StackTuple SkipTag(GDMTag owner, int tagLevel, int tagId, string tagValue)
+        {
+            return SkipReaderStackTuple(tagLevel, null, null);
+        }
+
+        private static StackTuple SkipReaderStackTuple(int level, GDMTag tag, AddTagHandler addHandler)
+        {
+            return new StackTuple(level, null, SkipTag);
         }
 
         private static bool WriteBaseTag(StreamWriter stream, int level, GDMTag tag)

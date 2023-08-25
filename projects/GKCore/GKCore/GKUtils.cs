@@ -1736,6 +1736,7 @@ namespace GKCore
             string subm = header.Submitter.XRef;
             int oldRev = header.File.Revision;
             GDMLanguageID langId = header.Language;
+            string note = header.Note.Lines.Text.Trim();
 
             header.Clear();
             header.Source.StringValue = "GEDKeeper";
@@ -1757,6 +1758,10 @@ namespace GKCore
 
             if (!string.IsNullOrEmpty(subm)) {
                 header.Submitter.XRef = subm;
+            }
+
+            if (!string.IsNullOrEmpty(note)) {
+                header.Note.Lines.Text = note;
             }
         }
 

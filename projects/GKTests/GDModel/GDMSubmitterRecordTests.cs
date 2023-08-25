@@ -41,8 +41,8 @@ namespace GDModel
         public void Test_Common()
         {
             using (GDMSubmitterRecord subrRec = new GDMSubmitterRecord(fContext.Tree)) {
-                subrRec.Name.StringValue = "Test Submitter";
-                Assert.AreEqual("Test Submitter", subrRec.Name.StringValue);
+                subrRec.Name = "Test Submitter";
+                Assert.AreEqual("Test Submitter", subrRec.Name);
 
                 subrRec.RegisteredReference = "regref";
                 Assert.AreEqual("regref", subrRec.RegisteredReference);

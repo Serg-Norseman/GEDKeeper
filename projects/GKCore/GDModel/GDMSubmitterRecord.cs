@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,7 +26,7 @@ namespace GDModel
     {
         private GDMAddress fAddress;
         private GDMList<GDMLanguage> fLanguages;
-        private GDMPersonalName fName;
+        private string fName;
         private string fRegisteredReference;
 
 
@@ -40,9 +40,10 @@ namespace GDModel
             get { return fLanguages; }
         }
 
-        public GDMPersonalName Name
+        public string Name
         {
             get { return fName; }
+            set { fName = value; }
         }
 
         public string RegisteredReference
@@ -58,7 +59,7 @@ namespace GDModel
 
             fAddress = new GDMAddress();
             fLanguages = new GDMList<GDMLanguage>();
-            fName = new GDMPersonalName();
+            fName = string.Empty;
             fRegisteredReference = string.Empty;
         }
 
@@ -76,7 +77,6 @@ namespace GDModel
 
             fAddress.TrimExcess();
             fLanguages.TrimExcess();
-            fName.TrimExcess();
         }
 
         public override void Clear()
@@ -85,13 +85,13 @@ namespace GDModel
 
             fAddress.Clear();
             fLanguages.Clear();
-            fName.Clear();
+            fName = string.Empty;
             fRegisteredReference = string.Empty;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fAddress.IsEmpty() && (fLanguages.Count == 0) && fName.IsEmpty() &&
+            return base.IsEmpty() && fAddress.IsEmpty() && (fLanguages.Count == 0) && string.IsNullOrEmpty(fName) &&
                 string.IsNullOrEmpty(fRegisteredReference);
         }
 
@@ -101,7 +101,6 @@ namespace GDModel
 
             fAddress.ReplaceXRefs(map);
             fLanguages.ReplaceXRefs(map);
-            fName.ReplaceXRefs(map);
         }
 
         public GDMLanguage AddLanguage(GDMLanguage value)
