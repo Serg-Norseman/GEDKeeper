@@ -1,0 +1,37 @@
+name: Package GEDKeeper3 for Fedora
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  DOTNET_VERSION: '6.0.*'
+
+jobs:
+  build-fedora:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Init
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: .NET SDK check
+      run: dotnet sdk check
+# error NETSDK1084: There is no application host available for the specified RuntimeIdentifier 'freebsd-x64'
+# https://learn.microsoft.com/en-us/dotnet/devops/dotnet-build-github-action
+#    - name: Install dependencies
+#      run: dotnet restore
+#      working-directory: projects/GKv3
+    - name: Build
+      run: dotnet build -c Linux_Release
+      working-directory: projects/GKv3
+    - name: Package
+      run: rpmbuild --build-in-place -bb deploy/rpm/gedkeeper-github.spec
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: gedkeeper3-rpm
+        path: ~/rpmbuild/RPMS/x86_64/*.rpm
+        if-no-files-found: error
