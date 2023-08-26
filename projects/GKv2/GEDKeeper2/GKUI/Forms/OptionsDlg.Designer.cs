@@ -2254,7 +2254,7 @@
             this.chkUseInlineImagesInSvg.Location = new System.Drawing.Point(20, 20);
             this.chkUseInlineImagesInSvg.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkUseInlineImagesInSvg.Name = "chkUseInlineImagesInSvg";
-            this.chkUseInlineImagesInSvg.Size = new System.Drawing.Size(360, 22);
+            this.chkUseInlineImagesInSvg.Size = new System.Drawing.Size(600, 22);
             this.chkUseInlineImagesInSvg.TabIndex = 12;
             this.chkUseInlineImagesInSvg.Text = "chkUseInlineImagesInSvg";
             // 
@@ -2263,7 +2263,7 @@
             this.chkUseExtendedNotes.Location = new System.Drawing.Point(20, 61);
             this.chkUseExtendedNotes.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkUseExtendedNotes.Name = "chkUseExtendedNotes";
-            this.chkUseExtendedNotes.Size = new System.Drawing.Size(400, 22);
+            this.chkUseExtendedNotes.Size = new System.Drawing.Size(600, 22);
             this.chkUseExtendedNotes.TabIndex = 12;
             this.chkUseExtendedNotes.Text = "chkUseExtendedNotes";
             // 
@@ -2299,7 +2299,7 @@
             this.chkUseExtraControls.Location = new System.Drawing.Point(20, 225);
             this.chkUseExtraControls.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkUseExtraControls.Name = "chkUseExtraControls";
-            this.chkUseExtraControls.Size = new System.Drawing.Size(254, 22);
+            this.chkUseExtraControls.Size = new System.Drawing.Size(600, 22);
             this.chkUseExtraControls.TabIndex = 12;
             this.chkUseExtraControls.Text = "chkUseExtraControls";
             // 
@@ -2308,7 +2308,7 @@
             this.chkSAFByAllNames.Location = new System.Drawing.Point(20, 266);
             this.chkSAFByAllNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSAFByAllNames.Name = "chkSAFByAllNames";
-            this.chkSAFByAllNames.Size = new System.Drawing.Size(360, 22);
+            this.chkSAFByAllNames.Size = new System.Drawing.Size(600, 22);
             this.chkSAFByAllNames.TabIndex = 13;
             this.chkSAFByAllNames.Text = "chkSAFByAllNames";
             // 
@@ -2317,7 +2317,7 @@
             this.chkShortenDateRanges.Location = new System.Drawing.Point(20, 307);
             this.chkShortenDateRanges.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkShortenDateRanges.Name = "chkShortenDateRanges";
-            this.chkShortenDateRanges.Size = new System.Drawing.Size(360, 22);
+            this.chkShortenDateRanges.Size = new System.Drawing.Size(600, 22);
             this.chkShortenDateRanges.TabIndex = 14;
             this.chkShortenDateRanges.Text = "chkShortenDateRanges";
             // 
@@ -2326,7 +2326,7 @@
             this.chkKeepInfoPansOverallSize.Location = new System.Drawing.Point(20, 348);
             this.chkKeepInfoPansOverallSize.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkKeepInfoPansOverallSize.Name = "chkKeepInfoPansOverallSize";
-            this.chkKeepInfoPansOverallSize.Size = new System.Drawing.Size(360, 22);
+            this.chkKeepInfoPansOverallSize.Size = new System.Drawing.Size(600, 22);
             this.chkKeepInfoPansOverallSize.TabIndex = 15;
             this.chkKeepInfoPansOverallSize.Text = "chkKeepInfoPansOverallSize";
             // 
@@ -2335,7 +2335,7 @@
             this.chkFilesOverwriteWarn.Location = new System.Drawing.Point(20, 389);
             this.chkFilesOverwriteWarn.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkFilesOverwriteWarn.Name = "chkFilesOverwriteWarn";
-            this.chkFilesOverwriteWarn.Size = new System.Drawing.Size(360, 22);
+            this.chkFilesOverwriteWarn.Size = new System.Drawing.Size(600, 22);
             this.chkFilesOverwriteWarn.TabIndex = 16;
             this.chkFilesOverwriteWarn.Text = "chkFilesOverwriteWarn";
             // 
@@ -2344,7 +2344,7 @@
             this.chkExtendedKinships.Location = new System.Drawing.Point(20, 430);
             this.chkExtendedKinships.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkExtendedKinships.Name = "chkExtendedKinships";
-            this.chkExtendedKinships.Size = new System.Drawing.Size(360, 22);
+            this.chkExtendedKinships.Size = new System.Drawing.Size(600, 22);
             this.chkExtendedKinships.TabIndex = 17;
             this.chkExtendedKinships.Text = "chkExtendedKinships";
             // 
