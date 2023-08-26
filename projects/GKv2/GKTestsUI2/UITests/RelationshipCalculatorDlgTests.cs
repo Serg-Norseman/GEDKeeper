@@ -87,7 +87,7 @@ namespace GKUI.Forms
 
             var txtResult = new TextBoxTester("txtResult", form);
             // default is not Russian culture
-            Assert.AreEqual("Ivanova Maria Petrovna is wife of Ivanov Ivan Ivanovich", txtResult.Text); // :D
+            Assert.AreEqual("Ivanov Ivan Ivanovich is husband of Ivanova Maria Petrovna", txtResult.Text); // :D
 
             ClickButton("btnClose", form);
         }
