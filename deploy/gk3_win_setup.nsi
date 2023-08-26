@@ -8,7 +8,7 @@
 
 ;Unicode true
 Name "GEDKeeper"
-OutFile "gedkeeper_3.2.1_win86.exe"
+OutFile "gedkeeper_3.3.0_win86.exe"
 InstallDir $PROGRAMFILES\GEDKeeper3
 
 CRCCheck on

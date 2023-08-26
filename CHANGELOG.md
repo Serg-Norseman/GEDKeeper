@@ -1,3 +1,31 @@
+## 28.08.2023 [v2.27.0 &amp; v3.3.0]
+- Fixed error sending mail in Linux.
+- Fixed error opening media files with a space in the name in Linux.
+- Fixed ancestor circle segment calculation error.
+- Added the option to define adoption, common-law marriage, and half-siblings to the kinship analysis.
+- Improved Polish localization [Waldemar Stoczkowski].
+- Improved English localization [Alexander Zaytsev].
+- Added partial (initial) localization into Belarusian.
+- Improved French localization [Christophe Gadaud].
+- German translation and proofreading completed [Christian Bettinger].
+- Returned window management functions.
+- Fixed a bug with changing date periods in the event editing dialog.
+- Added the feature to hide spouses of descendants (tree diagram display modes).
+- Added the feature to restore default values for each of the settings categories.
+- Added tree diagrams option to fix the same width of cards.
+- Added option to enable warnings about overwriting database files.
+- Added search and replace modes for facts and associations in individual records.
+- Added a definition for the Icelandic relationship of father/mother brother (uncle) and father/mother sister (aunt).
+- Added display of citations of sources of events in the information panel.
+- Added output of all associations from the database to Navigator.
+- Name display options extended to more places.
+- Added partial (initial) localizations into Portuguese and Spanish.
+- Added partial localization into Icelandic [Stridmann].
+- Improved Ukrainian localization [Stridmann].
+- Added localization into Hungarian [Lajos Kékesi].
+- Added partial localization into Serbian.
+- Minor fixes to localization files.
+
 ## 30.05.2023 [v2.26.1 &amp; v3.2.1]
 - Fixed font selection in tree diagram options (GKv3).
 - Missing text issue on very large tree diagrams with very small font (GKv3) is partially resolved.

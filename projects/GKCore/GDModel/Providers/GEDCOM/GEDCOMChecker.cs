@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -194,13 +194,29 @@ namespace GDModel.Providers.GEDCOM
         {
             CheckStructWL(evt);
 
-            // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
-            if (fFormat == GEDCOMFormat.gf_FamilyTreeMaker) {
-                string subtype = evt.Classification.ToLower();
-                if (evt.Id == (int)GEDCOMTagType.EVEN && subtype == "occupation") {
-                    evt.SetName(GEDCOMTagType.OCCU);
-                    evt.Classification = string.Empty;
-                }
+            var tagType = (GEDCOMTagType)evt.Id;
+
+            switch (fFormat) {
+                // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
+                case GEDCOMFormat.gf_FamilyTreeMaker: {
+                        string subtype = evt.Classification.ToLower();
+                        if (tagType == GEDCOMTagType.EVEN && subtype == "occupation") {
+                            evt.SetName(GEDCOMTagType.OCCU);
+                            evt.Classification = string.Empty;
+                        }
+                        break;
+                    }
+
+                // FIXME: move to base repair tool
+                // StrValue can be address, or comment, or place!
+                /*case GEDCOMFormat.gf_Native:
+                    if (tagType == GEDCOMTagType.RESI && !string.IsNullOrEmpty(evt.StringValue)) {
+                        if (string.IsNullOrEmpty(evt.Address.Lines.Text)) {
+                            evt.Address.SetAddressText(evt.StringValue);
+                        }
+                        evt.StringValue = string.Empty;
+                    }
+                    break;*/
             }
 
             if (evt.HasPlace) {

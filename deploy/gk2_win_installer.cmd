@@ -1,7 +1,7 @@
 @echo off
 cls
 
-set GKVER=2.26.1
+set GKVER=2.27.0
 
 del .\*.exe /q
 del .\*.zip /q

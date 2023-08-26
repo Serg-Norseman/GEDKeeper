@@ -34,8 +34,8 @@ namespace GKCore
 
         public const string APP_COPYRIGHT = "Copyright © 2009-2023 by Sergey V. Zhdanovskih";
 
-        public const string APP_VERSION_2X = "2.26.1.0";
-        public const string APP_VERSION_3X = "3.2.1.0";
+        public const string APP_VERSION_2X = "2.27.0.0";
+        public const string APP_VERSION_3X = "3.3.0.0";
 
 #if !GK3
         public const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
@@ -53,7 +53,12 @@ namespace GKCore
         public const string APP_CHANNEL_RU = "https://t.me/gedkeeper_ru";
 
         public const int APP_FORMAT_DEFVER = 39; // don't change it!
-        public const int APP_FORMAT_CURVER = 44; // v2.19.0
+
+        /*
+         * 44 - v2.19.0
+         * 45 - v2.27.0 / v3.3.0
+         */
+        public const int APP_FORMAT_CURVER = 45;
 
         public const string GEDCOM_EXT = "ged";
         public const string GEDCOM_SEC_EXT = "geds";
