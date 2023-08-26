@@ -289,7 +289,7 @@
 288=Sesso sconosciuto
 289=Marito divorziato
 290=Moglie divorziata
-291=Font
+291=Carattere
 292=Pedigree generazione
 293=Includi gli attributi delle persone
 294=Includi le note
@@ -824,14 +824,14 @@
 821=Copy XRef to the clipboard
 822=Bold font of names
 
-823=Baptism
+823=Battesimo
 824=Bar mitzvah
 825=Bat mitzvah
 826=Blessing
 827=Adult christening
 828=Confirmation
-829=First communion
-830=Ordination
+829=Prima comunione
+830=Ordinazione
 831=Restriction geo search by country
 832=Separate depth
 833=Ancestors
@@ -853,9 +853,9 @@
 849=Certainty assessment algorithm
 850=Localized calendar signatures
 851=G|J|H|FR|R|I|?
-852=Copy
+852=Copia
 853=Cut
-854=Paste
+854=Incolla
 855=Person `{0}` has a half link of a spouse to family `{1}`
 856=Person `{0}` has a half link of a child to family `{1}`
 857=Family `{0}` has a half link of a husband to person `{1}`
@@ -880,7 +880,7 @@
 876=The difference between spouses is abnormally high `{0}`
 877=The difference between siblings is abnormally high `{0}`
 878=Find and Replace
-879=Find
+879=Trova
 880=Replace with
 881=Match case
 882=Match wildcards
@@ -912,6 +912,28 @@
 908=Swap
 909=Warn when overwriting files
 910=Same cards width
-911=uncle
-912=aunt
+911=zio
+912=zia
 913=Hide spouses of descendants
+
+914=blood
+915=uterine
+916=adoptive
+917=adopted
+918=common-law
+
+919=<?>
+920=<?>
+
+921=-
+922=first
+923=second
+924=third
+925=fourth
+926=fifth
+927=sixth
+928=seventh
+929=eighth
+930=ninth
+
+931=Extended definition of kinship

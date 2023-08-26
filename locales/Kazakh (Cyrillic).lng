@@ -312,10 +312,10 @@
 311=Білімі
 312=Мамандығы
 313=Caste
-314=Mili
-315=Mili ind
-316=Mili dis
-317=Mili rank
+314=Military Service
+315=Military Induction
+316=Military Discharge
+317=Military Rank
 318=Changed
 319=Marriage registered
 320=Marriage is not registered
@@ -382,7 +382,7 @@
 381=Image width is more than 65,000 pixels. Unable to save.
 382=Артқа
 383=Келесі
-384=<?>
+384=Previous
 385=Келесі
 386=You know that ...
 387=Loading and searching places
@@ -915,3 +915,25 @@
 911=uncle
 912=aunt
 913=Hide spouses of descendants
+
+914=blood
+915=uterine
+916=adoptive
+917=adopted
+918=common-law
+
+919=<?>
+920=<?>
+
+921=-
+922=first
+923=second
+924=third
+925=fourth
+926=fifth
+927=sixth
+928=seventh
+929=eighth
+930=ninth
+
+931=Extended definition of kinship

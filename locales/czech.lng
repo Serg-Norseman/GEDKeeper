@@ -3,7 +3,7 @@
 002=Upravit
 003=Rodokmen
 004=Služba
-005=Windows
+005=Okna
 006=Nápověda
 007=Nový
 008=Otevřít...
@@ -11,12 +11,12 @@
 010=Uložit
 011=Zavřít
 012=Vlastnosti
-013=Export
+013=Exportovat
 014=Kniha rodin...
 015=Uložit jako...
 016=Exportní tabulka...
-017=Exit
-018=Import
+017=Ukončit
+018=Importovat
 019=Smazat
 020=Přidat záznam
 021=Upravit záznam
@@ -85,7 +85,7 @@
 084=Události
 085=Příjmení
 086=Jméno
-087=Patronymic
+087=Prostřední jméno
 088=Pohlaví
 089=Přezdívka
 090=Předpona příjmení
@@ -312,9 +312,9 @@
 311=Vzdělání
 312=Povolání
 313=Kasta
-314=Mili
-315=Mili ind
-316=Mili dis
+314=Vojenská služba
+315=Military Induction
+316=Military Discharge
 317=Mili hodnost
 318=Změněno
 319=Manželství se zaregistrovalo
@@ -825,8 +825,8 @@
 822=Tučné písmo jmen
 
 823=Křest
-824=Bar mitzvah
-825=Bat mitzvah
+824=Bar micva
+825=Bar micva
 826=Požehnání
 827=Křest dospělých
 828=Biřmování
@@ -905,13 +905,35 @@
 901=Do jubilea {0} zbývá {1} dní
 902=Zdrojový rok
 903=Věk v roce
-904=Keep overall size of info panels
-905=Identifiers (XRef)
-906=father's wife
-907=mother's husband
-908=Swap
-909=Warn when overwriting files
-910=Same cards width
-911=uncle
-912=aunt
-913=Hide spouses of descendants
+904=Zachovat celkovou velikost informačních panelů
+905=Identifikátory (XRef)
+906=manželka otce
+907=manžel matky
+908=Prohodit
+909=Upozornit při přepisování souborů
+910=Šířka stejných karet
+911=strýc
+912=teta
+913=Skrýt manželky potomků
+
+914=blood
+915=uterine
+916=adoptive
+917=adopted
+918=common-law
+
+919=<?>
+920=<?>
+
+921=-
+922=first
+923=second
+924=third
+925=fourth
+926=fifth
+927=sixth
+928=seventh
+929=eighth
+930=ninth
+
+931=Extended definition of kinship

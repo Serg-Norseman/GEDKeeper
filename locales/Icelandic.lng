@@ -58,7 +58,7 @@
 057=Heimildir
 058=Repositories
 059=Groups
-060=Researches
+060=Rannsóknir
 061=Tasks
 062=Communications
 063=Staðsetningar
@@ -84,13 +84,13 @@
 083=Heimilisfang
 084=Atburðir
 085=Surname
-086=Name
+086=Nafn
 087=Patronymic
 088=Kyn
 089=Gælunafn
 090=Last name prefix
 091=Name prefix
-092=Name suffix
+092=Viðskeyti
 093=Patriarch
 094=Bókamerki
 095=Association
@@ -252,7 +252,7 @@
 251=Tré
 252=Pedigrees
 253=Files encoding
-254=Addresses
+254=Heimilisföng
 255=Mails
 256=Webs
 257=Internet
@@ -303,7 +303,7 @@
 302=Full name
 303=Fæðingarstaður
 304=Dánarstaður
-305=Residence
+305=Aðsetur
 306=Aldur
 307=Lifetime
 308=Days before birth
@@ -312,20 +312,20 @@
 311=Menntun
 312=Starf
 313=Caste
-314=Mili
-315=Mili ind
-316=Mili dis
-317=Mili rank
+314=Military Service
+315=Military Induction
+316=Military Discharge
+317=Military Rank
 318=Changed
 319=Marriage registered
 320=Marriage is not registered
 321=Divorced
-322=Birth
+322=Fæðing
 323=Adoption
 324=Christening (child)
-325=Graduation
-326=Retirement
-327=Naturalization
+325=Útskrift
+326=Starfslok
+327=Ríkisborgararéttur
 328=Brottflutningur
 329=Innflutningur
 330=Manntal
@@ -340,7 +340,7 @@
 339=Social security number
 340=Fjöldi barna
 341=Fjöldi hjónabanda
-342=Property
+342=Eign
 343=Title
 344=Travel
 345=Hobby
@@ -424,9 +424,9 @@
 423=Saving to the archive
 424=Saving to the store
 425=-
-426=Audio
+426=Hljóðrit
 427=Bók
-428=Card
+428=Spjald
 429=Rafrænt
 430=Örfilma
 431=Filma
@@ -465,7 +465,7 @@
 464=Questionable reliability of evidence
 465=Circumstantial evidence
 466=Direct and primary evidence
-467=Research
+467=Rannsókn
 468=Task
 469=Correspondence
 470=Correcting IDs
@@ -587,7 +587,7 @@
 586=The first marriage at the age of {0} years?
 587=The first child was born at the age of {0} years?
 588=Descendants
-589=Generations
+589=Kynslóðir
 590=Number of links
 591=Processing places
 592=The place is already in the locations list
@@ -824,14 +824,14 @@
 821=Copy XRef to the clipboard
 822=Bold font of names
 
-823=Baptism
+823=Skírn
 824=Bar mitzvah
 825=Bat mitzvah
-826=Blessing
-827=Adult christening
-828=Confirmation
-829=First communion
-830=Ordination
+826=Blessun
+827=Skírn
+828=Ferming
+829=Fyrsta altarisganga
+830=Reglustaða
 831=Restriction geo search by country
 832=Separate depth
 833=Ancestors
@@ -880,7 +880,7 @@
 876=The difference between spouses is abnormally high `{0}`
 877=The difference between siblings is abnormally high `{0}`
 878=Finna og skipta út
-879=Find
+879=Finna
 880=Replace with
 881=Match case
 882=Match wildcards
@@ -915,3 +915,25 @@
 911=uncle
 912=aunt
 913=Hide spouses of descendants
+
+914=blood
+915=uterine
+916=adoptive
+917=adopted
+918=common-law
+
+919=<?>
+920=<?>
+
+921=-
+922=first
+923=second
+924=third
+925=fourth
+926=fifth
+927=sixth
+928=seventh
+929=eighth
+930=ninth
+
+931=Extended definition of kinship

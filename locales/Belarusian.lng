@@ -206,8 +206,8 @@
 205=Месца
 206=Прычына
 207=Agency
-208=Female
-209=Male
+208=Жанчына
+209=Мужчына
 210=An individual record is not selected.
 211=This individual has no sex defined.
 212=This individual has no families.
@@ -215,7 +215,7 @@
 214=Estimated number of descendants {0} is more than permissible limits.
 215=Generations visible:
 216=unlimited
-217=Spouse
+217=Пара
 218=Marriage date
 219=Are you sure you want to detach the link to the father?
 220=Are you sure you want to detach the link to the mother?
@@ -236,7 +236,7 @@
 235=Links
 236=Place and attribute
 237=marriage
-238=family
+238=сям'я
 239=Namesakes
 240=Remove the event?
 241=Are you sure you want to detach the link to the note?
@@ -284,8 +284,8 @@
 283=Show portraits
 284=Hide died in childhood
 285=Decor
-286=Man
-287=Woman
+286=Мужчына
+287=Жанчына
 288=Unknown sex
 289=Divorcee husband
 290=Divorcee wife
@@ -300,10 +300,10 @@
 299=Jump to a record
 300=Move record up
 301=Move record down
-302=Full name
+302=Поўнае імя
 303=Месца нараджэння
 304=Месца смерці
-305=Residence
+305=Пражыванне
 306=Узрост
 307=Lifetime
 308=Days before birth
@@ -312,10 +312,10 @@
 311=Education
 312=Occupation
 313=Caste
-314=Mili
-315=Mili ind
-316=Mili dis
-317=Mili rank
+314=Military Service
+315=Military Induction
+316=Military Discharge
+317=Military Rank
 318=Changed
 319=Marriage registered
 320=Marriage is not registered
@@ -915,3 +915,25 @@
 911=uncle
 912=aunt
 913=Hide spouses of descendants
+
+914=blood
+915=uterine
+916=adoptive
+917=adopted
+918=common-law
+
+919=<?>
+920=<?>
+
+921=-
+922=first
+923=second
+924=third
+925=fourth
+926=fifth
+927=sixth
+928=seventh
+929=eighth
+930=ninth
+
+931=Extended definition of kinship
