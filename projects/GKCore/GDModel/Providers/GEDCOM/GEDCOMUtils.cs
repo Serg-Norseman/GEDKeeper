@@ -300,7 +300,9 @@ namespace GDModel.Providers.GEDCOM
                 char chr = str[i];
                 if (chr == GEDCOMConsts.PointerDelimiter) {
                     if (init == -1) {
-                        init = i;
+                        if (i == strBeg) {
+                            init = i;
+                        }
                     } else {
                         fin = i;
                         xref = str.Substring(init + 1, fin - 1 - init);
@@ -477,6 +479,9 @@ namespace GDModel.Providers.GEDCOM
         // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
         public static string ParseRangeDate(GDMTree owner, GDMDateRange date, GEDCOMParser strTok)
         {
+            /*GEDCOMFormat format = (owner == null) ? GEDCOMFormat.gf_Native : owner.Format;
+            bool isAQDeviance = (format == GEDCOMFormat.gf_AncestQuest);*/
+
             strTok.SkipWhitespaces();
 
             var token = strTok.CurrentToken;
@@ -494,10 +499,16 @@ namespace GDModel.Providers.GEDCOM
                 ParseDate(owner, date.Before, strTok);
             } else if (dateType == 2) { // "BET"
                 strTok.Next();
+
+                /*if (isAQDeviance && strTok.RequireSymbol('.')) {
+                    strTok.Next();
+                }*/
+
                 ParseDate(owner, date.After, strTok);
                 strTok.SkipWhitespaces();
 
                 if (!strTok.RequireWord(GEDCOMConsts.GEDCOMDateRangeArray[3])) { // "AND"
+                    //&& !(isAQDeviance && strTok.RequireSymbol('-'))) {
                     throw new GEDCOMRangeDateException(strTok.GetFullStr());
                 }
 

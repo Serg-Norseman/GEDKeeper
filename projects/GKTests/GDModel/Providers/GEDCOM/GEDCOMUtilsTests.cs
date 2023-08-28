@@ -519,6 +519,10 @@ namespace GDModel.Providers.GEDCOM
             rest = GEDCOMUtils.ParseXRefPointer(null, out xref);
             Assert.AreEqual("", rest);
             Assert.AreEqual("", xref);
+
+            rest = GEDCOMUtils.ParseXRefPointer(" ... sample@email.com <sample@email.com>", out xref);
+            Assert.AreEqual("... sample@email.com <sample@email.com>", rest);
+            Assert.AreEqual("", xref);
         }
 
         [Test]
