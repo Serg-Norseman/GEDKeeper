@@ -2,11 +2,11 @@
 ; Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
 ; This file is part of "GEDKeeper".
 
+Unicode true
+
 !include "MUI2.nsh"
 !define MUI_ICON "..\projects\GKv3\GEDKeeper3\icon_gedkeeper.ico"
 
-
-;Unicode true
 Name "GEDKeeper"
 OutFile "gedkeeper_3.3.0_win86.exe"
 InstallDir $PROGRAMFILES\GEDKeeper3

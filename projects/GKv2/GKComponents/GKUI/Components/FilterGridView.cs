@@ -27,36 +27,26 @@ using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
-    public class FilterGridView : DataGridView, IFilterGridView
+    public class FilterGridView : ContainerControl, IFilterGridView
     {
+        private readonly ToolStripButton fBtnAdd;
+        private readonly ToolStripButton fBtnDelete;
+        private readonly ToolStrip fToolBar;
+        private readonly DataGridView fGridView;
         private readonly IRecordsListModel fListMan;
         private string[] fFields;
         private MaskedTextBox fMaskedTextBox;
 
 
-        public FilterGridView(IRecordsListModel listMan)
-        {
-            AllowUserToResizeRows = false;
-            ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            Margin = new Padding(2);
-            MultiSelect = false;
-            RowHeadersVisible = false;
-
-            fListMan = listMan;
-            fFields = fListMan.CreateFields();
-
-            InitGrid();
-        }
-
         public int Count
         {
-            get { return Rows.Count; }
+            get { return fGridView.Rows.Count; }
         }
 
         public FilterCondition this[int index]
         {
             get {
-                DataGridViewRow row = Rows[index];
+                DataGridViewRow row = fGridView.Rows[index];
 
                 // ".Value" can be null, so that we should to use direct cast
                 string fld = (string)row.Cells[0].Value;
@@ -75,10 +65,55 @@ namespace GKUI.Components
             }
         }
 
+
+        public FilterGridView(IRecordsListModel listMan)
+        {
+            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.LSID_MIRecordDelete), ItemDelete);
+            fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.LSID_MIRecordAdd), ItemAdd);
+
+            fToolBar = new ToolStrip();
+            fToolBar.Name = "ToolBar";
+            fToolBar.Dock = DockStyle.Right;
+            fToolBar.Items.AddRange(new ToolStripItem[] { fBtnAdd, fBtnDelete });
+            fToolBar.GripStyle = ToolStripGripStyle.Hidden;
+            fToolBar.ImageScalingSize = new Size(24, 20);
+            fToolBar.AutoSize = true;
+            fToolBar.ShowItemToolTips = true;
+
+            fGridView = new DataGridView();
+            fGridView.Dock = DockStyle.Fill;
+
+            SuspendLayout();
+            Controls.Add(fGridView);
+            Controls.Add(fToolBar);
+            ResumeLayout(false);
+
+            fGridView.AllowUserToResizeRows = false;
+            fGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            fGridView.Margin = new Padding(2);
+            fGridView.MultiSelect = false;
+            fGridView.RowHeadersVisible = false;
+
+            fListMan = listMan;
+            fFields = fListMan.CreateFields();
+
+            InitGrid();
+        }
+
+        private ToolStripButton CreateButton(string name, Image image, string toolTip, EventHandler click)
+        {
+            var btn = new ToolStripButton();
+            btn.Name = name;
+            btn.Image = image;
+            btn.ToolTipText = toolTip;
+            btn.Click += click;
+            return btn;
+        }
+
         public void AddCondition(FilterCondition fcond)
         {
-            int r = Rows.Add();
-            DataGridViewRow row = Rows[r];
+            int r = fGridView.Rows.Add();
+            DataGridViewRow row = fGridView.Rows[r];
 
             int condIndex = ((IConvertible)fcond.Condition).ToByte(null);
 
@@ -89,7 +124,14 @@ namespace GKUI.Components
 
         public void Clear()
         {
-            Rows.Clear();
+            fGridView.Rows.Clear();
+        }
+
+        public void RemoveCondition(int index)
+        {
+            if (index >= 0 && index < fGridView.Rows.Count) {
+                fGridView.Rows.RemoveAt(index);
+            }
         }
 
         public void Activate()
@@ -127,28 +169,29 @@ namespace GKUI.Components
             fMaskedTextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             Controls.Add(fMaskedTextBox);
 
-            Rows.Clear();
-            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
-            Columns.AddRange(new DataGridViewColumn[] {
-                                               AddComboColumn("FField", LangMan.LS(LSID.LSID_Field), fFields, 200),
-                                               AddComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150),
-                                               AddTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300)});
+            fGridView.Rows.Clear();
+            ((System.ComponentModel.ISupportInitialize)(fGridView)).BeginInit();
+            fGridView.Columns.AddRange(new DataGridViewColumn[] {
+                AddComboColumn("FField", LangMan.LS(LSID.LSID_Field), fFields, 200),
+                AddComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150),
+                AddTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300)
+            });
 
-            CellBeginEdit += dataGridView1_CellBeginEdit;
-            CellEndEdit += dataGridView1_CellEndEdit;
+            fGridView.CellBeginEdit += dataGridView1_CellBeginEdit;
+            fGridView.CellEndEdit += dataGridView1_CellEndEdit;
             Scroll += dataGridView1_Scroll;
 
-            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(fGridView)).EndInit();
 
             //this.dataGridView1.AutoResizeColumns();
-            Columns[0].Width = 150;
-            Columns[1].Width = 150;
-            Columns[2].Width = 150;
+            fGridView.Columns[0].Width = 150;
+            fGridView.Columns[1].Width = 150;
+            fGridView.Columns[2].Width = 150;
         }
 
         private bool IsGEDCOMDateCell(int rowIndex)
         {
-            DataGridViewRow row = Rows[rowIndex];
+            DataGridViewRow row = fGridView.Rows[rowIndex];
 
             string fld = (string)row.Cells[0].Value;
             if (!string.IsNullOrEmpty(fld)) {
@@ -164,20 +207,20 @@ namespace GKUI.Components
         private void dataGridView1_Scroll(object sender, ScrollEventArgs e)
         {
             if (fMaskedTextBox.Visible) {
-                DataGridViewCell cell = CurrentCell;
-                Rectangle rect = GetCellDisplayRectangle(cell.ColumnIndex, cell.RowIndex, true);
+                DataGridViewCell cell = fGridView.CurrentCell;
+                Rectangle rect = fGridView.GetCellDisplayRectangle(cell.ColumnIndex, cell.RowIndex, true);
                 fMaskedTextBox.Location = rect.Location;
             }
         }
 
         private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if (e.ColumnIndex == 2 && e.RowIndex < NewRowIndex) {
+            if (e.ColumnIndex == 2 && e.RowIndex < fGridView.NewRowIndex) {
                 if (IsGEDCOMDateCell(e.RowIndex)) {
-                    Rectangle rect = GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true);
+                    Rectangle rect = fGridView.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true);
 
-                    if (this[e.ColumnIndex, e.RowIndex].Value != null) {
-                        fMaskedTextBox.Text = this[e.ColumnIndex, e.RowIndex].Value.ToString();
+                    if (fGridView[e.ColumnIndex, e.RowIndex].Value != null) {
+                        fMaskedTextBox.Text = fGridView[e.ColumnIndex, e.RowIndex].Value.ToString();
                     } else {
                         fMaskedTextBox.Text = "";
                     }
@@ -193,10 +236,20 @@ namespace GKUI.Components
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (fMaskedTextBox.Visible) {
-                CurrentCell.Value = fMaskedTextBox.Text;
+                fGridView.CurrentCell.Value = fMaskedTextBox.Text;
                 fMaskedTextBox.Visible = false;
                 Focus();
             }
+        }
+
+        private void ItemAdd(object sender, EventArgs e)
+        {
+            fGridView.Rows.Add();
+        }
+
+        private void ItemDelete(object sender, EventArgs e)
+        {
+            RemoveCondition(fGridView.CurrentRow.Index);
         }
 
         #endregion

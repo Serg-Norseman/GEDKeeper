@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design.Controls;
@@ -27,30 +28,29 @@ using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
-    public class FilterGridView : GridView, IFilterGridView
+    public class FilterGridView : Panel, IFilterGridView
     {
         private class FilterConditionRow : FilterCondition
         {
             private readonly FilterGridView fGrid;
 
-            public string ColumnText
+            public object ColumnText
             {
                 get {
                     return fGrid.fFields[ColumnIndex + 1];
                 }
                 set {
-                    ColumnIndex = fGrid.fListMan.GetFieldColumnId(fGrid.fFields, value);
+                    ColumnIndex = fGrid.fListMan.GetFieldColumnId(fGrid.fFields, value.ToString());
                 }
             }
 
-            public string ConditionText
+            public object ConditionText
             {
                 get {
-                    int condIndex = ((IConvertible)Condition).ToByte(null);
-                    return GKData.CondSigns[condIndex];
+                    return GKData.CondSigns[(int)Condition];
                 }
                 set {
-                    Condition = fGrid.fListMan.GetCondByName(value);
+                    Condition = fGrid.fListMan.GetCondByName(value.ToString());
                 }
             }
 
@@ -73,10 +73,24 @@ namespace GKUI.Components
         }
 
 
+        private readonly Button fBtnAdd;
+        private readonly Button fBtnDelete;
+        private readonly GridView fGridView;
+
         private IRecordsListModel fListMan;
         private ObservableCollection<FilterConditionRow> fCollection;
         private string[] fFields;
 
+
+        public int Count
+        {
+            get { return fCollection.Count; }
+        }
+
+        public FilterCondition this[int index]
+        {
+            get { return fCollection[index]; }
+        }
 
         public IRecordsListModel ListMan
         {
@@ -93,18 +107,40 @@ namespace GKUI.Components
 
         public FilterGridView()
         {
+            GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
+            GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);
+
+            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.LSID_MIRecordDelete), ItemDelete);
+            fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.LSID_MIRecordAdd), ItemAdd);
+
+            fGridView = new GridView();
+
+            SuspendLayout();
+            var toolbar = new StackLayout() {
+                Orientation = Orientation.Vertical,
+                Spacing = 4,
+                Items = { fBtnAdd, fBtnDelete }
+            };
+            Content = new TableLayout() {
+                Spacing = new Size(4, 4),
+                Rows = {
+                    new TableRow() {
+                        Cells = {
+                            new TableCell(fGridView, true),
+                            new TableCell(toolbar, false)
+                        }
+                    }
+                }
+            };
+            ResumeLayout();
+
             fCollection = new ObservableCollection<FilterConditionRow>();
-            DataStore = fCollection;
-        }
+            fGridView.DataStore = fCollection;
 
-        public int Count
-        {
-            get { return fCollection.Count; }
-        }
-
-        public FilterCondition this[int index]
-        {
-            get { return fCollection[index]; }
+            fGridView.AllowColumnReordering = false;
+            fGridView.AllowMultipleSelection = false;
+            // [Gtk] Selection of the last (or only) row does not work on left click; EtoForms issue #2443
+            fGridView.AllowEmptySelection = false;
         }
 
         public void AddCondition(FilterCondition fcond)
@@ -131,64 +167,34 @@ namespace GKUI.Components
 
         #region Private functions
 
+        private Button CreateButton(string name, Image image, string toolTip, EventHandler<EventArgs> click)
+        {
+            var btn = new Button();
+            btn.Style = "iconBtn";
+            btn.Image = image;
+            btn.ToolTip = toolTip;
+            btn.Click += click;
+            return btn;
+        }
+
         private void InitGrid()
         {
-            // "00/00/0000"
-
-            var clmCell = new ComboBoxCell();
-            clmCell.DataStore = fFields;
-            clmCell.Binding = Binding.Property<FilterConditionRow, object>(r => r.ColumnText);
-
-            Columns.Add(new GridColumn {
-                DataCell = clmCell,
-                HeaderText = LangMan.LS(LSID.LSID_Field),
-                Width = 200,
-                Editable = true
-            });
-
-            var condCell = new ComboBoxCell();
-            condCell.DataStore = GKData.CondSigns;
-            condCell.Binding = Binding.Property<FilterConditionRow, object>(r => r.ConditionText);
-
-            Columns.Add(new GridColumn {
-                DataCell = condCell,
-                HeaderText = LangMan.LS(LSID.LSID_Condition),
-                Width = 150,
-                Editable = true
-            });
-
-            Columns.Add(new GridColumn {
-                DataCell = new TextBoxCell { Binding = Binding.Property<FilterConditionRow, string>(r => r.ValueText) },
-                HeaderText = LangMan.LS(LSID.LSID_Value),
-                Width = 300,
-                Editable = true
-            });
+            fGridView.Columns.Clear();
+            fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.LSID_Field), fFields, r => r.ColumnText, 200, false, true);
+            fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, r => r.ConditionText, 150, false, true);
+            fGridView.AddTextColumn<FilterConditionRow>(LangMan.LS(LSID.LSID_Value), r => r.ValueText, 300, false, true);
         }
 
-        private bool IsGEDCOMDateCell(int rowIndex)
+        private void ItemAdd(object sender, EventArgs e)
         {
-            /*DataGridViewRow row = dataGridView1.Rows[rowIndex];
-
-            string fld = (string)row.Cells[0].Value;
-            if (!string.IsNullOrEmpty(fld)) {
-                int colId = fController.GetFieldColumnId(fld);
-                DataType dataType = fListMan.GetColumnDataType(colId);
-
-                return (dataType == DataType.dtGEDCOMDate);
-            }*/
-
-            return false;
+            FilterCondition fcond = new FilterCondition(0, ConditionKind.ck_Contains, "");
+            AddCondition(fcond);
         }
 
-        /*
-        private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        private void ItemDelete(object sender, EventArgs e)
         {
-            if (e.ColumnIndex == 2 && e.RowIndex < dataGridView1.NewRowIndex) {
-                if (IsGEDCOMDateCell(e.RowIndex)) {
-                }
-            }
+            RemoveCondition(fGridView.SelectedRow);
         }
-        */
 
         #endregion
 
@@ -199,24 +205,26 @@ namespace GKUI.Components
             if (!HasFocus) {
                 Focus();
             }
-
-            e.Handled = true;
             base.OnMouseDown(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
             switch (e.Key) {
+                case Keys.Enter:
+                    if (!fGridView.IsEditing) {
+                    }
+                    break;
+
                 case Keys.I:
                     if (e.Control) {
-                        FilterCondition fcond = new FilterCondition(0, ConditionKind.ck_Contains, "");
-                        AddCondition(fcond);
+                        ItemAdd(null, null);
                     }
                     break;
 
                 case Keys.D:
                     if (e.Control) {
-                        RemoveCondition(SelectedRow);
+                        ItemDelete(null, null);
                     }
                     break;
 

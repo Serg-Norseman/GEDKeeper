@@ -35,7 +35,7 @@ namespace GKCore.Interfaces
     }
 
 
-    public enum ConditionKind
+    public enum ConditionKind : int
     {
         ck_NotEq, ck_LT, ck_LET, ck_Eq, ck_GET, ck_GT, ck_Contains, ck_NotContains
     }

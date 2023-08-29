@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design.Controls;
 using GKCore.Interfaces;
 
 namespace GKCore.Design.Controls
@@ -30,5 +29,6 @@ namespace GKCore.Design.Controls
 
         void AddCondition(FilterCondition fcond);
         void Clear();
+        void RemoveCondition(int index);
     }
 }

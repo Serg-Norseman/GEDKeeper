@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq.Expressions;
 using System.Reflection;
 using BSLib;
 using Eto.Drawing;
@@ -316,6 +317,46 @@ namespace GKUI.Components
         {
             var strList = new StringList(text);
             return strList.ToArray();
+        }
+
+        public static ListItemCollection Convert(string[] strings)
+        {
+            var list = new ListItemCollection();
+            foreach (var str in strings) {
+                list.Add(str);
+            }
+            return list;
+        }
+
+        public static void AddTextColumn<T>(this GridView gridView, string headerText, Expression<Func<T, string>> propExpression, int width, bool autoSize = false, bool editable = false)
+        {
+            var cell = new TextBoxCell();
+            cell.Binding = Binding.Property(propExpression);
+
+            gridView.AddColumn(cell, headerText, width, autoSize, editable);
+        }
+
+        public static void AddComboColumn<T>(this GridView gridView, string headerText, object[] items, Expression<Func<T, object>> propExpression, int width, bool autoSize = false, bool editable = false)
+        {
+            var cell = new ComboBoxCell();
+            cell.DataStore = items;
+            cell.Binding = Binding.Property(propExpression);
+
+            gridView.AddColumn(cell, headerText, width, autoSize, editable);
+        }
+
+        public static GridColumn AddColumn(this GridView gridView, Cell cell, string headerText, int width, bool autoSize = false, bool editable = false)
+        {
+            var col = new GridColumn() {
+                DataCell = cell,
+                HeaderText = headerText,
+                Width = width,
+                AutoSize = autoSize,
+                Sortable = false,
+                Editable = editable,
+            };
+            gridView.Columns.Add(col);
+            return col;
         }
 
         public static void ConvertFileDialogFilters(FileDialog fileDlg, string filter)

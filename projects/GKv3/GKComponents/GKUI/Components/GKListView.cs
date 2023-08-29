@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -561,33 +560,6 @@ namespace GKUI.Components
             Columns.Add(column);
 
             fCheckedList = true;
-        }
-
-        public void AddTextColumn(string caption, int width, bool autoSize = false)
-        {
-            var cell = new TextBoxCell(Columns.Count);
-
-            GridColumn column = new GridColumn();
-            column.HeaderText = caption;
-            column.DataCell = cell;
-            column.AutoSize = autoSize;
-            column.Width = width;
-            column.Editable = true;
-            Columns.Add(column);
-        }
-
-        public void AddComboColumn(string caption, int width, bool autoSize, object[] items)
-        {
-            var cell = new ComboBoxCell(Columns.Count);
-            cell.DataStore = items;
-
-            GridColumn column = new GridColumn();
-            column.HeaderText = caption;
-            column.DataCell = cell;
-            column.AutoSize = autoSize;
-            column.Width = width;
-            column.Editable = true;
-            Columns.Add(column);
         }
 
         public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)

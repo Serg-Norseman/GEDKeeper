@@ -2,12 +2,12 @@
 ; Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
 ; This file is part of "GEDKeeper".
 
+Unicode true
+
 !include "MUI2.nsh"
 !include "DotNetChecker.nsh"
 !define MUI_ICON "..\projects\GKv2\GEDKeeper2\GEDKeeper2.ico"
 
-
-;Unicode true
 Name "GEDKeeper"
 OutFile "gedkeeper_2.27.0_win86.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2

@@ -1,3 +1,5 @@
+## 28.10.2023 [v2.28.0 &amp; v3.4.0]
+
 ## 28.08.2023 [v2.27.0 &amp; v3.3.0]
 - Fixed error sending mail in Linux.
 - Fixed error opening media files with a space in the name in Linux.
