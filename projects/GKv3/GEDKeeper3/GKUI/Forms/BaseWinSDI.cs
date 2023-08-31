@@ -543,14 +543,16 @@ namespace GKUI.Forms
                 try {
                     try {
                         mediaViewer.MultimediaRecord = mediaRec;
-                        if (modal) {
+                        // In v3.X, the media viewer cannot be a dialog.
+                        /*if (modal) {
                             mediaViewer.Show();
-                        } else {
+                        } else*/
+                        {
                             mediaViewer.ShowInTaskbar = true;
                             mediaViewer.Show();
                         }
                     } finally {
-                        if (modal) mediaViewer.Dispose();
+                        //if (modal) mediaViewer.Dispose();
                     }
                 } catch (Exception ex) {
                     if (mediaViewer != null) mediaViewer.Dispose();

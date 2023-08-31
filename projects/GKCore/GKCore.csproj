@@ -372,6 +372,7 @@
     <Compile Include="GKCore\Search\SearchStrategy.cs" />
     <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />
     <Compile Include="GKCore\SysUtils.cs" />
+    <Compile Include="GKUI\ImageBox.cs" />
     <Compile Include="GKUI\Themes\BaseThemeManager.cs" />
     <Compile Include="GKUI\Themes\IThemedView.cs" />
     <Compile Include="GKUI\Themes\IThemeManager.cs" />

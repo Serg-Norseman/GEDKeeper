@@ -28,65 +28,10 @@ using GKCore.Types;
 namespace GKUI.Components
 {
     /// <summary>
-    ///   Specifies the selection mode.
-    /// </summary>
-    public enum ImageBoxSelectionMode
-    {
-        /// <summary>
-        ///   No selection.
-        /// </summary>
-        None,
-
-        /// <summary>
-        ///   Rectangle selection.
-        /// </summary>
-        Rectangle,
-
-        /// <summary>
-        ///   Zoom selection.
-        /// </summary>
-        Zoom
-    }
-
-    /// <summary>
-    ///   Specifies the border styles of an image
-    /// </summary>
-    public enum ImageBoxBorderStyle
-    {
-        /// <summary>
-        ///   No border.
-        /// </summary>
-        None,
-
-        /// <summary>
-        ///   A fixed, single-line border.
-        /// </summary>
-        FixedSingle,
-
-        /// <summary>
-        ///   A fixed, single-line border with a solid drop shadow.
-        /// </summary>
-        FixedSingleDropShadow,
-
-        /// <summary>
-        ///   A fixed, single-line border with a soft outer glow.
-        /// </summary>
-        FixedSingleGlowShadow
-    }
-
-    /// <summary>
     ///   Component for displaying images with support for scrolling and zooming.
     /// </summary>
     public sealed class ImageBox : ScrollablePanel
     {
-        #region Constants
-
-        private const int MAX_ZOOM = 3500;
-        private const int MIN_ZOOM = 1;
-        private const int SELECTION_DEAD_ZONE = 5;
-
-        #endregion
-
         #region Instance Fields
 
         private readonly List<NamedRegion> fNamedRegions;
@@ -279,7 +224,7 @@ namespace GKUI.Components
                 if (fIsSelecting != value) {
                     if (!value) {
                         if (fSelectionMode == ImageBoxSelectionMode.Zoom) {
-                            if (fSelectionRegion.Width > SELECTION_DEAD_ZONE && fSelectionRegion.Height > SELECTION_DEAD_ZONE) {
+                            if (fSelectionRegion.Width > ImageBoxConstants.SELECTION_DEAD_ZONE && fSelectionRegion.Height > ImageBoxConstants.SELECTION_DEAD_ZONE) {
                                 ZoomToRegion(fSelectionRegion);
                                 SelectionRegion = RectangleF.Empty;
                             }
@@ -373,10 +318,10 @@ namespace GKUI.Components
         {
             get { return fZoom; }
             set {
-                if (value < MIN_ZOOM)
-                    value = MIN_ZOOM;
-                else if (value > MAX_ZOOM)
-                    value = MAX_ZOOM;
+                if (value < ImageBoxConstants.MIN_ZOOM)
+                    value = ImageBoxConstants.MIN_ZOOM;
+                else if (value > ImageBoxConstants.MAX_ZOOM)
+                    value = ImageBoxConstants.MAX_ZOOM;
 
                 if (fZoom != value) {
                     fZoom = value;
@@ -777,19 +722,16 @@ namespace GKUI.Components
         /// <summary>
         ///   Draws the selection region.
         /// </summary>
-        /// <param name="e">
-        ///   The <see cref="System.Windows.Forms.PaintEventArgs" /> instance containing the event data.
-        /// </param>
-        private void DrawSelection(PaintEventArgs e)
+        private void DrawSelection(Graphics gfx)
         {
             RectangleF rect = GetOffsetRectangle(fSelectionRegion);
 
             var color = new Color(fSelectionColor, 0.25f);
             using (Brush brush = new SolidBrush(color))
-                e.Graphics.FillRectangle(brush, rect);
+                gfx.FillRectangle(brush, rect);
 
             using (var pen = new Pen(fSelectionColor))
-                e.Graphics.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
+                gfx.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
         }
 
         private void DrawNamedRegions(Graphics gfx)
@@ -833,12 +775,6 @@ namespace GKUI.Components
 
         #region Overriden methods
 
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.KeyDown" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   A <see cref="T:System.Windows.Forms.KeyEventArgs" /> that contains the event data.
-        /// </param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -847,12 +783,6 @@ namespace GKUI.Components
             ProcessImageShortcuts(e);
         }
 
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.MouseDown" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   A <see cref="T:System.Windows.Forms.MouseEventArgs" /> that contains the event data.
-        /// </param>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (!HasFocus)
@@ -865,12 +795,6 @@ namespace GKUI.Components
             base.OnMouseDown(e);
         }
 
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.MouseMove" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   A <see cref="T:System.Windows.Forms.MouseEventArgs" /> that contains the event data.
-        /// </param>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             switch (e.Buttons) {
@@ -906,12 +830,6 @@ namespace GKUI.Components
             base.OnMouseMove(e);
         }
 
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.MouseUp" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   A <see cref="T:System.Windows.Forms.MouseEventArgs" /> that contains the event data.
-        /// </param>
         protected override void OnMouseUp(MouseEventArgs e)
         {
             if (fIsPanning)
@@ -924,12 +842,6 @@ namespace GKUI.Components
             base.OnMouseUp(e);
         }
 
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.MouseWheel" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   A <see cref="T:System.Windows.Forms.MouseEventArgs" /> that contains the event data.
-        /// </param>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             if (fAllowZoom && !fSizeToFit) {
@@ -940,12 +852,6 @@ namespace GKUI.Components
             base.OnMouseWheel(e);
         }
 
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.Paint" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   A <see cref="T:System.Windows.Forms.PaintEventArgs" /> that contains the event data.
-        /// </param>
         protected override void OnPaint(PaintEventArgs e)
         {
             if (!AllowPainting()) return;
@@ -970,18 +876,12 @@ namespace GKUI.Components
 
                 // draw the selection
                 if (fSelectionRegion != Rectangle.Empty)
-                    DrawSelection(e);
+                    DrawSelection(gfx);
 
                 DrawNamedRegions(gfx);
             }
         }
 
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.Control.Resize" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   An <see cref="T:System.EventArgs" /> that contains the event data.
-        /// </param>
         protected override void OnSizeChanged(EventArgs e)
         {
             AdjustLayout();
