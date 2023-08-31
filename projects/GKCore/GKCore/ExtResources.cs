@@ -25,6 +25,7 @@ namespace GKCore
 {
     public sealed class ExtResource
     {
+        public string Name;
         public string Ident;
         public string URL;
     }
@@ -66,7 +67,7 @@ namespace GKCore
             }
         }
 
-        public string FindURL(string ident)
+        public ExtResource FindURL(string ident)
         {
             if (string.IsNullOrEmpty(ident))
                 throw new ArgumentNullException("ident");
@@ -76,14 +77,14 @@ namespace GKCore
                     var res = fResources.Resources[i];
 
                     if (res.Ident == ident) {
-                        return res.URL;
+                        return res;
                     }
                 }
             } catch (Exception ex) {
                 Logger.WriteError("ExtResources.FindURL()", ex);
             }
 
-            return string.Empty;
+            return null;
         }
     }
 }

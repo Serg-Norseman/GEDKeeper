@@ -187,6 +187,7 @@
     <EmbeddedResource Include="Resources\test_ages_adop.ged" />
     <EmbeddedResource Include="Resources\test_famhist2.ged" />
     <EmbeddedResource Include="Resources\test_gc4j_utf8.ged" />
+    <EmbeddedResource Include="Resources\test_rootsmagic.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

@@ -2702,6 +2702,7 @@ namespace GDModel.Providers.GEDCOM
             // non-standard convertible tags
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._FREL, GEDCOMTagName._FREL);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MREL, GEDCOMTagName._MREL);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._FSFTID, GEDCOMTagName._FSFTID);
 
             // non-standard extended tags (GEDKeeper)
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._BOOKMARK, GEDCOMTagName._BOOKMARK);

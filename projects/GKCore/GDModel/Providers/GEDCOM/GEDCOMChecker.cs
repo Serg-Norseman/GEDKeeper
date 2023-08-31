@@ -281,6 +281,15 @@ namespace GDModel.Providers.GEDCOM
             }
 
             fBaseContext.ImportNames(iRec);
+
+            if (fFormat == GEDCOMFormat.gf_RootsMagic) {
+                // _FSFTID -> fsft
+                var fsftTag = FindSubTagValue(iRec, "_FSFTID");
+                if (!string.IsNullOrEmpty(fsftTag)) {
+                    iRec.AddTag(new GDMValueTag((int)GEDCOMTagType.RFN, "fsft:" + fsftTag));
+                    iRec.DeleteTag("_FSFTID");
+                }
+            }
         }
 
         private void CheckChildLink(GDMFamilyRecord fam, int index)

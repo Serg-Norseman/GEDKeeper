@@ -220,6 +220,7 @@ namespace GDModel.Providers.GEDCOM
         // non-standard convertible tags
         _FREL, // [Ages, FTM/FTW, Legacy, Family Tree Maker]
         _MREL, // [Ages, FTM/FTW, Legacy, Family Tree Maker]
+        _FSFTID, // [FamilySearch]
     }
 
     public static class GEDCOMTagName
@@ -421,5 +422,6 @@ namespace GDModel.Providers.GEDCOM
         // non-standard convertible tags
         public const string _FREL = "_FREL";
         public const string _MREL = "_MREL";
+        public const string _FSFTID = "_FSFTID";
     }
 }

@@ -393,6 +393,18 @@ namespace GDModel.Providers
         }
 
         [Test]
+        public void Test_RootsMagic()
+        {
+            var progress = Substitute.For<IProgressController>();
+
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_rootsmagic.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_RootsMagic, ctx.Tree.Format);
+
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
+            }
+        }
+
+        [Test]
         public void Test_Geni_Badlines()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_badlines.ged")) {

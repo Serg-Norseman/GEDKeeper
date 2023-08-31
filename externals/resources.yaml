@@ -1,5 +1,9 @@
 ﻿---
 Resources:
-  - Ident: geni
+  - Name: Geni
+    Ident: geni
     URL: https://geni.com/profile/index/
+  - Name: FamilySearch
+    Ident: fsft
+    URL: https://www.familysearch.org/tree/person/
 ...

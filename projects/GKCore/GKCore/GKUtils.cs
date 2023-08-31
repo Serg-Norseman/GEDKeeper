@@ -2715,12 +2715,12 @@ namespace GKCore
             var resourceId = parts[0];
             var recordId = parts[1];
 
-            var url = AppHost.ExtResources.FindURL(resourceId);
-            if (string.IsNullOrEmpty(url)) return;
+            var res = AppHost.ExtResources.FindURL(resourceId);
+            if (res == null) return;
 
-            var fullURL = url + recordId;
+            var fullURL = res.URL + recordId;
             summary.Add("");
-            summary.Add(HyperLink(fullURL, fullURL));
+            summary.Add(HyperLink(fullURL, string.Format("{0}: {1}", res.Name, fullURL)));
         }
 
         public static void ShowSourceInfo(IBaseContext baseContext, GDMSourceRecord sourceRec, StringList summary)
