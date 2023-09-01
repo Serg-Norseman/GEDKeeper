@@ -371,7 +371,7 @@ namespace GKUI.Components
                 string name = filterParts[idx];
                 string exts = filterParts[idx + 1];
 
-                string[] extensions = exts.Split(',');
+                string[] extensions = exts.Split(new char[] { ',', ';' });
                 for (int k = 0; k < extensions.Length; k++) {
                     string ext = extensions[k];
                     if (ext.Length > 0 && ext[0] == '*') {
