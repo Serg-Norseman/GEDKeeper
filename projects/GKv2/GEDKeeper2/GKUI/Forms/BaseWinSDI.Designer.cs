@@ -113,6 +113,8 @@
         private System.Windows.Forms.ToolStripMenuItem miWinHTile;
         private System.Windows.Forms.ToolStripMenuItem miWinVTile;
         private System.Windows.Forms.ToolStripMenuItem miWinMinimize;
+        private System.Windows.Forms.ContextMenuStrip summaryMenu;
+        private System.Windows.Forms.ToolStripMenuItem miCopyContent;
 
         private void InitializeComponent()
         {
@@ -227,11 +229,14 @@
             this.miWinHTile = new System.Windows.Forms.ToolStripMenuItem();
             this.miWinVTile = new System.Windows.Forms.ToolStripMenuItem();
             this.miWinMinimize = new System.Windows.Forms.ToolStripMenuItem();
+            this.summaryMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.miCopyContent = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar.SuspendLayout();
             this.ToolBar1.SuspendLayout();
             this.MenuPedigree.SuspendLayout();
             this.MainMenu1.SuspendLayout();
             this.contextMenu.SuspendLayout();
+            this.summaryMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // StatusBar
@@ -1098,6 +1103,20 @@
             this.tabsRecords.TabIndex = 3;
             this.tabsRecords.SelectedIndexChanged += new System.EventHandler(this.tabsRecords_SelectedIndexChanged);
             // 
+            // summaryMenu
+            // 
+            this.summaryMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                                    this.miCopyContent});
+            this.summaryMenu.Name = "summaryMenu";
+            this.summaryMenu.Size = new System.Drawing.Size(218, 100);
+            // 
+            // miCopyContent
+            // 
+            this.miCopyContent.Name = "miCopyContent";
+            this.miCopyContent.Size = new System.Drawing.Size(217, 24);
+            this.miCopyContent.Text = "miCopyContent";
+            this.miCopyContent.Click += new System.EventHandler(this.miCopyContent_Click);
+            // 
             // BaseWinSDI
             // 
             this.AllowDrop = true;
@@ -1131,6 +1150,7 @@
             this.MainMenu1.ResumeLayout(false);
             this.MainMenu1.PerformLayout();
             this.contextMenu.ResumeLayout(false);
+            this.summaryMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
         }

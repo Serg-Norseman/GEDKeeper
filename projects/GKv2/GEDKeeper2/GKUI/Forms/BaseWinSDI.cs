@@ -151,6 +151,7 @@ namespace GKUI.Forms
             summary.Dock = DockStyle.Right;
             summary.Size = new Size(300, 290);
             summary.OnLink += mPersonSummaryLink;
+            summary.ContextMenuStrip = summaryMenu;
 
             var recView = new GKListView();
             recView.HideSelection = false;
@@ -349,6 +350,12 @@ namespace GKUI.Forms
         private void mPersonSummaryLink(object sender, string linkName)
         {
             fController.SelectSummaryLink(linkName);
+        }
+
+        private void miCopyContent_Click(object sender, EventArgs e)
+        {
+            var hyperView = summaryMenu.SourceControl as HyperView;
+            fController.CopyContent(hyperView);
         }
 
         #endregion

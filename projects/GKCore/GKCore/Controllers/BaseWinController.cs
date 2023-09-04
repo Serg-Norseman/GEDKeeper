@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using BSLib;
 using GDModel;
 using GKCore.Charts;
@@ -430,6 +431,14 @@ namespace GKCore.Controllers
         public void Redo()
         {
             fContext.DoRedo();
+        }
+
+        public void CopyContent(IHyperView hyperView)
+        {
+            if (hyperView == null) return;
+
+            var text = Regex.Replace(hyperView.Lines.Text, @"\[.*?\]", string.Empty);
+            AppHost.Instance.SetClipboardText(text);
         }
 
         #endregion
@@ -895,6 +904,8 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miContRecordDelete").Text = LangMan.LS(LSID.LSID_MIRecordDelete);
                 GetControl<IMenuItem>("miContRecordDuplicate").Text = LangMan.LS(LSID.LSID_RecordDuplicate);
                 GetControl<IMenuItem>("miContRecordMerge").Text = LangMan.LS(LSID.LSID_MergeDuplicates);
+
+                GetControl<IMenuItem>("miCopyContent").Text = LangMan.LS(LSID.LSID_Copy);
 
                 var tabControl = GetControl<ITabControl>("tabsRecords");
                 if (tabControl.Pages.Count >= 11) {

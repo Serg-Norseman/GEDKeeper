@@ -2516,7 +2516,7 @@ namespace GKCore
                         summary.Add("[u][b][size=+1]" + mediaTitle + "[/size][/b][/u]");
                         summary.Add("");
                         if (fileRef != null) {
-                            summary.Add("[ " + HyperLink(GKData.INFO_HREF_VIEW + mediaRec.XRef, LangMan.LS(LSID.LSID_View), 0) + " ]");
+                            summary.Add("( " + HyperLink(GKData.INFO_HREF_VIEW + mediaRec.XRef, LangMan.LS(LSID.LSID_View), 0) + " )");
                         }
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");

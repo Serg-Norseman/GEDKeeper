@@ -139,6 +139,8 @@ namespace GKUI.Forms
         private ButtonMenuItem miWinHTile;
         private ButtonMenuItem miWinVTile;
         private ButtonMenuItem miWinMinimize;
+        private ContextMenu summaryMenu;
+        private ButtonMenuItem miCopyContent;
 
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
@@ -232,6 +234,10 @@ namespace GKUI.Forms
             contextMenu = new ContextMenu();
             contextMenu.Items.AddRange(new MenuItem[] { miContRecordAdd, miContRecordEdit, miContRecordDelete, miContRecordDuplicate, miContRecordMerge });
             contextMenu.Opening += contextMenu_Opening;
+
+            miCopyContent = new ButtonMenuItem(miCopyContent_Click);
+            summaryMenu = new ContextMenu();
+            summaryMenu.Items.AddRange(new MenuItem[] { miCopyContent });
         }
 
         private void CreatePage(string pageText, GDMRecordType recType)
@@ -239,6 +245,7 @@ namespace GKUI.Forms
             var summary = new HyperView();
             summary.BorderWidth = 4;
             summary.OnLink += mPersonSummaryLink;
+            summary.ContextMenu = summaryMenu;
 
             var recView = new GKListView();
             recView.AllowMultipleSelection = true;
@@ -394,6 +401,12 @@ namespace GKUI.Forms
         private void mPersonSummaryLink(object sender, string linkName)
         {
             fController.SelectSummaryLink(linkName);
+        }
+
+        private void miCopyContent_Click(object sender, EventArgs e)
+        {
+            var hyperView = GetHyperViewByType(GetSelectedRecordType());
+            fController.CopyContent(hyperView);
         }
 
         #endregion
