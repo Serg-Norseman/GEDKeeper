@@ -103,7 +103,7 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     child = fBaseWin.Context.SelectPerson(fOwner, tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
-                    result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
+                    result = (child != null && fBaseWin.Context.IsAvailableRecord(child) && !family.HasChild(child));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
                     }

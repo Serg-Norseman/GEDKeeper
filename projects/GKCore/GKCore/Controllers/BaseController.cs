@@ -874,19 +874,24 @@ namespace GKCore.Controllers
             bool result = false;
 
             GDMIndividualRecord father = baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svMale);
-            if (father != null) {
-                GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
-                if (family != null) {
-                    var husb = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Husband);
-                    if (husb == null) {
-                        // new family
-                        result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
-                    } else {
-                        // selected family with husband
-                        Logger.WriteError("BaseController.AddFather(): fail, because family already has father");
-                        result = true;
-                    }
-                }
+            if (father == null) return result;
+
+            if (father == person) {
+                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_FatherAsChild));
+                return result;
+            }
+
+            GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
+            if (family == null) return result;
+
+            var husb = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Husband);
+            if (husb != null) {
+                // selected family with husband
+                Logger.WriteError("BaseController.AddFather(): fail, because family already has father");
+                result = true;
+            } else {
+                // new family
+                result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
             }
 
             return result;
@@ -912,21 +917,25 @@ namespace GKCore.Controllers
             bool result = false;
 
             GDMIndividualRecord mother = baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svFemale);
-            if (mother != null) {
-                GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, mother);
-                if (family != null) {
-                    var wife = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Wife);
-                    if (wife == null) {
-                        // new family
-                        result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
-                    } else {
-                        // selected family with wife
-                        Logger.WriteError("BaseController.AddMother(): fail, because family already has mother");
-                        result = true;
-                    }
-                }
+            if (mother == null) return result;
+
+            if (mother == person) {
+                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_MotherAsChild));
+                return result;
             }
 
+            GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, mother);
+            if (family == null) return result;
+
+            var wife = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Wife);
+            if (wife != null) {
+                // selected family with wife
+                Logger.WriteError("BaseController.AddMother(): fail, because family already has mother");
+                result = true;
+            } else {
+                // new family
+                result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);
+            }
             return result;
         }
 
