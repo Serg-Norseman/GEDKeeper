@@ -12,6 +12,7 @@
         <Compile Include="ReportExporterEx.cs" />
         <Compile Include="RepositoriesReport.cs" />
         <Compile Include="SourcesReport.cs" />
+        <Compile Include="RecordCardReport.cs" />
     </ItemGroup>
 
     <ItemGroup>

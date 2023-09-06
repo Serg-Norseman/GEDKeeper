@@ -23,13 +23,14 @@ using System.Reflection;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKStdReports")]
 [assembly: AssemblyDescription("GEDKeeper standard reports plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2018-2021 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("0.6.0.0")]
+[assembly: AssemblyCopyright("Copyright © 2018-2023 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyVersion("0.7.0.0")]
 [assembly: AssemblyCulture("")]
 
 #if DEBUG
@@ -69,6 +70,8 @@ namespace GKStdReports
         LSID_Implex,
         LSID_CommonAncestors,
         LSID_ConsanguinityCommonAncestors,
+        LSID_RecordCard,
+        LSID_NotSelectedRecord,
     }
 
 
@@ -251,6 +254,29 @@ namespace GKStdReports
             }
 
             using (var report = new AncestorStatisticsReport(curBase, selPerson)) {
+                report.Generate(true);
+            }
+        }
+    }
+
+
+    public class RecCardPlugin : StdReportPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_RecordCard); } }
+
+        public override void Execute()
+        {
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            var selRecord = curBase.GetSelectedRecordEx();
+            if (selRecord == null) {
+                AppHost.StdDialogs.ShowError(SRLangMan.LS(RLS.LSID_NotSelectedRecord));
+                return;
+            }
+
+            using (var report = new RecordCardReport(curBase, selRecord)) {
+                report.Options = GlobalOptions.Instance;
                 report.Generate(true);
             }
         }
