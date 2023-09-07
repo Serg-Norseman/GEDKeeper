@@ -23,7 +23,6 @@ using System.IO;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using ExifLibrary;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKUI.Components;
@@ -42,17 +41,7 @@ namespace GKUI.Platform
 
         public Stream CheckOrientation(Stream inputStream)
         {
-            Stream transformStream;
-
-            var file = ImageFile.FromStream(inputStream);
-            var orientProp = file.Properties.Get<ExifEnumProperty<ExifLibrary.Orientation>>(ExifTag.Orientation);
-            if (orientProp != null && orientProp.Value != ExifLibrary.Orientation.Normal) {
-                inputStream.Seek(0, SeekOrigin.Begin);
-                transformStream = ImageProcess.AutoOrient(inputStream);
-            } else {
-                transformStream = inputStream;
-            }
-
+            Stream transformStream = ImageProcess.IsNeedOrient(inputStream) ? ImageProcess.AutoOrient(inputStream) : inputStream;
             transformStream.Seek(0, SeekOrigin.Begin);
             return transformStream;
         }

@@ -19,6 +19,7 @@
  */
 
 using System.IO;
+using ExifLibrary;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -28,11 +29,38 @@ namespace GKUI.Platform
 {
     public static class ImageProcess
     {
+        public static bool IsNeedOrient(Stream inputStream)
+        {
+            try {
+                try {
+                    var file = ImageFile.FromStream(inputStream);
+                    var orientProp = file.Properties.Get<ExifEnumProperty<Orientation>>(ExifTag.Orientation);
+                    return (orientProp != null && orientProp.Value != Orientation.Normal);
+                } finally {
+                    inputStream.Seek(0, SeekOrigin.Begin);
+                }
+            } catch {
+                return false;
+            }
+        }
+
         public static Stream AutoOrient(Stream inputStream)
         {
             var outputStream = new MemoryStream();
             using (var image = Image.Load<Bgr565>(inputStream)) {
-                image.Mutate(x => x.AutoOrient());
+                /*var scrSize = Screen.PrimaryScreen.Bounds.Size;
+                var resizeRatio = GfxHelper.ZoomToFit(image.Width, image.Height, scrSize.Width, scrSize.Height);
+                int targetWidth = (int)Math.Round(image.Width * resizeRatio);
+                int targetHeight = (int)Math.Round(image.Height * resizeRatio);*/
+
+                /*var targetDPI = Screen.PrimaryScreen.DPI;
+                double currentDPI = image.Metadata.HorizontalResolution;
+                double resizeRatio = targetDPI / currentDPI;
+                if (resizeRatio < 0.1) { resizeRatio *= 10.0f; }
+                int targetWidth = (int)Math.Round(image.Width * resizeRatio);
+                int targetHeight = (int)Math.Round(image.Height * resizeRatio);*/
+
+                image.Mutate(x => x./*Resize(targetWidth, targetHeight).*/AutoOrient());
                 var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
                 image.SaveAsBmp(outputStream, encoder);
             }

@@ -244,6 +244,8 @@ namespace GKUI.Components
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
+            //Console.WriteLine("ScrollablePanel.OnMouseWheel()");
+
             int delta = -(int)(e.Delta.Height * 120.0f);
 
             if (Keys.None == e.Modifiers) {
