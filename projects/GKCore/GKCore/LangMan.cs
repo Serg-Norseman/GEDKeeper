@@ -998,8 +998,10 @@ namespace GKCore
         /* 930 */ LSID_KinshipDegree_10,
 
         /* 931 */ LSID_ExtendedKinships,
+        /* 932 */ LSID_UseSurnamesInPersonSelectionFilter,
+        /* 933 */ LSID_UseBirthDatesInPersonSelectionFilter,
 
-        /* 000 */ LSID_Last = LSID_ExtendedKinships
+        /* 000 */ LSID_Last = LSID_UseBirthDatesInPersonSelectionFilter
     }
 
 
@@ -1954,6 +1956,8 @@ namespace GKCore
             /* 930 */ "ninth",
 
             /* 931 */ "Extended definition of kinship",
+            /* 932 */ "Use surnames in person selection filter",
+            /* 933 */ "Use dates of birth in person selection filter",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -745,8 +745,8 @@ namespace GDModel
             var child1 = GetPtrValue<GDMIndividualRecord>(cp1);
             var child2 = GetPtrValue<GDMIndividualRecord>(cp2);
 
-            UDN udn1 = child1.GetUDN(GEDCOMTagName.BIRT);
-            UDN udn2 = child2.GetUDN(GEDCOMTagName.BIRT);
+            UDN udn1 = child1.GetUDN(GEDCOMTagType.BIRT);
+            UDN udn2 = child2.GetUDN(GEDCOMTagType.BIRT);
 
             return udn1.CompareTo(udn2);
         }
@@ -763,8 +763,8 @@ namespace GDModel
             var spouse1 = GetPtrValue<GDMFamilyRecord>(cp1);
             var spouse2 = GetPtrValue<GDMFamilyRecord>(cp2);
 
-            UDN udn1 = spouse1.GetUDN(GEDCOMTagName.MARR);
-            UDN udn2 = spouse2.GetUDN(GEDCOMTagName.MARR);
+            UDN udn1 = spouse1.GetUDN(GEDCOMTagType.MARR);
+            UDN udn2 = spouse2.GetUDN(GEDCOMTagType.MARR);
 
             return udn1.CompareTo(udn2);
         }

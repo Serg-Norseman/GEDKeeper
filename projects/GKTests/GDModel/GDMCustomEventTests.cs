@@ -201,6 +201,9 @@ namespace GDModel
             UDN testUDN = iRec.GetUDN(GEDCOMTagName.BIRT);
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 
+            testUDN = iRec.GetUDN(GEDCOMTagType.BIRT);
+            Assert.AreEqual("1990/12/28", testUDN.ToString());
+
             testUDN = GDMDate.GetUDNByFormattedStr("28/12/1990", GDMCalendar.dcGregorian);
             Assert.AreEqual("1990/12/28", testUDN.ToString());
 

@@ -342,6 +342,9 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkShortKinshipForm").Checked = fOptions.ShortKinshipForm;
             GetControl<ICheckBox>("chkSurnameFirstInOrder").Checked = fOptions.SurnameFirstInOrder;
             GetControl<ICheckBox>("chkSurnameInCapitals").Checked = fOptions.SurnameInCapitals;
+
+            GetControl<ICheckBox>("chkUseSurnamesInPSF").Checked = fOptions.UseSurnamesInPersonSelectionFilter;
+            GetControl<ICheckBox>("chkUseBirthDatesInPSF").Checked = fOptions.UseBirthDatesInPersonSelectionFilter;
         }
 
         public NameFormat GetSelectedNameFormat()
@@ -389,6 +392,9 @@ namespace GKCore.Controllers
             fOptions.ShortKinshipForm = GetControl<ICheckBox>("chkShortKinshipForm").Checked;
             fOptions.SurnameFirstInOrder = GetControl<ICheckBox>("chkSurnameFirstInOrder").Checked;
             fOptions.SurnameInCapitals = GetControl<ICheckBox>("chkSurnameInCapitals").Checked;
+
+            fOptions.UseSurnamesInPersonSelectionFilter = GetControl<ICheckBox>("chkUseSurnamesInPSF").Checked;
+            fOptions.UseBirthDatesInPersonSelectionFilter = GetControl<ICheckBox>("chkUseBirthDatesInPSF").Checked;
         }
 
         public void ResetSpecialsOptions()
@@ -879,6 +885,9 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkShortKinshipForm").Text = LangMan.LS(LSID.LSID_ShortKinshipForm);
             GetControl<ICheckBox>("chkSurnameFirstInOrder").Text = LangMan.LS(LSID.LSID_SurnameFirstInOrder);
             GetControl<ICheckBox>("chkSurnameInCapitals").Text = LangMan.LS(LSID.LSID_SurnameInCapitals);
+
+            GetControl<ICheckBox>("chkUseSurnamesInPSF").Text = LangMan.LS(LSID.LSID_UseSurnamesInPersonSelectionFilter);
+            GetControl<ICheckBox>("chkUseBirthDatesInPSF").Text = LangMan.LS(LSID.LSID_UseBirthDatesInPersonSelectionFilter);
 
             GetControl<IGroupBox>("grpDateFormat").Text = LangMan.LS(LSID.LSID_DateFormat);
             GetControl<ICheckBox>("chkShowDatesCalendar").Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);

@@ -40,12 +40,6 @@ namespace GKUI.Forms
         private GKListView fListRecords;
 
 
-        public string FastFilter
-        {
-            get { return txtFastFilter.Text; }
-            set { txtFastFilter.Text = value; }
-        }
-
         public GDMRecord ResultRecord { get; set; }
 
         #region View Interface
@@ -75,7 +69,6 @@ namespace GKUI.Forms
             fController.RecType = recType;
 
             UpdateRecordsView();
-            FastFilter = "*";
         }
 
         protected override void Dispose(bool disposing)
@@ -137,7 +130,8 @@ namespace GKUI.Forms
                     fChangeTimer = new System.Timers.Timer(500);
                     fChangeTimer.AutoReset = false;
                     fChangeTimer.Elapsed += (sdr, args) => {
-                        BeginInvoke(new UpdateDelegate(fController.UpdateView));
+                        if (IsHandleCreated)
+                            BeginInvoke(new UpdateDelegate(fController.UpdateView));
                     };
                 } else {
                     fChangeTimer.Stop();
@@ -156,9 +150,9 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)
+        public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex, string defFilter = "*")
         {
-            fController.SetTarget(mode, target, needSex);
+            fController.SetTarget(mode, target, needSex, defFilter);
         }
     }
 }

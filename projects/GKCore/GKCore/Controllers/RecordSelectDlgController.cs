@@ -19,6 +19,7 @@
  */
 
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -67,23 +68,49 @@ namespace GKCore.Controllers
             fView.FilterBox.AddStrings(filters);
         }
 
-        public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex)
+        public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex, string defFilter = "*")
         {
             fTarget.TargetMode = mode;
             fTarget.TargetIndividual = target;
             fTarget.NeedSex = needSex;
+
+            if (GlobalOptions.Instance.UseSurnamesInPersonSelectionFilter && mode != TargetMode.tmNone && target != null) {
+                string[] fams = fBase.Context.GetIndividualSurnames(target);
+                if (fams != null && fams.Length > 0 && !string.IsNullOrEmpty(fams[0])) {
+                    defFilter = fams[0];
+                }
+            }
+
+            fView.FilterBox.Text = defFilter;
+
             UpdateView();
         }
 
-        private static bool ChildSelectorHandler(GDMRecord record)
+        // select child for parent
+        private bool ChildSelectorHandler(GDMRecord record)
         {
-            GDMIndividualRecord iRec = record as GDMIndividualRecord;
-            return (iRec != null && iRec.ChildToFamilyLinks.Count == 0);
+            var probableChild = (GDMIndividualRecord)record;
+            bool result = (probableChild != null && probableChild.ChildToFamilyLinks.Count == 0);
+
+            if (GlobalOptions.Instance.UseBirthDatesInPersonSelectionFilter) {
+                var parent = fTarget.TargetIndividual;
+                result = result && (parent.GetUDN(GEDCOMTagType.BIRT).CompareTo(probableChild.GetUDN(GEDCOMTagType.BIRT)) < 0);
+            }
+
+            return result;
+        }
+
+        // select parent for child
+        private bool ParentSelectorHandler(GDMRecord record)
+        {
+            var probableParent = (GDMIndividualRecord)record;
+            var child = fTarget.TargetIndividual;
+            return (probableParent.GetUDN(GEDCOMTagType.BIRT).CompareTo(child.GetUDN(GEDCOMTagType.BIRT)) < 0);
         }
 
         private bool SpouseSelectorHandler(GDMRecord record)
         {
-            GDMFamilyRecord famRec = record as GDMFamilyRecord;
+            var famRec = (GDMFamilyRecord)record;
             return (famRec != null && famRec.HasSpouse(fTarget.TargetIndividual));
         }
 
@@ -111,8 +138,21 @@ namespace GKCore.Controllers
                 case GDMRecordType.rtIndividual: {
                         IndividualListFilter iFilter = (IndividualListFilter)recordsList.ListMan.Filter;
                         iFilter.Sex = fTarget.NeedSex;
-                        if (fTarget.TargetMode == TargetMode.tmParent) {
-                            recordsList.ListMan.ExternalFilter = ChildSelectorHandler;
+                        switch (fTarget.TargetMode) {
+                            case TargetMode.tmParent:
+                                recordsList.ListMan.ExternalFilter = ChildSelectorHandler;
+                                break;
+                            case TargetMode.tmChild:
+                                if (GlobalOptions.Instance.UseBirthDatesInPersonSelectionFilter) {
+                                    recordsList.ListMan.ExternalFilter = ParentSelectorHandler;
+                                }
+                                break;
+                            case TargetMode.tmSpouse:
+                                break;
+                            case TargetMode.tmFamilyChild:
+                                break;
+                            case TargetMode.tmFamilySpouse:
+                                break;
                         }
                         recordsList.SortModelColumn((int)IndividualListModel.ColumnType.ctName);
                         break;

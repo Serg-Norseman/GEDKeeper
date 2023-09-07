@@ -380,13 +380,20 @@
                   <StackLayout Style="vertListStack">
 
                     <CheckBox x:Name="chkPlacesWithAddress" />
+                    <StackLayoutItem />
                     <CheckBox x:Name="chkHighlightUnparented" />
                     <CheckBox x:Name="chkHighlightUnmarried" />
+                    <StackLayoutItem />
                     <CheckBox x:Name="chkAutoSortChildren" />
                     <CheckBox x:Name="chkAutoSortSpouses" />
+                    <StackLayoutItem />
                     <CheckBox x:Name="chkFirstCapitalLetterInNames" />
                     <CheckBox x:Name="chkSurnameInCapitals" />
+                    <StackLayoutItem />
                     <CheckBox x:Name="chkShortKinshipForm" />
+                    <StackLayoutItem />
+                    <CheckBox x:Name="chkUseSurnamesInPSF" />
+                    <CheckBox x:Name="chkUseBirthDatesInPSF" />
 
                   </StackLayout>
 

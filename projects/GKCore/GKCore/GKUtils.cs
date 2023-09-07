@@ -1086,8 +1086,8 @@ namespace GKCore
                     result = Math.Abs(dt2 - dt1);
                 }
 #else
-                var udn1 = (ev1 == null) ? UDN.CreateUnknown() : ev1.GetUDN();
-                var udn2 = (ev2 == null) ? UDN.CreateUnknown() : ev2.GetUDN();
+                var udn1 = (ev1 == null) ? UDN.CreateUnknown() : ev1.Date.GetUDN();
+                var udn2 = (ev2 == null) ? UDN.CreateUnknown() : ev2.Date.GetUDN();
 
                 DateTime dt2 = (currentEnd || !udn2.HasKnownYear()) ? DateTime.Now : udn2.GetGregorianDateTime();
 

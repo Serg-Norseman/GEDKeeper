@@ -645,7 +645,7 @@ namespace GKCore.Tools
                 if (rec.RecordType == GDMRecordType.rtIndividual) {
                     GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
 
-                    string[] fams = baseWin.Context.Culture.GetSurnames(iRec);
+                    string[] fams = baseWin.Context.GetIndividualSurnames(iRec);
 
                     for (int k = 0; k < fams.Length; k++) {
                         string f = fams[k];

@@ -270,6 +270,10 @@ namespace GKCore.Options
 
         public bool UseExtendedNotes { get; set; }
 
+        public bool UseSurnamesInPersonSelectionFilter { get; set; }
+
+        public bool UseBirthDatesInPersonSelectionFilter { get; set; }
+
         public WomanSurnameFormat WomanSurnameFormat { get; set; }
 
 
@@ -378,6 +382,8 @@ namespace GKCore.Options
             SurnameFirstInOrder = true;
             SurnameInCapitals = false;
             WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
+            UseSurnamesInPersonSelectionFilter = false;
+            UseBirthDatesInPersonSelectionFilter = false;
         }
 
         public void ResetDefaults_Specials()
@@ -765,6 +771,9 @@ namespace GKCore.Options
             FilesOverwriteWarn = ini.ReadBool("Common", "FilesOverwriteWarn", true);
             ExtendedKinships = ini.ReadBool("Common", "ExtendedKinships", false);
 
+            UseSurnamesInPersonSelectionFilter = ini.ReadBool("Common", "UseSurnamesInPersonSelectionFilter", false);
+            UseBirthDatesInPersonSelectionFilter = ini.ReadBool("Common", "UseBirthDatesInPersonSelectionFilter", false);
+
             Theme = ini.ReadString("Common", "Theme", "");
 
             LoadPluginsFromFile(ini);
@@ -906,6 +915,9 @@ namespace GKCore.Options
             ini.WriteBool("Common", "KeepInfoPansOverallSize", KeepInfoPansOverallSize);
             ini.WriteBool("Common", "FilesOverwriteWarn", FilesOverwriteWarn);
             ini.WriteBool("Common", "ExtendedKinships", ExtendedKinships);
+
+            ini.WriteBool("Common", "UseSurnamesInPersonSelectionFilter", UseSurnamesInPersonSelectionFilter);
+            ini.WriteBool("Common", "UseBirthDatesInPersonSelectionFilter", UseBirthDatesInPersonSelectionFilter);
 
             ini.WriteString("Common", "Theme", Theme);
 

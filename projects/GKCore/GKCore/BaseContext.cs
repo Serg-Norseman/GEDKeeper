@@ -439,6 +439,11 @@ namespace GKCore
 
         #region Individual utils
 
+        public string[] GetIndividualSurnames(GDMIndividualRecord iRec)
+        {
+            return Culture.GetSurnames(iRec);
+        }
+
         /// <summary>
         /// Attention: returns or creates only the first marriage!
         /// </summary>
@@ -1774,7 +1779,6 @@ namespace GKCore
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
-                    dlg.FastFilter = "*";
                     dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
 
                     if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
@@ -1797,7 +1801,6 @@ namespace GKCore
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtIndividual)) {
-                    dlg.FastFilter = "*";
                     dlg.SetTarget(targetMode, target, needSex);
 
                     if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
@@ -1820,12 +1823,8 @@ namespace GKCore
 
             try {
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, mode)) {
-                    if (args != null && args.Length > 0) {
-                        dlg.FastFilter = (args[0] as string);
-                    } else {
-                        dlg.FastFilter = "*";
-                    }
-                    dlg.SetTarget(TargetMode.tmNone, null, GDMSex.svUnknown);
+                    var flt = (args != null && args.Length > 0) ? (args[0] as string) : "*";
+                    dlg.SetTarget(TargetMode.tmNone, null, GDMSex.svUnknown, flt);
 
                     if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
                         result = dlg.ResultRecord;

@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
@@ -160,6 +161,7 @@ namespace GDModel
         
         GDMCustomEvent AddEvent(GDMCustomEvent evt);
         GDMCustomEvent FindEvent(string eventName);
+        GDMCustomEvent FindEvent(GEDCOMTagType eventType);
     }
 
 

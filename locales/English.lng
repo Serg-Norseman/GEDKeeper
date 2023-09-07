@@ -937,3 +937,5 @@
 930=ninth   ; kinship degree, format: word or word[-male_ending|-female_ending] or [male_word|female_word]
 
 931=Extended definition of kinship
+932=Use surnames in person selection filter
+933=Use dates of birth in person selection filter

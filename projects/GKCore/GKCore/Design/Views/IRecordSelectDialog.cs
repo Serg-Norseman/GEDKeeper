@@ -30,12 +30,11 @@ namespace GKCore.Design.Views
     /// </summary>
     public interface IRecordSelectDialog : ICommonDialog, IBaseEditor
     {
-        string FastFilter { get; set; }
         GDMRecord ResultRecord { get; set; }
 
         IComboBox FilterBox { get; }
         IListView RecordsList { get; }
 
-        void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex);
+        void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex, string defFilter = "*");
     }
 }

@@ -176,6 +176,8 @@
         private System.Windows.Forms.CheckBox chkFilesOverwriteWarn;
         private System.Windows.Forms.CheckBox chkSameCardsWidth;
         private System.Windows.Forms.CheckBox chkExtendedKinships;
+        private System.Windows.Forms.CheckBox chkUseSurnamesInPSF;
+        private System.Windows.Forms.CheckBox chkUseBirthDatesInPSF;
 
         private void InitializeComponent()
         {
@@ -353,6 +355,8 @@
             this.chkFilesOverwriteWarn = new System.Windows.Forms.CheckBox();
             this.chkSameCardsWidth = new System.Windows.Forms.CheckBox();
             this.chkExtendedKinships = new System.Windows.Forms.CheckBox();
+            this.chkUseSurnamesInPSF = new System.Windows.Forms.CheckBox();
+            this.chkUseBirthDatesInPSF = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1797,6 +1801,8 @@
             this.pageViewCommon.Controls.Add(this.chkShortKinshipForm);
             this.pageViewCommon.Controls.Add(this.chkAutoSortChildren);
             this.pageViewCommon.Controls.Add(this.chkHighlightUnmarried);
+            this.pageViewCommon.Controls.Add(this.chkUseSurnamesInPSF);
+            this.pageViewCommon.Controls.Add(this.chkUseBirthDatesInPSF);
             this.pageViewCommon.Location = new System.Drawing.Point(4, 26);
             this.pageViewCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewCommon.Name = "pageViewCommon";
@@ -2010,41 +2016,14 @@
             this.chkShowDatesCalendar.TabIndex = 4;
             this.chkShowDatesCalendar.Text = "chkShowDatesCalendar";
             // 
-            // chkSurnameInCapitals
+            // chkHighlightUnmarried
             // 
-            this.chkSurnameInCapitals.Location = new System.Drawing.Point(11, 378);
-            this.chkSurnameInCapitals.Margin = new System.Windows.Forms.Padding(2);
-            this.chkSurnameInCapitals.Name = "chkSurnameInCapitals";
-            this.chkSurnameInCapitals.Size = new System.Drawing.Size(302, 21);
-            this.chkSurnameInCapitals.TabIndex = 4;
-            this.chkSurnameInCapitals.Text = "chkSurnameInCapitals";
-            // 
-            // chkFirstCapitalLetterInNames
-            // 
-            this.chkFirstCapitalLetterInNames.Location = new System.Drawing.Point(11, 352);
-            this.chkFirstCapitalLetterInNames.Margin = new System.Windows.Forms.Padding(2);
-            this.chkFirstCapitalLetterInNames.Name = "chkFirstCapitalLetterInNames";
-            this.chkFirstCapitalLetterInNames.Size = new System.Drawing.Size(302, 21);
-            this.chkFirstCapitalLetterInNames.TabIndex = 4;
-            this.chkFirstCapitalLetterInNames.Text = "chkFirstCapitalLetterInNames";
-            // 
-            // chkAutoSortSpouses
-            // 
-            this.chkAutoSortSpouses.Location = new System.Drawing.Point(11, 326);
-            this.chkAutoSortSpouses.Margin = new System.Windows.Forms.Padding(2);
-            this.chkAutoSortSpouses.Name = "chkAutoSortSpouses";
-            this.chkAutoSortSpouses.Size = new System.Drawing.Size(302, 21);
-            this.chkAutoSortSpouses.TabIndex = 4;
-            this.chkAutoSortSpouses.Text = "chkAutoSortSpouses";
-            // 
-            // chkShortKinshipForm
-            // 
-            this.chkShortKinshipForm.Location = new System.Drawing.Point(11, 422);
-            this.chkShortKinshipForm.Margin = new System.Windows.Forms.Padding(2);
-            this.chkShortKinshipForm.Name = "chkShortKinshipForm";
-            this.chkShortKinshipForm.Size = new System.Drawing.Size(302, 21);
-            this.chkShortKinshipForm.TabIndex = 4;
-            this.chkShortKinshipForm.Text = "chkShortKinshipForm";
+            this.chkHighlightUnmarried.Location = new System.Drawing.Point(11, 249);
+            this.chkHighlightUnmarried.Margin = new System.Windows.Forms.Padding(2);
+            this.chkHighlightUnmarried.Name = "chkHighlightUnmarried";
+            this.chkHighlightUnmarried.Size = new System.Drawing.Size(302, 21);
+            this.chkHighlightUnmarried.TabIndex = 4;
+            this.chkHighlightUnmarried.Text = "chkHighlightUnmarried";
             // 
             // chkAutoSortChildren
             // 
@@ -2055,14 +2034,59 @@
             this.chkAutoSortChildren.TabIndex = 4;
             this.chkAutoSortChildren.Text = "chkAutoSortChildren";
             // 
-            // chkHighlightUnmarried
+            // chkAutoSortSpouses
             // 
-            this.chkHighlightUnmarried.Location = new System.Drawing.Point(11, 249);
-            this.chkHighlightUnmarried.Margin = new System.Windows.Forms.Padding(2);
-            this.chkHighlightUnmarried.Name = "chkHighlightUnmarried";
-            this.chkHighlightUnmarried.Size = new System.Drawing.Size(302, 21);
-            this.chkHighlightUnmarried.TabIndex = 4;
-            this.chkHighlightUnmarried.Text = "chkHighlightUnmarried";
+            this.chkAutoSortSpouses.Location = new System.Drawing.Point(11, 326);
+            this.chkAutoSortSpouses.Margin = new System.Windows.Forms.Padding(2);
+            this.chkAutoSortSpouses.Name = "chkAutoSortSpouses";
+            this.chkAutoSortSpouses.Size = new System.Drawing.Size(302, 21);
+            this.chkAutoSortSpouses.TabIndex = 4;
+            this.chkAutoSortSpouses.Text = "chkAutoSortSpouses";
+            // 
+            // chkFirstCapitalLetterInNames
+            // 
+            this.chkFirstCapitalLetterInNames.Location = new System.Drawing.Point(11, 352);
+            this.chkFirstCapitalLetterInNames.Margin = new System.Windows.Forms.Padding(2);
+            this.chkFirstCapitalLetterInNames.Name = "chkFirstCapitalLetterInNames";
+            this.chkFirstCapitalLetterInNames.Size = new System.Drawing.Size(302, 21);
+            this.chkFirstCapitalLetterInNames.TabIndex = 4;
+            this.chkFirstCapitalLetterInNames.Text = "chkFirstCapitalLetterInNames";
+            // 
+            // chkSurnameInCapitals
+            // 
+            this.chkSurnameInCapitals.Location = new System.Drawing.Point(11, 378);
+            this.chkSurnameInCapitals.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSurnameInCapitals.Name = "chkSurnameInCapitals";
+            this.chkSurnameInCapitals.Size = new System.Drawing.Size(302, 21);
+            this.chkSurnameInCapitals.TabIndex = 4;
+            this.chkSurnameInCapitals.Text = "chkSurnameInCapitals";
+            // 
+            // chkShortKinshipForm
+            // 
+            this.chkShortKinshipForm.Location = new System.Drawing.Point(11, 422);
+            this.chkShortKinshipForm.Margin = new System.Windows.Forms.Padding(2);
+            this.chkShortKinshipForm.Name = "chkShortKinshipForm";
+            this.chkShortKinshipForm.Size = new System.Drawing.Size(302, 21);
+            this.chkShortKinshipForm.TabIndex = 4;
+            this.chkShortKinshipForm.Text = "chkShortKinshipForm";
+            // 
+            // chkUseSurnamesInPSF
+            // 
+            this.chkUseSurnamesInPSF.Location = new System.Drawing.Point(11, 466);
+            this.chkUseSurnamesInPSF.Margin = new System.Windows.Forms.Padding(2);
+            this.chkUseSurnamesInPSF.Name = "chkUseSurnamesInPSF";
+            this.chkUseSurnamesInPSF.Size = new System.Drawing.Size(500, 21);
+            this.chkUseSurnamesInPSF.TabIndex = 4;
+            this.chkUseSurnamesInPSF.Text = "chkUseSurnamesInPSF";
+            // 
+            // chkUseBirthDatesInPSF
+            // 
+            this.chkUseBirthDatesInPSF.Location = new System.Drawing.Point(11, 492);
+            this.chkUseBirthDatesInPSF.Margin = new System.Windows.Forms.Padding(2);
+            this.chkUseBirthDatesInPSF.Name = "chkUseBirthDatesInPSF";
+            this.chkUseBirthDatesInPSF.Size = new System.Drawing.Size(500, 21);
+            this.chkUseBirthDatesInPSF.TabIndex = 4;
+            this.chkUseBirthDatesInPSF.Text = "chkUseBirthDatesInPSF";
             // 
             // pageViewPersons
             // 

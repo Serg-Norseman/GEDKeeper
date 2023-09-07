@@ -60,7 +60,6 @@ namespace GKUI.Forms
         [Test]
         public void Test_Common()
         {
-            Assert.AreEqual("*", fDialog.FastFilter);
             Assert.AreEqual(null, fDialog.ResultRecord);
 
             ClickButton("btnCancel", fDialog);
