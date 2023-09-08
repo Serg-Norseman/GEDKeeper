@@ -135,12 +135,12 @@ namespace GKCore
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
-            Assert.IsNotNull(fContext.LangsList);
-            Assert.AreEqual(0, fContext.LangsList.Count);
+            Assert.IsNotNull(fContext.LangStats);
+            Assert.AreEqual(0, fContext.LangStats.Count);
             fContext.CollectNameLangs(null);
             iRec.PersonalNames[0].Language = GDMLanguageID.AncientGreek;
             fContext.CollectNameLangs(iRec.PersonalNames[0]);
-            Assert.AreEqual(1, fContext.LangsList.Count);
+            Assert.AreEqual(1, fContext.LangStats.Count);
         }
 
         [Test]

@@ -57,8 +57,8 @@ namespace GKCore
         private bool fModified;
         private ShieldState fShieldState;
 
-        private readonly Dictionary<string, int> fEventStats;
-        private readonly List<GDMLanguageID> fLangsList;
+        private readonly FreqCollection<string> fEventStats;
+        private readonly FreqCollection<GDMLanguageID> fLangStats;
         private readonly List<GDMRecord> fLockedRecords;
         private readonly GDMTree fTree;
         private readonly ValuesCollection fValuesCollection;
@@ -87,7 +87,7 @@ namespace GKCore
             set { fDefaultLanguage = value; }
         }
 
-        public Dictionary<string, int> EventStats
+        public FreqCollection<string> EventStats
         {
             get { return fEventStats; }
         }
@@ -97,9 +97,9 @@ namespace GKCore
             get { return fFileName; }
         }
 
-        public List<GDMLanguageID> LangsList
+        public FreqCollection<GDMLanguageID> LangStats
         {
-            get { return fLangsList; }
+            get { return fLangStats; }
         }
 
         public bool Modified
@@ -169,8 +169,9 @@ namespace GKCore
             fUndoman = new ChangeTracker(this);
             fValuesCollection = new ValuesCollection();
             fLockedRecords = new List<GDMRecord>();
-            fLangsList = new List<GDMLanguageID>();
-            fEventStats = new Dictionary<string, int>();
+
+            fLangStats = new FreqCollection<GDMLanguageID>();
+            fEventStats = new FreqCollection<string>();
         }
 
         protected override void Dispose(bool disposing)
@@ -201,8 +202,8 @@ namespace GKCore
             if (persName == null) return;
 
             GDMLanguageID langId = persName.Language;
-            if (langId != GDMLanguageID.Unknown && !fLangsList.Contains(langId)) {
-                fLangsList.Add(langId);
+            if (langId != GDMLanguageID.Unknown) {
+                fLangStats.Increment(langId);
             }
         }
 
@@ -422,17 +423,6 @@ namespace GKCore
                     sources.AddObject(rec.ShortTitle, rec);
                 }
             }
-        }
-
-        public void IncrementEventStats(string tagName)
-        {
-            int val;
-            if (fEventStats.TryGetValue(tagName, out val)) {
-                val += 1;
-            } else {
-                val = 1;
-            }
-            fEventStats[tagName] = val;
         }
 
         #endregion

@@ -21,6 +21,7 @@
 using System;
 using System.Windows.Forms;
 using GDModel;
+using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -139,7 +140,7 @@ namespace GKUI.Forms
 
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbEventType.Text == EventEditDlgController.LineItem) {
+            if (cmbEventType.Text == FreqCollection<string>.LineItem) {
                 cmbEventType.SelectedIndex = 0;
                 return;
             }

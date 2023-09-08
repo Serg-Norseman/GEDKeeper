@@ -19,13 +19,14 @@
  */
 
 using System;
+using System.Collections.Generic;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Cultures;
-using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 
@@ -61,11 +62,6 @@ namespace GKCore.Controllers
             for (GDMNameType nt = GDMNameType.ntNone; nt <= GDMNameType.ntMarried; nt++) {
                 fView.NameType.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
             }
-
-            for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
-                fView.Language.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
-            }
-            fView.Language.Sort();
         }
 
         public override bool Accept()
@@ -99,6 +95,8 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+            FillLanguages();
+
             var parts = GKUtils.GetNameParts(fBase.Context.Tree, fIndividualRecord, fPersonalName, false);
 
             fView.Surname.Text = parts.Surname;
@@ -135,6 +133,20 @@ namespace GKCore.Controllers
             var culture = CulturesPool.DefineCulture(selectedLanguageId);
             fView.Surname.Enabled = culture.HasSurname;
             fView.Patronymic.Enabled = culture.HasPatronymic;
+        }
+
+        private void FillLanguages()
+        {
+            var freqList = new List<FreqItem<GDMLanguageID>>();
+
+            var langStats = fBase.Context.LangStats;
+            for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
+                int stat = (lid == GDMLanguageID.Unknown) ? 1000 : langStats.GetValue(lid);
+                freqList.Add(new FreqItem<GDMLanguageID>(lid, GEDCOMUtils.GetLanguageStr(lid), stat));
+                //fView.Language.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
+            }
+
+            FreqCollection<string>.PopulateCombo(fView.Language, freqList, GDMLanguageID.Unknown);
         }
 
         private GDMLanguageID GetSelectedLanguageID()

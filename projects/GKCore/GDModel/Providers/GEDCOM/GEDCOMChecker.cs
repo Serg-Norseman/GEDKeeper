@@ -223,7 +223,7 @@ namespace GDModel.Providers.GEDCOM
                 CheckEventPlace(evt.Place);
             }
 
-            fBaseContext.IncrementEventStats(evt.GetTagName());
+            fBaseContext.EventStats.Increment(evt.GetTagName());
         }
 
         private void CheckUserRef(GDMRecord rec, GDMUserReference userRef)

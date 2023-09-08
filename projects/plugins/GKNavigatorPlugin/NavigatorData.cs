@@ -454,9 +454,8 @@ namespace GKNavigatorPlugin
                 listView.Clear();
                 listView.AddColumn(fPlugin.LangMan.LS(PLS.LSID_Language), 200, true);
 
-                var baseContext = baseWin.Context;
-
-                foreach (var lang in baseContext.LangsList) {
+                var langsList = baseWin.Context.LangStats.ToList();
+                foreach (var lang in langsList) {
                     listView.AddItem(lang, new object[] { GEDCOMUtils.GetLanguageStr(lang) });
                 }
 

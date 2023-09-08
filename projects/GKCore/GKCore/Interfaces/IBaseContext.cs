@@ -33,14 +33,15 @@ namespace GKCore.Interfaces
     {
         ICulture Culture { get; }
         GDMLanguageID DefaultLanguage { get; set; }
-        Dictionary<string, int> EventStats { get; }
         string FileName { get; }
         GDMTree Tree { get; }
         ValuesCollection ValuesCollection { get; }
         ShieldState ShieldState { get; set; }
         bool Modified { get; set; }
         IBaseWindow Viewer { get; }
-        List<GDMLanguageID> LangsList { get; }
+
+        FreqCollection<string> EventStats { get; }
+        FreqCollection<GDMLanguageID> LangStats { get; }
 
         bool IsUnknown();
         void Clear();
@@ -130,7 +131,5 @@ namespace GKCore.Interfaces
 
         bool CopyFile(string sourceFileName, string destFileName, bool showProgress = true);
         void MoveMediaContainers(string oldFileName, string newFileName, bool createCopy = false);
-
-        void IncrementEventStats(string tagName);
     }
 }

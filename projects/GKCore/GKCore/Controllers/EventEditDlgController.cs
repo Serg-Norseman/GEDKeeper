@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using ExcelLibrary.BinaryFileFormat;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
@@ -96,7 +97,7 @@ namespace GKCore.Controllers
                     fEvent.StringValue = (eventProps.Kind == PersonEventKind.ekFact) ? fView.Attribute.Text : string.Empty;
                 }
                 fEvent.SetName(tagName);
-                fBase.Context.IncrementEventStats(tagName);
+                fBase.Context.EventStats.Increment(tagName);
 
                 if (fEvent is GDMIndividualEvent) {
                     if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
@@ -115,48 +116,17 @@ namespace GKCore.Controllers
             }
         }
 
-        private sealed class EventX
-        {
-            public string Name;
-            public int Index;
-            public int Stat;
-            public bool Use;
-
-            public EventX(string name, int index, int stat)
-            {
-                Name = name;
-                Index = index;
-                Stat = stat;
-                Use = (stat > 0);
-            }
-        }
-
-        public const string LineItem = " ------------------------------ ";
-
         private void SetEventTypes(GKData.EventStruct[] eventTypes)
         {
-            var list = new List<EventX>();
+            var freqList = new List<FreqItem<int>>();
+
             var eventStats = fBase.Context.EventStats;
             for (int i = 0; i < eventTypes.Length; i++) {
-                int stat;
-                if (!eventStats.TryGetValue(eventTypes[i].Sign, out stat)) {
-                    stat = 0;
-                }
-                list.Add(new EventX(LangMan.LS(eventTypes[i].Name), i, stat));
+                int stat = eventStats.GetValue(eventTypes[i].Sign);
+                freqList.Add(new FreqItem<int>(i, LangMan.LS(eventTypes[i].Name), stat));
             }
-            list.Sort((x, y) => { return (-10 * x.Use.CompareTo(y.Use)) + x.Name.CompareTo(y.Name); });
 
-            fView.EventType.Clear();
-            bool use = false;
-            for (int i = 0; i < list.Count; i++) {
-                var item = list[i];
-                if (use != item.Use && i != 0) {
-                    fView.EventType.AddItem(LineItem, -1);
-                }
-                //fView.EventType.AddItem(string.Format("{0} [{1}]", item.Name, item.Stat), item.Index);
-                fView.EventType.AddItem(item.Name, item.Index);
-                use = item.Use;
-            }
+            FreqCollection<string>.PopulateCombo(fView.EventType, freqList, 0);
         }
 
         public override void UpdateView()
@@ -225,7 +195,7 @@ namespace GKCore.Controllers
 
         public void AddPlace()
         {
-            fTempLocation = fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, null) as GDMLocationRecord;
+            fTempLocation = fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { fView.Place.Text }) as GDMLocationRecord;
             UpdatePlace();
         }
 
