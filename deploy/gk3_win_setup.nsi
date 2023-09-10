@@ -402,6 +402,41 @@ SectionGroup /e "$(gklang)"
         SetOutPath "$INSTDIR\locales"
         File "..\locales\czech.lng"
     SectionEnd
+
+    Section "Беларуская мова"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Belarusian.lng"
+    SectionEnd
+
+    Section "Magyar"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Hungarian.lng"
+    SectionEnd
+
+    Section "Íslenska"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Icelandic.lng"
+    SectionEnd
+
+    Section "Қазақ"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Kazakh (Cyrillic).lng"
+    SectionEnd
+
+    Section "Português"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Portuguese.lng"
+    SectionEnd
+
+    Section "Srpski"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Serbian (Latin).lng"
+    SectionEnd
+
+    Section "Español"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Spanish.lng"
+    SectionEnd
 SectionGroupEnd
 
 SectionGroup /e "$(gkplg)"
@@ -473,9 +508,7 @@ SectionGroup /e "$(gkplg)"
 
 ;    Section "GEDmill"
 ;        SetOutPath "$INSTDIR\plugins"
-;        File "..\plugins\GEDmillPlugin.dll"
-;        File "..\plugins\GEDmillPlugin.rus"
-;        File "..\plugins\GEDmillPlugin.enu"
+;        File "..\plugins\GEDmillPlugin.*"
 ;        File "..\plugins\log4net.dll"
 ;    SectionEnd
 

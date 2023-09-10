@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using ExcelLibrary.BinaryFileFormat;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;

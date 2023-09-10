@@ -428,132 +428,115 @@ SectionGroup /e "$(gklang)"
         SetOutPath "$INSTDIR\locales"
         File "..\locales\czech.lng"
     SectionEnd
+
+    Section "Беларуская мова"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Belarusian.lng"
+    SectionEnd
+
+    Section "Magyar"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Hungarian.lng"
+    SectionEnd
+
+    Section "Íslenska"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Icelandic.lng"
+    SectionEnd
+
+    Section "Қазақ"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Kazakh (Cyrillic).lng"
+    SectionEnd
+
+    Section "Português"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Portuguese.lng"
+    SectionEnd
+
+    Section "Srpski"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Serbian (Latin).lng"
+    SectionEnd
+
+    Section "Español"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Spanish.lng"
+    SectionEnd
 SectionGroupEnd
 
 SectionGroup /e "$(gkplg)"
     Section "$(gkp_calc)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKCalculatorPlugin.dll"
-        File "..\plugins\GKCalculatorPlugin.rus"
-        File "..\plugins\GKCalculatorPlugin.enu"
-        File "..\plugins\GKCalculatorPlugin.ukr"
-        File "..\plugins\GKCalculatorPlugin.pol"
+        File "..\plugins\GKCalculatorPlugin.*"
     SectionEnd
 
     Section "$(gkp_calendar)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKCalendarPlugin.dll"
-        File "..\plugins\GKCalendarPlugin.rus"
-        File "..\plugins\GKCalendarPlugin.enu"
-        File "..\plugins\GKCalendarPlugin.ukr"
-        File "..\plugins\GKCalendarPlugin.pol"
+        File "..\plugins\GKCalendarPlugin.*"
     SectionEnd
 
     Section "$(gkp_nb)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKNamesBookPlugin.dll"
-        File "..\plugins\GKNamesBookPlugin.rus"
-        File "..\plugins\GKNamesBookPlugin.enu"
-        File "..\plugins\GKNamesBookPlugin.ukr"
-        File "..\plugins\GKNamesBookPlugin.pol"
+        File "..\plugins\GKNamesBookPlugin.*"
     SectionEnd
 
     Section "$(gkp_timeline)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKTimeLinePlugin.dll"
-        File "..\plugins\GKTimeLinePlugin.rus"
-        File "..\plugins\GKTimeLinePlugin.enu"
-        File "..\plugins\GKTimeLinePlugin.ukr"
-        File "..\plugins\GKTimeLinePlugin.pol"
+        File "..\plugins\GKTimeLinePlugin.*"
     SectionEnd
 
     Section "$(gkp_flowinput)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKFlowInputPlugin.dll"
-        File "..\plugins\GKFlowInputPlugin.rus"
-        File "..\plugins\GKFlowInputPlugin.enu"
-        File "..\plugins\GKFlowInputPlugin.ukr"
-        File "..\plugins\GKFlowInputPlugin.pol"
+        File "..\plugins\GKFlowInputPlugin.*"
     SectionEnd
 
     Section "$(gkp_pi)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKPedigreeImporterPlugin.dll"
-        File "..\plugins\GKPedigreeImporterPlugin.rus"
-        File "..\plugins\GKPedigreeImporterPlugin.enu"
-        File "..\plugins\GKPedigreeImporterPlugin.ukr"
-        File "..\plugins\GKPedigreeImporterPlugin.pol"
+        File "..\plugins\GKPedigreeImporterPlugin.*"
     SectionEnd
 
     Section "$(gkp_ts)"
         SetOutPath "$INSTDIR\plugins"
         File "..\plugins\Lucene.Net.dll"
         File "..\plugins\ICSharpCode.SharpZipLib.dll"
-        File "..\plugins\GKTextSearchPlugin.dll"
-        File "..\plugins\GKTextSearchPlugin.rus"
-        File "..\plugins\GKTextSearchPlugin.enu"
-        File "..\plugins\GKTextSearchPlugin.ukr"
-        File "..\plugins\GKTextSearchPlugin.pol"
+        File "..\plugins\GKTextSearchPlugin.*"
     SectionEnd
 
     Section "$(gkp_cl)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKLifePlugin.dll"
-        File "..\plugins\GKLifePlugin.rus"
-        File "..\plugins\GKLifePlugin.enu"
-        File "..\plugins\GKLifePlugin.ukr"
-        File "..\plugins\GKLifePlugin.pol"
+        File "..\plugins\GKLifePlugin.*"
     SectionEnd
 
     Section "$(gkp_chron)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKChroniclePlugin.dll"
-        File "..\plugins\GKChroniclePlugin.rus"
-        File "..\plugins\GKChroniclePlugin.enu"
-        File "..\plugins\GKChroniclePlugin.ukr"
-        File "..\plugins\GKChroniclePlugin.pol"
+        File "..\plugins\GKChroniclePlugin.*"
     SectionEnd
 
     Section "$(gkp_cloud)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKWordsCloudPlugin.dll"
-        File "..\plugins\GKWordsCloudPlugin.rus"
-        File "..\plugins\GKWordsCloudPlugin.enu"
-        File "..\plugins\GKWordsCloudPlugin.ukr"
-        File "..\plugins\GKWordsCloudPlugin.pol"
+        File "..\plugins\GKWordsCloudPlugin.*"
     SectionEnd
 
     Section "$(gkp_histdata)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKHistoryDataPlugin.dll"
-        File "..\plugins\GKHistoryDataPlugin.rus"
-        File "..\plugins\GKHistoryDataPlugin.enu"
+        File "..\plugins\GKHistoryDataPlugin.*"
     SectionEnd
 
     Section "$(gkp_stdreports)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKStdReports.dll"
-        File "..\plugins\GKStdReports.rus"
-        File "..\plugins\GKStdReports.enu"
-        File "..\plugins\GKStdReports.fra"
-        File "..\plugins\GKStdReports.deu"
-        File "..\plugins\GKStdReports.ukr"
+        File "..\plugins\GKStdReports.*"
     SectionEnd
 
     Section "GEDmill"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GEDmillPlugin.dll"
-        File "..\plugins\GEDmillPlugin.rus"
-        File "..\plugins\GEDmillPlugin.enu"
+        File "..\plugins\GEDmillPlugin.*"
         File "..\plugins\log4net.dll"
     SectionEnd
 
     Section "$(gkp_navig)"
         SetOutPath "$INSTDIR\plugins"
-        File "..\plugins\GKNavigatorPlugin.dll"
-        File "..\plugins\GKNavigatorPlugin.rus"
-        File "..\plugins\GKNavigatorPlugin.enu"
-        File "..\plugins\GKNavigatorPlugin.ukr"
+        File "..\plugins\GKNavigatorPlugin.*"
     SectionEnd
 SectionGroupEnd
 
