@@ -133,6 +133,10 @@ namespace GKUI.Platform
                 h.Control.Button.ModifyFg(Gtk.StateType.Normal, new Gdk.Color(0, 0, 0));
             });
 #endif
+
+#if OS_MSWIN
+            Eto.Wpf.Forms.ToolBar.ToolItemHandler.DefaultImageSize = new Size(20, 20);
+#endif
         }
 
         private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)

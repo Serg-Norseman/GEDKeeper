@@ -187,6 +187,16 @@ namespace GKUI.Forms
             ShowInTaskbar = false;
 
             fControlsManager = new ControlsManager(this);
+
+            /*Styles.Add<Button>(null, b => {
+                b.KeyDown += (sender, e) => {
+                    var defButton = DefaultButton;
+                    if (e.KeyData == Keys.Enter && sender != defButton) {
+                        defButton?.PerformClick();
+                        e.Handled = true;
+                    }
+                };
+            });*/
         }
 
         public void SetToolTip(object component, string toolTip)
