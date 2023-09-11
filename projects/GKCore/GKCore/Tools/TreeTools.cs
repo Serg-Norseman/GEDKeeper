@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
@@ -879,6 +880,23 @@ namespace GKCore.Tools
 
         #region Places Management
 
+        private static string fMask;
+        private static Regex fRegexMask;
+
+        private static bool IsMatchesMask(string str, string mask)
+        {
+            if (string.IsNullOrEmpty(mask) || mask == "*") {
+                return true;
+            }
+
+            if (fMask != mask) {
+                fMask = mask;
+                fRegexMask = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
+            }
+
+            return fRegexMask.IsMatch(str, 0);
+        }
+
         public static void SearchPlaces_Clear(StringList placesList)
         {
             if (placesList == null)
@@ -887,11 +905,13 @@ namespace GKCore.Tools
             placesList.Clear();
         }
 
-        private static void SearchPlaces_CheckEventPlace(GDMTree tree, StringList placesList, GDMCustomEvent evt, bool checkLocation)
+        private static void SearchPlaces_CheckEventPlace(GDMTree tree, StringList placesList, GDMCustomEvent evt, string filter, bool checkLocation)
         {
             if (!evt.HasPlace) return;
             string placeStr = evt.Place.StringValue;
             if (string.IsNullOrEmpty(placeStr)) return;
+
+            if (!IsMatchesMask(placeStr, filter)) return;
 
             if (checkLocation) {
                 var locRec = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
@@ -912,7 +932,7 @@ namespace GKCore.Tools
             placeObj.Facts.Add(evt);
         }
 
-        public static void SearchPlaces(GDMTree tree, StringList placesList, IProgressController pc, bool checkLocation = true)
+        public static void SearchPlaces(GDMTree tree, StringList placesList, IProgressController pc, string filter = "*", bool checkLocation = true)
         {
             if (tree == null)
                 throw new ArgumentNullException("tree");
@@ -938,7 +958,7 @@ namespace GKCore.Tools
                         for (int j = 0; j < num2; j++) {
                             GDMCustomEvent evt = evsRec.Events[j];
 
-                            SearchPlaces_CheckEventPlace(tree, placesList, evt, checkLocation);
+                            SearchPlaces_CheckEventPlace(tree, placesList, evt, filter, checkLocation);
                         }
                     }
                 }

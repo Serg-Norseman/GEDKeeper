@@ -8,6 +8,8 @@
 		private System.Windows.Forms.Panel Panel4;
 		private System.Windows.Forms.Button btnAnalysePlaces;
 		private System.Windows.Forms.Button btnIntoList;
+        private System.Windows.Forms.Label lblFilter;
+        private System.Windows.Forms.TextBox txtFilter;
 
 		private void InitializeComponent()
 		{
@@ -17,6 +19,8 @@
 		    this.btnIntoList = new System.Windows.Forms.Button();
 		    this.btnAnalysePlaces = new System.Windows.Forms.Button();
 		    this.btnClose = new System.Windows.Forms.Button();
+            this.lblFilter = new System.Windows.Forms.Label();
+            this.txtFilter = new System.Windows.Forms.TextBox();
 		    this.tabsTools.SuspendLayout();
 		    this.pagePlaceManage.SuspendLayout();
 		    this.SuspendLayout();
@@ -36,6 +40,8 @@
 		    this.pagePlaceManage.Controls.Add(this.Panel4);
 		    this.pagePlaceManage.Controls.Add(this.btnIntoList);
 		    this.pagePlaceManage.Controls.Add(this.btnAnalysePlaces);
+            this.pagePlaceManage.Controls.Add(this.lblFilter);
+            this.pagePlaceManage.Controls.Add(this.txtFilter);
 		    this.pagePlaceManage.Location = new System.Drawing.Point(4, 22);
 		    this.pagePlaceManage.Margin = new System.Windows.Forms.Padding(2);
 		    this.pagePlaceManage.Name = "pagePlaceManage";
@@ -57,7 +63,7 @@
 		    this.btnIntoList.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnIntoList.Name = "btnIntoList";
 		    this.btnIntoList.Size = new System.Drawing.Size(143, 25);
-		    this.btnIntoList.TabIndex = 1;
+		    this.btnIntoList.TabIndex = 4;
 		    this.btnIntoList.Text = "btnIntoList";
 		    this.btnIntoList.Click += new System.EventHandler(this.btnIntoList_Click);
 		    // 
@@ -70,6 +76,23 @@
 		    this.btnAnalysePlaces.TabIndex = 1;
 		    this.btnAnalysePlaces.Text = "btnAnalysePlaces";
 		    this.btnAnalysePlaces.Click += new System.EventHandler(this.btnAnalysePlaces_Click);
+            // 
+            // lblFilter
+            // 
+            this.lblFilter.AutoSize = true;
+            this.lblFilter.Location = new System.Drawing.Point(180, 377);
+            this.lblFilter.Name = "lblFilter";
+            this.lblFilter.Size = new System.Drawing.Size(112, 17);
+            this.lblFilter.TabIndex = 2;
+            this.lblFilter.Text = "lblFilter";
+            // 
+            // txtFilter
+            // 
+            this.txtFilter.Location = new System.Drawing.Point(260, 373);
+            this.txtFilter.Name = "txtFilter";
+            this.txtFilter.Size = new System.Drawing.Size(160, 24);
+            this.txtFilter.TabIndex = 3;
+            this.txtFilter.Text = "*";
 		    // 
 		    // btnClose
 		    // 

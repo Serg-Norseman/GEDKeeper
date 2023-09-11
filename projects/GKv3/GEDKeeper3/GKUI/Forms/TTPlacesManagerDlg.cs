@@ -40,11 +40,18 @@ namespace GKUI.Forms
         private Button btnAnalysePlaces;
         private Button btnIntoList;
         private GKListView ListPlaces;
+        private Label lblFilter;
+        private TextBox txtFilter;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         #region View Interface
+
+        ITextBox IPlacesManagerDlg.FilterBox
+        {
+            get { return GetControlHandler<ITextBox>(txtFilter); }
+        }
 
         IListView IPlacesManagerDlg.PlacesList
         {

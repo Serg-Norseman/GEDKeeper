@@ -25,6 +25,8 @@ namespace GKCore.Design.Views
 {
     public interface IPlacesManagerDlg : ICommonDialog, IBaseEditor
     {
+        ITextBox FilterBox { get; }
+
         IListView PlacesList { get; }
     }
 }

@@ -56,7 +56,7 @@ namespace GKCore.Controllers
             fView.PlacesList.BeginUpdate();
             try {
                 AppHost.Instance.ExecuteWork((controller) => {
-                    TreeTools.SearchPlaces(fBase.Context.Tree, fPlaces, controller);
+                    TreeTools.SearchPlaces(fBase.Context.Tree, fPlaces, controller, fView.FilterBox.Text);
                 });
 
                 fView.PlacesList.ClearItems();
@@ -106,6 +106,7 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
             GetControl<IButton>("btnIntoList").Text = LangMan.LS(LSID.LSID_InsertIntoBook);
             GetControl<IButton>("btnAnalysePlaces").Text = LangMan.LS(LSID.LSID_Analyze);
+            GetControl<ILabel>("lblFilter").Text = LangMan.LS(LSID.LSID_MIFilter);
 
             fView.PlacesList.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
             fView.PlacesList.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);

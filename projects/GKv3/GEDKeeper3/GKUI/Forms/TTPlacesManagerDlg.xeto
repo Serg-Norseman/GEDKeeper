@@ -19,6 +19,8 @@
             <TableRow>
               <StackLayout Spacing="4" Orientation="Horizontal">
                 <Button x:Name="btnAnalysePlaces" Click="btnAnalysePlaces_Click" />
+                <Label x:Name="lblFilter" />
+                <TextBox x:Name="txtFilter" Text="*" />
                 <StackLayoutItem Expand="True" />
                 <Button x:Name="btnIntoList" Click="btnIntoList_Click" />
               </StackLayout>

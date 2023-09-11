@@ -33,6 +33,11 @@ namespace GKUI.Forms
 
         #region View Interface
 
+        ITextBox IPlacesManagerDlg.FilterBox
+        {
+            get { return GetControlHandler<ITextBox>(txtFilter); }
+        }
+
         IListView IPlacesManagerDlg.PlacesList
         {
             get { return ListPlaces; }
