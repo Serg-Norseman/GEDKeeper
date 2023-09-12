@@ -327,19 +327,6 @@ namespace GKCore
                 new StoreTypeRec(LSID.LSID_STWeb, "http")
             };
 
-            FamilyEvents = new EventStruct[] {
-                new EventStruct(LSID.LSID_Event, GEDCOMTagName.EVEN, PersonEventKind.ekEvent),
-                new EventStruct(LSID.LSID_FEvt_1, GEDCOMTagName.ENGA, PersonEventKind.ekEvent),
-                new EventStruct(LSID.LSID_FEvt_2, GEDCOMTagName.MARR, PersonEventKind.ekEvent),
-                new EventStruct(LSID.LSID_FEvt_3, GEDCOMTagName.MARB, PersonEventKind.ekEvent),
-                new EventStruct(LSID.LSID_FEvt_4, GEDCOMTagName.MARC, PersonEventKind.ekEvent),
-                new EventStruct(LSID.LSID_FEvt_5, GEDCOMTagName.MARL, PersonEventKind.ekEvent),
-                new EventStruct(LSID.LSID_FEvt_6, GEDCOMTagName.MARS, PersonEventKind.ekEvent),
-                new EventStruct(LSID.LSID_FEvt_7, GEDCOMTagName.ANUL, PersonEventKind.ekEvent),
-                new EventStruct(LSID.LSID_FEvt_8, GEDCOMTagName.DIVF, PersonEventKind.ekEvent),
-                new EventStruct(LSID.LSID_FEvt_9, GEDCOMTagName.DIV, PersonEventKind.ekEvent),
-            };
-
             // гр|юл|евр|фр|рим|исл(хид?)|?
             // н.ст.|ст.ст.|евр|фр|рим|исл(хид?)|?
             // G|J|H|FR|R|I|?
@@ -421,6 +408,19 @@ namespace GKCore
                 new EventStruct(LSID.LSID_Confirmation, GEDCOMTagName.CONF, PersonEventKind.ekEvent),
                 new EventStruct(LSID.LSID_FirstCommunion, GEDCOMTagName.FCOM, PersonEventKind.ekEvent),
                 new EventStruct(LSID.LSID_Ordination, GEDCOMTagName.ORDN, PersonEventKind.ekEvent),
+            };
+
+            FamilyEvents = new EventStruct[] {
+                new EventStruct(LSID.LSID_Event, GEDCOMTagName.EVEN, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FEvt_1, GEDCOMTagName.ENGA, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FEvt_2, GEDCOMTagName.MARR, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FEvt_3, GEDCOMTagName.MARB, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FEvt_4, GEDCOMTagName.MARC, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FEvt_5, GEDCOMTagName.MARL, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FEvt_6, GEDCOMTagName.MARS, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FEvt_7, GEDCOMTagName.ANUL, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FEvt_8, GEDCOMTagName.DIVF, PersonEventKind.ekEvent),
+                new EventStruct(LSID.LSID_FEvt_9, GEDCOMTagName.DIV, PersonEventKind.ekEvent),
             };
 
             MarriageStatus = new MarStatusStruct[] {

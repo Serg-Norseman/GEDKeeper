@@ -1000,8 +1000,9 @@ namespace GKCore
         /* 931 */ LSID_ExtendedKinships,
         /* 932 */ LSID_UseSurnamesInPersonSelectionFilter,
         /* 933 */ LSID_UseBirthDatesInPersonSelectionFilter,
+        /* 934 */ LSID_FactValueIsInvalid,
 
-        /* 000 */ LSID_Last = LSID_UseBirthDatesInPersonSelectionFilter
+        /* 000 */ LSID_Last = LSID_FactValueIsInvalid
     }
 
 
@@ -1958,6 +1959,7 @@ namespace GKCore
             /* 931 */ "Extended definition of kinship",
             /* 932 */ "Use surnames in person selection filter",
             /* 933 */ "Use dates of birth in person selection filter",
+            /* 934 */ "Fact value is empty or invalid",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

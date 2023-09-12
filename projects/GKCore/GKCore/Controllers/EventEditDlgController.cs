@@ -80,30 +80,36 @@ namespace GKCore.Controllers
                     throw ex;
                 }
 
+                int eventType = fView.EventType.GetSelectedTag<int>();
+                var eventProps = (fEvent is GDMFamilyEvent) ? GKData.FamilyEvents[eventType] : GKData.PersonEvents[eventType];
+
+                if (eventProps.Kind == PersonEventKind.ekFact) {
+                    var attrValue = fView.Attribute.Text;
+
+                    if (string.IsNullOrEmpty(attrValue)) {
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FactValueIsInvalid));
+                        throw new Exception();
+                    }
+
+                    fEvent.StringValue = attrValue;
+                } else {
+                    fEvent.StringValue = string.Empty;
+                }
+
                 fEvent.Place.StringValue = fView.Place.Text;
                 fBase.Context.Tree.SetPtrValue(fEvent.Place.Location, fTempLocation);
                 fEvent.Classification = fView.EventName.Text;
                 fEvent.Cause = fView.Cause.Text;
                 fEvent.Agency = fView.Agency.Text;
 
-                string tagName;
-                int eventType = fView.EventType.GetSelectedTag<int>();
-                if (fEvent is GDMFamilyEvent) {
-                    tagName = GKData.FamilyEvents[eventType].Sign;
-                } else {
-                    GKData.EventStruct eventProps = GKData.PersonEvents[eventType];
-                    tagName = eventProps.Sign;
-                    fEvent.StringValue = (eventProps.Kind == PersonEventKind.ekFact) ? fView.Attribute.Text : string.Empty;
-                }
+                string tagName = eventProps.Sign;
                 fEvent.SetName(tagName);
                 fBase.Context.EventStats.Increment(tagName);
 
-                if (fEvent is GDMIndividualEvent) {
-                    if (GKData.PersonEvents[eventType].Kind == PersonEventKind.ekFact) {
-                        var attr = new GDMIndividualAttribute();
-                        attr.Assign(fEvent);
-                        fEvent = attr;
-                    }
+                if (fEvent is GDMIndividualEvent && eventProps.Kind == PersonEventKind.ekFact) {
+                    var attr = new GDMIndividualAttribute();
+                    attr.Assign(fEvent);
+                    fEvent = attr;
                 }
 
                 CommitChanges();
