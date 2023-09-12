@@ -57,6 +57,9 @@
     <Compile Include="GKUI\Components\FilterGridView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Components\GKFilterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\GKTabControl.cs">
       <SubType>Component</SubType>
     </Compile>

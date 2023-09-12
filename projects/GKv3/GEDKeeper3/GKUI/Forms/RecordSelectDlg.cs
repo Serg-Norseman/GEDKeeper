@@ -42,6 +42,7 @@ namespace GKUI.Forms
         private Button btnCancel;
         private Panel panList;
         public ComboBox txtFastFilter;
+        private GKFilterControl fltCtl;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -60,6 +61,11 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(txtFastFilter); }
         }
 
+        IFilterControl IRecordSelectDialog.FilterCtl
+        {
+            get { return fltCtl; }
+        }
+
         IListView IRecordSelectDialog.RecordsList
         {
             get { return fListRecords; }
@@ -75,6 +81,8 @@ namespace GKUI.Forms
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);
             fController.RecType = recType;
+
+            fltCtl.ParamsChanged += txtFastFilter_TextChanged;
 
             UpdateRecordsView();
         }

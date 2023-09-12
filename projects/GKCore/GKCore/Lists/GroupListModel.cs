@@ -60,7 +60,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fFetchedRec.GroupName, QuickFilter);
+            bool res = CheckQuickFilter(fFetchedRec.GroupName);
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 

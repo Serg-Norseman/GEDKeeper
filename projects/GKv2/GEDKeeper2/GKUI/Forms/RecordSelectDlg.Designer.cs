@@ -8,6 +8,7 @@
         private System.Windows.Forms.Panel panList;
         private System.Windows.Forms.Panel panFilter;
         public System.Windows.Forms.ComboBox txtFastFilter;
+        private GKUI.Components.GKFilterControl fltCtl;
 
         private void InitializeComponent()
         {
@@ -17,6 +18,7 @@
             this.panFilter = new System.Windows.Forms.Panel();
             this.txtFastFilter = new System.Windows.Forms.ComboBox();
             this.panList = new System.Windows.Forms.Panel();
+            this.fltCtl = new GKUI.Components.GKFilterControl();
             this.panFilter.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,6 +56,7 @@
             // panFilter
             // 
             this.panFilter.Controls.Add(this.txtFastFilter);
+            this.panFilter.Controls.Add(this.fltCtl);
             this.panFilter.Dock = System.Windows.Forms.DockStyle.Top;
             this.panFilter.Location = new System.Drawing.Point(0, 0);
             this.panFilter.Name = "panFilter";
@@ -64,10 +67,17 @@
             // 
             this.txtFastFilter.Location = new System.Drawing.Point(11, 10);
             this.txtFastFilter.Name = "txtFastFilter";
-            this.txtFastFilter.Size = new System.Drawing.Size(506, 24);
+            this.txtFastFilter.Size = new System.Drawing.Size(472, 24);
             this.txtFastFilter.TabIndex = 0;
             this.txtFastFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(txtFastFilter_KeyDown);
             this.txtFastFilter.TextChanged += new System.EventHandler(this.txtFastFilter_TextChanged);
+            // 
+            // fltCtl
+            // 
+            this.fltCtl.Location = new System.Drawing.Point(491, 8);
+            this.fltCtl.Name = "fltCtl";
+            this.fltCtl.Size = new System.Drawing.Size(36, 32);
+            this.fltCtl.TabIndex = 1;
             // 
             // panList
             // 

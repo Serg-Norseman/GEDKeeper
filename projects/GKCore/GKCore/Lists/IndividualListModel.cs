@@ -383,7 +383,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = (fBaseContext.IsRecordAccess(fFetchedRec.Restriction) && IsMatchesMask(buf_fullname, QuickFilter));
+            bool res = fBaseContext.IsRecordAccess(fFetchedRec.Restriction) && CheckQuickFilter(buf_fullname);
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec) && CheckSpecificFilter();
 

@@ -150,11 +150,11 @@ namespace GKCore
             var grpRec = fContext.Tree.XRefIndex_Find("G1") as GDMGroupRecord;
             listManager.Fetch(grpRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*roup*";
+            listManager.QuickFilter.Value = "*roup*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*alpha*";
+            listManager.QuickFilter.Value = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter());
 
             var listView = Substitute.For<IListView>();
@@ -174,7 +174,7 @@ namespace GKCore
 
             Assert.Throws(typeof(ArgumentNullException), () => { listColumns.CopyTo(null); });
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             listManager.AddCondition((byte)GroupListModel.ColumnType.ctName, ConditionKind.ck_Contains, "*roup*");
             Assert.IsTrue(listManager.CheckFilter());
         }
@@ -193,11 +193,11 @@ namespace GKCore
             var communicationRec = fContext.Tree.XRefIndex_Find("CM1") as GDMCommunicationRecord;
             listManager.Fetch(communicationRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*commun*";
+            listManager.QuickFilter.Value = "*commun*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*alpha*";
+            listManager.QuickFilter.Value = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter());
 
             var listView = Substitute.For<IListView>();
@@ -214,11 +214,11 @@ namespace GKCore
             var familyRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
             listManager.Fetch(familyRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "* - *";
+            listManager.QuickFilter.Value = "* - *";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*alpha*";
+            listManager.QuickFilter.Value = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter());
 
             var listView = Substitute.For<IListView>();
@@ -240,11 +240,11 @@ namespace GKCore
             var individualRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
             listManager.Fetch(individualRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*Petr*";
+            listManager.QuickFilter.Value = "*Petr*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*alpha*";
+            listManager.QuickFilter.Value = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter());
 
             GlobalOptions.Instance.ListHighlightUnparentedPersons = true;
@@ -276,11 +276,11 @@ namespace GKCore
             var locationRec = fContext.Tree.XRefIndex_Find("L1") as GDMLocationRecord;
             listManager.Fetch(locationRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*locat*";
+            listManager.QuickFilter.Value = "*locat*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*xxxx*";
+            listManager.QuickFilter.Value = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
             var listView = Substitute.For<IListView>();
@@ -297,11 +297,11 @@ namespace GKCore
             var mediaRec = fContext.Tree.XRefIndex_Find("O1") as GDMMultimediaRecord;
             listManager.Fetch(mediaRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*media*";
+            listManager.QuickFilter.Value = "*media*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*xxxx*";
+            listManager.QuickFilter.Value = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
             var listView = Substitute.For<IListView>();
@@ -319,11 +319,11 @@ namespace GKCore
             noteRec.AddNoteText("Test text");
             listManager.Fetch(noteRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*text*";
+            listManager.QuickFilter.Value = "*text*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*xxxxxx*";
+            listManager.QuickFilter.Value = "*xxxxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
             var listView = Substitute.For<IListView>();
@@ -342,11 +342,11 @@ namespace GKCore
             var repositoryRec = fContext.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
             listManager.Fetch(repositoryRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*repos*";
+            listManager.QuickFilter.Value = "*repos*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*xxxx*";
+            listManager.QuickFilter.Value = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
             var listView = Substitute.For<IListView>();
@@ -363,11 +363,11 @@ namespace GKCore
             var researchRec = fContext.Tree.XRefIndex_Find("RS1") as GDMResearchRecord;
             listManager.Fetch(researchRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*resear*";
+            listManager.QuickFilter.Value = "*resear*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*xxxx*";
+            listManager.QuickFilter.Value = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
             var listView = Substitute.For<IListView>();
@@ -384,11 +384,11 @@ namespace GKCore
             var sourceRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
             listManager.Fetch(sourceRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*sourc*";
+            listManager.QuickFilter.Value = "*sourc*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*xxxx*";
+            listManager.QuickFilter.Value = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
             var listView = Substitute.For<IListView>();
@@ -405,11 +405,11 @@ namespace GKCore
             var taskRec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
             listManager.Fetch(taskRec);
 
-            listManager.QuickFilter = "*";
+            listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*task*";
+            listManager.QuickFilter.Value = "*task*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter = "*xxxx*";
+            listManager.QuickFilter.Value = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());
 
             var listView = Substitute.For<IListView>();

@@ -49,6 +49,11 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(txtFastFilter); }
         }
 
+        IFilterControl IRecordSelectDialog.FilterCtl
+        {
+            get { return fltCtl; }
+        }
+
         IListView IRecordSelectDialog.RecordsList
         {
             get { return fListRecords; }
@@ -67,6 +72,8 @@ namespace GKUI.Forms
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);
             fController.RecType = recType;
+
+            fltCtl.ParamsChanged += txtFastFilter_TextChanged;
 
             UpdateRecordsView();
         }

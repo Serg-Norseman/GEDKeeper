@@ -61,7 +61,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(GKUtils.GetTaskGoalStr(fBaseContext.Tree, fFetchedRec), QuickFilter);
+            bool res = CheckQuickFilter(GKUtils.GetTaskGoalStr(fBaseContext.Tree, fFetchedRec));
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 

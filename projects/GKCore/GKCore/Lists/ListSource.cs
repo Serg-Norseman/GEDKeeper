@@ -44,7 +44,7 @@ namespace GKCore.Lists
         private readonly ExtObservableList<ContentItem> fContentList;
         private SGCulture fSysCulture;
         private int fTotalCount;
-        private string fQuickFilter = "*";
+        private readonly QuickFilterParams fQuickFilter;
         private int fXSortFactor;
 
         private string fMask;
@@ -107,10 +107,9 @@ namespace GKCore.Lists
             get { return fTotalCount; }
         }
 
-        public string QuickFilter
+        public QuickFilterParams QuickFilter
         {
             get { return fQuickFilter; }
-            set { fQuickFilter = value; }
         }
 
 
@@ -120,6 +119,7 @@ namespace GKCore.Lists
             fColumnsMap = new List<MapColumnRec>();
             fListColumns = defaultListColumns;
             fContentList = new ExtObservableList<ContentItem>();
+            fQuickFilter = new QuickFilterParams();
 
             CreateFilter();
         }
@@ -310,6 +310,15 @@ namespace GKCore.Lists
         #endregion
 
         #region Filters
+
+        protected bool CheckQuickFilter(string str)
+        {
+            if (fQuickFilter.Type == MatchType.Indistinct) {
+                return (IndistinctMatching.GetSimilarity(str, fQuickFilter.Value) >= fQuickFilter.IndistinctThreshold);
+            } else {
+                return IsMatchesMask(str, fQuickFilter.Value);
+            }
+        }
 
         public virtual void PrepareFilter()
         {

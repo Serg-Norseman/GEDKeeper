@@ -61,6 +61,28 @@ namespace GKCore.Interfaces
     }
 
 
+    public enum MatchType : int
+    {
+        REMask,
+        Indistinct
+    }
+
+
+    public class QuickFilterParams
+    {
+        public string Value;
+        public MatchType Type;
+        public float IndistinctThreshold;
+
+        public QuickFilterParams()
+        {
+            Value = "*";
+            Type = MatchType.REMask;
+            IndistinctThreshold = 1.00f;
+        }
+    }
+
+
     public interface IListSource
     {
         IBaseContext BaseContext { get; }
@@ -72,7 +94,7 @@ namespace GKCore.Interfaces
         int FilteredCount { get; }
         IListColumns ListColumns { get; }
         int TotalCount { get; }
-        string QuickFilter { get; set; }
+        QuickFilterParams QuickFilter { get; }
 
         void AddCondition(byte columnId, ConditionKind condition, string value);
         void ChangeColumnWidth(int colIndex, int colWidth);

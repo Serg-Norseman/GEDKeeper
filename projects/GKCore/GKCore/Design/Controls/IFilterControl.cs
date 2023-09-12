@@ -18,24 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
-using GKCore.Design.Controls;
 using GKCore.Interfaces;
-using GKCore.Types;
 
-namespace GKCore.Design.Views
+namespace GKCore.Design.Controls
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IRecordSelectDialog : ICommonDialog, IBaseEditor
+    public interface IFilterControl : IBaseControl
     {
-        GDMRecord ResultRecord { get; set; }
-
-        IComboBox FilterBox { get; }
-        IFilterControl FilterCtl { get; }
-        IListView RecordsList { get; }
-
-        void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex, string defFilter = "*");
+        QuickFilterParams Params { get; set; }
     }
 }

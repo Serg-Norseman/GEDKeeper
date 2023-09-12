@@ -58,7 +58,7 @@ namespace GKCore.Lists
 
         public override bool CheckFilter()
         {
-            bool res = IsMatchesMask(fFetchedLines, QuickFilter);
+            bool res = IsMatchesMask(fFetchedLines, QuickFilter.Value);
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 

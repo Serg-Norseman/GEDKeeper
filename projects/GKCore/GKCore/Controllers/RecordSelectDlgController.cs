@@ -132,7 +132,9 @@ namespace GKCore.Controllers
 
             IListView recordsList = fView.RecordsList;
             recordsList.ListMan.Filter.Clear();
-            recordsList.ListMan.QuickFilter = flt;
+            recordsList.ListMan.QuickFilter.Value = flt;
+
+            fView.FilterCtl.Params = recordsList.ListMan.QuickFilter;
 
             switch (fRecType) {
                 case GDMRecordType.rtIndividual: {
