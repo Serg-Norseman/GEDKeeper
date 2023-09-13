@@ -34,10 +34,20 @@ namespace GKUI.Platform
     /// <summary>
     /// 
     /// </summary>
-    public class XFGfxProvider : IGraphicsProviderEx
+    public class XFGfxProvider : IGraphicsProvider
     {
         public XFGfxProvider()
         {
+        }
+
+        public Stream CheckOrientation(Stream inputStream)
+        {
+            return inputStream;
+        }
+
+        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
+        {
+            return null;
         }
 
         public IImage LoadImage(string fileName)
@@ -56,72 +66,15 @@ namespace GKUI.Platform
             throw new NotImplementedException();
         }
 
-        public void SaveImage(IImage image, string fileName)
+        public IImage LoadResourceImage(string resName)
         {
-            /*if (image == null)
-                throw new ArgumentNullException("image");
-
-            if (fileName == null)
-                throw new ArgumentNullException("fileName");
-
-            ((ImageHandler)image).Handle.Save(fileName, ImageFormat.Bmp);*/
+            //return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(resName)));
             throw new NotImplementedException();
         }
 
-        public IImage CreateImage(Stream stream)
+        public IImage LoadResourceImage(Type baseType, string resName)
         {
-            /*if (stream == null)
-                throw new ArgumentNullException("stream");
-
-            using (Bitmap bmp = new Bitmap(stream))
-            {
-                // cloning is necessary to release the resource
-                // loaded from the image stream
-                Bitmap resImage = (Bitmap)bmp.Clone();
-
-                return new ImageHandler(resImage);
-            }*/
-            throw new NotImplementedException();
-        }
-
-        public IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
-        {
-            /*if (stream == null)
-                throw new ArgumentNullException("stream");
-
-            using (Bitmap bmp = new Bitmap(stream))
-            {
-                bool cutoutIsEmpty = cutoutArea.IsEmpty();
-                int imgWidth = (cutoutIsEmpty) ? bmp.Width : cutoutArea.GetWidth();
-                int imgHeight = (cutoutIsEmpty) ? bmp.Height : cutoutArea.GetHeight();
-
-                if (thumbWidth > 0 && thumbHeight > 0) {
-                    float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
-                    imgWidth = (int)(imgWidth * ratio);
-                    imgHeight = (int)(imgHeight * ratio);
-                }
-
-                Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                using (Graphics graphic = Graphics.FromImage(newImage)) {
-                    graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graphic.SmoothingMode = SmoothingMode.HighQuality;
-                    graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    graphic.CompositingQuality = CompositingQuality.HighQuality;
-
-                    if (cutoutIsEmpty) {
-                        graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
-                    } else {
-                        Rectangle destRect = new Rectangle(0, 0, imgWidth, imgHeight);
-                        //Rectangle srcRect = cutoutArea.ToRectangle();
-                        graphic.DrawImage(bmp, destRect,
-                                          cutoutArea.Left, cutoutArea.Top,
-                                          cutoutArea.GetWidth(), cutoutArea.GetHeight(),
-                                          GraphicsUnit.Pixel);
-                    }
-                }
-
-                return new ImageHandler(newImage);
-            }*/
+            //return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(baseType, resName)));
             throw new NotImplementedException();
         }
 
@@ -140,6 +93,18 @@ namespace GKUI.Platform
             }
 
             return new ImageHandler(img);*/
+            throw new NotImplementedException();
+        }
+
+        public void SaveImage(IImage image, string fileName)
+        {
+            /*if (image == null)
+                throw new ArgumentNullException("image");
+
+            if (fileName == null)
+                throw new ArgumentNullException("fileName");
+
+            ((ImageHandler)image).Handle.Save(fileName, ImageFormat.Bmp);*/
             throw new NotImplementedException();
         }
 

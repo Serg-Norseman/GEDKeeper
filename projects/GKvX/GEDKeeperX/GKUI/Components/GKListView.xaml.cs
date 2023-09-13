@@ -2,21 +2,17 @@
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using Xamarin.Forms;
+using BSDListItem = GKCore.Design.Controls.IListItem;
+using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 
 namespace GKUI.Components
 {
-    public sealed partial class GKListView : View, IListViewEx
+    /// <summary>
+    ///
+    /// </summary>
+    public sealed partial class GKListView : View, IListView
     {
-        public int SelectedIndex
-        {
-            get { return 0; }
-            set { }
-        }
-
-        public GKListView()
-        {
-            //InitializeComponent();
-        }
+        public bool Enabled { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         public IListViewItems Items
         {
@@ -27,11 +23,25 @@ namespace GKUI.Components
 
         public IListSource ListMan
         {
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
+            get {
+                throw new System.NotImplementedException();
+            }
+            set {
+                throw new System.NotImplementedException();
+            }
         }
 
-        public bool Enabled { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public int SelectedIndex
+        {
+            get { return 0; }
+            set { }
+        }
+
+        public bool Sorting
+        {
+            get;
+            set;
+        }
 
         public int SortColumn
         {
@@ -39,33 +49,40 @@ namespace GKUI.Components
             set;
         }
 
+        public GKListView()
+        {
+            //InitializeComponent();
+        }
+
         public void Activate()
         {
         }
 
-        public void AddCheckedColumn(string caption, int width, bool autoSize = false)
-        {
-        }
-
-        public IListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
-        {
-            return null;
-        }
-
-        public void AddColumn(string caption, int width, bool autoSize)
-        {
-        }
-
-        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
-        {
-        }
-
-        public IListItem AddItem(object rowData, params object[] columnValues)
-        {
-            return null;
-        }
-
         public void BeginUpdate()
+        {
+        }
+
+        public void EndUpdate()
+        {
+        }
+
+        public void SetSortColumn(int sortColumn, bool checkOrder = true)
+        {
+        }
+
+        public void Sort(int sortColumn, BSDSortOrder sortOrder)
+        {
+        }
+
+        public void SortModelColumn(int columnId)
+        {
+        }
+
+        public void UpdateContents(bool columnsChanged = false)
+        {
+        }
+
+        public void DeleteRecord(object data)
         {
         }
 
@@ -77,24 +94,15 @@ namespace GKUI.Components
         {
         }
 
-        public void ClearItems()
+        public void AddColumn(string caption, int width, bool autoSize = false)
         {
         }
 
-        public void DeleteRecord(object data)
+        public void AddCheckedColumn(string caption, int width, bool autoSize = false)
         {
         }
 
-        public void EndUpdate()
-        {
-        }
-
-        public object GetSelectedData()
-        {
-            return null;
-        }
-
-        public void SelectItem(object rowData)
+        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
         {
         }
 
@@ -102,23 +110,38 @@ namespace GKUI.Components
         {
         }
 
-        public void SetSortColumn(int sortColumn, bool checkOrder = true)
-        {
-        }
-
-        public void Sort(int sortColumn, BSDTypes.SortOrder sortOrder)
-        {
-        }
-
-        public void UpdateContents(bool columnsChanged = false)
-        {
-        }
-
         public void ResizeColumn(int columnIndex)
         {
         }
 
+        public void ResizeColumns()
+        {
+        }
+
+        public void ClearItems()
+        {
+        }
+
+        public BSDListItem AddItem(object rowData, params object[] columnValues)
+        {
+            return null;
+        }
+
+        public BSDListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
+        {
+            return null;
+        }
+
+        public object GetSelectedData()
+        {
+            return null;
+        }
+
         public void SelectItem(int index)
+        {
+        }
+
+        public void SelectItem(object rowData)
         {
         }
     }

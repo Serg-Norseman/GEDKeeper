@@ -34,6 +34,8 @@ namespace GKUI.Forms
     {
         protected readonly ControlsManager fControlsManager;
 
+        public IWindow OwnerWindow { get; }
+
         #region View Interface
 
         public string Title
@@ -131,7 +133,7 @@ namespace GKUI.Forms
         {
         }
 
-        public virtual bool ShowModalX(object owner)
+        public virtual bool ShowModalX(IView owner)
         {
             return false;//(ShowModal((Control)owner) == DialogResult.Ok);
         }

@@ -20,6 +20,7 @@
 
 using System;
 using GKCore;
+using GKCore.Design;
 using GKCore.Interfaces;
 using Xamarin.Forms.Xaml;
 
@@ -41,6 +42,11 @@ namespace GKUI.Forms
             lblTimePassed.Text = LangMan.LS(LSID.LSID_TimePassed);
             lblTimeRemain.Text = LangMan.LS(LSID.LSID_TimeRemain);
             lblTimeTotal.Text = LangMan.LS(LSID.LSID_TimeTotal);
+        }
+
+        public bool ShowModalX(IView owner)
+        {
+            return false;//(ShowModal((Control)owner) == DialogResult.Ok);
         }
 
         #region Private methods

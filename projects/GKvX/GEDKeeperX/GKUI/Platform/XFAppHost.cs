@@ -24,9 +24,11 @@ using BSLib;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
+using GKCore.Types;
 using Xamarin.Forms;
 using XFRadioButton = Xamarin.Forms.RadioButton;
 
@@ -52,6 +54,15 @@ namespace GKUI.Platform
             base.Init(args, isMDI);
         }
 
+        public override void Activate()
+        {
+        }
+
+        public override IForm GetActiveForm()
+        {
+            return null;
+        }
+
         public override IWindow GetActiveWindow()
         {
             throw new NotImplementedException();
@@ -62,9 +73,9 @@ namespace GKUI.Platform
             throw new NotImplementedException();
         }
 
-        public override bool ShowModalX(ICommonDialog form, bool keepModeless = false)
+        public override bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
-            return base.ShowModalX(form, keepModeless);
+            return base.ShowModalX(dialog, owner, keepModeless);
         }
 
         public override void EnableWindow(IWidgetForm form, bool value)
@@ -92,7 +103,7 @@ namespace GKUI.Platform
 
         public override void ExecuteWork(ProgressStart proc)
         {
-            var activeWnd = GetActiveWindow() as ContentPage;
+            var activeWnd = GetActiveWindow();
 
             using (var progressForm = ResolveDialog<IProgressController>()) {
                 var workerThread = new Thread((obj) => {
@@ -114,6 +125,10 @@ namespace GKUI.Platform
             return false;
         }
 
+        public override void CloseDependentWindows(IWindow owner)
+        {
+        }
+
         public override ExtRect GetActiveScreenWorkingArea()
         {
             throw new NotImplementedException();
@@ -127,6 +142,15 @@ namespace GKUI.Platform
         public override string SelectFolder(string folderPath)
         {
             return string.Empty;
+        }
+
+        public override bool HasFeatureSupport(Feature feature)
+        {
+            return false;
+        }
+
+        public override void LayoutWindows(WinLayout layout)
+        {
         }
 
         #region KeyLayout functions
@@ -165,7 +189,7 @@ namespace GKUI.Platform
 
             // controls and other
             /*container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);*/
-            container.Register<IGraphicsProviderEx, XFGfxProvider>(LifeCycle.Singleton);
+            container.Register<IGraphicsProvider, XFGfxProvider>(LifeCycle.Singleton);
             /*container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
 
             // dialogs

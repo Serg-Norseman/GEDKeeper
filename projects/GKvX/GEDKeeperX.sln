@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32526.322
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33920.266
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeperX.Android", "GEDKeeperX.Android\GEDKeeperX.Android.csproj", "{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}"
 EndProject
@@ -15,15 +15,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.nstd", "..\GKCore\GK
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{A853C7C7-CAAB-467D-92C1-8B7D6AED39D4}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\locales\Belarusian.lng = ..\..\locales\Belarusian.lng
 		..\..\locales\Chinese Simplified.lng = ..\..\locales\Chinese Simplified.lng
 		..\..\locales\czech.lng = ..\..\locales\czech.lng
 		..\..\locales\English.lng = ..\..\locales\English.lng
 		..\..\locales\french.lng = ..\..\locales\french.lng
 		..\..\locales\german.lng = ..\..\locales\german.lng
+		..\..\locales\Hungarian.lng = ..\..\locales\Hungarian.lng
+		..\..\locales\Icelandic.lng = ..\..\locales\Icelandic.lng
 		..\..\locales\italian.lng = ..\..\locales\italian.lng
+		..\..\locales\Kazakh (Cyrillic).lng = ..\..\locales\Kazakh (Cyrillic).lng
 		..\..\locales\kazakh_cyrillic.lng = ..\..\locales\kazakh_cyrillic.lng
 		..\..\locales\polish.lng = ..\..\locales\polish.lng
+		..\..\locales\Portuguese.lng = ..\..\locales\Portuguese.lng
 		..\..\locales\russian.lng = ..\..\locales\russian.lng
+		..\..\locales\Serbian (Latin).lng = ..\..\locales\Serbian (Latin).lng
+		..\..\locales\Spanish.lng = ..\..\locales\Spanish.lng
 		..\..\locales\ukrainian.lng = ..\..\locales\ukrainian.lng
 	EndProjectSection
 EndProject
@@ -187,8 +194,8 @@ Global
 		{9528C5A8-EF89-4F3A-B8BF-D9CD316B89D9}.Release|x86.ActiveCfg = Release|Any CPU
 		{9528C5A8-EF89-4F3A-B8BF-D9CD316B89D9}.Release|x86.Build.0 = Release|Any CPU
 		{9528C5A8-EF89-4F3A-B8BF-D9CD316B89D9}.Release|x86.Deploy.0 = Release|Any CPU
-		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Debug|Any CPU.ActiveCfg = MSWin_Debug|Any CPU
+		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Debug|Any CPU.Build.0 = MSWin_Debug|Any CPU
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Debug|ARM.Build.0 = Debug|Any CPU
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Debug|iPhone.ActiveCfg = Debug|Any CPU
@@ -199,8 +206,8 @@ Global
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Debug|x64.Build.0 = Debug|Any CPU
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Debug|x86.Build.0 = Debug|Any CPU
-		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Release|Any CPU.ActiveCfg = MSWin_Release|Any CPU
+		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Release|Any CPU.Build.0 = MSWin_Release|Any CPU
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Release|ARM.ActiveCfg = Release|Any CPU
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Release|ARM.Build.0 = Release|Any CPU
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Release|iPhone.ActiveCfg = Release|Any CPU

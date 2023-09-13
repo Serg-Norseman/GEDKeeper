@@ -8,7 +8,7 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <DebugSymbols>True</DebugSymbols>
-        <DebugType>Full</DebugType>
+        <DebugType>Portable</DebugType>
         <Optimize>False</Optimize>
         <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
         <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
