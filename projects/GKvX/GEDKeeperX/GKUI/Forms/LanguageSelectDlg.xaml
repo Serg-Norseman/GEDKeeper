@@ -1,24 +1,13 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <forms:CommonDialog xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform" xmlns:comp="clr-namespace:GKUI.Components"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore" xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
-    x:Class="GKUI.Forms.UserRefEditDlg"
-    x:TypeArguments="mvp:IUserRefEditDlg, contr:UserRefEditDlgController">
-
-    <ContentPage.Resources>
-    </ContentPage.Resources>
+    x:Class="GKUI.Forms.LanguageSelectDlg" Title="Select language"
+    x:TypeArguments="mvp:ILanguageSelectDlg, contr:LanguageSelectDlgController">
 
     <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
 
-        <Grid ColumnSpacing="4" RowSpacing="4">
-            <Grid.Children>
-                <Label x:Name="lblReference" Grid.Column="0" Grid.Row="0" />
-                <Picker x:Name="cmbRef" WidthRequest="300" Grid.Column="1" Grid.Row="0" />
-
-                <Label x:Name="lblRefType" Grid.Column="0" Grid.Row="1" />
-                <Picker x:Name="cmbRefType" WidthRequest="300" Grid.Column="1" Grid.Row="1" />
-            </Grid.Children>
-        </Grid>
+        <comp:GKListView x:Name="lstLanguages" WidthRequest="280" HeightRequest="380" />
 
         <StackLayout Spacing="8" Orientation="Horizontal">
             <Label HorizontalOptions="FillAndExpand" />

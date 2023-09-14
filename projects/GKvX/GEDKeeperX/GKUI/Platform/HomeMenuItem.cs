@@ -8,6 +8,8 @@
         QuickSearch,
         Progress,
         PatriarchsViewer,
+        LanguageSelect,
+        BaseWinSDI,
     }
 
     public class HomeMenuItem

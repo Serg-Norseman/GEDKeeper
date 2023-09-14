@@ -123,6 +123,7 @@ namespace GKUI.Platform
         }
     }
 
+
     public sealed class ComboBoxHandler : BaseControlHandler<XFComboBox, ComboBoxHandler>, IComboBox
     {
         private readonly IList fItems;
@@ -288,6 +289,172 @@ namespace GKUI.Platform
         {
         }
     }
+
+
+    public sealed class PComboBoxHandler : BaseControlHandler<Picker, PComboBoxHandler>, IComboBox
+    {
+        private readonly IList fItems;
+
+        public PComboBoxHandler(Picker control) : base(control)
+        {
+            fItems = new ObservableCollection<string>();
+            control.ItemsSource = fItems;
+        }
+
+        public new bool Enabled
+        {
+            get { return Control.IsEnabled; }
+            set {
+                Control.IsEnabled = value;
+                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+            }
+        }
+
+        public IList Items
+        {
+            get {
+                return null;
+            }
+        }
+
+        public bool ReadOnly
+        {
+            get { return false; /*Control.ReadOnly*/; }
+            set { /*Control.ReadOnly = value;*/ }
+        }
+
+        public int SelectedIndex
+        {
+            get { return 0/*Control.SelectedIndex*/; }
+            set { /*Control.SelectedIndex = value;*/ }
+        }
+
+        public object SelectedItem
+        {
+            get { return Control.SelectedItem; }
+            set { Control.SelectedItem = value; }
+        }
+
+        public bool Sorted
+        {
+            get { return false; }
+            set {
+                if (value) {
+                    Sort();
+                }
+            }
+        }
+
+        /*public object SelectedTag
+        {
+            get {
+                return ((GKComboItem)Control.SelectedItem).Tag;
+            }
+            set {
+                var ctl = Control;
+                foreach (object item in ctl.Items) {
+                    GKComboItem comboItem = (GKComboItem)item;
+                    if (comboItem.Tag == value) {
+                        ctl.SelectedItem = item;
+                        return;
+                    }
+                }
+                ctl.SelectedIndex = 0;
+            }
+        }*/
+
+        public string Text
+        {
+            get { return /*Control.Text*/string.Empty; }
+            set { /*Control.Text = value;*/ }
+        }
+
+        public void Add(object item)
+        {
+            //Control.ItemsSource = null;
+            //Control.Items.Add((string)item);
+            fItems.Add(item.ToString());
+            //Control.ItemsSource = fItems;
+        }
+
+        public void AddItem<T>(string caption, T tag, IImage image = null)
+        {
+            //Control.Items.Add(new GKComboItem<T>(caption, tag, image));
+            //Control.Items.Add(caption);
+        }
+
+        public void AddItem(string caption, object tag, IImage image = null)
+        {
+            //Control.Items.Add(new GKComboItem(caption, tag, image));
+            //Control.Items.Add(caption);
+        }
+
+        public void AddItem<T>(string caption, T tag)
+        {
+            //Control.Items.Add(caption);
+        }
+
+        public void AddRange(object[] items, bool sorted = false)
+        {
+            //Control.Sorted = false;
+            //Control.Items.AddRange(GKComboItem.Convert((string[])items));
+            foreach (var itm in items) {
+                //Control.Items.Add((string)itm);
+            }
+            //Control.Sorted = sorted;
+        }
+
+        public void AddRange(IEnumerable<object> items, bool sorted = false)
+        {
+            //Control.Sorted = false;
+            //Control.Items.AddRange(GKComboItem.Convert((string[])items));
+            foreach (var itm in items) {
+                //Control.Items.Add((string)itm);
+            }
+            //Control.Sorted = sorted;
+        }
+
+        public void AddStrings(StringList strings)
+        {
+            int num = strings.Count;
+            for (int i = 0; i < num; i++) {
+                AddItem(strings[i], strings.GetObject(i));
+            }
+        }
+
+        public void BeginUpdate()
+        {
+            //Control.BeginUpdate();
+            //Control.ItemsSource = null;
+        }
+
+        public void Clear()
+        {
+            //Control.Items.Clear();
+            //fItems.Clear();
+        }
+
+        public void EndUpdate()
+        {
+            //Control.ItemsSource = fItems;
+            //Control.EndUpdate();
+        }
+
+        public void Sort()
+        {
+            //Control.SortItems();
+        }
+
+        public T GetSelectedTag<T>()
+        {
+            return default(T);
+        }
+
+        public void SetSelectedTag<T>(T tagValue, bool allowDefault = true)
+        {
+        }
+    }
+
 
     public sealed class TextBoxHandler : BaseControlHandler<Entry, TextBoxHandler>, ITextBox
     {

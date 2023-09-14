@@ -18,43 +18,38 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore;
-using GKUI.Forms;
-using GKUI.Platform;
-using Xamarin.Forms;
+using GKCore.Controllers;
+using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using Xamarin.Forms.Xaml;
 
-namespace GKUI
+namespace GKUI.Forms
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class App : Application
+    public partial class LanguageSelectDlg : CommonDialog<ILanguageSelectDlg, LanguageSelectDlgController>, ILanguageSelectDlg
     {
-        public App()
+        public int SelectedLanguage
+        {
+            get { return fController.SelectedLanguage; }
+            set { fController.SelectedLanguage = value; }
+        }
+
+        #region View Interface
+
+        IListView ILanguageSelectDlg.LanguagesList
+        {
+            get { return lstLanguages; }
+        }
+
+        #endregion
+
+        public LanguageSelectDlg()
         {
             InitializeComponent();
 
-            LangMan.DefInit();
-            XFAppHost.Startup(null);
+            lstLanguages.AddColumn(@"Language", 300);
 
-            MainPage = new MainPage();
-        }
-
-        protected override void OnStart()
-        {
-            // Handle when your app starts
-            AppHost.InitSettings();
-            AppHost.Instance.Init(null, false);
-        }
-
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
-
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
-            AppHost.DoneSettings();
+            fController = new LanguageSelectDlgController(this);
         }
     }
 }

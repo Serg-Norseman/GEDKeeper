@@ -25,10 +25,12 @@ using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Forms;
 using Xamarin.Forms;
 using XFRadioButton = Xamarin.Forms.RadioButton;
 
@@ -146,6 +148,9 @@ namespace GKUI.Platform
 
         public override bool HasFeatureSupport(Feature feature)
         {
+            if (feature == Feature.EmbeddedLocales || feature == Feature.Mobile) {
+                return true;
+            }
             return false;
         }
 
@@ -206,9 +211,9 @@ namespace GKUI.Platform
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             container.Register<IFragmentSearchDlg, TTFamilyGroupsDlg>(LifeCycle.Transient);
             container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
-            container.Register<ILanguageEditDlg, LanguageEditDlg>(LifeCycle.Transient);
+            container.Register<ILanguageEditDlg, LanguageEditDlg>(LifeCycle.Transient);*/
             container.Register<ILanguageSelectDlg, LanguageSelectDlg>(LifeCycle.Transient);
-            container.Register<ILocationEditDlg, LocationEditDlg>(LifeCycle.Transient);
+            /*container.Register<ILocationEditDlg, LocationEditDlg>(LifeCycle.Transient);
             container.Register<IMapsViewerWin, MapsViewerWin>(LifeCycle.Transient);
             container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
             container.Register<INameEditDlg, NameEditDlg>(LifeCycle.Transient);
@@ -217,9 +222,9 @@ namespace GKUI.Platform
             container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
             container.Register<IParentsEditDlg, ParentsEditDlg>(LifeCycle.Transient);
-            container.Register<IPatriarchsSearchDlg, TTPatSearchDlg>(LifeCycle.Transient);
+            container.Register<IPatriarchsSearchDlg, TTPatSearchDlg>(LifeCycle.Transient);*/
             container.Register<IPatriarchsViewer, PatriarchsViewerWin>(LifeCycle.Transient);
-            container.Register<IPersonsFilterDlg, PersonsFilterDlg>(LifeCycle.Transient);
+            /*container.Register<IPersonsFilterDlg, PersonsFilterDlg>(LifeCycle.Transient);
             container.Register<IPlacesManagerDlg, TTPlacesManagerDlg>(LifeCycle.Transient);
             container.Register<IPersonalNameEditDlg, PersonalNameEditDlg>(LifeCycle.Transient);
             container.Register<IPersonEditDlg, PersonEditDlg>(LifeCycle.Transient);
@@ -241,15 +246,16 @@ namespace GKUI.Platform
             container.Register<ITreeCompareDlg, TTTreeCompareDlg>(LifeCycle.Transient);
             container.Register<ITreeFilterDlg, TreeFilterDlg>(LifeCycle.Transient);
             container.Register<ITreeMergeDlg, TTTreeMergeDlg>(LifeCycle.Transient);
-            container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
+            container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);*/
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
-            container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
+            /*container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
 
             container.Register<IProgressController, ProgressDlg>(LifeCycle.Transient);*/
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(Switch), typeof(CheckBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(XFComboBox), typeof(ComboBoxHandler));
+            //ControlsManager.RegisterHandlerType(typeof(XFComboBox), typeof(ComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(Picker), typeof(PComboBoxHandler));
             //ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
             //ControlsManager.RegisterHandlerType(typeof(MaskedEntry), typeof(MaskedTextBoxHandler));
@@ -270,7 +276,7 @@ namespace GKUI.Platform
         public static void Startup(string[] args)
         {
             ConfigureBootstrap();
-            CheckPortable(args);
+            //CheckPortable(args);
             Logger.Init(GetLogFilename());
             LogSysInfo();
 

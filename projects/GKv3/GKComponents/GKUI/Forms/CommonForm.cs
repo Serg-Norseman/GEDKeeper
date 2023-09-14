@@ -188,10 +188,11 @@ namespace GKUI.Forms
 
             fControlsManager = new ControlsManager(this);
 
+            // Option: Enter in dialogs is always the "Accept/Apply/Ok" button
             /*Styles.Add<Button>(null, b => {
                 b.KeyDown += (sender, e) => {
                     var defButton = DefaultButton;
-                    if (e.KeyData == Keys.Enter && sender != defButton) {
+                    if (e.KeyData == Keys.Enter && sender != defButton && sender != AbortButton) {
                         defButton?.PerformClick();
                         e.Handled = true;
                     }

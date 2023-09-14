@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using BSLib;
 using GDModel;
@@ -406,11 +407,11 @@ namespace GKCore.Options
 
         #region Language
 
-        private void LngPrepareProc(string fileName)
+        private void LngPrepareProc(string fileName, Stream inputStream)
         {
             try {
-                using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8)) {
-                    string st = lngFile.ReadLine(); // header
+                using (var reader = new StreamReader(inputStream, Encoding.UTF8)) {
+                    string st = reader.ReadLine(); // header
 
                     if (!string.IsNullOrEmpty(st) && st[0] == ';') {
                         st = st.Remove(0, 1);
@@ -429,6 +430,17 @@ namespace GKCore.Options
                     }
                 }
             } catch (Exception ex) {
+                Logger.WriteError("GlobalOptions.LngPrepareProc.1(" + fileName + ")", ex);
+            }
+        }
+
+        private void LngPrepareProc(string fileName)
+        {
+            try {
+                using (var stream = new FileStream(fileName, FileMode.Open)) {
+                    LngPrepareProc(fileName, stream);
+                }
+            } catch (Exception ex) {
                 Logger.WriteError("GlobalOptions.LngPrepareProc(" + fileName + ")", ex);
             }
         }
@@ -436,9 +448,22 @@ namespace GKCore.Options
         public void FindLanguages()
         {
             try {
-                string path = GKUtils.GetLangsPath();
-                string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
-                for (int i = 0; i < langFiles.Length; i++) LngPrepareProc(langFiles[i]);
+                var appInstance = AppHost.Instance;
+
+                if (!appInstance.HasFeatureSupport(Feature.EmbeddedLocales)) {
+                    string path = GKUtils.GetLangsPath();
+                    string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
+                    for (int i = 0; i < langFiles.Length; i++) {
+                        LngPrepareProc(langFiles[i]);
+                    }
+                } else {
+                    var appAssembly = appInstance.GetType().Assembly;
+                    string path = "Resources.locales";
+                    string[] langFiles = appAssembly.GetManifestResourceNames().Where(r => r.StartsWith(path) && r.EndsWith(".lng")).ToArray();
+                    for (int i = 0; i < langFiles.Length; i++) {
+                        LngPrepareProc(langFiles[i], appAssembly.GetManifestResourceStream(langFiles[i]));
+                    }
+                }
             } catch (Exception ex) {
                 Logger.WriteError("GlobalOptions.FindLanguages()", ex);
             }

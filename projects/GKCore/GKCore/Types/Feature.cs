@@ -28,5 +28,7 @@ namespace GKCore.Types
         RecentFilesLoad,
         Themes,
         OverwritePrompt,
+        EmbeddedLocales,
+        Mobile,
     }
 }

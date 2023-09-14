@@ -21,8 +21,7 @@ namespace GKUI.Forms
             MasterBehavior = MasterBehavior.Popover;
 
             var navPage = new NavigationPage(new AboutPage());
-            if (Device.OS == TargetPlatform.iOS)
-            {
+            if (Device.OS == TargetPlatform.iOS) {
                 navPage.Icon = "tab_feed.png"; // FileImageSource
             }
 
@@ -32,10 +31,8 @@ namespace GKUI.Forms
 
         public async Task NavigateFromMenu(int id)
         {
-            if (!MenuPages.ContainsKey(id))
-            {
-                switch (id)
-                {
+            if (!MenuPages.ContainsKey(id)) {
+                switch (id) {
                     case (int)MenuItemType.Browse:
                         //MenuPages.Add(id, new NavigationPage(new ItemsPage()));
                         break;
@@ -54,13 +51,18 @@ namespace GKUI.Forms
                     case (int)MenuItemType.PatriarchsViewer:
                         MenuPages.Add(id, new NavigationPage(new PatriarchsViewerWin()));
                         break;
+                    case (int)MenuItemType.LanguageSelect:
+                        MenuPages.Add(id, new NavigationPage(new LanguageSelectDlg()));
+                        break;
+                    case (int)MenuItemType.BaseWinSDI:
+                        MenuPages.Add(id, new NavigationPage(new BaseWinSDI()));
+                        break;
                 }
             }
 
             var newPage = MenuPages[id];
 
-            if (newPage != null && Detail != newPage)
-            {
+            if (newPage != null && Detail != newPage) {
                 Detail = newPage;
 
                 if (Device.RuntimePlatform == Device.Android)

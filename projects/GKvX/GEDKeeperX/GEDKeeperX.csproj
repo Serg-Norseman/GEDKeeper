@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
@@ -24,6 +24,54 @@
     <ItemGroup>
         <EmbeddedResource Include="Resources\gk_logo.png">
             <LogicalName>Resources.gk_logo.png</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\Belarusian.lng">
+            <LogicalName>Resources.locales.Belarusian.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\Chinese Simplified.lng">
+            <LogicalName>Resources.locales.Chinese Simplified.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\czech.lng">
+            <LogicalName>Resources.locales.czech.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\English.lng">
+            <LogicalName>Resources.locales.English.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\french.lng">
+            <LogicalName>Resources.locales.french.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\german.lng">
+            <LogicalName>Resources.locales.german.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\Hungarian.lng">
+            <LogicalName>Resources.locales.Hungarian.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\Icelandic.lng">
+            <LogicalName>Resources.locales.Icelandic.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\italian.lng">
+            <LogicalName>Resources.locales.italian.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\Kazakh (Cyrillic).lng">
+            <LogicalName>Resources.locales.Kazakh (Cyrillic).lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\polish.lng">
+            <LogicalName>Resources.locales.polish.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\Portuguese.lng">
+            <LogicalName>Resources.locales.Portuguese.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\russian.lng">
+            <LogicalName>Resources.locales.russian.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\Serbian (Latin).lng">
+            <LogicalName>Resources.locales.Serbian (Latin).lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\Spanish.lng">
+            <LogicalName>Resources.locales.Spanish.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\ukrainian.lng">
+            <LogicalName>Resources.locales.ukrainian.lng</LogicalName>
         </EmbeddedResource>
     </ItemGroup>
 

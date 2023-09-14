@@ -22,6 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKMap.EtoForms", "..\GKMap\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8EEE8-8592-420C-B5C5-E6DDBA389BA1}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\locales\Belarusian.lng = ..\..\locales\Belarusian.lng
 		..\..\locales\Chinese Simplified.lng = ..\..\locales\Chinese Simplified.lng
 		..\..\locales\czech.lng = ..\..\locales\czech.lng
 		..\..\locales\English.lng = ..\..\locales\English.lng

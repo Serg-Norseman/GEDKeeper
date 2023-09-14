@@ -18,43 +18,37 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore;
-using GKUI.Forms;
-using GKUI.Platform;
+using GDModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace GKUI
+namespace GKUI.Forms
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class App : Application
+    public partial class BaseWinSDI : TabbedPage
     {
-        public App()
+        public BaseWinSDI()
         {
             InitializeComponent();
 
-            LangMan.DefInit();
-            XFAppHost.Startup(null);
-
-            MainPage = new MainPage();
+            CreatePage("Individuals", GDMRecordType.rtIndividual);
+            CreatePage("Families", GDMRecordType.rtFamily);
+            CreatePage("Notes", GDMRecordType.rtNote);
+            CreatePage("Multimedia", GDMRecordType.rtMultimedia);
+            CreatePage("Sources", GDMRecordType.rtSource);
+            CreatePage("Repositories", GDMRecordType.rtRepository);
+            CreatePage("Groups", GDMRecordType.rtGroup);
+            CreatePage("Researches", GDMRecordType.rtResearch);
+            CreatePage("Tasks", GDMRecordType.rtTask);
+            CreatePage("Communications", GDMRecordType.rtCommunication);
+            CreatePage("Locations", GDMRecordType.rtLocation);
         }
 
-        protected override void OnStart()
+        private void CreatePage(string pageText, GDMRecordType recType)
         {
-            // Handle when your app starts
-            AppHost.InitSettings();
-            AppHost.Instance.Init(null, false);
-        }
-
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
-
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
-            AppHost.DoneSettings();
+            var tabPage = new ContentPage();
+            tabPage.Title = pageText;
+            Children.Add(tabPage);
         }
     }
 }

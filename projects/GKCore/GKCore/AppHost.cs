@@ -420,13 +420,23 @@ namespace GKCore
             string path;
 
             if (string.IsNullOrEmpty(fAppDataPath)) {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
-                    Path.DirectorySeparatorChar + GetAppSign() + Path.DirectorySeparatorChar;
+                Environment.SpecialFolder specialFolder;
+                if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                    specialFolder = Environment.SpecialFolder.ApplicationData; // for compatibility
+                } else {
+                    specialFolder = Environment.SpecialFolder.LocalApplicationData;
+                }
+
+                path = Environment.GetFolderPath(specialFolder) + Path.DirectorySeparatorChar + GetAppSign() + Path.DirectorySeparatorChar;
             } else {
                 path = fAppDataPath;
             }
 
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            try {
+                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            } catch (Exception ex) {
+                Logger.WriteError("AppHost.GetAppDataPathStatic()", ex);
+            }
 
             return path;
         }
