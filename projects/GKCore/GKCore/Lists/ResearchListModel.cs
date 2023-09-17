@@ -198,7 +198,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (task != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachTaskQuery))) {
+                    if (task != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachTaskQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskRemove, research, task);
                     }
                     break;
@@ -291,7 +291,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (comm != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachCommunicationQuery))) {
+                    if (comm != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachCommunicationQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationRemove, research, comm);
                     }
                     break;
@@ -368,7 +368,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (group != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery))) {
+                    if (group != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupRemove, research, group);
                     }
                     break;

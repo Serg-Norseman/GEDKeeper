@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,6 +27,7 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKUI.Components;
+using Xam.Plugin.TabView;
 using Xamarin.Forms;
 using XFIKCheckBox = Plugin.InputKit.Shared.Controls.CheckBox;
 using XFRadioButton = Xamarin.Forms.RadioButton;
@@ -104,6 +106,7 @@ namespace GKUI.Platform
         }
     }
 
+
     public sealed class RadioButtonHandler : BaseControlHandler<XFRadioButton, RadioButtonHandler>, IRadioButton
     {
         public RadioButtonHandler(XFRadioButton control) : base(control)
@@ -124,178 +127,11 @@ namespace GKUI.Platform
     }
 
 
-    public sealed class ComboBoxHandler : BaseControlHandler<XFComboBox, ComboBoxHandler>, IComboBox
+    public sealed class ComboBoxHandler : BaseControlHandler<Picker, ComboBoxHandler>, IComboBox
     {
         private readonly IList fItems;
 
-        public ComboBoxHandler(XFComboBox control) : base(control)
-        {
-            fItems = new ObservableCollection<string>();
-            control.ItemsSource = fItems;
-        }
-
-        public new bool Enabled
-        {
-            get { return Control.IsEnabled; }
-            set {
-                Control.IsEnabled = value;
-                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
-            }
-        }
-
-        public IList Items
-        {
-            get {
-                return null;
-            }
-        }
-
-        public bool ReadOnly
-        {
-            get { return false; /*Control.ReadOnly*/; }
-            set { /*Control.ReadOnly = value;*/ }
-        }
-
-        public int SelectedIndex
-        {
-            get { return 0/*Control.SelectedIndex*/; }
-            set { /*Control.SelectedIndex = value;*/ }
-        }
-
-        public object SelectedItem
-        {
-            get { return Control.SelectedItem; }
-            set { Control.SelectedItem = value; }
-        }
-
-        public bool Sorted
-        {
-            get { return false; }
-            set {
-                if (value) {
-                    Sort();
-                }
-            }
-        }
-
-        /*public object SelectedTag
-        {
-            get {
-                return ((GKComboItem)Control.SelectedItem).Tag;
-            }
-            set {
-                var ctl = Control;
-                foreach (object item in ctl.Items) {
-                    GKComboItem comboItem = (GKComboItem)item;
-                    if (comboItem.Tag == value) {
-                        ctl.SelectedItem = item;
-                        return;
-                    }
-                }
-                ctl.SelectedIndex = 0;
-            }
-        }*/
-
-        public string Text
-        {
-            get { return /*Control.Text*/string.Empty; }
-            set { /*Control.Text = value;*/ }
-        }
-
-        public void Add(object item)
-        {
-            //Control.ItemsSource = null;
-            //Control.Items.Add((string)item);
-            fItems.Add(item.ToString());
-            //Control.ItemsSource = fItems;
-        }
-
-        public void AddItem<T>(string caption, T tag, IImage image = null)
-        {
-            //Control.Items.Add(new GKComboItem<T>(caption, tag, image));
-            //Control.Items.Add(caption);
-        }
-
-        public void AddItem(string caption, object tag, IImage image = null)
-        {
-            //Control.Items.Add(new GKComboItem(caption, tag, image));
-            //Control.Items.Add(caption);
-        }
-
-        public void AddItem<T>(string caption, T tag)
-        {
-            //Control.Items.Add(caption);
-        }
-
-        public void AddRange(object[] items, bool sorted = false)
-        {
-            //Control.Sorted = false;
-            //Control.Items.AddRange(GKComboItem.Convert((string[])items));
-            foreach (var itm in items)
-            {
-                //Control.Items.Add((string)itm);
-            }
-            //Control.Sorted = sorted;
-        }
-
-        public void AddRange(IEnumerable<object> items, bool sorted = false)
-        {
-            //Control.Sorted = false;
-            //Control.Items.AddRange(GKComboItem.Convert((string[])items));
-            foreach (var itm in items)
-            {
-                //Control.Items.Add((string)itm);
-            }
-            //Control.Sorted = sorted;
-        }
-
-        public void AddStrings(StringList strings)
-        {
-            int num = strings.Count;
-            for (int i = 0; i < num; i++) {
-                AddItem(strings[i], strings.GetObject(i));
-            }
-        }
-
-        public void BeginUpdate()
-        {
-            //Control.BeginUpdate();
-            //Control.ItemsSource = null;
-        }
-
-        public void Clear()
-        {
-            //Control.Items.Clear();
-            //fItems.Clear();
-        }
-
-        public void EndUpdate()
-        {
-            //Control.ItemsSource = fItems;
-            //Control.EndUpdate();
-        }
-
-        public void Sort()
-        {
-            //Control.SortItems();
-        }
-
-        public T GetSelectedTag<T>()
-        {
-            return default(T);
-        }
-
-        public void SetSelectedTag<T>(T tagValue, bool allowDefault = true)
-        {
-        }
-    }
-
-
-    public sealed class PComboBoxHandler : BaseControlHandler<Picker, PComboBoxHandler>, IComboBox
-    {
-        private readonly IList fItems;
-
-        public PComboBoxHandler(Picker control) : base(control)
+        public ComboBoxHandler(Picker control) : base(control)
         {
             fItems = new ObservableCollection<string>();
             control.ItemsSource = fItems;
@@ -488,7 +324,10 @@ namespace GKUI.Platform
 
         public string SelectedText
         {
-            get { return /*Control.SelectedText*/ string.Empty; }
+            get {
+                string selectedText = (Control.Text == null) ? string.Empty : Control.Text.Substring(Control.CursorPosition, Control.SelectionLength);
+                return selectedText;
+            }
             set { /*Control.SelectedText = value;*/ }
         }
 
@@ -515,16 +354,17 @@ namespace GKUI.Platform
 
         public void Copy()
         {
-            //UIHelper.SetClipboardText(Control.SelectedText);
+            UIHelper.SetClipboardText(SelectedText);
         }
 
         public void SelectAll()
         {
-            //Control.SelectAll();
+            Control.CursorPosition = 0;
+            Control.SelectionLength = Control.Text != null ? Control.Text.Length : 0;
         }
     }
 
-    /*public sealed class TextAreaHandler : BaseControlHandler<Editor, TextAreaHandler>, ITextBox
+    public sealed class TextAreaHandler : BaseControlHandler<Editor, TextAreaHandler>, ITextBox
     {
         public TextAreaHandler(Editor control) : base(control)
         {
@@ -541,23 +381,23 @@ namespace GKUI.Platform
 
         public string[] Lines
         {
-            get { return UIHelper.Convert(Control.Text); }
+            get { /*return UIHelper.Convert(Control.Text);*/ return null; }
             set { } // TODO
         }
 
         public bool ReadOnly
         {
-            get { return Control.ReadOnly; }
+            get { return Control.IsReadOnly; }
             set {
-                Control.ReadOnly = value;
+                Control.IsReadOnly = value;
                 SetBackColor();
             }
         }
 
         public string SelectedText
         {
-            get { return Control.SelectedText; }
-            set { Control.SelectedText = value; }
+            get { return /*Control.SelectedText*/ null; }
+            set { /*Control.SelectedText = value;*/ }
         }
 
         public string Text
@@ -568,7 +408,7 @@ namespace GKUI.Platform
 
         public void AppendText(string text)
         {
-            Control.Append(text, true);
+            //Control.Append(text, true);
         }
 
         public void Clear()
@@ -578,19 +418,20 @@ namespace GKUI.Platform
 
         private void SetBackColor()
         {
-            Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
+            //Control.BackgroundColor = (!Control.IsReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
         }
 
         public void Copy()
         {
-            UIHelper.SetClipboardText(Control.SelectedText);
+            UIHelper.SetClipboardText(SelectedText);
         }
 
         public void SelectAll()
         {
-            Control.SelectAll();
+            //Control.CursorPosition = 0;
+            //Control.SelectionLength = Control.Text != null ? Control.Text.Length : 0;
         }
-    }*/
+    }
 
     /*public sealed class MaskedTextBoxHandler : BaseControlHandler<Entry, MaskedTextBoxHandler>, ITextBox
     {
@@ -721,35 +562,48 @@ namespace GKUI.Platform
         }
     }*/
 
-    /*public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBarHandler
+    public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBar
     {
+        private int fMin;
+        private int fMax;
+        private int fValue;
+
         public ProgressBarHandler(ProgressBar control) : base(control)
         {
         }
 
         public int Minimum
         {
-            get { return Control.MinValue; }
-            set { Control.MinValue = value; }
+            get { return fMin; }
+            set { fMin = value; }
         }
 
         public int Maximum
         {
-            get { return Control.MaxValue; }
-            set { Control.MaxValue = value; }
+            get { return fMax; }
+            set { fMax = value; }
         }
 
         public int Value
         {
-            get { return Control.Value; }
-            set { Control.Value = value; }
+            get { return fValue; }
+            set {
+                fValue = value;
+                UpdateValue();
+            }
         }
 
         public void Increment(int value)
         {
-            Control.Value += value;
+            fValue += value;
+            UpdateValue();
         }
-    }*/
+
+        private void UpdateValue()
+        {
+            Control.Progress = fValue / (fMax - fMin);
+        }
+    }
 
     /*public sealed class LogChartHandler : BaseControlHandler<LogChart, LogChartHandler>, ILogChart
     {
@@ -768,18 +622,65 @@ namespace GKUI.Platform
         }
     }*/
 
-    /*public sealed class TabControlHandler : BaseControlHandler<TabControl, TabControlHandler>, ITabControl
+    public sealed class TabPageHandler : BaseControlHandler<View, TabPageHandler>, ITabPage
     {
-        public TabControlHandler(TabControl control) : base(control)
+        public TabPageHandler(View control) : base(control)
         {
+        }
+
+        public string Text
+        {
+            get { return /*Control.HeaderText*/ ""; }
+            set { /*Control.HeaderText = value;*/ }
+        }
+    }
+
+    public sealed class TabControlHandler : BaseControlHandler<TabViewControl, TabControlHandler>, ITabControl
+    {
+        private class TabPageItems : ITabPages
+        {
+            private TabViewControl fTabControl;
+
+            public ITabPage this[int index]
+            {
+                get {
+                    if (index < 0 || index >= fTabControl.Children.Count)
+                        throw new ArgumentOutOfRangeException("index");
+
+                    //return new TabPageHandler(fTabControl.Children[index]);
+                    return new TabPageHandler(fTabControl.ItemSource[index].Content);
+                }
+            }
+
+            public int Count
+            {
+                get { return fTabControl.Children.Count; }
+            }
+
+            public TabPageItems(TabViewControl control)
+            {
+                fTabControl = control;
+            }
+        }
+
+        private TabPageItems fItems;
+
+        public TabControlHandler(TabViewControl control) : base(control)
+        {
+            fItems = new TabPageItems(control);
         }
 
         public int SelectedIndex
         {
-            get { return Control.SelectedIndex; }
-            set { Control.SelectedIndex = value; }
+            get { return Control.SelectedTabIndex; /*Children.IndexOf(Control.CurrentPage)*/; }
+            set { Control.SelectedTabIndex = value; /*CurrentPage = Control.Children[value];*/ }
         }
-    }*/
+
+        public ITabPages Pages
+        {
+            get { return fItems; }
+        }
+    }
 
     /*public sealed class MenuItemHandler : ControlHandler<ButtonMenuItem, MenuItemHandler>, IMenuItem
     {

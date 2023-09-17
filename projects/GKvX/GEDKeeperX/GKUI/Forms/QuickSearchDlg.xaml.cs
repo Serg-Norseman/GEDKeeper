@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,6 +31,11 @@ namespace GKUI.Forms
     public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
     {
         private readonly QuickSearchDlgController fController;
+
+        public IWindow OwnerWindow
+        {
+            get { return fController.WorkWindow; }
+        }
 
         #region View Interface
 
@@ -87,5 +92,10 @@ namespace GKUI.Forms
                     break;
             }
         }*/
+
+        public void SetLocale()
+        {
+            fController.SetLocale();
+        }
     }
 }

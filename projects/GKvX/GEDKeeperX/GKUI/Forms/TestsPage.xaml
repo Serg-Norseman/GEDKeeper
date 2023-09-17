@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="GKUI.Forms.TestsPage">
+
+    <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
+
+        <Button x:Name="btnAlert" Clicked="btnAlert_Clicked" Text="Alert / Message / Warning" />
+
+        <Button x:Name="btnQuestion" Clicked="btnQuestion_Clicked" Text="Question" />
+
+        <Button x:Name="btnOpenFile" Clicked="btnOpenFile_Clicked" Text="OpenFile" />
+
+        <Button x:Name="btnCopyToCb" Clicked="btnCopyToCb_Clicked" Text="Copy to clipboard" />
+
+    </StackLayout>
+
+</ContentPage>

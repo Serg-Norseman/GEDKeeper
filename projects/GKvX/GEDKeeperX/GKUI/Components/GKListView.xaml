@@ -1,7 +1,16 @@
-﻿<forms:ListView
+﻿<dg:DataGrid
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:forms="http://xamarin.com/schemas/2014/forms"
-    x:Class="GKUI.Components.GKListView">
+    xmlns:dg="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
+    xmlns:xf="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.Core"
+    x:Class="GKUI.Components.GKListView"
+    HeaderBackground="#E0E6F8">
 
-</forms:ListView>
+    <dg:DataGrid.RowsBackgroundColorPalette>
+        <dg:PaletteCollection>
+            <xf:Color>#F2F2F2</xf:Color>
+            <xf:Color>#FFFFFF</xf:Color>
+        </dg:PaletteCollection>
+    </dg:DataGrid.RowsBackgroundColorPalette>
+
+</dg:DataGrid>

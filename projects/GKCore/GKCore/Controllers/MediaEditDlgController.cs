@@ -199,7 +199,7 @@ namespace GKCore.Controllers
             if (string.IsNullOrEmpty(fileName)) return;
 
             if (GlobalOptions.Instance.RemovableMediaWarning && FileHelper.IsRemovableDrive(fileName)) {
-                if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage))) {
+                if (!AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage))) {
                     return;
                 }
             }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,14 +23,15 @@ using System.Threading;
 using BSLib;
 using GKCore;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Components;
 using GKUI.Forms;
+using Xam.Plugin.TabView;
 using Xamarin.Forms;
 using XFRadioButton = Xamarin.Forms.RadioButton;
 
@@ -62,12 +63,14 @@ namespace GKUI.Platform
 
         public override IForm GetActiveForm()
         {
-            return null;
+            var form = Shell.Current.CurrentPage as IForm;
+            return form;
         }
 
         public override IWindow GetActiveWindow()
         {
-            throw new NotImplementedException();
+            var window = GetActiveForm() as IWindow;
+            return window;
         }
 
         public override IntPtr GetTopWindowHandle()
@@ -95,7 +98,8 @@ namespace GKUI.Platform
 
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
-            throw new NotImplementedException();
+            var result = new XFUITimer(msInterval, elapsedHandler);
+            return result;
         }
 
         public override void Quit()
@@ -162,17 +166,16 @@ namespace GKUI.Platform
 
         public override int GetKeyLayout()
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public override void SetKeyLayout(int layout)
         {
-            throw new NotImplementedException();
         }
 
         public override void SetClipboardText(string text)
         {
-            throw new NotImplementedException();
+            UIHelper.SetClipboardText(text);
         }
 
         #endregion
@@ -184,6 +187,8 @@ namespace GKUI.Platform
         /// </summary>
         public static void ConfigureBootstrap()
         {
+            Xamarin.Forms.DataGrid.DataGridComponent.Init();
+
             var appHost = new XFAppHost();
             IContainer container = AppHost.Container;
 
@@ -193,7 +198,7 @@ namespace GKUI.Platform
             container.Reset();
 
             // controls and other
-            /*container.Register<IStdDialogs, EtoStdDialogs>(LifeCycle.Singleton);*/
+            container.Register<IStdDialogs, XFStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProvider, XFGfxProvider>(LifeCycle.Singleton);
             /*container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
 
@@ -253,21 +258,20 @@ namespace GKUI.Platform
             container.Register<IProgressController, ProgressDlg>(LifeCycle.Transient);*/
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
-            ControlsManager.RegisterHandlerType(typeof(Switch), typeof(CheckBoxHandler));
-            //ControlsManager.RegisterHandlerType(typeof(XFComboBox), typeof(ComboBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(Picker), typeof(PComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(Switch), typeof(CheckBoxHandler)); // CheckBox / Switch
+            ControlsManager.RegisterHandlerType(typeof(Picker), typeof(ComboBoxHandler));
             //ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
             //ControlsManager.RegisterHandlerType(typeof(MaskedEntry), typeof(MaskedTextBoxHandler));
             //ControlsManager.RegisterHandlerType(typeof(NumericUpDown), typeof(NumericBoxHandler));
-            //ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
+            ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(XFRadioButton), typeof(RadioButtonHandler));
-            //ControlsManager.RegisterHandlerType(typeof(TabControl), typeof(TabControlHandler));
+            ControlsManager.RegisterHandlerType(typeof(TabViewControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(Entry), typeof(TextBoxHandler));
             //ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             //ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
 
-            //ControlsManager.RegisterHandlerType(typeof(TextArea), typeof(TextAreaHandler));
+            ControlsManager.RegisterHandlerType(typeof(Editor), typeof(TextAreaHandler));
             //ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
         }
 

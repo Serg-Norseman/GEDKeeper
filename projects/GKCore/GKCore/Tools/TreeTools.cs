@@ -372,7 +372,7 @@ namespace GKCore.Tools
                 throw new ArgumentNullException("sourceRec");
 
             if (targetRec.RecordType == GDMRecordType.rtRepository) {
-                if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RepoRecsMergeWarning))) {
+                if (!AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RepoRecsMergeWarning))) {
                     return;
                 }
             }

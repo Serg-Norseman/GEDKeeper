@@ -442,7 +442,7 @@ namespace GKCore.Controllers
 
         public void DeleteParents()
         {
-            if (!AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery))) return;
+            if (!AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachParentsQuery))) return;
 
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family == null) return;

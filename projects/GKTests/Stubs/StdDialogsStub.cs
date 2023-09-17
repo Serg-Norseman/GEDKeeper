@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Threading.Tasks;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 
@@ -33,6 +34,11 @@ namespace GKTests.Stubs
         public string GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
         {
             return string.Empty;
+        }
+
+        public Task<string> GetOpenFileAsync(string title, string context, string filter, int filterIndex, string defaultExt)
+        {
+            throw new System.NotImplementedException();
         }
 
         public bool GetPassword(string prompt, ref string value)
@@ -77,9 +83,14 @@ namespace GKTests.Stubs
         {
         }
 
-        public bool ShowQuestionYN(string msg, string title = "")
+        public bool ShowQuestion(string msg, string title = "")
         {
             return false;
+        }
+
+        public Task<bool> ShowQuestionAsync(string msg, string title = "")
+        {
+            throw new System.NotImplementedException();
         }
 
         public void ShowWarning(string msg, string title = "")

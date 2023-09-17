@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -39,6 +39,11 @@ namespace GKUI.Forms
         private readonly int fMinGens;
         private bool fTipShow;
 
+        public IWindow OwnerWindow
+        {
+            get { return fBase; }
+        }
+
         public PatriarchsViewerWin() : this(null, 0)
         {
         }
@@ -49,6 +54,7 @@ namespace GKUI.Forms
 
             fBase = baseWin;
             fMinGens = minGens;
+
             fTipShow = false;
 
             Appearing += Form_Load;

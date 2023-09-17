@@ -171,7 +171,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (repoCit != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachRepositoryQuery))) {
+                    if (repoCit != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachRepositoryQuery))) {
                         repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, repoRec);
                     }

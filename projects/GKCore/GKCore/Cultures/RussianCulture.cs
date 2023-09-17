@@ -128,7 +128,7 @@ namespace GKCore.Cultures
 
             if (result == GDMSex.svUnknown && canQuery) {
                 string fn = iName + " " + iPat;
-                bool res = AppHost.StdDialogs.ShowQuestionYN(string.Format(LangMan.LS(LSID.LSID_NotDeterminedPersonSex), fn));
+                bool res = AppHost.StdDialogs.ShowQuestion(string.Format(LangMan.LS(LSID.LSID_NotDeterminedPersonSex), fn));
                 result = res ? GDMSex.svMale : GDMSex.svFemale;
             }
 

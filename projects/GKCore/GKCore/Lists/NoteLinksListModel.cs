@@ -103,7 +103,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachNoteQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachNoteQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GDMObject)dataOwner, notes);
                     }
                     break;

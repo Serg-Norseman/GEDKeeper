@@ -113,7 +113,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachMultimediaQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachMultimediaQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GDMObject)dataOwner, mmLink);
                     }
                     break;

@@ -19,6 +19,7 @@
  */
 
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Design.Graphics;
@@ -77,6 +78,11 @@ namespace GKUI.Platform
                     return string.Empty;
                 }
             }
+        }
+
+        public Task<string> GetOpenFileAsync(string title, string context, string filter, int filterIndex, string defaultExt)
+        {
+            throw new System.NotImplementedException();
         }
 
         private static OpenFileDialog CreateOpenFileDialog(string title, string context, string filter,
@@ -181,13 +187,18 @@ namespace GKUI.Platform
             MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Hand);
         }
 
-        public bool ShowQuestionYN(string msg, string title = "")
+        public bool ShowQuestion(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
             return MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+        }
+
+        public Task<bool> ShowQuestionAsync(string msg, string title = "")
+        {
+            throw new System.NotImplementedException();
         }
 
         public void ShowWarning(string msg, string title = "")

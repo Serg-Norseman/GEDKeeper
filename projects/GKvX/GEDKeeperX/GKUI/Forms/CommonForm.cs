@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,8 +21,8 @@
 using System;
 using GKCore;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Interfaces;
+using GKUI.Themes;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
@@ -30,9 +30,9 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : ContentPage, IView
+    public class CommonForm : ContentPage, IView, IThemedView
     {
-        protected readonly ControlsManager fControlsManager;
+        private readonly ControlsManager fControlsManager;
 
         public IWindow OwnerWindow { get; }
 
@@ -69,6 +69,16 @@ namespace GKUI.Forms
             Focus();
         }
 
+        protected T GetControlHandler<T>(object control) where T : class, IControl
+        {
+            return fControlsManager.GetControl<T>(control);
+        }
+
+        public object GetControl(string controlName)
+        {
+            return FindByName(controlName);
+        }
+
         public void Close()
         {
             //base.Close();
@@ -78,14 +88,29 @@ namespace GKUI.Forms
         {
         }
 
-        public object GetControl(string controlName)
+        public virtual void ApplyTheme()
         {
-            return FindByName(controlName);
+            if (AppHost.Instance != null) {
+                AppHost.Instance.ApplyTheme(this);
+            }
         }
 
-        protected T GetControlHandler<T>(object control) where T : class, IControl
+        public virtual bool SkipTheme(IDisposable component)
         {
-            return fControlsManager.GetControl<T>(control);
+            return false;
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CommonWindow : CommonForm, IWindow
+    {
+        public virtual void Show(bool showInTaskbar)
+        {
+            //ShowInTaskbar = showInTaskbar;
+            //Show();
         }
 
         public virtual void SetLocale()
@@ -97,16 +122,17 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonWindow : CommonForm, IWindow
+    public class CommonWindow<TView, TController> : CommonWindow
+        where TView : IView
+        where TController : FormController<TView>
     {
-        public CommonWindow()
-        {
-        }
+        protected TController fController;
 
-        public virtual void Show(bool showInTaskbar)
+
+        public override void ApplyTheme()
         {
-            //ShowInTaskbar = showInTaskbar;
-            //Show();
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
     }
 
@@ -196,5 +222,11 @@ namespace GKUI.Forms
             base.OnClosing(e);
             e.Cancel = fController.CheckChangesPersistence();
         }*/
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
+        }
     }
 }

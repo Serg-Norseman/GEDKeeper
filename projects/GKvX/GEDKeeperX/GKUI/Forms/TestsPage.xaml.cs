@@ -20,42 +20,40 @@
 
 using System;
 using GKCore;
-using GKCore.Options;
+using GKUI.Components;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AboutPage : ContentPage
+    public partial class TestsPage : ContentPage
     {
-        public AboutPage()
+        public TestsPage()
         {
             InitializeComponent();
-
-            // FontSize="12" FontAttributes="Bold"
-
-            Title = LangMan.LS(LSID.LSID_MIAbout);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            //lblProduct.Text = GKData.APP_TITLE;
-            lblVersion.Text = @"Version " + AppHost.GetAppVersion();
-            lblCopyright.Text = AppHost.GetAppCopyright();
-
-            if (GlobalOptions.Instance.GetLanguageSign() == "rus") {
-                lblForum.Text = GKData.APP_FORUM_RU;
-                lblChannel.Text = GKData.APP_CHANNEL_RU;
-            } else {
-                lblForum.Text = GKData.APP_FORUM_EN;
-                lblChannel.Text = GKData.APP_CHANNEL_EN;
-            }
         }
 
-        private void lblURL_Clicked(object sender, EventArgs e)
+        private void btnAlert_Clicked(object sender, EventArgs e)
         {
-            var btn = sender as Button;
-            if (btn != null) {
-                Device.OpenUri(new Uri(btn.Text));
-            }
+            AppHost.StdDialogs.ShowAlert("Test Alert!");
+        }
+
+        private async void btnQuestion_Clicked(object sender, EventArgs e)
+        {
+            if (await AppHost.StdDialogs.ShowQuestionAsync("Question"))
+                AppHost.StdDialogs.ShowAlert("Yes");
+        }
+
+        private async void btnOpenFile_Clicked(object sender, EventArgs e)
+        {
+            string fileName = await AppHost.StdDialogs.GetOpenFileAsync("title", "context", "GEDCOM Files|*.ged,*.gedz,*.gedsec", 0, "");
+            AppHost.StdDialogs.ShowAlert(fileName);
+        }
+
+        private void btnCopyToCb_Clicked(object sender, EventArgs e)
+        {
+            UIHelper.SetClipboardText("clipboard sample");
         }
     }
 }

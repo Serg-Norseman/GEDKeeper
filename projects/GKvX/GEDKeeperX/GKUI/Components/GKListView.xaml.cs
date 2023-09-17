@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,14 +20,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq.Expressions;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using Xamarin.Forms;
+using Xamarin.Forms.DataGrid;
 using BSDListItem = GKCore.Design.Controls.IListItem;
 using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 
@@ -151,7 +150,7 @@ namespace GKUI.Components
     /// <summary>
     ///
     /// </summary>
-    public sealed partial class GKListView : ListView, IListView
+    public sealed partial class GKListView : /*ListView*/DataGrid, IListView
     {
         private readonly List<string> fColumns;
         private readonly ObservableExtList<GKListItem> fItems;
@@ -292,15 +291,17 @@ namespace GKUI.Components
 
         public void ClearColumns()
         {
-            fColumns.Clear();
-            ItemTemplate = null;
+            Columns.Clear();
+
+            //fColumns.Clear();
+            //ItemTemplate = null;
         }
 
         public void AddColumn(string caption, int width, bool autoSize = false)
         {
             int index = fColumns.Count;
             var binding = string.Format("Values[{0}]", index);
-            fColumns.Add(binding);
+            //fColumns.Add(binding);
 
             //Expression<Func<GKListItem, object>> myLambda;
             //myLambda = item => Convert.ToString(item.Values[0]);
@@ -309,7 +310,7 @@ namespace GKUI.Components
             lbl.SetBinding(Label.TextProperty, "Values[0]"); //string.Format("Values[{0}]", index)); // string.Format("Values[{0}]", index)
             */
 
-            ItemTemplate = new DataTemplate(() => {
+            /*ItemTemplate = new DataTemplate(() => {
                 var rowView = new StackLayout() {
                     Orientation = StackOrientation.Horizontal
                 };
@@ -325,6 +326,12 @@ namespace GKUI.Components
                 return new ViewCell() {
                     View = rowView
                 };
+            });*/
+
+            Columns.Add(new DataGridColumn() {
+                Title = caption,
+                Width = width,
+                PropertyName = binding
             });
         }
 

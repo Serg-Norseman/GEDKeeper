@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,7 +32,7 @@ using IPen = GKCore.Design.Graphics.IPen;
 namespace GKUI.Platform
 {
     /// <summary>
-    /// 
+    /// The main implementation of the platform-specific graphics provider for Xamarin.
     /// </summary>
     public class XFGfxProvider : IGraphicsProvider
     {

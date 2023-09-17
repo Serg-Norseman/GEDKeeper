@@ -755,7 +755,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachGroupQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, iRec);
                     }
                     break;
@@ -853,7 +853,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raDelete:
                     if (iRec.PersonalNames.Count > 1) {
-                        result = (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveNameQuery)));
+                        result = (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RemoveNameQuery)));
                         if (result) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, iRec, persName);
                         }
@@ -968,7 +968,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachParentsQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachParentsQuery))) {
                         var famRec = fBaseContext.Tree.GetPtrValue(cfLink);
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, iRec, famRec);
                     }
@@ -1096,7 +1096,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (family != null && AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_DetachSpouseQuery))) {
+                    if (family != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachSpouseQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, iRec);
                     }
                     break;
@@ -1205,7 +1205,7 @@ namespace GKCore.Lists
                 case RecordAction.raDelete:
                     {
                         string confirmation = !string.IsNullOrEmpty(userRef.StringValue) ? userRef.StringValue : userRef.ReferenceType;
-                        if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveUserRefQuery, confirmation))) {
+                        if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RemoveUserRefQuery, confirmation))) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, iRec, userRef);
                             fBaseWin.Context.Modified = true;
                         }

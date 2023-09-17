@@ -1062,7 +1062,7 @@ namespace GKCore
                             if (!GlobalOptions.Instance.DeleteMediaFileWithoutConfirm) {
                                 string msg = string.Format(LangMan.LS(LSID.LSID_MediaFileDeleteQuery));
                                 // TODO: may be Yes/No/Cancel?
-                                if (!AppHost.StdDialogs.ShowQuestionYN(msg)) {
+                                if (!AppHost.StdDialogs.ShowQuestion(msg)) {
                                     return false;
                                 }
                             }
@@ -1077,15 +1077,15 @@ namespace GKCore
                         break;
 
                     case MediaStoreStatus.mssFileNotFound:
-                        result = AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_FileNotFound, fileName)));
+                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_FileNotFound, fileName)));
                         break;
 
                     case MediaStoreStatus.mssStgNotFound:
-                        result = AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_StgNotFound)));
+                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_StgNotFound)));
                         break;
 
                     case MediaStoreStatus.mssArcNotFound:
-                        result = AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_ArcNotFound)));
+                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_ArcNotFound)));
                         break;
 
                     case MediaStoreStatus.mssBadData:
@@ -1848,7 +1848,7 @@ namespace GKCore
                     GDMIndividualRecord wife = fTree.GetPtrValue(fam.Wife);
                     if (husb == newParent || wife == newParent) {
                         string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fTree, fam));
-                        if (AppHost.StdDialogs.ShowQuestionYN(msg)) {
+                        if (AppHost.StdDialogs.ShowQuestion(msg)) {
                             result = fam;
                             break;
                         }

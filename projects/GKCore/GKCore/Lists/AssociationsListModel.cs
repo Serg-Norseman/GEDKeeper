@@ -112,7 +112,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveAssociationQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RemoveAssociationQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationRemove, person, ast);
                     }
                     break;

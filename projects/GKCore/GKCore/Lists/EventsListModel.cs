@@ -149,7 +149,7 @@ namespace GKCore.Lists
                         break;
 
                     case RecordAction.raDelete:
-                        if (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_RemoveEventQuery))) {
+                        if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RemoveEventQuery))) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, evt);
                             evt = null;
                         }

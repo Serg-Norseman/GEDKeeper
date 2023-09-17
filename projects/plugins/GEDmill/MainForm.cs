@@ -312,7 +312,7 @@ namespace GEDmill
 
         private bool ShowQuestionYN(string msg, string title = GMConfig.SoftwareName)
         {
-            return AppHost.StdDialogs.ShowQuestionYN(msg, title);
+            return AppHost.StdDialogs.ShowQuestion(msg, title);
         }
 
         private void ShowAlert(string msg, string title = GMConfig.SoftwareName)

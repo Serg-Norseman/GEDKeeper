@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,9 +27,6 @@ using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class UserRefEditDlg : CommonDialog<IUserRefEditDlg, UserRefEditDlgController>, IUserRefEditDlg
     {
@@ -43,12 +40,12 @@ namespace GKUI.Forms
 
         IComboBox IUserRefEditDlg.Ref
         {
-            get { return fControlsManager.GetControl<IComboBox>(cmbRef); }
+            get { return GetControlHandler<IComboBox>(cmbRef); }
         }
 
         IComboBox IUserRefEditDlg.RefType
         {
-            get { return fControlsManager.GetControl<IComboBox>(cmbRefType); }
+            get { return GetControlHandler<IComboBox>(cmbRefType); }
         }
 
         #endregion

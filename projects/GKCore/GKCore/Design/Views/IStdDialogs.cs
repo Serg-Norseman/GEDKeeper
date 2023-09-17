@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Threading.Tasks;
 using GKCore.Design.Graphics;
 
 namespace GKCore.Design.Views
@@ -31,6 +32,9 @@ namespace GKCore.Design.Views
 
         string GetOpenFile(string title, string context, string filter,
                            int filterIndex, string defaultExt);
+
+        Task<string> GetOpenFileAsync(string title, string context, string filter,
+                                  int filterIndex, string defaultExt);
 
         bool GetPassword(string prompt, ref string value);
 
@@ -51,7 +55,9 @@ namespace GKCore.Design.Views
 
         void ShowMessage(string msg, string title = "");
 
-        bool ShowQuestionYN(string msg, string title = "");
+        bool ShowQuestion(string msg, string title = "");
+
+        Task<bool> ShowQuestionAsync(string msg, string title = "");
 
         void ShowWarning(string msg, string title = "");
     }

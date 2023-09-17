@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.33920.266
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeperX.Android", "GEDKeeperX.Android\GEDKeeperX.Android.csproj", "{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeperX.iOS", "GEDKeeperX.iOS\GEDKeeperX.iOS.csproj", "{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeperX.UWP", "GEDKeeperX.UWP\GEDKeeperX.UWP.csproj", "{14A1B4FC-FE4F-46D3-8D92-2858CA1D5139}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GEDKeeperX", "GEDKeeperX\GEDKeeperX.csproj", "{9528C5A8-EF89-4F3A-B8BF-D9CD316B89D9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.nstd", "..\GKCore\GKCore.nstd.csproj", "{80BB677B-48EF-46CF-9476-C9C81E6D58AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeperX.Android", "GEDKeeperX.Android\GEDKeeperX.Android.csproj", "{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeperX.iOS", "GEDKeeperX.iOS\GEDKeeperX.iOS.csproj", "{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

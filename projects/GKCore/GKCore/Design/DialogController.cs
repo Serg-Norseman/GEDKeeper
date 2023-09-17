@@ -81,7 +81,7 @@ namespace GKCore.Design
         public bool CheckChangesPersistence()
         {
             if (GlobalOptions.Instance.DialogClosingWarn && fLocalUndoman != null && fLocalUndoman.HasChanges()) {
-                return (AppHost.StdDialogs.ShowQuestionYN(LangMan.LS(LSID.LSID_WarningOfDialogUnsavedChanges)));
+                return (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_WarningOfDialogUnsavedChanges)));
             } else {
                 return false;
             }

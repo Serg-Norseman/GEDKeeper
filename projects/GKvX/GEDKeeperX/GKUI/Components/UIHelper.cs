@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using GKCore;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace GKUI.Components
@@ -34,6 +35,11 @@ namespace GKUI.Components
         public static ImageSource LoadResourceImage(Type baseType, string resName)
         {
             return ImageSource.FromResource(resName, baseType.Assembly);
+        }
+
+        public static void SetClipboardText(string text)
+        {
+            Clipboard.SetTextAsync(text);
         }
     }
 }
