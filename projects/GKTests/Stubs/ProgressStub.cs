@@ -24,7 +24,7 @@ using GKCore.Interfaces;
 
 namespace GKTests.Stubs
 {
-    internal class ProgressStub : IProgressController
+    internal class ProgressStub : IProgressDialog
     {
         public bool Enabled { get; set; }
         public void Activate() { }

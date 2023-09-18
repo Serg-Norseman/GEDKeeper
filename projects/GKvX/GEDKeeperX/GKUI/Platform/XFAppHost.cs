@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Text;
 using System.Threading;
 using BSLib;
 using GKCore;
@@ -61,15 +62,21 @@ namespace GKUI.Platform
         {
         }
 
+        private Page GetCurrentPage()
+        {
+            var navPage = ((MainPage)Application.Current.MainPage).CurrentPage as NavigationPage;
+            return (navPage == null) ? null : navPage.CurrentPage;
+        }
+
         public override IForm GetActiveForm()
         {
-            var form = Shell.Current.CurrentPage as IForm;
+            var form = GetCurrentPage() as IForm;
             return form;
         }
 
         public override IWindow GetActiveWindow()
         {
-            var window = GetActiveForm() as IWindow;
+            var window = GetCurrentPage() as IWindow;
             return window;
         }
 
@@ -107,22 +114,26 @@ namespace GKUI.Platform
             Application.Current.Quit();
         }
 
+        private IProgressController GetProgressController()
+        {
+            var progressCtl = GetCurrentPage() as IProgressController;
+            return (progressCtl == null) ? new ProgressControllerStub() : progressCtl;
+
+            //return Container.Resolve<IProgressController>();
+        }
+
         public override void ExecuteWork(ProgressStart proc)
         {
-            var activeWnd = GetActiveWindow();
+            try {
+                var progressForm = GetProgressController();
 
-            using (var progressForm = ResolveDialog<IProgressController>()) {
                 var workerThread = new Thread((obj) => {
                     proc((IProgressController)obj);
                 });
 
-                try {
-                    workerThread.Start(progressForm);
-
-                    progressForm.ShowModalX(activeWnd);
-                } catch (Exception ex) {
-                    Logger.WriteError("ExecuteWork()", ex);
-                }
+                workerThread.Start(progressForm);
+            } catch (Exception ex) {
+                Logger.WriteError("ExecuteWork()", ex);
             }
         }
 
@@ -142,7 +153,7 @@ namespace GKUI.Platform
 
         public override void WidgetLocate(IWidgetForm view, WidgetLocation location)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public override string SelectFolder(string folderPath)
@@ -152,14 +163,40 @@ namespace GKUI.Platform
 
         public override bool HasFeatureSupport(Feature feature)
         {
-            if (feature == Feature.EmbeddedLocales || feature == Feature.Mobile) {
-                return true;
+            switch (feature) {
+                case Feature.GridCellFormat:
+                    return true; // [Q?]
+
+                case Feature.InternetProxy:
+                    return false; // [Accepted]
+
+                case Feature.MediaPlayer:
+                    return false; // [Accepted]
+
+                case Feature.RecentFilesLoad:
+                    return false; // [Q?]
+
+                case Feature.Themes:
+                    return false; // [Accepted]
+
+                case Feature.OverwritePrompt:
+                    return false; // [Q?]
+
+                case Feature.EmbeddedLocales:
+                case Feature.Mobile:
+                    return true; // [Accepted]
+
+                case Feature.Plugins:
+                    return false; // [Accepted]
+
+                default:
+                    return false;
             }
-            return false;
         }
 
         public override void LayoutWindows(WinLayout layout)
         {
+            throw new NotSupportedException();
         }
 
         #region KeyLayout functions
@@ -187,6 +224,9 @@ namespace GKUI.Platform
         /// </summary>
         public static void ConfigureBootstrap()
         {
+            // support for legacy encodings
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             Xamarin.Forms.DataGrid.DataGridComponent.Init();
 
             var appHost = new XFAppHost();
@@ -283,15 +323,6 @@ namespace GKUI.Platform
             //CheckPortable(args);
             Logger.Init(GetLogFilename());
             LogSysInfo();
-
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
-        }
-
-        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs e)
-        {
-            // Saving the copy for restoration
-            AppHost.Instance.CriticalSave();
-            Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)e.ExceptionObject);
         }
     }
 }

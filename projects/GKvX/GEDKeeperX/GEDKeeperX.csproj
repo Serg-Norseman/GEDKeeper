@@ -25,52 +25,52 @@
         <EmbeddedResource Include="Resources\gk_logo.png">
             <LogicalName>Resources.gk_logo.png</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\Belarusian.lng">
+        <EmbeddedResource Include="..\..\..\locales\Belarusian.lng" Link="Resources\locales\Belarusian.lng">
             <LogicalName>Resources.locales.Belarusian.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\Chinese Simplified.lng">
+        <EmbeddedResource Include="..\..\..\locales\Chinese Simplified.lng" Link="Resources\locales\Chinese Simplified.lng">
             <LogicalName>Resources.locales.Chinese Simplified.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\czech.lng">
+        <EmbeddedResource Include="..\..\..\locales\czech.lng" Link="Resources\locales\czech.lng">
             <LogicalName>Resources.locales.czech.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\English.lng">
+        <EmbeddedResource Include="..\..\..\locales\English.lng" Link="Resources\locales\English.lng">
             <LogicalName>Resources.locales.English.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\french.lng">
+        <EmbeddedResource Include="..\..\..\locales\french.lng" Link="Resources\locales\french.lng">
             <LogicalName>Resources.locales.french.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\german.lng">
+        <EmbeddedResource Include="..\..\..\locales\german.lng" Link="Resources\locales\german.lng">
             <LogicalName>Resources.locales.german.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\Hungarian.lng">
+        <EmbeddedResource Include="..\..\..\locales\Hungarian.lng" Link="Resources\locales\Hungarian.lng">
             <LogicalName>Resources.locales.Hungarian.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\Icelandic.lng">
+        <EmbeddedResource Include="..\..\..\locales\Icelandic.lng" Link="Resources\locales\Icelandic.lng">
             <LogicalName>Resources.locales.Icelandic.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\italian.lng">
+        <EmbeddedResource Include="..\..\..\locales\italian.lng" Link="Resources\locales\italian.lng">
             <LogicalName>Resources.locales.italian.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\Kazakh (Cyrillic).lng">
+        <EmbeddedResource Include="..\..\..\locales\Kazakh (Cyrillic).lng" Link="Resources\locales\Kazakh %28Cyrillic%29.lng">
             <LogicalName>Resources.locales.Kazakh (Cyrillic).lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\polish.lng">
+        <EmbeddedResource Include="..\..\..\locales\polish.lng" Link="Resources\locales\polish.lng">
             <LogicalName>Resources.locales.polish.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\Portuguese.lng">
+        <EmbeddedResource Include="..\..\..\locales\Portuguese.lng" Link="Resources\locales\Portuguese.lng">
             <LogicalName>Resources.locales.Portuguese.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\russian.lng">
+        <EmbeddedResource Include="..\..\..\locales\russian.lng" Link="Resources\locales\russian.lng">
             <LogicalName>Resources.locales.russian.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\Serbian (Latin).lng">
+        <EmbeddedResource Include="..\..\..\locales\Serbian (Latin).lng" Link="Resources\locales\Serbian %28Latin%29.lng">
             <LogicalName>Resources.locales.Serbian (Latin).lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\Spanish.lng">
+        <EmbeddedResource Include="..\..\..\locales\Spanish.lng" Link="Resources\locales\Spanish.lng">
             <LogicalName>Resources.locales.Spanish.lng</LogicalName>
         </EmbeddedResource>
-        <EmbeddedResource Include="..\..\..\locales\ukrainian.lng">
+        <EmbeddedResource Include="..\..\..\locales\ukrainian.lng" Link="Resources\locales\ukrainian.lng">
             <LogicalName>Resources.locales.ukrainian.lng</LogicalName>
         </EmbeddedResource>
     </ItemGroup>
@@ -83,6 +83,7 @@
         <PackageReference Include="Xam.Plugin.TabView" Version="1.1.1" />
         <PackageReference Include="CarouselView.FormsPlugin" Version="6.0.0" />
         <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>

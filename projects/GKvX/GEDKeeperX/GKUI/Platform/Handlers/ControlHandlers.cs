@@ -23,110 +23,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using BSLib;
-using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKUI.Components;
 using Xam.Plugin.TabView;
 using Xamarin.Forms;
-using XFIKCheckBox = Plugin.InputKit.Shared.Controls.CheckBox;
-using XFRadioButton = Xamarin.Forms.RadioButton;
 
 namespace GKUI.Platform
 {
-    public abstract class BaseControlHandler<T, TThis> : ControlHandler<T, TThis>, IBaseControl
-        where T : VisualElement
-        where TThis : ControlHandler<T, TThis>
-    {
-        protected BaseControlHandler(T control) : base(control)
-        {
-        }
-
-        public bool Enabled
-        {
-            get { return Control.IsEnabled; }
-            set { Control.IsEnabled = value; }
-        }
-
-        public void Activate()
-        {
-            Control.Focus();
-        }
-    }
-
-
-    public sealed class LabelHandler : BaseControlHandler<Label, LabelHandler>, ILabel
-    {
-        public LabelHandler(Label control) : base(control)
-        {
-        }
-
-        public IColor BackColor
-        {
-            get { return new ColorHandler(Control.BackgroundColor); }
-            set { Control.BackgroundColor = ((ColorHandler)value).Handle; }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-    }
-
-    public sealed class ButtonHandler : BaseControlHandler<Button, ButtonHandler>, IButton
-    {
-        public ButtonHandler(Button control) : base(control)
-        {
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-    }
-
-    public sealed class CheckBoxHandler : BaseControlHandler<XFIKCheckBox, CheckBoxHandler>, ICheckBox
-    {
-        public CheckBoxHandler(XFIKCheckBox control) : base(control)
-        {
-        }
-
-        public bool Checked
-        {
-            get { return Control.IsChecked; }
-            set { Control.IsChecked = value; }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-    }
-
-
-    public sealed class RadioButtonHandler : BaseControlHandler<XFRadioButton, RadioButtonHandler>, IRadioButton
-    {
-        public RadioButtonHandler(XFRadioButton control) : base(control)
-        {
-        }
-
-        public bool Checked
-        {
-            get { return Control.IsChecked; }
-            set { Control.IsChecked = value; }
-        }
-
-        public string Text
-        {
-            get { return (string)Control.Content; }
-            set { Control.Content = value; }
-        }
-    }
-
-
     public sealed class ComboBoxHandler : BaseControlHandler<Picker, ComboBoxHandler>, IComboBox
     {
         private readonly IList fItems;

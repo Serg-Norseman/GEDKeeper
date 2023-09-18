@@ -1,11 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<forms:CommonWindow xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform"
-    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore" xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+<forms:CommonWindow
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
     x:Class="GKUI.Forms.BaseWinSDI">
 
-    <xp:TabViewControl x:Name="tabsRecords">
-    </xp:TabViewControl>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Load File" Order="Primary" Priority="0" Clicked="miFileLoad_Click" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout VerticalOptions="FillAndExpand">
+        <ProgressBar x:Name="progressBar" IsVisible="false" VerticalOptions="Start" />
+
+        <xp:TabViewControl x:Name="tabsRecords" VerticalOptions="FillAndExpand">
+        </xp:TabViewControl>
+    </StackLayout>
 
 </forms:CommonWindow>

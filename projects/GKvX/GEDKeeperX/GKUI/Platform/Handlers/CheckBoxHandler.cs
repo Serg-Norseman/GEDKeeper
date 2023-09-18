@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,26 +18,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore;
-using GKCore.Interfaces;
-using GKTests.Stubs;
-using GKUI.Platform;
+using GKCore.Design.Controls;
+using XFIKCheckBox = Plugin.InputKit.Shared.Controls.CheckBox;
 
-namespace GKTests
+namespace GKUI.Platform
 {
-    public class TestUtilsUI
+    public sealed class CheckBoxHandler : BaseControlHandler<XFIKCheckBox, CheckBoxHandler>, ICheckBox
     {
-        public static void InitUITest()
+        public CheckBoxHandler(XFIKCheckBox control) : base(control)
         {
-            TestUtils.InitGEDCOMProviderTest();
-            AppHost.TEST_MODE = true;
+        }
 
-            // GlobalOptions -> IGraphicsProviderEx
-            WFAppHost.ConfigureBootstrap();
+        public bool Checked
+        {
+            get { return Control.IsChecked; }
+            set { Control.IsChecked = value; }
+        }
 
-            LangMan.DefInit();
-
-            AppHost.Container.Register<IProgressDialog, ProgressStub>(GKCore.IoC.LifeCycle.Singleton, true);
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
         }
     }
 }

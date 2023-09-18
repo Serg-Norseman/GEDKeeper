@@ -50,7 +50,7 @@ namespace GKCore.Interfaces
     /// This defines an interface which can be implemented by UI elements
     /// which indicate the progress of a long operation.
     /// </summary>
-    public interface IProgressController : IGDMProgressCallback, ICommonDialog
+    public interface IProgressController : IGDMProgressCallback
     {
         /// <summary>
         /// If this property is true, then you should abort work
@@ -110,5 +110,14 @@ namespace GKCore.Interfaces
         void Increment(int value = 1);
 
         void InvokeEx(Action action);
+    }
+
+
+    /// <summary>
+    /// This defines an interface which can be implemented by UI elements
+    /// which indicate the progress of a long operation.
+    /// </summary>
+    public interface IProgressDialog : IProgressController, ICommonDialog
+    {
     }
 }

@@ -62,6 +62,8 @@ namespace GKUI.Platform
             try {
                 var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> {
                     { DevicePlatform.UWP, ConvertFilePickerFilters(filter) },
+                    { DevicePlatform.iOS, ConvertFilePickerFilters(filter, true) },
+                    { DevicePlatform.Android, ConvertFilePickerFilters(filter, true) },
                 });
                 var options = new PickOptions {
                     PickerTitle = title,
@@ -93,7 +95,7 @@ namespace GKUI.Platform
             throw new NotSupportedException();
         }
 
-        private static IEnumerable<string> ConvertFilePickerFilters(string filter)
+        private static IEnumerable<string> ConvertFilePickerFilters(string filter, bool withoutDot = false)
         {
             var result = new List<string>();
 
@@ -107,6 +109,9 @@ namespace GKUI.Platform
                 string[] extensions = exts.Split(new char[] { ',', ';' });
                 for (int k = 0; k < extensions.Length; k++) {
                     string ext = extensions[k];
+                    if (withoutDot && ext.StartsWith(".")) {
+                        ext = ext.Substring(1);
+                    }
                     if (ext.Length > 0) {
                         result.Add(ext);
                     }
@@ -153,7 +158,7 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            return await curPage.DisplayAlert(title, msg, "Да", "Нет");
+            return await curPage.DisplayAlert(title, msg, "Yes", "No");
         }
 
         public void ShowWarning(string msg, string title = "")

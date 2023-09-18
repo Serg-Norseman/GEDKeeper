@@ -78,7 +78,7 @@ namespace GKTests.Stubs
         {
             IView activeWnd = GetActiveWindow();
 
-            using (var progressForm = ResolveDialog<IProgressController>()) {
+            using (var progressForm = ResolveDialog<IProgressDialog>()) {
                 var workerThread = new Thread((obj) => {
                     proc((IProgressController)obj);
                 });
@@ -206,7 +206,7 @@ namespace GKTests.Stubs
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
             container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
 
-            container.Register<IProgressController, ProgressDlg>(LifeCycle.Transient);*/
+            container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);*/
 
             //ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             //ControlsManager.RegisterHandlerType(typeof(Switch), typeof(CheckBoxHandler));

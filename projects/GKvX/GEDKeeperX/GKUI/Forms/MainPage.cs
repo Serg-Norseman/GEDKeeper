@@ -27,6 +27,16 @@ namespace GKUI.Forms
     public partial class MainPage : MasterDetailPage
     {
         private readonly Dictionary<int, NavigationPage> fMenuPages;
+        private Page fCurrentPage;
+
+        public Page CurrentPage
+        {
+            get { return fCurrentPage; }
+            set {
+                fCurrentPage = value;
+                Detail = fCurrentPage;
+            }
+        }
 
         public MainPage()
         {
@@ -38,7 +48,7 @@ namespace GKUI.Forms
             }
 
             Master = new MenuPage();
-            Detail = navPage;
+            CurrentPage = navPage;
 
             fMenuPages = new Dictionary<int, NavigationPage>();
             fMenuPages.Add((int)MenuItemType.Browse, navPage);
@@ -56,7 +66,7 @@ namespace GKUI.Forms
             }
 
             if (newPage != null && Detail != newPage) {
-                Detail = newPage;
+                CurrentPage = newPage;
 
                 if (Device.RuntimePlatform == Device.Android)
                     await Task.Delay(100);

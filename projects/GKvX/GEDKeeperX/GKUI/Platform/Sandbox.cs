@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using GKCore;
+using GKCore.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -103,5 +104,46 @@ namespace GKUI.Platform
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
+    }
+
+
+    internal class ProgressControllerStub : IProgressController
+    {
+        public bool IsCanceled
+        {
+            get { return false; }
+        }
+
+        public void Begin(int maximum, bool cancelable)
+        {
+        }
+
+        public void Begin(string title, int maximum, bool cancelable = false)
+        {
+        }
+
+        public void End()
+        {
+        }
+
+        public void End(ThreadError threadError)
+        {
+        }
+
+        public void Increment(int value = 1)
+        {
+        }
+
+        public void InvokeEx(Action action)
+        {
+        }
+
+        public void SetText(string text)
+        {
+        }
+
+        public void StepTo(int value)
+        {
+        }
     }
 }

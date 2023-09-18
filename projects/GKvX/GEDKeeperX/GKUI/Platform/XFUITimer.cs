@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GKCore.Interfaces;
+using Xamarin.Forms;
 
 namespace GKUI.Platform
 {
@@ -29,9 +30,7 @@ namespace GKUI.Platform
     /// </summary>
     public sealed class XFUITimer : BaseObject, ITimer
     {
-        //private readonly UITimer fInnerTimer;
         private readonly EventHandler fElapsedHandler;
-
         private bool fEnabled;
         private double fInterval;
 
@@ -40,11 +39,10 @@ namespace GKUI.Platform
             get { return fEnabled; }
             set {
                 if (value) {
-                    //fInnerTimer.Start();
+                    Start();
                 } else {
-                    //fInnerTimer.Stop();
+                    Stop();
                 }
-                fEnabled = value;
             }
         }
 
@@ -59,36 +57,34 @@ namespace GKUI.Platform
 
         public XFUITimer(double msInterval, EventHandler elapsedHandler)
         {
+            fInterval = msInterval;
             fElapsedHandler = elapsedHandler;
-
-            /*fInnerTimer = new UITimer();
-            fInnerTimer.Interval = msInterval / 1000;
-            fInnerTimer.Elapsed += ElapsedEventHandler;*/
-
-            //Device.StartTimer(TimeSpan interval, Func<bool> callback);
+            fEnabled = false;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                //fInnerTimer.Dispose();
+                Stop();
             }
             base.Dispose(disposing);
         }
 
-        private void ElapsedEventHandler(object sender, EventArgs e)
+        private bool ElapsedEventHandler()
         {
-            fElapsedHandler(sender, e);
+            fElapsedHandler(this, new EventArgs());
+            return fEnabled;
         }
 
         public void Start()
         {
-            //fInnerTimer.Start();
+            fEnabled = true;
+            Device.StartTimer(TimeSpan.FromMilliseconds(fInterval), ElapsedEventHandler);
         }
 
         public void Stop()
         {
-            //fInnerTimer.Stop();
+            fEnabled = false;
         }
     }
 }

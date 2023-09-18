@@ -30,5 +30,6 @@ namespace GKCore.Types
         OverwritePrompt,
         EmbeddedLocales,
         Mobile,
+        Plugins,
     }
 }

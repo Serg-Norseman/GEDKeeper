@@ -29,8 +29,9 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Export;
 using GKCore.Interfaces;
-using GKCore.Options;
+using GKCore.Lists;
 using GKCore.Types;
+using GKUI.Components;
 using Xam.Plugin.TabView;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -38,7 +39,7 @@ using Xamarin.Forms.Xaml;
 namespace GKUI.Forms
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class BaseWinSDI : CommonWindow, IBaseWindowView
+    public partial class BaseWinSDI : CommonWindow, IBaseWindowView, IProgressController
     {
         #region Private fields
 
@@ -108,10 +109,46 @@ namespace GKUI.Forms
 
         private void CreatePage(string pageText, GDMRecordType recType)
         {
+            var summary = new HyperView();
+            //summary.BorderWidth = 4;
+            //summary.OnLink += mPersonSummaryLink;
+            //summary.ContextMenu = summaryMenu;
+
+            var recView = new GKListView();
+            //recView.AllowMultipleSelection = true;
+            //recView.MouseDoubleClick += miRecordEdit_Click;
+            //recView.SelectedItemsChanged += List_SelectedIndexChanged;
+            //recView.ContextMenu = contextMenu;
+            recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
+            recView.UpdateContents();
+
+            //var spl = new StackLayout();
+            string splID = "splitter" + ((int)recType).ToString();
+            /*spl.Panel1 = recView;
+            spl.Panel2 = summary;
+            spl.RelativePosition = 300;
+            spl.Orientation = Orientation.Horizontal;
+            spl.FixedPanel = SplitterFixedPanel.Panel2;
+            spl.PositionChanged += Spl_PositionChanged;*/
+            var spl = new Grid {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                ColumnDefinitions = new ColumnDefinitionCollection() {
+                    new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) },
+                    new ColumnDefinition() { Width = new GridLength(300, GridUnitType.Absolute) },
+                },
+                RowDefinitions = new RowDefinitionCollection() {
+                    new RowDefinition() { Height = GridLength.Auto }
+                }
+            };
+            spl.Children.Add(recView, 0, 0);
+            spl.Children.Add(summary, 1, 0);
+
             var tabPage = new TabItem(); //ContentPage();
             tabPage.HeaderText = pageText;
-            //tabsRecords.Children.Add(tabPage);
+            tabPage.Content = spl;
             tabsRecords.AddTab(tabPage);
+
+            fController.SetTabPart(recType, recView, splID, summary);
         }
 
         #endregion
@@ -416,38 +453,17 @@ namespace GKUI.Forms
 
         public void Restore()
         {
-            /*if (WindowState == Eto.Forms.WindowState.Minimized) {
-                WindowState = Eto.Forms.WindowState.Normal;
-            }*/
+            // not supported
         }
 
         private void Form_DragEnter(object sender, DragEventArgs e)
         {
-            /*var files = e.Data.Uris;
-            e.Effects = (files != null) ? DragEffects.Copy : DragEffects.None;*/
+            // not supported
         }
 
         private void Form_DragDrop(object sender, DragEventArgs e)
         {
-            /*try {
-                try {
-                    AppHost.Instance.BeginLoading();
-
-                    var files = e.Data.Uris;
-                    if (files == null) return;
-
-                    for (int i = 0; i < files.Length; i++) {
-                        var uri = files[i];
-                        if (!uri.IsFile) continue;
-                        string fn = uri.AbsolutePath;
-                        AppHost.Instance.LoadBase(this, fn);
-                    }
-                } finally {
-                    AppHost.Instance.EndLoading();
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.Form_DragDrop()", ex);
-            }*/
+            // not supported
         }
 
         void IBaseWindowView.LoadBase(string fileName)
@@ -504,45 +520,12 @@ namespace GKUI.Forms
 
         private void ThemeClick(object sender, EventArgs e)
         {
-            /*var mItem = (CheckMenuItem)sender;
-            foreach (CheckMenuItem mi in ((ButtonMenuItem)mItem.Parent).Items) {
-                mi.Checked = mItem == mi;
-            }
-
-            var theme = (Theme)mItem.Tag;
-            AppHost.Instance.ApplyTheme(theme.Name);*/
+            // not supported
         }
 
         private void UpdateThemesItems()
         {
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes))
-                return;
-
-            try {
-                string curTheme = GlobalOptions.Instance.Theme;
-
-                /*miThemes.Items.Clear();
-
-                var themes = AppHost.ThemeManager.Themes;
-                int num = themes.Count;
-                for (int i = 0; i < num; i++) {
-                    var theme = themes[i];
-
-                    var mi = new CheckMenuItem();
-                    mi.Text = theme.Name;
-                    mi.Tag = theme;
-                    mi.Click += ThemeClick;
-                    miThemes.Items.Add(mi);
-
-                    if ((i == 0 && string.IsNullOrEmpty(curTheme)) || (theme.Name == curTheme)) {
-                        mi.Checked = true;
-                    }
-                }
-
-                miThemes.Enabled = (miThemes.Items.Count > 0);*/
-            } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.UpdateThemesItems()", ex);
-            }
+            // not supported
         }
 
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
@@ -647,7 +630,7 @@ namespace GKUI.Forms
 
         private void miFileLoad_Click(object sender, EventArgs e)
         {
-            fController.LoadFileEx();
+            fController.LoadFileAsync();
         }
 
         private void miFileSaveAs_Click(object sender, EventArgs e)
@@ -793,6 +776,90 @@ namespace GKUI.Forms
         private void miWinMinimize_Click(object sender, EventArgs e)
         {
             AppHost.Instance.LayoutWindows(WinLayout.Minimize);
+        }
+
+        #endregion
+
+        #region IProgressController
+
+        private int fMaximum;
+        private int fVal;
+
+        bool IProgressController.IsCanceled
+        {
+            get { return false; }
+        }
+
+        private void UpdateProgress()
+        {
+            progressBar.Progress = (fMaximum == 0) ? 0 : fVal / (float)fMaximum;
+        }
+
+        void IProgressController.Begin(int maximum, bool cancelable)
+        {
+            fMaximum = maximum;
+            fVal = 0;
+            Device.BeginInvokeOnMainThread(() => {
+                progressBar.IsVisible = true;
+                UpdateProgress();
+            });
+        }
+
+        void IProgressController.Begin(string title, int maximum, bool cancelable)
+        {
+            fMaximum = maximum;
+            fVal = 0;
+            Device.BeginInvokeOnMainThread(() => {
+                progressBar.IsVisible = true;
+                UpdateProgress();
+            });
+        }
+
+        void IProgressController.End()
+        {
+            /*Device.BeginInvokeOnMainThread(() => {
+                progressBar.IsVisible = false;
+            });*/
+        }
+
+        void IProgressController.End(ThreadError threadError)
+        {
+            /*Device.BeginInvokeOnMainThread(() => {
+                progressBar.IsVisible = false;
+            });*/
+        }
+
+        void IProgressController.SetText(string text)
+        {
+        }
+
+        void IProgressController.StepTo(int value)
+        {
+            fVal = value;
+            Device.BeginInvokeOnMainThread(() => {
+                UpdateProgress();
+            });
+        }
+
+        void IGDMProgressCallback.StepTo(int value)
+        {
+            fVal = value;
+            Device.BeginInvokeOnMainThread(() => {
+                UpdateProgress();
+            });
+        }
+
+        void IProgressController.Increment(int value)
+        {
+            fVal += value;
+            Device.BeginInvokeOnMainThread(() => {
+                UpdateProgress();
+            });
+        }
+
+        void IProgressController.InvokeEx(Action action)
+        {
+            Device.BeginInvokeOnMainThread(action);
         }
 
         #endregion

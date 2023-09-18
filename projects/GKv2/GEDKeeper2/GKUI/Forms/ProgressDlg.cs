@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,7 +27,7 @@ using GKCore.Interfaces;
 
 namespace GKUI.Forms
 {
-    public sealed partial class ProgressDlg : CommonDialog, IProgressController
+    public sealed partial class ProgressDlg : CommonDialog, IProgressDialog
     {
         private readonly ManualResetEvent fInitEvent;
         private readonly ManualResetEvent fBeginEvent;

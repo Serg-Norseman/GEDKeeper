@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,26 +18,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore;
-using GKCore.Interfaces;
-using GKTests.Stubs;
-using GKUI.Platform;
+using GKCore.Design;
+using Xamarin.Forms;
 
-namespace GKTests
+namespace GKUI.Platform
 {
-    public class TestUtilsUI
+    public abstract class BaseControlHandler<T, TThis> : ControlHandler<T, TThis>, IBaseControl
+        where T : VisualElement
+        where TThis : ControlHandler<T, TThis>
     {
-        public static void InitUITest()
+        protected BaseControlHandler(T control) : base(control)
         {
-            TestUtils.InitGEDCOMProviderTest();
-            AppHost.TEST_MODE = true;
+        }
 
-            // GlobalOptions -> IGraphicsProviderEx
-            WFAppHost.ConfigureBootstrap();
+        public bool Enabled
+        {
+            get { return Control.IsEnabled; }
+            set { Control.IsEnabled = value; }
+        }
 
-            LangMan.DefInit();
-
-            AppHost.Container.Register<IProgressDialog, ProgressStub>(GKCore.IoC.LifeCycle.Singleton, true);
+        public void Activate()
+        {
+            Control.Focus();
         }
     }
 }

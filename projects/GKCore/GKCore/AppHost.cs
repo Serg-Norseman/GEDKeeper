@@ -1204,7 +1204,19 @@ namespace GKCore
 
         static AppHost()
         {
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
+
             fIocContainer = new IocContainer();
+        }
+
+        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs e)
+        {
+            try {
+                // Saving the copy for restoration
+                AppHost.Instance.CriticalSave();
+                Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)e.ExceptionObject);
+            } catch (Exception ex) {
+            }
         }
 
         public static void CheckPortable(string[] args)

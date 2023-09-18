@@ -138,21 +138,38 @@ namespace GKCore.Controllers
             }
         }
 
+        private void PrepareLoadFile(out string homePath, out string filters)
+        {
+            homePath = AppHost.Instance.GetUserFilesPath("");
+
+            filters = LangMan.LS(LSID.LSID_GEDCOMFilter);
+
+#if GEDML_SUPPORT
+            filters += "|" + LangMan.LS(LSID.LSID_GedMLFilter);
+#endif
+
+#if FAMX_SUPPORT
+            filters += "|" + "Family.Show files (*.familyx)|*.familyx";
+#endif
+        }
+
         public void LoadFileEx()
         {
-            string homePath = AppHost.Instance.GetUserFilesPath("");
-
-            string filters = LangMan.LS(LSID.LSID_GEDCOMFilter);
-
-            #if GEDML_SUPPORT
-            filters += "|" + LangMan.LS(LSID.LSID_GedMLFilter);
-            #endif
-
-            #if FAMX_SUPPORT
-            filters += "|" + "Family.Show files (*.familyx)|*.familyx";
-            #endif
+            string homePath, filters;
+            PrepareLoadFile(out homePath, out filters);
 
             string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
+            if (!string.IsNullOrEmpty(fileName)) {
+                AppHost.Instance.LoadBase(fView, fileName);
+            }
+        }
+
+        public async void LoadFileAsync()
+        {
+            string homePath, filters;
+            PrepareLoadFile(out homePath, out filters);
+
+            string fileName = await AppHost.StdDialogs.GetOpenFileAsync("", homePath, filters, 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
                 AppHost.Instance.LoadBase(fView, fileName);
             }

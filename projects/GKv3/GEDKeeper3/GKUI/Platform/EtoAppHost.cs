@@ -252,7 +252,7 @@ namespace GKUI.Platform
         {
             var activeWnd = GetActiveWindow();
 
-            using (var progressForm = ResolveDialog<IProgressController>()) {
+            using (var progressForm = ResolveDialog<IProgressDialog>()) {
                 var workerThread = new Thread((obj) => {
                     proc((IProgressController)obj);
                 });
@@ -544,7 +544,7 @@ namespace GKUI.Platform
             container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
             container.Register<IFARDlg, FindAndReplaceDlg>(LifeCycle.Transient);
 
-            container.Register<IProgressController, ProgressDlg>(LifeCycle.Transient);
+            container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
@@ -586,15 +586,6 @@ namespace GKUI.Platform
             CheckPortable(args);
             Logger.Init(GetLogFilename());
             LogSysInfo();
-
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
-        }
-
-        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs e)
-        {
-            // Saving the copy for restoration
-            AppHost.Instance.CriticalSave();
-            Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)e.ExceptionObject);
         }
     }
 }

@@ -168,13 +168,13 @@ namespace GKUI.Platform
             // In test mode, when a stub is substituted for the real form, 
             // the modal show of the dialog does not block further code execution after ExecuteWork.
             if (TEST_MODE) {
-                using (var progressForm = ResolveDialog<IProgressController>()) {
+                using (var progressForm = ResolveDialog<IProgressDialog>()) {
                     proc(progressForm);
                 }
                 return;
             }
 
-            using (var progressForm = ResolveDialog<IProgressController>()) {
+            using (var progressForm = ResolveDialog<IProgressDialog>()) {
                 var workerThread = new Thread((obj) => {
                     proc((IProgressController)obj);
                 });
@@ -514,7 +514,7 @@ namespace GKUI.Platform
             container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
             container.Register<IFARDlg, FindAndReplaceDlg>(LifeCycle.Transient);
 
-            container.Register<IProgressController, ProgressDlg>(LifeCycle.Transient);
+            container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
@@ -576,7 +576,6 @@ namespace GKUI.Platform
 
             Application.ThreadException += ExExceptionHandler;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -585,13 +584,6 @@ namespace GKUI.Platform
         private static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
         {
             Logger.WriteError("GK.ExExceptionHandler()", args.Exception);
-        }
-
-        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args)
-        {
-            // Saving the copy for restoration
-            AppHost.Instance.CriticalSave();
-            Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)args.ExceptionObject);
         }
     }
 }

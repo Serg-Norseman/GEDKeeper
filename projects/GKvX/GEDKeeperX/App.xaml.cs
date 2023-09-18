@@ -21,8 +21,10 @@
 using GKCore;
 using GKUI.Forms;
 using GKUI.Platform;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using static Xamarin.Essentials.Permissions;
 
 namespace GKUI
 {
@@ -39,11 +41,27 @@ namespace GKUI
             MainPage = new MainPage();
         }
 
-        protected override void OnStart()
+        protected async override void OnStart()
         {
             // Handle when your app starts
             AppHost.InitSettings();
             AppHost.Instance.Init(null, false);
+
+            RequestPermissions<Permissions.StorageRead>();
+            RequestPermissions<Permissions.StorageWrite>();
+        }
+
+        private async static void RequestPermissions<T>() where T : BasePermission, new()
+        {
+            var status = await Permissions.CheckStatusAsync<T>();
+            if (status != PermissionStatus.Granted) {
+                status = await Permissions.RequestAsync<T>();
+                if (status != PermissionStatus.Granted) {
+                    string v = $"Permission must be ALLOW acceess to searching folder";
+                    await App.Current.MainPage.DisplayAlert("", v, "OK");
+                    await Permissions.RequestAsync<T>();
+                }
+            }
         }
 
         protected override void OnSleep()

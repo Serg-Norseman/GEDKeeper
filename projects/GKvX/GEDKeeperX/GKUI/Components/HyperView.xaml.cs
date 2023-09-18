@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,26 +18,36 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore;
-using GKCore.Interfaces;
-using GKTests.Stubs;
-using GKUI.Platform;
+using BSLib;
+using GKCore.Design.Controls;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
-namespace GKTests
+namespace GKUI.Components
 {
-    public class TestUtilsUI
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class HyperView : ContentView, IHyperView
     {
-        public static void InitUITest()
+        public HyperView()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            AppHost.TEST_MODE = true;
+            InitializeComponent();
+        }
 
-            // GlobalOptions -> IGraphicsProviderEx
-            WFAppHost.ConfigureBootstrap();
+        public StringList Lines
+        {
+            get {
+                throw new System.NotImplementedException();
+            }
+        }
 
-            LangMan.DefInit();
+        public bool Enabled
+        {
+            get { return false; }
+            set { }
+        }
 
-            AppHost.Container.Register<IProgressDialog, ProgressStub>(GKCore.IoC.LifeCycle.Singleton, true);
+        public void Activate()
+        {
         }
     }
 }
