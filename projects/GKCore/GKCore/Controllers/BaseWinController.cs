@@ -107,6 +107,7 @@ namespace GKCore.Controllers
         public void Clear()
         {
             fNavman.Clear();
+            fChangedRecords.Clear();
             fContext.Clear();
         }
 
@@ -123,7 +124,11 @@ namespace GKCore.Controllers
 
         public void NewFile()
         {
-            AppHost.Instance.CreateBase("");
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                AppHost.Instance.CreateBase("");
+            } else {
+                CreateNewFile();
+            }
         }
 
         public void LoadFile(string fileName)

@@ -22,15 +22,10 @@ using System;
 using System.Collections.Generic;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
+using GKCore.Interfaces;
 
 namespace GDModel
 {
-    public interface IGDMProgressCallback
-    {
-        void StepTo(int value);
-    }
-
-
     public enum GDMTreeState
     {
         osLoading,
@@ -150,7 +145,7 @@ namespace GDModel
 
         private GEDCOMFormat fFormat;
         private int[] fLastIDs;
-        private IGDMProgressCallback fProgressCallback;
+        private IProgressController fProgressCallback;
         private GDMTreeState fState;
         private int fUpdateCount;
 
@@ -191,7 +186,7 @@ namespace GDModel
 
         public event EventHandler OnChanging;
 
-        public IGDMProgressCallback ProgressCallback
+        public IProgressController ProgressCallback
         {
             get { return fProgressCallback; }
             set { fProgressCallback = value; }

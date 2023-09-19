@@ -87,8 +87,6 @@ namespace GKUI.Components
             set { base.Values[0] = value; }
         }
 
-        public object Data { get; set; }
-
         public GKListItem(params object[] values) : base(values)
         {
             BackColor = Colors.Transparent;
@@ -97,10 +95,6 @@ namespace GKUI.Components
         public int CompareTo(object obj)
         {
             return 0;
-        }
-
-        public void AddSubItem(object itemValue)
-        {
         }
 
         public void SetBackColor(IColor color)
@@ -117,10 +111,6 @@ namespace GKUI.Components
             if (colorHandler != null) {
                 ForeColor = colorHandler.Handle;
             }
-        }
-
-        public void SetFont(IFont font)
-        {
         }
 
         public void SetSubItem(int index, object value)
@@ -623,7 +613,7 @@ namespace GKUI.Components
             }
 
             var item = new GKListItem(itemValues);
-            item.Data = rowData;
+            item.Tag = rowData;
             fItems.Add(item);
             return item;
         }
@@ -635,7 +625,7 @@ namespace GKUI.Components
 
                 if (fListMan == null) {
                     foreach (GKListItem item in SelectedItems) {
-                        result.Add(item.Data);
+                        result.Add(item.Tag);
                     }
                 } else {
                     foreach (var index in SelectedRows) {
@@ -658,7 +648,7 @@ namespace GKUI.Components
 
             if (!fIsVirtual) {
                 var item = SelectedItem as GKListItem;
-                return (item != null) ? item.Data : null;
+                return (item != null) ? item.Tag : null;
             } else {
                 var item = SelectedItem as ContentItem;
                 return (item != null) ? item.Record : null;
@@ -684,7 +674,7 @@ namespace GKUI.Components
                 } else {
                     int num = fItems.Count;
                     for (int i = 0; i < num; i++) {
-                        if (fItems[i].Data == rowData) {
+                        if (fItems[i].Tag == rowData) {
                             SelectItem(i);
                             return;
                         }

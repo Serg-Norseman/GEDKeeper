@@ -29,8 +29,6 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
-using GKCore.Lists;
-using GKCore.Types;
 using GKUI.Platform.Handlers;
 using BSDListItem = GKCore.Design.Controls.IListItem;
 using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
@@ -45,13 +43,11 @@ namespace GKUI.Components
     {
         protected object fValue;
 
-        public object Data { get; set; }
-
-        public GKListItem(object itemValue, object data)
+        public GKListItem(object itemValue, object tag)
         {
             fValue = itemValue;
             Text = ToString();
-            Data = data;
+            Tag = tag;
         }
 
         public override string ToString()
@@ -88,11 +84,6 @@ namespace GKUI.Components
             return compRes;
         }
 
-        public void AddSubItem(object itemValue)
-        {
-            SubItems.Add(new GKListSubItem(itemValue));
-        }
-
         public void SetSubItem(int index, object value)
         {
             SubItems[index] = new GKListSubItem(value);
@@ -112,10 +103,6 @@ namespace GKUI.Components
             if (colorHandler != null) {
                 ForeColor = colorHandler.Handle;
             }
-        }
-
-        public void SetFont(IFont font)
-        {
         }
     }
 
@@ -507,9 +494,9 @@ namespace GKUI.Components
 
         private static IListItem CreateListItem(object data, object[] columnValues)
         {
-            IListItem result = new GKListItem(columnValues[0], data);
+            var result = new GKListItem(columnValues[0], data);
             for (int i = 1, num = columnValues.Length; i < num; i++)
-                result.AddSubItem(columnValues[i]);
+                result.SubItems.Add(new GKListSubItem(columnValues[i]));
             return result;
         }
 
@@ -735,7 +722,7 @@ namespace GKUI.Components
                     int num = SelectedItems.Count;
                     for (int i = 0; i < num; i++) {
                         var lvItem = SelectedItems[i] as GKListItem;
-                        result.Add(lvItem.Data);
+                        result.Add(lvItem.Tag);
                     }
                 } else {
                     int num = SelectedIndices.Count;
@@ -772,7 +759,7 @@ namespace GKUI.Components
 
                 if (!VirtualMode) {
                     GKListItem item = GetSelectedItem();
-                    if (item != null) result = item.Data;
+                    if (item != null) result = item.Tag;
                 } else {
                     if (SelectedIndices.Count > 0) {
                         int index = SelectedIndices[0];
@@ -823,7 +810,7 @@ namespace GKUI.Components
                     int num = Items.Count;
                     for (int i = 0; i < num; i++) {
                         var item = (GKListItem)Items[i];
-                        if (item.Data == rowData) {
+                        if (item.Tag == rowData) {
                             SelectItem(i, item);
                             return;
                         }

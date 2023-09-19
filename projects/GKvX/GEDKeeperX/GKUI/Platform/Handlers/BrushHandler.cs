@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,47 +18,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design.Controls;
+using BSLib;
 using GKCore.Design.Graphics;
+using Xamarin.Forms;
+using IBrush = GKCore.Design.Graphics.IBrush;
 
-namespace GKTests.Stubs
+namespace GKUI.Components
 {
-    public class ListItemStub : IListItem
+    public sealed class BrushHandler : TypeHandler<Brush>, IBrush
     {
-        public bool Checked
+        public IColor Color
         {
-            get { return false; }
-            set { }
+            get { return UIHelper.ConvertColor(((SolidColorBrush)Handle).Color); }
         }
 
-        public object Tag
-        {
-            get { return null; }
-            set { }
-        }
-
-        public ListItemStub(object itemValue, object data)
-        {
-        }
-
-        public int CompareTo(object obj)
-        {
-            return 0;
-        }
-
-        public void SetBackColor(IColor color)
-        {
-        }
-
-        public void SetFont(IFont font)
-        {
-        }
-
-        public void SetForeColor(IColor color)
-        {
-        }
-
-        public void SetSubItem(int index, object value)
+        public BrushHandler(Brush handle) : base(handle)
         {
         }
     }

@@ -678,7 +678,7 @@ namespace GKCore.Lists
             Fetch(rec);
 
             if (CheckFilter()) {
-                fContentList.Add(new ContentItem(rec));
+                fContentList.Add(new ContentItem(this, rec));
             }
         }
 

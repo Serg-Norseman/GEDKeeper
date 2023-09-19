@@ -683,7 +683,7 @@ namespace GKPedigreeImporterPlugin
                             rawLine.Type = RawLineType.rltEOF;
                         }
 
-                        progress.StepTo(i + 1);
+                        progress.Increment();
                     }
 
                     if (numberStats[1] > numberStats[2]) {
@@ -875,7 +875,7 @@ namespace GKPedigreeImporterPlugin
                                 break;
                         }
 
-                        progress.StepTo(row);
+                        progress.Increment();
                     }
 
                     // hack: processing last items before end
@@ -964,7 +964,7 @@ namespace GKPedigreeImporterPlugin
                             fRawContents.AddObject(txt, new RawLine(lineNum));
                         }
 
-                        progress.StepTo(i + 1);
+                        progress.Increment();
                         lineNum++;
                     }
                     fRawContents.AddObject("", new RawLine(lineNum));

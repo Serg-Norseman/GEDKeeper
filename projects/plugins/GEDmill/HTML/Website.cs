@@ -67,9 +67,6 @@ namespace GEDmill.HTML
             var mtTree = new MTTree(GMConfig.Instance, fTree, treeDrawer);
 
             try {
-                // The value to indicate in the progress bar to show how much of the website creation is complete.
-                int progress = 0;
-
                 int[] gfstats = fTree.GetRecordStats();
 
                 // The maximum value of the progress bar, i.e. when website creation is fully complete.
@@ -99,7 +96,7 @@ namespace GEDmill.HTML
                 if (progressWnd.IsCanceled) {
                     return;
                 }
-                progressWnd.StepTo(++progress);
+                progressWnd.Increment();
 
                 // Create the index creator for use by the individuals records creator.
                 var indiIndexCreator = new CreatorIndexIndividuals(fContext, fLangMan);
@@ -110,7 +107,7 @@ namespace GEDmill.HTML
                 if (progressWnd.IsCanceled) {
                     return;
                 }
-                progressWnd.StepTo(++progress);
+                progressWnd.Increment();
 
                 // Create the style sheet
                 progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingStyleSheet));
@@ -122,7 +119,7 @@ namespace GEDmill.HTML
                 if (progressWnd.IsCanceled) {
                     return;
                 }
-                progressWnd.StepTo(++progress);
+                progressWnd.Increment();
 
                 // Create the pages for the individual records.
                 progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualPages));
@@ -135,7 +132,7 @@ namespace GEDmill.HTML
                     if (progressWnd.IsCanceled) {
                         return;
                     }
-                    progressWnd.StepTo(++progress);
+                    progressWnd.Increment();
                 }
 
                 // Create the index for the individual records pages.
@@ -144,7 +141,7 @@ namespace GEDmill.HTML
                 if (progressWnd.IsCanceled) {
                     return;
                 }
-                progressWnd.StepTo(++progress);
+                progressWnd.Increment();
 
                 // Clear list of copied files, so that source images get copied afresh
                 // and so get resized differently to any indi images based on the same file.
@@ -163,7 +160,7 @@ namespace GEDmill.HTML
                         return;
                     }
 
-                    progressWnd.StepTo(++progress);
+                    progressWnd.Increment();
                 }
 
                 if (progressWnd.IsCanceled) {
@@ -176,7 +173,7 @@ namespace GEDmill.HTML
                     CreatorFrontPage fpc = new CreatorFrontPage(fContext, fLangMan, stats);
                     fpc.Create();
                 }
-                progressWnd.StepTo(++progress);
+                progressWnd.Increment();
                 if (progressWnd.IsCanceled) {
                     return;
                 }
@@ -190,7 +187,7 @@ namespace GEDmill.HTML
                 if (progressWnd.IsCanceled) {
                     return;
                 }
-                progressWnd.StepTo(++progress);
+                progressWnd.Increment();
 
                 // Done
                 fLogger.WriteInfo("Website::CreateFinished");

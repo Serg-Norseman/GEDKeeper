@@ -33,6 +33,7 @@ namespace GKCore.Interfaces
 
         void AddRecord();
         void CheckAutosave();
+        bool CheckModified();
         void CreateNewFile();
         void DeleteRecord();
         void DuplicateRecord();

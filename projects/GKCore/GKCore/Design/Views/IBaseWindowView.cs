@@ -29,7 +29,6 @@ namespace GKCore.Design.Views
         IMenuItem ReportsItem { get; }
         IMenuItem PluginsItem { get; }
 
-        bool CheckModified();
         void LoadBase(string fileName);
 
         void EnableSplitterEvent(object control, bool enable);

@@ -30,12 +30,10 @@ namespace GKCore.Design.Controls
     public interface IListItem : IComparable
     {
         bool Checked { get; set; }
-        object Data { get; set; }
+        object Tag { get; set; }
 
-        void AddSubItem(object itemValue);
         void SetBackColor(IColor color);
         void SetForeColor(IColor color);
-        void SetFont(IFont font);
         void SetSubItem(int index, object value);
     }
 

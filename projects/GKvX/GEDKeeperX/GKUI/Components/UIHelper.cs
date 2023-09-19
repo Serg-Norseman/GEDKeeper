@@ -19,7 +19,9 @@
  */
 
 using System;
+using BSLib;
 using GKCore;
+using GKCore.Design.Graphics;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -27,6 +29,28 @@ namespace GKUI.Components
 {
     public static class UIHelper
     {
+        public static IColor ConvertColor(Color color)
+        {
+            return new ColorHandler(color);
+        }
+
+        public static Color ConvertColor(IColor color)
+        {
+            return ((ColorHandler)color).Handle;
+        }
+
+        public static Color Darker(Color color, float fraction)
+        {
+            int rgb = ColorExtensions.ToInt(color);
+            return Color.FromUint((uint)GfxHelper.Darker(rgb, fraction));
+        }
+
+        public static Color Lighter(Color color, float fraction)
+        {
+            int rgb = ColorExtensions.ToInt(color);
+            return Color.FromUint((uint)GfxHelper.Lighter(rgb, fraction));
+        }
+
         public static ImageSource LoadResourceImage(string resName)
         {
             return ImageSource.FromResource(resName, typeof(GKUtils).Assembly);

@@ -82,7 +82,7 @@ namespace GKCore.Controllers
                 for (int i = 0; i < num; i++) {
                     IListItem item = fView.ChecksList.Items[i];
                     if (item.Checked) {
-                        var checkObj = item.Data as TreeInspector.CheckObj;
+                        var checkObj = item.Tag as TreeInspector.CheckObj;
                         TreeInspector.RepairProblem(fView, fBase, checkObj);
                     }
                 }
@@ -114,7 +114,7 @@ namespace GKCore.Controllers
             for (int i = 0; i < num; i++) {
                 IListItem item = fView.ChecksList.Items[i];
                 if (item.Checked) {
-                    var checkObj = item.Data as TreeInspector.CheckObj;
+                    var checkObj = item.Tag as TreeInspector.CheckObj;
                     result.Add(checkObj.Rec);
                 }
             }

@@ -22,7 +22,6 @@ using System;
 using System.IO;
 using BSLib;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKUI.Components;
 using Xamarin.Forms;
 using IBrush = GKCore.Design.Graphics.IBrush;
@@ -177,20 +176,16 @@ namespace GKUI.Platform
 
         public IColor CreateColor(int argb)
         {
-            // Dirty hack!
-            //argb = (int)unchecked((long)argb & (long)((ulong)-1));
-            //argb = (int)unchecked((ulong)argb & (uint)0xFF000000);
-            byte red = (byte)((argb >> 16) & 0xFF);
-            byte green = (byte)((argb >> 8) & 0xFF);
-            byte blue = (byte)((argb >> 0) & 0xFF);
+            byte alpha, red, green, blue;
+            GfxHelper.DecomposeARGB(argb, out alpha, out red, out green, out blue);
 
-            Color color = Color.FromRgba(red, green, blue, 0);
+            Color color = Color.FromRgba(red, green, blue, 255);
             return new ColorHandler(color);
         }
 
         public IColor CreateColor(int r, int g, int b)
         {
-            Color color = Color.FromRgba((byte)r, (byte)g, (byte)b, 0);
+            Color color = Color.FromRgba((byte)r, (byte)g, (byte)b, 255);
             return new ColorHandler(color);
         }
 

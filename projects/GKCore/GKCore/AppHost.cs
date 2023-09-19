@@ -723,19 +723,27 @@ namespace GKCore
                 throw new ArgumentNullException(@"baseWin");
 
             try {
-                if (!baseWin.Context.IsUnknown() || !baseWin.Context.Tree.IsEmpty) {
-                    CreateBase(fileName);
-                    return;
-                }
-
-                try {
-                    BeginLoading();
+                if (!HasFeatureSupport(Feature.Mobile)) {
+                    // Multiple documents/bases
+                    if (!baseWin.Context.IsUnknown() || !baseWin.Context.Tree.IsEmpty) {
+                        CreateBase(fileName);
+                        return;
+                    }
 
                     IBaseWindow result = FindBase(fileName);
                     if (result != null) {
                         result.Activate();
                         return;
                     }
+                } else {
+                    // Single document/base
+                    if (!baseWin.CheckModified()) {
+                        return;
+                    }
+                }
+
+                try {
+                    BeginLoading();
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
                         baseWin.LoadFile(fileName);

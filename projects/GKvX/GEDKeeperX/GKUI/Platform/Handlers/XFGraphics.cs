@@ -20,80 +20,11 @@
 
 using System.IO;
 using BSLib;
-using GKCore.Design.Graphics;
 using Xamarin.Forms;
-using IBrush = GKCore.Design.Graphics.IBrush;
 using IImage = GKCore.Design.Graphics.IImage;
 
 namespace GKUI.Components
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class ColorHandler : TypeHandler<Color>, IColor
-    {
-        public ColorHandler(Color handle) : base(handle)
-        {
-        }
-
-        public IColor Darker(float fraction)
-        {
-            //return new ColorHandler(UIHelper.Darker(this.Handle, fraction));
-            return default(IColor);
-        }
-
-        public IColor Lighter(float fraction)
-        {
-            //return new ColorHandler(UIHelper.Lighter(this.Handle, fraction));
-            return default(IColor);
-        }
-
-        public string GetName()
-        {
-            Color color = this.Handle;
-            return color.ToString();
-        }
-
-        public int ToArgb()
-        {
-            int result = 0; // FIXME this.Handle.ToArgb();
-            return result;
-        }
-
-        public string GetCode()
-        {
-            int argb = ToArgb() & 0xFFFFFF;
-            string result = argb.ToString("X6");
-            return result;
-        }
-
-        public byte GetR()
-        {
-            return (byte)(Handle.R * 255);
-        }
-
-        public byte GetG()
-        {
-            return (byte)(Handle.G * 255);
-        }
-
-        public byte GetB()
-        {
-            return (byte)(Handle.B * 255);
-        }
-
-        public byte GetA()
-        {
-            return (byte)(Handle.A * 255);
-        }
-
-        public bool IsTransparent()
-        {
-            return false; // FIXME (Handle == Color.Transparent);
-        }
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
@@ -194,30 +125,6 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
     }*/
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class BrushHandler : TypeHandler<Brush>, IBrush
-    {
-        public IColor Color
-        {
-            get { return null; /*UIHelper.ConvertColor(((SolidColorBrush)Handle).Color);*/ }
-        }
-
-        public BrushHandler(Brush handle) : base(handle)
-        {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                //Handle.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-    }
 
 
     /// <summary>

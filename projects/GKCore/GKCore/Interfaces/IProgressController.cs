@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using GDModel;
 
 namespace GKCore.Interfaces
 {
@@ -50,7 +49,7 @@ namespace GKCore.Interfaces
     /// This defines an interface which can be implemented by UI elements
     /// which indicate the progress of a long operation.
     /// </summary>
-    public interface IProgressController : IGDMProgressCallback
+    public interface IProgressController
     {
         /// <summary>
         /// If this property is true, then you should abort work
@@ -100,7 +99,7 @@ namespace GKCore.Interfaces
         /// </summary>
         /// <param name="value">The amount by which to increment the progress indicator</param>
         /// <remarks>You must have called one of the Begin() methods prior to this call.</remarks>
-        new void StepTo(int value);
+        void StepTo(int value);
 
         /// <summary>
         /// Call this method from the worker thread to step the progress meter to a particular value.

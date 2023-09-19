@@ -32,11 +32,22 @@ namespace GKCore.Interfaces
 
     public sealed class ContentItem
     {
+        private readonly IListSource ListSource;
+
         public readonly object Record;
         public object SortValue;
 
-        public ContentItem(object record)
+        /// <summary>
+        /// The property of supporting grids with the absence of bindings to arbitrary getters/setters.
+        /// </summary>
+        public object[] Values
         {
+            get { return ListSource.GetItemData(Record); }
+        }
+
+        public ContentItem(IListSource listSource, object record)
+        {
+            ListSource = listSource;
             Record = record;
         }
     }

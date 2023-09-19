@@ -88,9 +88,11 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            tabsRecords.PositionChanged += tabsRecords_SelectedIndexChanged;
+
             fController = new BaseWinController(this, true);
             fContext = fController.Context;
-            //((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;*/
+            ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
 
             CreatePage("Individuals", GDMRecordType.rtIndividual);
             CreatePage("Families", GDMRecordType.rtFamily);
@@ -111,13 +113,13 @@ namespace GKUI.Forms
         {
             var summary = new HyperView();
             //summary.BorderWidth = 4;
-            //summary.OnLink += mPersonSummaryLink;
+            summary.OnLink += mPersonSummaryLink;
             //summary.ContextMenu = summaryMenu;
 
             var recView = new GKListView();
             //recView.AllowMultipleSelection = true;
             //recView.MouseDoubleClick += miRecordEdit_Click;
-            //recView.SelectedItemsChanged += List_SelectedIndexChanged;
+            recView.ItemSelected += List_SelectedIndexChanged;
             //recView.ContextMenu = contextMenu;
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
@@ -157,6 +159,68 @@ namespace GKUI.Forms
 
         void IBaseWindowView.EnableSplitterEvent(object controlHandler, bool enable)
         {
+        }
+
+        private void BaseContext_ModifiedChanged(object sender, EventArgs e)
+        {
+            fController.SetMainTitle();
+        }
+
+        private void miRecordAdd_Click(object sender, EventArgs e)
+        {
+            AddRecord();
+        }
+
+        private void miRecordEdit_Click(object sender, EventArgs e)
+        {
+            EditRecord();
+        }
+
+        private void miRecordDelete_Click(object sender, EventArgs e)
+        {
+            DeleteRecord();
+        }
+
+        private void miRecordDuplicate_Click(object sender, EventArgs e)
+        {
+            DuplicateRecord();
+        }
+
+        private void miRecordMerge_Click(object sender, EventArgs e)
+        {
+            var recView = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
+            if (recView != null) {
+                var items = recView.GetSelectedItems();
+                BaseController.ShowRecMerge(this, this,
+                    items.Count > 0 ? items[0] as GDMRecord : null,
+                    items.Count > 1 ? items[1] as GDMRecord : null
+                );
+            }
+        }
+
+        private void List_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (sender != null) {
+                fController.ChangeListItem((IListView)sender);
+                AppHost.Instance.SelectedIndexChanged(this);
+            }
+        }
+
+        private void tabsRecords_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AppHost.Instance.UpdateControls(false);
+            AppHost.Instance.TabChanged(this);
+        }
+
+        private void mPersonSummaryLink(object sender, string linkName)
+        {
+            fController.SelectSummaryLink(linkName);
+        }
+
+        private void miCopyContent_Click(object sender, EventArgs e)
+        {
+            var hyperView = GetHyperViewByType(GetSelectedRecordType());
+            fController.CopyContent(hyperView);
         }
 
         #endregion
@@ -429,7 +493,7 @@ namespace GKUI.Forms
 
         public void ShowRecordsTab(GDMRecordType recType)
         {
-            //tabsRecords.SelectedIndex = (int)recType - 1;
+            tabsRecords.SelectedTabIndex = (int)recType - 1;
         }
 
         public void SelectRecordByXRef(string xref, bool delayedTransition = false)
@@ -834,14 +898,6 @@ namespace GKUI.Forms
         }
 
         void IProgressController.StepTo(int value)
-        {
-            fVal = value;
-            Device.BeginInvokeOnMainThread(() => {
-                UpdateProgress();
-            });
-        }
-
-        void IGDMProgressCallback.StepTo(int value)
         {
             fVal = value;
             Device.BeginInvokeOnMainThread(() => {

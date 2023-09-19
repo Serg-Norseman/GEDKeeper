@@ -25,29 +25,65 @@ using Xamarin.Forms.Xaml;
 
 namespace GKUI.Components
 {
+    public delegate void LinkEventHandler(object sender, string linkName);
+
+    /// <summary>
+    ///
+    /// </summary>
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HyperView : ContentView, IHyperView
     {
-        public HyperView()
+        private readonly StringList fLines;
+
+        private bool fWordWrap;
+
+        public event LinkEventHandler OnLink;
+
+        public bool Enabled
         {
-            InitializeComponent();
+            get { return base.IsEnabled; }
+            set { base.IsEnabled = value; }
         }
 
         public StringList Lines
         {
-            get {
-                throw new System.NotImplementedException();
-            }
+            get { return fLines; }
         }
 
-        public bool Enabled
+        public bool WordWrap
         {
-            get { return false; }
-            set { }
+            get { return fWordWrap; }
+            set { fWordWrap = value; }
+        }
+
+
+        public HyperView()
+        {
+            InitializeComponent();
+
+            fLines = new StringList();
+            fLines.OnChange += LinesChanged;
+            fWordWrap = true;
         }
 
         public void Activate()
         {
+            try {
+                Focus();
+            } catch {
+                // why is an exception thrown here?
+            }
+        }
+
+        private void LinesChanged(object sender)
+        {
+            //UpdateScrollPosition(0, 0);
+            ArrangeText();
+        }
+
+        private void ArrangeText()
+        {
+            hvContent.Text = fLines.Text;
         }
     }
 }

@@ -132,6 +132,7 @@ namespace GKUI.Platform
                 });
 
                 workerThread.Start(progressForm);
+                workerThread.Join();
             } catch (Exception ex) {
                 Logger.WriteError("ExecuteWork()", ex);
             }
@@ -185,9 +186,6 @@ namespace GKUI.Platform
                 case Feature.EmbeddedLocales:
                 case Feature.Mobile:
                     return true; // [Accepted]
-
-                case Feature.Plugins:
-                    return false; // [Accepted]
 
                 default:
                     return false;

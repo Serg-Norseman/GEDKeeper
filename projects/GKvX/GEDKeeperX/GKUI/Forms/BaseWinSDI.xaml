@@ -3,11 +3,13 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
     x:Class="GKUI.Forms.BaseWinSDI">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Load File" Order="Primary" Priority="0" Clicked="miFileLoad_Click" />
+        <ToolbarItem Order="Primary" Priority="0" IconImageSource="{plat:ImageResourceExt Resources.btn_create_new.gif}" Clicked="miFileNew_Click" />
+        <ToolbarItem Order="Primary" Priority="1" IconImageSource="{plat:ImageResourceExt Resources.btn_load.gif}" Clicked="miFileLoad_Click" />
     </ContentPage.ToolbarItems>
 
     <StackLayout VerticalOptions="FillAndExpand">

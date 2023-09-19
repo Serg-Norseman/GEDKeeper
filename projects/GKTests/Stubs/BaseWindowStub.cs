@@ -61,6 +61,7 @@ namespace GKTests.Stubs
         public void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone) { }
         public void ChangeRecord(GDMRecord record) { }
         public void CheckAutosave() { }
+        public bool CheckModified() { return false; }
         public void CreateNewFile() { }
         public void CriticalSave() { }
         public void DeleteRecord() { }
