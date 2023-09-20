@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Reflection;
 
 namespace GKCore.Interfaces
 {
@@ -28,6 +29,6 @@ namespace GKCore.Interfaces
     public interface ILangMan
     {
         string LS(Enum lsid);
-        bool LoadFromFile(string fileName, int offset = 0);
+        bool LoadFromFile(string fileName, Assembly resAssembly, int offset = 0);
     }
 }

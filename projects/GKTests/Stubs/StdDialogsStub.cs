@@ -31,6 +31,11 @@ namespace GKTests.Stubs
             return false;
         }
 
+        public Task<string> GetInputAsync(object owner, string prompt)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public string GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
         {
             return string.Empty;

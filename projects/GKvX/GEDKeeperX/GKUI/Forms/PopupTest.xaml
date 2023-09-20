@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct2:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct2="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+    x:Class="GKUI.Forms.PopupTest"
+    Size="300, 400">
+
+    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="20, 20, 20, 20">
+        <Label Text="Test" VerticalOptions="Fill" />
+
+        <Grid HorizontalOptions="Center" VerticalOptions="End" Padding="10" BackgroundColor="WhiteSmoke" RowDefinitions="Auto" ColumnDefinitions="*, *">
+            <Button Grid.Row="0" Grid.Column="0" Text="Confirm Attendance" Clicked="ConfirmAttendanceClicked" />
+            <Button Grid.Row="0" Grid.Column="1" Text="Cancel Attendance" Clicked="CancelAttendanceClicked" />
+        </Grid>
+    </StackLayout>
+</xct2:Popup>

@@ -22,6 +22,37 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+
+        <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
+
+        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
+        <PackageReference Include="Xamarin.Forms.InputKit" Version="3.7.2" />
+        <PackageReference Include="Xamarin.Forms.DataGrid" Version="3.1.0" />
+        <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
+        <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.6" />
+
+        <PackageReference Include="Xam.Plugin.TabView" Version="1.1.1" />
+        <PackageReference Include="CarouselView.FormsPlugin" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\..\GlobalSuppressions.cs">
+            <Link>GlobalSuppressions.cs</Link>
+        </Compile>
+        <Reference Include="BSLib">
+            <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.Model">
+            <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
         <EmbeddedResource Include="Resources\gk_logo.png">
             <LogicalName>Resources.gk_logo.png</LogicalName>
         </EmbeddedResource>
@@ -73,33 +104,6 @@
         <EmbeddedResource Include="..\..\..\locales\ukrainian.lng" Link="Resources\locales\ukrainian.lng">
             <LogicalName>Resources.locales.ukrainian.lng</LogicalName>
         </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
-        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
-        <PackageReference Include="Xamarin.Forms.InputKit" Version="3.7.2" />
-        <PackageReference Include="Xamarin.Forms.DataGrid" Version="3.1.0" />
-        <PackageReference Include="Xam.Plugin.TabView" Version="1.1.1" />
-        <PackageReference Include="CarouselView.FormsPlugin" Version="6.0.0" />
-        <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Include="..\..\GlobalSuppressions.cs">
-            <Link>GlobalSuppressions.cs</Link>
-        </Compile>
-        <Reference Include="BSLib">
-            <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
-        </Reference>
-        <Reference Include="BSLib.DataViz.Model">
-            <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
-        </Reference>
     </ItemGroup>
 
 </Project>

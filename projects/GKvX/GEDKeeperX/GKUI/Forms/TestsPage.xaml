@@ -14,6 +14,10 @@
 
         <Button x:Name="btnCopyToCb" Clicked="btnCopyToCb_Clicked" Text="Copy to clipboard" />
 
+        <Button x:Name="btnLangSelect" Clicked="btnLangSelect_Clicked" Text="Select Language" />
+
+        <Button x:Name="btnInput" Clicked="btnInput_Clicked" Text="Input" />
+
     </StackLayout>
 
 </ContentPage>

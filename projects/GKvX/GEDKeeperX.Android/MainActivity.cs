@@ -1,7 +1,6 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using GKUI;
 
 namespace GEDKeeperX.Droid
 {
@@ -15,7 +14,7 @@ namespace GEDKeeperX.Droid
 
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            LoadApplication(new App());
+            LoadApplication(new GKUI.App());
         }
     }
 }

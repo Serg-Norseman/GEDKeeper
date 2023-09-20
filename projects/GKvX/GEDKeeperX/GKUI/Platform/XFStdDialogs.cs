@@ -169,16 +169,21 @@ namespace GKUI.Platform
 
         public bool GetInput(object owner, string prompt, ref string value)
         {
-            //bool res = GKInputBox.QueryText(owner, GKData.APP_TITLE, prompt, ref value);
-            //return res && !string.IsNullOrEmpty(value);
-            return false;
+            throw new NotSupportedException();
+        }
+
+        public async Task<string> GetInputAsync(object owner, string prompt)
+        {
+            var page = owner as Page;
+            if (page == null) return string.Empty;
+
+            var title = GKData.APP_TITLE;
+            return await page.DisplayPromptAsync(title, prompt, LangMan.LS(LSID.LSID_DlgAccept), LangMan.LS(LSID.LSID_DlgCancel));
         }
 
         public bool GetPassword(string prompt, ref string value)
         {
-            //bool res = GKInputBox.QueryPassword(GKData.APP_TITLE, prompt, ref value);
-            //return res && !string.IsNullOrEmpty(value);
-            return false;
+            throw new NotSupportedException();
         }
     }
 }

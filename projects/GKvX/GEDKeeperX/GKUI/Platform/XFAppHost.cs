@@ -225,8 +225,6 @@ namespace GKUI.Platform
             // support for legacy encodings
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            Xamarin.Forms.DataGrid.DataGridComponent.Init();
-
             var appHost = new XFAppHost();
             IContainer container = AppHost.Container;
 

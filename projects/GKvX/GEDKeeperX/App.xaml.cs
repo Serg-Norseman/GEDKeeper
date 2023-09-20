@@ -35,6 +35,8 @@ namespace GKUI
         {
             InitializeComponent();
 
+            Xamarin.Forms.DataGrid.DataGridComponent.Init();
+
             LangMan.DefInit();
             XFAppHost.Startup(null);
 
@@ -67,12 +69,12 @@ namespace GKUI
         protected override void OnSleep()
         {
             // Handle when your app sleeps
+            AppHost.DoneSettings();
         }
 
         protected override void OnResume()
         {
             // Handle when your app resumes
-            AppHost.DoneSettings();
         }
     }
 }

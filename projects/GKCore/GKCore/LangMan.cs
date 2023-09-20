@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using BSLib;
 using GKCore.Interfaces;
@@ -1984,27 +1985,23 @@ namespace GKCore
             fLangMan.DefInit(LSDefList);
         }
 
-        public static bool LoadFromFile(string fileName)
+        public static bool LoadFromFile(string fileName, Assembly resAssembly)
         {
-            return fLangMan.LoadFromFile(fileName, 1);
+            return fLangMan.LoadFromFile(fileName, resAssembly, 1);
         }
 
         public static void SaveDefaultLanguage()
         {
             StreamWriter lf = new StreamWriter(GKUtils.GetLangsPath() + "english.sample2", false, Encoding.UTF8);
-            try
-            {
+            try {
                 lf.WriteLine(";" + LS_DEF_CODE.ToString() + "," + LS_DEF_SIGN + "," + LS_DEF_NAME);
-                for (LSID i = LSID.LSID_First; i <= LSID.LSID_Last; i++)
-                {
+                for (LSID i = LSID.LSID_First; i <= LSID.LSID_Last; i++) {
                     string ls = LSDefList[(int)i - 1];
                     if (!string.IsNullOrEmpty(ls)) {
                         lf.WriteLine(ConvertHelper.AdjustNumber((int)i, 3) + "=" + ls);
                     }
                 }
-            }
-            finally
-            {
+            } finally {
                 lf.Close();
             }
         }
@@ -2023,24 +2020,23 @@ namespace GKCore
         {
             int idx = ((IConvertible)lsid).ToInt32(null);
             string res;
-            return (fList.TryGetValue(idx, out res)) ? res : "?";
+            return fList.TryGetValue(idx, out res) ? res : "?";
         }
 
-        public bool LoadFromFile(string fileName, int offset = 0)
+        public bool LoadFromFile(string fileName, Assembly resAssembly, int offset = 0)
         {
             bool result = false;
 
-            if (File.Exists(fileName))
-            {
+            if (resAssembly == null && !File.Exists(fileName)) return result;
+
+            using (var inputStream = (resAssembly == null) ? new FileStream(fileName, FileMode.Open) : resAssembly.GetManifestResourceStream(fileName)) {
                 fList.Clear();
 
-                using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8))
-                {
+                using (StreamReader lngFile = new StreamReader(inputStream, Encoding.UTF8)) {
                     bool xt = false;
 
                     string st = lngFile.ReadLine();
-                    if (!string.IsNullOrEmpty(st) && st[0] == ';')
-                    {
+                    if (!string.IsNullOrEmpty(st) && st[0] == ';') {
                         st = st.Remove(0, 1);
                         string[] lngParams = st.Split(',');
                         if (lngParams.Length < 3)
@@ -2049,9 +2045,8 @@ namespace GKCore
                         xt = (lngParams.Length == 4 && lngParams[3] == "xt");
                     }
 
-                    int i = 0 + (offset);
-                    while (lngFile.Peek() != -1)
-                    {
+                    int i = 0 + offset;
+                    while (lngFile.Peek() != -1) {
                         st = lngFile.ReadLine().Trim();
 
                         if (xt) {
@@ -2079,8 +2074,7 @@ namespace GKCore
         {
             fList.Clear();
 
-            for (LSID id = LSID.LSID_First; id <= LSID.LSID_Last; id++)
-            {
+            for (LSID id = LSID.LSID_First; id <= LSID.LSID_Last; id++) {
                 int idx = (int)id;
                 fList.Add(idx, source[idx - 1]);
             }

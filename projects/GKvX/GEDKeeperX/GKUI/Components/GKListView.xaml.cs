@@ -92,7 +92,7 @@ namespace GKUI.Components
 
         public GKListItem(params object[] values)
         {
-            //BackColor = Colors.Transparent;
+            BackColor = Color.Transparent;
             Values = values;
         }
 
@@ -349,7 +349,7 @@ namespace GKUI.Components
                 return fRowBackColor;
             } else {
                 var item = eItem as GKListItem;
-                if (item != null && item.BackColor != Color.Transparent) {
+                if (item != null && item.BackColor != Color.Transparent && item.BackColor != Color.Black) {
                     return item.BackColor;
                 }
             }
@@ -486,14 +486,7 @@ namespace GKUI.Components
 
         public void AddColumn(string caption, int width, bool autoSize = false)
         {
-            int index = Columns.Count;
-            var binding = string.Format("Values[{0}]", index);
-
-            Columns.Add(new DataGridColumn() {
-                Title = caption,
-                Width = width,
-                PropertyName = binding
-            });
+            AddColumn(caption, width, autoSize, BSDTypes.HorizontalAlignment.Left);
         }
 
         public void AddCheckedColumn(string caption, int width, bool autoSize = false)
@@ -502,7 +495,28 @@ namespace GKUI.Components
 
         public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
         {
-            AddColumn(caption, width, autoSize);
+            int index = Columns.Count;
+            var binding = string.Format("Values[{0}]", index);
+
+            LayoutOptions hca = LayoutOptions.Start;
+            switch (textAlign) {
+                case BSDTypes.HorizontalAlignment.Left:
+                    hca = LayoutOptions.Start;
+                    break;
+                case BSDTypes.HorizontalAlignment.Right:
+                    hca = LayoutOptions.End;
+                    break;
+                case BSDTypes.HorizontalAlignment.Center:
+                    hca = LayoutOptions.Center;
+                    break;
+            }
+
+            Columns.Add(new DataGridColumn() {
+                Title = caption,
+                Width = width,
+                PropertyName = binding,
+                HorizontalContentAlignment = hca
+            });
         }
 
         public void SetColumnCaption(int index, string caption)

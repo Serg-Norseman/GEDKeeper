@@ -21,6 +21,7 @@
 using System;
 using GKCore;
 using GKUI.Components;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -54,6 +55,20 @@ namespace GKUI.Forms
         private void btnCopyToCb_Clicked(object sender, EventArgs e)
         {
             UIHelper.SetClipboardText("clipboard sample");
+        }
+
+        private async void btnLangSelect_Clicked(object sender, EventArgs e)
+        {
+            var curPage = Application.Current.MainPage;
+            curPage.Navigation.ShowPopup(new PopupTest());
+        }
+
+        private async void btnInput_Clicked(object sender, EventArgs e)
+        {
+            var input = await AppHost.StdDialogs.GetInputAsync(this, "What is your email?");
+            if (input == "ok") {
+                AppHost.StdDialogs.ShowAlert("Ok!");
+            }
         }
     }
 }

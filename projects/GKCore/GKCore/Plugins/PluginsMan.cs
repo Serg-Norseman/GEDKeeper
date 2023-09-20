@@ -183,7 +183,7 @@ namespace GKCore.Plugins
             }
 
             LangManager langMan = new LangManager();
-            bool res = langMan.LoadFromFile(langFile);
+            bool res = langMan.LoadFromFile(langFile, null);
             return (res) ? langMan : null;
         }
 

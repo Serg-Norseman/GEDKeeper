@@ -1279,9 +1279,12 @@ namespace GKCore
 
             var options = GlobalOptions.Instance;
             options.SaveToFile(GetAppDataPathStatic() + "GEDKeeper2.ini");
-            options.Dispose();
 
-            Plugins.Unload();
+            // In a mobile app, closing the app causes sleep rather than exit. No objects dispose is required.
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                options.Dispose();
+                Plugins.Unload();
+            }
         }
 
         public static void ForceGC()

@@ -29,6 +29,7 @@ namespace GKCore.Design.Views
     public interface IStdDialogs
     {
         bool GetInput(object owner, string prompt, ref string value);
+        Task<string> GetInputAsync(object owner, string prompt);
 
         string GetOpenFile(string title, string context, string filter,
                            int filterIndex, string defaultExt);

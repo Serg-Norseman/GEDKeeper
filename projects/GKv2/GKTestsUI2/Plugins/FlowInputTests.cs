@@ -21,6 +21,7 @@
 #if !MONO && !DIS_NUF
 
 using System;
+using System.Reflection;
 using GDModel;
 using GKCore.Interfaces;
 using GKTests;
@@ -83,7 +84,7 @@ namespace GKFlowInputPlugin
             return LSDefList[idx];
         }
 
-        public bool LoadFromFile(string fileName, int offset = 0)
+        public bool LoadFromFile(string fileName, Assembly resAssembly, int offset = 0)
         {
             return true;
         }

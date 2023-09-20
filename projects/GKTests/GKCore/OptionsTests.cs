@@ -44,7 +44,7 @@ namespace GKCore
         [Test]
         public void Test_Locales()
         {
-            LangRecord langRecord = new LangRecord(1049, "rus", "Russian", "filename.lng");
+            LangRecord langRecord = new LangRecord(1049, "rus", "Russian", "filename.lng", null);
             Assert.IsNotNull(langRecord);
             Assert.AreEqual(1049, langRecord.Code);
             Assert.AreEqual("rus", langRecord.Sign);

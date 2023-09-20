@@ -56,7 +56,7 @@ namespace GKCore.Controllers
                 defLang = GlobalOptions.Instance.GetLangByCode(LangMan.LS_DEF_CODE);
             } else {
                 // unit-testing and some other cases
-                defLang = new LangRecord(LangMan.LS_DEF_CODE, LangMan.LS_DEF_SIGN, LangMan.LS_DEF_NAME, "English.lng");
+                defLang = new LangRecord(LangMan.LS_DEF_CODE, LangMan.LS_DEF_SIGN, LangMan.LS_DEF_NAME, "English.lng", null);
                 fView.LanguagesList.AddItem(defLang, defLang.Name);
             }
 

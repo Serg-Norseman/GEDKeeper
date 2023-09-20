@@ -13,7 +13,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
@@ -141,6 +141,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Xamarin.CommunityToolkit">
+      <Version>2.0.6</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.14" />
     <PackageReference Include="Xamarin.Forms.InputKit">

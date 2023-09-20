@@ -223,6 +223,11 @@ namespace GKUI.Platform
             return res && !string.IsNullOrEmpty(value);
         }
 
+        public Task<string> GetInputAsync(object owner, string prompt)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public bool GetPassword(string prompt, ref string value)
         {
             bool res = GKInputBox.QueryPassword(GKData.APP_TITLE, prompt, ref value);

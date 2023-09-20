@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using BSLib;
 using GDModel;
@@ -407,38 +408,29 @@ namespace GKCore.Options
 
         #region Language
 
-        private void LngPrepareProc(string fileName, Stream inputStream)
+        private void LngPrepareProc(string fileName, Assembly resAssembly)
         {
             try {
-                using (var reader = new StreamReader(inputStream, Encoding.UTF8)) {
-                    string st = reader.ReadLine(); // header
+                using (var inputStream = (resAssembly == null) ? new FileStream(fileName, FileMode.Open) : resAssembly.GetManifestResourceStream(fileName)) {
+                    using (var reader = new StreamReader(inputStream, Encoding.UTF8)) {
+                        string st = reader.ReadLine(); // header
 
-                    if (!string.IsNullOrEmpty(st) && st[0] == ';') {
-                        st = st.Remove(0, 1);
-                        string[] lngParams = st.Split(',');
-                        if (lngParams.Length < 3)
-                            throw new GKException("Header is incorrect");
+                        if (!string.IsNullOrEmpty(st) && st[0] == ';') {
+                            st = st.Remove(0, 1);
+                            string[] lngParams = st.Split(',');
+                            if (lngParams.Length < 3)
+                                throw new GKException("Header is incorrect");
 
-                        string lngCode = lngParams[0];
-                        string lngSign = lngParams[1];
-                        string lngName = lngParams[2];
+                            string lngCode = lngParams[0];
+                            string lngSign = lngParams[1];
+                            string lngName = lngParams[2];
 
-                        //bool xt = (lngParams.Length == 4 && lngParams[3] == "xt");
+                            //bool xt = (lngParams.Length == 4 && lngParams[3] == "xt");
 
-                        LangRecord lngRec = new LangRecord((ushort)int.Parse(lngCode), lngSign, lngName, fileName);
-                        fLanguages.Add(lngRec);
+                            LangRecord lngRec = new LangRecord((ushort)int.Parse(lngCode), lngSign, lngName, fileName, resAssembly);
+                            fLanguages.Add(lngRec);
+                        }
                     }
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("GlobalOptions.LngPrepareProc.1(" + fileName + ")", ex);
-            }
-        }
-
-        private void LngPrepareProc(string fileName)
-        {
-            try {
-                using (var stream = new FileStream(fileName, FileMode.Open)) {
-                    LngPrepareProc(fileName, stream);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GlobalOptions.LngPrepareProc(" + fileName + ")", ex);
@@ -454,14 +446,14 @@ namespace GKCore.Options
                     string path = GKUtils.GetLangsPath();
                     string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
                     for (int i = 0; i < langFiles.Length; i++) {
-                        LngPrepareProc(langFiles[i]);
+                        LngPrepareProc(langFiles[i], null);
                     }
                 } else {
                     var appAssembly = appInstance.GetType().Assembly;
                     string path = "Resources.locales";
                     string[] langFiles = appAssembly.GetManifestResourceNames().Where(r => r.StartsWith(path) && r.EndsWith(".lng")).ToArray();
                     for (int i = 0; i < langFiles.Length; i++) {
-                        LngPrepareProc(langFiles[i], appAssembly.GetManifestResourceStream(langFiles[i]));
+                        LngPrepareProc(langFiles[i], appAssembly);
                     }
                 }
             } catch (Exception ex) {
@@ -476,7 +468,7 @@ namespace GKCore.Options
 
                 foreach (LangRecord langRec in fLanguages) {
                     if (langRec.Code == langCode) {
-                        loaded = LangMan.LoadFromFile(langRec.FileName);
+                        loaded = LangMan.LoadFromFile(langRec.FileName, langRec.ResAssembly);
                         break;
                     }
                 }
