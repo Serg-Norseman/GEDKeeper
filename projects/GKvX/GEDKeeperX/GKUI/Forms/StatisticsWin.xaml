@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonWindow
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:comp="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    x:Class="GKUI.Forms.StatisticsWin"
+    Appearing="StatisticsWin_Load">
+
+    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <comp:GKListView x:Name="lvSummary" HeightRequest="280" HorizontalOptions="FillAndExpand" />
+
+        <StackLayout x:Name="ToolBar1" Orientation="Horizontal" Spacing="4" HorizontalOptions="FillAndExpand">
+            <Picker x:Name="cbType" WidthRequest="200" SelectedIndexChanged="cbType_SelectedIndexChanged" />
+            <Button x:Name="tbExcelExport" Image="{plat:ImageResourceExt Resources.btn_excel.gif}" Clicked="tbExcelExport_Click" />
+            <Label HorizontalOptions="FillAndExpand" />
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comp:GKListView x:Name="fListStats" WidthRequest="400" />
+            <comp:ZGraphControl x:Name="fGraph" HorizontalOptions="FillAndExpand" />
+        </StackLayout>
+    </StackLayout>
+
+</forms:CommonWindow>

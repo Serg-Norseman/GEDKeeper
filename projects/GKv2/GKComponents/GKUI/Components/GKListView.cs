@@ -66,19 +66,13 @@ namespace GKUI.Components
             IComparable cv2 = otherItem.fValue as IComparable;
 
             int compRes;
-            if (cv1 != null && cv2 != null)
-            {
+            if (cv1 != null && cv2 != null) {
                 compRes = cv1.CompareTo(cv2);
-            }
-            else if (cv1 != null)
-            {
+            } else if (cv1 != null) {
                 compRes = -1;
-            }
-            else if (cv2 != null)
-            {
+            } else if (cv2 != null) {
                 compRes = 1;
-            }
-            else {
+            } else {
                 compRes = 0;
             }
             return compRes;
@@ -137,19 +131,13 @@ namespace GKUI.Components
             IComparable cv2 = otherItem.fValue as IComparable;
 
             int compRes;
-            if (cv1 != null && cv2 != null)
-            {
+            if (cv1 != null && cv2 != null) {
                 compRes = cv1.CompareTo(cv2);
-            }
-            else if (cv1 != null)
-            {
+            } else if (cv1 != null) {
                 compRes = -1;
-            }
-            else if (cv2 != null)
-            {
+            } else if (cv2 != null) {
                 compRes = 1;
-            }
-            else {
+            } else {
                 compRes = 0;
             }
             return compRes;
@@ -492,18 +480,27 @@ namespace GKUI.Components
 
         #region Virtual mode with ListSource
 
-        private static IListItem CreateListItem(object data, object[] columnValues)
-        {
-            var result = new GKListItem(columnValues[0], data);
-            for (int i = 1, num = columnValues.Length; i < num; i++)
-                result.SubItems.Add(new GKListSubItem(columnValues[i]));
-            return result;
-        }
-
         private GKListItem GetVirtualItem(int itemIndex)
         {
             object rowData = fListMan.GetContentItem(itemIndex);
-            return (rowData == null) ? null : fListMan.CreateListItem(itemIndex, rowData, CreateListItem) as GKListItem;
+            if (rowData == null) {
+                return null;
+            } else {
+                object[] columnValues = fListMan.GetItemData(rowData);
+                if (columnValues == null)
+                    return null;
+
+                var item = new GKListItem(columnValues[0], rowData);
+                for (int i = 1, num = columnValues.Length; i < num; i++)
+                    item.SubItems.Add(new GKListSubItem(columnValues[i]));
+
+                var backColor = fListMan.GetBackgroundColor(itemIndex, rowData);
+                if (backColor != null) {
+                    item.SetBackColor(backColor);
+                }
+
+                return item;
+            }
         }
 
         protected override void OnCacheVirtualItems(CacheVirtualItemsEventArgs e)
@@ -514,7 +511,10 @@ namespace GKUI.Components
             fCacheFirstItem = e.StartIndex;
             int length = e.EndIndex - e.StartIndex + 1;
 
-            fCache = new GKListItem[length];
+            if (fCache == null || fCache.Length != length) {
+                fCache = new GKListItem[length];
+            }
+
             for (int i = 0; i < length; i++) {
                 fCache[i] = GetVirtualItem(fCacheFirstItem + i);
             }

@@ -320,9 +320,6 @@ namespace GKUI.Components
             BeginUpdate();
             try {
                 SortContents();
-
-                if (!fIsVirtual)
-                    UpdateInternalItems();
             } finally {
                 EndUpdate();
             }
@@ -399,27 +396,6 @@ namespace GKUI.Components
             }
         }
 
-        private BSDListItem CreateListItem(object data, object[] columnValues)
-        {
-            return AddItem(data, false, columnValues);
-        }
-
-        private void UpdateInternalItems()
-        {
-            if (fListMan == null) return;
-
-            fItems.Clear();
-
-            int num = fListMan.FilteredCount;
-            for (int i = 0; i < num; i++) {
-                object rowData = fListMan.GetContentItem(i);
-
-                if (rowData != null) {
-                    fListMan.CreateListItem(i, rowData, CreateListItem);
-                }
-            }
-        }
-
         public void SortModelColumn(int columnId)
         {
             if (fListMan != null) {
@@ -450,9 +426,6 @@ namespace GKUI.Components
 
                     fListMan.UpdateContents();
                     SortContents();
-
-                    if (!fIsVirtual)
-                        UpdateInternalItems();
 
                     ResizeColumns();
                 } finally {
@@ -615,11 +588,17 @@ namespace GKUI.Components
 
         public void SelectItem(int index)
         {
-            if (index >= 0 && index < ContentList.Count) {
-                /*ScrollToRow(index);
-                UnselectAll();
-                SelectRow(index);*/
+            object item = null;
+            if (!fIsVirtual) {
+                if (index >= 0 && index < fItems.Count)
+                    item = fItems[index];
+            } else {
+                if (index >= 0 && index < fListMan.ContentList.Count)
+                    item = fListMan.ContentList[index];
             }
+
+            if (item != null)
+                SelectedItem = item;
         }
 
         public void SelectItem(object rowData)

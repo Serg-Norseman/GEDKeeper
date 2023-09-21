@@ -54,6 +54,14 @@ namespace GKUI.Forms
             fMenuPages.Add((int)MenuItemType.Browse, navPage);
         }
 
+        public void NavigateEx(Page page)
+        {
+            if (page == null) return;
+
+            CurrentPage = new NavigationPage(page);
+            IsPresented = false;
+        }
+
         public async Task NavigateFromMenu(int id)
         {
             NavigationPage newPage;

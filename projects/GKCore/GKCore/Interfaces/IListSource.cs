@@ -27,8 +27,6 @@ namespace GKCore.Interfaces
 {
     public delegate bool ExternalFilterHandler(GDMRecord record);
 
-    public delegate IListItem CreateListItemHandler(object data, object[] columnValues);
-
 
     public sealed class ContentItem
     {
@@ -110,7 +108,6 @@ namespace GKCore.Interfaces
         void AddCondition(byte columnId, ConditionKind condition, string value);
         void ChangeColumnWidth(int colIndex, int colWidth);
         string[] CreateFields();
-        IListItem CreateListItem(int itemIndex, object rowData, CreateListItemHandler handler);
         bool DeleteItem(object data);
         DataType GetColumnDataType(int columnId);
         string GetColumnName(int columnId);

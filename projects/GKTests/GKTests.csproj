@@ -125,7 +125,6 @@
     <Compile Include="GKCore\YamlHelperTests.cs" />
     <Compile Include="Stubs\BaseWindowStub.cs" />
     <Compile Include="Stubs\GfxProviderStub.cs" />
-    <Compile Include="Stubs\ListItemStub.cs" />
     <Compile Include="Stubs\ProgressStub.cs" />
     <Compile Include="Stubs\StdDialogsStub.cs" />
     <Compile Include="Stubs\TestPlugin.cs" />

@@ -298,9 +298,6 @@ namespace GKUI.Components
             BeginUpdate();
             try {
                 SortContents();
-
-                if (!fIsVirtual)
-                    UpdateInternalItems();
             } finally {
                 EndUpdate();
             }
@@ -408,15 +405,14 @@ namespace GKUI.Components
 
         #region Virtual mode with ListSource
 
-        // In Eto not exists
-        /*protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
+        protected override void OnColumnWidthChanged(GridColumnEventArgs e)
         {
             if (fListMan != null && fUpdateCount == 0) {
-                fListMan.ChangeColumnWidth(e.ColumnIndex, Columns[e.ColumnIndex].Width);
+                fListMan.ChangeColumnWidth(e.Column.DisplayIndex, e.Column.Width);
             }
 
             base.OnColumnWidthChanged(e);
-        }*/
+        }
 
         private void SortContents()
         {
@@ -425,27 +421,6 @@ namespace GKUI.Components
                     fListMan.SortContents(fSortColumn, fSortOrder == BSDSortOrder.Ascending);
                 } else {
                     SortHelper.MergeSort(fItems, CompareItems);
-                }
-            }
-        }
-
-        private BSDListItem CreateListItem(object data, object[] columnValues)
-        {
-            return AddItem(data, false, columnValues);
-        }
-
-        private void UpdateInternalItems()
-        {
-            if (fListMan == null) return;
-
-            fItems.Clear();
-
-            int num = fListMan.FilteredCount;
-            for (int i = 0; i < num; i++) {
-                object rowData = fListMan.GetContentItem(i);
-
-                if (rowData != null) {
-                    fListMan.CreateListItem(i, rowData, CreateListItem);
                 }
             }
         }
@@ -480,9 +455,6 @@ namespace GKUI.Components
 
                     fListMan.UpdateContents();
                     SortContents();
-
-                    if (!fIsVirtual)
-                        UpdateInternalItems();
 
                     ResizeColumns();
                 } finally {

@@ -617,25 +617,6 @@ namespace GKCore.Lists
             return result;
         }
 
-        public virtual IListItem CreateListItem(int itemIndex, object rowData, CreateListItemHandler handler)
-        {
-            if (rowData == null || handler == null)
-                return null;
-
-            object[] columnValues = GetItemData(rowData);
-            if (columnValues == null)
-                return null;
-
-            IListItem item = handler(rowData, columnValues);
-
-            var backColor = GetBackgroundColor(itemIndex, fFetchedRec);
-            if (backColor != null) {
-                item.SetBackColor(backColor);
-            }
-
-            return item;
-        }
-
         public virtual IColor GetBackgroundColor(int itemIndex, object rowData)
         {
             if (GlobalOptions.Instance.ReadabilityHighlightRows && MathHelper.IsOdd(itemIndex)) {

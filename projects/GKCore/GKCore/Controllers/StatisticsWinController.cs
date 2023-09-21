@@ -26,6 +26,7 @@ using GKCore.Design.Views;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Stats;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -243,7 +244,9 @@ namespace GKCore.Controllers
         {
             fView.Title = LangMan.LS(LSID.LSID_MIStats);
 
-            GetControl<IGroupBox>("grpSummary").Text = LangMan.LS(LSID.LSID_Summary);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IGroupBox>("grpSummary").Text = LangMan.LS(LSID.LSID_Summary);
+            }
 
             var lvSummary = fView.Summary;
             lvSummary.ClearColumns();

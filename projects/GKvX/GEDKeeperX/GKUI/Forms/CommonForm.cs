@@ -34,8 +34,6 @@ namespace GKUI.Forms
     {
         private readonly ControlsManager fControlsManager;
 
-        public IWindow OwnerWindow { get; }
-
         #region View Interface
 
         public string Title
@@ -109,8 +107,7 @@ namespace GKUI.Forms
     {
         public virtual void Show(bool showInTaskbar)
         {
-            //ShowInTaskbar = showInTaskbar;
-            //Show();
+            ((MainPage)Application.Current.MainPage).NavigateEx(this);
         }
 
         public virtual void SetLocale()

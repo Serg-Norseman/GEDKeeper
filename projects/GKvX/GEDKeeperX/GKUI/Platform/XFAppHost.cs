@@ -279,9 +279,9 @@ namespace GKUI.Platform
             container.Register<ISourceCitEditDlg, SourceCitEditDlg>(LifeCycle.Transient);
             container.Register<ISourceEditDlg, SourceEditDlg>(LifeCycle.Transient);
             container.Register<IScriptEditWin, ScriptEditWin>(LifeCycle.Transient);
-            container.Register<ISlideshowWin, SlideshowWin>(LifeCycle.Transient);
+            container.Register<ISlideshowWin, SlideshowWin>(LifeCycle.Transient);*/
             container.Register<IStatisticsWin, StatisticsWin>(LifeCycle.Transient);
-            container.Register<ITaskEditDlg, TaskEditDlg>(LifeCycle.Transient);
+            /*container.Register<ITaskEditDlg, TaskEditDlg>(LifeCycle.Transient);
             container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
             container.Register<ITreeCheckDlg, TTTreeCheckDlg>(LifeCycle.Transient);
             container.Register<ITreeCompareDlg, TTTreeCompareDlg>(LifeCycle.Transient);
