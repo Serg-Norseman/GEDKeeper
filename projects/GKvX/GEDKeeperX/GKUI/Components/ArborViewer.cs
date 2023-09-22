@@ -81,9 +81,9 @@ namespace GKUI.Components
         }
     }
 
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public sealed partial class ArborViewer : ContentView, IArborRenderer
+    public sealed class ArborViewer : ContentView, IArborRenderer
     {
+        private SKCanvasView fCanvas;
         private bool fEnergyDebug;
         private ArborNode fDragged;
         private bool fNodesDragging;
@@ -108,7 +108,12 @@ namespace GKUI.Components
 
         public ArborViewer()
         {
-            InitializeComponent();
+            fCanvas = new SKCanvasView();
+            fCanvas.PaintSurface += OnPaint;
+            fCanvas.EnableTouchEvents = true;
+            fCanvas.Touch += OnTouch;
+            fCanvas.SizeChanged += OnSizeChanged;
+            Content = fCanvas;
 
             BackgroundColor = Color.White;
 
@@ -124,7 +129,7 @@ namespace GKUI.Components
 
         private void OnSizeChanged(object sender, EventArgs e)
         {
-            fSys.SetViewSize((int)CanvasView.Width, (int)CanvasView.Height);
+            fSys.SetViewSize((int)fCanvas.Width, (int)fCanvas.Height);
             Invalidate();
         }
 
@@ -298,7 +303,7 @@ namespace GKUI.Components
 
         public void Invalidate()
         {
-            CanvasView.InvalidateSurface();
+            fCanvas.InvalidateSurface();
         }
     }
 }

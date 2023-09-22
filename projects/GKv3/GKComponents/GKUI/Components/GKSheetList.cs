@@ -143,16 +143,6 @@ namespace GKUI.Components
             fListModel = null;
         }
 
-        public GKSheetList(Panel owner) : this()
-        {
-            if (owner == null)
-                throw new ArgumentNullException("owner");
-
-            owner.SuspendLayout();
-            owner.Content = this;
-            owner.ResumeLayout();
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
@@ -170,7 +160,20 @@ namespace GKUI.Components
             base.Dispose(disposing);
         }
 
-        public Button CreateButton(string name, Image image, string toolTip, EventHandler<EventArgs> click)
+        public void Activate()
+        {
+            Focus();
+        }
+
+        public void UpdateSheet()
+        {
+            UpdateButtons();
+            fList.UpdateContents();
+        }
+
+        #region Private methods
+
+        private Button CreateButton(string name, Image image, string toolTip, EventHandler<EventArgs> click)
         {
             var btn = new Button();
             btn.Style = "iconBtn";
@@ -179,13 +182,6 @@ namespace GKUI.Components
             btn.Click += click;
             return btn;
         }
-
-        public void Activate()
-        {
-            Focus();
-        }
-
-        #region Private methods
 
         private void UpdateButtons()
         {
@@ -401,11 +397,5 @@ namespace GKUI.Components
         }
 
         #endregion
-
-        public void UpdateSheet()
-        {
-            UpdateButtons();
-            fList.UpdateContents();
-        }
     }
 }

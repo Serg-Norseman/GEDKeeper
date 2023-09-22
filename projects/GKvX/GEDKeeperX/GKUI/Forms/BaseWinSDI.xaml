@@ -25,6 +25,8 @@
         <ToolbarItem x:Name="tbPedigree" Order="Primary" Priority="10" IconImageSource="{plat:ImageResourceExt Resources.btn_scroll.gif}" Clicked="miPedigree_KonovalovClick" />
 
         <ToolbarItem x:Name="tbStats" Order="Primary" Priority="11" IconImageSource="{plat:ImageResourceExt Resources.btn_table.gif}" Clicked="miStats_Click" />
+
+        <ToolbarItem x:Name="miOrganizer" Text="Organizer" Order="Secondary" Priority="1" IconImageSource="{plat:ImageResourceExt Resources.btn_organizer.gif}" Clicked="miOrganizer_Click" />
     </ContentPage.ToolbarItems>
 
     <StackLayout VerticalOptions="FillAndExpand">

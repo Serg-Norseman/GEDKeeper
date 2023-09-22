@@ -158,6 +158,7 @@ namespace GKUI.Forms
 
         public virtual bool ShowModalX(IView owner)
         {
+            ((MainPage)Application.Current.MainPage).NavigateEx(this);
             return false;//(ShowModal((Control)owner) == DialogResult.Ok);
         }
 

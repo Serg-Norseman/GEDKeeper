@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,31 +19,29 @@
  */
 
 using System;
-using System.Drawing;
-using System.Windows.Forms;
 using BSLib;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Lists;
 using GKCore.Types;
+using Xamarin.Forms;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKSheetList : ContainerControl, ISheetList
+    public class GKSheetList : ContentView, ISheetList
     {
-        private readonly ToolStripButton fBtnAdd;
-        private readonly ToolStripButton fBtnDelete;
-        private readonly ToolStripButton fBtnEdit;
-        private readonly ToolStripButton fBtnLinkJump;
-        private readonly ToolStripButton fBtnMoveUp;
-        private readonly ToolStripButton fBtnMoveDown;
-        private readonly ToolStripButton fBtnCopy;
-        private readonly ToolStripButton fBtnCut;
-        private readonly ToolStripButton fBtnPaste;
-        private readonly ToolStrip fToolBar;
+        private readonly Button fBtnAdd;
+        private readonly Button fBtnDelete;
+        private readonly Button fBtnEdit;
+        private readonly Button fBtnLinkJump;
+        private readonly Button fBtnMoveUp;
+        private readonly Button fBtnMoveDown;
+        private readonly Button fBtnCopy;
+        private readonly Button fBtnCut;
+        private readonly Button fBtnPaste;
         private readonly GKListView fList;
 
         private EnumSet<SheetButton> fButtons;
@@ -67,6 +65,12 @@ namespace GKUI.Components
                     UpdateButtons();
                 }
             }
+        }
+
+        public bool Enabled
+        {
+            get { return base.IsEnabled; }
+            set { base.IsEnabled = value; }
         }
 
         public ISheetModel ListModel
@@ -109,74 +113,35 @@ namespace GKUI.Components
             fBtnCopy = CreateButton("btnCopy", UIHelper.LoadResourceImage("Resources.btn_copy.gif"), LangMan.LS(LSID.LSID_Copy), ItemCopy);
             fBtnMoveDown = CreateButton("btnDown", UIHelper.LoadResourceImage("Resources.btn_down.gif"), LangMan.LS(LSID.LSID_RecordMoveDown), ItemMoveDown);
             fBtnMoveUp = CreateButton("btnUp", UIHelper.LoadResourceImage("Resources.btn_up.gif"), LangMan.LS(LSID.LSID_RecordMoveUp), ItemMoveUp);
-            fBtnLinkJump = CreateButton("btnJump",  UIHelper.LoadResourceImage("Resources.btn_jump.gif"), LangMan.LS(LSID.LSID_RecordGoto), ItemJump);
+            fBtnLinkJump = CreateButton("btnJump", UIHelper.LoadResourceImage("Resources.btn_jump.gif"), LangMan.LS(LSID.LSID_RecordGoto), ItemJump);
             fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.LSID_MIRecordDelete), ItemDelete);
             fBtnEdit = CreateButton("btnEdit", UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif"), LangMan.LS(LSID.LSID_MIRecordEdit), ItemEdit);
-            fBtnAdd = CreateButton( "btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.LSID_MIRecordAdd), ItemAdd);
-
-            fToolBar = new ToolStrip();
-            fToolBar.Name = "ToolBar";
-            fToolBar.Dock = DockStyle.Right;
-            fToolBar.Items.AddRange(new ToolStripItem[] { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste });
-            fToolBar.GripStyle = ToolStripGripStyle.Hidden;
-            fToolBar.ImageScalingSize = new Size(24, 20);
-            fToolBar.AutoSize = true;
-            fToolBar.ShowItemToolTips = true;
+            fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.LSID_MIRecordAdd), ItemAdd);
 
             fList = new GKListView();
-            fList.Dock = DockStyle.Fill;
-            fList.Location = new Point(0, 0);
-            fList.Size = new Size(500, 290);
-            fList.HideSelection = false;
-            fList.LabelEdit = false;
-            fList.FullRowSelect = true;
-            fList.View = View.Details;
-            fList.DoubleClick += List_DoubleClick;
-            fList.KeyDown += List_KeyDown;
+            fList.HorizontalOptions = LayoutOptions.FillAndExpand;
+            //fList.MouseDoubleClick += List_DoubleClick;
 
-            SuspendLayout();
-            Controls.Add(fList);
-            Controls.Add(fToolBar);
-            ResumeLayout(false);
+            var toolbar = new StackLayout() {
+                Orientation = StackOrientation.Vertical,
+                Spacing = 4,
+                Children = { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste },
+                HorizontalOptions = LayoutOptions.End
+            };
 
-            Dock = DockStyle.Fill;
-            KeyDown += List_KeyDown;
+            Content = new StackLayout() {
+                Orientation = StackOrientation.Horizontal,
+                Spacing = 4,
+                Children = { fList, toolbar }
+            };
 
             Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
             fListModel = null;
         }
 
-        public GKSheetList(Control owner) : this()
-        {
-            if (owner == null)
-                throw new ArgumentNullException("owner");
-
-            owner.SuspendLayout();
-            owner.Controls.Add(this);
-            owner.ResumeLayout(false);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                fList.Dispose();
-                fBtnPaste.Dispose();
-                fBtnCut.Dispose();
-                fBtnCopy.Dispose();
-                fBtnLinkJump.Dispose();
-                fBtnMoveUp.Dispose();
-                fBtnMoveDown.Dispose();
-                fBtnDelete.Dispose();
-                fBtnEdit.Dispose();
-                fBtnAdd.Dispose();
-                fToolBar.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         public void Activate()
         {
-            Select();
+            Focus();
         }
 
         public void UpdateSheet()
@@ -185,110 +150,64 @@ namespace GKUI.Components
             fList.UpdateContents();
         }
 
-        /// <summary>
-        /// The library NUnitForms has a bug in the class Finder.
-        /// So we need unique names for hierarchical included components.
-        /// </summary>
-        /// <param name="name">name of component</param>
-        public void SetControlName(string name)
-        {
-            Name = name;
-            fToolBar.Name = name + "_ToolBar";
-            fBtnAdd.Name = fToolBar.Name + "_btnAdd";
-            fBtnEdit.Name = fToolBar.Name + "_btnEdit";
-            fBtnDelete.Name = fToolBar.Name + "_btnDelete";
-            fBtnMoveUp.Name = fToolBar.Name + "_btnMoveUp";
-            fBtnMoveDown.Name = fToolBar.Name + "_btnMoveDown";
-            fBtnCopy.Name = fToolBar.Name + "_btnCopy";
-            fBtnCut.Name = fToolBar.Name + "_btnCut";
-            fBtnPaste.Name = fToolBar.Name + "_btnPaste";
-        }
-
         #region Private methods
 
-        private ToolStripButton CreateButton(string name, Image image, string toolTip, EventHandler click)
+        private Button CreateButton(string name, ImageSource image, string toolTip, EventHandler click)
         {
-            var btn = new ToolStripButton();
-            btn.Name = name;
-            btn.Image = image;
-            btn.ToolTipText = toolTip;
-            btn.Click += click;
+            var btn = new Button();
+            //btn.Style = "iconBtn";
+            btn.ImageSource = image;
+            //btn.ToolTip = toolTip;
+            btn.Clicked += click;
             return btn;
         }
 
         private void UpdateButtons()
         {
             if (fListModel == null) {
-                fBtnAdd.Visible = fButtons.Contains(SheetButton.lbAdd);
-                fBtnDelete.Visible = fButtons.Contains(SheetButton.lbDelete);
-                fBtnEdit.Visible = fButtons.Contains(SheetButton.lbEdit);
-                fBtnLinkJump.Visible = fButtons.Contains(SheetButton.lbJump);
-                fBtnMoveUp.Visible = fButtons.Contains(SheetButton.lbMoveUp);
-                fBtnMoveDown.Visible = fButtons.Contains(SheetButton.lbMoveDown);
-                fBtnCopy.Visible = fButtons.Contains(SheetButton.lbCopy);
-                fBtnCut.Visible = fButtons.Contains(SheetButton.lbCut);
-                fBtnPaste.Visible = fButtons.Contains(SheetButton.lbPaste);
-                fToolBar.Visible = !fButtons.IsEmpty();
+                fBtnAdd.IsVisible = fButtons.Contains(SheetButton.lbAdd);
+                fBtnDelete.IsVisible = fButtons.Contains(SheetButton.lbDelete);
+                fBtnEdit.IsVisible = fButtons.Contains(SheetButton.lbEdit);
+                fBtnLinkJump.IsVisible = fButtons.Contains(SheetButton.lbJump);
+                fBtnMoveUp.IsVisible = fButtons.Contains(SheetButton.lbMoveUp);
+                fBtnMoveDown.IsVisible = fButtons.Contains(SheetButton.lbMoveDown);
+                fBtnCopy.IsVisible = fButtons.Contains(SheetButton.lbCopy);
+                fBtnCut.IsVisible = fButtons.Contains(SheetButton.lbCut);
+                fBtnPaste.IsVisible = fButtons.Contains(SheetButton.lbPaste);
+                //fToolBar.Enabled = !fButtons.IsEmpty();
             } else {
                 EnumSet<RecordAction> allowedActions = fListModel.AllowedActions;
-                fBtnAdd.Visible = allowedActions.Contains(RecordAction.raAdd);
-                fBtnDelete.Visible = allowedActions.Contains(RecordAction.raDelete);
-                fBtnEdit.Visible = allowedActions.Contains(RecordAction.raEdit);
-                fBtnLinkJump.Visible = allowedActions.Contains(RecordAction.raJump);
-                fBtnMoveUp.Visible = allowedActions.Contains(RecordAction.raMoveUp);
-                fBtnMoveDown.Visible = allowedActions.Contains(RecordAction.raMoveDown);
-                fBtnCopy.Visible = allowedActions.Contains(RecordAction.raCopy);
-                fBtnCut.Visible = allowedActions.Contains(RecordAction.raCut);
-                fBtnPaste.Visible = allowedActions.Contains(RecordAction.raPaste);
-                fToolBar.Visible = !allowedActions.IsEmpty();
+                fBtnAdd.IsVisible = allowedActions.Contains(RecordAction.raAdd);
+                fBtnDelete.IsVisible = allowedActions.Contains(RecordAction.raDelete);
+                fBtnEdit.IsVisible = allowedActions.Contains(RecordAction.raEdit);
+                fBtnLinkJump.IsVisible = allowedActions.Contains(RecordAction.raJump);
+                fBtnMoveUp.IsVisible = allowedActions.Contains(RecordAction.raMoveUp);
+                fBtnMoveDown.IsVisible = allowedActions.Contains(RecordAction.raMoveDown);
+                fBtnCopy.IsVisible = allowedActions.Contains(RecordAction.raCopy);
+                fBtnCut.IsVisible = allowedActions.Contains(RecordAction.raCut);
+                fBtnPaste.IsVisible = allowedActions.Contains(RecordAction.raPaste);
+                //fToolBar.Visible = !allowedActions.IsEmpty();
             }
         }
 
         private void SetReadOnly(bool value)
         {
             fReadOnly = value;
-            fBtnAdd.Enabled = !fReadOnly;
-            fBtnDelete.Enabled = !fReadOnly;
-            fBtnEdit.Enabled = !fReadOnly;
-            fBtnMoveUp.Enabled = !fReadOnly;
-            fBtnMoveDown.Enabled = !fReadOnly;
-            fBtnCopy.Enabled = !fReadOnly;
-            fBtnCut.Enabled = !fReadOnly;
-            fBtnPaste.Enabled = !fReadOnly;
+            fBtnAdd.IsEnabled = !fReadOnly;
+            fBtnDelete.IsEnabled = !fReadOnly;
+            fBtnEdit.IsEnabled = !fReadOnly;
+            fBtnMoveUp.IsEnabled = !fReadOnly;
+            fBtnMoveDown.IsEnabled = !fReadOnly;
+            fBtnCopy.IsEnabled = !fReadOnly;
+            fBtnCut.IsEnabled = !fReadOnly;
+            fBtnPaste.IsEnabled = !fReadOnly;
 
-            fList.BackColor = (fReadOnly) ? SystemColors.Control : SystemColors.Window;
+            //fList.BackgroundColor = (fReadOnly) ? SystemColors.Control : SystemColors.WindowBackground;
         }
 
         private void List_DoubleClick(object sender, EventArgs e)
         {
             ItemEdit(sender, e);
-        }
-
-        private void List_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control) {
-                switch (e.KeyCode) {
-                    case Keys.I:
-                        ItemAdd(sender, e);
-                        break;
-                    case Keys.L:
-                        ItemDelete(sender, e);
-                        break;
-                    case Keys.Return:
-                        ItemEdit(sender, e);
-                        break;
-
-                    case Keys.C:
-                        ItemCopy(sender, e);
-                        break;
-                    case Keys.X:
-                        ItemCut(sender, e);
-                        break;
-                    case Keys.V:
-                        ItemPaste(sender, e);
-                        break;
-                }
-            }
         }
 
         private void RestoreSelected(object itemData)

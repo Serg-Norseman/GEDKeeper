@@ -18,10 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using GKCore.Design.Controls;
 using GKUI.Components;
-using Xam.Plugin.TabView;
 using Xamarin.Forms;
 
 namespace GKUI.Platform
@@ -296,49 +294,6 @@ namespace GKUI.Platform
         }
     }*/
 
-    public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBar
-    {
-        private int fMin;
-        private int fMax;
-        private int fValue;
-
-        public ProgressBarHandler(ProgressBar control) : base(control)
-        {
-        }
-
-        public int Minimum
-        {
-            get { return fMin; }
-            set { fMin = value; }
-        }
-
-        public int Maximum
-        {
-            get { return fMax; }
-            set { fMax = value; }
-        }
-
-        public int Value
-        {
-            get { return fValue; }
-            set {
-                fValue = value;
-                UpdateValue();
-            }
-        }
-
-        public void Increment(int value)
-        {
-            fValue += value;
-            UpdateValue();
-        }
-
-        private void UpdateValue()
-        {
-            Control.Progress = fValue / (fMax - fMin);
-        }
-    }
-
     /*public sealed class LogChartHandler : BaseControlHandler<LogChart, LogChartHandler>, ILogChart
     {
         public LogChartHandler(LogChart control) : base(control)
@@ -355,66 +310,6 @@ namespace GKUI.Platform
             Control.Clear();
         }
     }*/
-
-    public sealed class TabPageHandler : BaseControlHandler<View, TabPageHandler>, ITabPage
-    {
-        public TabPageHandler(View control) : base(control)
-        {
-        }
-
-        public string Text
-        {
-            get { return /*Control.HeaderText*/ ""; }
-            set { /*Control.HeaderText = value;*/ }
-        }
-    }
-
-    public sealed class TabControlHandler : BaseControlHandler<TabViewControl, TabControlHandler>, ITabControl
-    {
-        private class TabPageItems : ITabPages
-        {
-            private TabViewControl fTabControl;
-
-            public ITabPage this[int index]
-            {
-                get {
-                    if (index < 0 || index >= fTabControl.Children.Count)
-                        throw new ArgumentOutOfRangeException("index");
-
-                    //return new TabPageHandler(fTabControl.Children[index]);
-                    return new TabPageHandler(fTabControl.ItemSource[index].Content);
-                }
-            }
-
-            public int Count
-            {
-                get { return fTabControl.Children.Count; }
-            }
-
-            public TabPageItems(TabViewControl control)
-            {
-                fTabControl = control;
-            }
-        }
-
-        private TabPageItems fItems;
-
-        public TabControlHandler(TabViewControl control) : base(control)
-        {
-            fItems = new TabPageItems(control);
-        }
-
-        public int SelectedIndex
-        {
-            get { return Control.SelectedTabIndex; /*Children.IndexOf(Control.CurrentPage)*/; }
-            set { Control.SelectedTabIndex = value; /*CurrentPage = Control.Children[value];*/ }
-        }
-
-        public ITabPages Pages
-        {
-            get { return fItems; }
-        }
-    }
 
     /*public sealed class MenuItemHandler : ControlHandler<ButtonMenuItem, MenuItemHandler>, IMenuItem
     {

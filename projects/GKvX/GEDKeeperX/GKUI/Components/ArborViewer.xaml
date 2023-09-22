@@ -1,9 +1,0 @@
-﻿<forms:ContentView
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:forms="http://xamarin.com/schemas/2014/forms"
-    xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
-    x:Class="GKUI.Components.ArborViewer">
-
-    <skia:SKCanvasView x:Name="CanvasView" PaintSurface="OnPaint" EnableTouchEvents="True" Touch="OnTouch" SizeChanged="OnSizeChanged" />
-</forms:ContentView>
