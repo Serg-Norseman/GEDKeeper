@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,58 +20,61 @@
 
 using System;
 using BSLib;
-using Eto.Drawing;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
 using GKUI.Components;
-using GKUI.Platform.Handlers;
+using SkiaSharp;
 
 namespace GKUI.Platform
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed class EtoGfxRenderer : ChartRenderer
+    public sealed class XFGfxRenderer : ChartRenderer
     {
-        private Graphics fCanvas;
+        private bool fAntiAlias;
+        private SKSurface fSurface;
+        private SKCanvas fCanvas;
         private float fTranslucent;
 
-        public EtoGfxRenderer()
+        public XFGfxRenderer()
         {
         }
 
         public override void SetTarget(object target)
         {
-            Graphics gfx = target as Graphics;
+            var gfx = target as SKSurface;
             if (gfx == null)
                 throw new ArgumentException("target");
 
-            fCanvas = gfx;
+            fSurface = gfx;
+            fCanvas = gfx.Canvas;
         }
 
         public override void SetSmoothing(bool value)
         {
-            fCanvas.AntiAlias = value;
+            // -> SKPaint.IsAntialias!
+            fAntiAlias = value;
         }
 
         public override void DrawArc(IPen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
         {
-            Pen sdPen = ((PenHandler)pen).Handle;
+            /*Pen sdPen = ((PenHandler)pen).Handle;
 
-            fCanvas.DrawArc(sdPen, x, y, width, height, startAngle, sweepAngle);
+            fCanvas.DrawArc(sdPen, x, y, width, height, startAngle, sweepAngle);*/
         }
 
         public override void DrawImage(IImage image, float x, float y,
                                        float width, float height, string imName)
         {
             try {
-                if (fCanvas != null && image != null) {
+                /*if (fCanvas != null && image != null) {
                     var sdImage = ((ImageHandler)image).Handle;
 
                     // TODO: implement output with transparency
                     fCanvas.DrawImage(sdImage, x, y, width, height);
-                }
+                }*/
             } catch (Exception ex) {
                 Logger.WriteError(string.Format("EtoGfxRenderer.DrawImage({0})", imName), ex);
             }
@@ -79,62 +82,65 @@ namespace GKUI.Platform
 
         public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)
         {
-            var sdImage = ((ImageHandler)image).Handle;
+            /*var sdImage = ((ImageHandler)image).Handle;
 
             Rectangle destRect = UIHelper.Rt2Rt(destinationRect);
             Rectangle sourRect = UIHelper.Rt2Rt(sourceRect);
-            fCanvas.DrawImage(sdImage, sourRect, destRect);
+            fCanvas.DrawImage(sdImage, sourRect, destRect);*/
         }
 
         public override ExtSizeF GetTextSize(string text, IFont font)
         {
-            if (string.IsNullOrEmpty(text) || font == null)
+            /*if (string.IsNullOrEmpty(text) || font == null)
                 return ExtSizeF.Empty;
 
             Font sdFnt = ((FontHandler)font).Handle;
             var size = sdFnt.MeasureString(text);
-            return new ExtSizeF(size.Width, size.Height);
+            return new ExtSizeF(size.Width, size.Height);*/
+            return ExtSizeF.Empty;
         }
 
         public override void DrawString(string text, IFont font, IBrush brush, float x, float y)
         {
-            SolidBrush sdBrush = (SolidBrush)((BrushHandler)brush).Handle;
+            /*SolidBrush sdBrush = (SolidBrush)((BrushHandler)brush).Handle;
             Font sdFnt = ((FontHandler)font).Handle;
 
-            fCanvas.DrawText(sdFnt, sdBrush, x, y, text);
+            fCanvas.DrawText(sdFnt, sdBrush, x, y, text);*/
         }
 
         public override void DrawLine(IPen pen, float x1, float y1, float x2, float y2)
         {
-            Pen sdPen = ((PenHandler)pen).Handle;
+            /*Pen sdPen = ((PenHandler)pen).Handle;
 
-            fCanvas.DrawLine(sdPen, x1, y1, x2, y2);
+            fCanvas.DrawLine(sdPen, x1, y1, x2, y2);*/
         }
 
-        private static GraphicsPath CreateRectangle(float x, float y, float width, float height)
+        private static SKPath CreateRectangle(float x, float y, float width, float height)
         {
             float xw = x + width;
             float yh = y + height;
 
-            GraphicsPath p = new GraphicsPath();
-            p.StartFigure();
+            var p = new SKPath();
+            p.Reset();
+            p.AddRect(new SKRect(x, y, xw, yh));
 
-            p.AddLine(x, y, xw, y); // Top Edge
-            p.AddLine(xw, y, xw, yh); // Right Edge
-            p.AddLine(xw, yh, x, yh); // Bottom Edge
-            p.AddLine(x, yh, x, y); // Left Edge
+            /*p.MoveTo(x, y);
+            p.LineTo(xw, y); // Top Edge
+            p.LineTo(xw, yh); // Right Edge
+            p.LineTo(x, yh); // Bottom Edge
+            p.LineTo(x, y); // Left Edge*/
 
-            p.CloseFigure();
+            p.Close();
             return p;
         }
 
         public override void DrawRectangle(IPen pen, IColor fillColor,
                                            float x, float y, float width, float height)
         {
-            Color sdFillColor = (fillColor == null) ? Colors.Transparent : ((ColorHandler)fillColor).Handle;
+            /*Color sdFillColor = (fillColor == null) ? Color.Transparent : ((ColorHandler)fillColor).Handle;
 
-            using (GraphicsPath path = CreateRectangle(x, y, width, height)) {
-                if (sdFillColor != Colors.Transparent) {
+            using (var path = CreateRectangle(x, y, width, height)) {
+                if (sdFillColor != Color.Transparent) {
                     sdFillColor = PrepareColor(sdFillColor);
 
                     fCanvas.FillPath(new SolidBrush(sdFillColor), path);
@@ -144,19 +150,19 @@ namespace GKUI.Platform
                     Pen sdPen = ((PenHandler)pen).Handle;
                     fCanvas.DrawPath(sdPen, path);
                 }
-            }
+            }*/
         }
 
         public override void FillRectangle(IBrush brush,
                                            float x, float y, float width, float height)
         {
-            if (brush != null) {
+            /*if (brush != null) {
                 Brush sdBrush = ((BrushHandler)brush).Handle;
                 fCanvas.FillRectangle(sdBrush, x, y, width, height);
-            }
+            }*/
         }
 
-        private static GraphicsPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
+        private static SKPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
         {
             float xw = x + width;
             float yh = y + height;
@@ -168,29 +174,30 @@ namespace GKUI.Platform
             float xwr2 = xw - r2;
             float yhr2 = yh - r2;
 
-            GraphicsPath p = new GraphicsPath();
-            p.StartFigure();
+            var p = new SKPath();
+            p.Reset();
+            p.AddRoundRect(new SKRoundRect(new SKRect(x, y, xw, yh), radius));
 
-            p.AddArc(x, y, r2, r2, 180, 90); // Top Left Corner
+            /*p.AddArc(x, y, r2, r2, 180, 90); // Top Left Corner
             p.AddLine(xr, y, xwr, y); // Top Edge
             p.AddArc(xwr2, y, r2, r2, 270, 90); // Top Right Corner
             p.AddLine(xw, yr, xw, yhr); // Right Edge
             p.AddArc(xwr2, yhr2, r2, r2, 0, 90); // Bottom Right Corner
             p.AddLine(xwr, yh, xr, yh); // Bottom Edge
             p.AddArc(x, yhr2, r2, r2, 90, 90); // Bottom Left Corner
-            p.AddLine(x, yhr, x, yr); // Left Edge
+            p.AddLine(x, yhr, x, yr); // Left Edge*/
 
-            p.CloseFigure();
+            p.Close();
             return p;
         }
 
         public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
                                                   float width, float height, float radius)
         {
-            Color sdFillColor = ((ColorHandler)fillColor).Handle;
+            /*Color sdFillColor = ((ColorHandler)fillColor).Handle;
 
-            using (GraphicsPath path = CreateRoundedRectangle(x, y, width, height, radius)) {
-                if (sdFillColor != Colors.Transparent) {
+            using (var path = CreateRoundedRectangle(x, y, width, height, radius)) {
+                if (sdFillColor != Color.Transparent) {
                     sdFillColor = PrepareColor(sdFillColor);
 
                     fCanvas.FillPath(new SolidBrush(sdFillColor), path);
@@ -200,26 +207,26 @@ namespace GKUI.Platform
                     Pen sdPen = ((PenHandler)pen).Handle;
                     fCanvas.DrawPath(sdPen, path);
                 }
-            }
+            }*/
         }
 
         public override void FillPath(IBrush brush, IGfxPath path)
         {
-            Brush sdBrush = ((BrushHandler)brush).Handle;
-            GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
-            fCanvas.FillPath(sdBrush, sdPath);
+            /*Brush sdBrush = ((BrushHandler)brush).Handle;
+            var sdPath = ((GfxPathHandler)path).Handle;
+            fCanvas.FillPath(sdBrush, sdPath);*/
         }
 
         public override void DrawPath(IPen pen, IGfxPath path)
         {
-            Pen sdPen = ((PenHandler)pen).Handle;
-            GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
-            fCanvas.DrawPath(sdPen, sdPath);
+            /*Pen sdPen = ((PenHandler)pen).Handle;
+            var sdPath = ((GfxPathHandler)path).Handle;
+            fCanvas.DrawPath(sdPen, sdPath);*/
         }
 
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
         {
-            GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
+            /*var sdPath = ((GfxPathHandler)path).Handle;
 
             if (brush != null) {
                 Brush sdBrush = ((BrushHandler)brush).Handle;
@@ -229,18 +236,18 @@ namespace GKUI.Platform
             if (pen != null) {
                 Pen sdPen = ((PenHandler)pen).Handle;
                 fCanvas.DrawPath(sdPen, sdPath);
-            }
+            }*/
         }
 
-        private Color PrepareColor(Color color)
+        /*private SKColor PrepareColor(Color color)
         {
             float alpha = (1 - fTranslucent);
-            return new Color(color, alpha);
-        }
+            return new SKColor(color, alpha);
+        }*/
 
         public override IPen CreatePen(IColor color, float width, float[] dashPattern = null)
         {
-            Color sdColor = ((ColorHandler)color).Handle;
+            /*Color sdColor = ((ColorHandler)color).Handle;
             sdColor = PrepareColor(sdColor);
 
             var etoPen = new Pen(sdColor, width);
@@ -248,20 +255,22 @@ namespace GKUI.Platform
                 etoPen.DashStyle = new DashStyle(0, dashPattern);
             }
 
-            return new PenHandler(etoPen);
+            return new PenHandler(etoPen);*/
+            return null;
         }
 
         public override IBrush CreateSolidBrush(IColor color)
         {
-            Color sdColor = ((ColorHandler)color).Handle;
+            /*Color sdColor = ((ColorHandler)color).Handle;
             sdColor = PrepareColor(sdColor);
 
-            return new BrushHandler(new SolidBrush(sdColor));
+            return new BrushHandler(new SolidBrush(sdColor));*/
+            return null;
         }
 
         public override IGfxPath CreatePath()
         {
-            return new GfxPathHandler(new GraphicsPath());
+            return new GfxPathHandler(new SKPath());
         }
 
         public override void SetTranslucent(float value)
@@ -271,17 +280,17 @@ namespace GKUI.Platform
 
         public override void ScaleTransform(float sx, float sy)
         {
-            fCanvas.ScaleTransform(sx, sy);
+            fCanvas.Scale(sx, sy);
         }
 
         public override void TranslateTransform(float dx, float dy)
         {
-            fCanvas.TranslateTransform(dx, dy);
+            fCanvas.Translate(dx, dy);
         }
 
         public override void RotateTransform(float angle)
         {
-            fCanvas.RotateTransform(angle);
+            fCanvas.RotateDegrees(angle);
         }
 
         public override void ResetTransform()
@@ -291,12 +300,12 @@ namespace GKUI.Platform
 
         public override void RestoreTransform()
         {
-            fCanvas.RestoreTransform();
+            fCanvas.Restore();
         }
 
         public override void SaveTransform()
         {
-            fCanvas.SaveTransform();
+            fCanvas.Save();
         }
     }
 }

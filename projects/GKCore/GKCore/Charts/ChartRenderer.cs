@@ -206,7 +206,5 @@ namespace GKCore.Charts
                 RestoreTransform();
             }
         }
-
-        public abstract IImage CreateSphere(int rad, IColor color);
     }
 }

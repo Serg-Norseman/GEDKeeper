@@ -29,6 +29,16 @@ namespace GKUI.Components
 {
     public static class UIHelper
     {
+        public static Rectangle Rt2Rt(ExtRect ert)
+        {
+            return new Rectangle(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
+        }
+
+        public static ExtRect Rt2Rt(Rectangle ert)
+        {
+            return ExtRect.CreateBounds((int)ert.Left, (int)ert.Top, (int)ert.Width, (int)ert.Height);
+        }
+
         public static IColor ConvertColor(Color color)
         {
             return new ColorHandler(color);

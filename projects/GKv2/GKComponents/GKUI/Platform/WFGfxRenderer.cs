@@ -334,12 +334,5 @@ namespace GKUI.Platform
         {
             fTransforms.Push(fCanvas.Transform);
         }
-
-        public override IImage CreateSphere(int rad, IColor color)
-        {
-            Color sdColor = ((ColorHandler)color).Handle;
-            var bitmap = UIHelper.CreateSphere(rad, sdColor);
-            return (bitmap == null) ? null : new ImageHandler(bitmap);
-        }
     }
 }

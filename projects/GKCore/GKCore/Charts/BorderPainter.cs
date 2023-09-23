@@ -38,9 +38,8 @@ namespace GKCore.Charts
         SingleBevels,
         DoubleBevels,
         CrossCorners,
-        RivetTape,
 
-        Last = RivetTape
+        Last = CrossCorners
     }
 
     /// <summary>
@@ -103,10 +102,6 @@ namespace GKCore.Charts
 
                 case GfxBorderStyle.CrossCorners:
                     DrawCrossCorners(renderer, rL, rT, rR, rB, DefaultAngleOffset, DefaultPenWidth);
-                    break;
-
-                case GfxBorderStyle.RivetTape:
-                    DrawRivetTape(renderer, rL, rT, rR, rB, DefaultAngleOffset, DefaultPenWidth);
                     break;
             }
         }
@@ -309,74 +304,6 @@ namespace GKCore.Charts
             rR -= DefaultStreak;
             rB -= DefaultStreak;
             DrawSingleRect(renderer, rL, rT, (rR - rL), (rB - rT), pw);
-        }
-
-        public const int DarkGoldenrod = 0xB8860B;
-
-        private static void DrawRivetTape(ChartRenderer renderer, int rL, int rT, int rR, int rB, float gap, float pw)
-        {
-            int tw = 12;
-            int htw = 6;
-            rL -= htw;
-            rT -= htw;
-            rR += htw;
-            rB += htw;
-            using (var p = renderer.CreatePen(BSDColors.Gray, tw))
-                using (var rivet = renderer.CreateSphere(5, ChartRenderer.GetColor(/*DarkGoldenrod*/BSDColors.Silver))) {
-                renderer.DrawLine(p, rL, rB + htw, rL, rT - htw); // L
-                renderer.DrawLine(p, rL, rT, rR, rT); // T
-                renderer.DrawLine(p, rL, rB, rR, rB); // B
-                renderer.DrawLine(p, rR, rB + htw, rR, rT - htw); // R
-
-                if (rivet != null) {
-                    int hNum = ((rR - rL) + tw) / 20;
-                    if (!MathHelper.IsOdd(hNum)) hNum -= 1;
-                    int dist = ((rR - rL) + tw) / hNum;
-
-                    for (int i = 0; i < hNum; i++) {
-                        renderer.DrawImage(rivet, rL - htw / 2 + (i * dist), rT - 5, string.Empty);
-                        renderer.DrawImage(rivet, rL - htw / 2 + (i * dist), rB - 5, string.Empty);
-                    }
-
-                    hNum = ((rB - rT) + tw) / 20;
-                    if (!MathHelper.IsOdd(hNum)) hNum -= 1;
-                    dist = ((rB - rT) + tw) / hNum;
-
-                    for (int i = 0; i < hNum; i++) {
-                        renderer.DrawImage(rivet, rL - 5, rT + tw / 2 + (i * dist), string.Empty);
-                        renderer.DrawImage(rivet, rR - 5, rT + tw / 2 + (i * dist), string.Empty);
-                    }
-                }
-            }
-
-            using (var p = renderer.CreatePen(BSDColors.Black, 2)) {
-                rL -= htw;
-                rT -= htw;
-                rR += htw;
-                rB += htw;
-                renderer.DrawLine(p, rL, rB, rL, rT); // L
-                renderer.DrawLine(p, rL, rT, rR, rT); // T
-                renderer.DrawLine(p, rL, rB, rR, rB); // B
-                renderer.DrawLine(p, rR, rB, rR, rT); // R
-
-                rL += tw;
-                rT += tw;
-                rR -= tw;
-                rB -= tw;
-                renderer.DrawLine(p, rL, rB, rL, rT); // L
-                renderer.DrawLine(p, rL, rT, rR, rT); // T
-                renderer.DrawLine(p, rL, rB, rR, rB); // B
-                renderer.DrawLine(p, rR, rB, rR, rT); // R
-
-                rL += 3;
-                rT += 3;
-                rR -= 3;
-                rB -= 3;
-                renderer.DrawLine(p, rL, rB, rL, rT); // L
-                renderer.DrawLine(p, rL, rT, rR, rT); // T
-                renderer.DrawLine(p, rL, rB, rR, rB); // B
-                renderer.DrawLine(p, rR, rB, rR, rT); // R
-            }
         }
     }
 }

@@ -34,6 +34,8 @@ namespace GKUI.Forms
         PatriarchsViewer,
         LanguageSelect,
         Tests,
+        Launch,
+        Services,
     }
 
 
@@ -76,6 +78,8 @@ namespace GKUI.Forms
                 new HomeMenuItem (MenuItemType.PatriarchsViewer, "PatriarchsViewer"),
                 new HomeMenuItem (MenuItemType.LanguageSelect, "LanguageSelect"),
                 new HomeMenuItem (MenuItemType.Tests, "Tests"),
+                new HomeMenuItem (MenuItemType.Launch, "Launch"),
+                new HomeMenuItem (MenuItemType.Services, "Services"),
             };
 
             ListViewMenu.ItemsSource = fMenuItems;
@@ -116,6 +120,12 @@ namespace GKUI.Forms
                     break;
                 case MenuItemType.Tests:
                     result = new TestsPage();
+                    break;
+                case MenuItemType.Launch:
+                    result = new LaunchPage();
+                    break;
+                case MenuItemType.Services:
+                    result = new ServicesPage();
                     break;
             }
             return result;

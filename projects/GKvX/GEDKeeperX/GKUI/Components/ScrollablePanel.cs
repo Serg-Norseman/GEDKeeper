@@ -62,13 +62,15 @@ namespace GKUI.Components
         /// <summary>
         /// Gets the rectangle that represents the client area of the control.
         /// </summary>
-        /*public Rectangle ClientRectangle
+        public Rectangle ClientRectangle
         {
             get {
-                var clientSize = base.ClientSize;
+                // FIXME: bad!!!
+                //var clientSize = base.ClientSize;
+                var clientSize = base.ContentSize;
                 return new Rectangle(0, 0, clientSize.Width, clientSize.Height);
             }
-        }*/
+        }
 
         public Font Font
         {
@@ -86,9 +88,9 @@ namespace GKUI.Components
             get { return fImageRect; }
         }
 
-        protected Rectangle ImageViewport
+        protected ExtRect ImageViewport
         {
-            get { return fImageViewport; }
+            get { return UIHelper.Rt2Rt(fImageViewport); }
         }
 
         public Point MouseOffset
@@ -117,9 +119,9 @@ namespace GKUI.Components
         /// <summary>
         /// The rectangle that is visible to the user.
         /// </summary>
-        public Rectangle Viewport
+        public ExtRect Viewport
         {
-            get { return fViewport; }
+            get { return UIHelper.Rt2Rt(fViewport); }
         }
 
 

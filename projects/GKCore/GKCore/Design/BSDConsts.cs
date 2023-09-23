@@ -31,6 +31,7 @@ namespace GKCore.Design
             public const int Blue = 0x0000FF;
             public const int CadetBlue = 0x5F9EA0;
             public const int Coral = 0xFF7F50;
+            public const int DarkGoldenrod = 0xB8860B;
             public const int DarkGray = 0xA9A9A9; // 169, 169, 169
             public const int DimGray = 0x696969; // 105, 105, 105
             public const int Gray = 0x808080; // 128, 128, 128

@@ -20,6 +20,8 @@
 
 using System.IO;
 using BSLib;
+using GKCore.Design.Graphics;
+using SkiaSharp;
 using Xamarin.Forms;
 using IImage = GKCore.Design.Graphics.IImage;
 
@@ -28,9 +30,9 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    /*public class GfxPathHandler: TypeHandler<GraphicsPath>, IGfxPath
+    public class GfxPathHandler: TypeHandler<SKPath>, IGfxPath
     {
-        public GfxPathHandler(GraphicsPath handle) : base(handle)
+        public GfxPathHandler(SKPath handle) : base(handle)
         {
         }
 
@@ -44,22 +46,22 @@ namespace GKUI.Components
 
         public void AddEllipse(float x, float y, float width, float height)
         {
-            Handle.AddEllipse(x, y, width, height);
+            Handle.AddOval(new SKRect(x, y, x + width - 1, y + height - 1));
         }
 
         public void CloseFigure()
         {
-            Handle.CloseFigure();
+            Handle.Close();
         }
 
         public void StartFigure()
         {
-            Handle.StartFigure();
+            Handle.Reset();
         }
 
         public ExtRectF GetBounds()
         {
-            RectangleF rect = Handle.GetBounds();
+            var rect = Handle.Bounds;
             return ExtRectF.CreateBounds(rect.Left, rect.Top, rect.Width, rect.Height);
         }
     }
@@ -68,7 +70,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public class GfxCirclePathHandler: GfxPathHandler, IGfxCirclePath
+    /*public class GfxCirclePathHandler: GfxPathHandler, IGfxCirclePath
     {
         public float X { get; set; }
         public float Y { get; set; }

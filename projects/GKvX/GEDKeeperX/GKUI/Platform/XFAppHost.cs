@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading;
 using BSLib;
 using GKCore;
+using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
@@ -236,7 +237,7 @@ namespace GKUI.Platform
             // controls and other
             container.Register<IStdDialogs, XFStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProvider, XFGfxProvider>(LifeCycle.Singleton);
-            //container.Register<ITreeChartBox, TreeChartBox>(LifeCycle.Transient);
+            container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
 
             // dialogs
             //container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
@@ -282,7 +283,7 @@ namespace GKUI.Platform
             //container.Register<ISlideshowWin, SlideshowWin>(LifeCycle.Transient);
             container.Register<IStatisticsWin, StatisticsWin>(LifeCycle.Transient);
             //container.Register<ITaskEditDlg, TaskEditDlg>(LifeCycle.Transient);
-            //container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
+            container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
             //container.Register<ITreeCheckDlg, TTTreeCheckDlg>(LifeCycle.Transient);
             //container.Register<ITreeCompareDlg, TTTreeCompareDlg>(LifeCycle.Transient);
             //container.Register<ITreeFilterDlg, TreeFilterDlg>(LifeCycle.Transient);

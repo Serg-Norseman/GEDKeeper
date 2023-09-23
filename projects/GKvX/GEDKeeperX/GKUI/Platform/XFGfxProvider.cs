@@ -92,7 +92,7 @@ namespace GKUI.Platform
             }
 
             return new ImageHandler(img);*/
-            throw new NotImplementedException();
+            return null;
         }
 
         public void SaveImage(IImage image, string fileName)
