@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 
 namespace GKCore.Charts
@@ -65,8 +66,8 @@ namespace GKCore.Charts
         public TCGenerationsControl(ITreeChart chart, TreeChartKind controlMode) : base(chart)
         {
             fControlMode = controlMode;
-            fBlankColor = AppHost.GfxProvider.CreateColor(191, 191, 191);
-            fSelectColor = AppHost.GfxProvider.CreateColor(128, 128, 128);
+            fBlankColor = AppHost.GfxProvider.CreateColor(BSDConsts.Colors.Silver);
+            fSelectColor = AppHost.GfxProvider.CreateColor(BSDConsts.Colors.Gray);
         }
 
         public override void UpdateState()
@@ -136,9 +137,9 @@ namespace GKCore.Charts
 
                 IColor color = (i <= fThumbPos) ? fSelectColor : fBlankColor;
 
-                using (var brush = AppHost.GfxProvider.CreateSolidBrush(color)) {
-                    using (var path = AppHost.GfxProvider.CreateCircleSegmentPath(ctX, ctY, inRad, extRad, SEGMENT_ANGLE, ang1, ang2)) {
-                        gfx.FillPath(brush, path);
+                using (var brush = AppHost.GfxProvider.CreateBrush(color)) {
+                    using (var path = gfx.CreateCircleSegmentPath(ctX, ctY, inRad, extRad, SEGMENT_ANGLE, ang1, ang2)) {
+                        gfx.DrawPath(null, brush, path);
                     }
                 }
 

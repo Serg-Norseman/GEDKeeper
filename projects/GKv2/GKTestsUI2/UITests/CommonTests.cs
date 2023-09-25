@@ -23,6 +23,7 @@ using System.Drawing;
 using BSLib;
 using GDModel;
 using GKCore;
+using GKCore.Design;
 using GKTests;
 using GKUI.Platform.Handlers;
 using NUnit.Framework;
@@ -67,8 +68,8 @@ namespace GKUI.Components
             var chk_res = AppHost.GfxProvider.CreateColor(50, 50, 50);
             Assert.AreEqual(((ColorHandler)chk_res).Handle, ((ColorHandler)color.Darker(0.5f)).Handle);
 
-            color = AppHost.GfxProvider.CreateColor(255, 75, 75, 75);
-            Assert.AreEqual("ff4b4b4b", color.GetName());
+            color = AppHost.GfxProvider.CreateColor(BSDConsts.Colors.Silver);
+            Assert.AreEqual("ffc0c0c0", color.GetName());
 
             color = AppHost.GfxProvider.CreateColor(50, 50, 50);
             chk_res = AppHost.GfxProvider.CreateColor(75, 75, 75);
@@ -85,7 +86,7 @@ namespace GKUI.Components
         public void Test_Brush()
         {
             var color = AppHost.GfxProvider.CreateColor(50, 50, 50);
-            var brush = AppHost.GfxProvider.CreateSolidBrush(color);
+            var brush = AppHost.GfxProvider.CreateBrush(color);
             Assert.AreEqual(((ColorHandler)color).Handle, ((ColorHandler)brush.Color).Handle);
         }
 

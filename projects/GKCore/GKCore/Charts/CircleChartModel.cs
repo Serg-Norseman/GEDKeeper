@@ -49,7 +49,6 @@ namespace GKCore.Charts
         {
             Gen = generation;
             IRec = null;
-            Path = AppHost.GfxProvider.CreatePath();
         }
 
         protected override void Dispose(bool disposing)
@@ -257,8 +256,8 @@ namespace GKCore.Charts
             for (int i = 0; i < fOptions.BrushColor.Length; i++) {
                 IColor col = fOptions.BrushColor[i];
 
-                fCircleBrushes[i] = fRenderer.CreateSolidBrush(col);
-                fDarkBrushes[i] = fRenderer.CreateSolidBrush(col.Darker(0.2f));
+                fCircleBrushes[i] = fRenderer.CreateBrush(col);
+                fDarkBrushes[i] = fRenderer.CreateBrush(col.Darker(0.2f));
             }
 
             fFemaleColor = ChartRenderer.GetColor(TreeChartOptions.FEMALE_COLOR).Darker(0.4f);
@@ -486,9 +485,7 @@ namespace GKCore.Charts
             return (wedgeL / size.Width <= 0.9f);
         }
 
-        private void DefineSegment(CircleSegment segment,
-                                   float rad, float inRad, float extRad,
-                                   float startAngle, float wedgeAngle)
+        private void DefineSegment(CircleSegment segment, float rad, float inRad, float extRad, float startAngle, float wedgeAngle)
         {
             segment.StartAngle = startAngle;
             segment.WedgeAngle = wedgeAngle;
@@ -497,9 +494,9 @@ namespace GKCore.Charts
             segment.ExtRad = extRad;
 
             if (wedgeAngle == 360.0f) {
-                segment.Path = AppHost.GfxProvider.CreateCirclePath(-extRad, -extRad, extRad * 2.0f, extRad * 2.0f);
+                segment.Path = fRenderer.CreateCirclePath(-extRad, -extRad, extRad * 2.0f, extRad * 2.0f);
             } else {
-                segment.Path = AppHost.GfxProvider.CreateCircleSegmentPath(inRad, extRad, wedgeAngle, startAngle, startAngle + wedgeAngle);
+                segment.Path = fRenderer.CreateCircleSegmentPath(0, 0, inRad, extRad, wedgeAngle, startAngle, startAngle + wedgeAngle);
             }
         }
 
@@ -685,7 +682,7 @@ namespace GKCore.Charts
                             color = fMaleColor;
                         }
 
-                        brush = fRenderer.CreateSolidBrush(color.Lighter(0.15f * segment.Gen));
+                        brush = fRenderer.CreateBrush(color.Lighter(0.15f * segment.Gen));
                         brushDispose = true;
                     }
 

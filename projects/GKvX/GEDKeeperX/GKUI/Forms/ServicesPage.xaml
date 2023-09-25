@@ -1,12 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="GKUI.Forms.ServicesPage">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
+    x:Class="GKUI.Forms.ServicesPage">
+
+    <flv:FlowListView x:Name="flowListView" FlowColumnCount="2" SeparatorVisibility="None" RowHeight="40"
+        FlowUseAbsoluteLayoutInternally="false" FlowColumnExpand="None"
+        IsGroupingEnabled="true" FlowGroupDisplayBinding="{Binding Key}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+        <flv:FlowListView.FlowColumnTemplate>
+            <DataTemplate>
+                <Label HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" 
+                    XAlign="Center" YAlign="Center" Text="{Binding Title}" LineBreakMode="CharacterWrap" BackgroundColor="{Binding Color}"/>
+            </DataTemplate>
+        </flv:FlowListView.FlowColumnTemplate>
+
+    </flv:FlowListView>
+
 </ContentPage>

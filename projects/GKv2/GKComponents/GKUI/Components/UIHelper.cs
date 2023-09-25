@@ -20,8 +20,6 @@
 
 using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Globalization;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
@@ -278,11 +276,6 @@ namespace GKUI.Components
             }
         }
 
-        public static void SetClipboardText(string text)
-        {
-            Clipboard.SetDataObject(text);
-        }
-
         public static void ProcessName(object sender)
         {
             TextBox tb = (sender as TextBox);
@@ -343,71 +336,5 @@ namespace GKUI.Components
 
         #endif
         #endregion
-
-        public static void DrawArrowLine(Graphics gfx, Color fillColor, Pen pen, float x1, float y1, float x2, float y2, int arrLength = 8)
-        {
-            gfx.DrawLine(pen, x1, y1, x2, y2);
-
-            var m = x2 - x1 == 0 ? 0 : (y2 - y1) / (x2 - x1);
-            var degree = Math.Atan(m);
-            var toLeft = x2 > x1 ? 0 : Math.PI;
-
-            var degree1 = degree + 5 * Math.PI / 6 + toLeft;
-            var degree2 = degree + 7 * Math.PI / 6 + toLeft;
-
-            var px1 = x2 + (float)Math.Cos(degree1) * arrLength;
-            var py1 = y2 + (float)Math.Sin(degree1) * arrLength;
-
-            var px2 = x2 + (float)Math.Cos(degree2) * arrLength;
-            var py2 = y2 + (float)Math.Sin(degree2) * arrLength;
-
-            var mp1 = new PointF(x2, y2);
-            var mp2 = new PointF(px1, py1);
-            var mp3 = new PointF(px2, py2);
-
-            using (var brush = new SolidBrush(fillColor)) {
-                GraphicsPath path = new GraphicsPath();
-                path.AddLine(mp1, mp2);
-                path.AddLine(mp2, mp3);
-                path.AddLine(mp3, mp1);
-                gfx.FillPath(brush, path);
-            }
-        }
-
-        private const int ExifOrientationTagId = 274;
-
-        public static void NormalizeOrientation(Image image)
-        {
-            if (image == null || Array.IndexOf(image.PropertyIdList, ExifOrientationTagId) < 0) return;
-
-            int orientation = image.GetPropertyItem(ExifOrientationTagId).Value[0];
-            if (orientation >= 1 && orientation <= 8) {
-                switch (orientation) {
-                    case 2:
-                        image.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                        break;
-                    case 3:
-                        image.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                        break;
-                    case 4:
-                        image.RotateFlip(RotateFlipType.Rotate180FlipX);
-                        break;
-                    case 5:
-                        image.RotateFlip(RotateFlipType.Rotate90FlipX);
-                        break;
-                    case 6:
-                        image.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                        break;
-                    case 7:
-                        image.RotateFlip(RotateFlipType.Rotate270FlipX);
-                        break;
-                    case 8:
-                        image.RotateFlip(RotateFlipType.Rotate270FlipNone);
-                        break;
-                }
-
-                image.RemovePropertyItem(ExifOrientationTagId);
-            }
-        }
     }
 }

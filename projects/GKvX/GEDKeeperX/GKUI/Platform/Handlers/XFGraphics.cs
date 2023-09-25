@@ -22,6 +22,7 @@ using System.IO;
 using BSLib;
 using GKCore.Design.Graphics;
 using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 using IImage = GKCore.Design.Graphics.IImage;
 
@@ -70,14 +71,14 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    /*public class GfxCirclePathHandler: GfxPathHandler, IGfxCirclePath
+    public class GfxCirclePathHandler: GfxPathHandler, IGfxCirclePath
     {
         public float X { get; set; }
         public float Y { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
 
-        public GfxCirclePathHandler(GraphicsPath handle) : base(handle)
+        public GfxCirclePathHandler(SKPath handle) : base(handle)
         {
         }
     }
@@ -94,28 +95,28 @@ namespace GKUI.Components
         public float Ang1 { get; set; }
         public float Ang2 { get; set; }
 
-        public GfxCircleSegmentPathHandler(GraphicsPath handle) : base(handle)
+        public GfxCircleSegmentPathHandler(SKPath handle) : base(handle)
         {
         }
-    }*/
+    }
 
 
     /// <summary>
     /// 
     /// </summary>
-    /*public sealed class PenHandler: TypeHandler<Pen>, IPen
+    public sealed class PenHandler: TypeHandler<SKPaint>, IPen
     {
         public IColor Color
         {
-            get { return UIHelper.ConvertColor(Handle.Color); }
+            get { return UIHelper.ConvertColor(Handle.Color.ToFormsColor()); }
         }
 
         public float Width
         {
-            get { return Handle.Width; }
+            get { return Handle.StrokeWidth; }
         }
 
-        public PenHandler(Pen handle) : base(handle)
+        public PenHandler(SKPaint handle) : base(handle)
         {
         }
 
@@ -126,30 +127,30 @@ namespace GKUI.Components
             }
             base.Dispose(disposing);
         }
-    }*/
+    }
 
 
     /// <summary>
     /// 
     /// </summary>
-    /*public sealed class FontHandler: TypeHandler<Font>, IFont
+    public sealed class FontHandler: TypeHandler<SKPaint>, IFont
     {
         public string FontFamilyName
         {
-            get { return Handle.FontFamily.Name; }
+            get { return Handle.Typeface.FamilyName; }
         }
 
         public string Name
         {
-            get { return Handle.Name; }
+            get { return Handle.Typeface.FamilyName; }
         }
 
         public float Size
         {
-            get { return Handle.Size; }
+            get { return Handle.TextSize; }
         }
 
-        public FontHandler(Font handle) : base(handle)
+        public FontHandler(SKPaint handle) : base(handle)
         {
         }
 
@@ -160,7 +161,7 @@ namespace GKUI.Components
             }
             base.Dispose(disposing);
         }
-    }*/
+    }
 
 
     /// <summary>

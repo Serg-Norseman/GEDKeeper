@@ -40,12 +40,12 @@ namespace GKUI.Components
         private Font fFont;
         private bool fHasHScroll;
         private bool fHasVScroll;
-        private Size fImageSize;
+        private ExtSize fImageSize;
         private Rectangle fImageRect;
         private Rectangle fImageViewport;
         private int fMouseOffsetX, fMouseOffsetY;
         private Color fTextColor;
-        private Rectangle fViewport;
+        private ExtRect fViewport;
 
 
         public Rectangle CanvasRectangle
@@ -121,14 +121,12 @@ namespace GKUI.Components
         /// </summary>
         public ExtRect Viewport
         {
-            get { return UIHelper.Rt2Rt(fViewport); }
+            get { return fViewport; }
         }
 
 
         public ScrollablePanel()
         {
-            //base.ExpandContentHeight = true;
-            //base.ExpandContentWidth = true;
             base.Padding = new Thickness(0);
 
             fCanvas = new SKCanvasView();
@@ -137,6 +135,9 @@ namespace GKUI.Components
             fCanvas.KeyUp += KeyUpHandler;
             fCanvas.CanFocus = true;*/
             Content = fCanvas;
+
+            base.SizeChanged += OnSizeChanged;
+            base.Scrolled += OnScroll;
 
             //fFont = SystemFonts.Label();
             //fTextColor = SystemColors.ControlText;
@@ -173,9 +174,9 @@ namespace GKUI.Components
 
         private void UpdateProperties()
         {
-            //if (fViewport.IsEmpty) return;
+            if (fViewport.IsEmpty()) return;
 
-            /*fHasHScroll = (fViewport.Width < fImageSize.Width);
+            fHasHScroll = (fViewport.Width < fImageSize.Width);
             fHasVScroll = (fViewport.Height < fImageSize.Height);
 
             int destX, destY;
@@ -210,18 +211,8 @@ namespace GKUI.Components
 
             int width = Math.Min(fImageSize.Width, fViewport.Width);
             int height = Math.Min(fImageSize.Height, fViewport.Height);
-            fImageViewport = new Rectangle(destX, destY, width, height);*/
+            fImageViewport = new Rectangle(destX, destY, width, height);
         }
-
-        // unsupported in Wpf and maybe in other platforms (exclude WinForms), don't use
-        /*public Graphics CreateGraphics()
-        {
-            if (fCanvas.SupportsCreateGraphics) {
-                return fCanvas.CreateGraphics();
-            } else {
-                return null;
-            }
-        }*/
 
         /*protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -261,26 +252,20 @@ namespace GKUI.Components
             }
 
             base.OnShown(e);
-        }
-
-        protected override void OnSizeChanged(EventArgs e)
-        {
-            if (Loaded) {
-                fViewport = VisibleRect;
-                UpdateProperties();
-            }
-            base.OnSizeChanged(e);
-        }
-
-        protected override void OnScroll(ScrollEventArgs e)
-        {
-            if (Loaded) {
-                fViewport = VisibleRect;
-                UpdateProperties();
-                fCanvas.Invalidate();
-            }
-            base.OnScroll(e);
         }*/
+
+        private void OnSizeChanged(object sender, EventArgs e)
+        {
+            fViewport = new ExtRect((int)ScrollX, (int)ScrollY, (int)Width, (int)Height);
+            UpdateProperties();
+        }
+
+        private void OnScroll(object sender, ScrolledEventArgs e)
+        {
+            fViewport = new ExtRect((int)ScrollX, (int)ScrollY, (int)Width, (int)Height);
+            UpdateProperties();
+            fCanvas.InvalidateSurface();
+        }
 
         /// <summary>
         /// Updates the scroll position.
@@ -289,7 +274,7 @@ namespace GKUI.Components
         /// <param name="posY">The Y position.</param>
         protected void UpdateScrollPosition(int posX, int posY)
         {
-            //ScrollPosition = new Point(posX, posY);
+            SetScrolledPosition(posX, posY);
         }
 
         /// <summary>
@@ -299,8 +284,7 @@ namespace GKUI.Components
         /// <param name="dy">The Y shift.</param>
         protected void AdjustScroll(int dx, int dy)
         {
-            //Point curScroll = base.ScrollPosition;
-            //UpdateScrollPosition(curScroll.X + dx, curScroll.Y + dy);
+            UpdateScrollPosition((int)ScrollX + dx, (int)ScrollY + dy);
         }
 
         /// <summary>
@@ -310,19 +294,21 @@ namespace GKUI.Components
         /// <param name="noRedraw">Flag of the need to redraw.</param>
         protected void SetImageSize(ExtSize imageSize, bool noRedraw = false)
         {
-            /*if (!imageSize.IsEmpty) {
-                fImageSize = new Size(imageSize.Width, imageSize.Height);
+            if (!imageSize.IsEmpty) {
+                fImageSize = imageSize;
 
-                Size clientSize = fViewport.Size;
+                ExtSize clientSize = new ExtSize(fViewport.Width, fViewport.Height);
                 int canvWidth = Math.Max(imageSize.Width, clientSize.Width);
                 int canvHeight = Math.Max(imageSize.Height, clientSize.Height);
-                fCanvas.Size = new Size(canvWidth, canvHeight);
+                //fCanvas.Size = new Size(canvWidth, canvHeight);
+                fCanvas.WidthRequest = canvWidth;
+                fCanvas.HeightRequest = canvHeight;
 
-                base.UpdateScrollSizes();
+                //base.UpdateScrollSizes();
                 UpdateProperties();
             }
 
-            if (!noRedraw) Invalidate();*/
+            if (!noRedraw) InvalidateContent();
         }
 
         protected Point GetImageRelativeLocation(Point mpt, bool buttons)

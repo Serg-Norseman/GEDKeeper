@@ -1593,7 +1593,7 @@ namespace GKCore.Charts
             fDottedLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrLine), 1f, new float[] {4.0F, 2.0F});
             fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrDecor), 1f);
             fDottedDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrDecor), 1f, new float[] {4.0F, 2.0F});
-            fSolidBlack = fRenderer.CreateSolidBrush(ChartRenderer.GetColor(BSDColors.Black));
+            fSolidBlack = fRenderer.CreateBrush(ChartRenderer.GetColor(BSDColors.Black));
         }
 
         private void DoneGraphics()

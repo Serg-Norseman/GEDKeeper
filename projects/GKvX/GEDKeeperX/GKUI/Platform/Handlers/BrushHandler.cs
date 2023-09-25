@@ -20,19 +20,20 @@
 
 using BSLib;
 using GKCore.Design.Graphics;
-using Xamarin.Forms;
+using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using IBrush = GKCore.Design.Graphics.IBrush;
 
 namespace GKUI.Components
 {
-    public sealed class BrushHandler : TypeHandler<Brush>, IBrush
+    public sealed class BrushHandler : TypeHandler<SKPaint>, IBrush
     {
         public IColor Color
         {
-            get { return UIHelper.ConvertColor(((SolidColorBrush)Handle).Color); }
+            get { return UIHelper.ConvertColor(((SKPaint)Handle).Color.ToFormsColor()); }
         }
 
-        public BrushHandler(Brush handle) : base(handle)
+        public BrushHandler(SKPaint handle) : base(handle)
         {
         }
     }

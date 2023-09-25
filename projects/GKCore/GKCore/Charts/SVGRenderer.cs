@@ -154,32 +154,6 @@ namespace GKCore.Charts
             }
         }
 
-        public override void FillPath(IBrush brush, IGfxPath path)
-        {
-            if (fGfx != null) {
-                if (path is IGfxCirclePath) {
-                    var circlePath = (IGfxCirclePath)path;
-                    fGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, null /*pen*/, brush);
-                } else if (path is IGfxCircleSegmentPath) {
-                    var segmPath = (IGfxCircleSegmentPath)path;
-                    fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, null /*pen*/, brush);
-                }
-            }
-        }
-
-        public override void DrawPath(IPen pen, IGfxPath path)
-        {
-            if (fGfx != null) {
-                if (path is IGfxCirclePath) {
-                    var circlePath = (IGfxCirclePath)path;
-                    fGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, null /*brush*/);
-                } else if (path is IGfxCircleSegmentPath) {
-                    var segmPath = (IGfxCircleSegmentPath)path;
-                    fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, null /*brush*/);
-                }
-            }
-        }
-
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
         {
             if (fGfx != null) {
@@ -191,6 +165,16 @@ namespace GKCore.Charts
                     fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, brush);
                 }
             }
+        }
+
+        public override IGfxPath CreateCirclePath(float x, float y, float width, float height)
+        {
+            return null;
+        }
+
+        public override IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
+        {
+            return null;
         }
 
         public override void SetTranslucent(float value)
@@ -219,13 +203,6 @@ namespace GKCore.Charts
         {
             if (fGfx != null) {
                 fGfx.Rotate(angle);
-            }
-        }
-
-        public override void ResetTransform()
-        {
-            if (fGfx != null) {
-                fGfx.ResetState();
             }
         }
 

@@ -25,6 +25,8 @@ using GKCore.Charts;
 using GKCore.Design.Graphics;
 using GKUI.Components;
 using SkiaSharp;
+using SkiaSharp.Views.Forms;
+using Xamarin.Forms;
 
 namespace GKUI.Platform
 {
@@ -91,152 +93,86 @@ namespace GKUI.Platform
 
         public override ExtSizeF GetTextSize(string text, IFont font)
         {
-            /*if (string.IsNullOrEmpty(text) || font == null)
+            if (string.IsNullOrEmpty(text) || font == null)
                 return ExtSizeF.Empty;
 
-            Font sdFnt = ((FontHandler)font).Handle;
-            var size = sdFnt.MeasureString(text);
-            return new ExtSizeF(size.Width, size.Height);*/
-            return ExtSizeF.Empty;
+            var skPaint = ((FontHandler)font).Handle;
+            var width = skPaint.MeasureText(text);
+            return new ExtSizeF(width, skPaint.TextSize);
         }
 
         public override void DrawString(string text, IFont font, IBrush brush, float x, float y)
         {
-            /*SolidBrush sdBrush = (SolidBrush)((BrushHandler)brush).Handle;
-            Font sdFnt = ((FontHandler)font).Handle;
+            var color = (brush != null) ? ((BrushHandler)brush).Handle.Color.ToFormsColor() : Color.Black;
 
-            fCanvas.DrawText(sdFnt, sdBrush, x, y, text);*/
+            var skPaint = ((FontHandler)font).Handle;
+            skPaint.IsAntialias = fAntiAlias;
+            skPaint.Color = color.ToSKColor();
+            fCanvas.DrawText(text, x, y, skPaint);
         }
 
         public override void DrawLine(IPen pen, float x1, float y1, float x2, float y2)
         {
-            /*Pen sdPen = ((PenHandler)pen).Handle;
-
-            fCanvas.DrawLine(sdPen, x1, y1, x2, y2);*/
-        }
-
-        private static SKPath CreateRectangle(float x, float y, float width, float height)
-        {
-            float xw = x + width;
-            float yh = y + height;
-
-            var p = new SKPath();
-            p.Reset();
-            p.AddRect(new SKRect(x, y, xw, yh));
-
-            /*p.MoveTo(x, y);
-            p.LineTo(xw, y); // Top Edge
-            p.LineTo(xw, yh); // Right Edge
-            p.LineTo(x, yh); // Bottom Edge
-            p.LineTo(x, y); // Left Edge*/
-
-            p.Close();
-            return p;
+            if (pen != null) {
+                var skPaint = ((PenHandler)pen).Handle;
+                fCanvas.DrawLine(x1, y1, x2, y2, skPaint);
+            }
         }
 
         public override void DrawRectangle(IPen pen, IColor fillColor,
                                            float x, float y, float width, float height)
         {
-            /*Color sdFillColor = (fillColor == null) ? Color.Transparent : ((ColorHandler)fillColor).Handle;
+            if (fillColor != null) {
+                var skPaint = new SKPaint();
+                skPaint.Color = ((ColorHandler)fillColor).Handle.ToSKColor();
+                skPaint.Style = SKPaintStyle.Fill;
+                fCanvas.DrawRect(x, y, width, height, skPaint);
+            }
 
-            using (var path = CreateRectangle(x, y, width, height)) {
-                if (sdFillColor != Color.Transparent) {
-                    sdFillColor = PrepareColor(sdFillColor);
-
-                    fCanvas.FillPath(new SolidBrush(sdFillColor), path);
-                }
-
-                if (pen != null) {
-                    Pen sdPen = ((PenHandler)pen).Handle;
-                    fCanvas.DrawPath(sdPen, path);
-                }
-            }*/
+            if (pen != null) {
+                var skPaint = ((PenHandler)pen).Handle;
+                fCanvas.DrawRect(x, y, width, height, skPaint);
+            }
         }
 
         public override void FillRectangle(IBrush brush,
                                            float x, float y, float width, float height)
         {
-            /*if (brush != null) {
-                Brush sdBrush = ((BrushHandler)brush).Handle;
-                fCanvas.FillRectangle(sdBrush, x, y, width, height);
-            }*/
-        }
-
-        private static SKPath CreateRoundedRectangle(float x, float y, float width, float height, float radius)
-        {
-            float xw = x + width;
-            float yh = y + height;
-            float xwr = xw - radius;
-            float yhr = yh - radius;
-            float xr = x + radius;
-            float yr = y + radius;
-            float r2 = radius * 2;
-            float xwr2 = xw - r2;
-            float yhr2 = yh - r2;
-
-            var p = new SKPath();
-            p.Reset();
-            p.AddRoundRect(new SKRoundRect(new SKRect(x, y, xw, yh), radius));
-
-            /*p.AddArc(x, y, r2, r2, 180, 90); // Top Left Corner
-            p.AddLine(xr, y, xwr, y); // Top Edge
-            p.AddArc(xwr2, y, r2, r2, 270, 90); // Top Right Corner
-            p.AddLine(xw, yr, xw, yhr); // Right Edge
-            p.AddArc(xwr2, yhr2, r2, r2, 0, 90); // Bottom Right Corner
-            p.AddLine(xwr, yh, xr, yh); // Bottom Edge
-            p.AddArc(x, yhr2, r2, r2, 90, 90); // Bottom Left Corner
-            p.AddLine(x, yhr, x, yr); // Left Edge*/
-
-            p.Close();
-            return p;
+            if (brush != null) {
+                var skPaint = ((BrushHandler)brush).Handle;
+                skPaint.Style = SKPaintStyle.Fill;
+                fCanvas.DrawRect(x, y, width, height, skPaint);
+            }
         }
 
         public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
                                                   float width, float height, float radius)
         {
-            /*Color sdFillColor = ((ColorHandler)fillColor).Handle;
+            if (fillColor != null) {
+                var skPaint = new SKPaint();
+                skPaint.Color = ((ColorHandler)fillColor).Handle.ToSKColor();
+                skPaint.Style = SKPaintStyle.Fill;
+                fCanvas.DrawRoundRect(x, y, width, height, radius, radius, skPaint);
+            }
 
-            using (var path = CreateRoundedRectangle(x, y, width, height, radius)) {
-                if (sdFillColor != Color.Transparent) {
-                    sdFillColor = PrepareColor(sdFillColor);
-
-                    fCanvas.FillPath(new SolidBrush(sdFillColor), path);
-                }
-
-                if (pen != null) {
-                    Pen sdPen = ((PenHandler)pen).Handle;
-                    fCanvas.DrawPath(sdPen, path);
-                }
-            }*/
-        }
-
-        public override void FillPath(IBrush brush, IGfxPath path)
-        {
-            /*Brush sdBrush = ((BrushHandler)brush).Handle;
-            var sdPath = ((GfxPathHandler)path).Handle;
-            fCanvas.FillPath(sdBrush, sdPath);*/
-        }
-
-        public override void DrawPath(IPen pen, IGfxPath path)
-        {
-            /*Pen sdPen = ((PenHandler)pen).Handle;
-            var sdPath = ((GfxPathHandler)path).Handle;
-            fCanvas.DrawPath(sdPen, sdPath);*/
+            if (pen != null) {
+                var skPaint = ((PenHandler)pen).Handle;
+                fCanvas.DrawRoundRect(x, y, width, height, radius, radius, skPaint);
+            }
         }
 
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
         {
-            /*var sdPath = ((GfxPathHandler)path).Handle;
-
             if (brush != null) {
-                Brush sdBrush = ((BrushHandler)brush).Handle;
-                fCanvas.FillPath(sdBrush, sdPath);
+                var skPaint = ((BrushHandler)brush).Handle;
+                skPaint.Style = SKPaintStyle.Fill;
+                fCanvas.DrawPath(((GfxPathHandler)path).Handle, skPaint);
             }
 
             if (pen != null) {
-                Pen sdPen = ((PenHandler)pen).Handle;
-                fCanvas.DrawPath(sdPen, sdPath);
-            }*/
+                var skPaint = ((PenHandler)pen).Handle;
+                fCanvas.DrawPath(((GfxPathHandler)path).Handle, skPaint);
+            }
         }
 
         /*private SKColor PrepareColor(Color color)
@@ -247,30 +183,64 @@ namespace GKUI.Platform
 
         public override IPen CreatePen(IColor color, float width, float[] dashPattern = null)
         {
-            /*Color sdColor = ((ColorHandler)color).Handle;
-            sdColor = PrepareColor(sdColor);
+            Color xfColor = ((ColorHandler)color).Handle;
+            //sdColor = PrepareColor(sdColor);
+            var skPaint = new SKPaint();
+            skPaint.Color = xfColor.ToSKColor();
+            skPaint.StrokeWidth = width;
+            skPaint.Style = SKPaintStyle.Stroke;
+            skPaint.IsAntialias = fAntiAlias;
 
-            var etoPen = new Pen(sdColor, width);
             if (dashPattern != null) {
-                etoPen.DashStyle = new DashStyle(0, dashPattern);
+                skPaint.PathEffect = SKPathEffect.CreateDash(dashPattern, 0);
             }
 
-            return new PenHandler(etoPen);*/
-            return null;
+            return new PenHandler(skPaint);
         }
 
-        public override IBrush CreateSolidBrush(IColor color)
+        public override IBrush CreateBrush(IColor color)
         {
-            /*Color sdColor = ((ColorHandler)color).Handle;
-            sdColor = PrepareColor(sdColor);
+            Color xfColor = ((ColorHandler)color).Handle;
+            //sdColor = PrepareColor(sdColor);
+            var skPaint = new SKPaint();
+            skPaint.Color = xfColor.ToSKColor();
+            skPaint.Style = SKPaintStyle.Fill;
+            skPaint.IsAntialias = fAntiAlias;
 
-            return new BrushHandler(new SolidBrush(sdColor));*/
-            return null;
+            return new BrushHandler(skPaint);
         }
 
-        public override IGfxPath CreatePath()
+        public override IGfxPath CreateCirclePath(float x, float y, float width, float height)
         {
-            return new GfxPathHandler(new SKPath());
+            var path = new SKPath();
+            var result = new GfxCirclePathHandler(path);
+
+            result.X = x;
+            result.Y = y;
+            result.Width = width;
+            result.Height = height;
+
+            path.Reset();
+            path.AddOval(new SKRect(x, y, width, height));
+            path.Close();
+
+            return result;
+        }
+
+        public override IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
+        {
+            var path = new SKPath();
+            var result = new GfxCircleSegmentPathHandler(path);
+
+            result.InRad = inRad;
+            result.ExtRad = extRad;
+            result.WedgeAngle = wedgeAngle;
+            result.Ang1 = ang1;
+            result.Ang2 = ang2;
+
+            //UIHelper.CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
+
+            return result;
         }
 
         public override void SetTranslucent(float value)
@@ -291,11 +261,6 @@ namespace GKUI.Platform
         public override void RotateTransform(float angle)
         {
             fCanvas.RotateDegrees(angle);
-        }
-
-        public override void ResetTransform()
-        {
-            // unsupported in Eto
         }
 
         public override void RestoreTransform()

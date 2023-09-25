@@ -160,94 +160,6 @@ namespace GKUI.Platform
             ((Bitmap)((ImageHandler)image).Handle).Save(fileName, ImageFormat.Bitmap);
         }
 
-        public IGfxPath CreatePath()
-        {
-            return new GfxPathHandler(new GraphicsPath());
-        }
-
-        public IGfxPath CreateCirclePath(float x, float y, float width, float height)
-        {
-            var path = new GraphicsPath();
-            var result = new GfxCirclePathHandler(path);
-
-            result.X = x;
-            result.Y = y;
-            result.Width = width;
-            result.Height = height;
-
-            path.StartFigure();
-            path.AddEllipse(x, y, width, height);
-            path.CloseFigure();
-
-            return result;
-        }
-
-        public IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
-        {
-            var path = new GraphicsPath();
-            var result = new GfxCircleSegmentPathHandler(path);
-
-            result.InRad = inRad;
-            result.ExtRad = extRad;
-            result.WedgeAngle = wedgeAngle;
-            result.Ang1 = ang1;
-            result.Ang2 = ang2;
-
-            CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
-
-            return result;
-        }
-
-        public IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
-            float ang1, float ang2)
-        {
-            var path = new GraphicsPath();
-            var result = new GfxCircleSegmentPathHandler(path);
-
-            result.InRad = inRad;
-            result.ExtRad = extRad;
-            result.WedgeAngle = wedgeAngle;
-            result.Ang1 = ang1;
-            result.Ang2 = ang2;
-
-            CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
-
-            return result;
-        }
-
-        private static void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
-                                               float inRad, float extRad, float wedgeAngle,
-                                               float ang1, float ang2)
-        {
-            float angCos, angSin;
-
-            float angval1 = (float)(ang1 * Math.PI / 180.0f);
-            angCos = (float)Math.Cos(angval1);
-            angSin = (float)Math.Sin(angval1);
-            float px1 = ctX + (inRad * angCos);
-            float py1 = ctY + (inRad * angSin);
-            float px2 = ctX + (extRad * angCos);
-            float py2 = ctY + (extRad * angSin);
-
-            float angval2 = (float)(ang2 * Math.PI / 180.0f);
-            angCos = (float)Math.Cos(angval2);
-            angSin = (float)Math.Sin(angval2);
-            float nx1 = ctX + (inRad * angCos);
-            float ny1 = ctY + (inRad * angSin);
-            float nx2 = ctX + (extRad * angCos);
-            float ny2 = ctY + (extRad * angSin);
-
-            float ir2 = inRad * 2.0f;
-            float er2 = extRad * 2.0f;
-
-            path.StartFigure();
-            path.AddLine(px2, py2, px1, py1);
-            if (ir2 > 0) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
-            path.AddLine(nx1, ny1, nx2, ny2);
-            path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
-            path.CloseFigure();
-        }
-
         public IFont CreateFont(string fontName, float size, bool bold)
         {
             FontStyle style = (!bold) ? FontStyle.None : FontStyle.Bold;
@@ -274,18 +186,12 @@ namespace GKUI.Platform
             return new ColorHandler(color);
         }
 
-        public IColor CreateColor(int a, int r, int g, int b)
-        {
-            Color color = Color.FromArgb(r, g, b, a);
-            return new ColorHandler(color);
-        }
-
         public IColor CreateColor(string signature)
         {
             return null;
         }
 
-        public IBrush CreateSolidBrush(IColor color)
+        public IBrush CreateBrush(IColor color)
         {
             Color sdColor = ((ColorHandler)color).Handle;
 

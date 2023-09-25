@@ -19,6 +19,7 @@
  */
 
 using Eto.Forms;
+using GKCore;
 using GKCore.Design.Controls;
 using GKUI.Components;
 
@@ -78,7 +79,7 @@ namespace GKUI.Platform.Handlers
 
         public void Copy()
         {
-            UIHelper.SetClipboardText(Control.SelectedText);
+            AppHost.Instance.SetClipboardText(Control.SelectedText);
         }
 
         public void SelectAll()

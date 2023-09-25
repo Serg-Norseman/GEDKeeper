@@ -27,6 +27,8 @@ using Xamarin.Forms;
 using IBrush = GKCore.Design.Graphics.IBrush;
 using IImage = GKCore.Design.Graphics.IImage;
 using IPen = GKCore.Design.Graphics.IPen;
+using SkiaSharp;
+using SkiaSharp.Views.Forms;
 
 namespace GKUI.Platform
 {
@@ -107,71 +109,12 @@ namespace GKUI.Platform
             throw new NotImplementedException();
         }
 
-        public IGfxPath CreatePath()
-        {
-            //return new GfxPathHandler(new GraphicsPath());
-            throw new NotImplementedException();
-        }
-
-        public IGfxPath CreateCirclePath(float x, float y, float width, float height)
-        {
-            /*var path = new GraphicsPath();
-            var result = new GfxCirclePathHandler(path);
-
-            result.X = x;
-            result.Y = y;
-            result.Width = width;
-            result.Height = height;
-
-            path.StartFigure();
-            path.AddEllipse(x, y, width, height);
-            path.CloseFigure();
-
-            return result;*/
-            throw new NotImplementedException();
-        }
-
-        public IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
-        {
-            /*var path = new GraphicsPath();
-            var result = new GfxCircleSegmentPathHandler(path);
-
-            result.InRad = inRad;
-            result.ExtRad = extRad;
-            result.WedgeAngle = wedgeAngle;
-            result.Ang1 = ang1;
-            result.Ang2 = ang2;
-
-            UIHelper.CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
-
-            return result;*/
-            throw new NotImplementedException();
-        }
-
-        public IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
-            float ang1, float ang2)
-        {
-            /*var path = new GraphicsPath();
-            var result = new GfxCircleSegmentPathHandler(path);
-
-            result.InRad = inRad;
-            result.ExtRad = extRad;
-            result.WedgeAngle = wedgeAngle;
-            result.Ang1 = ang1;
-            result.Ang2 = ang2;
-
-            UIHelper.CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
-
-            return result;*/
-            throw new NotImplementedException();
-        }
-
         public IFont CreateFont(string fontName, float size, bool bold)
         {
-            /*FontStyle style = (!bold) ? FontStyle.Regular : FontStyle.Bold;
-            var sdFont = new Font(fontName, size, style, GraphicsUnit.Point);
-            return new FontHandler(sdFont);*/
-            throw new NotImplementedException();
+            var skFont = new SKFont(SKTypeface.FromFamilyName(fontName), size);
+            skFont.Embolden = bold;
+            SKPaint pt = new SKPaint(skFont);
+            return new FontHandler(pt);
         }
 
         public IColor CreateColor(int argb)
@@ -189,18 +132,12 @@ namespace GKUI.Platform
             return new ColorHandler(color);
         }
 
-        public IColor CreateColor(int a, int r, int g, int b)
-        {
-            Color color = Color.FromRgba((byte)r, (byte)g, (byte)b, (byte)a);
-            return new ColorHandler(color);
-        }
-
         public IColor CreateColor(string signature)
         {
             return null;
         }
 
-        public IBrush CreateSolidBrush(IColor color)
+        public IBrush CreateBrush(IColor color)
         {
             //Color sdColor = ((ColorHandler)color).Handle;
             //return new BrushHandler(new SolidBrush(sdColor));
@@ -209,9 +146,12 @@ namespace GKUI.Platform
 
         public IPen CreatePen(IColor color, float width)
         {
-            //Color sdColor = ((ColorHandler)color).Handle;
-            //return new PenHandler(new Pen(sdColor, width));
-            throw new NotImplementedException();
+            Color xfColor = ((ColorHandler)color).Handle;
+            var skPaint = new SKPaint();
+            skPaint.Color = xfColor.ToSKColor();
+            skPaint.StrokeWidth = width;
+            skPaint.Style = SKPaintStyle.Stroke;
+            return new PenHandler(skPaint);
         }
 
         public ExtSizeF GetTextSize(string text, IFont font, object target)

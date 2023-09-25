@@ -77,16 +77,13 @@ namespace GKCore.Charts
             return AppHost.GfxProvider.CreateColor(argb);
         }
 
-        public static IColor GetColor(int r, int g, int b)
-        {
-            return AppHost.GfxProvider.CreateColor(r, g, b);
-        }
-
 
         public abstract void SetTarget(object target);
 
         public void DrawImage(IImage image, float x, float y, string imName)
         {
+            if (image == null) return;
+
             DrawImage(image, x, y, image.Width, image.Height, imName);
         }
 
@@ -132,9 +129,6 @@ namespace GKCore.Charts
         public abstract void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
                                                   float width, float height, float radius);
 
-        public abstract void FillPath(IBrush brush, IGfxPath path);
-
-        public abstract void DrawPath(IPen pen, IGfxPath path);
         public abstract void DrawPath(IPen pen, IBrush brush, IGfxPath path);
 
         public virtual IPen CreatePen(IColor color, float width, float[] dashPattern = null)
@@ -148,21 +142,13 @@ namespace GKCore.Charts
             return AppHost.GfxProvider.CreatePen(color, width);
         }
 
-        public virtual IBrush CreateSolidBrush(IColor color)
+        public virtual IBrush CreateBrush(IColor color)
         {
-            return AppHost.GfxProvider.CreateSolidBrush(color);
+            return AppHost.GfxProvider.CreateBrush(color);
         }
 
-        public IBrush CreateSolidBrush(int argb)
-        {
-            IColor color = GetColor(argb);
-            return CreateSolidBrush(color);
-        }
-
-        public virtual IGfxPath CreatePath()
-        {
-            return AppHost.GfxProvider.CreatePath();
-        }
+        public abstract IGfxPath CreateCirclePath(float x, float y, float width, float height);
+        public abstract IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2);
 
         public abstract void SetTranslucent(float value);
 
@@ -170,7 +156,6 @@ namespace GKCore.Charts
         public abstract void TranslateTransform(float dx, float dy);
         public abstract void RotateTransform(float angle);
 
-        public abstract void ResetTransform();
         public abstract void RestoreTransform();
         public abstract void SaveTransform();
 

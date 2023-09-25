@@ -57,7 +57,7 @@ namespace GKCore.Charts
         {
             var gfxProv = AppHost.GfxProvider;
             fCtlPen = gfxProv.CreatePen(gfxProv.CreateColor(BSDColors.Black), 2.0f);
-            fCtlBrush = gfxProv.CreateSolidBrush(gfxProv.CreateColor(128, 128, 128, 128));
+            fCtlBrush = gfxProv.CreateBrush(gfxProv.CreateColor(BSDColors.Gray));
         }
 
         protected override void Dispose(bool disposing)

@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using BSLib.DataViz.ArborGVT;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {
@@ -183,7 +184,7 @@ namespace GKUI.Components
                         ArborPoint head = (tail.IsNull()) ? ArborPoint.Null : intersect_line_box(tail, pt2, tgtNode.Box);
 
                         if (!head.IsNull() && !tail.IsNull()) {
-                            UIHelper.DrawArrowLine(gfx, Color.Gray, grayPen, (float)tail.X, (float)tail.Y, (float)head.X, (float)head.Y);
+                            WFGfxRenderer.DrawArrowLine(gfx, Color.Gray, grayPen, (float)tail.X, (float)tail.Y, (float)head.X, (float)head.Y);
                         }
                     }
                 }

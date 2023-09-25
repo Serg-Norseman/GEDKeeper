@@ -451,7 +451,8 @@ namespace GKUI.Components
                 fRenderer.DrawRectangle(null, backColor, 0, 0, fModel.ImageWidth, fModel.ImageHeight);
             }
 
-            fRenderer.ResetTransform();
+            fRenderer.SaveTransform();
+
             fRenderer.TranslateTransform(center.X, center.Y);
 
             if (target == RenderTarget.Screen) {
@@ -469,6 +470,8 @@ namespace GKUI.Components
                     fModel.DrawDescendants();
                     break;
             }
+
+            fRenderer.RestoreTransform();
         }
     }
 }

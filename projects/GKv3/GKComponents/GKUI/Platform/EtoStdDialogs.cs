@@ -103,7 +103,7 @@ namespace GKUI.Platform
                 ofd.Directory = new Uri(context);
 
             if (!string.IsNullOrEmpty(filter)) {
-                UIHelper.ConvertFileDialogFilters(ofd, filter);
+                ConvertFileDialogFilters(ofd, filter);
                 if (filterIndex > 0) ofd.CurrentFilterIndex = filterIndex - 1;
             }
 
@@ -154,7 +154,7 @@ namespace GKUI.Platform
                 sfd.Directory = new Uri(context);
 
             if (!string.IsNullOrEmpty(filter)) {
-                UIHelper.ConvertFileDialogFilters(sfd, filter);
+                ConvertFileDialogFilters(sfd, filter);
 
                 if (filterIndex > 0) sfd.CurrentFilterIndex = filterIndex - 1;
             }
@@ -163,6 +163,30 @@ namespace GKUI.Platform
                 sfd.FileName = suggestedFileName;
 
             return sfd;
+        }
+
+        private static void ConvertFileDialogFilters(FileDialog fileDlg, string filter)
+        {
+            if (fileDlg == null)
+                throw new ArgumentNullException("fileDlg");
+
+            var filterParts = filter.Split('|');
+            int filtersNum = filterParts.Length / 2;
+            for (int i = 0; i < filtersNum; i++) {
+                int idx = i * 2;
+                string name = filterParts[idx];
+                string exts = filterParts[idx + 1];
+
+                string[] extensions = exts.Split(new char[] { ',', ';' });
+                for (int k = 0; k < extensions.Length; k++) {
+                    string ext = extensions[k];
+                    if (ext.Length > 0 && ext[0] == '*') {
+                        extensions[k] = ext.Substring(1);
+                    }
+                }
+
+                fileDlg.Filters.Add(new FileFilter(name, extensions));
+            }
         }
 
 

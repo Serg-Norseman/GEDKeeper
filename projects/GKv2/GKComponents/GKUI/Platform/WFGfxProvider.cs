@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -41,6 +41,42 @@ namespace GKUI.Platform
         {
         }
 
+        private static void NormalizeOrientation(Image image)
+        {
+            const int ExifOrientationTagId = 274;
+
+            if (image == null || Array.IndexOf(image.PropertyIdList, ExifOrientationTagId) < 0) return;
+
+            int orientation = image.GetPropertyItem(ExifOrientationTagId).Value[0];
+            if (orientation >= 1 && orientation <= 8) {
+                switch (orientation) {
+                    case 2:
+                        image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        break;
+                    case 3:
+                        image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                        break;
+                    case 4:
+                        image.RotateFlip(RotateFlipType.Rotate180FlipX);
+                        break;
+                    case 5:
+                        image.RotateFlip(RotateFlipType.Rotate90FlipX);
+                        break;
+                    case 6:
+                        image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        break;
+                    case 7:
+                        image.RotateFlip(RotateFlipType.Rotate270FlipX);
+                        break;
+                    case 8:
+                        image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                        break;
+                }
+
+                image.RemovePropertyItem(ExifOrientationTagId);
+            }
+        }
+
         public Stream CheckOrientation(Stream inputStream)
         {
             Stream transformStream;
@@ -60,7 +96,7 @@ namespace GKUI.Platform
 
                 transformStream = new MemoryStream();
                 using (var bmp = new Bitmap(inputStream)) {
-                    UIHelper.NormalizeOrientation(bmp);
+                    NormalizeOrientation(bmp);
                     bmp.Save(transformStream, ImageFormat.Bmp);
                 }
             } else {
@@ -189,94 +225,6 @@ namespace GKUI.Platform
             ((ImageHandler)image).Handle.Save(fileName, ImageFormat.Bmp);
         }
 
-        public IGfxPath CreatePath()
-        {
-            return new GfxPathHandler(new GraphicsPath());
-        }
-
-        public IGfxPath CreateCirclePath(float x, float y, float width, float height)
-        {
-            var path = new GraphicsPath();
-            var result = new GfxCirclePathHandler(path);
-
-            result.X = x;
-            result.Y = y;
-            result.Width = width;
-            result.Height = height;
-
-            path.StartFigure();
-            path.AddEllipse(x, y, width, height);
-            path.CloseFigure();
-
-            return result;
-        }
-
-        public IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
-        {
-            var path = new GraphicsPath();
-            var result = new GfxCircleSegmentPathHandler(path);
-
-            result.InRad = inRad;
-            result.ExtRad = extRad;
-            result.WedgeAngle = wedgeAngle;
-            result.Ang1 = ang1;
-            result.Ang2 = ang2;
-
-            CreateCircleSegment(path, 0, 0, inRad, extRad, wedgeAngle, ang1, ang2);
-
-            return result;
-        }
-
-        public IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
-            float ang1, float ang2)
-        {
-            var path = new GraphicsPath();
-            var result = new GfxCircleSegmentPathHandler(path);
-
-            result.InRad = inRad;
-            result.ExtRad = extRad;
-            result.WedgeAngle = wedgeAngle;
-            result.Ang1 = ang1;
-            result.Ang2 = ang2;
-
-            CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
-
-            return result;
-        }
-
-        private static void CreateCircleSegment(GraphicsPath path, int ctX, int ctY,
-                                               float inRad, float extRad, float wedgeAngle,
-                                               float ang1, float ang2)
-        {
-            float angCos, angSin;
-
-            float angval1 = (float)(ang1 * Math.PI / 180.0f);
-            angCos = (float)Math.Cos(angval1);
-            angSin = (float)Math.Sin(angval1);
-            float px1 = ctX + (inRad * angCos);
-            float py1 = ctY + (inRad * angSin);
-            float px2 = ctX + (extRad * angCos);
-            float py2 = ctY + (extRad * angSin);
-
-            float angval2 = (float)(ang2 * Math.PI / 180.0f);
-            angCos = (float)Math.Cos(angval2);
-            angSin = (float)Math.Sin(angval2);
-            float nx1 = ctX + (inRad * angCos);
-            float ny1 = ctY + (inRad * angSin);
-            float nx2 = ctX + (extRad * angCos);
-            float ny2 = ctY + (extRad * angSin);
-
-            float ir2 = inRad * 2.0f;
-            float er2 = extRad * 2.0f;
-
-            path.StartFigure();
-            path.AddLine(px2, py2, px1, py1);
-            if (ir2 > 0) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
-            path.AddLine(nx1, ny1, nx2, ny2);
-            path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
-            path.CloseFigure();
-        }
-
         public IFont CreateFont(string fontName, float size, bool bold)
         {
             FontStyle style = (!bold) ? FontStyle.Regular : FontStyle.Bold;
@@ -286,9 +234,6 @@ namespace GKUI.Platform
 
         public IColor CreateColor(int argb)
         {
-            // FIXME: Dirty hack!
-            //argb = (int)unchecked((long)argb & (long)((ulong)-1));
-            //argb = (int)unchecked((ulong)argb & (uint)0xFF000000);
             int red = (argb >> 16) & 0xFF;
             int green = (argb >> 8) & 0xFF;
             int blue = (argb >> 0) & 0xFF;
@@ -303,18 +248,12 @@ namespace GKUI.Platform
             return new ColorHandler(color);
         }
 
-        public IColor CreateColor(int a, int r, int g, int b)
-        {
-            Color color = Color.FromArgb(a, r, g, b);
-            return new ColorHandler(color);
-        }
-
         public IColor CreateColor(string signature)
         {
             return null;
         }
 
-        public IBrush CreateSolidBrush(IColor color)
+        public IBrush CreateBrush(IColor color)
         {
             Color sdColor = ((ColorHandler)color).Handle;
 

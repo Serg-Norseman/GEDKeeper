@@ -417,25 +417,8 @@ namespace GKUI.Platform
 
         public override void SetClipboardText(string text)
         {
-            UIHelper.SetClipboardText(text);
+            Clipboard.SetDataObject(text);
         }
-
-        /*public override void SetClipboardObject(string objTypeName, string objContent)
-        {
-            DataFormats.Format format = DataFormats.GetFormat(objTypeName);
-            IDataObject dataObj = new DataObject();
-            dataObj.SetData(format.Name, false, objContent);
-            Clipboard.SetDataObject(dataObj, false);
-        }*/
-
-        /*public override string GetClipboardObject(string objTypeName)
-        {
-            IDataObject dataObj = Clipboard.GetDataObject();
-            if (dataObj.GetDataPresent(objTypeName)) {
-                return dataObj.GetData(objTypeName) as string;
-            }
-            return string.Empty;
-        }*/
 
         #endregion
 

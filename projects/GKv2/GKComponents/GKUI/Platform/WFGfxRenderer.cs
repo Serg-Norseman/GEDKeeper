@@ -218,20 +218,6 @@ namespace GKUI.Platform
             }
         }
 
-        public override void FillPath(IBrush brush, IGfxPath path)
-        {
-            Brush sdBrush = ((BrushHandler)brush).Handle;
-            GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
-            fCanvas.FillPath(sdBrush, sdPath);
-        }
-
-        public override void DrawPath(IPen pen, IGfxPath path)
-        {
-            Pen sdPen = ((PenHandler)pen).Handle;
-            GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
-            fCanvas.DrawPath(sdPen, sdPath);
-        }
-
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
         {
             GraphicsPath sdPath = ((GfxPathHandler)path).Handle;
@@ -266,12 +252,71 @@ namespace GKUI.Platform
             return new PenHandler(wfPen);
         }
 
-        public override IBrush CreateSolidBrush(IColor color)
+        public override IBrush CreateBrush(IColor color)
         {
             Color sdColor = ((ColorHandler)color).Handle;
             sdColor = PrepareColor(sdColor);
 
             return new BrushHandler(new SolidBrush(sdColor));
+        }
+
+        public override IGfxPath CreateCirclePath(float x, float y, float width, float height)
+        {
+            var path = new GraphicsPath();
+            var result = new GfxCirclePathHandler(path);
+
+            result.X = x;
+            result.Y = y;
+            result.Width = width;
+            result.Height = height;
+
+            path.StartFigure();
+            path.AddEllipse(x, y, width, height);
+            path.CloseFigure();
+
+            return result;
+        }
+
+        public override IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
+        {
+            var path = new GraphicsPath();
+            var result = new GfxCircleSegmentPathHandler(path);
+
+            result.InRad = inRad;
+            result.ExtRad = extRad;
+            result.WedgeAngle = wedgeAngle;
+            result.Ang1 = ang1;
+            result.Ang2 = ang2;
+
+            float angCos, angSin;
+
+            float angval1 = (float)(ang1 * Math.PI / 180.0f);
+            angCos = (float)Math.Cos(angval1);
+            angSin = (float)Math.Sin(angval1);
+            float px1 = ctX + (inRad * angCos);
+            float py1 = ctY + (inRad * angSin);
+            float px2 = ctX + (extRad * angCos);
+            float py2 = ctY + (extRad * angSin);
+
+            float angval2 = (float)(ang2 * Math.PI / 180.0f);
+            angCos = (float)Math.Cos(angval2);
+            angSin = (float)Math.Sin(angval2);
+            float nx1 = ctX + (inRad * angCos);
+            float ny1 = ctY + (inRad * angSin);
+            float nx2 = ctX + (extRad * angCos);
+            float ny2 = ctY + (extRad * angSin);
+
+            float ir2 = inRad * 2.0f;
+            float er2 = extRad * 2.0f;
+
+            path.StartFigure();
+            path.AddLine(px2, py2, px1, py1);
+            if (ir2 > 0) path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
+            path.AddLine(nx1, ny1, nx2, ny2);
+            path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
+            path.CloseFigure();
+
+            return result;
         }
 
         public override void SetTranslucent(float value)
@@ -315,24 +360,46 @@ namespace GKUI.Platform
             fCanvas.Transform = m;
         }
 
-        public override void ResetTransform()
-        {
-            fCanvas.ResetTransform();
-            fTransforms.Push(fCanvas.Transform);
-        }
-
         public override void RestoreTransform()
         {
             if (fTransforms.Count > 1) {
                 fCanvas.Transform = fTransforms.Pop();
-            } else {
-                ResetTransform();
             }
         }
 
         public override void SaveTransform()
         {
             fTransforms.Push(fCanvas.Transform);
+        }
+
+        public static void DrawArrowLine(Graphics gfx, Color fillColor, Pen pen, float x1, float y1, float x2, float y2, int arrLength = 8)
+        {
+            gfx.DrawLine(pen, x1, y1, x2, y2);
+
+            var m = x2 - x1 == 0 ? 0 : (y2 - y1) / (x2 - x1);
+            var degree = Math.Atan(m);
+            var toLeft = x2 > x1 ? 0 : Math.PI;
+
+            var degree1 = degree + 5 * Math.PI / 6 + toLeft;
+            var degree2 = degree + 7 * Math.PI / 6 + toLeft;
+
+            var px1 = x2 + (float)Math.Cos(degree1) * arrLength;
+            var py1 = y2 + (float)Math.Sin(degree1) * arrLength;
+
+            var px2 = x2 + (float)Math.Cos(degree2) * arrLength;
+            var py2 = y2 + (float)Math.Sin(degree2) * arrLength;
+
+            var mp1 = new PointF(x2, y2);
+            var mp2 = new PointF(px1, py1);
+            var mp3 = new PointF(px2, py2);
+
+            using (var brush = new SolidBrush(fillColor)) {
+                GraphicsPath path = new GraphicsPath();
+                path.AddLine(mp1, mp2);
+                path.AddLine(mp2, mp3);
+                path.AddLine(mp3, mp1);
+                gfx.FillPath(brush, path);
+            }
         }
     }
 }

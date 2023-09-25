@@ -78,7 +78,7 @@ namespace GKCalculatorPlugin
                     res = fCalc.Calc(edExpression.Text).ToString();
 
                     if (chkPutToClipboard.Checked.Value) {
-                        UIHelper.SetClipboardText(res);
+                        AppHost.Instance.SetClipboardText(res);
                     }
 
                     if (chkEventsYearCalculation.Checked.Value) {

@@ -459,7 +459,9 @@ namespace GKUI.Platform
 
         public override void SetClipboardText(string text)
         {
-            UIHelper.SetClipboardText(text);
+            using (var clipboard = new Clipboard()) {
+                clipboard.Text = text;
+            }
         }
 
         #endregion

@@ -24,6 +24,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Interfaces;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {
@@ -181,7 +182,7 @@ namespace GKUI.Components
                         ArborPoint head = (tail.IsNull()) ? ArborPoint.Null : intersect_line_box(tail, pt2, tgtNode.Box);
 
                         if (!head.IsNull() && !tail.IsNull()) {
-                            UIHelper.DrawArrowLine(gfx, Colors.Gray, grayPen, (float)tail.X, (float)tail.Y, (float)head.X, (float)head.Y);
+                            EtoGfxRenderer.DrawArrowLine(gfx, Colors.Gray, grayPen, (float)tail.X, (float)tail.Y, (float)head.X, (float)head.Y);
                         }
                     }
                 }

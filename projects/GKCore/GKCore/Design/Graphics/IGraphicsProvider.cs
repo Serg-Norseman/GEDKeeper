@@ -38,14 +38,12 @@ namespace GKCore.Design.Graphics
 
         IColor CreateColor(int argb);
         IColor CreateColor(int r, int g, int b);
-        IColor CreateColor(int a, int r, int g, int b);
+        IColor CreateColor(string signature);
 
         IPen CreatePen(IColor color, float width);
-        IBrush CreateSolidBrush(IColor color);
+        IBrush CreateBrush(IColor color);
 
         IFont CreateFont(string fontName, float size, bool bold);
-
-        IGfxPath CreatePath();
 
         IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
 
@@ -57,19 +55,12 @@ namespace GKCore.Design.Graphics
 
         IImage LoadResourceImage(string resName);
         IImage LoadResourceImage(Type baseType, string resName);
+        IImage LoadResourceImage(string resName, bool makeTransp);
+
         void SaveImage(IImage image, string fileName);
 
         ExtSizeF GetTextSize(string text, IFont font, object target);
 
         string GetDefaultFontName();
-
-        IColor CreateColor(string signature);
-
-        IGfxPath CreateCirclePath(float x, float y, float width, float height);
-        IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2);
-        IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
-                                     float ang1, float ang2);
-
-        IImage LoadResourceImage(string resName, bool makeTransp);
     }
 }

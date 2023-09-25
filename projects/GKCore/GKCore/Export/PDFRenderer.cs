@@ -286,16 +286,18 @@ namespace GKCore.Export
             }
         }
 
-        public override void FillPath(IBrush brush, IGfxPath path)
-        {
-        }
-
-        public override void DrawPath(IPen pen, IGfxPath path)
-        {
-        }
-
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
         {
+        }
+
+        public override IGfxPath CreateCirclePath(float x, float y, float width, float height)
+        {
+            return null;
+        }
+
+        public override IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
+        {
+            return null;
         }
 
         public override void ScaleTransform(float sx, float sy)
@@ -307,10 +309,6 @@ namespace GKCore.Export
         }
 
         public override void RotateTransform(float angle)
-        {
-        }
-
-        public override void ResetTransform()
         {
         }
 

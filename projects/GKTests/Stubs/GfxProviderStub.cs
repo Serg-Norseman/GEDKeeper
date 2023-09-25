@@ -103,17 +103,12 @@ namespace GKTests.Stubs
             return Substitute.For<IColor>();
         }
 
-        public IColor CreateColor(int a, int r, int g, int b)
-        {
-            return Substitute.For<IColor>();
-        }
-
         public IColor CreateColor(string signature)
         {
             return Substitute.For<IColor>();
         }
 
-        public IBrush CreateSolidBrush(IColor color)
+        public IBrush CreateBrush(IColor color)
         {
             return Substitute.For<IBrush>();
         }

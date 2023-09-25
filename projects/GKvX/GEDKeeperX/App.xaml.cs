@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using DLToolkit.Forms.Controls;
 using GKCore;
 using GKUI.Forms;
 using GKUI.Platform;
@@ -36,6 +37,7 @@ namespace GKUI
             InitializeComponent();
 
             Xamarin.Forms.DataGrid.DataGridComponent.Init();
+            FlowListView.Init();
 
             LangMan.DefInit();
             XFAppHost.Startup(null);
