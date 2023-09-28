@@ -250,14 +250,6 @@ namespace GKUI.Components
             return new Bitmap(GKUtils.LoadResourceStream(resName));
         }
 
-        public static void SetControlEnabled(Control ctl, bool enabled)
-        {
-            if (ctl != null) {
-                ctl.Enabled = enabled;
-                ctl.BackgroundColor = enabled ? SystemColors.WindowBackground : SystemColors.Control;
-            }
-        }
-
         public static void ProcessName(object sender)
         {
             TextBox tb = (sender as TextBox);
@@ -271,54 +263,17 @@ namespace GKUI.Components
             }
         }
 
-        public static void SetControlFont(Control ctl, Font font)
-        {
-            var cmCtl = ctl as CommonControl;
-            if (cmCtl != null && font != null) {
-                cmCtl.Font = font;
-            }
-
-            var container = ctl as Container;
-            if (container != null) {
-                foreach (var child in container.Controls) {
-                    SetControlFont(child, font);
-                }
-            }
-        }
-
-        public static void SetControlFont(Control ctl, string family,
-                                          float size, FontStyle style = FontStyle.None,
-                                          FontDecoration decoration = FontDecoration.None)
-        {
-            if (ctl != null) {
-                Font font = null;
-                try {
-                    font = new Font(family, size, style, decoration);
-                } catch {
-                }
-                SetControlFont(ctl, font);
-            }
-        }
-
-        public static Font GetDefaultFont(float size = 8.25f, FontStyle style = FontStyle.None)
-        {
-            string fontName = AppHost.GfxProvider.GetDefaultFontName();
-            return new Font(fontName, size);
-        }
-
         public static string[] Convert(string text)
         {
             var strList = new StringList(text);
             return strList.ToArray();
         }
 
-        public static ListItemCollection Convert(string[] strings)
+        public static void AddRange(this ListItemCollection items, string[] strings)
         {
-            var list = new ListItemCollection();
             foreach (var str in strings) {
-                list.Add(str);
+                items.Add(str);
             }
-            return list;
         }
 
         public static void AddTextColumn<T>(this GridView gridView, string headerText, Expression<Func<T, string>> propExpression, int width, bool autoSize = false, bool editable = false)
@@ -445,13 +400,6 @@ namespace GKUI.Components
                 var field = instanceType.GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
                 if (field != null)
                     field.SetValue(instance, value);
-            }
-        }
-
-        public static void AddRange(this ListItemCollection items, string[] strings)
-        {
-            foreach (var str in strings) {
-                items.Add(str);
             }
         }
     }

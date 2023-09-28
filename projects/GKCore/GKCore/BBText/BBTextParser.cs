@@ -202,7 +202,7 @@ namespace GKCore.BBText
                         //bool skipTag = false;
 
                         if (tag == "color") {
-                            // [color="{red|#ff0000}"][/color]
+                            // [color="{#ff0000}"][/color]
                             IColor color = fTextColor;
                             if (!closedTag) {
                                 tok = strTok.Next();

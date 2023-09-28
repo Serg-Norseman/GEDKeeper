@@ -37,11 +37,7 @@ namespace GKCore.Design.Graphics
         Stream CheckOrientation(Stream inputStream);
 
         IColor CreateColor(int argb);
-        IColor CreateColor(int r, int g, int b);
         IColor CreateColor(string signature);
-
-        IPen CreatePen(IColor color, float width);
-        IBrush CreateBrush(IColor color);
 
         IFont CreateFont(string fontName, float size, bool bold);
 
@@ -53,9 +49,8 @@ namespace GKCore.Design.Graphics
         /// </summary>
         IImage LoadImage(string fileName);
 
-        IImage LoadResourceImage(string resName);
         IImage LoadResourceImage(Type baseType, string resName);
-        IImage LoadResourceImage(string resName, bool makeTransp);
+        IImage LoadResourceImage(string resName, bool makeTransp = false);
 
         void SaveImage(IImage image, string fileName);
 

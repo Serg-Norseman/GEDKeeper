@@ -23,12 +23,9 @@ using System.IO;
 using BSLib;
 using GKCore.Design.Graphics;
 using GKUI.Components;
-using Xamarin.Forms;
-using IBrush = GKCore.Design.Graphics.IBrush;
-using IImage = GKCore.Design.Graphics.IImage;
-using IPen = GKCore.Design.Graphics.IPen;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
+using Xamarin.Forms;
+using IImage = GKCore.Design.Graphics.IImage;
 
 namespace GKUI.Platform
 {
@@ -67,20 +64,17 @@ namespace GKUI.Platform
             throw new NotImplementedException();
         }
 
-        public IImage LoadResourceImage(string resName)
-        {
-            //return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(resName)));
-            throw new NotImplementedException();
-        }
-
         public IImage LoadResourceImage(Type baseType, string resName)
         {
             //return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(baseType, resName)));
             throw new NotImplementedException();
         }
 
-        public IImage LoadResourceImage(string resName, bool makeTransp)
+        public IImage LoadResourceImage(string resName, bool makeTransp = false)
         {
+            if (string.IsNullOrEmpty(resName))
+                return null;
+
             /*Bitmap img = (Bitmap)UIHelper.LoadResourceImage("Resources." + resName);
 
             if (makeTransp) {
@@ -126,32 +120,10 @@ namespace GKUI.Platform
             return new ColorHandler(color);
         }
 
-        public IColor CreateColor(int r, int g, int b)
-        {
-            Color color = Color.FromRgba((byte)r, (byte)g, (byte)b, 255);
-            return new ColorHandler(color);
-        }
-
         public IColor CreateColor(string signature)
         {
-            return null;
-        }
-
-        public IBrush CreateBrush(IColor color)
-        {
-            //Color sdColor = ((ColorHandler)color).Handle;
-            //return new BrushHandler(new SolidBrush(sdColor));
-            throw new NotImplementedException();
-        }
-
-        public IPen CreatePen(IColor color, float width)
-        {
-            Color xfColor = ((ColorHandler)color).Handle;
-            var skPaint = new SKPaint();
-            skPaint.Color = xfColor.ToSKColor();
-            skPaint.StrokeWidth = width;
-            skPaint.Style = SKPaintStyle.Stroke;
-            return new PenHandler(skPaint);
+            Color color = Color.FromHex(signature);
+            return new ColorHandler(color);
         }
 
         public ExtSizeF GetTextSize(string text, IFont font, object target)
@@ -170,11 +142,11 @@ namespace GKUI.Platform
         public string GetDefaultFontName()
         {
             string fontName;
-            #if __MonoCS__
+#if __MonoCS__
             fontName = "Noto Sans";
-            #else
-            fontName = "Verdana"; // "Tahoma";
-            #endif
+#else
+            fontName = "Verdana";
+#endif
             return fontName;
         }
     }

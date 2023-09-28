@@ -27,6 +27,37 @@ using GKCore.Options;
 
 namespace GKCore.Charts
 {
+    internal class FakePen : IPen
+    {
+        public IColor Color { get; private set; }
+
+        public float Width { get; private set; }
+
+        public FakePen(IColor color, float width)
+        {
+            Color = color;
+            Width = width;
+        }
+
+        public void Dispose()
+        {
+        }
+    }
+
+    internal class FakeBrush : IBrush
+    {
+        public IColor Color { get; private set; }
+
+        public FakeBrush(IColor color)
+        {
+            Color = color;
+        }
+
+        public void Dispose()
+        {
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -74,6 +105,16 @@ namespace GKCore.Charts
         public override void SetSmoothing(bool value)
         {
             // dummy
+        }
+
+        public override IPen CreatePen(IColor color, float width, float[] dashPattern = null)
+        {
+            return new FakePen(color, width);
+        }
+
+        public override IBrush CreateBrush(IColor color)
+        {
+            return new FakeBrush(color);
         }
 
         public override void DrawImage(IImage image, float x, float y, float width, float height, string imName)

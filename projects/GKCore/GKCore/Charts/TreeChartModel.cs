@@ -294,7 +294,7 @@ namespace GKCore.Charts
                 return null;
 
             try {
-                return AppHost.GfxProvider.LoadResourceImage(name, makeTransp);
+                return AppHost.GfxProvider.LoadResourceImage("Resources." + name, makeTransp);
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartModel.PrepareImage()", ex);
                 return null;

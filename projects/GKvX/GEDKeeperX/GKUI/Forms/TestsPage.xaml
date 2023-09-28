@@ -6,17 +6,11 @@
 
     <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
 
-        <Button x:Name="btnAlert" Clicked="btnAlert_Clicked" Text="Alert / Message / Warning" />
-
-        <Button x:Name="btnQuestion" Clicked="btnQuestion_Clicked" Text="Question" />
-
         <Button x:Name="btnOpenFile" Clicked="btnOpenFile_Clicked" Text="OpenFile" />
-
-        <Button x:Name="btnCopyToCb" Clicked="btnCopyToCb_Clicked" Text="Copy to clipboard" />
 
         <Button x:Name="btnLangSelect" Clicked="btnLangSelect_Clicked" Text="Select Language" />
 
-        <Button x:Name="btnInput" Clicked="btnInput_Clicked" Text="Input" />
+        <Button x:Name="btnAddress" Clicked="btnAddress_Clicked" Text="Address" />
 
     </StackLayout>
 

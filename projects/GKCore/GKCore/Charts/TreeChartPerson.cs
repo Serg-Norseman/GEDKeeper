@@ -25,7 +25,6 @@ using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore.Design.Graphics;
 using GKCore.Import;
-using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using BSDColors = GKCore.Design.BSDConsts.Colors;
@@ -365,8 +364,8 @@ namespace GKCore.Charts
                             fPortrait = PortraitsCache.Instance.GetImage(baseContext, iRec);
 
                             if (fPortrait == null && options.DefaultPortraits) {
-                                string resName = (fSex == GDMSex.svFemale) ? "pi_female_140.png" : "pi_male_140.png";
-                                fPortrait = AppHost.GfxProvider.LoadResourceImage(resName, false);
+                                string resImage = GKData.SexData[(int)fSex].DefPortraitImage;
+                                fPortrait = AppHost.GfxProvider.LoadResourceImage(resImage, false);
                             }
                         } catch (MediaFileNotFoundException) {
                             if (!fModel.HasMediaFail) {

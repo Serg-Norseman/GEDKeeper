@@ -20,7 +20,6 @@
 
 using System;
 using GKCore;
-using GKUI.Components;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -35,26 +34,10 @@ namespace GKUI.Forms
             InitializeComponent();
         }
 
-        private void btnAlert_Clicked(object sender, EventArgs e)
-        {
-            AppHost.StdDialogs.ShowAlert("Test Alert!");
-        }
-
-        private async void btnQuestion_Clicked(object sender, EventArgs e)
-        {
-            if (await AppHost.StdDialogs.ShowQuestionAsync("Question"))
-                AppHost.StdDialogs.ShowAlert("Yes");
-        }
-
         private async void btnOpenFile_Clicked(object sender, EventArgs e)
         {
             string fileName = await AppHost.StdDialogs.GetOpenFileAsync("title", "context", "GEDCOM Files|*.ged,*.gedz,*.gedsec", 0, "");
             AppHost.StdDialogs.ShowAlert(fileName);
-        }
-
-        private void btnCopyToCb_Clicked(object sender, EventArgs e)
-        {
-            UIHelper.SetClipboardText("clipboard sample");
         }
 
         private async void btnLangSelect_Clicked(object sender, EventArgs e)
@@ -63,12 +46,10 @@ namespace GKUI.Forms
             curPage.Navigation.ShowPopup(new PopupTest());
         }
 
-        private async void btnInput_Clicked(object sender, EventArgs e)
+        private async void btnAddress_Clicked(object sender, EventArgs e)
         {
-            var input = await AppHost.StdDialogs.GetInputAsync(this, "What is your email?");
-            if (input == "ok") {
-                AppHost.StdDialogs.ShowAlert("Ok!");
-            }
+            var curPage = (MainPage)Application.Current.MainPage;
+            curPage.CurrentPage = new NavigationPage(new AddressEditDlg());
         }
     }
 }

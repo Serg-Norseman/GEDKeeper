@@ -740,13 +740,13 @@ namespace GKCore.Controllers
             var gfxProvider = AppHost.GfxProvider;
             switch (fContext.ShieldState) {
                 case ShieldState.None:
-                    img = gfxProvider.LoadResourceImage("rg_shield_none.gif", true);
+                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_none.gif", true);
                     break;
                 case ShieldState.Middle:
-                    img = gfxProvider.LoadResourceImage("rg_shield_mid.gif", true);
+                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_mid.gif", true);
                     break;
                 case ShieldState.Maximum:
-                    img = gfxProvider.LoadResourceImage("rg_shield_max.gif", true);
+                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_max.gif", true);
                     break;
             }
             return img;

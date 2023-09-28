@@ -119,19 +119,17 @@ namespace GKUI.Platform
             }
         }
 
-        public IImage LoadResourceImage(string resName)
-        {
-            return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(resName)));
-        }
-
         public IImage LoadResourceImage(Type baseType, string resName)
         {
             return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(baseType, resName)));
         }
 
-        public IImage LoadResourceImage(string resName, bool makeTransp)
+        public IImage LoadResourceImage(string resName, bool makeTransp = false)
         {
-            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
+            if (string.IsNullOrEmpty(resName))
+                return null;
+
+            Bitmap img = UIHelper.LoadResourceImage(resName);
 
             if (makeTransp) {
                 // TODO
@@ -169,9 +167,6 @@ namespace GKUI.Platform
 
         public IColor CreateColor(int argb)
         {
-            // FIXME: Dirty hack!
-            //argb = (int)unchecked((long)argb & (long)((ulong)-1));
-            //argb = (int)unchecked((ulong)argb & (uint)0xFF000000);
             int red = (argb >> 16) & 0xFF;
             int green = (argb >> 8) & 0xFF;
             int blue = (argb >> 0) & 0xFF;
@@ -180,29 +175,10 @@ namespace GKUI.Platform
             return new ColorHandler(color);
         }
 
-        public IColor CreateColor(int r, int g, int b)
-        {
-            Color color = Color.FromArgb(r, g, b);
-            return new ColorHandler(color);
-        }
-
         public IColor CreateColor(string signature)
         {
-            return null;
-        }
-
-        public IBrush CreateBrush(IColor color)
-        {
-            Color sdColor = ((ColorHandler)color).Handle;
-
-            return new BrushHandler(new SolidBrush(sdColor));
-        }
-
-        public IPen CreatePen(IColor color, float width)
-        {
-            Color sdColor = ((ColorHandler)color).Handle;
-
-            return new PenHandler(new Pen(sdColor, width));
+            Color color = Color.FromArgb(SysUtils.ParseColor(signature));
+            return new ColorHandler(color);
         }
 
         public ExtSizeF GetTextSize(string text, IFont font, object target)
@@ -212,7 +188,7 @@ namespace GKUI.Platform
                 var size = sdFnt.MeasureString(text);
                 return new ExtSizeF(size.Width, size.Height);
             } else {
-                return new ExtSizeF();
+                return ExtSizeF.Empty;
             }
         }
 
@@ -220,10 +196,9 @@ namespace GKUI.Platform
         {
             string fontName;
             if (Application.Instance.Platform.IsGtk) {
-                //fontName = "Noto Sans";
                 fontName = "Sans";
             } else {
-                fontName = "Verdana"; // "Tahoma";
+                fontName = "Verdana";
             }
             return fontName;
         }

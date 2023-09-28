@@ -89,10 +89,15 @@ namespace GKCore
         {
             public LSID NameId;
             public string Sign;
+            public string SymImage;
+            public string DefPortraitImage;
 
-            public SexStruct(LSID name, string sign) {
+            public SexStruct(LSID name, string sign, string symImage, string defPortraitImage)
+            {
                 NameId = name;
                 Sign = sign;
+                SymImage = symImage;
+                DefPortraitImage = defPortraitImage;
             }
         }
 
@@ -101,7 +106,8 @@ namespace GKCore
             public LSID Name;
             public string StatSign;
 
-            public MarStatusStruct(LSID name, string sign) {
+            public MarStatusStruct(LSID name, string sign)
+            {
                 Name = name;
                 StatSign = sign;
             }
@@ -113,7 +119,8 @@ namespace GKCore
             public string Sign;
             public PersonEventKind Kind;
 
-            public EventStruct(LSID name, string sign, PersonEventKind kind) {
+            public EventStruct(LSID name, string sign, PersonEventKind kind)
+            {
                 Name = name;
                 Sign = sign;
                 Kind = kind;
@@ -125,7 +132,8 @@ namespace GKCore
             public LSID Name;
             public byte Dates;
 
-            public DateKindStruct(LSID name, byte dates) {
+            public DateKindStruct(LSID name, byte dates)
+            {
                 Name = name;
                 Dates = dates;
             }
@@ -137,7 +145,8 @@ namespace GKCore
             public string Sign;
             public bool HasSupport;
 
-            public CalendarStruct(LSID name, string sign, bool hasSupport) {
+            public CalendarStruct(LSID name, string sign, bool hasSupport)
+            {
                 Name = name;
                 Sign = sign;
                 HasSupport = hasSupport;
@@ -149,7 +158,8 @@ namespace GKCore
             public LSID Name;
             public string Sign;
 
-            public StoreTypeRec(LSID name, string sign) {
+            public StoreTypeRec(LSID name, string sign)
+            {
                 Name = name;
                 Sign = sign;
             }
@@ -160,7 +170,8 @@ namespace GKCore
             public LSID Title;
             public LSID Cap;
 
-            public StatsTitleStruct(LSID title, LSID cap) {
+            public StatsTitleStruct(LSID title, LSID cap)
+            {
                 Title = title;
                 Cap = cap;
             }
@@ -431,10 +442,10 @@ namespace GKCore
             };
 
             SexData = new SexStruct[] {
-                new SexStruct(LSID.LSID_SexU, "U"),
-                new SexStruct(LSID.LSID_SexM, "M"),
-                new SexStruct(LSID.LSID_SexF, "F"),
-                new SexStruct(LSID.LSID_SexX, "X")
+                new SexStruct(LSID.LSID_SexU, "U", "", ""),
+                new SexStruct(LSID.LSID_SexM, "M", "Resources.sym_male.png", "Resources.pi_male_140.png"),
+                new SexStruct(LSID.LSID_SexF, "F", "Resources.sym_female.png", "Resources.pi_female_140.png"),
+                new SexStruct(LSID.LSID_SexX, "X", "", "")
             };
 
             RecordTypes = new RecordTypeStruct[] {

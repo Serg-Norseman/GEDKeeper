@@ -131,21 +131,14 @@ namespace GKCore.Charts
 
         public abstract void DrawPath(IPen pen, IBrush brush, IGfxPath path);
 
-        public virtual IPen CreatePen(IColor color, float width, float[] dashPattern = null)
-        {
-            return AppHost.GfxProvider.CreatePen(color, width);
-        }
-
         public IPen CreatePen(int argb, float width = 1.0f)
         {
-            IColor color = GetColor(argb);
-            return AppHost.GfxProvider.CreatePen(color, width);
+            return CreatePen(GetColor(argb), width);
         }
 
-        public virtual IBrush CreateBrush(IColor color)
-        {
-            return AppHost.GfxProvider.CreateBrush(color);
-        }
+        public abstract IPen CreatePen(IColor color, float width, float[] dashPattern = null);
+
+        public abstract IBrush CreateBrush(IColor color);
 
         public abstract IGfxPath CreateCirclePath(float x, float y, float width, float height);
         public abstract IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2);

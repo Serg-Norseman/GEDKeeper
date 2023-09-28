@@ -29,8 +29,8 @@ namespace GKCore.Charts
     /// </summary>
     public sealed class TCPersonControl : ITreeControl
     {
-        private readonly IPen fCtlPen;
-        private readonly IBrush fCtlBrush;
+        private IPen fCtlPen;
+        private IBrush fCtlBrush;
 
         private TreeChartPerson fPerson;
 
@@ -55,9 +55,6 @@ namespace GKCore.Charts
 
         public TCPersonControl(ITreeChart chart) : base(chart)
         {
-            var gfxProv = AppHost.GfxProvider;
-            fCtlPen = gfxProv.CreatePen(gfxProv.CreateColor(BSDColors.Black), 2.0f);
-            fCtlBrush = gfxProv.CreateBrush(gfxProv.CreateColor(BSDColors.Gray));
         }
 
         protected override void Dispose(bool disposing)
@@ -91,6 +88,9 @@ namespace GKCore.Charts
         public override void Draw(ChartRenderer gfx)
         {
             if (gfx == null) return;
+
+            if (fCtlPen == null) fCtlPen = gfx.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 2.0f);
+            if (fCtlBrush == null) fCtlBrush = gfx.CreateBrush(ChartRenderer.GetColor(BSDColors.Gray));
 
             //gfx.FillRectangle(fCtlBrush, fDestRect);
             //gfx.DrawRectangle(fCtlPen, fDestRect);

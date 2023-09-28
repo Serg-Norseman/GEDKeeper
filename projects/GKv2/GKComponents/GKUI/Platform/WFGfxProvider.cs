@@ -27,7 +27,6 @@ using BSLib;
 using ExifLib;
 using GKCore;
 using GKCore.Design.Graphics;
-using GKUI.Components;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Platform
@@ -187,19 +186,17 @@ namespace GKUI.Platform
             }
         }
 
-        public IImage LoadResourceImage(string resName)
-        {
-            return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(resName)));
-        }
-
         public IImage LoadResourceImage(Type baseType, string resName)
         {
             return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(baseType, resName)));
         }
 
-        public IImage LoadResourceImage(string resName, bool makeTransp)
+        public IImage LoadResourceImage(string resName, bool makeTransp = false)
         {
-            Bitmap img = UIHelper.LoadResourceImage("Resources." + resName);
+            if (string.IsNullOrEmpty(resName))
+                return null;
+
+            Bitmap img = new Bitmap(GKUtils.LoadResourceStream(resName));
 
             if (makeTransp) {
                 img = (Bitmap)img.Clone();
@@ -242,29 +239,10 @@ namespace GKUI.Platform
             return new ColorHandler(color);
         }
 
-        public IColor CreateColor(int r, int g, int b)
-        {
-            Color color = Color.FromArgb(r, g, b);
-            return new ColorHandler(color);
-        }
-
         public IColor CreateColor(string signature)
         {
-            return null;
-        }
-
-        public IBrush CreateBrush(IColor color)
-        {
-            Color sdColor = ((ColorHandler)color).Handle;
-
-            return new BrushHandler(new SolidBrush(sdColor));
-        }
-
-        public IPen CreatePen(IColor color, float width)
-        {
-            Color sdColor = ((ColorHandler)color).Handle;
-
-            return new PenHandler(new Pen(sdColor, width));
+            Color color = Color.FromArgb(SysUtils.ParseColor(signature));
+            return new ColorHandler(color);
         }
 
         public ExtSizeF GetTextSize(string text, IFont font, object target)
@@ -275,18 +253,18 @@ namespace GKUI.Platform
                 var size = gfx.MeasureString(text, sdFnt);
                 return new ExtSizeF(size.Width, size.Height);
             } else {
-                return new ExtSizeF();
+                return ExtSizeF.Empty;
             }
         }
 
         public string GetDefaultFontName()
         {
             string fontName;
-            #if MONO
+#if MONO
             fontName = "Noto Sans";
-            #else
-            fontName = "Verdana"; // "Tahoma";
-            #endif
+#else
+            fontName = "Verdana";
+#endif
             return fontName;
         }
     }

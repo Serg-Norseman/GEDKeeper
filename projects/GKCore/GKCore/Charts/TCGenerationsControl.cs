@@ -137,7 +137,7 @@ namespace GKCore.Charts
 
                 IColor color = (i <= fThumbPos) ? fSelectColor : fBlankColor;
 
-                using (var brush = AppHost.GfxProvider.CreateBrush(color)) {
+                using (var brush = gfx.CreateBrush(color)) {
                     using (var path = gfx.CreateCircleSegmentPath(ctX, ctY, inRad, extRad, SEGMENT_ANGLE, ang1, ang2)) {
                         gfx.DrawPath(null, brush, path);
                     }

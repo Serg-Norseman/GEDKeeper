@@ -277,14 +277,8 @@ namespace GEDmill
         public static int SelectColor(int color)
         {
             var colorHandle = AppHost.StdDialogs.SelectColor(new ColorHandler(Color.FromArgb(color)));
-            var newColor = ((ColorHandler)colorHandle).Handle.ToArgb();
+            var newColor = colorHandle.ToArgb();
             return newColor;
-        }
-
-        public static Color SelectColor(Color color)
-        {
-            var colorHandle = AppHost.StdDialogs.SelectColor(new ColorHandler(color));
-            return ((ColorHandler)colorHandle).Handle;
         }
 
         // Crops the specified image file to the given size. Also converts non-standard formats to standard ones.

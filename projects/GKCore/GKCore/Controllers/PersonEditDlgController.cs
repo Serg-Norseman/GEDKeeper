@@ -18,16 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define SEX_SYMBOLS
-
 using System;
 using GDModel;
-using GKCore.Design.Graphics;
+using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Design;
-using GKCore.Design.Views;
 using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
@@ -78,17 +76,8 @@ namespace GKCore.Controllers
 
             for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
                 string name = GKUtils.SexStr(sx);
-                IImage image = null;
-                #if SEX_SYMBOLS
-                switch (sx) {
-                    case GDMSex.svMale:
-                        image = AppHost.GfxProvider.LoadResourceImage("sym_male.png", true);
-                        break;
-                    case GDMSex.svFemale:
-                        image = AppHost.GfxProvider.LoadResourceImage("sym_female.png", true);
-                        break;
-                }
-                #endif
+                string resImage = GKData.SexData[(int)sx].SymImage;
+                IImage image = AppHost.GfxProvider.LoadResourceImage(resImage, true);
                 fView.SexCombo.AddItem(name, sx, image);
             }
         }
@@ -317,16 +306,8 @@ namespace GKCore.Controllers
             if (img == null) {
                 // using avatar's image
                 GDMSex curSex = (GDMSex)fView.SexCombo.SelectedIndex;
-
-                switch (curSex) {
-                    case GDMSex.svMale:
-                        img = AppHost.GfxProvider.LoadResourceImage("pi_male_140.png", false);
-                        break;
-
-                    case GDMSex.svFemale:
-                        img = AppHost.GfxProvider.LoadResourceImage("pi_female_140.png", false);
-                        break;
-                }
+                string resImage = GKData.SexData[(int)curSex].DefPortraitImage;
+                img = AppHost.GfxProvider.LoadResourceImage(resImage, false);
             }
             fView.SetPortrait(img);
 

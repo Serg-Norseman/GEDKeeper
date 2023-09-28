@@ -63,6 +63,16 @@ namespace GKCore.Export
             // dummy
         }
 
+        public override IPen CreatePen(IColor color, float width, float[] dashPattern = null)
+        {
+            return new FakePen(color, width);
+        }
+
+        public override IBrush CreateBrush(IColor color)
+        {
+            return new FakeBrush(color);
+        }
+
         #region Private methods
 
         private static BaseFont GetBaseFont(IFont font)

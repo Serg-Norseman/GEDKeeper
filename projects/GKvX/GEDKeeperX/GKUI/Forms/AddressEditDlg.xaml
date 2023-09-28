@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    x:Class="GKUI.Forms.AddressEditDlg"
+    x:TypeArguments="mvp:IAddressEditDlg, contr:AddressEditDlgController">
+
+    <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
+
+        <xp:TabViewControl WidthRequest="600" HeightRequest="260" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageCommon">
+                    <Grid ColumnSpacing="4" RowSpacing="4">
+                        <Grid.Children>
+                            <Label x:Name="lblCountry" Grid.Column="0" Grid.Row="0" />
+                            <Entry x:Name="txtCountry" Grid.Column="1" Grid.Row="0" />
+
+                            <Label x:Name="lblState" Grid.Column="0" Grid.Row="1" />
+                            <Entry x:Name="txtState" Grid.Column="1" Grid.Row="1" />
+
+                            <Label x:Name="lblCity" Grid.Column="0" Grid.Row="2" />
+                            <Entry x:Name="txtCity" Grid.Column="1" Grid.Row="2" />
+
+                            <Label x:Name="lblPostalCode" Grid.Column="0" Grid.Row="3" />
+                            <Entry x:Name="txtPostalCode" Grid.Column="1" Grid.Row="3" />
+
+                            <Label x:Name="lblAddress" Grid.Column="0" Grid.Row="4" />
+                            <Entry x:Name="txtAddress" Grid.Column="1" Grid.Row="4" />
+                        </Grid.Children>
+                    </Grid>
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pagePhones">
+                    <comcom:GKSheetList x:Name="fPhonesList" OnModify="ListModify" />
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageEmails">
+                    <comcom:GKSheetList x:Name="fMailsList" OnModify="ListModify" />
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageWebPages">
+                    <comcom:GKSheetList x:Name="fWebsList" OnModify="ListModify" />
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+        <StackLayout Spacing="8" Orientation="Horizontal">
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

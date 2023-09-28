@@ -714,7 +714,7 @@ namespace GKCore
                 Logger.WriteError("AppHost.CreateBase()", ex);
             }
 
-            return null;
+            return result;
         }
 
         public void LoadBase(IBaseWindow baseWin, string fileName)
@@ -1223,7 +1223,7 @@ namespace GKCore
                 // Saving the copy for restoration
                 AppHost.Instance.CriticalSave();
                 Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)e.ExceptionObject);
-            } catch (Exception ex) {
+            } catch (Exception) {
             }
         }
 
