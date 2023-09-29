@@ -178,6 +178,10 @@
         private System.Windows.Forms.CheckBox chkExtendedKinships;
         private System.Windows.Forms.CheckBox chkUseSurnamesInPSF;
         private System.Windows.Forms.CheckBox chkUseBirthDatesInPSF;
+        private System.Windows.Forms.Label lblDescendNumbering;
+        private System.Windows.Forms.ComboBox cmbDescendNumbering;
+        private System.Windows.Forms.Label lblAscendNumbering;
+        private System.Windows.Forms.ComboBox cmbAscendNumbering;
 
         private void InitializeComponent()
         {
@@ -357,6 +361,10 @@
             this.chkExtendedKinships = new System.Windows.Forms.CheckBox();
             this.chkUseSurnamesInPSF = new System.Windows.Forms.CheckBox();
             this.chkUseBirthDatesInPSF = new System.Windows.Forms.CheckBox();
+            this.lblAscendNumbering = new System.Windows.Forms.Label();
+            this.cmbAscendNumbering = new System.Windows.Forms.ComboBox();
+            this.lblDescendNumbering = new System.Windows.Forms.Label();
+            this.cmbDescendNumbering = new System.Windows.Forms.ComboBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2170,6 +2178,10 @@
             // 
             // grpPedigree
             // 
+            this.grpPedigree.Controls.Add(this.lblDescendNumbering);
+            this.grpPedigree.Controls.Add(this.cmbDescendNumbering);
+            this.grpPedigree.Controls.Add(this.lblAscendNumbering);
+            this.grpPedigree.Controls.Add(this.cmbAscendNumbering);
             this.grpPedigree.Controls.Add(this.chkAttributes);
             this.grpPedigree.Controls.Add(this.chkNotes);
             this.grpPedigree.Controls.Add(this.chkGenerations);
@@ -2179,7 +2191,7 @@
             this.grpPedigree.Margin = new System.Windows.Forms.Padding(2);
             this.grpPedigree.Name = "grpPedigree";
             this.grpPedigree.Padding = new System.Windows.Forms.Padding(10);
-            this.grpPedigree.Size = new System.Drawing.Size(405, 258);
+            this.grpPedigree.Size = new System.Drawing.Size(480, 320);
             this.grpPedigree.TabIndex = 0;
             this.grpPedigree.TabStop = false;
             this.grpPedigree.Text = "grpPedigree";
@@ -2450,6 +2462,44 @@
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblAscendNumbering
+            // 
+            this.lblAscendNumbering.AutoSize = true;
+            this.lblAscendNumbering.Location = new System.Drawing.Point(17, 253);
+            this.lblAscendNumbering.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblAscendNumbering.Name = "lblAscendNumbering";
+            this.lblAscendNumbering.Size = new System.Drawing.Size(164, 21);
+            this.lblAscendNumbering.TabIndex = 5;
+            this.lblAscendNumbering.Text = "lblAscendNumbering";
+            // 
+            // cmbAscendNumbering
+            // 
+            this.cmbAscendNumbering.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAscendNumbering.Location = new System.Drawing.Point(233, 250);
+            this.cmbAscendNumbering.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbAscendNumbering.Name = "cmbAscendNumbering";
+            this.cmbAscendNumbering.Size = new System.Drawing.Size(230, 25);
+            this.cmbAscendNumbering.TabIndex = 6;
+            // 
+            // lblDescendNumbering
+            // 
+            this.lblDescendNumbering.AutoSize = true;
+            this.lblDescendNumbering.Location = new System.Drawing.Point(17, 282);
+            this.lblDescendNumbering.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDescendNumbering.Name = "lblDescendNumbering";
+            this.lblDescendNumbering.Size = new System.Drawing.Size(175, 21);
+            this.lblDescendNumbering.TabIndex = 7;
+            this.lblDescendNumbering.Text = "lblDescendNumbering";
+            // 
+            // cmbDescendNumbering
+            // 
+            this.cmbDescendNumbering.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDescendNumbering.Location = new System.Drawing.Point(233, 279);
+            this.cmbDescendNumbering.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbDescendNumbering.Name = "cmbDescendNumbering";
+            this.cmbDescendNumbering.Size = new System.Drawing.Size(230, 25);
+            this.cmbDescendNumbering.TabIndex = 8;
             // 
             // OptionsDlg
             // 

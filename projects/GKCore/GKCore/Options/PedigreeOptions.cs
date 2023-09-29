@@ -46,6 +46,9 @@ namespace GKCore.Options
         public bool IncludeSources;
         public bool IncludeGenerations;
 
+        public PedigreeNumbering AscendNumbering;
+        public PedigreeNumbering DescendNumbering;
+
         public PedigreeOptions()
         {
             ResetDefaults();
@@ -58,6 +61,9 @@ namespace GKCore.Options
             IncludeNotes = true;
             IncludeSources = true;
             IncludeGenerations = true;
+
+            AscendNumbering = PedigreeNumbering.Kobrin_Konovalov_A;
+            DescendNumbering = PedigreeNumbering.Kobrin_Konovalov_D;
         }
 
         public void Assign(IOptions source)
@@ -70,6 +76,9 @@ namespace GKCore.Options
             IncludeNotes = srcOptions.IncludeNotes;
             IncludeSources = srcOptions.IncludeSources;
             IncludeGenerations = srcOptions.IncludeGenerations;
+
+            AscendNumbering = srcOptions.AscendNumbering;
+            DescendNumbering = srcOptions.DescendNumbering;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -83,6 +92,9 @@ namespace GKCore.Options
                 IncludeNotes = iniFile.ReadBool("Pedigree", "IncludeNotes", true);
                 IncludeSources = iniFile.ReadBool("Pedigree", "IncludeSources", true);
                 IncludeGenerations = iniFile.ReadBool("Pedigree", "IncludeGenerations", true);
+
+                AscendNumbering = (PedigreeNumbering)iniFile.ReadInteger("Pedigree", "AscendNumbering", (int)PedigreeNumbering.Kobrin_Konovalov_A);
+                DescendNumbering = (PedigreeNumbering)iniFile.ReadInteger("Pedigree", "DescendNumbering", (int)PedigreeNumbering.Kobrin_Konovalov_D);
             } catch (Exception) {
                 throw new PedigreeOptionsException("Error loading PedigreeOptions");
             }
@@ -98,6 +110,9 @@ namespace GKCore.Options
             iniFile.WriteBool("Pedigree", "IncludeNotes", IncludeNotes);
             iniFile.WriteBool("Pedigree", "IncludeSources", IncludeSources);
             iniFile.WriteBool("Pedigree", "IncludeGenerations", IncludeGenerations);
+
+            iniFile.WriteInteger("Pedigree", "AscendNumbering", (int)AscendNumbering);
+            iniFile.WriteInteger("Pedigree", "DescendNumbering", (int)DescendNumbering);
         }
     }
 }

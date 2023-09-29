@@ -480,8 +480,7 @@ namespace GKUI.Forms
         {
             fCurBase.SelectRecordByXRef("I1");
             Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef);
-            GeneratePedigree("miPedigree_dAboville");
-            GeneratePedigree("miPedigree_Konovalov");
+            GeneratePedigree("miPedigreeDescend");
         }
 
         private void GeneratePedigree(string menuItem)

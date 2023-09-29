@@ -197,6 +197,10 @@ namespace GKUI.Forms
         private CheckBox chkExtendedKinships;
         private CheckBox chkUseSurnamesInPSF;
         private CheckBox chkUseBirthDatesInPSF;
+        private Label lblDescendNumbering;
+        private ComboBox cmbDescendNumbering;
+        private Label lblAscendNumbering;
+        private ComboBox cmbAscendNumbering;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion

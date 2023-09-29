@@ -31,7 +31,6 @@ using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
@@ -91,8 +90,8 @@ namespace GKUI.Forms
         private ButtonMenuItem miPedigree;
         private ButtonMenuItem miTreeAncestors;
         private ButtonMenuItem miTreeDescendants;
-        private ButtonMenuItem miPedigree_dAboville;
-        private ButtonMenuItem miPedigree_Konovalov;
+        private ButtonMenuItem miPedigreeAscend;
+        private ButtonMenuItem miPedigreeDescend;
         private ButtonMenuItem miMap;
         private ButtonMenuItem miStats;
         private ButtonMenuItem miHelp;
@@ -102,8 +101,8 @@ namespace GKUI.Forms
         private ButtonMenuItem miAbout;
         private ContextMenu MenuMRU;
         private ContextMenu MenuPedigree;
-        private ButtonMenuItem miPedigree_dAboville2;
-        private ButtonMenuItem miPedigree_Konovalov2;
+        private ButtonMenuItem miPedigreeAscend2;
+        private ButtonMenuItem miPedigreeDescend2;
         private ButtonMenuItem miOrganizer;
         private ButtonMenuItem miService;
         private ButtonMenuItem miScripts;
@@ -115,7 +114,6 @@ namespace GKUI.Forms
         private ButtonMenuItem miPlugins;
         private ButtonMenuItem miSlideshow;
         private GKDropDownToolItem tbLoadMRU;
-        private ButtonMenuItem miPedigreeAscend;
         private ButtonMenuItem miDescendantsCircle;
         private ButtonMenuItem miRelationshipCalculator;
         private TabControl tabsRecords;
@@ -1010,17 +1008,12 @@ namespace GKUI.Forms
 
         private void miPedigreeAscend_Click(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Ascend);
+            fController.GeneratePedigree(PedigreeType.Ascend);
         }
 
-        private void miPedigree_dAbovilleClick(object sender, EventArgs e)
+        private void miPedigreeDescend_Click(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_dAboville);
-        }
-
-        private void miPedigree_KonovalovClick(object sender, EventArgs e)
-        {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_Konovalov);
+            fController.GeneratePedigree(PedigreeType.Descend);
         }
 
         private void miTreeAncestors_Click(object sender, EventArgs e)

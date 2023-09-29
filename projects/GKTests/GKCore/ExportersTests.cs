@@ -64,8 +64,8 @@ namespace GKCore
                 exporter.Options.PedigreeOptions.IncludeSources = true;
                 exporter.Options.PedigreeOptions.IncludeGenerations = true;
 
-                exporter.Kind = PedigreeExporter.PedigreeKind.Descend_Konovalov;
-                Assert.AreEqual(PedigreeExporter.PedigreeKind.Descend_Konovalov, exporter.Kind);
+                exporter.Type = PedigreeType.Descend;
+                Assert.AreEqual(PedigreeType.Descend, exporter.Type);
 
                 var writer = Substitute.For<CustomWriter>();
 
@@ -76,12 +76,12 @@ namespace GKCore
                 Assert.IsTrue(exporter.Generate(writer));
 
 
-                exporter.Kind = PedigreeExporter.PedigreeKind.Descend_dAboville;
+                exporter.Type = PedigreeType.Descend;
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
                 Assert.IsTrue(exporter.Generate(writer));
 
 
-                exporter.Kind = PedigreeExporter.PedigreeKind.Ascend;
+                exporter.Type = PedigreeType.Ascend;
                 exporter.Options.PedigreeOptions.Format = PedigreeFormat.Excess;
                 Assert.IsTrue(exporter.Generate(writer));
             }

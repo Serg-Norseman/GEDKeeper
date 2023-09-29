@@ -79,15 +79,9 @@ namespace GKCore.Export
             }
         }
 
-        public enum PedigreeKind
-        {
-            Ascend,
-            Descend_dAboville,
-            Descend_Konovalov
-        }
-
         private PedigreeFormat fFormat;
-        private PedigreeKind fKind;
+        private PedigreeNumbering fNumbering;
+        private PedigreeType fType;
         private List<PedigreePerson> fPersonList;
         private readonly GDMIndividualRecord fRoot;
         private readonly ShieldState fShieldState;
@@ -97,10 +91,13 @@ namespace GKCore.Export
         private IFont fLinkFont;
         private IFont fTextFont, fSupText;
 
-        public PedigreeKind Kind
+        public PedigreeType Type
         {
-            get { return fKind; }
-            set { fKind = value; }
+            get { return fType; }
+            set {
+                fType = value;
+                fNumbering = (fType == PedigreeType.Ascend) ? fOptions.PedigreeOptions.AscendNumbering : fOptions.PedigreeOptions.DescendNumbering;
+            }
         }
 
         public GDMIndividualRecord Root
@@ -188,7 +185,7 @@ namespace GKCore.Export
         {
             string result = person.Id;
 
-            if (fKind == PedigreeKind.Descend_Konovalov && person.Parent != null) {
+            if (fNumbering == PedigreeNumbering.Kobrin_Konovalov_D && person.Parent != null) {
                 GDMFamilyRecord family = fTree.GetPtrValue(person.IRec.ChildToFamilyLinks[0]);
                 string spStr = "";
                 int idx = person.Parent.IRec.IndexOfSpouse(family);
@@ -442,7 +439,7 @@ namespace GKCore.Export
 
             ProcessSourceCitations(iRec, res.Sources);
 
-            if (fKind == PedigreeKind.Ascend) {
+            if (fType == PedigreeType.Ascend) {
                 if (iRec.ChildToFamilyLinks.Count > 0) {
                     GDMFamilyRecord family = fTree.GetPtrValue(iRec.ChildToFamilyLinks[0]);
                     if (fBase.Context.IsRecordAccess(family.Restriction)) {
@@ -483,8 +480,8 @@ namespace GKCore.Export
             for (int i = 0; i < num3; i++) {
                 PedigreePerson obj = fPersonList[i];
 
-                switch (fKind) {
-                    case PedigreeKind.Descend_dAboville:
+                switch (fNumbering) {
+                    case PedigreeNumbering.Aboville:
                         if (obj.Parent == null) {
                             obj.Id = "1";
                         } else {
@@ -493,8 +490,8 @@ namespace GKCore.Export
                         }
                         break;
 
-                    case PedigreeKind.Ascend:
-                    case PedigreeKind.Descend_Konovalov:
+                    case PedigreeNumbering.Kobrin_Konovalov_A:
+                    case PedigreeNumbering.Kobrin_Konovalov_D:
                         obj.Id = (i + 1).ToString();
                         if (obj.Parent != null) {
                             string pid = obj.Parent.Id;
@@ -504,6 +501,10 @@ namespace GKCore.Export
 
                             obj.Id = obj.Id + "-" + pid;
                         }
+                        break;
+
+                    case PedigreeNumbering.Sosa_Stradonitz:
+                        obj.Id = (i + 1).ToString();
                         break;
                 }
             }

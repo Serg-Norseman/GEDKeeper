@@ -798,8 +798,10 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miTreeAncestors").Enabled = ifEn;
                 GetControl<IMenuItem>("miTreeDescendants").Enabled = ifEn;
                 GetControl<IMenuItem>("miTreeBoth").Enabled = ifEn;
-                GetControl<IMenuItem>("miPedigree_dAboville").Enabled = indivEn;
-                GetControl<IMenuItem>("miPedigree_Konovalov").Enabled = indivEn;
+
+                GetControl<IMenuItem>("miPedigreeAscend").Enabled = indivEn;
+                GetControl<IMenuItem>("miPedigreeDescend").Enabled = indivEn;
+
                 GetControl<IMenuItem>("miStats").Enabled = baseEn;
                 GetControl<IMenuItem>("miExportToFamilyBook").Enabled = baseEn;
                 GetControl<IMenuItem>("miExportToTreesAlbum").Enabled = baseEn;
@@ -819,7 +821,10 @@ namespace GKCore.Controllers
                     GetControl<IToolItem>("tbTreeAncestors").Enabled = GetControl<IMenuItem>("miTreeAncestors").Enabled;
                     GetControl<IToolItem>("tbTreeDescendants").Enabled = GetControl<IMenuItem>("miTreeDescendants").Enabled;
                     GetControl<IToolItem>("tbTreeBoth").Enabled = GetControl<IMenuItem>("miTreeBoth").Enabled;
+
                     GetControl<IToolItem>("tbPedigree").Enabled = GetControl<IMenuItem>("miPedigree").Enabled;
+                    GetControl<IMenuItem>("miPedigreeAscend2").Enabled = indivEn;
+                    GetControl<IMenuItem>("miPedigreeDescend2").Enabled = indivEn;
                 }
 
                 UpdateNavControls();
@@ -867,8 +872,7 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miTreeDescendants").Text = LangMan.LS(LSID.LSID_MITreeDescendants);
                 GetControl<IMenuItem>("miTreeBoth").Text = LangMan.LS(LSID.LSID_MITreeBoth);
                 GetControl<IMenuItem>("miPedigreeAscend").Text = LangMan.LS(LSID.LSID_MIPedigreeAscend);
-                GetControl<IMenuItem>("miPedigree_dAboville").Text = LangMan.LS(LSID.LSID_MIPedigree_dAboville);
-                GetControl<IMenuItem>("miPedigree_Konovalov").Text = LangMan.LS(LSID.LSID_MIPedigree_Konovalov);
+                GetControl<IMenuItem>("miPedigreeDescend").Text = LangMan.LS(LSID.LSID_MIPedigreeDescend);
                 GetControl<IMenuItem>("miMap").Text = LangMan.LS(LSID.LSID_MIMap) + @"...";
                 GetControl<IMenuItem>("miStats").Text = LangMan.LS(LSID.LSID_MIStats) + @"...";
                 GetControl<IMenuItem>("miAncestorsCircle").Text = LangMan.LS(LSID.LSID_AncestorsCircle);
@@ -917,8 +921,8 @@ namespace GKCore.Controllers
                     SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
                     SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
 
-                    GetControl<IMenuItem>("miPedigree_dAboville2").Text = LangMan.LS(LSID.LSID_Pedigree_dAbovilleTip);
-                    GetControl<IMenuItem>("miPedigree_Konovalov2").Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
+                    GetControl<IMenuItem>("miPedigreeAscend2").Text = LangMan.LS(LSID.LSID_MIPedigreeAscend);
+                    GetControl<IMenuItem>("miPedigreeDescend2").Text = LangMan.LS(LSID.LSID_MIPedigreeDescend);
                 }
 
                 GetControl<IMenuItem>("miContRecordAdd").Text = LangMan.LS(LSID.LSID_MIRecordAdd);
@@ -984,8 +988,7 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miTreeDescendants").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeDescendants);
                 GetControl<IMenuItem>("miTreeBoth").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeBoth);
                 GetControl<IMenuItem>("miPedigreeAscend").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Pedigree);
-                GetControl<IMenuItem>("miPedigree_dAboville").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Pedigree);
-                GetControl<IMenuItem>("miPedigree_Konovalov").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Pedigree);
+                GetControl<IMenuItem>("miPedigreeDescend").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Pedigree);
                 GetControl<IMenuItem>("miMap").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Maps);
                 GetControl<IMenuItem>("miStats").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Stats);
 
@@ -1209,7 +1212,7 @@ namespace GKCore.Controllers
             AppHost.Instance.ShowWindow(win);
         }
 
-        public void GeneratePedigree(PedigreeExporter.PedigreeKind kind)
+        public void GeneratePedigree(PedigreeType type)
         {
             var selPerson = GetSelectedPerson();
             if (selPerson == null) {
@@ -1221,7 +1224,7 @@ namespace GKCore.Controllers
 
             using (var p = new PedigreeExporter(fView, selPerson)) {
                 p.Options = AppHost.Options;
-                p.Kind = kind;
+                p.Type = type;
                 p.Generate(true);
             }
         }

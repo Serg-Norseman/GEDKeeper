@@ -52,6 +52,9 @@ namespace GKCore.Design.Graphics
         IImage LoadResourceImage(Type baseType, string resName);
         IImage LoadResourceImage(string resName, bool makeTransp = false);
 
+        /// <summary>
+        /// Saving portrait images for caching purposes.
+        /// </summary>
         void SaveImage(IImage image, string fileName);
 
         ExtSizeF GetTextSize(string text, IFont font, object target);

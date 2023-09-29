@@ -958,17 +958,12 @@ namespace GKUI.Forms
 
         private void miPedigreeAscend_Click(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Ascend);
+            fController.GeneratePedigree(PedigreeType.Ascend);
         }
 
-        private void miPedigree_dAbovilleClick(object sender, EventArgs e)
+        private void miPedigreeDescend_Click(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_dAboville);
-        }
-
-        private void miPedigree_KonovalovClick(object sender, EventArgs e)
-        {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_Konovalov);
+            fController.GeneratePedigree(PedigreeType.Descend);
         }
 
         private void miTreeAncestors_Click(object sender, EventArgs e)

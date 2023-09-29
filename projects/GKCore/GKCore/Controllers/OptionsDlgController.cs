@@ -18,11 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Design;
-using GKCore.Design.Views;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.Types;
@@ -202,6 +202,19 @@ namespace GKCore.Controllers
             UpdatePedigreesOptions();
         }
 
+        private void PrepareNumbCombo(string comboName, PedigreeType pedigreeType, PedigreeNumbering curValue)
+        {
+            var combo = GetControl<IComboBox>(comboName);
+            combo.Clear();
+            for (PedigreeNumbering pn = PedigreeNumbering.Aboville; pn <= PedigreeNumbering.Sosa_Stradonitz; pn++) {
+                var pnStr = PedigreeData.Numberings[(int)pn];
+                if (pnStr.Type == pedigreeType) {
+                    combo.AddItem(LangMan.LS(pnStr.Name), pn);
+                }
+            }
+            combo.SetSelectedTag(curValue);
+        }
+
         public void UpdatePedigreesOptions()
         {
             GetControl<ICheckBox>("chkAttributes").Checked = fOptions.PedigreeOptions.IncludeAttributes;
@@ -217,6 +230,9 @@ namespace GKCore.Controllers
                     GetControl<IRadioButton>("radCompact").Checked = true;
                     break;
             }
+
+            PrepareNumbCombo("cmbAscendNumbering", PedigreeType.Ascend, fOptions.PedigreeOptions.AscendNumbering);
+            PrepareNumbCombo("cmbDescendNumbering", PedigreeType.Descend, fOptions.PedigreeOptions.DescendNumbering);
         }
 
         public void AcceptPedigreesOptions()
@@ -231,6 +247,9 @@ namespace GKCore.Controllers
             } else if (GetControl<IRadioButton>("radCompact").Checked) {
                 fOptions.PedigreeOptions.Format = PedigreeFormat.Compact;
             }
+
+            fOptions.PedigreeOptions.AscendNumbering = GetControl<IComboBox>("cmbAscendNumbering").GetSelectedTag<PedigreeNumbering>();
+            fOptions.PedigreeOptions.DescendNumbering = GetControl<IComboBox>("cmbDescendNumbering").GetSelectedTag<PedigreeNumbering>();
         }
 
         public void UpdateWomanSurnameFormat()
@@ -916,6 +935,9 @@ namespace GKCore.Controllers
             GetControl<IGroupBox>("grpPedigreeFormat").Text = LangMan.LS(LSID.LSID_PedigreeFormat);
             GetControl<IRadioButton>("radExcess").Text = LangMan.LS(LSID.LSID_PF1);
             GetControl<IRadioButton>("radCompact").Text = LangMan.LS(LSID.LSID_PF2);
+
+            GetControl<ILabel>("lblAscendNumbering").Text = LangMan.LS(LSID.LSID_AscendNumbering);
+            GetControl<ILabel>("lblDescendNumbering").Text = LangMan.LS(LSID.LSID_DescendNumbering);
 
             // Specials
             GetControl<ITabPage>("pageSpecials").Text = LangMan.LS(LSID.LSID_Specials);

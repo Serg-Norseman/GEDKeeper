@@ -443,6 +443,17 @@
               <CheckBox x:Name="chkNotes" />
               <CheckBox x:Name="chkSources" />
               <CheckBox x:Name="chkGenerations" />
+
+              <TableLayout Style="paddedTable8">
+                <TableRow>
+                  <Label x:Name="lblAscendNumbering" />
+                  <ComboBox x:Name="cmbAscendNumbering" ReadOnly="True" />
+                </TableRow>
+                <TableRow>
+                  <Label x:Name="lblDescendNumbering" />
+                  <ComboBox x:Name="cmbDescendNumbering" ReadOnly="True" />
+                </TableRow>
+              </TableLayout>
             </StackLayout>
           </GroupBox>
 

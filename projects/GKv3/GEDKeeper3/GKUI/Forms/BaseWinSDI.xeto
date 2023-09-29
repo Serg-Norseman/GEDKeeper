@@ -34,8 +34,8 @@
       <complat:GKDropDownToolItem x:Name="tbPedigree" Image="{Resource Resources.btn_scroll.gif, GKCore}">
         <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuPedigree">
-            <ButtonMenuItem x:Name="miPedigree_dAboville2" Click="miPedigree_dAbovilleClick" />
-            <ButtonMenuItem x:Name="miPedigree_Konovalov2" Click="miPedigree_KonovalovClick" />
+            <ButtonMenuItem x:Name="miPedigreeAscend2" Click="miPedigreeAscend_Click" />
+            <ButtonMenuItem x:Name="miPedigreeDescend2" Click="miPedigreeDescend_Click" />
           </ContextMenu>
         </complat:GKDropDownToolItem.ContextMenu>
       </complat:GKDropDownToolItem>
@@ -88,8 +88,7 @@
         <ButtonMenuItem x:Name="miDescendantsCircle" Click="miDescendantsCircle_Click" />
         <SeparatorMenuItem />
         <ButtonMenuItem x:Name="miPedigreeAscend" Click="miPedigreeAscend_Click" />
-        <ButtonMenuItem x:Name="miPedigree_dAboville" Shortcut="CommonModifier+P" Click="miPedigree_dAbovilleClick" />
-        <ButtonMenuItem x:Name="miPedigree_Konovalov" Shortcut="CommonModifier+K" Click="miPedigree_KonovalovClick" />
+        <ButtonMenuItem x:Name="miPedigreeDescend" Shortcut="CommonModifier+P" Click="miPedigreeDescend_Click" />
         <ButtonMenuItem x:Name="miExportToFamilyBook" Click="miExportToFamilyBook_Click" />
         <ButtonMenuItem x:Name="miExportToTreesAlbum" Click="miExportToTreesAlbum_Click" />
         <SeparatorMenuItem />

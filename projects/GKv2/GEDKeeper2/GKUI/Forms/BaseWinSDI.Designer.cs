@@ -57,8 +57,8 @@
         private System.Windows.Forms.ToolStripMenuItem miTreeAncestors;
         private System.Windows.Forms.ToolStripMenuItem miTreeDescendants;
         private System.Windows.Forms.ToolStripSeparator N8;
-        private System.Windows.Forms.ToolStripMenuItem miPedigree_dAboville;
-        private System.Windows.Forms.ToolStripMenuItem miPedigree_Konovalov;
+        private System.Windows.Forms.ToolStripMenuItem miPedigreeAscend;
+        private System.Windows.Forms.ToolStripMenuItem miPedigreeDescend;
         private System.Windows.Forms.ToolStripSeparator N9;
         private System.Windows.Forms.ToolStripMenuItem miMap;
         private System.Windows.Forms.ToolStripSeparator N10;
@@ -71,8 +71,8 @@
         private System.Windows.Forms.ToolStripMenuItem miAbout;
         private System.Windows.Forms.ContextMenuStrip MenuMRU;
         private System.Windows.Forms.ContextMenuStrip MenuPedigree;
-        private System.Windows.Forms.ToolStripMenuItem miPedigree_dAboville2;
-        private System.Windows.Forms.ToolStripMenuItem miPedigree_Konovalov2;
+        private System.Windows.Forms.ToolStripMenuItem miPedigreeAscend2;
+        private System.Windows.Forms.ToolStripMenuItem miPedigreeDescend2;
         private System.Windows.Forms.ToolStripSeparator TBS7;
         private System.Windows.Forms.ToolStripMenuItem miOrganizer;
         private System.Windows.Forms.ToolStripMenuItem miService;
@@ -88,7 +88,6 @@
         private System.Windows.Forms.ToolStripMenuItem miPlugins;
         private System.Windows.Forms.ToolStripMenuItem miSlideshow;
         private System.Windows.Forms.ToolStripDropDownButton tbLoadMRU;
-        private System.Windows.Forms.ToolStripMenuItem miPedigreeAscend;
         private System.Windows.Forms.ToolStripMenuItem miDescendantsCircle;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem miRelationshipCalculator;
@@ -141,8 +140,8 @@
             this.TBS5 = new System.Windows.Forms.ToolStripSeparator();
             this.tbPedigree = new System.Windows.Forms.ToolStripDropDownButton();
             this.MenuPedigree = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.miPedigree_dAboville2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.miPedigree_Konovalov2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.miPedigreeAscend2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.miPedigreeDescend2 = new System.Windows.Forms.ToolStripMenuItem();
             this.TBS6 = new System.Windows.Forms.ToolStripSeparator();
             this.tbStats = new System.Windows.Forms.ToolStripButton();
             this.TBS7 = new System.Windows.Forms.ToolStripSeparator();
@@ -181,8 +180,7 @@
             this.miDescendantsCircle = new System.Windows.Forms.ToolStripMenuItem();
             this.N6 = new System.Windows.Forms.ToolStripSeparator();
             this.miPedigreeAscend = new System.Windows.Forms.ToolStripMenuItem();
-            this.miPedigree_dAboville = new System.Windows.Forms.ToolStripMenuItem();
-            this.miPedigree_Konovalov = new System.Windows.Forms.ToolStripMenuItem();
+            this.miPedigreeDescend = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportToFamilyBook = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportToTreesAlbum = new System.Windows.Forms.ToolStripMenuItem();
             this.N7 = new System.Windows.Forms.ToolStripSeparator();
@@ -418,23 +416,23 @@
             // MenuPedigree
             // 
             this.MenuPedigree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                                    this.miPedigree_dAboville2,
-                                    this.miPedigree_Konovalov2});
+                                    this.miPedigreeAscend2,
+                                    this.miPedigreeDescend2});
             this.MenuPedigree.Name = "MenuPedigree";
             this.MenuPedigree.OwnerItem = this.tbPedigree;
             this.MenuPedigree.Size = new System.Drawing.Size(70, 48);
             // 
-            // miPedigree_dAboville2
+            // miPedigreeAscend2
             // 
-            this.miPedigree_dAboville2.Name = "miPedigree_dAboville2";
-            this.miPedigree_dAboville2.Size = new System.Drawing.Size(69, 22);
-            this.miPedigree_dAboville2.Click += new System.EventHandler(this.miPedigree_dAbovilleClick);
+            this.miPedigreeAscend2.Name = "miPedigreeAscend2";
+            this.miPedigreeAscend2.Size = new System.Drawing.Size(69, 22);
+            this.miPedigreeAscend2.Click += new System.EventHandler(this.miPedigreeAscend_Click);
             // 
-            // miPedigree_Konovalov2
+            // miPedigreeDescend2
             // 
-            this.miPedigree_Konovalov2.Name = "miPedigree_Konovalov2";
-            this.miPedigree_Konovalov2.Size = new System.Drawing.Size(69, 22);
-            this.miPedigree_Konovalov2.Click += new System.EventHandler(this.miPedigree_KonovalovClick);
+            this.miPedigreeDescend2.Name = "miPedigreeDescend2";
+            this.miPedigreeDescend2.Size = new System.Drawing.Size(69, 22);
+            this.miPedigreeDescend2.Click += new System.EventHandler(this.miPedigreeDescend_Click);
             // 
             // TBS6
             // 
@@ -680,8 +678,7 @@
                                     this.miDescendantsCircle,
                                     this.N6,
                                     this.miPedigreeAscend,
-                                    this.miPedigree_dAboville,
-                                    this.miPedigree_Konovalov,
+                                    this.miPedigreeDescend,
                                     this.miExportToFamilyBook,
                                     this.miExportToTreesAlbum,
                                     this.N7,
@@ -743,21 +740,13 @@
             this.miPedigreeAscend.Text = "miPedigreeAscend";
             this.miPedigreeAscend.Click += new System.EventHandler(this.miPedigreeAscend_Click);
             // 
-            // miPedigree_dAboville
+            // miPedigreeDescend
             // 
-            this.miPedigree_dAboville.Name = "miPedigree_dAboville";
-            this.miPedigree_dAboville.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.miPedigree_dAboville.Size = new System.Drawing.Size(281, 24);
-            this.miPedigree_dAboville.Text = "miPedigree_dAboville";
-            this.miPedigree_dAboville.Click += new System.EventHandler(this.miPedigree_dAbovilleClick);
-            // 
-            // miPedigree_Konovalov
-            // 
-            this.miPedigree_Konovalov.Name = "miPedigree_Konovalov";
-            this.miPedigree_Konovalov.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
-            this.miPedigree_Konovalov.Size = new System.Drawing.Size(281, 24);
-            this.miPedigree_Konovalov.Text = "miPedigree_Konovalov";
-            this.miPedigree_Konovalov.Click += new System.EventHandler(this.miPedigree_KonovalovClick);
+            this.miPedigreeDescend.Name = "miPedigreeDescend";
+            this.miPedigreeDescend.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.miPedigreeDescend.Size = new System.Drawing.Size(281, 24);
+            this.miPedigreeDescend.Text = "miPedigreeDescend";
+            this.miPedigreeDescend.Click += new System.EventHandler(this.miPedigreeDescend_Click);
             // 
             // miExportToFamilyBook
             // 
