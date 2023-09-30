@@ -3,7 +3,11 @@
 
     <ItemGroup>
         <Compile Include="NavigatorData.cs" />
+
         <None Include="GKNavigatorPlugin.cze">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKNavigatorPlugin.dut">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Include="GKNavigatorPlugin.enu">

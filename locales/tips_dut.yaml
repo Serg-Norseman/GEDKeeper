@@ -1,0 +1,7 @@
+﻿---
+Tips:
+  - Text: 'Maak zo vaak mogelijk een backup van de database. Om dit te doen, gebruik dan de functies van het programma [Extra  Opties  Algemeen] of sla elke sessie op in een bestand met toevoeging van het nummer: "MyRod_1", "MyRod_2", "MyRod_3", "MyRod_ ...". Hierdoor kan er vol vertrouwen en veilig gewerkt worden.'
+  - Text: 'Controleer de database regelmatig [Extra > Gereedschap > Controleer database] - hiermee worden logische onjuistheden en problemen met de gegevensstructuur tijdig opgemerkt en uitgesloten.'
+  - Text: 'Als het invoerveld voor patroniem in het dialoogvenster voor het bewerken van personen niet beschikbaar is, controleer dan de database taal [Eigenschappen] omdat de mogelijkheid om een patroniem in te voeren afhankelijk is van de beschikbaarheid in de taal en cultuur.'
+  - Text: 'Als u de meisjesnaam van een vrouw moet invoeren en het bijbehorende veld is niet beschikbaar, vink dan de optie [Extra > Opties > Interface]  Eigen achternaam aan.'
+...

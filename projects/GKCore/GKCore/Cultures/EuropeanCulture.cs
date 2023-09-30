@@ -23,9 +23,9 @@ namespace GKCore.Cultures
     /// <summary>
     /// 
     /// </summary>
-    public abstract class EuropeanCulture : DefaultCulture
+    public class EuropeanCulture : DefaultCulture
     {
-        protected EuropeanCulture()
+        public EuropeanCulture()
         {
             // default values
             HasPatronymic = false;

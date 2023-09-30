@@ -49,46 +49,8 @@ namespace GKCore.Cultures
         {
             DefaultCulture culture;
             switch (langID) {
-                case GDMLanguageID.Russian:
-                case GDMLanguageID.Ukrainian:
-                case GDMLanguageID.Kazakh:
-                    culture = new RussianCulture();
-                    break;
-
-                case GDMLanguageID.Polish:
-                    culture = new PolishCulture();
-                    break;
-
-                case GDMLanguageID.German:
-                    culture = new GermanCulture();
-                    break;
-
-                case GDMLanguageID.Swedish:
-                    culture = new SwedishCulture();
-                    break;
-
-                case GDMLanguageID.Icelandic:
-                    culture = new IcelandCulture();
-                    break;
-
                 case GDMLanguageID.Armenian:
                     culture = new ArmenianCulture();
-                    break;
-
-                case GDMLanguageID.Turkish:
-                    culture = new TurkishCulture();
-                    break;
-
-                case GDMLanguageID.French:
-                    culture = new FrenchCulture();
-                    break;
-
-                case GDMLanguageID.Italian:
-                    culture = new ItalianCulture();
-                    break;
-
-                case GDMLanguageID.Czech:
-                    culture = new CzechCulture();
                     break;
 
                 case GDMLanguageID.Cantonese:
@@ -96,9 +58,51 @@ namespace GKCore.Cultures
                     culture = new ChineseCulture();
                     break;
 
+                case GDMLanguageID.Czech:
+                    culture = new CzechCulture();
+                    break;
+
                 case GDMLanguageID.English:
-                default:
                     culture = new BritishCulture();
+                    break;
+
+                case GDMLanguageID.French:
+                    culture = new FrenchCulture();
+                    break;
+
+                case GDMLanguageID.German:
+                    culture = new GermanCulture();
+                    break;
+
+                case GDMLanguageID.Icelandic:
+                    culture = new IcelandCulture();
+                    break;
+
+                case GDMLanguageID.Italian:
+                    culture = new ItalianCulture();
+                    break;
+
+                case GDMLanguageID.Polish:
+                    culture = new PolishCulture();
+                    break;
+
+                case GDMLanguageID.Russian:
+                case GDMLanguageID.Belorusian:
+                case GDMLanguageID.Kazakh:
+                case GDMLanguageID.Ukrainian:
+                    culture = new RussianCulture();
+                    break;
+
+                case GDMLanguageID.Swedish:
+                    culture = new SwedishCulture();
+                    break;
+
+                case GDMLanguageID.Turkish:
+                    culture = new TurkishCulture();
+                    break;
+
+                default:
+                    culture = new EuropeanCulture();
                     break;
             }
 

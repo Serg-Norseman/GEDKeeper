@@ -4,7 +4,11 @@
     <ItemGroup>
         <Compile Include="ConwayLife\LifeGrid.cs" />
         <Compile Include="ConwayLife\LifeHistory.cs" />
+
         <None Include="GKLifePlugin.cze">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKLifePlugin.dut">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Include="GKLifePlugin.enu">

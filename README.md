@@ -65,6 +65,7 @@ If your problem or idea is not addressed yet, please open a new issue.
 - Belarusian, initial
 - Chinese (simplified)
 - Czech
+- Dutch
 - English
 - French
 - German

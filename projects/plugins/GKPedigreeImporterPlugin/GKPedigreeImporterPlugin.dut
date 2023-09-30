@@ -1,0 +1,37 @@
+;1031,dut,Dutch
+Importeer stamboom
+Bestand
+Selecteer
+Formaat niet ondersteund
+Laad-data fout.
+Fout: aantal verslagen bevat tussenruimtes.
+Erkend persoonlijk verslag
+Generatie
+Fout: niet gevonden in lijst van voorouders met nummer
+Fout: datum
+Fout: persoon nummer is gekopieerd
+Persoonsnummer formaat
+zoals D'Aboville (nog niet ondersteund)
+zoals Konovalov
+onbekend
+Tekst stamboom parameters
+Persoonslijnscheidingsteken
+Namen opmaken in persoonsregel
+Opmaaklijn van generatie
+Datumscheidingsteken
+Datum opmaak
+Transformatie parameter
+Normaliseer de namen (FIDELE -> Fidele)
+Volgende >
+< Vorige
+Sluit
+Speciale instelling persoonlijke lijnen formaat
+1) "Nummer. Naam (*geboorte +overlijding)" - data tussen haakjes
+Analyseren
+Laden
+Naam Patroniem Achternaam
+Achternaam Naam Patroniem
+niet speciaal
+Alle ondersteunde formaten (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Stamboom in txt formaat (*.txt)|*.txt|Stamboom in csv formaat (*.csv)|*.csv|Stamboom in MS Word formaat (*.doc)|*.doc|Stamboom in MS Excel formaat (*.xls)|*.xls
+Alle ondersteunde formaten (*.txt, *.csv)|*.txt;*.csv|Stamboom in txt formaat (*.txt)|*.txt|Stamboom in csv formaat (*.csv)|*.csv
+Tegenstrijdige informatie over echtgenoten

@@ -22,6 +22,9 @@
         <None Include="GKStdReports.deu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKStdReports.dut">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKStdReports.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

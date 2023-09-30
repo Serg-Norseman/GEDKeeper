@@ -3,7 +3,11 @@
 
     <ItemGroup>
         <Compile Include="HistoryData.cs" />
+
         <None Include="GKHistoryDataPlugin.cze">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKHistoryDataPlugin.dut">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Include="GKHistoryDataPlugin.enu">

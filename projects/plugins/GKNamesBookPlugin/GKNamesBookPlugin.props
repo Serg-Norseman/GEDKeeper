@@ -3,7 +3,11 @@
 
     <ItemGroup>
         <Compile Include="NamesBook.cs" />
+
         <None Include="GKNamesBookPlugin.cze">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKNamesBookPlugin.dut">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Include="GKNamesBookPlugin.enu">
@@ -18,6 +22,7 @@
         <None Include="GKNamesBookPlugin.ukr">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+
         <EmbeddedResource Include="Resources\bk_names.txt" />
         <EmbeddedResource Include="Resources\bk_names_cf.txt" />
         <EmbeddedResource Include="Resources\bk_names_cm.txt" />

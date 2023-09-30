@@ -5,6 +5,9 @@
         <None Include="GKCalendarPlugin.cze">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKCalendarPlugin.dut">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKCalendarPlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

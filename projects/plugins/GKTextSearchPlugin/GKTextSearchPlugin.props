@@ -3,7 +3,11 @@
 
     <ItemGroup>
         <Compile Include="SearchManager.cs" />
+
         <None Include="GKTextSearchPlugin.cze">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKTextSearchPlugin.dut">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Include="GKTextSearchPlugin.enu">
