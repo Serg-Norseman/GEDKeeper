@@ -134,7 +134,7 @@ namespace GKPedigreeImporterPlugin
 #if !MONO
             filter = fLangMan.LS(PLS.AllFiltersW);
 #else
-            filter = fLangMan.LS(ILS.AllFiltersL);
+            filter = fLangMan.LS(PLS.AllFiltersL);
 #endif
 
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", filter, 1, "");

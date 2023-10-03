@@ -124,7 +124,7 @@ namespace GKFlowInputPlugin
             Title = fLangMan.LS(PLS.FlowInput);
             tsSimpleInput.Text = fLangMan.LS(PLS.InputSimple);
             btnMale.Text = new string(fLangMan.LS(PLS.SexM)[0], 1);
-            //this.btnFemale.Text = new string(LangMan.LS(FLS.67][0], 1);
+            //this.btnFemale.Text = new string(LangMan.LS(PLS.67][0], 1);
             lblFullName.Text = fLangMan.LS(PLS.FullName);
             chkBirth.Text = fLangMan.LS(PLS.Birth);
             lblBirthDate.Text = fLangMan.LS(PLS.BirthDate);
@@ -263,17 +263,17 @@ namespace GKFlowInputPlugin
             string[] surnamesList = new string[0];
 
             /*dgv.Columns.AddRange(new DataGridViewColumn[] {
-                                     AddComboColumn("FLink", fLangMan.LS(FLS.Join), linksList),
+                                     AddComboColumn("FLink", fLangMan.LS(PLS.Join), linksList),
 
-                                     AddComboColumn("FName", fLangMan.LS(FLS.Name), namesList),
-                                     AddComboColumn("FPatronymic", fLangMan.LS(FLS.Patronymic), patrList),
-                                     AddComboColumn("FSurname", fLangMan.LS(FLS.Surname), surnamesList),
-                                     //AddTextColumn("FName", fLangMan.LS(FLS.Name)),
-                                     //AddTextColumn("FPatronymic", fLangMan.LS(FLS.Patronymic)),
-                                     //AddTextColumn("FSurname", fLangMan.LS(FLS.Surname)),
+                                     AddComboColumn("FName", fLangMan.LS(PLS.Name), namesList),
+                                     AddComboColumn("FPatronymic", fLangMan.LS(PLS.Patronymic), patrList),
+                                     AddComboColumn("FSurname", fLangMan.LS(PLS.Surname), surnamesList),
+                                     //AddTextColumn("FName", fLangMan.LS(PLS.Name)),
+                                     //AddTextColumn("FPatronymic", fLangMan.LS(PLS.Patronymic)),
+                                     //AddTextColumn("FSurname", fLangMan.LS(PLS.Surname)),
 
-                                     AddTextColumn("FAge", fLangMan.LS(FLS.Age)),
-                                     AddTextColumn("FComment", fLangMan.LS(FLS.Comment))});
+                                     AddTextColumn("FAge", fLangMan.LS(PLS.Age)),
+                                     AddTextColumn("FComment", fLangMan.LS(PLS.Comment))});
 
             dgv.CellValidating += dataGridView1_CellValidating;
             dgv.EditingControlShowing += dataGridView1_EditingControlShowing;
