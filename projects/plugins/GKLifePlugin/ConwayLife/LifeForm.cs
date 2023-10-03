@@ -46,12 +46,12 @@ namespace GKLifePlugin.ConwayLife
 
         public void SetLocale()
         {
-            Text = fLangMan.LS(PLS.LSID_LifeGame);
-            tbStep.Text = fLangMan.LS(PLS.LSID_Step);
-            tbStart.Text = fLangMan.LS(PLS.LSID_Start);
-            btnSetCells.Text = fLangMan.LS(PLS.LSID_SetCells);
-            tbClear.Text = fLangMan.LS(PLS.LSID_Clear);
-            tbRandomise.Text = fLangMan.LS(PLS.LSID_Random);
+            Text = fLangMan.LS(PLS.LifeGame);
+            tbStep.Text = fLangMan.LS(PLS.Step);
+            tbStart.Text = fLangMan.LS(PLS.Start);
+            btnSetCells.Text = fLangMan.LS(PLS.SetCells);
+            tbClear.Text = fLangMan.LS(PLS.Clear);
+            tbRandomise.Text = fLangMan.LS(PLS.Random);
         }
 
         private void tbRandomise_Click(object sender, EventArgs e)
@@ -85,11 +85,11 @@ namespace GKLifePlugin.ConwayLife
             tbStart.Enabled = !btnSetCells.Checked;
             if (tbStart.Checked) {
                 cmpLife.OnChange += cmpLife_Change;
-                tbStart.Text = fLangMan.LS(PLS.LSID_Stop);
+                tbStart.Text = fLangMan.LS(PLS.Stop);
                 tbStart.ToolTipText = "Остановка хода поколений";
             } else {
                 cmpLife.OnChange -= cmpLife_Change;
-                tbStart.Text = fLangMan.LS(PLS.LSID_Start);
+                tbStart.Text = fLangMan.LS(PLS.Start);
                 tbStart.ToolTipText = "Автоматическое прохождение поколений";
             }
 

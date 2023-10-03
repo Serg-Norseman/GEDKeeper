@@ -1,30 +1,30 @@
-﻿;1029,cze,Čeština
-Kalendář
-Datum
-Gregoriánský
-Julian
-Hebrejský
-Islámský
-Peršan
-Indický
-Bahai
-Bahá|Jalál|Jamál|'Aẓamat|Núr|Raḥmat|Kalimát|Kamál|Asmá'|'Izzat|Mashíyyat|'Ilm|Qudrat|Qawl|Masá'il|Sharaf|Sulṭán|Mulk|Ayyám'A-i '
-Jamál|Kamál|Fiḍál|‘Idál|Istijlál|Istiqlál|Jalál
-leden|únor|březen|duben|květen|červen|červenec|srpen|září|říjen|listopad|prosinec
-pondělí|úterý|středa|čtvrtek|pátek|sobota|neděle
-Nisan|Iyyar|Sivan|Tammuz|Av|Elul|Tishri|Heshvan|Kislev|Teveth|Shevat|Adar|Veadar
-Alef|Bet|Gimel|Dalet|He|Vav|Zayin
-Caitra|Vaisakha|Jyaistha|Asadha|Sravana|Bhadra|Asvina|Kartika|Agrahayana|Pausa|Magha|Phalguna
-Ravivara|Somavara|Mangalavara|Budhavara|Brahaspativara|Sukravara|Sanivara
-Muharram|Safar|Rabi`al-Awwal|Rabi`ath-Thani|Jumada l-Ula|Jumada t-Tania|Rajab|Sha`ban|Ramadán|Shawwal|Dhu l-Qa`da|Dhu l-Hijja
-Al-'ahad|Al-'ithnayn|Ath-thalatha'|Al-'arb`a'|Al-khamis|Al-jum`a|As-sabt
-Farvardin|Ordibehesht|Khordad|Tir|Mordad|Shahrivar|Mehr|Aban|Azar|Dey|Bahman|Esfand
-Yekshanbeh|Doshanbeh|Seshhanbeh|Chaharshanbeh|Panjshanbeh|Jomeh|Shanbeh
-Kull-i-Shay’ {0}, Váḥid {1}
-Byzantský
-Ianuarius|Februarius|Martius|Aprilis|Maius|Iunius|Iulius|Augustus|September|October|November|December
-Den
-Měsíc
-Rok
-Datum zdroje
-Převedené datum
+﻿;1029,cze,Čeština,xt
+01=Kalendář
+02=Datum
+03=Gregoriánský
+04=Julian
+05=Hebrejský
+06=Islámský
+07=Peršan
+08=Indický
+09=Bahai
+10=Bahá|Jalál|Jamál|'Aẓamat|Núr|Raḥmat|Kalimát|Kamál|Asmá'|'Izzat|Mashíyyat|'Ilm|Qudrat|Qawl|Masá'il|Sharaf|Sulṭán|Mulk|Ayyám'A-i '
+11=Jamál|Kamál|Fiḍál|‘Idál|Istijlál|Istiqlál|Jalál
+12=leden|únor|březen|duben|květen|červen|červenec|srpen|září|říjen|listopad|prosinec
+13=pondělí|úterý|středa|čtvrtek|pátek|sobota|neděle
+14=Nisan|Iyyar|Sivan|Tammuz|Av|Elul|Tishri|Heshvan|Kislev|Teveth|Shevat|Adar|Veadar
+15=Alef|Bet|Gimel|Dalet|He|Vav|Zayin
+16=Caitra|Vaisakha|Jyaistha|Asadha|Sravana|Bhadra|Asvina|Kartika|Agrahayana|Pausa|Magha|Phalguna
+17=Ravivara|Somavara|Mangalavara|Budhavara|Brahaspativara|Sukravara|Sanivara
+18=Muharram|Safar|Rabi`al-Awwal|Rabi`ath-Thani|Jumada l-Ula|Jumada t-Tania|Rajab|Sha`ban|Ramadán|Shawwal|Dhu l-Qa`da|Dhu l-Hijja
+19=Al-'ahad|Al-'ithnayn|Ath-thalatha'|Al-'arb`a'|Al-khamis|Al-jum`a|As-sabt
+20=Farvardin|Ordibehesht|Khordad|Tir|Mordad|Shahrivar|Mehr|Aban|Azar|Dey|Bahman|Esfand
+21=Yekshanbeh|Doshanbeh|Seshhanbeh|Chaharshanbeh|Panjshanbeh|Jomeh|Shanbeh
+22=Kull-i-Shay’ {0}, Váḥid {1}
+23=Byzantský
+24=Ianuarius|Februarius|Martius|Aprilis|Maius|Iunius|Iulius|Augustus|September|October|November|December
+25=Den
+26=Měsíc
+27=Rok
+28=Datum zdroje
+29=Převedené datum

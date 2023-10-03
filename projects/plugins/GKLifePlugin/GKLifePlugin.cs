@@ -43,14 +43,14 @@ namespace GKLifePlugin
 {
     public enum PLS
     {
-        LSID_LifeGame,
-        LSID_Step,
-        LSID_Start,
-        LSID_Stop,
-        LSID_SetCells,
-        LSID_Clear,
-        LSID_Random,
-        LSID_Options,
+        LifeGame,
+        Step,
+        Start,
+        Stop,
+        SetCells,
+        Clear,
+        Random,
+        Options,
     }
 
     public class Plugin : OrdinaryPlugin
@@ -73,7 +73,7 @@ namespace GKLifePlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(PLS.LSID_LifeGame);
+                fDisplayName = fLangMan.LS(PLS.LifeGame);
             } catch (Exception ex) {
                 Logger.WriteError("GKLifePlugin.OnLanguageChange()", ex);
             }

@@ -85,9 +85,9 @@ namespace GKPedigreeImporterPlugin
 
             cbDateSeparator.Items.AddRange(new string[] { ".", "/", "-"});
             cbDatesFormat.Items.AddRange(new string[] { "DD/MM/YYYY", "YYYY/MM/DD" });
-            cbGenerationFormat.Items.AddRange(new string[] { "I, II, III, IV...", fLangMan.LS(ILS.LSID_Generation) + " N"});
-            cbNameFormat.Items.AddRange(new string[] { fLangMan.LS(ILS.LSID_NPS), fLangMan.LS(ILS.LSID_SNP) });
-            cbPersonSeparator.Items.AddRange(new string[] { fLangMan.LS(ILS.LSID_NoSpecial), ";", "," });
+            cbGenerationFormat.Items.AddRange(new string[] { "I, II, III, IV...", fLangMan.LS(PLS.Generation) + " N"});
+            cbNameFormat.Items.AddRange(new string[] { fLangMan.LS(PLS.NPS), fLangMan.LS(PLS.SNP) });
+            cbPersonSeparator.Items.AddRange(new string[] { fLangMan.LS(PLS.NoSpecial), ";", "," });
 
             fBase = curBase;
             fImporter = new Importer(this, fBase, fLangMan, lbLog.Items);
@@ -101,40 +101,40 @@ namespace GKPedigreeImporterPlugin
             cbDateSeparator.SelectedIndex = 0;
 
             // SetLocale()
-            Title = fLangMan.LS(ILS.LSID_PluginTitle);
-            lblFile.Text = fLangMan.LS(ILS.LSID_File);
-            btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + @"...";
+            Title = fLangMan.LS(PLS.PedigreeImporter);
+            lblFile.Text = fLangMan.LS(PLS.File);
+            btnImportFileChoose.Text = fLangMan.LS(PLS.DlgSelect) + @"...";
 
-            grpPersonIdFormat.Text = fLangMan.LS(ILS.LSID_PersonIdFormat);
-            rbNumsDAboville.Text = fLangMan.LS(ILS.LSID_NumsDAboville);
-            rbNumsKonovalov.Text = fLangMan.LS(ILS.LSID_NumsKonovalov);
-            rbNumsUnknown.Text = fLangMan.LS(ILS.LSID_NumsUnknown);
+            grpPersonIdFormat.Text = fLangMan.LS(PLS.PersonIdFormat);
+            rbNumsDAboville.Text = fLangMan.LS(PLS.NumsDAboville);
+            rbNumsKonovalov.Text = fLangMan.LS(PLS.NumsKonovalov);
+            rbNumsUnknown.Text = fLangMan.LS(PLS.NumsUnknown);
 
-            grpTextPedigreesParams.Text = fLangMan.LS(ILS.LSID_TextPedigreesParams);
-            lblPersonLineSeparator.Text = fLangMan.LS(ILS.LSID_PersonLineSeparator);
-            lblSurnameFormat.Text = fLangMan.LS(ILS.LSID_SurnameFormat);
-            lblGenerationFormat.Text = fLangMan.LS(ILS.LSID_GenerationFormat);
-            lblDateSeparator.Text = fLangMan.LS(ILS.LSID_DateSeparator);
-            lblDateFormat.Text = fLangMan.LS(ILS.LSID_DateFormat);
+            grpTextPedigreesParams.Text = fLangMan.LS(PLS.TextPedigreesParams);
+            lblPersonLineSeparator.Text = fLangMan.LS(PLS.PersonLineSeparator);
+            lblSurnameFormat.Text = fLangMan.LS(PLS.SurnameFormat);
+            lblGenerationFormat.Text = fLangMan.LS(PLS.GenerationFormat);
+            lblDateSeparator.Text = fLangMan.LS(PLS.DateSeparator);
+            lblDateFormat.Text = fLangMan.LS(PLS.DateFormat);
 
-            grpConversionParams.Text = fLangMan.LS(ILS.LSID_ConversionParams);
-            chkSurnamesNormalize.Text = fLangMan.LS(ILS.LSID_SurnamesNormalize);
+            grpConversionParams.Text = fLangMan.LS(PLS.ConversionParams);
+            chkSurnamesNormalize.Text = fLangMan.LS(PLS.SurnamesNormalize);
 
-            btnNext.Text = fLangMan.LS(ILS.LSID_Next);
-            btnBack.Text = fLangMan.LS(ILS.LSID_Back);
-            btnClose.Text = fLangMan.LS(ILS.LSID_Close);
+            btnNext.Text = fLangMan.LS(PLS.Next);
+            btnBack.Text = fLangMan.LS(PLS.Back);
+            btnClose.Text = fLangMan.LS(PLS.Close);
 
-            grpPersonLineSpecials.Text = fLangMan.LS(ILS.LSID_PersonLineSpecials);
-            chkSpecial_1.Text = fLangMan.LS(ILS.LSID_Special_1);
+            grpPersonLineSpecials.Text = fLangMan.LS(PLS.PersonLineSpecials);
+            chkSpecial_1.Text = fLangMan.LS(PLS.Special_1);
         }
 
         private void btnImportFileChoose_Click(object sender, EventArgs e)
         {
             string filter;
 #if !MONO
-            filter = fLangMan.LS(ILS.LSID_AllFiltersW);
+            filter = fLangMan.LS(PLS.AllFiltersW);
 #else
-            filter = fLangMan.LS(ILS.LSID_AllFiltersL);
+            filter = fLangMan.LS(ILS.AllFiltersL);
 #endif
 
             string fileName = AppHost.StdDialogs.GetOpenFile("", "", filter, 1, "");
@@ -163,7 +163,7 @@ namespace GKPedigreeImporterPlugin
 
                 UpdateNavigation();
             } catch (Exception ex) {
-                AppHost.StdDialogs.ShowError(ex.Message, fLangMan.LS(ILS.LSID_PluginTitle));
+                AppHost.StdDialogs.ShowError(ex.Message, fLangMan.LS(PLS.PedigreeImporter));
             }
         }
 

@@ -33,7 +33,7 @@ namespace GKStdReports
         public RepositoriesReport(IBaseWindow baseWin)
             : base(baseWin, false)
         {
-            fTitle = SRLangMan.LS(RLS.LSID_Repositories_Title);
+            fTitle = SRLangMan.LS(PLS.RepositoriesReport);
         }
 
         protected override void InternalGenerate()
@@ -61,8 +61,8 @@ namespace GKStdReports
             fWriter.BeginTable(2, repositories.Count + 1);
 
             fWriter.BeginTableRow(true);
-            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Name), headerFont, TextAlignment.taLeft);
-            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Address), headerFont, TextAlignment.taLeft);
+            fWriter.AddTableCell(SRLangMan.LS(PLS.Name), headerFont, TextAlignment.taLeft);
+            fWriter.AddTableCell(SRLangMan.LS(PLS.Address), headerFont, TextAlignment.taLeft);
             fWriter.EndTableRow();
 
             for (int i = 0; i < repositories.Count; i++) {

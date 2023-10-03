@@ -41,7 +41,7 @@ namespace GKStdReports
         public ContemporariesReport(IBaseWindow baseWin, GDMIndividualRecord selectedPerson)
             : base(baseWin, false)
         {
-            fTitle = SRLangMan.LS(RLS.LSID_Contemporaries_Title);
+            fTitle = SRLangMan.LS(PLS.ContemporariesReport);
             fPerson = selectedPerson;
         }
 

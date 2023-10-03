@@ -46,7 +46,7 @@ namespace GKWordsCloudPlugin
 {
     public enum PLS
     {
-        LSID_Title,
+        WordsCloud,
     }
 
     public sealed class Plugin : WidgetPlugin
@@ -90,7 +90,7 @@ namespace GKWordsCloudPlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(PLS.LSID_Title);
+                fDisplayName = fLangMan.LS(PLS.WordsCloud);
 
                 if (fForm != null)
                     fForm.SetLocale();

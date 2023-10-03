@@ -41,37 +41,37 @@ using GKCore.Plugins;
 
 namespace GKStdReports
 {
-    public enum RLS
+    public enum PLS
     {
-        LSID_NFR_Title,
-        LSID_PER_Title,
-        LSID_Names,
-        LSID_Surnames,
-        LSID_Phonetics_Title,
-        LSID_Contemporaries_Title,
-        LSID_Sources_Title,
-        LSID_Name,
-        LSID_Title,
-        LSID_Repositories_Title,
-        LSID_Address,
-        LSID_Places_Title,
-        LSID_Repository,
-        LSID_AncestorStatistics_Title,
-        LSID_RootIndividual,
-        LSID_ImplexFactor,
-        LSID_ConsanguinityFactor,
-        LSID_Generation,
-        LSID_Possible,
-        LSID_Known,
-        LSID_KnownPercent,
-        LSID_Cumul,
-        LSID_CumulPercent,
-        LSID_Diff,
-        LSID_Implex,
-        LSID_CommonAncestors,
-        LSID_ConsanguinityCommonAncestors,
-        LSID_RecordCard,
-        LSID_NotSelectedRecord,
+        NamesFreqReport,
+        PersonalEventsReport,
+        Names,
+        Surnames,
+        PhoneticsReport,
+        ContemporariesReport,
+        SourcesReport,
+        Name,
+        Title,
+        RepositoriesReport,
+        Address,
+        PlacesReport,
+        Repository,
+        AncestorStatisticsReport,
+        RootIndividual,
+        ImplexFactor,
+        ConsanguinityFactor,
+        Generation,
+        Possible,
+        Known,
+        KnownPercent,
+        Cumul,
+        CumulPercent,
+        Diff,
+        Implex,
+        CommonAncestors,
+        ConsanguinityCommonAncestors,
+        RecordCardReport,
+        NotSelectedRecord,
     }
 
 
@@ -116,7 +116,7 @@ namespace GKStdReports
 
     public class NFRPlugin : StdReportPlugin
     {
-        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_NFR_Title); } }
+        public override string DisplayName { get { return SRLangMan.LS(PLS.NamesFreqReport); } }
 
         public override void Execute()
         {
@@ -132,7 +132,7 @@ namespace GKStdReports
 
     public class PERPlugin : StdReportPlugin
     {
-        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_PER_Title); } }
+        public override string DisplayName { get { return SRLangMan.LS(PLS.PersonalEventsReport); } }
 
         public override void Execute()
         {
@@ -154,7 +154,7 @@ namespace GKStdReports
 
     public class PhonPlugin : StdReportPlugin
     {
-        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Phonetics_Title); } }
+        public override string DisplayName { get { return SRLangMan.LS(PLS.PhoneticsReport); } }
 
         public override void Execute()
         {
@@ -170,7 +170,7 @@ namespace GKStdReports
 
     public class ContempPlugin : StdReportPlugin
     {
-        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Contemporaries_Title); } }
+        public override string DisplayName { get { return SRLangMan.LS(PLS.ContemporariesReport); } }
 
         public override void Execute()
         {
@@ -192,7 +192,7 @@ namespace GKStdReports
 
     public class SourcesPlugin : StdReportPlugin
     {
-        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Sources_Title); } }
+        public override string DisplayName { get { return SRLangMan.LS(PLS.SourcesReport); } }
 
         public override void Execute()
         {
@@ -208,7 +208,7 @@ namespace GKStdReports
 
     public class RepositoriesPlugin : StdReportPlugin
     {
-        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Repositories_Title); } }
+        public override string DisplayName { get { return SRLangMan.LS(PLS.RepositoriesReport); } }
 
         public override void Execute()
         {
@@ -224,7 +224,7 @@ namespace GKStdReports
 
     public class PlacesPlugin : StdReportPlugin
     {
-        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_Places_Title); } }
+        public override string DisplayName { get { return SRLangMan.LS(PLS.PlacesReport); } }
 
         public override void Execute()
         {
@@ -240,7 +240,7 @@ namespace GKStdReports
 
     public class AncStatsPlugin : StdReportPlugin
     {
-        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_AncestorStatistics_Title); } }
+        public override string DisplayName { get { return SRLangMan.LS(PLS.AncestorStatisticsReport); } }
 
         public override void Execute()
         {
@@ -262,7 +262,7 @@ namespace GKStdReports
 
     public class RecCardPlugin : StdReportPlugin
     {
-        public override string DisplayName { get { return SRLangMan.LS(RLS.LSID_RecordCard); } }
+        public override string DisplayName { get { return SRLangMan.LS(PLS.RecordCardReport); } }
 
         public override void Execute()
         {
@@ -271,7 +271,7 @@ namespace GKStdReports
 
             var selRecord = curBase.GetSelectedRecordEx();
             if (selRecord == null) {
-                AppHost.StdDialogs.ShowError(SRLangMan.LS(RLS.LSID_NotSelectedRecord));
+                AppHost.StdDialogs.ShowError(SRLangMan.LS(PLS.NotSelectedRecord));
                 return;
             }
 

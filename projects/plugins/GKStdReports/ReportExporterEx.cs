@@ -36,7 +36,7 @@ namespace GKStdReports
             return GKUtils.GetNameString(iRec, true, false);
         }
 
-        protected static string Localize(RLS lsid, params object[] args)
+        protected static string Localize(PLS lsid, params object[] args)
         {
             return string.Format(SRLangMan.LS(lsid), args);
         }

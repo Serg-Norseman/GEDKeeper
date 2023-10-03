@@ -40,44 +40,44 @@ using GKCore.Plugins;
 
 namespace GKPedigreeImporterPlugin
 {
-    public enum ILS
+    public enum PLS
     {
-        LSID_PluginTitle,
-        LSID_File,
-        LSID_DlgSelect,
-        LSID_FormatUnsupported,
-        LSID_DataLoadError,
-        LSID_ParseError_LineSeq,
-        LSID_PersonParsed,
-        LSID_Generation,
-        LSID_ParseError_AncNotFound,
-        LSID_ParseError_DateInvalid,
-        LSID_ParseError_NumDuplicate,
-        LSID_PersonIdFormat,
-        LSID_NumsDAboville,
-        LSID_NumsKonovalov,
-        LSID_NumsUnknown,
-        LSID_TextPedigreesParams,
-        LSID_PersonLineSeparator,
-        LSID_SurnameFormat,
-        LSID_GenerationFormat,
-        LSID_DateSeparator,
-        LSID_DateFormat,
-        LSID_ConversionParams,
-        LSID_SurnamesNormalize,
-        LSID_Next,
-        LSID_Back,
-        LSID_Close,
-        LSID_PersonLineSpecials,
-        LSID_Special_1,
-        LSID_Analyzing,
-        LSID_Loading,
-        LSID_NPS,
-        LSID_SNP,
-        LSID_NoSpecial,
-        LSID_AllFiltersW,
-        LSID_AllFiltersL,
-        LSID_SpousesInfoConflict
+        PedigreeImporter,
+        File,
+        DlgSelect,
+        FormatUnsupported,
+        DataLoadError,
+        ParseError_LineSeq,
+        PersonParsed,
+        Generation,
+        ParseError_AncNotFound,
+        ParseError_DateInvalid,
+        ParseError_NumDuplicate,
+        PersonIdFormat,
+        NumsDAboville,
+        NumsKonovalov,
+        NumsUnknown,
+        TextPedigreesParams,
+        PersonLineSeparator,
+        SurnameFormat,
+        GenerationFormat,
+        DateSeparator,
+        DateFormat,
+        ConversionParams,
+        SurnamesNormalize,
+        Next,
+        Back,
+        Close,
+        PersonLineSpecials,
+        Special_1,
+        Analyzing,
+        Loading,
+        NPS,
+        SNP,
+        NoSpecial,
+        AllFiltersW,
+        AllFiltersL,
+        SpousesInfoConflict
     }
 
     public class PlugIn : OrdinaryPlugin
@@ -107,7 +107,7 @@ namespace GKPedigreeImporterPlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(ILS.LSID_PluginTitle);
+                fDisplayName = fLangMan.LS(PLS.PedigreeImporter);
             } catch (Exception ex) {
                 Logger.WriteError("GKPedigreeImporterPlugin.OnLanguageChange()", ex);
             }

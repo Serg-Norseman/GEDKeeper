@@ -32,7 +32,7 @@ namespace GKStdReports
         public PlacesReport(IBaseWindow baseWin)
             : base(baseWin, false)
         {
-            fTitle = SRLangMan.LS(RLS.LSID_Places_Title);
+            fTitle = SRLangMan.LS(PLS.PlacesReport);
         }
 
         protected override void InternalGenerate()
@@ -57,7 +57,7 @@ namespace GKStdReports
             fWriter.BeginTable(1, places.Count + 1);
 
             fWriter.BeginTableRow(true);
-            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Name), headerFont, TextAlignment.taLeft);
+            fWriter.AddTableCell(SRLangMan.LS(PLS.Name), headerFont, TextAlignment.taLeft);
             fWriter.EndTableRow();
 
             for (int i = 0; i < places.Count; i++) {

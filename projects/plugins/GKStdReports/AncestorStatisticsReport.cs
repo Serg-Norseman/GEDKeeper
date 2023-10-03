@@ -42,7 +42,7 @@ namespace GKStdReports
         public AncestorStatisticsReport(IBaseWindow baseWin, GDMIndividualRecord selectedPerson)
             : base(baseWin, false)
         {
-            fTitle = SRLangMan.LS(RLS.LSID_AncestorStatistics_Title);
+            fTitle = SRLangMan.LS(PLS.AncestorStatisticsReport);
             fPerson = selectedPerson;
         }
 
@@ -68,7 +68,7 @@ namespace GKStdReports
             fWriter.AddParagraph(text, fTextFont, TextAlignment.taLeft);
         }
 
-        private void WriteLine(RLS lsid, params object[] args)
+        private void WriteLine(PLS lsid, params object[] args)
         {
             fWriter.AddParagraph(Localize(lsid, args), fTextFont, TextAlignment.taLeft);
         }
@@ -137,12 +137,12 @@ namespace GKStdReports
 
         private void PrintHeader()
         {
-            fWriter.AddParagraph(Localize(RLS.LSID_AncestorStatistics_Title), fTitleFont);
+            fWriter.AddParagraph(Localize(PLS.AncestorStatisticsReport), fTitleFont);
             fWriter.NewLine();
 
-            WriteLine(RLS.LSID_RootIndividual, GetName(fPerson));
-            WriteLine(RLS.LSID_ImplexFactor, fImplexFactor);
-            WriteLine(RLS.LSID_ConsanguinityFactor, fConsanguinityFactor);
+            WriteLine(PLS.RootIndividual, GetName(fPerson));
+            WriteLine(PLS.ImplexFactor, fImplexFactor);
+            WriteLine(PLS.ConsanguinityFactor, fConsanguinityFactor);
             fWriter.NewLine();
         }
 
@@ -153,14 +153,14 @@ namespace GKStdReports
 
             // Print header
             fWriter.BeginTableRow();
-            AddCell(Localize(RLS.LSID_Generation), TextAlignment.taLeft);
-            AddCell(Localize(RLS.LSID_Possible), TextAlignment.taRight);
-            AddCell(Localize(RLS.LSID_Known), TextAlignment.taRight);
-            AddCell(Localize(RLS.LSID_KnownPercent), TextAlignment.taRight);
-            AddCell(Localize(RLS.LSID_Cumul), TextAlignment.taRight);
-            AddCell(Localize(RLS.LSID_CumulPercent), TextAlignment.taRight);
-            AddCell(Localize(RLS.LSID_Diff), TextAlignment.taRight);
-            AddCell(Localize(RLS.LSID_Implex), TextAlignment.taRight);
+            AddCell(Localize(PLS.Generation), TextAlignment.taLeft);
+            AddCell(Localize(PLS.Possible), TextAlignment.taRight);
+            AddCell(Localize(PLS.Known), TextAlignment.taRight);
+            AddCell(Localize(PLS.KnownPercent), TextAlignment.taRight);
+            AddCell(Localize(PLS.Cumul), TextAlignment.taRight);
+            AddCell(Localize(PLS.CumulPercent), TextAlignment.taRight);
+            AddCell(Localize(PLS.Diff), TextAlignment.taRight);
+            AddCell(Localize(PLS.Implex), TextAlignment.taRight);
             fWriter.EndTableRow();
 
             // Iteration on generations
@@ -187,7 +187,7 @@ namespace GKStdReports
             if (fImplexCommonIndiMap.Count == 0) return;
 
             // Print table of common individuals
-            fWriter.AddParagraph(Localize(RLS.LSID_CommonAncestors), fChaptFont);
+            fWriter.AddParagraph(Localize(PLS.CommonAncestors), fChaptFont);
             foreach (var itr in fImplexCommonIndiMap.Values) {
                 WriteLine(GetName(itr));
             }
@@ -199,7 +199,7 @@ namespace GKStdReports
             int tblSize = fConsanguinityCommonIndiMap.Count;
             if (tblSize == 0) return;
 
-            WriteLine(RLS.LSID_ConsanguinityCommonAncestors);
+            WriteLine(PLS.ConsanguinityCommonAncestors);
 
             fWriter.BeginTable(2, tblSize);
             foreach (var info in fConsanguinityCommonIndiMap.Values) {

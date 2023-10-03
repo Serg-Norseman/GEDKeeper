@@ -173,7 +173,7 @@ namespace GKNamesBookPlugin
 
             if (rec.ChIndex >= 0 && rec.ChList != null) {
                 result.AppendLine("");
-                result.AppendLine(fPlugin.LangMan.LS(NLS.LSID_Calendar) + ":");
+                result.AppendLine(fPlugin.LangMan.LS(PLS.Calendar) + ":");
 
                 int num = rec.ChList.Count;
                 for (int i = rec.ChIndex + 1; i < num; i++) {

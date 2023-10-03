@@ -71,10 +71,10 @@ namespace GKBackupPlugin
 
         public void SetLocale()
         {
-            Text = fPlugin.LangMan.LS(PLS.LSID_Backup);
-            chkEnabled.Text = fPlugin.LangMan.LS(PLS.LSID_Enabled);
-            lblFolder.Text = fPlugin.LangMan.LS(PLS.LSID_Folder);
-            btnFolderChoose.Text = fPlugin.LangMan.LS(PLS.LSID_FolderChoose);
+            Text = fPlugin.LangMan.LS(PLS.Backup);
+            chkEnabled.Text = fPlugin.LangMan.LS(PLS.Enabled);
+            lblFolder.Text = fPlugin.LangMan.LS(PLS.Folder);
+            btnFolderChoose.Text = fPlugin.LangMan.LS(PLS.FolderChoose);
         }
     }
 }

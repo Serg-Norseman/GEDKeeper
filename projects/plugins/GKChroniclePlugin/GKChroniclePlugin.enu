@@ -1,7 +1,7 @@
-;1033,eng,English
-Chronicle
-Date
-Event
-Place
-Cause
-Subject
+;1033,eng,English,xt
+01=Chronicle
+02=Date
+03=Event
+04=Place
+05=Cause
+06=Subject

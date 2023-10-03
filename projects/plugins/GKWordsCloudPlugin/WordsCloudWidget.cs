@@ -96,7 +96,7 @@ namespace GKWordsCloudPlugin
 
         public void SetLocale()
         {
-            Text = fPlugin.LangMan.LS(PLS.LSID_Title);
+            Text = fPlugin.LangMan.LS(PLS.WordsCloud);
 
             cbType.BeginUpdate();
             int selItem = cbType.SelectedIndex;

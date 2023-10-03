@@ -43,14 +43,14 @@ using GKCore.Plugins;
 
 namespace GKChroniclePlugin
 {
-    public enum CLS
+    public enum PLS
     {
-        /* 00 */ LSID_Title,
-        /* 01 */ LSID_Date,
-        /* 02 */ LSID_Event,
-        /* 03 */ LSID_Place,
-        /* 04 */ LSID_Cause,
-        /* 05 */ LSID_Description
+        Chronicle = 1,
+        Date,
+        Event,
+        Place,
+        Cause,
+        Description
     }
 
     internal class EventRecord
@@ -106,7 +106,7 @@ namespace GKChroniclePlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(CLS.LSID_Title);
+                fDisplayName = fLangMan.LS(PLS.Chronicle);
 
                 if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {

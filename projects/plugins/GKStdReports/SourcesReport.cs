@@ -33,7 +33,7 @@ namespace GKStdReports
         public SourcesReport(IBaseWindow baseWin)
             : base(baseWin, false)
         {
-            fTitle = SRLangMan.LS(RLS.LSID_Sources_Title);
+            fTitle = SRLangMan.LS(PLS.SourcesReport);
         }
 
         protected override void InternalGenerate()
@@ -61,9 +61,9 @@ namespace GKStdReports
             fWriter.BeginTable(3, sources.Count + 1);
 
             fWriter.BeginTableRow(true);
-            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Name), headerFont, TextAlignment.taLeft);
-            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Title), headerFont, TextAlignment.taLeft);
-            fWriter.AddTableCell(SRLangMan.LS(RLS.LSID_Repository), headerFont, TextAlignment.taLeft);
+            fWriter.AddTableCell(SRLangMan.LS(PLS.Name), headerFont, TextAlignment.taLeft);
+            fWriter.AddTableCell(SRLangMan.LS(PLS.Title), headerFont, TextAlignment.taLeft);
+            fWriter.AddTableCell(SRLangMan.LS(PLS.Repository), headerFont, TextAlignment.taLeft);
             fWriter.EndTableRow();
 
             for (int i = 0; i < sources.Count; i++) {

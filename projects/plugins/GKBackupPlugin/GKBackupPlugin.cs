@@ -44,10 +44,10 @@ namespace GKBackupPlugin
 {
     public enum PLS
     {
-        /* 001 */ LSID_Backup,
-        /* 002 */ LSID_Enabled,
-        /* 003 */ LSID_Folder,
-        /* 004 */ LSID_FolderChoose,
+        Backup = 1,
+        Enabled,
+        Folder,
+        FolderChoose,
     }
 
     public sealed class Plugin : WidgetPlugin
@@ -116,7 +116,7 @@ namespace GKBackupPlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(PLS.LSID_Backup);
+                fDisplayName = fLangMan.LS(PLS.Backup);
 
                 if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {

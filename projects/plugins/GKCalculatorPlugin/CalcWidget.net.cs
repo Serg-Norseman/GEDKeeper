@@ -129,7 +129,7 @@ namespace GKCalculatorPlugin
 
         public void SetLocale()
         {
-            Title = fPlugin.LangMan.LS(PLS.Title);
+            Title = fPlugin.LangMan.LS(PLS.Calculator);
             chkPutToClipboard.Text = fPlugin.LangMan.LS(PLS.CopyResultToClipboard);
             chkEventsYearCalculation.Text = fPlugin.LangMan.LS(PLS.EventsYearCalculation);
         }

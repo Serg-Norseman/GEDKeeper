@@ -115,15 +115,15 @@ namespace GKNavigatorPlugin
 
         public void SetLocale()
         {
-            Title = fLangMan.LS(PLS.LSID_Navigator);
-            tnRecAct.Text = fLangMan.LS(PLS.LSID_RecentActivity);
-            tnJumpHist.Text = fLangMan.LS(PLS.LSID_JumpHistory);
-            tnProblems.Text = fLangMan.LS(PLS.LSID_PotencialProblems);
-            tnFilters.Text = fLangMan.LS(PLS.LSID_Filters);
-            tnBookmarks.Text = fLangMan.LS(PLS.LSID_Bookmarks);
-            tnLanguages.Text = fLangMan.LS(PLS.LSID_Languages);
-            tnAssociations.Text = fLangMan.LS(PLS.LSID_Associations);
-            tnRecords.Text = fLangMan.LS(PLS.LSID_Records);
+            Title = fLangMan.LS(PLS.Navigator);
+            tnRecAct.Text = fLangMan.LS(PLS.RecentActivity);
+            tnJumpHist.Text = fLangMan.LS(PLS.JumpHistory);
+            tnProblems.Text = fLangMan.LS(PLS.PotencialProblems);
+            tnFilters.Text = fLangMan.LS(PLS.Filters);
+            tnBookmarks.Text = fLangMan.LS(PLS.Bookmarks);
+            tnLanguages.Text = fLangMan.LS(PLS.Languages);
+            tnAssociations.Text = fLangMan.LS(PLS.Associations);
+            tnRecords.Text = fLangMan.LS(PLS.Records);
         }
 
         private void Form_Shown(object sender, EventArgs e)
@@ -184,17 +184,17 @@ namespace GKNavigatorPlugin
                     //treeView1.BeginUpdate();
 
                     tnRoot.Text = dbName;
-                    tnRecsIndividual.Text = FmtTitle(fLangMan.LS(PLS.LSID_Individuals), stats[(int)GDMRecordType.rtIndividual]);
-                    tnRecsFamily.Text = FmtTitle(fLangMan.LS(PLS.LSID_Families), stats[(int)GDMRecordType.rtFamily]);
-                    tnRecsNote.Text = FmtTitle(fLangMan.LS(PLS.LSID_Notes), stats[(int)GDMRecordType.rtNote]);
-                    tnRecsMultimedia.Text = FmtTitle(fLangMan.LS(PLS.LSID_Multimedia), stats[(int)GDMRecordType.rtMultimedia]);
-                    tnRecsSource.Text = FmtTitle(fLangMan.LS(PLS.LSID_Sources), stats[(int)GDMRecordType.rtSource]);
-                    tnRecsRepository.Text = FmtTitle(fLangMan.LS(PLS.LSID_Repositories), stats[(int)GDMRecordType.rtRepository]);
-                    tnRecsGroup.Text = FmtTitle(fLangMan.LS(PLS.LSID_Groups), stats[(int)GDMRecordType.rtGroup]);
-                    tnRecsResearch.Text = FmtTitle(fLangMan.LS(PLS.LSID_Researches), stats[(int)GDMRecordType.rtResearch]);
-                    tnRecsTask.Text = FmtTitle(fLangMan.LS(PLS.LSID_Tasks), stats[(int)GDMRecordType.rtTask]);
-                    tnRecsCommunication.Text = FmtTitle(fLangMan.LS(PLS.LSID_Communications), stats[(int)GDMRecordType.rtCommunication]);
-                    tnRecsLocation.Text = FmtTitle(fLangMan.LS(PLS.LSID_Locations), stats[(int)GDMRecordType.rtLocation]);
+                    tnRecsIndividual.Text = FmtTitle(fLangMan.LS(PLS.Individuals), stats[(int)GDMRecordType.rtIndividual]);
+                    tnRecsFamily.Text = FmtTitle(fLangMan.LS(PLS.Families), stats[(int)GDMRecordType.rtFamily]);
+                    tnRecsNote.Text = FmtTitle(fLangMan.LS(PLS.Notes), stats[(int)GDMRecordType.rtNote]);
+                    tnRecsMultimedia.Text = FmtTitle(fLangMan.LS(PLS.Multimedia), stats[(int)GDMRecordType.rtMultimedia]);
+                    tnRecsSource.Text = FmtTitle(fLangMan.LS(PLS.Sources), stats[(int)GDMRecordType.rtSource]);
+                    tnRecsRepository.Text = FmtTitle(fLangMan.LS(PLS.Repositories), stats[(int)GDMRecordType.rtRepository]);
+                    tnRecsGroup.Text = FmtTitle(fLangMan.LS(PLS.Groups), stats[(int)GDMRecordType.rtGroup]);
+                    tnRecsResearch.Text = FmtTitle(fLangMan.LS(PLS.Researches), stats[(int)GDMRecordType.rtResearch]);
+                    tnRecsTask.Text = FmtTitle(fLangMan.LS(PLS.Tasks), stats[(int)GDMRecordType.rtTask]);
+                    tnRecsCommunication.Text = FmtTitle(fLangMan.LS(PLS.Communications), stats[(int)GDMRecordType.rtCommunication]);
+                    tnRecsLocation.Text = FmtTitle(fLangMan.LS(PLS.Locations), stats[(int)GDMRecordType.rtLocation]);
 
                     tnHiddenRoot.Expanded = true;
                     tnRoot.Expanded = true;

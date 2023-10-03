@@ -42,38 +42,38 @@ namespace GKCalendarPlugin
 {
     public enum PLS
     {
-        LSID_MICalendar,
-        LSID_Date,
-        LSID_Cal_Gregorian,
-        LSID_Cal_Julian,
-        LSID_Cal_Hebrew,
-        LSID_Cal_Islamic,
-        LSID_Cal_Persian,
-        LSID_Cal_Indian,
-        LSID_Cal_Bahai,
+        Calendar = 1,
+        Date,
+        Cal_Gregorian,
+        Cal_Julian,
+        Cal_Hebrew,
+        Cal_Islamic,
+        Cal_Persian,
+        Cal_Indian,
+        Cal_Bahai,
 
-        LSID_BahaiMonths,
-        LSID_BahaiWeekdays,
-        LSID_ClassicMonths,
-        LSID_ClassicWeekdays,
-        LSID_HebrewMonths,
-        LSID_HebrewWeekdays,
-        LSID_IndianCivilMonths,
-        LSID_IndianCivilWeekdays,
-        LSID_IslamicMonths,
-        LSID_IslamicWeekdays,
-        LSID_PersianMonths,
-        LSID_PersianWeekdays,
-        LSID_BahaiCycles,
+        BahaiMonths,
+        BahaiWeekdays,
+        ClassicMonths,
+        ClassicWeekdays,
+        HebrewMonths,
+        HebrewWeekdays,
+        IndianCivilMonths,
+        IndianCivilWeekdays,
+        IslamicMonths,
+        IslamicWeekdays,
+        PersianMonths,
+        PersianWeekdays,
+        BahaiCycles,
 
-        LSID_Cal_Byzantine,
-        LSID_ByzantineMonths,
+        Cal_Byzantine,
+        ByzantineMonths,
 
-        LSID_Day,
-        LSID_Month,
-        LSID_Year,
-        LSID_SourceDate,
-        LSID_ConvertedDate,
+        Day,
+        Month,
+        Year,
+        SourceDate,
+        ConvertedDate,
     }
 
     public sealed class Plugin : WidgetPlugin
@@ -111,7 +111,7 @@ namespace GKCalendarPlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(PLS.LSID_MICalendar);
+                fDisplayName = fLangMan.LS(PLS.Calendar);
 
                 if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {

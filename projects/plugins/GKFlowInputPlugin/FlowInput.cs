@@ -57,14 +57,14 @@ namespace GKFlowInputPlugin
 
     internal class FlowInput
     {
-        public static readonly FLS[] PersonLinks = new FLS[] {
-            FLS.LSID_RK_Unk,
-            FLS.LSID_PLPerson,
-            FLS.LSID_Father,
-            FLS.LSID_Mother,
-            FLS.LSID_PLGodparent,
-            FLS.LSID_Spouse,
-            FLS.LSID_Child
+        public static readonly PLS[] PersonLinks = new PLS[] {
+            PLS.RK_Unk,
+            PLS.PLPerson,
+            PLS.Father,
+            PLS.Mother,
+            PLS.PLGodparent,
+            PLS.Spouse,
+            PLS.Child
         };
 
         private readonly IPlugin fPlugin;
@@ -81,7 +81,7 @@ namespace GKFlowInputPlugin
 
         public void ShowError(string msg)
         {
-            string title = fLangMan.LS(FLS.LSID_PluginTitle);
+            string title = fLangMan.LS(PLS.FlowInput);
             AppHost.StdDialogs.ShowError(msg, title);
         }
 
@@ -107,7 +107,7 @@ namespace GKFlowInputPlugin
             string tmp = fullName.ToLower();
             string[] tokens = tmp.Split(' ');
             if (tokens.Length < 3) {
-                ShowError(fLangMan.LS(FLS.LSID_NameInvalid));
+                ShowError(fLangMan.LS(PLS.NameInvalid));
                 return;
             }
 
@@ -226,7 +226,7 @@ namespace GKFlowInputPlugin
                 } else {
 
                     if (iMain == null) {
-                        throw new PersonScanException(fLangMan.LS(FLS.LSID_BasePersonInvalid));
+                        throw new PersonScanException(fLangMan.LS(PLS.BasePersonInvalid));
                     } else {
                         switch (link) {
                             case PersonLink.plFather:
@@ -236,7 +236,7 @@ namespace GKFlowInputPlugin
                                 break;
 
                             case PersonLink.plGodparent:
-                                iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
+                                iMain.AddAssociation(fLangMan.LS(PLS.PLGodparent), iRec);
                                 break;
 
                             case PersonLink.plSpouse:

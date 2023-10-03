@@ -55,7 +55,7 @@ namespace GKTimeLinePlugin
 
         public void SetLocale()
         {
-            Title = fPlugin.LangMan.LS(PLS.LSID_MITimeLine);
+            Title = fPlugin.LangMan.LS(PLS.TimeLine);
             UpdateStatus();
         }
 
@@ -75,8 +75,8 @@ namespace GKTimeLinePlugin
         private void UpdateStatus()
         {
             if (fBase != null) {
-                StatusBarPanel1.Text = string.Format(fPlugin.LangMan.LS(PLS.LSID_TimeScale), fYearMin, fYearMax);
-                StatusBarPanel2.Text = string.Format(fPlugin.LangMan.LS(PLS.LSID_CurrentYear), fYearCurrent);
+                StatusBarPanel1.Text = string.Format(fPlugin.LangMan.LS(PLS.TimeScale), fYearMin, fYearMax);
+                StatusBarPanel2.Text = string.Format(fPlugin.LangMan.LS(PLS.CurrentYear), fYearCurrent);
             } else {
                 StatusBarPanel1.Text = "";
                 StatusBarPanel2.Text = "";

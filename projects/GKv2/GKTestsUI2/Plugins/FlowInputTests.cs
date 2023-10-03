@@ -173,7 +173,7 @@ namespace GKFlowInputPlugin
             SelectCombo("cbEventType", fDialog, 0); // birth event
 
             var dataGridView1 = new DataGridViewTester("dataGridView1", fDialog);
-            dataGridView1.EnterCell(0, 0, fLangMan.LS(FLS.LSID_PLPerson));
+            dataGridView1.EnterCell(0, 0, fLangMan.LS(PLS.PLPerson));
             dataGridView1.EnterCell(0, 1, "Иван");
             dataGridView1.EnterCell(0, 2, "Иванович");
             dataGridView1.EnterCell(0, 3, "Иванов");
@@ -205,7 +205,7 @@ namespace GKFlowInputPlugin
             SelectCombo("cbEventType", fDialog, 1); // death event
 
             var dataGridView1 = new DataGridViewTester("dataGridView1", fDialog);
-            dataGridView1.EnterCell(0, 0, fLangMan.LS(FLS.LSID_PLPerson));
+            dataGridView1.EnterCell(0, 0, fLangMan.LS(PLS.PLPerson));
             dataGridView1.EnterCell(0, 1, "Анна");
             dataGridView1.EnterCell(0, 2, "Васильевна");
             dataGridView1.EnterCell(0, 3, "Иванова");
@@ -238,13 +238,13 @@ namespace GKFlowInputPlugin
 
             var dataGridView1 = new DataGridViewTester("dataGridView1", fDialog);
             dataGridView1.Properties.Rows.Add(2);
-            dataGridView1.EnterCell(0, 0, fLangMan.LS(FLS.LSID_PLPerson));
+            dataGridView1.EnterCell(0, 0, fLangMan.LS(PLS.PLPerson));
             dataGridView1.EnterCell(0, 1, "Иван");
             dataGridView1.EnterCell(0, 2, "Иванович");
             dataGridView1.EnterCell(0, 3, "Иванов");
             dataGridView1.EnterCell(0, 4, "20");
             dataGridView1.EnterCell(0, 5, "test comment");
-            dataGridView1.EnterCell(1, 0, fLangMan.LS(FLS.LSID_Spouse));
+            dataGridView1.EnterCell(1, 0, fLangMan.LS(PLS.Spouse));
             dataGridView1.EnterCell(1, 1, "Анна");
             dataGridView1.EnterCell(1, 2, "Васильевна");
             dataGridView1.EnterCell(1, 3, "Иванова");
@@ -278,31 +278,31 @@ namespace GKFlowInputPlugin
 
             var dataGridView1 = new DataGridViewTester("dataGridView1", fDialog);
             dataGridView1.Properties.Rows.Add(5);
-            dataGridView1.EnterCell(0, 0, fLangMan.LS(FLS.LSID_PLPerson));
+            dataGridView1.EnterCell(0, 0, fLangMan.LS(PLS.PLPerson));
             dataGridView1.EnterCell(0, 1, "Иван");
             dataGridView1.EnterCell(0, 2, "Иванович");
             dataGridView1.EnterCell(0, 3, "Иванов");
             dataGridView1.EnterCell(0, 4, "20");
             dataGridView1.EnterCell(0, 5, "test comment");
-            dataGridView1.EnterCell(1, 0, fLangMan.LS(FLS.LSID_Spouse));
+            dataGridView1.EnterCell(1, 0, fLangMan.LS(PLS.Spouse));
             dataGridView1.EnterCell(1, 1, "Анна");
             dataGridView1.EnterCell(1, 2, "Васильевна");
             dataGridView1.EnterCell(1, 3, "Иванова");
             dataGridView1.EnterCell(1, 4, "19");
             dataGridView1.EnterCell(1, 5, "test comment2");
-            dataGridView1.EnterCell(2, 0, fLangMan.LS(FLS.LSID_Father));
+            dataGridView1.EnterCell(2, 0, fLangMan.LS(PLS.Father));
             dataGridView1.EnterCell(2, 1, "Иван");
             dataGridView1.EnterCell(2, 2, "Петрович");
             dataGridView1.EnterCell(2, 3, "Иванов");
             dataGridView1.EnterCell(2, 4, "40");
             dataGridView1.EnterCell(2, 5, "");
-            dataGridView1.EnterCell(3, 0, fLangMan.LS(FLS.LSID_Child));
+            dataGridView1.EnterCell(3, 0, fLangMan.LS(PLS.Child));
             dataGridView1.EnterCell(3, 1, "Василий");
             dataGridView1.EnterCell(3, 2, "Иванович");
             dataGridView1.EnterCell(3, 3, "Иванов");
             dataGridView1.EnterCell(3, 4, "1");
             dataGridView1.EnterCell(3, 5, "");
-            dataGridView1.EnterCell(4, 0, fLangMan.LS(FLS.LSID_PLGodparent));
+            dataGridView1.EnterCell(4, 0, fLangMan.LS(PLS.PLGodparent));
             dataGridView1.EnterCell(4, 1, "Иван");
             dataGridView1.EnterCell(4, 2, "Григорьевич");
             dataGridView1.EnterCell(4, 3, "Иванов");

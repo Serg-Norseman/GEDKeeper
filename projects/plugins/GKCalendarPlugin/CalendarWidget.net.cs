@@ -82,9 +82,9 @@ namespace GKCalendarPlugin
         {
             var langMan = fPlugin.LangMan;
 
-            Title = langMan.LS(PLS.LSID_MICalendar);
-            grpSourceDate.Text = langMan.LS(PLS.LSID_SourceDate);
-            grpConvertedDate.Text = langMan.LS(PLS.LSID_ConvertedDate);
+            Title = langMan.LS(PLS.Calendar);
+            grpSourceDate.Text = langMan.LS(PLS.SourceDate);
+            grpConvertedDate.Text = langMan.LS(PLS.ConvertedDate);
         }
 
         #endregion

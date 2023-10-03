@@ -44,7 +44,7 @@ namespace GKStdReports
         public RecordCardReport(IBaseWindow baseWin, GDMRecord selectedRecord)
             : base(baseWin, false)
         {
-            fTitle = SRLangMan.LS(RLS.LSID_RecordCard);
+            fTitle = SRLangMan.LS(PLS.RecordCardReport);
             fRecord = selectedRecord;
         }
 

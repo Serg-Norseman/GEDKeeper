@@ -42,9 +42,9 @@ namespace GKTimeLinePlugin
 {
     public enum PLS
     {
-        /* 032 */ LSID_MITimeLine,
-        /* 130 */ LSID_TimeScale,
-        /* 131 */ LSID_CurrentYear,
+        TimeLine = 1,
+        TimeScale,
+        CurrentYear,
     }
 
     public sealed class Plugin : WidgetPlugin
@@ -82,7 +82,7 @@ namespace GKTimeLinePlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(PLS.LSID_MITimeLine);
+                fDisplayName = fLangMan.LS(PLS.TimeLine);
 
                 if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {

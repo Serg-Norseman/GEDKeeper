@@ -42,12 +42,12 @@ using GKCore.Types;
 
 namespace GKTextSearchPlugin
 {
-    public enum TLS
+    public enum PLS
     {
-        LSID_PluginTitle,
-        LSID_SearchIndexRefreshing,
-        LSID_SearchResults,
-        LSID_Search
+        TextSearch = 1,
+        SearchIndexRefreshing,
+        SearchResults,
+        Search
     }
 
     public sealed class Plugin : OrdinaryPlugin, ISubscriber
@@ -93,7 +93,7 @@ namespace GKTextSearchPlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(TLS.LSID_PluginTitle);
+                fDisplayName = fLangMan.LS(PLS.TextSearch);
 
                 if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {

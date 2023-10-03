@@ -43,10 +43,10 @@ namespace GKCalendarPlugin
     public class HistoryDateBox : Panel
     {
         private static PLS[] fCalendarNames = new PLS[] {
-            PLS.LSID_Cal_Gregorian, PLS.LSID_Cal_Julian, PLS.LSID_Cal_Byzantine,
-            PLS.LSID_Cal_Hebrew, PLS.LSID_Cal_Islamic,
-            PLS.LSID_Cal_Persian, PLS.LSID_Cal_Indian,
-            //PLS.LSID_Cal_Bahai,
+            PLS.Cal_Gregorian, PLS.Cal_Julian, PLS.Cal_Byzantine,
+            PLS.Cal_Hebrew, PLS.Cal_Islamic,
+            PLS.Cal_Persian, PLS.Cal_Indian,
+            //PLS.Cal_Bahai,
         };
 
 
@@ -98,10 +98,10 @@ namespace GKCalendarPlugin
                 // in designtime calls to GlobalOptions throws exceptions
                 fLangMan = PluginsMan.CreateLangMan(this.GetType().Assembly);
 
-                lblCalendar.Text = fLangMan.LS(PLS.LSID_MICalendar);
-                lblDay.Text = fLangMan.LS(PLS.LSID_Day);
-                lblMonth.Text = fLangMan.LS(PLS.LSID_Month);
-                lblYear.Text = fLangMan.LS(PLS.LSID_Year);
+                lblCalendar.Text = fLangMan.LS(PLS.Calendar);
+                lblDay.Text = fLangMan.LS(PLS.Day);
+                lblMonth.Text = fLangMan.LS(PLS.Month);
+                lblYear.Text = fLangMan.LS(PLS.Year);
                 chkBC.Text = "B.C.";
 
                 for (Calendar hc = Calendar.First; hc <= Calendar.Last; hc++) {
@@ -222,25 +222,25 @@ namespace GKCalendarPlugin
                 switch (hc) {
                     case Calendar.Gregorian:
                     case Calendar.Julian:
-                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_ClassicMonths));
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.ClassicMonths));
                         break;
                     case Calendar.Byzantine:
-                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_ByzantineMonths));
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.ByzantineMonths));
                         break;
                     case Calendar.Hebrew:
-                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_HebrewMonths));
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.HebrewMonths));
                         break;
                     case Calendar.Islamic:
-                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_IslamicMonths));
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.IslamicMonths));
                         break;
                     case Calendar.Persian:
-                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_PersianMonths));
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.PersianMonths));
                         break;
                     case Calendar.Indian:
-                        months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_IndianCivilMonths));
+                        months = CalendarData.InitNames(fLangMan.LS(PLS.IndianCivilMonths));
                         break;
                         //case Calendar.Bahai:
-                        //months = CalendarData.InitNames(fLangMan.LS(PLS.LSID_BahaiMonths));
+                        //months = CalendarData.InitNames(fLangMan.LS(PLS.BahaiMonths));
                         //break;
                 }
 

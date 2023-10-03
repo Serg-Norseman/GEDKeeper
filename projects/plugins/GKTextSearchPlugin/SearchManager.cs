@@ -176,7 +176,7 @@ namespace GKTextSearchPlugin
             try {
                 lock (fLock) {
                     AppHost.Instance.ExecuteWork((progress) => {
-                        progress.Begin(fPlugin.LangMan.LS(TLS.LSID_SearchIndexRefreshing), baseWin.Context.Tree.RecordsCount);
+                        progress.Begin(fPlugin.LangMan.LS(PLS.SearchIndexRefreshing), baseWin.Context.Tree.RecordsCount);
 
                         int num = baseWin.Context.Tree.RecordsCount;
                         for (int i = 0; i < num; i++) {
@@ -296,7 +296,7 @@ namespace GKTextSearchPlugin
                 strList.Clear();
                 var searchResults = Search(baseWin, query, resNum);
 
-                strList.Add(string.Format(fPlugin.LangMan.LS(TLS.LSID_SearchResults) + "\r\n", searchResults.Count));
+                strList.Add(string.Format(fPlugin.LangMan.LS(PLS.SearchResults) + "\r\n", searchResults.Count));
 
                 int num = searchResults.Count;
                 for (int i = 0; i < num; i++) {

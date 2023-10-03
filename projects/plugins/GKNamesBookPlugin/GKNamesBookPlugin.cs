@@ -40,10 +40,10 @@ using GKCore.Plugins;
 
 namespace GKNamesBookPlugin
 {
-    public enum NLS
+    public enum PLS
     {
-        LSID_MINamesBook,
-        LSID_Calendar
+        NamesBook = 1,
+        Calendar
     }
 
     public sealed class Plugin : WidgetPlugin
@@ -80,7 +80,7 @@ namespace GKNamesBookPlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(NLS.LSID_MINamesBook);
+                fDisplayName = fLangMan.LS(PLS.NamesBook);
 
                 if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {

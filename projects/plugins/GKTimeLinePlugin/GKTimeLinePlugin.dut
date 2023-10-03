@@ -1,4 +1,4 @@
-;1031,dut,Dutch
-Tijdlijn
-Tijdschaal: {0} - {1}
-Huidig jaar: {0}
+;1043,dut,Dutch,xt
+1=Tijdlijn
+2=Tijdschaal: {0} - {1}
+3=Huidig jaar: {0}

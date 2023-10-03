@@ -61,7 +61,7 @@ namespace GKHistoryDataPlugin
 
         public void SetLocale()
         {
-            Title = fPlugin.LangMan.LS(HDLS.LSID_Title);
+            Title = fPlugin.LangMan.LS(PLS.HistoryData);
         }
 
         private void Form_Shown(object sender, EventArgs e)

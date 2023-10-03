@@ -42,9 +42,9 @@ namespace GKCalculatorPlugin
 {
     public enum PLS
     {
-        /* 00 */ Title,
-        /* 01 */ CopyResultToClipboard,
-        /* 02 */ EventsYearCalculation,
+        Calculator = 1,
+        CopyResultToClipboard,
+        EventsYearCalculation,
     }
 
     public sealed class Plugin : WidgetPlugin
@@ -82,7 +82,7 @@ namespace GKCalculatorPlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(PLS.Title);
+                fDisplayName = fLangMan.LS(PLS.Calculator);
 
                 if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {

@@ -83,11 +83,11 @@ namespace GKChroniclePlugin
                 lvEvents.BeginUpdate();
 
                 lvEvents.Clear();
-                lvEvents.AddColumn(fPlugin.LangMan.LS(CLS.LSID_Date), 80, false);
-                lvEvents.AddColumn(fPlugin.LangMan.LS(CLS.LSID_Event), 90, false);
-                lvEvents.AddColumn(fPlugin.LangMan.LS(CLS.LSID_Description), 130, false);
-                lvEvents.AddColumn(fPlugin.LangMan.LS(CLS.LSID_Place), 200, false);
-                lvEvents.AddColumn(fPlugin.LangMan.LS(CLS.LSID_Cause), 130, false);
+                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Date), 80, false);
+                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Event), 90, false);
+                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Description), 130, false);
+                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Place), 200, false);
+                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Cause), 130, false);
 
                 for (int i = 0; i < fEvents.Count; i++) {
                     EventRecord eventRec = fEvents[i];
@@ -111,7 +111,7 @@ namespace GKChroniclePlugin
 
         public void SetLocale()
         {
-            Title = fPlugin.LangMan.LS(CLS.LSID_Title);
+            Title = fPlugin.LangMan.LS(PLS.Chronicle);
         }
     }
 }

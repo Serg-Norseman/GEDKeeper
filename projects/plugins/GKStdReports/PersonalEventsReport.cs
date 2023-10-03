@@ -67,7 +67,7 @@ namespace GKStdReports
         public PersonalEventsReport(IBaseWindow baseWin, GDMIndividualRecord selectedPerson)
             : base(baseWin, false)
         {
-            fTitle = SRLangMan.LS(RLS.LSID_PER_Title);
+            fTitle = SRLangMan.LS(PLS.PersonalEventsReport);
             fPerson = selectedPerson;
         }
 

@@ -54,8 +54,8 @@ namespace GKTextSearchPlugin
 
         public void SetLocale()
         {
-            Title = fPlugin.LangMan.LS(TLS.LSID_PluginTitle) + string.Format(" [{0}]", Path.GetFileName(fBase.Context.FileName));
-            btnSearch.Text = fPlugin.LangMan.LS(TLS.LSID_Search);
+            Title = fPlugin.LangMan.LS(PLS.TextSearch) + string.Format(" [{0}]", Path.GetFileName(fBase.Context.FileName));
+            btnSearch.Text = fPlugin.LangMan.LS(PLS.Search);
         }
 
         private void Form_Shown(object sender, EventArgs e)

@@ -1,5 +1,5 @@
-﻿;1045,pol,Polski
-Wyszukiwanie pełnotekstowe
-Aktualizowanie indeksu wyszukiwania
-Znaleziono: {0} wynik(-i).
-Szukaj
+﻿;1045,pol,Polski,xt
+01=Wyszukiwanie pełnotekstowe
+02=Aktualizowanie indeksu wyszukiwania
+03=Znaleziono: {0} wynik(-i).
+04=Szukaj

@@ -55,7 +55,7 @@ namespace GKNamesBookPlugin
 
         public void SetLocale()
         {
-            Title = fPlugin.LangMan.LS(NLS.LSID_MINamesBook);
+            Title = fPlugin.LangMan.LS(PLS.NamesBook);
         }
 
         private void Form_Shown(object sender, EventArgs e)

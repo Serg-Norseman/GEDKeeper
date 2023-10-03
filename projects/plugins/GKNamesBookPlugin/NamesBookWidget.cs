@@ -45,7 +45,7 @@ namespace GKNamesBookPlugin
 
         public void SetLocale()
         {
-            Text = fPlugin.LangMan.LS(NLS.LSID_MINamesBook);
+            Text = fPlugin.LangMan.LS(PLS.NamesBook);
         }
 
         private void NamesBookWidget_Load(object sender, EventArgs e)

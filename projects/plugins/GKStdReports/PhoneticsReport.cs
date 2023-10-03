@@ -33,7 +33,7 @@ namespace GKStdReports
         public PhoneticsReport(IBaseWindow baseWin)
             : base(baseWin, false)
         {
-            fTitle = SRLangMan.LS(RLS.LSID_Phonetics_Title);
+            fTitle = SRLangMan.LS(PLS.PhoneticsReport);
         }
 
         protected override void InternalGenerate()
@@ -59,7 +59,7 @@ namespace GKStdReports
                 surnames.Add(surname);
             }
 
-            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Surnames), chapFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(SRLangMan.LS(PLS.Surnames), chapFont, TextAlignment.taLeft);
             fWriter.BeginList();
             for (int i = 0; i < surnames.Count; i++) {
                 string item = surnames[i];

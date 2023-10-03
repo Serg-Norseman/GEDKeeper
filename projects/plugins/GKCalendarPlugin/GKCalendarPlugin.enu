@@ -1,30 +1,30 @@
-﻿;1033,eng,English
-Calendar
-Date
-Gregorian
-Julian
-Hebrew
-Islamic
-Persian
-Indian
-Bahai
-Bahá|Jalál|Jamál|‘Aẓamat|Núr|Raḥmat|Kalimát|Kamál|Asmá’|‘Izzat|Mashíyyat|‘Ilm|Qudrat|Qawl|Masá’il|Sharaf|Sulṭán|Mulk|Ayyám-i-Há|‘Alá’
-Jamál|Kamál|Fiḍál|‘Idál|Istijlál|Istiqlál|Jalál
-January|February|March|April|May|June|July|August|September|October|November|December
-Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday
-Nisan|Iyyar|Sivan|Tammuz|Av|Elul|Tishri|Heshvan|Kislev|Teveth|Shevat|Adar|Veadar
-Alef|Bet|Gimel|Dalet|He|Vav|Zayin
-Caitra|Vaisakha|Jyaistha|Asadha|Sravana|Bhadra|Asvina|Kartika|Agrahayana|Pausa|Magha|Phalguna
-Ravivara|Somavara|Mangalavara|Budhavara|Brahaspativara|Sukravara|Sanivara
-Muharram|Safar|Rabi`al-Awwal|Rabi`ath-Thani|Jumada l-Ula|Jumada t-Tania|Rajab|Sha`ban|Ramadan|Shawwal|Dhu l-Qa`da|Dhu l-Hijja
-Al-'ahad|Al-'ithnayn|Ath-thalatha'|Al-'arb`a'|Al-khamis|Al-jum`a|As-sabt
-Farvardin|Ordibehesht|Khordad|Tir|Mordad|Shahrivar|Mehr|Aban|Azar|Dey|Bahman|Esfand
-Yekshanbeh|Doshanbeh|Seshhanbeh|Chaharshanbeh|Panjshanbeh|Jomeh|Shanbeh
-Kull-i-Shay’ {0}, Váḥid {1}
-Byzantine
-Ianuarius|Februarius|Martius|Aprilis|Maius|Iunius|Iulius|Augustus|September|October|November|December
-Day
-Month
-Year
-Source date
-Converted date
+﻿;1033,eng,English,xt
+01=Calendar
+02=Date
+03=Gregorian
+04=Julian
+05=Hebrew
+06=Islamic
+07=Persian
+08=Indian
+09=Bahai
+10=Bahá|Jalál|Jamál|‘Aẓamat|Núr|Raḥmat|Kalimát|Kamál|Asmá’|‘Izzat|Mashíyyat|‘Ilm|Qudrat|Qawl|Masá’il|Sharaf|Sulṭán|Mulk|Ayyám-i-Há|‘Alá’
+11=Jamál|Kamál|Fiḍál|‘Idál|Istijlál|Istiqlál|Jalál
+12=January|February|March|April|May|June|July|August|September|October|November|December
+13=Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday
+14=Nisan|Iyyar|Sivan|Tammuz|Av|Elul|Tishri|Heshvan|Kislev|Teveth|Shevat|Adar|Veadar
+15=Alef|Bet|Gimel|Dalet|He|Vav|Zayin
+16=Caitra|Vaisakha|Jyaistha|Asadha|Sravana|Bhadra|Asvina|Kartika|Agrahayana|Pausa|Magha|Phalguna
+17=Ravivara|Somavara|Mangalavara|Budhavara|Brahaspativara|Sukravara|Sanivara
+18=Muharram|Safar|Rabi`al-Awwal|Rabi`ath-Thani|Jumada l-Ula|Jumada t-Tania|Rajab|Sha`ban|Ramadan|Shawwal|Dhu l-Qa`da|Dhu l-Hijja
+19=Al-'ahad|Al-'ithnayn|Ath-thalatha'|Al-'arb`a'|Al-khamis|Al-jum`a|As-sabt
+20=Farvardin|Ordibehesht|Khordad|Tir|Mordad|Shahrivar|Mehr|Aban|Azar|Dey|Bahman|Esfand
+21=Yekshanbeh|Doshanbeh|Seshhanbeh|Chaharshanbeh|Panjshanbeh|Jomeh|Shanbeh
+22=Kull-i-Shay’ {0}, Váḥid {1}
+23=Byzantine
+24=Ianuarius|Februarius|Martius|Aprilis|Maius|Iunius|Iulius|Augustus|September|October|November|December
+25=Day
+26=Month
+27=Year
+28=Source date
+29=Converted date

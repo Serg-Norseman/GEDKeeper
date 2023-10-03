@@ -1,5 +1,5 @@
-;1033,eng,English
-Full-text search
-Updating the search index
-Found: {0} result(s).
-Search
+;1033,eng,English,xt
+01=Full-text search
+02=Updating the search index
+03=Found: {0} result(s).
+04=Search

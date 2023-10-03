@@ -40,9 +40,9 @@ using GKCore.Plugins;
 
 namespace GKHistoryDataPlugin
 {
-    public enum HDLS
+    public enum PLS
     {
-        LSID_Title,
+        HistoryData,
     }
 
     public sealed class Plugin : WidgetPlugin
@@ -86,7 +86,7 @@ namespace GKHistoryDataPlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(HDLS.LSID_Title);
+                fDisplayName = fLangMan.LS(PLS.HistoryData);
 
                 if (fForm != null) fForm.SetLocale();
             } catch (Exception ex) {

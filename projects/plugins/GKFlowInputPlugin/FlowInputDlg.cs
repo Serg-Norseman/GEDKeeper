@@ -48,9 +48,9 @@ namespace GKFlowInputPlugin
             fFlowInput = new FlowInput(plugin, baseWin);
 
             cbEventType.Items.AddRange(new object[] {
-                                           fPlugin.LangMan.LS(FLS.LSID_Birth),
-                                           fPlugin.LangMan.LS(FLS.LSID_Death),
-                                           fPlugin.LangMan.LS(FLS.LSID_Marriage) });
+                                           fPlugin.LangMan.LS(PLS.Birth),
+                                           fPlugin.LangMan.LS(PLS.Death),
+                                           fPlugin.LangMan.LS(PLS.Marriage) });
 
             InitGrid(dataGridView1);
             InitSimpleControls();
@@ -65,32 +65,32 @@ namespace GKFlowInputPlugin
 
         public void SetLocale()
         {
-            btnParse.Text = fLangMan.LS(FLS.LSID_DlgAppend);
-            btnClose.Text = fLangMan.LS(FLS.LSID_DlgClose);
-            Text = fLangMan.LS(FLS.LSID_PluginTitle);
-            tsSimpleInput.Text = fLangMan.LS(FLS.LSID_InputSimple);
-            btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexM)[0], 1);
+            btnParse.Text = fLangMan.LS(PLS.DlgAppend);
+            btnClose.Text = fLangMan.LS(PLS.DlgClose);
+            Text = fLangMan.LS(PLS.FlowInput);
+            tsSimpleInput.Text = fLangMan.LS(PLS.InputSimple);
+            btnMale.Text = new string(fLangMan.LS(PLS.SexM)[0], 1);
             //this.btnFemale.Text = new string(LangMan.LS(FLS.67][0], 1);
-            lblFullName.Text = fLangMan.LS(FLS.LSID_FullName);
-            chkBirth.Text = fLangMan.LS(FLS.LSID_Birth);
-            lblBirthDate.Text = fLangMan.LS(FLS.LSID_BirthDate);
-            lblBirthPlace.Text = fLangMan.LS(FLS.LSID_BirthPlace);
-            chkDeath.Text = fLangMan.LS(FLS.LSID_Death);
-            lblDeathDate.Text = fLangMan.LS(FLS.LSID_DeathDate);
-            lblDeathPlace.Text = fLangMan.LS(FLS.LSID_DeathPlace);
-            lblNote.Text = fLangMan.LS(FLS.LSID_Note);
-            tsSourceInput.Text = fLangMan.LS(FLS.LSID_InputSource);
-            rgSourceKind.Text = fLangMan.LS(FLS.LSID_SourceKind);
-            lblSource.Text = fLangMan.LS(FLS.LSID_Source);
-            lblPage.Text = fLangMan.LS(FLS.LSID_Page);
-            lblYear.Text = fLangMan.LS(FLS.LSID_Year);
-            lblSettlement.Text = fLangMan.LS(FLS.LSID_Settlement);
-            gbMetrics.Text = fLangMan.LS(FLS.LSID_SK_Met);
-            lblEventDate.Text = fLangMan.LS(FLS.LSID_EventDate);
-            lblEventType.Text = fLangMan.LS(FLS.LSID_EventType);
+            lblFullName.Text = fLangMan.LS(PLS.FullName);
+            chkBirth.Text = fLangMan.LS(PLS.Birth);
+            lblBirthDate.Text = fLangMan.LS(PLS.BirthDate);
+            lblBirthPlace.Text = fLangMan.LS(PLS.BirthPlace);
+            chkDeath.Text = fLangMan.LS(PLS.Death);
+            lblDeathDate.Text = fLangMan.LS(PLS.DeathDate);
+            lblDeathPlace.Text = fLangMan.LS(PLS.DeathPlace);
+            lblNote.Text = fLangMan.LS(PLS.Note);
+            tsSourceInput.Text = fLangMan.LS(PLS.InputSource);
+            rgSourceKind.Text = fLangMan.LS(PLS.SourceKind);
+            lblSource.Text = fLangMan.LS(PLS.Source);
+            lblPage.Text = fLangMan.LS(PLS.Page);
+            lblYear.Text = fLangMan.LS(PLS.Year);
+            lblSettlement.Text = fLangMan.LS(PLS.Settlement);
+            gbMetrics.Text = fLangMan.LS(PLS.SK_Met);
+            lblEventDate.Text = fLangMan.LS(PLS.EventDate);
+            lblEventType.Text = fLangMan.LS(PLS.EventType);
 
-            rbSK_Rev.Text = fLangMan.LS(FLS.LSID_SK_Rev);
-            rbSK_Met.Text = fLangMan.LS(FLS.LSID_SK_Met);
+            rbSK_Rev.Text = fLangMan.LS(PLS.SK_Rev);
+            rbSK_Met.Text = fLangMan.LS(PLS.SK_Met);
         }
 
         #region Parse functions
@@ -110,7 +110,7 @@ namespace GKFlowInputPlugin
         {
             int srcYear;
             if (!int.TryParse(edSourceYear.Text, out srcYear)) {
-                fFlowInput.ShowError(fLangMan.LS(FLS.LSID_SourceYearInvalid));
+                fFlowInput.ShowError(fLangMan.LS(PLS.SourceYearInvalid));
                 return;
             }
 
@@ -178,7 +178,7 @@ namespace GKFlowInputPlugin
             txtNote.Text = "";
 
             fSimpleTempSex = GDMSex.svMale;
-            btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexM)[0], 1);
+            btnMale.Text = new string(fLangMan.LS(PLS.SexM)[0], 1);
         }
 
         private void InitSourceControls()
@@ -209,17 +209,17 @@ namespace GKFlowInputPlugin
             string[] surnamesList = new string[0];
 
             dgv.Columns.AddRange(new DataGridViewColumn[] {
-                                     AddComboColumn("FLink", fLangMan.LS(FLS.LSID_Join), linksList),
+                                     AddComboColumn("FLink", fLangMan.LS(PLS.Join), linksList),
 
-                                     AddComboColumn("FName", fLangMan.LS(FLS.LSID_Name), namesList),
-                                     AddComboColumn("FPatronymic", fLangMan.LS(FLS.LSID_Patronymic), patrList),
-                                     AddComboColumn("FSurname", fLangMan.LS(FLS.LSID_Surname), surnamesList),
-                                     //AddTextColumn("FName", fLangMan.LS(FLS.LSID_Name)),
-                                     //AddTextColumn("FPatronymic", fLangMan.LS(FLS.LSID_Patronymic)),
-                                     //AddTextColumn("FSurname", fLangMan.LS(FLS.LSID_Surname)),
+                                     AddComboColumn("FName", fLangMan.LS(PLS.Name), namesList),
+                                     AddComboColumn("FPatronymic", fLangMan.LS(PLS.Patronymic), patrList),
+                                     AddComboColumn("FSurname", fLangMan.LS(PLS.Surname), surnamesList),
+                                     //AddTextColumn("FName", fLangMan.LS(PLS.Name)),
+                                     //AddTextColumn("FPatronymic", fLangMan.LS(PLS.Patronymic)),
+                                     //AddTextColumn("FSurname", fLangMan.LS(PLS.Surname)),
 
-                                     AddTextColumn("FAge", fLangMan.LS(FLS.LSID_Age)),
-                                     AddTextColumn("FComment", fLangMan.LS(FLS.LSID_Comment))});
+                                     AddTextColumn("FAge", fLangMan.LS(PLS.Age)),
+                                     AddTextColumn("FComment", fLangMan.LS(PLS.Comment))});
 
             dgv.CellValidating += dataGridView1_CellValidating;
             dgv.EditingControlShowing += dataGridView1_EditingControlShowing;
@@ -287,11 +287,11 @@ namespace GKFlowInputPlugin
         {
             switch (fSimpleTempSex) {
                 case GDMSex.svMale:
-                    btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexF)[0], 1);
+                    btnMale.Text = new string(fLangMan.LS(PLS.SexF)[0], 1);
                     fSimpleTempSex = GDMSex.svFemale;
                     break;
                 case GDMSex.svFemale:
-                    btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexM)[0], 1);
+                    btnMale.Text = new string(fLangMan.LS(PLS.SexM)[0], 1);
                     fSimpleTempSex = GDMSex.svMale;
                     break;
             }

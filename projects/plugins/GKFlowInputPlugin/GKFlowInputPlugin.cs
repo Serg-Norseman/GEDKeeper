@@ -40,49 +40,49 @@ using GKCore.Plugins;
 
 namespace GKFlowInputPlugin
 {
-    public enum FLS
+    public enum PLS
     {
-        LSID_PluginTitle,
-        LSID_SexM,
-        LSID_SexF,
-        LSID_Surname,
-        LSID_Name,
-        LSID_Patronymic,
-        LSID_DlgClose,
-        LSID_DlgAppend,
-        LSID_Note,
-        LSID_Source,
-        LSID_Page,
-        LSID_BirthDate,
-        LSID_DeathDate,
-        LSID_Father,
-        LSID_Mother,
-        LSID_Spouse,
-        LSID_FullName,
-        LSID_BirthPlace,
-        LSID_DeathPlace,
-        LSID_Age,
-        LSID_Birth,
-        LSID_Death,
-        LSID_RK_Unk,
-        LSID_InputSimple,
-        LSID_InputSource,
-        LSID_SourceKind,
-        LSID_SK_Rev,
-        LSID_SK_Met,
-        LSID_Year,
-        LSID_Settlement,
-        LSID_EventDate,
-        LSID_EventType,
-        LSID_Join,
-        LSID_Comment,
-        LSID_PLPerson,
-        LSID_PLGodparent,
-        LSID_Child,
-        LSID_NameInvalid,
-        LSID_BasePersonInvalid,
-        LSID_SourceYearInvalid,
-        LSID_Marriage
+        FlowInput,
+        SexM,
+        SexF,
+        Surname,
+        Name,
+        Patronymic,
+        DlgClose,
+        DlgAppend,
+        Note,
+        Source,
+        Page,
+        BirthDate,
+        DeathDate,
+        Father,
+        Mother,
+        Spouse,
+        FullName,
+        BirthPlace,
+        DeathPlace,
+        Age,
+        Birth,
+        Death,
+        RK_Unk,
+        InputSimple,
+        InputSource,
+        SourceKind,
+        SK_Rev,
+        SK_Met,
+        Year,
+        Settlement,
+        EventDate,
+        EventType,
+        Join,
+        Comment,
+        PLPerson,
+        PLGodparent,
+        Child,
+        NameInvalid,
+        BasePersonInvalid,
+        SourceYearInvalid,
+        Marriage
     }
 
     public class Plugin : OrdinaryPlugin
@@ -114,7 +114,7 @@ namespace GKFlowInputPlugin
         {
             try {
                 fLangMan = Host.CreateLangMan(this);
-                fDisplayName = fLangMan.LS(FLS.LSID_PluginTitle);
+                fDisplayName = fLangMan.LS(PLS.FlowInput);
             } catch (Exception ex) {
                 Logger.WriteError("GKFlowInputPlugin.OnLanguageChange()", ex);
             }

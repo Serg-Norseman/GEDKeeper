@@ -45,7 +45,7 @@ namespace GKStdReports
         public NamesFreqReport(IBaseWindow baseWin)
             : base(baseWin, false)
         {
-            fTitle = SRLangMan.LS(RLS.LSID_NFR_Title);
+            fTitle = SRLangMan.LS(PLS.NamesFreqReport);
         }
 
         protected override void InternalGenerate()
@@ -85,14 +85,14 @@ namespace GKStdReports
             SortHelper.QuickSort(names, ItemsCompare);
             SortHelper.QuickSort(surnames, ItemsCompare);
 
-            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Names), chapFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(SRLangMan.LS(PLS.Names), chapFont, TextAlignment.taLeft);
             fWriter.BeginList();
             foreach (var item in names) {
                 fWriter.AddListItem(" " + item.Name + "\t" + item.Amount, textFont);
             }
             fWriter.EndList();
 
-            fWriter.AddParagraph(SRLangMan.LS(RLS.LSID_Surnames), chapFont, TextAlignment.taLeft);
+            fWriter.AddParagraph(SRLangMan.LS(PLS.Surnames), chapFont, TextAlignment.taLeft);
             fWriter.BeginList();
             foreach (var item in surnames) {
                 fWriter.AddListItem(" " + item.Name + "\t" + item.Amount, textFont);

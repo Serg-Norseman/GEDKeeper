@@ -419,7 +419,7 @@ namespace GKPedigreeImporterPlugin
 
                 evt.Date.ParseString(tmp);
             } catch (Exception) {
-                fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_DateInvalid) + " \"" + date + "\"");
+                fLog.Add(">>>> " + fLangMan.LS(PLS.ParseError_DateInvalid) + " \"" + date + "\"");
             }
         }
 
@@ -456,7 +456,7 @@ namespace GKPedigreeImporterPlugin
                 pid_end = plRet.Pos;
 
                 if (fPersonsList.ContainsKey(plRet.PersId)) {
-                    fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_NumDuplicate) + " \"" + plRet.PersId + "\".");
+                    fLog.Add(">>>> " + fLangMan.LS(PLS.ParseError_NumDuplicate) + " \"" + plRet.PersId + "\".");
                     return null;
                 }
 
@@ -478,7 +478,7 @@ namespace GKPedigreeImporterPlugin
                     if (fPersonsList.TryGetValue(plRet.ParentId, out parent)) {
                         AddChild(parent, marrNum, result);
                     } else {
-                        fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_AncNotFound) + " \"" + plRet.ParentId + "\".");
+                        fLog.Add(">>>> " + fLangMan.LS(PLS.ParseError_AncNotFound) + " \"" + plRet.ParentId + "\".");
                     }
                 }
 
@@ -510,7 +510,7 @@ namespace GKPedigreeImporterPlugin
                             result = res;
                         } else {
                             if (result != res) {
-                                fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_SpousesInfoConflict));
+                                fLog.Add(">>>> " + fLangMan.LS(PLS.SpousesInfoConflict));
                                 return GDMSex.svUnknown;
                             } else {
                                 // matched, checked
@@ -599,13 +599,13 @@ namespace GKPedigreeImporterPlugin
                 string s = buffer[0];
                 string personId = IsPersonLine(s);
                 if (!string.IsNullOrEmpty(personId)) {
-                    fLog.Add("> " + fLangMan.LS(ILS.LSID_PersonParsed) + " \"" + personId + "\"");
+                    fLog.Add("> " + fLangMan.LS(PLS.PersonParsed) + " \"" + personId + "\"");
 
                     int selfId = 0;
                     GDMIndividualRecord curPerson = ParsePerson(buffer, s, ref selfId);
 
                     if (NumbersType == PersonNumbersType.pnKonovalov && selfId - prevId > 1) {
-                        fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_LineSeq));
+                        fLog.Add(">>>> " + fLangMan.LS(PLS.ParseError_LineSeq));
                     }
 
                     prevId = selfId;
@@ -655,7 +655,7 @@ namespace GKPedigreeImporterPlugin
                     int[] numberStats = new int[3];
 
                     int num = fRawContents.Count;
-                    progress.Begin(fLangMan.LS(ILS.LSID_Analyzing), num);
+                    progress.Begin(fLangMan.LS(PLS.Analyzing), num);
 
                     for (int i = 0; i < num; i++) {
                         string txt = fRawContents[i].Trim();
@@ -754,7 +754,7 @@ namespace GKPedigreeImporterPlugin
                                         buffer.Add(line);
                                         break;
                                     case RawLineType.rltRomeGeneration:
-                                        fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
+                                        fLog.Add("> " + fLangMan.LS(PLS.Generation) + " \"" + line + "\"");
                                         break;
                                     case RawLineType.rltEOF:
                                         fLog.Add("> EOF.");
@@ -803,7 +803,7 @@ namespace GKPedigreeImporterPlugin
                     int rowsCount = sheet.UsedRange.Rows.Count;
                     //int colsCount = sheet.UsedRange.Columns.Count;
 
-                    progress.Begin(fLangMan.LS(ILS.LSID_Loading), rowsCount);
+                    progress.Begin(fLangMan.LS(PLS.Loading), rowsCount);
 
                     MSOExcel.Range excelRange = sheet.UsedRange;
                     object[,] valueArray = (object[,])excelRange.get_Value(MSOExcel.XlRangeValueDataType.xlRangeValueDefault);
@@ -865,7 +865,7 @@ namespace GKPedigreeImporterPlugin
                                             buffer.Add(line);
                                             break;
                                         case RawLineType.rltRomeGeneration:
-                                            fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
+                                            fLog.Add("> " + fLangMan.LS(PLS.Generation) + " \"" + line + "\"");
                                             break;
                                         case RawLineType.rltEOF:
                                             fLog.Add("> EOF.");
@@ -892,7 +892,7 @@ namespace GKPedigreeImporterPlugin
                     excel = null;
                 }
             } catch (Exception ex) {
-                fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
+                fLog.Add(">>>> " + fLangMan.LS(PLS.DataLoadError));
                 Logger.WriteError("Importer.ImportTableContent()", ex);
                 return false;
             }
@@ -907,7 +907,7 @@ namespace GKPedigreeImporterPlugin
                 using (Stream fs = new FileStream(fFileName, FileMode.Open, FileAccess.Read))
                 using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
                     try {
-                        progress.Begin(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
+                        progress.Begin(fLangMan.LS(PLS.Loading), (int)strd.BaseStream.Length);
 
                         int lineNum = 0;
                         while (strd.Peek() != -1) {
@@ -928,7 +928,7 @@ namespace GKPedigreeImporterPlugin
 
                 return AnalyseRaw(progress);
             } catch (Exception ex) {
-                fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
+                fLog.Add(">>>> " + fLangMan.LS(PLS.DataLoadError));
                 Logger.WriteError("Importer.LoadRawText()", ex);
                 return false;
             }
@@ -953,7 +953,7 @@ namespace GKPedigreeImporterPlugin
 
                     MSOWord.Document doc = wordApp.Documents.Open(fFileName);
 
-                    progress.Begin(fLangMan.LS(ILS.LSID_Loading), doc.Paragraphs.Count);
+                    progress.Begin(fLangMan.LS(PLS.Loading), doc.Paragraphs.Count);
 
                     int lineNum = 0;
                     for (int i = 0; i < doc.Paragraphs.Count; i++) {
@@ -978,7 +978,7 @@ namespace GKPedigreeImporterPlugin
                     wordApp = null;
                 }
             } catch (Exception ex) {
-                fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
+                fLog.Add(">>>> " + fLangMan.LS(PLS.DataLoadError));
                 Logger.WriteError("Importer.LoadRawWord()", ex);
                 return false;
             }
@@ -1019,7 +1019,7 @@ namespace GKPedigreeImporterPlugin
                 return LoadRawExcel();
 #endif
             } else {
-                throw new ImporterException(fLangMan.LS(ILS.LSID_FormatUnsupported));
+                throw new ImporterException(fLangMan.LS(PLS.FormatUnsupported));
             }
             return result;
         }
