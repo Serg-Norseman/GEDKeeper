@@ -1,30 +1,30 @@
-;1036,fra,Français
-Fréquence des noms
-Événements personnels
-Des noms
-Les noms
-Phonétique
-Contemporains
-Sources
-Name
-Title
-Repositories
-Address
-Places
-Repository
-Ancestor Statistics
-Root individual: {0}
-Implex factor: {0}
-Consanguinity factor: {0}
-Generation
-Possible
-Known
-Known, %
-Cumul
-Cumul, %
-Diff
-Implex
-Common ancestors
-Consanguinity common ancestors
-Record card
-An record is not selected.
+;1036,fra,Français,xt
+01=Fréquence des noms
+02=Événements personnels
+03=Des noms
+04=Les noms
+05=Phonétique
+06=Contemporains
+07=Sources
+08=Name
+09=Title
+10=Repositories
+11=Address
+12=Places
+13=Repository
+14=Ancestor Statistics
+15=Root individual: {0}
+16=Implex factor: {0}
+17=Consanguinity factor: {0}
+18=Generation
+19=Possible
+20=Known
+21=Known, %
+22=Cumul
+23=Cumul, %
+24=Diff
+25=Implex
+26=Common ancestors
+27=Consanguinity common ancestors
+28=Record card
+29=An record is not selected.

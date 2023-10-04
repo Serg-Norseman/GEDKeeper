@@ -1,30 +1,30 @@
-;1029,cze,Čeština
-Frekvence jmen
-Osobní události
-Jména
-Příjmení
-Fonetika
-Současníci
-Zdroje
-Jméno
-Titul
-Úložiště
-Adresa
-Místa
-Úložiště
-Statistika předků
-Kořenová osoba: {0}
-Implex faktor: {0}
-Faktor příbuznosti: {0}
-Generace
-Možné
-Známé
-Známé, %
-Kumul
-Kumul, %
-Dif
-Implex
-Společní předkové
-Příbuzenství společných předků
-Record card
-An record is not selected.
+;1029,cze,Čeština,xt
+01=Frekvence jmen
+02=Osobní události
+03=Jména
+04=Příjmení
+05=Fonetika
+06=Současníci
+07=Zdroje
+08=Jméno
+09=Titul
+10=Úložiště
+11=Adresa
+12=Místa
+13=Úložiště
+14=Statistika předků
+15=Kořenová osoba: {0}
+16=Implex faktor: {0}
+17=Faktor příbuznosti: {0}
+18=Generace
+19=Možné
+20=Známé
+21=Známé, %
+22=Kumul
+23=Kumul, %
+24=Dif
+25=Implex
+26=Společní předkové
+27=Příbuzenství společných předků
+28=Record card
+29=An record is not selected.

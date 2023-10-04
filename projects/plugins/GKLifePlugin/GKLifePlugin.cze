@@ -1,9 +1,9 @@
-;1029,cze,Čeština
-Conway's Game of Life
-Krok
-Start
-Stop
-SetCells
-Smazat
-Náhodné
-Možnosti
+;1029,cze,Čeština,xt
+01=Conway's Game of Life
+02=Krok
+03=Start
+04=Stop
+05=SetCells
+06=Smazat
+07=Náhodné
+08=Možnosti

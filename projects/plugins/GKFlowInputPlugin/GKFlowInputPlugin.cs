@@ -42,7 +42,7 @@ namespace GKFlowInputPlugin
 {
     public enum PLS
     {
-        FlowInput,
+        FlowInput = 1,
         SexM,
         SexF,
         Surname,

@@ -46,7 +46,7 @@ namespace GKWordsCloudPlugin
 {
     public enum PLS
     {
-        WordsCloud,
+        WordsCloud = 1,
     }
 
     public sealed class Plugin : WidgetPlugin

@@ -42,7 +42,7 @@ namespace GKPedigreeImporterPlugin
 {
     public enum PLS
     {
-        PedigreeImporter,
+        PedigreeImporter = 1,
         File,
         DlgSelect,
         FormatUnsupported,

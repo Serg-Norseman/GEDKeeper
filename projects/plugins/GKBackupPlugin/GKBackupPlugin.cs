@@ -30,7 +30,7 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKBackupPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Backup plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2022 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2022-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("0.1.0.0")]
 [assembly: AssemblyCulture("")]
 

@@ -1,42 +1,42 @@
-;1033,eng,English
-Stream input...
-Male
-Female
-Surname
-Name
-Patronymic
-Close
-Append
-Note
-Source
-Page
-Birth date
-Death date
-Father
-Mother
-Spouse
-Full name
-Birth place
-Death place
-Age
-Birth
-Death
-?
-Simple input
-Source input
-Source type
-Revision book
-Parish register
-Year
-Settlement
-Event date
-Event type
-Link
-Comment
-Person
-Godparent
-Child
-Number of name components is less than three.
-Basic person ("Person") is not defined by the first
-Year of the source is incorrect
-Marriage
+;1033,eng,English,xt
+01=Stream input...
+02=Male
+03=Female
+04=Surname
+05=Name
+06=Patronymic
+07=Close
+08=Append
+09=Note
+10=Source
+11=Page
+12=Birth date
+13=Death date
+14=Father
+15=Mother
+16=Spouse
+17=Full name
+18=Birth place
+19=Death place
+20=Age
+21=Birth
+22=Death
+23=?
+24=Simple input
+25=Source input
+26=Source type
+27=Revision book
+28=Parish register
+29=Year
+30=Settlement
+31=Event date
+32=Event type
+33=Link
+34=Comment
+35=Person
+36=Godparent
+37=Child
+38=Number of name components is less than three.
+39=Basic person ("Person") is not defined by the first
+40=Year of the source is incorrect
+41=Marriage

@@ -1,37 +1,37 @@
-;1033,eng,English
-Import pedigrees
-File
-Select
-The format is not supported
-Error loading data.
-Parse error: number of records contain the gap.
-Recognized personal record
-Generation
-Parsing error: not found in the list of ancestors with a number
-Parse Error: date
-Parse Error: person number is duplicated
-Person numbers format
-by D'Aboville (not supported yet)
-by Konovalov
-unknown
-Text pedigrees params
-Person line delimiter
-Format names in person line
-Format line of generation
-Dates delimiter
-Dates format
-Transformation params
-Normalize the names (PETROV -> Petrov)
-Next >
-< Back
-Close
-Special settings of personal lines format
-1) "Number. Name (*birth +death)" - the dates in brackets
-Analyzing
-Loading
-Name Patronymic Surname
-Surname Name Patronymic
-no special
-All supported formats (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Pedigree in txt format (*.txt)|*.txt|Pedigree in the csv format (*.csv)|*.csv|Pedigree in MS Word format (*.doc)|*.doc|Pedigree in MS Excel format (*.xls)|*.xls
-All supported formats (*.txt, *.csv)|*.txt;*.csv|Pedigree in txt format (*.txt)|*.txt|Pedigree in the csv format (*.csv)|*.csv
-Conflicting information about spouses
+;1033,eng,English,xt
+01=Import pedigrees
+02=File
+03=Select
+04=The format is not supported
+05=Error loading data.
+06=Parse error: number of records contain the gap.
+07=Recognized personal record
+08=Generation
+09=Parsing error: not found in the list of ancestors with a number
+10=Parse Error: date
+11=Parse Error: person number is duplicated
+12=Person numbers format
+13=by D'Aboville (not supported yet)
+14=by Konovalov
+15=unknown
+16=Text pedigrees params
+17=Person line delimiter
+18=Format names in person line
+19=Format line of generation
+20=Dates delimiter
+21=Dates format
+22=Transformation params
+23=Normalize the names (PETROV -> Petrov)
+24=Next >
+25=< Back
+26=Close
+27=Special settings of personal lines format
+28=1) "Number. Name (*birth +death)" - the dates in brackets
+29=Analyzing
+30=Loading
+31=Name Patronymic Surname
+32=Surname Name Patronymic
+33=no special
+34=All supported formats (*.txt, *.csv, *.doc, *.xls)|*.txt,*.csv,*.doc,*.xls|Pedigree in txt format (*.txt)|*.txt|Pedigree in the csv format (*.csv)|*.csv|Pedigree in MS Word format (*.doc)|*.doc|Pedigree in MS Excel format (*.xls)|*.xls
+35=All supported formats (*.txt, *.csv)|*.txt,*.csv|Pedigree in txt format (*.txt)|*.txt|Pedigree in the csv format (*.csv)|*.csv
+36=Conflicting information about spouses

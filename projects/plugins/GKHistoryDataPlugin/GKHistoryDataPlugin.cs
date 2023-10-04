@@ -28,7 +28,7 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKHistoryDataPlugin")]
 [assembly: AssemblyDescription("GEDKeeper HistoryData plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2017-2018 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2017-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 
@@ -42,7 +42,7 @@ namespace GKHistoryDataPlugin
 {
     public enum PLS
     {
-        HistoryData,
+        HistoryData = 1,
     }
 
     public sealed class Plugin : WidgetPlugin

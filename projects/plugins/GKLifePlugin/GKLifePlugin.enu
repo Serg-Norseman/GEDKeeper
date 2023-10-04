@@ -1,9 +1,9 @@
-;1033,eng,English
-Conway's Game of Life
-Step
-Start
-Stop
-SetCells
-Clear
-Random
-Options
+;1033,eng,English,xt
+01=Conway's Game of Life
+02=Step
+03=Start
+04=Stop
+05=SetCells
+06=Clear
+07=Random
+08=Options

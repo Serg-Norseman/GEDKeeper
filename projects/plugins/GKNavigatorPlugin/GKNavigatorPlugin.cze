@@ -1,29 +1,29 @@
-;1029,cze,Čeština
-Navigátor
-Poslední aktivita
-Historie skoků
-Potenciální problémy
-Filtry
-Záložky
-Jazyky
-Evidence
-Osoby
-Rodiny
-Poznámky
-Multimédia
-Zdroje
-Úložiště
-Skupiny
-Výzkumy
-Úkoly
-Komunikace
-Místa
-Jazyk
-Osoba
-Záznam
-Čas
-Jméno
-Akce
-Filtr
-Associations
-Relation
+;1029,cze,Čeština,xt
+01=Navigátor
+02=Poslední aktivita
+03=Historie skoků
+04=Potenciální problémy
+05=Filtry
+06=Záložky
+07=Jazyky
+08=Evidence
+09=Osoby
+10=Rodiny
+11=Poznámky
+12=Multimédia
+13=Zdroje
+14=Úložiště
+15=Skupiny
+16=Výzkumy
+17=Úkoly
+18=Komunikace
+19=Místa
+20=Jazyk
+21=Osoba
+22=Záznam
+23=Čas
+24=Jméno
+25=Akce
+26=Filtr
+27=Associations
+28=Relation

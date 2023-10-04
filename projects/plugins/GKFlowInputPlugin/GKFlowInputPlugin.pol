@@ -1,42 +1,42 @@
-﻿;1045,pol,Polski
-Źródło wejścia...
-Mężczyzna
-Kobieta
-Nazwisko
-Nazwa
-Nazwisko rodowe
-Zamknij
-Dołączyć
-Uwaga:
-Źródła
-Strona
-Data urodzenia
-Data śmierci
-Ojciec
-Matka
-Małżonka
-Pełna nazwa
-Miejsce urodzenia
-Miejsce śmierci
-Wiek
-Urodzenie
-Śmierć
-?
-Proste wprowadzanie
-Źródło sygnału wejściowego
-Typ źródła
-Zmiana książki
-Księga metrykalna
-Rok
-Rozliczenia
-Data wydarzenia
-Typ zdarzenia
-Link
-Komentarz
-Osoba
-Rodzice chrzestni
-Dziecko
-Numer części nazwa jest mniejsza niż trzy.
-Podstawowe ("osoby") nie jest zdefiniowany przez pierwszy
-Rok źródła jest niepoprawny
-Małżeństwo
+﻿;1045,pol,Polski,xt
+01=Źródło wejścia...
+02=Mężczyzna
+03=Kobieta
+04=Nazwisko
+05=Nazwa
+06=Nazwisko rodowe
+07=Zamknij
+08=Dołączyć
+09=Uwaga:
+10=Źródła
+11=Strona
+12=Data urodzenia
+13=Data śmierci
+14=Ojciec
+15=Matka
+16=Małżonka
+17=Pełna nazwa
+18=Miejsce urodzenia
+19=Miejsce śmierci
+20=Wiek
+21=Urodzenie
+22=Śmierć
+23=?
+24=Proste wprowadzanie
+25=Źródło sygnału wejściowego
+26=Typ źródła
+27=Zmiana książki
+28=Księga metrykalna
+29=Rok
+30=Rozliczenia
+31=Data wydarzenia
+32=Typ zdarzenia
+33=Link
+34=Komentarz
+35=Osoba
+36=Rodzice chrzestni
+37=Dziecko
+38=Numer części nazwa jest mniejsza niż trzy.
+39=Podstawowe ("osoby") nie jest zdefiniowany przez pierwszy
+40=Rok źródła jest niepoprawny
+41=Małżeństwo

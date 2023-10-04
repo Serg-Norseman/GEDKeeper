@@ -44,7 +44,7 @@ namespace GKNavigatorPlugin
 {
     public enum PLS
     {
-        Navigator,
+        Navigator = 1,
         RecentActivity,
         JumpHistory,
         PotencialProblems,

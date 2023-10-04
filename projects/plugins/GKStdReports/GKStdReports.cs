@@ -43,7 +43,7 @@ namespace GKStdReports
 {
     public enum PLS
     {
-        NamesFreqReport,
+        NamesFreqReport = 1,
         PersonalEventsReport,
         Names,
         Surnames,

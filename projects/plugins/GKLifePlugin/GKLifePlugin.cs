@@ -43,7 +43,7 @@ namespace GKLifePlugin
 {
     public enum PLS
     {
-        LifeGame,
+        LifeGame = 1,
         Step,
         Start,
         Stop,
